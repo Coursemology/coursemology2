@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import { blue, grey, red } from '@mui/material/colors';
 
-import MaterialSummernote from 'lib/components/MaterialSummernote';
+import DraftRichText from 'lib/components/DraftRichText';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 import BuildLog from '../../components/BuildLog';
@@ -268,7 +268,7 @@ class ProgrammingQuestionForm extends Component {
     return this.props.intl.formatMessage(translations.submitButton);
   }
 
-  summernoteHandler(field) {
+  draftHandler(field) {
     return (e) =>
       this.props.actions.updateProgrammingQuestion(field, e === '' ? null : e);
   }
@@ -533,9 +533,9 @@ class ProgrammingQuestionForm extends Component {
     );
   }
 
-  renderSummernoteField(label, field, required, value) {
+  renderDraftField(label, field, required, value) {
     return (
-      <MaterialSummernote
+      <DraftRichText
         field={field}
         label={label}
         required={required}
@@ -543,7 +543,7 @@ class ProgrammingQuestionForm extends Component {
         disabled={this.props.data.get('is_loading')}
         name={ProgrammingQuestionForm.getInputName(field)}
         inputId={ProgrammingQuestionForm.getInputId(field)}
-        onChange={this.summernoteHandler(field)}
+        onChange={this.draftHandler(field)}
       />
     );
   }
@@ -688,7 +688,7 @@ class ProgrammingQuestionForm extends Component {
               )}
             </div>
             <div className={styles.descriptionInput}>
-              {this.renderSummernoteField(
+              {this.renderDraftField(
                 this.props.intl.formatMessage(
                   translations.descriptionFieldLabel,
                 ),
@@ -698,7 +698,7 @@ class ProgrammingQuestionForm extends Component {
               )}
             </div>
             <div className={styles.staffCommentsInput}>
-              {this.renderSummernoteField(
+              {this.renderDraftField(
                 this.props.intl.formatMessage(
                   translations.staffOnlyCommentsFieldLabel,
                 ),

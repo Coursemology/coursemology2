@@ -2,8 +2,9 @@ import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Button, CircularProgress } from '@mui/material';
-import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ReactTooltip from 'react-tooltip';
+
+import DraftRichText from 'lib/components/DraftRichText';
 
 const translations = defineMessages({
   prompt: {
@@ -47,22 +48,19 @@ export default class CommentField extends Component {
       isSubmittingDelayedComment,
       isUpdatingComment,
       value,
-      airMode,
-      airModeColor,
       renderDelayedCommentButton,
     } = this.props;
     const disableCommentButton =
       value === undefined ||
       value === '' ||
       value === '<br>' ||
+      value === '<p></p>\n' || // For draft
       isSubmittingNormalComment ||
       isSubmittingDelayedComment ||
       isUpdatingComment;
     return (
       <>
-        <MaterialSummernote
-          airMode={airMode}
-          airModeColor={airModeColor}
+        <DraftRichText
           disabled={isSubmittingNormalComment || isSubmittingDelayedComment}
           inputId={inputId}
           label={
@@ -71,8 +69,8 @@ export default class CommentField extends Component {
             </h4>
           }
           onChange={(nextValue) => this.onChange(nextValue)}
-          onKeyDown={(e) => this.onKeyDown(e)}
           value={value}
+          clearOnSubmit
         />
         <Button
           variant="contained"
@@ -118,14 +116,8 @@ CommentField.propTypes = {
   isSubmittingDelayedComment: PropTypes.bool,
   isUpdatingComment: PropTypes.bool,
   value: PropTypes.string,
-  airMode: PropTypes.bool,
-  airModeColor: PropTypes.bool,
   renderDelayedCommentButton: PropTypes.bool,
 
   createComment: PropTypes.func,
   handleChange: PropTypes.func,
-};
-
-CommentField.defaultProps = {
-  airMode: true,
 };

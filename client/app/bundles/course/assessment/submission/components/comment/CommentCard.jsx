@@ -5,7 +5,7 @@ import { grey, orange, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import MaterialSummernote from 'lib/components/MaterialSummernote';
+import DraftRichText from 'lib/components/DraftRichText';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import moment from 'lib/moment';
 
@@ -126,15 +126,13 @@ export default class CommentCard extends Component {
     const { editMode } = this.state;
     const {
       editValue,
-      airMode,
       post: { formattedText, id },
     } = this.props;
 
     if (editMode) {
       return (
         <>
-          <MaterialSummernote
-            airMode={airMode}
+          <DraftRichText
             id={id.toString()}
             inputId={CommentCard.editPostIdentifier(id)}
             onChange={(nextValue) => this.onChange(nextValue)}
@@ -219,13 +217,8 @@ export default class CommentCard extends Component {
 CommentCard.propTypes = {
   post: postShape.isRequired,
   editValue: PropTypes.string,
-  airMode: PropTypes.bool,
 
   handleChange: PropTypes.func,
   updateComment: PropTypes.func,
   deleteComment: PropTypes.func,
-};
-
-CommentCard.defaultProps = {
-  airMode: true,
 };
