@@ -88,7 +88,7 @@ class LessonPlanShow extends Component {
   render() {
     return (
       <>
-        {this.renderHeader()}
+        {this.props.canManageLessonPlan && this.renderHeader()}
         {this.props.groups.map((group) => this.renderGroup(group))}
       </>
     );
@@ -99,6 +99,7 @@ LessonPlanShow.propTypes = {
   groups: lessonPlanTypesGroups.isRequired,
   visibility: PropTypes.shape({}).isRequired,
   milestonesExpanded: PropTypes.string,
+  canManageLessonPlan: PropTypes.bool.isRequired,
 };
 
 export const UnconnectedLessonPlanShow = LessonPlanShow;
@@ -106,4 +107,5 @@ export default connect((state) => ({
   groups: state.lessonPlan.groups,
   visibility: state.lessonPlan.visibilityByType,
   milestonesExpanded: state.flags.milestonesExpanded,
+  canManageLessonPlan: state.flags.canManageLessonPlan,
 }))(LessonPlanShow);
