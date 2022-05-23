@@ -99,13 +99,10 @@ class LessonPlanLayout extends Component {
 LessonPlanLayout.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   groups: lessonPlanTypesGroups.isRequired,
-  canManageLessonPlan: PropTypes.bool.isRequired,
-
   dispatch: PropTypes.func.isRequired,
 };
 
 export default connect((state) => ({
   isLoading: state.lessonPlan.isLoading,
   groups: state.lessonPlan.groups,
-  canManageLessonPlan: state.flags.canManageLessonPlan,
 }))(LessonPlanLayout);
