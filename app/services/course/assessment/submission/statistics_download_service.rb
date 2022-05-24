@@ -6,11 +6,12 @@ class Course::Assessment::Submission::StatisticsDownloadService
   class << self
     # Downloads the statistics and zip them.
     #
+    # @param [Course] current_course The current course the submissions belong to
     # @param [User] current_user The current user downloading the statistics.
     # @param [Array<Integer>] submission_ids The ids of the submissions to download statistics for
     # @return [String] The path to the csv file.
-    def download(current_user, submission_ids)
-      service = new(current_user, submission_ids)
+    def download(current_course, current_user, submission_ids)
+      service = new(current_course, current_user, submission_ids)
       ActsAsTenant.without_tenant do
         service.generate_csv_report
       end
@@ -20,9 +21,10 @@ class Course::Assessment::Submission::StatisticsDownloadService
   def generate_csv_report
     submissions = Course::Assessment::Submission.
                   where(id: @submission_ids).
-                  calculated(:log_count, :graded_at, :grade).
+                  calculated(:log_count, :graded_at, :grade, :grader_ids).
                   includes(:course_user, :publisher)
     assessment = submissions&.first&.assessment&.calculated(:maximum_grade)
+    @course_users_hash ||= @current_course.course_users.map { |cu| [cu.user_id, [cu.id, cu.name]] }.to_h
     statistics_file_path = File.join(@base_dir, 'statistics.csv')
     CSV.open(statistics_file_path, 'w') do |csv|
       download_statistics_header csv
@@ -35,9 +37,10 @@ class Course::Assessment::Submission::StatisticsDownloadService
 
   private
 
-  def initialize(current_user, submission_ids)
+  def initialize(current_course, current_user, submission_ids)
     @current_user = current_user
     @submission_ids = submission_ids
+    @current_course = current_course
     @base_dir = Dir.mktmpdir('coursemology-statistics-')
   end
 
@@ -53,7 +56,8 @@ class Course::Assessment::Submission::StatisticsDownloadService
             I18n.t('course.assessment.submission.submissions.statistics_download_service.time_taken'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.graded_date_time'),
             I18n.t('course.assessment.submission.submissions.statistics_download_service.grading_time'),
-            I18n.t('course.assessment.submission.submissions.statistics_download_service.grader')]
+            I18n.t('course.assessment.submission.submissions.statistics_download_service.grader'),
+            I18n.t('course.assessment.submission.submissions.statistics_download_service.publisher')]
   end
 
   def download_statistics(csv, submission, assessment)
@@ -68,7 +72,8 @@ class Course::Assessment::Submission::StatisticsDownloadService
             csv_time_taken(submission),
             csv_graded_at(submission),
             csv_grading_time(submission),
-            csv_grader(submission)]
+            csv_grader(submission),
+            csv_publisher(submission)]
   end
 
   def csv_empty
@@ -120,6 +125,18 @@ class Course::Assessment::Submission::StatisticsDownloadService
   end
 
   def csv_grader(submission)
+    if submission.grader_ids
+      graders = submission.grader_ids.map do |grader_id|
+        cu = @course_users_hash[grader_id] || [0, 'System']
+        cu[1]
+      end
+      graders.join(', ')
+    else
+      csv_empty
+    end
+  end
+
+  def csv_publisher(submission)
     if submission.publisher
       course_user = submission.publisher.course_users.
                     find_by(course_id: submission.assessment.course_id)

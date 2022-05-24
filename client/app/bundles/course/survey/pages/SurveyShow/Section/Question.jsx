@@ -1,4 +1,3 @@
-/* eslint-disable new-cap */
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages, intlShape } from 'react-intl';
@@ -69,12 +68,13 @@ class Question extends Component {
         initialValues: {
           ...question,
           question_type: question.question_type.toString(),
+          optionsToDelete: [],
         },
       }),
     );
   };
 
-  updateQuestionHandler = (data) => {
+  updateQuestionHandler = (data, setError) => {
     const { dispatch, intl } = this.props;
     const { updateSurveyQuestion } = questionActions;
 
@@ -82,7 +82,13 @@ class Question extends Component {
     const successMessage = intl.formatMessage(translations.updateSuccess);
     const failureMessage = intl.formatMessage(translations.updateFailure);
     return dispatch(
-      updateSurveyQuestion(data.id, payload, successMessage, failureMessage),
+      updateSurveyQuestion(
+        data.id,
+        payload,
+        successMessage,
+        failureMessage,
+        setError,
+      ),
     );
   };
 

@@ -24,7 +24,7 @@ RSpec.describe 'Course: Assessments: Submissions: Text Response Answers', js: tr
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         answer_id = submission.answers.first.id
-        find_field(name: "#{answer_id}[answer_text]").set('Test')
+        find_field(name: "#{answer_id}.answer_text").set('Test')
         click_button('Finalise Submission')
         accept_confirm_dialog do
           wait_for_job

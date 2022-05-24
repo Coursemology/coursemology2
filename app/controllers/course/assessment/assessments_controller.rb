@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::Assessment::AssessmentsController < Course::Assessment::Controller
+  include Course::Assessment::AssessmentsHelper
   before_action :load_question_duplication_data, only: [:show, :reorder]
 
   COURSE_USERS = { my_students: 'my_students',
@@ -78,7 +79,9 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def authenticate
-    if authentication_service.authenticate(params.require(:assessment).permit(:password)[:password])
+    if assessment_not_started(@assessment.time_for(current_course_user))
+      render json: { success: false }
+    elsif authentication_service.authenticate(params.require(:assessment).permit(:password)[:password])
       render json: { success: true }
     else
       render json: { success: false }

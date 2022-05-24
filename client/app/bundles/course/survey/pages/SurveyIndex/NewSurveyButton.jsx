@@ -42,14 +42,14 @@ const NewSurveyButton = (props) => {
   const { canCreate } = props;
   const navigate = useNavigate();
 
-  const createSurveyHandler = (data) => {
+  const createSurveyHandler = (data, setError) => {
     const { dispatch, intl } = props;
 
     const payload = formatSurveyFormData(data);
     const successMessage = intl.formatMessage(translations.success, data);
     const failureMessage = intl.formatMessage(translations.failure);
     return dispatch(
-      createSurvey(payload, successMessage, failureMessage, navigate),
+      createSurvey(payload, successMessage, failureMessage, navigate, setError),
     );
   };
 
@@ -61,9 +61,14 @@ const NewSurveyButton = (props) => {
         onSubmit: createSurveyHandler,
         formTitle: intl.formatMessage(translations.newSurvey),
         initialValues: {
-          base_exp: 0,
-          allow_response_after_end: true,
+          title: '',
+          description: '',
           ...aWeekStartingTomorrow(),
+          base_exp: 0,
+          time_bonus_exp: 0,
+          allow_response_after_end: true,
+          allow_modify_after_submit: false,
+          anonymous: false,
         },
       }),
     );

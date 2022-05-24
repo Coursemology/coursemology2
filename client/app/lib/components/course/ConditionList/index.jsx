@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
 import {
@@ -27,7 +27,7 @@ const styles = {
   },
 };
 
-class ConditionList extends Component {
+class ConditionList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

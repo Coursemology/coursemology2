@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
-import { Field } from 'redux-form';
+import { Controller, useFormContext } from 'react-hook-form';
 import { Card, CardContent, Chip } from '@mui/material';
 import FileUpload from '@mui/icons-material/FileUpload';
 
@@ -57,7 +57,7 @@ class FileInput extends Component {
     const {
       callback,
       disabled,
-      input: { onChange },
+      field: { onChange },
     } = this.props;
     this.setState({ dropzoneActive: false });
     if (!disabled) {
@@ -100,8 +100,8 @@ class FileInput extends Component {
       className,
       inputOptions,
       disabled,
-      meta: { error, touched },
-      input: { value },
+      fieldState: { error },
+      field: { value },
     } = this.props;
 
     return (
@@ -119,7 +119,7 @@ class FileInput extends Component {
             <CardContent>{this.displayFileNames(value)}</CardContent>
           </Card>
         </Dropzone>
-        {error && touched ? error : ''}
+        {error || ''}
       </div>
     );
   }
@@ -133,13 +133,13 @@ FileInput.propTypes = {
     accept: PropTypes.string,
   }),
   disabled: PropTypes.bool,
-  meta: PropTypes.shape({
+  fieldState: PropTypes.shape({
     error: PropTypes.bool,
-    touched: PropTypes.bool,
   }).isRequired,
-  input: PropTypes.shape({
+  field: PropTypes.shape({
     onChange: PropTypes.func,
     value: PropTypes.oneOfType([
+      PropTypes.object,
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
     ]),
@@ -153,8 +153,30 @@ FileInput.defaultProps = {
   callback: () => {},
 };
 
-const FieldWithFileInput = (props) => (
-  <Field {...props} component={FileInput} />
-);
+const FileInputField = ({ name, disabled, callback, ...custom }) => {
+  const { control } = useFormContext();
 
-export default FieldWithFileInput;
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <FileInput
+          field={field}
+          fieldState={fieldState}
+          disabled={disabled}
+          callback={callback}
+          {...custom}
+        />
+      )}
+    />
+  );
+};
+
+FileInputField.propTypes = {
+  name: PropTypes.string,
+  disabled: PropTypes.bool,
+  callback: PropTypes.func,
+};
+
+export default FileInputField;

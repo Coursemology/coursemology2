@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { submit, isPristine } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import {
   Button,
@@ -18,19 +17,20 @@ import formTranslations from 'lib/translations/form';
 import AssessmentForm from '../../containers/AssessmentForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
-import actionTypes, { formNames } from '../../constants';
+import actionTypes from '../../constants';
 
 class PopupDialog extends Component {
-  onFormSubmit = (data) => {
-    const { categoryId, tabId, intl } = this.props;
+  onFormSubmit = (data, setError) => {
+    const { categoryId, dispatch, intl, tabId } = this.props;
 
-    return this.props.dispatch(
+    return dispatch(
       actions.createAssessment(
         categoryId,
         tabId,
         { assessment: data },
         intl.formatMessage(translations.creationSuccess),
         intl.formatMessage(translations.creationFailure),
+        setError,
       ),
     );
   };
@@ -38,7 +38,6 @@ class PopupDialog extends Component {
   handleClose = () => {
     this.props.dispatch({
       type: actionTypes.ASSESSMENT_FORM_CANCEL,
-      payload: { pristine: this.props.pristine },
     });
   };
 
@@ -47,12 +46,21 @@ class PopupDialog extends Component {
   };
 
   render() {
-    const { intl, dispatch } = this.props;
+    const {
+      confirmationDialogOpen,
+      disabled,
+      dispatch,
+      gamified,
+      intl,
+      notification,
+      visible,
+      randomizationAllowed,
+    } = this.props;
 
     const formActions = [
       <Button
         color="primary"
-        disabled={this.props.disabled}
+        disabled={disabled}
         key="assessment-popup-dialog-cancel-button"
         onClick={this.handleClose}
       >
@@ -61,29 +69,43 @@ class PopupDialog extends Component {
       <Button
         color="primary"
         className="btn-submit"
-        disabled={this.props.disabled}
+        disabled={disabled}
+        form="assessment-form"
         key="assessment-popup-dialog-submit-button"
-        onClick={() => dispatch(submit(formNames.ASSESSMENT))}
+        type="submit"
       >
         <FormattedMessage {...formTranslations.submit} />
       </Button>,
     ];
 
     const initialValues = {
+      title: '',
+      description: '',
+      start_at: null,
+      end_at: null,
+      bonus_end_at: null,
       base_exp: 0,
       time_bonus_exp: 0,
+      published: false,
+      autograded: false,
+      block_student_viewing_after_submitted: false,
       skippable: false,
       allow_partial_submission: false,
-      autograded: false,
       show_mcq_answer: true,
-      delayed_grade_publication: false,
       tabbed_view: false,
+      delayed_grade_publication: false,
+      password_protected: false,
+      view_password: null,
+      session_password: null,
       show_mcq_mrq_solution: true,
       use_public: false,
       use_private: true,
       use_evaluation: true,
+      show_private: false,
+      show_evaluation: false,
       randomization: false,
-      block_student_viewing_after_submitted: false,
+      has_personal_times: false,
+      affects_personal_times: false,
     };
 
     return (
@@ -91,33 +113,37 @@ class PopupDialog extends Component {
         <Button
           variant="contained"
           color="primary"
-          disabled={this.props.disabled}
+          disabled={disabled}
           onClick={this.handleOpen}
         >
           {intl.formatMessage(translations.new)}
         </Button>
         <Dialog
           onClose={this.handleClose}
-          open={this.props.visible}
+          open={visible}
           maxWidth="md"
+          style={{
+            top: 40,
+          }}
         >
           <DialogTitle>
             {intl.formatMessage(translations.newAssessment)}
           </DialogTitle>
           <DialogContent>
             <AssessmentForm
-              gamified={this.props.gamified}
-              randomizationAllowed={this.props.randomizationAllowed}
+              disabled={disabled}
+              gamified={gamified}
+              initialValues={initialValues}
               modeSwitching
               onSubmit={this.onFormSubmit}
-              initialValues={initialValues}
+              randomizationAllowed={randomizationAllowed}
             />
           </DialogContent>
           <DialogActions>{formActions}</DialogActions>
         </Dialog>
         <ConfirmationDialog
           confirmDiscard
-          open={this.props.confirmationDialogOpen}
+          open={confirmationDialogOpen}
           onCancel={() =>
             dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_CANCEL })
           }
@@ -125,7 +151,7 @@ class PopupDialog extends Component {
             dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_DISCARD })
           }
         />
-        <NotificationBar notification={this.props.notification} />
+        <NotificationBar notification={notification} />
       </>
     );
   }
@@ -149,5 +175,4 @@ PopupDialog.propTypes = {
 
 export default connect((state) => ({
   ...state.formDialog,
-  pristine: isPristine(formNames.ASSESSMENT)(state),
 }))(injectIntl(PopupDialog));

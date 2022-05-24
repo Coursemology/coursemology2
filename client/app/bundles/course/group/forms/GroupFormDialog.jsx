@@ -1,8 +1,6 @@
 import { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { isPristine, submit } from 'redux-form';
 import { connect } from 'react-redux';
-
 import FormDialogue from 'lib/components/FormDialogue';
 import actionTypes, { formNames } from '../constants';
 
@@ -10,7 +8,6 @@ const GroupFormDialog = ({
   dialogTitle,
   expectedDialogTypes,
   dispatch,
-  isPristine: pristine,
   isDisabled,
   isShown,
   dialogType,
@@ -20,13 +17,7 @@ const GroupFormDialog = ({
     () =>
       dispatch({
         type: actionTypes.DIALOG_CANCEL,
-        payload: { isPristine: pristine },
       }),
-    [dispatch, pristine],
-  );
-
-  const handleSubmit = useCallback(
-    () => dispatch(submit(formNames.GROUP)),
     [dispatch],
   );
 
@@ -38,8 +29,8 @@ const GroupFormDialog = ({
       open={isShown && isExpectedDialogType}
       disabled={isDisabled}
       hideForm={handleClose}
-      skipConfirmation={pristine}
-      submitForm={handleSubmit}
+      skipConfirmation={false}
+      form={formNames.GROUP}
     >
       {children}
     </FormDialogue>
@@ -50,7 +41,6 @@ GroupFormDialog.propTypes = {
   dialogTitle: PropTypes.string.isRequired,
   expectedDialogTypes: PropTypes.arrayOf(PropTypes.string).isRequired,
   dispatch: PropTypes.func.isRequired,
-  isPristine: PropTypes.bool,
   isShown: PropTypes.bool.isRequired,
   isDisabled: PropTypes.bool.isRequired,
   dialogType: PropTypes.string.isRequired,
@@ -59,5 +49,4 @@ GroupFormDialog.propTypes = {
 
 export default connect((state) => ({
   ...state.groupsDialog,
-  isPristine: isPristine(formNames.GROUP)(state),
 }))(GroupFormDialog);

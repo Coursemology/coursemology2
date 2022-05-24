@@ -1,5 +1,5 @@
-import { SubmissionError } from 'redux-form';
 import CourseAPI from 'api/course';
+import { setReactHookFormError } from 'lib/helpers/actions-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import actionTypes from './constants';
 
@@ -26,7 +26,12 @@ const formatAttributes = (data) => {
   return payload;
 };
 
-export function createAchievement(data, successMessage, failureMessage) {
+export function createAchievement(
+  data,
+  successMessage,
+  failureMessage,
+  setError,
+) {
   const attributes = formatAttributes(data.achievement);
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_ACHIEVEMENT_REQUEST });
@@ -54,7 +59,7 @@ export function createAchievement(data, successMessage, failureMessage) {
         });
 
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
+          setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };
@@ -65,6 +70,7 @@ export function updateAchievement(
   data,
   successMessage,
   failureMessage,
+  setError,
 ) {
   const attributes = formatAttributes(data.achievement);
   return (dispatch) => {
@@ -89,7 +95,7 @@ export function updateAchievement(
         });
 
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
+          setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };

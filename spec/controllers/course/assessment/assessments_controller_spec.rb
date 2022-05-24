@@ -238,5 +238,57 @@ RSpec.describe Course::Assessment::AssessmentsController do
         end
       end
     end
+
+    describe '#authenticate' do
+      let(:started_assessment) do
+        create(:assessment, :published_with_all_question_types, :view_password, course: course)
+      end
+      let(:not_started_assessment) do
+        create(:assessment, :published_with_all_question_types, :view_password,
+               start_at: 1.day.from_now, course: course)
+      end
+
+      let(:json) { JSON.parse(response.body) }
+
+      context 'when the assessment is not started' do
+        it 'does not unlock even with correct password' do
+          post :authenticate, params: {
+            course_id: course.id,
+            id: not_started_assessment.id,
+            assessment: {
+              assessment: not_started_assessment,
+              password: not_started_assessment.view_password
+            }
+          }
+          expect(json['success']).to be_falsy
+        end
+      end
+
+      context 'when the assessment is started' do
+        it 'unlocks with correct password' do
+          post :authenticate, params: {
+            course_id: course.id,
+            id: started_assessment.id,
+            assessment: {
+              assessment: started_assessment,
+              password: started_assessment.view_password
+            }
+          }
+          expect(json['success']).to be_truthy
+        end
+
+        it 'does not unlock with wrong password' do
+          post :authenticate, params: {
+            course_id: course.id,
+            id: started_assessment.id,
+            assessment: {
+              assessment: started_assessment,
+              password: 'WRONG_PASSWORD'
+            }
+          }
+          expect(json['success']).to be_falsy
+        end
+      end
+    end
   end
 end

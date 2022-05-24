@@ -87,18 +87,19 @@ class DestinationCourseSelector extends Component {
 
     return (
       <NewCourseForm
-        onSubmit={(values) =>
+        disabled={isDuplicating}
+        initialValues={initialValues}
+        onSubmit={(values, setError) =>
           dispatch(
             duplicateCourse(
               values,
               successMessage,
               pendingMessage,
               failureMessage,
+              setError,
             ),
           )
         }
-        disabled={isDuplicating}
-        initialValues={initialValues}
       />
     );
   };

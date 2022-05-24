@@ -1,12 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { fieldMetaPropTypes } from 'redux-form';
-import { FormattedMessage, intlShape } from 'react-intl';
 import Dropzone from 'react-dropzone';
 import { grey, red } from '@mui/material/colors';
-
-import createComponent from '../createComponent';
-import mapError from '../mapError';
+import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import FilePreview from './FilePreview';
 import ImagePreview from './ImagePreview';
 import BadgePreview from './BadgePreview';
@@ -26,7 +22,7 @@ const styles = {
 };
 
 /**
- * Creates a Single file input component for use with Redux Forms.
+ * Creates a Single file input component for use with react hook form.
  * The display of the file can be customized by passing a component or function as the `previewComponent` prop.
  * The PreviewComponent may accept the following props:
  *   - file: the selected file
@@ -34,17 +30,9 @@ const styles = {
  *   - originalUrl: the URL of the last uploaded file
  *   - handleCancel: event handler to clear the input
  *
- * Additional format of form props (see createComponent for base set):
- * {
- *   ...createComponent,
- *   value: {
- *      url, // URL of preview of existing file if it is an image, otherwise nil.
- *     name, // Name of existing file, if any.
- *   },
- * }
  */
 // TODO: Use the input element as a controller component - https://reactjs.org/docs/forms.html
-class SingleFileInput extends Component {
+class FormSingleFileInput extends Component {
   constructor(props) {
     super(props);
     this.state = { file: null };
@@ -62,35 +50,40 @@ class SingleFileInput extends Component {
 
   updateStore = (file) => {
     const {
-      input: { onChange },
-      value: { url, name },
+      field: {
+        onChange,
+        value: { url, name },
+      },
     } = this.props;
     onChange({ file, url, name });
   };
 
   renderErrorMessage = () => {
     const {
-      meta: { touched, error },
+      fieldState: { error },
     } = this.props;
-    return touched && error ? (
+    return error ? (
       <div className="error-message" style={styles.fileLabelError}>
-        <FormattedMessage {...error} />
+        {formatErrorMessage(error.message)}
       </div>
     ) : null;
   };
 
   render() {
-    const { accept, previewComponent: PreviewComponent } = this.props;
+    const { accept, disabled, previewComponent: PreviewComponent } = this.props;
     const {
-      value: { name, url },
+      field: {
+        value: { name, url },
+      },
     } = this.props;
 
     return (
       <Dropzone
+        accept={accept}
+        disabled={disabled}
         multiple={false}
         onDrop={this.onDrop}
         style={styles.dropzone}
-        accept={accept}
       >
         <div>
           <PreviewComponent
@@ -106,32 +99,18 @@ class SingleFileInput extends Component {
   }
 }
 
-SingleFileInput.propTypes = {
-  meta: PropTypes.shape(fieldMetaPropTypes),
-  value: PropTypes.shape({
-    file: PropTypes.object,
-    url: PropTypes.string,
-    name: PropTypes.string,
-  }),
-  input: PropTypes.shape({
-    onChange: PropTypes.func.isRequired,
-  }),
-  errorMessage: PropTypes.string,
-  required: PropTypes.bool,
-  intl: intlShape.isRequired,
+FormSingleFileInput.propTypes = {
+  field: PropTypes.object.isRequired,
+  fieldState: PropTypes.object.isRequired,
   accept: PropTypes.string,
+  disabled: PropTypes.bool,
   previewComponent: PropTypes.func,
 };
 
-SingleFileInput.defaultProps = {
+FormSingleFileInput.defaultProps = {
   previewComponent: FilePreview,
 };
 
-const mapProps = ({ ...props }) => ({
-  ...props,
-  ...mapError(props),
-});
-
-export default createComponent(SingleFileInput, mapProps);
+export default FormSingleFileInput;
 
 export { FilePreview, ImagePreview, BadgePreview };

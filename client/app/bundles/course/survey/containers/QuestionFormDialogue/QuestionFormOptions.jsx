@@ -1,7 +1,6 @@
-/* eslint-disable react/no-array-index-key */
-import { Component } from 'react';
+import { memo } from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
 import QuestionFormOption from './QuestionFormOption';
 
@@ -34,69 +33,116 @@ const optionsTranslations = defineMessages({
   },
 });
 
-class QuestionFormOptions extends Component {
-  handleSelectFiles = (event) => {
-    const { fields } = this.props;
-    const options = fields.getAll();
-    const files = event.target.files;
+const handleSelectFiles = (event, fieldsConfig) => {
+  const { append } = fieldsConfig;
+  const files = event.target.files;
 
-    // eliminate blank options
-    fields.removeAll();
-    options.forEach((option) => {
-      if (option.option || option.file) {
-        fields.push(option);
-      }
+  for (let i = 0; i < files.length; i += 1) {
+    append({
+      weight: null,
+      option: '',
+      image_url: '',
+      image_name: '',
+      file: files[i],
     });
-
-    for (let i = 0; i < files.length; i += 1) {
-      fields.push({ file: files[i] });
-    }
-  };
-
-  render() {
-    const { intl, fields, disabled, ...props } = this.props;
-
-    return (
-      <>
-        {fields.map((member, index) => (
-          <QuestionFormOption
-            key={index}
-            {...{ member, index, fields, disabled, ...props }}
-          />
-        ))}
-        <div style={styles.buttons}>
-          <Button
-            color="primary"
-            disabled={disabled}
-            onClick={() => fields.push({})}
-          >
-            {intl.formatMessage(optionsTranslations.addOption)}
-          </Button>
-          <Button color="primary" component="label" disabled={disabled}>
-            {intl.formatMessage(optionsTranslations.bulkUploadImages)}
-            <input
-              type="file"
-              style={styles.imageUploader}
-              onChange={this.handleSelectFiles}
-              multiple
-              {...{ disabled }}
-            />
-          </Button>
-        </div>
-      </>
-    );
   }
-}
-
-QuestionFormOptions.propTypes = {
-  intl: intlShape.isRequired,
-  disabled: PropTypes.bool,
-  fields: PropTypes.shape({
-    map: PropTypes.func.isRequired,
-    getAll: PropTypes.func.isRequired,
-    removeAll: PropTypes.func.isRequired,
-    push: PropTypes.func.isRequired,
-  }).isRequired,
 };
 
-export default injectIntl(QuestionFormOptions);
+const QuestionFormOptions = (props) => {
+  const {
+    fieldsConfig,
+    disabled,
+    multipleChoice,
+    multipleResponse,
+    deletedOptionsAppend,
+  } = props;
+  const { append, fields } = fieldsConfig;
+
+  return (
+    <>
+      {fields.map((field, index) => (
+        <QuestionFormOption
+          key={field.id}
+          {...{
+            field,
+            index,
+            fieldsConfig,
+            disabled,
+            multipleChoice,
+            multipleResponse,
+            deletedOptionsAppend,
+          }}
+        />
+      ))}
+      <div style={styles.buttons}>
+        <Button
+          color="primary"
+          disabled={disabled}
+          onClick={() =>
+            append({
+              weight: null,
+              option: '',
+              image_url: '',
+              image_name: '',
+              file: null,
+            })
+          }
+        >
+          <FormattedMessage {...optionsTranslations.addOption} />
+        </Button>
+        <Button color="primary" component="label" disabled={disabled}>
+          <FormattedMessage {...optionsTranslations.bulkUploadImages} />
+          <input
+            type="file"
+            style={styles.imageUploader}
+            onChange={(event) => handleSelectFiles(event, fieldsConfig)}
+            multiple
+            {...{ disabled }}
+          />
+        </Button>
+      </div>
+    </>
+  );
+};
+
+QuestionFormOptions.propTypes = {
+  disabled: PropTypes.bool,
+  fieldsConfig: PropTypes.shape({
+    control: PropTypes.object.isRequired,
+    fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    append: PropTypes.func.isRequired,
+    remove: PropTypes.func.isRequired,
+  }),
+  multipleChoice: PropTypes.bool,
+  multipleResponse: PropTypes.bool,
+  deletedOptionsAppend: PropTypes.func.isRequired,
+};
+
+export default memo(QuestionFormOptions, (prevProps, nextProps) => {
+  if (
+    prevProps.multipleChoice !== nextProps.multipleChoice ||
+    prevProps.multipleResponse !== nextProps.multipleResponse
+  ) {
+    return false;
+  }
+
+  const prevOptions = prevProps.fieldsConfig.fields;
+  const nextOptions = nextProps.fieldsConfig.fields;
+  if (prevOptions.length !== nextOptions.length) {
+    return false;
+  }
+  const shallowCompare = (obj1, obj2) =>
+    Object.keys(obj1).length === Object.keys(obj2).length &&
+    Object.keys(obj1).every(
+      (key) =>
+        Object.prototype.hasOwnProperty.call(obj2, key) &&
+        obj1[key] === obj2[key],
+    );
+
+  for (let i = 0; i < prevOptions.length; i++) {
+    if (!shallowCompare(prevOptions[i], nextOptions[i])) {
+      return false;
+    }
+  }
+  return true;
+});

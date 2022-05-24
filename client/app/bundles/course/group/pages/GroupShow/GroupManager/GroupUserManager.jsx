@@ -189,7 +189,7 @@ const GroupUserManager = ({
   );
 
   const onFormSubmit = useCallback(
-    (data) =>
+    (data, setError) =>
       dispatch(
         updateGroup(
           categoryId,
@@ -201,6 +201,7 @@ const GroupUserManager = ({
           intl.formatMessage(translations.updateFailure, {
             groupName: group.name,
           }),
+          setError,
         ),
       ),
     [dispatch, categoryId, group.name, group.id],

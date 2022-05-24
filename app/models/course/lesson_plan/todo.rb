@@ -65,20 +65,6 @@ class Course::LessonPlan::Todo < ApplicationRecord
       result.ids
     end
 
-    # Destroy todos for the associated lesson_plan_item for specified course_users.
-    #   If no course_user is specified, destroy all todos for that lesson_plan_item.
-    #
-    # @param [Course::LessonPlan::Item] item Item's todos to be deleted
-    # @param [Array<CourseUser>] course_users If specified, filter of course_users to delete todos.
-    # @return [Array<Course::LessonPlan::Todo>|nil] The todos that are deleted, or nil if invalid
-    #   params
-    def delete_for(item, course_users = nil)
-      return unless item
-
-      user_ids = course_users ? course_users.select(:user_id) : item.todos.select(:user_id)
-      item.todos.where.has { user_id.in(user_ids) }.destroy_all
-    end
-
     private
 
     # Constructs and returns the column and attribute hash. This is required for

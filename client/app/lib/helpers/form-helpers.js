@@ -103,9 +103,42 @@ function removeParentForm($element) {
   parentFormForElement($element).remove();
 }
 
+/**
+ * Adjust another date field based on a date field
+ *
+ * @param {Date} newStartAt new start_at date value
+ * @param {function} watch watch function from react hook form to get previous field values
+ * @param {function} setValue setValue function from react hook form to set a field value
+ * @param {string} startAtField field name of watched field
+ * @param {string} endAtField field name of target field
+ */
+function shiftDateField(
+  newStartAt,
+  watch,
+  setValue,
+  startAtField = 'start_at',
+  endAtField = 'end_at',
+) {
+  const oldStartAt = watch(startAtField);
+  const oldEndAt = watch(endAtField);
+  if (!oldStartAt || !oldEndAt || !newStartAt) {
+    return;
+  }
+  const oldStartTime = new Date(oldStartAt).getTime();
+  const oldEndTime = new Date(oldEndAt).getTime();
+
+  // if start time is before end time, allow user to clear the error
+  if (oldStartTime <= oldEndTime) {
+    const newStartTime = new Date(newStartAt).getTime();
+    const newEndAt = new Date(oldEndTime + (newStartTime - oldStartTime));
+    setValue(endAtField, newEndAt);
+  }
+}
+
 export {
   submitAndDisableForm,
   enableForm,
   parentFormForElement,
   removeParentForm,
+  shiftDateField,
 };

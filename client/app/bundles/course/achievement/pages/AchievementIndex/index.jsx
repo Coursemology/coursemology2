@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { submit, isPristine } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import {
   Button,
@@ -18,7 +17,7 @@ import formTranslations from 'lib/translations/form';
 import AchievementForm from '../../containers/AchievementForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
-import actionTypes, { formNames } from '../../constants';
+import actionTypes from '../../constants';
 
 const styles = {
   newButton: {
@@ -31,14 +30,15 @@ const styles = {
 };
 
 class PopupDialog extends Component {
-  onFormSubmit = (data) => {
-    const { intl } = this.props;
+  onFormSubmit = (data, setError) => {
+    const { dispatch, intl } = this.props;
 
-    return this.props.dispatch(
+    return dispatch(
       actions.createAchievement(
         { achievement: data },
         intl.formatMessage(translations.creationSuccess),
         intl.formatMessage(translations.creationFailure),
+        setError,
       ),
     );
   };
@@ -46,7 +46,6 @@ class PopupDialog extends Component {
   handleClose = () => {
     this.props.dispatch({
       type: actionTypes.ACHIEVEMENT_FORM_CANCEL,
-      payload: { pristine: this.props.pristine },
     });
   };
 
@@ -55,12 +54,20 @@ class PopupDialog extends Component {
   };
 
   render() {
-    const { intl, dispatch, badge } = this.props;
+    const {
+      badge,
+      confirmationDialogOpen,
+      disabled,
+      dispatch,
+      notification,
+      intl,
+      visible,
+    } = this.props;
 
     const formActions = [
       <Button
         color="primary"
-        disabled={this.props.disabled}
+        disabled={disabled}
         key="achievement-popup-dialog-cancel-button"
         onClick={this.handleClose}
       >
@@ -69,15 +76,18 @@ class PopupDialog extends Component {
       <Button
         color="primary"
         className="btn-submit"
-        disabled={this.props.disabled}
+        disabled={disabled}
+        form="achievement-form"
         key="achievement-popup-dialog-submit-button"
-        onClick={() => dispatch(submit(formNames.ACHIEVEMENT))}
+        type="submit"
       >
         <FormattedMessage {...formTranslations.submit} />
       </Button>,
     ];
 
     const initialValues = {
+      title: '',
+      description: '',
       published: false,
       badge,
     };
@@ -92,11 +102,7 @@ class PopupDialog extends Component {
         >
           {intl.formatMessage(translations.new)}
         </Button>
-        <Dialog
-          onClose={this.handleClose}
-          open={this.props.visible}
-          maxWidth="xl"
-        >
+        <Dialog onClose={this.handleClose} open={visible} maxWidth="xl">
           <DialogTitle>
             {intl.formatMessage(translations.newAchievement)}
           </DialogTitle>
@@ -110,7 +116,7 @@ class PopupDialog extends Component {
         </Dialog>
         <ConfirmationDialog
           confirmDiscard
-          open={this.props.confirmationDialogOpen}
+          open={confirmationDialogOpen}
           onCancel={() =>
             dispatch({ type: actionTypes.ACHIEVEMENT_FORM_CONFIRM_CANCEL })
           }
@@ -118,7 +124,7 @@ class PopupDialog extends Component {
             dispatch({ type: actionTypes.ACHIEVEMENT_FORM_CONFIRM_DISCARD })
           }
         />
-        <NotificationBar notification={this.props.notification} />
+        <NotificationBar notification={notification} />
       </>
     );
   }
@@ -128,7 +134,6 @@ PopupDialog.propTypes = {
   dispatch: PropTypes.func.isRequired,
   intl: intlShape,
   disabled: PropTypes.bool,
-  pristine: PropTypes.bool,
   visible: PropTypes.bool.isRequired,
   confirmationDialogOpen: PropTypes.bool.isRequired,
   notification: notificationShape,
@@ -139,5 +144,4 @@ PopupDialog.propTypes = {
 
 export default connect((state) => ({
   ...state.indexFormDialog,
-  pristine: isPristine(formNames.ACHIEVEMENT)(state),
 }))(injectIntl(PopupDialog));

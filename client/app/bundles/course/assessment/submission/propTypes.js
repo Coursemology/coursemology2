@@ -132,12 +132,6 @@ export const submissionShape = PropTypes.shape({
   workflowState: PropTypes.string,
 });
 
-export const reduxFormShape = PropTypes.shape({
-  registeredField: PropTypes.object,
-  // eslint-disable-next-line react/forbid-prop-types
-  values: PropTypes.any,
-});
-
 export const topicShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   posts: PropTypes.arrayOf(PropTypes.number),

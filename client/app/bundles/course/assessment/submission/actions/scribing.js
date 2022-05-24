@@ -1,5 +1,4 @@
 import CourseAPI from 'api/course';
-import { SubmissionError } from 'redux-form';
 import actions, { canvasActionTypes } from '../constants';
 
 export function setCanvasLoaded(answerId, loaded, canvas) {
@@ -34,14 +33,11 @@ export function updateScribingAnswer(
           payload: { answerId },
         }),
       )
-      .catch((error) => {
+      .catch(() => {
         dispatch({
           type: actions.UPDATE_SCRIBING_ANSWER_FAILURE,
           payload: { answerId },
         });
-        if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        }
       });
   };
 }

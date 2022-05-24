@@ -79,8 +79,6 @@ RSpec.feature 'Course: Duplication' do
           find('.source-course-dropdown').click
           find("[role='option']", text: source_course.title).click
 
-          # Work around for cabybara/redux-form issue:
-          # https://github.com/erikras/redux-form/issues/686
           fill_in 'new_title', with: ''
           fill_in 'new_title', with: new_course_title
 

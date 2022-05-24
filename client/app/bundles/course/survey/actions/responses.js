@@ -1,4 +1,4 @@
-import { SubmissionError } from 'redux-form';
+import { setReactHookFormError } from 'lib/helpers/actions-helper';
 import CourseAPI from 'api/course';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import actionTypes from '../constants';
@@ -93,6 +93,7 @@ export function updateResponse(
   successMessage,
   failureMessage,
   navigate,
+  setError,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_RESPONSE_REQUEST });
@@ -118,10 +119,9 @@ export function updateResponse(
       .catch((error) => {
         dispatch({ type: actionTypes.UPDATE_RESPONSE_FAILURE });
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
+          setReactHookFormError(setError, error.response.data.errors);
         }
+        dispatch(setNotification(failureMessage));
       });
   };
 }

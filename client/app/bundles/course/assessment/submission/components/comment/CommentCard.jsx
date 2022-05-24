@@ -9,7 +9,7 @@ import MaterialSummernote from 'lib/components/MaterialSummernote';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import moment from 'lib/moment';
 
-import { postShape } from '../propTypes';
+import { postShape } from '../../propTypes';
 
 const translations = defineMessages({
   deleteConfirmation: {

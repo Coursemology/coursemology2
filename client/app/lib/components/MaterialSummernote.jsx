@@ -106,9 +106,7 @@ class MaterialSummernote extends Component {
   };
 
   render() {
-    const testFieldLabelColor = this.state.isFocused
-      ? cyan[500]
-      : 'rgba(0, 0, 0, 0.3)';
+    const testFieldLabelColor = this.state.isFocused ? cyan[500] : null;
     return (
       <div
         key={this.props.field}
@@ -126,6 +124,7 @@ class MaterialSummernote extends Component {
         <InputLabel
           disabled={this.props.disabled}
           htmlFor={this.props.field}
+          required={this.props.required}
           shrink
           style={{
             pointerEvents: 'none',
@@ -140,7 +139,7 @@ class MaterialSummernote extends Component {
           name={this.props.name}
           id={this.props.inputId}
           required={this.props.required}
-          value={this.props.value}
+          value={this.props.value || ''}
           style={{ display: 'none' }}
           onChange={this.onChange}
           disabled={this.props.disabled}

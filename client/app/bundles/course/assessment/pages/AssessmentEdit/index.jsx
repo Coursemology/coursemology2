@@ -1,7 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { submit } from 'redux-form';
 import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
 import { Button } from '@mui/material';
 import NotificationBar, {
@@ -11,7 +10,6 @@ import { achievementTypesConditionAttributes } from 'lib/types';
 import AssessmentForm from '../../containers/AssessmentForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
-import { formNames } from '../../constants';
 
 const styles = {
   buttonContainer: {
@@ -21,7 +19,7 @@ const styles = {
 };
 
 class EditPage extends Component {
-  onFormSubmit = (data) => {
+  onFormSubmit = (data, setError) => {
     // Remove view_password and session_password field if password is disabled
     const viewPassword = data.password_protected ? data.view_password : null;
     const sessionPassword = data.password_protected
@@ -33,54 +31,59 @@ class EditPage extends Component {
       session_password: sessionPassword,
     };
 
-    const { intl } = this.props;
+    const { dispatch, intl } = this.props;
 
-    return this.props.dispatch(
+    return dispatch(
       actions.updateAssessment(
         data.id,
         { assessment: atrributes },
         intl.formatMessage(translations.updateSuccess),
         intl.formatMessage(translations.updateFailure),
+        setError,
       ),
     );
   };
 
   render() {
     const {
-      gamified,
-      showPersonalizedTimelineFeatures,
-      modeSwitching,
-      initialValues,
-      randomizationAllowed,
-      folderAttributes,
       conditionAttributes,
-      dispatch,
+      disabled,
+      folderAttributes,
+      gamified,
+      initialValues,
+      modeSwitching,
+      notification,
+      randomizationAllowed,
+      showPersonalizedTimelineFeatures,
     } = this.props;
 
     return (
       <>
         <AssessmentForm
-          editing
-          gamified={gamified}
-          showPersonalizedTimelineFeatures={showPersonalizedTimelineFeatures}
-          randomizationAllowed={randomizationAllowed}
-          onSubmit={this.onFormSubmit}
-          modeSwitching={modeSwitching}
-          folderAttributes={folderAttributes}
           conditionAttributes={conditionAttributes}
+          disabled={disabled}
+          editing
+          folderAttributes={folderAttributes}
+          gamified={gamified}
           initialValues={initialValues}
+          modeSwitching={modeSwitching}
+          onSubmit={this.onFormSubmit}
+          randomizationAllowed={randomizationAllowed}
+          showPersonalizedTimelineFeatures={showPersonalizedTimelineFeatures}
         />
         <div style={styles.buttonContainer}>
           <Button
             variant="contained"
             color="primary"
-            disabled={this.props.disabled}
-            onClick={() => dispatch(submit(formNames.ASSESSMENT))}
+            className="btn-submit"
+            disabled={disabled}
+            form="assessment-form"
+            type="submit"
           >
             <FormattedMessage {...translations.updateAssessment} />
           </Button>
         </div>
-        <NotificationBar notification={this.props.notification} />
+        <NotificationBar notification={notification} />
       </>
     );
   }
