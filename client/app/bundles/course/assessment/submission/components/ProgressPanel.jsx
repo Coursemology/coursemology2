@@ -93,13 +93,17 @@ class ProgressPanel extends Component {
 
   render() {
     const { intl } = this.props;
-    const { late, submitter, workflowState } = this.props.submission;
+    const {
+      late,
+      submitter: { name },
+      workflowState,
+    } = this.props.submission;
     const title = intl.formatMessage(translations[workflowState]);
     return (
       <Card>
         <CardHeader
           id="submission-by"
-          title={intl.formatMessage(translations.submissionBy, { submitter })}
+          title={intl.formatMessage(translations.submissionBy, { name })}
           titleTypographyProps={{ variant: 'subtitle1' }}
           subheader={title}
           subheaderTypographyProps={{ variant: 'subtitle2' }}

@@ -27,7 +27,7 @@ const translations = defineMessages({
   },
   submissionBy: {
     id: 'course.assessment.submission.submissionBy',
-    defaultMessage: 'Submission by {submitter}',
+    defaultMessage: 'Submission by {name}',
   },
   saveDraft: {
     id: 'course.assessment.submission.saveDraft',
