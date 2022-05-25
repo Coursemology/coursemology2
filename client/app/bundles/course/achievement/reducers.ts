@@ -10,17 +10,24 @@ import {
   saveEntityToStore,
   saveListToStore,
 } from 'utilities/store';
-import * as types from './types';
+import {
+  SAVE_ACHIEVEMENT_LIST,
+  SAVE_ACHIEVEMENT,
+  DELETE_ACHIEVEMENT,
+  SAVE_ACHIEVEMENT_COURSE_USERS,
+  AchievementsState,
+  AchievementsActionType,
+} from './types';
 
-const initialState: types.AchievementsState = {
+const initialState: AchievementsState = {
   achievements: createEntityStore(),
   permissions: { canCreate: false, canManage: false, canReorder: false },
 };
 
 const reducer = produce(
-  (draft: types.AchievementsState, action: types.AchievementsActionType) => {
+  (draft: AchievementsState, action: AchievementsActionType) => {
     switch (action.type) {
-      case types.SAVE_ACHIEVEMENT_LIST: {
+      case SAVE_ACHIEVEMENT_LIST: {
         const achievementList = action.achievementList;
         const entityList: AchievementMiniEntity[] = achievementList.map(
           (data) => ({
@@ -31,20 +38,20 @@ const reducer = produce(
         draft.permissions = action.achievementPermissions;
         break;
       }
-      case types.SAVE_ACHIEVEMENT: {
+      case SAVE_ACHIEVEMENT: {
         const achievementData = action.achievement;
         const achievementEntity: AchievementEntity = { ...achievementData };
         saveEntityToStore(draft.achievements, achievementEntity);
         break;
       }
-      case types.DELETE_ACHIEVEMENT: {
+      case DELETE_ACHIEVEMENT: {
         const achievementId = action.id;
         if (draft.achievements.byId[achievementId]) {
           removeFromStore(draft.achievements, achievementId);
         }
         break;
       }
-      case types.SAVE_ACHIEVEMENT_COURSE_USERS: {
+      case SAVE_ACHIEVEMENT_COURSE_USERS: {
         const achievementId = action.id;
         const achievementUsers = action.achievementCourseUsers;
         const achievementUsersEntity: AchievementCourseUserEntity[] =
