@@ -10,6 +10,7 @@ import {
   AchievementCourseUserEntity,
   AchievementEntity,
 } from 'types/course/achievements';
+import { TableColumns } from 'types/components/DataTable';
 import DataTable from 'lib/components/DataTable';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { formatShortDateTime } from 'lib/moment';
@@ -18,12 +19,12 @@ import { AppDispatch } from 'types/store';
 import AchievementAwardSummary from './AchievementAwardSummary';
 import { awardAchievement } from '../../operations';
 
-interface OwnProps {
+interface Props {
   achievement: AchievementEntity;
   isLoading: boolean;
   handleClose: (skipDialog: boolean) => void;
   intl?: any;
-  setIsDirty?: Function;
+  setIsDirty?: (value: boolean) => void;
 }
 
 const styles = {
@@ -93,7 +94,7 @@ const translations = defineMessages({
 const getObtainedUserIds = (courseUsers: AchievementCourseUserEntity[]) =>
   courseUsers.filter((cu) => cu.obtainedAt !== null).map((cu) => cu.id);
 
-const AchievementAwardManager: FC<OwnProps> = (props) => {
+const AchievementAwardManager: FC<Props> = (props) => {
   const { achievement, isLoading, handleClose, intl, setIsDirty } = props;
   const achievementUsers = achievement.achievementUsers;
 
@@ -181,7 +182,7 @@ const AchievementAwardManager: FC<OwnProps> = (props) => {
     viewColumns: false,
   };
 
-  const columns: any = [
+  const columns: TableColumns[] = [
     {
       name: 'name',
       label: 'Name',

@@ -13,7 +13,7 @@ import AchievementForm from '../../components/forms/AchievementForm';
 import { loadAchievement, updateAchievement } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
 
-interface OwnProps {
+interface Props {
   intl?: any;
 }
 
@@ -32,7 +32,7 @@ const translations = defineMessages({
   },
 });
 
-const AchievementEdit: FC<OwnProps> = (props) => {
+const AchievementEdit: FC<Props> = (props) => {
   const { intl } = props;
   const courseId = getCourseId();
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);

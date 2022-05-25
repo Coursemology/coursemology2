@@ -4,13 +4,13 @@ import { IconButton } from '@mui/material';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import TitleBar from 'lib/components/TitleBar';
 
-interface OwnProps {
+interface Props {
   title: string;
   returnLink?: string;
   toolbars?: ReactElement[];
 }
 
-const PageHeader: FC<OwnProps> = (props) => {
+const PageHeader: FC<Props> = (props) => {
   const { title, returnLink, toolbars } = props;
   const navigate = useNavigate();
 

@@ -10,7 +10,7 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import { deleteAchievement } from '../../operations';
 import AwardButton from './AwardButton';
 
-interface OwnProps {
+interface Props {
   achievement: AchievementMiniEntity;
   navigateToIndex: boolean;
   intl?: any;
@@ -32,7 +32,7 @@ const translations = defineMessages({
   },
 });
 
-const AchievementManagementButtons: FC<OwnProps> = (props) => {
+const AchievementManagementButtons: FC<Props> = (props) => {
   const { achievement, intl, navigateToIndex } = props;
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();

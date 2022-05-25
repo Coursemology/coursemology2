@@ -5,6 +5,7 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import { AchievementFormData } from 'types/course/achievements';
 import { Operation } from 'types/store';
 import * as actions from './actions';
+import { SaveAchievementAction } from './types';
 
 /**
  * Prepares and maps object attributes to a FormData object for an post/patch request.
@@ -13,7 +14,7 @@ import * as actions from './actions';
  *     { title, description, badge: file }
  *   }
  */
-const formatAttributes = (data: AchievementFormData) => {
+const formatAttributes = (data: AchievementFormData): FormData => {
   const payload = new FormData();
 
   ['title', 'description', 'published'].forEach((field) => {
@@ -44,7 +45,9 @@ export function fetchAchievements(): Operation<void> {
       });
 }
 
-export function loadAchievement(achievementId: number): Operation<any> {
+export function loadAchievement(
+  achievementId: number,
+): Operation<SaveAchievementAction> {
   return async (dispatch) =>
     CourseAPI.achievements
       .fetch(achievementId)
@@ -55,7 +58,7 @@ export function loadAchievement(achievementId: number): Operation<any> {
 
 export function loadAchievementCourseUsers(
   achievementId: number,
-): Operation<any> {
+): Operation<void> {
   return async (dispatch) =>
     CourseAPI.achievements
       .fetchAchievementCourseUsers(achievementId)

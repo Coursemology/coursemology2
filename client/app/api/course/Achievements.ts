@@ -52,7 +52,7 @@ export default class AchievementsAPI extends BaseCourseAPI {
   }
 
   /**
-   * Create an achievement.
+   * Creates an achievement.
    *
    * @param {object} params - params in the format of:
    *   {
@@ -71,7 +71,7 @@ export default class AchievementsAPI extends BaseCourseAPI {
   }
 
   /**
-   * Update the achievement.
+   * Updates the achievement.
    *
    * @param {number} achievementId
    * @param {object} params - params in the format of { achievement: { :title, :description, etc } }

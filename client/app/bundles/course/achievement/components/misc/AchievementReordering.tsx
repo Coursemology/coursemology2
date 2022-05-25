@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 require('jquery-ui/ui/widgets/sortable');
 
-interface OwnProps {
+interface Props {
   intl?: any;
 }
 
@@ -58,7 +58,7 @@ function submitReordering(ordering: string): Promise<void> {
     });
 }
 
-const AchievementReordering: FC<OwnProps> = (props: OwnProps) => {
+const AchievementReordering: FC<Props> = (props: Props) => {
   const { intl } = props;
   const [isReordering, setIsReordering] = useState(false);
 

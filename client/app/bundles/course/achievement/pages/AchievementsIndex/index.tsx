@@ -18,7 +18,7 @@ import AchievementTable from '../../components/tables/AchievementTable';
 import AchievementNew from '../AchievementNew';
 import AchievementReordering from '../../components/misc/AchievementReordering';
 
-interface OwnProps {
+interface Props {
   intl?: any;
 }
 
@@ -48,7 +48,7 @@ const translations = defineMessages({
   },
 });
 
-const AchievementsIndex: FC<OwnProps> = (props) => {
+const AchievementsIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);

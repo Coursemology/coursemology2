@@ -2,15 +2,16 @@ import { FC } from 'react';
 import { Grid } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import { AchievementCourseUserEntity } from 'types/course/achievements';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 import DataTable from 'lib/components/DataTable';
 
-interface OwnProps {
+interface Props {
   achievementUsers: AchievementCourseUserEntity[];
   initialObtainedUserIds: number[];
   selectedUserIds: Set<number>;
 }
 
-const AchievementAwardSummary: FC<OwnProps> = (props) => {
+const AchievementAwardSummary: FC<Props> = (props) => {
   const { achievementUsers, initialObtainedUserIds, selectedUserIds } = props;
 
   const removedUserIds = new Set(
@@ -26,7 +27,7 @@ const AchievementAwardSummary: FC<OwnProps> = (props) => {
     removedUserIds.has(cu.id),
   );
 
-  const awardedTableOptions = {
+  const awardedTableOptions: TableOptions = {
     download: false,
     filter: false,
     print: false,
@@ -39,7 +40,7 @@ const AchievementAwardSummary: FC<OwnProps> = (props) => {
     viewColumns: false,
   };
 
-  const removedTableOptions = {
+  const removedTableOptions: TableOptions = {
     download: false,
     filter: false,
     print: false,
@@ -52,7 +53,7 @@ const AchievementAwardSummary: FC<OwnProps> = (props) => {
     viewColumns: false,
   };
 
-  const awardedTableColumns: any = [
+  const awardedTableColumns: TableColumns[] = [
     {
       name: 'name',
       label: 'Name',
@@ -76,7 +77,7 @@ const AchievementAwardSummary: FC<OwnProps> = (props) => {
     },
   ];
 
-  const removedTableColumns: any = [
+  const removedTableColumns: TableColumns[] = [
     {
       name: 'name',
       label: 'Name',

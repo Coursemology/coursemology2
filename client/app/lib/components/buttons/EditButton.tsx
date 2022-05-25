@@ -2,7 +2,7 @@ import { IconButton, IconButtonProps } from '@mui/material';
 import Edit from '@mui/icons-material/Edit';
 
 interface Props extends IconButtonProps {
-  onClick: (event: any) => void;
+  onClick: (SyntheticEvent: any) => void;
 }
 
 const EditButton = ({ onClick, ...props }: Props) => (
