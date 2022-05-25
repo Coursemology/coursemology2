@@ -12,7 +12,7 @@ import AchievementManagementButtons from '../../components/buttons/AchievementMa
 import { loadAchievement } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
 
-interface OwnProps {
+interface Props {
   intl?: any;
 }
 
@@ -38,7 +38,7 @@ const translations = defineMessages({
   },
 });
 
-const AchievementShow: FC<OwnProps> = (props) => {
+const AchievementShow: FC<Props> = (props) => {
   const { intl } = props;
   const courseId = getCourseId();
   const [isLoading, setIsLoading] = useState(true);

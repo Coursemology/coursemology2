@@ -94,7 +94,7 @@ module.exports = {
         tsconfigRootDir: __dirname,
         sourceType: 'module',
       },
-      plugins: ['@typescript-eslint', 'react-hooks'],
+      plugins: ['react-hooks'],
       rules: {
         '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
         'no-unused-vars': 'off',

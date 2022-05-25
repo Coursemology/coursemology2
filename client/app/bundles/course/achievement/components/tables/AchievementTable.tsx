@@ -11,7 +11,7 @@ import Note from 'lib/components/Note';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import AchievementManagementButtons from '../buttons/AchievementManagementButtons';
 
-interface OwnProps {
+interface Props {
   achievements: AchievementMiniEntity[];
   permissions: AchievementPermissions | null;
   onTogglePublished: (achievementId: number, data: boolean) => void;
@@ -36,7 +36,7 @@ const styles = {
   toggle: {},
 };
 
-const AchievementTable: FC<OwnProps> = (props) => {
+const AchievementTable: FC<Props> = (props) => {
   const { achievements, permissions, onTogglePublished } = props;
 
   if (achievements && achievements.length === 0) {

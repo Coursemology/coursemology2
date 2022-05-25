@@ -8,7 +8,7 @@ import AchievementAwardManager from './AchievementAwardManager';
 import { loadAchievementCourseUsers } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
 
-interface OwnProps {
+interface Props {
   achievementId: number;
   open: boolean;
   handleClose: () => any;
@@ -22,7 +22,7 @@ const translations = defineMessages({
   },
 });
 
-const AchievementAward: FC<OwnProps> = (props) => {
+const AchievementAward: FC<Props> = (props) => {
   const { achievementId, open, handleClose, intl } = props;
 
   const [discardDialogOpen, setDiscardDialogOpen] = useState(false);
@@ -41,7 +41,7 @@ const AchievementAward: FC<OwnProps> = (props) => {
         setIsLoading(false),
       );
     }
-  }, [dispatch, open]);
+  }, [achievementId, dispatch, open]);
 
   if (!open) {
     return null;
@@ -65,10 +65,8 @@ const AchievementAward: FC<OwnProps> = (props) => {
         fullWidth
         maxWidth="lg"
         style={{
-          minHeight: 800,
-          maxHeight: 1000,
           position: 'absolute',
-          top: 150,
+          top: 50,
         }}
       >
         <DialogTitle>

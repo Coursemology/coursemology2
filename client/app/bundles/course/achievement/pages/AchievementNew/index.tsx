@@ -9,7 +9,7 @@ import { AchievementFormData } from 'types/course/achievements';
 import AchievementForm from '../../components/forms/AchievementForm';
 import { createAchievement } from '../../operations';
 
-interface OwnProps {
+interface Props {
   open: boolean;
   handleClose: () => any;
   intl?: any;
@@ -37,7 +37,7 @@ const initialValues = {
   badge: { name: '', url: '', file: undefined }, // TODO: Pass url for local achievement_blank.png asset
 };
 
-const AchievementNew: FC<OwnProps> = (props) => {
+const AchievementNew: FC<Props> = (props) => {
   const { open, handleClose, intl } = props;
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [isDirty, setIsDirty] = useState(false);

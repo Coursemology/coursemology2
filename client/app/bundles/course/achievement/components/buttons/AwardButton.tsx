@@ -3,18 +3,18 @@ import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import EmojiEvents from '@mui/icons-material/EmojiEvents';
 import AchievementAward from '../../pages/AchievementAward';
 
-interface OwnProps extends IconButtonProps {
+interface Props extends IconButtonProps {
   achievementId: number;
   disabled?: boolean;
   tooltipText?: string;
 }
 
-const AwardButton: FC<OwnProps> = ({
+const AwardButton: FC<Props> = ({
   achievementId,
   disabled,
   tooltipText,
   ...props
-}: OwnProps) => {
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const awardButton = (

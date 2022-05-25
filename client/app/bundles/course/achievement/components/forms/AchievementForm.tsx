@@ -14,11 +14,11 @@ import FormSingleFileInput, {
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 
-interface OwnProps {
+interface Props {
   editing: boolean; // If the Form is in editing mode, `Add Conditions` button will be displayed.
   handleClose: (isDirty: boolean) => any;
   onSubmit: Function;
-  setIsDirty?: Function;
+  setIsDirty?: (value: boolean) => void;
   conditionAttributes?: any; // To update achievementTypesConditionAttributes
   initialValues?: Object;
 }
@@ -59,7 +59,7 @@ const validationSchema = yup.object({
   published: yup.bool(),
 });
 
-const AchievementForm: FC<OwnProps> = (props) => {
+const AchievementForm: FC<Props> = (props) => {
   const {
     conditionAttributes,
     editing,
