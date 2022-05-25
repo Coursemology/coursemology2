@@ -1,5 +1,6 @@
+import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { IconButton } from '@mui/material';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
 
@@ -9,37 +10,33 @@ const styles = {
   },
 };
 
-const UnsubmitButton = (props) => {
-  const isUnsubmitting =
-    useSelector(
-      (state) =>
-        state.surveysFlags && state.surveysFlags.isUnsubmittingResponse,
-    ) || false;
-  return (
-    <>
-      <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
-        <IconButton
-          id={`unsubmit-button-${props.buttonId}`}
-          disabled={isUnsubmitting || props.isUnsubmitting}
-          onClick={() =>
-            props.setState({
-              ...props.state,
-              unsubmitConfirmation: true,
-            })
-          }
-          size="large"
-          style={styles.formButton}
-        >
-          <RemoveCircle
-            htmlColor={
-              isUnsubmitting || props.isUnsubmitting ? undefined : props.color
+class UnsubmitButton extends Component {
+  render() {
+    const { isUnsubmitting } = this.props;
+    return (
+      <>
+        <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
+          <IconButton
+            id={`unsubmit-button-${this.props.buttonId}`}
+            disabled={isUnsubmitting}
+            onClick={() =>
+              this.props.setState({
+                ...this.props.state,
+                unsubmitConfirmation: true,
+              })
             }
-          />
-        </IconButton>
-      </span>
-    </>
-  );
-};
+            size="large"
+            style={styles.formButton}
+          >
+            <RemoveCircle
+              htmlColor={isUnsubmitting ? undefined : this.props.color}
+            />
+          </IconButton>
+        </span>
+      </>
+    );
+  }
+}
 
 UnsubmitButton.propTypes = {
   buttonId: PropTypes.number.isRequired,
@@ -49,4 +46,8 @@ UnsubmitButton.propTypes = {
   state: PropTypes.object.isRequired,
 };
 
-export default UnsubmitButton;
+export default connect((state, ownProps) => ({
+  isUnsubmitting: state.surveysFlags
+    ? state.surveysFlags.isUnsubmittingResponse
+    : ownProps.isUnsubmitting,
+}))(UnsubmitButton);
