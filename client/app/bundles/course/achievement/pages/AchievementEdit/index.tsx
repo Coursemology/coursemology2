@@ -2,10 +2,12 @@ import { FC, useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { defineMessages, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Typography } from '@mui/material';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { AppDispatch, AppState } from 'types/store';
 import { AchievementEditFormData } from 'types/course/achievements';
@@ -65,16 +67,20 @@ const AchievementEdit: FC<Props> = (props) => {
   }
 
   const onSubmit = (data: AchievementEditFormData, setError) =>
-    dispatch(
-      updateAchievement(
-        data.id,
-        data,
-        intl.formatMessage(translations.updateSuccess),
-        intl.formatMessage(translations.updateFailure),
-        setError,
-        navigate,
-      ),
-    );
+    dispatch(updateAchievement(data.id, data))
+      .then(() => {
+        toast.success(intl.formatMessage(translations.updateSuccess));
+        setTimeout(() => {
+          navigate(`/courses/${getCourseId()}/achievements`);
+        }, 500);
+      })
+      .catch((error) => {
+        toast.error(intl.formatMessage(translations.updateFailure));
+        if (error.response && error.response.data) {
+          setReactHookFormError(setError, error.response.data.errors);
+        }
+        throw error;
+      });
 
   const initialValues = {
     id: achievement.id,

@@ -1,4 +1,4 @@
-import { setReactHookFormError } from 'lib/helpers/actions-helper';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CourseAPI from 'api/course';
 import pollJob from 'lib/helpers/job-helpers';
 import { getCourseId } from 'lib/helpers/url-helpers';

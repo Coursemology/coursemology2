@@ -2,6 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
 import { Button, Checkbox, Grid, Tooltip } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
@@ -15,6 +16,7 @@ import DataTable from 'lib/components/DataTable';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { formatShortDateTime } from 'lib/moment';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import { getCourseId } from 'lib/helpers/url-helpers';
 import { AppDispatch } from 'types/store';
 import AchievementAwardSummary from './AchievementAwardSummary';
 import { awardAchievement } from '../../operations';
@@ -130,15 +132,17 @@ const AchievementAwardManager: FC<Props> = (props) => {
   }
 
   const onSubmit = (achievementId: number, courseUserIds: number[]) =>
-    dispatch(
-      awardAchievement(
-        achievementId,
-        courseUserIds,
-        intl.formatMessage(translations.awardSuccess),
-        intl.formatMessage(translations.awardFailure),
-        navigate,
-      ),
-    );
+    dispatch(awardAchievement(achievementId, courseUserIds))
+      .then(() => {
+        toast.success(intl.formatMessage(translations.awardSuccess));
+        setTimeout(() => {
+          navigate(`/courses/${getCourseId()}/achievements/${achievementId}`);
+        }, 100);
+      })
+      .catch((error) => {
+        toast.error(intl.formatMessage(translations.awardFailure));
+        throw error;
+      });
 
   const options = {
     customToolbar: () => (

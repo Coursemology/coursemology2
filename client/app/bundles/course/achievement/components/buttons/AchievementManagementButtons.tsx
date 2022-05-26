@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { AchievementMiniEntity } from 'types/course/achievements';
 import { AppDispatch } from 'types/store';
 import DeleteButton from 'lib/components/buttons/DeleteButton';
@@ -44,15 +45,18 @@ const AchievementManagementButtons: FC<Props> = (props) => {
 
   const onDelete = (): Promise<void> => {
     setIsDeleting(true);
-    return dispatch(
-      deleteAchievement(
-        achievement.id,
-        intl.formatMessage(translations.deletionSuccess),
-        intl.formatMessage(translations.deletionFailure),
-        navigateToIndex,
-        navigate,
-      ),
-    ).finally(() => setIsDeleting(false));
+    return dispatch(deleteAchievement(achievement.id))
+      .then(() => {
+        toast.success(intl.formatMessage(translations.deletionSuccess));
+        if (navigateToIndex) {
+          navigate(`/courses/${getCourseId()}/achievements/`);
+        }
+      })
+      .catch((error) => {
+        toast.error(intl.formatMessage(translations.deletionFailure));
+        throw error;
+      })
+      .finally(() => setIsDeleting(false));
   };
 
   const managementButtons = (

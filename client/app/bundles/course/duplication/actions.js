@@ -1,5 +1,5 @@
 import CourseAPI from 'api/course';
-import { setReactHookFormError } from 'lib/helpers/actions-helper';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import pollJob from 'lib/helpers/job-helpers';
 import actionTypes from 'course/duplication/constants';
 import { setNotification } from 'lib/actions';
