@@ -72,9 +72,7 @@ class ProgrammingFile extends Component {
       );
     }
 
-    console.log(file.highlighted_content);
-
-    const content = file.highlighted_content.split('\n').slice(1, -1);
+    const content = file.highlighted_content.split('\n');
     return (
       <ReadOnlyEditor answerId={answerId} fileId={file.id} content={content} />
     );
