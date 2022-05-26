@@ -17,7 +17,7 @@ class ReadOnlyEditorContainer extends Component {
         answerId={answerId}
         fileId={fileId}
         annotations={Object.values(annotations)}
-        content={content}
+        content={content.slice(1, -1)}
       />
     );
   }
