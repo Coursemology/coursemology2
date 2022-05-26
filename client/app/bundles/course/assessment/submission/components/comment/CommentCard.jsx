@@ -1,11 +1,11 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Avatar, Button, Card, CardHeader, CardContent } from '@mui/material';
+import { Avatar, Button, CardHeader } from '@mui/material';
 import { grey, orange, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import MaterialSummernote from 'lib/components/MaterialSummernote';
+import CKEditorRichText from 'lib/components/CKEditorRichText';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import moment from 'lib/moment';
 
@@ -33,6 +33,11 @@ const styles = {
   },
   card: {
     marginBottom: 20,
+    borderStyle: 'solid',
+    borderWidth: 0.2,
+    borderColor: grey[400],
+    borderRadius: 10,
+    padding: 10,
   },
   header: {
     display: 'flex',
@@ -126,15 +131,13 @@ export default class CommentCard extends Component {
     const { editMode } = this.state;
     const {
       editValue,
-      airMode,
       post: { formattedText, id },
     } = this.props;
 
     if (editMode) {
       return (
         <>
-          <MaterialSummernote
-            airMode={airMode}
+          <CKEditorRichText
             id={id.toString()}
             inputId={CommentCard.editPostIdentifier(id)}
             onChange={(nextValue) => this.onChange(nextValue)}
@@ -168,7 +171,7 @@ export default class CommentCard extends Component {
       isDelayed,
     } = this.props.post;
     return (
-      <Card id={CommentCard.postIdentifier(id)} style={styles.card}>
+      <div id={CommentCard.postIdentifier(id)} style={styles.card}>
         <div style={isDelayed ? styles.delayedHeader : styles.header}>
           <CardHeader
             avatar={<Avatar src={avatar} style={styles.avatar} />}
@@ -201,9 +204,7 @@ export default class CommentCard extends Component {
             ) : null}
           </div>
         </div>
-        <CardContent style={styles.commentContent}>
-          {this.renderCommentContent()}
-        </CardContent>
+        <div style={styles.commentContent}>{this.renderCommentContent()}</div>
         <ConfirmationDialog
           confirmDelete
           open={this.state.deleteConfirmation}
@@ -211,7 +212,7 @@ export default class CommentCard extends Component {
           onCancel={() => this.setState({ deleteConfirmation: false })}
           onConfirm={() => this.onConfirmDelete()}
         />
-      </Card>
+      </div>
     );
   }
 }
@@ -219,13 +220,8 @@ export default class CommentCard extends Component {
 CommentCard.propTypes = {
   post: postShape.isRequired,
   editValue: PropTypes.string,
-  airMode: PropTypes.bool,
 
   handleChange: PropTypes.func,
   updateComment: PropTypes.func,
   deleteComment: PropTypes.func,
-};
-
-CommentCard.defaultProps = {
-  airMode: true,
 };

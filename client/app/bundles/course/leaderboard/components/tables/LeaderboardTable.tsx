@@ -327,6 +327,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
   );
 };
 
+// eslint-disable-next-line react/display-name
 export default memo(
   LeaderboardTable,
   (prevProps, nextProps) => prevProps.data.length === nextProps.data.length,

@@ -28,6 +28,6 @@ class Course::Assessment::Question::TextResponseSolution < ApplicationRecord
   end
 
   def sanitize_explanation
-    self.explanation = ApplicationController.helpers.format_html(explanation)
+    self.explanation = ApplicationController.helpers.format_ckeditor_rich_text(explanation)
   end
 end

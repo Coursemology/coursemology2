@@ -23,7 +23,7 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
   end
 
   def edit
-    @multiple_response_question.description = helpers.format_html(@multiple_response_question.description)
+    @multiple_response_question.description = helpers.format_ckeditor_rich_text(@multiple_response_question.description)
   end
 
   def update

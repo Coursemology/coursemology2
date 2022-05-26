@@ -30,7 +30,7 @@ class Course::Assessment::Question::VoiceResponsesController < Course::Assessmen
   end
 
   def edit
-    @voice_response_question.description = helpers.format_html(@voice_response_question.description)
+    @voice_response_question.description = helpers.format_ckeditor_rich_text(@voice_response_question.description)
   end
 
   def destroy

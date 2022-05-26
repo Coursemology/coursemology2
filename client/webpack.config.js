@@ -83,13 +83,7 @@ const config = {
       {
         test: /\.scss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
-        include: [
-          path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
-          path.resolve(
-            __dirname,
-            'app/lib/styles/MaterialSummernoteModal.scss',
-          ),
-        ],
+        include: [path.resolve(__dirname, 'app/lib/styles')],
       },
       {
         test: /\.scss$/,
@@ -106,14 +100,7 @@ const config = {
           },
           'sass-loader',
         ],
-        exclude: [
-          /node_modules/,
-          path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
-          path.resolve(
-            __dirname,
-            'app/lib/styles/MaterialSummernoteModal.scss',
-          ),
-        ],
+        exclude: [/node_modules/, path.resolve(__dirname, 'app/lib/styles')],
       },
       {
         test: require.resolve('jquery'),

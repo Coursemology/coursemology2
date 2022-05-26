@@ -31,6 +31,10 @@ module ApplicationHTMLFormattersHelper
     return unless node_name == 'iframe'
     return unless node['src']&.match VIDEO_URL_WHITELIST
 
+    node['src'] = node['src'].to_s.
+                  gsub(/watch?v/, 'embed/').
+                  gsub(/youtu.be\//, 'youtube.com/embed/') # Turn the link into an embed link
+
     Sanitize.node!(node, elements: ['iframe'],
                          attributes: {
                            'iframe' => ['allowfullscreen', 'frameborder', 'height', 'src', 'width']
@@ -62,13 +66,16 @@ module ApplicationHTMLFormattersHelper
   SANITIZATION_FILTER_WHITELIST = begin
     list = HTML::Pipeline::SanitizationFilter::ALLOWLIST.deep_dup
     list[:remove_contents] = ['style']
-    list[:elements] |= ['span', 'font', 'u']
+    list[:elements] |= ['span', 'font', 'u', 'colgroup', 'col']
     list[:attributes][:all] |= ['style']
     list[:attributes]['font'] = ['face']
     list[:attributes]['table'] = ['class']
+    list[:attributes]['code'] = ['class']
+    list[:attributes]['figure'] = ['class']
     list[:css] = { properties: [
       'background-color', 'color', 'font-family', 'margin',
-      'margin-bottom', 'margin-left', 'margin-right', 'margin-top', 'text-align'
+      'margin-bottom', 'margin-left', 'margin-right', 'margin-top', 'text-align',
+      'width', 'list-style-type'
     ] }
     list[:transformers] |= [VIDEO_WHITELIST_TRANSFORMER, IMAGE_WHITELIST_TRANSFORMER]
     list
@@ -119,6 +126,14 @@ module ApplicationHTMLFormattersHelper
   # @return [String]
   def format_html(text)
     format_with_pipeline(DefaultHTMLPipeline, text)
+  end
+
+  def format_ckeditor_rich_text(text)
+    text = text.to_s.gsub(/<iframe url="/, '<iframe src="') # For displaying an embedded video
+    DefaultHTMLPipeline.to_document("<div>#{text}</div>").child.inner_html.html_safe.
+      gsub(/<br>/, ''). # Remove <br> that causes table to be badly rendered
+      gsub(/<table>/, '<table class="table table-bordered">'). # Add lines to tables
+      gsub(/width="640" height="360"><\/iframe>/, '></iframe>') # Backwards compatability for videos
   end
 
   # Syntax highlights and adds lines numbers to the given code fragment.

@@ -3,7 +3,7 @@
 # directly renders the actable partial by delegating :to_partial_path to the actable.
 
 json.id question.id
-json.description format_html(question.description)
+json.description format_ckeditor_rich_text(question.description)
 json.maximumGrade question.maximum_grade.to_f
 
 json.canViewHistory case question.actable_type

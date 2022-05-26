@@ -22,10 +22,10 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         answer_id = submission.answers.first.id
-        summernote_selector = "textarea[name=\"#{answer_id}.answer_text\"]"
-        expect(page).to have_selector(summernote_selector, visible: false)
-        fill_in_react_summernote summernote_selector, ''
-        fill_in_react_summernote summernote_selector, 'Testing Save Draft'
+        react_ck_selector = "textarea[name=\"#{answer_id}.answer_text\"]"
+        expect(page).to have_selector(react_ck_selector, visible: false)
+        fill_in_react_ck react_ck_selector, ''
+        fill_in_react_ck react_ck_selector, 'Testing Save Draft'
         expect(page).to have_text('Testing Save Draft')
         click_button('Save Draft')
         expect(current_path).to eq(
@@ -40,10 +40,10 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         answer_id = submission.answers.first.id
-        summernote_selector = "textarea[name=\"#{answer_id}.answer_text\"]"
-        expect(page).to have_selector(summernote_selector, visible: false)
-        fill_in_react_summernote summernote_selector, ''
-        fill_in_react_summernote summernote_selector, 'Testing Finalising'
+        react_ck_selector = "textarea[name=\"#{answer_id}.answer_text\"]"
+        expect(page).to have_selector(react_ck_selector, visible: false)
+        fill_in_react_ck react_ck_selector, ''
+        fill_in_react_ck react_ck_selector, 'Testing Finalising'
         expect(page).to have_text('Testing Finalising')
         click_button('Finalise Submission')
         accept_confirm_dialog do

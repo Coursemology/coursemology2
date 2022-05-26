@@ -63,6 +63,7 @@ MultipleResponseOptions.defaultProps = {
   readOnly: false,
 };
 
+// eslint-disable-next-line react/display-name
 const MemoMultipleResponseOptions = memo(
   MultipleResponseOptions,
   (prevProps, nextProps) => {

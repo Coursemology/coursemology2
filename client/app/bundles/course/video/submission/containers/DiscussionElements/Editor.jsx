@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
-import MaterialSummernote from 'lib/components/MaterialSummernote';
+import CKEditorRichText from 'lib/components/CKEditorRichText';
 
 import style from '../Discussion.scss';
 
@@ -42,8 +42,7 @@ const defaultProps = {
 function Editor(props) {
   return (
     <>
-      <MaterialSummernote
-        airMode
+      <CKEditorRichText
         disabled={props.disabled}
         label={<FormattedMessage {...translations.prompt} />}
         onChange={(nextValue) => props.onContentUpdate(nextValue)}

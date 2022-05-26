@@ -4,7 +4,7 @@ json.(survey, :id, :title, :base_exp, :time_bonus_exp, :published,
 json.start_at survey.start_at&.iso8601
 json.end_at survey.end_at&.iso8601
 json.closing_reminded_at survey.closing_reminded_at&.iso8601
-json.description format_html(survey.description)
+json.description format_ckeditor_rich_text(survey.description)
 
 can_update = can?(:update, survey)
 json.canUpdate can_update
