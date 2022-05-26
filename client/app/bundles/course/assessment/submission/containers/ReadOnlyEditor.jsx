@@ -12,6 +12,7 @@ class ReadOnlyEditorContainer extends Component {
 
   render() {
     const { answerId, fileId, annotations, content } = this.props;
+    // content has <div> tags at first and last index, increasing line count
     return (
       <ReadOnlyEditorComponent
         answerId={answerId}
