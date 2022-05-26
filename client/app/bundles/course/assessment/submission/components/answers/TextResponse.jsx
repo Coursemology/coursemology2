@@ -36,6 +36,7 @@ const TextResponse = (props) => {
           multiline
           renderIf={!readOnly && !question.autogradable}
           variant="standard"
+          disabled={readOnly}
         />
       )}
     />

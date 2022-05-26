@@ -43,7 +43,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def edit
-    @assessment.description = helpers.format_html(@assessment.description)
+    @assessment.description = helpers.format_ckeditor_rich_text(@assessment.description)
   end
 
   def update
