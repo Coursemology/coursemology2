@@ -2,6 +2,10 @@
 import CourseAPI from 'api/course';
 import pollJob from 'lib/helpers/job-helpers';
 /* eslint-enable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
+import {
+  resetArrayFields,
+  resetObjectFields,
+} from 'lib/helpers/react-hook-form-helper';
 import actionTypes from '../constants';
 import translations from '../translations';
 
@@ -59,7 +63,13 @@ function buildErrorMessage(error) {
     .join(', ');
 }
 
-function getEvaluationResult(submissionId, answerId, questionId) {
+function getEvaluationResult(
+  submissionId,
+  answerId,
+  questionId,
+  setValue,
+  resetField,
+) {
   return (dispatch) => {
     CourseAPI.assessment.submissions
       .reloadAnswer(submissionId, { answer_id: answerId })
@@ -70,6 +80,14 @@ function getEvaluationResult(submissionId, answerId, questionId) {
           payload: data,
           questionId,
         });
+        if (setValue !== undefined && resetField !== undefined) {
+          // have to setValue first to clear any `staged` properties before resetting
+          setValue(
+            `${answerId}.files_attributes`,
+            data.fields.files_attributes,
+          );
+          resetObjectFields(resetField, data.fields, answerId);
+        }
       })
       .catch(() => {
         dispatch(setNotification(translations.requestFailure));
@@ -255,7 +273,13 @@ export function reevaluateAnswer(submissionId, answerId, questionId) {
   };
 }
 
-export function submitAnswer(submissionId, answerId, rawAnswer, setValue) {
+export function submitAnswer(
+  submissionId,
+  answerId,
+  rawAnswer,
+  setValue,
+  resetField,
+) {
   const answer = formatAnswer(rawAnswer);
   const payload = { answer };
   const questionId = answer.questionId;
@@ -275,7 +299,13 @@ export function submitAnswer(submissionId, answerId, rawAnswer, setValue) {
             JOB_POLL_DELAY,
             () =>
               dispatch(
-                getEvaluationResult(submissionId, answer.id, questionId),
+                getEvaluationResult(
+                  submissionId,
+                  answer.id,
+                  questionId,
+                  setValue,
+                  resetField,
+                ),
               ),
             (errorData) => {
               dispatch({
@@ -292,9 +322,8 @@ export function submitAnswer(submissionId, answerId, rawAnswer, setValue) {
             payload: data,
             questionId,
           });
-
-          // When an answer is submitted, the value of that field needs to be updated.
-          setValue(`${answerId}`, data.fields);
+          // When an answer is submitted, update default value of field for form
+          resetObjectFields(resetField, data.fields, answerId);
         }
       })
       .catch(() => {
@@ -318,15 +347,18 @@ export function resetAnswer(submissionId, answerId, questionId, setValue) {
           payload: data,
           questionId,
         });
-
-        // When an answer is submitted, the value of that field needs to be updated.
+        // we leave the form dirty, since after reset
+        // the user should resubmit
         setValue(`${answerId}`, data.fields);
+
+        // Clear the import_files attribute to empty dropzone
+        setValue(`${answerId}.import_files`, []);
       })
       .catch(() => dispatch({ type: actionTypes.RESET_FAILURE, questionId }));
   };
 }
 
-export function deleteFile(answerId, fileId, answers, setValue) {
+export function deleteFile(answerId, fileId, answers, setValue, resetField) {
   const answer = Object.values(answers).find((ans) => ans.id === answerId);
   const payload = { answer: { id: answerId, file_id: fileId } };
 
@@ -343,12 +375,20 @@ export function deleteFile(answerId, fileId, answers, setValue) {
           payload: responsePayload,
         });
 
-        // When an uploaded programming file is deleted, we need to update the field value
-        // excluding the deleted file.
         const newFilesAttributes = answer.files_attributes.filter(
           (file) => file.id !== fileId,
         );
-        setValue(`${answerId}.files_attributes`, newFilesAttributes);
+
+        // When an uploaded programming file is deleted, we need to update the field value
+        // excluding the deleted file.
+        setValue(`${answerId}.files_attributes`, newFilesAttributes, {
+          shouldDirty: false,
+        });
+        resetArrayFields(
+          resetField,
+          newFilesAttributes,
+          `${answerId}.files_attributes`,
+        );
 
         dispatch(setNotification(translations.deleteFileSuccess));
       })
@@ -380,7 +420,13 @@ function validateJavaFiles(files) {
 }
 
 // Imports staged files into the question to be evaluated
-export function importFiles(answerId, answerFields, language, setValue) {
+export function importFiles(
+  answerId,
+  answerFields,
+  language,
+  setValue,
+  resetField,
+) {
   const answer = Object.values(answerFields).find((ans) => ans.id === answerId);
   const files = answerFields[answerId].files_attributes;
   const payload = { answer: { id: answerId, ...answer } };
@@ -409,9 +455,21 @@ export function importFiles(answerId, answerFields, language, setValue) {
           const newFilesAttributes = data.fields.files_attributes.map(
             (file) => ({ ...file, staged: false }),
           );
+
+          // When an uploaded programming file is uploaded, we need to update the field value
+          // Have to use setValue first to include `staged` property, then reset initial values
           setValue(`${answerId}.files_attributes`, newFilesAttributes);
-          // import_files field is reset to remove files from dropbox.
+          resetArrayFields(
+            resetField,
+            newFilesAttributes,
+            `${answerId}.files_attributes`,
+          );
+
+          // Clear the import_files attribute to empty dropzone
           setValue(`${answerId}.import_files`, []);
+          resetField(`${answerId}.import_files`, {
+            defaultValue: [],
+          });
 
           dispatch(setNotification(translations.importFilesSuccess));
         })

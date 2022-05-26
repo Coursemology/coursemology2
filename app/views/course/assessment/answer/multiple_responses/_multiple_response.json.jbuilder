@@ -1,11 +1,15 @@
 # frozen_string_literal: true
+last_attempt = last_attempt(answer)
+
 json.fields do
   json.questionId answer.question_id
   json.id answer.acting_as.id
   json.option_ids answer.options.map(&:id)
 end
 
-last_attempt = last_attempt(answer)
+json.answerStatus do
+  json.isLatestAnswer answer.specific.compare_answer(last_attempt.specific)
+end
 
 json.explanation do
   if last_attempt&.auto_grading&.result

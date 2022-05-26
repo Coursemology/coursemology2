@@ -9,6 +9,10 @@ json.fields do
   end
 end
 
+json.answerStatus do
+  json.isLatestAnswer true
+end
+
 last_attempt = last_attempt(answer)
 
 json.explanation do

@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+last_attempt = last_attempt(answer)
+
 json.fields do
   json.questionId answer.question_id
   json.id answer.acting_as.id
@@ -7,11 +9,13 @@ json.fields do
   json.answer_text answer.answer_text unless question.hide_text
 end
 
+json.answerStatus do
+  json.isLatestAnswer answer.specific.compare_answer(last_attempt.specific)
+end
+
 json.attachments answer.attachments do |attachment|
   json.(attachment, :name, :id)
 end
-
-last_attempt = last_attempt(answer)
 
 json.explanation do
   json.correct last_attempt&.correct

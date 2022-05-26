@@ -11,8 +11,21 @@ function buildInitialValues(answers) {
   );
 }
 
+function buildAnswerStatus(answers) {
+  return answers.reduce(
+    (obj, answer) => ({
+      ...obj,
+      [answer.fields.questionId]: {
+        isLatestAnswer: answer.answerStatus.isLatestAnswer,
+      },
+    }),
+    {},
+  );
+}
+
 const initialState = {
   initial: {},
+  status: {},
 };
 
 export default function (state = initialState, action) {
@@ -26,18 +39,32 @@ export default function (state = initialState, action) {
     case actions.UNMARK_SUCCESS:
     case actions.PUBLISH_SUCCESS: {
       const initialValues = buildInitialValues(action.payload.answers);
+      const answerStatus = buildAnswerStatus(action.payload.answers);
       return {
         ...state,
         initial: initialValues,
+        status: {
+          ...state.status,
+          ...answerStatus,
+        },
       };
     }
     case actions.IMPORT_FILES_SUCCESS:
-    case actions.REEVALUATE_SUCCESS:
-    case actions.AUTOGRADE_SUCCESS:
-    case actions.RESET_SUCCESS:
     case actions.DELETE_FILE_SUCCESS: {
       return {
         ...state,
+      };
+    }
+    case actions.REEVALUATE_SUCCESS:
+    case actions.AUTOGRADE_SUCCESS:
+    case actions.RESET_SUCCESS: {
+      const answerStatus = buildAnswerStatus([action.payload]);
+      return {
+        ...state,
+        status: {
+          ...state.status,
+          ...answerStatus,
+        },
       };
     }
     default:

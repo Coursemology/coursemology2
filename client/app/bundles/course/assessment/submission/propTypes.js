@@ -88,6 +88,10 @@ export const answerShape = PropTypes.shape({
   createdAt: PropTypes.string,
 });
 
+export const answerStatusShape = PropTypes.shape({
+  isLatestAnswer: PropTypes.bool,
+});
+
 export const explanationShape = PropTypes.shape({
   correct: PropTypes.bool,
   explanations: PropTypes.arrayOf(PropTypes.string),
@@ -208,7 +212,7 @@ export const forumPostShape = PropTypes.shape({
   id: PropTypes.number,
   text: PropTypes.string,
   updatedAt: PropTypes.string,
-  isUpdated: PropTypes.bool,
+  isLatestAnswer: PropTypes.bool,
   isDeleted: PropTypes.bool,
   userName: PropTypes.string,
   avatar: PropTypes.string,

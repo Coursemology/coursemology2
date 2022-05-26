@@ -4,6 +4,7 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
 import { Button } from '@mui/material';
+import { resetArrayFields } from 'lib/helpers/react-hook-form-helper';
 import ImportedFileView from './ImportedFileView';
 import Editor from '../components/Editor';
 import FileInputField from '../components/FileInput';
@@ -102,7 +103,7 @@ const renderProgrammingHistoryEditor = (answer, displayFileIndex) => {
 };
 
 const stageFiles = async (props) => {
-  const { answerId, answers, filesToImport, setValue } = props;
+  const { answerId, answers, filesToImport, setValue, resetField } = props;
 
   // Create a map of promises that will resolve all files are read
   const readerPromises = Object.keys(filesToImport).map(
@@ -134,13 +135,22 @@ const stageFiles = async (props) => {
       (file) => !file.staged,
     );
 
-    setValue(`${answerId}.files_attributes`, filteredFiles.concat(newFiles));
+    // Call setValue first to update fields in react-hook-form,
+    // followed by reset to set clean the form
+    setValue(`${answerId}.files_attributes`, filteredFiles.concat(newFiles), {
+      shouldDirty: false,
+    });
+    resetArrayFields(
+      resetField,
+      filteredFiles.concat(newFiles),
+      `${answerId}.files_attributes`,
+    );
   });
 };
 
 const VisibleProgrammingImportEditor = (props) => {
   const [displayFileIndex, setDisplayFileIndex] = useState(0);
-  const { control, setValue } = useFormContext();
+  const { control, setValue, resetField } = useFormContext();
   const {
     dispatch,
     submissionId,
@@ -169,7 +179,7 @@ const VisibleProgrammingImportEditor = (props) => {
   const disableImport = !stagedFiles || isSaving;
 
   const handleDeleteFile = (fileId) => {
-    dispatch(deleteFile(answerId, fileId, answers, setValue));
+    dispatch(deleteFile(answerId, fileId, answers, setValue, resetField));
     setDisplayFileIndex(0);
   };
 
@@ -211,6 +221,7 @@ const VisibleProgrammingImportEditor = (props) => {
                 answers,
                 filesToImport,
                 setValue,
+                resetField,
               })
             }
           />
@@ -219,7 +230,13 @@ const VisibleProgrammingImportEditor = (props) => {
             disabled={disableImport}
             onClick={() =>
               dispatch(
-                importFiles(answerId, answers, question.language, setValue),
+                importFiles(
+                  answerId,
+                  answers,
+                  question.language,
+                  setValue,
+                  resetField,
+                ),
               )
             }
             style={styles.formButton}

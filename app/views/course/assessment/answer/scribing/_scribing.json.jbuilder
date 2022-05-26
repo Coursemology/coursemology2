@@ -15,6 +15,10 @@ json.fields do
   json.id answer.acting_as.id
 end
 
+json.answerStatus do
+  json.isLatestAnswer true
+end
+
 last_attempt = last_attempt(answer)
 
 json.explanation do

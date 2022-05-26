@@ -48,6 +48,9 @@ const mockSubmission = {
         id: answerId,
         questionId: 1,
       },
+      answerStatus: {
+        1: { isLatestAnswer: true },
+      },
       grading: {
         grade: null,
         id: answerId,

@@ -7,6 +7,10 @@ json.fields do
                 selected_posts: answer.compute_post_packs
 end
 
+json.answerStatus do
+  json.isLatestAnswer true
+end
+
 last_attempt = last_attempt(answer)
 
 json.explanation do

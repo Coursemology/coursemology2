@@ -35,6 +35,10 @@ json.fields do
   end
 end
 
+json.answerStatus do
+  json.isLatestAnswer answer.specific.compare_answer(latest_answer.specific)
+end
+
 if attempt.submitted? && (job = attempt&.auto_grading&.job)
   json.autograding do
     json.path job_path(job) if job.submitted?
