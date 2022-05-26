@@ -1,7 +1,7 @@
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
 import history from 'lib/history';
-import { setReactHookFormError } from 'lib/helpers/actions-helper';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import {
   getCourseId,
   getAssessmentId,

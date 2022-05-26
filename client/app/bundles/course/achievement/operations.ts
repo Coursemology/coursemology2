@@ -1,7 +1,5 @@
-import { toast } from 'react-toastify';
+import { AxiosResponse } from 'axios';
 import CourseAPI from 'api/course';
-import { setReactHookFormError } from 'lib/helpers/actions-helper';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { AchievementFormData } from 'types/course/achievements';
 import { Operation } from 'types/store';
 import * as actions from './actions';
@@ -75,129 +73,53 @@ export function loadAchievementCourseUsers(
       });
 }
 
-export function createAchievement(
-  data: AchievementFormData,
-  successMessage: string,
-  failureMessage: string,
-  setError: Function,
-  navigate: Function,
-): Operation<void> {
+export function createAchievement(data: AchievementFormData): Operation<
+  AxiosResponse<{
+    id: number;
+  }>
+> {
   const attributes = formatAttributes(data);
-
-  return async (dispatch) =>
-    CourseAPI.achievements
-      .create(attributes)
-      .then((response) => {
-        toast.success(successMessage);
-        setTimeout(() => {
-          if (response.data && response.data.id) {
-            navigate(
-              `/courses/${getCourseId()}/achievements/${response.data.id}`,
-            );
-          }
-        }, 200);
-      })
-      .catch((error) => {
-        toast.error(failureMessage);
-        if (error.response && error.response.data) {
-          setReactHookFormError(setError, error.response.data.errors);
-        }
-        throw error;
-      });
+  return async (dispatch) => CourseAPI.achievements.create(attributes);
 }
 
 export function updateAchievement(
   achievementId: number,
   data: AchievementFormData,
-  successMessage: string,
-  failureMessage: string,
-  setError: Function,
-  navigate: Function,
-): Operation<void> {
+): Operation<AxiosResponse<any, any>> {
   const attributes = formatAttributes(data);
   return async (dispatch) =>
-    CourseAPI.achievements
-      .update(achievementId, attributes)
-      .then(() => {
-        toast.success(successMessage);
-        setTimeout(() => {
-          navigate(`/courses/${getCourseId()}/achievements`);
-        }, 500);
-      })
-      .catch((error) => {
-        toast.error(failureMessage);
-        if (error.response && error.response.data) {
-          setReactHookFormError(setError, error.response.data.errors);
-        }
-        throw error;
-      });
+    CourseAPI.achievements.update(achievementId, attributes);
 }
 
-export function deleteAchievement(
-  achievementId: number,
-  successMessage: string,
-  failureMessage: string,
-  navigateToIndex: boolean,
-  navigate: Function,
-): Operation<void> {
+export function deleteAchievement(achievementId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.achievements
-      .delete(achievementId)
-      .then(() => {
-        dispatch(actions.deleteAchievement(achievementId));
-        toast.success(successMessage);
-        if (navigateToIndex) {
-          navigate(`/courses/${getCourseId()}/achievements/`);
-        }
-      })
-      .catch((error) => {
-        toast.error(failureMessage);
-        throw error;
-      });
+    CourseAPI.achievements.delete(achievementId).then(() => {
+      dispatch(actions.deleteAchievement(achievementId));
+    });
 }
 
 export function awardAchievement(
   achievementId: number,
   data: number[],
-  successMessage: string,
-  failureMessage: string,
-  navigate: Function,
 ): Operation<void> {
   const attributes = { achievement: { course_user_ids: data } };
   return async (dispatch) =>
     CourseAPI.achievements
       .update(achievementId, attributes)
       .then((response) => {
-        toast.success(successMessage);
-        setTimeout(() => {
-          navigate(`/courses/${getCourseId()}/achievements/${achievementId}`);
-          dispatch(actions.saveAchievement(response.data.achievement));
-        }, 100);
-      })
-      .catch((error) => {
-        toast.error(failureMessage);
-        throw error;
+        dispatch(actions.saveAchievement(response.data.achievement));
       });
 }
 
 export function updatePublishedAchievement(
   achievementId: number,
   data: boolean,
-  successMessage: string,
-  failureMessage: string,
 ): Operation<void> {
   const attributes = { achievement: { published: data } };
   return async (dispatch) =>
     CourseAPI.achievements
       .update(achievementId, attributes)
       .then((response) => {
-        toast.success(successMessage);
-        setTimeout(() => {
-          dispatch(actions.saveAchievement(response.data.achievement));
-        }, 100);
-      })
-      .catch((error) => {
-        toast.error(failureMessage);
-        throw error;
+        dispatch(actions.saveAchievement(response.data.achievement));
       });
 }

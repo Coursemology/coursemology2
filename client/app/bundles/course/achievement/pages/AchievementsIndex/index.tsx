@@ -96,14 +96,14 @@ const AchievementsIndex: FC<Props> = (props) => {
   }
 
   const onTogglePublished = (achievementId: number, data: boolean) =>
-    dispatch(
-      updatePublishedAchievement(
-        achievementId,
-        data,
-        intl.formatMessage(translations.toggleSuccess),
-        intl.formatMessage(translations.toggleFailure),
-      ),
-    );
+    dispatch(updatePublishedAchievement(achievementId, data))
+      .then(() => {
+        toast.success(intl.formatMessage(translations.toggleSuccess));
+      })
+      .catch((error) => {
+        toast.error(intl.formatMessage(translations.toggleFailure));
+        throw error;
+      });
 
   return (
     <>

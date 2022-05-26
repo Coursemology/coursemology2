@@ -1,5 +1,5 @@
 import CourseAPI from 'api/course';
-import { setReactHookFormError } from 'lib/helpers/actions-helper';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import {
   setNotification,
   resetDeleteConfirmation,

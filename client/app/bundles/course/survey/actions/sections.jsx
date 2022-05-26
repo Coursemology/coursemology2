@@ -1,4 +1,4 @@
-import { setReactHookFormError } from 'lib/helpers/actions-helper';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CourseAPI from 'api/course';
 import { getSurveyId } from 'lib/helpers/url-helpers';
 import actionTypes from '../constants';
