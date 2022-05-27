@@ -42,6 +42,22 @@ class VisibleGradingPanel extends Component {
       .reduce((acc, b) => acc + b.grade, 0);
   }
 
+  static renderCourseUserLink(courseUser) {
+    const courseId = getCourseId();
+    if (courseUser && courseUser.id) {
+      return (
+        <a href={getCourseUserURL(courseId, courseUser.id)}>
+          {courseUser.name}
+        </a>
+      );
+    }
+    if (courseUser) {
+      // System or deleted users should not be linked to
+      return <>{courseUser.name}</>;
+    }
+    return null;
+  }
+
   handleExpField(value) {
     const { updateExp } = this.props;
     const parsedValue = parseFloat(value);
@@ -133,6 +149,7 @@ class VisibleGradingPanel extends Component {
           <a href={getCourseUserURL(courseId, grader.id)}>{grader.name}</a>
         );
       } else if (grader) {
+        // System or deleted users should not be linked to
         graderInfo = grader.name;
       } else {
         graderInfo = '';
@@ -230,14 +247,14 @@ class VisibleGradingPanel extends Component {
   renderSubmissionTable() {
     const {
       submission: {
-        submitter,
         workflowState,
         bonusEndAt,
         dueAt,
         attemptedAt,
         submittedAt,
-        grader,
+        submitter,
         gradedAt,
+        grader,
         graderView,
       },
       gamified,
@@ -261,7 +278,10 @@ class VisibleGradingPanel extends Component {
         <h4>{intl.formatMessage(translations.statistics)}</h4>
         <Table style={styles.table}>
           <TableBody>
-            {tableRow('student', submitter)}
+            {tableRow(
+              'student',
+              VisibleGradingPanel.renderCourseUserLink(submitter),
+            )}
             {tableRow('status', this.renderSubmissionStatus())}
             {shouldRenderGrading
               ? tableRow('totalGrade', this.renderTotalGrade())
@@ -275,7 +295,12 @@ class VisibleGradingPanel extends Component {
             {dueAt ? tableRow('dueAt', formatDateTime(dueAt)) : null}
             {tableRow('attemptedAt', formatDateTime(attemptedAt))}
             {tableRow('submittedAt', formatDateTime(submittedAt))}
-            {shouldRenderGrading ? tableRow('grader', grader) : null}
+            {shouldRenderGrading
+              ? tableRow(
+                  'grader',
+                  VisibleGradingPanel.renderCourseUserLink(grader),
+                )
+              : null}
             {shouldRenderGrading
               ? tableRow('gradedAt', formatDateTime(gradedAt))
               : null}
