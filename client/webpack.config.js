@@ -28,6 +28,7 @@ const config = {
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {
+      theme: path.resolve('./app/theme'),
       lib: path.resolve('./app/lib'),
       api: path.resolve('./app/api'),
       course: path.resolve('./app/bundles/course'),

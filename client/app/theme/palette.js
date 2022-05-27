@@ -44,22 +44,6 @@ const palette = {
     light: '#FDF8F3',
     dark: '#95591E',
   },
-  status: {
-    [workflowStates.Unstarted]: colors.red[100],
-    [workflowStates.Attempting]: colors.yellow[100],
-    [workflowStates.Submitted]: colors.grey[100],
-    [workflowStates.Graded]: colors.blue[100],
-    [workflowStates.Published]: colors.green[100],
-  },
-  icon: {
-    person: colors.blue[500],
-    history: {
-      none: colors.red[600],
-      default: colors.blue[600],
-    },
-    unsubmit: colors.pink[600],
-    delete: colors.red[900],
-  },
   danger: {
     contrastText: white,
     main: '#ED4740',
@@ -83,6 +67,24 @@ const palette = {
   },
   contrastThreshold: 3,
   tonalOffset: 0.1,
+
+  // Add custom colors below
+  submissionStatus: {
+    [workflowStates.Unstarted]: colors.red[100],
+    [workflowStates.Attempting]: colors.yellow[100],
+    [workflowStates.Submitted]: colors.grey[100],
+    [workflowStates.Graded]: colors.blue[100],
+    [workflowStates.Published]: colors.green[100],
+  },
+  submissionIcon: {
+    person: colors.blue[500],
+    history: {
+      none: colors.red[600],
+      default: colors.blue[600],
+    },
+    unsubmit: colors.pink[600],
+    delete: colors.red[900],
+  },
 };
 
 export default palette;

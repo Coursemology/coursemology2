@@ -13,6 +13,7 @@ module.exports = {
     'import/resolver': {
       alias: {
         map: [
+          ['theme', './app/theme'],
           ['lib', './app/lib'],
           ['api', './app/api'],
           ['course', './app/bundles/course'],
