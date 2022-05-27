@@ -9,9 +9,18 @@ export interface AppState {
   achievements: AchievementsState;
 }
 
-export type Operation<R> = ThunkAction<Promise<R>, AppState, {}, AnyAction>;
+export type Operation<R> = ThunkAction<
+  Promise<R>,
+  AppState,
+  Record<string, unknown>,
+  AnyAction
+>;
 
-export type AppDispatch = ThunkDispatch<AppState, {}, AnyAction>;
+export type AppDispatch = ThunkDispatch<
+  AppState,
+  Record<string, unknown>,
+  AnyAction
+>;
 
 interface EntityMetadata {
   // The timestamp at which the entity was last updated, in number of milliseconds since UTC.

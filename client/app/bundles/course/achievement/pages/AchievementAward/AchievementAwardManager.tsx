@@ -93,7 +93,9 @@ const translations = defineMessages({
   },
 });
 
-const getObtainedUserIds = (courseUsers: AchievementCourseUserEntity[]) =>
+const getObtainedUserIds = (
+  courseUsers: AchievementCourseUserEntity[],
+): number[] =>
   courseUsers.filter((cu) => cu.obtainedAt !== null).map((cu) => cu.id);
 
 const AchievementAwardManager: FC<Props> = (props) => {
@@ -131,7 +133,10 @@ const AchievementAwardManager: FC<Props> = (props) => {
     return <Note message={<FormattedMessage {...translations.noUser} />} />;
   }
 
-  const onSubmit = (achievementId: number, courseUserIds: number[]) =>
+  const onSubmit = (
+    achievementId: number,
+    courseUserIds: number[],
+  ): Promise<void> =>
     dispatch(awardAchievement(achievementId, courseUserIds))
       .then(() => {
         toast.success(intl.formatMessage(translations.awardSuccess));
@@ -147,16 +152,19 @@ const AchievementAwardManager: FC<Props> = (props) => {
   const options = {
     customToolbar: () => (
       <>
-        <Button color="secondary" onClick={() => handleClose(false)}>
+        <Button color="secondary" onClick={(): void => handleClose(false)}>
           <FormattedMessage {...translations.cancel} />
         </Button>
         <Button
           disabled={isPristine}
-          onClick={() => setSelectedUserIds(new Set(obtainedUserIds))}
+          onClick={(): void => setSelectedUserIds(new Set(obtainedUserIds))}
         >
           <FormattedMessage {...translations.resetChanges} />
         </Button>
-        <Button disabled={isPristine} onClick={() => setOpenConfirmation(true)}>
+        <Button
+          disabled={isPristine}
+          onClick={(): void => setOpenConfirmation(true)}
+        >
           <FormattedMessage {...translations.saveChanges} />
         </Button>
       </>
@@ -167,7 +175,11 @@ const AchievementAwardManager: FC<Props> = (props) => {
     print: false,
     rowsPerPageOptions: [10, 25, 50],
     selectableRows: 'none',
-    setRowProps: (row, dataIndex: number, rowIndex: number) => {
+    setRowProps: (
+      _row,
+      dataIndex: number,
+      _rowIndex: number,
+    ): Record<string, unknown> => {
       const obtainedAchievement =
         achievementUsers[dataIndex].obtainedAt !== null;
       const awardedAchievement = selectedUserIds.has(
@@ -199,7 +211,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
       label: 'User Type',
       options: {
         search: false,
-        customBodyRenderLite: (dataIndex: number) => {
+        customBodyRenderLite: (dataIndex: number): string => {
           const isPhantom = achievementUsers[dataIndex].phantom;
           if (isPhantom) {
             return 'Phantom Student';
@@ -214,7 +226,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
       options: {
         filter: false,
         search: false,
-        customBodyRenderLite: (dataIndex: number) => {
+        customBodyRenderLite: (dataIndex: number): string => {
           const achievementObtainedDate =
             achievementUsers[dataIndex].obtainedAt;
           return formatShortDateTime(achievementObtainedDate);
@@ -228,7 +240,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
         filter: false,
         search: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number) => {
+        customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const userId = achievementUsers[dataIndex].id;
           const isChecked = selectedUserIds.has(userId);
           return (
@@ -236,7 +248,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
               id={`checkbox_${userId}`}
               key={`checkbox_${userId}`}
               checked={isChecked}
-              onChange={(event, checked) => {
+              onChange={(_event, checked): void => {
                 if (checked) {
                   setSelectedUserIds((prev) => new Set(prev.add(userId)));
                 } else {
@@ -249,11 +261,11 @@ const AchievementAwardManager: FC<Props> = (props) => {
             />
           );
         },
-        customHeadLabelRender: () => (
+        customHeadLabelRender: (): JSX.Element => (
           <div style={{ display: 'flex', alignItems: 'end' }}>
             <Checkbox
               defaultChecked={false}
-              onChange={(event, checked) => {
+              onChange={(_event, checked): void => {
                 if (checked) {
                   setSelectedUserIds(
                     new Set(achievementUsers.map((cu) => cu.id)),
@@ -312,8 +324,8 @@ const AchievementAwardManager: FC<Props> = (props) => {
       {openConfirmation && (
         <ConfirmationDialog
           open={openConfirmation}
-          onCancel={() => setOpenConfirmation(false)}
-          onConfirm={() => {
+          onCancel={(): void => setOpenConfirmation(false)}
+          onConfirm={(): void => {
             setIsSubmitting(true);
             onSubmit(achievement.id, Array.from(selectedUserIds))
               .then(() => handleClose(true))

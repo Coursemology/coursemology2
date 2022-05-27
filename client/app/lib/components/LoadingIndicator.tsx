@@ -10,7 +10,7 @@ const styles = {
   },
 };
 
-const LoadingIndicator: FC<{}> = () => (
+const LoadingIndicator: FC = () => (
   <div style={styles.loading}>
     <div style={{ position: 'absolute' }}>
       <CircularProgress size={60} />

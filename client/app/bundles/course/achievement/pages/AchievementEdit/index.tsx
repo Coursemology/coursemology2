@@ -66,7 +66,7 @@ const AchievementEdit: FC<Props> = (props) => {
     );
   }
 
-  const onSubmit = (data: AchievementEditFormData, setError) =>
+  const onSubmit = (data: AchievementEditFormData, setError): Promise<void> =>
     dispatch(updateAchievement(data.id, data))
       .then(() => {
         toast.success(intl.formatMessage(translations.updateSuccess));
@@ -76,7 +76,7 @@ const AchievementEdit: FC<Props> = (props) => {
       })
       .catch((error) => {
         toast.error(intl.formatMessage(translations.updateFailure));
-        if (error.response && error.response.data) {
+        if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
         throw error;
@@ -88,8 +88,8 @@ const AchievementEdit: FC<Props> = (props) => {
     description: achievement.description,
     published: achievement.published,
     badge: {
-      name: achievement.badge && achievement.badge.name,
-      url: achievement.badge && achievement.badge.url,
+      name: achievement.badge?.name,
+      url: achievement.badge?.url,
       file: '',
     },
   };
@@ -106,7 +106,7 @@ const AchievementEdit: FC<Props> = (props) => {
           conditions: achievement.conditions,
         }}
         editing
-        handleClose={(isDirty) => {
+        handleClose={(isDirty): void => {
           if (isDirty) {
             setConfirmationDialogOpen(true);
           }
@@ -117,8 +117,8 @@ const AchievementEdit: FC<Props> = (props) => {
       <ConfirmationDialog
         confirmDiscard
         open={confirmationDialogOpen}
-        onCancel={() => setConfirmationDialogOpen(false)}
-        onConfirm={() => {
+        onCancel={(): void => setConfirmationDialogOpen(false)}
+        onConfirm={(): void => {
           setConfirmationDialogOpen(false);
         }}
       />

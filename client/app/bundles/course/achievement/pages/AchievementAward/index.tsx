@@ -54,7 +54,7 @@ const AchievementAward: FC<Props> = (props) => {
   return (
     <>
       <Dialog
-        onClose={() => {
+        onClose={(): void => {
           if (isDirty) {
             setDiscardDialogOpen(true);
           } else {
@@ -78,7 +78,7 @@ const AchievementAward: FC<Props> = (props) => {
           <AchievementAwardManager
             achievement={achievement}
             isLoading={isLoading}
-            handleClose={(skipDialog: boolean) => {
+            handleClose={(skipDialog: boolean): void => {
               if (isDirty && !skipDialog) {
                 setDiscardDialogOpen(true);
               } else {
@@ -92,8 +92,8 @@ const AchievementAward: FC<Props> = (props) => {
       <ConfirmationDialog
         confirmDiscard
         open={discardDialogOpen}
-        onCancel={() => setDiscardDialogOpen(false)}
-        onConfirm={() => {
+        onCancel={(): void => setDiscardDialogOpen(false)}
+        onConfirm={(): void => {
           setDiscardDialogOpen(false);
           handleClose();
         }}

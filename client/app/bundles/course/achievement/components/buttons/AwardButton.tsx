@@ -19,7 +19,7 @@ const AwardButton: FC<Props> = ({
 
   const awardButton = (
     <IconButton
-      onClick={() => setIsOpen(true)}
+      onClick={(): void => setIsOpen(true)}
       color="inherit"
       disabled={disabled}
       {...props}
@@ -32,7 +32,7 @@ const AwardButton: FC<Props> = ({
     <AchievementAward
       achievementId={achievementId}
       open={isOpen}
-      handleClose={() => setIsOpen(false)}
+      handleClose={(): void => setIsOpen(false)}
     />
   );
 

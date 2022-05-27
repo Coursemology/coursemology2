@@ -20,7 +20,7 @@ const PageHeader: FC<Props> = (props) => {
       iconElementRight={toolbars && toolbars.length > 0 ? toolbars : null}
       iconElementLeft={
         returnLink ? (
-          <IconButton onClick={() => navigate(returnLink)}>
+          <IconButton onClick={(): void => navigate(returnLink)}>
             <ArrowBack htmlColor="white" />
           </IconButton>
         ) : null

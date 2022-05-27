@@ -68,7 +68,7 @@ const AchievementReordering: FC<Props> = (props: Props) => {
       key="achievement-reordering-button"
       variant="outlined"
       color="primary"
-      onClick={() => {
+      onClick={(): void => {
         if (isReordering) {
           $('tbody').first().sortable({ disabled: true });
           setIsReordering(false);

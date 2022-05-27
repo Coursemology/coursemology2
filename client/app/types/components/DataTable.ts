@@ -2,21 +2,21 @@ export interface TableColumns {
   name: string;
   label: string;
   options: {
-    filter?: Boolean;
-    search?: Boolean;
-    sort?: Boolean;
+    filter?: boolean;
+    search?: boolean;
+    sort?: boolean;
     customBodyRenderLite?: (dataIndex: number) => string | JSX.Element;
     customHeadLabelRender?: () => JSX.Element;
   };
 }
 
 export interface TableOptions {
-  download: Boolean;
-  filter: Boolean;
-  print: Boolean;
-  pagination: Boolean;
-  search: Boolean;
+  download: boolean;
+  filter: boolean;
+  print: boolean;
+  pagination: boolean;
+  search: boolean;
   selectableRows: string;
   setRowProps: (row, dataIndex: number, rowIndex: number) => any;
-  viewColumns: Boolean;
+  viewColumns: boolean;
 }

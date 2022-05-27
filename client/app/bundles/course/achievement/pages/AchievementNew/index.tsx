@@ -51,12 +51,12 @@ const AchievementNew: FC<Props> = (props) => {
     return null;
   }
 
-  const onSubmit = (data: AchievementFormData, setError) =>
+  const onSubmit = (data: AchievementFormData, setError): Promise<void> =>
     dispatch(createAchievement(data))
       .then((response) => {
         toast.success(intl.formatMessage(translations.creationSuccess));
         setTimeout(() => {
-          if (response.data && response.data.id) {
+          if (response.data?.id) {
             navigate(
               `/courses/${getCourseId()}/achievements/${response.data.id}`,
             );
@@ -65,7 +65,7 @@ const AchievementNew: FC<Props> = (props) => {
       })
       .catch((error) => {
         toast.error(intl.formatMessage(translations.creationFailure));
-        if (error.response && error.response.data) {
+        if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
         throw error;
@@ -74,7 +74,7 @@ const AchievementNew: FC<Props> = (props) => {
   return (
     <>
       <Dialog
-        onClose={() => {
+        onClose={(): void => {
           if (isDirty) {
             setConfirmationDialogOpen(true);
           } else {
@@ -90,7 +90,7 @@ const AchievementNew: FC<Props> = (props) => {
         <DialogContent>
           <AchievementForm
             editing={false}
-            handleClose={() => {
+            handleClose={(): void => {
               if (isDirty) {
                 setConfirmationDialogOpen(true);
               } else {
@@ -106,8 +106,8 @@ const AchievementNew: FC<Props> = (props) => {
       <ConfirmationDialog
         confirmDiscard
         open={confirmationDialogOpen}
-        onCancel={() => setConfirmationDialogOpen(false)}
-        onConfirm={() => {
+        onCancel={(): void => setConfirmationDialogOpen(false)}
+        onConfirm={(): void => {
           setConfirmationDialogOpen(false);
           handleClose();
         }}

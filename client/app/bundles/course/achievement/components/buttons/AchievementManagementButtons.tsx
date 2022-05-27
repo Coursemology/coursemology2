@@ -39,7 +39,7 @@ const AchievementManagementButtons: FC<Props> = (props) => {
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const onEdit = () => {
+  const onEdit = (): void => {
     navigate(`/courses/${getCourseId()}/achievements/${achievement.id}/edit`);
   };
 
