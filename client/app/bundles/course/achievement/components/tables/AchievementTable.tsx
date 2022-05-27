@@ -51,7 +51,11 @@ const AchievementTable: FC<Props> = (props) => {
     print: false,
     search: false,
     selectableRows: 'none',
-    setRowProps: (row: Array<any>, dataIndex: number, rowIndex: number) => {
+    setRowProps: (
+      _row: Array<any>,
+      dataIndex: number,
+      _rowIndex: number,
+    ): Record<string, unknown> => {
       const achievementStatus = achievements[dataIndex].achievementStatus;
       let backgroundColor: any = null;
       if (achievementStatus === 'granted') {
@@ -84,7 +88,7 @@ const AchievementTable: FC<Props> = (props) => {
       options: {
         filter: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number) => (
+        customBodyRenderLite: (_dataIndex: number) => (
           <Icon className="fa fa-reorder hidden" />
         ),
       },
@@ -105,7 +109,7 @@ const AchievementTable: FC<Props> = (props) => {
       options: {
         filter: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number) => {
+        customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const badge = achievements[dataIndex].badge;
           return (
             <img
@@ -125,7 +129,7 @@ const AchievementTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number) => {
+        customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const achievement = achievements[dataIndex];
 
           return (
@@ -146,7 +150,7 @@ const AchievementTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number) => {
+        customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const achievement = achievements[dataIndex];
           return (
             <p
@@ -164,7 +168,7 @@ const AchievementTable: FC<Props> = (props) => {
       options: {
         filter: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number) => {
+        customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const conditions = achievements[dataIndex].conditions;
           return (
             <div key={achievements[dataIndex].id}>
@@ -178,7 +182,7 @@ const AchievementTable: FC<Props> = (props) => {
     },
   ];
 
-  if (permissions && permissions.canManage) {
+  if (permissions?.canManage) {
     columns.push({
       name: 'published',
       label: 'Published',
@@ -186,7 +190,7 @@ const AchievementTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: true,
-        customBodyRenderLite: (dataIndex: number) => {
+        customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const achievementId = achievements[dataIndex].id;
           const isPublished = achievements[dataIndex].published;
           return (
@@ -194,7 +198,7 @@ const AchievementTable: FC<Props> = (props) => {
               key={achievementId}
               checked={isPublished}
               color="primary"
-              onChange={(_, checked) =>
+              onChange={(_, checked): void =>
                 onTogglePublished(achievementId, checked)
               }
             />

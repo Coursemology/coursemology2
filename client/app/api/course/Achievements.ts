@@ -8,7 +8,7 @@ import {
 import BaseCourseAPI from './Base';
 
 export default class AchievementsAPI extends BaseCourseAPI {
-  _getUrlPrefix() {
+  _getUrlPrefix(): string {
     return `/courses/${this.getCourseId()}/achievements`;
   }
 

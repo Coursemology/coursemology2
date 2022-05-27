@@ -66,7 +66,7 @@ const AchievementShow: FC<Props> = (props) => {
 
   const headerToolbars: ReactElement[] = [];
 
-  if (achievement.permissions && achievement.permissions.canManage) {
+  if (achievement.permissions?.canManage) {
     headerToolbars.push(
       <AchievementManagementButtons
         key={achievement.id}

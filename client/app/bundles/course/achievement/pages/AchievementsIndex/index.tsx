@@ -74,20 +74,20 @@ const AchievementsIndex: FC<Props> = (props) => {
 
   const headerToolbars: ReactElement[] = []; // To Add: Reorder Button
 
-  if (achievementPermissions && achievementPermissions.canReorder) {
+  if (achievementPermissions?.canReorder) {
     headerToolbars.push(
       <AchievementReordering key="achievementReorderingButton" />,
     );
   }
 
-  if (achievementPermissions && achievementPermissions.canCreate) {
+  if (achievementPermissions?.canCreate) {
     headerToolbars.push(
       <Button
         className="new-achievement-button"
         key="new-achievement-button"
         variant="outlined"
         color="primary"
-        onClick={() => setIsOpen(true)}
+        onClick={(): void => setIsOpen(true)}
         style={styles.newButton}
       >
         {intl.formatMessage(translations.newAchievement)}
@@ -95,7 +95,10 @@ const AchievementsIndex: FC<Props> = (props) => {
     );
   }
 
-  const onTogglePublished = (achievementId: number, data: boolean) =>
+  const onTogglePublished = (
+    achievementId: number,
+    data: boolean,
+  ): Promise<void> =>
     dispatch(updatePublishedAchievement(achievementId, data))
       .then(() => {
         toast.success(intl.formatMessage(translations.toggleSuccess));
@@ -114,7 +117,10 @@ const AchievementsIndex: FC<Props> = (props) => {
         })}
         toolbars={headerToolbars}
       />
-      <AchievementNew open={isOpen} handleClose={() => setIsOpen(false)} />
+      <AchievementNew
+        open={isOpen}
+        handleClose={(): void => setIsOpen(false)}
+      />
       <AchievementTable
         achievements={achievements}
         permissions={achievementPermissions}

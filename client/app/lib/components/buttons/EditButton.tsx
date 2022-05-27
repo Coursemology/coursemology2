@@ -5,7 +5,7 @@ interface Props extends IconButtonProps {
   onClick: (SyntheticEvent: any) => void;
 }
 
-const EditButton = ({ onClick, ...props }: Props) => (
+const EditButton = ({ onClick, ...props }: Props): JSX.Element => (
   <IconButton onClick={onClick} color="inherit" {...props}>
     <Edit />
   </IconButton>

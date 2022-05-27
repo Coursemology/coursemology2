@@ -17,7 +17,7 @@ import FormToggleField from 'lib/components/form/fields/ToggleField';
 interface Props {
   editing: boolean; // If the Form is in editing mode, `Add Conditions` button will be displayed.
   handleClose: (isDirty: boolean) => any;
-  onSubmit: Function;
+  onSubmit: (data: any, setError: unknown) => void;
   setIsDirty?: (value: boolean) => void;
   conditionAttributes?: any; // To update achievementTypesConditionAttributes
   initialValues?: Object;
@@ -113,7 +113,7 @@ const AchievementForm: FC<Props> = (props) => {
         className="btn-cancel"
         disabled={disabled}
         key="achievement-form-cancel-button"
-        onClick={() => handleClose(isDirty)}
+        onClick={(): void => handleClose(isDirty)}
       >
         <FormattedMessage {...formTranslations.cancel} />
       </Button>
@@ -141,7 +141,7 @@ const AchievementForm: FC<Props> = (props) => {
         <Controller
           control={control}
           name="title"
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormTextField
               field={field}
               fieldState={fieldState}
@@ -160,7 +160,7 @@ const AchievementForm: FC<Props> = (props) => {
         <Controller
           name="description"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormRichTextField
               field={field}
               fieldState={fieldState}
@@ -178,7 +178,7 @@ const AchievementForm: FC<Props> = (props) => {
         <Controller
           name="badge"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormSingleFileInput
               field={field}
               fieldState={fieldState}
@@ -191,7 +191,7 @@ const AchievementForm: FC<Props> = (props) => {
         <Controller
           name="published"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormToggleField
               field={field}
               fieldState={fieldState}

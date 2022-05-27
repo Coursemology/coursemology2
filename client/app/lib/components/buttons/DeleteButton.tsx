@@ -9,13 +9,18 @@ interface Props extends IconButtonProps {
   withDialog: boolean;
 }
 
-const DeleteButton = ({ disabled, onClick, withDialog, ...props }: Props) => {
+const DeleteButton = ({
+  disabled,
+  onClick,
+  withDialog,
+  ...props
+}: Props): JSX.Element => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
     <>
       <IconButton
-        onClick={() => {
+        onClick={(): void => {
           if (withDialog) {
             setDialogOpen(true);
           } else {
@@ -33,8 +38,8 @@ const DeleteButton = ({ disabled, onClick, withDialog, ...props }: Props) => {
           disableCancelButton={disabled}
           disableConfirmButton={disabled}
           open={dialogOpen}
-          onCancel={() => setDialogOpen(false)}
-          onConfirm={() => {
+          onCancel={(): void => setDialogOpen(false)}
+          onConfirm={(): void => {
             onClick().finally(() => setDialogOpen(false));
           }}
         />

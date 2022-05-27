@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { AppState, SelectionKey } from 'types/store';
 import {
   selectMiniEntity,

@@ -22,7 +22,7 @@ export function createEntityStore<M, E extends M = M>(): EntityStore<M, E> {
 export function removeFromStore<M extends WithId, E extends M = M>(
   store: EntityStore<M, E>,
   id: number,
-) {
+): void {
   store.ids.delete(id);
   delete store.byId[id];
 }
@@ -36,7 +36,7 @@ export function saveEntityToStore<M extends WithId, E extends M = M>(
   store: EntityStore<M, E>,
   entity: E,
   isDetailed = true,
-) {
+): void {
   const existing = store.byId[entity.id] || { lastFullUpdate: 0 };
 
   // delete all keys that are set to undefined, to avoid overriding existing values
@@ -61,7 +61,7 @@ export function saveEntityToStore<M extends WithId, E extends M = M>(
 export function saveListToStore<M extends WithId, E extends M = M>(
   store: EntityStore<M, E>,
   list: M[],
-) {
+): void {
   list.forEach((entity) => saveEntityToStore(store, entity, false));
 }
 
