@@ -1,15 +1,9 @@
-import React, { useState } from 'react';
+import { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
-import {
-  Chip,
-  Icon,
-  IconButton,
-  Link,
-  TableCell,
-  TableRow,
-} from '@mui/material';
+import { Chip, Icon, IconButton, TableCell, TableRow } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
@@ -19,7 +13,6 @@ import {
   getEditSubmissionURL,
   getSubmissionLogsURL,
 } from 'lib/helpers/url-builders';
-import { useTheme } from '@emotion/react';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
@@ -56,47 +49,47 @@ const styles = {
   },
 };
 
+const formatDate = (date) =>
+  date ? moment(date).format('DD MMM HH:mm') : null;
+
+const formatGrade = (grade) => (grade !== null ? grade.toFixed(1) : null);
+
+const renderPhantomUserIcon = (submission) => {
+  if (submission.courseUser.phantom) {
+    return (
+      <Icon
+        className="fa fa-user-secret fa-xs"
+        data-for="phantom-user"
+        data-tip
+        style={styles.phantomIcon}
+      />
+    );
+  }
+  return null;
+};
+
+const renderUnpublishedWarning = (submission) => {
+  if (submission.workflowState !== workflowStates.Graded) return null;
+  return (
+    <span style={{ display: 'inline-block', paddingLeft: 5 }}>
+      <div data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
+        <i className="fa fa-exclamation-triangle" />
+      </div>
+    </span>
+  );
+};
+
 const SubmissionsTableRow = (props) => {
+  const { assessment, assessmentId, courseId, dispatch, submission } = props;
   const palette = useTheme().palette;
   const [state, setState] = useState({
     unsubmitConfirmation: false,
     deleteConfirmation: false,
   });
 
-  const formatDate = (date) =>
-    date ? moment(date).format('DD MMM HH:mm') : null;
-
-  const formatGrade = (grade) => (grade !== null ? grade.toFixed(1) : null);
-
-  const renderPhantomUserIcon = (submission) => {
-    if (submission.courseUser.phantom) {
-      return (
-        <Icon
-          className="fa fa-user-secret fa-xs"
-          data-for="phantom-user"
-          data-tip
-          style={styles.phantomIcon}
-        />
-      );
-    }
-    return null;
-  };
-
-  const renderUnpublishedWarning = (submission) => {
-    if (submission.workflowState !== workflowStates.Graded) return null;
-    return (
-      <span style={{ display: 'inline-block', paddingLeft: 5 }}>
-        <div data-tip data-for="unpublished-grades" data-offset="{'left' : -8}">
-          <i className="fa fa-exclamation-triangle" />
-        </div>
-      </span>
-    );
-  };
-
-  const getGradeString = (submission) => {
+  const getGradeString = () => {
     if (submission.workflowState === workflowStates.Unstarted) return null;
 
-    const { assessment } = props;
     const gradeString =
       submission.workflowState === workflowStates.Attempting ||
       submission.workflowState === workflowStates.Submitted
@@ -124,8 +117,7 @@ const SubmissionsTableRow = (props) => {
     );
   };
 
-  const renderDeleteButton = (submission) => {
-    const { assessment } = props;
+  const renderDeleteButton = () => {
     const disabled =
       disableButtons() || submission.workflowState === workflowStates.Unstarted;
     if (
@@ -143,15 +135,16 @@ const SubmissionsTableRow = (props) => {
           size="large"
           style={styles.button}
         >
-          <Delete htmlColor={disabled ? undefined : palette.icon.delete} />
+          <Delete
+            htmlColor={disabled ? undefined : palette.submissionIcon.delete}
+          />
         </IconButton>
       </span>
     );
   };
 
-  const renderDeleteDialog = (submission) => {
+  const renderDeleteDialog = () => {
     const { deleteConfirmation } = state;
-    const { dispatch } = props;
     const values = { name: submission.courseUser.name };
     const successMessage = (
       <FormattedMessage
@@ -177,9 +170,7 @@ const SubmissionsTableRow = (props) => {
     );
   };
 
-  const renderSubmissionLogsLink = (submission) => {
-    const { assessment, courseId, assessmentId } = props;
-
+  const renderSubmissionLogsLink = () => {
     if (
       !assessment.passwordProtected ||
       !assessment.canViewLogs ||
@@ -193,7 +184,7 @@ const SubmissionsTableRow = (props) => {
           <IconButton size="large" style={styles.button}>
             <History
               htmlColor={
-                palette.icon.history[
+                palette.submissionIcon.history[
                   submission.logCount > 1 ? 'none' : 'default'
                 ]
               }
@@ -204,9 +195,8 @@ const SubmissionsTableRow = (props) => {
     );
   };
 
-  const renderSubmissionWorkflowState = (submission) => {
-    const { courseId, assessmentId } = props;
-    return submission.workflowState === workflowStates.Unstarted ? (
+  const renderSubmissionWorkflowState = () =>
+    submission.workflowState === workflowStates.Unstarted ? (
       <FormattedMessage {...translations[submission.workflowState]}>
         {(msg) => (
           <Chip
@@ -214,7 +204,8 @@ const SubmissionsTableRow = (props) => {
             label={msg}
             style={{
               ...styles.chip,
-              backgroundColor: palette.status[submission.workflowState],
+              backgroundColor:
+                palette.submissionStatus[submission.workflowState],
             }}
             variant="filled"
           />
@@ -224,26 +215,32 @@ const SubmissionsTableRow = (props) => {
       <FormattedMessage {...translations[submission.workflowState]}>
         {(msg) => (
           <Chip
-            clickable={submission.workflowState !== workflowStates.Unstarted}
-            component={Link}
-            href={getEditSubmissionURL(courseId, assessmentId, submission.id)}
             icon={renderUnpublishedWarning(submission)}
-            label={msg}
+            label={
+              <a
+                href={getEditSubmissionURL(
+                  courseId,
+                  assessmentId,
+                  submission.id,
+                )}
+              >
+                {msg}
+              </a>
+            }
             style={{
               ...(submission.workflowState !== workflowStates.Graded &&
                 styles.chip),
-              backgroundColor: palette.status[submission.workflowState],
+              backgroundColor:
+                palette.submissionStatus[submission.workflowState],
+              textColor: 'white',
             }}
             variant="filled"
           />
         )}
       </FormattedMessage>
     );
-  };
 
-  const renderUnsubmitButton = (submission) => {
-    const { assessment } = props;
-
+  const renderUnsubmitButton = () => {
     const disabled =
       disableButtons() ||
       submission.workflowState === workflowStates.Unstarted ||
@@ -261,16 +258,15 @@ const SubmissionsTableRow = (props) => {
           style={styles.button}
         >
           <RemoveCircle
-            htmlColor={disabled ? undefined : palette.icon.unsubmit}
+            htmlColor={disabled ? undefined : palette.submissionIcon.unsubmit}
           />
         </IconButton>
       </span>
     );
   };
 
-  const renderUnsubmitDialog = (submission) => {
+  const renderUnsubmitDialog = () => {
     const { unsubmitConfirmation } = state;
-    const { dispatch } = props;
     const values = { name: submission.courseUser.name };
     const successMessage = (
       <FormattedMessage
@@ -297,8 +293,7 @@ const SubmissionsTableRow = (props) => {
     );
   };
 
-  const renderUser = (submission) => {
-    const { courseId, assessment } = props;
+  const renderUser = () => {
     const { unsubmitConfirmation, deleteConfirmation } = state;
     const tableCenterCellStyle = {
       ...styles.tableCell,
@@ -316,11 +311,9 @@ const SubmissionsTableRow = (props) => {
           </a>
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
-          {renderSubmissionWorkflowState(submission)}
+          {renderSubmissionWorkflowState()}
         </TableCell>
-        <TableCell style={tableCenterCellStyle}>
-          {getGradeString(submission)}
-        </TableCell>
+        <TableCell style={tableCenterCellStyle}>{getGradeString()}</TableCell>
         {assessment.gamified ? (
           <TableCell style={tableCenterCellStyle}>
             {submission.pointsAwarded !== undefined
@@ -354,18 +347,17 @@ const SubmissionsTableRow = (props) => {
             : null}
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
-          {renderSubmissionLogsLink(submission)}
-          {renderUnsubmitButton(submission)}
-          {renderDeleteButton(submission)}
-          {unsubmitConfirmation && renderUnsubmitDialog(submission)}
-          {deleteConfirmation && renderDeleteDialog(submission)}
+          {renderSubmissionLogsLink()}
+          {renderUnsubmitButton()}
+          {renderDeleteButton()}
+          {unsubmitConfirmation && renderUnsubmitDialog()}
+          {deleteConfirmation && renderDeleteDialog()}
         </TableCell>
       </TableRow>
     );
   };
 
-  const { submission } = props;
-  return renderUser(submission);
+  return renderUser();
 };
 
 SubmissionsTableRow.propTypes = {
@@ -396,7 +388,7 @@ SubmissionsTableRow.propTypes = {
 
 SubmissionsTableRow.displayName = 'SubmissionsTableRow';
 
-export default React.memo(
+export default memo(
   SubmissionsTableRow,
   (prevProps, nextProps) =>
     prevProps.submission.workflowState === nextProps.submission.workflowState &&
