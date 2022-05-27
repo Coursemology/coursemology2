@@ -23,7 +23,7 @@ import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
-import { useTheme } from '@emotion/react';
+import { useTheme } from '@mui/material/styles';
 import RemindButton from './RemindButton';
 import { workflowStates } from '../../../assessment/submission/constants';
 
@@ -95,17 +95,17 @@ const translations = defineMessages({
 });
 
 const ResponseIndex = (props) => {
+  const { dispatch, survey, responses, isLoading } = props;
   const { palette } = useTheme();
   const [state, setState] = useState({
     includePhantomsInStats: false,
   });
 
   useEffect(() => {
-    const { dispatch } = props;
     dispatch(fetchResponses());
   }, []);
 
-  const computeStatuses = (responses) => {
+  const computeStatuses = (computeResponses) => {
     const summary = {
       [responseStatus.NOT_STARTED]: 0,
       [responseStatus.SUBMITTED]: 0,
@@ -116,7 +116,7 @@ const ResponseIndex = (props) => {
       summary[status] += 1;
       responsesWithStatuses.push({ ...response, status });
     };
-    responses.forEach((response) => {
+    computeResponses.forEach((response) => {
       if (!response.present) {
         updateStatus(response, responseStatus.NOT_STARTED);
       } else if (response.submitted_at) {
@@ -129,7 +129,7 @@ const ResponseIndex = (props) => {
     return { responses: responsesWithStatuses, summary };
   };
 
-  const renderUpdatedAt = (response, survey) => {
+  const renderUpdatedAt = (response) => {
     if (!response.submitted_at) {
       return null;
     }
@@ -140,7 +140,7 @@ const ResponseIndex = (props) => {
     return updatedAt;
   };
 
-  const renderResponseStatus = (response, survey) => {
+  const renderResponseStatus = (response) => {
     const status = <FormattedMessage {...translations[response.status]} />;
     if (response.status === responseStatus.NOT_STARTED) {
       return <div style={styles.red}>{status}</div>;
@@ -148,7 +148,7 @@ const ResponseIndex = (props) => {
     return survey.anonymous ? status : <Link to={response.path}>{status}</Link>;
   };
 
-  const renderSubmittedAt = (response, survey) => {
+  const renderSubmittedAt = (response) => {
     if (!response.submitted_at) {
       return null;
     }
@@ -159,7 +159,7 @@ const ResponseIndex = (props) => {
     return submittedAt;
   };
 
-  const renderTable = (responses, survey) => (
+  const renderTable = (tableResponses) => (
     <Table>
       <TableHead>
         <TableRow>
@@ -179,16 +179,16 @@ const ResponseIndex = (props) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {responses.map((response) => (
+        {tableResponses.map((response) => (
           <TableRow key={response.course_user.id}>
             <TableCell colSpan={2}>
               <a href={response.course_user.path}>
                 {response.course_user.name}
               </a>
             </TableCell>
-            <TableCell>{renderResponseStatus(response, survey)}</TableCell>
-            <TableCell>{renderSubmittedAt(response, survey)}</TableCell>
-            <TableCell>{renderUpdatedAt(response, survey)}</TableCell>
+            <TableCell>{renderResponseStatus(response)}</TableCell>
+            <TableCell>{renderSubmittedAt(response)}</TableCell>
+            <TableCell>{renderUpdatedAt(response)}</TableCell>
             <TableCell>
               {response.status === responseStatus.SUBMITTED &&
               response.canUnsubmit ? (
@@ -201,8 +201,8 @@ const ResponseIndex = (props) => {
     </Table>
   );
 
-  const renderPhantomTable = (responses, survey) => {
-    if (responses.length < 1) {
+  const renderPhantomTable = (tableResponses) => {
+    if (tableResponses.length < 1) {
       return null;
     }
 
@@ -211,7 +211,7 @@ const ResponseIndex = (props) => {
         <h1>
           <FormattedMessage {...translations.phantoms} />
         </h1>
-        {renderTable(responses, survey)}
+        {renderTable(tableResponses)}
       </div>
     );
   };
@@ -265,7 +265,6 @@ const ResponseIndex = (props) => {
   };
 
   const renderBody = () => {
-    const { survey, responses, isLoading } = props;
     if (isLoading) {
       return <LoadingIndicator />;
     }
@@ -293,43 +292,40 @@ const ResponseIndex = (props) => {
     return (
       <div>
         {renderStats(realResponsesStatuses, phantomResponsesStatuses)}
-        {renderTable(realResponsesWithStatuses, survey)}
-        {renderPhantomTable(phantomResponsesWithStatuses, survey)}
+        {renderTable(realResponsesWithStatuses)}
+        {renderPhantomTable(phantomResponsesWithStatuses)}
       </div>
     );
   };
 
-  const renderHeader = () => {
-    const { survey } = props;
-    return (
-      <Card style={styles.detailsCard}>
-        <Table style={styles.table}>
-          <TableBody>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.opensAt} />
-              </TableCell>
-              <TableCell>{formatLongDateTime(survey.start_at)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.expiresAt} />
-              </TableCell>
-              <TableCell>{formatLongDateTime(survey.end_at)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.closingRemindedAt} />
-              </TableCell>
-              <TableCell>
-                {formatLongDateTime(survey.closing_reminded_at, '-')}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </Card>
-    );
-  };
+  const renderHeader = () => (
+    <Card style={styles.detailsCard}>
+      <Table style={styles.table}>
+        <TableBody>
+          <TableRow>
+            <TableCell>
+              <FormattedMessage {...surveyTranslations.opensAt} />
+            </TableCell>
+            <TableCell>{formatLongDateTime(survey.start_at)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>
+              <FormattedMessage {...surveyTranslations.expiresAt} />
+            </TableCell>
+            <TableCell>{formatLongDateTime(survey.end_at)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>
+              <FormattedMessage {...surveyTranslations.closingRemindedAt} />
+            </TableCell>
+            <TableCell>
+              {formatLongDateTime(survey.closing_reminded_at, '-')}
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Card>
+  );
 
   return (
     <div>
