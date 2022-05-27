@@ -213,6 +213,7 @@ class Course::Assessment < ApplicationRecord
 
   def include_in_consolidated_email?(event)
     email_enabled = course.email_enabled(:assessments, event, tab.category.id)
+    return false unless email_enabled # TO REMOVE - Testing for duplicate opening emails #4531
     email_enabled.regular || email_enabled.phantom
   end
 
