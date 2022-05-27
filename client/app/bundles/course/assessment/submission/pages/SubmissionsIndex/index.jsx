@@ -116,7 +116,7 @@ class VisibleSubmissionsIndex extends Component {
         message={<FormattedMessage {...message} values={values} />}
       />
     );
-  };
+  }
 
   renderBarChart = (submissionBarChart) => {
     const { includePhantoms } = this.state;
