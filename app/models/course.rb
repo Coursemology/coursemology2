@@ -266,8 +266,7 @@ class Course < ApplicationRecord
     course_users.build(user: creator,
                        role: :owner,
                        creator: creator,
-                       updater: updater,
-                       timeline_algorithm: default_timeline_algorithm)
+                       updater: updater)
   end
 
   def validate_only_one_default_reference_timeline

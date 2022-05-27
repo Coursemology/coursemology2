@@ -215,7 +215,6 @@ class CourseUser < ApplicationRecord
   def set_defaults # :nodoc:
     self.name ||= user.name if user
     self.role ||= :student
-    self.timeline_algorithm ||= course.default_timeline_algorithm if course
   end
 
   # TODO(#3092): Validation is correct but everyone's reference timeline should be nil
