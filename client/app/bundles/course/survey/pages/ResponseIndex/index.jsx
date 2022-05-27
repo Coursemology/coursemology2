@@ -219,9 +219,15 @@ const ResponseIndex = (props) => {
   const renderStats = (realResponsesStatuses, phantomResponsesStatuses) => {
     const { NOT_STARTED, RESPONDING, SUBMITTED } = responseStatus;
     const dataColor = {
-      [NOT_STARTED]: palette.submissionStatus && palette.submissionStatus[workflowStates.Unstarted],
-      [RESPONDING]: palette.submissionStatus && palette.submissionStatus[workflowStates.Attempting],
-      [SUBMITTED]: palette.submissionStatus && palette.submissionStatus[workflowStates.Published],
+      [NOT_STARTED]:
+        palette.submissionStatus &&
+        palette.submissionStatus[workflowStates.Unstarted],
+      [RESPONDING]:
+        palette.submissionStatus &&
+        palette.submissionStatus[workflowStates.Attempting],
+      [SUBMITTED]:
+        palette.submissionStatus &&
+        palette.submissionStatus[workflowStates.Published],
     };
     const chartData = [NOT_STARTED, RESPONDING, SUBMITTED].map((data) => {
       const count = state.includePhantomsInStats
