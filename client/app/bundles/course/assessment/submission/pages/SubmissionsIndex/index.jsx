@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
@@ -54,44 +54,40 @@ class VisibleSubmissionsIndex extends Component {
     );
   }
 
-  static canPublish(shownSubmissions) {
-    return shownSubmissions.some(
-      (s) => s.workflowState === workflowStates.Graded,
-    );
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      publishConfirmation: false,
-      forceSubmitConfirmation: false,
-      includePhantoms: false,
-      remindConfirmation: false,
-      tab: 'my-students-tab',
-    };
-  }
-
-  componentDidMount() {
-    const { dispatch } = this.props;
+  useEffect(() => {
+    const { dispatch } = props;
     dispatch(fetchSubmissions());
-  }
+  }, []);
 
-  componentDidUpdate(_prevProps, prevState) {
+  useEffect(() => {
     if (
-      prevState.tab === 'my-students-tab' &&
-      this.props.submissions.every((s) => !s.courseUser.myStudent)
+      state.tab === 'my-students-tab' &&
+      props.submissions.every((s) => !s.courseUser.myStudent)
     ) {
       // This is safe since there will not be infinite re-renderings caused.
       // Follows the guidelines as recommended on React's website.
       // https://reactjs.org/docs/react-component.html#componentdidupdate
       // eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ tab: 'students-tab' });
+      setState({ ...state, tab: 'students-tab' });
     }
-  }
+  });
 
-  renderForceSubmitConfirmation(shownSubmissions, handleForceSubmitParams) {
-    const { dispatch, assessment } = this.props;
-    const { forceSubmitConfirmation } = this.state;
+  const canForceSubmitOrRemind = (shownSubmissions) =>
+    shownSubmissions.some(
+      (s) =>
+        s.workflowState === workflowStates.Unstarted ||
+        s.workflowState === workflowStates.Attempting,
+    );
+
+  const canPublish = (shownSubmissions) =>
+    shownSubmissions.some((s) => s.workflowState === workflowStates.Graded);
+
+  const renderForceSubmitConfirmation = (
+    shownSubmissions,
+    handleForceSubmitParams,
+  ) => {
+    const { dispatch, assessment } = props;
+    const { forceSubmitConfirmation } = state;
     const values = {
       unattempted: shownSubmissions.filter(
         (s) => s.workflowState === workflowStates.Unstarted,
@@ -108,10 +104,10 @@ class VisibleSubmissionsIndex extends Component {
     return (
       <ConfirmationDialog
         open={forceSubmitConfirmation}
-        onCancel={() => this.setState({ forceSubmitConfirmation: false })}
+        onCancel={() => setState({ ...state, forceSubmitConfirmation: false })}
         onConfirm={() => {
           dispatch(forceSubmitSubmissions(handleForceSubmitParams));
-          this.setState({ forceSubmitConfirmation: false });
+          setState({ ...state, forceSubmitConfirmation: false });
         }}
         message={<FormattedMessage {...message} values={values} />}
       />
@@ -153,7 +149,42 @@ class VisibleSubmissionsIndex extends Component {
     return <BarChart data={data} />;
   };
 
-  renderHeader(shownSubmissions) {
+  const renderBarChart = (submissionBarChart) => {
+    const { includePhantoms } = state;
+    const workflowStatesArray = Object.values(workflowStates);
+
+    const initialCounts = workflowStatesArray.reduce(
+      (counts, w) => ({ ...counts, [w]: 0 }),
+      {},
+    );
+    const submissionStateCounts = submissionBarChart.reduce(
+      (counts, submission) => {
+        if (includePhantoms || !submission.courseUser.phantom) {
+          return {
+            ...counts,
+            [submission.workflowState]: counts[submission.workflowState] + 1,
+          };
+        }
+        return counts;
+      },
+      initialCounts,
+    );
+
+    const data = workflowStatesArray
+      .map((w) => {
+        const count = submissionStateCounts[w];
+        return {
+          count,
+          color: palette.status[w],
+          label: <FormattedMessage {...translations[w]} />,
+        };
+      })
+      .filter((seg) => seg.count > 0);
+
+    return <BarChart data={data} />;
+  };
+
+  const renderHeader = (shownSubmissions) => {
     const {
       assessment: { title, canPublishGrades, canForceSubmit },
       isPublishing,
@@ -161,8 +192,8 @@ class VisibleSubmissionsIndex extends Component {
       isDeleting,
       isUnsubmitting,
       isReminding,
-    } = this.props;
-    const { includePhantoms, tab } = this.state;
+    } = props;
+    const { includePhantoms, tab } = state;
     const disableButtons =
       isPublishing ||
       isForceSubmitting ||
@@ -183,7 +214,7 @@ class VisibleSubmissionsIndex extends Component {
                 className="toggle-phantom"
                 color="primary"
                 onChange={() =>
-                  this.setState({ includePhantoms: !includePhantoms })
+                  setState({ ...state, includePhantoms: !includePhantoms })
                 }
               />
             }
@@ -202,12 +233,9 @@ class VisibleSubmissionsIndex extends Component {
             <Button
               variant="contained"
               color="primary"
-              disabled={
-                disableButtons ||
-                !VisibleSubmissionsIndex.canPublish(shownSubmissions)
-              }
+              disabled={disableButtons || !canPublish(shownSubmissions)}
               endIcon={isPublishing && <CircularProgress size={24} />}
-              onClick={() => this.setState({ publishConfirmation: true })}
+              onClick={() => setState({ ...state, publishConfirmation: true })}
             >
               <FormattedMessage {...submissionsTranslations.publishGrades} />
             </Button>
@@ -217,13 +245,12 @@ class VisibleSubmissionsIndex extends Component {
               variant="contained"
               color="primary"
               disabled={
-                disableButtons ||
-                !VisibleSubmissionsIndex.canForceSubmitOrRemind(
-                  shownSubmissions,
-                )
+                disableButtons || !canForceSubmitOrRemind(shownSubmissions)
               }
               endIcon={isForceSubmitting && <CircularProgress size={24} />}
-              onClick={() => this.setState({ forceSubmitConfirmation: true })}
+              onClick={() =>
+                setState({ ...state, forceSubmitConfirmation: true })
+              }
             >
               <FormattedMessage {...submissionsTranslations.forceSubmit} />
             </Button>
@@ -233,13 +260,10 @@ class VisibleSubmissionsIndex extends Component {
               variant="contained"
               color="primary"
               disabled={
-                disableButtons ||
-                !VisibleSubmissionsIndex.canForceSubmitOrRemind(
-                  shownSubmissions,
-                )
+                disableButtons || !canForceSubmitOrRemind(shownSubmissions)
               }
               endIcon={isReminding && <CircularProgress size={24} />}
-              onClick={() => this.setState({ remindConfirmation: true })}
+              onClick={() => setState({ ...state, remindConfirmation: true })}
             >
               <FormattedMessage {...submissionsTranslations.remind} />
             </Button>
@@ -263,10 +287,10 @@ class VisibleSubmissionsIndex extends Component {
     return (
       <ConfirmationDialog
         open={publishConfirmation}
-        onCancel={() => this.setState({ publishConfirmation: false })}
+        onCancel={() => setState({ ...state, publishConfirmation: false })}
         onConfirm={() => {
           dispatch(publishSubmissions(handlePublishParams));
-          this.setState({ publishConfirmation: false });
+          setState({ ...state, publishConfirmation: false });
         }}
         message={
           <FormattedMessage
@@ -276,12 +300,12 @@ class VisibleSubmissionsIndex extends Component {
         }
       />
     );
-  }
+  };
 
-  renderReminderConfirmation(shownSubmissions, handleRemindParams) {
-    const { dispatch } = this.props;
-    const { assessmentId } = this.props.match.params;
-    const { remindConfirmation } = this.state;
+  const renderReminderConfirmation = (shownSubmissions, handleRemindParams) => {
+    const { dispatch } = props;
+    const { assessmentId } = props.match.params;
+    const { remindConfirmation } = state;
     const values = {
       unattempted: shownSubmissions.filter(
         (s) => s.workflowState === workflowStates.Unstarted,
@@ -295,12 +319,12 @@ class VisibleSubmissionsIndex extends Component {
     return (
       <ConfirmationDialog
         open={remindConfirmation}
-        onCancel={() => this.setState({ remindConfirmation: false })}
+        onCancel={() => setState({ ...state, remindConfirmation: false })}
         onConfirm={() => {
           dispatch(
             sendAssessmentReminderEmail(assessmentId, handleRemindParams),
           );
-          this.setState({ remindConfirmation: false });
+          setState({ ...state, remindConfirmation: false });
         }}
         message={
           <FormattedMessage
@@ -310,15 +334,16 @@ class VisibleSubmissionsIndex extends Component {
         }
       />
     );
-  }
+  };
 
-  renderTable(
+  const renderTable = (
     shownSubmissions,
     handleActionParams,
     confirmDialogValue,
     isActive,
-  ) {
-    const { courseId, assessmentId } = this.props.match.params;
+  ) => {
+    const { courseId, assessmentId } = props.match.params;
+
     const {
       dispatch,
       assessment,
@@ -327,9 +352,9 @@ class VisibleSubmissionsIndex extends Component {
       isStatisticsDownloading,
       isUnsubmitting,
       isDeleting,
-    } = this.props;
+    } = props;
 
-    const props = {
+    const newProps = {
       dispatch,
       courseId,
       assessmentId,
@@ -340,6 +365,7 @@ class VisibleSubmissionsIndex extends Component {
       isUnsubmitting,
       isDeleting,
     };
+
     return (
       <SubmissionsTable
         confirmDialogValue={confirmDialogValue}
@@ -357,10 +383,10 @@ class VisibleSubmissionsIndex extends Component {
         }
         isActive={isActive}
         submissions={shownSubmissions}
-        {...props}
+        {...newProps}
       />
     );
-  }
+  };
 
   renderTabs(myStudentsExist) {
     return (
@@ -391,6 +417,13 @@ class VisibleSubmissionsIndex extends Component {
           label={<FormattedMessage {...submissionsTranslations.students} />}
           value="students-tab"
         />
+      )}
+      <Tab
+        id="students-tab"
+        icon={<Person style={{ color: palette.icon.person }} />}
+        label={<FormattedMessage {...submissionsTranslations.students} />}
+        value="students-tab"
+      />
 
         <Tab
           id="staff-tab"
@@ -403,105 +436,88 @@ class VisibleSubmissionsIndex extends Component {
       </Tabs>
     );
   }
+  const myStudentAllSubmissions = submissions.filter(
+    (s) => s.courseUser.isStudent && s.courseUser.myStudent,
+  );
+  const myStudentNormalSubmissions = myStudentAllSubmissions.filter(
+    (s) => !s.courseUser.phantom,
+  );
+  const myStudentSubmissions = includePhantoms
+    ? myStudentAllSubmissions
+    : myStudentNormalSubmissions;
+  const studentSubmissions = includePhantoms
+    ? submissions.filter((s) => s.courseUser.isStudent)
+    : submissions.filter(
+        (s) => s.courseUser.isStudent && !s.courseUser.phantom,
+      );
+  const staffSubmissions = includePhantoms
+    ? submissions.filter((s) => !s.courseUser.isStudent)
+    : submissions.filter(
+        (s) => !s.courseUser.isStudent && !s.courseUser.phantom,
+      );
 
-  render() {
-    const { isLoading, notification, submissions } = this.props;
-    const {
-      includePhantoms,
-      tab,
-      publishConfirmation,
-      forceSubmitConfirmation,
-      remindConfirmation,
-    } = this.state;
-    if (isLoading) {
-      return <LoadingIndicator />;
-    }
-    const myStudentAllSubmissions = submissions.filter(
-      (s) => s.courseUser.isStudent && s.courseUser.myStudent,
-    );
-    const myStudentNormalSubmissions = myStudentAllSubmissions.filter(
-      (s) => !s.courseUser.phantom,
-    );
-    const myStudentSubmissions = includePhantoms
-      ? myStudentAllSubmissions
-      : myStudentNormalSubmissions;
-    const studentSubmissions = includePhantoms
-      ? submissions.filter((s) => s.courseUser.isStudent)
-      : submissions.filter(
-          (s) => s.courseUser.isStudent && !s.courseUser.phantom,
-        );
-    const staffSubmissions = includePhantoms
-      ? submissions.filter((s) => !s.courseUser.isStudent)
-      : submissions.filter(
-          (s) => !s.courseUser.isStudent && !s.courseUser.phantom,
-        );
+  const handleMyStudentsParams = includePhantoms
+    ? selectedUserType.my_students_w_phantom
+    : selectedUserType.my_students;
+  const handleStudentsParams = includePhantoms
+    ? selectedUserType.students_w_phantom
+    : selectedUserType.students;
+  const handleStaffParams = includePhantoms
+    ? selectedUserType.staff_w_phantom
+    : selectedUserType.staff;
 
-    const handleMyStudentsParams = includePhantoms
-      ? selectedUserType.my_students_w_phantom
-      : selectedUserType.my_students;
-    const handleStudentsParams = includePhantoms
-      ? selectedUserType.students_w_phantom
-      : selectedUserType.students;
-    const handleStaffParams = includePhantoms
-      ? selectedUserType.staff_w_phantom
-      : selectedUserType.staff;
+  const myStudentsExist = myStudentAllSubmissions.length > 0;
 
-    const myStudentsExist = myStudentAllSubmissions.length > 0;
-
-    let shownSubmissions; // shownSubmissions are submissions currently shown on the active tab on the page
-    let handleActionParams;
-    switch (tab) {
-      case 'staff-tab':
-        shownSubmissions = staffSubmissions;
-        handleActionParams = handleStaffParams;
-        break;
-      case 'my-students-tab':
-        shownSubmissions = myStudentSubmissions;
-        handleActionParams = handleMyStudentsParams;
-        break;
-      case 'students-tab':
-      default:
-        shownSubmissions = studentSubmissions;
-        handleActionParams = handleStudentsParams;
-    }
-
-    return (
-      <>
-        {this.renderHeader(shownSubmissions)}
-        {this.renderTabs(myStudentsExist)}
-        {myStudentsExist &&
-          this.renderTable(
-            myStudentSubmissions,
-            handleMyStudentsParams,
-            'your students',
-            tab === 'my-students-tab',
-          )}
-        {this.renderTable(
-          staffSubmissions,
-          handleStaffParams,
-          'staff',
-          tab === 'staff-tab',
-        )}
-        {this.renderTable(
-          studentSubmissions,
-          handleStudentsParams,
-          'students',
-          tab === 'students-tab',
-        )}
-        {publishConfirmation &&
-          this.renderPublishConfirmation(shownSubmissions, handleActionParams)}
-        {forceSubmitConfirmation &&
-          this.renderForceSubmitConfirmation(
-            shownSubmissions,
-            handleActionParams,
-          )}
-        {remindConfirmation &&
-          this.renderReminderConfirmation(shownSubmissions, handleActionParams)}
-        <NotificationBar notification={notification} />
-      </>
-    );
+  let shownSubmissions; // shownSubmissions are submissions currently shown on the active tab on the page
+  let handleActionParams;
+  switch (tab) {
+    case 'staff-tab':
+      shownSubmissions = staffSubmissions;
+      handleActionParams = handleStaffParams;
+      break;
+    case 'my-students-tab':
+      shownSubmissions = myStudentSubmissions;
+      handleActionParams = handleMyStudentsParams;
+      break;
+    case 'students-tab':
+    default:
+      shownSubmissions = studentSubmissions;
+      handleActionParams = handleStudentsParams;
   }
-}
+
+  return (
+    <>
+      {renderHeader(shownSubmissions)}
+      {renderTabs(myStudentsExist)}
+      {myStudentsExist &&
+        renderTable(
+          myStudentSubmissions,
+          handleMyStudentsParams,
+          'your students',
+          tab === 'my-students-tab',
+        )}
+      {renderTable(
+        staffSubmissions,
+        handleStaffParams,
+        'staff',
+        tab === 'staff-tab',
+      )}
+      {renderTable(
+        studentSubmissions,
+        handleStudentsParams,
+        'students',
+        tab === 'students-tab',
+      )}
+      {publishConfirmation &&
+        renderPublishConfirmation(shownSubmissions, handleActionParams)}
+      {forceSubmitConfirmation &&
+        renderForceSubmitConfirmation(shownSubmissions, handleActionParams)}
+      {remindConfirmation &&
+        renderReminderConfirmation(shownSubmissions, handleActionParams)}
+      <NotificationBar notification={notification} />
+    </>
+  );
+};
 
 VisibleSubmissionsIndex.propTypes = {
   dispatch: PropTypes.func.isRequired,
