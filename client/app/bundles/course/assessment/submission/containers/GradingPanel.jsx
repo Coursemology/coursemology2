@@ -51,7 +51,8 @@ class VisibleGradingPanel extends Component {
         </a>
       );
     }
-    if (courseUser) { // System or deleted users should not be linked to
+    if (courseUser) {
+      // System or deleted users should not be linked to
       return <>{courseUser.name}</>;
     }
     return null;
@@ -147,7 +148,8 @@ class VisibleGradingPanel extends Component {
         graderInfo = (
           <a href={getCourseUserURL(courseId, grader.id)}>{grader.name}</a>
         );
-      } else if (grader) { // System or deleted users should not be linked to
+      } else if (grader) {
+        // System or deleted users should not be linked to
         graderInfo = grader.name;
       } else {
         graderInfo = '';
