@@ -67,6 +67,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
         new_course_users <<
           @current_course.course_users.build(user: user[:user], name: user[:name],
                                              role: user[:role], phantom: user[:phantom],
+                                             timeline_algorithm: @current_course.default_timeline_algorithm,
                                              creator: @current_user, updater: @current_user)
         @current_course.enrol_requests.find_by(user: user[:user].id)&.destroy!
       end
