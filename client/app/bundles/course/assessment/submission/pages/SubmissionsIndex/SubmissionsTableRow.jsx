@@ -251,7 +251,7 @@ const SubmissionsTableRow = (props) => {
     return (
       <>
         <UnsubmitButton
-          buttonId={submission.courseUser.id} 
+          buttonId={submission.courseUser.id}
           color={palette.submissionIcon.unsubmit}
           setState={setState}
           state={state}
