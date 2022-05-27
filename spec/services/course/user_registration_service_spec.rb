@@ -208,7 +208,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
             expect(course.course_users.find_by(user_id: user.id).timeline_algorithm).to eq('fomo')
           end
         end
-        
+
         context 'when timeline algorithm is not specified and \
         default course timeline setting is stragglers' do
           before do
@@ -224,7 +224,7 @@ RSpec.describe Course::UserRegistrationService, type: :service do
             expect(course.course_users.find_by(user_id: user.id).timeline_algorithm).to eq('stragglers')
           end
         end
-        
+
         context 'when timeline algorithm is not specified and \
         default course timeline setting is otot' do
           before do
