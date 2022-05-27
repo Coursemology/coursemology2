@@ -13,7 +13,6 @@ import {
   getEditSubmissionURL,
   getSubmissionLogsURL,
 } from 'lib/helpers/url-builders';
-import { useTheme } from '@emotion/react';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';
