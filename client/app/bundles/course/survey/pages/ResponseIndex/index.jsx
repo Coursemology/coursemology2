@@ -105,7 +105,7 @@ const ResponseIndex = (props) => {
     dispatch(fetchResponses());
   }, []);
 
-  const computeStatuses = (responses) => {
+  const computeStatuses = (computeResponses) => {
     const summary = {
       [responseStatus.NOT_STARTED]: 0,
       [responseStatus.SUBMITTED]: 0,
@@ -116,7 +116,7 @@ const ResponseIndex = (props) => {
       summary[status] += 1;
       responsesWithStatuses.push({ ...response, status });
     };
-    responses.forEach((response) => {
+    computeResponses.forEach((response) => {
       if (!response.present) {
         updateStatus(response, responseStatus.NOT_STARTED);
       } else if (response.submitted_at) {
@@ -159,7 +159,7 @@ const ResponseIndex = (props) => {
     return submittedAt;
   };
 
-  const renderTable = (responses) => (
+  const renderTable = (tableResponses) => (
     <Table>
       <TableHead>
         <TableRow>
@@ -179,7 +179,7 @@ const ResponseIndex = (props) => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {responses.map((response) => (
+        {tableResponses.map((response) => (
           <TableRow key={response.course_user.id}>
             <TableCell colSpan={2}>
               <a href={response.course_user.path}>
@@ -201,8 +201,8 @@ const ResponseIndex = (props) => {
     </Table>
   );
 
-  const renderPhantomTable = (responses) => {
-    if (responses.length < 1) {
+  const renderPhantomTable = (tableResponses) => {
+    if (tableResponses.length < 1) {
       return null;
     }
 
@@ -211,7 +211,7 @@ const ResponseIndex = (props) => {
         <h1>
           <FormattedMessage {...translations.phantoms} />
         </h1>
-        {renderTable(responses)}
+        {renderTable(tableResponses)}
       </div>
     );
   };
@@ -219,9 +219,9 @@ const ResponseIndex = (props) => {
   const renderStats = (realResponsesStatuses, phantomResponsesStatuses) => {
     const { NOT_STARTED, RESPONDING, SUBMITTED } = responseStatus;
     const dataColor = {
-      [NOT_STARTED]: palette && palette.submissionStatus[workflowStates.Unstarted],
-      [RESPONDING]: palette && palette.submissionStatus[workflowStates.Attempting],
-      [SUBMITTED]: palette && palette.submissionStatus[workflowStates.Published],
+      [NOT_STARTED]: palette.submissionStatus && palette.submissionStatus[workflowStates.Unstarted],
+      [RESPONDING]: palette.submissionStatus && palette.submissionStatus[workflowStates.Attempting],
+      [SUBMITTED]: palette.submissionStatus && palette.submissionStatus[workflowStates.Published],
     };
     const chartData = [NOT_STARTED, RESPONDING, SUBMITTED].map((data) => {
       const count = state.includePhantomsInStats
@@ -298,36 +298,34 @@ const ResponseIndex = (props) => {
     );
   };
 
-  const renderHeader = () => {
-    return (
-      <Card style={styles.detailsCard}>
-        <Table style={styles.table}>
-          <TableBody>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.opensAt} />
-              </TableCell>
-              <TableCell>{formatLongDateTime(survey.start_at)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.expiresAt} />
-              </TableCell>
-              <TableCell>{formatLongDateTime(survey.end_at)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.closingRemindedAt} />
-              </TableCell>
-              <TableCell>
-                {formatLongDateTime(survey.closing_reminded_at, '-')}
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </Card>
-    );
-  };
+  const renderHeader = () => (
+    <Card style={styles.detailsCard}>
+      <Table style={styles.table}>
+        <TableBody>
+          <TableRow>
+            <TableCell>
+              <FormattedMessage {...surveyTranslations.opensAt} />
+            </TableCell>
+            <TableCell>{formatLongDateTime(survey.start_at)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>
+              <FormattedMessage {...surveyTranslations.expiresAt} />
+            </TableCell>
+            <TableCell>{formatLongDateTime(survey.end_at)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>
+              <FormattedMessage {...surveyTranslations.closingRemindedAt} />
+            </TableCell>
+            <TableCell>
+              {formatLongDateTime(survey.closing_reminded_at, '-')}
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </Card>
+  );
 
   return (
     <div>

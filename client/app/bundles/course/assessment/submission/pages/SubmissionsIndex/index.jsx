@@ -249,51 +249,6 @@ class VisibleSubmissionsIndex extends Component {
     );
   }
 
-  renderHistogram(submissionHistogram) {
-    const { includePhantoms } = this.state;
-    const workflowStatesArray = Object.values(workflowStates);
-
-    const initialCounts = workflowStatesArray.reduce(
-      (counts, w) => ({ ...counts, [w]: 0 }),
-      {},
-    );
-    const submissionStateCounts = submissionHistogram.reduce(
-      (counts, submission) => {
-        if (includePhantoms || !submission.courseUser.phantom) {
-          return {
-            ...counts,
-            [submission.workflowState]: counts[submission.workflowState] + 1,
-          };
-        }
-        return counts;
-      },
-      initialCounts,
-    );
-
-    return (
-      <div style={styles.histogram}>
-        {workflowStatesArray.map((w) => {
-          const count = submissionStateCounts[w];
-          const cellStyle = {
-            ...styles.histogramCells.common,
-            backgroundColor: palette.submissionStatus[w],
-            flex: count,
-            minWidth: count > 0 ? 50 : 0,
-          };
-
-          return (
-            <div key={w} style={cellStyle} data-tip data-for={w}>
-              {count > 0 ? count : null}
-              <ReactTooltip id={w} effect="solid">
-                <FormattedMessage {...translations[w]} />
-              </ReactTooltip>
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
-
   renderPublishConfirmation(shownSubmissions, handlePublishParams) {
     const { dispatch } = this.props;
     const { publishConfirmation } = this.state;
