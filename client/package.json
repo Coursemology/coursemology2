@@ -97,7 +97,7 @@
     "hard-source-webpack-plugin": "^0.13.1",
     "history": "^5.2.0",
     "immer": "^9.0.12",
-    "immutable": "^3.8.2",
+    "immutable": "^4.1.0",
     "intl": "^1.2.5",
     "jquery": "^3.6.0",
     "jquery-ui": "^1.13.0",
