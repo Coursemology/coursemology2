@@ -15,6 +15,7 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Link,
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import BarChart from 'lib/components/BarChart';
@@ -39,6 +40,7 @@ const styles = {
   },
   chip: {
     width: 100,
+    
   },
   detailsCard: {
     marginBottom: 30,
@@ -120,19 +122,19 @@ const ResponseIndex = (props) => {
     <FormattedMessage {...translations[response.status]}>
       {(msg) => (
         <Chip
-          label={
-            response.status !== responseStatus.NOT_STARTED &&
-            !survey.anonymous ? (
-              <a href={response.path}>{msg}</a>
-            ) : (
-              msg
-            )
-          }
+          clickable={response.status !== responseStatus.NOT_STARTED 
+            && !survey.anonymous}
+          label={msg}
+          component={response.status !== responseStatus.NOT_STARTED 
+            && !survey.anonymous ? Link : null}
+          href={response.path}
           style={{
             ...styles.chip,
             backgroundColor: survey.anonymous
               ? palette.submissionStatus.Submitted // grey colour
               : dataColor[response.status],
+            color: response.status !== responseStatus.NOT_STARTED
+              && palette.links
           }}
           variant="filled"
         />
