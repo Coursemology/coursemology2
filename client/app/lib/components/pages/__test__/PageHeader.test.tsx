@@ -3,7 +3,7 @@ import PageHeader from '../PageHeader';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
+  useNavigate: (): void => jest.fn() as unknown as void,
 }));
 
 let documentBody: RenderResult;
