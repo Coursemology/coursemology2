@@ -182,41 +182,42 @@ export default function NarrowEditor(props) {
   const { content } = props;
 
   return (
-    <table className="codehilite" style={styles.editor} ref={editorRef}>
-      <tbody>
-        {content.map((line, index) => (
-          // eslint-disable-next-line react/no-array-index-key
-          <tr key={`${index}-${line}`}>
-            <td
-              style={{
-                width: 50,
-                userSelect: 'none',
-                verticalAlign: 'top',
-              }}
-            >
-              {renderLineNumberColumn(index + 1)}
-            </td>
+    <div style={{ overflow: 'auto' }}>
+      <table className="codehilite" style={styles.editor} ref={editorRef}>
+        <tbody>
+          {content.map((line, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <tr key={`${index}-${line}`}>
+              <td
+                style={{
+                  width: 50,
+                  userSelect: 'none',
+                  verticalAlign: 'top',
+                }}
+              >
+                {renderLineNumberColumn(index + 1)}
+              </td>
 
-            <td
-              style={{
-                display: 'block',
-                overflowX: 'visible',
-                verticalAlign: 'top',
-              }}
-            >
-              <div style={styles.editorLine}>
-                <pre style={{ overflow: 'visible' }}>
-                  <code
-                    dangerouslySetInnerHTML={{ __html: line }}
-                    style={{ whiteSpace: 'inherit' }}
-                  />
-                </pre>
-              </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+              <td
+                style={{
+                  display: 'block',
+                  verticalAlign: 'top',
+                }}
+              >
+                <div style={styles.editorLine}>
+                  <pre style={{ overflow: 'visible' }}>
+                    <code
+                      dangerouslySetInnerHTML={{ __html: line }}
+                      style={{ whiteSpace: 'inherit' }}
+                    />
+                  </pre>
+                </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
