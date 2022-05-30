@@ -11,7 +11,7 @@ const AllTheProviders: FC<any> = ({ children }) => {
   );
 };
 
-const customRender = (
+const customRender: any = (
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>,
 ) => render(ui, { wrapper: AllTheProviders, ...options });
