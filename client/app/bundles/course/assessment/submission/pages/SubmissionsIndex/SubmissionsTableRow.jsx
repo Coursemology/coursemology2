@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
-import { Chip, Icon, IconButton, TableCell, TableRow } from '@mui/material';
+import { Chip, Icon, IconButton, TableCell, TableRow, Link } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
@@ -216,23 +216,21 @@ const SubmissionsTableRow = (props) => {
         {(msg) => (
           <Chip
             icon={renderUnpublishedWarning(submission)}
-            label={
-              <a
-                href={getEditSubmissionURL(
-                  courseId,
-                  assessmentId,
-                  submission.id,
-                )}
-              >
-                {msg}
-              </a>
-            }
+            component={Link}
+            clickable
+            href={getEditSubmissionURL(
+              courseId,
+              assessmentId,
+              submission.id,
+            )}
+            label={msg}
             style={{
               ...(submission.workflowState !== workflowStates.Graded &&
                 styles.chip),
               backgroundColor:
                 palette.submissionStatus[submission.workflowState],
               textColor: 'white',
+              color: palette.links
             }}
             variant="filled"
           />

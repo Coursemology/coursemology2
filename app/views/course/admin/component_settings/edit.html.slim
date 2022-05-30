@@ -5,7 +5,7 @@
     thead
       tr
         th = t('.name')
-        th = t('.enabled')
+        th = :enabled_component_ids
     tbody
       = f.collection_check_boxes :enabled_component_ids,
                                  @settings.disableable_component_collection, :last, :first do |f|

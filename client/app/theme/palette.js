@@ -85,6 +85,7 @@ const palette = {
     unsubmit: colors.pink[600],
     delete: colors.red[900],
   },
+  links: colors.blue[800],
 };
 
 export default palette;
