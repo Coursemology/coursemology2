@@ -370,7 +370,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resource :leaderboard, only: [:show] do
+      resource :leaderboard, only: [:index, :show] do
         get 'groups', as: :group
       end
 
