@@ -4,6 +4,10 @@ class Course::LeaderboardsController < Course::ComponentController
   before_action :check_component_settings
   before_action :preload_course_levels, only: [:show]
 
+  def index # :nodoc:
+    @course_users = @course.course_users.students.without_phantom_users.includes(:user)
+  end
+
   def show # :nodoc:
     @course_users = @course.course_users.students.without_phantom_users.includes(:user)
   end
