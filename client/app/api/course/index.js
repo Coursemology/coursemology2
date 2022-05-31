@@ -16,6 +16,7 @@ import GroupsAPI from './Groups';
 import LearningMapAPI from './LearningMap';
 import CoursesAPI from './Courses';
 import UsersAPI from './Users';
+import LeaderboardAPI from './Leaderboard';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -36,6 +37,7 @@ const CourseAPI = {
   groups: new GroupsAPI(),
   learningMap: new LearningMapAPI(),
   users: new UsersAPI(),
+  leaderboard: new LeaderboardAPI(),
 };
 
 Object.freeze(CourseAPI);
