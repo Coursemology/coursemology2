@@ -12,6 +12,10 @@ class Course::UsersController < Course::ComponentController
   def show
     @skills_service = Course::SkillsMasteryPreloadService.new(current_course,
                                                               @course_user)
+    respond_to do |format|
+      format.html { render 'index' }
+      format.json { render 'show' }
+    end
   end
 
   private
