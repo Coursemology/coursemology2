@@ -25,7 +25,7 @@ import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { useTheme } from '@mui/material/styles';
 import RemindButton from './RemindButton';
-import { workflowStates } from '../../../assessment/submission/constants';
+import { workflowStates } from '../../constants';
 
 const styles = {
   red: {
@@ -103,7 +103,7 @@ const ResponseIndex = (props) => {
 
   useEffect(() => {
     dispatch(fetchResponses());
-  }, []);
+  }, [dispatch]);
 
   const computeStatuses = (computeResponses) => {
     const summary = {
