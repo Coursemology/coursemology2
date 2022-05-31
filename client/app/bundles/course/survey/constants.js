@@ -97,6 +97,6 @@ export const workflowStates = {
   Unstarted: 'unstarted',
   Attempting: 'attempting',
   Submitted: 'submitted',
-}
+};
 
 export default actionTypes;
