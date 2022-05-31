@@ -16,7 +16,6 @@ const styles = {
   },
 };
 
-// props.data[i] = {count: number, color: hex, label: <FormattedMessage/>}
 const BarChart = (props) => (
   <div style={styles.bar}>
     {props.data.map((segment) => {

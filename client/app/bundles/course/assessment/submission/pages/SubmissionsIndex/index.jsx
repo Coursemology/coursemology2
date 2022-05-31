@@ -43,7 +43,7 @@ import {
 } from '../../constants';
 import translations from '../../translations';
 import submissionsTranslations from './translations';
-import BarChart from '../../../../../../lib/components/BarChart';
+import BarChart from 'lib/components/BarChart';
 
 class VisibleSubmissionsIndex extends Component {
   static canForceSubmitOrRemind(shownSubmissions) {
