@@ -2,21 +2,32 @@ import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { Avatar, Grid } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
 import { getAllUserMiniEntities } from '../../selectors';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { fetchUsers } from '../../operations';
-// import AchievementTable from '../../components/tables/AchievementTable';
-// import AchievementNew from '../AchievementNew';
-// import AchievementReordering from '../../components/misc/AchievementReordering';
+import { getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
 interface Props {
   intl?: any;
 }
 
-// const styles = {
-// };
+const styles = {
+  courseUserImage: {
+    height: 75,
+    width: 75,
+    marginTop: '1em',
+  },
+  courseUserName: {
+    paddingTop: '2em',
+  },
+  courseUserMiniEntity: {
+    textDecoration: 'none',
+  },
+};
 
 const translations = defineMessages({
   fetchUsersFailure: {
@@ -27,8 +38,11 @@ const translations = defineMessages({
 
 const UsersIndex: FC<Props> = (props) => {
   const { intl } = props;
+  const courseId = getCourseId();
   const [isLoading, setIsLoading] = useState(true);
   const users = useSelector((state: AppState) => getAllUserMiniEntities(state));
+  const smallUsers = users.concat(users).concat(users).concat(users);
+  const largeUsers = smallUsers.concat(smallUsers).concat(smallUsers);
   //   const achievementPermissions = useSelector((state: AppState) =>
   //     getAchievementPermissions(state),
   //   );
@@ -41,11 +55,6 @@ const UsersIndex: FC<Props> = (props) => {
         toast.error(intl.formatMessage(translations.fetchUsersFailure)),
       );
   }, [dispatch]);
-
-  useEffect(() => {
-    console.log('sup');
-    console.log('my users are ', users);
-  }, []);
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -83,7 +92,36 @@ const UsersIndex: FC<Props> = (props) => {
         })}
         toolbars={headerToolbars}
       />
-      <>hello world</>
+      <Grid container>
+        {largeUsers.map((courseUser) => (
+          <Grid
+            item
+            id={`course_user_${courseUser.id}`}
+            key={courseUser.id}
+            xs={12}
+            md={6}
+            lg={4}
+          >
+            <a
+              href={getCourseUserURL(courseId, courseUser.id)}
+              style={styles.courseUserMiniEntity}
+            >
+              <Grid container direction="row" spacing={1} alignItems="center">
+                <Grid container item xs={3} justifyContent="center">
+                  <Avatar
+                    src={courseUser.imageUrl}
+                    alt={courseUser.name}
+                    sx={styles.courseUserImage}
+                  />
+                </Grid>
+                <Grid item xs style={styles.courseUserName}>
+                  <h4> {courseUser.name} </h4>
+                </Grid>
+              </Grid>
+            </a>
+          </Grid>
+        ))}
+      </Grid>
     </>
   );
 };

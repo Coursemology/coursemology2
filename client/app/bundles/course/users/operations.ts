@@ -2,6 +2,7 @@
 import CourseAPI from 'api/course';
 import { Operation } from 'types/store';
 import * as actions from './actions';
+import { SaveUserAction } from './types';
 
 export function fetchUsers(): Operation<void> {
   console.log('calling fetchusers in operations');
@@ -16,4 +17,12 @@ export function fetchUsers(): Operation<void> {
       .catch((error) => {
         throw error;
       });
+}
+
+export function loadUser(userId: number): Operation<SaveUserAction> {
+  console.log('calling loadUser in operations');
+  return async (dispatch) =>
+    CourseAPI.users
+      .fetch(userId)
+      .then((response) => dispatch(actions.saveUser(response.data.user)));
 }

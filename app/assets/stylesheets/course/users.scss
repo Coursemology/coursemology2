@@ -39,20 +39,5 @@
     table.skills-list tr.skill td.skill-title {
       text-indent: 30px;
     }
-  }
-
-  &.index {
-    .profile-picture {
-      text-align: center;
-
-      .image > img {
-        @include fit-round-img($course-user-listing-picture);
-        margin-top: 1em;
-      }
     }
-
-    .user-name {
-      padding-top: 2em;
-    }
-  }
 }

@@ -1,16 +1,21 @@
 import { produce } from 'immer';
 import {
   //   AchievementCourseUserEntity,
-  //   UserEntity,
+  UserEntity,
   UserMiniEntity,
 } from 'types/course/users';
 import {
   createEntityStore,
+  saveEntityToStore,
   //   removeFromStore,
-  //   saveEntityToStore,
   saveListToStore,
 } from 'utilities/store';
-import { UsersState, UsersActionType, SAVE_USERS_LIST } from './types';
+import {
+  UsersState,
+  UsersActionType,
+  SAVE_USER,
+  SAVE_USERS_LIST,
+} from './types';
 
 const initialState: UsersState = {
   users: createEntityStore(),
@@ -26,6 +31,12 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
       }));
       saveListToStore(draft.users, entityList);
       draft.permissions = action.userPermissions;
+      break;
+    }
+    case SAVE_USER: {
+      const userData = action.user;
+      const userEntity: UserEntity = { ...userData };
+      saveEntityToStore(draft.users, userEntity);
       break;
     }
     default: {

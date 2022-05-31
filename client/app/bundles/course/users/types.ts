@@ -3,26 +3,24 @@ import {
   UserMiniEntity,
   UserListData,
   UserPermissions,
+  UserData,
 } from 'types/course/users';
 import { EntityStore } from 'types/store';
 
 // Action Names
-
-export const SOMETHING_USERS_LIST = 'course/users/USERS_LIST';
+export const SAVE_USER = 'course/users/SAVE_USER';
 export const SAVE_USERS_LIST = 'course/users/SAVE_USERS_LIST';
 
 // Action Types
-
 export interface SaveUsersListAction {
-    type: typeof SAVE_USERS_LIST;
-    userList: UserListData[];
-    userPermissions: UserPermissions;
-  }
-
-export interface SomethingUsersListAction {
-  type: typeof SOMETHING_USERS_LIST;
+  type: typeof SAVE_USERS_LIST;
   userList: UserListData[];
   userPermissions: UserPermissions;
+}
+
+export interface SaveUserAction {
+  type: typeof SAVE_USER;
+  user: UserData;
 }
 
 // State Types
@@ -33,6 +31,4 @@ export interface UsersState {
   //   permissions: UsersPermissions | null;
 }
 
-export type UsersActionType =
-    | SaveUsersListAction
-    | SomethingUsersListAction;
+export type UsersActionType = SaveUsersListAction | SaveUserAction;

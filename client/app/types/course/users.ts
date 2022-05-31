@@ -1,5 +1,6 @@
 import { Permissions } from 'types';
-import { CourseUserData, CourseUserEntity } from './course_users';
+import { AchievementListData, AchievementMiniEntity } from './achievements';
+import { CourseUserData } from './course_users';
 
 export type UserPermissions = Permissions<
   'canCreate' | 'canManage' | 'canReorder'
@@ -11,24 +12,31 @@ export type UserPermissions = Permissions<
 
 export interface UserListData {
   id: number;
-  userName: string;
-  userLink: string;
-  userImageUrl: string;
-
+  name: string;
+  imageUrl?: string;
   //   permissions: UserListDataPermissions;
 }
 
-export interface UserData extends CourseUserData {}
+export interface UserData extends CourseUserData {
+  role: string;
+  achievementCount?: number;
+  achievements?: AchievementListData[];
+  email: string;
+  experiencePointsRecordsUrl?: string;
+  manageEmailSubscriptionUrl: string;
+}
 
 export interface UserMiniEntity {
   id: number;
-  userName: string;
-  userLink: string;
-  userImageUrl: string;
+  name: string;
+  imageUrl?: string;
 }
 
-export interface UserEntity extends CourseUserEntity {
-    userName: string;
-    userLink: string;
-    userImageUrl: string;
+export interface UserEntity extends UserMiniEntity {
+  role: string;
+  achievementCount?: number;
+  achievements?: AchievementMiniEntity[];
+  email: string;
+  experiencePointsRecordsUrl?: string;
+  manageEmailSubscriptionUrl: string;
 }

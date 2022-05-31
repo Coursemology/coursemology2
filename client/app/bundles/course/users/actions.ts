@@ -1,14 +1,17 @@
+import { UserData, UserListData, UserPermissions } from 'types/course/users';
 import {
-  // UserData,
-  UserListData,
-  UserPermissions,
-} from 'types/course/users';
-import {
-  SOMETHING_USERS_LIST,
+  SAVE_USER,
   SAVE_USERS_LIST,
+  SaveUserAction,
   SaveUsersListAction,
-  SomethingUsersListAction,
 } from './types';
+
+export function saveUser(user: UserData): SaveUserAction {
+  return {
+    type: SAVE_USER,
+    user,
+  };
+}
 
 export function saveUsersList(
   userList: UserListData[],
@@ -16,17 +19,6 @@ export function saveUsersList(
 ): SaveUsersListAction {
   return {
     type: SAVE_USERS_LIST,
-    userList,
-    userPermissions,
-  };
-}
-
-export function somethingUsersList(
-  userList: UserListData[],
-  userPermissions: UserPermissions,
-): SomethingUsersListAction {
-  return {
-    type: SOMETHING_USERS_LIST,
     userList,
     userPermissions,
   };
