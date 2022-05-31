@@ -14,6 +14,7 @@ import UserNotificationsAPI from './UserNotifications';
 import UserEmailSubscriptionsAPI from './UserEmailSubscriptions';
 import GroupsAPI from './Groups';
 import LearningMapAPI from './LearningMap';
+import LeaderboardAPI from './Leaderboard';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -32,6 +33,7 @@ const CourseAPI = {
   userEmailSubscriptions: new UserEmailSubscriptionsAPI(),
   groups: new GroupsAPI(),
   learningMap: new LearningMapAPI(),
+  leaderboard: new LeaderboardAPI(),
 };
 
 Object.freeze(CourseAPI);

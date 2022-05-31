@@ -1,11 +1,18 @@
 # frozen_string_literal: true
 class Course::LeaderboardsController < Course::ComponentController
+  include Course::LeaderboardsHelper
   before_action :add_leaderboard_breadcrumb
   before_action :check_component_settings
-  before_action :preload_course_levels, only: [:show]
+  before_action :preload_course_levels, only: [:index]
 
   def index # :nodoc:
-    @course_users = @course.course_users.students.without_phantom_users.includes(:user)
+    course_users = @course.course_users.students.without_phantom_users.includes(:user)
+    achievements_enabled = current_component_host[:course_achievements_component].present?
+
+    @course_users_points = course_users.ordered_by_experience_points.take(display_user_count)
+    if achievements_enabled
+      @course_users_count = course_users.ordered_by_achievement_count.take(display_user_count)
+    end
   end
 
   def show # :nodoc:
