@@ -11,48 +11,5 @@
     h4 {
       padding-top: 1em;
     }
-  }
-
-  &.show {
-    @include automatically-clear;
-
-    .achievement {
-      text-align: center;
-
-      .image > img {
-        height: $course-user-achievement-badge;
-        width: $course-user-achievement-badge;
-      }
     }
-
-    .profile-box {
-      .image > img {
-        @include fit-round-img($course-user-profile-picture);
-        margin-top: 1em;
-      }
-
-      .omniauth-info {
-        margin: 1em;
-      }
-    }
-
-    table.skills-list tr.skill td.skill-title {
-      text-indent: 30px;
-    }
-  }
-
-  &.index {
-    .profile-picture {
-      text-align: center;
-
-      .image > img {
-        @include fit-round-img($course-user-listing-picture);
-        margin-top: 1em;
-      }
-    }
-
-    .user-name {
-      padding-top: 2em;
-    }
-  }
 }

@@ -38,17 +38,5 @@ en:
         upgrade_to_staff: 'Upgrade to Staff'
       upgrade_to_staff:
         success: '%{name} is now a %{role}.'
-      show:
-        header: 'Profile'
-        role: 'Role: %{role}'
-        level_and_exp: 'Level %{level} - %{exp} EXP'
-        achievements_header: 'Achievements'
-        achievement_count:
-          zero: 'No achievements'
-          one: 'One achievement'
-          other: '%{count} achievements'
-        topic_mastery: 'Topic Mastery'
-        grade_for_skill: '%{grade}/%{total_grade} points'
-        manage_email_subscription: 'Manage email subscriptions'
       index:
         header: 'Students'
