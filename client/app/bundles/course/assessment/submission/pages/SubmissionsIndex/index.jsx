@@ -24,6 +24,7 @@ import NotificationBar, {
 } from 'lib/components/NotificationBar';
 import withRouter from 'lib/components/withRouter';
 import palette from 'theme/palette';
+import BarChart from 'lib/components/BarChart';
 import {
   fetchSubmissions,
   publishSubmissions,
@@ -43,7 +44,6 @@ import {
 } from '../../constants';
 import translations from '../../translations';
 import submissionsTranslations from './translations';
-import BarChart from 'lib/components/BarChart';
 
 class VisibleSubmissionsIndex extends Component {
   static canForceSubmitOrRemind(shownSubmissions) {
