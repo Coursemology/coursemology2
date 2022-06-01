@@ -1,4 +1,6 @@
 import { produce } from 'immer';
+import { createEntityStore, saveListToStore } from 'utilities/store';
+import { LeaderboardActionType, LeaderboardState, SAVE_LEADERBOARD_ACHIEVEMENT, SAVE_LEADERBOARD_POINTS } from './types';
 // import {
 //   AchievementCourseUserEntity,
 //   AchievementEntity,
@@ -12,10 +14,30 @@ import { produce } from 'immer';
 // } from 'utilities/store';
 
 
-const initialState = {};
+const initialState: LeaderboardState = {
+  leaderboardPoints: createEntityStore(),
+  leaderboardAchievement: createEntityStore(),
+};
 
-const reducer = produce(() => {},
+const reducer = produce(
+  (draft: LeaderboardState, action: LeaderboardActionType) => {
+    switch (action.type) {
+      case SAVE_LEADERBOARD_POINTS: {
+        const leaderboardPointsList = action.usersPoints;
+        saveListToStore(draft.leaderboardPoints, leaderboardPointsList);
+        break;
+      }
+      case SAVE_LEADERBOARD_ACHIEVEMENT: {
+        const leaderboardAchievementList = action.usersCount;
+        saveListToStore(draft.leaderboardAchievement, leaderboardAchievementList);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  },
   initialState,
-);
+);;
 
 export default reducer;

@@ -33,6 +33,7 @@ export function fetchAchievements(): Operation<void> {
       .index()
       .then((response) => {
         const data = response.data;
+        console.log(data);
 
         dispatch(
           actions.saveAchievementList(data.achievements, data.permissions),
