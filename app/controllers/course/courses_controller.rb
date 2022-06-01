@@ -6,7 +6,9 @@ class Course::CoursesController < Course::Controller
   before_action :load_todos, only: [:show]
 
   def index # :nodoc:
-    @courses = Course.publicly_accessible.ordered_by_start_at.page(page_param).per(24)
+    @courses = Course.publicly_accessible
+    # ordered_by_title.ordered_by_start_at
+    # .page(page_param).per(12)
   end
 
   def show # :nodoc:
@@ -23,9 +25,10 @@ class Course::CoursesController < Course::Controller
 
   def create # :nodoc:
     if @course.save
-      redirect_to course_admin_path(@course), success: t('.success', title: @course.title)
+      # redirect_to course_admin_path(@course), success: t('.success', title: @course.title)
+      render json: {id: @course.id }, status: :ok
     else
-      render 'new'
+      render json: {errors: @course.errors }, status: :bad_request
     end
   end
 

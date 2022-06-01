@@ -1,12 +1,12 @@
-= page_header do
-  - if can?(:create, Course.new)
-    = new_button([:course])
-  - elsif request = current_tenant.user_role_requests.find_by(user_id: current_user&.id)
-    = link_to t('.edit_role_request'), edit_instance_user_role_request_path(request), class: 'btn btn-default'
-  - else
-    = link_to t('.new_role_request'), new_instance_user_role_request_path, class: 'btn btn-primary'
+/ = page_header do
+/   - if can?(:create, Course.new)
+/     = new_button([:course])
+/   - elsif request = current_tenant.user_role_requests.find_by(user_id: current_user&.id)
+/     = link_to t('.edit_role_request'), edit_instance_user_role_request_path(request), class: 'btn btn-default'
+/   - else
+/     = link_to t('.new_role_request'), new_instance_user_role_request_path, class: 'btn btn-primary'
 
-div.row.is-flex
-  = render @courses
+/ div.row.is-flex
+/   = render @courses
 
-= paginate @courses
+div#all-courses-component
