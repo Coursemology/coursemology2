@@ -18,12 +18,12 @@ export interface UserListData {
 }
 
 export interface UserData extends CourseUserData {
+  email: string;
   role: string;
   achievementCount?: number;
   achievements?: AchievementListData[];
-  email: string;
   experiencePointsRecordsUrl?: string;
-  manageEmailSubscriptionUrl: string;
+  manageEmailSubscriptionUrl?: string;
 }
 
 export interface UserMiniEntity {
@@ -33,10 +33,10 @@ export interface UserMiniEntity {
 }
 
 export interface UserEntity extends UserMiniEntity {
+  email: string;
   role: string;
   achievementCount?: number;
   achievements?: AchievementMiniEntity[];
-  email: string;
   experiencePointsRecordsUrl?: string;
-  manageEmailSubscriptionUrl: string;
+  manageEmailSubscriptionUrl?: string;
 }
