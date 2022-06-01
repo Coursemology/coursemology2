@@ -14,12 +14,14 @@ import UserNotificationsAPI from './UserNotifications';
 import UserEmailSubscriptionsAPI from './UserEmailSubscriptions';
 import GroupsAPI from './Groups';
 import LearningMapAPI from './LearningMap';
+import CoursesAPI from './Courses';
 import UsersAPI from './Users';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
   assessment: AssessmentAPI,
   comments: new CommentsAPI(),
+  courses: new CoursesAPI(),
   virtualClassrooms: new VirtualClassroomsAPI(),
   materials: new MaterialsAPI(),
   materialFolders: new MaterialFoldersAPI(),

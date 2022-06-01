@@ -1,6 +1,7 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { AchievementsState } from 'bundles/course/achievement/types';
+import { CoursesState } from 'bundles/course/courses/types';
 import { UsersState } from 'bundles/course/users/types';
 
 /**
@@ -8,6 +9,7 @@ import { UsersState } from 'bundles/course/users/types';
  */
 export interface AppState {
   achievements: AchievementsState;
+  courses: CoursesState;
   users: UsersState;
 }
 
