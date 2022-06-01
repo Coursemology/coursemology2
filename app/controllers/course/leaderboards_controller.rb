@@ -11,6 +11,7 @@ class Course::LeaderboardsController < Course::ComponentController
 
     @course_users_points = course_users.ordered_by_experience_points.take(display_user_count)
     if achievements_enabled
+
       @course_users_count = course_users.ordered_by_achievement_count.take(display_user_count)
     end
   end

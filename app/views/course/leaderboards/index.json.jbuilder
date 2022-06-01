@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 json.usersPoints @course_users_points do |course_user|
-  json.user course_user.user
+  json.id course_user.id
   json.name format_inline_text(course_user.name)
   json.userLink course_user_path(course_user, current_course)
   json.userPicture user_image(course_user.user)
@@ -11,7 +11,7 @@ end
 
 if @course_users_count.present?
   json.usersCount @course_users_count do |course_user|
-    json.user course_user.user
+    json.id course_user.id
     json.name format_inline_text(course_user.name)
     json.userLink course_user_path(course_user, course_user.course)
     json.userPicture user_image(course_user.user)
