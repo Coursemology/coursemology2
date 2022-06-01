@@ -26,9 +26,9 @@ class Course::CoursesController < Course::Controller
   def create # :nodoc:
     if @course.save
       # redirect_to course_admin_path(@course), success: t('.success', title: @course.title)
-      render json: {id: @course.id }, status: :ok
+      render json: { id: @course.id }, status: :ok
     else
-      render json: {errors: @course.errors }, status: :bad_request
+      render json: { errors: @course.errors }, status: :bad_request
     end
   end
 
