@@ -24,10 +24,12 @@ end
 all_skill_branches = @skills_service.skill_branches
 if can_read_progress && all_skill_branches.present?
   json.skillBranches all_skill_branches.each do |skill_branch|
+    json.id skill_branch.id
     json.title skill_branch.title
 
     all_skills_in_branch = @skills_service.skills_in_branch(skill_branch)
-    all_skills_in_branch&.each do |skill|
+    json.skill all_skills_in_branch&.each do |skill|
+      json.id skill.id
       json.title skill.title
       json.percentage @skills_service.percentage_mastery(skill)
       json.grade @skills_service.grade(skill)
