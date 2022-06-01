@@ -1,6 +1,7 @@
 import { Permissions } from 'types';
 import { AchievementListData, AchievementMiniEntity } from './achievements';
 import { CourseUserData } from './course_users';
+import { SkillBranchData, SkillBranchEntity } from './skill_branches';
 
 export type UserPermissions = Permissions<
   'canCreate' | 'canManage' | 'canReorder'
@@ -24,6 +25,7 @@ export interface UserData extends CourseUserData {
   achievements?: AchievementListData[];
   experiencePointsRecordsUrl?: string;
   manageEmailSubscriptionUrl?: string;
+  skillBranches?: SkillBranchData[];
 }
 
 export interface UserMiniEntity {
@@ -39,4 +41,5 @@ export interface UserEntity extends UserMiniEntity {
   achievements?: AchievementMiniEntity[];
   experiencePointsRecordsUrl?: string;
   manageEmailSubscriptionUrl?: string;
+  skillBranches?: SkillBranchEntity[];
 }

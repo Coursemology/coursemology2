@@ -28,7 +28,7 @@ if can_read_progress && all_skill_branches.present?
     json.title skill_branch.title
 
     all_skills_in_branch = @skills_service.skills_in_branch(skill_branch)
-    json.skill all_skills_in_branch&.each do |skill|
+    json.skills all_skills_in_branch&.each do |skill|
       json.id skill.id
       json.title skill.title
       json.percentage @skills_service.percentage_mastery(skill)
