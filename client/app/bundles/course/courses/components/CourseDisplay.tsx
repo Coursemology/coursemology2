@@ -12,7 +12,7 @@ const CourseDisplay: FC<Props> = (props) => {
   const { courses } = props;
   // Ideally 24. Divisble by 2, 3 and 4. Also makes the pagination less awkward and causes less
   // UI jumps when the scroll bar of the webpage is rendered (when expanding descriptions)
-  const ITEMS_PER_PAGE = 12;
+  const ITEMS_PER_PAGE = 24;
   const count = Math.ceil(courses.length / ITEMS_PER_PAGE);
   const [page, setPage] = useState(1);
   const [slicedCourses, setSlicedCorses] = useState(

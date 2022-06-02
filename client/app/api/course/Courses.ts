@@ -32,6 +32,7 @@ export default class CoursesAPI extends BaseCourseAPI {
   create(params: FormData): Promise<
     AxiosResponse<{
       id: number;
+      title: string;
     }>
   > {
     return this.getClient().post(this._baseUrlPrefix, params);
