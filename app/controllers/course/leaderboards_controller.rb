@@ -8,13 +8,19 @@ class Course::LeaderboardsController < Course::ComponentController
   def index # :nodoc:
     course_users = @course.course_users.students.without_phantom_users.includes(:user)
     achievements_enabled = current_component_host[:course_achievements_component].present?
+    groups_enabled = @settings.enable_group_leaderboard
 
     @course_users_points = course_users.ordered_by_experience_points.take(display_user_count)
     if achievements_enabled
       @course_users_count = course_users.ordered_by_achievement_count.take(display_user_count)
     end
-    @groups_points = @course.groups.ordered_by_experience_points.take(display_user_count)
-    @groups_count = @course.groups.ordered_by_average_achievement_count.take(display_user_count)
+    if groups_enabled
+      @groups_points = @course.groups.ordered_by_experience_points.take(display_user_count)
+      if achievements_enabled
+        @groups_count = @course.groups.ordered_by_average_achievement_count.take(display_user_count)
+      end
+    end
+
   end
 
   private

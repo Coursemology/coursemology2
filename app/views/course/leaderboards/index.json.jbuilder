@@ -25,26 +25,26 @@ if @course_users_count.present?
   end
 end
 
-if @settings.enable_group_leaderboard
+if @groups_points.present?
   json.groupPoints @groups_points do |group|
     json.id group.id
     json.name format_inline_text(group.name)
     json.averageExperiencePoints group.average_experience_points
     json.group group.course_users.includes(:user, :course).students.each do |course_user|
-      json.id group.id
+      json.id course_user.id
       json.name course_user.name
       json.userLink course_user_path(current_course, course_user)
       json.userPicture user_image(course_user.user)
     end
   end
 
-  if @course_users_count.present?
+  if @groups_count.present?
     json.groupCount @groups_count do |group|
       json.id group.id
       json.name format_inline_text(group.name)
       json.averageAchievementCount group.average_achievement_count
       json.group group.course_users.includes(:user, :course).students.each do |course_user|
-        json.id group.id
+        json.id course_user.id
         json.name course_user.name
         json.userLink course_user_path(current_course, course_user)
         json.userPicture user_image(course_user.user)
