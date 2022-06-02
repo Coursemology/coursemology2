@@ -1,6 +1,5 @@
 import { Permissions } from 'types';
 import { AchievementListData, AchievementMiniEntity } from './achievements';
-import { CourseUserData } from './course_users';
 import { SkillBranchData, SkillBranchEntity } from './skill_branches';
 
 export type UserPermissions = Permissions<
@@ -14,11 +13,11 @@ export type UserPermissions = Permissions<
 export interface UserListData {
   id: number;
   name: string;
-  imageUrl?: string;
+  imageUrl: string;
   //   permissions: UserListDataPermissions;
 }
 
-export interface UserData extends CourseUserData {
+export interface UserData extends UserListData {
   email: string;
   role: string;
   level: number;
@@ -33,7 +32,7 @@ export interface UserData extends CourseUserData {
 export interface UserMiniEntity {
   id: number;
   name: string;
-  imageUrl?: string;
+  imageUrl: string;
 }
 
 export interface UserEntity extends UserMiniEntity {

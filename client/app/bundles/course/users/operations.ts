@@ -5,13 +5,11 @@ import * as actions from './actions';
 import { SaveUserAction } from './types';
 
 export function fetchUsers(): Operation<void> {
-  console.log('calling fetchusers in operations');
   return async (dispatch) =>
     CourseAPI.users
       .index()
       .then((response) => {
         const data = response.data;
-
         dispatch(actions.saveUsersList(data.users, data.permissions));
       })
       .catch((error) => {
@@ -20,7 +18,6 @@ export function fetchUsers(): Operation<void> {
 }
 
 export function loadUser(userId: number): Operation<SaveUserAction> {
-  console.log('calling loadUser in operations');
   return async (dispatch) =>
     CourseAPI.users
       .fetch(userId)

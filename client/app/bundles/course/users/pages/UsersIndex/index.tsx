@@ -5,11 +5,11 @@ import { toast } from 'react-toastify';
 import { Avatar, Grid } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
-import { getAllUserMiniEntities } from '../../selectors';
 import PageHeader from 'lib/components/pages/PageHeader';
-import { fetchUsers } from '../../operations';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { fetchUsers } from '../../operations';
+import { getAllUserMiniEntities } from '../../selectors';
 
 interface Props {
   intl?: any;

@@ -7,7 +7,6 @@ import AchievementShow from './pages/AchievementShow';
 import configureStore from './store';
 
 $(() => {
-  console.log("achievement poke");
   const mountNode = document.getElementById('course-achievement-component');
 
   if (mountNode) {
