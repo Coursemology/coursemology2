@@ -1,9 +1,23 @@
-import { LeaderboardAchievement, LeaderboardPoints } from "types/course/leaderboard";
-import { SaveLeaderboardAchievementAction, SaveLeaderboardPointsAction, SAVE_LEADERBOARD_ACHIEVEMENT, SAVE_LEADERBOARD_POINTS } from "./types";
+import {
+  GroupLeaderboardAchievement,
+  GroupLeaderboardPoints,
+  LeaderboardAchievement,
+  LeaderboardPoints,
+} from 'types/course/leaderboard';
+import {
+  SaveGroupLeaderboardAchievementAction,
+  SaveGroupLeaderboardPointsAction,
+  SaveLeaderboardAchievementAction,
+  SaveLeaderboardPointsAction,
+  SAVE_GROUPLEADERBOARD_ACHIEVEMENT,
+  SAVE_GROUPLEADERBOARD_POINTS,
+  SAVE_LEADERBOARD_ACHIEVEMENT,
+  SAVE_LEADERBOARD_POINTS,
+} from './types';
 
 export function saveLeaderboardPoints(
   usersPoints: LeaderboardPoints[],
-): SaveLeaderboardPointsAction{
+): SaveLeaderboardPointsAction {
   return {
     type: SAVE_LEADERBOARD_POINTS,
     usersPoints,
@@ -16,5 +30,23 @@ export function saveLeaderboardAchievement(
   return {
     type: SAVE_LEADERBOARD_ACHIEVEMENT,
     usersCount,
+  };
+}
+
+export function saveGroupLeaderboardPoints(
+  groupPoints: GroupLeaderboardPoints[],
+): SaveGroupLeaderboardPointsAction {
+  return {
+    type: SAVE_GROUPLEADERBOARD_POINTS,
+    groupPoints,
+  };
+}
+
+export function saveGroupLeaderboardAchievement(
+  groupCount: GroupLeaderboardAchievement[],
+): SaveGroupLeaderboardAchievementAction {
+  return {
+    type: SAVE_GROUPLEADERBOARD_ACHIEVEMENT,
+    groupCount,
   };
 }

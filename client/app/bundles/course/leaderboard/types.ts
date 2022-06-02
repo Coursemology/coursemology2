@@ -1,20 +1,25 @@
-// import {
-//   AchievementCourseUserData,
-//   AchievementData,
-//   AchievementEntity,
-//   AchievementListData,
-//   AchievementMiniEntity,
-//   AchievementPermissions,
-// } from 'types/course/achievements';
-// import { EntityStore } from 'types/store';
-
-import { LeaderboardAchievement, LeaderboardAchievementEntity, LeaderboardPoints, LeaderboardPointsEntity } from "types/course/leaderboard";
-import { EntityStore } from "types/store";
+import {
+  GroupLeaderboardAchievement,
+  GroupLeaderboardAchievementEntity,
+  GroupLeaderboardPoints,
+  GroupLeaderboardPointsEntity,
+  LeaderboardAchievement,
+  LeaderboardAchievementEntity,
+  LeaderboardPoints,
+  LeaderboardPointsEntity,
+} from 'types/course/leaderboard';
+import { EntityStore } from 'types/store';
 
 // Action Names
 
-export const SAVE_LEADERBOARD_POINTS = 'course/leadearboard/SAVE_LEADERBOARD_POINTS';
-export const SAVE_LEADERBOARD_ACHIEVEMENT = 'course/leadearboard/SAVE_LEADERBOARD_ACHIEVEMENT';
+export const SAVE_LEADERBOARD_POINTS =
+  'course/leadearboard/SAVE_LEADERBOARD_POINTS';
+export const SAVE_LEADERBOARD_ACHIEVEMENT =
+  'course/leadearboard/SAVE_LEADERBOARD_ACHIEVEMENT';
+export const SAVE_GROUPLEADERBOARD_POINTS =
+  'course/leadearboard/SAVE_GROUPLEADERBOARD_POINTS';
+export const SAVE_GROUPLEADERBOARD_ACHIEVEMENT =
+  'course/leadearboard/SAVE_GROUPLEADERBOARD_ACHIEVEMENT';
 
 // Action Types
 
@@ -28,29 +33,27 @@ export interface SaveLeaderboardAchievementAction {
   usersCount: LeaderboardAchievement[];
 }
 
-// export interface SaveAchievementAction {
-//   type: typeof SAVE_ACHIEVEMENT;
-//   achievement: AchievementData;
-// }
+export interface SaveGroupLeaderboardPointsAction {
+  type: typeof SAVE_GROUPLEADERBOARD_POINTS;
+  groupPoints: GroupLeaderboardPoints[];
+}
 
-// export interface DeleteAchievementAction {
-//   type: typeof DELETE_ACHIEVEMENT;
-//   id: number;
-// }
-
-// export interface SaveAchievementCourseUserAction {
-//   type: typeof SAVE_ACHIEVEMENT_COURSE_USERS;
-//   id: number;
-//   achievementCourseUsers: AchievementCourseUserData[];
-// }
+export interface SaveGroupLeaderboardAchievementAction {
+  type: typeof SAVE_GROUPLEADERBOARD_ACHIEVEMENT;
+  groupCount: GroupLeaderboardAchievement[];
+}
 
 export type LeaderboardActionType =
   | SaveLeaderboardPointsAction
-  | SaveLeaderboardAchievementAction;
+  | SaveLeaderboardAchievementAction
+  | SaveGroupLeaderboardPointsAction
+  | SaveGroupLeaderboardAchievementAction;
 
 // State Types
 
 export interface LeaderboardState {
   leaderboardPoints: EntityStore<LeaderboardPointsEntity>;
   leaderboardAchievement: EntityStore<LeaderboardAchievementEntity>;
+  groupLeaderboardPoints: EntityStore<GroupLeaderboardPointsEntity>;
+  groupLeaderboardAchievement: EntityStore<GroupLeaderboardAchievementEntity>;
 }
