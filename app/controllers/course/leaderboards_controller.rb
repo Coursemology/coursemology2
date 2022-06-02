@@ -11,17 +11,10 @@ class Course::LeaderboardsController < Course::ComponentController
 
     @course_users_points = course_users.ordered_by_experience_points.take(display_user_count)
     if achievements_enabled
-
       @course_users_count = course_users.ordered_by_achievement_count.take(display_user_count)
     end
-  end
-
-  def show # :nodoc:
-    @course_users = @course.course_users.students.without_phantom_users.includes(:user)
-  end
-
-  def groups # :nodoc:
-    @groups ||= @course.groups
+    @groups_points = @course.groups.ordered_by_experience_points.take(display_user_count)
+    @groups_count = @course.groups.ordered_by_average_achievement_count.take(display_user_count)
   end
 
   private

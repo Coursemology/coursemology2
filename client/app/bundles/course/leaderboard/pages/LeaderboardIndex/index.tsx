@@ -1,17 +1,25 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
-import { defineMessages, injectIntl } from 'react-intl';
-// import { useDispatch, useSelector } from 'react-redux';
-// import { AppDispatch, AppState } from 'types/store';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import Group from '@mui/icons-material/Group';
+import Person from '@mui/icons-material/Person';
 import { toast } from 'react-toastify';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
-import { fetchLeaderboard } from '../../operations';
-import { Grid } from '@mui/material';
-import LeaderboardPointsTable from '../../LeaderboardPointsTable';
-import LeaderboardAchievementsTable from '../../LeaderboardAchievementsTable';
-import { getLeaderboardAchievements, getLeaderboardPoints } from '../../selectors';
+import { Grid, Tab, Tabs } from '@mui/material';
+import palette from 'theme/palette';
+import fetchLeaderboard from '../../operations';
+import LeaderboardPointsTable from '../../components/tables/LeaderboardPointsTable';
+import LeaderboardAchievementsTable from '../../components/tables/LeaderboardAchievementsTable';
+import {
+  getGroupLeaderboardAchievements,
+  getGroupLeaderboardPoints,
+  getLeaderboardAchievements,
+  getLeaderboardPoints,
+} from '../../selectors';
+import GroupLeaderboardPointsTable from '../../components/tables/GroupLeaderboardPointsTable';
+import GroupLeaderboardAchievementsTable from '../../components/tables/GroupLeaderboardAchievementsTable';
 
 interface Props {
   intl?: any;
@@ -22,19 +30,33 @@ const translations = defineMessages({
     id: 'course.leaderboards.index.fetch.failure',
     defaultMessage: 'Failed to retrieve Leaderboard.',
   },
-
+  leaderboard: {
+    id: 'course.leaderboards.index.leaderboard',
+    defaultMessage: 'Leaderboard',
+  },
+  groupLeaderboard: {
+    id: 'course.leaderboards.index.groupLeaderboard',
+    defaultMessage: 'Group Leaderboard',
+  },
 });
 
 const LeaderboardIndex: FC<Props> = (props) => {
   const { intl } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(true);
+  const [tabValue, setTabValue] = useState('leaderboard-tab');
   const leaderboardPoints = useSelector((state: AppState) =>
     getLeaderboardPoints(state),
   );
   const leaderboardAchievements = useSelector((state: AppState) =>
-  getLeaderboardAchievements(state),
-);
+    getLeaderboardAchievements(state),
+  );
+  const groupLeaderboardPoints = useSelector((state: AppState) =>
+    getGroupLeaderboardPoints(state),
+  );
+  const groupLeaderboardAchievements = useSelector((state: AppState) =>
+    getGroupLeaderboardAchievements(state),
+  );
 
   useEffect(() => {
     dispatch(fetchLeaderboard())
@@ -50,6 +72,9 @@ const LeaderboardIndex: FC<Props> = (props) => {
 
   const headerToolbars: ReactElement[] = []; // To Add: Reorder Button
 
+  const isAchievementHidden = leaderboardAchievements.length === 0;
+  const isGroupHidden = groupLeaderboardPoints.length === 0;
+
   return (
     <>
       <PageHeader
@@ -59,17 +84,64 @@ const LeaderboardIndex: FC<Props> = (props) => {
         })}
         toolbars={headerToolbars}
       />
-      <Grid container>
-        <Grid item xs={6}>
-          <LeaderboardPointsTable data={leaderboardPoints}/>
+      {!isGroupHidden && (
+        <Tabs
+          onChange={(_, value): void => {
+            setTabValue(value);
+          }}
+          style={{
+            backgroundColor: palette.background.default,
+          }}
+          TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+          value={tabValue}
+          variant="fullWidth"
+        >
+          <Tab
+            id="leaderboard-tab"
+            style={{ color: palette.submissionIcon.person }}
+            icon={<Person />}
+            label={<FormattedMessage {...translations.leaderboard} />}
+            value="leaderboard-tab"
+          />
+          <Tab
+            id="groupLeaderboard-tab"
+            style={{ color: palette.submissionIcon.person }}
+            icon={<Group />}
+            label={<FormattedMessage {...translations.groupLeaderboard} />}
+            value="group-leaderboard-tab"
+          />
+        </Tabs>
+      )}
+
+      {tabValue === 'leaderboard-tab' && (
+        <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
+          <Grid item xs>
+            <LeaderboardPointsTable data={leaderboardPoints} />
+          </Grid>
+          {!isAchievementHidden && (
+            <Grid item xs>
+              <LeaderboardAchievementsTable data={leaderboardAchievements} />
+            </Grid>
+          )}
         </Grid>
-        <Grid item xs={6}>
-          <LeaderboardAchievementsTable data={leaderboardAchievements}/>
+      )}
+
+      {tabValue === 'group-leaderboard-tab' && (
+        <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
+          <Grid item xs>
+            <GroupLeaderboardPointsTable data={groupLeaderboardPoints} />
+          </Grid>
+          {!isAchievementHidden && (
+            <Grid item xs>
+              <GroupLeaderboardAchievementsTable
+                data={groupLeaderboardAchievements}
+              />
+            </Grid>
+          )}
         </Grid>
-      </Grid>
+      )}
     </>
   );
-
-}
+};
 
 export default injectIntl(LeaderboardIndex);

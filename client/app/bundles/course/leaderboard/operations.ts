@@ -1,23 +1,28 @@
-// import { AxiosResponse } from 'axios';
 import CourseAPI from 'api/course';
 import { LeaderboardData } from 'types/course/leaderboard';
 import { Operation } from 'types/store';
 import * as actions from './actions';
 
-export function fetchLeaderboard(): Operation<void> {
+const fetchLeaderboard = (): Operation<void> => {
   return async (dispatch) =>
     CourseAPI.leaderboard
       .index()
       .then((response) => {
         const data: LeaderboardData = response.data;
-        console.log(data);
-        dispatch(
-          actions.saveLeaderboardPoints(data.usersPoints),
-        );
-        data.usersCount && 
+        dispatch(actions.saveLeaderboardPoints(data.usersPoints));
+        if (data.usersCount) {
           dispatch(actions.saveLeaderboardAchievement(data.usersCount));
+        }
+        if (data.groupPoints) {
+          dispatch(actions.saveGroupLeaderboardPoints(data.groupPoints));
+        }
+        if (data.groupCount) {
+          dispatch(actions.saveGroupLeaderboardAchievement(data.groupCount));
+        }
       })
       .catch((error) => {
         throw error;
       });
-}
+};
+
+export default fetchLeaderboard;

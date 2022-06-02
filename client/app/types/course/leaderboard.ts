@@ -5,6 +5,8 @@
 export interface LeaderboardData {
   usersPoints: LeaderboardPoints[];
   usersCount?: LeaderboardAchievement[];
+  groupPoints?: GroupLeaderboardPoints[];
+  groupCount?: GroupLeaderboardAchievement[];
 }
 
 export interface LeaderboardAchievement {
@@ -12,18 +14,46 @@ export interface LeaderboardAchievement {
   name: string;
   userLink: string;
   userPicture: string;
-  achievements: {
-    badge: string;
-    link: string;
-  };
+  achievementCount: number;
+  achievements: Achievement[];
 }
 export interface LeaderboardPoints {
-  id:number;
+  id: number;
   name: string;
   userLink: string;
   userPicture: string;
   level: number;
   experience: number;
+}
+
+export interface GroupLeaderboardAchievement {
+  id: number;
+  name: string;
+  averageAchievementCount: number;
+  group: User[];
+  link: string;
+}
+
+export interface GroupLeaderboardPoints {
+  id: number;
+  name: string;
+  averageExperiencePoints: number;
+  group: User[];
+  link: string;
+}
+
+interface Achievement {
+  id: number;
+  badge: string;
+  link: string;
+  name: string;
+}
+
+interface User {
+  id: number;
+  name: string;
+  userLink: string;
+  userPicture: string;
 }
 
 /**
@@ -32,7 +62,7 @@ export interface LeaderboardPoints {
  */
 
 export interface LeaderboardPointsEntity {
-  id:number;
+  id: number;
   name: string;
   userLink: string;
   userPicture: string;
@@ -45,8 +75,22 @@ export interface LeaderboardAchievementEntity {
   name: string;
   userLink: string;
   userPicture: string;
-  achievements: {
-    badge: string;
-    link: string;
-  };
+  achievementCount: number;
+  achievements: Achievement[];
+}
+
+export interface GroupLeaderboardAchievementEntity {
+  id: number;
+  name: string;
+  averageAchievementCount: number;
+  group: User[];
+  link: string;
+}
+
+export interface GroupLeaderboardPointsEntity {
+  id: number;
+  name: string;
+  averageExperiencePoints: number;
+  group: User[];
+  link: string;
 }
