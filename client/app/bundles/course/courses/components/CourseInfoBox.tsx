@@ -16,13 +16,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { grey } from '@mui/material/colors';
 import { CoursesEntity } from 'types/course/courses';
 
-const styles = {
-  viewCourseButton: {
-    marginBottom: 10,
-    marginRight: 10,
-  },
-};
-
 interface Props {
   course: CoursesEntity;
 }
@@ -63,7 +56,7 @@ const CourseInfoBox: FC<Props> = (props) => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         borderStyle: 'solid',
         borderWidth: 0.2,
         borderColor: grey[300],
@@ -74,17 +67,16 @@ const CourseInfoBox: FC<Props> = (props) => {
     >
       <Link href={course.course} style={{ textDecoration: 'none' }}>
         <Button
-          style={
-            (styles.viewCourseButton,
-            { display: 'flex', flexDirection: 'column', width: '100%' })
-          }
+          sx={{ display: 'flex', flexDirection: 'column' }}
           disableTouchRipple
+          fullWidth
+          color="primary"
         >
           <p
-            style={{ textAlign: 'center' }}
+            style={{ marginTop: -10, textAlign: 'center' }}
             dangerouslySetInnerHTML={{ __html: course.logo }}
           />
-          <CardContent style={{ padding: 0 }}>
+          <CardContent style={{ padding: 2 }}>
             <Typography
               variant="h6"
               component="div"
@@ -98,7 +90,7 @@ const CourseInfoBox: FC<Props> = (props) => {
       </Link>
 
       {course.description && (
-        <CardActions style={{ paddingTop: 0 }}>
+        <CardActions style={{ paddingTop: 0, marginTop: -10 }}>
           <ExpandMore
             expand={expanded}
             onClick={handleExpandClick}
@@ -111,7 +103,7 @@ const CourseInfoBox: FC<Props> = (props) => {
       )}
 
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>
+        <CardContent style={{ paddingTop: 0, paddingBottom: 5 }}>
           <Typography
             variant="body2"
             dangerouslySetInnerHTML={{ __html: course.description }}
