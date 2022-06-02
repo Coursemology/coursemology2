@@ -16,9 +16,9 @@ if can_read_progress
   json.exp course_user.experience_points
 end
 
-unless current_component_host[:course_achievements_component].nil?
-  json.achivementCount course_user.achievement_count if @course_user.student? && current_course.gamified?
-  json.achievments course_user.achievements if @course_user.student? && @course_user.achievements.present?
+unless current_component_host[:course_achievements_component].nil? && !current_course.gamified?
+  json.achievementCount course_user.achievement_count if @course_user.student?
+  json.achievements course_user.achievements if @course_user.student?
 end
 
 all_skill_branches = @skills_service.skill_branches
