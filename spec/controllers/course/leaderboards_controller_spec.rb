@@ -10,8 +10,8 @@ RSpec.describe Course::LeaderboardsController, type: :controller do
 
     before { sign_in(user) }
 
-    describe '#show' do
-      subject { get :show, params: { course_id: course } }
+    describe '#index' do
+      subject { get :index, params: { course_id: course } }
 
       context 'when the leaderboard component is disabled' do
         before do

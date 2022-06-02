@@ -11,16 +11,12 @@ class Course::LeaderboardsController < Course::ComponentController
     groups_enabled = @settings.enable_group_leaderboard
 
     @course_users_points = course_users.ordered_by_experience_points.take(display_user_count)
-    if achievements_enabled
-      @course_users_count = course_users.ordered_by_achievement_count.take(display_user_count)
-    end
-    if groups_enabled
-      @groups_points = @course.groups.ordered_by_experience_points.take(display_user_count)
-      if achievements_enabled
-        @groups_count = @course.groups.ordered_by_average_achievement_count.take(display_user_count)
-      end
-    end
-
+    @course_users_count = achievements_enabled &&
+      course_users.ordered_by_achievement_count.take(display_user_count)
+    @groups_points = groups_enabled &&
+      @course.groups.ordered_by_experience_points.take(display_user_count)
+    @groups_count = achievements_enabled && groups_enabled &&
+      @course.groups.ordered_by_average_achievement_count.take(display_user_count)
   end
 
   private
