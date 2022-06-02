@@ -1,22 +1,19 @@
 import { produce } from 'immer';
 import { createEntityStore, saveListToStore } from 'utilities/store';
-import { LeaderboardActionType, LeaderboardState, SAVE_LEADERBOARD_ACHIEVEMENT, SAVE_LEADERBOARD_POINTS } from './types';
-// import {
-//   AchievementCourseUserEntity,
-//   AchievementEntity,
-//   AchievementMiniEntity,
-// } from 'types/course/achievements';
-// import {
-//   createEntityStore,
-//   removeFromStore,
-//   saveEntityToStore,
-//   saveListToStore,
-// } from 'utilities/store';
-
+import {
+  LeaderboardActionType,
+  LeaderboardState,
+  SAVE_GROUPLEADERBOARD_ACHIEVEMENT,
+  SAVE_GROUPLEADERBOARD_POINTS,
+  SAVE_LEADERBOARD_ACHIEVEMENT,
+  SAVE_LEADERBOARD_POINTS,
+} from './types';
 
 const initialState: LeaderboardState = {
   leaderboardPoints: createEntityStore(),
   leaderboardAchievement: createEntityStore(),
+  groupLeaderboardPoints: createEntityStore(),
+  groupLeaderboardAchievement: createEntityStore(),
 };
 
 const reducer = produce(
@@ -29,7 +26,26 @@ const reducer = produce(
       }
       case SAVE_LEADERBOARD_ACHIEVEMENT: {
         const leaderboardAchievementList = action.usersCount;
-        saveListToStore(draft.leaderboardAchievement, leaderboardAchievementList);
+        saveListToStore(
+          draft.leaderboardAchievement,
+          leaderboardAchievementList,
+        );
+        break;
+      }
+      case SAVE_GROUPLEADERBOARD_POINTS: {
+        const groupLeaderboardPointsList = action.groupPoints;
+        saveListToStore(
+          draft.groupLeaderboardPoints,
+          groupLeaderboardPointsList,
+        );
+        break;
+      }
+      case SAVE_GROUPLEADERBOARD_ACHIEVEMENT: {
+        const groupLeaderboardAchievementList = action.groupCount;
+        saveListToStore(
+          draft.groupLeaderboardAchievement,
+          groupLeaderboardAchievementList,
+        );
         break;
       }
       default: {
@@ -38,6 +54,6 @@ const reducer = produce(
     }
   },
   initialState,
-);;
+);
 
 export default reducer;
