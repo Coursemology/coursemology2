@@ -32,6 +32,7 @@ const formatAttributes = (data: NewCourseFormData): FormData => {
 export function createCourse(data: NewCourseFormData): Operation<
   AxiosResponse<{
     id: number;
+    title: string;
   }>
 > {
   const attributes = formatAttributes(data);
