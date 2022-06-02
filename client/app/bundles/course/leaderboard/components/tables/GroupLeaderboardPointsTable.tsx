@@ -37,6 +37,7 @@ const styles = {
     wordWrap: 'break-word',
     display: 'inline-flex',
     alignItems: 'center',
+    minWidth: '150px',
   },
 };
 
