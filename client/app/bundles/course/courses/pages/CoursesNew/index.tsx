@@ -57,6 +57,7 @@ const CoursesNew: FC<Props> = (props) => {
         toast.success(intl.formatMessage(translations.courseCreationSuccess));
         setTimeout(() => {
           if (response.data?.id) {
+            // TODO Change this to a react router after the courses home page has been implemented
             // Go to course page after creation
             window.location.assign(`/courses/${response.data?.id}`);
           }

@@ -5,7 +5,7 @@ import { CoursesActionType, CoursesState, SAVE_COURSES_LIST } from './types';
 
 const initialState: CoursesState = {
   courses: createEntityStore(),
-  permissions: { canCreate: false, requestSubmitted: false },
+  permissions: { canCreate: false, requestSubmitted: null },
 };
 
 const reducer = produce((draft: CoursesState, action: CoursesActionType) => {
