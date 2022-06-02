@@ -1,9 +1,24 @@
-import { Permissions } from 'types';
+export interface Request {
+  id: number;
+  instance_id: number;
+  user_id: number;
+  role: string;
+  organization: string;
+  designation: string;
+  reason: string;
+  created_at: string;
+  updated_at: string;
+}
 
-export type CoursesPermissions = Permissions<'canCreate' | 'requestSubmitted'>;
-export type CoursesListPermissions = Permissions<
-  'canCreate' | 'requestSubmitted'
->;
+export interface CoursesPermissions {
+  canCreate: boolean;
+  requestSubmitted: Request | null;
+}
+
+export interface CoursesListPermissions {
+  canCreate: boolean;
+  requestSubmitted: Request | null;
+}
 
 export interface CoursesEntity {
   id: number;

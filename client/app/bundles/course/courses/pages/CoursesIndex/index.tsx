@@ -35,6 +35,14 @@ const translations = defineMessages({
     id: 'course.index.fetch.failure',
     defaultMessage: 'Failed to retrieve courses.',
   },
+  newRequest: {
+    id: 'request.new',
+    defaultMessage: 'Request to be an instructor',
+  },
+  editRequest: {
+    id: 'request.edit',
+    defaultMessage: 'Edit your request',
+  },
 });
 
 const CoursesIndex: FC<Props> = (props) => {
@@ -78,6 +86,28 @@ const CoursesIndex: FC<Props> = (props) => {
         style={styles.newButton}
       >
         {intl.formatMessage(translations.newCourse)}
+      </Button>,
+    );
+  } else {
+    headerToolbars.push(
+      <Button
+        className="request-button"
+        key="request-button"
+        variant="outlined"
+        color="primary"
+        // TODO Route this properly after role_request page is refactored
+        onClick={(): void =>
+          coursesPermissions?.requestSubmitted
+            ? window.location.assign(
+                `role_requests/${coursesPermissions.requestSubmitted?.id}/edit`,
+              )
+            : window.location.assign('role_requests/new')
+        }
+        style={styles.newButton}
+      >
+        {coursesPermissions?.requestSubmitted
+          ? intl.formatMessage(translations.editRequest)
+          : intl.formatMessage(translations.newRequest)}
       </Button>,
     );
   }
