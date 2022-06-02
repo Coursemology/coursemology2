@@ -81,7 +81,7 @@ const GroupLeaderboardAchievementsTable: FC<Props> = (props: Props) => {
             sx={styles.avatarGroup}
           >
             {data[_dataIndex].group.map((user) => (
-              <Tooltip title={user.name} key={user.name}>
+              <Tooltip title={user.name} key={user.id}>
                 <Avatar
                   src={user.userPicture}
                   alt={user.name}
