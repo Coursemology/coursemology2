@@ -69,7 +69,10 @@ const UserProfileCard: FC<Props> = ({
 
   function UserStatsCard(props): JSX.Element {
     return (
-      <Paper variant="outlined" className="user-stats-card">
+      <Paper
+        variant="outlined"
+        className={`user-stats-card ${props.className}`}
+      >
         <Typography variant="overline">{props.title}</Typography>
         <Typography variant="h5">{props.value}</Typography>
       </Paper>
@@ -79,6 +82,7 @@ const UserProfileCard: FC<Props> = ({
   UserStatsCard.propTypes = {
     title: PropTypes.string,
     value: PropTypes.number,
+    className: PropTypes.string,
   };
 
   function handleScrollToAchievements(e: React.MouseEvent): void {
@@ -111,9 +115,6 @@ const UserProfileCard: FC<Props> = ({
   };
 
   const renderUserStats = (): JSX.Element | null => {
-    if (role !== 'Student') {
-      return null;
-    }
     return (
       <Grid
         item
@@ -122,10 +123,16 @@ const UserProfileCard: FC<Props> = ({
         justifyContent={{ xs: 'center', sm: 'start' }}
         sx={styles.statsContainer}
       >
-        {level !== undefined && <UserStatsCard title="Level" value={level} />}
+        {level !== undefined && (
+          <UserStatsCard
+            title="Level"
+            value={level}
+            className="user-level-stat"
+          />
+        )}
         {exp !== undefined && (
           <a href={experiencePointsRecordsUrl}>
-            <UserStatsCard title="EXP" value={exp} />
+            <UserStatsCard title="EXP" value={exp} className="user-exp-stat" />
           </a>
         )}
         {achievementCount !== undefined && (
@@ -133,7 +140,11 @@ const UserProfileCard: FC<Props> = ({
             href="#user-profile-achievements"
             onClick={(e): void => handleScrollToAchievements(e)}
           >
-            <UserStatsCard title="Achievements" value={achievementCount} />
+            <UserStatsCard
+              title="Achievements"
+              value={achievementCount}
+              className="user-achievements-stat"
+            />
           </a>
         )}
       </Grid>
