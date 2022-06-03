@@ -130,17 +130,6 @@ const SubmissionEditStepForm = (props) => {
     reset(initialValues);
   }, [initialValues]);
 
-  const handleNext = () => {
-    setMaxStep(Math.max(maxStep, stepIndex + 1));
-    setStepIndex(stepIndex + 1);
-  };
-
-  const handleStepClick = (index) => {
-    if (published || skippable || graderView || index <= maxStep) {
-      setStepIndex(index);
-    }
-  };
-
   const isOutdated = (question) => {
     const isBackendOutdated = !answerStatus[question.id].isLatestAnswer;
     const isFrontendDirty = question.answerId in dirtyFields;
@@ -167,6 +156,29 @@ const SubmissionEditStepForm = (props) => {
 
   const shouldRenderContinueButton = () =>
     !isLastQuestion(questionIds, stepIndex);
+
+  const isStepButtonActive = (index) => {
+    if (index === 0) return true;
+
+    const previousQuestion = questionIds[index - 1];
+
+    return (
+      index <= maxStep ||
+      (explanations[previousQuestion] && explanations[previousQuestion].correct)
+    );
+  };
+
+  const handleNext = () => {
+    setMaxStep(Math.max(maxStep, stepIndex + 1));
+    setStepIndex(stepIndex + 1);
+  };
+
+  const handleStepClick = (index) => {
+    if (published || skippable || graderView || isStepButtonActive(index)) {
+      setStepIndex(index);
+      setMaxStep(Math.max(maxStep, stepIndex));
+    }
+  };
 
   const renderAnswerLoadingIndicator = () => {
     const id = questionIds[stepIndex];
@@ -564,9 +576,14 @@ const SubmissionEditStepForm = (props) => {
           } else {
             stepButtonColor = isCurrentQuestion ? blue[800] : lightBlue[400];
           }
-          if (published || skippable || graderView || index <= maxStep) {
+          if (
+            published ||
+            skippable ||
+            graderView ||
+            isStepButtonActive(index)
+          ) {
             return (
-              <Step key={questionId} active={index <= maxStep}>
+              <Step key={questionId}>
                 <StepButton
                   icon={
                     <SvgIcon htmlColor={stepButtonColor}>
