@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { UserData, UserListData, UserPermissions } from 'types/course/users';
+import { CourseUserData, CourseUserListData } from 'types/course/course_users';
 import BaseCourseAPI from './Base';
 
 export default class UsersAPI extends BaseCourseAPI {
@@ -12,19 +12,18 @@ export default class UsersAPI extends BaseCourseAPI {
    */
   index(): Promise<
     AxiosResponse<{
-      users: UserListData[];
-      permissions: UserPermissions;
+      users: CourseUserListData[];
     }>
   > {
     return this.getClient().get(this._getUrlPrefix());
   }
 
   /**
-   * Fetches a user.
+   * Fetches a user with detailed information in a course.
    */
   fetch(userId: number): Promise<
     AxiosResponse<{
-      user: UserData;
+      user: CourseUserData;
     }>
   > {
     return this.getClient().get(`${this._getUrlPrefix()}/${userId}`);

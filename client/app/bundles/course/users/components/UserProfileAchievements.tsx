@@ -3,13 +3,30 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { Avatar, Grid, Typography } from '@mui/material';
 import { AchievementMiniEntity } from 'types/course/achievements';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { getAchievementURL } from 'lib/helpers/url-builders';
 
 interface Props {
   achievements: AchievementMiniEntity[];
   intl?: any;
 }
 
+const styles = {
+  achievementBadge: {
+    height: '100px',
+    width: '100px',
+  },
+  achievementMiniEntityContainer: {
+    textAlign: 'center',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+};
+
 const translations = defineMessages({
+  achivementsHeader: {
+    id: 'course.users.show.achievementsHeader',
+    defaultMessage: 'Achievements',
+  },
   noAchievements: {
     id: 'course.users.show.noAchievements',
     defaultMessage: 'No achievements... yet!',
@@ -17,22 +34,10 @@ const translations = defineMessages({
 });
 
 const UserProfileAchievements: FC<Props> = ({ achievements, intl }: Props) => {
-  const styles = {
-    achievementBadge: {
-      height: '100px',
-      width: '100px',
-    },
-    achievementMiniEntityContainer: {
-      textAlign: 'center',
-      display: 'flex',
-      justifyContent: 'center',
-    },
-  };
-
   return (
     <>
       <Typography variant="h4" component="h2" id="user-profile-achievements">
-        Achievements
+        {intl.formatMessage(translations.achivementsHeader)}
       </Typography>
       {achievements.length > 0 ? (
         <Grid container spacing={1}>
@@ -46,11 +51,7 @@ const UserProfileAchievements: FC<Props> = ({ achievements, intl }: Props) => {
               lg={2}
             >
               <Grid container sx={styles.achievementMiniEntityContainer}>
-                <a
-                  href={`/courses/${getCourseId()}/achievements/${
-                    achievement.id
-                  }`}
-                >
+                <a href={getAchievementURL(getCourseId(), achievement.id)}>
                   <Grid container justifyContent="center">
                     <Avatar
                       src={achievement.badge.url}

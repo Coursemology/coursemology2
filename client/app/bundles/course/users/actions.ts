@@ -1,4 +1,4 @@
-import { UserData, UserListData, UserPermissions } from 'types/course/users';
+import { CourseUserData, CourseUserListData } from 'types/course/course_users';
 import {
   SAVE_USER,
   SAVE_USERS_LIST,
@@ -6,20 +6,18 @@ import {
   SaveUsersListAction,
 } from './types';
 
-export function saveUser(user: UserData): SaveUserAction {
-  return {
-    type: SAVE_USER,
-    user,
-  };
-}
-
 export function saveUsersList(
-  userList: UserListData[],
-  userPermissions: UserPermissions,
+  userList: CourseUserListData[],
 ): SaveUsersListAction {
   return {
     type: SAVE_USERS_LIST,
     userList,
-    userPermissions,
+  };
+}
+
+export function saveUser(user: CourseUserData): SaveUserAction {
+  return {
+    type: SAVE_USER,
+    user,
   };
 }

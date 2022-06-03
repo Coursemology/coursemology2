@@ -1,5 +1,8 @@
 import { produce } from 'immer';
-import { UserEntity, UserMiniEntity } from 'types/course/users';
+import {
+  CourseUserEntity,
+  CourseUserMiniEntity,
+} from 'types/course/course_users';
 import {
   createEntityStore,
   saveEntityToStore,
@@ -14,23 +17,21 @@ import {
 
 const initialState: UsersState = {
   users: createEntityStore(),
-  permissions: { canCreate: false, canManage: false, canReorder: false },
 };
 
 const reducer = produce((draft: UsersState, action: UsersActionType) => {
   switch (action.type) {
     case SAVE_USERS_LIST: {
       const userList = action.userList;
-      const entityList: UserMiniEntity[] = userList.map((data) => ({
+      const entityList: CourseUserMiniEntity[] = userList.map((data) => ({
         ...data,
       }));
       saveListToStore(draft.users, entityList);
-      draft.permissions = action.userPermissions;
       break;
     }
     case SAVE_USER: {
       const userData = action.user;
-      const userEntity: UserEntity = { ...userData };
+      const userEntity: CourseUserEntity = { ...userData };
       saveEntityToStore(draft.users, userEntity);
       break;
     }

@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import { FC } from 'react';
+import { defineMessages, injectIntl } from 'react-intl';
 import {
   Avatar,
   Box,
@@ -11,107 +11,108 @@ import {
   Typography,
 } from '@mui/material';
 import { scroller } from 'react-scroll';
-import { blue, green, orange } from '@mui/material/colors';
+import { green } from '@mui/material/colors';
+import { CourseUserEntity } from 'types/course/course_users';
 
 interface Props {
-  name: string;
-  imageUrl: string;
-  email: string;
-  role: string;
-  exp?: number;
-  level?: number;
-  experiencePointsRecordsUrl?: string;
-  manageEmailSubscriptionUrl?: string;
-  achievementCount?: number;
+  user: CourseUserEntity;
+  intl?: any;
 }
 
-const UserProfileCard: FC<Props> = ({
-  name,
-  imageUrl,
-  email,
-  role,
-  exp,
-  level,
-  experiencePointsRecordsUrl,
-  manageEmailSubscriptionUrl,
-  achievementCount,
-}: Props) => {
-  const styles = {
-    courseUserImage: {
-      height: 140,
-      width: 140,
+const styles = {
+  courseUserImage: {
+    height: 140,
+    width: 140,
+  },
+  statsContainer: {
+    '& a': {
+      textDecoration: 'none',
     },
-    statsContainer: {
-      '& a': {
-        textDecoration: 'none',
-      },
-      '& .user-stats-card': {
-        margin: '4px 4px 4px 0px',
-        padding: '12px',
-        minWidth: '100px',
-        maxWidth: '144px',
-        transition: 'background-color 0.5s, color 0.5s',
-      },
-      '& :nth-child(2n):hover .user-stats-card,& .user-stats-card:nth-child(2n):hover':
-        {
-          backgroundColor: blue[400],
-        },
-      '& :nth-child(3n):hover .user-stats-card,& .user-stats-card:nth-child(3n):hover':
-        {
-          backgroundColor: orange[400],
-        },
-      '& .user-stats-card:hover': {
-        backgroundColor: green[400],
-        color: 'white',
-      },
+    '& .user-stats-card': {
+      margin: '4px 4px 4px 0px',
+      padding: '12px',
+      minWidth: '100px',
+      maxWidth: '144px',
+      transition: 'background-color 0.5s, color 0.5s',
     },
-  };
+    '& .user-stats-card:hover': {
+      backgroundColor: green[400],
+      color: 'white',
+    },
+  },
+};
 
-  function UserStatsCard(props): JSX.Element {
+const translations = defineMessages({
+  manageEmailSubscription: {
+    id: 'course.users.show.manageEmailSubscription',
+    defaultMessage: 'Manage email subscriptions',
+  },
+  level: {
+    id: 'course.users.show.level',
+    defaultMessage: 'Level',
+  },
+  exp: {
+    id: 'course.users.show.exp',
+    defaultMessage: 'EXP',
+  },
+  achievements: {
+    id: 'course.users.show.achievements',
+    defaultMessage: 'Achievements',
+  },
+});
+
+const UserProfileCard: FC<Props> = ({ user, intl }) => {
+  interface UserStatsCardProps {
+    title: string;
+    value: number;
+    className: string;
+  }
+
+  const UserStatsCard = (props: UserStatsCardProps): JSX.Element => {
     return (
       <Paper
         variant="outlined"
         className={`user-stats-card ${props.className}`}
       >
         <Typography variant="overline">{props.title}</Typography>
-        <Typography variant="h5">{props.value}</Typography>
+        <Typography variant="h5" className={`${props.className}-value`}>
+          {props.value}
+        </Typography>
       </Paper>
     );
-  }
-
-  UserStatsCard.propTypes = {
-    title: PropTypes.string,
-    value: PropTypes.number,
-    className: PropTypes.string,
   };
 
-  function handleScrollToAchievements(e: React.MouseEvent): void {
+  const handleScrollToAchievements = (e: React.MouseEvent): void => {
     e.preventDefault();
     scroller.scrollTo('user-profile-achievements', {
       smooth: true,
       duration: 200,
       offset: -50,
     });
-  }
+  };
 
   const renderManageEmail = (): JSX.Element => {
-    if (manageEmailSubscriptionUrl) {
+    if (user.manageEmailSubscriptionUrl) {
       return (
         <Box>
           <Typography variant="body1" component="span">
-            {email} &mdash;{' '}
+            {user.email} &mdash;{' '}
           </Typography>
           <Link
-            href={manageEmailSubscriptionUrl}
+            href={user.manageEmailSubscriptionUrl}
             variant="body1"
             underline="hover"
           >
-            Manage Email Subscriptions
+            {intl.formatMessage(translations.manageEmailSubscription)}
           </Link>
         </Box>
       );
     }
-    return <>{email}</>;
+    return (
+      <Typography variant="body1" component="span">
+        {user.email}
+      </Typography>
+    );
   };
 
   const renderUserStats = (): JSX.Element | null => {
@@ -121,28 +122,33 @@ const UserProfileCard: FC<Props> = ({
         container
         direction="row"
         justifyContent={{ xs: 'center', sm: 'start' }}
+        className="user-stats-container"
         sx={styles.statsContainer}
       >
-        {level !== undefined && (
+        {user.level !== undefined && (
           <UserStatsCard
-            title="Level"
-            value={level}
+            title={intl.formatMessage(translations.level)}
+            value={user.level}
             className="user-level-stat"
           />
         )}
-        {exp !== undefined && (
-          <a href={experiencePointsRecordsUrl}>
-            <UserStatsCard title="EXP" value={exp} className="user-exp-stat" />
+        {user.exp !== undefined && (
+          <a href={user.experiencePointsRecordsUrl}>
+            <UserStatsCard
+              title={intl.formatMessage(translations.exp)}
+              value={user.exp}
+              className="user-exp-stat"
+            />
           </a>
         )}
-        {achievementCount !== undefined && (
+        {user.achievements !== undefined && (
           <a
             href="#user-profile-achievements"
             onClick={(e): void => handleScrollToAchievements(e)}
           >
             <UserStatsCard
-              title="Achievements"
-              value={achievementCount}
+              title={intl.formatMessage(translations.achievements)}
+              value={user.achievements.length}
               className="user-achievements-stat"
             />
           </a>
@@ -168,7 +174,7 @@ const UserProfileCard: FC<Props> = ({
             xs={12}
             sm="auto"
           >
-            <Avatar src={imageUrl} sx={styles.courseUserImage} />
+            <Avatar src={user.imageUrl} sx={styles.courseUserImage} />
           </Grid>
           <Grid
             item
@@ -176,12 +182,11 @@ const UserProfileCard: FC<Props> = ({
             direction="column"
             alignItems={{ xs: 'center', sm: 'start' }}
           >
-            <Typography variant="h4">{name}</Typography>
+            <Typography variant="h4">{user.name}</Typography>
             <Typography variant="body1">
-              <strong>{role}</strong>
+              <strong>{user.role}</strong>
             </Typography>
             {renderManageEmail()}
-
             {renderUserStats()}
           </Grid>
         </Grid>
@@ -190,4 +195,4 @@ const UserProfileCard: FC<Props> = ({
   );
 };
 
-export default UserProfileCard;
+export default injectIntl(UserProfileCard);

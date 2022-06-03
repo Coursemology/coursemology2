@@ -19,26 +19,32 @@ if can_read_progress && is_student_and_gamified
 end
 
 unless current_component_host[:course_achievements_component].nil? || !is_student_and_gamified
-  json.achievementCount course_user.achievement_count
-  json.achievements course_user.achievements
+  json.achievements course_user.achievements.each do |achievement|
+    json.id achievement.id
+    json.title achievement.title
+    json.badge achievement.badge
+  end
 end
 
 all_skill_branches = @skills_service.skill_branches
 can_view_skills = all_skill_branches.present? && can_read_progress
-if can_view_skills && is_student_and_gamified
-  json.skillBranches all_skill_branches.each do |skill_branch|
-    json.id skill_branch.id
-    json.title skill_branch.title
 
-    all_skills_in_branch = @skills_service.skills_in_branch(skill_branch)
-    json.skills all_skills_in_branch&.each do |skill|
-      json.id skill.id
-      json.title skill.title
-      json.percentage @skills_service.percentage_mastery(skill)
-      json.grade @skills_service.grade(skill)
-      json.totalGrade skill.total_grade
-    end
-  end
+if can_view_skills && is_student_and_gamified
+  json.partial! 'course/assessment/skill_branches/skill_branch', skill_branches: all_skill_branches
+
+  # json.skillBranches all_skill_branches.each do |skill_branch|
+  #   json.id skill_branch.id
+  #   json.title skill_branch.title
+
+  #   all_skills_in_branch = @skills_service.skills_in_branch(skill_branch)
+  #   json.skills all_skills_in_branch&.each do |skill|
+  #     json.id skill.id
+  #     json.title skill.title
+  #     json.percentage @skills_service.percentage_mastery(skill)
+  #     json.grade @skills_service.grade(skill)
+  #     json.totalGrade skill.total_grade
+  #   end
+  # end
 end
 
 # NOTE: Facebook login feature is currently disabled

@@ -15,6 +15,12 @@ interface Props {
   intl?: any;
 }
 
+const styles = {
+  userShowPage: {
+    '& > * + *': { marginTop: '24px !important' },
+  },
+};
+
 const UserShow: FC<Props> = () => {
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
@@ -35,25 +41,9 @@ const UserShow: FC<Props> = () => {
     return null;
   }
 
-  const styles = {
-    userShowPage: {
-      '& > * + *': { marginTop: '24px !important' },
-    },
-  };
-
   return (
     <Box sx={styles.userShowPage}>
-      <UserProfileCard
-        name={user.name}
-        imageUrl={user.imageUrl}
-        email={user.email}
-        role={user.role}
-        manageEmailSubscriptionUrl={user.manageEmailSubscriptionUrl}
-        experiencePointsRecordsUrl={user.experiencePointsRecordsUrl}
-        level={user.level}
-        exp={user.exp}
-        achievementCount={user.achievementCount}
-      />
+      <UserProfileCard user={user} />
       {user.achievements && (
         <UserProfileAchievements achievements={user.achievements} />
       )}

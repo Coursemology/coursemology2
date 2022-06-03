@@ -10,7 +10,7 @@ export function fetchUsers(): Operation<void> {
       .index()
       .then((response) => {
         const data = response.data;
-        dispatch(actions.saveUsersList(data.users, data.permissions));
+        dispatch(actions.saveUsersList(data.users));
       })
       .catch((error) => {
         throw error;

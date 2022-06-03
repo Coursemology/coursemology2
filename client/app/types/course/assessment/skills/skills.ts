@@ -13,3 +13,17 @@ export interface SkillEntity {
   grade: number;
   totalGrade: number;
 }
+
+export interface SkillBranchData {
+  id: number;
+  title: string;
+  description?: string;
+  skills?: SkillData[];
+}
+
+export interface SkillBranchEntity {
+  id: number;
+  title: string;
+  description?: string;
+  skills?: SkillEntity[];
+}
