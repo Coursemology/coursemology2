@@ -12,7 +12,7 @@ RSpec.feature 'Instance::UserRoleRequests' do
     context 'As a normal instance user' do
       scenario 'I can create a new role request', type: :mailer do
         visit courses_path
-        click_button('Request to be an instructor')
+        find('#request-button').click
 
         request = build(:role_request)
         fill_in 'user_role_request[organization]', with: request.organization
@@ -32,8 +32,8 @@ RSpec.feature 'Instance::UserRoleRequests' do
       scenario 'I can edit my existing role request' do
         request = create(:role_request, user: user, instance: instance)
         visit courses_path
+        find('#request-button').click
 
-        click_button('EDIT YOUR REQUEST')
         new_reason = 'New Reason'
         fill_in 'user_role_request[reason]', with: new_reason
         click_button 'edit'

@@ -1,79 +1,44 @@
 import { injectIntl } from 'react-intl';
-import { useState, FC } from 'react';
-import {
-  CardContent,
-  Collapse,
-  Typography,
-  Grid,
-  Link,
-  CardActions,
-  Button,
-  IconButton,
-  IconButtonProps,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { FC } from 'react';
+import { CardContent, Typography, Grid, Link } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { CoursesEntity } from 'types/course/courses';
+
+import './CourseInfoBox.scss';
 
 interface Props {
   course: CoursesEntity;
 }
 
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  // Taking out expand to avoid error when passing on to next component
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
-
 const CourseInfoBox: FC<Props> = (props) => {
   const { course } = props;
-  // For description box
-  const [expanded, setExpanded] = useState(false);
-
-  const handleExpandClick: () => void = () => {
-    setExpanded(!expanded);
-  };
 
   return (
-    <Grid
-      item
-      xs={1}
-      sm={1}
-      md={1}
-      lg={1}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        borderStyle: 'solid',
-        borderWidth: 0.2,
-        borderColor: grey[300],
-        borderRadius: 5,
-        paddingLeft: 0,
-        paddingTop: 0,
-      }}
-    >
-      <Link href={course.course} style={{ textDecoration: 'none' }}>
-        <Button
-          sx={{ display: 'flex', flexDirection: 'column' }}
-          disableTouchRipple
-          fullWidth
-          color="primary"
+    <Grid item xs={1} sm={1} md={1} lg={1} xl={1} style={{ padding: 15 }}>
+      <div
+        style={{
+          borderStyle: 'solid',
+          borderWidth: 0.2,
+          borderColor: grey[300],
+          borderRadius: 5,
+          height: '100%',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+        }}
+      >
+        <Link
+          href={course.course}
+          style={{
+            textDecoration: 'none',
+          }}
         >
           <p
-            style={{ marginTop: -10, textAlign: 'center' }}
+            style={{
+              marginTop: -10,
+              textAlign: 'center',
+            }}
             dangerouslySetInnerHTML={{ __html: course.logo }}
           />
           <CardContent style={{ padding: 2 }}>
@@ -86,30 +51,27 @@ const CourseInfoBox: FC<Props> = (props) => {
               {course.title}
             </Typography>
           </CardContent>
-        </Button>
-      </Link>
-
-      {course.description && (
-        <CardActions style={{ paddingTop: 0, marginTop: -10 }}>
-          <ExpandMore
-            expand={expanded}
-            onClick={handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="show more"
+        </Link>
+        {course.description && (
+          <CardContent
+            style={{
+              padding: '5px 5px 5px 5px',
+              height: 100,
+              overflow: 'auto',
+              margin: 5,
+              borderStyle: 'solid',
+              borderWidth: 0.2,
+              borderColor: grey[300],
+              borderRadius: 5,
+            }}
           >
-            <ExpandMoreIcon />
-          </ExpandMore>
-        </CardActions>
-      )}
-
-      <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent style={{ paddingTop: 0, paddingBottom: 5 }}>
-          <Typography
-            variant="body2"
-            dangerouslySetInnerHTML={{ __html: course.description }}
-          />
-        </CardContent>
-      </Collapse>
+            <Typography
+              variant="body2"
+              dangerouslySetInnerHTML={{ __html: course.description }}
+            />
+          </CardContent>
+        )}
+      </div>
     </Grid>
   );
 };

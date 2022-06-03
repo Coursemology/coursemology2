@@ -44,12 +44,11 @@ const CourseDisplay: FC<Props> = (props) => {
         />
       )}
       <Grid
-        // MUI applies default marginLeft: -24
-        style={{ marginLeft: -12 }}
+        // MUI applies default marginLeft: -16
+        style={{ padding: 0 }}
         container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
-        p={2}
+        columns={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 4 }}
+        p={1}
       >
         {slicedCourses.map((course: CoursesEntity) => (
           <CourseInfoBox key={course.id} course={course} />
