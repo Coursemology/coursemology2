@@ -44,17 +44,33 @@ const CourseDisplay: FC<Props> = (props) => {
 
   return (
     <>
-      <SearchBar
-        placeholder={intl.formatMessage(translations.searchBarPlaceholder)}
-        onChange={handleSearchBarChange}
-      />
-      <Pagination
-        items={shavedCourses}
-        itemsPerPage={ITEMS_PER_PAGE}
-        setSlicedItems={setSlicedCorses}
-        page={page}
-        setPage={setPage}
-      />
+      <Grid style={{ padding: 0 }} container columns={{ xs: 1, lg: 9 }}>
+        <Grid
+          item
+          xs={2}
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <SearchBar
+            placeholder={intl.formatMessage(translations.searchBarPlaceholder)}
+            onChange={handleSearchBarChange}
+          />
+        </Grid>
+        <Grid item xs={1} />
+        <Grid item xs={3}>
+          <Pagination
+            items={shavedCourses}
+            itemsPerPage={ITEMS_PER_PAGE}
+            setSlicedItems={setSlicedCorses}
+            page={page}
+            setPage={setPage}
+          />
+        </Grid>
+        <Grid item xs={3} />
+      </Grid>
+
       <Grid
         // MUI applies default marginLeft: -16
         style={{ padding: 0 }}
