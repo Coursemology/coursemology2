@@ -10,7 +10,7 @@ RSpec.feature 'Courses: Course User Listing' do
     let!(:phantom_user) { create(:course_student, :phantom, course: course) }
     let!(:course_teaching_assistant) { create(:course_teaching_assistant, course: course) }
 
-    context 'As a Course Student' do
+    context 'As a Course Student', js: true do
       let(:student) { create(:course_student, course: course) }
       before { login_as(student.user, scope: :user) }
 
@@ -18,13 +18,13 @@ RSpec.feature 'Courses: Course User Listing' do
         visit course_users_path(course)
 
         course_student_list.each do |student|
-          expect(page).to have_content_tag_for(student)
+          expect(page).to have_selector("div.course-user-#{student.id}")
           expect(page).to have_link(nil, href: course_user_path(course, student))
         end
 
         # Page should not display users, phantom users and teaching assistants
-        expect(page).to have_no_content_tag_for(phantom_user)
-        expect(page).to have_no_content_tag_for(course_teaching_assistant)
+        expect(page).to_not have_selector("div.course-user-#{phantom_user.id}")
+        expect(page).to_not have_selector("div.course-user-#{course_teaching_assistant.id}")
       end
     end
   end

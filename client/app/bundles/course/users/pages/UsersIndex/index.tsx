@@ -70,7 +70,7 @@ const UsersIndex: FC<Props> = (props) => {
         {largeUsers.map((courseUser) => (
           <Grid
             item
-            id={`course_user_${courseUser.id}`}
+            className={`course-user-${courseUser.id}`}
             key={courseUser.id}
             xs={12}
             md={6}

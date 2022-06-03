@@ -24,7 +24,8 @@ unless current_component_host[:course_achievements_component].nil? || !is_studen
 end
 
 all_skill_branches = @skills_service.skill_branches
-if can_read_progress && all_skill_branches.present?
+can_view_skills = all_skill_branches.present? && can_read_progress
+if can_view_skills && is_student_and_gamified
   json.skillBranches all_skill_branches.each do |skill_branch|
     json.id skill_branch.id
     json.title skill_branch.title
