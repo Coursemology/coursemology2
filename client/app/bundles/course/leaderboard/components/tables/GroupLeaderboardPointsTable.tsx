@@ -2,7 +2,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Avatar, Tooltip, Link, Box, AvatarGroup } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import { GroupLeaderboardPoints } from 'types/course/leaderboard';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 interface Props {
   data: GroupLeaderboardPoints[];
@@ -130,4 +130,4 @@ const GroupLeaderboardPointsTable: FC<Props> = (props: Props) => {
   );
 };
 
-export default GroupLeaderboardPointsTable;
+export default memo(GroupLeaderboardPointsTable);

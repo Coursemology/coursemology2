@@ -1,7 +1,7 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Avatar, Box, Link } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { LeaderboardPoints } from 'types/course/leaderboard';
 
 interface Props {
@@ -113,4 +113,4 @@ const LeaderboardPointsTable: FC<Props> = (props: Props) => {
   );
 };
 
-export default LeaderboardPointsTable;
+export default memo(LeaderboardPointsTable);
