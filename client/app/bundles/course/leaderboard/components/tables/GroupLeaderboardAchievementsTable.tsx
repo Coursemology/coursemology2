@@ -2,7 +2,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Avatar, Tooltip, Link, Box, AvatarGroup } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import { GroupLeaderboardAchievement } from 'types/course/leaderboard';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 
 interface Props {
   data: GroupLeaderboardAchievement[];
@@ -130,4 +130,4 @@ const GroupLeaderboardAchievementsTable: FC<Props> = (props: Props) => {
   );
 };
 
-export default GroupLeaderboardAchievementsTable;
+export default memo(GroupLeaderboardAchievementsTable);
