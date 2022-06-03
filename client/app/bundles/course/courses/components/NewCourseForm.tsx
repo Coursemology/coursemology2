@@ -24,11 +24,11 @@ interface IFormInputs {
 const translations = defineMessages({
   title: {
     id: 'course.form.title',
-    defaultMessage: 'Title',
+    defaultMessage: 'Give it an awesome name',
   },
   description: {
     id: 'course.form.description',
-    defaultMessage: 'Description',
+    defaultMessage: 'Give it an awesome backstory!',
   },
 });
 

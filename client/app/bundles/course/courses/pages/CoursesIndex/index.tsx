@@ -92,6 +92,7 @@ const CoursesIndex: FC<Props> = (props) => {
     headerToolbars.push(
       <Button
         className="request-button"
+        id="request-button"
         key="request-button"
         variant="outlined"
         color="primary"
