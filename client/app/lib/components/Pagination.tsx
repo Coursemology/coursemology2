@@ -36,7 +36,7 @@ const PaginationHelper: FC<Props> = (props) => {
   useEffect(() => {
     const begin = (page - 1) * itemsPerPage;
     setSlicedItems(items.slice(begin, begin + itemsPerPage));
-  }, [page]);
+  }, [page, items]);
 
   const handleChange: (
     _e: React.ChangeEvent<unknown>,
