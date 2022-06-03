@@ -1,6 +1,9 @@
 export const getCourseUserURL = (courseId, courseUserId) =>
   `/courses/${courseId}/users/${courseUserId}`;
 
+export const getAchievementURL = (courseId, achievementId) =>
+  `/courses/${courseId}/achievements/${achievementId}`;
+
 export const getEditSubmissionURL = (courseId, assessmentId, submissionId) =>
   `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
 

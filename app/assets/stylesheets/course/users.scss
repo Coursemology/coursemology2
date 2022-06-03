@@ -11,5 +11,16 @@
     h4 {
       padding-top: 1em;
     }
+  }
+  &.show {
+    .user-stats-container :nth-child(2n):hover .user-stats-card,
+    .user-stats-card:nth-child(2n):hover {
+      background-color: $blue;
     }
+
+    .user-stats-container :nth-child(3n):hover .user-stats-card,
+    .user-stats-card:nth-child(3n):hover {
+      background-color: $orange;
+    }
+  }
 }

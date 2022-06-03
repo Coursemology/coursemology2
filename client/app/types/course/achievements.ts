@@ -1,6 +1,6 @@
 import { Permissions } from 'types';
 import { ConditionData, ConditionListData, Conditions } from './conditions';
-import { CourseUserData, CourseUserEntity } from './course_users';
+import type { CourseUserListData, CourseUserMiniEntity } from './course_users';
 
 export interface BadgeEntity {
   name: string;
@@ -33,11 +33,11 @@ export interface AchievementListData {
 
 export interface AchievementData extends AchievementListData {
   conditions: ConditionData[];
-  achievementUsers: CourseUserData[];
+  achievementUsers: CourseUserListData[];
   enabledConditions: Conditions[];
 }
 
-export interface AchievementCourseUserData extends CourseUserData {
+export interface AchievementCourseUserData extends CourseUserListData {
   obtainedAt?: string | null;
 }
 
@@ -64,7 +64,7 @@ export interface AchievementEntity extends AchievementMiniEntity {
   enabledConditions: Conditions[];
 }
 
-export interface AchievementCourseUserEntity extends CourseUserEntity {
+export interface AchievementCourseUserEntity extends CourseUserMiniEntity {
   obtainedAt?: string | null;
 }
 
