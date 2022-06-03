@@ -95,6 +95,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
           TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
           value={tabValue}
           variant="fullWidth"
+          sx={{ marginBottom: 2, }}
         >
           <Tab
             id="leaderboard-tab"
@@ -115,7 +116,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
 
       {tabValue === 'leaderboard-tab' && (
         <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
-          <Grid item xs>
+          <Grid item xs id="leaderboard-level">
             <LeaderboardPointsTable data={leaderboardPoints} />
           </Grid>
           {!isAchievementHidden && (
