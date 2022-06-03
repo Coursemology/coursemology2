@@ -1,7 +1,7 @@
 import { injectIntl } from 'react-intl';
 import { FC } from 'react';
 import { CardContent, Typography, Grid, Link } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { blue } from '@mui/material/colors';
 import { CoursesEntity } from 'types/course/courses';
 
 import './CourseInfoBox.scss';
@@ -14,12 +14,12 @@ const CourseInfoBox: FC<Props> = (props) => {
   const { course } = props;
 
   return (
-    <Grid item xs={1} sm={1} md={1} lg={1} xl={1} style={{ padding: 15 }}>
+    <Grid item xs={1} sm={1} md={1} lg={1} xl={1} style={{ padding: 10 }}>
       <div
         style={{
           borderStyle: 'solid',
           borderWidth: 0.2,
-          borderColor: grey[300],
+          borderColor: blue[50],
           borderRadius: 5,
           height: '100%',
           width: '100%',
@@ -36,12 +36,12 @@ const CourseInfoBox: FC<Props> = (props) => {
         >
           <p
             style={{
-              marginTop: -10,
               textAlign: 'center',
+              marginBottom: 0,
             }}
             dangerouslySetInnerHTML={{ __html: course.logo }}
           />
-          <CardContent style={{ padding: 2 }}>
+          <CardContent style={{ padding: 5 }}>
             <Typography
               variant="h6"
               component="div"
@@ -61,7 +61,7 @@ const CourseInfoBox: FC<Props> = (props) => {
               margin: 5,
               borderStyle: 'solid',
               borderWidth: 0.2,
-              borderColor: grey[300],
+              borderColor: blue[50],
               borderRadius: 5,
             }}
           >
