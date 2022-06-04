@@ -9,13 +9,13 @@ RSpec.feature 'Courses' do
     let(:user) { create(:instance_user, :instructor).user }
     before { login_as(user, scope: :user) }
 
-    scenario 'Users can see a list of published courses' do
+    scenario 'Users can see a list of published courses', js: true do
       create(:course)
       create(:course, :published)
 
       visit courses_path
       expect(all('.course').count).to eq(1)
-      expect(subject).to have_link(nil, href: new_course_path)
+      expect(all('button.new-course-button').count).to eq(1)
     end
 
     scenario 'Users can see a list of their courses' do
@@ -29,19 +29,19 @@ RSpec.feature 'Courses' do
       expect(page).not_to have_link(other_course.title, href: course_path(other_course))
     end
 
-    scenario 'Users can create a new course' do
-      visit new_course_path
+    scenario 'Users can create a new course', js: true do
+      visit courses_path
 
-      expect(subject).to have_field('course_title')
-      expect(subject).to have_field('course_description')
+      find('button.new-course-button').click
+      expect(page).to have_selector('h2', text: 'New Course')
+      expect(subject).to have_field('title')
+
+      expect(find('button.btn-submit')).to be_disabled
 
       expect do
-        click_button I18n.t('helpers.submit.course.create')
-      end.not_to change(instance.courses, :count)
-
-      expect do
-        fill_in 'course_title', with: 'Lorem ipsum'
-        click_button I18n.t('helpers.submit.course.create')
+        fill_in 'title', with: 'Lorem ipsum'
+        find('button.btn-submit').click
+        expect(page).not_to have_selector('h2', text: 'New Course')
       end.to change(instance.courses, :count).by(1)
     end
   end

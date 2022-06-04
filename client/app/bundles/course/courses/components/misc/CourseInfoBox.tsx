@@ -17,6 +17,7 @@ const CourseInfoBox: FC<Props> = (props) => {
   return (
     <Grid item xs={1} sm={1} md={1} lg={1} xl={1} style={{ padding: 10 }}>
       <div
+        className="course"
         style={{
           borderStyle: 'solid',
           borderWidth: 0.2,

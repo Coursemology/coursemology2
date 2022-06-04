@@ -96,9 +96,7 @@ const CoursesIndex: FC<Props> = (props) => {
   } else {
     headerToolbars.push(
       <Button
-        className="request-button"
         id="request-button"
-        key="request-button"
         variant="outlined"
         color="primary"
         // TODO Route this properly after role_request page is refactored

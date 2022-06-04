@@ -10,9 +10,9 @@ RSpec.feature 'Instance::UserRoleRequests' do
     before { login_as(user, scope: :user) }
 
     context 'As a normal instance user' do
-      scenario 'I can create a new role request', type: :mailer do
+      scenario 'I can create a new role request', type: :mailer, js: true do
         visit courses_path
-        click_on('request-button')
+        find('#request-button').click
 
         request = build(:role_request)
         fill_in 'user_role_request[organization]', with: request.organization
@@ -29,10 +29,10 @@ RSpec.feature 'Instance::UserRoleRequests' do
         expect(request_created.reason).to eq(request.reason)
       end
 
-      scenario 'I can edit my existing role request' do
+      scenario 'I can edit my existing role request', js: true do
         request = create(:role_request, user: user, instance: instance)
         visit courses_path
-        find_button('#request-button').click
+        find('#request-button').click
 
         new_reason = 'New Reason'
         fill_in 'user_role_request[reason]', with: new_reason
