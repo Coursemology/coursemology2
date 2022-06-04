@@ -23,7 +23,7 @@ RSpec.describe 'Course: Leaderboard: View' do
           sorted_course_users = course.course_users.students.without_phantom_users.
                                 ordered_by_experience_points
 
-          sorted_course_users.each.with_index(1) do |student|
+          sorted_course_users.each do |student|
             within find(content_tag_selector(student)) do
               expect(page).to have_text(student.name)
               # expect(page).to have_text(index)

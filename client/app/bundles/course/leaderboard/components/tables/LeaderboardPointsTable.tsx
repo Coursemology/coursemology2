@@ -54,7 +54,11 @@ const LeaderboardPointsTable: FC<Props> = (props: Props) => {
         alignLeft: true,
         justifyCenter: true,
         customBodyRenderLite: (_dataIndex: number) => (
-          <Box sx={styles.avatar} className="course_user" id={`course_user_${data[_dataIndex].id}`}>
+          <Box
+            sx={styles.avatar}
+            className="course_user"
+            id={`course_user_${data[_dataIndex].id}`}
+          >
             <Avatar
               src={data[_dataIndex].userPicture}
               alt={data[_dataIndex].name}
