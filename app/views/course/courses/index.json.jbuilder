@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 json.courses @courses do |course|
-  json.partial! 'courses_list_data', course: course
+  json.partial! 'course_list_data', course: course
 end
 
 request = current_tenant.user_role_requests.find_by(user_id: current_user&.id)

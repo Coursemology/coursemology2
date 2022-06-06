@@ -13,19 +13,30 @@ interface Props {
 
 const translations = defineMessages({
   searchBarPlaceholder: {
-    id: 'search.placeholder',
+    id: 'course.courses.componenets.misc.search.placeholder',
     defaultMessage: 'Search by course title',
+  },
+  noCourse: {
+    id: 'course.courses.components.misc.noCourse',
+    defaultMessage: 'There are no courses.',
   },
 });
 
 const CourseDisplay: FC<Props> = (props) => {
   const { intl, courses } = props;
+
   // Ideally 24. Divisble by 2, 3 and 4. Also makes the pagination less awkward
   const ITEMS_PER_PAGE = 24;
-  const [slicedCourses, setSlicedCorses] = useState(courses);
+  const [slicedCourses, setSlicedCorses] = useState(
+    courses.slice(0, ITEMS_PER_PAGE), // To not render all course logos if there are multiple pages
+  );
   const [page, setPage] = useState(1);
 
   const [shavedCourses, setShavedCourses] = useState(courses);
+
+  if (courses.length === 0) {
+    return <div>{intl.formatMessage(translations.noCourse)}</div>;
+  }
 
   const handleSearchBarChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
