@@ -5,13 +5,11 @@ class Course::CoursesController < Course::Controller
   skip_authorize_resource :course, only: [:show, :index]
   before_action :load_todos, only: [:show]
 
-  def index # :nodoc:
-    @courses = Course.publicly_accessible
-    # ordered_by_title.ordered_by_start_at
-    # .page(page_param).per(12)
+  def index
+    @courses = Course.publicly_accessible.ordered_by_title.ordered_by_start_at
   end
 
-  def show # :nodoc:
+  def show
     @registration = Course::Registration.new
     @currently_active_announcements = current_course.announcements.currently_active.sorted_by_sticky.sorted_by_date
     @activity_feeds = recent_activity_feeds.limit(20).preload(activity: [{ object: { topic: { actable: :forum } } },
@@ -20,10 +18,10 @@ class Course::CoursesController < Course::Controller
     render layout: 'course'
   end
 
-  def new # :nodoc:
+  def new
   end
 
-  def create # :nodoc:
+  def create
     if @course.save
       # redirect_to course_admin_path(@course), success: t('.success', title: @course.title)
       render json: { id: @course.id, title: @course.title }, status: :ok
@@ -32,7 +30,7 @@ class Course::CoursesController < Course::Controller
     end
   end
 
-  def destroy # :nodoc:
+  def destroy
   end
 
   protected
@@ -43,7 +41,7 @@ class Course::CoursesController < Course::Controller
 
   private
 
-  def course_params # :nodoc:
+  def course_params
     params.require(:course).
       permit(:title, :description, :status, :start_at, :end_at, :logo)
   end

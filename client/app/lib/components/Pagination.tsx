@@ -2,8 +2,10 @@ import { FC, useEffect } from 'react';
 import { Pagination } from '@mui/material';
 
 interface Props {
+  // Typing is any as it can be an array of any type
   items: any[];
-  itemsPerPage: number;
+  itemsPerPage: 12 | 24 | 36 | 42;
+  // Typing is also any, following from items: any[]
   setSlicedItems: React.Dispatch<React.SetStateAction<any[]>>;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
@@ -15,16 +17,16 @@ on top of the pagination that MUI offers.
 
 How to use: (can refer to CourseDisplay.tsx for example)
 
-items - An array of objects that you need to paginate
+items - An array of objects that you need to paginate.
 
-itemsPerPage: - The number of items you want per page
+itemsPerPage: - The number of items you want per page (12, 24, 36 or 42)
 
 setSlicedItems - A useState function, to set your sliced items for you to use in a 
 higher component.
 e.g. const [slicedItems, setSlicedItems] = useState(items);
-You can then use slicedItems in your upper component.
+You can then manipulate the slicedItems however you choose.
 
-page, setPage - Initialize these with useState(1) in your upper componenet and pass them down.
+page, setPage - Initialize these with useState(1) and pass them down.
 This is to ensure that multiple paginations within the same page are both synced properly.
 */
 

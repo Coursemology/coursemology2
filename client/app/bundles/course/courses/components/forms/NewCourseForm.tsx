@@ -10,7 +10,7 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 
 interface Props {
-  handleClose: (isDirty: boolean) => any;
+  handleClose: (isDirty: boolean) => void;
   onSubmit: (data: any, setError: unknown) => void;
   setIsDirty?: (value: boolean) => void;
   initialValues?: Object;

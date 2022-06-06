@@ -1,40 +1,23 @@
-export interface Request {
-  id: number;
-  instance_id: number;
-  user_id: number;
-  role: string;
-  organization: string;
-  designation: string;
-  reason: string;
-  created_at: string;
-  updated_at: string;
-}
+import { Permissions } from 'types';
 
-export interface CoursesPermissions {
-  canCreate: boolean;
-  requestSubmitted: Request | null;
-}
+export type CoursePermissions = Permissions<'canCreate'>;
 
-export interface CoursesListPermissions {
-  canCreate: boolean;
-  requestSubmitted: Request | null;
-}
+export type CourseListPermissions = Permissions<'canCreate'>;
 
-export interface CoursesEntity {
+export interface CourseMiniEntity {
   id: number;
   title: string;
   description: string;
-  course: string;
-  logo: string;
+  logoURL: string;
 }
 
-export interface CoursesListData {
+export interface CourseListData {
   id: number;
   title: string;
   description: string;
-  course: string;
-  logo: string;
-  permissions: CoursesListPermissions;
+  logoURL: string;
+  instanceUserRoleRequestId: number;
+  permissions: CourseListPermissions;
 }
 
 export interface NewCourseFormData {

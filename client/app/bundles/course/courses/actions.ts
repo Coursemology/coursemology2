@@ -1,14 +1,16 @@
-import { CoursesListData, CoursesPermissions } from 'types/course/courses';
-import { SAVE_COURSES_LIST, SaveCoursesListAction } from './types';
+import { CourseListData, CoursePermissions } from 'types/course/courses';
+import { SAVE_COURSE_LIST, SaveCoursesListAction } from './types';
 
 // eslint-disable-next-line import/prefer-default-export
 export function saveCoursesList(
-  coursesList: CoursesListData[],
-  coursesPermissions: CoursesPermissions,
+  coursesList: CourseListData[],
+  instanceUserRoleRequestId: number,
+  coursesPermissions: CoursePermissions,
 ): SaveCoursesListAction {
   return {
-    type: SAVE_COURSES_LIST,
+    type: SAVE_COURSE_LIST,
     coursesList,
+    instanceUserRoleRequestId,
     coursesPermissions,
   };
 }
