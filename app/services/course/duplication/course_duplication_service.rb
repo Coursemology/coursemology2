@@ -38,31 +38,36 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
   # @return [Course] The duplicated course
   def duplicate_course(source_course)
     duplicated_course = Course.transaction do
-      new_course = duplicator.duplicate(source_course)
-      raise ActiveRecord::Rollback unless new_course.save
+      begin
+        new_course = duplicator.duplicate(source_course)
+        new_course.save!
 
-      duplicator.set_option(:destination_course, new_course)
+        duplicator.set_option(:destination_course, new_course)
 
-      # Delete the auto-generated default reference timeline in favor of duplicating existing one
-      raise ActiveRecord::Rollback unless new_course.default_reference_timeline.destroy
-
-      new_course.reload
-
-      source_course.duplication_manifest.each do |item|
-        raise ActiveRecord::Rollback unless duplicator.duplicate(item).save
+        # Delete the auto-generated default reference timeline in favor of duplicating existing one
+        new_course.default_reference_timeline.destroy!
 
         new_course.reload
-      end
-      raise ActiveRecord::Rollback unless update_course_settings(duplicator, new_course, source_course)
-      raise ActiveRecord::Rollback unless update_sidebar_settings(duplicator, new_course, source_course)
 
-      # As per carrierwave v2.1.0, carrierwave image mounter that retains uploaded file as a cache
-      # is reset upon reload (in our case it is new_course.reload).
-      # As a result, logo duplication needs to be done after course reload.
-      # https://github.com/carrierwaveuploader/carrierwave/issues/2482#issuecomment-762966926
-      new_course.logo.duplicate_from(source_course.logo) if source_course.logo_url
+        source_course.duplication_manifest.each do |item|
+          duplicator.duplicate(item).save!
 
-      new_course
+          new_course.reload
+        end
+        update_course_settings(duplicator, new_course, source_course)
+        update_sidebar_settings(duplicator, new_course, source_course)
+
+        # As per carrierwave v2.1.0, carrierwave image mounter that retains uploaded file as a cache
+        # is reset upon reload (in our case it is new_course.reload).
+        # As a result, logo duplication needs to be done after course reload.
+        # https://github.com/carrierwaveuploader/carrierwave/issues/2482#issuecomment-762966926
+        new_course.logo.duplicate_from(source_course.logo) if source_course.logo_url
+
+        new_course
+      rescue => _e # TO REMOVE - Testing for production duplication error
+        Rails.logger.debug(message: 'Course duplication error debugging', error: _e, error_message: _e.message)
+        raise ActiveRecord::Rollback
+      end 
     end
     notify_duplication_complete(duplicated_course)
     duplicated_course
@@ -107,7 +112,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
       new_category_settings[new_category.id.to_s] = old_category_settings[old_category.id.to_s]
     end
     new_course.settings.public_send("#{component_key}=", new_category_settings)
-    new_course.save
+    new_course.save!
   end
 
   # Update sidebar settings keys with the new assessment category IDs.
@@ -122,6 +127,6 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
       new_course.settings(:sidebar).settings("assessments_#{new_category.id}").weight = weight
       new_course.settings(:sidebar).public_send("assessments_#{old_category.id}=", nil)
     end
-    new_course.save
+    new_course.save!
   end
 end
