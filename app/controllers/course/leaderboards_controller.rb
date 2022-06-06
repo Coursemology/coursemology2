@@ -12,7 +12,6 @@ class Course::LeaderboardsController < Course::ComponentController
 
     fetch_users_list(achievements_enabled)
     groups_enabled && fetch_groups_list(achievements_enabled)
-
   end
 
   private
@@ -51,14 +50,14 @@ class Course::LeaderboardsController < Course::ComponentController
   def fetch_users_list(achievements_enabled)
     @course_users_points = @course_users.ordered_by_experience_points.take(display_user_count)
     @course_users_count = achievements_enabled &&
-      @course_users.ordered_by_achievement_count.take(display_user_count)
+                          @course_users.ordered_by_achievement_count.take(display_user_count)
   end
 
   # Load users in leaderboard
   def fetch_groups_list(achievements_enabled)
     @groups_points = @course.groups.ordered_by_experience_points.take(display_user_count)
     @groups_count = achievements_enabled &&
-      @course.groups.ordered_by_average_achievement_count.take(display_user_count)
+                    @course.groups.ordered_by_average_achievement_count.take(display_user_count)
   end
 
 end
