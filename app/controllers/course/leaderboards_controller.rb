@@ -59,5 +59,4 @@ class Course::LeaderboardsController < Course::ComponentController
     @groups_count = achievements_enabled &&
                     @course.groups.ordered_by_average_achievement_count.take(display_user_count)
   end
-
 end
