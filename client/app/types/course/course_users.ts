@@ -7,14 +7,14 @@ import { SkillBranchData, SkillBranchEntity } from './assessment/skills/skills';
 export interface CourseUserListData {
   id: number;
   name: string;
-  imageUrl?: string;
+  imageUrl: string;
   phantom?: boolean;
 }
 
 export interface CourseUserMiniEntity {
   id: number;
   name: string;
-  imageUrl?: string;
+  imageUrl: string;
   phantom?: boolean;
 }
 
