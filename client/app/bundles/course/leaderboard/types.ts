@@ -22,7 +22,7 @@ export const SAVE_GROUP_LEADERBOARD_POINTS =
 export const SAVE_GROUP_LEADERBOARD_ACHIEVEMENT =
   'course/leadearboard/SAVE_GROUP_LEADERBOARD_ACHIEVEMENT';
 export const SAVE_LEADERBOARD_SETTINGS =
-'course/leadearboard/SAVE_LEADERBOARD_SETTINGS';
+  'course/leadearboard/SAVE_LEADERBOARD_SETTINGS';
 
 // Action Types
 
@@ -66,4 +66,11 @@ export interface LeaderboardState {
   leaderboardAchievement: EntityStore<LeaderboardAchievementEntity>;
   groupLeaderboardPoints: EntityStore<GroupLeaderboardPointsEntity>;
   groupLeaderboardAchievement: EntityStore<GroupLeaderboardAchievementEntity>;
+}
+
+export enum LeaderboardTableType {
+  'LeaderboardPoints' = 0,
+  'LeaderboardAchievement' = 1,
+  'GroupLeaderboardPoints' = 2,
+  'GroupLeaderboardAchievement' = 3,
 }

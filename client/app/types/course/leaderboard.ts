@@ -2,8 +2,8 @@
  * Data types for leaderboard data retrieved from backend through API call.
  */
 
-import { Achievement } from "./achievements";
-import { CourseUserData } from "./course_users";
+import { Achievement } from './achievements';
+import { CourseUserData } from './course_users';
 
 export interface LeaderboardSettings {
   leaderboardTitle?: string;

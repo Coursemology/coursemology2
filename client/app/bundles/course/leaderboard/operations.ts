@@ -9,16 +9,33 @@ const fetchLeaderboard = (): Operation<void> => {
       .index()
       .then((response) => {
         const data: LeaderboardData = response.data;
-        dispatch(actions.saveLeaderboardSettings({leaderboardTitle: data.leaderboardTitle, groupleaderboardTitle: data.groupleaderboardTitle}))
+        dispatch(
+          actions.saveLeaderboardSettings({
+            leaderboardTitle: data.leaderboardTitle,
+            groupleaderboardTitle: data.groupleaderboardTitle,
+          }),
+        );
         dispatch(actions.saveLeaderboardPoints(data.leaderboardByExpPoints));
         if (data.leaderboardByAchievementCount) {
-          dispatch(actions.saveLeaderboardAchievement(data.leaderboardByAchievementCount));
+          dispatch(
+            actions.saveLeaderboardAchievement(
+              data.leaderboardByAchievementCount,
+            ),
+          );
         }
         if (data.groupleaderboardByExpPoints) {
-          dispatch(actions.saveGroupLeaderboardPoints(data.groupleaderboardByExpPoints));
+          dispatch(
+            actions.saveGroupLeaderboardPoints(
+              data.groupleaderboardByExpPoints,
+            ),
+          );
         }
         if (data.groupleaderboardByAchievementCount) {
-          dispatch(actions.saveGroupLeaderboardAchievement(data.groupleaderboardByAchievementCount));
+          dispatch(
+            actions.saveGroupLeaderboardAchievement(
+              data.groupleaderboardByAchievementCount,
+            ),
+          );
         }
       })
       .catch((error) => {

@@ -18,9 +18,9 @@ import { formatShortDateTime } from 'lib/moment';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { AppDispatch } from 'types/store';
+import { getAchievementURL } from 'lib/helpers/url-builders';
 import AchievementAwardSummary from './AchievementAwardSummary';
 import { awardAchievement } from '../../operations';
-import { getAchievementURL } from 'lib/helpers/url-builders';
 
 interface Props {
   achievement: AchievementEntity;

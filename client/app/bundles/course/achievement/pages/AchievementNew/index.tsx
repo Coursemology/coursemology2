@@ -9,9 +9,9 @@ import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { AppDispatch } from 'types/store';
 import { AchievementFormData } from 'types/course/achievements';
+import { getAchievementURL } from 'lib/helpers/url-builders';
 import AchievementForm from '../../components/forms/AchievementForm';
 import { createAchievement } from '../../operations';
-import { getAchievementURL } from 'lib/helpers/url-builders';
 
 interface Props {
   open: boolean;
@@ -58,9 +58,7 @@ const AchievementNew: FC<Props> = (props) => {
         toast.success(intl.formatMessage(translations.creationSuccess));
         setTimeout(() => {
           if (response.data?.id) {
-            navigate(
-              getAchievementURL(getCourseId(), response.data.id),
-            );
+            navigate(getAchievementURL(getCourseId(), response.data.id));
           }
         }, 200);
       })

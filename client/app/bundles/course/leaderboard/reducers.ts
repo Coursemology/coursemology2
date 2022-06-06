@@ -46,7 +46,8 @@ const reducer = produce(
         break;
       }
       case SAVE_GROUP_LEADERBOARD_ACHIEVEMENT: {
-        const groupLeaderboardAchievementList = action.groupleaderboardByAchievementCount;
+        const groupLeaderboardAchievementList =
+          action.groupleaderboardByAchievementCount;
         saveListToStore(
           draft.groupLeaderboardAchievement,
           groupLeaderboardAchievementList,
@@ -54,7 +55,7 @@ const reducer = produce(
         break;
       }
       case SAVE_LEADERBOARD_SETTINGS: {
-        draft.leaderboardSettings = {...action.leaderboardSettings};
+        draft.leaderboardSettings = { ...action.leaderboardSettings };
         break;
       }
       default: {
