@@ -9,10 +9,11 @@ import { Button } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { fetchCourses } from '../../operations';
 import {
-  getAllCoursesMiniEntities,
-  getCoursesPermissions,
+  getAllCourseMiniEntities,
+  getCourseInstanceUserRoleRequest,
+  getCoursePermissions,
 } from '../../selectors';
-import CourseDisplay from '../../components/CourseDisplay';
+import CourseDisplay from '../../components/misc/CourseDisplay';
 import CoursesNew from '../CoursesNew';
 
 interface Props {
@@ -52,11 +53,15 @@ const CoursesIndex: FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const courses = useSelector((state: AppState) =>
-    getAllCoursesMiniEntities(state),
+    getAllCourseMiniEntities(state),
   );
 
   const coursesPermissions = useSelector((state: AppState) =>
-    getCoursesPermissions(state),
+    getCoursePermissions(state),
+  );
+
+  const instanceUserRoleRequestId = useSelector((state: AppState) =>
+    getCourseInstanceUserRoleRequest(state),
   );
 
   const dispatch = useDispatch<AppDispatch>();
@@ -97,16 +102,16 @@ const CoursesIndex: FC<Props> = (props) => {
         variant="outlined"
         color="primary"
         // TODO Route this properly after role_request page is refactored
-        onClick={(): void =>
-          coursesPermissions?.requestSubmitted
-            ? window.location.assign(
-                `role_requests/${coursesPermissions.requestSubmitted?.id}/edit`,
-              )
-            : window.location.assign('role_requests/new')
-        }
+        onClick={(): void => {
+          if (instanceUserRoleRequestId) {
+            window.location.href = `role_requests/${instanceUserRoleRequestId}/edit`;
+          } else {
+            window.location.href = 'role_requests/new';
+          }
+        }}
         style={styles.newButton}
       >
-        {coursesPermissions?.requestSubmitted
+        {instanceUserRoleRequestId
           ? intl.formatMessage(translations.editRequest)
           : intl.formatMessage(translations.newRequest)}
       </Button>,

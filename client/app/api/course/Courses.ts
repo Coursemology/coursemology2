@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { CoursesListData, CoursesPermissions } from 'types/course/courses';
+import { CourseListData, CoursePermissions } from 'types/course/courses';
 import BaseCourseAPI from './Base';
 
 export default class CoursesAPI extends BaseCourseAPI {
@@ -10,8 +10,9 @@ export default class CoursesAPI extends BaseCourseAPI {
    */
   index(): Promise<
     AxiosResponse<{
-      courses: CoursesListData[];
-      permissions: CoursesPermissions;
+      courses: CourseListData[];
+      instanceUserRoleRequestId: number;
+      permissions: CoursePermissions;
     }>
   > {
     return this.getClient().get(this._baseUrlPrefix);

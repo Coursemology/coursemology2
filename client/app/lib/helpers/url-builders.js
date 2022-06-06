@@ -1,3 +1,5 @@
+export const getCourseURL = (courseId) => `/courses/${courseId}`;
+
 export const getCourseUserURL = (courseId, courseUserId) =>
   `/courses/${courseId}/users/${courseUserId}`;
 

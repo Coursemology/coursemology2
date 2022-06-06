@@ -11,12 +11,12 @@ import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { AppDispatch } from 'types/store';
 import { NewCourseFormData } from 'types/course/courses';
 
-import NewCourseForm from '../../components/NewCourseForm';
+import NewCourseForm from '../../components/forms/NewCourseForm';
 import { createCourse } from '../../operations';
 
 interface Props {
   open: boolean;
-  handleClose: () => any;
+  handleClose: () => void;
   intl?: any;
 }
 
@@ -59,7 +59,7 @@ const CoursesNew: FC<Props> = (props) => {
           if (response.data?.id) {
             // TODO Change this to a react router after the courses home page has been implemented
             // Go to course page after creation
-            window.location.assign(`/courses/${response.data?.id}`);
+            window.location.href = `/courses/${response.data?.id}`;
           }
         }, 200);
       })

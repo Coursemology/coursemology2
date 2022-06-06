@@ -2,12 +2,13 @@ import { injectIntl } from 'react-intl';
 import { FC } from 'react';
 import { CardContent, Typography, Grid, Link } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import { CoursesEntity } from 'types/course/courses';
+import { CourseMiniEntity } from 'types/course/courses';
 
 import './CourseInfoBox.scss';
+import { getCourseURL } from 'lib/helpers/url-builders';
 
 interface Props {
-  course: CoursesEntity;
+  course: CourseMiniEntity;
 }
 
 const CourseInfoBox: FC<Props> = (props) => {
@@ -20,7 +21,7 @@ const CourseInfoBox: FC<Props> = (props) => {
           borderStyle: 'solid',
           borderWidth: 0.2,
           borderColor: blue[50],
-          borderRadius: 5,
+          borderRadius: 10,
           height: '100%',
           width: '100%',
           display: 'flex',
@@ -29,7 +30,7 @@ const CourseInfoBox: FC<Props> = (props) => {
         }}
       >
         <Link
-          href={course.course}
+          href={getCourseURL(course.id)}
           style={{
             textDecoration: 'none',
           }}
@@ -39,7 +40,7 @@ const CourseInfoBox: FC<Props> = (props) => {
               textAlign: 'center',
               marginBottom: 0,
             }}
-            dangerouslySetInnerHTML={{ __html: course.logo }}
+            dangerouslySetInnerHTML={{ __html: course.logoURL }}
           />
           <CardContent style={{ padding: 5 }}>
             <Typography
