@@ -7,40 +7,17 @@ import {
   CardContent,
   Grid,
   Link,
-  Paper,
   Typography,
 } from '@mui/material';
 import { scroller } from 'react-scroll';
-import { green } from '@mui/material/colors';
 import { CourseUserEntity } from 'types/course/course_users';
+import UserProfileCardStats from './UserProfileCardStats';
+import styles from './UserProfileCard.scss';
 
 interface Props {
   user: CourseUserEntity;
   intl?: any;
 }
-
-const styles = {
-  courseUserImage: {
-    height: 140,
-    width: 140,
-  },
-  statsContainer: {
-    '& a': {
-      textDecoration: 'none',
-    },
-    '& .user-stats-card': {
-      margin: '4px 4px 4px 0px',
-      padding: '12px',
-      minWidth: '100px',
-      maxWidth: '144px',
-      transition: 'background-color 0.5s, color 0.5s',
-    },
-    '& .user-stats-card:hover': {
-      backgroundColor: green[400],
-      color: 'white',
-    },
-  },
-};
 
 const translations = defineMessages({
   manageEmailSubscription: {
@@ -62,26 +39,6 @@ const translations = defineMessages({
 });
 
 const UserProfileCard: FC<Props> = ({ user, intl }) => {
-  interface UserStatsCardProps {
-    title: string;
-    value: number;
-    className: string;
-  }
-
-  const UserStatsCard = (props: UserStatsCardProps): JSX.Element => {
-    return (
-      <Paper
-        variant="outlined"
-        className={`user-stats-card ${props.className}`}
-      >
-        <Typography variant="overline">{props.title}</Typography>
-        <Typography variant="h5" className={`${props.className}-value`}>
-          {props.value}
-        </Typography>
-      </Paper>
-    );
-  };
-
   const handleScrollToAchievements = (e: React.MouseEvent): void => {
     e.preventDefault();
     scroller.scrollTo('user-profile-achievements', {
@@ -122,11 +79,10 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
         container
         direction="row"
         justifyContent={{ xs: 'center', sm: 'start' }}
-        className="user-stats-container"
-        sx={styles.statsContainer}
+        className={styles.userStatsContainer}
       >
         {user.level !== undefined && (
-          <UserStatsCard
+          <UserProfileCardStats
             title={intl.formatMessage(translations.level)}
             value={user.level}
             className="user-level-stat"
@@ -134,7 +90,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
         )}
         {user.exp !== undefined && (
           <a href={user.experiencePointsRecordsUrl}>
-            <UserStatsCard
+            <UserProfileCardStats
               title={intl.formatMessage(translations.exp)}
               value={user.exp}
               className="user-exp-stat"
@@ -146,7 +102,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
             href="#user-profile-achievements"
             onClick={(e): void => handleScrollToAchievements(e)}
           >
-            <UserStatsCard
+            <UserProfileCardStats
               title={intl.formatMessage(translations.achievements)}
               value={user.achievements.length}
               className="user-achievements-stat"
@@ -174,7 +130,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
             xs={12}
             sm="auto"
           >
-            <Avatar src={user.imageUrl} sx={styles.courseUserImage} />
+            <Avatar src={user.imageUrl} className={styles.courseUserImage} />
           </Grid>
           <Grid
             item
