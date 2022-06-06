@@ -25,9 +25,6 @@ const styles = {
   courseUserName: {
     paddingTop: '2em',
   },
-  clearTextDecoration: {
-    textDecoration: 'none',
-  },
 };
 
 const translations = defineMessages({
@@ -88,7 +85,7 @@ const UsersIndex: FC<Props> = (props) => {
               >
                 <Link
                   to={getCourseUserURL(courseId, courseUser.id)}
-                  style={styles.clearTextDecoration}
+                  style={{ textDecoration: 'none' }}
                 >
                   <Grid
                     container
@@ -104,7 +101,7 @@ const UsersIndex: FC<Props> = (props) => {
                       />
                     </Grid>
                     <Grid item xs style={styles.courseUserName}>
-                      <h4> {courseUser.name} </h4>
+                      <Typography variant="body1">{courseUser.name}</Typography>
                     </Grid>
                   </Grid>
                 </Link>

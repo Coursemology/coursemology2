@@ -8,6 +8,7 @@ import PageHeader from 'lib/components/pages/PageHeader';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { AppDispatch, AppState } from 'types/store';
+import AvatarWithLabel from 'lib/components/AvatarWithLabel';
 import AchievementManagementButtons from '../../components/buttons/AchievementManagementButtons';
 import { loadAchievement } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
@@ -118,19 +119,14 @@ const AchievementShow: FC<Props> = (props) => {
         {achievement.achievementUsers.map((courseUser) => (
           <>
             {courseUser.obtainedAt !== null && (
-              <Grid item key={courseUser.id} xs={1} justifyContent="center">
-                <div style={{ textAlign: 'center' }}>
-                  <img
-                    src={courseUser.imageUrl}
-                    alt={courseUser.name}
-                    style={styles.courseUserImage}
+              <Grid item key={courseUser.id} xs={4} sm={3} lg={1}>
+                <a href={getCourseUserURL(courseId, courseUser.id)}>
+                  <AvatarWithLabel
+                    label={courseUser.name}
+                    imageUrl={courseUser.imageUrl}
+                    size="sm"
                   />
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                  <a href={getCourseUserURL(courseId, courseUser.id)}>
-                    {courseUser.name}
-                  </a>
-                </div>
+                </a>
               </Grid>
             )}
           </>
