@@ -6,7 +6,7 @@ class Course::CoursesController < Course::Controller
   before_action :load_todos, only: [:show]
 
   def index
-    @courses = Course.publicly_accessible.ordered_by_title.ordered_by_start_at
+    @courses = Course.publicly_accessible.ordered_by_start_at
   end
 
   def show
@@ -23,7 +23,6 @@ class Course::CoursesController < Course::Controller
 
   def create
     if @course.save
-      # redirect_to course_admin_path(@course), success: t('.success', title: @course.title)
       render json: { id: @course.id, title: @course.title }, status: :ok
     else
       render json: { errors: @course.errors }, status: :bad_request
