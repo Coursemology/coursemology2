@@ -8,9 +8,9 @@ import { AppDispatch } from 'types/store';
 import DeleteButton from 'lib/components/buttons/DeleteButton';
 import EditButton from 'lib/components/buttons/EditButton';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { getAchievementURL } from 'lib/helpers/url-builders';
 import { deleteAchievement } from '../../operations';
 import AwardButton from './AwardButton';
-import { getAchievementURL } from 'lib/helpers/url-builders';
 
 interface Props {
   achievement: AchievementMiniEntity;

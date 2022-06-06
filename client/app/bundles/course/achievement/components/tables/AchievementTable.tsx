@@ -9,9 +9,9 @@ import {
 } from 'types/course/achievements';
 import Note from 'lib/components/Note';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import AchievementManagementButtons from '../buttons/AchievementManagementButtons';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import { TableColumns } from 'types/components/DataTable';
+import AchievementManagementButtons from '../buttons/AchievementManagementButtons';
 
 interface Props {
   achievements: AchievementMiniEntity[];

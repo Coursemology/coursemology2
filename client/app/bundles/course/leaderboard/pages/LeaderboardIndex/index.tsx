@@ -10,8 +10,7 @@ import PageHeader from 'lib/components/pages/PageHeader';
 import { Grid, Tab, Tabs } from '@mui/material';
 import palette from 'theme/palette';
 import fetchLeaderboard from '../../operations';
-import LeaderboardPointsTable from '../../components/tables/LeaderboardPointsTable';
-import LeaderboardAchievementsTable from '../../components/tables/LeaderboardAchievementsTable';
+import LeaderboardTable from '../../components/tables/LeaderboardTable';
 import {
   getGroupLeaderboardAchievements,
   getGroupLeaderboardPoints,
@@ -19,8 +18,7 @@ import {
   getLeaderboardPoints,
   getLeaderboardSettings,
 } from '../../selectors';
-import GroupLeaderboardPointsTable from '../../components/tables/GroupLeaderboardPointsTable';
-import GroupLeaderboardAchievementsTable from '../../components/tables/GroupLeaderboardAchievementsTable';
+import { LeaderboardTableType } from '../../types';
 
 interface Props {
   intl?: any;
@@ -46,7 +44,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(true);
   const [tabValue, setTabValue] = useState('leaderboard-tab');
-  const settings = useSelector((state: AppState) => 
+  const settings = useSelector((state: AppState) =>
     getLeaderboardSettings(state),
   );
   const leaderboardPoints = useSelector((state: AppState) =>
@@ -80,7 +78,10 @@ const LeaderboardIndex: FC<Props> = (props) => {
   return (
     <>
       <PageHeader
-        title={settings.leaderboardTitle || intl.formatMessage({...translations.leaderboard})}
+        title={
+          settings.leaderboardTitle ??
+          intl.formatMessage({ ...translations.leaderboard })
+        }
       />
       {!isGroupHidden && (
         <Tabs
@@ -99,46 +100,76 @@ const LeaderboardIndex: FC<Props> = (props) => {
             id="leaderboard-tab"
             style={{ color: palette.submissionIcon.person }}
             icon={<Person />}
-            label={settings.leaderboardTitle || <FormattedMessage {...translations.leaderboard} />}
+            label={
+              settings.leaderboardTitle ?? (
+                <FormattedMessage {...translations.leaderboard} />
+              )
+            }
             value="leaderboard-tab"
           />
           <Tab
             id="groupLeaderboard-tab"
             style={{ color: palette.submissionIcon.person }}
             icon={<Group />}
-            label={settings.groupleaderboardTitle || <FormattedMessage {...translations.groupLeaderboard} />}
+            label={
+              settings.groupleaderboardTitle ?? (
+                <FormattedMessage {...translations.groupLeaderboard} />
+              )
+            }
             value="group-leaderboard-tab"
           />
         </Tabs>
       )}
 
-      {tabValue === 'leaderboard-tab' && (
-        <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
-          <Grid item xs id="leaderboard-level">
-            <LeaderboardPointsTable data={leaderboardPoints} />
-          </Grid>
-          {!isAchievementHidden && (
-            <Grid item xs>
-              <LeaderboardAchievementsTable data={leaderboardAchievements} />
-            </Grid>
-          )}
+      {/* {tabValue === 'leaderboard-tab' && ( */}
+      <Grid
+        container
+        direction="row"
+        columnSpacing={2}
+        rowSpacing={2}
+        display={tabValue === 'leaderboard-tab' ? 'flex' : 'none'}
+      >
+        <Grid item xs id="leaderboard-level">
+          <LeaderboardTable
+            data={leaderboardPoints}
+            id={LeaderboardTableType.LeaderboardPoints}
+          />
         </Grid>
-      )}
-
-      {tabValue === 'group-leaderboard-tab' && (
-        <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
+        {!isAchievementHidden && (
           <Grid item xs>
-            <GroupLeaderboardPointsTable data={groupLeaderboardPoints} />
+            <LeaderboardTable
+              data={leaderboardAchievements}
+              id={LeaderboardTableType.LeaderboardAchievement}
+            />
           </Grid>
-          {!isAchievementHidden && (
-            <Grid item xs>
-              <GroupLeaderboardAchievementsTable
-                data={groupLeaderboardAchievements}
-              />
-            </Grid>
-          )}
+        )}
+      </Grid>
+      {/* )} */}
+
+      {/* {tabValue === 'group-leaderboard-tab' && ( */}
+      <Grid
+        container
+        direction="row"
+        columnSpacing={2}
+        rowSpacing={2}
+        display={tabValue !== 'leaderboard-tab' ? 'flex' : 'none'}
+      >
+        <Grid item xs>
+          <LeaderboardTable
+            data={groupLeaderboardPoints}
+            id={LeaderboardTableType.GroupLeaderboardPoints}
+          />
         </Grid>
-      )}
+        {!isAchievementHidden && (
+          <Grid item xs>
+            <LeaderboardTable
+              data={groupLeaderboardAchievements}
+              id={LeaderboardTableType.GroupLeaderboardAchievement}
+            />
+          </Grid>
+        )}
+      </Grid>
+      {/* )} */}
     </>
   );
 };
