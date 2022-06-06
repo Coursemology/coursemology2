@@ -6,30 +6,35 @@
 }
 
 .userStatsContainer {
-    a {
-      text-decoration: none;
-    }
-    .userStatsCard {
-      margin: 4px 4px 4px 0px;
-      padding: 12px;
-      min-width: 100px;
-      max-width: 144px;
-      transition: background-color 0.5s, color 0.5s;
-    }
-    .userStatsCard:hover {
-      background-color: #66bb6a; // green[400]
-      color: white;
-    }
+  a {
+    text-decoration: none;
+  }
+
+  .userStatsCard {
+    margin-bottom: 4px;
+    margin-left: 0;
+    margin-right: 4px;
+    margin-top: 4px;
+    max-width: 144px;
+    min-width: 100px;
+    padding: 12px;
+    transition: background-color 0.5s, color 0.5s;
+  }
+
+  .userStatsCard:hover {
+    background-color: #66bb6a; // green[400]
+    color: #ffffff;
+  }
 }
 
 .userStatsContainer :nth-child(2n):hover .userStatsCard,
 .userStatsCard:nth-child(2n):hover {
-    background-color: #42a5f5; // blue[400]
+  background-color: #42a5f5; // blue[400]
 }
 
 .userStatsContainer :nth-child(3n):hover .userStatsCard,
 .userStatsCard:nth-child(3n):hover {
-    background-color: #ffa726; // orange[400]
+  background-color: #ffa726; // orange[400]
 }
 // scss-lint:enable ColorVariable
 // scss-lint:enable ImportantRule
