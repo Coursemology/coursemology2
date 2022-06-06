@@ -38,6 +38,10 @@ const PaginationHelper: FC<Props> = (props) => {
   useEffect(() => {
     const begin = (page - 1) * itemsPerPage;
     setSlicedItems(items.slice(begin, begin + itemsPerPage));
+
+    if (count < page) {
+      setPage(1);
+    }
   }, [page, items]);
 
   const handleChange: (
