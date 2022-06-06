@@ -1,0 +1,35 @@
+// scss-lint:disable ColorVariable
+// scss-lint:disable ImportantRule
+.courseUserImage {
+  height: 140px !important;
+  width: 140px !important;
+}
+
+.userStatsContainer {
+    a {
+      text-decoration: none;
+    }
+    .userStatsCard {
+      margin: 4px 4px 4px 0px;
+      padding: 12px;
+      min-width: 100px;
+      max-width: 144px;
+      transition: background-color 0.5s, color 0.5s;
+    }
+    .userStatsCard:hover {
+      background-color: #66bb6a; // green[400]
+      color: white;
+    }
+}
+
+.userStatsContainer :nth-child(2n):hover .userStatsCard,
+.userStatsCard:nth-child(2n):hover {
+    background-color: #42a5f5; // blue[400]
+}
+
+.userStatsContainer :nth-child(3n):hover .userStatsCard,
+.userStatsCard:nth-child(3n):hover {
+    background-color: #ffa726; // orange[400]
+}
+// scss-lint:enable ColorVariable
+// scss-lint:enable ImportantRule

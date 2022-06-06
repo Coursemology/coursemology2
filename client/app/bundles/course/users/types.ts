@@ -24,7 +24,6 @@ export interface SaveUserAction {
 export type UsersActionType = SaveUsersListAction | SaveUserAction;
 
 // State Types
-
 export interface UsersState {
   users: EntityStore<CourseUserMiniEntity, CourseUserEntity>;
 }
