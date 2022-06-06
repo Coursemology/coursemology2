@@ -264,7 +264,7 @@ export class VisibleTestCaseView extends Component {
         <AccordionSummary expandIcon={<ExpandMoreIcon />} style={headerStyle}>
           {title}
         </AccordionSummary>
-        <AccordionDetails>
+        <AccordionDetails style={{ overflowX: 'auto' }}>
           <Table>
             <TableHead>
               <TableRow>
