@@ -3,50 +3,62 @@ import {
   GroupLeaderboardPoints,
   LeaderboardAchievement,
   LeaderboardPoints,
+  LeaderboardSettings,
 } from 'types/course/leaderboard';
 import {
   SaveGroupLeaderboardAchievementAction,
   SaveGroupLeaderboardPointsAction,
   SaveLeaderboardAchievementAction,
   SaveLeaderboardPointsAction,
-  SAVE_GROUPLEADERBOARD_ACHIEVEMENT,
-  SAVE_GROUPLEADERBOARD_POINTS,
+  SaveLeaderboardSettingsAction,
+  SAVE_GROUP_LEADERBOARD_ACHIEVEMENT,
+  SAVE_GROUP_LEADERBOARD_POINTS,
   SAVE_LEADERBOARD_ACHIEVEMENT,
   SAVE_LEADERBOARD_POINTS,
+  SAVE_LEADERBOARD_SETTINGS,
 } from './types';
 
 export function saveLeaderboardPoints(
-  usersPoints: LeaderboardPoints[],
+  leaderboardByExpPoints: LeaderboardPoints[],
 ): SaveLeaderboardPointsAction {
   return {
     type: SAVE_LEADERBOARD_POINTS,
-    usersPoints,
+    leaderboardByExpPoints,
   };
 }
 
 export function saveLeaderboardAchievement(
-  usersCount: LeaderboardAchievement[],
+  leaderboardByAchievementCount: LeaderboardAchievement[],
 ): SaveLeaderboardAchievementAction {
   return {
     type: SAVE_LEADERBOARD_ACHIEVEMENT,
-    usersCount,
+    leaderboardByAchievementCount,
   };
 }
 
 export function saveGroupLeaderboardPoints(
-  groupPoints: GroupLeaderboardPoints[],
+  groupleaderboardByExpPoints: GroupLeaderboardPoints[],
 ): SaveGroupLeaderboardPointsAction {
   return {
-    type: SAVE_GROUPLEADERBOARD_POINTS,
-    groupPoints,
+    type: SAVE_GROUP_LEADERBOARD_POINTS,
+    groupleaderboardByExpPoints,
   };
 }
 
 export function saveGroupLeaderboardAchievement(
-  groupCount: GroupLeaderboardAchievement[],
+  groupleaderboardByAchievementCount: GroupLeaderboardAchievement[],
 ): SaveGroupLeaderboardAchievementAction {
   return {
-    type: SAVE_GROUPLEADERBOARD_ACHIEVEMENT,
-    groupCount,
+    type: SAVE_GROUP_LEADERBOARD_ACHIEVEMENT,
+    groupleaderboardByAchievementCount,
+  };
+}
+
+export function saveLeaderboardSettings(
+  leaderboardSettings: LeaderboardSettings,
+): SaveLeaderboardSettingsAction {
+  return {
+    type: SAVE_LEADERBOARD_SETTINGS,
+    leaderboardSettings,
   };
 }

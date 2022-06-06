@@ -33,3 +33,7 @@ export function getGroupLeaderboardPoints(state: AppState) {
     getLocalState(state).groupLeaderboardPoints.ids,
   );
 }
+
+export function getLeaderboardSettings(state: AppState) {
+  return getLocalState(state).leaderboardSettings;
+}

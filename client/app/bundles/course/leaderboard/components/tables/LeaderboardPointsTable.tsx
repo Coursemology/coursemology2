@@ -3,6 +3,9 @@ import { Avatar, Box, Link } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import { FC, memo } from 'react';
 import { LeaderboardPoints } from 'types/course/leaderboard';
+import { TableColumns } from 'types/components/DataTable';
+import { getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
 interface Props {
   data: LeaderboardPoints[];
@@ -31,9 +34,9 @@ const styles = {
 };
 
 const LeaderboardPointsTable: FC<Props> = (props: Props) => {
-  const data = props.data;
+  const { data } = props;
 
-  const columns: any = [
+  const columns: TableColumns[] = [
     {
       name: 'id',
       label: 'Rank',
@@ -60,13 +63,13 @@ const LeaderboardPointsTable: FC<Props> = (props: Props) => {
             id={`course_user_${data[_dataIndex].id}`}
           >
             <Avatar
-              src={data[_dataIndex].userPicture}
+              src={data[_dataIndex].imageUrl}
               alt={data[_dataIndex].name}
               component={Link}
-              href={data[_dataIndex].userLink}
+              href={getCourseUserURL(getCourseId(), data[_dataIndex].id)}
               marginRight={1}
             />
-            <a href={data[_dataIndex].userLink}>{data[_dataIndex].name}</a>
+            <a href={getCourseUserURL(getCourseId(), data[_dataIndex].id)}>{data[_dataIndex].name}</a>
           </Box>
         ),
       },

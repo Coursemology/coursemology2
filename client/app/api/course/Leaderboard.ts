@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { LeaderboardData } from 'types/course/leaderboard';
 import BaseCourseAPI from './Base';
 
-export default class AchievementsAPI extends BaseCourseAPI {
+export default class LeaderboardsAPI extends BaseCourseAPI {
   _getUrlPrefix(): string {
     return `/courses/${this.getCourseId()}/leaderboard`;
   }

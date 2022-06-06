@@ -9,15 +9,16 @@ const fetchLeaderboard = (): Operation<void> => {
       .index()
       .then((response) => {
         const data: LeaderboardData = response.data;
-        dispatch(actions.saveLeaderboardPoints(data.usersPoints));
-        if (data.usersCount) {
-          dispatch(actions.saveLeaderboardAchievement(data.usersCount));
+        dispatch(actions.saveLeaderboardSettings({leaderboardTitle: data.leaderboardTitle, groupleaderboardTitle: data.groupleaderboardTitle}))
+        dispatch(actions.saveLeaderboardPoints(data.leaderboardByExpPoints));
+        if (data.leaderboardByAchievementCount) {
+          dispatch(actions.saveLeaderboardAchievement(data.leaderboardByAchievementCount));
         }
-        if (data.groupPoints) {
-          dispatch(actions.saveGroupLeaderboardPoints(data.groupPoints));
+        if (data.groupleaderboardByExpPoints) {
+          dispatch(actions.saveGroupLeaderboardPoints(data.groupleaderboardByExpPoints));
         }
-        if (data.groupCount) {
-          dispatch(actions.saveGroupLeaderboardAchievement(data.groupCount));
+        if (data.groupleaderboardByAchievementCount) {
+          dispatch(actions.saveGroupLeaderboardAchievement(data.groupleaderboardByAchievementCount));
         }
       })
       .catch((error) => {

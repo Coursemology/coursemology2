@@ -3,6 +3,9 @@ import { AvatarGroup, Avatar, Tooltip, Link, Box } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import { LeaderboardAchievement } from 'types/course/leaderboard';
 import { FC, memo } from 'react';
+import { TableColumns } from 'types/components/DataTable';
+import { getAchievementURL, getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
 interface Props {
   data: LeaderboardAchievement[];
@@ -42,9 +45,9 @@ const styles = {
 };
 
 const LeaderboardAchievementsTable: FC<Props> = (props: Props) => {
-  const data = props.data;
+  const { data } = props;
 
-  const columns: any = [
+  const columns: TableColumns[] = [
     {
       name: 'id',
       label: 'Rank',
@@ -67,13 +70,13 @@ const LeaderboardAchievementsTable: FC<Props> = (props: Props) => {
         customBodyRenderLite: (_dataIndex: number) => (
           <Box sx={styles.avatar}>
             <Avatar
-              src={data[_dataIndex].userPicture}
+              src={data[_dataIndex].imageUrl}
               alt={data[_dataIndex].name}
               component={Link}
-              href={data[_dataIndex].userLink}
+              href={getCourseUserURL(getCourseId(), data[_dataIndex].id)}
               marginRight={1}
             />
-            <a href={data[_dataIndex].userLink}>{data[_dataIndex].name}</a>
+            <a href={getCourseUserURL(getCourseId(), data[_dataIndex].id)}>{data[_dataIndex].name}</a>
           </Box>
         ),
       },
@@ -87,7 +90,7 @@ const LeaderboardAchievementsTable: FC<Props> = (props: Props) => {
         alignCenter: true,
         justifyCenter: true,
         customBodyRenderLite: (_dataIndex: number) => (
-          <Link href={data[_dataIndex].userLink} style={styles.link}>
+          <Link href={getCourseUserURL(getCourseId(), data[_dataIndex].id)} style={styles.link}>
             <AvatarGroup
               total={data[_dataIndex].achievementCount}
               max={6}
@@ -95,12 +98,12 @@ const LeaderboardAchievementsTable: FC<Props> = (props: Props) => {
             >
               {data[_dataIndex].achievements.map((achievement) => {
                 return (
-                  <Tooltip title={achievement.name} key={achievement.id}>
+                  <Tooltip title={achievement.title} key={achievement.id}>
                     <Avatar
-                      alt={achievement.name}
-                      src={achievement.badge}
+                      src={achievement.badge.url}
+                      alt={achievement.badge.name}
                       component={Link}
-                      href={achievement.link}
+                      href={getAchievementURL(getCourseId(), achievement.id)}
                     />
                   </Tooltip>
                 );

@@ -19,12 +19,16 @@ export type AchievementListDataPermissions = Permissions<
 /**
  * Data types for achievement data retrieved from backend through API call.
  */
-export interface AchievementListData {
+
+export interface Achievement {
   id: number;
   title: string;
+  badge: BadgeEntity;
+}
+
+export interface AchievementListData extends Achievement {
   description: string;
   conditions: ConditionListData[];
-  badge: BadgeEntity;
   weight: number;
   published: boolean;
   achievementStatus: 'granted' | 'locked' | null;
@@ -46,12 +50,9 @@ export interface AchievementCourseUserData extends CourseUserListData {
  * received backend data.
  */
 
-export interface AchievementMiniEntity {
-  id: number;
-  title: string;
+export interface AchievementMiniEntity extends Achievement {
   description: string;
   conditions: ConditionListData[];
-  badge: BadgeEntity;
   weight: number;
   published: boolean;
   achievementStatus: 'granted' | 'locked' | null;

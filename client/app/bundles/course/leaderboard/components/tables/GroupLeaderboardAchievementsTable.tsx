@@ -3,9 +3,13 @@ import { Avatar, Tooltip, Link, Box, AvatarGroup } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import { GroupLeaderboardAchievement } from 'types/course/leaderboard';
 import { FC, memo } from 'react';
+import { TableColumns } from 'types/components/DataTable';
+import { getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
 interface Props {
   data: GroupLeaderboardAchievement[];
+//   tableType: 'GroupLeaderboardAchievementTable' | 'GroupLeaderboardPointsTable' | 'LeaderboardAchievementsTable' | 'LeaderboardPointsTable';
 }
 
 const translations = defineMessages({
@@ -42,9 +46,9 @@ const styles = {
 };
 
 const GroupLeaderboardAchievementsTable: FC<Props> = (props: Props) => {
-  const data = props.data;
+  const { data } = props;
 
-  const columns: any = [
+  const columns: TableColumns[] = [
     {
       name: 'id',
       label: 'Rank',
@@ -84,10 +88,10 @@ const GroupLeaderboardAchievementsTable: FC<Props> = (props: Props) => {
             {data[_dataIndex].group.map((user) => (
               <Tooltip title={user.name} key={user.id}>
                 <Avatar
-                  src={user.userPicture}
+                  src={user.imageUrl}
                   alt={user.name}
                   component={Link}
-                  href={user.userLink}
+                  href={getCourseUserURL(getCourseId(), user.id)}
                 />
               </Tooltip>
             ))}
