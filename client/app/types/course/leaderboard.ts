@@ -2,26 +2,25 @@
  * Data types for leaderboard data retrieved from backend through API call.
  */
 
-export interface LeaderboardData {
-  usersPoints: LeaderboardPoints[];
-  usersCount?: LeaderboardAchievement[];
-  groupPoints?: GroupLeaderboardPoints[];
-  groupCount?: GroupLeaderboardAchievement[];
+import { Achievement } from "./achievements";
+import { CourseUserData } from "./course_users";
+
+export interface LeaderboardSettings {
+  leaderboardTitle?: string;
+  groupleaderboardTitle?: string;
+}
+export interface LeaderboardData extends LeaderboardSettings {
+  leaderboardByExpPoints: LeaderboardPoints[];
+  leaderboardByAchievementCount?: LeaderboardAchievement[];
+  groupleaderboardByExpPoints?: GroupLeaderboardPoints[];
+  groupleaderboardByAchievementCount?: GroupLeaderboardAchievement[];
 }
 
-export interface LeaderboardAchievement {
-  id: number;
-  name: string;
-  userLink: string;
-  userPicture: string;
+export interface LeaderboardAchievement extends CourseUserData {
   achievementCount: number;
   achievements: Achievement[];
 }
-export interface LeaderboardPoints {
-  id: number;
-  name: string;
-  userLink: string;
-  userPicture: string;
+export interface LeaderboardPoints extends CourseUserData {
   level: number;
   experience: number;
 }
@@ -30,30 +29,14 @@ export interface GroupLeaderboardAchievement {
   id: number;
   name: string;
   averageAchievementCount: number;
-  group: User[];
-  link: string;
+  group: CourseUserData[];
 }
 
 export interface GroupLeaderboardPoints {
   id: number;
   name: string;
   averageExperiencePoints: number;
-  group: User[];
-  link: string;
-}
-
-interface Achievement {
-  id: number;
-  badge: string;
-  link: string;
-  name: string;
-}
-
-interface User {
-  id: number;
-  name: string;
-  userLink: string;
-  userPicture: string;
+  group: CourseUserData[];
 }
 
 /**
@@ -61,20 +44,12 @@ interface User {
  * received backend data.
  */
 
-export interface LeaderboardPointsEntity {
-  id: number;
-  name: string;
-  userLink: string;
-  userPicture: string;
+export interface LeaderboardPointsEntity extends CourseUserData {
   level: number;
   experience: number;
 }
 
-export interface LeaderboardAchievementEntity {
-  id: number;
-  name: string;
-  userLink: string;
-  userPicture: string;
+export interface LeaderboardAchievementEntity extends CourseUserData {
   achievementCount: number;
   achievements: Achievement[];
 }
@@ -83,14 +58,12 @@ export interface GroupLeaderboardAchievementEntity {
   id: number;
   name: string;
   averageAchievementCount: number;
-  group: User[];
-  link: string;
+  group: CourseUserData[];
 }
 
 export interface GroupLeaderboardPointsEntity {
   id: number;
   name: string;
   averageExperiencePoints: number;
-  group: User[];
-  link: string;
+  group: CourseUserData[];
 }

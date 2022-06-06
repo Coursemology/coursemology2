@@ -10,6 +10,8 @@ import {
 import Note from 'lib/components/Note';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import AchievementManagementButtons from '../buttons/AchievementManagementButtons';
+import { getAchievementURL } from 'lib/helpers/url-builders';
+import { TableColumns } from 'types/components/DataTable';
 
 interface Props {
   achievements: AchievementMiniEntity[];
@@ -81,7 +83,7 @@ const AchievementTable: FC<Props> = (props) => {
     viewColumns: false,
   };
 
-  const columns: any = [
+  const columns: TableColumns[] = [
     {
       name: 'id',
       label: ' ',
@@ -135,7 +137,7 @@ const AchievementTable: FC<Props> = (props) => {
           return (
             <Link
               key={achievement.id}
-              to={`/courses/${getCourseId()}/achievements/${achievement.id}`}
+              to={getAchievementURL(getCourseId(), achievement.id)}
             >
               {achievement.title}
             </Link>

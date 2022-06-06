@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
@@ -17,6 +17,7 @@ import {
   getGroupLeaderboardPoints,
   getLeaderboardAchievements,
   getLeaderboardPoints,
+  getLeaderboardSettings,
 } from '../../selectors';
 import GroupLeaderboardPointsTable from '../../components/tables/GroupLeaderboardPointsTable';
 import GroupLeaderboardAchievementsTable from '../../components/tables/GroupLeaderboardAchievementsTable';
@@ -45,6 +46,9 @@ const LeaderboardIndex: FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(true);
   const [tabValue, setTabValue] = useState('leaderboard-tab');
+  const settings = useSelector((state: AppState) => 
+    getLeaderboardSettings(state),
+  );
   const leaderboardPoints = useSelector((state: AppState) =>
     getLeaderboardPoints(state),
   );
@@ -70,19 +74,13 @@ const LeaderboardIndex: FC<Props> = (props) => {
     return <LoadingIndicator />;
   }
 
-  const headerToolbars: ReactElement[] = []; // To Add: Reorder Button
-
   const isAchievementHidden = leaderboardAchievements.length === 0;
   const isGroupHidden = groupLeaderboardPoints.length === 0;
 
   return (
     <>
       <PageHeader
-        title={intl.formatMessage({
-          id: 'course.leaderboards.index.header',
-          defaultMessage: 'Leaderboard',
-        })}
-        toolbars={headerToolbars}
+        title={settings.leaderboardTitle || intl.formatMessage({...translations.leaderboard})}
       />
       {!isGroupHidden && (
         <Tabs
@@ -101,14 +99,14 @@ const LeaderboardIndex: FC<Props> = (props) => {
             id="leaderboard-tab"
             style={{ color: palette.submissionIcon.person }}
             icon={<Person />}
-            label={<FormattedMessage {...translations.leaderboard} />}
+            label={settings.leaderboardTitle || <FormattedMessage {...translations.leaderboard} />}
             value="leaderboard-tab"
           />
           <Tab
             id="groupLeaderboard-tab"
             style={{ color: palette.submissionIcon.person }}
             icon={<Group />}
-            label={<FormattedMessage {...translations.groupLeaderboard} />}
+            label={settings.groupleaderboardTitle || <FormattedMessage {...translations.groupLeaderboard} />}
             value="group-leaderboard-tab"
           />
         </Tabs>

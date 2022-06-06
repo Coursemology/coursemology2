@@ -10,6 +10,7 @@ import EditButton from 'lib/components/buttons/EditButton';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { deleteAchievement } from '../../operations';
 import AwardButton from './AwardButton';
+import { getAchievementURL } from 'lib/helpers/url-builders';
 
 interface Props {
   achievement: AchievementMiniEntity;
@@ -40,7 +41,7 @@ const AchievementManagementButtons: FC<Props> = (props) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const onEdit = (): void => {
-    navigate(`/courses/${getCourseId()}/achievements/${achievement.id}/edit`);
+    navigate(`${getAchievementURL(getCourseId(), achievement.id)}/edit`);
   };
 
   const onDelete = (): Promise<void> => {

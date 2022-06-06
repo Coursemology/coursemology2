@@ -11,6 +11,7 @@ import { AppDispatch } from 'types/store';
 import { AchievementFormData } from 'types/course/achievements';
 import AchievementForm from '../../components/forms/AchievementForm';
 import { createAchievement } from '../../operations';
+import { getAchievementURL } from 'lib/helpers/url-builders';
 
 interface Props {
   open: boolean;
@@ -58,7 +59,7 @@ const AchievementNew: FC<Props> = (props) => {
         setTimeout(() => {
           if (response.data?.id) {
             navigate(
-              `/courses/${getCourseId()}/achievements/${response.data.id}`,
+              getAchievementURL(getCourseId(), response.data.id),
             );
           }
         }, 200);

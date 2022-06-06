@@ -20,6 +20,7 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import { AppDispatch } from 'types/store';
 import AchievementAwardSummary from './AchievementAwardSummary';
 import { awardAchievement } from '../../operations';
+import { getAchievementURL } from 'lib/helpers/url-builders';
 
 interface Props {
   achievement: AchievementEntity;
@@ -141,7 +142,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
       .then(() => {
         toast.success(intl.formatMessage(translations.awardSuccess));
         setTimeout(() => {
-          navigate(`/courses/${getCourseId()}/achievements/${achievementId}`);
+          navigate(getAchievementURL(getCourseId(), achievementId));
         }, 100);
       })
       .catch((error) => {
