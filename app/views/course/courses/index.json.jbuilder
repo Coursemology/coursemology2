@@ -8,7 +8,7 @@ request = current_tenant.user_role_requests.find_by(user_id: current_user&.id)
 
 if request
   json.instanceUserRoleRequestId current_tenant.user_role_requests.find_by(user_id: current_user&.id).id
-else 
+else
   json.instanceUserRoleRequestId request
 end
 
