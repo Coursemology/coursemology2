@@ -70,7 +70,7 @@ RSpec.feature 'Course: Administration: Leaderboard' do
         click_button 'update'
 
         visit course_leaderboard_path(course)
-        expect(page).to have_button('Group Leaderboard')
+        expect(page).not_to have_button('Group Leaderboard')
       end
 
       scenario 'I can change the title of the group leaderboard' do
