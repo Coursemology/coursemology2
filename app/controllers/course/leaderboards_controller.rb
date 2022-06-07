@@ -14,10 +14,6 @@ class Course::LeaderboardsController < Course::ComponentController
     groups_enabled && fetch_groups_list(achievements_enabled)
   end
 
-  def groups # :nodoc:
-    @groups ||= @course.groups
-  end
-
   private
 
   # Checks if group leaderboard setting is enabled
