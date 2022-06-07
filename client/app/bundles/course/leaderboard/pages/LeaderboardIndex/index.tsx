@@ -136,7 +136,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
           />
         </Grid>
         {!isAchievementHidden && (
-          <Grid item xs>
+          <Grid item xs id="leaderboard-achievement">
             <LeaderboardTable
               data={leaderboardAchievements}
               id={LeaderboardTableType.LeaderboardAchievement}
