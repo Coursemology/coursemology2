@@ -12,6 +12,7 @@ import { TableColumns } from 'types/components/DataTable';
 import { getAchievementURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { LeaderboardTableType } from '../../types';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
   data:
@@ -61,6 +62,7 @@ const styles = {
 
 const LeaderboardTable: FC<Props> = (props: Props) => {
   const { data, id: tableType } = props;
+  const navigate = useNavigate();
 
   const columns: TableColumns[] = [
     {
@@ -159,17 +161,25 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         alignCenter: true,
         justifyCenter: true,
         customBodyRenderLite: (_dataIndex: number) => (
-          <Link
-            href={getCourseUserURL(
-              getCourseId(),
-              achievementData[_dataIndex].id,
-            )}
-            style={styles.link}
-          >
+          // <Link
+          //   href={getCourseUserURL(
+          //     getCourseId(),
+          //     achievementData[_dataIndex].id,
+          //   )}
+          //   style={styles.link}
+          // >
             <AvatarGroup
               total={achievementData[_dataIndex].achievementCount}
               max={6}
               sx={styles.avatarGroup}
+              componentsProps= {{additionalAvatar: {
+                onClick: () => {navigate(getCourseUserURL(
+                      getCourseId(),
+                      achievementData[_dataIndex].id,
+                    ), { replace: false })},
+                sx: {cursor: 'pointer'}
+              
+              }}}
             >
               {achievementData[_dataIndex].achievements.map((achievement) => {
                 return (
@@ -179,12 +189,13 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
                       alt={achievement.badge.name}
                       component={Link}
                       href={getAchievementURL(getCourseId(), achievement.id)}
+                      className="achievement" id={`achievement_${achievement.id}`}
                     />
                   </Tooltip>
                 );
               })}
             </AvatarGroup>
-          </Link>
+          // </Link>
         ),
       },
     });

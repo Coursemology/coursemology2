@@ -26,7 +26,6 @@ RSpec.describe 'Course: Leaderboard: View' do
           sorted_course_users.each do |student|
             within find(content_tag_selector(student)) do
               expect(page).to have_text(student.name)
-              # expect(page).to have_text(index)
               expect(page).to have_link(nil, href: course_user_path(course, student))
             end
           end
@@ -39,15 +38,15 @@ RSpec.describe 'Course: Leaderboard: View' do
         create(:course_user_achievement, course_user: students[0])
         visit course_leaderboard_path(course)
 
-        within find('.leaderboard-achievement') do
+        within find('#leaderboard-achievement') do
           sorted_course_users = course.course_users.students.without_phantom_users.
                                 ordered_by_achievement_count
 
-          sorted_course_users.each.with_index(1) do |student, index|
+          sorted_course_users.each.with_index(1) do |student|
             within find(content_tag_selector(student)) do
-              expect(page).to have_text(index)
+              expect(page).to have_text(student.name)
               student.achievements.ordered_by_date_obtained.take(5).each do |achievement|
-                expect(page).to have_content_tag_for(achievement)
+                expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
               end
             end
           end
