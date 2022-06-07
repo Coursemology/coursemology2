@@ -1,9 +1,17 @@
-import { CourseUserData, CourseUserListData } from 'types/course/courseUsers';
+import {
+  CourseUserData,
+  CourseUserListData,
+  CourseUsersPermissions,
+} from 'types/course/courseUsers';
 import {
   SAVE_USER,
   SAVE_USERS_LIST,
+  SAVE_USERS_LIST_WITH_PERMISSIONS,
+  DELETE_USER,
   SaveUserAction,
   SaveUsersListAction,
+  SaveUsersListWithPermissionsAction,
+  DeleteUserAction,
 } from './types';
 
 export function saveUsersList(
@@ -12,6 +20,24 @@ export function saveUsersList(
   return {
     type: SAVE_USERS_LIST,
     userList,
+  };
+}
+
+export function saveUsersListWithPermissions(
+  userList: CourseUserData[],
+  courseUsersPermissions: CourseUsersPermissions,
+): SaveUsersListWithPermissionsAction {
+  return {
+    type: SAVE_USERS_LIST_WITH_PERMISSIONS,
+    userList,
+    courseUsersPermissions,
+  };
+}
+
+export function deleteUser(userId: number): DeleteUserAction {
+  return {
+    type: DELETE_USER,
+    userId,
   };
 }
 

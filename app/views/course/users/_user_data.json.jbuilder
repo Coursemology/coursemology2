@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 json.partial! 'user_list_data', course_user: course_user
 
 json.email course_user.user.email

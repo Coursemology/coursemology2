@@ -26,6 +26,10 @@ const translations = defineMessages({
     id: 'course.achievement.delete.fail',
     defaultMessage: 'Failed to delete achievement.',
   },
+  deletionConfirm: {
+    id: 'course.achievement.delete.confirm',
+    defaultMessage: 'Are you sure you wish to delete this achievement?',
+  },
   automaticAward: {
     id: 'course.achievement.award.automatic',
     defaultMessage:
@@ -82,8 +86,7 @@ const AchievementManagementButtons: FC<Props> = (props) => {
           className={`achievement-delete-${achievement.id}`}
           disabled={isDeleting}
           onClick={onDelete}
-          withDialog
-          message={intl.formatMessage(translations.deletionConfirmation)}
+          confirmMessage={intl.formatMessage(translations.deletionConfirm)}
         />
       )}
     </div>

@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import UsersIndex from './pages/UsersIndex';
 import UserShow from './pages/UserShow';
+import ManageStudents from './pages/ManageStudents';
+import ManageStaff from './pages/ManageStaff';
 import configureStore from './store';
 
 $(() => {
@@ -20,6 +22,11 @@ $(() => {
               path="/courses/:courseId/users/:userId"
               element={<UserShow />}
             />
+            <Route
+              path="/courses/:courseId/students"
+              element={<ManageStudents />}
+            />
+            <Route path="/courses/:courseId/staff" element={<ManageStaff />} />
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,

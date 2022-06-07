@@ -7,9 +7,9 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
 import { getUserEntity } from '../../selectors';
 import { loadUser } from '../../operations';
-import UserProfileCard from '../../components/UserProfileCard';
-import UserProfileAchievements from '../../components/UserProfileAchievements';
-import UserProfileSkills from '../../components/UserProfileSkills';
+import UserProfileCard from '../../components/misc/UserProfileCard';
+import UserProfileAchievements from '../../components/misc/UserProfileAchievements';
+import UserProfileSkills from '../../components/misc/UserProfileSkills';
 
 type Props = WrappedComponentProps;
 

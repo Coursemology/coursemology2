@@ -8,9 +8,6 @@ interface Props {
 }
 
 const styles = {
-  image: {
-    marginTop: '1em',
-  },
   sm: {
     height: 75,
     width: 75,
@@ -35,7 +32,7 @@ const AvatarWithLabel: FC<Props> = (props: Props) => {
         <Avatar
           src={props.imageUrl}
           alt={props.label}
-          sx={[styles.image, styles[props.size]]}
+          sx={styles[props.size]}
         />
       </Grid>
       <Typography variant="body2" align="center">
