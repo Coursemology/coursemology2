@@ -135,7 +135,7 @@ class ResponseShow extends Component {
     }
     return (
       <span style={{ marginLeft: 12 }}>
-        <UnsubmitButton responseId={response.id} />
+        <UnsubmitButton responseId={response.id} isIcon={false} />
       </span>
     );
   }

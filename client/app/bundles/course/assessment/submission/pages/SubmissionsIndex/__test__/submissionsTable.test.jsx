@@ -1,6 +1,5 @@
 import { mount } from 'enzyme';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
-import storeCreator from 'course/survey/store';
 import SubmissionsTable from '../SubmissionsTable';
 
 const defaultAssessmentProps = {
@@ -48,7 +47,7 @@ const defaultProps = {
 const setupTest = (propsOverrides) => {
   const props = { ...defaultProps, ...propsOverrides };
   const submissionsTable = mount(
-    <ProviderWrapper store={storeCreator({})}>
+    <ProviderWrapper>
       <SubmissionsTable {...props} />
     </ProviderWrapper>,
   );
