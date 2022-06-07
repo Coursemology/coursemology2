@@ -3,7 +3,7 @@
  */
 
 import { Achievement } from './achievements';
-import { CourseUserData } from './course_users';
+import { CourseUserListData } from './course_users';
 
 export interface LeaderboardSettings {
   leaderboardTitle?: string;
@@ -16,11 +16,11 @@ export interface LeaderboardData extends LeaderboardSettings {
   groupleaderboardByAchievementCount?: GroupLeaderboardAchievement[];
 }
 
-export interface LeaderboardAchievement extends CourseUserData {
+export interface LeaderboardAchievement extends CourseUserListData {
   achievementCount: number;
   achievements: Achievement[];
 }
-export interface LeaderboardPoints extends CourseUserData {
+export interface LeaderboardPoints extends CourseUserListData {
   level: number;
   experience: number;
 }
@@ -29,14 +29,14 @@ export interface GroupLeaderboardAchievement {
   id: number;
   name: string;
   averageAchievementCount: number;
-  group: CourseUserData[];
+  group: CourseUserListData[];
 }
 
 export interface GroupLeaderboardPoints {
   id: number;
   name: string;
   averageExperiencePoints: number;
-  group: CourseUserData[];
+  group: CourseUserListData[];
 }
 
 /**
@@ -44,12 +44,12 @@ export interface GroupLeaderboardPoints {
  * received backend data.
  */
 
-export interface LeaderboardPointsEntity extends CourseUserData {
+export interface LeaderboardPointsEntity extends CourseUserListData {
   level: number;
   experience: number;
 }
 
-export interface LeaderboardAchievementEntity extends CourseUserData {
+export interface LeaderboardAchievementEntity extends CourseUserListData {
   achievementCount: number;
   achievements: Achievement[];
 }
@@ -58,12 +58,12 @@ export interface GroupLeaderboardAchievementEntity {
   id: number;
   name: string;
   averageAchievementCount: number;
-  group: CourseUserData[];
+  group: CourseUserListData[];
 }
 
 export interface GroupLeaderboardPointsEntity {
   id: number;
   name: string;
   averageExperiencePoints: number;
-  group: CourseUserData[];
+  group: CourseUserListData[];
 }
