@@ -27,4 +27,3 @@ export const getForumURL = (courseId, forumID) =>
 
 export const getForumTopicURL = (courseId, forumID, topicId) =>
   `/courses/${courseId}/forums/${forumID}/topics/${topicId}`;
-

@@ -149,14 +149,14 @@ const LeaderboardIndex: FC<Props> = (props) => {
         rowSpacing={2}
         display={tabValue !== 'leaderboard-tab' ? 'flex' : 'none'}
       >
-        <Grid item xs>
+        <Grid item xs id="group-leaderboard-level">
           <LeaderboardTable
             data={groupLeaderboardPoints}
             id={LeaderboardTableType.GroupLeaderboardPoints}
           />
         </Grid>
         {!isAchievementHidden && (
-          <Grid item xs>
+          <Grid item xs id="group-leaderboard-achievement">
             <LeaderboardTable
               data={groupLeaderboardAchievements}
               id={LeaderboardTableType.GroupLeaderboardAchievement}

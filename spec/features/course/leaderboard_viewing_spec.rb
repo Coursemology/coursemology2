@@ -45,9 +45,10 @@ RSpec.describe 'Course: Leaderboard: View' do
           sorted_course_users.each do |student|
             within find(content_tag_selector(student)) do
               expect(page).to have_text(student.name)
-              student.achievements.ordered_by_date_obtained.take(5).each do |achievement|
-                expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
-              end
+            end
+            student.achievements.ordered_by_date_obtained.take(5).each do |achievement|
+              expect(page).to have_content_tag_for(achievement)
+              expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
             end
           end
         end
@@ -74,15 +75,15 @@ RSpec.describe 'Course: Leaderboard: View' do
         scenario 'I can view the group leaderboard by experience points' do
           create(:course_experience_points_record, points_awarded: 200, course_user: students[0])
 
-          visit group_course_leaderboard_path(course)
-          expect(page).to have_text(I18n.t('course.leaderboards.groups.header'))
+          visit course_leaderboard_path(course)
+          expect(page).to have_selector("button#group-leaderboard-tab")
+          find("button#group-leaderboard-tab").click
 
-          within find('.leaderboard-points') do
+          within find('#group-leaderboard-level') do
             sorted_course_groups = course.groups.ordered_by_experience_points
 
-            sorted_course_groups.each.with_index(1) do |group, index|
+            sorted_course_groups.each do |group|
               within find(content_tag_selector(group)) do
-                expect(page).to have_text(index)
                 expect(page).to have_text(group.name)
               end
             end
@@ -92,15 +93,15 @@ RSpec.describe 'Course: Leaderboard: View' do
         scenario 'I can view the group leaderboard by achievement count' do
           create(:course_user_achievement, course_user: students[0])
 
-          visit group_course_leaderboard_path(course)
-          expect(page).to have_selector(:id, 'groupLeaderboard-tab')
+          visit course_leaderboard_path(course)
+          expect(page).to have_selector("button#group-leaderboard-tab")
+          find("button#group-leaderboard-tab").click
 
-          within find('.leaderboard-achievement') do
+          within find('#group-leaderboard-achievement') do
             sorted_course_groups = course.groups.ordered_by_average_achievement_count
 
-            sorted_course_groups.each.with_index(1) do |group, index|
+            sorted_course_groups.each do |group|
               within find(content_tag_selector(group)) do
-                expect(page).to have_text(index)
                 expect(page).to have_text(group.name)
               end
             end

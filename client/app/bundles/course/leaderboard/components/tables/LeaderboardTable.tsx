@@ -163,14 +163,17 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
             total={achievementData[_dataIndex].achievementCount}
             max={6}
             sx={styles.avatarGroup}
-            componentsProps= {{additionalAvatar: {
-              onClick: () => {
-                window.location.href = getCourseUserURL(
+            componentsProps={{
+              additionalAvatar: {
+                onClick: (): void => {
+                  window.location.href = getCourseUserURL(
                     getCourseId(),
                     achievementData[_dataIndex].id,
-                  )},
-              sx: {cursor: 'pointer'},
-            }}}
+                  );
+                },
+                sx: { cursor: 'pointer' },
+              },
+            }}
           >
             {achievementData[_dataIndex].achievements.map((achievement) => {
               return (
@@ -180,7 +183,8 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
                     alt={achievement.badge.name}
                     component={Link}
                     href={getAchievementURL(getCourseId(), achievement.id)}
-                    className="achievement" id={`achievement_${achievement.id}`}
+                    className="achievement"
+                    id={`achievement_${achievement.id}`}
                   />
                 </Tooltip>
               );
@@ -204,8 +208,11 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
           sort: false,
           alignCenter: true,
           justifyCenter: true,
-          customBodyRenderLite: (_dataIndex: number) =>
-            groupData[_dataIndex].name,
+          customBodyRenderLite: (_dataIndex: number) => (
+            <Box className="group" id={`group_${groupData[_dataIndex].id}`}>
+              {groupData[_dataIndex].name}
+            </Box>
+          ),
         },
       },
       {
@@ -306,7 +313,8 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
 
   const title = (
     <Box sx={styles.title}>
-      {tableType === LeaderboardTableType.LeaderboardPoints || tableType === LeaderboardTableType.GroupLeaderboardPoints ? (
+      {tableType === LeaderboardTableType.LeaderboardPoints ||
+      tableType === LeaderboardTableType.GroupLeaderboardPoints ? (
         <FormattedMessage {...translations.titlePoints} />
       ) : (
         <FormattedMessage {...translations.titleAchievements} />
