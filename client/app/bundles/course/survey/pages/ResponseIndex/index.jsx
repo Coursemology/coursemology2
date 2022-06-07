@@ -19,17 +19,16 @@ import {
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import BarChart from 'lib/components/BarChart';
-import {
-  fetchResponses,
-  unsubmitResponse,
-} from 'course/survey/actions/responses';
+import { fetchResponses } from 'course/survey/actions/responses';
 import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { useTheme } from '@mui/material/styles';
+import ReactTooltip from 'react-tooltip';
 import RemindButton from './RemindButton';
 import { workflowStates } from '../../constants';
+import translations from './translations';
+import UnsubmitButton from '../../containers/UnsubmitButton';
 
 const styles = {
   red: {
@@ -40,7 +39,6 @@ const styles = {
   },
   chip: {
     width: 100,
-    
   },
   detailsCard: {
     marginBottom: 30,
@@ -72,11 +70,10 @@ const ResponseIndex = (props) => {
       palette.submissionStatus[workflowStates.Attempting],
     [SUBMITTED]:
       palette.submissionStatus &&
-      palette.submissionStatus[workflowStates.Published],
+      palette.submissionStatus[workflowStates.Submitted],
   };
   const [state, setState] = useState({
     includePhantomsInStats: false,
-    unsubmitConfirmation: false,
   });
 
   useEffect(() => {
@@ -122,19 +119,23 @@ const ResponseIndex = (props) => {
     <FormattedMessage {...translations[response.status]}>
       {(msg) => (
         <Chip
-          clickable={response.status !== responseStatus.NOT_STARTED 
-            && !survey.anonymous}
+          clickable={
+            response.status !== responseStatus.NOT_STARTED && !survey.anonymous
+          }
           label={msg}
-          component={response.status !== responseStatus.NOT_STARTED 
-            && !survey.anonymous ? Link : null}
+          component={
+            response.status !== responseStatus.NOT_STARTED && !survey.anonymous
+              ? Link
+              : null
+          }
           href={response.path}
           style={{
             ...styles.chip,
             backgroundColor: survey.anonymous
               ? palette.submissionStatus.Submitted // grey colour
               : dataColor[response.status],
-            color: response.status !== responseStatus.NOT_STARTED
-              && palette.links
+            color:
+              response.status !== responseStatus.NOT_STARTED && palette.links,
           }}
           variant="filled"
         />
@@ -151,15 +152,6 @@ const ResponseIndex = (props) => {
       return <div style={styles.red}>{submittedAt}</div>;
     }
     return submittedAt;
-  };
-
-  const handleUnsubmitResponse = (buttonId) => {
-    const { unsubmitSuccess, unsubmitFailure } = translations;
-    const successMessage = <FormattedMessage {...unsubmitSuccess} />;
-    const failureMessage = <FormattedMessage {...unsubmitFailure} />;
-
-    setState({ open: false });
-    return dispatch(unsubmitResponse(buttonId, successMessage, failureMessage));
   };
 
   const renderTable = (tableResponses) => (
@@ -195,25 +187,11 @@ const ResponseIndex = (props) => {
             <TableCell>
               {response.status === responseStatus.SUBMITTED &&
               response.canUnsubmit ? (
-                <>
-                  <UnsubmitButton
-                    buttonId={response.id}
-                    color={palette.submissionIcon.unsubmit}
-                    setState={setState}
-                    state={state}
-                  />
-                  <ReactTooltip id="unsubmit-button" effect="solid">
-                    <FormattedMessage {...translations.unsubmit} />
-                  </ReactTooltip>
-                  <ConfirmationDialog
-                    message={<FormattedMessage {...translations.confirm} />}
-                    open={state.unsubmitConfirmation}
-                    onCancel={() =>
-                      setState({ ...state, unsubmitConfirmation: false })
-                    }
-                    onConfirm={() => handleUnsubmitResponse(response.id)}
-                  />
-                </>
+                <UnsubmitButton
+                  isIcon
+                  responseId={response.id}
+                  color={palette.submissionIcon.unsubmit}
+                />
               ) : null}
             </TableCell>
           </TableRow>
@@ -309,6 +287,9 @@ const ResponseIndex = (props) => {
         {renderStats(realResponsesStatuses, phantomResponsesStatuses)}
         {renderTable(realResponsesWithStatuses)}
         {renderPhantomTable(phantomResponsesWithStatuses)}
+        <ReactTooltip id="unsubmit-button" effect="solid">
+          <FormattedMessage {...translations.unsubmit} />
+        </ReactTooltip>
       </div>
     );
   };

@@ -2,10 +2,18 @@ import { memo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import moment from 'lib/moment';
-import { Chip, Icon, IconButton, TableCell, TableRow, Link } from '@mui/material';
+import {
+  Chip,
+  Icon,
+  IconButton,
+  TableCell,
+  TableRow,
+  Link,
+} from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
+import RemoveCircle from '@mui/icons-material/RemoveCircle';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import {
   getCourseUserURL,
@@ -20,7 +28,6 @@ import {
   unsubmitSubmission,
   deleteSubmission,
 } from '../../actions/submissions';
-import UnsubmitButton from '../../../../survey/containers/UnsubmitButton';
 
 const styles = {
   nameWrapper: {
@@ -218,11 +225,7 @@ const SubmissionsTableRow = (props) => {
             icon={renderUnpublishedWarning(submission)}
             component={Link}
             clickable
-            href={getEditSubmissionURL(
-              courseId,
-              assessmentId,
-              submission.id,
-            )}
+            href={getEditSubmissionURL(courseId, assessmentId, submission.id)}
             label={msg}
             style={{
               ...(submission.workflowState !== workflowStates.Graded &&
@@ -230,7 +233,7 @@ const SubmissionsTableRow = (props) => {
               backgroundColor:
                 palette.submissionStatus[submission.workflowState],
               textColor: 'white',
-              color: palette.links
+              color: palette.links,
             }}
             variant="filled"
           />
@@ -247,15 +250,19 @@ const SubmissionsTableRow = (props) => {
     if (!assessment.canUnsubmitSubmission) return null;
 
     return (
-      <>
-        <UnsubmitButton
-          buttonId={submission.courseUser.id}
-          color={palette.submissionIcon.unsubmit}
-          setState={setState}
-          state={state}
-          isUnsubmitting={disabled}
-        />
-      </>
+      <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
+        <IconButton
+          id={`unsubmit-button-${submission.courseUser.id}`}
+          disabled={disabled}
+          onClick={() => setState({ ...state, unsubmitConfirmation: true })}
+          size="large"
+          style={styles.button}
+        >
+          <RemoveCircle
+            htmlColor={disabled ? undefined : palette.submissionIcon.unsubmit}
+          />
+        </IconButton>
+      </span>
     );
   };
 

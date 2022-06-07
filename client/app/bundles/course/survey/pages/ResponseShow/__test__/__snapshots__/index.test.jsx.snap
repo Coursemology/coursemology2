@@ -93,6 +93,7 @@ exports[`<ResponseShow /> shows form and admin buttons if user has permissions a
     }
   >
     <Connect(UnsubmitButton)
+      isIcon={false}
       responseId={2}
     />
   </span>
