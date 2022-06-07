@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment, { formatLongDateTime } from 'lib/moment';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 import mirrorCreator from 'mirror-creator';
 import {
   Card,
@@ -15,7 +16,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Link,
 } from '@mui/material';
 import { red } from '@mui/material/colors';
 import BarChart from 'lib/components/BarChart';
@@ -115,33 +115,34 @@ const ResponseIndex = (props) => {
     return updatedAt;
   };
 
-  const renderResponseStatus = (response) => (
-    <FormattedMessage {...translations[response.status]}>
-      {(msg) => (
-        <Chip
-          clickable={
-            response.status !== responseStatus.NOT_STARTED && !survey.anonymous
-          }
-          label={msg}
-          component={
-            response.status !== responseStatus.NOT_STARTED && !survey.anonymous
-              ? Link
-              : null
-          }
-          href={response.path}
-          style={{
-            ...styles.chip,
-            backgroundColor: survey.anonymous
-              ? palette.submissionStatus.Submitted // grey colour
-              : dataColor[response.status],
-            color:
-              response.status !== responseStatus.NOT_STARTED && palette.links,
-          }}
-          variant="filled"
-        />
-      )}
-    </FormattedMessage>
-  );
+  const renderResponseStatus = (response) => {
+    const status = <FormattedMessage {...translations[response.status]} />;
+
+    return (
+      <Chip
+        clickable={
+          response.status !== responseStatus.NOT_STARTED && !survey.anonymous
+        }
+        label={
+          response.status !== responseStatus.NOT_STARTED &&
+          !survey.anonymous ? (
+            <Link to={response.path}>{status}</Link>
+          ) : (
+            status
+          )
+        }
+        style={{
+          ...styles.chip,
+          backgroundColor: survey.anonymous
+            ? palette.submissionStatus.Submitted // grey colour
+            : dataColor[response.status],
+          color:
+            response.status !== responseStatus.NOT_STARTED && palette.links,
+        }}
+        variant="filled"
+      />
+    );
+  };
 
   const renderSubmittedAt = (response) => {
     if (!response.submitted_at) {
