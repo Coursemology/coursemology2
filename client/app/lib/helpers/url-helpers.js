@@ -127,6 +127,17 @@ function getVideoSubmissionId() {
   return match && match[1];
 }
 
+/**
+ * Get the current path from URL.
+ *
+ * e.g. /courses/15/users/invite => users/invite
+ * return {string}
+ */
+function getCurrentPath() {
+  const match = window.location.pathname.match(/^\/courses\/\d+\/(.+)/);
+  return match && match[1];
+}
+
 /* eslint-disable import/prefer-default-export */
 export {
   getUrlParameter,
@@ -139,4 +150,5 @@ export {
   getVideoId,
   getVideoSubmissionId,
   getCourseUserId,
+  getCurrentPath,
 };

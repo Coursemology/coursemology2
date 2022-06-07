@@ -1,11 +1,14 @@
 import { AxiosResponse } from 'axios';
-import { CourseUserData, CourseUserListData } from 'types/course/courseUsers';
+import {
+  CourseUserData,
+  CourseUserListData,
+  CourseUsersPermissions,
+  UpdateCourseUserPatchData,
+} from 'types/course/courseUsers';
 import BaseCourseAPI from './Base';
 
 export default class UsersAPI extends BaseCourseAPI {
-  _getUrlPrefix(): string {
-    return `/courses/${this.getCourseId()}/users`;
-  }
+  _baseUrlPrefix: string = `/courses/${this.getCourseId()}`;
 
   /**
    * Fetches a list of users in a course.
@@ -15,7 +18,31 @@ export default class UsersAPI extends BaseCourseAPI {
       users: CourseUserListData[];
     }>
   > {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(`${this._baseUrlPrefix}/users`);
+  }
+
+  /**
+   * Fetches a list of students in a course.
+   */
+  indexStudents(): Promise<
+    AxiosResponse<{
+      users: CourseUserData[];
+      permissions: CourseUsersPermissions;
+    }>
+  > {
+    return this.getClient().get(`${this._baseUrlPrefix}/students`);
+  }
+
+  /**
+   * Fetches a list of staff in a course.
+   */
+  indexStaff(): Promise<
+    AxiosResponse<{
+      users: CourseUserData[];
+      permissions: CourseUsersPermissions;
+    }>
+  > {
+    return this.getClient().get(`${this._baseUrlPrefix}/staff`);
   }
 
   /**
@@ -26,6 +53,60 @@ export default class UsersAPI extends BaseCourseAPI {
       user: CourseUserData;
     }>
   > {
-    return this.getClient().get(`${this._getUrlPrefix()}/${userId}`);
+    return this.getClient().get(`${this._baseUrlPrefix}/users/${userId}`);
+  }
+
+  /**
+   * Deletes a user.
+   *
+   * @param {number} userId
+   * @return {Promise}
+   * success response: {}
+   * error response: {}
+   */
+  delete(userId: number): Promise<AxiosResponse> {
+    return this.getClient().delete(`${this._baseUrlPrefix}/users/${userId}`);
+  }
+
+  /**
+   * Updates a user.
+   *
+   * @param {number} userId
+   * @param {UpdateCourseUserPatchData} params - params in the format of { course_user: { :user_id, :name, :role, etc } }
+   * @return {Promise}
+   * success response: { user }
+   * error response: { errors: [] } - An array of errors will be returned upon validation error.
+   */
+  update(
+    userId: number,
+    params: UpdateCourseUserPatchData | object,
+  ): Promise<AxiosResponse> {
+    return this.getClient().patch(
+      `${this._baseUrlPrefix}/users/${userId}`,
+      params,
+    );
+  }
+
+  /**
+   * Upgrade a user to staff.
+   *
+   * @param {number} userId
+   * @param {string} role
+   * @return {Promise}
+   * success response: {}
+   * error response: { errors: [] } - An array of errors will be returned upon validation error.
+   */
+  upgradeToStaff(userId: number, role: string): Promise<AxiosResponse> {
+    const params = {
+      course_user: {
+        id: userId,
+        role: role,
+      },
+    };
+
+    return this.getClient().patch(
+      `${this._baseUrlPrefix}/upgrade_to_staff`,
+      params,
+    );
   }
 }

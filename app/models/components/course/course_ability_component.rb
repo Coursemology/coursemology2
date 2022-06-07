@@ -48,7 +48,7 @@ module Course::CourseAbilityComponent
   end
 
   def allow_teaching_staff_manage_personal_times
-    can :manage_personal_times, Course, id: course.id
+    can :manage_personal_times, Course, { id: course.id, show_personalized_timeline_features: true }
   end
 
   def allow_teaching_staff_analyze_videos

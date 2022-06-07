@@ -13,20 +13,19 @@ module Course::UsersControllerManagementConcern
     @course_user.assign_attributes(course_user_params)
     # Recompute personal timeline if algorithm changed
     update_personalized_timeline_for_user(@course_user) if @course_user.timeline_algorithm_changed?
+
     if @course_user.save
-      flash.now[:success] = t('course.users.update.success', name: @course_user.name)
+      update_user_success
     else
-      flash.now[:danger] = @course_user.errors.full_messages.to_sentence
+      update_user_failure
     end
   end
 
   def destroy # :nodoc:
     if @course_user.destroy
-      success = t('course.users.destroy.success', role: @course_user.role,
-                                                  email: @course_user.user.email)
-      redirect_to delete_redirect_path, success: success
+      destroy_user_success
     else
-      redirect_to delete_redirect_path, danger: @course_user.errors.full_messages.to_sentence
+      destroy_user_failure
     end
   end
 
@@ -36,7 +35,7 @@ module Course::UsersControllerManagementConcern
 
   def staff # :nodoc:
     @student_options = @course_users.students.order_alphabetically.pluck(:name, :id)
-    @course_users = @course_users.staff.includes(user: :emails).order_alphabetically
+    @course_users = @course_users.includes(user: :emails).order_alphabetically
   end
 
   def upgrade_to_staff # :nodoc:
@@ -99,13 +98,51 @@ module Course::UsersControllerManagementConcern
   end
 
   def upgrade_to_staff_success # :nodoc:
-    success = t('course.users.upgrade_to_staff.success',
-                name: @course_user.name, role: t("course.users.role.#{@course_user.role}"))
-    redirect_to course_users_staff_path(current_course), success: success
+    respond_to do |format|
+      format.html do
+        success = t('course.users.upgrade_to_staff.success',
+                    name: @course_user.name, role: t("course.users.role.#{@course_user.role}"))
+        redirect_to course_users_staff_path(current_course), success: success
+      end
+      format.json { render json: { user: @course_user }, status: :ok }
+    end
   end
 
   def upgrade_to_staff_failure # :nodoc:
-    redirect_to course_users_staff_path(current_course),
-                danger: @course_user.errors.full_messages.to_sentence
+    respond_to do |format|
+      format.html { redirect_to course_users_staff_path(current_course),danger: @course_user.errors.full_messages.to_sentence }
+      format.json { render json: { errors: @course_user.errors.full_messages.to_sentence }, status: :bad_request }
+    end
+  end
+
+  def update_user_success # :nodoc:
+    respond_to do |format|
+      format.html { flash.now[:success] = t('course.users.update.success', name: @course_user.name) }
+      format.json { render json: { user: @course_user }, status: :ok }
+    end
+  end
+
+  def update_user_failure # :nodoc:
+    respond_to do |format|
+      format.html { flash.now[:success] = t('course.users.update.success', name: @course_user.name) }
+      format.json { render json: { errors: @course_user.errors.full_messages.to_sentence }, status: :bad_request }
+    end
+  end
+
+  def destroy_user_success # :nodoc:
+    respond_to do |format|
+      format.html do
+        success = t('course.users.destroy.success', role: @course_user.role, email: @course_user.user.email)
+        redirect_to delete_redirect_path, success: success
+      end
+      format.json { head :ok }
+    end
+  end
+
+  def destroy_user_failure # :nodoc:
+    respond_to do |format|
+      format.html { redirect_to delete_redirect_path, danger: @course_user.errors.full_messages.to_sentence }
+      format.json { render json: { errors: @course_user.errors.full_messages.to_sentence }, status: :bad_request }
+    end
   end
 end
