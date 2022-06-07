@@ -76,8 +76,8 @@ RSpec.describe 'Course: Leaderboard: View' do
           create(:course_experience_points_record, points_awarded: 200, course_user: students[0])
 
           visit course_leaderboard_path(course)
-          expect(page).to have_selector("button#group-leaderboard-tab")
-          find("button#group-leaderboard-tab").click
+          expect(page).to have_selector('button#group-leaderboard-tab')
+          find('button#group-leaderboard-tab').click
 
           within find('#group-leaderboard-level') do
             sorted_course_groups = course.groups.ordered_by_experience_points
@@ -94,8 +94,8 @@ RSpec.describe 'Course: Leaderboard: View' do
           create(:course_user_achievement, course_user: students[0])
 
           visit course_leaderboard_path(course)
-          expect(page).to have_selector("button#group-leaderboard-tab")
-          find("button#group-leaderboard-tab").click
+          expect(page).to have_selector('button#group-leaderboard-tab')
+          find('button#group-leaderboard-tab').click
 
           within find('#group-leaderboard-achievement') do
             sorted_course_groups = course.groups.ordered_by_average_achievement_count
