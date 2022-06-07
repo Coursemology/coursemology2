@@ -108,7 +108,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
             value="leaderboard-tab"
           />
           <Tab
-            id="groupLeaderboard-tab"
+            id="group-leaderboard-tab"
             style={{ color: palette.submissionIcon.person }}
             icon={<Group />}
             label={
@@ -120,8 +120,6 @@ const LeaderboardIndex: FC<Props> = (props) => {
           />
         </Tabs>
       )}
-
-      {/* {tabValue === 'leaderboard-tab' && ( */}
       <Grid
         container
         direction="row"
@@ -144,9 +142,6 @@ const LeaderboardIndex: FC<Props> = (props) => {
           </Grid>
         )}
       </Grid>
-      {/* )} */}
-
-      {/* {tabValue === 'group-leaderboard-tab' && ( */}
       <Grid
         container
         direction="row"
@@ -169,7 +164,6 @@ const LeaderboardIndex: FC<Props> = (props) => {
           </Grid>
         )}
       </Grid>
-      {/* )} */}
     </>
   );
 };

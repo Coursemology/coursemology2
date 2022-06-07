@@ -12,7 +12,6 @@ import { TableColumns } from 'types/components/DataTable';
 import { getAchievementURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { LeaderboardTableType } from '../../types';
-import { useNavigate } from 'react-router-dom';
 
 interface Props {
   data:
@@ -46,8 +45,8 @@ const styles = {
   avatarGroup: {
     justifyContent: 'left',
     '& .MuiAvatar-root': {
-      width: 30,
-      height: 30,
+      width: 40,
+      height: 40,
       marginLeft: '0.1px',
     },
   },
@@ -62,7 +61,6 @@ const styles = {
 
 const LeaderboardTable: FC<Props> = (props: Props) => {
   const { data, id: tableType } = props;
-  const navigate = useNavigate();
 
   const columns: TableColumns[] = [
     {
@@ -158,44 +156,36 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
       options: {
         filter: false,
         sort: false,
-        alignCenter: true,
+        alignLeft: true,
         justifyCenter: true,
         customBodyRenderLite: (_dataIndex: number) => (
-          // <Link
-          //   href={getCourseUserURL(
-          //     getCourseId(),
-          //     achievementData[_dataIndex].id,
-          //   )}
-          //   style={styles.link}
-          // >
-            <AvatarGroup
-              total={achievementData[_dataIndex].achievementCount}
-              max={6}
-              sx={styles.avatarGroup}
-              componentsProps= {{additionalAvatar: {
-                onClick: () => {navigate(getCourseUserURL(
-                      getCourseId(),
-                      achievementData[_dataIndex].id,
-                    ), { replace: false })},
-                sx: {cursor: 'pointer'}
-              
-              }}}
-            >
-              {achievementData[_dataIndex].achievements.map((achievement) => {
-                return (
-                  <Tooltip title={achievement.title} key={achievement.id}>
-                    <Avatar
-                      src={achievement.badge.url}
-                      alt={achievement.badge.name}
-                      component={Link}
-                      href={getAchievementURL(getCourseId(), achievement.id)}
-                      className="achievement" id={`achievement_${achievement.id}`}
-                    />
-                  </Tooltip>
-                );
-              })}
-            </AvatarGroup>
-          // </Link>
+          <AvatarGroup
+            total={achievementData[_dataIndex].achievementCount}
+            max={6}
+            sx={styles.avatarGroup}
+            componentsProps= {{additionalAvatar: {
+              onClick: () => {
+                window.location.href = getCourseUserURL(
+                    getCourseId(),
+                    achievementData[_dataIndex].id,
+                  )},
+              sx: {cursor: 'pointer'},
+            }}}
+          >
+            {achievementData[_dataIndex].achievements.map((achievement) => {
+              return (
+                <Tooltip title={achievement.title} key={achievement.id}>
+                  <Avatar
+                    src={achievement.badge.url}
+                    alt={achievement.badge.name}
+                    component={Link}
+                    href={getAchievementURL(getCourseId(), achievement.id)}
+                    className="achievement" id={`achievement_${achievement.id}`}
+                  />
+                </Tooltip>
+              );
+            })}
+          </AvatarGroup>
         ),
       },
     });
@@ -316,7 +306,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
 
   const title = (
     <Box sx={styles.title}>
-      {tableType < LeaderboardTableType.GroupLeaderboardPoints ? (
+      {tableType === LeaderboardTableType.LeaderboardPoints || tableType === LeaderboardTableType.GroupLeaderboardPoints ? (
         <FormattedMessage {...translations.titlePoints} />
       ) : (
         <FormattedMessage {...translations.titleAchievements} />

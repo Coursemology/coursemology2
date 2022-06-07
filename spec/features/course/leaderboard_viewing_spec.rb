@@ -93,7 +93,7 @@ RSpec.describe 'Course: Leaderboard: View' do
           create(:course_user_achievement, course_user: students[0])
 
           visit group_course_leaderboard_path(course)
-          expect(page).to have_text(I18n.t('course.leaderboards.groups.header'))
+          expect(page).to have_selector(:id, 'groupLeaderboard-tab')
 
           within find('.leaderboard-achievement') do
             sorted_course_groups = course.groups.ordered_by_average_achievement_count
