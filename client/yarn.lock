@@ -7112,10 +7112,10 @@ react-hook-form@^7.28.1:
   resolved "https://registry.yarnpkg.com/react-hook-form/-/react-hook-form-7.28.1.tgz#95fc37be6c6b9d57212eb7eca055fb36d079b3b7"
   integrity sha512-mgwxvXuvt3FMY/mdnWbPc++Zf1U5xYzkhOaL05mtFMLvXc9MvUhMUlKtUVuO12sOrgT3nPXBgVFawtiJ4ONrgg==
 
-react-hot-keys@^2.7.1:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/react-hot-keys/-/react-hot-keys-2.7.1.tgz#a811445e66551c9f5b0e6b130d12096a59688539"
-  integrity sha512-h2LfJGs450z58/DvKuzal1LetoEGjXUbcxJyKFvWOJPy+IRpQsyxZv7FYDAJ7W0my3ySI3sVB3h5xcgvMdxS1g==
+react-hot-keys@^2.7.2:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/react-hot-keys/-/react-hot-keys-2.7.2.tgz#7d2b02b7e2cf69182ea71ca01885446ebfae01d2"
+  integrity sha512-Z7eSh7SU6s52+zP+vkfFoNk0x4kgEmnwqDiyACKv53crK2AZ7FUaBLnf+vxLor3dvtId9murLmKOsrJeYgeHWw==
   dependencies:
     hotkeys-js "^3.8.1"
     prop-types "^15.7.2"
