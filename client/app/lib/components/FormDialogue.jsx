@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import {
   Button,
   Dialog,
@@ -18,7 +18,7 @@ const propTypes = {
   skipConfirmation: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   open: PropTypes.bool.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   children: PropTypes.node,
   form: PropTypes.string,
 };

@@ -182,7 +182,6 @@ module.exports = {
       globals: {
         courseId: true,
         intl: true,
-        intlShape: true,
         sleep: true,
         buildContextOptions: true,
         localStorage: true,

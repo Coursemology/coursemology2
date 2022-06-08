@@ -1,13 +1,13 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Button, MenuItem, MenuList, Popover } from '@mui/material';
 import Done from '@mui/icons-material/Done';
 import { scribingTranslations as translations } from '../../translations';
 import { scribbleShape } from '../../propTypes';
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
   open: PropTypes.bool,

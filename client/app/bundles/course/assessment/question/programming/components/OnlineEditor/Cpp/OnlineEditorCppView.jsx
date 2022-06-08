@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import {
   Accordion,
   AccordionDetails,
@@ -48,7 +48,7 @@ const propTypes = {
   }),
   isLoading: PropTypes.bool.isRequired,
   autograded: PropTypes.bool.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 class OnlineEditorCppView extends Component {

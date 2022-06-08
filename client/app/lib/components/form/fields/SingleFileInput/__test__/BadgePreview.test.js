@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import BadgePreview from '../BadgePreview';
 
@@ -6,13 +5,7 @@ describe('<SingleFileInput />', () => {
   it('renders with url and name', () => {
     const badgePreview = mount(
       <BadgePreview originalName="bar" originalUrl="foo" />,
-      {
-        context: { intl, muiTheme }, // eslint-disable-line no-undef
-        childContextTypes: {
-          intl: intlShape,
-          muiTheme: PropTypes.object,
-        },
-      },
+      buildContextOptions(),
     );
 
     const avatar = badgePreview.find('ForwardRef(Avatar)').first();
@@ -22,13 +15,7 @@ describe('<SingleFileInput />', () => {
   });
 
   it('renders a placeholder when no url is provided', () => {
-    const badgePreview = mount(<BadgePreview />, {
-      context: { intl, muiTheme }, // eslint-disable-line no-undef
-      childContextTypes: {
-        intl: intlShape,
-        muiTheme: PropTypes.object,
-      },
-    });
+    const badgePreview = mount(<BadgePreview />, buildContextOptions());
 
     const avatar = badgePreview.find('ForwardRef(Avatar)').first();
     // SvgIcon is the element of the placeholder 'InsertDriveFileIcon'

@@ -1,6 +1,6 @@
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import moment from 'lib/moment';
 import { TextField } from '@mui/material';
 import { DatePicker, LocalizationProvider, TimePicker } from '@mui/lab';
@@ -57,7 +57,7 @@ const propTypes = {
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
   disabled: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   style: PropTypes.object,
 };
 

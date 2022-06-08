@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import { TextField } from '@mui/material';
 import {
   MobileDateTimePicker as MuiDateTimePicker,
@@ -106,7 +106,7 @@ FormDateTimePickerField.propTypes = {
   fieldState: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   label: PropTypes.node,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   renderIf: PropTypes.bool,
   style: PropTypes.object,
 };

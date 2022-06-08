@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import OnlineEditorPythonView from './Python/OnlineEditorPythonView';
 import OnlineEditorCppView from './Cpp/OnlineEditorCppView';
 import OnlineEditorJavaView from './Java/OnlineEditorJavaView';
@@ -27,7 +27,7 @@ const propTypes = {
   isLoading: PropTypes.bool.isRequired,
   autograded: PropTypes.bool.isRequired,
   autogradedAssessment: PropTypes.bool.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   hasSubmissions: PropTypes.bool.isRequired,
 };
 

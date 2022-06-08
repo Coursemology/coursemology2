@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, FormProvider } from 'react-hook-form';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import Hotkeys from 'react-hot-keys';
 import {
   Button,
@@ -566,7 +566,7 @@ const SubmissionEditStepForm = (props) => {
 
 SubmissionEditStepForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 
   graderView: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,

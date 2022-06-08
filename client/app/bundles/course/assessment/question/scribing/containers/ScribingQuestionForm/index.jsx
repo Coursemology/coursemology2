@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { FormattedMessage, intlShape } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -241,7 +241,7 @@ ScribingQuestionForm.propTypes = {
   }),
   data: dataShape.isRequired,
   initialValues: PropTypes.object,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   scribingId: PropTypes.string,
 };
 

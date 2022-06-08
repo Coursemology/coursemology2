@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage, intlShape } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import {
   Button,
   Dialog,
@@ -159,7 +159,7 @@ class PopupDialog extends Component {
 
 PopupDialog.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
   // If the gamification feature is enabled in the course.
   gamified: PropTypes.bool,
   // If randomization is allowed for assessments in the current course

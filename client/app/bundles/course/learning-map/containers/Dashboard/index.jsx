@@ -9,7 +9,7 @@ import {
 } from 'course/learning-map/actions';
 import ReactTooltip from 'react-tooltip';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { elementTypes, satisfiabilityTypes } from '../../constants';
 import translations from '../../translations.intl';
@@ -235,7 +235,7 @@ const mapStateToProps = (state) => ({
 
 Dashboard.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   nodes: PropTypes.arrayOf(nodeShape).isRequired,
   response: responseShape.isRequired,

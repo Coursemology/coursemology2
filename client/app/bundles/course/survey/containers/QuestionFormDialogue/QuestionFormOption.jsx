@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import { Controller } from 'react-hook-form';
 import { Checkbox, IconButton, Radio } from '@mui/material';
 import { grey } from '@mui/material/colors';
@@ -173,7 +173,7 @@ const QuestionFormOption = (props) => {
 
 QuestionFormOption.propTypes = {
   disabled: PropTypes.bool,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   multipleChoice: PropTypes.bool,
   multipleResponse: PropTypes.bool,
   field: PropTypes.object.isRequired,

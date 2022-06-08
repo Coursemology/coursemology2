@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
@@ -47,7 +47,7 @@ const propTypes = {
     question: questionShape,
     isLoading: PropTypes.bool,
   }).isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
   scribingId: PropTypes.string,
 };
 

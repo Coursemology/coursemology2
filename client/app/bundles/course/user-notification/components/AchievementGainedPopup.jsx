@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import Popup from 'course/user-notification/components/Popup';
 
 const styles = {
@@ -50,7 +50,7 @@ AchievementGainedPopup.propTypes = {
   }),
   onDismiss: PropTypes.func,
 
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default injectIntl(AchievementGainedPopup);

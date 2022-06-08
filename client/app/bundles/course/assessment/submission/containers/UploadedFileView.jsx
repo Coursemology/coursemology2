@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import { Chip } from '@mui/material';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { attachmentShape } from '../propTypes';
@@ -116,7 +116,7 @@ class VisibleUploadedFileView extends Component {
 }
 
 VisibleUploadedFileView.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   canDestroyAttachments: PropTypes.bool,
   attachments: PropTypes.arrayOf(attachmentShape),
 

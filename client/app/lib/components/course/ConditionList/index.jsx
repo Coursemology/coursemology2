@@ -1,6 +1,6 @@
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import {
   IconButton,
   ListSubheader,
@@ -179,7 +179,7 @@ class ConditionList extends PureComponent {
 }
 
 ConditionList.propTypes = {
-  intl: intlShape,
+  intl: PropTypes.object,
   newConditionUrls: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,

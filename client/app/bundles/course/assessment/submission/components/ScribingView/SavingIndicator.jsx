@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { scribingTranslations as translations } from '../../translations';
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   isSaving: PropTypes.bool,
   isSaved: PropTypes.bool,
   hasError: PropTypes.bool,
