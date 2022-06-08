@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   Card,
   CardContent,
@@ -137,7 +137,7 @@ class PastAnswers extends Component {
 }
 
 PastAnswers.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   selectedAnswerIds: PropTypes.arrayOf(PropTypes.number),
   answerIds: PropTypes.arrayOf(PropTypes.number),
   answers: PropTypes.objectOf(answerShape),

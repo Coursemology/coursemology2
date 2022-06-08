@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import { Avatar, Button } from '@mui/material';
 import { deepOrange, yellow } from '@mui/material/colors';
 import Star from '@mui/icons-material/Star';
@@ -83,7 +83,7 @@ LevelReachedPopup.propTypes = {
   }),
   onDismiss: PropTypes.func,
 
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default injectIntl(LevelReachedPopup);

@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import {
   Autocomplete,
   Button,
@@ -44,7 +44,7 @@ const propTypes = {
     clearSubmissionMessage: PropTypes.func.isRequired,
   }),
   onlineEditorActions: PropTypes.instanceOf(Object).isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const DEFAULT_TIME_LIMIT = 10;

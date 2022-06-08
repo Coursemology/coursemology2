@@ -1,10 +1,5 @@
 import PropTypes from 'prop-types';
-import {
-  defineMessages,
-  injectIntl,
-  intlShape,
-  FormattedMessage,
-} from 'react-intl';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
@@ -302,7 +297,7 @@ SurveyForm.propTypes = {
   disabled: PropTypes.bool,
   disableAnonymousToggle: PropTypes.bool,
   initialValues: PropTypes.object.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
 };
 

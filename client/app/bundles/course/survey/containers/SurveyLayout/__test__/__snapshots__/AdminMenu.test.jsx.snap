@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<AdminMenu /> does not render button if user cannot edit or update 1`] = `
-<Connect(InjectIntl(AdminMenu))
+<Connect(injectIntl(AdminMenu))
   survey={
     Object {
       "canDelete": false,
@@ -12,7 +12,7 @@ exports[`<AdminMenu /> does not render button if user cannot edit or update 1`] 
   }
   surveyId="2"
 >
-  <InjectIntl(AdminMenu)
+  <injectIntl(AdminMenu)
     dispatch={[Function]}
     survey={
       Object {
@@ -31,25 +31,31 @@ exports[`<AdminMenu /> does not render button if user cannot edit or update 1`] 
           "defaultFormats": Object {},
           "defaultLocale": "en",
           "formatDate": [Function],
+          "formatDateToParts": [Function],
+          "formatDisplayName": [Function],
           "formatHTMLMessage": [Function],
+          "formatList": [Function],
           "formatMessage": [Function],
           "formatNumber": [Function],
+          "formatNumberToParts": [Function],
           "formatPlural": [Function],
-          "formatRelative": [Function],
+          "formatRelativeTime": [Function],
           "formatTime": [Function],
+          "formatTimeToParts": [Function],
           "formats": Object {},
           "formatters": Object {
             "getDateTimeFormat": [Function],
+            "getDisplayNames": [Function],
+            "getListFormat": [Function],
             "getMessageFormat": [Function],
             "getNumberFormat": [Function],
-            "getPluralFormat": [Function],
-            "getRelativeFormat": [Function],
+            "getPluralRules": [Function],
+            "getRelativeTimeFormat": [Function],
           },
           "locale": "en",
           "messages": Object {},
-          "now": [Function],
           "onError": [Function],
-          "textComponent": "span",
+          "textComponent": Symbol(react.fragment),
           "timeZone": "Asia/Singapore",
         }
       }
@@ -63,6 +69,6 @@ exports[`<AdminMenu /> does not render button if user cannot edit or update 1`] 
       }
       surveyId="2"
     />
-  </InjectIntl(AdminMenu)>
-</Connect(InjectIntl(AdminMenu))>
+  </injectIntl(AdminMenu)>
+</Connect(injectIntl(AdminMenu))>
 `;

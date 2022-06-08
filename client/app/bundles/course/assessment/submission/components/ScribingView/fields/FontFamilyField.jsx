@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   fontFamilyValue: PropTypes.string,
   onChangeFontFamily: PropTypes.func.isRequired,
 };

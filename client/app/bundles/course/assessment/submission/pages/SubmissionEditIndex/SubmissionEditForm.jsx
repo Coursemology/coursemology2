@@ -1,7 +1,7 @@
 import { Suspense, lazy, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useForm, FormProvider } from 'react-hook-form';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Element, scroller } from 'react-scroll';
 import {
   Button,
@@ -662,7 +662,7 @@ const SubmissionEditForm = (props) => {
 
 SubmissionEditForm.propTypes = {
   initialValues: PropTypes.object.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 
   graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,

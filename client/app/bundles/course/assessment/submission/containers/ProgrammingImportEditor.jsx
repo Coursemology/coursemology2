@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import { connect } from 'react-redux';
-import { intlShape, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Button } from '@mui/material';
 import ImportedFileView from './ImportedFileView';
 import Editor from '../components/Editor';
@@ -233,7 +233,7 @@ const VisibleProgrammingImportEditor = (props) => {
 };
 
 VisibleProgrammingImportEditor.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   dispatch: PropTypes.func,
   submissionId: PropTypes.number,
   questionId: PropTypes.number,

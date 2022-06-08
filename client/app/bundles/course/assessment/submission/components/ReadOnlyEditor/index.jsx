@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { FormControlLabel, Switch } from '@mui/material';
 import NarrowEditor from './NarrowEditor';
 import WideEditor from './WideEditor';
@@ -228,7 +228,7 @@ ReadOnlyEditor.propTypes = {
   answerId: PropTypes.number.isRequired,
   content: PropTypes.arrayOf(PropTypes.string),
   fileId: PropTypes.number.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 ReadOnlyEditor.defaultProps = {

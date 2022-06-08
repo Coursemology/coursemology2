@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import { Controller } from 'react-hook-form';
 import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
@@ -169,7 +169,7 @@ const ResponseAnswer = (props) => {
 ResponseAnswer.propTypes = {
   control: PropTypes.object.isRequired,
   disabled: PropTypes.bool.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
   question: PropTypes.object,
   questionIndex: PropTypes.number.isRequired,
   sectionIndex: PropTypes.number.isRequired,

@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import UploadedPackageTemplateView from './UploadedPackageTemplateView';
 import UploadedPackageTestCaseView from './UploadedPackageTestCaseView';
 
@@ -20,7 +20,7 @@ const translations = defineMessages({
 
 const propTypes = {
   data: PropTypes.instanceOf(Immutable.Map).isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const UploadedPackageView = (props) => {

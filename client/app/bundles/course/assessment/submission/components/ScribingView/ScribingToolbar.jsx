@@ -1,7 +1,7 @@
 /* eslint react/sort-comp: "off" */
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Grid, Icon, Tooltip } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
 import SavingIndicator from './SavingIndicator';
@@ -24,7 +24,7 @@ import {
 } from '../../constants';
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   answerId: PropTypes.number.isRequired,
   scribing: scribingShape,
   setLayerDisplay: PropTypes.func.isRequired,

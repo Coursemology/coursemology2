@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { SketchPicker } from 'react-color';
 import { Checkbox, FormControlLabel, Popover } from '@mui/material';
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   onClickColorPicker: PropTypes.func,
   colorPickerPopoverOpen: PropTypes.bool,
   colorPickerPopoverAnchorEl: PropTypes.object,

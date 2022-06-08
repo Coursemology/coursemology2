@@ -2,13 +2,13 @@ import PropTypes from 'prop-types';
 import { IconButton, Tooltip } from '@mui/material';
 import SkipNext from '@mui/icons-material/SkipNext';
 import { connect } from 'react-redux';
-import { FormattedMessage, intlShape, injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 import styles from '../VideoPlayer.scss';
 import translations from '../../translations';
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 
   isPostRequest: PropTypes.bool,
   url: PropTypes.string,

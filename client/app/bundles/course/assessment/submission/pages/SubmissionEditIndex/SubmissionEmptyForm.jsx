@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { useForm } from 'react-hook-form';
 import { Button, Card } from '@mui/material';
 import history from 'lib/history';
@@ -166,7 +166,7 @@ const SubmissionEmptyForm = (props) => {
 };
 
 SubmissionEmptyForm.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 
   graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Bar } from 'react-chartjs-2';
 import { FormControlLabel, Switch } from '@mui/material';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import { videoDefaults } from 'lib/constants/videoConstants';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
@@ -77,7 +77,7 @@ function calculateWidthAndResolution(duration) {
 }
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 
   watchFrequency: PropTypes.arrayOf(PropTypes.number).isRequired,
   videoDuration: PropTypes.number.isRequired,

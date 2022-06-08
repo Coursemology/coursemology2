@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVert from '@mui/icons-material/MoreVert';
 import * as surveyActions from 'course/survey/actions/surveys';
@@ -154,7 +154,7 @@ AdminMenu.propTypes = {
   survey: surveyShape,
   surveyId: PropTypes.string.isRequired,
 
-  intl: intlShape,
+  intl: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
 };
 

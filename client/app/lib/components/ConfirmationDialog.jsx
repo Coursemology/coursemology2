@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
 import formTranslations from 'lib/translations/form';
 
@@ -132,7 +132,7 @@ ConfirmationDialog.propTypes = {
   disableCancelButton: PropTypes.bool,
   disableConfirmButton: PropTypes.bool,
   form: PropTypes.string,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(ConfirmationDialog);
