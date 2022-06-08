@@ -1,5 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import {
+  defineMessages,
+  FormattedMessage,
+  injectIntl,
+  WrappedComponentProps,
+} from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -22,13 +27,12 @@ import { getAchievementURL } from 'lib/helpers/url-builders';
 import AchievementAwardSummary from './AchievementAwardSummary';
 import { awardAchievement } from '../../operations';
 
-interface Props {
+type Props = {
   achievement: AchievementEntity;
   isLoading: boolean;
   handleClose: (skipDialog: boolean) => void;
-  intl?: any;
   setIsDirty?: (value: boolean) => void;
-}
+} & WrappedComponentProps;
 
 const styles = {
   badge: {
@@ -199,6 +203,10 @@ const AchievementAwardManager: FC<Props> = (props) => {
     viewColumns: false,
   };
 
+  const columnHeadLabelAchievement = intl.formatMessage(
+    translations.obtainedAchievement,
+  );
+
   const columns: TableColumns[] = [
     {
       name: 'name',
@@ -277,7 +285,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
               }}
               style={styles.checkbox}
             />
-            {intl.formatMessage(translations.obtainedAchievement)}
+            {columnHeadLabelAchievement}
           </div>
         ),
       },

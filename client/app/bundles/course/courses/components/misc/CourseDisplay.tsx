@@ -3,13 +3,12 @@ import { Grid } from '@mui/material';
 import { CourseMiniEntity } from 'types/course/courses';
 import Pagination from 'lib/components/Pagination';
 import SearchBar from 'lib/components/SearchBar';
-import { injectIntl, defineMessages } from 'react-intl';
+import { injectIntl, defineMessages, WrappedComponentProps } from 'react-intl';
 import CourseInfoBox from './CourseInfoBox';
 
-interface Props {
-  intl?: any;
+type Props = {
   courses: CourseMiniEntity[];
-}
+} & WrappedComponentProps;
 
 const translations = defineMessages({
   searchBarPlaceholder: {

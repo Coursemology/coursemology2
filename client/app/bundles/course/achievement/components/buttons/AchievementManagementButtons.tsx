@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -12,11 +12,10 @@ import { getAchievementURL } from 'lib/helpers/url-builders';
 import { deleteAchievement } from '../../operations';
 import AwardButton from './AwardButton';
 
-interface Props {
+type Props = {
   achievement: AchievementMiniEntity;
   navigateToIndex: boolean;
-  intl?: any;
-}
+} & WrappedComponentProps;
 
 const translations = defineMessages({
   deletionSuccess: {

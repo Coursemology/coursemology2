@@ -1,4 +1,4 @@
-import { injectIntl } from 'react-intl';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
 import { CardContent, Typography, Grid, Link } from '@mui/material';
 import { blue } from '@mui/material/colors';
@@ -7,9 +7,9 @@ import { CourseMiniEntity } from 'types/course/courses';
 import './CourseInfoBox.scss';
 import { getCourseURL } from 'lib/helpers/url-builders';
 
-interface Props {
+type Props = {
   course: CourseMiniEntity;
-}
+} & WrappedComponentProps;
 
 const CourseInfoBox: FC<Props> = (props) => {
   const { course } = props;

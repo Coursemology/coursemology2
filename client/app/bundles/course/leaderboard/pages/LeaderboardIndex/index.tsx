@@ -1,7 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import {
+  defineMessages,
+  injectIntl,
+  FormattedMessage,
+  WrappedComponentProps,
+} from 'react-intl';
 import Group from '@mui/icons-material/Group';
 import Person from '@mui/icons-material/Person';
 import { toast } from 'react-toastify';
@@ -20,9 +25,7 @@ import {
 } from '../../selectors';
 import { LeaderboardTableType } from '../../types';
 
-interface Props {
-  intl?: any;
-}
+type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   fetchLeaderboardFailure: {

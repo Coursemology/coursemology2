@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 
@@ -14,11 +14,10 @@ import { NewCourseFormData } from 'types/course/courses';
 import NewCourseForm from '../../components/forms/NewCourseForm';
 import { createCourse } from '../../operations';
 
-interface Props {
+type Props = {
   open: boolean;
   handleClose: () => void;
-  intl?: any;
-}
+} & WrappedComponentProps;
 
 const translations = defineMessages({
   newCourse: {
