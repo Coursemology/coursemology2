@@ -29,6 +29,9 @@
     "transform": {
       "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest"
     },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!intl-messageformat|intl-messageformat-parser).+\\.js$"
+    ],
     "moduleDirectories": [
       "node_modules",
       "app"
@@ -83,10 +86,10 @@
     "@mui/lab": "^5.0.0-alpha.75",
     "@mui/material": "^5.5.3",
     "@mui/styles": "^5.5.3",
-    "ace-builds": "^1.4.13",
+    "ace-builds": "^1.5.3",
     "axios": "^0.26.1",
     "babel-loader": "^8.2.4",
-    "babel-plugin-react-intl": "^7.9.4",
+    "babel-plugin-formatjs": "^10.3.24",
     "chart.js": "^3.7.0",
     "css-loader": "^6.7.1",
     "dnd-core": "^14.0.1",
@@ -119,7 +122,7 @@
     "react-dropzone": "^5.1.1",
     "react-hook-form": "^7.28.1",
     "react-hot-keys": "^2.7.1",
-    "react-intl": "^2.9.0",
+    "react-intl": "^6.0.4",
     "react-player": "^2.10.0",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.3.0",
