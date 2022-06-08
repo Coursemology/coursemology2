@@ -70,7 +70,7 @@
     "extends": "react-app"
   },
   "dependencies": {
-    "@babel/cli": "^7.16.0",
+    "@babel/cli": "^7.17.10",
     "@babel/core": "^7.17.8",
     "@babel/node": "^7.16.5",
     "@babel/plugin-proposal-class-properties": "^7.16.5",
@@ -79,7 +79,7 @@
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-react": "^7.16.5",
     "@babel/runtime": "^7.17.8",
-    "@emotion/react": "^11.8.2",
+    "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@hookform/resolvers": "^2.8.8",
     "@mui/icons-material": "^5.6.0",
@@ -138,7 +138,7 @@
     "redux-thunk": "^2.4.1",
     "reselect": "^4.1.6",
     "sass": "^1.49.11",
-    "sass-loader": "^12.4.0",
+    "sass-loader": "^13.0.0",
     "script-loader": "^0.7.2",
     "style-loader": "^3.3.1",
     "webfontloader": "^1.6.28",
@@ -152,7 +152,7 @@
     "@types/jquery": "^3.5.14",
     "@types/react": "^18.0.5",
     "@types/react-dom": "^18.0.1",
-    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.20.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
     "axios-mock-adapter": "^1.20.0",
@@ -182,7 +182,7 @@
     "redux-logger": "^3.0.6",
     "ts-loader": "^9.2.8",
     "typescript": "^4.6.3",
-    "webpack-dev-server": "^4.8.1"
+    "webpack-dev-server": "^4.9.2"
   },
   "license": "MIT",
   "repository": "git+https://github.com/Coursemology/coursemology2.git",
