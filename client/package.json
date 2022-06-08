@@ -78,7 +78,7 @@
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.18.2",
     "@babel/preset-react": "^7.17.12",
-    "@babel/runtime": "^7.17.8",
+    "@babel/runtime": "^7.18.3",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@hookform/resolvers": "^2.9.0",
