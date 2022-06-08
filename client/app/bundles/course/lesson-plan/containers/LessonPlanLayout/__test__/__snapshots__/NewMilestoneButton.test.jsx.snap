@@ -11,12 +11,17 @@ exports[`<NewMilestoneButton /> is hidden when canManageLessonPlan is false 1`] 
       dispatch={[Function]}
       intl={
         Object {
+          "$t": [Function],
           "defaultFormats": Object {},
           "defaultLocale": "en",
+          "defaultRichTextElements": undefined,
+          "fallbackOnEmptyString": true,
           "formatDate": [Function],
+          "formatDateTimeRange": [Function],
           "formatDateToParts": [Function],
           "formatDisplayName": [Function],
           "formatList": [Function],
+          "formatListToParts": [Function],
           "formatMessage": [Function],
           "formatNumber": [Function],
           "formatNumberToParts": [Function],
@@ -37,6 +42,7 @@ exports[`<NewMilestoneButton /> is hidden when canManageLessonPlan is false 1`] 
           "locale": "en",
           "messages": Object {},
           "onError": [Function],
+          "onWarn": [Function],
           "textComponent": Symbol(react.fragment),
           "timeZone": "Asia/Singapore",
           "wrapRichTextChunksInFragment": undefined,
