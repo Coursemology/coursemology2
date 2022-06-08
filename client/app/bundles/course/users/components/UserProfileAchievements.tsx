@@ -1,15 +1,14 @@
 import { FC } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Grid, Typography } from '@mui/material';
 import { AchievementMiniEntity } from 'types/course/achievements';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import AvatarWithLabel from 'lib/components/AvatarWithLabel';
 
-interface Props {
+type Props = {
   achievements: AchievementMiniEntity[];
-  intl?: any;
-}
+} & WrappedComponentProps;
 
 const styles = {
   achievementBadge: {

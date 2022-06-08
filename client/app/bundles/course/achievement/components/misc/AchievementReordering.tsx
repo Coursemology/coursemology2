@@ -1,14 +1,12 @@
 import { FC, useState } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Button } from '@mui/material';
 import axios from 'lib/axios';
 import { toast } from 'react-toastify';
 
 require('jquery-ui/ui/widgets/sortable');
 
-interface Props {
-  intl?: any;
-}
+type Props = WrappedComponentProps;
 
 const styles = {
   AchievementReorderingButton: {

@@ -1,5 +1,5 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 
 import PageHeader from 'lib/components/pages/PageHeader';
 import { AppDispatch, AppState } from 'types/store';
@@ -16,9 +16,7 @@ import {
 import CourseDisplay from '../../components/misc/CourseDisplay';
 import CoursesNew from '../CoursesNew';
 
-interface Props {
-  intl?: any;
-}
+type Props = WrappedComponentProps;
 
 const styles = {
   newButton: {

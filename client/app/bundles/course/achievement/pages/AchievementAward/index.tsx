@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -8,12 +8,11 @@ import AchievementAwardManager from './AchievementAwardManager';
 import { loadAchievementCourseUsers } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
 
-interface Props {
+type Props = {
   achievementId: number;
   open: boolean;
   handleClose: () => any;
-  intl?: any;
-}
+} & WrappedComponentProps;
 
 const translations = defineMessages({
   awardAchievement: {

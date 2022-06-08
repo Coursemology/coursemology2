@@ -1,5 +1,5 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
@@ -18,9 +18,7 @@ import AchievementTable from '../../components/tables/AchievementTable';
 import AchievementNew from '../AchievementNew';
 import AchievementReordering from '../../components/misc/AchievementReordering';
 
-interface Props {
-  intl?: any;
-}
+type Props = WrappedComponentProps;
 
 const styles = {
   newButton: {

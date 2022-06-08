@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
@@ -13,11 +13,10 @@ import { getAchievementURL } from 'lib/helpers/url-builders';
 import AchievementForm from '../../components/forms/AchievementForm';
 import { createAchievement } from '../../operations';
 
-interface Props {
+type Props = {
   open: boolean;
   handleClose: () => any;
-  intl?: any;
-}
+} & WrappedComponentProps;
 
 const translations = defineMessages({
   newAchievement: {

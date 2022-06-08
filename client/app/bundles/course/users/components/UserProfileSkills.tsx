@@ -1,5 +1,5 @@
 import { FC, Fragment } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   Table,
   TableBody,
@@ -10,10 +10,9 @@ import {
 import { SkillBranchEntity } from 'types/course/assessment/skills/skills';
 import LinearProgressWithLabel from 'lib/components/LinearProgressWithLabel';
 
-interface Props {
+type Props = {
   skillBranches: SkillBranchEntity[];
-  intl?: any;
-}
+} & WrappedComponentProps;
 
 const translations = defineMessages({
   topicMasteryHeader: {

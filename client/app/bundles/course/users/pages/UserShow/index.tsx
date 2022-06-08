@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { injectIntl } from 'react-intl';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
@@ -11,9 +11,7 @@ import UserProfileCard from '../../components/UserProfileCard';
 import UserProfileAchievements from '../../components/UserProfileAchievements';
 import UserProfileSkills from '../../components/UserProfileSkills';
 
-interface Props {
-  intl?: any;
-}
+type Props = WrappedComponentProps;
 
 const styles = {
   userShowPage: {

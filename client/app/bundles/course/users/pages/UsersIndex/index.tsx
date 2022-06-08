@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Avatar, Grid, Typography } from '@mui/material';
@@ -12,9 +12,7 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import { fetchUsers } from '../../operations';
 import { getAllUserMiniEntities } from '../../selectors';
 
-interface Props {
-  intl?: any;
-}
+type Props = WrappedComponentProps;
 
 const styles = {
   courseUserImage: {

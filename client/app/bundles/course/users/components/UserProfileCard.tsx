@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   Avatar,
   Box,
@@ -14,10 +14,9 @@ import { CourseUserEntity } from 'types/course/course_users';
 import UserProfileCardStats from './UserProfileCardStats';
 import styles from './UserProfileCard.scss';
 
-interface Props {
+type Props = {
   user: CourseUserEntity;
-  intl?: any;
-}
+} & WrappedComponentProps;
 
 const translations = defineMessages({
   manageEmailSubscription: {
