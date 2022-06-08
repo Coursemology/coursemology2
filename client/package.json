@@ -126,7 +126,7 @@
     "react-player": "^2.10.1",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.3.0",
-    "react-scroll": "^1.8.6",
+    "react-scroll": "^1.8.7",
     "react-summernote": "github:zhuhanming/react-summernote#v1.2",
     "react-toastify": "^8.2.0",
     "react-tooltip": "^4.2.21",
