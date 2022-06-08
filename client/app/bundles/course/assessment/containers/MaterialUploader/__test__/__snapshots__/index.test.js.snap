@@ -55,7 +55,7 @@ exports[`<Material /> renders the material 1`] = `
         resizeHide={true}
         wrapper="div"
       >
-        <FormattedMessage
+        <MemoizedFormattedMessage
           defaultMessage="This action is unavailable as the Materials Component is disabled in the Admin Settings"
           id="course.material.disableDelete"
         />
@@ -72,7 +72,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
     <ForwardRef(ListSubheader)
       disableSticky={true}
     >
-      <FormattedMessage
+      <MemoizedFormattedMessage
         defaultMessage="Files"
         id="course.assessment.MaterialList.uploadedFiles"
       />
@@ -110,7 +110,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
           }
         }
       >
-        <FormattedMessage
+        <MemoizedFormattedMessage
           defaultMessage="Add Files"
           id="course.material.addFiles"
         />
@@ -139,7 +139,7 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
       resizeHide={true}
       wrapper="div"
     >
-      <FormattedMessage
+      <MemoizedFormattedMessage
         defaultMessage="This action is unavailable as the Materials Component is disabled in the Admin Settings"
         id="course.material.disableNewFile"
       />
