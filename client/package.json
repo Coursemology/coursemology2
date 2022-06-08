@@ -107,7 +107,7 @@
     "json-loader": "^0.5.7",
     "mirror-creator": "1.1.0",
     "mkdirp": "^1.0.4",
-    "moment": "^2.29.2",
+    "moment": "^2.29.3",
     "moment-timezone": "^0.5.34",
     "mui-datatables": "^4.2.2",
     "prop-types": "^15.8.0",
