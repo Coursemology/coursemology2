@@ -12,10 +12,10 @@ import { getAchievementURL } from 'lib/helpers/url-builders';
 import { deleteAchievement } from '../../operations';
 import AwardButton from './AwardButton';
 
-type Props = {
+interface Props extends WrappedComponentProps {
   achievement: AchievementMiniEntity;
   navigateToIndex: boolean;
-} & WrappedComponentProps;
+}
 
 const translations = defineMessages({
   deletionSuccess: {

@@ -13,10 +13,10 @@ import { getAchievementURL } from 'lib/helpers/url-builders';
 import AchievementForm from '../../components/forms/AchievementForm';
 import { createAchievement } from '../../operations';
 
-type Props = {
+interface Props extends WrappedComponentProps {
   open: boolean;
   handleClose: () => any;
-} & WrappedComponentProps;
+}
 
 const translations = defineMessages({
   newAchievement: {

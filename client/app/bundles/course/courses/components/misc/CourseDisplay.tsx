@@ -6,9 +6,9 @@ import SearchBar from 'lib/components/SearchBar';
 import { injectIntl, defineMessages, WrappedComponentProps } from 'react-intl';
 import CourseInfoBox from './CourseInfoBox';
 
-type Props = {
+interface Props extends WrappedComponentProps {
   courses: CourseMiniEntity[];
-} & WrappedComponentProps;
+}
 
 const translations = defineMessages({
   searchBarPlaceholder: {

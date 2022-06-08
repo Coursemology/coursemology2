@@ -14,9 +14,9 @@ import { CourseUserEntity } from 'types/course/course_users';
 import UserProfileCardStats from './UserProfileCardStats';
 import styles from './UserProfileCard.scss';
 
-type Props = {
+interface Props extends WrappedComponentProps {
   user: CourseUserEntity;
-} & WrappedComponentProps;
+}
 
 const translations = defineMessages({
   manageEmailSubscription: {

@@ -6,9 +6,9 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import AvatarWithLabel from 'lib/components/AvatarWithLabel';
 
-type Props = {
+interface Props extends WrappedComponentProps {
   achievements: AchievementMiniEntity[];
-} & WrappedComponentProps;
+}
 
 const styles = {
   achievementBadge: {
