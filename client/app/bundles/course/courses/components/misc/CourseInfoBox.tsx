@@ -7,9 +7,9 @@ import { CourseMiniEntity } from 'types/course/courses';
 import './CourseInfoBox.scss';
 import { getCourseURL } from 'lib/helpers/url-builders';
 
-type Props = {
+interface Props extends WrappedComponentProps {
   course: CourseMiniEntity;
-} & WrappedComponentProps;
+}
 
 const CourseInfoBox: FC<Props> = (props) => {
   const { course } = props;

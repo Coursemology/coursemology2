@@ -14,11 +14,10 @@ import { NewCourseFormData } from 'types/course/courses';
 import NewCourseForm from '../../components/forms/NewCourseForm';
 import { createCourse } from '../../operations';
 
-type Props = {
+interface Props extends WrappedComponentProps {
   open: boolean;
   handleClose: () => void;
-} & WrappedComponentProps;
-
+}
 const translations = defineMessages({
   newCourse: {
     id: 'course.new',

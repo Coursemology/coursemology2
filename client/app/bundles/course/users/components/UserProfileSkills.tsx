@@ -10,9 +10,9 @@ import {
 import { SkillBranchEntity } from 'types/course/assessment/skills/skills';
 import LinearProgressWithLabel from 'lib/components/LinearProgressWithLabel';
 
-type Props = {
+interface Props extends WrappedComponentProps {
   skillBranches: SkillBranchEntity[];
-} & WrappedComponentProps;
+}
 
 const translations = defineMessages({
   topicMasteryHeader: {

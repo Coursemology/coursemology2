@@ -27,12 +27,12 @@ import { getAchievementURL } from 'lib/helpers/url-builders';
 import AchievementAwardSummary from './AchievementAwardSummary';
 import { awardAchievement } from '../../operations';
 
-type Props = {
+interface Props extends WrappedComponentProps {
   achievement: AchievementEntity;
   isLoading: boolean;
   handleClose: (skipDialog: boolean) => void;
   setIsDirty?: (value: boolean) => void;
-} & WrappedComponentProps;
+}
 
 const styles = {
   badge: {

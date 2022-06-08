@@ -8,11 +8,11 @@ import AchievementAwardManager from './AchievementAwardManager';
 import { loadAchievementCourseUsers } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
 
-type Props = {
+interface Props extends WrappedComponentProps {
   achievementId: number;
   open: boolean;
   handleClose: () => any;
-} & WrappedComponentProps;
+}
 
 const translations = defineMessages({
   awardAchievement: {
