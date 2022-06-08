@@ -79,7 +79,7 @@
     "@babel/preset-env": "^7.16.5",
     "@babel/preset-react": "^7.16.5",
     "@babel/runtime": "^7.17.8",
-    "@emotion/react": "^11.8.2",
+    "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@hookform/resolvers": "^2.8.8",
     "@mui/icons-material": "^5.6.0",
