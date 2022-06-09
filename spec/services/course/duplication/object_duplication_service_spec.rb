@@ -54,6 +54,14 @@ RSpec.describe Course::Duplication::ObjectDuplicationService, type: :service do
             default_title = Course::Assessment::Tab.human_attribute_name('title.default')
             expect(duplicate_objects.tabs.first.title).to eq(default_title)
           end
+
+          it 'creates default assessment email settings for it' do
+            expect { duplicate_objects }.to change { destination_course.assessment_categories.count }.by(1)
+            new_assessment_email_settings = destination_course.setting_emails.
+                                              where(course_assessment_category_id: destination_course.assessment_categories.second.id)
+
+            expect(new_assessment_email_settings.length).to eq(6)
+          end
         end
 
         context 'when only a tab is selected' do

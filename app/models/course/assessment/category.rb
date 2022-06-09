@@ -60,6 +60,8 @@ class Course::Assessment::Category < ApplicationRecord
   # @return [Boolean] true if post-duplication processing is successful.
   def after_duplicate_save(duplicator)
     User.with_stamper(duplicator.options[:current_user]) do
+      Course::Settings::Email.build_assessment_email_settings(self)
+      save
       build_initial_tab ? save : true
     end
   end
