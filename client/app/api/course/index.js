@@ -18,6 +18,7 @@ import CoursesAPI from './Courses';
 import UsersAPI from './Users';
 import LeaderboardAPI from './Leaderboard';
 import AnnouncementsAPI from './Announcements';
+import UserInvitationsAPI from './UserInvitations';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -40,6 +41,7 @@ const CourseAPI = {
   learningMap: new LearningMapAPI(),
   users: new UsersAPI(),
   leaderboard: new LeaderboardAPI(),
+  userInvitations: new UserInvitationsAPI(),
 };
 
 Object.freeze(CourseAPI);

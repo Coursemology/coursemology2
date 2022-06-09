@@ -1,20 +1,20 @@
-- pending = !invitations.first.confirmed?
-table.table.table-striped.table-hover class="#{pending ? 'pending' : 'confirmed'}"
-  thead
-    tr
-      th.text-center = t('common.serial_number')
-      th = t('common.name')
-      th = t('common.email')
-      th = t('common.role')
-      th = t('course.users.role.phantom')
-      th = t('.invitation_code')
-      th = t('.status')
-      - if pending
-        th = t('.sent_at')
-      - else
-        th = t('.confirmed_at')
-      th
-      th
+/ - pending = !invitations.first.confirmed?
+/ table.table.table-striped.table-hover class="#{pending ? 'pending' : 'confirmed'}"
+/   thead
+/     tr
+/       th.text-center = t('common.serial_number')
+/       th = t('common.name')
+/       th = t('common.email')
+/       th = t('common.role')
+/       th = t('course.users.role.phantom')
+/       th = t('.invitation_code')
+/       th = t('.status')
+/       - if pending
+/         th = t('.sent_at')
+/       - else
+/         th = t('.confirmed_at')
+/       th
+/       th
 
-  tbody
-    = render partial: 'course_user_invitation', collection: invitations, as: :invitation
+/   tbody
+/     = render partial: 'course_user_invitation', collection: invitations, as: :invitation

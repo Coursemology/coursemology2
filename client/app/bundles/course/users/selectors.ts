@@ -1,5 +1,8 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { CourseUsersPermissions } from 'types/course/course_users';
+import {
+  ManageCourseUsersPermissions,
+  ManageCourseUsersTabData,
+} from 'types/course/course_users';
 import { AppState, SelectionKey } from 'types/store';
 import {
   selectMiniEntity,
@@ -41,7 +44,10 @@ export function getAllStaffEntities(state: AppState) {
   ).filter((entity) => entity.role !== 'student');
 }
 
+export function getManageCourseUserPermissions(state: AppState) {
+  return getLocalState(state).permissions as ManageCourseUsersPermissions;
+}
 
-export function getCourseUserPermissions(state: AppState) {
-  return getLocalState(state).permissions as CourseUsersPermissions;
+export function getManageCourseUsersTabData(state: AppState) {
+  return getLocalState(state).manageCourseUsersData as ManageCourseUsersTabData;
 }

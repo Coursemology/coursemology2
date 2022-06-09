@@ -1,28 +1,28 @@
-- serial_number = defined?(invitation_counter) ? invitation_counter + 1 : serial_number
-= content_tag_for(:tr, invitation) do
-  td.text-center = serial_number
-  th = invitation.name
-  td = invitation.email
-  td = t("course.users.role.#{invitation.role}")
-  td = format_boolean(invitation.phantom)
-  td = invitation.invitation_key
-  - if !invitation.confirmed?
-    td = t('course.users.status.invited')
-    td = format_datetime(invitation.sent_at, :short) if invitation.sent_at
-    td
-      div.btn-group
-        = link_to course_user_invitation_resend_invitation_path(current_course, invitation, serial_number: serial_number),
-                  remote: true, class: ['btn', 'btn-info', 'btn-sm'], method: :post,
-                  title: t('.resend_tooltip') do
-          = fa_icon 'envelope'.freeze
-        = delete_button([current_course, invitation],
-                { class: 'btn-sm',
-                  title: t('.delete_tooltip'),
-                  data: { confirm: t('course.user_invitations.destroy.confirm',
-                                        role: t("course.users.role.#{invitation.role}").downcase,
-                                        name: invitation.name, email: invitation.email) } }) do
-          = fa_icon 'close'.freeze
-  - else
-    td = t('course.users.status.accepted')
-    td = format_datetime(invitation.confirmed_at, :short) if invitation.confirmed_at
-  td
+/ - serial_number = defined?(invitation_counter) ? invitation_counter + 1 : serial_number
+/ = content_tag_for(:tr, invitation) do
+/   td.text-center = serial_number
+/   th = invitation.name
+/   td = invitation.email
+/   td = t("course.users.role.#{invitation.role}")
+/   td = format_boolean(invitation.phantom)
+/   td = invitation.invitation_key
+/   - if !invitation.confirmed?
+/     td = t('course.users.status.invited')
+/     td = format_datetime(invitation.sent_at, :short) if invitation.sent_at
+/     td
+/       div.btn-group
+/         = link_to course_user_invitation_resend_invitation_path(current_course, invitation, serial_number: serial_number),
+/                   remote: true, class: ['btn', 'btn-info', 'btn-sm'], method: :post,
+/                   title: t('.resend_tooltip') do
+/           = fa_icon 'envelope'.freeze
+/         = delete_button([current_course, invitation],
+/                 { class: 'btn-sm',
+/                   title: t('.delete_tooltip'),
+/                   data: { confirm: t('course.user_invitations.destroy.confirm',
+/                                         role: t("course.users.role.#{invitation.role}").downcase,
+/                                         name: invitation.name, email: invitation.email) } }) do
+/           = fa_icon 'close'.freeze
+/   - else
+/     td = t('course.users.status.accepted')
+/     td = format_datetime(invitation.confirmed_at, :short) if invitation.confirmed_at
+/   td

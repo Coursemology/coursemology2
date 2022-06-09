@@ -130,11 +130,11 @@ function getVideoSubmissionId() {
 /**
  * Get the current path from URL.
  *
- * e.g. /courses/15/users/invite => users/invite
+ * e.g. /courses/15/users/invite
  * return {string}
  */
 function getCurrentPath() {
-  const match = window.location.pathname.match(/^\/courses\/\d+\/(.+)/);
+  const match = window.location.pathname.match(/(^\/courses\/\d+\/.+)/);
   return match && match[1];
 }
 

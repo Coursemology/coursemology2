@@ -110,7 +110,7 @@ module Course::UsersControllerManagementConcern
 
   def upgrade_to_staff_failure # :nodoc:
     respond_to do |format|
-      format.html { redirect_to course_users_staff_path(current_course),danger: @course_user.errors.full_messages.to_sentence }
+      format.html { redirect_to course_users_staff_path(current_course), danger: @course_user.errors.full_messages.to_sentence }
       format.json { render json: { errors: @course_user.errors.full_messages.to_sentence }, status: :bad_request }
     end
   end

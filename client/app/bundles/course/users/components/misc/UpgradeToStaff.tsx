@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   Autocomplete,
   Box,
@@ -13,13 +13,12 @@ import {
 } from '@mui/material';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
-import { upgradeToStaff } from '../../operations';
 import sharedConstants from 'lib/constants/sharedConstants';
 import { CourseUserData } from 'types/course/course_users';
+import { upgradeToStaff } from '../../operations';
 
-interface Props {
+interface Props extends WrappedComponentProps {
   students: CourseUserData[];
-  intl?: any;
 }
 
 const translations = defineMessages({
@@ -64,18 +63,18 @@ const UpgradeToStaff: FC<Props> = (props) => {
       .catch((error) => {
         toast.error(
           intl.formatMessage(translations.upgradeFailure, {
-            error: error,
+            error,
           }),
         );
         throw error;
       });
   };
 
-  const handleNameChange = (_event, newValue) => {
+  const handleNameChange = (_event, newValue): void => {
     setUser(newValue);
   };
 
-  const handleRoleChange = (event) => {
+  const handleRoleChange = (event): void => {
     setRole(event.target.value);
   };
 
@@ -93,13 +92,13 @@ const UpgradeToStaff: FC<Props> = (props) => {
           value={user}
           onChange={handleNameChange}
           options={students}
-          getOptionLabel={(option) => option.name}
-          renderOption={(props, option) => (
+          getOptionLabel={(option): string => option.name}
+          renderOption={(props, option): JSX.Element => (
             <Box component="li" {...props}>
               {option.name}
             </Box>
           )}
-          renderInput={(params) => (
+          renderInput={(params): JSX.Element => (
             <TextField {...params} label="Name" variant="standard" />
           )}
           sx={{ width: '25%', marginRight: '12px' }}

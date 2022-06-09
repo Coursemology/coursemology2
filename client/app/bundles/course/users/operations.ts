@@ -47,7 +47,11 @@ export function fetchStudents(): Operation<void> {
       .then((response) => {
         const data = response.data;
         dispatch(
-          actions.saveUsersListWithPermissions(data.users, data.permissions),
+          actions.saveManageUsersList(
+            data.users,
+            data.permissions,
+            data.manageCourseUsersData,
+          ),
         );
       })
       .catch((error) => {
@@ -62,7 +66,11 @@ export function fetchStaff(): Operation<void> {
       .then((response) => {
         const data = response.data;
         dispatch(
-          actions.saveUsersListWithPermissions(data.users, data.permissions),
+          actions.saveManageUsersList(
+            data.users,
+            data.permissions,
+            data.manageCourseUsersData,
+          ),
         );
       })
       .catch((error) => {

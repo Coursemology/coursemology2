@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IconButton, IconButtonProps } from '@mui/material';
+import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import Delete from '@mui/icons-material/Delete';
 import ConfirmationDialog from '../ConfirmationDialog';
 
@@ -7,31 +7,35 @@ interface Props extends IconButtonProps {
   disabled: boolean;
   onClick: () => Promise<void>;
   confirmMessage: string;
+  tooltip?: string;
 }
 
 const DeleteButton = ({
   disabled,
   onClick,
   confirmMessage,
+  tooltip = '',
   ...props
 }: Props): JSX.Element => {
   const [dialogOpen, setDialogOpen] = useState(false);
 
   return (
     <>
-      <IconButton
-        onClick={(): void => {
-          if (confirmMessage) {
-            setDialogOpen(true);
-          } else {
-            onClick();
-          }
-        }}
-        color="error"
-        {...props}
-      >
-        <Delete />
-      </IconButton>
+      <Tooltip title={tooltip}>
+        <IconButton
+          onClick={(): void => {
+            if (confirmMessage) {
+              setDialogOpen(true);
+            } else {
+              onClick();
+            }
+          }}
+          color="error"
+          {...props}
+        >
+          <Delete />
+        </IconButton>
+      </Tooltip>
       {dialogOpen && (
         <ConfirmationDialog
           message={confirmMessage}

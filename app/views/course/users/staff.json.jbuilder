@@ -10,3 +10,7 @@ end
 json.permissions do
   json.partial! 'permissions_data', current_course: current_course
 end
+
+json.manageCourseUsersData do
+  json.partial! 'tabs_data', current_course: current_course
+end
