@@ -21,5 +21,8 @@ export function loadUser(userId: number): Operation<SaveUserAction> {
   return async (dispatch) =>
     CourseAPI.users
       .fetch(userId)
-      .then((response) => dispatch(actions.saveUser(response.data.user)));
+      .then((response) => {
+        console.log(response.data)
+        return dispatch(actions.saveUser(response.data.user))
+      });
 }

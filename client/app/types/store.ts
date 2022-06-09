@@ -4,6 +4,7 @@ import { AchievementsState } from 'bundles/course/achievement/types';
 import { CoursesState } from 'bundles/course/courses/types';
 import { UsersState } from 'bundles/course/users/types';
 import { LeaderboardState } from 'bundles/course/leaderboard/types';
+import { SkillState } from 'bundles/course/assessment/skills/types';
 
 /**
  * Describes the overall shape of the application's Redux store state.
@@ -13,6 +14,7 @@ export interface AppState {
   courses: CoursesState;
   users: UsersState;
   leaderboard: LeaderboardState;
+  skills: SkillState;
 }
 
 export type Operation<R> = ThunkAction<

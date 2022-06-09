@@ -39,6 +39,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @return {Promise}
    * success response: array of skills
    */
+  // TODO: change endpoint
   fetchSkills() {
     return this.getClient().get(`${this._getUrlPrefix()}/skills`);
   }

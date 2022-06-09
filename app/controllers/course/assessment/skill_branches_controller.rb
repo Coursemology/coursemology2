@@ -10,10 +10,9 @@ class Course::Assessment::SkillBranchesController < Course::ComponentController
 
   def create
     if @skill_branch.save
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', title: @skill_branch.title)
+      render json: { id: @skill_branch.id }, status: :ok
     else
-      render 'new'
+      render json: { errors: @skill_branch.errors }, status: :bad_request
     end
   end
 
@@ -31,11 +30,9 @@ class Course::Assessment::SkillBranchesController < Course::ComponentController
 
   def destroy
     if @skill_branch.destroy
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', skill_branch: @skill_branch.title)
+      head :ok
     else
-      redirect_to course_assessments_skills_path(current_course),
-                  danger: t('.failure', error: @skill_branch.errors.full_messages.to_sentence)
+      head :bad_request
     end
   end
 

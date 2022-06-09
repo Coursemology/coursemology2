@@ -7,11 +7,11 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { SkillBranchEntity } from 'types/course/assessment/skills/skills';
+import { UserSkillBranchEntity } from 'types/course/assessment/skills/skills';
 import LinearProgressWithLabel from 'lib/components/LinearProgressWithLabel';
 
 interface Props extends WrappedComponentProps {
-  skillBranches: SkillBranchEntity[];
+  skillBranches: UserSkillBranchEntity[];
 }
 
 const translations = defineMessages({
@@ -56,7 +56,7 @@ const UserProfileSkills: FC<Props> = ({ skillBranches, intl }: Props) => {
                     </TableCell>
                   </TableRow>
 
-                  {skillBranch.skills
+                  {skillBranch.userSkills
                     ?.filter((skill) => skill.totalGrade > 0)
                     .map((skill) => (
                       <TableRow key={`skill-${skill.id}`}>

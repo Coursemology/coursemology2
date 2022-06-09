@@ -1,6 +1,6 @@
 export interface TableColumns {
   name: string;
-  label: string;
+  label: string | JSX.Element;
   options: {
     display?: boolean;
     filter?: boolean;
@@ -9,8 +9,10 @@ export interface TableColumns {
     alignCenter?: boolean;
     alignLeft?: boolean;
     justifyCenter?: boolean;
+    setCellProps?: Function;
     customBodyRenderLite?: (dataIndex: number) => string | JSX.Element | number;
-    customHeadLabelRender?: () => JSX.Element;
+    customHeadLabelRender?: () => JSX.Element | null;
+    customHeadRender?: () => JSX.Element | null;
   };
 }
 
@@ -23,4 +25,9 @@ export interface TableOptions {
   selectableRows: string;
   setRowProps: (row, dataIndex: number, rowIndex: number) => any;
   viewColumns: boolean;
+}
+
+export interface TableRowMeta {
+  rowIndex: number;
+  dataIndex: number;
 }
