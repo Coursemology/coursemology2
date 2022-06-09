@@ -88,11 +88,11 @@ class Course::Settings::Email < ApplicationRecord
 
   def self.build_assessment_email_settings(category)
     default_email_settings = [{ assessments: :opening_reminder },
-      { assessments: :closing_reminder },
-      { assessments: :closing_reminder_summary },
-      { assessments: :grades_released },
-      { assessments: :new_comment },
-      { assessments: :new_submission }]
+                              { assessments: :closing_reminder },
+                              { assessments: :closing_reminder_summary },
+                              { assessments: :grades_released },
+                              { assessments: :new_comment },
+                              { assessments: :new_submission }]
 
     default_email_settings.each do |default_email_setting|
       component = default_email_setting.keys[0]
