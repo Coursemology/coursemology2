@@ -1,12 +1,22 @@
 import { FC } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
-import { Box, Tab, Tabs } from '@mui/material';
-import { CourseUsersPermissions } from 'types/course/course_users';
-import { getCurrentPath } from 'lib/helpers/url-helpers';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { Badge, Box, Tab, Tabs } from '@mui/material';
+import {
+  ManageCourseUsersPermissions,
+  ManageCourseUsersTabData,
+} from 'types/course/courseUsers';
+import { getCurrentPath, getCourseId } from 'lib/helpers/url-helpers';
+import { getCourseURL } from 'lib/helpers/url-builders';
 
-interface Props {
-  permissions: CourseUsersPermissions;
-  intl?: any;
+interface Props extends WrappedComponentProps {
+  permissions: ManageCourseUsersPermissions;
+  tabData: ManageCourseUsersTabData;
+}
+
+interface LinkTabProps {
+  key: string;
+  label: string | JSX.Element;
+  href: string | undefined;
 }
 
 const translations = defineMessages({
@@ -36,52 +46,70 @@ const translations = defineMessages({
   },
 });
 
-interface Tab {
-  label?: string;
+const styles = {
+  tabStyle: {
+    '&:focus': {
+      outline: 0,
+    },
+  },
+};
+
+interface TabData {
+  label: { id: string; defaultMessage: string };
   href?: string;
+  count?: number;
 }
 
-const LinkTab: FC<Tab> = (props: Tab) => {
-  return <Tab component="a" {...props} />;
+const courseUrl = getCourseURL(getCourseId());
+
+const LinkTab = (props: LinkTabProps): JSX.Element => {
+  return <Tab component="a" {...props} sx={styles.tabStyle} />;
 };
 
 const allTabs = {
   studentsTab: {
     label: translations.studentsTitle,
-    href: 'students',
+    href: `${courseUrl}/students`,
   },
   staffTab: {
     label: translations.staffTitle,
-    href: 'staff',
+    href: `${courseUrl}/staff`,
   },
   enrolRequestsTab: {
     label: translations.enrolRequestsTitle,
-    href: 'enrol_requests',
+    href: `${courseUrl}/enrol_requests`,
+    count: 0,
   },
   inviteTab: {
     label: translations.inviteTitle,
-    href: 'users/invite',
+    href: `${courseUrl}/users/invite`,
   },
   userInvitationsTab: {
     label: translations.userInvitationsTitle,
-    href: 'user_invitations',
+    href: `${courseUrl}/user_invitations`,
+    count: 0,
   },
   personalTimesTab: {
     label: translations.personalTimesTitle,
-    href: 'users/personal_times',
+    href: `${courseUrl}/users/personal_times`,
   },
 };
 
-const generateTabs = (permissions: CourseUsersPermissions) => {
-  const tabs: Tab[] = [];
+const generateTabs = (
+  permissions: ManageCourseUsersPermissions,
+  tabData: ManageCourseUsersTabData,
+): TabData[] => {
+  const tabs: TabData[] = [];
   if (permissions.canManageCourseUsers) {
     tabs.push(allTabs.studentsTab);
     tabs.push(allTabs.staffTab);
   }
   if (permissions.canManageEnrolRequests) {
+    allTabs.enrolRequestsTab.count = tabData.requestsCount;
     tabs.push(allTabs.enrolRequestsTab);
   }
   tabs.push(allTabs.inviteTab);
+  allTabs.userInvitationsTab.count = tabData.invitationsCount;
   tabs.push(allTabs.userInvitationsTab);
   if (permissions.canManagePersonalTimes) {
     tabs.push(allTabs.personalTimesTab);
@@ -89,53 +117,49 @@ const generateTabs = (permissions: CourseUsersPermissions) => {
   return tabs;
 };
 
+// TODO: Once full react migration is complete, we'll refactor this component
+// to use react - router - dom's <Link>,
+// and control the state of current selected tab, rather than reading from url.
 const UserManagementTabs: FC<Props> = (props) => {
-  const { permissions, intl } = props;
+  const { permissions, tabData, intl } = props;
 
-  const tabs = generateTabs(permissions);
+  const tabs = generateTabs(permissions, tabData);
 
-  const getCurrentTab = () => {
+  const getCurrentTabIndex = (): number => {
     const path = getCurrentPath();
     return tabs.findIndex((tab) => tab.href === path);
+  };
+
+  const getTabLabel = (tab: TabData): string | JSX.Element => {
+    if (tab.count) {
+      return (
+        <Badge
+          badgeContent={tab.count}
+          color="error"
+          sx={{ '& .MuiBadge-badge': { right: '-2px' } }}
+        >
+          {intl.formatMessage(tab.label)}
+        </Badge>
+      );
+    }
+    return intl.formatMessage(tab.label);
   };
 
   const managementTabs = (
     <>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={getCurrentTab()} variant="scrollable" scrollButtons="auto">
-          {tabs.map((tab, index) => (
+        <Tabs
+          value={getCurrentTabIndex()}
+          variant="scrollable"
+          scrollButtons="auto"
+        >
+          {tabs.map((tab) => (
             <LinkTab
-              key={index}
-              label={intl.formatMessage(tab.label)}
+              key={tab.label.id}
+              label={getTabLabel(tab)}
               href={tab.href}
             />
           ))}
-          {/* <LinkTab
-            label={intl.formatMessage(translations.studentsTitle)}
-            href="students"
-          />
-          <LinkTab
-            label={intl.formatMessage(translations.staffTitle)}
-            href="staff"
-          />
-          <LinkTab
-            label={intl.formatMessage(translations.enrolRequestsTitle)}
-            href="enrol_requests"
-          />
-          <LinkTab
-            label={intl.formatMessage(translations.inviteTitle)}
-            href="users/invite"
-          />
-          <LinkTab
-            label={intl.formatMessage(translations.userInvitationsTitle)}
-            href="user_invitations"
-          />
-          {permissions.canManagePersonalTimes ? (
-            <LinkTab
-              label={intl.formatMessage(translations.personalTimesTitle)}
-              href="users/personal_times"
-            />
-          ) : null} */}
         </Tabs>
       </Box>
     </>

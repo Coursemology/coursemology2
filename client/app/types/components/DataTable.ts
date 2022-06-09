@@ -14,9 +14,11 @@ export interface TableColumns {
     justifyCenter?: boolean;
     justifyLeft?: boolean;
     justifyRight?: boolean;
+    empty?: boolean;
     setCellProps?: () => CSSProperties;
     setCellHeaderProps?: () => CSSProperties;
     customBodyRenderLite?: (dataIndex: number) => string | JSX.Element | number;
+    customBodyRender?: (value, tableMeta, updateValue) => JSX.Element;
     customHeadLabelRender?: () => JSX.Element | null;
     customHeadRender?: () => JSX.Element | null;
   };
@@ -34,8 +36,10 @@ export interface TableOptions {
   ) => void;
   print?: boolean;
   pagination?: boolean;
+  rowsPerPage?: number;
   rowsPerPageOptions?: number[];
   search?: boolean;
+  searchPlaceholder?: string;
   selectableRows?: string;
   selectToolbarPlacement?: string;
   setRowProps?: (

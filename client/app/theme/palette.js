@@ -85,6 +85,10 @@ const palette = {
     unsubmit: colors.pink[600],
     delete: colors.red[900],
   },
+  invitationStatus: {
+    pending: colors.grey[100],
+    accepted: colors.green[100],
+  },
   links: colors.blue[800],
 };
 

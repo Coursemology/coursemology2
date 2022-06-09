@@ -26,11 +26,9 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def destroy
     if @invitation.destroy
-      redirect_to course_user_invitations_path(current_course),
-                  success: t('.success', name: @invitation.name)
+      destroy_invitation_success
     else
-      redirect_to course_user_invitations_path(current_course),
-                  danger: @invitation.errors.full_messages.to_sentence
+      destroy_invitation_failure
     end
   end
 
@@ -38,18 +36,19 @@ class Course::UserInvitationsController < Course::ComponentController
     @invitation = load_invitations.first
     @serial_number = params[:serial_number]
     if @invitation && invitation_service.resend_invitation(load_invitations)
-      flash.now[:success] = t('.success', email: @invitation.email)
+      resend_invitation_success
     else
-      flash.now[:danger] = t('.failure')
+      resend_invitation_failure
     end
-    render 'reload_course_user_invitation'
   end
 
   def resend_invitations
     if invitation_service.resend_invitation(load_invitations)
-      redirect_to course_user_invitations_path(current_course), success: t('.success')
+      resend_invitations_success
+      # redirect_to course_user_invitations_path(current_course), success: t('.success')
     else
-      redirect_to course_user_invitations_path(current_course), danger: t('.failure')
+      resend_invitations_failure
+      # redirect_to course_user_invitations_path(current_course), danger: t('.failure')
     end
   end
 
@@ -233,5 +232,51 @@ class Course::UserInvitationsController < Course::ComponentController
   # @return [nil] If component is disabled.
   def component
     current_component_host[:course_users_component]
+  end
+
+  def resend_invitation_success # :nodoc:
+    respond_to do |format|
+      format.html { flash.now[:success] = t('.success', email: @invitation.email) }
+      format.json { render json: { id: @invitation.id }, status: :ok }
+    end
+  end
+
+  def resend_invitation_failure # :nodoc:
+    respond_to do |format|
+      format.html { flash.now[:danger] = t('.failure') }
+      format.json { head :bad_request }
+    end
+  end
+
+  def resend_invitations_success # :nodoc:
+    respond_to do |format|
+      format.html { redirect_to course_user_invitations_path(current_course), success: t('.success') }
+      format.json { head :ok }
+    end
+  end
+
+  def resend_invitations_failure # :nodoc:
+    respond_to do |format|
+      format.html { redirect_to course_user_invitations_path(current_course), success: t('.success') }
+      format.json { head :bad_request }
+    end
+  end
+
+  def destroy_invitation_success
+    respond_to do |format|
+      format.html do
+        redirect_to course_user_invitations_path(current_course), success: t('.success', name: @invitation.name)
+      end
+      format.json { render json: { id: @invitation.id }, status: :ok }
+    end
+  end
+
+  def destroy_invitation_failure
+    respond_to do |format|
+      format.html do
+        redirect_to course_user_invitations_path(current_course), danger: @invitation.errors.full_messages.to_sentence
+      end
+      format.json { render json: { errors: @invitation.errors.full_messages.to_sentence }, status: :bad_request }
+    end
   end
 end

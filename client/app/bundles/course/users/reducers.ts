@@ -11,7 +11,7 @@ import {
   UsersActionType,
   SAVE_USER,
   SAVE_USERS_LIST,
-  SAVE_USERS_LIST_WITH_PERMISSIONS,
+  SAVE_MANAGE_USERS_LIST,
   DELETE_USER,
 } from './types';
 
@@ -21,6 +21,10 @@ const initialState: UsersState = {
     canManageCourseUsers: false,
     canManageEnrolRequests: false,
     canManagePersonalTimes: false,
+  },
+  manageCourseUsersData: {
+    requestsCount: 0,
+    invitationsCount: 0,
   },
 };
 
@@ -40,13 +44,14 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
       saveEntityToStore(draft.users, userEntity);
       break;
     }
-    case SAVE_USERS_LIST_WITH_PERMISSIONS: {
+    case SAVE_MANAGE_USERS_LIST: {
       const usersList = action.userList;
       const entityList: CourseUserEntity[] = usersList.map((data) => ({
         ...data,
       }));
       saveDetailedListToStore(draft.users, entityList);
-      draft.permissions = action.courseUsersPermissions;
+      draft.permissions = action.manageCourseUsersPermissions;
+      draft.manageCourseUsersData = action.manageCourseUsersData;
       break;
     }
     case DELETE_USER: {

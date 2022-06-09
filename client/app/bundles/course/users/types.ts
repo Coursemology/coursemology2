@@ -3,15 +3,15 @@ import {
   CourseUserMiniEntity,
   CourseUserListData,
   CourseUserData,
-  CourseUsersPermissions,
+  ManageCourseUsersPermissions,
+  ManageCourseUsersTabData,
 } from 'types/course/courseUsers';
 import { EntityStore } from 'types/store';
 
 // Action Names
 export const SAVE_USERS_LIST = 'course/users/SAVE_USERS_LIST';
 export const SAVE_USER = 'course/users/SAVE_USER';
-export const SAVE_USERS_LIST_WITH_PERMISSIONS =
-  'course/users/SAVE_USERS_LIST_WITH_PERMISSIONS';
+export const SAVE_MANAGE_USERS_LIST = 'course/users/SAVE_MANAGE_USERS_LIST';
 export const DELETE_USER = 'course/users/DELETE_USER';
 
 // Action Types
@@ -25,10 +25,11 @@ export interface SaveUserAction {
   user: CourseUserData;
 }
 
-export interface SaveUsersListWithPermissionsAction {
-  type: typeof SAVE_USERS_LIST_WITH_PERMISSIONS;
+export interface SaveManageUsersListAction {
+  type: typeof SAVE_MANAGE_USERS_LIST;
   userList: CourseUserData[];
-  courseUsersPermissions: CourseUsersPermissions;
+  manageCourseUsersPermissions: ManageCourseUsersPermissions;
+  manageCourseUsersData: ManageCourseUsersTabData;
 }
 export interface DeleteUserAction {
   type: typeof DELETE_USER;
@@ -38,11 +39,12 @@ export interface DeleteUserAction {
 export type UsersActionType =
   | SaveUsersListAction
   | SaveUserAction
-  | SaveUsersListWithPermissionsAction
+  | SaveManageUsersListAction
   | DeleteUserAction;
 
 // State Types
 export interface UsersState {
   users: EntityStore<CourseUserMiniEntity, CourseUserEntity>;
-  permissions: CourseUsersPermissions | null;
+  permissions: ManageCourseUsersPermissions | null;
+  manageCourseUsersData: ManageCourseUsersTabData | null;
 }

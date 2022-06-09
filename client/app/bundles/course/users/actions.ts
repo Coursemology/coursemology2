@@ -1,17 +1,18 @@
 import {
   CourseUserData,
   CourseUserListData,
-  CourseUsersPermissions,
+  ManageCourseUsersPermissions,
+  ManageCourseUsersTabData,
 } from 'types/course/courseUsers';
 import {
   SAVE_USER,
   SAVE_USERS_LIST,
-  SAVE_USERS_LIST_WITH_PERMISSIONS,
   DELETE_USER,
   SaveUserAction,
   SaveUsersListAction,
-  SaveUsersListWithPermissionsAction,
+  SaveManageUsersListAction,
   DeleteUserAction,
+  SAVE_MANAGE_USERS_LIST,
 } from './types';
 
 export function saveUsersList(
@@ -23,14 +24,16 @@ export function saveUsersList(
   };
 }
 
-export function saveUsersListWithPermissions(
+export function saveManageUsersList(
   userList: CourseUserData[],
-  courseUsersPermissions: CourseUsersPermissions,
-): SaveUsersListWithPermissionsAction {
+  manageCourseUsersPermissions: ManageCourseUsersPermissions,
+  manageCourseUsersData: ManageCourseUsersTabData,
+): SaveManageUsersListAction {
   return {
-    type: SAVE_USERS_LIST_WITH_PERMISSIONS,
+    type: SAVE_MANAGE_USERS_LIST,
     userList,
-    courseUsersPermissions,
+    manageCourseUsersPermissions,
+    manageCourseUsersData,
   };
 }
 

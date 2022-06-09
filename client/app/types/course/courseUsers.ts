@@ -9,7 +9,7 @@ import {
 } from './assessment/skills/userSkills';
 import { TimelineAlgorithm } from './personalTimes';
 
-export type CourseUsersPermissions = Permissions<
+export type ManageCourseUsersPermissions = Permissions<
   'canManageCourseUsers' | 'canManageEnrolRequests' | 'canManagePersonalTimes'
 >;
 
@@ -72,4 +72,14 @@ export interface UpdateCourseUserPatchData {
     timeline_algorithm?: TimelineAlgorithm;
     role?: string;
   };
+}
+
+/**
+ * Count of enrol requests and invitations
+ * Used to render badges in tabs on Manage Users page
+ * We only need counts, as certain pages don't retrieve enrol requests nor invitations
+ */
+export interface ManageCourseUsersTabData {
+  requestsCount: number;
+  invitationsCount: number;
 }

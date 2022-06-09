@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Typography } from '@mui/material';
@@ -9,14 +9,14 @@ import PageHeader from 'lib/components/pages/PageHeader';
 import { fetchStudents } from '../../operations';
 import {
   getAllStudentsEntities,
-  getCourseUserPermissions,
+  getManageCourseUserPermissions,
+  getManageCourseUsersTabData,
 } from '../../selectors';
 import UserManagementTabs from '../../components/navigation/UserManagementTabs';
 import ManageUsersTable from '../../components/tables/ManageUsersTable';
+import UserManagementButtons from '../../components/buttons/UserManagementButtons';
 
-interface Props {
-  intl?: any;
-}
+type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   manageUsersHeader: {
@@ -40,7 +40,10 @@ const ManageStudents: FC<Props> = (props) => {
     getAllStudentsEntities(state),
   );
   const permissions = useSelector((state: AppState) =>
-    getCourseUserPermissions(state),
+    getManageCourseUserPermissions(state),
+  );
+  const tabData = useSelector((state: AppState) =>
+    getManageCourseUsersTabData(state),
   );
   const dispatch = useDispatch<AppDispatch>();
 
@@ -69,12 +72,15 @@ const ManageStudents: FC<Props> = (props) => {
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
-      <UserManagementTabs permissions={permissions} />
+      <UserManagementTabs permissions={permissions} tabData={tabData} />
       {students.length > 0 ? (
         <ManageUsersTable
           title="Students"
           users={students}
           permissions={permissions}
+          renderRowActionComponent={(user): JSX.Element => (
+            <UserManagementButtons user={user} />
+          )}
         />
       ) : (
         renderEmptyState()
