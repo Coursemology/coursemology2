@@ -141,7 +141,7 @@ jobs:
       # Run tests!
       - run:
           name: run
-          no_output_timeout: 30m
+          no_output_timeout: 10m
           command: |
             mkdir /tmp/test-results
             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
