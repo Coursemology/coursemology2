@@ -1,4 +1,5 @@
 import { produce } from 'immer';
+import { CourseUserEntity } from 'types/course/courseUsers';
 import {
   createEntityStore,
   saveEntityToStore,
@@ -21,6 +22,7 @@ const initialState: UsersState = {
     canManageCourseUsers: false,
     canManageEnrolRequests: false,
     canManagePersonalTimes: false,
+    canRegisterWithCode: false,
   },
   manageCourseUsersData: {
     requestsCount: 0,

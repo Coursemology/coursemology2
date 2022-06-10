@@ -3,7 +3,7 @@ import { Operation } from 'types/store';
 import {
   CourseUserData,
   UpdateCourseUserPatchData,
-} from 'types/course/course_users';
+} from 'types/course/courseUsers';
 import * as actions from './actions';
 import { SaveUserAction } from './types';
 

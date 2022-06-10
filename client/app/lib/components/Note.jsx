@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { Card, CardHeader, CardContent } from '@mui/material';
+import { Card, CardHeader, CardContent, Typography } from '@mui/material';
 import { orange } from '@mui/material/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
@@ -34,7 +34,9 @@ const Note = ({ message }) => (
       title={<FormattedMessage {...translations.noteHeader} />}
       titleTypographyProps={{ variant: 'body2', style: styles.cardHeaderTitle }}
     />
-    <CardContent>{message}</CardContent>
+    <CardContent>
+      <Typography variant="body2">{message}</Typography>
+    </CardContent>
   </Card>
 );
 

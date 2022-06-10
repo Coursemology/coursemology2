@@ -35,20 +35,20 @@ const palette = {
   info: {
     contrastText: white,
     main: '#1070CA',
-    light: '#F1FBFC',
-    dark: '#007489',
+    // light: '#F1FBFC',
+    // dark: '#007489',
   },
   warning: {
     contrastText: white,
     main: '#E69F22',
-    light: '#FDF8F3',
-    dark: '#95591E',
+    // light: '#FDF8F3',
+    // dark: '#95591E',
   },
   danger: {
     contrastText: white,
     main: '#ED4740',
-    light: '#FEF6F6',
-    dark: '#BF0E08',
+    // light: '#FEF6F6',
+    // dark: '#BF0E08',
   },
   discarded: {
     contrastText: black,

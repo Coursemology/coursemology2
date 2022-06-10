@@ -1,21 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
-import {
-  //   Box,
-  Button,
-  Checkbox,
-  Grid,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TextField,
-  Typography,
-} from '@mui/material';
-import Clear from '@mui/icons-material/Clear';
+import { Box, Grid, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
@@ -26,6 +12,9 @@ import {
 } from '../../selectors';
 import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
 import { fetchInvitations } from '../../operations';
+import RegistrationCodeButton from '../../components/buttons/RegistrationCodeButton';
+import UploadFileButton from '../../components/buttons/UploadFileButton';
+import IndividualInviteForm from '../../components/forms/IndividualInviteForm';
 
 type Props = WrappedComponentProps;
 
@@ -70,63 +59,21 @@ const InviteUsers: FC<Props> = (props) => {
     <>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
       <UserManagementTabs permissions={permissions} tabData={tabData} />
-      <Grid>
+      <Box>
         <Grid
           container
           flexDirection="row"
-          justifyContent="space-between"
+          justifyContent="flex-end"
           sx={{ margin: '12px 0px' }}
         >
-          <Typography variant="h5">Invite Users</Typography>
-          <Grid item sx={{ margin: '0px 4px' }}>
-            <Button variant="outlined">Upload File</Button>
-            <Button variant="outlined">Registration Code</Button>
+          <Grid item style={{ display: 'flex', gap: 12 }}>
+            <UploadFileButton />
+            <RegistrationCodeButton />
           </Grid>
         </Grid>
-        <Paper elevation={3} sx={{ padding: '12px' }}>
-          <Grid container flexDirection="row" justifyContent="space-between">
-            <Typography variant="h5">Individually Add Users</Typography>
-            <Button variant="contained">Add new row</Button>
-          </Grid>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell>Phantom</TableCell>
-                <TableCell>Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>
-                  <TextField variant="standard" />
-                </TableCell>
-
-                <TableCell>
-                  <TextField variant="standard" />
-                </TableCell>
-
-                <TableCell>
-                  <TextField select value="Student" variant="standard" />
-                </TableCell>
-
-                <TableCell>
-                  <Checkbox />
-                </TableCell>
-
-                <TableCell>
-                  <Clear />
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-          <Button variant="contained" sx={{ marginTop: '4px' }}>
-            Invite Users
-          </Button>
-        </Paper>
-      </Grid>
+        <Typography variant="h5">Individually Invite Users</Typography>
+        <IndividualInviteForm permissions={permissions} />
+      </Box>
     </>
   );
 };

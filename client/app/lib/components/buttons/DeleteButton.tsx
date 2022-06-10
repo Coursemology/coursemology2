@@ -6,7 +6,7 @@ import ConfirmationDialog from '../ConfirmationDialog';
 interface Props extends IconButtonProps {
   disabled: boolean;
   onClick: () => Promise<void>;
-  confirmMessage: string;
+  confirmMessage?: string;
   tooltip?: string;
 }
 

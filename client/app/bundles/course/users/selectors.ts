@@ -2,7 +2,7 @@
 import {
   ManageCourseUsersPermissions,
   ManageCourseUsersTabData,
-} from 'types/course/course_users';
+} from 'types/course/courseUsers';
 import { AppState, SelectionKey } from 'types/store';
 import {
   selectMiniEntity,

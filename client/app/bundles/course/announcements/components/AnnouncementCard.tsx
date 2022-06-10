@@ -108,9 +108,8 @@ const AnnouncementCard: FC<Props> = (props) => {
             {announcement.permissions.canDelete && (
               <DeleteButton
                 disabled={false}
-                message={`Are you sure you want to delete the Announcement (${announcement.title})?`}
+                confirmMessage={`Are you sure you want to delete the Announcement (${announcement.title})?`}
                 onClick={onDelete}
-                withDialog
               />
             )}
           </div>

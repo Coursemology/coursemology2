@@ -11,6 +11,7 @@ import Note from 'lib/components/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { InvitationEntity } from 'types/course/userInvitations';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
+import sharedConstants from 'lib/constants/sharedConstants';
 import ResendInvitationsButton from '../buttons/ResendAllInvitationsButton';
 
 interface Props extends WrappedComponentProps {
@@ -160,7 +161,11 @@ const UserInvitationsTable: FC<Props> = (props) => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={`role-${invitation.id}`} variant="body2">
-              {invitation.role}
+              {
+                sharedConstants.USER_ROLES.find(
+                  (role) => role.value === invitation.role,
+                )?.label
+              }
             </Typography>
           );
         },

@@ -45,6 +45,10 @@ const translations = defineMessages({
     id: 'lib.form.validation.numeric',
     defaultMessage: 'Enter a number',
   },
+  email: {
+    id: 'lib.form.validation.email',
+    defaultMessage: 'Enter a valid email',
+  },
   required: {
     id: 'lib.form.validation.required',
     defaultMessage: 'Required',

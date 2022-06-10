@@ -24,3 +24,7 @@ export function getManageCourseUserPermissions(state: AppState) {
 export function getManageCourseUsersTabData(state: AppState) {
   return getLocalState(state).manageCourseUsersData as ManageCourseUsersTabData;
 }
+
+export function getCourseRegistrationKey(state: AppState) {
+  return getLocalState(state).courseRegistrationKey;
+}

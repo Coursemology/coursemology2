@@ -1,3 +1,3 @@
 export interface TimelineAlgorithm {
-  timelineAlgorithm?: 'fixed' | 'fomo' | 'stragglers' | 'otot';
+  timelineAlgorithm: 'fixed' | 'fomo' | 'stragglers' | 'otot';
 }
