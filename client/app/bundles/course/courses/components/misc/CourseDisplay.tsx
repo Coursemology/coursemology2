@@ -45,7 +45,9 @@ const CourseDisplay: FC<Props> = (props) => {
     } else {
       setShavedCourses(
         courses.filter((course: CourseMiniEntity) =>
-          course.title.toLowerCase().includes(event.target.value.toLowerCase()),
+          course.title
+            .toLowerCase()
+            .includes(event.target.value.trim().toLowerCase()),
         ),
       );
     }
