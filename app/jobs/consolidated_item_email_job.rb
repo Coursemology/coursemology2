@@ -7,7 +7,7 @@ class ConsolidatedItemEmailJob < ApplicationJob
     midnight_time_zones = ActiveSupport::TimeZone.all.select { |time| time.now.hour == 0 }.
                           map(&:name)
     ActsAsTenant.without_tenant do
-      courses = Course.where('time_zone in (?) AND end_at >=(?)', midnight_time_zones, Time.now)
+      courses = Course.where(time_zone: midnight_time_zones)
       courses.each do |course|
         Course::ConsolidatedOpeningReminderNotifier.opening_reminder(course)
       end
