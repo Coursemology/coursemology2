@@ -10,6 +10,14 @@ class InstanceUserRoleRequestsController < ApplicationController
   end
 
   def new
+    @existing_role_request = @user_role_request.
+                             instance.user_role_requests.
+                             where(creator_id: current_user.id, workflow_state: :pending).first
+    if @existing_role_request
+      redirect_to edit_instance_user_role_request_path(@existing_role_request)
+    else
+      render 'new'
+    end
   end
 
   def create
@@ -26,7 +34,7 @@ class InstanceUserRoleRequestsController < ApplicationController
   end
 
   def update
-    if @user_role_request.update(user_role_request_params)
+    if @user_role_request.pending? && @user_role_request.update(user_role_request_params)
       redirect_to courses_path, success: t('.success')
     else
       render 'edit'
