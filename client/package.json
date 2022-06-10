@@ -86,7 +86,7 @@
     "@mui/lab": "^5.0.0-alpha.75",
     "@mui/material": "^5.5.3",
     "@mui/styles": "^5.5.3",
-    "ace-builds": "^1.4.13",
+    "ace-builds": "^1.6.0",
     "axios": "^0.27.2",
     "babel-loader": "^8.2.5",
     "babel-plugin-formatjs": "^10.3.24",
