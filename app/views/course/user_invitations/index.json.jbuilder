@@ -10,3 +10,5 @@ end
 json.manageCourseUsersData do
   json.partial! 'course/users/tabs_data', current_course: current_course
 end
+
+json.message @message unless @message.blank?

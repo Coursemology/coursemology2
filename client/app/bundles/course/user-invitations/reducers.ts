@@ -1,5 +1,5 @@
 import { produce } from 'immer';
-import { InvitationEntity } from 'types/course/user_invitations';
+import { InvitationEntity } from 'types/course/userInvitations';
 import {
   createEntityStore,
   removeFromStore,
@@ -9,6 +9,7 @@ import {
   DELETE_INVITATION,
   InvitationsActionType,
   InvitationsState,
+  SAVE_COURSE_REGISTRATION_KEY,
   SAVE_INVITATION_LIST,
 } from './types';
 
@@ -18,11 +19,13 @@ const initialState: InvitationsState = {
     canManageCourseUsers: false,
     canManageEnrolRequests: false,
     canManagePersonalTimes: false,
+    canRegisterWithCode: false,
   },
   manageCourseUsersData: {
     requestsCount: 0,
     invitationsCount: 0,
   },
+  courseRegistrationKey: '',
 };
 
 const reducer = produce(
@@ -42,7 +45,16 @@ const reducer = produce(
         const invitationId = action.invitationId;
         if (draft.invitations.byId[invitationId]) {
           removeFromStore(draft.invitations, invitationId);
+          const updated = {
+            ...draft.manageCourseUsersData,
+            invitationsCount: draft.manageCourseUsersData.invitationsCount - 1,
+          };
+          draft.manageCourseUsersData = updated;
         }
+        break;
+      }
+      case SAVE_COURSE_REGISTRATION_KEY: {
+        draft.courseRegistrationKey = action.courseRegistrationKey;
         break;
       }
       default: {

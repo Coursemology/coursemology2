@@ -83,7 +83,11 @@ module Course::UserInvitationService::ParseInvitationConcern
     users.map do |(_, value)|
       name = value[:name].presence || value[:email]
       phantom = ActiveRecord::Type::Boolean.new.cast(value[:phantom])
-      { name: name, email: value[:email], role: value[:role], phantom: phantom }
+      { name: name,
+        email: value[:email],
+        role: value[:role],
+        phantom: phantom,
+        timeline_algorithm: value[:timeline_algorithm] }
     end
   end
 
@@ -144,7 +148,8 @@ module Course::UserInvitationService::ParseInvitationConcern
 
     role = parse_file_role(row[2])
     phantom = parse_file_phantom(row[3])
-    { name: row[0], email: row[1], role: role, phantom: phantom }
+    timeline_algorithm = parse_file_timeline_algorithm(row[4])
+    { name: row[0], email: row[1], role: role, phantom: phantom, timeline_algorithm: timeline_algorithm }
   end
 
   # Parses the role column from the CSV file.
@@ -169,6 +174,19 @@ module Course::UserInvitationService::ParseInvitationConcern
     return false if phantom.blank?
 
     TRUE_VALUES.include?(phantom.downcase)
+  end
+
+  # Parses file value for an invitation's timeline algorithm.
+  # Sets timeline algorithm as course default if value is not specified.
+  #
+  # @param [String|nil] Timeline algorithm as specified in the CSV file.
+  # @return [Integer] The enum integer for +Course::UserInvitation.timeline_algorithm+ matching the input.
+  #                   current_course.default_timeline_algorithm is returned by default.
+  def parse_file_timeline_algorithm(timeline_algorithm)
+    return current_course.default_timeline_algorithm if timeline_algorithm.blank?
+
+    symbol = timeline_algorithm.parameterize(separator: '_').to_sym
+    symbol || @current_course.default_timeline_algorithm
   end
 
   # Removes the UTF-8 byte order mark (BOM) from the string.

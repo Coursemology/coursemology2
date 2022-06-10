@@ -4,70 +4,70 @@
 / = render partial: 'course/users/tabs'
 div#user-invitations-component
 
-div.methods role='tabpanel'
-  ul class='nav nav-pills' role='tablist'
-    li.active role='presentation'
-      a href='#file' aria-controls='file' role='tab' data-toggle='tab'
-        = t('.tabs.file')
-    li role='presentation'
-      a href='#individual' aria-controls='individual' role='tab' data-toggle='tab'
-        = t('.tabs.individual')
-    li role='presentation'
-      a href='#registration-code' aria-controls='individual' role='tab' data-toggle='tab'
-        = t('.tabs.registration_code')
+/ div.methods role='tabpanel'
+/   ul class='nav nav-pills' role='tablist'
+/     li.active role='presentation'
+/       a href='#file' aria-controls='file' role='tab' data-toggle='tab'
+/         = t('.tabs.file')
+/     li role='presentation'
+/       a href='#individual' aria-controls='individual' role='tab' data-toggle='tab'
+/         = t('.tabs.individual')
+/     li role='presentation'
+/       a href='#registration-code' aria-controls='individual' role='tab' data-toggle='tab'
+/         = t('.tabs.registration_code')
 
-  div.tab-content
-    div.tab-pane.active#file role='tabpanel'
-      div.panel.panel-primary
-        div.panel-body
-          = t('.file.format_html')
-          pre
-            code
-              = "#{t('common.name')},#{t('common.email')}[,#{t('common.role')},#{t('course.users.role.phantom')}]\n"
-              = "John,test1@example.org[,student,y]\n"
-              = "Mary,test2@example.org[,teaching_assistant,n]"
+/   div.tab-content
+/     div.tab-pane.active#file role='tabpanel'
+/       div.panel.panel-primary
+/         div.panel-body
+/           = t('.file.format_html')
+/           pre
+/             code
+/               = "#{t('common.name')},#{t('common.email')}[,#{t('common.role')},#{t('course.users.role.phantom')}]\n"
+/               = "John,test1@example.org[,student,y]\n"
+/               = "Mary,test2@example.org[,teaching_assistant,n]"
 
-      = simple_form_for current_course, url: invite_course_users_path, method: :post do |f|
-        = f.error_notification
-        = f.input :invitations_file, as: :file
-        = f.button :submit
+/       = simple_form_for current_course, url: invite_course_users_path, method: :post do |f|
+/         = f.error_notification
+/         = f.input :invitations_file, as: :file
+/         = f.button :submit
 
-    div.tab-pane#individual role='tabpanel'
-      = simple_form_for current_course, url: invite_course_users_path, method: :post do |f|
-        = f.error_notification
-        table.table.table-hover
-          thead
-            tr
-              th = t('common.name')
-              th = t('common.email')
-              th = t('common.role')
-              th = t('course.users.role.phantom')
-              th
-                div.pull-right
-                  = link_to_add_association t('.individual.add_user'), f, :invitations,
-                                            find_selector: 'tbody.invitation_fields', insert_using: 'append'
-          tbody.invitation_fields
-            = f.simple_fields_for :invitations, current_course.invitations.select(&:new_record?) do |invitation_form|
-              = render 'invitation_fields', f: invitation_form
+/     div.tab-pane#individual role='tabpanel'
+/       = simple_form_for current_course, url: invite_course_users_path, method: :post do |f|
+/         = f.error_notification
+/         table.table.table-hover
+/           thead
+/             tr
+/               th = t('common.name')
+/               th = t('common.email')
+/               th = t('common.role')
+/               th = t('course.users.role.phantom')
+/               th
+/                 div.pull-right
+/                   = link_to_add_association t('.individual.add_user'), f, :invitations,
+/                                             find_selector: 'tbody.invitation_fields', insert_using: 'append'
+/           tbody.invitation_fields
+/             = f.simple_fields_for :invitations, current_course.invitations.select(&:new_record?) do |invitation_form|
+/               = render 'invitation_fields', f: invitation_form
 
-        = f.button :submit
+/         = f.button :submit
 
-    div.tab-pane#registration-code role='tabpanel'
-      = simple_format(t('.registration_code.explanation'))
-      div.alert.alert-warning
-        = simple_format(t('.registration_code.explanation_warning'))
-      = simple_form_for current_course, url: toggle_registration_course_users_path,
-                                        method: :post do |f|
-        - if current_course.code_registration_enabled?
-          div.registration-code
-            pre
-              code
-                = current_course.registration_key
-          = f.hidden_field :registration_key, as: :hidden, value: ''
-          = f.button :submit, class: ['btn-info'], value: t('.registration_code.disable')
+/     div.tab-pane#registration-code role='tabpanel'
+/       = simple_format(t('.registration_code.explanation'))
+/       div.alert.alert-warning
+/         = simple_format(t('.registration_code.explanation_warning'))
+/       = simple_form_for current_course, url: toggle_registration_course_users_path,
+/                                         method: :post do |f|
+/         - if current_course.code_registration_enabled?
+/           div.registration-code
+/             pre
+/               code
+/                 = current_course.registration_key
+/           = f.hidden_field :registration_key, as: :hidden, value: ''
+/           = f.button :submit, class: ['btn-info'], value: t('.registration_code.disable')
 
-        - else
-          = t('.registration_code.disabled')
-          = f.hidden_field :registration_key, as: :hidden, value: 'checked'
-          br
-          =< f.button :submit, class: ['btn-info'], value: t('.registration_code.enable')
+/         - else
+/           = t('.registration_code.disabled')
+/           = f.hidden_field :registration_key, as: :hidden, value: 'checked'
+/           br
+/           =< f.button :submit, class: ['btn-info'], value: t('.registration_code.enable')

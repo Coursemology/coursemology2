@@ -6,6 +6,7 @@ import SaveButton from 'lib/components/buttons/SaveButton';
 import { CourseUserData } from 'types/course/courseUsers';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
+import sharedConstants from 'lib/constants/sharedConstants';
 import { updateUser, deleteUser } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -89,7 +90,9 @@ const UserManagementButtons: FC<Props> = (props) => {
         disabled={isDeleting || isSaving}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
-          role: user.role,
+          role: sharedConstants.USER_ROLES.find(
+            (role) => role.value === user.role,
+          )?.label,
           name: user.name,
           email: user.email,
         })}

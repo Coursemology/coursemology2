@@ -14,7 +14,7 @@ import {
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
 import sharedConstants from 'lib/constants/sharedConstants';
-import { CourseUserData } from 'types/course/course_users';
+import { CourseUserData } from 'types/course/courseUsers';
 import { upgradeToStaff } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -93,6 +93,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
           onChange={handleNameChange}
           options={students}
           getOptionLabel={(option): string => option.name}
+          // eslint-disable-next-line @typescript-eslint/no-shadow
           renderOption={(props, option): JSX.Element => (
             <Box component="li" {...props}>
               {option.name}
@@ -112,6 +113,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
           onChange={handleRoleChange}
           sx={{ width: '25%', marginRight: '12px' }}
         >
+          {/* eslint-disable-next-line @typescript-eslint/no-shadow */}
           {sharedConstants.STAFF_ROLES.map((role) => (
             <MenuItem
               key={`upgrade-student-role-${role.value}`}

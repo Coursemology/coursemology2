@@ -10,7 +10,10 @@ import {
 import { TimelineAlgorithm } from './personalTimes';
 
 export type ManageCourseUsersPermissions = Permissions<
-  'canManageCourseUsers' | 'canManageEnrolRequests' | 'canManagePersonalTimes'
+  | 'canManageCourseUsers'
+  | 'canManageEnrolRequests'
+  | 'canManagePersonalTimes'
+  | 'canRegisterWithCode'
 >;
 
 export interface CourseUserListData {

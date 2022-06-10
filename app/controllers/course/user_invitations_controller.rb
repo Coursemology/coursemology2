@@ -16,11 +16,10 @@ class Course::UserInvitationsController < Course::ComponentController
   def create
     result = invite
     if result
-      redirect_to course_user_invitations_path(current_course), success: create_success_message(*result),
-                                                                warning: create_warning_message(*result)
+      create_invitation_success(result)
     else
       propagate_errors
-      render 'new'
+      render json: { errors: current_course.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -45,10 +44,8 @@ class Course::UserInvitationsController < Course::ComponentController
   def resend_invitations
     if invitation_service.resend_invitation(load_invitations)
       resend_invitations_success
-      # redirect_to course_user_invitations_path(current_course), success: t('.success')
     else
       resend_invitations_failure
-      # redirect_to course_user_invitations_path(current_course), danger: t('.failure')
     end
   end
 
@@ -67,7 +64,6 @@ class Course::UserInvitationsController < Course::ComponentController
   def course_user_invitation_params # :nodoc:
     @course_user_invitation_params ||= begin
       params[:course] = { invitations_attributes: {} } unless params.key?(:course)
-
       params.require(:course).permit(:invitations_file, :registration_key,
                                      invitations_attributes: [:name, :email, :role, :phantom, :timeline_algorithm])
     end
@@ -210,7 +206,7 @@ class Course::UserInvitationsController < Course::ComponentController
   # Returns the warning invitation creation message based on file or entry invitation.
   def create_warning_message(_new_invitations, _existing_invitations, _new_course_users,
                              _existing_course_users, duplicate_users)
-    t('.summary.duplicate_emails', count: duplicate_users) if invite_by_file? && duplicate_users > 0
+    t('.summary.duplicate_emails', count: duplicate_users) if duplicate_users > 0
   end
 
   # Enables or disables registration codes in the given course.
@@ -277,6 +273,17 @@ class Course::UserInvitationsController < Course::ComponentController
         redirect_to course_user_invitations_path(current_course), danger: @invitation.errors.full_messages.to_sentence
       end
       format.json { render json: { errors: @invitation.errors.full_messages.to_sentence }, status: :bad_request }
+    end
+  end
+
+  def create_invitation_success(result)
+    respond_to do |format|
+      format.json do
+        @invitations = current_course.invitations.order(name: :asc)
+
+        @message = { success: create_success_message(*result), warning: create_warning_message(*result) }
+        render 'index'
+      end
     end
   end
 end

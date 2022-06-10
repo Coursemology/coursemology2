@@ -57,9 +57,7 @@ en:
           disabled: 'Registration via registration codes are currently disabled.'
           enable: 'Enable'
       create:
-        success: >
-          Successfully invited users from the uploaded file:
-          %{new_invitations}, %{already_invited}, %{new_course_users}, %{already_enrolled}.
+        success: '%{new_invitations}, %{already_invited}, %{new_course_users}, %{already_enrolled}.'
         summary:
           new_invitations:
             one: '1 new invitation sent'

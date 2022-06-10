@@ -5,7 +5,8 @@ import DeleteButton from 'lib/components/buttons/DeleteButton';
 import EmailButton from 'lib/components/buttons/EmailButton';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
-import { InvitationData } from 'types/course/user_invitations';
+import { InvitationData } from 'types/course/userInvitations';
+import sharedConstants from 'lib/constants/sharedConstants';
 import { resendInvitationEmail, deleteInvitation } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -43,6 +44,8 @@ const translations = defineMessages({
     defaultMessage: 'Failed to delete user. {error}',
   },
 });
+
+const ROLES = sharedConstants.USER_ROLES;
 
 const UserManagementButtons: FC<Props> = (props) => {
   const { intl, invitation } = props;
@@ -82,7 +85,11 @@ const UserManagementButtons: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.deletionFailure));
+        toast.error(
+          intl.formatMessage(translations.deletionFailure, {
+            error,
+          }),
+        );
         throw error;
       })
       .finally(() => setIsDeleting(false));
@@ -102,7 +109,7 @@ const UserManagementButtons: FC<Props> = (props) => {
         disabled={isResending || isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
-          role: invitation.role,
+          role: ROLES.find((role) => role.value === invitation.role)?.label,
           name: invitation.name,
           email: invitation.email,
         })}

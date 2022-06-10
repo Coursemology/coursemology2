@@ -120,13 +120,12 @@ const SkillManagementButtons: FC<Props> = (props) => {
       )}
       {canDestroy && (
         <DeleteButton
-          message={message}
+          confirmMessage={message}
           className={
             isSkillBranch ? `skill-branch-delete-${id}` : `skill-delete-${id}`
           }
           disabled={isDeleting}
           onClick={onDelete}
-          withDialog
         />
       )}
     </div>
