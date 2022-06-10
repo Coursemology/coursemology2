@@ -22,6 +22,8 @@ en:
         header: 'Role Request Rejection'
     form:
       hint: 'Please provide the following information for us to review your request.'
+      role_request_approved: 'The request below has been approved.'
+      role_request_rejected: 'The request below has been rejected.'
       role_label: 'Request to be'
       instructor: 'Instructor (can create courses)'
       administrator: 'Administrator (can create courses and give others instructor permissions)'
@@ -42,6 +44,8 @@ en:
       reject_with_message: 'Reject user role request and send message'
       reject: 'Reject user role request'
     user_role_request_rejection_form:
+      role_request_approved: 'The request below has been approved.'
+      role_request_rejected: 'The request below has been rejected.'
       role_label: 'Request to be'
       reject_with_message: 'Reject and send message'
       cancel: 'Cancel'
