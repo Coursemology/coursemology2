@@ -151,7 +151,7 @@
     "@babel/preset-typescript": "^7.17.12",
     "@types/jquery": "^3.5.14",
     "@types/react": "^18.0.5",
-    "@types/react-dom": "^18.0.1",
+    "@types/react-dom": "^18.0.5",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
