@@ -78,6 +78,9 @@ gem 'docker-api'
 gem 'recaptcha'
 gem 'rexml'
 
+# Page profiler
+gem 'rack-mini-profiler'
+
 group :development do
   # Spring speeds up development by keeping your application running in the background.
   # Read more: https://github.com/rails/spring
@@ -100,9 +103,6 @@ group :development do
 
   # Gem to generate favicon
   gem 'rails_real_favicon'
-
-  # Page profiler
-  gem 'rack-mini-profiler'
 end
 
 group :test do
@@ -167,7 +167,6 @@ end
 group :production do
   # Use fog-aws as CarrierWave's storage provider
   gem 'fog-aws', '3.8.0'
-  gem 'rack-mini-profiler'
   gem 'flamegraph'
   gem 'stackprof'
   gem 'sidekiq'
