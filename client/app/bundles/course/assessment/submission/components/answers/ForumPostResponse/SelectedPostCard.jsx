@@ -2,12 +2,10 @@ import { Component } from 'react';
 import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
 import { postPackShape } from 'course/assessment/submission/propTypes';
-import ForumPost from 'course/forum/components/ForumPost';
 import { getForumTopicURL, getForumURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-
+import ForumPost from './ForumPost';
 import Labels from './Labels';
 import ParentPost from './ParentPost';
 
