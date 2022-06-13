@@ -133,13 +133,7 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
     },
   };
 
-  return (
-    <DataTable
-      data={data}
-      options={options}
-      columns={columns}
-    />
-  );
+  return <DataTable data={data} options={options} columns={columns} />;
 };
 
 export default injectIntl(SkillsBranchTable);

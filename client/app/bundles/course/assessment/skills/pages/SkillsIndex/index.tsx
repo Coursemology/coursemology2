@@ -86,7 +86,7 @@ const SkillsIndex: FC<Props> = (props) => {
     return <LoadingIndicator />;
   }
 
-  const headerToolbars: ReactElement[] = []; 
+  const headerToolbars: ReactElement[] = [];
 
   if (settings.canCreateSkill) {
     headerToolbars.push(
