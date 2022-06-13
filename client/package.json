@@ -99,7 +99,7 @@
     "glob": "^8.0.3",
     "hard-source-webpack-plugin": "^0.13.1",
     "history": "^5.2.0",
-    "immer": "^9.0.14",
+    "immer": "^9.0.15",
     "immutable": "^3.8.2",
     "intl": "^1.2.5",
     "jquery": "^3.6.0",
