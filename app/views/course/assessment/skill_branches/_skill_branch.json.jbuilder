@@ -11,7 +11,7 @@ json.skillBranches skill_branches.each do |skill_branch|
       json.canDestroy can?(:destroy, skill_branch)
     end
   else
-    json.id -1
+    json.id { -1 }
     json.title nil
   end
 

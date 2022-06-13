@@ -86,11 +86,12 @@ const SkillsIndex: FC<Props> = (props) => {
     return <LoadingIndicator />;
   }
 
-  const headerToolbars: ReactElement[] = []; // To Add: Reorder Button
+  const headerToolbars: ReactElement[] = []; 
 
   if (settings.canCreateSkill) {
     headerToolbars.push(
       <Button
+        key={DialogTypes.NewSkill}
         variant="outlined"
         color="primary"
         onClick={(): void => {
@@ -107,6 +108,7 @@ const SkillsIndex: FC<Props> = (props) => {
   if (settings.canCreateSkillBranch) {
     headerToolbars.push(
       <Button
+        key={DialogTypes.NewSkillBranch}
         variant="outlined"
         color="primary"
         onClick={(): void => {

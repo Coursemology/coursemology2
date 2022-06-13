@@ -133,16 +133,11 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
     },
   };
 
-  const components = {
-    ExpandButton: () => null,
-  };
-
   return (
     <DataTable
       data={data}
       options={options}
       columns={columns}
-      components={components}
     />
   );
 };
