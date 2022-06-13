@@ -1,3 +1,5 @@
+import { CSSProperties } from '@mui/styles';
+
 export interface TableColumns {
   name: string;
   label: string | JSX.Element;
@@ -9,7 +11,7 @@ export interface TableColumns {
     alignCenter?: boolean;
     alignLeft?: boolean;
     justifyCenter?: boolean;
-    setCellProps?: Function;
+    setCellProps?: () => CSSProperties;
     customBodyRenderLite?: (dataIndex: number) => string | JSX.Element | number;
     customHeadLabelRender?: () => JSX.Element | null;
     customHeadRender?: () => JSX.Element | null;

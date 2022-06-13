@@ -13,7 +13,11 @@ import {
   SaveSkillBranchDataAction,
   SaveSkillDataAction,
   SaveSkillListDataAction,
-  SaveSkillSettingsAction, SAVE_SKILLS_LIST_DATA, SAVE_SKILLS_SETTINGS, SAVE_SKILL_BRANCH_DATA, SAVE_SKILL_DATA,
+  SaveSkillSettingsAction,
+  SAVE_SKILLS_LIST_DATA,
+  SAVE_SKILLS_SETTINGS,
+  SAVE_SKILL_BRANCH_DATA,
+  SAVE_SKILL_DATA,
 } from './types';
 
 export function saveSkillSettings(
@@ -28,13 +32,17 @@ export function saveSkillSettings(
 export function saveSkillListData(
   skillBranches: SkillBranchData[],
 ): SaveSkillListDataAction {
-  const skills = skillBranches.flatMap((branch: SkillBranchData) => {
-    return branch.skills
-  }).filter(skill => skill) as SkillData[];
-  const newSkillBranches: SkillBranchEntity[] = skillBranches.map((skillBranch: SkillBranchData) => {
-    const { skills, ...newSkillBranch } = skillBranch;
-    return newSkillBranch;
-  })
+  const skills = skillBranches
+    .flatMap((branch: SkillBranchData) => {
+      return branch.skills;
+    })
+    .filter((skill) => skill) as SkillData[];
+  const newSkillBranches: SkillBranchEntity[] = skillBranches.map(
+    (skillBranch: SkillBranchData) => {
+      const newSkillBranch = { skills: undefined, ...skillBranch }; // eslint-disable-line react/no-unused-prop-types
+      return newSkillBranch;
+    },
+  );
   return {
     type: SAVE_SKILLS_LIST_DATA,
     skillBranches: newSkillBranches,
@@ -42,12 +50,10 @@ export function saveSkillListData(
   };
 }
 
-export function saveSkillData(
-  skill: SkillEntity,
-): SaveSkillDataAction {
+export function saveSkillData(skill: SkillEntity): SaveSkillDataAction {
   return {
     type: SAVE_SKILL_DATA,
-    skill: skill,
+    skill,
   };
 }
 
@@ -56,22 +62,18 @@ export function saveSkillBranchData(
 ): SaveSkillBranchDataAction {
   return {
     type: SAVE_SKILL_BRANCH_DATA,
-    skillBranch: skillBranch,
+    skillBranch,
   };
 }
 
-export function deleteSkill(
-  skillId: number,
-): DeleteSkillAction {
+export function deleteSkill(skillId: number): DeleteSkillAction {
   return {
     type: DELETE_SKILL,
     id: skillId,
   };
 }
 
-export function deleteSkillBranch(
-  branchId: number,
-): DeleteSkillBranchAction {
+export function deleteSkillBranch(branchId: number): DeleteSkillBranchAction {
   return {
     type: DELETE_SKILL_BRANCH,
     id: branchId,

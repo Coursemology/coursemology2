@@ -8,8 +8,11 @@ import DeleteButton from 'lib/components/buttons/DeleteButton';
 import EditButton from 'lib/components/buttons/EditButton';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { getSkillsURL } from 'lib/helpers/url-builders';
+import {
+  SkillBranchData,
+  SkillData,
+} from 'types/course/assessment/skills/skills';
 import { deleteSkill, deleteSkillBranch } from '../operations';
-import { SkillBranchData, SkillData } from 'types/course/assessment/skills/skills';
 
 interface Props extends WrappedComponentProps {
   id: number;
@@ -49,7 +52,16 @@ const translations = defineMessages({
 });
 
 const SkillManagementButtons: FC<Props> = (props) => {
-  const { id, canUpdate, canDestroy, intl, isBranch, data, editSkillClick, editSkillBranchClick } = props;
+  const {
+    id,
+    canUpdate,
+    canDestroy,
+    intl,
+    isBranch,
+    data,
+    editSkillClick,
+    editSkillBranchClick,
+  } = props;
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -66,17 +78,17 @@ const SkillManagementButtons: FC<Props> = (props) => {
     setIsDeleting(true);
     if (isBranch) {
       return dispatch(deleteSkillBranch(id))
-      .then(() => {
-        toast.success(intl.formatMessage(translations.deleteBranchSuccess));
-        navigate(getSkillsURL(getCourseId()));
-      })
-      .catch((error) => {
-        toast.error(intl.formatMessage(translations.deleteBranchFailure));
-        throw error;
-      })
-      .finally(() => setIsDeleting(false));
-    } else {
-      return dispatch(deleteSkill(id))
+        .then(() => {
+          toast.success(intl.formatMessage(translations.deleteBranchSuccess));
+          navigate(getSkillsURL(getCourseId()));
+        })
+        .catch((error) => {
+          toast.error(intl.formatMessage(translations.deleteBranchFailure));
+          throw error;
+        })
+        .finally(() => setIsDeleting(false));
+    }
+    return dispatch(deleteSkill(id))
       .then(() => {
         toast.success(intl.formatMessage(translations.deleteSkillSuccess));
         navigate(getSkillsURL(getCourseId()));
@@ -86,7 +98,6 @@ const SkillManagementButtons: FC<Props> = (props) => {
         throw error;
       })
       .finally(() => setIsDeleting(false));
-    }
   };
 
   const managementButtons = (
@@ -97,7 +108,11 @@ const SkillManagementButtons: FC<Props> = (props) => {
         onClick={onEdit}
       />
       <DeleteButton
-        message={isBranch ? intl.formatMessage(translations.deletionBranchConfirmation) : intl.formatMessage(translations.deletionSkillConfirmation)}
+        message={
+          isBranch
+            ? intl.formatMessage(translations.deletionBranchConfirmation)
+            : intl.formatMessage(translations.deletionSkillConfirmation)
+        }
         className={`branch-delete-${id}`}
         disabled={!canDestroy && isDeleting}
         onClick={onDelete}

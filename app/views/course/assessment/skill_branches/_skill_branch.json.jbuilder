@@ -27,5 +27,4 @@ json.skillBranches skill_branches.each do |skill_branch|
       json.partial! 'course/assessment/skills/skill', skill: skill
     end
   end
-
 end

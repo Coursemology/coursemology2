@@ -2,7 +2,10 @@ import type {
   AchievementListData,
   AchievementMiniEntity,
 } from './achievements';
-import { UserSkillBranchEntity, UserSkillBranchData } from './assessment/skills/skills';
+import {
+  UserSkillBranchEntity,
+  UserSkillBranchData,
+} from './assessment/skills/skills';
 
 export interface CourseUserListData {
   id: number;

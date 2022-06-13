@@ -34,7 +34,7 @@ const translations = defineMessages({
   deletionConfirmation: {
     id: 'course.achievement.delete.confirmation',
     defaultMessage: 'Are you sure you wish to delete this achievement?',
-  }
+  },
 });
 
 const AchievementManagementButtons: FC<Props> = (props) => {

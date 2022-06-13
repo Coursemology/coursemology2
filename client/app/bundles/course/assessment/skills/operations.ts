@@ -1,6 +1,13 @@
 import CourseAPI from 'api/course';
 import { AxiosResponse } from 'axios';
-import { SkillBranchEntity, SkillBranchFormData, SkillEntity, SkillFormData, SkillListData, SkillResponseData } from 'types/course/assessment/skills/skills';
+import {
+  SkillBranchEntity,
+  SkillBranchFormData,
+  SkillEntity,
+  SkillFormData,
+  SkillListData,
+  SkillResponseData,
+} from 'types/course/assessment/skills/skills';
 import { Operation } from 'types/store';
 import * as actions from './actions';
 
@@ -11,7 +18,7 @@ import * as actions from './actions';
  *     { title, description, skill_branch_id }
  *   }
  */
- const formatSkillAttributes = (data: SkillFormData): FormData => {
+const formatSkillAttributes = (data: SkillFormData): FormData => {
   const payload = new FormData();
 
   ['title', 'description', 'skill_branch_id'].forEach((field) => {
@@ -63,14 +70,22 @@ const fetchSkills = (): Operation<void> => {
       });
 };
 
-export function createSkill(data: SkillFormData): Operation<AxiosResponse<SkillResponseData>> {
+export function createSkill(
+  data: SkillFormData,
+): Operation<AxiosResponse<SkillResponseData>> {
   const attributes = formatSkillAttributes(data);
-  return async (dispatch) => CourseAPI.assessment.skills.create(attributes).then((response) => {
-    const responseData: SkillResponseData = response.data;
-    const skill: SkillEntity = {...responseData, branchId: data.skill_branch_id, title: data.title, description: data.description}
-    dispatch(actions.saveSkillData(skill));
-    return response;
-  });
+  return async (dispatch) =>
+    CourseAPI.assessment.skills.create(attributes).then((response) => {
+      const responseData: SkillResponseData = response.data;
+      const skill: SkillEntity = {
+        ...responseData,
+        branchId: data.skill_branch_id,
+        title: data.title,
+        description: data.description,
+      };
+      dispatch(actions.saveSkillData(skill));
+      return response;
+    });
 }
 
 export function createSkillBranch(data: SkillBranchFormData): Operation<
@@ -79,12 +94,17 @@ export function createSkillBranch(data: SkillBranchFormData): Operation<
   }>
 > {
   const attributes = formatSkillBranchAttributes(data);
-  return async (dispatch) => CourseAPI.assessment.skills.createBranch(attributes).then((response) => {
-    const responseData: SkillResponseData = response.data;
-    const skillBranch: SkillBranchEntity = {...responseData, title: data.title, description: data.description}
-    dispatch(actions.saveSkillBranchData(skillBranch));
-    return response;
-  });
+  return async (dispatch) =>
+    CourseAPI.assessment.skills.createBranch(attributes).then((response) => {
+      const responseData: SkillResponseData = response.data;
+      const skillBranch: SkillBranchEntity = {
+        ...responseData,
+        title: data.title,
+        description: data.description,
+      };
+      dispatch(actions.saveSkillBranchData(skillBranch));
+      return response;
+    });
 }
 
 export function updateSkill(
@@ -92,12 +112,18 @@ export function updateSkill(
   data: SkillFormData,
 ): Operation<AxiosResponse<any, any>> {
   const attributes = formatSkillAttributes(data);
-  return async (dispatch) => CourseAPI.assessment.skills.update(skillId, attributes).then((response) => {
-    const responseData: SkillResponseData = response.data;
-    const skill: SkillEntity = {...responseData, branchId: data.skill_branch_id, title: data.title, description: data.description}
-    dispatch(actions.saveSkillData(skill));
-    return response;
-  });
+  return async (dispatch) =>
+    CourseAPI.assessment.skills.update(skillId, attributes).then((response) => {
+      const responseData: SkillResponseData = response.data;
+      const skill: SkillEntity = {
+        ...responseData,
+        branchId: data.skill_branch_id,
+        title: data.title,
+        description: data.description,
+      };
+      dispatch(actions.saveSkillData(skill));
+      return response;
+    });
 }
 
 export function updateSkillBranch(
@@ -105,15 +131,22 @@ export function updateSkillBranch(
   data: SkillBranchFormData,
 ): Operation<AxiosResponse<any, any>> {
   const attributes = formatSkillBranchAttributes(data);
-  return async (dispatch) => CourseAPI.assessment.skills.updateBranch(branchId, attributes).then((response) => {
-    const responseData: SkillResponseData = response.data;
-    const skillBranch: SkillBranchEntity = {...responseData, title: data.title, description: data.description}
-    dispatch(actions.saveSkillBranchData(skillBranch));
-    return response;
-  });
+  return async (dispatch) =>
+    CourseAPI.assessment.skills
+      .updateBranch(branchId, attributes)
+      .then((response) => {
+        const responseData: SkillResponseData = response.data;
+        const skillBranch: SkillBranchEntity = {
+          ...responseData,
+          title: data.title,
+          description: data.description,
+        };
+        dispatch(actions.saveSkillBranchData(skillBranch));
+        return response;
+      });
 }
 
-export function deleteSkill(skillId: number,): Operation<void> {
+export function deleteSkill(skillId: number): Operation<void> {
   return async (dispatch) =>
     CourseAPI.assessment.skills.delete(skillId).then(() => {
       dispatch(actions.deleteSkill(skillId));

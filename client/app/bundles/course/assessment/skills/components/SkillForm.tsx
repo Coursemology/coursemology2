@@ -9,7 +9,12 @@ import formTranslations from 'lib/translations/form';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
-import { BranchOptions, SkillBranchFormData, SkillFormData, SkillSettings } from 'types/course/assessment/skills/skills';
+import {
+  BranchOptions,
+  SkillBranchFormData,
+  SkillFormData,
+  SkillSettings,
+} from 'types/course/assessment/skills/skills';
 import { DialogTypes } from '../types';
 
 interface Props {
@@ -49,7 +54,7 @@ const SkillForm: FC<Props> = (props) => {
     setIsDirty,
     settings,
     branchOptions,
-    dialogType
+    dialogType,
   } = props;
   const {
     control,
@@ -106,16 +111,16 @@ const SkillForm: FC<Props> = (props) => {
         id="skill-form"
         noValidate
         onSubmit={handleSubmit((data) => {
-          const { skill_branch_id, ...newData } = data;
+          const newData = { title: data.title, description: data.description };
           switch (dialogType) {
             case DialogTypes.NewSkill:
-              onSubmit(data as SkillFormData, setError)
+              onSubmit(data as SkillFormData, setError);
               break;
             case DialogTypes.NewSkillBranch:
               onSubmit(newData as SkillBranchFormData, setError);
               break;
             case DialogTypes.EditSkill:
-              onSubmit(data as SkillFormData, setError)
+              onSubmit(data as SkillFormData, setError);
               break;
             case DialogTypes.EditSkillBranch:
               onSubmit(newData as SkillBranchFormData, setError);
@@ -163,11 +168,12 @@ const SkillForm: FC<Props> = (props) => {
             />
           )}
         />
-        {(dialogType === DialogTypes.NewSkill || dialogType === DialogTypes.EditSkill) &&
+        {(dialogType === DialogTypes.NewSkill ||
+          dialogType === DialogTypes.EditSkill) && (
           <Controller
             name="skill_branch_id"
             control={control}
-            render={({ field, fieldState }) => (
+            render={({ field, fieldState }): JSX.Element => (
               <FormSelectField
                 field={field}
                 fieldState={fieldState}
@@ -177,7 +183,7 @@ const SkillForm: FC<Props> = (props) => {
               />
             )}
           />
-        }
+        )}
         {actionButtons}
       </form>
     </>

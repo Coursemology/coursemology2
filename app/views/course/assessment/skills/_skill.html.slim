@@ -1,8 +1,0 @@
-= content_tag_for(:tr, skill) do
-  td.text-center
-  th = skill.title
-  td = format_html(skill.description)
-  td
-    div.btn-group
-      = edit_button([current_course, :assessments, skill]) if can?(:update, skill)
-      = delete_button([current_course, :assessments, skill]) if can?(:destroy, skill)

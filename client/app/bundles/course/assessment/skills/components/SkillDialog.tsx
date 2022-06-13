@@ -6,10 +6,22 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { AppDispatch } from 'types/store';
+import {
+  BranchOptions,
+  SkillBranchData,
+  SkillBranchFormData,
+  SkillData,
+  SkillFormData,
+  SkillSettings,
+} from 'types/course/assessment/skills/skills';
 import { DialogTypes } from '../types';
 import SkillForm from './SkillForm';
-import { BranchOptions, SkillBranchData, SkillBranchFormData, SkillData, SkillFormData, SkillSettings } from 'types/course/assessment/skills/skills';
-import { createSkill, createSkillBranch, updateSkill, updateSkillBranch } from '../operations';
+import {
+  createSkill,
+  createSkillBranch,
+  updateSkill,
+  updateSkillBranch,
+} from '../operations';
 
 interface Props extends WrappedComponentProps {
   dialogType: DialogTypes;
@@ -69,67 +81,75 @@ const initialValues: SkillFormData = {
 };
 
 const SkillDialog: FC<Props> = (props) => {
-  const { open, handleClose, intl, dialogType, settings, branchOptions, data } = props;
+  const { open, handleClose, intl, dialogType, settings, branchOptions, data } =
+    props;
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
   if (dialogType === DialogTypes.EditSkill && data) {
     const newData = data as SkillData;
-    initialValues.title = newData.title ?? "";
-    initialValues.description = newData.description ?? "";
-    initialValues.skill_branch_id = newData.branchId ?? -1
+    initialValues.title = newData.title ?? '';
+    initialValues.description = newData.description ?? '';
+    initialValues.skill_branch_id = newData.branchId ?? -1;
   } else if (dialogType === DialogTypes.EditSkillBranch && data) {
     const newData = data as SkillBranchData;
-    initialValues.title = newData.title ?? "";
-    initialValues.description = newData.description ?? "";
+    initialValues.title = newData.title ?? '';
+    initialValues.description = newData.description ?? '';
   } else {
-    initialValues.title = "";
-    initialValues.description = "";
+    initialValues.title = '';
+    initialValues.description = '';
   }
 
   if (!open) {
     return null;
   }
 
-  const onSubmit = (formData: SkillFormData | SkillBranchFormData, setError): Promise<void> => {
+  const onSubmit = (
+    formData: SkillFormData | SkillBranchFormData,
+    setError,
+  ): Promise<void> => {
     switch (dialogType) {
       case DialogTypes.NewSkill:
         return dispatch(createSkill(formData))
-        .then((response) => {
-          toast.success(intl.formatMessage(translations.createSkillSuccess));
-          setTimeout(() => {
-            if (response.data?.id) {
-              handleClose();
+          .then((response) => {
+            toast.success(intl.formatMessage(translations.createSkillSuccess));
+            setTimeout(() => {
+              if (response.data?.id) {
+                handleClose();
+              }
+            }, 200);
+          })
+          .catch((error) => {
+            toast.error(intl.formatMessage(translations.createSkillFailure));
+            if (error.response?.data) {
+              setReactHookFormError(setError, error.response.data.errors);
             }
-          }, 200);
-        })
-        .catch((error) => {
-          toast.error(intl.formatMessage(translations.createSkillFailure));
-          if (error.response?.data) {
-            setReactHookFormError(setError, error.response.data.errors);
-          }
-          throw error;
-        });
+            throw error;
+          });
       case DialogTypes.NewSkillBranch:
         return dispatch(createSkillBranch(formData))
-        .then((response) => {
-          toast.success(intl.formatMessage(translations.createSkillBranchSuccess));
-          setTimeout(() => {
-            if (response.data?.id) {
-              handleClose();
+          .then((response) => {
+            toast.success(
+              intl.formatMessage(translations.createSkillBranchSuccess),
+            );
+            setTimeout(() => {
+              if (response.data?.id) {
+                handleClose();
+              }
+            }, 200);
+          })
+          .catch((error) => {
+            toast.error(
+              intl.formatMessage(translations.createSkillBranchFailure),
+            );
+            if (error.response?.data) {
+              setReactHookFormError(setError, error.response.data.errors);
             }
-          }, 200);
-        })
-        .catch((error) => {
-          toast.error(intl.formatMessage(translations.createSkillBranchFailure));
-          if (error.response?.data) {
-            setReactHookFormError(setError, error.response.data.errors);
-          }
-          throw error;
-        });
-        case DialogTypes.EditSkill:
-          return dispatch(updateSkill(data?.id ?? -1, formData))
+            throw error;
+          });
+      case DialogTypes.EditSkill:
+        return dispatch(updateSkill(data?.id ?? -1, formData))
           .then((response) => {
             toast.success(intl.formatMessage(translations.updateSkillSuccess));
             setTimeout(() => {
@@ -145,10 +165,12 @@ const SkillDialog: FC<Props> = (props) => {
             }
             throw error;
           });
-        case DialogTypes.EditSkillBranch:
-          return dispatch(updateSkillBranch(data?.id ?? -1, formData))
+      case DialogTypes.EditSkillBranch:
+        return dispatch(updateSkillBranch(data?.id ?? -1, formData))
           .then((response) => {
-            toast.success(intl.formatMessage(translations.updateSkillBranchSuccess));
+            toast.success(
+              intl.formatMessage(translations.updateSkillBranchSuccess),
+            );
             setTimeout(() => {
               if (response.data?.id) {
                 handleClose();
@@ -156,7 +178,9 @@ const SkillDialog: FC<Props> = (props) => {
             }, 200);
           })
           .catch((error) => {
-            toast.error(intl.formatMessage(translations.updateSkillBranchFailure));
+            toast.error(
+              intl.formatMessage(translations.updateSkillBranchFailure),
+            );
             if (error.response?.data) {
               setReactHookFormError(setError, error.response.data.errors);
             }
@@ -165,8 +189,7 @@ const SkillDialog: FC<Props> = (props) => {
       default:
         return Promise.reject();
     }
-  }
-
+  };
 
   return (
     <>
@@ -182,7 +205,9 @@ const SkillDialog: FC<Props> = (props) => {
         maxWidth="xl"
       >
         <DialogTitle>
-          {dialogType === DialogTypes.NewSkill ? intl.formatMessage(translations.newSkill) : intl.formatMessage(translations.newSkillBranch)}
+          {dialogType === DialogTypes.NewSkill
+            ? intl.formatMessage(translations.newSkill)
+            : intl.formatMessage(translations.newSkillBranch)}
         </DialogTitle>
         <DialogContent>
           <SkillForm

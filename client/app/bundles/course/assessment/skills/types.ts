@@ -1,5 +1,9 @@
 import {
-  SkillBranchData, SkillSettings, SkillBranchEntity, SkillEntity, SkillData
+  SkillBranchData,
+  SkillSettings,
+  SkillBranchEntity,
+  SkillEntity,
+  SkillData,
 } from 'types/course/assessment/skills/skills';
 import { EntityStore } from 'types/store';
 
@@ -9,12 +13,12 @@ export const SAVE_SKILLS_SETTINGS =
   'course/assessment/skills/SAVE_SKILLS_SETTINGS';
 export const SAVE_SKILLS_LIST_DATA =
   'course/assessment/skills/SAVE_SKILLS_LIST_DATA';
-export const SAVE_SKILL_DATA =
-  'course/assessment/skills/SAVE_SKILL_DATA';
+export const SAVE_SKILL_DATA = 'course/assessment/skills/SAVE_SKILL_DATA';
 export const SAVE_SKILL_BRANCH_DATA =
   'course/assessment/skills/SAVE_SKILL_BRANCH_DATA';
 export const DELETE_SKILL = 'course/assessment/skills/DELETE_SKILL';
-export const DELETE_SKILL_BRANCH = 'course/assessment/skills/DELETE_SKILL_BRANCH';
+export const DELETE_SKILL_BRANCH =
+  'course/assessment/skills/DELETE_SKILL_BRANCH';
 
 // Action Types
 
@@ -71,5 +75,5 @@ export enum DialogTypes {
   'NewSkill' = 0,
   'NewSkillBranch' = 1,
   'EditSkill' = 3,
-  'EditSkillBranch' = 4
+  'EditSkillBranch' = 4,
 }

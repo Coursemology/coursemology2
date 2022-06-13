@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-json.canCreateSkill  can?(:create, Course::Assessment::Skill.new(course: current_course))
+json.canCreateSkill can?(:create, Course::Assessment::Skill.new(course: current_course))
 json.canCreateSkillBranch can?(:create, Course::Assessment::SkillBranch.new(course: current_course))
 
 json.headerTitle Course::Assessment::Skill.human_attribute_name(:title)

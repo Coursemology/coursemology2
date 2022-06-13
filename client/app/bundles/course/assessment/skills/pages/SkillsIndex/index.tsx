@@ -1,17 +1,21 @@
-import { Button } from "@mui/material";
-import LoadingIndicator from "lib/components/LoadingIndicator";
-import PageHeader from "lib/components/pages/PageHeader";
-import { FC, ReactElement, useEffect, useState } from "react";
-import { defineMessages, injectIntl, WrappedComponentProps } from "react-intl";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { BranchOptions, SkillBranchData, SkillData } from "types/course/assessment/skills/skills";
-import { AppDispatch, AppState } from "types/store";
-import SkillDialog from "../../components/SkillDialog";
-import SkillsBranchTable from "../../components/SkillsBranchTable";
-import fetchSkills from "../../operations";
-import { getSkillBranches, getSkills, getSkillSettings } from "../../selectors";
-import { DialogTypes } from "../../types";
+import { Button } from '@mui/material';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import PageHeader from 'lib/components/pages/PageHeader';
+import { FC, ReactElement, useEffect, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import {
+  BranchOptions,
+  SkillBranchData,
+  SkillData,
+} from 'types/course/assessment/skills/skills';
+import { AppDispatch, AppState } from 'types/store';
+import SkillDialog from '../../components/SkillDialog';
+import SkillsBranchTable from '../../components/SkillsBranchTable';
+import fetchSkills from '../../operations';
+import { getSkillBranches, getSkills, getSkillSettings } from '../../selectors';
+import { DialogTypes } from '../../types';
 
 type Props = WrappedComponentProps;
 
@@ -34,11 +38,11 @@ const translations = defineMessages({
   },
   addSkill: {
     id: 'course.assessment.skills.index.addSkill',
-    defaultMessage: 'Add Skill'
+    defaultMessage: 'Add Skill',
   },
   addSkillBranch: {
     id: 'course.assessment.skills.index.addSkillBranch',
-    defaultMessage: 'Add Skill Branch'
+    defaultMessage: 'Add Skill Branch',
   },
 });
 
@@ -49,23 +53,26 @@ const SkillsIndex: FC<Props> = (props) => {
   const [dialogType, setDialogType] = useState(DialogTypes.NewSkill);
   const [isOpen, setIsOpen] = useState(false);
   const [dialogData, setDialogData] = useState({} as SkillData);
-  const settings = useSelector((state: AppState) => 
-    getSkillSettings(state),
-  );
-  const skillBranches = useSelector((state: AppState) => 
+  const settings = useSelector((state: AppState) => getSkillSettings(state));
+  const skillBranches = useSelector((state: AppState) =>
     getSkillBranches(state),
   );
-  const skills = useSelector((state: AppState) => 
-    getSkills(state),
-  );
-  const data: SkillBranchData[] = skillBranches.map(branch => {
-    return {...branch, skills: skills.filter(skill => branch.id !== -1 ? skill.branchId === branch.id : !skill.branchId)}
+  const skills = useSelector((state: AppState) => getSkills(state));
+  const data: SkillBranchData[] = skillBranches.map((branch) => {
+    return {
+      ...branch,
+      skills: skills.filter((skill) =>
+        branch.id !== -1 ? skill.branchId === branch.id : !skill.branchId,
+      ),
+    };
   });
 
-  const branchOptions: BranchOptions[] = skillBranches.map(branch => ({
-    value: branch.id,
-    label: branch.title
-  })).filter(branch => branch.value !== -1)
+  const branchOptions: BranchOptions[] = skillBranches
+    .map((branch) => ({
+      value: branch.id,
+      label: branch.title,
+    }))
+    .filter((branch) => branch.value !== -1);
 
   useEffect(() => {
     dispatch(fetchSkills())
@@ -88,7 +95,7 @@ const SkillsIndex: FC<Props> = (props) => {
         color="primary"
         onClick={(): void => {
           setIsOpen(true);
-          setDialogType(DialogTypes.NewSkill)
+          setDialogType(DialogTypes.NewSkill);
         }}
         style={styles.newButton}
       >
@@ -104,7 +111,7 @@ const SkillsIndex: FC<Props> = (props) => {
         color="primary"
         onClick={(): void => {
           setIsOpen(true);
-          setDialogType(DialogTypes.NewSkillBranch)
+          setDialogType(DialogTypes.NewSkillBranch);
         }}
         style={styles.newButton}
       >
@@ -113,27 +120,30 @@ const SkillsIndex: FC<Props> = (props) => {
     );
   }
 
-  const editSkillClick = (data: SkillData): void => {
+  const editSkillClick = (skillData: SkillData): void => {
     setIsOpen(true);
     setDialogType(DialogTypes.EditSkill);
-    setDialogData(data);
-  }
+    setDialogData(skillData);
+  };
 
-  const editSkillBranchClick = (data: SkillBranchData): void => {
+  const editSkillBranchClick = (skillBranchData: SkillBranchData): void => {
     setIsOpen(true);
     setDialogType(DialogTypes.EditSkillBranch);
-    setDialogData(data);
-  }
+    setDialogData(skillBranchData);
+  };
 
   return (
     <>
       <PageHeader
-        title={
-          intl.formatMessage({...translations.skills})
-        }
+        title={intl.formatMessage({ ...translations.skills })}
         toolbars={headerToolbars}
       />
-      <SkillsBranchTable data={data} settings={settings} editSkillClick={editSkillClick} editSkillBranchClick={editSkillBranchClick}/>
+      <SkillsBranchTable
+        data={data}
+        settings={settings}
+        editSkillClick={editSkillClick}
+        editSkillBranchClick={editSkillBranchClick}
+      />
       <SkillDialog
         dialogType={dialogType}
         open={isOpen}
