@@ -17,10 +17,9 @@ class Course::Assessment::SkillsController < Course::ComponentController
 
   def create
     if @skill.save
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', title: @skill.title)
+      render json: { id: @skill.id, canUpdate: can?(:update, @skill), canDestroy: can?(:destroy, @skill) }, status: :ok
     else
-      render 'new'
+      render json: { errors: @skill.errors }, status: :bad_request
     end
   end
 
@@ -29,20 +28,23 @@ class Course::Assessment::SkillsController < Course::ComponentController
 
   def update
     if @skill.update(skill_params)
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', title: @skill.title)
+      render json: { id: @skill.id, canUpdate: can?(:update, @skill), canDestroy: can?(:destroy, @skill) }, status: :ok
     else
-      render 'edit'
+      render json: { errors: @skill.errors }, status: :bad_request
     end
   end
 
   def destroy
     if @skill.destroy
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', skill: @skill.title)
+      head :ok
     else
-      redirect_to course_assessments_skills_path(current_course),
-                  danger: t('.failure', error: @skill.errors.full_messages.to_sentence)
+      head :bad_request
+    end
+  end
+
+  def options
+    respond_to do |format|
+      format.json { render partial: 'options' }
     end
   end
 

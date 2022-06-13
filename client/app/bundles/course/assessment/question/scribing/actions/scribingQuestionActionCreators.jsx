@@ -21,7 +21,6 @@ export function fetchSkills() {
     return CourseAPI.assessment.assessments
       .fetchSkills()
       .then((response) => {
-        console.log(response.data)
         dispatch({
           type: actionTypes.FETCH_SKILLS_SUCCESS,
           skills: response.data.skills,

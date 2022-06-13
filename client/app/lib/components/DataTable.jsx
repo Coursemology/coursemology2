@@ -31,6 +31,14 @@ const theme = createTheme({
       },
     },
   },
+  overrides: {
+    MUIDataTableSelectCell: {
+      expandDisabled: {
+        // Soft hide the button.
+        visibility: 'hidden',
+      },
+    },
+  },
 });
 
 const processColumns = (includeRowNumber, columns) => {

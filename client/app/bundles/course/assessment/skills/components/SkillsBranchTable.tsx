@@ -2,28 +2,30 @@ import DataTable from "lib/components/DataTable";
 import { FC } from "react";
 import { defineMessages, injectIntl, WrappedComponentProps } from "react-intl";
 import { TableColumns, TableRowMeta } from "types/components/DataTable";
-import { SkillBranchData, SkillSettings } from "types/course/assessment/skills/skills";
+import { SkillBranchData, SkillData, SkillSettings } from "types/course/assessment/skills/skills";
 import SkillsTable from "./SkillsTable";
 import SkillManagementButtons from "./SkillManagementButtons";
 
 interface Props extends WrappedComponentProps {
   data: SkillBranchData[];
   settings: SkillSettings;
+  editSkillClick: (data: SkillData) => void;
+  editSkillBranchClick: (data: SkillBranchData) => void;
 }
 
 const translations = defineMessages({
   actions: {
-    id: 'course.assessment.skills.component.SkillsTable.actions',
+    id: 'course.assessment.skills.components.SkillsBranchTable.actions',
     defaultMessage: "Actions",
   },
   uncategorised: {
-    id: 'course.assessment.skills.index.uncategorised',
+    id: 'course.assessment.skills.components.SkillsBranchTable.uncategorised',
     defaultMessage: 'Uncategorised Skills',
   },
 });
 
 const SkillsBranchTable: FC<Props> = (props: Props) => {
-  const { data, settings, intl } = props;
+  const { data, settings, intl, editSkillClick, editSkillBranchClick } = props;
 
   const columns: TableColumns[] = [
     {
@@ -45,7 +47,7 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellProps: () => ({ style: { width: '10%' }}),
-        customBodyRenderLite: (_dataIndex: number) => data[_dataIndex].title ?? intl.formatMessage(translations.uncategorised),
+        customBodyRenderLite: (_dataIndex: number) => data[_dataIndex].title ?? "",
       }
     },
     {
@@ -55,7 +57,7 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellProps: () => ({ style: { width: '60%' }}),
-        customBodyRenderLite: (_dataIndex: number) => <div dangerouslySetInnerHTML={{ __html: data[_dataIndex].description ?? ""}} />,
+        customBodyRenderLite: (_dataIndex: number) => <div dangerouslySetInnerHTML={{ __html: data[_dataIndex].description ?? intl.formatMessage(translations.uncategorised)}} />,
       }
     },
     {
@@ -75,6 +77,9 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
               isBranch={true}
               canDestroy={branch.canDestroy}
               canUpdate={branch.canUpdate}
+              editSkillClick={editSkillClick}
+              editSkillBranchClick={editSkillBranchClick}
+              data={branch}
             />
           : <></>
           )
@@ -90,22 +95,32 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
     print: false,
     search: false,
     expandableRows: true,
+    expandableRowsHeader: false,
+    selectableRows: 'none',
+    selectToolbarPlacement: 'none',
     viewColumns:false,
-    rowsExpanded: data.map((_, i) => i),
+    rowsExpanded: data.map((branch: SkillBranchData, index) => {
+      if (branch.skills && branch.skills.length !== 0) {
+        return index;
+      }
+    }),
     renderExpandableRow: (_, rowMeta: TableRowMeta) => {
-      console.log(rowMeta);
       return (
         <tr>
           <td colSpan={5}>
-            <SkillsTable intl={intl} data={data[rowMeta.rowIndex].skills ?? []} />
+            <SkillsTable intl={intl} data={data[rowMeta.rowIndex].skills ?? []} editSkillClick={editSkillClick} />
           </td>
         </tr>
       );
     },
   };
 
+  const components = {
+    ExpandButton: () => null,
+  };
+
   return (
-    <DataTable data={data} options={options} columns={columns}/>
+    <DataTable data={data} options={options} columns={columns} components={components}/>
   )
 };
 

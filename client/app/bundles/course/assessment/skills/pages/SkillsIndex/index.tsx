@@ -5,10 +5,13 @@ import { FC, ReactElement, useEffect, useState } from "react";
 import { defineMessages, injectIntl, WrappedComponentProps } from "react-intl";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { BranchOptions, SkillBranchData, SkillData } from "types/course/assessment/skills/skills";
 import { AppDispatch, AppState } from "types/store";
+import SkillDialog from "../../components/SkillDialog";
 import SkillsBranchTable from "../../components/SkillsBranchTable";
 import fetchSkills from "../../operations";
-import { getSkillBranches, getSkillSettings } from "../../selectors";
+import { getSkillBranches, getSkills, getSkillSettings } from "../../selectors";
+import { DialogTypes } from "../../types";
 
 type Props = WrappedComponentProps;
 
@@ -43,13 +46,26 @@ const SkillsIndex: FC<Props> = (props) => {
   const { intl } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(true);
-  const [_, setIsOpen] = useState(false);
+  const [dialogType, setDialogType] = useState(DialogTypes.NewSkill);
+  const [isOpen, setIsOpen] = useState(false);
+  const [dialogData, setDialogData] = useState({} as SkillData);
   const settings = useSelector((state: AppState) => 
     getSkillSettings(state),
   );
   const skillBranches = useSelector((state: AppState) => 
     getSkillBranches(state),
   );
+  const skills = useSelector((state: AppState) => 
+    getSkills(state),
+  );
+  const data: SkillBranchData[] = skillBranches.map(branch => {
+    return {...branch, skills: skills.filter(skill => branch.id !== -1 ? skill.branchId === branch.id : !skill.branchId)}
+  });
+
+  const branchOptions: BranchOptions[] = skillBranches.map(branch => ({
+    value: branch.id,
+    label: branch.title
+  })).filter(branch => branch.value !== -1)
 
   useEffect(() => {
     dispatch(fetchSkills())
@@ -70,7 +86,10 @@ const SkillsIndex: FC<Props> = (props) => {
       <Button
         variant="outlined"
         color="primary"
-        onClick={(): void => setIsOpen(true)}
+        onClick={(): void => {
+          setIsOpen(true);
+          setDialogType(DialogTypes.NewSkill)
+        }}
         style={styles.newButton}
       >
         {intl.formatMessage(translations.addSkill)}
@@ -83,12 +102,27 @@ const SkillsIndex: FC<Props> = (props) => {
       <Button
         variant="outlined"
         color="primary"
-        onClick={(): void => setIsOpen(true)}
+        onClick={(): void => {
+          setIsOpen(true);
+          setDialogType(DialogTypes.NewSkillBranch)
+        }}
         style={styles.newButton}
       >
         {intl.formatMessage(translations.addSkillBranch)}
       </Button>,
     );
+  }
+
+  const editSkillClick = (data: SkillData): void => {
+    setIsOpen(true);
+    setDialogType(DialogTypes.EditSkill);
+    setDialogData(data);
+  }
+
+  const editSkillBranchClick = (data: SkillBranchData): void => {
+    setIsOpen(true);
+    setDialogType(DialogTypes.EditSkillBranch);
+    setDialogData(data);
   }
 
   return (
@@ -99,7 +133,15 @@ const SkillsIndex: FC<Props> = (props) => {
         }
         toolbars={headerToolbars}
       />
-      <SkillsBranchTable data={skillBranches} settings={settings}/>
+      <SkillsBranchTable data={data} settings={settings} editSkillClick={editSkillClick} editSkillBranchClick={editSkillBranchClick}/>
+      <SkillDialog
+        dialogType={dialogType}
+        open={isOpen}
+        handleClose={(): void => setIsOpen(false)}
+        settings={settings}
+        branchOptions={branchOptions}
+        data={dialogData ?? null}
+      />
     </>
   );
 };

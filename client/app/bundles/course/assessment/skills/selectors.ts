@@ -13,6 +13,13 @@ export function getSkillBranches(state: AppState) {
   );
 }
 
+export function getSkills(state: AppState) {
+  return selectMiniEntities(
+    getLocalState(state).skills,
+    getLocalState(state).skills.ids,
+  );
+}
+
 export function getSkillSettings(state: AppState) {
   return getLocalState(state).skillSettings;
 }

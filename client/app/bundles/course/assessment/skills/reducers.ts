@@ -1,6 +1,6 @@
 import { produce } from 'immer';
-import { createEntityStore, removeFromStore, saveListToStore } from 'utilities/store';
-import { DELETE_SKILL_BRANCH, SAVE_SKILLS_LIST_DATA, SAVE_SKILLS_SETTINGS, SkillsActionType, SkillState } from './types';
+import { createEntityStore, removeFromStore, saveEntityToStore, saveListToStore } from 'utilities/store';
+import { DELETE_SKILL, DELETE_SKILL_BRANCH, SAVE_SKILLS_LIST_DATA, SAVE_SKILLS_SETTINGS, SAVE_SKILL_BRANCH_DATA, SAVE_SKILL_DATA, SkillsActionType, SkillState } from './types';
 
 const initialState: SkillState = {
   skillSettings: {
@@ -10,6 +10,7 @@ const initialState: SkillState = {
     headerDescription: '',
   },
   skillBranches: createEntityStore(),
+  skills: createEntityStore(),
 };
 
 const reducer = produce(
@@ -24,6 +25,31 @@ const reducer = produce(
           draft.skillBranches,
           action.skillBranches,
         );
+        saveListToStore(
+          draft.skills,
+          action.skills,
+        );
+        break;
+      }
+      case SAVE_SKILL_DATA: {
+        saveEntityToStore(
+          draft.skills,
+          action.skill,
+        )
+        break;
+      }
+      case SAVE_SKILL_BRANCH_DATA: {
+        saveEntityToStore(
+          draft.skillBranches,
+          action.skillBranch,
+        )
+        break;
+      }
+      case DELETE_SKILL: {
+        const skillId = action.id;
+        if (draft.skills.byId[skillId]) {
+          removeFromStore(draft.skills, skillId);
+        }
         break;
       }
       case DELETE_SKILL_BRANCH: {

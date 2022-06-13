@@ -10,7 +10,7 @@ class Course::Assessment::SkillBranchesController < Course::ComponentController
 
   def create
     if @skill_branch.save
-      render json: { id: @skill_branch.id }, status: :ok
+      render json: { id: @skill_branch.id, canUpdate: can?(:update, @skill_branch), canDestroy: can?(:destroy, @skill_branch) }, status: :ok
     else
       render json: { errors: @skill_branch.errors }, status: :bad_request
     end
@@ -21,10 +21,9 @@ class Course::Assessment::SkillBranchesController < Course::ComponentController
 
   def update
     if @skill_branch.update(skill_branch_params)
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', title: @skill_branch.title)
+      render json: { id: @skill_branch.id, canUpdate: can?(:update, @skill_branch), canDestroy: can?(:destroy, @skill_branch) }, status: :ok
     else
-      render 'edit'
+      render json: { errors: @skill_branch.errors }, status: :bad_request
     end
   end
 

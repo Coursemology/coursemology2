@@ -7,17 +7,22 @@ import SkillManagementButtons from "./SkillManagementButtons";
 
 interface Props extends WrappedComponentProps {
   data: SkillData[];
+  editSkillClick: (data: SkillData) => void;
 }
 
 const translations = defineMessages({
   actions: {
-    id: 'course.assessment.skills.component.SkillsTable.actions',
+    id: 'course.assessment.skills.components.SkillsTable.actions',
     defaultMessage: "Actions",
+  },
+  noSkill: {
+    id: 'course.assessment.skills.index.SkillsTable.noSkill',
+    defaultMessage: 'Sorry, no skill found under this skill branch.',
   },
 });
 
 const SkillsTable: FC<Props> = (props: Props) => {
-  const { data, intl } = props;
+  const { data, intl, editSkillClick } = props;
 
   const columns: TableColumns[] = [
     {
@@ -67,6 +72,8 @@ const SkillsTable: FC<Props> = (props: Props) => {
             isBranch={false}
             canDestroy={skill.canDestroy}
             canUpdate={skill.canUpdate}
+            editSkillClick={editSkillClick}
+            data={skill}
           />);
         },
       }
@@ -81,6 +88,11 @@ const SkillsTable: FC<Props> = (props: Props) => {
     search: false,
     viewColumns: false,
     selectableRows: 'none',
+    textLabels: {
+      body: {
+        noMatch: intl.formatMessage(translations.noSkill),
+      }
+    },
   };
 
   return (
