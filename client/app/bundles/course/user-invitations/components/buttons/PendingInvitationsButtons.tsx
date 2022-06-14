@@ -5,12 +5,16 @@ import DeleteButton from 'lib/components/buttons/DeleteButton';
 import EmailButton from 'lib/components/buttons/EmailButton';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
-import { InvitationData } from 'types/course/userInvitations';
+import { InvitationEntity } from 'types/course/userInvitations';
 import sharedConstants from 'lib/constants/sharedConstants';
-import { resendInvitationEmail, deleteInvitation } from '../../operations';
+import {
+  resendInvitationEmail,
+  deleteInvitation,
+  fetchInvitations,
+} from '../../operations';
 
 interface Props extends WrappedComponentProps {
-  invitation: InvitationData;
+  invitation: InvitationEntity;
 }
 
 const translations = defineMessages({
@@ -20,7 +24,7 @@ const translations = defineMessages({
   },
   resendSuccess: {
     id: 'course.userInvitations.resend.success',
-    defaultMessage: 'Resending email invitation to {email}.',
+    defaultMessage: 'Resent email invitation to {email}!',
   },
   resendFailure: {
     id: 'course.userInvitations.resend.fail',
@@ -47,7 +51,7 @@ const translations = defineMessages({
 
 const ROLES = sharedConstants.USER_ROLES;
 
-const UserManagementButtons: FC<Props> = (props) => {
+const PendingInvitationsButtons: FC<Props> = (props) => {
   const { intl, invitation } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isResending, setIsResending] = useState(false);
@@ -57,6 +61,7 @@ const UserManagementButtons: FC<Props> = (props) => {
     setIsResending(true);
     return dispatch(resendInvitationEmail(invitation.id))
       .then(() => {
+        dispatch(fetchInvitations());
         toast.success(
           intl.formatMessage(translations.resendSuccess, {
             email: invitation.email,
@@ -120,4 +125,4 @@ const UserManagementButtons: FC<Props> = (props) => {
   return managementButtons;
 };
 
-export default injectIntl(UserManagementButtons);
+export default injectIntl(PendingInvitationsButtons);

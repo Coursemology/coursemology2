@@ -7,7 +7,7 @@ import { AppDispatch, AppState } from 'types/store';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
 import {
-  getManageCourseUsersTabData,
+  getManageCourseUsersSharedData,
   getManageCourseUserPermissions,
 } from '../../selectors';
 import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
@@ -23,6 +23,10 @@ const translations = defineMessages({
     id: 'course.users.manage.header',
     defaultMessage: 'Manage Users',
   },
+  inviteUsersHeader: {
+    id: 'course.users.userInvitations.header',
+    defaultMessage: 'Invite Users',
+  },
   fetchInvitationsFailure: {
     id: 'course.users.userInvitations.fetch.failure',
     defaultMessage: 'Unable to fetch invitations',
@@ -35,8 +39,8 @@ const InviteUsers: FC<Props> = (props) => {
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
   );
-  const tabData = useSelector((state: AppState) =>
-    getManageCourseUsersTabData(state),
+  const sharedData = useSelector((state: AppState) =>
+    getManageCourseUsersSharedData(state),
   );
 
   const dispatch = useDispatch<AppDispatch>();
@@ -58,20 +62,23 @@ const InviteUsers: FC<Props> = (props) => {
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
-      <UserManagementTabs permissions={permissions} tabData={tabData} />
+      <UserManagementTabs permissions={permissions} sharedData={sharedData} />
       <Box>
         <Grid
           container
           flexDirection="row"
-          justifyContent="flex-end"
+          justifyContent="space-between"
+          alignItems="flex-end"
           sx={{ margin: '12px 0px' }}
         >
+          <Typography variant="h5">
+            {intl.formatMessage(translations.inviteUsersHeader)}
+          </Typography>
           <Grid item style={{ display: 'flex', gap: 12 }}>
             <UploadFileButton />
             <RegistrationCodeButton />
           </Grid>
         </Grid>
-        <Typography variant="h5">Individually Invite Users</Typography>
         <IndividualInviteForm permissions={permissions} />
       </Box>
     </>

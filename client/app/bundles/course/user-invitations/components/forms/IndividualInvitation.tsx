@@ -100,17 +100,6 @@ const IndividualInvitation: FC<Props> = (props) => {
           />
         )}
       />
-      <Controller
-        name={`invitations.${index}.phantom`}
-        control={fieldsConfig.control}
-        render={({ field, fieldState }): JSX.Element => (
-          <FormToggleField
-            field={field}
-            fieldState={fieldState}
-            label="Phantom"
-          />
-        )}
-      />
       {permissions.canManagePersonalTimes && (
         <Controller
           name={`invitations.${index}.timelineAlgorithm`}
@@ -126,6 +115,17 @@ const IndividualInvitation: FC<Props> = (props) => {
           )}
         />
       )}
+      <Controller
+        name={`invitations.${index}.phantom`}
+        control={fieldsConfig.control}
+        render={({ field, fieldState }): JSX.Element => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            label="Phantom"
+          />
+        )}
+      />
     </Grid>
   );
 

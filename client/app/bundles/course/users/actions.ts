@@ -2,7 +2,7 @@ import {
   CourseUserData,
   CourseUserListData,
   ManageCourseUsersPermissions,
-  ManageCourseUsersTabData,
+  ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
 import {
   SAVE_USER,
@@ -27,7 +27,7 @@ export function saveUsersList(
 export function saveManageUsersList(
   userList: CourseUserData[],
   manageCourseUsersPermissions: ManageCourseUsersPermissions,
-  manageCourseUsersData: ManageCourseUsersTabData,
+  manageCourseUsersData: ManageCourseUsersSharedData,
 ): SaveManageUsersListAction {
   return {
     type: SAVE_MANAGE_USERS_LIST,

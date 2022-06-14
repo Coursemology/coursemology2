@@ -77,7 +77,7 @@ const UserManagementButtons: FC<Props> = (props) => {
   };
 
   const managementButtons = (
-    <div style={{ whiteSpace: 'nowrap' }}>
+    <div style={{ whiteSpace: 'nowrap' }} key={`buttons-${user.id}`}>
       <SaveButton
         tooltip="Save Changes"
         className={`user-save-${user.id}`}

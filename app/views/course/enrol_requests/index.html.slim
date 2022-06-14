@@ -1,57 +1,58 @@
 - add_breadcrumb t('.header')
-= page_header t('.header')
+/ = page_header t('.header')
 
-= render partial: 'course/users/tabs'
+div#enrol-requests-component
+/ = render partial: 'course/users/tabs'
 
-- pending_requests = @enrol_requests.where(workflow_state: 'pending')
-- approved_requests = @enrol_requests.where(workflow_state: 'approved')
-- rejected_requests = @enrol_requests.where(workflow_state: 'rejected')
+/ - pending_requests = @enrol_requests.where(workflow_state: 'pending')
+/ - approved_requests = @enrol_requests.where(workflow_state: 'approved')
+/ - rejected_requests = @enrol_requests.where(workflow_state: 'rejected')
 
-div.users
-  div.table-fluid
-    - unless pending_requests.blank?
-      h4 = t('.pending_header')
-      table.table.table-striped.table-hover id='pending_table'
-        thead
-          tr
-            th = t('common.name')
-            th = t('common.email')
-            th = t('common.created_at')
-            th = t('common.role')
-            th = t('course.users.role.phantom')
-            th
+/ div.users
+/   div.table-fluid
+/     - unless pending_requests.blank?
+/       h4 = t('.pending_header')
+/       table.table.table-striped.table-hover id='pending_table'
+/         thead
+/           tr
+/             th = t('common.name')
+/             th = t('common.email')
+/             th = t('common.created_at')
+/             th = t('common.role')
+/             th = t('course.users.role.phantom')
+/             th
 
-        tbody
-          - pending_requests.each do |pending_request|
-            = render partial: 'enrol_request', locals: { enrol_request: pending_request }
+/         tbody
+/           - pending_requests.each do |pending_request|
+/             = render partial: 'enrol_request', locals: { enrol_request: pending_request }
 
-  div.table-fluid id='approved_requests'
-    - unless approved_requests.blank?
-      h4 = t('.approved_header')
-      table.table.table-striped.table-hover
-        thead
-          tr
-            th = t('common.name')
-            th = t('common.email')
-            th = t('common.created_at')
-            th = t('common.role')
-            th = t('course.users.role.phantom')
-            th = t('common.approver')
-            th = t('common.approved_at')
-        tbody
-          = render partial: 'enrol_request', collection: approved_requests
+/   div.table-fluid id='approved_requests'
+/     - unless approved_requests.blank?
+/       h4 = t('.approved_header')
+/       table.table.table-striped.table-hover
+/         thead
+/           tr
+/             th = t('common.name')
+/             th = t('common.email')
+/             th = t('common.created_at')
+/             th = t('common.role')
+/             th = t('course.users.role.phantom')
+/             th = t('common.approver')
+/             th = t('common.approved_at')
+/         tbody
+/           = render partial: 'enrol_request', collection: approved_requests
 
-  div.table-fluid
-    - unless rejected_requests.blank?
-      h4 = t('.rejected_header')
-      table.table.table-striped.table-hover id='rejected_table'
-        thead
-          tr
-            th = t('common.name')
-            th = t('common.email')
-            th = t('common.created_at')
-            th = t('common.rejector')
-            th = t('common.rejected_at')
-        tbody
-          = render partial: 'enrol_request', collection: rejected_requests
+/   div.table-fluid
+/     - unless rejected_requests.blank?
+/       h4 = t('.rejected_header')
+/       table.table.table-striped.table-hover id='rejected_table'
+/         thead
+/           tr
+/             th = t('common.name')
+/             th = t('common.email')
+/             th = t('common.created_at')
+/             th = t('common.rejector')
+/             th = t('common.rejected_at')
+/         tbody
+/           = render partial: 'enrol_request', collection: rejected_requests
 

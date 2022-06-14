@@ -1,19 +1,20 @@
-import ErrorText from 'lib/components/ErrorText';
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm, useFieldArray } from 'react-hook-form';
+import { AppDispatch, AppState } from 'types/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'types/store';
 import {
   IndividualInvites,
   InvitationsPostData,
 } from 'types/course/userInvitations';
+import ErrorText from 'lib/components/ErrorText';
 import IndividualInvitations from './IndividualInvitations';
 import { inviteUsersFromForm } from '../../operations';
+import { getManageCourseUsersSharedData } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
   permissions: ManageCourseUsersPermissions;
@@ -47,7 +48,12 @@ const validationSchema = yup.object({
 
 const IndividualInviteForm: FC<Props> = (props) => {
   const { permissions } = props;
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
+  const sharedData = useSelector((state: AppState) =>
+    getManageCourseUsersSharedData(state),
+  );
+  const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
   const initialValues = {
     invitations: [
       {
@@ -56,7 +62,7 @@ const IndividualInviteForm: FC<Props> = (props) => {
         role: 'student',
         phantom: false,
         ...(permissions.canManagePersonalTimes && {
-          timelineAlgorithm: 'fixed',
+          timelineAlgorithm: defaultTimelineAlgorithm,
         }),
       },
     ],
@@ -108,6 +114,7 @@ const IndividualInviteForm: FC<Props> = (props) => {
   }, [invitationsFields.length === 0]);
 
   const onSubmit = (data: InvitationsPostData): Promise<void> => {
+    setIsLoading(true);
     return dispatch(inviteUsersFromForm(data))
       .then((response) => {
         const { success, warning } = response;
@@ -116,6 +123,7 @@ const IndividualInviteForm: FC<Props> = (props) => {
       })
       .finally(() => {
         reset(initialValues);
+        setIsLoading(false);
       });
   };
 
@@ -128,6 +136,7 @@ const IndividualInviteForm: FC<Props> = (props) => {
     >
       <ErrorText errors={errors} />
       <IndividualInvitations
+        isLoading={isLoading}
         permissions={permissions}
         fieldsConfig={{
           control,

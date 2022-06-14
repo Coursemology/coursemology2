@@ -82,6 +82,10 @@ const themeSettings = {
         color: grey[500],
         padding: '16px 16px',
       },
+      sizeSmall: {
+        padding: '6px 12px',
+        height: '40px',
+      },
     },
   },
 };

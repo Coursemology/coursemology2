@@ -8,7 +8,7 @@ type Props = WrappedComponentProps;
 const translations = defineMessages({
   uploadFile: {
     id: 'course.userInvitation.uploadFile',
-    defaultMessage: 'Upload File',
+    defaultMessage: 'Invite from file',
   },
 });
 

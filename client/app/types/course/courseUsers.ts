@@ -78,11 +78,13 @@ export interface UpdateCourseUserPatchData {
 }
 
 /**
- * Count of enrol requests and invitations
- * Used to render badges in tabs on Manage Users page
+ * Shared data for Manage Course Users component
+ * - Count of enrol requests and invitations (to render badges on tabs)
+ * - Default course timeline algorithm (for default selection)
  * We only need counts, as certain pages don't retrieve enrol requests nor invitations
  */
-export interface ManageCourseUsersTabData {
+export interface ManageCourseUsersSharedData {
   requestsCount: number;
   invitationsCount: number;
+  defaultTimelineAlgorithm: TimelineAlgorithm;
 }

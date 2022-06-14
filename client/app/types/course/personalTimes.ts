@@ -1,3 +1,1 @@
-export interface TimelineAlgorithm {
-  timelineAlgorithm: 'fixed' | 'fomo' | 'stragglers' | 'otot';
-}
+export type TimelineAlgorithm = 'fixed' | 'fomo' | 'stragglers' | 'otot';

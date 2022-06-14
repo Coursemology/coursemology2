@@ -11,7 +11,7 @@ import {
   getAllStudentsEntities,
   getAllStaffEntities,
   getManageCourseUserPermissions,
-  getManageCourseUsersTabData,
+  getManageCourseUsersSharedData,
 } from '../../selectors';
 import UserManagementTabs from '../../components/navigation/UserManagementTabs';
 import ManageUsersTable from '../../components/tables/ManageUsersTable';
@@ -45,8 +45,8 @@ const ManageStaff: FC<Props> = (props) => {
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
   );
-  const tabData = useSelector((state: AppState) =>
-    getManageCourseUsersTabData(state),
+  const sharedData = useSelector((state: AppState) =>
+    getManageCourseUsersSharedData(state),
   );
   const dispatch = useDispatch<AppDispatch>();
 
@@ -73,7 +73,7 @@ const ManageStaff: FC<Props> = (props) => {
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
-      <UserManagementTabs permissions={permissions} tabData={tabData} />
+      <UserManagementTabs permissions={permissions} sharedData={sharedData} />
       <UpgradeToStaff students={students} />
       {staff.length > 0 ? (
         <ManageUsersTable

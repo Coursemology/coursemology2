@@ -6,7 +6,7 @@ import propsAreEqual from './utils/propsAreEqual';
 
 const styles = {
   autoCompleteFieldStyle: {
-    margin: '14px 10px 12px 0px',
+    margin: '8px 10px 8px 0px',
   },
 };
 
