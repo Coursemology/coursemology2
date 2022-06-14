@@ -7,7 +7,7 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { Box, Typography } from '@mui/material';
 import PageHeader from 'lib/components/pages/PageHeader';
 import {
-  getManageCourseUsersTabData,
+  getManageCourseUsersSharedData,
   getManageCourseUserPermissions,
   getAllInvitationsEntities,
 } from '../../selectors';
@@ -24,9 +24,17 @@ const translations = defineMessages({
     id: 'course.users.manage.header',
     defaultMessage: 'Manage Users',
   },
-  fetchInvitationsFailure: {
+  pending: {
+    id: 'course.users.userInvitations.pending.title',
+    defaultMessage: 'Pending Invitations',
+  },
+  accepted: {
+    id: 'course.users.userInvitations.accepted.title',
+    defaultMessage: 'Accepted Invitations',
+  },
+  failure: {
     id: 'course.users.userInvitations.fetch.failure',
-    defaultMessage: 'Unable to fetch invitations',
+    defaultMessage: 'Failed to fetch all invitations',
   },
   invitationsInfo: {
     id: 'course.users.userInvitations.index.invitationsInfo',
@@ -43,8 +51,8 @@ const InviteUsers: FC<Props> = (props) => {
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
   );
-  const tabData = useSelector((state: AppState) =>
-    getManageCourseUsersTabData(state),
+  const sharedData = useSelector((state: AppState) =>
+    getManageCourseUsersSharedData(state),
   );
 
   const pendingInvitations = invitations.filter(
@@ -61,21 +69,17 @@ const InviteUsers: FC<Props> = (props) => {
       .finally(() => {
         setIsLoading(false);
       })
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchInvitationsFailure)),
-      );
+      .catch(() => toast.error(intl.formatMessage(translations.failure)));
   }, [dispatch]);
 
   if (isLoading) {
     return <LoadingIndicator />;
   }
 
-  // pendingInvitations.length = 0;
-
   return (
     <Box>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
-      <UserManagementTabs permissions={permissions} tabData={tabData} />
+      <UserManagementTabs permissions={permissions} sharedData={sharedData} />
       <Box sx={{ margin: '12px 0px' }}>
         <InvitationsBarChart
           accepted={acceptedInvitations.length}
@@ -88,7 +92,7 @@ const InviteUsers: FC<Props> = (props) => {
 
       {pendingInvitations.length > 0 && (
         <UserInvitationsTable
-          title="Pending Invitations"
+          title={intl.formatMessage(translations.pending)}
           invitations={pendingInvitations}
           pendingInvitations
           renderRowActionComponent={(invitation): JSX.Element => (
@@ -99,7 +103,7 @@ const InviteUsers: FC<Props> = (props) => {
 
       {acceptedInvitations.length > 0 && (
         <UserInvitationsTable
-          title="Accepted Invitations"
+          title={intl.formatMessage(translations.accepted)}
           invitations={acceptedInvitations}
           acceptedInvitations
         />

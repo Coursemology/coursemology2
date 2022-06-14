@@ -16,6 +16,7 @@ import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import sharedConstants from 'lib/constants/sharedConstants';
 import { InvitationEntity } from 'types/course/userInvitations';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
+import tableTranslations from 'lib/components/tables/translations';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -34,48 +35,15 @@ const translations = defineMessages({
     id: 'course.users.components.tables.ManageUsersTable.searchText',
     defaultMessage: 'Search by name, email, role, etc.',
   },
-  idColumn: {
-    id: 'course.users.components.tables.ManageUsersTable.column.id',
-    defaultMessage: 'id',
-  },
-  nameColumn: {
-    id: 'course.users.components.tables.ManageUsersTable.column.name',
-    defaultMessage: 'Name',
-  },
-  emailColumn: {
-    id: 'course.users.components.tables.ManageUsersTable.column.email',
-    defaultMessage: 'Email',
-  },
-  phantomColumn: {
-    id: 'course.users.components.tables.ManageUsersTable.column.phantom',
-    defaultMessage: 'Phantom',
-  },
-  roleColumn: {
-    id: 'course.users.components.tables.ManageUsersTable.column.role',
-    defaultMessage: 'Role',
-  },
-  timelineAlgorithmColumn: {
-    id: 'course.users.components.tables.ManageUsersTable.column.timelineAlgorithm',
-    defaultMessage: 'Timeline Algorithm',
-  },
-  actionsColumn: {
-    id: 'course.users.components.tables.ManageUsersTable.column.actions',
-    defaultMessage: 'Actions',
-  },
 });
 
 const styles = {
-  badge: {
-    maxHeight: 75,
-    maxWidth: 75,
-  },
   checkbox: {
     margin: '0px 12px 0px 0px',
     padding: 0,
   },
   textField: {
     width: '100%',
-    marginBottom: '0.5rem',
   },
 };
 
@@ -103,8 +71,12 @@ const ManageUsersTable: FC<Props> = (props) => {
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',
+    setTableProps: (): object => {
+      return { size: 'small' };
+    },
     setRowProps: (_row, dataIndex, _rowIndex): Record<string, unknown> => {
       return {
+        key: `user_${users[dataIndex].id}`,
         userid: `user_${users[dataIndex].id}`,
       };
     },
@@ -118,7 +90,7 @@ const ManageUsersTable: FC<Props> = (props) => {
   const columns: TableColumns[] = [
     {
       name: 'id',
-      label: intl.formatMessage(translations.idColumn),
+      label: intl.formatMessage(tableTranslations.id),
       options: {
         display: false,
         filter: false,
@@ -127,13 +99,20 @@ const ManageUsersTable: FC<Props> = (props) => {
     },
     {
       name: 'name',
-      label: intl.formatMessage(translations.nameColumn),
+      label: intl.formatMessage(tableTranslations.name),
       options: {
         alignCenter: false,
-        customBodyRender: (value, _tableMeta, updateValue): JSX.Element => {
+        customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
+          const user = tableMeta.tableData[tableMeta.rowIndex];
           return (
             <TextField
+              key={`name-${user.id}`}
               value={value}
+              // new one that doesn't work
+              // onChange={(event) =>
+              //   handleChange(updateValue, event.target.value)
+              // }
+              // old one that works
               onChange={(event): React.ChangeEvent =>
                 updateValue(event.target.value)
               }
@@ -146,13 +125,13 @@ const ManageUsersTable: FC<Props> = (props) => {
     },
     {
       name: 'email',
-      label: intl.formatMessage(translations.emailColumn),
+      label: intl.formatMessage(tableTranslations.email),
       options: {
         alignCenter: false,
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const user = users[dataIndex];
           return (
-            <Typography key={user.id} variant="body2">
+            <Typography key={`email-${user.id}`} variant="body2">
               {user.email}
             </Typography>
           );
@@ -161,7 +140,7 @@ const ManageUsersTable: FC<Props> = (props) => {
     },
     {
       name: 'phantom',
-      label: intl.formatMessage(translations.phantomColumn),
+      label: intl.formatMessage(tableTranslations.phantom),
       options: {
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
           const user = tableMeta.tableData[tableMeta.rowIndex];
@@ -182,7 +161,7 @@ const ManageUsersTable: FC<Props> = (props) => {
   if (permissions?.canManagePersonalTimes) {
     columns.push({
       name: 'timelineAlgorithm',
-      label: intl.formatMessage(translations.timelineAlgorithmColumn),
+      label: intl.formatMessage(tableTranslations.timelineAlgorithm),
       options: {
         alignCenter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
@@ -190,6 +169,7 @@ const ManageUsersTable: FC<Props> = (props) => {
           return (
             <TextField
               id={`timeline-algorithm-${user.id}`}
+              key={`timeline-algorithm-${user.id}`}
               select
               value={value}
               onChange={(e): React.ChangeEvent => updateValue(e.target.value)}
@@ -213,7 +193,7 @@ const ManageUsersTable: FC<Props> = (props) => {
   if (manageStaff && permissions?.canManageCourseUsers) {
     columns.push({
       name: 'role',
-      label: intl.formatMessage(translations.roleColumn),
+      label: intl.formatMessage(tableTranslations.role),
       options: {
         alignCenter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
@@ -221,6 +201,7 @@ const ManageUsersTable: FC<Props> = (props) => {
           return (
             <TextField
               id={`role-${user.id}`}
+              key={`role-${user.id}`}
               select
               value={value}
               onChange={(e): React.ChangeEvent => updateValue(e.target.value)}
@@ -244,7 +225,7 @@ const ManageUsersTable: FC<Props> = (props) => {
   if (renderRowActionComponent) {
     columns.push({
       name: 'actions',
-      label: intl.formatMessage(translations.actionsColumn),
+      label: intl.formatMessage(tableTranslations.actions),
       options: {
         empty: true,
         sort: false,

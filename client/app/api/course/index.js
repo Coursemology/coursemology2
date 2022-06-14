@@ -19,6 +19,7 @@ import UsersAPI from './Users';
 import LeaderboardAPI from './Leaderboard';
 import AnnouncementsAPI from './Announcements';
 import UserInvitationsAPI from './UserInvitations';
+import EnrolRequestsAPI from './EnrolRequests';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -42,6 +43,7 @@ const CourseAPI = {
   users: new UsersAPI(),
   leaderboard: new LeaderboardAPI(),
   userInvitations: new UserInvitationsAPI(),
+  enrolRequests: new EnrolRequestsAPI(),
 };
 
 Object.freeze(CourseAPI);

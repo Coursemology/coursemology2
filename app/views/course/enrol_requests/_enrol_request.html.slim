@@ -7,6 +7,7 @@
       td = enrol_request.user.email
       td = format_datetime(enrol_request.created_at)
       td = f.input :role, as: :select, include_blank: false, collection: CourseUser.roles.keys
+      / td = f.input :timeline_algorithm, as: :select, include_blank: false, collection: CourseUser.timeline_algorithms.keys
       td = f.input :phantom, label: false
       td
         = f.button :submit, class: 'approve', title: t('.approve') do

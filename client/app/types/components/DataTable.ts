@@ -47,6 +47,7 @@ export interface TableOptions {
     dataIndex: number,
     rowIndex: number,
   ) => Object;
+  setTableProps?: (size: string) => Object;
   sortOrder?: Object;
   tableBodyHeight?: string;
   textLabels?: Object;

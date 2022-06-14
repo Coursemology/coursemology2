@@ -27,23 +27,23 @@ class Course::EnrolRequestsController < Course::ComponentController
     end
   end
 
-  # Approve the given role request and creates the course user.
+  # Approve the given enrolment request and creates the course user.
   def approve
     course_user = create_course_user
     if course_user.persisted?
-      flash.now[:success] = t('.success', name: course_user.name, role: course_user.role)
       Course::Mailer.user_added_email(course_user).deliver_later
+      approve_success(course_user)
     else
-      flash.now[:danger] = course_user.errors.full_messages.to_sentence
+      approve_failure
     end
   end
 
   def reject
     if @enrol_request.update(reject: true)
       Course::Mailer.user_rejected_email(current_course, @enrol_request.user).deliver_later
-      redirect_to course_enrol_requests_path(current_course), success: t('.success', user: @enrol_request.user.name)
+      reject_success
     else
-      redirect_to course_enrol_requests_path(current_course), danger: @enrol_request.errors.full_messages.to_sentence
+      reject_failure
     end
   end
 
@@ -62,12 +62,44 @@ class Course::EnrolRequestsController < Course::ComponentController
   end
 
   def course_user_params
-    params.require(:course_user).permit(:name, :role, :phantom).to_h
+    params.require(:course_user).permit(:name, :role, :phantom, :timeline_algorithm).to_h
   end
 
   # @return [Course::UsersComponent]
   # @return [nil] If component is disabled.
   def component
     current_component_host[:course_users_component]
+  end
+
+  def approve_success(course_user)
+    respond_to do |format|
+      format.html { flash.now[:success] = t('.success', name: course_user.name, role: course_user.role) }
+      format.json { render '_enrol_request', locals: { enrol_request: @enrol_request }, status: :ok }
+    end
+  end
+
+  def approve_failure
+    respond_to do |format|
+      format.html { flash.now[:danger] = course_user.errors.full_messages.to_sentence }
+      format.json { render json: { errors: course_user.errors.full_messages.to_sentence }, status: :bad_request }
+    end
+  end
+
+  def reject_success
+    respond_to do |format|
+      format.html do
+        redirect_to course_enrol_requests_path(current_course), success: t('.success', user: @enrol_request.user.name)
+      end
+      format.json { render '_enrol_request', locals: { enrol_request: @enrol_request }, status: :ok }
+    end
+  end
+
+  def reject_failure
+    respond_to do |format|
+      format.html do
+        redirect_to course_enrol_requests_path(current_course), danger: @enrol_request.errors.full_messages.to_sentence
+      end
+      format.json { render json: { errors: @enrol_request.errors.full_messages.to_sentence }, status: :bad_request }
+    end
   end
 end

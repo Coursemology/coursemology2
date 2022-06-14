@@ -64,9 +64,13 @@ const translations = defineMessages({
     id: 'course.userInvitation.registrationCode.disable',
     defaultMessage: 'Disable Registration Code',
   },
-  success: {
-    id: 'course.userInvitation.registrationCode.success',
-    defaultMessage: 'Successfully updated course!',
+  enableSuccess: {
+    id: 'course.userInvitation.registrationCode.enable.success',
+    defaultMessage: 'Successfully enabled registration code!',
+  },
+  disableSuccess: {
+    id: 'course.userInvitation.registrationCode.disable.success',
+    defaultMessage: 'Successfully disabled registration code!',
   },
   cancel: {
     id: 'course.userInvitation.registrationCode.cancel',
@@ -101,7 +105,11 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
     setIsLoading(true);
     return dispatch(toggleRegistrationCode(registrationCode.length === 0))
       .then(() => {
-        toast.success(intl.formatMessage(translations.success));
+        if (registrationCode.length > 0) {
+          toast.success(intl.formatMessage(translations.disableSuccess));
+        } else {
+          toast.success(intl.formatMessage(translations.enableSuccess));
+        }
       })
       .finally(() => setIsLoading(false));
   };
@@ -111,7 +119,7 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
   }
 
   const renderRegistrationCode = (
-    <Tooltip title={intl.formatMessage(translations.copy)} followCursor>
+    <Tooltip title={intl.formatMessage(translations.copy)}>
       <pre
         role="presentation"
         style={styles.registrationCode}
@@ -141,10 +149,9 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
       </DialogTitle>
       <DialogContent>
         <Stack spacing={2}>
-          <Typography variant="body2">
-            {intl.formatMessage(translations.registrationCodeInfo)}
-          </Typography>
           <Alert severity="info">
+            {intl.formatMessage(translations.registrationCodeInfo)}
+            <br />
             {intl.formatMessage(translations.registrationCodeNote)}
           </Alert>
           {registrationCode.length > 0 ? (

@@ -4,7 +4,7 @@ import {
   CourseUserListData,
   CourseUserData,
   ManageCourseUsersPermissions,
-  ManageCourseUsersTabData,
+  ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
 import { EntityStore } from 'types/store';
 
@@ -29,7 +29,7 @@ export interface SaveManageUsersListAction {
   type: typeof SAVE_MANAGE_USERS_LIST;
   userList: CourseUserData[];
   manageCourseUsersPermissions: ManageCourseUsersPermissions;
-  manageCourseUsersData: ManageCourseUsersTabData;
+  manageCourseUsersData: ManageCourseUsersSharedData;
 }
 export interface DeleteUserAction {
   type: typeof DELETE_USER;
@@ -45,6 +45,6 @@ export type UsersActionType =
 // State Types
 export interface UsersState {
   users: EntityStore<CourseUserMiniEntity, CourseUserEntity>;
-  permissions: ManageCourseUsersPermissions | null;
-  manageCourseUsersData: ManageCourseUsersTabData | null;
+  permissions: ManageCourseUsersPermissions;
+  manageCourseUsersData: ManageCourseUsersSharedData;
 }

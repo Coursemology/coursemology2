@@ -183,7 +183,7 @@ module Course::UserInvitationService::ParseInvitationConcern
   # @return [Integer] The enum integer for +Course::UserInvitation.timeline_algorithm+ matching the input.
   #                   current_course.default_timeline_algorithm is returned by default.
   def parse_file_timeline_algorithm(timeline_algorithm)
-    return current_course.default_timeline_algorithm if timeline_algorithm.blank?
+    return @current_course.default_timeline_algorithm if timeline_algorithm.blank?
 
     symbol = timeline_algorithm.parameterize(separator: '_').to_sym
     symbol || @current_course.default_timeline_algorithm

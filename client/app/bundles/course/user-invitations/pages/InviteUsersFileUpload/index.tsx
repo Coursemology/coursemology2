@@ -10,7 +10,10 @@ import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { InvitationFileEntity } from 'types/course/userInvitations';
 import { inviteUsersFromFile } from '../../operations';
 import FileUploadForm from '../../components/forms/InviteUsersFileUploadForm';
-import { getManageCourseUserPermissions } from '../../selectors';
+import {
+  getManageCourseUserPermissions,
+  getManageCourseUsersSharedData,
+} from '../../selectors';
 
 interface Props extends WrappedComponentProps {
   open: boolean;
@@ -40,8 +43,8 @@ const translations = defineMessages({
   fileUploadInfoPersonalTimeline: {
     id: 'course.userInvitation.fileUpload.info.personalTimeline',
     defaultMessage:
-      'Personal Timelines can be <code>[fixed, otot, stragglers, fomo]</code>,\
-     and defaults to the course default if omitted.',
+      `Personal Timelines can be [fixed, otot, stragglers, fomo],` +
+      `with course default: {defaultTimelineAlgorithm} if omitted.`,
   },
   exampleHeader: {
     id: 'course.userInvitation.fileUpload.example.header',
@@ -68,7 +71,7 @@ const translations = defineMessages({
   failure: {
     id: 'course.userInvitation.registrationCode.failure',
     defaultMessage:
-      'Failed to invite users. Please ensure your data is formatted correctly',
+      'Failed to invite users. Please ensure your data is formatted correctly. {error}',
   },
   cancel: {
     id: 'course.userInvitation.registrationCode.cancel',
@@ -87,9 +90,14 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
   const [discardDialogOpen, setDiscardDialogOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
+  const sharedData = useSelector((state: AppState) =>
+    getManageCourseUsersSharedData(state),
+  );
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
   );
+
+  const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
 
   if (!open) {
     return null;
@@ -112,11 +120,16 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         if (warning) toast.warn(warning);
         setTimeout(() => {
           handleClose();
-        }, 1500);
+        }, 600);
       })
       .catch((error) => {
         toast.error(intl.formatMessage(translations.failure));
         if (error.response?.data) {
+          toast.error(
+            intl.formatMessage(translations.failure, {
+              error: error.response.data.errors,
+            }),
+          );
           setReactHookFormError(setError, error.response.data.errors);
         }
         throw error;
@@ -155,6 +168,7 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
               dangerouslySetInnerHTML={{
                 __html: intl.formatMessage(
                   translations.fileUploadInfoPersonalTimeline,
+                  { defaultTimelineAlgorithm },
                 ),
               }}
             />

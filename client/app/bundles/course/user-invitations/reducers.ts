@@ -24,6 +24,7 @@ const initialState: InvitationsState = {
   manageCourseUsersData: {
     requestsCount: 0,
     invitationsCount: 0,
+    defaultTimelineAlgorithm: 'fixed',
   },
   courseRegistrationKey: '',
 };

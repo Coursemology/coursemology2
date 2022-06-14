@@ -1,8 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import {
-  ManageCourseUsersPermissions,
-  ManageCourseUsersTabData,
-} from 'types/course/courseUsers';
 import { AppState } from 'types/store';
 import { selectEntities } from 'utilities/store';
 
@@ -18,11 +14,11 @@ export function getAllInvitationsEntities(state: AppState) {
 }
 
 export function getManageCourseUserPermissions(state: AppState) {
-  return getLocalState(state).permissions as ManageCourseUsersPermissions;
+  return getLocalState(state).permissions;
 }
 
-export function getManageCourseUsersTabData(state: AppState) {
-  return getLocalState(state).manageCourseUsersData as ManageCourseUsersTabData;
+export function getManageCourseUsersSharedData(state: AppState) {
+  return getLocalState(state).manageCourseUsersData;
 }
 
 export function getCourseRegistrationKey(state: AppState) {
