@@ -26,18 +26,6 @@ const SkillsTable: FC<Props> = (props: Props) => {
 
   const columns: TableColumns[] = [
     {
-      name: '',
-      label: '',
-      options: {
-        filter: false,
-        sort: false,
-        setCellProps: () => ({
-          style: { minWidth: '160px', maxWidth: '160px' },
-        }),
-        customHeadRender: () => null,
-      },
-    },
-    {
       name: 'title',
       label: '',
       options: {
@@ -56,9 +44,6 @@ const SkillsTable: FC<Props> = (props: Props) => {
       options: {
         filter: false,
         sort: false,
-        setCellProps: () => ({
-          style: { minWidth: '600px', maxWidth: '600px' },
-        }),
         customHeadRender: () => null,
         customBodyRenderLite: (_dataIndex: number) =>
           (
@@ -76,9 +61,6 @@ const SkillsTable: FC<Props> = (props: Props) => {
       options: {
         filter: false,
         sort: false,
-        setCellProps: () => ({
-          style: { minWidth: '110px', maxWidth: '110px' },
-        }),
         customHeadRender: () => null,
         customBodyRenderLite: (_dataIndex: number): JSX.Element => {
           const skill = data[_dataIndex];

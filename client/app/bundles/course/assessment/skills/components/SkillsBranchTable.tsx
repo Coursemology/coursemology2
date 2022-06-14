@@ -7,7 +7,6 @@ import {
   SkillData,
   SkillSettings,
 } from 'types/course/assessment/skills/skills';
-import { CSSProperties } from '@mui/styles';
 import SkillsTable from './SkillsTable';
 import SkillManagementButtons from './SkillManagementButtons';
 
@@ -34,24 +33,11 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
 
   const columns: TableColumns[] = [
     {
-      name: 'id',
-      label: 'S/N',
-      options: {
-        filter: false,
-        sort: false,
-        alignCenter: true,
-        justifyCenter: true,
-        setCellProps: () => ({ style: { width: '5%' } }),
-        customBodyRenderLite: (_dataIndex: number) => _dataIndex + 1,
-      },
-    },
-    {
       name: 'title',
       label: settings.headerTitle,
       options: {
         filter: false,
         sort: false,
-        setCellProps: () => ({ style: { width: '10%' } }),
         customBodyRenderLite: (_dataIndex: number) =>
           data[_dataIndex].title ?? '',
       },
@@ -62,7 +48,6 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
       options: {
         filter: false,
         sort: false,
-        setCellProps: () => ({ style: { width: '60%' } }),
         customBodyRenderLite: (_dataIndex: number) => (
           <div
             dangerouslySetInnerHTML={{
@@ -81,7 +66,6 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         alignCenter: true,
-        setCellProps: (): CSSProperties => ({ style: { width: '35%' } }),
         customBodyRenderLite: (_dataIndex: number): JSX.Element => {
           const branch = data[_dataIndex];
           // Only display if branch is not uncategorised
