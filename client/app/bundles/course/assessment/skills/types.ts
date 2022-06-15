@@ -77,3 +77,9 @@ export enum DialogTypes {
   'EditSkill' = 3,
   'EditSkillBranch' = 4,
 }
+
+// Table Types
+export enum TableTypes {
+  'SkillBranches' = 0,
+  'Skills' = 1,
+}

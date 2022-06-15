@@ -10,8 +10,12 @@ export interface TableColumns {
     sort?: boolean;
     alignCenter?: boolean;
     alignLeft?: boolean;
+    alignRight?: boolean;
     justifyCenter?: boolean;
+    justifyLeft?: boolean;
+    justifyRight?: boolean;
     setCellProps?: () => CSSProperties;
+    setCellHeaderProps?: () => CSSProperties;
     customBodyRenderLite?: (dataIndex: number) => string | JSX.Element | number;
     customHeadLabelRender?: () => JSX.Element | null;
     customHeadRender?: () => JSX.Element | null;

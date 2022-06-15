@@ -39,6 +39,14 @@ const translations = defineMessages({
     id: 'course.assessment.skills.components.SkillDialog.newSkill',
     defaultMessage: 'New Skill Branch',
   },
+  editSkill: {
+    id: 'course.assessment.skills.components.SkillDialog.newSkill',
+    defaultMessage: 'Edit Skill',
+  },
+  editSkillBranch: {
+    id: 'course.assessment.skills.components.SkillDialog.newSkill',
+    defaultMessage: 'Edit Skill Branch',
+  },
   createSkillSuccess: {
     id: 'course.assessment.skills.components.SkillDialog.createSkillSuccess',
     defaultMessage: 'Skill was created.',
@@ -188,6 +196,24 @@ const SkillDialog: FC<Props> = (props) => {
     }
   };
 
+  let title = '';
+  switch (dialogType) {
+    case DialogTypes.NewSkill:
+      title = intl.formatMessage(translations.newSkill);
+      break;
+    case DialogTypes.NewSkillBranch:
+      title = intl.formatMessage(translations.newSkillBranch);
+      break;
+    case DialogTypes.EditSkill:
+      title = intl.formatMessage(translations.editSkill);
+      break;
+    case DialogTypes.EditSkillBranch:
+      title = intl.formatMessage(translations.editSkillBranch);
+      break;
+    default:
+      break;
+  }
+
   return (
     <>
       <Dialog
@@ -201,11 +227,7 @@ const SkillDialog: FC<Props> = (props) => {
         open={open}
         maxWidth="xl"
       >
-        <DialogTitle>
-          {dialogType === DialogTypes.NewSkill
-            ? intl.formatMessage(translations.newSkill)
-            : intl.formatMessage(translations.newSkillBranch)}
-        </DialogTitle>
+        <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           <SkillForm
             handleClose={(): void => {

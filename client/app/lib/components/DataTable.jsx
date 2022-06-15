@@ -9,37 +9,49 @@ const options = {
   fixedSelectColumn: false,
 };
 
-const theme = createTheme({
-  ...adaptedTheme,
-  components: {
-    ...adaptedTheme.components,
-    MUIDataTableHeadCell: {
-      styleOverrides: {
-        fixedHeader: {
-          zIndex: 0,
+const processTheme = (newHeight) =>
+  createTheme({
+    ...adaptedTheme,
+    components: {
+      ...adaptedTheme.components,
+      MUIDataTableHeadCell: {
+        styleOverrides: {
+          fixedHeader: {
+            zIndex: 0,
+          },
+        },
+      },
+      MuiTablePagination: {
+        styleOverrides: {
+          selectLabel: {
+            marginBottom: 0,
+          },
+          displayedRows: {
+            marginBottom: 0,
+          },
+        },
+      },
+      MuiTableCell: {
+        styleOverrides: {
+          ...adaptedTheme.components.MuiTableCell.styleOverrides,
+          root: {
+            ...adaptedTheme.components.MuiTableCell.styleOverrides.root,
+            height:
+              newHeight ??
+              adaptedTheme.components.MuiTableCell.styleOverrides.root.height,
+          },
         },
       },
     },
-    MuiTablePagination: {
-      styleOverrides: {
-        selectLabel: {
-          marginBottom: 0,
-        },
-        displayedRows: {
-          marginBottom: 0,
+    overrides: {
+      MUIDataTableSelectCell: {
+        expandDisabled: {
+          // Soft hide the button.
+          visibility: 'hidden',
         },
       },
     },
-  },
-  overrides: {
-    MUIDataTableSelectCell: {
-      expandDisabled: {
-        // Soft hide the button.
-        visibility: 'hidden',
-      },
-    },
-  },
-});
+  });
 
 const processColumns = (includeRowNumber, columns) => {
   if (!columns) {
@@ -82,7 +94,7 @@ const processColumns = (includeRowNumber, columns) => {
  * Refer to https://github.com/gregnb/mui-datatables for the documentation.
  */
 const DataTable = (props) => (
-  <ThemeProvider theme={theme}>
+  <ThemeProvider theme={processTheme(props.height)}>
     <MUIDataTable
       {...props}
       columns={processColumns(props.includeRowNumber, props.columns)}

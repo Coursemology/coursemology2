@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { FC, ReactElement, useEffect, useState } from 'react';
@@ -12,14 +12,14 @@ import {
 } from 'types/course/assessment/skills/skills';
 import { AppDispatch, AppState } from 'types/store';
 import SkillDialog from '../../components/SkillDialog';
-import SkillsBranchTable from '../../components/SkillsBranchTable';
+import SkillsTable from '../../components/SkillsTable';
 import fetchSkills from '../../operations';
 import {
   getSkillBranches,
   getSkills,
   getSkillPermissions,
 } from '../../selectors';
-import { DialogTypes } from '../../types';
+import { DialogTypes, TableTypes } from '../../types';
 
 type Props = WrappedComponentProps;
 
@@ -55,25 +55,34 @@ const SkillsIndex: FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(true);
   const [dialogType, setDialogType] = useState(DialogTypes.NewSkill);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogData, setDialogData] = useState({} as SkillData);
+  const [branchSelected, setBranchSelected] = useState(-1);
+
   const permissions = useSelector((state: AppState) =>
     getSkillPermissions(state),
   );
-  const skillBranches = useSelector((state: AppState) =>
+  const skillBranchesEntity = useSelector((state: AppState) =>
     getSkillBranches(state),
   );
-  const skills = useSelector((state: AppState) => getSkills(state));
-  const data: SkillBranchData[] = skillBranches.map((branch) => {
-    return {
-      ...branch,
-      skills: skills.filter((skill) =>
-        branch.id !== -1 ? skill.branchId === branch.id : !skill.branchId,
-      ),
-    };
-  });
+  const skillsEntity = useSelector((state: AppState) => getSkills(state));
+  const data: SkillBranchData[] = skillBranchesEntity
+    .map((branch) => {
+      return {
+        ...branch,
+        skills: skillsEntity.filter((skill) =>
+          branch.id !== -1 ? skill.branchId === branch.id : !skill.branchId,
+        ),
+      };
+    })
+    .sort((a, b) => {
+      if (!a.title || !b.title) {
+        return !a.title ? 1 : -1;
+      }
+      return a.title.charCodeAt(0) - b.title.charCodeAt(0);
+    });
 
-  const branchOptions: BranchOptions[] = skillBranches
+  const branchOptions: BranchOptions[] = skillBranchesEntity
     .map((branch) => ({
       value: branch.id,
       label: branch.title,
@@ -101,7 +110,7 @@ const SkillsIndex: FC<Props> = (props) => {
         variant="outlined"
         color="primary"
         onClick={(): void => {
-          setIsOpen(true);
+          setIsDialogOpen(true);
           setDialogType(DialogTypes.NewSkill);
         }}
         style={styles.newButton}
@@ -118,7 +127,7 @@ const SkillsIndex: FC<Props> = (props) => {
         variant="outlined"
         color="primary"
         onClick={(): void => {
-          setIsOpen(true);
+          setIsDialogOpen(true);
           setDialogType(DialogTypes.NewSkillBranch);
         }}
         style={styles.newButton}
@@ -129,15 +138,19 @@ const SkillsIndex: FC<Props> = (props) => {
   }
 
   const editSkillClick = (skillData: SkillData): void => {
-    setIsOpen(true);
+    setIsDialogOpen(true);
     setDialogType(DialogTypes.EditSkill);
     setDialogData(skillData);
   };
 
   const editSkillBranchClick = (skillBranchData: SkillBranchData): void => {
-    setIsOpen(true);
+    setIsDialogOpen(true);
     setDialogType(DialogTypes.EditSkillBranch);
     setDialogData(skillBranchData);
+  };
+
+  const changeBranch = (branchIndex: number): void => {
+    setBranchSelected(branchIndex);
   };
 
   return (
@@ -146,15 +159,30 @@ const SkillsIndex: FC<Props> = (props) => {
         title={intl.formatMessage({ ...translations.skills })}
         toolbars={headerToolbars}
       />
-      <SkillsBranchTable
-        data={data}
-        editSkillClick={editSkillClick}
-        editSkillBranchClick={editSkillBranchClick}
-      />
+      <Grid container direction="row" columnGap={0.2} maxHeight="70vh">
+        <Grid item xs={5.9} id="skill-branches">
+          <SkillsTable
+            data={data}
+            editClick={editSkillBranchClick}
+            tableType={TableTypes.SkillBranches}
+            branchIndex={branchSelected}
+            changeBranch={changeBranch}
+          />
+        </Grid>
+        <Grid item xs={5.9} id="skills">
+          <SkillsTable
+            data={data}
+            editClick={editSkillClick}
+            tableType={TableTypes.Skills}
+            branchIndex={branchSelected}
+            changeBranch={changeBranch}
+          />
+        </Grid>
+      </Grid>
       <SkillDialog
         dialogType={dialogType}
-        open={isOpen}
-        handleClose={(): void => setIsOpen(false)}
+        open={isDialogOpen}
+        handleClose={(): void => setIsDialogOpen(false)}
         branchOptions={branchOptions}
         data={dialogData ?? null}
       />

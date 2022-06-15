@@ -19,15 +19,14 @@ interface Props extends WrappedComponentProps {
   isBranch: boolean;
   canUpdate?: boolean;
   canDestroy?: boolean;
-  editSkillClick: (data: SkillData) => void;
-  editSkillBranchClick?: (data: SkillBranchData) => void;
+  editClick: (data: SkillData | SkillBranchData) => void;
   data: SkillBranchData | SkillData;
 }
 
 const translations = defineMessages({
   deleteBranchSuccess: {
     id: 'course.assessment.skills.components.SkillManagementButtons.deleteBranchSuccess',
-    defaultMessage: 'Skill Branch was deleted.',
+    defaultMessage: 'Skill branch was deleted.',
   },
   deleteBranchFailure: {
     id: 'course.assessment.skills.components.SkillManagementButtons.deleteBranchFailure',
@@ -52,25 +51,16 @@ const translations = defineMessages({
 });
 
 const SkillManagementButtons: FC<Props> = (props) => {
-  const {
-    id,
-    canUpdate,
-    canDestroy,
-    intl,
-    isBranch,
-    data,
-    editSkillClick,
-    editSkillBranchClick,
-  } = props;
+  const { id, canUpdate, canDestroy, intl, isBranch, data, editClick } = props;
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const onEdit = (): void => {
-    if (isBranch && editSkillBranchClick) {
-      editSkillBranchClick(data as SkillBranchData);
+    if (isBranch) {
+      editClick(data as SkillBranchData);
     } else {
-      editSkillClick(data as SkillData);
+      editClick(data as SkillData);
     }
   };
 
@@ -101,7 +91,7 @@ const SkillManagementButtons: FC<Props> = (props) => {
   };
 
   const managementButtons = (
-    <div style={{ whiteSpace: 'nowrap' }}>
+    <div style={{ whiteSpace: 'nowrap', textAlign: 'end' }}>
       <EditButton
         className={`branch-edit-${id}`}
         disabled={!canUpdate}
