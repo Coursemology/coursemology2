@@ -108,7 +108,7 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellProps: () => ({
-          style: { textAlign: 'right', padding: '8px 14px' },
+          style: { textAlign: 'right' },
         }),
         customBodyRenderLite: (_dataIndex: number) => (
           <span className="fa fa-chevron-right" />
