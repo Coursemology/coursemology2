@@ -28,19 +28,23 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   upgradeSuccess: {
-    id: 'course.user.upgradeToStaff.success',
+    id: 'course.user.components.misc.upgradeToStaff.success',
     defaultMessage: '{name} is now a {role}',
   },
   upgradeFailure: {
-    id: 'course.user.upgradeToStaff.fail',
+    id: 'course.user.components.misc.upgradeToStaff.fail',
     defaultMessage: 'Failed to update user.',
   },
   upgradeHeader: {
-    id: 'course.user.upgradeToStaff.header',
+    id: 'course.user.components.misc.upgradeToStaff.header',
     defaultMessage: 'Upgrade Student',
   },
+  nameLabel: {
+    id: 'course.user.components.misc.upgradeToStaff.label',
+    defaultMessage: 'Name',
+  },
   upgradeButton: {
-    id: 'course.user.upgradeToStaff.button',
+    id: 'course.user.components.misc.upgradeToStaff.button',
     defaultMessage: 'Upgrade to staff',
   },
 });
@@ -75,27 +79,6 @@ const UpgradeToStaff: FC<Props> = (props) => {
           throw error;
         }),
     );
-    // return dispatch(upgradeToStaff(user.id, role))
-    //   .then(() => {
-    //     const roleLabel = sharedConstants.STAFF_ROLES.find(
-    //       (roleObjs) => roleObjs.value === role,
-    //     )?.label;
-    //     toast.success(
-    //       intl.formatMessage(translations.upgradeSuccess, {
-    //         name: user.name,
-    //         role: roleLabel,
-    //       }),
-    //     );
-    //     setUsers([students[0]]);
-    //   })
-    //   .catch((error) => {
-    //     toast.error(
-    //       intl.formatMessage(translations.upgradeFailure, {
-    //         error,
-    //       }),
-    //     );
-    //     throw error;
-    //   });
   };
 
   const handleNameChange = (_event, newValue): void => {
@@ -137,7 +120,11 @@ const UpgradeToStaff: FC<Props> = (props) => {
             </Box>
           )}
           renderInput={(params): JSX.Element => (
-            <TextField {...params} label="Name" variant="standard" />
+            <TextField
+              {...params}
+              label={intl.formatMessage(translations.nameLabel)}
+              variant="standard"
+            />
           )}
           sx={{ minWidth: '300px', marginRight: '12px' }}
         />

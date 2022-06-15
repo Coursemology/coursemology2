@@ -4,8 +4,13 @@ import {
   CourseUserData,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
+import { PersonalTimePostData } from 'types/course/personalTimes';
 import * as actions from './actions';
-import { SaveUserAction } from './types';
+import {
+  DeletePersonalTimeAction,
+  SaveUserAction,
+  UpdatePersonalTimeAction,
+} from './types';
 
 /**
  * Prepares and maps object attributes to a FormData object for a PATCH request on /update.
@@ -27,13 +32,19 @@ const formatAttributes = (data: CourseUserData): UpdateCourseUserPatchData => {
   return payload;
 };
 
-export function fetchUsers(): Operation<void> {
+export function fetchUsers(onlyStudents: boolean = true): Operation<void> {
   return async (dispatch) =>
     CourseAPI.users
-      .index()
+      .index(onlyStudents)
       .then((response) => {
         const data = response.data;
-        dispatch(actions.saveUsersList(data.users));
+        dispatch(
+          actions.saveUsersList(
+            data.users,
+            data.permissions,
+            data.manageCourseUsersData,
+          ),
+        );
       })
       .catch((error) => {
         throw error;
@@ -108,4 +119,64 @@ export function deleteUser(userId: number): Operation<void> {
     CourseAPI.users.delete(userId).then(() => {
       dispatch(actions.deleteUser(userId));
     });
+}
+
+export function fetchPersonalTimes(userId: number): Operation<void> {
+  return async (dispatch) =>
+    CourseAPI.personalTimes
+      .index(userId)
+      .then((response) => {
+        dispatch(actions.savePersonalTimesList(response.data.personalTimes));
+      })
+      .catch((error) => {
+        throw error;
+      });
+}
+
+export function recomputePersonalTimes(userId: number): Operation<void> {
+  return async (dispatch) =>
+    CourseAPI.personalTimes.recompute(userId).then((response) => {
+      dispatch(actions.savePersonalTimesList(response.data.personalTimes));
+    });
+}
+
+export function updatePersonalTime(
+  data: {
+    id: number;
+    fixed: boolean;
+    startAt?: string | Date;
+    bonusEndAt?: string | Date;
+    endAt?: string | Date;
+  },
+  userId: number,
+): Operation<UpdatePersonalTimeAction> {
+  const payload: PersonalTimePostData = {
+    personal_time: {
+      lesson_plan_item_id: data.id,
+      fixed: data.fixed,
+      start_at: data.startAt,
+      bonus_end_at: data.bonusEndAt,
+      end_at: data.endAt,
+    },
+  };
+
+  const formData = new FormData();
+  Object.keys(payload.personal_time).forEach((key) => {
+    formData.append(`personal_time[${key}]`, payload.personal_time[key]);
+  });
+
+  return async (dispatch) =>
+    CourseAPI.personalTimes
+      .update(formData, userId)
+      .then((response) => dispatch(actions.updatePersonalTime(response.data)));
+}
+
+export function deletePersonalTime(
+  personalTimeId: number,
+  userId: number,
+): Operation<DeletePersonalTimeAction> {
+  return async (dispatch) =>
+    CourseAPI.personalTimes
+      .delete(personalTimeId, userId)
+      .then(() => dispatch(actions.deletePersonalTime(personalTimeId)));
 }

@@ -43,6 +43,9 @@ export interface CourseUserData extends CourseUserListData {
   manageEmailSubscriptionUrl?: string;
   skillBranches?: UserSkillBranchListData[];
   timelineAlgorithm?: TimelineAlgorithm;
+  learningRate?: number;
+  learningRateEffectiveMin?: number;
+  learningRateEffectiveMax?: number;
 }
 
 export interface CourseUserEntity extends CourseUserMiniEntity {
@@ -55,6 +58,9 @@ export interface CourseUserEntity extends CourseUserMiniEntity {
   manageEmailSubscriptionUrl?: string;
   skillBranches?: UserSkillBranchMiniEntity[];
   timelineAlgorithm?: TimelineAlgorithm;
+  learningRate?: number;
+  learningRateEffectiveMin?: number;
+  learningRateEffectiveMax?: number;
 }
 
 export interface CourseUserFormData {

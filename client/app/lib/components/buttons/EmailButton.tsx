@@ -13,9 +13,11 @@ const EmailButton = ({
   ...props
 }: Props): JSX.Element => (
   <Tooltip title={tooltip}>
-    <IconButton onClick={onClick} color="inherit" {...props}>
-      <Email />
-    </IconButton>
+    <span>
+      <IconButton onClick={onClick} color="inherit" {...props}>
+        <Email />
+      </IconButton>
+    </span>
   </Tooltip>
 );
 

@@ -12,9 +12,9 @@ const formatAttributes = (
   const payload = {
     course_user: {
       name: data.name,
-      phantom: data.phantom, // will be undefined if user doesn't change
-      role: data.role, // will be undefined if user doesn't change
-      timeline_algorithm: data.timelineAlgorithm, // will be undefined if user doesn't change
+      phantom: data.phantom, // undefined if user doesn't change
+      role: data.role, // undefined if user doesn't change
+      timeline_algorithm: data.timelineAlgorithm, // undefined if user doesn't change
     },
   };
   return payload;

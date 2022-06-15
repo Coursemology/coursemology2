@@ -20,9 +20,21 @@ const USER_ROLES = [
 
 const STAFF_ROLES = USER_ROLES.slice(1);
 
+const ITEM_ACTABLE_TYPES = {
+  video: {
+    name: 'Course::Video',
+    value: 'video',
+  },
+  assessment: {
+    name: 'Course::Assessment',
+    value: 'assessment',
+  },
+};
+
 export default {
   SUPPORTED_VOICE_FILE_TYPES,
   TIMELINE_ALGORITHMS,
   USER_ROLES,
   STAFF_ROLES,
+  ITEM_ACTABLE_TYPES,
 };

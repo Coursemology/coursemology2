@@ -1,6 +1,6 @@
 module.exports = {
   parser: 'babel-eslint',
-  plugins: ['jest', 'formatjs'],
+  plugins: ['jest'],
   extends: [
     'airbnb',
     'eslint:recommended',
@@ -29,7 +29,6 @@ module.exports = {
     },
   },
   rules: {
-    'formatjs/no-offset': 'error',
     'react/destructuring-assignment': 'off',
     'react/forbid-prop-types': ['error', { forbid: ['any', 'array'] }],
     'react/jsx-props-no-spreading': 'off',

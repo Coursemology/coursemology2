@@ -25,6 +25,8 @@ unless current_component_host[:course_achievements_component].nil? || !is_studen
   end
 end
 
+json.timelineAlgorithm course_user.timeline_algorithm if current_course.show_personalized_timeline_features?
+
 all_skill_branches = @skills_service.skill_branches
 can_view_skills = all_skill_branches.present? && can_read_progress
 
@@ -34,6 +36,12 @@ if can_view_skills
   end
 end
 
+
+if @learning_rate_record.present?
+  json.learningRate @learning_rate_record.learning_rate
+  json.learningRateEffectiveMin @learning_rate_record.effective_min
+  json.learningRateEffectiveMax @learning_rate_record.effective_max
+end
 
 # NOTE: Facebook login feature is currently disabled
 # if facebook = course_user.user.identities.facebook.first

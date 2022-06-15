@@ -43,7 +43,7 @@ const translations = defineMessages({
   fileUploadInfoPersonalTimeline: {
     id: 'course.userInvitation.fileUpload.info.personalTimeline',
     defaultMessage:
-      `Personal Timelines can be [fixed, otot, stragglers, fomo],` +
+      `Personal Timelines can be [fixed, otot, stragglers, fomo], ` +
       `with course default: {defaultTimelineAlgorithm} if omitted.`,
   },
   exampleHeader: {

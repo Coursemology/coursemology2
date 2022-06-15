@@ -36,7 +36,7 @@ const translations = defineMessages({
     defaultMessage: 'Rejected Enrolment Requests',
   },
   fetchEnrolRequestsFailure: {
-    id: 'fail',
+    id: 'course.users.enrolRequests.fetch.failure',
     defaultMessage: 'Failed to fetch enrol requests',
   },
 });

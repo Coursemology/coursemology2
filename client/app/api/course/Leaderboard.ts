@@ -8,7 +8,7 @@ export default class LeaderboardsAPI extends BaseCourseAPI {
   }
 
   /**
-   * Fetches a list of achievements in a course.
+   * Fetches a list of leaderboard data in a course.
    */
   index(): Promise<AxiosResponse<LeaderboardData>> {
     return this.getClient().get(this._getUrlPrefix());

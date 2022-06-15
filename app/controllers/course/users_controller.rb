@@ -24,12 +24,17 @@ class Course::UsersController < Course::ComponentController
     course_users = current_course.course_users
     case params[:action]
     when 'index'
-      @course_users ||= course_users.without_phantom_users.students.
-                        includes(:user).order_alphabetically
+      @course_users ||= if params[:only_students] == 'false'
+                          course_users.includes(:user).order_alphabetically
+                        else
+                          course_users.without_phantom_users.students.
+                            includes(:user).order_alphabetically
+                        end
     else
       return if super
 
       @course_user ||= course_users.includes(:user).find(params[:id])
+      @learning_rate_record = @course_user.latest_learning_rate_record
     end
   end
 

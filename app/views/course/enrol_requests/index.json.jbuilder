@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 json.enrolRequests @enrol_requests.each do |enrol_request|
-  json.partial! 'enrol_request', enrol_request: enrol_request
+  json.partial! 'enrol_request_data', enrol_request: enrol_request
 end
 
 json.permissions do

@@ -22,19 +22,21 @@ const DeleteButton = ({
   return (
     <>
       <Tooltip title={tooltip}>
-        <IconButton
-          onClick={(): void => {
-            if (confirmMessage) {
-              setDialogOpen(true);
-            } else {
-              onClick();
-            }
-          }}
-          color="error"
-          {...props}
-        >
-          <Delete />
-        </IconButton>
+        <span>
+          <IconButton
+            onClick={(): void => {
+              if (confirmMessage) {
+                setDialogOpen(true);
+              } else {
+                onClick();
+              }
+            }}
+            color="error"
+            {...props}
+          >
+            <Delete />
+          </IconButton>
+        </span>
       </Tooltip>
       {dialogOpen && (
         <ConfirmationDialog

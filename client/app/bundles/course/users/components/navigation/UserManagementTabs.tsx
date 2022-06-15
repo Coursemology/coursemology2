@@ -134,7 +134,12 @@ const UserManagementTabs: FC<Props> = (props) => {
 
   const getCurrentTabIndex = (): number => {
     const path = getCurrentPath();
-    const res = tabs.findIndex((tab) => tab.href === path);
+    const res = tabs.findIndex(
+      (tab) =>
+        tab.href === path ||
+        (path?.includes('personal_times') &&
+          tab.href?.includes('personal_times')),
+    );
     return res === -1 ? 0 : res;
   };
 
