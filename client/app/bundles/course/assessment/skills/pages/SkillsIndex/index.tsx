@@ -160,7 +160,7 @@ const SkillsIndex: FC<Props> = (props) => {
         toolbars={headerToolbars}
       />
       <Grid container direction="row" columnGap={0.2} maxHeight="70vh">
-        <Grid item xs={5.9} id="skill-branches">
+        <Grid item xs id="skill-branches">
           <SkillsTable
             data={data}
             editClick={editSkillBranchClick}
@@ -169,7 +169,7 @@ const SkillsIndex: FC<Props> = (props) => {
             changeBranch={changeBranch}
           />
         </Grid>
-        <Grid item xs={5.9} id="skills">
+        <Grid item xs id="skills">
           <SkillsTable
             data={data}
             editClick={editSkillClick}
