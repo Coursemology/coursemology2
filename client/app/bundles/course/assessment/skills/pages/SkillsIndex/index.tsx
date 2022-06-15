@@ -14,7 +14,11 @@ import { AppDispatch, AppState } from 'types/store';
 import SkillDialog from '../../components/SkillDialog';
 import SkillsBranchTable from '../../components/SkillsBranchTable';
 import fetchSkills from '../../operations';
-import { getSkillBranches, getSkills, getSkillSettings } from '../../selectors';
+import {
+  getSkillBranches,
+  getSkills,
+  getSkillPermissions,
+} from '../../selectors';
 import { DialogTypes } from '../../types';
 
 type Props = WrappedComponentProps;
@@ -53,7 +57,9 @@ const SkillsIndex: FC<Props> = (props) => {
   const [dialogType, setDialogType] = useState(DialogTypes.NewSkill);
   const [isOpen, setIsOpen] = useState(false);
   const [dialogData, setDialogData] = useState({} as SkillData);
-  const settings = useSelector((state: AppState) => getSkillSettings(state));
+  const permissions = useSelector((state: AppState) =>
+    getSkillPermissions(state),
+  );
   const skillBranches = useSelector((state: AppState) =>
     getSkillBranches(state),
   );
@@ -88,7 +94,7 @@ const SkillsIndex: FC<Props> = (props) => {
 
   const headerToolbars: ReactElement[] = [];
 
-  if (settings.canCreateSkill) {
+  if (permissions.canCreateSkill) {
     headerToolbars.push(
       <Button
         key={DialogTypes.NewSkill}
@@ -105,7 +111,7 @@ const SkillsIndex: FC<Props> = (props) => {
     );
   }
 
-  if (settings.canCreateSkillBranch) {
+  if (permissions.canCreateSkillBranch) {
     headerToolbars.push(
       <Button
         key={DialogTypes.NewSkillBranch}
@@ -142,7 +148,6 @@ const SkillsIndex: FC<Props> = (props) => {
       />
       <SkillsBranchTable
         data={data}
-        settings={settings}
         editSkillClick={editSkillClick}
         editSkillBranchClick={editSkillBranchClick}
       />
@@ -150,7 +155,6 @@ const SkillsIndex: FC<Props> = (props) => {
         dialogType={dialogType}
         open={isOpen}
         handleClose={(): void => setIsOpen(false)}
-        settings={settings}
         branchOptions={branchOptions}
         data={dialogData ?? null}
       />

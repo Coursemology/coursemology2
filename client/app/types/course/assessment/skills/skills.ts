@@ -7,15 +7,9 @@ export interface BranchOptions {
  * Data types for skills data retrieved from backend through API call.
  */
 
-export interface SkillSettings {
+export interface SkillPermissions {
   canCreateSkill: boolean;
   canCreateSkillBranch: boolean;
-  headerTitle: string;
-  headerDescription: string;
-}
-
-export interface SkillListData extends SkillSettings {
-  skillBranches: SkillBranchData[];
 }
 
 export interface SkillData {

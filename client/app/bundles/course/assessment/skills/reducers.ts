@@ -8,8 +8,8 @@ import {
 import {
   DELETE_SKILL,
   DELETE_SKILL_BRANCH,
-  SAVE_SKILLS_LIST_DATA,
-  SAVE_SKILLS_SETTINGS,
+  SAVE_SKILL_BRANCH_LIST,
+  SAVE_SKILL_PERMISSIONS,
   SAVE_SKILL_BRANCH_DATA,
   SAVE_SKILL_DATA,
   SkillsActionType,
@@ -17,11 +17,9 @@ import {
 } from './types';
 
 const initialState: SkillState = {
-  skillSettings: {
+  skillPermissions: {
     canCreateSkill: false,
     canCreateSkillBranch: false,
-    headerTitle: '',
-    headerDescription: '',
   },
   skillBranches: createEntityStore(),
   skills: createEntityStore(),
@@ -29,11 +27,11 @@ const initialState: SkillState = {
 
 const reducer = produce((draft: SkillState, action: SkillsActionType) => {
   switch (action.type) {
-    case SAVE_SKILLS_SETTINGS: {
-      draft.skillSettings = { ...action.skillSettings };
+    case SAVE_SKILL_PERMISSIONS: {
+      draft.skillPermissions = { ...action.skillPermissions };
       break;
     }
-    case SAVE_SKILLS_LIST_DATA: {
+    case SAVE_SKILL_BRANCH_LIST: {
       saveListToStore(draft.skillBranches, action.skillBranches);
       saveListToStore(draft.skills, action.skills);
       break;

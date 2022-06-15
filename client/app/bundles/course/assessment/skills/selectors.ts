@@ -20,6 +20,6 @@ export function getSkills(state: AppState) {
   );
 }
 
-export function getSkillSettings(state: AppState) {
-  return getLocalState(state).skillSettings;
+export function getSkillPermissions(state: AppState) {
+  return getLocalState(state).skillPermissions;
 }

@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import {
-  SkillListData,
+  SkillBranchData,
+  SkillPermissions,
   SkillResponseData,
 } from 'types/course/assessment/skills/skills';
 import BaseCourseAPI from './Base';
@@ -17,7 +18,12 @@ export default class SkillssAPI extends BaseCourseAPI {
   /**
    * Fetches a list of skills in a course.
    */
-  index(): Promise<AxiosResponse<SkillListData>> {
+  index(): Promise<
+    AxiosResponse<{
+      skillBranches: SkillBranchData[];
+      permissions: SkillPermissions;
+    }>
+  > {
     return this.getClient().get(this._getUrlPrefix());
   }
 

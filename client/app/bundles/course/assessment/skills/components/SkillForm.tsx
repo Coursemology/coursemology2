@@ -13,7 +13,6 @@ import {
   BranchOptions,
   SkillBranchFormData,
   SkillFormData,
-  SkillSettings,
 } from 'types/course/assessment/skills/skills';
 import { DialogTypes } from '../types';
 
@@ -22,7 +21,6 @@ interface Props {
   onSubmit: (data: any, setError: unknown) => void;
   setIsDirty?: (value: boolean) => void;
   initialValues?: Object;
-  settings: SkillSettings;
   branchOptions: BranchOptions[];
   dialogType: DialogTypes;
 }
@@ -38,6 +36,14 @@ const translations = defineMessages({
     id: 'course.assessment.skills.components.SkillForm.branches',
     defaultMessage: 'Skill Branch',
   },
+  title: {
+    id: 'course.assessment.skills.components.SkillForm.title',
+    defaultMessage: 'Title',
+  },
+  description: {
+    id: 'course.assessment.skills.components.SkillForm.description',
+    defaultMessage: 'Description',
+  },
 });
 
 const validationSchema = yup.object({
@@ -52,7 +58,6 @@ const SkillForm: FC<Props> = (props) => {
     initialValues,
     onSubmit,
     setIsDirty,
-    settings,
     branchOptions,
     dialogType,
   } = props;
@@ -139,7 +144,7 @@ const SkillForm: FC<Props> = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={settings.headerTitle}
+              label={<FormattedMessage {...translations.title} />}
               // @ts-ignore: component is still written in JS
               fullWidth
               InputLabelProps={{
@@ -158,7 +163,7 @@ const SkillForm: FC<Props> = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={settings.headerDescription}
+              label={<FormattedMessage {...translations.description} />}
               // @ts-ignore: component is still written in JS
               fullWidth
               InputLabelProps={{

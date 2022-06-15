@@ -12,7 +12,6 @@ import {
   SkillBranchFormData,
   SkillData,
   SkillFormData,
-  SkillSettings,
 } from 'types/course/assessment/skills/skills';
 import { DialogTypes } from '../types';
 import SkillForm from './SkillForm';
@@ -27,7 +26,6 @@ interface Props extends WrappedComponentProps {
   dialogType: DialogTypes;
   open: boolean;
   handleClose: () => any;
-  settings: SkillSettings;
   branchOptions: BranchOptions[];
   data?: SkillData | SkillBranchData | null;
 }
@@ -81,8 +79,7 @@ const initialValues: SkillFormData = {
 };
 
 const SkillDialog: FC<Props> = (props) => {
-  const { open, handleClose, intl, dialogType, settings, branchOptions, data } =
-    props;
+  const { open, handleClose, intl, dialogType, branchOptions, data } = props;
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -221,7 +218,6 @@ const SkillDialog: FC<Props> = (props) => {
             initialValues={initialValues}
             onSubmit={onSubmit}
             setIsDirty={setIsDirty}
-            settings={settings}
             branchOptions={branchOptions}
             dialogType={dialogType}
           />

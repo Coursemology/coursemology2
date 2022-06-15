@@ -1,6 +1,6 @@
 import {
   SkillBranchData,
-  SkillSettings,
+  SkillPermissions,
   SkillBranchEntity,
   SkillEntity,
   SkillData,
@@ -9,10 +9,10 @@ import { EntityStore } from 'types/store';
 
 // Action Names
 
-export const SAVE_SKILLS_SETTINGS =
-  'course/assessment/skills/SAVE_SKILLS_SETTINGS';
-export const SAVE_SKILLS_LIST_DATA =
-  'course/assessment/skills/SAVE_SKILLS_LIST_DATA';
+export const SAVE_SKILL_PERMISSIONS =
+  'course/assessment/skills/SAVE_SKILL_PERMISSIONS';
+export const SAVE_SKILL_BRANCH_LIST =
+  'course/assessment/skills/SAVE_SKILL_BRANCH_LIST';
 export const SAVE_SKILL_DATA = 'course/assessment/skills/SAVE_SKILL_DATA';
 export const SAVE_SKILL_BRANCH_DATA =
   'course/assessment/skills/SAVE_SKILL_BRANCH_DATA';
@@ -22,8 +22,8 @@ export const DELETE_SKILL_BRANCH =
 
 // Action Types
 
-export interface SaveSkillListDataAction {
-  type: typeof SAVE_SKILLS_LIST_DATA;
+export interface SaveSkillBranchListAction {
+  type: typeof SAVE_SKILL_BRANCH_LIST;
   skillBranches: SkillBranchData[];
   skills: SkillData[];
 }
@@ -38,9 +38,9 @@ export interface SaveSkillBranchDataAction {
   skillBranch: SkillBranchEntity;
 }
 
-export interface SaveSkillSettingsAction {
-  type: typeof SAVE_SKILLS_SETTINGS;
-  skillSettings: SkillSettings;
+export interface SaveSkillPermissionsAction {
+  type: typeof SAVE_SKILL_PERMISSIONS;
+  skillPermissions: SkillPermissions;
 }
 
 export interface DeleteSkillAction {
@@ -54,8 +54,8 @@ export interface DeleteSkillBranchAction {
 }
 
 export type SkillsActionType =
-  | SaveSkillListDataAction
-  | SaveSkillSettingsAction
+  | SaveSkillBranchListAction
+  | SaveSkillPermissionsAction
   | SaveSkillDataAction
   | SaveSkillBranchDataAction
   | DeleteSkillBranchAction
@@ -64,7 +64,7 @@ export type SkillsActionType =
 // State Types
 
 export interface SkillState {
-  skillSettings: SkillSettings;
+  skillPermissions: SkillPermissions;
   skillBranches: EntityStore<SkillBranchEntity>;
   skills: EntityStore<SkillEntity>;
 }

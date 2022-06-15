@@ -5,7 +5,6 @@ import {
   SkillBranchFormData,
   SkillEntity,
   SkillFormData,
-  SkillListData,
   SkillResponseData,
 } from 'types/course/assessment/skills/skills';
 import { Operation } from 'types/store';
@@ -54,16 +53,9 @@ const fetchSkills = (): Operation<void> => {
     CourseAPI.assessment.skills
       .index()
       .then((response) => {
-        const data: SkillListData = response.data;
-        dispatch(
-          actions.saveSkillSettings({
-            canCreateSkill: data.canCreateSkill,
-            canCreateSkillBranch: data.canCreateSkillBranch,
-            headerTitle: data.headerTitle,
-            headerDescription: data.headerDescription,
-          }),
-        );
-        dispatch(actions.saveSkillListData(data.skillBranches));
+        const data = response.data;
+        dispatch(actions.saveSkillPermissions(data.permissions));
+        dispatch(actions.saveSkillBranchList(data.skillBranches));
       })
       .catch((error) => {
         throw error;

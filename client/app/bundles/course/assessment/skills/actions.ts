@@ -3,7 +3,7 @@ import {
   SkillBranchEntity,
   SkillData,
   SkillEntity,
-  SkillSettings,
+  SkillPermissions,
 } from 'types/course/assessment/skills/skills';
 import {
   DeleteSkillAction,
@@ -12,26 +12,26 @@ import {
   DELETE_SKILL_BRANCH,
   SaveSkillBranchDataAction,
   SaveSkillDataAction,
-  SaveSkillListDataAction,
-  SaveSkillSettingsAction,
-  SAVE_SKILLS_LIST_DATA,
-  SAVE_SKILLS_SETTINGS,
+  SaveSkillBranchListAction,
+  SaveSkillPermissionsAction,
+  SAVE_SKILL_BRANCH_LIST,
+  SAVE_SKILL_PERMISSIONS,
   SAVE_SKILL_BRANCH_DATA,
   SAVE_SKILL_DATA,
 } from './types';
 
-export function saveSkillSettings(
-  skillSettings: SkillSettings,
-): SaveSkillSettingsAction {
+export function saveSkillPermissions(
+  skillPermissions: SkillPermissions,
+): SaveSkillPermissionsAction {
   return {
-    type: SAVE_SKILLS_SETTINGS,
-    skillSettings,
+    type: SAVE_SKILL_PERMISSIONS,
+    skillPermissions,
   };
 }
 
-export function saveSkillListData(
+export function saveSkillBranchList(
   skillBranches: SkillBranchData[],
-): SaveSkillListDataAction {
+): SaveSkillBranchListAction {
   const skills = skillBranches
     .flatMap((branch: SkillBranchData) => {
       return branch.skills;
@@ -44,7 +44,7 @@ export function saveSkillListData(
     },
   );
   return {
-    type: SAVE_SKILLS_LIST_DATA,
+    type: SAVE_SKILL_BRANCH_LIST,
     skillBranches: newSkillBranches,
     skills,
   };

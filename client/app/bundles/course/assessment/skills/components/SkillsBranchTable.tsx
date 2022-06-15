@@ -5,14 +5,12 @@ import { TableColumns, TableRowMeta } from 'types/components/DataTable';
 import {
   SkillBranchData,
   SkillData,
-  SkillSettings,
 } from 'types/course/assessment/skills/skills';
 import SkillsTable from './SkillsTable';
 import SkillManagementButtons from './SkillManagementButtons';
 
 interface Props extends WrappedComponentProps {
   data: SkillBranchData[];
-  settings: SkillSettings;
   editSkillClick: (data: SkillData) => void;
   editSkillBranchClick: (data: SkillBranchData) => void;
 }
@@ -29,12 +27,12 @@ const translations = defineMessages({
 });
 
 const SkillsBranchTable: FC<Props> = (props: Props) => {
-  const { data, settings, intl, editSkillClick, editSkillBranchClick } = props;
+  const { data, intl, editSkillClick, editSkillBranchClick } = props;
 
   const columns: TableColumns[] = [
     {
       name: 'title',
-      label: settings.headerTitle,
+      label: 'Title',
       options: {
         filter: false,
         sort: false,
@@ -44,7 +42,7 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
     },
     {
       name: 'description',
-      label: settings.headerDescription,
+      label: 'Description',
       options: {
         filter: false,
         sort: false,
