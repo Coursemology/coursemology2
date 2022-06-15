@@ -13,13 +13,18 @@ export default class UsersAPI extends BaseCourseAPI {
 
   /**
    * Fetches a list of users in a course.
+   * param onlyStudents: bool - whether to return only students or all users
    */
-  index(): Promise<
+  index(onlyStudents: boolean = true): Promise<
     AxiosResponse<{
       users: CourseUserListData[];
+      permissions: ManageCourseUsersPermissions;
+      manageCourseUsersData: ManageCourseUsersSharedData;
     }>
   > {
-    return this.getClient().get(`${this._baseUrlPrefix}/users`);
+    return this.getClient().get(`${this._baseUrlPrefix}/users`, {
+      params: { only_students: onlyStudents },
+    });
   }
 
   /**

@@ -7,7 +7,7 @@ class Course::PersonalTimesController < Course::ComponentController
 
   def index
     if params[:user_id].present?
-      @course_user = CourseUser.find_by(course: @course, id: params[:user_id])
+      @course_user ||= CourseUser.find_by(course: @course, id: params[:user_id])
       @learning_rate_record = @course_user.latest_learning_rate_record
 
       # Only show for assessments and videos
@@ -25,9 +25,9 @@ class Course::PersonalTimesController < Course::ComponentController
     @item = @course.lesson_plan_items.find(params[:personal_time][:lesson_plan_item_id])
     @personal_time = @item.find_or_create_personal_time_for(@course_user)
     if @personal_time.update(personal_time_params)
-      redirect_to course_user_personal_times_path, success: t('.success')
+      render '_personal_time_data', locals: { item: @item }, status: :ok
     else
-      redirect_to course_user_personal_times_path, danger: @personal_time.errors.full_messages.to_sentence
+      render json: { errors: @personal_time.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -35,16 +35,16 @@ class Course::PersonalTimesController < Course::ComponentController
     @course_user = CourseUser.find_by(course: @course, id: params[:user_id])
     @personal_time = @course_user.personal_times.find(params[:id])
     if @personal_time.destroy
-      redirect_to course_user_personal_times_path, success: t('.success')
+      head :ok
     else
-      redirect_to course_user_personal_times_path, danger: @personal_time.errors.full_messages.to_sentence
+      render json: { errors: @personal_time.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   def recompute
     @course_user = CourseUser.find_by(course: @course, id: params[:user_id])
     update_personalized_timeline_for_user(@course_user) if @course_user.present?
-    redirect_to course_user_personal_times_path, success: t('.success', name: @course_user.name)
+    index
   end
 
   private

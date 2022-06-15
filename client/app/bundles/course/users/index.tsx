@@ -5,6 +5,8 @@ import UsersIndex from './pages/UsersIndex';
 import UserShow from './pages/UserShow';
 import ManageStudents from './pages/ManageStudents';
 import ManageStaff from './pages/ManageStaff';
+import PersonalTimes from './pages/PersonalTimes';
+import PersonalTimesShow from './pages/PersonalTimesShow';
 import configureStore from './store';
 
 $(() => {
@@ -17,7 +19,7 @@ $(() => {
       <ProviderWrapper {...{ store }}>
         <BrowserRouter>
           <Routes>
-            <Route path="/courses/:courseId/users/" element={<UsersIndex />} />
+            <Route path="/courses/:courseId/users" element={<UsersIndex />} />
             <Route
               path="/courses/:courseId/users/:userId"
               element={<UserShow />}
@@ -27,6 +29,14 @@ $(() => {
               element={<ManageStudents />}
             />
             <Route path="/courses/:courseId/staff" element={<ManageStaff />} />
+            <Route
+              path="/courses/:courseId/users/personal_times"
+              element={<PersonalTimes />}
+            />
+            <Route
+              path="/courses/:courseId/users/:userId/personal_times"
+              element={<PersonalTimesShow />}
+            />
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,

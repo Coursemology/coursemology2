@@ -232,7 +232,7 @@ const ManageUsersTable: FC<Props> = (props) => {
         alignCenter: true,
         customBodyRender: (_value, tableMeta): JSX.Element => {
           const rowData = tableMeta.currentTableData[tableMeta.rowIndex];
-          const user = rebuildObjectFromRow(columns, rowData); // maybe can optimize if we push this function to within the buttons?
+          const user = rebuildObjectFromRow(columns, rowData);
           const actionComponent = renderRowActionComponent(user);
           return actionComponent;
         },

@@ -61,6 +61,26 @@ const translations = defineMessages({
     id: 'components.table.column.actions',
     defaultMessage: 'Actions',
   },
+  referenceTimeline: {
+    id: 'components.table.column.referenceTimeline',
+    defaultMessage: 'Reference Timeline',
+  },
+  personalizedTimeline: {
+    id: 'components.table.column.personalizedTimeline',
+    defaultMessage: 'Personalized Timeline',
+  },
+  startAt: {
+    id: 'components.table.column.startAt',
+    defaultMessage: 'Start At',
+  },
+  bonusEndAt: {
+    id: 'components.table.column.bonusEndAt',
+    defaultMessage: 'Bonus Cut Off',
+  },
+  endAt: {
+    id: 'components.table.column.endAt',
+    defaultMessage: 'End At',
+  },
 });
 
 export default translations;

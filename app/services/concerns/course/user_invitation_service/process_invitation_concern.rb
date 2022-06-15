@@ -23,7 +23,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
   def process_invitations(users)
     augment_user_objects(users)
     existing_users, new_users = users.partition { |user| user[:user].present? }
-    
+
     [*invite_new_users(new_users), *add_existing_users(existing_users)]
   end
 

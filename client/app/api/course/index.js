@@ -20,6 +20,7 @@ import LeaderboardAPI from './Leaderboard';
 import AnnouncementsAPI from './Announcements';
 import UserInvitationsAPI from './UserInvitations';
 import EnrolRequestsAPI from './EnrolRequests';
+import PersonalTimesAPI from './PersonalTimes';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -44,6 +45,7 @@ const CourseAPI = {
   leaderboard: new LeaderboardAPI(),
   userInvitations: new UserInvitationsAPI(),
   enrolRequests: new EnrolRequestsAPI(),
+  personalTimes: new PersonalTimesAPI(),
 };
 
 Object.freeze(CourseAPI);

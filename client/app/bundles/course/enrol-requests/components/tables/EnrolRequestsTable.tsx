@@ -24,7 +24,7 @@ interface Props extends WrappedComponentProps {
   pendingEnrolRequests?: boolean;
   approvedEnrolRequests?: boolean;
   rejectedEnrolRequests?: boolean;
-  renderRowActionComponent?: (any) => ReactElement;
+  renderRowActionComponent?: (EnrolRequestEntity) => ReactElement;
 }
 
 const translations = defineMessages({

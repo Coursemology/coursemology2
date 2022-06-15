@@ -47,3 +47,10 @@ export function getManageCourseUserPermissions(state: AppState) {
 export function getManageCourseUsersSharedData(state: AppState) {
   return getLocalState(state).manageCourseUsersData;
 }
+
+export function getAllPersonalTimesEntities(state: AppState) {
+  return selectEntities(
+    getLocalState(state).personalTimes,
+    getLocalState(state).personalTimes.ids,
+  );
+}
