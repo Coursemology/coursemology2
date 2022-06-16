@@ -2,14 +2,8 @@ en:
   course:
     enrol_requests:
       index:
-        header: "User Requests"
-        pending_header: "Pending Enrolment Requests"
-        approved_header: "Approved Enrolment Requests"
-        rejected_header: "Rejected Enrolment Requests"
+        header: 'User Requests'
       approve:
         success: "%{name} is enrolled as a %{role}."
       reject:
-        success: "The role request made by %{user} has been rejected."
-      enrol_request:
-        approve: "Approve course enrolment request"
-        reject: "Reject course enrolment request"
+        success: 'The role request made by %{user} has been rejected.'
