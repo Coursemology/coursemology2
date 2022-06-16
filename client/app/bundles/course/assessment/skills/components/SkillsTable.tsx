@@ -6,10 +6,11 @@ import {
   SkillBranchData,
   SkillData,
 } from 'types/course/assessment/skills/skills';
-import { Slide, Typography, Box } from '@mui/material';
+import { Slide, Typography, Box, CardContent } from '@mui/material';
 import { CSSProperties } from '@mui/styles';
 import SkillManagementButtons from './SkillManagementButtons';
 import { TableTypes } from '../types';
+import './SkillsTable.scss';
 
 interface Props extends WrappedComponentProps {
   data: SkillBranchData[];
@@ -187,6 +188,7 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
                         alignSelf: 'center',
                         marginRight: 'auto',
                         wordBreak: 'break-word',
+                        paddingLeft: '8px',
                       }}
                     >
                       {tableData[indexSelected].title}
@@ -201,15 +203,23 @@ const SkillsBranchTable: FC<Props> = (props: Props) => {
                       data={tableData[indexSelected]}
                     />
                   </Box>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: tableData[indexSelected].description ?? '',
-                    }}
+                  <CardContent
                     style={{
-                      borderTop: '1px solid #e0e0e0',
-                      wordBreak: 'break-word',
+                      height: 80,
+                      overflow: 'auto',
+                      margin: 5,
+                      borderStyle: 'solid',
+                      borderWidth: 0.2,
+                      borderColor: '#eeeeee',
+                      borderRadius: 5,
+                      padding: '4px 4px',
                     }}
-                  />
+                  >
+                    <Typography
+                      variant="body2"
+                      dangerouslySetInnerHTML={{ __html: tableData[indexSelected].description ?? '' }}
+                    />
+                  </CardContent>
                 </>
               ) : (
                 <></>
