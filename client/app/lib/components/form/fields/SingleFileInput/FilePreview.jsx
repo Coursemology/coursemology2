@@ -6,12 +6,12 @@ import translations from './translations';
 const FilePreview = (props) => {
   const { file } = props;
   return (
-    <>
-      {file && <Chip label={file.name} className="file-name" />}
+    <div className="file-name">
+      {file && <Chip label={file.name} />}
       <div>
         <FormattedMessage {...translations.dropzone} />
       </div>
-    </>
+    </div>
   );
 };
 

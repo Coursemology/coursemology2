@@ -3,7 +3,6 @@ en:
     serial_number: 'S/N'
     name: 'Name'
     email: 'Email'
-    algorithm: 'Timeline algorithm'
     new: 'New'
     role: 'Role'
     not_started: 'Not started'
@@ -14,14 +13,9 @@ en:
     submit: 'Submit'
     summary: 'Summary'
     click_here: 'Click here'
-    created_at: 'Created At'
     truthy: 'Yes'
     falsey: 'No'
     percentage: '%{percentage}%'
-    approver: 'Approver'
-    approved_at: 'Approved At'
-    rejector: 'Rejector'
-    rejected_at: 'Rejected At'
   helpers:
     submit:
       condition_level:
