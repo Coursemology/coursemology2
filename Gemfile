@@ -212,7 +212,8 @@ gem 'simple_form'
 gem 'simple_form-bootstrap', git: 'https://github.com/raymondtangsc/simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
-gem 'momentjs-rails' # Needed for bootstrap3-datetimepicker-rails
+# momentjs-rails is needed for bootstrap3-datetimepicker-rails
+gem 'momentjs-rails', git: 'https://github.com/ekowidianto/momentjs-rails.git'
 gem 'bootstrap3-datetimepicker-rails'
 gem 'bootstrap-select-rails'
 gem 'bootstrap_tokenfield_rails'
