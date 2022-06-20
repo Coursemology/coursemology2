@@ -34,7 +34,7 @@ class Course::EnrolRequestsController < Course::ComponentController
       Course::Mailer.user_added_email(course_user).deliver_later
       approve_success t('.success', name: course_user.name, role: course_user.role)
     else
-      approve_failure
+      approve_failure(course_user)
     end
   end
 
@@ -78,7 +78,7 @@ class Course::EnrolRequestsController < Course::ComponentController
     end
   end
 
-  def approve_failure
+  def approve_failure(course_user)
     respond_to do |format|
       format.html { flash.now[:danger] = course_user.errors.full_messages.to_sentence }
       format.json { render json: { errors: course_user.errors.full_messages.to_sentence }, status: :bad_request }

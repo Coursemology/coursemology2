@@ -17,7 +17,11 @@ const RegistrationCodeButton: FC<Props> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const registrationCodeButton = (
-    <Button variant="contained" onClick={(): void => setIsOpen(true)}>
+    <Button
+      variant="contained"
+      onClick={(): void => setIsOpen(true)}
+      className="registration-code"
+    >
       {intl.formatMessage(translations.registrationCode)}
     </Button>
   );

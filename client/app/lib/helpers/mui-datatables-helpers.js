@@ -13,6 +13,6 @@
  */
 export default function rebuildObjectFromRow(columns, rowData) {
   return Object.fromEntries(
-    columns.map((col, colIndex) => [col.name, rowData.data[colIndex]]),
+    columns.map((col, colIndex) => [col.name, rowData[colIndex]]),
   );
 }

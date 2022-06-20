@@ -78,6 +78,7 @@ const ManageUsersTable: FC<Props> = (props) => {
       return {
         key: `user_${users[dataIndex].id}`,
         userid: `user_${users[dataIndex].id}`,
+        className: `course_user course_user_${users[dataIndex].id}`,
       };
     },
     sortOrder: {
@@ -103,16 +104,12 @@ const ManageUsersTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const user = tableMeta.tableData[tableMeta.rowIndex];
+          const userId = tableMeta.rowData[1];
           return (
             <TextField
-              key={`name-${user.id}`}
+              key={`name-${userId}`}
               value={value}
-              // new one that doesn't work
-              // onChange={(event) =>
-              //   handleChange(updateValue, event.target.value)
-              // }
-              // old one that works
+              className="course_user_name"
               onChange={(event): React.ChangeEvent =>
                 updateValue(event.target.value)
               }
@@ -131,7 +128,11 @@ const ManageUsersTable: FC<Props> = (props) => {
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const user = users[dataIndex];
           return (
-            <Typography key={`email-${user.id}`} variant="body2">
+            <Typography
+              key={`email-${user.id}`}
+              className="course_user_email"
+              variant="body2"
+            >
               {user.email}
             </Typography>
           );
@@ -143,11 +144,12 @@ const ManageUsersTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.phantom),
       options: {
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const user = tableMeta.tableData[tableMeta.rowIndex];
+          const user = users[tableMeta.rowIndex];
           return (
             <Checkbox
-              id={`checkbox_${user.id}`}
-              key={`checkbox_${user.id}`}
+              id={`phantom-${user.id}`}
+              key={`phantom-${user.id}`}
+              className="course_user_phantom"
               checked={value}
               style={styles.checkbox}
               onChange={(e): React.ChangeEvent => updateValue(e.target.checked)}
@@ -165,7 +167,7 @@ const ManageUsersTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const user = tableMeta.tableData[tableMeta.rowIndex];
+          const user = users[tableMeta.rowIndex];
           return (
             <TextField
               id={`timeline-algorithm-${user.id}`}
@@ -177,6 +179,7 @@ const ManageUsersTable: FC<Props> = (props) => {
             >
               {sharedConstants.TIMELINE_ALGORITHMS.map((option) => (
                 <MenuItem
+                  id={`timeline-algorithm-option-${user.id}-${option.value}`}
                   key={`timeline-algorithm-option-${user.id}-${option.value}`}
                   value={option.value}
                 >
@@ -197,11 +200,12 @@ const ManageUsersTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const user = tableMeta.tableData[tableMeta.rowIndex];
+          const user = users[tableMeta.rowIndex];
           return (
             <TextField
               id={`role-${user.id}`}
               key={`role-${user.id}`}
+              className="course_user_role"
               select
               value={value}
               onChange={(e): React.ChangeEvent => updateValue(e.target.value)}
@@ -209,6 +213,7 @@ const ManageUsersTable: FC<Props> = (props) => {
             >
               {sharedConstants.USER_ROLES.map((option) => (
                 <MenuItem
+                  id={`role-${user.id}-${option.value}`}
                   key={`role-${user.id}-${option.value}`}
                   value={option.value}
                 >
@@ -231,7 +236,7 @@ const ManageUsersTable: FC<Props> = (props) => {
         sort: false,
         alignCenter: true,
         customBodyRender: (_value, tableMeta): JSX.Element => {
-          const rowData = tableMeta.currentTableData[tableMeta.rowIndex];
+          const rowData = tableMeta.rowData;
           const user = rebuildObjectFromRow(columns, rowData);
           const actionComponent = renderRowActionComponent(user);
           return actionComponent;

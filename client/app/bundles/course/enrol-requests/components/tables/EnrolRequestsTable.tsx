@@ -71,6 +71,19 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     );
   }
 
+  const requestTypePrefix: string = ((): string => {
+    /* eslint-disable no-else-return */
+    if (approvedEnrolRequests) {
+      return 'approved';
+    } else if (rejectedEnrolRequests) {
+      return 'rejected';
+    } else if (pendingEnrolRequests) {
+      return 'pending';
+    }
+    return '';
+    /* eslint-enable no-else-return */
+  })();
+
   const options: TableOptions = {
     download: false,
     filter: false,
@@ -87,6 +100,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       return {
         key: `enrol-request_${enrolRequests[dataIndex].id}`,
         enrolrequestid: `enrol-request_${enrolRequests[dataIndex].id}`,
+        className: `enrol_request ${requestTypePrefix}_enrol_request_${enrolRequests[dataIndex].id}`,
       };
     },
     sortOrder: {
@@ -144,9 +158,12 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.name),
       options: {
         alignCenter: false,
-        customBodyRender: (value, _tableMeta, updateValue): JSX.Element => {
+        customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
+          const enrolRequest = enrolRequests[tableMeta.rowIndex];
           return (
             <TextField
+              key={`name-${enrolRequest.id}`}
+              className="enrol_request_name"
               value={value}
               onChange={(event): React.ChangeEvent =>
                 updateValue(event.target.value)
@@ -165,7 +182,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const enrolRequest = tableMeta.tableData[tableMeta.rowIndex];
+          const enrolRequest = enrolRequests[tableMeta.rowIndex];
           return (
             <TextField
               id={`role-${enrolRequest.id}`}
@@ -192,7 +209,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.phantom),
       options: {
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const enrolRequest = tableMeta.tableData[tableMeta.rowIndex];
+          const enrolRequest = enrolRequests[tableMeta.rowIndex];
           return (
             <Checkbox
               id={`checkbox_${enrolRequest.id}`}

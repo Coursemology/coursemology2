@@ -10,42 +10,43 @@ RSpec.feature 'Courses: Students' do
     let!(:course_students) { create_list(:course_student, 3, course: course) }
     before { login_as(user, scope: :user) }
 
-    scenario 'Course staff can view the list of students registered' do
+    scenario 'Course staff can view the list of students registered', js: true do
       visit course_users_students_path(course)
 
       course_students.each do |course_user|
-        expect(page).to have_field('course_user_name', with: course_user.name)
+        expect(page).to have_selector("tr.course_user_#{course_user.id}")
       end
     end
 
     scenario "Course staff can update students' records", js: true do
       student_to_update = course_students.sample
-      new_name = 'NewNamePerson'
+      new_name = 'new student name'
 
       visit course_users_students_path(course)
 
-      within find(content_tag_selector(student_to_update)) do
-        fill_in 'course_user_name', with: new_name
-        check 'course_user_phantom'
-        click_button 'update'
+      within find("tr.course_user_#{student_to_update.id}") do
+        find('div.course_user_name').find('input').set(new_name)
+        find("#phantom-#{student_to_update.id}", visible: false).click
+        find("button.user-save-#{student_to_update.id}").click
       end
 
-      wait_for_ajax
-
-      student_to_update = student_to_update.reload
-      expect(student_to_update).to be_phantom
+      expect_toastify("Record for #{new_name} was updated.")
+      expect(student_to_update.reload).to be_phantom
       expect(student_to_update.name).to eq(new_name)
-      expect(page).to have_text('course.users.update.success')
     end
 
-    scenario 'Course staff can delete students' do
+    scenario 'Course staff can delete students', js: true do
       user_to_delete = course_students.first
-
       visit course_users_students_path(course)
+
       expect do
-        find_link(nil, href: course_user_path(course, user_to_delete)).click
-      end.to change { page.all('.course_user').count }.by(-1)
-      expect(page).to_not have_field('course_user_name', with: user_to_delete.name)
+        find("button.user-delete-#{user_to_delete.id}").click
+        accept_confirm_dialog
+      end.to change { page.all('tr.course_user').count }.by(-1)
+
+      page.all('div.course_user_name > input') do |input|
+        expect(input).to_not_have user_to_delete.name
+      end
     end
   end
 end

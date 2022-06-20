@@ -104,7 +104,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
     <div style={{ whiteSpace: 'nowrap' }}>
       <EmailButton
         tooltip={intl.formatMessage(translations.resendTooltip)}
-        className={`invitation-accept-${invitation.id}`}
+        className={`invitation-resend-${invitation.id}`}
         disabled={isResending || isDeleting}
         onClick={onResend}
       />

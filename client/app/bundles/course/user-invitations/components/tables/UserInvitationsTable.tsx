@@ -53,6 +53,10 @@ const UserInvitationsTable: FC<Props> = (props) => {
     );
   }
 
+  const invitationTypePrefix: string = pendingInvitations
+    ? 'pending'
+    : 'accepted';
+
   const options: TableOptions = {
     download: false,
     filter: false,
@@ -69,6 +73,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
       return {
         key: `invitation_${invitations[dataIndex].id}`,
         invitationid: `invitation_${invitations[dataIndex].id}`,
+        className: `invitation ${invitationTypePrefix}_invitation_${invitations[dataIndex].id}`,
       };
     },
     sortOrder: {
@@ -217,7 +222,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
         sort: false,
         alignCenter: true,
         customBodyRender: (_value, tableMeta): JSX.Element => {
-          const rowData = tableMeta.currentTableData[tableMeta.rowIndex];
+          const rowData = tableMeta.rowData;
           const user = rebuildObjectFromRow(columns, rowData);
           const actionComponent = renderRowActionComponent(user);
           return actionComponent;

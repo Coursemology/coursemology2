@@ -45,58 +45,72 @@ RSpec.feature 'Courses: Staff Management' do
         expect(page).to have_selector('li', text: 'layouts.course_users.title')
       end
 
-      scenario 'I can view the list of staff' do
+      scenario 'I can view the list of staff', js: true do
         visit course_users_staff_path(course)
 
         course_students.each do |student|
-          expect(page).not_to have_field('course_user_name', with: student.name)
+          expect(page).not_to have_selector("tr.course_user_#{student.id}")
         end
 
         course_managers.each do |staff|
-          expect(page).to have_field('course_user_name', with: staff.name)
+          expect(page).to have_selector("tr.course_user_#{staff.id}")
         end
       end
 
-      scenario 'I can change staff roles', js: true do
+      scenario 'I can change staff name and role', js: true do
         new_name = 'new staff name'
         staff_to_change = course_managers.sample
         visit course_users_staff_path(course)
 
-        within find(content_tag_selector(staff_to_change)) do
-          fill_in 'course_user_name', with: new_name, fill_options: { clear: :backspace }
-          select 'owner'
-          click_button 'update'
+        within find("tr.course_user_#{staff_to_change.id}") do
+          find('div.course_user_name').find('input').set(new_name)
+          find('div.course_user_role').click
+        end
+        find("#role-#{staff_to_change.id}-owner").select_option
+
+        within find("tr.course_user_#{staff_to_change.id}") do
+          find("button.user-save-#{staff_to_change.id}").click
         end
 
-        wait_for_ajax
-
+        expect_toastify("Record for #{new_name} was updated.")
         expect(staff_to_change.reload).to be_owner
         expect(staff_to_change.name).to eq(new_name)
-        expect(page).to have_text('course.users.update.success')
       end
 
-      scenario 'I can add new staff' do
+      scenario 'I can add new staff', js: true do
         visit course_users_staff_path(course)
 
         staff_to_be = course_students[0]
-        expect(page).not_to have_field('course_user_name', with: staff_to_be.name)
 
-        find('#course_user_id').
-          find(:css, "option[value='#{staff_to_be.id}']").
-          select_option
-        click_button I18n.t('course.users.staff.upgrade_to_staff')
+        page.all('div.course_user_name > input') do |input|
+          expect(input).to_not_have staff_to_be.name
+        end
 
-        expect(page).to have_field('course_user_name', with: staff_to_be.name)
+        find('#upgrade-student-name').click
+        find('#upgrade-student-name-option-0').select_option
+        find('button.MuiAutocomplete-popupIndicator').click # close the autocomplete popup
+
+        click_button 'Upgrade to staff'
+
+        expect_toastify("#{staff_to_be.name} is now a Teaching Assistant")
+
+        within find("tr.course_user_#{staff_to_be.id}") do
+          expect(find('div.course_user_name').find('input').value).to eq(staff_to_be.name)
+        end
       end
 
-      scenario 'I can delete staff' do
+      scenario 'I can delete staff', js: true do
         staff_to_delete = course_managers.sample
         visit course_users_staff_path(course)
 
         expect do
-          find_link(nil, href: course_user_path(course, staff_to_delete)).click
-        end.to change { page.all('.course_user').count }.by(-1)
-        expect(page).not_to have_field('course_user_name', with: staff_to_delete.name)
+          find("button.user-delete-#{staff_to_delete.id}").click
+          accept_confirm_dialog
+        end.to change { page.all('tr.course_user').count }.by(-1)
+
+        page.all('div.course_user_name > input') do |input|
+          expect(input).to_not_have staff_to_delete.name
+        end
       end
     end
   end

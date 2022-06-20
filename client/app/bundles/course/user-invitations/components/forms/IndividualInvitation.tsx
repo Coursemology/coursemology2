@@ -67,6 +67,7 @@ const IndividualInvitation: FC<Props> = (props) => {
             placeholder="Awesome User"
             label="Name"
             variant="standard"
+            id={`name-${index}`}
             sx={styles.textInput}
           />
         )}
@@ -82,6 +83,7 @@ const IndividualInvitation: FC<Props> = (props) => {
             placeholder="user@example.com"
             label="Email"
             variant="standard"
+            id={`email-${index}`}
             sx={styles.textInput}
           />
         )}

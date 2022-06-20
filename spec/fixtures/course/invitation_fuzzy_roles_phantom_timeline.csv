@@ -1,0 +1,10 @@
+name,email,role,phantom,timeline_algorithm
+Foo,bar@foo.com,,,
+Non-Phantom Staff 1,foo1@bar.com,Teaching Assistant,no,stragGlers
+Non-Phantom Staff 2,foo2@bar.com,manager,no,OTOT
+Non-Phantom Staff 3,foo3@bar.com,oWNER,no,Fomo
+Non-Phantom Staff 4,foo4@bar.com,Observer,no,Fixed
+Phantom Baz,foo5@bar.com,teaching_AssisTant,y,otot
+Phantom Student1,foo6@bar.com,student,t,fixed
+Phantom Student2,foo7@bar.com,student,yes,foMo
+Phantom Student3,foo8@bar.com,student,true,stragglers
