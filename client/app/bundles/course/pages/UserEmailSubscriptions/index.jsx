@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   ListSubheader,
   Switch,
@@ -37,14 +37,14 @@ class UserEmailSubscriptions extends Component {
   };
 
   handleUserEmailSubscriptionsUpdate = (setting) => {
-    const { userEmailSubscriptionsPageFilter, dispatch } = this.props;
+    const { userEmailSubscriptionsPageFilter, dispatch, intl } = this.props;
     const componentTitle =
       setting.component_title ??
       (subscriptionComponents[setting.component]
-        ? subscriptionComponents[setting.component].defaultMessage
+        ? intl.formatMessage(subscriptionComponents[setting.component])
         : setting.component);
     const settingTitle = subscriptionTitles[setting.setting]
-      ? subscriptionTitles[setting.setting].defaultMessage
+      ? intl.formatMessage(subscriptionTitles[setting.setting])
       : setting.setting;
     return (_, enabled) => {
       const payloadSetting = { ...setting, enabled };
@@ -204,9 +204,10 @@ UserEmailSubscriptions.propTypes = {
   ),
   userEmailSubscriptionsPageFilter: PropTypes.object,
   dispatch: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default connect((state) => ({
   userEmailSubscriptions: state.userEmailSubscriptions.settings,
   userEmailSubscriptionsPageFilter: state.userEmailSubscriptions.pageFilter,
-}))(UserEmailSubscriptions);
+}))(injectIntl(UserEmailSubscriptions));
