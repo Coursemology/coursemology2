@@ -17,6 +17,7 @@ import sharedConstants from 'lib/constants/sharedConstants';
 import { InvitationEntity } from 'types/course/userInvitations';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import tableTranslations from 'lib/components/tables/translations';
+import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -41,9 +42,6 @@ const styles = {
   checkbox: {
     margin: '0px 12px 0px 0px',
     padding: 0,
-  },
-  textField: {
-    width: '100%',
   },
 };
 
@@ -106,14 +104,11 @@ const ManageUsersTable: FC<Props> = (props) => {
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
           const userId = tableMeta.rowData[1];
           return (
-            <TextField
+            <InlineEditTextField
               key={`name-${userId}`}
               value={value}
               className="course_user_name"
-              onChange={(event): React.ChangeEvent =>
-                updateValue(event.target.value)
-              }
-              style={styles.textField}
+              updateValue={updateValue}
               variant="standard"
             />
           );
