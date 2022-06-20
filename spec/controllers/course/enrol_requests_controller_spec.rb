@@ -78,7 +78,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
       end
     end
 
-    describe '#approve' do
+    describe '#approve', js: true do
       before { sign_in(admin) }
       let!(:request) { create(:course_enrol_request, :pending, course: course, user: user) }
 
@@ -86,13 +86,13 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
         patch :approve, params: { course_id: course,
                                   id: request,
                                   course_user: { name: user.name, role: 'student', phantom: false },
-                                  format: 'js' }
+                                  format: 'json' }
       end
 
       context 'when a valid request is approved' do
         it 'adds the user to the course' do
           subject
-          expect(flash[:success]).to eq(I18n.t('course.enrol_requests.approve.success'))
+          expect(subject).to have_http_status(:ok)
 
           request.reload
           expect(request.workflow_state).to eq('approved')
@@ -113,27 +113,28 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
 
       context 'when a course user already exists' do
         let!(:course_user) { create(:course_student, course: course, user: user) }
-        it 'flashes an error' do
+        it 'returns bad_request with errors' do
           subject
-          expect(flash[:danger]).not_to be_nil
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
         end
       end
     end
 
-    describe '#reject' do
+    describe '#reject', js: true do
       before { sign_in(admin) }
       let!(:request) { create(:course_enrol_request, :pending, course: course, user: user) }
 
       subject do
         patch :reject, params: { course_id: course,
-                                 id: request }
+                                 id: request,
+                                 format: 'json' }
       end
 
       context 'when a valid request is rejected' do
         it 'does not add the user to the course' do
           subject
-          expect(flash[:success]).to eq(I18n.t('course.enrol_requests.reject.success'))
-          is_expected.to redirect_to(course_enrol_requests_path)
+          expect(subject).to have_http_status(:ok)
 
           request.reload
           expect(request.workflow_state).to eq('rejected')
@@ -162,8 +163,8 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
         it 'fails to reject the request' do
           subject
 
-          expect(flash[:danger]).to eq('')
-          is_expected.to redirect_to(course_enrol_requests_path)
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
         end
       end
     end

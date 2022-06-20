@@ -4,12 +4,12 @@ require 'rails_helper'
 RSpec.describe Course::UserInvitationService, type: :service do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
-    def temp_csv_from_attributes(records, roles = [])
+    def temp_csv_from_attributes(records, roles = [], timeline_algorithms = [])
       Tempfile.new(File.basename(__FILE__, '.*')).tap do |file|
         file.write(CSV.generate do |csv|
           csv << [:name, :email, :role]
-          records.zip(roles).each do |user, role|
-            csv << (role.blank? ? [user.name, user.email] : [user.name, user.email, role, false])
+          records.zip(roles, timeline_algorithms).each do |user, role, timeline_algorithm|
+            csv << (role.blank? ? [user.name, user.email] : [user.name, user.email, role, false, timeline_algorithm])
           end
         end)
         file.rewind
@@ -29,6 +29,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     subject { Course::UserInvitationService.new(course_user) }
 
     let(:existing_roles) { Course::UserInvitation.roles.keys.sample(3).map(&:to_sym) }
+    let(:existing_timeline_algorithms) { Course::UserInvitation.timeline_algorithms.keys.sample(3).map(&:to_sym) }
     let(:existing_users) do
       (1..3).map do
         create(:instance_user).user
@@ -37,10 +38,11 @@ RSpec.describe Course::UserInvitationService, type: :service do
     let(:existing_user_attributes) do
       existing_users.each_with_index.map do |user, id|
         { name: user.name, email: user.email, phantom: false,
-          role: existing_roles[id] }
+          role: existing_roles[id], timeline_algorithm: existing_timeline_algorithms[id] }
       end
     end
     let(:new_roles) { Course::UserInvitation.roles.keys.sample(3).map(&:to_sym) }
+    let(:new_timeline_algorithms) { Course::UserInvitation.timeline_algorithms.keys.sample(3).map(&:to_sym) }
     let(:new_users) do
       (1..3).map do
         build(:user)
@@ -49,7 +51,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     let(:new_user_attributes) do
       new_users.each_with_index.map do |user, id|
         { name: user.name, email: user.email, phantom: false,
-          role: new_roles[id] }
+          role: new_roles[id], timeline_algorithm: new_timeline_algorithms[id] }
       end
     end
     let(:invalid_user_attributes) do
@@ -57,6 +59,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
     end
     let(:users) { existing_users + new_users }
     let(:roles) { existing_roles + new_roles }
+    let(:timeline_algorithms) { existing_timeline_algorithms + new_timeline_algorithms }
     let(:user_attributes) { existing_user_attributes + new_user_attributes + invalid_user_attributes }
     let(:user_form_attributes) do
       user_attributes.map do |hash|
@@ -64,7 +67,8 @@ RSpec.describe Course::UserInvitationService, type: :service do
          name: hash[:name],
          email: hash[:email],
          role: hash[:role],
-         phantom: hash[:phantom]]
+         phantom: hash[:phantom],
+         timeline_algorithm: hash[:timeline_algorithm]]
       end.to_h
     end
 
@@ -207,7 +211,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
     describe '#parse_from_file' do
       subject { stubbed_user_invitation_service }
-      let(:temp_csv) { temp_csv_from_attributes(users, roles) }
+      let(:temp_csv) { temp_csv_from_attributes(users, roles, timeline_algorithms) }
       after { temp_csv.close! }
 
       it 'accepts a file with name/header' do
@@ -251,6 +255,54 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
       end
 
+      context 'when the provided file has no timeline algorithm and \
+      default course timeline setting is fomo' do
+        before do
+          course.update!(default_timeline_algorithm: 'fomo')
+        end
+        let(:temp_csv_without_timeline) { temp_csv_from_attributes(users) }
+        after { temp_csv_without_timeline.close! }
+
+        it 'defaults the timeline algorithm to fomo' do
+          result = subject.send(:parse_from_file, temp_csv_without_timeline)
+          result.each do |attr|
+            expect(attr[:timeline_algorithm]).to eq('fomo')
+          end
+        end
+      end
+
+      context 'when the provided file has no timeline algorithm and \
+      default course timeline setting is stragglers' do
+        before do
+          course.update!(default_timeline_algorithm: 'stragglers')
+        end
+        let(:temp_csv_without_timeline) { temp_csv_from_attributes(users) }
+        after { temp_csv_without_timeline.close! }
+
+        it 'defaults the timeline algorithm to stragglers' do
+          result = subject.send(:parse_from_file, temp_csv_without_timeline)
+          result.each do |attr|
+            expect(attr[:timeline_algorithm]).to eq('stragglers')
+          end
+        end
+      end
+
+      context 'when the provided file has no timeline algorithm and \
+      default course timeline setting is otot' do
+        before do
+          course.update!(default_timeline_algorithm: 'otot')
+        end
+        let(:temp_csv_without_timeline) { temp_csv_from_attributes(users) }
+        after { temp_csv_without_timeline.close! }
+
+        it 'defaults the timeline algorithm to otot' do
+          result = subject.send(:parse_from_file, temp_csv_without_timeline)
+          result.each do |attr|
+            expect(attr[:timeline_algorithm]).to eq('otot')
+          end
+        end
+      end
+
       context 'when the provided file has whitespace in the fields' do
         let(:csv_file) { file_fixture('course/invitation_whitespace.csv') }
 
@@ -263,10 +315,11 @@ RSpec.describe Course::UserInvitationService, type: :service do
         end
       end
 
-      context 'when the csv file has slightly invalid role and/or phantom specifications' do
+      context 'when the csv file has slightly invalid role and/or phantom and/or \
+      timeline algorithm specifications' do
         subject do
           stubbed_user_invitation_service.
-            send(:parse_from_file, file_fixture('course/invitation_fuzzy_roles_and_phantom.csv'))
+            send(:parse_from_file, file_fixture('course/invitation_fuzzy_roles_phantom_timeline.csv'))
         end
 
         it 'defaults blank role column to student' do
@@ -275,6 +328,10 @@ RSpec.describe Course::UserInvitationService, type: :service do
 
         it 'defaults blank phantom to false' do
           expect(subject[0][:phantom]).to be_falsey
+        end
+
+        it 'defaults blank timeline algorithm to course default (fixed)' do
+          expect(subject[0][:timeline_algorithm]).to eq('fixed')
         end
 
         it 'parses roles correctly anyway' do
@@ -290,6 +347,13 @@ RSpec.describe Course::UserInvitationService, type: :service do
           (6..8).each do |i|
             expect(subject[i][:phantom]).to be_truthy
           end
+        end
+
+        it 'parses roles correctly anyway' do
+          expect(subject[1][:timeline_algorithm]).to eq(:stragglers)
+          expect(subject[2][:timeline_algorithm]).to eq(:otot)
+          expect(subject[3][:timeline_algorithm]).to eq(:fomo)
+          expect(subject[4][:timeline_algorithm]).to eq(:fixed)
         end
       end
 

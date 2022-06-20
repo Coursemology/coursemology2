@@ -80,7 +80,7 @@ const InviteUsers: FC<Props> = (props) => {
     <Box>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
       <UserManagementTabs permissions={permissions} sharedData={sharedData} />
-      <Box sx={{ margin: '12px 0px' }}>
+      <Box sx={{ margin: '12px 0px' }} className="invitations-bar-chart">
         <InvitationsBarChart
           accepted={acceptedInvitations.length}
           pending={pendingInvitations.length}

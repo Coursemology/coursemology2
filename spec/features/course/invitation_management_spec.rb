@@ -16,41 +16,40 @@ RSpec.feature 'Courses: Invitations', js: true do
         visit invite_course_users_path(course)
 
         # Make sure existing invitations don't show up.
-        expect(page).not_to have_selector(".user_invitation#user_invitation_#{invitation.id}")
+        expect(page).to_not have_selector("tr.pending_invitation_#{invitation.id}")
 
-        click_link I18n.t('course.user_invitations.new.tabs.individual')
         name = 'My name'
         email = 'email_test@example.org'
-        within find('div#individual form') do
-          find(:css, 'input.invitation_name').set(name)
-          find(:css, 'input.invitation_email').set(email)
-          click_button 'submit'
+        within find('form#invite-users-individual-form') do
+          find('input#name-0', visible: false).set(name)
+          find('input#email-0', visible: false).set(email)
+          click_button 'Invite All Users'
         end
 
-        expect(page).to have_selector('div.progress > div[aria-valuenow="0"]')
-        expect(page).to have_selector('tr.user_invitation th', text: name)
-        expect(page).to have_selector('tr.user_invitation td', text: email)
+        expect_toastify(I18n.t('course.user_invitations.create.success'))
       end
 
       scenario 'I can invite users by uploading a file' do
         # Build a invitation file and invite 2 random users.
         users = build_list(:user, 2)
-        invitation_file = Tempfile.new('invitation')
+        invitation_file = Tempfile.new(['invitation', '.csv'])
         invitation_file.
           write("Name,Email\n#{users.map { |u| [u.name, u.email].join(',') }.join("\n")}")
         invitation_file.close
 
         visit invite_course_users_path(course)
-        within find('#course_invitations_file').find(:xpath, '../..') do
-          attach_file 'course_invitations_file', invitation_file.path
-          click_button 'submit'
+        click_button 'Invite from file'
+
+        within find('#invite-users-file-upload-form') do
+          find('input[type="file"]').set(invitation_file.path)
         end
-        expect(page).to have_selector('div.progress')
+        click_button 'Invite Users from File'
+        expect_toastify(I18n.t('course.user_invitations.create.success'))
+
+        visit course_user_invitations_path(course)
         users.each do |user|
-          expect(page).to have_selector('tr.user_invitation th', text: user.name)
-          expect(page).to have_selector('tr.user_invitation td', text: user.email)
-          expect(page).to have_selector('tr.user_invitation td',
-                                        text: I18n.t('course.users.status.invited'))
+          expect(page).to have_selector('p', text: user.name.to_s)
+          expect(page).to have_selector('p', text: user.email.to_s)
         end
       end
 
@@ -59,22 +58,18 @@ RSpec.feature 'Courses: Invitations', js: true do
         visit invite_course_users_path(course)
 
         # Enable registration codes
-        click_link I18n.t('course.user_invitations.new.tabs.registration_code')
-        within find('#registration-code') do
-          click_button I18n.t('course.user_invitations.new.registration_code.enable')
-        end
+        click_button 'Registration Code'
+        page.find('button.toggle-registration-code').click
+
         expect(current_path).to eq(invite_course_users_path(course))
-        click_link I18n.t('course.user_invitations.new.tabs.registration_code')
+        expect_toastify('Successfully enabled registration code!')
         course.reload
         expect(course.registration_key).not_to be_nil
         expect(page).to have_selector('pre', text: course.registration_key)
 
         # Disable registration codes
-        within find('#registration-code').find(:xpath, '..') do
-          click_button I18n.t('course.user_invitations.new.registration_code.disable')
-        end
+        page.find('button.toggle-registration-code').click
         expect(current_path).to eq(invite_course_users_path(course))
-        click_link I18n.t('course.user_invitations.new.tabs.registration_code')
         expect(page).not_to have_selector('pre', text: course.registration_key)
         course.reload
         expect(course.registration_key).to be_nil
@@ -90,45 +85,36 @@ RSpec.feature 'Courses: Invitations', js: true do
         invitation_to_resend = invitations.last
         visit course_user_invitations_path(course)
 
-        expect(page).to have_selector('div.progress')
+        expect(page).to have_selector('div.invitations-bar-chart')
         invitations.each do |invitation|
-          within find(content_tag_selector(invitation)) do
-            expect(page).to have_selector('th')
-            expect(page).to have_selector('td')
-
-            if invitation.confirmed?
-              expect(page).to have_selector('td', text: I18n.t('course.users.status.accepted'))
-            else
-              expect(page).to have_selector('td', text: I18n.t('course.users.status.invited'))
-            end
+          if invitation.confirmed?
+            expect(page).to have_selector("tr.accepted_invitation_#{invitation.id}")
+          else
+            expect(page).to have_selector("tr.pending_invitation_#{invitation.id}")
           end
         end
 
         # Resend individual user_invitation
-        within find(content_tag_selector(invitation_to_resend)) do
-          find_link(
-            nil,
-            href: course_user_invitation_resend_invitation_path(course, invitation_to_resend, serial_number: 2)
-          ).click
+        within find("tr.pending_invitation_#{invitation_to_resend.id}") do
+          find("button.invitation-resend-#{invitation_to_resend.id}").click
         end
-        wait_for_ajax
-        expect(page).to have_css('.alert.alert-success')
+        expect_toastify("Resent email invitation to #{invitation_to_resend.email}!")
+        expect(invitation_to_resend.reload.sent_at).not_to eq(old_time)
 
         # Resend user_invitation for entire course
-        find_link(I18n.t('course.user_invitations.index.resend_button'),
-                  href: resend_invitations_course_users_path(course)).click
+        click_button('Resend All Invitations')
         expect(current_path).to eq(course_user_invitations_path(course))
         expect(invitation_to_delete.reload.sent_at).not_to eq(old_time)
 
-        find_link(nil,
-                  href: course_user_invitation_path(course, invitation_to_delete)).click
+        # Delete individual user_invitation
+        within find("tr.pending_invitation_#{invitation_to_delete.id}") do
+          find("button.invitation-delete-#{invitation_to_delete.id}").click
+        end
         expect(page).to have_selector('.confirm-btn')
         accept_confirm_dialog
 
-        expect(page).to have_selector('div.alert-success',
-                                      text: I18n.t('course.user_invitations.destroy.success'))
         expect(current_path).to eq(course_user_invitations_path(course))
-        expect(page).to have_no_content_tag_for(invitation_to_delete)
+        expect(page).to_not have_selector("tr.pending_invitation_#{invitation_to_delete.id}")
       end
     end
 

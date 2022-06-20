@@ -87,7 +87,7 @@ const FileUploadForm: FC<Props> = (props) => {
           loading={isLoading}
           disabled={disabled}
           variant="contained"
-          className="btn-submit"
+          className="btn-submit file-upload-submit"
           form="invite-users-file-upload-form"
           key="invite-users-file-upload-form-submit-button"
           type="submit"

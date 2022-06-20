@@ -13,11 +13,11 @@ RSpec.feature 'Course: EnrolRequests' do
     scenario 'Course staff can approve requests', js: true do
       visit course_enrol_requests_path(course)
 
-      within find(content_tag_selector(enrol_request)) do
-        find('.btn.approve').click
+      within find("tr.pending_enrol_request_#{enrol_request.id}") do
+        find("button.enrol-request-approve-#{enrol_request.id}").click
       end
 
-      wait_for_ajax
+      expect_toastify("Approved enrol request of #{enrol_request.user.name}!")
       enrol_request.reload
       expect(enrol_request.workflow_state).to eq('approved')
 
@@ -25,30 +25,32 @@ RSpec.feature 'Course: EnrolRequests' do
       expect(course_user).to be_present
 
       expect(current_path).to eq(course_enrol_requests_path(course))
-      expect(page).to have_no_content_tag_for(enrol_request)
-      expect(page).to have_text('course.enrol_requests.approve.success')
+      expect(page).to_not have_selector("tr.pending_enrol_request_#{enrol_request.id}")
+      expect(page).to have_selector("tr.approved_enrol_request_#{enrol_request.id}")
 
       visit course_users_students_path(course)
-      expect(page).to have_content_tag_for(course_user)
+      expect(page).to have_selector("tr.course_user_#{course_user.id}")
     end
 
     scenario 'Course staff can reject request', js: true do
       visit course_enrol_requests_path(course)
-      expect(page).to have_field('course_user_name', with: enrol_request.user.name)
+
+      expect(page).to have_selector("tr.pending_enrol_request_#{enrol_request.id}")
 
       expect do
-        within find(content_tag_selector(enrol_request)) do
-          find_link(nil, href: reject_course_enrol_request_path(course, enrol_request)).click
+        within find("tr.pending_enrol_request_#{enrol_request.id}") do
+          find("button.enrol-request-reject-#{enrol_request.id}").click
         end
+        accept_confirm_dialog
       end.to change(course.enrol_requests, :count).by(0)
 
+      expect_toastify("Enrol request for #{enrol_request.user.name} was deleted.")
       enrol_request.reload
 
       expect(enrol_request.workflow_state).to eq('rejected')
       expect(current_path).to eq(course_enrol_requests_path(course))
-      expect(page).to have_no_content_tag_for(enrol_request)
-      expect(page).to have_selector('div.alert',
-                                    text: I18n.t('course.enrol_requests.reject.success'))
+      expect(page).to_not have_selector("tr.pending_enrol_request_#{enrol_request.id}")
+      expect(page).to have_selector("tr.rejected_enrol_request_#{enrol_request.id}")
     end
   end
 end

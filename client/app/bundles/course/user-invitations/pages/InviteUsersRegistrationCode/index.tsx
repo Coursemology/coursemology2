@@ -171,6 +171,7 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
             loading={isLoading}
             variant="contained"
             onClick={handleToggleRegistrationCode}
+            className="toggle-registration-code"
           >
             {registrationCode.length > 0
               ? intl.formatMessage(translations.disable)

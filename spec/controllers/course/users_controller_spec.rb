@@ -56,7 +56,7 @@ RSpec.describe Course::UsersController, type: :controller do
     describe '#update' do
       before { sign_in(user) }
       subject do
-        put :update, as: :js, params: { course_id: course, id: course_user, course_user: updated_course_user }
+        put :update, as: :json, params: { course_id: course, id: course_user, course_user: updated_course_user }
       end
       let!(:course_user_to_update) { create(:course_user) }
       let(:updated_course_user) { { role: :teaching_assistant } }
@@ -69,9 +69,8 @@ RSpec.describe Course::UsersController, type: :controller do
           expect { subject }.to change { course_user.reload.role }.to('teaching_assistant')
         end
 
-        it 'sets the proper flash message' do
-          subject
-          expect(flash[:success]).to eq(I18n.t('course.users.update.success'))
+        it 'succeeds with http status ok' do
+          expect(subject).to have_http_status(:ok)
         end
 
         it 'does not send a notification email to the user', type: :mailer do
@@ -84,9 +83,8 @@ RSpec.describe Course::UsersController, type: :controller do
             subject
           end
 
-          it { is_expected.to render_template(:update) }
-          it 'sets an error flash message' do
-            expect(flash[:danger]).to eq('')
+          it 'fails with http status bad request' do
+            expect(subject).to have_http_status(:bad_request)
           end
         end
       end
@@ -105,7 +103,7 @@ RSpec.describe Course::UsersController, type: :controller do
 
     describe '#destroy' do
       before { sign_in(user) }
-      subject { delete :destroy, params: { course_id: course, id: course_user_to_delete } }
+      subject { delete :destroy, as: :json, params: { course_id: course, id: course_user_to_delete } }
 
       let!(:course_user_to_delete) { create(:course_user, course: course) }
 
@@ -115,11 +113,7 @@ RSpec.describe Course::UsersController, type: :controller do
         it 'destroys the registration record' do
           expect { subject }.to change { course.course_users.reload.count }.by(-1)
         end
-        it { is_expected.to redirect_to(course_users_students_path(course)) }
-        it 'sets the proper flash message' do
-          subject
-          expect(flash[:success]).to eq(I18n.t('course.users.destroy.success'))
-        end
+        it { is_expected.to have_http_status(:ok) }
 
         context 'when the user cannot be destroyed' do
           before do
@@ -127,10 +121,7 @@ RSpec.describe Course::UsersController, type: :controller do
             subject
           end
 
-          it { is_expected.to redirect_to(course_users_students_path(course)) }
-          it 'sets an error flash message' do
-            expect(flash[:danger]).to eq('')
-          end
+          it { is_expected.to have_http_status(:bad_request) }
         end
       end
 

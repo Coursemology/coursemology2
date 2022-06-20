@@ -44,7 +44,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
     describe '#create' do
       let(:assessment) { create(:assessment, course: course) }
       subject do
-        post :create, params: {
+        post :create, as: :json, params: {
           course_id: course.id,
           user_id: course_user.id,
           personal_time: {
@@ -83,7 +83,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
         before { sign_in(user) }
         it 'is successfully created' do
           subject
-          expect(flash[:success]).to eq(I18n.t('course.personal_times.create.success'))
+          expect(subject).to have_http_status(:ok)
           expect(assessment.personal_times.reload.count).to eq(1)
         end
       end
@@ -94,7 +94,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
         before { sign_in(user) }
         it 'is successfully created' do
           subject
-          expect(flash[:success]).to eq(I18n.t('course.personal_times.create.success'))
+          expect(subject).to have_http_status(:ok)
           expect(assessment.personal_times.reload.count).to eq(1)
         end
       end
@@ -148,7 +148,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
         before { sign_in(user) }
         it 'is successfully destroyed' do
           subject
-          expect(flash[:success]).to eq(I18n.t('course.personal_times.destroy.success'))
+          expect(subject).to have_http_status(:ok)
           expect(assessment.personal_times.reload.count).to eq(0)
         end
       end
@@ -158,7 +158,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
         before { sign_in(user) }
         it 'is successfully destroyed' do
           subject
-          expect(flash[:success]).to eq(I18n.t('course.personal_times.destroy.success'))
+          expect(subject).to have_http_status(:ok)
           expect(assessment.personal_times.reload.count).to eq(0)
         end
       end
@@ -191,7 +191,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
         before { sign_in(user) }
         it 'is successful' do
           subject
-          expect(flash[:success]).to eq(I18n.t('course.personal_times.recompute.success'))
+          expect(subject).to have_http_status(:ok)
         end
       end
     end
