@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   ListSubheader,
   Switch,
@@ -29,14 +29,14 @@ const styles = {
 
 class NotificationSettings extends Component {
   handleComponentNotificationSettingUpdate = (setting, type) => {
-    const { dispatch } = this.props;
+    const { dispatch, intl } = this.props;
     const componentTitle =
       setting.component_title ??
       (settingComponents[setting.component]
-        ? settingComponents[setting.component].defaultMessage
+        ? intl.formatMessage(settingComponents[setting.component])
         : setting.component);
     const settingTitle = settingTitles[setting.setting]
-      ? settingTitles[setting.setting].defaultMessage
+      ? intl.formatMessage(settingTitles[setting.setting])
       : setting.setting;
 
     return (_, enabled) => {
@@ -200,8 +200,9 @@ NotificationSettings.propTypes = {
     }),
   ),
   dispatch: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default connect((state) => ({
   emailSettings: state.notificationSettings,
-}))(NotificationSettings);
+}))(injectIntl(NotificationSettings));

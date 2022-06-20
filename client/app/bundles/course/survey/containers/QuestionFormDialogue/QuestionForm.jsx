@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -203,7 +203,7 @@ const validationSchema = yup.object({
 });
 
 const QuestionForm = (props) => {
-  const { disabled, initialValues, onSubmit } = props;
+  const { disabled, initialValues, onSubmit, intl } = props;
   const {
     control,
     handleSubmit,
@@ -350,9 +350,9 @@ const QuestionForm = (props) => {
                       shrink: true,
                     }}
                     onWheel={(event) => event.currentTarget.blur()}
-                    placeholder={
-                      questionFormTranslations.noRestriction.defaultMessage
-                    }
+                    placeholder={intl.formatMessage(
+                      questionFormTranslations.noRestriction,
+                    )}
                     renderIf={isMultipleResponse}
                     style={styles.numberOfResponsesField}
                     type="number"
@@ -374,9 +374,9 @@ const QuestionForm = (props) => {
                       shrink: true,
                     }}
                     onWheel={(event) => event.currentTarget.blur()}
-                    placeholder={
-                      questionFormTranslations.noRestriction.defaultMessage
-                    }
+                    placeholder={intl.formatMessage(
+                      questionFormTranslations.noRestriction,
+                    )}
                     renderIf={isMultipleResponse}
                     style={styles.numberOfResponsesField}
                     type="number"
@@ -478,6 +478,7 @@ QuestionForm.propTypes = {
   disabled: PropTypes.bool,
   onSubmit: PropTypes.func.isRequired,
   initialValues: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
-export default QuestionForm;
+export default injectIntl(QuestionForm);

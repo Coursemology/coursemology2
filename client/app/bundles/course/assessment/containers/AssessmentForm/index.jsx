@@ -190,7 +190,7 @@ const AssessmentForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            placeholder={translations.viewPassword.defaultMessage}
+            placeholder={<FormattedMessage {...translations.viewPassword} />}
             fullWidth
             InputLabelProps={{
               shrink: true,
@@ -214,7 +214,7 @@ const AssessmentForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            placeholder={translations.sessionPassword.defaultMessage}
+            placeholder={<FormattedMessage {...translations.sessionPassword} />}
             fullWidth
             InputLabelProps={{
               shrink: true,
