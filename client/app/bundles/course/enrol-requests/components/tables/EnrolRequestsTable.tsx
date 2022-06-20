@@ -15,6 +15,7 @@ import tableTranslations from 'lib/components/tables/translations';
 import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
 import { TimelineAlgorithm } from 'types/course/personalTimes';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
+import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -38,9 +39,6 @@ const styles = {
   checkbox: {
     margin: '0px 12px 0px 0px',
     padding: 0,
-  },
-  textField: {
-    width: '100%',
   },
 };
 
@@ -161,14 +159,11 @@ const EnrolRequestsTable: FC<Props> = (props) => {
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
           const enrolRequest = enrolRequests[tableMeta.rowIndex];
           return (
-            <TextField
+            <InlineEditTextField
               key={`name-${enrolRequest.id}`}
-              className="enrol_request_name"
               value={value}
-              onChange={(event): React.ChangeEvent =>
-                updateValue(event.target.value)
-              }
-              style={styles.textField}
+              className="enrol_request_name"
+              updateValue={updateValue}
               variant="standard"
             />
           );

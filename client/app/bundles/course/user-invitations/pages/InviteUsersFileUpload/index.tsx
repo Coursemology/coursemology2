@@ -1,5 +1,10 @@
-import { FC, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FC, ReactNode, useState } from 'react';
+import {
+  defineMessages,
+  FormattedMessage,
+  injectIntl,
+  WrappedComponentProps,
+} from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
 
@@ -34,16 +39,22 @@ const translations = defineMessages({
     defaultMessage:
       'Roles can be <code>[student, observer, teaching_assistant, manager, owner]</code>,\
      and defaults to student if omitted. Teaching assistants can only invite users as students.',
+    values: {
+      code: (str: ReactNode[]): JSX.Element => <code>{str}</code>,
+    },
   },
   fileUploadInfoPhantom: {
     id: 'course.userInvitation.fileUpload.info.phantom',
     defaultMessage: `Phantom can be true/false with the following true values <code>['t', 'true', 'y', 'yes']</code>\
      (case insenstitive), and defaults to false if omitted.`,
+    values: {
+      code: (str: ReactNode[]): JSX.Element => <code>{str}</code>,
+    },
   },
   fileUploadInfoPersonalTimeline: {
     id: 'course.userInvitation.fileUpload.info.personalTimeline',
     defaultMessage:
-      `Personal Timelines can be [fixed, otot, stragglers, fomo], ` +
+      `Personal Timelines can be <code>[fixed, otot, stragglers, fomo]</code>, ` +
       `with course default: {defaultTimelineAlgorithm} if omitted.`,
   },
   exampleHeader: {
@@ -146,32 +157,26 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
       </Typography>
       <ul>
         <li>
-          <Typography
-            variant="body2"
-            dangerouslySetInnerHTML={{
-              __html: intl.formatMessage(translations.fileUploadInfoRole),
-            }}
-          />
+          <Typography variant="body2">
+            <FormattedMessage {...translations.fileUploadInfoRole} />
+          </Typography>
         </li>
         <li>
-          <Typography
-            variant="body2"
-            dangerouslySetInnerHTML={{
-              __html: intl.formatMessage(translations.fileUploadInfoPhantom),
-            }}
-          />
+          <Typography variant="body2">
+            <FormattedMessage {...translations.fileUploadInfoPhantom} />
+          </Typography>
         </li>
         {permissions.canManagePersonalTimes && (
           <li>
-            <Typography
-              variant="body2"
-              dangerouslySetInnerHTML={{
-                __html: intl.formatMessage(
-                  translations.fileUploadInfoPersonalTimeline,
-                  { defaultTimelineAlgorithm },
-                ),
-              }}
-            />
+            <Typography variant="body2">
+              <FormattedMessage
+                {...translations.fileUploadInfoPersonalTimeline}
+                values={{
+                  code: (str: ReactNode[]): JSX.Element => <code>{str}</code>,
+                  defaultTimelineAlgorithm: `${defaultTimelineAlgorithm}`,
+                }}
+              />
+            </Typography>
           </li>
         )}
       </ul>
