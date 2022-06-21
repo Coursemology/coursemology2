@@ -22,6 +22,10 @@ FactoryBot.define do
     randomization { nil }
     show_mcq_answer { true }
 
+    trait :with_illegal_characters_in_title do
+      title { 'Assessment"|/\?*<>:Title' }
+    end
+
     trait :delay_grade_publication do
       delayed_grade_publication { true }
     end
