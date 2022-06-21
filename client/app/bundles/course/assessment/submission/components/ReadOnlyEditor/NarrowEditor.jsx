@@ -2,6 +2,7 @@ import { useRef, useState, useCallback, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { grey } from '@mui/material/colors';
 
+import { ClickAwayListener } from '@mui/material';
 import AddCommentIcon from './AddCommentIcon';
 import Annotations from '../../containers/Annotations';
 import { annotationShape } from '../../propTypes';
@@ -67,6 +68,7 @@ const LineNumberColumn = (props) => {
     setLineHovered,
     toggleComment,
     expandComment,
+    collapseComment,
     annotations,
     editorWidth,
   } = props;
@@ -78,23 +80,25 @@ const LineNumberColumn = (props) => {
 
     if (expanded[lineNumber - 1]) {
       return (
-        <div
-          style={{
-            width: Math.max(0, editorWidth - 2),
-            maxWidth: 850,
-            ...styles.tooltipStyle,
-          }}
-        >
-          <div style={styles.tooltipInnerStyle}>
-            <Annotations
-              answerId={answerId}
-              fileId={fileId}
-              lineNumber={lineNumber}
-              annotation={annotation}
-              airMode={false}
-            />
+        <ClickAwayListener onClickAway={() => collapseComment(lineNumber)}>
+          <div
+            style={{
+              width: Math.max(0, editorWidth - 2),
+              maxWidth: 1000,
+              ...styles.tooltipStyle,
+            }}
+          >
+            <div style={styles.tooltipInnerStyle}>
+              <Annotations
+                answerId={answerId}
+                fileId={fileId}
+                lineNumber={lineNumber}
+                annotation={annotation}
+                airMode={false}
+              />
+            </div>
           </div>
-        </div>
+        </ClickAwayListener>
       );
     }
     return <></>;
@@ -129,6 +133,7 @@ LineNumberColumn.propTypes = {
   setLineHovered: PropTypes.func.isRequired,
   toggleComment: PropTypes.func.isRequired,
   expandComment: PropTypes.func.isRequired,
+  collapseComment: PropTypes.func.isRequired,
   editorWidth: PropTypes.number.isRequired,
 
   expanded: PropTypes.arrayOf(PropTypes.bool).isRequired,
@@ -167,6 +172,10 @@ export default function NarrowEditor(props) {
     props.toggleLine(lineNumber);
   };
 
+  const collapseComment = (lineNumber) => {
+    props.collapseLine(lineNumber);
+  };
+
   const renderLineNumberColumn = (lineNumber) => (
     <LineNumberColumn
       lineNumber={lineNumber}
@@ -174,6 +183,7 @@ export default function NarrowEditor(props) {
       setLineHovered={setLineHovered}
       toggleComment={toggleComment}
       expandComment={expandComment}
+      collapseComment={collapseComment}
       editorWidth={editorWidth}
       {...props}
     />
