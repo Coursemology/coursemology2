@@ -1,9 +1,17 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import {
+  Chart as ChartJS,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import { Scatter } from 'react-chartjs-2';
 import { injectIntl } from 'react-intl';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import { videoDefaults } from 'lib/constants/videoConstants';
 import { connect } from 'react-redux';
@@ -11,9 +19,13 @@ import { connect } from 'react-redux';
 import translations from '../../translations';
 import { seekToDirectly } from '../../actions/video';
 
+ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
+
 const graphGlobalOptions = (intl, videoDuration) => ({
-  legend: {
-    display: false,
+  plugins: {
+    legend: {
+      display: false,
+    },
   },
   elements: {
     point: {
@@ -23,38 +35,31 @@ const graphGlobalOptions = (intl, videoDuration) => ({
       radius: 5,
       hitRadius: 10,
     },
-    line: {
-      tension: 0,
-    },
   },
   scales: {
-    xAxes: [
-      {
-        scaleLabel: {
-          display: true,
-          labelString: intl.formatMessage(translations.eventRealTimeLabel),
-          fontSize: 15,
-        },
-        ticks: {
-          suggestedMin: 0,
-          callback: formatTimestamp,
-        },
+    x: {
+      title: {
+        display: true,
+        text: intl.formatMessage(translations.eventRealTimeLabel),
+        fontSize: 15,
       },
-    ],
-    yAxes: [
-      {
-        scaleLabel: {
-          display: true,
-          labelString: intl.formatMessage(translations.eventVideoTimeLabel),
-          fontSize: 15,
-        },
-        ticks: {
-          suggestedMin: 0,
-          max: videoDuration,
-          callback: formatTimestamp,
-        },
+      suggestedMin: 0,
+      ticks: {
+        callback: formatTimestamp,
       },
-    ],
+    },
+    y: {
+      title: {
+        display: true,
+        text: intl.formatMessage(translations.eventVideoTimeLabel),
+        fontSize: 15,
+      },
+      suggestedMin: 0,
+      max: videoDuration,
+      ticks: {
+        callback: formatTimestamp,
+      },
+    },
   },
 });
 
@@ -135,28 +140,28 @@ class ProgressGraph extends Component {
           return;
         }
         const element = elements[0];
-        const { y } = data.datasets[element._datasetIndex].data[element._index];
+        const { y } = data.datasets[element.datasetIndex].data[element.index];
 
         this.props.onMarkerClick(y);
       },
-      hover: {
-        onHover: (event, elements) => {
-          const style = event.target.style;
-          style.cursor = elements.length > 0 ? 'pointer' : 'default';
-        },
+      onHover: (event, elements) => {
+        const style = event.native.target.style;
+        style.cursor = elements.length > 0 ? 'pointer' : 'default';
       },
     };
   }
 
   generateToolTipOptions() {
     return {
-      tooltips: {
+      tooltip: {
         displayColors: false,
-        bodyFontSize: 14,
+        bodyFont: {
+          size: 14,
+        },
         callbacks: {
-          label: (tooltipItem, graphData) => {
-            const { datasetIndex, index } = tooltipItem;
-            const { x, y, type } = graphData.datasets[datasetIndex].data[index];
+          label: (tooltipItem) => {
+            const { dataIndex, dataset } = tooltipItem;
+            const { x, y, type } = dataset.data[dataIndex];
 
             const realTime = formatTimestamp(x);
             const videoTime = formatTimestamp(y);
@@ -259,13 +264,21 @@ class ProgressGraph extends Component {
       ],
     };
 
+    const globalOptions = graphGlobalOptions(
+      this.props.intl,
+      this.props.videoDuration,
+    );
+
     return (
       <Scatter
         data={data}
         options={{
-          ...graphGlobalOptions(this.props.intl, this.props.videoDuration),
+          ...globalOptions,
+          plugins: {
+            ...globalOptions.plugins,
+            ...this.generateToolTipOptions(),
+          },
           ...this.generateMouseOptions(data),
-          ...this.generateToolTipOptions(),
         }}
       />
     );
