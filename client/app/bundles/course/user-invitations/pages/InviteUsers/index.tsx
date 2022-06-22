@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
+import { InvitationResult } from 'types/course/userInvitations';
 import {
   getManageCourseUsersSharedData,
   getManageCourseUserPermissions,
@@ -15,6 +16,7 @@ import { fetchInvitations } from '../../operations';
 import RegistrationCodeButton from '../../components/buttons/RegistrationCodeButton';
 import UploadFileButton from '../../components/buttons/UploadFileButton';
 import IndividualInviteForm from '../../components/forms/IndividualInviteForm';
+import InvitationResultDialog from '../../components/misc/InvitationResultDialog';
 
 type Props = WrappedComponentProps;
 
@@ -36,6 +38,9 @@ const translations = defineMessages({
 const InviteUsers: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
+  const [showInvitationResultDialog, setShowInvitationResultDialog] =
+    useState(false);
+  const [invitationResult, setInvitationResult] = useState({});
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
   );
@@ -59,6 +64,11 @@ const InviteUsers: FC<Props> = (props) => {
     return <LoadingIndicator />;
   }
 
+  const openResultDialog = (result: InvitationResult): void => {
+    setInvitationResult(result);
+    setShowInvitationResultDialog(true);
+  };
+
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
@@ -75,12 +85,20 @@ const InviteUsers: FC<Props> = (props) => {
             {intl.formatMessage(translations.inviteUsersHeader)}
           </Typography>
           <Grid item style={{ display: 'flex', gap: 12 }}>
-            <UploadFileButton />
+            <UploadFileButton openResultDialog={openResultDialog} />
             <RegistrationCodeButton />
           </Grid>
         </Grid>
-        <IndividualInviteForm permissions={permissions} />
+        <IndividualInviteForm
+          permissions={permissions}
+          openResultDialog={openResultDialog}
+        />
       </Box>
+      <InvitationResultDialog
+        open={showInvitationResultDialog}
+        handleClose={(): void => setShowInvitationResultDialog(false)}
+        invitationResult={invitationResult}
+      />
     </>
   );
 };

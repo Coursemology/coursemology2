@@ -26,7 +26,7 @@ RSpec.feature 'Courses: Invitations', js: true do
           click_button 'Invite All Users'
         end
 
-        expect_toastify(I18n.t('course.user_invitations.create.success'))
+        expect(find('h6', text: 'New Invitations (1)')).to be_present
       end
 
       scenario 'I can invite users by uploading a file' do
@@ -44,13 +44,19 @@ RSpec.feature 'Courses: Invitations', js: true do
           find('input[type="file"]').set(invitation_file.path)
         end
         click_button 'Invite Users from File'
-        expect_toastify(I18n.t('course.user_invitations.create.success'))
+        expect(find('h6', text: 'New Invitations (2)')).to be_present
 
         visit course_user_invitations_path(course)
         users.each do |user|
           expect(page).to have_selector('p', text: user.name.to_s)
           expect(page).to have_selector('p', text: user.email.to_s)
         end
+      end
+
+      scenario 'I can download a template file' do
+        visit invite_course_users_path(course)
+        click_button 'Invite from file'
+        expect(find_link(nil, href: ActionController::Base.helpers.asset_path('template.csv'))).to be_present
       end
 
       scenario 'I can enable and disable registration-code registrations' do

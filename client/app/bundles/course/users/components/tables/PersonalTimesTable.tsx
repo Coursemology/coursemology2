@@ -1,4 +1,5 @@
 import {
+  Icon,
   Link,
   Paper,
   Table,
@@ -31,6 +32,11 @@ const translations = defineMessages({
   },
 });
 
+const icons = {
+  assessment: 'fa fa-plane',
+  video: 'fa fa-video-camera',
+};
+
 const getLink = (item: PersonalTimeEntity): JSX.Element => {
   let url = '';
   const courseId = getCourseId();
@@ -47,13 +53,37 @@ const getLink = (item: PersonalTimeEntity): JSX.Element => {
   );
 };
 
+const getIcon = (item: PersonalTimeEntity): JSX.Element => {
+  let materialType = '';
+
+  if (item.type === sharedConstants.ITEM_ACTABLE_TYPES.video.name) {
+    materialType = 'video';
+  } else if (item.type === sharedConstants.ITEM_ACTABLE_TYPES.assessment.name) {
+    materialType = 'assessment';
+  }
+
+  return (
+    <Icon
+      className={icons[materialType]}
+      style={{
+        fontSize: 12,
+        marginRight: '4px',
+        verticalAlign: 'inherit',
+      }}
+    />
+  );
+};
+
 const PersonalTimesTable: FC<Props> = (props) => {
   const { personalTimes, intl } = props;
 
   const renderRow = (item: PersonalTimeEntity): JSX.Element => {
     return (
       <TableRow hover key={item.id}>
-        <TableCell>{getLink(item)}</TableCell>
+        <TableCell>
+          {getIcon(item)}
+          {getLink(item)}
+        </TableCell>
         <TableCell>{item.itemStartAt}</TableCell>
         <TableCell>{item.itemBonusEndAt}</TableCell>
         <TableCell>{item.itemEndAt}</TableCell>

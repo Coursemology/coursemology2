@@ -1,12 +1,17 @@
+import { CourseUserData } from './courseUsers';
+
 export interface InvitationFileEntity {
   name: string;
   url: string;
   file?: Blob;
 }
 
-export interface InvitationMessage {
-  success?: string;
-  warning?: string;
+export interface InvitationResult {
+  duplicateUsers?: CourseUserData[];
+  existingCourseUsers?: CourseUserData[];
+  existingInvitations?: InvitationData[];
+  newCourseUsers?: CourseUserData[];
+  newInvitations?: InvitationData[];
 }
 
 export interface IndividualInvites {

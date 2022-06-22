@@ -26,6 +26,10 @@ const translations = defineMessages({
     id: 'course.userInvitation.fileUpload.invite',
     defaultMessage: 'Invite Users from File',
   },
+  header: {
+    id: 'course.userInvitation.fileUpload.header',
+    defaultMessage: 'File Upload (.csv)',
+  },
   cancel: {
     id: 'course.userInvitation.fileUpload.cancel',
     defaultMessage: 'Cancel',
@@ -58,7 +62,7 @@ const FileUploadForm: FC<Props> = (props) => {
   return (
     <>
       <Typography variant="body2">
-        <strong>File Upload (.csv):</strong>
+        <strong>{intl.formatMessage(translations.header)}</strong>
       </Typography>
       <form
         encType="multipart/form-data"

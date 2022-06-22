@@ -7,12 +7,23 @@ import { AppDispatch, AppState } from 'types/store';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { useParams } from 'react-router-dom';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { Grid, Paper, Stack, Typography } from '@mui/material';
+import {
+  Grid,
+  MenuItem,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from '@mui/material';
+import sharedConstants from 'lib/constants/sharedConstants';
+import { CourseUserEntity } from 'types/course/courseUsers';
+import { TimelineAlgorithm } from 'types/course/personalTimes';
 import {
   fetchPersonalTimes,
   fetchUsers,
   loadUser,
   recomputePersonalTimes,
+  updateUser,
 } from '../../operations';
 import {
   getAllPersonalTimesEntities,
@@ -52,6 +63,10 @@ const translations = defineMessages({
     id: 'course.users.manage.personalTimes.recompute',
     defaultMessage: 'Recompute all times',
   },
+  updateSuccess: {
+    id: 'course.users.manage.personalTimes.update.success',
+    defaultMessage: 'Successfully updated {name} to timeline "{timeline}"',
+  },
   learningRate: {
     id: 'course.users.manage.personalTimes.learningRate.rate',
     defaultMessage: 'Learning rate: {rate}',
@@ -80,10 +95,10 @@ const PersonalTimesShow: FC<Props> = (props) => {
   const sharedData = useSelector((state: AppState) =>
     getManageCourseUsersSharedData(state),
   );
+  const [timeline, setTimeline] = useState('fixed');
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    setIsLoading(true);
     dispatch(fetchUsers(false));
   }, [dispatch]);
 
@@ -92,9 +107,13 @@ const PersonalTimesShow: FC<Props> = (props) => {
     // we fetch personal times first -- we need learning rate records before loading user
     dispatch(fetchPersonalTimes(+userId!))
       .then(() =>
-        dispatch(loadUser(+userId!)).finally(() => {
-          setIsLoading(false);
-        }),
+        dispatch(loadUser(+userId!))
+          .then((response) => {
+            setTimeline(response.user.timelineAlgorithm!);
+          })
+          .finally(() => {
+            setIsLoading(false);
+          }),
       )
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchPersonalTimesFailure)),
@@ -118,6 +137,26 @@ const PersonalTimesShow: FC<Props> = (props) => {
       );
   };
 
+  const handleTimelineChange = (event): void => {
+    if (currentUser) {
+      const newTimeline = event.target.value;
+      const data: CourseUserEntity = {
+        ...currentUser,
+        timelineAlgorithm: newTimeline as TimelineAlgorithm,
+      };
+
+      dispatch(updateUser(+userId!, data)).then(() => {
+        toast.success(
+          intl.formatMessage(translations.updateSuccess, {
+            name: currentUser.name,
+            timeline: newTimeline,
+          }),
+        );
+        setTimeline(newTimeline);
+      });
+    }
+  };
+
   const renderBody = currentUser && (
     <>
       <Paper
@@ -125,18 +164,35 @@ const PersonalTimesShow: FC<Props> = (props) => {
         sx={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}
       >
         <Stack spacing={1}>
-          <Typography variant="h6" sx={{ marginBottom: '24px' }}>
+          <Typography variant="h6">
             {intl.formatMessage(translations.courseUserHeader)}
           </Typography>
-          <SelectCourseUser users={users} initialUser={currentUser} />
-          <Grid container flexDirection="row" alignItems="center">
-            <Typography variant="body2">
-              {intl.formatMessage(translations.algorithm, {
-                algorithm: currentUser.timelineAlgorithm,
-              })}
-            </Typography>
-            &nbsp;&mdash;
-            <LoadingButton loading={isRecomputing} onClick={handleRecompute}>
+          <Grid container flexDirection="row" alignItems="flex-end">
+            <SelectCourseUser users={users} initialUser={currentUser} />
+            <TextField
+              label="Timeline Algorithm"
+              id="change-timeline"
+              select
+              value={timeline}
+              variant="standard"
+              onChange={handleTimelineChange}
+              sx={{ minWidth: '300px', marginRight: '12px' }}
+            >
+              {/* eslint-disable-next-line @typescript-eslint/no-shadow */}
+              {sharedConstants.TIMELINE_ALGORITHMS.map((timeline) => (
+                <MenuItem
+                  key={`change-timeline-${timeline.value}`}
+                  value={timeline.value}
+                >
+                  {timeline.label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <LoadingButton
+              loading={isRecomputing}
+              onClick={handleRecompute}
+              variant="contained"
+            >
               {intl.formatMessage(translations.recomputeLabel)}
             </LoadingButton>
           </Grid>

@@ -43,7 +43,7 @@ class Course::UserInvitationService
 
     send_registered_emails(new_course_users) if success
     send_invitation_emails(new_invitations) if success
-    success ? [new_invitations, existing_invitations, new_course_users, existing_course_users, duplicate_users].map(&:size) : nil
+    success ? [new_invitations, existing_invitations, new_course_users, existing_course_users, duplicate_users] : nil
   end
 
   # Resends invitation emails to CourseUsers to the given course.

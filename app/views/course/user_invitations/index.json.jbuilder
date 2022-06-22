@@ -12,4 +12,4 @@ json.manageCourseUsersData do
   json.defaultTimelineAlgorithm current_course.default_timeline_algorithm
 end
 
-json.message @message unless @message.blank?
+json.invitationResult @invitation_result unless @invitation_result.blank?
