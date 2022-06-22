@@ -48,7 +48,7 @@ module Capybara::TestGroupHelpers
     # Selector should specify the class of the target +textarea+, and method targets the +div+
     # within. This should change when the internals of the summernote react component is changed.
     def fill_in_react_ck(selector, text)
-      react_selector = ' + div.react-ck > div. ck-editor'
+      react_selector = ' + div.react-ck > div.ck-editor > div.ck-editor__main > div.ck-content'
       find(selector + react_selector).set(text)
     end
 
