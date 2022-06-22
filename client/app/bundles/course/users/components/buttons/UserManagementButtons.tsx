@@ -3,14 +3,14 @@ import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import DeleteButton from 'lib/components/buttons/DeleteButton';
 import SaveButton from 'lib/components/buttons/SaveButton';
-import { CourseUserData } from 'types/course/courseUsers';
+import { CourseUserEntity } from 'types/course/courseUsers';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
 import sharedConstants from 'lib/constants/sharedConstants';
 import { updateUser, deleteUser } from '../../operations';
 
 interface Props extends WrappedComponentProps {
-  user: CourseUserData;
+  user: CourseUserEntity;
 }
 
 const translations = defineMessages({
@@ -42,7 +42,7 @@ const UserManagementButtons: FC<Props> = (props) => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const onSave = (data: CourseUserData): Promise<void> => {
+  const onSave = (data: CourseUserEntity): Promise<void> => {
     setIsSaving(true);
     return dispatch(updateUser(user.id, data))
       .then(() => {

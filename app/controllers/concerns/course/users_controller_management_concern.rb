@@ -104,7 +104,13 @@ module Course::UsersControllerManagementConcern
                     name: @course_user.name, role: t("course.users.role.#{@course_user.role}"))
         redirect_to course_users_staff_path(current_course), success: success
       end
-      format.json { render json: { user: @course_user }, status: :ok }
+      format.json do
+        render '_user_list_data', locals: {
+          course_user: @course_user,
+          should_show_timeline: true,
+          should_show_phantom: true
+        }, status: :ok
+      end
     end
   end
 
@@ -121,7 +127,13 @@ module Course::UsersControllerManagementConcern
   def update_user_success # :nodoc:
     respond_to do |format|
       format.html { flash.now[:success] = t('course.users.update.success', name: @course_user.name) }
-      format.json { render json: { user: @course_user }, status: :ok }
+      format.json do
+        render '_user_list_data', locals: {
+          course_user: @course_user,
+          should_show_timeline: true,
+          should_show_phantom: true
+        }, status: :ok
+      end
     end
   end
 

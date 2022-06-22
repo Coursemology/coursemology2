@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { FC, useEffect, useState } from 'react';
@@ -34,6 +34,10 @@ const translations = defineMessages({
   rejected: {
     id: 'course.users.enrolRequests.rejected.title',
     defaultMessage: 'Rejected Enrolment Requests',
+  },
+  noEnrolRequests: {
+    id: 'course.users.enrolRequests.empty',
+    defaultMessage: 'There are no enrol requests',
   },
   fetchEnrolRequestsFailure: {
     id: 'course.users.enrolRequests.fetch.failure',
@@ -80,10 +84,26 @@ const UserRequests: FC<Props> = (props) => {
     return <LoadingIndicator />;
   }
 
+  const renderEmptyState = (): JSX.Element | undefined => {
+    if (
+      pendingEnrolRequests.length === 0 &&
+      approvedEnrolRequests.length === 0 &&
+      rejectedEnrolRequests.length === 0
+    ) {
+      return (
+        <Typography variant="body1">
+          {intl.formatMessage(translations.noEnrolRequests)}
+        </Typography>
+      );
+    }
+    return undefined;
+  };
+
   return (
     <Box>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
       <UserManagementTabs permissions={permissions} sharedData={sharedData} />
+      {renderEmptyState()}
       {pendingEnrolRequests.length > 0 && (
         <EnrolRequestsTable
           title={intl.formatMessage(translations.pending)}

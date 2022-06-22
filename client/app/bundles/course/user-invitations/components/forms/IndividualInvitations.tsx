@@ -12,10 +12,7 @@ import {
   UseFieldArrayAppend,
   UseFieldArrayRemove,
 } from 'react-hook-form';
-import { useSelector } from 'react-redux';
-import { AppState } from 'types/store';
 import IndividualInvitation from './IndividualInvitation';
-import { getManageCourseUsersSharedData } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
   isLoading: boolean;
@@ -29,7 +26,7 @@ interface Props extends WrappedComponentProps {
 }
 
 const translations = defineMessages({
-  addInvitation: {
+  appendNewRow: {
     id: 'course.userInvitations.IndividualInvitations.add',
     defaultMessage: 'Add Row',
   },
@@ -43,10 +40,18 @@ const IndividualInvitations: FC<Props> = (props) => {
   const { isLoading, permissions, fieldsConfig, intl } = props;
   const { append, fields } = fieldsConfig;
 
-  const sharedData = useSelector((state: AppState) =>
-    getManageCourseUsersSharedData(state),
-  );
-  const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
+  const appendNewRow = (): void => {
+    const lastRow = fields[fields.length - 1];
+    append({
+      name: '',
+      email: '',
+      role: lastRow.role,
+      phantom: lastRow.phantom,
+      ...(permissions.canManagePersonalTimes && {
+        timelineAlgorithm: lastRow.timelineAlgorithm,
+      }),
+    });
+  };
 
   return (
     <>
@@ -72,21 +77,8 @@ const IndividualInvitations: FC<Props> = (props) => {
         >
           {intl.formatMessage(translations.invite)}
         </LoadingButton>
-        <Button
-          color="primary"
-          onClick={(): void =>
-            append({
-              name: '',
-              email: '',
-              role: 'student',
-              phantom: false,
-              ...(permissions.canManagePersonalTimes && {
-                timelineAlgorithm: defaultTimelineAlgorithm,
-              }),
-            })
-          }
-        >
-          {intl.formatMessage(translations.addInvitation)}
+        <Button color="primary" onClick={appendNewRow}>
+          {intl.formatMessage(translations.appendNewRow)}
         </Button>
       </Grid>
     </>

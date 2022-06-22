@@ -1,7 +1,7 @@
 import CourseAPI from 'api/course';
 import { Operation } from 'types/store';
 import {
-  CourseUserData,
+  CourseUserEntity,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
 import { PersonalTimePostData } from 'types/course/personalTimes';
@@ -19,7 +19,9 @@ import {
  *     { name, phantom, role, timeline_algorithm }
  *   }
  */
-const formatAttributes = (data: CourseUserData): UpdateCourseUserPatchData => {
+const formatAttributes = (
+  data: CourseUserEntity,
+): UpdateCourseUserPatchData => {
   const payload = {
     course_user: {
       name: data.name,
@@ -98,19 +100,19 @@ export function loadUser(userId: number): Operation<SaveUserAction> {
 
 export function updateUser(
   userId: number,
-  data: CourseUserData,
+  data: CourseUserEntity,
 ): Operation<void> {
   const attributes = formatAttributes(data);
   return async (dispatch) =>
     CourseAPI.users.update(userId, attributes).then((response) => {
-      dispatch(actions.saveUser(response.data.user));
+      dispatch(actions.saveUser(response.data));
     });
 }
 
 export function upgradeToStaff(userId: number, role: string): Operation<void> {
   return async (dispatch) =>
     CourseAPI.users.upgradeToStaff(userId, role).then((response) => {
-      dispatch(actions.saveUser(response.data.user));
+      dispatch(actions.saveUser(response.data));
     });
 }
 

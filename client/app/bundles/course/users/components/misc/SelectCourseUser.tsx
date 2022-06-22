@@ -57,7 +57,7 @@ const SelectCourseUser: FC<Props> = (props) => {
         />
       )}
       isOptionEqualToValue={(option, value): boolean => option.id === value.id}
-      sx={{ marginRight: '12px' }}
+      sx={{ minWidth: '300px', marginRight: '12px' }}
     />
   );
 };

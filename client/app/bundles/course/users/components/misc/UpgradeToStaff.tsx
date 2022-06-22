@@ -97,12 +97,11 @@ const UpgradeToStaff: FC<Props> = (props) => {
       <Typography variant="h6" sx={{ marginBottom: '24px' }}>
         {intl.formatMessage(translations.upgradeHeader)}
       </Typography>
-      <Grid container flexDirection="row" alignItems="center">
+      <Grid container flexDirection="row" alignItems="flex-end">
         <Autocomplete
           multiple
           disableCloseOnSelect
           id="upgrade-student-name"
-          limitTags={3}
           value={users}
           onChange={handleNameChange}
           options={students}
@@ -126,7 +125,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
               variant="standard"
             />
           )}
-          sx={{ minWidth: '300px', marginRight: '12px' }}
+          sx={{ minWidth: '300px', maxWidth: '450px', marginRight: '12px' }}
         />
         <TextField
           label="Role"

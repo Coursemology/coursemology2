@@ -25,7 +25,7 @@ class Course::UsersController < Course::ComponentController
     case params[:action]
     when 'index'
       @course_users ||= if params[:only_students] == 'false'
-                          course_users.includes(:user).order_alphabetically
+                          course_users.includes(user: [:emails]).order_alphabetically
                         else
                           course_users.without_phantom_users.students.
                             includes(:user).order_alphabetically

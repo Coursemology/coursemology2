@@ -1,4 +1,4 @@
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import {
   defineMessages,
   FormattedMessage,
@@ -6,22 +6,34 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dialog, DialogContent, DialogTitle, Typography } from '@mui/material';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  Link,
+  Typography,
+} from '@mui/material';
 
 import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import { InvitationFileEntity } from 'types/course/userInvitations';
-import { inviteUsersFromFile } from '../../operations';
+import {
+  InvitationFileEntity,
+  InvitationResult,
+} from 'types/course/userInvitations';
+import DownloadIcon from '@mui/icons-material/Download';
+import CourseAPI from 'api/course';
 import FileUploadForm from '../../components/forms/InviteUsersFileUploadForm';
 import {
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
+import { inviteUsersFromFile } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   open: boolean;
+  openResultDialog: (invitationResult: InvitationResult) => void;
   handleClose: () => void;
 }
 
@@ -59,7 +71,11 @@ const translations = defineMessages({
   },
   exampleHeader: {
     id: 'course.userInvitation.fileUpload.example.header',
-    defaultMessage: 'Example:',
+    defaultMessage: 'Example ',
+  },
+  template: {
+    id: 'course.userInvitation.fileUpload.example.template',
+    defaultMessage: '(Template File)',
   },
   fileUploadExample: {
     id: 'course.userInvitation.fileUpload.example',
@@ -95,10 +111,11 @@ const initialValues = {
 };
 
 const InviteUsersFileUpload: FC<Props> = (props) => {
-  const { open, handleClose, intl } = props;
+  const { open, handleClose, openResultDialog, intl } = props;
   const [isDirty, setIsDirty] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [discardDialogOpen, setDiscardDialogOpen] = useState(false);
+  const [downloadTemplatePath, setDownloadTemplatePath] = useState('');
   const dispatch = useDispatch<AppDispatch>();
 
   const sharedData = useSelector((state: AppState) =>
@@ -109,6 +126,12 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
   );
 
   const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
+
+  useEffect(() => {
+    CourseAPI.userInvitations.getTemplateCsvPath().then((response) => {
+      setDownloadTemplatePath(response.data.templatePath);
+    });
+  }, []);
 
   if (!open) {
     return null;
@@ -126,12 +149,8 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
     setIsLoading(true);
     return dispatch(inviteUsersFromFile(data))
       .then((response) => {
-        const { success, warning } = response;
-        if (success) toast.success(success);
-        if (warning) toast.warn(warning);
-        setTimeout(() => {
-          handleClose();
-        }, 600);
+        handleClose();
+        openResultDialog(response);
       })
       .catch((error) => {
         toast.error(intl.formatMessage(translations.failure));
@@ -182,6 +201,21 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
       </ul>
       <Typography variant="body2">
         <strong>{intl.formatMessage(translations.exampleHeader)}</strong>
+        <Link
+          variant="inherit"
+          href={downloadTemplatePath}
+          download="template.csv"
+          target="_blank"
+          style={{ textDecoration: 'none', cursor: 'pointer' }}
+        >
+          {intl.formatMessage(translations.template)}
+          <DownloadIcon
+            fontSize="small"
+            style={{
+              verticalAlign: 'bottom',
+            }}
+          />
+        </Link>
       </Typography>
       {permissions.canManagePersonalTimes ? (
         <pre

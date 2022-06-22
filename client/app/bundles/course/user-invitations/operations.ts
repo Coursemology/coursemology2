@@ -2,9 +2,9 @@ import CourseAPI from 'api/course';
 import { AxiosResponse } from 'axios';
 import {
   InvitationFileEntity,
-  InvitationMessage,
   InvitationPostData,
   InvitationsPostData,
+  InvitationResult,
 } from 'types/course/userInvitations';
 import { Operation } from 'types/store';
 import * as actions from './actions';
@@ -62,24 +62,29 @@ export function fetchInvitations(): Operation<void> {
 
 export function inviteUsersFromFile(
   fileEntity: InvitationFileEntity,
-): Operation<InvitationMessage> {
+): Operation<InvitationResult> {
   return async (dispatch) =>
-    CourseAPI.userInvitations.invite(fileEntity).then((response) => {
-      const data = response.data;
-      dispatch(
-        actions.saveInvitationList(
-          data.invitations,
-          data.permissions,
-          data.manageCourseUsersData,
-        ),
-      );
-      return data.message;
-    });
+    CourseAPI.userInvitations
+      .invite(fileEntity)
+      .then((response) => {
+        const data = response.data;
+        dispatch(
+          actions.saveInvitationList(
+            data.invitations,
+            data.permissions,
+            data.manageCourseUsersData,
+          ),
+        );
+        return JSON.parse(data.invitationResult);
+      })
+      .catch((error) => {
+        throw error;
+      });
 }
 
 export function inviteUsersFromForm(
   postData: InvitationsPostData,
-): Operation<InvitationMessage> {
+): Operation<InvitationResult> {
   const formattedData = formatInvitations(postData.invitations);
   return async (dispatch) =>
     CourseAPI.userInvitations.invite(formattedData).then((response) => {
@@ -91,7 +96,7 @@ export function inviteUsersFromForm(
           data.manageCourseUsersData,
         ),
       );
-      return data.message;
+      return JSON.parse(data.invitationResult);
     });
 }
 

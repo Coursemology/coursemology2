@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { scroller } from 'react-scroll';
 import { CourseUserEntity } from 'types/course/courseUsers';
+import sharedConstants from 'lib/constants/sharedConstants';
 import UserProfileCardStats from './UserProfileCardStats';
 import styles from './UserProfileCard.scss';
 
@@ -139,7 +140,11 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
           >
             <Typography variant="h4">{user.name}</Typography>
             <Typography variant="body1">
-              <strong>{user.role}</strong>
+              <strong>
+                {sharedConstants.USER_ROLES.find(
+                  (role) => role.value === user.role,
+                )?.label ?? '-'}
+              </strong>
             </Typography>
             {renderManageEmail()}
             {renderUserStats()}

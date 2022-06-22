@@ -5,11 +5,11 @@ import { AppDispatch, AppState } from 'types/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
 import {
   IndividualInvites,
   InvitationsPostData,
+  InvitationResult,
 } from 'types/course/userInvitations';
 import ErrorText from 'lib/components/ErrorText';
 import IndividualInvitations from './IndividualInvitations';
@@ -17,6 +17,7 @@ import { inviteUsersFromForm } from '../../operations';
 import { getManageCourseUsersSharedData } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
+  openResultDialog: (invitationResult: InvitationResult) => void;
   permissions: ManageCourseUsersPermissions;
 }
 
@@ -47,7 +48,7 @@ const validationSchema = yup.object({
 });
 
 const IndividualInviteForm: FC<Props> = (props) => {
-  const { permissions } = props;
+  const { openResultDialog, permissions } = props;
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const sharedData = useSelector((state: AppState) =>
@@ -107,7 +108,7 @@ const IndividualInviteForm: FC<Props> = (props) => {
         role: 'student',
         phantom: false,
         ...(permissions.canManagePersonalTimes && {
-          timelineAlgorithm: 'fixed',
+          timelineAlgorithm: defaultTimelineAlgorithm,
         }),
       });
     }
@@ -117,9 +118,7 @@ const IndividualInviteForm: FC<Props> = (props) => {
     setIsLoading(true);
     return dispatch(inviteUsersFromForm(data))
       .then((response) => {
-        const { success, warning } = response;
-        if (success) toast.success(success);
-        if (warning) toast.warn(warning);
+        openResultDialog(response);
       })
       .finally(() => {
         reset(initialValues);

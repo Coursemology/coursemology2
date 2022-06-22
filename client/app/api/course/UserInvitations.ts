@@ -31,10 +31,16 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    *
    * @param {InvitationFileEntity | FormData} data Invitation file (.csv), or cleaned data from react-hook-form
    * @return {Promise}
-   * success response: { }
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
-  invite(data: InvitationFileEntity | FormData): Promise<AxiosResponse> {
+  invite(data: InvitationFileEntity | FormData): Promise<
+    AxiosResponse<{
+      invitations: InvitationData[];
+      permissions: ManageCourseUsersPermissions;
+      manageCourseUsersData: ManageCourseUsersSharedData;
+      invitationResult: string; // string which is JSON.parsed to type InvitationResult
+    }>
+  > {
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -87,6 +93,17 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       `${this._baseUrlPrefix}/users/toggle_registration`,
       params,
     );
+  }
+
+  /**
+   * Get path to download template csv file
+   */
+  getTemplateCsvPath(): Promise<
+    AxiosResponse<{
+      templatePath: string;
+    }>
+  > {
+    return this.getClient().get(`${this._baseUrlPrefix}/users/invite`);
   }
 
   /**

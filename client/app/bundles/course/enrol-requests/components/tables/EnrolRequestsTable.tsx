@@ -12,8 +12,8 @@ import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { EnrolRequestEntity } from 'types/course/enrolRequests';
 import sharedConstants from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/components/tables/translations';
-import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
 import { TimelineAlgorithm } from 'types/course/personalTimes';
+import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 
@@ -25,7 +25,7 @@ interface Props extends WrappedComponentProps {
   pendingEnrolRequests?: boolean;
   approvedEnrolRequests?: boolean;
   rejectedEnrolRequests?: boolean;
-  renderRowActionComponent?: (EnrolRequestEntity) => ReactElement;
+  renderRowActionComponent?: (enrolRequest: EnrolRequestEntity) => ReactElement;
 }
 
 const translations = defineMessages({
@@ -54,7 +54,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     renderRowActionComponent = null,
     intl,
   } = props;
-  let columns: object[] = [];
+  let columns: TableColumns[] = [];
 
   if (enrolRequests && enrolRequests.length === 0) {
     return (
@@ -265,7 +265,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
               sort: false,
               alignCenter: true,
               customBodyRender: (_value, tableMeta): JSX.Element => {
-                const rowData = tableMeta.currentTableData[tableMeta.rowIndex];
+                const rowData = tableMeta.rowData;
                 const enrolRequest = rebuildObjectFromRow(columns, rowData); // maybe can optimize if we push this function to within the buttons?
                 const actionComponent = renderRowActionComponent(enrolRequest);
                 return actionComponent;

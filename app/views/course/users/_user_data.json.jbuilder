@@ -2,7 +2,7 @@
 json.partial! 'user_list_data', course_user: course_user
 
 json.email course_user.user.email
-json.role CourseUser.human_attribute_name(course_user.role)
+json.role course_user.role
 
 if can?(:manage, Course::UserEmailUnsubscription.new(course_user: course_user))
   json.manageEmailSubscriptionUrl course_user_manage_email_subscription_path(current_course, @course_user)
