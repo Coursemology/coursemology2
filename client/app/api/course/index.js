@@ -1,7 +1,6 @@
 import AchievementsAPI from './Achievements';
 import AssessmentAPI from './Assessment';
 import CommentsAPI from './Comments';
-import VirtualClassroomsAPI from './VirtualClassrooms';
 import MaterialsAPI from './Materials';
 import MaterialFoldersAPI from './MaterialFolders';
 import LessonPlanAPI from './LessonPlan';
@@ -28,7 +27,6 @@ const CourseAPI = {
   assessment: AssessmentAPI,
   comments: new CommentsAPI(),
   courses: new CoursesAPI(),
-  virtualClassrooms: new VirtualClassroomsAPI(),
   materials: new MaterialsAPI(),
   materialFolders: new MaterialFoldersAPI(),
   lessonPlan: new LessonPlanAPI(),
