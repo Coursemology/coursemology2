@@ -1,24 +1,26 @@
-= page_header do
-  = new_button([:admin, :instance]) if can?(:create, Instance.new)
+div#system-admin-component
 
-= page_entries_info(@instances)
+/ = page_header do
+/   = new_button([:admin, :instance]) if can?(:create, Instance.new)
 
-table.table.table-middle-align.table-hover
-  thead
-    tr
-      th= t('common.serial_number')
-      th= t('.name')
-      th= t('.host_name')
-      th
-        div data-toggle="tooltip" title="#{t('.users_hint')}"
-          = t('.users')
-      th
-        div data-toggle="tooltip" title="#{t('.courses_hint')}"
-          = t('.courses')
+/ = page_entries_info(@instances)
 
-  tbody
-    = render partial: 'instance', collection: @instances,
-                                  locals: { current_page: @instances.current_page,
-                                            per_page: @instances.default_per_page }
+/ table.table.table-middle-align.table-hover
+/   thead
+/     tr
+/       th= t('common.serial_number')
+/       th= t('.name')
+/       th= t('.host_name')
+/       th
+/         div data-toggle="tooltip" title="#{t('.users_hint')}"
+/           = t('.users')
+/       th
+/         div data-toggle="tooltip" title="#{t('.courses_hint')}"
+/           = t('.courses')
 
-= paginate @instances
+/   tbody
+/     = render partial: 'instance', collection: @instances,
+/                                   locals: { current_page: @instances.current_page,
+/                                             per_page: @instances.default_per_page }
+
+/ = paginate @instances

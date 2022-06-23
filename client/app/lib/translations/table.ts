@@ -85,6 +85,30 @@ const translations = defineMessages({
     id: 'components.table.column.endAt',
     defaultMessage: 'End At',
   },
+  instances: {
+    id: 'components.table.column.instances',
+    defaultMessage: 'Instances',
+  },
+  instance: {
+    id: 'components.table.column.instance',
+    defaultMessage: 'Instance',
+  },
+  owners: {
+    id: 'components.table.column.owners',
+    defaultMessage: 'Owners',
+  },
+  host: {
+    id: 'components.table.column.host',
+    defaultMessage: 'Host Name',
+  },
+  activeTotalUsers: {
+    id: 'components.table.column.activeTotalUsers',
+    defaultMessage: 'Active/Total Users',
+  },
+  activeTotalCourses: {
+    id: 'components.table.column.activeTotalCourses',
+    defaultMessage: 'Active/Total Courses',
+  },
 });
 
 export default translations;

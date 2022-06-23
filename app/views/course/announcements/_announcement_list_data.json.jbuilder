@@ -6,7 +6,8 @@ json.content announcement.content
 json.startTime announcement.start_at
 json.endTime announcement.end_at
 
-course_user = announcement.creator.course_users.find_by(course: controller.current_course)
+course_user = announcement.creator.course_users.find_by(course: controller.current_course) unless @course.nil?
+
 if course_user
   json.courseUserId course_user.id
   json.courseUserName course_user.name

@@ -18,9 +18,11 @@ import { TableColumns, TableOptions } from 'types/components/DataTable';
 import tableTranslations from 'lib/translations/table';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import equal from 'fast-deep-equal';
-import { useSelector } from 'react-redux';
-import { AppState } from 'types/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, AppState } from 'types/store';
+import { toast } from 'react-toastify';
 import { getManageCourseUserPermissions } from '../../selectors';
+import { updateUser } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -37,6 +39,10 @@ const translations = defineMessages({
   searchText: {
     id: 'course.users.components.tables.ManageUsersTable.searchText',
     defaultMessage: 'Search by name, email, role, etc.',
+  },
+  renameSuccess: {
+    id: 'course.users.rename.success',
+    defaultMessage: '{oldName} was renamed to {newName}',
   },
 });
 
@@ -58,10 +64,30 @@ const ManageUsersTable: FC<Props> = (props) => {
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
   );
+  const dispatch = useDispatch<AppDispatch>();
 
   if (users && users.length === 0) {
     return <Note message={<FormattedMessage {...translations.noUsers} />} />;
   }
+
+  const handleNameUpdate = (rowData, newName: string): Promise<void> => {
+    const user = rebuildObjectFromRow(
+      columns, // eslint-disable-line @typescript-eslint/no-use-before-define
+      rowData,
+    ) as CourseUserMiniEntity;
+    const newUser = {
+      ...user,
+      name: newName,
+    };
+    return dispatch(updateUser(rowData[1], newUser)).then(() => {
+      toast.success(
+        intl.formatMessage(translations.renameSuccess, {
+          oldName: user.name,
+          newName,
+        }),
+      );
+    });
+  };
 
   const options: TableOptions = {
     download: false,
@@ -106,7 +132,7 @@ const ManageUsersTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const userId = tableMeta.rowData[1];
+          const userId = tableMeta.rowData[0];
           return (
             <InlineEditTextField
               key={`name-${userId}`}
@@ -114,6 +140,9 @@ const ManageUsersTable: FC<Props> = (props) => {
               className="course_user_name"
               updateValue={updateValue}
               variant="standard"
+              onUpdate={(newName): Promise<void> =>
+                handleNameUpdate(tableMeta.rowData, newName)
+              }
             />
           );
         },

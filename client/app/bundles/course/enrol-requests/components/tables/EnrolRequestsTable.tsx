@@ -190,6 +190,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
               className="enrol_request_name"
               updateValue={updateValue}
               variant="standard"
+              alwaysEditable
             />
           );
         },

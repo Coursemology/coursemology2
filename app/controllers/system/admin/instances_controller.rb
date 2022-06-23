@@ -4,7 +4,7 @@ class System::Admin::InstancesController < System::Admin::Controller
   add_breadcrumb :index, :admin_instances_path
 
   def index # :nodoc:
-    @instances = Instance.order_for_display.page(page_param).
+    @instances = Instance.order_for_display. # page(page_param).
                  calculated(:active_course_count, :course_count, :active_user_count, :user_count)
   end
 
@@ -13,9 +13,11 @@ class System::Admin::InstancesController < System::Admin::Controller
 
   def create # :nodoc:
     if @instance.save
-      redirect_to admin_instances_path, success: t('.success')
+      render 'system/admin/instances/_instance_list_data',
+             locals: { instance: @instance },
+             status: :ok
     else
-      render 'new'
+      render json: { errors: @instance.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -24,18 +26,19 @@ class System::Admin::InstancesController < System::Admin::Controller
 
   def update # :nodoc:
     if @instance.update(instance_params)
-      redirect_to admin_instances_path, success: t('.success')
+      render 'system/admin/instances/_instance_list_data',
+             locals: { instance: @instance },
+             status: :ok
     else
-      render 'edit'
+      render json: { errors: @instance.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   def destroy # :nodoc:
     if @instance.destroy
-      redirect_to admin_instances_path, success: t('.success', instance: @instance.name)
+      head :ok
     else
-      redirect_to admin_instances_path,
-                  danger: t('.failure', error: @instance.errors.full_messages.to_sentence)
+      render json: { errors: @user.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 

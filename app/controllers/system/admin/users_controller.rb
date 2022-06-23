@@ -10,18 +10,21 @@ class System::Admin::UsersController < System::Admin::Controller
   end
 
   def update
+    @instances_preload_service = User::InstancePreloadService.new(@user.id)
     if @user.update(user_params)
-      flash.now[:success] = t('.success', user: @user.name)
+      render 'system/admin/users/_user_list_data',
+             locals: { user: @user },
+             status: :ok
     else
-      flash.now[:danger] = @user.errors.full_messages.to_sentence
+      render json: { errors: @user.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   def destroy
     if @user.destroy
-      redirect_to admin_users_path, success: t('.success', user: @user.name)
+      head :ok
     else
-      redirect_to admin_users_path, danger: @user.errors.full_messages.to_sentence
+      render json: { errors: @user.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 

@@ -1,4 +1,5 @@
 import type { StaffRoles, CourseUserRoles } from 'types/course/courseUsers';
+import type { UserRoles } from 'types/users';
 
 // Form options
 
@@ -15,6 +16,11 @@ const TIMELINE_ALGORITHMS = [
   { value: 'stragglers', label: 'Stragglers' },
   { value: 'otot', label: 'Otot' },
 ];
+
+const USER_ROLES: UserRoles = {
+  normal: 'Normal',
+  administrator: 'Administrator',
+};
 
 const COURSE_USER_ROLES: CourseUserRoles = {
   student: 'Student',
@@ -42,6 +48,7 @@ const ITEM_ACTABLE_TYPES = {
 export default {
   SUPPORTED_VOICE_FILE_TYPES,
   TIMELINE_ALGORITHMS,
+  USER_ROLES,
   COURSE_USER_ROLES,
   STAFF_ROLES,
   ITEM_ACTABLE_TYPES,

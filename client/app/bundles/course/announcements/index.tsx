@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import configureStore from './store';
 
-// import AnnouncementEdit from './pages/AnnouncementEdit';
 import AnnouncementsIndex from './pages/AnnouncementsIndex';
 
 $(() => {
@@ -20,10 +19,6 @@ $(() => {
               path="courses/:courseId/announcements"
               element={<AnnouncementsIndex />}
             />
-            {/* <Route
-              path="courses/:courseId/announcements/:announcementId/edit"
-              element={<AnnouncementEdit />}
-            /> */}
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,

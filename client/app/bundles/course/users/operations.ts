@@ -4,6 +4,7 @@ import {
   CourseUserBasicListData,
   CourseUserBasicMiniEntity,
   CourseUserEntity,
+  CourseUserMiniEntity,
   StaffRole,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
@@ -26,7 +27,7 @@ import {
  *   }
  */
 const formatUpdateUser = (
-  data: CourseUserEntity,
+  data: CourseUserEntity | CourseUserMiniEntity,
 ): UpdateCourseUserPatchData => {
   const payload = {
     course_user: {
@@ -130,7 +131,7 @@ export function loadUser(userId: number): Operation<SaveUserAction> {
 
 export function updateUser(
   userId: number,
-  data: CourseUserEntity,
+  data: CourseUserEntity | CourseUserMiniEntity,
 ): Operation<void> {
   const attributes = formatUpdateUser(data);
   return async (dispatch) =>

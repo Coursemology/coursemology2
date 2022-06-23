@@ -8,7 +8,7 @@ import { AppDispatch, AppState } from 'types/store';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
 
-import { fetchAnnouncements } from '../../operations';
+import { fetchAnnouncements, createAnnouncement } from '../../operations';
 import {
   getAllAnnouncementMiniEntities,
   getAnnouncementPermissions,
@@ -93,6 +93,7 @@ const AnnouncementsIndex: FC<Props> = (props) => {
       <AnnouncementNew
         open={isOpen}
         handleClose={(): void => setIsOpen(false)}
+        createOperation={createAnnouncement}
       />
     </>
   );
