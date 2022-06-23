@@ -18,8 +18,16 @@ const styles = {
 };
 
 const FormSelectField = (props) => {
-  const { field, fieldState, disabled, label, options, renderIf, ...custom } =
-    props;
+  const {
+    field,
+    fieldState,
+    disabled,
+    label,
+    options,
+    renderIf,
+    noneSelected,
+    ...custom
+  } = props;
   const isError = !!fieldState.error;
   if (!renderIf) {
     return null;
@@ -35,14 +43,24 @@ const FormSelectField = (props) => {
     >
       <InputLabel>{label}</InputLabel>
       <Select
+        id="select"
         {...field}
         onChange={(event) => field.onChange(event.target.value)}
         {...custom}
         variant="standard"
       >
+        {noneSelected && (
+          <MenuItem value="" key={noneSelected}>
+            {noneSelected}
+          </MenuItem>
+        )}
         {options &&
           options.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
+            <MenuItem
+              key={option.value}
+              id={`select-${option.value}`}
+              value={option.value}
+            >
               {option.label}
             </MenuItem>
           ))}
@@ -67,6 +85,7 @@ FormSelectField.propTypes = {
   label: PropTypes.node,
   options: PropTypes.arrayOf(PropTypes.object),
   renderIf: PropTypes.bool,
+  noneSelected: PropTypes.string,
 };
 
 export default memo(FormSelectField, propsAreEqual);

@@ -7,12 +7,14 @@ interface Props extends IconButtonProps {
   disabled: boolean;
   onClick: () => Promise<void>;
   withDialog: boolean;
+  message: string;
 }
 
 const DeleteButton = ({
   disabled,
   onClick,
   withDialog,
+  message,
   ...props
 }: Props): JSX.Element => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -34,7 +36,7 @@ const DeleteButton = ({
       </IconButton>
       {dialogOpen && (
         <ConfirmationDialog
-          message="Are you sure you wish to delete this achievement?"
+          message={message}
           disableCancelButton={disabled}
           disableConfirmButton={disabled}
           open={dialogOpen}

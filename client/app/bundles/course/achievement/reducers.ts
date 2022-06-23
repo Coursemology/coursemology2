@@ -1,10 +1,5 @@
 import { produce } from 'immer';
 import {
-  AchievementCourseUserEntity,
-  AchievementEntity,
-  AchievementMiniEntity,
-} from 'types/course/achievements';
-import {
   createEntityStore,
   removeFromStore,
   saveEntityToStore,
@@ -29,18 +24,16 @@ const reducer = produce(
     switch (action.type) {
       case SAVE_ACHIEVEMENT_LIST: {
         const achievementList = action.achievementList;
-        const entityList: AchievementMiniEntity[] = achievementList.map(
-          (data) => ({
-            ...data,
-          }),
-        );
+        const entityList = achievementList.map((data) => ({
+          ...data,
+        }));
         saveListToStore(draft.achievements, entityList);
         draft.permissions = action.achievementPermissions;
         break;
       }
       case SAVE_ACHIEVEMENT: {
         const achievementData = action.achievement;
-        const achievementEntity: AchievementEntity = { ...achievementData };
+        const achievementEntity = { ...achievementData };
         saveEntityToStore(draft.achievements, achievementEntity);
         break;
       }
@@ -54,10 +47,9 @@ const reducer = produce(
       case SAVE_ACHIEVEMENT_COURSE_USERS: {
         const achievementId = action.id;
         const achievementUsers = action.achievementCourseUsers;
-        const achievementUsersEntity: AchievementCourseUserEntity[] =
-          achievementUsers.map((data) => ({
-            ...data,
-          }));
+        const achievementUsersEntity = achievementUsers.map((data) => ({
+          ...data,
+        }));
 
         // @ts-ignore: ignore other existing AchievementEntity contents as they are already saved
         saveEntityToStore(draft.achievements, {

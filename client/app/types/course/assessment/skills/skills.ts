@@ -1,29 +1,80 @@
-export interface SkillData {
-  id: number;
-  title: string;
-  percentage: number;
-  grade: number;
-  totalGrade: number;
+import { Permissions } from 'types';
+
+export interface SkillBranchOptions {
+  value: number;
+  label: string;
 }
 
-export interface SkillEntity {
+/**
+ * Data types for skills data retrieved from backend through API call.
+ */
+
+export type SkillPermissions = Permissions<
+  'canCreateSkill' | 'canCreateSkillBranch'
+>;
+
+export interface SkillListData {
   id: number;
   title: string;
-  percentage: number;
-  grade: number;
-  totalGrade: number;
+  branchId?: number;
+  description: string;
+  permissions: {
+    canUpdate: boolean;
+    canDestroy: boolean;
+  };
 }
 
-export interface SkillBranchData {
+export interface SkillBranchListData {
   id: number;
   title: string;
-  description?: string;
-  skills?: SkillData[];
+  description: string;
+  permissions: {
+    canUpdate: boolean;
+    canDestroy: boolean;
+  };
+  skills?: SkillListData[];
 }
 
-export interface SkillBranchEntity {
+/**
+ * Data types for achievement data used in frontend that are converted from
+ * received backend data.
+ */
+
+export interface SkillMiniEntity {
   id: number;
   title: string;
-  description?: string;
-  skills?: SkillEntity[];
+  branchId?: number;
+  description: string;
+  permissions: {
+    canUpdate: boolean;
+    canDestroy: boolean;
+  };
 }
+
+export interface SkillBranchMiniEntity {
+  id: number;
+  title: string;
+  description: string;
+  permissions: {
+    canUpdate: boolean;
+    canDestroy: boolean;
+  };
+  skills?: SkillMiniEntity[];
+}
+
+/**
+ * Data types for skills form data.
+ */
+
+export interface SkillFormData {
+  title: string;
+  description: string;
+  skillBranchId?: number | null;
+}
+
+/**
+ * Data types for skills table data.
+ */
+
+export type SkillTableData = SkillListData;
+export type SkillBranchTableData = SkillBranchListData;

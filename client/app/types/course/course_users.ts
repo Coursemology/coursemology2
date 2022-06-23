@@ -2,7 +2,10 @@ import type {
   AchievementListData,
   AchievementMiniEntity,
 } from './achievements';
-import { SkillBranchData, SkillBranchEntity } from './assessment/skills/skills';
+import {
+  UserSkillBranchMiniEntity,
+  UserSkillBranchListData,
+} from './assessment/skills/userSkills';
 
 export interface CourseUserListData {
   id: number;
@@ -29,7 +32,7 @@ export interface CourseUserData extends CourseUserListData {
   achievements?: AchievementListData[];
   experiencePointsRecordsUrl?: string;
   manageEmailSubscriptionUrl?: string;
-  skillBranches?: SkillBranchData[];
+  skillBranches?: UserSkillBranchListData[];
 }
 
 export interface CourseUserEntity extends CourseUserMiniEntity {
@@ -40,5 +43,5 @@ export interface CourseUserEntity extends CourseUserMiniEntity {
   achievements?: AchievementMiniEntity[];
   experiencePointsRecordsUrl?: string;
   manageEmailSubscriptionUrl?: string;
-  skillBranches?: SkillBranchEntity[];
+  skillBranches?: UserSkillBranchMiniEntity[];
 }
