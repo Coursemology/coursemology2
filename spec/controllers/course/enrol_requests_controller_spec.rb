@@ -21,8 +21,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
       context 'when a user creates a new enrolment request' do
         it 'redirects and sets the proper success flash message' do
           subject
-          is_expected.to redirect_to(course_path(course))
-          expect(flash[:success]).to eq(I18n.t('course.enrol_requests.create.success'))
+          is_expected.to have_http_status(:ok)
         end
 
         it 'sends an email notification to course owner', type: :mailer do
@@ -42,9 +41,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
 
           it 'sets the proper danger flash message' do
             subject
-            is_expected.to redirect_to(course_path(course))
-            expect(flash[:danger]).to eq(I18n.t('activerecord.errors.models.'\
-                                                'course/enrol_request.existing_pending_request'))
+            is_expected.to have_http_status(:bad_request)
           end
         end
 
@@ -55,8 +52,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
 
           it 'sets the proper danger flash message' do
             subject
-            is_expected.to redirect_to(course_path(course))
-            expect(flash[:success]).to eq(I18n.t('course.enrol_requests.create.success'))
+            is_expected.to have_http_status(:ok)
           end
         end
       end
@@ -69,8 +65,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
         let!(:request) { create(:course_enrol_request, :pending, course: course, user: user) }
         it 'redirects and sets the proper success flash message' do
           subject
-          is_expected.to redirect_to(course_path(course))
-          expect(flash[:success]).to eq(I18n.t('course.enrol_requests.destroy.success'))
+          is_expected.to have_http_status(:ok)
         end
       end
 
@@ -78,9 +73,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
         let!(:request) { create(:course_enrol_request, :approved, course: course, user: user) }
         it 'redirects and sets the proper message' do
           subject
-          is_expected.to redirect_to(course_path(course))
-          expect(flash[:danger]).to eq(I18n.t('activerecord.errors.models.'\
-                                              'course/enrol_request.attributes.base.deletion'))
+          is_expected.to have_http_status(:bad_request)
         end
       end
     end

@@ -49,11 +49,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
               it 'registers the user' do
                 expect { subject }.to change { course.course_users.count }.by(1)
               end
-              it { is_expected.to redirect_to(course_path(course)) }
-              it 'sets the proper flash message' do
-                subject
-                expect(flash[:success]).to eq(I18n.t('course.user_registrations.create.registered'))
-              end
+              it { is_expected.to have_http_status(:ok) }
             end
 
             context 'when the course does not allow enrolment requests' do
@@ -91,11 +87,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
               it 'registers the user' do
                 expect { subject }.to change { course.course_users.count }.by(1)
               end
-              it { is_expected.to redirect_to(course_path(course)) }
-              it 'sets the proper flash message' do
-                subject
-                expect(flash[:success]).to eq(I18n.t('course.user_registrations.create.registered'))
-              end
+              it { is_expected.to have_http_status(:ok) }
             end
 
             context 'when the course does not allow enrolment requests' do
@@ -121,7 +113,7 @@ RSpec.describe Course::UserRegistrationsController, type: :controller do
         context 'when an invalid registration code is specified' do
           let(:registration_code) { '*' }
           it 'rejects the request' do
-            expect(subject).to render_template('course/courses/show')
+            expect(subject).to_not be_successful
           end
         end
       end

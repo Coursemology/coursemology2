@@ -83,6 +83,7 @@ RSpec.feature 'Course: Announcements' do
         expect do
           find_link(nil, href: course_announcement_path(course, announcement)).click
         end.to change(course.announcements, :count).by(-1)
+
         expect(current_path).to eq(course_announcements_path(course))
         expect(page).to have_selector('div.alert.alert-success',
                                       text: I18n.t('course.announcements.destroy.success'))
