@@ -53,7 +53,6 @@ MultipleChoiceOptions.propTypes = {
   }).isRequired,
 };
 
-// eslint-disable-next-line react/display-name
 const MemoMultipleChoiceOptions = memo(
   MultipleChoiceOptions,
   (prevProps, nextProps) => {

@@ -3,7 +3,7 @@
 if skill_branch
   json.id skill_branch.id
   json.title skill_branch.title
-  json.description format_html(skill_branch.description)
+  json.description format_ckeditor_rich_text(skill_branch.description)
   json.permissions do
     json.canUpdate can?(:update, skill_branch)
     json.canDestroy can?(:destroy, skill_branch)
