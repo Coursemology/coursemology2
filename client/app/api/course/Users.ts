@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { CourseUserData, CourseUserListData } from 'types/course/course_users';
+import { CourseUserData, CourseUserListData } from 'types/course/courseUsers';
 import BaseCourseAPI from './Base';
 
 export default class UsersAPI extends BaseCourseAPI {

@@ -3,7 +3,7 @@
  */
 
 import { Achievement } from './achievements';
-import { CourseUserListData } from './course_users';
+import { CourseUserListData } from './courseUsers';
 
 export interface LeaderboardSettings {
   leaderboardTitle?: string;

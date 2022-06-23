@@ -1,4 +1,4 @@
-import { CourseUserData, CourseUserListData } from 'types/course/course_users';
+import { CourseUserData, CourseUserListData } from 'types/course/courseUsers';
 import {
   SAVE_USER,
   SAVE_USERS_LIST,
