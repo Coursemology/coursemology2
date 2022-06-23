@@ -118,7 +118,6 @@ QuestionFormOptions.propTypes = {
   deletedOptionsAppend: PropTypes.func.isRequired,
 };
 
-// eslint-disable-next-line react/display-name
 export default memo(QuestionFormOptions, (prevProps, nextProps) => {
   if (
     prevProps.multipleChoice !== nextProps.multipleChoice ||

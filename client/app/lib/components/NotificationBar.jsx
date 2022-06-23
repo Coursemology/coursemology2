@@ -68,7 +68,6 @@ NotificationBar.propTypes = {
   autoHideDuration: PropTypes.number,
 };
 
-// eslint-disable-next-line react/display-name
 export default memo(
   NotificationBar,
   (prevProps, nextProps) => prevProps.notification === nextProps.notification,

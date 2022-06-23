@@ -389,7 +389,6 @@ SubmissionsTableRow.propTypes = {
 
 SubmissionsTableRow.displayName = 'SubmissionsTableRow';
 
-// eslint-disable-next-line react/display-name
 export default memo(
   SubmissionsTableRow,
   (prevProps, nextProps) =>
