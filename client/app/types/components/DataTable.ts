@@ -1,3 +1,5 @@
+import { CSSProperties } from '@mui/styles';
+
 export interface TableColumns {
   name: string;
   label: string;
@@ -8,9 +10,15 @@ export interface TableColumns {
     sort?: boolean;
     alignCenter?: boolean;
     alignLeft?: boolean;
+    alignRight?: boolean;
     justifyCenter?: boolean;
+    justifyLeft?: boolean;
+    justifyRight?: boolean;
+    setCellProps?: () => CSSProperties;
+    setCellHeaderProps?: () => CSSProperties;
     customBodyRenderLite?: (dataIndex: number) => string | JSX.Element | number;
-    customHeadLabelRender?: () => JSX.Element;
+    customHeadLabelRender?: () => JSX.Element | null;
+    customHeadRender?: () => JSX.Element | null;
   };
 }
 
@@ -23,4 +31,9 @@ export interface TableOptions {
   selectableRows: string;
   setRowProps: (row, dataIndex: number, rowIndex: number) => any;
   viewColumns: boolean;
+}
+
+export interface TableRowMeta {
+  rowIndex: number;
+  dataIndex: number;
 }

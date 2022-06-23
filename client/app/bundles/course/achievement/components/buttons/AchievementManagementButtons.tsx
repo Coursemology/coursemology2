@@ -31,6 +31,10 @@ const translations = defineMessages({
     defaultMessage:
       'Automatically-awarded achievements cannot be manually awarded to students.',
   },
+  deletionConfirmation: {
+    id: 'course.achievement.delete.confirmation',
+    defaultMessage: 'Are you sure you wish to delete this achievement?',
+  },
 });
 
 const AchievementManagementButtons: FC<Props> = (props) => {
@@ -79,6 +83,7 @@ const AchievementManagementButtons: FC<Props> = (props) => {
           disabled={isDeleting}
           onClick={onDelete}
           withDialog
+          message={intl.formatMessage(translations.deletionConfirmation)}
         />
       )}
     </div>

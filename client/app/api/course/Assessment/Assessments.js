@@ -34,13 +34,13 @@ export default class AssessmentsAPI extends BaseCourseAPI {
   }
 
   /**
-   * Fetches assessment skills
+   * Fetches assessment skills options
    *
    * @return {Promise}
    * success response: array of skills
    */
   fetchSkills() {
-    return this.getClient().get(`${this._getUrlPrefix()}/skills`);
+    return this.getClient().get(`${this._getUrlPrefix()}/skills/options`);
   }
 
   /**

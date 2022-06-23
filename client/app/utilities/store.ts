@@ -107,3 +107,10 @@ export function selectMiniEntities<M, E extends M = M>(
   });
   return result;
 }
+
+/**
+ * Returns a new array with all `undefined` and `null` elements removed.
+ */
+export function removeNulls<T>(list: Array<T | null | undefined>): T[] {
+  return list.filter((item) => item !== undefined && item !== null) as T[];
+}
