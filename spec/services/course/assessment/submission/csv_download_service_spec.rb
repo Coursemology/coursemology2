@@ -22,10 +22,6 @@ RSpec.describe Course::Assessment::Submission::CsvDownloadService do
       create(:submission, :submitted, assessment: assessment1,
                                       course: course, creator: student2.user)
     end
-    let!(:submission3) do
-      create(:submission, :submitted, assessment: assessment2,
-                                      course: course, creator: student2.user)
-    end
 
     describe '#download' do
       subject do
