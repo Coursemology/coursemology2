@@ -4,6 +4,10 @@ class Course::LessonPlan::TodosController < Course::LessonPlan::Controller
   load_and_authorize_resource :todo, class: Course::LessonPlan::Todo.name, except: [:new, :create]
 
   def ignore
-    flash.now[:success] = t('.success') if @todo.update_column(:ignore, true)
+    if @todo.update_column(:ignore, true)
+      render json: { id: @todo.id }, status: :ok
+    else
+      render json: { errors: @todo.errors }, status: :bad_request
+    end
   end
 end

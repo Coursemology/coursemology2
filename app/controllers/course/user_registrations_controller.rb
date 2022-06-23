@@ -8,9 +8,9 @@ class Course::UserRegistrationsController < Course::ComponentController
     @registration.update(registration_params.reverse_merge(course: current_course,
                                                            user: current_user))
     if registration_service.register(@registration)
-      create_success
+      head :ok
     else
-      render 'course/courses/show'
+      render json: { errors: @registration.errors }, status: :bad_request
     end
   end
 

@@ -11,10 +11,9 @@ class Course::EnrolRequestsController < Course::ComponentController
     @enrol_request.user = current_user
     if @enrol_request.save
       Course::Mailer.user_enrol_requested_email(@enrol_request).deliver_later
-      redirect_to course_path(current_course), success: t('.success')
+      render json: { id: @enrol_request.id }, status: :ok
     else
-      redirect_to course_path(current_course),
-                  danger: @enrol_request.errors.full_messages.to_sentence
+      render json: { errors: @enrol_request.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -22,10 +21,9 @@ class Course::EnrolRequestsController < Course::ComponentController
   # approval/rejection.
   def destroy
     if @enrol_request.destroy
-      redirect_back fallback_location: course_path(current_course), success: t('.success')
+      head :ok
     else
-      redirect_back fallback_location: course_path(current_course),
-                    danger: @enrol_request.errors.full_messages.to_sentence
+      render json: { errors: @enrol_request.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 

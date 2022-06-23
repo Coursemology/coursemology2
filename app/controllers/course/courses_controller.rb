@@ -1,21 +1,27 @@
 # frozen_string_literal: true
 class Course::CoursesController < Course::Controller
   include Course::ActivityFeedsConcern
-
   skip_authorize_resource :course, only: [:show, :index]
-  before_action :load_todos, only: [:show]
 
   def index
     @courses = Course.publicly_accessible.ordered_by_start_at
   end
 
   def show
-    @registration = Course::Registration.new
-    @currently_active_announcements = current_course.announcements.currently_active.sorted_by_sticky.sorted_by_date
-    @activity_feeds = recent_activity_feeds.limit(20).preload(activity: [{ object: { topic: { actable: :forum } } },
-                                                                         :actor])
-    load_activity_course_users
-    render layout: 'course'
+    respond_to do |format|
+      format.html { render layout: 'course' }
+      format.json do
+        @registration = Course::Registration.new
+        @currently_active_announcements = current_course.announcements.
+                                          currently_active.includes(:creator).
+                                          sorted_by_sticky.sorted_by_date
+        @activity_feeds = recent_activity_feeds.limit(20).preload(activity: [{ object: { topic: { actable: :forum } } },
+                                                                             :actor])
+        load_activity_course_users
+        load_todos
+        load_items_with_timeline
+      end
+    end
   end
 
   def new
@@ -49,20 +55,33 @@ class Course::CoursesController < Course::Controller
     return unless current_course_user&.student?
 
     todos = Course::LessonPlan::Todo.pending_for(current_course_user).
-            preload(:user, { item: [:course, actable: :conditions] }).order(updated_at: :desc)
+            preload(:user, { item: [:default_reference_time, :course, actable: :conditions] }).order(updated_at: :desc)
     todos = todos.select(&:can_user_start?)
     @video_todos = todos.select { |td| td.item.actable_type == Course::Video.name }
     @assessment_todos = todos.select { |td| td.item.actable_type == Course::Assessment.name }
     @survey_todos = todos.select { |td| td.item.actable_type == Course::Survey.name }
-    load_items_with_timeline
+
+    @assessment_todos_hash = Course::Assessment::Submission.
+                             where(
+                               'creator_id in (?) and assessment_id in (?)',
+                               current_user.id,
+                               @assessment_todos.map(&:item).pluck(:actable_id)
+                             ).
+                             map { |submission| [submission.assessment_id, submission] }.to_h
+
+    @survey_todos_hash = Course::Survey::Response.
+                         where(
+                           'creator_id in (?) and survey_id in (?)',
+                           current_user.id,
+                           @survey_todos.map(&:item).pluck(:actable_id)
+                         ).
+                         map { |survey| [survey.survey_id, survey] }.to_h
   end
 
   def load_items_with_timeline # rubocop:disable Metrics/AbcSize
-    # preload items with their timeline. Only the first 5 items are preloaded since
-    # we are only showing the first 5 items.
-    item_ids = [*@video_todos.map { |todo| todo.item.id }.first(5),
-                *@assessment_todos.map { |todo| todo.item.id }.first(5),
-                *@survey_todos.map { |todo| todo.item.id }.first(5)]
+    item_ids = [*@video_todos&.map { |todo| todo.item.id },
+                *@assessment_todos&.map { |todo| todo.item.id },
+                *@survey_todos&.map { |todo| todo.item.id }]
     @todo_items_with_timeline_hash = @course.lesson_plan_items.where(id: item_ids).
                                      with_reference_times_for(current_course_user).
                                      with_personal_times_for(current_course_user).
