@@ -16,11 +16,19 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
 
   def create
     if @submission.save
-      redirect_to edit_course_video_submission_path(current_course, @video, @submission)
+      respond_to do |format|
+        format.html { redirect_to edit_course_video_submission_path(current_course, @video, @submission) }
+        format.json { render json: { submissionId: @submission.id }, status: :ok }
+      end
     elsif @submission.existing_submission.present?
-      redirect_to edit_course_video_submission_path(current_course,
-                                                    @video,
-                                                    @submission.existing_submission)
+      respond_to do |format|
+        format.html do
+          redirect_to edit_course_video_submission_path(current_course,
+                                                        @video,
+                                                        @submission.existing_submission)
+        end
+        format.json { render json: { submissionId: @submission.existing_submission.id }, status: :ok }
+      end
     else
       redirect_to course_videos_path(current_course),
                   danger: t('.failure', error: @submission.errors.full_messages.to_sentence)
