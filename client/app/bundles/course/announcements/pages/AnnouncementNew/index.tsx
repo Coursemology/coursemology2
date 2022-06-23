@@ -2,7 +2,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { AppDispatch } from 'types/store';
+import { AppDispatch, Operation } from 'types/store';
 
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
@@ -11,11 +11,12 @@ import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { AnnouncementFormData } from 'types/course/announcements';
 import AnnouncementForm from '../../components/forms/AnnouncementForm';
-import { createAnnouncement } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   open: boolean;
   handleClose: () => void;
+  createOperation: (formData: AnnouncementFormData) => Operation<void>;
+  canSticky?: boolean;
 }
 
 const translations = defineMessages({
@@ -43,7 +44,7 @@ const initialValues = {
 };
 
 const AnnouncementNew: FC<Props> = (props) => {
-  const { intl, open, handleClose } = props;
+  const { intl, open, handleClose, createOperation, canSticky = true } = props;
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -55,7 +56,7 @@ const AnnouncementNew: FC<Props> = (props) => {
   }
 
   const onSubmit = (data: AnnouncementFormData, setError): void => {
-    dispatch(createAnnouncement(data))
+    dispatch(createOperation(data))
       .then((_) => {
         handleClose();
         setConfirmationDialogOpen(false);
@@ -111,6 +112,7 @@ const AnnouncementNew: FC<Props> = (props) => {
             initialValues={initialValues}
             onSubmit={onSubmit}
             setIsDirty={setIsDirty}
+            canSticky={canSticky}
           />
         </DialogContent>
       </Dialog>

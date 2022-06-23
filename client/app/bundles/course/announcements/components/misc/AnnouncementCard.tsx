@@ -1,8 +1,11 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC, useState, memo } from 'react';
-import { AnnouncementMiniEntity } from 'types/course/announcements';
+import {
+  AnnouncementFormData,
+  AnnouncementMiniEntity,
+} from 'types/course/announcements';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'types/store';
+import { AppDispatch, Operation } from 'types/store';
 import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
 
@@ -18,13 +21,18 @@ import DeleteButton from 'lib/components/buttons/DeleteButton';
 import EditButton from 'lib/components/buttons/EditButton';
 import CustomTooltip from 'lib/components/CustomTooltip';
 
-import { deleteAnnouncement } from '../../operations';
 import AnnouncementEdit from '../../pages/AnnouncementEdit';
 
 interface Props extends WrappedComponentProps {
   key: number;
   announcement: AnnouncementMiniEntity;
   showEditOptions?: boolean;
+  updateOperation?: (
+    announcementId: number,
+    formData: AnnouncementFormData,
+  ) => Operation<void>;
+  deleteOperation?: (announcementId: number) => Operation<void>;
+  canSticky?: boolean;
 }
 
 const translations = defineMessages({
@@ -55,7 +63,15 @@ const translations = defineMessages({
 });
 
 const AnnouncementCard: FC<Props> = (props) => {
-  const { intl, key, announcement, showEditOptions } = props;
+  const {
+    intl,
+    key,
+    announcement,
+    showEditOptions,
+    updateOperation,
+    deleteOperation,
+    canSticky = true,
+  } = props;
 
   // For editing announcements form dialog
   const [isOpen, setIsOpen] = useState(false);
@@ -85,13 +101,24 @@ const AnnouncementCard: FC<Props> = (props) => {
 
   const onEdit = (): void => setIsOpen(true);
 
-  const userLink = announcement.courseUserId
-    ? getCourseUserURL(getCourseId(), announcement.courseUserId)
-    : getUserURL(announcement.userId);
-
   const userName = announcement.courseUserName
     ? announcement.courseUserName
     : announcement.userName;
+
+  const renderUserLink = (): JSX.Element => {
+    const userLink = announcement.courseUserId
+      ? getCourseUserURL(getCourseId(), announcement.courseUserId)
+      : getUserURL(announcement.userId);
+
+    if (announcement.userId === -1) {
+      return <>{userName}</>;
+    }
+    return (
+      <Link href={userLink} style={{ textDecoration: 'none' }}>
+        {userName}
+      </Link>
+    );
+  };
 
   const backgroundColor = announcement.isUnread ? '#ffe8e8' : '#ffffff';
 
@@ -140,7 +167,7 @@ const AnnouncementCard: FC<Props> = (props) => {
               {announcement.title}
             </h3>
           </div>
-          {showEditOptions && (
+          {showEditOptions && updateOperation && deleteOperation && (
             <div style={{ display: 'flex' }}>
               {announcement.permissions.canEdit && (
                 <EditButton
@@ -165,24 +192,24 @@ const AnnouncementCard: FC<Props> = (props) => {
           )}
         </div>
 
-        <i className="timestamp">
+        <em className="timestamp">
           {getFullDateTime(announcement.startTime)}
           {intl.formatMessage(translations.timeSeperator)}
-          <Link href={userLink} style={{ textDecoration: 'none' }}>
-            {userName}
-          </Link>
-        </i>
+          {renderUserLink()}
+        </em>
         <div
           style={{ marginTop: 15 }}
           dangerouslySetInnerHTML={{ __html: announcement.content }}
         />
       </div>
-      {showEditOptions && (
+      {showEditOptions && updateOperation && (
         <AnnouncementEdit
           open={isOpen}
           handleClose={(): void => setIsOpen(false)}
           announcementId={announcement.id}
           initialValues={initialValues}
+          updateOperation={updateOperation}
+          canSticky={canSticky}
         />
       )}
     </>

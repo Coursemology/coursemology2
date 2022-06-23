@@ -5,6 +5,7 @@ export interface TableColumns {
   label: string | JSX.Element;
   options: {
     display?: boolean;
+    empty?: boolean;
     filter?: boolean;
     search?: boolean;
     sort?: boolean;
@@ -14,7 +15,6 @@ export interface TableColumns {
     justifyCenter?: boolean;
     justifyLeft?: boolean;
     justifyRight?: boolean;
-    empty?: boolean;
     setCellProps?: (
       cellValue: string,
       rowIndex: number,

@@ -32,6 +32,7 @@ interface Props {
     conditions: ConditionData[];
   };
   initialValues?: Object;
+  canSticky: boolean;
 }
 
 interface IFormInputs {
@@ -40,6 +41,7 @@ interface IFormInputs {
   sticky: boolean;
   startAt: string;
   endAt: string;
+  canSticky: boolean;
 }
 
 const translations = defineMessages({
@@ -78,7 +80,14 @@ const validationSchema = yup.object({
 });
 
 const AnnouncementForm: FC<Props> = (props) => {
-  const { editing, handleClose, initialValues, onSubmit, setIsDirty } = props;
+  const {
+    editing,
+    handleClose,
+    initialValues,
+    onSubmit,
+    setIsDirty,
+    canSticky,
+  } = props;
 
   const {
     control,
@@ -198,18 +207,20 @@ const AnnouncementForm: FC<Props> = (props) => {
             />
           )}
         />
-        <Controller
-          name="sticky"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormToggleField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.sticky} />}
-            />
-          )}
-        />
+        {canSticky && (
+          <Controller
+            name="sticky"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.sticky} />}
+              />
+            )}
+          />
+        )}
         <div style={{ marginBottom: 12 }} />
 
         <div style={{ display: 'flex' }}>

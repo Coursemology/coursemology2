@@ -14,6 +14,7 @@ import Pagination from 'lib/components/Pagination';
 import equal from 'fast-deep-equal';
 
 import AnnouncementCard from './AnnouncementCard';
+import { deleteAnnouncement, updateAnnouncement } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   announcements: AnnouncementMiniEntity[];
@@ -105,6 +106,8 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
               key={announcement.id}
               announcement={announcement}
               showEditOptions={announcementPermissions.canCreate}
+              updateOperation={updateAnnouncement}
+              deleteOperation={deleteAnnouncement}
             />
           ))}
         </Stack>

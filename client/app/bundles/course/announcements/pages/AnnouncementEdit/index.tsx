@@ -2,7 +2,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { AppDispatch } from 'types/store';
+import { AppDispatch, Operation } from 'types/store';
 
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
@@ -11,7 +11,6 @@ import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { AnnouncementFormData } from 'types/course/announcements';
 import AnnouncementForm from '../../components/forms/AnnouncementForm';
-import { updateAnnouncement } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   open: boolean;
@@ -24,6 +23,11 @@ interface Props extends WrappedComponentProps {
     startAt: Date;
     endAt: Date;
   };
+  updateOperation: (
+    announcementId: number,
+    formData: AnnouncementFormData,
+  ) => Operation<void>;
+  canSticky: boolean;
 }
 
 const translations = defineMessages({
@@ -42,7 +46,15 @@ const translations = defineMessages({
 });
 
 const AnnouncementEdit: FC<Props> = (props) => {
-  const { intl, open, handleClose, announcementId, initialValues } = props;
+  const {
+    intl,
+    open,
+    handleClose,
+    announcementId,
+    initialValues,
+    updateOperation,
+    canSticky,
+  } = props;
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
@@ -54,7 +66,7 @@ const AnnouncementEdit: FC<Props> = (props) => {
   }
 
   const onSubmit = (data: AnnouncementFormData, setError): void => {
-    dispatch(updateAnnouncement(announcementId, data))
+    dispatch(updateOperation(announcementId, data))
       .then((_) => {
         handleClose();
         setConfirmationDialogOpen(false);
@@ -110,6 +122,7 @@ const AnnouncementEdit: FC<Props> = (props) => {
             initialValues={initialValues}
             onSubmit={onSubmit}
             setIsDirty={setIsDirty}
+            canSticky={canSticky}
           />
         </DialogContent>
       </Dialog>

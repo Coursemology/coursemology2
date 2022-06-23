@@ -35,10 +35,6 @@ const translations = defineMessages({
     defaultMessage:
       'Automatically-awarded achievements cannot be manually awarded to students.',
   },
-  deletionConfirmation: {
-    id: 'course.achievement.delete.confirmation',
-    defaultMessage: 'Are you sure you wish to delete this achievement?',
-  },
 });
 
 const AchievementManagementButtons: FC<Props> = (props) => {

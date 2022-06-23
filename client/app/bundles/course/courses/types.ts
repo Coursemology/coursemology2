@@ -5,6 +5,7 @@ import {
   CourseMiniEntity,
   CoursePermissions,
 } from 'types/course/courses';
+
 import { EntityStore } from 'types/store';
 
 // eslint-disable-next-line import/prefer-default-export

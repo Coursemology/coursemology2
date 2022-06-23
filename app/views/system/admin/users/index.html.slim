@@ -1,30 +1,32 @@
-= page_header
+div#system-admin-component
 
-- if params[:search].blank?
-  .panel.panel-default
-    .panel-heading = t('common.summary')
-    .panel-body
-      div
-        = t('.total_users_html',
-            admin_count: user_count_link(params, @counts[:total][:administrator], { role: 'administrator' }),
-            normal_count: user_count_link(params, @counts[:total][:normal], { role: 'normal' }),
-            all_count: user_count_link(params, @counts[:total].values.sum, {}))
-      div
-        = t('.active_users_html',
-            admin_count: user_count_link(params, @counts[:active][:administrator], { active: 'true', role: 'administrator' }),
-            normal_count: user_count_link(params, @counts[:active][:normal], { active: 'true', role: 'normal' }),
-            all_count: user_count_link(params, @counts[:active].values.sum, { active: 'true' }))
+/ = page_header
 
-= render partial: 'layouts/search_form', locals: { url: admin_users_path, placeholder: t('.search_placeholder') }
+/ - if params[:search].blank?
+/   .panel.panel-default
+/     .panel-heading = t('common.summary')
+/     .panel-body
+/       div
+/         = t('.total_users_html',
+/             admin_count: user_count_link(params, @counts[:total][:administrator], { role: 'administrator' }),
+/             normal_count: user_count_link(params, @counts[:total][:normal], { role: 'normal' }),
+/             all_count: user_count_link(params, @counts[:total].values.sum, {}))
+/       div
+/         = t('.active_users_html',
+/             admin_count: user_count_link(params, @counts[:active][:administrator], { active: 'true', role: 'administrator' }),
+/             normal_count: user_count_link(params, @counts[:active][:normal], { active: 'true', role: 'normal' }),
+/             all_count: user_count_link(params, @counts[:active].values.sum, { active: 'true' }))
 
-table.table.table-middle-align.table-hover
-  thead
-    tr
-      th= t('common.name')
-      th= t('common.email')
-      th= t('.related_instances')
-      th= t('common.role')
+/ = render partial: 'layouts/search_form', locals: { url: admin_users_path, placeholder: t('.search_placeholder') }
 
-  tbody
-    = render @users
-= paginate @users
+/ table.table.table-middle-align.table-hover
+/   thead
+/     tr
+/       th= t('common.name')
+/       th= t('common.email')
+/       th= t('.related_instances')
+/       th= t('common.role')
+
+/   tbody
+/     = render @users
+/ = paginate @users
