@@ -32,6 +32,8 @@ const CourseInfoBox: FC<Props> = (props) => {
       >
         <Link
           href={getCourseURL(course.id)}
+          // Change to Router-DOM Link and use this after courses sidebar is migrated
+          // to={getCourseURL(course.id)}
           style={{
             textDecoration: 'none',
           }}
@@ -41,7 +43,7 @@ const CourseInfoBox: FC<Props> = (props) => {
               textAlign: 'center',
               marginBottom: 0,
             }}
-            dangerouslySetInnerHTML={{ __html: course.logoURL }}
+            dangerouslySetInnerHTML={{ __html: course.logoUrl }}
           />
           <CardContent style={{ padding: 5 }}>
             <Typography

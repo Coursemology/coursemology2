@@ -3,7 +3,7 @@ import {
   CourseUserMiniEntity,
   CourseUserListData,
   CourseUserData,
-} from 'types/course/course_users';
+} from 'types/course/courseUsers';
 import { EntityStore } from 'types/store';
 
 // Action Names

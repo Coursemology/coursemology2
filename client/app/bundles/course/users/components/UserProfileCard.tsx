@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import { scroller } from 'react-scroll';
-import { CourseUserEntity } from 'types/course/course_users';
+import { CourseUserEntity } from 'types/course/courseUsers';
 import UserProfileCardStats from './UserProfileCardStats';
 import styles from './UserProfileCard.scss';
 

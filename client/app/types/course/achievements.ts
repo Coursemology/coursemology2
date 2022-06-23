@@ -1,6 +1,6 @@
 import { Permissions } from 'types';
 import { ConditionData, ConditionListData, Conditions } from './conditions';
-import type { CourseUserListData, CourseUserMiniEntity } from './course_users';
+import type { CourseUserListData, CourseUserMiniEntity } from './courseUsers';
 
 export interface BadgeEntity {
   name: string;
