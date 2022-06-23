@@ -31,15 +31,6 @@ FactoryBot.define do
       end
     end
 
-    trait :with_virtual_classroom_component_enabled do
-      after(:build) do |course|
-        course.instance.set_component_enabled_boolean(:course_virtual_classrooms_component, true)
-        course.set_component_enabled_boolean(:course_virtual_classrooms_component, true)
-        course.settings(:course_virtual_classrooms_component).braincert_whiteboard_api_key =
-          'FAKE_API_KEY'
-      end
-    end
-
     trait :with_mrq_options_randomization_enabled do
       after(:build) do |course|
         course.allow_mrq_options_randomization = true
