@@ -10,10 +10,9 @@ class Course::Assessment::SkillBranchesController < Course::ComponentController
 
   def create
     if @skill_branch.save
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', title: @skill_branch.title)
+      render '_skill_branch_list_data', locals: { skill_branch: @skill_branch }, status: :ok
     else
-      render 'new'
+      render json: { errors: @skill_branch.errors }, status: :bad_request
     end
   end
 
@@ -22,20 +21,17 @@ class Course::Assessment::SkillBranchesController < Course::ComponentController
 
   def update
     if @skill_branch.update(skill_branch_params)
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', title: @skill_branch.title)
+      render '_skill_branch_list_data', locals: { skill_branch: @skill_branch }, status: :ok
     else
-      render 'edit'
+      render json: { errors: @skill_branch.errors }, status: :bad_request
     end
   end
 
   def destroy
     if @skill_branch.destroy
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', skill_branch: @skill_branch.title)
+      head :ok
     else
-      redirect_to course_assessments_skills_path(current_course),
-                  danger: t('.failure', error: @skill_branch.errors.full_messages.to_sentence)
+      head :bad_request
     end
   end
 

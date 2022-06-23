@@ -252,7 +252,9 @@ Rails.application.routes.draw do
           concerns :conditional
 
           collection do
-            resources :skills, as: :assessments_skills, except: [:show]
+            resources :skills, as: :assessments_skills, except: [:show] do
+              get 'options', on: :collection
+            end
             resources :skill_branches, as: :assessments_skill_branches, except: [:index, :show]
             resources :submissions, only: [:index], concerns: :paginatable do
               get 'pending', on: :collection
