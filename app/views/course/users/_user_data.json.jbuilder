@@ -29,7 +29,12 @@ end
 all_skill_branches = @skills_service.skill_branches
 can_view_skills = all_skill_branches.present? && can_read_progress
 
-json.partial! 'course/assessment/skill_branches/skill_branch', skill_branches: all_skill_branches if can_view_skills
+if can_view_skills
+  json.skillBranches all_skill_branches.each do |skill_branch|
+    json.partial! 'course/assessment/skill_branches/skill_branch_user_list_data', skill_branch: skill_branch
+  end
+end
+
 
 # NOTE: Facebook login feature is currently disabled
 # if facebook = course_user.user.identities.facebook.first
