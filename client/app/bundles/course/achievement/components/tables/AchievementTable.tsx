@@ -1,7 +1,8 @@
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Icon, Switch } from '@mui/material';
+import equal from 'fast-deep-equal';
 import DataTable from 'lib/components/DataTable';
 import {
   AchievementMiniEntity,
@@ -48,7 +49,6 @@ const AchievementTable: FC<Props> = (props) => {
   const options: TableOptions = {
     download: false,
     filter: false,
-    // jumpToPage: true,
     pagination: false,
     print: false,
     search: false,
@@ -227,4 +227,6 @@ const AchievementTable: FC<Props> = (props) => {
   return <DataTable data={achievements} columns={columns} options={options} />;
 };
 
-export default AchievementTable;
+export default memo(AchievementTable, (prevProps, nextProps) => {
+  return equal(prevProps.achievements, nextProps.achievements);
+});
