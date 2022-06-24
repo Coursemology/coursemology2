@@ -55,7 +55,6 @@
     ],
     "moduleNameMapper": {
       ".scss$": "<rootDir>/SassStub.js",
-      "^.+\\.(css|less)$": "<rootDir>/CssStub.js",
       "^api(.*)$": "<rootDir>/app/api$1",
       "^lib(.*)$": "<rootDir>/app/lib$1",
       "^theme(.*)$": "<rootDir>/app/theme$1",
