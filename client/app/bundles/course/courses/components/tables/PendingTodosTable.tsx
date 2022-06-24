@@ -275,7 +275,6 @@ const PendingTodosTable: FC<Props> = (props) => {
   );
 };
 
-// eslint-disable-next-line react/display-name
 export default memo(injectIntl(PendingTodosTable), (prevProps, nextProps) => {
   return equal(prevProps.todos, nextProps.todos);
 });
