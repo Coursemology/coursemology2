@@ -245,6 +245,6 @@ gem 'rwordnet', git: 'https://github.com/makqien/rwordnet'
 gem 'loofah', '>= 2.2.1'
 gem 'rails-html-sanitizer', '>= 1.0.4'
 
-gem 'sprockets', '< 4.0.0'
+gem 'sprockets', '< 5.0.0'
 gem 'mimemagic', '0.4.3'
 gem 'ffi', '>= 1.14.2'
