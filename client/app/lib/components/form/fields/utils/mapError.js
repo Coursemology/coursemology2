@@ -4,7 +4,7 @@
  * @param errorOrWarning The message could look like any one of the following:
  *   1) A string - 'cannot be blank'
  *   2) An array - ['must contain a digit', 'too long']
- *   3) An object - { id: 'translations.module.id', defaultMessage: 'Translated Error' }
+ *   3) An object - { id: 'translations.module.id', defaultMessage: [{ id: 0, value: 'Translated Error'}] }
  * @param intl
  */
 export const formatErrorMessage = (errorOrWarning, intl) => {
@@ -18,7 +18,7 @@ export const formatErrorMessage = (errorOrWarning, intl) => {
     return intl.formatMessage(errorOrWarning);
   }
   if (typeof errorOrWarning === 'object') {
-    return errorOrWarning.defaultMessage;
+    return errorOrWarning.defaultMessage[0].value;
   }
   return errorOrWarning;
 };
