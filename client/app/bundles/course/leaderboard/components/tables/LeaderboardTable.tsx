@@ -71,7 +71,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         sort: false,
         alignCenter: true,
         justifyCenter: true,
-        customBodyRenderLite: (_dataIndex: number) => _dataIndex + 1,
+        customBodyRenderLite: (dataIndex) => dataIndex + 1,
       },
     },
   ];
@@ -88,29 +88,29 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         sort: false,
         alignLeft: true,
         justifyCenter: true,
-        customBodyRenderLite: (_dataIndex: number) => (
+        customBodyRenderLite: (dataIndex) => (
           <Box
             sx={styles.avatar}
             className="course_user"
-            id={`course_user_${individualData[_dataIndex].id}`}
+            id={`course_user_${individualData[dataIndex].id}`}
           >
             <Avatar
-              src={individualData[_dataIndex].imageUrl}
-              alt={individualData[_dataIndex].name}
+              src={individualData[dataIndex].imageUrl}
+              alt={individualData[dataIndex].name}
               component={Link}
               href={getCourseUserURL(
                 getCourseId(),
-                individualData[_dataIndex].id,
+                individualData[dataIndex].id,
               )}
               marginRight={1}
             />
             <a
               href={getCourseUserURL(
                 getCourseId(),
-                individualData[_dataIndex].id,
+                individualData[dataIndex].id,
               )}
             >
-              {individualData[_dataIndex].name}
+              {individualData[dataIndex].name}
             </a>
           </Box>
         ),
@@ -129,8 +129,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
           sort: false,
           alignCenter: true,
           justifyCenter: true,
-          customBodyRenderLite: (_dataIndex: number) =>
-            pointData[_dataIndex].level,
+          customBodyRenderLite: (dataIndex) => pointData[dataIndex].level,
         },
       },
       {
@@ -141,8 +140,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
           sort: false,
           alignCenter: true,
           justifyCenter: true,
-          customBodyRenderLite: (_dataIndex: number) =>
-            pointData[_dataIndex].experience,
+          customBodyRenderLite: (dataIndex) => pointData[dataIndex].experience,
         },
       },
     );
@@ -158,9 +156,9 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         sort: false,
         alignLeft: true,
         justifyCenter: true,
-        customBodyRenderLite: (_dataIndex: number) => (
+        customBodyRenderLite: (dataIndex) => (
           <AvatarGroup
-            total={achievementData[_dataIndex].achievementCount}
+            total={achievementData[dataIndex].achievementCount}
             max={6}
             sx={styles.avatarGroup}
             componentsProps={{
@@ -168,14 +166,14 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
                 onClick: (): void => {
                   window.location.href = getCourseUserURL(
                     getCourseId(),
-                    achievementData[_dataIndex].id,
+                    achievementData[dataIndex].id,
                   );
                 },
                 sx: { cursor: 'pointer' },
               },
             }}
           >
-            {achievementData[_dataIndex].achievements.map((achievement) => {
+            {achievementData[dataIndex].achievements.map((achievement) => {
               return (
                 <Tooltip title={achievement.title} key={achievement.id}>
                   <Avatar
@@ -208,9 +206,9 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
           sort: false,
           alignCenter: true,
           justifyCenter: true,
-          customBodyRenderLite: (_dataIndex: number) => (
-            <Box className="group" id={`group_${groupData[_dataIndex].id}`}>
-              {groupData[_dataIndex].name}
+          customBodyRenderLite: (dataIndex) => (
+            <Box className="group" id={`group_${groupData[dataIndex].id}`}>
+              {groupData[dataIndex].name}
             </Box>
           ),
         },
@@ -223,13 +221,13 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
           sort: false,
           alignLeft: true,
           justifyCenter: true,
-          customBodyRenderLite: (_dataIndex: number) => (
+          customBodyRenderLite: (dataIndex) => (
             <AvatarGroup
-              total={groupData[_dataIndex].group.length}
+              total={groupData[dataIndex].group.length}
               max={6}
               sx={styles.avatarGroup}
             >
-              {groupData[_dataIndex].group.map((user) => (
+              {groupData[dataIndex].group.map((user) => (
                 <Tooltip title={user.name} key={user.id}>
                   <Avatar
                     src={user.imageUrl}
@@ -256,8 +254,8 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         sort: false,
         alignCenter: true,
         justifyCenter: true,
-        customBodyRenderLite: (_dataIndex: number) =>
-          groupPointData[_dataIndex].averageExperiencePoints.toFixed(2),
+        customBodyRenderLite: (dataIndex) =>
+          groupPointData[dataIndex].averageExperiencePoints.toFixed(2),
       },
     });
   };
@@ -272,8 +270,8 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         sort: false,
         alignCenter: true,
         justifyCenter: true,
-        customBodyRenderLite: (_dataIndex: number) =>
-          groupAchievementData[_dataIndex].averageAchievementCount.toFixed(2),
+        customBodyRenderLite: (dataIndex) =>
+          groupAchievementData[dataIndex].averageAchievementCount.toFixed(2),
       },
     });
   };

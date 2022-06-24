@@ -34,11 +34,7 @@ const AchievementAwardSummary: FC<Props> = (props) => {
     pagination: false,
     search: false,
     selectableRows: 'none',
-    setRowProps: (
-      _row,
-      _dataIndex: number,
-      _rowIndex: number,
-    ): Record<string, unknown> => ({
+    setRowProps: (_row, _dataIndex, _rowIndex): Record<string, unknown> => ({
       style: { background: green[100] },
     }),
     viewColumns: false,
@@ -51,7 +47,7 @@ const AchievementAwardSummary: FC<Props> = (props) => {
     pagination: false,
     search: false,
     selectableRows: 'none',
-    setRowProps: (_row, _dataIndex: number, _rowIndex: number) => ({
+    setRowProps: (_row, _dataIndex, _rowIndex) => ({
       style: { background: red[100] },
     }),
     viewColumns: false,
@@ -70,7 +66,7 @@ const AchievementAwardSummary: FC<Props> = (props) => {
       label: 'User Type',
       options: {
         search: false,
-        customBodyRenderLite: (dataIndex: number): string => {
+        customBodyRenderLite: (dataIndex): string => {
           const isPhantom = awardedUsers[dataIndex].phantom;
           if (isPhantom) {
             return 'Phantom Student';
@@ -94,7 +90,7 @@ const AchievementAwardSummary: FC<Props> = (props) => {
       label: 'User Type',
       options: {
         search: false,
-        customBodyRenderLite: (dataIndex: number): string => {
+        customBodyRenderLite: (dataIndex): string => {
           const isPhantom = removedUsers[dataIndex].phantom;
           if (isPhantom) {
             return 'Phantom Student';

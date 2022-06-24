@@ -10,7 +10,6 @@ import PageHeader from 'lib/components/pages/PageHeader';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { AppDispatch, AppState } from 'types/store';
-import { AchievementEditFormData } from 'types/course/achievements';
 import AchievementForm from '../../components/forms/AchievementForm';
 import { loadAchievement, updateAchievement } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
@@ -64,7 +63,7 @@ const AchievementEdit: FC<Props> = (props) => {
     );
   }
 
-  const onSubmit = (data: AchievementEditFormData, setError): Promise<void> =>
+  const onSubmit = (data, setError): Promise<void> =>
     dispatch(updateAchievement(data.id, data))
       .then(() => {
         toast.success(intl.formatMessage(translations.updateSuccess));

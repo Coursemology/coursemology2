@@ -85,7 +85,7 @@ export function createAchievement(data: AchievementFormData): Operation<
 export function updateAchievement(
   achievementId: number,
   data: AchievementFormData,
-): Operation<AxiosResponse<any, any>> {
+): Operation<AxiosResponse<unknown, unknown>> {
   const attributes = formatAttributes(data);
   return async (_) => CourseAPI.achievements.update(achievementId, attributes);
 }

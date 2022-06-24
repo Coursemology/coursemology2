@@ -13,13 +13,24 @@ import FormSingleFileInput, {
 } from 'lib/components/form/fields/SingleFileInput';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
+import {
+  AchievementEditFormData,
+  AchievementFormData,
+} from 'types/course/achievements';
+import { ConditionData, Conditions } from 'types/course/conditions';
 
 interface Props {
   editing: boolean; // If the Form is in editing mode, `Add Conditions` button will be displayed.
-  handleClose: (isDirty: boolean) => any;
-  onSubmit: (data: any, setError: unknown) => void;
+  handleClose: (isDirty: boolean) => void;
+  onSubmit: (
+    data: AchievementFormData | AchievementEditFormData,
+    setError: unknown,
+  ) => void;
   setIsDirty?: (value: boolean) => void;
-  conditionAttributes?: any; // To update achievementTypesConditionAttributes
+  conditionAttributes?: {
+    enabledConditions: Conditions[];
+    conditions: ConditionData[];
+  };
   initialValues?: Object;
 }
 

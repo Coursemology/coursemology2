@@ -10,7 +10,7 @@ import {
 import Note from 'lib/components/Note';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { getAchievementURL } from 'lib/helpers/url-builders';
-import { TableColumns } from 'types/components/DataTable';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 import AchievementManagementButtons from '../buttons/AchievementManagementButtons';
 
 interface Props {
@@ -45,7 +45,7 @@ const AchievementTable: FC<Props> = (props) => {
     return <Note message={<FormattedMessage {...translations.noCategory} />} />;
   }
 
-  const options = {
+  const options: TableOptions = {
     download: false,
     filter: false,
     // jumpToPage: true,
@@ -53,13 +53,9 @@ const AchievementTable: FC<Props> = (props) => {
     print: false,
     search: false,
     selectableRows: 'none',
-    setRowProps: (
-      _row: Array<any>,
-      dataIndex: number,
-      _rowIndex: number,
-    ): Record<string, unknown> => {
+    setRowProps: (_row, dataIndex, _rowIndex) => {
       const achievementStatus = achievements[dataIndex].achievementStatus;
-      let backgroundColor: any = null;
+      let backgroundColor: unknown = null;
       if (achievementStatus === 'granted') {
         backgroundColor = '#dff0d8';
       } else if (
@@ -90,7 +86,7 @@ const AchievementTable: FC<Props> = (props) => {
       options: {
         filter: false,
         sort: false,
-        customBodyRenderLite: (_dataIndex: number) => (
+        customBodyRenderLite: (_dataIndex) => (
           <Icon className="fa fa-reorder hidden" />
         ),
       },
@@ -111,7 +107,7 @@ const AchievementTable: FC<Props> = (props) => {
       options: {
         filter: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const badge = achievements[dataIndex].badge;
           return (
             <img
@@ -131,7 +127,7 @@ const AchievementTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const achievement = achievements[dataIndex];
 
           return (
@@ -152,7 +148,7 @@ const AchievementTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const achievement = achievements[dataIndex];
           return (
             <p
@@ -170,7 +166,7 @@ const AchievementTable: FC<Props> = (props) => {
       options: {
         filter: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const conditions = achievements[dataIndex].conditions;
           return (
             <div key={achievements[dataIndex].id}>
@@ -192,7 +188,7 @@ const AchievementTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: true,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const achievementId = achievements[dataIndex].id;
           const isPublished = achievements[dataIndex].published;
           return (
@@ -215,7 +211,7 @@ const AchievementTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: true,
-        customBodyRenderLite: (dataIndex: number) => {
+        customBodyRenderLite: (dataIndex) => {
           const achievement = achievements[dataIndex];
           return (
             <AchievementManagementButtons

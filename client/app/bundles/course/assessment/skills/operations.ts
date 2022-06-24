@@ -89,7 +89,7 @@ export function createSkillBranch(
 export function updateSkill(
   skillId: number,
   data: SkillFormData,
-): Operation<AxiosResponse<any, any>> {
+): Operation<AxiosResponse<SkillListData, unknown>> {
   const attributes = formatSkillAttributes(data);
   return async (dispatch) =>
     CourseAPI.assessment.skills.update(skillId, attributes).then((response) => {
@@ -101,7 +101,7 @@ export function updateSkill(
 export function updateSkillBranch(
   branchId: number,
   data: SkillFormData,
-): Operation<AxiosResponse<any, any>> {
+): Operation<AxiosResponse<SkillBranchListData, unknown>> {
   const attributes = formatSkillBranchAttributes(data);
   return async (dispatch) =>
     CourseAPI.assessment.skills

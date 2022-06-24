@@ -8,10 +8,11 @@ import ErrorText from 'lib/components/ErrorText';
 import formTranslations from 'lib/translations/form';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
+import { NewCourseFormData } from 'types/course/courses';
 
 interface Props {
   handleClose: (isDirty: boolean) => void;
-  onSubmit: (data: any, setError: unknown) => void;
+  onSubmit: (data: NewCourseFormData, setError: unknown) => void;
   setIsDirty?: (value: boolean) => void;
   initialValues?: Object;
 }

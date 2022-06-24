@@ -41,7 +41,8 @@ export function saveEntityToStore<M extends WithId, E extends M = M>(
 
   // delete all keys that are set to undefined, to avoid overriding existing values
   Object.keys(entity).forEach(
-    (key) => (entity as any)[key] === undefined && delete (entity as any)[key],
+    (key) =>
+      (entity as Object)[key] === undefined && delete (entity as Object)[key],
   );
 
   store.ids.add(entity.id);

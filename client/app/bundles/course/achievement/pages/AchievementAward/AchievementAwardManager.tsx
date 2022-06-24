@@ -16,7 +16,7 @@ import {
   AchievementCourseUserEntity,
   AchievementEntity,
 } from 'types/course/achievements';
-import { TableColumns } from 'types/components/DataTable';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 import DataTable from 'lib/components/DataTable';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { formatShortDateTime } from 'lib/moment';
@@ -154,7 +154,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
         throw error;
       });
 
-  const options = {
+  const options: TableOptions = {
     customToolbar: () => (
       <>
         <Button color="secondary" onClick={(): void => handleClose(false)}>
@@ -180,17 +180,13 @@ const AchievementAwardManager: FC<Props> = (props) => {
     print: false,
     rowsPerPageOptions: [10, 25, 50],
     selectableRows: 'none',
-    setRowProps: (
-      _row,
-      dataIndex: number,
-      _rowIndex: number,
-    ): Record<string, unknown> => {
+    setRowProps: (_row, dataIndex, _rowIndex) => {
       const obtainedAchievement =
         achievementUsers[dataIndex].obtainedAt !== null;
       const awardedAchievement = selectedUserIds.has(
         achievementUsers[dataIndex].id,
       );
-      let backgroundColor: any = null;
+      let backgroundColor: unknown = null;
       if (!obtainedAchievement && awardedAchievement) {
         backgroundColor = green[100];
       } else if (obtainedAchievement && !awardedAchievement) {
@@ -220,7 +216,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
       label: 'User Type',
       options: {
         search: false,
-        customBodyRenderLite: (dataIndex: number): string => {
+        customBodyRenderLite: (dataIndex): string => {
           const isPhantom = achievementUsers[dataIndex].phantom;
           if (isPhantom) {
             return 'Phantom Student';
@@ -235,7 +231,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
       options: {
         filter: false,
         search: false,
-        customBodyRenderLite: (dataIndex: number): string => {
+        customBodyRenderLite: (dataIndex): string => {
           const achievementObtainedDate =
             achievementUsers[dataIndex].obtainedAt;
           return formatShortDateTime(achievementObtainedDate);
@@ -249,7 +245,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
         filter: false,
         search: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const userId = achievementUsers[dataIndex].id;
           const isChecked = selectedUserIds.has(userId);
           return (
