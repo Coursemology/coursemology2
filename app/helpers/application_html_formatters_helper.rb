@@ -126,7 +126,6 @@ module ApplicationHTMLFormattersHelper
 
   def format_ckeditor_rich_text(text)
     DefaultHTMLPipeline.to_document("<div>#{text}</div>").child.inner_html.html_safe.
-      gsub(/<br>/, ''). # Remove <br> that causes table to be badly rendered
       gsub(/<table>/, '<table class="table table-bordered">') # Add lines to tables
   end
 

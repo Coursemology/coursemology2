@@ -37,7 +37,8 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
   const [isFocused, setIsFocused] = useState(false);
   const testFieldLabelColor = isFocused ? cyan[500] : undefined;
 
-  // Any type used as there is no documentation on the type
+  // Any type used as there is no documentation on the typing of CKEditor's editor object
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [myEditor, setMyEditor] = useState<any>();
 
   // Clear Editor field after comment is submitted, only if clearOnSubmit is true
