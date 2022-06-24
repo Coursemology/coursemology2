@@ -11,8 +11,9 @@ const rootReducer = combineReducers({
 
 enableMapSet();
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function configureStore(): any {
-  const storeCreator: any =
+  const storeCreator =
     // @ts-ignore: ignore ts warning for process
     process.env.NODE_ENV === 'development'
       ? compose(

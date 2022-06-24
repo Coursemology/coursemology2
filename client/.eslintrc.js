@@ -87,6 +87,7 @@ module.exports = {
         'plugin:prettier/recommended',
         'plugin:react/recommended',
         'plugin:@typescript-eslint/eslint-recommended',
+        'prettier',
       ],
       parser: '@typescript-eslint/parser',
       parserOptions: {
@@ -99,6 +100,7 @@ module.exports = {
       rules: {
         '@typescript-eslint/no-unused-vars': ['warn', { args: 'none' }],
         'no-unused-vars': 'off',
+        'no-console': ['error', { allow: ['warn', 'error'] }],
         'react-hooks/rules-of-hooks': 'warn',
         'react/react-in-jsx-scope': 'off',
         'no-param-reassign': 'off',
@@ -152,6 +154,7 @@ module.exports = {
           'error',
           { allow: ['arrowFunctions'] },
         ],
+        '@typescript-eslint/no-explicit-any': 'error',
         '@typescript-eslint/prefer-nullish-coalescing': 'error',
         '@typescript-eslint/prefer-optional-chain': 'error',
         '@typescript-eslint/prefer-as-const': 'error',

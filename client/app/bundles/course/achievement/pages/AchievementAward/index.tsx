@@ -11,7 +11,7 @@ import { getAchievementEntity } from '../../selectors';
 interface Props extends WrappedComponentProps {
   achievementId: number;
   open: boolean;
-  handleClose: () => any;
+  handleClose: () => void;
 }
 
 const translations = defineMessages({

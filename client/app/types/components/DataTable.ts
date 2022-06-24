@@ -23,14 +23,30 @@ export interface TableColumns {
 }
 
 export interface TableOptions {
-  download: boolean;
-  filter: boolean;
-  print: boolean;
-  pagination: boolean;
-  search: boolean;
-  selectableRows: string;
-  setRowProps: (row, dataIndex: number, rowIndex: number) => any;
-  viewColumns: boolean;
+  customToolbar?: () => JSX.Element;
+  customFooter?: () => JSX.Element | string;
+  download?: boolean;
+  filter?: boolean;
+  jumpToPage?: boolean;
+  onRowClick?: (
+    rowData: string[],
+    rowMeta: { dataIndex: number; rowIndex: number },
+  ) => void;
+  print?: boolean;
+  pagination?: boolean;
+  rowsPerPageOptions?: number[];
+  search?: boolean;
+  selectableRows?: string;
+  selectToolbarPlacement?: string;
+  setRowProps?: (
+    row: Array<unknown>,
+    dataIndex: number,
+    rowIndex: number,
+  ) => Object;
+  sortOrder?: Object;
+  tableBodyHeight?: string;
+  textLabels?: Object;
+  viewColumns?: boolean;
 }
 
 export interface TableRowMeta {

@@ -1,11 +1,13 @@
 import { FC, useEffect } from 'react';
-import { Pagination } from '@mui/material';
+import { Pagination as PaginationMUI } from '@mui/material';
 
 interface Props {
   // Typing is any as it can be an array of any type
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   items: any[];
   itemsPerPage: 12 | 24 | 36 | 42;
   // Typing is also any, following from items: any[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSlicedItems: React.Dispatch<React.SetStateAction<any[]>>;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
@@ -30,7 +32,7 @@ page, setPage - Initialize these with useState(1) and pass them down.
 This is to ensure that multiple paginations within the same page are both synced properly.
 */
 
-const PaginationHelper: FC<Props> = (props) => {
+const Pagination: FC<Props> = (props) => {
   const { items, itemsPerPage, setSlicedItems, page, setPage } = props;
 
   const count = Math.ceil(items.length / itemsPerPage);
@@ -54,7 +56,7 @@ const PaginationHelper: FC<Props> = (props) => {
   return (
     <>
       {count > 1 && (
-        <Pagination
+        <PaginationMUI
           color="primary"
           variant="outlined"
           style={{ padding: 24, display: 'flex', justifyContent: 'center' }}
@@ -67,4 +69,4 @@ const PaginationHelper: FC<Props> = (props) => {
   );
 };
 
-export default PaginationHelper;
+export default Pagination;

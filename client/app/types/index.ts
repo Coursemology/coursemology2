@@ -10,6 +10,6 @@ export type Permissions<T extends string> = {
  */
 declare global {
   interface JQuery {
-    sortable(var1?: any, var2?: any): any;
+    sortable(var1?: Object, var2?: Object): string;
   }
 }

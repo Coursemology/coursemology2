@@ -8,14 +8,13 @@ import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { AppDispatch } from 'types/store';
-import { AchievementFormData } from 'types/course/achievements';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import AchievementForm from '../../components/forms/AchievementForm';
 import { createAchievement } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   open: boolean;
-  handleClose: () => any;
+  handleClose: () => void;
 }
 
 const translations = defineMessages({
@@ -51,7 +50,7 @@ const AchievementNew: FC<Props> = (props) => {
     return null;
   }
 
-  const onSubmit = (data: AchievementFormData, setError): Promise<void> =>
+  const onSubmit = (data, setError): Promise<void> =>
     dispatch(createAchievement(data))
       .then((response) => {
         toast.success(intl.formatMessage(translations.creationSuccess));

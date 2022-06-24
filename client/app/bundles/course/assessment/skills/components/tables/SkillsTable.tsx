@@ -6,7 +6,7 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import equal from 'fast-deep-equal';
-import { TableColumns } from 'types/components/DataTable';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 import {
   SkillBranchMiniEntity,
   SkillMiniEntity,
@@ -21,7 +21,6 @@ import {
   TableRow,
   Button,
 } from '@mui/material';
-import { CSSProperties } from '@mui/styles';
 import { Add } from '@mui/icons-material';
 import DataTable from 'lib/components/DataTable';
 import SkillManagementButtons from '../buttons/SkillManagementButtons';
@@ -129,12 +128,12 @@ const SkillsTable: FC<Props> = (props: Props) => {
         setCellProps: () => ({
           style: { overflowWrap: 'anywhere' },
         }),
-        customBodyRenderLite: (_dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           let title = '';
           if (tableType === TableEnum.Skills) {
             return (
-              <div className="skill" id={`skill_${tableData[_dataIndex].id}`}>
-                {tableData[_dataIndex].title}
+              <div className="skill" id={`skill_${tableData[dataIndex].id}`}>
+                {tableData[dataIndex].title}
               </div>
             );
           }
@@ -142,12 +141,12 @@ const SkillsTable: FC<Props> = (props: Props) => {
             return <div>{intl.formatMessage(translations.noBranch)}</div>;
           }
           title =
-            tableData[_dataIndex].title ??
+            tableData[dataIndex].title ??
             intl.formatMessage(translations.uncategorised);
           return (
             <div
               className="skill_branch"
-              id={`skill_branch_${tableData[_dataIndex].id}`}
+              id={`skill_branch_${tableData[dataIndex].id}`}
             >
               {title}
             </div>
@@ -192,13 +191,13 @@ const SkillsTable: FC<Props> = (props: Props) => {
         setCellProps: () => ({
           style: { textAlign: 'right' },
         }),
-        customBodyRenderLite: (_dataIndex: number): JSX.Element | string => {
+        customBodyRenderLite: (dataIndex): JSX.Element | string => {
           if (tableType === TableEnum.SkillBranches) {
             return (
               <span
                 className="fa fa-chevron-right"
                 id={`skill_branch_${
-                  tableData[_dataIndex] ? tableData[_dataIndex].id : ''
+                  tableData[dataIndex] ? tableData[dataIndex].id : ''
                 }`}
               />
             );
@@ -214,7 +213,7 @@ const SkillsTable: FC<Props> = (props: Props) => {
     tableData[indexSelected] &&
     tableData[indexSelected].id !== -1;
 
-  const options = {
+  const options: TableOptions = {
     download: false,
     filter: false,
     pagination: false,
@@ -235,20 +234,20 @@ const SkillsTable: FC<Props> = (props: Props) => {
         ),
       },
     },
-    setRowProps: (_, dataIndex: number): CSSProperties => {
+    setRowProps: (_, dataIndex) => {
       if (dataIndex === indexSelected) {
         return { style: { backgroundColor: '#eeeeee', cursor: 'pointer' } };
       }
       return { style: { cursor: 'pointer' } };
     },
-    onRowClick: (_, rowMeta: { dataIndex: number; rowIndex: number }): void => {
+    onRowClick: (_, rowMeta: { dataIndex; rowIndex }) => {
       const index = rowMeta.dataIndex;
       if (tableType === TableEnum.SkillBranches) {
         changeSkillBranch(tableData[index].id);
       }
       setIndexSelected(index);
     },
-    customFooter: (): JSX.Element => {
+    customFooter: () => {
       return (
         <TableFooter>
           <TableRow>
