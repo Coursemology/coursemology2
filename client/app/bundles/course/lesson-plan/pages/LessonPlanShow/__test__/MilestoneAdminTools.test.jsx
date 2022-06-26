@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import { mount, shallow } from 'enzyme';
-import ReactTestUtils from 'react-dom/test-utils';
+import ReactTestUtils, { act } from 'react-dom/test-utils';
 import CourseAPI from 'api/course';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 import storeCreator from 'course/lesson-plan/store';
@@ -14,6 +14,7 @@ const buildShallowWrapper = (canManageLessonPlan, milestone) => {
     buildContextOptions(),
   )
     .children()
+    .dive()
     .dive()
     .dive();
 };
@@ -71,13 +72,13 @@ describe('<MilestoneAdminTools />', () => {
     expect(spyDelete).toHaveBeenCalledWith(milestoneId);
   });
 
-  it('allows milestone to be edited', () => {
+  it('allows milestone to be edited', async () => {
     const spyUpdate = jest.spyOn(CourseAPI.lessonPlan, 'updateMilestone');
     const store = storeCreator({ flags: { canManageLessonPlan: true } });
     const contextOptions = buildContextOptions(store);
     const milestoneId = 55;
     const milestoneTitle = 'Original title';
-    const milestoneStart = '2017-01-04T02:03:00.000+08:00';
+    const milestoneStart = new Date('2017-01-03T18:03:00.000+08:00');
     const milestoneFormDialog = mount(<MilestoneFormDialog />, contextOptions);
 
     const wrapper = mount(
@@ -103,11 +104,9 @@ describe('<MilestoneAdminTools />', () => {
     const descriptionInput = milestoneForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: description } });
 
-    const submitButton = milestoneFormDialog
-      .find('FormDialogue')
-      .first()
-      .instance().submitButton;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
+    await act(async () => {
+      milestoneForm.simulate('submit');
+    });
 
     const expectedPayload = {
       lesson_plan_milestone: {

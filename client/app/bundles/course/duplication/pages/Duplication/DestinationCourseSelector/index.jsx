@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import moment, { shortDateTime } from 'lib/moment';
 import {
   setDestinationCourseId,
@@ -87,18 +87,19 @@ class DestinationCourseSelector extends Component {
 
     return (
       <NewCourseForm
-        onSubmit={(values) =>
+        disabled={isDuplicating}
+        initialValues={initialValues}
+        onSubmit={(values, setError) =>
           dispatch(
             duplicateCourse(
               values,
               successMessage,
               pendingMessage,
               failureMessage,
+              setError,
             ),
           )
         }
-        disabled={isDuplicating}
-        initialValues={initialValues}
       />
     );
   };
@@ -122,7 +123,7 @@ DestinationCourseSelector.propTypes = {
   isDuplicating: PropTypes.bool.isRequired,
 
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect(({ duplication }) => ({

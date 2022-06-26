@@ -19,7 +19,7 @@ const styles = {
   },
 };
 
-export default function Error({
+export default function ErrorCard({
   message,
   cardStyles,
   headerStyles,
@@ -37,7 +37,7 @@ export default function Error({
   );
 }
 
-Error.propTypes = {
+ErrorCard.propTypes = {
   message: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,

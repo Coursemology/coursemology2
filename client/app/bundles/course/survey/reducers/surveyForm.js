@@ -18,11 +18,14 @@ export default function (state = initialState, action) {
     case actionTypes.SURVEY_FORM_HIDE: {
       return { ...state, visible: false };
     }
-    case actionTypes.CREATE_SURVEY_REQUEST: {
+    case actionTypes.CREATE_SURVEY_REQUEST:
+    case actionTypes.UPDATE_SURVEY_REQUEST: {
       return { ...state, disabled: true };
     }
     case actionTypes.CREATE_SURVEY_SUCCESS:
-    case actionTypes.CREATE_SURVEY_FAILURE: {
+    case actionTypes.CREATE_SURVEY_FAILURE:
+    case actionTypes.UPDATE_SURVEY_SUCCESS:
+    case actionTypes.UPDATE_SURVEY_FAILURE: {
       return { ...state, disabled: false };
     }
     default:

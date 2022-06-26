@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import { injectIntl, intlShape } from 'react-intl';
+import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import {
   Card,
   CardContent,
@@ -93,13 +94,17 @@ class ProgressPanel extends Component {
 
   render() {
     const { intl } = this.props;
-    const { late, submitter, workflowState } = this.props.submission;
+    const {
+      late,
+      submitter: { name },
+      workflowState,
+    } = this.props.submission;
     const title = intl.formatMessage(translations[workflowState]);
     return (
       <Card>
         <CardHeader
           id="submission-by"
-          title={intl.formatMessage(translations.submissionBy, { submitter })}
+          title={intl.formatMessage(translations.submissionBy, { name })}
           titleTypographyProps={{ variant: 'subtitle1' }}
           subheader={title}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
@@ -115,7 +120,7 @@ class ProgressPanel extends Component {
 }
 
 ProgressPanel.propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   submission: submissionShape.isRequired,
 };
 

@@ -5,7 +5,7 @@ source 'https://rubygems.org'
 gem 'tzinfo-data', platforms: [:mswin, :mswin64]
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.0.4.7'
+gem 'rails', '~> 6.0.4.8'
 
 # Use PostgreSQL for the backend
 gem 'pg'
@@ -18,7 +18,7 @@ gem 'unread'
 gem 'validates_hostname'
 # A Ruby state machine library
 gem 'workflow'
-gem 'workflow-activerecord', '>= 4.1', '< 6.0'
+gem 'workflow-activerecord', '>= 4.1', '< 7.0'
 # Add creator_id and updater_id attributes to models
 gem 'activerecord-userstamp', git: 'https://github.com/ekowidianto/activerecord-userstamp.git'
 # Allow actions to be deferred until after a record is committed.
@@ -78,6 +78,9 @@ gem 'docker-api'
 gem 'recaptcha'
 gem 'rexml'
 
+# Page profiler
+gem 'rack-mini-profiler'
+
 group :development do
   # Spring speeds up development by keeping your application running in the background.
   # Read more: https://github.com/rails/spring
@@ -100,9 +103,6 @@ group :development do
 
   # Gem to generate favicon
   gem 'rails_real_favicon'
-
-  # Page profiler
-  gem 'rack-mini-profiler'
 end
 
 group :test do
@@ -167,7 +167,6 @@ end
 group :production do
   # Use fog-aws as CarrierWave's storage provider
   gem 'fog-aws', '3.8.0'
-  gem 'rack-mini-profiler'
   gem 'flamegraph'
   gem 'stackprof'
   gem 'sidekiq'
@@ -213,7 +212,8 @@ gem 'simple_form'
 gem 'simple_form-bootstrap', git: 'https://github.com/raymondtangsc/simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
-gem 'momentjs-rails' # Needed for bootstrap3-datetimepicker-rails
+# momentjs-rails is needed for bootstrap3-datetimepicker-rails
+gem 'momentjs-rails', git: 'https://github.com/ekowidianto/momentjs-rails.git'
 gem 'bootstrap3-datetimepicker-rails'
 gem 'bootstrap-select-rails'
 gem 'bootstrap_tokenfield_rails'

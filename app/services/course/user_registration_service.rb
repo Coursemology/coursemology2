@@ -6,7 +6,7 @@ class Course::UserRegistrationService
   # @return [Boolean] True if the registration succeeded. False if the registration failed.
   def register(registration)
     course_user = create_or_update_registration(registration)
-    course_user.course.enrol_requests.find_by(user: course_user.user)&.destroy! if course_user
+    course_user.course.enrol_requests.pending.find_by(user: course_user.user)&.destroy! if course_user
     course_user.nil? ? false : course_user.persisted?
   end
 
@@ -51,10 +51,11 @@ class Course::UserRegistrationService
     name = invitation.try(:name) || registration.user.name
     role = invitation.try(:role) || :student
     phantom = invitation.try(:phantom) || false
+    timeline_algorithm = invitation.try(:timeline_algorithm) || registration.course.default_timeline_algorithm
 
     registration.course_user =
       CourseUser.find_or_create_by!(course: registration.course, user: registration.user,
-                                    name: name, role: role, phantom: phantom)
+                                    name: name, role: role, phantom: phantom, timeline_algorithm: timeline_algorithm)
   end
 
   # Claims a given registration code. The correct type of code is deduced from the code itself and

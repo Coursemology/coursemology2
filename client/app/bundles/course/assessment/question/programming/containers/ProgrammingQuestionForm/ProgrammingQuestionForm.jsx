@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import {
   Autocomplete,
   Button,
@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import { blue, grey, red } from '@mui/material/colors';
 
-import MaterialSummernote from 'lib/components/MaterialSummernote';
+import CKEditorRichText from 'lib/components/CKEditorRichText';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
 import BuildLog from '../../components/BuildLog';
@@ -44,7 +44,7 @@ const propTypes = {
     clearSubmissionMessage: PropTypes.func.isRequired,
   }),
   onlineEditorActions: PropTypes.instanceOf(Object).isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const DEFAULT_TIME_LIMIT = 10;
@@ -268,7 +268,7 @@ class ProgrammingQuestionForm extends Component {
     return this.props.intl.formatMessage(translations.submitButton);
   }
 
-  summernoteHandler(field) {
+  CKEditorHandler(field) {
     return (e) =>
       this.props.actions.updateProgrammingQuestion(field, e === '' ? null : e);
   }
@@ -533,9 +533,9 @@ class ProgrammingQuestionForm extends Component {
     );
   }
 
-  renderSummernoteField(label, field, required, value) {
+  renderCKEditorField(label, field, required, value) {
     return (
-      <MaterialSummernote
+      <CKEditorRichText
         field={field}
         label={label}
         required={required}
@@ -543,7 +543,7 @@ class ProgrammingQuestionForm extends Component {
         disabled={this.props.data.get('is_loading')}
         name={ProgrammingQuestionForm.getInputName(field)}
         inputId={ProgrammingQuestionForm.getInputId(field)}
-        onChange={this.summernoteHandler(field)}
+        onChange={this.CKEditorHandler(field)}
       />
     );
   }
@@ -688,7 +688,7 @@ class ProgrammingQuestionForm extends Component {
               )}
             </div>
             <div className={styles.descriptionInput}>
-              {this.renderSummernoteField(
+              {this.renderCKEditorField(
                 this.props.intl.formatMessage(
                   translations.descriptionFieldLabel,
                 ),
@@ -698,7 +698,7 @@ class ProgrammingQuestionForm extends Component {
               )}
             </div>
             <div className={styles.staffCommentsInput}>
-              {this.renderSummernoteField(
+              {this.renderCKEditorField(
                 this.props.intl.formatMessage(
                   translations.staffOnlyCommentsFieldLabel,
                 ),

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Paper, Popover } from '@mui/material';
 import FontFamilyField from '../fields/FontFamilyField';
 import FontSizeField from '../fields/FontSizeField';
@@ -7,7 +7,7 @@ import ColorPickerField from '../fields/ColorPickerField';
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   open: PropTypes.bool,
   anchorEl: PropTypes.object,
   onRequestClose: PropTypes.func,

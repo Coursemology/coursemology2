@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Element } from 'react-scroll';
 import moment from 'lib/moment';
-import DateTimePicker from 'lib/components/form/DateTimePicker';
+import DateTimePicker from 'lib/components/fields/DateTimePicker';
 import { updateMilestone } from 'course/lesson-plan/actions';
 import { fields } from 'course/lesson-plan/constants';
 
@@ -23,7 +23,7 @@ const sameDate = (a, b) =>
   (!a && !b) || (a && b && moment(a).isSame(b, 'minute'));
 
 class MilestoneRow extends Component {
-  updateMilestoneStartAt = (_, newDate) => {
+  updateMilestoneStartAt = (_, newDate, setError) => {
     const { id, title, startAt, dispatch } = this.props;
     if (sameDate(startAt, newDate)) {
       return;
@@ -39,6 +39,7 @@ class MilestoneRow extends Component {
         { start_at: newDate },
         successMessage,
         failureMessage,
+        setError,
       ),
     );
   };

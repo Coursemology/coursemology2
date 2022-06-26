@@ -2,7 +2,7 @@
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import { Button } from '@mui/material';
 import Edit from '@mui/icons-material/Edit';
 import Delete from '@mui/icons-material/Delete';
@@ -77,7 +77,7 @@ class MilestoneAdminTools extends PureComponent {
     );
   };
 
-  updateMilestoneHandler = (data) => {
+  updateMilestoneHandler = (data, setError) => {
     const {
       dispatch,
       intl,
@@ -86,7 +86,9 @@ class MilestoneAdminTools extends PureComponent {
 
     const successMessage = intl.formatMessage(translations.updateSuccess);
     const failureMessage = intl.formatMessage(translations.updateFailure);
-    return dispatch(updateMilestone(id, data, successMessage, failureMessage));
+    return dispatch(
+      updateMilestone(id, data, successMessage, failureMessage, setError),
+    );
   };
 
   render() {
@@ -130,7 +132,7 @@ MilestoneAdminTools.propTypes = {
   canManageLessonPlan: PropTypes.bool,
 
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default connect((state) => ({

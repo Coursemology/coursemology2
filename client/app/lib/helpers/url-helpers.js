@@ -46,6 +46,18 @@ function getSurveyId() {
 }
 
 /**
+ * Get the achievement id from URL.
+ *
+ * return {number}
+ */
+function getAchievementId() {
+  const match = window.location.pathname.match(
+    /^\/courses\/\d+\/achievements\/(\d+)/,
+  );
+  return match && match[1];
+}
+
+/**
  * Get the assessment id from URL.
  *
  * return {number}
@@ -120,6 +132,7 @@ export {
   getUrlParameter,
   getCourseId,
   getSurveyId,
+  getAchievementId,
   getAssessmentId,
   getSubmissionId,
   getScribingId,

@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import CourseAPI from 'api/course';
@@ -12,7 +12,7 @@ const propTypes = {
   enableMaterialsAction: PropTypes.bool.isRequired,
 };
 
-class MaterialUploader extends Component {
+class MaterialUploader extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -108,7 +108,7 @@ class MaterialUploader extends Component {
     }));
   }
 
-  // Remove materials from uploading list and add new materials from server reponse to existing
+  // Remove materials from uploading list and add new materials from server response to existing
   // materials list.
   updateMaterials(materials, response) {
     const uploadingMaterials = this.state.uploadingMaterials.filter(

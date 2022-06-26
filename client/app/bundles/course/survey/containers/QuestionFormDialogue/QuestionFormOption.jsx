@@ -1,13 +1,12 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, intlShape } from 'react-intl';
-import { Field } from 'redux-form';
+import { defineMessages, injectIntl } from 'react-intl';
+import { Controller } from 'react-hook-form';
 import { Checkbox, IconButton, Radio } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import Close from '@mui/icons-material/Close';
-import Photo from '@mui/icons-material/Photo';
-import renderTextField from 'lib/components/redux-form/TextField';
+import FormTextField from 'lib/components/form/fields/TextField';
 import Thumbnail from 'lib/components/Thumbnail';
+import ImageField from './components/ImageField';
 
 const optionTranslations = defineMessages({
   optionPlaceholder: {
@@ -60,41 +59,41 @@ const styles = {
   },
 };
 
-class QuestionFormOption extends Component {
-  renderImageField = (fieldProps) => {
-    const { input, index, disabled } = fieldProps;
-    const fieldId = `option-${index}-image-field`;
-    return (
-      <div style={styles.imageUploaderDiv}>
-        <label htmlFor={fieldId}>
-          <IconButton
-            disabled={disabled}
-            onClick={() => this.fileInput.click()}
-          >
-            <Photo htmlColor={disabled ? undefined : grey[700]} />
-          </IconButton>
-        </label>
-        <input
-          id={fieldId}
-          type="file"
-          style={styles.imageUploader}
-          onChange={(event) => {
-            const image = event.target.files[0];
-            input.onChange(image);
-            input.onBlur(image);
-          }}
-          ref={(field) => {
-            this.fileInput = field;
-          }}
-          {...{ disabled }}
-        />
-      </div>
-    );
+const handleRemove = (remove, index, field, deletedOptionsAppend) => {
+  remove(index);
+
+  // Append deleted options to the list of to be deleted options
+  // Only for edit question form - For new question form, there is no
+  // weight assigned yet.
+  if (field.weight) {
+    deletedOptionsAppend({ ...field });
+  }
+};
+
+const QuestionFormOption = (props) => {
+  const {
+    fieldsConfig,
+    field,
+    index,
+    disabled,
+    multipleResponse,
+    multipleChoice,
+    intl,
+    deletedOptionsAppend,
+  } = props;
+
+  const renderWidget = () => {
+    let widget = null;
+    if (multipleChoice) {
+      widget = <Radio disabled style={styles.widget} />;
+    } else if (multipleResponse) {
+      widget = <Checkbox disabled style={styles.widget} />;
+    }
+    return widget;
   };
 
-  renderOptionBody() {
-    const { intl, member, index, fields, disabled } = this.props;
-    const fieldValue = fields.get(index);
+  const renderOptionBody = () => {
+    const fieldValue = field;
     const imageFile = fieldValue && fieldValue.file;
 
     const fileOrSrc = {};
@@ -125,73 +124,67 @@ class QuestionFormOption extends Component {
           />
         ) : null}
         <small>{imageFileName}</small>
-        <Field
-          fullWidth
-          multiline
-          name={`${member}.option`}
-          component={renderTextField}
-          {...{ placeholder, disabled }}
+        <Controller
+          name={`options.${index}.option`}
+          control={fieldsConfig.control}
+          // eslint-disable-next-line no-shadow
+          render={({ field, fieldState }) => (
+            <FormTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              fullWidth
+              multiline
+              InputLabelProps={{
+                shrink: true,
+              }}
+              placeholder={placeholder}
+              variant="standard"
+            />
+          )}
         />
       </div>
     );
-  }
+  };
 
-  renderWidget() {
-    const { multipleResponse, multipleChoice } = this.props;
-    let widget = null;
-    if (multipleChoice) {
-      widget = <Radio disabled style={styles.widget} />;
-    } else if (multipleResponse) {
-      widget = <Checkbox disabled style={styles.widget} />;
-    }
-    return widget;
-  }
-
-  render() {
-    const { member, index, fields, disabled, addToOptionsToDelete } =
-      this.props;
-    const fieldValue = fields.get(index);
-    const handleRemove = () => {
-      fields.remove(index);
-      if (fieldValue.id) {
-        addToOptionsToDelete(fieldValue);
-      }
-      // eslint-disable-next-line react/prop-types
-      if (fields.length <= 1) {
-        // eslint-disable-next-line react/prop-types
-        fields.push({});
-      }
-    };
-
-    return (
-      <div key={index} style={styles.option}>
-        {this.renderWidget()}
-        {this.renderOptionBody()}
-        <Field
-          name={`${member}.file`}
-          component={this.renderImageField}
-          {...{ index, disabled }}
-        />
-        <IconButton disabled={disabled} onClick={handleRemove}>
-          <Close htmlColor={disabled ? undefined : grey[600]} />
-        </IconButton>
-      </div>
-    );
-  }
-}
+  return (
+    <div key={index} style={styles.option}>
+      {renderWidget()}
+      {renderOptionBody()}
+      <Controller
+        name={`options.${index}.file`}
+        control={fieldsConfig.control}
+        // eslint-disable-next-line no-shadow
+        render={({ field }) => (
+          <ImageField field={field} index={index} disabled={disabled} />
+        )}
+      />
+      <IconButton
+        disabled={disabled}
+        onClick={() =>
+          handleRemove(fieldsConfig.remove, index, field, deletedOptionsAppend)
+        }
+      >
+        <Close htmlColor={disabled ? undefined : grey[600]} />
+      </IconButton>
+    </div>
+  );
+};
 
 QuestionFormOption.propTypes = {
-  intl: intlShape.isRequired,
   disabled: PropTypes.bool,
+  intl: PropTypes.object.isRequired,
   multipleChoice: PropTypes.bool,
   multipleResponse: PropTypes.bool,
-  member: PropTypes.string.isRequired,
+  field: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
-  fields: PropTypes.shape({
-    get: PropTypes.func.isRequired,
+  fieldsConfig: PropTypes.shape({
+    control: PropTypes.object.isRequired,
+    fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+    append: PropTypes.func.isRequired,
     remove: PropTypes.func.isRequired,
-  }).isRequired,
-  addToOptionsToDelete: PropTypes.func.isRequired,
+  }),
+  deletedOptionsAppend: PropTypes.func.isRequired,
 };
 
 export default injectIntl(QuestionFormOption);

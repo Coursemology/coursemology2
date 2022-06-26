@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { mount } from 'enzyme';
 import ColorPickerField from 'course/assessment/submission/components/ScribingView/fields/ColorPickerField';
 
@@ -24,13 +23,10 @@ props.colorPickerPopoverAnchorEl.getBoundingClientRect.mockReturnValue({
 
 describe('ColorPickerField', () => {
   it('checks no fill checkbox when noFillValue is true', async () => {
-    const colorPickerField = mount(<ColorPickerField {...props} />, {
-      context: { intl, muiTheme }, // eslint-disable-line no-undef
-      childContextTypes: {
-        intl: intlShape,
-        muiTheme: PropTypes.object,
-      },
-    });
+    const colorPickerField = mount(
+      <ColorPickerField {...props} />,
+      buildContextOptions(),
+    );
 
     expect(colorPickerField.find('ForwardRef(Checkbox)').prop('checked')).toBe(
       true,

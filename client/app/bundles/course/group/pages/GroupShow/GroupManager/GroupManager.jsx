@@ -1,12 +1,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button } from '@mui/material';
-import {
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-  defineMessages,
-} from 'react-intl';
+import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import { connect } from 'react-redux';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -172,7 +167,7 @@ const GroupManager = ({
   const [isConfirmingSave, setIsConfirmingSave] = useState(false);
 
   const onCreateFormSubmit = useCallback(
-    (data) => {
+    (data, setError) => {
       const existingNames = new Set(groups.map((g) => g.name));
       const groupData = getGroupData(data, existingNames);
       return dispatch(
@@ -180,6 +175,7 @@ const GroupManager = ({
           category.id,
           { groups: groupData },
           getCreateGroupMessage(intl),
+          setError,
         ),
       );
     },
@@ -323,7 +319,12 @@ const GroupManager = ({
       >
         <GroupCreationForm
           onSubmit={onCreateFormSubmit}
-          initialValues={{ is_single: true }}
+          initialValues={{
+            name: '',
+            description: '',
+            num_to_create: 0,
+            is_single: true,
+          }}
           existingGroups={groups}
         />
       </GroupFormDialog>
@@ -365,7 +366,7 @@ GroupManager.propTypes = {
   selectedGroupId: PropTypes.number.isRequired,
   modifiedGroups: PropTypes.arrayOf(groupShape).isRequired,
   isUpdating: PropTypes.bool.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect((state) => ({

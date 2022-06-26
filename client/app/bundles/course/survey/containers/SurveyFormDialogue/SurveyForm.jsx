@@ -1,18 +1,17 @@
 import PropTypes from 'prop-types';
-import {
-  defineMessages,
-  injectIntl,
-  intlShape,
-  FormattedMessage,
-} from 'react-intl';
-import { reduxForm, Field, Form } from 'redux-form';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
-import renderTextField from 'lib/components/redux-form/TextField';
-import DateTimePicker from 'lib/components/redux-form/DateTimePicker';
-import renderToggleField from 'lib/components/redux-form/Toggle';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import ErrorText from 'lib/components/ErrorText';
+import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
+import FormTextField from 'lib/components/form/fields/TextField';
+import FormToggleField from 'lib/components/form/fields/ToggleField';
+import { shiftDateField } from 'lib/helpers/form-helpers';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
-import { formNames } from 'course/survey/constants';
 
 const styles = {
   columns: {
@@ -68,158 +67,238 @@ const surveyFormTranslations = defineMessages({
   },
 });
 
-const validate = (values) => {
-  const errors = {};
+const validationSchema = yup.object({
+  title: yup.string().required(formTranslations.required),
+  description: yup.string(),
+  start_at: yup.date().nullable().required(formTranslations.required),
+  end_at: yup
+    .date()
+    .nullable()
+    .min(yup.ref('start_at'), translations.startEndValidationError)
+    .when('allow_response_after_end', {
+      is: true,
+      then: yup
+        .date()
+        .min(yup.ref('start_at'), translations.startEndValidationError)
+        .typeError(formTranslations.required)
+        .required(formTranslations.required),
+    }),
+  base_exp: yup
+    .number()
+    .typeError(formTranslations.required)
+    .required(formTranslations.required),
+  time_bonus_exp: yup.number(),
+  allow_response_after_end: yup.bool(),
+  allow_modify_after_submit: yup.bool(),
+  anonymous: yup.bool(),
+});
 
-  const requiredFields = ['title', 'start_at'];
-  requiredFields.forEach((field) => {
-    if (!values[field]) {
-      errors[field] = formTranslations.required;
-    }
+const SurveyForm = (props) => {
+  const { intl, onSubmit, disabled, disableAnonymousToggle, initialValues } =
+    props;
+  const {
+    control,
+    handleSubmit,
+    setError,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: initialValues,
+    resolver: yupResolver(validationSchema),
   });
+  const allowResponseAfterEnd = watch('allow_response_after_end');
 
-  if (values.end_at && new Date(values.start_at) >= new Date(values.end_at)) {
-    errors.end_at = surveyFormTranslations.startEndValidationError;
-  }
-
-  if (values.allow_response_after_end && !values.end_at) {
-    errors.end_at = formTranslations.required;
-  }
-
-  return errors;
+  return (
+    <form
+      id="survey-form"
+      noValidate
+      onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+    >
+      <ErrorText errors={errors} />
+      <Controller
+        name="title"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.title} />}
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            required
+            variant="standard"
+          />
+        )}
+      />
+      <Controller
+        name="description"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormRichTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.description} />}
+            fullWidth
+            multiline
+            InputLabelProps={{
+              shrink: true,
+            }}
+            rows={2}
+            variant="standard"
+          />
+        )}
+      />
+      <div style={styles.columns}>
+        <Controller
+          name="start_at"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormDateTimePickerField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.opensAt} />}
+              afterChangeField={(newStartAt) =>
+                shiftDateField(newStartAt, watch, setValue)
+              }
+              style={styles.oneColumn}
+            />
+          )}
+        />
+        <Controller
+          name="end_at"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormDateTimePickerField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.expiresAt} />}
+              style={styles.oneColumn}
+            />
+          )}
+        />
+      </div>
+      <div style={styles.columns}>
+        <div style={styles.oneColumn}>
+          <Controller
+            name="base_exp"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                fullWidth
+                label={<FormattedMessage {...translations.basePoints} />}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onWheel={(event) => event.currentTarget.blur()}
+                type="number"
+                variant="standard"
+              />
+            )}
+          />
+        </div>
+        <div
+          style={styles.oneColumn}
+          data-tip
+          data-for="timeBonusExpTooltip"
+          data-tip-disable={allowResponseAfterEnd}
+        >
+          <Controller
+            name="time_bonus_exp"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled || !allowResponseAfterEnd}
+                fullWidth
+                label={<FormattedMessage {...translations.bonusPoints} />}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onWheel={(event) => event.currentTarget.blur()}
+                style={styles.flexChild}
+                type="number"
+                variant="standard"
+              />
+            )}
+          />
+          <ReactTooltip id="timeBonusExpTooltip">
+            <FormattedMessage {...surveyFormTranslations.timeBonusExpTooltip} />
+          </ReactTooltip>
+        </div>
+      </div>
+      <Controller
+        name="allow_response_after_end"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.allowResponseAfterEnd} />}
+            style={styles.toggle}
+          />
+        )}
+      />
+      <div style={styles.hint}>
+        {intl.formatMessage(surveyFormTranslations.allowResponseAfterEndHint)}
+      </div>
+      <Controller
+        name="allow_modify_after_submit"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={
+              <FormattedMessage {...translations.allowModifyAfterSubmit} />
+            }
+            style={styles.toggle}
+          />
+        )}
+      />
+      <div style={styles.hint}>
+        {intl.formatMessage(surveyFormTranslations.allowModifyAfterSubmitHint)}
+      </div>
+      <Controller
+        name="anonymous"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled || disableAnonymousToggle}
+            label={<FormattedMessage {...translations.anonymous} />}
+            style={styles.toggle}
+          />
+        )}
+      />
+      <div style={styles.hint}>
+        {disableAnonymousToggle
+          ? intl.formatMessage(surveyFormTranslations.hasStudentResponse)
+          : intl.formatMessage(surveyFormTranslations.anonymousHint)}
+      </div>
+    </form>
+  );
 };
 
-const propTypes = {
-  formValues: PropTypes.shape({
-    start_at: PropTypes.instanceOf(Date),
-    end_at: PropTypes.instanceOf(Date),
-    allow_response_after_end: PropTypes.bool,
-  }),
-  shiftEndDate: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
-  disableAnonymousToggle: PropTypes.bool,
+SurveyForm.propTypes = {
   disabled: PropTypes.bool,
+  disableAnonymousToggle: PropTypes.bool,
+  initialValues: PropTypes.object.isRequired,
+  intl: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
-const SurveyForm = ({
-  handleSubmit,
-  intl,
-  onSubmit,
-  disabled,
-  disableAnonymousToggle,
-  shiftEndDate,
-  formValues,
-}) => (
-  <Form onSubmit={handleSubmit(onSubmit)}>
-    <Field
-      fullWidth
-      name="title"
-      label={intl.formatMessage(translations.title)}
-      component={renderTextField}
-      {...{ disabled }}
-    />
-    <br />
-    <Field
-      fullWidth
-      name="description"
-      label={intl.formatMessage(translations.description)}
-      component={renderTextField}
-      multiline
-      minRows={2}
-      {...{ disabled }}
-    />
-    <div style={styles.columns}>
-      <Field
-        name="start_at"
-        label={intl.formatMessage(translations.opensAt)}
-        component={DateTimePicker}
-        afterChange={(_, newStartAt) =>
-          shiftEndDate(formNames.SURVEY, newStartAt, formValues)
-        }
-        style={styles.oneColumn}
-        {...{ disabled }}
-      />
-      <Field
-        name="end_at"
-        label={intl.formatMessage(translations.expiresAt)}
-        component={DateTimePicker}
-        style={styles.oneColumn}
-        {...{ disabled }}
-      />
-    </div>
-    <div style={styles.columns}>
-      <div style={styles.oneColumn}>
-        <Field
-          name="base_exp"
-          label={intl.formatMessage(translations.basePoints)}
-          component={renderTextField}
-          type="number"
-          onWheel={(event) => event.currentTarget.blur()}
-          {...{ disabled }}
-        />
-      </div>
-      <div
-        style={styles.oneColumn}
-        data-tip
-        data-for="timeBonusExpTooltip"
-        data-tip-disable={formValues && formValues.allow_response_after_end}
-      >
-        <Field
-          name="time_bonus_exp"
-          label={intl.formatMessage(translations.bonusPoints)}
-          component={renderTextField}
-          type="number"
-          onWheel={(event) => event.currentTarget.blur()}
-          disabled={formValues && !formValues.allow_response_after_end}
-        />
-        <ReactTooltip id="timeBonusExpTooltip">
-          <FormattedMessage {...surveyFormTranslations.timeBonusExpTooltip} />
-        </ReactTooltip>
-      </div>
-    </div>
-    <Field
-      name="allow_response_after_end"
-      component={renderToggleField}
-      parse={Boolean}
-      label={intl.formatMessage(translations.allowResponseAfterEnd)}
-      style={styles.toggle}
-      disabled={disabled}
-    />
-    <div style={styles.hint}>
-      {intl.formatMessage(surveyFormTranslations.allowResponseAfterEndHint)}
-    </div>
-    <Field
-      name="allow_modify_after_submit"
-      component={renderToggleField}
-      parse={Boolean}
-      label={intl.formatMessage(translations.allowModifyAfterSubmit)}
-      style={styles.toggle}
-      disabled={disabled}
-    />
-    <div style={styles.hint}>
-      {intl.formatMessage(surveyFormTranslations.allowModifyAfterSubmitHint)}
-    </div>
-    <Field
-      name="anonymous"
-      component={renderToggleField}
-      parse={Boolean}
-      label={intl.formatMessage(translations.anonymous)}
-      style={styles.toggle}
-      disabled={disableAnonymousToggle || disabled}
-    />
-    <div style={styles.hint}>
-      {disableAnonymousToggle
-        ? intl.formatMessage(surveyFormTranslations.hasStudentResponse)
-        : intl.formatMessage(surveyFormTranslations.anonymousHint)}
-    </div>
-  </Form>
-);
-
-SurveyForm.propTypes = propTypes;
-
-export default reduxForm({
-  form: formNames.SURVEY,
-  validate,
-})(injectIntl(SurveyForm));
+export default injectIntl(SurveyForm);

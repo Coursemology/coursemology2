@@ -93,4 +93,10 @@ const actionTypes = mirrorCreator([
   'DOWNLOAD_SURVEY_FAILURE',
 ]);
 
+export const workflowStates = {
+  Unstarted: 'unstarted',
+  Attempting: 'attempting',
+  Submitted: 'submitted',
+};
+
 export default actionTypes;

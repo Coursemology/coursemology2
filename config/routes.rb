@@ -82,6 +82,7 @@ Rails.application.routes.draw do
 
   resources :instance_user_role_requests, path: 'role_requests' do
     patch 'approve', on: :member
+    patch 'reject', on: :member
   end
 
   resources :users, only: [:show]
@@ -186,7 +187,7 @@ Rails.application.routes.draw do
       scope module: :achievement do
         resources :achievements, except: [:new] do
           concerns :conditional
-          resources :course_users, only: [:index]
+          get :achievement_course_users, on: :member
           post 'reorder', on: :collection
         end
       end
@@ -251,7 +252,9 @@ Rails.application.routes.draw do
           concerns :conditional
 
           collection do
-            resources :skills, as: :assessments_skills, except: [:show]
+            resources :skills, as: :assessments_skills, except: [:show] do
+              get 'options', on: :collection
+            end
             resources :skill_branches, as: :assessments_skill_branches, except: [:index, :show]
             resources :submissions, only: [:index], concerns: :paginatable do
               get 'pending', on: :collection
@@ -279,7 +282,8 @@ Rails.application.routes.draw do
       end
 
       resources :enrol_requests, only: [:index, :create, :destroy] do
-        post 'approve', on: :member
+        patch 'approve', on: :member
+        patch 'reject', on: :member
       end
 
       namespace :lesson_plan do
@@ -370,7 +374,8 @@ Rails.application.routes.draw do
         end
       end
 
-      resource :leaderboard, only: [:show] do
+      resource :leaderboard, only: [:index] do
+        get '/' => 'leaderboards#index'
         get 'groups', as: :group
       end
 

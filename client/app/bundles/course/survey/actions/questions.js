@@ -1,7 +1,7 @@
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CourseAPI from 'api/course';
-import { submit, arrayPush, SubmissionError } from 'redux-form';
 import { getSurveyId } from 'lib/helpers/url-helpers';
-import actionTypes, { formNames } from '../constants';
+import actionTypes from '../constants';
 import { setNotification } from './index';
 
 export function showQuestionForm(formParams) {
@@ -10,20 +10,6 @@ export function showQuestionForm(formParams) {
 
 export function hideQuestionForm() {
   return { type: actionTypes.QUESTION_FORM_HIDE };
-}
-
-export function submitQuestionForm() {
-  return (dispatch) => dispatch(submit(formNames.SURVEY_QUESTION));
-}
-
-export function addToOptions(option) {
-  return (dispatch) =>
-    dispatch(arrayPush(formNames.SURVEY_QUESTION, 'options', option));
-}
-
-export function addToOptionsToDelete(option) {
-  return (dispatch) =>
-    dispatch(arrayPush(formNames.SURVEY_QUESTION, 'optionsToDelete', option));
 }
 
 /**
@@ -137,7 +123,12 @@ export function finalizeOrder(successMessage, failureMessage) {
   };
 }
 
-export function createSurveyQuestion(fields, successMessage, failureMessage) {
+export function createSurveyQuestion(
+  fields,
+  successMessage,
+  failureMessage,
+  setError,
+) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_SURVEY_QUESTION_REQUEST });
     return CourseAPI.survey.questions
@@ -155,10 +146,9 @@ export function createSurveyQuestion(fields, successMessage, failureMessage) {
       .catch((error) => {
         dispatch({ type: actionTypes.CREATE_SURVEY_QUESTION_FAILURE });
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
+          setReactHookFormError(setError, error.response.data.errors);
         }
+        dispatch(setNotification(failureMessage));
       });
   };
 }
@@ -168,6 +158,7 @@ export function updateSurveyQuestion(
   data,
   successMessage,
   failureMessage,
+  setError,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SURVEY_QUESTION_REQUEST });
@@ -186,10 +177,9 @@ export function updateSurveyQuestion(
       .catch((error) => {
         dispatch({ type: actionTypes.UPDATE_SURVEY_QUESTION_FAILURE });
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
+          setReactHookFormError(setError, error.response.data.errors);
         }
+        dispatch(setNotification(failureMessage));
       });
   };
 }

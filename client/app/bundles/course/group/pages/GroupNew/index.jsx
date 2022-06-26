@@ -2,13 +2,8 @@ import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@mui/material';
-import {
-  injectIntl,
-  intlShape,
-  FormattedMessage,
-  defineMessages,
-} from 'react-intl';
-
+import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
+import NotificationPopup from 'lib/containers/NotificationPopup';
 import actionTypes, { dialogTypes } from '../../constants';
 import { createCategory } from '../../actions';
 import GroupFormDialog from '../../forms/GroupFormDialog';
@@ -38,12 +33,13 @@ const styles = {
 // Assumption: If the new button shows, it means that the user is able to create categories.
 const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
   const onFormSubmit = useCallback(
-    (data) =>
+    (data, setError) =>
       dispatch(
         createCategory(
           data,
           intl.formatMessage(translations.success),
           intl.formatMessage(translations.failure),
+          setError,
         ),
       ),
     [dispatch],
@@ -68,8 +64,15 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
         dialogTitle={intl.formatMessage(translations.new)}
         expectedDialogTypes={[dialogTypes.CREATE_CATEGORY]}
       >
-        <NameDescriptionForm onSubmit={onFormSubmit} />
+        <NameDescriptionForm
+          onSubmit={onFormSubmit}
+          initialValues={{
+            name: '',
+            description: '',
+          }}
+        />
       </GroupFormDialog>
+      <NotificationPopup />
     </>
   );
 };
@@ -77,7 +80,7 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
 PopupDialog.propTypes = {
   dispatch: PropTypes.func.isRequired,
   isManagingGroups: PropTypes.bool.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect((state) => ({

@@ -1,6 +1,6 @@
-import { Component } from 'react';
+import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import {
   IconButton,
   ListSubheader,
@@ -27,7 +27,7 @@ const styles = {
   },
 };
 
-class ConditionList extends Component {
+class ConditionList extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -75,11 +75,13 @@ class ConditionList extends Component {
 
   renderConditionRows() {
     return this.props.conditions.map((condition) => (
-      <TableRow key={condition.edit_url}>
+      <TableRow key={condition.edit_url || condition.id}>
         <TableCell colSpan="1">{condition.type}</TableCell>
-        <TableCell colSpan="3">{condition.description}</TableCell>
+        <TableCell colSpan="3">
+          {condition.description || condition.title}
+        </TableCell>
         <TableCell colSpan="2" style={styles.alignRight}>
-          <IconButton href={condition.edit_url}>
+          <IconButton href={condition.edit_url || condition.editUrl}>
             <Edit htmlColor="black" style={{ padding: 0 }} />
           </IconButton>
 
@@ -87,11 +89,11 @@ class ConditionList extends Component {
             onClick={() =>
               this.setState({
                 isDeleting: true,
-                deletionUrl: condition.delete_url,
+                deletionUrl: condition.delete_url || condition.deleteUrl,
               })
             }
             style={styles.alignMiddle}
-            id={condition.delete_url}
+            id={condition.delete_url || condition.deleteUrl}
           >
             <Delete htmlColor="black" style={{ padding: 0 }} />
           </IconButton>
@@ -177,7 +179,7 @@ class ConditionList extends Component {
 }
 
 ConditionList.propTypes = {
-  intl: intlShape,
+  intl: PropTypes.object,
   newConditionUrls: PropTypes.arrayOf(
     PropTypes.shape({
       name: PropTypes.string,
@@ -186,8 +188,10 @@ ConditionList.propTypes = {
   ).isRequired,
   conditions: PropTypes.arrayOf(
     PropTypes.shape({
+      id: PropTypes.number,
       name: PropTypes.string,
       description: PropTypes.string,
+      title: PropTypes.string,
       edit_url: PropTypes.string,
       delete_url: PropTypes.string,
     }),

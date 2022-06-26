@@ -13,7 +13,7 @@ const propTypes = {
 const styles = {
   canvasDiv: {
     alignItems: 'center',
-    margin: 'auto',
+    marginBottom: 8,
   },
 };
 

@@ -19,6 +19,8 @@ export function parseLanguages(language) {
   switch (language) {
     case 'C/C++':
       return 'c_cpp';
+    case 'Java 8':
+    case 'Java 11':
     case 'Java':
       return 'java';
     case 'Python 3.9':

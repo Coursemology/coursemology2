@@ -29,10 +29,6 @@ const styles = {
   hideTable: {
     display: 'none',
   },
-  unstartedText: {
-    color: red[600],
-    fontWeight: 'bold',
-  },
   tableCell: {
     padding: '0.5em',
     textOverflow: 'initial',

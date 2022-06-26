@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 
 const translations = defineMessages({
   showAll: {
@@ -16,7 +16,7 @@ const translations = defineMessages({
 const propTypes = {
   text: PropTypes.string.isRequired,
   maxChars: PropTypes.number,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   style: PropTypes.object,
 };
 

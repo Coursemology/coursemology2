@@ -362,6 +362,7 @@ RSpec.describe Course::UserInvitationService, type: :service do
           existing_users.each do |user|
             found_user = course.course_users.find { |course_user| course_user.user == user }
             expect(found_user).not_to be_nil
+            expect(found_user.timeline_algorithm).to eq('fixed') # default value
           end
         end
 
@@ -384,6 +385,48 @@ RSpec.describe Course::UserInvitationService, type: :service do
             existing_users.each do |user|
               found_user = course.course_users.find { |course_user| course_user.user == user }
               expect(found_user).not_to be_nil
+            end
+          end
+        end
+
+        context 'when users already exist in the current instance and \
+          default course timeline setting is fomo' do
+          before do
+            course.update!(default_timeline_algorithm: 'fomo')
+          end
+          it 'sets the timeline algorithm for the users to fomo' do
+            subject.send(:invite_users, temp_csv_from_attributes(existing_users, existing_roles))
+            existing_users.each do |user|
+              found_user = course.course_users.find { |course_user| course_user.user == user }
+              expect(found_user.timeline_algorithm).to eq('fomo')
+            end
+          end
+        end
+
+        context 'when users already exist in the current instance and \
+          default course timeline setting is stragglers' do
+          before do
+            course.update!(default_timeline_algorithm: 'stragglers')
+          end
+          it 'sets the timeline algorithm for the users to stragglers' do
+            subject.send(:invite_users, temp_csv_from_attributes(existing_users, existing_roles))
+            existing_users.each do |user|
+              found_user = course.course_users.find { |course_user| course_user.user == user }
+              expect(found_user.timeline_algorithm).to eq('stragglers')
+            end
+          end
+        end
+
+        context 'when users already exist in the current instance and \
+          default course timeline setting is otot' do
+          before do
+            course.update!(default_timeline_algorithm: 'otot')
+          end
+          it 'sets the timeline algorithm for the users to otot' do
+            subject.send(:invite_users, temp_csv_from_attributes(existing_users, existing_roles))
+            existing_users.each do |user|
+              found_user = course.course_users.find { |course_user| course_user.user == user }
+              expect(found_user.timeline_algorithm).to eq('otot')
             end
           end
         end

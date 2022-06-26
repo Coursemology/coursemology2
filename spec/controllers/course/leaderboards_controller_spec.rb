@@ -10,24 +10,14 @@ RSpec.describe Course::LeaderboardsController, type: :controller do
 
     before { sign_in(user) }
 
-    describe '#show' do
-      subject { get :show, params: { course_id: course } }
+    describe '#index' do
+      subject { get :index, params: { course_id: course } }
 
       context 'when the leaderboard component is disabled' do
         before do
           allow(controller).to receive_message_chain('current_component_host.[]').and_return(nil)
         end
         it 'raises an component not found error' do
-          expect { subject }.to raise_error(ComponentNotFoundError)
-        end
-      end
-    end
-
-    describe '#groups' do
-      subject { get :groups, params: { course_id: course } }
-
-      context 'when the group leaderboard is disabled' do
-        it 'raises a standard error' do
           expect { subject }.to raise_error(ComponentNotFoundError)
         end
       end

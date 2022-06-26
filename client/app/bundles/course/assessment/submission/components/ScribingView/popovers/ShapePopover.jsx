@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Divider, Paper, Popover } from '@mui/material';
 import LineStyleField from '../fields/LineStyleField';
 import LineThicknessField from '../fields/LineThicknessField';
@@ -9,7 +9,7 @@ import ShapeField from '../fields/ShapeField';
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   lineToolType: PropTypes.string,
   open: PropTypes.bool,
   anchorEl: PropTypes.object,

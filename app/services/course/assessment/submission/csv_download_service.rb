@@ -23,7 +23,7 @@ class Course::Assessment::Submission::CsvDownloadService
                   includes(:assessment, { answers: { actable: [:options, :files] },
                                           experience_points_record: :course_user })
     submissions_hash = submissions.to_h { |submission| [submission.creator_id, submission] }
-    csv_file_path = File.join(@base_dir, "#{@assessment.title}.csv")
+    csv_file_path = File.join(@base_dir, "#{Pathname.normalize_filename(@assessment.title)}.csv")
     CSV.open(csv_file_path, 'w') do |csv|
       submissions_csv_header csv
       @course_users.each do |course_user|

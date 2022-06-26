@@ -124,18 +124,18 @@ export const submissionShape = PropTypes.shape({
   dueAt: PropTypes.string,
   grade: PropTypes.number,
   gradedAt: PropTypes.string,
-  grader: PropTypes.string,
+  grader: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+  }),
   late: PropTypes.bool,
   pointsAwarded: PropTypes.number,
   submittedAt: PropTypes.string,
-  submitter: PropTypes.string,
+  submitter: PropTypes.shape({
+    id: PropTypes.number,
+    name: PropTypes.string,
+  }),
   workflowState: PropTypes.string,
-});
-
-export const reduxFormShape = PropTypes.shape({
-  registeredField: PropTypes.object,
-  // eslint-disable-next-line react/forbid-prop-types
-  values: PropTypes.any,
 });
 
 export const topicShape = PropTypes.shape({

@@ -141,7 +141,7 @@ jobs:
       # Run tests!
       - run:
           name: run
-          no_output_timeout: 30m
+          no_output_timeout: 10m
           command: |
             mkdir /tmp/test-results
             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
@@ -162,6 +162,8 @@ jobs:
       - store_artifacts:
           path: /tmp/test-results
           destination: test-results
+    # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+    resource_class: large
 
   lint:
     docker:

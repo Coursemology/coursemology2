@@ -2,7 +2,6 @@ import { Component } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
-import ReactTooltip from 'react-tooltip';
 import {
   Button,
   Card,
@@ -15,7 +14,6 @@ import {
   Tab,
   Tabs,
 } from '@mui/material';
-import { blue, green, grey, yellow, red } from '@mui/material/colors';
 import Group from '@mui/icons-material/Group';
 import Person from '@mui/icons-material/Person';
 import PersonOutline from '@mui/icons-material/PersonOutline';
@@ -25,6 +23,8 @@ import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
 import withRouter from 'lib/components/withRouter';
+import palette from 'theme/palette';
+import BarChart from 'lib/components/BarChart';
 import {
   fetchSubmissions,
   publishSubmissions,
@@ -44,23 +44,6 @@ import {
 } from '../../constants';
 import translations from '../../translations';
 import submissionsTranslations from './translations';
-
-const styles = {
-  histogram: {
-    borderRadius: 10,
-    display: 'flex',
-    overflow: 'hidden',
-    textAlign: 'center',
-  },
-  histogramCells: {
-    common: { transition: 'flex .5s, min-width .5s' },
-    unstarted: { backgroundColor: red[100] },
-    attempting: { backgroundColor: yellow[100] },
-    submitted: { backgroundColor: grey[100] },
-    graded: { backgroundColor: blue[100] },
-    published: { backgroundColor: green[100] },
-  },
-};
 
 class VisibleSubmissionsIndex extends Component {
   static canForceSubmitOrRemind(shownSubmissions) {
@@ -135,6 +118,41 @@ class VisibleSubmissionsIndex extends Component {
     );
   }
 
+  renderBarChart = (submissionBarChart) => {
+    const { includePhantoms } = this.state;
+    const workflowStatesArray = Object.values(workflowStates);
+
+    const initialCounts = workflowStatesArray.reduce(
+      (counts, w) => ({ ...counts, [w]: 0 }),
+      {},
+    );
+    const submissionStateCounts = submissionBarChart.reduce(
+      (counts, submission) => {
+        if (includePhantoms || !submission.courseUser.phantom) {
+          return {
+            ...counts,
+            [submission.workflowState]: counts[submission.workflowState] + 1,
+          };
+        }
+        return counts;
+      },
+      initialCounts,
+    );
+
+    const data = workflowStatesArray
+      .map((w) => {
+        const count = submissionStateCounts[w];
+        return {
+          count,
+          color: palette.submissionStatus[w],
+          label: <FormattedMessage {...translations[w]} />,
+        };
+      })
+      .filter((seg) => seg.count > 0);
+
+    return <BarChart data={data} />;
+  };
+
   renderHeader(shownSubmissions) {
     const {
       assessment: { title, canPublishGrades, canForceSubmit },
@@ -157,7 +175,7 @@ class VisibleSubmissionsIndex extends Component {
       <Card style={{ marginBottom: 20 }}>
         <CardHeader title={<h3>{title}</h3>} subheader="Submissions" />
         <CardContent style={{ paddingTop: 0, paddingBottom: 0 }}>
-          {this.renderHistogram(shownSubmissions)}
+          {this.renderBarChart(shownSubmissions)}
           <FormControlLabel
             control={
               <Switch
@@ -228,51 +246,6 @@ class VisibleSubmissionsIndex extends Component {
           )}
         </CardActions>
       </Card>
-    );
-  }
-
-  renderHistogram(submissionHistogram) {
-    const { includePhantoms } = this.state;
-    const workflowStatesArray = Object.values(workflowStates);
-
-    const initialCounts = workflowStatesArray.reduce(
-      (counts, w) => ({ ...counts, [w]: 0 }),
-      {},
-    );
-    const submissionStateCounts = submissionHistogram.reduce(
-      (counts, submission) => {
-        if (includePhantoms || !submission.courseUser.phantom) {
-          return {
-            ...counts,
-            [submission.workflowState]: counts[submission.workflowState] + 1,
-          };
-        }
-        return counts;
-      },
-      initialCounts,
-    );
-
-    return (
-      <div style={styles.histogram}>
-        {workflowStatesArray.map((w) => {
-          const count = submissionStateCounts[w];
-          const cellStyle = {
-            ...styles.histogramCells.common,
-            ...styles.histogramCells[w],
-            flex: count,
-            minWidth: count > 0 ? 50 : 0,
-          };
-
-          return (
-            <div key={w} style={cellStyle} data-tip data-for={w}>
-              {count > 0 ? count : null}
-              <ReactTooltip id={w} effect="solid">
-                <FormattedMessage {...translations[w]} />
-              </ReactTooltip>
-            </div>
-          );
-        })}
-      </div>
     );
   }
 
@@ -395,7 +368,10 @@ class VisibleSubmissionsIndex extends Component {
         onChange={(event, value) => {
           this.setState({ tab: value });
         }}
-        style={{ backgroundColor: grey[100], color: blue[500] }}
+        style={{
+          backgroundColor: palette.background.default,
+          color: palette.submissionIcon.person,
+        }}
         TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
         value={this.state.tab}
         variant="fullWidth"
@@ -403,22 +379,24 @@ class VisibleSubmissionsIndex extends Component {
         {myStudentsExist && (
           <Tab
             id="my-students-tab"
-            style={{ color: blue[500] }}
-            icon={<Group style={{ color: blue[500] }} />}
+            style={{ color: palette.submissionIcon.person }}
+            icon={<Group style={{ color: palette.submissionIcon.person }} />}
             label={<FormattedMessage {...submissionsTranslations.myStudents} />}
             value="my-students-tab"
           />
         )}
         <Tab
           id="students-tab"
-          icon={<Person style={{ color: blue[500] }} />}
+          icon={<Person style={{ color: palette.submissionIcon.person }} />}
           label={<FormattedMessage {...submissionsTranslations.students} />}
           value="students-tab"
         />
 
         <Tab
           id="staff-tab"
-          icon={<PersonOutline style={{ color: blue[500] }} />}
+          icon={
+            <PersonOutline style={{ color: palette.submissionIcon.person }} />
+          }
           label={<FormattedMessage {...submissionsTranslations.staff} />}
           value="staff-tab"
         />

@@ -29,3 +29,12 @@ en:
         You have been approved to be an %{role} on Coursemology!
 
         %{click_here} to create a new course and get started!
+
+    role_request_rejected:
+      subject: 'Your role request has been rejected!'
+      message_empty: >
+        Your role request to be an %{role} on Coursemology has been rejected!
+      message: >
+        Your role request to be an %{role} on Coursemology has been rejected!
+        Please refer to the message below:
+        %{message}

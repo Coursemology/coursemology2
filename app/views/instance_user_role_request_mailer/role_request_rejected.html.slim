@@ -1,0 +1,4 @@
+- if @message
+  = simple_format(t('.message', role: @instance_user.role, message: @message))
+- else
+  = simple_format(t('.message_empty', role: @instance_user.role))

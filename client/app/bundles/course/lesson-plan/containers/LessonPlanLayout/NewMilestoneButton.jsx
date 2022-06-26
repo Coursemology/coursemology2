@@ -1,12 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  injectIntl,
-  defineMessages,
-  intlShape,
-  FormattedMessage,
-} from 'react-intl';
+import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
 import { showMilestoneForm, createMilestone } from 'course/lesson-plan/actions';
 
@@ -32,11 +27,13 @@ const styles = {
 };
 
 class NewMilestoneButton extends Component {
-  createMilestoneHandler = (data) => {
+  createMilestoneHandler = (data, setError) => {
     const { dispatch } = this.props;
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
-    return dispatch(createMilestone(data, successMessage, failureMessage));
+    return dispatch(
+      createMilestone(data, successMessage, failureMessage, setError),
+    );
   };
 
   showForm = () => {
@@ -45,7 +42,7 @@ class NewMilestoneButton extends Component {
       showMilestoneForm({
         onSubmit: this.createMilestoneHandler,
         formTitle: intl.formatMessage(translations.newMilestone),
-        initialValues: {},
+        initialValues: { title: '', description: '', start_at: null },
       }),
     );
   };
@@ -72,7 +69,7 @@ NewMilestoneButton.propTypes = {
   canManageLessonPlan: PropTypes.bool.isRequired,
 
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default connect((state) => ({

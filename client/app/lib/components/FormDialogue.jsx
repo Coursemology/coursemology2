@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import {
   Button,
   Dialog,
@@ -18,8 +18,9 @@ const propTypes = {
   skipConfirmation: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   open: PropTypes.bool.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   children: PropTypes.node,
+  form: PropTypes.string,
 };
 
 class FormDialogue extends Component {
@@ -54,7 +55,8 @@ class FormDialogue extends Component {
   };
 
   render() {
-    const { intl, title, disabled, open, submitForm, children } = this.props;
+    const { intl, title, disabled, form, open, submitForm, children } =
+      this.props;
     const formActions = [
       <Button
         color="secondary"
@@ -71,7 +73,7 @@ class FormDialogue extends Component {
         color="primary"
         className="btn-submit"
         key="form-dialogue-submit-button"
-        onClick={submitForm}
+        {...(form ? { form, type: 'submit' } : { onClick: submitForm })}
         {...{ disabled }}
       >
         {intl.formatMessage(formTranslations.submit)}
@@ -85,6 +87,9 @@ class FormDialogue extends Component {
           maxWidth="md"
           open={open}
           onClose={this.handleFormClose}
+          style={{
+            top: 40,
+          }}
         >
           <DialogTitle>{title}</DialogTitle>
           <DialogContent>{children}</DialogContent>

@@ -80,7 +80,7 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
   end
 
   def render_scribing_question_json
-    @scribing_question.description = helpers.format_html(@scribing_question.description)
+    @scribing_question.description = helpers.format_ckeditor_rich_text(@scribing_question.description)
     render partial: 'scribing_question'
   end
 
@@ -89,7 +89,7 @@ class Course::Assessment::Question::ScribingController < Course::Assessment::Que
   end
 
   def render_failure_json(message)
-    render json: { message: message, errors: @scribing_question.errors.full_messages },
+    render json: { message: message, errors: @scribing_question.errors },
            status: :bad_request
   end
 

@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Slider } from '@mui/material';
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   toolThicknessValue: PropTypes.number,
   onChangeSliderThickness: PropTypes.func,
 };

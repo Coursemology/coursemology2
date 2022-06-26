@@ -137,33 +137,15 @@ RSpec.feature 'Courses: Invitations', js: true do
       let(:instance_user) { create(:instance_user) }
       let(:user) { instance_user.user }
 
-      context 'when I have been invited using my current email address' do
-        let(:user_email) { user.email }
-        let!(:invitation) do
-          create(:course_user_invitation, course: course, email: user_email)
-        end
-
-        scenario 'I can enter the course' do
-          visit course_path(course)
-          expect(page).not_to have_button('.register')
-
-          click_button I18n.t('course.user_registrations.registration.enter_course')
-
-          course_user = course.course_users.find_by(user_id: user.id)
-          expect(course_user).to be_present
-          expect(course_user.name).to eq(invitation.name)
-        end
-      end
-
       context 'when I have an invitation code for another email address' do
         let!(:invitation) { create(:course_user_invitation, course: course) }
 
-        scenario 'I can accept invitations' do
+        scenario 'I can accept invitations', js: true do
           visit course_path(course)
-          fill_in 'registration_code', with: invitation.invitation_key
-          click_button I18n.t('course.user_registrations.registration.register')
+          fill_in 'registration-code', with: invitation.invitation_key
+          find('#register-button').click
 
-          expect(page).not_to have_selector('div.register')
+          expect(page).to have_selector('h2', text: 'Announcements')
           course_user = course.course_users.find_by(user_id: user.id)
           expect(course_user).to be_present
           expect(course_user.name).to eq(invitation.name)
@@ -176,12 +158,12 @@ RSpec.feature 'Courses: Invitations', js: true do
           course.save!
         end
 
-        scenario 'I can register for courses using the course registration code' do
+        scenario 'I can register for courses using the course registration code', js: true do
           visit course_path(course)
-          fill_in 'registration_code', with: course.registration_key
-          click_button I18n.t('course.user_registrations.registration.register')
+          fill_in 'registration-code', with: course.registration_key
+          find('#register-button').click
 
-          expect(page).not_to have_selector('div.register')
+          expect(page).not_to have_selector('#register-button')
         end
       end
     end

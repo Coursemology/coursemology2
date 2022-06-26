@@ -143,6 +143,6 @@ class Course::Discussion::Post < ApplicationRecord
   end
 
   def sanitize_text
-    self.text = ApplicationController.helpers.format_html(text)
+    self.text = ApplicationController.helpers.format_ckeditor_rich_text(text)
   end
 end

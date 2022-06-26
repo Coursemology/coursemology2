@@ -1,12 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  injectIntl,
-  defineMessages,
-  intlShape,
-  FormattedMessage,
-} from 'react-intl';
+import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
 
 import {
@@ -46,13 +41,19 @@ class EditSectionButton extends Component {
     );
   };
 
-  updateSectionHandler = (data) => {
+  updateSectionHandler = (data, setError) => {
     const { dispatch, section } = this.props;
     const payload = { section: data };
     const successMessage = <FormattedMessage {...translations.success} />;
     const failureMessage = <FormattedMessage {...translations.failure} />;
     return dispatch(
-      updateSurveySection(section.id, payload, successMessage, failureMessage),
+      updateSurveySection(
+        section.id,
+        payload,
+        successMessage,
+        failureMessage,
+        setError,
+      ),
     );
   };
 
@@ -70,7 +71,7 @@ EditSectionButton.propTypes = {
   disabled: PropTypes.bool,
 
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 EditSectionButton.defaultProps = {

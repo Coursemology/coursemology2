@@ -179,28 +179,29 @@ const SurveyDetails = (props) => {
           <NewSectionButton {...{ disabled }} />
         ) : null}
         {survey.canViewResults ? (
-          <Button
-            variant="outlined"
-            onClick={() =>
-              navigate(`/courses/${courseId}/surveys/${survey.id}/results`)
-            }
-            style={styles.button}
-          >
-            <FormattedMessage {...surveyTranslations.results} />
-          </Button>
+          <>
+            <Button
+              variant="outlined"
+              onClick={() =>
+                navigate(`/courses/${courseId}/surveys/${survey.id}/results`)
+              }
+              style={styles.button}
+            >
+              <FormattedMessage {...surveyTranslations.results} />
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() =>
+                navigate(`/courses/${courseId}/surveys/${survey.id}/responses`)
+              }
+              style={styles.button}
+            >
+              <FormattedMessage {...surveyTranslations.responses} />
+            </Button>
+            <DownloadResponsesButton />
+          </>
         ) : null}
-        {survey.canViewResults ? (
-          <Button
-            variant="outlined"
-            onClick={() =>
-              navigate(`/courses/${courseId}/surveys/${survey.id}/responses`)
-            }
-            style={styles.button}
-          >
-            <FormattedMessage {...surveyTranslations.responses} />
-          </Button>
-        ) : null}
-        <DownloadResponsesButton />
+
         <RespondButton
           courseId={courseId}
           surveyId={survey.id}

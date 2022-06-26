@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { reduxForm, Field, Form } from 'redux-form';
-import { connect } from 'react-redux';
-
-import ErrorText, { errorProps } from 'lib/components/ErrorText';
-import renderTextField from 'lib/components/redux-form/TextField';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import ErrorText from 'lib/components/ErrorText';
+import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
 import { formNames } from '../constants';
 
@@ -32,61 +32,82 @@ const styles = {
     width: '100%',
   },
 };
+const validationSchema = yup.object({
+  name: yup
+    .string()
+    .required(formTranslations.required)
+    .max(255, formTranslations.nameLength),
+  description: yup.string().nullable(),
+});
 
-const isFieldBlank = (str) => str == null || str === '';
-
-const validate = (values) => {
-  const errors = {};
-  const requiredFields = ['name'];
-
-  requiredFields.forEach((field) => {
-    if (isFieldBlank(values[field])) {
-      errors[field] = formTranslations.required;
-    }
+const NameDescriptionForm = (props) => {
+  const { initialValues, onSubmit } = props;
+  const {
+    control,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: initialValues,
+    resolver: yupResolver(validationSchema),
   });
 
-  if ((values.name?.length ?? 0) > 255) {
-    errors.name = translations.nameLength;
-  }
-
-  return errors;
+  return (
+    <form
+      id={formNames.GROUP}
+      noValidate
+      onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+    >
+      <ErrorText errors={errors} />
+      <div style={styles.flexCol}>
+        <Controller
+          name="name"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={isSubmitting}
+              label={<FormattedMessage {...translations.name} />}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+              style={styles.flexChild}
+              variant="standard"
+            />
+          )}
+        />
+        <Controller
+          name="description"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={isSubmitting}
+              label={<FormattedMessage {...translations.description} />}
+              fullWidth
+              multiline
+              InputLabelProps={{
+                shrink: true,
+              }}
+              minRows={2}
+              maxRows={4}
+              style={styles.flexChild}
+              variant="standard"
+            />
+          )}
+        />
+      </div>
+    </form>
+  );
 };
 
-const NameDescriptionForm = ({ submitting, handleSubmit, onSubmit, error }) => (
-  <Form onSubmit={handleSubmit(onSubmit)}>
-    <ErrorText errors={error} />
-    <div style={styles.flexCol}>
-      <Field
-        name="name"
-        component={renderTextField}
-        label={<FormattedMessage {...translations.name} />}
-        disabled={submitting}
-        style={styles.flexChild}
-      />
-      <Field
-        name="description"
-        component={renderTextField}
-        label={<FormattedMessage {...translations.description} />}
-        multiline
-        disabled={submitting}
-        minRows={2}
-        maxRows={4}
-        style={styles.flexChild}
-      />
-    </div>
-  </Form>
-);
-
 NameDescriptionForm.propTypes = {
-  handleSubmit: PropTypes.func.isRequired,
-  submitting: PropTypes.bool,
-  error: errorProps,
+  initialValues: PropTypes.object,
   onSubmit: PropTypes.func.isRequired,
 };
 
-export default connect()(
-  reduxForm({
-    form: formNames.GROUP,
-    validate,
-  })(NameDescriptionForm),
-);
+export default NameDescriptionForm;

@@ -1,45 +1,57 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { FormControlLabel, Switch } from '@mui/material';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import { videoDefaults } from 'lib/constants/videoConstants';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { seekToDirectly } from '../../actions/video';
 import translations from '../../translations';
 
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+);
+
 const graphGlobalOptions = (intl) => ({
   maintainAspectRatio: false,
-  legend: {
-    display: false,
+  plugins: {
+    legend: {
+      display: false,
+    },
   },
   scales: {
-    xAxes: [
-      {
-        scaleLabel: {
-          display: true,
-          labelString: intl.formatMessage(translations.eventVideoTimeLabel),
-          fontSize: 15,
-        },
-        ticks: {
-          suggestedMin: 0,
-        },
+    x: {
+      title: {
+        display: true,
+        text: intl.formatMessage(translations.eventVideoTimeLabel),
+        fontSize: 15,
       },
-    ],
-    yAxes: [
-      {
-        scaleLabel: {
-          display: true,
-          labelString: 'Watch Frequency',
-          fontSize: 15,
-        },
-        ticks: {
-          suggestedMin: 0,
-        },
+      suggestedMin: 0,
+    },
+    y: {
+      title: {
+        display: true,
+        text: 'Watch Frequency',
+        fontSize: 15,
       },
-    ],
+      suggestedMin: 0,
+    },
   },
 });
 
@@ -77,7 +89,7 @@ function calculateWidthAndResolution(duration) {
 }
 
 const propTypes = {
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 
   watchFrequency: PropTypes.arrayOf(PropTypes.number).isRequired,
   videoDuration: PropTypes.number.isRequired,
@@ -106,13 +118,11 @@ class HeatMap extends Component {
       if (elements.length < 1) {
         return;
       }
-      this.props.onBarClick(elements[0]._index); // Index is the video time
+      this.props.onBarClick(elements[0].index); // Index is the video time
     },
-    hover: {
-      onHover: (event, elements) => {
-        const style = event.target.style;
-        style.cursor = elements.length > 0 ? 'pointer' : 'default';
-      },
+    onHover: (event, elements) => {
+      const style = event.native.target.style;
+      style.cursor = elements.length > 0 ? 'pointer' : 'default';
     },
   };
 
@@ -123,18 +133,18 @@ class HeatMap extends Component {
 
   generateToolTipOptions() {
     return {
-      tooltips: {
+      tooltip: {
         displayColors: false,
         callbacks: {
           title: (tooltipItem) => {
-            const videoTime = tooltipItem[0].xLabel;
+            const videoTime = tooltipItem[0].label;
             return this.props.intl.formatMessage(translations.eventVideoTime, {
               videoTime,
             });
           },
-          label: (tooltipItem, graphData) => {
-            const { datasetIndex, index } = tooltipItem;
-            const watchFrequency = graphData.datasets[datasetIndex].data[index];
+          label: (tooltipItem) => {
+            const { dataIndex, dataset } = tooltipItem;
+            const watchFrequency = dataset.data[dataIndex];
             return this.props.intl.formatMessage(translations.watchFrequency, {
               watchFrequency,
             });
@@ -184,9 +194,14 @@ class HeatMap extends Component {
       ],
     };
 
+    const globalOptions = graphGlobalOptions(this.props.intl);
+
     const options = {
-      ...graphGlobalOptions(this.props.intl),
-      ...this.generateToolTipOptions(),
+      ...globalOptions,
+      plugins: {
+        ...globalOptions.plugins,
+        ...this.generateToolTipOptions(),
+      },
       ...this.mouseOptions,
     };
 

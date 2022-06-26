@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import {
   Card,
   CardHeader,
@@ -16,7 +16,7 @@ import styles from './UploadedPackageTestCaseView.scss';
 
 const propTypes = {
   testCases: PropTypes.object.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 const translations = defineMessages({

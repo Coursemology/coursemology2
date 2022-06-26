@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
 import formTranslations from 'lib/translations/form';
 
@@ -25,6 +25,7 @@ class ConfirmationDialog extends Component {
       confirmSubmit,
       disableCancelButton,
       disableConfirmButton,
+      form,
     } = this.props;
 
     let confirmationButtonText = intl.formatMessage(formTranslations.continue);
@@ -72,6 +73,7 @@ class ConfirmationDialog extends Component {
         disabled={disableConfirmButton}
         key="confirmation-dialog-confirm-button"
         onClick={onConfirm}
+        {...(form ? { form, type: 'submit' } : {})}
         ref={(button) => {
           this.confirmButton = button;
         }}
@@ -129,8 +131,8 @@ ConfirmationDialog.propTypes = {
   confirmSubmit: PropTypes.bool,
   disableCancelButton: PropTypes.bool,
   disableConfirmButton: PropTypes.bool,
-
-  intl: intlShape.isRequired,
+  form: PropTypes.string,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(ConfirmationDialog);

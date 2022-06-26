@@ -25,7 +25,7 @@ RSpec.describe Course::Assessment::SkillsController do
           subject
         end
 
-        it { is_expected.to render_template('new') }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
@@ -40,7 +40,7 @@ RSpec.describe Course::Assessment::SkillsController do
           subject
         end
 
-        it { is_expected.to render_template('edit') }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
@@ -55,10 +55,7 @@ RSpec.describe Course::Assessment::SkillsController do
           subject
         end
 
-        it { is_expected.to redirect_to course_assessments_skills_path(course) }
-        it 'sets the appropriate flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.assessment.skills.destroy.failure'))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
   end

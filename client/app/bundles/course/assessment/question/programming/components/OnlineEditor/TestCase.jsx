@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { Button, TableCell, TableRow, TextField } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import styles from './OnlineEditorView.scss';
@@ -157,7 +157,7 @@ TestCase.propTypes = {
   hint: PropTypes.string.isRequired,
   enableInlineCodeEditor: PropTypes.bool.isRequired,
   showCodeEditor: PropTypes.bool.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(TestCase);

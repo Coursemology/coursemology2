@@ -48,6 +48,7 @@ class Course::Survey < ApplicationRecord
     self.course = duplicator.options[:destination_course]
     copy_attributes(other, duplicator)
     self.sections = duplicator.duplicate(other.sections)
+    self.closing_reminded_at = nil
     survey_conditions << other.survey_conditions.
                          select { |condition| duplicator.duplicated?(condition.conditional) }.
                          map { |condition| duplicator.duplicate(condition) }

@@ -12,6 +12,6 @@ module Course::SanitizeDescriptionConcern
   private
 
   def sanitize_description
-    self.description = ApplicationController.helpers.format_html(description)
+    self.description = ApplicationController.helpers.format_ckeditor_rich_text(description)
   end
 end

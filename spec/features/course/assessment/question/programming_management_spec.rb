@@ -26,10 +26,10 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         question_attributes = attributes_for(:course_assessment_question_programming)
         fill_in 'question_programming[title]', with: question_attributes[:title]
 
-        fill_in_react_summernote 'textarea#question_programming_description',
-                                 question_attributes[:description]
-        fill_in_react_summernote 'textarea#question_programming_staff_only_comments',
-                                 question_attributes[:staff_only_comments]
+        fill_in_react_ck 'textarea#question_programming_description',
+                         question_attributes[:description]
+        fill_in_react_ck 'textarea#question_programming_staff_only_comments',
+                         question_attributes[:staff_only_comments]
         fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
 
         page.execute_script("$('select[name=\"question_programming[question_assessment][skill_ids][]\"]').show()")

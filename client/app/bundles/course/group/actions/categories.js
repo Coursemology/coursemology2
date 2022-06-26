@@ -1,13 +1,14 @@
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import { SubmissionError } from 'redux-form';
 import actionTypes from '../constants';
 
 export function createCategory(
   { name, description },
   successMessage,
   failureMessage,
+  setError,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_CATEGORY_REQUEST });
@@ -34,7 +35,7 @@ export function createCategory(
         setNotification(failureMessage)(dispatch);
 
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
+          setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };
@@ -45,6 +46,7 @@ export function updateCategory(
   { name, description },
   successMessage,
   failureMessage,
+  setError,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_CATEGORY_REQUEST });
@@ -65,7 +67,7 @@ export function updateCategory(
         setNotification(failureMessage)(dispatch);
 
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
+          setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };

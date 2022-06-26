@@ -93,13 +93,13 @@ json.explanation do
 
     if failed_test_cases_by_type['public_test']
       failed_test_cases_by_type['public_test'].each do |test_case, test_result|
-        explanations << format_html(get_hint(test_case, test_result))
+        explanations << format_ckeditor_rich_text(get_hint(test_case, test_result))
       end
       json.failureType 'public_test'
 
     elsif failed_test_cases_by_type['private_test']
       failed_test_cases_by_type['private_test'].each do |test_case, test_result|
-        explanations << format_html(get_hint(test_case, test_result))
+        explanations << format_ckeditor_rich_text(get_hint(test_case, test_result))
       end
       json.failureType 'private_test'
     end

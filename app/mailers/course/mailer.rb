@@ -26,6 +26,18 @@ class Course::Mailer < ApplicationMailer
     mail(to: @recipient.email, subject: t('.subject', course: @course.title))
   end
 
+  # Sends a notification email to a user informing his registration in a course.
+  #
+  # @param [CourseUser] user The user who was added.
+  def user_rejected_email(course, user)
+    ActsAsTenant.without_tenant do
+      @course = course
+    end
+    @recipient = user
+
+    mail(to: @recipient.email, subject: t('.subject', course: @course.title))
+  end
+
   # Sends a notification email to the course managers to approve a given EnrolRequest.
   #
   # @param [Course] enrol_request The user enrol request.

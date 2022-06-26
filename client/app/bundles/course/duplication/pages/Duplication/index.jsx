@@ -1,12 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import {
   FormControlLabel,
   ListSubheader,
@@ -16,7 +11,7 @@ import {
 } from '@mui/material';
 import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import DateTimePicker from 'lib/components/form/DateTimePicker';
+import DateTimePicker from 'lib/components/fields/DateTimePicker';
 import {
   fetchObjectsList,
   setDuplicationMode,
@@ -301,7 +296,7 @@ Duplication.propTypes = {
   sourceCourses: courseListingShape,
 
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect(({ duplication }) => ({

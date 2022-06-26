@@ -1,15 +1,17 @@
 # frozen_string_literal: true
 class Course::LeaderboardsController < Course::ComponentController
+  include Course::LeaderboardsHelper
   before_action :add_leaderboard_breadcrumb
   before_action :check_component_settings
-  before_action :preload_course_levels, only: [:show]
+  before_action :preload_course_levels, only: [:index]
+  before_action :fetch_course_users, only: [:index]
 
-  def show # :nodoc:
-    @course_users = @course.course_users.students.without_phantom_users.includes(:user)
-  end
+  def index # :nodoc:
+    achievements_enabled = current_component_host[:course_achievements_component].present?
+    groups_enabled = @settings.enable_group_leaderboard
 
-  def groups # :nodoc:
-    @groups ||= @course.groups
+    fetch_users_list(achievements_enabled)
+    groups_enabled && fetch_groups_list(achievements_enabled)
   end
 
   private
@@ -37,5 +39,24 @@ class Course::LeaderboardsController < Course::ComponentController
   # @return [nil] If leaderboard component is disabled.
   def component
     current_component_host[:course_leaderboard_component]
+  end
+
+  # Preload course_users
+  def fetch_course_users
+    @course_users = @course.course_users.students.without_phantom_users.includes(:user)
+  end
+
+  # Load users in leaderboard
+  def fetch_users_list(achievements_enabled)
+    @course_users_points = @course_users.ordered_by_experience_points.take(display_user_count)
+    @course_users_count = achievements_enabled &&
+                          @course_users.ordered_by_achievement_count.take(display_user_count)
+  end
+
+  # Load users in leaderboard
+  def fetch_groups_list(achievements_enabled)
+    @groups_points = @course.groups.ordered_by_experience_points.take(display_user_count)
+    @groups_count = achievements_enabled &&
+                    @course.groups.ordered_by_average_achievement_count.take(display_user_count)
   end
 end

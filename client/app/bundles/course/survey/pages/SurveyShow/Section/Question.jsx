@@ -1,7 +1,6 @@
-/* eslint-disable new-cap */
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import { connect } from 'react-redux';
 import { DragSource, DropTarget } from 'react-dnd';
 import { showDeleteConfirmation } from 'course/survey/actions';
@@ -69,12 +68,13 @@ class Question extends Component {
         initialValues: {
           ...question,
           question_type: question.question_type.toString(),
+          optionsToDelete: [],
         },
       }),
     );
   };
 
-  updateQuestionHandler = (data) => {
+  updateQuestionHandler = (data, setError) => {
     const { dispatch, intl } = this.props;
     const { updateSurveyQuestion } = questionActions;
 
@@ -82,7 +82,13 @@ class Question extends Component {
     const successMessage = intl.formatMessage(translations.updateSuccess);
     const failureMessage = intl.formatMessage(translations.updateFailure);
     return dispatch(
-      updateSurveyQuestion(data.id, payload, successMessage, failureMessage),
+      updateSurveyQuestion(
+        data.id,
+        payload,
+        successMessage,
+        failureMessage,
+        setError,
+      ),
     );
   };
 
@@ -210,7 +216,7 @@ Question.propTypes = {
   expanded: PropTypes.bool.isRequired,
 
   dispatch: PropTypes.func.isRequired,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   connectDropTarget: PropTypes.func.isRequired,
   connectDragSource: PropTypes.func.isRequired,
   isDragging: PropTypes.bool.isRequired,

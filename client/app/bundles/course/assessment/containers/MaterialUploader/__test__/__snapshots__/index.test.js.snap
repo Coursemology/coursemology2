@@ -55,10 +55,16 @@ exports[`<Material /> renders the material 1`] = `
         resizeHide={true}
         wrapper="div"
       >
-        <FormattedMessage
-          defaultMessage="This action is unavailable as the Materials Component is disabled in the Admin Settings"
+        <MemoizedFormattedMessage
+          defaultMessage={
+            Array [
+              Object {
+                "type": 0,
+                "value": "This action is unavailable as the Materials Component is disabled in the Admin Settings",
+              },
+            ]
+          }
           id="course.material.disableDelete"
-          values={Object {}}
         />
       </ReactTooltip>
     </ForwardRef(IconButton)>
@@ -73,10 +79,16 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
     <ForwardRef(ListSubheader)
       disableSticky={true}
     >
-      <FormattedMessage
-        defaultMessage="Files"
+      <MemoizedFormattedMessage
+        defaultMessage={
+          Array [
+            Object {
+              "type": 0,
+              "value": "Files",
+            },
+          ]
+        }
         id="course.assessment.MaterialList.uploadedFiles"
-        values={Object {}}
       />
     </ForwardRef(ListSubheader)>
     <Material
@@ -112,10 +124,16 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
           }
         }
       >
-        <FormattedMessage
-          defaultMessage="Add Files"
+        <MemoizedFormattedMessage
+          defaultMessage={
+            Array [
+              Object {
+                "type": 0,
+                "value": "Add Files",
+              },
+            ]
+          }
           id="course.material.addFiles"
-          values={Object {}}
         />
         <input
           disabled={true}
@@ -142,10 +160,16 @@ exports[`<MaterialList /> renders the component with materials 1`] = `
       resizeHide={true}
       wrapper="div"
     >
-      <FormattedMessage
-        defaultMessage="This action is unavailable as the Materials Component is disabled in the Admin Settings"
+      <MemoizedFormattedMessage
+        defaultMessage={
+          Array [
+            Object {
+              "type": 0,
+              "value": "This action is unavailable as the Materials Component is disabled in the Admin Settings",
+            },
+          ]
+        }
         id="course.material.disableNewFile"
-        values={Object {}}
       />
     </ReactTooltip>
   </ForwardRef(List)>

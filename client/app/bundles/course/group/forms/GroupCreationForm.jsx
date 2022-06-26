@@ -1,13 +1,15 @@
-import { useEffect, useCallback, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { change, Field, Form, formValueSelector, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
+import { Controller, useForm } from 'react-hook-form';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab, Tabs } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import ErrorText, { errorProps } from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/ErrorText';
+import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
-import renderTextField from 'lib/components/redux-form/TextField';
 import actionTypes, { formNames } from '../constants';
 import { groupShape } from '../propTypes';
 
@@ -73,41 +75,28 @@ const translations = defineMessages({
 const MIN_NUM_TO_CREATE = 2;
 const MAX_NUM_TO_CREATE = 50;
 
-const isFieldBlank = (str) => str == null || str === '';
-
-const validate = (values) => {
-  const errors = {};
-  const requiredFields = ['name'];
-
-  requiredFields.forEach((field) => {
-    if (isFieldBlank(values[field])) {
-      errors[field] = formTranslations.required;
-    }
-  });
-
-  if ((values.name?.length ?? 0) > 255) {
-    errors.name = translations.nameLength;
-  }
-
-  const isSingle = values.is_single === true || values.is_single === 'true';
-
-  if (!isSingle) {
-    if (isFieldBlank(values.num_to_create)) {
-      errors.num_to_create = formTranslations.required;
-    } else {
-      const numToCreate = Number.parseInt(values.num_to_create, 10);
-
-      if (numToCreate < MIN_NUM_TO_CREATE) {
-        errors.num_to_create = translations.numToCreateMin;
-      }
-      if (numToCreate > MAX_NUM_TO_CREATE) {
-        errors.num_to_create = translations.numToCreateMax;
-      }
-    }
-  }
-
-  return errors;
-};
+const validationSchema = yup.object({
+  name: yup
+    .string()
+    .required(formTranslations.required)
+    .max(255, translations.nameLength),
+  description: yup.string().nullable(),
+  is_single: yup.bool(),
+  num_to_create: yup
+    .number()
+    .nullable()
+    .transform((v) => (v === '' || Number.isNaN(v) ? null : v))
+    .when('is_single', {
+      is: false,
+      then: yup
+        .number()
+        .transform((v) => Number.parseInt(v, 10))
+        .required(formTranslations.required)
+        .typeError(formTranslations.required)
+        .min(MIN_NUM_TO_CREATE, translations.numToCreateMin)
+        .max(MAX_NUM_TO_CREATE, translations.numToCreateMax),
+    }),
+});
 
 const getConflictingNames = (name, numToCreate, existingGroups) => {
   if (!name || !numToCreate) return [];
@@ -120,20 +109,24 @@ const getConflictingNames = (name, numToCreate, existingGroups) => {
   );
 };
 
-const GroupCreationForm = ({
-  dispatch,
-  submitting,
-  handleSubmit,
-  onSubmit,
-  isSingle,
-  numToCreate,
-  name,
-  existingGroups,
-  error,
-}) => {
-  useEffect(() => {
-    dispatch(change(formNames.GROUP, 'is_single', true));
-  }, []);
+const GroupCreationForm = (props) => {
+  const { dispatch, existingGroups, initialValues, onSubmit } = props;
+  const {
+    control,
+    handleSubmit,
+    setError,
+    setValue,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: initialValues,
+    mode: 'onChange',
+    resolver: yupResolver(validationSchema),
+  });
+
+  const name = watch('name');
+  const numToCreate = Number.parseInt(watch('num_to_create'), 10);
+  const isSingle = watch('is_single');
 
   const conflictingNames = useMemo(
     () => getConflictingNames(name, numToCreate, existingGroups),
@@ -146,22 +139,22 @@ const GroupCreationForm = ({
     } else {
       dispatch({ type: actionTypes.SET_IS_DISABLED_FALSE });
     }
-  }, [numToCreate, conflictingNames]);
-
-  const handleChange = useCallback(
-    (event, value) =>
-      dispatch(change(formNames.GROUP, 'is_single', value === 'is_single')),
-    [dispatch],
-  );
+  }, [dispatch, numToCreate, conflictingNames, isSingle]);
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <ErrorText errors={error} />
+    <form
+      id={formNames.GROUP}
+      noValidate
+      onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+    >
+      <ErrorText errors={errors} />
       <Tabs
         indicatorColor="primary"
         textColor="inherit"
         value={isSingle ? 'is_single' : 'is_multiple'}
-        onChange={handleChange}
+        onChange={(event, value) =>
+          setValue('is_single', value === 'is_single')
+        }
         variant="fullWidth"
       >
         <Tab label="Single" value="is_single" />
@@ -169,44 +162,98 @@ const GroupCreationForm = ({
       </Tabs>
       {isSingle && (
         <div style={styles.flexCol}>
-          <Field
+          <Controller
             name="name"
-            component={renderTextField}
-            label={<FormattedMessage {...translations.name} />}
-            disabled={submitting}
-            style={styles.flexChild}
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={isSubmitting}
+                label={<FormattedMessage {...translations.name} />}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                renderIf={isSingle}
+                required
+                style={styles.flexChild}
+                variant="standard"
+              />
+            )}
           />
-          <Field
+          <Controller
             name="description"
-            component={renderTextField}
-            label={<FormattedMessage {...translations.description} />}
-            multiline
-            disabled={submitting}
-            minRows={2}
-            maxRows={4}
-            style={styles.flexChild}
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={isSubmitting}
+                label={<FormattedMessage {...translations.description} />}
+                fullWidth
+                multiline
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                minRows={2}
+                maxRows={4}
+                renderIf={isSingle}
+                style={styles.flexChild}
+                variant="standard"
+              />
+            )}
           />
         </div>
       )}
       {!isSingle && (
         <div style={styles.flexCol}>
-          <Field
+          <Controller
             name="name"
-            component={renderTextField}
-            label={<FormattedMessage {...translations.prefix} />}
-            disabled={submitting}
-            style={styles.flexChild}
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={isSubmitting}
+                label={<FormattedMessage {...translations.prefix} />}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                renderIf={!isSingle}
+                required
+                style={styles.flexChild}
+                variant="standard"
+              />
+            )}
           />
-          <Field
+          <Controller
             name="num_to_create"
-            component={renderTextField}
-            label={<FormattedMessage {...translations.numToCreate} />}
-            type="number"
-            onWheel={(event) => event.currentTarget.blur()}
-            disabled={submitting}
-            style={styles.flexChild}
-            min={MIN_NUM_TO_CREATE}
-            max={MAX_NUM_TO_CREATE}
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={isSubmitting}
+                fullWidth
+                label={<FormattedMessage {...translations.numToCreate} />}
+                InputProps={{
+                  inputProps: {
+                    min: MIN_NUM_TO_CREATE,
+                    max: MAX_NUM_TO_CREATE,
+                  },
+                }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onWheel={(event) => event.currentTarget.blur()}
+                renderIf={!isSingle}
+                style={styles.flexChild}
+                type="number"
+                variant="standard"
+              />
+            )}
           />
           {name &&
           numToCreate >= MIN_NUM_TO_CREATE &&
@@ -228,31 +275,17 @@ const GroupCreationForm = ({
           ) : null}
         </div>
       )}
-    </Form>
+    </form>
   );
 };
 
 GroupCreationForm.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  handleSubmit: PropTypes.func.isRequired,
-  submitting: PropTypes.bool,
-  error: errorProps,
-  isSingle: PropTypes.bool,
-  numToCreate: PropTypes.number,
-  name: PropTypes.string,
-  onSubmit: PropTypes.func.isRequired,
   existingGroups: PropTypes.arrayOf(groupShape).isRequired,
+  dispatch: PropTypes.func.isRequired,
+  initialValues: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
 };
 
-const formSelector = formValueSelector(formNames.GROUP);
-
 export default connect((state) => ({
-  isSingle: formSelector(state, 'is_single'),
-  numToCreate: Number.parseInt(formSelector(state, 'num_to_create'), 10),
-  name: formSelector(state, 'name'),
-}))(
-  reduxForm({
-    form: formNames.GROUP,
-    validate,
-  })(GroupCreationForm),
-);
+  ...state.groupsDialog,
+}))(GroupCreationForm);

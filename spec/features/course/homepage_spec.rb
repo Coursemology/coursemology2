@@ -109,29 +109,29 @@ RSpec.feature 'Course: Homepage' do
         expect(course_user.reload.last_active_at).to be_within(1.hour).of(Time.zone.now)
       end
 
-      scenario 'I am able to see announcements in course homepage' do
+      scenario 'I am able to see announcements in course homepage', js: true do
         valid_announcement = create(:course_announcement, course: course)
         visit course_path(course)
-        expect(page).to have_content_tag_for(valid_announcement)
+        expect(page).to have_selector("#announcement-#{valid_announcement.id}")
       end
 
-      scenario 'I am able to see the activity feed in course homepage' do
+      scenario 'I am able to see the activity feed in course homepage', js: true do
         feed_notifications
 
         visit course_path(course)
         feed_notifications.each do |notification|
-          expect(page).to have_content_tag_for(notification)
+          expect(page).to have_selector("#notification-#{notification.id}")
         end
       end
 
-      scenario 'I am unable to see activities with deleted objects in my course homepage' do
+      scenario 'I am unable to see activities with deleted objects in my course homepage', js: true do
         feed_notifications.each do |notification|
           notification.activity.object.delete
         end
 
         visit course_path(course)
         feed_notifications.each do |notification|
-          expect(page).to have_no_content_tag_for(notification)
+          expect(page).to_not have_selector("#notification-#{notification.id}")
         end
       end
 
@@ -141,77 +141,68 @@ RSpec.feature 'Course: Homepage' do
         survey_todo
         visit course_path(course)
 
-        within find(content_tag_selector(assessment_todos[:enter_password])) do
-          expect(page).to have_text(
-            I18n.t('course.assessment.assessments.todo_assessment_button.enter_password')
-          )
+        within find("#todo-#{assessment_todos[:enter_password].id}") do
+          expect(page).to have_text('ENTER PASSWORD')
         end
 
         [:completed, :unpublished].each do |status|
-          expect(page).to have_no_content_tag_for(assessment_todos[status])
+          expect(page).to_not have_selector("#todo-#{assessment_todos[status].id}")
         end
 
-        within find(content_tag_selector(assessment_todos[:not_started])) do
-          expect(page).to have_text(
-            I18n.t('course.assessment.assessments.todo_assessment_button.attempt')
-          )
+        within find("#todo-#{assessment_todos[:not_started].id}") do
+          expect(page).to have_text('ATTEMPT')
         end
 
-        within find(content_tag_selector(assessment_todos[:in_progress])) do
-          expect(page).to have_text(
-            I18n.t('course.assessment.assessments.todo_assessment_button.resume')
-          )
-
-          # click_button is not used because poltergist detected overlapping elements with the
-          #   navbar. See poltergeist#520 for more details.
-          find('input.btn.btn-primary').click
-          wait_for_ajax
-          expect(assessment_todos[:in_progress].reload.ignore?).to be_truthy
+        within find("#todo-#{assessment_todos[:in_progress].id}") do
+          expect(page).to have_text('RESUME')
         end
+
+        find("#todo-ignore-button-#{assessment_todos[:in_progress].id}").click
+        expect(page).to have_selector('div.Toastify__toast-body', text: 'Pending task successfully ignored')
 
         # Reload page to load other todos
         visit course_path(course)
-        within find(content_tag_selector(video_todo)) do
-          expect(page).to have_text(I18n.t('course.video.videos.todo_video_button.watch'))
+        within find("#todo-#{video_todo.id}") do
+          expect(page).to have_text('WATCH')
         end
 
-        within find(content_tag_selector(survey_todo)) do
-          expect(page).to have_text(I18n.t('course.surveys.todo_survey_button.respond'))
+        within find("#todo-#{survey_todo.id}") do
+          expect(page).to have_text('RESPOND')
         end
       end
     end
 
     context 'As a user not registered for the course' do
       let(:user) { create(:user) }
-      scenario 'I am not able to see announcements in course homepage' do
+      scenario 'I am not able to see announcements in course homepage', js: true do
         valid_announcement = create(:course_announcement, course: course)
         visit course_path(course)
-        expect(page).to have_no_content_tag_for(valid_announcement)
+        expect(page).to_not have_selector("#announcement-#{valid_announcement.id}")
       end
 
-      scenario 'I am not able to see the activity feed in course homepage' do
+      scenario 'I am not able to see the activity feed in course homepage', js: true do
         feed_notifications
 
         visit course_path(course)
         feed_notifications.each do |notification|
-          expect(page).to have_no_content_tag_for(notification)
+          expect(page).to_not have_selector("#notification-#{notification.id}")
         end
       end
 
-      scenario 'I am able to see owner and managers in instructors list' do
+      scenario 'I am able to see owner and managers in instructors list', js: true do
         manager = create(:course_manager, course: course)
         teaching_assistant = create(:course_teaching_assistant, course: course)
         visit course_path(course)
         course.course_users.owner.each do |course_user|
-          expect(page).to have_selector('span.name', text: course_user.name)
+          expect(page).to have_selector("#instructor-#{course_user.user_id}")
         end
-        expect(page).to have_selector('span.name', text: manager.name)
-        expect(page).not_to have_selector('span.name', text: teaching_assistant.name)
+        expect(page).to have_selector("#instructor-#{manager.user_id}")
+        expect(page).not_to have_selector("#instructor-#{teaching_assistant.user_id}")
       end
 
-      scenario 'I am able to see the course description' do
+      scenario 'I am able to see the course description', js: true do
         visit course_path(course)
-        expect(page).to have_selector('h2', text: I18n.t('course.courses.show.description'))
+        expect(page).to have_selector('h2', text: 'Description')
         expect(page).to have_text(course.description)
       end
     end

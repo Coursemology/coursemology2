@@ -1,10 +1,18 @@
-p = t('.hint')
+- disabled = @user_role_request.approved? || @user_role_request.rejected?
+
+- if @user_role_request.approved?
+  p = t('.role_request_approved')
+- elsif @user_role_request.rejected?
+  p = t('.role_request_rejected')
+- else
+  p = t('.hint')
 
 = simple_form_for [:instance, @user_role_request] do |f|
-  = f.input :role, as: :select, collection: Instance::UserRoleRequest.roles.keys.map { |k| [t(".#{k}"), k]},
-                   label: t('.role_label')
-  = f.input :organization
-  = f.input :designation
-  = f.input :reason, as: :string
+  = f.input :role, as: :select, include_blank: false, collection: Instance::UserRoleRequest.roles.keys.map { |k| [t(".#{k}"), k]},
+                   label: t('.role_label'), disabled: disabled
+  = f.input :organization, disabled: disabled
+  = f.input :designation, disabled: disabled
+  = f.input :reason, as: :string, disabled: disabled
 
-  = f.button :submit, f.object.persisted? ? t('.edit_button') : t('.create_button')
+  - if !disabled
+    = f.button :submit, f.object.persisted? ? t('.edit_button') : t('.create_button')

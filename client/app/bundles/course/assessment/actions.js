@@ -1,5 +1,5 @@
-import { SubmissionError } from 'lib/redux-form';
 import CourseAPI from 'api/course';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import actionTypes from './constants';
 
@@ -9,6 +9,7 @@ export function createAssessment(
   data,
   successMessage,
   failureMessage,
+  setError,
 ) {
   const attributes = { ...data, category: categoryId, tab: tabId };
   return (dispatch) => {
@@ -37,7 +38,7 @@ export function createAssessment(
         });
 
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
+          setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };
@@ -48,6 +49,7 @@ export function updateAssessment(
   data,
   successMessage,
   failureMessage,
+  setError,
 ) {
   const attributes = data;
   return (dispatch) => {
@@ -72,7 +74,7 @@ export function updateAssessment(
         });
 
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
+          setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };

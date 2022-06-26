@@ -6,9 +6,12 @@ RSpec.feature 'Course: Administration: Leaderboard' do
 
   with_tenant(:instance) do
     let(:course) { create(:course) }
+    let(:group_category1) { create(:course_group_category, course: course) }
+    let!(:group_category2) { create(:course_group_category, course: course) }
+    let!(:groups) { create_list(:course_group, 3, group_category: group_category1) }
     before { login_as(user, scope: :user) }
 
-    context 'As a Course Manager' do
+    context 'As a Course Manager', js: true do
       let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can change the leaderboard display user count setting' do
@@ -58,9 +61,8 @@ RSpec.feature 'Course: Administration: Leaderboard' do
         check(enable_group_leaderboard_field)
         click_button 'update'
 
-        visit group_course_leaderboard_path(course)
-        expect(page).
-          to have_selector('li a', text: I18n.t('course.leaderboards.tabs.group_leaderboard'))
+        visit course_leaderboard_path(course)
+        expect(page).to have_button('Group Leaderboard')
 
         visit course_admin_leaderboard_path(course)
         expect(page).to have_checked_field(enable_group_leaderboard_field)
@@ -68,8 +70,7 @@ RSpec.feature 'Course: Administration: Leaderboard' do
         click_button 'update'
 
         visit course_leaderboard_path(course)
-        expect(page).
-          not_to have_selector('li a', text: I18n.t('course.leaderboards.tabs.group_leaderboard'))
+        expect(page).not_to have_button('Group Leaderboard')
       end
 
       scenario 'I can change the title of the group leaderboard' do
@@ -86,9 +87,8 @@ RSpec.feature 'Course: Administration: Leaderboard' do
           to have_selector('div', text: I18n.t('course.admin.leaderboard_settings.update.success'))
         expect(page).to have_field(group_leaderboard_title_field, with: new_title)
 
-        visit group_course_leaderboard_path(course)
-        expect(page).to have_selector('h1', text: new_title)
-        expect(page).to have_selector('li a', text: new_title)
+        visit course_leaderboard_path(course)
+        expect(page).to have_button(new_title)
 
         visit course_admin_leaderboard_path(course)
         fill_in group_leaderboard_title_field, with: empty_title
@@ -96,11 +96,8 @@ RSpec.feature 'Course: Administration: Leaderboard' do
         expect(page).
           to have_selector('div', text: I18n.t('course.admin.leaderboard_settings.update.success'))
 
-        visit group_course_leaderboard_path(course)
-        expect(page).
-          to have_selector('h1', text: I18n.t('course.leaderboards.groups.header'))
-        expect(page).
-          to have_selector('li a', text: I18n.t('course.leaderboards.tabs.group_leaderboard'))
+        visit course_leaderboard_path(course)
+        expect(page).to have_button('Group Leaderboard')
       end
     end
   end

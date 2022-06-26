@@ -19,7 +19,7 @@ const translations = defineMessages({
   },
   graded: {
     id: 'course.assessment.submission.graded',
-    defaultMessage: 'Graded but not published',
+    defaultMessage: 'Graded, unpublished',
   },
   published: {
     id: 'course.assessment.submission.published',
@@ -27,7 +27,7 @@ const translations = defineMessages({
   },
   submissionBy: {
     id: 'course.assessment.submission.submissionBy',
-    defaultMessage: 'Submission by {submitter}',
+    defaultMessage: 'Submission by {name}',
   },
   saveDraft: {
     id: 'course.assessment.submission.saveDraft',

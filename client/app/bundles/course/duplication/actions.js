@@ -1,4 +1,5 @@
 import CourseAPI from 'api/course';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import pollJob from 'lib/helpers/job-helpers';
 import actionTypes from 'course/duplication/constants';
 import { setNotification } from 'lib/actions';
@@ -133,6 +134,7 @@ export function duplicateCourse(
   successMessage,
   pendingMessage,
   failureMessage,
+  setError,
 ) {
   const payload = { duplication: fields };
 
@@ -145,15 +147,12 @@ export function duplicateCourse(
       dispatch({ type: actionTypes.DUPLICATE_COURSE_SUCCESS });
     };
 
-    const handleFailure = (data) => {
-      const message =
-        (data &&
-          data.response &&
-          data.response.data &&
-          data.response.data.error) ||
-        failureMessage;
+    const handleFailure = (error) => {
       dispatch({ type: actionTypes.DUPLICATE_COURSE_FAILURE });
-      dispatch(setNotification(message));
+      if (error.response && error.response.data) {
+        setReactHookFormError(setError, error.response.data.errors);
+      }
+      dispatch(setNotification(failureMessage));
     };
 
     dispatch({ type: actionTypes.DUPLICATE_COURSE_REQUEST });

@@ -7,6 +7,7 @@ const styles = {
     // To be removed once top bar has been migrated to MaterialUI.
     zIndex: 0,
     position: 'static',
+    marginBottom: 16,
   },
   leftIcon: {
     marginLeft: -16,
@@ -18,15 +19,9 @@ const styles = {
 };
 
 // Hide menu icon by default. To revert once sidebar has been ported to MaterialUI.
-const TitleBar = ({
-  style,
-  iconElementLeft,
-  iconElementRight,
-  title,
-  ...props
-}) => (
+const TitleBar = ({ iconElementLeft, iconElementRight, title, ...props }) => (
   <div style={{ flexGrow: 1 }}>
-    <AppBar style={{ ...styles.bar, ...style }} {...props}>
+    <AppBar style={{ ...styles.bar }} {...props}>
       <Toolbar>
         <div style={styles.leftIcon}>{iconElementLeft}</div>
         <Typography variant="h5" color="inherit" style={styles.text}>
@@ -40,7 +35,6 @@ const TitleBar = ({
 
 TitleBar.propTypes = {
   onClick: PropTypes.func,
-  style: PropTypes.object,
   iconElementLeft: PropTypes.node,
   iconElementRight: PropTypes.node,
   title: PropTypes.node,

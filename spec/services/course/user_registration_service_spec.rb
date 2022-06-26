@@ -74,6 +74,59 @@ RSpec.describe Course::UserRegistrationService, type: :service do
             expect(subject.send(:claim_course_registration_code, registration)).to be_truthy
           end.to change { course.course_users.reload.count }.by(1)
         end
+
+        context 'when role is not specified' do
+          it 'associates the user as student' do
+            expect(subject.send(:claim_course_registration_code, registration)).to be_truthy
+            expect(course.course_users.find_by(user_id: user.id)).to be_present
+            expect(course.course_users.find_by(user_id: user.id).role).to eq('student')
+          end
+        end
+
+        context 'when timeline algorithm is not specified and \
+        default course timeline setting is fomo' do
+          before do
+            course.update!(default_timeline_algorithm: 'fomo')
+          end
+          let(:registration) do
+            Course::Registration.new(course: course, user: user)
+          end
+
+          it 'sets the timeline algorithm for the user to fomo' do
+            expect(subject.send(:claim_course_registration_code, registration)).to be_truthy
+            expect(course.course_users.find_by(user_id: user.id).timeline_algorithm).to eq('fomo')
+          end
+        end
+
+        context 'when timeline algorithm is not specified and \
+        default course timeline setting is stragglers' do
+          before do
+            course.update!(default_timeline_algorithm: 'stragglers')
+          end
+          let(:registration) do
+            Course::Registration.new(course: course, user: user)
+          end
+
+          it 'sets the timeline algorithm for the user to stragglers' do
+            expect(subject.send(:claim_course_registration_code, registration)).to be_truthy
+            expect(course.course_users.find_by(user_id: user.id).timeline_algorithm).to eq('stragglers')
+          end
+        end
+
+        context 'when timeline algorithm is not specified and \
+        default course timeline setting is otot' do
+          before do
+            course.update!(default_timeline_algorithm: 'otot')
+          end
+          let(:registration) do
+            Course::Registration.new(course: course, user: user)
+          end
+
+          it 'sets the timeline algorithm for the user to otot' do
+            expect(subject.send(:claim_course_registration_code, registration)).to be_truthy
+            expect(course.course_users.find_by(user_id: user.id).timeline_algorithm).to eq('otot')
+          end
+        end
       end
 
       context 'when the wrong code is given' do
@@ -137,6 +190,54 @@ RSpec.describe Course::UserRegistrationService, type: :service do
           it 'sets phantom to true' do
             expect(subject.send(:claim_registration_code, registration)).to be_truthy
             expect(course.course_users.find_by(user_id: user.id).phantom).to be_truthy
+          end
+        end
+
+        context 'when timeline algorithm is not specified and \
+        default course timeline setting is fomo' do
+          before do
+            course.update!(default_timeline_algorithm: 'fomo')
+          end
+          let!(:invitation) { create(:course_user_invitation, course: course) }
+          let(:registration) do
+            Course::Registration.new(course: course, user: user, code: invitation.invitation_key.dup)
+          end
+
+          it 'sets the timeline algorithm for the user to fomo' do
+            expect(subject.send(:claim_registration_code, registration)).to be_truthy
+            expect(course.course_users.find_by(user_id: user.id).timeline_algorithm).to eq('fomo')
+          end
+        end
+
+        context 'when timeline algorithm is not specified and \
+        default course timeline setting is stragglers' do
+          before do
+            course.update!(default_timeline_algorithm: 'stragglers')
+          end
+          let!(:invitation) { create(:course_user_invitation, course: course) }
+          let(:registration) do
+            Course::Registration.new(course: course, user: user, code: invitation.invitation_key.dup)
+          end
+
+          it 'sets the timeline algorithm for the user to stragglers' do
+            expect(subject.send(:claim_registration_code, registration)).to be_truthy
+            expect(course.course_users.find_by(user_id: user.id).timeline_algorithm).to eq('stragglers')
+          end
+        end
+
+        context 'when timeline algorithm is not specified and \
+        default course timeline setting is otot' do
+          before do
+            course.update!(default_timeline_algorithm: 'otot')
+          end
+          let!(:invitation) { create(:course_user_invitation, course: course) }
+          let(:registration) do
+            Course::Registration.new(course: course, user: user, code: invitation.invitation_key.dup)
+          end
+
+          it 'sets the timeline algorithm for the user to otot' do
+            expect(subject.send(:claim_registration_code, registration)).to be_truthy
+            expect(course.course_users.find_by(user_id: user.id).timeline_algorithm).to eq('otot')
           end
         end
       end

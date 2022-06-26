@@ -1,7 +1,7 @@
-import { submit, SubmissionError } from 'redux-form';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CourseAPI from 'api/course';
 import { getSurveyId } from 'lib/helpers/url-helpers';
-import actionTypes, { formNames } from '../constants';
+import actionTypes from '../constants';
 import { setNotification } from './index';
 
 export function showSectionForm(formParams) {
@@ -12,13 +12,12 @@ export function hideSectionForm() {
   return { type: actionTypes.SECTION_FORM_HIDE };
 }
 
-export function submitSectionForm() {
-  return (dispatch) => {
-    dispatch(submit(formNames.SURVEY_SECTION));
-  };
-}
-
-export function createSurveySection(fields, successMessage, failureMessage) {
+export function createSurveySection(
+  fields,
+  successMessage,
+  failureMessage,
+  setError,
+) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_SURVEY_SECTION_REQUEST });
     return CourseAPI.survey.sections
@@ -35,10 +34,9 @@ export function createSurveySection(fields, successMessage, failureMessage) {
       .catch((error) => {
         dispatch({ type: actionTypes.CREATE_SURVEY_SECTION_FAILURE });
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
+          setReactHookFormError(setError, error.response.data.errors);
         }
+        dispatch(setNotification(failureMessage));
       });
   };
 }
@@ -48,6 +46,7 @@ export function updateSurveySection(
   data,
   successMessage,
   failureMessage,
+  setError,
 ) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SURVEY_SECTION_REQUEST });
@@ -65,10 +64,9 @@ export function updateSurveySection(
       .catch((error) => {
         dispatch({ type: actionTypes.UPDATE_SURVEY_SECTION_FAILURE });
         if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        } else {
-          setNotification(failureMessage)(dispatch);
+          setReactHookFormError(setError, error.response.data.errors);
         }
+        dispatch(setNotification(failureMessage));
       });
   };
 }

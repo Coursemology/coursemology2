@@ -6,9 +6,10 @@ class Course::Assessment::SkillsController < Course::ComponentController
   add_breadcrumb :index, :course_assessments_skills_path
 
   def index
+    @skills = @skills.includes(:skill_branch).group_by(&:skill_branch)
     respond_to do |format|
       format.html { render 'index' }
-      format.json { render partial: 'index' }
+      format.json { render 'index' }
     end
   end
 
@@ -17,10 +18,9 @@ class Course::Assessment::SkillsController < Course::ComponentController
 
   def create
     if @skill.save
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', title: @skill.title)
+      render '_skill_list_data', locals: { skill: @skill }, status: :ok
     else
-      render 'new'
+      render json: { errors: @skill.errors }, status: :bad_request
     end
   end
 
@@ -29,20 +29,23 @@ class Course::Assessment::SkillsController < Course::ComponentController
 
   def update
     if @skill.update(skill_params)
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', title: @skill.title)
+      render '_skill_list_data', locals: { skill: @skill }, status: :ok
     else
-      render 'edit'
+      render json: { errors: @skill.errors }, status: :bad_request
     end
   end
 
   def destroy
     if @skill.destroy
-      redirect_to course_assessments_skills_path(current_course),
-                  success: t('.success', skill: @skill.title)
+      head :ok
     else
-      redirect_to course_assessments_skills_path(current_course),
-                  danger: t('.failure', error: @skill.errors.full_messages.to_sentence)
+      head :bad_request
+    end
+  end
+
+  def options
+    respond_to do |format|
+      format.json { render partial: 'options' }
     end
   end
 

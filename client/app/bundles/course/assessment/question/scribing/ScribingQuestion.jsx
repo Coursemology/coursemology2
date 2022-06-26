@@ -1,27 +1,35 @@
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getFormValues } from 'redux-form';
-
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import NotificationPopup from 'lib/containers/NotificationPopup';
 import { getScribingId } from 'lib/helpers/url-helpers';
 import ScribingQuestionForm from './containers/ScribingQuestionForm';
 import * as scribingQuestionActionCreators from './actions/scribingQuestionActionCreators';
-import { formNames } from './constants';
 import { questionShape } from './propTypes';
+import translations from './containers/ScribingQuestionForm/ScribingQuestionForm.intl';
 
 function buildInitialValues(scribingQuestion) {
   return scribingQuestion.question
     ? {
-        question_scribing: {
-          title: scribingQuestion.question.title,
-          description: scribingQuestion.question.description,
-          staff_only_comments: scribingQuestion.question.staff_only_comments,
-          maximum_grade: scribingQuestion.question.maximum_grade || undefined,
-          skill_ids: scribingQuestion.question.skill_ids,
-          attachment: scribingQuestion.question.attachment || {},
-        },
+        title: scribingQuestion.question.title || '',
+        description: scribingQuestion.question.description || '',
+        staff_only_comments:
+          scribingQuestion.question.staff_only_comments || '',
+        maximum_grade: scribingQuestion.question.maximum_grade || '',
+        skill_ids: scribingQuestion.question.skill_ids,
+        attachment: scribingQuestion.question.attachment || {},
       }
-    : {};
+    : {
+        title: '',
+        description: '',
+        staff_only_comments: '',
+        maximum_grade: '',
+        skill_ids: [],
+        attachment: {},
+      };
 }
 
 function mapStateToProps({ scribingQuestion, ...state }) {
@@ -29,7 +37,6 @@ function mapStateToProps({ scribingQuestion, ...state }) {
     ...state,
     scribingQuestion,
     initialValues: buildInitialValues(scribingQuestion),
-    formValues: getFormValues(formNames.SCRIBING_QUESTION)(state),
     scribingId: getScribingId(),
   };
 }
@@ -38,31 +45,45 @@ const propTypes = {
   dispatch: PropTypes.func.isRequired,
   scribingQuestion: PropTypes.shape({
     question: questionShape,
-    is_loading: PropTypes.bool,
+    isLoading: PropTypes.bool,
   }).isRequired,
-  formValues: PropTypes.shape({
-    question_scribing: PropTypes.shape(questionShape),
-  }),
-  initialValues: PropTypes.object,
+  intl: PropTypes.object,
   scribingId: PropTypes.string,
 };
 
 const ScribingQuestion = (props) => {
-  const { dispatch, scribingQuestion, formValues, initialValues, scribingId } =
-    props;
+  const { dispatch, intl, scribingId, scribingQuestion } = props;
   const actions = bindActionCreators(scribingQuestionActionCreators, dispatch);
+  const initialValues = buildInitialValues(scribingQuestion);
+
+  useEffect(() => {
+    if (scribingId) {
+      actions.fetchScribingQuestion(
+        intl.formatMessage(translations.fetchFailureMessage),
+      );
+    } else {
+      actions.fetchSkills();
+    }
+  }, []);
+
+  if (scribingQuestion.isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
-    <ScribingQuestionForm
-      actions={actions}
-      data={scribingQuestion}
-      formValues={formValues}
-      initialValues={initialValues}
-      scribingId={scribingId}
-    />
+    <>
+      <ScribingQuestionForm
+        actions={actions}
+        data={scribingQuestion}
+        initialValues={initialValues}
+        intl={intl}
+        scribingId={scribingId}
+      />
+      <NotificationPopup />
+    </>
   );
 };
 
 ScribingQuestion.propTypes = propTypes;
 
-export default connect(mapStateToProps)(ScribingQuestion);
+export default connect(mapStateToProps)(injectIntl(ScribingQuestion));

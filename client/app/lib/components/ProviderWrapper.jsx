@@ -1,16 +1,18 @@
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
-import { IntlProvider, addLocaleData } from 'react-intl';
+import { IntlProvider } from 'react-intl';
+import { ToastContainer } from 'react-toastify';
 import { i18nLocale } from 'lib/helpers/server-context';
 import { createTheme, adaptV4Theme, ThemeProvider } from '@mui/material/styles';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import zh from 'react-intl/locale-data/zh';
+import { injectStyle } from 'react-toastify/dist/inject-style';
 import palette from '../../theme/palette';
 import { grey } from '../../theme/colors';
-
 import ErrorBoundary from './ErrorBoundary';
 import translations from '../../../build/locales/locales.json';
+
+injectStyle();
 
 const propTypes = {
   store: PropTypes.shape({
@@ -84,23 +86,35 @@ const themeSettings = {
   },
 };
 
-const themeV5 = createTheme(adaptV4Theme(themeSettings));
+export const adaptedTheme = adaptV4Theme(themeSettings);
+
+const themeV5 = createTheme(adaptedTheme);
 
 const ProviderWrapper = ({ store, persistor, children }) => {
-  const availableForeignLocales = { zh };
   const localeWithoutRegionCode = i18nLocale.toLowerCase().split(/[_-]+/)[0];
 
   let messages;
-  if (
-    localeWithoutRegionCode !== 'en' &&
-    availableForeignLocales[localeWithoutRegionCode]
-  ) {
-    addLocaleData(availableForeignLocales[localeWithoutRegionCode]);
+  if (localeWithoutRegionCode !== 'en') {
     messages =
       translations[localeWithoutRegionCode] || translations[i18nLocale];
   }
 
-  let providers = children;
+  let providers = (
+    <>
+      {children}
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    </>
+  );
 
   if (store && persistor) {
     providers = (
@@ -111,7 +125,7 @@ const ProviderWrapper = ({ store, persistor, children }) => {
   }
 
   providers = (
-    <IntlProvider locale={i18nLocale} messages={messages}>
+    <IntlProvider locale={i18nLocale} messages={messages} textComponent="span">
       <ThemeProvider theme={themeV5}>{providers}</ThemeProvider>
     </IntlProvider>
   );

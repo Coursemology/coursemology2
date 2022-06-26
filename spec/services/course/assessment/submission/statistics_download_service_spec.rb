@@ -24,7 +24,7 @@ RSpec.describe Course::Assessment::Submission::StatisticsDownloadService do
       context 'when downloading statistics' do
         it 'download empty statistics' do
           empty_path = Course::Assessment::Submission::StatisticsDownloadService.
-                       send(:download, course_staff.user, nil)
+                       send(:download, course, course_staff.user, nil)
           expect(File.exist?(empty_path)).to be_truthy
           line_count = File.open(empty_path, 'r').readlines.size
           expect(line_count).to eq(1)
@@ -33,7 +33,7 @@ RSpec.describe Course::Assessment::Submission::StatisticsDownloadService do
         it 'download non-empty statistics' do
           submission_ids = [submission1.id, submission2.id]
           non_empty_path = Course::Assessment::Submission::StatisticsDownloadService.
-                           send :download, course_staff.user, submission_ids
+                           send :download, course, course_staff.user, submission_ids
           expect(File.exist?(non_empty_path)).to be_truthy
           line_count = File.open(non_empty_path, 'r').readlines.size
           expect(line_count).to eq(1 + submission_ids.length)

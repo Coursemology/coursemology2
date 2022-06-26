@@ -26,10 +26,13 @@ const config = {
   },
 
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
-      lib: path.resolve('./app/lib'),
       api: path.resolve('./app/api'),
+      lib: path.resolve('./app/lib'),
+      theme: path.resolve('./app/theme'),
+      types: path.resolve('./app/types'),
+      utilities: path.resolve('./app/utilities'),
       course: path.resolve('./app/bundles/course'),
       testUtils: path.resolve('./app/__test__/utils'),
     },
@@ -69,19 +72,18 @@ const config = {
         exclude: /node_modules/,
       },
       {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+      {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.scss$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
-        include: [
-          path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
-          path.resolve(
-            __dirname,
-            'app/lib/styles/MaterialSummernoteModal.scss',
-          ),
-        ],
+        include: [path.resolve(__dirname, 'app/lib/styles')],
       },
       {
         test: /\.scss$/,
@@ -98,14 +100,7 @@ const config = {
           },
           'sass-loader',
         ],
-        exclude: [
-          /node_modules/,
-          path.resolve(__dirname, 'app/lib/styles/MaterialSummernote.scss'),
-          path.resolve(
-            __dirname,
-            'app/lib/styles/MaterialSummernoteModal.scss',
-          ),
-        ],
+        exclude: [/node_modules/, path.resolve(__dirname, 'app/lib/styles')],
       },
       {
         test: require.resolve('jquery'),

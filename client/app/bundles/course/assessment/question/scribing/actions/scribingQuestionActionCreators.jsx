@@ -1,11 +1,12 @@
 import CourseAPI from 'api/course';
+import { setNotification } from 'lib/actions';
 import history from 'lib/history';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import {
   getCourseId,
   getAssessmentId,
   getScribingId,
 } from 'lib/helpers/url-helpers';
-import { SubmissionError } from 'redux-form';
 import actionTypes from '../constants';
 
 // Helper function to redirect to assessment main page
@@ -25,16 +26,13 @@ export function fetchSkills() {
           skills: response.data.skills,
         });
       })
-      .catch((error) => {
+      .catch(() => {
         dispatch({ type: actionTypes.FETCH_SKILLS_FAILURE });
-        if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        }
       });
   };
 }
 
-export function fetchScribingQuestion() {
+export function fetchScribingQuestion(failureMessage) {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SCRIBING_QUESTION_REQUEST });
     return CourseAPI.assessment.question.scribing
@@ -46,11 +44,9 @@ export function fetchScribingQuestion() {
           data: response.data,
         });
       })
-      .catch((error) => {
+      .catch(() => {
         dispatch({ type: actionTypes.FETCH_SCRIBING_QUESTION_FAILURE });
-        if (error.response && error.response.data) {
-          throw new SubmissionError(error.response.data.errors);
-        }
+        setNotification(failureMessage)(dispatch);
       });
   };
 }
@@ -62,36 +58,26 @@ function processFields(fields) {
 
   // Modify the structure of `parsedFields` so it matches what non React forms
   // pass to the Rails backend.
-  parsedFields.question_scribing.question_assessment = {};
-  if (fields.question_scribing.skill_ids.length < 1) {
-    parsedFields.question_scribing.question_assessment.skill_ids = [''];
+  parsedFields.question_assessment = {};
+  if (fields.skill_ids.length < 1) {
+    parsedFields.question_assessment.skill_ids = [''];
   } else {
-    parsedFields.question_scribing.question_assessment.skill_ids =
-      parsedFields.question_scribing.skill_ids;
+    parsedFields.question_assessment.skill_ids = parsedFields.skill_ids;
   }
 
-  if (fields.question_scribing.attachment) {
-    parsedFields.question_scribing.file =
-      fields.question_scribing.attachment.file;
+  if (fields.attachment) {
+    parsedFields.file = fields.attachment.file;
   } else {
-    delete parsedFields.question_scribing.file;
+    delete parsedFields.file;
   }
 
-  delete parsedFields.question_scribing.attachment;
-  delete parsedFields.question_scribing.skill_ids;
+  delete parsedFields.attachment;
+  delete parsedFields.skill_ids;
 
-  return parsedFields;
+  return { question_scribing: parsedFields };
 }
 
-export function clearSubmitError() {
-  return (dispatch) => {
-    dispatch({
-      type: actionTypes.CLEAR_SUBMIT_ERROR,
-    });
-  };
-}
-
-export function createScribingQuestion(fields) {
+export function createScribingQuestion(fields, failureMessage, setError) {
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_SCRIBING_QUESTION_REQUEST });
     const parsedFields = processFields(fields);
@@ -108,14 +94,21 @@ export function createScribingQuestion(fields) {
       .catch((error) => {
         dispatch({
           type: actionTypes.CREATE_SCRIBING_QUESTION_FAILURE,
-          saveErrors:
-            error.response && error.response.data && error.response.data.errors,
         });
+        setNotification(failureMessage)(dispatch);
+        if (error.response && error.response.data) {
+          setReactHookFormError(setError, error.response.data.errors);
+        }
       });
   };
 }
 
-export function updateScribingQuestion(questionId, fields) {
+export function updateScribingQuestion(
+  questionId,
+  fields,
+  failureMessage,
+  setError,
+) {
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_SCRIBING_QUESTION_REQUEST });
     const parsedFields = processFields(fields);
@@ -131,9 +124,11 @@ export function updateScribingQuestion(questionId, fields) {
       .catch((error) => {
         dispatch({
           type: actionTypes.UPDATE_SCRIBING_QUESTION_FAILURE,
-          saveErrors:
-            error.response && error.response.data && error.response.data.errors,
         });
+        setNotification(failureMessage)(dispatch);
+        if (error.response && error.response.data) {
+          setReactHookFormError(setError, error.response.data.errors);
+        }
       });
   };
 }

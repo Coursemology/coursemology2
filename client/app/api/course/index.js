@@ -14,11 +14,17 @@ import UserNotificationsAPI from './UserNotifications';
 import UserEmailSubscriptionsAPI from './UserEmailSubscriptions';
 import GroupsAPI from './Groups';
 import LearningMapAPI from './LearningMap';
+import CoursesAPI from './Courses';
+import UsersAPI from './Users';
+import LeaderboardAPI from './Leaderboard';
+import AnnouncementsAPI from './Announcements';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
+  announcements: new AnnouncementsAPI(),
   assessment: AssessmentAPI,
   comments: new CommentsAPI(),
+  courses: new CoursesAPI(),
   virtualClassrooms: new VirtualClassroomsAPI(),
   materials: new MaterialsAPI(),
   materialFolders: new MaterialFoldersAPI(),
@@ -32,6 +38,8 @@ const CourseAPI = {
   userEmailSubscriptions: new UserEmailSubscriptionsAPI(),
   groups: new GroupsAPI(),
   learningMap: new LearningMapAPI(),
+  users: new UsersAPI(),
+  leaderboard: new LeaderboardAPI(),
 };
 
 Object.freeze(CourseAPI);

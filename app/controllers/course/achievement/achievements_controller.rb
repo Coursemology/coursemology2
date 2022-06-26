@@ -2,14 +2,21 @@
 class Course::Achievement::AchievementsController < Course::Achievement::Controller
   before_action :authorize_achievement!, only: [:update]
 
-  def index # :nodoc:
-    @achievements = @achievements.includes(:conditions)
+  def index
+    @achievements = @achievements.includes([:conditions, :course_user_achievements])
   end
 
-  def show # :nodoc:
+  def show
+    @achievement_users = @achievement.course_users.without_phantom_users.students.includes([:user, :course])
+    respond_to do |format|
+      format.html { render 'index' }
+      format.json { render 'show' }
+    end
   end
 
-  def create # :nodoc:
+  def create
+    # Add achievement to the most bottom of existing achievements in a course.
+    @achievement.weight = current_course.achievements.size + 1
     if @achievement.save
       render json: { id: @achievement.id }, status: :ok
     else
@@ -17,33 +24,31 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
     end
   end
 
-  def edit # :nodoc:
+  def edit
+    respond_to do |format|
+      format.html { render 'index' }
+      format.json { render 'show' }
+    end
   end
 
-  def update # :nodoc:
+  def update
     if @achievement.update(achievement_params)
+      @achievement_users = @achievement.course_users.without_phantom_users.students.includes([:user, :course])
       respond_to do |format|
-        format.html do
-          redirect_to course_achievement_path(current_course, @achievement.id),
-                      success: t('.success')
-        end
-        format.json { head :ok }
+        format.json { render 'show' }
       end
     else
       respond_to do |format|
-        format.html { render 'edit' }
         format.json { render json: { errors: @achievement.errors }, status: :bad_request }
       end
     end
   end
 
-  def destroy # :nodoc:
+  def destroy
     if @achievement.destroy
-      redirect_to course_achievements_path(current_course),
-                  success: t('.success', title: @achievement.title)
+      head :ok
     else
-      redirect_to course_achievements_path,
-                  danger: t('.failure', error: @achievement.errors.full_messages.to_sentence)
+      head :bad_request
     end
   end
 
@@ -52,16 +57,32 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
 
     Course::Achievement.transaction do
       achievement_order_params.each_with_index do |id, index|
-        achievements_hash[id].update_attribute(:weight, index)
+        achievements_hash[id].update_column(:weight, index)
       end
     end
 
     head :ok
   end
 
+  def achievement_course_users
+    authorize!(:award, @achievement)
+    course_users = current_course.course_users.students.order_alphabetically
+    achievement_course_users = course_users.
+                               joins("LEFT JOIN course_user_achievements
+                                      ON course_users.id = course_user_achievements.course_user_id
+                                      AND course_user_achievements.achievement_id = (#{@achievement.id}) ").
+                               select('course_users.id, LTRIM(course_users.name) AS name,
+                                       course_users.phantom,
+                                       course_user_achievements.obtained_at AS "obtainedAt"')
+
+    respond_to do |format|
+      format.json { render json: { achievementCourseUsers: achievement_course_users }, status: :ok }
+    end
+  end
+
   private
 
-  def achievement_params # :nodoc:
+  def achievement_params
     @achievement_params ||= begin
       result = params.require(:achievement).
                permit(:title, :description, :weight, :published, :badge, course_user_ids: [])

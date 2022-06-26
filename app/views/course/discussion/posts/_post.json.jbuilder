@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 json.(post, :id, :title, :text)
-json.formattedText format_html(simple_format(post.text))
+json.formattedText format_ckeditor_rich_text(simple_format(post.text))
 creator = post.creator
 json.creator do
   json.name post.author_name

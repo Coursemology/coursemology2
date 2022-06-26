@@ -39,6 +39,11 @@ class Course::Assessment::Answer::ProgrammingFile < ApplicationRecord
     end
   end
 
+  def add_line
+    content.insert(0, "\r\n  ")
+    self
+  end
+
   private
 
   # Normalises the filename for use across platforms.

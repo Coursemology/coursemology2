@@ -5,12 +5,7 @@ import { Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
 import CompareArrows from '@mui/icons-material/CompareArrows';
 import Delete from '@mui/icons-material/Delete';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  intlShape,
-} from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 
@@ -189,7 +184,7 @@ const GroupUserManager = ({
   );
 
   const onFormSubmit = useCallback(
-    (data) =>
+    (data, setError) =>
       dispatch(
         updateGroup(
           categoryId,
@@ -201,6 +196,7 @@ const GroupUserManager = ({
           intl.formatMessage(translations.updateFailure, {
             groupName: group.name,
           }),
+          setError,
         ),
       ),
     [dispatch, categoryId, group.name, group.id],
@@ -438,7 +434,7 @@ GroupUserManager.propTypes = {
   groups: PropTypes.arrayOf(groupShape).isRequired,
   originalGroup: groupShape,
   courseUsers: PropTypes.arrayOf(courseUserShape).isRequired,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default connect((state) => ({

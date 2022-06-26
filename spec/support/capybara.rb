@@ -43,6 +43,15 @@ module Capybara::TestGroupHelpers
       expect(page).to have_no_selector('button.confirm-btn')
     end
 
+    # Special helper to fill in draftjs textarea defined by react.
+    #
+    # Selector should specify the class of the target +textarea+, and method targets the +div+
+    # within. This should change when the internals of the summernote react component is changed.
+    def fill_in_react_ck(selector, text)
+      react_selector = ' + div.react-ck > div.ck-editor > div.ck-editor__main > div.ck-content'
+      find(selector + react_selector).set(text)
+    end
+
     # Helper to fill in summernote textareas. Only to be used where javascript is enabled.
     #
     # The method provides an alternative method to fill up the textarea, which would
@@ -54,15 +63,6 @@ module Capybara::TestGroupHelpers
       $(editorSelector).summernote('editor.insertText', '#{text}');
       JS
       execute_script(script)
-    end
-
-    # Special helper to fill in summernote textarea defined by react.
-    #
-    # Selector should specify the class of the target +textarea+, and method targets the +div+
-    # within. This should change when the internals of the summernote react component is changed.
-    def fill_in_react_summernote(selector, text)
-      react_selector = ' + div.material-summernote > div > div[id^="react-summernote-"]'
-      fill_in_summernote(selector + react_selector, text)
     end
 
     # Special helper to fill in summernote textarea defined in rails.

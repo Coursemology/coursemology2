@@ -2,7 +2,7 @@ import { Component } from 'react';
 import { blueGrey, green } from '@mui/material/colors';
 
 import PropTypes from 'prop-types';
-import { injectIntl, intlShape } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import { postPackShape } from 'course/assessment/submission/propTypes';
 import ForumPost, { translations } from 'course/forum/components/ForumPost';
@@ -71,7 +71,7 @@ ForumPostOption.propTypes = {
   isSelected: PropTypes.bool.isRequired,
   onSelectPostPack: PropTypes.func.isRequired,
   style: PropTypes.object,
-  intl: intlShape,
+  intl: PropTypes.object,
 };
 
 export default injectIntl(ForumPostOption);

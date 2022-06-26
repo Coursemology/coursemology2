@@ -94,7 +94,7 @@ class LessonPlanEdit extends Component {
 
     return (
       <>
-        {this.renderHeader()}
+        {this.props.canManageLessonPlan && this.renderHeader()}
         <div style={styles.page}>
           <table>
             {this.renderTableHeader()}
@@ -109,9 +109,11 @@ class LessonPlanEdit extends Component {
 LessonPlanEdit.propTypes = {
   groups: lessonPlanTypesGroups.isRequired,
   columnsVisible: PropTypes.shape({}).isRequired,
+  canManageLessonPlan: PropTypes.bool.isRequired,
 };
 
 export default connect((state) => ({
   groups: state.lessonPlan.groups,
   columnsVisible: state.flags.editPageColumnsVisible,
+  canManageLessonPlan: state.flags.canManageLessonPlan,
 }))(LessonPlanEdit);

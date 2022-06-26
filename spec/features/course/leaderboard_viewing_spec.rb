@@ -10,7 +10,7 @@ RSpec.describe 'Course: Leaderboard: View' do
       login_as(user, scope: :user)
     end
 
-    context 'As a student' do
+    context 'As a student', js: true do
       let!(:students) { create_list(:course_student, 2, course: course) }
       let!(:phantom_user) { create(:course_student, :phantom, course: course) }
       let(:user) { students[0].user }
@@ -19,14 +19,14 @@ RSpec.describe 'Course: Leaderboard: View' do
         create(:course_experience_points_record, points_awarded: 200, course_user: students[0])
         visit course_leaderboard_path(course)
 
-        within find('.leaderboard-level') do
+        within find('#leaderboard-level') do
           sorted_course_users = course.course_users.students.without_phantom_users.
                                 ordered_by_experience_points
 
-          sorted_course_users.each.with_index(1) do |student, index|
+          sorted_course_users.each do |student|
             within find(content_tag_selector(student)) do
-              expect(page).to have_text(index)
-              expect(page).to have_text(I18n.t('course.leaderboards.show.level'))
+              expect(page).to have_text(student.name)
+              expect(page).to have_link(nil, href: course_user_path(course, student))
             end
           end
         end
@@ -38,16 +38,17 @@ RSpec.describe 'Course: Leaderboard: View' do
         create(:course_user_achievement, course_user: students[0])
         visit course_leaderboard_path(course)
 
-        within find('.leaderboard-achievement') do
+        within find('#leaderboard-achievement') do
           sorted_course_users = course.course_users.students.without_phantom_users.
                                 ordered_by_achievement_count
 
-          sorted_course_users.each.with_index(1) do |student, index|
+          sorted_course_users.each do |student|
             within find(content_tag_selector(student)) do
-              expect(page).to have_text(index)
-              student.achievements.ordered_by_date_obtained.take(5).each do |achievement|
-                expect(page).to have_content_tag_for(achievement)
-              end
+              expect(page).to have_text(student.name)
+            end
+            student.achievements.ordered_by_date_obtained.take(5).each do |achievement|
+              expect(page).to have_content_tag_for(achievement)
+              expect(page).to have_link(nil, href: course_achievement_path(course, achievement))
             end
           end
         end
@@ -55,7 +56,7 @@ RSpec.describe 'Course: Leaderboard: View' do
         expect(page).to have_no_content_tag_for(phantom_user)
       end
 
-      context 'when the group leaderboard is enabled for the course' do
+      context 'when the group leaderboard is enabled for the course', js: true do
         let!(:groups) { create_list(:course_group, 2, course: course) }
         let!(:group_user1) do
           create(:course_group_user, course: course, course_user: students[0], group: groups[0])
@@ -74,15 +75,15 @@ RSpec.describe 'Course: Leaderboard: View' do
         scenario 'I can view the group leaderboard by experience points' do
           create(:course_experience_points_record, points_awarded: 200, course_user: students[0])
 
-          visit group_course_leaderboard_path(course)
-          expect(page).to have_text(I18n.t('course.leaderboards.groups.header'))
+          visit course_leaderboard_path(course)
+          expect(page).to have_selector('button#group-leaderboard-tab')
+          find('button#group-leaderboard-tab').click
 
-          within find('.leaderboard-points') do
+          within find('#group-leaderboard-level') do
             sorted_course_groups = course.groups.ordered_by_experience_points
 
-            sorted_course_groups.each.with_index(1) do |group, index|
+            sorted_course_groups.each do |group|
               within find(content_tag_selector(group)) do
-                expect(page).to have_text(index)
                 expect(page).to have_text(group.name)
               end
             end
@@ -92,15 +93,15 @@ RSpec.describe 'Course: Leaderboard: View' do
         scenario 'I can view the group leaderboard by achievement count' do
           create(:course_user_achievement, course_user: students[0])
 
-          visit group_course_leaderboard_path(course)
-          expect(page).to have_text(I18n.t('course.leaderboards.groups.header'))
+          visit course_leaderboard_path(course)
+          expect(page).to have_selector('button#group-leaderboard-tab')
+          find('button#group-leaderboard-tab').click
 
-          within find('.leaderboard-achievement') do
+          within find('#group-leaderboard-achievement') do
             sorted_course_groups = course.groups.ordered_by_average_achievement_count
 
-            sorted_course_groups.each.with_index(1) do |group, index|
+            sorted_course_groups.each do |group|
               within find(content_tag_selector(group)) do
-                expect(page).to have_text(index)
                 expect(page).to have_text(group.name)
               end
             end

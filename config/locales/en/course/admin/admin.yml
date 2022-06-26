@@ -18,6 +18,9 @@ en:
           show_personalized_timeline_features_label: >
             If enabled, staff will be able to change the timeline algorithm for course users as
             well as manipulate individual course users' personalized timelines.
+          default_timeline_algorithm_label: >
+            Sets the default timeline algorithm for the course. New users enrolled will have this
+            timeline algorithm applied.
           time_zone_label: >
             Sets the time zone for the course. Consolidated email reminders will be sent out
             just after midnight for the time zone indicated here.

@@ -83,6 +83,10 @@ class Course::Settings::Email < ApplicationRecord
   def self.after_assessment_category_initialize(category)
     return if category.persisted? || !category.setting_emails.empty? || !category.course
 
+    build_assessment_email_settings(category)
+  end
+
+  def self.build_assessment_email_settings(category)
     default_email_settings = [{ assessments: :opening_reminder },
                               { assessments: :closing_reminder },
                               { assessments: :closing_reminder_summary },

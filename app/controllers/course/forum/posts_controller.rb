@@ -30,7 +30,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
   def edit
     # Sanitize input before passing to the form helper for display when editing in case the text
     # has not been sanitized before save.
-    @post.text = helpers.format_html(@post.text)
+    @post.text = helpers.format_ckeditor_rich_text(@post.text)
   end
 
   def update

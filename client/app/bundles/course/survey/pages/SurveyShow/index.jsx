@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, intlShape } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { createDragDropManager } from 'dnd-core';
@@ -84,7 +84,7 @@ const SurveyShow = ({
 SurveyShow.propTypes = {
   dispatch: PropTypes.func.isRequired,
   survey: surveyShape,
-  intl: intlShape.isRequired,
+  intl: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   courseId: PropTypes.string.isRequired,
