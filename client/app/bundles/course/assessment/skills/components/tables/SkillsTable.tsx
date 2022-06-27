@@ -212,9 +212,12 @@ const SkillsTable: FC<Props> = (props: Props) => {
     indexSelected !== -1 &&
     tableData[indexSelected] &&
     tableData[indexSelected].id !== -1;
-  
-  const branchHasSkills = tableType === TableEnum.SkillBranches && isOpen
-    && data[indexSelected].skills && (data[indexSelected].skills ?? []).length > 0;
+
+  const branchHasSkills =
+    tableType === TableEnum.SkillBranches &&
+    isOpen &&
+    data[indexSelected].skills &&
+    (data[indexSelected].skills ?? []).length > 0;
 
   const options: TableOptions = {
     download: false,

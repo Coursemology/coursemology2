@@ -48,13 +48,22 @@ const translations = defineMessages({
   },
   deletionSkillBranchWithSkills: {
     id: 'course.assessment.skills.components.SkillManagementButtons.deletionSkillBranchWithSkills',
-    defaultMessage: ' WARNING: There are skills in this skill branch which will also be deleted.',
-  }
+    defaultMessage:
+      ' WARNING: There are skills in this skill branch which will also be deleted.',
+  },
 });
 
 const SkillManagementButtons: FC<Props> = (props) => {
-  const { id, canUpdate, canDestroy, intl, isSkillBranch, data, editClick, branchHasSkills } =
-    props;
+  const {
+    id,
+    canUpdate,
+    canDestroy,
+    intl,
+    isSkillBranch,
+    data,
+    editClick,
+    branchHasSkills,
+  } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -92,8 +101,8 @@ const SkillManagementButtons: FC<Props> = (props) => {
 
   let message = isSkillBranch
     ? intl.formatMessage(translations.deletionSkillBranchConfirmation)
-    : intl.formatMessage(translations.deletionSkillConfirmation)
-  
+    : intl.formatMessage(translations.deletionSkillConfirmation);
+
   if (branchHasSkills) {
     message += intl.formatMessage(translations.deletionSkillBranchWithSkills);
   }
