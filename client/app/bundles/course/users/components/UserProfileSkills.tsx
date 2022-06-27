@@ -17,7 +17,7 @@ interface Props extends WrappedComponentProps {
 const translations = defineMessages({
   topicMasteryHeader: {
     id: 'course.users.show.topicMasteryHeader',
-    defaultMessage: 'Topic Mastery',
+    defaultMessage: 'Skill Mastery',
   },
   gradeForSkill: {
     id: 'course.users.show.gradeForSkill',
