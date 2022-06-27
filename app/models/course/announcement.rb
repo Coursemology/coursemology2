@@ -6,6 +6,8 @@ class Course::Announcement < ApplicationRecord
   acts_as_readable on: :updated_at
   has_many_attachments on: :content
 
+  before_save :sanitize_text
+
   validates :title, length: { maximum: 255 }, presence: true
   validates :sticky, inclusion: { in: [true, false] }
   validates :start_at, presence: true
@@ -22,5 +24,9 @@ class Course::Announcement < ApplicationRecord
 
   def to_partial_path
     'course/announcements/announcement'
+  end
+
+  def sanitize_text
+    self.content = ApplicationController.helpers.format_ckeditor_rich_text(content)
   end
 end

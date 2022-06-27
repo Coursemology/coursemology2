@@ -4,6 +4,7 @@ json.id announcement.id
 json.title announcement.title
 json.content announcement.content
 json.startTime announcement.start_at
+json.endTime announcement.end_at
 
 course_user = announcement.creator.course_users.find_by(course: controller.current_course)
 if course_user
