@@ -18,6 +18,7 @@ interface Props extends WrappedComponentProps {
   canDestroy?: boolean;
   editClick: (data: SkillBranchMiniEntity | SkillMiniEntity) => void;
   data: SkillBranchMiniEntity | SkillMiniEntity;
+  branchHasSkills: boolean;
 }
 
 const translations = defineMessages({
@@ -45,10 +46,14 @@ const translations = defineMessages({
     id: 'course.assessment.skills.components.SkillManagementButtons.deleteBranchConfirmation',
     defaultMessage: 'Are you sure you wish to delete this skill branch?',
   },
+  deletionSkillBranchWithSkills: {
+    id: 'course.assessment.skills.components.SkillManagementButtons.deletionSkillBranchWithSkills',
+    defaultMessage: ' WARNING: There are skills in this skill branch which will also be deleted.',
+  }
 });
 
 const SkillManagementButtons: FC<Props> = (props) => {
-  const { id, canUpdate, canDestroy, intl, isSkillBranch, data, editClick } =
+  const { id, canUpdate, canDestroy, intl, isSkillBranch, data, editClick, branchHasSkills } =
     props;
   const dispatch = useDispatch<AppDispatch>();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -85,6 +90,14 @@ const SkillManagementButtons: FC<Props> = (props) => {
       .finally(() => setIsDeleting(false));
   };
 
+  let message = isSkillBranch
+    ? intl.formatMessage(translations.deletionSkillBranchConfirmation)
+    : intl.formatMessage(translations.deletionSkillConfirmation)
+  
+  if (branchHasSkills) {
+    message += intl.formatMessage(translations.deletionSkillBranchWithSkills);
+  }
+
   const managementButtons = (
     <div style={{ whiteSpace: 'nowrap', textAlign: 'end' }}>
       {canUpdate && (
@@ -98,11 +111,7 @@ const SkillManagementButtons: FC<Props> = (props) => {
       )}
       {canDestroy && (
         <DeleteButton
-          message={
-            isSkillBranch
-              ? intl.formatMessage(translations.deletionSkillBranchConfirmation)
-              : intl.formatMessage(translations.deletionSkillConfirmation)
-          }
+          message={message}
           className={
             isSkillBranch ? `skill-branch-delete-${id}` : `skill-delete-${id}`
           }

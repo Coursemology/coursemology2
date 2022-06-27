@@ -148,7 +148,7 @@ const SkillsIndex: FC<Props> = (props) => {
   return (
     <>
       <PageHeader title={intl.formatMessage({ ...translations.skills })} />
-      <Grid container direction="row" columnGap={0.2} maxHeight="70vh">
+      <Grid container direction="row" columnGap={0.2}>
         <Grid item xs id="skill-branches">
           <SkillsTable
             data={data}
