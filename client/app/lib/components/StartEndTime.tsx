@@ -49,6 +49,7 @@ const StartEndTime: FC<Props> = (props) => {
   if (timeInfo.effectiveTime === null) {
     return <div>-</div>;
   }
+
   return (
     <div style={{ display: 'flex' }}>
       <div>{getFullDateTime(timeInfo.effectiveTime)}</div>
@@ -69,9 +70,9 @@ const StartEndTime: FC<Props> = (props) => {
           <CustomTooltip
             title={
               timeInfo.referenceTime
-                ? `${intl.formatMessage(translations.timeTooltip)} ${
-                    timeInfo.referenceTime
-                  }`
+                ? `${intl.formatMessage(
+                    translations.timeTooltip,
+                  )} ${getFullDateTime(timeInfo.referenceTime)}`
                 : intl.formatMessage(translations.altTimeTooltip)
             }
             arrow
