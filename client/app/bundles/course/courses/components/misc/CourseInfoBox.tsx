@@ -42,6 +42,7 @@ const CourseInfoBox: FC<Props> = (props) => {
             style={{
               textAlign: 'center',
               marginBottom: 0,
+              marginTop: 10,
             }}
             dangerouslySetInnerHTML={{ __html: course.logoUrl }}
           />
