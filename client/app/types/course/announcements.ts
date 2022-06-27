@@ -1,5 +1,7 @@
 import { Permissions } from 'types';
 
+export type AnnouncementPermissions = Permissions<'canCreate'>;
+
 export type AnnouncementListDataPermissions = Permissions<
   'canEdit' | 'canDelete'
 >;
@@ -9,6 +11,7 @@ export interface AnnouncementListData {
   title: string;
   content: string; // HTML String
   startTime: string;
+  endTime: string;
 
   // Either this exists
   courseUserId?: number;
@@ -24,11 +27,14 @@ export interface AnnouncementListData {
   permissions: AnnouncementListDataPermissions;
 }
 
+export interface AnnouncementData extends AnnouncementListData {}
+
 export interface AnnouncementMiniEntity {
   id: number;
   title: string;
   content: string; // HTML String
   startTime: string;
+  endTime: string;
 
   // Either this exists
   courseUserId?: number;
@@ -42,4 +48,17 @@ export interface AnnouncementMiniEntity {
   isSticky: boolean;
   isCurrentlyActive: boolean;
   permissions: AnnouncementListDataPermissions;
+}
+
+export interface AnnouncementEntity extends AnnouncementMiniEntity {}
+export interface AnnouncementFormData {
+  title: string;
+  content: string;
+  sticky: boolean;
+  startAt: string;
+  endAt: string;
+}
+
+export interface AnnouncementEditFormData extends AnnouncementFormData {
+  id: number;
 }

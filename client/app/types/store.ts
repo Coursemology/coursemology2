@@ -7,12 +7,14 @@ import { LeaderboardState } from 'bundles/course/leaderboard/types';
 import { SkillState } from 'bundles/course/assessment/skills/types';
 import { InvitationsState } from 'bundles/course/user-invitations/types';
 import { EnrolRequestsState } from 'bundles/course/enrol-requests/types';
+import { AnnouncementsState } from 'bundles/course/announcements/types';
 
 /**
  * Describes the overall shape of the application's Redux store state.
  */
 export interface AppState {
   achievements: AchievementsState;
+  announcements: AnnouncementsState;
   courses: CoursesState;
   users: UsersState;
   leaderboard: LeaderboardState;

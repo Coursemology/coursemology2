@@ -1,6 +1,34 @@
-import { DeleteAnnouncementAction, DELETE_ANNOUNCEMENT } from './types';
+import {
+  AnnouncementData,
+  AnnouncementListData,
+  AnnouncementPermissions,
+} from 'types/course/announcements';
+import {
+  DELETE_ANNOUNCEMENT,
+  SAVE_ANNOUNCEMENT_LIST,
+  DeleteAnnouncementAction,
+  SaveAnnouncementListAction,
+  SAVE_ANNOUNCEMENT,
+  SaveAnnouncementAction,
+} from './types';
 
-// eslint-disable-next-line import/prefer-default-export
+export function saveAnnouncementList(
+  announcementList: AnnouncementListData[],
+  announcementPermissions: AnnouncementPermissions,
+): SaveAnnouncementListAction {
+  return {
+    type: SAVE_ANNOUNCEMENT_LIST,
+    announcementList,
+    announcementPermissions,
+  };
+}
+
+export function saveAnnouncement(
+  announcement: AnnouncementData,
+): SaveAnnouncementAction {
+  return { type: SAVE_ANNOUNCEMENT, announcement };
+}
+
 export function deleteAnnouncement(
   announcementId: number,
 ): DeleteAnnouncementAction {

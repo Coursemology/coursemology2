@@ -1,11 +1,12 @@
-import { FC, useEffect } from 'react';
+import { FC, memo, useEffect } from 'react';
 import { Pagination as PaginationMUI } from '@mui/material';
+import equal from 'fast-deep-equal';
 
 interface Props {
   // Typing is any as it can be an array of any type
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   items: any[];
-  itemsPerPage: 12 | 24 | 36 | 42;
+  itemsPerPage: number;
   // Typing is also any, following from items: any[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setSlicedItems: React.Dispatch<React.SetStateAction<any[]>>;
@@ -69,4 +70,9 @@ const Pagination: FC<Props> = (props) => {
   );
 };
 
-export default Pagination;
+export default memo(Pagination, (prevProps, nextProps) => {
+  return (
+    equal(prevProps.items, nextProps.items) &&
+    equal(prevProps.page, nextProps.page)
+  );
+});
