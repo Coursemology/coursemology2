@@ -122,7 +122,7 @@ const PendingTodosTable: FC<Props> = (props) => {
               getCourseId(),
               todo.itemActableId,
             );
-          } else {
+          } else if (todo.canAttempt) {
             accessButtonText = intl.formatMessage(
               translations.accessButtonAttempt,
             );
@@ -165,6 +165,11 @@ const PendingTodosTable: FC<Props> = (props) => {
           accessButtonText={accessButtonText}
           accessButtonLink={accessButtonLink}
           isVideo={todoType === 'videos'}
+          isNewAttempt={
+            todo.progress === 'not_started' &&
+            todo.canAccess! &&
+            todo.canAttempt!
+          }
         />
         <TodoIgnoreButton
           ignoreLink={getIgnoreTodoURL(getCourseId(), todo.id)}
