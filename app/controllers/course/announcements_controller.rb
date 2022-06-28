@@ -8,7 +8,7 @@ class Course::AnnouncementsController < Course::ComponentController
       format.html
       format.json do
         @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
-        @announcements = @announcements.page(page_param).with_read_marks_for(current_user)
+        @announcements = @announcements.with_read_marks_for(current_user)
         mark_announcements_as_read
       end
     end
