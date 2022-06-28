@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, memo } from 'react';
 import {
   defineMessages,
   injectIntl,
@@ -9,24 +9,36 @@ import { Box, Typography } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import Note from 'lib/components/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
-import { InvitationEntity } from 'types/course/userInvitations';
+import {
+  InvitationMiniEntity,
+  InvitationRowData,
+} from 'types/course/userInvitations';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import sharedConstants from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/components/tables/translations';
+import equal from 'fast-deep-equal';
 import ResendInvitationsButton from '../buttons/ResendAllInvitationsButton';
 
 interface Props extends WrappedComponentProps {
   title: string;
-  invitations: InvitationEntity[];
+  invitations: InvitationMiniEntity[];
   pendingInvitations?: boolean;
   acceptedInvitations?: boolean;
-  renderRowActionComponent?: (any) => ReactElement;
+  renderRowActionComponent?: (invitation: InvitationRowData) => ReactElement;
 }
 
 const translations = defineMessages({
   noInvitations: {
     id: 'course.userInvitations.components.tables.UserInvitationsTable.noInvitations',
     defaultMessage: 'There are no {invitationType}',
+  },
+  pending: {
+    id: 'course.userInvitations.components.tables.UserInvitationsTable.invitationType.pending',
+    defaultMessage: 'pending',
+  },
+  accepted: {
+    id: 'course.userInvitations.components.tables.UserInvitationsTable.invitationType.accepted',
+    defaultMessage: 'accepted',
   },
 });
 
@@ -54,8 +66,8 @@ const UserInvitationsTable: FC<Props> = (props) => {
   }
 
   const invitationTypePrefix: string = pendingInvitations
-    ? 'pending'
-    : 'accepted';
+    ? intl.formatMessage(translations.pending)
+    : intl.formatMessage(translations.accepted);
 
   const options: TableOptions = {
     download: false,
@@ -135,11 +147,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={`role-${invitation.id}`} variant="body2">
-              {
-                sharedConstants.USER_ROLES.find(
-                  (role) => role.value === invitation.role,
-                )?.label
-              }
+              {sharedConstants.COURSE_USER_ROLES[invitation.role]}
             </Typography>
           );
         },
@@ -223,8 +231,8 @@ const UserInvitationsTable: FC<Props> = (props) => {
         alignCenter: true,
         customBodyRender: (_value, tableMeta): JSX.Element => {
           const rowData = tableMeta.rowData;
-          const user = rebuildObjectFromRow(columns, rowData);
-          const actionComponent = renderRowActionComponent(user);
+          const invitation = rebuildObjectFromRow(columns, rowData);
+          const actionComponent = renderRowActionComponent(invitation);
           return actionComponent;
         },
       },
@@ -244,4 +252,9 @@ const UserInvitationsTable: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(UserInvitationsTable);
+export default memo(
+  injectIntl(UserInvitationsTable),
+  (prevProps, nextProps) => {
+    return equal(prevProps.invitations, nextProps.invitations);
+  },
+);

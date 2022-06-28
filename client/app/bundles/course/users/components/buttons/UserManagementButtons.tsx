@@ -1,16 +1,17 @@
-import { FC, useState } from 'react';
+import { FC, useState, memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import DeleteButton from 'lib/components/buttons/DeleteButton';
 import SaveButton from 'lib/components/buttons/SaveButton';
-import { CourseUserEntity } from 'types/course/courseUsers';
+import { CourseUserRowData } from 'types/course/courseUsers';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
 import sharedConstants from 'lib/constants/sharedConstants';
+import equal from 'fast-deep-equal';
 import { updateUser, deleteUser } from '../../operations';
 
 interface Props extends WrappedComponentProps {
-  user: CourseUserEntity;
+  user: CourseUserRowData;
 }
 
 const translations = defineMessages({
@@ -39,10 +40,9 @@ const translations = defineMessages({
 const UserManagementButtons: FC<Props> = (props) => {
   const { intl, user } = props;
   const dispatch = useDispatch<AppDispatch>();
-  const [isDeleting, setIsDeleting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
-  const onSave = (data: CourseUserEntity): Promise<void> => {
+  const onSave = (data: CourseUserRowData): Promise<void> => {
     setIsSaving(true);
     return dispatch(updateUser(user.id, data))
       .then(() => {
@@ -64,7 +64,6 @@ const UserManagementButtons: FC<Props> = (props) => {
   };
 
   const onDelete = (): Promise<void> => {
-    setIsDeleting(true);
     return dispatch(deleteUser(user.id))
       .then(() => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
@@ -72,8 +71,7 @@ const UserManagementButtons: FC<Props> = (props) => {
       .catch((error) => {
         toast.error(intl.formatMessage(translations.deletionFailure));
         throw error;
-      })
-      .finally(() => setIsDeleting(false));
+      });
   };
 
   const managementButtons = (
@@ -81,18 +79,16 @@ const UserManagementButtons: FC<Props> = (props) => {
       <SaveButton
         tooltip="Save Changes"
         className={`user-save-${user.id}`}
-        disabled={isDeleting || isSaving}
+        disabled={isSaving}
         onClick={(): Promise<void> => onSave(user)}
       />
       <DeleteButton
         tooltip="Delete User"
         className={`user-delete-${user.id}`}
-        disabled={isDeleting || isSaving}
+        disabled={isSaving}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
-          role: sharedConstants.USER_ROLES.find(
-            (role) => role.value === user.role,
-          )?.label,
+          role: sharedConstants.COURSE_USER_ROLES[user.role],
           name: user.name,
           email: user.email,
         })}
@@ -103,4 +99,9 @@ const UserManagementButtons: FC<Props> = (props) => {
   return managementButtons;
 };
 
-export default injectIntl(UserManagementButtons);
+export default memo(
+  injectIntl(UserManagementButtons),
+  (prevProps, nextProps) => {
+    return equal(prevProps.user, nextProps.user);
+  },
+);

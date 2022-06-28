@@ -1,10 +1,16 @@
 import CourseAPI from 'api/course';
 import { Operation } from 'types/store';
 import {
+  CourseUserBasicListData,
+  CourseUserBasicMiniEntity,
   CourseUserEntity,
+  StaffRole,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
-import { PersonalTimePostData } from 'types/course/personalTimes';
+import {
+  PersonalTimeFormData,
+  PersonalTimePostData,
+} from 'types/course/personalTimes';
 import * as actions from './actions';
 import {
   DeletePersonalTimeAction,
@@ -19,7 +25,7 @@ import {
  *     { name, phantom, role, timeline_algorithm }
  *   }
  */
-const formatAttributes = (
+const formatUpdateUser = (
   data: CourseUserEntity,
 ): UpdateCourseUserPatchData => {
   const payload = {
@@ -34,19 +40,42 @@ const formatAttributes = (
   return payload;
 };
 
-export function fetchUsers(onlyStudents: boolean = true): Operation<void> {
+const formatUpdatePersonalTime = (data: PersonalTimeFormData): FormData => {
+  const payload: PersonalTimePostData = {
+    personal_time: {
+      lesson_plan_item_id: data.id,
+      fixed: data.fixed,
+      start_at: data.startAt,
+      bonus_end_at: data.bonusEndAt,
+      end_at: data.endAt,
+    },
+  };
+
+  const formData = new FormData();
+  Object.keys(payload.personal_time).forEach((key) => {
+    formData.append(`personal_time[${key}]`, payload.personal_time[key]);
+  });
+  return formData;
+};
+
+export function fetchUsers(asBasicData: boolean = false): Operation<void> {
   return async (dispatch) =>
     CourseAPI.users
-      .index(onlyStudents)
+      .index(asBasicData)
       .then((response) => {
         const data = response.data;
-        dispatch(
-          actions.saveUsersList(
-            data.users,
-            data.permissions,
-            data.manageCourseUsersData,
-          ),
-        );
+        if (data.userOptions && data.userOptions.length > 0) {
+          dispatch(
+            actions.saveManageUsersList(
+              data.users,
+              data.permissions!,
+              data.manageCourseUsersData!,
+              data.userOptions,
+            ),
+          );
+        } else {
+          dispatch(actions.saveUsersList(data.users, data.permissions!));
+        }
       })
       .catch((error) => {
         throw error;
@@ -83,6 +112,7 @@ export function fetchStaff(): Operation<void> {
             data.users,
             data.permissions,
             data.manageCourseUsersData,
+            data.userOptions,
           ),
         );
       })
@@ -102,18 +132,37 @@ export function updateUser(
   userId: number,
   data: CourseUserEntity,
 ): Operation<void> {
-  const attributes = formatAttributes(data);
+  const attributes = formatUpdateUser(data);
   return async (dispatch) =>
     CourseAPI.users.update(userId, attributes).then((response) => {
+      // if we are downgrading to student, we'll also need to add this student back to userOptions
+      if (data.role === 'student') {
+        const userOption: CourseUserBasicListData = {
+          id: response.data.id,
+          name: response.data.name,
+        };
+        dispatch(actions.updateUserOption(userOption));
+      }
       dispatch(actions.saveUser(response.data));
     });
 }
 
-export function upgradeToStaff(userId: number, role: string): Operation<void> {
+export function upgradeToStaff(
+  users: CourseUserBasicMiniEntity[],
+  role: StaffRole,
+): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.users.upgradeToStaff(userId, role).then((response) => {
-      dispatch(actions.saveUser(response.data));
-    });
+    CourseAPI.users
+      .upgradeToStaff(users, role)
+      .then((response) => {
+        response.data.users.forEach((user) => {
+          dispatch(actions.deleteUserOption(user.id));
+          dispatch(actions.saveUser(user));
+        });
+      })
+      .catch((error) => {
+        throw error;
+      });
 }
 
 export function deleteUser(userId: number): Operation<void> {
@@ -143,29 +192,10 @@ export function recomputePersonalTimes(userId: number): Operation<void> {
 }
 
 export function updatePersonalTime(
-  data: {
-    id: number;
-    fixed: boolean;
-    startAt?: string | Date;
-    bonusEndAt?: string | Date;
-    endAt?: string | Date;
-  },
+  data: PersonalTimeFormData,
   userId: number,
 ): Operation<UpdatePersonalTimeAction> {
-  const payload: PersonalTimePostData = {
-    personal_time: {
-      lesson_plan_item_id: data.id,
-      fixed: data.fixed,
-      start_at: data.startAt,
-      bonus_end_at: data.bonusEndAt,
-      end_at: data.endAt,
-    },
-  };
-
-  const formData = new FormData();
-  Object.keys(payload.personal_time).forEach((key) => {
-    formData.append(`personal_time[${key}]`, payload.personal_time[key]);
-  });
+  const formData = formatUpdatePersonalTime(data);
 
   return async (dispatch) =>
     CourseAPI.personalTimes

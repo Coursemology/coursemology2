@@ -7,6 +7,7 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def index
     @invitations = current_course.invitations.order(name: :asc)
+    @without_invitations = params[:without_invitations]
   end
 
   def new
@@ -25,7 +26,7 @@ class Course::UserInvitationsController < Course::ComponentController
 
   def destroy
     if @invitation.destroy
-      destroy_invitation_success t('.success', name: @invitation.name)
+      destroy_invitation_success
     else
       destroy_invitation_failure
     end
@@ -35,17 +36,17 @@ class Course::UserInvitationsController < Course::ComponentController
     @invitation = load_invitations.first
     @serial_number = params[:serial_number]
     if @invitation && invitation_service.resend_invitation(load_invitations)
-      resend_invitation_success t('.success', email: @invitation.email)
+      resend_invitation_success
     else
-      resend_invitation_failure t('.failure')
+      resend_invitation_failure
     end
   end
 
   def resend_invitations
     if invitation_service.resend_invitation(load_invitations)
-      resend_invitations_success t('.success')
+      resend_invitations_success
     else
-      resend_invitations_failure t('.failure')
+      resend_invitations_failure
     end
   end
 
@@ -218,58 +219,53 @@ class Course::UserInvitationsController < Course::ComponentController
     current_component_host[:course_users_component]
   end
 
-  def resend_invitation_success(message) # :nodoc:
+  def resend_invitation_success # :nodoc:
     respond_to do |format|
-      format.html { flash.now[:success] = message }
-      format.json { render json: { id: @invitation.id }, status: :ok }
+      format.json do
+        render partial: 'course_user_invitation_list_data', locals: { invitation: @invitation.reload }, status: :ok
+      end
     end
   end
 
-  def resend_invitation_failure(message) # :nodoc:
+  def resend_invitation_failure # :nodoc:
     respond_to do |format|
-      format.html { flash.now[:danger] = message }
       format.json { head :bad_request }
     end
   end
 
-  def resend_invitations_success(message) # :nodoc:
+  def resend_invitations_success # :nodoc:
     respond_to do |format|
-      format.html { redirect_to course_user_invitations_path(current_course), success: message }
-      format.json { head :ok }
+      format.json do
+        render partial: 'course_user_invitation_list', locals: { invitations: @invitations.reload }, status: :ok
+      end
     end
   end
 
-  def resend_invitations_failure(message) # :nodoc:
+  def resend_invitations_failure # :nodoc:
     respond_to do |format|
-      format.html { redirect_to course_user_invitations_path(current_course), danger: message }
       format.json { head :bad_request }
     end
   end
 
-  def destroy_invitation_success(message)
+  def destroy_invitation_success # :nodoc:
     respond_to do |format|
-      format.html do
-        redirect_to course_user_invitations_path(current_course), success: message
-      end
       format.json { render json: { id: @invitation.id }, status: :ok }
     end
   end
 
-  def destroy_invitation_failure
+  def destroy_invitation_failure # :nodoc:
     respond_to do |format|
-      format.html do
-        redirect_to course_user_invitations_path(current_course), danger: @invitation.errors.full_messages.to_sentence
-      end
       format.json { render json: { errors: @invitation.errors.full_messages.to_sentence }, status: :bad_request }
     end
   end
 
-  def create_invitation_success(result)
+  def create_invitation_success(result) # :nodoc:
     respond_to do |format|
       format.json do
-        @invitations = current_course.invitations.order(name: :asc)
-        @invitation_result = parse_invitation_result(*result)
-        render 'index'
+        render json: {
+          newInvitations: result[0].length,
+          invitationResult: parse_invitation_result(*result)
+        }, status: :ok
       end
     end
   end

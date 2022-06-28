@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { PersonalTimeData } from 'types/course/personalTimes';
+import { PersonalTimeListData } from 'types/course/personalTimes';
 import BaseCourseAPI from './Base';
 
 export default class PersonalTimesAPI extends BaseCourseAPI {
@@ -10,7 +10,7 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
    */
   index(userId: number): Promise<
     AxiosResponse<{
-      personalTimes: PersonalTimeData[];
+      personalTimes: PersonalTimeListData[];
     }>
   > {
     return this.getClient().get(
@@ -24,7 +24,7 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
    */
   recompute(userId: number): Promise<
     AxiosResponse<{
-      personalTimes: PersonalTimeData[];
+      personalTimes: PersonalTimeListData[];
     }>
   > {
     const url = `${this._baseUrlPrefix}/users/${userId}/personal_times`;
@@ -45,7 +45,7 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
   update(
     data: FormData,
     userId: number,
-  ): Promise<AxiosResponse<PersonalTimeData>> {
+  ): Promise<AxiosResponse<PersonalTimeListData>> {
     const url = `${this._baseUrlPrefix}/users/${userId}/personal_times`;
     const config = {
       headers: {

@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { AppState } from 'types/store';
-import { selectEntities } from 'utilities/store';
+import { selectMiniEntities } from 'utilities/store';
 
 function getLocalState(state: AppState) {
   return state.invitations;
 }
 
 export function getAllInvitationsEntities(state: AppState) {
-  return selectEntities(
+  return selectMiniEntities(
     getLocalState(state).invitations,
     getLocalState(state).invitations.ids,
   );

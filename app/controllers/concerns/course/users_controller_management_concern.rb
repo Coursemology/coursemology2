@@ -34,12 +34,13 @@ module Course::UsersControllerManagementConcern
   end
 
   def staff # :nodoc:
-    @student_options = @course_users.students.order_alphabetically.pluck(:name, :id)
-    @course_users = @course_users.includes(user: :emails).order_alphabetically
+    @student_options = @course_users.students.order_alphabetically.pluck(:id, :name)
+    @course_users = @course_users.staff.includes(user: :emails).order_alphabetically
   end
 
   def upgrade_to_staff # :nodoc:
-    if @course_user.update(upgrade_to_staff_params)
+    upgrade_to_staff_params
+    if upgrade_students_to_staff
       upgrade_to_staff_success
     else
       upgrade_to_staff_failure
@@ -53,7 +54,8 @@ module Course::UsersControllerManagementConcern
   end
 
   def upgrade_to_staff_params # :nodoc:
-    @upgrade_to_staff_params ||= params.require(:course_user).permit(:id, :role)
+    @upgrade_to_staff_params ||= params.require(:course_users).permit(:role, ids: [])
+    params.require(:user).permit(:id)
   end
 
   def load_resource
@@ -66,6 +68,19 @@ module Course::UsersControllerManagementConcern
     when 'upgrade_to_staff'
       @course_user ||= course_users.includes(:user).find(upgrade_to_staff_params[:id])
     end
+  end
+
+  def upgrade_students_to_staff
+    role = @upgrade_to_staff_params[:role]
+    course_users = current_course.course_users
+    @upgraded_course_users = []
+    @upgrade_to_staff_params[:ids].each do |id|
+      course_user = course_users.find(id)
+      course_user.update(role: role)
+      @upgraded_course_users << course_user.reload
+    end
+
+    true
   end
 
   # Prevents access to this set of pages unless the user is a staff of the course.
@@ -99,16 +114,9 @@ module Course::UsersControllerManagementConcern
 
   def upgrade_to_staff_success # :nodoc:
     respond_to do |format|
-      format.html do
-        success = t('course.users.upgrade_to_staff.success',
-                    name: @course_user.name, role: t("course.users.role.#{@course_user.role}"))
-        redirect_to course_users_staff_path(current_course), success: success
-      end
       format.json do
-        render '_user_list_data', locals: {
-          course_user: @course_user,
-          should_show_timeline: true,
-          should_show_phantom: true
+        render partial: 'upgrade_to_staff_results', locals: {
+          upgraded_course_users: @upgraded_course_users
         }, status: :ok
       end
     end
@@ -116,17 +124,12 @@ module Course::UsersControllerManagementConcern
 
   def upgrade_to_staff_failure # :nodoc:
     respond_to do |format|
-      format.html do
-        redirect_to course_users_staff_path(current_course),
-                    danger: @course_user.errors.full_messages.to_sentence
-      end
       format.json { render json: { errors: @course_user.errors.full_messages.to_sentence }, status: :bad_request }
     end
   end
 
   def update_user_success # :nodoc:
     respond_to do |format|
-      format.html { flash.now[:success] = t('course.users.update.success', name: @course_user.name) }
       format.json do
         render '_user_list_data', locals: {
           course_user: @course_user,
@@ -139,24 +142,18 @@ module Course::UsersControllerManagementConcern
 
   def update_user_failure # :nodoc:
     respond_to do |format|
-      format.html { flash.now[:success] = t('course.users.update.success', name: @course_user.name) }
       format.json { render json: { errors: @course_user.errors.full_messages.to_sentence }, status: :bad_request }
     end
   end
 
   def destroy_user_success # :nodoc:
     respond_to do |format|
-      format.html do
-        success = t('course.users.destroy.success', role: @course_user.role, email: @course_user.user.email)
-        redirect_to delete_redirect_path, success: success
-      end
       format.json { head :ok }
     end
   end
 
   def destroy_user_failure # :nodoc:
     respond_to do |format|
-      format.html { redirect_to delete_redirect_path, danger: @course_user.errors.full_messages.to_sentence }
       format.json { render json: { errors: @course_user.errors.full_messages.to_sentence }, status: :bad_request }
     end
   end

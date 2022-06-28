@@ -1,20 +1,17 @@
-import { FC, useState } from 'react';
+import { FC, memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import DeleteButton from 'lib/components/buttons/DeleteButton';
 import EmailButton from 'lib/components/buttons/EmailButton';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
-import { InvitationEntity } from 'types/course/userInvitations';
+import { InvitationRowData } from 'types/course/userInvitations';
 import sharedConstants from 'lib/constants/sharedConstants';
-import {
-  resendInvitationEmail,
-  deleteInvitation,
-  fetchInvitations,
-} from '../../operations';
+import equal from 'fast-deep-equal';
+import { resendInvitationEmail, deleteInvitation } from '../../operations';
 
 interface Props extends WrappedComponentProps {
-  invitation: InvitationEntity;
+  invitation: InvitationRowData;
 }
 
 const translations = defineMessages({
@@ -49,19 +46,17 @@ const translations = defineMessages({
   },
 });
 
-const ROLES = sharedConstants.USER_ROLES;
+const ROLES = sharedConstants.COURSE_USER_ROLES;
 
 const PendingInvitationsButtons: FC<Props> = (props) => {
   const { intl, invitation } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isResending, setIsResending] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const onResend = (): Promise<void> => {
     setIsResending(true);
     return dispatch(resendInvitationEmail(invitation.id))
       .then(() => {
-        dispatch(fetchInvitations());
         toast.success(
           intl.formatMessage(translations.resendSuccess, {
             email: invitation.email,
@@ -80,7 +75,6 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
   };
 
   const onDelete = (): Promise<void> => {
-    setIsDeleting(true);
     return dispatch(deleteInvitation(invitation.id))
       .then(() => {
         toast.success(
@@ -96,8 +90,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
           }),
         );
         throw error;
-      })
-      .finally(() => setIsDeleting(false));
+      });
   };
 
   const managementButtons = (
@@ -105,16 +98,16 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
       <EmailButton
         tooltip={intl.formatMessage(translations.resendTooltip)}
         className={`invitation-resend-${invitation.id}`}
-        disabled={isResending || isDeleting}
+        disabled={isResending}
         onClick={onResend}
       />
       <DeleteButton
         tooltip={intl.formatMessage(translations.deletionTooltip)}
         className={`invitation-delete-${invitation.id}`}
-        disabled={isResending || isDeleting}
+        disabled={isResending}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
-          role: ROLES.find((role) => role.value === invitation.role)?.label,
+          role: ROLES[invitation.role],
           name: invitation.name,
           email: invitation.email,
         })}
@@ -125,4 +118,9 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
   return managementButtons;
 };
 
-export default injectIntl(PendingInvitationsButtons);
+export default memo(
+  injectIntl(PendingInvitationsButtons),
+  (prevProps, nextProps) => {
+    return equal(prevProps.invitation, nextProps.invitation);
+  },
+);

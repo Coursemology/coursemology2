@@ -69,6 +69,10 @@ const translations = defineMessages({
     id: 'components.table.column.personalizedTimeline',
     defaultMessage: 'Personalized Timeline',
   },
+  item: {
+    id: 'components.table.column.item',
+    defaultMessage: 'Item',
+  },
   startAt: {
     id: 'components.table.column.startAt',
     defaultMessage: 'Start At',

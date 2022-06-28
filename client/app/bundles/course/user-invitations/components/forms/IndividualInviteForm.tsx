@@ -5,7 +5,6 @@ import { AppDispatch, AppState } from 'types/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
 import {
   IndividualInvites,
   InvitationsPostData,
@@ -14,11 +13,13 @@ import {
 import ErrorText from 'lib/components/ErrorText';
 import IndividualInvitations from './IndividualInvitations';
 import { inviteUsersFromForm } from '../../operations';
-import { getManageCourseUsersSharedData } from '../../selectors';
+import {
+  getManageCourseUserPermissions,
+  getManageCourseUsersSharedData,
+} from '../../selectors';
 
 interface Props extends WrappedComponentProps {
   openResultDialog: (invitationResult: InvitationResult) => void;
-  permissions: ManageCourseUsersPermissions;
 }
 
 const translations = defineMessages({
@@ -48,11 +49,14 @@ const validationSchema = yup.object({
 });
 
 const IndividualInviteForm: FC<Props> = (props) => {
-  const { openResultDialog, permissions } = props;
+  const { openResultDialog } = props;
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const sharedData = useSelector((state: AppState) =>
     getManageCourseUsersSharedData(state),
+  );
+  const permissions = useSelector((state: AppState) =>
+    getManageCourseUserPermissions(state),
   );
   const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
   const initialValues = {

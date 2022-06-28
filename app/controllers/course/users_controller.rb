@@ -24,12 +24,13 @@ class Course::UsersController < Course::ComponentController
     course_users = current_course.course_users
     case params[:action]
     when 'index'
-      @course_users ||= if params[:only_students] == 'false'
-                          course_users.includes(user: [:emails]).order_alphabetically
-                        else
-                          course_users.without_phantom_users.students.
-                            includes(:user).order_alphabetically
-                        end
+      if params[:as_basic_data] == 'true'
+        @user_options = course_users.order_alphabetically.pluck(:id, :name)
+      else
+        @course_users ||= course_users.without_phantom_users.students.
+                          includes(user: [:emails]).order_alphabetically
+      end
+
     else
       return if super
 

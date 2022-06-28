@@ -27,7 +27,6 @@ import {
 } from '../../operations';
 import {
   getAllPersonalTimesEntities,
-  getAllUserMiniEntities,
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
   getUserEntity,
@@ -82,7 +81,6 @@ const PersonalTimesShow: FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isRecomputing, setIsRecomputing] = useState(false);
   const { userId } = useParams();
-  const users = useSelector((state: AppState) => getAllUserMiniEntities(state));
   const currentUser = useSelector((state: AppState) =>
     getUserEntity(state, +userId!),
   );
@@ -99,12 +97,12 @@ const PersonalTimesShow: FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(fetchUsers(false));
-  }, [dispatch]);
-
-  useEffect(() => {
     setIsLoading(true);
-    // we fetch personal times first -- we need learning rate records before loading user
+
+    const asBasicData = true;
+    dispatch(fetchUsers(asBasicData));
+
+    // we fetch personal times before user -- we need learning rate records before user
     dispatch(fetchPersonalTimes(+userId!))
       .then(() =>
         dispatch(loadUser(+userId!))
@@ -118,7 +116,7 @@ const PersonalTimesShow: FC<Props> = (props) => {
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchPersonalTimesFailure)),
       );
-  }, [userId]);
+  }, [dispatch, userId]);
 
   const handleRecompute = (): void => {
     setIsRecomputing(true);
@@ -168,7 +166,7 @@ const PersonalTimesShow: FC<Props> = (props) => {
             {intl.formatMessage(translations.courseUserHeader)}
           </Typography>
           <Grid container flexDirection="row" alignItems="flex-end">
-            <SelectCourseUser users={users} initialUser={currentUser} />
+            <SelectCourseUser initialUser={currentUser} />
             <TextField
               label="Timeline Algorithm"
               id="change-timeline"

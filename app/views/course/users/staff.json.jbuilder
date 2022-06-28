@@ -9,6 +9,10 @@ json.users @course_users do |course_user|
                                   should_show_timeline: should_show_timeline
 end
 
+json.userOptions @student_options do |course_user|
+  json.partial! 'user_basic_list_data', course_user: course_user
+end
+
 json.permissions do
   json.partial! 'permissions_data', current_course: current_course
 end

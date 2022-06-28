@@ -5,10 +5,12 @@ import {
   CourseUserData,
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
+  CourseUserBasicMiniEntity,
+  CourseUserBasicListData,
 } from 'types/course/courseUsers';
 import {
-  PersonalTimeData,
-  PersonalTimeEntity,
+  PersonalTimeListData,
+  PersonalTimeMiniEntity,
 } from 'types/course/personalTimes';
 import { EntityStore } from 'types/store';
 
@@ -20,13 +22,14 @@ export const DELETE_USER = 'course/users/DELETE_USER';
 export const SAVE_PERSONAL_TIMES_LIST = 'course/users/SAVE_PERSONAL_TIMES_LIST';
 export const UPDATE_PERSONAL_TIME = 'course/users/UPDATE_PERSONAL_TIME';
 export const DELETE_PERSONAL_TIME = 'course/users/DELETE_PERSONAL_TIME';
+export const UPDATE_USER_OPTION = 'course/users/UPDATE_USER_OPTION';
+export const DELETE_USER_OPTION = 'course/users/DELETE_USER_OPTION';
 
 // Action Types
 export interface SaveUsersListAction {
   type: typeof SAVE_USERS_LIST;
   userList: CourseUserListData[];
   manageCourseUsersPermissions: ManageCourseUsersPermissions;
-  manageCourseUsersData: ManageCourseUsersSharedData;
 }
 
 export interface SaveUserAction {
@@ -36,9 +39,10 @@ export interface SaveUserAction {
 
 export interface SaveManageUsersListAction {
   type: typeof SAVE_MANAGE_USERS_LIST;
-  userList: CourseUserData[];
+  userList: CourseUserListData[];
   manageCourseUsersPermissions: ManageCourseUsersPermissions;
   manageCourseUsersData: ManageCourseUsersSharedData;
+  userOptions: CourseUserBasicListData[];
 }
 export interface DeleteUserAction {
   type: typeof DELETE_USER;
@@ -47,15 +51,25 @@ export interface DeleteUserAction {
 
 export interface SavePersonalTimesListAction {
   type: typeof SAVE_PERSONAL_TIMES_LIST;
-  personalTimes: PersonalTimeData[];
+  personalTimes: PersonalTimeListData[];
 }
 export interface UpdatePersonalTimeAction {
   type: typeof UPDATE_PERSONAL_TIME;
-  personalTime: PersonalTimeData;
+  personalTime: PersonalTimeListData;
 }
 export interface DeletePersonalTimeAction {
   type: typeof DELETE_PERSONAL_TIME;
   personalTimeId: number;
+}
+
+export interface UpdateUserOptionAction {
+  type: typeof UPDATE_USER_OPTION;
+  userOption: CourseUserBasicListData;
+}
+
+export interface DeleteUserOptionAction {
+  type: typeof DELETE_USER_OPTION;
+  id: number;
 }
 
 export type UsersActionType =
@@ -65,12 +79,15 @@ export type UsersActionType =
   | DeleteUserAction
   | SavePersonalTimesListAction
   | UpdatePersonalTimeAction
-  | DeletePersonalTimeAction;
+  | DeletePersonalTimeAction
+  | UpdateUserOptionAction
+  | DeleteUserOptionAction;
 
 // State Types
 export interface UsersState {
   users: EntityStore<CourseUserMiniEntity, CourseUserEntity>;
+  userOptions: EntityStore<CourseUserBasicMiniEntity, CourseUserEntity>;
   permissions: ManageCourseUsersPermissions;
   manageCourseUsersData: ManageCourseUsersSharedData;
-  personalTimes: EntityStore<PersonalTimeEntity, PersonalTimeEntity>;
+  personalTimes: EntityStore<PersonalTimeMiniEntity, PersonalTimeMiniEntity>;
 }

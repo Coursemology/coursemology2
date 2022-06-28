@@ -100,7 +100,7 @@ const CourseShow: FC<Props> = (props) => {
                 <div id={`instructor-${instructor.id}`}>
                   <AvatarWithLabel
                     label={instructor.name}
-                    imageUrl={instructor.imageUrl}
+                    imageUrl={instructor.imageUrl!}
                     size="sm"
                   />
                 </div>

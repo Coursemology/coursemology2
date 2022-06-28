@@ -1,5 +1,4 @@
 import CourseAPI from 'api/course';
-import { AxiosResponse } from 'axios';
 import {
   InvitationFileEntity,
   InvitationPostData,
@@ -60,6 +59,14 @@ export function fetchInvitations(): Operation<void> {
       });
 }
 
+export function fetchPermissionsAndSharedData(): Operation<void> {
+  return async (dispatch) =>
+    CourseAPI.userInvitations.getPermissionsAndSharedData().then((response) => {
+      dispatch(actions.savePermissions(response.data.permissions));
+      dispatch(actions.saveSharedData(response.data.manageCourseUsersData));
+    });
+}
+
 export function inviteUsersFromFile(
   fileEntity: InvitationFileEntity,
 ): Operation<InvitationResult> {
@@ -68,13 +75,7 @@ export function inviteUsersFromFile(
       .invite(fileEntity)
       .then((response) => {
         const data = response.data;
-        dispatch(
-          actions.saveInvitationList(
-            data.invitations,
-            data.permissions,
-            data.manageCourseUsersData,
-          ),
-        );
+        dispatch(actions.updateInvitationCounts(data.newInvitations));
         return JSON.parse(data.invitationResult);
       })
       .catch((error) => {
@@ -89,32 +90,30 @@ export function inviteUsersFromForm(
   return async (dispatch) =>
     CourseAPI.userInvitations.invite(formattedData).then((response) => {
       const data = response.data;
-      dispatch(
-        actions.saveInvitationList(
-          data.invitations,
-          data.permissions,
-          data.manageCourseUsersData,
-        ),
-      );
+      dispatch(actions.updateInvitationCounts(data.newInvitations));
       return JSON.parse(data.invitationResult);
     });
 }
 
-export function resendAllInvitations(): Operation<
-  AxiosResponse<unknown, unknown>
-> {
-  return async (_) =>
-    CourseAPI.userInvitations.resendAllInvitations().catch((error) => {
-      throw error;
-    });
+export function resendAllInvitations(): Operation<void> {
+  return async (dispatch) =>
+    CourseAPI.userInvitations
+      .resendAllInvitations()
+      .then((response) => {
+        dispatch(actions.updateInvitationList(response.data.invitations));
+      })
+      .catch((error) => {
+        throw error;
+      });
 }
 
-export function resendInvitationEmail(
-  invitationId: number,
-): Operation<AxiosResponse<unknown, unknown>> {
-  return async (_) =>
+export function resendInvitationEmail(invitationId: number): Operation<void> {
+  return async (dispatch) =>
     CourseAPI.userInvitations
       .resendInvitationEmail(invitationId)
+      .then((response) => {
+        dispatch(actions.updateInvitation(response.data));
+      })
       .catch((error) => {
         throw error;
       });

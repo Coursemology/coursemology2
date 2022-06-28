@@ -7,16 +7,16 @@ import { AppDispatch, AppState } from 'types/store';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { InvitationResult } from 'types/course/userInvitations';
-import {
-  getManageCourseUsersSharedData,
-  getManageCourseUserPermissions,
-} from '../../selectors';
 import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
-import { fetchInvitations } from '../../operations';
+import { fetchPermissionsAndSharedData } from '../../operations';
 import RegistrationCodeButton from '../../components/buttons/RegistrationCodeButton';
 import UploadFileButton from '../../components/buttons/UploadFileButton';
 import IndividualInviteForm from '../../components/forms/IndividualInviteForm';
 import InvitationResultDialog from '../../components/misc/InvitationResultDialog';
+import {
+  getManageCourseUserPermissions,
+  getManageCourseUsersSharedData,
+} from '../../selectors';
 
 type Props = WrappedComponentProps;
 
@@ -29,9 +29,9 @@ const translations = defineMessages({
     id: 'course.users.userInvitations.header',
     defaultMessage: 'Invite Users',
   },
-  fetchInvitationsFailure: {
+  loadFailure: {
     id: 'course.users.userInvitations.fetch.failure',
-    defaultMessage: 'Unable to fetch invitations',
+    defaultMessage: 'Failed to load data',
   },
 });
 
@@ -51,13 +51,11 @@ const InviteUsers: FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(fetchInvitations())
+    dispatch(fetchPermissionsAndSharedData())
       .finally(() => {
         setIsLoading(false);
       })
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchInvitationsFailure)),
-      );
+      .catch(() => toast.error(intl.formatMessage(translations.loadFailure)));
   }, [dispatch]);
 
   if (isLoading) {
@@ -89,10 +87,7 @@ const InviteUsers: FC<Props> = (props) => {
             <RegistrationCodeButton />
           </Grid>
         </Grid>
-        <IndividualInviteForm
-          permissions={permissions}
-          openResultDialog={openResultDialog}
-        />
+        <IndividualInviteForm openResultDialog={openResultDialog} />
       </Box>
       <InvitationResultDialog
         open={showInvitationResultDialog}

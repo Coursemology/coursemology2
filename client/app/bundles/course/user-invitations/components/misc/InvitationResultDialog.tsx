@@ -22,7 +22,10 @@ import {
   IntlShape,
   WrappedComponentProps,
 } from 'react-intl';
-import { InvitationData, InvitationResult } from 'types/course/userInvitations';
+import {
+  InvitationListData,
+  InvitationResult,
+} from 'types/course/userInvitations';
 import HelpIcon from '@mui/icons-material/Help';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import sharedConstants from 'lib/constants/sharedConstants';
@@ -110,9 +113,7 @@ const renderUsersTable = (
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.phantom ? 'Yes' : 'No'}</TableCell>
             <TableCell>
-              {sharedConstants.USER_ROLES.find(
-                (role) => role.value === user.role,
-              )?.label ?? '-'}
+              {sharedConstants.COURSE_USER_ROLES[user.role]}
             </TableCell>
           </TableRow>
         ))}
@@ -123,7 +124,7 @@ const renderUsersTable = (
 
 const renderInvitationsTable = (
   intl: IntlShape,
-  invitations: InvitationData[],
+  invitations: InvitationListData[],
 ): JSX.Element => {
   return (
     <Table size="small">
@@ -145,9 +146,7 @@ const renderInvitationsTable = (
             <TableCell>{invitation.email}</TableCell>
             <TableCell>{invitation.phantom ? 'Yes' : 'No'}</TableCell>
             <TableCell>
-              {sharedConstants.USER_ROLES.find(
-                (role) => role.value === invitation.role,
-              )?.label ?? '-'}
+              {sharedConstants.COURSE_USER_ROLES[invitation.role]}
             </TableCell>
             <TableCell>{invitation.sentAt ?? '-'}</TableCell>
           </TableRow>

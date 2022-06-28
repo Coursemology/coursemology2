@@ -4,7 +4,7 @@ import { FC, useState } from 'react';
 import { injectIntl, defineMessages, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
-import { fetchInvitations, resendAllInvitations } from '../../operations';
+import { resendAllInvitations } from '../../operations';
 
 const translations = defineMessages({
   buttonText: {
@@ -32,7 +32,6 @@ const ResendInvitationsButton: FC<Props> = (props) => {
     setIsLoading(true);
     return dispatch(resendAllInvitations())
       .then(() => {
-        dispatch(fetchInvitations());
         toast.success(intl.formatMessage(translations.resendSuccess));
       })
       .catch((error) => {

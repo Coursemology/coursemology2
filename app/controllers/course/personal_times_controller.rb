@@ -25,7 +25,7 @@ class Course::PersonalTimesController < Course::ComponentController
     @item = @course.lesson_plan_items.find(params[:personal_time][:lesson_plan_item_id])
     @personal_time = @item.find_or_create_personal_time_for(@course_user)
     if @personal_time.update(personal_time_params)
-      render '_personal_time_data', locals: { item: @item }, status: :ok
+      render '_personal_time_list_data', locals: { item: @item }, status: :ok
     else
       render json: { errors: @personal_time.errors.full_messages.to_sentence }, status: :bad_request
     end

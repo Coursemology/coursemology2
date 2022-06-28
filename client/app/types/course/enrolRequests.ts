@@ -1,25 +1,26 @@
+import { CourseUserRole } from './courseUsers';
 import { TimelineAlgorithm } from './personalTimes';
 
-export interface EnrolRequestEntity {
+export interface EnrolRequestMiniEntity {
   id: number;
   name: string;
   email: string;
   status: string;
   phantom: boolean;
   timelineAlgorithm?: TimelineAlgorithm;
-  role?: string;
+  role?: CourseUserRole;
   createdAt: string;
   confirmedBy?: string;
   confirmedAt?: string;
 }
 
-export interface EnrolRequestData {
+export interface EnrolRequestListData {
   id: number;
   name: string;
   email: string;
   status: string;
   phantom: boolean;
-  role?: string;
+  role?: CourseUserRole;
   timelineAlgorithm?: TimelineAlgorithm;
   createdAt: string;
   confirmedBy?: string;
@@ -32,7 +33,15 @@ export interface EnrolRequestData {
   course_user: {
     name: string;
     phantom: boolean;
-    role?: string;
+    role?: CourseUserRole;
     timeline_algorithm?: TimelineAlgorithm;
   };
+}
+
+/**
+ * Row data from EnrolRequestsTable Datatable
+ */
+export interface EnrolRequestRowData extends EnrolRequestMiniEntity {
+  'S/N'?: number;
+  actions?: undefined;
 }

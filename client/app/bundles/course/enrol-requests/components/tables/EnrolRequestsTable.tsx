@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, memo } from 'react';
 import {
   defineMessages,
   injectIntl,
@@ -9,29 +9,49 @@ import { Box, Checkbox, MenuItem, TextField, Typography } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import Note from 'lib/components/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
-import { EnrolRequestEntity } from 'types/course/enrolRequests';
+import {
+  EnrolRequestMiniEntity,
+  EnrolRequestRowData,
+} from 'types/course/enrolRequests';
 import sharedConstants from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/components/tables/translations';
-import { TimelineAlgorithm } from 'types/course/personalTimes';
-import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
+import equal from 'fast-deep-equal';
+import { useSelector } from 'react-redux';
+import { AppState } from 'types/store';
+import {
+  getManageCourseUserPermissions,
+  getManageCourseUsersSharedData,
+} from '../../selectors';
 
 interface Props extends WrappedComponentProps {
   title: string;
-  enrolRequests: EnrolRequestEntity[];
-  permissions: ManageCourseUsersPermissions;
-  defaultTimelineAlgorithm?: TimelineAlgorithm;
+  enrolRequests: EnrolRequestMiniEntity[];
   pendingEnrolRequests?: boolean;
   approvedEnrolRequests?: boolean;
   rejectedEnrolRequests?: boolean;
-  renderRowActionComponent?: (enrolRequest: EnrolRequestEntity) => ReactElement;
+  renderRowActionComponent?: (
+    enrolRequest: EnrolRequestRowData,
+  ) => ReactElement;
 }
 
 const translations = defineMessages({
   noEnrolRequests: {
     id: 'course.enrolRequests.components.tables.EnrolRequestsTable.noEnrolRequests',
     defaultMessage: 'There are no {enrolRequestsType}',
+  },
+  approved: {
+    id: 'course.enrolRequests.components.tables.EnrolRequestsTable.requestType.approved',
+    defaultMessage: 'approved',
+  },
+  rejected: {
+    id: 'course.enrolRequests.components.tables.EnrolRequestsTable.requestType.rejected',
+    defaultMessage: 'rejected',
+  },
+  pending: {
+    id: 'course.enrolRequests.components.tables.EnrolRequestsTable.requestType.pending',
+    defaultMessage: 'pending',
   },
 });
 
@@ -46,14 +66,19 @@ const EnrolRequestsTable: FC<Props> = (props) => {
   const {
     title,
     enrolRequests,
-    permissions,
-    defaultTimelineAlgorithm = 'fixed',
     pendingEnrolRequests = false,
     approvedEnrolRequests = false,
     rejectedEnrolRequests = false,
     renderRowActionComponent = null,
     intl,
   } = props;
+  const permissions = useSelector((state: AppState) =>
+    getManageCourseUserPermissions(state),
+  );
+  const sharedData = useSelector((state: AppState) =>
+    getManageCourseUsersSharedData(state),
+  );
+  const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
   let columns: TableColumns[] = [];
 
   if (enrolRequests && enrolRequests.length === 0) {
@@ -72,11 +97,11 @@ const EnrolRequestsTable: FC<Props> = (props) => {
   const requestTypePrefix: string = ((): string => {
     /* eslint-disable no-else-return */
     if (approvedEnrolRequests) {
-      return 'approved';
+      return intl.formatMessage(translations.approved);
     } else if (rejectedEnrolRequests) {
-      return 'rejected';
+      return intl.formatMessage(translations.rejected);
     } else if (pendingEnrolRequests) {
-      return 'pending';
+      return intl.formatMessage(translations.pending);
     }
     return '';
     /* eslint-enable no-else-return */
@@ -186,12 +211,12 @@ const EnrolRequestsTable: FC<Props> = (props) => {
               onChange={(e): React.ChangeEvent => updateValue(e.target.value)}
               variant="standard"
             >
-              {sharedConstants.USER_ROLES.map((option) => (
+              {Object.keys(sharedConstants.COURSE_USER_ROLES).map((option) => (
                 <MenuItem
-                  key={`role-${enrolRequest.id}-${option.value}`}
-                  value={option.value}
+                  key={`role-${enrolRequest.id}-${option}`}
+                  value={option}
                 >
-                  {option.label}
+                  {sharedConstants.COURSE_USER_ROLES[option]}
                 </MenuItem>
               ))}
             </TextField>
@@ -265,8 +290,8 @@ const EnrolRequestsTable: FC<Props> = (props) => {
               sort: false,
               alignCenter: true,
               customBodyRender: (_value, tableMeta): JSX.Element => {
-                const rowData = tableMeta.rowData;
-                const enrolRequest = rebuildObjectFromRow(columns, rowData); // maybe can optimize if we push this function to within the buttons?
+                const rowData = tableMeta.rowData as EnrolRequestRowData;
+                const enrolRequest = rebuildObjectFromRow(columns, rowData);
                 const actionComponent = renderRowActionComponent(enrolRequest);
                 return actionComponent;
               },
@@ -302,9 +327,9 @@ const EnrolRequestsTable: FC<Props> = (props) => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`role-${enrolRequest.id}`} variant="body2">
-              {sharedConstants.USER_ROLES.find(
-                (role) => role.value === enrolRequest.role,
-              )?.label ?? '-'}
+              {enrolRequest.role
+                ? sharedConstants.COURSE_USER_ROLES[enrolRequest.role]
+                : '-'}
             </Typography>
           );
         },
@@ -433,4 +458,6 @@ const EnrolRequestsTable: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(EnrolRequestsTable);
+export default memo(injectIntl(EnrolRequestsTable), (prevProps, nextProps) => {
+  return equal(prevProps.enrolRequests, nextProps.enrolRequests);
+});

@@ -124,7 +124,9 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         sign_in(user)
       end
       let!(:invitation) { create(:course_user_invitation, course: course) }
-      subject { post :resend_invitations, params: { course_id: course, user_invitation_id: invitation.id } }
+      subject do
+        post :resend_invitations, params: { course_id: course, user_invitation_id: invitation.id }, format: :json
+      end
 
       it 'loads the invitation' do
         subject
@@ -146,7 +148,7 @@ RSpec.describe Course::UserInvitationsController, type: :controller do
         sign_in(user)
       end
       let!(:pending_invitations) { create_list(:course_user_invitation, 3, course: course) }
-      subject { post :resend_invitations, params: { course_id: course } }
+      subject { post :resend_invitations, params: { course_id: course }, format: :json }
 
       it 'loads the all unconfirmed invitations' do
         subject

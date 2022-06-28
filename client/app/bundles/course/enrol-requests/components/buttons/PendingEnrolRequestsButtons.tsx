@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import DeleteButton from 'lib/components/buttons/DeleteButton';
@@ -6,11 +6,12 @@ import AcceptButton from 'lib/components/buttons/AcceptButton';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
 import sharedConstants from 'lib/constants/sharedConstants';
-import { EnrolRequestEntity } from 'types/course/enrolRequests';
+import { EnrolRequestRowData } from 'types/course/enrolRequests';
+import equal from 'fast-deep-equal';
 import { approveEnrolRequest, rejectEnrolRequest } from '../../operations';
 
 interface Props extends WrappedComponentProps {
-  enrolRequest: EnrolRequestEntity;
+  enrolRequest: EnrolRequestRowData;
 }
 
 const translations = defineMessages({
@@ -37,21 +38,20 @@ const translations = defineMessages({
   },
   rejectSuccess: {
     id: 'course.enrolRequests.reject.success',
-    defaultMessage: 'Enrol request for {name} was deleted.',
+    defaultMessage: 'Enrol request for {name} was rejected.',
   },
   rejectFailure: {
     id: 'course.enrolRequests.reject.fail',
-    defaultMessage: 'Failed to delete enrol request. {error}',
+    defaultMessage: 'Failed to reject enrol request. {error}',
   },
 });
 
-const ROLES = sharedConstants.USER_ROLES;
+const ROLES = sharedConstants.COURSE_USER_ROLES;
 
 const PendingEnrolRequestsButtons: FC<Props> = (props) => {
   const { intl, enrolRequest } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isApproving, setIsApproving] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const onApprove = (): Promise<void> => {
     setIsApproving(true);
@@ -75,7 +75,6 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
   };
 
   const onDelete = (): Promise<void> => {
-    setIsDeleting(true);
     return dispatch(rejectEnrolRequest(enrolRequest.id))
       .then(() => {
         toast.success(
@@ -91,8 +90,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
           }),
         );
         throw error;
-      })
-      .finally(() => setIsDeleting(false));
+      });
   };
 
   const managementButtons = (
@@ -100,16 +98,16 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
       <AcceptButton
         tooltip={intl.formatMessage(translations.approveTooltip)}
         className={`enrol-request-approve-${enrolRequest.id}`}
-        disabled={isApproving || isDeleting}
+        disabled={isApproving}
         onClick={onApprove}
       />
       <DeleteButton
         tooltip={intl.formatMessage(translations.rejectTooltip)}
         className={`enrol-request-reject-${enrolRequest.id}`}
-        disabled={isApproving || isDeleting}
+        disabled={isApproving}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.rejectConfirm, {
-          role: ROLES.find((role) => role.value === enrolRequest.role)?.label,
+          role: ROLES[enrolRequest.role!],
           name: enrolRequest.name,
           email: enrolRequest.email,
         })}
@@ -120,4 +118,9 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
   return managementButtons;
 };
 
-export default injectIntl(PendingEnrolRequestsButtons);
+export default memo(
+  injectIntl(PendingEnrolRequestsButtons),
+  (prevProps, nextProps) => {
+    return equal(prevProps.enrolRequest, nextProps.enrolRequest);
+  },
+);

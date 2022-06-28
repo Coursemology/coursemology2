@@ -1,13 +1,13 @@
 import CourseAPI from 'api/course';
 import {
   ApproveEnrolRequestPatchData,
-  EnrolRequestEntity,
+  EnrolRequestMiniEntity,
 } from 'types/course/enrolRequests';
 import { Operation } from 'types/store';
 import * as actions from './actions';
 
 const formatAttributes = (
-  data: EnrolRequestEntity,
+  data: EnrolRequestMiniEntity,
 ): ApproveEnrolRequestPatchData => {
   const payload = {
     course_user: {
@@ -40,7 +40,7 @@ export function fetchEnrolRequests(): Operation<void> {
 }
 
 export function approveEnrolRequest(
-  enrolRequest: EnrolRequestEntity,
+  enrolRequest: EnrolRequestMiniEntity,
 ): Operation<void> {
   return async (dispatch) => {
     const enrolRequestData = formatAttributes(enrolRequest);

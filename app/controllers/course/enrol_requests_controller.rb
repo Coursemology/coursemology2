@@ -74,7 +74,7 @@ class Course::EnrolRequestsController < Course::ComponentController
   def approve_success(message)
     respond_to do |format|
       format.html { flash.now[:success] = message }
-      format.json { render '_enrol_request_data', locals: { enrol_request: @enrol_request }, status: :ok }
+      format.json { render '_enrol_request_list_data', locals: { enrol_request: @enrol_request }, status: :ok }
     end
   end
 
@@ -90,7 +90,7 @@ class Course::EnrolRequestsController < Course::ComponentController
       format.html do
         redirect_to course_enrol_requests_path(current_course), success: message
       end
-      format.json { render '_enrol_request_data', locals: { enrol_request: @enrol_request }, status: :ok }
+      format.json { render '_enrol_request_list_data', locals: { enrol_request: @enrol_request }, status: :ok }
     end
   end
 

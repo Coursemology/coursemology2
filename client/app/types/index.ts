@@ -6,6 +6,13 @@ export type Permissions<T extends string> = {
 };
 
 /**
+ * User or course user role types.
+ */
+export type Roles<T extends string> = {
+  [key in T]: string;
+};
+
+/**
  * Declare global types below.
  */
 declare global {

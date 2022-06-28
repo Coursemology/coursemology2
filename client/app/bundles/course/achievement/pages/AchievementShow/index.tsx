@@ -121,7 +121,7 @@ const AchievementShow: FC<Props> = (props) => {
                 <a href={getCourseUserURL(courseId, courseUser.id)}>
                   <AvatarWithLabel
                     label={courseUser.name}
-                    imageUrl={courseUser.imageUrl}
+                    imageUrl={courseUser.imageUrl!}
                     size="sm"
                   />
                 </a>

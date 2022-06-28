@@ -9,15 +9,15 @@ export interface InvitationFileEntity {
 export interface InvitationResult {
   duplicateUsers?: CourseUserData[];
   existingCourseUsers?: CourseUserData[];
-  existingInvitations?: InvitationData[];
+  existingInvitations?: InvitationListData[];
   newCourseUsers?: CourseUserData[];
-  newInvitations?: InvitationData[];
+  newInvitations?: InvitationListData[];
 }
 
 export interface IndividualInvites {
-  invitations: IndividualInviteRowData[];
+  invitations: IndividualInvite[];
 }
-export interface IndividualInviteRowData {
+export interface IndividualInvite {
   id?: string;
   name: string;
   email: string;
@@ -49,7 +49,7 @@ export interface InvitationsPostData {
   }[];
 }
 
-export interface InvitationEntity {
+export interface InvitationMiniEntity {
   id: number;
   name: string;
   email: string;
@@ -58,11 +58,10 @@ export interface InvitationEntity {
   invitationKey: string;
   confirmed: boolean;
   sentAt?: string;
-  resendInvitationUrl?: string;
   confirmedAt?: string;
 }
 
-export interface InvitationData {
+export interface InvitationListData {
   id: number;
   name: string;
   email: string;
@@ -71,6 +70,13 @@ export interface InvitationData {
   invitationKey: string;
   confirmed: boolean;
   sentAt?: string;
-  resendInvitationUrl?: string;
   confirmedAt?: string;
+}
+
+/**
+ * Row data from UserInvitationsTable Datatable
+ */
+export interface InvitationRowData extends InvitationMiniEntity {
+  'S/N'?: number;
+  actions?: undefined;
 }

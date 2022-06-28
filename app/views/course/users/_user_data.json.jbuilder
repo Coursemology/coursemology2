@@ -1,8 +1,5 @@
 # frozen_string_literal: true
-json.partial! 'user_list_data', course_user: course_user
-
-json.email course_user.user.email
-json.role course_user.role
+json.partial! 'user_list_data', course_user: course_user, should_show_timeline: should_show_timeline
 
 if can?(:manage, Course::UserEmailUnsubscription.new(course_user: course_user))
   json.manageEmailSubscriptionUrl course_user_manage_email_subscription_path(current_course, @course_user)
@@ -25,8 +22,6 @@ unless current_component_host[:course_achievements_component].nil? || !is_studen
   end
 end
 
-json.timelineAlgorithm course_user.timeline_algorithm if current_course.show_personalized_timeline_features?
-
 all_skill_branches = @skills_service.skill_branches
 can_view_skills = all_skill_branches.present? && can_read_progress
 
@@ -35,7 +30,6 @@ if can_view_skills
     json.partial! 'course/assessment/skill_branches/skill_branch_user_list_data', skill_branch: skill_branch
   end
 end
-
 
 if @learning_rate_record.present?
   json.learningRate @learning_rate_record.learning_rate

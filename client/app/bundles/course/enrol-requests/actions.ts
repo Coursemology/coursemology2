@@ -2,16 +2,16 @@ import {
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
-import { EnrolRequestData } from 'types/course/enrolRequests';
+import { EnrolRequestListData } from 'types/course/enrolRequests';
 import {
-  SaveEnrolRequestsListAction,
   SAVE_ENROL_REQUESTS_LIST,
-  UpdateEnrolRequestAction,
   UPDATE_ENROL_REQUEST,
+  SaveEnrolRequestsListAction,
+  UpdateEnrolRequestAction,
 } from './types';
 
 export function saveEnrolRequestsList(
-  enrolRequestsList: EnrolRequestData[],
+  enrolRequestsList: EnrolRequestListData[],
   manageCourseUsersPermissions: ManageCourseUsersPermissions,
   manageCourseUsersData: ManageCourseUsersSharedData,
 ): SaveEnrolRequestsListAction {
@@ -24,7 +24,7 @@ export function saveEnrolRequestsList(
 }
 
 export function updateEnrolRequest(
-  enrolRequest: EnrolRequestData,
+  enrolRequest: EnrolRequestListData,
 ): UpdateEnrolRequestAction {
   return {
     type: UPDATE_ENROL_REQUEST,

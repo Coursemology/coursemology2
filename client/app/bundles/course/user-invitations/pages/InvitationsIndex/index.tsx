@@ -7,9 +7,9 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { Box, Typography } from '@mui/material';
 import PageHeader from 'lib/components/pages/PageHeader';
 import {
-  getManageCourseUsersSharedData,
-  getManageCourseUserPermissions,
   getAllInvitationsEntities,
+  getManageCourseUserPermissions,
+  getManageCourseUsersSharedData,
 } from '../../selectors';
 import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
 import { fetchInvitations } from '../../operations';

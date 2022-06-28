@@ -5,7 +5,7 @@ import {
 } from 'types/course/courseUsers';
 import {
   ApproveEnrolRequestPatchData,
-  EnrolRequestData,
+  EnrolRequestListData,
 } from 'types/course/enrolRequests';
 import BaseCourseAPI from './Base';
 
@@ -17,7 +17,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    */
   index(): Promise<
     AxiosResponse<{
-      enrolRequests: EnrolRequestData[];
+      enrolRequests: EnrolRequestListData[];
       permissions: ManageCourseUsersPermissions;
       manageCourseUsersData: ManageCourseUsersSharedData;
     }>
@@ -27,13 +27,13 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
 
   /**
    * Approve a course enrol request
-   * success response: EnrolRequestData - Data of the changed course enrolment
+   * success response: EnrolRequestListData - Data of the changed course enrolment
    * error response: { errors: [] } - An array of errors will be returned upon error.
    */
   approve(
     enrolRequest: ApproveEnrolRequestPatchData,
     requestId: number,
-  ): Promise<AxiosResponse<EnrolRequestData>> {
+  ): Promise<AxiosResponse<EnrolRequestListData>> {
     return this.getClient().patch(
       `${this._baseUrlPrefix}/${requestId}/approve`,
       enrolRequest,
@@ -42,10 +42,10 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
 
   /**
    * Reject a course enrol request
-   * success response: EnrolRequestData - Data of the changed course enrolment
+   * success response: EnrolRequestListData - Data of the changed course enrolment
    * error response: { errors: [] } - An array of errors will be returned upon error.
    */
-  reject(requestId: number): Promise<AxiosResponse<EnrolRequestData>> {
+  reject(requestId: number): Promise<AxiosResponse<EnrolRequestListData>> {
     return this.getClient().patch(`${this._baseUrlPrefix}/${requestId}/reject`);
   }
 }
