@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Announcements', type: :feature do
+RSpec.describe 'Course: Announcements', type: :feature, js: true do
   describe 'Sticky' do
     subject { page }
 
@@ -32,7 +32,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
         subject { first('div.announcement') }
 
         it 'shows sticky announcement on top' do
-          expect(subject).to have_selector('h2', text: sticky_announcement.title)
+          expect(subject).to have_selector('h3', text: sticky_announcement.title)
         end
       end
     end

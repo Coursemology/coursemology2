@@ -17,76 +17,71 @@ RSpec.feature 'Course: Announcements' do
     context 'As an Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can create new announcements' do
-        visit new_course_announcement_path(course)
-        click_button I18n.t('helpers.submit.course/announcement.create')
-        expect(page).to have_button(I18n.t('helpers.submit.course/announcement.create'))
-        expect(page).to have_css('div.has-error')
+      scenario 'I can create new announcements', js: true do
+        visit course_announcements_path(course)
+        find('#new-announcement-button').click
+        expect(page).to have_selector('h2', text: 'New Announcement')
 
         announcement = build_stubbed(:course_announcement, course: course)
-        fill_in 'announcement_title',    with: announcement.title
-        fill_in 'announcement_content',  with: announcement.content
-        expect do
-          click_button I18n.t('helpers.submit.course/announcement.create')
-        end.to change(course.announcements, :count).by(1)
+        fill_in 'title', with: announcement.title
+        find('#announcement-form-submit-button').click
 
-        expect(page).to have_selector('div.alert.alert-success',
-                                      text: I18n.t('course.announcements.create.success'))
+        expect(page).to have_selector('h3', text: announcement.title)
+
+        expect(page).
+          to have_selector('div.Toastify__toast-body', text: 'New announcement posted!')
+
         expect(current_path).to eq(course_announcements_path(course))
       end
 
-      scenario 'I can edit announcements' do
+      scenario 'I can edit announcements', js: true do
         announcement = create(:course_announcement, course: course)
         time_zone = user.time_zone || Application.config.x.default_user_time_zone
-        visit edit_course_announcement_path(course, announcement)
+        visit course_announcements_path(course)
 
-        expect(page).to have_field('announcement_title', with: announcement.title)
-        expect(page).to have_field('announcement_content', with: announcement.content)
-        expect(page).to have_field('announcement[start_at]',
-                                   with: announcement.start_at.in_time_zone(time_zone))
-        expect(page).to have_field('announcement[end_at]',
-                                   with: announcement.end_at.in_time_zone(time_zone))
+        find("#announcement-edit-button-#{announcement.id}").click
 
-        fill_in 'announcement_title', with: ''
-        click_button I18n.t('helpers.submit.course/announcement.update')
-        expect(page).to have_button('helpers.submit.course/announcement.update')
-        expect(page).to have_css('div.has-error')
+        fill_in 'title', with: ' '
+        find('#announcement-form-update-button').click
+        expect(page).
+          to have_selector('div.Toastify__toast-body', text: 'Failed to update the announcement')
+        expect(page).to have_selector('#announcement-form-update-button')
 
         new_title = 'New Title'
-        new_content = 'New content'
-        fill_in 'announcement_title',        with: new_title
-        fill_in 'announcement_content',      with: new_content
-        click_button I18n.t('helpers.submit.course/announcement.update')
+        fill_in 'title', with: new_title
+        find('#announcement-form-update-button').click
 
         expect(current_path).to eq course_announcements_path(course)
-        expect(page).to have_selector('div.alert.alert-success',
-                                      text: I18n.t('course.announcements.update.success'))
-        expect(announcement.reload.title).to eq(new_title)
-        expect(announcement.reload.content).to eq(new_content)
-      end
-
-      scenario 'I can see all existing announcements' do
-        visit course_announcements_path(course)
-        expect(page).to have_link(nil, href: new_course_announcement_path(course))
-
-        [not_started_announcement, valid_announcement, ended_announcement].each do |announcement|
-          expect(page).to have_content_tag_for(announcement)
-          expect(page).to have_link(nil, href: edit_course_announcement_path(course, announcement))
-          expect(page).to have_link(nil, href: course_announcement_path(course, announcement))
+        expect(page).
+          to have_selector('div.Toastify__toast-body', text: 'Failed to update the announcement')
+        within find("#announcement-#{announcement.id}") do
+          expect(page).to have_selector('h3', text: new_title)
         end
       end
 
-      scenario 'I can delete an existing announcement' do
+      scenario 'I can see all existing announcements', js: true do
+        visit course_announcements_path(course)
+        expect(page).to have_selector('#new-announcement-button')
+
+        [not_started_announcement, valid_announcement, ended_announcement].each do |announcement|
+          expect(page).to have_selector("#announcement-#{announcement.id}")
+          expect(page).to have_selector("#announcement-edit-button-#{announcement.id}")
+          expect(page).to have_selector("#announcement-delete-button-#{announcement.id}")
+        end
+      end
+
+      scenario 'I can delete an existing announcement', js: true do
         announcement = create(:course_announcement, course: course)
         visit course_announcements_path(course)
 
-        expect do
-          find_link(nil, href: course_announcement_path(course, announcement)).click
-        end.to change(course.announcements, :count).by(-1)
+        find("#announcement-delete-button-#{announcement.id}").click
+        click_button('Continue')
 
-        expect(current_path).to eq(course_announcements_path(course))
-        expect(page).to have_selector('div.alert.alert-success',
-                                      text: I18n.t('course.announcements.destroy.success'))
+        expect(page).not_to have_selector("#announcement-#{announcement.id}")
+        expect(page).not_to have_selector("#announcement-edit-button-#{announcement.id}")
+        expect(page).not_to have_selector("#announcement-delete-button-#{announcement.id}")
+
+        expect(page).to have_selector('div.Toastify__toast-body', text: 'Announcement was successfully deleted.')
       end
     end
 
@@ -99,18 +94,21 @@ RSpec.feature 'Course: Announcements' do
         expect(page).to have_selector('li', text: 'course.announcements.sidebar_title')
       end
 
-      scenario 'I can see the started announcements' do
+      scenario 'I can see the started announcements', js: true do
         visit course_announcements_path(course)
-        expect(page).not_to have_link(nil, href: new_course_announcement_path(course))
+
+        # Cannot create new announcement
+        expect(page).not_to have_selector('#new-announcement-button')
 
         [valid_announcement, ended_announcement].each do |announcement|
-          expect(page).to have_content_tag_for(announcement)
-          expect(page).
-            not_to have_link(nil, href: edit_course_announcement_path(course, announcement))
-          expect(page).not_to have_link(nil, href: course_announcement_path(course, announcement))
+          expect(page).to have_selector("#announcement-#{announcement.id}")
+          # Cannot edit or delete announcements
+          expect(page).not_to have_selector("#announcement-edit-button-#{announcement.id}")
+          expect(page).not_to have_selector("#announcement-delete-button-#{announcement.id}")
         end
 
-        expect(page).to have_no_content_tag_for(not_started_announcement)
+        # Cannot see announcements that have not started
+        expect(page).not_to have_selector("#announcement-#{not_started_announcement.id}")
       end
     end
   end

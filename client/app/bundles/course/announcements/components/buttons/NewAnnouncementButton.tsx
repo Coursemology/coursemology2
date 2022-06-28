@@ -23,6 +23,7 @@ const NewAnnouncementButton: FC<Props> = (props) => {
       title={intl.formatMessage(translations.newAnnouncementTooltip)}
     >
       <IconButton
+        id="new-announcement-button"
         onClick={(): void => {
           setIsOpen(true);
         }}
