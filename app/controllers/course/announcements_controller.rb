@@ -17,9 +17,10 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def create # :nodoc:
     if @announcement.save
-      render partial: 'course/announcements/announcement_list_data', locals: { announcement: @announcement }, status: :ok
+      # Return all announcements for re-rendering ordering purposes
+      redirect_to course_announcements_path(current_course)
     else
-      render json: { errors: @announcement.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
   end
 
@@ -28,9 +29,11 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def update # :nodoc:
     if @announcement.update(announcement_params)
-      render partial: 'course/announcements/announcement_list_data', locals: { announcement: @announcement }, status: :ok
+      render partial: 'course/announcements/announcement_list_data',
+             locals: { announcement: @announcement },
+             status: :ok
     else
-      render json: { errors: @announcement.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
   end
 
@@ -38,7 +41,7 @@ class Course::AnnouncementsController < Course::ComponentController
     if @announcement.destroy
       head :ok
     else
-      render json: { errors: @announcement.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
   end
 

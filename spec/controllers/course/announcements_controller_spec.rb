@@ -37,9 +37,8 @@ RSpec.describe Course::AnnouncementsController, type: :controller do
           subject
         end
 
-        it { is_expected.to redirect_to(course_announcements_path(course)) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.announcements.destroy.failure', error: ''))
+        it 'returns an error' do
+          expect(response.status).to eq(400)
         end
       end
     end
