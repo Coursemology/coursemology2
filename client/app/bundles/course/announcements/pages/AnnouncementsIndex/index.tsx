@@ -101,15 +101,18 @@ const AnnouncementsIndex: FC<Props> = (props) => {
             setPage={setPage}
             padding={12}
           />
-          <Stack spacing={1} sx={{ paddingBottom: 1 }}>
-            {slicedAnnouncements.map((announcement) => (
-              <AnnouncementCard
-                key={announcement.id}
-                announcement={announcement}
-                showEditOptions={announcementPermissions.canCreate}
-              />
-            ))}
-          </Stack>
+          <div id="course-announcements">
+            <Stack spacing={1} sx={{ paddingBottom: 1 }}>
+              {slicedAnnouncements.map((announcement) => (
+                <AnnouncementCard
+                  key={announcement.id}
+                  announcement={announcement}
+                  showEditOptions={announcementPermissions.canCreate}
+                />
+              ))}
+            </Stack>
+          </div>
+
           {slicedAnnouncements.length > 6 && (
             <Pagination
               items={announcements}

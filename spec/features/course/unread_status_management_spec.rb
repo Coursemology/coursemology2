@@ -27,15 +27,15 @@ RSpec.describe 'Course: Announcements', type: :feature do
             end
           end
 
-          context 'after visiting' do
+          context 'after visiting', js: true do
             before do
               login_as(first_user)
-              visit course_announcements_path(course, page: '2')
+              visit course_announcements_path(course)
             end
 
             it 'marks announcements in page 2 as read' do
-              expect_number = self.class::TEST_NUMBER - course.announcements.page(2).count
-              expect(course.announcements.unread_by(first_user).count).to eq(expect_number)
+              expect(page).to have_selector('#course-announcements')
+              expect(course.announcements.unread_by(first_user).count).to eq(0)
             end
           end
         end
