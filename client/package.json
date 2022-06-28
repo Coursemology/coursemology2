@@ -86,7 +86,7 @@
     "@hookform/resolvers": "^2.9.1",
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "^5.0.0-alpha.75",
-    "@mui/material": "^5.5.3",
+    "@mui/material": "^5.8.6",
     "@mui/styles": "^5.8.6",
     "ace-builds": "^1.6.1",
     "axios": "^0.27.2",
