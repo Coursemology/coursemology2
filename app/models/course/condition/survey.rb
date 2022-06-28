@@ -33,9 +33,23 @@ class Course::Condition::Survey < ApplicationRecord
     submitted_response_by_user(course_user)
   end
 
-  def compute_satisfaction_information(users)
-    satisfaction_information = Array.new(users.length, 0)
-    return satisfaction_information
+  # Returns a boolean array denoting whether each of the specified
+  # course users has satisfied the survey condition.
+  #
+  # @param [Array<CourseUser>] course_users The specified course users.
+  # @return [Array<Boolean>] At each index, true if the corresponding course
+  #   user has submitted the required survey and false otherwise.
+  def compute_satisfaction_information(course_users)
+    satisfaction_information = Array.new(course_users.length, false)
+    course_user_ids = course_users.map { |course_user| course_user.id }
+    course_user_submissions = survey.responses.submitted.where(course_user_id: course_user_ids)
+    course_user_ids_to_indices = course_user_ids.map.with_index { |course_user_id, index| [course_user_id, index] }.to_h
+
+    course_user_submissions.each do |course_user_submission|
+      satisfaction_information[course_user_ids_to_indices[course_user_submission.course_user_id]] = true
+    end
+
+    satisfaction_information
   end
 
   # Class that the condition depends on.
