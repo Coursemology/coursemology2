@@ -44,7 +44,7 @@ RSpec.feature 'Course: EnrolRequests' do
         accept_confirm_dialog
       end.to change(course.enrol_requests, :count).by(0)
 
-      expect_toastify("Enrol request for #{enrol_request.user.name} was deleted.")
+      expect_toastify("Enrol request for #{enrol_request.user.name} was rejected.")
       enrol_request.reload
 
       expect(enrol_request.workflow_state).to eq('rejected')

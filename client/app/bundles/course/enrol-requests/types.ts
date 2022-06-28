@@ -3,8 +3,8 @@ import {
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
 import {
-  EnrolRequestData,
-  EnrolRequestEntity,
+  EnrolRequestListData,
+  EnrolRequestMiniEntity,
 } from 'types/course/enrolRequests';
 import { EntityStore } from 'types/store';
 
@@ -16,13 +16,13 @@ export const UPDATE_ENROL_REQUEST = 'course/enrolRequests/UPDATE_ENROL_REQUEST';
 // Action Types
 export interface SaveEnrolRequestsListAction {
   type: typeof SAVE_ENROL_REQUESTS_LIST;
-  enrolRequestsList: EnrolRequestData[];
+  enrolRequestsList: EnrolRequestListData[];
   manageCourseUsersPermissions: ManageCourseUsersPermissions;
   manageCourseUsersData: ManageCourseUsersSharedData;
 }
 export interface UpdateEnrolRequestAction {
   type: typeof UPDATE_ENROL_REQUEST;
-  enrolRequest: EnrolRequestData;
+  enrolRequest: EnrolRequestListData;
 }
 
 export type EnrolRequestsActionType =
@@ -31,7 +31,7 @@ export type EnrolRequestsActionType =
 
 // State Types
 export interface EnrolRequestsState {
-  enrolRequests: EntityStore<EnrolRequestEntity, EnrolRequestEntity>;
+  enrolRequests: EntityStore<EnrolRequestMiniEntity, EnrolRequestMiniEntity>;
   permissions: ManageCourseUsersPermissions;
   manageCourseUsersData: ManageCourseUsersSharedData;
 }

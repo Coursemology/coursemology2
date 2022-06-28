@@ -1,9 +1,8 @@
 import { produce } from 'immer';
-import { EnrolRequestEntity } from 'types/course/enrolRequests';
 import {
   createEntityStore,
-  saveDetailedListToStore,
   saveEntityToStore,
+  saveListToStore,
 } from 'utilities/store';
 import {
   EnrolRequestsActionType,
@@ -32,19 +31,17 @@ const reducer = produce(
     switch (action.type) {
       case SAVE_ENROL_REQUESTS_LIST: {
         const enrolRequestsList = action.enrolRequestsList;
-        const entityList: EnrolRequestEntity[] = enrolRequestsList.map(
-          (data) => ({
-            ...data,
-          }),
-        );
-        saveDetailedListToStore(draft.enrolRequests, entityList);
+        const entityList = enrolRequestsList.map((data) => ({
+          ...data,
+        }));
+        saveListToStore(draft.enrolRequests, entityList);
         draft.permissions = action.manageCourseUsersPermissions;
         draft.manageCourseUsersData = action.manageCourseUsersData;
         break;
       }
       case UPDATE_ENROL_REQUEST: {
         const enrolRequest = action.enrolRequest;
-        const enrolRequestEntity: EnrolRequestEntity = { ...enrolRequest };
+        const enrolRequestEntity = { ...enrolRequest };
         saveEntityToStore(draft.enrolRequests, enrolRequestEntity);
         draft.manageCourseUsersData.requestsCount -= 1;
         break;

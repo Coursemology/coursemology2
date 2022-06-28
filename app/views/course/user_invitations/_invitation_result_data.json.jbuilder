@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 json.newInvitations new_invitations.each do |invitation|
-  json.partial! 'course_user_invitation_data', invitation: invitation
+  json.partial! 'course_user_invitation_list_data', invitation: invitation
 end
 
 json.existingInvitations existing_invitations.each do |invitation|
-  json.partial! 'course_user_invitation_data', invitation: invitation
+  json.partial! 'course_user_invitation_list_data', invitation: invitation
 end
 
 json.newCourseUsers new_course_users.each do |course_user|

@@ -6,10 +6,10 @@ import { Typography } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
 import PageHeader from 'lib/components/pages/PageHeader';
+import manageUsersTranslations from 'lib/translations/course/users/index';
 import { fetchStaff } from '../../operations';
 import {
-  getAllStudentsEntities,
-  getAllStaffEntities,
+  getAllStaffMiniEntities,
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
@@ -21,27 +21,22 @@ import UserManagementButtons from '../../components/buttons/UserManagementButton
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
-  manageUsersHeader: {
-    id: 'course.users.manage.header',
-    defaultMessage: 'Manage Users',
+  manageStaffTitle: {
+    id: 'course.users.manage.staff.title',
+    defaultMessage: 'Staff',
   },
   noStaff: {
     id: 'course.users.manage.noStaff',
     defaultMessage: 'No staff in course',
-  },
-  fetchUsersFailure: {
-    id: 'course.users.manage.fetch.failue',
-    defaultMessage: 'Failed to fetch users',
   },
 });
 
 const ManageStaff: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
-  const students = useSelector((state: AppState) =>
-    getAllStudentsEntities(state),
+  const staff = useSelector((state: AppState) =>
+    getAllStaffMiniEntities(state),
   );
-  const staff = useSelector((state: AppState) => getAllStaffEntities(state));
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
   );
@@ -54,7 +49,9 @@ const ManageStaff: FC<Props> = (props) => {
     dispatch(fetchStaff())
       .finally(() => setIsLoading(false))
       .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchUsersFailure)),
+        toast.error(
+          intl.formatMessage(manageUsersTranslations.fetchUsersFailure),
+        ),
       );
   }, [dispatch]);
 
@@ -72,14 +69,15 @@ const ManageStaff: FC<Props> = (props) => {
 
   return (
     <>
-      <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
+      <PageHeader
+        title={intl.formatMessage(manageUsersTranslations.manageUsersHeader)}
+      />
       <UserManagementTabs permissions={permissions} sharedData={sharedData} />
-      <UpgradeToStaff students={students} />
+      <UpgradeToStaff />
       {staff.length > 0 ? (
         <ManageUsersTable
-          title="Staff"
+          title={intl.formatMessage(translations.manageStaffTitle)}
           users={staff}
-          permissions={permissions}
           manageStaff
           renderRowActionComponent={(user): JSX.Element => (
             <UserManagementButtons user={user} />

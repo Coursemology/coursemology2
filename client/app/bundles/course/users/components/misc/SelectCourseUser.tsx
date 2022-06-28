@@ -1,14 +1,16 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Autocomplete, Box, TextField } from '@mui/material';
-import { CourseUserMiniEntity } from 'types/course/courseUsers';
+import { CourseUserBasicMiniEntity } from 'types/course/courseUsers';
 import { useNavigate } from 'react-router-dom';
 import { getCourseURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useSelector } from 'react-redux';
+import { AppState } from 'types/store';
+import { getAllUserOptionMiniEntities } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
-  users: CourseUserMiniEntity[];
-  initialUser?: CourseUserMiniEntity | null;
+  initialUser?: CourseUserBasicMiniEntity | null;
 }
 
 const translations = defineMessages({
@@ -19,13 +21,18 @@ const translations = defineMessages({
 });
 
 const SelectCourseUser: FC<Props> = (props) => {
-  const { users, initialUser = null, intl } = props;
-  const [user, setUser] = useState<CourseUserMiniEntity | null>(initialUser);
+  const { initialUser = null, intl } = props;
+  const users = useSelector((state: AppState) =>
+    getAllUserOptionMiniEntities(state),
+  );
+  const [user, setUser] = useState<CourseUserBasicMiniEntity | null>(
+    initialUser,
+  );
   const navigate = useNavigate();
 
   const handleChange = (
     _e: React.SyntheticEvent,
-    value: CourseUserMiniEntity | null,
+    value: CourseUserBasicMiniEntity | null,
   ): void => {
     if (value) {
       setUser(value);
@@ -45,7 +52,7 @@ const SelectCourseUser: FC<Props> = (props) => {
       getOptionLabel={(option): string => option.name}
       // eslint-disable-next-line @typescript-eslint/no-shadow
       renderOption={(props, option): JSX.Element => (
-        <Box component="li" {...props}>
+        <Box component="li" {...props} key={option.id}>
           {option.name}
         </Box>
       )}

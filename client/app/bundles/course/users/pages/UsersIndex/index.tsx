@@ -10,7 +10,7 @@ import PageHeader from 'lib/components/pages/PageHeader';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { fetchUsers } from '../../operations';
-import { getAllUserMiniEntities } from '../../selectors';
+import { getAllStudentMiniEntities } from '../../selectors';
 
 type Props = WrappedComponentProps;
 
@@ -44,7 +44,9 @@ const UsersIndex: FC<Props> = (props) => {
   const { intl } = props;
   const courseId = getCourseId();
   const [isLoading, setIsLoading] = useState(true);
-  const users = useSelector((state: AppState) => getAllUserMiniEntities(state));
+  const users = useSelector((state: AppState) =>
+    getAllStudentMiniEntities(state),
+  );
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {

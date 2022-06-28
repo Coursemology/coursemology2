@@ -92,7 +92,7 @@ RSpec.feature 'Courses: Staff Management' do
 
         click_button 'Upgrade to staff'
 
-        expect_toastify("#{staff_to_be.name} is now a Teaching Assistant")
+        expect_toastify('1 new user has been upgraded to Teaching Assistant')
 
         within find("tr.course_user_#{staff_to_be.id}") do
           expect(find('div.course_user_name').find('input').value).to eq(staff_to_be.name)

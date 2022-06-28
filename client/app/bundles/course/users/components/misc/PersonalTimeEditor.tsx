@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { AppDispatch } from 'types/store';
-import { PersonalTimeEntity } from 'types/course/personalTimes';
+import { PersonalTimeMiniEntity } from 'types/course/personalTimes';
 import {
   Controller,
   useForm,
@@ -30,7 +30,7 @@ import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { deletePersonalTime, updatePersonalTime } from '../../operations';
 
 interface Props extends WrappedComponentProps {
-  item: PersonalTimeEntity;
+  item: PersonalTimeMiniEntity;
 }
 
 interface IFormInputs {
@@ -47,11 +47,7 @@ const translations = defineMessages({
   },
   createSuccess: {
     id: 'course.users.components.misc.PersonalTimeEditor.create.success',
-    defaultMessage: 'Created new personal time!',
-  },
-  createFailure: {
-    id: 'course.users.components.misc.PersonalTimeEditor.create.failure',
-    defaultMessage: 'Unable to create new personal time',
+    defaultMessage: 'Created new personal time for {title}!',
   },
   update: {
     id: 'course.users.components.misc.PersonalTimeEditor.update',
@@ -76,7 +72,7 @@ const translations = defineMessages({
   },
   deleteSuccess: {
     id: 'course.users.components.misc.PersonalTimeEditor.delete.success',
-    defaultMessage: 'Deleted personal time!',
+    defaultMessage: 'Deleted personal time for {title}.',
   },
   deleteFailure: {
     id: 'course.users.components.misc.PersonalTimeEditor.delete.failure',
@@ -110,40 +106,29 @@ const PersonalTimeEditor: FC<Props> = (props) => {
     resolver: yupResolver(validationSchema),
   });
   const { userId } = useParams();
-  const [isCreating, setIsCreating] = useState(false);
+  const [isCreating, setIsCreating] = useState(!item.new);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleCreate = (): Promise<void> => {
-    const data = {
-      id: item.id,
-      fixed: item.fixed,
-      startAt: item.itemStartAt,
-      bonusEndAt: item.itemBonusEndAt,
-      endAt: item.itemEndAt,
-    };
+  const handleCreate = (): void => {
     setIsCreating(true);
-    return dispatch(updatePersonalTime(data, +userId!))
-      .then(() => {
-        reset(initialValues);
-      })
-      .finally(() => {
-        setIsCreating(false);
-        toast.success(intl.formatMessage(translations.createSuccess));
-      })
-      .catch((error) => {
-        toast.error(intl.formatMessage(translations.createFailure));
-        throw error;
-      });
   };
 
-  const onDelete = (): Promise<void> => {
+  const handleDelete = (): Promise<void> => {
+    setIsCreating(false);
+    if (item.new) {
+      return new Promise<void>(() => {});
+    }
     setIsDeleting(true);
     return dispatch(deletePersonalTime(item.personalTimeId!, +userId!))
       .then(() => {
         reset(initialValues);
-        toast.success(intl.formatMessage(translations.deleteSuccess));
+        toast.success(
+          intl.formatMessage(translations.deleteSuccess, {
+            title: item.title,
+          }),
+        );
       })
       .finally(() => {
         setIsDeleting(false);
@@ -168,11 +153,19 @@ const PersonalTimeEditor: FC<Props> = (props) => {
       .then(() => {})
       .finally(() => {
         setIsSaving(false);
-        toast.success(
-          intl.formatMessage(translations.updateSuccess, {
-            title: item.title,
-          }),
-        );
+        if (item.new) {
+          toast.success(
+            intl.formatMessage(translations.createSuccess, {
+              title: item.title,
+            }),
+          );
+        } else {
+          toast.success(
+            intl.formatMessage(translations.updateSuccess, {
+              title: item.title,
+            }),
+          );
+        }
       })
       .catch((error) => {
         toast.error(
@@ -187,7 +180,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
 
   return (
     <>
-      {item.new ? (
+      {!isCreating ? (
         <TableCell colSpan={4}>
           <Grid container flexDirection="column" alignItems="center">
             <LoadingButton
@@ -257,7 +250,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
               />
               <SaveButton
                 tooltip={intl.formatMessage(translations.update)}
-                disabled={isCreating || isSaving || isDeleting}
+                disabled={isSaving || isDeleting}
                 onClick={(): UseFormHandleSubmit<IFormInputs> => handleSubmit}
                 className="btn-submit"
                 form={`personal-time-form-${item.personalTimeId}`}
@@ -266,11 +259,15 @@ const PersonalTimeEditor: FC<Props> = (props) => {
               />
               <DeleteButton
                 tooltip={intl.formatMessage(translations.delete)}
-                disabled={isCreating || isSaving || isDeleting}
-                onClick={onDelete}
-                confirmMessage={intl.formatMessage(translations.deleteConfirm, {
-                  title: item.title,
-                })}
+                disabled={isSaving || isDeleting}
+                onClick={handleDelete}
+                confirmMessage={
+                  item.new
+                    ? undefined
+                    : intl.formatMessage(translations.deleteConfirm, {
+                        title: item.title,
+                      })
+                }
                 size="small"
               />
               <form

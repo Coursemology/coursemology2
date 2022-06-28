@@ -6,9 +6,10 @@ import { Typography } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
 import PageHeader from 'lib/components/pages/PageHeader';
+import manageUsersTranslations from 'lib/translations/course/users/index';
 import { fetchStudents } from '../../operations';
 import {
-  getAllStudentsEntities,
+  getAllStudentMiniEntities,
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
@@ -19,17 +20,13 @@ import UserManagementButtons from '../../components/buttons/UserManagementButton
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
-  manageUsersHeader: {
-    id: 'course.users.manage.header',
-    defaultMessage: 'Manage Users',
+  manageStudentsTitle: {
+    id: 'course.users.manage.students.title',
+    defaultMessage: 'Students',
   },
   noStudents: {
     id: 'course.users.manage.noStudents',
     defaultMessage: 'No students in course',
-  },
-  fetchUsersFailure: {
-    id: 'course.users.manage.fetch.failue',
-    defaultMessage: 'Failed to fetch users',
   },
 });
 
@@ -37,7 +34,7 @@ const ManageStudents: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
   const students = useSelector((state: AppState) =>
-    getAllStudentsEntities(state),
+    getAllStudentMiniEntities(state),
   );
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
@@ -53,7 +50,9 @@ const ManageStudents: FC<Props> = (props) => {
         setIsLoading(false);
       })
       .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchUsersFailure)),
+        toast.error(
+          intl.formatMessage(manageUsersTranslations.fetchUsersFailure),
+        ),
       );
   }, [dispatch]);
 
@@ -71,13 +70,14 @@ const ManageStudents: FC<Props> = (props) => {
 
   return (
     <>
-      <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
+      <PageHeader
+        title={intl.formatMessage(manageUsersTranslations.manageUsersHeader)}
+      />
       <UserManagementTabs permissions={permissions} sharedData={sharedData} />
       {students.length > 0 ? (
         <ManageUsersTable
-          title="Students"
+          title={intl.formatMessage(translations.manageStudentsTitle)}
           users={students}
-          permissions={permissions}
           renderRowActionComponent={(user): JSX.Element => (
             <UserManagementButtons user={user} />
           )}

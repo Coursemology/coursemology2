@@ -1,11 +1,8 @@
 import { produce } from 'immer';
-import { CourseUserEntity } from 'types/course/courseUsers';
-import { PersonalTimeEntity } from 'types/course/personalTimes';
 import {
   createEntityStore,
   saveEntityToStore,
   saveListToStore,
-  saveDetailedListToStore,
   removeFromStore,
 } from 'utilities/store';
 import {
@@ -18,10 +15,13 @@ import {
   SAVE_PERSONAL_TIMES_LIST,
   UPDATE_PERSONAL_TIME,
   DELETE_PERSONAL_TIME,
+  UPDATE_USER_OPTION,
+  DELETE_USER_OPTION,
 } from './types';
 
 const initialState: UsersState = {
   users: createEntityStore(),
+  userOptions: createEntityStore(),
   permissions: {
     canManageCourseUsers: false,
     canManageEnrolRequests: false,
@@ -45,7 +45,6 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
       }));
       saveListToStore(draft.users, entityList);
       draft.permissions = action.manageCourseUsersPermissions;
-      draft.manageCourseUsersData = action.manageCourseUsersData;
       break;
     }
     case SAVE_USER: {
@@ -56,10 +55,16 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
     }
     case SAVE_MANAGE_USERS_LIST: {
       const usersList = action.userList;
-      const entityList: CourseUserEntity[] = usersList.map((data) => ({
+      const entityList = usersList.map((data) => ({
         ...data,
       }));
-      saveDetailedListToStore(draft.users, entityList);
+      saveListToStore(draft.users, entityList);
+      if (action.userOptions.length > 0) {
+        const userOptionsEntityList = action.userOptions.map((data) => ({
+          ...data,
+        }));
+        saveListToStore(draft.userOptions, userOptionsEntityList);
+      }
       draft.permissions = action.manageCourseUsersPermissions;
       draft.manageCourseUsersData = action.manageCourseUsersData;
       break;
@@ -73,15 +78,13 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
     }
     case SAVE_PERSONAL_TIMES_LIST: {
       const personalTimesList = action.personalTimes;
-      const entityList: PersonalTimeEntity[] = personalTimesList.map(
-        (data) => ({ ...data }),
-      );
-      saveDetailedListToStore(draft.personalTimes, entityList);
+      const entityList = personalTimesList.map((data) => ({ ...data }));
+      saveListToStore(draft.personalTimes, entityList);
       break;
     }
     case UPDATE_PERSONAL_TIME: {
       const newPersonalTime = action.personalTime;
-      const personalTimeEntity: PersonalTimeEntity = { ...newPersonalTime };
+      const personalTimeEntity = { ...newPersonalTime };
       saveEntityToStore(draft.personalTimes, personalTimeEntity);
       break;
     }
@@ -93,7 +96,7 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
       )[0];
       const entityToDelete = draft.personalTimes.byId[itemIdToDelete];
       if (entityToDelete) {
-        const newEntity: PersonalTimeEntity = {
+        const newEntity = {
           ...entityToDelete,
           new: true,
           personalStartAt: null,
@@ -102,6 +105,19 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
           personalTimeId: null,
         };
         saveEntityToStore(draft.personalTimes, newEntity);
+      }
+      break;
+    }
+    case UPDATE_USER_OPTION: {
+      const userOption = action.userOption;
+      const userOptionEntity = { ...userOption };
+      saveEntityToStore(draft.userOptions, userOptionEntity);
+      break;
+    }
+    case DELETE_USER_OPTION: {
+      const optionId = action.id;
+      if (draft.userOptions.byId[optionId]) {
+        removeFromStore(draft.userOptions, optionId);
       }
       break;
     }

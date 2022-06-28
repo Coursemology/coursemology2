@@ -1,10 +1,9 @@
 import { FC, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   Autocomplete,
   Box,
-  Button,
   Checkbox,
   Grid,
   MenuItem,
@@ -13,27 +12,29 @@ import {
   Typography,
 } from '@mui/material';
 import { toast } from 'react-toastify';
-import { AppDispatch } from 'types/store';
+import { AppDispatch, AppState } from 'types/store';
 import sharedConstants from 'lib/constants/sharedConstants';
-import { CourseUserData } from 'types/course/courseUsers';
+import { CourseUserBasicMiniEntity, StaffRole } from 'types/course/courseUsers';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { LoadingButton } from '@mui/lab';
 import { upgradeToStaff } from '../../operations';
+import { getAllUserOptionMiniEntities } from '../../selectors';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
-interface Props extends WrappedComponentProps {
-  students: CourseUserData[];
-}
+
+type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   upgradeSuccess: {
     id: 'course.user.components.misc.upgradeToStaff.success',
-    defaultMessage: '{name} is now a {role}',
+    defaultMessage:
+      '{count, plural, =0 {No users were} one {# new user has} other {# new users have}} been upgraded to {role}',
   },
   upgradeFailure: {
     id: 'course.user.components.misc.upgradeToStaff.fail',
-    defaultMessage: 'Failed to update user.',
+    defaultMessage: 'Failed to update user. {error}',
   },
   upgradeHeader: {
     id: 'course.user.components.misc.upgradeToStaff.header',
@@ -50,39 +51,49 @@ const translations = defineMessages({
 });
 
 const UpgradeToStaff: FC<Props> = (props) => {
-  const { students, intl } = props;
-  const [users, setUsers] = useState<CourseUserData[]>([]);
-  const [role, setRole] = useState(sharedConstants.STAFF_ROLES[0].value);
+  const { intl } = props;
+
+  const students = useSelector((state: AppState) =>
+    getAllUserOptionMiniEntities(state),
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedStudents, setSelectedStudents] = useState<
+    CourseUserBasicMiniEntity[]
+  >([]);
+  const [role, setRole] = useState<StaffRole>(
+    Object.keys(sharedConstants.STAFF_ROLES)[0] as StaffRole, // object.keys returns string[]; we know it is a StaffRole
+  );
   const dispatch = useDispatch<AppDispatch>();
 
-  const onSubmit = (): void => {
-    return users.forEach((user) =>
-      dispatch(upgradeToStaff(user.id, role))
-        .then(() => {
-          const roleLabel = sharedConstants.STAFF_ROLES.find(
-            (roleObjs) => roleObjs.value === role,
-          )?.label;
-          toast.success(
-            intl.formatMessage(translations.upgradeSuccess, {
-              name: user.name,
-              role: roleLabel,
-            }),
-          );
-          setUsers([]);
-        })
-        .catch((error) => {
+  const onSubmit = (): Promise<void> => {
+    setIsLoading(true);
+    setSelectedStudents([]);
+    return dispatch(upgradeToStaff(selectedStudents, role))
+      .then(() => {
+        const roleLabel = sharedConstants.STAFF_ROLES[role];
+        toast.success(
+          intl.formatMessage(translations.upgradeSuccess, {
+            count: selectedStudents.length,
+            role: roleLabel,
+          }),
+        );
+      })
+      .finally(() => {
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error.response?.data) {
           toast.error(
             intl.formatMessage(translations.upgradeFailure, {
-              error,
+              error: error.response.data.errors,
             }),
           );
-          throw error;
-        }),
-    );
+        }
+      });
   };
 
   const handleNameChange = (_event, newValue): void => {
-    setUsers(newValue);
+    setSelectedStudents(newValue);
   };
 
   const handleRoleChange = (event): void => {
@@ -102,13 +113,13 @@ const UpgradeToStaff: FC<Props> = (props) => {
           multiple
           disableCloseOnSelect
           id="upgrade-student-name"
-          value={users}
+          value={selectedStudents}
           onChange={handleNameChange}
           options={students}
           getOptionLabel={(option): string => option.name}
           // eslint-disable-next-line @typescript-eslint/no-shadow
           renderOption={(props, option, { selected }): JSX.Element => (
-            <Box component="li" {...props}>
+            <Box component="li" {...props} key={option.id}>
               <Checkbox
                 icon={icon}
                 checkedIcon={checkedIcon}
@@ -137,22 +148,20 @@ const UpgradeToStaff: FC<Props> = (props) => {
           sx={{ minWidth: '300px', marginRight: '12px' }}
         >
           {/* eslint-disable-next-line @typescript-eslint/no-shadow */}
-          {sharedConstants.STAFF_ROLES.map((role) => (
-            <MenuItem
-              key={`upgrade-student-role-${role.value}`}
-              value={role.value}
-            >
-              {role.label}
+          {Object.keys(sharedConstants.STAFF_ROLES).map((role) => (
+            <MenuItem key={`upgrade-student-role-${role}`} value={role}>
+              {sharedConstants.STAFF_ROLES[role]}
             </MenuItem>
           ))}
         </TextField>
-        <Button
+        <LoadingButton
+          loading={isLoading}
           variant="contained"
           onClick={onSubmit}
           style={{ marginTop: '4px' }}
         >
           {intl.formatMessage(translations.upgradeButton)}
-        </Button>
+        </LoadingButton>
       </Grid>
     </Paper>
   );

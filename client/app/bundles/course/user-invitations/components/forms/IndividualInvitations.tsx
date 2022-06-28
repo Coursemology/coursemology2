@@ -3,7 +3,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Button, Divider, Grid } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import {
-  IndividualInviteRowData,
+  IndividualInvite,
   IndividualInvites,
 } from 'types/course/userInvitations';
 import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
@@ -19,7 +19,7 @@ interface Props extends WrappedComponentProps {
   permissions: ManageCourseUsersPermissions;
   fieldsConfig: {
     control: Control<IndividualInvites>;
-    fields: IndividualInviteRowData[];
+    fields: IndividualInvite[];
     append: UseFieldArrayAppend<IndividualInvites, 'invitations'>;
     remove: UseFieldArrayRemove;
   };

@@ -1,8 +1,8 @@
 export type TimelineAlgorithm = 'fixed' | 'fomo' | 'stragglers' | 'otot';
 
-export interface PersonalTimeData {
-  id: number; // id of lesson_plan_item
-  personalTimeId?: number; // id of personal_time
+export interface PersonalTimeMiniEntity {
+  id: number;
+  personalTimeId?: number;
   actableId: number;
   title: string;
   itemStartAt?: string;
@@ -15,9 +15,10 @@ export interface PersonalTimeData {
   fixed: boolean;
   new: boolean;
 }
-export interface PersonalTimeEntity {
-  id: number;
-  personalTimeId?: number;
+
+export interface PersonalTimeListData {
+  id: number; // id of lesson_plan_item
+  personalTimeId?: number; // id of personal_time
   actableId: number;
   title: string;
   itemStartAt?: string;
@@ -42,4 +43,15 @@ export interface PersonalTimePostData {
     bonus_end_at?: string | Date;
     end_at?: string | Date;
   };
+}
+
+/**
+ * Data type from PersonalTimeEditor form
+ */
+export interface PersonalTimeFormData {
+  id: number;
+  fixed: boolean;
+  startAt?: string | Date;
+  bonusEndAt?: string | Date;
+  endAt?: string | Date;
 }

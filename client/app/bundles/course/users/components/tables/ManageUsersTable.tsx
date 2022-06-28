@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactElement, memo } from 'react';
 import {
   defineMessages,
   FormattedMessage,
@@ -8,23 +8,25 @@ import {
 import { Box, Checkbox, MenuItem, TextField, Typography } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import {
-  CourseUserEntity,
-  ManageCourseUsersPermissions,
+  CourseUserMiniEntity,
+  CourseUserRowData,
 } from 'types/course/courseUsers';
 import Note from 'lib/components/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import sharedConstants from 'lib/constants/sharedConstants';
-import { InvitationEntity } from 'types/course/userInvitations';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import tableTranslations from 'lib/components/tables/translations';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
+import equal from 'fast-deep-equal';
+import { useSelector } from 'react-redux';
+import { AppState } from 'types/store';
+import { getManageCourseUserPermissions } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
   title: string;
-  users: CourseUserEntity[] | InvitationEntity[];
-  permissions: ManageCourseUsersPermissions | null;
+  users: CourseUserMiniEntity[];
   manageStaff?: boolean;
-  renderRowActionComponent?: (any) => ReactElement;
+  renderRowActionComponent?: (user: CourseUserRowData) => ReactElement;
 }
 
 const translations = defineMessages({
@@ -49,11 +51,13 @@ const ManageUsersTable: FC<Props> = (props) => {
   const {
     title,
     users,
-    permissions,
     manageStaff = false,
     renderRowActionComponent = null,
     intl,
   } = props;
+  const permissions = useSelector((state: AppState) =>
+    getManageCourseUserPermissions(state),
+  );
 
   if (users && users.length === 0) {
     return <Note message={<FormattedMessage {...translations.noUsers} />} />;
@@ -206,13 +210,13 @@ const ManageUsersTable: FC<Props> = (props) => {
               onChange={(e): React.ChangeEvent => updateValue(e.target.value)}
               variant="standard"
             >
-              {sharedConstants.USER_ROLES.map((option) => (
+              {Object.keys(sharedConstants.COURSE_USER_ROLES).map((option) => (
                 <MenuItem
-                  id={`role-${user.id}-${option.value}`}
-                  key={`role-${user.id}-${option.value}`}
-                  value={option.value}
+                  id={`role-${user.id}-${option}`}
+                  key={`role-${user.id}-${option}`}
+                  value={option}
                 >
-                  {option.label}
+                  {sharedConstants.COURSE_USER_ROLES[option]}
                 </MenuItem>
               ))}
             </TextField>
@@ -231,7 +235,7 @@ const ManageUsersTable: FC<Props> = (props) => {
         sort: false,
         alignCenter: true,
         customBodyRender: (_value, tableMeta): JSX.Element => {
-          const rowData = tableMeta.rowData;
+          const rowData = tableMeta.rowData as CourseUserRowData;
           const user = rebuildObjectFromRow(columns, rowData);
           const actionComponent = renderRowActionComponent(user);
           return actionComponent;
@@ -253,4 +257,6 @@ const ManageUsersTable: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(ManageUsersTable);
+export default memo(injectIntl(ManageUsersTable), (prevProps, nextProps) => {
+  return equal(prevProps.users, nextProps.users);
+});

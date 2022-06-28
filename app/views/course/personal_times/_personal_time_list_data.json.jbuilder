@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 personal_time = item.find_or_create_personal_time_for(@course_user)
 
 json.id personal_time.lesson_plan_item_id

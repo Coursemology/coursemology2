@@ -12,7 +12,7 @@ import FormTextField from 'lib/components/form/fields/TextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 import {
-  IndividualInviteRowData,
+  IndividualInvite,
   IndividualInvites,
 } from 'types/course/userInvitations';
 import sharedConstants from 'lib/constants/sharedConstants';
@@ -22,7 +22,7 @@ interface Props extends WrappedComponentProps {
   permissions: ManageCourseUsersPermissions;
   fieldsConfig: {
     control: Control<IndividualInvites>;
-    fields: IndividualInviteRowData[];
+    fields: IndividualInvite[];
     append: UseFieldArrayAppend<IndividualInvites, 'invitations'>;
     remove: UseFieldArrayRemove;
   };
@@ -50,6 +50,13 @@ const translations = defineMessages({
     defaultMessage: 'Remove Invitation',
   },
 });
+
+const userRoleOptions = Object.keys(sharedConstants.COURSE_USER_ROLES).map(
+  (roleValue) => ({
+    label: sharedConstants.COURSE_USER_ROLES[roleValue],
+    value: roleValue,
+  }),
+);
 
 const IndividualInvitation: FC<Props> = (props) => {
   const { permissions, fieldsConfig, index, intl } = props;
@@ -95,7 +102,7 @@ const IndividualInvitation: FC<Props> = (props) => {
           <FormSelectField
             field={field}
             fieldState={fieldState}
-            options={sharedConstants.USER_ROLES}
+            options={userRoleOptions}
             // @ts-ignore: component is still written in JS
             label="Role"
             sx={styles.textInput}

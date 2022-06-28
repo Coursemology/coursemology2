@@ -8,14 +8,3 @@ en:
         header: 'Invitations'
       new:
         header: 'Invite Users'
-      destroy:
-        success: 'Invitation to %{name} was deleted.'
-      resend_invitation:
-        success: >
-          The request to resend the email invitation to %{email}
-          is received, please wait while the email is sent out.
-        failure: 'The request to resend the email invitation failed.'
-      resend_invitations:
-        success: 'Email invitations were successfully resent.'
-        failure: 'The resending of email invitations failed.'
-

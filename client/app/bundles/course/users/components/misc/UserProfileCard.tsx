@@ -140,11 +140,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
           >
             <Typography variant="h4">{user.name}</Typography>
             <Typography variant="body1">
-              <strong>
-                {sharedConstants.USER_ROLES.find(
-                  (role) => role.value === user.role,
-                )?.label ?? '-'}
-              </strong>
+              <strong>{sharedConstants.COURSE_USER_ROLES[user.role]}</strong>
             </Typography>
             {renderManageEmail()}
             {renderUserStats()}

@@ -7,13 +7,12 @@ import { AppDispatch, AppState } from 'types/store';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { Paper, Typography } from '@mui/material';
 import { fetchUsers } from '../../operations';
+import UserManagementTabs from '../../components/navigation/UserManagementTabs';
+import SelectCourseUser from '../../components/misc/SelectCourseUser';
 import {
-  getAllUserMiniEntities,
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
-import UserManagementTabs from '../../components/navigation/UserManagementTabs';
-import SelectCourseUser from '../../components/misc/SelectCourseUser';
 
 type Props = WrappedComponentProps;
 
@@ -35,7 +34,6 @@ const translations = defineMessages({
 const PersonalTimes: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
-  const users = useSelector((state: AppState) => getAllUserMiniEntities(state));
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
   );
@@ -45,7 +43,8 @@ const PersonalTimes: FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(fetchUsers(false))
+    const asBasicData = true;
+    dispatch(fetchUsers(asBasicData))
       .finally(() => {
         setIsLoading(false);
       })
@@ -70,7 +69,7 @@ const PersonalTimes: FC<Props> = (props) => {
           {intl.formatMessage(translations.courseUserHeader)}
         </Typography>
 
-        <SelectCourseUser users={users} />
+        <SelectCourseUser />
       </Paper>
     </>
   );

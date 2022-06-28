@@ -108,8 +108,6 @@ const UserRequests: FC<Props> = (props) => {
         <EnrolRequestsTable
           title={intl.formatMessage(translations.pending)}
           enrolRequests={pendingEnrolRequests}
-          permissions={permissions}
-          defaultTimelineAlgorithm={sharedData.defaultTimelineAlgorithm}
           pendingEnrolRequests
           renderRowActionComponent={(enrolRequest): JSX.Element => (
             <PendingEnrolRequestsButtons enrolRequest={enrolRequest} />
@@ -120,7 +118,6 @@ const UserRequests: FC<Props> = (props) => {
         <EnrolRequestsTable
           title={intl.formatMessage(translations.approved)}
           enrolRequests={approvedEnrolRequests}
-          permissions={permissions}
           approvedEnrolRequests
         />
       )}
@@ -128,7 +125,6 @@ const UserRequests: FC<Props> = (props) => {
         <EnrolRequestsTable
           title={intl.formatMessage(translations.rejected)}
           enrolRequests={rejectedEnrolRequests}
-          permissions={permissions}
           rejectedEnrolRequests
         />
       )}

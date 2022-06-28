@@ -1,9 +1,12 @@
 import { AxiosResponse } from 'axios';
 import {
+  CourseUserBasicListData,
+  CourseUserBasicMiniEntity,
   CourseUserData,
   CourseUserListData,
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
+  StaffRole,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
 import BaseCourseAPI from './Base';
@@ -13,17 +16,22 @@ export default class UsersAPI extends BaseCourseAPI {
 
   /**
    * Fetches a list of users in a course.
-   * param onlyStudents: bool - whether to return only students or all users
+   * Note that GET /users returns only students if asBasicData is false.
+   * Otherwise, GET /users will return BasicListData of all course users when asBasicData is true.
+   *
+   * param asBasicData: bool - whether to return users: CourseUserListData[] or
+   *                           as userOptions: CourseUserBasicListData[]
    */
-  index(onlyStudents: boolean = true): Promise<
+  index(asBasicData: boolean = false): Promise<
     AxiosResponse<{
       users: CourseUserListData[];
-      permissions: ManageCourseUsersPermissions;
-      manageCourseUsersData: ManageCourseUsersSharedData;
+      userOptions?: CourseUserBasicListData[];
+      permissions?: ManageCourseUsersPermissions;
+      manageCourseUsersData?: ManageCourseUsersSharedData;
     }>
   > {
     return this.getClient().get(`${this._baseUrlPrefix}/users`, {
-      params: { only_students: onlyStudents },
+      params: { as_basic_data: asBasicData },
     });
   }
 
@@ -32,7 +40,7 @@ export default class UsersAPI extends BaseCourseAPI {
    */
   indexStudents(): Promise<
     AxiosResponse<{
-      users: CourseUserData[];
+      users: CourseUserListData[];
       permissions: ManageCourseUsersPermissions;
       manageCourseUsersData: ManageCourseUsersSharedData;
     }>
@@ -45,7 +53,8 @@ export default class UsersAPI extends BaseCourseAPI {
    */
   indexStaff(): Promise<
     AxiosResponse<{
-      users: CourseUserData[];
+      users: CourseUserListData[];
+      userOptions?: CourseUserBasicListData[];
       permissions: ManageCourseUsersPermissions;
       manageCourseUsersData: ManageCourseUsersSharedData;
     }>
@@ -98,17 +107,23 @@ export default class UsersAPI extends BaseCourseAPI {
   /**
    * Upgrade a user to staff.
    *
-   * @param {number} userId
-   * @param {string} role
-   * @return {Promise}
-   * success response: {}
+   * @param {CourseUserBasicMiniEntity[]} users
+   * @param {StaffRole} role
+   * @return {Promise} list of upgraded users
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
-  upgradeToStaff(userId: number, role: string): Promise<AxiosResponse> {
+  upgradeToStaff(
+    users: CourseUserBasicMiniEntity[],
+    role: StaffRole,
+  ): Promise<AxiosResponse> {
+    const userIds = users.map((user) => user.id);
     const params = {
-      course_user: {
-        id: userId,
+      course_users: {
+        ids: userIds,
         role,
+      },
+      user: {
+        id: userIds[0],
       },
     };
 

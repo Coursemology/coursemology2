@@ -2,18 +2,28 @@ import {
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
-import { InvitationData } from 'types/course/userInvitations';
+import { InvitationListData } from 'types/course/userInvitations';
 import {
-  DeleteInvitationAction,
-  DELETE_INVITATION,
-  SaveCourseRegistrationKeyAction,
-  SaveInvitationListAction,
-  SAVE_COURSE_REGISTRATION_KEY,
   SAVE_INVITATION_LIST,
+  DELETE_INVITATION,
+  SAVE_COURSE_REGISTRATION_KEY,
+  SAVE_PERMISSIONS,
+  SAVE_SHARED_DATA,
+  UPDATE_INVITATION,
+  UPDATE_INVITATION_LIST,
+  UPDATE_INVITATION_COUNTS,
+  SaveInvitationListAction,
+  DeleteInvitationAction,
+  SaveCourseRegistrationKeyAction,
+  SavePermissionsAction,
+  SaveSharedDataAction,
+  UpdateInvitationAction,
+  UpdateInvitationListAction,
+  UpdateInvitationCountsAction,
 } from './types';
 
 export function saveInvitationList(
-  invitationList: InvitationData[],
+  invitationList: InvitationListData[],
   manageCourseUsersPermissions: ManageCourseUsersPermissions,
   manageCourseUsersData: ManageCourseUsersSharedData,
 ): SaveInvitationListAction {
@@ -38,5 +48,50 @@ export function saveRegistrationKey(
   return {
     type: SAVE_COURSE_REGISTRATION_KEY,
     courseRegistrationKey,
+  };
+}
+
+export function savePermissions(
+  manageCourseUsersPermissions: ManageCourseUsersPermissions,
+): SavePermissionsAction {
+  return {
+    type: SAVE_PERMISSIONS,
+    manageCourseUsersPermissions,
+  };
+}
+
+export function saveSharedData(
+  manageCourseUsersData: ManageCourseUsersSharedData,
+): SaveSharedDataAction {
+  return {
+    type: SAVE_SHARED_DATA,
+    manageCourseUsersData,
+  };
+}
+
+export function updateInvitation(
+  invitation: InvitationListData,
+): UpdateInvitationAction {
+  return {
+    type: UPDATE_INVITATION,
+    invitation,
+  };
+}
+
+export function updateInvitationList(
+  invitationList: InvitationListData[],
+): UpdateInvitationListAction {
+  return {
+    type: UPDATE_INVITATION_LIST,
+    invitationList,
+  };
+}
+
+export function updateInvitationCounts(
+  newInvitations: number,
+): UpdateInvitationCountsAction {
+  return {
+    type: UPDATE_INVITATION_COUNTS,
+    newInvitations,
   };
 }

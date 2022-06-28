@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import sharedConstants from 'lib/constants/sharedConstants';
 import { AppState, SelectionKey } from 'types/store';
 import {
   selectMiniEntity,
   selectMiniEntities,
   selectEntity,
-  selectEntities,
 } from 'utilities/store';
 
 function getLocalState(state: AppState) {
@@ -19,25 +19,28 @@ export function getUserEntity(state: AppState, id: SelectionKey) {
   return selectEntity(getLocalState(state).users, id);
 }
 
-export function getAllUserMiniEntities(state: AppState) {
+export function getAllStudentMiniEntities(state: AppState) {
   return selectMiniEntities(
-    getLocalState(state).users,
-    getLocalState(state).users.ids,
-  );
-}
-
-export function getAllStudentsEntities(state: AppState) {
-  return selectEntities(
     getLocalState(state).users,
     getLocalState(state).users.ids,
   ).filter((entity) => entity.role === 'student');
 }
 
-export function getAllStaffEntities(state: AppState) {
-  return selectEntities(
+export function getAllStaffMiniEntities(state: AppState) {
+  return selectMiniEntities(
     getLocalState(state).users,
     getLocalState(state).users.ids,
-  ).filter((entity) => entity.role !== 'student');
+  ).filter(
+    (entity) =>
+      Object.keys(sharedConstants.STAFF_ROLES).indexOf(entity.role) > -1,
+  );
+}
+
+export function getAllUserOptionMiniEntities(state: AppState) {
+  return selectMiniEntities(
+    getLocalState(state).userOptions,
+    getLocalState(state).userOptions.ids,
+  );
 }
 
 export function getManageCourseUserPermissions(state: AppState) {
@@ -49,7 +52,7 @@ export function getManageCourseUsersSharedData(state: AppState) {
 }
 
 export function getAllPersonalTimesEntities(state: AppState) {
-  return selectEntities(
+  return selectMiniEntities(
     getLocalState(state).personalTimes,
     getLocalState(state).personalTimes.ids,
   );

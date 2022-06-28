@@ -4,7 +4,7 @@ import {
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
 import {
-  InvitationData,
+  InvitationListData,
   InvitationFileEntity,
 } from 'types/course/userInvitations';
 import SubmissionsAPI from './Assessment/Submissions';
@@ -18,7 +18,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    */
   index(): Promise<
     AxiosResponse<{
-      invitations: InvitationData[];
+      invitations: InvitationListData[];
       permissions: ManageCourseUsersPermissions;
       manageCourseUsersData: ManageCourseUsersSharedData;
     }>
@@ -35,9 +35,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    */
   invite(data: InvitationFileEntity | FormData): Promise<
     AxiosResponse<{
-      invitations: InvitationData[];
-      permissions: ManageCourseUsersPermissions;
-      manageCourseUsersData: ManageCourseUsersSharedData;
+      newInvitations: number;
       invitationResult: string; // string which is JSON.parsed to type InvitationResult
     }>
   > {
@@ -78,6 +76,20 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
   }
 
   /**
+   * Fetches permissions & shared course data.
+   */
+  getPermissionsAndSharedData(): Promise<
+    AxiosResponse<{
+      permissions: ManageCourseUsersPermissions;
+      manageCourseUsersData: ManageCourseUsersSharedData;
+    }>
+  > {
+    return this.getClient().get(
+      `${this._baseUrlPrefix}/user_invitations?without_invitations=true`,
+    );
+  }
+
+  /**
    * Toggles course registration code status.
    */
   toggleCourseRegistrationKey(shouldEnable: boolean): Promise<
@@ -109,11 +121,12 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
   /**
    * Resends all invitation emails.
    *
-   * @return {Promise}
-   * success response: { }
+   * @return {Promise} updated invitations
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
-  resendAllInvitations(): Promise<AxiosResponse> {
+  resendAllInvitations(): Promise<
+    AxiosResponse<{ invitations: InvitationListData[] }>
+  > {
     return this.getClient().post(
       `${this._baseUrlPrefix}/users/resend_invitations`,
     );
@@ -123,11 +136,12 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    * Resends an invitation email.
    *
    * @param {number} invitationId Invitation to resend email to
-   * @return {Promise}
-   * success response: { }
+   * @return {Promise} updated invitation
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
-  resendInvitationEmail(invitationId: number): Promise<AxiosResponse> {
+  resendInvitationEmail(
+    invitationId: number,
+  ): Promise<AxiosResponse<InvitationListData>> {
     return this.getClient().post(
       `${this._baseUrlPrefix}/user_invitations/${invitationId}/resend_invitation`,
     );
@@ -138,7 +152,6 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    *
    * @param {number} invitationId Invitation to delete
    * @return {Promise}
-   * success response: { }
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   delete(invitationId: number): Promise<AxiosResponse> {
