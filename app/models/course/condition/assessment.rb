@@ -121,7 +121,8 @@ class Course::Condition::Assessment < ApplicationRecord
   def fill_satisfaction_information_with_minimum_grade_percentage(user_submissions, satisfaction_information,
                                                                   user_ids_to_indices)
     user_submissions.with_published_state.eager_load(:answers, assessment: :questions).each do |user_submission|
-      if satisfied_minimum_grade_percentage?(user_submission)
+      if !satisfaction_information[user_ids_to_indices[user_submission.course_user.user.id]] &&
+         satisfied_minimum_grade_percentage?(user_submission)
         satisfaction_information[user_ids_to_indices[user_submission.course_user.user.id]] = true
       end
     end
