@@ -169,7 +169,7 @@ RSpec.describe Course::Condition::Achievement, type: :model do
         end
       end
 
-      context 'when one user does not have the achievement' do
+      context 'when one user does not have the achievement while the rest have it' do
         before do
           create(:course_user_achievement, course_user: course_user1, achievement: achievement)
           create(:course_user_achievement, course_user: course_user3, achievement: achievement)

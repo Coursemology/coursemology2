@@ -113,7 +113,7 @@ RSpec.describe Course::Condition::Level, type: :model do
         end
       end
 
-      context 'when all users have reached the required level' do
+      context 'when one user has not reached the required level while the rest have' do
         it 'returns true for all users' do
           subject.minimum_level = 6
           expect(subject.compute_satisfaction_information([course_user1, course_user2,

@@ -138,7 +138,7 @@ RSpec.describe Course::Condition::Survey, type: :model do
         end
       end
 
-      context 'when one user is attempting the survey' do
+      context 'when one user is attempting the survey while the rest have completed it' do
         before do
           create(:response, survey: survey, course_user: course_user1,
                             submitted_at: Time.zone.now,
@@ -157,7 +157,7 @@ RSpec.describe Course::Condition::Survey, type: :model do
         end
       end
 
-      context 'when one user has not attempted the survey' do
+      context 'when one user has not attempted the survey while the rest have completed it' do
         before do
           create(:response, survey: survey, course_user: course_user1,
                             submitted_at: Time.zone.now,
@@ -173,7 +173,7 @@ RSpec.describe Course::Condition::Survey, type: :model do
         end
       end
 
-      context 'when all users do not have the achievement' do
+      context 'when all users have not completed the survey' do
         it 'returns false for all users' do
           expect(subject.compute_satisfaction_information([course_user1, course_user2,
                                                            course_user3])).to eq([false, false, false])
