@@ -121,6 +121,7 @@ const AnnouncementForm: FC<Props> = (props) => {
       </Button>
       {editing ? (
         <Button
+          id="announcement-form-update-button"
           variant="contained"
           color="primary"
           className="btn-submit"
@@ -133,6 +134,7 @@ const AnnouncementForm: FC<Props> = (props) => {
         </Button>
       ) : (
         <Button
+          id="announcement-form-submit-button"
           color="primary"
           className="btn-submit"
           disabled={disabled || !isDirty}
@@ -155,25 +157,28 @@ const AnnouncementForm: FC<Props> = (props) => {
         onSubmit={handleSubmit((data) => onSubmit(data, setError))}
       >
         <ErrorText errors={errors} />
-        <Controller
-          control={control}
-          name="title"
-          render={({ field, fieldState }): JSX.Element => (
-            <FormTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.title} />}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-              variant="standard"
-            />
-          )}
-        />
+        <div id="announcement-title">
+          <Controller
+            control={control}
+            name="title"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.title} />}
+                // @ts-ignore: component is still written in JS
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                variant="standard"
+              />
+            )}
+          />
+        </div>
+
         <Controller
           name="content"
           control={control}

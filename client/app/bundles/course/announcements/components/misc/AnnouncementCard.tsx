@@ -96,6 +96,7 @@ const AnnouncementCard: FC<Props> = (props) => {
     <>
       <div
         id={`announcement-${announcement.id}`}
+        className="announcement"
         key={key}
         style={{
           borderStyle: 'solid',
@@ -140,12 +141,14 @@ const AnnouncementCard: FC<Props> = (props) => {
             <div style={{ display: 'flex' }}>
               {announcement.permissions.canEdit && (
                 <EditButton
+                  id={`announcement-edit-button-${announcement.id}`}
                   onClick={onEdit}
                   sx={{ paddingTop: 0, paddingBottom: 0, paddingRight: 0 }}
                 />
               )}
               {announcement.permissions.canDelete && (
                 <DeleteButton
+                  id={`announcement-delete-button-${announcement.id}`}
                   disabled={false}
                   message={`${intl.formatMessage(
                     translations.deleteConfirmation,
