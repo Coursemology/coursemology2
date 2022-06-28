@@ -26,7 +26,12 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
   /**
    * Creates a new announcement
    */
-  create(params: FormData): Promise<AxiosResponse<AnnouncementData>> {
+  create(params: FormData): Promise<
+    AxiosResponse<{
+      announcements: AnnouncementListData[];
+      permissions: AnnouncementPermissions;
+    }>
+  > {
     const data = this.getClient().post(this._getUrlPrefix(), params);
     return data;
   }

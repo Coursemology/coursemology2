@@ -3,15 +3,8 @@ en:
     announcements:
       sidebar_title: :'course.announcements.index.header'
       index:
-        header: 'Announcements'
+        header: "Announcements"
       new:
-        header: 'New Announcement'
-      create:
-        success: 'Announcement %{title} was created.'
+        header: "New Announcement"
       edit:
-        header: 'Edit Announcement'
-      update:
-        success: 'Announcement %{title} was updated.'
-      destroy:
-        success: 'Announcement %{title} was deleted.'
-        failure: 'Failed to delete announcement: %{error}'
+        header: "Edit Announcement"

@@ -24,6 +24,10 @@ const reducer = produce(
       case SAVE_ANNOUNCEMENT_LIST: {
         const announcementList = action.announcementList;
         const entityList = announcementList.map((data) => ({ ...data }));
+
+        // Need to refresh the entire store for creating new achievement for ordering to be correct
+        draft.announcements = createEntityStore();
+
         saveListToStore(draft.announcements, entityList);
         draft.permissions = action.announcementPermissions;
         break;

@@ -54,7 +54,10 @@ export function createAnnouncement(
     CourseAPI.announcements
       .create(attributes)
       .then((response) => {
-        dispatch(actions.saveAnnouncement(response.data));
+        const data = response.data;
+        dispatch(
+          actions.saveAnnouncementList(data.announcements, data.permissions),
+        );
       })
       .catch((error) => {
         throw error;

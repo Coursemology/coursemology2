@@ -99,6 +99,7 @@ const AnnouncementsIndex: FC<Props> = (props) => {
             setSlicedItems={setslicedAnnouncements}
             page={page}
             setPage={setPage}
+            padding={12}
           />
           <Stack spacing={1} sx={{ paddingBottom: 1 }}>
             {slicedAnnouncements.map((announcement) => (
@@ -109,6 +110,16 @@ const AnnouncementsIndex: FC<Props> = (props) => {
               />
             ))}
           </Stack>
+          {slicedAnnouncements.length > 6 && (
+            <Pagination
+              items={announcements}
+              itemsPerPage={ITEMS_PER_PAGE}
+              setSlicedItems={setslicedAnnouncements}
+              page={page}
+              setPage={setPage}
+              padding={12}
+            />
+          )}
         </>
       )}
 

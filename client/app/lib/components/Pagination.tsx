@@ -12,6 +12,7 @@ interface Props {
   setSlicedItems: React.Dispatch<React.SetStateAction<any[]>>;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  padding?: number;
 }
 
 /*
@@ -34,7 +35,7 @@ This is to ensure that multiple paginations within the same page are both synced
 */
 
 const Pagination: FC<Props> = (props) => {
-  const { items, itemsPerPage, setSlicedItems, page, setPage } = props;
+  const { items, itemsPerPage, setSlicedItems, page, setPage, padding } = props;
 
   const count = Math.ceil(items.length / itemsPerPage);
 
@@ -60,7 +61,11 @@ const Pagination: FC<Props> = (props) => {
         <PaginationMUI
           color="primary"
           variant="outlined"
-          style={{ padding: 24, display: 'flex', justifyContent: 'center' }}
+          style={{
+            padding: padding ?? 24,
+            display: 'flex',
+            justifyContent: 'center',
+          }}
           count={count}
           page={page}
           onChange={handleChange}
