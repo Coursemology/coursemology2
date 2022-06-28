@@ -43,11 +43,12 @@ class Course::Condition::Achievement < ApplicationRecord
   #   user has the required achievement and false otherwise.
   def compute_satisfaction_information(course_users)
     satisfaction_information = Array.new(course_users.length, false)
+    course_user_ids = course_users.map(&:id)
     course_user_achievements = Course::UserAchievement.where(course_user: course_users).where(achievement: achievement)
-    course_users_to_indices = course_users.map.with_index { |course_user, index| [course_user, index] }.to_h
+    course_user_ids_to_indices = course_user_ids.map.with_index { |course_user_id, index| [course_user_id, index] }.to_h
 
     course_user_achievements.each do |course_user_achievement|
-      satisfaction_information[course_users_to_indices[course_user_achievement.course_user]] = true
+      satisfaction_information[course_user_ids_to_indices[course_user_achievement.course_user.id]] = true
     end
 
     satisfaction_information
