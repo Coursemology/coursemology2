@@ -41,7 +41,7 @@ class Course::Condition::Survey < ApplicationRecord
   #   user has submitted the required survey and false otherwise.
   def compute_satisfaction_information(course_users)
     satisfaction_information = Array.new(course_users.length, false)
-    course_user_ids = course_users.map { |course_user| course_user.id }
+    course_user_ids = course_users.map(&:id)
     course_user_submissions = survey.responses.submitted.where(course_user_id: course_user_ids)
     course_user_ids_to_indices = course_user_ids.map.with_index { |course_user_id, index| [course_user_id, index] }.to_h
 
