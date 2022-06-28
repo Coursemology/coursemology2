@@ -37,7 +37,12 @@ when Course::Assessment
   submission = @assessment_todos_hash[actable.id]
   json.itemActableSpecificId submission&.id
   json.canAccess can?(:access, actable)
-  json.canAttempt can?(:attempt, actable)
+
+  # Supposed to use can?(:attempt, actable) for canAttempt,
+  # but to fix N+1 issue, we do a custom check below by passing todo_item_with_timeline
+  # to avoid repetitive db call. Also, conditions_satisfied_by? check is not done since
+  # the can_user_start method has been called for the todos in the controller.
+  json.canAttempt actable.published? && todo_item_with_timeline.self_directed_started?(current_course_user)
 when Course::Video
   json.itemActableSpecificId actable.id
 when Course::Survey
