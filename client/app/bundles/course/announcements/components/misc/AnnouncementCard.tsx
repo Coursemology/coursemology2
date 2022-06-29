@@ -64,8 +64,8 @@ const AnnouncementCard: FC<Props> = (props) => {
     title: announcement.title,
     content: announcement.content,
     sticky: announcement.isSticky,
-    start_at: Date.parse(announcement.startTime),
-    end_at: Date.parse(announcement.endTime),
+    start_at: new Date(announcement.startTime),
+    end_at: new Date(announcement.endTime),
   };
 
   const dispatch = useDispatch<AppDispatch>();

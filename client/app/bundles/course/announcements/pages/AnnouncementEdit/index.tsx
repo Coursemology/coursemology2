@@ -21,8 +21,8 @@ interface Props extends WrappedComponentProps {
     title: string;
     content: string;
     sticky: boolean;
-    start_at: number;
-    end_at: number;
+    start_at: Date;
+    end_at: Date;
   };
 }
 
