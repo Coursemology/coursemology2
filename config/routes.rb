@@ -183,7 +183,8 @@ Rails.application.routes.draw do
       get 'virtual_classrooms/recorded_video_link/:record_id' =>
             'virtual_classrooms#recorded_video_link'
 
-      resources :announcements, concerns: :paginatable
+      resources :announcements, concerns: :paginatable, except: [:new, :edit]
+
       scope module: :achievement do
         resources :achievements, except: [:new] do
           concerns :conditional
