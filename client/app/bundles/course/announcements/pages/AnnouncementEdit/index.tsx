@@ -21,8 +21,8 @@ interface Props extends WrappedComponentProps {
     title: string;
     content: string;
     sticky: boolean;
-    start_at: Date;
-    end_at: Date;
+    startAt: Date;
+    endAt: Date;
   };
 }
 
@@ -62,7 +62,19 @@ const AnnouncementEdit: FC<Props> = (props) => {
       })
       .catch((error) => {
         toast.error(intl.formatMessage(translations.updateFailure));
+
         if (error.response?.data) {
+          // Replace start_at and end_at with startAt and endAt
+          if (error.response.data.errors.start_at) {
+            error.response.data.errors.startAt =
+              error.response.data.errors.start_at;
+            delete error.response.data.errors.start_at;
+          }
+          if (error.response.data.errors.end_at) {
+            error.response.data.errors.endAt =
+              error.response.data.errors.end_at;
+            delete error.response.data.errors.end_at;
+          }
           setReactHookFormError(setError, error.response.data.errors);
         }
         throw error;

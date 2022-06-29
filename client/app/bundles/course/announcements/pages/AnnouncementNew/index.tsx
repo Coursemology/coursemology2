@@ -38,8 +38,8 @@ const initialValues = {
   content: '',
   sticky: false,
   // Dates need to be initialized for endtime to change automatically when start time changes
-  start_at: new Date(),
-  end_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // + one week
+  startAt: new Date(),
+  endAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // + one week
 };
 
 const AnnouncementNew: FC<Props> = (props) => {
@@ -65,6 +65,17 @@ const AnnouncementNew: FC<Props> = (props) => {
         toast.error(intl.formatMessage(translations.creationFailure));
 
         if (error.response?.data) {
+          // Replace start_at and end_at with startAt and endAt
+          if (error.response.data.errors.start_at) {
+            error.response.data.errors.startAt =
+              error.response.data.errors.start_at;
+            delete error.response.data.errors.start_at;
+          }
+          if (error.response.data.errors.end_at) {
+            error.response.data.errors.endAt =
+              error.response.data.errors.end_at;
+            delete error.response.data.errors.end_at;
+          }
           setReactHookFormError(setError, error.response.data.errors);
         }
         throw error;
