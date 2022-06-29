@@ -10,65 +10,6 @@ RSpec.describe ApplicationWidgetsHelper, type: :helper do
 
   let(:instance) { Instance.default }
   with_tenant(:instance) do
-    describe '#new_button' do
-      let(:announcement) { create(:course_announcement) }
-      let(:url_options) { new_course_announcement_path(announcement.course) }
-      subject { helper.new_button(url_options) }
-
-      it 'defaults to a btn-primary class' do
-        expect(subject).to have_tag('a.btn.btn-primary')
-      end
-      it 'defaults to a file button' do
-        expect(subject).to have_tag('i.fa-file')
-      end
-
-      context 'when URL options are specified' do
-        before { stub_resource_button }
-        context 'when a string is specified' do
-          it 'is not modified' do
-            expect(subject).to eq(url_options)
-          end
-        end
-
-        context 'when a symbol is specified' do
-          let(:url_options) { [announcement.course, :announcement] }
-          it 'adds a :new at the start of the URL options' do
-            expect(subject).to eq([:new] + url_options)
-          end
-        end
-      end
-    end
-
-    describe '#edit_button' do
-      let(:announcement) { create(:course_announcement) }
-      let(:url_options) { [announcement.course, announcement] }
-      subject { helper.edit_button(url_options) }
-
-      it 'defaults to a btn-default class' do
-        expect(subject).to have_tag('a.btn.btn-default')
-      end
-      it 'defaults to a file button' do
-        expect(subject).to have_tag('i.fa-edit')
-      end
-
-      context 'when URL options are specified' do
-        before { stub_resource_button }
-        context 'when a string is specified' do
-          let(:url_options) { edit_course_announcement_path(announcement.course, announcement) }
-          it 'is not modified' do
-            expect(subject).to eq(url_options)
-          end
-        end
-
-        context 'when a resource is specified' do
-          let(:url_options) { [announcement.course, announcement] }
-          it 'adds a :edit at the start of the URL options' do
-            expect(subject).to eq([:edit] + url_options)
-          end
-        end
-      end
-    end
-
     describe '#delete_button' do
       let(:announcement) { create(:course_announcement) }
       subject { helper.delete_button([announcement.course, announcement]) }
