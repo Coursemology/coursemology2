@@ -13,19 +13,9 @@ import * as actions from './actions';
 const formatAttributes = (data: AnnouncementFormData): FormData => {
   const payload = new FormData();
 
-  ['title', 'content', 'sticky', 'startAt', 'endAt'].forEach((field) => {
+  ['title', 'content', 'sticky', 'start_at', 'end_at'].forEach((field) => {
     if (data[field] !== undefined && data[field] !== null) {
-      switch (field) {
-        case 'startAt':
-          payload.append('announcement[start_at]', data[field]);
-          break;
-        case 'endAt':
-          payload.append('announcement[end_at]', data[field]);
-          break;
-        default:
-          payload.append(`announcement[${field}]`, data[field]);
-          break;
-      }
+      payload.append(`announcement[${field}]`, data[field]);
     }
   });
   return payload;

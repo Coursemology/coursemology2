@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { toast } from 'react-toastify';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import { AnnouncementFormData } from 'types/course/announcements';
 import AnnouncementForm from '../../components/forms/AnnouncementForm';
 import { updateAnnouncement } from '../../operations';
 
@@ -20,8 +21,8 @@ interface Props extends WrappedComponentProps {
     title: string;
     content: string;
     sticky: boolean;
-    startAt: string;
-    endAt: string;
+    start_at: number;
+    end_at: number;
   };
 }
 
@@ -52,7 +53,7 @@ const AnnouncementEdit: FC<Props> = (props) => {
     return null;
   }
 
-  const onSubmit = (data, setError): void => {
+  const onSubmit = (data: AnnouncementFormData, setError): void => {
     dispatch(updateAnnouncement(announcementId, data))
       .then((_) => {
         handleClose();
