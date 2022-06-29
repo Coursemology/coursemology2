@@ -120,15 +120,11 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
         <CKEditor
           editor={CustomEditor}
           config={{
-            mediaEmbed: {
-              elementName: 'iframe',
-              previewsInData: false,
-              removeProviders: [
-                'instagram',
-                'twitter',
-                'googleMaps',
-                'flickr',
-                'facebook',
+            // For formatting <pre> properly (summernote compatability).
+            // CKEditor will change it to <pre><code> but on edit it will render properly
+            heading: {
+              options: [
+                { model: 'formatted', view: 'pre', title: 'Formatted' },
               ],
             },
           }}
