@@ -55,8 +55,8 @@ export interface AnnouncementFormData {
   title: string;
   content: string;
   sticky: boolean;
-  startAt: string;
-  endAt: string;
+  start_at: string;
+  end_at: string;
 }
 
 export interface AnnouncementEditFormData extends AnnouncementFormData {

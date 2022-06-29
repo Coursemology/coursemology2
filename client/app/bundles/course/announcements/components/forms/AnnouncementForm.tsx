@@ -12,6 +12,7 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
+import { shiftDateField } from 'lib/helpers/form-helpers';
 
 import { ConditionData, Conditions } from 'types/course/conditions';
 import {
@@ -38,8 +39,8 @@ interface IFormInputs {
   title: string;
   content: string;
   sticky: boolean;
-  startAt: string;
-  endAt: string;
+  start_at: string;
+  end_at: string;
 }
 
 const translations = defineMessages({
@@ -73,8 +74,8 @@ const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
   content: yup.string().nullable(),
   sticky: yup.bool(),
-  startAt: yup.date().nullable(),
-  endAt: yup.date().nullable(),
+  start_at: yup.date().nullable(),
+  end_at: yup.date().nullable(),
 });
 
 const AnnouncementForm: FC<Props> = (props) => {
@@ -84,6 +85,8 @@ const AnnouncementForm: FC<Props> = (props) => {
     control,
     handleSubmit,
     setError,
+    setValue,
+    watch,
     formState: { errors, isDirty, isSubmitting },
   } = useForm<IFormInputs>({
     defaultValues: initialValues,
@@ -214,7 +217,7 @@ const AnnouncementForm: FC<Props> = (props) => {
 
         <div style={{ display: 'flex' }}>
           <Controller
-            name="startAt"
+            name="start_at"
             control={control}
             render={({ field, fieldState }): JSX.Element => (
               <FormDateTimePickerField
@@ -222,12 +225,15 @@ const AnnouncementForm: FC<Props> = (props) => {
                 fieldState={fieldState}
                 disabled={disabled}
                 label={<FormattedMessage {...translations.startAt} />}
+                afterChangeField={(newStartAt: Date): void => {
+                  shiftDateField(newStartAt, watch, setValue);
+                }}
                 style={{ flex: 1 }}
               />
             )}
           />
           <Controller
-            name="endAt"
+            name="end_at"
             control={control}
             render={({ field, fieldState }): JSX.Element => (
               <FormDateTimePickerField

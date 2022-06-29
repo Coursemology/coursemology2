@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { toast } from 'react-toastify';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import { AnnouncementFormData } from 'types/course/announcements';
 import AnnouncementForm from '../../components/forms/AnnouncementForm';
 import { createAnnouncement } from '../../operations';
 
@@ -36,6 +37,9 @@ const initialValues = {
   title: '',
   content: '',
   sticky: false,
+  // Dates need to be initialized for endtime to change automatically when start time changes
+  start_at: Date.now(),
+  end_at: Date.now() + 7 * 24 * 60 * 60 * 1000, // + one week
 };
 
 const AnnouncementNew: FC<Props> = (props) => {
@@ -50,7 +54,7 @@ const AnnouncementNew: FC<Props> = (props) => {
     return null;
   }
 
-  const onSubmit = (data, setError): void => {
+  const onSubmit = (data: AnnouncementFormData, setError): void => {
     dispatch(createAnnouncement(data))
       .then((_) => {
         handleClose();
@@ -59,6 +63,7 @@ const AnnouncementNew: FC<Props> = (props) => {
       })
       .catch((error) => {
         toast.error(intl.formatMessage(translations.creationFailure));
+
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
