@@ -38,8 +38,8 @@ const initialValues = {
   content: '',
   sticky: false,
   // Dates need to be initialized for endtime to change automatically when start time changes
-  start_at: Date.now(),
-  end_at: Date.now() + 7 * 24 * 60 * 60 * 1000, // + one week
+  start_at: new Date(),
+  end_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // + one week
 };
 
 const AnnouncementNew: FC<Props> = (props) => {
