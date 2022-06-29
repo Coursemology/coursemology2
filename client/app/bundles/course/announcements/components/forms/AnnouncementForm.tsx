@@ -39,8 +39,8 @@ interface IFormInputs {
   title: string;
   content: string;
   sticky: boolean;
-  start_at: string;
-  end_at: string;
+  startAt: string;
+  endAt: string;
 }
 
 const translations = defineMessages({
@@ -74,8 +74,8 @@ const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
   content: yup.string().nullable(),
   sticky: yup.bool(),
-  start_at: yup.date().nullable(),
-  end_at: yup.date().nullable(),
+  startAt: yup.date().nullable(),
+  endAt: yup.date().nullable(),
 });
 
 const AnnouncementForm: FC<Props> = (props) => {
@@ -217,7 +217,7 @@ const AnnouncementForm: FC<Props> = (props) => {
 
         <div style={{ display: 'flex' }}>
           <Controller
-            name="start_at"
+            name="startAt"
             control={control}
             render={({ field, fieldState }): JSX.Element => (
               <FormDateTimePickerField
@@ -233,7 +233,7 @@ const AnnouncementForm: FC<Props> = (props) => {
             )}
           />
           <Controller
-            name="end_at"
+            name="endAt"
             control={control}
             render={({ field, fieldState }): JSX.Element => (
               <FormDateTimePickerField
