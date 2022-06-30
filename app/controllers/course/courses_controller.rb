@@ -55,7 +55,8 @@ class Course::CoursesController < Course::Controller
     return unless current_course_user&.student?
 
     todos = Course::LessonPlan::Todo.pending_for(current_course_user).
-            preload(:user, { item: [:default_reference_time, :course, actable: :conditions] }).order(updated_at: :desc)
+            preload(:user, { item: [:default_reference_time, :course, actable: :conditions] }).
+            order(end_at: :asc, start_at: :asc)
     todos = todos.select(&:can_user_start?)
     @video_todos = todos.select { |td| td.item.actable_type == Course::Video.name }
     @assessment_todos = todos.select { |td| td.item.actable_type == Course::Assessment.name }
