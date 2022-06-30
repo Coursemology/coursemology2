@@ -207,7 +207,7 @@ describe('Scribing question', () => {
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalled();
     fetchPage.update();
-    expect(fetchPage.find('Memo(ErrorText)')).toHaveLength(1);
+    expect(fetchPage.find('ErrorText')).toHaveLength(1);
   });
 
   // eslint-disable-next-line jest/no-disabled-tests
