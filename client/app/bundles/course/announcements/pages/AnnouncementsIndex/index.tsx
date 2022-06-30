@@ -7,9 +7,6 @@ import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
-import Pagination from 'lib/components/Pagination';
-
-import { Stack } from '@mui/material';
 
 import { fetchAnnouncements } from '../../operations';
 import {
@@ -17,9 +14,9 @@ import {
   getAnnouncementPermissions,
 } from '../../selectors';
 
-import AnnouncementCard from '../../components/misc/AnnouncementCard';
 import NewAnnouncementButton from '../../components/buttons/NewAnnouncementButton';
 import AnnouncementNew from '../AnnouncementNew';
+import AnnouncementsDisplay from '../../components/misc/AnnouncementsDisplay';
 
 interface Props extends WrappedComponentProps {}
 
@@ -35,6 +32,10 @@ const translations = defineMessages({
   noAnnouncements: {
     id: 'course.announcement.noAnnouncements',
     defaultMessage: 'There are no announcements',
+  },
+  searchBarPlaceholder: {
+    id: 'course.announcement.searchBarPlaceholder',
+    defaultMessage: 'Search by announcement title',
   },
 });
 
@@ -53,15 +54,7 @@ const AnnouncementsIndex: FC<Props> = (props) => {
     getAnnouncementPermissions(state),
   );
 
-  // For pagination
-  const ITEMS_PER_PAGE = 12;
-  const [slicedAnnouncements, setslicedAnnouncements] = useState(
-    announcements.slice(0, ITEMS_PER_PAGE),
-  );
-  const [page, setPage] = useState(1);
-
   const dispatch = useDispatch<AppDispatch>();
-
   useEffect(() => {
     dispatch(fetchAnnouncements())
       .finally(() => setIsLoading(false))
@@ -92,40 +85,11 @@ const AnnouncementsIndex: FC<Props> = (props) => {
       {announcements.length === 0 ? (
         <div>{intl.formatMessage(translations.noAnnouncements)}</div>
       ) : (
-        <>
-          <Pagination
-            items={announcements}
-            itemsPerPage={ITEMS_PER_PAGE}
-            setSlicedItems={setslicedAnnouncements}
-            page={page}
-            setPage={setPage}
-            padding={12}
-          />
-          <div id="course-announcements">
-            <Stack spacing={1} sx={{ paddingBottom: 1 }}>
-              {slicedAnnouncements.map((announcement) => (
-                <AnnouncementCard
-                  key={announcement.id}
-                  announcement={announcement}
-                  showEditOptions={announcementPermissions.canCreate}
-                />
-              ))}
-            </Stack>
-          </div>
-
-          {slicedAnnouncements.length > 6 && (
-            <Pagination
-              items={announcements}
-              itemsPerPage={ITEMS_PER_PAGE}
-              setSlicedItems={setslicedAnnouncements}
-              page={page}
-              setPage={setPage}
-              padding={12}
-            />
-          )}
-        </>
+        <AnnouncementsDisplay
+          announcements={announcements}
+          announcementPermissions={announcementPermissions}
+        />
       )}
-
       <AnnouncementNew
         open={isOpen}
         handleClose={(): void => setIsOpen(false)}

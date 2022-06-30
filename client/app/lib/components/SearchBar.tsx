@@ -6,6 +6,7 @@ import { FC } from 'react';
 
 interface Props {
   placeholder: string;
+  width?: number;
   onChange: (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
   ) => void;
@@ -20,12 +21,17 @@ This search bar will update the search everytime a change is detected
 */
 
 const SearchBar: FC<Props> = (props) => {
-  const { placeholder, onChange } = props;
+  const { placeholder, width, onChange } = props;
 
   return (
     <Paper
       component="form"
-      sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+      sx={{
+        p: '2px 4px',
+        display: 'flex',
+        alignItems: 'center',
+        width: width ?? 400,
+      }}
     >
       <InputBase
         sx={{ ml: 1, flex: 1 }}
