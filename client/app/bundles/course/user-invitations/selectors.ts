@@ -6,7 +6,7 @@ function getLocalState(state: AppState) {
   return state.invitations;
 }
 
-export function getAllInvitationsEntities(state: AppState) {
+export function getAllInvitationsMiniEntities(state: AppState) {
   return selectMiniEntities(
     getLocalState(state).invitations,
     getLocalState(state).invitations.ids,
