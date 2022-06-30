@@ -150,11 +150,10 @@ const AnnouncementCard: FC<Props> = (props) => {
                 <DeleteButton
                   id={`announcement-delete-button-${announcement.id}`}
                   disabled={false}
-                  message={`${intl.formatMessage(
+                  confirmMessage={`${intl.formatMessage(
                     translations.deleteConfirmation,
                   )} (${announcement.title})?`}
                   onClick={onDelete}
-                  withDialog
                   sx={{ paddingTop: 0, paddingBottom: 0 }}
                 />
               )}
