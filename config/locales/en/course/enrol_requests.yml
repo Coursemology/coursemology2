@@ -3,7 +3,3 @@ en:
     enrol_requests:
       index:
         header: 'User Requests'
-      approve:
-        success: "%{name} is enrolled as a %{role}."
-      reject:
-        success: 'The role request made by %{user} has been rejected.'

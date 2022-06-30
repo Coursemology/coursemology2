@@ -32,7 +32,7 @@ class Course::EnrolRequestsController < Course::ComponentController
     course_user = create_course_user
     if course_user.persisted?
       Course::Mailer.user_added_email(course_user).deliver_later
-      approve_success t('.success', name: course_user.name, role: course_user.role)
+      approve_success
     else
       approve_failure(course_user)
     end
@@ -41,7 +41,7 @@ class Course::EnrolRequestsController < Course::ComponentController
   def reject
     if @enrol_request.update(reject: true)
       Course::Mailer.user_rejected_email(current_course, @enrol_request.user).deliver_later
-      reject_success t('.success', user: @enrol_request.user.name)
+      reject_success
     else
       reject_failure
     end
@@ -71,34 +71,26 @@ class Course::EnrolRequestsController < Course::ComponentController
     current_component_host[:course_users_component]
   end
 
-  def approve_success(message)
+  def approve_success
     respond_to do |format|
-      format.html { flash.now[:success] = message }
       format.json { render '_enrol_request_list_data', locals: { enrol_request: @enrol_request }, status: :ok }
     end
   end
 
   def approve_failure(course_user)
     respond_to do |format|
-      format.html { flash.now[:danger] = course_user.errors.full_messages.to_sentence }
       format.json { render json: { errors: course_user.errors.full_messages.to_sentence }, status: :bad_request }
     end
   end
 
-  def reject_success(message)
+  def reject_success
     respond_to do |format|
-      format.html do
-        redirect_to course_enrol_requests_path(current_course), success: message
-      end
       format.json { render '_enrol_request_list_data', locals: { enrol_request: @enrol_request }, status: :ok }
     end
   end
 
   def reject_failure
     respond_to do |format|
-      format.html do
-        redirect_to course_enrol_requests_path(current_course), danger: @enrol_request.errors.full_messages.to_sentence
-      end
       format.json { render json: { errors: @enrol_request.errors.full_messages.to_sentence }, status: :bad_request }
     end
   end

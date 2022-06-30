@@ -17,7 +17,10 @@ import { TableColumns, TableOptions } from 'types/components/DataTable';
 import sharedConstants from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/components/tables/translations';
 import equal from 'fast-deep-equal';
+import { useSelector } from 'react-redux';
+import { AppState } from 'types/store';
 import ResendInvitationsButton from '../buttons/ResendAllInvitationsButton';
+import { getManageCourseUserPermissions } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -51,6 +54,9 @@ const UserInvitationsTable: FC<Props> = (props) => {
     renderRowActionComponent = null,
     intl,
   } = props;
+  const permissions = useSelector((state: AppState) =>
+    getManageCourseUserPermissions(state),
+  );
 
   if (invitations && invitations.length === 0) {
     return (
@@ -75,7 +81,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
     pagination: true,
     print: false,
     rowsPerPage: 30,
-    rowsPerPageOptions: [15, 30, 50],
+    rowsPerPageOptions: [15, 30, 50, 100],
     search: true,
     selectableRows: 'none',
     setTableProps: (): Record<string, unknown> => {
@@ -196,6 +202,26 @@ const UserInvitationsTable: FC<Props> = (props) => {
           return (
             <Typography key={invitation.id} variant="body2">
               {invitation.sentAt}
+            </Typography>
+          );
+        },
+      },
+    });
+  }
+
+  if (permissions.canManagePersonalTimes) {
+    columns.push({
+      name: 'personalTimes',
+      label: intl.formatMessage(tableTranslations.personalizedTimeline),
+      options: {
+        alignCenter: false,
+        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+          const invitation = invitations[dataIndex];
+          return (
+            <Typography key={invitation.id} variant="body2">
+              {sharedConstants.TIMELINE_ALGORITHMS.find(
+                (timeline) => timeline.value === invitation.timelineAlgorithm,
+              )?.label ?? '-'}
             </Typography>
           );
         },
