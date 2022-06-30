@@ -69,7 +69,7 @@ const ManageUsersTable: FC<Props> = (props) => {
     pagination: true,
     print: false,
     rowsPerPage: 30,
-    rowsPerPageOptions: [15, 30, 50],
+    rowsPerPageOptions: [15, 30, 50, 100],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',

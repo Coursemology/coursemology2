@@ -1,4 +1,5 @@
 import { CourseUserData } from './courseUsers';
+import { TimelineAlgorithm } from './personalTimes';
 
 export interface InvitationFileEntity {
   name: string;
@@ -55,6 +56,7 @@ export interface InvitationMiniEntity {
   email: string;
   role: string;
   phantom: boolean;
+  timelineAlgorithm?: TimelineAlgorithm;
   invitationKey: string;
   confirmed: boolean;
   sentAt?: string;
@@ -67,6 +69,7 @@ export interface InvitationListData {
   email: string;
   role: string;
   phantom: boolean;
+  timelineAlgorithm?: TimelineAlgorithm;
   invitationKey: string;
   confirmed: boolean;
   sentAt?: string;

@@ -29,6 +29,9 @@ const processTheme = (newHeight) =>
           displayedRows: {
             marginBottom: 0,
           },
+          root: {
+            overflow: 'visible',
+          },
         },
       },
       MuiTableCell: {
