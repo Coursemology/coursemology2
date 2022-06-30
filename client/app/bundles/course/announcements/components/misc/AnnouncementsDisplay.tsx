@@ -17,7 +17,7 @@ interface Props extends WrappedComponentProps {
 const translations = defineMessages({
   searchBarPlaceholder: {
     id: 'course.announcement.searchBarPlaceholder',
-    defaultMessage: 'Search by announcement title',
+    defaultMessage: 'Search by title or content',
   },
 });
 
@@ -41,10 +41,14 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
       setShavedAnnouncements(announcements);
     } else {
       setShavedAnnouncements(
-        announcements.filter((announcement: AnnouncementMiniEntity) =>
-          announcement.title
-            .toLowerCase()
-            .includes(event.target.value.trim().toLowerCase()),
+        announcements.filter(
+          (announcement: AnnouncementMiniEntity) =>
+            announcement.title
+              .toLowerCase()
+              .includes(event.target.value.trim().toLowerCase()) ||
+            announcement.content
+              .toLowerCase()
+              .includes(event.target.value.trim().toLowerCase()),
         ),
       );
     }
