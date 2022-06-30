@@ -10,7 +10,9 @@ json.users @course_users do |course_user|
 end
 
 json.userOptions @student_options do |course_user|
-  json.partial! 'user_basic_list_data', course_user: course_user
+  # course_user comes from @user_options which only plucks(:id, :name)
+  json.id course_user[0]
+  json.name course_user[1]
 end
 
 json.permissions do

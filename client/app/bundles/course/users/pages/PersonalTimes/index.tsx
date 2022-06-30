@@ -43,8 +43,7 @@ const PersonalTimes: FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const asBasicData = true;
-    dispatch(fetchUsers(asBasicData))
+    dispatch(fetchUsers(true))
       .finally(() => {
         setIsLoading(false);
       })

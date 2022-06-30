@@ -155,6 +155,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
           ))}
         </TextField>
         <LoadingButton
+          disabled={selectedStudents.length === 0}
           loading={isLoading}
           variant="contained"
           onClick={onSubmit}

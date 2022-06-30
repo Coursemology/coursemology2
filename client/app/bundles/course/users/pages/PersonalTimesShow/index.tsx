@@ -98,9 +98,7 @@ const PersonalTimesShow: FC<Props> = (props) => {
 
   useEffect(() => {
     setIsLoading(true);
-
-    const asBasicData = true;
-    dispatch(fetchUsers(asBasicData));
+    dispatch(fetchUsers(true));
 
     // we fetch personal times before user -- we need learning rate records before user
     dispatch(fetchPersonalTimes(+userId!))

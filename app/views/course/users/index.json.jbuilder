@@ -6,7 +6,9 @@ end
 
 unless @user_options.nil?
   json.userOptions @user_options do |course_user|
-    json.partial! 'user_basic_list_data', course_user: course_user
+    # course_user comes from @user_options which only plucks(:id, :name)
+    json.id course_user[0]
+    json.name course_user[1]
   end
 end
 

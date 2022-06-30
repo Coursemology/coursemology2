@@ -62,7 +62,7 @@ const translations = defineMessages({
   },
   duplicateUsers: {
     id: 'course.userInvitations.components.misc.InvitationResultDialog.duplicateUsers',
-    defaultMessage: 'Duplicate Users ({count})',
+    defaultMessage: 'Users with Duplicate Emails ({count})',
   },
   existingCourseUsersInfo: {
     id: 'course.userInvitations.components.misc.InvitationResultDialog.existingCourseUsers.info',

@@ -41,8 +41,8 @@ const reducer = produce(
       }
       case UPDATE_ENROL_REQUEST: {
         const enrolRequest = action.enrolRequest;
-        const enrolRequestEntity = { ...enrolRequest };
-        saveEntityToStore(draft.enrolRequests, enrolRequestEntity);
+        const enrolRequestMiniEntity = { ...enrolRequest };
+        saveEntityToStore(draft.enrolRequests, enrolRequestMiniEntity);
         draft.manageCourseUsersData.requestsCount -= 1;
         break;
       }

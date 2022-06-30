@@ -78,6 +78,7 @@ const FileUploadForm: FC<Props> = (props) => {
           control={control}
           render={({ field, fieldState }): JSX.Element => (
             <FormSingleFileInput
+              disabled={isLoading}
               field={field}
               fieldState={fieldState}
               accept="text/csv"
@@ -98,7 +99,11 @@ const FileUploadForm: FC<Props> = (props) => {
         >
           {intl.formatMessage(translations.invite)}
         </LoadingButton>
-        <Button color="secondary" onClick={(): void => handleClose(isDirty)}>
+        <Button
+          color="secondary"
+          onClick={(): void => handleClose(isDirty)}
+          disabled={isLoading}
+        >
           {intl.formatMessage(translations.cancel)}
         </Button>
       </Grid>

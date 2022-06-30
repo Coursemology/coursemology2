@@ -7,7 +7,7 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { Box, Typography } from '@mui/material';
 import PageHeader from 'lib/components/pages/PageHeader';
 import {
-  getAllInvitationsEntities,
+  getAllInvitationsMiniEntities,
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
@@ -46,7 +46,7 @@ const InviteUsers: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
   const invitations = useSelector((state: AppState) =>
-    getAllInvitationsEntities(state),
+    getAllInvitationsMiniEntities(state),
   );
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
