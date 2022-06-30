@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { red } from '@mui/material/colors';
@@ -50,4 +49,4 @@ ErrorText.propTypes = {
   errors: errorProps,
 };
 
-export default memo(ErrorText);
+export default ErrorText;

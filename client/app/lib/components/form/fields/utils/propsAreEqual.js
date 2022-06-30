@@ -16,7 +16,6 @@
  */
 const propsAreEqual = (prevProps, nextProps) => {
   const { value: prevValue } = prevProps.field;
-  const { error: prevError } = prevProps.fieldState;
   const { value: nextValue } = nextProps.field;
   const { error: nextError } = nextProps.fieldState;
   const { disabled: prevDisabled } = prevProps;
@@ -27,7 +26,8 @@ const propsAreEqual = (prevProps, nextProps) => {
   const { options: prevOptions } = prevProps;
   const { options: nextOptions } = nextProps;
   const valueIsUnchanged = prevValue === nextValue;
-  const errorIsUnchanged = prevError === nextError;
+  // If there is an error, need to re-render
+  const errorIsUnchanged = !nextError;
   const isDisabledUnchanged = prevDisabled === nextDisabled;
   const isRenderIfUnchanged = prevRenderIf === nextRenderIf;
   const isOptionsUnchanged = prevOptions === nextOptions;
