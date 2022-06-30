@@ -1,12 +1,18 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { FC, useState } from 'react';
+import { FC, useState, memo, useEffect } from 'react';
+
 import {
   AnnouncementMiniEntity,
   AnnouncementPermissions,
 } from 'types/course/announcements';
+
 import { Grid, Stack } from '@mui/material';
+
 import SearchBar from 'lib/components/SearchBar';
 import Pagination from 'lib/components/Pagination';
+
+import equal from 'fast-deep-equal';
+
 import AnnouncementCard from './AnnouncementCard';
 
 interface Props extends WrappedComponentProps {
@@ -33,6 +39,10 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
 
   // For search bar
   const [shavedAnnouncements, setShavedAnnouncements] = useState(announcements);
+
+  useEffect(() => {
+    setShavedAnnouncements(announcements);
+  }, [announcements]);
 
   const handleSearchBarChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
@@ -114,4 +124,15 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(AnnouncementsDisplay);
+export default memo(
+  injectIntl(AnnouncementsDisplay),
+  (prevProps, nextProps) => {
+    return (
+      equal(prevProps.announcements, nextProps.announcements) &&
+      equal(
+        prevProps.announcementPermissions,
+        nextProps.announcementPermissions,
+      )
+    );
+  },
+);
