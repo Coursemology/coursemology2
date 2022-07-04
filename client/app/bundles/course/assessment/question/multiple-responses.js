@@ -26,4 +26,26 @@ $(() => {
       updateWeights();
     },
   });
+
+  function rendeTableOptionColumn() {
+    const element = $('#question_multiple_response_skip_grading');
+    if (element && element[0].checked) {
+      $('.table-option').hide();
+    } else {
+      $('.table-option').show();
+    }
+  }
+
+  $(rendeTableOptionColumn);
+
+  $('.question_multiple_response_skip_grading').on('click', () => {
+    rendeTableOptionColumn();
+  });
+
+  // When add_option button is clicked, hide the correct option after it's rendered
+  $('.add_fields').on('click', () => {
+    setTimeout(() => {
+      rendeTableOptionColumn();
+    }, 10);
+  });
 });

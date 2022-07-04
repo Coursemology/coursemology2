@@ -8,6 +8,8 @@
 
   = f.hidden_field :grading_scheme
 
+  = f.input :skip_grading, label: t('.skip_grading')
+
   / workaround for plataformatec/simple_form#1284
   div.has-error
     = f.full_error :options
@@ -21,7 +23,7 @@
       tr
         th.reorder
         th = t('.correct')
-        th = t('.option')
+        th.table-option = t('.option')
         th = t('.explanation')
         - if current_course.allow_mrq_options_randomization
           th = t('.ignore_randomization')

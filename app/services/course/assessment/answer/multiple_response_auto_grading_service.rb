@@ -18,6 +18,8 @@ class Course::Assessment::Answer::MultipleResponseAutoGradingService < \
   def evaluate_answer(answer)
     question = answer.question.actable
 
+    return [true, grade_for(question, true), ['']] if question.skip_grading?
+
     if question.any_correct?
       grade_any_correct(question, answer)
     else

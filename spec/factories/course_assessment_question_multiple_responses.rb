@@ -34,6 +34,10 @@ FactoryBot.define do
       grading_scheme { :any_correct }
     end
 
+    trait :skip_grading do
+      skip_grading { true }
+    end
+
     trait :randomized do
       randomize_options { true }
     end

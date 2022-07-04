@@ -2,7 +2,7 @@
   td.reorder.handle.weight
     span = fa_icon 'reorder'.freeze
     = f.hidden_field :weight
-  td = f.input :correct, label: false
+  td.table-option = f.input :correct, label: false
   td = f.input :option, label: false, input_html: { class: ['multiple-response-option', 'airmode', 'no-color-palette'] }
   td
     = f.input :explanation, label: false, placeholder: t('.explanation_hint'),

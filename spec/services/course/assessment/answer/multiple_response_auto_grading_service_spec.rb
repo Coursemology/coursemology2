@@ -111,6 +111,98 @@ RSpec.describe Course::Assessment::Answer::MultipleResponseAutoGradingService do
           end
         end
       end
+
+      context 'when the question requires all correct options but grading is skipped' do
+        let(:question_traits) { [:skip_grading] }
+
+        context 'when only the correct answer is selected' do
+          let(:answer_traits) { [:with_all_correct_options] }
+
+          it 'marks the answer correct' do
+            subject.grade(answer)
+            expect(answer).to be_correct
+            expect(answer.grade).to eq(question.maximum_grade)
+            expect(grading.result['messages']).
+              to contain_exactly('')
+          end
+        end
+
+        context 'when only the wrong answer is selected' do
+          let(:answer_traits) { :with_all_wrong_options }
+
+          it 'marks the answer correct' do
+            subject.grade(answer)
+            expect(answer).to be_correct
+            expect(answer.grade).to eq(question.maximum_grade)
+            expect(grading.result['messages']).
+              to contain_exactly('')
+          end
+        end
+
+        context 'when the wrong and right answers are selected' do
+          let(:answer_traits) { [:with_all_correct_options, :with_all_wrong_options] }
+
+          it 'marks the answer correct' do
+            subject.grade(answer)
+            expect(answer).to be_correct
+            expect(answer.grade).to eq(question.maximum_grade)
+            expect(grading.result['messages']).
+              to contain_exactly('')
+          end
+        end
+      end
+
+      context 'when a question requires any correct option but grading is skipped' do
+        let(:question_traits) { [:any_correct, :skip_grading] }
+
+        context 'when only the correct answer is selected' do
+          let(:answer_traits) { :with_all_correct_options }
+
+          it 'marks the answer correct' do
+            subject.grade(answer)
+            expect(answer).to be_correct
+            expect(answer.grade).to eq(question.maximum_grade)
+            expect(grading.result['messages']).
+              to contain_exactly('')
+          end
+        end
+
+        context 'when only the wrong answer is selected' do
+          let(:answer_traits) { :with_all_wrong_options }
+
+          it 'marks the answer correct' do
+            subject.grade(answer)
+            expect(answer).to be_correct
+            expect(answer.grade).to eq(question.maximum_grade)
+            expect(grading.result['messages']).
+              to contain_exactly('')
+          end
+        end
+
+        context 'when the wrong and right answers are selected' do
+          let(:answer_traits) { [:with_all_correct_options, :with_all_wrong_options] }
+
+          it 'marks the answer correct' do
+            subject.grade(answer)
+            expect(answer).to be_correct
+            expect(answer.grade).to eq(question.maximum_grade)
+            expect(grading.result['messages']).
+              to contain_exactly('')
+          end
+        end
+
+        context 'when only one of two right answers is selected' do
+          let(:answer_traits) { :with_one_correct_option }
+
+          it 'marks the answer correct' do
+            subject.grade(answer)
+            expect(answer).to be_correct
+            expect(answer.grade).to eq(question.maximum_grade)
+            expect(grading.result['messages']).
+              to contain_exactly('')
+          end
+        end
+      end
     end
   end
 end

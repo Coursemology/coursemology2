@@ -30,6 +30,7 @@ en:
             explanation: 'Explanation'
             randomize_options: 'Randomize option order (options that ignore this will be shifted to the bottom)'
             ignore_randomization: 'Ignore Randomization'
+            skip_grading: 'Always grade as correct, as there is no correct or wrong answer.'
             add_option: 'Add Option'
             multiple_choice_button: 'Multiple Choice Question (MCQ)'
             multiple_response_button: 'Multiple Response Question (MRQ)'
