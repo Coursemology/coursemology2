@@ -84,6 +84,8 @@ class Course::Assessment::Question::MultipleResponse < ApplicationRecord
   private
 
   def validate_multiple_choice_has_solution
+    return true if skip_grading
+
     errors.add(:options, :no_correct_option) if options.select(&:correct?).empty?
   end
 end

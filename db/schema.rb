@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_19_055836) do
+ActiveRecord::Schema.define(version: 2022_07_01_045213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -264,6 +264,7 @@ ActiveRecord::Schema.define(version: 2022_05_19_055836) do
   create_table "course_assessment_question_multiple_responses", id: :serial, force: :cascade do |t|
     t.integer "grading_scheme", default: 0, null: false
     t.boolean "randomize_options", default: false
+    t.boolean "skip_grading", default: false
   end
 
   create_table "course_assessment_question_programming", id: :serial, force: :cascade do |t|
