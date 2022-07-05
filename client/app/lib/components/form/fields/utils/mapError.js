@@ -7,7 +7,7 @@
  *   3) An object - { id: 'translations.module.id', defaultMessage: [{ id: 0, value: 'Translated Error'}] }
  * @param intl
  */
-export const formatErrorMessage = (errorOrWarning, intl) => {
+export const formatErrorMessage = (errorOrWarning, intl = false) => {
   if (!errorOrWarning || typeof errorOrWarning === 'string') {
     return errorOrWarning;
   }

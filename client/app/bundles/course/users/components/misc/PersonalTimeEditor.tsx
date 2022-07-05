@@ -115,7 +115,13 @@ const PersonalTimeEditor: FC<Props> = (props) => {
     bonusEndAt: item.personalBonusEndAt,
     endAt: item.personalEndAt,
   };
-  const { control, handleSubmit, setError, reset } = useForm<IFormInputs>({
+  const {
+    control,
+    handleSubmit,
+    setError,
+    reset,
+    formState: { isDirty },
+  } = useForm<IFormInputs>({
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
   });
@@ -166,7 +172,8 @@ const PersonalTimeEditor: FC<Props> = (props) => {
     return dispatch(updatePersonalTime(data, +userId!))
       .then(() => {})
       .finally(() => {
-        reset(item);
+        reset(formData);
+        setIsSaving(false);
         if (item.new) {
           toast.success(
             intl.formatMessage(translations.createSuccess, {
@@ -273,16 +280,18 @@ const PersonalTimeEditor: FC<Props> = (props) => {
                   />
                 )}
               />
-              <SaveButton
-                tooltip={intl.formatMessage(translations.update)}
-                disabled={isSaving || isDeleting}
-                onClick={(): UseFormHandleSubmit<IFormInputs> => handleSubmit}
-                className="btn-submit"
-                form={`personal-time-form-${item.personalTimeId}`}
-                type="submit"
-                size="small"
-                sx={styles.buttonStyle}
-              />
+              {isDirty && (
+                <SaveButton
+                  tooltip={intl.formatMessage(translations.update)}
+                  disabled={isSaving || isDeleting}
+                  onClick={(): UseFormHandleSubmit<IFormInputs> => handleSubmit}
+                  className="btn-submit"
+                  form={`personal-time-form-${item.id}-${item.personalTimeId}`}
+                  type="submit"
+                  size="small"
+                  sx={styles.buttonStyle}
+                />
+              )}
               <DeleteButton
                 tooltip={intl.formatMessage(translations.delete)}
                 disabled={isSaving || isDeleting}
@@ -299,7 +308,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
               />
               <form
                 encType="multipart/form-data"
-                id={`personal-time-form-${item.personalTimeId}`}
+                id={`personal-time-form-${item.id}-${item.personalTimeId}`}
                 noValidate
                 onSubmit={handleSubmit((data) => onSubmit(data, setError))}
               />

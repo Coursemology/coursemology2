@@ -83,7 +83,10 @@ const PersonalTimesTable: FC<Props> = (props) => {
         <TableCell>{item.itemStartAt}</TableCell>
         <TableCell>{item.itemBonusEndAt}</TableCell>
         <TableCell>{item.itemEndAt}</TableCell>
-        <PersonalTimeEditor item={item} />
+        <PersonalTimeEditor
+          key={`personal-time-editor-${item.id}`}
+          item={item}
+        />
       </TableRow>
     );
   };
