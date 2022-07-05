@@ -14,6 +14,12 @@ interface Props extends WrappedComponentProps {
   user: CourseUserRowData;
 }
 
+const styles = {
+  buttonStyle: {
+    padding: '0px 8px',
+  },
+};
+
 const translations = defineMessages({
   deletionSuccess: {
     id: 'course.user.delete.success',
@@ -81,6 +87,7 @@ const UserManagementButtons: FC<Props> = (props) => {
         className={`user-save-${user.id}`}
         disabled={isSaving}
         onClick={(): Promise<void> => onSave(user)}
+        sx={styles.buttonStyle}
       />
       <DeleteButton
         tooltip="Delete User"
@@ -92,6 +99,7 @@ const UserManagementButtons: FC<Props> = (props) => {
           name: user.name,
           email: user.email,
         })}
+        sx={styles.buttonStyle}
       />
     </div>
   );

@@ -7,7 +7,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Tooltip,
 } from '@mui/material';
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
@@ -16,7 +15,6 @@ import tableTranslations from 'lib/components/tables/translations';
 import { getAssessmentURL, getVideoURL } from 'lib/helpers/url-builders';
 import sharedConstants from 'lib/constants/sharedConstants';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import Lock from '@mui/icons-material/Lock';
 import PersonalTimeEditor from '../misc/PersonalTimeEditor';
 
 interface Props extends WrappedComponentProps {
@@ -24,11 +22,9 @@ interface Props extends WrappedComponentProps {
 }
 
 const translations = defineMessages({
-  fixedDescription: {
-    id: 'course.users.personalTimes.table.fixed.description',
-    defaultMessage:
-      "A fixed personal time means that the personal time will no longer be automatically modified. If a personal\
-    time is left unfixed, it may be dynamically updated by the algorithm on the user's next submission.",
+  fixed: {
+    id: 'course.users.personalTimes.table.fixed',
+    defaultMessage: 'Fixed',
   },
 });
 
@@ -103,7 +99,7 @@ const PersonalTimesTable: FC<Props> = (props) => {
                 {intl.formatMessage(tableTranslations.referenceTimeline)}
               </TableCell>
               <TableCell colSpan={4}>
-                {intl.formatMessage(tableTranslations.personalizedTimeline)}e
+                {intl.formatMessage(tableTranslations.personalizedTimeline)}
               </TableCell>
             </TableRow>
             <TableRow>
@@ -119,15 +115,7 @@ const PersonalTimesTable: FC<Props> = (props) => {
               <TableCell>
                 {intl.formatMessage(tableTranslations.endAt)}
               </TableCell>
-              <TableCell align="center">
-                <Tooltip
-                  title={intl.formatMessage(translations.fixedDescription)}
-                  placement="top"
-                  arrow
-                >
-                  <Lock fontSize="small" />
-                </Tooltip>
-              </TableCell>
+              <TableCell>{intl.formatMessage(translations.fixed)}</TableCell>
               <TableCell>
                 {intl.formatMessage(tableTranslations.startAt)}
               </TableCell>

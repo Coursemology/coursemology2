@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { TextField } from '@mui/material';
 
 const styles = {
-  textFieldStyle: { margin: '8px 10px 8px 0px', width: '100%' },
+  textFieldStyle: { margin: '0px 10px 0px 0px', width: '100%' },
 };
 
 const InlineEditTextField = (props): JSX.Element | null => {

@@ -13,6 +13,11 @@ import { resendInvitationEmail, deleteInvitation } from '../../operations';
 interface Props extends WrappedComponentProps {
   invitation: InvitationRowData;
 }
+const styles = {
+  buttonStyle: {
+    padding: '0px 8px',
+  },
+};
 
 const translations = defineMessages({
   resendTooltip: {
@@ -100,6 +105,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
         className={`invitation-resend-${invitation.id}`}
         disabled={isResending}
         onClick={onResend}
+        sx={styles.buttonStyle}
       />
       <DeleteButton
         tooltip={intl.formatMessage(translations.deletionTooltip)}
@@ -111,6 +117,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
           name: invitation.name,
           email: invitation.email,
         })}
+        sx={styles.buttonStyle}
       />
     </div>
   );
