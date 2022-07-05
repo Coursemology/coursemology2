@@ -18,7 +18,7 @@ const styles = {
   errorText: { margin: 0 },
 };
 
-const FormCheckboxField = (props) => {
+const FormCheckboxField = (props): JSX.Element => {
   const {
     field,
     fieldState,
@@ -31,7 +31,7 @@ const FormCheckboxField = (props) => {
   } = props;
   const isError = !!fieldState.error;
   if (!renderIf) {
-    return null;
+    return <></>;
   }
 
   return (
