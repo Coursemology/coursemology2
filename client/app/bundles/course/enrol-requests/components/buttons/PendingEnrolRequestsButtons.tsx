@@ -13,6 +13,11 @@ import { approveEnrolRequest, rejectEnrolRequest } from '../../operations';
 interface Props extends WrappedComponentProps {
   enrolRequest: EnrolRequestRowData;
 }
+const styles = {
+  buttonStyle: {
+    padding: '0px 8px',
+  },
+};
 
 const translations = defineMessages({
   approveTooltip: {
@@ -100,6 +105,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
         className={`enrol-request-approve-${enrolRequest.id}`}
         disabled={isApproving}
         onClick={onApprove}
+        sx={styles.buttonStyle}
       />
       <DeleteButton
         tooltip={intl.formatMessage(translations.rejectTooltip)}
@@ -111,6 +117,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
           name: enrolRequest.name,
           email: enrolRequest.email,
         })}
+        sx={styles.buttonStyle}
       />
     </div>
   );

@@ -13,11 +13,13 @@ import {
 import * as yup from 'yup';
 import Add from '@mui/icons-material/Add';
 import { LoadingButton } from '@mui/lab';
-import { Grid, TableCell } from '@mui/material';
+import { Grid, TableCell, Tooltip } from '@mui/material';
+import LockOutlined from '@mui/icons-material/LockOutlined';
+import LockOpenOutlined from '@mui/icons-material/LockOpenOutlined';
 import DeleteButton from 'lib/components/buttons/DeleteButton';
 import SaveButton from 'lib/components/buttons/SaveButton';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
-import FormToggleField from 'lib/components/form/fields/ToggleField';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import {
   defineMessages,
   FormattedMessage,
@@ -32,6 +34,12 @@ import { deletePersonalTime, updatePersonalTime } from '../../operations';
 interface Props extends WrappedComponentProps {
   item: PersonalTimeMiniEntity;
 }
+
+const styles = {
+  buttonStyle: {
+    padding: '0px 8px',
+  },
+};
 
 interface IFormInputs {
   fixed: boolean;
@@ -81,6 +89,12 @@ const translations = defineMessages({
   startEndValidationError: {
     id: 'course.users.components.misc.PersonalTimeEditor.error.startEndValidation',
     defaultMessage: 'Must be after start time',
+  },
+  fixedDescription: {
+    id: 'course.users.personalTimes.table.fixed.description',
+    defaultMessage:
+      "A fixed personal time means that the personal time will no longer be automatically modified. If a personal\
+    time is left unfixed, it may be dynamically updated by the algorithm on the user's next submission.",
   },
 });
 
@@ -152,7 +166,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
     return dispatch(updatePersonalTime(data, +userId!))
       .then(() => {})
       .finally(() => {
-        setIsSaving(false);
+        reset(item);
         if (item.new) {
           toast.success(
             intl.formatMessage(translations.createSuccess, {
@@ -195,15 +209,26 @@ const PersonalTimeEditor: FC<Props> = (props) => {
         </TableCell>
       ) : (
         <>
-          <TableCell>
-            <Controller
-              name="fixed"
-              control={control}
-              render={({ field, fieldState }): JSX.Element => (
-                <FormToggleField field={field} fieldState={fieldState} />
-              )}
-            />
-          </TableCell>
+          <Tooltip
+            title={intl.formatMessage(translations.fixedDescription)}
+            placement="top"
+            arrow
+          >
+            <TableCell>
+              <Controller
+                name="fixed"
+                control={control}
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormCheckboxField
+                    field={field}
+                    fieldState={fieldState}
+                    icon={<LockOpenOutlined />}
+                    checkedIcon={<LockOutlined />}
+                  />
+                )}
+              />
+            </TableCell>
+          </Tooltip>
           <TableCell>
             <Controller
               name="startAt"
@@ -256,6 +281,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
                 form={`personal-time-form-${item.personalTimeId}`}
                 type="submit"
                 size="small"
+                sx={styles.buttonStyle}
               />
               <DeleteButton
                 tooltip={intl.formatMessage(translations.delete)}
@@ -269,6 +295,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
                       })
                 }
                 size="small"
+                sx={styles.buttonStyle}
               />
               <form
                 encType="multipart/form-data"
