@@ -124,7 +124,7 @@
     "react-dropzone": "^5.1.1",
     "react-hook-form": "^7.33.1",
     "react-hot-keys": "^2.7.2",
-    "react-intl": "^6.0.4",
+    "react-intl": "^6.0.5",
     "react-player": "^2.10.1",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.3.0",
