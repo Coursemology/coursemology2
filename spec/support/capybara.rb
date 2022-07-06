@@ -79,9 +79,7 @@ module Capybara::TestGroupHelpers
     # to ensure certain changes are made before continuing with the tests.
     # NOTE: if there is more than one toast visible, the search will only return the first toast
     def expect_toastify(message)
-      # byebug
       expect(page.find('div.Toastify__toast-body').text).to eq(message)
-      # expect(page).to have_content(message)
     end
   end
 end
