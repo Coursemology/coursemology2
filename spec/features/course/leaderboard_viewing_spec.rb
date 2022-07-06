@@ -37,6 +37,7 @@ RSpec.describe 'Course: Leaderboard: View' do
       scenario 'I can view the leaderboard sorted by achievement count' do
         create(:course_user_achievement, course_user: students[0])
         visit course_leaderboard_path(course)
+        find('button#achievement-tab').click
 
         within find('#leaderboard-achievement') do
           sorted_course_users = course.course_users.students.without_phantom_users.
@@ -96,6 +97,7 @@ RSpec.describe 'Course: Leaderboard: View' do
           visit course_leaderboard_path(course)
           expect(page).to have_selector('button#group-leaderboard-tab')
           find('button#group-leaderboard-tab').click
+          find('button#achievement-tab').click
 
           within find('#group-leaderboard-achievement') do
             sorted_course_groups = course.groups.ordered_by_average_achievement_count
