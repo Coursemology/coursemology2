@@ -20,6 +20,7 @@ import AnnouncementsAPI from './Announcements';
 import UserInvitationsAPI from './UserInvitations';
 import EnrolRequestsAPI from './EnrolRequests';
 import PersonalTimesAPI from './PersonalTimes';
+import SubmissionsAPI from './Assessment/Submissions/Submissions';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -44,6 +45,7 @@ const CourseAPI = {
   userInvitations: new UserInvitationsAPI(),
   enrolRequests: new EnrolRequestsAPI(),
   personalTimes: new PersonalTimesAPI(),
+  submissions: new SubmissionsAPI(),
 };
 
 Object.freeze(CourseAPI);

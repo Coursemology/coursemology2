@@ -165,6 +165,7 @@ class Course::Assessment::Submission < ApplicationRecord
       where('course_assessments.autograded = ?', false)
   end)
 
+  SUBMISSIONS_PER_PAGE = 25
   # Filter submissions by category_id, assessment_id, group_id and/or user_id (creator)
   scope :filter_by_params, (lambda do |filter_params|
     result = all
@@ -174,6 +175,12 @@ class Course::Assessment::Submission < ApplicationRecord
     result = result.where(assessment_id: filter_params[:assessment_id]) if filter_params[:assessment_id].present?
     result = result.from_group(filter_params[:group_id]) if filter_params[:group_id].present?
     result = result.by_user(filter_params[:user_id]) if filter_params[:user_id].present?
+    # Pagination with frontend params
+    if filter_params[:page_num].present?
+      result = result.
+              offset((filter_params[:page_num].to_f - 1) * SUBMISSIONS_PER_PAGE).
+              limit(SUBMISSIONS_PER_PAGE)
+    end
     result
   end)
 

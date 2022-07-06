@@ -2,16 +2,20 @@
 class Course::Assessment::SubmissionsController < Course::ComponentController
   before_action :load_submissions
   before_action :add_submissions_breadcrumb
-  before_action :load_group_managers, only: [:pending]
+  before_action :load_group_managers, only: [:pending, :index]
 
   def index # :nodoc:
     @submissions = @submissions.from_category(category).confirmed
     @submissions = @submissions.filter_by_params(filter_params) unless filter_params.blank?
+    @submission_count = @submissions.count
+    @submissions = @submissions.filter_by_params(filter_page_num) unless filter_page_num.blank?
     load_assessments
   end
 
   def pending
     @submissions = pending_submissions.from_course(current_course)
+    @submission_count = @submissions.count
+    @submissions = @submissions.filter_by_params(filter_page_num) unless filter_page_num.blank?
     load_assessments
   end
 
@@ -29,6 +33,12 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
     return {} if params[:filter].blank?
 
     params[:filter].permit(:assessment_id, :group_id, :user_id, :category_id)
+  end
+
+  def filter_page_num
+    return {} if params[:filter].blank?
+
+    params[:filter].permit(:page_num)
   end
 
   def category_param

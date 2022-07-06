@@ -7,7 +7,7 @@ const styles = {
     // To be removed once top bar has been migrated to MaterialUI.
     zIndex: 0,
     position: 'static',
-    marginBottom: 16,
+    marginBottom: 0,
   },
   leftIcon: {
     marginLeft: -16,
