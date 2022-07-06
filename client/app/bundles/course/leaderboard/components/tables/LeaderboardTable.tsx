@@ -1,7 +1,14 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Avatar, AvatarGroup, Box, Link, Tooltip } from '@mui/material';
+import {
+  Avatar,
+  AvatarGroup,
+  Box,
+  Link,
+  Tooltip,
+  useMediaQuery,
+} from '@mui/material';
 import DataTable from 'lib/components/DataTable';
-import { FC, memo } from 'react';
+import { FC, memo, useEffect, useState } from 'react';
 import {
   GroupLeaderboardAchievement,
   GroupLeaderboardPoints,
@@ -30,6 +37,18 @@ const translations = defineMessages({
   titleAchievements: {
     id: 'course.leaderboard.components.LeaderboardTable.titleAcheivements',
     defaultMessage: 'By Achievements',
+  },
+  average: {
+    id: 'course.leaderboard.components.LeaderboardTable.average',
+    defaultMessage: 'Average',
+  },
+  experience: {
+    id: 'course.leaderboard.components.LeaderboardTable.experience',
+    defaultMessage: 'Experience',
+  },
+  achievements: {
+    id: 'course.leaderboard.components.LeaderboardTable.achievements',
+    defaultMessage: 'Achievements',
   },
 });
 
@@ -61,6 +80,19 @@ const styles = {
 
 const LeaderboardTable: FC<Props> = (props: Props) => {
   const { data, id: tableType } = props;
+  const tabletView = !useMediaQuery('(min-width:600px)');
+  const phoneView = !useMediaQuery('(min-width:450px)');
+  const [maxAvatars, setMaxAvatars] = useState(6);
+
+  useEffect(() => {
+    if (phoneView) {
+      setMaxAvatars(2);
+    } else if (tabletView) {
+      setMaxAvatars(4);
+    } else {
+      setMaxAvatars(6);
+    }
+  }, [phoneView, tabletView]);
 
   const columns: TableColumns[] = [
     {
@@ -181,7 +213,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         customBodyRenderLite: (dataIndex) => (
           <AvatarGroup
             total={achievementData[dataIndex].achievementCount}
-            max={6}
+            max={maxAvatars}
             sx={styles.avatarGroup}
             componentsProps={{
               additionalAvatar: {
@@ -254,7 +286,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
           customBodyRenderLite: (dataIndex) => (
             <AvatarGroup
               total={groupData[dataIndex].group.length}
-              max={6}
+              max={maxAvatars}
               sx={styles.avatarGroup}
             >
               {groupData[dataIndex].group.map((user) => (
@@ -286,8 +318,12 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         justifyCenter: true,
         customHeadLabelRender: () => (
           <>
-            <div>Average</div>
-            <div>Experience</div>
+            <div>
+              <FormattedMessage {...translations.average} />
+            </div>
+            <div>
+              <FormattedMessage {...translations.experience} />
+            </div>
           </>
         ),
         customBodyRenderLite: (_dataIndex: number) =>
@@ -308,8 +344,12 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         justifyCenter: true,
         customHeadLabelRender: () => (
           <>
-            <div>Average</div>
-            <div>Achievements</div>
+            <div>
+              <FormattedMessage {...translations.average} />
+            </div>
+            <div>
+              <FormattedMessage {...translations.achievements} />
+            </div>
           </>
         ),
         customBodyRenderLite: (_dataIndex: number) =>
