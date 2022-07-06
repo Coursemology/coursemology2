@@ -70,10 +70,10 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellHeaderProps: () => ({
-          style: { padding: '16px', textAlign: 'center'},
+          style: { padding: '16px', textAlign: 'center' },
         }),
         setCellProps: () => ({
-          style: { textAlign: 'center', maxWidth: '50px' }
+          style: { textAlign: 'center', maxWidth: '50px' },
         }),
         customBodyRenderLite: (dataIndex) => dataIndex + 1,
       },
@@ -91,7 +91,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         filter: false,
         sort: false,
         setCellProps: () => ({
-          style: { width: '100%' }
+          style: { width: '100%' },
         }),
         setCellHeaderProps: () => ({
           style: { padding: '0px' },
@@ -139,13 +139,9 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
             style: { padding: '0px', textAlign: 'center' },
           }),
           setCellProps: () => ({
-            style: { textAlign: 'center' }
+            style: { textAlign: 'center' },
           }),
-          customBodyRenderLite: (dataIndex) => (
-            <Box>
-              {pointData[dataIndex].level}
-            </Box>
-          ),
+          customBodyRenderLite: (dataIndex) => pointData[dataIndex].level,
         },
       },
       {
@@ -158,13 +154,9 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
             style: { padding: '16px', textAlign: 'center' },
           }),
           setCellProps: () => ({
-            style: { textAlign: 'center' }
+            style: { textAlign: 'center' },
           }),
-          customBodyRenderLite: (dataIndex) => (
-            <Box>
-              {pointData[dataIndex].experience.toString()}
-            </Box>
-          ),
+          customBodyRenderLite: (dataIndex) => pointData[dataIndex].experience,
         },
       },
     );
@@ -292,7 +284,12 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         sort: false,
         alignCenter: true,
         justifyCenter: true,
-        customHeadLabelRender: () => (<><div>Average</div><div>Experience</div></>),
+        customHeadLabelRender: () => (
+          <>
+            <div>Average</div>
+            <div>Experience</div>
+          </>
+        ),
         customBodyRenderLite: (_dataIndex: number) =>
           groupPointData[_dataIndex].averageExperiencePoints.toFixed(2),
       },
@@ -309,7 +306,12 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         sort: false,
         alignCenter: true,
         justifyCenter: true,
-        customHeadLabelRender: () => (<><div>Average</div><div>Achievements</div></>),
+        customHeadLabelRender: () => (
+          <>
+            <div>Average</div>
+            <div>Achievements</div>
+          </>
+        ),
         customBodyRenderLite: (_dataIndex: number) =>
           groupAchievementData[_dataIndex].averageAchievementCount.toFixed(2),
       },
@@ -362,7 +364,17 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
 
   // Update columns based on table type
   updateColumns();
-  return <DataTable data={data} options={options} columns={columns} title={title} titleGrid titleAlignCenter padding="0px" />;
+  return (
+    <DataTable
+      data={data}
+      options={options}
+      columns={columns}
+      title={title}
+      titleGrid
+      titleAlignCenter
+      padding="0px"
+    />
+  );
 };
 
 export default memo(

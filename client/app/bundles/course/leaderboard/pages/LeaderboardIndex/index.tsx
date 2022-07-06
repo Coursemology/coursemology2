@@ -14,6 +14,7 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { Grid, Tab, Tabs, useMediaQuery, useTheme } from '@mui/material';
 import palette from 'theme/palette';
+import { AutoFixHigh, EmojiEvents } from '@mui/icons-material';
 import fetchLeaderboard from '../../operations';
 import LeaderboardTable from '../../components/tables/LeaderboardTable';
 import {
@@ -24,7 +25,6 @@ import {
   getLeaderboardSettings,
 } from '../../selectors';
 import { LeaderboardTableType } from '../../types';
-import { AutoFixHigh, EmojiEvents } from '@mui/icons-material';
 
 type Props = WrappedComponentProps;
 
@@ -187,14 +187,15 @@ const LeaderboardIndex: FC<Props> = (props) => {
             />
           </Grid>
         )}
-        {!isAchievementHidden && (!tabView || innerTabValue === 'achievement-tab') && (
-          <Grid item xs id="leaderboard-achievement">
-            <LeaderboardTable
-              data={leaderboardAchievements}
-              id={LeaderboardTableType.LeaderboardAchievement}
-            />
-          </Grid>
-        )}
+        {!isAchievementHidden &&
+          (!tabView || innerTabValue === 'achievement-tab') && (
+            <Grid item xs id="leaderboard-achievement">
+              <LeaderboardTable
+                data={leaderboardAchievements}
+                id={LeaderboardTableType.LeaderboardAchievement}
+              />
+            </Grid>
+          )}
       </Grid>
       <Grid
         container
@@ -211,14 +212,15 @@ const LeaderboardIndex: FC<Props> = (props) => {
             />
           </Grid>
         )}
-        {!isAchievementHidden && (!tabView || innerTabValue === 'achievement-tab') && (
-          <Grid item xs id="group-leaderboard-achievement">
-            <LeaderboardTable
-              data={groupLeaderboardAchievements}
-              id={LeaderboardTableType.GroupLeaderboardAchievement}
-            />
-          </Grid>
-        )}
+        {!isAchievementHidden &&
+          (!tabView || innerTabValue === 'achievement-tab') && (
+            <Grid item xs id="group-leaderboard-achievement">
+              <LeaderboardTable
+                data={groupLeaderboardAchievements}
+                id={LeaderboardTableType.GroupLeaderboardAchievement}
+              />
+            </Grid>
+          )}
       </Grid>
     </>
   );
