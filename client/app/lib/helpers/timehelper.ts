@@ -22,11 +22,18 @@ const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
  * @return Format: Day, Month Date Year Time
  *         Example: Thursday, June 05 2022 15:13
  */
-// eslint-disable-next-line import/prefer-default-export
 export const getFullDateTime = (dateTime: string): string => {
   const dateObj = new Date(dateTime);
   const dayName = days[dateObj.getDay()];
   const monthName = months[dateObj.getMonth()];
   return `${dayName}, ${dateObj.getDate()} ${monthName} ${dateObj.getFullYear()} 
           ${dateObj.toTimeString().slice(0, 5)}`;
+};
+
+export const getDayMonthTime = (dateTime: string): string => {
+  const dateObj = new Date(dateTime);
+  const monthName = months[dateObj.getMonth()];
+  return `${dateObj.getDate()} ${monthName} ${dateObj
+    .toTimeString()
+    .slice(0, 5)}`;
 };
