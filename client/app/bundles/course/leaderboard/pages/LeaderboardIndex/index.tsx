@@ -12,7 +12,7 @@ import Person from '@mui/icons-material/Person';
 import { toast } from 'react-toastify';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
-import { Grid, Tab, Tabs } from '@mui/material';
+import { Grid, Tab, Tabs, useMediaQuery, useTheme } from '@mui/material';
 import palette from 'theme/palette';
 import fetchLeaderboard from '../../operations';
 import LeaderboardTable from '../../components/tables/LeaderboardTable';
@@ -24,6 +24,7 @@ import {
   getLeaderboardSettings,
 } from '../../selectors';
 import { LeaderboardTableType } from '../../types';
+import { AutoFixHigh, EmojiEvents } from '@mui/icons-material';
 
 type Props = WrappedComponentProps;
 
@@ -40,13 +41,24 @@ const translations = defineMessages({
     id: 'course.leaderboards.index.groupLeaderboard',
     defaultMessage: 'Group Leaderboard',
   },
+  experience: {
+    id: 'course.leaderboards.index.leaderboard',
+    defaultMessage: 'By Experience Points',
+  },
+  achievemnt: {
+    id: 'course.leaderboards.index.groupLeaderboard',
+    defaultMessage: 'By Achievements',
+  },
 });
 
 const LeaderboardIndex: FC<Props> = (props) => {
   const { intl } = props;
   const dispatch = useDispatch<AppDispatch>();
+  const theme = useTheme();
+  const tabView = !useMediaQuery(theme.breakpoints.up('lg'));
   const [isLoading, setIsLoading] = useState(true);
   const [tabValue, setTabValue] = useState('leaderboard-tab');
+  const [innerTabValue, setInnerTabValue] = useState('experience-tab');
   const settings = useSelector((state: AppState) =>
     getLeaderboardSettings(state),
   );
@@ -123,6 +135,43 @@ const LeaderboardIndex: FC<Props> = (props) => {
           />
         </Tabs>
       )}
+      {tabView && (
+        <Tabs
+          onChange={(_, value): void => {
+            setInnerTabValue(value);
+          }}
+          style={{
+            backgroundColor: palette.background.default,
+          }}
+          TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+          value={innerTabValue}
+          variant="fullWidth"
+          sx={{ marginBottom: 2 }}
+        >
+          <Tab
+            id="experience-tab"
+            style={{ color: palette.submissionIcon.person }}
+            icon={<AutoFixHigh />}
+            label={
+              settings.leaderboardTitle ?? (
+                <FormattedMessage {...translations.experience} />
+              )
+            }
+            value="experience-tab"
+          />
+          <Tab
+            id="achievement-tab"
+            style={{ color: palette.submissionIcon.person }}
+            icon={<EmojiEvents />}
+            label={
+              settings.groupleaderboardTitle ?? (
+                <FormattedMessage {...translations.achievemnt} />
+              )
+            }
+            value="achievement-tab"
+          />
+        </Tabs>
+      )}
       <Grid
         container
         direction="row"
@@ -130,13 +179,15 @@ const LeaderboardIndex: FC<Props> = (props) => {
         rowSpacing={2}
         display={tabValue === 'leaderboard-tab' ? 'flex' : 'none'}
       >
-        <Grid item xs id="leaderboard-level">
-          <LeaderboardTable
-            data={leaderboardPoints}
-            id={LeaderboardTableType.LeaderboardPoints}
-          />
-        </Grid>
-        {!isAchievementHidden && (
+        {(!tabView || innerTabValue === 'experience-tab') && (
+          <Grid item xs id="leaderboard-level">
+            <LeaderboardTable
+              data={leaderboardPoints}
+              id={LeaderboardTableType.LeaderboardPoints}
+            />
+          </Grid>
+        )}
+        {!isAchievementHidden && (!tabView || innerTabValue === 'achievement-tab') && (
           <Grid item xs id="leaderboard-achievement">
             <LeaderboardTable
               data={leaderboardAchievements}
@@ -152,13 +203,15 @@ const LeaderboardIndex: FC<Props> = (props) => {
         rowSpacing={2}
         display={tabValue !== 'leaderboard-tab' ? 'flex' : 'none'}
       >
-        <Grid item xs id="group-leaderboard-level">
-          <LeaderboardTable
-            data={groupLeaderboardPoints}
-            id={LeaderboardTableType.GroupLeaderboardPoints}
-          />
-        </Grid>
-        {!isAchievementHidden && (
+        {(!tabView || innerTabValue === 'experience-tab') && (
+          <Grid item xs id="group-leaderboard-level">
+            <LeaderboardTable
+              data={groupLeaderboardPoints}
+              id={LeaderboardTableType.GroupLeaderboardPoints}
+            />
+          </Grid>
+        )}
+        {!isAchievementHidden && (!tabView || innerTabValue === 'achievement-tab') && (
           <Grid item xs id="group-leaderboard-achievement">
             <LeaderboardTable
               data={groupLeaderboardAchievements}
