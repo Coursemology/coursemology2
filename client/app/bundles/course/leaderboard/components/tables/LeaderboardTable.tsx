@@ -36,7 +36,7 @@ const translations = defineMessages({
 const styles = {
   title: {
     flexDirection: 'column',
-    textAlign: 'right',
+    textAlign: 'center',
     fontSize: 20,
   },
   link: {
@@ -53,7 +53,7 @@ const styles = {
   avatar: {
     maxWidth: '250px',
     wordWrap: 'break-word',
-    display: 'inline-flex',
+    display: 'flex',
     alignItems: 'center',
     minWidth: '150px',
   },
@@ -69,8 +69,12 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
       options: {
         filter: false,
         sort: false,
-        alignCenter: true,
-        justifyCenter: true,
+        setCellHeaderProps: () => ({
+          style: { padding: '16px', textAlign: 'center'},
+        }),
+        setCellProps: () => ({
+          style: { textAlign: 'center', maxWidth: '50px' }
+        }),
         customBodyRenderLite: (dataIndex) => dataIndex + 1,
       },
     },
@@ -86,8 +90,12 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
       options: {
         filter: false,
         sort: false,
-        alignLeft: true,
-        justifyCenter: true,
+        setCellProps: () => ({
+          style: { width: '100%' }
+        }),
+        setCellHeaderProps: () => ({
+          style: { padding: '0px' },
+        }),
         customBodyRenderLite: (dataIndex) => (
           <Box
             sx={styles.avatar}
@@ -127,9 +135,17 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         options: {
           filter: false,
           sort: false,
-          alignCenter: true,
-          justifyCenter: true,
-          customBodyRenderLite: (dataIndex) => pointData[dataIndex].level,
+          setCellHeaderProps: () => ({
+            style: { padding: '0px', textAlign: 'center' },
+          }),
+          setCellProps: () => ({
+            style: { textAlign: 'center' }
+          }),
+          customBodyRenderLite: (dataIndex) => (
+            <Box>
+              {pointData[dataIndex].level}
+            </Box>
+          ),
         },
       },
       {
@@ -138,9 +154,17 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         options: {
           filter: false,
           sort: false,
-          alignCenter: true,
-          justifyCenter: true,
-          customBodyRenderLite: (dataIndex) => pointData[dataIndex].experience,
+          setCellHeaderProps: () => ({
+            style: { padding: '16px', textAlign: 'center' },
+          }),
+          setCellProps: () => ({
+            style: { textAlign: 'center' }
+          }),
+          customBodyRenderLite: (dataIndex) => (
+            <Box>
+              {pointData[dataIndex].experience.toString()}
+            </Box>
+          ),
         },
       },
     );
@@ -156,6 +180,12 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         sort: false,
         alignLeft: true,
         justifyCenter: true,
+        setCellHeaderProps: () => ({
+          style: { padding: '0px 16px 0px 1px' },
+        }),
+        setCellProps: () => ({
+          style: { padding: '0px 16px 0px 0px' },
+        }),
         customBodyRenderLite: (dataIndex) => (
           <AvatarGroup
             total={achievementData[dataIndex].achievementCount}
@@ -204,8 +234,12 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         options: {
           filter: false,
           sort: false,
-          alignCenter: true,
-          justifyCenter: true,
+          setCellHeaderProps: () => ({
+            style: { padding: '0px 16px 0px 1px', minWidth: '80px' },
+          }),
+          setCellProps: () => ({
+            style: { padding: '0px 16px 0px 0px', minWidth: '80px' },
+          }),
           customBodyRenderLite: (dataIndex) => (
             <Box className="group" id={`group_${groupData[dataIndex].id}`}>
               {groupData[dataIndex].name}
@@ -219,8 +253,12 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         options: {
           filter: false,
           sort: false,
-          alignLeft: true,
-          justifyCenter: true,
+          setCellHeaderProps: () => ({
+            style: { padding: '0px 16px 0px 1px', width: '100%' },
+          }),
+          setCellProps: () => ({
+            style: { padding: '0px 16px 0px 0px', width: '100%' },
+          }),
           customBodyRenderLite: (dataIndex) => (
             <AvatarGroup
               total={groupData[dataIndex].group.length}
@@ -254,8 +292,9 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         sort: false,
         alignCenter: true,
         justifyCenter: true,
-        customBodyRenderLite: (dataIndex) =>
-          groupPointData[dataIndex].averageExperiencePoints.toFixed(2),
+        customHeadLabelRender: () => (<><div>Average</div><div>Experience</div></>),
+        customBodyRenderLite: (_dataIndex: number) =>
+          groupPointData[_dataIndex].averageExperiencePoints.toFixed(2),
       },
     });
   };
@@ -270,8 +309,9 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         sort: false,
         alignCenter: true,
         justifyCenter: true,
-        customBodyRenderLite: (dataIndex) =>
-          groupAchievementData[dataIndex].averageAchievementCount.toFixed(2),
+        customHeadLabelRender: () => (<><div>Average</div><div>Achievements</div></>),
+        customBodyRenderLite: (_dataIndex: number) =>
+          groupAchievementData[_dataIndex].averageAchievementCount.toFixed(2),
       },
     });
   };
@@ -322,9 +362,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
 
   // Update columns based on table type
   updateColumns();
-  return (
-    <DataTable data={data} options={options} columns={columns} title={title} />
-  );
+  return <DataTable data={data} options={options} columns={columns} title={title} titleGrid titleAlignCenter padding="0px" />;
 };
 
 export default memo(

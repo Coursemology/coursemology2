@@ -9,7 +9,7 @@ const options = {
   fixedSelectColumn: false,
 };
 
-const processTheme = (newHeight) =>
+const processTheme = (newHeight, grid, alignCenter, newPadding) =>
   createTheme({
     ...adaptedTheme,
     components: {
@@ -42,9 +42,20 @@ const processTheme = (newHeight) =>
             height:
               newHeight ??
               adaptedTheme.components.MuiTableCell.styleOverrides.root.height,
+            padding: newPadding ?? adaptedTheme.components.MuiTableCell.styleOverrides.root.padding,
           },
         },
       },
+      MuiToolbar: {
+        styleOverrides: {
+          ...adaptedTheme.components.MuiTableCell.styleOverrides,
+          root: {
+            ...adaptedTheme.components.MuiTableCell.styleOverrides.root,
+            display: grid ? 'grid' : 'flex',
+            alignContent: alignCenter ? 'center' : 'inherit',
+          },
+        },
+      }
     },
     overrides: {
       MUIDataTableSelectCell: {
@@ -97,7 +108,7 @@ const processColumns = (includeRowNumber, columns) => {
  * Refer to https://github.com/gregnb/mui-datatables for the documentation.
  */
 const DataTable = (props) => (
-  <ThemeProvider theme={processTheme(props.height)}>
+  <ThemeProvider theme={processTheme(props.height, props.titleGrid, props.titleAlignCenter, props.padding)}>
     <MUIDataTable
       {...props}
       columns={processColumns(props.includeRowNumber, props.columns)}
