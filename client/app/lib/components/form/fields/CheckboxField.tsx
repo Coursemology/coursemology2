@@ -1,8 +1,20 @@
-import { memo } from 'react';
-import PropTypes from 'prop-types';
+import { FC, memo } from 'react';
 import { Checkbox, FormControlLabel, FormHelperText } from '@mui/material';
+import { ControllerFieldState } from 'react-hook-form';
 import { formatErrorMessage } from './utils/mapError';
 import propsAreEqual from './utils/propsAreEqual';
+
+interface Props {
+  // react-hook-form ControllerRenderProps requires generics for field
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  field: any;
+  fieldState: ControllerFieldState;
+  disabled?: boolean;
+  label?: JSX.Element;
+  renderIf?: boolean;
+  icon?: JSX.Element;
+  checkedIcon?: JSX.Element;
+}
 
 const styles = {
   checkboxContainer: {
@@ -18,13 +30,13 @@ const styles = {
   errorText: { margin: 0 },
 };
 
-const FormCheckboxField = (props): JSX.Element => {
+const FormCheckboxField: FC<Props> = (props) => {
   const {
     field,
     fieldState,
     disabled,
     label,
-    renderIf,
+    renderIf = true,
     icon,
     checkedIcon,
     ...custom
@@ -56,25 +68,11 @@ const FormCheckboxField = (props): JSX.Element => {
       />
       {isError && (
         <FormHelperText error={isError} style={styles.errorText}>
-          {formatErrorMessage(fieldState.error.message)}
+          {formatErrorMessage(fieldState.error?.message)}
         </FormHelperText>
       )}
     </div>
   );
-};
-
-FormCheckboxField.defaultProps = {
-  renderIf: true,
-};
-
-FormCheckboxField.propTypes = {
-  field: PropTypes.object.isRequired,
-  fieldState: PropTypes.object.isRequired,
-  disabled: PropTypes.bool,
-  label: PropTypes.node,
-  renderIf: PropTypes.bool,
-  icon: PropTypes.element,
-  checkedIcon: PropTypes.element,
 };
 
 export default memo(FormCheckboxField, propsAreEqual);

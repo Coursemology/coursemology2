@@ -25,6 +25,11 @@ const styles = {
   dateTimeTextField: {
     marginRight: 5,
   },
+  dialogStyle: {
+    '.MuiDialog-paper': {
+      overflowY: 'visible',
+    },
+  },
 };
 
 const onChangeDateTime = (newDateTime, onChange, afterChangeField) => {
@@ -60,6 +65,7 @@ const FormDateTimePickerField = (props) => {
         <MuiDateTimePicker
           {...field}
           ampm={false}
+          DialogProps={{ sx: styles.dialogStyle }}
           clearable
           disabled={disabled}
           inputFormat="DD-MM-YYYY HH:mm"
