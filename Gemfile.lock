@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/doabit/bootstrap-sass-extras
-  revision: 41160dfbdd8486c446ee59918ba3342ed96ee423
+  revision: 5db21def780a8d14b537ef8db0b3d34da881257a
   specs:
     bootstrap-sass-extras (0.1.0)
       rails (>= 3.1.0)
