@@ -5,18 +5,28 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   before_action :load_group_managers, only: [:pending, :index]
 
   def index # :nodoc:
-    @submissions = @submissions.from_category(category).confirmed
-    @submissions = @submissions.filter_by_params(filter_params) unless filter_params.blank?
-    @submission_count = @submissions.count
-    @submissions = @submissions.filter_by_params(filter_page_num) unless filter_page_num.blank?
-    load_assessments
+    respond_to do |format|
+      format.html
+      format.json do
+        @submissions = @submissions.from_category(category).confirmed
+        @submissions = @submissions.filter_by_params(filter_params) unless filter_params.blank?
+        @submission_count = @submissions.count
+        @submissions = @submissions.filter_by_params(filter_page_num) unless filter_page_num.blank?
+        load_assessments
+      end
+    end
   end
 
   def pending
-    @submissions = pending_submissions.from_course(current_course)
-    @submission_count = @submissions.count
-    @submissions = @submissions.filter_by_params(filter_page_num) unless filter_page_num.blank?
-    load_assessments
+    respond_to do |format|
+      format.html
+      format.json do
+        @submissions = pending_submissions.from_course(current_course)
+        @submission_count = @submissions.count
+        @submissions = @submissions.filter_by_params(filter_page_num) unless filter_page_num.blank?
+        load_assessments
+      end
+    end
   end
 
   private

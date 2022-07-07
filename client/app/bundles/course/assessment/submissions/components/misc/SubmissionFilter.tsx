@@ -124,7 +124,7 @@ const SubmissionFilter: FC<Props> = (props) => {
   };
 
   return (
-    <Stack spacing={1.5}>
+    <Stack spacing={1.5} className="submissions-filter">
       {showDetailFilter && (
         <>
           <h3 style={{ marginTop: 0, marginBottom: 0 }}>

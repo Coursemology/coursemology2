@@ -146,7 +146,11 @@ const SubmissionsTable: FC<Props> = (props) => {
             </TableHead>
             <TableBody>
               {submissions.map((submission, index) => (
-                <TableRow key={submission.id}>
+                <TableRow
+                  key={`submission_${submission.id}`}
+                  className="submission"
+                  id={`submission_${submission.id}`}
+                >
                   <TableCell align="center">
                     {index + 1 + (pageNum - 1) * rowsPerPage}
                   </TableCell>

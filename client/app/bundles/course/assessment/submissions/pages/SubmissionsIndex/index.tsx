@@ -114,6 +114,7 @@ const SubmissionsIndex: FC<Props> = (props) => {
           TabIndicatorProps={{ style: { transition: 'none' } }}
         >
           <Tab
+            id="my-students-pending-tab"
             value={0}
             label={intl.formatMessage(translations.myStudentsPending)}
             icon={
@@ -141,6 +142,7 @@ const SubmissionsIndex: FC<Props> = (props) => {
           />
 
           <Tab
+            id="all-students-pending-tab"
             value={1}
             label={intl.formatMessage(translations.allStudentsPending)}
             icon={
