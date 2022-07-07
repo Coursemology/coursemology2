@@ -16,7 +16,7 @@ class Course::Admin::AnnouncementSettingsController < Course::Admin::Controller
   private
 
   def announcement_settings_params # :nodoc:
-    params.require(:settings_announcements_component).permit(:title, :pagination)
+    params.require(:settings_announcements_component).permit(:title)
   end
 
   def component

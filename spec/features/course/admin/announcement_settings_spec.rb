@@ -11,24 +11,6 @@ RSpec.feature 'Course: Administration: Announcement' do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can change the announcement pagination settings' do
-        visit course_admin_announcements_path(course)
-
-        invalid_pagination_count = -1
-        valid_pagination_count = 100
-
-        pagination_field = 'settings_announcements_component_pagination'
-        fill_in pagination_field, with: invalid_pagination_count
-        click_button 'update'
-        expect(page).to have_css('div.has-error')
-
-        fill_in pagination_field, with: valid_pagination_count
-        click_button 'update'
-        expect(page).
-          to have_selector('div', text: I18n.t('course.admin.announcement_settings.update.success'))
-        expect(page).to have_field(pagination_field, with: valid_pagination_count)
-      end
-
       scenario 'I can change the announcements title' do
         visit course_admin_announcements_path(course)
 
