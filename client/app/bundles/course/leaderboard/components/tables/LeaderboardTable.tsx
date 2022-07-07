@@ -80,11 +80,12 @@ const styles = {
 
 const LeaderboardTable: FC<Props> = (props: Props) => {
   const { data, id: tableType } = props;
-  const tabletView = !useMediaQuery('(min-width:600px)');
-  const phoneView = !useMediaQuery('(min-width:450px)');
+  const tabletView = useMediaQuery('(max-width:600px)');
+  const phoneView = useMediaQuery('(max-width:450px)');
   const [maxAvatars, setMaxAvatars] = useState(6);
 
   useEffect(() => {
+    console.log(`phone: ${phoneView}, tablet: ${tabletView}`);
     if (phoneView) {
       setMaxAvatars(2);
     } else if (tabletView) {

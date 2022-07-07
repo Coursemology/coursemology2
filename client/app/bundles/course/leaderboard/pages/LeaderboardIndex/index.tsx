@@ -55,7 +55,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
   const { intl } = props;
   const dispatch = useDispatch<AppDispatch>();
   const theme = useTheme();
-  const tabView = !useMediaQuery(theme.breakpoints.up('lg'));
+  const tabView = useMediaQuery(theme.breakpoints.down('lg'));
   const [isLoading, setIsLoading] = useState(true);
   const [tabValue, setTabValue] = useState('leaderboard-tab');
   const [innerTabValue, setInnerTabValue] = useState('experience-tab');
