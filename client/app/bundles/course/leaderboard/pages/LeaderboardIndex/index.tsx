@@ -58,7 +58,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
   const tabView = useMediaQuery(theme.breakpoints.down('lg'));
   const [isLoading, setIsLoading] = useState(true);
   const [tabValue, setTabValue] = useState('leaderboard-tab');
-  const [innerTabValue, setInnerTabValue] = useState('experience-tab');
+  const [innerTabValue, setInnerTabValue] = useState('points-tab');
   const settings = useSelector((state: AppState) =>
     getLeaderboardSettings(state),
   );
@@ -149,7 +149,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
           sx={{ marginBottom: 2 }}
         >
           <Tab
-            id="experience-tab"
+            id="points-tab"
             style={{ color: palette.submissionIcon.person }}
             icon={<AutoFixHigh />}
             label={
@@ -157,7 +157,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
                 <FormattedMessage {...translations.experience} />
               )
             }
-            value="experience-tab"
+            value="points-tab"
           />
           <Tab
             id="achievement-tab"
@@ -179,7 +179,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
         rowSpacing={2}
         display={tabValue === 'leaderboard-tab' ? 'flex' : 'none'}
       >
-        {(!tabView || innerTabValue === 'experience-tab') && (
+        {(!tabView || innerTabValue === 'points-tab') && (
           <Grid item xs id="leaderboard-level">
             <LeaderboardTable
               data={leaderboardPoints}
@@ -204,7 +204,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
         rowSpacing={2}
         display={tabValue !== 'leaderboard-tab' ? 'flex' : 'none'}
       >
-        {(!tabView || innerTabValue === 'experience-tab') && (
+        {(!tabView || innerTabValue === 'points-tab') && (
           <Grid item xs id="group-leaderboard-level">
             <LeaderboardTable
               data={groupLeaderboardPoints}

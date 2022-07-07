@@ -85,7 +85,6 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
   const [maxAvatars, setMaxAvatars] = useState(6);
 
   useEffect(() => {
-    console.log(`phone: ${phoneView}, tablet: ${tabletView}`);
     if (phoneView) {
       setMaxAvatars(2);
     } else if (tabletView) {
