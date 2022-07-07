@@ -28,6 +28,7 @@ const SubmissionsTableButton: FC<Props> = (props) => {
 
   return (
     <Button
+      id={`submission-button-${submissionId}`}
       href={getEditAssessmentSubmissionURL(
         getCourseId(),
         assessmentId,
