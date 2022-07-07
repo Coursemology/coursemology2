@@ -2,8 +2,6 @@
 class Course::Settings::AnnouncementsComponent < Course::Settings::Component
   include ActiveModel::Conversion
 
-  validates :pagination, numericality: { greater_than: 0 }
-
   def self.component_class
     Course::AnnouncementsComponent
   end
@@ -21,19 +19,5 @@ class Course::Settings::AnnouncementsComponent < Course::Settings::Component
   def title=(title)
     title = nil if title.blank?
     settings.title = title
-  end
-
-  # Returns the announcement pagination count
-  #
-  # @return [Integer] The pagination count of announcement
-  def pagination
-    settings.pagination || 50
-  end
-
-  # Sets the announcement pagination number
-  #
-  # @param [Integer] count The new pagination count
-  def pagination=(count)
-    settings.pagination = count
   end
 end
