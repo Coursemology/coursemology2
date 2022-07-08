@@ -1,7 +1,11 @@
-import { Box, Typography } from '@mui/material';
-import { FC, ReactElement } from 'react';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import { FC, ReactElement, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
+import {
+  TableColumns,
+  TableOptions,
+  TableState,
+} from 'types/components/DataTable';
 import tableTranslations from 'lib/components/tables/translations';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import DataTable from 'lib/components/DataTable';
@@ -10,14 +14,19 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import { toast } from 'react-toastify';
-import { getAllInstanceMiniEntities } from '../../selectors';
-import { updateInstance } from '../../operations';
+import { UserMiniEntity } from 'types/users';
+import { getAdminCounts, getAllInstanceMiniEntities } from '../../selectors';
+import { indexInstances, updateInstance } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   renderRowActionComponent: (instance: InstanceMiniEntity) => ReactElement;
 }
 
 const translations = defineMessages({
+  title: {
+    id: 'system.admin.components.tables.InstancesTable.title',
+    defaultMessage: 'Instances',
+  },
   searchText: {
     id: 'system.admin.components.tables.InstancesTable.searchPlaceholder',
     defaultMessage: 'Search instance name or host name',
@@ -35,10 +44,15 @@ const translations = defineMessages({
 const InstancesTable: FC<Props> = (props) => {
   const { renderRowActionComponent, intl } = props;
   const dispatch = useDispatch<AppDispatch>();
-
+  const [isLoading, setIsLoading] = useState(false);
   const instances = useSelector((state: AppState) =>
     getAllInstanceMiniEntities(state),
   );
+  const counts = useSelector((state: AppState) => getAdminCounts(state));
+
+  const [tableState, setTableState] = useState<TableState<UserMiniEntity>>({
+    page: 0,
+  });
 
   const handleNameUpdate = (rowData, newName: string): Promise<void> => {
     const instance = rebuildObjectFromRow(
@@ -77,16 +91,37 @@ const InstancesTable: FC<Props> = (props) => {
     });
   };
 
-  const options: TableOptions = {
+  const changePage = (page): void => {
+    setIsLoading(true);
+    setTableState({
+      ...tableState,
+      page,
+    });
+    dispatch(indexInstances({ page })).then(() => {
+      setIsLoading(false);
+    });
+  };
+
+  const options: TableOptions<InstanceMiniEntity> = {
+    count: counts.instancesCount,
     download: false,
     filter: false,
+    onTableChange: (action, newTableState) => {
+      switch (action) {
+        case 'changePage':
+          changePage(newTableState.page);
+          break;
+        default:
+          break;
+      }
+    },
     pagination: true,
     print: false,
     rowsPerPage: 30,
-    rowsPerPageOptions: [15, 30, 50],
-    search: true,
-    searchPlaceholder: intl.formatMessage(translations.searchText),
+    rowsPerPageOptions: [30],
+    search: false,
     selectableRows: 'none',
+    serverSide: true,
     setTableProps: (): Record<string, unknown> => {
       return { size: 'small' };
     },
@@ -137,6 +172,7 @@ const InstancesTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.name),
       options: {
         alignCenter: false,
+        search: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
           const rowData = tableMeta.rowData;
           return (
@@ -161,7 +197,7 @@ const InstancesTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.host),
       options: {
         alignCenter: false,
-        search: true,
+        search: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
           const rowData = tableMeta.rowData;
           return (
@@ -254,7 +290,17 @@ const InstancesTable: FC<Props> = (props) => {
   return (
     <Box sx={{ margin: '12px 0px' }}>
       <DataTable
-        title="Instances"
+        title={
+          <Typography variant="h6">
+            {intl.formatMessage(translations.title)}
+            {isLoading && (
+              <CircularProgress
+                size={24}
+                style={{ marginLeft: 15, position: 'relative', top: 4 }}
+              />
+            )}
+          </Typography>
+        }
         data={instances}
         columns={columns}
         options={options}

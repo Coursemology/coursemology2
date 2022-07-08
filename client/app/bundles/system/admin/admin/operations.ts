@@ -123,10 +123,10 @@ export function createAnnouncement(
       });
 }
 
-export function indexUsers(): Operation<void> {
+export function indexUsers(params?): Operation<void> {
   return async (dispatch) =>
     CourseAPI.admin.system
-      .indexUsers()
+      .indexUsers(params)
       .then((response) => {
         const data = response.data;
         dispatch(actions.saveUsersList(data.users, data.counts));
@@ -159,15 +159,16 @@ export function deleteUser(userId: number): Operation<void> {
     });
 }
 
-export function indexCourses(): Operation<void> {
+export function indexCourses(params?): Operation<void> {
   return async (dispatch) =>
     CourseAPI.admin.system
-      .indexCourses()
+      .indexCourses(params)
       .then((response) => {
         const data = response.data;
         const counts = {
           totalCourses: data.totalCourses,
           activeCourses: data.activeCourses,
+          searchCount: data.searchCount,
         };
         dispatch(actions.saveCourseList(data.courses, counts));
       })
@@ -183,13 +184,19 @@ export function deleteCourse(courseId: number): Operation<void> {
     });
 }
 
-export function indexInstances(): Operation<void> {
+export function indexInstances(params?): Operation<void> {
   return async (dispatch) =>
     CourseAPI.admin.system
-      .indexInstances()
+      .indexInstances(params)
       .then((response) => {
         const data = response.data;
-        dispatch(actions.saveInstanceList(data.instances, data.permissions));
+        dispatch(
+          actions.saveInstanceList(
+            data.instances,
+            data.permissions,
+            data.counts,
+          ),
+        );
       })
       .catch((error) => {
         throw error;

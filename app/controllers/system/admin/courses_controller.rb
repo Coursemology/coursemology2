@@ -5,8 +5,10 @@ class System::Admin::CoursesController < System::Admin::Controller
 
   def index
     @courses = Course.includes(:instance).search(search_param).calculated(:active_user_count, :user_count)
-    @courses = @courses.active_in_past_7_days.order('active_user_count DESC, user_count') if params[:active]
-    @courses = @courses.ordered_by_title#.page(page_param)
+    @courses = @courses.active_in_past_7_days.order('active_user_count DESC, user_count') if params[:active].present?
+    @courses = @courses.ordered_by_title
+    @search_count = @courses.length
+    @courses = @courses.paginate(page_param)
 
     @owner_preload_service = Course::CourseOwnerPreloadService.new(@courses.map(&:id))
   end
@@ -16,11 +18,8 @@ class System::Admin::CoursesController < System::Admin::Controller
 
     if @course.destroy
       head :ok
-      # redirect_to admin_courses_path, success: t('.success', course: @course.title)
     else
       render json: { errors: @course.errors.full_messages.to_sentence }, status: :bad_request
-      # redirect_to admin_courses_path,
-      #             danger: t('.failure', error: @course.errors.full_messages.to_sentence)
     end
   end
 

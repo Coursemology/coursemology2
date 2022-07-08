@@ -93,6 +93,10 @@ class Instance < ApplicationRecord
     joins(:instance_users).where('instance_users.user_id = ?', user.id)
   end)
 
+  scope :paginate, (lambda do |page|
+    offset(page.to_i * 30).limit(30)
+  end)
+
   # The number of active courses (in the past 7 days) in the instance.
   calculated :active_course_count, (lambda do
     Course.unscoped.active_in_past_7_days.where('courses.instance_id = instances.id').

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 json.id course.id
 json.title format_inline_text(course.title)
 json.createdAt format_datetime(course.created_at, :date_only_long)

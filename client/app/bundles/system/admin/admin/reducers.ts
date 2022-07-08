@@ -1,6 +1,7 @@
 import { produce } from 'immer';
 import {
   createEntityStore,
+  removeAllFromStore,
   removeFromStore,
   saveEntityToStore,
   saveListToStore,
@@ -35,8 +36,10 @@ const initialState: AdminState = {
       normalCount: 0,
       allCount: 0,
     },
+    searchCount: 0,
     totalCourses: 0,
     activeCourses: 0,
+    instancesCount: 0,
   },
   instances: createEntityStore(),
   courses: createEntityStore(),
@@ -74,6 +77,7 @@ const reducer = produce((draft: AdminState, action: AdminActionType) => {
       const entityList = userList.map((data) => ({
         ...data,
       }));
+      removeAllFromStore(draft.users);
       saveListToStore(draft.users, entityList);
       draft.counts = { ...draft.counts, ...counts };
       break;
@@ -97,6 +101,7 @@ const reducer = produce((draft: AdminState, action: AdminActionType) => {
       const entityList = courseList.map((data) => ({
         ...data,
       }));
+      removeAllFromStore(draft.courses);
       saveListToStore(draft.courses, entityList);
       draft.counts = { ...draft.counts, ...counts };
       break;
@@ -114,7 +119,9 @@ const reducer = produce((draft: AdminState, action: AdminActionType) => {
       const entityList = instanceList.map((data) => ({
         ...data,
       }));
+      removeAllFromStore(draft.instances);
       saveListToStore(draft.instances, entityList);
+      draft.counts.instancesCount = action.count;
       draft.permissions = action.permissions;
       break;
     }
@@ -129,6 +136,7 @@ const reducer = produce((draft: AdminState, action: AdminActionType) => {
       if (draft.instances.byId[instanceId]) {
         removeFromStore(draft.instances, instanceId);
       }
+      draft.counts.instancesCount -= 1;
       break;
     }
     default: {

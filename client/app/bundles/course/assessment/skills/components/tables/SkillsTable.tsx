@@ -219,7 +219,7 @@ const SkillsTable: FC<Props> = (props: Props) => {
     data[indexSelected].skills &&
     (data[indexSelected].skills ?? []).length > 0;
 
-  const options: TableOptions = {
+  const options: TableOptions<SkillBranchMiniEntity> = {
     download: false,
     filter: false,
     pagination: false,

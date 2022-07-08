@@ -4,6 +4,7 @@ class System::Admin::UsersController < System::Admin::Controller
   add_breadcrumb :index, :admin_users_path
 
   def index
+    params.permit(:active, :role)
     load_users
     load_counts
     @instances_preload_service = User::InstancePreloadService.new(@users.map(&:id))
@@ -31,9 +32,11 @@ class System::Admin::UsersController < System::Admin::Controller
   private
 
   def load_users
-    @users = @users.human_users.includes(:emails).ordered_by_name.page(page_param).search(search_param)
-    @users = @users.active_in_past_7_days if params[:active]
-    @users = @users.where(role: params[:role]) if params[:role] && User.roles.key?(params[:role])
+    @users = @users.human_users.includes(:emails).ordered_by_name.search(search_param)
+    @users = @users.active_in_past_7_days if params[:active].present?
+    @users = @users.where(role: params[:role]) if params[:role].present? && User.roles.key?(params[:role])
+    @user_count = @users.length
+    @users = @users.paginate(page_param)
   end
 
   def load_counts

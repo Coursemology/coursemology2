@@ -89,7 +89,7 @@ const ManageUsersTable: FC<Props> = (props) => {
     });
   };
 
-  const options: TableOptions = {
+  const options: TableOptions<CourseUserMiniEntity> = {
     download: false,
     filter: false,
     pagination: true,

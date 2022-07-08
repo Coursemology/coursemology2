@@ -75,7 +75,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
     ? intl.formatMessage(translations.pending)
     : intl.formatMessage(translations.accepted);
 
-  const options: TableOptions = {
+  const options: TableOptions<InvitationMiniEntity> = {
     download: false,
     filter: false,
     pagination: true,

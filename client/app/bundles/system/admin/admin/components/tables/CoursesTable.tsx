@@ -1,21 +1,32 @@
-import { Box, Typography } from '@mui/material';
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
+import {
+  TableColumns,
+  TableOptions,
+  TableState,
+} from 'types/components/DataTable';
 import tableTranslations from 'lib/components/tables/translations';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import { debounceSearchRender } from 'mui-datatables';
 import DataTable from 'lib/components/DataTable';
 import { CourseMiniEntity } from 'types/system/courses';
-import { useSelector } from 'react-redux';
-import { AppState } from 'types/store';
-import { UserBasicMiniEntity } from 'types/users';
-import { getAllCourseMiniEntities } from '../../selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, AppState } from 'types/store';
+import { UserBasicMiniEntity, UserMiniEntity } from 'types/users';
+import { getUrlParameter } from 'lib/helpers/url-helpers';
+import { getAdminCounts, getAllCourseMiniEntities } from '../../selectors';
+import { indexCourses } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   renderRowActionComponent: (course: CourseMiniEntity) => ReactElement;
 }
 
 const translations = defineMessages({
+  title: {
+    id: 'system.admin.components.tables.CoursesTable.title',
+    defaultMessage: 'Courses',
+  },
   searchText: {
     id: 'system.admin.components.tables.CoursesTable.searchPlaceholder',
     defaultMessage: 'Search course title, description or owners.',
@@ -34,10 +45,26 @@ const styles = {
 
 const CoursesTable: FC<Props> = (props) => {
   const { renderRowActionComponent, intl } = props;
-
+  const [isLoading, setIsLoading] = useState(false);
   const courses = useSelector((state: AppState) =>
     getAllCourseMiniEntities(state),
   );
+  const counts = useSelector((state: AppState) => getAdminCounts(state));
+  const active = getUrlParameter('active');
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [tableState, setTableState] = useState<TableState<UserMiniEntity>>({
+    count: counts.searchCount,
+    page: 0,
+    searchText: '',
+  });
+
+  useEffect((): void => {
+    setTableState({
+      ...tableState,
+      count: counts.searchCount,
+    });
+  }, [counts]);
 
   const renderOwnerLink = (owner: UserBasicMiniEntity): JSX.Element => {
     if (owner.id === -1 && owner.name === 'Deleted') {
@@ -54,13 +81,45 @@ const CoursesTable: FC<Props> = (props) => {
     );
   };
 
-  const options: TableOptions = {
+  const changePage = (page): void => {
+    setIsLoading(true);
+    setTableState({
+      ...tableState,
+      page,
+    });
+    dispatch(indexCourses({ page, active })).then(() => {
+      setIsLoading(false);
+    });
+  };
+
+  const search = (page, searchText): void => {
+    setIsLoading(true);
+    dispatch(indexCourses({ page, active, search: searchText })).then(() => {
+      setIsLoading(false);
+    });
+  };
+
+  const options: TableOptions<CourseMiniEntity> = {
+    count: tableState.count,
+    customSearchRender: debounceSearchRender(500),
     download: false,
     filter: false,
+    onTableChange: (action, newTableState) => {
+      switch (action) {
+        case 'search':
+          search(newTableState.page, newTableState.searchText);
+          break;
+        case 'changePage':
+          changePage(newTableState.page);
+          break;
+        default:
+          break;
+      }
+    },
     pagination: true,
     print: false,
     rowsPerPage: 30,
-    rowsPerPageOptions: [15, 30, 50],
+    rowsPerPageOptions: [30],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',
@@ -96,6 +155,7 @@ const CoursesTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.name),
       options: {
         alignCenter: false,
+        sort: false,
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const course = courses[dataIndex];
           return (
@@ -116,6 +176,7 @@ const CoursesTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         search: false,
+        sort: false,
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const course = courses[dataIndex];
           return (
@@ -136,6 +197,7 @@ const CoursesTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         search: false,
+        sort: false,
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const course = courses[dataIndex];
           return (
@@ -156,6 +218,7 @@ const CoursesTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         search: true,
+        sort: false,
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const course = courses[dataIndex];
           return (
@@ -178,6 +241,7 @@ const CoursesTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         search: true,
+        sort: false,
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const course = courses[dataIndex];
           return (
@@ -208,7 +272,17 @@ const CoursesTable: FC<Props> = (props) => {
   return (
     <Box sx={{ margin: '12px 0px' }}>
       <DataTable
-        title="Courses"
+        title={
+          <Typography variant="h6">
+            {intl.formatMessage(translations.title)}
+            {isLoading && (
+              <CircularProgress
+                size={24}
+                style={{ marginLeft: 15, position: 'relative', top: 4 }}
+              />
+            )}
+          </Typography>
+        }
         data={courses}
         columns={columns}
         options={options}

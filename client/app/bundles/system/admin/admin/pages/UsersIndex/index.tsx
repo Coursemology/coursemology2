@@ -12,7 +12,9 @@ import { toast } from 'react-toastify';
 import { AppState, AppDispatch } from 'types/store';
 import { Typography } from '@mui/material';
 import SummaryCard from 'lib/components/SummaryCard';
-import { getAdminCounts, getAllUserMiniEntities } from '../../selectors';
+import { getUrlParameter } from 'lib/helpers/url-helpers';
+import { useLocation } from 'react-router-dom';
+import { getAdminCounts } from '../../selectors';
 import { indexUsers } from '../../operations';
 import UsersButtons from '../../components/buttons/UsersButtons';
 import UsersTable from '../../components/tables/UsersTable';
@@ -26,7 +28,7 @@ const translations = defineMessages({
   },
   fetchUsersFailure: {
     id: 'system.admin.users.fetch.failure',
-    defaultMessage: 'Unable to fetch users',
+    defaultMessage: 'Failed to fetch users.',
   },
   totalUsers: {
     id: 'system.admin.users.totalUsers',
@@ -46,19 +48,21 @@ const translations = defineMessages({
 const UsersIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
-  const users = useSelector((state: AppState) => getAllUserMiniEntities(state));
   const counts = useSelector((state: AppState) => getAdminCounts(state));
   const dispatch = useDispatch<AppDispatch>();
+  const location = useLocation();
 
   const { activeUsers: activeCounts, totalUsers: totalCounts } = counts;
 
   useEffect(() => {
-    dispatch(indexUsers())
+    const role = getUrlParameter('role');
+    const active = getUrlParameter('active');
+    dispatch(indexUsers({ role, active }))
       .finally(() => setIsLoading(false))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchUsersFailure)),
       );
-  }, [dispatch]);
+  }, [dispatch, location]);
 
   const renderSummaryContent: JSX.Element = (
     <>
@@ -110,7 +114,6 @@ const UsersIndex: FC<Props> = (props) => {
         <SummaryCard renderContent={renderSummaryContent} />
       </div>
       <UsersTable
-        users={users}
         renderRowActionComponent={(user): JSX.Element => (
           <UsersButtons user={user} />
         )}

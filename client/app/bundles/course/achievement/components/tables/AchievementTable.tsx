@@ -46,7 +46,7 @@ const AchievementTable: FC<Props> = (props) => {
     return <Note message={<FormattedMessage {...translations.noCategory} />} />;
   }
 
-  const options: TableOptions = {
+  const options: TableOptions<AchievementMiniEntity> = {
     download: false,
     filter: false,
     pagination: false,

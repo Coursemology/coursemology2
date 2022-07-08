@@ -29,15 +29,26 @@ export interface TableColumns {
   };
 }
 
-export interface TableOptions {
-  customToolbar?: () => JSX.Element;
+export interface TableOptions<TableData> {
+  count?: number;
   customFooter?: () => JSX.Element | string;
+  customSearchRender?: (
+    searchText: string,
+    handleSearch,
+    hideSearch,
+    options,
+  ) => JSX.Element;
+  customToolbar?: () => JSX.Element;
   download?: boolean;
   filter?: boolean;
   jumpToPage?: boolean;
   onRowClick?: (
     rowData: string[],
     rowMeta: { dataIndex: number; rowIndex: number },
+  ) => void;
+  onTableChange?: (
+    action: string,
+    newTableState: TableState<TableData>,
   ) => void;
   print?: boolean;
   pagination?: boolean;
@@ -47,6 +58,7 @@ export interface TableOptions {
   searchPlaceholder?: string;
   selectableRows?: string;
   selectToolbarPlacement?: string;
+  serverSide?: boolean;
   setRowProps?: (
     row: Array<unknown>,
     dataIndex: number,
@@ -64,6 +76,15 @@ export interface TableOptions {
     rowData,
     rowMeta: { rowIndex: number; dataIndex: number },
   ) => void;
+}
+
+export interface TableState<TableData> {
+  data?: TableData[];
+  page?: number;
+  count?: number;
+  rowsPerPage?: number;
+  searchText?: string;
+  sortOrder?: Object;
 }
 
 export interface TableRowMeta {
