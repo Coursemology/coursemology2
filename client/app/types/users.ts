@@ -43,6 +43,8 @@ export interface AdminStats {
     normalCount?: number;
     allCount: number;
   };
+  searchCount: number;
   totalCourses: number;
   activeCourses: number;
+  instancesCount: number;
 }

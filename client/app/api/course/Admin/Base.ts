@@ -58,13 +58,15 @@ export default class BaseAdminAPI extends BaseCourseAPI {
   /**
    * Fetches a list of system users.
    */
-  indexUsers(): Promise<
+  indexUsers(params): Promise<
     AxiosResponse<{
       users: UserListData[];
       counts: AdminStats;
     }>
   > {
-    return this.getClient().get(`${BaseAdminAPI._getUrlPrefix()}/users`);
+    return this.getClient().get(`${BaseAdminAPI._getUrlPrefix()}/users/`, {
+      params,
+    });
   }
 
   /**
@@ -89,13 +91,16 @@ export default class BaseAdminAPI extends BaseCourseAPI {
   /**
    * Fetches a list of instances.
    */
-  indexInstances(): Promise<
+  indexInstances(params?): Promise<
     AxiosResponse<{
       instances: InstanceListData[];
       permissions: InstancePermissions;
+      counts: number;
     }>
   > {
-    return this.getClient().get(`${BaseAdminAPI._getUrlPrefix()}/instances`);
+    return this.getClient().get(`${BaseAdminAPI._getUrlPrefix()}/instances`, {
+      params,
+    });
   }
 
   /**
@@ -130,14 +135,17 @@ export default class BaseAdminAPI extends BaseCourseAPI {
   /**
    * Fetches a list of courses.
    */
-  indexCourses(): Promise<
+  indexCourses(params?): Promise<
     AxiosResponse<{
       courses: CourseListData[];
       totalCourses: number;
       activeCourses: number;
+      searchCount: number;
     }>
   > {
-    return this.getClient().get(`${BaseAdminAPI._getUrlPrefix()}/courses`);
+    return this.getClient().get(`${BaseAdminAPI._getUrlPrefix()}/courses`, {
+      params,
+    });
   }
 
   /**

@@ -14,4 +14,5 @@ json.counts do
     json.normalCount @counts[:active][:normal]
     json.allCount @counts[:active].values.sum
   end
+  json.searchCount @user_count
 end

@@ -80,6 +80,7 @@ export interface SaveInstanceListAction {
   type: typeof SAVE_INSTANCE_LIST;
   instanceList: InstanceListData[];
   permissions: InstancePermissions;
+  count: number;
 }
 
 export interface SaveInstanceAction {

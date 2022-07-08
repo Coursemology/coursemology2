@@ -154,7 +154,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
         throw error;
       });
 
-  const options: TableOptions = {
+  const options: TableOptions<AchievementCourseUserEntity> = {
     customToolbar: () => (
       <>
         <Button color="secondary" onClick={(): void => handleClose(false)}>

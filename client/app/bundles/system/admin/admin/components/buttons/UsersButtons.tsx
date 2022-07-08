@@ -6,10 +6,9 @@ import sharedConstants from 'lib/constants/sharedConstants';
 import { UserMiniEntity } from 'types/users';
 import MasqueradeButton from 'lib/components/buttons/MasqueradeButton';
 import DeleteButton from 'lib/components/buttons/DeleteButton';
-import SaveButton from 'lib/components/buttons/SaveButton';
 import equal from 'fast-deep-equal';
 import { toast } from 'react-toastify';
-import { deleteUser, updateUser } from '../../operations';
+import { deleteUser } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   user: UserMiniEntity;
@@ -34,42 +33,12 @@ const translations = defineMessages({
     id: 'system.admin.user.delete.confirm',
     defaultMessage: 'Are you sure you wish to delete {role} {name} ({email})?',
   },
-  updateSuccess: {
-    id: 'system.admin.user.update.success',
-    defaultMessage: 'Record for {name} was updated.',
-  },
-  updateFailure: {
-    id: 'system.admin.user.update.fail',
-    defaultMessage: 'Failed to update user. {error}',
-  },
 });
 
 const UserManagementButtons: FC<Props> = (props) => {
   const { intl, user } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-
-  const onSave = (userToSave: UserMiniEntity): Promise<void> => {
-    setIsSaving(true);
-    return dispatch(updateUser(userToSave.id, userToSave))
-      .then(() => {
-        toast.success(
-          intl.formatMessage(translations.updateSuccess, {
-            name: userToSave.name,
-          }),
-        );
-      })
-      .catch((error) => {
-        toast.error(
-          intl.formatMessage(translations.updateFailure, {
-            error: error.message,
-          }),
-        );
-        throw error;
-      })
-      .finally(() => setIsSaving(false));
-  };
 
   const onDelete = (): Promise<void> => {
     setIsDeleting(true);
@@ -90,17 +59,10 @@ const UserManagementButtons: FC<Props> = (props) => {
 
   const managementButtons = (
     <div style={{ whiteSpace: 'nowrap' }} key={`buttons-${user.id}`}>
-      <SaveButton
-        tooltip="Save Changes"
-        className={`user-save-${user.id}`}
-        disabled={isDeleting || isSaving}
-        onClick={(): Promise<void> => onSave(user)}
-        sx={styles.buttonStyle}
-      />
       <DeleteButton
         tooltip="Delete User"
         className={`user-delete-${user.id}`}
-        disabled={isDeleting || isSaving}
+        disabled={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
           role: sharedConstants.USER_ROLES[user.role],

@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, ReactElement, ReactNode, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { useSelector, useDispatch } from 'react-redux';
@@ -9,7 +9,7 @@ import { Typography } from '@mui/material';
 import { indexInstances } from '../../operations';
 import InstancesTable from '../../components/tables/InstancesTable';
 import InstancesButtons from '../../components/buttons/InstancesButtons';
-import { getAllInstanceMiniEntities, getPermissions } from '../../selectors';
+import { getAdminCounts, getPermissions } from '../../selectors';
 import NewInstanceButton from '../../components/buttons/NewInstanceButton';
 import InstanceNew from '../InstanceNew';
 
@@ -19,6 +19,10 @@ const translations = defineMessages({
   header: {
     id: 'system.admin.instances.header',
     defaultMessage: 'Instances',
+  },
+  totalInstances: {
+    id: 'system.admin.instances.totalInstances',
+    defaultMessage: 'Total Instances: <strong>{count}</strong>',
   },
   fetchInstancesFailure: {
     id: 'system.admin.admin.fetchInstances.failure',
@@ -30,9 +34,7 @@ const InstancesIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const instances = useSelector((state: AppState) =>
-    getAllInstanceMiniEntities(state),
-  );
+  const counts = useSelector((state: AppState) => getAdminCounts(state));
   const permissions = useSelector((state: AppState) => getPermissions(state));
   const dispatch = useDispatch<AppDispatch>();
   const headerToolbars: ReactElement[] = [];
@@ -54,7 +56,10 @@ const InstancesIndex: FC<Props> = (props) => {
   const renderBody: JSX.Element = (
     <>
       <Typography variant="body1">
-        Total Instances: <strong>{instances.length}</strong>
+        {intl.formatMessage(translations.totalInstances, {
+          strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
+          count: counts.instancesCount,
+        })}
       </Typography>
       <InstancesTable
         renderRowActionComponent={(instance): JSX.Element => (

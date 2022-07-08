@@ -109,6 +109,10 @@ class Course < ApplicationRecord
     joins(:course_users).merge(CourseUser.active_in_past_7_days).merge(CourseUser.student).distinct
   end)
 
+  scope :paginate, (lambda do |page|
+    offset(page.to_i * 30).limit(30)
+  end)
+
   delegate :staff, to: :course_users
   delegate :instructors, to: :course_users
   delegate :managers, to: :course_users

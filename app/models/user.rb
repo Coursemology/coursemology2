@@ -79,6 +79,9 @@ class User < ApplicationRecord
   scope :with_email_addresses, (lambda do |email_addresses|
     includes(:emails).joins(:emails).where('user_emails.email IN (?)', email_addresses)
   end)
+  scope :paginate, (lambda do |page|
+    offset(page.to_i * 30).limit(30)
+  end)
 
   # Gets whether the current user is one of the the built in users.
   #

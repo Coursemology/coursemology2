@@ -100,11 +100,13 @@ export function deleteCourse(courseId: number): DeleteCourseAction {
 export function saveInstanceList(
   instanceList: InstanceListData[],
   permissions: InstancePermissions,
+  count: number,
 ): SaveInstanceListAction {
   return {
     type: SAVE_INSTANCE_LIST,
     instanceList,
     permissions,
+    count,
   };
 }
 

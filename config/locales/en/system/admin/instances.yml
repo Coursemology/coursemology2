@@ -4,20 +4,8 @@ en:
       instances:
         index:
           header: 'Instances'
-          name: 'Name'
-          host_name: 'Host Name'
-          users: 'Active / Total Users'
-          users_hint: 'Number of active users in the past 7 days'
-          courses: 'Active / Total Courses'
-          courses_hint: 'Number of active courses in the past 7 days'
         new:
           header: 'New Instance'
-        create:
-          success: 'Instance has been successfully created.'
         edit:
           header: 'Edit Instance'
-        update:
-          success: 'Instance has been successfully updated.'
-        destroy:
-          success: '%{instance} was destroyed.'
-          failure: 'Failed to delete instance: %{error}'
+       
