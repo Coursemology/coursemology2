@@ -11,7 +11,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
         @submissions = @submissions.from_category(category).confirmed
         @submissions = @submissions.filter_by_params(filter_params) unless filter_params.blank?
         @submission_count = @submissions.count
-        @submissions = @submissions.filter_by_params(filter_page_num) unless filter_page_num.blank?
+        @submissions = @submissions.paginated(filter_page_num)
         load_assessments
       end
     end
@@ -23,7 +23,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
       format.json do
         @submissions = pending_submissions.from_course(current_course)
         @submission_count = @submissions.count
-        @submissions = @submissions.filter_by_params(filter_page_num) unless filter_page_num.blank?
+        @submissions = @submissions.paginated(filter_page_num)
         load_assessments
       end
     end
@@ -75,7 +75,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
 
     @submissions = Course::Assessment::Submission.by_users(student_ids).
                    ordered_by_submitted_date.accessible_by(current_ability).
-                   page(page_param).calculated(:grade).
+                   calculated(:grade).
                    includes(:assessment, :answers,
                             experience_points_record: { course_user: [:course, :groups] })
   end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Submission < ApplicationRecord
   include Workflow
+  include Generic::CollectionConcern
   include Course::Assessment::Submission::WorkflowEventConcern
   include Course::Assessment::Submission::TodoConcern
   include Course::Assessment::Submission::NotificationConcern
@@ -175,12 +176,6 @@ class Course::Assessment::Submission < ApplicationRecord
     result = result.where(assessment_id: filter_params[:assessment_id]) if filter_params[:assessment_id].present?
     result = result.from_group(filter_params[:group_id]) if filter_params[:group_id].present?
     result = result.by_user(filter_params[:user_id]) if filter_params[:user_id].present?
-    # Pagination with frontend params
-    if filter_params[:page_num].present?
-      result = result.
-              offset((filter_params[:page_num].to_f - 1) * SUBMISSIONS_PER_PAGE).
-              limit(SUBMISSIONS_PER_PAGE)
-    end
     result
   end)
 
