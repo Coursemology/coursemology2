@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 const env = process.env.NODE_ENV || 'development';
 const development = env === 'development';
@@ -53,6 +54,7 @@ const config = {
 
   plugins: [
     new webpack.IgnorePlugin({ resourceRegExp: /__test__/ }),
+    new CompressionPlugin(),
     new WebpackManifestPlugin({
       publicPath: '/webpack/',
       writeToFileEmit: true,

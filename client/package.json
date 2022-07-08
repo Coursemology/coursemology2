@@ -93,6 +93,7 @@
     "babel-loader": "^8.2.5",
     "babel-plugin-formatjs": "^10.3.25",
     "chart.js": "^3.8.0",
+    "compression-webpack-plugin": "^10.0.0",
     "css-loader": "^6.7.1",
     "dnd-core": "^14.0.1",
     "expose-loader": "^4.0.0",
