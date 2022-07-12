@@ -1,50 +1,22 @@
 import {
   SubmissionListData,
   SubmissionPermissions,
-  SubmissionFilterData,
-  SubmissionsTabData,
+  SubmissionsMetaData,
 } from 'types/course/assessment/submissions';
-import {
-  SaveOverwriteSubmissionListAction,
-  SaveSubmissionListAction,
-  SAVE_OVERWRITE_SUBMISSION_LIST,
-  SAVE_SUBMISSION_LIST,
-} from './types';
+import { SaveSubmissionListAction, SAVE_SUBMISSION_LIST } from './types';
 
+// eslint-disable-next-line import/prefer-default-export
 export function saveSubmissionList(
-  isGamified: boolean,
-  submissionCount: number,
   submissionList: SubmissionListData[],
-  tabs: SubmissionsTabData,
-  filter: SubmissionFilterData,
+  metaData: SubmissionsMetaData,
   submissionPermissions: SubmissionPermissions,
+  overwrite: boolean,
 ): SaveSubmissionListAction {
   return {
     type: SAVE_SUBMISSION_LIST,
-    isGamified,
-    submissionCount,
     submissionList,
-    tabs,
-    filter,
+    metaData,
     submissionPermissions,
-  };
-}
-
-export function saveOverwriteSubmissionList(
-  isGamified: boolean,
-  submissionCount: number,
-  submissionList: SubmissionListData[],
-  tabs: SubmissionsTabData,
-  filter: SubmissionFilterData,
-  submissionPermissions: SubmissionPermissions,
-): SaveOverwriteSubmissionListAction {
-  return {
-    type: SAVE_OVERWRITE_SUBMISSION_LIST,
-    isGamified,
-    submissionCount,
-    submissionList,
-    tabs,
-    filter,
-    submissionPermissions,
+    overwrite,
   };
 }

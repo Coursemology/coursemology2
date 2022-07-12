@@ -12,4 +12,3 @@ module Generic::CollectionConcern
     }
   end
 end
-  

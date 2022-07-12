@@ -2,14 +2,18 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, AppState } from 'types/store';
-
 import { toast } from 'react-toastify';
 
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import { Badge, BadgeProps, styled, Tab, Tabs } from '@mui/material';
+import { AppDispatch, AppState } from 'types/store';
+import {
+  SubmissionAssessmentFilterData,
+  SubmissionGroupFilterData,
+  SubmissionUserFilterData,
+} from 'types/course/assessment/submissions';
 
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
+
 import {
   getAllSubmissionMiniEntities,
   getFilter,
@@ -18,14 +22,16 @@ import {
   getSubmissionPermissions,
   getTabs,
 } from '../../selectors';
+
 import {
-  fetchAllStudentsPendingSubmissions,
-  fetchCategorySubmissions,
-  fetchMyStudentsPendingSubmissions,
   fetchSubmissions,
+  filterPendingSubmissions,
+  filterSubmissions,
 } from '../../operations';
 import SubmissionsTable from '../../components/tables/SubmissionsTable';
 import SubmissionFilter from '../../components/misc/SubmissionFilter';
+import SubmissionTabs from '../../components/misc/SubmissionTabs';
+import SubmissionPagination from '../../components/misc/SubmissionPagination';
 
 interface Props extends WrappedComponentProps {}
 
@@ -38,31 +44,16 @@ const translations = defineMessages({
     id: 'course.assessments.submissions.fetchSubmissionsFailure',
     defaultMessage: 'Failed to fetch submissions',
   },
-  allStudentsPending: {
-    id: 'course.assessments.submissions.allStudentsPending',
-    defaultMessage: 'All Pending Submissions',
-  },
-  myStudentsPending: {
-    id: 'course.assessments.submissions.myStudentsPending',
-    defaultMessage: 'My Students Pending',
-  },
-  noSubmissionsMessage: {
-    id: 'course.assessments.submissions.noSubmissionsMessage',
-    defaultMessage: 'There are no submissions',
+  filterGetFailure: {
+    id: 'course.assessments.submissions.filterGetFailure',
+    defaultMessage: 'Failed to filter',
   },
 });
 
-const CustomBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    right: -5,
-    top: 0,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: '0 4px',
-  },
-}));
-
 const SubmissionsIndex: FC<Props> = (props) => {
   const { intl } = props;
+
+  const dispatch = useDispatch<AppDispatch>();
 
   const ROWS_PER_PAGE = 25;
   const [pageNum, setPageNum] = useState(1);
@@ -83,173 +74,120 @@ const SubmissionsIndex: FC<Props> = (props) => {
 
   // For tab logic and control
   const [tabValue, setTabValue] = useState(2);
-  const handleTabChange = (
-    _event: React.SyntheticEvent,
-    newValue: number,
-  ): void => {
-    setTabValue(newValue);
-  };
+  const [isTabChanging, setIsTabChanging] = useState(false);
+
   const [tableIsLoading, setTableIsLoading] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(true);
-  const dispatch = useDispatch<AppDispatch>();
+  // For filtering
+  const [selectedAssessment, setselectedAssessment] =
+    useState<SubmissionAssessmentFilterData | null>(null);
+
+  const [selectedGroup, setselectedGroup] =
+    useState<SubmissionGroupFilterData | null>(null);
+
+  const [selectedUser, setselectedUser] =
+    useState<SubmissionUserFilterData | null>(null);
+
+  const handleFilter = (newPageNumber: number): void => {
+    const assessmentId = selectedAssessment ? selectedAssessment.id : null;
+    const groupId = selectedGroup ? selectedGroup.id : null;
+    const userId = selectedUser ? selectedUser.id : null;
+
+    const categoryId = tabValue > 1 ? tabs.categories[tabValue - 2].id : null;
+
+    dispatch(
+      filterSubmissions(
+        categoryId,
+        assessmentId,
+        groupId,
+        userId,
+        newPageNumber,
+      ),
+    )
+      .then(() => {
+        setTableIsLoading(false);
+      })
+      .catch((error) => {
+        toast.error(intl.formatMessage(translations.filterGetFailure));
+        throw error;
+      });
+  };
+
+  const handlePageChange = (newPageNumber): void => {
+    setTableIsLoading(true);
+    setPageNum(newPageNumber);
+    if (tabValue < 2) {
+      dispatch(filterPendingSubmissions(tabValue === 0, newPageNumber))
+        .then(() => {
+          setTableIsLoading(false);
+        })
+        .catch((error) => {
+          toast.error(intl.formatMessage(translations.filterGetFailure));
+          throw error;
+        });
+    } else {
+      handleFilter(newPageNumber);
+    }
+  };
+
+  const [pageIsLoading, setPageIsLoading] = useState(true);
   useEffect(() => {
     dispatch(fetchSubmissions())
-      .finally(() => setIsLoading(false))
+      .finally(() => {
+        setPageIsLoading(false);
+      })
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchSubmissionsFailure)),
       );
   }, [dispatch]);
-  if (isLoading) {
+
+  if (pageIsLoading) {
     return <LoadingIndicator />;
   }
-
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.header)} />
-      {submissionPermissions.isTeachingStaff ? (
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          TabIndicatorProps={{ style: { transition: 'none' } }}
-        >
-          <Tab
-            id="my-students-pending-tab"
-            value={0}
-            label={intl.formatMessage(translations.myStudentsPending)}
-            icon={
-              <CustomBadge
-                badgeContent={tabs.myStudentsPendingCount}
-                color="primary"
-              />
-            }
-            iconPosition="end"
-            onClick={(): Promise<string | number | void> => {
-              // Prevent API calls when spam clicking the tab
-              if (tabValue !== 0) {
-                setTableIsLoading(true);
-                return dispatch(fetchMyStudentsPendingSubmissions())
-                  .finally(() => setTableIsLoading(false))
-                  .catch(() => {
-                    setTableIsLoading(false);
-                    toast.error(
-                      intl.formatMessage(translations.fetchSubmissionsFailure),
-                    );
-                  });
-              }
-              return new Promise(() => {});
-            }}
-          />
-
-          <Tab
-            id="all-students-pending-tab"
-            value={1}
-            label={intl.formatMessage(translations.allStudentsPending)}
-            icon={
-              <CustomBadge
-                badgeContent={tabs.allStudentsPendingCount}
-                color="primary"
-              />
-            }
-            iconPosition="end"
-            onClick={(): Promise<string | number | void> => {
-              // Prevent API calls when spam clicking the tab
-              if (tabValue !== 1) {
-                setTableIsLoading(true);
-                return dispatch(fetchAllStudentsPendingSubmissions())
-                  .finally(() => setTableIsLoading(false))
-                  .catch(() => {
-                    setTableIsLoading(false);
-                    toast.error(
-                      intl.formatMessage(translations.fetchSubmissionsFailure),
-                    );
-                  });
-              }
-              return new Promise(() => {});
-            }}
-          />
-
-          {tabs.categories.map((tab, index) => (
-            <Tab
-              key={tab.id}
-              value={index + 2}
-              label={tab.title}
-              onClick={(): Promise<string | number | void> => {
-                // Prevent API calls when spam clicking the tab
-                if (tabValue !== index + 2) {
-                  setTableIsLoading(true);
-                  return dispatch(fetchCategorySubmissions(tab.id))
-                    .finally(() => setTableIsLoading(false))
-                    .catch(() => {
-                      setTableIsLoading(false);
-                      toast.error(
-                        intl.formatMessage(
-                          translations.fetchSubmissionsFailure,
-                        ),
-                      );
-                    });
-                }
-                return new Promise(() => {});
-              }}
-            />
-          ))}
-        </Tabs>
-      ) : (
-        <Tabs value={tabValue} onChange={handleTabChange}>
-          {tabs.categories.map((tab, index) => (
-            <Tab
-              key={tab.id}
-              value={index + 2}
-              label={tab.title}
-              onClick={(): Promise<string | number | void> => {
-                // Prevent API calls when spam clicking the tab
-                if (tabValue !== index + 2) {
-                  setTableIsLoading(true);
-                  dispatch(fetchCategorySubmissions(tab.id))
-                    .finally(() => setTableIsLoading(false))
-                    .catch(() => {
-                      setTableIsLoading(false);
-                      toast.error(
-                        intl.formatMessage(
-                          translations.fetchSubmissionsFailure,
-                        ),
-                      );
-                    });
-                }
-                return new Promise(() => {});
-              }}
-            />
-          ))}
-        </Tabs>
-      )}
-
-      <SubmissionFilter
-        showDetailFilter={submissionPermissions.canManage && tabValue >= 2}
-        tabCategories={tabs.categories}
-        categoryNum={tabValue - 2}
-        filter={filter}
-        submissionCount={submissionCount}
-        rowsPerPage={ROWS_PER_PAGE}
-        pageNum={pageNum}
+      <SubmissionTabs
+        isTeachingStaff={submissionPermissions.isTeachingStaff}
+        tabs={tabs}
+        tabValue={tabValue}
+        setTabValue={setTabValue}
+        setIsTabChanging={setIsTabChanging}
+        setTableIsLoading={setTableIsLoading}
         setPageNum={setPageNum}
       />
 
-      {submissions.length === 0 ? (
-        <div style={{ marginTop: 10 }}>
-          {intl.formatMessage(translations.noSubmissionsMessage)}
-        </div>
-      ) : (
-        <>
-          <SubmissionsTable
-            isGamified={isGamified}
-            submissions={submissions}
-            isPendingTab={submissionPermissions.isTeachingStaff && tabValue < 2}
-            tableIsLoading={tableIsLoading}
-            rowsPerPage={ROWS_PER_PAGE}
-            pageNum={pageNum}
-          />
-        </>
+      <SubmissionFilter
+        key={`submission-filter-${tabValue}`}
+        showDetailFilter={submissionPermissions.canManage && tabValue > 1}
+        tabCategories={tabs.categories}
+        categoryNum={tabValue - 2}
+        filter={filter}
+        setPageNum={setPageNum}
+        setTableIsLoading={setTableIsLoading}
+        setSelectedAssessment={setselectedAssessment}
+        setSelectedGroup={setselectedGroup}
+        setSelectedUser={setselectedUser}
+        handleFilterOnClick={handleFilter}
+      />
+
+      {!isTabChanging && (
+        <SubmissionPagination
+          submissionCount={submissionCount}
+          rowsPerPage={ROWS_PER_PAGE}
+          pageNum={pageNum}
+          handlePageChange={handlePageChange}
+        />
       )}
+
+      <SubmissionsTable
+        isGamified={isGamified}
+        submissions={submissions}
+        isPendingTab={submissionPermissions.isTeachingStaff && tabValue < 2}
+        tableIsLoading={tableIsLoading}
+        rowsPerPage={ROWS_PER_PAGE}
+        pageNum={pageNum}
+      />
     </>
   );
 };

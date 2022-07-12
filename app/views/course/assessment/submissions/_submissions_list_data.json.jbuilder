@@ -13,9 +13,6 @@ json.assessmentTitle assessment.title
 
 json.submittedAt submission.submitted_at
 
-# Translations are here
-# /home/yoopie/coursemology2/config/locales/en/activerecord/course/assessment/submission.yml
-# json.status Course::Assessment::Submission.human_attribute_name(submission.workflow_state)
 json.status submission.workflow_state
 
 if pending

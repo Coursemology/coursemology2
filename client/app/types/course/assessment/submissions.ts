@@ -22,10 +22,30 @@ export interface SubmissionsTabData {
   categories: { id: number; title: string }[];
 }
 
+export interface SubmissionAssessmentFilterData {
+  id: number;
+  title: string;
+}
+export interface SubmissionGroupFilterData {
+  id: number;
+  name: string;
+}
+export interface SubmissionUserFilterData {
+  id: number;
+  name: string;
+}
+
 export interface SubmissionFilterData {
-  assessments: { id: number; title: string }[];
-  groups: { id: number; name: string }[];
-  users: { id: number; name: string }[];
+  assessments: SubmissionAssessmentFilterData[];
+  groups: SubmissionGroupFilterData[];
+  users: SubmissionUserFilterData[];
+}
+
+export interface SubmissionsMetaData {
+  isGamified: boolean;
+  submissionCount: number;
+  tabs: SubmissionsTabData;
+  filter: SubmissionFilterData;
 }
 
 export interface SubmissionListData {
@@ -37,23 +57,16 @@ export interface SubmissionListData {
   assessmentTitle: string;
   submittedAt: string;
   status: SubmissionStatus;
-  // Depends on whether the tab is a pending assesments tab ---
-  teachingStaff?: { teachingStaffId: number; teachingStaffName: string }[];
-  // ----------------------------------------------------------
 
-  // Depends on canSeeGrades ------------
+  teachingStaff?: { teachingStaffId: number; teachingStaffName: string }[];
+
   currentGrade?: string;
   isGradedNotPublished?: boolean;
-  // Depends on isGamified---
   pointsAwarded?: number;
-  // ------------------------
-  // ------------------------------------
   maxGrade: string;
 
   permissions: SubmissionListDataPermissions;
 }
-
-export interface SubmissionData extends SubmissionListData {}
 
 export interface SubmissionMiniEntity {
   id: number;
@@ -65,20 +78,13 @@ export interface SubmissionMiniEntity {
   assessmentTitle: string;
   submittedAt: string;
   status: SubmissionStatus;
-  // Depends on whether the tab is a pending assesments tab ---
-  teachingStaff?: { teachingStaffId: number; teachingStaffName: string }[];
-  // ----------------------------------------------------------
 
-  // Depends on canSeeGrades ------------
+  teachingStaff?: { teachingStaffId: number; teachingStaffName: string }[];
+
   currentGrade?: string;
   isGradedNotPublished?: boolean;
-  // Depends on isGamified---
   pointsAwarded?: number;
-  // ------------------------
-  // ------------------------------------
   maxGrade: string;
 
   permissions: SubmissionListDataPermissions;
 }
-
-export interface SubmissionEntity extends SubmissionMiniEntity {}

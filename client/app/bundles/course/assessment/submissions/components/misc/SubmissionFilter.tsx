@@ -1,30 +1,35 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { FC, useState, memo } from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'types/store';
-import { toast } from 'react-toastify';
-import equal from 'fast-deep-equal';
+import { FC } from 'react';
+
+import { Autocomplete, Button, Stack, TextField } from '@mui/material';
 
 import {
-  Autocomplete,
-  Button,
-  Pagination,
-  Stack,
-  TextField,
-} from '@mui/material';
-
-import { SubmissionFilterData } from 'types/course/assessment/submissions';
-import { filterSubmissions } from '../../operations';
+  SubmissionAssessmentFilterData,
+  SubmissionFilterData,
+  SubmissionGroupFilterData,
+  SubmissionUserFilterData,
+} from 'types/course/assessment/submissions';
 
 interface Props extends WrappedComponentProps {
   showDetailFilter: boolean;
+  filter: SubmissionFilterData;
+
   tabCategories: { id: number; title: string }[];
   categoryNum: number;
-  filter: SubmissionFilterData;
-  submissionCount: number;
-  rowsPerPage: number;
-  pageNum: number;
+
   setPageNum: React.Dispatch<React.SetStateAction<number>>;
+  setTableIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+
+  setSelectedAssessment: React.Dispatch<
+    React.SetStateAction<SubmissionAssessmentFilterData | null>
+  >;
+  setSelectedGroup: React.Dispatch<
+    React.SetStateAction<SubmissionGroupFilterData | null>
+  >;
+  setSelectedUser: React.Dispatch<
+    React.SetStateAction<SubmissionUserFilterData | null>
+  >;
+  handleFilterOnClick: (newPageNumber: number) => void;
 }
 
 const translations = defineMessages({
@@ -40,88 +45,20 @@ const translations = defineMessages({
     id: 'course.assessments.submissions.filterButton',
     defaultMessage: 'Apply Filter',
   },
-  filterGetFailure: {
-    id: 'course.assessments.submissions.filterGetFailure',
-    defaultMessage: 'Failed to filter',
-  },
 });
 
 const SubmissionFilter: FC<Props> = (props) => {
   const {
     intl,
     showDetailFilter,
+    filter,
     tabCategories,
     categoryNum,
-    filter,
-    submissionCount,
-    rowsPerPage,
-    pageNum,
-    setPageNum,
+    setSelectedAssessment,
+    setSelectedGroup,
+    setSelectedUser,
+    handleFilterOnClick,
   } = props;
-
-  const [selectedAssessment, setselectedAssessment] = useState<{
-    id: number;
-    title: string;
-  } | null>(null);
-
-  const [selectedGroup, setselectedGroup] = useState<{
-    id: number;
-    name: string;
-  } | null>(null);
-
-  const [selectedUser, setselectedUser] = useState<{
-    id: number;
-    name: string;
-  } | null>(null);
-
-  const dispatch = useDispatch<AppDispatch>();
-
-  const handleFilterOnClick = (): void => {
-    const assessmentId = selectedAssessment ? selectedAssessment.id : null;
-    const groupId = selectedGroup ? selectedGroup.id : null;
-    const userId = selectedUser ? selectedUser.id : null;
-
-    dispatch(
-      filterSubmissions(
-        tabCategories[categoryNum].id,
-        assessmentId,
-        groupId,
-        userId,
-        pageNum,
-      ),
-    ).catch((error) => {
-      toast.error(intl.formatMessage(translations.filterGetFailure));
-      throw error;
-    });
-  };
-
-  // For pagination
-  const count = Math.ceil(submissionCount / rowsPerPage);
-  const handlePageChange: (
-    _e: React.ChangeEvent<unknown>,
-    pageNum: number,
-  ) => void = (_e, pageNumber) => {
-    // Prevent multiple calls when spam clicking
-    if (pageNumber !== pageNum) {
-      setPageNum(pageNumber);
-      const assessmentId = selectedAssessment ? selectedAssessment.id : null;
-      const groupId = selectedGroup ? selectedGroup.id : null;
-      const userId = selectedUser ? selectedUser.id : null;
-
-      dispatch(
-        filterSubmissions(
-          tabCategories[categoryNum].id,
-          assessmentId,
-          groupId,
-          userId,
-          pageNumber,
-        ),
-      ).catch((error) => {
-        toast.error(intl.formatMessage(translations.filterGetFailure));
-        throw error;
-      });
-    }
-  };
 
   return (
     <Stack spacing={1.5} className="submissions-filter">
@@ -150,7 +87,7 @@ const SubmissionFilter: FC<Props> = (props) => {
               _event: React.SyntheticEvent,
               value: { id: number; title: string } | null,
             ): void => {
-              setselectedAssessment(value);
+              setSelectedAssessment(value);
             }}
           />
           <Autocomplete
@@ -173,7 +110,7 @@ const SubmissionFilter: FC<Props> = (props) => {
               _event: React.SyntheticEvent,
               value: { id: number; name: string } | null,
             ): void => {
-              setselectedGroup(value);
+              setSelectedGroup(value);
             }}
           />
           <Autocomplete
@@ -196,34 +133,19 @@ const SubmissionFilter: FC<Props> = (props) => {
               _event: React.SyntheticEvent,
               value: { id: number; name: string } | null,
             ): void => {
-              setselectedUser(value);
+              setSelectedUser(value);
             }}
           />
           <Button
             variant="contained"
             sx={{ width: 130 }}
-            onClick={handleFilterOnClick}
+            onClick={(): void => handleFilterOnClick(1)}
           >
             {intl.formatMessage(translations.filterButton)}
           </Button>
         </>
       )}
-      {count > 1 && (
-        <Pagination
-          style={{ padding: 10, display: 'flex', justifyContent: 'center' }}
-          count={count}
-          onChange={handlePageChange}
-        />
-      )}
     </Stack>
   );
 };
-
-export default memo(injectIntl(SubmissionFilter), (prevProps, nextProps) => {
-  return (
-    equal(prevProps.tabCategories, nextProps.tabCategories) &&
-    equal(prevProps.categoryNum, nextProps.categoryNum) &&
-    equal(prevProps.filter, nextProps.filter) &&
-    equal(prevProps.pageNum, nextProps.pageNum)
-  );
-});
+export default injectIntl(SubmissionFilter);

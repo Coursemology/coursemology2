@@ -10,12 +10,10 @@ export function fetchSubmissions(): Operation<void> {
         const data = response.data;
         dispatch(
           actions.saveSubmissionList(
-            data.isGamified,
-            data.submissionCount,
             data.submissions,
-            data.tabs,
-            data.filter,
+            data.metaData,
             data.permissions,
+            false,
           ),
         );
       })
@@ -31,13 +29,11 @@ export function fetchMyStudentsPendingSubmissions(): Operation<void> {
       .then((response) => {
         const data = response.data;
         dispatch(
-          actions.saveOverwriteSubmissionList(
-            data.isGamified,
-            data.submissionCount,
+          actions.saveSubmissionList(
             data.submissions,
-            data.tabs,
-            data.filter,
+            data.metaData,
             data.permissions,
+            true,
           ),
         );
       })
@@ -53,13 +49,11 @@ export function fetchAllStudentsPendingSubmissions(): Operation<void> {
       .then((response) => {
         const data = response.data;
         dispatch(
-          actions.saveOverwriteSubmissionList(
-            data.isGamified,
-            data.submissionCount,
+          actions.saveSubmissionList(
             data.submissions,
-            data.tabs,
-            data.filter,
+            data.metaData,
             data.permissions,
+            true,
           ),
         );
       })
@@ -75,13 +69,11 @@ export function fetchCategorySubmissions(categoryId: number): Operation<void> {
       .then((response) => {
         const data = response.data;
         dispatch(
-          actions.saveOverwriteSubmissionList(
-            data.isGamified,
-            data.submissionCount,
+          actions.saveSubmissionList(
             data.submissions,
-            data.tabs,
-            data.filter,
+            data.metaData,
             data.permissions,
+            true,
           ),
         );
       })
@@ -91,7 +83,7 @@ export function fetchCategorySubmissions(categoryId: number): Operation<void> {
 }
 
 export function filterSubmissions(
-  categoryId: number,
+  categoryId: number | null,
   assessmentId: number | null,
   groupId: number | null,
   userId: number | null,
@@ -103,13 +95,34 @@ export function filterSubmissions(
       .then((response) => {
         const data = response.data;
         dispatch(
-          actions.saveOverwriteSubmissionList(
-            data.isGamified,
-            data.submissionCount,
+          actions.saveSubmissionList(
             data.submissions,
-            data.tabs,
-            data.filter,
+            data.metaData,
             data.permissions,
+            true,
+          ),
+        );
+      })
+      .catch((error) => {
+        throw error;
+      });
+}
+
+export function filterPendingSubmissions(
+  myStudents: boolean,
+  pageNum: number | null,
+): Operation<void> {
+  return async (dispatch) =>
+    CourseAPI.submissions
+      .filterPending(myStudents, pageNum)
+      .then((response) => {
+        const data = response.data;
+        dispatch(
+          actions.saveSubmissionList(
+            data.submissions,
+            data.metaData,
+            data.permissions,
+            true,
           ),
         );
       })
