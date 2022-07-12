@@ -39,7 +39,9 @@ class Course < ApplicationRecord
   has_many :announcements, dependent: :destroy
   # The order needs to be preserved, this makes sure that the root_folder will be saved first
   has_many :material_folders, class_name: Course::Material::Folder.name, inverse_of: :course,
-                              dependent: :destroy
+                              dependent: :destroy do
+    include Course::MaterialConcern
+  end
   has_many :materials, through: :material_folders
   has_many :assessment_categories, class_name: Course::Assessment::Category.name,
                                    dependent: :destroy, inverse_of: :course

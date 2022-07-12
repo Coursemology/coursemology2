@@ -15,7 +15,7 @@ module Course::DuplicationConcern
   def duplication_manifest
     [
       *reference_timelines,
-      *material_folders.concrete,
+      *material_folders.concrete.ordered_topologically.flatten,
       *materials.in_concrete_folder,
       *levels,
       *assessment_categories,

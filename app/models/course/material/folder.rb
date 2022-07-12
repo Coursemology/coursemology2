@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Material::Folder < ApplicationRecord
   acts_as_forest order: :name, dependent: :destroy, optional: true
+  extend Course::Material::Folder::OrderingConcern
   include Course::ModelComponentHost::Component
   include DuplicationStateTrackingConcern
 
