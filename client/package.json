@@ -116,7 +116,7 @@
     "rc-slider": "^9.7.5",
     "react": "^17.0.2",
     "react-ace": "^10.1.0",
-    "react-chartjs-2": "^4.2.0",
+    "react-chartjs-2": "^4.3.0",
     "react-color": "^2.19.3",
     "react-dnd": "^14.0.4",
     "react-dnd-html5-backend": "^14.0.2",
