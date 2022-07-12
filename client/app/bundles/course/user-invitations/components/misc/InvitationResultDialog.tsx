@@ -1,7 +1,4 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
   Button,
   Dialog,
   DialogActions,
@@ -27,7 +24,6 @@ import {
   InvitationResult,
 } from 'types/course/userInvitations';
 import HelpIcon from '@mui/icons-material/Help';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import sharedConstants from 'lib/constants/sharedConstants';
 import { CourseUserData } from 'types/course/courseUsers';
 import tableTranslations from 'lib/components/tables/translations';
@@ -191,117 +187,69 @@ const InvitationResultDialog: FC<Props> = (props) => {
           </Typography>
           {duplicateUsers && duplicateUsers.length > 0 && (
             <div className="duplicates">
-              <Accordion TransitionProps={{ unmountOnExit: true }}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  id="duplicates"
-                >
-                  <Typography variant="h6">
-                    <Tooltip
-                      title={intl.formatMessage(translations.duplicateInfo)}
-                    >
-                      <HelpIcon style={styles.icon} />
-                    </Tooltip>
-                    {intl.formatMessage(translations.duplicateUsers, {
-                      count: duplicateUsers.length,
-                    })}
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {renderUsersTable(intl, duplicateUsers)}
-                </AccordionDetails>
-              </Accordion>
+              <Typography variant="h6">
+                <Tooltip title={intl.formatMessage(translations.duplicateInfo)}>
+                  <HelpIcon style={styles.icon} />
+                </Tooltip>
+                {intl.formatMessage(translations.duplicateUsers, {
+                  count: duplicateUsers.length,
+                })}
+              </Typography>
+              {renderUsersTable(intl, duplicateUsers)}
             </div>
           )}
           {existingCourseUsers && existingCourseUsers.length > 0 && (
             <div className="existingCourseUsers">
-              <Accordion TransitionProps={{ unmountOnExit: true }}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  id="existingCourseUsers"
+              <Typography variant="h6">
+                <Tooltip
+                  title={intl.formatMessage(
+                    translations.existingCourseUsersInfo,
+                  )}
                 >
-                  <Typography variant="h6">
-                    <Tooltip
-                      title={intl.formatMessage(
-                        translations.existingCourseUsersInfo,
-                      )}
-                    >
-                      <HelpIcon style={styles.icon} />
-                    </Tooltip>
-                    {intl.formatMessage(translations.existingCourseUsers, {
-                      count: existingCourseUsers.length,
-                    })}
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {renderUsersTable(intl, existingCourseUsers)}
-                </AccordionDetails>
-              </Accordion>
+                  <HelpIcon style={styles.icon} />
+                </Tooltip>
+                {intl.formatMessage(translations.existingCourseUsers, {
+                  count: existingCourseUsers.length,
+                })}
+              </Typography>
+              {renderUsersTable(intl, existingCourseUsers)}
             </div>
           )}
           {existingInvitations && existingInvitations.length > 0 && (
             <div className="existingInvitations">
-              <Accordion TransitionProps={{ unmountOnExit: true }}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  id="existingInvitations"
+              <Typography variant="h6">
+                <Tooltip
+                  title={intl.formatMessage(
+                    translations.existingInvitationsInfo,
+                  )}
                 >
-                  <Typography variant="h6">
-                    <Tooltip
-                      title={intl.formatMessage(
-                        translations.existingInvitationsInfo,
-                      )}
-                    >
-                      <HelpIcon style={styles.icon} />
-                    </Tooltip>
-                    {intl.formatMessage(translations.existingInvitations, {
-                      count: existingInvitations.length,
-                    })}
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {renderInvitationsTable(intl, existingInvitations)}
-                </AccordionDetails>
-              </Accordion>
+                  <HelpIcon style={styles.icon} />
+                </Tooltip>
+                {intl.formatMessage(translations.existingInvitations, {
+                  count: existingInvitations.length,
+                })}
+              </Typography>
+              {renderInvitationsTable(intl, existingInvitations)}
             </div>
           )}
           {newCourseUsers && newCourseUsers.length > 0 && (
             <div className="newCourseUsers">
-              <Accordion TransitionProps={{ unmountOnExit: true }}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  id="newCourseUsers"
-                >
-                  <Typography variant="h6">
-                    {intl.formatMessage(translations.newCourseUsers, {
-                      count: newCourseUsers.length,
-                    })}
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {renderUsersTable(intl, newCourseUsers)}
-                </AccordionDetails>
-              </Accordion>
+              <Typography variant="h6">
+                {intl.formatMessage(translations.newCourseUsers, {
+                  count: newCourseUsers.length,
+                })}
+              </Typography>
+              {renderUsersTable(intl, newCourseUsers)}
             </div>
           )}
           {newInvitations && newInvitations.length > 0 && (
             <div className="newInvitations">
-              <Accordion TransitionProps={{ unmountOnExit: true }}>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  id="newInvitations"
-                >
-                  <Typography variant="h6">
-                    {intl.formatMessage(translations.newInvitations, {
-                      count: newInvitations.length,
-                    })}
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  {renderInvitationsTable(intl, newInvitations)}
-                </AccordionDetails>
-              </Accordion>
-              <></>
+              <Typography variant="h6">
+                {intl.formatMessage(translations.newInvitations, {
+                  count: newInvitations.length,
+                })}
+              </Typography>
+              {renderInvitationsTable(intl, newInvitations)}
             </div>
           )}
           <DialogActions>
