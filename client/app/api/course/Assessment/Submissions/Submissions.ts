@@ -3,8 +3,7 @@ import BaseCourseAPI from 'api/course/Base';
 import {
   SubmissionListData,
   SubmissionPermissions,
-  SubmissionFilterData,
-  SubmissionsTabData,
+  SubmissionsMetaData,
 } from 'types/course/assessment/submissions';
 
 export default class SubmissionsAPI extends BaseCourseAPI {
@@ -17,11 +16,8 @@ export default class SubmissionsAPI extends BaseCourseAPI {
    */
   index(): Promise<
     AxiosResponse<{
-      isGamified: boolean;
-      submissionCount: number;
       submissions: SubmissionListData[];
-      tabs: SubmissionsTabData;
-      filter: SubmissionFilterData;
+      metaData: SubmissionsMetaData;
       permissions: SubmissionPermissions;
     }>
   > {
@@ -30,11 +26,8 @@ export default class SubmissionsAPI extends BaseCourseAPI {
 
   pending(isMyStudents: boolean): Promise<
     AxiosResponse<{
-      isGamified: boolean;
-      submissionCount: number;
       submissions: SubmissionListData[];
-      tabs: SubmissionsTabData;
-      filter: SubmissionFilterData;
+      metaData: SubmissionsMetaData;
       permissions: SubmissionPermissions;
     }>
   > {
@@ -45,11 +38,8 @@ export default class SubmissionsAPI extends BaseCourseAPI {
 
   category(categoryId: number): Promise<
     AxiosResponse<{
-      isGamified: boolean;
-      submissionCount: number;
       submissions: SubmissionListData[];
-      tabs: SubmissionsTabData;
-      filter: SubmissionFilterData;
+      metaData: SubmissionsMetaData;
       permissions: SubmissionPermissions;
     }>
   > {
@@ -62,18 +52,15 @@ export default class SubmissionsAPI extends BaseCourseAPI {
    * Filters submissions based on params
    */
   filter(
-    categoryId: number,
+    categoryId: number | null,
     assessmentId: number | null,
     groupId: number | null,
     userId: number | null,
     pageNum: number | null,
   ): Promise<
     AxiosResponse<{
-      isGamified: boolean;
-      submissionCount: number;
       submissions: SubmissionListData[];
-      tabs: SubmissionsTabData;
-      filter: SubmissionFilterData;
+      metaData: SubmissionsMetaData;
       permissions: SubmissionPermissions;
     }>
   > {
@@ -86,6 +73,30 @@ export default class SubmissionsAPI extends BaseCourseAPI {
         'filter[page_num]': pageNum,
       },
     });
+    return data;
+  }
+
+  /**
+   * Filters pending submissions, used for pagination
+   */
+  filterPending(
+    myStudents: boolean,
+    pageNum: number | null,
+  ): Promise<
+    AxiosResponse<{
+      submissions: SubmissionListData[];
+      metaData: SubmissionsMetaData;
+      permissions: SubmissionPermissions;
+    }>
+  > {
+    const data = this.getClient().get(
+      `${this._getUrlPrefix()}/pending?my_students=${myStudents}`,
+      {
+        params: {
+          'filter[page_num]': pageNum,
+        },
+      },
+    );
     return data;
   }
 }

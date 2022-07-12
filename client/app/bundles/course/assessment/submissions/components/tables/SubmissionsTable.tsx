@@ -31,6 +31,10 @@ interface Props extends WrappedComponentProps {
 }
 
 const translations = defineMessages({
+  noSubmissionsMessage: {
+    id: 'course.assessments.submissions.noSubmissionsMessage',
+    defaultMessage: 'There are no submissions',
+  },
   tableHeaderSn: {
     id: 'course.assessments.submissions.tableHeaderSn',
     defaultMessage: 'S/N',
@@ -104,10 +108,16 @@ const SubmissionsTable: FC<Props> = (props) => {
     pageNum,
   } = props;
 
+  if (tableIsLoading) {
+    return <LoadingIndicator />;
+  }
+
   return (
     <>
-      {tableIsLoading ? (
-        <LoadingIndicator />
+      {submissions.length === 0 ? (
+        <div style={{ marginTop: 10 }}>
+          {intl.formatMessage(translations.noSubmissionsMessage)}
+        </div>
       ) : (
         <>
           <Table sx={{ marginBottom: 4 }}>
@@ -201,23 +211,22 @@ const SubmissionsTable: FC<Props> = (props) => {
                     </TableCell>
                   )}
 
-                  <TableCell
-                    align="center"
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
-                  >
-                    <div>
-                      {`${
-                        submission.permissions.canSeeGrades &&
-                        submission.currentGrade
-                          ? submission.currentGrade
-                          : '--'
-                      } / ${submission.maxGrade}`}
-                    </div>
-                    <>
+                  <TableCell align="center">
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <div>
+                        {`${
+                          submission.permissions.canSeeGrades &&
+                          submission.currentGrade
+                            ? submission.currentGrade
+                            : '--'
+                        } / ${submission.maxGrade}`}
+                      </div>
                       {submission.permissions.canSeeGrades &&
                         submission.isGradedNotPublished && (
                           <CustomTooltip
@@ -232,7 +241,7 @@ const SubmissionsTable: FC<Props> = (props) => {
                             />
                           </CustomTooltip>
                         )}
-                    </>
+                    </div>
                   </TableCell>
 
                   {isGamified && (

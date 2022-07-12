@@ -1,18 +1,19 @@
 import { produce } from 'immer';
 import { createEntityStore, saveListToStore } from 'utilities/store';
 import {
-  SAVE_OVERWRITE_SUBMISSION_LIST,
   SAVE_SUBMISSION_LIST,
   SubmissionsActionType,
   SubmissionsState,
 } from './types';
 
 const initialState: SubmissionsState = {
-  isGamified: false,
-  submissionCount: 0,
   submissions: createEntityStore(),
-  tabs: { categories: [] },
-  filter: { assessments: [], groups: [], users: [] },
+  metaData: {
+    isGamified: false,
+    submissionCount: 0,
+    tabs: { categories: [] },
+    filter: { assessments: [], groups: [], users: [] },
+  },
   permissions: { canManage: false, isTeachingStaff: false },
 };
 
@@ -23,25 +24,12 @@ const reducer = produce(
         const submissionList = action.submissionList;
         const entityList = submissionList.map((data) => ({ ...data }));
 
-        draft.isGamified = action.isGamified;
-        draft.submissionCount = action.submissionCount;
-        saveListToStore(draft.submissions, entityList);
-        draft.tabs = action.tabs;
-        draft.filter = action.filter;
-        draft.permissions = action.submissionPermissions;
-        break;
-      }
+        if (action.overwrite) {
+          draft.submissions = createEntityStore();
+        }
 
-      case SAVE_OVERWRITE_SUBMISSION_LIST: {
-        const submissionList = action.submissionList;
-        const entityList = submissionList.map((data) => ({ ...data }));
-
-        draft.isGamified = action.isGamified;
-        draft.submissionCount = action.submissionCount;
-        draft.submissions = createEntityStore();
         saveListToStore(draft.submissions, entityList);
-        draft.tabs = action.tabs;
-        draft.filter = action.filter;
+        draft.metaData = action.metaData;
         draft.permissions = action.submissionPermissions;
         break;
       }

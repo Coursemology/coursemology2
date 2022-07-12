@@ -15,19 +15,19 @@ export function getAllSubmissionMiniEntities(state: AppState) {
 }
 
 export function getIsGamified(state: AppState) {
-  return getLocalState(state).isGamified;
+  return getLocalState(state).metaData.isGamified;
 }
 
 export function getSubmissionCount(state: AppState) {
-  return getLocalState(state).submissionCount;
+  return getLocalState(state).metaData.submissionCount;
 }
 
 export function getTabs(state: AppState) {
-  return getLocalState(state).tabs;
+  return getLocalState(state).metaData.tabs;
 }
 
 export function getFilter(state: AppState) {
-  return getLocalState(state).filter;
+  return getLocalState(state).metaData.filter;
 }
 
 export function getSubmissionPermissions(state: AppState) {
