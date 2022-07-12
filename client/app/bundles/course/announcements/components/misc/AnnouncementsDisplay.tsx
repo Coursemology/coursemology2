@@ -1,24 +1,26 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC, useState, memo, useEffect } from 'react';
-
 import {
+  AnnouncementFormData,
   AnnouncementMiniEntity,
   AnnouncementPermissions,
 } from 'types/course/announcements';
-
+import equal from 'fast-deep-equal';
+import { Operation } from 'types/store';
 import { Grid, Stack } from '@mui/material';
-
 import SearchBar from 'lib/components/SearchBar';
 import Pagination from 'lib/components/Pagination';
-
-import equal from 'fast-deep-equal';
-
 import AnnouncementCard from './AnnouncementCard';
-import { deleteAnnouncement, updateAnnouncement } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   announcements: AnnouncementMiniEntity[];
   announcementPermissions: AnnouncementPermissions;
+  updateOperation?: (
+    announcementId: number,
+    formData: AnnouncementFormData,
+  ) => Operation<void>;
+  deleteOperation?: (announcementId: number) => Operation<void>;
+  canSticky?: boolean;
 }
 
 const translations = defineMessages({
@@ -29,7 +31,14 @@ const translations = defineMessages({
 });
 
 const AnnouncementsDisplay: FC<Props> = (props) => {
-  const { intl, announcements, announcementPermissions } = props;
+  const {
+    intl,
+    announcements,
+    announcementPermissions,
+    updateOperation,
+    deleteOperation,
+    canSticky = true,
+  } = props;
 
   // For pagination
   const ITEMS_PER_PAGE = 12;
@@ -106,8 +115,9 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
               key={announcement.id}
               announcement={announcement}
               showEditOptions={announcementPermissions.canCreate}
-              updateOperation={updateAnnouncement}
-              deleteOperation={deleteAnnouncement}
+              updateOperation={updateOperation}
+              deleteOperation={deleteOperation}
+              canSticky={canSticky}
             />
           ))}
         </Stack>

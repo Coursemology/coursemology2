@@ -5,15 +5,21 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState, AppDispatch } from 'types/store';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { toast } from 'react-toastify';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import AddButton from 'lib/components/buttons/AddButton';
 import { indexInstances } from '../../operations';
 import InstancesTable from '../../components/tables/InstancesTable';
 import InstancesButtons from '../../components/buttons/InstancesButtons';
 import { getAdminCounts, getPermissions } from '../../selectors';
-import NewInstanceButton from '../../components/buttons/NewInstanceButton';
 import InstanceNew from '../InstanceNew';
 
 type Props = WrappedComponentProps;
+
+const styles = {
+  newButton: {
+    color: 'white',
+  },
+};
 
 const translations = defineMessages({
   header: {
@@ -28,6 +34,10 @@ const translations = defineMessages({
     id: 'system.admin.admin.fetchInstances.failure',
     defaultMessage: 'Failed to get instances',
   },
+  newInstance: {
+    id: 'system.admin.instance.new',
+    defaultMessage: 'New Instance',
+  },
 });
 
 const InstancesIndex: FC<Props> = (props) => {
@@ -40,22 +50,30 @@ const InstancesIndex: FC<Props> = (props) => {
   const headerToolbars: ReactElement[] = [];
 
   useEffect(() => {
-    dispatch(indexInstances())
+    dispatch(indexInstances({ 'filter[length]': 30 }))
       .finally(() => setIsLoading(false))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchInstancesFailure)),
       );
   }, [dispatch]);
 
-  if (permissions.canCreate) {
+  if (permissions.canCreateInstances) {
     headerToolbars.push(
-      <NewInstanceButton key="new-instance-button" setIsOpen={setIsOpen} />,
+      <AddButton
+        id="new-instance-button"
+        key="new-instance-button"
+        onClick={(): void => {
+          setIsOpen(true);
+        }}
+        tooltip={intl.formatMessage(translations.newInstance)}
+        sx={styles.newButton}
+      />,
     );
   }
 
   const renderBody: JSX.Element = (
     <>
-      <Typography variant="body1">
+      <Typography variant="body1" style={{ marginTop: '8px' }}>
         {intl.formatMessage(translations.totalInstances, {
           strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
           count: counts.instancesCount,

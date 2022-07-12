@@ -15,7 +15,9 @@ import {
 } from 'types/components/DataTable';
 import { UserMiniEntity, UserRole } from 'types/users';
 import tableTranslations from 'lib/components/tables/translations';
-import sharedConstants from 'lib/constants/sharedConstants';
+import sharedConstants, {
+  FIELD_DEBOUNCE_DELAY,
+} from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { debounceSearchRender } from 'mui-datatables';
 import DataTable from 'lib/components/DataTable';
@@ -72,16 +74,16 @@ const UsersTable: FC<Props> = (props) => {
   const active = getUrlParameter('active');
   const dispatch = useDispatch<AppDispatch>();
 
-  const [tableState, setTableState] = useState<TableState<UserMiniEntity>>({
-    count: counts.searchCount,
-    page: 0,
+  const [tableState, setTableState] = useState<TableState>({
+    count: counts.usersCount,
+    page: 1,
     searchText: '',
   });
 
   useEffect((): void => {
     setTableState({
       ...tableState,
-      count: counts.searchCount,
+      count: counts.usersCount,
     });
   }, [counts]);
 
@@ -144,7 +146,14 @@ const UsersTable: FC<Props> = (props) => {
       ...tableState,
       page,
     });
-    dispatch(indexUsers({ page, role, active })).then(() => {
+    dispatch(
+      indexUsers({
+        'filter[page_num]': page,
+        'filter[length]': 30,
+        role,
+        active,
+      }),
+    ).then(() => {
       setIsLoading(false);
     });
   };
@@ -153,27 +162,33 @@ const UsersTable: FC<Props> = (props) => {
     setIsLoading(true);
     setTableState({
       ...tableState,
-      count: counts.searchCount,
+      count: counts.usersCount,
     });
-    dispatch(indexUsers({ page, role, active, search: searchText })).then(
-      () => {
-        setIsLoading(false);
-      },
-    );
+    dispatch(
+      indexUsers({
+        'filter[page_num]': page,
+        'filter[length]': 30,
+        role,
+        active,
+        search: searchText,
+      }),
+    ).then(() => {
+      setIsLoading(false);
+    });
   };
 
-  const options: TableOptions<UserMiniEntity> = {
+  const options: TableOptions = {
     count: tableState.count,
-    customSearchRender: debounceSearchRender(500),
+    customSearchRender: debounceSearchRender(FIELD_DEBOUNCE_DELAY),
     download: false,
     filter: false,
     onTableChange: (action, newTableState) => {
       switch (action) {
         case 'search':
-          search(newTableState.page, newTableState.searchText);
+          search(newTableState.page! + 1, newTableState.searchText);
           break;
         case 'changePage':
-          changePage(newTableState.page);
+          changePage(newTableState.page! + 1);
           break;
         default:
           break;

@@ -30,10 +30,7 @@ const Breadcrumbs = (): JSX.Element => {
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
-    <Paper
-      variant="outlined"
-      sx={{ margin: '0px 4px 12px 12px', padding: '4px' }}
-    >
+    <Paper variant="outlined" sx={{ marginBottom: '4px', padding: '4px 8px' }}>
       <MuiBreadcrumbs aria-label="breadcrumb">
         {pathnames.map((_value, index) => {
           const last = index === pathnames.length - 1;

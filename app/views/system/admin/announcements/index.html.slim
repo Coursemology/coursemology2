@@ -1,6 +1,0 @@
-div#system-admin-component
-/ = page_header do
-/   = new_button([:admin, :announcement]) if can?(:create, System::Announcement.new)
-
-/ = render partial: @announcements, spacer_template: 'announcements/announcement_spacer'
-/ = paginate @announcements

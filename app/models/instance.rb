@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Instance < ApplicationRecord
   include Instance::CourseComponentsConcern
+  include Generic::CollectionConcern
 
   DEFAULT_INSTANCE_ID = 0
 
@@ -91,10 +92,6 @@ class Instance < ApplicationRecord
   #   Note: Must be used with ActsAsTenant#without_tenant block.
   scope :containing_user, (lambda do |user|
     joins(:instance_users).where('instance_users.user_id = ?', user.id)
-  end)
-
-  scope :paginate, (lambda do |page|
-    offset(page.to_i * 30).limit(30)
   end)
 
   # The number of active courses (in the past 7 days) in the instance.

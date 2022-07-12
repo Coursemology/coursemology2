@@ -27,7 +27,7 @@ const AchievementAwardSummary: FC<Props> = (props) => {
     removedUserIds.has(cu.id),
   );
 
-  const awardedTableOptions: TableOptions<AchievementCourseUserEntity> = {
+  const awardedTableOptions: TableOptions = {
     download: false,
     filter: false,
     print: false,
@@ -40,7 +40,7 @@ const AchievementAwardSummary: FC<Props> = (props) => {
     viewColumns: false,
   };
 
-  const removedTableOptions: TableOptions<AchievementCourseUserEntity> = {
+  const removedTableOptions: TableOptions = {
     download: false,
     filter: false,
     print: false,

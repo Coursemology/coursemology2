@@ -68,6 +68,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
     setIsSaving(true);
     if (controlledVal === '') {
       setHelperText('Cannot be empty.');
+      setIsSaving(false);
       return;
     }
     if (controlledVal === value) {
@@ -152,6 +153,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
 export default memo(InlineEditTextField, (prevProps, nextProps) => {
   return (
     equal(prevProps.value, nextProps.value) &&
-    equal(prevProps.link, nextProps.link)
+    equal(prevProps.link, nextProps.link) &&
+    equal(prevProps.renderIf, nextProps.renderIf)
   );
 });

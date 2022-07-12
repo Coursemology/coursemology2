@@ -8,7 +8,12 @@ import { AppDispatch, AppState } from 'types/store';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
 
-import { fetchAnnouncements, createAnnouncement } from '../../operations';
+import {
+  fetchAnnouncements,
+  createAnnouncement,
+  updateAnnouncement,
+  deleteAnnouncement,
+} from '../../operations';
 import {
   getAllAnnouncementMiniEntities,
   getAnnouncementPermissions,
@@ -88,6 +93,8 @@ const AnnouncementsIndex: FC<Props> = (props) => {
         <AnnouncementsDisplay
           announcements={announcements}
           announcementPermissions={announcementPermissions}
+          updateOperation={updateAnnouncement}
+          deleteOperation={deleteAnnouncement}
         />
       )}
       <AnnouncementNew

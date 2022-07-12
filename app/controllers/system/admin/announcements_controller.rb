@@ -4,10 +4,12 @@ class System::Admin::AnnouncementsController < System::Admin::Controller
   add_breadcrumb :index, :admin_announcements_path
 
   def index
-    @announcements = @announcements.includes(:creator).ordered_by_date.page(page_param)
-  end
-
-  def new
+    respond_to do |format|
+      format.html { render 'system/admin/admin/index' }
+      format.json do
+        @announcements = @announcements.includes(:creator).sorted_by_date.page(page_param)
+      end
+    end
   end
 
   def create
@@ -16,11 +18,8 @@ class System::Admin::AnnouncementsController < System::Admin::Controller
              locals: { announcement: @announcement },
              status: :ok
     else
-      render json: { errors: @announcement.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
-  end
-
-  def edit
   end
 
   def update
@@ -29,18 +28,15 @@ class System::Admin::AnnouncementsController < System::Admin::Controller
              locals: { announcement: @announcement.reload },
              status: :ok
     else
-      render json: { errors: @announcement.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
   end
 
   def destroy
     if @announcement.destroy
       head :ok
-      # redirect_to admin_announcements_path,
-      #             success: t('.success',
-      #                        title: @announcement.title)
     else
-      render json: { errors: @announcement.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
   end
 

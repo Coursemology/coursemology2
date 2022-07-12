@@ -7,27 +7,27 @@ import { InstanceListData, InstancePermissions } from 'types/system/instances';
 import { UserListData, AdminStats } from 'types/users';
 import {
   SaveAnnouncementsListAction,
+  SaveAnnouncementAction,
   DeleteAnnouncementAction,
+  SaveUsersListAction,
+  SaveCoursesListAction,
+  SaveInstanceListAction,
+  DeleteCourseAction,
+  SaveUserAction,
+  DeleteUserAction,
+  SaveInstanceAction,
+  DeleteInstanceAction,
   SAVE_ANNOUNCEMENTS_LIST,
   DELETE_ANNOUNCEMENT,
   SAVE_USERS_LIST,
-  SaveUsersListAction,
   SAVE_COURSE_LIST,
-  SaveCoursesListAction,
-  SaveInstanceListAction,
   SAVE_INSTANCE_LIST,
-  DeleteCourseAction,
   DELETE_COURSE,
-  SaveAnnouncementAction,
   SAVE_ANNOUNCEMENT,
   SAVE_USER,
-  SaveUserAction,
   DELETE_USER,
-  DeleteUserAction,
-  SaveInstanceAction,
   SAVE_INSTANCE,
   DELETE_INSTANCE,
-  DeleteInstanceAction,
 } from './types';
 
 export function saveAnnouncementsList(
@@ -39,6 +39,12 @@ export function saveAnnouncementsList(
   };
 }
 
+export function saveAnnouncement(
+  announcement: AnnouncementData,
+): SaveAnnouncementAction {
+  return { type: SAVE_ANNOUNCEMENT, announcement };
+}
+
 export function deleteAnnouncement(
   announcementId: number,
 ): DeleteAnnouncementAction {
@@ -47,13 +53,6 @@ export function deleteAnnouncement(
     id: announcementId,
   };
 }
-
-export function saveAnnouncement(
-  announcement: AnnouncementData,
-): SaveAnnouncementAction {
-  return { type: SAVE_ANNOUNCEMENT, announcement };
-}
-
 export function saveUsersList(
   userList: UserListData[],
   counts: AdminStats,

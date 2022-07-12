@@ -4,10 +4,14 @@ class System::Admin::UsersController < System::Admin::Controller
   add_breadcrumb :index, :admin_users_path
 
   def index
-    params.permit(:active, :role)
-    load_users
-    load_counts
-    @instances_preload_service = User::InstancePreloadService.new(@users.map(&:id))
+    respond_to do |format|
+      format.html { render 'system/admin/admin/index' }
+      format.json do
+        load_users
+        load_counts
+        @instances_preload_service = User::InstancePreloadService.new(@users.map(&:id))
+      end
+    end
   end
 
   def update
@@ -17,7 +21,7 @@ class System::Admin::UsersController < System::Admin::Controller
              locals: { user: @user },
              status: :ok
     else
-      render json: { errors: @user.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @user.errors }, status: :bad_request
     end
   end
 
@@ -25,7 +29,7 @@ class System::Admin::UsersController < System::Admin::Controller
     if @user.destroy
       head :ok
     else
-      render json: { errors: @user.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @user.errors }, status: :bad_request
     end
   end
 
@@ -35,8 +39,8 @@ class System::Admin::UsersController < System::Admin::Controller
     @users = @users.human_users.includes(:emails).ordered_by_name.search(search_param)
     @users = @users.active_in_past_7_days if params[:active].present?
     @users = @users.where(role: params[:role]) if params[:role].present? && User.roles.key?(params[:role])
-    @user_count = @users.length
-    @users = @users.paginate(page_param)
+    @users_count = @users.count.is_a?(Hash) ? @users.count.count : @users.count
+    @users = @users.paginated(new_page_params)
   end
 
   def load_counts

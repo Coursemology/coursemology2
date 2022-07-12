@@ -4,8 +4,8 @@ import PageHeader from 'lib/components/pages/PageHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AppState, AppDispatch } from 'types/store';
+import AddButton from 'lib/components/buttons/AddButton';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import { Stack } from '@mui/material';
 import { getAllAnnouncementMiniEntities } from '../../selectors';
 import {
   indexAnnouncements,
@@ -13,11 +13,16 @@ import {
   updateAnnouncement,
   createAnnouncement,
 } from '../../operations';
-import AnnouncementCard from '../../../../../course/announcements/components/misc/AnnouncementCard';
-import NewAnnouncementButton from '../../../../../course/announcements/components/buttons/NewAnnouncementButton';
+import AnnouncementsDisplay from '../../../../../course/announcements/components/misc/AnnouncementsDisplay';
 import AnnouncementNew from '../../../../../course/announcements/pages/AnnouncementNew';
 
 type Props = WrappedComponentProps;
+
+const styles = {
+  newButton: {
+    color: 'white',
+  },
+};
 
 const translations = defineMessages({
   header: {
@@ -27,6 +32,10 @@ const translations = defineMessages({
   fetchAnnouncementsFailure: {
     id: 'system.admin.announcements.fetch.failure',
     defaultMessage: 'Unable to fetch announcements',
+  },
+  newAnnouncement: {
+    id: 'system.admin.announcements.new',
+    defaultMessage: 'New Announcement',
   },
 });
 
@@ -49,28 +58,28 @@ const AnnouncementsIndex: FC<Props> = (props) => {
   }, [dispatch]);
 
   headerToolbars.push(
-    <NewAnnouncementButton
+    <AddButton
+      id="new-announcement-button"
       key="new-announcement-button"
-      setIsOpen={setIsOpen}
+      onClick={(): void => {
+        setIsOpen(true);
+      }}
+      tooltip={intl.formatMessage(translations.newAnnouncement)}
+      sx={styles.newButton}
     />,
   );
 
   const renderBody: JSX.Element = (
     <>
-      <Stack spacing={1}>
-        {announcements
-          .sort((a, b) => Date.parse(b.startTime) - Date.parse(a.startTime))
-          .map((announcement) => (
-            <AnnouncementCard
-              key={announcement.id}
-              announcement={announcement}
-              showEditOptions
-              updateOperation={updateAnnouncement}
-              deleteOperation={deleteAnnouncement}
-              canSticky={false}
-            />
-          ))}
-      </Stack>
+      <AnnouncementsDisplay
+        announcements={announcements.sort(
+          (a, b) => Date.parse(b.startTime) - Date.parse(a.startTime),
+        )}
+        announcementPermissions={{ canCreate: true }}
+        updateOperation={updateAnnouncement}
+        deleteOperation={deleteAnnouncement}
+        canSticky={false}
+      />
       <AnnouncementNew
         open={isOpen}
         handleClose={(): void => setIsOpen(false)}

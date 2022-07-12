@@ -4,7 +4,7 @@ active_course = Course.unscoped.active_in_past_7_days.count
 
 json.totalCourses total_course
 json.activeCourses active_course
-json.searchCount @search_count
+json.coursesCount @courses_count
 
 json.courses @courses.each do |course|
   json.partial! 'course_list_data', course: course

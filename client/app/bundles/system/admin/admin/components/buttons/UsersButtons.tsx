@@ -33,6 +33,18 @@ const translations = defineMessages({
     id: 'system.admin.user.delete.confirm',
     defaultMessage: 'Are you sure you wish to delete {role} {name} ({email})?',
   },
+  deleteTooltip: {
+    id: 'system.admin.user.delete.tooltip',
+    defaultMessage: 'Delete User',
+  },
+  masqueradeTooltip: {
+    id: 'system.admin.user.masquerade.tooltip',
+    defaultMessage: 'Masquerade',
+  },
+  masqueradeDisabledTooltip: {
+    id: 'system.admin.user.masquerade.disabled.tooltip',
+    defaultMessage: 'User not confirmed',
+  },
 });
 
 const UserManagementButtons: FC<Props> = (props) => {
@@ -60,7 +72,7 @@ const UserManagementButtons: FC<Props> = (props) => {
   const managementButtons = (
     <div style={{ whiteSpace: 'nowrap' }} key={`buttons-${user.id}`}>
       <DeleteButton
-        tooltip="Delete User"
+        tooltip={intl.formatMessage(translations.deleteTooltip)}
         className={`user-delete-${user.id}`}
         disabled={isDeleting}
         onClick={onDelete}
@@ -72,7 +84,11 @@ const UserManagementButtons: FC<Props> = (props) => {
         sx={styles.buttonStyle}
       />
       <MasqueradeButton
-        tooltip="Masquerade"
+        tooltip={
+          user.canMasquerade
+            ? intl.formatMessage(translations.masqueradeTooltip)
+            : intl.formatMessage(translations.masqueradeDisabledTooltip)
+        }
         className={`user-masquerade-${user.id}`}
         disabled={!user.canMasquerade}
         onClick={(): void => handleMasquerade(user)}

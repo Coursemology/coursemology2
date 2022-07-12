@@ -107,7 +107,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     /* eslint-enable no-else-return */
   })();
 
-  const options: TableOptions<EnrolRequestMiniEntity> = {
+  const options: TableOptions = {
     download: false,
     filter: false,
     pagination: true,
