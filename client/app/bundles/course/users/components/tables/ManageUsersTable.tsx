@@ -8,8 +8,8 @@ import {
 import { Box, Checkbox, MenuItem, TextField, Typography } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import {
-  CourseUserMiniEntity,
   CourseUserRowData,
+  CourseUserMiniEntity,
 } from 'types/course/courseUsers';
 import Note from 'lib/components/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
@@ -89,7 +89,7 @@ const ManageUsersTable: FC<Props> = (props) => {
     });
   };
 
-  const options: TableOptions<CourseUserMiniEntity> = {
+  const options: TableOptions = {
     download: false,
     filter: false,
     pagination: true,

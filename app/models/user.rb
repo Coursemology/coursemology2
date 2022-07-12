@@ -7,6 +7,7 @@ class User < ApplicationRecord
   include UserSearchConcern
   include UserMasqueradeConcern
   include TimeZoneConcern
+  include Generic::CollectionConcern
   model_stamper
   acts_as_reader
   mount_uploader :profile_photo, ImageUploader
@@ -78,9 +79,6 @@ class User < ApplicationRecord
   end)
   scope :with_email_addresses, (lambda do |email_addresses|
     includes(:emails).joins(:emails).where('user_emails.email IN (?)', email_addresses)
-  end)
-  scope :paginate, (lambda do |page|
-    offset(page.to_i * 30).limit(30)
   end)
 
   # Gets whether the current user is one of the the built in users.

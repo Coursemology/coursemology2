@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 json.id course.id
-json.title format_inline_text(course.title)
+json.title course.title
 json.createdAt format_datetime(course.created_at, :date_only_long)
 json.activeUserCount course.active_user_count
 json.userCount course.user_count
 json.instance do
   json.id course.instance.id
-  json.name format_inline_text(course.instance.name)
+  json.name course.instance.name
   json.host course.instance.host
 end
 

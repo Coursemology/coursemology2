@@ -13,7 +13,7 @@ import { AppState, AppDispatch } from 'types/store';
 import { Typography } from '@mui/material';
 import SummaryCard from 'lib/components/SummaryCard';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getAdminCounts } from '../../selectors';
 import { indexUsers } from '../../operations';
 import UsersButtons from '../../components/buttons/UsersButtons';
@@ -47,7 +47,7 @@ const translations = defineMessages({
 
 const UsersIndex: FC<Props> = (props) => {
   const { intl } = props;
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const counts = useSelector((state: AppState) => getAdminCounts(state));
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
@@ -55,9 +55,16 @@ const UsersIndex: FC<Props> = (props) => {
   const { activeUsers: activeCounts, totalUsers: totalCounts } = counts;
 
   useEffect(() => {
+    setIsLoading(true);
     const role = getUrlParameter('role');
     const active = getUrlParameter('active');
-    dispatch(indexUsers({ role, active }))
+    dispatch(
+      indexUsers({
+        'filter[length]': 30,
+        role,
+        active,
+      }),
+    )
       .finally(() => setIsLoading(false))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchUsersFailure)),
@@ -73,14 +80,14 @@ const UsersIndex: FC<Props> = (props) => {
             strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
             allCount: totalCounts.allCount,
             adminCount: (
-              <a href="?role=administrator">
+              <Link to={{ search: `?role=administrator` }}>
                 <strong>{totalCounts.adminCount ?? 0}</strong>
-              </a>
+              </Link>
             ),
             normalCount: (
-              <a href="?role=normal">
+              <Link to={{ search: `?role=normal` }}>
                 <strong>{totalCounts.normalCount ?? 0}</strong>
-              </a>
+              </Link>
             ),
           }}
         />
@@ -92,14 +99,14 @@ const UsersIndex: FC<Props> = (props) => {
             strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
             allCount: activeCounts.allCount ?? 0,
             adminCount: (
-              <a href="?active=true&role=administrator">
+              <Link to={{ search: `?active=true&role=administrator` }}>
                 <strong>{activeCounts.adminCount ?? 0}</strong>
-              </a>
+              </Link>
             ),
             normalCount: (
-              <a href="?active=true&role=normal">
+              <Link to={{ search: `?active=true&role=normal` }}>
                 <strong>{activeCounts.normalCount ?? 0}</strong>
-              </a>
+              </Link>
             ),
             br: <br />,
           }}

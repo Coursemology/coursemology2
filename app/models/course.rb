@@ -5,6 +5,7 @@ class Course < ApplicationRecord
   include Course::DuplicationConcern
   include Course::CourseComponentsConcern
   include TimeZoneConcern
+  include Generic::CollectionConcern
 
   acts_as_tenant :instance, inverse_of: :courses
   has_settings_on :settings
@@ -107,10 +108,6 @@ class Course < ApplicationRecord
 
   scope :active_in_past_7_days, (lambda do
     joins(:course_users).merge(CourseUser.active_in_past_7_days).merge(CourseUser.student).distinct
-  end)
-
-  scope :paginate, (lambda do |page|
-    offset(page.to_i * 30).limit(30)
   end)
 
   delegate :staff, to: :course_users

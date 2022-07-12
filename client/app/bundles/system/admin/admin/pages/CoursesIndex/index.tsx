@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 import { AppState, AppDispatch } from 'types/store';
 import { Typography } from '@mui/material';
 import SummaryCard from 'lib/components/SummaryCard';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 import { indexCourses } from '../../operations';
 import CoursesTable from '../../components/tables/CoursesTable';
@@ -42,14 +42,15 @@ const translations = defineMessages({
 
 const CoursesIndex: FC<Props> = (props) => {
   const { intl } = props;
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const counts = useSelector((state: AppState) => getAdminCounts(state));
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
 
   useEffect(() => {
     const active = getUrlParameter('active');
-    dispatch(indexCourses({ active }))
+    setIsLoading(true);
+    dispatch(indexCourses({ 'filter[length]': 30, active }))
       .finally(() => setIsLoading(false))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchCoursesFailure)),
@@ -72,9 +73,9 @@ const CoursesIndex: FC<Props> = (props) => {
           {...translations.activeCourses}
           values={{
             link: (
-              <a href="?active=true">
+              <Link to={{ search: `?active=true` }}>
                 <strong>{counts.activeCourses}</strong>
-              </a>
+              </Link>
             ),
           }}
         />

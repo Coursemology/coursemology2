@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import { toast } from 'react-toastify';
-import { UserMiniEntity } from 'types/users';
 import { getAdminCounts, getAllInstanceMiniEntities } from '../../selectors';
 import { indexInstances, updateInstance } from '../../operations';
 
@@ -50,8 +49,8 @@ const InstancesTable: FC<Props> = (props) => {
   );
   const counts = useSelector((state: AppState) => getAdminCounts(state));
 
-  const [tableState, setTableState] = useState<TableState<UserMiniEntity>>({
-    page: 0,
+  const [tableState, setTableState] = useState<TableState>({
+    page: 1,
   });
 
   const handleNameUpdate = (rowData, newName: string): Promise<void> => {
@@ -97,19 +96,21 @@ const InstancesTable: FC<Props> = (props) => {
       ...tableState,
       page,
     });
-    dispatch(indexInstances({ page })).then(() => {
+    dispatch(
+      indexInstances({ 'filter[page_num]': page, 'filter[length]': 30 }),
+    ).then(() => {
       setIsLoading(false);
     });
   };
 
-  const options: TableOptions<InstanceMiniEntity> = {
+  const options: TableOptions = {
     count: counts.instancesCount,
     download: false,
     filter: false,
     onTableChange: (action, newTableState) => {
       switch (action) {
         case 'changePage':
-          changePage(newTableState.page);
+          changePage(newTableState.page! + 1);
           break;
         default:
           break;
@@ -150,16 +151,7 @@ const InstancesTable: FC<Props> = (props) => {
       },
     },
     {
-      name: 'canEdit',
-      label: '',
-      options: {
-        display: false,
-        filter: false,
-        sort: false,
-      },
-    },
-    {
-      name: 'canDelete',
+      name: 'permissions',
       label: '',
       options: {
         display: false,
@@ -177,16 +169,16 @@ const InstancesTable: FC<Props> = (props) => {
           const rowData = tableMeta.rowData;
           return (
             <InlineEditTextField
-              key={`name-${rowData[0]}`}
+              key={`name-${rowData[1]}`}
               value={value}
-              className={`instance_name instance_name_${rowData[0]}`}
+              className={`instance_name instance_name_${rowData[1]}`}
               updateValue={updateValue}
               variant="standard"
               link={`//${rowData[4]}/admin/instances`}
               onUpdate={(newValue): Promise<void> =>
                 handleNameUpdate(rowData, newValue)
               }
-              disabled={!rowData[1]}
+              disabled={!rowData[2].canEdit} // rowData[2] contains InstanceMiniEntityPermissions
             />
           );
         },
@@ -202,15 +194,15 @@ const InstancesTable: FC<Props> = (props) => {
           const rowData = tableMeta.rowData;
           return (
             <InlineEditTextField
-              key={`host-${rowData[0]}`}
+              key={`host-${rowData[1]}`}
               value={value}
-              className={`instance_host instance_host_${rowData[0]}`}
+              className={`instance_host instance_host_${rowData[1]}`}
               updateValue={updateValue}
               variant="standard"
               onUpdate={(newValue): Promise<void> =>
                 handleHostUpdate(rowData, newValue)
               }
-              disabled={!rowData[1]}
+              disabled={!rowData[2].canEdit} // rowData[2] contains InstanceMiniEntityPermissions
             />
           );
         },
@@ -304,6 +296,7 @@ const InstancesTable: FC<Props> = (props) => {
         data={instances}
         columns={columns}
         options={options}
+        includeRowNumber
       />
     </Box>
   );

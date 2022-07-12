@@ -56,7 +56,7 @@ const InstancesButtons: FC<Props> = (props) => {
 
   const managementButtons = (
     <div style={{ whiteSpace: 'nowrap' }} key={`buttons-${instance.id}`}>
-      {instance.canDelete && (
+      {instance.permissions.canDelete && (
         <DeleteButton
           tooltip="Delete Instance"
           className={`instance-delete-${instance.id}`}

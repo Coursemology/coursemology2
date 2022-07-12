@@ -1,6 +1,10 @@
 import { Permissions } from 'types';
 
-export type InstancePermissions = Permissions<'canCreate'>;
+export type InstancePermissions = Permissions<'canCreateInstances'>;
+
+export type InstanceMiniEntityPermissions = Permissions<
+  'canEdit' | 'canDelete'
+>;
 
 export interface InstanceListData {
   id: number;
@@ -10,9 +14,7 @@ export interface InstanceListData {
   userCount: number;
   activeCourseCount: number;
   courseCount: number;
-
-  canEdit: boolean;
-  canDelete: boolean;
+  permissions: InstanceMiniEntityPermissions;
 }
 
 export interface InstanceBasicMiniEntity {
@@ -29,9 +31,7 @@ export interface InstanceMiniEntity {
   userCount: number;
   activeCourseCount: number;
   courseCount: number;
-
-  canEdit: boolean;
-  canDelete: boolean;
+  permissions: InstanceMiniEntityPermissions;
 }
 
 export interface InstanceFormData {

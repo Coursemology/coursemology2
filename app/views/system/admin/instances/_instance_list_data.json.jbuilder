@@ -7,5 +7,7 @@ json.userCount instance.user_count
 json.activeCourseCount instance.active_course_count
 json.courseCount instance.course_count
 
-json.canEdit can?(:edit, instance)
-json.canDelete can?(:destroy, instance)
+json.permissions do
+  json.canEdit can?(:edit, instance)
+  json.canDelete can?(:destroy, instance)
+end

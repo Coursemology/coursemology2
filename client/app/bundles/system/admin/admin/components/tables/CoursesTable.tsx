@@ -13,8 +13,9 @@ import DataTable from 'lib/components/DataTable';
 import { CourseMiniEntity } from 'types/system/courses';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
-import { UserBasicMiniEntity, UserMiniEntity } from 'types/users';
+import { UserBasicMiniEntity } from 'types/users';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
+import { FIELD_DEBOUNCE_DELAY } from 'lib/constants/sharedConstants';
 import { getAdminCounts, getAllCourseMiniEntities } from '../../selectors';
 import { indexCourses } from '../../operations';
 
@@ -45,24 +46,24 @@ const styles = {
 
 const CoursesTable: FC<Props> = (props) => {
   const { renderRowActionComponent, intl } = props;
+  const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(false);
   const courses = useSelector((state: AppState) =>
     getAllCourseMiniEntities(state),
   );
   const counts = useSelector((state: AppState) => getAdminCounts(state));
   const active = getUrlParameter('active');
-  const dispatch = useDispatch<AppDispatch>();
 
-  const [tableState, setTableState] = useState<TableState<UserMiniEntity>>({
-    count: counts.searchCount,
-    page: 0,
+  const [tableState, setTableState] = useState<TableState>({
+    count: counts.coursesCount,
+    page: 1,
     searchText: '',
   });
 
   useEffect((): void => {
     setTableState({
       ...tableState,
-      count: counts.searchCount,
+      count: counts.coursesCount,
     });
   }, [counts]);
 
@@ -87,30 +88,39 @@ const CoursesTable: FC<Props> = (props) => {
       ...tableState,
       page,
     });
-    dispatch(indexCourses({ page, active })).then(() => {
+    dispatch(
+      indexCourses({ 'filter[page_num]': page, 'filter[length]': 30, active }),
+    ).then(() => {
       setIsLoading(false);
     });
   };
 
   const search = (page, searchText): void => {
     setIsLoading(true);
-    dispatch(indexCourses({ page, active, search: searchText })).then(() => {
+    dispatch(
+      indexCourses({
+        'filter[page_num]': page,
+        'filter[length]': 30,
+        active,
+        search: searchText,
+      }),
+    ).then(() => {
       setIsLoading(false);
     });
   };
 
-  const options: TableOptions<CourseMiniEntity> = {
+  const options: TableOptions = {
     count: tableState.count,
-    customSearchRender: debounceSearchRender(500),
+    customSearchRender: debounceSearchRender(FIELD_DEBOUNCE_DELAY),
     download: false,
     filter: false,
     onTableChange: (action, newTableState) => {
       switch (action) {
         case 'search':
-          search(newTableState.page, newTableState.searchText);
+          search(newTableState.page! + 1, newTableState.searchText);
           break;
         case 'changePage':
-          changePage(newTableState.page);
+          changePage(newTableState.page! + 1);
           break;
         default:
           break;
@@ -123,6 +133,7 @@ const CoursesTable: FC<Props> = (props) => {
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',
+    serverSide: true,
     setTableProps: (): Record<string, unknown> => {
       return { size: 'small' };
     },
@@ -286,6 +297,7 @@ const CoursesTable: FC<Props> = (props) => {
         data={courses}
         columns={columns}
         options={options}
+        includeRowNumber
       />
     </Box>
   );

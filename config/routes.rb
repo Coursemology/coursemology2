@@ -98,8 +98,8 @@ Rails.application.routes.draw do
   scope module: 'system' do
     namespace :admin do
       get '/' => 'admin#index'
-      resources :announcements, except: [:show], concerns: :paginatable
-      resources :instances, except: [:show]
+      resources :announcements, only: [:index, :create, :update, :destroy], concerns: :paginatable
+      resources :instances, only: [:index, :create, :update, :destroy]
       resources :users, only: [:index, :update, :destroy], concerns: :paginatable
       resources :courses, only: [:index, :destroy], concerns: :paginatable
 

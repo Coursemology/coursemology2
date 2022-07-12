@@ -1,5 +1,5 @@
 import { Operation } from 'types/store';
-import CourseAPI from 'api/course';
+import SystemAPI from 'api/system';
 import { AnnouncementFormData } from 'types/system/announcements';
 import { UserMiniEntity } from 'types/users';
 import { InstanceFormData, InstanceMiniEntity } from 'types/system/instances';
@@ -74,7 +74,7 @@ const formatInstanceAttributes = (
 };
 export function indexAnnouncements(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.admin.system
+    SystemAPI.admin
       .indexAnnouncements()
       .then((response) => {
         const data = response.data;
@@ -87,7 +87,7 @@ export function indexAnnouncements(): Operation<void> {
 
 export function deleteAnnouncement(announcementId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.admin.system.deleteAnnouncement(announcementId).then(() => {
+    SystemAPI.admin.deleteAnnouncement(announcementId).then(() => {
       dispatch(actions.deleteAnnouncement(announcementId));
     });
 }
@@ -98,7 +98,7 @@ export function updateAnnouncement(
 ): Operation<void> {
   const attributes = formatAnnouncementAttributes(formData);
   return async (dispatch) =>
-    CourseAPI.admin.system
+    SystemAPI.admin
       .updateAnnouncement(announcementId, attributes)
       .then((response) => {
         dispatch(actions.saveAnnouncement(response.data));
@@ -113,7 +113,7 @@ export function createAnnouncement(
 ): Operation<void> {
   const attributes = formatAnnouncementAttributes(formData);
   return async (dispatch) =>
-    CourseAPI.admin.system
+    SystemAPI.admin
       .createAnnouncement(attributes)
       .then((response) => {
         dispatch(actions.saveAnnouncement(response.data));
@@ -125,7 +125,7 @@ export function createAnnouncement(
 
 export function indexUsers(params?): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.admin.system
+    SystemAPI.admin
       .indexUsers(params)
       .then((response) => {
         const data = response.data;
@@ -142,7 +142,7 @@ export function updateUser(
 ): Operation<void> {
   const attributes = formatUserAttributes(userEntity);
   return async (dispatch) =>
-    CourseAPI.admin.system
+    SystemAPI.admin
       .updateUser(userId, attributes)
       .then((response) => {
         dispatch(actions.saveUser(response.data));
@@ -154,21 +154,21 @@ export function updateUser(
 
 export function deleteUser(userId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.admin.system.deleteUser(userId).then(() => {
+    SystemAPI.admin.deleteUser(userId).then(() => {
       dispatch(actions.deleteUser(userId));
     });
 }
 
 export function indexCourses(params?): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.admin.system
+    SystemAPI.admin
       .indexCourses(params)
       .then((response) => {
         const data = response.data;
         const counts = {
           totalCourses: data.totalCourses,
           activeCourses: data.activeCourses,
-          searchCount: data.searchCount,
+          coursesCount: data.coursesCount,
         };
         dispatch(actions.saveCourseList(data.courses, counts));
       })
@@ -179,14 +179,14 @@ export function indexCourses(params?): Operation<void> {
 
 export function deleteCourse(courseId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.admin.system.deleteCourse(courseId).then(() => {
+    SystemAPI.admin.deleteCourse(courseId).then(() => {
       dispatch(actions.deleteCourse(courseId));
     });
 }
 
 export function indexInstances(params?): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.admin.system
+    SystemAPI.admin
       .indexInstances(params)
       .then((response) => {
         const data = response.data;
@@ -206,7 +206,7 @@ export function indexInstances(params?): Operation<void> {
 export function createInstance(formData: InstanceFormData): Operation<void> {
   const attributes = formatInstanceAttributes(formData);
   return async (dispatch) =>
-    CourseAPI.admin.system
+    SystemAPI.admin
       .createInstance(attributes)
       .then((response) => {
         dispatch(actions.saveInstance(response.data));
@@ -222,7 +222,7 @@ export function updateInstance(
 ): Operation<void> {
   const attributes = formatInstanceAttributes(instanceEntity);
   return async (dispatch) =>
-    CourseAPI.admin.system
+    SystemAPI.admin
       .updateInstance(instanceId, attributes)
       .then((response) => {
         dispatch(actions.saveInstance(response.data));
@@ -234,7 +234,7 @@ export function updateInstance(
 
 export function deleteInstance(instanceId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.admin.system.deleteInstance(instanceId).then(() => {
+    SystemAPI.admin.deleteInstance(instanceId).then(() => {
       dispatch(actions.deleteInstance(instanceId));
     });
 }

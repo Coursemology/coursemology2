@@ -20,7 +20,6 @@ import { UserListData, UserMiniEntity, AdminStats } from 'types/users';
 export const SAVE_ANNOUNCEMENTS_LIST = 'system/admin/SAVE_ANNOUNCEMENTS_LIST';
 export const SAVE_ANNOUNCEMENT = 'system/admin/SAVE_ANNOUNCEMENT';
 export const DELETE_ANNOUNCEMENT = 'system/admin/DELETE_ANNOUNCEMENT';
-export const UPDATE_ANNOUNCEMENT = 'system/admin/UPDATE_ANNOUNCEMENT';
 export const SAVE_USERS_LIST = 'system/admin/SAVE_USERS_LIST';
 export const SAVE_USER = 'system/admin/SAVE_USER';
 export const DELETE_USER = 'system/admin/DELETE_USER';
@@ -43,11 +42,6 @@ export interface SaveAnnouncementAction {
 
 export interface DeleteAnnouncementAction {
   type: typeof DELETE_ANNOUNCEMENT;
-  id: number;
-}
-
-export interface UpdateAnnouncementAction {
-  type: typeof UPDATE_ANNOUNCEMENT;
   id: number;
 }
 
@@ -97,7 +91,6 @@ export type AdminActionType =
   | SaveAnnouncementsListAction
   | SaveAnnouncementAction
   | DeleteAnnouncementAction
-  | UpdateAnnouncementAction
   | SaveUsersListAction
   | SaveUserAction
   | DeleteUserAction

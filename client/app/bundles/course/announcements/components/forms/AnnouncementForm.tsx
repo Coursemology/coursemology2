@@ -202,7 +202,6 @@ const AnnouncementForm: FC<Props> = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
-              required
               variant="standard"
             />
           )}

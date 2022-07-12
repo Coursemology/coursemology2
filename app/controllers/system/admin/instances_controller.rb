@@ -4,12 +4,14 @@ class System::Admin::InstancesController < System::Admin::Controller
   add_breadcrumb :index, :admin_instances_path
 
   def index # :nodoc:
-    @instances_count = Instance.count
-    @instances = Instance.order_for_display.paginate(page_param).
-                 calculated(:active_course_count, :course_count, :active_user_count, :user_count)
-  end
-
-  def new # :nodoc:
+    respond_to do |format|
+      format.html { render 'system/admin/admin/index' }
+      format.json do
+        @instances_count = Instance.count
+        @instances = Instance.order_for_display.paginated(new_page_params).
+                     calculated(:active_course_count, :course_count, :active_user_count, :user_count)
+      end
+    end
   end
 
   def create # :nodoc:
@@ -18,11 +20,8 @@ class System::Admin::InstancesController < System::Admin::Controller
              locals: { instance: @instance },
              status: :ok
     else
-      render json: { errors: @instance.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @instance.errors }, status: :bad_request
     end
-  end
-
-  def edit # :nodoc:
   end
 
   def update # :nodoc:
@@ -31,7 +30,7 @@ class System::Admin::InstancesController < System::Admin::Controller
              locals: { instance: @instance },
              status: :ok
     else
-      render json: { errors: @instance.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @instance.errors }, status: :bad_request
     end
   end
 
@@ -39,7 +38,7 @@ class System::Admin::InstancesController < System::Admin::Controller
     if @instance.destroy
       head :ok
     else
-      render json: { errors: @user.errors.full_messages.to_sentence }, status: :bad_request
+      render json: { errors: @instance.errors }, status: :bad_request
     end
   end
 

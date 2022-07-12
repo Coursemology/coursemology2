@@ -4,7 +4,7 @@ json.instances @instances.each do |instance|
 end
 
 json.permissions do
-  json.canCreate can?(:create, Instance.new)
+  json.canCreateInstances can?(:create, Instance.new)
 end
 
 json.counts @instances_count
