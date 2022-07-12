@@ -1,7 +1,7 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
 
-import { Autocomplete, Button, Stack, TextField } from '@mui/material';
+import { Autocomplete, Button, Grid, Stack, TextField } from '@mui/material';
 
 import {
   SubmissionAssessmentFilterData,
@@ -61,81 +61,90 @@ const SubmissionFilter: FC<Props> = (props) => {
   } = props;
 
   return (
-    <Stack spacing={1.5} className="submissions-filter">
+    <>
       {showDetailFilter && (
-        <>
+        <Stack spacing={1} className="submissions-filter">
           <h3 style={{ marginTop: 0, marginBottom: 0 }}>
             {intl.formatMessage(translations.filterHeader)}
           </h3>
-          <Autocomplete
-            key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-assesment-selector`}
-            disablePortal
-            clearOnEscape
-            options={filter.assessments}
-            getOptionLabel={(option): string => option.title}
-            renderInput={(params): React.ReactNode => {
-              return (
-                <TextField
-                  {...params}
-                  label={`${intl.formatMessage(
-                    translations.filterAssessmentLabel,
-                  )} ${tabCategories[categoryNum].title}`}
-                />
-              );
-            }}
-            onChange={(
-              _event: React.SyntheticEvent,
-              value: { id: number; title: string } | null,
-            ): void => {
-              setSelectedAssessment(value);
-            }}
-          />
-          <Autocomplete
-            key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-group-selector`}
-            disablePortal
-            clearOnEscape
-            options={filter.groups}
-            getOptionLabel={(option): string => option.name}
-            renderInput={(params): React.ReactNode => {
-              return (
-                <TextField
-                  {...params}
-                  label={`${intl.formatMessage(
-                    translations.filterAssessmentLabel,
-                  )} Group`}
-                />
-              );
-            }}
-            onChange={(
-              _event: React.SyntheticEvent,
-              value: { id: number; name: string } | null,
-            ): void => {
-              setSelectedGroup(value);
-            }}
-          />
-          <Autocomplete
-            key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-user-selector`}
-            disablePortal
-            clearOnEscape
-            options={filter.users}
-            getOptionLabel={(option): string => option.name}
-            renderInput={(params): React.ReactNode => {
-              return (
-                <TextField
-                  {...params}
-                  label={`${intl.formatMessage(
-                    translations.filterAssessmentLabel,
-                  )} User`}
-                />
-              );
-            }}
-            onChange={(
-              _event: React.SyntheticEvent,
-              value: { id: number; name: string } | null,
-            ): void => {
-              setSelectedUser(value);
-            }}
-          />
+          <Grid container columns={{ xs: 1, md: 3 }}>
+            <Grid item xs={1} paddingRight={1} paddingBottom={1}>
+              <Autocomplete
+                key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-assesment-selector`}
+                disablePortal
+                clearOnEscape
+                options={filter.assessments}
+                getOptionLabel={(option): string => option.title}
+                renderInput={(params): React.ReactNode => {
+                  return (
+                    <TextField
+                      {...params}
+                      label={`${intl.formatMessage(
+                        translations.filterAssessmentLabel,
+                      )} ${tabCategories[categoryNum].title}`}
+                    />
+                  );
+                }}
+                onChange={(
+                  _event: React.SyntheticEvent,
+                  value: { id: number; title: string } | null,
+                ): void => {
+                  setSelectedAssessment(value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={1} paddingRight={1} paddingBottom={1}>
+              <Autocomplete
+                key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-group-selector`}
+                disablePortal
+                clearOnEscape
+                options={filter.groups}
+                getOptionLabel={(option): string => option.name}
+                renderInput={(params): React.ReactNode => {
+                  return (
+                    <TextField
+                      {...params}
+                      label={`${intl.formatMessage(
+                        translations.filterAssessmentLabel,
+                      )} Group`}
+                    />
+                  );
+                }}
+                onChange={(
+                  _event: React.SyntheticEvent,
+                  value: { id: number; name: string } | null,
+                ): void => {
+                  setSelectedGroup(value);
+                }}
+              />
+            </Grid>
+            <Grid item xs={1} paddingRight={1}>
+              <Autocomplete
+                key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-user-selector`}
+                disablePortal
+                clearOnEscape
+                options={filter.users}
+                getOptionLabel={(option): string => option.name}
+                renderInput={(params): React.ReactNode => {
+                  return (
+                    <TextField
+                      {...params}
+                      label={`${intl.formatMessage(
+                        translations.filterAssessmentLabel,
+                      )} User`}
+                    />
+                  );
+                }}
+                onChange={(
+                  _event: React.SyntheticEvent,
+                  value: { id: number; name: string } | null,
+                ): void => {
+                  setSelectedUser(value);
+                }}
+              />
+            </Grid>
+          </Grid>
+
           <Button
             variant="contained"
             sx={{ width: 130 }}
@@ -143,9 +152,9 @@ const SubmissionFilter: FC<Props> = (props) => {
           >
             {intl.formatMessage(translations.filterButton)}
           </Button>
-        </>
+        </Stack>
       )}
-    </Stack>
+    </>
   );
 };
 export default injectIntl(SubmissionFilter);
