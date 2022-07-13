@@ -17,7 +17,6 @@ import {
 import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import {
   InvitationFileEntity,
   InvitationResult,
@@ -145,7 +144,7 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
     }
   };
 
-  const onSubmit = (data: InvitationFileEntity, setError): Promise<void> => {
+  const onSubmit = (data: InvitationFileEntity): Promise<void> => {
     setIsLoading(true);
     return dispatch(inviteUsersFromFile(data))
       .then((response) => {
@@ -153,14 +152,13 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         openResultDialog(response);
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.failure));
         if (error.response?.data) {
           toast.error(
             intl.formatMessage(translations.failure, {
               error: error.response.data.errors,
             }),
+            { autoClose: false },
           );
-          setReactHookFormError(setError, error.response.data.errors);
         }
         throw error;
       })
