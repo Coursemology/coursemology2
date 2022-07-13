@@ -85,6 +85,9 @@ const SubmissionTabs: FC<Props> = (props) => {
         setIsTabChanging(false);
         setTableIsLoading(false);
       });
+    } else {
+      setIsTabChanging(false);
+      setTableIsLoading(false);
     }
   }, []);
 
@@ -184,6 +187,7 @@ const SubmissionTabs: FC<Props> = (props) => {
 
           {tabs.categories.map((tab, index) => (
             <Tab
+              id={`category-tab-${tab.id}`}
               key={tab.id}
               value={index + 2}
               label={tab.title}

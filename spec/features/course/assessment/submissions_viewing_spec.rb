@@ -26,6 +26,7 @@ RSpec.describe 'Course: Submissions Viewing' do
           create(:submission, :submitted, assessment: assessment, creator: course_manager.user)
 
         visit course_submissions_path(course)
+        find("#category-tab-#{course.assessment_categories.first.id}").click
 
         expect(page).to have_selector('div.submissions-filter')
 
