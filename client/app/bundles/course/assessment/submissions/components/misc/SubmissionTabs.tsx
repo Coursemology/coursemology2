@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -15,6 +15,7 @@ import {
 } from '../../operations';
 
 interface Props extends WrappedComponentProps {
+  canManage: boolean;
   isTeachingStaff: boolean;
   tabs: SubmissionsTabData;
   tabValue: number;
@@ -41,8 +42,8 @@ const translations = defineMessages({
 
 const CustomBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {
-    right: -5,
-    top: 0,
+    right: -8,
+    top: -1,
     border: `2px solid ${theme.palette.background.paper}`,
     padding: '0 4px',
   },
@@ -51,6 +52,7 @@ const CustomBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
 const SubmissionTabs: FC<Props> = (props) => {
   const {
     intl,
+    canManage,
     isTeachingStaff,
     tabs,
     tabValue,
@@ -69,6 +71,22 @@ const SubmissionTabs: FC<Props> = (props) => {
   };
 
   const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    if (isTeachingStaff && tabs.myStudentsPendingCount !== 0) {
+      setTabValue(0);
+      dispatch(fetchMyStudentsPendingSubmissions()).then(() => {
+        setIsTabChanging(false);
+        setTableIsLoading(false);
+      });
+    } else if (canManage && tabs.allStudentsPendingCount !== 0) {
+      setTabValue(1);
+      dispatch(fetchAllStudentsPendingSubmissions()).then(() => {
+        setIsTabChanging(false);
+        setTableIsLoading(false);
+      });
+    }
+  }, []);
 
   /*
   The Tabs are numbered (values) as such:
@@ -96,6 +114,9 @@ const SubmissionTabs: FC<Props> = (props) => {
                 />
               }
               iconPosition="end"
+              style={{
+                paddingRight: tabs.myStudentsPendingCount === 0 ? 8 : 26,
+              }}
               onClick={(): Promise<string | number | void> => {
                 // Prevent API calls when spam clicking the tab
                 if (tabValue !== 0) {
@@ -133,6 +154,9 @@ const SubmissionTabs: FC<Props> = (props) => {
                 />
               }
               iconPosition="end"
+              style={{
+                paddingRight: tabs.allStudentsPendingCount === 0 ? 8 : 26,
+              }}
               onClick={(): Promise<string | number | void> => {
                 // Prevent API calls when spam clicking the tab
                 if (tabValue !== 1) {

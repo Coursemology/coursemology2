@@ -74,9 +74,9 @@ const SubmissionsIndex: FC<Props> = (props) => {
 
   // For tab logic and control
   const [tabValue, setTabValue] = useState(2);
-  const [isTabChanging, setIsTabChanging] = useState(false);
+  const [isTabChanging, setIsTabChanging] = useState(true);
 
-  const [tableIsLoading, setTableIsLoading] = useState(false);
+  const [tableIsLoading, setTableIsLoading] = useState(true);
 
   // For filtering
   const [selectedAssessment, setselectedAssessment] =
@@ -89,6 +89,9 @@ const SubmissionsIndex: FC<Props> = (props) => {
     useState<SubmissionUserFilterData | null>(null);
 
   const handleFilter = (newPageNumber: number): void => {
+    setPageNum(newPageNumber);
+    setTableIsLoading(true);
+
     const assessmentId = selectedAssessment ? selectedAssessment.id : null;
     const groupId = selectedGroup ? selectedGroup.id : null;
     const userId = selectedUser ? selectedUser.id : null;
@@ -148,6 +151,7 @@ const SubmissionsIndex: FC<Props> = (props) => {
     <>
       <PageHeader title={intl.formatMessage(translations.header)} />
       <SubmissionTabs
+        canManage={submissionPermissions.canManage}
         isTeachingStaff={submissionPermissions.isTeachingStaff}
         tabs={tabs}
         tabValue={tabValue}
@@ -188,6 +192,15 @@ const SubmissionsIndex: FC<Props> = (props) => {
         rowsPerPage={ROWS_PER_PAGE}
         pageNum={pageNum}
       />
+
+      {!isTabChanging && submissions.length > 15 && !tableIsLoading && (
+        <SubmissionPagination
+          submissionCount={submissionCount}
+          rowsPerPage={ROWS_PER_PAGE}
+          pageNum={pageNum}
+          handlePageChange={handlePageChange}
+        />
+      )}
     </>
   );
 };
