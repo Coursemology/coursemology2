@@ -113,7 +113,7 @@
     "moment-timezone": "^0.5.34",
     "mui-datatables": "^4.2.2",
     "prop-types": "^15.8.0",
-    "rc-slider": "^9.7.5",
+    "rc-slider": "^10.0.1",
     "react": "^17.0.2",
     "react-ace": "^10.1.0",
     "react-chartjs-2": "^4.2.0",
