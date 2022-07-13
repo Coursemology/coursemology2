@@ -27,6 +27,8 @@ const SubmissionPagination: FC<Props> = (props) => {
     <>
       {count > 1 && (
         <Pagination
+          color="primary"
+          variant="outlined"
           style={{ padding: 10, display: 'flex', justifyContent: 'center' }}
           count={count}
           page={pageNum}

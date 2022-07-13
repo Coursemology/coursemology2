@@ -2,6 +2,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
 
 import {
+  Chip,
   Link,
   Stack,
   Table,
@@ -19,6 +20,8 @@ import { getAssessmentURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getDayMonthTime } from 'lib/helpers/timehelper';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import CustomTooltip from 'lib/components/CustomTooltip';
+import palette from 'theme/palette';
+
 import SubmissionsTableButton from '../buttons/SubmissionsTableButton';
 
 interface Props extends WrappedComponentProps {
@@ -120,7 +123,7 @@ const SubmissionsTable: FC<Props> = (props) => {
         </div>
       ) : (
         <>
-          <Table sx={{ marginBottom: 4 }}>
+          <Table sx={{ marginBottom: 2 }}>
             <TableHead>
               <TableRow>
                 <TableCell align="center">
@@ -190,24 +193,35 @@ const SubmissionsTable: FC<Props> = (props) => {
                     {getDayMonthTime(submission.submittedAt)}
                   </TableCell>
                   <TableCell align="center">
-                    {translateStatus(submission.status)}
+                    <Chip
+                      style={{
+                        width: 100,
+                        backgroundColor:
+                          palette.submissionStatus[submission.status],
+                      }}
+                      label={translateStatus(submission.status)}
+                    />
                   </TableCell>
                   {isPendingTab && (
                     <TableCell>
-                      <Stack>
-                        {submission.teachingStaff?.map((staff) => (
-                          <Link
-                            key={staff.teachingStaffId}
-                            href={getCourseUserURL(
-                              getCourseId(),
-                              staff.teachingStaffId,
-                            )}
-                            underline="hover"
-                          >
-                            {staff.teachingStaffName}
-                          </Link>
-                        ))}
-                      </Stack>
+                      {submission.teachingStaff?.length !== 0 ? (
+                        <Stack>
+                          {submission.teachingStaff?.map((staff) => (
+                            <Link
+                              key={staff.teachingStaffId}
+                              href={getCourseUserURL(
+                                getCourseId(),
+                                staff.teachingStaffId,
+                              )}
+                              underline="hover"
+                            >
+                              {staff.teachingStaffName}
+                            </Link>
+                          ))}
+                        </Stack>
+                      ) : (
+                        <div>--</div>
+                      )}
                     </TableCell>
                   )}
 
