@@ -62,4 +62,12 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.x.default_host = 'example.org'
+
+  # Rails 6.0.5.1 security patch
+  # To find out more unpermitted classes and add below then uncomment
+  # yaml_column_permitted_classes. When this is done,
+  # config.active_record.use_yaml_unsafe_load can be removed.
+  # config.active_record.yaml_column_permitted_classes = [ActiveSupport::HashWithIndifferentAccess,
+  #                                                       ActiveSupport::Duration]
+  config.active_record.use_yaml_unsafe_load = true
 end

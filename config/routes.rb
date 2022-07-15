@@ -247,7 +247,7 @@ Rails.application.routes.draw do
               get 'options', on: :collection
             end
             resources :skill_branches, as: :assessments_skill_branches, except: [:index, :show]
-            resources :submissions, only: [:index], concerns: :paginatable do
+            resources :submissions, only: [:index] do
               get 'pending', on: :collection
             end
           end
