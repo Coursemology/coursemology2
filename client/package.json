@@ -105,7 +105,7 @@
     "immutable": "^3.8.2",
     "intl": "^1.2.5",
     "jquery": "^3.6.0",
-    "jquery-ui": "^1.13.0",
+    "jquery-ui": "^1.13.2",
     "json-loader": "^0.5.7",
     "mirror-creator": "1.1.0",
     "mkdirp": "^1.0.4",
