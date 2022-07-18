@@ -27,6 +27,11 @@ const FormSelectField = (props) => {
     renderIf,
     noneSelected,
     sx,
+    onChangeCustom,
+    margin,
+    shrink,
+    displayEmpty,
+    className,
     ...custom
   } = props;
   const isError = !!fieldState.error;
@@ -45,16 +50,25 @@ const FormSelectField = (props) => {
       disabled={disabled}
       error={isError}
       fullWidth
-      style={styles.selectFieldStyle}
+      style={{ margin: margin ?? styles.selectFieldStyle.margin }}
       variant="standard"
     >
-      <InputLabel>{label}</InputLabel>
+      <InputLabel shrink={shrink}>{label}</InputLabel>
       <Select
         id="select"
         {...field}
-        onChange={(event) => field.onChange(event.target.value)}
+        onChange={(event) =>
+          onChangeCustom
+            ? onChangeCustom(event.target.value)
+            : field.onChange(event)
+        }
         {...custom}
         variant="standard"
+        displayEmpty={displayEmpty}
+        className={className}
+        MenuProps={{
+          style: { maxHeight: '50vh' },
+        }}
       >
         {noneSelected && (
           <MenuItem value="" key={noneSelected}>
@@ -94,6 +108,11 @@ FormSelectField.propTypes = {
   sx: PropTypes.object,
   renderIf: PropTypes.bool,
   noneSelected: PropTypes.string,
+  onChangeCustom: PropTypes.func,
+  margin: PropTypes.string,
+  shrink: PropTypes.bool,
+  displayEmpty: PropTypes.bool,
+  className: PropTypes.string,
 };
 
 export default memo(FormSelectField, propsAreEqual);

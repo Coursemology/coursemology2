@@ -5,7 +5,7 @@ import { TextField } from '@mui/material';
 import {
   MobileDateTimePicker as MuiDateTimePicker,
   LocalizationProvider,
-} from '@mui/lab';
+} from '@mui/x-date-pickers';
 import AdapterMoment from '@mui/lab/AdapterMoment';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import propsAreEqual from './utils/propsAreEqual';
@@ -52,6 +52,7 @@ const FormDateTimePickerField = (props) => {
     label,
     renderIf,
     style,
+    className,
     ...custom
   } = props;
 
@@ -78,6 +79,7 @@ const FormDateTimePickerField = (props) => {
           {...custom}
           renderInput={(params) => (
             <TextField
+              className={className}
               {...params}
               error={!!fieldState.error || params.error}
               fullWidth
@@ -115,6 +117,7 @@ FormDateTimePickerField.propTypes = {
   intl: PropTypes.object.isRequired,
   renderIf: PropTypes.bool,
   style: PropTypes.object,
+  className: PropTypes.string,
 };
 
 export default injectIntl(memo(FormDateTimePickerField, propsAreEqual));
