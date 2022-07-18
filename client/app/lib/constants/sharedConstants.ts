@@ -1,5 +1,9 @@
 import type { StaffRoles, CourseUserRoles } from 'types/course/courseUsers';
 
+// Form options
+
+export const FIELD_DEBOUNCE_DELAY = 500;
+
 /**
  * constants needed by both server and client
  */
