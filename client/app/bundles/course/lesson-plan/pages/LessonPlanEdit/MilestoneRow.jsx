@@ -11,7 +11,7 @@ import { fields } from 'course/lesson-plan/constants';
 const translations = defineMessages({
   updateSuccess: {
     id: 'course.lessonPlan.LessonPlanEdit.MilestoneRow.updateSuccess',
-    defaultMessage: "'{title}' was updated.",
+    defaultMessage: '"{title}" was updated.',
   },
   updateFailed: {
     id: 'course.lessonPlan.LessonPlanEdit.MilestoneRow.updateFailed',

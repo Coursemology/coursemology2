@@ -226,7 +226,13 @@ const AnnouncementForm: FC<Props> = (props) => {
                 disabled={disabled}
                 label={<FormattedMessage {...translations.startAt} />}
                 afterChangeField={(newStartAt: Date): void => {
-                  shiftDateField(newStartAt, watch, setValue);
+                  shiftDateField(
+                    newStartAt,
+                    watch,
+                    setValue,
+                    'startAt',
+                    'endAt',
+                  );
                 }}
                 style={{ flex: 1 }}
               />
