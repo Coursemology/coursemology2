@@ -20,6 +20,7 @@ const PointTextField: FC<Props> = (props: Props) => {
         <FormTextField
           field={field}
           fieldState={fieldState}
+          enableDebouncing
           // @ts-ignore: component is still written in JS
           fullWidth
           InputLabelProps={{
