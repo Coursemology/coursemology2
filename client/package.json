@@ -87,7 +87,7 @@
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "^5.0.0-alpha.75",
     "@mui/material": "^5.8.6",
-    "@mui/styles": "^5.8.7",
+    "@mui/styles": "^5.9.0",
     "@mui/x-date-pickers": "^5.0.0-beta.1",
     "ace-builds": "^1.6.1",
     "axios": "^0.27.2",
