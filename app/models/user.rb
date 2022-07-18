@@ -112,7 +112,7 @@ class User < ApplicationRecord
                          role: invitation.role,
                          phantom: invitation.phantom,
                          timeline_algorithm: invitation.timeline_algorithm ||
-                                             invitation.course.default_timeline_algorithm,
+                                             invitation.course&.default_timeline_algorithm,
                          creator: self,
                          updater: self)
     when Instance::UserInvitation::INVITATION_KEY_IDENTIFIER
