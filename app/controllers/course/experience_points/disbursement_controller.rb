@@ -4,15 +4,18 @@ class Course::ExperiencePoints::DisbursementController < Course::ComponentContro
   before_action :load_resource
   before_action :authorize_resource
 
-  def new # :nodoc:
+  def new
+    respond_to do |format|
+      format.html { render 'new' }
+      format.json { render 'index' }
+    end
   end
 
   def create # :nodoc:
     if @disbursement.save
-      redirect_to disburse_experience_points_course_users_path(current_course),
-                  success: t('.success', count: recipient_count)
+      render json: { count: recipient_count }, status: :ok
     else
-      render 'new'
+      render json: { errors: @disbursement.errors }, status: :bad_request
     end
   end
 

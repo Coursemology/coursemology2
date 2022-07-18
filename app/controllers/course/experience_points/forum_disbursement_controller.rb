@@ -3,10 +3,9 @@ class Course::ExperiencePoints::ForumDisbursementController <
   Course::ExperiencePoints::DisbursementController
   def create # :nodoc:
     if @disbursement.save
-      redirect_to forum_disbursement_course_users_path(current_course, @disbursement.params_hash),
-                  success: t('.success', count: recipient_count)
+      render json: { count: recipient_count }, status: :ok
     else
-      render 'new'
+      render json: { errors: @disbursement.errors }, status: :bad_request
     end
   end
 
