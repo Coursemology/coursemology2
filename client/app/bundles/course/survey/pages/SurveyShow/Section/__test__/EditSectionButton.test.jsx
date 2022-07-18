@@ -33,6 +33,7 @@ describe('<EditSectionButton />', () => {
     const sectionForm = sectionFormDialogue.find('form');
     const descriptionInput = sectionForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: newDescription } });
+    await sleep(0.01);
 
     await act(async () => {
       sectionForm.simulate('submit');

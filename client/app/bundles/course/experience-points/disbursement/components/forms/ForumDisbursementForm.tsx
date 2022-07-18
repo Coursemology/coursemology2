@@ -34,13 +34,13 @@ import { toast } from 'react-toastify';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CloseIcon from '@mui/icons-material/Close';
 import equal from 'fast-deep-equal';
+import { getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 import { createForumDisbursement, fetchForumPost } from '../../operations';
 import PointTextField from '../fields/PointTextField';
 import ForumDisbursementTable from '../tables/ForumDisbursementTable';
 import ForumPostTable from '../tables/ForumPostTable';
 import './DialogScroll.scss';
-import { getCourseUserURL } from 'lib/helpers/url-builders';
-import { getCourseId } from 'lib/helpers/url-helpers';
 
 interface Props extends WrappedComponentProps {
   forumUsers: ForumDisbursementUserEntity[];
@@ -285,8 +285,12 @@ const ForumDisbursementForm: FC<Props> = (props) => {
             padding: '10px 10px 10px 24px',
           }}
         >
-          <div>{'Posts by '}<a href={getCourseUserURL(getCourseId(), dialogUserId)}>{dialogName}</a></div>
-          
+          <div>
+            {'Posts by '}
+            <a href={getCourseUserURL(getCourseId(), dialogUserId)}>
+              {dialogName}
+            </a>
+          </div>
           <IconButton onClick={(): void => setDialogName('')}>
             <CloseIcon />
           </IconButton>

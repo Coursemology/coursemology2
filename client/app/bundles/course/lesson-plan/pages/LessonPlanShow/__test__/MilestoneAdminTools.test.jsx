@@ -103,6 +103,7 @@ describe('<MilestoneAdminTools />', () => {
     const description = 'Add nice description';
     const descriptionInput = milestoneForm.find('textarea[name="description"]');
     descriptionInput.simulate('change', { target: { value: description } });
+    await sleep(0.01);
 
     await act(async () => {
       milestoneForm.simulate('submit');
