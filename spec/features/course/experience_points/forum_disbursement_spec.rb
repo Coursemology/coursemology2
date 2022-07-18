@@ -12,7 +12,7 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
 
     before { login_as(user, scope: :user) }
 
-    context 'As a Course Teaching Assistant' do
+    context 'As a Course Teaching Assistant', js: true do
       let(:user) { course_teaching_assistant.user }
 
       scenario 'I can compute and award forum participation points' do
@@ -28,36 +28,42 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
                                           created_at: 3.weeks.ago, updated_at: 3.weeks.ago)
         end
         create(:course_discussion_post_vote, post: older_posts[0])
-        visit forum_disbursement_course_users_path(course)
+        visit disburse_experience_points_course_users_path(course)
 
         within find(content_tag_selector(students[0])) do
-          expect(find('.points_awarded').value).to eq('100')
+          expect(find('input').value).to eq('100')
         end
 
+        start_date = 4.weeks.ago
+        end_date = 2.weeks.ago
+        fill_in_mui_datetimepicker(find('div.start_time'), start_date)
+        fill_in_mui_datetimepicker(find('div.end_time'), end_date)
+
+        find('div.weekly_cap').find('input').set(200)
+
         within find('.forum-participation-search-panel') do
-          fill_in 'experience_points_forum_disbursement[start_time]', with: 4.weeks.ago
-          fill_in 'experience_points_forum_disbursement[end_time]', with: 2.weeks.ago
-          fill_in 'experience_points_forum_disbursement[weekly_cap]', with: 200
-          click_button I18n.t('course.experience_points.forum_disbursement.new.search')
+          find('button.filter-btn-submit').click
+          sleep 0.2
         end
 
         # The first student gets 400 (2 * weekly_cap) for the 2-week span since his
         # participation score is higher than the rest due to the additional upvote.
         within find(content_tag_selector(students[0])) do
-          expect(find('.points_awarded').value).to eq('400')
+          expect(find('input').value).to eq('429')
         end
         # The other two students get the same experience points because they have the
         # same participation score.
         within find(content_tag_selector(students[1])) do
-          expect(find('.points_awarded').value).to eq('200')
+          expect(find('input').value).to eq('215')
         end
         within find(content_tag_selector(students[2])) do
-          expect(find('.points_awarded').value).to eq('200')
-          expect(all('td a').last[:href]).to include(search_course_forums_path(course))
+          expect(find('input').value).to eq('215')
         end
 
-        expect { click_button I18n.t('course.experience_points.forum_disbursement.new.submit') }.
-          to change { Course::ExperiencePointsRecord.count }.by(3)
+        expect do
+          find('button.forum-btn-submit').click
+          sleep 0.2
+        end.to change(Course::ExperiencePointsRecord, :count).by(3)
       end
     end
   end

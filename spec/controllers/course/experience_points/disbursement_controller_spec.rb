@@ -25,7 +25,7 @@ RSpec.describe Course::ExperiencePoints::DisbursementController, type: :controll
           subject
         end
 
-        it { is_expected.to render_template('new') }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
   end
