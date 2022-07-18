@@ -2,7 +2,7 @@ import { CSSProperties } from '@mui/styles';
 
 export interface TableColumns {
   name: string;
-  label: string;
+  label: string | JSX.Element;
   options: {
     display?: boolean;
     filter?: boolean;
@@ -15,12 +15,17 @@ export interface TableColumns {
     justifyLeft?: boolean;
     justifyRight?: boolean;
     empty?: boolean;
-    setCellProps?: () => CSSProperties;
+    setCellProps?: (
+      cellValue: string,
+      rowIndex: number,
+      columnIndex: number,
+    ) => CSSProperties;
     setCellHeaderProps?: () => CSSProperties;
     customBodyRenderLite?: (dataIndex: number) => string | JSX.Element | number;
     customBodyRender?: (value, tableMeta, updateValue) => JSX.Element;
     customHeadLabelRender?: () => JSX.Element | null;
     customHeadRender?: () => JSX.Element | null;
+    filterList?: string[];
   };
 }
 
@@ -52,6 +57,13 @@ export interface TableOptions {
   tableBodyHeight?: string;
   textLabels?: Object;
   viewColumns?: boolean;
+  expandableRows?: boolean;
+  expandableRowsHeader?: boolean;
+  expandableRowsOnClick?: boolean;
+  renderExpandableRow?: (
+    rowData,
+    rowMeta: { rowIndex: number; dataIndex: number },
+  ) => void;
 }
 
 export interface TableRowMeta {

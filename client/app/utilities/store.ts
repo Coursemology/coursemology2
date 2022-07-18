@@ -28,6 +28,17 @@ export function removeFromStore<M extends WithId, E extends M = M>(
 }
 
 /**
+ * Removes the the given list of non-detailed entities from the given entity store
+ * This method is meant to be used within the reducers.
+ */
+export function removeAllFromStore<M extends WithId, E extends M = M>(
+  store: EntityStore<M, E>,
+): void {
+  store.ids.clear();
+  store.byId = {};
+}
+
+/**
  * Saves the given (detailed) entity to the given entity store. If the given entity
  * already exists in the store, it will be merged with the existing entity.
  * This method is meant to be used within the reducers.

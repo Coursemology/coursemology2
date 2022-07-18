@@ -30,8 +30,8 @@ export const getProgrammingFileURL = (
 export const getForumURL = (courseId, forumID) =>
   `/courses/${courseId}/forums/${forumID}`;
 
-export const getForumTopicURL = (courseId, forumID, topicId) =>
-  `/courses/${courseId}/forums/${forumID}/topics/${topicId}`;
+export const getForumTopicURL = (courseId, forumSlug, topicSlug) =>
+  `/courses/${courseId}/forums/${forumSlug}/topics/${topicSlug}`;
 
 export const getSkillsURL = (courseId) =>
   `/courses/${courseId}/assessments/skills`;

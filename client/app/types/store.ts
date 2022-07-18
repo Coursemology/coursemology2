@@ -9,6 +9,7 @@ import { InvitationsState } from 'bundles/course/user-invitations/types';
 import { EnrolRequestsState } from 'bundles/course/enrol-requests/types';
 import { AnnouncementsState } from 'bundles/course/announcements/types';
 import { SubmissionsState } from 'bundles/course/assessment/submissions/types';
+import { DisbursementState } from 'bundles/course/experience-points/disbursement/types';
 
 /**
  * Describes the overall shape of the application's Redux store state.
@@ -23,6 +24,7 @@ export interface AppState {
   submissions: SubmissionsState;
   invitations: InvitationsState;
   enrolRequests: EnrolRequestsState;
+  disbursement: DisbursementState;
 }
 
 export type Operation<R> = ThunkAction<
