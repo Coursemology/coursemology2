@@ -1,4 +1,4 @@
-import LoadingButton from '@mui/lab/LoadingButton';
+import { LoadingButton } from '@mui/lab';
 import { useDispatch } from 'react-redux';
 import { FC, useState } from 'react';
 import { injectIntl, defineMessages, WrappedComponentProps } from 'react-intl';

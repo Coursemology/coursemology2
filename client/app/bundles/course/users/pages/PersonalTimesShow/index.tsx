@@ -6,7 +6,7 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { useParams } from 'react-router-dom';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { LoadingButton } from '@mui/lab';
 import {
   Grid,
   MenuItem,
