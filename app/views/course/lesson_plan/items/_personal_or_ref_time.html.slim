@@ -4,7 +4,7 @@
   span title=t('course.lesson_plan.items.fixed_desc')
     = fa_icon 'lock'
 =< format_datetime(effective_time[attribute], datetime_format) if effective_time[attribute]
-- if (effective_time[attribute] != reference_time[attribute]) && (effective_time[attribute] != nil)
+- if (effective_time[attribute] != reference_time[attribute]) && (effective_time[attribute] != nil) && (reference_time[attribute] != nil)
   br
   strike
     = t('course.lesson_plan.items.ref')
