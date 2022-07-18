@@ -39,6 +39,7 @@ describe('<AssessmentEdit />', () => {
 
     // Enable autograded field
     autogradedInput.simulate('change', { target: { value: true } });
+    await sleep(0.01);
     expect(editPage.find('FormSelectField')).toHaveLength(1); // Only Tab, no more Layout Field
     expect(editPage.find('input[name="password_protected"]')).toHaveLength(0);
     expect(editPage.find('input[name="skippable"]')).toHaveLength(1);
@@ -47,6 +48,7 @@ describe('<AssessmentEdit />', () => {
     const newTitle = 'New Title';
     const titleInput = editPage.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: newTitle } });
+    await sleep(0.01);
 
     const spy = jest.spyOn(CourseAPI.assessment.assessments, 'update');
     const form = editPage.find('form');

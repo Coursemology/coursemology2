@@ -24,6 +24,7 @@ describe('<NewSectionButton />', () => {
     const sectionForm = sectionFormDialogue.find('form');
     const titleInput = sectionForm.find('input[name="title"]');
     titleInput.simulate('change', { target: { value: section.title } });
+    await sleep(0.01);
 
     // Submit section form
     await act(async () => {

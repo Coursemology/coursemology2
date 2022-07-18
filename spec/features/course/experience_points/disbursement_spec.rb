@@ -39,6 +39,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
         find('button#general-disbursement-tab').click
 
         first('tbody').first('tr').find('div.points_awarded').find('input').set '100'
+        sleep 0.5 # Added due to debounced field
 
         find('.experience-points-disbursement-copy-button').click
 
@@ -63,6 +64,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
         find("tr.course_user_#{student_to_award_points.id}").find('div.points_awarded').find('input').set '100'
         find("tr.course_user_#{student_to_set_one.id}").find('div.points_awarded').find('input').set '1'
         find("tr.course_user_#{student_to_set_zero.id}").find('div.points_awarded').find('input').set '0'
+        sleep 0.5 # Added due to debounced field
 
         expect do
           find('button.general-btn-submit').click
