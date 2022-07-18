@@ -123,7 +123,7 @@ const ForumPostTable: FC<Props> = (props: Props) => {
         setCellProps: () => ({
           style: {
             overflowWrap: 'anywhere',
-            padding: '5px 10px',
+            padding: '5px 20px',
             textAlign: 'center',
             minWidth: 'max-content',
           },

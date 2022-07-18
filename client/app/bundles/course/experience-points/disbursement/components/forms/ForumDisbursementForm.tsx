@@ -39,6 +39,8 @@ import PointTextField from '../fields/PointTextField';
 import ForumDisbursementTable from '../tables/ForumDisbursementTable';
 import ForumPostTable from '../tables/ForumPostTable';
 import './DialogScroll.scss';
+import { getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
 interface Props extends WrappedComponentProps {
   forumUsers: ForumDisbursementUserEntity[];
@@ -190,6 +192,7 @@ const ForumDisbursementForm: FC<Props> = (props) => {
         .then((response) => {
           const data = response.data;
           setDialogName(data.name);
+          setDialogUserId(user.id);
           const newPosts: ForumPostEntity[] = data.userPosts.map(
             (postData: ForumPostData) => ({
               ...postData,
@@ -279,15 +282,16 @@ const ForumDisbursementForm: FC<Props> = (props) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '10px 24px',
+            padding: '10px 10px 10px 24px',
           }}
         >
-          <div>{`Posts by ${dialogName}`}</div>
+          <div>{'Posts by '}<a href={getCourseUserURL(getCourseId(), dialogUserId)}>{dialogName}</a></div>
+          
           <IconButton onClick={(): void => setDialogName('')}>
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <DialogContent style={{ height: '70vh' }}>
+        <DialogContent style={{ height: '70vh', padding: '0px' }}>
           <ForumPostTable posts={dialogPosts} />
         </DialogContent>
       </Dialog>
