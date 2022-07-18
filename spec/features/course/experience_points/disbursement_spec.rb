@@ -11,7 +11,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
     before { login_as(user, scope: :user) }
 
-    context 'As a Course Teaching Assistant' do
+    context 'As a Course Teaching Assistant', js: true do
       let(:user) { course_teaching_assistant.user }
 
       scenario 'I can filter students by group' do
@@ -21,26 +21,29 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
         create(:course_group_user, group: group2, course_user: group2_student)
 
         visit disburse_experience_points_course_users_path(course)
+        find('button#general-disbursement-tab').click
         course_students.each do |student|
-          expect(page).to have_content_tag_for(student)
+          expect(page).to have_selector("tr.course_user_#{student.id}")
         end
 
-        click_link group1.name
-        expect(page).to have_content_tag_for(group1_student)
-        expect(page).to have_no_content_tag_for(group2_student)
-        expect(page).to have_no_content_tag_for(ungrouped_student)
+        find('div.filter-group').click
+        find('li', text: group1.name).click
+        expect(page).to have_selector("tr.course_user_#{group1_student.id}")
+        expect(page).to have_no_selector("tr.course_user_#{group2_student.id}")
+        expect(page).to have_no_selector("tr.course_user_#{ungrouped_student.id}")
       end
 
       scenario 'I can copy points awarded for first student to all students', js: true do
         course_students
         visit disburse_experience_points_course_users_path(course)
+        find('button#general-disbursement-tab').click
 
-        first('.course_user').find('input.points_awarded').set '100'
+        first('tbody').first('tr').find('div.points_awarded').find('input').set '100'
 
-        click_button 'experience-points-disbursement-copy-button'
+        find('.experience-points-disbursement-copy-button').click
 
         course_students.each do |student|
-          points_awarded = find(content_tag_selector(student)).find('input.points_awarded').value
+          points_awarded = find("tr.course_user_#{student.id}").find('div.points_awarded').find('input').value
           expect(points_awarded).to eq('100')
         end
       end
@@ -49,22 +52,22 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
         course_students
 
         visit disburse_experience_points_course_users_path(course)
+        find('button#general-disbursement-tab').click
 
-        fill_in 'experience_points_disbursement_reason', with: 'a reason'
+        find('div.experience_points_disbursement_reason').find('input').set('a reason')
 
         student_to_award_points, student_to_set_zero, student_to_set_one,
         student_to_leave_blank = course_students
 
-        expect(page).to have_content_tag_for(student_to_leave_blank)
-        find(content_tag_selector(student_to_award_points)).find('input.points_awarded').set '100'
-        find(content_tag_selector(student_to_set_one)).find('input.points_awarded').set '1'
-        find(content_tag_selector(student_to_set_zero)).find('input.points_awarded').set '0'
+        expect(page).to have_selector("tr.course_user_#{student_to_leave_blank.id}")
+        find("tr.course_user_#{student_to_award_points.id}").find('div.points_awarded').find('input').set '100'
+        find("tr.course_user_#{student_to_set_one.id}").find('div.points_awarded').find('input').set '1'
+        find("tr.course_user_#{student_to_set_zero.id}").find('div.points_awarded').find('input').set '0'
 
         expect do
-          click_button I18n.t('course.experience_points.disbursement.new.submit')
+          find('button.general-btn-submit').click
+          sleep 0.2
         end.to change(Course::ExperiencePointsRecord, :count).by(2)
-
-        expect(current_path).to eq(disburse_experience_points_course_users_path(course))
       end
     end
   end

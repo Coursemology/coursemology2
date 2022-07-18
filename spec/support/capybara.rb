@@ -81,6 +81,49 @@ module Capybara::TestGroupHelpers
     def expect_toastify(message)
       expect(page.find('div.Toastify__toast-body').text).to eq(message)
     end
+
+    # Helper to fill in year of MUI datetimepicker
+    def select_year(current_datetime, datetime)
+      return unless current_datetime.year - datetime.year != 0
+
+      click_button 'calendar view is open, switch to year view'
+      click_button datetime.strftime('%Y')
+    end
+
+    # Helper to fill in month of MUI datetimepicker
+    def select_month(current_datetime, datetime)
+      month_difference = current_datetime.month - datetime.month
+      if month_difference > 0
+        while month_difference != 0
+          click_button 'Previous month'
+          month_difference -= 1
+          sleep 0.2
+        end
+      elsif month_difference < 0
+        while month_difference != 0
+          click_button 'Next month'
+          month_difference += 1
+          sleep 0.2
+        end
+      end
+    end
+
+    # Special helper to fill in MUI datetimepicker
+    def fill_in_mui_datetimepicker(selector, datetime)
+      current_datetime = selector.find('input').value.to_datetime
+      Capybara.enable_aria_label = true
+      selector.click
+
+      # select year
+      select_year(current_datetime, datetime)
+
+      # select month
+      select_month(current_datetime, datetime)
+
+      # select date
+      click_button datetime.strftime('%b %-d, %Y')
+      click_button 'OK'
+    end
   end
 end
 
