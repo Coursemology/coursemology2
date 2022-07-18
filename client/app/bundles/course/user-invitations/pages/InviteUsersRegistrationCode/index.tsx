@@ -13,7 +13,7 @@ import {
   Typography,
 } from '@mui/material';
 
-import LoadingButton from '@mui/lab/LoadingButton';
+import { LoadingButton } from '@mui/lab';
 import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
 import {
