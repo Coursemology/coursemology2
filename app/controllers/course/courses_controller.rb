@@ -24,9 +24,6 @@ class Course::CoursesController < Course::Controller
     end
   end
 
-  def new
-  end
-
   def create
     if @course.save
       render json: { id: @course.id, title: @course.title }, status: :ok

@@ -123,7 +123,7 @@ Rails.application.routes.draw do
   end
 
   scope module: 'course' do
-    resources :courses, except: [:edit, :update] do
+    resources :courses, except: [:new, :edit, :update] do
       namespace :admin do
         get '/' => 'admin#index'
         patch '/' => 'admin#update'
