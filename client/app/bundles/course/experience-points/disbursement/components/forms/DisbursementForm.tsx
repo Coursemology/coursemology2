@@ -280,11 +280,11 @@ const DisbursementForm: FC<Props> = (props) => {
             name="reason"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
-                className="experience_points_disbursement_reason"
                 field={field}
                 fieldState={fieldState}
                 label={<FormattedMessage {...translations.reason} />}
                 // @ts-ignore: component is still written in JS
+                className="experience_points_disbursement_reason"
                 fullWidth
                 InputLabelProps={{
                   shrink: true,

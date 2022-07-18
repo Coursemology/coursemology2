@@ -3,7 +3,11 @@ import PropTypes from 'prop-types';
 import { injectIntl, defineMessages } from 'react-intl';
 import moment from 'lib/moment';
 import { TextField } from '@mui/material';
-import { DatePicker, LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
+import {
+  DatePicker,
+  LocalizationProvider,
+  TimePicker,
+} from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
 const translations = defineMessages({

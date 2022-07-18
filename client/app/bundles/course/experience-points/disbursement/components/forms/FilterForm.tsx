@@ -147,10 +147,10 @@ const FilterForm: FC<Props> = (props) => {
             control={control}
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
-                className="weekly_cap"
                 field={field}
                 fieldState={fieldState}
                 // @ts-ignore: component is still written in JS
+                className="weekly_cap"
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
