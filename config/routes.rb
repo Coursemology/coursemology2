@@ -173,7 +173,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :announcements, except: [:new, :edit]
+      resources :announcements, except: [:show, :new, :edit]
 
       scope module: :achievement do
         resources :achievements, except: [:new] do

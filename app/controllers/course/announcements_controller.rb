@@ -14,12 +14,6 @@ class Course::AnnouncementsController < Course::ComponentController
     end
   end
 
-  def show # :nodoc:
-  end
-
-  def new # :nodoc:
-  end
-
   def create # :nodoc:
     if @announcement.save
       # Return all announcements for re-rendering ordering purposes
@@ -27,9 +21,6 @@ class Course::AnnouncementsController < Course::ComponentController
     else
       render json: { errors: @announcement.errors }, status: :bad_request
     end
-  end
-
-  def edit # :nodoc:
   end
 
   def update # :nodoc:
