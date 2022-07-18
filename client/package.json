@@ -89,7 +89,7 @@
     "@mui/material": "^5.8.6",
     "@mui/styles": "^5.8.7",
     "@mui/x-date-pickers": "^5.0.0-beta.1",
-    "ace-builds": "^1.6.1",
+    "ace-builds": "^1.7.1",
     "axios": "^0.27.2",
     "babel-loader": "^8.2.5",
     "babel-plugin-formatjs": "^10.3.25",
