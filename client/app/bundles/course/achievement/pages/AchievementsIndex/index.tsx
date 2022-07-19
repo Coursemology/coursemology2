@@ -2,10 +2,12 @@ import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Button } from '@mui/material';
+
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
 import PageHeader from 'lib/components/pages/PageHeader';
+import AddButton from 'lib/components/buttons/AddButton';
+
 import {
   fetchAchievements,
   updatePublishedAchievement,
@@ -14,18 +16,12 @@ import {
   getAchievementPermissions,
   getAllAchievementMiniEntities,
 } from '../../selectors';
+
 import AchievementTable from '../../components/tables/AchievementTable';
-import AchievementNew from '../AchievementNew';
 import AchievementReordering from '../../components/misc/AchievementReordering';
+import AchievementNew from '../AchievementNew';
 
 type Props = WrappedComponentProps;
-
-const styles = {
-  newButton: {
-    background: 'white',
-    fontSize: 14,
-  },
-};
 
 const translations = defineMessages({
   newAchievement: {
@@ -80,16 +76,12 @@ const AchievementsIndex: FC<Props> = (props) => {
 
   if (achievementPermissions?.canCreate) {
     headerToolbars.push(
-      <Button
+      <AddButton
         className="new-achievement-button"
         key="new-achievement-button"
-        variant="outlined"
-        color="primary"
         onClick={(): void => setIsOpen(true)}
-        style={styles.newButton}
-      >
-        {intl.formatMessage(translations.newAchievement)}
-      </Button>,
+        tooltip={intl.formatMessage(translations.newAchievement)}
+      />,
     );
   }
 
