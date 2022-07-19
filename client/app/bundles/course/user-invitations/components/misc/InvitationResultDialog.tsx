@@ -108,6 +108,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
   return (
     <Dialog
       onClose={handleDialogClose}
+      disableEscapeKeyDown
       open={open}
       fullWidth
       maxWidth="lg"
