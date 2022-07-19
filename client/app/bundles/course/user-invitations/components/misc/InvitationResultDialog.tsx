@@ -1,35 +1,18 @@
-import { FC, forwardRef } from 'react';
+import { FC } from 'react';
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   Tooltip,
   Typography,
 } from '@mui/material';
-import {
-  defineMessages,
-  injectIntl,
-  IntlShape,
-  WrappedComponentProps,
-} from 'react-intl';
-import {
-  InvitationListData,
-  InvitationResult,
-} from 'types/course/userInvitations';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { InvitationResult } from 'types/course/userInvitations';
 import HelpIcon from '@mui/icons-material/Help';
-import sharedConstants from 'lib/constants/sharedConstants';
-import { CourseUserData } from 'types/course/courseUsers';
-import tableTranslations from 'lib/components/tables/translations';
-import { TableVirtuoso } from 'react-virtuoso';
+import InvitationResultUsersTable from '../tables/InvitationResultUsersTable';
+import InvitationResultInvitationsTable from '../tables/InvitationResultInvitationsTable';
 
 interface Props extends WrappedComponentProps {
   open: boolean;
@@ -41,6 +24,13 @@ const styles = {
   icon: {
     fontSize: '16px',
     marginRight: '4px',
+  },
+  dialogStyle: {
+    position: 'absolute',
+    top: 50,
+    '& .MuiDialog-paper': {
+      overflowY: 'hidden',
+    },
   },
 };
 
@@ -95,107 +85,6 @@ const translations = defineMessages({
   },
 });
 
-const renderUsersTable = (
-  intl: IntlShape,
-  users: CourseUserData[],
-): JSX.Element => {
-  const tableHeight = users.length > 20 ? 600 : users.length * 40 + 40;
-  return (
-    <TableVirtuoso
-      style={{ height: tableHeight }}
-      data={users}
-      components={{
-        // eslint-disable-next-line react/display-name
-        Scroller: forwardRef((props, ref) => (
-          <TableContainer component={Paper} {...props} ref={ref} />
-        )),
-        Table: (props) => (
-          <Table
-            {...props}
-            style={{ borderCollapse: 'separate' }}
-            size="small"
-          />
-        ),
-        TableHead,
-        TableRow, // eslint-disable-next-line react/display-name
-        TableBody: forwardRef((props, ref) => (
-          <TableBody {...props} ref={ref} />
-        )),
-      }}
-      fixedHeaderContent={(): JSX.Element => (
-        <TableRow style={{ background: 'white' }}>
-          <TableCell>{intl.formatMessage(tableTranslations.name)}</TableCell>
-          <TableCell>{intl.formatMessage(tableTranslations.email)}</TableCell>
-          <TableCell>{intl.formatMessage(tableTranslations.phantom)}</TableCell>
-          <TableCell>{intl.formatMessage(tableTranslations.role)}</TableCell>
-        </TableRow>
-      )}
-      itemContent={(_index, user): JSX.Element => (
-        <>
-          <TableCell>{user.name}</TableCell>
-          <TableCell>{user.email}</TableCell>
-          <TableCell>{user.phantom ? 'Yes' : 'No'}</TableCell>
-          <TableCell>{sharedConstants.COURSE_USER_ROLES[user.role]}</TableCell>
-        </>
-      )}
-    />
-  );
-};
-
-const renderInvitationsTable = (
-  intl: IntlShape,
-  invitations: InvitationListData[],
-): JSX.Element => {
-  const tableHeight =
-    invitations.length > 20 ? 600 : invitations.length * 40 + 40;
-  return (
-    <TableVirtuoso
-      style={{ height: tableHeight }}
-      data={invitations}
-      components={{
-        // eslint-disable-next-line react/display-name
-        Scroller: forwardRef((props, ref) => (
-          <TableContainer component={Paper} {...props} ref={ref} />
-        )),
-        Table: (props) => (
-          <Table
-            {...props}
-            style={{ borderCollapse: 'separate' }}
-            size="small"
-          />
-        ),
-        TableHead,
-        TableRow, // eslint-disable-next-line react/display-name
-        TableBody: forwardRef((props, ref) => (
-          <TableBody {...props} ref={ref} />
-        )),
-      }}
-      fixedHeaderContent={(): JSX.Element => (
-        <TableRow style={{ background: 'white' }}>
-          <TableCell>{intl.formatMessage(tableTranslations.name)}</TableCell>
-          <TableCell>{intl.formatMessage(tableTranslations.email)}</TableCell>
-          <TableCell>{intl.formatMessage(tableTranslations.phantom)}</TableCell>
-          <TableCell>{intl.formatMessage(tableTranslations.role)}</TableCell>
-          <TableCell>
-            {intl.formatMessage(tableTranslations.invitationSentAt)}
-          </TableCell>
-        </TableRow>
-      )}
-      itemContent={(_index, invitation): JSX.Element => (
-        <>
-          <TableCell>{invitation.name}</TableCell>
-          <TableCell>{invitation.email}</TableCell>
-          <TableCell>{invitation.phantom ? 'Yes' : 'No'}</TableCell>
-          <TableCell>
-            {sharedConstants.COURSE_USER_ROLES[invitation.role]}
-          </TableCell>
-          <TableCell>{invitation.sentAt ?? '-'}</TableCell>
-        </>
-      )}
-    />
-  );
-};
-
 const InvitationResultDialog: FC<Props> = (props) => {
   const { open, handleClose, invitationResult, intl } = props;
   const {
@@ -210,99 +99,122 @@ const InvitationResultDialog: FC<Props> = (props) => {
     return null;
   }
 
+  const handleDialogClose = (_event: object, reason: string): void => {
+    if (reason && reason !== 'backdropClick') {
+      handleClose();
+    }
+  };
+
   return (
     <Dialog
-      onClose={handleClose}
+      onClose={handleDialogClose}
       open={open}
       fullWidth
       maxWidth="lg"
-      style={{
-        position: 'absolute',
-        top: 50,
-      }}
+      sx={styles.dialogStyle}
     >
       <DialogTitle>{`${intl.formatMessage(translations.header)}`}</DialogTitle>
       <DialogContent>
-        <>
-          <Typography variant="body2" gutterBottom>
-            {intl.formatMessage(translations.body, {
-              count: newInvitations?.length ?? 0,
-            })}
-          </Typography>
-          {duplicateUsers && duplicateUsers.length > 0 && (
-            <div className="duplicates">
-              <Typography variant="h6">
-                <Tooltip title={intl.formatMessage(translations.duplicateInfo)}>
-                  <HelpIcon style={styles.icon} />
-                </Tooltip>
-                {intl.formatMessage(translations.duplicateUsers, {
-                  count: duplicateUsers.length,
-                })}
-              </Typography>
-              {renderUsersTable(intl, duplicateUsers)}
-            </div>
-          )}
-          {existingInvitations && existingInvitations.length > 0 && (
-            <div className="existingInvitations">
-              <Typography variant="h6">
-                <Tooltip
-                  title={intl.formatMessage(
-                    translations.existingInvitationsInfo,
-                  )}
-                >
-                  <HelpIcon style={styles.icon} />
-                </Tooltip>
-                {intl.formatMessage(translations.existingInvitations, {
-                  count: existingInvitations.length,
-                })}
-              </Typography>
-              {renderInvitationsTable(intl, existingInvitations)}
-            </div>
-          )}
-          {existingCourseUsers && existingCourseUsers.length > 0 && (
-            <div className="existingCourseUsers">
-              <Typography variant="h6">
-                <Tooltip
-                  title={intl.formatMessage(
-                    translations.existingCourseUsersInfo,
-                  )}
-                >
-                  <HelpIcon style={styles.icon} />
-                </Tooltip>
-                {intl.formatMessage(translations.existingCourseUsers, {
-                  count: existingCourseUsers.length,
-                })}
-              </Typography>
-              {renderUsersTable(intl, existingCourseUsers)}
-            </div>
-          )}
-          {newInvitations && newInvitations.length > 0 && (
-            <div className="newInvitations">
-              <Typography variant="h6">
-                {intl.formatMessage(translations.newInvitations, {
-                  count: newInvitations.length,
-                })}
-              </Typography>
-              {renderInvitationsTable(intl, newInvitations)}
-            </div>
-          )}
-          {newCourseUsers && newCourseUsers.length > 0 && (
-            <div className="newCourseUsers">
-              <Typography variant="h6">
-                {intl.formatMessage(translations.newCourseUsers, {
-                  count: newCourseUsers.length,
-                })}
-              </Typography>
-              {renderUsersTable(intl, newCourseUsers)}
-            </div>
-          )}
-          <DialogActions>
-            <Button onClick={handleClose} color="secondary">
-              {intl.formatMessage(translations.close)}
-            </Button>
-          </DialogActions>
-        </>
+        <Typography variant="body2" gutterBottom>
+          {intl.formatMessage(translations.body, {
+            count: newInvitations?.length ?? 0,
+          })}
+        </Typography>
+        {duplicateUsers && duplicateUsers.length > 0 && (
+          <div className="duplicates">
+            <InvitationResultUsersTable
+              users={duplicateUsers}
+              title={
+                <Typography variant="h6">
+                  <Tooltip
+                    title={intl.formatMessage(translations.duplicateInfo)}
+                  >
+                    <HelpIcon style={styles.icon} />
+                  </Tooltip>
+                  {intl.formatMessage(translations.duplicateUsers, {
+                    count: duplicateUsers.length,
+                  })}
+                </Typography>
+              }
+            />
+          </div>
+        )}
+        {existingInvitations && existingInvitations.length > 0 && (
+          <div className="existingInvitations">
+            <InvitationResultInvitationsTable
+              invitations={existingInvitations}
+              title={
+                <Typography variant="h6">
+                  <Tooltip
+                    title={intl.formatMessage(
+                      translations.existingInvitationsInfo,
+                    )}
+                  >
+                    <HelpIcon style={styles.icon} />
+                  </Tooltip>
+                  {intl.formatMessage(translations.existingInvitations, {
+                    count: existingInvitations.length,
+                  })}
+                </Typography>
+              }
+            />
+          </div>
+        )}
+        {existingCourseUsers && existingCourseUsers.length > 0 && (
+          <div className="existingCourseUsers">
+            <InvitationResultUsersTable
+              users={existingCourseUsers}
+              title={
+                <Typography variant="h6">
+                  <Tooltip
+                    title={intl.formatMessage(
+                      translations.existingCourseUsersInfo,
+                    )}
+                  >
+                    <HelpIcon style={styles.icon} />
+                  </Tooltip>
+                  {intl.formatMessage(translations.existingCourseUsers, {
+                    count: existingCourseUsers.length,
+                  })}
+                </Typography>
+              }
+            />
+          </div>
+        )}
+        {newInvitations && newInvitations.length > 0 && (
+          <div className="newInvitations">
+            <InvitationResultInvitationsTable
+              invitations={newInvitations}
+              title={
+                <Typography variant="h6">
+                  {intl.formatMessage(translations.newInvitations, {
+                    count: newInvitations.length,
+                  })}
+                </Typography>
+              }
+            />
+          </div>
+        )}
+        {newCourseUsers && newCourseUsers.length > 0 && (
+          <div className="newCourseUsers">
+            <InvitationResultUsersTable
+              users={newCourseUsers}
+              title={
+                <Typography variant="h6">
+                  {intl.formatMessage(translations.newCourseUsers, {
+                    count: newCourseUsers.length,
+                  })}
+                </Typography>
+              }
+            />
+          </div>
+        )}
       </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="secondary">
+          {intl.formatMessage(translations.close)}
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };
