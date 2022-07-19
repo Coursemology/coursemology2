@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Badge, Box, Tab, Tabs } from '@mui/material';
+import { Badge, BadgeProps, Box, styled, Tab, Tabs } from '@mui/material';
 import {
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
@@ -11,12 +11,6 @@ import { getCourseURL } from 'lib/helpers/url-builders';
 interface Props extends WrappedComponentProps {
   permissions: ManageCourseUsersPermissions;
   sharedData: ManageCourseUsersSharedData;
-}
-
-interface LinkTabProps {
-  key: string;
-  label: string | JSX.Element;
-  href: string | undefined;
 }
 
 const translations = defineMessages({
@@ -47,19 +41,24 @@ const translations = defineMessages({
 });
 
 const styles = {
-  tabStyle: {
-    '&:focus': {
-      outline: 0,
-    },
-  },
   tabsIndicatorStyle: {
     // to show tab indicator on firefox
     '& .MuiTabs-indicator': {
       bottom: 'auto',
     },
+    '.css-117fsft-MuiButtonBase-root-MuiTab-root': { minHeight: 48 },
     minHeight: '50px',
   },
 };
+
+const CustomBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+  '& .MuiBadge-badge': {
+    right: -8,
+    top: -1,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: '0 4px',
+  },
+}));
 
 interface TabData {
   label: { id: string; defaultMessage: string };
@@ -68,10 +67,6 @@ interface TabData {
 }
 
 const courseUrl = getCourseURL(getCourseId());
-
-const LinkTab = (props: LinkTabProps): JSX.Element => {
-  return <Tab component="a" {...props} sx={styles.tabStyle} />;
-};
 
 const allTabs = {
   studentsTab: {
@@ -143,21 +138,6 @@ const UserManagementTabs: FC<Props> = (props) => {
     return res === -1 ? 0 : res;
   };
 
-  const getTabLabel = (tab: TabData): string | JSX.Element => {
-    if (tab.count) {
-      return (
-        <Badge
-          badgeContent={tab.count}
-          color="error"
-          sx={{ '& .MuiBadge-badge': { right: '-2px' } }}
-        >
-          {intl.formatMessage(tab.label)}
-        </Badge>
-      );
-    }
-    return intl.formatMessage(tab.label);
-  };
-
   const managementTabs = (
     <>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -168,10 +148,17 @@ const UserManagementTabs: FC<Props> = (props) => {
           sx={styles.tabsIndicatorStyle}
         >
           {tabs.map((tab) => (
-            <LinkTab
+            <Tab
               key={tab.label.id}
-              label={getTabLabel(tab)}
+              label={intl.formatMessage(tab.label)}
+              icon={<CustomBadge badgeContent={tab.count} color="error" />}
+              iconPosition="end"
               href={tab.href}
+              component="a"
+              style={{
+                paddingRight:
+                  tab.count === 0 || tab.count === undefined ? 8 : 26,
+              }}
             />
           ))}
         </Tabs>

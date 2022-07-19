@@ -104,6 +104,9 @@ const SubmissionTabs: FC<Props> = (props) => {
           value={tabValue}
           onChange={handleTabChange}
           TabIndicatorProps={{ style: { transition: 'none' } }}
+          sx={{
+            '.css-117fsft-MuiButtonBase-root-MuiTab-root': { minHeight: 48 },
+          }}
         >
           {isTeachingStaff && (
             <Tab
