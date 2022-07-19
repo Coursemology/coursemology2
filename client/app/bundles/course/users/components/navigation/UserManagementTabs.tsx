@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Badge, BadgeProps, Box, styled, Tab, Tabs } from '@mui/material';
+import { Badge, BadgeProps, styled, Tab, Tabs } from '@mui/material';
 import {
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
@@ -142,32 +142,27 @@ const UserManagementTabs: FC<Props> = (props) => {
   };
 
   const managementTabs = (
-    <>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          value={getCurrentTabIndex()}
-          variant="scrollable"
-          scrollButtons="auto"
-          sx={styles.tabsStyle}
-        >
-          {tabs.map((tab) => (
-            <Tab
-              key={tab.label.id}
-              label={intl.formatMessage(tab.label)}
-              icon={<CustomBadge badgeContent={tab.count} color="error" />}
-              iconPosition="end"
-              href={tab.href}
-              component="a"
-              style={{
-                paddingRight:
-                  tab.count === 0 || tab.count === undefined ? 8 : 26,
-                textDecoration: 'none',
-              }}
-            />
-          ))}
-        </Tabs>
-      </Box>
-    </>
+    <Tabs
+      value={getCurrentTabIndex()}
+      variant="scrollable"
+      scrollButtons="auto"
+      sx={styles.tabsStyle}
+    >
+      {tabs.map((tab) => (
+        <Tab
+          key={tab.label.id}
+          label={intl.formatMessage(tab.label)}
+          icon={<CustomBadge badgeContent={tab.count} color="error" />}
+          iconPosition="end"
+          href={tab.href}
+          component="a"
+          style={{
+            paddingRight: tab.count === 0 || tab.count === undefined ? 8 : 26,
+            textDecoration: 'none',
+          }}
+        />
+      ))}
+    </Tabs>
   );
 
   return managementTabs;
