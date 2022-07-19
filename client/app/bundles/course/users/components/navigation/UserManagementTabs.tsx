@@ -41,13 +41,16 @@ const translations = defineMessages({
 });
 
 const styles = {
-  tabsIndicatorStyle: {
+  tabsStyle: {
     // to show tab indicator on firefox
     '& .MuiTabs-indicator': {
       bottom: 'auto',
     },
     '.css-117fsft-MuiButtonBase-root-MuiTab-root': { minHeight: 48 },
     minHeight: '50px',
+    '& .MuiTab-root:focus': {
+      outline: 0,
+    },
   },
 };
 
@@ -145,7 +148,7 @@ const UserManagementTabs: FC<Props> = (props) => {
           value={getCurrentTabIndex()}
           variant="scrollable"
           scrollButtons="auto"
-          sx={styles.tabsIndicatorStyle}
+          sx={styles.tabsStyle}
         >
           {tabs.map((tab) => (
             <Tab
@@ -158,6 +161,7 @@ const UserManagementTabs: FC<Props> = (props) => {
               style={{
                 paddingRight:
                   tab.count === 0 || tab.count === undefined ? 8 : 26,
+                textDecoration: 'none',
               }}
             />
           ))}
