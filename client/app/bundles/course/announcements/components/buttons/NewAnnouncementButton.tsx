@@ -1,7 +1,7 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
 import { IconButton } from '@mui/material';
-import { Feed } from '@mui/icons-material';
+import { PostAddTwoTone as PostAddIcon } from '@mui/icons-material';
 import CustomTooltip from 'lib/components/CustomTooltip';
 
 interface Props extends WrappedComponentProps {
@@ -28,7 +28,7 @@ const NewAnnouncementButton: FC<Props> = (props) => {
           setIsOpen(true);
         }}
       >
-        <Feed />
+        <PostAddIcon />
       </IconButton>
     </CustomTooltip>
   );
