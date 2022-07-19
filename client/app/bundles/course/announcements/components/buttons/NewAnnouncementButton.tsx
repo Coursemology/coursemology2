@@ -1,8 +1,6 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-import { IconButton } from '@mui/material';
-import { PostAddTwoTone as PostAddIcon } from '@mui/icons-material';
-import CustomTooltip from 'lib/components/CustomTooltip';
+import AddButton from 'lib/components/buttons/AddButton';
 
 interface Props extends WrappedComponentProps {
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,18 +17,13 @@ const NewAnnouncementButton: FC<Props> = (props) => {
   const { intl, setIsOpen } = props;
 
   return (
-    <CustomTooltip
-      title={intl.formatMessage(translations.newAnnouncementTooltip)}
-    >
-      <IconButton
-        id="new-announcement-button"
-        onClick={(): void => {
-          setIsOpen(true);
-        }}
-      >
-        <PostAddIcon />
-      </IconButton>
-    </CustomTooltip>
+    <AddButton
+      id="new-announcement-button"
+      onClick={(): void => {
+        setIsOpen(true);
+      }}
+      tooltip={intl.formatMessage(translations.newAnnouncementTooltip)}
+    />
   );
 };
 
