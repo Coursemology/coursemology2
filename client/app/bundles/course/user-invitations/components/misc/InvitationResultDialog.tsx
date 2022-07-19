@@ -1,18 +1,20 @@
+import { FC, forwardRef } from 'react';
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  Paper,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
   Tooltip,
   Typography,
 } from '@mui/material';
-import { FC } from 'react';
 import {
   defineMessages,
   injectIntl,
@@ -27,6 +29,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import sharedConstants from 'lib/constants/sharedConstants';
 import { CourseUserData } from 'types/course/courseUsers';
 import tableTranslations from 'lib/components/tables/translations';
+import { TableVirtuoso } from 'react-virtuoso';
 
 interface Props extends WrappedComponentProps {
   open: boolean;
@@ -45,6 +48,10 @@ const translations = defineMessages({
   header: {
     id: 'course.userInvitations.components.misc.InvitationResultDialog.header',
     defaultMessage: 'Invitation Summary',
+  },
+  close: {
+    id: 'course.userInvitations.components.misc.InvitationResultDialog.close',
+    defaultMessage: 'Close',
   },
   body: {
     id: 'course.userInvitations.components.misc.InvitationResultDialog.body',
@@ -92,29 +99,46 @@ const renderUsersTable = (
   intl: IntlShape,
   users: CourseUserData[],
 ): JSX.Element => {
+  const tableHeight = users.length > 20 ? 600 : users.length * 40 + 40;
   return (
-    <Table size="small">
-      <TableHead>
-        <TableRow>
+    <TableVirtuoso
+      style={{ height: tableHeight }}
+      data={users}
+      components={{
+        // eslint-disable-next-line react/display-name
+        Scroller: forwardRef((props, ref) => (
+          <TableContainer component={Paper} {...props} ref={ref} />
+        )),
+        Table: (props) => (
+          <Table
+            {...props}
+            style={{ borderCollapse: 'separate' }}
+            size="small"
+          />
+        ),
+        TableHead,
+        TableRow, // eslint-disable-next-line react/display-name
+        TableBody: forwardRef((props, ref) => (
+          <TableBody {...props} ref={ref} />
+        )),
+      }}
+      fixedHeaderContent={(): JSX.Element => (
+        <TableRow style={{ background: 'white' }}>
           <TableCell>{intl.formatMessage(tableTranslations.name)}</TableCell>
           <TableCell>{intl.formatMessage(tableTranslations.email)}</TableCell>
           <TableCell>{intl.formatMessage(tableTranslations.phantom)}</TableCell>
           <TableCell>{intl.formatMessage(tableTranslations.role)}</TableCell>
         </TableRow>
-      </TableHead>
-      <TableBody>
-        {users.map((user) => (
-          <TableRow key={user.id} hover>
-            <TableCell>{user.name}</TableCell>
-            <TableCell>{user.email}</TableCell>
-            <TableCell>{user.phantom ? 'Yes' : 'No'}</TableCell>
-            <TableCell>
-              {sharedConstants.COURSE_USER_ROLES[user.role]}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+      )}
+      itemContent={(_index, user): JSX.Element => (
+        <>
+          <TableCell>{user.name}</TableCell>
+          <TableCell>{user.email}</TableCell>
+          <TableCell>{user.phantom ? 'Yes' : 'No'}</TableCell>
+          <TableCell>{sharedConstants.COURSE_USER_ROLES[user.role]}</TableCell>
+        </>
+      )}
+    />
   );
 };
 
@@ -122,10 +146,32 @@ const renderInvitationsTable = (
   intl: IntlShape,
   invitations: InvitationListData[],
 ): JSX.Element => {
+  const tableHeight =
+    invitations.length > 20 ? 600 : invitations.length * 40 + 40;
   return (
-    <Table size="small">
-      <TableHead>
-        <TableRow>
+    <TableVirtuoso
+      style={{ height: tableHeight }}
+      data={invitations}
+      components={{
+        // eslint-disable-next-line react/display-name
+        Scroller: forwardRef((props, ref) => (
+          <TableContainer component={Paper} {...props} ref={ref} />
+        )),
+        Table: (props) => (
+          <Table
+            {...props}
+            style={{ borderCollapse: 'separate' }}
+            size="small"
+          />
+        ),
+        TableHead,
+        TableRow, // eslint-disable-next-line react/display-name
+        TableBody: forwardRef((props, ref) => (
+          <TableBody {...props} ref={ref} />
+        )),
+      }}
+      fixedHeaderContent={(): JSX.Element => (
+        <TableRow style={{ background: 'white' }}>
           <TableCell>{intl.formatMessage(tableTranslations.name)}</TableCell>
           <TableCell>{intl.formatMessage(tableTranslations.email)}</TableCell>
           <TableCell>{intl.formatMessage(tableTranslations.phantom)}</TableCell>
@@ -134,21 +180,19 @@ const renderInvitationsTable = (
             {intl.formatMessage(tableTranslations.invitationSentAt)}
           </TableCell>
         </TableRow>
-      </TableHead>
-      <TableBody>
-        {invitations.map((invitation) => (
-          <TableRow key={invitation.id} hover>
-            <TableCell>{invitation.name}</TableCell>
-            <TableCell>{invitation.email}</TableCell>
-            <TableCell>{invitation.phantom ? 'Yes' : 'No'}</TableCell>
-            <TableCell>
-              {sharedConstants.COURSE_USER_ROLES[invitation.role]}
-            </TableCell>
-            <TableCell>{invitation.sentAt ?? '-'}</TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+      )}
+      itemContent={(_index, invitation): JSX.Element => (
+        <>
+          <TableCell>{invitation.name}</TableCell>
+          <TableCell>{invitation.email}</TableCell>
+          <TableCell>{invitation.phantom ? 'Yes' : 'No'}</TableCell>
+          <TableCell>
+            {sharedConstants.COURSE_USER_ROLES[invitation.role]}
+          </TableCell>
+          <TableCell>{invitation.sentAt ?? '-'}</TableCell>
+        </>
+      )}
+    />
   );
 };
 
@@ -198,23 +242,6 @@ const InvitationResultDialog: FC<Props> = (props) => {
               {renderUsersTable(intl, duplicateUsers)}
             </div>
           )}
-          {existingCourseUsers && existingCourseUsers.length > 0 && (
-            <div className="existingCourseUsers">
-              <Typography variant="h6">
-                <Tooltip
-                  title={intl.formatMessage(
-                    translations.existingCourseUsersInfo,
-                  )}
-                >
-                  <HelpIcon style={styles.icon} />
-                </Tooltip>
-                {intl.formatMessage(translations.existingCourseUsers, {
-                  count: existingCourseUsers.length,
-                })}
-              </Typography>
-              {renderUsersTable(intl, existingCourseUsers)}
-            </div>
-          )}
           {existingInvitations && existingInvitations.length > 0 && (
             <div className="existingInvitations">
               <Typography variant="h6">
@@ -232,14 +259,21 @@ const InvitationResultDialog: FC<Props> = (props) => {
               {renderInvitationsTable(intl, existingInvitations)}
             </div>
           )}
-          {newCourseUsers && newCourseUsers.length > 0 && (
-            <div className="newCourseUsers">
+          {existingCourseUsers && existingCourseUsers.length > 0 && (
+            <div className="existingCourseUsers">
               <Typography variant="h6">
-                {intl.formatMessage(translations.newCourseUsers, {
-                  count: newCourseUsers.length,
+                <Tooltip
+                  title={intl.formatMessage(
+                    translations.existingCourseUsersInfo,
+                  )}
+                >
+                  <HelpIcon style={styles.icon} />
+                </Tooltip>
+                {intl.formatMessage(translations.existingCourseUsers, {
+                  count: existingCourseUsers.length,
                 })}
               </Typography>
-              {renderUsersTable(intl, newCourseUsers)}
+              {renderUsersTable(intl, existingCourseUsers)}
             </div>
           )}
           {newInvitations && newInvitations.length > 0 && (
@@ -252,9 +286,19 @@ const InvitationResultDialog: FC<Props> = (props) => {
               {renderInvitationsTable(intl, newInvitations)}
             </div>
           )}
+          {newCourseUsers && newCourseUsers.length > 0 && (
+            <div className="newCourseUsers">
+              <Typography variant="h6">
+                {intl.formatMessage(translations.newCourseUsers, {
+                  count: newCourseUsers.length,
+                })}
+              </Typography>
+              {renderUsersTable(intl, newCourseUsers)}
+            </div>
+          )}
           <DialogActions>
             <Button onClick={handleClose} color="secondary">
-              Close
+              {intl.formatMessage(translations.close)}
             </Button>
           </DialogActions>
         </>
