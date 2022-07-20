@@ -1,21 +1,37 @@
 # frozen_string_literal: true
 
 json.newInvitations new_invitations.each do |invitation|
-  json.partial! 'course_user_invitation_list_data', invitation: invitation
+  json.id invitation.id
+  json.name invitation.name
+  json.email invitation.email
+  json.role invitation.role
+  json.phantom invitation.phantom
+  json.sentAt format_datetime(invitation.sent_at, :short) if invitation.sent_at
 end
 
 json.existingInvitations existing_invitations.each do |invitation|
-  json.partial! 'course_user_invitation_list_data', invitation: invitation
+  json.id invitation.id
+  json.name invitation.name
+  json.email invitation.email
+  json.role invitation.role
+  json.phantom invitation.phantom
+  json.sentAt format_datetime(invitation.sent_at, :short) if invitation.sent_at
 end
 
 json.newCourseUsers new_course_users.each do |course_user|
-  json.partial! 'course/users/user_list_data', course_user: course_user,
-                                               should_show_phantom: true, should_show_timeline: true
+  json.id course_user.id if course_user.id
+  json.name course_user.name.strip
+  json.email course_user.user.email
+  json.role course_user.role
+  json.phantom course_user.phantom?
 end
 
 json.existingCourseUsers existing_course_users.each do |course_user|
-  json.partial! 'course/users/user_list_data', course_user: course_user,
-                                               should_show_phantom: true, should_show_timeline: true
+  json.id course_user.id if course_user.id
+  json.name course_user.name.strip
+  json.email course_user.user.email
+  json.role course_user.role
+  json.phantom course_user.phantom?
 end
 
 json.duplicateUsers duplicate_users.each do |duplicate_user, index|
@@ -24,5 +40,4 @@ json.duplicateUsers duplicate_users.each do |duplicate_user, index|
   json.email duplicate_user[:email]
   json.role duplicate_user[:role]
   json.phantom duplicate_user[:phantom]
-  json.timelineAlgorithm duplicate_user[:timeline_algorithm]
 end

@@ -61,18 +61,7 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.name),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const user = users[dataIndex];
-          return (
-            <Typography
-              key={`name-${user.id}`}
-              className="invitation_result_user_name"
-              variant="body2"
-            >
-              {user.name}
-            </Typography>
-          );
-        },
+        sort: false,
       },
     },
     {
@@ -80,24 +69,14 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.email),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const user = users[dataIndex];
-          return (
-            <Typography
-              key={`email-${user.id}`}
-              className="invitation_result_user_email"
-              variant="body2"
-            >
-              {user.email}
-            </Typography>
-          );
-        },
+        sort: false,
       },
     },
     {
       name: 'phantom',
       label: intl.formatMessage(tableTranslations.phantom),
       options: {
+        sort: false,
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const user = users[dataIndex];
           return (
@@ -117,6 +96,7 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.role),
       options: {
         alignCenter: false,
+        sort: false,
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const user = users[dataIndex];
           return (
