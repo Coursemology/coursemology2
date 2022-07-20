@@ -27,7 +27,7 @@ const FormTextField = (props) => {
     disabled,
     label,
     renderIf,
-    margins,
+    margins = true,
     enableDebouncing = false,
     ...custom
   } = props;

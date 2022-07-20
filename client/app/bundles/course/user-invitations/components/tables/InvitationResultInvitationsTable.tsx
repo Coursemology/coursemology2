@@ -61,18 +61,7 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.name),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const invitation = invitations[dataIndex];
-          return (
-            <Typography
-              key={`name-${invitation.id}`}
-              className="invitation_result_invitation_name"
-              variant="body2"
-            >
-              {invitation.name}
-            </Typography>
-          );
-        },
+        sort: false,
       },
     },
     {
@@ -80,24 +69,14 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.email),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const invitation = invitations[dataIndex];
-          return (
-            <Typography
-              key={`email-${invitation.id}`}
-              className="invitation_result_invitation_email"
-              variant="body2"
-            >
-              {invitation.email}
-            </Typography>
-          );
-        },
+        sort: false,
       },
     },
     {
       name: 'phantom',
       label: intl.formatMessage(tableTranslations.phantom),
       options: {
+        sort: false,
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
@@ -117,6 +96,7 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.role),
       options: {
         alignCenter: false,
+        sort: false,
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
@@ -136,18 +116,7 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.invitationSentAt),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const invitation = invitations[dataIndex];
-          return (
-            <Typography
-              key={`sentAt-${invitation.id}`}
-              className="invitation_result_invitation_email"
-              variant="body2"
-            >
-              {invitation.sentAt ?? '-'}
-            </Typography>
-          );
-        },
+        sort: false,
       },
     },
   ];
