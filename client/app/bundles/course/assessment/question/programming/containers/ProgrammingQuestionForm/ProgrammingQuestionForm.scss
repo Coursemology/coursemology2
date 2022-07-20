@@ -1,31 +1,5 @@
-.inputContainer {
-  display: flex;
-  flex-flow: row wrap;
-}
-
-.titleInput,
-.descriptionInput,
-.staffCommentsInput,
-.skillsInput,
-.maximumGradeInput,
-.autogradeToggle,
-.languageInput,
-.memoryLimitInput,
-.timeLimitInput,
-.attemptLimitInput {
-  flex: 1 100%;
-}
-
 @media (min-width: 375px) {
-  .maximumGradeInput,
-  .languageInput,
-  .memoryLimitInput,
-  .timeLimitInput {
-    flex: 1 50%;
-  }
-
-  .maximumGradeInput,
-  .memoryLimitInput {
+  .maximumGradeInput {
     padding-right: 1em;
   }
 }
@@ -35,10 +9,6 @@
   .timeLimitInput,
   .attemptLimitInput {
     flex: 1 auto;
-  }
-
-  .attemptLimitInput {
-    padding-left: 1em;
   }
 }
 

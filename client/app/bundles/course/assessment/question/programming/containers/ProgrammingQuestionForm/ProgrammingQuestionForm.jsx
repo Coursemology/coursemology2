@@ -15,9 +15,11 @@ import {
   Select,
   Snackbar,
   Switch,
+  Stack,
   Tab,
   Tabs,
   TextField,
+  Grid,
 } from '@mui/material';
 import { blue, grey, red } from '@mui/material/colors';
 
@@ -675,9 +677,8 @@ class ProgrammingQuestionForm extends Component {
             name="authenticity_token"
             value={formData.get('auth_token')}
           />
-
-          <div className={styles.inputContainer}>
-            <div className={styles.titleInput}>
+          <Stack>
+            <div>
               {this.renderInputField(
                 this.props.intl.formatMessage(translations.titleFieldLabel),
                 'title',
@@ -687,7 +688,7 @@ class ProgrammingQuestionForm extends Component {
                 this.props.data.getIn(['question', 'error', 'title']),
               )}
             </div>
-            <div className={styles.descriptionInput}>
+            <div>
               {this.renderCKEditorField(
                 this.props.intl.formatMessage(
                   translations.descriptionFieldLabel,
@@ -697,7 +698,7 @@ class ProgrammingQuestionForm extends Component {
                 question.get('description') || '',
               )}
             </div>
-            <div className={styles.staffCommentsInput}>
+            <div>
               {this.renderCKEditorField(
                 this.props.intl.formatMessage(
                   translations.staffOnlyCommentsFieldLabel,
@@ -707,7 +708,7 @@ class ProgrammingQuestionForm extends Component {
                 question.get('staff_only_comments') || '',
               )}
             </div>
-            <div className={styles.skillsInput}>
+            <div>
               {this.renderMultiSelectSkillsField(
                 this.props.intl.formatMessage(translations.skillsFieldLabel),
                 'skill_ids',
@@ -716,31 +717,36 @@ class ProgrammingQuestionForm extends Component {
                 this.props.data.getIn(['question', 'error', 'skill_ids']),
               )}
             </div>
-            <div className={styles.maximumGradeInput}>
-              {this.renderInputField(
-                this.props.intl.formatMessage(
-                  translations.maximumGradeFieldLabel,
-                ),
-                'maximum_grade',
-                true,
-                'number',
-                ProgrammingQuestionForm.convertNull(
-                  question.get('maximum_grade'),
-                ),
-                this.props.data.getIn(['question', 'error', 'maximum_grade']),
-              )}
-            </div>
-            <div className={styles.languageInput}>
-              {this.renderDropdownSelectField(
-                this.props.intl.formatMessage(translations.languageFieldLabel),
-                'language_id',
-                true,
-                question.get('language_id') || undefined,
-                languageOptions,
-                this.props.data.getIn(['question', 'error', 'language_id']),
-                this.languageHandler('language_id'),
-              )}
-            </div>
+            <Stack direction="row" justifyContent="space-between" spacing={1}>
+              <div style={{ width: '100%' }}>
+                {this.renderInputField(
+                  this.props.intl.formatMessage(
+                    translations.maximumGradeFieldLabel,
+                  ),
+                  'maximum_grade',
+                  true,
+                  'number',
+                  ProgrammingQuestionForm.convertNull(
+                    question.get('maximum_grade'),
+                  ),
+                  this.props.data.getIn(['question', 'error', 'maximum_grade']),
+                )}
+              </div>
+              <div style={{ width: '100%' }}>
+                {this.renderDropdownSelectField(
+                  this.props.intl.formatMessage(
+                    translations.languageFieldLabel,
+                  ),
+                  'language_id',
+                  true,
+                  question.get('language_id') || undefined,
+                  languageOptions,
+                  this.props.data.getIn(['question', 'error', 'language_id']),
+                  this.languageHandler('language_id'),
+                )}
+              </div>
+            </Stack>
+
             <div className={styles.autogradeToggle}>
               {this.props.data.getIn([
                 'question',
@@ -777,62 +783,82 @@ class ProgrammingQuestionForm extends Component {
                 </>
               ) : null}
             </div>
-            <div className={styles.memoryLimitInput}>
-              {autograded
-                ? this.renderInputField(
-                    this.props.intl.formatMessage(
-                      translations.memoryLimitFieldLabel,
-                    ),
-                    'memory_limit',
-                    false,
-                    'number',
-                    ProgrammingQuestionForm.convertNull(
-                      question.get('memory_limit'),
-                    ),
-                    this.props.data.getIn([
-                      'question',
-                      'error',
-                      'memory_limit',
-                    ]),
-                  )
-                : null}
-            </div>
-            <div className={styles.timeLimitInput}>
-              {autograded
-                ? this.renderInputField(
-                    this.props.intl.formatMessage(
-                      translations.timeLimitFieldLabel,
-                    ),
-                    'time_limit',
-                    false,
-                    'number',
-                    question.get('time_limit') === null
-                      ? DEFAULT_TIME_LIMIT
-                      : question.get('time_limit'),
-                    this.props.data.getIn(['question', 'error', 'time_limit']),
-                  )
-                : null}
-            </div>
-            {autograded && showAttemptLimit ? (
-              <div className={styles.attemptLimitInput}>
-                {this.renderInputField(
-                  this.props.intl.formatMessage(
-                    translations.attemptLimitFieldLabel,
-                  ),
-                  'attempt_limit',
-                  false,
-                  'number',
-                  ProgrammingQuestionForm.convertNull(
-                    question.get('attempt_limit'),
-                  ),
-                  this.props.data.getIn(['question', 'error', 'attempt_limit']),
-                  this.props.intl.formatMessage(
-                    translations.attemptLimitPlaceholderMessage,
-                  ),
-                )}
-              </div>
-            ) : null}
-          </div>
+            <Grid
+              container
+              columns={{ xs: 1, sm: showAttemptLimit ? 3 : 2 }}
+              columnSpacing={1}
+            >
+              <Grid item xs={1}>
+                <div className={styles.memoryLimitInput}>
+                  {autograded
+                    ? this.renderInputField(
+                        this.props.intl.formatMessage(
+                          translations.memoryLimitFieldLabel,
+                        ),
+                        'memory_limit',
+                        false,
+                        'number',
+                        ProgrammingQuestionForm.convertNull(
+                          question.get('memory_limit'),
+                        ),
+                        this.props.data.getIn([
+                          'question',
+                          'error',
+                          'memory_limit',
+                        ]),
+                      )
+                    : null}
+                </div>
+              </Grid>
+              <Grid item xs={1}>
+                <div className={styles.timeLimitInput}>
+                  {autograded
+                    ? this.renderInputField(
+                        this.props.intl.formatMessage(
+                          translations.timeLimitFieldLabel,
+                        ),
+                        'time_limit',
+                        false,
+                        'number',
+                        question.get('time_limit') === null
+                          ? DEFAULT_TIME_LIMIT
+                          : question.get('time_limit'),
+                        this.props.data.getIn([
+                          'question',
+                          'error',
+                          'time_limit',
+                        ]),
+                      )
+                    : null}
+                </div>
+              </Grid>
+              <Grid item xs={1}>
+                {autograded && showAttemptLimit ? (
+                  <div className={styles.attemptLimitInput}>
+                    {this.renderInputField(
+                      this.props.intl.formatMessage(
+                        translations.attemptLimitFieldLabel,
+                      ),
+                      'attempt_limit',
+                      false,
+                      'number',
+                      ProgrammingQuestionForm.convertNull(
+                        question.get('attempt_limit'),
+                      ),
+                      this.props.data.getIn([
+                        'question',
+                        'error',
+                        'attempt_limit',
+                      ]),
+                      this.props.intl.formatMessage(
+                        translations.attemptLimitPlaceholderMessage,
+                      ),
+                    )}
+                  </div>
+                ) : null}
+              </Grid>
+            </Grid>
+          </Stack>
 
           {this.renderSwitcher(
             showEditOnline,
