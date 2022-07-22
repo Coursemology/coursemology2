@@ -18,11 +18,9 @@ RSpec.describe System::Admin::InstancesController do
 
       subject { delete :destroy, params: { id: instance_to_delete } }
 
-      it { is_expected.to redirect_to(admin_instances_path) }
 
-      it 'sets an success flash message' do
-        subject
-        expect(flash[:success]).to eq(I18n.t('system.admin.instances.destroy.success'))
+      it 'succeeds with http status ok' do
+        expect(subject).to have_http_status(:ok)
       end
 
       context 'when the instance cannot be destroyed' do
@@ -31,10 +29,8 @@ RSpec.describe System::Admin::InstancesController do
           subject
         end
 
-        it { is_expected.to redirect_to(admin_instances_path) }
-
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('system.admin.instances.destroy.failure'))
+        it 'fails with http status bad request' do
+          expect(subject).to have_http_status(:bad_request)
         end
       end
     end

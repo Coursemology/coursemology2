@@ -62,22 +62,31 @@ RSpec.feature 'Courses: Staff Management' do
         staff_to_change = course_managers.sample
         visit course_users_staff_path(course)
 
+        # change name
         within find("tr.course_user_#{staff_to_change.id}") do
-          find('div.course_user_name').find('input').set(new_name)
+          find('button.inline-edit-button', visible: false).click
+          find('input').set(new_name)
+          find('button.confirm-btn').click
+        end
+        expect_toastify("#{staff_to_change.name} was renamed to #{new_name}")
+
+        # change role
+        within find("tr.course_user_#{staff_to_change.id}") do
           find('div.course_user_role').click
         end
-        find("#role-#{staff_to_change.id}-owner").select_option
+        page.all('li.MuiMenuItem-root')[3].click # option id "role-#{staff_to_change.id}-owner" can't be targetted...
 
         within find("tr.course_user_#{staff_to_change.id}") do
           find("button.user-save-#{staff_to_change.id}").click
         end
+        expect(page).
+          to have_selector('div.Toastify__toast-body', text: "Record for #{new_name} was updated.")
 
-        expect_toastify("Record for #{new_name} was updated.")
         expect(staff_to_change.reload).to be_owner
         expect(staff_to_change.name).to eq(new_name)
       end
 
-      scenario 'I can add new staff', js: true do
+      scenario 'I can upgrade students to staff', js: true do
         visit course_users_staff_path(course)
 
         staff_to_be = course_students[0]
@@ -95,7 +104,7 @@ RSpec.feature 'Courses: Staff Management' do
         expect_toastify('1 new user has been upgraded to Teaching Assistant')
 
         within find("tr.course_user_#{staff_to_be.id}") do
-          expect(find('div.course_user_name').find('input').value).to eq(staff_to_be.name)
+          expect(find('div.course_user_name').text).to eq(staff_to_be.name)
         end
       end
 
@@ -108,9 +117,7 @@ RSpec.feature 'Courses: Staff Management' do
           accept_confirm_dialog
         end.to change { page.all('tr.course_user').count }.by(-1)
 
-        page.all('div.course_user_name > input') do |input|
-          expect(input).to_not_have staff_to_delete.name
-        end
+        expect(page).to_not have_selector('div.course_user_name', text: staff_to_delete.name)
       end
     end
   end

@@ -24,13 +24,23 @@ RSpec.feature 'Courses: Students' do
 
       visit course_users_students_path(course)
 
+      # change name
       within find("tr.course_user_#{student_to_update.id}") do
-        find('div.course_user_name').find('input').set(new_name)
+        find('button.inline-edit-button', visible: false).click
+        find('input').set(new_name)
+        find('button.confirm-btn').click
+      end
+      expect_toastify("#{student_to_update.name} was renamed to #{new_name}")
+
+      # change phantom
+      within find("tr.course_user_#{student_to_update.id}") do
         find("#phantom-#{student_to_update.id}", visible: false).click
         find("button.user-save-#{student_to_update.id}").click
       end
 
-      expect_toastify("Record for #{new_name} was updated.")
+      expect(page).
+        to have_selector('div.Toastify__toast-body', text: "Record for #{new_name} was updated.")
+
       expect(student_to_update.reload).to be_phantom
       expect(student_to_update.name).to eq(new_name)
     end
@@ -44,9 +54,7 @@ RSpec.feature 'Courses: Students' do
         accept_confirm_dialog
       end.to change { page.all('tr.course_user').count }.by(-1)
 
-      page.all('div.course_user_name > input') do |input|
-        expect(input).to_not_have user_to_delete.name
-      end
+      expect(page).to_not have_selector('div.course_user_name', text: user_to_delete.name)
     end
   end
 end

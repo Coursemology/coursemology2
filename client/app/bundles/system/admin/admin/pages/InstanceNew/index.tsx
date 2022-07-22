@@ -35,7 +35,7 @@ const translations = defineMessages({
   },
   creationFailure: {
     id: 'system.admin.instance.new.creationFailure',
-    defaultMessage: 'Failed to created new instance. {error}',
+    defaultMessage: 'Failed to create new instance. {error}.',
   },
 });
 

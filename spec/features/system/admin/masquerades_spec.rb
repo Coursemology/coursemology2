@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'System: Administration: Masquerade' do
+RSpec.feature 'System: Administration: Masquerade', js: true do
   include DeviseMasquerade::Controllers::UrlHelpers
   let(:instance) { Instance.default }
 
@@ -17,7 +17,7 @@ RSpec.feature 'System: Administration: Masquerade' do
 
       scenario 'I can masquerade a user' do
         visit admin_users_path
-        first(:link, id: "masquerade_#{user_to_masquerade.id}").click
+        find("button.user-masquerade-#{user_to_masquerade.id}").click
         expect(page).to have_selector('li', text: user_to_masquerade.name)
       end
     end

@@ -28,8 +28,7 @@ RSpec.feature 'Course: Announcements' do
 
         expect(page).to have_selector('h3', text: announcement.title)
 
-        expect(page).
-          to have_selector('div.Toastify__toast-body', text: 'New announcement posted!')
+        expect_toastify('New announcement posted!')
 
         expect(current_path).to eq(course_announcements_path(course))
       end

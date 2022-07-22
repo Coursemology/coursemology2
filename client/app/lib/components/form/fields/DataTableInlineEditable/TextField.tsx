@@ -66,13 +66,14 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
 
   const handleSave = (): void => {
     setIsSaving(true);
-    if (controlledVal === '') {
+    if (controlledVal.trim() === '') {
       setHelperText('Cannot be empty.');
       setIsSaving(false);
       return;
     }
     if (controlledVal === value) {
       setIsEditing(false);
+      setIsSaving(false);
     } else if (onUpdate) {
       onUpdate(controlledVal)
         .then(() => {
@@ -93,6 +94,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
 
   const handleCancel = (): void => {
     setControlledVal(value);
+    setHelperText('');
     setIsEditing(false);
   };
 
@@ -132,6 +134,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
             loading={isSaving}
             onClick={handleSave}
             sx={styles.buttonStyle}
+            className="confirm-btn"
           >
             <Check />
           </LoadingButton>
@@ -139,6 +142,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
             onClick={handleCancel}
             sx={styles.buttonStyle}
             disabled={isSaving}
+            className="cancel-btn"
           >
             <Clear />
           </IconButton>

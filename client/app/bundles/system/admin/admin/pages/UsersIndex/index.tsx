@@ -26,6 +26,10 @@ const translations = defineMessages({
     id: 'system.admin.users.header',
     defaultMessage: 'Users',
   },
+  title: {
+    id: 'system.admin.users.title',
+    defaultMessage: 'Users',
+  },
   fetchUsersFailure: {
     id: 'system.admin.users.fetch.failure',
     defaultMessage: 'Failed to fetch users.',
@@ -51,13 +55,38 @@ const UsersIndex: FC<Props> = (props) => {
   const counts = useSelector((state: AppState) => getAdminCounts(state));
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
+  const [tableTitle, setTableTitle] = useState(
+    intl.formatMessage(translations.title),
+  );
 
   const { activeUsers: activeCounts, totalUsers: totalCounts } = counts;
+
+  const updateTableTitle = (
+    role: string | true,
+    active: string | true,
+  ): void => {
+    if (role === true || active === true) {
+      return;
+    }
+    if (role !== '' || active !== '') {
+      const roleString = role.replace(/^\w/, (c) => c.toUpperCase()); // capitalize first letter
+      let activeString = '';
+      if (active === 'true') {
+        activeString = ', Active';
+      }
+      setTableTitle(
+        `${intl.formatMessage(
+          translations.title,
+        )} — (${roleString}${activeString})`,
+      );
+    }
+  };
 
   useEffect(() => {
     setIsLoading(true);
     const role = getUrlParameter('role');
     const active = getUrlParameter('active');
+    updateTableTitle(role, active);
     dispatch(
       indexUsers({
         'filter[length]': 30,
@@ -121,6 +150,7 @@ const UsersIndex: FC<Props> = (props) => {
         <SummaryCard renderContent={renderSummaryContent} />
       </div>
       <UsersTable
+        title={tableTitle}
         renderRowActionComponent={(user): JSX.Element => (
           <UsersButtons user={user} />
         )}
