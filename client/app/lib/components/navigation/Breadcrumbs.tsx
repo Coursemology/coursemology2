@@ -9,11 +9,9 @@ import { Link as RouterLink, useLocation } from 'react-router-dom';
 const breadcrumbNameMap: { [key: string]: string } = {
   '/admin': 'Administration',
   '/admin/announcements': 'System Announcements',
-  '/admin/announcements/new': 'New System Announcement',
   '/admin/users': 'Users',
   '/admin/instances': 'Instances',
   '/admin/courses': 'Courses',
-  '/drafts': 'Drafts',
 };
 
 interface LinkRouterProps extends LinkProps {

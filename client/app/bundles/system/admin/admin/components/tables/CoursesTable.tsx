@@ -16,18 +16,16 @@ import { AppDispatch, AppState } from 'types/store';
 import { UserBasicMiniEntity } from 'types/users';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 import { FIELD_DEBOUNCE_DELAY } from 'lib/constants/sharedConstants';
+import LoadingOverlay from 'lib/components/LoadingOverlay';
 import { getAdminCounts, getAllCourseMiniEntities } from '../../selectors';
 import { indexCourses } from '../../operations';
 
 interface Props extends WrappedComponentProps {
+  title: string;
   renderRowActionComponent: (course: CourseMiniEntity) => ReactElement;
 }
 
 const translations = defineMessages({
-  title: {
-    id: 'system.admin.components.tables.CoursesTable.title',
-    defaultMessage: 'Courses',
-  },
   searchText: {
     id: 'system.admin.components.tables.CoursesTable.searchPlaceholder',
     defaultMessage: 'Search course title, description or owners.',
@@ -45,7 +43,7 @@ const styles = {
 };
 
 const CoursesTable: FC<Props> = (props) => {
-  const { renderRowActionComponent, intl } = props;
+  const { title, renderRowActionComponent, intl } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(false);
   const courses = useSelector((state: AppState) =>
@@ -282,10 +280,11 @@ const CoursesTable: FC<Props> = (props) => {
 
   return (
     <Box sx={{ margin: '12px 0px' }}>
+      {isLoading && <LoadingOverlay />}
       <DataTable
         title={
           <Typography variant="h6">
-            {intl.formatMessage(translations.title)}
+            {title}
             {isLoading && (
               <CircularProgress
                 size={24}

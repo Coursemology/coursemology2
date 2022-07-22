@@ -16,9 +16,10 @@ class System::Admin::InstancesController < System::Admin::Controller
 
   def create # :nodoc:
     if @instance.save
-      render 'system/admin/instances/_instance_list_data',
-             locals: { instance: @instance },
-             status: :ok
+      @instances_count = Instance.count
+      @instances = Instance.order_for_display.paginated(new_page_params).
+                   calculated(:active_course_count, :course_count, :active_user_count, :user_count)
+      render 'index', format: :json
     else
       render json: { errors: @instance.errors }, status: :bad_request
     end

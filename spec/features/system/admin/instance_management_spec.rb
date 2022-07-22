@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'System: Administration: Instances' do
+RSpec.feature 'System: Administration: Instances', js: true do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     context 'As a system administrator' do
@@ -9,72 +9,79 @@ RSpec.feature 'System: Administration: Instances' do
       before { login_as(user, scope: :user) }
 
       scenario 'I can create new instances' do
-        visit new_admin_instance_path
-
-        expect(page).to have_field('instance_name')
-        expect(page).to have_field('instance_host')
+        visit admin_instances_path
 
         expect do
-          click_button I18n.t('helpers.submit.instance.create')
+          find('button#new-instance-button').click
         end.not_to(change { Instance.count })
 
-        fill_in 'instance_name', with: 'Lorem ipsum'
-        fill_in 'instance_host', with: generate(:host)
-        expect do
-          click_button I18n.t('helpers.submit.instance.create')
-        end.to change { Instance.count }.by(1)
+        fill_in 'name', with: 'Lorem Ipsum'
+        fill_in 'host', with: generate(:host)
 
-        expect(current_path).to eq(admin_instances_path)
-        expect(page).to have_selector('div.alert.alert-success')
+        find('button.btn-submit').click
+        expect(page).to have_selector('div.instance_name', text: 'Lorem Ipsum')
       end
 
       scenario 'I can edit instances' do
-        instance = create(:instance)
-        visit edit_admin_instance_path(instance)
+        create(:instance)
+        instance = Instance.order_for_display[1] # gets first non-default instance
+        visit admin_instances_path
 
-        fill_in 'instance_name', with: ''
-        click_button I18n.t('helpers.submit.instance.update')
+        within find("div.instance_name_#{instance.id}") do
+          find('button.inline-edit-button', visible: false).click
+          find('input').set(' ')
+          find('button.confirm-btn').click
+        end
+
         expect(instance.reload.name).not_to eq('')
-        expect(page).to have_css('div.has-error')
+        expect(find("div.instance_name_#{instance.id}").find('p.MuiFormHelperText-root').text).to eq('Cannot be empty.')
+        find('button.cancel-btn').click
 
         new_name = 'New Name'
         new_host = generate(:host)
-        fill_in 'instance_name', with: new_name
-        fill_in 'instance_host', with: new_host
-        click_button I18n.t('helpers.submit.instance.update')
+        within find("div.instance_name_#{instance.id}") do
+          find('button.inline-edit-button', visible: false).click
+          find('input').set(new_name)
+          find('button.confirm-btn').click
+        end
+        expect(page).
+          to have_selector('div.Toastify__toast-body', text: "Renamed instance to #{new_name}")
+        expect(find("div.instance_name_#{instance.id}").text).to eq(new_name)
 
-        expect(instance.reload.name).to eq(new_name)
-        expect(instance.reload.host).to eq(new_host)
-        expect(current_path).to eq(admin_instances_path)
-        expect(page).to have_selector('div.alert.alert-success')
+        within find("div.instance_host_#{instance.id}") do
+          find('button.inline-edit-button', visible: false).click
+          find('input').set(new_host)
+          find('button.confirm-btn').click
+        end
+        expect(page).
+          to have_selector('div.Toastify__toast-body', text: "Host changed from #{instance.host} to #{new_host}")
+        expect(find("div.instance_host_#{instance.id}").text).to eq(new_host)
       end
 
       scenario 'I can see all instances' do
-        instances = create_list(:instance, 2)
-        instances &= Instance.order_by_name
+        create_list(:instance, 2)
+        instances = Instance.order_by_name.first(2) # gets first 2 instances on display
         expect(instances).not_to be_empty
+        visit admin_instances_path
 
         instances.each do |instance|
-          # Get the page number each instance is on.
-          page_number = (Instance.order_for_display.map(&:id).index(instance.id) /
-                        Instance.page.default_per_page) + 1
-          visit admin_instances_path(page: page_number)
-          expect(page).to have_content_tag_for(instance)
+          expect(page).to have_selector('div.instance_name', exact_text: instance.name)
           expect(page).
-            to have_link(nil, href: admin_instance_admin_url(host: instance.host, port: nil))
+            to have_link(nil, href: "//#{instance.host}/admin/instances")
         end
       end
 
       scenario 'I can destroy an instance' do
-        instance = create(:instance)
-        page_number = (Instance.order_for_display.map(&:id).index(instance.id) /
-                      Instance.page.default_per_page) + 1
-        visit admin_instances_path(page: page_number)
+        create(:instance)
+        instance = Instance.order_for_display[1] # the 1st instance (Default) cannot be destroyed
+        visit admin_instances_path
 
-        within find(content_tag_selector(instance)) do
-          expect { find(:css, 'a.delete').click }.to \
-            change { Instance.find_by(id: instance.id) }.to(nil)
-        end
+        expect(page).to have_selector('div.instance_name', exact_text: instance.name)
+        find("button.instance-delete-#{instance.id}").click
+        click_button('Continue')
+
+        expect(page).not_to have_selector('div.instance_name', exact_text: instance.name)
+        expect_toastify("#{instance.name} was deleted.")
       end
     end
   end

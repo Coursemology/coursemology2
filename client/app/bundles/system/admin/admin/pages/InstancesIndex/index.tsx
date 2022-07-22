@@ -1,11 +1,10 @@
-import { FC, ReactElement, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState, AppDispatch } from 'types/store';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { toast } from 'react-toastify';
-import Typography from '@mui/material/Typography';
 import AddButton from 'lib/components/buttons/AddButton';
 import { indexInstances } from '../../operations';
 import InstancesTable from '../../components/tables/InstancesTable';
@@ -26,9 +25,9 @@ const translations = defineMessages({
     id: 'system.admin.instances.header',
     defaultMessage: 'Instances',
   },
-  totalInstances: {
-    id: 'system.admin.instances.totalInstances',
-    defaultMessage: 'Total Instances: <strong>{count}</strong>',
+  title: {
+    id: 'system.admin.instances.title',
+    defaultMessage: 'Instances ({count})',
   },
   fetchInstancesFailure: {
     id: 'system.admin.admin.fetchInstances.failure',
@@ -73,13 +72,10 @@ const InstancesIndex: FC<Props> = (props) => {
 
   const renderBody: JSX.Element = (
     <>
-      <Typography variant="body1" style={{ marginTop: '8px' }}>
-        {intl.formatMessage(translations.totalInstances, {
-          strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
+      <InstancesTable
+        title={intl.formatMessage(translations.title, {
           count: counts.instancesCount,
         })}
-      </Typography>
-      <InstancesTable
         renderRowActionComponent={(instance): JSX.Element => (
           <InstancesButtons instance={instance} />
         )}

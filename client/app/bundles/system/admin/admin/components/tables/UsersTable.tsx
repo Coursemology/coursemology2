@@ -25,18 +25,16 @@ import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
+import LoadingOverlay from 'lib/components/LoadingOverlay';
 import { indexUsers, updateUser } from '../../operations';
 import { getAdminCounts, getAllUserMiniEntities } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
+  title: string;
   renderRowActionComponent: (user: UserMiniEntity) => ReactElement;
 }
 
 const translations = defineMessages({
-  title: {
-    id: 'system.admin.components.tables.UsersTable.title',
-    defaultMessage: 'Users',
-  },
   searchText: {
     id: 'system.admin.components.tables.UsersTable.searchPlaceholder',
     defaultMessage: 'Search user name or emails',
@@ -66,7 +64,7 @@ const styles = {
 };
 
 const UsersTable: FC<Props> = (props) => {
-  const { renderRowActionComponent, intl } = props;
+  const { title, renderRowActionComponent, intl } = props;
   const [isLoading, setIsLoading] = useState(false);
   const users = useSelector((state: AppState) => getAllUserMiniEntities(state));
   const counts = useSelector((state: AppState) => getAdminCounts(state));
@@ -363,10 +361,11 @@ const UsersTable: FC<Props> = (props) => {
 
   return (
     <Box sx={{ margin: '12px 0px' }}>
+      {isLoading && <LoadingOverlay />}
       <DataTable
         title={
           <Typography variant="h6">
-            {intl.formatMessage(translations.title)}
+            {title}
             {isLoading && (
               <CircularProgress
                 size={24}

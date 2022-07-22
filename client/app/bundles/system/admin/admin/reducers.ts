@@ -54,8 +54,7 @@ const reducer = produce((draft: AdminState, action: AdminActionType) => {
     case SAVE_ANNOUNCEMENTS_LIST: {
       const announcementList = action.announcementList;
       const entityList = announcementList.map((data) => ({ ...data }));
-      // Need to refresh the entire store for creating new announcement for ordering to be correct
-      draft.announcements = createEntityStore();
+      removeAllFromStore(draft.announcements);
       saveListToStore(draft.announcements, entityList);
       break;
     }

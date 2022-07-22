@@ -26,6 +26,10 @@ const translations = defineMessages({
     id: 'system.admin.courses.header',
     defaultMessage: 'Courses',
   },
+  title: {
+    id: 'system.admin.courses.title',
+    defaultMessage: 'Courses',
+  },
   fetchCoursesFailure: {
     id: 'system.admin.courses.fetch.failure',
     defaultMessage: 'Failed to fetch courses.',
@@ -46,9 +50,15 @@ const CoursesIndex: FC<Props> = (props) => {
   const counts = useSelector((state: AppState) => getAdminCounts(state));
   const dispatch = useDispatch<AppDispatch>();
   const location = useLocation();
+  const [tableTitle, setTableTitle] = useState(
+    intl.formatMessage(translations.title),
+  );
 
   useEffect(() => {
     const active = getUrlParameter('active');
+    if (active === 'true') {
+      setTableTitle(`${intl.formatMessage(translations.title)} (Active)`);
+    }
     setIsLoading(true);
     dispatch(indexCourses({ 'filter[length]': 30, active }))
       .finally(() => setIsLoading(false))
@@ -87,6 +97,7 @@ const CoursesIndex: FC<Props> = (props) => {
     <>
       <SummaryCard renderContent={renderSummaryContent} />
       <CoursesTable
+        title={tableTitle}
         renderRowActionComponent={(course): JSX.Element => (
           <CoursesButtons course={course} />
         )}

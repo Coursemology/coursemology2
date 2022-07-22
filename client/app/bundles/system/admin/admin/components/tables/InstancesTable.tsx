@@ -14,18 +14,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import { toast } from 'react-toastify';
+import LoadingOverlay from 'lib/components/LoadingOverlay';
 import { getAdminCounts, getAllInstanceMiniEntities } from '../../selectors';
 import { indexInstances, updateInstance } from '../../operations';
 
 interface Props extends WrappedComponentProps {
+  title: string;
   renderRowActionComponent: (instance: InstanceMiniEntity) => ReactElement;
 }
 
 const translations = defineMessages({
-  title: {
-    id: 'system.admin.components.tables.InstancesTable.title',
-    defaultMessage: 'Instances',
-  },
   searchText: {
     id: 'system.admin.components.tables.InstancesTable.searchPlaceholder',
     defaultMessage: 'Search instance name or host name',
@@ -41,7 +39,7 @@ const translations = defineMessages({
 });
 
 const InstancesTable: FC<Props> = (props) => {
-  const { renderRowActionComponent, intl } = props;
+  const { renderRowActionComponent, title, intl } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(false);
   const instances = useSelector((state: AppState) =>
@@ -281,10 +279,11 @@ const InstancesTable: FC<Props> = (props) => {
 
   return (
     <Box sx={{ margin: '12px 0px' }}>
+      {isLoading && <LoadingOverlay />}
       <DataTable
         title={
           <Typography variant="h6">
-            {intl.formatMessage(translations.title)}
+            {title}
             {isLoading && (
               <CircularProgress
                 size={24}

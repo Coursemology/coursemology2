@@ -49,11 +49,8 @@ RSpec.describe System::Admin::CoursesController, type: :controller do
           expect(controller.instance_variable_get(:@course)).to be_destroyed
         end
 
-        it { is_expected.to redirect_to(admin_courses_path) }
-
-        it 'sets the proper flash message' do
-          subject
-          expect(flash[:success]).to eq(I18n.t('system.admin.courses.destroy.success'))
+        it 'succeeds with http status ok' do
+          expect(subject).to have_http_status(:ok)
         end
 
         context 'when the course cannot be destroyed' do
@@ -62,10 +59,8 @@ RSpec.describe System::Admin::CoursesController, type: :controller do
             subject
           end
 
-          it { is_expected.to redirect_to(admin_courses_path) }
-
-          it 'sets an error flash message' do
-            expect(flash[:danger]).to eq(I18n.t('system.admin.courses.destroy.failure'))
+          it 'fails with http status bad request' do
+            expect(subject).to have_http_status(:bad_request)
           end
         end
       end

@@ -209,7 +209,14 @@ export function createInstance(formData: InstanceFormData): Operation<void> {
     SystemAPI.admin
       .createInstance(attributes)
       .then((response) => {
-        dispatch(actions.saveInstance(response.data));
+        const data = response.data;
+        dispatch(
+          actions.saveInstanceList(
+            data.instances,
+            data.permissions,
+            data.counts,
+          ),
+        );
       })
       .catch((error) => {
         throw error;
