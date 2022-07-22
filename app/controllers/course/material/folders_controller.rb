@@ -11,7 +11,7 @@ class Course::Material::FoldersController < Course::Material::Controller
         # Don't display the folder if the user cannot access its owner.
         @subfolders.select! { |f| can?(:read_owner, f) }
       end
-    
+    end
   end
 
   def edit

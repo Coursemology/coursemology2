@@ -8,3 +8,6 @@ en:
           header: "Edit Folder"
         new_materials:
           header: "Upload Files"
+        upload_materials:
+          success: "Files were uploaded."
+          failure: "Failed to upload files: %{error}"
