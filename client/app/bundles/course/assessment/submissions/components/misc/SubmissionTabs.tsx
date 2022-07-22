@@ -49,6 +49,20 @@ const CustomBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   },
 }));
 
+const styles = {
+  tabsStyle: {
+    // to show tab indicator on firefox
+    '& .MuiTabs-indicator': {
+      bottom: 'auto',
+    },
+    '.css-117fsft-MuiButtonBase-root-MuiTab-root': { minHeight: 48 },
+    minHeight: '50px',
+    '& .MuiTab-root:focus': {
+      outline: 0,
+    },
+  },
+};
+
 const SubmissionTabs: FC<Props> = (props) => {
   const {
     intl,
@@ -102,11 +116,11 @@ const SubmissionTabs: FC<Props> = (props) => {
       {tabValue !== null && (
         <Tabs
           value={tabValue}
+          variant="scrollable"
+          scrollButtons="auto"
           onChange={handleTabChange}
           TabIndicatorProps={{ style: { transition: 'none' } }}
-          sx={{
-            '.css-117fsft-MuiButtonBase-root-MuiTab-root': { minHeight: 48 },
-          }}
+          sx={styles.tabsStyle}
         >
           {isTeachingStaff && (
             <Tab
