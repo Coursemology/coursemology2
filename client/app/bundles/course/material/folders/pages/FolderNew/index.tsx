@@ -56,7 +56,6 @@ const FolderNew: FC<Props> = (props) => {
   }
 
   const onSubmit = (data: FolderFormData, setError): void => {
-    console.log(data);
     dispatch(createFolder(data, folderId))
       .then((_) => {
         handleClose();

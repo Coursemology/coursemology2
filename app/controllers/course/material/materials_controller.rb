@@ -31,8 +31,8 @@ class Course::Material::MaterialsController < Course::Material::Controller
                          name: @material.name,
                          description: @material.description,
                          updatedAt: @material.updated_at,
-                         updater: { id: id, name: name, isCourseUser: !course_user.nil? }},
-                         status: :ok
+                         updater: { id: id, name: name, isCourseUser: !course_user.nil? } },
+                 status: :ok
         end
       end
     else
