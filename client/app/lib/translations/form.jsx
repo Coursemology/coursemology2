@@ -37,6 +37,10 @@ const translations = defineMessages({
     id: 'lib.form.buttons.update',
     defaultMessage: 'Update',
   },
+  upload: {
+    id: 'lib.form.buttons.upload',
+    defaultMessage: 'Upload',
+  },
   discardChanges: {
     id: 'lib.form.messages.discardChanges',
     defaultMessage: 'Discard Changes?',

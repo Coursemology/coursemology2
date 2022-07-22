@@ -13,76 +13,57 @@ import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 
-import {
-  AnnouncementEditFormData,
-  AnnouncementFormData,
-} from 'types/course/announcements';
+import { FolderFormData } from 'types/course/material/folders';
 
 interface Props {
   editing: boolean;
   handleClose: (isDirty: boolean) => void;
-  onSubmit: (
-    data: AnnouncementFormData | AnnouncementEditFormData,
-    setError: unknown,
-  ) => void;
-  setIsDirty?: (value: boolean) => void;
-  initialValues?: Object;
-  canSticky: boolean;
+  onSubmit: (data: FolderFormData, setError: unknown) => void;
+  setIsDirty: (value: boolean) => void;
+  initialValues: Object;
 }
 
 interface IFormInputs {
-  title: string;
-  content: string;
-  sticky: boolean;
+  name: string;
+  description: string;
+  canStudentUpload: boolean;
   startAt: string;
   endAt: string;
-  canSticky: boolean;
 }
 
 const translations = defineMessages({
-  title: {
-    id: 'course.announcement.form.title',
-    defaultMessage: 'Title',
+  name: {
+    id: 'course.materials.folders.folderForm.name',
+    defaultMessage: 'Name',
   },
-  content: {
-    id: 'course.announcement.form.content',
-    defaultMessage: 'Content',
+  description: {
+    id: 'course.materials.folders.folderForm.description',
+    defaultMessage: 'Description',
   },
-  sticky: {
-    id: 'course.announcement.form.sticky',
-    defaultMessage: 'Sticky',
+  canStudentUpload: {
+    id: 'course.materials.folders.folderForm.canStudentUpload',
+    defaultMessage: 'Students are allowed to upload',
   },
   startAt: {
-    id: 'course.announcement.form.startAt',
+    id: 'course.materials.folders.folderForm.startAt',
     defaultMessage: 'Start At',
   },
   endAt: {
-    id: 'course.announcement.form.endAt',
+    id: 'course.materials.folders.folderForm.endAt',
     defaultMessage: 'End At',
-  },
-  endTimeError: {
-    id: 'course.announcement.form.endTimeError',
-    defaultMessage: 'End time cannot be earlier than start time',
   },
 });
 
 const validationSchema = yup.object({
-  title: yup.string().required(formTranslations.required),
-  content: yup.string().nullable(),
-  sticky: yup.bool(),
-  startAt: yup.date().nullable().typeError(formTranslations.invalidDate),
-  endAt: yup.date().nullable().typeError(formTranslations.invalidDate),
+  name: yup.string().required(formTranslations.required),
+  description: yup.string().nullable(),
+  canStudentUpload: yup.bool(),
+  startAt: yup.date().nullable(),
+  endAt: yup.date().nullable(),
 });
 
-const AnnouncementForm: FC<Props> = (props) => {
-  const {
-    editing,
-    handleClose,
-    initialValues,
-    onSubmit,
-    setIsDirty,
-    canSticky,
-  } = props;
+const FolderForm: FC<Props> = (props) => {
+  const { editing, handleClose, initialValues, onSubmit, setIsDirty } = props;
 
   const {
     control,
@@ -95,13 +76,7 @@ const AnnouncementForm: FC<Props> = (props) => {
   });
 
   useEffect(() => {
-    if (setIsDirty) {
-      if (isDirty) {
-        setIsDirty(true);
-      } else {
-        setIsDirty(false);
-      }
-    }
+    setIsDirty(isDirty);
   }, [isDirty]);
 
   const disabled = isSubmitting;
@@ -118,32 +93,32 @@ const AnnouncementForm: FC<Props> = (props) => {
         color="primary"
         className="btn-cancel"
         disabled={disabled}
-        key="announcement-form-cancel-button"
+        key="folder-form-cancel-button"
         onClick={(): void => handleClose(isDirty)}
       >
         <FormattedMessage {...formTranslations.cancel} />
       </Button>
       {editing ? (
         <Button
-          id="announcement-form-update-button"
+          id="folder-form-update-button"
           variant="contained"
           color="primary"
           className="btn-submit"
           disabled={disabled || !isDirty}
-          form="announcement-form"
-          key="announcement-form-update-button"
+          form="folder-form"
+          key="folder-form-update-button"
           type="submit"
         >
           <FormattedMessage {...formTranslations.update} />
         </Button>
       ) : (
         <Button
-          id="announcement-form-submit-button"
+          id="folder-form-submit-button"
           color="primary"
           className="btn-submit"
           disabled={disabled || !isDirty}
-          form="announcement-form"
-          key="announcement-form-submit-button"
+          form="folder-form"
+          key="folder-form-submit-button"
           type="submit"
         >
           <FormattedMessage {...formTranslations.submit} />
@@ -156,21 +131,21 @@ const AnnouncementForm: FC<Props> = (props) => {
     <>
       <form
         encType="multipart/form-data"
-        id="announcement-form"
+        id="folder-form"
         noValidate
         onSubmit={handleSubmit((data) => onSubmit(data, setError))}
       >
         <ErrorText errors={errors} />
-        <div id="announcement-title">
+        <div id="folder-name">
           <Controller
             control={control}
-            name="title"
+            name="name"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
                 field={field}
                 fieldState={fieldState}
                 disabled={disabled}
-                label={<FormattedMessage {...translations.title} />}
+                label={<FormattedMessage {...translations.name} />}
                 // @ts-ignore: component is still written in JS
                 fullWidth
                 InputLabelProps={{
@@ -184,37 +159,36 @@ const AnnouncementForm: FC<Props> = (props) => {
         </div>
 
         <Controller
-          name="content"
+          name="description"
           control={control}
           render={({ field, fieldState }): JSX.Element => (
             <FormRichTextField
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.content} />}
+              label={<FormattedMessage {...translations.description} />}
               // @ts-ignore: component is still written in JS
               fullWidth
               InputLabelProps={{
                 shrink: true,
               }}
+              required
               variant="standard"
             />
           )}
         />
-        {canSticky && (
-          <Controller
-            name="sticky"
-            control={control}
-            render={({ field, fieldState }): JSX.Element => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.sticky} />}
-              />
-            )}
-          />
-        )}
+        <Controller
+          name="canStudentUpload"
+          control={control}
+          render={({ field, fieldState }): JSX.Element => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.canStudentUpload} />}
+            />
+          )}
+        />
         <div style={{ marginBottom: 12 }} />
 
         <div style={{ display: 'flex' }}>
@@ -252,4 +226,4 @@ const AnnouncementForm: FC<Props> = (props) => {
   );
 };
 
-export default AnnouncementForm;
+export default FolderForm;

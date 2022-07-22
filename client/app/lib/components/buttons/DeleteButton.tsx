@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
+import { IconButton, IconButtonProps } from '@mui/material';
 import Delete from '@mui/icons-material/Delete';
 import ConfirmationDialog from '../ConfirmationDialog';
+import CustomTooltip from '../CustomTooltip';
 
 interface Props extends IconButtonProps {
   disabled: boolean;
@@ -23,7 +24,7 @@ const DeleteButton = ({
 
   return (
     <>
-      <Tooltip title={tooltip}>
+      <CustomTooltip title={tooltip}>
         <span>
           <IconButton
             disabled={disabled}
@@ -40,7 +41,7 @@ const DeleteButton = ({
             <Delete />
           </IconButton>
         </span>
-      </Tooltip>
+      </CustomTooltip>
       {dialogOpen && (
         <ConfirmationDialog
           message={confirmMessage}

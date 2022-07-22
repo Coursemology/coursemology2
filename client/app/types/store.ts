@@ -12,6 +12,7 @@ import { SubmissionsState } from 'bundles/course/assessment/submissions/types';
 import { DisbursementState } from 'bundles/course/experience-points/disbursement/types';
 import { CommentState } from 'bundles/course/discussion/topics/types';
 import { AdminState } from 'bundles/system/admin/admin/types';
+import { FoldersState } from 'bundles/course/material/folders/types';
 
 /**
  * Describes the overall shape of the application's Redux store state.
@@ -21,6 +22,7 @@ export interface AppState {
   achievements: AchievementsState;
   announcements: AnnouncementsState;
   courses: CoursesState;
+  folders: FoldersState;
   users: UsersState;
   leaderboard: LeaderboardState;
   skills: SkillState;

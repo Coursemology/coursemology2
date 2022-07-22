@@ -5,10 +5,6 @@ import * as actions from './actions';
 
 /**
  * Prepares and maps object attributes to a FormData object for an post/patch request.
- * Expected FormData attributes shape:
- *   { announcement :
- *     { title, description, badge: file }
- *   }
  */
 const formatAttributes = (data: AnnouncementFormData): FormData => {
   const payload = new FormData();

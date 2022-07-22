@@ -73,3 +73,6 @@ export const getRegistrationURL = (courseId) => `/courses/${courseId}/register`;
 
 export const getEnrolRequestURL = (courseId) =>
   `/courses/${courseId}/enrol_requests`;
+
+export const getWorkbinFolderURL = (courseId, folderId) =>
+  `/courses/${courseId}/materials/folders/${folderId}`;
