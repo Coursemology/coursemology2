@@ -26,8 +26,7 @@ const styles = {
     marginRight: '4px',
   },
   dialogStyle: {
-    position: 'absolute',
-    top: 50,
+    top: 40,
     '& .MuiDialog-paper': {
       overflowY: 'hidden',
     },
