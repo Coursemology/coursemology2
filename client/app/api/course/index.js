@@ -24,6 +24,7 @@ import SubmissionsAPI from './Assessment/Submissions/Submissions';
 import DisbursementAPI from './Disbursement';
 import ForumAPI from './Forum';
 import ExperiencePointsRecordAPI from './ExperiencePointsRecord';
+import FoldersAPI from './Material/Folders';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -31,6 +32,7 @@ const CourseAPI = {
   assessment: AssessmentAPI,
   comments: new CommentsAPI(),
   courses: new CoursesAPI(),
+  folders: new FoldersAPI(),
   materials: new MaterialsAPI(),
   materialFolders: new MaterialFoldersAPI(),
   lessonPlan: new LessonPlanAPI(),

@@ -1,6 +1,7 @@
 import { SyntheticEvent } from 'react';
-import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
+import { IconButton, IconButtonProps } from '@mui/material';
 import Edit from '@mui/icons-material/Edit';
+import CustomTooltip from '../CustomTooltip';
 
 interface Props extends IconButtonProps {
   onClick: (e: SyntheticEvent) => void;
@@ -12,13 +13,13 @@ const EditButton = ({
   tooltip = '',
   ...props
 }: Props): JSX.Element => (
-  <Tooltip title={tooltip}>
+  <CustomTooltip title={tooltip}>
     <span>
       <IconButton onClick={onClick} color="inherit" {...props}>
         <Edit />
       </IconButton>
     </span>
-  </Tooltip>
+  </CustomTooltip>
 );
 
 export default EditButton;
