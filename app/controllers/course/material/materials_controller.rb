@@ -13,10 +13,33 @@ class Course::Material::MaterialsController < Course::Material::Controller
 
   def update
     if @material.update(material_params)
-      redirect_to course_material_folder_path(current_course, @folder),
-                  success: t('.success', name: @material.name)
+      respond_to do |format|
+        format.html do
+          redirect_to course_material_folder_path(current_course, @folder),
+                      success: t('.success', name: @material.name)
+        end
+        format.json do
+          course_user = @material.updater.course_users.find_by(course: current_course)
+          if course_user
+            id = course_user.id
+            name = course_user.name
+          else
+            id = @material.updater.id
+            name = @material.updater.name
+          end
+          render json: { id: @material.id,
+                         name: @material.name,
+                         description: @material.description,
+                         updatedAt: @material.updated_at,
+                         updater: { id: id, name: name, isCourseUser: !course_user.nil? }},
+                         status: :ok
+        end
+      end
     else
-      render 'edit'
+      respond_to do |format|
+        format.html { render 'edit' }
+        format.json { render json: { errors: @folder.errors }, status: :bad_request }
+      end
     end
   end
 
