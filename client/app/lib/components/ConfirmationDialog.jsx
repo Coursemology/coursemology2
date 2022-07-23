@@ -102,10 +102,21 @@ class ConfirmationDialog extends Component {
       actions.push(...confirmButtonSecondary);
     }
 
+    const handleDialogClose = (_event, reason) => {
+      if (reason && reason !== 'backdropClick') {
+        onCancel();
+      }
+    };
+
     return (
       <Dialog
         fullWidth
-        onClose={onCancel}
+        disableEscapeKeyDown={disableCancelButton || disableConfirmButton}
+        onClose={
+          disableCancelButton || disableConfirmButton
+            ? handleDialogClose
+            : onCancel
+        }
         open={open}
         maxWidth="md"
         style={{ zIndex: 9999 }}

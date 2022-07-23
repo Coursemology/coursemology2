@@ -57,6 +57,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
   const { intl, invitation } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isResending, setIsResending] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const onResend = (): Promise<void> => {
     setIsResending(true);
@@ -80,6 +81,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
   };
 
   const onDelete = (): Promise<void> => {
+    setIsDeleting(true);
     return dispatch(deleteInvitation(invitation.id))
       .then(() => {
         toast.success(
@@ -95,7 +97,8 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
           }),
         );
         throw error;
-      });
+      })
+      .finally(() => setIsDeleting(false));
   };
 
   const managementButtons = (
@@ -103,14 +106,14 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
       <EmailButton
         tooltip={intl.formatMessage(translations.resendTooltip)}
         className={`invitation-resend-${invitation.id}`}
-        disabled={isResending}
+        disabled={isResending || isDeleting}
         onClick={onResend}
         sx={styles.buttonStyle}
       />
       <DeleteButton
         tooltip={intl.formatMessage(translations.deletionTooltip)}
         className={`invitation-delete-${invitation.id}`}
-        disabled={isResending}
+        disabled={isResending || isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
           role: ROLES[invitation.role],
