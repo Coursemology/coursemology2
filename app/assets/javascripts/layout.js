@@ -1,5 +1,4 @@
 //= require helpers/event_helpers
-//= require layout_checkbox_toggle_all
 
 (function ($, EVENT_HELPERS) {
   'use strict';
@@ -61,6 +60,7 @@
   //   Function applies config options to summernote based on CSS classes applied in 'textarea'.
   //   Currently supported options include `airmode` and `focus`.
   function initializeSummernote(element) {
+    console.log('asdfasdf')
     var airmodeOptions = {
       airMode: true,
       popover: {
@@ -155,7 +155,6 @@
     // Tooltips are attached to elements with a title attribute, except for the Facebook button.
     // See https://github.com/Coursemology/coursemology-theme/pull/5
     $('[title]', element).not('.fb-like *').tooltip();
-    $('input.toggle-all[type="checkbox"]', element).checkboxToggleAll();
     initializeSummernote(element);
   }
 
