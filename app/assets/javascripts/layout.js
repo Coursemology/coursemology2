@@ -60,7 +60,6 @@
   //   Function applies config options to summernote based on CSS classes applied in 'textarea'.
   //   Currently supported options include `airmode` and `focus`.
   function initializeSummernote(element) {
-    console.log('asdfasdf')
     var airmodeOptions = {
       airMode: true,
       popover: {
