@@ -241,7 +241,6 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         fullWidth
         maxWidth="lg"
         style={{
-          position: 'absolute',
           top: 0,
         }}
       >
