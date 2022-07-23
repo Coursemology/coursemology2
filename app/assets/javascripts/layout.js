@@ -165,7 +165,13 @@
   $(function () {
     initializeComponents(document);
 
-    EVENT_HELPERS.onNodesInserted($(document), initializeComponents);
+    // The line below impacts all React pages very badly as the script is run
+    // whenever a DOM Node is inserted in the dynamically rendered React page.
+    // As I do not see the need to initialize any component upon node insertion in rails pages,
+    // and also since we have less server-side rendered rails pages with injected dynamic behavior,
+    // we are disabling the line below and eventually, this whole file will also be deleted
+    // upon completion of the react pages porting. 
+    // EVENT_HELPERS.onNodesInserted($(document), initializeComponents);
 
     $(document).on('nested:fieldAdded', function (e) {
       initializeComponents(e.field);
