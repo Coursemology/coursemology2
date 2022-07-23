@@ -24,6 +24,7 @@ const DeleteButton = ({
       <Tooltip title={tooltip}>
         <span>
           <IconButton
+            disabled={disabled}
             onClick={(): void => {
               if (confirmMessage) {
                 setDialogOpen(true);

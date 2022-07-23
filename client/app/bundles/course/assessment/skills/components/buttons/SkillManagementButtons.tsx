@@ -114,7 +114,7 @@ const SkillManagementButtons: FC<Props> = (props) => {
           className={
             isSkillBranch ? `skill-branch-edit-${id}` : `skill-edit-${id}`
           }
-          disabled={!canUpdate}
+          disabled={!canUpdate || isDeleting}
           onClick={(): void => editClick(data)}
         />
       )}

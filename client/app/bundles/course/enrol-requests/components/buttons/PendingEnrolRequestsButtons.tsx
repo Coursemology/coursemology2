@@ -57,6 +57,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
   const { intl, enrolRequest } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isApproving, setIsApproving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const onApprove = (): Promise<void> => {
     setIsApproving(true);
@@ -80,6 +81,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
   };
 
   const onDelete = (): Promise<void> => {
+    setIsDeleting(true);
     return dispatch(rejectEnrolRequest(enrolRequest.id))
       .then(() => {
         toast.success(
@@ -95,7 +97,8 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
           }),
         );
         throw error;
-      });
+      })
+      .finally(() => setIsDeleting(false));
   };
 
   const managementButtons = (
@@ -103,14 +106,14 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
       <AcceptButton
         tooltip={intl.formatMessage(translations.approveTooltip)}
         className={`enrol-request-approve-${enrolRequest.id}`}
-        disabled={isApproving}
+        disabled={isApproving || isDeleting}
         onClick={onApprove}
         sx={styles.buttonStyle}
       />
       <DeleteButton
         tooltip={intl.formatMessage(translations.rejectTooltip)}
         className={`enrol-request-reject-${enrolRequest.id}`}
-        disabled={isApproving}
+        disabled={isApproving || isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.rejectConfirm, {
           role: ROLES[enrolRequest.role!],
