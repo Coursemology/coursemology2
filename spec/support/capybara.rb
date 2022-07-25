@@ -81,8 +81,8 @@ module Capybara::TestGroupHelpers
       within find('div.Toastify__toast') do
         expect(find('div.Toastify__toast-body', visible: true).text).to eq(message)
         find('button.Toastify__close-button').click
-        sleep 0.5 # ensure toast fully closes
       end
+      sleep 0.5 # To ensure toast is closed
     end
 
     # Helper to fill in year of MUI datetimepicker
