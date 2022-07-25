@@ -42,8 +42,7 @@ RSpec.feature 'Course: Announcements' do
 
         fill_in 'title', with: ' '
         find('#announcement-form-update-button').click
-        expect(page).
-          to have_selector('div.Toastify__toast-body', text: 'Failed to update the announcement')
+        expect_toastify('Failed to update the announcement')
         expect(page).to have_selector('#announcement-form-update-button')
 
         new_title = 'New Title'
@@ -51,8 +50,7 @@ RSpec.feature 'Course: Announcements' do
         find('#announcement-form-update-button').click
 
         expect(current_path).to eq course_announcements_path(course)
-        expect(page).
-          to have_selector('div.Toastify__toast-body', text: 'Failed to update the announcement')
+        expect_toastify('Failed to update the announcement')
         within find("#announcement-#{announcement.id}") do
           expect(page).to have_selector('h3', text: new_title)
         end
@@ -80,7 +78,7 @@ RSpec.feature 'Course: Announcements' do
         expect(page).not_to have_selector("#announcement-edit-button-#{announcement.id}")
         expect(page).not_to have_selector("#announcement-delete-button-#{announcement.id}")
 
-        expect(page).to have_selector('div.Toastify__toast-body', text: 'Announcement was successfully deleted.')
+        expect_toastify('Announcement was successfully deleted.')
       end
     end
 

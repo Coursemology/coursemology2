@@ -38,8 +38,7 @@ RSpec.feature 'Courses: Students' do
         find("button.user-save-#{student_to_update.id}").click
       end
 
-      expect(page).
-        to have_selector('div.Toastify__toast-body', text: "Record for #{new_name} was updated.")
+      expect_toastify("Record for #{new_name} was updated.")
 
       expect(student_to_update.reload).to be_phantom
       expect(student_to_update.name).to eq(new_name)

@@ -15,11 +15,14 @@ RSpec.feature 'System: Administration: Instances', js: true do
           find('button#new-instance-button').click
         end.not_to(change { Instance.count })
 
-        fill_in 'name', with: 'Lorem Ipsum'
-        fill_in 'host', with: generate(:host)
+        new_name = 'Lorem Ipsum'
+        new_host = generate(:host)
+
+        fill_in 'name', with: new_name
+        fill_in 'host', with: new_host
 
         find('button.btn-submit').click
-        expect(page).to have_selector('div.instance_name', text: 'Lorem Ipsum')
+        expect_toastify("New instance #{new_name} (#{new_host}) created!")
       end
 
       scenario 'I can edit instances' do
@@ -44,8 +47,7 @@ RSpec.feature 'System: Administration: Instances', js: true do
           find('input').set(new_name)
           find('button.confirm-btn').click
         end
-        expect(page).
-          to have_selector('div.Toastify__toast-body', text: "Renamed instance to #{new_name}")
+        expect_toastify("Renamed instance to #{new_name}")
         expect(find("div.instance_name_#{instance.id}").text).to eq(new_name)
 
         within find("div.instance_host_#{instance.id}") do
@@ -53,8 +55,7 @@ RSpec.feature 'System: Administration: Instances', js: true do
           find('input').set(new_host)
           find('button.confirm-btn').click
         end
-        expect(page).
-          to have_selector('div.Toastify__toast-body', text: "Host changed from #{instance.host} to #{new_host}")
+        expect_toastify("Host changed from #{instance.host} to #{new_host}")
         expect(find("div.instance_host_#{instance.id}").text).to eq(new_host)
       end
 
