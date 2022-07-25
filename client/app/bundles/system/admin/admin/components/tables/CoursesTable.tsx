@@ -100,7 +100,7 @@ const CoursesTable: FC<Props> = (props) => {
         'filter[page_num]': page,
         'filter[length]': 30,
         active,
-        search: searchText,
+        search: searchText.trim(),
       }),
     ).then(() => {
       setIsLoading(false);
@@ -215,6 +215,7 @@ const CoursesTable: FC<Props> = (props) => {
               className="course_active_total_users"
               variant="body2"
             >
+              {/* ADD LINK TO COURSE USER PAGE */}
               {course.activeUserCount} / {course.userCount}
             </Typography>
           );
@@ -279,7 +280,7 @@ const CoursesTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box sx={{ margin: '12px 0px', position: 'relative' }}>
+    <Box sx={{ margin: '12px 0px' }}>
       {isLoading && <LoadingOverlay />}
       <DataTable
         title={

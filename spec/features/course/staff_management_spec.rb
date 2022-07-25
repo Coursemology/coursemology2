@@ -79,8 +79,7 @@ RSpec.feature 'Courses: Staff Management' do
         within find("tr.course_user_#{staff_to_change.id}") do
           find("button.user-save-#{staff_to_change.id}").click
         end
-        expect(page).
-          to have_selector('div.Toastify__toast-body', text: "Record for #{new_name} was updated.")
+        expect_toastify("Record for #{new_name} was updated.")
 
         expect(staff_to_change.reload).to be_owner
         expect(staff_to_change.name).to eq(new_name)

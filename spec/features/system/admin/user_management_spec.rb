@@ -48,17 +48,14 @@ RSpec.feature 'System: Administration: Users', js: true do
           find('input').set(new_name)
           find('button.confirm-btn').click
         end
+        expect_toastify("#{user_to_change.name} was renamed to #{new_name}.")
 
         # change role
         within find("tr.system_user_#{user_to_change.id}") do
           find('div.user_role').click
         end
         find("#role-#{user_to_change.id}-administrator").select_option
-
-        expect_toastify("#{user_to_change.name} was renamed to #{new_name}.")
-        expect(page).
-          to have_selector('div.Toastify__toast-body',
-                           text: "Successfully changed #{new_name}'s role to Administrator.")
+        expect_toastify("Successfully changed #{new_name}'s role to Administrator.")
 
         expect(user_to_change.reload).to be_administrator
         expect(user_to_change.name).to eq(new_name)

@@ -168,7 +168,7 @@ const UsersTable: FC<Props> = (props) => {
         'filter[length]': 30,
         role,
         active,
-        search: searchText,
+        search: searchText.trim(),
       }),
     ).then(() => {
       setIsLoading(false);

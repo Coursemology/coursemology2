@@ -77,9 +77,12 @@ module Capybara::TestGroupHelpers
     #
     # Since capybara's `find` has a default timeout until the element is found, this helps
     # to ensure certain changes are made before continuing with the tests.
-    # NOTE: if there is more than one toast visible, the search will only return the first toast
     def expect_toastify(message)
-      expect(page.find('div.Toastify__toast-body').text).to eq(message)
+      within find('div.Toastify__toast') do
+        expect(find('div.Toastify__toast-body', visible: true).text).to eq(message)
+        find('button.Toastify__close-button').click
+        sleep 0.5 # ensure toast fully closes
+      end
     end
 
     # Helper to fill in year of MUI datetimepicker

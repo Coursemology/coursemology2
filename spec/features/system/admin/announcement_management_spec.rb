@@ -34,17 +34,15 @@ RSpec.feature 'System: Administration: Announcements' do
 
         fill_in 'title', with: ' '
         find('#announcement-form-update-button').click
-        expect(page).
-          to have_selector('div.Toastify__toast-body', text: 'Failed to update the announcement')
+        expect_toastify('Failed to update the announcement')
         expect(page).to have_selector('#announcement-form-update-button')
 
         new_title = 'New Title'
         fill_in 'title', with: new_title
         find('#announcement-form-update-button').click
+        expect_toastify('Announcement updated')
 
         expect(current_path).to eq admin_announcements_path
-        expect(page).
-          to have_selector('div.Toastify__toast-body', text: 'Announcement updated')
         within find("#announcement-#{announcement.id}") do
           expect(page).to have_selector('h3', text: new_title)
         end
