@@ -47,6 +47,7 @@ const UserManagementButtons: FC<Props> = (props) => {
   const { intl, user } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const onSave = (data: CourseUserRowData): Promise<void> => {
     setIsSaving(true);
@@ -70,9 +71,13 @@ const UserManagementButtons: FC<Props> = (props) => {
   };
 
   const onDelete = (): Promise<void> => {
+    setIsDeleting(true);
     return dispatch(deleteUser(user.id))
       .then(() => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
+      })
+      .finally(() => {
+        setIsDeleting(false);
       })
       .catch((error) => {
         toast.error(intl.formatMessage(translations.deletionFailure));
@@ -85,14 +90,15 @@ const UserManagementButtons: FC<Props> = (props) => {
       <SaveButton
         tooltip="Save Changes"
         className={`user-save-${user.id}`}
-        disabled={isSaving}
+        disabled={isSaving || isDeleting}
         onClick={(): Promise<void> => onSave(user)}
         sx={styles.buttonStyle}
       />
       <DeleteButton
         tooltip="Delete User"
         className={`user-delete-${user.id}`}
-        disabled={isSaving}
+        disabled={isSaving || isDeleting}
+        loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
           role: sharedConstants.COURSE_USER_ROLES[user.role],

@@ -7,6 +7,7 @@ interface Props extends IconButtonProps {
   disabled: boolean;
   onClick: () => Promise<void>;
   confirmMessage?: string;
+  loading?: boolean;
   tooltip?: string;
 }
 
@@ -15,9 +16,16 @@ const DeleteButton = ({
   onClick,
   confirmMessage,
   tooltip = '',
+  loading = false,
   ...props
 }: Props): JSX.Element => {
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  const handleDialogClose = (_event: object, reason: string): void => {
+    if (reason && reason !== 'backdropClick') {
+      setDialogOpen(false);
+    }
+  };
 
   return (
     <>
@@ -44,7 +52,8 @@ const DeleteButton = ({
           disableCancelButton={disabled}
           disableConfirmButton={disabled}
           open={dialogOpen}
-          onCancel={(): void => setDialogOpen(false)}
+          loadingConfirmButton={loading}
+          onCancel={handleDialogClose}
           onConfirm={(): void => {
             onClick().finally(() => setDialogOpen(false));
           }}
