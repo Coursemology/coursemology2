@@ -35,6 +35,14 @@ class System::Admin::UsersController < System::Admin::Controller
 
   private
 
+  def user_params
+    params.require(:user).permit(:name, :role)
+  end
+
+  def search_param
+    params.permit(:search)[:search]
+  end
+
   def load_users
     @users = @users.human_users.includes(:emails).ordered_by_name.search(search_param)
     @users = @users.active_in_past_7_days if params[:active].present?
@@ -48,13 +56,5 @@ class System::Admin::UsersController < System::Admin::Controller
       total: User.group(:role).count,
       active: User.active_in_past_7_days.group(:role).count
     }.with_indifferent_access
-  end
-
-  def user_params
-    params.require(:user).permit(:name, :role)
-  end
-
-  def search_param
-    params.permit(:search)[:search]
   end
 end

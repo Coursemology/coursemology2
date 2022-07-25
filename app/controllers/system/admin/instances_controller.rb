@@ -7,18 +7,14 @@ class System::Admin::InstancesController < System::Admin::Controller
     respond_to do |format|
       format.html { render 'system/admin/admin/index' }
       format.json do
-        @instances_count = Instance.count
-        @instances = Instance.order_for_display.paginated(new_page_params).
-                     calculated(:active_course_count, :course_count, :active_user_count, :user_count)
+        preload_instances
       end
     end
   end
 
   def create # :nodoc:
     if @instance.save
-      @instances_count = Instance.count
-      @instances = Instance.order_for_display.paginated(new_page_params).
-                   calculated(:active_course_count, :course_count, :active_user_count, :user_count)
+      preload_instances
       render 'index', format: :json
     else
       render json: { errors: @instance.errors }, status: :bad_request
@@ -47,5 +43,11 @@ class System::Admin::InstancesController < System::Admin::Controller
 
   def instance_params # :nodoc:
     params.require(:instance).permit(:name, :host)
+  end
+
+  def preload_instances
+    @instances_count = Instance.count
+    @instances = Instance.order_for_display.paginated(new_page_params).
+                 calculated(:active_course_count, :course_count, :active_user_count, :user_count)
   end
 end
