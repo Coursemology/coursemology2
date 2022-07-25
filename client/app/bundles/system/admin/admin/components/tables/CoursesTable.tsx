@@ -279,7 +279,7 @@ const CoursesTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box sx={{ margin: '12px 0px' }}>
+    <Box sx={{ margin: '12px 0px', position: 'relative' }}>
       {isLoading && <LoadingOverlay />}
       <DataTable
         title={
