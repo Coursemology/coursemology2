@@ -10,7 +10,7 @@ interface Props {
   field: any;
   fieldState: ControllerFieldState;
   disabled?: boolean;
-  label?: JSX.Element;
+  label?: string;
   renderIf?: boolean;
   icon?: JSX.Element;
   checkedIcon?: JSX.Element;
@@ -21,11 +21,12 @@ const styles = {
     width: '100%',
   },
   checkbox: {
-    margin: '-4px 0px 0px 0px',
-    padding: '2px',
+    padding: '8px',
   },
   checkboxStyle: {
     marginLeft: '0px',
+    height: '30px',
+    margin: '8px 0px 0px -8px',
   },
   errorText: { margin: 0 },
 };
@@ -62,7 +63,7 @@ const FormCheckboxField: FC<Props> = (props) => {
         }
         disabled={disabled}
         label={<b>{label}</b>}
-        labelPlacement="start"
+        labelPlacement="end"
         style={styles.checkboxStyle}
         {...custom}
       />

@@ -15,7 +15,7 @@ import Note from 'lib/components/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import sharedConstants from 'lib/constants/sharedConstants';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
-import tableTranslations from 'lib/components/tables/translations';
+import tableTranslations from 'lib/translations/table';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import equal from 'fast-deep-equal';
 import { useSelector } from 'react-redux';

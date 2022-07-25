@@ -5,7 +5,7 @@ import DataTable from 'lib/components/DataTable';
 import { CourseUserData } from 'types/course/courseUsers';
 import sharedConstants from 'lib/constants/sharedConstants';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
-import tableTranslations from 'lib/components/tables/translations';
+import tableTranslations from 'lib/translations/table';
 import equal from 'fast-deep-equal';
 
 interface Props extends WrappedComponentProps {

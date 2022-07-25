@@ -14,7 +14,7 @@ import {
   EnrolRequestRowData,
 } from 'types/course/enrolRequests';
 import sharedConstants from 'lib/constants/sharedConstants';
-import tableTranslations from 'lib/components/tables/translations';
+import tableTranslations from 'lib/translations/table';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import equal from 'fast-deep-equal';

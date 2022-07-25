@@ -59,24 +59,24 @@ const IndividualInviteForm: FC<Props> = (props) => {
     getManageCourseUserPermissions(state),
   );
   const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
+  const emptyInvitation = {
+    name: '',
+    email: '',
+    role: 'student',
+    phantom: false,
+    ...(permissions.canManagePersonalTimes && {
+      timelineAlgorithm: defaultTimelineAlgorithm,
+    }),
+  };
   const initialValues = {
-    invitations: [
-      {
-        name: '',
-        email: '',
-        role: 'student',
-        phantom: false,
-        ...(permissions.canManagePersonalTimes && {
-          timelineAlgorithm: defaultTimelineAlgorithm,
-        }),
-      },
-    ],
+    invitations: [emptyInvitation],
   };
   const {
     control,
     handleSubmit,
     watch,
     reset,
+    formState,
     formState: { errors },
   } = useForm<IndividualInvites>({
     defaultValues: initialValues,
@@ -106,17 +106,16 @@ const IndividualInviteForm: FC<Props> = (props) => {
   useEffect(() => {
     // To add an invitation field by default when all other invitation fields are deleted.
     if (invitationsFields.length === 0) {
-      invitationsAppend({
-        name: '',
-        email: '',
-        role: 'student',
-        phantom: false,
-        ...(permissions.canManagePersonalTimes && {
-          timelineAlgorithm: defaultTimelineAlgorithm,
-        }),
-      });
+      invitationsAppend(emptyInvitation);
     }
   }, [invitationsFields.length === 0]);
+
+  // It's recommended to reset in useEffect as execution order matters
+  useEffect(() => {
+    if (formState.isSubmitSuccessful) {
+      reset(initialValues);
+    }
+  }, [formState, reset]);
 
   const onSubmit = (data: InvitationsPostData): Promise<void> => {
     setIsLoading(true);
@@ -125,7 +124,6 @@ const IndividualInviteForm: FC<Props> = (props) => {
         openResultDialog(response);
       })
       .finally(() => {
-        reset(initialValues);
         setIsLoading(false);
       });
   };

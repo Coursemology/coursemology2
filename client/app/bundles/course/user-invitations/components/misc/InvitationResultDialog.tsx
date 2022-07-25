@@ -45,7 +45,8 @@ const translations = defineMessages({
   body: {
     id: 'course.userInvitations.components.misc.InvitationResultDialog.body',
     defaultMessage:
-      '{count, plural, =0 {No new users were} one {# new user was} other {# new users were}} invited.',
+      '{newInvitationsCount, plural, =0 {No new users were} one {# new user was} other {# new users were}} invited to Coursemology. ' +
+      '{newCourseUsersCount, plural, =0 {No users without Coursemology accounts were} one {# new user without Coursemology account was} other {# new users without Coursemology accounts were}} invited to this course.',
   },
   duplicateInfo: {
     id: 'course.userInvitations.components.misc.InvitationResultDialog.duplicateUsers.info',
@@ -117,7 +118,8 @@ const InvitationResultDialog: FC<Props> = (props) => {
       <DialogContent>
         <Typography variant="body2" gutterBottom>
           {intl.formatMessage(translations.body, {
-            count: newInvitations?.length ?? 0,
+            newInvitationsCount: newInvitations?.length ?? 0,
+            newCourseUsersCount: newCourseUsers?.length ?? 0,
           })}
         </Typography>
         {duplicateUsers && duplicateUsers.length > 0 && (
