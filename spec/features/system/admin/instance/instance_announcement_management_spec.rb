@@ -73,7 +73,19 @@ RSpec.feature 'System: Administration: Instance Announcements' do
         expect(page).to have_link(nil, href: new_admin_instance_announcement_path)
         announcements.each do |announcement|
           expect(page).to have_content_tag_for(announcement)
+          expect(page).to have_link(nil, href: edit_admin_instance_announcement_path(announcement))
+          expect(page).to have_link(nil, href: admin_instance_announcement_path(announcement))
         end
+      end
+
+      scenario 'I can delete announcements' do
+        announcement = create(:instance_announcement, instance: instance)
+        visit admin_instance_announcements_path(page: Instance::Announcement.page.total_pages)
+
+        find_link(nil, href: admin_instance_announcement_path(announcement)).click
+        expect(instance.announcements.exists?(announcement.id)).to be(false)
+        visit admin_instance_announcements_path(page: Instance::Announcement.page.total_pages)
+        expect(page).not_to have_link(nil, href: admin_instance_announcement_path(announcement))
       end
     end
   end

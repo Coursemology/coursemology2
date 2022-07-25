@@ -11,11 +11,13 @@
 
     = format_inline_text(announcement.title)
 
-  / edit & delete buttons still exist in (rails) instance announcements,
-  / but that will be ported soon
-  /   div.btn-group
-  / = edit_button(edit_button_path) if can?(:edit, announcement)
-  / = delete_button(delete_button_path) if can?(:destroy, announcement)
+  // edit & delete buttons still exist in (rails) instance announcements,
+  // but that will be ported soon
+
+  div.pull-right
+    div.btn-group
+      = edit_button(edit_button_path) if can?(:edit, announcement) && edit_button_path
+      = delete_button(delete_button_path) if can?(:destroy, announcement) && delete_button_path
 
   i.timestamp
     => format_datetime(announcement.start_at)
