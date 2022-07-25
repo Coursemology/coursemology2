@@ -27,7 +27,7 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import { toast } from 'react-toastify';
-import tableTranslations from 'lib/components/tables/translations';
+import tableTranslations from 'lib/translations/table';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { deletePersonalTime, updatePersonalTime } from '../../operations';
 

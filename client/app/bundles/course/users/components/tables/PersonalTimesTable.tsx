@@ -11,7 +11,7 @@ import {
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { PersonalTimeMiniEntity } from 'types/course/personalTimes';
-import tableTranslations from 'lib/components/tables/translations';
+import tableTranslations from 'lib/translations/table';
 import { getAssessmentURL, getVideoURL } from 'lib/helpers/url-builders';
 import sharedConstants from 'lib/constants/sharedConstants';
 import { getCourseId } from 'lib/helpers/url-helpers';

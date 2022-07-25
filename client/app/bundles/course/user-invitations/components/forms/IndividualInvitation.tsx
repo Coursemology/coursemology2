@@ -10,13 +10,14 @@ import {
 import { defineMessages, WrappedComponentProps, injectIntl } from 'react-intl';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
-import FormToggleField from 'lib/components/form/fields/ToggleField';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import {
   IndividualInvite,
   IndividualInvites,
 } from 'types/course/userInvitations';
 import sharedConstants from 'lib/constants/sharedConstants';
 import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
+import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
   permissions: ManageCourseUsersPermissions;
@@ -49,6 +50,14 @@ const translations = defineMessages({
     id: 'course.userInvitations.IndividualInvitations.remove',
     defaultMessage: 'Remove Invitation',
   },
+  namePlaceholder: {
+    id: 'course.userInvitations.IndividualInvitations.name.placeholder',
+    defaultMessage: 'Awesome User',
+  },
+  emailPlaceholder: {
+    id: 'course.userInvitations.IndividualInvitations.email.placeholder',
+    defaultMessage: 'user@example.com',
+  },
 });
 
 const userRoleOptions = Object.keys(sharedConstants.COURSE_USER_ROLES).map(
@@ -71,8 +80,8 @@ const IndividualInvitation: FC<Props> = (props) => {
             field={field}
             fieldState={fieldState}
             // @ts-ignore: component is still written in JS
-            placeholder="Awesome User"
-            label="Name"
+            placeholder={intl.formatMessage(translations.namePlaceholder)}
+            label={intl.formatMessage(tableTranslations.name)}
             variant="standard"
             id={`name-${index}`}
             sx={styles.textInput}
@@ -87,8 +96,8 @@ const IndividualInvitation: FC<Props> = (props) => {
             field={field}
             fieldState={fieldState}
             // @ts-ignore: component is still written in JS
-            placeholder="user@example.com"
-            label="Email"
+            placeholder={intl.formatMessage(translations.emailPlaceholder)}
+            label={intl.formatMessage(tableTranslations.email)}
             variant="standard"
             id={`email-${index}`}
             sx={styles.textInput}
@@ -104,7 +113,7 @@ const IndividualInvitation: FC<Props> = (props) => {
             fieldState={fieldState}
             options={userRoleOptions}
             // @ts-ignore: component is still written in JS
-            label="Role"
+            label={intl.formatMessage(tableTranslations.role)}
             sx={styles.textInput}
           />
         )}
@@ -119,7 +128,7 @@ const IndividualInvitation: FC<Props> = (props) => {
               fieldState={fieldState}
               options={sharedConstants.TIMELINE_ALGORITHMS}
               // @ts-ignore: component is still written in JS
-              label="Timeline Algorithm"
+              label={intl.formatMessage(tableTranslations.timelineAlgorithm)}
             />
           )}
         />
@@ -128,10 +137,10 @@ const IndividualInvitation: FC<Props> = (props) => {
         name={`invitations.${index}.phantom`}
         control={fieldsConfig.control}
         render={({ field, fieldState }): JSX.Element => (
-          <FormToggleField
+          <FormCheckboxField
             field={field}
             fieldState={fieldState}
-            label="Phantom"
+            label={intl.formatMessage(tableTranslations.phantom)}
           />
         )}
       />

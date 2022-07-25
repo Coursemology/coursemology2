@@ -15,7 +15,7 @@ import {
 } from 'types/course/userInvitations';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import sharedConstants from 'lib/constants/sharedConstants';
-import tableTranslations from 'lib/components/tables/translations';
+import tableTranslations from 'lib/translations/table';
 import equal from 'fast-deep-equal';
 import { useSelector } from 'react-redux';
 import { AppState } from 'types/store';
