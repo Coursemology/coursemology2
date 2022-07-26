@@ -24,7 +24,7 @@ const UploadFilesButton: FC<Props> = (props) => {
     >
       <IconButton
         id="upload-files-button"
-        style={{ padding: 4 }}
+        style={{ padding: 6 }}
         onClick={handleOnClick}
       >
         <UploadIcon />

@@ -75,6 +75,7 @@ const MaterialUpload: FC<Props> = (props) => {
         }}
         open={isOpen}
         maxWidth="xl"
+        fullWidth
       >
         <DialogTitle>
           {intl.formatMessage(translations.uploadMaterialsTitle)}

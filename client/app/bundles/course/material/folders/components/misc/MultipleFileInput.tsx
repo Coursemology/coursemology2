@@ -63,6 +63,7 @@ const MultipleFileInput: FC<Props> = (props) => {
     <Dropzone
       id="material-upload"
       disabled={disabled}
+      width="100%"
       onDragEnter={(): void => setDropZoneActive(true)}
       onDragLeave={(): void => setDropZoneActive(false)}
       onDrop={(files): void => {

@@ -24,7 +24,7 @@ const NewSubfolderButton: FC<Props> = (props) => {
     >
       <IconButton
         id="new-subfolder-button"
-        style={{ padding: 4 }}
+        style={{ padding: 6 }}
         onClick={handleOnClick}
       >
         <CreateNewFolderIcon />

@@ -46,7 +46,7 @@ const DownloadFolderButton: FC<Props> = (props) => {
           >
             <IconButton
               id="download-folder-button"
-              style={{ padding: 4 }}
+              style={{ padding: 6 }}
               onClick={(): void => {
                 setIsLoading(true);
                 dispatch(downloadFolder(currFolderId))
