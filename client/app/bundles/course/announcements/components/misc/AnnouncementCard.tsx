@@ -59,6 +59,7 @@ const AnnouncementCard: FC<Props> = (props) => {
 
   // For editing announcements form dialog
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const initialValues = {
     title: announcement.title,
@@ -70,6 +71,7 @@ const AnnouncementCard: FC<Props> = (props) => {
 
   const dispatch = useDispatch<AppDispatch>();
   const onDelete = (): Promise<void> => {
+    setIsDeleting(true);
     return dispatch(deleteAnnouncement(announcement.id))
       .then(() => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
@@ -77,7 +79,8 @@ const AnnouncementCard: FC<Props> = (props) => {
       .catch((error) => {
         toast.error(intl.formatMessage(translations.deletionFailure));
         throw error;
-      });
+      })
+      .finally(() => setIsDeleting(false));
   };
 
   const onEdit = (): void => setIsOpen(true);
@@ -149,7 +152,8 @@ const AnnouncementCard: FC<Props> = (props) => {
               {announcement.permissions.canDelete && (
                 <DeleteButton
                   id={`announcement-delete-button-${announcement.id}`}
-                  disabled={false}
+                  disabled={isDeleting}
+                  loading={isDeleting}
                   confirmMessage={`${intl.formatMessage(
                     translations.deleteConfirmation,
                   )} (${announcement.title})?`}

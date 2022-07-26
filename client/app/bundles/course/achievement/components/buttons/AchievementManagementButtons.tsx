@@ -85,6 +85,7 @@ const AchievementManagementButtons: FC<Props> = (props) => {
         <DeleteButton
           className={`achievement-delete-${achievement.id}`}
           disabled={isDeleting}
+          loading={isDeleting}
           onClick={onDelete}
           confirmMessage={intl.formatMessage(translations.deletionConfirm)}
         />

@@ -114,6 +114,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
         tooltip={intl.formatMessage(translations.rejectTooltip)}
         className={`enrol-request-reject-${enrolRequest.id}`}
         disabled={isApproving || isDeleting}
+        loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.rejectConfirm, {
           role: ROLES[enrolRequest.role!],

@@ -125,6 +125,7 @@ const SkillManagementButtons: FC<Props> = (props) => {
             isSkillBranch ? `skill-branch-delete-${id}` : `skill-delete-${id}`
           }
           disabled={isDeleting}
+          loading={isDeleting}
           onClick={onDelete}
         />
       )}

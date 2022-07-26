@@ -114,6 +114,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
         tooltip={intl.formatMessage(translations.deletionTooltip)}
         className={`invitation-delete-${invitation.id}`}
         disabled={isResending || isDeleting}
+        loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
           role: ROLES[invitation.role],
