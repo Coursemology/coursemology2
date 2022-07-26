@@ -295,6 +295,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
               <DeleteButton
                 tooltip={intl.formatMessage(translations.delete)}
                 disabled={isSaving || isDeleting}
+                loading={isDeleting}
                 onClick={handleDelete}
                 confirmMessage={
                   item.new
