@@ -1,5 +1,5 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
-import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
@@ -36,7 +36,15 @@ import FolderEdit from '../FolderEdit';
 
 interface Props extends WrappedComponentProps {}
 
-const FolderShow: FC<Props> = (_props) => {
+const translations = defineMessages({
+  defaultHeader: {
+    id: 'course.materials.folders.defaultHeader',
+    defaultMessage: 'Materials',
+  },
+});
+
+const FolderShow: FC<Props> = (props) => {
+  const { intl } = props;
   const { folderId } = useParams();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -123,7 +131,9 @@ const FolderShow: FC<Props> = (_props) => {
     <>
       <PageHeader
         key={`workbin-folder-${name}-${id}`}
-        title={name === null ? 'Workbin' : name}
+        title={
+          name === null ? intl.formatMessage(translations.defaultHeader) : name
+        }
         toolbars={headerToolbars}
         returnLink={
           parentId !== null
