@@ -8,6 +8,7 @@ interface Props extends IconButtonProps {
   onClick: () => Promise<void>;
   confirmMessage?: string;
   tooltip?: string;
+  loading?: boolean;
 }
 
 const DeleteButton = ({
@@ -15,6 +16,7 @@ const DeleteButton = ({
   onClick,
   confirmMessage,
   tooltip = '',
+  loading = false,
   ...props
 }: Props): JSX.Element => {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -44,6 +46,7 @@ const DeleteButton = ({
           message={confirmMessage}
           disableCancelButton={disabled}
           disableConfirmButton={disabled}
+          loadingConfirmButton={loading}
           open={dialogOpen}
           onCancel={(): void => setDialogOpen(false)}
           onConfirm={(): void => {

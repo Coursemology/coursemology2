@@ -96,6 +96,7 @@ const UserManagementButtons: FC<Props> = (props) => {
         tooltip="Delete User"
         className={`user-delete-${user.id}`}
         disabled={isSaving || isDeleting}
+        loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
           role: sharedConstants.COURSE_USER_ROLES[user.role],
