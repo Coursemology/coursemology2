@@ -1,5 +1,5 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import {
@@ -8,6 +8,7 @@ import {
 } from 'types/course/material/folders';
 
 import {
+  Button,
   Stack,
   Table,
   TableBody,
@@ -17,6 +18,8 @@ import {
   Tooltip,
 } from '@mui/material';
 import {
+  ArrowDropDown as ArrowDropDownIcon,
+  ArrowDropUp as ArrowDropUpIcon,
   Block as BlockIcon,
   Description as DescriptionIcon,
   Folder as FolderIcon,
@@ -71,32 +74,156 @@ const WorkbinTable: FC<Props> = (props) => {
     isCurrentCourseStudent,
     isConcrete,
   } = props;
+  const [sortedSubfolders, setSortedSubfolders] = useState(subfolders);
+  const [sortedMaterials, setSortedMaterials] = useState(materials);
+
+  useEffect(() => {
+    setSortedSubfolders(subfolders);
+  }, [subfolders]);
+
+  useEffect(() => {
+    setSortedMaterials(materials);
+  }, [materials]);
+
+  const [sortBy, setSortBy] = useState(
+    intl.formatMessage(translations.tableHeaderName),
+  );
+  const [sortDirection, setSortDirection] = useState<'down' | 'up'>('down');
+
+  const sortWithDirection = (
+    columnName: string,
+    direction: 'down' | 'up',
+  ): void => {
+    switch (columnName) {
+      case intl.formatMessage(translations.tableHeaderName):
+        if (direction === 'up') {
+          setSortedSubfolders(
+            subfolders.sort((a, b) => (a.name > b.name ? -1 : 1)),
+          );
+          setSortedMaterials(
+            materials.sort((a, b) => (a.name > b.name ? -1 : 1)),
+          );
+        } else {
+          setSortedSubfolders(
+            subfolders.sort((a, b) => (a.name > b.name ? 1 : -1)),
+          );
+          setSortedMaterials(
+            materials.sort((a, b) => (a.name > b.name ? 1 : -1)),
+          );
+        }
+        break;
+
+      case intl.formatMessage(translations.tableHeaderStartAt):
+        if (direction === 'up') {
+          setSortedSubfolders(
+            subfolders.sort((a, b) => (a.startAt > b.startAt ? -1 : 1)),
+          );
+        } else {
+          setSortedSubfolders(
+            subfolders.sort((a, b) => (a.startAt > b.startAt ? 1 : -1)),
+          );
+        }
+        // Materials does not have a startAt
+        setSortedMaterials(materials);
+        break;
+
+      case intl.formatMessage(translations.tableHeaderLastModified):
+        if (direction === 'up') {
+          setSortedSubfolders(
+            subfolders.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1)),
+          );
+          setSortedMaterials(
+            materials.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1)),
+          );
+        } else {
+          setSortedSubfolders(
+            subfolders.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1)),
+          );
+          setSortedMaterials(
+            materials.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1)),
+          );
+        }
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const sort = (columnName: string): void => {
+    if (columnName === sortBy) {
+      if (sortDirection === 'down') {
+        sortWithDirection(columnName, 'up');
+        setSortDirection('up');
+      } else {
+        sortWithDirection(columnName, 'down');
+        setSortDirection('down');
+      }
+    } else {
+      sortWithDirection(columnName, 'down');
+      setSortBy(columnName);
+      setSortDirection('down');
+    }
+  };
+
+  const columnHeaderWithSort = (columnName: string): JSX.Element => {
+    const endIcon =
+      sortBy === columnName ? (
+        sortDirection === 'down' ? (
+          <ArrowDropDownIcon />
+        ) : (
+          <ArrowDropUpIcon />
+        )
+      ) : (
+        <></>
+      );
+
+    return (
+      <Button
+        onClick={(): void => {
+          sort(columnName);
+        }}
+        endIcon={endIcon}
+        disableFocusRipple
+        disableRipple
+        style={{ padding: 0, alignItems: 'center', justifyContent: 'start' }}
+      >
+        {columnName}
+      </Button>
+    );
+  };
 
   return (
     <>
       <Table sx={{ marginBottom: 2 }}>
         <TableHead>
           <TableRow>
-            <TableCell>
-              {intl.formatMessage(translations.tableHeaderName)}
+            <TableCell style={{ padding: 2 }}>
+              {columnHeaderWithSort(
+                intl.formatMessage(translations.tableHeaderName),
+              )}
             </TableCell>
-            <TableCell>
-              {intl.formatMessage(translations.tableHeaderLastModified)}
+            <TableCell style={{ padding: 2 }}>
+              {columnHeaderWithSort(
+                intl.formatMessage(translations.tableHeaderLastModified),
+              )}
             </TableCell>
-            <TableCell>
-              {intl.formatMessage(translations.tableHeaderStartAt)}
+            <TableCell style={{ padding: 2 }}>
+              {columnHeaderWithSort(
+                intl.formatMessage(translations.tableHeaderStartAt),
+              )}
             </TableCell>
             <TableCell />
           </TableRow>
         </TableHead>
         <TableBody>
-          {subfolders.map((subfolder) => {
+          {sortedSubfolders.map((subfolder) => {
             return (
               <TableRow
                 key={`subfolder-${subfolder.id}`}
                 id={`subfolder-${subfolder.id}`}
               >
-                <TableCell>
+                <TableCell style={{ padding: 2 }}>
                   <Stack spacing={1}>
                     <Stack direction="row" spacing={0.5} alignItems="center">
                       <FolderIcon htmlColor="grey" />
@@ -131,8 +258,10 @@ const WorkbinTable: FC<Props> = (props) => {
                       )}
                   </Stack>
                 </TableCell>
-                <TableCell>{getFullDateTime(subfolder.updatedAt)}</TableCell>
-                <TableCell>
+                <TableCell style={{ padding: 2 }}>
+                  {getFullDateTime(subfolder.updatedAt)}
+                </TableCell>
+                <TableCell style={{ padding: 2 }}>
                   {subfolder.permissions.canEdit ? (
                     <Stack direction="row" spacing={0.5} alignItems="center">
                       {subfolder.permissions.showSdlWarning && (
@@ -150,7 +279,7 @@ const WorkbinTable: FC<Props> = (props) => {
                     <div>-</div>
                   )}
                 </TableCell>
-                <TableCell>
+                <TableCell style={{ padding: 2 }}>
                   <WorkbinTableButtons
                     currFolderId={currFolderId}
                     itemId={subfolder.id}
@@ -175,13 +304,13 @@ const WorkbinTable: FC<Props> = (props) => {
             );
           })}
 
-          {materials.map((material) => {
+          {sortedMaterials.map((material) => {
             return (
               <TableRow
                 key={`material-${material.id}`}
                 id={`material-${material.id}`}
               >
-                <TableCell>
+                <TableCell style={{ padding: 2 }}>
                   <Stack spacing={1}>
                     <Stack direction="row" spacing={0.5} alignItems="center">
                       <DescriptionIcon htmlColor="grey" />
@@ -203,7 +332,7 @@ const WorkbinTable: FC<Props> = (props) => {
                       )}
                   </Stack>
                 </TableCell>
-                <TableCell>
+                <TableCell style={{ padding: 2 }}>
                   <Stack>
                     <div>{getFullDateTime(material.updatedAt)}</div>
                     <a
@@ -217,8 +346,8 @@ const WorkbinTable: FC<Props> = (props) => {
                     </a>
                   </Stack>
                 </TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>
+                <TableCell style={{ padding: 2 }}>-</TableCell>
+                <TableCell style={{ padding: 2 }}>
                   <WorkbinTableButtons
                     currFolderId={currFolderId}
                     itemId={material.id}

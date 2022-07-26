@@ -24,7 +24,7 @@ const EditFolderButton: FC<Props> = (props) => {
     >
       <IconButton
         id="edit-folder-button"
-        style={{ padding: 4 }}
+        style={{ padding: 6 }}
         onClick={handleOnClick}
       >
         <EditIcon />
