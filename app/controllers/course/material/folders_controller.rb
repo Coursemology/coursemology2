@@ -105,6 +105,7 @@ class Course::Material::FoldersController < Course::Material::Controller
   def upload_materials_failure
     flash.now[:danger] = t('course.material.folders.upload_materials.failure',
                            error: @folder.errors.full_messages.to_sentence)
-    render 'new_materials'
+
+    render json: { status: :bad_request }
   end
 end

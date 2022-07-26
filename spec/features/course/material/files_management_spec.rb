@@ -13,71 +13,76 @@ RSpec.feature 'Course: Material: Files: Management' do
 
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
-      scenario 'I can view all the materials' do
+      scenario 'I can view all the materials', js: true do
         visit course_material_folder_path(course, folder)
         materials.each do |material|
-          expect(page).to have_content_tag_for(material)
-          expect(page).
-            to have_link(nil,
-                         href: edit_course_material_folder_material_path(course, folder, material))
-          expect(page).
-            to have_link(nil, href: course_material_folder_material_path(course, folder, material))
+          expect(page).to have_selector("#material-#{material.id}")
+          expect(page).to have_selector("#material-delete-button-#{material.id}")
+          expect(page).to have_selector("#material-delete-button-#{material.id}")
         end
       end
 
-      scenario 'I can edit a file' do
+      scenario 'I can edit a file', js: true do
         material = materials.sample
         visit course_material_folder_path(course, folder)
-        find_link(nil,
-                  href: edit_course_material_folder_material_path(course, folder, material)).click
+        find("#material-edit-button-#{material.id}").click
 
-        fill_in 'material_name', with: ''
-        click_button 'submit'
-        expect(page).to have_selector('div.has-error')
+        find('input[name="name"]').set(' ')
+        click_button 'Update'
+
+        expect(page).
+          to have_selector('div.Toastify__toast-body', text: 'File could not be edited')
 
         new_name = 'new name'
-        fill_in 'material_name', with: new_name
-        click_button 'submit'
+        find('input[name="name"]').set(new_name)
+        click_button 'Update'
 
         expect(current_path).to eq(course_material_folder_path(course, folder))
+        sleep(0.1)
         expect(material.reload.name).to eq(new_name)
       end
 
-      scenario 'I can delete a file' do
+      scenario 'I can delete a file', js: true do
         visit course_material_folder_path(course, folder)
 
         material = materials.sample
 
-        within find(content_tag_selector(material)) do
-          expect { find(:css, 'a.delete').click }.to change { folder.materials.count }.by(-1)
-        end
+        find("#material-delete-button-#{material.id}").click
+        click_button('Continue')
+
+        expect(page).not_to have_selector("#material-#{material.id}")
         expect(current_path).to eq(course_material_folder_path(course, folder))
+
+        visit course_material_folder_path(course, folder)
+        expect(page).not_to have_selector("#material-#{material.id}")
       end
     end
 
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I can view all the materials' do
+      scenario 'I can view all the materials', js: true do
         visit course_material_folder_path(course, folder)
 
-        expect(page).not_to have_selector('a.btn-danger.delete')
         materials.each do |material|
-          expect(page).to have_content_tag_for(material)
-          edit_link = edit_course_material_folder_material_path(course, folder, material)
-          expect(page).not_to have_link(nil, href: edit_link)
+          expect(page).to have_selector("#material-#{material.id}")
+          expect(page).not_to have_selector("#material-edit-button-#{material.id}")
+          expect(page).not_to have_selector("#material-delete-button-#{material.id}")
         end
       end
 
-      scenario 'I can edit the material created by me' do
+      scenario 'I can edit the material created by me', js: true do
         material = create(:material, folder: folder, creator: user)
-        visit edit_course_material_folder_material_path(course, folder, material)
+        visit course_material_folder_path(course, folder)
+
+        find("#material-edit-button-#{material.id}").click
 
         new_name = 'new name'
-        fill_in 'material_name', with: new_name
-        click_button 'submit'
+        find('input[name="name"]').set(new_name)
+        click_button 'Update'
 
         expect(current_path).to eq(course_material_folder_path(course, folder))
+        sleep(0.1)
         expect(material.reload.name).to eq(new_name)
       end
     end

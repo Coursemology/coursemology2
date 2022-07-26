@@ -22,7 +22,11 @@ const UploadFilesButton: FC<Props> = (props) => {
       title={intl.formatMessage(translations.uploadFilesTooltip)}
       placement="top"
     >
-      <IconButton style={{ padding: 4 }} onClick={handleOnClick}>
+      <IconButton
+        id="upload-files-button"
+        style={{ padding: 4 }}
+        onClick={handleOnClick}
+      >
         <UploadIcon />
       </IconButton>
     </Tooltip>

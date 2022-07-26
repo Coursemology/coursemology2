@@ -45,6 +45,7 @@ const DownloadFolderButton: FC<Props> = (props) => {
             placement="top"
           >
             <IconButton
+              id="download-folder-button"
               style={{ padding: 4 }}
               onClick={(): void => {
                 setIsLoading(true);

@@ -55,7 +55,7 @@ const validationSchema = yup.object({
   description: yup.string().nullable(),
 });
 
-const FolderForm: FC<Props> = (props) => {
+const MaterialForm: FC<Props> = (props) => {
   const { intl, editing, handleClose, initialValues, onSubmit, setIsDirty } =
     props;
 
@@ -87,32 +87,32 @@ const FolderForm: FC<Props> = (props) => {
         color="primary"
         className="btn-cancel"
         disabled={disabled}
-        key="folder-form-cancel-button"
+        key="material-form-cancel-button"
         onClick={(): void => handleClose(isDirty)}
       >
         <FormattedMessage {...formTranslations.cancel} />
       </Button>
       {editing ? (
         <Button
-          id="folder-form-update-button"
+          id="material-form-update-button"
           variant="contained"
           color="primary"
           className="btn-submit"
           disabled={disabled || !isDirty}
-          form="folder-form"
-          key="folder-form-update-button"
+          form="material-form"
+          key="material-form-update-button"
           type="submit"
         >
           <FormattedMessage {...formTranslations.update} />
         </Button>
       ) : (
         <Button
-          id="folder-form-submit-button"
+          id="material-form-submit-button"
           color="primary"
           className="btn-submit"
           disabled={disabled || !isDirty}
-          form="folder-form"
-          key="folder-form-submit-button"
+          form="material-form"
+          key="material-form-submit-button"
           type="submit"
         >
           <FormattedMessage {...formTranslations.submit} />
@@ -125,12 +125,12 @@ const FolderForm: FC<Props> = (props) => {
     <>
       <form
         encType="multipart/form-data"
-        id="folder-form"
+        id="material-form"
         noValidate
         onSubmit={handleSubmit((data) => onSubmit(data, setError))}
       >
         <ErrorText errors={errors} />
-        <div id="folder-name">
+        <div id="material-name">
           <Controller
             control={control}
             name="name"
@@ -192,4 +192,4 @@ const FolderForm: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(FolderForm);
+export default injectIntl(MaterialForm);

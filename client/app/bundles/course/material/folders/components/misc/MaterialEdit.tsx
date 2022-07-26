@@ -27,17 +27,17 @@ interface Props extends WrappedComponentProps {
 }
 
 const translations = defineMessages({
-  editSubfolderTitle: {
-    id: 'course.materials.folders.editSubfolderTitle',
-    defaultMessage: 'Edit Folder',
+  editMaterialTitle: {
+    id: 'course.materials.folders.editMaterialTitle',
+    defaultMessage: 'Edit Material',
   },
-  folderEditSuccess: {
-    id: 'course.materials.folders.folderEditSuccess',
-    defaultMessage: 'Folder has been edited',
+  materialEditSuccess: {
+    id: 'course.materials.folders.materialEditSuccess',
+    defaultMessage: 'File has been edited',
   },
-  folderEditFailure: {
-    id: 'course.materials.folders.folderEditSuccess',
-    defaultMessage: 'Folder could not be edited',
+  materialEditFailure: {
+    id: 'course.materials.folders.materialEditFailure',
+    defaultMessage: 'File could not be edited',
   },
 });
 
@@ -55,10 +55,10 @@ const FolderEdit: FC<Props> = (props) => {
       .then((_) => {
         handleClose();
         setConfirmationDialogOpen(false);
-        toast.success(intl.formatMessage(translations.folderEditSuccess));
+        toast.success(intl.formatMessage(translations.materialEditSuccess));
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.folderEditFailure));
+        toast.error(intl.formatMessage(translations.materialEditFailure));
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
@@ -84,7 +84,7 @@ const FolderEdit: FC<Props> = (props) => {
         maxWidth="xl"
       >
         <DialogTitle>
-          {intl.formatMessage(translations.editSubfolderTitle)}
+          {intl.formatMessage(translations.editMaterialTitle)}
         </DialogTitle>
         <DialogContent>
           <MaterialForm

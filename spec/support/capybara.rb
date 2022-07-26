@@ -43,10 +43,10 @@ module Capybara::TestGroupHelpers
       expect(page).to have_no_selector('button.confirm-btn')
     end
 
-    # Special helper to fill in draftjs textarea defined by react.
+    # Special helper to fill in CKEditor textarea defined by react.
     #
     # Selector should specify the class of the target +textarea+, and method targets the +div+
-    # within. This should change when the internals of the summernote react component is changed.
+    # within. This should change when the internals of the CKEditor react component is changed.
     def fill_in_react_ck(selector, text)
       react_selector = ' + div.react-ck > div.ck-editor > div.ck-editor__main > div.ck-content'
       find(selector + react_selector).set(text)

@@ -22,7 +22,11 @@ const NewSubfolderButton: FC<Props> = (props) => {
       title={intl.formatMessage(translations.newSubfolderTooltip)}
       placement="top"
     >
-      <IconButton style={{ padding: 4 }} onClick={handleOnClick}>
+      <IconButton
+        id="new-subfolder-button"
+        style={{ padding: 4 }}
+        onClick={handleOnClick}
+      >
         <CreateNewFolderIcon />
       </IconButton>
     </Tooltip>
