@@ -22,7 +22,11 @@ const EditFolderButton: FC<Props> = (props) => {
       title={intl.formatMessage(translations.editFolderTooltip)}
       placement="top"
     >
-      <IconButton style={{ padding: 4 }} onClick={handleOnClick}>
+      <IconButton
+        id="edit-folder-button"
+        style={{ padding: 4 }}
+        onClick={handleOnClick}
+      >
         <EditIcon />
       </IconButton>
     </Tooltip>

@@ -37,7 +37,7 @@ const translations = defineMessages({
     defaultMessage: 'Folder has been edited',
   },
   folderEditFailure: {
-    id: 'course.materials.folders.folderEditSuccess',
+    id: 'course.materials.folders.folderEditFailure',
     defaultMessage: 'Folder could not be edited',
   },
 });

@@ -25,16 +25,13 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
           controller.instance_variable_set(:@folder, folder_stub)
           subject
         end
-
-        it { is_expected.to redirect_to(course_material_folder_path(course, folder_stub.parent)) }
-
-        it 'shows a flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.material.folders.destroy.failure'))
+        it 'returns an error' do
+          expect(response.status).to eq(400)
         end
       end
     end
 
-    describe '#upload_materials' do
+    describe '#upload_materials', js: true do
       let(:file) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'files', 'text.txt')) }
       subject do
         patch :upload_materials,
@@ -46,9 +43,8 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
           controller.instance_variable_set(:@folder, folder_stub)
           subject
         end
-
-        it 'shows a flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.material.folders.upload_materials.failure'))
+        it 'returns an error' do
+          expect(response.status).to eq(200)
         end
       end
     end

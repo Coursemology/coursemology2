@@ -123,7 +123,7 @@ const FolderShow: FC<Props> = (_props) => {
     <>
       <PageHeader
         key={`workbin-folder-${name}-${id}`}
-        title={name}
+        title={name === null ? 'Workbin' : name}
         toolbars={headerToolbars}
         returnLink={
           parentId !== null
