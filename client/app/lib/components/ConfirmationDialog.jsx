@@ -2,6 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import formTranslations from 'lib/translations/form';
 
 const buttonStyle = {
@@ -25,6 +26,7 @@ class ConfirmationDialog extends Component {
       confirmSubmit,
       disableCancelButton,
       disableConfirmButton,
+      loadingConfirmButton,
       form,
     } = this.props;
 
@@ -67,10 +69,11 @@ class ConfirmationDialog extends Component {
       >
         {cancelButtonText || intl.formatMessage(formTranslations.cancel)}
       </Button>,
-      <Button
+      <LoadingButton
         color="primary"
         className="confirm-btn"
         disabled={disableConfirmButton}
+        loading={loadingConfirmButton}
         key="confirmation-dialog-confirm-button"
         onClick={onConfirm}
         {...(form ? { form, type: 'submit' } : {})}
@@ -80,7 +83,7 @@ class ConfirmationDialog extends Component {
         style={buttonStyle}
       >
         {confirmationButtonText}
-      </Button>,
+      </LoadingButton>,
     ];
 
     if (onConfirmSecondary) {
@@ -142,6 +145,7 @@ ConfirmationDialog.propTypes = {
   confirmSubmit: PropTypes.bool,
   disableCancelButton: PropTypes.bool,
   disableConfirmButton: PropTypes.bool,
+  loadingConfirmButton: PropTypes.bool,
   form: PropTypes.string,
   intl: PropTypes.object.isRequired,
 };
