@@ -109,14 +109,7 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
         disabled={disabled}
       />
 
-      <div
-        className="react-ck"
-        style={{
-          border: '0.2px solid lightGray',
-          borderRadius: '15px',
-          padding: '10px',
-        }}
-      >
+      <div className="react-ck">
         <CKEditor
           editor={CustomEditor}
           config={{
