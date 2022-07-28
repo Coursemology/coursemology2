@@ -102,6 +102,14 @@ export function selectEntity<M, E extends M = M>(
     : null;
 }
 
+export function selectEntityNoUpdate<M, E extends M = M>(
+  store: EntityStore<M, E>,
+  id: SelectionKey,
+): EntitySelection<E> {
+  const entity = id && store.byId[id];
+  return entity ? (entity as EntitySelection<E>) : null;
+}
+
 /**
  * Selects and returns multiple mini entities with the given IDs from the given entity store.
  * This method is meant to be used within the selectors.
@@ -113,6 +121,24 @@ export function selectMiniEntities<M, E extends M = M>(
   const result: M[] = [];
   ids.forEach((id) => {
     const entity = selectMiniEntity(store, id);
+    if (entity) {
+      result.push(entity);
+    }
+  });
+  return result;
+}
+
+/**
+ * Selects and returns multiple entities with the given IDs from the given entity store.
+ * This method is meant to be used within the selectors.
+ */
+export function selectEntities<M, E extends M = M>(
+  store: EntityStore<M, E>,
+  ids: Set<SelectionKey>,
+): E[] {
+  const result: E[] = [];
+  ids.forEach((id) => {
+    const entity = selectEntityNoUpdate(store, id);
     if (entity) {
       result.push(entity);
     }

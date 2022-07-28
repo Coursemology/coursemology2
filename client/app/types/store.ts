@@ -10,6 +10,7 @@ import { EnrolRequestsState } from 'bundles/course/enrol-requests/types';
 import { AnnouncementsState } from 'bundles/course/announcements/types';
 import { SubmissionsState } from 'bundles/course/assessment/submissions/types';
 import { DisbursementState } from 'bundles/course/experience-points/disbursement/types';
+import { CommentState } from 'bundles/course/discussion/topics/types';
 import { AdminState } from 'bundles/system/admin/admin/types';
 
 /**
@@ -27,6 +28,7 @@ export interface AppState {
   invitations: InvitationsState;
   enrolRequests: EnrolRequestsState;
   disbursement: DisbursementState;
+  comments: CommentState;
 }
 
 export type Operation<R> = ThunkAction<

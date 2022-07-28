@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 
-import { ChangeEventHandler, FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { InputLabel } from '@mui/material';
 import { cyan } from '@mui/material/colors';
 
@@ -10,15 +10,16 @@ import CustomEditor from '@ckeditor/ckeditor5-build-custom';
 import axios from 'lib/axios';
 
 interface Props {
-  label: string;
-  value: string;
-  onChange: ChangeEventHandler<HTMLTextAreaElement>;
-  disabled: boolean;
-  field: string | undefined;
-  required: boolean | undefined;
+  label?: string;
+  value?: string;
+  onChange: (text: string) => void;
+  disabled?: boolean;
+  field?: string | undefined;
+  required?: boolean | undefined;
   name: string;
   inputId: string;
-  clearOnSubmit: boolean;
+  clearOnSubmit?: boolean;
+  width?: string;
 }
 
 const CKEditorRichText: FC<Props> = (props: Props) => {
@@ -32,6 +33,7 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
     name,
     inputId,
     clearOnSubmit,
+    width,
   } = props;
 
   const [isFocused, setIsFocused] = useState(false);
@@ -78,7 +80,7 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
     <div
       style={{
         fontSize: 16,
-        width: '100%',
+        width: width ?? '100%',
         display: 'inline-block',
         position: 'relative',
         backgroundColor: 'transparent',
@@ -105,7 +107,9 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
         required={required}
         value={value || ''}
         style={{ display: 'none' }}
-        onChange={onChange}
+        onChange={(event) => {
+          onChange(event.target.value);
+        }}
         disabled={disabled}
       />
 

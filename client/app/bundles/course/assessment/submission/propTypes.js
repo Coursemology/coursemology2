@@ -62,8 +62,9 @@ export const postShape = PropTypes.shape({
   title: PropTypes.string,
   text: PropTypes.string,
   creator: PropTypes.shape({
+    id: PropTypes.number,
     name: PropTypes.string.isRequired,
-    avatar: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string.isRequired,
   }),
   createdAt: PropTypes.string.isRequired,
   canUpdate: PropTypes.bool.isRequired,
