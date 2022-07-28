@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-
-import { FC, useEffect, useState } from 'react';
+import { FC, forwardRef, useEffect, useState } from 'react';
 import { InputLabel } from '@mui/material';
 import { cyan } from '@mui/material/colors';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -18,7 +17,7 @@ interface Props {
   inputId: string;
 }
 
-const CKEditorRichText: FC<Props> = (props: Props) => {
+const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
   const { label, value, onChange, disabled, field, required, name, inputId } =
     props;
 
@@ -103,6 +102,7 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
 
       <div className="react-ck">
         <CKEditor
+          ref={ref}
           disabled={disabled}
           editor={CustomEditor}
           config={{
@@ -163,7 +163,7 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
       </div>
     </div>
   );
-};
+});
 
 CKEditorRichText.displayName = 'CKEditor';
 
