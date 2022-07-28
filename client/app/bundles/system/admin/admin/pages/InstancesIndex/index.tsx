@@ -49,7 +49,7 @@ const InstancesIndex: FC<Props> = (props) => {
   const headerToolbars: ReactElement[] = [];
 
   useEffect(() => {
-    dispatch(indexInstances({ 'filter[length]': 30 }))
+    dispatch(indexInstances({ 'filter[length]': 100 }))
       .finally(() => setIsLoading(false))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchInstancesFailure)),

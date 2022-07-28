@@ -89,7 +89,7 @@ const UsersIndex: FC<Props> = (props) => {
     updateTableTitle(role, active);
     dispatch(
       indexUsers({
-        'filter[length]': 30,
+        'filter[length]': 100,
         role,
         active,
       }),

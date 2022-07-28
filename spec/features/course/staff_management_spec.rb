@@ -74,12 +74,9 @@ RSpec.feature 'Courses: Staff Management' do
         within find("tr.course_user_#{staff_to_change.id}") do
           find('div.course_user_role').click
         end
-        page.all('li.MuiMenuItem-root')[3].click # option id "role-#{staff_to_change.id}-owner" can't be targetted...
+        page.all('li.MuiMenuItem-root')[3].click # option id "role-#{staff_to_change.id}-owner" can't be targeted...
 
-        within find("tr.course_user_#{staff_to_change.id}") do
-          find("button.user-save-#{staff_to_change.id}").click
-        end
-        expect_toastify("Record for #{new_name} was updated.")
+        expect_toastify("Successfully changed #{new_name}'s role to Owner.")
 
         expect(staff_to_change.reload).to be_owner
         expect(staff_to_change.name).to eq(new_name)

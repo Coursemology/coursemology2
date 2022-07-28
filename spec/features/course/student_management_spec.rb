@@ -35,10 +35,9 @@ RSpec.feature 'Courses: Students' do
       # change phantom
       within find("tr.course_user_#{student_to_update.id}") do
         find("#phantom-#{student_to_update.id}", visible: false).click
-        find("button.user-save-#{student_to_update.id}").click
       end
 
-      expect_toastify("Record for #{new_name} was updated.")
+      expect_toastify("#{new_name} is now a phantom.")
 
       expect(student_to_update.reload).to be_phantom
       expect(student_to_update.name).to eq(new_name)

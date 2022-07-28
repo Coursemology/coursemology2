@@ -60,7 +60,7 @@ const CoursesIndex: FC<Props> = (props) => {
       setTableTitle(`${intl.formatMessage(translations.title)} (Active)`);
     }
     setIsLoading(true);
-    dispatch(indexCourses({ 'filter[length]': 30, active }))
+    dispatch(indexCourses({ 'filter[length]': 100, active }))
       .finally(() => setIsLoading(false))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchCoursesFailure)),

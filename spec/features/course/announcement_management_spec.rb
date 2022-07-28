@@ -50,7 +50,7 @@ RSpec.feature 'Course: Announcements' do
         find('#announcement-form-update-button').click
 
         expect(current_path).to eq course_announcements_path(course)
-        expect_toastify('Failed to update the announcement')
+        expect_toastify('Announcement updated')
         within find("#announcement-#{announcement.id}") do
           expect(page).to have_selector('h3', text: new_title)
         end

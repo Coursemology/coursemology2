@@ -6,7 +6,7 @@ import {
   TableOptions,
   TableState,
 } from 'types/components/DataTable';
-import tableTranslations from 'lib/components/tables/translations';
+import tableTranslations from 'lib/translations/table';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import DataTable from 'lib/components/DataTable';
 import { InstanceMiniEntity } from 'types/system/instances';
@@ -95,7 +95,7 @@ const InstancesTable: FC<Props> = (props) => {
       page,
     });
     dispatch(
-      indexInstances({ 'filter[page_num]': page, 'filter[length]': 30 }),
+      indexInstances({ 'filter[page_num]': page, 'filter[length]': 100 }),
     ).then(() => {
       setIsLoading(false);
     });
@@ -116,8 +116,8 @@ const InstancesTable: FC<Props> = (props) => {
     },
     pagination: true,
     print: false,
-    rowsPerPage: 30,
-    rowsPerPageOptions: [30],
+    rowsPerPage: 100,
+    rowsPerPageOptions: [100],
     search: false,
     selectableRows: 'none',
     serverSide: true,
@@ -130,10 +130,6 @@ const InstancesTable: FC<Props> = (props) => {
         instanceid: `instance_${instances[dataIndex].id}`,
         className: `instance instance_${instances[dataIndex].id}`,
       };
-    },
-    sortOrder: {
-      name: 'id',
-      direction: 'asc',
     },
     viewColumns: false,
   };

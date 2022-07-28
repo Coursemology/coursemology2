@@ -1,10 +1,29 @@
-import { List, ListItem, ListItemText } from '@mui/material';
-import { FC, useState } from 'react';
+import {
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+} from '@mui/material';
+import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Link } from 'react-router-dom';
 import Sidebar from 'lib/components/navigation/Sidebar';
+import {
+  AutoStories,
+  Category,
+  Group,
+  Campaign,
+  KeyboardDoubleArrowLeft,
+  KeyboardDoubleArrowRight,
+} from '@mui/icons-material';
+import { grey } from '@mui/material/colors';
 
-type Props = WrappedComponentProps;
+interface Props extends WrappedComponentProps {
+  isExpanded: boolean;
+  handleExpand: (forceExpand?: boolean) => void;
+}
 
 const translations = defineMessages({
   announcements: {
@@ -23,66 +42,156 @@ const translations = defineMessages({
     id: 'system.admin.components.navigation.sidebar.courses',
     defaultMessage: 'Courses',
   },
+  collapseSidebar: {
+    id: 'system.admin.components.navigation.sidebar.collapse',
+    defaultMessage: 'Collapse Sidebar',
+  },
+  expandSidebar: {
+    id: 'system.admin.components.navigation.sidebar.expand',
+    defaultMessage: 'Expand Sidebar',
+  },
 });
 
 interface ListItemLinkProps {
   primary: string;
   to: string;
+  icon: JSX.Element;
+  expanded: boolean;
   callback: () => void;
 }
 
 const ListItemLink = (props: ListItemLinkProps): JSX.Element => {
-  const { primary, to, callback } = props;
+  const { primary, to, icon, expanded, callback } = props;
+
+  const renderIcon = (): JSX.Element => {
+    if (expanded) {
+      return <ListItemIcon sx={{ minWidth: '32px' }}>{icon}</ListItemIcon>;
+    }
+    return (
+      <Tooltip placement="right" title={primary}>
+        <ListItemIcon sx={{ minWidth: '32px' }}>{icon}</ListItemIcon>
+      </Tooltip>
+    );
+  };
+
+  const textStyle = expanded ? { display: 'block' } : { display: 'none' };
 
   return (
     <li>
       <ListItem
         button
+        disablePadding
         component={Link}
         to={to}
-        style={{ border: 'none', outline: 'none', textDecoration: 'none' }}
+        style={{
+          border: 'none',
+          outline: 'none',
+          textDecoration: 'none',
+          padding: '4px 16px',
+        }}
         onClick={callback}
       >
-        <ListItemText primary={primary} />
+        {renderIcon()}
+        <ListItemText primary={primary} sx={textStyle} />
       </ListItem>
     </li>
   );
 };
 
 const SystemAdminSidebar: FC<Props> = (props) => {
-  const { intl } = props;
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const { isExpanded, handleExpand, intl } = props;
 
-  const handleDrawerToggle = (): void => {
-    setIsDrawerOpen(!isDrawerOpen);
+  const renderDrawer = (isDrawerOpen, handleDrawerToggle): JSX.Element => {
+    const handleExpandClick = (): void => {
+      if (isDrawerOpen) {
+        handleDrawerToggle();
+      } else {
+        handleExpand();
+      }
+    };
+
+    const handleListItemClick = (): void => {
+      if (isDrawerOpen) {
+        handleDrawerToggle();
+      }
+    };
+
+    const backgroundColor = isDrawerOpen ? 'white' : grey[100];
+
+    return (
+      <Grid
+        container
+        justifyContent="space-between"
+        style={{ height: '100vh', backgroundColor }}
+        flexDirection="column"
+      >
+        <Grid item>
+          <List style={{ marginTop: '60px' }}>
+            <ListItemLink
+              to="/admin/announcements"
+              primary={intl.formatMessage(translations.announcements)}
+              callback={handleListItemClick}
+              icon={<Campaign />}
+              expanded={isExpanded}
+            />
+            <ListItemLink
+              to="/admin/users"
+              primary={intl.formatMessage(translations.users)}
+              callback={handleListItemClick}
+              icon={<Group />}
+              expanded={isExpanded}
+            />
+            <ListItemLink
+              to="/admin/instances"
+              primary={intl.formatMessage(translations.instances)}
+              callback={handleListItemClick}
+              icon={<Category />}
+              expanded={isExpanded}
+            />
+            <ListItemLink
+              to="/admin/courses"
+              primary={intl.formatMessage(translations.courses)}
+              callback={handleListItemClick}
+              icon={<AutoStories />}
+              expanded={isExpanded}
+            />
+          </List>
+        </Grid>
+        <Grid item>
+          <List>
+            <ListItem button onClick={handleExpandClick}>
+              <ListItemIcon sx={{ minWidth: '32px' }}>
+                {isExpanded ? (
+                  <KeyboardDoubleArrowLeft />
+                ) : (
+                  <Tooltip
+                    placement="right"
+                    title={intl.formatMessage(translations.expandSidebar)}
+                  >
+                    <KeyboardDoubleArrowRight />
+                  </Tooltip>
+                )}
+              </ListItemIcon>
+              {isExpanded && (
+                <ListItemText
+                  primary={intl.formatMessage(translations.collapseSidebar)}
+                />
+              )}
+            </ListItem>
+          </List>
+        </Grid>
+      </Grid>
+    );
   };
 
-  const drawer = (
-    <List>
-      <ListItemLink
-        to="/admin/announcements"
-        primary={intl.formatMessage(translations.announcements)}
-        callback={handleDrawerToggle}
-      />
-      <ListItemLink
-        to="/admin/users"
-        primary={intl.formatMessage(translations.users)}
-        callback={handleDrawerToggle}
-      />
-      <ListItemLink
-        to="/admin/instances"
-        primary={intl.formatMessage(translations.instances)}
-        callback={handleDrawerToggle}
-      />
-      <ListItemLink
-        to="/admin/courses"
-        primary={intl.formatMessage(translations.courses)}
-        callback={handleDrawerToggle}
-      />
-    </List>
+  return (
+    <Sidebar
+      renderDrawer={(isDrawerOpen, handleDrawerToggle): JSX.Element =>
+        renderDrawer(isDrawerOpen, handleDrawerToggle)
+      }
+      handleExpand={handleExpand}
+    />
   );
-
-  return <Sidebar drawer={drawer} />;
 };
 
 export default injectIntl(SystemAdminSidebar);

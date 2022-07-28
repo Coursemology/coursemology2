@@ -39,10 +39,6 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
         className: `invitation_result_user invitation_result_user_${users[dataIndex].id}`,
       };
     },
-    sortOrder: {
-      name: 'name',
-      direction: 'asc',
-    },
     viewColumns: false,
   };
 

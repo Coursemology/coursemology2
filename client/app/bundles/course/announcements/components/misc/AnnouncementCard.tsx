@@ -88,15 +88,15 @@ const AnnouncementCard: FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const onDelete = (): Promise<void> => {
     setIsDeleting(true);
-    return dispatch(deleteAnnouncement(announcement.id))
+    return dispatch(deleteOperation!(announcement.id))
       .then(() => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
       })
+      .finally(() => setIsDeleting(false))
       .catch((error) => {
         toast.error(intl.formatMessage(translations.deletionFailure));
         throw error;
-      })
-      .finally(() => setIsDeleting(false));
+      });
   };
 
   const onEdit = (): void => setIsOpen(true);
@@ -162,6 +162,7 @@ const AnnouncementCard: FC<Props> = (props) => {
                     ? 5
                     : 0,
                 fontWeight: 'bold',
+                overflowWrap: 'anywhere',
               }}
             >
               {announcement.title}

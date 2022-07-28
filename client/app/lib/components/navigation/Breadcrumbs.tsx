@@ -3,6 +3,7 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import Link, { LinkProps } from '@mui/material/Link';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 
@@ -20,7 +21,7 @@ interface LinkRouterProps extends LinkProps {
 }
 
 const LinkRouter = (props: LinkRouterProps): JSX.Element => (
-  <Link {...props} component={RouterLink} />
+  <Link {...props} component={RouterLink} variant="body2" />
 );
 
 const Breadcrumbs = (): JSX.Element => {
@@ -28,14 +29,22 @@ const Breadcrumbs = (): JSX.Element => {
   const pathnames = location.pathname.split('/').filter((x) => x);
 
   return (
-    <Paper variant="outlined" sx={{ marginBottom: '4px', padding: '4px 8px' }}>
+    <Paper
+      variant="outlined"
+      sx={{
+        marginBottom: '4px',
+        padding: '4px 8px',
+        backgroundColor: grey[100],
+        border: '0',
+      }}
+    >
       <MuiBreadcrumbs aria-label="breadcrumb">
         {pathnames.map((_value, index) => {
           const last = index === pathnames.length - 1;
           const to = `/${pathnames.slice(0, index + 1).join('/')}`;
 
           return last ? (
-            <Typography color="text.primary" key={to}>
+            <Typography color="text.primary" key={to} variant="body2">
               {breadcrumbNameMap[to]}
             </Typography>
           ) : (

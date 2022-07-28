@@ -39,10 +39,6 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
         className: `invitation_result_invitation invitation_result_invitation_${invitations[dataIndex].id}`,
       };
     },
-    sortOrder: {
-      name: 'name',
-      direction: 'asc',
-    },
     viewColumns: false,
   };
 
