@@ -29,7 +29,7 @@ const translations = defineMessages({
 });
 
 const TopicList: FC<Props> = (props) => {
-  const { intl, tabValue, settings, setCount   } = props;
+  const { intl, tabValue, settings, setCount } = props;
   const dispatch = useDispatch<AppDispatch>();
   const topicCountData = useSelector((state: AppState) => getTopicCount(state));
   const topicListData = useSelector((state: AppState) =>
@@ -78,7 +78,10 @@ const TopicList: FC<Props> = (props) => {
           // set 0 index to topic count for pagination (pages start from 1)
           arrayTopicIds[0] = new Set<number>().add(request.data.topicCount);
           setTopicTabs({ ...topicTabs, [newTabValue]: arrayTopicIds });
-          if (newTabValue !== CommentTabTypes.ALL && newTabValue !== CommentTabTypes.MY_STUDENTS) {
+          if (
+            newTabValue !== CommentTabTypes.ALL &&
+            newTabValue !== CommentTabTypes.MY_STUDENTS
+          ) {
             setCount(request.data.topicCount, newTabValue as CommentTabTypes);
           }
         })
@@ -127,9 +130,15 @@ const TopicList: FC<Props> = (props) => {
   );
 
   return (
-    <Grid container direction="column" columnSpacing={2} rowSpacing={2} style={{ marginTop: '0px' }}>
+    <Grid
+      container
+      direction="column"
+      columnSpacing={2}
+      rowSpacing={2}
+      style={{ marginTop: '0px' }}
+    >
       {renderPagination()}
-      {Object.keys(topicList).map((key: string) => (  
+      {Object.keys(topicList).map((key: string) => (
         <Grid item key={topicList[key].id} xs>
           <TopicCard
             topic={topicList[key]}
