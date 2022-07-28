@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Link, Tooltip } from '@mui/material';
+import { Card, CardContent, CardHeader, Link } from '@mui/material';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { FC, useEffect, useState } from 'react';
@@ -10,11 +10,15 @@ import {
   CommentTopicEntity,
 } from 'types/course/comments';
 import { AppDispatch, AppState } from 'types/store';
+import {
+  CheckCircleOutline,
+  PendingOutlined,
+  ScheduleOutlined,
+} from '@mui/icons-material';
 import { updatePending, updateRead } from '../../operations';
 import { getAllCommentPostMiniEntities } from '../../selectors';
 import CommentCard from './CommentCard';
 import CommentField from '../fields/CommentField';
-import { CheckCircleOutline, PendingOutlined, ScheduleOutlined } from '@mui/icons-material';
 
 interface Props extends WrappedComponentProps {
   topic: CommentTopicEntity;
@@ -42,7 +46,7 @@ const translations = defineMessages({
   loadingStatus: {
     id: 'course.discussion.topics.TopicCard.loading',
     defaultMessage: 'Loading...',
-  }
+  },
 });
 
 const TopicCard: FC<Props> = (props) => {
@@ -97,26 +101,27 @@ const TopicCard: FC<Props> = (props) => {
     }
   };
 
-  const updateStatus = () => {
-    if (status == CommentStatusTypes.unread) {
+  const updateStatus = (): void => {
+    if (status === CommentStatusTypes.unread) {
       setStatus(CommentStatusTypes.read);
       updateReadTab();
-    } else if (status == CommentStatusTypes.pending) {
+    } else if (status === CommentStatusTypes.pending) {
       setStatus(CommentStatusTypes.notPending);
-      updatePendingTab()
+      updatePendingTab();
     }
-
-  }
+  };
 
   const renderStatus = (): JSX.Element | null => {
     switch (status) {
       case CommentStatusTypes.loading:
         return (
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            flexWrap: 'wrap'
-          }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+            }}
+          >
             <PendingOutlined />
             {intl.formatMessage(translations.loadingStatus)}
           </div>
@@ -126,10 +131,11 @@ const TopicCard: FC<Props> = (props) => {
           <Link
             className="clickable"
             onClick={(): void => onClickPending(topic.id)}
-            style={{ cursor: 'pointer', 
+            style={{
+              cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
             }}
             id={`mark-as-pending-${topic.id}`}
           >
@@ -142,10 +148,11 @@ const TopicCard: FC<Props> = (props) => {
           <Link
             className="clickable"
             onClick={(): void => onClickPending(topic.id)}
-            style={{ cursor: 'pointer', 
+            style={{
+              cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              flexWrap: 'wrap'
+              flexWrap: 'wrap',
             }}
             id={`unmark-as-pending-${topic.id}`}
           >
@@ -157,22 +164,20 @@ const TopicCard: FC<Props> = (props) => {
         return <div />;
       case CommentStatusTypes.unread:
         return (
-          <Tooltip title={intl.formatMessage(translations.unreadStatus)}>
-            <Link
-              className="clickable"
-              onClick={(): void => onClickRead(topic.id)}
-              style={{ cursor: 'pointer', 
-                display: 'flex',
-                alignItems: 'center',
-                flexWrap: 'wrap'
-              }}
-              id={`mark-as-read-${topic.id}`}
-            >
-              <CheckCircleOutline />
-              {intl.formatMessage(translations.unreadStatus)}
-            </Link>
-          </Tooltip>
-
+          <Link
+            className="clickable"
+            onClick={(): void => onClickRead(topic.id)}
+            style={{
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+            }}
+            id={`mark-as-read-${topic.id}`}
+          >
+            <CheckCircleOutline />
+            {intl.formatMessage(translations.unreadStatus)}
+          </Link>
         );
       default:
         return null;
@@ -182,19 +187,20 @@ const TopicCard: FC<Props> = (props) => {
   return (
     <Card>
       <CardHeader
-        title={<a 
-          href={topic.links.titleLink}
-          className={`topic-${topic.id}`}
-          id={`topic-${topic.id}-${topic.timestamp?.toString().replaceAll(':', '-') ?? ''}`}
+        title={
+          <a
+            href={topic.links.titleLink}
+            className={`topic-${topic.id}`}
+            id={`topic-${topic.id}-${
+              topic.timestamp?.toString().replaceAll(':', '-') ?? ''
+            }`}
           >
             {topic.title}
           </a>
         }
         subheader={
           <>
-            <div>
-              {renderStatus()}
-            </div>
+            <div>{renderStatus()}</div>
             <div>
               {`${intl.formatMessage(translations.by)}: `}
               <a href={getCourseUserURL(getCourseId(), topic.creator.id)}>
@@ -202,7 +208,6 @@ const TopicCard: FC<Props> = (props) => {
               </a>
             </div>
           </>
-
         }
         style={{ paddingBottom: '0px' }}
       />

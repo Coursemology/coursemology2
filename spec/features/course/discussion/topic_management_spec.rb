@@ -31,22 +31,20 @@ RSpec.feature 'Course: Topics: Management' do
     context 'As a Course Teaching Assistant' do
       let(:user) { course_teaching_assistant.user }
 
-      scenario 'I can see all the comments' do
+      scenario 'I can see all the comments', js: true do
         comment
         code_annotation
         video_comment
         visit course_topics_path(course)
-
-        expect(page).to have_selector('.nav.nav-tabs')
+        expect(page).to have_selector('button#all_tab')
+        find('button#all_tab').click
         expect(page).to have_selector('div', text: comment.submission.assessment.title)
         expect(page).
           to have_selector('div', text: code_annotation.file.answer.submission.assessment.title)
-        expect(page).
-          to have_link(I18n.t(
-                         'course.video.topics.discussion_topic_topic.comment_title',
-                         title: video_comment.video.title,
-                         timestamp: Time.at(video_comment.timestamp).utc.strftime('%H:%M:%S')
-                       ))
+        expect(page).to have_selector(
+          "#topic-#{video_comment.discussion_topic.id}-#{Time.at(video_comment.timestamp).utc.strftime('%H-%M-%S')}",
+          text: video_comment.video.title
+        )
       end
 
       scenario 'I can reply to a comment topic', js: true do
@@ -55,18 +53,21 @@ RSpec.feature 'Course: Topics: Management' do
         topic = choices.sample[]
         visit course_topics_path(course)
 
+        expect(page).to have_selector('button#all_tab')
+        find('button#all_tab').click
+
         comment = 'GOOD WORK!'
-        fill_in_rails_summernote '.post-form', comment
-        within find('.post-form') do
-          click_button 'course.discussion.posts.form.comment'
+
+        within find("div#comment-field-#{topic.discussion_topic.id}") do
+          fill_in_react_ck 'textarea', comment
         end
-        wait_for_ajax
+
+        find("button#comment-submit-#{topic.discussion_topic.id}").click
 
         post = topic.posts.reload.last
-        expect(post.text).to have_tag('*', text: comment)
-        expect(page).to have_content_tag_for(post)
-        within find(content_tag_selector(topic.acting_as)) do
-          expect(page).to have_tag('.post-form', count: 1)
+
+        within find("div#post_#{post.id}") do
+          expect(page).to have_tag('*', text: comment)
         end
       end
 
@@ -75,13 +76,14 @@ RSpec.feature 'Course: Topics: Management' do
         topic = choices.sample[].acting_as
         visit course_topics_path(course)
 
-        click_link I18n.t('course.discussion.topics.mark_as_pending')
-        wait_for_ajax
-        expect(topic.reload).to be_pending_staff_reply
+        expect(page).to have_selector('button#all_tab')
+        find('button#all_tab').click
 
-        click_link I18n.t('course.discussion.topics.unmark_as_pending')
-        wait_for_ajax
+        find("a#unmark-as-pending-#{topic.id}").click
         expect(topic.reload).not_to be_pending_staff_reply
+
+        find("a#mark-as-pending-#{topic.id}").click
+        expect(topic.reload).to be_pending_staff_reply
       end
     end
 
@@ -126,40 +128,42 @@ RSpec.feature 'Course: Topics: Management' do
                topic: student_video_comment.acting_as, creator: course.creator)
       end
 
-      scenario 'I can see all my comments' do
+      scenario 'I can see all my comments', js: true do
         other_comments = [comment, code_annotation, video_comment].map(&:acting_as)
         my_comments = [student_comment, student_annotation, student_video_comment].map(&:acting_as)
         visit course_topics_path(course)
 
-        expect(page).to have_selector('.nav.nav-tabs')
-        expect(page).not_to have_link(I18n.t('course.discussion.topics.mark_as_pending'))
+        expect(page).to have_selector('button#all_tab')
+        find('button#all_tab').click
+
+        expect(page).not_to have_selector('a.clickable')
 
         other_comments.each do |comment|
-          expect(page).to have_no_content_tag_for(comment)
+          expect(page).not_to have_selector(".topic-#{comment.id}")
         end
 
         my_comments.each do |comment|
-          expect(page).to have_content_tag_for(comment)
+          expect(page).to have_selector(".topic-#{comment.id}")
         end
       end
 
-      scenario 'I can see my pending comments and mark as read' do
+      scenario 'I can see my pending comments and mark as read', js: true do
         other_comments = [
           staff_response_to_comment, staff_response_to_annotation, staff_response_to_video
         ].map(&:topic)
         mark_as_read = other_comments.sample
 
-        visit pending_course_topics_path(course)
+        visit course_topics_path(course)
 
-        expect(page).to have_selector('.nav.nav-tabs')
+        expect(page).to have_selector('button#unread_tab')
+        find('button#unread_tab').click
 
-        other_comments.each { |comment| expect(page).to have_content_tag_for(comment) }
+        other_comments.each { |comment| expect(page).to have_selector(".topic-#{comment.id}") }
 
-        within find(content_tag_selector(mark_as_read)) do
-          click_link I18n.t('course.discussion.topics.mark_as_read')
-        end
+        find("a#mark-as-read-#{mark_as_read.id}").click
+        sleep 0.2
 
-        expect(page).to have_no_content_tag_for(mark_as_read)
+        expect(page).to have_selector('a.clickable', count: other_comments.length - 1)
         expect(mark_as_read.unread?(user)).to be_falsey
       end
 
@@ -171,37 +175,39 @@ RSpec.feature 'Course: Topics: Management' do
         topic = choices.sample[]
         visit course_topics_path(course)
 
+        expect(page).to have_selector('button#all_tab')
+        find('button#all_tab').click
+
         comment = 'THANKS !'
-        fill_in_rails_summernote '.post-form', comment
-        within find('.post-form') do
-          click_button I18n.t('course.discussion.posts.form.comment')
+        within find("div#comment-field-#{topic.discussion_topic.id}") do
+          fill_in_react_ck 'textarea', comment
         end
-        wait_for_ajax
+
+        find("button#comment-submit-#{topic.discussion_topic.id}").click
 
         post = topic.posts.reload.last
-        expect(post.text).to have_tag('*', text: comment)
-        expect(page).to have_content_tag_for(post)
-        within find(content_tag_selector(topic.acting_as)) do
-          expect(page).to have_tag('.post-form', count: 1)
+        within find("div#post_#{post.id}") do
+          expect(page).to have_tag('*', text: comment)
         end
 
         # Delete post
-        find(content_tag_selector(post)).find('.delete').click
+        find("div#post_#{post.id}").find('.delete-comment').click
         expect(page).to have_selector('.confirm-btn')
         accept_confirm_dialog
-        wait_for_ajax
-        expect(page).to have_no_content_tag_for(post)
+        expect(page).not_to have_selector("div#post_#{post.id}")
 
         # Reply when last post of topic has just been deleted
         reply_text = 'WELCOME (:'
-        fill_in_rails_summernote '.post-form', reply_text
-        within find('.post-form') do
-          click_button I18n.t('course.discussion.posts.form.comment')
+        within find("div#comment-field-#{topic.discussion_topic.id}") do
+          fill_in_react_ck 'textarea', reply_text
         end
-        wait_for_ajax
 
-        reply = topic.posts.reload.last
-        expect(reply.text).to have_tag('*', text: reply_text)
+        find("button#comment-submit-#{topic.discussion_topic.id}").click
+
+        post = topic.posts.reload.last
+        within find("div#post_#{post.id}") do
+          expect(page).to have_tag('*', text: reply_text)
+        end
       end
 
       scenario 'I can edit my comment post', js: true do
@@ -209,23 +215,24 @@ RSpec.feature 'Course: Topics: Management' do
         my_comment_post = choices.sample[]
         visit course_topics_path(course)
 
+        expect(page).to have_selector('button#all_tab')
+        find('button#all_tab').click
+
         # Test post editing
         old_text = my_comment_post.text
-        find(content_tag_selector(my_comment_post)).find('.edit').click
-        within find('.edit-discussion-post-form') do
-          click_button I18n.t('javascript.course.discussion.post.submit')
+        find("div#post_#{my_comment_post.id}").find('.edit-comment').click
+        within find(".edit-discussion-post-form#edit_post_#{my_comment_post.id}") do
+          find(".cancel-button#post_#{my_comment_post.id}").click
         end
-        wait_for_ajax
         # Edit and save should not change the old content
         expect(my_comment_post.reload.text).to eq(old_text)
 
         new_post_text = 'new post text'
-        find(content_tag_selector(my_comment_post)).find('.edit').click
-        fill_in_rails_summernote '.edit-discussion-post-form', new_post_text
-        within find('.edit-discussion-post-form') do
-          click_button I18n.t('javascript.course.discussion.post.submit')
+        find("div#post_#{my_comment_post.id}").find('.edit-comment').click
+        within find(".edit-discussion-post-form#edit_post_#{my_comment_post.id}") do
+          fill_in_react_ck 'textarea', new_post_text
+          find(".submit-button#post_#{my_comment_post.id}").click
         end
-        wait_for_ajax
         expect(page).to have_text(new_post_text)
       end
     end
@@ -233,19 +240,18 @@ RSpec.feature 'Course: Topics: Management' do
     context 'As a system administrator' do
       let(:user) { create(:administrator) }
 
-      scenario 'I can visit the comments page' do
+      scenario 'I can visit the comments page', js: true do
         comment
         video_comment
         visit course_topics_path(course)
 
-        expect(page).to have_selector('.nav.nav-tabs')
+        expect(page).to have_selector('button#all_tab')
+        find('button#all_tab').click
         expect(page).to have_selector('div', text: comment.submission.assessment.title)
-        expect(page).
-          to have_link(I18n.t(
-                         'course.video.topics.discussion_topic_topic.comment_title',
-                         title: video_comment.video.title,
-                         timestamp: Time.at(video_comment.timestamp).utc.strftime('%H:%M:%S')
-                       ))
+        expect(page).to have_selector(
+          "#topic-#{video_comment.discussion_topic.id}-#{Time.at(video_comment.timestamp).utc.strftime('%H-%M-%S')}",
+          text: video_comment.video.title
+        )
       end
     end
   end

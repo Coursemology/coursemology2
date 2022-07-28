@@ -55,12 +55,12 @@ RSpec.describe Course::Discussion::TopicsController do
     end
 
     describe '#pending' do
-      subject { get :pending, params: { course_id: course } }
+      subject { get :pending, format: :json, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
         before { sign_in(staff) }
 
-        it { is_expected.to render_template(:pending) }
+        it { is_expected.to render_template(:topics_list_data) }
 
         it 'only shows the pending topics' do
           subject
@@ -71,7 +71,7 @@ RSpec.describe Course::Discussion::TopicsController do
       context 'when a course student visits the page' do
         before { sign_in(student) }
 
-        it { is_expected.to render_template(:pending) }
+        it { is_expected.to render_template(:topics_list_data) }
 
         it 'only shows the unread topics' do
           subject
@@ -81,12 +81,12 @@ RSpec.describe Course::Discussion::TopicsController do
     end
 
     describe '#my_students' do
-      subject { get :my_students, params: { course_id: course } }
+      subject { get :my_students, format: :json, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
         before { sign_in(staff) }
 
-        it { is_expected.to render_template(:my_students) }
+        it { is_expected.to render_template(:topics_list_data) }
 
         context 'when the user does not have any students' do
           it 'shows nothing' do
@@ -120,12 +120,12 @@ RSpec.describe Course::Discussion::TopicsController do
     end
 
     describe '#my_students_pending' do
-      subject { get :my_students_pending, params: { course_id: course } }
+      subject { get :my_students_pending, format: :json, params: { course_id: course } }
 
       context 'when a course staff visits the page' do
         before { sign_in(staff) }
 
-        it { is_expected.to render_template(:my_students_pending) }
+        it { is_expected.to render_template(:topics_list_data) }
 
         context 'when the user does not have any students' do
           it 'shows nothing' do

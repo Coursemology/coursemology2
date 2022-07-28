@@ -129,15 +129,27 @@ const CommentCard: FC<Props> = (props) => {
             }}
             value={editValue ?? ''}
           />
-          <div style={{
-            display: 'flex',
-            marginRight: 5,
-            marginBottom: 2,
-          }}>
-            <Button color="secondary" onClick={(): void => setEditMode(false)} id={`post_${post.id}`} className='cancel-button'>
+          <div
+            style={{
+              display: 'flex',
+              marginRight: 5,
+              marginBottom: 2,
+            }}
+          >
+            <Button
+              color="secondary"
+              onClick={(): void => setEditMode(false)}
+              id={`post_${post.id}`}
+              className="cancel-button"
+            >
               <FormattedMessage {...translations.cancel} />
             </Button>
-            <Button color="primary" onClick={onSave} id={`post_${post.id}`} className='submit-button'>
+            <Button
+              color="primary"
+              onClick={onSave}
+              id={`post_${post.id}`}
+              className="submit-button"
+            >
               <FormattedMessage {...translations.save} />
             </Button>
           </div>
@@ -149,23 +161,31 @@ const CommentCard: FC<Props> = (props) => {
   };
 
   return (
-    <div id={postIdentifier(post.id.toString())} 
+    <div
+      id={postIdentifier(post.id.toString())}
       style={{
         marginBottom: 10,
         borderStyle: 'solid',
         borderWidth: 0.2,
         borderColor: grey[400],
-        borderRadius: 10
-        }}
+        borderRadius: 10,
+      }}
     >
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: post.isDelayed ? orange[100] : grey[100],
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          backgroundColor: post.isDelayed ? orange[100] : grey[100],
+        }}
+      >
         <CardHeader
-          avatar={<Avatar src={post.creator.imageUrl} style={{height: '25px', width: '25px'}} />}
+          avatar={
+            <Avatar
+              src={post.creator.imageUrl}
+              style={{ height: '25px', width: '25px' }}
+            />
+          }
           title={
             <a href={getCourseUserURL(getCourseId(), post.creator.id)}>
               {post.creator.name}
@@ -176,13 +196,15 @@ const CommentCard: FC<Props> = (props) => {
             post.isDelayed ? ' (delayed comment)' : ''
           }`}
           subheaderTypographyProps={{ display: 'block' }}
-          style={{padding: 6}}
+          style={{ padding: 6 }}
         />
-        <div style={{
-          display: 'flex',
-          marginRight: 5,
-          marginBottom: 2,
-        }}>
+        <div
+          style={{
+            display: 'flex',
+            marginRight: 5,
+            marginBottom: 2,
+          }}
+        >
           {post.canUpdate ? (
             <Button
               className="edit-comment"

@@ -4,8 +4,8 @@ import { CourseUserBasicListData } from './courseUsers';
  * Data types for comments data retrieved from backend through API call.
  */
 export interface CommentTabData {
-  type: CommentTabTypes
-  count: number
+  type: CommentTabTypes;
+  count: number;
 }
 
 export interface CommentPermissions {

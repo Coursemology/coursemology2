@@ -89,20 +89,31 @@ const CommentIndex: FC<Props> = (props) => {
       }
     }
     tabs.push(CommentTabTypes.ALL);
-    const tabData: CommentTabData[] = tabs.map((commentType: CommentTabTypes) => {
-      let typeCount = 0;
-      if (commentType === CommentTabTypes.MY_STUDENTS_PENDING && tabInfo.myStudentUnreadCount) {
-        typeCount = tabInfo.myStudentUnreadCount;
-      } else if (commentType === CommentTabTypes.PENDING && tabInfo.allStaffUnreadCount) {
-        typeCount = tabInfo.allStaffUnreadCount;
-      } else if (commentType === CommentTabTypes.UNREAD && tabInfo.allStudentUnreadCount) {
-        typeCount = tabInfo.allStudentUnreadCount;
-      }
-      return ({
-        type: commentType,
-        count: typeCount,
-      })
-    })
+    const tabData: CommentTabData[] = tabs.map(
+      (commentType: CommentTabTypes) => {
+        let typeCount = 0;
+        if (
+          commentType === CommentTabTypes.MY_STUDENTS_PENDING &&
+          tabInfo.myStudentUnreadCount
+        ) {
+          typeCount = tabInfo.myStudentUnreadCount;
+        } else if (
+          commentType === CommentTabTypes.PENDING &&
+          tabInfo.allStaffUnreadCount
+        ) {
+          typeCount = tabInfo.allStaffUnreadCount;
+        } else if (
+          commentType === CommentTabTypes.UNREAD &&
+          tabInfo.allStudentUnreadCount
+        ) {
+          typeCount = tabInfo.allStudentUnreadCount;
+        }
+        return {
+          type: commentType,
+          count: typeCount,
+        };
+      },
+    );
     return tabData;
   };
 
@@ -125,17 +136,18 @@ const CommentIndex: FC<Props> = (props) => {
       .finally(() => setIsLoading(false));
   }, [dispatch]);
 
-  const setCount = (count: number, type: CommentTabTypes) => {
-    const newTabTypesToRender: CommentTabData[] = tabTypesToRender.map((data: CommentTabData) => {
-      if (data.type === type) {
-        const newData = {...data, count: count};
-        return newData
-      } else {
+  const setCount = (count: number, type: CommentTabTypes): void => {
+    const newTabTypesToRender: CommentTabData[] = tabTypesToRender.map(
+      (data: CommentTabData) => {
+        if (data.type === type) {
+          const newData = { ...data, count };
+          return newData;
+        }
         return data;
-      }
-    });
+      },
+    );
     setTabTypesToRender(newTabTypesToRender);
-  }
+  };
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -181,7 +193,7 @@ const CommentIndex: FC<Props> = (props) => {
         style={{
           backgroundColor: palette.background.default,
         }}
-        TabIndicatorProps={{ color: 'primary', style: { height: 5 }  }}
+        TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
         value={tabValue}
         variant="scrollable"
         scrollButtons="auto"
@@ -202,11 +214,14 @@ const CommentIndex: FC<Props> = (props) => {
             <Tab
               id={`${tabData.type}_tab`}
               key={tabData.type}
-              icon={<CustomBadge badgeContent={tabData.count} color="primary"/>}
+              icon={
+                <CustomBadge badgeContent={tabData.count} color="primary" />
+              }
               iconPosition="end"
               style={{
-                paddingRight: tabData.count === 0 || tabData.count === undefined ? 8 : 26,
-                textDecoration: 'none'
+                paddingRight:
+                  tabData.count === 0 || tabData.count === undefined ? 8 : 26,
+                textDecoration: 'none',
               }}
               label={tabTranslation(tabData.type)}
               value={tabData.type}
