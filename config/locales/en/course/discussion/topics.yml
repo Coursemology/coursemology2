@@ -3,12 +3,6 @@ en:
     discussion:
       topics:
         sidebar_title: :'course.discussion.topics.index.header'
-        tabs:
-          my_students_pending: 'My Students Pending'
-          pending: 'Pending'
-          unread: 'Unread'
-          my_students: 'My Students'
-          all: 'All'
         index:
           header: 'Comments'
         pending:

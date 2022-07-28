@@ -19,7 +19,7 @@ module Course::DiscussionsAbilityComponent
   private
 
   def allow_course_users_show_topics
-    can [:read, :pending], Course::Discussion::Topic, course_id: course.id
+    can [:read, :pending, :all], Course::Discussion::Topic, course_id: course.id
   end
 
   def allow_course_users_mark_topics_as_read
