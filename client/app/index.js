@@ -13,6 +13,7 @@
 
 function loadCurrentModule() {
   const { modulePath } = require('./lib/helpers/server-context');
+
   try {
     require(`../app/bundles/${modulePath}`);
   } catch (e) {

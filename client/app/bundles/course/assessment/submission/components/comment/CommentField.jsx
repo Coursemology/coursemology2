@@ -80,7 +80,7 @@ export default class CommentField extends Component {
           startIcon={
             isSubmittingNormalComment ? <CircularProgress size={24} /> : null
           }
-          style={{ marginRight: 10, marginBotton: 10 }}
+          style={{ marginRight: 10, marginBottom: 10 }}
         >
           <FormattedMessage {...translations.comment} />
         </Button>

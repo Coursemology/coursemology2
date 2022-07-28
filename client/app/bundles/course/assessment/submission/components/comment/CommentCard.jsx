@@ -163,7 +163,7 @@ export default class CommentCard extends Component {
 
   render() {
     const {
-      creator: { name, avatar },
+      creator: { name, imageUrl },
       createdAt,
       canUpdate,
       canDestroy,
@@ -174,7 +174,7 @@ export default class CommentCard extends Component {
       <div id={CommentCard.postIdentifier(id)} style={styles.card}>
         <div style={isDelayed ? styles.delayedHeader : styles.header}>
           <CardHeader
-            avatar={<Avatar src={avatar} style={styles.avatar} />}
+            avatar={<Avatar src={imageUrl} style={styles.avatar} />}
             title={name}
             titleTypographyProps={{ display: 'block', marginright: 20 }}
             subheader={`${CommentCard.formatDateTime(createdAt)}${
