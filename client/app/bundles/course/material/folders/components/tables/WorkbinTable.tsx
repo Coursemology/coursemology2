@@ -1,36 +1,23 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-
-import {
-  FolderMiniEntity,
-  MaterialMiniEntity,
-} from 'types/course/material/folders';
-
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   Button,
-  Stack,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Tooltip,
 } from '@mui/material';
 import {
   ArrowDropDown as ArrowDropDownIcon,
   ArrowDropUp as ArrowDropUpIcon,
-  Block as BlockIcon,
-  Description as DescriptionIcon,
-  Folder as FolderIcon,
-  Visibility as VisibilityIcon,
 } from '@mui/icons-material';
-
-import { getFullDateTime } from 'lib/helpers/timehelper';
-import { getCourseId } from 'lib/helpers/url-helpers';
-import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
-
-import WorkbinTableButtons from '../buttons/WorkbinTableButtons';
+import {
+  FolderMiniEntity,
+  MaterialMiniEntity,
+} from 'types/course/material/folders';
+import TableSubfolderRow from './TableSubfolderRow';
+import TableMaterialRow from './TableMaterialRow';
 
 interface Props extends WrappedComponentProps {
   currFolderId: number;
@@ -52,16 +39,6 @@ const translations = defineMessages({
   tableHeaderStartAt: {
     id: 'course.materials.folders.tableHeaderStartAt',
     defaultMessage: 'Start At',
-  },
-  subfolderBlockedTooltip: {
-    id: 'course.materials.folders.subfolderBlockedTooltip',
-    defaultMessage:
-      "This folder is hidden from students as it's start time has not been reached",
-  },
-  visibleBecauseSdlTooltip: {
-    id: 'course.materials.folders.visibleBecauseSdlTooltip',
-    defaultMessage:
-      'This folder is visible to students before the start time because of Self-Directed Learning',
   },
 });
 
@@ -98,17 +75,25 @@ const WorkbinTable: FC<Props> = (props) => {
       case intl.formatMessage(translations.tableHeaderName):
         if (direction === 'up') {
           setSortedSubfolders(
-            subfolders.sort((a, b) => (a.name > b.name ? -1 : 1)),
+            subfolders.sort((a, b) =>
+              a.name.toUpperCase() > b.name.toUpperCase() ? -1 : 1,
+            ),
           );
           setSortedMaterials(
-            materials.sort((a, b) => (a.name > b.name ? -1 : 1)),
+            materials.sort((a, b) =>
+              a.name.toUpperCase() > b.name.toUpperCase() ? -1 : 1,
+            ),
           );
         } else {
           setSortedSubfolders(
-            subfolders.sort((a, b) => (a.name > b.name ? 1 : -1)),
+            subfolders.sort((a, b) =>
+              a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1,
+            ),
           );
           setSortedMaterials(
-            materials.sort((a, b) => (a.name > b.name ? 1 : -1)),
+            materials.sort((a, b) =>
+              a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1,
+            ),
           );
         }
         break;
@@ -167,16 +152,12 @@ const WorkbinTable: FC<Props> = (props) => {
   };
 
   const columnHeaderWithSort = (columnName: string): JSX.Element => {
-    const endIcon =
-      sortBy === columnName ? (
-        sortDirection === 'down' ? (
-          <ArrowDropDownIcon />
-        ) : (
-          <ArrowDropUpIcon />
-        )
-      ) : (
-        <></>
-      );
+    let endIcon = <></>;
+    if (sortBy === columnName && sortDirection === 'down') {
+      endIcon = <ArrowDropDownIcon />;
+    } else if (sortBy === columnName && sortDirection === 'up') {
+      endIcon = <ArrowDropUpIcon />;
+    }
 
     return (
       <Button
@@ -219,156 +200,23 @@ const WorkbinTable: FC<Props> = (props) => {
         <TableBody>
           {sortedSubfolders.map((subfolder) => {
             return (
-              <TableRow
+              <TableSubfolderRow
                 key={`subfolder-${subfolder.id}`}
-                id={`subfolder-${subfolder.id}`}
-              >
-                <TableCell style={{ padding: 2 }}>
-                  <Stack spacing={1}>
-                    <Stack direction="row" spacing={0.5} alignItems="center">
-                      <FolderIcon htmlColor="grey" />
-                      <Link
-                        to={`/courses/${getCourseId()}/materials/folders/${
-                          subfolder.id
-                        }/`}
-                      >
-                        {`${subfolder.name} (${subfolder.itemCount})`}
-                      </Link>
-                      {new Date(subfolder.effectiveStartAt).getTime() >
-                        Date.now() &&
-                        !isCurrentCourseStudent && (
-                          <Tooltip
-                            title={intl.formatMessage(
-                              translations.subfolderBlockedTooltip,
-                            )}
-                            placement="top"
-                            arrow
-                          >
-                            <BlockIcon color="error" fontSize="small" />
-                          </Tooltip>
-                        )}
-                    </Stack>
-                    {subfolder.description !== null &&
-                      subfolder.description.length !== 0 && (
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: subfolder.description,
-                          }}
-                        />
-                      )}
-                  </Stack>
-                </TableCell>
-                <TableCell style={{ padding: 2 }}>
-                  {getFullDateTime(subfolder.updatedAt)}
-                </TableCell>
-                <TableCell style={{ padding: 2 }}>
-                  {subfolder.permissions.canEdit ? (
-                    <Stack direction="row" spacing={0.5} alignItems="center">
-                      {subfolder.permissions.showSdlWarning && (
-                        <Tooltip
-                          title={intl.formatMessage(
-                            translations.visibleBecauseSdlTooltip,
-                          )}
-                        >
-                          <VisibilityIcon color="info" fontSize="small" />
-                        </Tooltip>
-                      )}
-                      <div>{getFullDateTime(subfolder.startAt)}</div>
-                    </Stack>
-                  ) : (
-                    <div>-</div>
-                  )}
-                </TableCell>
-                <TableCell style={{ padding: 2 }}>
-                  <WorkbinTableButtons
-                    currFolderId={currFolderId}
-                    itemId={subfolder.id}
-                    itemName={subfolder.name}
-                    isConcrete={isConcrete}
-                    canEdit={subfolder.permissions.canEdit}
-                    canDelete={subfolder.permissions.canDelete}
-                    type="subfolder"
-                    folderInitialValues={{
-                      name: subfolder.name,
-                      description: subfolder.description,
-                      canStudentUpload: subfolder.canStudentUpload,
-                      startAt: new Date(subfolder.startAt),
-                      endAt:
-                        subfolder.endAt !== null
-                          ? new Date(subfolder.endAt)
-                          : null,
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
+                currFolderId={currFolderId}
+                subfolder={subfolder}
+                isCurrentCourseStudent={isCurrentCourseStudent}
+                isConcrete={isConcrete}
+              />
             );
           })}
-
           {sortedMaterials.map((material) => {
             return (
-              <TableRow
+              <TableMaterialRow
                 key={`material-${material.id}`}
-                id={`material-${material.id}`}
-              >
-                <TableCell style={{ padding: 2 }}>
-                  <Stack spacing={1}>
-                    <Stack direction="row" spacing={0.5} alignItems="center">
-                      <DescriptionIcon htmlColor="grey" />
-                      <a
-                        href={`/courses/${getCourseId()}/materials/folders/${currFolderId}/files/${
-                          material.id
-                        }`}
-                      >
-                        {material.name}
-                      </a>
-                    </Stack>
-                    {material.description !== null &&
-                      material.description.length !== 0 && (
-                        <div
-                          dangerouslySetInnerHTML={{
-                            __html: material.description,
-                          }}
-                        />
-                      )}
-                  </Stack>
-                </TableCell>
-                <TableCell style={{ padding: 2 }}>
-                  <Stack>
-                    <div>{getFullDateTime(material.updatedAt)}</div>
-                    <a
-                      href={
-                        material.updater.isCourseUser
-                          ? getCourseUserURL(getCourseId(), material.updater.id)
-                          : getUserURL(material.updater.id)
-                      }
-                    >
-                      {material.updater.name}
-                    </a>
-                  </Stack>
-                </TableCell>
-                <TableCell style={{ padding: 2 }}>-</TableCell>
-                <TableCell style={{ padding: 2 }}>
-                  <WorkbinTableButtons
-                    currFolderId={currFolderId}
-                    itemId={material.id}
-                    itemName={material.name}
-                    isConcrete={isConcrete}
-                    canEdit={material.permissions.canEdit}
-                    canDelete={material.permissions.canDelete}
-                    type="material"
-                    materialInitialValues={{
-                      name: material.name,
-                      description: material.description,
-                      file: {
-                        name: material.name,
-                        url: `/courses/${getCourseId()}/materials/folders/${currFolderId}/files/${
-                          material.id
-                        }`,
-                      },
-                    }}
-                  />
-                </TableCell>
-              </TableRow>
+                currFolderId={currFolderId}
+                material={material}
+                isConcrete={isConcrete}
+              />
             );
           })}
         </TableBody>
