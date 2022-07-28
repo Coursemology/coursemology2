@@ -172,7 +172,6 @@ const FolderForm: FC<Props> = (props) => {
               InputLabelProps={{
                 shrink: true,
               }}
-              required
               variant="standard"
             />
           )}
