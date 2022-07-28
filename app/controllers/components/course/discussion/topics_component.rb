@@ -20,7 +20,7 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
         icon: 'comments',
         title: settings.title || t('course.discussion.topics.sidebar_title'),
         weight: 5,
-        path: sidebar_path,
+        path: course_topics_path(current_course),
         unread: unread_count
       }
     ]
@@ -35,16 +35,6 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
         path: course_admin_topics_path(current_course)
       }
     ]
-  end
-
-  def sidebar_path
-    if staff_with_students?
-      my_students_pending_course_topics_path(current_course)
-    elsif current_course_user&.teaching_staff? || current_course_user&.student?
-      pending_course_topics_path(current_course)
-    else
-      course_topics_path(current_course)
-    end
   end
 
   def unread_count
