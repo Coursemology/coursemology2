@@ -1,0 +1,85 @@
+import { FC, memo } from 'react';
+import { Stack, TableCell, TableRow } from '@mui/material';
+import { Description as DescriptionIcon } from '@mui/icons-material';
+import equal from 'fast-deep-equal';
+import { MaterialMiniEntity } from 'types/course/material/folders';
+import { getFullDateTime } from 'lib/helpers/timehelper';
+import { getCourseId } from 'lib/helpers/url-helpers';
+import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
+import WorkbinTableButtons from '../buttons/WorkbinTableButtons';
+
+interface Props {
+  currFolderId: number;
+  material: MaterialMiniEntity;
+  isConcrete: boolean;
+}
+
+const TableMaterialRow: FC<Props> = (props) => {
+  const { currFolderId, material, isConcrete } = props;
+
+  return (
+    <TableRow id={`material-${material.id}`}>
+      <TableCell style={{ padding: 2 }}>
+        <Stack spacing={1}>
+          <Stack direction="row" spacing={0.5} alignItems="center">
+            <DescriptionIcon htmlColor="grey" />
+            <a
+              href={`/courses/${getCourseId()}/materials/folders/${currFolderId}/files/${
+                material.id
+              }`}
+            >
+              {material.name}
+            </a>
+          </Stack>
+          {material.description !== null && material.description.length !== 0 && (
+            <div
+              dangerouslySetInnerHTML={{
+                __html: material.description,
+              }}
+            />
+          )}
+        </Stack>
+      </TableCell>
+      <TableCell style={{ padding: 2 }}>
+        <Stack>
+          <div>{getFullDateTime(material.updatedAt)}</div>
+          <a
+            href={
+              material.updater.isCourseUser
+                ? getCourseUserURL(getCourseId(), material.updater.id)
+                : getUserURL(material.updater.id)
+            }
+          >
+            {material.updater.name}
+          </a>
+        </Stack>
+      </TableCell>
+      <TableCell style={{ padding: 2 }}>-</TableCell>
+      <TableCell style={{ padding: 2 }}>
+        <WorkbinTableButtons
+          currFolderId={currFolderId}
+          itemId={material.id}
+          itemName={material.name}
+          isConcrete={isConcrete}
+          canEdit={material.permissions.canEdit}
+          canDelete={material.permissions.canDelete}
+          type="material"
+          materialInitialValues={{
+            name: material.name,
+            description: material.description,
+            file: {
+              name: material.name,
+              url: `/courses/${getCourseId()}/materials/folders/${currFolderId}/files/${
+                material.id
+              }`,
+            },
+          }}
+        />
+      </TableCell>
+    </TableRow>
+  );
+};
+
+export default memo(TableMaterialRow, (prevProps, nextProps) => {
+  return equal(prevProps, nextProps);
+});
