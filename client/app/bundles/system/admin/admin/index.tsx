@@ -16,11 +16,20 @@ $(() => {
   if (mountNode) {
     const store = configureStore();
 
+    const renderSidebar = (isExpanded, handleExpand): JSX.Element => {
+      return (
+        <SystemAdminSidebar
+          isExpanded={isExpanded}
+          handleExpand={handleExpand}
+        />
+      );
+    };
+
     render(
       <ProviderWrapper {...{ store }}>
         <BrowserRouter>
           <AppLayout
-            sidebar={<SystemAdminSidebar />}
+            renderSidebar={renderSidebar}
             routes={
               <Routes>
                 <Route path="/admin" element={<AdminIndex />} />

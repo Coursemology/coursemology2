@@ -6,7 +6,7 @@ import {
   TableOptions,
   TableState,
 } from 'types/components/DataTable';
-import tableTranslations from 'lib/components/tables/translations';
+import tableTranslations from 'lib/translations/table';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { debounceSearchRender } from 'mui-datatables';
 import DataTable from 'lib/components/DataTable';
@@ -98,7 +98,7 @@ const CoursesTable: FC<Props> = (props) => {
     dispatch(
       indexCourses({
         'filter[page_num]': page,
-        'filter[length]': 30,
+        'filter[length]': 100,
         active,
         search: searchText.trim(),
       }),
@@ -126,8 +126,8 @@ const CoursesTable: FC<Props> = (props) => {
     },
     pagination: true,
     print: false,
-    rowsPerPage: 30,
-    rowsPerPageOptions: [30],
+    rowsPerPage: 100,
+    rowsPerPageOptions: [100],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',
@@ -141,10 +141,6 @@ const CoursesTable: FC<Props> = (props) => {
         courseid: `course_${courses[dataIndex].id}`,
         className: `course course_${courses[dataIndex].id}`,
       };
-    },
-    sortOrder: {
-      name: 'name',
-      direction: 'asc',
     },
     viewColumns: false,
   };
@@ -215,8 +211,9 @@ const CoursesTable: FC<Props> = (props) => {
               className="course_active_total_users"
               variant="body2"
             >
-              {/* ADD LINK TO COURSE USER PAGE */}
-              {course.activeUserCount} / {course.userCount}
+              <a href={`/courses/${course.id}/students`}>
+                {course.activeUserCount} / {course.userCount}
+              </a>
             </Typography>
           );
         },

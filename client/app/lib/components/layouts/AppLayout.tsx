@@ -1,34 +1,71 @@
 import Breadcrumbs from 'lib/components/navigation/Breadcrumbs';
 import Grid from '@mui/material/Grid';
+import { useState } from 'react';
+import './layout.scss';
 
 interface AppLayoutProps {
   routes: JSX.Element;
-  sidebar: JSX.Element;
+  renderSidebar: (
+    isExpanded: boolean,
+    setIsExpanded: (forceExpand?: boolean) => void,
+  ) => JSX.Element;
 }
 
 const AppLayout = (props: AppLayoutProps): JSX.Element => {
-  const { routes, sidebar } = props;
+  const { routes, renderSidebar } = props;
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  const handleExpand = (forceExpand): void => {
+    if (forceExpand) {
+      setIsExpanded(true);
+    } else {
+      setIsExpanded(!isExpanded);
+    }
+  };
 
   return (
-    <div>
-      <Grid container>
-        <Grid
-          item
-          className="breadcrumbs"
-          xs={11}
-          sm={12}
-          sx={{ marginBottom: '4px' }}
-        >
-          <Breadcrumbs />
-        </Grid>
-        <Grid item className="sidebar" xs={1} sm={4} md={3} lg={2}>
-          {sidebar}
-        </Grid>
-        <Grid item className="content" xs={12} sm={8} md={9} lg={10}>
-          {routes}
-        </Grid>
+    <Grid container>
+      <Grid
+        item
+        className="sidebar"
+        sx={{ transition: 'max-width 0.3s ease-in-out' }}
+        xs={1}
+        sm={isExpanded ? 4 : 2}
+        md={isExpanded ? 3 : 1}
+        lg={isExpanded ? 2 : 1}
+      >
+        {renderSidebar(isExpanded, handleExpand)}
       </Grid>
-    </div>
+      <Grid
+        item
+        className="breadcrumbs"
+        xs={11}
+        sm={isExpanded ? 8 : 10}
+        md={isExpanded ? 9 : 11}
+        lg={isExpanded ? 10 : 11}
+        sx={{ marginBottom: '4px' }}
+      >
+        <Breadcrumbs />
+      </Grid>
+      <Grid
+        item
+        xs={0}
+        sm={isExpanded ? 4 : 2}
+        md={isExpanded ? 3 : 1}
+        lg={isExpanded ? 2 : 1}
+      />
+      <Grid
+        item
+        className="content"
+        sx={{ transition: 'max-width 0.2s ease-in-out' }}
+        xs={12}
+        sm={isExpanded ? 8 : 10}
+        md={isExpanded ? 9 : 11}
+        lg={isExpanded ? 10 : 11}
+      >
+        {routes}
+      </Grid>
+    </Grid>
   );
 };
 

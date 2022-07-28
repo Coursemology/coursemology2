@@ -14,7 +14,7 @@ import {
   TableState,
 } from 'types/components/DataTable';
 import { UserMiniEntity, UserRole } from 'types/users';
-import tableTranslations from 'lib/components/tables/translations';
+import tableTranslations from 'lib/translations/table';
 import sharedConstants, {
   FIELD_DEBOUNCE_DELAY,
 } from 'lib/constants/sharedConstants';
@@ -147,7 +147,7 @@ const UsersTable: FC<Props> = (props) => {
     dispatch(
       indexUsers({
         'filter[page_num]': page,
-        'filter[length]': 30,
+        'filter[length]': 100,
         role,
         active,
       }),
@@ -165,7 +165,7 @@ const UsersTable: FC<Props> = (props) => {
     dispatch(
       indexUsers({
         'filter[page_num]': page,
-        'filter[length]': 30,
+        'filter[length]': 100,
         role,
         active,
         search: searchText.trim(),
@@ -194,8 +194,8 @@ const UsersTable: FC<Props> = (props) => {
     },
     pagination: true,
     print: false,
-    rowsPerPage: 30,
-    rowsPerPageOptions: [30],
+    rowsPerPage: 100,
+    rowsPerPageOptions: [100],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',
@@ -209,10 +209,6 @@ const UsersTable: FC<Props> = (props) => {
         userid: `user_${users[rowIndex].id}`,
         className: `system_user system_user_${users[rowIndex].id}`,
       };
-    },
-    sortOrder: {
-      name: 'name',
-      direction: 'asc',
     },
     viewColumns: false,
   };
