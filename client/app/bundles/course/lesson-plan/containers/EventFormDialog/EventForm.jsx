@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,7 +9,6 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 import ErrorText from 'lib/components/ErrorText';
-import { shiftDateField } from 'lib/helpers/form-helpers';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/lesson-plan/translations';
 import { fields } from 'course/lesson-plan/constants';
@@ -40,23 +39,21 @@ const styles = {
   },
 };
 
-const validationTranslations = defineMessages({
-  startEndValidationError: {
-    id: 'course.lessonPlan.EventForm.startEndValidationError',
-    defaultMessage: 'Must be after "Start At"',
-  },
-});
-
 const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
   event_type: yup.string().nullable().required(formTranslations.required),
   location: yup.string().nullable(),
   description: yup.string().nullable(),
-  start_at: yup.date().nullable().required(formTranslations.required),
+  start_at: yup
+    .date()
+    .nullable()
+    .typeError(formTranslations.invalidDate)
+    .required(formTranslations.required),
   end_at: yup
     .date()
     .nullable()
-    .min(yup.ref('start_at'), validationTranslations.startEndValidationError),
+    .typeError(formTranslations.invalidDate)
+    .min(yup.ref('start_at'), formTranslations.startEndDateValidationError),
   published: yup.bool(),
 });
 
@@ -67,8 +64,6 @@ const EventForm = (props) => {
     control,
     handleSubmit,
     setError,
-    setValue,
-    watch,
     formState: { errors },
   } = useForm({
     defaultValues: initialValues,
@@ -164,9 +159,6 @@ const EventForm = (props) => {
                 fieldState={fieldState}
                 disabled={disabled}
                 label={<FormattedMessage {...translations[START_AT]} />}
-                afterChangeField={(newStartAt) =>
-                  shiftDateField(newStartAt, watch, setValue)
-                }
                 style={styles.oneColumn}
               />
             )}

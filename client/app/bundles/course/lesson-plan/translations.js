@@ -36,7 +36,7 @@ const translations = defineMessages({
   },
   [START_AT]: {
     id: 'course.lessonPlan.startAt',
-    defaultMessage: 'Start At',
+    defaultMessage: 'Start At *',
   },
   [BONUS_END_AT]: {
     id: 'course.lessonPlan.bonusEndAt',

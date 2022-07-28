@@ -27,6 +27,7 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import { toast } from 'react-toastify';
+import formTranslations from 'lib/translations/form';
 import tableTranslations from 'lib/translations/table';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { deletePersonalTime, updatePersonalTime } from '../../operations';
@@ -99,10 +100,11 @@ const translations = defineMessages({
 });
 
 const validationSchema = yup.object({
-  startAt: yup.date().nullable(),
+  startAt: yup.date().nullable().typeError(formTranslations.invalidDate),
   endAt: yup
     .date()
     .nullable()
+    .typeError(formTranslations.invalidDate)
     .min(yup.ref('startAt'), translations.startEndValidationError),
   bonusEndAt: yup.date().nullable(),
 });

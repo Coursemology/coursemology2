@@ -12,7 +12,6 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
-import { shiftDateField } from 'lib/helpers/form-helpers';
 
 import { ConditionData, Conditions } from 'types/course/conditions';
 import {
@@ -74,8 +73,8 @@ const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
   content: yup.string().nullable(),
   sticky: yup.bool(),
-  startAt: yup.date().nullable(),
-  endAt: yup.date().nullable(),
+  startAt: yup.date().nullable().typeError(formTranslations.invalidDate),
+  endAt: yup.date().nullable().typeError(formTranslations.invalidDate),
 });
 
 const AnnouncementForm: FC<Props> = (props) => {
@@ -85,8 +84,6 @@ const AnnouncementForm: FC<Props> = (props) => {
     control,
     handleSubmit,
     setError,
-    setValue,
-    watch,
     formState: { errors, isDirty, isSubmitting },
   } = useForm<IFormInputs>({
     defaultValues: initialValues,
@@ -225,15 +222,6 @@ const AnnouncementForm: FC<Props> = (props) => {
                 fieldState={fieldState}
                 disabled={disabled}
                 label={<FormattedMessage {...translations.startAt} />}
-                afterChangeField={(newStartAt: Date): void => {
-                  shiftDateField(
-                    newStartAt,
-                    watch,
-                    setValue,
-                    'startAt',
-                    'endAt',
-                  );
-                }}
                 style={{ flex: 1 }}
               />
             )}
