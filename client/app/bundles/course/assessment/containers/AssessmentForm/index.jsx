@@ -42,14 +42,20 @@ const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
   tab_id: yup.number(),
   description: yup.string(),
-  start_at: yup.date().nullable().required(formTranslations.required),
+  start_at: yup
+    .date()
+    .nullable()
+    .typeError(formTranslations.invalidDate)
+    .required(formTranslations.required),
   end_at: yup
     .date()
     .nullable()
+    .typeError(formTranslations.invalidDate)
     .min(yup.ref('start_at'), translations.startEndValidationError),
   bonus_end_at: yup
     .date()
     .nullable()
+    .typeError(formTranslations.invalidDate)
     .min(yup.ref('start_at'), translations.startEndValidationError),
   base_exp: yup
     .number()
@@ -104,41 +110,6 @@ const validationSchema = yup.object({
   affects_personal_times: yup.bool(),
 });
 
-const onStartAtChange = (nextStartAt, watch, setValue) => {
-  const prevStartAt = watch('start_at');
-  const prevEndAt = watch('end_at');
-  const prevBonusEndAt = watch('bonus_end_at');
-
-  const newStartTime = nextStartAt && new Date(nextStartAt).getTime();
-  const oldStartTime = prevStartAt && new Date(prevStartAt).getTime();
-  const oldEndTime = prevEndAt && new Date(prevEndAt).getTime();
-  const oldBonusTime = prevBonusEndAt && new Date(prevBonusEndAt).getTime();
-
-  // Shift end_at time
-  if (
-    newStartTime &&
-    oldStartTime &&
-    oldEndTime &&
-    oldStartTime <= oldEndTime
-  ) {
-    const nextEndAt = new Date(oldEndTime + (newStartTime - oldStartTime));
-    setValue('end_at', nextEndAt);
-  }
-
-  // Shift bonus_end_at time
-  if (
-    newStartTime &&
-    oldStartTime &&
-    oldBonusTime &&
-    oldStartTime <= oldBonusTime
-  ) {
-    const nextBonusEndAt = new Date(
-      oldBonusTime + (newStartTime - oldStartTime),
-    );
-    setValue('bonus_end_at', nextBonusEndAt);
-  }
-};
-
 const AssessmentForm = (props) => {
   const {
     conditionAttributes,
@@ -158,7 +129,6 @@ const AssessmentForm = (props) => {
     control,
     handleSubmit,
     setError,
-    setValue,
     watch,
     formState: { errors },
   } = useForm({
@@ -435,9 +405,6 @@ const AssessmentForm = (props) => {
               fieldState={fieldState}
               disabled={disabled}
               label={<FormattedMessage {...translations.startAt} />}
-              afterChangeField={(newValue) =>
-                onStartAtChange(newValue, watch, setValue)
-              }
               style={styles.flexChild}
             />
           )}

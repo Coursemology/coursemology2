@@ -11,7 +11,7 @@ const translations = defineMessages({
   },
   startAt: {
     id: 'course.assessment.form.startAt',
-    defaultMessage: 'Start At',
+    defaultMessage: 'Start At *',
   },
   endAt: {
     id: 'course.assessment.form.endAt',

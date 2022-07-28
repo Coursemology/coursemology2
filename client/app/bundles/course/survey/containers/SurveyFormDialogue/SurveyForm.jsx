@@ -9,7 +9,6 @@ import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerFi
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
-import { shiftDateField } from 'lib/helpers/form-helpers';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
 
@@ -70,17 +69,22 @@ const surveyFormTranslations = defineMessages({
 const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
   description: yup.string(),
-  start_at: yup.date().nullable().required(formTranslations.required),
+  start_at: yup
+    .date()
+    .nullable()
+    .typeError(formTranslations.invalidDate)
+    .required(formTranslations.required),
   end_at: yup
     .date()
     .nullable()
+    .typeError(formTranslations.invalidDate)
     .min(yup.ref('start_at'), translations.startEndValidationError)
     .when('allow_response_after_end', {
       is: true,
       then: yup
         .date()
         .min(yup.ref('start_at'), translations.startEndValidationError)
-        .typeError(formTranslations.required)
+        .typeError(formTranslations.invalidDate)
         .required(formTranslations.required),
     }),
   base_exp: yup
@@ -100,7 +104,6 @@ const SurveyForm = (props) => {
     control,
     handleSubmit,
     setError,
-    setValue,
     watch,
     formState: { errors },
   } = useForm({
@@ -163,9 +166,6 @@ const SurveyForm = (props) => {
               fieldState={fieldState}
               disabled={disabled}
               label={<FormattedMessage {...translations.opensAt} />}
-              afterChangeField={(newStartAt) =>
-                shiftDateField(newStartAt, watch, setValue)
-              }
               style={styles.oneColumn}
             />
           )}

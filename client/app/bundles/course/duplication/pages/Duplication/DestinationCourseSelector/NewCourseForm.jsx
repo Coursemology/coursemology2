@@ -15,7 +15,7 @@ const translations = defineMessages({
   },
   newStartAt: {
     id: 'course.duplication.NewCourseForm.newStartAt',
-    defaultMessage: 'New Start Date',
+    defaultMessage: 'New Start Date *',
   },
 });
 

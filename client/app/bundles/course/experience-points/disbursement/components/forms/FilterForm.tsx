@@ -28,11 +28,11 @@ interface Props extends WrappedComponentProps {
 const translations = defineMessages({
   startTime: {
     id: 'course.experience-points.disbursement.FilterForm.startTime',
-    defaultMessage: 'Start time   *',
+    defaultMessage: 'Start Date *',
   },
   endTime: {
     id: 'course.experience-points.disbursement.FilterForm.endTime',
-    defaultMessage: 'End time *',
+    defaultMessage: 'End Date *',
   },
   weeklyCap: {
     id: 'course.experience-points.disbursement.FilterForm.weeklyCap',
@@ -41,10 +41,6 @@ const translations = defineMessages({
   submit: {
     id: 'course.experience-points.disbursement.FilterForm.submit',
     defaultMessage: 'Search',
-  },
-  startEndValidationError: {
-    id: 'course.experience-points.disbursement.ForumDisbursementForm.startEndValidationError',
-    defaultMessage: "Must be after 'Start At'",
   },
   fetchFilterSuccess: {
     id: 'course.experience-points.disbursement.DisbursementForm.fetchFilterSuccess',
@@ -60,17 +56,27 @@ const translations = defineMessages({
   },
 });
 
+const validationSchema = yup.object({
+  startTime: yup
+    .date()
+    .nullable()
+    .typeError(formTranslations.invalidDate)
+    .required(formTranslations.required),
+  endTime: yup
+    .date()
+    .nullable()
+    .typeError(formTranslations.invalidDate)
+    .required(formTranslations.required)
+    .min(yup.ref('startTime'), formTranslations.startEndDateValidationError),
+  weeklyCap: yup
+    .number()
+    .typeError(formTranslations.required)
+    .required(formTranslations.required),
+});
+
 const FilterForm: FC<Props> = (props) => {
   const { intl, initialValues } = props;
   const dispatch = useDispatch<AppDispatch>();
-
-  const validationSchema = yup.object({
-    startDate: yup.date().nullable(),
-    endDate: yup
-      .date()
-      .min(yup.ref('startDate'), translations.startEndValidationError),
-    weeklyCap: yup.number().required(formTranslations.required),
-  });
 
   const {
     control,

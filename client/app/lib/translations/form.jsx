@@ -65,6 +65,14 @@ const translations = defineMessages({
     id: 'lib.form.validation.invalid',
     defaultMessage: 'Invalid',
   },
+  invalidDate: {
+    id: 'lib.form.validation.invalidDate',
+    defaultMessage: 'Invalid Date',
+  },
+  startEndDateValidationError: {
+    id: 'lib.form.validation.startEndDateValidationError',
+    defaultMessage: 'Must be after Start Date',
+  },
 });
 
 export default translations;
