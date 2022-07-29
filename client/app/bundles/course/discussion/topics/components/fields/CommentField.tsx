@@ -74,7 +74,7 @@ const CommentField: FC<Props> = (props: Props) => {
         value={value}
         onChange={(text: string): void => setValue(text)}
         clearOnSubmit
-        width="98%"
+        width="100%"
       />
       <Button
         id={`comment-submit-${topic.id.toString()}`}

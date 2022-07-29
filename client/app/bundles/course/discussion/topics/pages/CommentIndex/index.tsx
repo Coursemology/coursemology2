@@ -12,7 +12,6 @@ import {
   CommentTabTypes,
 } from 'types/course/comments';
 import { Badge, BadgeProps, styled, Tab, Tabs } from '@mui/material';
-import palette from 'theme/palette';
 import { getSettings } from '../../selectors';
 import { fetchTabData } from '../../operations';
 import TopicList from '../../components/lists/TopicList';
@@ -189,9 +188,6 @@ const CommentIndex: FC<Props> = (props) => {
       <Tabs
         onChange={(_, value): void => {
           setTabValue(value);
-        }}
-        style={{
-          backgroundColor: palette.background.default,
         }}
         TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
         value={tabValue}

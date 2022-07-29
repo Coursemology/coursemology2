@@ -98,6 +98,7 @@ const TopicList: FC<Props> = (props) => {
 
   useEffect(() => {
     getData(tabValue, 1);
+    setPage(1);
   }, [tabValue]);
 
   useEffect(() => {
@@ -139,7 +140,12 @@ const TopicList: FC<Props> = (props) => {
     >
       {renderPagination()}
       {Object.keys(topicList).map((key: string) => (
-        <Grid item key={topicList[key].id} xs>
+        <Grid
+          item
+          key={topicList[key].id}
+          xs
+          style={{ position: 'relative', width: '100%' }}
+        >
           <TopicCard
             topic={topicList[key]}
             updatePendingTab={updatePendingTab}
