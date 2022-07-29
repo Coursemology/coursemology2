@@ -168,7 +168,7 @@ const CommentCard: FC<Props> = (props) => {
         borderStyle: 'solid',
         borderWidth: 0.2,
         borderColor: grey[400],
-        borderRadius: 10,
+        borderRadius: '5px',
       }}
     >
       <div
@@ -177,6 +177,7 @@ const CommentCard: FC<Props> = (props) => {
           alignItems: 'center',
           justifyContent: 'space-between',
           backgroundColor: post.isDelayed ? orange[100] : grey[100],
+          borderRadius: '5px 5px 0px 0px',
         }}
       >
         <CardHeader

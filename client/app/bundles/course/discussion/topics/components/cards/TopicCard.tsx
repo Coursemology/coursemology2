@@ -195,7 +195,9 @@ const TopicCard: FC<Props> = (props) => {
               topic.timestamp?.toString().replaceAll(':', '-') ?? ''
             }`}
           >
-            {topic.title}
+            {topic.timestamp
+              ? `${topic.title}: ${topic.timestamp.toString()}`
+              : topic.title}
           </a>
         }
         subheader={
@@ -212,6 +214,9 @@ const TopicCard: FC<Props> = (props) => {
         style={{ paddingBottom: '0px' }}
       />
       <CardContent>
+        {topic.content && (
+          <div dangerouslySetInnerHTML={{ __html: topic.content }} />
+        )}
         {postListData
           .filter((post: CommentPostMiniEntity) => post.topicId === topic.id)
           .map((post: CommentPostMiniEntity) => {

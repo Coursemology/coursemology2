@@ -4,6 +4,3 @@ en:
       submission_question:
         comments_footer:
           comment: 'Comment'
-      submission_questions:
-        discussion_topic_submission_question:
-          by_html: 'By: %{user}'
