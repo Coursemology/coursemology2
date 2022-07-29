@@ -7,14 +7,20 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
                                                          class: Course::ExperiencePointsRecord.name
   before_action :add_breadcrumbs
 
-  def index
-    updater_ids = @experience_points_records.active.pluck(:updater_id)
-    @course_user_preload_service =
-      Course::CourseUserPreloadService.new(updater_ids, current_course)
-
-    @experience_points_records =
-      @experience_points_records.active.
-      includes(:actable, :updater).order(updated_at: :desc).page(page_param)
+  def index # :nodoc:
+    respond_to do |format|
+      format.html
+      format.json do
+        updater_ids = @experience_points_records.active.pluck(:updater_id)
+        @course_user_preload_service =
+          Course::CourseUserPreloadService.new(updater_ids, current_course)
+        @experience_points_records =
+          @experience_points_records.active.
+          includes(:actable, :updater).order(updated_at: :desc)
+        @experience_points_count = @experience_points_records.count
+        @experience_points_records = @experience_points_records.paginated(paginate_page_param)
+      end
+    end
   end
 
   def update
@@ -52,6 +58,10 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
   def add_breadcrumbs
     add_breadcrumb @course_user.name, course_user_path(current_course, @course_user)
     add_breadcrumb :index
+  end
+
+  def paginate_page_param
+    params.permit(:page_num)
   end
 
   # @return [Course::ExperiencePointsComponent]
