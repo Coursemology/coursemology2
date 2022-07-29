@@ -52,6 +52,10 @@ $(() => {
               path="/courses/:courseId/users/:userId/personal_times"
               element={<PersonalTimesShow />}
             />
+            {/* <Route
+              path="/courses/:courseId/users/:userId/experience_points_records"
+              element={<PersonalTimesShow />}
+            /> */}
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,

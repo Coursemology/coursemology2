@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 class Course::ExperiencePointsRecord < ApplicationRecord
+  include Generic::CollectionConcern
   actable optional: true
 
   before_save :send_notification, if: :reached_new_level?
