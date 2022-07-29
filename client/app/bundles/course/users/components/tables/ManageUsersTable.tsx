@@ -54,8 +54,8 @@ const translations = defineMessages({
     id: 'course.user.phantom.success',
     defaultMessage:
       '{name} {isPhantom, select, ' +
-      'true {is now a phantom} ' +
-      'other {is no longer a phantom} ' +
+      'true {is now a phantom user} ' +
+      'other {is now a normal user} ' +
       '}.',
   },
   changeRoleSuccess: {
@@ -251,7 +251,7 @@ const ManageUsersTable: FC<Props> = (props) => {
     filter: false,
     pagination: true,
     print: false,
-    rowsPerPage: 100,
+    rowsPerPage: 50,
     rowsPerPageOptions: [15, 30, 50, 100],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
