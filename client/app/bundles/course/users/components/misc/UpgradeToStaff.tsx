@@ -34,7 +34,7 @@ const translations = defineMessages({
   },
   upgradeFailure: {
     id: 'course.user.components.misc.upgradeToStaff.fail',
-    defaultMessage: 'Failed to update user. {error}',
+    defaultMessage: 'Failed to update user - {error}',
   },
   upgradeHeader: {
     id: 'course.user.components.misc.upgradeToStaff.header',
@@ -78,17 +78,18 @@ const UpgradeToStaff: FC<Props> = (props) => {
           }),
         );
       })
+      .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.upgradeFailure, {
+            error: errorMessage,
+          }),
+        );
+      })
       .finally(() => {
         setIsLoading(false);
-      })
-      .catch((error) => {
-        if (error.response?.data) {
-          toast.error(
-            intl.formatMessage(translations.upgradeFailure, {
-              error: error.response.data.errors,
-            }),
-          );
-        }
       });
   };
 

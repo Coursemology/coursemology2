@@ -97,7 +97,7 @@ const translations = defineMessages({
   failure: {
     id: 'course.userInvitation.registrationCode.failure',
     defaultMessage:
-      'Failed to invite users. Please ensure your data is formatted correctly. {error}',
+      'Failed to invite users. Please ensure your data is formatted correctly - {error}',
   },
   cancel: {
     id: 'course.userInvitation.registrationCode.cancel',
@@ -152,15 +152,15 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         openResultDialog(response);
       })
       .catch((error) => {
-        if (error.response?.data) {
-          toast.error(
-            intl.formatMessage(translations.failure, {
-              error: error.response.data.errors,
-            }),
-            { autoClose: false },
-          );
-        }
-        throw error;
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.failure, {
+            error: errorMessage,
+          }),
+          { autoClose: false },
+        );
       })
       .finally(() => {
         setIsLoading(false);

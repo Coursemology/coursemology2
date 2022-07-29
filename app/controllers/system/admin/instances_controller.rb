@@ -27,7 +27,7 @@ class System::Admin::InstancesController < System::Admin::Controller
              locals: { instance: @instance },
              status: :ok
     else
-      render json: { errors: @instance.errors }, status: :bad_request
+      render json: { errors: @instance.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -35,7 +35,7 @@ class System::Admin::InstancesController < System::Admin::Controller
     if @instance.destroy
       head :ok
     else
-      render json: { errors: @instance.errors }, status: :bad_request
+      render json: { errors: @instance.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 

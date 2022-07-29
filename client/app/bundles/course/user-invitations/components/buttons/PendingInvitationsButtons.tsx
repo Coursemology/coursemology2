@@ -30,7 +30,7 @@ const translations = defineMessages({
   },
   resendFailure: {
     id: 'course.userInvitations.resend.fail',
-    defaultMessage: 'Failed to resend invitation. {error}',
+    defaultMessage: 'Failed to resend invitation - {error}',
   },
   deletionTooltip: {
     id: 'course.userInvitations.delete',
@@ -47,7 +47,7 @@ const translations = defineMessages({
   },
   deletionFailure: {
     id: 'course.userInvitations.delete.fail',
-    defaultMessage: 'Failed to delete user. {error}',
+    defaultMessage: 'Failed to delete user - {error}',
   },
 });
 
@@ -70,12 +70,14 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
         toast.error(
           intl.formatMessage(translations.resendFailure, {
-            error: error.message,
+            error: errorMessage,
           }),
         );
-        throw error;
       })
       .finally(() => setIsResending(false));
   };
@@ -91,12 +93,14 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
         toast.error(
           intl.formatMessage(translations.deletionFailure, {
-            error,
+            error: errorMessage,
           }),
         );
-        throw error;
       })
       .finally(() => setIsDeleting(false));
   };

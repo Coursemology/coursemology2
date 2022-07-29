@@ -72,6 +72,7 @@ const formatInstanceAttributes = (
 
   return payload;
 };
+
 export function indexAnnouncements(): Operation<void> {
   return async (dispatch) =>
     SystemAPI.admin
@@ -85,11 +86,19 @@ export function indexAnnouncements(): Operation<void> {
       });
 }
 
-export function deleteAnnouncement(announcementId: number): Operation<void> {
+export function createAnnouncement(
+  formData: AnnouncementFormData,
+): Operation<void> {
+  const attributes = formatAnnouncementAttributes(formData);
   return async (dispatch) =>
-    SystemAPI.admin.deleteAnnouncement(announcementId).then(() => {
-      dispatch(actions.deleteAnnouncement(announcementId));
-    });
+    SystemAPI.admin
+      .createAnnouncement(attributes)
+      .then((response) => {
+        dispatch(actions.saveAnnouncement(response.data));
+      })
+      .catch((error) => {
+        throw error;
+      });
 }
 
 export function updateAnnouncement(
@@ -108,15 +117,12 @@ export function updateAnnouncement(
       });
 }
 
-export function createAnnouncement(
-  formData: AnnouncementFormData,
-): Operation<void> {
-  const attributes = formatAnnouncementAttributes(formData);
+export function deleteAnnouncement(announcementId: number): Operation<void> {
   return async (dispatch) =>
     SystemAPI.admin
-      .createAnnouncement(attributes)
-      .then((response) => {
-        dispatch(actions.saveAnnouncement(response.data));
+      .deleteAnnouncement(announcementId)
+      .then(() => {
+        dispatch(actions.deleteAnnouncement(announcementId));
       })
       .catch((error) => {
         throw error;
@@ -154,9 +160,14 @@ export function updateUser(
 
 export function deleteUser(userId: number): Operation<void> {
   return async (dispatch) =>
-    SystemAPI.admin.deleteUser(userId).then(() => {
-      dispatch(actions.deleteUser(userId));
-    });
+    SystemAPI.admin
+      .deleteUser(userId)
+      .then(() => {
+        dispatch(actions.deleteUser(userId));
+      })
+      .catch((error) => {
+        throw error;
+      });
 }
 
 export function indexCourses(params?): Operation<void> {
@@ -179,9 +190,14 @@ export function indexCourses(params?): Operation<void> {
 
 export function deleteCourse(courseId: number): Operation<void> {
   return async (dispatch) =>
-    SystemAPI.admin.deleteCourse(courseId).then(() => {
-      dispatch(actions.deleteCourse(courseId));
-    });
+    SystemAPI.admin
+      .deleteCourse(courseId)
+      .then(() => {
+        dispatch(actions.deleteCourse(courseId));
+      })
+      .catch((error) => {
+        throw error;
+      });
 }
 
 export function indexInstances(params?): Operation<void> {
@@ -241,7 +257,12 @@ export function updateInstance(
 
 export function deleteInstance(instanceId: number): Operation<void> {
   return async (dispatch) =>
-    SystemAPI.admin.deleteInstance(instanceId).then(() => {
-      dispatch(actions.deleteInstance(instanceId));
-    });
+    SystemAPI.admin
+      .deleteInstance(instanceId)
+      .then(() => {
+        dispatch(actions.deleteInstance(instanceId));
+      })
+      .catch((error) => {
+        throw error;
+      });
 }

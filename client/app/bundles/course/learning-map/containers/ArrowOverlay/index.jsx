@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import GateToNodeArrows from '../GateToNodeArrows';
@@ -59,4 +59,4 @@ ArrowOverlay.propTypes = {
   scale: PropTypes.number.isRequired,
 };
 
-export default connect(mapStateToProps)(React.memo(ArrowOverlay));
+export default connect(mapStateToProps)(memo(ArrowOverlay));

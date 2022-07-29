@@ -61,10 +61,10 @@ const CoursesIndex: FC<Props> = (props) => {
     }
     setIsLoading(true);
     dispatch(indexCourses({ 'filter[length]': 100, active }))
-      .finally(() => setIsLoading(false))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchCoursesFailure)),
-      );
+      )
+      .finally(() => setIsLoading(false));
   }, [dispatch, location]);
 
   const renderSummaryContent: JSX.Element = (

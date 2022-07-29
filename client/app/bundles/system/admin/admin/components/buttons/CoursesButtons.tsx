@@ -27,6 +27,10 @@ const translations = defineMessages({
     id: 'system.admin.course.delete.confirm',
     defaultMessage: 'Are you sure you wish to delete {title}?',
   },
+  deletionFailure: {
+    id: 'system.admin.course.delete.failure',
+    defaultMessage: '{title} failed to be deleted - {error}',
+  },
 });
 
 const CourseManagementButtons: FC<Props> = (props) => {
@@ -44,6 +48,17 @@ const CourseManagementButtons: FC<Props> = (props) => {
           }),
         );
       })
+      .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.deletionFailure, {
+            title: course.title,
+            error: errorMessage,
+          }),
+        );
+      })
       .finally(() => setIsDeleting(false));
   };
 
@@ -53,6 +68,7 @@ const CourseManagementButtons: FC<Props> = (props) => {
         tooltip="Delete Course"
         className={`course-delete-${course.id}`}
         disabled={isDeleting}
+        loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
           title: course.title,

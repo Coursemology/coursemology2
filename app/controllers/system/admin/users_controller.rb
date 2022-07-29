@@ -21,7 +21,7 @@ class System::Admin::UsersController < System::Admin::Controller
              locals: { user: @user },
              status: :ok
     else
-      render json: { errors: @user.errors }, status: :bad_request
+      render json: { errors: @user.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -29,7 +29,7 @@ class System::Admin::UsersController < System::Admin::Controller
     if @user.destroy
       head :ok
     else
-      render json: { errors: @user.errors }, status: :bad_request
+      render json: { errors: @user.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 

@@ -35,7 +35,7 @@ const translations = defineMessages({
   },
   creationFailure: {
     id: 'system.admin.instance.new.creationFailure',
-    defaultMessage: 'Failed to create new instance. {error}.',
+    defaultMessage: 'Failed to create new instance.',
   },
 });
 
@@ -69,16 +69,10 @@ const InstanceNew: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
-        toast.error(
-          intl.formatMessage(translations.creationFailure, {
-            error: error.response.data.errors,
-          }),
-        );
-
+        toast.error(intl.formatMessage(translations.creationFailure));
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
-        throw error;
       });
   };
 

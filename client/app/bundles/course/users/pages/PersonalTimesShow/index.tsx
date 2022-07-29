@@ -64,7 +64,12 @@ const translations = defineMessages({
   },
   updateSuccess: {
     id: 'course.users.manage.personalTimes.update.success',
-    defaultMessage: 'Successfully updated {name} to timeline "{timeline}"',
+    defaultMessage: "Successfully updated {name}/'s timeline to {timeline}",
+  },
+  updateFailure: {
+    id: 'course.users.manage.personalTimes.update.failure',
+    defaultMessage:
+      "Failted to update {name}'s timeline to {timeline} - {error}",
   },
   learningRate: {
     id: 'course.users.manage.personalTimes.learningRate.rate',
@@ -141,15 +146,25 @@ const PersonalTimesShow: FC<Props> = (props) => {
         timelineAlgorithm: newTimeline as TimelineAlgorithm,
       };
 
-      dispatch(updateUser(+userId!, data)).then(() => {
-        toast.success(
-          intl.formatMessage(translations.updateSuccess, {
-            name: currentUser.name,
-            timeline: newTimeline,
-          }),
-        );
-        setTimeline(newTimeline);
-      });
+      dispatch(updateUser(+userId!, data))
+        .then(() => {
+          toast.success(
+            intl.formatMessage(translations.updateSuccess, {
+              name: currentUser.name,
+              timeline: newTimeline,
+            }),
+          );
+          setTimeline(newTimeline);
+        })
+        .catch((error) => {
+          toast.error(
+            intl.formatMessage(translations.updateFailure, {
+              name: currentUser.name,
+              timeline: newTimeline,
+              error: error.response.data.errors,
+            }),
+          );
+        });
     }
   };
 

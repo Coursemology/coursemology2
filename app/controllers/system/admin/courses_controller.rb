@@ -18,7 +18,7 @@ class System::Admin::CoursesController < System::Admin::Controller
     if @course.destroy
       head :ok
     else
-      render json: { errors: @course.errors }, status: :bad_request
+      render json: { errors: @course.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -34,9 +34,7 @@ class System::Admin::CoursesController < System::Admin::Controller
 
   def preload_courses
     @courses = Course.includes(:instance).search(search_param).calculated(:active_user_count, :user_count)
-    if params[:active].present?
-      @courses = @courses.active_in_past_7_days.order('active_user_count DESC, user_count')
-    end
+    @courses = @courses.active_in_past_7_days.order('active_user_count DESC, user_count') if params[:active].present?
     @courses = @courses.ordered_by_title
     @courses_count = @courses.count.is_a?(Hash) ? @courses.count.count : @courses.count
     @courses = @courses.paginated(new_page_params)

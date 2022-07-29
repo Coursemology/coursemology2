@@ -82,7 +82,8 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
         })
         .catch((error) => {
           setHelperText(error.response.data.errors);
-        });
+        })
+        .finally(() => setIsSaving(false));
     }
   };
 
@@ -121,7 +122,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
         value={controlledVal}
         onChange={handleChange}
         className={className}
-        disabled={disabled || isSaving}
+        disabled={disabled ?? isSaving}
         label={label}
         onBlur={handleBlur}
         helperText={helperText}

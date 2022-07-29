@@ -94,10 +94,10 @@ const UsersIndex: FC<Props> = (props) => {
         active,
       }),
     )
-      .finally(() => setIsLoading(false))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchUsersFailure)),
-      );
+      )
+      .finally(() => setIsLoading(false));
   }, [dispatch, location]);
 
   const renderSummaryContent: JSX.Element = (

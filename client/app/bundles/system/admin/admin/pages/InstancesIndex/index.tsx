@@ -50,10 +50,10 @@ const InstancesIndex: FC<Props> = (props) => {
 
   useEffect(() => {
     dispatch(indexInstances({ 'filter[length]': 100 }))
-      .finally(() => setIsLoading(false))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchInstancesFailure)),
-      );
+      )
+      .finally(() => setIsLoading(false));
   }, [dispatch]);
 
   if (permissions.canCreateInstances) {
