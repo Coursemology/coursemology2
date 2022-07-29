@@ -28,7 +28,6 @@ const AppLayout = (props: AppLayoutProps): JSX.Element => {
       <Grid
         item
         className="sidebar"
-        sx={{ transition: 'max-width 0.3s ease-in-out' }}
         xs={1}
         sm={isExpanded ? 4 : 2}
         md={isExpanded ? 3 : 1}
@@ -57,7 +56,6 @@ const AppLayout = (props: AppLayoutProps): JSX.Element => {
       <Grid
         item
         className="content"
-        sx={{ transition: 'max-width 0.2s ease-in-out' }}
         xs={12}
         sm={isExpanded ? 8 : 10}
         md={isExpanded ? 9 : 11}
