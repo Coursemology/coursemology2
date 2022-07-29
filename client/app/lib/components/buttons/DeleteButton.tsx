@@ -5,10 +5,10 @@ import ConfirmationDialog from '../ConfirmationDialog';
 
 interface Props extends IconButtonProps {
   disabled: boolean;
+  loading: boolean;
   onClick: () => Promise<void>;
   confirmMessage?: string;
   tooltip?: string;
-  loading?: boolean;
 }
 
 const DeleteButton = ({

@@ -24,7 +24,7 @@ const translations = defineMessages({
   },
   deletionFailure: {
     id: 'system.admin.instance.delete.fail',
-    defaultMessage: 'Failed to delete instance.',
+    defaultMessage: 'Failed to delete instance - {error}',
   },
   deletionConfirm: {
     id: 'system.admin.instance.delete.confirm',
@@ -48,8 +48,14 @@ const InstancesButtons: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.deletionFailure));
-        throw error;
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.deletionFailure, {
+            error: errorMessage,
+          }),
+        );
       })
       .finally(() => setIsDeleting(false));
   };
@@ -61,6 +67,7 @@ const InstancesButtons: FC<Props> = (props) => {
           tooltip="Delete Instance"
           className={`instance-delete-${instance.id}`}
           disabled={isDeleting}
+          loading={isDeleting}
           onClick={onDelete}
           confirmMessage={intl.formatMessage(translations.deletionConfirm, {
             name: instance.name,

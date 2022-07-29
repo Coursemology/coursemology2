@@ -68,7 +68,7 @@ const translations = defineMessages({
   },
   updateFailure: {
     id: 'course.users.components.misc.PersonalTimeEditor.update.failure',
-    defaultMessage: 'Unable to update personal time. {error}',
+    defaultMessage: 'Unable to update personal time - {error}',
   },
   delete: {
     id: 'course.users.components.misc.PersonalTimeEditor.delete',
@@ -85,7 +85,7 @@ const translations = defineMessages({
   },
   deleteFailure: {
     id: 'course.users.components.misc.PersonalTimeEditor.delete.failure',
-    defaultMessage: 'Failed to delete personal time.',
+    defaultMessage: 'Failed to delete personal time - {error}',
   },
   startEndValidationError: {
     id: 'course.users.components.misc.PersonalTimeEditor.error.startEndValidation',
@@ -152,12 +152,18 @@ const PersonalTimeEditor: FC<Props> = (props) => {
           }),
         );
       })
+      .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.deleteFailure, {
+            error: errorMessage,
+          }),
+        );
+      })
       .finally(() => {
         setIsDeleting(false);
-      })
-      .catch((error) => {
-        toast.error(intl.formatMessage(translations.deleteFailure));
-        throw error;
       });
   };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { nodeShape } from '../../propTypes';
@@ -88,4 +88,4 @@ Levels.propTypes = {
   nodes: PropTypes.arrayOf(nodeShape).isRequired,
 };
 
-export default connect(mapStateToProps)(React.memo(Levels));
+export default connect(mapStateToProps)(memo(Levels));

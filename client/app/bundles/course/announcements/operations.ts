@@ -82,7 +82,12 @@ export function updateAnnouncement(
 
 export function deleteAnnouncement(accouncementId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.announcements.delete(accouncementId).then(() => {
-      dispatch(actions.deleteAnnouncement(accouncementId));
-    });
+    CourseAPI.announcements
+      .delete(accouncementId)
+      .then(() => {
+        dispatch(actions.deleteAnnouncement(accouncementId));
+      })
+      .catch((error) => {
+        throw error;
+      });
 }

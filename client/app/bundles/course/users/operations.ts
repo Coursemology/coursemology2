@@ -135,17 +135,22 @@ export function updateUser(
 ): Operation<void> {
   const attributes = formatUpdateUser(data);
   return async (dispatch) =>
-    CourseAPI.users.update(userId, attributes).then((response) => {
-      // if we are downgrading to student, we'll also need to add this student back to userOptions
-      if (data.role === 'student') {
-        const userOption: CourseUserBasicListData = {
-          id: response.data.id,
-          name: response.data.name,
-        };
-        dispatch(actions.updateUserOption(userOption));
-      }
-      dispatch(actions.saveUser(response.data));
-    });
+    CourseAPI.users
+      .update(userId, attributes)
+      .then((response) => {
+        // if we are downgrading to student, we'll also need to add this student back to userOptions
+        if (data.role === 'student') {
+          const userOption: CourseUserBasicListData = {
+            id: response.data.id,
+            name: response.data.name,
+          };
+          dispatch(actions.updateUserOption(userOption));
+        }
+        dispatch(actions.saveUser(response.data));
+      })
+      .catch((error) => {
+        throw error;
+      });
 }
 
 export function upgradeToStaff(
@@ -168,9 +173,14 @@ export function upgradeToStaff(
 
 export function deleteUser(userId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.users.delete(userId).then(() => {
-      dispatch(actions.deleteUser(userId));
-    });
+    CourseAPI.users
+      .delete(userId)
+      .then(() => {
+        dispatch(actions.deleteUser(userId));
+      })
+      .catch((error) => {
+        throw error;
+      });
 }
 
 export function fetchPersonalTimes(userId: number): Operation<void> {
@@ -211,5 +221,8 @@ export function deletePersonalTime(
   return async (dispatch) =>
     CourseAPI.personalTimes
       .delete(personalTimeId, userId)
-      .then(() => dispatch(actions.deletePersonalTime(personalTimeId)));
+      .then(() => dispatch(actions.deletePersonalTime(personalTimeId)))
+      .catch((error) => {
+        throw error;
+      });
 }

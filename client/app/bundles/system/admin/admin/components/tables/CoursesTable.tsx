@@ -1,6 +1,7 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { toast } from 'react-toastify';
 import {
   TableColumns,
   TableOptions,
@@ -29,6 +30,10 @@ const translations = defineMessages({
   searchText: {
     id: 'system.admin.components.tables.CoursesTable.searchPlaceholder',
     defaultMessage: 'Search course title, description or owners.',
+  },
+  fetchFilteredCoursesFailure: {
+    id: 'system.admin.courses.fetchFiltered.failure',
+    defaultMessage: 'Failed to fetch courses.',
   },
 });
 
@@ -88,9 +93,15 @@ const CoursesTable: FC<Props> = (props) => {
     });
     dispatch(
       indexCourses({ 'filter[page_num]': page, 'filter[length]': 30, active }),
-    ).then(() => {
-      setIsLoading(false);
-    });
+    )
+      .catch(() =>
+        toast.error(
+          intl.formatMessage(translations.fetchFilteredCoursesFailure),
+        ),
+      )
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const search = (page, searchText): void => {
@@ -102,9 +113,15 @@ const CoursesTable: FC<Props> = (props) => {
         active,
         search: searchText.trim(),
       }),
-    ).then(() => {
-      setIsLoading(false);
-    });
+    )
+      .catch(() =>
+        toast.error(
+          intl.formatMessage(translations.fetchFilteredCoursesFailure),
+        ),
+      )
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const options: TableOptions = {

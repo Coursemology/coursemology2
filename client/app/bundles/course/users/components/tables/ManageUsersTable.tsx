@@ -46,6 +46,10 @@ const translations = defineMessages({
     id: 'course.users.rename.success',
     defaultMessage: '{oldName} was renamed to {newName}',
   },
+  renameFailure: {
+    id: 'course.users.rename.failure',
+    defaultMessage: 'Failed to rename {oldName} to {newName}',
+  },
   phantomSuccess: {
     id: 'course.user.phantom.success',
     defaultMessage:
@@ -58,14 +62,23 @@ const translations = defineMessages({
     id: 'course.user.changeRole.success',
     defaultMessage: "Successfully changed {name}'s role to {role}.",
   },
+  changeRoleFailure: {
+    id: 'course.user.changeRole.failure',
+    defaultMessage: "Failed to change {name}'s role to {role}.",
+  },
   changeTimelineSuccess: {
     id: 'course.user.changeTimeline.success',
     defaultMessage:
       "Successfully changed {name}'s timeline algorithm to {timeline}.",
   },
+  changeTimelineFailure: {
+    id: 'course.user.changeTimeline.failure',
+    defaultMessage:
+      "Failed to change {name}'s timeline algorithm to {timeline}.",
+  },
   updateFailure: {
     id: 'course.user.update.fail',
-    defaultMessage: 'Failed to update user. {error}',
+    defaultMessage: 'Failed to update user - {error}',
   },
 });
 
@@ -102,14 +115,28 @@ const ManageUsersTable: FC<Props> = (props) => {
       ...user,
       name: newName,
     };
-    return dispatch(updateUser(rowData[1], newUser)).then(() => {
-      toast.success(
-        intl.formatMessage(translations.renameSuccess, {
-          oldName: user.name,
-          newName,
-        }),
-      );
-    });
+    return dispatch(updateUser(rowData[1], newUser))
+      .then(() => {
+        toast.success(
+          intl.formatMessage(translations.renameSuccess, {
+            oldName: user.name,
+            newName,
+          }),
+        );
+      })
+      .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.renameFailure, {
+            oldName: user.name,
+            newName,
+            error: errorMessage,
+          }),
+        );
+        throw error;
+      });
   };
 
   const handlePhantomUpdate = (rowData, newValue: boolean): Promise<void> => {
@@ -121,14 +148,25 @@ const ManageUsersTable: FC<Props> = (props) => {
       ...user,
       phantom: newValue,
     };
-    return dispatch(updateUser(rowData[1], newUser)).then(() => {
-      toast.success(
-        intl.formatMessage(translations.phantomSuccess, {
-          name: user.name,
-          isPhantom: newValue,
-        }),
-      );
-    });
+    return dispatch(updateUser(rowData[1], newUser))
+      .then(() => {
+        toast.success(
+          intl.formatMessage(translations.phantomSuccess, {
+            name: user.name,
+            isPhantom: newValue,
+          }),
+        );
+      })
+      .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.updateFailure, {
+            error: errorMessage,
+          }),
+        );
+      });
   };
 
   const handleRoleUpdate = (
@@ -155,8 +193,16 @@ const ManageUsersTable: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.updateFailure));
-        throw error;
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.changeRoleFailure, {
+            name: user.name,
+            role: sharedConstants.COURSE_USER_ROLES[newRole],
+            error: errorMessage,
+          }),
+        );
       });
   };
 
@@ -187,8 +233,16 @@ const ManageUsersTable: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.updateFailure));
-        throw error;
+        toast.error(
+          intl.formatMessage(translations.changeTimelineFailure, {
+            name: user.name,
+            timeline:
+              sharedConstants.TIMELINE_ALGORITHMS.find(
+                (timeline) => timeline.value === newTimeline,
+              )?.label ?? 'Unknown',
+            error: error.response.data.errors,
+          }),
+        );
       });
   };
 

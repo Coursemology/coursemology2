@@ -27,7 +27,7 @@ const translations = defineMessages({
   },
   deletionFailure: {
     id: 'system.admin.user.delete.fail',
-    defaultMessage: 'Failed to delete user.',
+    defaultMessage: 'Failed to delete user - {error}',
   },
   deletionConfirm: {
     id: 'system.admin.user.delete.confirm',
@@ -59,8 +59,14 @@ const UserManagementButtons: FC<Props> = (props) => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.deletionFailure));
-        throw error;
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.deletionFailure, {
+            error: errorMessage,
+          }),
+        );
       })
       .finally(() => setIsDeleting(false));
   };
@@ -75,6 +81,7 @@ const UserManagementButtons: FC<Props> = (props) => {
         tooltip={intl.formatMessage(translations.deleteTooltip)}
         className={`user-delete-${user.id}`}
         disabled={isDeleting}
+        loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
           role: sharedConstants.USER_ROLES[user.role],

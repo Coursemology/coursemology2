@@ -51,10 +51,10 @@ const AnnouncementsIndex: FC<Props> = (props) => {
 
   useEffect(() => {
     dispatch(indexAnnouncements())
-      .finally(() => setIsLoading(false))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchAnnouncementsFailure)),
-      );
+      )
+      .finally(() => setIsLoading(false));
   }, [dispatch]);
 
   headerToolbars.push(

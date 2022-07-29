@@ -42,10 +42,9 @@ export function fetchEnrolRequests(): Operation<void> {
 export function approveEnrolRequest(
   enrolRequest: EnrolRequestMiniEntity,
 ): Operation<void> {
-  return async (dispatch) => {
-    const enrolRequestData = formatAttributes(enrolRequest);
+  return async (dispatch) =>
     CourseAPI.enrolRequests
-      .approve(enrolRequestData, enrolRequest.id)
+      .approve(formatAttributes(enrolRequest), enrolRequest.id)
       .then((response) => {
         const enrolRequestToUpdate = response.data;
         dispatch(actions.updateEnrolRequest(enrolRequestToUpdate));
@@ -53,7 +52,6 @@ export function approveEnrolRequest(
       .catch((error) => {
         throw error;
       });
-  };
 }
 
 export function rejectEnrolRequest(requestId: number): Operation<void> {

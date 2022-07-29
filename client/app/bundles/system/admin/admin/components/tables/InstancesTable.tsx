@@ -36,6 +36,18 @@ const translations = defineMessages({
     id: 'system.admin.components.tables.InstancesTable.changeHost.success',
     defaultMessage: 'Host changed from {oldHost} to {newHost}',
   },
+  updateNameFailure: {
+    id: 'system.admin.components.tables.InstancesTable.updateNameFailure',
+    defaultMessage: 'Failed to rename instance to {oldName}',
+  },
+  updateHostFailure: {
+    id: 'system.admin.components.tables.InstancesTable.updateRoleFailure',
+    defaultMessage: 'Failed to change host from {oldHost} to {newHost}',
+  },
+  fetchFilteredInstancesFailure: {
+    id: 'system.admin.admin.fetchFilteredInstances.failure',
+    defaultMessage: 'Failed to get instances',
+  },
 });
 
 const InstancesTable: FC<Props> = (props) => {
@@ -60,13 +72,22 @@ const InstancesTable: FC<Props> = (props) => {
       ...instance,
       name: newName,
     };
-    return dispatch(updateInstance(instance.id, newInstance)).then(() => {
-      toast.success(
-        intl.formatMessage(translations.renameSuccess, {
-          name: newName,
-        }),
-      );
-    });
+    return dispatch(updateInstance(instance.id, newInstance))
+      .then(() => {
+        toast.success(
+          intl.formatMessage(translations.renameSuccess, {
+            name: newName,
+          }),
+        );
+      })
+      .catch((error) => {
+        toast.error(
+          intl.formatMessage(translations.updateNameFailure, {
+            oldName: instance.name,
+          }),
+        );
+        throw error;
+      });
   };
 
   const handleHostUpdate = (rowData, newHost: string): Promise<void> => {
@@ -78,14 +99,24 @@ const InstancesTable: FC<Props> = (props) => {
       ...instance,
       host: newHost,
     };
-    return dispatch(updateInstance(instance.id, newInstance)).then(() => {
-      toast.success(
-        intl.formatMessage(translations.changeHostSuccess, {
-          oldHost: instance.host,
-          newHost,
-        }),
-      );
-    });
+    return dispatch(updateInstance(instance.id, newInstance))
+      .then(() => {
+        toast.success(
+          intl.formatMessage(translations.changeHostSuccess, {
+            oldHost: instance.host,
+            newHost,
+          }),
+        );
+      })
+      .catch((error) => {
+        toast.error(
+          intl.formatMessage(translations.updateHostFailure, {
+            oldHost: instance.host,
+            newHost,
+          }),
+        );
+        throw error;
+      });
   };
 
   const changePage = (page): void => {
@@ -96,9 +127,15 @@ const InstancesTable: FC<Props> = (props) => {
     });
     dispatch(
       indexInstances({ 'filter[page_num]': page, 'filter[length]': 100 }),
-    ).then(() => {
-      setIsLoading(false);
-    });
+    )
+      .catch(() =>
+        toast.error(
+          intl.formatMessage(translations.fetchFilteredInstancesFailure),
+        ),
+      )
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const options: TableOptions = {

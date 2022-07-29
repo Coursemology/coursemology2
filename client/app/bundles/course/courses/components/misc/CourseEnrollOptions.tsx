@@ -82,6 +82,7 @@ const CourseEnrollOptions: FC<Props> = (props) => {
         style={{
           display: 'flex',
           justifyContent: 'left',
+          marginTop: 5,
         }}
       >
         <div style={{ marginRight: 15 }}>

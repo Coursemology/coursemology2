@@ -42,7 +42,7 @@ const translations = defineMessages({
   },
   deletionFailure: {
     id: 'course.announcements.delete.failure',
-    defaultMessage: 'Announcement could not be deleted.',
+    defaultMessage: 'Announcement could not be deleted - {error}',
   },
   timeSeperator: {
     id: 'course.announcements.timeSeperator',
@@ -92,11 +92,17 @@ const AnnouncementCard: FC<Props> = (props) => {
       .then(() => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
       })
-      .finally(() => setIsDeleting(false))
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.deletionFailure));
-        throw error;
-      });
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.deletionFailure, {
+            error: errorMessage,
+          }),
+        );
+      })
+      .finally(() => setIsDeleting(false));
   };
 
   const onEdit = (): void => setIsOpen(true);
@@ -199,7 +205,7 @@ const AnnouncementCard: FC<Props> = (props) => {
           {renderUserLink()}
         </em>
         <div
-          style={{ marginTop: 15 }}
+          style={{ marginTop: 15, overflowWrap: 'anywhere' }}
           dangerouslySetInnerHTML={{ __html: announcement.content }}
         />
       </div>

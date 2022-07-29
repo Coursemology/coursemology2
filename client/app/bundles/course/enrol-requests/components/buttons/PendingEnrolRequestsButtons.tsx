@@ -30,7 +30,7 @@ const translations = defineMessages({
   },
   approveFailure: {
     id: 'course.enrolRequests.approve.fail',
-    defaultMessage: 'Failed to approve enrol request. {error}',
+    defaultMessage: 'Failed to approve enrol request - {error}',
   },
   rejectTooltip: {
     id: 'course.enrolRequests.reject',
@@ -70,12 +70,14 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
         toast.error(
           intl.formatMessage(translations.approveFailure, {
-            error: error.message,
+            error: errorMessage,
           }),
         );
-        throw error;
       })
       .finally(() => setIsApproving(false));
   };
@@ -91,12 +93,14 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
         toast.error(
           intl.formatMessage(translations.rejectFailure, {
-            error,
+            error: errorMessage,
           }),
         );
-        throw error;
       })
       .finally(() => setIsDeleting(false));
   };

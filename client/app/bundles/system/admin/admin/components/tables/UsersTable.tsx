@@ -47,9 +47,17 @@ const translations = defineMessages({
     id: 'system.admin.user.changeRole.success',
     defaultMessage: "Successfully changed {name}'s role to {role}.",
   },
-  updateFailure: {
-    id: 'system.admin.user.update.failure',
-    defaultMessage: 'Failed to update user.',
+  updateNameFailure: {
+    id: 'system.admin.user.update.updateNameFailure',
+    defaultMessage: "Failed to update user's name.",
+  },
+  updateRoleFailure: {
+    id: 'system.admin.user.update.updateRoleFailure',
+    defaultMessage: "Failed to update user's role.",
+  },
+  fetchFilteredUsersFailure: {
+    id: 'system.admin.users.fetchFiltered.failure',
+    defaultMessage: 'Failed to fetch users.',
   },
 });
 
@@ -104,7 +112,7 @@ const UsersTable: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.updateFailure));
+        toast.error(intl.formatMessage(translations.updateNameFailure));
         throw error;
       });
   };
@@ -132,9 +140,8 @@ const UsersTable: FC<Props> = (props) => {
           }),
         );
       })
-      .catch((error) => {
-        toast.error(intl.formatMessage(translations.updateFailure));
-        throw error;
+      .catch(() => {
+        toast.error(intl.formatMessage(translations.updateRoleFailure));
       });
   };
 
@@ -151,9 +158,13 @@ const UsersTable: FC<Props> = (props) => {
         role,
         active,
       }),
-    ).then(() => {
-      setIsLoading(false);
-    });
+    )
+      .catch(() =>
+        toast.error(intl.formatMessage(translations.fetchFilteredUsersFailure)),
+      )
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const search = (page, searchText): void => {
@@ -170,9 +181,13 @@ const UsersTable: FC<Props> = (props) => {
         active,
         search: searchText.trim(),
       }),
-    ).then(() => {
-      setIsLoading(false);
-    });
+    )
+      .catch(() =>
+        toast.error(intl.formatMessage(translations.fetchFilteredUsersFailure)),
+      )
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const options: TableOptions = {
