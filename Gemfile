@@ -44,7 +44,7 @@ gem 'uglifier', '>= 1.3.0'
 # https://github.com/rails/webpacker/blob/4f65c5ee58666bbe58b234c48d47ec7d48fab4d8/CHANGELOG.md
 gem 'webpacker', '<= 5.4.4'
 # Internationalisation for JavaScript.
-gem 'i18n-js', '<= 3.10.0'
+gem 'i18n-js', '<= 4.1.0'
 
 # Routes from JavaScript
 gem 'js-routes'
