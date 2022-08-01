@@ -43,9 +43,16 @@ RSpec.feature 'Course: Forum: Post: Management' do
         expect(topic.reload.subscriptions.where(user: user).count).to eq(1)
       end
 
-      scenario 'I can update a post' do
+      scenario 'I can update my own post' do
+        create(:course_discussion_post, topic: topic.acting_as, creator: user)
+        topic.reload
         visit course_forum_topic_path(course, forum, topic)
 
+        # Cannot update someone else's post
+        expect(page).not_to have_link(nil, href: edit_course_forum_topic_post_path(course, forum, topic,
+                                                                                   topic.posts.first))
+
+        # My own post
         find_link(nil, href: edit_course_forum_topic_post_path(course, forum, topic,
                                                                topic.posts.last)).click
         expect(current_path).to eq(edit_course_forum_topic_post_path(course, forum, topic,
@@ -66,9 +73,13 @@ RSpec.feature 'Course: Forum: Post: Management' do
         expect(topic.reload.posts.last.text).to eq('new_text')
       end
 
-      scenario 'I can delete a post' do
-        post = create(:course_discussion_post, topic: topic.acting_as)
+      scenario 'I can delete my own post' do
+        post = create(:course_discussion_post, topic: topic.acting_as, creator: user)
         visit course_forum_topic_path(course, forum, topic)
+
+        # Cannot delete someone else's post
+        expect(page).not_to have_link(nil, href: edit_course_forum_topic_post_path(course, forum, topic,
+                                                                                   topic.posts.first))
 
         find_link(nil, href: course_forum_topic_post_path(course, forum, topic, post)).click
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
