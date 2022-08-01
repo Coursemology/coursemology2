@@ -8,4 +8,4 @@
 - posts_locals[:max_depth] = max_depth if defined?(max_depth)
 div.posts
   = render partial: 'course/discussion/posts', locals: posts_locals
-= render partial: footer, locals: { topic: topic } if defined?(footer) && foot
+= render partial: footer, locals: { topic: topic } if defined?(footer) && footer
