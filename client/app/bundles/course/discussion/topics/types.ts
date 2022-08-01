@@ -33,6 +33,7 @@ export interface SaveCommentListAction {
   type: typeof SAVE_COMMENT_LIST;
   topicCount: number;
   topicList: CommentTopicData[];
+  tabValue: string;
 }
 
 export interface SavePendingAction {
