@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, Link } from '@mui/material';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import { FC, useEffect, useState } from 'react';
+import { FC, lazy, useEffect, useState, Suspense } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -18,12 +18,16 @@ import {
 import { updatePending, updateRead } from '../../operations';
 import { getAllCommentPostMiniEntities } from '../../selectors';
 import CommentCard from './CommentCard';
-import CommentField from '../fields/CommentField';
+
+const CommentField = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "discussionComment" */ '../fields/CommentField'
+    ),
+);
 
 interface Props extends WrappedComponentProps {
   topic: CommentTopicEntity;
-  updatePendingTab: () => void;
-  updateReadTab: () => void;
 }
 
 const translations = defineMessages({
@@ -47,10 +51,14 @@ const translations = defineMessages({
     id: 'course.discussion.topics.TopicCard.loading',
     defaultMessage: 'Loading...',
   },
+  loadingComment: {
+    id: 'course.discussion.topics.TopicCard.loadingComment',
+    defaultMessage: 'Loading comment field...',
+  },
 });
 
 const TopicCard: FC<Props> = (props) => {
-  const { intl, topic, updatePendingTab, updateReadTab } = props;
+  const { intl, topic } = props;
   const dispatch = useDispatch<AppDispatch>();
   const postListData = useSelector((state: AppState) =>
     getAllCommentPostMiniEntities(state),
@@ -82,7 +90,6 @@ const TopicCard: FC<Props> = (props) => {
       setStatus(CommentStatusTypes.loading);
       dispatch(updatePending(id)).then(() => {
         setStatus(newStatus);
-        updatePendingTab();
       });
     }
   };
@@ -96,7 +103,6 @@ const TopicCard: FC<Props> = (props) => {
       setStatus(CommentStatusTypes.loading);
       dispatch(updateRead(id)).then(() => {
         setStatus(newStatus);
-        updateReadTab();
       });
     }
   };
@@ -104,10 +110,8 @@ const TopicCard: FC<Props> = (props) => {
   const updateStatus = (): void => {
     if (status === CommentStatusTypes.unread) {
       setStatus(CommentStatusTypes.read);
-      updateReadTab();
     } else if (status === CommentStatusTypes.pending) {
       setStatus(CommentStatusTypes.notPending);
-      updatePendingTab();
     }
   };
 
@@ -161,7 +165,7 @@ const TopicCard: FC<Props> = (props) => {
           </Link>
         );
       case CommentStatusTypes.read:
-        return <div />;
+        return <></>;
       case CommentStatusTypes.unread:
         return (
           <Link
@@ -226,7 +230,19 @@ const TopicCard: FC<Props> = (props) => {
               </div>
             );
           })}
-        <CommentField topic={topic} updateStatus={updateStatus} />
+        <Suspense
+          fallback={
+            <div
+              style={{
+                marginTop: 10,
+              }}
+            >
+              {intl.formatMessage(translations.loadingComment)}
+            </div>
+          }
+        >
+          <CommentField topic={topic} updateStatus={updateStatus} />
+        </Suspense>
       </CardContent>
     </Card>
   );

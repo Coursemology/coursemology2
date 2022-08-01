@@ -1,10 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
-import {
-  CommentSettings,
-  CommentTabTypes,
-  CommentTopicEntity,
-} from 'types/course/comments';
+import { CommentSettings, CommentTopicEntity } from 'types/course/comments';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
@@ -18,7 +14,11 @@ import CommentPagination from '../paginations/CommentPagination';
 interface Props extends WrappedComponentProps {
   tabValue: string;
   settings: CommentSettings;
-  setCount: (count: number, type: CommentTabTypes) => void;
+}
+
+interface TopicListProps {
+  listIsLoading: boolean;
+  topicList: CommentTopicEntity[];
 }
 
 const translations = defineMessages({
@@ -28,105 +28,72 @@ const translations = defineMessages({
   },
 });
 
-const TopicList: FC<Props> = (props) => {
-  const { intl, tabValue, settings, setCount } = props;
-  const dispatch = useDispatch<AppDispatch>();
-  const topicCountData = useSelector((state: AppState) => getTopicCount(state));
-  const topicListData = useSelector((state: AppState) =>
-    getAllCommentTopicEntities(state),
-  );
-  const [isLoading, setIsLoading] = useState(true);
-  const [topicCount, setTopicCount] = useState(0);
-  const [topicList, setTopicList] = useState(Array<CommentTopicEntity>());
-  const [topicTabs, setTopicTabs] = useState({});
-  const [page, setPage] = useState(1);
+const TopicList: FC<TopicListProps> = (props) => {
+  const { listIsLoading, topicList } = props;
 
-  const getData = (newTabValue: string, newPage: number): void => {
-    if (topicTabs[newTabValue]?.[newPage] instanceof Set) {
-      const topicIds: Set<number> = topicTabs[newTabValue][newPage];
-      // set 0 index to topic count for pagination (pages start from 1)
-      const topicCountSet: Set<number> = topicTabs[newTabValue][0];
-      const newTopicListData = topicListData.filter(
-        (topic: CommentTopicEntity) => topicIds.has(topic.id),
-      );
-      setTopicList(newTopicListData);
-      setTopicCount(topicCountSet.keys().next().value);
-    } else {
-      setIsLoading(true);
-      // unread is "pending" for students
-      newTabValue =
-        newTabValue === CommentTabTypes.UNREAD
-          ? CommentTabTypes.PENDING
-          : newTabValue;
-      dispatch(fetchCommentData(newTabValue, newPage))
-        .then((request) => {
-          const newTopicList: CommentTopicEntity[] = {
-            ...request.data.topicList,
-          };
-          setTopicList(newTopicList);
-          const topicIds = new Set<number>();
-          const topicKeys = Object.keys(newTopicList);
-          if (topicKeys.length > 0) {
-            topicKeys.forEach((key: string) =>
-              topicIds.add(newTopicList[key].id),
-            );
-          }
-          const arrayTopicIds: Set<number>[] = [
-            ...(topicTabs[newTabValue] ?? []),
-          ];
-          arrayTopicIds[newPage] = topicIds;
-          // set 0 index to topic count for pagination (pages start from 1)
-          arrayTopicIds[0] = new Set<number>().add(request.data.topicCount);
-          setTopicTabs({ ...topicTabs, [newTabValue]: arrayTopicIds });
-          if (
-            newTabValue !== CommentTabTypes.ALL &&
-            newTabValue !== CommentTabTypes.MY_STUDENTS
-          ) {
-            setCount(request.data.topicCount, newTabValue as CommentTabTypes);
-          }
-        })
-        .catch(() =>
-          toast.error(intl.formatMessage(translations.fetchTopicsFailure)),
-        )
-        .finally(() => setIsLoading(false));
-    }
-  };
-
-  useEffect(() => {
-    setTopicCount(topicCountData);
-  }, [topicCountData]);
-
-  useEffect(() => {
-    getData(tabValue, 1);
-    setPage(1);
-  }, [tabValue]);
-
-  useEffect(() => {
-    getData(tabValue, page);
-  }, [page]);
-
-  const updatePendingTab = (): void => {
-    setTopicTabs({
-      ...topicTabs,
-      [CommentTabTypes.MY_STUDENTS_PENDING]: undefined,
-      [CommentTabTypes.PENDING]: undefined,
-    });
-  };
-
-  const updateReadTab = (): void => {
-    setTopicTabs({ ...topicTabs, [CommentTabTypes.UNREAD]: undefined });
-  };
-
-  if (isLoading) {
+  if (listIsLoading) {
     return <LoadingIndicator />;
   }
 
+  return (
+    <>
+      {Object.keys(topicList).map((key: string) => (
+        <Grid
+          item
+          key={topicList[key].id}
+          xs
+          style={{ position: 'relative', width: '100%' }}
+        >
+          <TopicCard topic={topicList[key]} />
+        </Grid>
+      ))}
+    </>
+  );
+};
+
+const TopicListWithPagination: FC<Props> = (props) => {
+  const { intl, settings, tabValue } = props;
+  const dispatch = useDispatch<AppDispatch>();
+
+  const [pageNum, setPageNum] = useState(1);
+  const [listIsLoading, setListIsLoading] = useState(false);
+  const [pageIsLoading, setPageIsLoading] = useState(true);
+
+  const topicCount = useSelector((state: AppState) => getTopicCount(state));
+  const topicList = useSelector((state: AppState) =>
+    getAllCommentTopicEntities(state),
+  );
+
+  useEffect(() => {
+    dispatch(fetchCommentData(tabValue, pageNum))
+      .catch(() =>
+        toast.error(intl.formatMessage(translations.fetchTopicsFailure)),
+      )
+      .finally(() => {
+        setPageIsLoading(false);
+      });
+  }, [dispatch]);
+
+  if (pageIsLoading) {
+    return <LoadingIndicator />;
+  }
+
+  const handlePageChange = (newPageNumber: number): void => {
+    setListIsLoading(true);
+    setPageNum(newPageNumber);
+    dispatch(fetchCommentData(tabValue, newPageNumber))
+      .catch(() => {
+        toast.error(intl.formatMessage(translations.fetchTopicsFailure));
+      })
+      .finally(() => setListIsLoading(false));
+  };
+
   const renderPagination = (): JSX.Element => (
     <CommentPagination
-      pageNum={page}
+      pageNum={pageNum}
       topicCount={topicCount}
-      topicsPerPage={settings.topicsPerPage}
-      handlePageChange={(pageNumber: number): void => setPage(pageNumber)}
+      rowsPerPage={settings.topicsPerPage}
+      handlePageChange={handlePageChange}
     />
   );
 
@@ -139,23 +106,10 @@ const TopicList: FC<Props> = (props) => {
       style={{ marginTop: '0px' }}
     >
       {renderPagination()}
-      {Object.keys(topicList).map((key: string) => (
-        <Grid
-          item
-          key={topicList[key].id}
-          xs
-          style={{ position: 'relative', width: '100%' }}
-        >
-          <TopicCard
-            topic={topicList[key]}
-            updatePendingTab={updatePendingTab}
-            updateReadTab={updateReadTab}
-          />
-        </Grid>
-      ))}
-      {renderPagination()}
+      <TopicList topicList={topicList} listIsLoading={listIsLoading} />
+      {topicList.length > 15 && !listIsLoading && renderPagination()}
     </Grid>
   );
 };
 
-export default injectIntl(TopicList);
+export default injectIntl(TopicListWithPagination);

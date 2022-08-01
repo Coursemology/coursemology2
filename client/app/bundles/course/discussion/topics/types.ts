@@ -16,9 +16,9 @@ export const SAVE_COMMENT_TAB = 'course/discussion/topics/SAVE_COMMENT_TAB';
 export const SAVE_COMMENT_LIST = 'course/discussion/topics/SAVE_COMMENT_LIST';
 export const SAVE_PENDING = 'course/discussion/topics/SAVE_PENDING';
 export const SAVE_READ = 'course/discussion/topics/SAVE_READ';
+export const CREATE_POST = 'course/discussion/topics/CREATE_POST';
 export const UPDATE_POST = 'course/discussion/topics/UPDATE_POST';
 export const DELETE_POST = 'course/discussion/topics/DELETE_POST';
-export const CREATE_POST = 'course/discussion/topics/CREATE_POST';
 
 // Action Types
 
@@ -33,7 +33,6 @@ export interface SaveCommentListAction {
   type: typeof SAVE_COMMENT_LIST;
   topicCount: number;
   topicList: CommentTopicData[];
-  tabValue: string;
 }
 
 export interface SavePendingAction {
@@ -46,18 +45,20 @@ export interface SaveReadAction {
   topicId: number;
 }
 
-export interface DeletePostAction {
-  type: typeof DELETE_POST;
-  postId: number;
+export interface CreatePostAction {
+  type: typeof CREATE_POST;
+  post: CommentPostListData;
 }
+
 export interface UpdatePostAction {
   type: typeof UPDATE_POST;
   postId: number;
   text: string;
 }
-export interface CreatePostAction {
-  type: typeof CREATE_POST;
-  post: CommentPostListData;
+
+export interface DeletePostAction {
+  type: typeof DELETE_POST;
+  postId: number;
 }
 
 export type CommentActionType =
@@ -65,9 +66,9 @@ export type CommentActionType =
   | SaveCommentListAction
   | SavePendingAction
   | SaveReadAction
-  | DeletePostAction
+  | CreatePostAction
   | UpdatePostAction
-  | CreatePostAction;
+  | DeletePostAction;
 
 // State Types
 

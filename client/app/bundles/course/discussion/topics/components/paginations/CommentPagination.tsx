@@ -4,15 +4,15 @@ import { injectIntl, WrappedComponentProps } from 'react-intl';
 
 interface Props extends WrappedComponentProps {
   topicCount: number;
-  topicsPerPage: number;
+  rowsPerPage: number;
   pageNum: number;
   handlePageChange: (page: number) => void;
 }
 
 const CommentPagination: FC<Props> = (props) => {
-  const { topicCount, topicsPerPage, pageNum, handlePageChange } = props;
+  const { topicCount, rowsPerPage, pageNum, handlePageChange } = props;
 
-  const count = Math.ceil(topicCount / topicsPerPage);
+  const count = Math.ceil(topicCount / rowsPerPage);
 
   const handleChange: (
     _e: React.ChangeEvent<unknown>,

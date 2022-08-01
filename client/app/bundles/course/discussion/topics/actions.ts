@@ -38,13 +38,11 @@ export function saveCommentTab(
 export function saveCommentList(
   topicCount: number,
   topicList: CommentTopicData[],
-  tabValue: string,
 ): SaveCommentListAction {
   return {
     type: SAVE_COMMENT_LIST,
     topicCount,
     topicList,
-    tabValue,
   };
 }
 

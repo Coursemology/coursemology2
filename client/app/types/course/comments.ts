@@ -11,6 +11,7 @@ export interface CommentTabData {
 export interface CommentPermissions {
   canManage: boolean;
   isStudent: boolean;
+  isTeachingStaff: boolean;
 }
 
 export interface CommentTopicPermissions {
