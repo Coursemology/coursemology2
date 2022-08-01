@@ -55,7 +55,6 @@ class VisibleComments extends Component {
           isSubmittingDelayedComment={commentForms.isSubmittingDelayedComment}
           isUpdatingComment={commentForms.isUpdatingComment}
           value={commentForms.topics[topic.id]}
-          airModeColor={false}
           renderDelayedCommentButton={renderDelayedCommentButton}
         />
       </div>

@@ -11,15 +11,14 @@ import axios from 'lib/axios';
 
 interface Props {
   label?: string;
-  value?: string;
+  value: string;
   onChange: (text: string) => void;
-  disabled?: boolean;
+  disabled: boolean;
   field?: string | undefined;
   required?: boolean | undefined;
   name: string;
   inputId: string;
   clearOnSubmit?: boolean;
-  width?: string;
 }
 
 const CKEditorRichText: FC<Props> = (props: Props) => {
@@ -33,7 +32,6 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
     name,
     inputId,
     clearOnSubmit,
-    width,
   } = props;
 
   const [isFocused, setIsFocused] = useState(false);
@@ -80,7 +78,7 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
     <div
       style={{
         fontSize: 16,
-        width: width ?? '100%',
+        width: '100%',
         display: 'inline-block',
         position: 'relative',
         backgroundColor: 'transparent',

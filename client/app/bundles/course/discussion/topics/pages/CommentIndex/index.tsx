@@ -1,5 +1,10 @@
 import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import {
+  defineMessages,
+  injectIntl,
+  WrappedComponentProps,
+  IntlShape,
+} from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
@@ -11,12 +16,19 @@ import {
   CommentTabInfo,
   CommentTabTypes,
 } from 'types/course/comments';
-import { Badge, BadgeProps, styled, Tab, Tabs } from '@mui/material';
-import { getSettings } from '../../selectors';
+import { Tab, Tabs } from '@mui/material';
+import CustomBadge from 'lib/components/misc/CustomBadge';
+import { tabsStyle } from 'theme/mui-style';
+import { getPermissions, getSettings, getTabInfo } from '../../selectors';
 import { fetchTabData } from '../../operations';
 import TopicList from '../../components/lists/TopicList';
 
 type Props = WrappedComponentProps;
+
+interface CommentTabProps extends WrappedComponentProps {
+  tabValue: string;
+  setTabValue: React.Dispatch<React.SetStateAction<string>>;
+}
 
 const translations = defineMessages({
   fetchCommentsFailure: {
@@ -49,85 +61,140 @@ const translations = defineMessages({
   },
 });
 
+const getInitialTab = (
+  permissions: CommentPermissions,
+  tabInfo: CommentTabInfo,
+): CommentTabTypes => {
+  if (permissions.canManage) {
+    if (tabInfo.myStudentExist) {
+      return CommentTabTypes.MY_STUDENTS_PENDING;
+    }
+    return CommentTabTypes.PENDING;
+  }
+  return CommentTabTypes.UNREAD;
+};
+
+const getTabTypesToRender = (
+  permissions: CommentPermissions,
+  tabInfo: CommentTabInfo,
+): CommentTabData[] => {
+  const tabs = [] as CommentTabTypes[];
+  if (permissions.isTeachingStaff || permissions.canManage) {
+    if (tabInfo.myStudentExist) {
+      tabs.push(CommentTabTypes.MY_STUDENTS_PENDING);
+    }
+    tabs.push(CommentTabTypes.PENDING);
+    if (tabInfo.myStudentExist) {
+      tabs.push(CommentTabTypes.MY_STUDENTS);
+    }
+  } else if (permissions.isStudent) {
+    tabs.push(CommentTabTypes.UNREAD);
+  }
+  tabs.push(CommentTabTypes.ALL);
+  const tabData: CommentTabData[] = tabs.map((commentType: CommentTabTypes) => {
+    let typeCount = 0;
+    if (
+      commentType === CommentTabTypes.MY_STUDENTS_PENDING &&
+      tabInfo.myStudentUnreadCount
+    ) {
+      typeCount = tabInfo.myStudentUnreadCount;
+    } else if (
+      commentType === CommentTabTypes.PENDING &&
+      tabInfo.allStaffUnreadCount
+    ) {
+      typeCount = tabInfo.allStaffUnreadCount;
+    } else if (
+      commentType === CommentTabTypes.UNREAD &&
+      tabInfo.allStudentUnreadCount
+    ) {
+      typeCount = tabInfo.allStudentUnreadCount;
+    }
+    return {
+      type: commentType,
+      count: typeCount,
+    };
+  });
+  return tabData;
+};
+
+const tabTranslation = (
+  intl: IntlShape,
+  tabType: CommentTabTypes,
+): string | JSX.Element => {
+  switch (tabType) {
+    case CommentTabTypes.MY_STUDENTS_PENDING:
+      return intl.formatMessage(translations.myStudentsPending);
+    case CommentTabTypes.PENDING:
+      return intl.formatMessage(translations.pending);
+    case CommentTabTypes.MY_STUDENTS:
+      return intl.formatMessage(translations.myStudents);
+    case CommentTabTypes.UNREAD:
+      return intl.formatMessage(translations.unread);
+    case CommentTabTypes.ALL:
+      return intl.formatMessage(translations.all);
+    default:
+      return '';
+  }
+};
+
+const CommentTabs: FC<CommentTabProps> = (props) => {
+  const { tabValue, setTabValue, intl } = props;
+  const [tabTypesToRender, setTabTypesToRender] = useState(
+    [] as CommentTabData[],
+  );
+  const permissions = useSelector((state: AppState) => getPermissions(state));
+  const tabs = useSelector((state: AppState) => getTabInfo(state));
+
+  useEffect(() => {
+    setTabTypesToRender(getTabTypesToRender(permissions, tabs));
+  }, [permissions, tabs]);
+
+  return (
+    <Tabs
+      onChange={(_, value): void => {
+        setTabValue(value);
+      }}
+      TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+      value={tabValue}
+      variant="scrollable"
+      scrollButtons="auto"
+      sx={tabsStyle}
+    >
+      {tabTypesToRender.length > 0 &&
+        tabTypesToRender.map((tabData: CommentTabData) => (
+          <Tab
+            id={`${tabData.type}_tab`}
+            key={tabData.type}
+            icon={<CustomBadge badgeContent={tabData.count} color="primary" />}
+            iconPosition="end"
+            style={{
+              minHeight: 48,
+              paddingRight:
+                tabData.count === 0 || tabData.count === undefined ? 8 : 26,
+              textDecoration: 'none',
+            }}
+            label={tabTranslation(intl, tabData.type)}
+            value={tabData.type}
+          />
+        ))}
+    </Tabs>
+  );
+};
+
 const CommentIndex: FC<Props> = (props) => {
   const { intl } = props;
   const dispatch = useDispatch<AppDispatch>();
 
-  // Selectors
   const settings = useSelector((state: AppState) => getSettings(state));
-
-  const getInitialTab = (
-    permissions: CommentPermissions,
-    tabInfo: CommentTabInfo,
-  ): CommentTabTypes => {
-    if (permissions.canManage) {
-      if (tabInfo.myStudentExist) {
-        return CommentTabTypes.MY_STUDENTS_PENDING;
-      }
-      return CommentTabTypes.PENDING;
-    }
-    return CommentTabTypes.UNREAD;
-  };
-
-  const getTabTypesToRender = (
-    permissions: CommentPermissions,
-    tabInfo: CommentTabInfo,
-  ): CommentTabData[] => {
-    const tabs = [] as CommentTabTypes[];
-    if (permissions.isStudent) {
-      tabs.push(CommentTabTypes.UNREAD);
-    } else {
-      if (tabInfo.myStudentExist) {
-        tabs.push(CommentTabTypes.MY_STUDENTS_PENDING);
-      }
-      if (permissions.canManage) {
-        tabs.push(CommentTabTypes.PENDING);
-      }
-      if (tabInfo.myStudentExist) {
-        tabs.push(CommentTabTypes.MY_STUDENTS);
-      }
-    }
-    tabs.push(CommentTabTypes.ALL);
-    const tabData: CommentTabData[] = tabs.map(
-      (commentType: CommentTabTypes) => {
-        let typeCount = 0;
-        if (
-          commentType === CommentTabTypes.MY_STUDENTS_PENDING &&
-          tabInfo.myStudentUnreadCount
-        ) {
-          typeCount = tabInfo.myStudentUnreadCount;
-        } else if (
-          commentType === CommentTabTypes.PENDING &&
-          tabInfo.allStaffUnreadCount
-        ) {
-          typeCount = tabInfo.allStaffUnreadCount;
-        } else if (
-          commentType === CommentTabTypes.UNREAD &&
-          tabInfo.allStudentUnreadCount
-        ) {
-          typeCount = tabInfo.allStudentUnreadCount;
-        }
-        return {
-          type: commentType,
-          count: typeCount,
-        };
-      },
-    );
-    return tabData;
-  };
 
   const [isLoading, setIsLoading] = useState(true);
   const [tabValue, setTabValue] = useState('');
-  const [tabTypesToRender, setTabTypesToRender] = useState(
-    [] as CommentTabData[],
-  );
 
   useEffect(() => {
     dispatch(fetchTabData())
       .then((request) => {
         const data = request.data;
         setTabValue(getInitialTab(data.permissions, data.tabs));
-        setTabTypesToRender(getTabTypesToRender(data.permissions, data.tabs));
       })
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchCommentsFailure)),
@@ -135,48 +202,9 @@ const CommentIndex: FC<Props> = (props) => {
       .finally(() => setIsLoading(false));
   }, [dispatch]);
 
-  const setCount = (count: number, type: CommentTabTypes): void => {
-    const newTabTypesToRender: CommentTabData[] = tabTypesToRender.map(
-      (data: CommentTabData) => {
-        if (data.type === type) {
-          const newData = { ...data, count };
-          return newData;
-        }
-        return data;
-      },
-    );
-    setTabTypesToRender(newTabTypesToRender);
-  };
-
   if (isLoading) {
     return <LoadingIndicator />;
   }
-
-  const tabTranslation = (tabType: CommentTabTypes): string | JSX.Element => {
-    switch (tabType) {
-      case CommentTabTypes.MY_STUDENTS_PENDING:
-        return intl.formatMessage(translations.myStudentsPending);
-      case CommentTabTypes.PENDING:
-        return intl.formatMessage(translations.pending);
-      case CommentTabTypes.MY_STUDENTS:
-        return intl.formatMessage(translations.myStudents);
-      case CommentTabTypes.UNREAD:
-        return intl.formatMessage(translations.unread);
-      case CommentTabTypes.ALL:
-        return intl.formatMessage(translations.all);
-      default:
-        return '';
-    }
-  };
-
-  const CustomBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-    '& .MuiBadge-badge': {
-      right: -8,
-      top: -1,
-      border: `2px solid ${theme.palette.background.paper}`,
-      padding: '0 4px',
-    },
-  }));
 
   return (
     <>
@@ -185,46 +213,8 @@ const CommentIndex: FC<Props> = (props) => {
           settings.title ?? intl.formatMessage({ ...translations.comments })
         }
       />
-      <Tabs
-        onChange={(_, value): void => {
-          setTabValue(value);
-        }}
-        TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
-        value={tabValue}
-        variant="scrollable"
-        scrollButtons="auto"
-        sx={{
-          // to show tab indicator on firefox
-          '& .MuiTabs-indicator': {
-            bottom: 'auto',
-          },
-          '.css-117fsft-MuiButtonBase-root-MuiTab-root': { minHeight: 48 },
-          minHeight: '50px',
-          '& .MuiTab-root:focus': {
-            outline: 0,
-          },
-        }}
-      >
-        {tabTypesToRender.length > 0 &&
-          tabTypesToRender.map((tabData: CommentTabData) => (
-            <Tab
-              id={`${tabData.type}_tab`}
-              key={tabData.type}
-              icon={
-                <CustomBadge badgeContent={tabData.count} color="primary" />
-              }
-              iconPosition="end"
-              style={{
-                paddingRight:
-                  tabData.count === 0 || tabData.count === undefined ? 8 : 26,
-                textDecoration: 'none',
-              }}
-              label={tabTranslation(tabData.type)}
-              value={tabData.type}
-            />
-          ))}
-      </Tabs>
-      <TopicList tabValue={tabValue} settings={settings} setCount={setCount} />
+      <CommentTabs tabValue={tabValue} setTabValue={setTabValue} intl={intl} />
+      <TopicList key={tabValue} tabValue={tabValue} settings={settings} />
     </>
   );
 };

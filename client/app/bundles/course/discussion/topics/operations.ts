@@ -5,6 +5,7 @@ import {
   CommentPostListData,
   CommentPostMiniEntity,
   CommentSettings,
+  CommentTabTypes,
   CommentTabInfo,
   CommentTopicData,
 } from 'types/course/comments';
@@ -54,14 +55,16 @@ export function fetchCommentData(
     topicList: CommentTopicData[];
   }>
 > {
+  // unread is "pending" for students
+  const queryTabValue =
+    tabValue === CommentTabTypes.UNREAD ? CommentTabTypes.PENDING : tabValue;
+
   return async (dispatch) =>
     CourseAPI.comments
-      .fetchCommentData(tabValue, pageNum)
+      .fetchCommentData(queryTabValue, pageNum)
       .then((response) => {
         const data = response.data;
-        dispatch(
-          actions.saveCommentList(data.topicCount, data.topicList, tabValue),
-        );
+        dispatch(actions.saveCommentList(data.topicCount, data.topicList));
         return response;
       })
       .catch((error) => {
@@ -93,6 +96,22 @@ export function updateRead(topicId: number): Operation<void> {
       });
 }
 
+export function createPost(
+  topicId: number,
+  text: string,
+): Operation<AxiosResponse<CommentPostListData>> {
+  return async (dispatch) =>
+    CourseAPI.comments
+      .create(topicId.toString(), formatNewPostAttributes(text))
+      .then((response) => {
+        dispatch(actions.createPost(response.data));
+        return response;
+      })
+      .catch((error) => {
+        throw error;
+      });
+}
+
 export function updatePost(
   post: CommentPostMiniEntity,
   text: string,
@@ -118,22 +137,6 @@ export function deletePost(post: CommentPostMiniEntity): Operation<void> {
       .delete(post.topicId.toString(), post.id.toString())
       .then(() => {
         dispatch(actions.deletePost(post.id));
-      })
-      .catch((error) => {
-        throw error;
-      });
-}
-
-export function createPost(
-  topicId: number,
-  text: string,
-): Operation<AxiosResponse<CommentPostListData>> {
-  return async (dispatch) =>
-    CourseAPI.comments
-      .create(topicId.toString(), formatNewPostAttributes(text))
-      .then((response) => {
-        dispatch(actions.createPost(response.data));
-        return response;
       })
       .catch((error) => {
         throw error;

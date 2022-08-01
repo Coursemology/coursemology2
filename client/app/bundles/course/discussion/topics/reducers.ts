@@ -28,9 +28,18 @@ import {
 
 const initialState: CommentState = {
   topicCount: 0,
-  permissions: {} as CommentPermissions,
-  settings: {} as CommentSettings,
-  tabs: {} as CommentTabInfo,
+  permissions: {
+    canManage: false,
+    isStudent: false,
+    isTeachingStaff: false,
+  } as CommentPermissions,
+  settings: { title: '', topicsPerPage: 25 } as CommentSettings,
+  tabs: {
+    myStudentExist: false,
+    myStudentUnreadCount: 0,
+    allStaffUnreadCount: 0,
+    allStudentUnreadCount: 0,
+  } as CommentTabInfo,
   topicList: createEntityStore(),
   postList: createEntityStore(),
 };
@@ -45,6 +54,9 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
     }
     case SAVE_COMMENT_LIST: {
       draft.topicCount = action.topicCount;
+      draft.topicList = createEntityStore();
+      draft.postList = createEntityStore();
+
       const newPostList = [] as CommentPostMiniEntity[];
       const newTopicList = action.topicList?.map((topic: CommentTopicData) => {
         const { postList, ...newTopic } = topic;
@@ -86,7 +98,7 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
           ...topic,
           topicSettings: {
             ...topic.topicSettings,
-            isPending: !topic.topicSettings.isPending,
+            isUnread: !topic.topicSettings.isUnread,
           },
         };
         saveEntityToStore(draft.topicList, newTopic);

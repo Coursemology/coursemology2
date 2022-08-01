@@ -1,4 +1,5 @@
 import { Avatar, Button, CardHeader } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { grey, orange, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
@@ -63,6 +64,8 @@ const CommentCard: FC<Props> = (props) => {
   const { intl, post } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [editMode, setEditMode] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [deleteConfirmation, setDeleteConfirmation] = useState(false);
   const [editValue, setEditValue] = useState(post.text);
 
@@ -79,37 +82,45 @@ const CommentCard: FC<Props> = (props) => {
   const updateComment = (text: string): void => {
     dispatch(updatePost(post, text))
       .then(() => {
+        setEditMode(false);
         toast.success(intl.formatMessage(translations.updateSuccess));
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(intl.formatMessage(translations.updateFailure));
-        throw error;
-      });
-  };
-
-  const deleteComment = (): void => {
-    dispatch(deletePost(post))
-      .then(() => {
-        toast.success(intl.formatMessage(translations.deleteSuccess));
       })
-      .catch((error) => {
-        toast.error(intl.formatMessage(translations.deleteFailure));
-        throw error;
+      .finally(() => {
+        setIsSaving(false);
       });
   };
 
   const onConfirmDelete = (): void => {
-    deleteComment();
-    setDeleteConfirmation(false);
-  };
-
-  const onDelete = (): void => {
-    setDeleteConfirmation(true);
+    setIsDeleting(true);
+    dispatch(deletePost(post))
+      .then(() => {
+        setDeleteConfirmation(false);
+        toast.success(intl.formatMessage(translations.deleteSuccess));
+      })
+      .catch(() => {
+        toast.error(intl.formatMessage(translations.deleteFailure));
+      })
+      .finally(() => {
+        setIsDeleting(false);
+      });
   };
 
   const onSave = (): void => {
-    updateComment(editValue);
-    setEditMode(false);
+    setIsSaving(true);
+    if (editValue.trim() === '') {
+      toast.error('Cannot be empty');
+      setIsSaving(false);
+      return;
+    }
+    if (editValue === post.text) {
+      setEditMode(false);
+      setIsSaving(false);
+    } else {
+      updateComment(editValue);
+    }
   };
 
   const toggleEditMode = (): void => {
@@ -122,6 +133,7 @@ const CommentCard: FC<Props> = (props) => {
       return (
         <div id={`edit_post_${post.id}`} className="edit-discussion-post-form">
           <CKEditorRichText
+            disabled={isSaving}
             name={intl.formatMessage(translations.comment)}
             inputId={editPostIdentifier(post.id.toString())}
             onChange={(value): void => {
@@ -144,14 +156,16 @@ const CommentCard: FC<Props> = (props) => {
             >
               <FormattedMessage {...translations.cancel} />
             </Button>
-            <Button
+            <LoadingButton
               color="primary"
               onClick={onSave}
+              disabled={isDeleting || isSaving}
+              loading={isSaving}
               id={`post_${post.id}`}
               className="submit-button"
             >
               <FormattedMessage {...translations.save} />
-            </Button>
+            </LoadingButton>
           </div>
         </div>
       );
@@ -223,8 +237,9 @@ const CommentCard: FC<Props> = (props) => {
           {post.canDestroy ? (
             <Button
               className="delete-comment"
+              disabled={isDeleting}
               id={`post_${post.id}`}
-              onClick={onDelete}
+              onClick={(): void => setDeleteConfirmation(true)}
               style={{
                 height: 35,
                 width: 40,
@@ -246,6 +261,9 @@ const CommentCard: FC<Props> = (props) => {
       </div>
       <ConfirmationDialog
         confirmDelete
+        disableCancelButton={isDeleting}
+        disableConfirmButton={isDeleting}
+        loadingConfirmButton={isDeleting}
         open={deleteConfirmation}
         message={<FormattedMessage {...translations.deleteConfirmation} />}
         onCancel={(): void => setDeleteConfirmation(false)}

@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import CKEditorRichText from 'lib/components/CKEditorRichText';
 import { FC, useEffect, useState } from 'react';
 import {
@@ -37,8 +37,8 @@ const CommentField: FC<Props> = (props: Props) => {
   const { intl, topic, updateStatus } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState('');
-  const [disableCommentButton, setDisableCommentButton] = useState(false);
-  const [disableComment, setDisableComment] = useState(false);
+  const [disableCommentButton, setDisableCommentButton] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const newValue = value.replace(/<\/?[^>]+(>|$)/g, '').trim();
@@ -50,18 +50,20 @@ const CommentField: FC<Props> = (props: Props) => {
   }, [value]);
 
   const createComment = (): void => {
+    setIsSubmitting(true);
     setDisableCommentButton(true);
-    setDisableComment(true);
     dispatch(createPost(topic.id, value))
       .then(() => {
         setValue('');
         toast.success(intl.formatMessage(translations.createSuccess));
         updateStatus();
-        setDisableComment(false);
       })
       .catch((error) => {
         toast.error(intl.formatMessage(translations.createFailure));
         throw error;
+      })
+      .finally(() => {
+        setIsSubmitting(false);
       });
   };
 
@@ -69,23 +71,23 @@ const CommentField: FC<Props> = (props: Props) => {
     <div id={`comment-field-${topic.id}`}>
       <CKEditorRichText
         name={intl.formatMessage(translations.comment)}
-        disabled={disableComment}
+        disabled={isSubmitting}
         inputId={topic.id.toString()}
         value={value}
         onChange={(text: string): void => setValue(text)}
         clearOnSubmit
-        width="100%"
       />
-      <Button
+      <LoadingButton
         id={`comment-submit-${topic.id.toString()}`}
         variant="contained"
         color="primary"
         disabled={disableCommentButton}
+        loading={isSubmitting}
         onClick={createComment}
         style={{ marginRight: 10, marginBottom: 10 }}
       >
         <FormattedMessage {...translations.comment} />
-      </Button>
+      </LoadingButton>
     </div>
   );
 };
