@@ -8,6 +8,17 @@ class Course::Discussion::TopicsController < Course::ComponentController
   def index
   end
 
+  def all
+    @topics = all_topics
+
+    if current_course_user&.student?
+      @topics = @topics.merge(Course::Discussion::Topic.from_user(current_course_user.user_id))
+    end
+    @topic_count = @topics.count
+    @topics = @topics.paginated(pagination_page_param)
+    render 'topics_list_data'
+  end
+
   # Loads topics pending staff reply for course_staff, and unread topics for students.
   def pending
     @topics = if current_course_user&.student?
@@ -16,32 +27,21 @@ class Course::Discussion::TopicsController < Course::ComponentController
                 all_topics.pending_staff_reply
               end
     @topic_count = @topics.count
-    @topics = @topics.paginated(filter_page_num)
+    @topics = @topics.paginated(pagination_page_param)
     render 'topics_list_data'
   end
 
   def my_students
     @topics = my_students_topics
     @topic_count = @topics.count
-    @topics = @topics.paginated(filter_page_num)
+    @topics = @topics.paginated(pagination_page_param)
     render 'topics_list_data'
   end
 
   def my_students_pending
     @topics = my_students_topics.pending_staff_reply
     @topic_count = @topics.count
-    @topics = @topics.paginated(filter_page_num)
-    render 'topics_list_data'
-  end
-
-  def all
-    @topics = all_topics
-
-    if current_course_user&.student?
-      @topics = @topics.merge(Course::Discussion::Topic.from_user(current_course_user.user_id))
-    end
-    @topic_count = @topics.count
-    @topics = @topics.paginated(filter_page_num)
+    @topics = @topics.paginated(pagination_page_param)
     render 'topics_list_data'
   end
 
@@ -51,28 +51,41 @@ class Course::Discussion::TopicsController < Course::ComponentController
               else
                 @topic.mark_as_pending
               end
-
-    head :bad_request unless success
+    if success
+      head :ok
+    else
+      head :bad_request
+    end
   end
 
   def mark_as_read
     success = @topic.mark_as_read! for: current_user
-    head :bad_request unless success
-  end
-
-  def filter_page_num
-    params.permit(:length)
-    params.permit(:page_num).reverse_merge(length: @settings.pagination)
+    if success
+      head :ok
+    else
+      head :bad_request
+    end
   end
 
   private
 
-  def all_topics
-    @topics.globally_displayed.ordered_by_updated_at.includes(:actable)
+  def pagination_page_param
+    params.permit(:page_num).reverse_merge(length: @settings.pagination)
   end
 
   def unread_topics_for_student
     all_topics.from_user(current_user.id).unread_by(current_user)
+  end
+
+  def all_topics
+    @topics.globally_displayed.
+      ordered_by_updated_at.
+      preload([:posts,
+               actable: [:question,
+                         { submission: [:assessment,
+                                        :creator] },
+                         file: { answer: [:question,
+                                          :submission] }]])
   end
 
   def my_students_topics
