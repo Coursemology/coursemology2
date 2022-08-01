@@ -64,7 +64,9 @@ export function fetchCommentData(
       .fetchCommentData(queryTabValue, pageNum)
       .then((response) => {
         const data = response.data;
-        dispatch(actions.saveCommentList(data.topicCount, data.topicList));
+        dispatch(
+          actions.saveCommentList(data.topicCount, data.topicList, tabValue),
+        );
         return response;
       })
       .catch((error) => {

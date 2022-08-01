@@ -7,6 +7,7 @@ import {
   CommentTabInfo,
   CommentTopicData,
   CommentTopicEntity,
+  CommentTabTypes,
 } from 'types/course/comments';
 import {
   createEntityStore,
@@ -72,6 +73,15 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
       }
       if (newPostList) {
         saveListToStore(draft.postList, newPostList);
+      }
+
+      // Update tab count when switched to that tab.
+      if (action.tabValue === CommentTabTypes.MY_STUDENTS_PENDING) {
+        draft.tabs.myStudentUnreadCount = newTopicList.length;
+      } else if (action.tabValue === CommentTabTypes.PENDING) {
+        draft.tabs.allStaffUnreadCount = newTopicList.length;
+      } else if (action.tabValue === CommentTabTypes.UNREAD) {
+        draft.tabs.allStudentUnreadCount = newTopicList.length;
       }
       break;
     }
