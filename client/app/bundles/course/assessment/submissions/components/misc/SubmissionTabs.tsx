@@ -2,12 +2,11 @@ import { FC, useEffect } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-
-import { Badge, BadgeProps, styled, Tab, Tabs } from '@mui/material';
-
+import { Tab, Tabs } from '@mui/material';
+import CustomBadge from 'lib/components/misc/CustomBadge';
 import { SubmissionsTabData } from 'types/course/assessment/submissions';
 import { AppDispatch } from 'types/store';
-
+import { tabsStyle } from 'theme/mui-style';
 import {
   fetchAllStudentsPendingSubmissions,
   fetchCategorySubmissions,
@@ -39,29 +38,6 @@ const translations = defineMessages({
     defaultMessage: 'My Students Pending',
   },
 });
-
-const CustomBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    right: -8,
-    top: -1,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: '0 4px',
-  },
-}));
-
-const styles = {
-  tabsStyle: {
-    // to show tab indicator on firefox
-    '& .MuiTabs-indicator': {
-      bottom: 'auto',
-    },
-    '.css-117fsft-MuiButtonBase-root-MuiTab-root': { minHeight: 48 },
-    minHeight: '50px',
-    '& .MuiTab-root:focus': {
-      outline: 0,
-    },
-  },
-};
 
 const SubmissionTabs: FC<Props> = (props) => {
   const {
@@ -120,7 +96,7 @@ const SubmissionTabs: FC<Props> = (props) => {
           scrollButtons="auto"
           onChange={handleTabChange}
           TabIndicatorProps={{ style: { transition: 'none' } }}
-          sx={styles.tabsStyle}
+          sx={tabsStyle}
         >
           {isTeachingStaff && (
             <Tab
@@ -135,7 +111,9 @@ const SubmissionTabs: FC<Props> = (props) => {
               }
               iconPosition="end"
               style={{
+                minHeight: 48,
                 paddingRight: tabs.myStudentsPendingCount === 0 ? 8 : 26,
+                textDecoration: 'none',
               }}
               onClick={(): Promise<string | number | void> => {
                 // Prevent API calls when spam clicking the tab

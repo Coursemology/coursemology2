@@ -1,12 +1,14 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Badge, BadgeProps, styled, Tab, Tabs } from '@mui/material';
+import { Tab, Tabs } from '@mui/material';
 import {
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
+import CustomBadge from 'lib/components/misc/CustomBadge';
 import { getCurrentPath, getCourseId } from 'lib/helpers/url-helpers';
 import { getCourseURL } from 'lib/helpers/url-builders';
+import { tabsStyle } from 'theme/mui-style';
 
 interface Props extends WrappedComponentProps {
   permissions: ManageCourseUsersPermissions;
@@ -39,29 +41,6 @@ const translations = defineMessages({
     defaultMessage: 'Personalized Timelines',
   },
 });
-
-const styles = {
-  tabsStyle: {
-    // to show tab indicator on firefox
-    '& .MuiTabs-indicator': {
-      bottom: 'auto',
-    },
-    '.css-117fsft-MuiButtonBase-root-MuiTab-root': { minHeight: 48 },
-    minHeight: '50px',
-    '& .MuiTab-root:focus': {
-      outline: 0,
-    },
-  },
-};
-
-const CustomBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    right: -8,
-    top: -1,
-    border: `2px solid ${theme.palette.background.paper}`,
-    padding: '0 4px',
-  },
-}));
 
 interface TabData {
   label: { id: string; defaultMessage: string };
@@ -146,7 +125,7 @@ const UserManagementTabs: FC<Props> = (props) => {
       value={getCurrentTabIndex()}
       variant="scrollable"
       scrollButtons="auto"
-      sx={styles.tabsStyle}
+      sx={tabsStyle}
     >
       {tabs.map((tab) => (
         <Tab
@@ -157,6 +136,7 @@ const UserManagementTabs: FC<Props> = (props) => {
           href={tab.href}
           component="a"
           style={{
+            minHeight: 48,
             paddingRight: tab.count === 0 || tab.count === undefined ? 8 : 26,
             textDecoration: 'none',
           }}
