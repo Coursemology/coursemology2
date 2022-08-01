@@ -82,7 +82,7 @@
     "@ckeditor/ckeditor5-build-custom": "github:syoopie/CKEditor5-build-custom#v1",
     "@ckeditor/ckeditor5-react": "^5.0.2",
     "@emotion/react": "^11.10.0",
-    "@emotion/styled": "^11.9.3",
+    "@emotion/styled": "^11.10.0",
     "@hookform/resolvers": "^2.9.7",
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "^5.0.0-alpha.92",
