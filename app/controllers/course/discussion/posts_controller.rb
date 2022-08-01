@@ -19,7 +19,6 @@ class Course::Discussion::PostsController < Course::ComponentController
     if result
       send_created_notification(@post)
       respond_to do |format|
-        format.js
         format.json { render @post }
       end
     else
@@ -30,7 +29,6 @@ class Course::Discussion::PostsController < Course::ComponentController
   def update
     if @post.update(post_params)
       respond_to do |format|
-        format.js
         format.json { render @post }
       end
     else
@@ -40,10 +38,7 @@ class Course::Discussion::PostsController < Course::ComponentController
 
   def destroy
     if @post.destroy
-      respond_to do |format|
-        format.js
-        format.json { head :ok }
-      end
+      head :ok
     else
       head :bad_request
     end
