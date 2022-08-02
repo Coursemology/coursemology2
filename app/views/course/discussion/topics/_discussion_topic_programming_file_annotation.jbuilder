@@ -19,7 +19,6 @@ json.content display_code_lines(file_annotation.file, file_annotation.line - 5, 
 
 json.partial! 'topic', topic: topic
 
-# TODO: remove links, change to frontend if possible
 json.links do
   json.titleLink edit_course_assessment_submission_path(current_course, assessment, submission,
                                                         step: submission.questions.index(question) + 1)
