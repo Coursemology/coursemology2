@@ -1,10 +1,10 @@
 import { Component } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import { Avatar, Button, CardHeader } from '@mui/material';
 import { grey, orange, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
-import { defineMessages, FormattedMessage } from 'react-intl';
 import CKEditorRichText from 'lib/components/CKEditorRichText';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import moment from 'lib/moment';
@@ -32,24 +32,25 @@ const styles = {
     width: '25px',
   },
   card: {
-    marginBottom: 20,
+    marginBottom: 10,
     borderStyle: 'solid',
     borderWidth: 0.2,
     borderColor: grey[400],
-    borderRadius: 10,
-    padding: 10,
+    borderRadius: 3,
   },
   header: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: grey[100],
+    borderRadius: 3,
   },
   delayedHeader: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     backgroundColor: orange[100],
+    borderRadius: 3,
   },
   cardHeader: {
     padding: 6,
