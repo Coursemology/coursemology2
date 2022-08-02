@@ -26,6 +26,7 @@ export function saveFolder(
   },
   subfolders: FolderListData[],
   materials: MaterialListData[],
+  breadcrumbs: { id: number; name: string }[],
   advanceStartAt: number,
   permissions: FolderPermissions,
 ): SaveFolderAction {
@@ -34,6 +35,7 @@ export function saveFolder(
     currFolderInfo,
     subfolders,
     materials,
+    breadcrumbs,
     advanceStartAt,
     permissions,
   };

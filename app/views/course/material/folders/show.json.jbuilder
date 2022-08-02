@@ -20,6 +20,11 @@ json.materials @folder.materials.order(:name).includes(:updater) do |material|
                 material: material
 end
 
+json.breadcrumbs @folder.ancestors.reverse << @folder do |folder|
+  json.id folder.id
+  json.name folder.name
+end
+
 json.advanceStartAt current_course.advance_start_at_duration
 
 json.permissions do

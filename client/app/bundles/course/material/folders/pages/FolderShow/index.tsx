@@ -1,9 +1,11 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import { AppDispatch, AppState } from 'types/store';
+
+import { Breadcrumbs } from '@mui/material';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
@@ -12,6 +14,7 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 
 import { loadFolder } from '../../operations';
 import {
+  getBreadcrumbs,
   getCurrFolderInfo,
   getFolderMaterials,
   getFolderPermissions,
@@ -56,6 +59,7 @@ const FolderShow: FC<Props> = (props) => {
   const currFolderInfo = useSelector((state: AppState) =>
     getCurrFolderInfo(state),
   );
+  const breadcrumbs = useSelector((state: AppState) => getBreadcrumbs(state));
   const permissions = useSelector((state: AppState) =>
     getFolderPermissions(state),
   );
@@ -119,6 +123,20 @@ const FolderShow: FC<Props> = (props) => {
 
   return (
     <>
+      <Breadcrumbs>
+        {breadcrumbs.map((breadcrumb) => {
+          return (
+            <Link
+              key={`folder-breadcrumb-${breadcrumb.id}`}
+              to={`/courses/${getCourseId()}/materials/folders/${
+                breadcrumb.id
+              }/`}
+            >
+              {breadcrumb.name === 'Root' ? '~' : breadcrumb.name}
+            </Link>
+          );
+        })}
+      </Breadcrumbs>
       <PageHeader
         key={`workbin-folder-${currFolderInfo.name}-${currFolderInfo.id}`}
         title={

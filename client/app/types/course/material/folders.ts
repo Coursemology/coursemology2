@@ -77,6 +77,7 @@ export interface FolderData {
   };
   subfolders: FolderListData[];
   materials: MaterialListData[];
+  breadcrumbs: { id: number; name: string }[];
   advanceStartAt: number;
   permissions: FolderPermissions;
 }
