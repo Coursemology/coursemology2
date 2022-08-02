@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 module Course::Discussion::TopicsHelper
-  # Sanitize the title in settings.
-  #
-  # @return [String|nil] The formatted title.
-  def topics_title
-    # We don't want to return a blank string so this check is necessary.
-    @settings.title ? format_inline_text(@settings.title) : nil
-  end
-
   # Display code lines in file.
   #
   # @param [Course::Assessment::Answer::ProgrammingFile] file The code file.
@@ -65,24 +57,5 @@ module Course::Discussion::TopicsHelper
       else
         0
       end
-  end
-
-  def link_to_toggle_pending(topic)
-    if topic.pending_staff_reply?
-      link_to t('course.discussion.topics.unmark_as_pending'),
-              toggle_pending_course_topic_path(current_course, topic, pending: false),
-              method: :patch, remote: true
-    else
-      link_to t('course.discussion.topics.mark_as_pending'),
-              toggle_pending_course_topic_path(current_course, topic, pending: true),
-              method: :patch, remote: true
-    end
-  end
-
-  def link_to_mark_as_read(topic)
-    return unless topic.unread?(current_user)
-
-    link_to t('course.discussion.topics.mark_as_read'),
-            mark_as_read_course_topic_path(current_course, topic), method: :patch
   end
 end
