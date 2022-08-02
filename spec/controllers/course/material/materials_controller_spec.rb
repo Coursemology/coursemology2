@@ -68,11 +68,7 @@ RSpec.describe Course::Material::MaterialsController, type: :controller do
           subject
         end
 
-        it { is_expected.to redirect_to(course_material_folder_path(course, folder)) }
-
-        it 'shows a flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.material.materials.destroy.failure'))
-        end
+        it { expect(response.status).to eq(400) }
       end
     end
   end
