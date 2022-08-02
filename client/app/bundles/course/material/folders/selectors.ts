@@ -24,6 +24,10 @@ export function getFolderMaterials(state: AppState) {
   );
 }
 
+export function getBreadcrumbs(state: AppState) {
+  return getLocalState(state).breadcrumbs;
+}
+
 export function getAdvanceStartAt(state: AppState) {
   return getLocalState(state).advanceStartAt;
 }
