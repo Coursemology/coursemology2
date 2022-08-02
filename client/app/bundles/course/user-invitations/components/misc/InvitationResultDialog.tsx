@@ -46,7 +46,7 @@ const translations = defineMessages({
     id: 'course.userInvitations.components.misc.InvitationResultDialog.body',
     defaultMessage:
       '{newInvitationsCount, plural, =0 {No new users were} one {# new user has been} other {# new users have been}} invited to Coursemology. ' +
-      '{newCourseUsersCount, plural, =0 {No user with Coursemology account has been} one {# new user with Coursemology account has been} other {# new users with Coursemology accounts have been}} added to this course.',
+      '{newCourseUsersCount, plural, =0 {No user with Coursemology account has been} one {# new user with existing Coursemology account has been} other {# new users with existing Coursemology accounts have been}} added to this course.',
   },
   duplicateInfo: {
     id: 'course.userInvitations.components.misc.InvitationResultDialog.duplicateUsers.info',
