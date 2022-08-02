@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
@@ -124,6 +124,7 @@ const AssessmentForm = (props) => {
     randomizationAllowed,
     showPersonalizedTimelineFeatures,
     tabs,
+    intl,
   } = props;
   const {
     control,
@@ -160,7 +161,7 @@ const AssessmentForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            placeholder={<FormattedMessage {...translations.viewPassword} />}
+            placeholder={intl.formatMessage(translations.viewPassword)}
             fullWidth
             InputLabelProps={{
               shrink: true,
@@ -184,7 +185,7 @@ const AssessmentForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            placeholder={<FormattedMessage {...translations.sessionPassword} />}
+            placeholder={intl.formatMessage(translations.sessionPassword)}
             fullWidth
             InputLabelProps={{
               shrink: true,
@@ -772,6 +773,7 @@ AssessmentForm.propTypes = {
   // Condtions will be displayed if the attributes are present.
   conditionAttributes: achievementTypesConditionAttributes,
   initialValues: PropTypes.object,
+  intl: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -780,4 +782,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(AssessmentForm);
+export default connect(mapStateToProps)(injectIntl(AssessmentForm));
