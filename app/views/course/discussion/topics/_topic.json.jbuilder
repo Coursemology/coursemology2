@@ -16,5 +16,5 @@ end
 
 # looping through linked list of posts
 json.postList posts.ordered_topologically.flatten.each do |post|
-  json.partial! 'course/discussion/posts/post', post: post
+  json.partial! 'course/discussion/posts/post', post: post if can_grade || !post.is_delayed
 end
