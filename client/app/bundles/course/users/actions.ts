@@ -5,6 +5,10 @@ import {
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
+import {
+  ExperiencePointsRecordListData,
+  ExperiencePointsRowData,
+} from 'types/course/experiencePointsRecords';
 import { PersonalTimeListData } from 'types/course/personalTimes';
 import {
   SAVE_USERS_LIST,
@@ -25,6 +29,12 @@ import {
   DeletePersonalTimeAction,
   UpdateUserOptionAction,
   DeleteUserOptionAction,
+  SAVE_EXPERIENCE_POINTS_RECORD_LIST,
+  SaveExperiencePointsRecordListAction,
+  UpdateExperiencePointsRecordAction,
+  UPDATE_EXPERIENCE_POINTS_RECORD,
+  DeleteExperiencePointsRecordAction,
+  DELETE_EXPERIENCE_POINTS_RECORD,
 } from './types';
 
 export function saveUsersList(
@@ -106,6 +116,37 @@ export function updateUserOption(
 export function deleteUserOption(id: number): DeleteUserOptionAction {
   return {
     type: DELETE_USER_OPTION,
+    id,
+  };
+}
+
+export function saveExperiencePointsRecordList(
+  name: string,
+  rowCount: number,
+  rowData: ExperiencePointsRecordListData[],
+): SaveExperiencePointsRecordListAction {
+  return {
+    type: SAVE_EXPERIENCE_POINTS_RECORD_LIST,
+    name,
+    rowCount,
+    rowData,
+  };
+}
+
+export function updateExperiencePointsRecord(
+  data: ExperiencePointsRowData,
+): UpdateExperiencePointsRecordAction {
+  return {
+    type: UPDATE_EXPERIENCE_POINTS_RECORD,
+    data,
+  };
+}
+
+export function deleteExperiencePointsRecord(
+  id: number,
+): DeleteExperiencePointsRecordAction {
+  return {
+    type: DELETE_EXPERIENCE_POINTS_RECORD,
     id,
   };
 }

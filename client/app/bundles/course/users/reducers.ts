@@ -1,9 +1,11 @@
 import { produce } from 'immer';
+import { ExperiencePointsRecordMiniEntity } from 'types/course/experiencePointsRecords';
 import {
   createEntityStore,
   saveEntityToStore,
   saveListToStore,
   removeFromStore,
+  removeAllFromStore,
 } from 'utilities/store';
 import {
   UsersState,
@@ -17,6 +19,9 @@ import {
   DELETE_PERSONAL_TIME,
   UPDATE_USER_OPTION,
   DELETE_USER_OPTION,
+  SAVE_EXPERIENCE_POINTS_RECORD_LIST,
+  UPDATE_EXPERIENCE_POINTS_RECORD,
+  DELETE_EXPERIENCE_POINTS_RECORD,
 } from './types';
 
 const initialState: UsersState = {
@@ -34,6 +39,11 @@ const initialState: UsersState = {
     defaultTimelineAlgorithm: 'fixed',
   },
   personalTimes: createEntityStore(),
+  experiencePointsRecords: createEntityStore(),
+  experiencePointsRecordsSettings: {
+    name: '',
+    rowCount: 0,
+  },
 };
 
 const reducer = produce((draft: UsersState, action: UsersActionType) => {
@@ -118,6 +128,43 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
       const optionId = action.id;
       if (draft.userOptions.byId[optionId]) {
         removeFromStore(draft.userOptions, optionId);
+      }
+      break;
+    }
+    case SAVE_EXPERIENCE_POINTS_RECORD_LIST: {
+      removeAllFromStore(draft.experiencePointsRecords);
+      const experiencePointsRecordList = action.rowData;
+      const entityList = experiencePointsRecordList.map((data) => ({
+        ...data,
+      }));
+      saveListToStore(draft.experiencePointsRecords, entityList);
+      draft.experiencePointsRecordsSettings.name = action.name;
+      draft.experiencePointsRecordsSettings.rowCount = action.rowCount;
+      break;
+    }
+    case UPDATE_EXPERIENCE_POINTS_RECORD: {
+      if (draft.experiencePointsRecords.byId[action.data.id]) {
+        const prevExperiencePointsEntity: ExperiencePointsRecordMiniEntity =
+          draft.experiencePointsRecords.byId[action.data.id]!;
+        const nextExperiencePointsEntity: ExperiencePointsRecordMiniEntity = {
+          ...prevExperiencePointsEntity,
+          reason: {
+            ...prevExperiencePointsEntity.reason,
+            text: action.data.reason,
+          },
+          pointsAwarded: action.data.pointsAwarded,
+        };
+        saveEntityToStore(
+          draft.experiencePointsRecords,
+          nextExperiencePointsEntity,
+        );
+      }
+      break;
+    }
+    case DELETE_EXPERIENCE_POINTS_RECORD: {
+      const recordId = action.id;
+      if (draft.experiencePointsRecords.byId[recordId]) {
+        removeFromStore(draft.experiencePointsRecords, recordId);
       }
       break;
     }

@@ -64,3 +64,14 @@ export function getAllPersonalTimesEntities(state: AppState) {
     getLocalState(state).personalTimes.ids,
   );
 }
+
+export function getAllExperiencePointsRecordsEntities(state: AppState) {
+  return selectMiniEntities(
+    getLocalState(state).experiencePointsRecords,
+    getLocalState(state).experiencePointsRecords.ids,
+  );
+}
+
+export function getExperiencePointsRecordsSettings(state: AppState) {
+  return getLocalState(state).experiencePointsRecordsSettings;
+}

@@ -12,10 +12,16 @@ import {
   PersonalTimeFormData,
   PersonalTimePostData,
 } from 'types/course/personalTimes';
+import {
+  ExperiencePointsRowData,
+  UpdateExperiencePointsRecordPatchData,
+} from 'types/course/experiencePointsRecords';
 import * as actions from './actions';
 import {
+  DeleteExperiencePointsRecordAction,
   DeletePersonalTimeAction,
   SaveUserAction,
+  UpdateExperiencePointsRecordAction,
   UpdatePersonalTimeAction,
 } from './types';
 
@@ -57,6 +63,18 @@ const formatUpdatePersonalTime = (data: PersonalTimeFormData): FormData => {
     formData.append(`personal_time[${key}]`, payload.personal_time[key]);
   });
   return formData;
+};
+
+const formatUpdateExperiencePointsRecord = (
+  data: ExperiencePointsRowData,
+): UpdateExperiencePointsRecordPatchData => {
+  const payload = {
+    experience_points_record: {
+      reason: data.reason,
+      points_awarded: data.pointsAwarded,
+    },
+  };
+  return payload;
 };
 
 export function fetchUsers(asBasicData: boolean = false): Operation<void> {
@@ -225,4 +243,47 @@ export function deletePersonalTime(
       .catch((error) => {
         throw error;
       });
+}
+
+export function fetchExperiencePointsRecord(
+  userId: number,
+  pageNum: number = 1,
+): Operation<void> {
+  return async (dispatch) =>
+    CourseAPI.experiencePointsRecord
+      .index(userId, pageNum)
+      .then((response) => {
+        const data = response.data;
+        dispatch(
+          actions.saveExperiencePointsRecordList(
+            data.name,
+            data.rowCount,
+            data.rowData,
+          ),
+        );
+      })
+      .catch((error) => {
+        throw error;
+      });
+}
+
+export function updateExperiencePointsRecord(
+  data: ExperiencePointsRowData,
+): Operation<UpdateExperiencePointsRecordAction> {
+  const params: UpdateExperiencePointsRecordPatchData =
+    formatUpdateExperiencePointsRecord(data);
+
+  return async (dispatch) =>
+    CourseAPI.experiencePointsRecord
+      .update(params, data.id)
+      .then(() => dispatch(actions.updateExperiencePointsRecord(data)));
+}
+
+export function deleteExperiencePointsRecord(
+  recordId: number,
+): Operation<DeleteExperiencePointsRecordAction> {
+  return async (dispatch) =>
+    CourseAPI.experiencePointsRecord
+      .delete(recordId)
+      .then(() => dispatch(actions.deleteExperiencePointsRecord(recordId)));
 }

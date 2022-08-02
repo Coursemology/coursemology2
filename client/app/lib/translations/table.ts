@@ -109,6 +109,22 @@ const translations = defineMessages({
     id: 'components.table.column.activeTotalCourses',
     defaultMessage: 'Active/Total Courses',
   },
+  updater: {
+    id: 'components.table.column.updater',
+    defaultMessage: 'Updater',
+  },
+  reason: {
+    id: 'components.table.column.reason',
+    defaultMessage: 'Reason',
+  },
+  experiencePointsAwarded: {
+    id: 'components.table.column.experiencePointsAwarded',
+    defaultMessage: 'Experience Points Awarded',
+  },
+  updatedAt: {
+    id: 'components.table.column.updatedAt',
+    defaultMessage: 'Updated At',
+  },
 });
 
 export default translations;
