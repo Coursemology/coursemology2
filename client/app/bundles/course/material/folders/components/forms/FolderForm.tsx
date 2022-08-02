@@ -1,6 +1,12 @@
 import { FC, useEffect } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import {
+  defineMessages,
+  FormattedMessage,
+  injectIntl,
+  WrappedComponentProps,
+} from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -14,8 +20,11 @@ import FormToggleField from 'lib/components/form/fields/ToggleField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 
 import { FolderFormData } from 'types/course/material/folders';
+import { AppState } from 'types/store';
 
-interface Props {
+import { getAdvanceStartAt } from '../../selectors';
+
+interface Props extends WrappedComponentProps {
   editing: boolean;
   handleClose: (isDirty: boolean) => void;
   onSubmit: (data: FolderFormData, setError: unknown) => void;
@@ -52,6 +61,15 @@ const translations = defineMessages({
     id: 'course.materials.folders.folderForm.endAt',
     defaultMessage: 'End At',
   },
+  startEndValidationError: {
+    id: 'course.materials.folders.folderForm.startEndValidationError',
+    defaultMessage: 'End Date cannot be before Start Date',
+  },
+  earlyAccessMessage: {
+    id: 'course.materials.folders.folderForm.earlyAccessMessage',
+    defaultMessage:
+      'Students can access materials {numDays} day(s) before the start date',
+  },
 });
 
 const validationSchema = yup.object({
@@ -59,11 +77,19 @@ const validationSchema = yup.object({
   description: yup.string().nullable(),
   canStudentUpload: yup.bool(),
   startAt: yup.date().nullable(),
-  endAt: yup.date().nullable(),
+  endAt: yup
+    .date()
+    .min(yup.ref('startAt'), translations.startEndValidationError)
+    .nullable(),
 });
 
 const FolderForm: FC<Props> = (props) => {
-  const { editing, handleClose, initialValues, onSubmit, setIsDirty } = props;
+  const { intl, editing, handleClose, initialValues, onSubmit, setIsDirty } =
+    props;
+
+  const advanceStartAt = useSelector((state: AppState) =>
+    getAdvanceStartAt(state),
+  );
 
   const {
     control,
@@ -219,10 +245,19 @@ const FolderForm: FC<Props> = (props) => {
           />
         </div>
 
+        {advanceStartAt !== 0 && (
+          <div style={{ marginTop: 12 }}>{`${intl.formatMessage(
+            translations.earlyAccessMessage,
+            {
+              numDays: Math.ceil(advanceStartAt / (24 * 60 * 60)),
+            },
+          )}`}</div>
+        )}
+
         {actionButtons}
       </form>
     </>
   );
 };
 
-export default FolderForm;
+export default injectIntl(FolderForm);

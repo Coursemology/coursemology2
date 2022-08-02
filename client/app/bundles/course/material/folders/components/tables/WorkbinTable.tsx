@@ -1,5 +1,7 @@
-import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FC, useEffect, useState, memo } from 'react';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
+import equal from 'fast-deep-equal';
+
 import {
   Button,
   Table,
@@ -12,10 +14,14 @@ import {
   ArrowDropDown as ArrowDropDownIcon,
   ArrowDropUp as ArrowDropUpIcon,
 } from '@mui/icons-material';
+
 import {
   FolderMiniEntity,
   MaterialMiniEntity,
 } from 'types/course/material/folders';
+
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+
 import TableSubfolderRow from './TableSubfolderRow';
 import TableMaterialRow from './TableMaterialRow';
 
@@ -27,52 +33,45 @@ interface Props extends WrappedComponentProps {
   isConcrete: boolean;
 }
 
-const translations = defineMessages({
-  tableHeaderName: {
-    id: 'course.materials.folders.tableHeaderName',
-    defaultMessage: 'Name',
-  },
-  tableHeaderLastModified: {
-    id: 'course.materials.folders.tableHeaderLastModified',
-    defaultMessage: 'Last Modified',
-  },
-  tableHeaderStartAt: {
-    id: 'course.materials.folders.tableHeaderStartAt',
-    defaultMessage: 'Start At',
-  },
-});
-
 const WorkbinTable: FC<Props> = (props) => {
   const {
-    intl,
     currFolderId,
     subfolders,
     materials,
     isCurrentCourseStudent,
     isConcrete,
   } = props;
+
+  const [isTableLoading, setIsTableLoading] = useState(false);
+
   const [sortedSubfolders, setSortedSubfolders] = useState(subfolders);
   const [sortedMaterials, setSortedMaterials] = useState(materials);
 
+  const [sortBy, setSortBy] = useState('Name');
+  const [sortDirection, setSortDirection] = useState<'down' | 'up'>('down');
+
   useEffect(() => {
-    setSortedSubfolders(subfolders);
+    if (!equal(subfolders, sortedSubfolders)) {
+      setSortedSubfolders(subfolders);
+      setSortBy('Name');
+      setSortDirection('down');
+    }
   }, [subfolders]);
 
   useEffect(() => {
-    setSortedMaterials(materials);
+    if (!equal(materials, sortedMaterials)) {
+      setSortedMaterials(materials);
+      setSortBy('Name');
+      setSortDirection('down');
+    }
   }, [materials]);
-
-  const [sortBy, setSortBy] = useState(
-    intl.formatMessage(translations.tableHeaderName),
-  );
-  const [sortDirection, setSortDirection] = useState<'down' | 'up'>('down');
 
   const sortWithDirection = (
     columnName: string,
     direction: 'down' | 'up',
   ): void => {
     switch (columnName) {
-      case intl.formatMessage(translations.tableHeaderName):
+      case 'Name':
         if (direction === 'up') {
           setSortedSubfolders(
             subfolders.sort((a, b) =>
@@ -98,7 +97,7 @@ const WorkbinTable: FC<Props> = (props) => {
         }
         break;
 
-      case intl.formatMessage(translations.tableHeaderStartAt):
+      case 'Start At':
         if (direction === 'up') {
           setSortedSubfolders(
             subfolders.sort((a, b) => (a.startAt > b.startAt ? -1 : 1)),
@@ -112,7 +111,7 @@ const WorkbinTable: FC<Props> = (props) => {
         setSortedMaterials(materials);
         break;
 
-      case intl.formatMessage(translations.tableHeaderLastModified):
+      case 'Last Modified':
         if (direction === 'up') {
           setSortedSubfolders(
             subfolders.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1)),
@@ -174,25 +173,22 @@ const WorkbinTable: FC<Props> = (props) => {
     );
   };
 
+  if (isTableLoading) {
+    return <LoadingIndicator />;
+  }
   return (
     <>
       <Table sx={{ marginBottom: 2 }}>
         <TableHead>
           <TableRow>
             <TableCell style={{ padding: 2 }}>
-              {columnHeaderWithSort(
-                intl.formatMessage(translations.tableHeaderName),
-              )}
+              {columnHeaderWithSort('Name')}
             </TableCell>
             <TableCell style={{ padding: 2 }}>
-              {columnHeaderWithSort(
-                intl.formatMessage(translations.tableHeaderLastModified),
-              )}
+              {columnHeaderWithSort('Last Modified')}
             </TableCell>
             <TableCell style={{ padding: 2 }}>
-              {columnHeaderWithSort(
-                intl.formatMessage(translations.tableHeaderStartAt),
-              )}
+              {columnHeaderWithSort('Start At')}
             </TableCell>
             <TableCell />
           </TableRow>
@@ -206,6 +202,7 @@ const WorkbinTable: FC<Props> = (props) => {
                 subfolder={subfolder}
                 isCurrentCourseStudent={isCurrentCourseStudent}
                 isConcrete={isConcrete}
+                setIsTableLoading={setIsTableLoading}
               />
             );
           })}
@@ -225,4 +222,6 @@ const WorkbinTable: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(WorkbinTable);
+export default memo(injectIntl(WorkbinTable), (prevProps, nextProps) => {
+  return equal(prevProps, nextProps);
+});

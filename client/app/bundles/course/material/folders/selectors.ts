@@ -6,26 +6,8 @@ function getLocalState(state: AppState) {
   return state.folders;
 }
 
-export function getFolderId(state: AppState) {
-  return getLocalState(state).id;
-}
-export function getFolderParentId(state: AppState) {
-  return getLocalState(state).parentId;
-}
-export function getFolderName(state: AppState) {
-  return getLocalState(state).name;
-}
-export function getFolderDescription(state: AppState) {
-  return getLocalState(state).description;
-}
-export function getFolderCanStudentUpload(state: AppState) {
-  return getLocalState(state).canStudentUpload;
-}
-export function getFolderStartAt(state: AppState) {
-  return getLocalState(state).startAt;
-}
-export function getFolderEndAt(state: AppState) {
-  return getLocalState(state).endAt;
+export function getCurrFolderInfo(state: AppState) {
+  return getLocalState(state).currFolderInfo;
 }
 
 export function getFolderSubfolders(state: AppState) {
@@ -40,6 +22,10 @@ export function getFolderMaterials(state: AppState) {
     getLocalState(state).materials,
     getLocalState(state).materials.ids,
   );
+}
+
+export function getAdvanceStartAt(state: AppState) {
+  return getLocalState(state).advanceStartAt;
 }
 
 export function getFolderPermissions(state: AppState) {

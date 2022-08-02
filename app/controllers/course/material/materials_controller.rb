@@ -8,53 +8,32 @@ class Course::Material::MaterialsController < Course::Material::Controller
     redirect_to @material.attachment.url(filename: @material.name)
   end
 
-  def edit
-  end
-
   def update
     if @material.update(material_params)
-      respond_to do |format|
-        format.html do
-          redirect_to course_material_folder_path(current_course, @folder),
-                      success: t('.success', name: @material.name)
-        end
-        format.json do
-          course_user = @material.updater.course_users.find_by(course: current_course)
-          if course_user
-            id = course_user.id
-            name = course_user.name
-          else
-            id = @material.updater.id
-            name = @material.updater.name
-          end
-          render json: { id: @material.id,
-                         name: @material.name,
-                         description: @material.description,
-                         updatedAt: @material.updated_at,
-                         updater: { id: id, name: name, isCourseUser: !course_user.nil? } },
-                 status: :ok
-        end
+      course_user = @material.updater.course_users.find_by(course: current_course)
+      if course_user
+        id = course_user.id
+        name = course_user.name
+      else
+        id = @material.updater.id
+        name = @material.updater.name
       end
+      render json: { id: @material.id,
+                     name: @material.name,
+                     description: @material.description,
+                     updatedAt: @material.updated_at,
+                     updater: { id: id, name: name, isCourseUser: !course_user.nil? } },
+             status: :ok
     else
-      respond_to do |format|
-        format.html { render 'edit' }
-        format.json { render json: { errors: @folder.errors }, status: :bad_request }
-      end
+      render json: { errors: @folder.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   def destroy
     if @material.destroy
-      respond_to do |format|
-        format.html do
-          redirect_to course_material_folder_path(current_course, @folder),
-                      success: t('.success', name: @material.name)
-        end
-        format.json { head :ok }
-      end
+      head :ok
     else
-      redirect_to course_material_folder_path(current_course, @folder),
-                  danger: t('.failure', message: @material.errors.full_messages.to_sentence)
+      render json: { errors: @material.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 

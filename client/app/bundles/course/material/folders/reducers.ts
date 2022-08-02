@@ -14,18 +14,21 @@ import {
 } from './types';
 
 const initialState: FoldersState = {
-  id: 1,
-  parentId: null,
-  name: 'Workbin',
-  description: '',
-  canStudentUpload: false,
-  startAt: '',
-  endAt: null,
+  currFolderInfo: {
+    id: 1,
+    parentId: null,
+    name: 'Workbin',
+    description: '',
+    isConcrete: false,
+    startAt: '',
+    endAt: null,
+  },
   subfolders: createEntityStore(),
   materials: createEntityStore(),
+  advanceStartAt: 0,
   permissions: {
     isCurrentCourseStudent: false,
-    isConcrete: false,
+    canStudentUpload: false,
     canCreateSubfolder: false,
     canUpload: false,
     canEdit: false,
@@ -35,13 +38,7 @@ const initialState: FoldersState = {
 const reducer = produce((draft: FoldersState, action: FoldersActionType) => {
   switch (action.type) {
     case SAVE_FOLDER: {
-      draft.id = action.id;
-      draft.parentId = action.parentId;
-      draft.name = action.name;
-      draft.description = action.description;
-      draft.canStudentUpload = action.canStudentUpload;
-      draft.startAt = action.startAt;
-      draft.endAt = action.endAt;
+      draft.currFolderInfo = action.currFolderInfo;
 
       const subfoldersList = action.subfolders;
       const subfoldersEntityList = subfoldersList.map((data) => ({
@@ -57,6 +54,7 @@ const reducer = produce((draft: FoldersState, action: FoldersActionType) => {
       draft.materials = createEntityStore();
       saveListToStore(draft.materials, materialsEntityList);
 
+      draft.advanceStartAt = action.advanceStartAt;
       draft.permissions = action.permissions;
       break;
     }
@@ -69,18 +67,18 @@ const reducer = produce((draft: FoldersState, action: FoldersActionType) => {
       break;
     }
 
-    case DELETE_MATERIAL_LIST: {
-      const materialId = action.materialId;
-      if (draft.materials.byId[materialId]) {
-        removeFromStore(draft.materials, materialId);
-      }
-      break;
-    }
-
     case SAVE_MATERIAL_LIST: {
       const materialId = action.materialList.id;
       if (draft.materials.byId[materialId]) {
         saveListToStore(draft.materials, [action.materialList]);
+      }
+      break;
+    }
+
+    case DELETE_MATERIAL_LIST: {
+      const materialId = action.materialId;
+      if (draft.materials.byId[materialId]) {
+        removeFromStore(draft.materials, materialId);
       }
       break;
     }

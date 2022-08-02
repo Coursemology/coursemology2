@@ -18,6 +18,7 @@ interface Props {
   subfolder: FolderMiniEntity;
   isCurrentCourseStudent: boolean;
   isConcrete: boolean;
+  setIsTableLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const translations = defineMessages({
@@ -34,7 +35,13 @@ const translations = defineMessages({
 });
 
 const TableSubfolderRow: FC<Props> = (props) => {
-  const { currFolderId, subfolder, isCurrentCourseStudent, isConcrete } = props;
+  const {
+    currFolderId,
+    subfolder,
+    isCurrentCourseStudent,
+    isConcrete,
+    setIsTableLoading,
+  } = props;
   const intl = useIntl();
 
   return (
@@ -47,6 +54,12 @@ const TableSubfolderRow: FC<Props> = (props) => {
               to={`/courses/${getCourseId()}/materials/folders/${
                 subfolder.id
               }/`}
+              onClick={(): void => {
+                setIsTableLoading(true);
+                setTimeout((): void => {
+                  setIsTableLoading(false);
+                }, 200);
+              }}
             >
               {`${subfolder.name} (${subfolder.itemCount})`}
             </Link>

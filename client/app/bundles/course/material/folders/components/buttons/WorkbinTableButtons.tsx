@@ -52,6 +52,10 @@ const translations = defineMessages({
     id: 'course.materials.folders.folderDeletionFailure',
     defaultMessage: ' could not be deleted',
   },
+  deleteConfirmation: {
+    id: 'course.materials.folders.deleteConfirmation',
+    defaultMessage: 'Are you sure you want to delete',
+  },
 });
 
 const WorkbinTableButtons: FC<Props> = (props) => {
@@ -86,7 +90,9 @@ const WorkbinTableButtons: FC<Props> = (props) => {
         })
         .catch((error) => {
           toast.error(
-            `"${itemName}" ${intl.formatMessage(translations.deletionFailure)}`,
+            `"${itemName}" ${intl.formatMessage(
+              translations.deletionFailure,
+            )}. Error: ${error}`,
           );
           throw error;
         });
@@ -99,7 +105,9 @@ const WorkbinTableButtons: FC<Props> = (props) => {
       })
       .catch((error) => {
         toast.error(
-          `"${itemName}" ${intl.formatMessage(translations.deletionFailure)}`,
+          `"${itemName}" ${intl.formatMessage(
+            translations.deletionFailure,
+          )}. Error: ${error}`,
         );
         throw error;
       });
@@ -152,7 +160,9 @@ const WorkbinTableButtons: FC<Props> = (props) => {
             id={`${type}-delete-button-${itemId}`}
             onClick={onDelete}
             disabled={false}
-            confirmMessage={`Are you sure you want to delete "${itemName}"`}
+            confirmMessage={`${intl.formatMessage(
+              translations.deleteConfirmation,
+            )} "${itemName}"`}
             style={{ padding: 5 }}
             tooltip={intl.formatMessage(translations.tableButtonDeleteTooltip)}
           />

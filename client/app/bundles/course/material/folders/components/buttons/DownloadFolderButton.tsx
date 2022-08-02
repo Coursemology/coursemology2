@@ -11,6 +11,8 @@ import {
   Downloading as DownloadingIcon,
 } from '@mui/icons-material';
 
+import CustomTooltip from 'lib/components/CustomTooltip';
+
 import { downloadFolder } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -26,6 +28,10 @@ const translations = defineMessages({
     id: 'course.materials.folders.downloadFolderErrorMessage',
     defaultMessage: 'Download has failed unexpectedly',
   },
+  downloading: {
+    id: 'course.materials.folders.downloading',
+    defaultMessage: 'Downloading...',
+  },
 });
 
 const DownloadFolderButton: FC<Props> = (props) => {
@@ -37,7 +43,9 @@ const DownloadFolderButton: FC<Props> = (props) => {
   return (
     <>
       {isLoading ? (
-        <DownloadingIcon style={{ padding: 4 }} />
+        <CustomTooltip title={intl.formatMessage(translations.downloading)}>
+          <DownloadingIcon style={{ padding: 4 }} />
+        </CustomTooltip>
       ) : (
         <>
           <Tooltip
@@ -53,11 +61,11 @@ const DownloadFolderButton: FC<Props> = (props) => {
                   .then(() => {
                     setIsLoading(false);
                   })
-                  .catch((_error) => {
+                  .catch((error) => {
                     toast.error(
-                      intl.formatMessage(
+                      `${intl.formatMessage(
                         translations.downloadFolderErrorMessage,
-                      ),
+                      )}. Error: ${error}`,
                     );
                     setIsLoading(false);
                   });

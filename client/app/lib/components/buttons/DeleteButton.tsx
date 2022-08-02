@@ -6,7 +6,7 @@ import CustomTooltip from '../CustomTooltip';
 
 interface Props extends IconButtonProps {
   disabled: boolean;
-  loading: boolean;
+  loading?: boolean;
   onClick: () => Promise<void>;
   confirmMessage?: string;
   tooltip?: string;

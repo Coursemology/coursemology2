@@ -1,10 +1,6 @@
 import { AxiosResponse } from 'axios';
 import pollJob from 'lib/helpers/job-helpers';
-import {
-  FolderListData,
-  FolderPermissions,
-  MaterialListData,
-} from 'types/course/material/folders';
+import { FolderData } from 'types/course/material/folders';
 import BaseCourseAPI from '../Base';
 
 export default class FoldersAPI extends BaseCourseAPI {
@@ -15,20 +11,7 @@ export default class FoldersAPI extends BaseCourseAPI {
   /**
    * Fetches a folder, along with all its subfolders and materials.
    */
-  fetch(folderId: number): Promise<
-    AxiosResponse<{
-      id: number;
-      parentId: number | null;
-      name: string;
-      description: string;
-      canStudentUpload: boolean;
-      startAt: string;
-      endAt: string | null;
-      subfolders: FolderListData[];
-      materials: MaterialListData[];
-      permissions: FolderPermissions;
-    }>
-  > {
+  fetch(folderId: number): Promise<AxiosResponse<FolderData>> {
     return this.getClient().get(`${this._getUrlPrefix()}/${folderId}`);
   }
 
@@ -36,22 +19,9 @@ export default class FoldersAPI extends BaseCourseAPI {
    * Creates a new folder
    */
   createFolder(
-    params: FormData,
     folderId: number,
-  ): Promise<
-    AxiosResponse<{
-      id: number;
-      parentId: number | null;
-      name: string;
-      description: string;
-      canStudentUpload: boolean;
-      startAt: string;
-      endAt: string | null;
-      subfolders: FolderListData[];
-      materials: MaterialListData[];
-      permissions: FolderPermissions;
-    }>
-  > {
+    params: FormData,
+  ): Promise<AxiosResponse<FolderData>> {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${folderId}/create/subfolder`,
       params,
@@ -62,22 +32,9 @@ export default class FoldersAPI extends BaseCourseAPI {
    * Updates a new folder
    */
   updateFolder(
-    params: FormData,
     folderId: number,
-  ): Promise<
-    AxiosResponse<{
-      id: number;
-      parentId: number | null;
-      name: string;
-      description: string;
-      canStudentUpload: boolean;
-      startAt: string;
-      endAt: string | null;
-      subfolders: FolderListData[];
-      materials: MaterialListData[];
-      permissions: FolderPermissions;
-    }>
-  > {
+    params: FormData,
+  ): Promise<AxiosResponse<FolderData>> {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${folderId}`,
       params,
@@ -107,8 +64,8 @@ export default class FoldersAPI extends BaseCourseAPI {
    * Uploads materials (files)
    */
   uploadMaterials(
-    params: FormData,
     currFolderId: number,
+    params: FormData,
   ): Promise<AxiosResponse> {
     return this.getClient().put(
       `${this._getUrlPrefix()}/${currFolderId}/upload_materials`,
@@ -120,9 +77,9 @@ export default class FoldersAPI extends BaseCourseAPI {
    * Updates a material (file)
    */
   updateMaterial(
-    params: FormData,
     folderId: number,
     materialId: number,
+    params: FormData,
   ): Promise<AxiosResponse> {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${folderId}/files/${materialId}`,
@@ -144,10 +101,8 @@ export default class FoldersAPI extends BaseCourseAPI {
           (data) => {
             window.open(data.redirect_url);
           },
-          (data) => {
-            if (data) {
-              throw new Error(data.message);
-            }
+          () => {
+            throw new Error('Download has failed');
           },
         );
       })

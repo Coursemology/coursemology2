@@ -17,15 +17,19 @@ export const SAVE_MATERIAL_LIST = 'course/materials/folders/SAVE_MATERIAL_LIST';
 // Action Types
 export interface SaveFolderAction {
   type: typeof SAVE_FOLDER;
-  id: number;
-  parentId: number | null;
-  name: string;
-  description: string;
-  canStudentUpload: boolean;
-  startAt: string;
-  endAt: string | null;
+  currFolderInfo: {
+    id: number;
+    parentId: number | null;
+    name: string;
+    description: string;
+    isConcrete: boolean;
+    startAt: string;
+    endAt: string | null;
+  };
+
   subfolders: FolderListData[];
   materials: MaterialListData[];
+  advanceStartAt: number;
   permissions: FolderPermissions;
 }
 
@@ -33,15 +37,13 @@ export interface DeleteFolderListAction {
   type: typeof DELETE_FOLDER_LIST;
   folderId: number;
 }
-
-export interface DeleteMaterialListAction {
-  type: typeof DELETE_MATERIAL_LIST;
-  materialId: number;
-}
-
 export interface SaveMaterialListAction {
   type: typeof SAVE_MATERIAL_LIST;
   materialList: MaterialListData;
+}
+export interface DeleteMaterialListAction {
+  type: typeof DELETE_MATERIAL_LIST;
+  materialId: number;
 }
 
 export type FoldersActionType =
@@ -52,14 +54,18 @@ export type FoldersActionType =
 
 // State Types
 export interface FoldersState {
-  id: number;
-  parentId: number | null;
-  name: string;
-  description: string;
-  canStudentUpload: boolean;
-  startAt: string;
-  endAt: string | null;
+  currFolderInfo: {
+    id: number;
+    parentId: number | null;
+    name: string;
+    description: string;
+    isConcrete: boolean;
+    startAt: string;
+    endAt: string | null;
+  };
+
   subfolders: EntityStore<FolderMiniEntity>;
   materials: EntityStore<MaterialMiniEntity>;
+  advanceStartAt: number;
   permissions: FolderPermissions;
 }
