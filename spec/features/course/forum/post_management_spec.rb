@@ -48,10 +48,6 @@ RSpec.feature 'Course: Forum: Post: Management' do
         topic.reload
         visit course_forum_topic_path(course, forum, topic)
 
-        # Cannot update someone else's post
-        expect(page).not_to have_link(nil, href: edit_course_forum_topic_post_path(course, forum, topic,
-                                                                                   topic.posts.first))
-
         # My own post
         find_link(nil, href: edit_course_forum_topic_post_path(course, forum, topic,
                                                                topic.posts.last)).click
@@ -76,10 +72,6 @@ RSpec.feature 'Course: Forum: Post: Management' do
       scenario 'I can delete my own post' do
         post = create(:course_discussion_post, topic: topic.acting_as, creator: user)
         visit course_forum_topic_path(course, forum, topic)
-
-        # Cannot delete someone else's post
-        expect(page).not_to have_link(nil, href: edit_course_forum_topic_post_path(course, forum, topic,
-                                                                                   topic.posts.first))
 
         find_link(nil, href: course_forum_topic_post_path(course, forum, topic, post)).click
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
