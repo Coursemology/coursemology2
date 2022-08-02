@@ -22,9 +22,10 @@ import {
   SAVE_COMMENT_TAB,
   SAVE_PENDING,
   SAVE_READ,
-  DELETE_POST,
-  UPDATE_POST,
   CREATE_POST,
+  UPDATE_POST,
+  DELETE_POST,
+  CHANGE_TAB_VALUE,
 } from './types';
 
 const initialState: CommentState = {
@@ -43,6 +44,9 @@ const initialState: CommentState = {
   } as CommentTabInfo,
   topicList: createEntityStore(),
   postList: createEntityStore(),
+  pageState: {
+    tabValue: '',
+  },
 };
 
 const reducer = produce((draft: CommentState, action: CommentActionType) => {
@@ -51,6 +55,16 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
       draft.permissions = { ...action.permissions };
       draft.settings = { ...action.settings };
       draft.tabs = { ...action.tabs };
+
+      if (action.permissions.canManage) {
+        if (action.tabs.myStudentExist) {
+          draft.pageState.tabValue = CommentTabTypes.MY_STUDENTS_PENDING;
+        }
+        draft.pageState.tabValue = CommentTabTypes.PENDING;
+      } else {
+        draft.pageState.tabValue = CommentTabTypes.UNREAD;
+      }
+
       break;
     }
     case SAVE_COMMENT_LIST: {
@@ -74,15 +88,6 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
       if (newPostList) {
         saveListToStore(draft.postList, newPostList);
       }
-
-      // Update tab count when switched to that tab.
-      if (action.tabValue === CommentTabTypes.MY_STUDENTS_PENDING) {
-        draft.tabs.myStudentUnreadCount = newTopicList.length;
-      } else if (action.tabValue === CommentTabTypes.PENDING) {
-        draft.tabs.allStaffUnreadCount = newTopicList.length;
-      } else if (action.tabValue === CommentTabTypes.UNREAD) {
-        draft.tabs.allStudentUnreadCount = newTopicList.length;
-      }
       break;
     }
     case SAVE_PENDING: {
@@ -97,6 +102,35 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
           },
         };
         saveEntityToStore(draft.topicList, newTopic);
+
+        // To update pending bubble count shown on the comment tabs.
+        if (topic.topicSettings.isPending) {
+          if (
+            draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS_PENDING ||
+            draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS
+          ) {
+            draft.tabs.myStudentUnreadCount! -= 1;
+            draft.tabs.allStaffUnreadCount! -= 1;
+          } else if (
+            draft.pageState.tabValue === CommentTabTypes.PENDING ||
+            draft.pageState.tabValue === CommentTabTypes.ALL
+          ) {
+            draft.tabs.allStaffUnreadCount! -= 1;
+          }
+        } else if (!topic.topicSettings.isPending) {
+          if (
+            draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS_PENDING ||
+            draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS
+          ) {
+            draft.tabs.myStudentUnreadCount! += 1;
+            draft.tabs.allStaffUnreadCount! += 1;
+          } else if (
+            draft.pageState.tabValue === CommentTabTypes.PENDING ||
+            draft.pageState.tabValue === CommentTabTypes.ALL
+          ) {
+            draft.tabs.allStaffUnreadCount! += 1;
+          }
+        }
       }
       break;
     }
@@ -112,7 +146,47 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
           },
         };
         saveEntityToStore(draft.topicList, newTopic);
+
+        if (topic.topicSettings.isUnread && draft.tabs.allStudentUnreadCount) {
+          draft.tabs.allStudentUnreadCount -= 1;
+        }
       }
+      break;
+    }
+    case CREATE_POST: {
+      const post = { ...action.post };
+      const id = post.topicId;
+      const topic = draft.topicList.byId[id] as CommentTopicEntity;
+      if (topic) {
+        const newTopic: CommentTopicEntity = {
+          ...topic,
+          topicSettings: {
+            ...topic.topicSettings,
+            isPending: false,
+            isUnread: false,
+          },
+        };
+        saveEntityToStore(draft.topicList, newTopic);
+
+        // To update pending bubble count shown on the comment tabs.
+        // When a new post of a topic is created, mark_as_pending is marked as false
+        // in the backend side.
+        if (topic.topicSettings.isPending) {
+          if (
+            draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS_PENDING ||
+            draft.pageState.tabValue === CommentTabTypes.MY_STUDENTS
+          ) {
+            draft.tabs.myStudentUnreadCount! -= 1;
+            draft.tabs.allStaffUnreadCount! -= 1;
+          } else if (
+            draft.pageState.tabValue === CommentTabTypes.PENDING ||
+            draft.pageState.tabValue === CommentTabTypes.ALL
+          ) {
+            draft.tabs.allStaffUnreadCount! -= 1;
+          }
+        }
+      }
+      saveEntityToStore(draft.postList, post);
       break;
     }
     case UPDATE_POST: {
@@ -132,22 +206,8 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
       }
       break;
     }
-    case CREATE_POST: {
-      const post = { ...action.post };
-      const id = post.topicId;
-      const topic = draft.topicList.byId[id] as CommentTopicEntity;
-      if (topic) {
-        const newTopic: CommentTopicEntity = {
-          ...topic,
-          topicSettings: {
-            ...topic.topicSettings,
-            isPending: false,
-            isUnread: false,
-          },
-        };
-        saveEntityToStore(draft.topicList, newTopic);
-      }
-      saveEntityToStore(draft.postList, post);
+    case CHANGE_TAB_VALUE: {
+      draft.pageState.tabValue = action.tabValue;
       break;
     }
     default: {

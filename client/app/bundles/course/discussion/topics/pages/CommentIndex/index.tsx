@@ -19,15 +19,20 @@ import {
 import { Tab, Tabs } from '@mui/material';
 import CustomBadge from 'lib/components/misc/CustomBadge';
 import { tabsStyle } from 'theme/mui-style';
-import { getPermissions, getSettings, getTabInfo } from '../../selectors';
+import {
+  getPermissions,
+  getSettings,
+  getTabInfo,
+  getTabValue,
+} from '../../selectors';
 import { fetchTabData } from '../../operations';
+import { changeTabValue } from '../../actions';
 import TopicList from '../../components/lists/TopicList';
 
 type Props = WrappedComponentProps;
 
 interface CommentTabProps extends WrappedComponentProps {
   tabValue: string;
-  setTabValue: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const translations = defineMessages({
@@ -60,19 +65,6 @@ const translations = defineMessages({
     defaultMessage: 'All',
   },
 });
-
-const getInitialTab = (
-  permissions: CommentPermissions,
-  tabInfo: CommentTabInfo,
-): CommentTabTypes => {
-  if (permissions.canManage) {
-    if (tabInfo.myStudentExist) {
-      return CommentTabTypes.MY_STUDENTS_PENDING;
-    }
-    return CommentTabTypes.PENDING;
-  }
-  return CommentTabTypes.UNREAD;
-};
 
 const getTabTypesToRender = (
   permissions: CommentPermissions,
@@ -138,7 +130,8 @@ const tabTranslation = (
 };
 
 const CommentTabs: FC<CommentTabProps> = (props) => {
-  const { tabValue, setTabValue, intl } = props;
+  const { tabValue, intl } = props;
+  const dispatch = useDispatch<AppDispatch>();
   const [tabTypesToRender, setTabTypesToRender] = useState(
     [] as CommentTabData[],
   );
@@ -152,7 +145,7 @@ const CommentTabs: FC<CommentTabProps> = (props) => {
   return (
     <Tabs
       onChange={(_, value): void => {
-        setTabValue(value);
+        dispatch(changeTabValue(value));
       }}
       TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
       value={tabValue}
@@ -186,16 +179,12 @@ const CommentIndex: FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const settings = useSelector((state: AppState) => getSettings(state));
+  const tabValue = useSelector((state: AppState) => getTabValue(state));
 
   const [isLoading, setIsLoading] = useState(true);
-  const [tabValue, setTabValue] = useState('');
 
   useEffect(() => {
     dispatch(fetchTabData())
-      .then((request) => {
-        const data = request.data;
-        setTabValue(getInitialTab(data.permissions, data.tabs));
-      })
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchCommentsFailure)),
       )
@@ -213,7 +202,7 @@ const CommentIndex: FC<Props> = (props) => {
           settings.title ?? intl.formatMessage({ ...translations.comments })
         }
       />
-      <CommentTabs tabValue={tabValue} setTabValue={setTabValue} intl={intl} />
+      <CommentTabs tabValue={tabValue} intl={intl} />
       <TopicList key={tabValue} tabValue={tabValue} settings={settings} />
     </>
   );
