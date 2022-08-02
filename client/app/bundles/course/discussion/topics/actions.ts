@@ -6,20 +6,22 @@ import {
   CommentTopicData,
 } from 'types/course/comments';
 import {
-  CreatePostAction,
   CREATE_POST,
-  DeletePostAction,
   DELETE_POST,
-  SaveCommentListAction,
-  SaveCommentTabAction,
-  SavePendingAction,
-  SaveReadAction,
   SAVE_COMMENT_LIST,
   SAVE_COMMENT_TAB,
   SAVE_PENDING,
   SAVE_READ,
-  UpdatePostAction,
   UPDATE_POST,
+  CHANGE_TAB_VALUE,
+  SaveCommentTabAction,
+  SaveCommentListAction,
+  SavePendingAction,
+  SaveReadAction,
+  CreatePostAction,
+  UpdatePostAction,
+  DeletePostAction,
+  ChangeTabValueAction,
 } from './types';
 
 export function saveCommentTab(
@@ -38,13 +40,11 @@ export function saveCommentTab(
 export function saveCommentList(
   topicCount: number,
   topicList: CommentTopicData[],
-  tabValue: string,
 ): SaveCommentListAction {
   return {
     type: SAVE_COMMENT_LIST,
     topicCount,
     topicList,
-    tabValue,
   };
 }
 
@@ -81,5 +81,12 @@ export function createPost(post: CommentPostListData): CreatePostAction {
   return {
     type: CREATE_POST,
     post,
+  };
+}
+
+export function changeTabValue(tabValue: string): ChangeTabValueAction {
+  return {
+    type: CHANGE_TAB_VALUE,
+    tabValue,
   };
 }

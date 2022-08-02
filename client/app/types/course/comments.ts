@@ -102,6 +102,10 @@ export interface CommentPostMiniEntity {
   canDestroy: boolean;
 }
 
+export interface CommentPageState {
+  tabValue: string;
+}
+
 export enum CommentTabTypes {
   MY_STUDENTS_PENDING = 'my_students_pending',
   PENDING = 'pending',

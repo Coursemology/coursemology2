@@ -35,3 +35,7 @@ export function getAllCommentPostMiniEntities(state: AppState) {
     getLocalState(state).postList.ids,
   );
 }
+
+export function getTabValue(state: AppState) {
+  return getLocalState(state).pageState.tabValue;
+}

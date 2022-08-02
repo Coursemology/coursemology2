@@ -6,6 +6,7 @@ import {
   CommentTabInfo,
   CommentTopicData,
   CommentTopicEntity,
+  CommentPageState,
 } from 'types/course/comments';
 
 import { EntityStore } from 'types/store';
@@ -19,6 +20,7 @@ export const SAVE_READ = 'course/discussion/topics/SAVE_READ';
 export const CREATE_POST = 'course/discussion/topics/CREATE_POST';
 export const UPDATE_POST = 'course/discussion/topics/UPDATE_POST';
 export const DELETE_POST = 'course/discussion/topics/DELETE_POST';
+export const CHANGE_TAB_VALUE = 'course/discussion/topics/CHANGE_TAB_VALUE';
 
 // Action Types
 
@@ -33,7 +35,6 @@ export interface SaveCommentListAction {
   type: typeof SAVE_COMMENT_LIST;
   topicCount: number;
   topicList: CommentTopicData[];
-  tabValue: string;
 }
 
 export interface SavePendingAction {
@@ -62,6 +63,11 @@ export interface DeletePostAction {
   postId: number;
 }
 
+export interface ChangeTabValueAction {
+  type: typeof CHANGE_TAB_VALUE;
+  tabValue: string;
+}
+
 export type CommentActionType =
   | SaveCommentTabAction
   | SaveCommentListAction
@@ -69,7 +75,8 @@ export type CommentActionType =
   | SaveReadAction
   | CreatePostAction
   | UpdatePostAction
-  | DeletePostAction;
+  | DeletePostAction
+  | ChangeTabValueAction;
 
 // State Types
 
@@ -80,4 +87,5 @@ export interface CommentState {
   tabs: CommentTabInfo;
   topicList: EntityStore<CommentTopicEntity>;
   postList: EntityStore<CommentPostMiniEntity>;
+  pageState: CommentPageState;
 }
