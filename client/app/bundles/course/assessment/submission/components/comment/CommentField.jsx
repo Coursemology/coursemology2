@@ -1,9 +1,8 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
-import { Button, CircularProgress } from '@mui/material';
 import ReactTooltip from 'react-tooltip';
-
+import { Button, CircularProgress } from '@mui/material';
+import PropTypes from 'prop-types';
 import CKEditorRichText from 'lib/components/CKEditorRichText';
 
 const translations = defineMessages({
@@ -88,7 +87,7 @@ export default class CommentField extends Component {
           <span data-tip data-for={`delayed-comment-button-${inputId}`}>
             <Button
               variant="contained"
-              color="primary"
+              color="warning"
               disabled={disableCommentButton}
               onClick={() => createComment(value, true)}
               startIcon={
@@ -96,7 +95,7 @@ export default class CommentField extends Component {
                   <CircularProgress size={24} />
                 ) : null
               }
-              style={{ marginRight: 10, marginBotton: 10 }}
+              style={{ marginRight: 10, marginBottom: 10 }}
             >
               <FormattedMessage {...translations.commentDelayed} />
             </Button>
