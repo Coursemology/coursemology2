@@ -94,7 +94,6 @@ const LineNumberColumn = (props) => {
                 fileId={fileId}
                 lineNumber={lineNumber}
                 annotation={annotation}
-                airMode={false}
               />
             </div>
           </div>

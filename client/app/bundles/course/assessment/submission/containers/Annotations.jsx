@@ -43,7 +43,6 @@ class VisibleAnnotations extends Component {
       deleteComment,
       handleCreateChange,
       handleUpdateChange,
-      airMode,
       graderView,
       renderDelayedCommentButton,
     } = this.props;
@@ -61,7 +60,6 @@ class VisibleAnnotations extends Component {
                   updateComment={(value) => updateComment(post.id, value)}
                   deleteComment={() => deleteComment(post.id)}
                   handleChange={(value) => handleUpdateChange(post.id, value)}
-                  airMode={airMode}
                 />
               ),
           )}
@@ -75,7 +73,6 @@ class VisibleAnnotations extends Component {
               isUpdatingComment={commentForms.isUpdatingComment}
               createComment={createComment}
               handleChange={handleCreateChange}
-              airMode={airMode}
               renderDelayedCommentButton={renderDelayedCommentButton}
             />
           ) : (
@@ -104,7 +101,6 @@ VisibleAnnotations.propTypes = {
   }),
   fileId: PropTypes.number.isRequired,
   lineNumber: PropTypes.number.isRequired,
-  airMode: PropTypes.bool,
   posts: PropTypes.arrayOf(postShape),
   /* eslint-disable react/no-unused-prop-types */
   match: PropTypes.shape({
@@ -125,10 +121,6 @@ VisibleAnnotations.propTypes = {
   createComment: PropTypes.func.isRequired,
   updateComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
-};
-
-VisibleAnnotations.defaultProps = {
-  airMode: true,
 };
 
 function mapStateToProps(state, ownProps) {
