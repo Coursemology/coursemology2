@@ -45,7 +45,7 @@ module Course::DiscussionsAbilityComponent
   def allow_course_users_update_delete_own_post
     can [:update, :destroy], Course::Discussion::Post, creator_id: user.id
     cannot [:update, :destroy], Course::Discussion::Post do |post|
-      post.creator_id != user.id
+      post.creator_id != user.id && !course_user.manager_or_owner?
     end
   end
 end
