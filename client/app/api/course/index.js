@@ -23,6 +23,7 @@ import PersonalTimesAPI from './PersonalTimes';
 import SubmissionsAPI from './Assessment/Submissions/Submissions';
 import DisbursementAPI from './Disbursement';
 import ForumAPI from './Forum';
+import ExperiencePointsRecordAPI from './ExperiencePointsRecord';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -50,6 +51,7 @@ const CourseAPI = {
   submissions: new SubmissionsAPI(),
   disbursement: new DisbursementAPI(),
   forum: new ForumAPI(),
+  experiencePointsRecord: new ExperiencePointsRecordAPI(),
 };
 
 Object.freeze(CourseAPI);

@@ -9,6 +9,12 @@ import {
   CourseUserBasicListData,
 } from 'types/course/courseUsers';
 import {
+  ExperiencePointsRecordListData,
+  ExperiencePointsRecordMiniEntity,
+  ExperiencePointsRecordSettings,
+  ExperiencePointsRowData,
+} from 'types/course/experiencePointsRecords';
+import {
   PersonalTimeListData,
   PersonalTimeMiniEntity,
 } from 'types/course/personalTimes';
@@ -24,6 +30,12 @@ export const UPDATE_PERSONAL_TIME = 'course/users/UPDATE_PERSONAL_TIME';
 export const DELETE_PERSONAL_TIME = 'course/users/DELETE_PERSONAL_TIME';
 export const UPDATE_USER_OPTION = 'course/users/UPDATE_USER_OPTION';
 export const DELETE_USER_OPTION = 'course/users/DELETE_USER_OPTION';
+export const SAVE_EXPERIENCE_POINTS_RECORD_LIST =
+  'course/users/SAVE_EXPERIENCE_POINTS_RECORD_LIST';
+export const UPDATE_EXPERIENCE_POINTS_RECORD =
+  'course/users/UPDATE_EXPERIENCE_POINTS_RECORD';
+export const DELETE_EXPERIENCE_POINTS_RECORD =
+  'course/users/DELETE_EXPERIENCE_POINTS_RECORD';
 
 // Action Types
 export interface SaveUsersListAction {
@@ -72,6 +84,23 @@ export interface DeleteUserOptionAction {
   id: number;
 }
 
+export interface SaveExperiencePointsRecordListAction {
+  type: typeof SAVE_EXPERIENCE_POINTS_RECORD_LIST;
+  name: string;
+  rowCount: number;
+  rowData: ExperiencePointsRecordListData[];
+}
+
+export interface UpdateExperiencePointsRecordAction {
+  type: typeof UPDATE_EXPERIENCE_POINTS_RECORD;
+  data: ExperiencePointsRowData;
+}
+
+export interface DeleteExperiencePointsRecordAction {
+  type: typeof DELETE_EXPERIENCE_POINTS_RECORD;
+  id: number;
+}
+
 export type UsersActionType =
   | SaveUsersListAction
   | SaveUserAction
@@ -81,7 +110,10 @@ export type UsersActionType =
   | UpdatePersonalTimeAction
   | DeletePersonalTimeAction
   | UpdateUserOptionAction
-  | DeleteUserOptionAction;
+  | DeleteUserOptionAction
+  | SaveExperiencePointsRecordListAction
+  | UpdateExperiencePointsRecordAction
+  | DeleteExperiencePointsRecordAction;
 
 // State Types
 export interface UsersState {
@@ -90,4 +122,9 @@ export interface UsersState {
   permissions: ManageCourseUsersPermissions;
   manageCourseUsersData: ManageCourseUsersSharedData;
   personalTimes: EntityStore<PersonalTimeMiniEntity, PersonalTimeMiniEntity>;
+  experiencePointsRecords: EntityStore<
+    ExperiencePointsRecordMiniEntity,
+    ExperiencePointsRecordMiniEntity
+  >;
+  experiencePointsRecordsSettings: ExperiencePointsRecordSettings;
 }

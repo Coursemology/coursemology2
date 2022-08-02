@@ -11,6 +11,7 @@ import UserRequests from '../enrol-requests/pages/UserRequests';
 import InviteUsers from '../user-invitations/pages/InviteUsers';
 import InvitationsIndex from '../user-invitations/pages/InvitationsIndex';
 import configureStore from './store';
+import ExperiencePointsRecords from './pages/ExperiencePointsRecords';
 
 $(() => {
   const mountNode = document.getElementById('course-users-component');
@@ -52,10 +53,10 @@ $(() => {
               path="/courses/:courseId/users/:userId/personal_times"
               element={<PersonalTimesShow />}
             />
-            {/* <Route
+            <Route
               path="/courses/:courseId/users/:userId/experience_points_records"
-              element={<PersonalTimesShow />}
-            /> */}
+              element={<ExperiencePointsRecords />}
+            />
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,
