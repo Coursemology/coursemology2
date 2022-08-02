@@ -3,7 +3,7 @@ import { Permissions } from 'types';
 // Permissions for rendering title bar buttons
 export type FolderPermissions = Permissions<
   | 'isCurrentCourseStudent'
-  | 'isConcrete'
+  | 'canStudentUpload'
   | 'canCreateSubfolder'
   | 'canUpload'
   | 'canEdit'
@@ -65,6 +65,22 @@ export interface MaterialMiniEntity {
   permissions: MaterialPermissions;
 }
 
+export interface FolderData {
+  currFolderInfo: {
+    id: number;
+    parentId: number | null;
+    name: string;
+    description: string;
+    isConcrete: boolean;
+    startAt: string;
+    endAt: string | null;
+  };
+  subfolders: FolderListData[];
+  materials: MaterialListData[];
+  advanceStartAt: number;
+  permissions: FolderPermissions;
+}
+
 export interface FolderFormData {
   name: string;
   description: string | null;
@@ -82,12 +98,3 @@ export interface MaterialFormData {
   description: string;
   file: { name: string; url: string; file?: Blob };
 }
-
-// JUST A REFERENCE
-// export interface FolderData {
-//   id: number;
-//   parentId: number;
-//   subfolders: FolderListData[];
-//   materials: MaterialListData[];
-//   permissions: FolderPermissions;
-// }

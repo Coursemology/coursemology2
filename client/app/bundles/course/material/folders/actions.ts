@@ -15,28 +15,26 @@ import {
 } from './types';
 
 export function saveFolder(
-  id: number,
-  parentId: number | null,
-  name: string,
-  description: string,
-  canStudentUpload: boolean,
-  startAt: string,
-  endAt: string | null,
+  currFolderInfo: {
+    id: number;
+    parentId: number | null;
+    name: string;
+    description: string;
+    isConcrete: boolean;
+    startAt: string;
+    endAt: string | null;
+  },
   subfolders: FolderListData[],
   materials: MaterialListData[],
+  advanceStartAt: number,
   permissions: FolderPermissions,
 ): SaveFolderAction {
   return {
     type: SAVE_FOLDER,
-    id,
-    parentId,
-    name,
-    description,
-    canStudentUpload,
-    startAt,
-    endAt,
+    currFolderInfo,
     subfolders,
     materials,
+    advanceStartAt,
     permissions,
   };
 }

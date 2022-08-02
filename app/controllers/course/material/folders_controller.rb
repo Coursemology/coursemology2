@@ -14,9 +14,6 @@ class Course::Material::FoldersController < Course::Material::Controller
     end
   end
 
-  def edit
-  end
-
   def update
     if @folder.update(folder_params)
       @folder = @folder.parent || @folder
@@ -32,12 +29,8 @@ class Course::Material::FoldersController < Course::Material::Controller
     if @folder.destroy
       head :ok
     else
-      render json: { errors: @folder.errors }, status: :bad_request
+      render json: { errors: @folder.errors.full_messages.to_sentence }, status: :bad_request
     end
-  end
-
-  def new_subfolder
-    @subfolder = Course::Material::Folder.new
   end
 
   def create_subfolder
@@ -49,9 +42,6 @@ class Course::Material::FoldersController < Course::Material::Controller
     else
       render json: { errors: @subfolder.errors }, status: :bad_request
     end
-  end
-
-  def new_materials
   end
 
   def upload_materials

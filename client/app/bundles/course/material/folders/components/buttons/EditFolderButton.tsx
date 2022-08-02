@@ -1,7 +1,6 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-import { IconButton, Tooltip } from '@mui/material';
-import { Edit as EditIcon } from '@mui/icons-material';
+import EditButton from 'lib/components/buttons/EditButton';
 
 interface Props extends WrappedComponentProps {
   handleOnClick: () => void;
@@ -18,18 +17,13 @@ const EditFolderButton: FC<Props> = (props) => {
   const { intl, handleOnClick } = props;
 
   return (
-    <Tooltip
-      title={intl.formatMessage(translations.editFolderTooltip)}
-      placement="top"
-    >
-      <IconButton
-        id="edit-folder-button"
-        style={{ padding: 6 }}
-        onClick={handleOnClick}
-      >
-        <EditIcon />
-      </IconButton>
-    </Tooltip>
+    <EditButton
+      id="edit-folder-button"
+      style={{ padding: 6 }}
+      color="default"
+      onClick={handleOnClick}
+      tooltip={intl.formatMessage(translations.editFolderTooltip)}
+    />
   );
 };
 

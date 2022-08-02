@@ -12,15 +12,9 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 
 import { loadFolder } from '../../operations';
 import {
-  getFolderCanStudentUpload,
-  getFolderDescription,
-  getFolderEndAt,
-  getFolderId,
+  getCurrFolderInfo,
   getFolderMaterials,
-  getFolderName,
-  getFolderParentId,
   getFolderPermissions,
-  getFolderStartAt,
   getFolderSubfolders,
 } from '../../selectors';
 
@@ -55,21 +49,13 @@ const FolderShow: FC<Props> = (props) => {
   // For material upload form dialog
   const [isMaterialUploadOpen, setIsMaterialUploadOpen] = useState(false);
 
-  const id = useSelector((state: AppState) => getFolderId(state));
-  const parentId = useSelector((state: AppState) => getFolderParentId(state));
-  const name = useSelector((state: AppState) => getFolderName(state));
-  const description = useSelector((state: AppState) =>
-    getFolderDescription(state),
-  );
-  const canStudentUpload = useSelector((state: AppState) =>
-    getFolderCanStudentUpload(state),
-  );
-  const startAt = useSelector((state: AppState) => getFolderStartAt(state));
-  const endAt = useSelector((state: AppState) => getFolderEndAt(state));
   const subfolders = useSelector((state: AppState) =>
     getFolderSubfolders(state),
   );
   const materials = useSelector((state: AppState) => getFolderMaterials(state));
+  const currFolderInfo = useSelector((state: AppState) =>
+    getCurrFolderInfo(state),
+  );
   const permissions = useSelector((state: AppState) =>
     getFolderPermissions(state),
   );
@@ -87,7 +73,7 @@ const FolderShow: FC<Props> = (props) => {
 
   const headerToolbars: ReactElement[] = [];
 
-  if (permissions.isConcrete && permissions.canCreateSubfolder) {
+  if (currFolderInfo.isConcrete && permissions.canCreateSubfolder) {
     headerToolbars.push(
       <NewSubfolderButton
         key="new-folder-button"
@@ -97,7 +83,7 @@ const FolderShow: FC<Props> = (props) => {
       />,
     );
   }
-  if (permissions.isConcrete && permissions.canUpload) {
+  if (currFolderInfo.isConcrete && permissions.canUpload) {
     headerToolbars.push(
       <UploadFilesButton
         key="upload-files-button"
@@ -108,9 +94,12 @@ const FolderShow: FC<Props> = (props) => {
     );
   }
   headerToolbars.push(
-    <DownloadFolderButton key="download-folder-button" currFolderId={id} />,
+    <DownloadFolderButton
+      key="download-folder-button"
+      currFolderId={currFolderInfo.id}
+    />,
   );
-  if (permissions.isConcrete && permissions.canEdit) {
+  if (currFolderInfo.isConcrete && permissions.canEdit) {
     headerToolbars.push(
       <EditFolderButton
         key="edit-folder-button"
@@ -120,34 +109,38 @@ const FolderShow: FC<Props> = (props) => {
   }
 
   const folderInitialValues = {
-    name,
-    description,
-    canStudentUpload,
-    startAt: new Date(startAt),
-    endAt: endAt !== null ? new Date(endAt) : null,
+    name: currFolderInfo.name,
+    description: currFolderInfo.description,
+    canStudentUpload: permissions.canStudentUpload,
+    startAt: new Date(currFolderInfo.startAt),
+    endAt:
+      currFolderInfo.endAt !== null ? new Date(currFolderInfo.endAt) : null,
   };
 
   return (
     <>
       <PageHeader
-        key={`workbin-folder-${name}-${id}`}
+        key={`workbin-folder-${currFolderInfo.name}-${currFolderInfo.id}`}
         title={
-          name === null ? intl.formatMessage(translations.defaultHeader) : name
+          currFolderInfo.name === null
+            ? intl.formatMessage(translations.defaultHeader)
+            : currFolderInfo.name
         }
         toolbars={headerToolbars}
         returnLink={
-          parentId !== null
-            ? getWorkbinFolderURL(getCourseId(), parentId)
+          currFolderInfo.parentId !== null
+            ? getWorkbinFolderURL(getCourseId(), currFolderInfo.parentId)
             : undefined
         }
       />
       <WorkbinTable
-        currFolderId={id}
+        currFolderId={currFolderInfo.id}
         subfolders={subfolders}
         materials={materials}
         isCurrentCourseStudent={permissions.isCurrentCourseStudent}
-        isConcrete={permissions.isConcrete}
+        isConcrete={currFolderInfo.isConcrete}
       />
+
       <FolderNew
         folderId={+folderId!}
         isOpen={isNewFolderOpen}
@@ -158,13 +151,13 @@ const FolderShow: FC<Props> = (props) => {
         handleClose={(): void => {
           setIsEditFolderOpen(false);
         }}
-        folderId={id}
+        folderId={currFolderInfo.id}
         initialValues={folderInitialValues}
       />
       <MaterialUpload
         isOpen={isMaterialUploadOpen}
         handleClose={(): void => setIsMaterialUploadOpen(false)}
-        currFolderId={id}
+        currFolderId={currFolderInfo.id}
       />
     </>
   );

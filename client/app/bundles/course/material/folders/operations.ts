@@ -58,35 +58,13 @@ export function loadFolder(folderId: number): Operation<SaveFolderAction> {
       const data = response.data;
       return dispatch(
         actions.saveFolder(
-          data.id,
-          data.parentId,
-          data.name,
-          data.description,
-          data.canStudentUpload,
-          data.startAt,
-          data.endAt,
+          data.currFolderInfo,
           data.subfolders,
           data.materials,
+          data.advanceStartAt,
           data.permissions,
         ),
       );
-    });
-}
-
-export function deleteFolder(folderId: number): Operation<void> {
-  return async (dispatch) =>
-    CourseAPI.folders.deleteFolder(folderId).then(() => {
-      dispatch(actions.deleteFolderList(folderId));
-    });
-}
-
-export function deleteMaterial(
-  currFolderId: number,
-  materialId: number,
-): Operation<void> {
-  return async (dispatch) =>
-    CourseAPI.folders.deleteMaterial(currFolderId, materialId).then(() => {
-      dispatch(actions.deleteMaterialList(materialId));
     });
 }
 
@@ -98,20 +76,15 @@ export function createFolder(
   attributes.append('material_folder[parent_id]', `${folderId}`);
   return async (dispatch) =>
     CourseAPI.folders
-      .createFolder(attributes, folderId)
+      .createFolder(folderId, attributes)
       .then((response) => {
         const data = response.data;
         dispatch(
           actions.saveFolder(
-            data.id,
-            data.parentId,
-            data.name,
-            data.description,
-            data.canStudentUpload,
-            data.startAt,
-            data.endAt,
+            data.currFolderInfo,
             data.subfolders,
             data.materials,
+            data.advanceStartAt,
             data.permissions,
           ),
         );
@@ -128,20 +101,15 @@ export function updateFolder(
   const attributes = formatFolderAttributes(formData);
   return async (dispatch) =>
     CourseAPI.folders
-      .updateFolder(attributes, folderId)
+      .updateFolder(folderId, attributes)
       .then((response) => {
         const data = response.data;
         dispatch(
           actions.saveFolder(
-            data.id,
-            data.parentId,
-            data.name,
-            data.description,
-            data.canStudentUpload,
-            data.startAt,
-            data.endAt,
+            data.currFolderInfo,
             data.subfolders,
             data.materials,
+            data.advanceStartAt,
             data.permissions,
           ),
         );
@@ -149,6 +117,13 @@ export function updateFolder(
       .catch((error) => {
         throw error;
       });
+}
+
+export function deleteFolder(folderId: number): Operation<void> {
+  return async (dispatch) =>
+    CourseAPI.folders.deleteFolder(folderId).then(() => {
+      dispatch(actions.deleteFolderList(folderId));
+    });
 }
 
 function formatMaterialUploadAttributes(
@@ -180,20 +155,15 @@ export function uploadMaterials(
   const attributes = formatMaterialUploadAttributes(formData);
   return async (dispatch) =>
     CourseAPI.folders
-      .uploadMaterials(attributes, currFolderId)
+      .uploadMaterials(currFolderId, attributes)
       .then((response) => {
         const data = response.data;
         dispatch(
           actions.saveFolder(
-            data.id,
-            data.parentId,
-            data.name,
-            data.description,
-            data.canStudentUpload,
-            data.startAt,
-            data.endAt,
+            data.currFolderInfo,
             data.subfolders,
             data.materials,
+            data.advanceStartAt,
             data.permissions,
           ),
         );
@@ -201,6 +171,16 @@ export function uploadMaterials(
       .catch((error) => {
         throw error;
       });
+}
+
+export function deleteMaterial(
+  currFolderId: number,
+  materialId: number,
+): Operation<void> {
+  return async (dispatch) =>
+    CourseAPI.folders.deleteMaterial(currFolderId, materialId).then(() => {
+      dispatch(actions.deleteMaterialList(materialId));
+    });
 }
 
 export function updateMaterial(
@@ -211,7 +191,7 @@ export function updateMaterial(
   const attributes = formatMaterialAttributes(formData);
   return async (dispatch) =>
     CourseAPI.folders
-      .updateMaterial(attributes, folderId, materialId)
+      .updateMaterial(folderId, materialId, attributes)
       .then((response) => {
         const data = response.data;
         dispatch(actions.saveMaterialList(data));

@@ -54,7 +54,11 @@ const MaterialUpload: FC<Props> = (props) => {
         toast.success(intl.formatMessage(translations.materialUploadSuccess));
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.materialUploadFailure));
+        toast.error(
+          `${intl.formatMessage(
+            translations.materialUploadFailure,
+          )}. Error: ${error}`,
+        );
         throw error;
       })
       .finally(() => {
@@ -74,7 +78,7 @@ const MaterialUpload: FC<Props> = (props) => {
           }
         }}
         open={isOpen}
-        maxWidth="xl"
+        maxWidth="md"
         fullWidth
       >
         <DialogTitle>

@@ -2,7 +2,6 @@ import { render } from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import FolderShow from './pages/FolderShow';
-// import FolderEdit from './pages/FolderEdit';
 import configureStore from './store';
 
 $(() => {
