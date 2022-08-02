@@ -15,7 +15,7 @@ json.creator do
 end
 json.timestamp Time.at(video_topic.timestamp).utc.strftime('%H:%M:%S')
 
-json.partial! 'topic', topic: topic
+json.partial! 'topic', topic: topic, can_grade: true
 
 json.links do
   json.titleLink edit_course_video_submission_path(current_course, video, submission,
