@@ -85,7 +85,7 @@
     "@emotion/styled": "^11.10.0",
     "@hookform/resolvers": "^2.9.7",
     "@mui/icons-material": "^5.8.4",
-    "@mui/lab": "^5.0.0-alpha.92",
+    "@mui/lab": "^5.0.0-alpha.93",
     "@mui/material": "^5.9.3",
     "@mui/styles": "^5.9.3",
     "@mui/x-date-pickers": "^5.0.0-beta.3",
