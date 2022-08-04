@@ -3,10 +3,8 @@
 import { FC, useEffect, useState } from 'react';
 import { InputLabel } from '@mui/material';
 import { cyan } from '@mui/material/colors';
-
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import CustomEditor from '@ckeditor/ckeditor5-build-custom';
-
 import axios from 'lib/axios';
 
 interface Props {
@@ -129,6 +127,14 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
             if (value) {
               editor.setData(value);
             }
+            // Enable the following to set a fixed height for ckeditor
+            // editor.editing.view.change((writer) => {
+            //   writer.setStyle(
+            //     'height',
+            //     '100px',
+            //     editor.editing.view.document.getRoot(),
+            //   );
+            // });
             editor.plugins.get('FileRepository').createUploadAdapter = (
               loader,
             ) => {
@@ -144,6 +150,7 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
           onFocus={(_event, _editor) => {
             setIsFocused(true);
           }}
+          style={{ minHeight: 500 }}
         />
       </div>
     </div>

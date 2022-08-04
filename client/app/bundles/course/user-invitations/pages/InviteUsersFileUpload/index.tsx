@@ -241,7 +241,7 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         fullWidth
         maxWidth="lg"
         style={{
-          top: 0,
+          top: 40,
         }}
       >
         <DialogTitle>

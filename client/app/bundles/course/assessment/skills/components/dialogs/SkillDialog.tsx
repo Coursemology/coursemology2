@@ -235,7 +235,10 @@ const SkillDialog: FC<Props> = (props) => {
           }
         }}
         open={open}
-        maxWidth="xl"
+        maxWidth="lg"
+        style={{
+          top: 40,
+        }}
       >
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>

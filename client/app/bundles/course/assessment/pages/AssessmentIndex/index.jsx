@@ -121,7 +121,7 @@ class PopupDialog extends Component {
         <Dialog
           onClose={this.handleClose}
           open={visible}
-          maxWidth="md"
+          maxWidth="lg"
           style={{
             top: 40,
           }}

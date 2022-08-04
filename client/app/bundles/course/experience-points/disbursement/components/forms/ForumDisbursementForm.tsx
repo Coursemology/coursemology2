@@ -275,6 +275,9 @@ const ForumDisbursementForm: FC<Props> = (props) => {
         onClose={(): void => {
           setDialogName('');
         }}
+        style={{
+          top: 40,
+        }}
       >
         <DialogTitle
           borderBottom="1px solid #ccc"

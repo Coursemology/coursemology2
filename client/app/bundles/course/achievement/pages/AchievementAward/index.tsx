@@ -64,8 +64,7 @@ const AchievementAward: FC<Props> = (props) => {
         fullWidth
         maxWidth="lg"
         style={{
-          position: 'absolute',
-          top: 50,
+          top: 40,
         }}
       >
         <DialogTitle>
