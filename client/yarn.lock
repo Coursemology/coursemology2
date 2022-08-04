@@ -200,17 +200,7 @@
   resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.18.9.tgz#4b8aea3b069d8cb8a72cdfe28ddf5ceca695ef2f"
   integrity sha512-aBXPT3bmtLryXaoJLyYPXPlSD4p1ld9aYeR+sJNOZjJJGiOpb+fKfh3NkcCu7J54nUJwCERPBExCCpyCOHnu/w==
 
-"@babel/helper-remap-async-to-generator@^7.18.6":
-  version "7.18.6"
-  resolved "https://registry.yarnpkg.com/@babel/helper-remap-async-to-generator/-/helper-remap-async-to-generator-7.18.6.tgz#fa1f81acd19daee9d73de297c0308783cd3cfc23"
-  integrity sha512-z5wbmV55TveUPZlCLZvxWHtrjuJd+8inFhk7DG0WW87/oJuGDcjDiu7HIvGcpf5464L6xKCg3vNkmlVVz9hwyQ==
-  dependencies:
-    "@babel/helper-annotate-as-pure" "^7.18.6"
-    "@babel/helper-environment-visitor" "^7.18.6"
-    "@babel/helper-wrap-function" "^7.18.6"
-    "@babel/types" "^7.18.6"
-
-"@babel/helper-remap-async-to-generator@^7.18.9":
+"@babel/helper-remap-async-to-generator@^7.18.6", "@babel/helper-remap-async-to-generator@^7.18.9":
   version "7.18.9"
   resolved "https://registry.yarnpkg.com/@babel/helper-remap-async-to-generator/-/helper-remap-async-to-generator-7.18.9.tgz#997458a0e3357080e54e1d79ec347f8a8cd28519"
   integrity sha512-dI7q50YKd8BAv3VEfgg7PS7yD3Rtbi2J1XMXaalXO0W0164hYLnh8zpjRS0mte9MfVp/tltvr/cfdXPvJr1opA==
@@ -267,17 +257,7 @@
   resolved "https://registry.yarnpkg.com/@babel/helper-validator-option/-/helper-validator-option-7.18.6.tgz#bf0d2b5a509b1f336099e4ff36e1a63aa5db4db8"
   integrity sha512-XO7gESt5ouv/LRJdrVjkShckw6STTaB7l9BrpBaAHDeF5YZT+01PCwmR0SJHnkW6i8OwW/EVWRShfi4j2x+KQw==
 
-"@babel/helper-wrap-function@^7.18.6":
-  version "7.18.6"
-  resolved "https://registry.yarnpkg.com/@babel/helper-wrap-function/-/helper-wrap-function-7.18.6.tgz#ec44ea4ad9d8988b90c3e465ba2382f4de81a073"
-  integrity sha512-I5/LZfozwMNbwr/b1vhhuYD+J/mU+gfGAj5td7l5Rv9WYmH6i3Om69WGKNmlIpsVW/mF6O5bvTKbvDQZVgjqOw==
-  dependencies:
-    "@babel/helper-function-name" "^7.18.6"
-    "@babel/template" "^7.18.6"
-    "@babel/traverse" "^7.18.6"
-    "@babel/types" "^7.18.6"
-
-"@babel/helper-wrap-function@^7.18.9":
+"@babel/helper-wrap-function@^7.18.6", "@babel/helper-wrap-function@^7.18.9":
   version "7.18.10"
   resolved "https://registry.yarnpkg.com/@babel/helper-wrap-function/-/helper-wrap-function-7.18.10.tgz#a7fcd3ab9b1be4c9b52cf7d7fdc1e88c2ce93396"
   integrity sha512-95NLBP59VWdfK2lyLKe6eTMq9xg+yWKzxzxbJ1wcYNi1Auz200+83fMDADjRxBvc2QQor5zja2yTQzXGhk2GtQ==
@@ -1080,9 +1060,9 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@ckeditor/ckeditor5-build-custom@github:syoopie/CKEditor5-build-custom#v1":
+"@ckeditor/ckeditor5-build-custom@github:ekowidianto/CKEditor5-build-coursemology#v1":
   version "0.0.1"
-  resolved "https://codeload.github.com/syoopie/CKEditor5-build-custom/tar.gz/c22c7a20899efb9dc9bd3e2a29fbca9848372ce4"
+  resolved "https://codeload.github.com/ekowidianto/CKEditor5-build-coursemology/tar.gz/c22c7a20899efb9dc9bd3e2a29fbca9848372ce4"
 
 "@ckeditor/ckeditor5-react@^5.0.2":
   version "5.0.2"
