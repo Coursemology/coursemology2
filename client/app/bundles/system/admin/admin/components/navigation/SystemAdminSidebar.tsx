@@ -127,6 +127,25 @@ const SystemAdminSidebar: FC<Props> = (props) => {
       >
         <Grid item>
           <List style={{ marginTop: '60px' }}>
+            <ListItem button onClick={handleExpandClick}>
+              <ListItemIcon sx={{ minWidth: '32px' }}>
+                {isExpanded ? (
+                  <KeyboardDoubleArrowLeft />
+                ) : (
+                  <Tooltip
+                    placement="right"
+                    title={intl.formatMessage(translations.expandSidebar)}
+                  >
+                    <KeyboardDoubleArrowRight />
+                  </Tooltip>
+                )}
+              </ListItemIcon>
+              {isExpanded && (
+                <ListItemText
+                  primary={intl.formatMessage(translations.collapseSidebar)}
+                />
+              )}
+            </ListItem>
             <ListItemLink
               to="/admin/announcements"
               primary={intl.formatMessage(translations.announcements)}
@@ -155,29 +174,6 @@ const SystemAdminSidebar: FC<Props> = (props) => {
               icon={<AutoStories />}
               expanded={isExpanded}
             />
-          </List>
-        </Grid>
-        <Grid item>
-          <List>
-            <ListItem button onClick={handleExpandClick}>
-              <ListItemIcon sx={{ minWidth: '32px' }}>
-                {isExpanded ? (
-                  <KeyboardDoubleArrowLeft />
-                ) : (
-                  <Tooltip
-                    placement="right"
-                    title={intl.formatMessage(translations.expandSidebar)}
-                  >
-                    <KeyboardDoubleArrowRight />
-                  </Tooltip>
-                )}
-              </ListItemIcon>
-              {isExpanded && (
-                <ListItemText
-                  primary={intl.formatMessage(translations.collapseSidebar)}
-                />
-              )}
-            </ListItem>
           </List>
         </Grid>
       </Grid>

@@ -57,6 +57,7 @@ const Sidebar: FC<Props> = (props) => {
           display: { xs: 'none', sm: 'block' },
         }}
         className={`${styles.sidebarContainer}`}
+        transitionDuration={1000}
       >
         {renderDrawer(isDrawerOpen, handleDrawerToggle)}
       </Drawer>
