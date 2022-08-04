@@ -83,6 +83,7 @@ class FormDialogue extends Component {
     return (
       <>
         <Dialog
+          disableEnforceFocus
           fullWidth
           maxWidth="md"
           open={open}

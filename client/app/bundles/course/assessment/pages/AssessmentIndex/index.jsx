@@ -119,6 +119,7 @@ class PopupDialog extends Component {
           {intl.formatMessage(translations.new)}
         </Button>
         <Dialog
+          disableEnforceFocus
           onClose={this.handleClose}
           open={visible}
           maxWidth="lg"
