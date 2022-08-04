@@ -80,7 +80,10 @@ const CoursesNew: FC<Props> = (props) => {
           }
         }}
         open={open}
-        maxWidth="xl"
+        maxWidth="lg"
+        style={{
+          top: 40,
+        }}
       >
         <DialogTitle>{intl.formatMessage(translations.newCourse)}</DialogTitle>
         <DialogContent>

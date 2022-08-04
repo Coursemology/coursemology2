@@ -232,6 +232,9 @@ export default class ForumPostSelectDialog extends Component {
         maxWidth="md"
         open={this.props.isVisible}
         onClose={() => this.props.setIsVisible(false)}
+        style={{
+          top: 40,
+        }}
       >
         <DialogTitle style={styles.dialogTitle}>
           {this.renderDialogTitle()}

@@ -103,7 +103,10 @@ const AnnouncementEdit: FC<Props> = (props) => {
           }
         }}
         open={open}
-        maxWidth="xl"
+        maxWidth="lg"
+        style={{
+          top: 40,
+        }}
       >
         <DialogTitle>
           {intl.formatMessage(translations.updateAnnouncement)}
