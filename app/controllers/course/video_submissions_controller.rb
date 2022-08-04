@@ -7,7 +7,7 @@ class Course::VideoSubmissionsController < Course::ComponentController
   before_action :load_video_submissions
   before_action :add_breadcrumbs
 
-  def index # :nodoc:
+  def index
     @videos = @course.videos
     @video_submissions = @video_submissions.
                          includes([:video, { experience_points_record: :course_user }, :statistic]).
@@ -16,7 +16,7 @@ class Course::VideoSubmissionsController < Course::ComponentController
 
   private
 
-  def add_breadcrumbs # :nodoc:
+  def add_breadcrumbs
     add_breadcrumb @course_user.name, course_user_path(current_course, @course_user)
     add_breadcrumb :index
   end

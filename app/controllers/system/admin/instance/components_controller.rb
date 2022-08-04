@@ -3,10 +3,10 @@ class System::Admin::Instance::ComponentsController < System::Admin::Instance::C
   before_action :load_settings
   add_breadcrumb :edit, :admin_instance_components_path
 
-  def edit # :nodoc:
+  def edit
   end
 
-  def update # :nodoc:
+  def update
     if @settings.update(settings_components_params) && current_tenant.save!
       redirect_to admin_instance_components_path, success: t('.success')
     else

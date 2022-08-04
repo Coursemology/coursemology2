@@ -3,7 +3,7 @@ class Course::AnnouncementsController < Course::ComponentController
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
   before_action :add_announcement_breadcrumb
 
-  def index # :nodoc:
+  def index
     respond_to do |format|
       format.html
       format.json do
@@ -14,7 +14,7 @@ class Course::AnnouncementsController < Course::ComponentController
     end
   end
 
-  def create # :nodoc:
+  def create
     if @announcement.save
       # Return all announcements for re-rendering ordering purposes
       redirect_to course_announcements_path(current_course)
@@ -23,7 +23,7 @@ class Course::AnnouncementsController < Course::ComponentController
     end
   end
 
-  def update # :nodoc:
+  def update
     if @announcement.update(announcement_params)
       render partial: 'course/announcements/announcement_list_data',
              locals: { announcement: @announcement },
@@ -33,7 +33,7 @@ class Course::AnnouncementsController < Course::ComponentController
     end
   end
 
-  def destroy # :nodoc:
+  def destroy
     if @announcement.destroy
       head :ok
     else
@@ -43,7 +43,7 @@ class Course::AnnouncementsController < Course::ComponentController
 
   private
 
-  def announcement_params # :nodoc:
+  def announcement_params
     params.require(:announcement).permit(:title, :content, :sticky, :start_at, :end_at)
   end
 

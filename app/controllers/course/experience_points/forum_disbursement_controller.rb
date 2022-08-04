@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class Course::ExperiencePoints::ForumDisbursementController <
   Course::ExperiencePoints::DisbursementController
-  def create # :nodoc:
+  def create
     if @disbursement.save
       render json: { count: recipient_count }, status: :ok
     else
@@ -11,11 +11,11 @@ class Course::ExperiencePoints::ForumDisbursementController <
 
   private
 
-  def load_resource # :nodoc:
+  def load_resource
     @disbursement ||= Course::ExperiencePoints::ForumDisbursement.new(disbursement_params)
   end
 
-  def disbursement_params # :nodoc:
+  def disbursement_params
     case action_name
     when 'new'
       new_disbursement_params

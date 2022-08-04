@@ -9,7 +9,7 @@ class Course::LessonPlan::MilestonesController < Course::LessonPlan::Controller
                               through: :course, through_association: :lesson_plan_milestones,
                               class: Course::LessonPlan::Milestone.name, except: [:new, :create]
 
-  def create # :nodoc:
+  def create
     if @milestone.save
       render partial: 'milestone', locals: { milestone: @milestone }
     else
@@ -17,7 +17,7 @@ class Course::LessonPlan::MilestonesController < Course::LessonPlan::Controller
     end
   end
 
-  def update # :nodoc:
+  def update
     if @milestone.update(milestone_params)
       render partial: 'milestone', locals: { milestone: @milestone }
     else
@@ -25,7 +25,7 @@ class Course::LessonPlan::MilestonesController < Course::LessonPlan::Controller
     end
   end
 
-  def destroy # :nodoc:
+  def destroy
     if @milestone.destroy
       head :ok
     else
@@ -35,7 +35,7 @@ class Course::LessonPlan::MilestonesController < Course::LessonPlan::Controller
 
   private
 
-  def milestone_params # :nodoc:
+  def milestone_params
     params.require(:lesson_plan_milestone).
       permit(:title, :description, :start_at)
   end

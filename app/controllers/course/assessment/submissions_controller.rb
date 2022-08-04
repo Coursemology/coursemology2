@@ -4,7 +4,7 @@ class Course::Assessment::SubmissionsController < Course::ComponentController
   before_action :add_submissions_breadcrumb
   before_action :load_group_managers, only: [:pending, :index]
 
-  def index # :nodoc:
+  def index
     respond_to do |format|
       format.html
       format.json do

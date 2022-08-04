@@ -17,7 +17,7 @@ class Course::Admin::VideoSettingsController < Course::Admin::Controller
 
   private
 
-  def video_settings_params # :nodoc:
+  def video_settings_params
     params.require(:settings_videos_component).permit(:title)
   end
 

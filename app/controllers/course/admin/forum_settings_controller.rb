@@ -15,7 +15,7 @@ class Course::Admin::ForumSettingsController < Course::Admin::Controller
 
   private
 
-  def forum_settings_params # :nodoc:
+  def forum_settings_params
     params.require(:settings_forums_component).permit(:title, :pagination)
   end
 

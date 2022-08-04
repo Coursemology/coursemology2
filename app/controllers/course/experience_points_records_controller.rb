@@ -7,7 +7,7 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
                                                          class: Course::ExperiencePointsRecord.name
   before_action :add_breadcrumbs
 
-  def index # :nodoc:
+  def index
     updater_ids = @experience_points_records.active.pluck(:updater_id)
     @course_user_preload_service =
       Course::CourseUserPreloadService.new(updater_ids, current_course)
@@ -25,7 +25,7 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
     end
   end
 
-  def destroy # :nodoc:
+  def destroy
     if @experience_points_record.destroy
       destroy_success
     else
@@ -39,17 +39,17 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
     params.require(:experience_points_record).permit(:points_awarded, :reason)
   end
 
-  def destroy_success # :nodoc:
+  def destroy_success
     redirect_to course_user_experience_points_records_path(current_course, @course_user),
                 success: t('course.experience_points_records.destroy.success')
   end
 
-  def destroy_failure # :nodoc:
+  def destroy_failure
     redirect_to course_user_experience_points_records_path(current_course, @course_user),
                 danger: @experience_points_record.errors.full_messages.to_sentence
   end
 
-  def add_breadcrumbs # :nodoc:
+  def add_breadcrumbs
     add_breadcrumb @course_user.name, course_user_path(current_course, @course_user)
     add_breadcrumb :index
   end

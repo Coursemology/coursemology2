@@ -6,7 +6,7 @@ class Course::UsersController < Course::ComponentController
   before_action :load_resource
   authorize_resource :course_user, through: :course, parent: false
 
-  def index # :nodoc:
+  def index
   end
 
   def show
@@ -25,7 +25,7 @@ class Course::UsersController < Course::ComponentController
     case params[:action]
     when 'index'
       if params[:as_basic_data] == 'true'
-        @user_options = course_users.order_alphabetically.pluck(:id, :name)
+        @user_options = course_users.order_alphabetically.pluck(:id, :name, :role)
       else
         @course_users ||= course_users.without_phantom_users.students.
                           includes(user: [:emails]).order_alphabetically

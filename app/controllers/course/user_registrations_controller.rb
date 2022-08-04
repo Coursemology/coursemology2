@@ -4,7 +4,7 @@ class Course::UserRegistrationsController < Course::ComponentController
   before_action :load_registration
   skip_authorize_resource :course, only: [:create]
 
-  def create # :nodoc:
+  def create
     @registration.update(registration_params.reverse_merge(course: current_course,
                                                            user: current_user))
     if registration_service.register(@registration)
@@ -16,7 +16,7 @@ class Course::UserRegistrationsController < Course::ComponentController
 
   private
 
-  def registration_params # :nodoc:
+  def registration_params
     @registration_params ||= params.require(:registration).permit(:code)
   end
 
@@ -39,7 +39,7 @@ class Course::UserRegistrationsController < Course::ComponentController
     @registration_service ||= Course::UserRegistrationService.new
   end
 
-  def create_success # :nodoc:
+  def create_success
     success =
       if @registration.course_user.present?
         role = t("course.users.role.#{@registration.course_user.role}")

@@ -3,11 +3,11 @@ class User::EmailsController < ApplicationController
   load_and_authorize_resource :email, through: :current_user, class: User::Email.name
   layout 'user_admin'
 
-  def index # :nodoc:
+  def index
     @new_email = current_user.emails.build
   end
 
-  def create # :nodoc:
+  def create
     if @email.save
       redirect_to user_emails_path, success: t('.success')
     else
@@ -15,7 +15,7 @@ class User::EmailsController < ApplicationController
     end
   end
 
-  def destroy # :nodoc:
+  def destroy
     if @email.destroy
       redirect_to user_emails_path, success: t('.success')
     else

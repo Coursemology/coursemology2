@@ -43,7 +43,6 @@ module ApplicationMultitenancyConcern
   end
 
   module ClassMethods
-    # :nodoc:
     def set_current_tenant_through_filter
       super
       class_eval do
