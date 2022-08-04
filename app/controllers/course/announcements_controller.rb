@@ -10,6 +10,7 @@ class Course::AnnouncementsController < Course::ComponentController
         @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
         @announcements = @announcements.with_read_marks_for(current_user)
         mark_announcements_as_read
+        render 'index'
       end
     end
   end
@@ -17,7 +18,8 @@ class Course::AnnouncementsController < Course::ComponentController
   def create
     if @announcement.save
       # Return all announcements for re-rendering ordering purposes
-      redirect_to course_announcements_path(current_course)
+      @announcements = Course::Announcement.where(course_id: current_course.id)
+      index
     else
       render json: { errors: @announcement.errors }, status: :bad_request
     end
