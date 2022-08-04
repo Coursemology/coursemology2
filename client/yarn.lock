@@ -257,7 +257,7 @@
   resolved "https://registry.yarnpkg.com/@babel/helper-validator-option/-/helper-validator-option-7.18.6.tgz#bf0d2b5a509b1f336099e4ff36e1a63aa5db4db8"
   integrity sha512-XO7gESt5ouv/LRJdrVjkShckw6STTaB7l9BrpBaAHDeF5YZT+01PCwmR0SJHnkW6i8OwW/EVWRShfi4j2x+KQw==
 
-"@babel/helper-wrap-function@^7.18.6", "@babel/helper-wrap-function@^7.18.9":
+"@babel/helper-wrap-function@^7.18.9":
   version "7.18.10"
   resolved "https://registry.yarnpkg.com/@babel/helper-wrap-function/-/helper-wrap-function-7.18.10.tgz#a7fcd3ab9b1be4c9b52cf7d7fdc1e88c2ce93396"
   integrity sha512-95NLBP59VWdfK2lyLKe6eTMq9xg+yWKzxzxbJ1wcYNi1Auz200+83fMDADjRxBvc2QQor5zja2yTQzXGhk2GtQ==
@@ -1030,7 +1030,7 @@
     "@babel/parser" "^7.18.10"
     "@babel/types" "^7.18.10"
 
-"@babel/traverse@7", "@babel/traverse@^7.18.10", "@babel/traverse@^7.18.6", "@babel/traverse@^7.18.9", "@babel/traverse@^7.7.0", "@babel/traverse@^7.7.2":
+"@babel/traverse@7", "@babel/traverse@^7.18.10", "@babel/traverse@^7.18.9", "@babel/traverse@^7.7.0", "@babel/traverse@^7.7.2":
   version "7.18.10"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.18.10.tgz#37ad97d1cb00efa869b91dd5d1950f8a6cf0cb08"
   integrity sha512-J7ycxg0/K9XCtLyHf0cz2DqDihonJeIo+z+HEdRe9YuT8TY4A66i+Ab2/xZCEW7Ro60bPCBBfqqboHSamoV3+g==
@@ -7608,10 +7608,10 @@ sass-loader@^13.0.2:
     klona "^2.0.4"
     neo-async "^2.6.2"
 
-sass@^1.54.1:
-  version "1.54.1"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.54.1.tgz#4f72ef57ce2a6c3251f4e2c75eee9a0c19e09eb5"
-  integrity sha512-GHJJr31Me32RjjUBagyzx8tzjKBUcDwo5239XANIRBq0adDu5iIG0aFO0i/TBb/4I9oyxkEv44nq/kL1DxdDhA==
+sass@^1.54.2:
+  version "1.54.2"
+  resolved "https://registry.yarnpkg.com/sass/-/sass-1.54.2.tgz#574cad83814c930ef2475921b9cb5d8203ae8867"
+  integrity sha512-wbVV26sejsCIbBScZZtNkvnrB/bVCQ8hSlZ01D9nzsVh9zLqCkWrlpvTb3YEb6xsuNi9cx75hncqwikHFSz7tw==
   dependencies:
     chokidar ">=3.0.0 <4.0.0"
     immutable "^4.0.0"
