@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 unless @without_invitations
-  json.invitations @invitations.each do |invitation|
-    json.partial! 'course_user_invitation_list_data', invitation: invitation
-  end
+  json.partial! 'course_user_invitation_list'
 end
 
 json.permissions do

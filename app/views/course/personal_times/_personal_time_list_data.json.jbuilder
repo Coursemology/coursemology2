@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# When changing the following, need to ensure that
+# personal_times/index is also changed.
 
 personal_time = item.find_or_create_personal_time_for(@course_user)
 
