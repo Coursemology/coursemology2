@@ -123,7 +123,10 @@ MilestoneAdminTools.propTypes = {
   milestone: PropTypes.shape({
     id: PropTypes.number,
     description: PropTypes.string,
-    start_at: PropTypes.string,
+    start_at: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+    ]),
     title: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.node, // Allow node containing translation

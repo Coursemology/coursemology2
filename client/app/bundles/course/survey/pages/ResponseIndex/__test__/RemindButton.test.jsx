@@ -10,7 +10,10 @@ describe('<RemindButton />', () => {
   it('injects handlers that trigger the reminder', () => {
     const spyRemind = jest.spyOn(CourseAPI.survey.surveys, 'remind');
     const store = storeCreator({ surveys: {} });
-    const remindButton = mount(<RemindButton />, buildContextOptions(store));
+    const remindButton = mount(
+      <RemindButton includePhantom />,
+      buildContextOptions(store),
+    );
     remindButton.find('button').simulate('click');
     const cancelButton = remindButton
       .find('ConfirmationDialog')

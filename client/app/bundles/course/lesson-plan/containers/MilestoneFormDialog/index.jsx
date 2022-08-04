@@ -41,7 +41,10 @@ MilestoneFormDialog.propTypes = {
   initialValues: PropTypes.shape({
     title: PropTypes.string,
     description: PropTypes.string,
-    start_at: PropTypes.string,
+    start_at: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+    ]),
   }),
   onSubmit: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,

@@ -144,8 +144,11 @@ AdminTools.propTypes = {
     published: PropTypes.bool,
     location: PropTypes.string,
     description: PropTypes.string,
-    start_at: PropTypes.string,
-    end_at: PropTypes.string,
+    start_at: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+    ]),
+    end_at: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
     lesson_plan_item_type: PropTypes.arrayOf(PropTypes.string),
   }).isRequired,
   canManageLessonPlan: PropTypes.bool.isRequired,
