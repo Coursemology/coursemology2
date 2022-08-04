@@ -9,6 +9,7 @@ unless @user_options.nil?
     # course_user comes from @user_options which only plucks(:id, :name)
     json.id course_user[0]
     json.name course_user[1]
+    json.role course_user[2]
   end
 end
 

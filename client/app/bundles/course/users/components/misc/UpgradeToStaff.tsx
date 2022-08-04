@@ -19,7 +19,7 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { LoadingButton } from '@mui/lab';
 import { upgradeToStaff } from '../../operations';
-import { getAllUserOptionMiniEntities } from '../../selectors';
+import { getStudentOptionMiniEntities } from '../../selectors';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -54,7 +54,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
   const { intl } = props;
 
   const students = useSelector((state: AppState) =>
-    getAllUserOptionMiniEntities(state),
+    getStudentOptionMiniEntities(state),
   );
   const [isLoading, setIsLoading] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<
