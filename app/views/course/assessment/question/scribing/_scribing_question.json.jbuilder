@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 json.question do
-  json.(@scribing_question, :id, :title, :description, :staff_only_comments, :maximum_grade)
-
+  json.(@scribing_question, :id, :title, :staff_only_comments, :maximum_grade)
+  json.description format_ckeditor_rich_text(@scribing_question.description)
   if @scribing_question.attachment_reference
     json.attachment_reference do
       json.partial! 'attachments/attachment_reference.json',
