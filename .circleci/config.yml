@@ -186,6 +186,7 @@ jobs:
           command: |
             cd client
             yarn lint
+    resource_class: large
 
   jstest:
     docker:
@@ -209,6 +210,7 @@ jobs:
           command: |
             cd client && yarn
             yarn testci
+    resource_class: large
 
   i18n:
     docker:
@@ -252,6 +254,7 @@ jobs:
             bundle exec rake factory_bot:lint
           environment:
             DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
+    resource_class: large
 
 workflows:
   version: 2
