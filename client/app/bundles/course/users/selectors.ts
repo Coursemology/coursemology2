@@ -43,6 +43,13 @@ export function getAllUserOptionMiniEntities(state: AppState) {
   );
 }
 
+export function getStudentOptionMiniEntities(state: AppState) {
+  return selectMiniEntities(
+    getLocalState(state).userOptions,
+    getLocalState(state).userOptions.ids,
+  ).filter((entity) => entity.role === 'student');
+}
+
 export function getManageCourseUserPermissions(state: AppState) {
   return getLocalState(state).permissions;
 }

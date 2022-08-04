@@ -10,9 +10,10 @@ json.users @course_users do |course_user|
 end
 
 json.userOptions @student_options do |course_user|
-  # course_user comes from @user_options which only plucks(:id, :name)
+  # course_user comes from @student_options which only plucks(:id, :name)
   json.id course_user[0]
   json.name course_user[1]
+  json.role course_user[2]
 end
 
 json.permissions do
