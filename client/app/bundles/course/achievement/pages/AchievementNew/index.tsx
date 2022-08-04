@@ -71,6 +71,7 @@ const AchievementNew: FC<Props> = (props) => {
   return (
     <>
       <Dialog
+        disableEnforceFocus
         onClose={(): void => {
           if (isDirty) {
             setConfirmationDialogOpen(true);
