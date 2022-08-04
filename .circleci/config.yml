@@ -27,9 +27,9 @@ commands:
       # Restore cached Ruby dependencies
       - restore_cache:
           keys:
-            - v3.0.3-ruby-{{ checksum "Gemfile.lock" }}
+            - v3.0.4-ruby-{{ checksum "Gemfile.lock" }}
             # Fallback to using the latest cache if no exact match is found
-            - v3.0.3-ruby-
+            - v3.0.4-ruby-
 
       # Update Ruby dependencies
       - run:
@@ -42,7 +42,7 @@ commands:
           paths:
             - ./vendor/bundle
             - ./.bundle
-          key: v3.0.3-ruby-{{ checksum "Gemfile.lock" }}
+          key: v3.0.4-ruby-{{ checksum "Gemfile.lock" }}
 
   restore_node_cache:
     steps:
@@ -87,7 +87,7 @@ jobs:
   test:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:3.0.3-browsers
+      - image: cimg/ruby:3.0.4-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -168,7 +168,7 @@ jobs:
   lint:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:3.0.3-browsers
+      - image: cimg/ruby:3.0.4-browsers
         environment:
           RAILS_ENV: test
 
@@ -190,7 +190,7 @@ jobs:
   jstest:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:3.0.3-browsers
+      - image: cimg/ruby:3.0.4-browsers
         environment:
           RAILS_ENV: test
 
@@ -213,7 +213,7 @@ jobs:
   i18n:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:3.0.3-browsers
+      - image: cimg/ruby:3.0.4-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
