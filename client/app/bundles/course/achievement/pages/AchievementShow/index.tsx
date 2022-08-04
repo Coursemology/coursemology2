@@ -11,7 +11,10 @@ import { AppDispatch, AppState } from 'types/store';
 import AvatarWithLabel from 'lib/components/AvatarWithLabel';
 import AchievementManagementButtons from '../../components/buttons/AchievementManagementButtons';
 import { loadAchievement } from '../../operations';
-import { getAchievementEntity } from '../../selectors';
+import {
+  getAchievementEntity,
+  getAchievementMiniEntity,
+} from '../../selectors';
 
 type Props = WrappedComponentProps;
 
@@ -43,6 +46,9 @@ const AchievementShow: FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch<AppDispatch>();
   const { achievementId } = useParams();
+  const achievementMiniEntity = useSelector((state: AppState) =>
+    getAchievementMiniEntity(state, +achievementId!),
+  );
   const achievement = useSelector((state: AppState) =>
     getAchievementEntity(state, +achievementId!),
   );
@@ -55,21 +61,20 @@ const AchievementShow: FC<Props> = (props) => {
     }
   }, [dispatch, achievementId]);
 
-  if (isLoading) {
+  if (!achievementMiniEntity && isLoading) {
     return <LoadingIndicator />;
   }
-
-  if (!achievement) {
+  if (!achievementMiniEntity) {
     return null;
   }
 
   const headerToolbars: ReactElement[] = [];
 
-  if (achievement.permissions?.canManage) {
+  if (achievementMiniEntity.permissions?.canManage) {
     headerToolbars.push(
       <AchievementManagementButtons
-        key={achievement.id}
-        achievement={achievement}
+        key={achievementMiniEntity.id}
+        achievement={achievementMiniEntity}
         navigateToIndex
       />,
     );
@@ -78,58 +83,66 @@ const AchievementShow: FC<Props> = (props) => {
   return (
     <>
       <PageHeader
-        title={`Achievement - ${achievement.title}`}
+        title={`Achievement - ${achievementMiniEntity.title}`}
         returnLink={`/courses/${courseId}/achievements/`}
         toolbars={headerToolbars}
       />
-      <Grid container>
-        <Grid
-          item
-          xs={12}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          style={{ marginBottom: 8 }}
-        >
-          <Tooltip
-            title={
-              achievement.achievementStatus ? achievement.achievementStatus : ''
-            }
-          >
-            <img
-              src={achievement.badge.url}
-              alt={achievement.badge.name}
-              style={styles.badge}
-            />
-          </Tooltip>
-          <div style={styles.description}>
-            <p
-              style={{ whiteSpace: 'normal' }}
-              dangerouslySetInnerHTML={{ __html: achievement.description }}
-            />
-          </div>
-        </Grid>
-        <Grid item xs={12} display="flex" justifyContent="center">
-          <Typography variant="h5">
-            {intl.formatMessage(translations.studentsWithAchievement)}
-          </Typography>
-        </Grid>
-        {achievement.achievementUsers.map((courseUser) => (
-          <>
-            {courseUser.obtainedAt !== null && (
-              <Grid item key={courseUser.id} xs={4} sm={3} lg={1}>
-                <a href={getCourseUserURL(courseId, courseUser.id)}>
-                  <AvatarWithLabel
-                    label={courseUser.name}
-                    imageUrl={courseUser.imageUrl!}
-                    size="sm"
-                  />
-                </a>
-              </Grid>
-            )}
-          </>
-        ))}
-      </Grid>
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        achievement && (
+          <Grid container>
+            <Grid
+              item
+              xs={12}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              style={{ marginBottom: 8 }}
+            >
+              <Tooltip
+                title={
+                  achievement.achievementStatus
+                    ? achievement.achievementStatus
+                    : ''
+                }
+              >
+                <img
+                  src={achievement.badge.url}
+                  alt={achievement.badge.name}
+                  style={styles.badge}
+                />
+              </Tooltip>
+              <div style={styles.description}>
+                <p
+                  style={{ whiteSpace: 'normal' }}
+                  dangerouslySetInnerHTML={{ __html: achievement.description }}
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12} display="flex" justifyContent="center">
+              <Typography variant="h5">
+                {intl.formatMessage(translations.studentsWithAchievement)}
+              </Typography>
+            </Grid>
+            {achievement.achievementUsers.map((courseUser) => (
+              <>
+                {courseUser.obtainedAt !== null && (
+                  <Grid item key={courseUser.id} xs={4} sm={3} lg={1}>
+                    <a href={getCourseUserURL(courseId, courseUser.id)}>
+                      <AvatarWithLabel
+                        label={courseUser.name}
+                        imageUrl={courseUser.imageUrl!}
+                        size="sm"
+                      />
+                    </a>
+                  </Grid>
+                )}
+              </>
+            ))}
+          </Grid>
+        )
+      )}
     </>
   );
 };

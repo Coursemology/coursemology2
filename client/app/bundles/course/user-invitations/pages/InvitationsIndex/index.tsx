@@ -72,41 +72,46 @@ const InviteUsers: FC<Props> = (props) => {
       .catch(() => toast.error(intl.formatMessage(translations.failure)));
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   return (
     <Box>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
-      <UserManagementTabs permissions={permissions} sharedData={sharedData} />
-      <Box sx={{ margin: '12px 0px' }} className="invitations-bar-chart">
-        <InvitationsBarChart
-          accepted={acceptedInvitations.length}
-          pending={pendingInvitations.length}
-        />
-      </Box>
-      <Typography variant="body2" style={{ whiteSpace: 'pre-line' }}>
-        {intl.formatMessage(translations.invitationsInfo)}
-      </Typography>
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <UserManagementTabs
+            permissions={permissions}
+            sharedData={sharedData}
+          />
+          <Box sx={{ margin: '12px 0px' }} className="invitations-bar-chart">
+            <InvitationsBarChart
+              accepted={acceptedInvitations.length}
+              pending={pendingInvitations.length}
+            />
+          </Box>
+          <Typography variant="body2" style={{ whiteSpace: 'pre-line' }}>
+            {intl.formatMessage(translations.invitationsInfo)}
+          </Typography>
 
-      {pendingInvitations.length > 0 && (
-        <UserInvitationsTable
-          title={intl.formatMessage(translations.pending)}
-          invitations={pendingInvitations}
-          pendingInvitations
-          renderRowActionComponent={(invitation): JSX.Element => (
-            <PendingInvitationsButtons invitation={invitation} />
+          {pendingInvitations.length > 0 && (
+            <UserInvitationsTable
+              title={intl.formatMessage(translations.pending)}
+              invitations={pendingInvitations}
+              pendingInvitations
+              renderRowActionComponent={(invitation): JSX.Element => (
+                <PendingInvitationsButtons invitation={invitation} />
+              )}
+            />
           )}
-        />
-      )}
 
-      {acceptedInvitations.length > 0 && (
-        <UserInvitationsTable
-          title={intl.formatMessage(translations.accepted)}
-          invitations={acceptedInvitations}
-          acceptedInvitations
-        />
+          {acceptedInvitations.length > 0 && (
+            <UserInvitationsTable
+              title={intl.formatMessage(translations.accepted)}
+              invitations={acceptedInvitations}
+              acceptedInvitations
+            />
+          )}
+        </>
       )}
     </Box>
   );

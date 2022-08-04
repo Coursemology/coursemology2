@@ -80,10 +80,6 @@ const UserRequests: FC<Props> = (props) => {
       );
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   const renderEmptyState = (): JSX.Element | undefined => {
     if (
       pendingEnrolRequests.length === 0 &&
@@ -102,31 +98,40 @@ const UserRequests: FC<Props> = (props) => {
   return (
     <Box>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
-      <UserManagementTabs permissions={permissions} sharedData={sharedData} />
-      {renderEmptyState()}
-      {pendingEnrolRequests.length > 0 && (
-        <EnrolRequestsTable
-          title={intl.formatMessage(translations.pending)}
-          enrolRequests={pendingEnrolRequests}
-          pendingEnrolRequests
-          renderRowActionComponent={(enrolRequest): JSX.Element => (
-            <PendingEnrolRequestsButtons enrolRequest={enrolRequest} />
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <UserManagementTabs
+            permissions={permissions}
+            sharedData={sharedData}
+          />
+          {renderEmptyState()}
+          {pendingEnrolRequests.length > 0 && (
+            <EnrolRequestsTable
+              title={intl.formatMessage(translations.pending)}
+              enrolRequests={pendingEnrolRequests}
+              pendingEnrolRequests
+              renderRowActionComponent={(enrolRequest): JSX.Element => (
+                <PendingEnrolRequestsButtons enrolRequest={enrolRequest} />
+              )}
+            />
           )}
-        />
-      )}
-      {approvedEnrolRequests.length > 0 && (
-        <EnrolRequestsTable
-          title={intl.formatMessage(translations.approved)}
-          enrolRequests={approvedEnrolRequests}
-          approvedEnrolRequests
-        />
-      )}
-      {rejectedEnrolRequests.length > 0 && (
-        <EnrolRequestsTable
-          title={intl.formatMessage(translations.rejected)}
-          enrolRequests={rejectedEnrolRequests}
-          rejectedEnrolRequests
-        />
+          {approvedEnrolRequests.length > 0 && (
+            <EnrolRequestsTable
+              title={intl.formatMessage(translations.approved)}
+              enrolRequests={approvedEnrolRequests}
+              approvedEnrolRequests
+            />
+          )}
+          {rejectedEnrolRequests.length > 0 && (
+            <EnrolRequestsTable
+              title={intl.formatMessage(translations.rejected)}
+              enrolRequests={rejectedEnrolRequests}
+              rejectedEnrolRequests
+            />
+          )}
+        </>
       )}
     </Box>
   );

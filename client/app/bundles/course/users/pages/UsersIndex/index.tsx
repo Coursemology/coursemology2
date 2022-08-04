@@ -57,10 +57,6 @@ const UsersIndex: FC<Props> = (props) => {
       );
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   const renderEmptyState = (): JSX.Element => {
     return (
       <Typography variant="body1">
@@ -72,43 +68,51 @@ const UsersIndex: FC<Props> = (props) => {
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.studentsHeader)} />
-      <Grid container>
-        {users.length > 0
-          ? users.map((courseUser) => (
-              <Grid
-                item
-                className={`course-user-${courseUser.id}`}
-                key={courseUser.id}
-                xs={12}
-                md={6}
-                lg={4}
-              >
-                <Link
-                  to={getCourseUserURL(courseId, courseUser.id)}
-                  style={{ textDecoration: 'none' }}
-                >
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <Grid container>
+            {users.length > 0
+              ? users.map((courseUser) => (
                   <Grid
-                    container
-                    direction="row"
-                    spacing={1}
-                    alignItems="center"
+                    item
+                    className={`course-user-${courseUser.id}`}
+                    key={courseUser.id}
+                    xs={12}
+                    md={6}
+                    lg={4}
                   >
-                    <Grid container item xs={3} justifyContent="center">
-                      <Avatar
-                        src={courseUser.imageUrl}
-                        alt={courseUser.name}
-                        sx={styles.courseUserImage}
-                      />
-                    </Grid>
-                    <Grid item xs style={styles.courseUserName}>
-                      <Typography variant="body1">{courseUser.name}</Typography>
-                    </Grid>
+                    <Link
+                      to={getCourseUserURL(courseId, courseUser.id)}
+                      style={{ textDecoration: 'none' }}
+                    >
+                      <Grid
+                        container
+                        direction="row"
+                        spacing={1}
+                        alignItems="center"
+                      >
+                        <Grid container item xs={3} justifyContent="center">
+                          <Avatar
+                            src={courseUser.imageUrl}
+                            alt={courseUser.name}
+                            sx={styles.courseUserImage}
+                          />
+                        </Grid>
+                        <Grid item xs style={styles.courseUserName}>
+                          <Typography variant="body1">
+                            {courseUser.name}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Link>
                   </Grid>
-                </Link>
-              </Grid>
-            ))
-          : renderEmptyState()}
-      </Grid>
+                ))
+              : renderEmptyState()}
+          </Grid>
+        </>
+      )}
     </>
   );
 };

@@ -58,10 +58,6 @@ const InviteUsers: FC<Props> = (props) => {
       .catch(() => toast.error(intl.formatMessage(translations.loadFailure)));
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   const openResultDialog = (result: InvitationResult): void => {
     setInvitationResult(result);
     setShowInvitationResultDialog(true);
@@ -70,30 +66,39 @@ const InviteUsers: FC<Props> = (props) => {
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
-      <UserManagementTabs permissions={permissions} sharedData={sharedData} />
-      <Box>
-        <Grid
-          container
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="flex-end"
-          sx={{ margin: '12px 0px' }}
-        >
-          <Typography variant="h5">
-            {intl.formatMessage(translations.inviteUsersHeader)}
-          </Typography>
-          <Grid item style={{ display: 'flex', gap: 12 }}>
-            <UploadFileButton openResultDialog={openResultDialog} />
-            <RegistrationCodeButton />
-          </Grid>
-        </Grid>
-        <IndividualInviteForm openResultDialog={openResultDialog} />
-      </Box>
-      <InvitationResultDialog
-        open={showInvitationResultDialog}
-        handleClose={(): void => setShowInvitationResultDialog(false)}
-        invitationResult={invitationResult}
-      />
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <UserManagementTabs
+            permissions={permissions}
+            sharedData={sharedData}
+          />
+          <Box>
+            <Grid
+              container
+              flexDirection="row"
+              justifyContent="space-between"
+              alignItems="flex-end"
+              sx={{ margin: '12px 0px' }}
+            >
+              <Typography variant="h5">
+                {intl.formatMessage(translations.inviteUsersHeader)}
+              </Typography>
+              <Grid item style={{ display: 'flex', gap: 12 }}>
+                <UploadFileButton openResultDialog={openResultDialog} />
+                <RegistrationCodeButton />
+              </Grid>
+            </Grid>
+            <IndividualInviteForm openResultDialog={openResultDialog} />
+          </Box>
+          <InvitationResultDialog
+            open={showInvitationResultDialog}
+            handleClose={(): void => setShowInvitationResultDialog(false)}
+            invitationResult={invitationResult}
+          />
+        </>
+      )}
     </>
   );
 };

@@ -52,24 +52,29 @@ const PersonalTimes: FC<Props> = (props) => {
       );
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
-      <UserManagementTabs permissions={permissions} sharedData={sharedData} />
-      <Paper
-        elevation={3}
-        sx={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}
-      >
-        <Typography variant="h6" sx={{ marginBottom: '24px' }}>
-          {intl.formatMessage(translations.courseUserHeader)}
-        </Typography>
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <UserManagementTabs
+            permissions={permissions}
+            sharedData={sharedData}
+          />
+          <Paper
+            elevation={3}
+            sx={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}
+          >
+            <Typography variant="h6" sx={{ marginBottom: '24px' }}>
+              {intl.formatMessage(translations.courseUserHeader)}
+            </Typography>
 
-        <SelectCourseUser />
-      </Paper>
+            <SelectCourseUser />
+          </Paper>
+        </>
+      )}
     </>
   );
 };

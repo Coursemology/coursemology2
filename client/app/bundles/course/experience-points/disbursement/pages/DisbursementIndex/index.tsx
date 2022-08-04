@@ -74,91 +74,93 @@ const DisbursementIndex: FC<Props> = (props) => {
       .finally(() => setIsLoading(false));
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   return (
     <>
       <PageHeader
         title={intl.formatMessage({ ...translations.disbursements })}
       />
-      <Tabs
-        onChange={(_, value): void => {
-          setTabValue(value);
-        }}
-        style={{
-          backgroundColor: palette.background.default,
-        }}
-        TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
-        value={tabValue}
-        variant="fullWidth"
-        sx={{ marginBottom: 2 }}
-      >
-        <Tab
-          id="forum-disbursement-tab"
-          style={{ color: palette.submissionIcon.person }}
-          icon={<FormatListBulletedIcon />}
-          label={<FormattedMessage {...translations.forumTab} />}
-          value="forum-disbursement-tab"
-        />
-        <Tab
-          id="general-disbursement-tab"
-          style={{ color: palette.submissionIcon.person }}
-          icon={<Group />}
-          label={<FormattedMessage {...translations.generalTab} />}
-          value="general-disbursement-tab"
-        />
-      </Tabs>
-      <Grid
-        container
-        direction="row"
-        columnSpacing={2}
-        rowSpacing={2}
-        id="general-disbursement-tab"
-        display={tabValue === 'general-disbursement-tab' ? 'flex' : 'none'}
-      >
-        <Grid item xs>
-          <DisbursementForm users={users} />
-        </Grid>
-      </Grid>
-      <Grid
-        container
-        direction="column"
-        columnSpacing={2}
-        rowSpacing={2}
-        id="forum-disbursement-tab"
-        display={tabValue === 'forum-disbursement-tab' ? 'flex' : 'none'}
-      >
-        <Grid item xs>
-          <Paper
-            elevation={3}
-            sx={{
-              padding: '5px 10px 0px 10px',
-              marginBottom: '5px',
-              display: 'flex',
-              alignItems: 'center',
-              backgroundColor: '#eeeeee',
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <Tabs
+            onChange={(_, value): void => {
+              setTabValue(value);
             }}
+            style={{
+              backgroundColor: palette.background.default,
+            }}
+            TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+            value={tabValue}
+            variant="fullWidth"
+            sx={{ marginBottom: 2 }}
           >
-            <FilterForm
-              initialValues={{
-                startTime: filters.startTime,
-                endTime: filters.endTime,
-                weeklyCap: filters.weeklyCap,
-              }}
+            <Tab
+              id="forum-disbursement-tab"
+              style={{ color: palette.submissionIcon.person }}
+              icon={<FormatListBulletedIcon />}
+              label={<FormattedMessage {...translations.forumTab} />}
+              value="forum-disbursement-tab"
             />
-          </Paper>
-        </Grid>
-        <Grid item xs>
-          <ForumDisbursementForm
-            numberOfUsers={users.length}
-            forumUsers={forumUsers}
-            filters={filters}
-            forumPosts={forumPosts}
-          />
-        </Grid>
-      </Grid>
+            <Tab
+              id="general-disbursement-tab"
+              style={{ color: palette.submissionIcon.person }}
+              icon={<Group />}
+              label={<FormattedMessage {...translations.generalTab} />}
+              value="general-disbursement-tab"
+            />
+          </Tabs>
+          <Grid
+            container
+            direction="row"
+            columnSpacing={2}
+            rowSpacing={2}
+            id="general-disbursement-tab"
+            display={tabValue === 'general-disbursement-tab' ? 'flex' : 'none'}
+          >
+            <Grid item xs>
+              <DisbursementForm users={users} />
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            direction="column"
+            columnSpacing={2}
+            rowSpacing={2}
+            id="forum-disbursement-tab"
+            display={tabValue === 'forum-disbursement-tab' ? 'flex' : 'none'}
+          >
+            <Grid item xs>
+              <Paper
+                elevation={3}
+                sx={{
+                  padding: '5px 10px 0px 10px',
+                  marginBottom: '5px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  backgroundColor: '#eeeeee',
+                }}
+              >
+                <FilterForm
+                  initialValues={{
+                    startTime: filters.startTime,
+                    endTime: filters.endTime,
+                    weeklyCap: filters.weeklyCap,
+                  }}
+                />
+              </Paper>
+            </Grid>
+            <Grid item xs>
+              <ForumDisbursementForm
+                numberOfUsers={users.length}
+                forumUsers={forumUsers}
+                filters={filters}
+                forumPosts={forumPosts}
+              />
+            </Grid>
+          </Grid>
+        </>
+      )}
     </>
   );
 };

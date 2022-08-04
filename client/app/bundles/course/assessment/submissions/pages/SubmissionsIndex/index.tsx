@@ -144,62 +144,65 @@ const SubmissionsIndex: FC<Props> = (props) => {
       );
   }, [dispatch]);
 
-  if (pageIsLoading) {
-    return <LoadingIndicator />;
-  }
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.header)} />
-      <SubmissionTabs
-        canManage={submissionPermissions.canManage}
-        isTeachingStaff={submissionPermissions.isTeachingStaff}
-        tabs={tabs}
-        tabValue={tabValue}
-        setTabValue={setTabValue}
-        setIsTabChanging={setIsTabChanging}
-        setTableIsLoading={setTableIsLoading}
-        setPageNum={setPageNum}
-      />
+      {pageIsLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <SubmissionTabs
+            canManage={submissionPermissions.canManage}
+            isTeachingStaff={submissionPermissions.isTeachingStaff}
+            tabs={tabs}
+            tabValue={tabValue}
+            setTabValue={setTabValue}
+            setIsTabChanging={setIsTabChanging}
+            setTableIsLoading={setTableIsLoading}
+            setPageNum={setPageNum}
+          />
 
-      <SubmissionFilter
-        key={`submission-filter-${tabValue}`}
-        showDetailFilter={submissionPermissions.canManage && tabValue > 1}
-        tabCategories={tabs.categories}
-        categoryNum={tabValue - 2}
-        filter={filter}
-        setPageNum={setPageNum}
-        setTableIsLoading={setTableIsLoading}
-        setSelectedAssessment={setselectedAssessment}
-        setSelectedGroup={setselectedGroup}
-        setSelectedUser={setselectedUser}
-        handleFilterOnClick={handleFilter}
-      />
+          <SubmissionFilter
+            key={`submission-filter-${tabValue}`}
+            showDetailFilter={submissionPermissions.canManage && tabValue > 1}
+            tabCategories={tabs.categories}
+            categoryNum={tabValue - 2}
+            filter={filter}
+            setPageNum={setPageNum}
+            setTableIsLoading={setTableIsLoading}
+            setSelectedAssessment={setselectedAssessment}
+            setSelectedGroup={setselectedGroup}
+            setSelectedUser={setselectedUser}
+            handleFilterOnClick={handleFilter}
+          />
 
-      {!isTabChanging && (
-        <SubmissionPagination
-          submissionCount={submissionCount}
-          rowsPerPage={ROWS_PER_PAGE}
-          pageNum={pageNum}
-          handlePageChange={handlePageChange}
-        />
-      )}
+          {!isTabChanging && (
+            <SubmissionPagination
+              submissionCount={submissionCount}
+              rowsPerPage={ROWS_PER_PAGE}
+              pageNum={pageNum}
+              handlePageChange={handlePageChange}
+            />
+          )}
 
-      <SubmissionsTable
-        isGamified={isGamified}
-        submissions={submissions}
-        isPendingTab={submissionPermissions.isTeachingStaff && tabValue < 2}
-        tableIsLoading={tableIsLoading}
-        rowsPerPage={ROWS_PER_PAGE}
-        pageNum={pageNum}
-      />
+          <SubmissionsTable
+            isGamified={isGamified}
+            submissions={submissions}
+            isPendingTab={submissionPermissions.isTeachingStaff && tabValue < 2}
+            tableIsLoading={tableIsLoading}
+            rowsPerPage={ROWS_PER_PAGE}
+            pageNum={pageNum}
+          />
 
-      {!isTabChanging && submissions.length > 15 && !tableIsLoading && (
-        <SubmissionPagination
-          submissionCount={submissionCount}
-          rowsPerPage={ROWS_PER_PAGE}
-          pageNum={pageNum}
-          handlePageChange={handlePageChange}
-        />
+          {!isTabChanging && submissions.length > 15 && !tableIsLoading && (
+            <SubmissionPagination
+              submissionCount={submissionCount}
+              rowsPerPage={ROWS_PER_PAGE}
+              pageNum={pageNum}
+              handlePageChange={handlePageChange}
+            />
+          )}
+        </>
       )}
     </>
   );

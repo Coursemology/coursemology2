@@ -100,10 +100,6 @@ const SkillsIndex: FC<Props> = (props) => {
       );
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   const newSkillClick = (): void => {
     setIsDialogOpen(true);
     setDialogType(DialogTypes.NewSkill);
@@ -148,46 +144,52 @@ const SkillsIndex: FC<Props> = (props) => {
   return (
     <>
       <PageHeader title={intl.formatMessage({ ...translations.skills })} />
-      <Grid container direction="row" columnGap={0.2}>
-        <Grid item xs id="skill-branches">
-          <SkillsTable
-            data={data}
-            editClick={editSkillBranchClick}
-            addClick={newSkillBranchClick}
-            addDisabled={!skillPermissions.canCreateSkill}
-            tableType={TableEnum.SkillBranches}
-            skillBranchIndex={branchSelected}
-            skillIndex={skillSelected}
-            changeSkillBranch={changeSkillBranch}
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <Grid container direction="row" columnGap={0.2}>
+            <Grid item xs id="skill-branches">
+              <SkillsTable
+                data={data}
+                editClick={editSkillBranchClick}
+                addClick={newSkillBranchClick}
+                addDisabled={!skillPermissions.canCreateSkill}
+                tableType={TableEnum.SkillBranches}
+                skillBranchIndex={branchSelected}
+                skillIndex={skillSelected}
+                changeSkillBranch={changeSkillBranch}
+              />
+            </Grid>
+            <Grid item xs id="skills">
+              <SkillsTable
+                data={data}
+                editClick={editSkillClick}
+                addClick={newSkillClick}
+                addDisabled={!skillPermissions.canCreateSkill}
+                tableType={TableEnum.Skills}
+                skillBranchIndex={branchSelected}
+                skillIndex={skillSelected}
+                changeSkillBranch={changeSkillBranch}
+              />
+            </Grid>
+          </Grid>
+          <SkillDialog
+            dialogType={dialogType}
+            open={isDialogOpen}
+            handleClose={(): void => setIsDialogOpen(false)}
+            skillBranchOptions={skillBranchOptions}
+            data={dialogData ?? null}
+            skillBranchId={
+              (dialogType === DialogTypes.NewSkill &&
+                branchSelected !== -1 &&
+                data[branchSelected].id) ||
+              -1
+            }
+            setNewSelected={setNewSelected}
           />
-        </Grid>
-        <Grid item xs id="skills">
-          <SkillsTable
-            data={data}
-            editClick={editSkillClick}
-            addClick={newSkillClick}
-            addDisabled={!skillPermissions.canCreateSkill}
-            tableType={TableEnum.Skills}
-            skillBranchIndex={branchSelected}
-            skillIndex={skillSelected}
-            changeSkillBranch={changeSkillBranch}
-          />
-        </Grid>
-      </Grid>
-      <SkillDialog
-        dialogType={dialogType}
-        open={isDialogOpen}
-        handleClose={(): void => setIsDialogOpen(false)}
-        skillBranchOptions={skillBranchOptions}
-        data={dialogData ?? null}
-        skillBranchId={
-          (dialogType === DialogTypes.NewSkill &&
-            branchSelected !== -1 &&
-            data[branchSelected].id) ||
-          -1
-        }
-        setNewSelected={setNewSelected}
-      />
+        </>
+      )}
     </>
   );
 };
