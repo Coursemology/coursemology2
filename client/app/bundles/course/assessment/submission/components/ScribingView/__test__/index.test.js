@@ -21,7 +21,7 @@ const mockSubmission = {
     maximumGrade: 70,
     pointsAwarded: null,
     submittedAt: '2017-05-11T17:02:17.000+08:00',
-    submitter: 'Jane',
+    submitter: { id: 10, name: 'Jane' },
     workflowState: 'submitted',
   },
   assessment: {},

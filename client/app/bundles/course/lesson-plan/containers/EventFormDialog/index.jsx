@@ -64,8 +64,11 @@ EventFormDialog.propTypes = {
     event_type: PropTypes.string,
     location: PropTypes.string,
     description: PropTypes.string,
-    start_at: PropTypes.string,
-    end_at: PropTypes.string,
+    start_at: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.instanceOf(Date),
+    ]),
+    end_at: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
     published: PropTypes.bool,
   }),
   items: PropTypes.arrayOf(

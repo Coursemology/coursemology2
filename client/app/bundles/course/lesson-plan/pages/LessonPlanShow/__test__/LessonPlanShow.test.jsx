@@ -48,7 +48,7 @@ describe('<LessonPlanShow />', () => {
 
   describe('when all milestones are expanded by default', () => {
     const wrapper = mount(
-      <LessonPlanShow milestonesExpanded="all" {...data} />,
+      <LessonPlanShow milestonesExpanded="all" canManageLessonPlan {...data} />,
       contextOptions,
     );
 
@@ -59,7 +59,11 @@ describe('<LessonPlanShow />', () => {
 
   describe('when none of the milestones are expanded by default', () => {
     const wrapper = mount(
-      <LessonPlanShow milestonesExpanded="none" {...data} />,
+      <LessonPlanShow
+        milestonesExpanded="none"
+        canManageLessonPlan
+        {...data}
+      />,
       contextOptions,
     );
 
@@ -70,7 +74,11 @@ describe('<LessonPlanShow />', () => {
 
   describe('when only of the current milestone is expanded by default', () => {
     const wrapper = mount(
-      <LessonPlanShow milestonesExpanded="current" {...data} />,
+      <LessonPlanShow
+        milestonesExpanded="current"
+        canManageLessonPlan
+        {...data}
+      />,
       contextOptions,
     );
 
