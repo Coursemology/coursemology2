@@ -175,7 +175,7 @@ RSpec.describe Course::PersonalTimesController, type: :controller do
 
     describe '#recompute' do
       subject do
-        post :recompute, params: { course_id: course.id, user_id: course_user.id }
+        post :recompute, as: :json, params: { course_id: course.id, user_id: course_user.id }
       end
 
       context 'when a normal user recomputes a personal timeline' do

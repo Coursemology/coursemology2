@@ -6,18 +6,22 @@ class Course::PersonalTimesController < Course::ComponentController
   before_action :authorize_personal_times!
 
   def index
-    if params[:user_id].present?
-      @course_user ||= CourseUser.find_by(course: @course, id: params[:user_id])
-      @learning_rate_record = @course_user.latest_learning_rate_record
+    respond_to do |format|
+      format.html
+      format.json do
+        if params[:user_id].present?
+          @course_user ||= CourseUser.find_by(course: @course, id: params[:user_id])
+          @learning_rate_record = @course_user.latest_learning_rate_record
 
-      # Only show for assessments and videos
-      @items = @course.lesson_plan_items.where(actable_type: [Course::Assessment.name, Course::Video.name]).
-               ordered_by_date_and_title.
-               with_reference_times_for(@course_user).
-               with_personal_times_for(@course_user)
+          # Only show for assessments and videos
+          @items = @course.lesson_plan_items.where(actable_type: [Course::Assessment.name, Course::Video.name]).
+                   ordered_by_date_and_title.
+                   with_reference_times_for(@course_user).
+                   with_personal_times_for(@course_user)
+          render 'index'
+        end
+      end
     end
-
-    render 'index'
   end
 
   def create
