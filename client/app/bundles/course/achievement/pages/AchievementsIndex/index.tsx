@@ -62,10 +62,6 @@ const AchievementsIndex: FC<Props> = (props) => {
       );
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   const headerToolbars: ReactElement[] = []; // To Add: Reorder Button
 
   if (achievementPermissions?.canReorder) {
@@ -107,15 +103,21 @@ const AchievementsIndex: FC<Props> = (props) => {
         })}
         toolbars={headerToolbars}
       />
-      <AchievementNew
-        open={isOpen}
-        handleClose={(): void => setIsOpen(false)}
-      />
-      <AchievementTable
-        achievements={achievements}
-        permissions={achievementPermissions}
-        onTogglePublished={onTogglePublished}
-      />
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <AchievementNew
+            open={isOpen}
+            handleClose={(): void => setIsOpen(false)}
+          />
+          <AchievementTable
+            achievements={achievements}
+            permissions={achievementPermissions}
+            onTogglePublished={onTogglePublished}
+          />
+        </>
+      )}
     </>
   );
 };

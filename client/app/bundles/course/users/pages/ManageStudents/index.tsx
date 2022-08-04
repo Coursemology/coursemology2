@@ -56,10 +56,6 @@ const ManageStudents: FC<Props> = (props) => {
       );
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   const renderEmptyState = (): JSX.Element => {
     return (
       <Typography variant="body1">
@@ -73,17 +69,26 @@ const ManageStudents: FC<Props> = (props) => {
       <PageHeader
         title={intl.formatMessage(manageUsersTranslations.manageUsersHeader)}
       />
-      <UserManagementTabs permissions={permissions} sharedData={sharedData} />
-      {students.length > 0 ? (
-        <ManageUsersTable
-          title={intl.formatMessage(translations.manageStudentsTitle)}
-          users={students}
-          renderRowActionComponent={(user): JSX.Element => (
-            <UserManagementButtons user={user} />
-          )}
-        />
+      {isLoading ? (
+        <LoadingIndicator />
       ) : (
-        renderEmptyState()
+        <>
+          <UserManagementTabs
+            permissions={permissions}
+            sharedData={sharedData}
+          />
+          {students.length > 0 ? (
+            <ManageUsersTable
+              title={intl.formatMessage(translations.manageStudentsTitle)}
+              users={students}
+              renderRowActionComponent={(user): JSX.Element => (
+                <UserManagementButtons user={user} />
+              )}
+            />
+          ) : (
+            renderEmptyState()
+          )}
+        </>
       )}
     </>
   );

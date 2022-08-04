@@ -191,19 +191,23 @@ const CommentIndex: FC<Props> = (props) => {
       .finally(() => setIsLoading(false));
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   return (
     <>
       <PageHeader
         title={
-          settings.title ?? intl.formatMessage({ ...translations.comments })
+          settings.title
+            ? settings.title
+            : intl.formatMessage({ ...translations.comments })
         }
       />
-      <CommentTabs tabValue={tabValue} intl={intl} />
-      <TopicList key={tabValue} tabValue={tabValue} settings={settings} />
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <CommentTabs tabValue={tabValue} intl={intl} />
+          <TopicList key={tabValue} tabValue={tabValue} settings={settings} />
+        </>
+      )}
     </>
   );
 };

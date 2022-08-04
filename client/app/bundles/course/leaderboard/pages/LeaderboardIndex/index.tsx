@@ -83,10 +83,6 @@ const LeaderboardIndex: FC<Props> = (props) => {
       );
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   const isAchievementHidden = leaderboardAchievements.length === 0;
   const isGroupHidden = groupLeaderboardPoints.length === 0;
 
@@ -94,134 +90,141 @@ const LeaderboardIndex: FC<Props> = (props) => {
     <>
       <PageHeader
         title={
-          settings.leaderboardTitle ??
-          intl.formatMessage({ ...translations.leaderboard })
+          settings.groupleaderboardTitle
+            ? settings.groupleaderboardTitle
+            : intl.formatMessage({ ...translations.leaderboard })
         }
       />
-      {!isGroupHidden && (
-        <Tabs
-          onChange={(_, value): void => {
-            setTabValue(value);
-          }}
-          style={{
-            backgroundColor: palette.background.default,
-          }}
-          TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
-          value={tabValue}
-          variant="fullWidth"
-          sx={{ marginBottom: 2 }}
-        >
-          <Tab
-            id="leaderboard-tab"
-            style={{ color: palette.submissionIcon.person }}
-            icon={<Person />}
-            label={
-              settings.leaderboardTitle ?? (
-                <FormattedMessage {...translations.leaderboard} />
-              )
-            }
-            value="leaderboard-tab"
-          />
-          <Tab
-            id="group-leaderboard-tab"
-            style={{ color: palette.submissionIcon.person }}
-            icon={<Group />}
-            label={
-              settings.groupleaderboardTitle ?? (
-                <FormattedMessage {...translations.groupLeaderboard} />
-              )
-            }
-            value="group-leaderboard-tab"
-          />
-        </Tabs>
-      )}
-      {tabView && (
-        <Tabs
-          onChange={(_, value): void => {
-            setInnerTabValue(value);
-          }}
-          style={{
-            backgroundColor: palette.background.default,
-          }}
-          TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
-          value={innerTabValue}
-          variant="fullWidth"
-          sx={{ marginBottom: 2 }}
-        >
-          <Tab
-            id="points-tab"
-            style={{ color: palette.submissionIcon.person }}
-            icon={<AutoFixHigh />}
-            label={
-              settings.leaderboardTitle ?? (
-                <FormattedMessage {...translations.experience} />
-              )
-            }
-            value="points-tab"
-          />
-          <Tab
-            id="achievement-tab"
-            style={{ color: palette.submissionIcon.person }}
-            icon={<EmojiEvents />}
-            label={
-              settings.groupleaderboardTitle ?? (
-                <FormattedMessage {...translations.achievemnt} />
-              )
-            }
-            value="achievement-tab"
-          />
-        </Tabs>
-      )}
-      <Grid
-        container
-        direction="row"
-        columnSpacing={2}
-        rowSpacing={2}
-        display={tabValue === 'leaderboard-tab' ? 'flex' : 'none'}
-      >
-        {(!tabView || innerTabValue === 'points-tab') && (
-          <Grid item xs id="leaderboard-level">
-            <LeaderboardTable
-              data={leaderboardPoints}
-              id={LeaderboardTableType.LeaderboardPoints}
-            />
-          </Grid>
-        )}
-        {!isAchievementHidden &&
-          (!tabView || innerTabValue === 'achievement-tab') && (
-            <Grid item xs id="leaderboard-achievement">
-              <LeaderboardTable
-                data={leaderboardAchievements}
-                id={LeaderboardTableType.LeaderboardAchievement}
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          {!isGroupHidden && (
+            <Tabs
+              onChange={(_, value): void => {
+                setTabValue(value);
+              }}
+              style={{
+                backgroundColor: palette.background.default,
+              }}
+              TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+              value={tabValue}
+              variant="fullWidth"
+              sx={{ marginBottom: 2 }}
+            >
+              <Tab
+                id="leaderboard-tab"
+                style={{ color: palette.submissionIcon.person }}
+                icon={<Person />}
+                label={
+                  settings.leaderboardTitle ?? (
+                    <FormattedMessage {...translations.leaderboard} />
+                  )
+                }
+                value="leaderboard-tab"
               />
-            </Grid>
-          )}
-      </Grid>
-      <Grid
-        container
-        direction="row"
-        columnSpacing={2}
-        rowSpacing={2}
-        display={tabValue !== 'leaderboard-tab' ? 'flex' : 'none'}
-      >
-        {(!tabView || innerTabValue === 'points-tab') && (
-          <Grid item xs id="group-leaderboard-level">
-            <LeaderboardTable
-              data={groupLeaderboardPoints}
-              id={LeaderboardTableType.GroupLeaderboardPoints}
-            />
-          </Grid>
-        )}
-        {!isAchievementHidden &&
-          (!tabView || innerTabValue === 'achievement-tab') && (
-            <Grid item xs id="group-leaderboard-achievement">
-              <LeaderboardTable
-                data={groupLeaderboardAchievements}
-                id={LeaderboardTableType.GroupLeaderboardAchievement}
+              <Tab
+                id="group-leaderboard-tab"
+                style={{ color: palette.submissionIcon.person }}
+                icon={<Group />}
+                label={
+                  settings.groupleaderboardTitle ?? (
+                    <FormattedMessage {...translations.groupLeaderboard} />
+                  )
+                }
+                value="group-leaderboard-tab"
               />
-            </Grid>
+            </Tabs>
           )}
-      </Grid>
+          {tabView && (
+            <Tabs
+              onChange={(_, value): void => {
+                setInnerTabValue(value);
+              }}
+              style={{
+                backgroundColor: palette.background.default,
+              }}
+              TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+              value={innerTabValue}
+              variant="fullWidth"
+              sx={{ marginBottom: 2 }}
+            >
+              <Tab
+                id="points-tab"
+                style={{ color: palette.submissionIcon.person }}
+                icon={<AutoFixHigh />}
+                label={
+                  settings.leaderboardTitle ?? (
+                    <FormattedMessage {...translations.experience} />
+                  )
+                }
+                value="points-tab"
+              />
+              <Tab
+                id="achievement-tab"
+                style={{ color: palette.submissionIcon.person }}
+                icon={<EmojiEvents />}
+                label={
+                  settings.groupleaderboardTitle ?? (
+                    <FormattedMessage {...translations.achievemnt} />
+                  )
+                }
+                value="achievement-tab"
+              />
+            </Tabs>
+          )}
+          <Grid
+            container
+            direction="row"
+            columnSpacing={2}
+            rowSpacing={2}
+            display={tabValue === 'leaderboard-tab' ? 'flex' : 'none'}
+          >
+            {(!tabView || innerTabValue === 'points-tab') && (
+              <Grid item xs id="leaderboard-level">
+                <LeaderboardTable
+                  data={leaderboardPoints}
+                  id={LeaderboardTableType.LeaderboardPoints}
+                />
+              </Grid>
+            )}
+            {!isAchievementHidden &&
+              (!tabView || innerTabValue === 'achievement-tab') && (
+                <Grid item xs id="leaderboard-achievement">
+                  <LeaderboardTable
+                    data={leaderboardAchievements}
+                    id={LeaderboardTableType.LeaderboardAchievement}
+                  />
+                </Grid>
+              )}
+          </Grid>
+          <Grid
+            container
+            direction="row"
+            columnSpacing={2}
+            rowSpacing={2}
+            display={tabValue !== 'leaderboard-tab' ? 'flex' : 'none'}
+          >
+            {(!tabView || innerTabValue === 'points-tab') && (
+              <Grid item xs id="group-leaderboard-level">
+                <LeaderboardTable
+                  data={groupLeaderboardPoints}
+                  id={LeaderboardTableType.GroupLeaderboardPoints}
+                />
+              </Grid>
+            )}
+            {!isAchievementHidden &&
+              (!tabView || innerTabValue === 'achievement-tab') && (
+                <Grid item xs id="group-leaderboard-achievement">
+                  <LeaderboardTable
+                    data={groupLeaderboardAchievements}
+                    id={LeaderboardTableType.GroupLeaderboardAchievement}
+                  />
+                </Grid>
+              )}
+          </Grid>
+        </>
+      )}
     </>
   );
 };

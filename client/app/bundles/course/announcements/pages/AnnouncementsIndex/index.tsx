@@ -68,10 +68,6 @@ const AnnouncementsIndex: FC<Props> = (props) => {
       );
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   return (
     <>
       <PageHeader
@@ -87,21 +83,27 @@ const AnnouncementsIndex: FC<Props> = (props) => {
             : undefined
         }
       />
-      {announcements.length === 0 ? (
-        <div>{intl.formatMessage(translations.noAnnouncements)}</div>
+      {isLoading ? (
+        <LoadingIndicator />
       ) : (
-        <AnnouncementsDisplay
-          announcements={announcements}
-          announcementPermissions={announcementPermissions}
-          updateOperation={updateAnnouncement}
-          deleteOperation={deleteAnnouncement}
-        />
+        <>
+          {announcements.length === 0 ? (
+            <div>{intl.formatMessage(translations.noAnnouncements)}</div>
+          ) : (
+            <AnnouncementsDisplay
+              announcements={announcements}
+              announcementPermissions={announcementPermissions}
+              updateOperation={updateAnnouncement}
+              deleteOperation={deleteAnnouncement}
+            />
+          )}
+          <AnnouncementNew
+            open={isOpen}
+            handleClose={(): void => setIsOpen(false)}
+            createOperation={createAnnouncement}
+          />
+        </>
       )}
-      <AnnouncementNew
-        open={isOpen}
-        handleClose={(): void => setIsOpen(false)}
-        createOperation={createAnnouncement}
-      />
     </>
   );
 };

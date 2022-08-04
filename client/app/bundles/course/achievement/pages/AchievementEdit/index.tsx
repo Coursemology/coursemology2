@@ -51,10 +51,6 @@ const AchievementEdit: FC<Props> = (props) => {
     }
   }, [dispatch, achievementId]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   if (!achievement) {
     return (
       <Typography variant="h5">
@@ -97,28 +93,34 @@ const AchievementEdit: FC<Props> = (props) => {
         title={`Edit Achievement - ${achievement.title}`}
         returnLink={`/courses/${courseId}/achievements/`}
       />
-      <AchievementForm
-        conditionAttributes={{
-          enabledConditions: achievement.enabledConditions,
-          conditions: achievement.conditions,
-        }}
-        editing
-        handleClose={(isDirty): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          }
-        }}
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-      />
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-        }}
-      />
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <AchievementForm
+            conditionAttributes={{
+              enabledConditions: achievement.enabledConditions,
+              conditions: achievement.conditions,
+            }}
+            editing
+            handleClose={(isDirty): void => {
+              if (isDirty) {
+                setConfirmationDialogOpen(true);
+              }
+            }}
+            initialValues={initialValues}
+            onSubmit={onSubmit}
+          />
+          <ConfirmationDialog
+            confirmDiscard
+            open={confirmationDialogOpen}
+            onCancel={(): void => setConfirmationDialogOpen(false)}
+            onConfirm={(): void => {
+              setConfirmationDialogOpen(false);
+            }}
+          />
+        </>
+      )}
     </>
   );
 };

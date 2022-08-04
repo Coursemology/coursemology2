@@ -72,10 +72,6 @@ const CoursesIndex: FC<Props> = (props) => {
       );
   }, [dispatch]);
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   // Adding appropriate button to the header
   const headerToolbars: ReactElement[] = [];
   if (coursesPermissions?.canCreate) {
@@ -91,7 +87,7 @@ const CoursesIndex: FC<Props> = (props) => {
         {intl.formatMessage(translations.newCourse)}
       </Button>,
     );
-  } else {
+  } else if (!isLoading) {
     headerToolbars.push(
       <Button
         key="role-request-button"
@@ -124,8 +120,17 @@ const CoursesIndex: FC<Props> = (props) => {
         })}
         toolbars={headerToolbars}
       />
-      <CourseDisplay courses={courses} />
-      <CoursesNew open={isOpen} handleClose={(): void => setIsOpen(false)} />
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <>
+          <CourseDisplay courses={courses} />
+          <CoursesNew
+            open={isOpen}
+            handleClose={(): void => setIsOpen(false)}
+          />{' '}
+        </>
+      )}
     </>
   );
 };
