@@ -6,12 +6,13 @@ class Course::UserInvitationsController < Course::ComponentController
   add_breadcrumb :index, :course_users_students_path
 
   def index
-    @invitations = current_course.invitations.order(name: :asc)
-    @without_invitations = params[:without_invitations]
-  end
-
-  def new
-    current_course.invitations.build
+    respond_to do |format|
+      format.html
+      format.json do
+        @invitations = current_course.invitations.order(name: :asc)
+        @without_invitations = params[:without_invitations]
+      end
+    end
   end
 
   def create
@@ -56,7 +57,7 @@ class Course::UserInvitationsController < Course::ComponentController
 
   private
 
-  def course_user_invitation_params # :nodoc:
+  def course_user_invitation_params
     @course_user_invitation_params ||= begin
       params[:course] = { invitations_attributes: {} } unless params.key?(:course)
       params.require(:course).permit(:invitations_file, :registration_key,
@@ -219,7 +220,7 @@ class Course::UserInvitationsController < Course::ComponentController
     current_component_host[:course_users_component]
   end
 
-  def resend_invitation_success # :nodoc:
+  def resend_invitation_success
     respond_to do |format|
       format.json do
         render partial: 'course_user_invitation_list_data', locals: { invitation: @invitation.reload }, status: :ok
@@ -227,13 +228,13 @@ class Course::UserInvitationsController < Course::ComponentController
     end
   end
 
-  def resend_invitation_failure # :nodoc:
+  def resend_invitation_failure
     respond_to do |format|
       format.json { head :bad_request }
     end
   end
 
-  def resend_invitations_success # :nodoc:
+  def resend_invitations_success
     respond_to do |format|
       format.json do
         render partial: 'course_user_invitation_list', locals: { invitations: @invitations.reload }, status: :ok
@@ -241,25 +242,25 @@ class Course::UserInvitationsController < Course::ComponentController
     end
   end
 
-  def resend_invitations_failure # :nodoc:
+  def resend_invitations_failure
     respond_to do |format|
       format.json { head :bad_request }
     end
   end
 
-  def destroy_invitation_success # :nodoc:
+  def destroy_invitation_success
     respond_to do |format|
       format.json { render json: { id: @invitation.id }, status: :ok }
     end
   end
 
-  def destroy_invitation_failure # :nodoc:
+  def destroy_invitation_failure
     respond_to do |format|
       format.json { render json: { errors: @invitation.errors.full_messages.to_sentence }, status: :bad_request }
     end
   end
 
-  def create_invitation_success(result) # :nodoc:
+  def create_invitation_success(result)
     respond_to do |format|
       format.json do
         render json: {

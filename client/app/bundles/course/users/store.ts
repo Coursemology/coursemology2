@@ -2,11 +2,15 @@ import { enableMapSet } from 'immer';
 import { applyMiddleware, createStore, compose, combineReducers } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import usersReducer from './reducers';
+import invitationsReducer from '../user-invitations/reducers';
+import enrolRequestsReducer from '../enrol-requests/reducers';
 
 const defaultReducers = {};
 
 const rootReducer = combineReducers({
   users: usersReducer,
+  invitations: invitationsReducer,
+  enrolRequests: enrolRequestsReducer,
 });
 
 enableMapSet();

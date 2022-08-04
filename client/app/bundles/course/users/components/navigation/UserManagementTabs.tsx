@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { Link } from 'react-router-dom';
 import { Tab, Tabs } from '@mui/material';
 import {
   ManageCourseUsersPermissions,
@@ -44,7 +45,7 @@ const translations = defineMessages({
 
 interface TabData {
   label: { id: string; defaultMessage: string };
-  href?: string;
+  href: string;
   count?: number;
 }
 
@@ -133,8 +134,8 @@ const UserManagementTabs: FC<Props> = (props) => {
           label={intl.formatMessage(tab.label)}
           icon={<CustomBadge badgeContent={tab.count} color="error" />}
           iconPosition="end"
-          href={tab.href}
-          component="a"
+          component={Link}
+          to={tab.href}
           style={{
             minHeight: 48,
             paddingRight: tab.count === 0 || tab.count === undefined ? 8 : 26,

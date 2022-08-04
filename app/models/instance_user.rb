@@ -23,7 +23,7 @@ class InstanceUser < ApplicationRecord
 
   private
 
-  def set_defaults # :nodoc:
+  def set_defaults
     self.role ||= InstanceUser.roles[:normal]
   end
 end

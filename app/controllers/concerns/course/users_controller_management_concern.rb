@@ -9,7 +9,7 @@ module Course::UsersControllerManagementConcern
     before_action :authorize_edit!, only: [:update, :destroy, :upgrade_to_staff]
   end
 
-  def update # :nodoc:
+  def update
     @course_user.assign_attributes(course_user_params)
     # Recompute personal timeline if algorithm changed
     update_personalized_timeline_for_user(@course_user) if @course_user.timeline_algorithm_changed?
@@ -21,7 +21,7 @@ module Course::UsersControllerManagementConcern
     end
   end
 
-  def destroy # :nodoc:
+  def destroy
     if @course_user.destroy
       destroy_user_success
     else
@@ -29,16 +29,26 @@ module Course::UsersControllerManagementConcern
     end
   end
 
-  def students # :nodoc:
-    @course_users = @course_users.students.includes(user: :emails).order_alphabetically
+  def students
+    respond_to do |format|
+      format.html
+      format.json do
+        @course_users = @course_users.students.includes(user: :emails).order_alphabetically
+      end
+    end
   end
 
-  def staff # :nodoc:
-    @student_options = @course_users.students.order_alphabetically.pluck(:id, :name)
-    @course_users = @course_users.staff.includes(user: :emails).order_alphabetically
+  def staff
+    respond_to do |format|
+      format.html
+      format.json do
+        @student_options = @course_users.students.order_alphabetically.pluck(:id, :name, :role)
+        @course_users = @course_users.staff.includes(user: :emails).order_alphabetically
+      end
+    end
   end
 
-  def upgrade_to_staff # :nodoc:
+  def upgrade_to_staff
     upgrade_to_staff_params
     if upgrade_students_to_staff
       upgrade_to_staff_success
@@ -49,11 +59,11 @@ module Course::UsersControllerManagementConcern
 
   private
 
-  def course_user_params # :nodoc:
+  def course_user_params
     @course_user_params ||= params.require(:course_user).permit(:user_id, :name, :timeline_algorithm, :role, :phantom)
   end
 
-  def upgrade_to_staff_params # :nodoc:
+  def upgrade_to_staff_params
     @upgrade_to_staff_params ||= params.require(:course_users).permit(:role, ids: [])
     params.require(:user).permit(:id)
   end
@@ -112,7 +122,7 @@ module Course::UsersControllerManagementConcern
     end
   end
 
-  def upgrade_to_staff_success # :nodoc:
+  def upgrade_to_staff_success
     respond_to do |format|
       format.json do
         render partial: 'upgrade_to_staff_results', locals: {
@@ -122,13 +132,13 @@ module Course::UsersControllerManagementConcern
     end
   end
 
-  def upgrade_to_staff_failure # :nodoc:
+  def upgrade_to_staff_failure
     respond_to do |format|
       format.json { render json: { errors: @course_user.errors.full_messages.to_sentence }, status: :bad_request }
     end
   end
 
-  def update_user_success # :nodoc:
+  def update_user_success
     respond_to do |format|
       format.json do
         render '_user_list_data', locals: {
@@ -140,19 +150,19 @@ module Course::UsersControllerManagementConcern
     end
   end
 
-  def update_user_failure # :nodoc:
+  def update_user_failure
     respond_to do |format|
       format.json { render json: { errors: @course_user.errors.full_messages.to_sentence }, status: :bad_request }
     end
   end
 
-  def destroy_user_success # :nodoc:
+  def destroy_user_success
     respond_to do |format|
       format.json { head :ok }
     end
   end
 
-  def destroy_user_failure # :nodoc:
+  def destroy_user_failure
     respond_to do |format|
       format.json { render json: { errors: @course_user.errors.full_messages.to_sentence }, status: :bad_request }
     end
