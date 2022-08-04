@@ -78,6 +78,7 @@ module Capybara::TestGroupHelpers
     # Since capybara's `find` has a default timeout until the element is found, this helps
     # to ensure certain changes are made before continuing with the tests.
     def expect_toastify(message)
+      sleep 0.5 # To ensure toast is open
       within find('div.Toastify__toast') do
         expect(find('div.Toastify__toast-body', visible: true).text).to eq(message)
         find('button.Toastify__close-button').click
