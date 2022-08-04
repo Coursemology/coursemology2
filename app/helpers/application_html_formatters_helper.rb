@@ -125,8 +125,30 @@ module ApplicationHTMLFormattersHelper
   end
 
   def format_ckeditor_rich_text(text)
-    DefaultHTMLPipeline.to_document("<div>#{text}</div>").child.inner_html.html_safe.
+    text_with_updated_code_tag = remove_internal_adjacent_code_tags(text)
+    DefaultHTMLPipeline.to_document("<div>#{text_with_updated_code_tag}</div>").
+      child.inner_html.html_safe.
       gsub(/<table>/, '<table class="table table-bordered">') # Add lines to tables
+  end
+
+  # Removes adjacent code tags inside pre tag
+  # In the past, when creating multiline codeblock using summernote,
+  # it would generate <pre><code>some code </code><code> some other code</code></pre>
+  # When there are multiple code tags within a pre tag, CKEditor will automatically
+  # add pre tag for every code tag, which messes up the display.
+  # This function will convert <pre><code></code>  <code></code></pre> into
+  # <pre><code>  </code></pre>
+  #
+  # @param [String] text The text to be updated
+  # @return [String]
+  def remove_internal_adjacent_code_tags(text)
+    return unless text
+
+    detect_pre_tag = /<pre.*?>((?:.|\s)*?)<\/pre>/
+    text.gsub(detect_pre_tag) do |match|
+      # Remove adjacent code tag (eg </code>  <code>) in the pre tag.
+      match.gsub(/(?:<\/code>(.*?)<code.*?>)/, '\\1')
+    end
   end
 
   # Syntax highlights and adds lines numbers to the given code fragment.

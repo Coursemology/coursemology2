@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 json.question do
-  json.(@programming_question, :id, :title, :description, :staff_only_comments, :maximum_grade,
+  json.(@programming_question, :id, :title, :staff_only_comments, :maximum_grade,
         :language_id, :memory_limit, :time_limit)
+  json.description format_ckeditor_rich_text(@programming_question.description)
   json.languages Coursemology::Polyglot::Language.all.order(:name) do |lang|
     json.(lang, :id, :name)
     json.editor_mode lang.ace_mode
