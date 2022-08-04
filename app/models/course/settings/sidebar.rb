@@ -36,11 +36,11 @@ class Course::Settings::Sidebar
     end
   end
 
-  def persisted? # :nodoc:
+  def persisted?
     true
   end
 
-  def valid? # :nodoc:
+  def valid?
     sidebar_items.all?(&:valid?)
   end
 end

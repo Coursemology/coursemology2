@@ -212,7 +212,7 @@ class CourseUser < ApplicationRecord
 
   private
 
-  def set_defaults # :nodoc:
+  def set_defaults
     self.name ||= user.name if user
     self.role ||= :student
   end

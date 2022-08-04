@@ -6,7 +6,7 @@ class Course::LeaderboardsController < Course::ComponentController
   before_action :preload_course_levels, only: [:index]
   before_action :fetch_course_users, only: [:index]
 
-  def index # :nodoc:
+  def index
     achievements_enabled = current_component_host[:course_achievements_component].present?
     groups_enabled = @settings.enable_group_leaderboard
 

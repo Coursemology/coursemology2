@@ -55,7 +55,7 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
 
   private
 
-  def instance_user_invitation_params # :nodoc:
+  def instance_user_invitation_params
     @instance_user_invitation_params ||= begin
       params[:instance] = { invitations_attributes: {} } unless params.key?(:instance)
       params.require(:instance).permit(invitations_attributes: [:name, :email, :role, :_destroy, :id])

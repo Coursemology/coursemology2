@@ -31,7 +31,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
     super
   end
 
-  def enqueue(job) # :nodoc:
+  def enqueue(job)
     ActiveSupport::Notifications.instrument(ENQUEUE_EVENT, job: job, caller: caller) do |payload|
       with_thread_pool { @pending_jobs << job.serialize }
       ensure_threads
@@ -40,7 +40,7 @@ class ActiveJob::QueueAdapters::BackgroundThreadAdapter < ActiveJob::QueueAdapte
     end
   end
 
-  def enqueue_at(job, timestamp) # :nodoc:
+  def enqueue_at(job, timestamp)
     @future_jobs << { job: job, at: timestamp }
   end
 

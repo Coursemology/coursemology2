@@ -2,10 +2,10 @@
 class Course::Admin::AnnouncementSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_announcements_path
 
-  def edit # :nodoc:
+  def edit
   end
 
-  def update # :nodoc:
+  def update
     if @settings.update(announcement_settings_params) && current_course.save
       redirect_to course_admin_announcements_path(current_course), success: t('.success')
     else
@@ -15,7 +15,7 @@ class Course::Admin::AnnouncementSettingsController < Course::Admin::Controller
 
   private
 
-  def announcement_settings_params # :nodoc:
+  def announcement_settings_params
     params.require(:settings_announcements_component).permit(:title)
   end
 

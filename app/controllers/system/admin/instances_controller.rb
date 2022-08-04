@@ -3,7 +3,7 @@ class System::Admin::InstancesController < System::Admin::Controller
   load_and_authorize_resource :instance, class: ::Instance.name
   add_breadcrumb :index, :admin_instances_path
 
-  def index # :nodoc:
+  def index
     respond_to do |format|
       format.html { render 'system/admin/admin/index' }
       format.json do
@@ -12,7 +12,7 @@ class System::Admin::InstancesController < System::Admin::Controller
     end
   end
 
-  def create # :nodoc:
+  def create
     if @instance.save
       preload_instances
       render 'index', format: :json
@@ -21,7 +21,7 @@ class System::Admin::InstancesController < System::Admin::Controller
     end
   end
 
-  def update # :nodoc:
+  def update
     if @instance.update(instance_params)
       render 'system/admin/instances/_instance_list_data',
              locals: { instance: @instance },
@@ -31,7 +31,7 @@ class System::Admin::InstancesController < System::Admin::Controller
     end
   end
 
-  def destroy # :nodoc:
+  def destroy
     if @instance.destroy
       head :ok
     else
@@ -41,7 +41,7 @@ class System::Admin::InstancesController < System::Admin::Controller
 
   private
 
-  def instance_params # :nodoc:
+  def instance_params
     params.require(:instance).permit(:name, :host)
   end
 

@@ -3,10 +3,10 @@ class Course::Admin::SidebarSettingsController < Course::Admin::Controller
   before_action :load_settings
   add_breadcrumb :index, :course_admin_sidebar_path
 
-  def edit # :nodoc:
+  def edit
   end
 
-  def update # :nodoc:
+  def update
     if @settings.update(settings_sidebar_params) && current_course.save
       redirect_to course_admin_sidebar_path(current_course), success: t('.success')
     else
@@ -16,7 +16,7 @@ class Course::Admin::SidebarSettingsController < Course::Admin::Controller
 
   private
 
-  def settings_sidebar_params # :nodoc:
+  def settings_sidebar_params
     params.require(:settings_sidebar)
   end
 
