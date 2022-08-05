@@ -15,7 +15,11 @@ import {
 import Note from 'lib/components/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import sharedConstants from 'lib/constants/sharedConstants';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
+import {
+  TableDownloadOptions,
+  TableColumns,
+  TableOptions,
+} from 'types/components/DataTable';
 import tableTranslations from 'lib/translations/table';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import equal from 'fast-deep-equal';
@@ -31,6 +35,7 @@ interface Props extends WrappedComponentProps {
   users: CourseUserMiniEntity[];
   manageStaff?: boolean;
   renderRowActionComponent?: (user: CourseUserRowData) => ReactElement;
+  csvDownloadOptions: TableDownloadOptions;
 }
 
 const translations = defineMessages({
@@ -96,6 +101,7 @@ const ManageUsersTable: FC<Props> = (props) => {
     manageStaff = false,
     renderRowActionComponent = null,
     intl,
+    csvDownloadOptions,
   } = props;
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
@@ -247,7 +253,8 @@ const ManageUsersTable: FC<Props> = (props) => {
   };
 
   const options: TableOptions = {
-    download: false,
+    download: true,
+    downloadOptions: csvDownloadOptions,
     filter: false,
     pagination: true,
     print: false,
@@ -277,6 +284,7 @@ const ManageUsersTable: FC<Props> = (props) => {
         display: false,
         filter: false,
         sort: false,
+        download: false,
       },
     },
     {
@@ -432,6 +440,7 @@ const ManageUsersTable: FC<Props> = (props) => {
           const actionComponent = renderRowActionComponent(user);
           return actionComponent;
         },
+        download: false,
       },
     });
   }

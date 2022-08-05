@@ -12,6 +12,7 @@ export interface TableColumns {
     customHeadLabelRender?: () => JSX.Element | null;
     customHeadRender?: () => JSX.Element | null;
     display?: boolean;
+    download?: boolean;
     empty?: boolean;
     filter?: boolean;
     filterList?: string[];
@@ -40,6 +41,7 @@ export interface TableOptions {
   ) => JSX.Element;
   customToolbar?: () => JSX.Element;
   download?: boolean;
+  downloadOptions?: TableDownloadOptions;
   expandableRows?: boolean;
   expandableRowsHeader?: boolean;
   expandableRowsOnClick?: boolean;
@@ -86,4 +88,13 @@ export interface TableState {
 export interface TableRowMeta {
   rowIndex: number;
   dataIndex: number;
+}
+
+export interface TableDownloadOptions {
+  filename: string;
+  separator?: string;
+  filterOptions?: {
+    useDisplayedColumnsOnly?: boolean;
+    useDisplayedRowsOnly?: boolean;
+  };
 }

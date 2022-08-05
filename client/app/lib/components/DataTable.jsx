@@ -80,6 +80,7 @@ const processColumns = (includeRowNumber, columns) => {
         sort: false,
         filter: false,
         customBodyRender: (value, meta) => meta.rowIndex + 1,
+        download: false,
       },
     });
   }
