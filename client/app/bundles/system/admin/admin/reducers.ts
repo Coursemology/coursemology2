@@ -58,17 +58,17 @@ const reducer = produce((draft: AdminState, action: AdminActionType) => {
       saveListToStore(draft.announcements, entityList);
       break;
     }
+    case SAVE_ANNOUNCEMENT: {
+      const announcementData = action.announcement;
+      const announcementEntity = { ...announcementData };
+      saveEntityToStore(draft.announcements, announcementEntity);
+      break;
+    }
     case DELETE_ANNOUNCEMENT: {
       const announcementId = action.id;
       if (draft.announcements.byId[announcementId]) {
         removeFromStore(draft.announcements, announcementId);
       }
-      break;
-    }
-    case SAVE_ANNOUNCEMENT: {
-      const announcementData = action.announcement;
-      const announcementEntity = { ...announcementData };
-      saveEntityToStore(draft.announcements, announcementEntity);
       break;
     }
     case SAVE_USERS_LIST: {

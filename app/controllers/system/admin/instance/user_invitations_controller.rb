@@ -22,8 +22,6 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
     result = invite
     if result
       create_invitation_success(result)
-    # redirect_to admin_instance_user_invitations_path, success: create_success_message(*result),
-    # warning: create_warning_message(*result)
     else
       head :bad_request
     end
@@ -33,12 +31,8 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
     @invitation = Instance::UserInvitation.find(params[:id])
     if @invitation.destroy
       destroy_invitation_success
-      # redirect_to admin_instance_user_invitations_path,
-      #             success: t('.success', name: @invitation.name)
     else
       destroy_invitation_failure
-      # redirect_to admin_instance_user_invitations_path,
-      #             danger: @invitation.errors.full_messages.to_sentence
     end
   end
 

@@ -72,20 +72,19 @@ RSpec.feature 'Instance::UserRoleRequests' do
       end
     end
 
-    context 'As an instance admin' do
+    context 'As an instance admin', js: true do
       let(:user) { create(:instance_administrator).user }
       let!(:requests) { create_list(:role_request, 2, instance: instance) }
 
-      scenario 'I can approve requests', js: true do
+      scenario 'I can approve requests' do
         visit instance_user_role_requests_path
 
         sample_request = requests.sample
 
-        within find(content_tag_selector(sample_request)) do
-          click_button 'update'
+        within find("tr.pending_role_request_#{sample_request.id}") do
+          find("button.role-request-approve-#{sample_request.id}").click
         end
-        wait_for_ajax
-        expect(page).to have_selector('div.alert', text: I18n.t('instance_user_role_requests.approve.success'))
+        expect_toastify("Approved role request of #{sample_request.user.name}!")
 
         expect(sample_request.user.instance_users.first.reload.role).to eq(sample_request.role)
       end
@@ -94,9 +93,18 @@ RSpec.feature 'Instance::UserRoleRequests' do
         visit instance_user_role_requests_path
 
         sample_request = requests.sample
-        find_link(nil, href: reject_instance_user_role_request_path(sample_request)).click
+        within find("tr.pending_role_request_#{sample_request.id}") do
+          find("button.role-request-reject-#{sample_request.id}").click
+        end
+        accept_confirm_dialog
 
-        expect(page).to have_selector('div.alert', text: I18n.t('instance_user_role_requests.reject.success'))
+        expect_toastify("Role request for #{sample_request.user.name} was rejected.")
+        sample_request.reload
+
+        expect(sample_request.workflow_state).to eq('rejected')
+        expect(current_path).to eq(instance_user_role_requests_path)
+        expect(page).to_not have_selector("tr.pending_role_request_#{sample_request.id}")
+        expect(page).to have_selector("tr.rejected_role_request_#{sample_request.id}")
       end
     end
   end

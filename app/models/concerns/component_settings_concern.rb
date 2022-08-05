@@ -4,6 +4,12 @@ module ComponentSettingsConcern
 
   # This is used when generating checkboxes for each of the components
   def disableable_component_collection
+    @settable.disableable_components.map { |c| [c.display_name, c.key.to_s] }.sort
+  end
+
+  # This is used to return components as json to the frontend
+  # Will replace disableable_component_collection when react migration is complete
+  def disableable_component_hash
     @settable.disableable_components.map { |c| { name: c.display_name, key: c.key.to_s } }
   end
 

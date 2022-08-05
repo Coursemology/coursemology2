@@ -43,7 +43,7 @@ class System::Admin::Instance::AnnouncementsController < System::Admin::Instance
       render json: { errors: @announcement.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
-  
+
   private
 
   def announcement_params

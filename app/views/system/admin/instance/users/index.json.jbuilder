@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 json.users @instance_users.each do |instance_user|
-  json.partial! 'user_list_data', user: instance_user.user
+  json.partial! 'user_list_data', instance_user: instance_user
 end
 
 json.counts do
