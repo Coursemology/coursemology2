@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class System::Admin::Instance::Controller < ApplicationController
-  layout 'system_admin_instance'
+  # layout 'system_admin_instance'
   before_action :load_instance
   before_action :authorize_instance_admin
   before_action :add_instance_breadcrumb

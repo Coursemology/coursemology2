@@ -1,9 +1,9 @@
-import { InstanceUserListData } from 'types/instanceUsers';
+import { InstanceUserBasicPhotoListData } from 'types/system/instance/users';
 import { CourseUserListData } from './courseUsers';
 
 export interface NotificationData {
   id: number;
-  userInfo: CourseUserListData | InstanceUserListData;
+  userInfo: CourseUserListData | InstanceUserBasicPhotoListData;
   isCourseUser: boolean;
   actableType:
     | 'achievement'

@@ -105,23 +105,25 @@ const CoursesTable: FC<Props> = (props) => {
   };
 
   const search = (page, searchText): void => {
-    setIsLoading(true);
-    dispatch(
-      indexCourses({
-        'filter[page_num]': page,
-        'filter[length]': 100,
-        active,
-        search: searchText ? searchText.trim() : searchText,
-      }),
-    )
-      .catch(() =>
-        toast.error(
-          intl.formatMessage(translations.fetchFilteredCoursesFailure),
-        ),
+    if (searchText !== null) {
+      setIsLoading(true);
+      dispatch(
+        indexCourses({
+          'filter[page_num]': page,
+          'filter[length]': 100,
+          active,
+          search: searchText ? searchText.trim() : searchText,
+        }),
       )
-      .finally(() => {
-        setIsLoading(false);
-      });
+        .catch(() =>
+          toast.error(
+            intl.formatMessage(translations.fetchFilteredCoursesFailure),
+          ),
+        )
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   const options: TableOptions = {

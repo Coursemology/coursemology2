@@ -58,6 +58,8 @@ const CoursesIndex: FC<Props> = (props) => {
     const active = getUrlParameter('active');
     if (active === 'true') {
       setTableTitle(`${intl.formatMessage(translations.title)} (Active)`);
+    } else {
+      setTableTitle(intl.formatMessage(translations.title));
     }
     setIsLoading(true);
     dispatch(indexCourses({ 'filter[length]': 100, active }))

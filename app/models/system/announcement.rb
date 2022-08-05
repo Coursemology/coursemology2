@@ -7,7 +7,6 @@ class System::Announcement < GenericAnnouncement
   #   @param [Symbol] direction The direction to order results by.
   scope :sorted_by_date, ->(direction = :desc) { order(start_at: direction) }
 
-
   def to_partial_path
     'system/admin/announcements/announcement'
   end

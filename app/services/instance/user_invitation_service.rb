@@ -42,7 +42,7 @@ class Instance::UserInvitationService
     send_registered_emails(new_instance_users) if success
     send_invitation_emails(new_invitations) if success
     invitations = [new_invitations, existing_invitations, new_instance_users, existing_instance_users, duplicate_users]
-    success ? invitations.map(&:size) : nil
+    success ? invitations : nil
   end
 
   def resend_invitation(invitations)
