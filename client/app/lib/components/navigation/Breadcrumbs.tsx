@@ -13,6 +13,14 @@ const breadcrumbNameMap: { [key: string]: string } = {
   '/admin/users': 'Users',
   '/admin/instances': 'Instances',
   '/admin/courses': 'Courses',
+  '/admin/instance': 'Instance Administration',
+  '/admin/instance/announcements': 'Announcements',
+  '/admin/instance/users': 'Users',
+  '/admin/instance/users/invite': 'Invite Users',
+  '/admin/instance/user_invitations': 'User Invitations',
+  '/admin/instance/courses': 'Courses',
+  '/admin/instance/components': 'Components',
+  '/role_requests': 'Role Requests',
 };
 
 interface LinkRouterProps extends LinkProps {

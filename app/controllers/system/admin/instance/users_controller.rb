@@ -5,23 +5,30 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
   add_breadcrumb :index, :admin_instance_users_path
 
   def index
-    load_instance_users
-    load_counts
+    respond_to do |format|
+      format.html { render 'system/admin/instance/admin/index' }
+      format.json do
+        load_instance_users
+        load_counts
+      end
+    end
   end
 
   def update
     if @instance_user.update(instance_user_params)
-      flash.now[:success] = t('.success', user: @instance_user.user.name)
+      render 'system/admin/instance/users/_user_list_data',
+             locals: { user: @instance_user.user },
+             status: :ok
     else
-      flash.now[:danger] = @instance_user.errors.full_messages.to_sentence
+      render json: { errors: @instance_user.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   def destroy
     if @instance_user.destroy
-      redirect_to admin_instance_users_path, success: t('.success', user: @instance_user.user.name)
+      head :ok
     else
-      redirect_to admin_instance_users_path, danger: @instance_user.errors.full_messages.to_sentence
+      render json: { errors: @instance_user.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -29,10 +36,16 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
 
   def load_instance_users
     @instance_users = @instance.instance_users.includes(user: [:emails, :courses]).
-                      page(page_param).search_and_ordered_by_username(search_param)
-    @instance_users = @instance_users.active_in_past_7_days if params[:active]
+                      search_and_ordered_by_username(search_param)
+    @instance_users = @instance_users.active_in_past_7_days if params[:active].present?
     @instance_users = @instance_users.where(role: params[:role]) \
-      if params[:role] && InstanceUser.roles.key?(params[:role])
+      if params[:role].present? && InstanceUser.roles.key?(params[:role])
+    @instance_users_count = if @instance_users.count.is_a?(Hash)
+                              @instance_users.count.count
+                            else
+                              @instance_users.count
+                            end
+    @instance_users = @instance_users.paginated(new_page_params)
   end
 
   def load_counts

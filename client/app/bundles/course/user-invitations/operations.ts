@@ -11,7 +11,7 @@ import * as actions from './actions';
 /**
  * Prepares and maps answer value in the react-hook-form into server side format.
  *
- * @param answers
+ * @param invitations
  * @returns
  */
 const formatInvitations = (invitations: InvitationPostData[]): FormData => {

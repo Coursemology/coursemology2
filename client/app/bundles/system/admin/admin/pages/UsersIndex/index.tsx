@@ -79,6 +79,8 @@ const UsersIndex: FC<Props> = (props) => {
           translations.title,
         )} — (${roleString}${activeString})`,
       );
+    } else {
+      setTableTitle(intl.formatMessage(translations.title));
     }
   };
 
