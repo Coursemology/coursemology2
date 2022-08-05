@@ -41,7 +41,7 @@ const initialState: UsersState = {
   personalTimes: createEntityStore(),
   experiencePointsRecords: createEntityStore(),
   experiencePointsRecordsSettings: {
-    name: '',
+    courseUserName: '',
     rowCount: 0,
   },
 };
@@ -133,12 +133,13 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
     }
     case SAVE_EXPERIENCE_POINTS_RECORD_LIST: {
       removeAllFromStore(draft.experiencePointsRecords);
-      const experiencePointsRecordList = action.rowData;
+      const experiencePointsRecordList = action.experiencePointRecords;
       const entityList = experiencePointsRecordList.map((data) => ({
         ...data,
       }));
       saveListToStore(draft.experiencePointsRecords, entityList);
-      draft.experiencePointsRecordsSettings.name = action.name;
+      draft.experiencePointsRecordsSettings.courseUserName =
+        action.courseUserName;
       draft.experiencePointsRecordsSettings.rowCount = action.rowCount;
       break;
     }

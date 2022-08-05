@@ -1,13 +1,15 @@
 import { TableCell, TableRow, TextField } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
+import { FC, memo, useEffect, useState } from 'react';
 import {
   ExperiencePointsRecordMiniEntity,
   ExperiencePointsRowData,
 } from 'types/course/experiencePointsRecords';
-import { getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import equal from 'fast-deep-equal';
 
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import PointManagementButtons from '../buttons/PointManagementButtons';
 
 interface Props {
@@ -32,6 +34,11 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
     reason: '',
     pointsAwarded: 0,
   } as ExperiencePointsRowData);
+  const [defaultRowData, setDefaultRowData] = useState({
+    id,
+    reason: '',
+    pointsAwarded: 0,
+  } as ExperiencePointsRowData);
 
   useEffect(() => {
     setRowData({
@@ -39,45 +46,72 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
       reason: record.reason.text,
       pointsAwarded: record.pointsAwarded,
     });
+    setDefaultRowData({
+      id: record.id,
+      reason: record.reason.text,
+      pointsAwarded: record.pointsAwarded,
+    });
   }, [record]);
 
   const onUpdateReason = (value: string): void => {
-    setRowData({ ...rowData, reason: value });
-    setIsDirty(value.trim().length > 0);
+    const newData: ExperiencePointsRowData = { ...rowData, reason: value };
+    setIsDirty(value.trim().length > 0 && !equal(newData, defaultRowData));
+    setRowData(newData);
   };
 
   const onUpdatePoints = (value: string): void => {
-    setIsDirty(value.trim().length > 0);
     if (!Number.isNaN(+value)) {
-      setRowData({ ...rowData, pointsAwarded: +value });
+      const newData: ExperiencePointsRowData = {
+        ...rowData,
+        pointsAwarded: +value,
+      };
+      setIsDirty(!equal(newData, defaultRowData));
+      setRowData(newData);
     }
   };
 
+  const handleSave = (newData: ExperiencePointsRowData): void => {
+    setDefaultRowData({ ...newData });
+    setIsDirty(false);
+  };
+
+  const renderReason = (): JSX.Element | string => {
+    if (!record.reason.isManuallyAwarded) {
+      return <a href={record.reason.link}>{rowData.reason}</a>;
+    }
+    if (record.permissions.canUpdate) {
+      return (
+        <TextField
+          id={`reason-${record.id}`}
+          key={`reason-${record.id}`}
+          value={rowData.reason}
+          onChange={(e): void => onUpdateReason(e.target.value)}
+          variant="standard"
+        />
+      );
+    }
+    return rowData.reason;
+  };
+
   return (
-    <TableRow hover key={record.id}>
+    <TableRow hover key={record.id} id={`record-${record.id}`}>
       <TableCell>
-        <a href={getCourseUserURL(getCourseId(), record.updaterCourseUser.id)}>
-          {record.updaterCourseUser.name}
-        </a>
+        <Link
+          to={
+            record.updaterUser.isCourseUser
+              ? getCourseUserURL(getCourseId(), record.updaterUser.id)
+              : getUserURL(record.updaterUser.id)
+          }
+        >
+          {record.updaterUser.name}
+        </Link>
       </TableCell>
-      <TableCell>
-        {record.reason.manuallyAwarded && record.permissions.canUpdate ? (
-          <TextField
-            id={`record-${record.id}`}
-            key={`record-${record.id}`}
-            value={rowData.reason}
-            onChange={(e): void => onUpdateReason(e.target.value)}
-            variant="standard"
-          />
-        ) : (
-          <a href={record.reason.link}>{rowData.reason}</a>
-        )}
-      </TableCell>
+      <TableCell>{renderReason()}</TableCell>
       <TableCell>
         {record.permissions.canUpdate ? (
           <TextField
-            id={`record-${record.id}`}
-            key={`record-${record.id}`}
+            id={`points-${record.id}`}
+            key={`points-${record.id}`}
             value={rowData.pointsAwarded}
             onChange={(e): void => onUpdatePoints(e.target.value)}
             variant="standard"
@@ -96,11 +130,14 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
           permissions={record.permissions}
           data={rowData}
           isDirty={isDirty}
-          manuallyAwarded={record.reason.manuallyAwarded}
+          isManuallyAwarded={record.reason.isManuallyAwarded}
+          handleSave={handleSave}
         />
       </TableCell>
     </TableRow>
   );
 };
 
-export default ExperiencePointsTableRow;
+export default memo(ExperiencePointsTableRow, (prevProps, nextProps) =>
+  equal(prevProps.record, nextProps.record),
+);

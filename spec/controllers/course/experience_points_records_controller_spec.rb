@@ -36,7 +36,7 @@ RSpec.describe Course::ExperiencePointsRecordsController, type: :controller do
         end
 
         it 'sets an error flash message' do
-          expect(flash[:danger]).to eq('')
+          expect(subject).to have_http_status(:bad_request)
         end
       end
     end
@@ -52,7 +52,7 @@ RSpec.describe Course::ExperiencePointsRecordsController, type: :controller do
           subject
         end
 
-        it { is_expected.to redirect_to(experience_points_history_path) }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
   end

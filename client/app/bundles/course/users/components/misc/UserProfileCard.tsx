@@ -12,6 +12,7 @@ import {
 import { scroller } from 'react-scroll';
 import { CourseUserEntity } from 'types/course/courseUsers';
 import sharedConstants from 'lib/constants/sharedConstants';
+import { Link as RouterLink } from 'react-router-dom';
 import UserProfileCardStats from './UserProfileCardStats';
 import styles from './UserProfileCard.scss';
 
@@ -89,13 +90,13 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
           />
         )}
         {user.exp !== undefined && (
-          <a href={user.experiencePointsRecordsUrl}>
+          <RouterLink to={user.experiencePointsRecordsUrl ?? ''}>
             <UserProfileCardStats
               title={intl.formatMessage(translations.exp)}
               value={user.exp}
               className="user-exp-stat"
             />
-          </a>
+          </RouterLink>
         )}
         {user.achievements !== undefined && (
           <a

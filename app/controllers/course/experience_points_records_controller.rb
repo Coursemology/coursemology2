@@ -18,16 +18,17 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
           @experience_points_records.active.
           includes(:actable, :updater).order(updated_at: :desc)
         @experience_points_count = @experience_points_records.count
-        @experience_points_records = @experience_points_records.paginated(paginate_page_param)
+        @experience_points_records = @experience_points_records.paginated(new_page_params)
       end
     end
   end
 
   def update
     if @experience_points_record.update(experience_points_record_params)
-      head :ok
+      render json: { id: @experience_points_record.id, reason: @experience_points_record.reason,
+                     pointsAwarded: @experience_points_record.points_awarded }, status: :ok
     else
-      head :bad_request
+      render json: { errors: @experience_points_record.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -35,7 +36,7 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
     if @experience_points_record.destroy
       head :ok
     else
-      head :bad_request
+      render json: { errors: @experience_points_record.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -48,10 +49,6 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
   def add_breadcrumbs # :nodoc:
     add_breadcrumb @course_user.name, course_user_path(current_course, @course_user)
     add_breadcrumb :index
-  end
-
-  def paginate_page_param
-    params.permit(:page_num)
   end
 
   # @return [Course::ExperiencePointsComponent]

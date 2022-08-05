@@ -2,8 +2,10 @@
 actable = specific.actable
 case actable
 when Course::Assessment::Submission
-  assessment = specific.assessment
+  submission = specific
+  assessment = submission.assessment
   json.text assessment.title
+  json.link edit_course_assessment_submission_path(current_course, assessment, submission)
 when Course::Survey::Response
   response = specific
   survey = response.survey

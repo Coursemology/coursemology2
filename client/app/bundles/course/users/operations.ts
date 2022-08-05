@@ -256,9 +256,9 @@ export function fetchExperiencePointsRecord(
         const data = response.data;
         dispatch(
           actions.saveExperiencePointsRecordList(
-            data.name,
+            data.courseUserName,
             data.rowCount,
-            data.rowData,
+            data.experiencePointRecords,
           ),
         );
       })

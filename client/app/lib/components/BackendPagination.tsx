@@ -9,7 +9,7 @@ interface Props extends WrappedComponentProps {
   handlePageChange: (arg1: number) => void;
 }
 
-const PointPagination: FC<Props> = (props) => {
+const BackendPagination: FC<Props> = (props) => {
   const { rowCount, rowsPerPage, pageNum, handlePageChange } = props;
 
   const count = Math.ceil(rowCount / rowsPerPage);
@@ -39,4 +39,4 @@ const PointPagination: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(PointPagination);
+export default injectIntl(BackendPagination);

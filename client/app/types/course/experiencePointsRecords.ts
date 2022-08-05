@@ -9,23 +9,28 @@ export type ExperiencePointsRecordPermissions = Permissions<
 >;
 
 export interface ExperiencePointsRecordSettings {
-  name: string;
+  courseUserName: string;
   rowCount: number;
+}
+
+export interface PointsReason {
+  isManuallyAwarded: boolean;
+  text: string;
+  link?: string;
+}
+
+export interface ExperiencePointsRecordUserListData
+  extends CourseUserBasicListData {
+  isCourseUser: boolean;
 }
 
 export interface ExperiencePointsRecordListData {
   id: number;
-  updaterCourseUser: CourseUserBasicListData;
+  updaterUser: CourseUserBasicListData;
   reason: PointsReason;
   pointsAwarded: number;
   updatedAt: Date;
   permissions: ExperiencePointsRecordPermissions;
-}
-
-export interface PointsReason {
-  manuallyAwarded: boolean;
-  text: string;
-  link?: string;
 }
 
 /**
@@ -33,9 +38,14 @@ export interface PointsReason {
  * received backend data.
  */
 
+export interface ExperiencePointsRecordUserMiniEntity
+  extends CourseUserBasicMiniEntity {
+  isCourseUser: boolean;
+}
+
 export interface ExperiencePointsRecordMiniEntity {
   id: number;
-  updaterCourseUser: CourseUserBasicMiniEntity;
+  updaterUser: ExperiencePointsRecordUserMiniEntity;
   reason: PointsReason;
   pointsAwarded: number;
   updatedAt: Date;

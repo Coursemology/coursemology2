@@ -23,9 +23,9 @@ interface Props extends WrappedComponentProps {
 }
 
 const translations = defineMessages({
-  fetchUsersFailure: {
-    id: 'course.users.manage.fetch.failue',
-    defaultMessage: 'Failed to fetch users',
+  fetchRecordsFailure: {
+    id: 'course.users.ExperiencePointsRecords.fetch.failure',
+    defaultMessage: 'Failed to fetch records',
   },
 });
 
@@ -44,7 +44,7 @@ const ExperiencePointsTable: FC<Props> = (props) => {
         setIsLoading(false);
       })
       .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchUsersFailure)),
+        toast.error(intl.formatMessage(translations.fetchRecordsFailure)),
       );
   }, [page]);
 

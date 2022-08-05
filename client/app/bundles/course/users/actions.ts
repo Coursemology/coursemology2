@@ -121,15 +121,15 @@ export function deleteUserOption(id: number): DeleteUserOptionAction {
 }
 
 export function saveExperiencePointsRecordList(
-  name: string,
+  courseUserName: string,
   rowCount: number,
-  rowData: ExperiencePointsRecordListData[],
+  experiencePointRecords: ExperiencePointsRecordListData[],
 ): SaveExperiencePointsRecordListAction {
   return {
     type: SAVE_EXPERIENCE_POINTS_RECORD_LIST,
-    name,
+    courseUserName,
     rowCount,
-    rowData,
+    experiencePointRecords,
   };
 }
 
