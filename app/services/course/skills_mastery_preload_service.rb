@@ -29,7 +29,8 @@ class Course::SkillsMasteryPreloadService
   # @param [Course::Assessment::Skill] skill The skill to calculate percentage mastery for.
   # @return [Integer] Percentage of skill mastered, rounded off
   def percentage_mastery(skill)
-    skill_total_grade = skill.total_grade
+    # skill_total_grade = skill.total_grade
+    skill_total_grade = total_grade_by_skill[skill]
     return 0 unless skill_total_grade > 0
 
     (grade(skill) / skill_total_grade.to_f * 100).round
@@ -41,6 +42,14 @@ class Course::SkillsMasteryPreloadService
   # @return [Float]
   def grade(skill)
     grade_by_skill[skill]
+  end
+
+  # Returns the maximum grade obtained for a given skill.
+  #
+  # @param [Course::Assessment::Skill] skill The skill to get the grade for.
+  # @return [Float]
+  def total_grade(skill)
+    total_grade_by_skill[skill]
   end
 
   private
@@ -66,6 +75,17 @@ class Course::SkillsMasteryPreloadService
         end
       end
       grade_by_skill
+    end
+  end
+
+  def total_grade_by_skill
+    @total_grade_by_skill ||= begin
+      total_grade_by_skill = Hash.new(0)
+      skills_with_total_grade = @course.assessment_skills.calculated(:total_grade)
+      skills_with_total_grade.each do |skill|
+        total_grade_by_skill[skill] = skill.total_grade
+      end
+      total_grade_by_skill
     end
   end
 end
