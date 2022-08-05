@@ -84,6 +84,7 @@ const ManageStudents: FC<Props> = (props) => {
               renderRowActionComponent={(user): JSX.Element => (
                 <UserManagementButtons user={user} />
               )}
+              csvDownloadOptions={{ filename: 'Student List' }}
             />
           ) : (
             renderEmptyState()
