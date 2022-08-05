@@ -34,12 +34,6 @@ en:
       success: 'Your role request was submitted.'
     update:
       success: 'Your role request was updated.'
-    approve:
-      success: '%{user} has been approved as %{role}.'
-    reject:
-      success_with_email: 'A role request rejection email with a message has been sent to %{user}.'
-      success: 'The role request made by %{user} has been rejected.'
-      failure: 'Failed to reject request. Please try again.'
     user_role_request:
       approve: 'Approve user role request'
       reject_with_message: 'Reject user role request and send message'
