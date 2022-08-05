@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import {
   ExperiencePointsRecordListData,
+  ExperiencePointsRowData,
   UpdateExperiencePointsRecordPatchData,
 } from 'types/course/experiencePointsRecords';
 import BaseCourseAPI from './Base';
@@ -16,13 +17,13 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
     pageNum: number = 1,
   ): Promise<
     AxiosResponse<{
-      name: string;
+      courseUserName: string;
       rowCount: number;
-      rowData: ExperiencePointsRecordListData[];
+      experiencePointRecords: ExperiencePointsRecordListData[];
     }>
   > {
     return this.getClient().get(
-      `${this._baseUrlPrefix}/users/${userId}/experience_points_records?page_num=${pageNum}`,
+      `${this._baseUrlPrefix}/users/${userId}/experience_points_records?filter[page_num]=${pageNum}`,
     );
   }
 
@@ -32,7 +33,7 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
   update(
     params: UpdateExperiencePointsRecordPatchData,
     recordId: number,
-  ): Promise<AxiosResponse<void>> {
+  ): Promise<AxiosResponse<ExperiencePointsRowData>> {
     const url = `${
       this._baseUrlPrefix
     }/users/${this.getCourseUserId()}/experience_points_records/${recordId}`;

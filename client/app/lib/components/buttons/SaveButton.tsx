@@ -3,13 +3,13 @@ import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import Save from '@mui/icons-material/Save';
 
 interface Props extends IconButtonProps {
-  onClick?: (e: SyntheticEvent) => void;
+  onClick: (e: SyntheticEvent) => void;
   tooltip?: string;
   disabled?: boolean;
 }
 
 const SaveButton = ({
-  onClick = undefined,
+  onClick,
   tooltip = '',
   disabled = false,
   ...props

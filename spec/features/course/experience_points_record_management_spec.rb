@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Courses: Experience Points Records: Management' do
+RSpec.feature 'Courses: Experience Points Records: Management', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -27,8 +27,7 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
     context 'As a Course manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario "I can view a course student's active experience points records" do
-        records
+      scenario "I can view a course student's active experience points records", js: true do
         visit course_user_experience_points_records_path(course, course_student)
 
         expect(page).to have_content_tag_for(record)
@@ -40,7 +39,6 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
       end
 
       scenario "I can update a course student's active manually-awarded points records", js: true do
-        records
         visit course_user_experience_points_records_path(course, course_student)
 
         within find(content_tag_selector(record)) do
@@ -65,8 +63,7 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
         expect(manual_record.points_awarded).to eq(updated_points)
       end
 
-      scenario "I can delete a course student's active manually-awarded points records" do
-        records
+      scenario "I can delete a course student's active manually-awarded points records", js: true do
         visit course_user_experience_points_records_path(course, course_student)
 
         record_path =
@@ -85,8 +82,7 @@ RSpec.feature 'Courses: Experience Points Records: Management' do
     context 'As a Course student' do
       let(:user) { course_student.user }
 
-      scenario 'I can view my active experience points records' do
-        records
+      scenario 'I can view my active experience points records', js: true do
         visit course_user_experience_points_records_path(course, course_student)
 
         expect(page).to have_content_tag_for(record)

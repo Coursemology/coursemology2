@@ -14,6 +14,7 @@ import {
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
 
+import BackendPagination from 'lib/components/BackendPagination';
 import {
   getAllSubmissionMiniEntities,
   getFilter,
@@ -31,7 +32,6 @@ import {
 import SubmissionsTable from '../../components/tables/SubmissionsTable';
 import SubmissionFilter from '../../components/misc/SubmissionFilter';
 import SubmissionTabs from '../../components/misc/SubmissionTabs';
-import SubmissionPagination from '../../components/misc/SubmissionPagination';
 
 interface Props extends WrappedComponentProps {}
 
@@ -177,8 +177,8 @@ const SubmissionsIndex: FC<Props> = (props) => {
           />
 
           {!isTabChanging && (
-            <SubmissionPagination
-              submissionCount={submissionCount}
+            <BackendPagination
+              rowCount={submissionCount}
               rowsPerPage={ROWS_PER_PAGE}
               pageNum={pageNum}
               handlePageChange={handlePageChange}
@@ -195,8 +195,8 @@ const SubmissionsIndex: FC<Props> = (props) => {
           />
 
           {!isTabChanging && submissions.length > 15 && !tableIsLoading && (
-            <SubmissionPagination
-              submissionCount={submissionCount}
+            <BackendPagination
+              rowCount={submissionCount}
               rowsPerPage={ROWS_PER_PAGE}
               pageNum={pageNum}
               handlePageChange={handlePageChange}

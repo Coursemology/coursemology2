@@ -1,18 +1,20 @@
 # frozen_string_literal: true
 
 json.rowCount @experience_points_count
-json.name @course_user.name
+json.courseUserName @course_user.name
 
-json.rowData @experience_points_records do |experience_points_record|
+json.experiencePointRecords @experience_points_records do |experience_points_record|
   json.id experience_points_record.id
-  updater_course_user = @course_user_preload_service.course_user_for(experience_points_record.updater)
-  json.updaterCourseUser do
-    json.id updater_course_user.id
-    json.name updater_course_user.name
+  course_user = @course_user_preload_service.course_user_for(experience_points_record.updater)
+  updater_user = course_user || experience_points_record.updater
+  json.updaterUser do
+    json.id updater_user.id
+    json.name updater_user.name
+    json.isCourseUser course_user.present?
   end
 
   json.reason do
-    json.manuallyAwarded experience_points_record.manually_awarded?
+    json.isManuallyAwarded experience_points_record.manually_awarded?
     if experience_points_record.manually_awarded?
       json.text experience_points_record.reason
     else

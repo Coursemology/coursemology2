@@ -86,9 +86,9 @@ export interface DeleteUserOptionAction {
 
 export interface SaveExperiencePointsRecordListAction {
   type: typeof SAVE_EXPERIENCE_POINTS_RECORD_LIST;
-  name: string;
+  courseUserName: string;
   rowCount: number;
-  rowData: ExperiencePointsRecordListData[];
+  experiencePointRecords: ExperiencePointsRecordListData[];
 }
 
 export interface UpdateExperiencePointsRecordAction {

@@ -3,20 +3,22 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { useSelector } from 'react-redux';
 import { AppState } from 'types/store';
-import { getExperiencePointsRecordsSettings } from '../../selectors';
+import { getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseId, getCourseUserId } from 'lib/helpers/url-helpers';
+import BackendPagination from 'lib/components/BackendPagination';
 import ExperiencePointsTable from '../../components/tables/ExperiencePointsTable';
-import PointPagination from '../../components/pagination/PointPagination';
+import { getExperiencePointsRecordsSettings } from '../../selectors';
 
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   experiencePointsRecordsHeader: {
-    id: 'course.users.xperiencePointsRecords.header',
+    id: 'course.users.ExperiencePointsRecords.header',
     defaultMessage: 'Experience Points History for ',
   },
   fetchUsersFailure: {
-    id: 'course.users.manage.fetch.failue',
-    defaultMessage: 'Failed to fetch users',
+    id: 'course.users.ExperiencePointsRecords.fetch.failue',
+    defaultMessage: 'Failed to fetch records',
   },
 });
 
@@ -37,16 +39,17 @@ const ExperiencePointsRecords: FC<Props> = (props) => {
       <PageHeader
         title={`${intl.formatMessage(
           translations.experiencePointsRecordsHeader,
-        )} ${experiencePointsRecordSettings.name}`}
+        )} ${experiencePointsRecordSettings.courseUserName}`}
+        returnLink={getCourseUserURL(getCourseId(), getCourseUserId())}
       />
-      <PointPagination
+      <BackendPagination
         rowCount={experiencePointsRecordSettings.rowCount}
         rowsPerPage={ROWS_PER_PAGE}
         pageNum={pageNum}
         handlePageChange={handlePageChange}
       />
       <ExperiencePointsTable page={pageNum} />
-      <PointPagination
+      <BackendPagination
         rowCount={experiencePointsRecordSettings.rowCount}
         rowsPerPage={ROWS_PER_PAGE}
         pageNum={pageNum}

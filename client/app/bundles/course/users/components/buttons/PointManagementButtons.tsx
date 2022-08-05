@@ -18,7 +18,8 @@ interface Props extends WrappedComponentProps {
   permissions: ExperiencePointsRecordPermissions;
   data: ExperiencePointsRowData;
   isDirty: boolean;
-  manuallyAwarded: boolean;
+  isManuallyAwarded: boolean;
+  handleSave: (newData: ExperiencePointsRowData) => void;
 }
 
 const translations = defineMessages({
@@ -28,7 +29,7 @@ const translations = defineMessages({
   },
   deletionFailure: {
     id: 'course.users.components.buttons.PointManagementButtons.delete.fail',
-    defaultMessage: 'Failed to delete record.',
+    defaultMessage: 'Failed to delete record - {error}',
   },
   deletionConfirm: {
     id: 'course.users.components.buttons.PointManagementButtons.delete.confirm',
@@ -41,25 +42,33 @@ const translations = defineMessages({
   },
   updateFailure: {
     id: 'course.users.components.buttons.PointManagementButtons.update.fail',
-    defaultMessage: 'Failed to update record',
+    defaultMessage: 'Failed to update record - {error}',
   },
 });
 
 const PointManagementButtons: FC<Props> = (props) => {
-  const { intl, permissions, data, isDirty, manuallyAwarded } = props;
+  const { intl, permissions, data, isDirty, isManuallyAwarded, handleSave } =
+    props;
   const dispatch = useDispatch<AppDispatch>();
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const onSave = (newData: ExperiencePointsRowData): Promise<void> => {
+  const onSave = (): void => {
     setIsSaving(true);
-    return dispatch(updateExperiencePointsRecord(newData))
-      .then(() => {
+    dispatch(updateExperiencePointsRecord(data))
+      .then((response) => {
+        handleSave(response.data);
         toast.success(intl.formatMessage(translations.updateSuccess));
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.updateFailure));
-        throw error;
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.updateFailure, {
+            error: errorMessage,
+          }),
+        );
       })
       .finally(() => setIsSaving(false));
   };
@@ -71,8 +80,14 @@ const PointManagementButtons: FC<Props> = (props) => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.deletionFailure));
-        throw error;
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          intl.formatMessage(translations.deletionFailure, {
+            error: errorMessage,
+          }),
+        );
       })
       .finally(() => setIsDeleting(false));
   };
@@ -84,10 +99,10 @@ const PointManagementButtons: FC<Props> = (props) => {
           tooltip="Save Changes"
           className={`record-save-${data.id}`}
           disabled={isSaving || isDeleting || !isDirty}
-          onClick={(): Promise<void> => onSave(data)}
+          onClick={onSave}
         />
       )}
-      {permissions.canDestroy && manuallyAwarded && (
+      {permissions.canDestroy && isManuallyAwarded && (
         <DeleteButton
           tooltip="Delete User"
           className={`record-delete-${data.id}`}
