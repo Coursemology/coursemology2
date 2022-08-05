@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-total_course = Course.unscoped.count
-active_course = Course.unscoped.active_in_past_7_days.count
+total_course = Course.count
+active_course = Course.active_in_past_7_days.count
 
 json.totalCourses total_course
 json.activeCourses active_course

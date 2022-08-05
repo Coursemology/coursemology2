@@ -236,6 +236,15 @@ const UsersTable: FC<Props> = (props) => {
       },
     },
     {
+      name: 'userId',
+      label: '',
+      options: {
+        display: false,
+        filter: false,
+        sort: false,
+      },
+    },
+    {
       name: 'masqueradePath',
       label: '',
       options: {

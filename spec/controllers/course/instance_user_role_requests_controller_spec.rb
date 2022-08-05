@@ -63,10 +63,8 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
       end
 
       context 'when a user updates an existing role request' do
-        it 'redirects and sets the proper success flash message' do
-          subject
+        it 'redirects to courses path' do
           is_expected.to redirect_to(courses_path)
-          expect(flash[:success]).to eq(I18n.t('instance_user_role_requests.update.success'))
         end
       end
 
@@ -85,15 +83,14 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
 
       subject do
         patch :approve, params: { id: request.id,
-                                  user_role_request:
-                                  { role: request.role },
-                                  format: 'js' }
+                                  user_role_request: { role: request.role },
+                                  format: 'json' }
       end
 
       context 'when a valid request is approved' do
-        it 'updates the role of the user' do
+        it 'succeeds and updates the role of the user' do
           subject
-          expect(flash[:success]).to eq(I18n.t('instance_user_role_requests.approve.success'))
+          expect(subject).to have_http_status(:ok)
 
           expect(request.user.instance_users.first.reload.role).to eq(request.role)
           expect(request.reload.workflow_state).to eq('approved')
@@ -116,19 +113,17 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
       let!(:request) { create(:instance_user_role_request, :pending, instance: instance, user: user) }
 
       subject do
-        patch :reject, params: { id: request.id }
+        patch :reject, format: :json, params: { id: request.id }
       end
 
       context 'when a valid request is rejected' do
         it 'does not change the role of the user' do
           subject
-          expect(flash[:success]).to eq(I18n.t('instance_user_role_requests.reject.success'))
+          expect(subject).to have_http_status(:ok)
 
           request.reload
           expect(request.workflow_state).to eq('rejected')
           expect(request.user.instance_users.first.reload.role).to eq(user.role)
-
-          is_expected.to redirect_to(instance_user_role_requests_path)
         end
 
         it 'sends a rejection email', type: :mailer do
@@ -152,20 +147,17 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
       let(:message) { 'Please provide reason for role request' }
 
       subject do
-        patch :reject, params: { id: request.id, user_role_request: { rejection_message: message } }
+        patch :reject, format: :json, params: { id: request.id, user_role_request: { rejection_message: message } }
       end
 
       context 'when a valid request is rejected' do
         it 'does not change the role of the user' do
-          subject
-          expect(flash[:success]).to eq(I18n.t('instance_user_role_requests.reject.success_with_email'))
+          expect(subject).to have_http_status(:ok)
 
           request.reload
           expect(request.workflow_state).to eq('rejected')
           expect(request.rejection_message).to eq(message)
           expect(request.user.instance_users.first.reload.role).to eq(user.role)
-
-          is_expected.to redirect_to(instance_user_role_requests_path)
         end
 
         it 'sends a rejection email with the message', type: :mailer do
@@ -191,9 +183,7 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
 
         it 'fails to reject the request' do
           subject
-
-          expect(flash[:danger]).to eq(I18n.t('instance_user_role_requests.reject.failure'))
-          is_expected.to redirect_to(instance_user_role_requests_path)
+          expect(subject).to have_http_status(:bad_request)
         end
       end
     end

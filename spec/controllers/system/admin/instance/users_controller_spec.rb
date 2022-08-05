@@ -28,7 +28,7 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
       let!(:instance_user) { create(:instance_user) }
 
       subject do
-        patch :update, as: :js, params: { id: instance_user, instance_user: { role: :administrator } }
+        patch :update, as: :json, params: { id: instance_user, instance_user: { role: :administrator } }
       end
 
       context 'when the user is an instance administrator' do
@@ -38,9 +38,8 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
           expect { subject }.to change { instance_user.reload.role }.to('administrator')
         end
 
-        it 'sets the proper flash message' do
-          subject
-          expect(flash[:success]).to eq(I18n.t('system.admin.instance.users.update.success'))
+        it 'succeeds with http status ok' do
+          expect(subject).to have_http_status(:ok)
         end
       end
 
@@ -69,11 +68,8 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
           expect(controller.instance_variable_get(:@instance_user)).to be_destroyed
         end
 
-        it { is_expected.to redirect_to(admin_instance_users_path) }
-
-        it 'sets the proper flash message' do
-          subject
-          expect(flash[:success]).to eq(I18n.t('system.admin.instance.users.destroy.success'))
+        it 'succeeds with http status ok' do
+          expect(subject).to have_http_status(:ok)
         end
 
         context 'when the user cannot be destroyed' do
@@ -82,10 +78,8 @@ RSpec.describe System::Admin::Instance::UsersController, type: :controller do
             subject
           end
 
-          it { is_expected.to redirect_to(admin_instance_users_path) }
-
-          it 'sets an error flash message' do
-            expect(flash[:danger]).to eq('')
+          it 'fails with http status bad request' do
+            expect(subject).to have_http_status(:bad_request)
           end
         end
       end

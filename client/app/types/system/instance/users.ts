@@ -10,6 +10,7 @@ export type RoleRequestRole = keyof RoleRequestRoles;
 
 export interface InstanceUserListData {
   id: number;
+  userId: string;
   name: string;
   email: string;
   role: InstanceUserRole;
@@ -18,6 +19,7 @@ export interface InstanceUserListData {
 
 export interface InstanceUserBasicListData {
   id: number;
+  userId: string;
   name: string;
 }
 
@@ -28,6 +30,7 @@ export interface InstanceUserBasicPhotoListData
 
 export interface InstanceUserBasicMiniEntity {
   id: number;
+  userId: string;
   name: string;
 }
 

@@ -82,7 +82,7 @@ RSpec.describe Instance::UserInvitationService, type: :service do
 
       context 'when a list of invitation form attributes are provided' do
         it 'registers everyone' do
-          expect(invite).to eq([new_users.size, 0, existing_users.size, 0, 0])
+          expect(invite.map(&:size)).to eq([new_users.size, 0, existing_users.size, 0, 0])
           verify_users
         end
 
@@ -104,7 +104,7 @@ RSpec.describe Instance::UserInvitationService, type: :service do
         end
 
         it 'succeeds' do
-          expect(invite).to eq([new_users.size - users_invited.size, users_invited.size,
+          expect(invite.map(&:size)).to eq([new_users.size - users_invited.size, users_invited.size,
                                 existing_users.size - users_in_instance.size, users_in_instance.size, 0])
         end
 
@@ -122,7 +122,7 @@ RSpec.describe Instance::UserInvitationService, type: :service do
         end
 
         it 'processes duplicate users only once' do
-          expect(invite).to eq([new_user_attributes.size - 1, 0, existing_user_attributes.size, 0, 1])
+          expect(invite.map(&:size)).to eq([new_user_attributes.size - 1, 0, existing_user_attributes.size, 0, 1])
         end
 
         with_active_job_queue_adapter(:test) do

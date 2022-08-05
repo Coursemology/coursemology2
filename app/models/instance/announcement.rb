@@ -8,7 +8,7 @@ class Instance::Announcement < GenericAnnouncement
   validates :end_at, presence: true
   validates :creator, presence: true
   validates :updater, presence: true
-  
+
   scope :sorted_by_date, -> { order(start_at: :desc) }
 
   def to_partial_path
