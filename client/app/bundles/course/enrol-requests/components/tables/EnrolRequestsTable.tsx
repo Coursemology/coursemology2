@@ -166,7 +166,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
-            <Typography key={`phantom-${enrolRequest.id}`} variant="body2">
+            <Typography key={`createdAt-${enrolRequest.id}`} variant="body2">
               {enrolRequest.createdAt}
             </Typography>
           );
@@ -175,7 +175,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     },
   ];
 
-  const pendingEnrolmentRequestsColumns: TableColumns[] = [
+  const pendingEnrolRequestsColumns: TableColumns[] = [
     {
       name: 'name',
       label: intl.formatMessage(tableTranslations.name),
@@ -439,7 +439,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
   ];
 
   if (pendingEnrolRequests) {
-    columns = pendingEnrolmentRequestsColumns;
+    columns = pendingEnrolRequestsColumns;
   } else if (approvedEnrolRequests) {
     columns = approvedEnrolRequestsColumns;
   } else if (rejectedEnrolRequests) {

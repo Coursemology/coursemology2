@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class InstanceUser < ApplicationRecord
   include InstanceUserSearchConcern
+  include Generic::CollectionConcern
   acts_as_tenant :instance, inverse_of: :instance_users
   after_initialize :set_defaults, if: :new_record?
 

@@ -57,6 +57,10 @@ const translations = defineMessages({
     id: 'components.table.column.rejectedAt',
     defaultMessage: 'Rejected At',
   },
+  rejectionMessage: {
+    id: 'components.table.column.rejectionMessage',
+    defaultMessage: 'Rejection Message',
+  },
   actions: {
     id: 'components.table.column.actions',
     defaultMessage: 'Actions',
@@ -92,6 +96,10 @@ const translations = defineMessages({
   instance: {
     id: 'components.table.column.instance',
     defaultMessage: 'Instance',
+  },
+  relatedCourses: {
+    id: 'components.table.column.courses',
+    defaultMessage: 'Related Courses',
   },
   owners: {
     id: 'components.table.column.owners',
@@ -140,6 +148,26 @@ const translations = defineMessages({
   enrolledAt: {
     id: 'components.table.column.enrolledAt',
     defaultMessage: 'Enrolled At',
+  },
+  component: {
+    id: 'components.table.column.component',
+    defaultMessage: 'Component',
+  },
+  isEnabled: {
+    id: 'components.table.column.isEnabled',
+    defaultMessage: 'Enabled?',
+  },
+  organization: {
+    id: 'components.table.column.organization',
+    defaultMessage: 'Organization',
+  },
+  designation: {
+    id: 'components.table.column.designation',
+    defaultMessage: 'Designation',
+  },
+  requestToBe: {
+    id: 'components.table.column.requestToBe',
+    defaultMessage: 'Request to be',
   },
 });
 

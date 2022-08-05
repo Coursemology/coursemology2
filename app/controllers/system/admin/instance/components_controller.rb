@@ -3,14 +3,19 @@ class System::Admin::Instance::ComponentsController < System::Admin::Instance::C
   before_action :load_settings
   add_breadcrumb :edit, :admin_instance_components_path
 
-  def edit
+  def edit # :nodoc:
+    respond_to do |format|
+      format.html { render 'system/admin/instance/admin/index' }
+      format.json { render 'system/admin/instance/components/index' }
+    end
   end
 
-  def update
+  def update # :nodoc:
     if @settings.update(settings_components_params) && current_tenant.save!
-      redirect_to admin_instance_components_path, success: t('.success')
+      render 'system/admin/instance/components/index',
+             status: :ok
     else
-      render 'edit'
+      head :bad_request
     end
   end
 

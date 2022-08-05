@@ -5,19 +5,19 @@ class System::Admin::Instance::CoursesController < System::Admin::Instance::Cont
   add_breadcrumb :index, :admin_instance_courses_path
 
   def index
-    @courses = @instance.courses.search(search_param).calculated(:active_user_count, :user_count)
-    @courses = @courses.active_in_past_7_days.order('active_user_count DESC, user_count') if params[:active]
-    @courses = @courses.ordered_by_title.page(page_param)
-
-    @owner_preload_service = Course::CourseOwnerPreloadService.new(@courses.map(&:id))
+    respond_to do |format|
+      format.html { render 'system/admin/instance/admin/index' }
+      format.json do
+        preload_courses
+      end
+    end
   end
 
   def destroy
     if @course.destroy
-      redirect_to admin_instance_courses_path, success: t('.success', course: @course.title)
+      head :ok
     else
-      redirect_to admin_instance_courses_path,
-                  danger: t('.failure', error: @course.errors.full_messages.to_sentence)
+      render json: { errors: @course.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -25,5 +25,15 @@ class System::Admin::Instance::CoursesController < System::Admin::Instance::Cont
 
   def search_param
     params.permit(:search)[:search]
+  end
+
+  def preload_courses
+    @courses = @instance.courses.search(search_param).calculated(:active_user_count, :user_count)
+    @courses = @courses.active_in_past_7_days.order('active_user_count DESC, user_count') if params[:active].present?
+    @courses = @courses.ordered_by_title
+    @courses_count = @courses.count.is_a?(Hash) ? @courses.count.count : @courses.count
+    @courses = @courses.paginated(new_page_params)
+
+    @owner_preload_service = Course::CourseOwnerPreloadService.new(@courses.map(&:id))
   end
 end

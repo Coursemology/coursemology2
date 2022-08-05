@@ -5,7 +5,12 @@ class System::Admin::Instance::AnnouncementsController < System::Admin::Instance
   add_breadcrumb :index, :admin_instance_announcements_path
 
   def index
-    @announcements = @announcements.includes(:creator).page(page_param)
+    respond_to do |format|
+      format.html { render 'system/admin/instance/admin/index' }
+      format.json do
+        @announcements = @announcements.includes(:creator).sorted_by_date.page(page_param)
+      end
+    end
   end
 
   def new
@@ -13,35 +18,32 @@ class System::Admin::Instance::AnnouncementsController < System::Admin::Instance
 
   def create
     if @announcement.save
-      redirect_to admin_instance_announcements_path,
-                  success: t('.success', title: @announcement.title)
+      render 'course/announcements/_announcement_list_data',
+             locals: { announcement: @announcement },
+             status: :ok
     else
-      render 'new'
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
-  end
-
-  def edit
   end
 
   def update
     if @announcement.update(announcement_params)
-      redirect_to admin_instance_announcements_path,
-                  success: t('.success', title: @announcement.title)
+      render 'course/announcements/_announcement_list_data',
+             locals: { announcement: @announcement.reload },
+             status: :ok
     else
-      render 'edit'
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
   end
 
   def destroy
     if @announcement.destroy
-      redirect_to admin_instance_announcements_path,
-                  success: t('.success', title: @announcement.title)
+      head :ok
     else
-      redirect_to admin_instance_announcements_path,
-                  danger: t('.failure', error: @announcement.errors.full_messages.to_sentence)
+      render json: { errors: @announcement.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
-
+  
   private
 
   def announcement_params
