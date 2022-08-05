@@ -10,7 +10,6 @@ en:
     plain_text_link: "%{text} (%{url})"
     draft: "Draft"
     search: "Search"
-    summary: "Summary"
     click_here: "Click here"
     truthy: "Yes"
     falsey: "No"

@@ -105,7 +105,7 @@ Rails.application.routes.draw do
 
       namespace :instance do
         get '/' => 'admin#index', as: :admin
-        resources :announcements, except: [:show], concerns: :paginatable
+        resources :announcements, only: [:index, :create, :update, :destroy], concerns: :paginatable
         resources :users, only: [:index, :update, :destroy], concerns: :paginatable
         resources :users do
           get 'invite' => 'user_invitations#new', on: :collection
