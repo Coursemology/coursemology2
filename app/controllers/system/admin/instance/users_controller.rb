@@ -17,7 +17,7 @@ class System::Admin::Instance::UsersController < System::Admin::Instance::Contro
   def update
     if @instance_user.update(instance_user_params)
       render 'system/admin/instance/users/_user_list_data',
-             locals: { user: @instance_user.user },
+             locals: { instance_user: @instance_user },
              status: :ok
     else
       render json: { errors: @instance_user.errors.full_messages.to_sentence }, status: :bad_request

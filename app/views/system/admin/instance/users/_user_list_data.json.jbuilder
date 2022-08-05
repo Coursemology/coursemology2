@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-
-json.id user.id
-json.name user.name
-json.email user.email
-json.role user.role
-json.courses user.courses.count
+json.id instance_user.id
+json.userId instance_user.user.id
+json.name instance_user.user.name
+json.email instance_user.user.email
+json.role instance_user.role
+json.courses instance_user.user.courses.count

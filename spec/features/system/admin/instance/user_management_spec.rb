@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'System: Administration: Instance: Users' do
+RSpec.feature 'System: Administration: Instance: Users', js: true do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
@@ -14,48 +14,36 @@ RSpec.feature 'System: Administration: Instance: Users' do
       scenario 'I can view all users in the instance' do
         visit admin_instance_users_path
 
-        instance_users.each do |instance_users|
-          expect(page).to have_selector('tr.instance_user th', text: instance_users.user.name)
-          expect(page).to have_selector('tr.instance_user td', text: instance_users.user.email)
+        instance_users.each do |instance_user|
+          expect(page).to have_selector('div.user_name', text: instance_user.user.name)
+          expect(page).to have_selector('p.user_email', text: instance_user.user.email)
         end
-
-        expect(page.all('tr.instance_user').count).to eq(instance.instance_users.count)
       end
 
       scenario 'I can filter users by role and view only administrators' do
         visit admin_instance_users_path(role: :administrator)
 
-        instance_users.each do |instance_users|
-          expect(page).not_to have_selector('tr.instance_user th', text: instance_users.user.name)
-          expect(page).not_to have_selector('tr.instance_user td', text: instance_users.user.email)
+        instance_users.each do |instance_user|
+          expect(page).to have_no_selector('div.user_name', exact_text: instance_user.user.name)
+          expect(page).to have_no_selector('p.user_email', exact_text: instance_user.user.email)
         end
 
-        expect(page).to have_selector('tr.instance_user th', text: instance_admin.name)
-        expect(page).to have_selector('tr.instance_user td', text: instance_admin.email)
+        expect(page).to have_selector('div.user_name', exact_text: instance_admin.name)
+        expect(page).to have_selector('p.user_email', exact_text: instance_admin.email)
       end
 
       scenario "I can change a user's role", js: true do
         visit admin_instance_users_path
 
         user_to_change = instance_users.sample
-        within find(content_tag_selector(user_to_change)) do
-          within find_field('instance_user_role', visible: false) do
-            select ''
-          end
-          click_button 'update'
+
+        within find("tr.instance_user_#{user_to_change.id}") do
+          find('div.user_role').click
         end
+        find("#role-#{user_to_change.id}-administrator").select_option
+        # byebug
+        expect_toastify("Successfully changed #{user_to_change.user.name}'s role to Administrator.")
 
-        wait_for_ajax
-        expect(page).to have_selector('div.alert.alert-danger')
-
-        within find(content_tag_selector(user_to_change)) do
-          select 'administrator'
-          click_button 'update'
-        end
-
-        wait_for_ajax
-        expect(page).to have_selector('div',
-                                      text: I18n.t('system.admin.instance.users.update.success'))
         expect(user_to_change.reload).to be_administrator
       end
 
@@ -63,9 +51,9 @@ RSpec.feature 'System: Administration: Instance: Users' do
         visit admin_instance_users_path
 
         user_to_delete = instance_users.sample
-        find_link(nil, href: admin_instance_user_path(user_to_delete)).click
-        expect(page).to have_selector('div',
-                                      text: I18n.t('system.admin.instance.users.destroy.success'))
+        find("button.user-delete-#{user_to_delete.id}").click
+        accept_confirm_dialog
+        expect_toastify('User was deleted.')
       end
 
       scenario 'I can search users' do
@@ -75,18 +63,22 @@ RSpec.feature 'System: Administration: Instance: Users' do
         visit admin_instance_users_path
 
         # Search by username
-        fill_in 'search', with: user_name
-        click_button I18n.t('layouts.search_form.search_button')
+        find('button[aria-label="Search"]').click
+        find('div[aria-label="Search"]').find('input').set(user_name)
 
-        instance_users_to_search.each { |user| expect(page).to have_content_tag_for(user) }
+        sleep 0.5 # timeout for search debouncing
+
+        instance_users_to_search.each do |instance_user|
+          expect(page).to have_selector('div.user_name', text: instance_user.user.name)
+        end
         expect(all('.instance_user').count).to eq(2)
 
         # Search by email
         random_instance_user = InstanceUser.order('RANDOM()').first
-        fill_in 'search', with: random_instance_user.user.email
-        click_button I18n.t('layouts.search_form.search_button')
+        find('div[aria-label="Search"]').find('input').set(random_instance_user.user.email)
+        sleep 0.5 # timeout for search debouncing
 
-        expect(page).to have_content_tag_for(random_instance_user)
+        expect(page).to have_selector('div.user_name', text: random_instance_user.user.name)
         expect(all('.instance_user').count).to eq(1)
       end
     end

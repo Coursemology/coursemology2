@@ -131,9 +131,13 @@ const InstanceComponentsForm: FC<Props> = (props) => {
         <TableBody>
           {controlledComponentFields.map(
             (c: ComponentMiniEntity, index): JSX.Element => (
-              <TableRow hover key={c.id}>
+              <TableRow hover key={c.id} id={`component_${c.key}`}>
                 <TableCell>
-                  <Typography variant="body2" gutterBottom={false}>
+                  <Typography
+                    variant="body2"
+                    gutterBottom={false}
+                    className={`component_name_${c.id}`}
+                  >
                     {c.name}
                   </Typography>
                 </TableCell>

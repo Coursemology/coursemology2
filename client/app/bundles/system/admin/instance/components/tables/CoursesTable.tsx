@@ -92,7 +92,7 @@ const CoursesTable: FC<Props> = (props) => {
       page,
     });
     dispatch(
-      indexCourses({ 'filter[page_num]': page, 'filter[length]': 30, active }),
+      indexCourses({ 'filter[page_num]': page, 'filter[length]': 100, active }),
     )
       .catch(() =>
         toast.error(

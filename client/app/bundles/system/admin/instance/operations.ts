@@ -46,18 +46,12 @@ const formatAnnouncementAttributes = (data: AnnouncementFormData): FormData => {
  * Prepares and maps user object attributes to a FormData object for an post/patch request.
  * Expected FormData attributes shape:
  *   { user :
- *     { name, role }
+ *     { role }
  *   }
  */
 const formatUserAttributes = (data: InstanceUserMiniEntity): FormData => {
   const payload = new FormData();
-
-  ['name', 'role'].forEach((field) => {
-    if (data[field] !== undefined && data[field] !== null) {
-      payload.append(`instance_user[${field}]`, data[field]);
-    }
-  });
-
+  payload.append(`instance_user[role]`, data.role);
   return payload;
 };
 
