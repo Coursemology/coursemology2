@@ -61,7 +61,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
   }
 
   const handleChange = (event): void => {
-    setControlledVal(event.target.value);
+    setControlledVal(event.target.value.trimStart());
   };
 
   const handleSave = (): void => {
@@ -71,11 +71,11 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
       setIsSaving(false);
       return;
     }
-    if (controlledVal === value) {
+    if (controlledVal.trim() === value) {
       setIsEditing(false);
       setIsSaving(false);
     } else if (onUpdate) {
-      onUpdate(controlledVal)
+      onUpdate(controlledVal.trim())
         .then(() => {
           setIsEditing(false);
           setIsSaving(false);
@@ -88,8 +88,9 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
   };
 
   const handleBlur = (): void => {
+    setControlledVal(controlledVal.trim());
     if (alwaysEditable) {
-      updateValue(controlledVal);
+      updateValue(controlledVal.trim());
     }
   };
 
