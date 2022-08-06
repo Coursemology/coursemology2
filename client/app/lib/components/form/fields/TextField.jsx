@@ -1,10 +1,9 @@
-import { memo, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 import { TextField } from '@mui/material';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import { FIELD_DEBOUNCE_DELAY } from 'lib/constants/sharedConstants';
-import propsAreEqual from './utils/propsAreEqual';
 
 const styles = {
   textFieldStyle: { margin: '8px 10px 8px 0px' },
@@ -51,8 +50,28 @@ const FormTextField = (props) => {
   // Custom onChange handler to keep track of this component's value internally
   const handleChange = (e) => {
     e.persist();
-    setOwnValue(e.target.value);
+    // To remove leading whitespace
+    setOwnValue(e.target.value.trimStart());
     syncFormState(e);
+  };
+
+  const handleBlur = (e) => {
+    // To remove trailing whitespace when blurring from the field
+    setOwnValue(e.target.value.trim()); // Update internal field value
+    field.onChange(e.target.value.trim()); // Update form field value
+    // Default react hook form controller onBlur function
+    field.onBlur(e);
+  };
+
+  const handleKeyPress = (e) => {
+    if (custom.type === 'number') {
+      onlyNumberInput(e);
+    }
+    // To remove trailing whitespace when clicking enter within the field.
+    if (e.charCode === 13) {
+      setOwnValue(e.target.value.trim()); // Update internal field value
+      field.onChange(e.target.value.trim()); // Update form field value
+    }
   };
 
   return (
@@ -60,6 +79,8 @@ const FormTextField = (props) => {
       {...field}
       value={ownValue}
       onChange={handleChange}
+      onBlur={handleBlur}
+      onKeyPress={handleKeyPress}
       disabled={disabled}
       label={label}
       error={!!fieldState.error}
@@ -68,7 +89,6 @@ const FormTextField = (props) => {
       }
       {...custom}
       style={margins ? styles.textFieldStyle : styles.empty}
-      onKeyPress={(e) => custom.type === 'number' && onlyNumberInput(e)}
     />
   );
 };
@@ -87,4 +107,4 @@ FormTextField.propTypes = {
   enableDebouncing: PropTypes.bool,
 };
 
-export default memo(FormTextField, propsAreEqual);
+export default FormTextField;
