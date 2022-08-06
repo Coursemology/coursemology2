@@ -14,6 +14,7 @@
         th = t('.designation')
         th = t('.reason')
         th = t('common.role')
+        th = t('.requested_at')
         th
     tbody
       = render partial: 'user_role_request', collection: pending_requests
@@ -33,6 +34,7 @@ div id='approved_requests'
           th = t('.designation')
           th = t('.reason')
           th = t('common.role')
+          th = t('.requested_at')
           th = t('.approver')
           th = t('.approved_at')
       tbody
@@ -49,6 +51,7 @@ div id='approved_requests'
         th = t('.designation')
         th = t('.reason')
         th = t('common.role')
+        th = t('.requested_at')
         th = t('.rejector')
         th = t('.rejected_at')
         th = t('.rejection_message')
