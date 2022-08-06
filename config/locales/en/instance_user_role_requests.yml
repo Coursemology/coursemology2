@@ -9,6 +9,7 @@ en:
       designation: 'Designation'
       organization: 'Organization'
       reason: 'Reason'
+      requested_at: 'Requested at'
       approver: 'Approver'
       approved_at: 'Approved at'
       rejector: 'Rejector'

@@ -7,6 +7,7 @@
     td = format_html(user_role_request.reason)
     - if user_role_request.pending?
       td = f.input :role, as: :select, include_blank: false, collection: Instance::UserRoleRequest.roles.keys, label: false
+      td = format_datetime(user_role_request.created_at)
       td
         = f.button :submit, id: 'update', title: t('.approve') do
           = fa_icon 'check'.freeze
@@ -16,6 +17,7 @@
           = fa_icon 'trash'.freeze
     - else
       td = user_role_request.role
+      td = format_datetime(user_role_request.created_at)
       td = user_role_request.confirmer.name
       td = format_datetime(user_role_request.confirmed_at)
     - if user_role_request.rejected?
