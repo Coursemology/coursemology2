@@ -17,7 +17,7 @@ const MultipleChoiceOptions = ({
     {question.options.map((option) => (
       <FormControlLabel
         checked={value && value.length > 0 && option.id === value[0]}
-        control={<Radio style={{ padding: '0 12px' }} />}
+        control={<Radio style={{ padding: '0 12px', marginBottom: 10 }} />}
         disabled={readOnly}
         key={option.id}
         label={
@@ -25,8 +25,12 @@ const MultipleChoiceOptions = ({
             <div
               style={
                 option.correct && readOnly && (showMcqMrqSolution || graderView)
-                  ? { backgroundColor: green[50] }
-                  : null
+                  ? {
+                      backgroundColor: green[50],
+                      verticalAlign: 'middle',
+                      marginBottom: 10,
+                    }
+                  : { verticalAlign: 'middle', marginBottom: 10 }
               }
               dangerouslySetInnerHTML={{ __html: option.option.trim() }}
             />
