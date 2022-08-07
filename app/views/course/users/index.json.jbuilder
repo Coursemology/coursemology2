@@ -13,7 +13,7 @@ unless @user_options.nil?
   end
 end
 
-if !current_course_user.student? || current_user&.administrator?
+if current_user&.administrator? || !current_course_user&.student?
   json.permissions do
     json.partial! 'permissions_data', current_course: current_course
   end
