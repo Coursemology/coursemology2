@@ -17,7 +17,7 @@ const MultipleResponseOptions = ({
     {question.options.map((option) => (
       <FormControlLabel
         checked={value.indexOf(option.id) !== -1}
-        control={<Checkbox style={{ padding: '0 12px' }} />}
+        control={<Checkbox style={{ padding: '0 12px', marginBottom: 10 }} />}
         disabled={readOnly}
         key={option.id}
         label={
@@ -25,8 +25,12 @@ const MultipleResponseOptions = ({
             <div
               style={
                 option.correct && readOnly && (showMcqMrqSolution || graderView)
-                  ? { backgroundColor: green[50], verticalAlign: 'middle' }
-                  : { verticalAlign: 'middle' }
+                  ? {
+                      backgroundColor: green[50],
+                      verticalAlign: 'middle',
+                      marginBottom: 10,
+                    }
+                  : { verticalAlign: 'middle', marginBottom: 10 }
               }
               dangerouslySetInnerHTML={{ __html: option.option.trim() }}
             />
