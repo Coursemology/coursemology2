@@ -178,7 +178,8 @@ const AchievementAwardManager: FC<Props> = (props) => {
     filter: false,
     jumpToPage: true,
     print: false,
-    rowsPerPageOptions: [10, 25, 50],
+    rowsPerPage: 100,
+    rowsPerPageOptions: [100],
     selectableRows: 'none',
     setRowProps: (_row, dataIndex, _rowIndex) => {
       const obtainedAchievement =

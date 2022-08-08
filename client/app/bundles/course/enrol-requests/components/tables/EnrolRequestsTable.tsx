@@ -112,8 +112,8 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     filter: false,
     pagination: true,
     print: false,
-    rowsPerPage: 30,
-    rowsPerPageOptions: [15, 30, 50, 100],
+    rowsPerPage: 100,
+    rowsPerPageOptions: [100],
     search: true,
     selectableRows: 'none',
     setTableProps: (): object => {
