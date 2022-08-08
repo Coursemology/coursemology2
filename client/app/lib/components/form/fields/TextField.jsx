@@ -26,7 +26,7 @@ const FormTextField = (props) => {
     disabled,
     label,
     renderIf,
-    multiline,
+    multiline = false,
     rows = 1,
     margins = true,
     enableDebouncing = false,

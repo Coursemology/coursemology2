@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 json.newInvitations new_invitations.each do |invitation|
   json.id invitation.id
   json.name invitation.name
