@@ -11,12 +11,12 @@ import {
   saveListToStore,
 } from 'utilities/store';
 import {
+  InstanceAdminActionType,
+  InstanceAdminState,
   DELETE_ANNOUNCEMENT,
   DELETE_COURSE,
   DELETE_INVITATION,
   DELETE_USER,
-  InstanceAdminActionType,
-  InstanceAdminState,
   SAVE_ANNOUNCEMENT,
   SAVE_ANNOUNCEMENTS_LIST,
   SAVE_COMPONENTS_LIST,

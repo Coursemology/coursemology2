@@ -88,30 +88,8 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
       .finally(() => setIsApproving(false));
   };
 
-  //   const onRejectWithMessage = (): Promise<void> => {
   const onRejectWithMessage = (): void => {
-    setIsDeleting(true);
     openRejectDialog(roleRequest);
-    // const message = 'i dont like';
-    // return dispatch(rejectRoleRequestWithMessage(roleRequest.id, message))
-    //   .then(() => {
-    //     toast.success(
-    //       intl.formatMessage(translations.rejectSuccess, {
-    //         name: roleRequest.name,
-    //       }),
-    //     );
-    //   })
-    //   .catch((error) => {
-    //     const errorMessage = error.response?.data?.errors
-    //       ? error.response.data.errors
-    //       : '';
-    //     toast.error(
-    //       intl.formatMessage(translations.rejectFailure, {
-    //         error: errorMessage,
-    //       }),
-    //     );
-    //   })
-    //   .finally(() => setIsDeleting(false));
   };
 
   const onReject = (): Promise<void> => {
