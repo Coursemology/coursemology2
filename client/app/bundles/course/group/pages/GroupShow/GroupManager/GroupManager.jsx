@@ -271,7 +271,7 @@ const GroupManager = ({
               style={styles.groupButton}
               onClick={() => handleGroupSelect(group.id)}
             >
-              {group.name}
+              {`${group.name} (${group.members.length})`}
             </Button>
           ))}
         </div>
