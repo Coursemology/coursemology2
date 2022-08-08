@@ -25,8 +25,8 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
     filter: false,
     pagination: true,
     print: false,
-    rowsPerPage: 15,
-    rowsPerPageOptions: [15],
+    rowsPerPage: 100,
+    rowsPerPageOptions: [100],
     search: false,
     selectableRows: 'none',
     setTableProps: (): object => {
