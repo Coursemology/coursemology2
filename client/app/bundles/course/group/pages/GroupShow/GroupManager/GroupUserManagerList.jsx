@@ -67,12 +67,17 @@ const styles = {
   listItemTextSize: {
     fontSize: 13,
   },
+  listItemLabel: {
+    display: 'flex',
+    width: '100%',
+    paddingTop: 8,
+    paddingBottom: 8,
+    paddingLeft: 16,
+    paddingRight: 16,
+  },
   checkbox: {
     width: 'auto',
     padding: 0,
-  },
-  divider: {
-    marginTop: 16,
   },
 };
 
@@ -87,43 +92,44 @@ const GroupUserManagerListItem = ({
   <ListItem
     button
     className={showDropdown ? 'has-dropdown' : ''}
+    disablePadding
     style={
       colour
         ? { ...styles.listItem, backgroundColor: colour.light }
         : styles.listItem
     }
   >
-    <Checkbox
-      checked={isChecked}
-      onChange={() => onCheck(user)}
-      style={styles.checkbox}
-    />
-    <ListItemText
-      style={styles.listItemText}
-      primaryTypographyProps={{ style: styles.listItemTextSize }}
-    >
-      {showDropdown ? (
-        <div style={styles.listItemWithDropdown}>
-          <div onClick={() => onCheck(user)}>{user.name}</div>
-          <Select
-            className="group-user-manager-list-item-dropdown"
-            onChange={(event) => onChangeDropdown(event.target.value, user)}
-            value={user.groupRole}
-            style={styles.listItemTextSize}
-            variant="standard"
-          >
-            <MenuItem value="normal" style={styles.listItemTextSize}>
-              <FormattedMessage {...translations.normal} />
-            </MenuItem>
-            <MenuItem value="manager" style={styles.listItemTextSize}>
-              <FormattedMessage {...translations.manager} />
-            </MenuItem>
-          </Select>
-        </div>
-      ) : (
-        <div onClick={() => onCheck(user)}>{user.name}</div>
-      )}
-    </ListItemText>
+    <div onClick={() => onCheck(user)} style={styles.listItemLabel}>
+      <Checkbox
+        checked={isChecked}
+        onChange={() => onCheck(user)}
+        style={styles.checkbox}
+      />
+
+      <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
+        {user.name}
+      </ListItemText>
+    </div>
+
+    {showDropdown ? (
+      <div style={styles.listItemWithDropdown}>
+        <Select
+          className="group-user-manager-list-item-dropdown"
+          onClick={() => {}}
+          onChange={(event) => onChangeDropdown(event.target.value, user)}
+          value={user.groupRole}
+          style={styles.listItemTextSize}
+          variant="standard"
+        >
+          <MenuItem value="normal" style={styles.listItemTextSize}>
+            <FormattedMessage {...translations.normal} />
+          </MenuItem>
+          <MenuItem value="manager" style={styles.listItemTextSize}>
+            <FormattedMessage {...translations.manager} />
+          </MenuItem>
+        </Select>
+      </div>
+    ) : null}
   </ListItem>
 );
 
