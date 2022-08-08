@@ -138,60 +138,51 @@ const GroupUserManagerList = ({
   showDropdown = false,
   onChangeDropdown,
   isChecked = false,
-}) => (
-  <List style={styles.list}>
-    {students.length === 0 && staff.length === 0 ? (
-      <ListItem button style={{ color: grey[400] }}>
-        <ListItemText>
-          <FormattedMessage {...translations.noUsersFound} />
-        </ListItemText>
-      </ListItem>
-    ) : null}
-    {students.length > 0 && (
-      <>
-        <ListSubheader disableSticky>
-          <FormattedMessage {...translations.students} />
-        </ListSubheader>
-        {students.map((user) => {
-          const colour = colourMap[user.id];
-          return (
-            <GroupUserManagerListItem
-              key={user.id}
-              user={user}
-              colour={colour}
-              onCheck={onCheck}
-              showDropdown={showDropdown}
-              onChangeDropdown={onChangeDropdown}
-              isChecked={isChecked}
-            />
-          );
-        })}
-      </>
-    )}
-    {staff.length > 0 && (
-      <>
-        {students.length > 0 && <Divider style={styles.divider} />}
-        <ListSubheader disableSticky>
-          <FormattedMessage {...translations.staff} />
-        </ListSubheader>
-        {staff.map((user) => {
-          const colour = colourMap[user.id];
-          return (
-            <GroupUserManagerListItem
-              key={user.id}
-              user={user}
-              colour={colour}
-              onCheck={onCheck}
-              showDropdown={showDropdown}
-              onChangeDropdown={onChangeDropdown}
-              isChecked={isChecked}
-            />
-          );
-        })}
-      </>
-    )}
-  </List>
-);
+}) => {
+  const renderUsersListItems = (users, title) => (
+    <>
+      <ListSubheader disableSticky>
+        <FormattedMessage {...title} />
+      </ListSubheader>
+
+      {users.map((user) => {
+        const colour = colourMap[user.id]
+        return (
+          <GroupUserManagerListItem
+            key={user.id}
+            user={user}
+            colour={colour}
+            onCheck={onCheck}
+            showDropdown={showDropdown}
+            onChangeDropdown={onChangeDropdown}
+            isChecked={isChecked}
+          />
+        )
+      })}
+    </>
+  );
+
+  return (
+    <List style={styles.list}>
+      {students.length === 0 && staff.length === 0 ? (
+        <ListItem button style={{ color: grey[400] }}>
+          <ListItemText>
+            <FormattedMessage {...translations.noUsersFound} />
+          </ListItemText>
+        </ListItem>
+      ) : null}
+
+      {students.length > 0 && renderUsersListItems(students, translations.students)}
+
+      {staff.length > 0 && (
+        <>
+          {students.length > 0 && <Divider style={styles.divider} />}
+          {renderUsersListItems(staff, translations.staff)}
+        </>
+      )}
+    </List>
+  );
+};
 
 GroupUserManagerList.propTypes = {
   students: PropTypes.arrayOf(memberShape),
