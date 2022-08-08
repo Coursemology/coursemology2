@@ -41,6 +41,12 @@ const styles = {
     border: 'solid 1px #d9d9d9',
     overflowY: 'scroll',
     height: 500,
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  listSubheader: {
+    backgroundColor: '#f0f0f0',
+    fontWeight: 'bold',
   },
   listItem: {
     height: 36,
@@ -141,7 +147,7 @@ const GroupUserManagerList = ({
 }) => {
   const renderUsersListItems = (users, title) => (
     <>
-      <ListSubheader disableSticky>
+      <ListSubheader style={styles.listSubheader}>
         <FormattedMessage {...title} />
       </ListSubheader>
 
@@ -174,12 +180,7 @@ const GroupUserManagerList = ({
 
       {students.length > 0 && renderUsersListItems(students, translations.students)}
 
-      {staff.length > 0 && (
-        <>
-          {students.length > 0 && <Divider style={styles.divider} />}
-          {renderUsersListItems(staff, translations.staff)}
-        </>
-      )}
+      {staff.length > 0 && renderUsersListItems(staff, translations.staff)}
     </List>
   );
 };
