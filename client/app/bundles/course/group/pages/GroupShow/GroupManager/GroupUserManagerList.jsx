@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import {
   Checkbox,
-  Divider,
   List,
   ListItem,
   ListItemText,
@@ -72,7 +71,7 @@ const styles = {
     width: '100%',
     paddingTop: 8,
     paddingBottom: 8,
-    paddingLeft: 16,
+    paddingLeft: 24,
     paddingRight: 16,
   },
   checkbox: {
@@ -154,11 +153,17 @@ const GroupUserManagerList = ({
   const renderUsersListItems = (users, title) => (
     <>
       <ListSubheader style={styles.listSubheader}>
+        <Checkbox
+          checked={isChecked}
+          onChange={() => onCheck(users)}
+          style={styles.checkbox}
+        />
+
         <FormattedMessage {...title} />
       </ListSubheader>
 
       {users.map((user) => {
-        const colour = colourMap[user.id]
+        const colour = colourMap[user.id];
         return (
           <GroupUserManagerListItem
             key={user.id}
@@ -169,7 +174,7 @@ const GroupUserManagerList = ({
             onChangeDropdown={onChangeDropdown}
             isChecked={isChecked}
           />
-        )
+        );
       })}
     </>
   );
@@ -184,7 +189,8 @@ const GroupUserManagerList = ({
         </ListItem>
       ) : null}
 
-      {students.length > 0 && renderUsersListItems(students, translations.students)}
+      {students.length > 0 &&
+        renderUsersListItems(students, translations.students)}
 
       {staff.length > 0 && renderUsersListItems(staff, translations.staff)}
     </List>

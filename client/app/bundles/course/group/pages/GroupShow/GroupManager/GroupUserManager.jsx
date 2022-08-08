@@ -226,22 +226,26 @@ const GroupUserManager = ({
     [dispatch, categoryId, group.id, group.name, setIsConfirmingDelete],
   );
 
+  /**
+   * @param input - A user instance or array of users
+   */
   const onCheck = useCallback(
-    (user) => {
-      let groupRole = 'normal';
-      if (user.role !== 'student') groupRole = 'manager';
+    (input) => {
+      let users = input;
+      if (!Array.isArray(input)) users = [input];
+
+      const newMembers = users.map((user) => ({
+        ...user,
+        groupRole: user.role === 'student' ? 'normal' : 'manager',
+      }));
 
       const newGroup = {
         ...group,
-        members: [
-          ...group.members,
-          {
-            ...user,
-            groupRole,
-          },
-        ],
+        members: [...group.members, ...newMembers],
       };
+
       newGroup.members.sort(sortByName).sort(sortByGroupRole);
+
       return dispatch({
         type: actionTypes.MODIFY_GROUP,
         group: newGroup,
@@ -250,12 +254,21 @@ const GroupUserManager = ({
     [dispatch, group],
   );
 
+  /**
+   * @param input - A user instance or array of users
+   */
   const onUncheck = useCallback(
-    (user) => {
+    (input) => {
+      let users = input;
+      if (!Array.isArray(input)) users = [input];
+
+      const memberIdsToRemove = new Set(users.map((user) => user.id));
+
       const newGroup = {
         ...group,
-        members: group.members.filter((m) => m.id !== user.id),
+        members: group.members.filter((m) => !memberIdsToRemove.has(m.id)),
       };
+
       return dispatch({
         type: actionTypes.MODIFY_GROUP,
         group: newGroup,
