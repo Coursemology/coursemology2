@@ -137,19 +137,11 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
       invitationResult: string; // string which is JSON.parsed to type InvitationResult
     }>
   > {
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data',
-    //     Accept: 'file_types',
-    //   },
-    // };
-
     const formData = data as FormData;
 
     return this.getClient().post(
       `${InstanceAdminAPI._getUrlPrefix()}/users/invite`,
       formData,
-      // config,
     );
   }
 
