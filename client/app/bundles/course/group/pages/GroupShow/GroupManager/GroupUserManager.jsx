@@ -228,13 +228,16 @@ const GroupUserManager = ({
 
   const onCheck = useCallback(
     (user) => {
+      let groupRole = 'normal';
+      if (user.role !== 'student') groupRole = 'manager';
+
       const newGroup = {
         ...group,
         members: [
           ...group.members,
           {
             ...user,
-            groupRole: 'normal',
+            groupRole,
           },
         ],
       };
