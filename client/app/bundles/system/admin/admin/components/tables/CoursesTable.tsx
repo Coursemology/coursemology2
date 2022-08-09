@@ -111,7 +111,7 @@ const CoursesTable: FC<Props> = (props) => {
         'filter[page_num]': page,
         'filter[length]': 100,
         active,
-        search: searchText.trim(),
+        search: searchText ? searchText.trim() : searchText,
       }),
     )
       .catch(() =>

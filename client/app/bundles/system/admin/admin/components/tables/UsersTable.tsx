@@ -179,7 +179,7 @@ const UsersTable: FC<Props> = (props) => {
         'filter[length]': 100,
         role,
         active,
-        search: searchText.trim(),
+        search: searchText ? searchText.trim() : searchText,
       }),
     )
       .catch(() =>
