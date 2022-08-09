@@ -25,20 +25,19 @@ class System::Admin::Instance::AnnouncementsController < System::Admin::Instance
 
   def update
     if @announcement.update(announcement_params)
-      redirect_to admin_instance_announcements_path,
-                  success: t('.success', title: @announcement.title)
+      render 'course/announcements/_announcement_list_data',
+             locals: { announcement: @announcement.reload },
+             status: :ok
     else
-      render 'edit'
+      render json: { errors: @announcement.errors }, status: :bad_request
     end
   end
 
   def destroy
     if @announcement.destroy
-      redirect_to admin_instance_announcements_path,
-                  success: t('.success', title: @announcement.title)
+      head :ok
     else
-      redirect_to admin_instance_announcements_path,
-                  danger: t('.failure', error: @announcement.errors.full_messages.to_sentence)
+      render json: { errors: @announcement.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 

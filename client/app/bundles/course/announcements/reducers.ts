@@ -32,14 +32,12 @@ const reducer = produce(
         draft.permissions = action.announcementPermissions;
         break;
       }
-
       case SAVE_ANNOUNCEMENT: {
         const announcementData = action.announcement;
         const announcementEntity = { ...announcementData };
         saveEntityToStore(draft.announcements, announcementEntity);
         break;
       }
-
       case DELETE_ANNOUNCEMENT: {
         const announcementId = action.id;
         if (draft.announcements.byId[announcementId]) {

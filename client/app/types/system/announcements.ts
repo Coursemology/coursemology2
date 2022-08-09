@@ -25,6 +25,7 @@ export interface AnnouncementListData {
   isSticky: boolean;
   isCurrentlyActive: boolean;
   permissions: AnnouncementListDataPermissions;
+  type?: string;
 }
 
 export interface AnnouncementData extends AnnouncementListData {}
@@ -48,6 +49,7 @@ export interface AnnouncementMiniEntity {
   isSticky: boolean;
   isCurrentlyActive: boolean;
   permissions: AnnouncementListDataPermissions;
+  type?: string;
 }
 
 export interface AnnouncementEntity extends AnnouncementMiniEntity {}
@@ -57,6 +59,7 @@ export interface AnnouncementFormData {
   sticky: boolean;
   startAt: string;
   endAt: string;
+  type?: string;
 }
 
 export interface AnnouncementEditFormData extends AnnouncementFormData {

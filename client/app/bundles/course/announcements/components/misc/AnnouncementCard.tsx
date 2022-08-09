@@ -31,7 +31,10 @@ interface Props extends WrappedComponentProps {
     announcementId: number,
     formData: AnnouncementFormData,
   ) => Operation<void>;
-  deleteOperation?: (announcementId: number) => Operation<void>;
+  deleteOperation?: (
+    announcementId: number,
+    announcementType?: string,
+  ) => Operation<void>;
   canSticky?: boolean;
 }
 
@@ -83,12 +86,13 @@ const AnnouncementCard: FC<Props> = (props) => {
     sticky: announcement.isSticky,
     startAt: new Date(announcement.startTime),
     endAt: new Date(announcement.endTime),
+    type: announcement.type ?? '',
   };
 
   const dispatch = useDispatch<AppDispatch>();
   const onDelete = (): Promise<void> => {
     setIsDeleting(true);
-    return dispatch(deleteOperation!(announcement.id))
+    return dispatch(deleteOperation!(announcement.id, announcement.type!))
       .then(() => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
       })
