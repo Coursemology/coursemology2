@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe System::Admin::Instance::UserInvitationsController, type: :controller do
+RSpec.describe System::Admin::Instance::UserInvitationsController, type: :controller, js: true do
   let(:instance) { create(:instance) }
   with_tenant(:instance) do
     let(:instance_admin) { create(:instance_user, role: :administrator).user }
@@ -15,19 +15,11 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
         { invitations_attributes: invitations }
       end
 
-      subject { post :create, params: { instance: invite_params } }
+      subject { post :create, format: :json, params: { instance: invite_params } }
 
       context 'when an instance administrator visits the page' do
         before { sign_in(instance_admin) }
-        it { is_expected.to redirect_to(admin_instance_user_invitations_path) }
-
-        context 'when no users are manually specified for invitations' do
-          subject { post :create, params: {} }
-
-          it 'redirects to the invitations path without an error' do
-            expect(subject).to redirect_to(admin_instance_user_invitations_path)
-          end
-        end
+        it { is_expected.to have_http_status(:ok) }
 
         context 'when the invitations do not get created successfully' do
           before do
@@ -39,7 +31,7 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
               and_return(stubbed_invitation_service)
           end
 
-          it { is_expected.to render_template(:new) }
+          it { is_expected.to have_http_status(:bad_request) }
         end
       end
 
@@ -53,7 +45,7 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
         sign_in(instance_admin)
       end
       let!(:invitation) { create(:instance_user_invitation, instance: instance) }
-      subject { post :resend_invitations, params: { user_invitation_id: invitation.id } }
+      subject { post :resend_invitations, format: :json, params: { user_invitation_id: invitation.id } }
 
       it 'loads the invitation' do
         subject
@@ -74,7 +66,7 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
         sign_in(instance_admin)
       end
       let!(:pending_invitations) { create_list(:instance_user_invitation, 3, instance: instance) }
-      subject { post :resend_invitations, params: {} }
+      subject { post :resend_invitations, format: :json, params: {} }
 
       it 'loads the all unconfirmed invitations' do
         subject

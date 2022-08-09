@@ -9,7 +9,8 @@ RSpec.describe System::Admin::Instance::ComponentsController, type: :controller 
 
     describe '#edit' do
       subject { get :edit }
-      it { is_expected.to render_template(:edit) }
+
+      it { is_expected.to render_template(:index) }
     end
 
     describe '#update' do
@@ -18,7 +19,7 @@ RSpec.describe System::Admin::Instance::ComponentsController, type: :controller 
         all_component_ids.sample(1 + rand(all_component_ids.count))
       end
       let(:components_params) { { enabled_component_ids: ids_to_enable } }
-      subject { patch :update, params: { settings_components: components_params } }
+      subject { patch :update, as: :json, params: { settings_components: components_params } }
 
       context 'enable/disable components' do
         let(:settings) do
@@ -54,7 +55,7 @@ RSpec.describe System::Admin::Instance::ComponentsController, type: :controller 
           subject
         end
 
-        it { is_expected.to render_template(:edit) }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
   end

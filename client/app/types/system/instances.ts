@@ -6,9 +6,12 @@ export type InstanceMiniEntityPermissions = Permissions<
   'canEdit' | 'canDelete'
 >;
 
-export interface InstanceListData {
+export interface InstanceBasicListData {
   id: number;
   name: string;
+}
+
+export interface InstanceListData extends InstanceBasicListData {
   host: string;
   activeUserCount: number;
   userCount: number;
@@ -20,12 +23,9 @@ export interface InstanceListData {
 export interface InstanceBasicMiniEntity {
   id: number;
   name: string;
-  host: string;
 }
 
-export interface InstanceMiniEntity {
-  id: number;
-  name: string;
+export interface InstanceMiniEntity extends InstanceBasicMiniEntity {
   host: string;
   activeUserCount: number;
   userCount: number;

@@ -7,49 +7,49 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
 
   def index
     @invitations = @instance.invitations.order(name: :asc)
+    respond_to do |format|
+      format.html { render 'system/admin/instance/admin/index' }
+      format.json { render 'system/admin/instance/user_invitations/index' }
+    end
   end
 
   def new
     @instance.invitations.build
+    render 'system/admin/instance/admin/index'
   end
 
   def create
     result = invite
     if result
-      redirect_to admin_instance_user_invitations_path, success: create_success_message(*result),
-                                                        warning: create_warning_message(*result)
+      create_invitation_success(result)
     else
-      propagate_errors
-      render 'new'
+      head :bad_request
     end
   end
 
   def destroy
     @invitation = Instance::UserInvitation.find(params[:id])
     if @invitation.destroy
-      redirect_to admin_instance_user_invitations_path,
-                  success: t('.success', name: @invitation.name)
+      destroy_invitation_success
     else
-      redirect_to admin_instance_user_invitations_path,
-                  danger: @invitation.errors.full_messages.to_sentence
+      destroy_invitation_failure
     end
   end
 
   def resend_invitation
     @invitation = invitations.first
     if @invitation && invitation_service.resend_invitation(invitations)
-      flash.now[:success] = t('.success', email: @invitation.email)
+      resend_invitation_success
     else
-      flash.now[:danger] = t('.failure')
+      resend_invitation_failure
     end
-    render 'reload_instance_user_invitation'
   end
 
   def resend_invitations
     if invitation_service.resend_invitation(invitations)
-      redirect_to admin_instance_user_invitations_path, success: t('.success')
+      resend_invitations_success
     else
-      redirect_to admin_instance_user_invitations_path, danger: t('.failure')
+      resend_invitations_failure
     end
   end
 
@@ -94,20 +94,65 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
     end
   end
 
-  def propagate_errors
+  # Returns the invitation response based on entry invitation.
+  def parse_invitation_result(new_invitations, existing_invitations, new_instance_users,
+                              existing_instance_users, duplicate_users)
+    render_to_string(partial: 'invitation_result_data', locals: { new_invitations: new_invitations,
+                                                                  existing_invitations: existing_invitations,
+                                                                  new_instance_users: new_instance_users,
+                                                                  existing_instance_users: existing_instance_users,
+                                                                  duplicate_users: duplicate_users })
   end
 
-  def create_success_message(new_invitations, existing_invitations, new_instance_users,
-                             existing_instance_users,  _duplicate_users)
-    t('.success',
-      new_invitations: t('.summary.new_invitations', count: new_invitations),
-      already_invited: t('.summary.already_invited', count: existing_invitations),
-      new_instance_users: t('.summary.new_instance_users', count: new_instance_users),
-      already_in_instance: t('.summary.already_in_instance', count: existing_instance_users))
+  def create_invitation_success(result) # :nodoc:
+    respond_to do |format|
+      format.json do
+        render json: {
+          newInvitations: result[0].length,
+          invitationResult: parse_invitation_result(*result)
+        }, status: :ok
+      end
+    end
   end
 
-  def create_warning_message(_new_invitations, _existing_invitations, _new_instance_users,
-                             _existing_instance_users, duplicate_users)
-    t('.summary.duplicate_emails', count: duplicate_users) if duplicate_users > 0
+  def resend_invitation_success # :nodoc:
+    respond_to do |format|
+      format.json do
+        render partial: 'instance_user_invitation_list_data', locals: { invitation: @invitation.reload }, status: :ok
+      end
+    end
+  end
+
+  def resend_invitation_failure # :nodoc:
+    respond_to do |format|
+      format.json { head :bad_request }
+    end
+  end
+
+  def resend_invitations_success # :nodoc:
+    respond_to do |format|
+      format.json do
+        render partial: 'system/admin/instance/user_invitations/index', locals: { invitations: @invitations.reload },
+               status: :ok
+      end
+    end
+  end
+
+  def resend_invitations_failure # :nodoc:
+    respond_to do |format|
+      format.json { head :bad_request }
+    end
+  end
+
+  def destroy_invitation_success # :nodoc:
+    respond_to do |format|
+      format.json { render json: { id: @invitation.id }, status: :ok }
+    end
+  end
+
+  def destroy_invitation_failure # :nodoc:
+    respond_to do |format|
+      format.json { render json: { errors: @invitation.errors.full_messages.to_sentence }, status: :bad_request }
+    end
   end
 end

@@ -11,7 +11,7 @@ const translations = defineMessages({
   },
 });
 
-const UsersIndex: FC<Props> = (props) => {
+const AdminIndex: FC<Props> = (props) => {
   const { intl } = props;
 
   return (
@@ -21,4 +21,4 @@ const UsersIndex: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(UsersIndex);
+export default injectIntl(AdminIndex);

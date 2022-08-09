@@ -22,10 +22,8 @@ RSpec.describe System::Admin::Instance::AnnouncementsController, type: :controll
           subject
         end
 
-        it { is_expected.to redirect_to(admin_instance_announcements_path) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).
-            to eq(I18n.t('system.admin.instance.announcements.destroy.failure', error: ''))
+        it 'fails with http status bad request' do
+          expect(subject).to have_http_status(:bad_request)
         end
       end
     end

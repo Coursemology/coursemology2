@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'System: Administration: Instance: Courses' do
+RSpec.feature 'System: Administration: Instance: Courses', js: true do
   let(:instance) { create(:instance) }
 
   with_tenant(:instance) do
@@ -22,8 +22,9 @@ RSpec.feature 'System: Administration: Instance: Courses' do
         visit admin_instance_courses_path
 
         courses.each do |course|
-          expect(page).to have_content_tag_for(course)
-          expect(page).to have_link(nil, href: course_path(course))
+          expect(page).to have_selector('p.course_title', text: course.title)
+          expect(page).
+            to have_link(nil, href: "/courses/#{course.id}")
 
           # It shows and only shows the owners
           course.course_users.owner.each do |course_user|
@@ -40,19 +41,21 @@ RSpec.feature 'System: Administration: Instance: Courses' do
       scenario 'I can delete a course' do
         visit admin_instance_courses_path
 
-        find_link(nil, href: admin_instance_course_path(course_to_delete)).click
-        expect(page).
-          to have_selector('div', text: I18n.t('system.admin.instance.courses.destroy.success'))
+        find("button.course-delete-#{course_to_delete.id}").click
+        accept_confirm_dialog
+        expect_toastify("#{course_to_delete.title} was deleted.")
       end
 
       let!(:course_to_search) { create(:course) }
       scenario 'I can search courses' do
         visit admin_instance_courses_path
 
-        fill_in 'search', with: course_to_search.title
-        click_button I18n.t('layouts.search_form.search_button')
+        find('button[aria-label="Search"]').click
+        find('div[aria-label="Search"]').find('input').set(course_to_search.title)
 
-        expect(page).to have_content_tag_for(course_to_search)
+        sleep 0.5 # timeout for search debouncing
+
+        expect(page).to have_selector('p.course_title', text: course_to_search.title)
         expect(all('.course').count).to eq(1)
       end
     end

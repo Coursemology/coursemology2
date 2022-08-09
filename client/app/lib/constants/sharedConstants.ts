@@ -1,4 +1,8 @@
 import type { StaffRoles, CourseUserRoles } from 'types/course/courseUsers';
+import {
+  InstanceUserRoles,
+  RoleRequestRoles,
+} from 'types/system/instance/users';
 import type { UserRoles } from 'types/users';
 
 // Form options
@@ -19,6 +23,17 @@ const TIMELINE_ALGORITHMS = [
 
 const USER_ROLES: UserRoles = {
   normal: 'Normal',
+  administrator: 'Administrator',
+};
+
+const INSTANCE_USER_ROLES: InstanceUserRoles = {
+  normal: 'Normal',
+  instructor: 'Instructor',
+  administrator: 'Administrator',
+};
+
+const ROLE_REQUEST_ROLES: RoleRequestRoles = {
+  instructor: 'Instructor',
   administrator: 'Administrator',
 };
 
@@ -49,6 +64,8 @@ export default {
   SUPPORTED_VOICE_FILE_TYPES,
   TIMELINE_ALGORITHMS,
   USER_ROLES,
+  INSTANCE_USER_ROLES,
+  ROLE_REQUEST_ROLES,
   COURSE_USER_ROLES,
   STAFF_ROLES,
   ITEM_ACTABLE_TYPES,

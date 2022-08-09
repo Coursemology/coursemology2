@@ -26,6 +26,8 @@ const FormTextField = (props) => {
     disabled,
     label,
     renderIf,
+    multiline = false,
+    rows = 1,
     margins = true,
     enableDebouncing = false,
     ...custom
@@ -84,6 +86,8 @@ const FormTextField = (props) => {
       disabled={disabled}
       label={label}
       error={!!fieldState.error}
+      multiline={multiline}
+      rows={rows}
       helperText={
         fieldState.error && formatErrorMessage(fieldState.error.message)
       }
@@ -105,6 +109,8 @@ FormTextField.propTypes = {
   renderIf: PropTypes.bool,
   margins: PropTypes.bool,
   enableDebouncing: PropTypes.bool,
+  multiline: PropTypes.bool,
+  rows: PropTypes.number,
 };
 
 export default FormTextField;

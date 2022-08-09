@@ -168,26 +168,30 @@ const UsersTable: FC<Props> = (props) => {
   };
 
   const search = (page, searchText): void => {
-    setIsLoading(true);
-    setTableState({
-      ...tableState,
-      count: counts.usersCount,
-    });
-    dispatch(
-      indexUsers({
-        'filter[page_num]': page,
-        'filter[length]': 100,
-        role,
-        active,
-        search: searchText.trim(),
-      }),
-    )
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchFilteredUsersFailure)),
-      )
-      .finally(() => {
-        setIsLoading(false);
+    if (searchText !== null) {
+      setIsLoading(true);
+      setTableState({
+        ...tableState,
+        count: counts.usersCount,
       });
+      dispatch(
+        indexUsers({
+          'filter[page_num]': page,
+          'filter[length]': 100,
+          role,
+          active,
+          search: searchText.trim(),
+        }),
+      )
+        .catch(() =>
+          toast.error(
+            intl.formatMessage(translations.fetchFilteredUsersFailure),
+          ),
+        )
+        .finally(() => {
+          setIsLoading(false);
+        });
+    }
   };
 
   const options: TableOptions = {

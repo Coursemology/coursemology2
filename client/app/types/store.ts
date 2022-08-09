@@ -13,12 +13,14 @@ import { DisbursementState } from 'bundles/course/experience-points/disbursement
 import { CommentState } from 'bundles/course/discussion/topics/types';
 import { AdminState } from 'bundles/system/admin/admin/types';
 import { GlobalState } from 'bundles/announcements/types';
+import { InstanceAdminState } from 'bundles/system/admin/instance/types';
 
 /**
  * Describes the overall shape of the application's Redux store state.
  */
 export interface AppState {
   admin: AdminState;
+  instanceAdmin: InstanceAdminState;
   achievements: AchievementsState;
   announcements: AnnouncementsState;
   courses: CoursesState;
