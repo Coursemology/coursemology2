@@ -87,6 +87,7 @@ const ResponseForm = (props) => {
     handleSubmit,
     reset,
     setError,
+    watch,
     formState: { errors, isSubmitting, isDirty },
   } = useForm({
     defaultValues: initialValues,
@@ -100,6 +101,11 @@ const ResponseForm = (props) => {
     reset(initialValues);
   }, [initialValues]);
 
+  const handleSave = () => {
+    const data = watch();
+    onSubmit({ ...data, submit: false }, setError);
+  };
+
   const renderSaveButton = () => {
     if (!canModify) {
       return null;
@@ -111,10 +117,7 @@ const ResponseForm = (props) => {
         color="primary"
         disabled={isSubmitting || !isDirty}
         style={styles.formButton}
-        onClick={handleSubmit((data) =>
-          onSubmit({ ...data, submit: false }, setError),
-        )}
-        type="submit"
+        onClick={handleSave}
       >
         <FormattedMessage {...formTranslations.save} />
       </Button>
