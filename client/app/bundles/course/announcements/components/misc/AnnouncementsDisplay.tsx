@@ -111,7 +111,7 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
         <Grid item xs={1} />
       </Grid>
 
-      <div id="course-announcements">
+      <div id="announcements">
         <Stack spacing={1} sx={{ paddingBottom: 1 }}>
           {slicedAnnouncements.map((announcement) => (
             <AnnouncementCard

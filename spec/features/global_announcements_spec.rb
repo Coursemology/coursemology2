@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Global announcements' do
+RSpec.feature 'Global announcements', js: true do
   subject { page }
   let(:instance) { Instance.default }
 
@@ -17,68 +17,31 @@ RSpec.feature 'Global announcements' do
 
       scenario 'I should not see any announcements if there are none' do
         visit announcements_path
-        expect(page).not_to have_selector('div.global-announcement')
-        expect(page).not_to have_selector('div.instance-announcement')
-        expect(page).not_to have_selector('div.system-announcement')
+        expect(page).to_not have_selector('.announcement')
       end
 
       scenario 'I should see instance announcements' do
         announcement = create(:instance_announcement, instance: instance)
         visit announcements_path
 
-        expect(page).to have_tag('div.global-announcement') do
-          with_tag('div.panel-heading', text: format('×%<title>s', title: announcement.title))
-          with_tag('div.panel-body', text: announcement.content)
-        end
-        expect(page).to have_content_tag_for(announcement)
+        expect(page).to have_selector("#announcement-#{announcement.id}")
       end
 
       scenario 'I should see system announcements' do
         announcement = create(:system_announcement)
         visit announcements_path
 
-        expect(page).to have_tag('div.global-announcement') do
-          with_tag('div.panel-heading', text: format('×%<title>s', title: announcement.title))
-          with_tag('div.panel-body', text: announcement.content)
-        end
-        expect(page).to have_content_tag_for(announcement)
+        expect(page).to have_selector("#announcement-#{announcement.id}")
       end
 
       scenario 'I should see both types of announcements' do
-        announcements = 2.downto(-1).flat_map do |i|
-          now = Time.zone.now
-          [
-            create(:instance_announcement,
-                   start_at: now - 1.week, end_at: now + i.minutes, instance: instance),
-            create(:system_announcement, start_at: now + i.minutes, end_at: now + 1.week)
-          ]
-        end
+        system_announcement = create(:system_announcement)
+        instance_announcement = create(:instance_announcement, instance: instance)
 
         visit announcements_path
 
-        expect(page).to have_tag('div.global-announcement') do
-          with_tag('div.panel-heading', text: format('×%<title>s', title: announcements.last.title))
-          with_tag('div.panel-body', text: announcements.last.content)
-        end
-
-        announcements.select(&:currently_active?).each do |s|
-          expect(page).to have_content_tag_for(s)
-        end
-        announcements.reject(&:currently_active?).each do |s|
-          expect(page).to have_no_content_tag_for(s)
-        end
-      end
-
-      scenario 'I can hide announcements that I have read' do
-        announcement = create(:instance_announcement, instance: instance)
-        expect(announcement.unread?(user)).to be_truthy
-
-        visit root_path
-        find_link(nil, href: announcement_mark_as_read_path(announcement)).click
-        expect(announcement.unread?(user)).to be_falsey
-
-        visit root_path
-        expect(page).not_to have_selector('div.global-announcement')
+        expect(page).to have_selector("#announcement-#{system_announcement.id}")
+        expect(page).to have_selector("#announcement-#{instance_announcement.id}")
       end
     end
   end

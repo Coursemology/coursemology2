@@ -11,8 +11,3 @@ en:
             success: 'Announcement %{title} was created.'
           edit:
             header: 'Edit Announcement'
-          update:
-            success: 'Announcement %{title} was updated.'
-          destroy:
-            success: 'Announcement %{title} was deleted.'
-            failure: 'Failed to delete announcement: %{error}'

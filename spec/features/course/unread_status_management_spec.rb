@@ -34,7 +34,7 @@ RSpec.describe 'Course: Announcements', type: :feature do
             end
 
             it 'marks announcements in page 2 as read' do
-              expect(page).to have_selector('#course-announcements')
+              expect(page).to have_selector('#announcements')
               expect(course.announcements.unread_by(first_user).count).to eq(0)
             end
           end
