@@ -12,15 +12,44 @@ import ResponseEdit from 'course/survey/pages/ResponseEdit';
 import ResponseIndex from 'course/survey/pages/ResponseIndex';
 import AdminMenu from './AdminMenu';
 
-const SurveyLayout = ({ surveys }) => {
+const backLocations = (courseId, surveyId, Page) => {
+  switch (Page) {
+    case 'SurveyResults':
+    case 'ResponseIndex':
+      return `/courses/${courseId}/surveys/${surveyId}`;
+    case 'SurveyShow':
+    case 'ResponseShow':
+    case 'ResponseEdit':
+    default:
+      return `/courses/${courseId}/surveys`;
+  }
+};
+
+const PageWithTitleBar = (props) => {
+  const { page, survey, surveyId, courseId } = props;
   const navigate = useNavigate();
-  const params = useParams();
-  const surveyId = params.surveyId;
-  const courseId = params.courseId;
-  const survey =
-    surveys && surveys.length > 0
-      ? surveys.find((s) => String(s.id) === String(params.surveyId))
-      : {};
+
+  let pageToRender = <></>;
+
+  switch (page) {
+    case 'SurveyResults':
+      pageToRender = <SurveyResults {...{ survey, courseId, surveyId }} />;
+      break;
+    case 'ResponseIndex':
+      pageToRender = <ResponseIndex {...{ survey, courseId, surveyId }} />;
+      break;
+    case 'SurveyShow':
+      pageToRender = <SurveyShow {...{ survey, courseId, surveyId }} />;
+      break;
+    case 'ResponseShow':
+      pageToRender = <ResponseShow {...{ survey, courseId, surveyId }} />;
+      break;
+    case 'ResponseEdit':
+      pageToRender = <ResponseEdit {...{ survey, courseId, surveyId }} />;
+      break;
+    default:
+      return <></>;
+  }
 
   return (
     <>
@@ -31,36 +60,81 @@ const SurveyLayout = ({ surveys }) => {
             surveyId ? <AdminMenu {...{ survey, surveyId }} /> : null
           }
           iconElementLeft={
-            <IconButton onClick={() => navigate(-1)}>
+            <IconButton
+              onClick={() => navigate(backLocations(courseId, surveyId, page))}
+            >
               <ArrowBack htmlColor="white" />
             </IconButton>
           }
         />
       )}
+      {pageToRender}
+    </>
+  );
+};
+
+PageWithTitleBar.propTypes = {
+  page: PropTypes.string,
+  survey: surveyShape,
+  surveyId: PropTypes.string,
+  courseId: PropTypes.string,
+};
+
+const SurveyLayout = ({ surveys }) => {
+  const params = useParams();
+  const surveyId = params.surveyId;
+  const courseId = params.courseId;
+  const survey =
+    surveys && surveys.length > 0
+      ? surveys.find((s) => String(s.id) === String(params.surveyId))
+      : {};
+
+  return (
+    <>
       <Routes>
         <Route
           path=""
-          element={<SurveyShow {...{ survey, courseId, surveyId }} />}
+          element={
+            <PageWithTitleBar
+              {...{ page: 'SurveyShow', survey, courseId, surveyId }}
+            />
+          }
         />
         <Route
           exact
           path="/results"
-          element={<SurveyResults {...{ survey, courseId, surveyId }} />}
+          element={
+            <PageWithTitleBar
+              {...{ page: 'SurveyResults', survey, courseId, surveyId }}
+            />
+          }
         />
         <Route
           exact
           path="/responses"
-          element={<ResponseIndex {...{ survey, courseId, surveyId }} />}
+          element={
+            <PageWithTitleBar
+              {...{ page: 'ResponseIndex', survey, courseId, surveyId }}
+            />
+          }
         />
         <Route
           exact
           path="/responses/:responseId"
-          element={<ResponseShow {...{ survey, courseId, surveyId }} />}
+          element={
+            <PageWithTitleBar
+              {...{ page: 'ResponseShow', survey, courseId, surveyId }}
+            />
+          }
         />
         <Route
           exact
           path="/responses/:responseId/edit"
-          element={<ResponseEdit {...{ survey, courseId, surveyId }} />}
+          element={
+            <PageWithTitleBar
+              {...{ page: 'ResponseEdit', survey, courseId, surveyId }}
+            />
+          }
         />
       </Routes>
     </>
