@@ -1753,10 +1753,10 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@mui/x-date-pickers@^5.0.0-beta.4":
-  version "5.0.0-beta.4"
-  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-5.0.0-beta.4.tgz#85132b8c8ad030823106adc1ce329330275dc7c7"
-  integrity sha512-MvfZVsTS99Bz4ZxlkgA3PU7beQ1ET5Aejj9T3sPhnnmb2f4YysIZqhReYl5r4IOEuU/enhMKUYwsqgB0GB0MTg==
+"@mui/x-date-pickers@^5.0.0-beta.5":
+  version "5.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@mui/x-date-pickers/-/x-date-pickers-5.0.0-beta.5.tgz#286387107a4cf03290cfae8013dba4a4e1c44cac"
+  integrity sha512-pCVNSHuAcndEJACVS/v2AKBSXemqmhzVvOdsPS9hOIOzGSYawrbCEuhI9+o0/NR/pFLz+JcIYrnVV/Zx8f2ZEw==
   dependencies:
     "@babel/runtime" "^7.18.6"
     "@date-io/core" "^2.14.0"
