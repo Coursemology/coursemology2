@@ -26,6 +26,7 @@ const propTypes = {
   actions: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   autograded: PropTypes.bool.isRequired,
+  isCodaveri: PropTypes.bool.isRequired,
   autogradedAssessment: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
   hasSubmissions: PropTypes.bool.isRequired,
@@ -54,6 +55,7 @@ const OnlineEditor = (props) => {
     intl,
     isLoading,
     autograded,
+    isCodaveri,
     autogradedAssessment,
     hasSubmissions,
   } = props;
@@ -68,6 +70,7 @@ const OnlineEditor = (props) => {
             dataFiles: data.get('data_files'),
             isLoading,
             autograded,
+            isCodaveri,
             autogradedAssessment,
           }}
         />

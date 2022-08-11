@@ -118,6 +118,11 @@ export default defineMessages({
     defaultMessage: 'Submit',
     description: 'Button for submitting the form.',
   },
+  submitButtonTooltip: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.submitButtonTooltip',
+    defaultMessage:
+      'Unable to update Codaveri question type as there are existing submissions',
+  },
   submitFailureMessage: {
     id: 'course.assessment.question.programming.programmingQuestionForm.submitFailureMessage',
     defaultMessage: 'An error occurred, please try again.',
@@ -166,5 +171,15 @@ export default defineMessages({
       only system-issued EXP for the submissions will be re-calculated.\
       Note that manually-issued EXP will not be updated.\
       Are you sure you wish to continue?',
+  },
+  codaveriToggle: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.codaveriToggle',
+    defaultMessage: 'Codaveri Evaluation & Feedback',
+  },
+  codaveriTooltip: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.codaveriTooltip',
+    defaultMessage:
+      "Codaveri provides code evaluation and automated code feedback services for students' codes. \
+      (Note that the code feedback is only provided upon finalising submissions)",
   },
 });

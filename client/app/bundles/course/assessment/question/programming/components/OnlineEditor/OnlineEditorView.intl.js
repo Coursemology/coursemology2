@@ -31,6 +31,11 @@ export default defineMessages({
     defaultMessage: '(optional, hidden, stores solution for future reference)',
     description: 'Subtitle for solution template code block.',
   },
+  requiredSolutionSubtitle: {
+    id: 'course.assessment.question.programming.onlineEditorView.requiredsolutionSubtitle',
+    defaultMessage:
+      "(Required, hidden, stores solution used as reference code by Codaveri in correcting students' codes)",
+  },
   submissionTitle: {
     id: 'course.assessment.question.programming.onlineEditorView.submissionTitle',
     defaultMessage: 'Submission Template',
@@ -152,5 +157,10 @@ export default defineMessages({
   cannotBeBlankValidationError: {
     id: 'course.assessment.question.programming.onlineEditorView.cannotBeBlankValidationError',
     defaultMessage: 'Cannot be blank.',
+  },
+  noSolutionTemplateError: {
+    id: 'course.assessment.question.programming.onlineEditorView.noSolutionTemplateError',
+    defaultMessage:
+      'For Codaveri to provide automated code correction, a solution code must be provided.',
   },
 });

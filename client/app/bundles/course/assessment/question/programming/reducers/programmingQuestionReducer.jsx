@@ -29,6 +29,8 @@ export const initialState = Immutable.fromJS({
     autograded_assessment: false,
     published_assessment: false,
     attempt_limit: null,
+    is_codaveri: false,
+    existing_submissions_count: 0,
     import_job_id: null,
     package: null,
     can_switch_package_type: true,
@@ -104,6 +106,7 @@ export const initialState = Immutable.fromJS({
     alert: null,
     build_log: null,
   },
+  codaveri_result: null,
   is_loading: false,
   is_evaluating: false,
   has_errors: false,
@@ -242,13 +245,20 @@ function apiReducer(state, action) {
         // Evaluation started
         return state
           .set('is_evaluating', isEvaluating)
+          .set('codaveri_result', null)
           .mergeIn(['import_result'], { alert: null, build_log: null });
       }
 
       if (data) {
         // Evaluation has completed, updated data retrieved from server.
-        const { form_data, question, package_ui, test_ui, import_result } =
-          data;
+        const {
+          form_data,
+          question,
+          package_ui,
+          test_ui,
+          import_result,
+          codaveri_result,
+        } = data;
         const key = state.getIn(['test_ui', 'data_files', 'key']);
         const submissionKey = state.getIn([
           'test_ui',
@@ -262,7 +272,7 @@ function apiReducer(state, action) {
           .set('is_evaluating', isEvaluating)
           .mergeDeep({ question })
           .setIn(['question', 'package_filename'], null)
-          .merge({ form_data, package_ui, import_result })
+          .merge({ form_data, package_ui, import_result, codaveri_result })
           .setIn(
             ['test_ui', 'data_files', 'new'],
             Immutable.fromJS([{ key, filename: null }]),

@@ -24,6 +24,7 @@ $(() => {
       <ProviderWrapper store={store}>
         <AssessmentEditPage
           modeSwitching={data.mode_switching}
+          containsCodaveri={data.contains_codaveri}
           gamified={data.gamified}
           showPersonalizedTimelineFeatures={
             data.show_personalized_timeline_features

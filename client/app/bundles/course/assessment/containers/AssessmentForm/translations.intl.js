@@ -116,8 +116,15 @@ const translations = defineMessages({
   modeSwitchingDisabled: {
     id: 'course.assessment.form.modeSwitchingHint',
     defaultMessage:
-      'Autograded ( Switch to autograded mode is not allowed as there are submissions \
-      for the assessment. )',
+      'Switch to autograded mode is not allowed as there are submissions \
+      for the assessment.',
+  },
+  containsCodaveriQuestion: {
+    id: 'course.assessment.form.modeSwitchingHint',
+    defaultMessage:
+      "Switch to autograded mode is not allowed as there's \
+      codaveri programming question type. This question type is only supported \
+      in non-autograded assessment.",
   },
   skippable: {
     id: 'course.assessment.form.skippable',
