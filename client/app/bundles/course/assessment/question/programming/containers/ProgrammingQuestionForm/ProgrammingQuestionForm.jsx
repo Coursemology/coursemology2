@@ -2,6 +2,7 @@
 import Immutable from 'immutable';
 
 import { Component } from 'react';
+import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import {
@@ -369,6 +370,22 @@ class ProgrammingQuestionForm extends Component {
     return null;
   }
 
+  renderCodaveriAlertView() {
+    const codaveriResult = this.props.data.get('codaveri_result');
+
+    if (codaveriResult && codaveriResult.get('codaveri_status')) {
+      return (
+        <div
+          className={codaveriResult.get('class')}
+        >{`Codaveri Status: ${codaveriResult.get(
+          'codaveri_status',
+        )}. Message: ${codaveriResult.get('codaveri_message')}.`}</div>
+      );
+    }
+
+    return null;
+  }
+
   renderInputField(
     label,
     field,
@@ -602,6 +619,7 @@ class ProgrammingQuestionForm extends Component {
             data: this.props.data.get('test_ui'),
             isLoading: this.props.data.get('is_loading'),
             autograded: this.props.data.getIn(['question', 'autograded']),
+            isCodaveri: this.props.data.getIn(['question', 'is_codaveri']),
             autogradedAssessment: this.props.data.getIn([
               'question',
               'autograded_assessment',
@@ -627,16 +645,22 @@ class ProgrammingQuestionForm extends Component {
       'question',
       'autograded_assessment',
     ]);
+    const showIsCodaveri =
+      !this.props.data.getIn(['question', 'autograded_assessment']) &&
+      question.get('autograded');
 
     const skillsOptions = question.get('skills').toJS();
     const skillsValues = question.get('skill_ids').toJS();
 
-    const languageOptions = languages.toJS();
-    languageOptions.unshift({ id: null, name: null });
-
     const autogradedAssessment = question.get('autograded_assessment');
     const autograded = question.get('autograded');
+    const isCodaveri = question.get('is_codaveri');
     const hasAutoGradings = question.get('has_auto_gradings');
+    const disableSubmit = false;
+    // const disableSubmit =
+    // autograded
+    // isCodaveri &&
+    // question.get('existing_submissions_count') !== 0;
     let autogradedLabel = this.props.intl.formatMessage(
       translations.autograded,
     );
@@ -652,9 +676,19 @@ class ProgrammingQuestionForm extends Component {
 
     const showEditOnline = question.get('edit_online');
 
+    let languageOptions = languages.toJS();
+    if (showIsCodaveri && isCodaveri) {
+      languageOptions = languageOptions.filter(
+        (language) =>
+          language.editor_mode === 'python' && language.name !== 'Python 2.7',
+      );
+    }
+    languageOptions.unshift({ id: null, name: null });
+
     return (
       <div>
         {this.renderImportAlertView()}
+        {this.renderCodaveriAlertView()}
         {this.props.data.get('save_errors') ? (
           <div className="alert alert-danger">
             {this.props.data.get('save_errors').map((errorMessage, index) => (
@@ -782,6 +816,45 @@ class ProgrammingQuestionForm extends Component {
                   />
                 </>
               ) : null}
+              {showIsCodaveri && (
+                <>
+                  <ReactTooltip id="codaveri-tooltip">
+                    {this.props.intl.formatMessage(
+                      translations.codaveriTooltip,
+                    )}
+                  </ReactTooltip>
+                  <span data-tip data-for="codaveri-tooltip">
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={isCodaveri}
+                          color="primary"
+                          onChange={(e) => {
+                            this.handleChange('is_codaveri', e.target.checked);
+                          }}
+                        />
+                      }
+                      name={ProgrammingQuestionForm.getInputName('is_codaveri')}
+                      disabled={this.props.data.get('is_loading')}
+                      label={
+                        <b>
+                          {this.props.intl.formatMessage(
+                            translations.codaveriToggle,
+                          )}
+                        </b>
+                      }
+                    />
+                    <input
+                      type="hidden"
+                      name={ProgrammingQuestionForm.getInputName('is_codaveri')}
+                      id={ProgrammingQuestionForm.getInputId('is_codaveri')}
+                      value={isCodaveri}
+                      style={{ display: 'none' }}
+                      readOnly={this.props.data.get('is_loading')}
+                    />
+                  </span>
+                </>
+              )}
             </div>
             <Grid
               container
@@ -896,21 +969,30 @@ class ProgrammingQuestionForm extends Component {
               this.props.actions.clearSubmissionMessage();
             }}
           />
-          <Button
-            variant="contained"
-            className={styles.submitButton}
-            color="primary"
-            disabled={this.props.data.get('is_loading')}
-            endIcon={
-              this.props.data.get('is_loading') ? (
-                <i className="fa fa-spinner fa-lg fa-spin" />
-              ) : null
-            }
-            id="programming-question-form-submit"
-            type="submit"
+          <ReactTooltip id="disabled-submit-tooltip">
+            {this.props.intl.formatMessage(translations.submitButtonTooltip)}
+          </ReactTooltip>
+          <div
+            data-tip
+            data-for="disabled-submit-tooltip"
+            data-tip-disable={!disableSubmit}
           >
-            {this.submitButtonText()}
-          </Button>
+            <Button
+              variant="contained"
+              className={styles.submitButton}
+              color="primary"
+              disabled={this.props.data.get('is_loading') || disableSubmit}
+              endIcon={
+                this.props.data.get('is_loading') ? (
+                  <i className="fa fa-spinner fa-lg fa-spin" />
+                ) : null
+              }
+              id="programming-question-form-submit"
+              type="submit"
+            >
+              {this.submitButtonText()}
+            </Button>
+          </div>
           {this.state.confirmationOpen && (
             <ConfirmationDialog
               message={this.props.intl.formatMessage(

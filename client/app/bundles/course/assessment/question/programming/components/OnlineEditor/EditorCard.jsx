@@ -20,6 +20,9 @@ const styles = {
   panelSummarySubtitle: {
     color: 'grey',
   },
+  panelSummarySubtitleError: {
+    color: 'red',
+  },
 };
 
 class EditorCard extends Component {
@@ -32,7 +35,8 @@ class EditorCard extends Component {
   }
 
   render() {
-    const { mode, field, value, header, subtitle, isLoading } = this.props;
+    const { mode, field, value, header, subtitle, isLoading, error } =
+      this.props;
     return (
       <Accordion defaultExpanded style={styles.panel}>
         <AccordionSummary
@@ -42,7 +46,15 @@ class EditorCard extends Component {
           <div style={styles.panelSummaryText}>
             {header}
             <br />
-            <div style={styles.panelSummarySubtitle}>{subtitle}</div>
+            <div
+              style={
+                error
+                  ? styles.panelSummarySubtitleError
+                  : styles.panelSummarySubtitle
+              }
+            >
+              {subtitle}
+            </div>
           </div>
         </AccordionSummary>
         <AccordionDetails style={{ padding: 0 }}>
@@ -78,6 +90,7 @@ EditorCard.propTypes = {
   header: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
   isLoading: PropTypes.bool.isRequired,
+  error: PropTypes.string,
 };
 
 export default injectIntl(EditorCard);

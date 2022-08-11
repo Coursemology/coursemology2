@@ -15,6 +15,7 @@ import ErrorText from 'lib/components/ErrorText';
 import ConditionList from 'lib/components/course/ConditionList';
 import formTranslations from 'lib/translations/form';
 import { achievementTypesConditionAttributes, typeMaterial } from 'lib/types';
+import ReactTooltip from 'react-tooltip';
 import translations from './translations.intl';
 import MaterialUploader from '../MaterialUploader';
 import { fetchTabs } from './actions';
@@ -113,6 +114,7 @@ const validationSchema = yup.object({
 const AssessmentForm = (props) => {
   const {
     conditionAttributes,
+    containsCodaveri,
     disabled,
     dispatch,
     editing,
@@ -150,6 +152,12 @@ const AssessmentForm = (props) => {
       dispatch(fetchTabs(failureMessage));
     }
   }, [dispatch]);
+
+  const autogradedToggleTooltip = containsCodaveri ? (
+    <FormattedMessage {...translations.containsCodaveriQuestion} />
+  ) : (
+    <FormattedMessage {...translations.modeSwitchingDisabled} />
+  );
 
   const renderPasswordFields = () => (
     <div>
@@ -500,27 +508,31 @@ const AssessmentForm = (props) => {
         />
       )}
 
-      <Controller
-        name="autograded"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormToggleField
-            field={field}
-            fieldState={fieldState}
-            disabled={!modeSwitching || disabled}
-            label={
-              modeSwitching ? (
-                <FormattedMessage {...translations.autograded} />
-              ) : (
-                <FormattedMessage {...translations.modeSwitchingDisabled} />
-              )
-            }
-            style={styles.toggle}
-          />
-        )}
-      />
+      <ReactTooltip id="autograde-toggle">
+        {autogradedToggleTooltip}
+      </ReactTooltip>
 
-      {modeSwitching && (
+      <div
+        data-tip
+        data-for="autograde-toggle"
+        data-tip-disable={!containsCodaveri && modeSwitching}
+      >
+        <Controller
+          name="autograded"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={containsCodaveri || !modeSwitching || disabled}
+              label={<FormattedMessage {...translations.autograded} />}
+              style={styles.toggle}
+            />
+          )}
+        />
+      </div>
+
+      {modeSwitching && !containsCodaveri && (
         <div style={styles.hint}>
           <FormattedMessage {...translations.autogradedHint} />
         </div>
@@ -763,6 +775,8 @@ AssessmentForm.propTypes = {
   randomizationAllowed: PropTypes.bool,
   // If allow to switch between autoraded and manually graded mode.
   modeSwitching: PropTypes.bool,
+  // If an assessment contains question of programming codaveri type
+  containsCodaveri: PropTypes.bool,
   folderAttributes: PropTypes.shape({
     folder_id: PropTypes.number,
     // If any action (upload, delete and download) of the materials
