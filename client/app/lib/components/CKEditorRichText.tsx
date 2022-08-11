@@ -120,6 +120,19 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
                 { model: 'formatted', view: 'pre', title: 'Formatted' },
               ],
             },
+            link: {
+              defaultProtocol: 'https://',
+              decorators: {
+                openInNewTab: {
+                  mode: 'manual',
+                  label: 'Open in a new tab',
+                  attributes: {
+                    target: '_blank',
+                    rel: 'noopener noreferrer',
+                  },
+                },
+              },
+            },
           }}
           data=""
           onReady={(editor) => {
