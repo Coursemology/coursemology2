@@ -21,6 +21,8 @@ json.question do
   json.autograded_assessment @assessment.autograded?
   json.published_assessment @assessment.published?
   json.attempt_limit @programming_question.attempt_limit
+  json.is_codaveri @programming_question.is_codaveri
+  json.existing_submissions_count @assessment.submissions.count
 
   if @programming_question.attachment.present? && @programming_question.attachment.persisted?
     json.package do

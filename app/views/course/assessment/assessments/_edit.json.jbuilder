@@ -19,6 +19,7 @@ json.tab_attributes do
 end
 
 json.mode_switching @assessment.allow_mode_switching?
+json.contains_codaveri @assessment.contains_programming_codaveri?
 json.gamified current_course.gamified?
 json.show_personalized_timeline_features current_course.show_personalized_timeline_features?
 json.randomization_allowed current_course.allow_randomization

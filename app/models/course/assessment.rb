@@ -170,6 +170,11 @@ class Course::Assessment < ApplicationRecord
     submissions.count == 0 || autograded?
   end
 
+  # To check if there is any codaveri question type in this assessment
+  def contains_programming_codaveri?
+    programming_questions.pluck(:is_codaveri).include?(true)
+  end
+
   # @override ConditionalInstanceMethods#permitted_for!
   def permitted_for!(_course_user)
   end
@@ -214,7 +219,7 @@ class Course::Assessment < ApplicationRecord
   def include_in_consolidated_email?(event)
     email_enabled = course.email_enabled(:assessments, event, tab.category.id)
     unless email_enabled # TO REMOVE - Monitoring for duplicate opening emails #4531
-      logger.debug(message: 'Duplicate emails debugging', course: course , assessment_id: id,
+      logger.debug(message: 'Duplicate emails debugging', course: course, assessment_id: id,
                    lesson_plan: lesson_plan_item, tab: tab, category_id: tab&.category&.id)
       return false
     end

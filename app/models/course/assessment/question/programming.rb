@@ -30,6 +30,8 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   validates :import_job_id, uniqueness: { allow_nil: true, if: :import_job_id_changed? }
   validates :language, presence: true
 
+  validate :validate_codaveri_question
+
   belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil, optional: true
   belongs_to :language, class_name: Coursemology::Polyglot::Language.name, inverse_of: nil
   has_one_attachment
@@ -124,7 +126,25 @@ class Course::Assessment::Question::Programming < ApplicationRecord
 
   # returns the type of question i.e. Programming
   def question_type
-    I18n.t('course.assessment.question.programming.question_type')
+    if is_codaveri
+      I18n.t('course.assessment.question.programming.question_type_codaveri')
+    else
+      I18n.t('course.assessment.question.programming.question_type')
+    end
+  end
+
+  # Returns language name in lowercase format (eg python, java).
+  #
+  # @return [String] The language name in lowercase format.
+  def polyglot_language_name
+    language.name.split[0].downcase
+  end
+
+  # Returns language version.
+  #
+  # @return [String] The language version.
+  def polyglot_language_version
+    language.name.split[1]
   end
 
   private
@@ -133,7 +153,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   def process_package
     if attachment_changed?
       attachment ? process_new_package : remove_old_package
-    elsif time_limit_changed? || memory_limit_changed? || language_id_changed?
+    elsif time_limit_changed? || memory_limit_changed? || language_id_changed? || (is_codaveri_changed? && is_codaveri)
       # For non-autograded questions, the attachment is not present
       evaluate_package if attachment
     end
@@ -184,5 +204,25 @@ class Course::Assessment::Question::Programming < ApplicationRecord
 
   def skip_process_package?
     duplicating?
+  end
+
+  def validate_codaveri_question
+    return unless is_codaveri
+
+    if question_assessments.first.assessment.autograded?
+      errors.add(:base, 'Assessment type must not be autograded')
+    elsif !codaveri_language_whitelist.include?(language.type.constantize)
+      errors.add(:base, 'Language type must be Python 3 and above')
+    end
+
+    nil
+  end
+
+  def codaveri_language_whitelist
+    [Coursemology::Polyglot::Language::Python::Python3Point4,
+     Coursemology::Polyglot::Language::Python::Python3Point5,
+     Coursemology::Polyglot::Language::Python::Python3Point6,
+     Coursemology::Polyglot::Language::Python::Python3Point7,
+     Coursemology::Polyglot::Language::Python::Python3Point9]
   end
 end
