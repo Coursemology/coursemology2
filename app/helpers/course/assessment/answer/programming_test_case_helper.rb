@@ -22,7 +22,10 @@ module Course::Assessment::Answer::ProgrammingTestCaseHelper
     if test_case_result
       output = test_case_result.messages['output']
       output = test_case_result.messages['failure'] if output.blank?
-      output = test_case_result.messages['error'] if output.blank?
+      # For codaveri programming test output, the stderror for each test case
+      # is shown as a full stack message. Thus, we only want the last line
+      # to be displayed.
+      output = test_case_result.messages['error']&.split("\n")&.last if output.blank?
     end
     output || ''
   end

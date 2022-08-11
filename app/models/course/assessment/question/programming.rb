@@ -49,7 +49,11 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   end
 
   def auto_grader
-    Course::Assessment::Answer::ProgrammingAutoGradingService.new
+    if is_codaveri
+      Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService.new
+    else
+      Course::Assessment::Answer::ProgrammingAutoGradingService.new
+    end
   end
 
   def attempt(submission, last_attempt = nil)
