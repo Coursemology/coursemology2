@@ -174,6 +174,22 @@ class Course::Assessment::ProgrammingPackage
     end
   end
 
+  # Gets the contents of all test files.
+  #
+  # @return [Hash<Pathname, String>] A hash mapping the file path to the file contents of each
+  #   file.
+  def test_files
+    get_folder_files(TESTS_PATH)
+  end
+
+  # Gets the contents of all files in main dir.
+  #
+  # @return [Hash<Pathname, String>] A hash mapping the file path to the file contents of each
+  #   file.
+  def main_files
+    retrieve_files_in_main_dir
+  end
+
   private
 
   # Ensures that the zip file is open.
@@ -222,5 +238,18 @@ class Course::Assessment::ProgrammingPackage
   def get_file(file_path)
     ensure_file_open!
     @file.read(file_path)
+  end
+
+  # Get the contents of all files in the main directory of the package.
+  #
+  # @return [Hash<Pathname, String>] A hash mapping the file path to the file contents of each
+  #   file.
+  def retrieve_files_in_main_dir
+    @file.glob('*').map do |entry|
+      next if entry.directory?
+
+      entry_file_name = Pathname.new(entry.name)
+      [entry_file_name, entry.get_input_stream(&:read)]
+    end.compact.to_h
   end
 end
