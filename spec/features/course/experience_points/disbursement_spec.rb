@@ -68,7 +68,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
         expect do
           find('button.general-btn-submit').click
-          sleep 0.2
+          sleep 0.5
         end.to change(Course::ExperiencePointsRecord, :count).by(2)
       end
     end
