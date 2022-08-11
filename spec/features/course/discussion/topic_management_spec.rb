@@ -161,7 +161,7 @@ RSpec.feature 'Course: Topics: Management' do
         other_comments.each { |comment| expect(page).to have_selector(".topic-#{comment.id}") }
 
         find("a#mark-as-read-#{mark_as_read.id}").click
-        sleep 0.2
+        sleep 0.5
 
         expect(page).to have_selector('a.clickable', count: other_comments.length - 1)
         expect(mark_as_read.unread?(user)).to be_falsey
