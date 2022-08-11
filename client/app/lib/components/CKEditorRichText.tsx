@@ -113,13 +113,15 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
         <CKEditor
           editor={CustomEditor}
           config={{
-            // For formatting <pre> properly (summernote compatability).
+            // To format <pre> properly (summernote compatability).
             // CKEditor will change it to <pre><code> but on edit it will render properly
             heading: {
               options: [
                 { model: 'formatted', view: 'pre', title: 'Formatted' },
               ],
             },
+            // To add the default https protocol and
+            // an option to open the link in a new tab.
             link: {
               defaultProtocol: 'https://',
               decorators: {
@@ -140,14 +142,14 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
             if (value) {
               editor.setData(value);
             }
-            // Enable the following to set a fixed height for ckeditor
-            // editor.editing.view.change((writer) => {
-            //   writer.setStyle(
-            //     'height',
-            //     '100px',
-            //     editor.editing.view.document.getRoot(),
-            //   );
-            // });
+            // Enable the following to set a max height for ckeditor
+            editor.editing.view.change((writer) => {
+              writer.setStyle(
+                'max-height',
+                '350px',
+                editor.editing.view.document.getRoot(),
+              );
+            });
             editor.plugins.get('FileRepository').createUploadAdapter = (
               loader,
             ) => {
