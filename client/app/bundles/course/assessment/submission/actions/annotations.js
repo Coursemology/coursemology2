@@ -34,7 +34,10 @@ export function create(
           payload: { ...data, fileId, line },
         });
       })
-      .catch(() => dispatch({ type: actionTypes.CREATE_ANNOTATION_FAILURE }));
+      .catch((error) => {
+        dispatch({ type: actionTypes.CREATE_ANNOTATION_FAILURE });
+        throw error;
+      });
   };
 }
 

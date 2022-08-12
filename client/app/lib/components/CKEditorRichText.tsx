@@ -16,21 +16,11 @@ interface Props {
   required?: boolean | undefined;
   name: string;
   inputId: string;
-  clearOnSubmit?: boolean;
 }
 
 const CKEditorRichText: FC<Props> = (props: Props) => {
-  const {
-    label,
-    value,
-    onChange,
-    disabled,
-    field,
-    required,
-    name,
-    inputId,
-    clearOnSubmit,
-  } = props;
+  const { label, value, onChange, disabled, field, required, name, inputId } =
+    props;
 
   const [isFocused, setIsFocused] = useState(false);
   const testFieldLabelColor = isFocused ? cyan[500] : undefined;
@@ -39,12 +29,14 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [myEditor, setMyEditor] = useState<any>();
 
-  // Clear Editor field after comment is submitted, only if clearOnSubmit is true
+  // Reset value in the ckeditor field when it is empty.
+  // This is needed when a field is emptied after its previous content
+  // has been stored to the backend (eg comment field)
   useEffect(() => {
-    if (!disabled && clearOnSubmit && myEditor) {
-      myEditor.setData('');
+    if (value === '' && myEditor) {
+      myEditor.setData(value);
     }
-  }, [disabled]);
+  }, [value]);
 
   const uploadAdapter = (loader) => {
     return {
@@ -111,6 +103,7 @@ const CKEditorRichText: FC<Props> = (props: Props) => {
 
       <div className="react-ck">
         <CKEditor
+          disabled={disabled}
           editor={CustomEditor}
           config={{
             // To format <pre> properly (summernote compatability).

@@ -1,8 +1,9 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
 import { grey } from '@mui/material/colors';
+import PropTypes from 'prop-types';
 import { postShape, topicShape } from '../propTypes';
 import CommentCard from '../components/comment/CommentCard';
 import CommentField from '../components/comment/CommentField';
@@ -112,7 +113,9 @@ function mapDispatchToProps(dispatch, ownProps) {
           comment,
           isDelayedComment,
         ),
-      ),
+      )
+        .then(() => toast.success('Successfully created comment.'))
+        .catch(() => toast.error('Failed to create comment.')),
     updateComment: (postId, comment) =>
       dispatch(commentActions.update(topic.id, postId, comment)),
     deleteComment: (postId) =>
