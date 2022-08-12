@@ -719,7 +719,7 @@ export default class ScribingCanvas extends Component {
     obj.setCoords();
   }
 
-  rehydrateCanvas = (scribbles) => {
+  rehydrateCanvas = (scribbles, scribbleCallback) => {
     this.isScribblesLoaded = false;
 
     this.canvas.clear();
@@ -729,7 +729,11 @@ export default class ScribingCanvas extends Component {
       this.canvas.add(layer.scribbleGroup),
     );
 
-    scribbles.forEach((scribble) => this.canvas.add(scribble));
+    scribbles.forEach((scribble) => {
+      scribbleCallback?.(scribble);
+      this.canvas.add(scribble);
+    });
+
     this.canvas.renderAll();
 
     this.isScribblesLoaded = true;
@@ -782,15 +786,11 @@ export default class ScribingCanvas extends Component {
   // This method clears the selection-disabled scribbles
   // and reloads them to enable selection again
   enableObjectSelection() {
-    const canvasState =
-      this.props.scribing.canvasStates[this.props.scribing.currentStateIndex];
-    const userScribbles = this.getFabricObjectsFromJson(canvasState);
-    this.canvas.clear();
-    this.canvas.setBackground();
-    this.props.scribing.layers.forEach((layer) =>
-      this.canvas.add(layer.scribbleGroup),
-    );
-    userScribbles.forEach((scribble) => {
+    const currentStateIndex = this.props.scribing.currentStateIndex;
+    const state = this.props.scribing.canvasStates[currentStateIndex];
+    const scribbles = this.getFabricObjectsFromJson(state);
+
+    this.rehydrateCanvas(scribbles, (scribble) => {
       if (scribble.type === 'i-text') {
         scribble.setControlsVisibility({
           bl: false,
@@ -803,10 +803,7 @@ export default class ScribingCanvas extends Component {
           tr: false,
         });
       }
-      this.canvas.add(scribble);
     });
-    this.canvas.renderAll();
-    this.isScribblesLoaded = true;
   }
 
   // Generates the left, top, width and height of the drag
