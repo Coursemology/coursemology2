@@ -178,6 +178,14 @@ export function setCanvasStates(answerId, canvasStates) {
     });
 }
 
+export function updateCanvasState(answerId, canvasState) {
+  return (dispatch) =>
+    dispatch({
+      type: canvasActionTypes.UPDATE_CANVAS_STATE,
+      payload: { answerId, canvasState },
+    });
+}
+
 export function setActiveObject(answerId, activeObject) {
   return (dispatch) =>
     dispatch({
