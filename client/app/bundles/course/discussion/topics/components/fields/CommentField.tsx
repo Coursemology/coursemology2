@@ -58,11 +58,11 @@ const CommentField: FC<Props> = (props: Props) => {
         toast.success(intl.formatMessage(translations.createSuccess));
         updateStatus();
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(intl.formatMessage(translations.createFailure));
-        throw error;
       })
       .finally(() => {
+        setDisableCommentButton(false);
         setIsSubmitting(false);
       });
   };
@@ -75,7 +75,6 @@ const CommentField: FC<Props> = (props: Props) => {
         inputId={topic.id.toString()}
         value={value}
         onChange={(text: string): void => setValue(text)}
-        clearOnSubmit
       />
       <LoadingButton
         id={`comment-submit-${topic.id.toString()}`}

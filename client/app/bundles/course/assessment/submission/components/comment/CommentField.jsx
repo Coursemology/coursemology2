@@ -69,7 +69,6 @@ export default class CommentField extends Component {
           }
           onChange={(nextValue) => this.onChange(nextValue)}
           value={value}
-          clearOnSubmit
         />
         <Button
           variant="contained"

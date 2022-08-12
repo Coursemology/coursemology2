@@ -1,10 +1,10 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import withRouter from 'lib/components/withRouter';
-import { Button, Card, CardContent } from '@mui/material';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
+import { connect } from 'react-redux';
+import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
+import { Button, Card, CardContent } from '@mui/material';
+import withRouter from 'lib/components/withRouter';
 import { postShape, annotationShape } from '../propTypes';
 import CommentCard from '../components/comment/CommentCard';
 import CommentField from '../components/comment/CommentField';
@@ -173,7 +173,9 @@ function mapDispatchToProps(dispatch, ownProps) {
             comment,
             isDelayedComment,
           ),
-        ),
+        )
+          .then(() => toast.success('Successfully created comment.'))
+          .catch(() => toast.error('Failed to create comment.')),
       updateComment: () => {},
       deleteComment: () => {},
     };
@@ -193,7 +195,9 @@ function mapDispatchToProps(dispatch, ownProps) {
           comment,
           isDelayedComment,
         ),
-      ),
+      )
+        .then(() => toast.success('Successfully created comment.'))
+        .catch(() => toast.error('Failed to create comment.')),
     updateComment: (postId, comment) =>
       dispatch(annotationActions.update(annotation.id, postId, comment)),
     deleteComment: (postId) =>

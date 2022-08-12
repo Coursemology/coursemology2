@@ -26,7 +26,10 @@ export function create(submissionQuestionId, text, isDelayedComment) {
           payload: data,
         });
       })
-      .catch(() => dispatch({ type: actionTypes.CREATE_COMMENT_FAILURE }));
+      .catch((error) => {
+        dispatch({ type: actionTypes.CREATE_COMMENT_FAILURE });
+        throw error;
+      });
   };
 }
 
