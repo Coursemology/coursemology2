@@ -85,6 +85,14 @@ export default class ScribingCanvas extends Component {
     this.isScribblesLoaded = false;
   }
 
+  get currentStateIndex() {
+    return this.props.scribing.currentStateIndex;
+  }
+
+  get canvasStates() {
+    return this.props.scribing.canvasStates;
+  }
+
   componentDidMount() {
     const { answerId, scribing } = this.props;
     this.initializeCanvas(answerId, scribing.answer.image_url);
@@ -647,7 +655,7 @@ export default class ScribingCanvas extends Component {
     };
   }
 
-  /*
+  /**
    * @param {string} json: JSON string with 'objects' key containing array of scribbles
    * @return {array} array of Fabric objects
    */
@@ -719,6 +727,12 @@ export default class ScribingCanvas extends Component {
     obj.setCoords();
   }
 
+  /**
+   * Draws the given `scribbles` on the canvas
+   * @param scribbles Scribbles as a fabric object
+   * @param scribbleCallback (optional) Function to be called for each
+   * `fabric.canvas.add` on scribble
+   */
   rehydrateCanvas = (scribbles, scribbleCallback) => {
     this.isScribblesLoaded = false;
 
@@ -740,7 +754,7 @@ export default class ScribingCanvas extends Component {
   };
 
   setCurrentCanvasState = (stateIndex) => {
-    const state = this.props.scribing.canvasStates[stateIndex];
+    const state = this.canvasStates[stateIndex];
     const scribbles = this.getFabricObjectsFromJson(state);
     if (!scribbles)
       throw new Error(`trying to setCurrentCanvasState to ${scribbles}`);
@@ -783,11 +797,12 @@ export default class ScribingCanvas extends Component {
     });
   }
 
-  // This method clears the selection-disabled scribbles
-  // and reloads them to enable selection again
+  /**
+   * Clears the selection-disabled scribbles
+   * and reloads them to enable selection again
+   */
   enableObjectSelection() {
-    const currentStateIndex = this.props.scribing.currentStateIndex;
-    const state = this.props.scribing.canvasStates[currentStateIndex];
+    const state = this.canvasStates[this.currentStateIndex];
     const scribbles = this.getFabricObjectsFromJson(state);
 
     this.rehydrateCanvas(scribbles, (scribble) => {
@@ -961,8 +976,10 @@ export default class ScribingCanvas extends Component {
 
   // Helpers
 
-  // Legacy code needed to support migrated v1 scribing questions.
-  // This code scales/unscales the scribbles by a standard number.
+  /**
+   * Scales/unscales the given scribbles by a standard number.
+   * Legacy method needed to support migrated v1 scribing questions.
+   */
   normaliseScribble(scribble, isDenormalise) {
     const STANDARD = 1000;
     let factor;
@@ -997,43 +1014,46 @@ export default class ScribingCanvas extends Component {
     });
   };
 
-  // Adjusting canvas height after canvas initialization
-  // helps to scale/move scribbles accordingly
+  /**
+   * Adjusting canvas height after canvas initialization
+   * helps to scale/move scribbles accordingly
+   */
   scaleCanvas() {
     this.canvas.setWidth(this.width);
     this.canvas.setHeight(this.height);
     this.canvas.renderAll();
   }
 
-  // Scribble Helpers
   undo = () => {
-    if (this.props.scribing.currentStateIndex <= 0) return;
+    if (this.currentStateIndex <= 0) return;
 
-    this.setCurrentCanvasState(this.props.scribing.currentStateIndex - 1);
+    this.setCurrentCanvasState(this.currentStateIndex - 1);
   };
 
   redo = () => {
-    const states = this.props.scribing.canvasStates.length;
-    const lastStateIndex = states - 1;
-    const currentStateIndex = this.props.scribing.currentStateIndex;
+    const lastStateIndex = this.canvasStates.length - 1;
+    const currentStateIndex = this.currentStateIndex;
 
     const hasNextStates = currentStateIndex < lastStateIndex;
-    const hasStates = states > 1;
+    const hasStates = this.canvasStates.length > 1;
 
     if (!hasNextStates || !hasStates) return;
 
-    this.setCurrentCanvasState(this.props.scribing.currentStateIndex + 1);
+    this.setCurrentCanvasState(this.currentStateIndex + 1);
   };
 
   render() {
     const answerId = this.props.answerId;
+    if (!answerId) return null;
+
     const isCanvasLoaded = this.props.scribing.isCanvasLoaded;
-    return answerId ? (
+
+    return (
       <div style={styles.canvas_div} id={`canvas-container-${answerId}`}>
         {!isCanvasLoaded ? <LoadingIndicator /> : null}
         <canvas style={styles.canvas} id={`canvas-${answerId}`} />
       </div>
-    ) : null;
+    );
   }
 }
 
