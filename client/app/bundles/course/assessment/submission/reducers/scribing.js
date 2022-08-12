@@ -1,3 +1,6 @@
+import produce from 'immer';
+import { isNumber } from 'lodash';
+
 import actions, {
   canvasActionTypes,
   scribingTools,
@@ -324,6 +327,36 @@ export default function (state = {}, action) {
           canvasStates,
         },
       };
+    }
+    case canvasActionTypes.UPDATE_CANVAS_STATE: {
+      const { answerId, canvasState } = action.payload;
+      return produce(state, (draft) => {
+        const currentState = draft[answerId];
+        if (!currentState) throw new Error(`currentState is ${currentState}`);
+
+        const currentStateIndex = currentState.currentStateIndex;
+        if (!isNumber(currentStateIndex))
+          throw new Error(`currentStateIndex is ${currentStateIndex}`);
+
+        const canvasStates = currentState.canvasStates;
+        if (!canvasStates)
+          throw new Error(`canvasStates for ${answerId} is not init`);
+
+        const lastIndex = canvasStates.length - 1;
+        const nextIndex = currentStateIndex + 1;
+
+        if (nextIndex <= lastIndex) canvasStates.splice(nextIndex);
+
+        canvasStates.push(canvasState);
+
+        const latestIndex = canvasStates.length - 1;
+        currentState.currentStateIndex = latestIndex;
+
+        if (latestIndex !== nextIndex)
+          throw new Error(
+            `canvasState index ${latestIndex} and nextIndex ${nextIndex} are different`,
+          );
+      });
     }
     case canvasActionTypes.SET_ACTIVE_OBJECT: {
       const { answerId, activeObject } = action.payload;

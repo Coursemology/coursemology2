@@ -22,7 +22,7 @@ const propTypes = {
   setCanvasProperties: PropTypes.func.isRequired,
   setToolSelected: PropTypes.func.isRequired,
   setCurrentStateIndex: PropTypes.func.isRequired,
-  setCanvasStates: PropTypes.func.isRequired,
+  updateCanvasState: PropTypes.func.isRequired,
   setActiveObject: PropTypes.func.isRequired,
   setCanvasCursor: PropTypes.func.isRequired,
   updateScribingAnswer: PropTypes.func.isRequired,
@@ -82,6 +82,7 @@ export default class ScribingCanvas extends Component {
     this.viewportTop = 0;
     this.textCreated = false;
     this.copiedObjects = [];
+    this.isScribblesLoaded = false;
   }
 
   componentDidMount() {
@@ -651,6 +652,8 @@ export default class ScribingCanvas extends Component {
    * @return {array} array of Fabric objects
    */
   getFabricObjectsFromJson = (json) => {
+    if (!json) return null;
+
     const objects = JSON.parse(json).objects;
     const userScribbles = [];
 
@@ -716,20 +719,29 @@ export default class ScribingCanvas extends Component {
     obj.setCoords();
   }
 
-  setCurrentCanvasState = (stateIndex) => {
-    const userScribbles = this.getFabricObjectsFromJson(
-      this.props.scribing.canvasStates[stateIndex],
-    );
+  rehydrateCanvas = (scribbles) => {
+    this.isScribblesLoaded = false;
 
     this.canvas.clear();
     this.canvas.setBackground();
+
     this.props.scribing.layers.forEach((layer) =>
       this.canvas.add(layer.scribbleGroup),
     );
-    userScribbles.forEach((scribble) => this.canvas.add(scribble));
-    this.canvas.renderAll();
-    this.isScribblesLoaded = true;
 
+    scribbles.forEach((scribble) => this.canvas.add(scribble));
+    this.canvas.renderAll();
+
+    this.isScribblesLoaded = true;
+  };
+
+  setCurrentCanvasState = (stateIndex) => {
+    const state = this.props.scribing.canvasStates[stateIndex];
+    const scribbles = this.getFabricObjectsFromJson(state);
+    if (!scribbles)
+      throw new Error(`trying to setCurrentCanvasState to ${scribbles}`);
+
+    this.rehydrateCanvas(scribbles);
     this.props.setCurrentStateIndex(this.props.answerId, stateIndex);
   };
 
@@ -972,42 +984,21 @@ export default class ScribingCanvas extends Component {
     });
   }
 
-  redo = () => {
-    if (
-      this.props.scribing.canvasStates.length - 1 >
-        this.props.scribing.currentStateIndex &&
-      this.props.scribing.canvasStates.length > 1
-    ) {
-      this.setCurrentCanvasState(this.props.scribing.currentStateIndex + 1);
-    }
-  };
+  saveScribbles = () => {
+    if (!this.isScribblesLoaded) return null;
 
-  saveScribbles = () =>
-    new Promise((resolve) => {
-      if (this.isScribblesLoaded) {
-        const answerId = this.props.answerId;
-        const answerActableId = this.props.scribing.answer.answer_id;
-        const json = this.getScribbleJSON();
-        this.props.updateScribingAnswerInLocal(answerId, json);
-        this.props.updateScribingAnswer(answerId, answerActableId, json);
+    return new Promise((resolve) => {
+      const answerId = this.props.answerId;
+      const answerActableId = this.props.scribing.answer.answer_id;
+      const state = this.getScribbleJSON();
+      this.props.updateScribingAnswerInLocal(answerId, state);
+      this.props.updateScribingAnswer(answerId, answerActableId, state);
 
-        let states = this.props.scribing.canvasStates;
-        if (
-          this.props.scribing.currentStateIndex <
-          this.props.scribing.canvasStates.length - 1
-        ) {
-          const addedStateIndex = this.props.scribing.currentStateIndex + 1;
-          states[addedStateIndex] = json;
-          states = states.splice(0, addedStateIndex + 1);
-          this.props.setCanvasStates(this.props.answerId, states);
-        } else {
-          states.push(json);
-          this.props.setCanvasStates(this.props.answerId, states);
-        }
-        this.props.setCurrentStateIndex(this.props.answerId, states.length - 1);
-      }
+      this.props.updateCanvasState(answerId, state);
+
       resolve();
     });
+  };
 
   // Adjusting canvas height after canvas initialization
   // helps to scale/move scribbles accordingly
@@ -1019,9 +1010,22 @@ export default class ScribingCanvas extends Component {
 
   // Scribble Helpers
   undo = () => {
-    if (this.props.scribing.currentStateIndex > 0) {
-      this.setCurrentCanvasState(this.props.scribing.currentStateIndex - 1);
-    }
+    if (this.props.scribing.currentStateIndex <= 0) return;
+
+    this.setCurrentCanvasState(this.props.scribing.currentStateIndex - 1);
+  };
+
+  redo = () => {
+    const states = this.props.scribing.canvasStates.length;
+    const lastStateIndex = states - 1;
+    const currentStateIndex = this.props.scribing.currentStateIndex;
+
+    const hasNextStates = currentStateIndex < lastStateIndex;
+    const hasStates = states > 1;
+
+    if (!hasNextStates || !hasStates) return;
+
+    this.setCurrentCanvasState(this.props.scribing.currentStateIndex + 1);
   };
 
   render() {
