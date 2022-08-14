@@ -694,7 +694,7 @@ export default class ScribingCanvas extends Component {
     y: event.clientY,
   });
 
-  getScribbleJSON() {
+  get scribblesAsJson() {
     // Remove non-user scribings in canvas
     this.props.scribing.layers.forEach((layer) => {
       if (layer.creator_id !== this.props.scribing.answer.user_id) {
@@ -764,14 +764,16 @@ export default class ScribingCanvas extends Component {
     this.isScribblesLoaded = true;
   };
 
-  setCurrentCanvasState = (stateIndex) => {
+  setCanvasStateAndUpdateAnswer = (stateIndex) => {
     const state = this.canvasStates[stateIndex];
     const scribbles = this.getFabricObjectsFromJson(state);
     if (!scribbles)
-      throw new Error(`trying to setCurrentCanvasState to ${scribbles}`);
+      throw new Error(`trying to set canvas state to ${scribbles}`);
 
     this.rehydrateCanvas(scribbles);
     this.props.setCurrentStateIndex(this.props.answerId, stateIndex);
+
+    this.updateAnswer(state);
   };
 
   // Utility Helpers
@@ -1009,16 +1011,22 @@ export default class ScribingCanvas extends Component {
     });
   }
 
+  updateAnswer = (state) => {
+    const answerId = this.props.answerId;
+    const answerActableId = this.props.scribing.answer.answer_id;
+
+    this.props.updateScribingAnswerInLocal(answerId, state);
+    this.props.updateScribingAnswer(answerId, answerActableId, state);
+  };
+
   saveScribbles = () => {
     if (!this.isScribblesLoaded) return null;
 
     return new Promise((resolve) => {
       const answerId = this.props.answerId;
-      const answerActableId = this.props.scribing.answer.answer_id;
-      const state = this.getScribbleJSON();
-      this.props.updateScribingAnswerInLocal(answerId, state);
-      this.props.updateScribingAnswer(answerId, answerActableId, state);
+      const state = this.scribblesAsJson;
 
+      this.updateAnswer(state);
       this.props.updateCanvasState(answerId, state);
 
       resolve();
@@ -1038,7 +1046,7 @@ export default class ScribingCanvas extends Component {
   undo = () => {
     if (this.currentStateIndex <= 0) return;
 
-    this.setCurrentCanvasState(this.currentStateIndex - 1);
+    this.setCanvasStateAndUpdateAnswer(this.currentStateIndex - 1);
   };
 
   redo = () => {
@@ -1050,7 +1058,7 @@ export default class ScribingCanvas extends Component {
 
     if (!hasNextStates || !hasStates) return;
 
-    this.setCurrentCanvasState(this.currentStateIndex + 1);
+    this.setCanvasStateAndUpdateAnswer(this.currentStateIndex + 1);
   };
 
   render() {
