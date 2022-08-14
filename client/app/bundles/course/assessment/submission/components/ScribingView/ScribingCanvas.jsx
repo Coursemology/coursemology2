@@ -166,9 +166,7 @@ export default class ScribingCanvas extends Component {
         this.props.resetRedo(this.props.answerId);
       }
       if (nextProps.scribing.isDelete) {
-        const activeObjects = this.canvas.getActiveObjects();
-        this.canvas.discardActiveObject();
-        activeObjects.forEach((object) => this.canvas.remove(object));
+        this.deleteActiveObjects();
         this.props.resetCanvasDelete(this.props.answerId);
       }
     }
@@ -176,6 +174,20 @@ export default class ScribingCanvas extends Component {
     // Render canvas only at the beginning
     return !this.props.scribing.isCanvasLoaded;
   }
+
+  deleteActiveObjects = () => {
+    const activeObjects = this.canvas.getActiveObjects();
+    this.canvas.discardActiveObject();
+
+    const lastObjectIndex = Math.max(activeObjects.length - 1, 0);
+    this.isScribblesLoaded = false;
+    activeObjects.forEach((object, index) => {
+      if (index === lastObjectIndex) this.isScribblesLoaded = true;
+      this.canvas.remove(object);
+    });
+
+    this.isScribblesLoaded = true;
+  };
 
   onKeyDown = (event) => {
     if (!this.canvas) return;
@@ -187,8 +199,7 @@ export default class ScribingCanvas extends Component {
       case 8: // Backspace key
       case 46: {
         // Delete key
-        this.canvas.discardActiveObject();
-        activeObjects.forEach((object) => this.canvas.remove(object));
+        this.deleteActiveObjects();
         break;
       }
       case 67: {
