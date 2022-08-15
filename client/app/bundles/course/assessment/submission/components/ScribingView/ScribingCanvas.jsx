@@ -1010,9 +1010,10 @@ export default class ScribingCanvas extends Component {
       this.updateAnswer(state);
       this.props.updateCanvasState(answerId, state);
 
-      this.canvas.setActiveObject(
-        new fabric.ActiveSelection(activeObjects, { canvas: this.canvas }),
-      );
+      if (activeObjects.length > 1)
+        this.canvas.setActiveObject(
+          new fabric.ActiveSelection(activeObjects, { canvas: this.canvas }),
+        );
 
       resolve();
     });
