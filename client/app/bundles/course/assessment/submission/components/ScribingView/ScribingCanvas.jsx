@@ -674,7 +674,7 @@ export default class ScribingCanvas extends Component {
     });
 
     // Only save rescaled user scribings
-    const objects = this.canvas._objects;
+    const objects = this.canvas.getObjects();
     objects.forEach((obj) => {
       this.normaliseScribble(obj);
     });
@@ -994,11 +994,20 @@ export default class ScribingCanvas extends Component {
     if (!this.isScribblesLoaded) return null;
 
     return new Promise((resolve) => {
+      // See https://github.com/Coursemology/coursemology2/pull/4957 to learn
+      // discarding and resetting active objects matters
+      const activeObjects = this.canvas.getActiveObjects();
+      this.canvas.discardActiveObject();
+
       const answerId = this.props.answerId;
       const state = this.scribblesAsJson;
 
       this.updateAnswer(state);
       this.props.updateCanvasState(answerId, state);
+
+      this.canvas.setActiveObject(
+        new fabric.ActiveSelection(activeObjects, { canvas: this.canvas }),
+      );
 
       resolve();
     });
