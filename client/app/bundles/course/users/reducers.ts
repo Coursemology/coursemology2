@@ -151,9 +151,11 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
           ...prevExperiencePointsEntity,
           reason: {
             ...prevExperiencePointsEntity.reason,
-            text: action.data.reason,
+            text: action.data.reason.text,
           },
           pointsAwarded: action.data.pointsAwarded,
+          updatedAt: action.data.updatedAt,
+          updaterUser: action.data.updaterUser,
         };
         saveEntityToStore(
           draft.experiencePointsRecords,

@@ -12,7 +12,6 @@ import {
   ExperiencePointsRecordListData,
   ExperiencePointsRecordMiniEntity,
   ExperiencePointsRecordSettings,
-  ExperiencePointsRowData,
 } from 'types/course/experiencePointsRecords';
 import {
   PersonalTimeListData,
@@ -93,7 +92,7 @@ export interface SaveExperiencePointsRecordListAction {
 
 export interface UpdateExperiencePointsRecordAction {
   type: typeof UPDATE_EXPERIENCE_POINTS_RECORD;
-  data: ExperiencePointsRowData;
+  data: ExperiencePointsRecordListData;
 }
 
 export interface DeleteExperiencePointsRecordAction {

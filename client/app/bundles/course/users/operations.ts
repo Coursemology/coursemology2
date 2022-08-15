@@ -276,7 +276,9 @@ export function updateExperiencePointsRecord(
   return async (dispatch) =>
     CourseAPI.experiencePointsRecord
       .update(params, data.id)
-      .then(() => dispatch(actions.updateExperiencePointsRecord(data)));
+      .then((response) =>
+        dispatch(actions.updateExperiencePointsRecord(response.data)),
+      );
 }
 
 export function deleteExperiencePointsRecord(

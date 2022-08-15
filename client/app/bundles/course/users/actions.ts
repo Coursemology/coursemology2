@@ -5,10 +5,7 @@ import {
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
-import {
-  ExperiencePointsRecordListData,
-  ExperiencePointsRowData,
-} from 'types/course/experiencePointsRecords';
+import { ExperiencePointsRecordListData } from 'types/course/experiencePointsRecords';
 import { PersonalTimeListData } from 'types/course/personalTimes';
 import {
   SAVE_USERS_LIST,
@@ -134,7 +131,7 @@ export function saveExperiencePointsRecordList(
 }
 
 export function updateExperiencePointsRecord(
-  data: ExperiencePointsRowData,
+  data: ExperiencePointsRecordListData,
 ): UpdateExperiencePointsRecordAction {
   return {
     type: UPDATE_EXPERIENCE_POINTS_RECORD,

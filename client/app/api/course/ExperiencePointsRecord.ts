@@ -1,7 +1,6 @@
 import { AxiosResponse } from 'axios';
 import {
   ExperiencePointsRecordListData,
-  ExperiencePointsRowData,
   UpdateExperiencePointsRecordPatchData,
 } from 'types/course/experiencePointsRecords';
 import BaseCourseAPI from './Base';
@@ -33,7 +32,7 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
   update(
     params: UpdateExperiencePointsRecordPatchData,
     recordId: number,
-  ): Promise<AxiosResponse<ExperiencePointsRowData>> {
+  ): Promise<AxiosResponse<ExperiencePointsRecordListData>> {
     const url = `${
       this._baseUrlPrefix
     }/users/${this.getCourseUserId()}/experience_points_records/${recordId}`;
