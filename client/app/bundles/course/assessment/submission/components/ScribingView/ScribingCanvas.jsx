@@ -597,13 +597,18 @@ export default class ScribingCanvas extends Component {
     }
   };
 
-  onObjectMovingCanvas = ({ target: object }) => {
+  onObjectMovingCanvas = ({ target }) => {
+    const object = target;
     const canvas = this.canvas;
-    if (object.width > canvas.width || object.height > canvas.height) return;
+    const width = object.getBoundingRect().width;
+    const height = object.getBoundingRect().height;
+    if (width > canvas.width || height > canvas.height) return;
 
     // Limit movement of objects to only within canvas
-    object.top = Math.min(Math.max(0, object.top), canvas.height);
-    object.left = Math.min(Math.max(0, object.left), canvas.width);
+    const canvasRight = canvas.width - width;
+    const canvasBottom = canvas.height - height;
+    object.top = Math.min(Math.max(0, object.top), canvasBottom);
+    object.left = Math.min(Math.max(0, object.left), canvasRight);
 
     object.setCoords();
   };
