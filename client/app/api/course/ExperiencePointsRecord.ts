@@ -9,7 +9,7 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
   _baseUrlPrefix: string = `/courses/${this.getCourseId()}`;
 
   /**
-   * Fetches experience points record data from specified user
+   * Fetches all experience points records from a user
    */
   index(
     userId: number,
@@ -27,7 +27,7 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
   }
 
   /**
-   * Update experience points record for user
+   * Update an experience points record for a user
    */
   update(
     params: UpdateExperiencePointsRecordPatchData,
@@ -40,7 +40,7 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
   }
 
   /**
-   * Delete experience points record for user
+   * Delete an experience points record for a user
    */
   delete(recordId: number): Promise<AxiosResponse<void>> {
     const url = `${
