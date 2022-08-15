@@ -39,13 +39,14 @@ const ExperiencePointsTable: FC<Props> = (props) => {
   );
 
   useEffect(() => {
+    setIsLoading(true);
     dispatch(fetchExperiencePointsRecord(+getCourseUserId()!, page))
-      .finally(() => {
-        setIsLoading(false);
-      })
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchRecordsFailure)),
-      );
+      )
+      .finally(() => {
+        setIsLoading(false);
+      });
   }, [page]);
 
   if (isLoading) {
@@ -70,20 +71,22 @@ const ExperiencePointsTable: FC<Props> = (props) => {
               <TableCell>
                 {intl.formatMessage(tableTranslations.updatedAt)}
               </TableCell>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.actions)}
-              </TableCell>
+              <TableCell />
             </TableRow>
           </TableHead>
-          <TableBody>
-            {experiencePointsRecords.map((item) => (
-              <ExperiencePointsTableRow
-                id={item.id}
-                record={item}
-                key={item.id}
-              />
-            ))}
-          </TableBody>
+          {isLoading ? (
+            <LoadingIndicator />
+          ) : (
+            <TableBody>
+              {experiencePointsRecords.map((item) => (
+                <ExperiencePointsTableRow
+                  id={item.id}
+                  record={item}
+                  key={item.id}
+                />
+              ))}
+            </TableBody>
+          )}
         </Table>
       </Paper>
     </>

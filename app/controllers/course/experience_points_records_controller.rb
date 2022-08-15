@@ -16,7 +16,7 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
           Course::CourseUserPreloadService.new(updater_ids, current_course)
         @experience_points_records =
           @experience_points_records.active.
-          includes(:actable, :updater).order(updated_at: :desc)
+          preload([{ actable: [:assessment, :survey] }, :updater]).order(updated_at: :desc)
         @experience_points_count = @experience_points_records.count
         @experience_points_records = @experience_points_records.paginated(new_page_params)
       end
@@ -25,8 +25,15 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
 
   def update
     if @experience_points_record.update(experience_points_record_params)
-      render json: { id: @experience_points_record.id, reason: @experience_points_record.reason,
-                     pointsAwarded: @experience_points_record.points_awarded }, status: :ok
+      course_user = CourseUser.find_by(course: current_course, id: @experience_points_record.updater)
+      updater_user = course_user || @experience_points_record.updater
+
+      render json: { id: @experience_points_record.id,
+                     reason: { text: @experience_points_record.reason },
+                     pointsAwarded: @experience_points_record.points_awarded,
+                     updatedAt: @experience_points_record.updated_at,
+                     updaterUser: { id: updater_user.id, name: updater_user.name,
+                                    isCourseUser: course_user.present? } }, status: :ok
     else
       render json: { errors: @experience_points_record.errors.full_messages.to_sentence }, status: :bad_request
     end

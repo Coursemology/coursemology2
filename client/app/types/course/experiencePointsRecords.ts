@@ -16,7 +16,7 @@ export interface ExperiencePointsRecordSettings {
 export interface PointsReason {
   isManuallyAwarded: boolean;
   text: string;
-  link?: string;
+  link: string;
 }
 
 export interface ExperiencePointsRecordUserListData
@@ -26,7 +26,7 @@ export interface ExperiencePointsRecordUserListData
 
 export interface ExperiencePointsRecordListData {
   id: number;
-  updaterUser: CourseUserBasicListData;
+  updaterUser: ExperiencePointsRecordUserListData;
   reason: PointsReason;
   pointsAwarded: number;
   updatedAt: Date;

@@ -57,7 +57,12 @@ const PointManagementButtons: FC<Props> = (props) => {
     setIsSaving(true);
     dispatch(updateExperiencePointsRecord(data))
       .then((response) => {
-        handleSave(response.data);
+        const experiencePointsRowData = {
+          id: response.data.id,
+          reason: response.data.reason.text,
+          pointsAwarded: response.data.pointsAwarded,
+        };
+        handleSave(experiencePointsRowData);
         toast.success(intl.formatMessage(translations.updateSuccess));
       })
       .catch((error) => {
@@ -104,7 +109,7 @@ const PointManagementButtons: FC<Props> = (props) => {
       )}
       {permissions.canDestroy && isManuallyAwarded && (
         <DeleteButton
-          tooltip="Delete User"
+          tooltip="Delete Experience Point"
           className={`record-delete-${data.id}`}
           disabled={isSaving || isDeleting}
           loading={isDeleting}
