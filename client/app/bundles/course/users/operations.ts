@@ -70,8 +70,8 @@ const formatUpdateExperiencePointsRecord = (
 ): UpdateExperiencePointsRecordPatchData => {
   const payload = {
     experience_points_record: {
-      reason: data.reason,
-      points_awarded: data.pointsAwarded,
+      reason: data.reason ? data.reason.trim() : data.reason,
+      points_awarded: parseInt(data.pointsAwarded.toString(), 10),
     },
   };
   return payload;

@@ -65,7 +65,9 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
         ...rowData,
         pointsAwarded: +value,
       };
-      setIsDirty(!equal(newData, defaultRowData));
+      setIsDirty(
+        !equal(newData, defaultRowData) && rowData.reason.trim().length > 0,
+      );
       setRowData(newData);
     }
   };
@@ -77,7 +79,11 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
 
   const renderReason = (): JSX.Element | string => {
     if (!record.reason.isManuallyAwarded) {
-      return <a href={record.reason.link}>{rowData.reason}</a>;
+      return (
+        <a target="_blank" rel="noopener noreferrer" href={record.reason.link}>
+          {rowData.reason}
+        </a>
+      );
     }
     if (record.permissions.canUpdate) {
       return (
@@ -112,7 +118,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
           <TextField
             id={`points-${record.id}`}
             key={`points-${record.id}`}
-            value={rowData.pointsAwarded}
+            value={rowData.pointsAwarded.toString()}
             onChange={(e): void => onUpdatePoints(e.target.value)}
             variant="standard"
             type="number"
