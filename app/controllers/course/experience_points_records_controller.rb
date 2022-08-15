@@ -7,7 +7,7 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
                                                          class: Course::ExperiencePointsRecord.name
   before_action :add_breadcrumbs
 
-  def index # :nodoc:
+  def index
     respond_to do |format|
       format.html
       format.json do
@@ -46,7 +46,7 @@ class Course::ExperiencePointsRecordsController < Course::ComponentController
     params.require(:experience_points_record).permit(:points_awarded, :reason)
   end
 
-  def add_breadcrumbs # :nodoc:
+  def add_breadcrumbs
     add_breadcrumb @course_user.name, course_user_path(current_course, @course_user)
     add_breadcrumb :index
   end
