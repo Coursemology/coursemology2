@@ -212,8 +212,6 @@ const DisbursementForm: FC<Props> = (props) => {
     shouldUnregister: false,
   });
 
-  const pointList = watch('pointList');
-
   const pointTextFieldArray: JSX.Element[] = fields.map((field, index) => (
     <PointTextField
       index={index}
@@ -229,7 +227,7 @@ const DisbursementForm: FC<Props> = (props) => {
   };
 
   const onClickCopy = (): void => {
-    const first = pointList[indexFilteredMap[0]].points;
+    const first = watch('pointList')[indexFilteredMap[0]].points;
     indexFilteredMap.forEach((index) => update(index, { points: first ?? '' }));
   };
 
@@ -282,6 +280,7 @@ const DisbursementForm: FC<Props> = (props) => {
               <FormTextField
                 field={field}
                 fieldState={fieldState}
+                enableDebouncing
                 label={<FormattedMessage {...translations.reason} />}
                 // @ts-ignore: component is still written in JS
                 className="experience_points_disbursement_reason"
