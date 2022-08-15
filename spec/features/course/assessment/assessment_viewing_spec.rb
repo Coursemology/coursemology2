@@ -58,7 +58,7 @@ RSpec.describe 'Course: Assessments: Viewing' do
 
         expect(page).to have_link(
           I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-          href: course_assessment_submissions_path(course, assessment)
+          href: course_assessment_attempt_path(course, assessment)
         )
       end
     end

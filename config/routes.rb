@@ -201,7 +201,8 @@ Rails.application.routes.draw do
             resources :forum_post_responses, only: [:new, :create, :edit, :update, :destroy]
           end
           scope module: :submission do
-            resources :submissions, only: [:index, :create, :edit, :update] do
+            get 'attempt' => 'submissions#create'
+            resources :submissions, only: [:index, :edit, :update] do
               post :auto_grade, on: :member
               post :reload_answer, on: :member
               patch :submit_answer, on: :member

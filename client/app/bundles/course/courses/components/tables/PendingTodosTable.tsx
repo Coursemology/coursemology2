@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import equal from 'fast-deep-equal';
 import {
+  getAssessmentAttemptURL,
   getAssessmentSubmissionURL,
   getAssessmentURL,
   getCourseURL,
@@ -128,7 +129,7 @@ const PendingTodosTable: FC<Props> = (props) => {
             accessButtonText = intl.formatMessage(
               translations.accessButtonAttempt,
             );
-            accessButtonLink = getAssessmentSubmissionURL(
+            accessButtonLink = getAssessmentAttemptURL(
               getCourseId(),
               todo.itemActableId,
             );
@@ -142,6 +143,11 @@ const PendingTodosTable: FC<Props> = (props) => {
             todo.itemActableId,
           )}/${todo.itemActableSpecificId}/edit`;
         }
+
+        submissionUrl = getAssessmentSubmissionURL(
+          getCourseId(),
+          todo.itemActableId,
+        );
         break;
 
       case 'videos':
