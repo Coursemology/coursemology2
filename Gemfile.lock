@@ -253,7 +253,7 @@ GEM
       htmlentities (~> 4.3.3)
       launchy (~> 2.1)
       mail (~> 2.7)
-    erubi (1.10.0)
+    erubi (1.11.0)
     et-orbi (1.2.7)
       tzinfo
     excon (0.92.3)
@@ -369,10 +369,10 @@ GEM
     lograge-sql (2.0.0)
       activerecord (>= 5, < 7.1)
       lograge (~> 0.11)
-    lol_dba (2.2.0)
-      actionpack (>= 3.0, < 7.0)
-      activerecord (>= 3.0, < 7.0)
-      railties (>= 3.0, < 7.0)
+    lol_dba (2.4.0)
+      actionpack
+      activerecord
+      railties
     loofah (2.18.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
