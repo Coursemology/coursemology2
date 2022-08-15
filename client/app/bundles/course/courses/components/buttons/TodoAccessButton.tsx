@@ -6,6 +6,7 @@ import axios from 'lib/axios';
 interface Props extends WrappedComponentProps {
   accessButtonText: string;
   accessButtonLink: string;
+  submissionUrl: string;
   isVideo: boolean;
   isNewAttempt: boolean;
 }
@@ -19,9 +20,9 @@ const TodoAccessButton: FC<Props> = (props) => {
       onClick={(): void => {
         if (isVideo) {
           axios
-            .post(accessButtonLink)
+            .get(accessButtonLink)
             .then((response) => {
-              window.location.href = `${accessButtonLink}/${response.data.submissionId}/edit`;
+              window.location.href = `${submissionUrl}/${response.data.submissionId}/edit`;
             })
             .catch((_e) => {});
         } else if (isNewAttempt) {
