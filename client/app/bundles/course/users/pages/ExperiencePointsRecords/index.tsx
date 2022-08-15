@@ -14,7 +14,7 @@ type Props = WrappedComponentProps;
 const translations = defineMessages({
   experiencePointsRecordsHeader: {
     id: 'course.users.ExperiencePointsRecords.header',
-    defaultMessage: 'Experience Points History for ',
+    defaultMessage: 'Experience Points History - ',
   },
   fetchUsersFailure: {
     id: 'course.users.ExperiencePointsRecords.fetch.failue',
@@ -49,12 +49,6 @@ const ExperiencePointsRecords: FC<Props> = (props) => {
         handlePageChange={handlePageChange}
       />
       <ExperiencePointsTable page={pageNum} />
-      <BackendPagination
-        rowCount={experiencePointsRecordSettings.rowCount}
-        rowsPerPage={ROWS_PER_PAGE}
-        pageNum={pageNum}
-        handlePageChange={handlePageChange}
-      />
     </>
   );
 };

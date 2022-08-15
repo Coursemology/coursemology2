@@ -5,11 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import BackendPagination from 'lib/components/BackendPagination';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { fetchCommentData } from '../../operations';
 import { getAllCommentTopicEntities, getTopicCount } from '../../selectors';
 import TopicCard from '../cards/TopicCard';
-import CommentPagination from '../paginations/CommentPagination';
 
 interface Props extends WrappedComponentProps {
   tabValue: string;
@@ -89,10 +89,10 @@ const TopicListWithPagination: FC<Props> = (props) => {
   };
 
   const renderPagination = (): JSX.Element => (
-    <CommentPagination
-      pageNum={pageNum}
-      topicCount={topicCount}
+    <BackendPagination
+      rowCount={topicCount}
       rowsPerPage={settings.topicsPerPage}
+      pageNum={pageNum}
       handlePageChange={handlePageChange}
     />
   );
