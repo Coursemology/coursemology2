@@ -391,7 +391,8 @@ Rails.application.routes.draw do
         resources :videos do
           resources :topics, only: [:index, :create, :show]
           scope module: :submission do
-            resources :submissions, only: [:index, :create, :show, :edit] do
+            get 'attempt' => 'submissions#create'
+            resources :submissions, only: [:index, :show, :edit] do
               resources :sessions, only: [:create, :update]
             end
           end

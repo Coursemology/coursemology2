@@ -18,6 +18,7 @@ import {
   getIgnoreTodoURL,
   getSurveyResponseURL,
   getSurveyURL,
+  getVideoAttemptURL,
   getVideoSubmissionsURL,
 } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
@@ -98,6 +99,7 @@ const PendingTodosTable: FC<Props> = (props) => {
   const renderButtons = (todo: TodoData): JSX.Element => {
     let accessButtonText = '';
     let accessButtonLink = '';
+    let submissionUrl;
     switch (todoType) {
       case 'surveys':
         accessButtonText = intl.formatMessage(translations.accessButtonRespond);
@@ -144,7 +146,12 @@ const PendingTodosTable: FC<Props> = (props) => {
 
       case 'videos':
         accessButtonText = intl.formatMessage(translations.accessButtonWatch);
-        accessButtonLink = getVideoSubmissionsURL(
+        accessButtonLink = getVideoAttemptURL(
+          getCourseId(),
+          todo.itemActableId,
+        );
+
+        submissionUrl = getVideoSubmissionsURL(
           getCourseId(),
           todo.itemActableId,
         );
@@ -170,6 +177,7 @@ const PendingTodosTable: FC<Props> = (props) => {
             todo.canAccess! &&
             todo.canAttempt!
           }
+          submissionUrl={submissionUrl ?? accessButtonLink}
         />
         <TodoIgnoreButton
           ignoreLink={getIgnoreTodoURL(getCourseId(), todo.id)}

@@ -60,6 +60,9 @@ export const getVideoURL = (courseId, videoId) =>
 export const getVideoSubmissionsURL = (courseId, videoId) =>
   `/courses/${courseId}/videos/${videoId}/submissions`;
 
+export const getVideoAttemptURL = (courseId, videoId) =>
+  `/courses/${courseId}/videos/${videoId}/attempt`;
+
 export const getIgnoreTodoURL = (courseId, todoId) =>
   `/courses/${courseId}/lesson_plan/todos/${todoId}/ignore`;
 
