@@ -47,6 +47,9 @@ export const getAssessmentURL = (courseId, assessmentId) =>
 export const getAssessmentSubmissionURL = (courseId, assessmentId) =>
   `/courses/${courseId}/assessments/${assessmentId}/submissions`;
 
+export const getAssessmentAttemptURL = (courseId, assessmentId) =>
+  `/courses/${courseId}/assessments/${assessmentId}/attempt`;
+
 export const getEditAssessmentSubmissionURL = (
   courseId,
   assessmentId,

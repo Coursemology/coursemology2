@@ -12,7 +12,13 @@ interface Props extends WrappedComponentProps {
 }
 
 const TodoAccessButton: FC<Props> = (props) => {
-  const { accessButtonText, accessButtonLink, isVideo, isNewAttempt } = props;
+  const {
+    accessButtonText,
+    accessButtonLink,
+    submissionUrl,
+    isVideo,
+    isNewAttempt,
+  } = props;
   return (
     <Button
       variant="contained"
@@ -27,9 +33,9 @@ const TodoAccessButton: FC<Props> = (props) => {
             .catch((_e) => {});
         } else if (isNewAttempt) {
           axios
-            .post(accessButtonLink)
+            .get(accessButtonLink)
             .then((response) => {
-              window.location.href = `${accessButtonLink}/${response.data.submission.id}/edit`;
+              window.location.href = `${submissionUrl}/${response.data.submission.id}/edit`;
             })
             .catch((_e) => {});
         } else {

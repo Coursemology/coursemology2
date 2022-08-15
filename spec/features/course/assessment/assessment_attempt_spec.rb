@@ -67,7 +67,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         within find(content_tag_selector(assessment_with_condition)) do
           find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-                    href: course_assessment_submissions_path(course, assessment_with_condition)).
+                    href: course_assessment_attempt_path(course, assessment_with_condition)).
             click
         end
 
@@ -83,7 +83,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         within find(content_tag_selector(assessment)) do
           find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-                    href: course_assessment_submissions_path(course, assessment)).click
+                    href: course_assessment_attempt_path(course, assessment)).click
         end
 
         created_submission = assessment.submissions.last
@@ -111,7 +111,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         within find(content_tag_selector(assessment_tabbed_single_question)) do
           find_link(
             I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-            href: course_assessment_submissions_path(course, assessment_tabbed_single_question)
+            href: course_assessment_attempt_path(course, assessment_tabbed_single_question)
           ).click
         end
 
@@ -123,7 +123,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
         within find(content_tag_selector(assessment_tabbed)) do
           find_link(
             I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-            href: course_assessment_submissions_path(course, assessment_tabbed)
+            href: course_assessment_attempt_path(course, assessment_tabbed)
           ).click
         end
 
@@ -187,7 +187,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         within find(content_tag_selector(assessment_with_condition)) do
           find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-                    href: course_assessment_submissions_path(course, assessment_with_condition)).
+                    href: course_assessment_attempt_path(course, assessment_with_condition)).
             click
         end
 
@@ -203,7 +203,7 @@ RSpec.describe 'Course: Assessments: Attempt' do
 
         within find(content_tag_selector(not_started_assessment)) do
           find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-                    href: course_assessment_submissions_path(course, not_started_assessment)).click
+                    href: course_assessment_attempt_path(course, not_started_assessment)).click
         end
 
         created_submission = not_started_assessment.submissions.last
