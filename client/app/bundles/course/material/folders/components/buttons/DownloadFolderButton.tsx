@@ -57,21 +57,17 @@ const DownloadFolderButton: FC<Props> = (props) => {
               style={{ padding: 6 }}
               onClick={(): void => {
                 setIsLoading(true);
-                dispatch(downloadFolder(currFolderId))
-                  .then(() => {
-                    setIsLoading(false);
-                  })
-                  .catch((error) => {
-                    const errorMessage = error.response?.data?.errors
-                      ? error.response.data.errors
-                      : '';
+                dispatch(
+                  downloadFolder(currFolderId, () => {
                     toast.error(
-                      `${intl.formatMessage(
+                      intl.formatMessage(
                         translations.downloadFolderErrorMessage,
-                      )} - ${errorMessage}`,
+                      ),
                     );
-                    setIsLoading(false);
-                  });
+                  }),
+                ).finally(() => {
+                  setIsLoading(false);
+                });
               }}
             >
               <DownloadIcon />

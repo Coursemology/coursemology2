@@ -90,7 +90,7 @@ export default class FoldersAPI extends BaseCourseAPI {
   /**
    * Downloads an entire folder and its contents
    */
-  downloadFolder(currFolderId: number): Promise<void> {
+  downloadFolder(currFolderId: number, onFailure: () => void): Promise<void> {
     const REQUEST_INTERVAL = 1000;
     return this.getClient()
       .get(`${this._getUrlPrefix()}/${currFolderId}/download`)
@@ -101,9 +101,7 @@ export default class FoldersAPI extends BaseCourseAPI {
           (data) => {
             window.open(data.redirect_url);
           },
-          () => {
-            throw new Error('Download has failed');
-          },
+          onFailure,
         );
       })
       .catch((error) => {
