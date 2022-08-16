@@ -22,7 +22,7 @@ class Course::Material::MaterialsController < Course::Material::Controller
                      name: @material.name,
                      description: @material.description,
                      updatedAt: @material.updated_at,
-                     updater: { id: id, name: name, isCourseUser: !course_user.nil? } },
+                     updater: { id: id, name: name, isCourseUser: !course_user.present? } },
              status: :ok
     else
       render json: { errors: @folder.errors.full_messages.to_sentence }, status: :bad_request

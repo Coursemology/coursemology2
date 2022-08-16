@@ -54,12 +54,14 @@ const MaterialUpload: FC<Props> = (props) => {
         toast.success(intl.formatMessage(translations.materialUploadSuccess));
       })
       .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
         toast.error(
           `${intl.formatMessage(
             translations.materialUploadFailure,
-          )} - ${error}`,
+          )} - ${errorMessage}`,
         );
-        throw error;
       })
       .finally(() => {
         setIsSubmitting(false);

@@ -48,19 +48,14 @@ class Course::Material::FoldersController < Course::Material::Controller
     @materials = @folder.build_materials(files_params[:files_attributes])
     respond_to do |format|
       if @folder.save
-        format.html do
-          redirect_to course_material_folder_path(current_course, @folder),
-                      success: t('.success', name: @folder.name)
-        end
         format.json do
           show
           render 'show', status: :ok
         end
       else
-        format.html { upload_materials_failure }
         format.json do
-          render json: { message: @folder.errors },
-                 status: :unprocessable_entity
+          render json: { errors: @folder.errors.full_messages.to_sentence },
+                 status: :bad_request
         end
       end
     end
@@ -72,7 +67,6 @@ class Course::Material::FoldersController < Course::Material::Controller
     zip_filename = @folder.root? ? root_folder_name : @folder.name
     job = Course::Material::ZipDownloadJob.perform_later(@folder, @materials, zip_filename).job
     respond_to do |format|
-      format.html { redirect_to(job_path(job)) }
       format.json { render json: { redirect_url: job_path(job) } }
     end
   end
@@ -90,12 +84,5 @@ class Course::Material::FoldersController < Course::Material::Controller
 
   def files_params
     params.require(:material_folder).permit(files_attributes: [])
-  end
-
-  def upload_materials_failure
-    flash.now[:danger] = t('course.material.folders.upload_materials.failure',
-                           error: @folder.errors.full_messages.to_sentence)
-
-    render json: { status: :bad_request }
   end
 end
