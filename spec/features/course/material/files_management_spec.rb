@@ -27,11 +27,11 @@ RSpec.feature 'Course: Material: Files: Management' do
         visit course_material_folder_path(course, folder)
         find("#material-edit-button-#{material.id}").click
 
-        find('input[name="name"]').set(' ')
+        new_name = ' '
+        find('input[name="name"]').set(new_name)
         click_button 'Update'
 
-        expect(page).
-          to have_selector('div.Toastify__toast-body', text: 'File could not be edited')
+        expect(material.reload.name).not_to eq(new_name)
 
         new_name = 'new name'
         find('input[name="name"]').set(new_name)
