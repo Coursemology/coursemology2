@@ -205,9 +205,9 @@ export function updateMaterial(
       });
 }
 
-export function downloadFolder(currFolderId: number): Operation<void> {
-  return async (_) =>
-    CourseAPI.folders.downloadFolder(currFolderId).catch((error) => {
-      throw error;
-    });
+export function downloadFolder(
+  currFolderId: number,
+  onFailure: () => void,
+): Operation<void> {
+  return async (_) => CourseAPI.folders.downloadFolder(currFolderId, onFailure);
 }
