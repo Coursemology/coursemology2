@@ -24,6 +24,8 @@ const TableMaterialRow: FC<Props> = (props) => {
           <Stack direction="row" spacing={0.5} alignItems="center">
             <DescriptionIcon htmlColor="grey" />
             <a
+              target="_blank"
+              rel="noopener noreferrer"
               href={`/courses/${getCourseId()}/materials/folders/${currFolderId}/files/${
                 material.id
               }`}
