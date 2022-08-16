@@ -78,7 +78,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
       end
     end
 
-    describe '#approve', js: true do
+    describe '#approve' do
       before { sign_in(admin) }
       let!(:request) { create(:course_enrol_request, :pending, course: course, user: user) }
 
@@ -121,7 +121,7 @@ RSpec.describe Course::EnrolRequestsController, type: :controller do
       end
     end
 
-    describe '#reject', js: true do
+    describe '#reject' do
       before { sign_in(admin) }
       let!(:request) { create(:course_enrol_request, :pending, course: course, user: user) }
 

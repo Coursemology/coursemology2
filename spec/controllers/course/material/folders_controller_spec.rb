@@ -31,10 +31,10 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
       end
     end
 
-    describe '#upload_materials', js: true do
+    describe '#upload_materials' do
       let(:file) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'files', 'text.txt')) }
       subject do
-        patch :upload_materials,
+        patch :upload_materials, as: :json,
               params: { course_id: course, id: folder_stub, material_folder: { files_attributes: [file] } }
       end
 
@@ -44,7 +44,7 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
           subject
         end
         it 'returns an error' do
-          expect(response.status).to eq(200)
+          expect(response.status).to eq(400)
         end
       end
     end
@@ -52,7 +52,7 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
     describe '#download' do
       let(:folder) { create(:folder, course: course, parent: course.root_folder) }
       let!(:material) { create(:course_material, folder: folder) }
-      subject { get :download, params: { course_id: course, id: folder } }
+      subject { get :download, as: :json, params: { course_id: course, id: folder } }
 
       it 'downloads all the files in current folder' do
         subject
