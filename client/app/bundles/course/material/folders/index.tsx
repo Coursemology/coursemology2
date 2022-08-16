@@ -5,7 +5,7 @@ import FolderShow from './pages/FolderShow';
 import configureStore from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-workbin-component');
+  const mountNode = document.getElementById('course-material-component');
 
   if (mountNode) {
     const store = configureStore();
