@@ -12,24 +12,18 @@ interface Props {
   handleClose: () => void;
   onSubmit: () => void;
   isSubmitting: boolean;
-  isDirty: boolean;
-  setIsDirty: React.Dispatch<React.SetStateAction<boolean>>;
   uploadedFiles: File[];
   setUploadedFiles: React.Dispatch<React.SetStateAction<File[]>>;
 }
 
-const FolderForm: FC<Props> = (props) => {
+const MaterialUploadForm: FC<Props> = (props) => {
   const {
     handleClose,
     onSubmit,
     isSubmitting,
-    isDirty,
-    setIsDirty,
     uploadedFiles,
     setUploadedFiles,
   } = props;
-
-  const disabled = isSubmitting;
 
   const actionButtons = (
     <div
@@ -42,7 +36,7 @@ const FolderForm: FC<Props> = (props) => {
       <Button
         color="primary"
         className="btn-cancel"
-        disabled={disabled}
+        disabled={isSubmitting}
         key="material-upload-form-cancel-button"
         onClick={(): void => handleClose()}
       >
@@ -53,7 +47,7 @@ const FolderForm: FC<Props> = (props) => {
         variant="contained"
         color="primary"
         className="btn-submit"
-        disabled={disabled || !isDirty}
+        disabled={isSubmitting || uploadedFiles.length === 0}
         key="material-upload-form-upload-button"
         onClick={(): void => onSubmit()}
         loading={isSubmitting}
@@ -66,8 +60,7 @@ const FolderForm: FC<Props> = (props) => {
   return (
     <>
       <MultipleFileInput
-        disabled={disabled}
-        setIsDirty={setIsDirty}
+        disabled={isSubmitting}
         uploadedFiles={uploadedFiles}
         setUploadedFiles={setUploadedFiles}
       />
@@ -76,4 +69,4 @@ const FolderForm: FC<Props> = (props) => {
   );
 };
 
-export default FolderForm;
+export default MaterialUploadForm;

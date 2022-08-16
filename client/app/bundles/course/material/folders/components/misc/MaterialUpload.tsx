@@ -36,7 +36,6 @@ const MaterialUpload: FC<Props> = (props) => {
   const { intl, isOpen, handleClose, currFolderId } = props;
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -72,7 +71,7 @@ const MaterialUpload: FC<Props> = (props) => {
     <>
       <Dialog
         onClose={(): void => {
-          if (isDirty) {
+          if (uploadedFiles.length > 0) {
             setConfirmationDialogOpen(true);
           } else {
             setUploadedFiles([]);
@@ -89,7 +88,7 @@ const MaterialUpload: FC<Props> = (props) => {
         <DialogContent>
           <MaterialUploadForm
             handleClose={(): void => {
-              if (isDirty) {
+              if (uploadedFiles.length > 0) {
                 setConfirmationDialogOpen(true);
               } else {
                 handleClose();
@@ -97,8 +96,6 @@ const MaterialUpload: FC<Props> = (props) => {
             }}
             onSubmit={onSubmit}
             isSubmitting={isSubmitting}
-            isDirty={isDirty}
-            setIsDirty={setIsDirty}
             uploadedFiles={uploadedFiles}
             setUploadedFiles={setUploadedFiles}
           />
@@ -112,7 +109,6 @@ const MaterialUpload: FC<Props> = (props) => {
           setConfirmationDialogOpen(false);
           handleClose();
           setUploadedFiles([]);
-          setIsDirty(false);
         }}
       />
     </>
