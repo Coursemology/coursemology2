@@ -5,8 +5,10 @@ import { Link, useParams } from 'react-router-dom';
 
 import { AppDispatch, AppState } from 'types/store';
 
-import { Breadcrumbs } from '@mui/material';
+import { Breadcrumbs, Paper } from '@mui/material';
+import { grey } from '@mui/material/colors';
 
+import EditButton from 'lib/components/buttons/EditButton';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { getWorkbinFolderURL } from 'lib/helpers/url-builders';
@@ -25,7 +27,6 @@ import WorkbinTable from '../../components/tables/WorkbinTable';
 import NewSubfolderButton from '../../components/buttons/NewSubfolderButton';
 import UploadFilesButton from '../../components/buttons/UploadFilesButton';
 import DownloadFolderButton from '../../components/buttons/DownloadFolderButton';
-import EditFolderButton from '../../components/buttons/EditFolderButton';
 import MaterialUpload from '../../components/misc/MaterialUpload';
 
 import FolderNew from '../FolderNew';
@@ -37,6 +38,10 @@ const translations = defineMessages({
   defaultHeader: {
     id: 'course.materials.folders.defaultHeader',
     defaultMessage: 'Materials',
+  },
+  editFolderTooltip: {
+    id: 'course.materials.folders.editFolderTooltip',
+    defaultMessage: 'Edit Folder',
   },
 });
 
@@ -105,9 +110,13 @@ const FolderShow: FC<Props> = (props) => {
   );
   if (currFolderInfo.isConcrete && permissions.canEdit) {
     headerToolbars.push(
-      <EditFolderButton
+      <EditButton
+        id="edit-folder-button"
         key="edit-folder-button"
-        handleOnClick={(): void => setIsEditFolderOpen(true)}
+        onClick={(): void => setIsEditFolderOpen(true)}
+        style={{ padding: 6 }}
+        color="default"
+        tooltip={intl.formatMessage(translations.editFolderTooltip)}
       />,
     );
   }
@@ -123,20 +132,30 @@ const FolderShow: FC<Props> = (props) => {
 
   return (
     <>
-      <Breadcrumbs>
-        {breadcrumbs.map((breadcrumb) => {
-          return (
-            <Link
-              key={`folder-breadcrumb-${breadcrumb.id}`}
-              to={`/courses/${getCourseId()}/materials/folders/${
-                breadcrumb.id
-              }/`}
-            >
-              {breadcrumb.name === 'Root' ? '~' : breadcrumb.name}
-            </Link>
-          );
-        })}
-      </Breadcrumbs>
+      <Paper
+        variant="outlined"
+        sx={{
+          marginBottom: '4px',
+          padding: '4px 8px',
+          backgroundColor: grey[100],
+          border: '0',
+        }}
+      >
+        <Breadcrumbs>
+          {breadcrumbs.map((breadcrumb) => {
+            return (
+              <Link
+                key={`folder-breadcrumb-${breadcrumb.id}`}
+                to={`/courses/${getCourseId()}/materials/folders/${
+                  breadcrumb.id
+                }/`}
+              >
+                {breadcrumb.name}
+              </Link>
+            );
+          })}
+        </Breadcrumbs>
+      </Paper>
       <PageHeader
         key={`workbin-folder-${currFolderInfo.name}-${currFolderInfo.id}`}
         title={
