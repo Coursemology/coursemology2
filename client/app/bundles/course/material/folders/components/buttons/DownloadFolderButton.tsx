@@ -62,10 +62,13 @@ const DownloadFolderButton: FC<Props> = (props) => {
                     setIsLoading(false);
                   })
                   .catch((error) => {
+                    const errorMessage = error.response?.data?.errors
+                      ? error.response.data.errors
+                      : '';
                     toast.error(
                       `${intl.formatMessage(
                         translations.downloadFolderErrorMessage,
-                      )} - ${error}`,
+                      )} - ${errorMessage}`,
                     );
                     setIsLoading(false);
                   });

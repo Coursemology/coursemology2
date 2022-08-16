@@ -15,7 +15,7 @@ json.updater do
     json.id updater.id
     json.name updater.name
   end
-  json.isCourseUser !course_user.nil?
+  json.isCourseUser !course_user.present?
 end
 
 json.permissions do

@@ -89,10 +89,13 @@ const WorkbinTableButtons: FC<Props> = (props) => {
           );
         })
         .catch((error) => {
+          const errorMessage = error.response?.data?.errors
+            ? error.response.data.errors
+            : '';
           toast.error(
             `"${itemName}" ${intl.formatMessage(
               translations.deletionFailure,
-            )} - ${error}`,
+            )} - ${errorMessage}`,
           );
           throw error;
         });
@@ -104,10 +107,13 @@ const WorkbinTableButtons: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
         toast.error(
           `"${itemName}" ${intl.formatMessage(
             translations.deletionFailure,
-          )} - ${error}`,
+          )} - ${errorMessage}`,
         );
         throw error;
       });
