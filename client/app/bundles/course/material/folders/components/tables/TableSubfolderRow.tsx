@@ -46,7 +46,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
 
   return (
     <TableRow id={`subfolder-${subfolder.id}`}>
-      <TableCell style={{ padding: 2 }}>
+      <TableCell style={{ padding: 2, minWidth: '200px' }}>
         <Stack spacing={1}>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <FolderIcon htmlColor="grey" />
@@ -59,6 +59,11 @@ const TableSubfolderRow: FC<Props> = (props) => {
                 setTimeout((): void => {
                   setIsTableLoading(false);
                 }, 200);
+              }}
+              style={{
+                textOverflow: 'initial',
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
               }}
             >
               {`${subfolder.name} (${subfolder.itemCount})`}
@@ -82,14 +87,33 @@ const TableSubfolderRow: FC<Props> = (props) => {
                 dangerouslySetInnerHTML={{
                   __html: subfolder.description,
                 }}
+                style={{
+                  textOverflow: 'initial',
+                  whiteSpace: 'normal',
+                  wordBreak: 'break-word',
+                }}
               />
             )}
         </Stack>
       </TableCell>
-      <TableCell style={{ padding: 2 }}>
+      <TableCell
+        style={{
+          padding: 2,
+          width: '240px',
+          maxWidth: '240px',
+          minWidth: '60px',
+        }}
+      >
         {getFullDateTime(subfolder.updatedAt)}
       </TableCell>
-      <TableCell style={{ padding: 2 }}>
+      <TableCell
+        style={{
+          padding: 2,
+          width: '240px',
+          maxWidth: '240px',
+          minWidth: '60px',
+        }}
+      >
         {subfolder.permissions.canEdit ? (
           <Stack direction="row" spacing={0.5} alignItems="center">
             {subfolder.permissions.showSdlWarning && (
@@ -107,7 +131,14 @@ const TableSubfolderRow: FC<Props> = (props) => {
           <div>-</div>
         )}
       </TableCell>
-      <TableCell style={{ padding: 2 }}>
+      <TableCell
+        style={{
+          padding: 2,
+          width: '60px',
+          maxWidth: '60px',
+          minWidth: '30px',
+        }}
+      >
         <WorkbinTableButtons
           currFolderId={currFolderId}
           itemId={subfolder.id}

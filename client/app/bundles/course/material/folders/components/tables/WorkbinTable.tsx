@@ -177,48 +177,46 @@ const WorkbinTable: FC<Props> = (props) => {
     return <LoadingIndicator />;
   }
   return (
-    <>
-      <Table sx={{ marginBottom: 2 }}>
-        <TableHead>
-          <TableRow>
-            <TableCell style={{ padding: 2 }}>
-              {columnHeaderWithSort('Name')}
-            </TableCell>
-            <TableCell style={{ padding: 2 }}>
-              {columnHeaderWithSort('Last Modified')}
-            </TableCell>
-            <TableCell style={{ padding: 2 }}>
-              {columnHeaderWithSort('Start At')}
-            </TableCell>
-            <TableCell />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {sortedSubfolders.map((subfolder) => {
-            return (
-              <TableSubfolderRow
-                key={`subfolder-${subfolder.id}`}
-                currFolderId={currFolderId}
-                subfolder={subfolder}
-                isCurrentCourseStudent={isCurrentCourseStudent}
-                isConcrete={isConcrete}
-                setIsTableLoading={setIsTableLoading}
-              />
-            );
-          })}
-          {sortedMaterials.map((material) => {
-            return (
-              <TableMaterialRow
-                key={`material-${material.id}`}
-                currFolderId={currFolderId}
-                material={material}
-                isConcrete={isConcrete}
-              />
-            );
-          })}
-        </TableBody>
-      </Table>
-    </>
+    <Table sx={{ marginBottom: 2 }}>
+      <TableHead>
+        <TableRow>
+          <TableCell style={{ padding: 2 }}>
+            {columnHeaderWithSort('Name')}
+          </TableCell>
+          <TableCell style={{ padding: 2 }}>
+            {columnHeaderWithSort('Last Modified')}
+          </TableCell>
+          <TableCell style={{ padding: 2 }}>
+            {columnHeaderWithSort('Start At')}
+          </TableCell>
+          <TableCell />
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {sortedSubfolders.map((subfolder) => {
+          return (
+            <TableSubfolderRow
+              key={`subfolder-${subfolder.id}`}
+              currFolderId={currFolderId}
+              subfolder={subfolder}
+              isCurrentCourseStudent={isCurrentCourseStudent}
+              isConcrete={isConcrete}
+              setIsTableLoading={setIsTableLoading}
+            />
+          );
+        })}
+        {sortedMaterials.map((material) => {
+          return (
+            <TableMaterialRow
+              key={`material-${material.id}`}
+              currFolderId={currFolderId}
+              material={material}
+              isConcrete={isConcrete}
+            />
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 };
 

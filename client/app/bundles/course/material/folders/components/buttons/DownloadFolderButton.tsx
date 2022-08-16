@@ -65,7 +65,7 @@ const DownloadFolderButton: FC<Props> = (props) => {
                     toast.error(
                       `${intl.formatMessage(
                         translations.downloadFolderErrorMessage,
-                      )}. Error: ${error}`,
+                      )} - ${error}`,
                     );
                     setIsLoading(false);
                   });

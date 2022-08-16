@@ -92,7 +92,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
           toast.error(
             `"${itemName}" ${intl.formatMessage(
               translations.deletionFailure,
-            )}. Error: ${error}`,
+            )} - ${error}`,
           );
           throw error;
         });
@@ -107,7 +107,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
         toast.error(
           `"${itemName}" ${intl.formatMessage(
             translations.deletionFailure,
-          )}. Error: ${error}`,
+          )} - ${error}`,
         );
         throw error;
       });
@@ -146,7 +146,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
 
   return (
     <>
-      <Stack direction="row">
+      <Stack direction={{ xs: 'column', sm: 'row' }}>
         {canEdit && isConcrete && (
           <EditButton
             id={`${type}-edit-button-${itemId}`}
