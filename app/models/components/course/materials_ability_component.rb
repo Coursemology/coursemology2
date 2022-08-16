@@ -39,7 +39,7 @@ module Course::MaterialsAbilityComponent
   end
 
   def allow_upload_materials
-    alias_action :new_materials, :upload_materials, to: :upload
+    alias_action :upload_materials, to: :upload
     can :upload, Course::Material::Folder, { course_id: course.id }.
       reverse_merge(can_student_upload: true)
     can :manage, Course::Material, creator: user
