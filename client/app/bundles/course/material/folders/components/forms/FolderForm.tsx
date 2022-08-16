@@ -61,10 +61,6 @@ const translations = defineMessages({
     id: 'course.materials.folders.folderForm.endAt',
     defaultMessage: 'End At',
   },
-  startEndValidationError: {
-    id: 'course.materials.folders.folderForm.startEndValidationError',
-    defaultMessage: 'End Date cannot be before Start Date',
-  },
   earlyAccessMessage: {
     id: 'course.materials.folders.folderForm.earlyAccessMessage',
     defaultMessage:
@@ -79,8 +75,9 @@ const validationSchema = yup.object({
   startAt: yup.date().nullable(),
   endAt: yup
     .date()
-    .min(yup.ref('startAt'), translations.startEndValidationError)
-    .nullable(),
+    .nullable()
+    .typeError(formTranslations.invalidDate)
+    .min(yup.ref('startAt'), formTranslations.startEndDateValidationError),
 });
 
 const FolderForm: FC<Props> = (props) => {
@@ -245,7 +242,7 @@ const FolderForm: FC<Props> = (props) => {
           />
         </div>
 
-        {advanceStartAt !== 0 && (
+        {editing && advanceStartAt !== 0 && (
           <div style={{ marginTop: 12 }}>{`${intl.formatMessage(
             translations.earlyAccessMessage,
             {
