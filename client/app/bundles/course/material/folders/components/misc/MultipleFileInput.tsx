@@ -9,7 +9,6 @@ import { toast } from 'react-toastify';
 
 interface Props extends WrappedComponentProps {
   uploadedFiles: File[];
-  setIsDirty: React.Dispatch<React.SetStateAction<boolean>>;
   setUploadedFiles: React.Dispatch<React.SetStateAction<File[]>>;
   disabled: boolean;
 }
@@ -27,7 +26,7 @@ const translations = defineMessages({
 });
 
 const MultipleFileInput: FC<Props> = (props) => {
-  const { intl, uploadedFiles, setIsDirty, setUploadedFiles, disabled } = props;
+  const { intl, uploadedFiles, setUploadedFiles, disabled } = props;
 
   const [dropZoneActive, setDropZoneActive] = useState(false);
 
@@ -52,7 +51,18 @@ const MultipleFileInput: FC<Props> = (props) => {
       <>
         {files.map((file) => {
           return (
-            <Chip key={file.name} label={file.name} style={{ margin: 4 }} />
+            <Chip
+              key={file.name}
+              label={file.name}
+              style={{ margin: 4 }}
+              onDelete={(): void => {
+                setUploadedFiles(
+                  uploadedFiles.filter(
+                    (uploadedFile) => uploadedFile.name !== file.name,
+                  ),
+                );
+              }}
+            />
           );
         })}
       </>
@@ -86,9 +96,8 @@ const MultipleFileInput: FC<Props> = (props) => {
           return isValidName;
         });
 
-        setUploadedFiles(uploadedFiles.concat(files));
+        setUploadedFiles([...uploadedFiles, ...files]);
         setDropZoneActive(false);
-        setIsDirty(true);
       }}
       style={{
         width: '100%',
