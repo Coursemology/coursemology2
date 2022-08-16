@@ -57,7 +57,7 @@ const MaterialUpload: FC<Props> = (props) => {
         toast.error(
           `${intl.formatMessage(
             translations.materialUploadFailure,
-          )}. Error: ${error}`,
+          )} - ${error}`,
         );
         throw error;
       })

@@ -19,7 +19,7 @@ const TableMaterialRow: FC<Props> = (props) => {
 
   return (
     <TableRow id={`material-${material.id}`}>
-      <TableCell style={{ padding: 2 }}>
+      <TableCell style={{ padding: 2, minWidth: '200px' }}>
         <Stack spacing={1}>
           <Stack direction="row" spacing={0.5} alignItems="center">
             <DescriptionIcon htmlColor="grey" />
@@ -27,6 +27,11 @@ const TableMaterialRow: FC<Props> = (props) => {
               href={`/courses/${getCourseId()}/materials/folders/${currFolderId}/files/${
                 material.id
               }`}
+              style={{
+                textOverflow: 'initial',
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
+              }}
             >
               {material.name}
             </a>
@@ -36,11 +41,23 @@ const TableMaterialRow: FC<Props> = (props) => {
               dangerouslySetInnerHTML={{
                 __html: material.description,
               }}
+              style={{
+                textOverflow: 'initial',
+                whiteSpace: 'normal',
+                wordBreak: 'break-word',
+              }}
             />
           )}
         </Stack>
       </TableCell>
-      <TableCell style={{ padding: 2 }}>
+      <TableCell
+        style={{
+          padding: 2,
+          width: '240px',
+          maxWidth: '240px',
+          minWidth: '60px',
+        }}
+      >
         <Stack>
           <div>{getFullDateTime(material.updatedAt)}</div>
           <a
@@ -54,8 +71,24 @@ const TableMaterialRow: FC<Props> = (props) => {
           </a>
         </Stack>
       </TableCell>
-      <TableCell style={{ padding: 2 }}>-</TableCell>
-      <TableCell style={{ padding: 2 }}>
+      <TableCell
+        style={{
+          padding: 2,
+          width: '240px',
+          maxWidth: '240px',
+          minWidth: '60px',
+        }}
+      >
+        -
+      </TableCell>
+      <TableCell
+        style={{
+          padding: 2,
+          width: '60px',
+          maxWidth: '60px',
+          minWidth: '30px',
+        }}
+      >
         <WorkbinTableButtons
           currFolderId={currFolderId}
           itemId={material.id}
