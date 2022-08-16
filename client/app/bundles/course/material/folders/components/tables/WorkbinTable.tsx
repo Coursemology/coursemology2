@@ -20,8 +20,6 @@ import {
   MaterialMiniEntity,
 } from 'types/course/material/folders';
 
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-
 import TableSubfolderRow from './TableSubfolderRow';
 import TableMaterialRow from './TableMaterialRow';
 
@@ -41,8 +39,6 @@ const WorkbinTable: FC<Props> = (props) => {
     isCurrentCourseStudent,
     isConcrete,
   } = props;
-
-  const [isTableLoading, setIsTableLoading] = useState(false);
 
   const [sortedSubfolders, setSortedSubfolders] = useState(subfolders);
   const [sortedMaterials, setSortedMaterials] = useState(materials);
@@ -173,9 +169,6 @@ const WorkbinTable: FC<Props> = (props) => {
     );
   };
 
-  if (isTableLoading) {
-    return <LoadingIndicator />;
-  }
   return (
     <Table sx={{ marginBottom: 2 }}>
       <TableHead>
@@ -201,7 +194,6 @@ const WorkbinTable: FC<Props> = (props) => {
               subfolder={subfolder}
               isCurrentCourseStudent={isCurrentCourseStudent}
               isConcrete={isConcrete}
-              setIsTableLoading={setIsTableLoading}
             />
           );
         })}
