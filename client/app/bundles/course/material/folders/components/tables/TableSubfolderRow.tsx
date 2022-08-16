@@ -150,7 +150,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
           folderInitialValues={{
             name: subfolder.name,
             description: subfolder.description,
-            canStudentUpload: subfolder.canStudentUpload,
+            canStudentUpload: subfolder.permissions.canStudentUpload,
             startAt: new Date(subfolder.startAt),
             endAt: subfolder.endAt !== null ? new Date(subfolder.endAt) : null,
           }}

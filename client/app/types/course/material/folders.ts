@@ -10,7 +10,7 @@ export type FolderPermissions = Permissions<
 >;
 
 export type SubfolderPermissions = Permissions<
-  'showSdlWarning' | 'canEdit' | 'canDelete'
+  'canStudentUpload' | 'showSdlWarning' | 'canEdit' | 'canDelete'
 >;
 
 export type MaterialPermissions = Permissions<'canEdit' | 'canDelete'>;
@@ -19,7 +19,6 @@ export interface FolderListData {
   id: number;
   name: string;
   description: string | null;
-  canStudentUpload: boolean;
   itemCount: number;
   updatedAt: string;
   startAt: string;
@@ -47,7 +46,6 @@ export interface FolderMiniEntity {
   id: number;
   name: string;
   description: string | null;
-  canStudentUpload: boolean;
   itemCount: number;
   updatedAt: string;
   startAt: string;
