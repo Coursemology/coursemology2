@@ -19,6 +19,7 @@ import ReactTooltip from 'react-tooltip';
 import translations from './translations.intl';
 import MaterialUploader from '../MaterialUploader';
 import { fetchTabs } from './actions';
+import Section from 'lib/components/layouts/Section';
 
 const styles = {
   flexGroup: {
@@ -211,126 +212,6 @@ const AssessmentForm = (props) => {
     </div>
   );
 
-  const renderExtraOptions = () => {
-    if (autograded) {
-      return (
-        <div>
-          <Controller
-            name="skippable"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.skippable} />}
-                renderIf={autograded}
-                style={styles.toggle}
-              />
-            )}
-          />
-          <Controller
-            name="allow_partial_submission"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={
-                  <FormattedMessage {...translations.allowPartialSubmission} />
-                }
-                renderIf={autograded}
-                style={styles.toggle}
-              />
-            )}
-          />
-          <Controller
-            name="show_mcq_answer"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.showMcqAnswer} />}
-                renderIf={autograded}
-                style={styles.toggle}
-              />
-            )}
-          />
-          <div style={styles.hint}>
-            <FormattedMessage {...translations.showMcqAnswerHint} />
-          </div>
-        </div>
-      );
-    }
-    const options = [
-      {
-        value: false,
-        label: <FormattedMessage {...translations.singlePage} />,
-      },
-      {
-        value: true,
-        label: <FormattedMessage {...translations.tabbedView} />,
-      },
-    ];
-    return (
-      <>
-        <Controller
-          name="tabbed_view"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormSelectField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.tab} />}
-              options={options}
-              renderIf={!autograded}
-              type="boolean"
-            />
-          )}
-        />
-        <Controller
-          name="delayed_grade_publication"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormToggleField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={
-                <FormattedMessage {...translations.delayedGradePublication} />
-              }
-              renderIf={!autograded}
-              style={styles.toggle}
-            />
-          )}
-        />
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.delayedGradePublicationHint} />
-        </div>
-
-        <Controller
-          name="password_protected"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormToggleField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.passwordProtection} />}
-              renderIf={!autograded}
-              style={styles.toggle}
-            />
-          )}
-        />
-        {passwordProtected && renderPasswordFields()}
-      </>
-    );
-  };
-
   const renderTabs = () => {
     if (!loadedTabs) {
       return null;
@@ -365,376 +246,526 @@ const AssessmentForm = (props) => {
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
-      <div style={styles.flexGroup}>
-        <Controller
-          name="title"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.title} />}
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-              style={styles.flexChild}
-              variant="standard"
-            />
-          )}
-        />
-        {editing && renderTabs(loadedTabs, disabled)}
-      </div>
-      <Controller
-        name="description"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormRichTextField
-            field={field}
-            fieldState={fieldState}
-            disabled={disabled}
-            label={<FormattedMessage {...translations.description} />}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            variant="standard"
-          />
-        )}
-      />
-      <div style={styles.flexGroup}>
-        <Controller
-          name="start_at"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormDateTimePickerField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.startAt} />}
-              style={styles.flexChild}
-            />
-          )}
-        />
-        <Controller
-          name="end_at"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormDateTimePickerField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.endAt} />}
-              style={styles.flexChild}
-            />
-          )}
-        />
-        {gamified && (
+
+      <Section title={intl.formatMessage(translations.assessmentDetails)}>
+        <div style={styles.flexGroup}>
           <Controller
-            name="bonus_end_at"
+            name="title"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.title} />}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                style={styles.flexChild}
+                variant="standard"
+              />
+            )}
+          />
+        </div>
+
+        <div style={styles.flexGroup}>
+          <Controller
+            name="start_at"
             control={control}
             render={({ field, fieldState }) => (
               <FormDateTimePickerField
                 field={field}
                 fieldState={fieldState}
                 disabled={disabled}
-                label={<FormattedMessage {...translations.bonusEndAt} />}
+                label={<FormattedMessage {...translations.startAt} />}
                 style={styles.flexChild}
+              />
+            )}
+          />
+          <Controller
+            name="end_at"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormDateTimePickerField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.endAt} />}
+                style={styles.flexChild}
+              />
+            )}
+          />
+          {gamified && (
+            <Controller
+              name="bonus_end_at"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormDateTimePickerField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  label={<FormattedMessage {...translations.bonusEndAt} />}
+                  style={styles.flexChild}
+                />
+              )}
+            />
+          )}
+        </div>
+
+        <Controller
+          name="description"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormRichTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.description} />}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              variant="standard"
+            />
+          )}
+        />
+
+        {editing && (
+          <Controller
+            name="published"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.published} />}
+                style={styles.toggle}
               />
             )}
           />
         )}
-      </div>
-      {gamified && (
-        <div style={styles.flexGroup}>
-          <Controller
-            name="base_exp"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormTextField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                fullWidth
-                label={<FormattedMessage {...translations.baseExp} />}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onWheel={(event) => event.currentTarget.blur()}
-                style={styles.flexChild}
-                type="number"
-                variant="standard"
-              />
-            )}
-          />
-          <Controller
-            name="time_bonus_exp"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormTextField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                fullWidth
-                label={<FormattedMessage {...translations.timeBonusExp} />}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onWheel={(event) => event.currentTarget.blur()}
-                style={styles.flexChild}
-                type="number"
-                variant="standard"
-              />
-            )}
-          />
-        </div>
-      )}
 
-      {editing && (
-        <Controller
-          name="published"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormToggleField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.published} />}
-              style={styles.toggle}
+        {folderAttributes && (
+          <>
+            <br />
+            <MaterialUploader
+              enableMaterialsAction={folderAttributes.enable_materials_action}
+              folderId={folderAttributes.folder_id}
+              materials={folderAttributes.materials}
             />
-          )}
-        />
-      )}
+          </>
+        )}
+      </Section>
+
+      <Section title={intl.formatMessage(translations.gamification)}>
+        {gamified && (
+          <div style={styles.flexGroup}>
+            <Controller
+              name="base_exp"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormTextField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  fullWidth
+                  label={<FormattedMessage {...translations.baseExp} />}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onWheel={(event) => event.currentTarget.blur()}
+                  style={styles.flexChild}
+                  type="number"
+                  variant="standard"
+                />
+              )}
+            />
+            <Controller
+              name="time_bonus_exp"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormTextField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  fullWidth
+                  label={<FormattedMessage {...translations.timeBonusExp} />}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onWheel={(event) => event.currentTarget.blur()}
+                  style={styles.flexChild}
+                  type="number"
+                  variant="standard"
+                />
+              )}
+            />
+          </div>
+        )}
+
+        {editing && conditionAttributes && (
+          <div style={styles.conditions}>
+            <ConditionList
+              newConditionUrls={conditionAttributes.new_condition_urls}
+              conditions={conditionAttributes.conditions}
+            />
+          </div>
+        )}
+      </Section>
 
       <ReactTooltip id="autograde-toggle">
         {autogradedToggleTooltip}
       </ReactTooltip>
 
-      <div
-        data-tip
-        data-for="autograde-toggle"
-        data-tip-disable={!containsCodaveri && modeSwitching}
-      >
+      <Section title={intl.formatMessage(translations.grading)}>
+        <div
+          data-tip
+          data-for="autograde-toggle"
+          data-tip-disable={!containsCodaveri && modeSwitching}
+        >
+          <Controller
+            name="autograded"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={containsCodaveri || !modeSwitching || disabled}
+                label={<FormattedMessage {...translations.autograded} />}
+                style={styles.toggle}
+              />
+            )}
+          />
+        </div>
+
+        {modeSwitching && !containsCodaveri && (
+          <div style={styles.hint}>
+            <FormattedMessage {...translations.autogradedHint} />
+          </div>
+        )}
+
+        <div style={styles.conditions}>
+          <FormattedMessage {...translations.autogradeTestCasesHint} />
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <Controller
+            name="use_public"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.usePublic} />}
+                style={styles.flexChild}
+              />
+            )}
+          />
+          <Controller
+            name="use_private"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.usePrivate} />}
+                style={styles.flexChild}
+              />
+            )}
+          />
+          <Controller
+            name="use_evaluation"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={<FormattedMessage {...translations.useEvaluation} />}
+                style={styles.flexChild}
+              />
+            )}
+          />
+        </div>
+
+        {autograded ? (
+          <>
+            <Controller
+              name="delayed_grade_publication"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormToggleField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  label={
+                    <FormattedMessage
+                      {...translations.delayedGradePublication}
+                    />
+                  }
+                  style={styles.toggle}
+                />
+              )}
+            />
+            <div style={styles.hint}>
+              <FormattedMessage {...translations.delayedGradePublicationHint} />
+            </div>
+          </>
+        ) : null}
+      </Section>
+
+      <Section title={intl.formatMessage(translations.answersAndTestCases)}>
+        {autograded ? (
+          <div>
+            <Controller
+              name="skippable"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormToggleField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  label={<FormattedMessage {...translations.skippable} />}
+                  renderIf={autograded}
+                  style={styles.toggle}
+                />
+              )}
+            />
+            <Controller
+              name="allow_partial_submission"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormToggleField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  label={
+                    <FormattedMessage
+                      {...translations.allowPartialSubmission}
+                    />
+                  }
+                  renderIf={autograded}
+                  style={styles.toggle}
+                />
+              )}
+            />
+          </div>
+        ) : null}
+
         <Controller
-          name="autograded"
+          name="show_private"
           control={control}
           render={({ field, fieldState }) => (
             <FormToggleField
               field={field}
               fieldState={fieldState}
-              disabled={containsCodaveri || !modeSwitching || disabled}
-              label={<FormattedMessage {...translations.autograded} />}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.showPrivate} />}
               style={styles.toggle}
             />
           )}
         />
-      </div>
-
-      {modeSwitching && !containsCodaveri && (
         <div style={styles.hint}>
-          <FormattedMessage {...translations.autogradedHint} />
+          <FormattedMessage {...translations.showPrivateHint} />
         </div>
-      )}
-
-      <Controller
-        name="block_student_viewing_after_submitted"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormToggleField
-            field={field}
-            fieldState={fieldState}
-            disabled={disabled}
-            label={
-              <FormattedMessage
-                {...translations.blockStudentViewingAfterSubmitted}
-              />
-            }
-            style={styles.toggle}
-          />
-        )}
-      />
-
-      {renderExtraOptions()}
-
-      <Controller
-        name="show_mcq_mrq_solution"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormToggleField
-            field={field}
-            fieldState={fieldState}
-            disabled={disabled}
-            label={<FormattedMessage {...translations.showMcqMrqSolution} />}
-            style={styles.toggle}
-          />
-        )}
-      />
-      <div style={styles.hint}>
-        <FormattedMessage {...translations.showMcqMrqSolutionHint} />
-      </div>
-
-      <div style={styles.conditions}>
-        <FormattedMessage {...translations.autogradeTestCasesHint} />
-      </div>
-
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <Controller
-          name="use_public"
+          name="show_evaluation"
           control={control}
           render={({ field, fieldState }) => (
             <FormToggleField
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.usePublic} />}
-              style={styles.flexChild}
+              label={<FormattedMessage {...translations.showEvaluation} />}
+              style={styles.toggle}
             />
           )}
         />
-        <Controller
-          name="use_private"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormToggleField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.usePrivate} />}
-              style={styles.flexChild}
-            />
-          )}
-        />
-        <Controller
-          name="use_evaluation"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormToggleField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.useEvaluation} />}
-              style={styles.flexChild}
-            />
-          )}
-        />
-      </div>
-
-      <Controller
-        name="show_private"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormToggleField
-            field={field}
-            fieldState={fieldState}
-            disabled={disabled}
-            label={<FormattedMessage {...translations.showPrivate} />}
-            style={styles.toggle}
-          />
-        )}
-      />
-      <div style={styles.hint}>
-        <FormattedMessage {...translations.showPrivateHint} />
-      </div>
-      <Controller
-        name="show_evaluation"
-        control={control}
-        render={({ field, fieldState }) => (
-          <FormToggleField
-            field={field}
-            fieldState={fieldState}
-            disabled={disabled}
-            label={<FormattedMessage {...translations.showEvaluation} />}
-            style={styles.toggle}
-          />
-        )}
-      />
-      <div style={styles.hint}>
-        <FormattedMessage {...translations.showEvaluationHint} />
-      </div>
-
-      {randomizationAllowed && (
-        <>
-          <Controller
-            name="randomization"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={
-                  <FormattedMessage {...translations.enableRandomization} />
-                }
-                style={styles.toggle}
-              />
-            )}
-          />
-          <div style={styles.hint}>
-            <FormattedMessage {...translations.enableRandomizationHint} />
-          </div>
-        </>
-      )}
-
-      {showPersonalizedTimelineFeatures && (
-        <>
-          <Controller
-            name="has_personal_times"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.hasPersonalTimes} />}
-                style={styles.toggle}
-              />
-            )}
-          />
-          <div style={styles.hint}>
-            <FormattedMessage {...translations.hasPersonalTimesHint} />
-          </div>
-
-          <Controller
-            name="affects_personal_times"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={
-                  <FormattedMessage {...translations.affectsPersonalTimes} />
-                }
-                style={styles.toggle}
-              />
-            )}
-          />
-          <div style={styles.hint}>
-            <FormattedMessage {...translations.affectsPersonalTimesHint} />
-          </div>
-        </>
-      )}
-
-      {folderAttributes && (
-        <>
-          <br />
-          <MaterialUploader
-            enableMaterialsAction={folderAttributes.enable_materials_action}
-            folderId={folderAttributes.folder_id}
-            materials={folderAttributes.materials}
-          />
-        </>
-      )}
-      {editing && conditionAttributes && (
-        <div style={styles.conditions}>
-          <ConditionList
-            newConditionUrls={conditionAttributes.new_condition_urls}
-            conditions={conditionAttributes.conditions}
-          />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.showEvaluationHint} />
         </div>
-      )}
+
+        <Controller
+          name="show_mcq_mrq_solution"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.showMcqMrqSolution} />}
+              style={styles.toggle}
+            />
+          )}
+        />
+        <div style={styles.hint}>
+          <FormattedMessage {...translations.showMcqMrqSolutionHint} />
+        </div>
+      </Section>
+
+      <Section
+        title={intl.formatMessage(translations.organisation)}
+        subtitle={intl.formatMessage(translations.organisationSubtitle)}
+      >
+        {editing && renderTabs(loadedTabs, disabled)}
+
+        <Controller
+          name="tabbed_view"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormSelectField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.tab} />}
+              options={[
+                {
+                  value: false,
+                  label: <FormattedMessage {...translations.singlePage} />,
+                },
+                {
+                  value: true,
+                  label: <FormattedMessage {...translations.tabbedView} />,
+                },
+              ]}
+              renderIf={!autograded}
+              type="boolean"
+            />
+          )}
+        />
+      </Section>
+
+      <Section title={intl.formatMessage(translations.examsAndAccessControl)}>
+        <Controller
+          name="block_student_viewing_after_submitted"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormToggleField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={
+                <FormattedMessage
+                  {...translations.blockStudentViewingAfterSubmitted}
+                />
+              }
+              style={styles.toggle}
+            />
+          )}
+        />
+
+        {randomizationAllowed && (
+          <>
+            <Controller
+              name="randomization"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormToggleField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  label={
+                    <FormattedMessage {...translations.enableRandomization} />
+                  }
+                  style={styles.toggle}
+                />
+              )}
+            />
+            <div style={styles.hint}>
+              <FormattedMessage {...translations.enableRandomizationHint} />
+            </div>
+          </>
+        )}
+
+        {autograded ? (
+          <>
+            <Controller
+              name="show_mcq_answer"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormToggleField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  label={<FormattedMessage {...translations.showMcqAnswer} />}
+                  renderIf={autograded}
+                  style={styles.toggle}
+                />
+              )}
+            />
+            <div style={styles.hint}>
+              <FormattedMessage {...translations.showMcqAnswerHint} />
+            </div>
+
+            <Controller
+              name="password_protected"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormToggleField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  label={
+                    <FormattedMessage {...translations.passwordProtection} />
+                  }
+                  renderIf={!autograded}
+                  style={styles.toggle}
+                />
+              )}
+            />
+            {passwordProtected && renderPasswordFields()}
+          </>
+        ) : null}
+      </Section>
+
+      <Section title={intl.formatMessage(translations.personalisedTimelines)}>
+        {showPersonalizedTimelineFeatures && (
+          <>
+            <Controller
+              name="has_personal_times"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormToggleField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  label={
+                    <FormattedMessage {...translations.hasPersonalTimes} />
+                  }
+                  style={styles.toggle}
+                />
+              )}
+            />
+            <div style={styles.hint}>
+              <FormattedMessage {...translations.hasPersonalTimesHint} />
+            </div>
+
+            <Controller
+              name="affects_personal_times"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormToggleField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  label={
+                    <FormattedMessage {...translations.affectsPersonalTimes} />
+                  }
+                  style={styles.toggle}
+                />
+              )}
+            />
+            <div style={styles.hint}>
+              <FormattedMessage {...translations.affectsPersonalTimesHint} />
+            </div>
+          </>
+        )}
+      </Section>
     </form>
   );
 };
