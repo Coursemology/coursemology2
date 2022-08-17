@@ -219,6 +219,38 @@ const translations = defineMessages({
     defaultMessage:
       'Enables randomized assignment of question bundles to students (per question group)',
   },
+  assessmentDetails: {
+    id: 'course.assessment.form.assessmentDetails',
+    defaultMessage: 'Assessment details',
+  },
+  gamification: {
+    id: 'course.assessment.form.gamification',
+    defaultMessage: 'Gamification',
+  },
+  grading: {
+    id: 'course.assessment.form.grading',
+    defaultMessage: 'Grading',
+  },
+  answersAndTestCases: {
+    id: 'course.assessment.form.answersAndTestCases',
+    defaultMessage: 'Answers and test cases',
+  },
+  organisation: {
+    id: 'course.assessment.form.organisation',
+    defaultMessage: 'Organisation',
+  },
+  organisationSubtitle: {
+    id: 'course.assessment.form.organisationSubtitle',
+    defaultMessage: 'Change how the asssessment looks and feels.',
+  },
+  examsAndAccessControl: {
+    id: 'course.assessment.form.examsAndAccessControl',
+    defaultMessage: 'Exams and access control',
+  },
+  personalisedTimelines: {
+    id: 'course.assessment.form.personalisedTimelines',
+    defaultMessage: 'Personalised timelines',
+  },
 });
 
 export default translations;
