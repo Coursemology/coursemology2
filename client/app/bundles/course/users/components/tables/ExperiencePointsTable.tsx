@@ -60,6 +60,9 @@ const ExperiencePointsTable: FC<Props> = (props) => {
           <TableHead>
             <TableRow>
               <TableCell>
+                {intl.formatMessage(tableTranslations.updatedAt)}
+              </TableCell>
+              <TableCell>
                 {intl.formatMessage(tableTranslations.updater)}
               </TableCell>
               <TableCell>
@@ -67,9 +70,6 @@ const ExperiencePointsTable: FC<Props> = (props) => {
               </TableCell>
               <TableCell>
                 {intl.formatMessage(tableTranslations.experiencePointsAwarded)}
-              </TableCell>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.updatedAt)}
               </TableCell>
               <TableCell />
             </TableRow>

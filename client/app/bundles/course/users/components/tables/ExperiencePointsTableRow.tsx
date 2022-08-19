@@ -102,6 +102,10 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
   return (
     <TableRow hover key={record.id} id={`record-${record.id}`}>
       <TableCell>
+        {moment(record.updatedAt).format('YYYY-MM-DD HH:mm:ss ZZ')}
+      </TableCell>
+
+      <TableCell>
         <Link
           to={
             record.updaterUser.isCourseUser
@@ -112,7 +116,9 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
           {record.updaterUser.name}
         </Link>
       </TableCell>
+
       <TableCell>{renderReason()}</TableCell>
+
       <TableCell>
         {record.permissions.canUpdate ? (
           <TextField
@@ -128,9 +134,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
           record.pointsAwarded
         )}
       </TableCell>
-      <TableCell>
-        {moment(record.updatedAt).format('YYYY-MM-DD HH:mm:ss ZZ')}
-      </TableCell>
+
       <TableCell>
         <PointManagementButtons
           permissions={record.permissions}
