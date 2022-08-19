@@ -7,7 +7,7 @@ import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
 import { achievementTypesConditionAttributes } from 'lib/types';
-import AssessmentForm from '../../containers/AssessmentForm';
+import AssessmentForm from '../../components/AssessmentForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
 
