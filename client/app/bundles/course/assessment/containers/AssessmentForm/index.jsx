@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
+
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
@@ -14,12 +15,12 @@ import FormToggleField from 'lib/components/form/fields/ToggleField';
 import ErrorText from 'lib/components/ErrorText';
 import ConditionList from 'lib/components/course/ConditionList';
 import formTranslations from 'lib/translations/form';
+import Section from 'lib/components/layouts/Section';
 import { achievementTypesConditionAttributes, typeMaterial } from 'lib/types';
 import ReactTooltip from 'react-tooltip';
 import t from './translations.intl';
 import MaterialUploader from '../MaterialUploader';
 import { fetchTabs } from './actions';
-import Section from 'lib/components/layouts/Section';
 
 const styles = {
   flexGroup: {
@@ -744,14 +745,6 @@ AssessmentForm.defaultProps = {
 AssessmentForm.propTypes = {
   disabled: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
-  start_at: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-  end_at: PropTypes.oneOfType([PropTypes.string, PropTypes.instanceOf(Date)]),
-  bonus_end_at: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.instanceOf(Date),
-  ]),
-  autograded: PropTypes.bool,
-  password_protected: PropTypes.bool,
   showPersonalizedTimelineFeatures: PropTypes.bool,
   tabs: PropTypes.arrayOf(
     PropTypes.shape({
@@ -759,8 +752,6 @@ AssessmentForm.propTypes = {
       title: PropTypes.string,
     }),
   ),
-  // If randomization is enabled for the assessment
-  randomization: PropTypes.bool,
 
   onSubmit: PropTypes.func.isRequired,
   // If the Form is in editing mode, `published` button will be displayed.
@@ -768,8 +759,6 @@ AssessmentForm.propTypes = {
   // if the EXP fields should be displayed
   gamified: PropTypes.bool,
   // If the personalized timeline fields should be displayed
-  show_personalized_timeline_features: PropTypes.bool,
-  // If randomization is allowed for assessments in the current course
   randomizationAllowed: PropTypes.bool,
   // If allow to switch between autoraded and manually graded mode.
   modeSwitching: PropTypes.bool,
@@ -782,7 +771,7 @@ AssessmentForm.propTypes = {
     // See MaterialFormContainer for detailed PropTypes.
     materials: typeMaterial,
   }),
-  // Condtions will be displayed if the attributes are present.
+  // Conditions will be displayed if the attributes are present.
   conditionAttributes: achievementTypesConditionAttributes,
   initialValues: PropTypes.object,
   intl: PropTypes.object,
