@@ -93,6 +93,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
           value={rowData.reason}
           onChange={(e): void => onUpdateReason(e.target.value)}
           variant="standard"
+          fullWidth
         />
       );
     }
