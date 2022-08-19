@@ -99,3 +99,9 @@ $summernote-font-color: #000000;
   color: $summernote-font-color;
   padding: 10px;
 }
+
+// Below is needed to ensure ckeditor popup (eg link)
+// is rendered properly.
+.ck-body-wrapper {
+  position: absolute;
+}
