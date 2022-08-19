@@ -40,6 +40,11 @@ const themeSettings = {
         color: 'white !important',
       },
     },
+    MuiCard: {
+      root: {
+        overflow: 'visible',
+      },
+    },
     MuiDialogContent: {
       root: {
         color: 'black',
