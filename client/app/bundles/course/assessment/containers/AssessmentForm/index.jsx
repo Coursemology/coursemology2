@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
@@ -16,7 +16,7 @@ import ConditionList from 'lib/components/course/ConditionList';
 import formTranslations from 'lib/translations/form';
 import { achievementTypesConditionAttributes, typeMaterial } from 'lib/types';
 import ReactTooltip from 'react-tooltip';
-import translations from './translations.intl';
+import t from './translations.intl';
 import MaterialUploader from '../MaterialUploader';
 import { fetchTabs } from './actions';
 import Section from 'lib/components/layouts/Section';
@@ -53,12 +53,12 @@ const validationSchema = yup.object({
     .date()
     .nullable()
     .typeError(formTranslations.invalidDate)
-    .min(yup.ref('start_at'), translations.startEndValidationError),
+    .min(yup.ref('start_at'), t.startEndValidationError),
   bonus_end_at: yup
     .date()
     .nullable()
     .typeError(formTranslations.invalidDate)
-    .min(yup.ref('start_at'), translations.startEndValidationError),
+    .min(yup.ref('start_at'), t.startEndValidationError),
   base_exp: yup
     .number()
     .typeError(formTranslations.required)
@@ -88,7 +88,7 @@ const validationSchema = yup.object({
             // Check if there is at least 1 password type when password_protectd
             // is enabled.
             password_protected ? session_password || view_password : true,
-          message: translations.passwordRequired,
+          message: t.passwordRequired,
         }),
     ),
   view_password: yup.string().nullable(),
@@ -102,7 +102,7 @@ const validationSchema = yup.object({
       schema.test({
         // Check if there is at least 1 selected test case.
         test: (use_evaluation) => use_public || use_private || use_evaluation,
-        message: translations.noTestCaseChosenError,
+        message: t.noTestCaseChosenError,
       }),
     ),
   show_private: yup.bool(),
@@ -147,18 +147,14 @@ const AssessmentForm = (props) => {
 
   useEffect(() => {
     if (editing) {
-      const failureMessage = (
-        <FormattedMessage {...translations.fetchTabFailure} />
-      );
+      const failureMessage = intl.formatMessage(t.fetchTabFailure);
       dispatch(fetchTabs(failureMessage));
     }
   }, [dispatch]);
 
-  const autogradedToggleTooltip = containsCodaveri ? (
-    <FormattedMessage {...translations.containsCodaveriQuestion} />
-  ) : (
-    <FormattedMessage {...translations.modeSwitchingDisabled} />
-  );
+  const autogradedToggleTooltip = containsCodaveri
+    ? intl.formatMessage(t.containsCodaveriQuestion)
+    : intl.formatMessage(t.modeSwitchingDisabled);
 
   const renderPasswordFields = () => (
     <div>
@@ -170,7 +166,7 @@ const AssessmentForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            placeholder={intl.formatMessage(translations.viewPassword)}
+            placeholder={intl.formatMessage(t.viewPassword)}
             fullWidth
             InputLabelProps={{
               shrink: true,
@@ -182,9 +178,7 @@ const AssessmentForm = (props) => {
           />
         )}
       />
-      <div style={styles.hint}>
-        <FormattedMessage {...translations.viewPasswordHint} />
-      </div>
+      <div style={styles.hint}>{intl.formatMessage(t.viewPasswordHint)}</div>
 
       <Controller
         name="session_password"
@@ -194,7 +188,7 @@ const AssessmentForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            placeholder={intl.formatMessage(translations.sessionPassword)}
+            placeholder={intl.formatMessage(t.sessionPassword)}
             fullWidth
             InputLabelProps={{
               shrink: true,
@@ -206,9 +200,7 @@ const AssessmentForm = (props) => {
           />
         )}
       />
-      <div style={styles.hint}>
-        <FormattedMessage {...translations.sessionPasswordHint} />
-      </div>
+      <div style={styles.hint}>{intl.formatMessage(t.sessionPasswordHint)}</div>
     </div>
   );
 
@@ -230,7 +222,7 @@ const AssessmentForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            label={<FormattedMessage {...translations.tab} />}
+            label={intl.formatMessage(t.tab)}
             options={options}
           />
         )}
@@ -247,7 +239,7 @@ const AssessmentForm = (props) => {
     >
       <ErrorText errors={errors} />
 
-      <Section title={intl.formatMessage(translations.assessmentDetails)}>
+      <Section title={intl.formatMessage(t.assessmentDetails)}>
         <div style={styles.flexGroup}>
           <Controller
             name="title"
@@ -257,7 +249,7 @@ const AssessmentForm = (props) => {
                 field={field}
                 fieldState={fieldState}
                 disabled={disabled}
-                label={<FormattedMessage {...translations.title} />}
+                label={intl.formatMessage(t.title)}
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
@@ -279,7 +271,7 @@ const AssessmentForm = (props) => {
                 field={field}
                 fieldState={fieldState}
                 disabled={disabled}
-                label={<FormattedMessage {...translations.startAt} />}
+                label={intl.formatMessage(t.startAt)}
                 style={styles.flexChild}
               />
             )}
@@ -292,7 +284,7 @@ const AssessmentForm = (props) => {
                 field={field}
                 fieldState={fieldState}
                 disabled={disabled}
-                label={<FormattedMessage {...translations.endAt} />}
+                label={intl.formatMessage(t.endAt)}
                 style={styles.flexChild}
               />
             )}
@@ -306,7 +298,7 @@ const AssessmentForm = (props) => {
                   field={field}
                   fieldState={fieldState}
                   disabled={disabled}
-                  label={<FormattedMessage {...translations.bonusEndAt} />}
+                  label={intl.formatMessage(t.bonusEndAt)}
                   style={styles.flexChild}
                 />
               )}
@@ -322,7 +314,7 @@ const AssessmentForm = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.description} />}
+              label={intl.formatMessage(t.description)}
               fullWidth
               InputLabelProps={{
                 shrink: true,
@@ -341,7 +333,7 @@ const AssessmentForm = (props) => {
                 field={field}
                 fieldState={fieldState}
                 disabled={disabled}
-                label={<FormattedMessage {...translations.published} />}
+                label={intl.formatMessage(t.published)}
                 style={styles.toggle}
               />
             )}
@@ -360,7 +352,7 @@ const AssessmentForm = (props) => {
         )}
       </Section>
 
-      <Section title={intl.formatMessage(translations.gamification)}>
+      <Section title={intl.formatMessage(t.gamification)}>
         {gamified && (
           <div style={styles.flexGroup}>
             <Controller
@@ -372,7 +364,7 @@ const AssessmentForm = (props) => {
                   fieldState={fieldState}
                   disabled={disabled}
                   fullWidth
-                  label={<FormattedMessage {...translations.baseExp} />}
+                  label={intl.formatMessage(t.baseExp)}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -392,7 +384,7 @@ const AssessmentForm = (props) => {
                   fieldState={fieldState}
                   disabled={disabled}
                   fullWidth
-                  label={<FormattedMessage {...translations.timeBonusExp} />}
+                  label={intl.formatMessage(t.timeBonusExp)}
                   InputLabelProps={{
                     shrink: true,
                   }}
@@ -416,11 +408,10 @@ const AssessmentForm = (props) => {
         )}
       </Section>
 
-      <ReactTooltip id="autograde-toggle">
-        {autogradedToggleTooltip}
-      </ReactTooltip>
-
-      <Section title={intl.formatMessage(translations.grading)}>
+      <Section title={intl.formatMessage(t.grading)}>
+        <ReactTooltip id="autograde-toggle">
+          {autogradedToggleTooltip}
+        </ReactTooltip>
         <div
           data-tip
           data-for="autograde-toggle"
@@ -434,7 +425,7 @@ const AssessmentForm = (props) => {
                 field={field}
                 fieldState={fieldState}
                 disabled={containsCodaveri || !modeSwitching || disabled}
-                label={<FormattedMessage {...translations.autograded} />}
+                label={intl.formatMessage(t.autograded)}
                 style={styles.toggle}
               />
             )}
@@ -442,13 +433,11 @@ const AssessmentForm = (props) => {
         </div>
 
         {modeSwitching && !containsCodaveri && (
-          <div style={styles.hint}>
-            <FormattedMessage {...translations.autogradedHint} />
-          </div>
+          <div style={styles.hint}>{intl.formatMessage(t.autogradedHint)}</div>
         )}
 
         <div style={styles.conditions}>
-          <FormattedMessage {...translations.autogradeTestCasesHint} />
+          {intl.formatMessage(t.autogradeTestCasesHint)}
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -460,7 +449,7 @@ const AssessmentForm = (props) => {
                 field={field}
                 fieldState={fieldState}
                 disabled={disabled}
-                label={<FormattedMessage {...translations.usePublic} />}
+                label={intl.formatMessage(t.usePublic)}
                 style={styles.flexChild}
               />
             )}
@@ -473,7 +462,7 @@ const AssessmentForm = (props) => {
                 field={field}
                 fieldState={fieldState}
                 disabled={disabled}
-                label={<FormattedMessage {...translations.usePrivate} />}
+                label={intl.formatMessage(t.usePrivate)}
                 style={styles.flexChild}
               />
             )}
@@ -486,7 +475,7 @@ const AssessmentForm = (props) => {
                 field={field}
                 fieldState={fieldState}
                 disabled={disabled}
-                label={<FormattedMessage {...translations.useEvaluation} />}
+                label={intl.formatMessage(t.useEvaluation)}
                 style={styles.flexChild}
               />
             )}
@@ -503,23 +492,19 @@ const AssessmentForm = (props) => {
                   field={field}
                   fieldState={fieldState}
                   disabled={disabled}
-                  label={
-                    <FormattedMessage
-                      {...translations.delayedGradePublication}
-                    />
-                  }
+                  label={intl.formatMessage(t.delayedGradePublication)}
                   style={styles.toggle}
                 />
               )}
             />
             <div style={styles.hint}>
-              <FormattedMessage {...translations.delayedGradePublicationHint} />
+              {intl.formatMessage(t.delayedGradePublicationHint)}
             </div>
           </>
         ) : null}
       </Section>
 
-      <Section title={intl.formatMessage(translations.answersAndTestCases)}>
+      <Section title={intl.formatMessage(t.answersAndTestCases)}>
         {autograded ? (
           <div>
             <Controller
@@ -530,7 +515,7 @@ const AssessmentForm = (props) => {
                   field={field}
                   fieldState={fieldState}
                   disabled={disabled}
-                  label={<FormattedMessage {...translations.skippable} />}
+                  label={intl.formatMessage(t.skippable)}
                   renderIf={autograded}
                   style={styles.toggle}
                 />
@@ -544,11 +529,7 @@ const AssessmentForm = (props) => {
                   field={field}
                   fieldState={fieldState}
                   disabled={disabled}
-                  label={
-                    <FormattedMessage
-                      {...translations.allowPartialSubmission}
-                    />
-                  }
+                  label={intl.formatMessage(t.allowPartialSubmission)}
                   renderIf={autograded}
                   style={styles.toggle}
                 />
@@ -565,14 +546,12 @@ const AssessmentForm = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.showPrivate} />}
+              label={intl.formatMessage(t.showPrivate)}
               style={styles.toggle}
             />
           )}
         />
-        <div style={styles.hint}>
-          <FormattedMessage {...translations.showPrivateHint} />
-        </div>
+        <div style={styles.hint}>{intl.formatMessage(t.showPrivateHint)}</div>
         <Controller
           name="show_evaluation"
           control={control}
@@ -581,13 +560,13 @@ const AssessmentForm = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.showEvaluation} />}
+              label={intl.formatMessage(t.showEvaluation)}
               style={styles.toggle}
             />
           )}
         />
         <div style={styles.hint}>
-          <FormattedMessage {...translations.showEvaluationHint} />
+          {intl.formatMessage(t.showEvaluationHint)}
         </div>
 
         <Controller
@@ -598,19 +577,19 @@ const AssessmentForm = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.showMcqMrqSolution} />}
+              label={intl.formatMessage(t.showMcqMrqSolution)}
               style={styles.toggle}
             />
           )}
         />
         <div style={styles.hint}>
-          <FormattedMessage {...translations.showMcqMrqSolutionHint} />
+          {intl.formatMessage(t.showMcqMrqSolutionHint)}
         </div>
       </Section>
 
       <Section
-        title={intl.formatMessage(translations.organisation)}
-        subtitle={intl.formatMessage(translations.organisationSubtitle)}
+        title={intl.formatMessage(t.organisation)}
+        subtitle={intl.formatMessage(t.organisationSubtitle)}
       >
         {editing && renderTabs(loadedTabs, disabled)}
 
@@ -622,15 +601,15 @@ const AssessmentForm = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.tab} />}
+              label={intl.formatMessage(t.tab)}
               options={[
                 {
                   value: false,
-                  label: <FormattedMessage {...translations.singlePage} />,
+                  label: intl.formatMessage(t.singlePage),
                 },
                 {
                   value: true,
-                  label: <FormattedMessage {...translations.tabbedView} />,
+                  label: intl.formatMessage(t.tabbedView),
                 },
               ]}
               renderIf={!autograded}
@@ -640,7 +619,7 @@ const AssessmentForm = (props) => {
         />
       </Section>
 
-      <Section title={intl.formatMessage(translations.examsAndAccessControl)}>
+      <Section title={intl.formatMessage(t.examsAndAccessControl)}>
         <Controller
           name="block_student_viewing_after_submitted"
           control={control}
@@ -649,11 +628,7 @@ const AssessmentForm = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={
-                <FormattedMessage
-                  {...translations.blockStudentViewingAfterSubmitted}
-                />
-              }
+              label={intl.formatMessage(t.blockStudentViewingAfterSubmitted)}
               style={styles.toggle}
             />
           )}
@@ -669,15 +644,13 @@ const AssessmentForm = (props) => {
                   field={field}
                   fieldState={fieldState}
                   disabled={disabled}
-                  label={
-                    <FormattedMessage {...translations.enableRandomization} />
-                  }
+                  label={intl.formatMessage(t.enableRandomization)}
                   style={styles.toggle}
                 />
               )}
             />
             <div style={styles.hint}>
-              <FormattedMessage {...translations.enableRandomizationHint} />
+              {intl.formatMessage(t.enableRandomizationHint)}
             </div>
           </>
         )}
@@ -692,14 +665,14 @@ const AssessmentForm = (props) => {
                   field={field}
                   fieldState={fieldState}
                   disabled={disabled}
-                  label={<FormattedMessage {...translations.showMcqAnswer} />}
+                  label={intl.formatMessage(t.showMcqAnswer)}
                   renderIf={autograded}
                   style={styles.toggle}
                 />
               )}
             />
             <div style={styles.hint}>
-              <FormattedMessage {...translations.showMcqAnswerHint} />
+              {intl.formatMessage(t.showMcqAnswerHint)}
             </div>
 
             <Controller
@@ -710,9 +683,7 @@ const AssessmentForm = (props) => {
                   field={field}
                   fieldState={fieldState}
                   disabled={disabled}
-                  label={
-                    <FormattedMessage {...translations.passwordProtection} />
-                  }
+                  label={intl.formatMessage(t.passwordProtection)}
                   renderIf={!autograded}
                   style={styles.toggle}
                 />
@@ -723,7 +694,7 @@ const AssessmentForm = (props) => {
         ) : null}
       </Section>
 
-      <Section title={intl.formatMessage(translations.personalisedTimelines)}>
+      <Section title={intl.formatMessage(t.personalisedTimelines)}>
         {showPersonalizedTimelineFeatures && (
           <>
             <Controller
@@ -734,15 +705,13 @@ const AssessmentForm = (props) => {
                   field={field}
                   fieldState={fieldState}
                   disabled={disabled}
-                  label={
-                    <FormattedMessage {...translations.hasPersonalTimes} />
-                  }
+                  label={intl.formatMessage(t.hasPersonalTimes)}
                   style={styles.toggle}
                 />
               )}
             />
             <div style={styles.hint}>
-              <FormattedMessage {...translations.hasPersonalTimesHint} />
+              {intl.formatMessage(t.hasPersonalTimesHint)}
             </div>
 
             <Controller
@@ -753,15 +722,13 @@ const AssessmentForm = (props) => {
                   field={field}
                   fieldState={fieldState}
                   disabled={disabled}
-                  label={
-                    <FormattedMessage {...translations.affectsPersonalTimes} />
-                  }
+                  label={intl.formatMessage(t.affectsPersonalTimes)}
                   style={styles.toggle}
                 />
               )}
             />
             <div style={styles.hint}>
-              <FormattedMessage {...translations.affectsPersonalTimesHint} />
+              {intl.formatMessage(t.affectsPersonalTimesHint)}
             </div>
           </>
         )}
