@@ -1,8 +1,20 @@
 # frozen_string_literal: true
 class Course::Discussion::Post < ApplicationRecord
+  include Workflow
   extend Course::Discussion::Post::OrderingConcern
   include Course::Discussion::Post::RetrievalConcern
   include Course::ForumParticipationConcern
+
+  workflow do
+    state :draft do
+      event :delay_publish, transitions_to: :delayed
+      event :publish, transitions_to: :published
+    end
+    state :delayed
+    state :published do
+      event :unpublish, transitions_to: :draft
+    end
+  end
 
   acts_as_forest order: :created_at, optional: true
   acts_as_readable on: :updated_at
@@ -20,6 +32,7 @@ class Course::Discussion::Post < ApplicationRecord
   validates :creator, presence: true
   validates :updater, presence: true
   validates :topic, presence: true
+  validates :workflow_state, length: { maximum: 255 }, presence: true
 
   belongs_to :topic, inverse_of: :posts, touch: true
   has_many :votes, inverse_of: :post, dependent: :destroy
@@ -27,8 +40,8 @@ class Course::Discussion::Post < ApplicationRecord
   default_scope { ordered_by_created_at.with_creator }
   scope :ordered_by_created_at, -> { order(created_at: :asc) }
   scope :with_creator, -> { includes(:creator) }
-  scope :exclude_delayed_posts, -> { where(is_delayed: false) }
-  scope :only_delayed_posts, -> { where(is_delayed: true) }
+  scope :only_published_posts, -> { where(workflow_state: :published) }
+  scope :only_delayed_posts, -> { where(workflow_state: :delayed) }
 
   # @!method self.with_user_votes(user)
   #   Preloads the given posts with votes from the given user.

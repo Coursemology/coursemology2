@@ -2,7 +2,7 @@
 json.topicCount @topic_count
 
 json.topicList @topics.map(&:specific) do |topic|
-  unless topic.posts.exclude_delayed_posts.empty?
+  unless topic.posts.only_published_posts.empty?
     actable = topic.actable
     case actable
     when Course::Assessment::SubmissionQuestion

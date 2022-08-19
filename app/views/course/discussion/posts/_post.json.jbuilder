@@ -11,4 +11,4 @@ json.createdAt post.created_at&.iso8601
 json.topicId post.topic_id
 json.canUpdate can?(:update, post)
 json.canDestroy can?(:destroy, post)
-json.isDelayed post.is_delayed
+json.isDelayed post.delayed?

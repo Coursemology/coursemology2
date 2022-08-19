@@ -101,7 +101,7 @@ RSpec.describe Course::Discussion::Topic, type: :model do
       end
     end
 
-    describe '.without_delayed_posts' do
+    describe '.with_published_posts' do
       let(:course) { create(:course) }
       let!(:annotation) do
         create(:course_assessment_answer_programming_file_annotation, :with_delayed_post, course: course).
@@ -112,7 +112,7 @@ RSpec.describe Course::Discussion::Topic, type: :model do
       end
 
       it 'only returns comments and annotations with non-delayed posts' do
-        expect(course.discussion_topics.without_delayed_posts).to contain_exactly(comment)
+        expect(course.discussion_topics.with_published_posts).to contain_exactly(comment)
       end
     end
 

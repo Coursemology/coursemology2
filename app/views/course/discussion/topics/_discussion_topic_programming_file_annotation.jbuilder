@@ -17,7 +17,7 @@ json.creator do
 end
 json.content display_code_lines(file_annotation.file, file_annotation.line - 5, file_annotation.line)
 
-json.partial! 'topic', topic: topic, can_grade: true
+json.partial! 'topic', topic: topic, can_grade: can?(:grade, submission)
 
 json.links do
   json.titleLink edit_course_assessment_submission_path(current_course, assessment, submission,

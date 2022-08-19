@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_01_045213) do
+ActiveRecord::Schema.define(version: 2022_08_19_071113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -536,6 +536,7 @@ ActiveRecord::Schema.define(version: 2022_07_01_045213) do
     t.datetime "updated_at", null: false
     t.boolean "answer", default: false
     t.boolean "is_delayed", default: false, null: false
+    t.string "workflow_state", default: "published"
     t.index ["creator_id"], name: "fk__course_discussion_posts_creator_id"
     t.index ["parent_id"], name: "fk__course_discussion_posts_parent_id"
     t.index ["topic_id"], name: "fk__course_discussion_posts_topic_id"
