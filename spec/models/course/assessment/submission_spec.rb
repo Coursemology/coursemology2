@@ -542,10 +542,10 @@ RSpec.describe Course::Assessment::Submission do
         let!(:submission_question_post) do
           create(:course_discussion_post, :delayed, topic: submission_question.discussion_topic, creator: user)
         end
-        it 'is set as not delayed after publication' do
+        it 'is set as published after publication' do
           submission.publish!
-          expect(annotation_post.reload.is_delayed).to be(false)
-          expect(submission_question_post.reload.is_delayed).to be(false)
+          expect(annotation_post.reload.published?).to be(true)
+          expect(submission_question_post.reload.published?).to be(true)
         end
       end
     end

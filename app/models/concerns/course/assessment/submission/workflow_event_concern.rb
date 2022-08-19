@@ -239,7 +239,7 @@ module Course::Assessment::Submission::WorkflowEventConcern
     unless delayed_posts.empty?
       # Remove 'mark as read' (if any)
       topic.read_marks.where('reader_id = ?', creator.id)&.destroy_all
-      delayed_posts.update_all(is_delayed: false)
+      delayed_posts.update_all(workflow_state: 'published')
     end
     true
   end

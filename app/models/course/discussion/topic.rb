@@ -34,9 +34,9 @@ class Course::Discussion::Topic < ApplicationRecord
       where(actable_type: global_topic_models.map(&:name)).distinct
   end)
 
-  # Topics of which there is at least 1 normal post
-  scope :without_delayed_posts, (lambda do
-    joins(:posts).where('course_discussion_posts.is_delayed = ?', false).distinct
+  # Topics of which there is at least 1 published post
+  scope :with_published_posts, (lambda do
+    joins(:posts).where('course_discussion_posts.workflow_state = ?', 'published').distinct
   end)
 
   # Returns the topics from the user(s) specified.

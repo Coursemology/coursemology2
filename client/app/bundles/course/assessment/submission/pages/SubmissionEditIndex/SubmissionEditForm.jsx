@@ -19,7 +19,7 @@ import {
   StepButton,
   SvgIcon,
 } from '@mui/material';
-import { blue, yellow, red } from '@mui/material/colors';
+import { blue, yellow, red, grey } from '@mui/material/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -244,15 +244,16 @@ const SubmissionEditForm = (props) => {
     const anyUngraded = Object.values(grading).some(
       (q) => q.grade === undefined || q.grade === null,
     );
+    const disabled = isSaving || anyUngraded;
     return (
       <Button
         variant="contained"
-        disabled={isSaving || anyUngraded}
+        disabled={disabled}
         onClick={handleMark}
         style={{
           ...styles.formButton,
-          backgroundColor: yellow[900],
-          color: 'white',
+          backgroundColor: disabled ? grey[300] : yellow[900],
+          color: disabled ? grey[600] : 'white',
         }}
       >
         {intl.formatMessage(translations.mark)}

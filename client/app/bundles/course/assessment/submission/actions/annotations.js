@@ -20,7 +20,10 @@ export function create(
 ) {
   const payload = {
     annotation: { line },
-    discussion_post: { text, is_delayed: isDelayedComment },
+    discussion_post: {
+      text,
+      workflow_state: isDelayedComment ? 'delayed' : 'published',
+    },
   };
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_ANNOTATION_REQUEST, isDelayedComment });
