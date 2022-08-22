@@ -171,6 +171,7 @@ const FolderShow: FC<Props> = (props) => {
         }
       />
       <WorkbinTable
+        key={currFolderInfo.id}
         currFolderId={currFolderInfo.id}
         subfolders={subfolders}
         materials={materials}

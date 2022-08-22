@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, memo } from 'react';
+import { FC, useState, memo, useMemo } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import equal from 'fast-deep-equal';
 
@@ -40,117 +40,77 @@ const WorkbinTable: FC<Props> = (props) => {
     isConcrete,
   } = props;
 
-  const [sortedSubfolders, setSortedSubfolders] = useState(subfolders);
-  const [sortedMaterials, setSortedMaterials] = useState(materials);
-
   const [sortBy, setSortBy] = useState('Name');
-  const [sortDirection, setSortDirection] = useState<'down' | 'up'>('down');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
-  useEffect(() => {
-    if (!equal(subfolders, sortedSubfolders)) {
-      setSortedSubfolders(subfolders);
-      setSortBy('Name');
-      setSortDirection('down');
-    }
-  }, [subfolders]);
+  const sortedSubfolders = useMemo(() => {
+    const sortedData = subfolders.sort((a, b) => {
+      switch (sortBy) {
+        case 'Name':
+          if (sortDirection === 'asc') {
+            return a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1;
+          }
+          return a.name.toUpperCase() > b.name.toUpperCase() ? -1 : 1;
 
-  useEffect(() => {
-    if (!equal(materials, sortedMaterials)) {
-      setSortedMaterials(materials);
-      setSortBy('Name');
-      setSortDirection('down');
-    }
-  }, [materials]);
+        case 'Start At':
+          if (sortDirection === 'asc') {
+            return a.startAt > b.startAt ? 1 : -1;
+          }
+          return a.startAt > b.startAt ? -1 : 1;
 
-  const sortWithDirection = (
-    columnName: string,
-    direction: 'down' | 'up',
-  ): void => {
-    switch (columnName) {
-      case 'Name':
-        if (direction === 'up') {
-          setSortedSubfolders(
-            subfolders.sort((a, b) =>
-              a.name.toUpperCase() > b.name.toUpperCase() ? -1 : 1,
-            ),
-          );
-          setSortedMaterials(
-            materials.sort((a, b) =>
-              a.name.toUpperCase() > b.name.toUpperCase() ? -1 : 1,
-            ),
-          );
-        } else {
-          setSortedSubfolders(
-            subfolders.sort((a, b) =>
-              a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1,
-            ),
-          );
-          setSortedMaterials(
-            materials.sort((a, b) =>
-              a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1,
-            ),
-          );
-        }
-        break;
+        case 'Last Modified':
+          if (sortDirection === 'asc') {
+            return a.updatedAt > b.updatedAt ? 1 : -1;
+          }
+          return a.updatedAt > b.updatedAt ? -1 : 1;
 
-      case 'Start At':
-        if (direction === 'up') {
-          setSortedSubfolders(
-            subfolders.sort((a, b) => (a.startAt > b.startAt ? -1 : 1)),
-          );
-        } else {
-          setSortedSubfolders(
-            subfolders.sort((a, b) => (a.startAt > b.startAt ? 1 : -1)),
-          );
-        }
-        // Materials does not have a startAt
-        setSortedMaterials(materials);
-        break;
+        default:
+          return 0;
+      }
+    });
+    return sortedData;
+  }, [subfolders, sortBy, sortDirection]);
 
-      case 'Last Modified':
-        if (direction === 'up') {
-          setSortedSubfolders(
-            subfolders.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1)),
-          );
-          setSortedMaterials(
-            materials.sort((a, b) => (a.updatedAt > b.updatedAt ? -1 : 1)),
-          );
-        } else {
-          setSortedSubfolders(
-            subfolders.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1)),
-          );
-          setSortedMaterials(
-            materials.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1)),
-          );
-        }
-        break;
+  const sortedMaterials = useMemo(() => {
+    const sortedData = materials.sort((a, b) => {
+      switch (sortBy) {
+        case 'Name':
+          if (sortDirection === 'asc') {
+            return a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1;
+          }
+          return a.name.toUpperCase() > b.name.toUpperCase() ? -1 : 1;
 
-      default:
-        break;
-    }
-  };
+        case 'Last Modified':
+          if (sortDirection === 'asc') {
+            return a.updatedAt > b.updatedAt ? 1 : -1;
+          }
+          return a.updatedAt > b.updatedAt ? -1 : 1;
+
+        default:
+          return 0;
+      }
+    });
+    return sortedData;
+  }, [materials, sortBy, sortDirection]);
 
   const sort = (columnName: string): void => {
     if (columnName === sortBy) {
-      if (sortDirection === 'down') {
-        sortWithDirection(columnName, 'up');
-        setSortDirection('up');
+      if (sortDirection === 'asc') {
+        setSortDirection('desc');
       } else {
-        sortWithDirection(columnName, 'down');
-        setSortDirection('down');
+        setSortDirection('asc');
       }
     } else {
-      sortWithDirection(columnName, 'down');
       setSortBy(columnName);
-      setSortDirection('down');
+      setSortDirection('asc');
     }
   };
 
   const columnHeaderWithSort = (columnName: string): JSX.Element => {
     let endIcon = <></>;
-    if (sortBy === columnName && sortDirection === 'down') {
+    if (sortBy === columnName && sortDirection === 'desc') {
       endIcon = <ArrowDropDownIcon />;
-    } else if (sortBy === columnName && sortDirection === 'up') {
+    } else if (sortBy === columnName && sortDirection === 'asc') {
       endIcon = <ArrowDropUpIcon />;
     }
 
