@@ -92,7 +92,7 @@
     "ace-builds": "^1.9.6",
     "axios": "^0.27.2",
     "babel-loader": "^8.2.5",
-    "babel-plugin-formatjs": "^10.3.25",
+    "babel-plugin-formatjs": "^10.3.27",
     "chart.js": "^3.8.2",
     "css-loader": "^6.7.1",
     "dnd-core": "^14.0.1",
