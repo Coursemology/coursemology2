@@ -4,7 +4,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService < \
   def evaluate(answer)
     answer.correct, grade, programming_auto_grading, = evaluate_answer(answer.actable)
     programming_auto_grading.auto_grading = answer.auto_grading
-    # retrieve_codaveri_feedback(answer.actable) TODO Afterwards
     grade
   end
 
@@ -118,8 +117,8 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService < \
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
   def build_test_case_records_from_test_results(question, auto_grading, evaluation_results) # rubocop:disable Metrics/AbcSize
     test_cases = question.test_cases.to_h { |test_case| [test_case.id, test_case] }
-    evaluation_results.map do |result|
-      test_case = find_test_case(test_cases, result['id'].to_i)
+    evaluation_results.map.with_index do |result, index|
+      test_case = question.test_cases[index] # find_test_case(test_cases, result['id'].to_i)
       result_run = result['run']
 
       error_message_sigkill = I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed')
@@ -184,20 +183,4 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService < \
   def find_test_case(test_cases, id)
     test_cases[id]
   end
-
-  # def retrieve_codaveri_feedback(answer)
-  #   question = answer.question.actable
-  #   submission = answer.submission
-  #   assessment = submission.assessment
-
-  #   should_retrieve_feedback = question.is_codaveri && submission.submitted &&
-  #                              !assessment.autograded? && answer.current_answer?
-
-  #   return unless should_retrieve_feedback
-
-  #   # To call feedback job
-  #   feedback_service = Course::Assessment::Answer::ProgrammingCodaveriFeedbackService.
-  #                        new(assessment, question, answer)
-  #   feedback_service.run_codaveri_feedback_service
-  # end
 end

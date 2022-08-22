@@ -62,11 +62,10 @@ export function saveRead(topicId: number): SaveReadAction {
   };
 }
 
-export function updatePost(postId: number, text: string): UpdatePostAction {
+export function updatePost(post: CommentPostListData): UpdatePostAction {
   return {
     type: UPDATE_POST,
-    postId,
-    text,
+    post,
   };
 }
 

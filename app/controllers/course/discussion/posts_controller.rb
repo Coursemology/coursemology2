@@ -17,7 +17,7 @@ class Course::Discussion::PostsController < Course::ComponentController
     end
 
     if result
-      send_created_notification(@post)
+      send_created_notification(@post) if @post.published?
       respond_to do |format|
         format.json { render @post }
       end
@@ -29,6 +29,12 @@ class Course::Discussion::PostsController < Course::ComponentController
   def update
     if @post.update(post_params)
       respond_to do |format|
+        # Change post creator from system to updater if it is a codaveri feedback
+        # and send notification
+        if @post.published? && @post.codaveri_feedback && @post.creator_id == 0
+          @post.update(creator_id: current_user.id)
+          send_created_notification(@post)
+        end
         format.json { render @post }
       end
     else

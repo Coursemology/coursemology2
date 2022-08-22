@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_19_081113) do
+ActiveRecord::Schema.define(version: 2022_08_19_091113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(version: 2022_08_19_081113) do
   end
 
   create_table "course_assessment_answer_programming", id: :serial, force: :cascade do |t|
+    t.uuid "codaveri_feedback_job_id", comment: "The ID of the codaveri code feedback job"
   end
 
   create_table "course_assessment_answer_programming_auto_gradings", id: :serial, force: :cascade do |t|
@@ -514,6 +515,18 @@ ActiveRecord::Schema.define(version: 2022_08_19_081113) do
     t.index ["course_id"], name: "fk__course_conditions_course_id"
     t.index ["creator_id"], name: "fk__course_conditions_creator_id"
     t.index ["updater_id"], name: "fk__course_conditions_updater_id"
+  end
+
+  create_table "course_discussion_post_codaveri_feedbacks", force: :cascade do |t|
+    t.bigint "post_id", null: false
+    t.integer "status"
+    t.text "codaveri_feedback_id", null: false
+    t.text "original_feedback", null: false
+    t.integer "rating"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["post_id"], name: "fk__codaveri_feedback_discussion_post_id", unique: true
+    t.index ["status"], name: "index_course_discussion_post_codaveri_feedbacks_on_status"
   end
 
   create_table "course_discussion_post_votes", id: :serial, force: :cascade do |t|
@@ -1354,6 +1367,7 @@ ActiveRecord::Schema.define(version: 2022_08_19_081113) do
   add_foreign_key "course_assessment_answer_forum_posts", "course_assessment_answer_forum_post_responses", column: "answer_id"
   add_foreign_key "course_assessment_answer_multiple_response_options", "course_assessment_answer_multiple_responses", column: "answer_id", name: "fk_course_assessment_answer_multiple_response_options_answer_id"
   add_foreign_key "course_assessment_answer_multiple_response_options", "course_assessment_question_multiple_response_options", column: "option_id", name: "fk_course_assessment_answer_multiple_response_options_option_id"
+  add_foreign_key "course_assessment_answer_programming", "jobs", column: "codaveri_feedback_job_id", on_delete: :nullify
   add_foreign_key "course_assessment_answer_programming_file_annotations", "course_assessment_answer_programming_files", column: "file_id", name: "fk_course_assessment_answer_ed21459e7a2a5034dcf43a14812cb17d"
   add_foreign_key "course_assessment_answer_programming_files", "course_assessment_answer_programming", column: "answer_id", name: "fk_course_assessment_answer_programming_files_answer_id"
   add_foreign_key "course_assessment_answer_programming_test_results", "course_assessment_answer_programming_auto_gradings", column: "auto_grading_id", name: "fk_course_assessment_answer_e3d785447112439bb306849be8690102"
@@ -1414,6 +1428,7 @@ ActiveRecord::Schema.define(version: 2022_08_19_081113) do
   add_foreign_key "course_conditions", "courses", name: "fk_course_conditions_course_id"
   add_foreign_key "course_conditions", "users", column: "creator_id", name: "fk_course_conditions_creator_id"
   add_foreign_key "course_conditions", "users", column: "updater_id", name: "fk_course_conditions_updater_id"
+  add_foreign_key "course_discussion_post_codaveri_feedbacks", "course_discussion_posts", column: "post_id"
   add_foreign_key "course_discussion_post_votes", "course_discussion_posts", column: "post_id", name: "fk_course_discussion_post_votes_post_id"
   add_foreign_key "course_discussion_post_votes", "users", column: "creator_id", name: "fk_course_discussion_post_votes_creator_id"
   add_foreign_key "course_discussion_post_votes", "users", column: "updater_id", name: "fk_course_discussion_post_votes_updater_id"

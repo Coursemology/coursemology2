@@ -1,12 +1,13 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
+import { injectIntl, defineMessages } from 'react-intl';
 import {
   Card,
   CardContent,
   CircularProgress,
   FormControlLabel,
   Switch,
+  Tooltip,
 } from '@mui/material';
 import { yellow } from '@mui/material/colors';
 
@@ -43,7 +44,6 @@ const translations = defineMessages({
 
 const styles = {
   containerStyle: {
-    width: 210,
     display: 'inline-block',
     float: 'right',
     marginTop: 20,
@@ -52,7 +52,6 @@ const styles = {
   progressStyle: {
     display: 'inline-block',
     verticalAlign: 'middle',
-    marginRight: 10,
   },
   toggleStyle: {
     float: 'right',
@@ -128,7 +127,13 @@ class SubmissionAnswer extends Component {
           {isLoading ? (
             <CircularProgress size={30} style={styles.progressStyle} />
           ) : null}
-          <>
+          <Tooltip
+            title={
+              noPastAnswers
+                ? intl.formatMessage(translations.noPastAnswers)
+                : ''
+            }
+          >
             <FormControlLabel
               control={
                 <Switch
@@ -150,12 +155,7 @@ class SubmissionAnswer extends Component {
               labelPlacement="start"
               style={styles.toggleStyle}
             />
-          </>
-          {noPastAnswers ? (
-            <div style={{ float: 'right' }}>
-              <FormattedMessage {...translations.noPastAnswers} />
-            </div>
-          ) : null}
+          </Tooltip>
         </div>
       );
     }

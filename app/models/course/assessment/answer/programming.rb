@@ -84,6 +84,19 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     save
   end
 
+  def retrieve_codaveri_code_feedback
+    question = self.question.actable
+    assessment = submission.assessment
+
+    should_retrieve_feedback = question.is_codaveri && submission.submitted? &&
+                               !assessment.autograded? && current_answer?
+
+    return unless should_retrieve_feedback
+
+    feedback_job = Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob.perform_later(assessment, question, self)
+    update_column(:codaveri_feedback_job_id, feedback_job.job_id)
+  end
+
   def compare_answer(other_answer)
     return false unless other_answer.is_a?(Course::Assessment::Answer::Programming)
 

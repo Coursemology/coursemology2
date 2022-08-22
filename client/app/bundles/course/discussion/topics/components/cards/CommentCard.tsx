@@ -95,13 +95,13 @@ const CommentCard: FC<Props> = (props) => {
     setIsDeleting(true);
     dispatch(deletePost(post))
       .then(() => {
-        setDeleteConfirmation(false);
         toast.success(intl.formatMessage(translations.deleteSuccess));
       })
       .catch(() => {
         toast.error(intl.formatMessage(translations.deleteFailure));
       })
       .finally(() => {
+        setDeleteConfirmation(false);
         setIsDeleting(false);
       });
   };

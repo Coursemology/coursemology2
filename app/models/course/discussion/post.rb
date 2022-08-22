@@ -36,10 +36,14 @@ class Course::Discussion::Post < ApplicationRecord
 
   belongs_to :topic, inverse_of: :posts, touch: true
   has_many :votes, inverse_of: :post, dependent: :destroy
+  has_one :codaveri_feedback, inverse_of: :post, dependent: :destroy
+
+  accepts_nested_attributes_for :codaveri_feedback
 
   default_scope { ordered_by_created_at.with_creator }
   scope :ordered_by_created_at, -> { order(created_at: :asc) }
   scope :with_creator, -> { includes(:creator) }
+  scope :only_draft_posts, -> { where(workflow_state: :draft) }
   scope :only_published_posts, -> { where(workflow_state: :published) }
   scope :only_delayed_posts, -> { where(workflow_state: :delayed) }
 

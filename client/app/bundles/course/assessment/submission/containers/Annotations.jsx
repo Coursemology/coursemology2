@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { Button, Card, CardContent } from '@mui/material';
 import withRouter from 'lib/components/withRouter';
 import { postShape, annotationShape } from '../propTypes';
+import CodaveriCommentCard from '../components/comment/CodaveriCommentCard';
 import CommentCard from '../components/comment/CommentCard';
 import CommentField from '../components/comment/CommentField';
 import * as annotationActions from '../actions/annotations';
@@ -45,14 +46,30 @@ class VisibleAnnotations extends Component {
       handleUpdateChange,
       graderView,
       renderDelayedCommentButton,
+      updateCodaveriFeedback,
     } = this.props;
 
     return (
       <Card style={styles.card}>
         <CardContent style={{ textAlign: 'left' }}>
-          {posts.map(
-            (post) =>
-              (graderView || !post.isDelayed) && (
+          {posts.map((post) => {
+            if (
+              post.codaveriFeedback &&
+              post.codaveriFeedback.status === 'pending_review'
+            ) {
+              return (
+                <CodaveriCommentCard
+                  key={post.id}
+                  post={post}
+                  editValue={commentForms.posts[post.id]}
+                  updateComment={updateCodaveriFeedback}
+                  deleteComment={() => deleteComment(post.id)}
+                  handleChange={(value) => handleUpdateChange(post.id, value)}
+                />
+              );
+            }
+            if (graderView || !post.isDelayed) {
+              return (
                 <CommentCard
                   key={post.id}
                   post={post}
@@ -61,8 +78,10 @@ class VisibleAnnotations extends Component {
                   deleteComment={() => deleteComment(post.id)}
                   handleChange={(value) => handleUpdateChange(post.id, value)}
                 />
-              ),
-          )}
+              );
+            }
+            return <></>;
+          })}
           {posts.length === 0 || fieldVisible ? (
             <CommentField
               value={commentForms.annotations[fileId][lineNumber]}
@@ -121,6 +140,7 @@ VisibleAnnotations.propTypes = {
   createComment: PropTypes.func.isRequired,
   updateComment: PropTypes.func.isRequired,
   deleteComment: PropTypes.func.isRequired,
+  updateCodaveriFeedback: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state, ownProps) {
@@ -202,6 +222,18 @@ function mapDispatchToProps(dispatch, ownProps) {
       dispatch(annotationActions.update(annotation.id, postId, comment)),
     deleteComment: (postId) =>
       dispatch(annotationActions.destroy(fileId, annotation.id, postId)),
+    updateCodaveriFeedback: (postId, codaveriId, comment, rating, status) =>
+      dispatch(
+        annotationActions.updateCodaveri(
+          fileId,
+          annotation.id,
+          postId,
+          codaveriId,
+          comment,
+          rating,
+          status,
+        ),
+      ),
   };
 }
 

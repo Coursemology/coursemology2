@@ -70,6 +70,12 @@ export const postShape = PropTypes.shape({
   canUpdate: PropTypes.bool.isRequired,
   canDestroy: PropTypes.bool.isRequired,
   isDelayed: PropTypes.bool.isRequired,
+  codaveriFeedback: PropTypes.shape({
+    id: PropTypes.number,
+    status: PropTypes.string,
+    originalFeedback: PropTypes.string,
+    rating: PropTypes.number,
+  }),
 });
 
 export const answerShape = PropTypes.shape({

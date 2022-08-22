@@ -54,8 +54,7 @@ export interface CreatePostAction {
 
 export interface UpdatePostAction {
   type: typeof UPDATE_POST;
-  postId: number;
-  text: string;
+  post: CommentPostListData;
 }
 
 export interface DeletePostAction {

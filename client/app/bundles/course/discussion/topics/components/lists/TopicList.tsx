@@ -107,7 +107,7 @@ const TopicListWithPagination: FC<Props> = (props) => {
     >
       {renderPagination()}
       <TopicList topicList={topicList} listIsLoading={listIsLoading} />
-      {topicList.length > 15 && !listIsLoading && renderPagination()}
+      {topicList.length > 5 && !listIsLoading && renderPagination()}
     </Grid>
   );
 };

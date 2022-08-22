@@ -171,6 +171,7 @@ export default class CommentCard extends Component {
       id,
       isDelayed,
     } = this.props.post;
+
     return (
       <div id={CommentCard.postIdentifier(id)} style={styles.card}>
         <div style={isDelayed ? styles.delayedHeader : styles.header}>

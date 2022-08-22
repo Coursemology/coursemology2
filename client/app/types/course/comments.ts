@@ -64,6 +64,14 @@ export interface CommentPostListData {
   text: string;
   canUpdate: boolean;
   canDestroy: boolean;
+  codaveriFeedback?: CodaveriFeedback;
+}
+
+export interface CodaveriFeedback {
+  id: number;
+  status: string;
+  originalFeedback: string;
+  rating: number;
 }
 
 export interface CommentLinks {
@@ -100,6 +108,7 @@ export interface CommentPostMiniEntity {
   text: string;
   canUpdate: boolean;
   canDestroy: boolean;
+  codaveriFeedback?: CodaveriFeedback;
 }
 
 export interface CommentPageState {
