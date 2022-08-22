@@ -87,3 +87,35 @@ export function destroy(fileId, topicId, postId) {
       .catch(() => dispatch({ type: actionTypes.DELETE_ANNOTATION_FAILURE }));
   };
 }
+
+export function updateCodaveri(
+  fileId,
+  topicId,
+  postId,
+  codaveriId,
+  text,
+  rating,
+  status,
+) {
+  const payload = {
+    discussion_post: {
+      text,
+      workflow_state: 'published',
+      codaveri_feedback_attributes: { id: codaveriId, rating, status },
+    },
+  };
+  return (dispatch) => {
+    dispatch({ type: actionTypes.UPDATE_ANNOTATION_REQUEST });
+
+    return CourseAPI.comments
+      .update(topicId, postId, payload)
+      .then((response) => response.data)
+      .then((data) => {
+        dispatch({
+          type: actionTypes.UPDATE_ANNOTATION_SUCCESS,
+          payload: data,
+        });
+      })
+      .catch(() => dispatch({ type: actionTypes.UPDATE_ANNOTATION_FAILURE }));
+  };
+}

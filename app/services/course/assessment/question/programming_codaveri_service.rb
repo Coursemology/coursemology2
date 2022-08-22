@@ -48,11 +48,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
   # @param [Course::Assessment::ProgrammingPackage] package The programming package attached to the question.
   def create_or_update_from_package(package)
     construct_problem_object(package)
-    if @is_update_problem
-      update_codaveri_problem
-    else
-      create_codaveri_problem
-    end
+    create_codaveri_problem
   end
 
   # Constructs codaveri question problem object.

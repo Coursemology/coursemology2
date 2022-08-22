@@ -20,6 +20,24 @@ const formatPostAttributes = (formattedText: string): Object => {
   };
 };
 
+const formatPostCodaveriAttributes = (
+  text: string,
+  codaveriId: number,
+  rating: number,
+): Object => {
+  return {
+    discussion_post: {
+      text,
+      workflow_state: 'published',
+      codaveri_feedback_attributes: {
+        id: codaveriId,
+        rating,
+        status: 'accepted',
+      },
+    },
+  };
+};
+
 const formatNewPostAttributes = (text: string): Object => {
   return { discussion_post: { text } };
 };
@@ -123,8 +141,28 @@ export function updatePost(
         post.id.toString(),
         formatPostAttributes(text),
       )
-      .then(() => {
-        dispatch(actions.updatePost(post.id, text));
+      .then((response) => {
+        dispatch(actions.updatePost(response.data));
+      })
+      .catch((error) => {
+        throw error;
+      });
+}
+
+export function updatePostCodaveri(
+  post: CommentPostMiniEntity,
+  text: string,
+  rating: number,
+): Operation<void> {
+  return async (dispatch) =>
+    CourseAPI.comments
+      .update(
+        post.topicId.toString(),
+        post.id.toString(),
+        formatPostCodaveriAttributes(text, post.codaveriFeedback!.id, rating),
+      )
+      .then((response) => {
+        dispatch(actions.updatePost(response.data));
       })
       .catch((error) => {
         throw error;

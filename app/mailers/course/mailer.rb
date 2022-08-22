@@ -149,6 +149,30 @@ class Course::Mailer < ApplicationMailer
          subject: t('.subject', course: @course.title, assessment: @assessment.title))
   end
 
+  # Sends a notification email to the course managers to approve a given EnrolRequest.
+  #
+  # @param [Course::Assessment::Submission] submission The submission which was graded.
+  def codaveri_feedback_email(answer) # rubocop:disable Metrics/AbcSize
+    ActsAsTenant.without_tenant do
+      @course = answer.submission.assessment.course
+      @submission = answer.submission
+      @question = answer.question
+      @assessment = @submission.assessment
+      @question_assessment = @assessment.question_assessments.find_by!(question: @question)
+    end
+    @recipient = OpenStruct.new(name: t('course.mailer.codaveri_feedback_email.recipients'))
+
+    managers = @submission.course_user.my_managers
+    email_managers = []
+    managers.each do |manager|
+      email_managers.append(manager.user.email)
+    end
+
+    mail(to: email_managers,
+         subject: t('.subject', course: @course.title,
+                                topic: "#{@assessment.title}: #{@question_assessment.display_title}"))
+  end
+
   # Send a reminder of the survey closing to a single user.
   #
   # @param [User] recipient The student who has not completed the survey.

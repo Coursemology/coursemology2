@@ -10,6 +10,7 @@ class Course::Assessment::Submission < ApplicationRecord
   acts_as_experience_points_record
 
   after_save :auto_grade_submission, if: :submitted?
+  after_save :retrieve_codaveri_feedback, if: :submitted?
 
   workflow do
     state :attempting do
@@ -200,6 +201,13 @@ class Course::Assessment::Submission < ApplicationRecord
     AutoGradingJob.perform_now(self, only_ungraded: only_ungraded)
   end
 
+  # Creates an Auto Feedback job for this submission.
+  #
+  # @return [Course::Assessment::Submission::AutoFeedbackJob] The job instance.
+  def auto_feedback!
+    AutoFeedbackJob.perform_later(self)
+  end
+
   def unsubmitting?
     !!@unsubmitting
   end
@@ -281,6 +289,16 @@ class Course::Assessment::Submission < ApplicationRecord
     execute_after_commit do
       # Grade only ungraded answers regardless of state as we dont want to regrade graded/evaluated answers.
       auto_grade!(only_ungraded: true)
+    end
+  end
+
+  # Retrieve codaveri feedback only for current answers of codaveri programming question type
+  # for finalised submissions.
+  def retrieve_codaveri_feedback
+    return unless saved_change_to_workflow_state?
+
+    execute_after_commit do
+      auto_feedback!
     end
   end
 

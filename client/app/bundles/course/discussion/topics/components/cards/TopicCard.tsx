@@ -4,11 +4,7 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import { FC, lazy, useEffect, useState, Suspense } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  CommentPostMiniEntity,
-  CommentStatusTypes,
-  CommentTopicEntity,
-} from 'types/course/comments';
+import { CommentStatusTypes, CommentTopicEntity } from 'types/course/comments';
 import { AppDispatch, AppState } from 'types/store';
 import {
   CheckCircleOutline,
@@ -18,6 +14,7 @@ import {
 import { updatePending, updateRead } from '../../operations';
 import { getAllCommentPostMiniEntities } from '../../selectors';
 import CommentCard from './CommentCard';
+import CodaveriCommentCard from './CodaveriCommentCard';
 
 const CommentField = lazy(
   () =>
@@ -62,7 +59,7 @@ const TopicCard: FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
   const postListData = useSelector((state: AppState) =>
     getAllCommentPostMiniEntities(state),
-  );
+  ).filter((post) => post.topicId === topic.id);
   const [status, setStatus] = useState(CommentStatusTypes.loading);
 
   useEffect(() => {
@@ -80,6 +77,10 @@ const TopicCard: FC<Props> = (props) => {
       setStatus(newStatus);
     }
   }, [topic]);
+
+  if (postListData.length === 0) {
+    return null;
+  }
 
   const onClickPending = (id: number): void => {
     if (status !== CommentStatusTypes.loading) {
@@ -221,28 +222,35 @@ const TopicCard: FC<Props> = (props) => {
         {topic.content && (
           <div dangerouslySetInnerHTML={{ __html: topic.content }} />
         )}
-        {postListData
-          .filter((post: CommentPostMiniEntity) => post.topicId === topic.id)
-          .map((post: CommentPostMiniEntity) => {
-            return (
-              <div key={post.id}>
+        {postListData.map((post) => {
+          return (
+            <div key={post.id}>
+              {post.codaveriFeedback &&
+              post.codaveriFeedback.status === 'pending_review' ? (
+                <CodaveriCommentCard post={post} />
+              ) : (
                 <CommentCard post={post} />
-              </div>
-            );
-          })}
-        <Suspense
-          fallback={
-            <div
-              style={{
-                marginTop: 10,
-              }}
-            >
-              {intl.formatMessage(translations.loadingComment)}
+              )}
             </div>
-          }
-        >
-          <CommentField topic={topic} updateStatus={updateStatus} />
-        </Suspense>
+          );
+        })}
+        {/* Dont need to render the comment field when the last post (which is 
+          the intended post to be shown) is of codaveri feedback type */}
+        {!postListData[postListData.length - 1]?.codaveriFeedback && (
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  marginTop: 10,
+                }}
+              >
+                {intl.formatMessage(translations.loadingComment)}
+              </div>
+            }
+          >
+            <CommentField topic={topic} updateStatus={updateStatus} />
+          </Suspense>
+        )}
       </CardContent>
     </Card>
   );

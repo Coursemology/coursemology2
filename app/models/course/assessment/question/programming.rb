@@ -211,7 +211,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   end
 
   def validate_codaveri_question
-    return unless is_codaveri
+    return if !is_codaveri || duplicating?
 
     if question_assessments.first.assessment.autograded?
       errors.add(:base, 'Assessment type must not be autograded')

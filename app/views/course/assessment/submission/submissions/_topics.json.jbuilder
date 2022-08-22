@@ -8,7 +8,8 @@ json.topics submission_questions do |submission_question|
 end
 
 programming_answers = submission.answers.where(question: submission.questions).
-                      includes(actable: { files: { annotations: { discussion_topic: :posts } } }).
+                      includes(actable: { files: { annotations:
+                                        { discussion_topic: { posts: :codaveri_feedback } } } }).
                       select do |answer|
   answer.actable_type == Course::Assessment::Answer::Programming.name
 end.map(&:specific)

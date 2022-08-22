@@ -1,14 +1,5 @@
 import { produce } from 'immer';
-import {
-  CommentPermissions,
-  CommentPostMiniEntity,
-  CommentPostListData,
-  CommentSettings,
-  CommentTabInfo,
-  CommentTopicData,
-  CommentTopicEntity,
-  CommentTabTypes,
-} from 'types/course/comments';
+import { CommentPostMiniEntity, CommentTabTypes } from 'types/course/comments';
 import {
   createEntityStore,
   removeFromStore,
@@ -34,14 +25,14 @@ const initialState: CommentState = {
     canManage: false,
     isStudent: false,
     isTeachingStaff: false,
-  } as CommentPermissions,
-  settings: { title: '', topicsPerPage: 25 } as CommentSettings,
+  },
+  settings: { title: '', topicsPerPage: 25 },
   tabs: {
     myStudentExist: false,
     myStudentUnreadCount: 0,
     allStaffUnreadCount: 0,
     allStudentUnreadCount: 0,
-  } as CommentTabInfo,
+  },
   topicList: createEntityStore(),
   postList: createEntityStore(),
   pageState: {
@@ -74,10 +65,10 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
       draft.postList = createEntityStore();
 
       const newPostList = [] as CommentPostMiniEntity[];
-      const newTopicList = action.topicList?.map((topic: CommentTopicData) => {
+      const newTopicList = action.topicList?.map((topic) => {
         const { postList, ...newTopic } = topic;
         if (postList) {
-          postList.forEach((post: CommentPostListData) => {
+          postList.forEach((post) => {
             newPostList.push({ ...post });
           });
         }
@@ -93,9 +84,9 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
     }
     case SAVE_PENDING: {
       const id: number = action.topicId;
-      const topic = draft.topicList.byId[id] as CommentTopicEntity;
+      const topic = draft.topicList.byId[id];
       if (topic) {
-        const newTopic: CommentTopicEntity = {
+        const newTopic = {
           ...topic,
           topicSettings: {
             ...topic.topicSettings,
@@ -137,9 +128,9 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
     }
     case SAVE_READ: {
       const id: number = action.topicId;
-      const topic = draft.topicList.byId[id] as CommentTopicEntity;
+      const topic = draft.topicList.byId[id];
       if (topic) {
-        const newTopic: CommentTopicEntity = {
+        const newTopic = {
           ...topic,
           topicSettings: {
             ...topic.topicSettings,
@@ -157,9 +148,9 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
     case CREATE_POST: {
       const post = { ...action.post };
       const id = post.topicId;
-      const topic = draft.topicList.byId[id] as CommentTopicEntity;
+      const topic = draft.topicList.byId[id];
       if (topic) {
-        const newTopic: CommentTopicEntity = {
+        const newTopic = {
           ...topic,
           topicSettings: {
             ...topic.topicSettings,
@@ -191,17 +182,15 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
       break;
     }
     case UPDATE_POST: {
-      const postId = action.postId;
-      const post = draft.postList.byId[postId] as CommentPostMiniEntity;
-      if (post) {
-        const newPost: CommentPostMiniEntity = { ...post, text: action.text };
-        saveEntityToStore(draft.postList, newPost);
-      }
+      const post = action.post;
+      removeFromStore(draft.postList, post.id);
+      saveEntityToStore(draft.postList, post);
+
       break;
     }
     case DELETE_POST: {
       const postId = action.postId;
-      const post = draft.postList.byId[postId] as CommentPostMiniEntity;
+      const post = draft.postList.byId[postId];
       if (post) {
         removeFromStore(draft.postList, postId);
       }

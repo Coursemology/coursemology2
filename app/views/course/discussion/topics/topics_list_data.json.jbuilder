@@ -2,7 +2,11 @@
 json.topicCount @topic_count
 
 json.topicList @topics.map(&:specific) do |topic|
-  unless topic.posts.only_published_posts.empty?
+  render_topic = true
+
+  render_topic = false if current_course_user&.student? && topic.posts.only_published_posts.empty?
+
+  if render_topic
     actable = topic.actable
     case actable
     when Course::Assessment::SubmissionQuestion

@@ -48,7 +48,8 @@ module Course::Discussion::PostsConcern
   private
 
   def post_params
-    params.require(:discussion_post).permit(:title, :text, :parent_id, :workflow_state)
+    params.require(:discussion_post).permit(:title, :text, :parent_id, :workflow_state,
+                                            codaveri_feedback_attributes: [:id, :rating, :status])
   end
 
   def set_topic
