@@ -541,6 +541,7 @@ ActiveRecord::Schema.define(version: 2022_08_19_071113) do
     t.index ["parent_id"], name: "fk__course_discussion_posts_parent_id"
     t.index ["topic_id"], name: "fk__course_discussion_posts_topic_id"
     t.index ["updater_id"], name: "fk__course_discussion_posts_updater_id"
+    t.index ["workflow_state"], name: "index_course_discussion_posts_on_workflow_state"
   end
 
   create_table "course_discussion_topic_subscriptions", id: :serial, force: :cascade do |t|

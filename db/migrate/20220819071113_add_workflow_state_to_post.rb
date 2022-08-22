@@ -1,7 +1,7 @@
 class AddWorkflowStateToPost < ActiveRecord::Migration[6.0]
   def up
     add_column :course_discussion_posts, :workflow_state, :string, default: 'published'
-
+    add_index :course_discussion_posts, :workflow_state, unique: false
     ActiveRecord::Base.connection.exec_update(
       "UPDATE course_discussion_posts
        SET workflow_state = 'delayed'
