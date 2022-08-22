@@ -14,14 +14,14 @@ export function getFolderSubfolders(state: AppState) {
   return selectMiniEntities(
     getLocalState(state).subfolders,
     getLocalState(state).subfolders.ids,
-  ).sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1));
+  );
 }
 
 export function getFolderMaterials(state: AppState) {
   return selectMiniEntities(
     getLocalState(state).materials,
     getLocalState(state).materials.ids,
-  ).sort((a, b) => (a.name.toUpperCase() > b.name.toUpperCase() ? 1 : -1));
+  );
 }
 
 export function getBreadcrumbs(state: AppState) {
