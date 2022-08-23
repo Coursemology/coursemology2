@@ -47,6 +47,7 @@ const FolderNew: FC<Props> = (props) => {
   const { intl, folderId, isOpen, handleClose } = props;
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -56,13 +57,17 @@ const FolderNew: FC<Props> = (props) => {
   }
 
   const onSubmit = (data: FolderFormData, setError): void => {
+    setIsSubmitting(true);
+
     dispatch(createFolder(data, folderId))
       .then((_) => {
+        setIsSubmitting(false);
         handleClose();
         setConfirmationDialogOpen(false);
         toast.success(intl.formatMessage(translations.folderCreationSuccess));
       })
       .catch((error) => {
+        setIsSubmitting(false);
         toast.error(intl.formatMessage(translations.folderCreationFailure));
 
         if (error.response?.data) {
@@ -79,13 +84,13 @@ const FolderNew: FC<Props> = (props) => {
           }
           setReactHookFormError(setError, error.response.data.errors);
         }
-        throw error;
       });
   };
 
   return (
     <>
       <Dialog
+        disableEnforceFocus
         onClose={(): void => {
           if (isDirty) {
             setConfirmationDialogOpen(true);
@@ -94,7 +99,10 @@ const FolderNew: FC<Props> = (props) => {
           }
         }}
         open={isOpen}
-        maxWidth="xl"
+        maxWidth="lg"
+        style={{
+          top: 40,
+        }}
       >
         <DialogTitle>
           {intl.formatMessage(translations.newSubfolderTitle)}
@@ -112,6 +120,7 @@ const FolderNew: FC<Props> = (props) => {
             initialValues={initialValues}
             onSubmit={onSubmit}
             setIsDirty={setIsDirty}
+            isSubmitting={isSubmitting}
           />
         </DialogContent>
       </Dialog>

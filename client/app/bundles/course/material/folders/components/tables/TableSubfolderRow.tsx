@@ -17,6 +17,7 @@ interface Props {
   currFolderId: number;
   subfolder: FolderMiniEntity;
   isCurrentCourseStudent: boolean;
+  canEditSubfolders: boolean;
   isConcrete: boolean;
 }
 
@@ -34,7 +35,13 @@ const translations = defineMessages({
 });
 
 const TableSubfolderRow: FC<Props> = (props) => {
-  const { currFolderId, subfolder, isCurrentCourseStudent, isConcrete } = props;
+  const {
+    currFolderId,
+    subfolder,
+    isCurrentCourseStudent,
+    canEditSubfolders,
+    isConcrete,
+  } = props;
   const intl = useIntl();
 
   return (
@@ -93,15 +100,15 @@ const TableSubfolderRow: FC<Props> = (props) => {
       >
         {getFullDateTime(subfolder.updatedAt)}
       </TableCell>
-      <TableCell
-        style={{
-          padding: 2,
-          width: '240px',
-          maxWidth: '240px',
-          minWidth: '60px',
-        }}
-      >
-        {subfolder.permissions.canEdit ? (
+      {subfolder.permissions.canEdit ? (
+        <TableCell
+          style={{
+            padding: 2,
+            width: '240px',
+            maxWidth: '240px',
+            minWidth: '60px',
+          }}
+        >
           <Stack direction="row" spacing={0.5} alignItems="center">
             {subfolder.permissions.showSdlWarning && (
               <Tooltip
@@ -114,10 +121,23 @@ const TableSubfolderRow: FC<Props> = (props) => {
             )}
             <div>{getFullDateTime(subfolder.startAt)}</div>
           </Stack>
-        ) : (
-          <div>-</div>
-        )}
-      </TableCell>
+        </TableCell>
+      ) : (
+        canEditSubfolders && (
+          <TableCell
+            style={{
+              padding: 2,
+              width: '240px',
+              maxWidth: '240px',
+              minWidth: '60px',
+            }}
+          >
+            <Stack direction="row" spacing={0.5} alignItems="center">
+              <div>-</div>
+            </Stack>
+          </TableCell>
+        )
+      )}
       <TableCell
         style={{
           padding: 2,
