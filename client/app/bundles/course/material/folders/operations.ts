@@ -207,7 +207,9 @@ export function updateMaterial(
 
 export function downloadFolder(
   currFolderId: number,
+  onSuccess: () => void,
   onFailure: () => void,
 ): Operation<void> {
-  return async (_) => CourseAPI.folders.downloadFolder(currFolderId, onFailure);
+  return async (_) =>
+    CourseAPI.folders.downloadFolder(currFolderId, onSuccess, onFailure);
 }

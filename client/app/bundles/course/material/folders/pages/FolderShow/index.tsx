@@ -142,7 +142,10 @@ const FolderShow: FC<Props> = (props) => {
         }}
       >
         <Breadcrumbs>
-          {breadcrumbs.map((breadcrumb) => {
+          {breadcrumbs.map((breadcrumb, index) => {
+            if (index === breadcrumbs.length - 1) {
+              return <span>{breadcrumb.name}</span>;
+            }
             return (
               <Link
                 key={`folder-breadcrumb-${breadcrumb.id}`}
@@ -175,6 +178,7 @@ const FolderShow: FC<Props> = (props) => {
         currFolderId={currFolderInfo.id}
         subfolders={subfolders}
         materials={materials}
+        canEditSubfolders={permissions.canEditSubfolders}
         isCurrentCourseStudent={permissions.isCurrentCourseStudent}
         isConcrete={currFolderInfo.isConcrete}
       />

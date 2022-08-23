@@ -27,6 +27,7 @@ interface Props extends WrappedComponentProps {
   onSubmit: (data: MaterialFormData, setError: unknown) => void;
   setIsDirty: (value: boolean) => void;
   initialValues: Object;
+  isSubmitting: boolean;
 }
 
 interface IFormInputs {
@@ -56,14 +57,21 @@ const validationSchema = yup.object({
 });
 
 const MaterialForm: FC<Props> = (props) => {
-  const { intl, editing, handleClose, initialValues, onSubmit, setIsDirty } =
-    props;
+  const {
+    intl,
+    editing,
+    handleClose,
+    initialValues,
+    onSubmit,
+    setIsDirty,
+    isSubmitting,
+  } = props;
 
   const {
     control,
     handleSubmit,
     setError,
-    formState: { errors, isDirty, isSubmitting },
+    formState: { errors, isDirty },
   } = useForm<IFormInputs>({
     defaultValues: initialValues,
     resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),

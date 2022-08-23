@@ -11,11 +11,12 @@ import WorkbinTableButtons from '../buttons/WorkbinTableButtons';
 interface Props {
   currFolderId: number;
   material: MaterialMiniEntity;
+  canEditSubfolders: boolean;
   isConcrete: boolean;
 }
 
 const TableMaterialRow: FC<Props> = (props) => {
-  const { currFolderId, material, isConcrete } = props;
+  const { currFolderId, material, canEditSubfolders, isConcrete } = props;
 
   return (
     <TableRow id={`material-${material.id}`}>
@@ -73,16 +74,18 @@ const TableMaterialRow: FC<Props> = (props) => {
           </a>
         </Stack>
       </TableCell>
-      <TableCell
-        style={{
-          padding: 2,
-          width: '240px',
-          maxWidth: '240px',
-          minWidth: '60px',
-        }}
-      >
-        -
-      </TableCell>
+      {canEditSubfolders && (
+        <TableCell
+          style={{
+            padding: 2,
+            width: '240px',
+            maxWidth: '240px',
+            minWidth: '60px',
+          }}
+        >
+          -
+        </TableCell>
+      )}
       <TableCell
         style={{
           padding: 2,

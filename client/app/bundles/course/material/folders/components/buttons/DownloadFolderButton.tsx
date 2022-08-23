@@ -26,7 +26,7 @@ const translations = defineMessages({
   },
   downloadFolderErrorMessage: {
     id: 'course.materials.folders.downloadFolderErrorMessage',
-    defaultMessage: 'Download has failed unexpectedly',
+    defaultMessage: 'Download has failed. Please try again later.',
   },
   downloading: {
     id: 'course.materials.folders.downloading',
@@ -58,16 +58,19 @@ const DownloadFolderButton: FC<Props> = (props) => {
               onClick={(): void => {
                 setIsLoading(true);
                 dispatch(
-                  downloadFolder(currFolderId, () => {
-                    toast.error(
-                      intl.formatMessage(
-                        translations.downloadFolderErrorMessage,
-                      ),
-                    );
-                  }),
-                ).finally(() => {
-                  setIsLoading(false);
-                });
+                  downloadFolder(
+                    currFolderId,
+                    () => setIsLoading(false),
+                    () => {
+                      toast.error(
+                        intl.formatMessage(
+                          translations.downloadFolderErrorMessage,
+                        ),
+                      );
+                      setIsLoading(false);
+                    },
+                  ),
+                );
               }}
             >
               <DownloadIcon />

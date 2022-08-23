@@ -46,23 +46,28 @@ const FolderEdit: FC<Props> = (props) => {
     props;
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [isDirty, setIsDirty] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
   const onSubmit = (data: MaterialFormData, setError): void => {
+    setIsSubmitting(true);
+
     dispatch(updateMaterial(data, folderId, materialId))
       .then((_) => {
+        setIsSubmitting(false);
         handleClose();
         setConfirmationDialogOpen(false);
         toast.success(intl.formatMessage(translations.materialEditSuccess));
       })
       .catch((error) => {
+        setIsSubmitting(false);
         toast.error(intl.formatMessage(translations.materialEditFailure));
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
-        throw error;
       });
   };
 
@@ -73,6 +78,7 @@ const FolderEdit: FC<Props> = (props) => {
   return (
     <>
       <Dialog
+        disableEnforceFocus
         onClose={(): void => {
           if (isDirty) {
             setConfirmationDialogOpen(true);
@@ -81,7 +87,10 @@ const FolderEdit: FC<Props> = (props) => {
           }
         }}
         open={isOpen}
-        maxWidth="xl"
+        maxWidth="lg"
+        style={{
+          top: 40,
+        }}
       >
         <DialogTitle>
           {intl.formatMessage(translations.editMaterialTitle)}
@@ -99,6 +108,7 @@ const FolderEdit: FC<Props> = (props) => {
             initialValues={initialValues}
             onSubmit={onSubmit}
             setIsDirty={setIsDirty}
+            isSubmitting={isSubmitting}
           />
         </DialogContent>
       </Dialog>

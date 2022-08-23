@@ -33,6 +33,7 @@ const initialState: FoldersState = {
     canCreateSubfolder: false,
     canUpload: false,
     canEdit: false,
+    canEditSubfolders: false,
   },
 };
 

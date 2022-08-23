@@ -73,6 +73,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
   } = props;
 
   const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -81,6 +82,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
   };
 
   const onDelete = (): Promise<void> => {
+    setIsDeleting(true);
     if (type === 'subfolder') {
       return dispatch(deleteFolder(itemId))
         .then(() => {
@@ -89,6 +91,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
           );
         })
         .catch((error) => {
+          setIsDeleting(false);
           const errorMessage = error.response?.data?.errors
             ? error.response.data.errors
             : '';
@@ -107,6 +110,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
+        setIsDeleting(false);
         const errorMessage = error.response?.data?.errors
           ? error.response.data.errors
           : '';
@@ -165,7 +169,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
           <DeleteButton
             id={`${type}-delete-button-${itemId}`}
             onClick={onDelete}
-            disabled={false}
+            disabled={isDeleting}
             confirmMessage={`${intl.formatMessage(
               translations.deleteConfirmation,
             )} "${itemName}"`}

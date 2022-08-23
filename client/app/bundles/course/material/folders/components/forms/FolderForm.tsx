@@ -30,6 +30,7 @@ interface Props extends WrappedComponentProps {
   onSubmit: (data: FolderFormData, setError: unknown) => void;
   setIsDirty: (value: boolean) => void;
   initialValues: Object;
+  isSubmitting: boolean;
 }
 
 interface IFormInputs {
@@ -81,8 +82,15 @@ const validationSchema = yup.object({
 });
 
 const FolderForm: FC<Props> = (props) => {
-  const { intl, editing, handleClose, initialValues, onSubmit, setIsDirty } =
-    props;
+  const {
+    intl,
+    editing,
+    handleClose,
+    initialValues,
+    onSubmit,
+    setIsDirty,
+    isSubmitting,
+  } = props;
 
   const advanceStartAt = useSelector((state: AppState) =>
     getAdvanceStartAt(state),
@@ -92,7 +100,7 @@ const FolderForm: FC<Props> = (props) => {
     control,
     handleSubmit,
     setError,
-    formState: { errors, isDirty, isSubmitting },
+    formState: { errors, isDirty },
   } = useForm<IFormInputs>({
     defaultValues: initialValues,
     resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
