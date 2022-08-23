@@ -97,8 +97,7 @@ class MaterialUploader extends PureComponent {
 
   // Remove given materials from uploading list and display error message.
   removeUploads(materials, response) {
-    const messageFromServer =
-      response && response.data && response.data.errors;
+    const messageFromServer = response && response.data && response.data.errors;
     const failureMessage = <FormattedMessage {...translations.uploadFail} />;
     this.setState((state) => ({
       uploadingMaterials: state.uploadingMaterials.filter(
