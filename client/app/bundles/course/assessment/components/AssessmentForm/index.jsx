@@ -395,61 +395,64 @@ const AssessmentForm = (props) => {
         )}
       </Section>
 
-      <Section title={intl.formatMessage(t.gamification)}>
-        {gamified && (
-          <div style={styles.flexGroup}>
-            <Controller
-              name="base_exp"
-              control={control}
-              render={({ field, fieldState }) => (
-                <FormTextField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={disabled}
-                  fullWidth
-                  label={intl.formatMessage(t.baseExp)}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onWheel={(event) => event.currentTarget.blur()}
-                  style={styles.flexChild}
-                  type="number"
-                  variant="standard"
-                />
-              )}
-            />
-            <Controller
-              name="time_bonus_exp"
-              control={control}
-              render={({ field, fieldState }) => (
-                <FormTextField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={disabled}
-                  fullWidth
-                  label={intl.formatMessage(t.timeBonusExp)}
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  onWheel={(event) => event.currentTarget.blur()}
-                  style={styles.flexChild}
-                  type="number"
-                  variant="standard"
-                />
-              )}
-            />
-          </div>
-        )}
+      {gamified && (
+        <Section title={intl.formatMessage(t.gamification)}>
+          <Grid container spacing={2} direction="row">
+            <Grid item xs>
+              <Controller
+                name="base_exp"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <FormTextField
+                    field={field}
+                    fieldState={fieldState}
+                    disabled={disabled}
+                    fullWidth
+                    label={intl.formatMessage(t.baseExp)}
+                    InputLabelProps={{ shrink: true }}
+                    onWheel={(event) => event.currentTarget.blur()}
+                    style={styles.flexChild}
+                    type="number"
+                    variant="filled"
+                  />
+                )}
+              />
+            </Grid>
 
-        {editing && conditionAttributes && (
-          <div style={styles.conditions}>
-            <ConditionList
-              newConditionUrls={conditionAttributes.new_condition_urls}
-              conditions={conditionAttributes.conditions}
-            />
-          </div>
-        )}
-      </Section>
+            <Grid item xs>
+              <Controller
+                name="time_bonus_exp"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <FormTextField
+                    field={field}
+                    fieldState={fieldState}
+                    disabled={disabled}
+                    fullWidth
+                    label={intl.formatMessage(t.timeBonusExp)}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    onWheel={(event) => event.currentTarget.blur()}
+                    style={styles.flexChild}
+                    type="number"
+                    variant="filled"
+                  />
+                )}
+              />
+            </Grid>
+          </Grid>
+
+          {editing && conditionAttributes && (
+            <div style={styles.conditions}>
+              <ConditionList
+                newConditionUrls={conditionAttributes.new_condition_urls}
+                conditions={conditionAttributes.conditions}
+              />
+            </div>
+          )}
+        </Section>
+      )}
 
       <Section title={intl.formatMessage(t.grading)}>
         <ReactTooltip id="autograde-toggle">
