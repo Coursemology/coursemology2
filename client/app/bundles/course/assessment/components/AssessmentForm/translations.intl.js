@@ -267,6 +267,10 @@ const translations = defineMessages({
     id: 'course.assessment.form.personalisedTimelines',
     defaultMessage: 'Personalised timelines',
   },
+  files: {
+    id: 'course.assessment.form.files',
+    defaultMessage: 'Files',
+  },
 });
 
 export default translations;
