@@ -35,7 +35,7 @@ const translations = defineMessages({
   },
   blockStudentViewingAfterSubmitted: {
     id: 'course.assessment.form.blockStudentViewingAfterSubmitted',
-    defaultMessage: 'Block Students from Viewing Finalized Submissions',
+    defaultMessage: 'Block students from viewing finalized submissions',
   },
   autogradeTestCasesHint: {
     id: 'course.assessment.form.autogradeTestCasesHint',
@@ -59,12 +59,12 @@ const translations = defineMessages({
   },
   showMcqAnswer: {
     id: 'course.assessment.form.showMcqAnswer',
-    defaultMessage: 'Show MCQ Submit Result',
+    defaultMessage: 'Show MCQ submit result',
   },
   showMcqAnswerHint: {
     id: 'course.assessment.form.showMcqAnswerHint',
     defaultMessage:
-      'Students can try to submit answer to MCQ and get feedback until they get the right answer',
+      'When enabled, students can try to submit MCQ answers and get feedback until they get it right.',
   },
   showPrivate: {
     id: 'course.assessment.form.showPrivate',
@@ -147,6 +147,10 @@ const translations = defineMessages({
   layout: {
     id: 'course.assessment.form.layout',
     defaultMessage: 'Layout',
+  },
+  displayAssessmentAs: {
+    id: 'course.assessment.form.displayAssessmentAs',
+    defaultMessage: 'Display assessment as',
   },
   tabbedView: {
     id: 'course.assessment.form.tabbedView',
