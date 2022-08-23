@@ -34,22 +34,7 @@ import InfoLabel from '../InfoLabel';
 import { fetchTabs } from './actions';
 
 const styles = {
-  flexGroup: {
-    display: 'flex',
-  },
-  flexChild: {
-    flex: 1,
-  },
-  toggle: {
-    marginTop: 16,
-  },
-  hint: {
-    fontSize: 14,
-    marginBottom: 12,
-  },
-  conditions: {
-    marginTop: 24,
-  },
+  conditions: { marginTop: 24 },
 };
 
 const validationSchema = yup.object({
@@ -213,14 +198,13 @@ const AssessmentForm = (props) => {
   );
 
   const renderTabs = () => {
-    if (!loadedTabs) {
-      return null;
-    }
+    if (!loadedTabs) return null;
 
     const options = loadedTabs.map((tab) => ({
       value: tab.tab_id,
       label: tab.title,
     }));
+
     return (
       <Controller
         name="tab_id"
@@ -232,6 +216,7 @@ const AssessmentForm = (props) => {
             disabled={disabled}
             label={intl.formatMessage(t.tab)}
             options={options}
+            variant="filled"
           />
         )}
       />
@@ -660,8 +645,8 @@ const AssessmentForm = (props) => {
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
-              label={intl.formatMessage(t.tab)}
+              disabled={disabled || autograded}
+              label={intl.formatMessage(t.displayAssessmentAs)}
               options={[
                 {
                   value: false,
@@ -672,8 +657,8 @@ const AssessmentForm = (props) => {
                   label: intl.formatMessage(t.tabbedView),
                 },
               ]}
-              renderIf={!autograded}
               type="boolean"
+              variant="filled"
             />
           )}
         />
@@ -684,56 +669,49 @@ const AssessmentForm = (props) => {
           name="block_student_viewing_after_submitted"
           control={control}
           render={({ field, fieldState }) => (
-            <FormToggleField
+            <FormCheckboxField
               field={field}
               fieldState={fieldState}
               disabled={disabled}
               label={intl.formatMessage(t.blockStudentViewingAfterSubmitted)}
-              style={styles.toggle}
             />
           )}
         />
 
         {randomizationAllowed && (
-          <>
-            <Controller
-              name="randomization"
-              control={control}
-              render={({ field, fieldState }) => (
-                <FormToggleField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={disabled}
-                  label={intl.formatMessage(t.enableRandomization)}
-                  style={styles.toggle}
-                />
-              )}
-            />
-            <div style={styles.hint}>
-              {intl.formatMessage(t.enableRandomizationHint)}
-            </div>
-          </>
+          <Controller
+            name="randomization"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormCheckboxField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={intl.formatMessage(t.enableRandomization)}
+                description={intl.formatMessage(t.enableRandomizationHint)}
+              />
+            )}
+          />
         )}
 
-        {autograded ? (
-          <>
-            <Controller
-              name="show_mcq_answer"
-              control={control}
-              render={({ field, fieldState }) => (
-                <FormToggleField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={disabled}
-                  label={intl.formatMessage(t.showMcqAnswer)}
-                  renderIf={autograded}
-                  style={styles.toggle}
+        <Controller
+          name="show_mcq_answer"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormCheckboxField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled || !autograded}
+              label={intl.formatMessage(t.showMcqAnswer)}
+              description={intl.formatMessage(t.showMcqAnswerHint)}
+              disabledHint={
+                <InfoLabel
+                  label={intl.formatMessage(t.unavailableInManuallyGraded)}
                 />
-              )}
+              }
             />
-            <div style={styles.hint}>
-              {intl.formatMessage(t.showMcqAnswerHint)}
-            </div>
+          )}
+        />
 
             <Controller
               name="password_protected"
@@ -754,45 +732,40 @@ const AssessmentForm = (props) => {
         ) : null}
       </Section>
 
-      <Section title={intl.formatMessage(t.personalisedTimelines)}>
-        {showPersonalizedTimelineFeatures && (
-          <>
-            <Controller
-              name="has_personal_times"
-              control={control}
-              render={({ field, fieldState }) => (
-                <FormToggleField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={disabled}
-                  label={intl.formatMessage(t.hasPersonalTimes)}
-                  style={styles.toggle}
-                />
-              )}
-            />
-            <div style={styles.hint}>
-              {intl.formatMessage(t.hasPersonalTimesHint)}
-            </div>
+      {showPersonalizedTimelineFeatures && (
+        <Section
+          title={intl.formatMessage(t.personalisedTimelines)}
+          sticksToNavbar={editing}
+        >
+          <Controller
+            name="has_personal_times"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormCheckboxField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={intl.formatMessage(t.hasPersonalTimes)}
+                description={intl.formatMessage(t.hasPersonalTimesHint)}
+              />
+            )}
+          />
 
-            <Controller
-              name="affects_personal_times"
-              control={control}
-              render={({ field, fieldState }) => (
-                <FormToggleField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={disabled}
-                  label={intl.formatMessage(t.affectsPersonalTimes)}
-                  style={styles.toggle}
-                />
-              )}
-            />
-            <div style={styles.hint}>
-              {intl.formatMessage(t.affectsPersonalTimesHint)}
-            </div>
-          </>
-        )}
-      </Section>
+          <Controller
+            name="affects_personal_times"
+            control={control}
+            render={({ field, fieldState }) => (
+              <FormCheckboxField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={intl.formatMessage(t.affectsPersonalTimes)}
+                description={intl.formatMessage(t.affectsPersonalTimesHint)}
+              />
+            )}
+          />
+        </Section>
+      )}
     </form>
   );
 };
