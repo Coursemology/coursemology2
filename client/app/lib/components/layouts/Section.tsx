@@ -9,7 +9,9 @@ interface SectionProps {
 }
 
 const styles: { [key: string]: SxProps<Theme> } = {
-  marginBottom: { marginBottom: 1 },
+  marginBottom: {
+    marginBottom: 1,
+  },
   stickyHeadersLgOnly: (theme) => ({
     [theme.breakpoints.up('lg')]: {
       position: 'sticky',
@@ -17,6 +19,9 @@ const styles: { [key: string]: SxProps<Theme> } = {
       alignSelf: 'flex-start',
     },
   }),
+  content: {
+    '> *:not(:last-child)': { marginBottom: 2 },
+  },
 };
 
 const Section = (props: SectionProps): JSX.Element => {
@@ -37,7 +42,7 @@ const Section = (props: SectionProps): JSX.Element => {
           ) : null}
         </Grid>
 
-        <Grid item xs={12} lg={9}>
+        <Grid item xs={12} lg={9} sx={styles.content}>
           {props.children}
         </Grid>
       </Grid>
