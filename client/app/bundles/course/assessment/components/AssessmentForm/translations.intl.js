@@ -68,21 +68,11 @@ const translations = defineMessages({
   },
   showPrivate: {
     id: 'course.assessment.form.showPrivate',
-    defaultMessage: 'Show private tests',
-  },
-  showPrivateHint: {
-    id: 'course.assessment.form.showPrivateHint',
-    defaultMessage:
-      'Show private tests to students after the submission is graded and published (For programming questions)',
+    defaultMessage: 'Show private test cases',
   },
   showEvaluation: {
     id: 'course.assessment.form.showEvaluation',
-    defaultMessage: 'Show evaluation tests',
-  },
-  showEvaluationHint: {
-    id: 'course.assessment.form.showEvaluationHint',
-    defaultMessage:
-      'Show evaluation tests to students after the submission is graded and published (For programming questions)',
+    defaultMessage: 'Show evaluation test cases',
   },
   hasPersonalTimes: {
     id: 'course.assessment.form.hasPersonalTimes',
@@ -178,12 +168,7 @@ const translations = defineMessages({
   },
   showMcqMrqSolution: {
     id: 'course.assessment.form.showMcqMrqSolution',
-    defaultMessage: 'Show MCQ/MRQ Solution(s)',
-  },
-  showMcqMrqSolutionHint: {
-    id: 'course.assessment.form.showMcqMrqSolutionHint',
-    defaultMessage:
-      'Show MCQ/MRQ Solution(s) when grades of submissions have been published.',
+    defaultMessage: 'Show MCQ/MRQ solution(s)',
   },
   passwordRequired: {
     id: 'course.assessment.form.passwordRequired',

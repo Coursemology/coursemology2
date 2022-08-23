@@ -567,44 +567,50 @@ const AssessmentForm = (props) => {
       </Section>
 
       <Section title={intl.formatMessage(t.answersAndTestCases)}>
-        {autograded ? (
-          <div>
-            <Controller
-              name="skippable"
-              control={control}
-              render={({ field, fieldState }) => (
-                <FormToggleField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={disabled}
-                  label={intl.formatMessage(t.skippable)}
-                  renderIf={autograded}
-                  style={styles.toggle}
+        <Controller
+          name="skippable"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormCheckboxField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled || !autograded}
+              label={intl.formatMessage(t.skippable)}
+              disabledHint={
+                <InfoLabel
+                  label={intl.formatMessage(t.unavailableInManuallyGraded)}
                 />
-              )}
+              }
             />
-            <Controller
-              name="allow_partial_submission"
-              control={control}
-              render={({ field, fieldState }) => (
-                <FormToggleField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={disabled}
-                  label={intl.formatMessage(t.allowPartialSubmission)}
-                  renderIf={autograded}
-                  style={styles.toggle}
+          )}
+        />
+        <Controller
+          name="allow_partial_submission"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormCheckboxField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled || !autograded}
+              label={intl.formatMessage(t.allowPartialSubmission)}
+              disabledHint={
+                <InfoLabel
+                  label={intl.formatMessage(t.unavailableInManuallyGraded)}
                 />
-              )}
+              }
             />
-          </div>
-        ) : null}
+          )}
+        />
+
+        <Typography variant="body1">
+          {intl.formatMessage(t.afterSubmissionGraded)}
+        </Typography>
 
         <Controller
           name="show_private"
           control={control}
           render={({ field, fieldState }) => (
-            <FormToggleField
+            <FormCheckboxField
               field={field}
               fieldState={fieldState}
               disabled={disabled}
@@ -613,12 +619,11 @@ const AssessmentForm = (props) => {
             />
           )}
         />
-        <div style={styles.hint}>{intl.formatMessage(t.showPrivateHint)}</div>
         <Controller
           name="show_evaluation"
           control={control}
           render={({ field, fieldState }) => (
-            <FormToggleField
+            <FormCheckboxField
               field={field}
               fieldState={fieldState}
               disabled={disabled}
@@ -627,26 +632,19 @@ const AssessmentForm = (props) => {
             />
           )}
         />
-        <div style={styles.hint}>
-          {intl.formatMessage(t.showEvaluationHint)}
-        </div>
 
         <Controller
           name="show_mcq_mrq_solution"
           control={control}
           render={({ field, fieldState }) => (
-            <FormToggleField
+            <FormCheckboxField
               field={field}
               fieldState={fieldState}
               disabled={disabled}
               label={intl.formatMessage(t.showMcqMrqSolution)}
-              style={styles.toggle}
             />
           )}
         />
-        <div style={styles.hint}>
-          {intl.formatMessage(t.showMcqMrqSolutionHint)}
-        </div>
       </Section>
 
       <Section
