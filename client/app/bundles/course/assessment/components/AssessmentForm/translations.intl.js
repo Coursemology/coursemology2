@@ -43,15 +43,15 @@ const translations = defineMessages({
   },
   usePublic: {
     id: 'course.assessment.form.usePublic',
-    defaultMessage: 'Public',
+    defaultMessage: 'Public test cases',
   },
   usePrivate: {
     id: 'course.assessment.form.usePrivate',
-    defaultMessage: 'Private',
+    defaultMessage: 'Private test cases',
   },
   useEvaluation: {
     id: 'course.assessment.form.useEvaluation',
-    defaultMessage: 'Evaluation',
+    defaultMessage: 'Evaluation test cases',
   },
   allowPartialSubmission: {
     id: 'course.assessment.form.allowPartialSubmission',
@@ -146,6 +146,10 @@ const translations = defineMessages({
       codaveri programming question type. This question type is only supported \
       in non-autograded assessment.",
   },
+  calculateGradeWith: {
+    id: 'course.assessment.form.calculateGradeWith',
+    defaultMessage: 'Calculate grade and EXP with',
+  },
   skippable: {
     id: 'course.assessment.form.skippable',
     defaultMessage: 'Allow to skip steps',
@@ -164,14 +168,13 @@ const translations = defineMessages({
   },
   delayedGradePublication: {
     id: 'course.assessment.form.delayedGradePublication',
-    defaultMessage: 'Delayed Grade Publication',
+    defaultMessage: 'Enable delayed grade publication',
   },
   delayedGradePublicationHint: {
     id: 'course.assessment.form.delayedGradePublicationHint',
     defaultMessage:
-      "When delayed grade publication is enabled, gradings done by course staff will \
-      not be immediately shown to the student. To publish all gradings for this assessment, click \
-      on the 'Publish Grades' button on the top right of the submissions listing for this assessment.",
+      'When delayed grade publication is on, gradings will not be immediately shown to students. \
+      To publish all gradings, you may click Publish Grades in the Submissions page.',
   },
   showMcqMrqSolution: {
     id: 'course.assessment.form.showMcqMrqSolution',
@@ -270,6 +273,18 @@ const translations = defineMessages({
   personalisedTimelines: {
     id: 'course.assessment.form.personalisedTimelines',
     defaultMessage: 'Personalised timelines',
+  },
+  unavailableInAutograded: {
+    id: 'course.assessment.form.unavailableInAutograded',
+    defaultMessage: 'Unavailable in autograded assessments.',
+  },
+  unavailableInManuallyGraded: {
+    id: 'course.assessment.form.unavailableInManuallyGraded',
+    defaultMessage: 'Unavailable in manually graded assessments.',
+  },
+  afterSubmissionGraded: {
+    id: 'course.assessment.form.afterSubmissionGraded',
+    defaultMessage: 'After submission is graded and published',
   },
   files: {
     id: 'course.assessment.form.files',

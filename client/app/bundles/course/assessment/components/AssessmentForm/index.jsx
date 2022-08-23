@@ -20,6 +20,7 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import ErrorText from 'lib/components/ErrorText';
 import ConditionList from 'lib/components/course/ConditionList';
 import formTranslations from 'lib/translations/form';
@@ -501,76 +502,68 @@ const AssessmentForm = (props) => {
           )}
         />
 
-        {modeSwitching && !containsCodaveri && (
-          <div style={styles.hint}>{intl.formatMessage(t.autogradedHint)}</div>
-        )}
+        <Typography variant="body1">
+          {intl.formatMessage(t.calculateGradeWith)}
+        </Typography>
 
-        <div style={styles.conditions}>
-          {intl.formatMessage(t.autogradeTestCasesHint)}
-        </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Controller
-            name="use_public"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={intl.formatMessage(t.usePublic)}
-                style={styles.flexChild}
-              />
-            )}
-          />
-          <Controller
-            name="use_private"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={intl.formatMessage(t.usePrivate)}
-                style={styles.flexChild}
-              />
-            )}
-          />
-          <Controller
-            name="use_evaluation"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={intl.formatMessage(t.useEvaluation)}
-                style={styles.flexChild}
-              />
-            )}
-          />
-        </div>
-
-        {autograded ? (
-          <>
-            <Controller
-              name="delayed_grade_publication"
-              control={control}
-              render={({ field, fieldState }) => (
-                <FormToggleField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={disabled}
-                  label={intl.formatMessage(t.delayedGradePublication)}
-                  style={styles.toggle}
-                />
-              )}
+        <Controller
+          name="use_public"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormCheckboxField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={intl.formatMessage(t.usePublic)}
+              style={styles.flexChild}
             />
-            <div style={styles.hint}>
-              {intl.formatMessage(t.delayedGradePublicationHint)}
-            </div>
-          </>
-        ) : null}
+          )}
+        />
+        <Controller
+          name="use_private"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormCheckboxField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={intl.formatMessage(t.usePrivate)}
+              style={styles.flexChild}
+            />
+          )}
+        />
+        <Controller
+          name="use_evaluation"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormCheckboxField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={intl.formatMessage(t.useEvaluation)}
+              style={styles.flexChild}
+            />
+          )}
+        />
+
+        <Controller
+          name="delayed_grade_publication"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormCheckboxField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled || autograded}
+              label={intl.formatMessage(t.delayedGradePublication)}
+              description={intl.formatMessage(t.delayedGradePublicationHint)}
+              disabledHint={
+                <InfoLabel
+                  label={intl.formatMessage(t.unavailableInAutograded)}
+                />
+              }
+            />
+          )}
+        />
       </Section>
 
       <Section title={intl.formatMessage(t.answersAndTestCases)}>
