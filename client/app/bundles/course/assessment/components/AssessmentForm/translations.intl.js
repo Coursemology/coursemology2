@@ -123,20 +123,24 @@ const translations = defineMessages({
     id: 'course.assessment.form.draftHint',
     defaultMessage: 'Only you and staff can see this assessment.',
   },
+  gradingMode: {
+    id: 'course.assessment.form.gradingMode',
+    defaultMessage: 'Grading mode',
+  },
   autogradedHint: {
     id: 'course.assessment.form.autogradedHint',
     defaultMessage:
-      'Automatically assign grade and experience points after assessment is \
-      submitted. Answers that are not auto-gradable will always receive the maximum grade.',
+      'Automatically assign grade and EXP upon submission. \
+      Non-autogradeable questions will always receive the maximum grade.',
   },
   modeSwitchingDisabled: {
     id: 'course.assessment.form.modeSwitchingHint',
     defaultMessage:
-      'Switch to autograded mode is not allowed as there are submissions \
-      for the assessment.',
+      'You can no longer change the grading mode because there are already submissions \
+      for this assessment.',
   },
   containsCodaveriQuestion: {
-    id: 'course.assessment.form.modeSwitchingHint',
+    id: 'course.assessment.form.containsCodaveriQuestion',
     defaultMessage:
       "Switch to autograded mode is not allowed as there's \
       codaveri programming question type. This question type is only supported \

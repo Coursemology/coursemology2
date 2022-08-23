@@ -10,6 +10,9 @@ import { RadioGroup, Typography, Grid } from '@mui/material';
 import {
   Public as PublishedIcon,
   Block as DraftIcon,
+  Create as ManualIcon,
+  CheckCircle as AutogradedIcon,
+  InfoOutlined as InfoOutlinedIcon,
 } from '@mui/icons-material';
 
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
@@ -26,6 +29,7 @@ import ReactTooltip from 'react-tooltip';
 import t from './translations.intl';
 import FileManager from '../FileManager';
 import IconRadio from '../IconRadio';
+import InfoLabel from '../InfoLabel';
 import { fetchTabs } from './actions';
 
 const styles = {
@@ -158,10 +162,6 @@ const AssessmentForm = (props) => {
       dispatch(fetchTabs(failureMessage));
     }
   }, [dispatch]);
-
-  const autogradedToggleTooltip = containsCodaveri
-    ? intl.formatMessage(t.containsCodaveriQuestion)
-    : intl.formatMessage(t.modeSwitchingDisabled);
 
   const renderPasswordFields = () => (
     <div>
@@ -455,28 +455,51 @@ const AssessmentForm = (props) => {
       )}
 
       <Section title={intl.formatMessage(t.grading)}>
-        <ReactTooltip id="autograde-toggle">
-          {autogradedToggleTooltip}
-        </ReactTooltip>
-        <div
-          data-tip
-          data-for="autograde-toggle"
-          data-tip-disable={!containsCodaveri && modeSwitching}
-        >
-          <Controller
-            name="autograded"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={containsCodaveri || !modeSwitching || disabled}
-                label={intl.formatMessage(t.autograded)}
-                style={styles.toggle}
-              />
-            )}
-          />
-        </div>
+        <Typography variant="body1">
+          {intl.formatMessage(t.gradingMode)}
+        </Typography>
+
+        {!modeSwitching ? (
+          <InfoLabel>{intl.formatMessage(t.modeSwitchingDisabled)}</InfoLabel>
+        ) : null}
+
+        {containsCodaveri ? (
+          <InfoLabel>
+            {intl.formatMessage(t.containsCodaveriQuestion)}
+          </InfoLabel>
+        ) : null}
+
+        <Controller
+          name="autograded"
+          control={control}
+          render={({ field, fieldState }) => (
+            <>
+              <RadioGroup
+                {...field}
+                value={field.value === true ? 'autograded' : 'manual'}
+                onChange={(e) => {
+                  const isAutograded = e.target.value === 'autograded';
+                  field.onChange(isAutograded);
+                }}
+              >
+                <IconRadio
+                  value="autograded"
+                  label="Autograded"
+                  icon={AutogradedIcon}
+                  description={intl.formatMessage(t.autogradedHint)}
+                  disabled={containsCodaveri || disabled || !modeSwitching}
+                />
+
+                <IconRadio
+                  value="manual"
+                  label="Manual"
+                  icon={ManualIcon}
+                  disabled={containsCodaveri || disabled || !modeSwitching}
+                />
+              </RadioGroup>
+            </>
+          )}
+        />
 
         {modeSwitching && !containsCodaveri && (
           <div style={styles.hint}>{intl.formatMessage(t.autogradedHint)}</div>
