@@ -32,6 +32,7 @@ const FormSelectField = (props) => {
     shrink,
     displayEmpty,
     className,
+    variant = 'standard',
     ...custom
   } = props;
   const isError = !!fieldState.error;
@@ -51,7 +52,7 @@ const FormSelectField = (props) => {
       error={isError}
       fullWidth
       style={{ margin: margin ?? styles.selectFieldStyle.margin }}
-      variant="standard"
+      variant={variant}
     >
       <InputLabel shrink={shrink}>{label}</InputLabel>
       <Select
@@ -63,7 +64,7 @@ const FormSelectField = (props) => {
             : field.onChange(event)
         }
         {...custom}
-        variant="standard"
+        variant={variant}
         displayEmpty={displayEmpty}
         className={className}
         MenuProps={{
@@ -113,6 +114,7 @@ FormSelectField.propTypes = {
   shrink: PropTypes.bool,
   displayEmpty: PropTypes.bool,
   className: PropTypes.string,
+  variant: PropTypes.string,
 };
 
 export default memo(FormSelectField, propsAreEqual);
