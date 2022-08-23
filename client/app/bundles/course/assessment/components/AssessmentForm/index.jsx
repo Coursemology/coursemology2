@@ -6,6 +6,11 @@ import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import { RadioGroup, Typography, Grid } from '@mui/material';
+import {
+  Public as PublishedIcon,
+  Block as DraftIcon,
+} from '@mui/icons-material';
 
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
@@ -20,6 +25,7 @@ import { achievementTypesConditionAttributes, typeMaterial } from 'lib/types';
 import ReactTooltip from 'react-tooltip';
 import t from './translations.intl';
 import MaterialUploader from '../MaterialUploader';
+import IconRadio from '../IconRadio';
 import { fetchTabs } from './actions';
 
 const styles = {
@@ -338,19 +344,40 @@ const AssessmentForm = (props) => {
         />
 
         {editing && (
-          <Controller
-            name="published"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={intl.formatMessage(t.published)}
-                style={styles.toggle}
-              />
-            )}
-          />
+          <>
+            <Typography variant="body1">
+              {intl.formatMessage(t.visibility)}
+            </Typography>
+
+            <Controller
+              name="published"
+              control={control}
+              render={({ field, fieldState }) => (
+                <RadioGroup
+                  {...field}
+                  value={field.value === true ? 'published' : 'draft'}
+                  onChange={(e) => {
+                    const isPublished = e.target.value === 'published';
+                    field.onChange(isPublished);
+                  }}
+                >
+                  <IconRadio
+                    value="published"
+                    label={intl.formatMessage(t.published)}
+                    icon={PublishedIcon}
+                    description={intl.formatMessage(t.publishedHint)}
+                  />
+
+                  <IconRadio
+                    value="draft"
+                    label={intl.formatMessage(t.draft)}
+                    icon={DraftIcon}
+                    description={intl.formatMessage(t.draftHint)}
+                  />
+                </RadioGroup>
+              )}
+            />
+          </>
         )}
 
         {folderAttributes && (

@@ -103,9 +103,25 @@ const translations = defineMessages({
       "Student's submission time for this item will be taken into account \
       when updating personal times for other items",
   },
+  visibility: {
+    id: 'course.assessment.form.visibility',
+    defaultMessage: 'Visibility',
+  },
   published: {
     id: 'course.assessment.form.published',
     defaultMessage: 'Published',
+  },
+  draft: {
+    id: 'course.assessment.form.draft',
+    defaultMessage: 'Draft',
+  },
+  publishedHint: {
+    id: 'course.assessment.form.publishedHint',
+    defaultMessage: 'Everyone can see this assessment.',
+  },
+  draftHint: {
+    id: 'course.assessment.form.draftHint',
+    defaultMessage: 'Only you and staff can see this assessment.',
   },
   autogradedHint: {
     id: 'course.assessment.form.autogradedHint',
