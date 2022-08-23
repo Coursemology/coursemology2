@@ -148,6 +148,7 @@ function formatMaterialUploadAttributes(
       }
     }
   });
+  payload.append('render_show', 'true');
   return payload;
 }
 
