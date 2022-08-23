@@ -241,71 +241,84 @@ const AssessmentForm = (props) => {
       <ErrorText errors={errors} />
 
       <Section title={intl.formatMessage(t.assessmentDetails)}>
-        <div style={styles.flexGroup}>
-          <Controller
-            name="title"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormTextField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={intl.formatMessage(t.title)}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                required
-                style={styles.flexChild}
-                variant="standard"
-              />
-            )}
-          />
-        </div>
+        <Controller
+          name="title"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={intl.formatMessage(t.title)}
+              fullWidth
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+              style={styles.flexChild}
+              variant="filled"
+            />
+          )}
+        />
 
-        <div style={styles.flexGroup}>
-          <Controller
-            name="start_at"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormDateTimePickerField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={intl.formatMessage(t.startAt)}
-                style={styles.flexChild}
-              />
-            )}
-          />
-          <Controller
-            name="end_at"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormDateTimePickerField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={intl.formatMessage(t.endAt)}
-                style={styles.flexChild}
-              />
-            )}
-          />
-          {gamified && (
+        <Grid container spacing={2} direction="row">
+          <Grid item xs>
             <Controller
-              name="bonus_end_at"
+              name="start_at"
               control={control}
               render={({ field, fieldState }) => (
                 <FormDateTimePickerField
                   field={field}
                   fieldState={fieldState}
                   disabled={disabled}
-                  label={intl.formatMessage(t.bonusEndAt)}
-                  style={styles.flexChild}
+                  label={intl.formatMessage(t.startAt)}
+                  variant="filled"
+                  disableMargins
                 />
               )}
             />
+          </Grid>
+
+          <Grid item xs>
+            <Controller
+              name="end_at"
+              control={control}
+              render={({ field, fieldState }) => (
+                <FormDateTimePickerField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={disabled}
+                  label={intl.formatMessage(t.endAt)}
+                  variant="filled"
+                  disableMargins
+                />
+              )}
+            />
+          </Grid>
+
+          {gamified && (
+            <Grid item xs>
+              <Controller
+                name="bonus_end_at"
+                control={control}
+                render={({ field, fieldState }) => (
+                  <FormDateTimePickerField
+                    field={field}
+                    fieldState={fieldState}
+                    disabled={disabled}
+                    label={intl.formatMessage(t.bonusEndAt)}
+                    variant="filled"
+                    disableMargins
+                  />
+                )}
+              />
+            </Grid>
           )}
-        </div>
+        </Grid>
+
+        <Typography variant="body1">
+          {intl.formatMessage(t.description)}
+        </Typography>
 
         <Controller
           name="description"
@@ -315,7 +328,6 @@ const AssessmentForm = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={intl.formatMessage(t.description)}
               fullWidth
               InputLabelProps={{
                 shrink: true,
