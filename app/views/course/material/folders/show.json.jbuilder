@@ -45,7 +45,7 @@ json.materials @folder.materials.includes(:updater) do |material|
       json.id updater.id
       json.name updater.name
     end
-    json.isCourseUser !course_user.present?
+    json.isCourseUser course_user.present?
   end
 
   json.permissions do

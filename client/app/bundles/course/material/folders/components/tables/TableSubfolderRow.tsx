@@ -82,6 +82,8 @@ const TableSubfolderRow: FC<Props> = (props) => {
                   __html: subfolder.description,
                 }}
                 style={{
+                  color: 'grey',
+                  marginLeft: 30,
                   textOverflow: 'initial',
                   whiteSpace: 'normal',
                   wordBreak: 'break-word',
