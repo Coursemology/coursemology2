@@ -9,10 +9,10 @@ exports[`<PageHeader /> when there is a return link matches the snapshot 1`] = `
       <header
         class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-11b3ww9-MuiPaper-root-MuiAppBar-root"
         data-testid="TitleBar"
-        style="z-index: 0; position: static; margin-bottom: 16px;"
+        style="z-index: 0; position: static; margin-bottom: 0px;"
       >
         <div
-          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1t29gy6-MuiToolbar-root"
+          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-hyum1k-MuiToolbar-root"
         >
           <div
             style="margin-left: -16px; margin-right: 8px;"
@@ -62,10 +62,10 @@ exports[`<PageHeader /> when there is no return link matches the snapshot 1`] = 
       <header
         class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-11b3ww9-MuiPaper-root-MuiAppBar-root"
         data-testid="TitleBar"
-        style="z-index: 0; position: static; margin-bottom: 16px;"
+        style="z-index: 0; position: static; margin-bottom: 0px;"
       >
         <div
-          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-1t29gy6-MuiToolbar-root"
+          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-hyum1k-MuiToolbar-root"
         >
           <div
             style="margin-left: -16px; margin-right: 8px;"
