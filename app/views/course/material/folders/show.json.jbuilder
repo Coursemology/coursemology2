@@ -11,13 +11,47 @@ json.currFolderInfo do
 end
 
 json.subfolders @subfolders do |subfolder|
-  json.partial! 'subfolder_data',
-                subfolder: subfolder
+  json.id subfolder.id
+  json.name subfolder.name
+  json.description subfolder.description
+  json.itemCount subfolder.material_count + subfolder.children_count
+  json.updatedAt subfolder.updated_at
+  json.startAt subfolder.start_at
+  json.endAt subfolder.end_at
+
+  json.effectiveStartAt subfolder.effective_start_at
+
+  json.permissions do
+    json.canStudentUpload subfolder.can_student_upload
+    json.showSdlWarning show_sdl_warning?(subfolder)
+    json.canEdit can?(:edit, subfolder)
+    json.canDelete can?(:destroy, subfolder)
+  end
 end
 
-json.materials @folder.materials.order(:name).includes(:updater) do |material|
-  json.partial! 'material_data',
-                material: material
+json.materials @folder.materials.includes(:updater) do |material|
+  json.id material.id
+  json.name material.name
+  json.description material.description
+  json.updatedAt material.updated_at
+
+  updater = material.updater
+  json.updater do
+    course_user = updater.course_users.find_by(course: controller.current_course)
+    if course_user
+      json.id course_user.id
+      json.name course_user.name
+    else
+      json.id updater.id
+      json.name updater.name
+    end
+    json.isCourseUser !course_user.present?
+  end
+
+  json.permissions do
+    json.canEdit can?(:edit, material)
+    json.canDelete can?(:destroy, material)
+  end
 end
 
 json.breadcrumbs @folder.ancestors.reverse << @folder do |folder|
@@ -33,4 +67,5 @@ json.permissions do
   json.canCreateSubfolder can?(:new_subfolder, @folder)
   json.canUpload can?(:upload, @folder)
   json.canEdit can?(:edit, @folder)
+  json.canEditSubfolders can?(:edit, @subfolders)
 end
