@@ -3,6 +3,7 @@ import { FC, ReactElement } from 'react';
 import { render, RenderOptions } from '@testing-library/react';
 import { IntlProvider } from 'react-intl';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const AllTheProviders: FC<any> = ({ children }) => {
   return (
     <IntlProvider locale="en" timeZone="Asia/Singapore">
@@ -11,6 +12,7 @@ const AllTheProviders: FC<any> = ({ children }) => {
   );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const customRender: any = (
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>,
