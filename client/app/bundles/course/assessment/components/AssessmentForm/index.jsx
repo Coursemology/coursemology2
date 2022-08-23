@@ -24,7 +24,7 @@ import Section from 'lib/components/layouts/Section';
 import { achievementTypesConditionAttributes, typeMaterial } from 'lib/types';
 import ReactTooltip from 'react-tooltip';
 import t from './translations.intl';
-import MaterialUploader from '../MaterialUploader';
+import FileManager from '../FileManager';
 import IconRadio from '../IconRadio';
 import { fetchTabs } from './actions';
 
@@ -382,9 +382,12 @@ const AssessmentForm = (props) => {
 
         {folderAttributes && (
           <>
-            <br />
-            <MaterialUploader
-              enableMaterialsAction={folderAttributes.enable_materials_action}
+            <Typography variant="body1">
+              {intl.formatMessage(t.files)}
+            </Typography>
+
+            <FileManager
+              disabled={!folderAttributes.enable_materials_action}
               folderId={folderAttributes.folder_id}
               materials={folderAttributes.materials}
             />
