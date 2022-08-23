@@ -49,8 +49,10 @@ class Course::Material::FoldersController < Course::Material::Controller
     respond_to do |format|
       if @folder.save
         format.json do
-          show
-          render 'show', status: :ok
+          if params[:render_show]
+            show
+            return render 'show', status: :ok
+          end
         end
       else
         format.json do

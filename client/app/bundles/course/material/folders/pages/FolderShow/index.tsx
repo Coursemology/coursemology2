@@ -144,7 +144,11 @@ const FolderShow: FC<Props> = (props) => {
         <Breadcrumbs>
           {breadcrumbs.map((breadcrumb, index) => {
             if (index === breadcrumbs.length - 1) {
-              return <span>{breadcrumb.name}</span>;
+              return (
+                <span key={`folder-breadcrumb-${breadcrumb.id}`}>
+                  {breadcrumb.name}
+                </span>
+              );
             }
             return (
               <Link
