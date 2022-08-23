@@ -1,6 +1,13 @@
 import { FC, memo } from 'react';
-import { Checkbox, FormControlLabel, FormHelperText } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  FormHelperText,
+  Typography,
+} from '@mui/material';
 import { ControllerFieldState } from 'react-hook-form';
+
 import { formatErrorMessage } from './utils/mapError';
 import propsAreEqual from './utils/propsAreEqual';
 
@@ -14,21 +21,28 @@ interface Props {
   renderIf?: boolean;
   icon?: JSX.Element;
   checkedIcon?: JSX.Element;
+  description?: string;
+  disabledHint?: string | JSX.Element;
 }
 
 const styles = {
   checkboxContainer: {
     width: '100%',
   },
+  field: {
+    marginBottom: 0,
+  },
   checkbox: {
-    padding: '8px',
+    padding: '0 8px',
   },
-  checkboxStyle: {
-    marginLeft: '0px',
-    height: '30px',
-    margin: '8px 0px 0px -8px',
+  description: {
+    marginLeft: '30px',
+    marginTop: 0.5,
   },
-  errorText: { margin: 0 },
+  disabledHint: {
+    marginLeft: '30px',
+    marginTop: '0.5rem',
+  },
 };
 
 const FormCheckboxField: FC<Props> = (props) => {
@@ -40,6 +54,8 @@ const FormCheckboxField: FC<Props> = (props) => {
     renderIf = true,
     icon,
     checkedIcon,
+    description,
+    disabledHint,
     ...custom
   } = props;
   const isError = !!fieldState.error;
@@ -48,7 +64,7 @@ const FormCheckboxField: FC<Props> = (props) => {
   }
 
   return (
-    <div style={styles.checkboxContainer}>
+    <Box width="100%">
       <FormControlLabel
         control={
           <Checkbox
@@ -56,23 +72,37 @@ const FormCheckboxField: FC<Props> = (props) => {
             checked={field.value}
             color="primary"
             onChange={field.onChange}
-            style={styles.checkbox}
+            sx={styles.checkbox}
             icon={icon}
             checkedIcon={checkedIcon}
           />
         }
         disabled={disabled}
-        label={<b>{label}</b>}
-        labelPlacement="end"
-        style={styles.checkboxStyle}
+        label={label}
+        sx={styles.field}
         {...custom}
       />
-      {isError && (
-        <FormHelperText error={isError} style={styles.errorText}>
+
+      {description ? (
+        <Typography
+          variant="body2"
+          sx={styles.description}
+          color={disabled ? 'text.disabled' : 'text.secondary'}
+        >
+          {description}
+        </Typography>
+      ) : null}
+
+      {disabledHint && disabled ? (
+        <div style={styles.disabledHint}>{disabledHint}</div>
+      ) : null}
+
+      {isError ? (
+        <FormHelperText error={isError} sx={styles.description}>
           {formatErrorMessage(fieldState.error?.message)}
         </FormHelperText>
-      )}
-    </div>
+      ) : null}
+    </Box>
   );
 };
 
