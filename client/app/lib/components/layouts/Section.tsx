@@ -6,29 +6,37 @@ interface SectionProps {
   title: string;
   subtitle?: string;
   children?: ReactNode;
+  sticksToNavbar?: boolean;
 }
 
 const styles: { [key: string]: SxProps<Theme> } = {
   marginBottom: {
-    marginBottom: 1,
+    marginBottom: 2,
   },
-  stickyHeadersLgOnly: (theme) => ({
-    [theme.breakpoints.up('lg')]: {
-      position: 'sticky',
-      top: '5rem',
-      alignSelf: 'flex-start',
-    },
-  }),
   content: {
     '> *:not(:last-child)': { marginBottom: 2 },
+  },
+  container: {
+    '& + &': { marginTop: 2 },
   },
 };
 
 const Section = (props: SectionProps): JSX.Element => {
   return (
-    <Container disableGutters maxWidth="lg" sx={styles.marginBottom}>
+    <Container disableGutters maxWidth="lg" sx={styles.container}>
       <Grid container spacing={2} sx={styles.marginBottom}>
-        <Grid item xs={12} lg={3} sx={styles.stickyHeadersLgOnly}>
+        <Grid
+          item
+          xs={12}
+          lg={3}
+          sx={(theme) => ({
+            [theme.breakpoints.up('lg')]: {
+              position: 'sticky',
+              top: props.sticksToNavbar ? '5rem' : '-1em',
+              alignSelf: 'flex-start',
+            },
+          })}
+        >
           {props.title ? (
             <Typography variant="h6" color="text.primary">
               {props.title}

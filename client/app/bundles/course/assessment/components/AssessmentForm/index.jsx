@@ -232,7 +232,10 @@ const AssessmentForm = (props) => {
     >
       <ErrorText errors={errors} />
 
-      <Section title={intl.formatMessage(t.assessmentDetails)}>
+      <Section
+        title={intl.formatMessage(t.assessmentDetails)}
+        sticksToNavbar={editing}
+      >
         <Controller
           name="title"
           control={control}
@@ -382,7 +385,10 @@ const AssessmentForm = (props) => {
       </Section>
 
       {gamified && (
-        <Section title={intl.formatMessage(t.gamification)}>
+        <Section
+          title={intl.formatMessage(t.gamification)}
+          sticksToNavbar={editing}
+        >
           <Grid container spacing={2} direction="row">
             <Grid item xs>
               <Controller
@@ -440,7 +446,7 @@ const AssessmentForm = (props) => {
         </Section>
       )}
 
-      <Section title={intl.formatMessage(t.grading)}>
+      <Section title={intl.formatMessage(t.grading)} sticksToNavbar={editing}>
         <Typography variant="body1">
           {intl.formatMessage(t.gradingMode)}
         </Typography>
@@ -551,7 +557,10 @@ const AssessmentForm = (props) => {
         />
       </Section>
 
-      <Section title={intl.formatMessage(t.answersAndTestCases)}>
+      <Section
+        title={intl.formatMessage(t.answersAndTestCases)}
+        sticksToNavbar={editing}
+      >
         <Controller
           name="skippable"
           control={control}
@@ -634,7 +643,7 @@ const AssessmentForm = (props) => {
 
       <Section
         title={intl.formatMessage(t.organisation)}
-        subtitle={intl.formatMessage(t.organisationSubtitle)}
+        sticksToNavbar={editing}
       >
         {editing && renderTabs(loadedTabs, disabled)}
 
@@ -664,7 +673,10 @@ const AssessmentForm = (props) => {
         />
       </Section>
 
-      <Section title={intl.formatMessage(t.examsAndAccessControl)}>
+      <Section
+        title={intl.formatMessage(t.examsAndAccessControl)}
+        sticksToNavbar={editing}
+      >
         <Controller
           name="block_student_viewing_after_submitted"
           control={control}
