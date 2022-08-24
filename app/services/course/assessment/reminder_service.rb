@@ -21,6 +21,7 @@ class Course::Assessment::ReminderService
     # TODO(#3240): Send closing reminder emails based on personal times
     students -=
       Set.new(CourseUser.joins(:personal_times).where(course_personal_times: { lesson_plan_item_id: assessment }))
+    return if students.empty?
 
     closing_reminder_students(assessment, students)
     closing_reminder_staff(assessment, students)

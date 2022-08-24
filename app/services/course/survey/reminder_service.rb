@@ -17,8 +17,10 @@ class Course::Survey::ReminderService
 
   def send_closing_reminder(survey, include_phantom: true, include_unsubscribed: false)
     students = uncompleted_subscribed_students(survey, include_phantom, include_unsubscribed)
-    closing_reminder_students(survey, students)
-    closing_reminder_staff(survey, students)
+    unless students.empty?
+      closing_reminder_students(survey, students)
+      closing_reminder_staff(survey, students)
+    end
     survey.update_attribute(:closing_reminded_at, Time.zone.now)
   end
 
