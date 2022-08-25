@@ -3,17 +3,17 @@ import { defineMessages } from 'react-intl';
 export default defineMessages({
   autograded: {
     id: 'course.assessment.question.programming.onlineEditorView.autograded',
-    defaultMessage: 'Autograded',
+    defaultMessage: 'Evaluate and Test Code',
   },
   autogradedAssessment: {
     id: 'course.assessment.question.programming.onlineEditorView.autogradedAssessment',
     defaultMessage:
-      'Answers to non-autograded programming questions will always receive the maximum grade',
+      'Answers to non-evaluation type programming questions will always receive the maximum grade',
   },
   autogradedToggleDisabled: {
     id: 'course.assessment.question.programming.onlineEditorView.autogradedToggleDisabled',
     defaultMessage:
-      'This question cannot be switched to non-autograded as some answers have already been submitted',
+      'This question cannot be switched to non-evaluation type as some answers have already been submitted',
   },
   titleFieldLabel: {
     id: 'course.assessment.question.programming.programmingQuestionForm.titleFieldLabel',
@@ -172,9 +172,17 @@ export default defineMessages({
       Note that manually-issued EXP will not be updated.\
       Are you sure you wish to continue?',
   },
-  codaveriToggle: {
-    id: 'course.assessment.question.programming.programmingQuestionForm.codaveriToggle',
-    defaultMessage: 'Codaveri Evaluation & Feedback',
+  chooseEvaluator: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.chooseEvaluator',
+    defaultMessage: 'For code evaluation, use:',
+  },
+  defaultEvaluator: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.defaultEvaluator',
+    defaultMessage: 'Default Evaluator',
+  },
+  codaveriEvaluator: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.codaveriEvaluator',
+    defaultMessage: 'Codaveri Evaluator & Feedback',
   },
   codaveriTooltip: {
     id: 'course.assessment.question.programming.programmingQuestionForm.codaveriTooltip',
@@ -186,6 +194,6 @@ export default defineMessages({
     id: 'course.assessment.question.programming.programmingQuestionForm.disableCodaveriTooltip',
     defaultMessage:
       "Codaveri provides code evaluation and automated code feedback services for students' codes. \
-      This setting is currently disabled. To use this feature, please enable it in the course setting.",
+      This feature is currently disabled. To use it, please enable this component in the course/instance setting.",
   },
 });
