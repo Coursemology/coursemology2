@@ -292,6 +292,7 @@ GEM
     fugit (1.5.3)
       et-orbi (~> 1, >= 1.2.7)
       raabro (~> 1.4)
+    glob (0.3.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     high_voltage (3.1.2)
@@ -304,8 +305,9 @@ GEM
     http_accept_language (2.1.1)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
-    i18n-js (3.9.2)
-      i18n (>= 0.6.6)
+    i18n-js (4.0.1)
+      glob
+      i18n
     i18n-tasks (1.0.11)
       activesupport (>= 4.0.2)
       ast (>= 2.1.0)
@@ -701,7 +703,7 @@ DEPENDENCIES
   html-pipeline
   html-pipeline-rouge_filter!
   http_accept_language
-  i18n-js (<= 3.10.0)
+  i18n-js (<= 4.1.0)
   i18n-tasks
   image_optim_rails
   jbuilder
