@@ -59,8 +59,9 @@ const reducer = produce((draft: CommentState, action: CommentActionType) => {
       if (action.permissions.canManage) {
         if (action.tabs.myStudentExist) {
           draft.pageState.tabValue = CommentTabTypes.MY_STUDENTS_PENDING;
+        } else {
+          draft.pageState.tabValue = CommentTabTypes.PENDING;
         }
-        draft.pageState.tabValue = CommentTabTypes.PENDING;
       } else {
         draft.pageState.tabValue = CommentTabTypes.UNREAD;
       }
