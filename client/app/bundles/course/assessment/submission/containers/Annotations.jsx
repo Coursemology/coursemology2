@@ -49,6 +49,32 @@ class VisibleAnnotations extends Component {
       updateCodaveriFeedback,
     } = this.props;
 
+    const shouldRenderCommentButton =
+      !posts[posts.length - 1]?.codaveriFeedback;
+
+    const renderCommentField = () => {
+      if (posts.length === 0 || fieldVisible)
+        return (
+          <CommentField
+            value={commentForms.annotations[fileId][lineNumber]}
+            isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
+            isSubmittingDelayedComment={commentForms.isSubmittingDelayedComment}
+            isUpdatingComment={commentForms.isUpdatingComment}
+            createComment={createComment}
+            handleChange={handleCreateChange}
+            renderDelayedCommentButton={renderDelayedCommentButton}
+          />
+        );
+      return (
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => this.setState({ fieldVisible: true })}
+        >
+          <FormattedMessage {...translations.comment} />
+        </Button>
+      );
+    };
     return (
       <Card style={styles.card}>
         <CardContent style={{ textAlign: 'left' }}>
@@ -82,27 +108,7 @@ class VisibleAnnotations extends Component {
             }
             return <></>;
           })}
-          {posts.length === 0 || fieldVisible ? (
-            <CommentField
-              value={commentForms.annotations[fileId][lineNumber]}
-              isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
-              isSubmittingDelayedComment={
-                commentForms.isSubmittingDelayedComment
-              }
-              isUpdatingComment={commentForms.isUpdatingComment}
-              createComment={createComment}
-              handleChange={handleCreateChange}
-              renderDelayedCommentButton={renderDelayedCommentButton}
-            />
-          ) : (
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => this.setState({ fieldVisible: true })}
-            >
-              <FormattedMessage {...translations.comment} />
-            </Button>
-          )}
+          {shouldRenderCommentButton && renderCommentField()}
         </CardContent>
       </Card>
     );
