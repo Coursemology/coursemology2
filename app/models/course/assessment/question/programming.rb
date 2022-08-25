@@ -210,13 +210,17 @@ class Course::Assessment::Question::Programming < ApplicationRecord
     duplicating?
   end
 
-  def validate_codaveri_question
+  def validate_codaveri_question # rubocop:disable Metrics/AbcSize
     return if !is_codaveri || duplicating?
 
     if question_assessments.first.assessment.autograded?
       errors.add(:base, 'Assessment type must not be autograded')
     elsif !codaveri_language_whitelist.include?(language.type.constantize)
       errors.add(:base, 'Language type must be Python 3 and above')
+    elsif !question_assessments.first.assessment.course.component_enabled?(Course::CodaveriComponent)
+      errors.add(:base,
+                 'Codaveri component is deactivated.
+                 Activate it in the course setting or switch this question into a non-codaveri type.')
     end
 
     nil
@@ -227,6 +231,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
      Coursemology::Polyglot::Language::Python::Python3Point5,
      Coursemology::Polyglot::Language::Python::Python3Point6,
      Coursemology::Polyglot::Language::Python::Python3Point7,
-     Coursemology::Polyglot::Language::Python::Python3Point9]
+     Coursemology::Polyglot::Language::Python::Python3Point9,
+     Coursemology::Polyglot::Language::Python::Python3Point10]
   end
 end

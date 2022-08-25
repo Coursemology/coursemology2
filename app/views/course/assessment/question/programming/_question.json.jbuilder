@@ -22,6 +22,7 @@ json.question do
   json.published_assessment @assessment.published?
   json.attempt_limit @programming_question.attempt_limit
   json.is_codaveri @programming_question.is_codaveri
+  json.codaveri_enabled current_course.component_enabled?(Course::CodaveriComponent)
   json.existing_submissions_count @assessment.submissions.count
 
   if @programming_question.attachment.present? && @programming_question.attachment.persisted?

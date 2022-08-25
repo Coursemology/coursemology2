@@ -220,16 +220,6 @@ class Course < ApplicationRecord
     settings(:course_assessments_component).allow_mrq_options_randomization = option
   end
 
-  # Setting to allow randomization of order of displaying mrq options
-  def enable_codaveri_question_type
-    settings(:course_assessments_component).enable_codaveri_question_type
-  end
-
-  def enable_codaveri_question_type=(option)
-    option = ActiveRecord::Type::Boolean.new.cast(option)
-    settings(:course_assessments_component).enable_codaveri_question_type = option
-  end
-
   def upcoming_lesson_plan_items_exist?
     opening_items = lesson_plan_items.published.eager_load(:personal_times, :reference_times).preload(:actable)
     opening_items.select { |item| item.actable.include_in_consolidated_email?(:opening_reminder) }.any? do |item|

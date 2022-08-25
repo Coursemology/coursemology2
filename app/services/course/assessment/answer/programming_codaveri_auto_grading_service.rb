@@ -2,6 +2,10 @@
 class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService < \
   Course::Assessment::Answer::AutoGradingService
   def evaluate(answer)
+    unless answer.submission.assessment.course.component_enabled?(Course::CodaveriComponent)
+      raise CodaveriError, I18n.t('course.assessment.question.programming.question_type_codaveri_deactivated')
+    end
+
     answer.correct, grade, programming_auto_grading, = evaluate_answer(answer.actable)
     programming_auto_grading.auto_grading = answer.auto_grading
     grade

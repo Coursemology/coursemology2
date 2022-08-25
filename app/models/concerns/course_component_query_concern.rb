@@ -65,6 +65,10 @@ module CourseComponentQueryConcern
     end
   end
 
+  def component_enabled?(component)
+    enabled_components.include? component
+  end
+
   private
 
   # Specify which subtree settings for component should be stored under.
