@@ -41,9 +41,9 @@ class Course::Video::VideosController < Course::Video::Controller
 
   def destroy
     if @video.destroy
-      redirect_to course_videos_path(current_course), success: t('.success', title: @video.title)
+      redirect_to course_videos_path(current_course, tab: @video.tab), success: t('.success', title: @video.title)
     else
-      redirect_to course_videos_path(current_course),
+      redirect_to course_videos_path(current_course, tab: @video.tab),
                   danger: t('.failure', error: @video.errors.full_messages.to_sentence)
     end
   end
