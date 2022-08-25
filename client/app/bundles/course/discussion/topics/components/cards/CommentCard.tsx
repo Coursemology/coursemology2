@@ -1,4 +1,4 @@
-import { Avatar, Button, CardHeader } from '@mui/material';
+import { Avatar, Button, CardHeader, Link } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { grey, orange, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
@@ -198,7 +198,10 @@ const CommentCard: FC<Props> = (props) => {
           avatar={
             <Avatar
               src={post.creator.imageUrl}
+              alt={post.creator.name}
               style={{ height: '25px', width: '25px' }}
+              component={Link}
+              href={getCourseUserURL(getCourseId(), post.creator.id)}
             />
           }
           title={
