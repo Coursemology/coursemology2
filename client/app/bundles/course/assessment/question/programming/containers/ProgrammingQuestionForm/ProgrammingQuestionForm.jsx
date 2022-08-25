@@ -22,8 +22,11 @@ import {
   TextField,
   Grid,
   Tooltip,
+  RadioGroup,
+  Radio,
 } from '@mui/material';
 import { blue, grey, red } from '@mui/material/colors';
+import { HelpOutline } from '@mui/icons-material';
 
 import CKEditorRichText from 'lib/components/CKEditorRichText';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
@@ -665,17 +668,35 @@ class ProgrammingQuestionForm extends Component {
     // autograded
     // isCodaveri &&
     // question.get('existing_submissions_count') !== 0;
-    let autogradedLabel = this.props.intl.formatMessage(
-      translations.autograded,
+    let autogradedLabel = (
+      <b>{this.props.intl.formatMessage(translations.autograded)}</b>
     );
     if (autogradedAssessment && !autograded) {
-      autogradedLabel += ` (${this.props.intl.formatMessage(
-        translations.autogradedAssessment,
-      )})`;
+      autogradedLabel = (
+        <div style={{ alignItems: 'center', display: 'flex' }}>
+          <b>{this.props.intl.formatMessage(translations.autograded)}</b>
+          <Tooltip
+            title={this.props.intl.formatMessage(
+              translations.autogradedAssessment,
+            )}
+          >
+            <HelpOutline fontSize="small" />
+          </Tooltip>
+        </div>
+      );
     } else if (hasAutoGradings) {
-      autogradedLabel += ` (${this.props.intl.formatMessage(
-        translations.autogradedToggleDisabled,
-      )})`;
+      autogradedLabel = (
+        <div style={{ alignItems: 'center', display: 'flex' }}>
+          <b>{this.props.intl.formatMessage(translations.autograded)}</b>
+          <Tooltip
+            title={this.props.intl.formatMessage(
+              translations.autogradedToggleDisabled,
+            )}
+          >
+            <HelpOutline fontSize="small" />
+          </Tooltip>
+        </div>
+      );
     }
 
     const showEditOnline = question.get('edit_online');
@@ -806,7 +827,7 @@ class ProgrammingQuestionForm extends Component {
                     disabled={
                       this.props.data.get('is_loading') || hasAutoGradings
                     }
-                    label={<b>{autogradedLabel}</b>}
+                    label={autogradedLabel}
                   />
                   <input
                     type="hidden"
@@ -822,36 +843,58 @@ class ProgrammingQuestionForm extends Component {
               ) : null}
               {showIsCodaveri && (
                 <>
-                  <Tooltip
-                    title={this.props.intl.formatMessage(
-                      enableCodaveri
-                        ? translations.codaveriTooltip
-                        : translations.disableCodaveriTooltip,
-                    )}
+                  <RadioGroup
+                    name={ProgrammingQuestionForm.getInputName('is_codaveri')}
+                    value={isCodaveri}
+                    onChange={(e_, mode) => {
+                      this.handleChange('is_codaveri', mode === 'true');
+                    }}
+                    disabled={this.props.data.get('is_loading')}
                   >
+                    <div>
+                      {this.props.intl.formatMessage(
+                        translations.chooseEvaluator,
+                      )}
+                    </div>
                     <FormControlLabel
-                      control={
-                        <Switch
-                          checked={isCodaveri}
-                          color="primary"
-                          onChange={(e) => {
-                            this.handleChange('is_codaveri', e.target.checked);
-                          }}
-                        />
-                      }
-                      name={ProgrammingQuestionForm.getInputName('is_codaveri')}
-                      disabled={
-                        this.props.data.get('is_loading') || !enableCodaveri
-                      }
+                      key={0}
+                      control={<Radio style={{ padding: 0, marginLeft: 10 }} />}
+                      value={false}
                       label={
                         <b>
                           {this.props.intl.formatMessage(
-                            translations.codaveriToggle,
+                            translations.defaultEvaluator,
                           )}
                         </b>
                       }
                     />
-                  </Tooltip>
+                    <FormControlLabel
+                      key={1}
+                      control={<Radio style={{ padding: 0, marginLeft: 10 }} />}
+                      disabled={!enableCodaveri}
+                      value
+                      label={
+                        <Tooltip
+                          title={this.props.intl.formatMessage(
+                            enableCodaveri
+                              ? translations.codaveriTooltip
+                              : translations.disableCodaveriTooltip,
+                          )}
+                        >
+                          <div
+                            style={{ alignItems: 'center', display: 'flex' }}
+                          >
+                            <b>
+                              {this.props.intl.formatMessage(
+                                translations.codaveriEvaluator,
+                              )}
+                            </b>
+                            <HelpOutline fontSize="small" />
+                          </div>
+                        </Tooltip>
+                      }
+                    />
+                  </RadioGroup>
                   <input
                     type="hidden"
                     name={ProgrammingQuestionForm.getInputName('is_codaveri')}
