@@ -33,6 +33,7 @@ class Course::Discussion::PostsController < Course::ComponentController
         # and send notification
         if @post.published? && @post.codaveri_feedback && @post.creator_id == 0
           @post.update(creator_id: current_user.id)
+          update_topic_pending_status
           send_created_notification(@post)
         end
         format.json { render @post }
