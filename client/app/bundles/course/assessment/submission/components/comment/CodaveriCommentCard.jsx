@@ -153,8 +153,10 @@ const CodaveriCommentCard = (props) => {
             // To prevent the rating to be reset to null when clicking on the same previous rating
             if (newValue !== null) {
               setRating(newValue);
-              setEditMode(true);
-              handleChange(text);
+              if (!editMode) {
+                setEditMode(true);
+                handleChange(text);
+              }
             }
           }}
           size="medium"
