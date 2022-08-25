@@ -42,7 +42,7 @@ const TodoAccessButton: FC<Props> = (props) => {
           window.location.href = accessButtonLink;
         }
       }}
-      style={{ marginRight: 10, width: 100 }}
+      style={{ width: 80 }}
     >
       {accessButtonText}
     </Button>

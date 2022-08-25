@@ -1,8 +1,5 @@
 import { produce } from 'immer';
-import {
-  ForumDisbursementFilters,
-  ForumPostEntity,
-} from 'types/course/disbursement';
+import { ForumDisbursementFilters } from 'types/course/disbursement';
 
 import {
   createEntityStore,
@@ -57,7 +54,7 @@ const reducer = produce(
         break;
       }
       case SAVE_FORUM_POST_LIST: {
-        const forumPostEntity: ForumPostEntity[] = action.posts.map((data) => ({
+        const forumPostEntity = action.posts.map((data) => ({
           ...data,
           userId: action.userId,
         }));

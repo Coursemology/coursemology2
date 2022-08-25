@@ -52,6 +52,7 @@ const TodoIgnoreButton: FC<Props> = (props) => {
       onClick={(): void => {
         onIgnore();
       }}
+      style={{ width: 80 }}
     >
       {intl.formatMessage(translations.ignoreButtonText)}
     </Button>
