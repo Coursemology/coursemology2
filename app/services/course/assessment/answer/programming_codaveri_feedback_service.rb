@@ -17,7 +17,8 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
     construct_feedback_object
     request_codaveri_feedback
     process_codaveri_feedback
-    send_codaveri_notification_email
+    # Email notification is disabled. If needed, it can be enabled below.
+    # send_codaveri_notification_email
   end
 
   private
