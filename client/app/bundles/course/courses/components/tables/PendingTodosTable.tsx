@@ -4,6 +4,7 @@ import { TodoData } from 'types/course/lesson-plan/todos';
 import {
   Button,
   Link,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -167,12 +168,11 @@ const PendingTodosTable: FC<Props> = (props) => {
     }
 
     return (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          minWidth: 200,
-        }}
+      <Stack
+        direction={{ xs: 'column', sm: 'row' }}
+        spacing={1}
+        justifyContent="center"
+        alignItems="center"
       >
         <TodoAccessButton
           accessButtonText={accessButtonText}
@@ -190,7 +190,7 @@ const PendingTodosTable: FC<Props> = (props) => {
           todoType={todoType}
           todoId={todo.id}
         />
-      </div>
+      </Stack>
     );
   };
 
@@ -248,26 +248,20 @@ const PendingTodosTable: FC<Props> = (props) => {
               style={{ ...getBackgroundColor(todo) }}
             >
               <TableCell>
-                <div style={{ width: 300 }}>
-                  <Link
-                    href={`${getCourseURL(getCourseId())}/${todoType}/${
-                      todo.itemActableId
-                    }`}
-                    style={{ textDecoration: 'none' }}
-                  >
-                    {todo.itemActableTitle}
-                  </Link>
-                </div>
+                <Link
+                  href={`${getCourseURL(getCourseId())}/${todoType}/${
+                    todo.itemActableId
+                  }`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  {todo.itemActableTitle}
+                </Link>
               </TableCell>
               <TableCell>
-                <div style={{ width: 180 }}>
-                  <StartEndTime timeInfo={todo.startTimeInfo} />
-                </div>
+                <StartEndTime timeInfo={todo.startTimeInfo} />
               </TableCell>
               <TableCell>
-                <div style={{ width: 180 }}>
-                  <StartEndTime timeInfo={todo.endTimeInfo} />
-                </div>
+                <StartEndTime timeInfo={todo.endTimeInfo} />
               </TableCell>
               <TableCell>{renderButtons(todo)}</TableCell>
             </TableRow>

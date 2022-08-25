@@ -1,5 +1,4 @@
 import { produce } from 'immer';
-import { ExperiencePointsRecordMiniEntity } from 'types/course/experiencePointsRecords';
 import {
   createEntityStore,
   saveEntityToStore,
@@ -145,9 +144,9 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
     }
     case UPDATE_EXPERIENCE_POINTS_RECORD: {
       if (draft.experiencePointsRecords.byId[action.data.id]) {
-        const prevExperiencePointsEntity: ExperiencePointsRecordMiniEntity =
+        const prevExperiencePointsEntity =
           draft.experiencePointsRecords.byId[action.data.id]!;
-        const nextExperiencePointsEntity: ExperiencePointsRecordMiniEntity = {
+        const nextExperiencePointsEntity = {
           ...prevExperiencePointsEntity,
           reason: {
             ...prevExperiencePointsEntity.reason,
