@@ -27,3 +27,5 @@ en:
                 evaluation_error: 'an error occurred during evaluation, see logs.'
           question_type: Programming
           question_type_codaveri: Programming (Codaveri)
+          question_type_codaveri_deactivated: >-
+            Codaveri component is deactivated. Please report this issue to the course owner/TA.

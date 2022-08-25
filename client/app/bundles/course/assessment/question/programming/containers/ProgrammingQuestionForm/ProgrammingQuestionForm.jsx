@@ -21,6 +21,7 @@ import {
   Tabs,
   TextField,
   Grid,
+  Tooltip,
 } from '@mui/material';
 import { blue, grey, red } from '@mui/material/colors';
 
@@ -648,6 +649,9 @@ class ProgrammingQuestionForm extends Component {
     const showIsCodaveri =
       !this.props.data.getIn(['question', 'autograded_assessment']) &&
       question.get('autograded');
+    const enableCodaveri =
+      this.props.data.getIn(['question', 'codaveri_enabled']) ||
+      question.get('is_codaveri');
 
     const skillsOptions = question.get('skills').toJS();
     const skillsValues = question.get('skill_ids').toJS();
@@ -818,12 +822,13 @@ class ProgrammingQuestionForm extends Component {
               ) : null}
               {showIsCodaveri && (
                 <>
-                  <ReactTooltip id="codaveri-tooltip">
-                    {this.props.intl.formatMessage(
-                      translations.codaveriTooltip,
+                  <Tooltip
+                    title={this.props.intl.formatMessage(
+                      enableCodaveri
+                        ? translations.codaveriTooltip
+                        : translations.disableCodaveriTooltip,
                     )}
-                  </ReactTooltip>
-                  <span data-tip data-for="codaveri-tooltip">
+                  >
                     <FormControlLabel
                       control={
                         <Switch
@@ -835,7 +840,9 @@ class ProgrammingQuestionForm extends Component {
                         />
                       }
                       name={ProgrammingQuestionForm.getInputName('is_codaveri')}
-                      disabled={this.props.data.get('is_loading')}
+                      disabled={
+                        this.props.data.get('is_loading') || !enableCodaveri
+                      }
                       label={
                         <b>
                           {this.props.intl.formatMessage(
@@ -844,15 +851,15 @@ class ProgrammingQuestionForm extends Component {
                         </b>
                       }
                     />
-                    <input
-                      type="hidden"
-                      name={ProgrammingQuestionForm.getInputName('is_codaveri')}
-                      id={ProgrammingQuestionForm.getInputId('is_codaveri')}
-                      value={isCodaveri}
-                      style={{ display: 'none' }}
-                      readOnly={this.props.data.get('is_loading')}
-                    />
-                  </span>
+                  </Tooltip>
+                  <input
+                    type="hidden"
+                    name={ProgrammingQuestionForm.getInputName('is_codaveri')}
+                    id={ProgrammingQuestionForm.getInputId('is_codaveri')}
+                    value={isCodaveri}
+                    style={{ display: 'none' }}
+                    readOnly={this.props.data.get('is_loading')}
+                  />
                 </>
               )}
             </div>

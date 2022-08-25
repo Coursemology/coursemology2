@@ -37,3 +37,5 @@ en:
       name: :'breadcrumbs.course.survey.controller.index'
     learning_map:
       name: 'Learning Map'
+    codaveri:
+      name: 'Codaveri Evaluation and Feedback'

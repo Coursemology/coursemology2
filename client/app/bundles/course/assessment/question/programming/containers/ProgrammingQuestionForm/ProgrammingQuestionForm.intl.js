@@ -180,6 +180,12 @@ export default defineMessages({
     id: 'course.assessment.question.programming.programmingQuestionForm.codaveriTooltip',
     defaultMessage:
       "Codaveri provides code evaluation and automated code feedback services for students' codes. \
-      (Note that the code feedback is only provided upon finalising submissions)",
+      (Note that the code feedback is only provided upon finalising submissions).",
+  },
+  disableCodaveriTooltip: {
+    id: 'course.assessment.question.programming.programmingQuestionForm.disableCodaveriTooltip',
+    defaultMessage:
+      "Codaveri provides code evaluation and automated code feedback services for students' codes. \
+      This setting is currently disabled. To use this feature, please enable it in the course setting.",
   },
 });

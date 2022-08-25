@@ -149,7 +149,10 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     response_body = JSON.parse(post_response.body)
     response_success = response_body['success']
 
-    raise CodaveriError, response_body unless response_status == 200 && response_success
+    unless response_status == 200 && response_success
+      raise CodaveriError,
+            { status: response_status, body: response_body }
+    end
 
     @codaveri_evaluation_results = response_body['data']['evaluation_results']
   end
