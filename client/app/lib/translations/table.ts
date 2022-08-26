@@ -125,6 +125,22 @@ const translations = defineMessages({
     id: 'components.table.column.updatedAt',
     defaultMessage: 'Updated At',
   },
+  course: {
+    id: 'components.table.column.course',
+    defaultMessage: 'Course',
+  },
+  level: {
+    id: 'components.table.column.level',
+    defaultMessage: 'Level',
+  },
+  achievements: {
+    id: 'components.table.column.achievements',
+    defaultMessage: 'Achievements',
+  },
+  enrolledAt: {
+    id: 'components.table.column.enrolledAt',
+    defaultMessage: 'Enrolled At',
+  },
 });
 
 export default translations;

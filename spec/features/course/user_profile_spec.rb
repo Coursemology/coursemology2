@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Courses: CourseUser Profile' do
+RSpec.feature 'Courses: CourseUser Profile', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -10,7 +10,7 @@ RSpec.feature 'Courses: CourseUser Profile' do
     let(:achievement) { create(:course_user_achievement, course_user: course_student).achievement }
     let(:course_teaching_assistant) { create(:course_teaching_assistant, course: course) }
 
-    context 'As a Course Teaching Assistant', js: true do
+    context 'As a Course Teaching Assistant' do
       before { login_as(course_teaching_assistant.user, scope: :user) }
 
       scenario "I can view a student's profile" do
@@ -29,7 +29,7 @@ RSpec.feature 'Courses: CourseUser Profile' do
       end
     end
 
-    context 'As a Course Student', js: true  do
+    context 'As a Course Student' do
       let(:student_user) { create(:course_student, course: course).user }
 
       scenario "I can view a staff's profile" do

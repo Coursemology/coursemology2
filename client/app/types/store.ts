@@ -13,6 +13,7 @@ import { DisbursementState } from 'bundles/course/experience-points/disbursement
 import { CommentState } from 'bundles/course/discussion/topics/types';
 import { AdminState } from 'bundles/system/admin/admin/types';
 import { FoldersState } from 'bundles/course/material/folders/types';
+import { GlobalUserState } from 'bundles/users/types';
 
 /**
  * Describes the overall shape of the application's Redux store state.
@@ -31,6 +32,7 @@ export interface AppState {
   enrolRequests: EnrolRequestsState;
   disbursement: DisbursementState;
   comments: CommentState;
+  global: { user: GlobalUserState };
 }
 
 export type Operation<R> = ThunkAction<

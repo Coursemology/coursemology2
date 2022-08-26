@@ -4,13 +4,21 @@ class UsersController < ApplicationController
 
   def show
     if @user.built_in?
-      render file: 'public/404', layout: false, status: :not_found
+      respond_to do |format|
+        format.html { render file: 'public/404', layout: false, status: 404 }
+        format.json { render file: 'public/404.json', layout: false, status: 404 }
+      end
     else
-      course_users =
-        @user.course_users.with_course_statistics.from_instance(current_tenant).includes(:course)
-      @current_course_users = course_users.merge(Course.current)
-      @completed_course_users = course_users.merge(Course.completed)
-      @instances = other_instances
+      respond_to do |format|
+        format.html
+        format.json do
+          course_users =
+            @user.course_users.with_course_statistics.from_instance(current_tenant).includes(:course)
+          @current_courses = course_users.merge(Course.current).order(created_at: :desc)
+          @completed_courses = course_users.merge(Course.completed).order(created_at: :desc)
+          @instances = other_instances
+        end
+      end
     end
   end
 
