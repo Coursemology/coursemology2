@@ -37,8 +37,8 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
         start_date = 4.weeks.ago.strftime('%d/%m/%Y %I:%M')
         end_date = 2.weeks.ago.strftime('%d/%m/%Y %I:%M')
 
-        find_field('startTime').click.set(start_date)
-        find_field('endTime').click.set(end_date)
+        find_field('startTime', visible: false).click.set(start_date)
+        find_field('endTime', visible: false).click.set(end_date)
 
         find('div.weekly_cap').find('input').set(200)
 
