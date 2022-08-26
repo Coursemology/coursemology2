@@ -1,8 +1,14 @@
 import { Roles } from 'types';
+import { CourseUserRole } from './course/courseUsers';
 
 export type UserRoles = Roles<'normal' | 'administrator'>;
 export type UserRole = keyof UserRoles;
 
+export interface UserBasicListData {
+  id: number;
+  name: string;
+  imageUrl?: string;
+}
 export interface UserListData {
   id: number;
   name: string;
@@ -19,6 +25,7 @@ export interface UserListData {
 export interface UserBasicMiniEntity {
   id: number;
   name: string;
+  imageUrl?: string;
 }
 
 export interface UserMiniEntity extends UserBasicMiniEntity {
@@ -30,6 +37,32 @@ export interface UserMiniEntity extends UserBasicMiniEntity {
   role: UserRole;
   canMasquerade?: boolean;
   masqueradePath?: string;
+}
+
+export interface UserCourseListData {
+  id: number;
+  title: string;
+  createdAt: string;
+  userCount: number;
+  courseUserId: number;
+  courseUserName: string;
+  courseUserRole: CourseUserRole;
+  courseUserAchievement: number;
+  courseUserLevel: number;
+  type: string;
+}
+
+export interface UserCourseMiniEntity {
+  id: number;
+  title: string;
+  createdAt: string;
+  userCount: number;
+  courseUserId: number;
+  courseUserName: string;
+  courseUserRole: CourseUserRole;
+  courseUserAchievement: number;
+  courseUserLevel: number;
+  type: string;
 }
 
 export interface AdminStats {

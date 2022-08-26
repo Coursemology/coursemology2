@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'User: Profile' do
+RSpec.feature 'User: Profile', js: true do
   let(:instance) { Instance.default }
   let(:other_instance) { create(:instance) }
 
