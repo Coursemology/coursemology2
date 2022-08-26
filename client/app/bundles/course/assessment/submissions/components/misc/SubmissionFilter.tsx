@@ -19,15 +19,17 @@ interface Props extends WrappedComponentProps {
 
   setPageNum: React.Dispatch<React.SetStateAction<number>>;
   setTableIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-
-  setSelectedAssessment: React.Dispatch<
-    React.SetStateAction<SubmissionAssessmentFilterData | null>
-  >;
-  setSelectedGroup: React.Dispatch<
-    React.SetStateAction<SubmissionGroupFilterData | null>
-  >;
-  setSelectedUser: React.Dispatch<
-    React.SetStateAction<SubmissionUserFilterData | null>
+  selectedFilter: {
+    assessment: SubmissionAssessmentFilterData | null;
+    group: SubmissionGroupFilterData | null;
+    user: SubmissionUserFilterData | null;
+  };
+  setSelectedFilter: React.Dispatch<
+    React.SetStateAction<{
+      assessment: SubmissionAssessmentFilterData | null;
+      group: SubmissionGroupFilterData | null;
+      user: SubmissionUserFilterData | null;
+    }>
   >;
   handleFilterOnClick: (newPageNumber: number) => void;
 }
@@ -41,9 +43,13 @@ const translations = defineMessages({
     id: 'course.assessments.submissions.filterHeader',
     defaultMessage: 'Filter Submissions',
   },
-  filterButton: {
-    id: 'course.assessments.submissions.filterButton',
+  applyFilterButton: {
+    id: 'course.assessments.submissions.applyFilterButton',
     defaultMessage: 'Apply Filter',
+  },
+  clearFilterButton: {
+    id: 'course.assessments.submissions.clearFilterButton',
+    defaultMessage: 'Clear Filter',
   },
 });
 
@@ -54,11 +60,11 @@ const SubmissionFilter: FC<Props> = (props) => {
     filter,
     tabCategories,
     categoryNum,
-    setSelectedAssessment,
-    setSelectedGroup,
-    setSelectedUser,
+    selectedFilter,
+    setSelectedFilter,
     handleFilterOnClick,
   } = props;
+  const disableButton = Object.values(selectedFilter).every((x) => x === null);
 
   return (
     <>
@@ -89,8 +95,12 @@ const SubmissionFilter: FC<Props> = (props) => {
                   _event: React.SyntheticEvent,
                   value: { id: number; title: string } | null,
                 ): void => {
-                  setSelectedAssessment(value);
+                  setSelectedFilter({
+                    ...selectedFilter,
+                    assessment: value,
+                  });
                 }}
+                value={selectedFilter.assessment}
               />
             </Grid>
             <Grid item xs={1} paddingRight={1} paddingBottom={1}>
@@ -114,8 +124,12 @@ const SubmissionFilter: FC<Props> = (props) => {
                   _event: React.SyntheticEvent,
                   value: { id: number; name: string } | null,
                 ): void => {
-                  setSelectedGroup(value);
+                  setSelectedFilter({
+                    ...selectedFilter,
+                    group: value,
+                  });
                 }}
+                value={selectedFilter.group}
               />
             </Grid>
             <Grid item xs={1} paddingRight={1}>
@@ -139,19 +153,39 @@ const SubmissionFilter: FC<Props> = (props) => {
                   _event: React.SyntheticEvent,
                   value: { id: number; name: string } | null,
                 ): void => {
-                  setSelectedUser(value);
+                  setSelectedFilter({
+                    ...selectedFilter,
+                    user: value,
+                  });
                 }}
+                value={selectedFilter.user}
               />
             </Grid>
           </Grid>
-
-          <Button
-            variant="contained"
-            sx={{ width: 130 }}
-            onClick={(): void => handleFilterOnClick(1)}
-          >
-            {intl.formatMessage(translations.filterButton)}
-          </Button>
+          <Grid container>
+            <Button
+              disabled={disableButton}
+              variant="contained"
+              onClick={(): void => handleFilterOnClick(1)}
+            >
+              {intl.formatMessage(translations.applyFilterButton)}
+            </Button>
+            <Button
+              disabled={disableButton}
+              color="secondary"
+              variant="contained"
+              onClick={(): void => {
+                setSelectedFilter({
+                  assessment: null,
+                  group: null,
+                  user: null,
+                });
+              }}
+              style={{ marginLeft: 10 }}
+            >
+              {intl.formatMessage(translations.clearFilterButton)}
+            </Button>
+          </Grid>
         </Stack>
       )}
     </>

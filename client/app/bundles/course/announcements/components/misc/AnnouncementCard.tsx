@@ -138,7 +138,6 @@ const AnnouncementCard: FC<Props> = (props) => {
           borderStyle: 'solid',
           borderWidth: 0.2,
           borderColor: grey[300],
-          borderRadius: 10,
           padding: 10,
           backgroundColor,
         }}

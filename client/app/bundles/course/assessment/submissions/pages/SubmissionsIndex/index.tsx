@@ -79,22 +79,25 @@ const SubmissionsIndex: FC<Props> = (props) => {
   const [tableIsLoading, setTableIsLoading] = useState(true);
 
   // For filtering
-  const [selectedAssessment, setselectedAssessment] =
-    useState<SubmissionAssessmentFilterData | null>(null);
-
-  const [selectedGroup, setselectedGroup] =
-    useState<SubmissionGroupFilterData | null>(null);
-
-  const [selectedUser, setselectedUser] =
-    useState<SubmissionUserFilterData | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState<{
+    assessment: SubmissionAssessmentFilterData | null;
+    group: SubmissionGroupFilterData | null;
+    user: SubmissionUserFilterData | null;
+  }>({
+    assessment: null,
+    group: null,
+    user: null,
+  });
 
   const handleFilter = (newPageNumber: number): void => {
     setPageNum(newPageNumber);
     setTableIsLoading(true);
 
-    const assessmentId = selectedAssessment ? selectedAssessment.id : null;
-    const groupId = selectedGroup ? selectedGroup.id : null;
-    const userId = selectedUser ? selectedUser.id : null;
+    const assessmentId = selectedFilter.assessment
+      ? selectedFilter.assessment.id
+      : null;
+    const groupId = selectedFilter.group ? selectedFilter.group.id : null;
+    const userId = selectedFilter.user ? selectedFilter.user.id : null;
 
     const categoryId = tabValue > 1 ? tabs.categories[tabValue - 2].id : null;
 
@@ -170,9 +173,8 @@ const SubmissionsIndex: FC<Props> = (props) => {
             filter={filter}
             setPageNum={setPageNum}
             setTableIsLoading={setTableIsLoading}
-            setSelectedAssessment={setselectedAssessment}
-            setSelectedGroup={setselectedGroup}
-            setSelectedUser={setselectedUser}
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
             handleFilterOnClick={handleFilter}
           />
 
