@@ -34,10 +34,11 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
           expect(find('input').value).to eq('100')
         end
 
-        start_date = 4.weeks.ago
-        end_date = 2.weeks.ago
-        fill_in_mui_datetimepicker(find('div.start_time'), start_date)
-        fill_in_mui_datetimepicker(find('div.end_time'), end_date)
+        start_date = 4.weeks.ago.strftime('%d/%m/%Y %I:%M')
+        end_date = 2.weeks.ago.strftime('%d/%m/%Y %I:%M')
+
+        find_field('startTime').click.set(start_date)
+        find_field('endTime').click.set(end_date)
 
         find('div.weekly_cap').find('input').set(200)
 
@@ -49,15 +50,15 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
         # The first student gets 400 (2 * weekly_cap) for the 2-week span since his
         # participation score is higher than the rest due to the additional upvote.
         within find(content_tag_selector(students[0])) do
-          expect(find('input').value).to eq('429')
+          expect(find('input').value).to eq('400')
         end
         # The other two students get the same experience points because they have the
         # same participation score.
         within find(content_tag_selector(students[1])) do
-          expect(find('input').value).to eq('215')
+          expect(find('input').value).to eq('200')
         end
         within find(content_tag_selector(students[2])) do
-          expect(find('input').value).to eq('215')
+          expect(find('input').value).to eq('200')
         end
 
         expect do
