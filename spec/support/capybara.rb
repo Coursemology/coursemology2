@@ -10,7 +10,7 @@ require 'selenium/webdriver'
 #   Capybara::Selenium::Driver.new app, browser: :chrome, desired_capabilities: capabilities
 # end
 
-Capybara.javascript_driver = :selenium_chrome_headless
+Capybara.javascript_driver = :selenium_chrome
 
 module Capybara::TestGroupHelpers
   module FeatureHelpers
