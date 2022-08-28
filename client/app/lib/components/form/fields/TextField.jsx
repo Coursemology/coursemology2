@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
-import { TextField } from '@mui/material';
+import TextField from 'lib/components/TextField';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import { FIELD_DEBOUNCE_DELAY } from 'lib/constants/sharedConstants';
 
@@ -10,13 +10,9 @@ const styles = {
   empty: { margin: '0px 0px 0px 0px' },
 };
 
-const onlyNumberInput = (evt) => {
-  if (evt.which === 8) {
-    return;
-  }
-  if (evt.which < 48 || evt.which > 57) {
-    evt.preventDefault();
-  }
+const onlyNumberInput = (e) => {
+  if (e.which === 8) return;
+  if (e.which < 48 || e.which > 57) e.preventDefault();
 };
 
 const FormTextField = (props) => {
@@ -30,10 +26,10 @@ const FormTextField = (props) => {
     enableDebouncing = false,
     ...custom
   } = props;
+
+  if (!renderIf) return null;
+
   const [ownValue, setOwnValue] = useState(field.value);
-  if (!renderIf) {
-    return null;
-  }
 
   // Debounced function to sync the value of this component with the form. This helps to reduce the cost of re-rendering
   // the entire form when the form state changes, especially in large forms.
@@ -64,9 +60,8 @@ const FormTextField = (props) => {
   };
 
   const handleKeyPress = (e) => {
-    if (custom.type === 'number') {
-      onlyNumberInput(e);
-    }
+    if (custom.type === 'number') onlyNumberInput(e);
+
     // To remove trailing whitespace when clicking enter within the field.
     if (e.charCode === 13) {
       setOwnValue(e.target.value.trim()); // Update internal field value
@@ -77,7 +72,7 @@ const FormTextField = (props) => {
   return (
     <TextField
       {...field}
-      value={ownValue}
+      value={ownValue ?? ''}
       onChange={handleChange}
       onBlur={handleBlur}
       onKeyPress={handleKeyPress}
@@ -87,8 +82,8 @@ const FormTextField = (props) => {
       helperText={
         fieldState.error && formatErrorMessage(fieldState.error.message)
       }
+      {...(margins ? { style: styles.textFieldStyle } : null)}
       {...custom}
-      style={margins ? styles.textFieldStyle : styles.empty}
     />
   );
 };
@@ -115,6 +110,7 @@ FormTextField.propTypes = {
   id: PropTypes.string,
   sx: PropTypes.object,
   className: PropTypes.string,
+  description: PropTypes.string,
 };
 
 export default FormTextField;
