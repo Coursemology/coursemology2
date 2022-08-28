@@ -148,6 +148,15 @@ const translations = defineMessages({
     id: 'course.assessment.form.layout',
     defaultMessage: 'Layout',
   },
+  unlockConditions: {
+    id: 'course.assessment.form.unlockConditions',
+    defaultMessage: 'Unlock conditions',
+  },
+  unlockConditionsHint: {
+    id: 'course.assessment.form.unlockConditionsHint',
+    defaultMessage:
+      'This assessment will be unlocked if a student meets the following conditions.',
+  },
   displayAssessmentAs: {
     id: 'course.assessment.form.displayAssessmentAs',
     defaultMessage: 'Display assessment as',

@@ -35,7 +35,7 @@ RSpec.feature 'Course: Achievements' do
         visit edit_course_achievement_path(course, achievement)
 
         # Create achievement condition
-        find('.add-condition-btn').click
+        find_button('Add a condition').click
         # Wait for the menu to expand fully. This scenario didn't fail for this but added
         # first for consistency.
         sleep 0.5
@@ -81,7 +81,7 @@ RSpec.feature 'Course: Achievements' do
         visit edit_course_achievement_path(course, achievement)
 
         # Create assessment condition
-        find('.add-condition-btn').click
+        find_button('Add a condition').click
         sleep 0.5 # Wait for the menu to expand fully
         find_link(
           nil, href: new_course_achievement_condition_assessment_path(course, achievement)
@@ -125,7 +125,7 @@ RSpec.feature 'Course: Achievements' do
         visit edit_course_achievement_path(course, achievement)
 
         # Create level condition
-        find('.add-condition-btn').click
+        find_button('Add a condition').click
         sleep 0.5 # need to wait for the menu to expand fully so we don't click the wrong button
         # TODO: disable animations globally in test env
         find_link(nil, href: new_course_achievement_condition_level_path(course, achievement)).click
@@ -167,7 +167,7 @@ RSpec.feature 'Course: Achievements' do
         visit edit_course_achievement_path(course, achievement)
 
         # Create survey condition
-        find('.add-condition-btn').click
+        find_button('Add a condition').click
         sleep 0.5 # need to wait for the menu to expand fully so we don't click the wrong button
         # TODO: disable animations globally in test env
         find_link(nil, href: new_course_achievement_condition_survey_path(course, achievement)).click

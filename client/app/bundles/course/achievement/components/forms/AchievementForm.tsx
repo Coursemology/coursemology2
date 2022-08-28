@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import ConditionList from 'lib/components/course/ConditionList';
 import ErrorText from 'lib/components/ErrorText';
 import formTranslations from 'lib/translations/form';
@@ -61,6 +61,15 @@ const translations = defineMessages({
   update: {
     id: 'course.achievement.form.update',
     defaultMessage: 'Update',
+  },
+  unlockConditions: {
+    id: 'course.achievement.form.unlockConditions',
+    defaultMessage: 'Unlock conditions',
+  },
+  unlockConditionsHint: {
+    id: 'course.achievement.form.unlockConditionsHint',
+    defaultMessage:
+      'This achievement will be unlocked if a student meets the following conditions.',
   },
 });
 
@@ -212,12 +221,24 @@ const AchievementForm: FC<Props> = (props) => {
           )}
         />
         {editing && conditionAttributes && (
-          <div>
+          <>
+            <Typography variant="body1" sx={{ paddingTop: 2 }}>
+              <FormattedMessage {...translations.unlockConditions} />
+            </Typography>
+
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ paddingBottom: 2 }}
+            >
+              <FormattedMessage {...translations.unlockConditionsHint} />
+            </Typography>
+
             <ConditionList
               newConditionUrls={conditionAttributes.enabledConditions}
               conditions={conditionAttributes.conditions}
             />
-          </div>
+          </>
         )}
         {actionButtons}
       </form>

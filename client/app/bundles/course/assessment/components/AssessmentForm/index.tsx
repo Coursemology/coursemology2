@@ -348,10 +348,22 @@ const AssessmentForm = (props: AssessmentFormProps) => {
           </Grid>
 
           {editing && conditionAttributes && (
-            <ConditionList
-              newConditionUrls={conditionAttributes.new_condition_urls}
-              conditions={conditionAttributes.conditions}
-            />
+            <>
+              <div>
+                <Typography variant="body1" sx={{ paddingTop: 2 }}>
+                  {intl.formatMessage(t.unlockConditions)}
+                </Typography>
+
+                <Typography variant="body2" color="text.secondary">
+                  {intl.formatMessage(t.unlockConditionsHint)}
+                </Typography>
+              </div>
+
+              <ConditionList
+                newConditionUrls={conditionAttributes.new_condition_urls}
+                conditions={conditionAttributes.conditions}
+              />
+            </>
           )}
         </Section>
       )}

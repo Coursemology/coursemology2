@@ -1,9 +1,9 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
-  title: {
-    id: 'course.conditions.title',
-    defaultMessage: 'Unlock Conditions',
+  addCondition: {
+    id: 'course.conditions.addCondition',
+    defaultMessage: 'Add a condition',
   },
   type: {
     id: 'course.conditions.type',

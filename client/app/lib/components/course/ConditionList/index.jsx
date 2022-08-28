@@ -11,6 +11,8 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Grid,
+  Button,
 } from '@mui/material';
 import Add from '@mui/icons-material/Add';
 import Edit from '@mui/icons-material/Edit';
@@ -106,7 +108,6 @@ class ConditionList extends PureComponent {
     if (this.props.conditions.length > 0) {
       return (
         <TableHead>
-          {this.renderTopHeader()}
           <TableRow>
             <TableCell colSpan="1">
               <FormattedMessage {...translations.type} />
@@ -119,53 +120,51 @@ class ConditionList extends PureComponent {
         </TableHead>
       );
     }
-    return <TableHead>{this.renderTopHeader()}</TableHead>;
+
+    return null;
   }
 
   renderTopHeader() {
     return (
-      <TableRow>
-        <TableCell colSpan="4">
-          <h3>
-            <FormattedMessage {...translations.title} />
-          </h3>
-        </TableCell>
-        <TableCell colSpan="2" style={styles.alignRight}>
-          <IconButton className="add-condition-btn" onClick={this.handleClick}>
-            <Add htmlColor="black" />
-          </IconButton>
-          <Menu
-            id="condition-menu"
-            anchorEl={this.state.anchorEl}
-            disableAutoFocusItem
-            onClose={this.handleClose}
-            open={Boolean(this.state.anchorEl)}
-          >
-            {this.props.newConditionUrls.map((url) => (
-              <MenuItem component="a" key={url.name} href={url.url}>
-                {url.name}
-              </MenuItem>
-            ))}
-          </Menu>
-        </TableCell>
-      </TableRow>
+      <>
+        <Button
+          startIcon={<Add />}
+          variant="outlined"
+          size="small"
+          onClick={this.handleClick}
+        >
+          <FormattedMessage {...translations.addCondition} />
+        </Button>
+
+        <Menu
+          id="condition-menu"
+          anchorEl={this.state.anchorEl}
+          disableAutoFocusItem
+          onClose={this.handleClose}
+          open={Boolean(this.state.anchorEl)}
+        >
+          {this.props.newConditionUrls.map((url) => (
+            <MenuItem component="a" key={url.name} href={url.url}>
+              {url.name}
+            </MenuItem>
+          ))}
+        </Menu>
+      </>
     );
   }
 
   render() {
     return (
-      <div>
+      <>
+        {this.renderTopHeader()}
+
         <Table>
           {this.renderHeaderRows()}
           <TableBody className="conditions-list">
             {this.renderConditionRows()}
           </TableBody>
         </Table>
-        {this.props.conditions.length === 0 && (
-          <ListSubheader disableSticky>
-            <FormattedMessage {...translations.empty} />
-          </ListSubheader>
-        )}
+
         <ConfirmationDialog
           confirmDelete
           open={this.state.isDeleting}
@@ -173,7 +172,7 @@ class ConditionList extends PureComponent {
           onCancel={() => this.setState({ isDeleting: false })}
           onConfirm={() => this.onConfirmDelete()}
         />
-      </div>
+      </>
     );
   }
 }
