@@ -12,7 +12,7 @@ import t from './translations.intl';
 import CourseAPI from 'api/course';
 import { formatLongDateTime } from 'lib/moment';
 
-interface Material {
+export interface Material {
   id?: number;
   name?: string;
   updated_at?: string;

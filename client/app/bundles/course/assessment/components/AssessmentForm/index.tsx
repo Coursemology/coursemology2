@@ -1,8 +1,6 @@
 /* eslint-disable camelcase */
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 import { Controller } from 'react-hook-form';
 import { RadioGroup, Typography, Grid } from '@mui/material';
 import {
@@ -10,32 +8,29 @@ import {
   Block as DraftIcon,
   Create as ManualIcon,
   CheckCircle as AutogradedIcon,
-  InfoOutlined as InfoOutlinedIcon,
 } from '@mui/icons-material';
 
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import FormToggleField from 'lib/components/form/fields/ToggleField';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import ErrorText from 'lib/components/ErrorText';
 import ConditionList from 'lib/components/course/ConditionList';
 import Section from 'lib/components/layouts/Section';
-import { achievementTypesConditionAttributes, typeMaterial } from 'lib/types';
-import ReactTooltip from 'react-tooltip';
 import t from './translations.intl';
+import IconRadio from 'lib/components/IconRadio';
+import InfoLabel from 'lib/components/InfoLabel';
 import FileManager from '../FileManager';
-import IconRadio from '../IconRadio';
-import InfoLabel from '../InfoLabel';
 import { fetchTabs } from './actions';
 import useFormValidation from './useFormValidation';
+import { connector, AssessmentFormProps } from './types';
 
 const styles = {
   conditions: { marginTop: 24 },
 };
 
-const AssessmentForm = (props) => {
+const AssessmentForm = (props: AssessmentFormProps) => {
   const {
     conditionAttributes,
     containsCodaveri,
@@ -69,6 +64,9 @@ const AssessmentForm = (props) => {
   useEffect(() => {
     if (editing) {
       const failureMessage = intl.formatMessage(t.fetchTabFailure);
+
+      // @ts-ignore until Assessment store and a custom dispatch for thunk is fully typed
+      // https://redux.js.org/tutorials/typescript-quick-start#define-typed-hooks
       dispatch(fetchTabs(failureMessage));
     }
   }, [dispatch]);
@@ -90,7 +88,6 @@ const AssessmentForm = (props) => {
             }}
             renderIf={passwordProtected}
             required
-            style={styles.flexChild}
             variant="standard"
           />
         )}
@@ -112,7 +109,6 @@ const AssessmentForm = (props) => {
             }}
             renderIf={passwordProtected}
             required
-            style={styles.flexChild}
             variant="standard"
           />
         )}
@@ -174,7 +170,6 @@ const AssessmentForm = (props) => {
                 shrink: true,
               }}
               required
-              style={styles.flexChild}
               variant="filled"
             />
           )}
@@ -265,7 +260,7 @@ const AssessmentForm = (props) => {
             <Controller
               name="published"
               control={control}
-              render={({ field, fieldState }) => (
+              render={({ field }) => (
                 <RadioGroup
                   {...field}
                   value={field.value === true ? 'published' : 'draft'}
@@ -327,7 +322,6 @@ const AssessmentForm = (props) => {
                     label={intl.formatMessage(t.baseExp)}
                     InputLabelProps={{ shrink: true }}
                     onWheel={(event) => event.currentTarget.blur()}
-                    style={styles.flexChild}
                     type="number"
                     variant="filled"
                   />
@@ -350,7 +344,6 @@ const AssessmentForm = (props) => {
                       shrink: true,
                     }}
                     onWheel={(event) => event.currentTarget.blur()}
-                    style={styles.flexChild}
                     type="number"
                     variant="filled"
                   />
@@ -375,9 +368,9 @@ const AssessmentForm = (props) => {
           {intl.formatMessage(t.gradingMode)}
         </Typography>
 
-        {!modeSwitching ? (
-          <InfoLabel>{intl.formatMessage(t.modeSwitchingDisabled)}</InfoLabel>
-        ) : null}
+        {!modeSwitching && (
+          <InfoLabel label={intl.formatMessage(t.modeSwitchingDisabled)} />
+        )}
 
         {containsCodaveri ? (
           <InfoLabel>
@@ -388,7 +381,7 @@ const AssessmentForm = (props) => {
         <Controller
           name="autograded"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field }) => (
             <>
               <RadioGroup
                 {...field}
@@ -430,7 +423,6 @@ const AssessmentForm = (props) => {
               fieldState={fieldState}
               disabled={disabled}
               label={intl.formatMessage(t.usePublic)}
-              style={styles.flexChild}
             />
           )}
         />
@@ -443,7 +435,6 @@ const AssessmentForm = (props) => {
               fieldState={fieldState}
               disabled={disabled}
               label={intl.formatMessage(t.usePrivate)}
-              style={styles.flexChild}
             />
           )}
         />
@@ -456,7 +447,6 @@ const AssessmentForm = (props) => {
               fieldState={fieldState}
               disabled={disabled}
               label={intl.formatMessage(t.useEvaluation)}
-              style={styles.flexChild}
             />
           )}
         />
@@ -533,7 +523,6 @@ const AssessmentForm = (props) => {
               fieldState={fieldState}
               disabled={disabled}
               label={intl.formatMessage(t.showPrivate)}
-              style={styles.toggle}
             />
           )}
         />
@@ -546,7 +535,6 @@ const AssessmentForm = (props) => {
               fieldState={fieldState}
               disabled={disabled}
               label={intl.formatMessage(t.showEvaluation)}
-              style={styles.toggle}
             />
           )}
         />
@@ -569,7 +557,7 @@ const AssessmentForm = (props) => {
         title={intl.formatMessage(t.organisation)}
         sticksToNavbar={editing}
       >
-        {editing && renderTabs(loadedTabs, disabled)}
+        {editing && renderTabs()}
 
         <Controller
           name="tabbed_view"
@@ -710,45 +698,4 @@ AssessmentForm.defaultProps = {
   gamified: true,
 };
 
-AssessmentForm.propTypes = {
-  disabled: PropTypes.bool,
-  dispatch: PropTypes.func.isRequired,
-  showPersonalizedTimelineFeatures: PropTypes.bool,
-  tabs: PropTypes.arrayOf(
-    PropTypes.shape({
-      tab_id: PropTypes.number,
-      title: PropTypes.string,
-    }),
-  ),
-
-  onSubmit: PropTypes.func.isRequired,
-  // If the Form is in editing mode, `published` button will be displayed.
-  editing: PropTypes.bool,
-  // if the EXP fields should be displayed
-  gamified: PropTypes.bool,
-  // If the personalized timeline fields should be displayed
-  randomizationAllowed: PropTypes.bool,
-  // If allow to switch between autoraded and manually graded mode.
-  modeSwitching: PropTypes.bool,
-  // If an assessment contains question of programming codaveri type
-  containsCodaveri: PropTypes.bool,
-  folderAttributes: PropTypes.shape({
-    folder_id: PropTypes.number,
-    // If any action (upload, delete and download) of the materials
-    enable_materials_action: PropTypes.bool,
-    // See MaterialFormContainer for detailed PropTypes.
-    materials: typeMaterial,
-  }),
-  // Conditions will be displayed if the attributes are present.
-  conditionAttributes: achievementTypesConditionAttributes,
-  initialValues: PropTypes.object,
-  intl: PropTypes.object,
-};
-
-function mapStateToProps(state) {
-  return {
-    tabs: state.editPage.tabs,
-  };
-}
-
-export default connect(mapStateToProps)(injectIntl(AssessmentForm));
+export default connector(injectIntl(AssessmentForm));

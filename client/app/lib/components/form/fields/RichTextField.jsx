@@ -21,6 +21,9 @@ FormRichTextField.propTypes = {
   fieldState: PropTypes.object.isRequired,
   disabled: PropTypes.bool,
   label: PropTypes.node,
+  fullWidth: PropTypes.bool,
+  InputLabelProps: PropTypes.object,
+  variant: PropTypes.string,
 };
 
 export default memo(FormRichTextField, propsAreEqual);

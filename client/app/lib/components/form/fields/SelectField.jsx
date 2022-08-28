@@ -115,6 +115,7 @@ FormSelectField.propTypes = {
   displayEmpty: PropTypes.bool,
   className: PropTypes.string,
   variant: PropTypes.string,
+  type: PropTypes.string,
 };
 
 export default memo(FormSelectField, propsAreEqual);
