@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { memo } from 'react';
 import {
   Box,
   Checkbox,
@@ -26,9 +26,6 @@ interface Props {
 }
 
 const styles = {
-  checkboxContainer: {
-    width: '100%',
-  },
   field: {
     marginBottom: 0,
   },
@@ -37,7 +34,6 @@ const styles = {
   },
   description: {
     marginLeft: '30px',
-    marginTop: 0.5,
   },
   disabledHint: {
     marginLeft: '30px',
@@ -45,7 +41,7 @@ const styles = {
   },
 };
 
-const FormCheckboxField: FC<Props> = (props) => {
+const FormCheckboxField = (props: Props): JSX.Element => {
   const {
     field,
     fieldState,
@@ -56,12 +52,10 @@ const FormCheckboxField: FC<Props> = (props) => {
     checkedIcon,
     description,
     disabledHint,
-    ...custom
   } = props;
+
   const isError = !!fieldState.error;
-  if (!renderIf) {
-    return <></>;
-  }
+  if (!renderIf) return <></>;
 
   return (
     <Box width="100%">
@@ -80,7 +74,6 @@ const FormCheckboxField: FC<Props> = (props) => {
         disabled={disabled}
         label={label}
         sx={styles.field}
-        {...custom}
       />
 
       {description ? (

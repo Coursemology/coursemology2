@@ -42,6 +42,7 @@ const FormDateTimePickerField = (props) => {
     className,
     variant = 'standard',
     disableMargins,
+    disableShrinkingLabel,
     ...custom
   } = props;
 
@@ -76,9 +77,9 @@ const FormDateTimePickerField = (props) => {
                     formatErrorMessage(translations.invalidDateTime)
               }
               name={field.name}
-              InputLabelProps={{
-                shrink: true,
-              }}
+              {...(!disableShrinkingLabel && {
+                InputLabelProps: { shrink: true },
+              })}
               ref={field.ref}
               variant={variant}
               {...(disableMargins ? null : { style: styles.dateTimeTextField })}
