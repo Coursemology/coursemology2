@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 const translations = defineMessages({
   updateAssessment: {
     id: 'course.assessment.edit.update',
-    defaultMessage: 'Update',
+    defaultMessage: 'Save',
   },
   updateSuccess: {
     id: 'course.assessment.update.success',
