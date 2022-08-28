@@ -3,9 +3,7 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { Controller } from 'react-hook-form';
 import { RadioGroup, Typography, Grid } from '@mui/material';
 import {
   Public as PublishedIcon,
@@ -23,7 +21,6 @@ import FormToggleField from 'lib/components/form/fields/ToggleField';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import ErrorText from 'lib/components/ErrorText';
 import ConditionList from 'lib/components/course/ConditionList';
-import formTranslations from 'lib/translations/form';
 import Section from 'lib/components/layouts/Section';
 import { achievementTypesConditionAttributes, typeMaterial } from 'lib/types';
 import ReactTooltip from 'react-tooltip';
@@ -32,82 +29,11 @@ import FileManager from '../FileManager';
 import IconRadio from '../IconRadio';
 import InfoLabel from '../InfoLabel';
 import { fetchTabs } from './actions';
+import useFormValidation from './useFormValidation';
 
 const styles = {
   conditions: { marginTop: 24 },
 };
-
-const validationSchema = yup.object({
-  title: yup.string().required(formTranslations.required),
-  tab_id: yup.number(),
-  description: yup.string(),
-  start_at: yup
-    .date()
-    .nullable()
-    .typeError(formTranslations.invalidDate)
-    .required(formTranslations.required),
-  end_at: yup
-    .date()
-    .nullable()
-    .typeError(formTranslations.invalidDate)
-    .min(yup.ref('start_at'), t.startEndValidationError),
-  bonus_end_at: yup
-    .date()
-    .nullable()
-    .typeError(formTranslations.invalidDate)
-    .min(yup.ref('start_at'), t.startEndValidationError),
-  base_exp: yup
-    .number()
-    .typeError(formTranslations.required)
-    .required(formTranslations.required),
-  time_bonus_exp: yup
-    .number()
-    .nullable(true)
-    .transform((_, val) => (val === Number(val) ? val : null)),
-  published: yup.bool(),
-  autograded: yup.bool(),
-  block_student_viewing_after_submitted: yup.bool(),
-  skippable: yup.bool(),
-  allow_partial_submission: yup.bool(),
-  show_mcq_answer: yup.bool(),
-  tabbed_view: yup.bool().when('autograded', {
-    is: false,
-    then: yup.bool().required(formTranslations.required),
-  }),
-  delayed_grade_publication: yup.bool(),
-  password_protected: yup
-    .bool()
-    .when(
-      ['view_password', 'session_password'],
-      (view_password, session_password, schema) =>
-        schema.test({
-          test: (password_protected) =>
-            // Check if there is at least 1 password type when password_protectd
-            // is enabled.
-            password_protected ? session_password || view_password : true,
-          message: t.passwordRequired,
-        }),
-    ),
-  view_password: yup.string().nullable(),
-  session_password: yup.string().nullable(),
-  show_mcq_mrq_solution: yup.bool(),
-  use_public: yup.bool(),
-  use_private: yup.bool(),
-  use_evaluation: yup
-    .bool()
-    .when(['use_public', 'use_private'], (use_public, use_private, schema) =>
-      schema.test({
-        // Check if there is at least 1 selected test case.
-        test: (use_evaluation) => use_public || use_private || use_evaluation,
-        message: t.noTestCaseChosenError,
-      }),
-    ),
-  show_private: yup.bool(),
-  show_evaluation: yup.bool(),
-  randomization: yup.bool(),
-  has_personal_times: yup.bool(),
-  affects_personal_times: yup.bool(),
-});
 
 const AssessmentForm = (props) => {
   const {
@@ -132,10 +58,8 @@ const AssessmentForm = (props) => {
     setError,
     watch,
     formState: { errors },
-  } = useForm({
-    defaultValues: initialValues,
-    resolver: yupResolver(validationSchema),
-  });
+  } = useFormValidation(initialValues);
+
   const autograded = watch('autograded');
   const passwordProtected = watch('password_protected');
 
