@@ -51,7 +51,7 @@ const FormSelectField = (props) => {
       disabled={disabled}
       error={isError}
       fullWidth
-      style={{ margin: margin ?? styles.selectFieldStyle.margin }}
+      sx={{ margin: margin ?? styles.selectFieldStyle.margin }}
       variant={variant}
     >
       <InputLabel shrink={shrink}>{label}</InputLabel>
