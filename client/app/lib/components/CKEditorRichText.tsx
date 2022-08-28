@@ -15,11 +15,21 @@ interface Props {
   required?: boolean | undefined;
   name: string;
   inputId: string;
+  disableMargins?: boolean;
 }
 
 const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
-  const { label, value, onChange, disabled, field, required, name, inputId } =
-    props;
+  const {
+    label,
+    value,
+    onChange,
+    disabled,
+    field,
+    required,
+    name,
+    inputId,
+    disableMargins,
+  } = props;
 
   const [isFocused, setIsFocused] = useState(false);
   const testFieldLabelColor = isFocused ? cyan[500] : undefined;
@@ -73,21 +83,24 @@ const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
         backgroundColor: 'transparent',
         fontFamily: 'Roboto, sans-serif',
         paddingTop: label ? '1em' : 0,
-        paddingBottom: '1em',
+        paddingBottom: !disableMargins ? '1em' : 0,
       }}
     >
-      <InputLabel
-        disabled={disabled}
-        htmlFor={field}
-        required={required}
-        shrink
-        style={{
-          pointerEvents: 'none',
-          color: disabled ? 'rgba(0, 0, 0, 0.3)' : testFieldLabelColor,
-        }}
-      >
-        {label}
-      </InputLabel>
+      {label && (
+        <InputLabel
+          disabled={disabled}
+          htmlFor={field}
+          required={required}
+          shrink
+          style={{
+            pointerEvents: 'none',
+            color: disabled ? 'rgba(0, 0, 0, 0.3)' : testFieldLabelColor,
+          }}
+        >
+          {label}
+        </InputLabel>
+      )}
+
       <textarea
         name={name}
         id={inputId}

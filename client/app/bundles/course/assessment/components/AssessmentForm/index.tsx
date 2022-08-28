@@ -26,10 +26,6 @@ import { fetchTabs } from './actions';
 import useFormValidation from './useFormValidation';
 import { connector, AssessmentFormProps } from './types';
 
-const styles = {
-  conditions: { marginTop: 24 },
-};
-
 const AssessmentForm = (props: AssessmentFormProps) => {
   const {
     conditionAttributes,
@@ -47,6 +43,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
     tabs,
     intl,
   } = props;
+
   const {
     control,
     handleSubmit,
@@ -137,6 +134,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
             label={intl.formatMessage(t.tab)}
             options={options}
             variant="filled"
+            margin="0"
           />
         )}
       />
@@ -166,11 +164,9 @@ const AssessmentForm = (props: AssessmentFormProps) => {
               disabled={disabled}
               label={intl.formatMessage(t.title)}
               fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
               required
               variant="filled"
+              margins={false}
             />
           )}
         />
@@ -188,6 +184,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
                   label={intl.formatMessage(t.startAt)}
                   variant="filled"
                   disableMargins
+                  disableShrinkingLabel
                 />
               )}
             />
@@ -205,6 +202,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
                   label={intl.formatMessage(t.endAt)}
                   variant="filled"
                   disableMargins
+                  disableShrinkingLabel
                 />
               )}
             />
@@ -223,6 +221,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
                     label={intl.formatMessage(t.bonusEndAt)}
                     variant="filled"
                     disableMargins
+                    disableShrinkingLabel
                   />
                 )}
               />
@@ -243,10 +242,8 @@ const AssessmentForm = (props: AssessmentFormProps) => {
               fieldState={fieldState}
               disabled={disabled}
               fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
               variant="standard"
+              disableMargins
             />
           )}
         />
@@ -320,10 +317,10 @@ const AssessmentForm = (props: AssessmentFormProps) => {
                     disabled={disabled}
                     fullWidth
                     label={intl.formatMessage(t.baseExp)}
-                    InputLabelProps={{ shrink: true }}
                     onWheel={(event) => event.currentTarget.blur()}
                     type="number"
                     variant="filled"
+                    margins={false}
                   />
                 )}
               />
@@ -340,12 +337,10 @@ const AssessmentForm = (props: AssessmentFormProps) => {
                     disabled={disabled}
                     fullWidth
                     label={intl.formatMessage(t.timeBonusExp)}
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
                     onWheel={(event) => event.currentTarget.blur()}
                     type="number"
                     variant="filled"
+                    margins={false}
                   />
                 )}
               />
@@ -353,12 +348,10 @@ const AssessmentForm = (props: AssessmentFormProps) => {
           </Grid>
 
           {editing && conditionAttributes && (
-            <div style={styles.conditions}>
-              <ConditionList
-                newConditionUrls={conditionAttributes.new_condition_urls}
-                conditions={conditionAttributes.conditions}
-              />
-            </div>
+            <ConditionList
+              newConditionUrls={conditionAttributes.new_condition_urls}
+              conditions={conditionAttributes.conditions}
+            />
           )}
         </Section>
       )}
@@ -580,6 +573,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
               ]}
               type="boolean"
               variant="filled"
+              margin="0"
             />
           )}
         />
