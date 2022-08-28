@@ -189,34 +189,38 @@ const translations = defineMessages({
   },
   passwordProtection: {
     id: 'course.assessment.form.passwordProtection',
-    defaultMessage: 'Password Protection',
+    defaultMessage: 'Enable password protection',
+  },
+  sessionProtection: {
+    id: 'course.assessment.form.sessionProtection',
+    defaultMessage: 'Enable session protection',
+  },
+  sessionProtectionHint: {
+    id: 'course.assessment.form.sessionProtection',
+    defaultMessage:
+      'When session protection is on, students can only access their attempt once. \
+      Further access will require the session unlock password.',
   },
   viewPasswordHint: {
     id: 'course.assessment.form.viewPasswordHint',
     defaultMessage:
-      'When assessment password is enabled, students are required to input the password in order to \
-      view/attempt the assessment.',
+      'Students need to input this password to View and Attempt this assessment.',
   },
   viewPassword: {
     id: 'course.assessment.form.viewPassword',
-    defaultMessage: 'Input Assessment Password',
+    defaultMessage: 'Assessment password',
   },
   sessionPasswordHint: {
     id: 'course.assessment.form.sessionPasswordHint',
-    defaultMessage:
-      "When submission password is enabled, students are allowed to access their \
-      submission once. Further attempts at editing the submission using a different session are \
-      not allowed unless the password is provided by the staff. This can be used to prevent \
-      students from accessing each other's submissions in exams. You should NOT give the submission password \
-      to the students.",
+    defaultMessage: 'Ideally, do NOT give this password to students.',
   },
   sessionPassword: {
     id: 'course.assessment.form.sessionPassword',
-    defaultMessage: 'Input Submission Password',
+    defaultMessage: 'Session unlock password',
   },
   startEndValidationError: {
     id: 'course.assessment.form.startEndValidationError',
-    defaultMessage: "Must be after 'Start At'",
+    defaultMessage: 'Must be after starting time',
   },
   noTestCaseChosenError: {
     id: 'course.assessment.form.noTestCaseChosenError',

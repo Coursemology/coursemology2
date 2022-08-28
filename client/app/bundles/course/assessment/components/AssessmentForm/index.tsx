@@ -54,22 +54,23 @@ const AssessmentForm = (props: AssessmentFormProps) => {
 
   const autograded = watch('autograded');
   const passwordProtected = watch('password_protected');
+  const sessionProtected = watch('session_protected');
 
   // Load all tabs if data is loaded, otherwise fall back to current assessment tab.
   const loadedTabs = tabs || watch('tabs');
 
   useEffect(() => {
-    if (editing) {
-      const failureMessage = intl.formatMessage(t.fetchTabFailure);
+    if (!editing) return;
 
-      // @ts-ignore until Assessment store and a custom dispatch for thunk is fully typed
-      // https://redux.js.org/tutorials/typescript-quick-start#define-typed-hooks
-      dispatch(fetchTabs(failureMessage));
-    }
+    const failureMessage = intl.formatMessage(t.fetchTabFailure);
+
+    // @ts-ignore until Assessment store and a custom dispatch for thunk is fully typed
+    // https://redux.js.org/tutorials/typescript-quick-start#define-typed-hooks
+    dispatch(fetchTabs(failureMessage));
   }, [dispatch]);
 
   const renderPasswordFields = () => (
-    <div>
+    <>
       <Controller
         name="view_password"
         control={control}
@@ -78,40 +79,50 @@ const AssessmentForm = (props: AssessmentFormProps) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            placeholder={intl.formatMessage(t.viewPassword)}
+            label={intl.formatMessage(t.viewPassword)}
+            description={intl.formatMessage(t.viewPasswordHint)}
             fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            renderIf={passwordProtected}
             required
-            variant="standard"
+            variant="filled"
+            type="password"
           />
         )}
       />
-      <div style={styles.hint}>{intl.formatMessage(t.viewPasswordHint)}</div>
 
       <Controller
-        name="session_password"
+        name="session_protected"
         control={control}
         render={({ field, fieldState }) => (
-          <FormTextField
+          <FormCheckboxField
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
-            placeholder={intl.formatMessage(t.sessionPassword)}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-            renderIf={passwordProtected}
-            required
-            variant="standard"
+            disabled={disabled || autograded}
+            label={intl.formatMessage(t.sessionProtection)}
+            description={intl.formatMessage(t.sessionProtectionHint)}
           />
         )}
       />
-      <div style={styles.hint}>{intl.formatMessage(t.sessionPasswordHint)}</div>
-    </div>
+
+      {sessionProtected && (
+        <Controller
+          name="session_password"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={intl.formatMessage(t.sessionPassword)}
+              description={intl.formatMessage(t.sessionPasswordHint)}
+              fullWidth
+              required
+              variant="filled"
+              type="password"
+            />
+          )}
+        />
+      )}
+    </>
   );
 
   const renderTabs = () => {
@@ -643,23 +654,25 @@ const AssessmentForm = (props: AssessmentFormProps) => {
           )}
         />
 
-            <Controller
-              name="password_protected"
-              control={control}
-              render={({ field, fieldState }) => (
-                <FormToggleField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={disabled}
-                  label={intl.formatMessage(t.passwordProtection)}
-                  renderIf={!autograded}
-                  style={styles.toggle}
+        <Controller
+          name="password_protected"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormCheckboxField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled || autograded}
+              label={intl.formatMessage(t.passwordProtection)}
+              disabledHint={
+                <InfoLabel
+                  label={intl.formatMessage(t.unavailableInAutograded)}
                 />
-              )}
+              }
             />
-            {passwordProtected && renderPasswordFields()}
-          </>
-        ) : null}
+          )}
+        />
+
+        {!autograded && passwordProtected && renderPasswordFields()}
       </Section>
 
       {showPersonalizedTimelineFeatures && (

@@ -84,10 +84,26 @@ const validationSchema = yup.object({
 });
 
 const useFormValidation = (initialValues): UseFormReturn => {
-  return useForm({
-    defaultValues: initialValues,
+  const form = useForm({
+    defaultValues: {
+      ...initialValues,
+      session_protected: Boolean(initialValues?.session_password),
+    },
     resolver: yupResolver(validationSchema),
   });
+
+  return {
+    ...form,
+
+    handleSubmit(onValid, onInvalid) {
+      const postProcessor = (rawData) => {
+        if (!rawData.session_protected) rawData.session_password = null;
+        return onValid(rawData);
+      };
+
+      return form.handleSubmit(postProcessor, onInvalid);
+    },
+  };
 };
 
 export default useFormValidation;
