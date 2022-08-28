@@ -105,6 +105,16 @@ FormTextField.propTypes = {
   renderIf: PropTypes.bool,
   margins: PropTypes.bool,
   enableDebouncing: PropTypes.bool,
+  fullWidth: PropTypes.bool,
+  InputLabelProps: PropTypes.object,
+  onWheel: PropTypes.func,
+  type: PropTypes.string,
+  variant: PropTypes.string,
+  required: PropTypes.bool,
+  placeholder: PropTypes.string,
+  id: PropTypes.string,
+  sx: PropTypes.object,
+  className: PropTypes.string,
 };
 
 export default FormTextField;
