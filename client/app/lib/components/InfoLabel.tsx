@@ -1,6 +1,9 @@
 import { CSSProperties, ReactNode } from 'react';
-import { Typography } from '@mui/material';
-import { InfoOutlined as InfoIcon, Warning as WarningIcon } from '@mui/icons-material';
+import { Typography, Box } from '@mui/material';
+import {
+  WarningAmber as WarningIcon,
+  InfoOutlined as InfoIcon,
+} from '@mui/icons-material';
 
 interface InfoLabelProps {
   label?: string;
@@ -15,7 +18,7 @@ const styles: { [key: string]: CSSProperties } = {
     alignItems: 'center',
   },
   infoLabelIcon: {
-    marginRight: 0.5,
+    marginRight: 1,
   },
 };
 
@@ -35,7 +38,7 @@ const InfoLabel = (props: InfoLabelProps): JSX.Element => {
       <Typography variant="body2">{props.label}</Typography>
 
       {props.children}
-    </Typography>
+    </Box>
   );
 };
 

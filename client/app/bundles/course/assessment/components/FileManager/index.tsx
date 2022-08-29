@@ -5,8 +5,8 @@ import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
 import DataTable from 'lib/components/DataTable';
+import InfoLabel from 'lib/components/InfoLabel';
 import Toolbar from './Toolbar';
-import InfoLabel from '../InfoLabel';
 import t from './translations.intl';
 
 import CourseAPI from 'api/course';
@@ -130,12 +130,22 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
     />
   );
 
-  const DisabledMessage = () => (
-    <InfoLabel>{intl.formatMessage(t.disableNewFile)}</InfoLabel>
+  const DisabledMessages = () => (
+    <>
+      <InfoLabel label={intl.formatMessage(t.disableNewFile)} />
+
+      {materials.length > 0 && (
+        <InfoLabel
+          warning
+          label={intl.formatMessage(t.studentCannotSeeFiles)}
+          marginTop={1}
+        />
+      )}
+    </>
   );
 
   const renderTopTableComponent = () =>
-    !props.disabled ? ToolbarComponent : DisabledMessage;
+    !props.disabled ? ToolbarComponent : DisabledMessages;
 
   const RowStartComponent = (props) => {
     const type = props['data-description'];

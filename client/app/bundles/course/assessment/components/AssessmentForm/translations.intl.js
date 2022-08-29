@@ -144,6 +144,11 @@ const translations = defineMessages({
     id: 'course.assessment.form.skippable',
     defaultMessage: 'Allow to skip steps',
   },
+  skippableManualHint: {
+    id: 'course.assessment.form.skippableManualHint',
+    defaultMessage:
+      'Students can already move between questions in manually graded assessments.',
+  },
   layout: {
     id: 'course.assessment.form.layout',
     defaultMessage: 'Layout',
