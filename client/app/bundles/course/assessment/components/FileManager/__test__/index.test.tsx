@@ -7,8 +7,8 @@ import {
   RenderResult,
   waitFor,
 } from 'utilities/test-utils';
-import FileManager from '..';
 import CourseAPI from 'api/course';
+import FileManager from '..';
 
 const FOLDER_ID = 1;
 

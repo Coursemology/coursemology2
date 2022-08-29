@@ -25,7 +25,7 @@ let initialValues;
 let props: ComponentProps<typeof AssessmentForm>;
 let form: RenderResult;
 
-const getComponent = () => (
+const getComponent = (): JSX.Element => (
   <ProviderWrapper store={store}>
     <AssessmentForm {...props} />
   </ProviderWrapper>
@@ -50,7 +50,7 @@ beforeEach(() => {
       materials: [],
       enable_materials_action: true,
     },
-    onSubmit: () => {},
+    onSubmit: (): void => {},
   };
 
   form = render(getComponent());
