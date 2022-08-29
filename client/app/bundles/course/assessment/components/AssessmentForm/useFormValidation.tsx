@@ -59,7 +59,7 @@ const validationSchema = yup.object({
       (view_password, session_password, schema: yup.BooleanSchema) =>
         schema.test({
           test: (password_protected) =>
-            // Check if there is at least 1 password type when password_protectd
+            // Check if there is at least 1 password type when password_protected
             // is enabled.
             password_protected ? session_password || view_password : true,
           message: t.passwordRequired,
@@ -103,6 +103,7 @@ const useFormValidation = (initialValues): UseFormReturn => {
     handleSubmit: (onValid, onInvalid): SubmitHandler<FieldValues> => {
       const postProcessor = (rawData): SubmitHandler<FieldValues> => {
         if (!rawData.session_protected) rawData.session_password = null;
+        delete rawData.session_protected;
         return onValid(rawData);
       };
 
