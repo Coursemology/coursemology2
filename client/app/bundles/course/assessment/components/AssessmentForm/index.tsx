@@ -9,6 +9,7 @@ import {
   Create as ManualIcon,
   CheckCircle as AutogradedIcon,
 } from '@mui/icons-material';
+import useEmitterFactory from 'react-emitter-factory';
 
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
@@ -49,7 +50,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
     handleSubmit,
     setError,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useFormValidation(initialValues);
 
   const autograded = watch('autograded');
@@ -68,6 +69,14 @@ const AssessmentForm = (props: AssessmentFormProps) => {
     // https://redux.js.org/tutorials/typescript-quick-start#define-typed-hooks
     dispatch(fetchTabs(failureMessage));
   }, [dispatch]);
+
+  useEmitterFactory(
+    props,
+    {
+      isDirty,
+    },
+    [isDirty],
+  );
 
   const renderPasswordFields = () => (
     <>
