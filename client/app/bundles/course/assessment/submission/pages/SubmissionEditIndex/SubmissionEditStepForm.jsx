@@ -82,6 +82,7 @@ const SubmissionEditStepForm = (props) => {
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
+    onReevaluateAnswer,
     handleSaveGrade,
     handleToggleViewHistoryMode,
     handleUnsubmit,
@@ -283,6 +284,29 @@ const SubmissionEditStepForm = (props) => {
     return visible ? <QuestionGrade id={id} editable={editable} /> : null;
   };
 
+  const renderReevaluateButton = () => {
+    const id = questionIds[stepIndex];
+    const question = questions[id];
+    const { answerId } = question;
+    const { isAutograding } = questionsFlags[id] || {};
+    if (question.type !== 'Programming') {
+      return null;
+    }
+
+    return (
+      <Button
+        variant="contained"
+        color="secondary"
+        disabled={isAutograding || isSaving}
+        id="re-evaluate-code"
+        onClick={() => onReevaluateAnswer(answerId, question.id)}
+        style={styles.formButton}
+      >
+        {intl.formatMessage(translations.reevaluate)}
+      </Button>
+    );
+  };
+
   const renderResetButton = () => {
     const id = questionIds[stepIndex];
     const question = questions[id];
@@ -461,6 +485,7 @@ const SubmissionEditStepForm = (props) => {
         />
         {renderAutogradingErrorPanel(id)}
         {renderExplanationPanel(question)}
+        {!attempting && graderView ? renderReevaluateButton() : null}
         {renderQuestionGrading(id)}
         {renderGradingPanel()}
         {attempting ? (
@@ -592,6 +617,7 @@ SubmissionEditStepForm.propTypes = {
   onSaveDraft: PropTypes.func,
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,
+  onReevaluateAnswer: PropTypes.func,
   handleUnsubmit: PropTypes.func,
   handleSaveGrade: PropTypes.func,
   handleToggleViewHistoryMode: PropTypes.func,

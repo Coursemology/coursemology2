@@ -388,8 +388,8 @@ const SubmissionEditForm = (props) => {
             {question.type === questionTypes.Programming && !viewHistory
               ? renderExplanationPanel(id)
               : null}
-            {viewHistory ? null : renderQuestionGrading(id)}
             {viewHistory ? null : renderProgrammingQuestionActions(id)}
+            {viewHistory ? null : renderQuestionGrading(id)}
             <Suspense
               fallback={
                 <div style={styles.loadingComment}>

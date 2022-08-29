@@ -18,6 +18,7 @@ export default function (state = {}, action) {
         }),
         {},
       );
+    case actions.REEVALUATE_REQUEST:
     case actions.AUTOGRADE_REQUEST: {
       const { questionId } = action;
       return {
@@ -28,6 +29,7 @@ export default function (state = {}, action) {
         },
       };
     }
+    case actions.REEVALUATE_SUCCESS:
     case actions.AUTOGRADE_SUCCESS: {
       const { questionId } = action;
       return {
@@ -39,6 +41,7 @@ export default function (state = {}, action) {
         },
       };
     }
+    case actions.REEVALUATE_FAILURE:
     case actions.AUTOGRADE_FAILURE: {
       const { questionId, payload } = action;
       const jobError = payload && payload.status === 'errored';

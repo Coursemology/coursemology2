@@ -158,6 +158,30 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
       end
     end
 
+    describe '#reevaluate_answer' do
+      let!(:submission) { create(:submission, :published, assessment: assessment, creator: user) }
+
+      # The normal case when the user checks his answer with the autograder.
+      context 'when a programming answer is re-evaluated' do
+        let(:answer) { submission.answers.third } # programming answer
+        subject do
+          post :reevaluate_answer, params: {
+            course_id: course, assessment_id: assessment.id,
+            id: submission.id, answer_id: answer.id, format: :json
+          }
+        end
+
+        it 'returns the answer' do
+          subject
+          wait_for_job
+
+          is_expected.to have_http_status(:ok)
+          json_result = JSON.parse(response.body)
+          expect(json_result['redirect_url']).not_to be(nil)
+        end
+      end
+    end
+
     describe '#reload_answer' do
       let!(:submission) { create(:submission, :attempting, assessment: assessment, creator: user) }
 

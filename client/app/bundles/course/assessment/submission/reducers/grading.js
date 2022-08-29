@@ -88,6 +88,26 @@ export default function (state = initialState, action) {
         expMultiplier: action.multiplier,
       };
     }
+    case actions.AUTOGRADE_SUCCESS: {
+      const { grading } = action.payload;
+      const { maximumGrade, basePoints, expMultiplier } = state;
+      if (grading) {
+        const questions = {
+          ...state.questions,
+          [action.questionId]: {
+            ...state.questions[action.questionId],
+            grade: grading.grade,
+          },
+        };
+
+        return {
+          ...state,
+          questions,
+          exp: computeExp(questions, maximumGrade, basePoints, expMultiplier),
+        };
+      }
+      return state;
+    }
     default:
       return state;
   }

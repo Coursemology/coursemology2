@@ -205,6 +205,7 @@ Rails.application.routes.draw do
             resources :submissions, only: [:index, :edit, :update] do
               post :auto_grade, on: :member
               post :reload_answer, on: :member
+              post :reevaluate_answer, on: :member
               patch :submit_answer, on: :member
               get :download_all, on: :collection
               get :download_statistics, on: :collection

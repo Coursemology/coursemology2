@@ -78,6 +78,10 @@ const translations = defineMessages({
     defaultMessage:
       'Run Code ({attemptsLeft, plural, one {# attempt} other {# attempts}} left)',
   },
+  reevaluate: {
+    id: 'course.assessment.submission.reevaluate',
+    defaultMessage: 'Re-evaluate Answer',
+  },
   reset: {
     id: 'course.assessment.submission.reset',
     defaultMessage: 'Reset Answer',

@@ -215,6 +215,46 @@ export function unsubmit(submissionId) {
   };
 }
 
+export function reevaluateAnswer(submissionId, answerId, questionId) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.REEVALUATE_REQUEST, questionId });
+
+    return CourseAPI.assessment.submissions
+      .reevaluateAnswer(submissionId, { answer_id: answerId })
+      .then((response) => response.data)
+      .then((data) => {
+        if (data.redirect_url && data.format === 'html') {
+          window.location = data.redirect_url;
+        } else if (data.redirect_url) {
+          pollJob(
+            data.redirect_url,
+            JOB_POLL_DELAY,
+            () =>
+              dispatch(getEvaluationResult(submissionId, answerId, questionId)),
+            (errorData) => {
+              dispatch({
+                type: actionTypes.REEVALUATE_FAILURE,
+                questionId,
+                payload: errorData,
+              });
+              dispatch(setNotification(translations.requestFailure));
+            },
+          );
+        } else {
+          dispatch({
+            type: actionTypes.REEVALUATE_SUCCESS,
+            payload: data,
+            questionId,
+          });
+        }
+      })
+      .catch(() => {
+        dispatch({ type: actionTypes.REEVALUATE_FAILURE, questionId });
+        dispatch(setNotification(translations.requestFailure));
+      });
+  };
+}
+
 export function submitAnswer(submissionId, answerId, rawAnswer, setValue) {
   const answer = formatAnswer(rawAnswer);
   const payload = { answer };
