@@ -20,6 +20,13 @@ import translations from './translations.intl';
 import actionTypes from '../../constants';
 
 class PopupDialog extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      assessmentForm: undefined,
+    };
+  }
+
   onFormSubmit = (data, setError) => {
     const { categoryId, dispatch, intl, tabId } = this.props;
 
@@ -41,9 +48,15 @@ class PopupDialog extends Component {
   };
 
   handleClose = () => {
-    this.props.dispatch({
-      type: actionTypes.ASSESSMENT_FORM_CANCEL,
-    });
+    if (this.state.assessmentForm?.isDirty) {
+      this.props.dispatch({
+        type: actionTypes.ASSESSMENT_FORM_CANCEL,
+      });
+    } else {
+      this.props.dispatch({
+        type: actionTypes.ASSESSMENT_FORM_CONFIRM_DISCARD,
+      });
+    }
   };
 
   handleOpen = () => {
@@ -64,12 +77,16 @@ class PopupDialog extends Component {
 
     const formActions = [
       <Button
-        color="primary"
+        color={this.state.assessmentForm?.isDirty ? 'error' : 'primary'}
         disabled={disabled}
         key="assessment-popup-dialog-cancel-button"
         onClick={this.handleClose}
       >
-        <FormattedMessage {...formTranslations.cancel} />
+        {this.state.assessmentForm?.isDirty ? (
+          <FormattedMessage {...formTranslations.discard} />
+        ) : (
+          <FormattedMessage {...formTranslations.cancel} />
+        )}
       </Button>,
       <Button
         color="primary"
@@ -79,7 +96,7 @@ class PopupDialog extends Component {
         key="assessment-popup-dialog-submit-button"
         type="submit"
       >
-        <FormattedMessage {...formTranslations.submit} />
+        <FormattedMessage {...translations.createAsDraft} />
       </Button>,
     ];
 
@@ -121,7 +138,7 @@ class PopupDialog extends Component {
           disabled={disabled}
           onClick={this.handleOpen}
         >
-          {intl.formatMessage(translations.new)}
+          {intl.formatMessage(translations.newAssessment)}
         </Button>
         <Dialog
           disableEnforceFocus
@@ -143,6 +160,7 @@ class PopupDialog extends Component {
               modeSwitching
               onSubmit={this.onFormSubmit}
               randomizationAllowed={randomizationAllowed}
+              emitsVia={(assessmentForm) => this.setState({ assessmentForm })}
             />
           </DialogContent>
           <DialogActions>{formActions}</DialogActions>

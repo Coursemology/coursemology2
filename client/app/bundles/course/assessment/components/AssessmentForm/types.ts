@@ -1,5 +1,6 @@
 import { connect, ConnectedProps } from 'react-redux';
 import { WrappedComponentProps } from 'react-intl';
+import { Emits } from 'react-emitter-factory';
 
 import { Material } from '../FileManager';
 import { FieldValues, UseFormSetError } from 'react-hook-form';
@@ -33,12 +34,17 @@ interface AchievementTypesConditionAttributes {
   }[];
 }
 
+export interface AssessmentFormEmitter {
+  isDirty?: boolean;
+}
+
 // @ts-ignore until Assessment store is fully typed
 export const connector = connect((state) => ({ tabs: state.editPage.tabs }));
 
 export interface AssessmentFormProps
   extends WrappedComponentProps,
-    ConnectedProps<typeof connector> {
+    ConnectedProps<typeof connector>,
+    Emits<AssessmentFormEmitter> {
   tabs: Tab[];
   onSubmit: (data: FieldValues, setError: UseFormSetError<FieldValues>) => void;
 
