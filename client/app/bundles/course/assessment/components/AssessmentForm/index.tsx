@@ -19,15 +19,15 @@ import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import ErrorText from 'lib/components/ErrorText';
 import ConditionList from 'lib/components/course/ConditionList';
 import Section from 'lib/components/layouts/Section';
-import t from './translations.intl';
 import IconRadio from 'lib/components/IconRadio';
 import InfoLabel from 'lib/components/InfoLabel';
+import t from './translations.intl';
 import FileManager from '../FileManager';
 import { fetchTabs } from './actions';
 import useFormValidation from './useFormValidation';
 import { connector, AssessmentFormProps } from './types';
 
-const AssessmentForm = (props: AssessmentFormProps) => {
+const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const {
     conditionAttributes,
     containsCodaveri,
@@ -58,7 +58,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
   const sessionProtected = watch('session_protected');
 
   // Load all tabs if data is loaded, otherwise fall back to current assessment tab.
-  const loadedTabs = tabs || watch('tabs');
+  const loadedTabs = tabs ?? watch('tabs');
 
   useEffect(() => {
     if (!editing) return;
@@ -78,12 +78,12 @@ const AssessmentForm = (props: AssessmentFormProps) => {
     [isDirty],
   );
 
-  const renderPasswordFields = () => (
+  const renderPasswordFields = (): JSX.Element => (
     <>
       <Controller
         name="view_password"
         control={control}
-        render={({ field, fieldState }) => (
+        render={({ field, fieldState }): JSX.Element => (
           <FormTextField
             field={field}
             fieldState={fieldState}
@@ -101,11 +101,11 @@ const AssessmentForm = (props: AssessmentFormProps) => {
       <Controller
         name="session_protected"
         control={control}
-        render={({ field, fieldState }) => (
+        render={({ field, fieldState }): JSX.Element => (
           <FormCheckboxField
             field={field}
             fieldState={fieldState}
-            disabled={disabled || autograded}
+            disabled={disabled ?? autograded}
             label={intl.formatMessage(t.sessionProtection)}
             description={intl.formatMessage(t.sessionProtectionHint)}
           />
@@ -116,7 +116,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="session_password"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormTextField
               field={field}
               fieldState={fieldState}
@@ -134,7 +134,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
     </>
   );
 
-  const renderTabs = () => {
+  const renderTabs = (): JSX.Element | null => {
     if (!loadedTabs) return null;
 
     const options = loadedTabs.map((tab) => ({
@@ -146,7 +146,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
       <Controller
         name="tab_id"
         control={control}
-        render={({ field, fieldState }) => (
+        render={({ field, fieldState }): JSX.Element => (
           <FormSelectField
             field={field}
             fieldState={fieldState}
@@ -177,7 +177,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="title"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormTextField
               field={field}
               fieldState={fieldState}
@@ -196,7 +196,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
             <Controller
               name="start_at"
               control={control}
-              render={({ field, fieldState }) => (
+              render={({ field, fieldState }): JSX.Element => (
                 <FormDateTimePickerField
                   field={field}
                   fieldState={fieldState}
@@ -214,7 +214,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
             <Controller
               name="end_at"
               control={control}
-              render={({ field, fieldState }) => (
+              render={({ field, fieldState }): JSX.Element => (
                 <FormDateTimePickerField
                   field={field}
                   fieldState={fieldState}
@@ -233,7 +233,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
               <Controller
                 name="bonus_end_at"
                 control={control}
-                render={({ field, fieldState }) => (
+                render={({ field, fieldState }): JSX.Element => (
                   <FormDateTimePickerField
                     field={field}
                     fieldState={fieldState}
@@ -256,7 +256,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="description"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormRichTextField
               field={field}
               fieldState={fieldState}
@@ -277,11 +277,11 @@ const AssessmentForm = (props: AssessmentFormProps) => {
             <Controller
               name="published"
               control={control}
-              render={({ field }) => (
+              render={({ field }): JSX.Element => (
                 <RadioGroup
                   {...field}
                   value={field.value === true ? 'published' : 'draft'}
-                  onChange={(e) => {
+                  onChange={(e): void => {
                     const isPublished = e.target.value === 'published';
                     field.onChange(isPublished);
                   }}
@@ -305,7 +305,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
           </>
         )}
 
-        {folderAttributes && (
+        {editing && folderAttributes && (
           <>
             <Typography variant="body1">
               {intl.formatMessage(t.files)}
@@ -330,14 +330,14 @@ const AssessmentForm = (props: AssessmentFormProps) => {
               <Controller
                 name="base_exp"
                 control={control}
-                render={({ field, fieldState }) => (
+                render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
                     field={field}
                     fieldState={fieldState}
                     disabled={disabled}
                     fullWidth
                     label={intl.formatMessage(t.baseExp)}
-                    onWheel={(event) => event.currentTarget.blur()}
+                    onWheel={(event): void => event.currentTarget.blur()}
                     type="number"
                     variant="filled"
                     margins={false}
@@ -350,14 +350,14 @@ const AssessmentForm = (props: AssessmentFormProps) => {
               <Controller
                 name="time_bonus_exp"
                 control={control}
-                render={({ field, fieldState }) => (
+                render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
                     field={field}
                     fieldState={fieldState}
                     disabled={disabled}
                     fullWidth
                     label={intl.formatMessage(t.timeBonusExp)}
-                    onWheel={(event) => event.currentTarget.blur()}
+                    onWheel={(event): void => event.currentTarget.blur()}
                     type="number"
                     variant="filled"
                     margins={false}
@@ -406,12 +406,12 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="autograded"
           control={control}
-          render={({ field }) => (
+          render={({ field }): JSX.Element => (
             <>
               <RadioGroup
                 {...field}
                 value={field.value === true ? 'autograded' : 'manual'}
-                onChange={(e) => {
+                onChange={(e): void => {
                   const isAutograded = e.target.value === 'autograded';
                   field.onChange(isAutograded);
                 }}
@@ -421,14 +421,14 @@ const AssessmentForm = (props: AssessmentFormProps) => {
                   label="Autograded"
                   icon={AutogradedIcon}
                   description={intl.formatMessage(t.autogradedHint)}
-                  disabled={containsCodaveri || disabled || !modeSwitching}
+                  disabled={containsCodaveri ?? disabled ?? !modeSwitching}
                 />
 
                 <IconRadio
                   value="manual"
                   label="Manual"
                   icon={ManualIcon}
-                  disabled={containsCodaveri || disabled || !modeSwitching}
+                  disabled={containsCodaveri ?? disabled ?? !modeSwitching}
                 />
               </RadioGroup>
             </>
@@ -442,7 +442,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="use_public"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
@@ -454,7 +454,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="use_private"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
@@ -466,7 +466,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="use_evaluation"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
@@ -479,11 +479,11 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="delayed_grade_publication"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
-              disabled={disabled || autograded}
+              disabled={disabled ?? autograded}
               label={intl.formatMessage(t.delayedGradePublication)}
               description={intl.formatMessage(t.delayedGradePublicationHint)}
               disabledHint={
@@ -503,11 +503,11 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="skippable"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
-              disabled={disabled || !autograded}
+              disabled={disabled ?? !autograded}
               label={intl.formatMessage(t.skippable)}
               disabledHint={
                 <InfoLabel label={intl.formatMessage(t.skippableManualHint)} />
@@ -518,11 +518,11 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="allow_partial_submission"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
-              disabled={disabled || !autograded}
+              disabled={disabled ?? !autograded}
               label={intl.formatMessage(t.allowPartialSubmission)}
               disabledHint={
                 <InfoLabel
@@ -540,7 +540,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="show_private"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
@@ -552,7 +552,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="show_evaluation"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
@@ -565,7 +565,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="show_mcq_mrq_solution"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
@@ -585,11 +585,11 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="tabbed_view"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              disabled={disabled || autograded}
+              disabled={disabled ?? autograded}
               label={intl.formatMessage(t.displayAssessmentAs)}
               options={[
                 {
@@ -616,7 +616,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="block_student_viewing_after_submitted"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
@@ -630,7 +630,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
           <Controller
             name="randomization"
             control={control}
-            render={({ field, fieldState }) => (
+            render={({ field, fieldState }): JSX.Element => (
               <FormCheckboxField
                 field={field}
                 fieldState={fieldState}
@@ -645,11 +645,11 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="show_mcq_answer"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
-              disabled={disabled || !autograded}
+              disabled={disabled ?? !autograded}
               label={intl.formatMessage(t.showMcqAnswer)}
               description={intl.formatMessage(t.showMcqAnswerHint)}
               disabledHint={
@@ -664,11 +664,11 @@ const AssessmentForm = (props: AssessmentFormProps) => {
         <Controller
           name="password_protected"
           control={control}
-          render={({ field, fieldState }) => (
+          render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               field={field}
               fieldState={fieldState}
-              disabled={disabled || autograded}
+              disabled={disabled ?? autograded}
               label={intl.formatMessage(t.passwordProtection)}
               disabledHint={
                 <InfoLabel
@@ -690,7 +690,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
           <Controller
             name="has_personal_times"
             control={control}
-            render={({ field, fieldState }) => (
+            render={({ field, fieldState }): JSX.Element => (
               <FormCheckboxField
                 field={field}
                 fieldState={fieldState}
@@ -704,7 +704,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
           <Controller
             name="affects_personal_times"
             control={control}
-            render={({ field, fieldState }) => (
+            render={({ field, fieldState }): JSX.Element => (
               <FormCheckboxField
                 field={field}
                 fieldState={fieldState}

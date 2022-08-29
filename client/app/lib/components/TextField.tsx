@@ -28,8 +28,8 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
               endAdornment: (
                 <InputAdornment position="end">
                   <IconButton
-                    onClick={() => setShowPassword((state) => !state)}
-                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={(): void => setShowPassword((state) => !state)}
+                    onMouseDown={(e): void => e.preventDefault()}
                     edge="end"
                   >
                     {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -49,5 +49,7 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
     );
   },
 );
+
+TextField.displayName = 'TextField';
 
 export default TextField;

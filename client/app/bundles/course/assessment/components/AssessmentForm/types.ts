@@ -1,9 +1,9 @@
 import { connect, ConnectedProps } from 'react-redux';
 import { WrappedComponentProps } from 'react-intl';
+import { FieldValues, UseFormSetError } from 'react-hook-form';
 import { Emits } from 'react-emitter-factory';
 
 import { Material } from '../FileManager';
-import { FieldValues, UseFormSetError } from 'react-hook-form';
 
 interface Tab {
   tab_id?: number;

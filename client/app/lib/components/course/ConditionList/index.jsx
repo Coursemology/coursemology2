@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import {
   IconButton,
-  ListSubheader,
   Menu,
   MenuItem,
   Table,
@@ -11,7 +10,6 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  Grid,
   Button,
 } from '@mui/material';
 import Add from '@mui/icons-material/Add';
