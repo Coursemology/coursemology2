@@ -7,7 +7,12 @@
 
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, UseFormReturn } from 'react-hook-form';
+import {
+  FieldValues,
+  SubmitHandler,
+  useForm,
+  UseFormReturn,
+} from 'react-hook-form';
 
 import ft from 'lib/translations/form';
 import t from './translations.intl';
@@ -95,8 +100,8 @@ const useFormValidation = (initialValues): UseFormReturn => {
   return {
     ...form,
 
-    handleSubmit(onValid, onInvalid) {
-      const postProcessor = (rawData) => {
+    handleSubmit: (onValid, onInvalid): SubmitHandler<FieldValues> => {
+      const postProcessor = (rawData): SubmitHandler<FieldValues> => {
         if (!rawData.session_protected) rawData.session_password = null;
         return onValid(rawData);
       };

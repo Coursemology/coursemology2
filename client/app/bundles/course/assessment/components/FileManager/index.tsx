@@ -4,13 +4,12 @@ import { Checkbox, CircularProgress } from '@mui/material';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
+import CourseAPI from 'api/course';
+import { formatLongDateTime } from 'lib/moment';
 import DataTable from 'lib/components/DataTable';
 import InfoLabel from 'lib/components/InfoLabel';
 import Toolbar from './Toolbar';
 import t from './translations.intl';
-
-import CourseAPI from 'api/course';
-import { formatLongDateTime } from 'lib/moment';
 
 export interface Material {
   id?: number;
@@ -32,12 +31,12 @@ const styles: { [key: string]: CSSProperties } = {
 };
 
 const FileManager = (props: FileManagerProps): JSX.Element => {
-  const { intl } = props;
+  const { disabled, intl } = props;
 
   const [materials, setMaterials] = useState(props.materials ?? []);
   const [uploadingMaterials, setUploadingMaterials] = useState<Material[]>([]);
 
-  const loadData = () => {
+  const loadData = (): (string | undefined)[][] => {
     const materialsData = materials?.map((file) => [
       file.name,
       formatLongDateTime(file.updated_at),
@@ -55,25 +54,25 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
    * Remove materials from uploading list and add new materials from server response to existing
    * materials list.
    */
-  const updateMaterials = (mat: Material[], response) => {
-    setUploadingMaterials((uploadingMaterials) =>
-      uploadingMaterials.filter((m) => mat.indexOf(m) === -1),
+  const updateMaterials = (mat: Material[], response): void => {
+    setUploadingMaterials((current) =>
+      current.filter((m) => mat.indexOf(m) === -1),
     );
 
     const newMaterials = response?.data?.materials;
     if (!newMaterials) return;
-    setMaterials((materials) => materials.concat(newMaterials));
+    setMaterials((current) => current.concat(newMaterials));
   };
 
   /**
    * Remove given materials from uploading list and display error message.
    */
-  const removeUploads = (mat: Material[], response) => {
+  const removeUploads = (mat: Material[], response): void => {
     const messageFromServer = response?.data?.errors;
     const failureMessage = intl.formatMessage(t.uploadFail);
 
-    setUploadingMaterials((uploadingMaterials) =>
-      uploadingMaterials.filter((m) => mat.indexOf(m) === -1),
+    setUploadingMaterials((current) =>
+      current.filter((m) => mat.indexOf(m) === -1),
     );
 
     toast.error(messageFromServer || failureMessage);
@@ -83,19 +82,18 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
    * Uploads the given files to the corresponding `folderId`.
    * @param files array of `File`s mapped from the file input in `Toolbar.tsx`
    */
-  const uploadFiles = async (files: File[]) => {
+  const uploadFiles = async (files: File[]): Promise<void> => {
     const { folderId } = props;
 
-    const materials = files.map((file) => ({ name: file.name }));
-    setUploadingMaterials((uploadingMaterials) =>
-      uploadingMaterials.concat(materials),
-    );
+    const newMaterials = files.map((file) => ({ name: file.name }));
+    setUploadingMaterials((current) => current.concat(newMaterials));
 
     try {
       const response = await CourseAPI.materialFolders.upload(folderId, files);
-      updateMaterials(materials, response);
+      updateMaterials(newMaterials, response);
     } catch (error) {
-      if (error instanceof AxiosError) removeUploads(materials, error.response);
+      if (error instanceof AxiosError)
+        removeUploads(newMaterials, error.response);
     }
   };
 
@@ -103,53 +101,52 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
    * Deletes a file on the `DataTable` asynchronously.
    * @param index row index of the file selected for deletion in the `DataTable`
    */
-  const deleteFileWithRowIndex = async (index: number) => {
+  const deleteFileWithRowIndex = async (index: number): Promise<void> => {
     const { id, name } = materials[index];
 
-    setMaterials((materials) =>
-      materials?.map((m) => (m.id === id ? { ...m, deleting: true } : m)),
+    setMaterials((current) =>
+      current?.map((m) => (m.id === id ? { ...m, deleting: true } : m)),
     );
 
     try {
       await CourseAPI.materials.destroy(props.folderId, id);
-      setMaterials((materials) => materials?.filter((m) => m.id !== id));
+      setMaterials((current) => current?.filter((m) => m.id !== id));
       toast.success(intl.formatMessage(t.deleteSuccess, { name }));
     } catch (error) {
-      setMaterials((materials) =>
-        materials?.map((m) => (m.id === id ? { ...m, deleting: false } : m)),
+      setMaterials((current) =>
+        current?.map((m) => (m.id === id ? { ...m, deleting: false } : m)),
       );
       toast.error(intl.formatMessage(t.deleteFail, { name }));
     }
   };
 
-  const ToolbarComponent = (props) => (
+  const ToolbarComponent = (toolbarProps): JSX.Element => (
     <Toolbar
-      {...props}
+      {...toolbarProps}
       onAddFiles={uploadFiles}
       onDeleteFileWithRowIndex={deleteFileWithRowIndex}
     />
   );
 
-  const DisabledMessages = () => (
-    <>
-      <InfoLabel label={intl.formatMessage(t.disableNewFile)} />
+  const DisabledMessages = injectIntl(
+    (messagesProps): JSX.Element => (
+      <>
+        <InfoLabel label={messagesProps.intl.formatMessage(t.disableNewFile)} />
 
-      {materials.length > 0 && (
-        <InfoLabel
-          warning
-          label={intl.formatMessage(t.studentCannotSeeFiles)}
-          marginTop={1}
-        />
-      )}
-    </>
+        {materials.length > 0 && (
+          <InfoLabel
+            warning
+            label={messagesProps.intl.formatMessage(t.studentCannotSeeFiles)}
+            marginTop={1}
+          />
+        )}
+      </>
+    ),
   );
 
-  const renderTopTableComponent = () =>
-    !props.disabled ? ToolbarComponent : DisabledMessages;
-
-  const RowStartComponent = (props) => {
-    const type = props['data-description'];
-    const index = props['data-index'];
+  const RowStartComponent = (rowStartProps): JSX.Element => {
+    const type = rowStartProps['data-description'];
+    const index = rowStartProps['data-index'];
 
     const isBodyRow = type === 'row-select';
     const isUploadingMaterial = index >= materials.length;
@@ -158,9 +155,9 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
 
     if (isBodyRow && (isUploadingMaterial || isDeletingMaterial)) {
       return <CircularProgress size={24} sx={styles.uploadingIndicator} />;
-    } else {
-      return <Checkbox {...props} />;
     }
+
+    return <Checkbox {...rowStartProps} />;
   };
 
   return (
@@ -173,13 +170,13 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
       options={{
         elevation: 0,
         pagination: false,
-        selectableRows: !props.disabled ? 'multiple' : 'none',
+        selectableRows: !disabled ? 'multiple' : 'none',
         setTableProps: () => ({ size: 'small', sx: { overflow: 'hidden' } }),
       }}
       components={{
         Checkbox: RowStartComponent,
-        TableToolbar: renderTopTableComponent(),
-        TableToolbarSelect: renderTopTableComponent(),
+        TableToolbar: !disabled ? ToolbarComponent : DisabledMessages,
+        TableToolbarSelect: !disabled ? ToolbarComponent : DisabledMessages,
         ...(materials.length <= 0
           ? {
               TableBody: () => null,

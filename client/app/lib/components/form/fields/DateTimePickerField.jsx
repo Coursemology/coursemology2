@@ -107,6 +107,7 @@ FormDateTimePickerField.propTypes = {
   className: PropTypes.string,
   variant: PropTypes.string,
   disableMargins: PropTypes.bool,
+  disableShrinkingLabel: PropTypes.bool,
 };
 
 export default injectIntl(FormDateTimePickerField);

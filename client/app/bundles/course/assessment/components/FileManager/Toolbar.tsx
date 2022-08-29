@@ -9,15 +9,7 @@ import t from './translations.intl';
  * Types are all any for now because DataTable is not fully typed.
  */
 interface ToolbarProps extends WrappedComponentProps {
-  options;
   selectedRows;
-  displayData;
-  onRowsDelete;
-  selectRowUpdate;
-  columns;
-  columnOrder;
-  data;
-  filterData;
   onAddFiles: (files: File[]) => void;
   onDeleteFileWithRowIndex: (index: number) => void;
 }
@@ -37,7 +29,7 @@ const styles: { [key: string]: CSSProperties } = {
 const Toolbar = (props: ToolbarProps): JSX.Element => {
   const { intl } = props;
 
-  const handleDeleteFiles = (e) => {
+  const handleDeleteFiles = (e): void => {
     e.preventDefault();
 
     props.selectedRows?.data?.forEach((row) => {
