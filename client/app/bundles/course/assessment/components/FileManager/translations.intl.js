@@ -38,6 +38,11 @@ const translations = defineMessages({
     defaultMessage:
       'You cannot add new files because the Materials component is disabled in Course Settings.',
   },
+  studentCannotSeeFiles: {
+    id: 'course.assessment.fileManager.studentCannotSeeFiles',
+    defaultMessage:
+      'Students cannot see these files because the Materials component is disabled in Course Settings.',
+  },
 });
 
 export default translations;

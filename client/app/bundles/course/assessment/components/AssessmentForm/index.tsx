@@ -510,9 +510,7 @@ const AssessmentForm = (props: AssessmentFormProps) => {
               disabled={disabled || !autograded}
               label={intl.formatMessage(t.skippable)}
               disabledHint={
-                <InfoLabel
-                  label={intl.formatMessage(t.unavailableInManuallyGraded)}
-                />
+                <InfoLabel label={intl.formatMessage(t.skippableManualHint)} />
               }
             />
           )}

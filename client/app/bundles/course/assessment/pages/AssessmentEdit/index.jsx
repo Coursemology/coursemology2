@@ -13,8 +13,9 @@ import translations from './translations.intl';
 
 const styles = {
   buttonContainer: {
-    marginTop: 16,
-    marginLeft: 16,
+    position: 'absolute',
+    marginTop: '-6rem',
+    right: '15px',
   },
 };
 
@@ -62,6 +63,19 @@ class EditPage extends Component {
 
     return (
       <>
+        <div style={styles.buttonContainer}>
+          <Button
+            variant="contained"
+            color="primary"
+            className="btn-submit"
+            disabled={disabled}
+            form="assessment-form"
+            type="submit"
+          >
+            <FormattedMessage {...translations.updateAssessment} />
+          </Button>
+        </div>
+
         <AssessmentForm
           conditionAttributes={conditionAttributes}
           disabled={disabled}
@@ -75,18 +89,6 @@ class EditPage extends Component {
           randomizationAllowed={randomizationAllowed}
           showPersonalizedTimelineFeatures={showPersonalizedTimelineFeatures}
         />
-        <div style={styles.buttonContainer}>
-          <Button
-            variant="contained"
-            color="primary"
-            className="btn-submit"
-            disabled={disabled}
-            form="assessment-form"
-            type="submit"
-          >
-            <FormattedMessage {...translations.updateAssessment} />
-          </Button>
-        </div>
         <NotificationBar notification={notification} />
       </>
     );
