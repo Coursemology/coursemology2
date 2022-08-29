@@ -20,6 +20,7 @@ export default function (state = {}, action) {
           {},
         ),
       };
+    case actions.REEVALUATE_SUCCESS:
     case actions.AUTOGRADE_SUCCESS:
     case actions.RESET_SUCCESS: {
       const { questionId } = action.payload;
@@ -33,6 +34,7 @@ export default function (state = {}, action) {
         { [questionId]: action.payload.explanation },
       );
     }
+    case actions.REEVALUATE_FAILURE:
     case actions.AUTOGRADE_FAILURE: {
       const { questionId } = action;
       return {

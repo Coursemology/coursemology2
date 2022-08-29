@@ -20,6 +20,7 @@ export default function (state = {}, action) {
           {},
         ),
       };
+    case actions.REEVALUATE_SUCCESS:
     case actions.AUTOGRADE_SUCCESS: {
       const { questionId } = action.payload;
       return {

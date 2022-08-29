@@ -23,6 +23,7 @@ import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
 import {
   fetchSubmission,
+  reevaluateAnswer,
   autogradeSubmission,
   saveDraft,
   finalise,
@@ -185,6 +186,14 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(submitAnswer(params.submissionId, answerId, answer, setValue));
   };
 
+  onReevaluateAnswer = (answerId, questionId) => {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    dispatch(reevaluateAnswer(params.submissionId, answerId, questionId));
+  };
+
   allConsideredCorrect() {
     const { explanations, questions } = this.props;
     if (Object.keys(explanations).length !== Object.keys(questions).length) {
@@ -289,9 +298,9 @@ class VisibleSubmissionEditIndex extends Component {
           onSaveDraft={this.onSaveDraft}
           onSubmit={this.onSubmit}
           onSubmitAnswer={this.onSubmitAnswer}
+          onReevaluateAnswer={this.onReevaluateAnswer}
           handleSaveGrade={() => this.handleSaveGrade()}
           handleUnsubmit={() => this.handleUnsubmit()}
-          handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
           handleToggleViewHistoryMode={this.handleToggleViewHistoryMode}
           explanations={explanations}
           allConsideredCorrect={this.allConsideredCorrect()}

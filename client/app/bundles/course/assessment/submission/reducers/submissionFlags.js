@@ -34,6 +34,7 @@ export default function (state = initialState, action) {
     case actions.FINALISE_REQUEST:
     case actions.UNSUBMIT_REQUEST:
     case actions.AUTOGRADE_REQUEST:
+    case actions.REEVALUATE_REQUEST:
     case actions.RESET_REQUEST:
     case actions.MARK_REQUEST:
     case actions.UNMARK_REQUEST:
@@ -46,6 +47,7 @@ export default function (state = initialState, action) {
     case actions.SAVE_GRADE_SUCCESS:
     case actions.FINALISE_SUCCESS:
     case actions.UNSUBMIT_SUCCESS:
+    case actions.REEVALUATE_SUCCESS:
     case actions.AUTOGRADE_SUCCESS:
     case actions.RESET_SUCCESS:
     case actions.MARK_SUCCESS:
@@ -58,6 +60,7 @@ export default function (state = initialState, action) {
     case actions.SAVE_GRADE_FAILURE:
     case actions.FINALISE_FAILURE:
     case actions.UNSUBMIT_FAILURE:
+    case actions.REEVALUATE_FAILURE:
     case actions.AUTOGRADE_FAILURE:
     case actions.RESET_FAILURE:
     case actions.MARK_FAILURE:
