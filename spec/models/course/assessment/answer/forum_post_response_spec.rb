@@ -70,7 +70,7 @@ RSpec.describe Course::Assessment::Answer::ForumPostResponse do
       it 'computes updated posts correctly' do
         parent_post.text = 'This post has been updated.'
         parent_post.save!
-        sleep(1) # Realistic wait time + prevents race conditions
+        sleep 1 # Realistic wait time + prevents race conditions
         post_packs = answer.compute_post_packs
         expect(post_packs[0].post_id).to eq(parent_post.id)
         expect(post_packs[0].post_updated_at.utc).not_to be_within(0.01.second).of parent_post.updated_at.utc
@@ -80,7 +80,7 @@ RSpec.describe Course::Assessment::Answer::ForumPostResponse do
 
       it 'computes deleted posts correctly' do
         parent_post.destroy
-        sleep(1) # Realistic wait time + prevents race conditions
+        sleep 1 # Realistic wait time + prevents race conditions
         post_packs = answer.compute_post_packs
         expect(post_packs[0].post_id).to eq(parent_post.id)
         expect(post_packs[0].is_post_updated).to eq(nil)
@@ -89,7 +89,7 @@ RSpec.describe Course::Assessment::Answer::ForumPostResponse do
 
       it 'computes deleted topics correctly' do
         topic.reload.destroy
-        sleep(1) # Realistic wait time + prevents race conditions
+        sleep 1 # Realistic wait time + prevents race conditions
         post_packs = answer.compute_post_packs
         expect(post_packs[0].forum_topic_id).to eq(topic.id)
         expect(post_packs[0].post_id).to eq(parent_post.id)
@@ -104,7 +104,7 @@ RSpec.describe Course::Assessment::Answer::ForumPostResponse do
       it 'computes updated parent posts correctly' do
         parent_post.text = 'This post has been updated.'
         parent_post.save!
-        sleep(1) # Realistic wait time + prevents race conditions
+        sleep 1 # Realistic wait time + prevents race conditions
         post_packs = answer_with_parent.compute_post_packs
         expect(post_packs[0].post_id).to eq(child_post.id) # Just a simple sanity check for child post
         expect(post_packs[0].parent_updated_at.utc).not_to be_within(0.01.second).of parent_post.updated_at.utc
@@ -114,7 +114,7 @@ RSpec.describe Course::Assessment::Answer::ForumPostResponse do
 
       it 'computes deleted parent posts correctly' do
         parent_post.destroy
-        sleep(1) # Realistic wait time + prevents race conditions
+        sleep 1 # Realistic wait time + prevents race conditions
         post_packs = answer_with_parent.compute_post_packs
         expect(post_packs[0].post_id).to eq(child_post.id) # Just a simple sanity check for child post
         expect(post_packs[0].is_parent_updated).to eq(nil)

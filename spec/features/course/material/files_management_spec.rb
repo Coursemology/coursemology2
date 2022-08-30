@@ -37,8 +37,9 @@ RSpec.feature 'Course: Material: Files: Management' do
         find('input[name="name"]').set(new_name)
         click_button 'Update'
 
+        sleep 0.3 # wait for update to complete
+
         expect(current_path).to eq(course_material_folder_path(course, folder))
-        sleep(0.1)
         expect(material.reload.name).to eq(new_name)
       end
 
@@ -80,9 +81,9 @@ RSpec.feature 'Course: Material: Files: Management' do
         new_name = 'new name'
         find('input[name="name"]').set(new_name)
         click_button 'Update'
+        sleep 0.3 # wait for update to complete
 
         expect(current_path).to eq(course_material_folder_path(course, folder))
-        sleep(0.1)
         expect(material.reload.name).to eq(new_name)
       end
     end

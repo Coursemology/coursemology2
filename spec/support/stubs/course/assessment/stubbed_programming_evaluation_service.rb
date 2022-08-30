@@ -11,7 +11,7 @@ module Course::Assessment::StubbedProgrammingEvaluationService
                    ) },
                    exit_code: 0 }
     # For timeout testing
-    sleep(0.2)
+    sleep 0.2
 
     [attributes[:stdout], attributes[:stderr], attributes[:test_reports], attributes[:exit_code]]
   end

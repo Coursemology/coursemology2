@@ -21,6 +21,7 @@ RSpec.feature 'System: Administration: Announcements' do
         fill_in_react_ck 'textarea[name="content"]', announcement[:content]
 
         find('button.btn-submit').click
+        sleep 0.3 # wait for creation to complete
         expect(current_path).to eq(admin_announcements_path)
         expect(page).to have_selector('h3', text: announcement[:title])
         expect(page).to have_selector('p', text: announcement[:content])
@@ -51,6 +52,7 @@ RSpec.feature 'System: Administration: Announcements' do
 
         # Commented due to flaky test
         # expect_toastify('Announcement updated')
+        sleep 0.3 # wait for update to complete
 
         expect(current_path).to eq admin_announcements_path
         within find("#announcement-#{announcement.id}") do

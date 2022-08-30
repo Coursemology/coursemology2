@@ -97,7 +97,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
 
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, submission))
-        sleep(0.1)
+        sleep 0.1
         expect(submission.reload.points_awarded).to be_nil
         expect(submission.draft_points_awarded).to eq(50)
       end
