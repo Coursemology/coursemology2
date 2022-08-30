@@ -58,7 +58,6 @@ RSpec.feature 'System: Administration: Courses', js: true do
         course_to_search = create(:course)
 
         visit admin_courses_path
-        expect(page).not_to have_selector('p.course_title', text: course_to_search.title)
         find('button[aria-label="Search"]').click
         find('div[aria-label="Search"]').find('input').set(course_to_search.title)
 
