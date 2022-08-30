@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Discussion::TopicsController < Course::ComponentController
+  include Course::UsersHelper
+
   load_and_authorize_resource :discussion_topic, through: :course, instance_name: :topic,
                                                  class: Course::Discussion::Topic.name,
                                                  parent: false
@@ -14,9 +16,8 @@ class Course::Discussion::TopicsController < Course::ComponentController
     if current_course_user&.student?
       @topics = @topics.merge(Course::Discussion::Topic.from_user(current_course_user.user_id))
     end
-    @topic_count = @topics.count
-    @topics = @topics.paginated(pagination_page_param)
-    render 'topics_list_data'
+
+    render_topics_list_data
   end
 
   # Loads topics pending staff reply for course_staff, and unread topics for students.
@@ -26,23 +27,18 @@ class Course::Discussion::TopicsController < Course::ComponentController
               else
                 all_topics.pending_staff_reply
               end
-    @topic_count = @topics.count
-    @topics = @topics.paginated(pagination_page_param)
-    render 'topics_list_data'
+
+    render_topics_list_data
   end
 
   def my_students
     @topics = my_students_topics
-    @topic_count = @topics.count
-    @topics = @topics.paginated(pagination_page_param)
-    render 'topics_list_data'
+    render_topics_list_data
   end
 
   def my_students_pending
     @topics = my_students_topics.pending_staff_reply
-    @topic_count = @topics.count
-    @topics = @topics.paginated(pagination_page_param)
-    render 'topics_list_data'
+    render_topics_list_data
   end
 
   def toggle_pending
@@ -107,5 +103,14 @@ class Course::Discussion::TopicsController < Course::ComponentController
 
   def mark_as_pending?
     params[:pending] == 'true'
+  end
+
+  def render_topics_list_data
+    @topic_count = @topics.count
+    @topics = @topics.paginated(pagination_page_param)
+
+    @course_users_hash = preload_course_users_hash(current_course)
+
+    render 'topics_list_data'
   end
 end
