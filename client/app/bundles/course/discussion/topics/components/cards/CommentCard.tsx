@@ -17,8 +17,6 @@ import { CommentPostMiniEntity } from 'types/course/comments';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'types/store';
 import { toast } from 'react-toastify';
-import { getCourseUserURL } from 'lib/helpers/url-builders';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { deletePost, updatePost } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -201,13 +199,15 @@ const CommentCard: FC<Props> = (props) => {
               alt={post.creator.name}
               style={{ height: '25px', width: '25px' }}
               component={Link}
-              href={getCourseUserURL(getCourseId(), post.creator.id)}
+              href={post.creator.userUrl}
             />
           }
           title={
-            <a href={getCourseUserURL(getCourseId(), post.creator.id)}>
-              {post.creator.name}
-            </a>
+            post.creator.userUrl ? (
+              <a href={post.creator.userUrl}>{post.creator.name}</a>
+            ) : (
+              post.creator.name
+            )
           }
           titleTypographyProps={{ display: 'block', marginright: 20 }}
           subheader={`${formatDateTime(post.createdAt)}${
