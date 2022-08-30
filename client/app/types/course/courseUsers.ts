@@ -31,6 +31,7 @@ export type StaffRole = keyof typeof sharedConstants.STAFF_ROLES;
 export interface CourseUserBasicListData {
   id: number;
   name: string;
+  userUrl?: string;
   imageUrl?: string;
   role?: CourseUserRole;
 }
@@ -45,6 +46,7 @@ export interface CourseUserListData extends CourseUserBasicListData {
 export interface CourseUserBasicMiniEntity {
   id: number;
   name: string;
+  userUrl?: string;
   imageUrl?: string;
   role?: CourseUserRole;
 }
