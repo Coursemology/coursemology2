@@ -215,7 +215,7 @@ const CodaveriCommentCard: FC<Props> = (props) => {
                     setRejectConfirmation(true);
                   }}
                 >
-                  <Clear htmlColor="red" />
+                  <Clear htmlColor={isRejecting || isSaving ? 'grey' : 'red'} />
                 </LoadingButton>
               </Tooltip>
               <Tooltip title={intl.formatMessage(translations.finalise)}>
@@ -225,7 +225,9 @@ const CodaveriCommentCard: FC<Props> = (props) => {
                   disabled={isRejecting || isSaving}
                   loading={isSaving}
                 >
-                  <Check htmlColor="green" />
+                  <Check
+                    htmlColor={isRejecting || isSaving ? 'grey' : 'green'}
+                  />
                 </LoadingButton>
               </Tooltip>
             </div>
