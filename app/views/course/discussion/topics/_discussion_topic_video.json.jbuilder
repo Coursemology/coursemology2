@@ -8,10 +8,12 @@ submission = video.submissions.by_user(creator).first
 json.id topic.id
 json.title video.title
 json.creator do
-  user = submission.creator
-  json.id user.id
-  json.name display_user(user)
-  json.imageUrl user.profile_photo.url
+  creator = submission.creator
+  user = @course_users_hash&.fetch(creator.id, creator)
+  json.id user&.id
+  json.userUrl url_to_user_or_course_user(current_course, user)
+  json.name display_user(creator)
+  json.imageUrl creator.profile_photo.url
 end
 json.timestamp Time.at(video_topic.timestamp).utc.strftime('%H:%M:%S')
 

@@ -10,10 +10,12 @@ question_assessment = assessment.question_assessments.find_by!(question: questio
 json.id topic.id
 json.title "#{assessment.title}: #{question_assessment.display_title}"
 json.creator do
-  user = submission.creator
-  json.id user.id
-  json.name display_user(user)
-  json.imageUrl user.profile_photo.url
+  creator = submission.creator
+  user = @course_users_hash&.fetch(creator.id, creator)
+  json.id user&.id
+  json.userUrl url_to_user_or_course_user(current_course, user)
+  json.name display_user(creator)
+  json.imageUrl creator.profile_photo.url
 end
 json.content display_code_lines(file_annotation.file, file_annotation.line - 5, file_annotation.line)
 
