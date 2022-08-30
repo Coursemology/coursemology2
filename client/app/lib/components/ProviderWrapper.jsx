@@ -3,12 +3,20 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { IntlProvider } from 'react-intl';
 import { ToastContainer } from 'react-toastify';
-import { i18nLocale } from 'lib/helpers/server-context';
-import { createTheme, adaptV4Theme, ThemeProvider } from '@mui/material/styles';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { injectStyle } from 'react-toastify/dist/inject-style';
-import palette from '../../theme/palette';
-import { grey } from '../../theme/colors';
+import {
+  createTheme,
+  adaptV4Theme,
+  ThemeProvider,
+  StyledEngineProvider,
+} from '@mui/material/styles';
+import resolveConfig from 'tailwindcss/resolveConfig';
+
+import { i18nLocale } from 'lib/helpers/server-context';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import palette from 'theme/palette';
+import { grey } from 'theme/colors';
+import tailwindUserConfig from '../../../tailwind.config';
 import ErrorBoundary from './ErrorBoundary';
 import translations from '../../../build/locales/locales.json';
 
@@ -24,12 +32,25 @@ const propTypes = {
   children: PropTypes.element.isRequired,
 };
 
+const tailwindConfig = resolveConfig(tailwindUserConfig);
+
+const pxInInt = (pixels) => parseInt(pixels.replace('px', ''), 10);
+
 const themeSettings = {
   palette,
   // https://material-ui.com/customization/themes/#typography---html-font-size
   // https://material-ui.com/style/typography/#migration-to-typography-v2
   typography: {
     htmlFontSize: 10,
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: pxInInt(tailwindConfig.theme.screens.sm),
+      md: pxInInt(tailwindConfig.theme.screens.md),
+      lg: pxInInt(tailwindConfig.theme.screens.lg),
+      xl: pxInInt(tailwindConfig.theme.screens.xl),
+    },
   },
   overrides: {
     MuiAppBar: {
@@ -97,10 +118,20 @@ const themeSettings = {
 
 export const adaptedTheme = adaptV4Theme(themeSettings);
 
-const themeV5 = createTheme(adaptedTheme);
-
 const ProviderWrapper = ({ store, persistor, children }) => {
   const localeWithoutRegionCode = i18nLocale.toLowerCase().split(/[_-]+/)[0];
+
+  // TODO: Replace with React's createRoot once true SPA is ready
+  const rootElement = document.getElementById('root');
+
+  const themeV5 = createTheme({
+    ...adaptedTheme,
+    components: {
+      MuiDialog: { defaultProps: { container: rootElement } },
+      MuiPopover: { defaultProps: { container: rootElement } },
+      MuiPopper: { defaultProps: { container: rootElement } },
+    },
+  });
 
   let messages;
   if (localeWithoutRegionCode !== 'en') {
@@ -135,7 +166,9 @@ const ProviderWrapper = ({ store, persistor, children }) => {
 
   providers = (
     <IntlProvider locale={i18nLocale} messages={messages} textComponent="span">
-      <ThemeProvider theme={themeV5}>{providers}</ThemeProvider>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={themeV5}>{providers}</ThemeProvider>
+      </StyledEngineProvider>
     </IntlProvider>
   );
 
