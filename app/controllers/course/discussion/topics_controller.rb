@@ -75,13 +75,13 @@ class Course::Discussion::TopicsController < Course::ComponentController
 
   def all_topics
     @topics.globally_displayed.
-      ordered_by_updated_at.
       preload([:posts,
                actable: [:question,
                          { submission: [:assessment,
                                         :creator] },
                          file: { answer: [:question,
-                                          :submission] }]])
+                                          :submission] }]]).
+      order('course_discussion_topics.updated_at')
   end
 
   def my_students_topics
