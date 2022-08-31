@@ -50,7 +50,7 @@ module Course::ControllerHelper
   #   string within a link to bring to the User page.
   def link_to_course_user(user, options = {})
     link_text = capture { block_given? ? yield(user) : display_course_user(user) }
-    link_path = url_to_user_or_course_user(user.course, user)
+    link_path = course_user_path(user.course, user)
     link_to(link_text, link_path, options)
   end
 
