@@ -15,20 +15,23 @@
   - subscribe_tooltip = t('course.forum.topics.subscribe.tag')
   - unsubscribe_tooltip = t('course.forum.topics.unsubscribe.tag')
 
+- disable_button = !admin_enable_email || user_unsubscribed
 - if topic.subscribed_by?(user)
-  = link_to subscribe_course_forum_topic_path(current_course, forum, topic, subscribe: false),
+  = link_to disable_button ? '#' : subscribe_course_forum_topic_path(current_course, forum, topic, subscribe: false),
             title: unsubscribe_tooltip,
             class: ['btn', 'btn-info', 'btn-subscribe'],
             method: :delete,
-            remote: true, disabled: !admin_enable_email || user_unsubscribed do
+            disabled: disable_button,
+            remote: true do
     = fa_icon 'envelope-open'.freeze, class: ['fa-fw']
     span = t('course.forum.topics.subscribe_button.subscribed')
 - else
-  = link_to subscribe_course_forum_topic_path(current_course, forum, topic, subscribe: true),
+  = link_to disable_button ? '#' : subscribe_course_forum_topic_path(current_course, forum, topic, subscribe: true),
             title: subscribe_tooltip,
             class: ['btn', 'btn-default', 'btn-subscribe'],
             method: :post,
             role: 'button',
-            remote: true, disabled: !admin_enable_email || user_unsubscribed do
+            disabled: disable_button,
+            remote: true do
     = fa_icon 'envelope-open-o'.freeze, class: ['fa-fw']
     span = t('course.forum.topics.subscribe_button.subscribe')
