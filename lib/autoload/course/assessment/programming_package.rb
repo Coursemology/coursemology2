@@ -245,6 +245,7 @@ class Course::Assessment::ProgrammingPackage
   # @return [Hash<Pathname, String>] A hash mapping the file path to the file contents of each
   #   file.
   def retrieve_files_in_main_dir
+    ensure_file_open!
     @file.glob('*').map do |entry|
       next if entry.directory?
 
