@@ -35,7 +35,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
     @answer_object[:problem_id] = @question.codaveri_id
 
     @answer_object[:language_version][:language] = @question.polyglot_language_name
-    @answer_object[:language_version][:version] = '3.10.0' # @question.polyglot_language_version
+    @answer_object[:language_version][:version] = @question.polyglot_language_version
 
     @answer_files.each do |file|
       file_template = default_codaveri_student_file_template
