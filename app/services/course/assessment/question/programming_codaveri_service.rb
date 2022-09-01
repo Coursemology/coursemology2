@@ -58,7 +58,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     @problem_object[:problem_id] = @question.codaveri_id if @question.codaveri_id
 
     @problem_object[:language_version][:language] = @question.polyglot_language_name
-    @problem_object[:language_version][:version] = '3.10.0' # @question.polyglot_language_version
+    @problem_object[:language_version][:version] = @question.polyglot_language_version
 
     codaveri_package = Course::Assessment::Question::ProgrammingCodaveri::ProgrammingCodaveriPackageService.new(
       @question, package
