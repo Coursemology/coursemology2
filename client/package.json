@@ -89,7 +89,7 @@
     "@mui/lab": "^5.0.0-alpha.97",
     "@mui/material": "^5.10.3",
     "@mui/styles": "^5.10.3",
-    "@mui/x-date-pickers": "^5.0.0-beta.7",
+    "@mui/x-date-pickers": "^5.0.0",
     "ace-builds": "^1.10.0",
     "axios": "^0.27.2",
     "babel-loader": "^8.2.5",
