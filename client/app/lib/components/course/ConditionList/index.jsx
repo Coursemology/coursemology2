@@ -11,6 +11,8 @@ import {
   TableHead,
   TableRow,
   Button,
+  Typography,
+  Box,
 } from '@mui/material';
 import Add from '@mui/icons-material/Add';
 import Edit from '@mui/icons-material/Edit';
@@ -154,6 +156,20 @@ class ConditionList extends PureComponent {
   render() {
     return (
       <>
+        {(this.props.title || this.props.description) && (
+          <Box mt={2} mb={2}>
+            {this.props.title && (
+              <Typography variant="body1">{this.props.title}</Typography>
+            )}
+
+            {this.props.description && (
+              <Typography variant="body2" color="text.secondary">
+                {this.props.description}
+              </Typography>
+            )}
+          </Box>
+        )}
+
         {this.renderTopHeader()}
 
         <Table>
@@ -193,6 +209,8 @@ ConditionList.propTypes = {
       delete_url: PropTypes.string,
     }),
   ),
+  title: PropTypes.string,
+  description: PropTypes.string,
 };
 
 ConditionList.defaultProps = {

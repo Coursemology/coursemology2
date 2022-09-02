@@ -1,9 +1,9 @@
 import { FC, useEffect } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import ConditionList from 'lib/components/course/ConditionList';
 import ErrorText from 'lib/components/ErrorText';
 import formTranslations from 'lib/translations/form';
@@ -19,7 +19,7 @@ import {
 } from 'types/course/achievements';
 import { ConditionData, Conditions } from 'types/course/conditions';
 
-interface Props {
+interface Props extends WrappedComponentProps {
   editing: boolean; // If the Form is in editing mode, `Add Conditions` button will be displayed.
   handleClose: (isDirty: boolean) => void;
   onSubmit: (
@@ -87,6 +87,7 @@ const AchievementForm: FC<Props> = (props) => {
     initialValues,
     onSubmit,
     setIsDirty,
+    intl,
   } = props;
   const {
     control,
@@ -121,7 +122,7 @@ const AchievementForm: FC<Props> = (props) => {
         key="achievement-form-update-button"
         type="submit"
       >
-        <FormattedMessage {...translations.update} />
+        {intl.formatMessage(translations.update)}
       </Button>
     </div>
   ) : (
@@ -135,7 +136,7 @@ const AchievementForm: FC<Props> = (props) => {
         key="achievement-form-cancel-button"
         onClick={(): void => handleClose(isDirty)}
       >
-        <FormattedMessage {...formTranslations.cancel} />
+        {intl.formatMessage(formTranslations.cancel)}
       </Button>
       <Button
         color="primary"
@@ -145,7 +146,7 @@ const AchievementForm: FC<Props> = (props) => {
         key="achievement-form-submit-button"
         type="submit"
       >
-        <FormattedMessage {...formTranslations.submit} />
+        {intl.formatMessage(formTranslations.submit)}
       </Button>
     </div>
   );
@@ -166,7 +167,7 @@ const AchievementForm: FC<Props> = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.title} />}
+              label={intl.formatMessage(translations.title)}
               // @ts-ignore: component is still written in JS
               fullWidth
               InputLabelProps={{
@@ -185,7 +186,7 @@ const AchievementForm: FC<Props> = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.description} />}
+              label={intl.formatMessage(translations.description)}
               // @ts-ignore: component is still written in JS
               fullWidth
               InputLabelProps={{
@@ -216,29 +217,17 @@ const AchievementForm: FC<Props> = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.published} />}
+              label={intl.formatMessage(translations.published)}
             />
           )}
         />
         {editing && conditionAttributes && (
-          <>
-            <Typography variant="body1" sx={{ paddingTop: 2 }}>
-              <FormattedMessage {...translations.unlockConditions} />
-            </Typography>
-
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ paddingBottom: 2 }}
-            >
-              <FormattedMessage {...translations.unlockConditionsHint} />
-            </Typography>
-
-            <ConditionList
-              newConditionUrls={conditionAttributes.enabledConditions}
-              conditions={conditionAttributes.conditions}
-            />
-          </>
+          <ConditionList
+            title={intl.formatMessage(translations.unlockConditions)}
+            description={intl.formatMessage(translations.unlockConditionsHint)}
+            newConditionUrls={conditionAttributes.enabledConditions}
+            conditions={conditionAttributes.conditions}
+          />
         )}
         {actionButtons}
       </form>
@@ -246,4 +235,4 @@ const AchievementForm: FC<Props> = (props) => {
   );
 };
 
-export default AchievementForm;
+export default injectIntl(AchievementForm);

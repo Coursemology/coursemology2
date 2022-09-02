@@ -368,22 +368,12 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           </Grid>
 
           {editing && conditionAttributes && (
-            <>
-              <div>
-                <Typography variant="body1" sx={{ paddingTop: 2 }}>
-                  {intl.formatMessage(t.unlockConditions)}
-                </Typography>
-
-                <Typography variant="body2" color="text.secondary">
-                  {intl.formatMessage(t.unlockConditionsHint)}
-                </Typography>
-              </div>
-
-              <ConditionList
-                newConditionUrls={conditionAttributes.new_condition_urls}
-                conditions={conditionAttributes.conditions}
-              />
-            </>
+            <ConditionList
+              title={intl.formatMessage(t.unlockConditions)}
+              description={intl.formatMessage(t.unlockConditionsHint)}
+              newConditionUrls={conditionAttributes.new_condition_urls}
+              conditions={conditionAttributes.conditions}
+            />
           )}
         </Section>
       )}
