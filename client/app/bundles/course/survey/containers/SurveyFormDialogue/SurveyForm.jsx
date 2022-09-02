@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -92,7 +92,7 @@ const SurveyForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            label={<FormattedMessage {...translations.title} />}
+            label={intl.formatMessage(translations.title)}
             fullWidth
             InputLabelProps={{
               shrink: true,
@@ -110,7 +110,7 @@ const SurveyForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            label={<FormattedMessage {...translations.description} />}
+            label={intl.formatMessage(translations.description)}
             fullWidth
             multiline
             InputLabelProps={{
@@ -130,7 +130,7 @@ const SurveyForm = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.opensAt} />}
+              label={intl.formatMessage(translations.opensAt)}
               style={styles.oneColumn}
             />
           )}
@@ -143,7 +143,7 @@ const SurveyForm = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.expiresAt} />}
+              label={intl.formatMessage(translations.expiresAt)}
               style={styles.oneColumn}
             />
           )}
@@ -156,7 +156,7 @@ const SurveyForm = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.bonusEndsAt} />}
+              label={intl.formatMessage(translations.bonusEndsAt)}
               style={styles.oneColumn}
             />
           )}
@@ -173,7 +173,7 @@ const SurveyForm = (props) => {
                 fieldState={fieldState}
                 disabled={disabled}
                 fullWidth
-                label={<FormattedMessage {...translations.basePoints} />}
+                label={intl.formatMessage(translations.basePoints)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -194,7 +194,7 @@ const SurveyForm = (props) => {
                 fieldState={fieldState}
                 disabled={disabled}
                 fullWidth
-                label={<FormattedMessage {...translations.bonusPoints} />}
+                label={intl.formatMessage(translations.bonusPoints)}
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -215,7 +215,7 @@ const SurveyForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            label={<FormattedMessage {...translations.allowResponseAfterEnd} />}
+            label={intl.formatMessage(translations.allowResponseAfterEnd)}
             style={styles.toggle}
           />
         )}
@@ -228,9 +228,7 @@ const SurveyForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled}
-            label={
-              <FormattedMessage {...translations.allowModifyAfterSubmit} />
-            }
+            label={intl.formatMessage(translations.allowModifyAfterSubmit)}
             style={styles.toggle}
           />
         )}
@@ -246,7 +244,7 @@ const SurveyForm = (props) => {
             field={field}
             fieldState={fieldState}
             disabled={disabled || disableAnonymousToggle}
-            label={<FormattedMessage {...translations.anonymous} />}
+            label={intl.formatMessage(translations.anonymous)}
             style={styles.toggle}
           />
         )}
