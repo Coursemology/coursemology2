@@ -109,6 +109,29 @@ const translations = defineMessages({
     id: 'course.surveys.responses',
     defaultMessage: 'Responses',
   },
+  startEndValidationError: {
+    id: 'course.surveys.SurveyForm.startEndValidationError',
+    defaultMessage: 'Must be after opening time.',
+  },
+  bonusEndValidationError: {
+    id: 'course.surveys.SurveyForm.bonusEndValidationError',
+    defaultMessage: 'Must be between opening and closing time.',
+  },
+  allowModifyAfterSubmitHint: {
+    id: 'course.surveys.SurveyForm.allowModifyAfterSubmitHint',
+    defaultMessage: 'Responses can be changed after being submitted.',
+  },
+  anonymousHint: {
+    id: 'course.surveys.SurveyForm.anonymousHint',
+    defaultMessage:
+      'If enabled, staff can see the survey results but not individual responses. \
+      Cannot be changed once there are submissions.',
+  },
+  hasStudentResponse: {
+    id: 'course.surveys.SurveyForm.hasStudentResponse',
+    defaultMessage:
+      'At least one student has responded to this survey. You may not remove anonymity.',
+  },
 });
 
 export default translations;
