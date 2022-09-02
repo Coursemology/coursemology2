@@ -71,14 +71,14 @@ const AdminMenu = (props) => {
     setAnchorEl(null);
   };
 
-  const updateSurveyHandler = (data) => {
+  const updateSurveyHandler = (data, setError) => {
     const { updateSurvey } = surveyActions;
 
     const payload = { survey: data };
     const successMessage = intl.formatMessage(translations.updateSuccess, data);
     const failureMessage = intl.formatMessage(translations.updateFailure);
     return dispatch(
-      updateSurvey(surveyId, payload, successMessage, failureMessage),
+      updateSurvey(surveyId, payload, successMessage, failureMessage, setError),
     );
   };
 
