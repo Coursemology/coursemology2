@@ -15,11 +15,15 @@ const translations = defineMessages({
   },
   opensAt: {
     id: 'course.surveys.fields.openAt',
-    defaultMessage: 'Opens At',
+    defaultMessage: 'Opens at',
   },
   expiresAt: {
     id: 'course.surveys.fields.expiresAt',
-    defaultMessage: 'Expires At',
+    defaultMessage: 'Closes at',
+  },
+  bonusEndsAt: {
+    id: 'course.surveys.fields.bonusEndsAt',
+    defaultMessage: 'Bonus ends at',
   },
   closingRemindedAt: {
     id: 'course.surveys.fields.closingRemindedAt',
@@ -27,23 +31,23 @@ const translations = defineMessages({
   },
   anonymous: {
     id: 'course.surveys.fields.anonymous',
-    defaultMessage: 'Anonymous',
+    defaultMessage: 'Anonymous responses',
   },
   allowResponseAfterEnd: {
     id: 'course.surveys.fields.allowResponseAfterEnd',
-    defaultMessage: 'Allow Responses After Survey Expires',
+    defaultMessage: 'Allow responses after survey closes',
   },
   allowModifyAfterSubmit: {
     id: 'course.surveys.fields.allowModifyAfterSubmit',
-    defaultMessage: 'Allow Submitted Responses To Be Modified',
+    defaultMessage: 'Allow response editing',
   },
   basePoints: {
     id: 'course.surveys.fields.basePoints',
-    defaultMessage: 'Base Points',
+    defaultMessage: 'Base EXP',
   },
   bonusPoints: {
     id: 'course.surveys.fields.bonusPoints',
-    defaultMessage: 'Bonus Points',
+    defaultMessage: 'Time Bonus EXP',
   },
   published: {
     id: 'course.surveys.fields.published',

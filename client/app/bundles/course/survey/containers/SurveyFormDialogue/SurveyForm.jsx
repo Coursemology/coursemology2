@@ -49,6 +49,12 @@ const validationSchema = yup.object({
         .typeError(formTranslations.invalidDate)
         .required(formTranslations.required),
     }),
+  bonus_end_at: yup
+    .date()
+    .nullable()
+    .typeError(formTranslations.invalidDate)
+    .min(yup.ref('start_at'), translations.bonusEndValidationError)
+    .max(yup.ref('end_at'), translations.bonusEndValidationError),
   base_exp: yup
     .number()
     .typeError(formTranslations.required)
@@ -145,6 +151,19 @@ const SurveyForm = (props) => {
             />
           )}
         />
+        <Controller
+          name="bonus_end_at"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormDateTimePickerField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations.bonusEndsAt} />}
+              style={styles.oneColumn}
+            />
+          )}
+        />
       </div>
       <div style={styles.columns}>
         <div style={styles.oneColumn}>
@@ -212,9 +231,6 @@ const SurveyForm = (props) => {
           />
         )}
       />
-      <div style={styles.hint}>
-        {intl.formatMessage(surveyFormTranslations.allowResponseAfterEndHint)}
-      </div>
       <Controller
         name="allow_modify_after_submit"
         control={control}

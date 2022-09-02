@@ -119,6 +119,16 @@ const SurveyDetails = (props) => {
             </TableRow>
             <TableRow>
               <TableCell>
+                <FormattedMessage {...surveyTranslations.bonusEndsAt} />
+              </TableCell>
+              <TableCell>
+                {survey.bonus_end_at
+                  ? formatLongDateTime(survey.bonus_end_at)
+                  : '-'}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
                 <FormattedMessage {...surveyTranslations.basePoints} />
               </TableCell>
               <TableCell>{survey.base_exp}</TableCell>
@@ -127,19 +137,7 @@ const SurveyDetails = (props) => {
               <TableCell>
                 <FormattedMessage {...surveyTranslations.bonusPoints} />
               </TableCell>
-              <TableCell>
-                {survey.allow_response_after_end ? survey.time_bonus_exp : '-'}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                <FormattedMessage {...surveyTranslations.anonymous} />
-              </TableCell>
-              <TableCell>
-                <FormattedMessage
-                  {...libTranslations[survey.anonymous ? 'yes' : 'no']}
-                />
-              </TableCell>
+              <TableCell>{survey.time_bonus_exp}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>
@@ -166,6 +164,16 @@ const SurveyDetails = (props) => {
                   {...libTranslations[
                     survey.allow_modify_after_submit ? 'yes' : 'no'
                   ]}
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>
+                <FormattedMessage {...surveyTranslations.anonymous} />
+              </TableCell>
+              <TableCell>
+                <FormattedMessage
+                  {...libTranslations[survey.anonymous ? 'yes' : 'no']}
                 />
               </TableCell>
             </TableRow>
