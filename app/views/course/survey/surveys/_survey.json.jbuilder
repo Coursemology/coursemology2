@@ -3,6 +3,7 @@ json.(survey, :id, :title, :base_exp, :time_bonus_exp, :published,
       :anonymous, :allow_response_after_end, :allow_modify_after_submit)
 json.start_at survey.start_at&.iso8601
 json.end_at survey.end_at&.iso8601
+json.bonus_end_at survey.bonus_end_at&.iso8601
 json.closing_reminded_at survey.closing_reminded_at&.iso8601
 json.description format_ckeditor_rich_text(survey.description)
 

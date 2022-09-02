@@ -24,8 +24,7 @@ class Course::Survey::Response < ApplicationRecord
   def submit
     self.submitted_at = Time.zone.now
     self.points_awarded = survey.base_exp
-    self.points_awarded += survey.time_bonus_exp if \
-      survey.allow_response_after_end && submitted_at <= survey.end_at
+    self.points_awarded += survey.time_bonus_exp if survey.bonus_end_at && submitted_at <= survey.bonus_end_at
     self.awarded_at = Time.zone.now
     self.awarder = creator
   end

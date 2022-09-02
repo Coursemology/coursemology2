@@ -7,7 +7,6 @@ import { IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVert from '@mui/icons-material/MoreVert';
 import * as surveyActions from 'course/survey/actions/surveys';
 import { showDeleteConfirmation } from 'course/survey/actions';
-import { formatSurveyFormData } from 'course/survey/utils';
 import { surveyShape } from 'course/survey/propTypes';
 import { useNavigate } from 'react-router-dom';
 
@@ -75,7 +74,7 @@ const AdminMenu = (props) => {
   const updateSurveyHandler = (data) => {
     const { updateSurvey } = surveyActions;
 
-    const payload = formatSurveyFormData(data);
+    const payload = { survey: data };
     const successMessage = intl.formatMessage(translations.updateSuccess, data);
     const failureMessage = intl.formatMessage(translations.updateFailure);
     return dispatch(
@@ -92,6 +91,7 @@ const AdminMenu = (props) => {
       time_bonus_exp,
       start_at,
       end_at,
+      bonus_end_at,
       hasStudentResponse,
       allow_response_after_end,
       allow_modify_after_submit,
@@ -106,6 +106,9 @@ const AdminMenu = (props) => {
       allow_response_after_end,
       allow_modify_after_submit,
       anonymous,
+      start_at: new Date(start_at),
+      end_at: end_at && new Date(end_at),
+      bonus_end_at: bonus_end_at && new Date(bonus_end_at),
     };
 
     return dispatch(
@@ -113,11 +116,7 @@ const AdminMenu = (props) => {
         onSubmit: updateSurveyHandler,
         formTitle: intl.formatMessage(translations.editSurvey),
         hasStudentResponse,
-        initialValues: {
-          ...initialValues,
-          start_at: new Date(start_at),
-          end_at: end_at && new Date(end_at),
-        },
+        initialValues,
       }),
     );
   };
