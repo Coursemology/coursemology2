@@ -88,6 +88,9 @@ const SurveysTable = (props) => {
           <TableCell colSpan={5}>
             <FormattedMessage {...translations.expiresAt} />
           </TableCell>
+          <TableCell colSpan={5}>
+            <FormattedMessage {...translations.bonusEndsAt} />
+          </TableCell>
           {canCreate ? (
             <TableCell colSpan={2}>
               <FormattedMessage {...translations.published} />
@@ -105,14 +108,17 @@ const SurveysTable = (props) => {
               </Link>
             </TableCell>
             <TableCell colSpan={3}>{survey.base_exp}</TableCell>
-            <TableCell colSpan={3}>
-              {survey.allow_response_after_end ? survey.time_bonus_exp : '-'}
-            </TableCell>
+            <TableCell colSpan={3}>{survey.time_bonus_exp}</TableCell>
             <TableCell colSpan={5} style={styles.wrap}>
               {formatShortDateTime(survey.start_at)}
             </TableCell>
             <TableCell colSpan={5} style={styles.wrap}>
               {formatShortDateTime(survey.end_at)}
+            </TableCell>
+            <TableCell colSpan={5} style={styles.wrap}>
+              {survey.bonus_end_at
+                ? formatShortDateTime(survey.bonus_end_at)
+                : '-'}
             </TableCell>
             {canCreate ? (
               <TableCell colSpan={2}>{renderPublishToggle(survey)}</TableCell>
