@@ -47,17 +47,12 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
 
     # For debugging purpose
     # File.write('codaveri_feedback_test.json', @answer_object.to_json)
+
+    @answer_object
   end
 
   def request_codaveri_feedback
-    connection = Excon.new('https://api.codaveri.com/feedback')
-    post_response = connection.post(
-      headers: {
-        'x-api-key' => ENV['CODAVERI_API_KEY'],
-        'Content-Type' => 'application/json'
-      },
-      body: @answer_object.to_json
-    )
+    post_response = connect_to_codaveri
 
     response_status = post_response.status
     response_body = JSON.parse(post_response.body)
@@ -70,6 +65,17 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
 
     feedback_files = response_body['data']['feedback_files']
     @feedback_files_hash = feedback_files.to_h { |file| [file['path'], file['feedback_lines']] }
+  end
+
+  def connect_to_codaveri
+    connection = Excon.new('https://api.codaveri.com/feedback')
+    connection.post(
+      headers: {
+        'x-api-key' => ENV['CODAVERI_API_KEY'],
+        'Content-Type' => 'application/json'
+      },
+      body: @answer_object.to_json
+    )
   end
 
   def process_codaveri_feedback

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite name="PrivateTestsGrader" tests="2" time="0.000" failures="0" errors="0" skipped="0">
+		<testcase classname="PrivateTestsGrader" name="test_private_01" time="0.000">
+			<meta expression="get_tag_type(to_rna(tagged_dna1))" expected="'rna'" hint="" output="'rna'"/>
+		</testcase>
+		<testcase classname="PrivateTestsGrader" name="test_private_02" time="0.000">
+			<meta expression="get_tag_type(to_dna(tagged_rna1))" expected="'dna'" hint="" output="'dna'"/>
+		</testcase>
+		<system-out><![CDATA[]]></system-out>
+		<system-err><![CDATA[]]></system-err>
+	</testsuite>n
+</testsuites>

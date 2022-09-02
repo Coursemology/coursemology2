@@ -258,5 +258,29 @@ RSpec.describe Course::Assessment::Answer do
         end
       end
     end
+
+    describe '#retrieve_codaveri_code_feedback' do
+      subject { answer.reset_answer }
+
+      it "calls the polymorphic object's methods" do
+        answer = create(:course_assessment_answer_multiple_response).answer
+        expect(answer.specific).to receive(:reset_answer).and_return(nil)
+        answer.reset_answer
+      end
+
+      context 'when the question does not implement #reset_attempt' do
+        let(:answer) { create(:course_assessment_answer) }
+
+        before do
+          actable = double
+          allow(actable).to receive(:self_respond_to?).and_return(false)
+          allow(answer).to receive(:actable).and_return(actable)
+        end
+
+        it 'raises a not implemented error' do
+          expect { subject }.to raise_error(NotImplementedError)
+        end
+      end
+    end
   end
 end

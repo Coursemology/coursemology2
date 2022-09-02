@@ -8,6 +8,10 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   has_many :files, class_name: Course::Assessment::Answer::ProgrammingFile.name,
                    foreign_key: :answer_id, dependent: :destroy, inverse_of: :answer
 
+  # @!attribute [r] job
+  #   This might be null if the job has been cleared.
+  belongs_to :codaveri_feedback_job, class_name: TrackableJob::Job.name, inverse_of: nil, optional: true
+
   accepts_nested_attributes_for :files, allow_destroy: true
 
   def to_partial_path

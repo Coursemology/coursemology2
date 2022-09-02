@@ -9,16 +9,16 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     #   be created in the Codaveri service.
     # @param [Attachment] attachment The attachment containing the package to be converted and sent to Codaveri.
     def create_or_update_question(question, attachment)
-      new(question, attachment).create_or_update_question
+      new(question, attachment).create_question
     end
   end
 
   # Opens the attachment, converts it into a programming package, extracts and converts required information
   # to be sent to Codaveri.
-  def create_or_update_question
+  def create_question
     @attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
-      create_or_update_from_package(package)
+      create_from_package(package)
     ensure
       next unless package
 
@@ -46,7 +46,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
   # Constructs codaveri question problem object and send an API request to Codaveri to create/update the question.
   #
   # @param [Course::Assessment::ProgrammingPackage] package The programming package attached to the question.
-  def create_or_update_from_package(package)
+  def create_from_package(package)
     construct_problem_object(package)
     create_codaveri_problem
   end
@@ -67,35 +67,13 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     @problem_object[:files_solution] = codaveri_package.process_solutions
     @problem_object[:testcases] = codaveri_package.process_test_cases
 
+    @problem_object
     # For debugging purpose
-    File.write('codaveri_problem_management_test.json', @problem_object.to_json)
-  end
-
-  # Returns language name in lowercase format (eg python, java).
-  #
-  # @param [String] language_name The programming language full name (eg Python 2.7, Java 11, etc).
-  # @return [String] The language name in lowercase format.
-  def extract_language_name(language_name)
-    language_name.split[0].downcase
-  end
-
-  # Returns language version.
-  #
-  # @param [String] language_name The programming language full name (eg Python 2.7, Java 11, etc).
-  # @return [String] The language version.
-  def extract_language_version(language_name)
-    language_name.split[1]
+    # File.write('codaveri_problem_management_test.json', @problem_object.to_json)
   end
 
   def create_codaveri_problem
-    connection = Excon.new('https://api.codaveri.com/problem')
-    post_response = connection.post(
-      headers: {
-        'x-api-key' => ENV['CODAVERI_API_KEY'],
-        'Content-Type' => 'application/json'
-      },
-      body: @problem_object.to_json
-    )
+    post_response = connect_to_codaveri
 
     response_status = post_response.status
     response_body = JSON.parse(post_response.body)
@@ -113,23 +91,14 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     end
   end
 
-  def update_codaveri_problem
+  def connect_to_codaveri
     connection = Excon.new('https://api.codaveri.com/problem')
-    post_response = connection.put(
+    connection.post(
       headers: {
         'x-api-key' => ENV['CODAVERI_API_KEY'],
         'Content-Type' => 'application/json'
       },
       body: @problem_object.to_json
     )
-
-    response_status = post_response.status
-    response_body = JSON.parse(post_response.body)
-    response_success = response_body['success']
-    response_message = response_body['message']
-
-    @question.update!(codaveri_status: response_status, codaveri_message: response_message)
-
-    raise CodaveriError, "Codevari Error: #{response_message}" if response_status != 200 && !response_success
   end
 end

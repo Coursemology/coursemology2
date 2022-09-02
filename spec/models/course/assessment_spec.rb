@@ -406,5 +406,21 @@ RSpec.describe Course::Assessment do
         expect(autograded_assessment.skippable).to be_truthy
       end
     end
+
+    describe '#contains_programming_codaveri' do
+      context 'when there is no codaveri question' do
+        let(:assessment_traits) { [:published_with_all_question_types] }
+        it 'does not contain programming codaveri quesetion' do
+          expect(assessment.contains_programming_codaveri?).to eq false
+        end
+      end
+
+      context 'when there is codaveri question' do
+        let(:assessment_traits) { [:with_programming_codaveri_question] }
+        it 'does not contain programming codaveri quesetion' do
+          expect(assessment.contains_programming_codaveri?).to eq true
+        end
+      end
+    end
   end
 end

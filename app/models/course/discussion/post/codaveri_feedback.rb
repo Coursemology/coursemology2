@@ -6,7 +6,7 @@ class Course::Discussion::Post::CodaveriFeedback < ApplicationRecord
 
   belongs_to :post, inverse_of: :codaveri_feedback
 
-  after_commit :send_rating_to_codaveri
+  after_commit :send_rating_to_codaveri, on: :update
 
   private
 

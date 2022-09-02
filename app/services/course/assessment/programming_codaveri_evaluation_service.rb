@@ -136,18 +136,12 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
 
     # For debugging purpose
     # File.write('codaveri_evaluation_test.json', @answer_object.to_json)
+
+    @answer_object
   end
 
   def request_codaveri_evaluation
-    connection = Excon.new('https://api.codaveri.com/code/evaluate')
-    post_response = connection.post(
-      headers: {
-        'x-api-key' => ENV['CODAVERI_API_KEY'],
-        'Content-Type' => 'application/json'
-      },
-      body: @answer_object.to_json
-    )
-
+    post_response = connect_to_codaveri
     response_status = post_response.status
     response_body = JSON.parse(post_response.body)
     response_success = response_body['success']
@@ -158,6 +152,17 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     end
 
     @codaveri_evaluation_results = response_body['data']['evaluation_results']
+  end
+
+  def connect_to_codaveri
+    connection = Excon.new('https://api.codaveri.com/code/evaluate')
+    connection.post(
+      headers: {
+        'x-api-key' => ENV['CODAVERI_API_KEY'],
+        'Content-Type' => 'application/json'
+      },
+      body: @answer_object.to_json
+    )
   end
 
   def build_evaluation_result # rubocop:disable Metrics/CyclomaticComplexity

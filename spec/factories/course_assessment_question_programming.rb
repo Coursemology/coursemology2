@@ -9,12 +9,13 @@ FactoryBot.define do
       test_case_count { 0 }
       private_test_case_count { 0 }
       evaluation_test_case_count { 0 }
+      with_codaveri_question { false }
     end
 
     memory_limit { 32 }
     time_limit { 10 }
     attempt_limit { nil }
-    language { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
+    language { Coursemology::Polyglot::Language::Python::Python3Point10.instance }
     template_files do
       template_file_count.downto(1).map do
         build(:course_assessment_question_programming_template_file, question: nil)
@@ -46,6 +47,19 @@ FactoryBot.define do
       public_test_cases + private_test_cases + evaluation_test_cases
     end
 
+    is_codaveri do
+      with_codaveri_question ? true : false
+    end
+    codaveri_id do
+      with_codaveri_question ? '6311a0548c57aae93d260927' : nil
+    end
+    codaveri_status do
+      with_codaveri_question ? 200 : nil
+    end
+    codaveri_message do
+      with_codaveri_question ? 'Problem successfully created' : nil
+    end
+
     after(:build) do |question|
       # We don't want to evaluate the package to import test cases during creation, it will
       # overwrite the defined test cases.
@@ -72,6 +86,13 @@ FactoryBot.define do
 
     trait :multiple_file_submission do
       multiple_file_submission { true }
+    end
+
+    trait :with_codaveri_question do
+      is_codaveri { true }
+      codaveri_id { '6311a0548c57aae93d260927' }
+      codaveri_status { 200 }
+      codaveri_message { 'Problem successfully created' }
     end
   end
 end
