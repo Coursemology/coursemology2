@@ -10,7 +10,7 @@ import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 import formTranslations from 'lib/translations/form';
-import translations from 'course/survey/translations';
+import translations from '../../translations';
 
 const styles = {
   columns: {
