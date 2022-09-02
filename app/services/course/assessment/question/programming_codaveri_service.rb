@@ -91,7 +91,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     connection = Excon.new('https://api.codaveri.com/problem')
     post_response = connection.post(
       headers: {
-        'x-api-key' => 'TkRsKLtz6A==.79f85119-80b9-4e38-9b6b-74e45735be6c',
+        'x-api-key' => ENV['CODAVERI_API_KEY'],
         'Content-Type' => 'application/json'
       },
       body: @problem_object.to_json
@@ -117,7 +117,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     connection = Excon.new('https://api.codaveri.com/problem')
     post_response = connection.put(
       headers: {
-        'x-api-key' => 'TkRsKLtz6A==.79f85119-80b9-4e38-9b6b-74e45735be6c',
+        'x-api-key' => ENV['CODAVERI_API_KEY'],
         'Content-Type' => 'application/json'
       },
       body: @problem_object.to_json
