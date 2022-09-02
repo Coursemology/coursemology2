@@ -76,3 +76,6 @@ export const getEnrolRequestURL = (courseId) =>
 
 export const getWorkbinFolderURL = (courseId, folderId) =>
   `/courses/${courseId}/materials/folders/${folderId}`;
+
+export const getWorkbinFileURL = (courseId, folderId, fileId) =>
+  `/courses/${courseId}/materials/folders/${folderId}/files/${fileId}`;
