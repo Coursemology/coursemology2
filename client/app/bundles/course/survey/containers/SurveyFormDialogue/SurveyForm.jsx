@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
@@ -27,44 +27,6 @@ const styles = {
     marginBottom: 12,
   },
 };
-
-const surveyFormTranslations = defineMessages({
-  startEndValidationError: {
-    id: 'course.surveys.SurveyForm.startEndValidationError',
-    defaultMessage: "Must be after 'Opens At'",
-  },
-  allowResponseAfterEndHint: {
-    id: 'course.surveys.SurveyForm.allowResponseAfterEndHint',
-    defaultMessage:
-      'Allow students to submit responses after the survey has expired. \
-      If this is enabled, students who submit before the deadline will get both the base and bonus \
-      points, whereas students who submit after the deadline will only be awarded the base points.',
-  },
-  allowModifyAfterSubmitHint: {
-    id: 'course.surveys.SurveyForm.allowModifyAfterSubmitHint',
-    defaultMessage:
-      'Allow students to modify their responses after they have submitted it. If \
-      this is disabled, you will have to manually unsubmit their responses to allow them to \
-      edit it.',
-  },
-  anonymousHint: {
-    id: 'course.surveys.SurveyForm.anonymousHint',
-    defaultMessage:
-      'If you make the survey anonymous, you will be able to see aggregate survey \
-      results but not individual responses. You may not toggle this setting once there is one \
-      or more student submissions.',
-  },
-  hasStudentResponse: {
-    id: 'course.surveys.SurveyForm.hasStudentResponse',
-    defaultMessage:
-      'At least one student has responded to this survey. You may not remove anonymity.',
-  },
-  timeBonusExpTooltip: {
-    id: 'course.surveys.SurveyForm.timeBonusExpTooltip',
-    defaultMessage:
-      'You must allow responses after the survey expires to set bonus points.',
-  },
-});
 
 const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
@@ -233,7 +195,7 @@ const SurveyForm = (props) => {
             )}
           />
           <ReactTooltip id="timeBonusExpTooltip">
-            <FormattedMessage {...surveyFormTranslations.timeBonusExpTooltip} />
+            <FormattedMessage {...translations.timeBonusExpTooltip} />
           </ReactTooltip>
         </div>
       </div>
@@ -269,7 +231,7 @@ const SurveyForm = (props) => {
         )}
       />
       <div style={styles.hint}>
-        {intl.formatMessage(surveyFormTranslations.allowModifyAfterSubmitHint)}
+        {intl.formatMessage(translations.allowModifyAfterSubmitHint)}
       </div>
       <Controller
         name="anonymous"
@@ -286,8 +248,8 @@ const SurveyForm = (props) => {
       />
       <div style={styles.hint}>
         {disableAnonymousToggle
-          ? intl.formatMessage(surveyFormTranslations.hasStudentResponse)
-          : intl.formatMessage(surveyFormTranslations.anonymousHint)}
+          ? intl.formatMessage(translations.hasStudentResponse)
+          : intl.formatMessage(translations.anonymousHint)}
       </div>
     </form>
   );
