@@ -1,6 +1,6 @@
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import {
   IconButton,
   Menu,
@@ -108,10 +108,10 @@ class ConditionList extends PureComponent {
         <TableHead>
           <TableRow>
             <TableCell colSpan="1">
-              <FormattedMessage {...translations.type} />
+              {this.props.intl.formatMessage(translations.type)}
             </TableCell>
             <TableCell colSpan="3">
-              <FormattedMessage {...translations.description} />
+              {this.props.intl.formatMessage(translations.description)}
             </TableCell>
             <TableCell colSpan="2" />
           </TableRow>
@@ -131,7 +131,7 @@ class ConditionList extends PureComponent {
           size="small"
           onClick={this.handleClick}
         >
-          <FormattedMessage {...translations.addCondition} />
+          {this.props.intl.formatMessage(translations.addCondition)}
         </Button>
 
         <Menu
