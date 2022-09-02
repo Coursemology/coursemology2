@@ -182,7 +182,7 @@ export default defineMessages({
   },
   codaveriEvaluator: {
     id: 'course.assessment.question.programming.programmingQuestionForm.codaveriEvaluator',
-    defaultMessage: 'Codaveri Evaluator & Feedback',
+    defaultMessage: 'Codaveri Evaluator & Feedback (Experimental Feature)',
   },
   codaveriTooltip: {
     id: 'course.assessment.question.programming.programmingQuestionForm.codaveriTooltip',
