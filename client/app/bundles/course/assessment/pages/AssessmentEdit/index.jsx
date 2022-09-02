@@ -25,8 +25,10 @@ class EditPage extends Component {
     const sessionPassword = data.password_protected
       ? data.session_password
       : null;
+    const timeBonusExp = data.time_bonus_exp ? data.time_bonus_exp : 0;
     const atrributes = {
       ...data,
+      time_bonus_exp: timeBonusExp,
       view_password: viewPassword,
       session_password: sessionPassword,
     };

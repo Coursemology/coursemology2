@@ -9,6 +9,7 @@ import * as surveyActions from 'course/survey/actions/surveys';
 import { showDeleteConfirmation } from 'course/survey/actions';
 import { surveyShape } from 'course/survey/propTypes';
 import { useNavigate } from 'react-router-dom';
+import { formatSurveyFormData } from '../../utils';
 
 const translations = defineMessages({
   editSurvey: {
@@ -74,7 +75,7 @@ const AdminMenu = (props) => {
   const updateSurveyHandler = (data, setError) => {
     const { updateSurvey } = surveyActions;
 
-    const payload = { survey: data };
+    const payload = formatSurveyFormData(data);
     const successMessage = intl.formatMessage(translations.updateSuccess, data);
     const failureMessage = intl.formatMessage(translations.updateFailure);
     return dispatch(

@@ -5,6 +5,7 @@ import { injectIntl, defineMessages } from 'react-intl';
 import moment from 'lib/moment';
 import { showSurveyForm, createSurvey } from 'course/survey/actions/surveys';
 import AddButton from 'course/survey/components/AddButton';
+import { formatSurveyFormData } from '../../utils';
 
 const translations = defineMessages({
   newSurvey: {
@@ -44,7 +45,7 @@ const NewSurveyButton = (props) => {
   const createSurveyHandler = (data, setError) => {
     const { dispatch, intl } = props;
 
-    const payload = { survey: data };
+    const payload = formatSurveyFormData(data);
     const successMessage = intl.formatMessage(translations.success, data);
     const failureMessage = intl.formatMessage(translations.failure);
     return dispatch(

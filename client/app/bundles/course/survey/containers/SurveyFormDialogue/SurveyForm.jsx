@@ -58,7 +58,10 @@ const validationSchema = yup.object({
     .number()
     .typeError(formTranslations.required)
     .required(formTranslations.required),
-  time_bonus_exp: yup.number(),
+  time_bonus_exp: yup
+    .number()
+    .nullable(true)
+    .transform((_, val) => (val === Number(val) ? val : null)),
   allow_response_after_end: yup.bool(),
   allow_modify_after_submit: yup.bool(),
   anonymous: yup.bool(),
