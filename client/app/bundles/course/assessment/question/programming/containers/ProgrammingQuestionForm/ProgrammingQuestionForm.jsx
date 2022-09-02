@@ -713,7 +713,7 @@ class ProgrammingQuestionForm extends Component {
     return (
       <div>
         {this.renderImportAlertView()}
-        {this.renderCodaveriAlertView()}
+        {/* {this.renderCodaveriAlertView()} */}
         {this.props.data.get('save_errors') ? (
           <div className="alert alert-danger">
             {this.props.data.get('save_errors').map((errorMessage, index) => (
