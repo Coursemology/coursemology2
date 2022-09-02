@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
-import ReactTooltip from 'react-tooltip';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
@@ -72,13 +71,11 @@ const SurveyForm = (props) => {
     control,
     handleSubmit,
     setError,
-    watch,
     formState: { errors },
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
   });
-  const allowResponseAfterEnd = watch('allow_response_after_end');
 
   return (
     <form
@@ -187,12 +184,7 @@ const SurveyForm = (props) => {
             )}
           />
         </div>
-        <div
-          style={styles.oneColumn}
-          data-tip
-          data-for="timeBonusExpTooltip"
-          data-tip-disable={allowResponseAfterEnd}
-        >
+        <div style={styles.oneColumn}>
           <Controller
             name="time_bonus_exp"
             control={control}
@@ -200,7 +192,7 @@ const SurveyForm = (props) => {
               <FormTextField
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled || !allowResponseAfterEnd}
+                disabled={disabled}
                 fullWidth
                 label={<FormattedMessage {...translations.bonusPoints} />}
                 InputLabelProps={{
@@ -213,9 +205,6 @@ const SurveyForm = (props) => {
               />
             )}
           />
-          <ReactTooltip id="timeBonusExpTooltip">
-            <FormattedMessage {...translations.timeBonusExpTooltip} />
-          </ReactTooltip>
         </div>
       </div>
       <Controller
