@@ -66,6 +66,9 @@ class Course::Assessment::Question::ProgrammingCodaveriService
 
     @problem_object[:files_solution] = codaveri_package.process_solutions
     @problem_object[:testcases] = codaveri_package.process_test_cases
+
+    # For debugging purpose
+    File.write('codaveri_problem_management_test.json', @problem_object.to_json)
   end
 
   # Returns language name in lowercase format (eg python, java).
@@ -104,7 +107,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
       @question.update!(codaveri_id: response_problem_id, codaveri_status: response_status,
                         codaveri_message: response_message)
     else
-      @question.update!(codaveri_status: response_status, codaveri_message: response_message)
+      @question.update!(codaveri_id: nil, codaveri_status: response_status, codaveri_message: response_message)
 
       raise CodaveriError, "Codevari Error: #{response_message}"
     end

@@ -44,6 +44,9 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
 
       @answer_object[:files_student].append(file_template)
     end
+
+    # For debugging purpose
+    # File.write('codaveri_feedback_test.json', @answer_object.to_json)
   end
 
   def request_codaveri_feedback
