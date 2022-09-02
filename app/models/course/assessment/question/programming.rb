@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Course::Assessment::Question::Programming < ApplicationRecord
+class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:disable Metrics/ClassLength
   enum package_type: { zip_upload: 0, online_editor: 1 }
 
   # The table name for this model is singular.
@@ -154,7 +154,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord
   private
 
   # Create new package or re-evaluate the old package.
-  def process_package
+  def process_package # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if attachment_changed?
       attachment ? process_new_package : remove_old_package
     elsif time_limit_changed? || memory_limit_changed? || language_id_changed? || (is_codaveri_changed? && is_codaveri)
@@ -210,17 +210,18 @@ class Course::Assessment::Question::Programming < ApplicationRecord
     duplicating?
   end
 
-  def validate_codaveri_question # rubocop:disable Metrics/AbcSize
+  def validate_codaveri_question # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     return if !is_codaveri || duplicating?
 
-    if question_assessments.first.assessment.autograded?
-      errors.add(:base, 'Assessment type must not be autograded')
+    if question_assessments&.first&.assessment&.autograded?
+      errors.add(:base, 'Assessment type must not be autograded.')
     elsif !codaveri_language_whitelist.include?(language.type.constantize)
-      errors.add(:base, 'Language type must be Python 3 and above')
-    elsif !question_assessments.first.assessment.course.component_enabled?(Course::CodaveriComponent)
+      errors.add(:base, 'Language type must be Python 3 and above.')
+    elsif !question_assessments.empty? &&
+          !question_assessments.first.assessment.course.component_enabled?(Course::CodaveriComponent)
       errors.add(:base,
-                 'Codaveri component is deactivated.
-                 Activate it in the course setting or switch this question into a non-codaveri type.')
+                 'Codaveri component is deactivated.'\
+                 'Activate it in the course setting or switch this question into a non-codaveri type.')
     end
 
     nil

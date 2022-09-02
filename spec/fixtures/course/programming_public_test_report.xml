@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite name="PublicTestsGrader" tests="5" time="0.000" failures="0" errors="0" skipped="0">
+		<testcase classname="PublicTestsGrader" name="test_public_01" time="0.000">
+			<meta expression="get_data(to_rna(tagged_dna1))" expected="'GCAUUU'" hint="" output="'GCAUUU'"/>
+		</testcase>
+		<testcase classname="PublicTestsGrader" name="test_public_02" time="0.000">
+			<meta expression="get_data(to_rna(tagged_rna1))" expected="'GCAUUU'" hint="" output="'GCAUUU'"/>
+		</testcase>
+		<testcase classname="PublicTestsGrader" name="test_public_03" time="0.000">
+			<meta expression="is_same_dogma(tagged_dna1, tagged_rna1)" expected="True" hint="" output="True"/>
+		</testcase>
+		<testcase classname="PublicTestsGrader" name="test_public_04" time="0.000">
+			<meta expression="is_same_dogma(tagged_rna1, tagged_rna1)" expected="True" hint="" output="True"/>
+		</testcase>
+		<testcase classname="PublicTestsGrader" name="test_public_05" time="0.000">
+			<meta expression="is_same_dogma(tagged_rna1, tagged_dna2)" expected="False" hint="" output="False"/>
+		</testcase>
+		<system-out><![CDATA[]]></system-out>
+		<system-err><![CDATA[]]></system-err>
+	</testsuite>
+</testsuites>

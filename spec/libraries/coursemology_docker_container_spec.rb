@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CoursemologyDockerContainer do
-  let(:image) { 'coursemology/evaluator-image-python:2.7' }
+  let(:image) { 'coursemology/evaluator-image-python:3.10' }
   let(:package) do
     Rails.root.join('spec', 'fixtures', 'course', 'programming_question_template.zip')
   end

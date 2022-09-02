@@ -5,7 +5,7 @@ class Course::Assessment::Submission::AutoFeedbackJob < ApplicationJob
 
   protected
 
-  # Performs the auto grading.
+  # Performs the auto feedback.
   #
   # @param [Course::Assessment::Submission] submission The object to store the feedback
   #   results into.

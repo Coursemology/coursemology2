@@ -4,6 +4,8 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::ProgrammingPackage do
   self::PACKAGE_PATH = File.join(Rails.root,
                                  'spec/fixtures/course/programming_question_template.zip')
+  self::ADDITIONAL_PACKAGE_PATH = File.join(Rails.root,
+                                            'spec/fixtures/course/programming_question_template_with_add_files.zip')
   self::EMPTY_PACKAGE_PATH = File.join(Rails.root,
                                        'spec/fixtures/course/'\
                                        'empty_programming_question_template.zip')
@@ -135,6 +137,24 @@ RSpec.describe Course::Assessment::ProgrammingPackage do
       replacement = { Pathname.new('test.py') => 'test!' }
       expect((subject.submission_files = replacement)).to eq(replacement)
       expect(subject.submission_files).to eq(replacement)
+    end
+  end
+
+  describe '#test_files' do
+    let!(:package_path) { self.class::ADDITIONAL_PACKAGE_PATH }
+    it 'loads all the test files' do
+      expect(subject.test_files.keys).to match_array([Pathname.new('tests_folder_extra_file.py'),
+                                                      Pathname.new('prepend.py'),
+                                                      Pathname.new('append.py'),
+                                                      Pathname.new('autograde.py')])
+    end
+  end
+
+  describe '#main_files' do
+    let!(:package_path) { self.class::ADDITIONAL_PACKAGE_PATH }
+    it 'loads all the main files' do
+      expect(subject.main_files.keys).to match_array([Pathname.new('root_folder_extra_file.py'),
+                                                      Pathname.new('Makefile')])
     end
   end
 

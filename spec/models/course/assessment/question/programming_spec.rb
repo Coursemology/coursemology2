@@ -178,11 +178,87 @@ RSpec.describe Course::Assessment::Question::Programming do
       end
     end
 
-    describe '#question_type' do
-      subject { build(:course_assessment_question_programming) }
+    describe '#auto_grader' do
+      subject { build(:course_assessment_question_programming, is_codaveri: is_codaveri) }
 
-      it 'returns correct question type' do
-        expect(subject.question_type).to eq I18n.t('course.assessment.question.programming.question_type')
+      context 'when the evaluator is the default coursemology evaluator' do
+        let(:is_codaveri) { false }
+        it 'returns correct autograder' do
+          expect(subject.auto_grader.class).to eq Course::Assessment::Answer::ProgrammingAutoGradingService
+        end
+      end
+
+      context 'when the evaluator is codaveri evaluator' do
+        let(:is_codaveri) { true }
+        it 'returns correct autograder' do
+          expect(subject.auto_grader.class).to eq Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService
+        end
+      end
+    end
+
+    describe '#question_type' do
+      subject { build(:course_assessment_question_programming, is_codaveri: is_codaveri) }
+
+      context 'when the evaluator is the default coursemology evaluator' do
+        let(:is_codaveri) { false }
+        it 'returns correct question type' do
+          expect(subject.question_type).to eq I18n.t('course.assessment.question.programming.question_type')
+        end
+      end
+
+      context 'when the evaluator is codaveri evaluator' do
+        let(:is_codaveri) { true }
+        it 'returns correct question type' do
+          expect(subject.question_type).to eq I18n.t('course.assessment.question.programming.question_type_codaveri')
+        end
+      end
+    end
+
+    describe '#polyglot_language_name' do
+      subject { build(:course_assessment_question_programming) }
+      it 'returns correct language name' do
+        expect(subject.polyglot_language_name).to eq 'python'
+      end
+    end
+
+    describe '#polyglot_language_version' do
+      subject { build(:course_assessment_question_programming) }
+      it 'returns correct language version' do
+        expect(subject.polyglot_language_version).to eq '3.10'
+      end
+    end
+
+    describe '#validate_codaveri_question' do
+      subject do
+        build(:course_assessment_question_programming, is_codaveri: true, assessment: assessment, language: language)
+      end
+      let(:assessment) { create(:assessment, :published_with_programming_question) }
+      let(:language) { Coursemology::Polyglot::Language::Python::Python3Point10.instance }
+
+      context 'when the assessment is autograded' do
+        let(:assessment) { create(:assessment, :published_with_programming_question, :autograded) }
+        it 'returns correct validation' do
+          expect(subject).to_not be_valid
+          expect(subject.errors.messages[:base]).to include('Assessment type must not be autograded.')
+        end
+      end
+
+      context 'when the language chosen is not whitelisted' do
+        let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
+        it 'returns correct validation' do
+          expect(subject).to_not be_valid
+          expect(subject.errors.messages[:base]).to include('Language type must be Python 3 and above.')
+        end
+      end
+
+      context 'when the codaveri component is disabled' do
+        it 'returns correct validation' do
+          # assessment.course.set_component_enabled_boolean!(Course::CodaveriComponent, false)
+          expect(subject).to_not be_valid
+          expect(subject.errors.messages[:base]).to include('Codaveri component is deactivated.'\
+                                                            'Activate it in the course setting or '\
+                                                            'switch this question into a non-codaveri type.')
+        end
       end
     end
   end
