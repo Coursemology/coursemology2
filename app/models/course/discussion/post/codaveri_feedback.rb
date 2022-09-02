@@ -26,7 +26,7 @@ class Course::Discussion::Post::CodaveriFeedback < ApplicationRecord
     connection = Excon.new('https://api.codaveri.com/feedback/rating')
     post_response = connection.post(
       headers: {
-        'x-api-key' => 'TkRsKLtz6A==.79f85119-80b9-4e38-9b6b-74e45735be6c',
+        'x-api-key' => ENV['CODAVERI_API_KEY'],
         'Content-Type' => 'application/json'
       },
       body: payload.to_json

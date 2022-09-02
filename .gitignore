@@ -63,3 +63,7 @@ node_modules
 
 # Ignore local node version
 .node-version
+
+# Ignore env files
+/.env
+/.env.*
