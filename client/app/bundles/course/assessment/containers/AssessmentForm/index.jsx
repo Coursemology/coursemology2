@@ -63,8 +63,8 @@ const validationSchema = yup.object({
     .required(formTranslations.required),
   time_bonus_exp: yup
     .number()
-    .typeError(formTranslations.required)
-    .required(formTranslations.required),
+    .nullable(true)
+    .transform((_, val) => (val === Number(val) ? val : null)),
   published: yup.bool(),
   autograded: yup.bool(),
   block_student_viewing_after_submitted: yup.bool(),

@@ -23,11 +23,16 @@ class PopupDialog extends Component {
   onFormSubmit = (data, setError) => {
     const { categoryId, dispatch, intl, tabId } = this.props;
 
+    const attributes = {
+      ...data,
+      time_bonus_exp: data.time_bonus_exp ? data.time_bonus_exp : 0,
+    };
+
     return dispatch(
       actions.createAssessment(
         categoryId,
         tabId,
-        { assessment: data },
+        { assessment: attributes },
         intl.formatMessage(translations.creationSuccess),
         intl.formatMessage(translations.creationFailure),
         setError,

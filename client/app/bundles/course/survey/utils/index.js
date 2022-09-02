@@ -123,3 +123,11 @@ export const formatQuestionFormData = (data) => {
 
   return payload;
 };
+
+export const formatSurveyFormData = (data) => {
+  const payload = { ...data };
+  if (!data.time_bonus_exp) {
+    payload.time_bonus_exp = 0;
+  }
+  return { survey: payload };
+};
