@@ -6,6 +6,8 @@ import { AxiosError } from 'axios';
 
 import CourseAPI from 'api/course';
 import { formatLongDateTime } from 'lib/moment';
+import { getWorkbinFileURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 import DataTable from 'lib/components/DataTable';
 import InfoLabel from 'lib/components/InfoLabel';
 import Toolbar from './Toolbar';
@@ -160,11 +162,32 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
     return <Checkbox {...rowStartProps} />;
   };
 
+  const renderFileNameRowContent = (
+    value: string,
+    { rowIndex },
+  ): string | JSX.Element => {
+    if (rowIndex >= materials.length) return value;
+
+    const material = materials[rowIndex];
+    if (!material) return value;
+
+    const url = getWorkbinFileURL(getCourseId(), props.folderId, material.id);
+
+    return (
+      <a href={url} target="_blank" rel="noreferrer">
+        {value}
+      </a>
+    );
+  };
+
   return (
     <DataTable
       data={loadData()}
       columns={[
-        intl.formatMessage(t.fileName),
+        {
+          name: intl.formatMessage(t.fileName),
+          options: { customBodyRender: renderFileNameRowContent },
+        },
         intl.formatMessage(t.dateAdded),
       ]}
       options={{
