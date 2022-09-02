@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { injectIntl, defineMessages } from 'react-intl';
 import moment from 'lib/moment';
 import { showSurveyForm, createSurvey } from 'course/survey/actions/surveys';
-import { formatSurveyFormData } from 'course/survey/utils';
 import AddButton from 'course/survey/components/AddButton';
 
 const translations = defineMessages({
@@ -45,7 +44,7 @@ const NewSurveyButton = (props) => {
   const createSurveyHandler = (data, setError) => {
     const { dispatch, intl } = props;
 
-    const payload = formatSurveyFormData(data);
+    const payload = { survey: data };
     const successMessage = intl.formatMessage(translations.success, data);
     const failureMessage = intl.formatMessage(translations.failure);
     return dispatch(
@@ -64,6 +63,7 @@ const NewSurveyButton = (props) => {
           title: '',
           description: '',
           ...aWeekStartingTomorrow(),
+          bonus_end_at: null,
           base_exp: 0,
           time_bonus_exp: 0,
           allow_response_after_end: true,
