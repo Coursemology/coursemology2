@@ -133,6 +133,9 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
 
       @answer_object[:files].append(file_template)
     end
+
+    # For debugging purpose
+    # File.write('codaveri_evaluation_test.json', @answer_object.to_json)
   end
 
   def request_codaveri_evaluation

@@ -16,6 +16,9 @@ class Course::Discussion::Post::CodaveriFeedback < ApplicationRecord
     payload = { feedback_id: codaveri_feedback_id,
                 updated_feedback: post.text,
                 rating: rating }
+
+    # For debugging purpose
+    # File.write('codaveri_rating_test.json', payload.to_json)
     send_codaveri_feedback_rating(payload)
   end
 
