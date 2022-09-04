@@ -33,12 +33,18 @@ class Course::Discussion::Post::CodaveriFeedback < ApplicationRecord
     )
 
     response_status = post_response.status
-    response_body = JSON.parse(post_response.body)
+    response_body = valid_json(post_response.body)
     response_success = response_body['success']
 
     return if response_status == 200 && response_success
 
     Rails.logger.debug(message: 'Send Feedback Rating Error',
                        response_status: response_status)
+  end
+
+  def valid_json(json)
+    JSON.parse(json)
+  rescue JSON::ParserError => _e
+    { 'success' => false, 'message' => json }
   end
 end
