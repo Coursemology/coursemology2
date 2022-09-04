@@ -55,7 +55,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
     post_response = connect_to_codaveri
 
     response_status = post_response.status
-    response_body = JSON.parse(post_response.body)
+    response_body = valid_json(post_response.body)
     response_success = response_body['success']
 
     unless response_status == 200 && response_success
@@ -65,6 +65,12 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
 
     feedback_files = response_body['data']['feedback_files']
     @feedback_files_hash = feedback_files.to_h { |file| [file['path'], file['feedback_lines']] }
+  end
+
+  def valid_json(json)
+    JSON.parse(json)
+  rescue JSON::ParserError => _e
+    { 'success' => false, 'message' => json }
   end
 
   def connect_to_codaveri

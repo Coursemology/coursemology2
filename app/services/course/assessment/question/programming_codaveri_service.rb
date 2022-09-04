@@ -76,7 +76,7 @@ class Course::Assessment::Question::ProgrammingCodaveriService
     post_response = connect_to_codaveri
 
     response_status = post_response.status
-    response_body = JSON.parse(post_response.body)
+    response_body = valid_json(post_response.body)
     response_success = response_body['success']
     response_message = response_body['message']
 
@@ -89,6 +89,12 @@ class Course::Assessment::Question::ProgrammingCodaveriService
 
       raise CodaveriError, "Codevari Error: #{response_message}"
     end
+  end
+
+  def valid_json(json)
+    JSON.parse(json)
+  rescue JSON::ParserError => _e
+    { 'success' => false, 'message' => json }
   end
 
   def connect_to_codaveri

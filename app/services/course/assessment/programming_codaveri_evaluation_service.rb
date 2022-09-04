@@ -143,7 +143,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   def request_codaveri_evaluation
     post_response = connect_to_codaveri
     response_status = post_response.status
-    response_body = JSON.parse(post_response.body)
+    response_body = valid_json(post_response.body)
     response_success = response_body['success']
 
     unless response_status == 200 && response_success
@@ -152,6 +152,12 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     end
 
     @codaveri_evaluation_results = response_body['data']['evaluation_results']
+  end
+
+  def valid_json(json)
+    JSON.parse(json)
+  rescue JSON::ParserError => _e
+    { 'success' => false, 'message' => json }
   end
 
   def connect_to_codaveri
