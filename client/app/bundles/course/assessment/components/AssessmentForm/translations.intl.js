@@ -74,6 +74,10 @@ const translations = defineMessages({
     id: 'course.assessment.form.showEvaluation',
     defaultMessage: 'Show evaluation test cases',
   },
+  forProgrammingQuestions: {
+    id: 'course.assessment.form.forProgrammingQuestions',
+    defaultMessage: 'for programming questions',
+  },
   hasPersonalTimes: {
     id: 'course.assessment.form.hasPersonalTimes',
     defaultMessage: 'Has personal times',
