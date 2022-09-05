@@ -11,14 +11,6 @@ import AssessmentForm from '../../components/AssessmentForm';
 import * as actions from '../../actions';
 import translations from './translations.intl';
 
-const styles = {
-  buttonContainer: {
-    position: 'absolute',
-    marginTop: '-6rem',
-    right: '15px',
-  },
-};
-
 class EditPage extends Component {
   onFormSubmit = (data, setError) => {
     // Remove view_password and session_password field if password is disabled
@@ -63,7 +55,7 @@ class EditPage extends Component {
 
     return (
       <>
-        <div style={styles.buttonContainer}>
+        <div className="absolute -mt-24 right-8">
           <Button
             variant="contained"
             color="primary"
@@ -89,6 +81,7 @@ class EditPage extends Component {
           randomizationAllowed={randomizationAllowed}
           showPersonalizedTimelineFeatures={showPersonalizedTimelineFeatures}
         />
+
         <NotificationBar notification={notification} />
       </>
     );

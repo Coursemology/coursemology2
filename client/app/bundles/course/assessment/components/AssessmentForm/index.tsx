@@ -191,7 +191,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           )}
         />
 
-        <Grid container spacing={2} direction="row">
+        <Grid container columnSpacing={2} direction="row">
           <Grid item xs>
             <Controller
               name="start_at"
@@ -388,9 +388,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
         )}
 
         {containsCodaveri && (
-          <InfoLabel>
-            {intl.formatMessage(t.containsCodaveriQuestion)}
-          </InfoLabel>
+          <InfoLabel label={intl.formatMessage(t.containsCodaveriQuestion)} />
         )}
 
         <Controller

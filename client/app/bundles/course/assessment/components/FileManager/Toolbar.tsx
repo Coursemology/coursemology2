@@ -1,4 +1,4 @@
-import { CSSProperties, ChangeEventHandler } from 'react';
+import { ChangeEventHandler } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Button, Grid } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
@@ -13,18 +13,6 @@ interface ToolbarProps extends WrappedComponentProps {
   onAddFiles: (files: File[]) => void;
   onDeleteFileWithRowIndex: (index: number) => void;
 }
-
-const styles: { [key: string]: CSSProperties } = {
-  uploadInput: {
-    cursor: 'pointer',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    opacity: 0,
-  },
-};
 
 const Toolbar = (props: ToolbarProps): JSX.Element => {
   const { intl } = props;
@@ -57,7 +45,7 @@ const Toolbar = (props: ToolbarProps): JSX.Element => {
           <input
             type="file"
             multiple
-            style={styles.uploadInput}
+            className="top-0 bottom-0 right-0 left-0 opacity-0 absolute cursor-pointer"
             onChange={handleFileInputChange}
             data-testid="FileInput"
           />
