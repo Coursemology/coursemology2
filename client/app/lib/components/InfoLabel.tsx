@@ -1,4 +1,3 @@
-import { CSSProperties, ReactNode } from 'react';
 import { Typography, Box } from '@mui/material';
 import {
   WarningAmber as WarningIcon,
@@ -7,37 +6,22 @@ import {
 
 interface InfoLabelProps {
   label?: string;
-  children?: ReactNode;
   warning?: boolean;
   marginTop?: number;
 }
 
-const styles: { [key: string]: CSSProperties } = {
-  infoLabel: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  infoLabelIcon: {
-    marginRight: 1,
-  },
-};
-
 const InfoLabel = (props: InfoLabelProps): JSX.Element => {
   return (
     <Box
-      sx={styles.infoLabel}
+      className="flex items-center"
       marginTop={props.marginTop}
       color={props.warning ? 'warning.main' : 'text.secondary'}
     >
-      {props.warning ? (
-        <WarningIcon sx={styles.infoLabelIcon} />
-      ) : (
-        <InfoIcon sx={styles.infoLabelIcon} />
-      )}
+      {props.warning ? <WarningIcon /> : <InfoIcon />}
 
-      <Typography variant="body2">{props.label}</Typography>
-
-      {props.children}
+      <Typography variant="body2" className="ml-2">
+        {props.label}
+      </Typography>
     </Box>
   );
 };

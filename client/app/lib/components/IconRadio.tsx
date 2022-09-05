@@ -1,4 +1,4 @@
-import { createElement, CSSProperties } from 'react';
+import { createElement } from 'react';
 import { Radio, Typography, SvgIcon } from '@mui/material';
 
 interface IconRadioProps {
@@ -9,58 +9,39 @@ interface IconRadioProps {
   disabled?: boolean;
 }
 
-const styles: { [key: string]: CSSProperties } = {
-  icon: {
-    marginLeft: 1,
-    marginRight: 1,
-  },
-  radio: {
-    paddingLeft: 0,
-  },
-  container: {
-    padding: '0.5rem 0',
-    cursor: 'pointer',
-    display: 'flex',
-  },
-};
+const IconRadio = (props: IconRadioProps): JSX.Element => (
+  <label
+    className={`py-2 cursor-pointer flex ${
+      props.description ? 'items-start' : 'items-center'
+    }`}
+  >
+    <Radio value={props.value} className="pl-0" disabled={props.disabled} />
 
-const IconRadio = (props: IconRadioProps): JSX.Element => {
-  return (
-    <label
-      style={{
-        ...styles.container,
-        alignItems: props.description ? 'flex-start' : 'center',
-      }}
-    >
-      <Radio value={props.value} sx={styles.radio} disabled={props.disabled} />
+    {props.icon &&
+      createElement(props.icon, {
+        fontSize: 'large',
+        className: 'mx-4',
+        color: props.disabled ? 'disabled' : undefined,
+      })}
 
-      {props.icon
-        ? createElement(props.icon, {
-            fontSize: 'large',
-            sx: styles.icon,
-            color: props.disabled ? 'disabled' : undefined,
-          })
-        : null}
+    <div>
+      <Typography
+        variant="body1"
+        color={props.disabled ? 'text.disabled' : 'text.primary'}
+      >
+        {props.label}
+      </Typography>
 
-      <div>
+      {props.description && (
         <Typography
-          variant="body1"
-          color={props.disabled ? 'text.disabled' : 'text.primary'}
+          variant="body2"
+          color={props.disabled ? 'text.disabled' : 'text.secondary'}
         >
-          {props.label}
+          {props.description}
         </Typography>
-
-        {props.description && (
-          <Typography
-            variant="body2"
-            color={props.disabled ? 'text.disabled' : 'text.secondary'}
-          >
-            {props.description}
-          </Typography>
-        )}
-      </div>
-    </label>
-  );
-};
+      )}
+    </div>
+  </label>
+);
 
 export default IconRadio;
