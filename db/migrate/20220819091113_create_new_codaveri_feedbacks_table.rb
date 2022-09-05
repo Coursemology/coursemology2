@@ -4,7 +4,7 @@ class CreateNewCodaveriFeedbacksTable < ActiveRecord::Migration[6.0]
     create_table :course_discussion_post_codaveri_feedbacks do |t|
       t.references :post, null: false, foreign_key: { to_table: :course_discussion_posts },
                           index: { name: 'fk__codaveri_feedback_discussion_post_id', unique: true }
-      t.integer :status, index: true, default: nil
+      t.integer :status, index: true, default: 0
       t.text :codaveri_feedback_id, null: false
       t.text :original_feedback, null: false
       t.integer :rating
