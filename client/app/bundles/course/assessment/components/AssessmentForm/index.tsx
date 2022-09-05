@@ -536,6 +536,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               fieldState={fieldState}
               disabled={disabled}
               label={intl.formatMessage(t.showPrivate)}
+              description={intl.formatMessage(t.forProgrammingQuestions)}
             />
           )}
         />
@@ -548,6 +549,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               fieldState={fieldState}
               disabled={disabled}
               label={intl.formatMessage(t.showEvaluation)}
+              description={intl.formatMessage(t.forProgrammingQuestions)}
             />
           )}
         />
