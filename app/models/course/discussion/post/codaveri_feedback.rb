@@ -11,7 +11,7 @@ class Course::Discussion::Post::CodaveriFeedback < ApplicationRecord
   private
 
   def send_rating_to_codaveri
-    return if !rating || status == :pending_review
+    return false if !rating || status == 'pending_review'
 
     payload = { feedback_id: codaveri_feedback_id,
                 updated_feedback: post.text,
@@ -23,23 +23,28 @@ class Course::Discussion::Post::CodaveriFeedback < ApplicationRecord
   end
 
   def send_codaveri_feedback_rating(payload)
+    post_response = connect_to_codaveri(payload)
+
+    response_status = post_response.status
+    response_body = valid_json(post_response.body)
+    response_success = response_body['success']
+
+    return 'Rating successfully sent!' if response_status == 200 && response_success
+
+    Rails.logger.debug(message: 'Send Feedback Rating Error',
+                       response_status: response_status)
+    false
+  end
+
+  def connect_to_codaveri(payload)
     connection = Excon.new('https://api.codaveri.com/feedback/rating')
-    post_response = connection.post(
+    connection.post(
       headers: {
         'x-api-key' => ENV['CODAVERI_API_KEY'],
         'Content-Type' => 'application/json'
       },
       body: payload.to_json
     )
-
-    response_status = post_response.status
-    response_body = valid_json(post_response.body)
-    response_success = response_body['success']
-
-    return if response_status == 200 && response_success
-
-    Rails.logger.debug(message: 'Send Feedback Rating Error',
-                       response_status: response_status)
   end
 
   def valid_json(json)
