@@ -1,8 +1,0 @@
-<% host = @course.instance.host %>
-<% step = @submission.questions.index(@question) + 1 %>
-
-<%= (t('.message', topic: plain_link_to("#{@assessment.title}: #{@question_assessment.display_title}",
-                                        edit_course_assessment_submission_url(@course, @assessment,
-                                                                              @submission, step: step, host: host)))) %>
-
-
