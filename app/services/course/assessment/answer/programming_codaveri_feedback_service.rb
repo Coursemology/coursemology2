@@ -17,8 +17,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
     construct_feedback_object
     request_codaveri_feedback
     process_codaveri_feedback
-    # Email notification is disabled. If needed, it can be enabled below.
-    # send_codaveri_notification_email
   end
 
   private
@@ -129,13 +127,6 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
     answer_course_user.my_managers.each do |manager|
       discussion_topic.ensure_subscribed_by(manager.user)
     end
-  end
-
-  # Send an email to all group managers when codaveri has provided the feedback.
-  #
-  # @param [Course::Assessment] assessment The assessment to query.
-  def send_codaveri_notification_email
-    Course::Mailer.codaveri_feedback_email(@answer).deliver_later unless @feedback_files_hash.values.flatten.empty?
   end
 
   def default_codaveri_student_file_template
