@@ -411,14 +411,14 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                   label="Autograded"
                   icon={AutogradedIcon}
                   description={intl.formatMessage(t.autogradedHint)}
-                  disabled={containsCodaveri ?? disabled ?? !modeSwitching}
+                  disabled={!!containsCodaveri || !!disabled || !modeSwitching}
                 />
 
                 <IconRadio
                   value="manual"
                   label="Manual"
                   icon={ManualIcon}
-                  disabled={containsCodaveri ?? disabled ?? !modeSwitching}
+                  disabled={!!containsCodaveri || !!disabled || !modeSwitching}
                 />
               </RadioGroup>
             </>
