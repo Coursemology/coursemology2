@@ -159,7 +159,7 @@
     "@types/jquery": "^3.5.14",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
     "axios-mock-adapter": "^1.21.2",
