@@ -29,17 +29,9 @@ const translations = defineMessages({
     id: 'course.assessment.form.timeBonusExp',
     defaultMessage: 'Time Bonus EXP',
   },
-  autograded: {
-    id: 'course.assessment.form.autograded',
-    defaultMessage: 'Autograded',
-  },
   blockStudentViewingAfterSubmitted: {
     id: 'course.assessment.form.blockStudentViewingAfterSubmitted',
     defaultMessage: 'Block students from viewing finalized submissions',
-  },
-  autogradeTestCasesHint: {
-    id: 'course.assessment.form.autogradeTestCasesHint',
-    defaultMessage: 'Select test case types for grade and exp calculation:',
   },
   usePublic: {
     id: 'course.assessment.form.usePublic',
@@ -137,8 +129,9 @@ const translations = defineMessages({
     id: 'course.assessment.form.containsCodaveriQuestion',
     defaultMessage:
       "Switch to autograded mode is not allowed as there's \
-      codaveri programming question type. This question type is only supported \
-      in non-autograded assessment.",
+      codaveri programming question type in this assessment. \
+      This question type is only supported \
+      in manually-graded assessment.",
   },
   calculateGradeWith: {
     id: 'course.assessment.form.calculateGradeWith',
@@ -152,10 +145,6 @@ const translations = defineMessages({
     id: 'course.assessment.form.skippableManualHint',
     defaultMessage:
       'Students can already move between questions in manually graded assessments.',
-  },
-  layout: {
-    id: 'course.assessment.form.layout',
-    defaultMessage: 'Layout',
   },
   unlockConditions: {
     id: 'course.assessment.form.unlockConditions',
@@ -272,10 +261,6 @@ const translations = defineMessages({
   organisation: {
     id: 'course.assessment.form.organisation',
     defaultMessage: 'Organisation',
-  },
-  organisationSubtitle: {
-    id: 'course.assessment.form.organisationSubtitle',
-    defaultMessage: 'Change how the asssessment looks and feels.',
   },
   examsAndAccessControl: {
     id: 'course.assessment.form.examsAndAccessControl',

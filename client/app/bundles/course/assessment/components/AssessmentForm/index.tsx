@@ -387,11 +387,11 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           <InfoLabel label={intl.formatMessage(t.modeSwitchingDisabled)} />
         )}
 
-        {containsCodaveri ? (
+        {containsCodaveri && (
           <InfoLabel>
             {intl.formatMessage(t.containsCodaveriQuestion)}
           </InfoLabel>
-        ) : null}
+        )}
 
         <Controller
           name="autograded"
