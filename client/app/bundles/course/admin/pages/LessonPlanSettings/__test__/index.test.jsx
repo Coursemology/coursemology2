@@ -1,6 +1,7 @@
 import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
-import storeCreator from 'course/admin/store';
+import { store } from '../../../store';
+import { update } from '../../../reducers/lessonPlanSettings';
 import LessonPlanSettings from '../index';
 
 const itemSettings = [
@@ -16,14 +17,13 @@ const itemSettings = [
 describe('<LessonPlanSettings />', () => {
   it('allow lesson plan item settings to be set', () => {
     const spy = jest.spyOn(CourseAPI.admin.lessonPlan, 'update');
-    const store = storeCreator({
-      admin: {
-        lessonPlanSettings: {
-          items_settings: itemSettings,
-          component_settings: {},
-        },
-      },
-    });
+
+    store.dispatch(
+      update({
+        items_settings: itemSettings,
+        component_settings: {},
+      }),
+    );
 
     const lessonPlanSettings = mount(
       <LessonPlanSettings />,

@@ -1,6 +1,7 @@
 import { mount } from 'enzyme';
 import CourseAPI from 'api/course';
-import storeCreator from 'course/admin/store';
+import { store } from '../../../store';
+import { update } from '../../../reducers/notificationSettings';
 import NotificationSettings from '../index';
 
 const emailSettings = [
@@ -16,9 +17,8 @@ const emailSettings = [
 describe('<NotificationSettings />', () => {
   it('allow emails notification settings to be set', () => {
     const spy = jest.spyOn(CourseAPI.admin.notifications, 'update');
-    const store = storeCreator({
-      admin: { notificationSettings: emailSettings },
-    });
+
+    store.dispatch(update(emailSettings));
 
     const notificationSettings = mount(
       <NotificationSettings />,
