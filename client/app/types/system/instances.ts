@@ -9,9 +9,6 @@ export type InstanceMiniEntityPermissions = Permissions<
 export interface InstanceBasicListData {
   id: number;
   name: string;
-}
-
-export interface InstanceListData extends InstanceBasicListData {
   host: string;
 }
 
@@ -26,10 +23,10 @@ export interface InstanceListData extends InstanceBasicListData {
 export interface InstanceBasicMiniEntity {
   id: number;
   name: string;
+  host: string;
 }
 
 export interface InstanceMiniEntity extends InstanceBasicMiniEntity {
-  host: string;
   activeUserCount: number;
   userCount: number;
   activeCourseCount: number;

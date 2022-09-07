@@ -41,6 +41,7 @@ const initialState: InstanceAdminState = {
   instance: {
     id: 0,
     name: '',
+    host: '',
   },
   counts: {
     totalUsers: {
