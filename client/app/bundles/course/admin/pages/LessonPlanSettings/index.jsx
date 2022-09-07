@@ -13,7 +13,7 @@ import {
   TableRow,
 } from '@mui/material';
 import NotificationPopup from 'lib/containers/NotificationPopup';
-import { updateLessonPlanSettings } from 'course/admin/actions/lesson-plan-items';
+import updateLessonPlanSettings from '../../actions/lessonPlan';
 import translations from './translations.intl';
 import MilestoneGroupSettings from './MilestoneGroupSettings';
 

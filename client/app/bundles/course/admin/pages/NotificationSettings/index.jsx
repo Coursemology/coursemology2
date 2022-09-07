@@ -12,7 +12,7 @@ import {
   TableRow,
 } from '@mui/material';
 import NotificationPopup from 'lib/containers/NotificationPopup';
-import { updateNotificationSetting } from 'course/admin/actions/notifications';
+import updateNotificationSettings from '../../actions/notifications';
 import adminTranslations from 'course/translations.intl';
 import translations, {
   settingComponents,
@@ -71,7 +71,7 @@ class NotificationSettings extends Component {
         />
       );
       dispatch(
-        updateNotificationSetting(payload, successMessage, failureMessage),
+        updateNotificationSettings(payload, successMessage, failureMessage),
       );
     };
   };

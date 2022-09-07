@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
-import { updateLessonPlanSettings } from 'course/admin/actions/lesson-plan-items';
+import updateLessonPlanSettings from '../../actions/lessonPlan';
 import { initialState as defaultSettings } from 'course/lesson-plan/reducers/flags';
 
 const translations = defineMessages({
