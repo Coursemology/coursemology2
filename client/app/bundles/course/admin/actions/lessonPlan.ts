@@ -1,0 +1,20 @@
+import { AxiosError } from 'axios';
+import { toast } from 'react-toastify';
+
+import CourseAPI from 'api/course';
+import { update } from '../reducers/lessonPlanSettings';
+
+const updateLessonPlanSettings =
+  (value, successMessage, failureMessage) => async (dispatch) => {
+    const payload = { lesson_plan_settings: value };
+
+    try {
+      const response = await CourseAPI.admin.lessonPlan.update(payload);
+      dispatch(update(response.data));
+      toast.success(successMessage);
+    } catch (error) {
+      if (error instanceof AxiosError) toast.error(failureMessage);
+    }
+  };
+
+export default updateLessonPlanSettings;
