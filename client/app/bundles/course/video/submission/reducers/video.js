@@ -12,7 +12,6 @@ import { createTransform } from 'redux-persist';
 export const initialState = {
   videoUrl: null,
   watchNextVideoUrl: null,
-  nextVideoSubmissionExists: false,
   playerState: playerStates.UNSTARTED,
   playerProgress: 0,
   duration: videoDefaults.placeHolderDuration,

@@ -14,7 +14,6 @@ const oldSessionsFixtures = makeImmutableMap({
   25: {
     videoUrl: 'https://www.youtube.com/watch?v=hSVNbxjdvv8',
     watchNextVideoUrl: '',
-    nextVideoSubmissionExists: false,
     playerState: 'PAUSED',
     playerProgress: 5,
     duration: 164,
