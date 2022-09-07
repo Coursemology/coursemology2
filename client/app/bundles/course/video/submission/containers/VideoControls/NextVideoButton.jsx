@@ -33,11 +33,7 @@ function NextVideoButton(props) {
 
   return (
     <Tooltip title={<FormattedMessage {...translations.watchNextVideo} />}>
-      <IconButton
-        className={styles.nextVideo}
-        data-method={props.isPostRequest ? 'post' : ''}
-        href={props.url}
-      >
+      <IconButton className={styles.nextVideo} href={props.url}>
         <SkipNext htmlColor="black" />
       </IconButton>
     </Tooltip>
@@ -49,7 +45,6 @@ NextVideoButton.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
-    isPostRequest: !state.video.nextVideoSubmissionExists,
     url: state.video.watchNextVideoUrl,
   };
 }

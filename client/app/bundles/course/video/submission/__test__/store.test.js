@@ -9,7 +9,6 @@ import {
 const videoStateObject = {
   videoUrl: 'https://www.youtube.com/watch?v=sTSA_sWGM44',
   watchNextVideoUrl: '',
-  nextVideoSubmissionExists: false,
   playerState: 'PLAYING',
   playerProgress: 10,
   duration: 295,
@@ -42,7 +41,6 @@ const oldSessionsFixture = JSON.stringify({
   25: {
     videoUrl: 'https://www.youtube.com/watch?v=hSVNbxjdvv8',
     watchNextVideoUrl: '',
-    nextVideoSubmissionExists: false,
     playerState: 'PAUSED',
     playerProgress: 5,
     duration: 164,
