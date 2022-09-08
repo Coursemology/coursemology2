@@ -331,6 +331,7 @@ class VisibleSubmissionEditIndex extends Component {
         onSaveDraft={this.onSaveDraft}
         onSubmit={this.onSubmit}
         onSubmitAnswer={this.onSubmitAnswer}
+        onReevaluateAnswer={this.onReevaluateAnswer}
         handleUnsubmit={() => this.handleUnsubmit()}
         handleSaveGrade={() => this.handleSaveGrade()}
         handleAutogradeSubmission={() => this.handleAutogradeSubmission()}
