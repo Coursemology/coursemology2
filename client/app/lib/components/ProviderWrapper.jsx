@@ -6,7 +6,6 @@ import { ToastContainer } from 'react-toastify';
 import { injectStyle } from 'react-toastify/dist/inject-style';
 import {
   createTheme,
-  adaptV4Theme,
   ThemeProvider,
   StyledEngineProvider,
 } from '@mui/material/styles';
@@ -36,101 +35,88 @@ const tailwindConfig = resolveConfig(tailwindUserConfig);
 
 const pxInInt = (pixels) => parseInt(pixels.replace('px', ''), 10);
 
-const themeSettings = {
-  palette,
-  // https://material-ui.com/customization/themes/#typography---html-font-size
-  // https://material-ui.com/style/typography/#migration-to-typography-v2
-  typography: {
-    htmlFontSize: 10,
-  },
-  breakpoints: {
-    values: {
-      xs: 0,
-      sm: pxInInt(tailwindConfig.theme.screens.sm),
-      md: pxInInt(tailwindConfig.theme.screens.md),
-      lg: pxInInt(tailwindConfig.theme.screens.lg),
-      xl: pxInInt(tailwindConfig.theme.screens.xl),
-    },
-  },
-  overrides: {
-    MuiAppBar: {
-      // When there is a MUI Dialog component, somehow
-      // the color of appbar is changed... smh
-      root: {
-        background: `${palette.primary.main} !important`,
-        color: 'white !important',
-      },
-    },
-    MuiCard: {
-      root: {
-        overflow: 'visible',
-      },
-    },
-    MuiDialogContent: {
-      root: {
-        color: 'black',
-        fontSize: '16px',
-        fontFamily: `'Roboto', 'sans-serif'`,
-      },
-    },
-    MuiAccordionSummary: {
-      root: {
-        width: '100%',
-      },
-      content: {
-        margin: 0,
-        paddingLeft: '16px',
-        '&$expanded': { margin: 0 },
-      },
-    },
-    MuiMenuItem: {
-      root: {
-        height: '48px',
-      },
-    },
-    MuiModal: {
-      root: {
-        zIndex: 1,
-      },
-    },
-    MuiStepLabel: {
-      iconContainer: {
-        paddingLeft: '2px',
-        paddingRight: '2px',
-      },
-    },
-    MuiTableCell: {
-      root: {
-        padding: '8px 14px',
-        height: '48px',
-      },
-      head: {
-        color: grey[500],
-        padding: '16px 16px',
-      },
-      sizeSmall: {
-        padding: '6px 12px',
-        height: '40px',
-      },
-    },
-  },
-};
-
-export const adaptedTheme = adaptV4Theme(themeSettings);
-
 const ProviderWrapper = ({ store, persistor, children }) => {
   const localeWithoutRegionCode = i18nLocale.toLowerCase().split(/[_-]+/)[0];
 
   // TODO: Replace with React's createRoot once true SPA is ready
   const rootElement = document.getElementById('root');
 
-  const themeV5 = createTheme({
-    ...adaptedTheme,
+  const theme = createTheme({
+    palette,
+    // https://material-ui.com/customization/themes/#typography---html-font-size
+    // https://material-ui.com/style/typography/#migration-to-typography-v2
+    typography: {
+      htmlFontSize: 10,
+    },
+    breakpoints: {
+      values: {
+        xs: 0,
+        sm: pxInInt(tailwindConfig.theme.screens.sm),
+        md: pxInInt(tailwindConfig.theme.screens.md),
+        lg: pxInInt(tailwindConfig.theme.screens.lg),
+        xl: pxInInt(tailwindConfig.theme.screens.xl),
+      },
+    },
     components: {
-      ...adaptedTheme.components,
       MuiDialog: { defaultProps: { container: rootElement } },
       MuiPopover: { defaultProps: { container: rootElement } },
       MuiPopper: { defaultProps: { container: rootElement } },
+      MuiCard: { styleOverrides: { root: { overflow: 'visible' } } },
+      MuiMenuItem: { styleOverrides: { root: { height: '48px' } } },
+      MuiModal: { styleOverrides: { root: { zIndex: 1 } } },
+      MuiAppBar: {
+        styleOverrides: {
+          // When there is a MUI Dialog component, somehow
+          // the color of appbar is changed... smh
+          root: {
+            background: `${palette.primary.main} !important`,
+            color: 'white !important',
+          },
+        },
+      },
+      MuiDialogContent: {
+        styleOverrides: {
+          root: {
+            color: 'black',
+            fontSize: '16px',
+            fontFamily: `'Roboto', 'sans-serif'`,
+          },
+        },
+      },
+      MuiAccordionSummary: {
+        styleOverrides: {
+          root: { width: '100%' },
+          content: {
+            margin: 0,
+            paddingLeft: '16px',
+            '&$expanded': { margin: 0 },
+          },
+        },
+      },
+      MuiStepLabel: {
+        styleOverrides: {
+          iconContainer: {
+            paddingLeft: '2px',
+            paddingRight: '2px',
+          },
+        },
+      },
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            padding: '8px 14px',
+            height: '48px',
+          },
+          head: {
+            color: grey[500],
+            padding: '16px 16px',
+          },
+          sizeSmall: {
+            padding: '6px 12px',
+            height: '40px',
+          },
+        },
+      },
     },
   });
 
@@ -168,7 +154,7 @@ const ProviderWrapper = ({ store, persistor, children }) => {
   providers = (
     <IntlProvider locale={i18nLocale} messages={messages} textComponent="span">
       <StyledEngineProvider injectFirst>
-        <ThemeProvider theme={themeV5}>{providers}</ThemeProvider>
+        <ThemeProvider theme={theme}>{providers}</ThemeProvider>
       </StyledEngineProvider>
     </IntlProvider>
   );
