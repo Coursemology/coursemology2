@@ -127,6 +127,7 @@ const ProviderWrapper = ({ store, persistor, children }) => {
   const themeV5 = createTheme({
     ...adaptedTheme,
     components: {
+      ...adaptedTheme.components,
       MuiDialog: { defaultProps: { container: rootElement } },
       MuiPopover: { defaultProps: { container: rootElement } },
       MuiPopper: { defaultProps: { container: rootElement } },
