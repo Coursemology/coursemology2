@@ -110,7 +110,6 @@ FormTextField.propTypes = {
   id: PropTypes.string,
   sx: PropTypes.object,
   className: PropTypes.string,
-  description: PropTypes.string,
 };
 
 export default FormTextField;

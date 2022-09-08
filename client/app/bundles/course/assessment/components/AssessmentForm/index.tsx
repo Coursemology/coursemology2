@@ -89,7 +89,6 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             fieldState={fieldState}
             disabled={disabled}
             label={intl.formatMessage(t.viewPassword)}
-            description={intl.formatMessage(t.viewPasswordHint)}
             fullWidth
             required
             variant="filled"
@@ -97,6 +96,10 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           />
         )}
       />
+
+      <Typography variant="body2" color="text.secondary" className="!mt-0">
+        {intl.formatMessage(t.viewPasswordHint)}
+      </Typography>
 
       <Controller
         name="session_protected"
@@ -113,23 +116,28 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
       />
 
       {sessionProtected && (
-        <Controller
-          name="session_password"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={intl.formatMessage(t.sessionPassword)}
-              description={intl.formatMessage(t.sessionPasswordHint)}
-              fullWidth
-              required
-              variant="filled"
-              type="password"
-            />
-          )}
-        />
+        <>
+          <Controller
+            name="session_password"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={disabled}
+                label={intl.formatMessage(t.sessionPassword)}
+                fullWidth
+                required
+                variant="filled"
+                type="password"
+              />
+            )}
+          />
+
+          <Typography variant="body2" color="text.secondary" className="!mt-0">
+            {intl.formatMessage(t.sessionPasswordHint)}
+          </Typography>
+        </>
       )}
     </>
   );
