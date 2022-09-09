@@ -190,7 +190,13 @@ module Course::Assessment::Submission::WorkflowEventConcern
       else
         last_non_current_answer = all_answers.reject(&:current_answer?).reject(&:attempting?).last
 
-        if current_answer.specific.compare_answer(last_non_current_answer.specific)
+        is_same_answer = current_answer.specific.compare_answer(last_non_current_answer.specific)
+
+        if assessment.autograded && !assessment.allow_partial_submission && !is_same_answer
+          self.has_unsubmitted_or_draft_answer = true
+        end
+
+        if is_same_answer
           # If the latest non-current answer and the current answer are the same, keep the latest non-current answer
           # and remove current answer
           all_answers.current_answers.select(&:attempting?).each(&:destroy!)
