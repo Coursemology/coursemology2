@@ -7,6 +7,8 @@ class Course::Assessment::Submission < ApplicationRecord
   include Course::Assessment::Submission::NotificationConcern
   include Course::Assessment::Submission::AnswersConcern
 
+  attr_accessor :has_unsubmitted_or_draft_answer
+
   acts_as_experience_points_record
 
   after_save :auto_grade_submission, if: :submitted?
@@ -43,6 +45,7 @@ class Course::Assessment::Submission < ApplicationRecord
 
   validate :validate_consistent_user, :validate_unique_submission, on: :create
   validate :validate_awarded_attributes, if: :published?
+  validate :validate_autograded_no_partial_answer, if: :submitted?
   validates :submitted_at, presence: true, unless: :attempting?
   validates :workflow_state, length: { maximum: 255 }, presence: true
   validates :creator, presence: true
@@ -326,5 +329,13 @@ class Course::Assessment::Submission < ApplicationRecord
     return if awarded_at && awarder
 
     errors.add(:experience_points_record, :absent_award_attributes)
+  end
+
+  # Validate that there is no unsubmitted updated answer for autograded assessment that
+  # does not allow partial submission
+  def validate_autograded_no_partial_answer
+    return unless assessment.autograded && !assessment.allow_partial_submission
+
+    errors.add(:base, :autograded_no_partial_answer) if has_unsubmitted_or_draft_answer
   end
 end

@@ -46,7 +46,7 @@ const formatAnswers = (answers = {}) => {
 };
 
 function buildErrorMessage(error) {
-  if (!error || !error.response || !error.data) {
+  if (!error && !error.response && !error.data) {
     return '';
   }
 
