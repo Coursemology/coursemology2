@@ -165,7 +165,7 @@
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
-    "autoprefixer": "^10.4.8",
+    "autoprefixer": "^10.4.9",
     "axios-mock-adapter": "^1.21.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.1.0",
