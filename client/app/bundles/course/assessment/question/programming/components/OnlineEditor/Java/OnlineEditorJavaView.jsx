@@ -1,4 +1,4 @@
-import Immutable from 'immutable';
+import { Map } from 'immutable';
 
 import { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -38,8 +38,8 @@ import {
 const MAX_TEST_CASES = 99;
 
 const propTypes = {
-  data: PropTypes.instanceOf(Immutable.Map).isRequired,
-  testData: PropTypes.instanceOf(Immutable.Map).isRequired,
+  data: PropTypes.instanceOf(Map).isRequired,
+  testData: PropTypes.instanceOf(Map).isRequired,
   actions: PropTypes.shape({
     toggleSubmitAsFile: PropTypes.func.isRequired,
     updateCodeBlock: PropTypes.func.isRequired,

@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import Immutable from 'immutable';
+import { List } from 'immutable';
 import PropTypes from 'prop-types';
 import { Card, CardContent, Tab, Tabs } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
 const propTypes = {
-  templates: PropTypes.instanceOf(Immutable.List).isRequired,
+  templates: PropTypes.instanceOf(List).isRequired,
 };
 
 const UploadedPackageTemplateView = (props) => {

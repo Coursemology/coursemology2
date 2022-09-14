@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import Immutable from 'immutable';
+import { fromJS, Set } from 'immutable';
 
 import actionTypes from '../constants/programmingQuestionConstants';
 import editorActionTypes from '../constants/onlineEditorConstants';
@@ -8,7 +8,7 @@ import {
   cppAppend,
 } from '../constants/onlineEditorDefaultTemplates';
 
-export const initialState = Immutable.fromJS({
+export const initialState = fromJS({
   // this is the default state that would be used if one were not passed into the store
   question: {
     assessment_id: null,
@@ -87,17 +87,17 @@ export const initialState = Immutable.fromJS({
       data_files: [],
     },
     solution_files: {
-      to_delete: Immutable.Set(),
+      to_delete: Set(),
       new: [{ key: 0, filename: null }],
       key: 0,
     },
     submission_files: {
-      to_delete: Immutable.Set(),
+      to_delete: Set(),
       new: [{ key: 0, filename: null }],
       key: 0,
     },
     data_files: {
-      to_delete: Immutable.Set(),
+      to_delete: Set(),
       new: [{ key: 0, filename: null }],
       key: 0,
     },
@@ -134,7 +134,7 @@ function questionReducer(state, action) {
     }
     case actionTypes.SKILLS_UPDATE: {
       const { skills } = action;
-      return state.set('skill_ids', Immutable.fromJS(skills));
+      return state.set('skill_ids', fromJS(skills));
     }
     default: {
       return state;
@@ -162,10 +162,7 @@ function testReducer(state, action) {
         inline_code: '',
         show_code_editor: false,
       };
-      const tests = state
-        .get('test_cases')
-        .get(testType)
-        .push(Immutable.fromJS(newTest));
+      const tests = state.get('test_cases').get(testType).push(fromJS(newTest));
       return state
         .setIn(['test_cases', testType], tests)
         .deleteIn(['test_cases', 'error']);
@@ -196,15 +193,13 @@ function packageFilesReducer(state, action) {
       let newFiles = state
         .get('new')
         .update(index, (fileData) =>
-          Immutable.fromJS({ key: fileData.get('key'), filename }),
+          fromJS({ key: fileData.get('key'), filename }),
         );
 
       // Adds a new entry if there are no more empty non-deleted files.
       if (newFiles.last().get('filename') !== null) {
         const newKey = state.get('key') + 1;
-        newFiles = newFiles.push(
-          Immutable.fromJS({ key: newKey, filename: null }),
-        );
+        newFiles = newFiles.push(fromJS({ key: newKey, filename: null }));
         return state.set('key', newKey).set('new', newFiles);
       }
 
@@ -275,15 +270,15 @@ function apiReducer(state, action) {
           .merge({ form_data, package_ui, import_result, codaveri_result })
           .setIn(
             ['test_ui', 'data_files', 'new'],
-            Immutable.fromJS([{ key, filename: null }]),
+            fromJS([{ key, filename: null }]),
           )
           .setIn(
             ['test_ui', 'submission_files', 'new'],
-            Immutable.fromJS([{ key: submissionKey, filename: null }]),
+            fromJS([{ key: submissionKey, filename: null }]),
           )
           .setIn(
             ['test_ui', 'solution_files', 'new'],
-            Immutable.fromJS([{ key: solutionKey, filename: null }]),
+            fromJS([{ key: solutionKey, filename: null }]),
           );
 
         if (import_result.import_errored) {
@@ -300,19 +295,10 @@ function apiReducer(state, action) {
             // the old package has been changed, set to what the server returned
             return newState
               .setIn(['test_ui', 'mode'], editorMode)
-              .setIn(
-                ['test_ui', editorMode],
-                Immutable.fromJS(test_ui[editorMode]),
-              )
-              .setIn(['test_ui', 'data_files', 'to_delete'], Immutable.Set())
-              .setIn(
-                ['test_ui', 'submission_files', 'to_delete'],
-                Immutable.Set(),
-              )
-              .setIn(
-                ['test_ui', 'solution_files', 'to_delete'],
-                Immutable.Set(),
-              );
+              .setIn(['test_ui', editorMode], fromJS(test_ui[editorMode]))
+              .setIn(['test_ui', 'data_files', 'to_delete'], Set())
+              .setIn(['test_ui', 'submission_files', 'to_delete'], Set())
+              .setIn(['test_ui', 'solution_files', 'to_delete'], Set());
           }
 
           // still the same old package, the client state shall be preserved
@@ -322,10 +308,10 @@ function apiReducer(state, action) {
         // Evaluation completed successfully
         return newState
           .setIn(['test_ui', 'mode'], editorMode)
-          .setIn(['test_ui', editorMode], Immutable.fromJS(test_ui[editorMode]))
-          .setIn(['test_ui', 'data_files', 'to_delete'], Immutable.Set())
-          .setIn(['test_ui', 'submission_files', 'to_delete'], Immutable.Set())
-          .setIn(['test_ui', 'solution_files', 'to_delete'], Immutable.Set());
+          .setIn(['test_ui', editorMode], fromJS(test_ui[editorMode]))
+          .setIn(['test_ui', 'data_files', 'to_delete'], Set())
+          .setIn(['test_ui', 'submission_files', 'to_delete'], Set())
+          .setIn(['test_ui', 'solution_files', 'to_delete'], Set());
       }
 
       // Evaluation ended without any data retrieved from server
@@ -340,7 +326,7 @@ function apiReducer(state, action) {
       if (editorMode && test_ui[editorMode] !== undefined) {
         newState = newState.setIn(
           ['test_ui', editorMode],
-          Immutable.fromJS(test_ui[editorMode]),
+          fromJS(test_ui[editorMode]),
         );
       }
 
@@ -402,7 +388,7 @@ export default function programmingQuestionReducer(
       let newState = state;
 
       errors.forEach((error) => {
-        newState = newState.setIn(error.path, Immutable.fromJS(error.error));
+        newState = newState.setIn(error.path, fromJS(error.error));
       });
 
       return newState.set('has_errors', errors.length !== 0);

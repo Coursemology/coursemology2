@@ -1,4 +1,4 @@
-import Immutable from 'immutable';
+import { Map } from 'immutable';
 
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages } from 'react-intl';
@@ -19,7 +19,7 @@ const translations = defineMessages({
 });
 
 const propTypes = {
-  data: PropTypes.instanceOf(Immutable.Map).isRequired,
+  data: PropTypes.instanceOf(Map).isRequired,
   intl: PropTypes.object.isRequired,
 };
 
