@@ -4,7 +4,7 @@
 = div_for(post, class: post_class) do
   a name=dom_id(post)
 
-  div.contents
+  div.post-contents
     div.title
       = div_for(post.creator) do
         = display_user_image(post.creator)
