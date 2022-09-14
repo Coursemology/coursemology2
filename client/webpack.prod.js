@@ -14,4 +14,7 @@ module.exports = merge(common, {
       cacheDirectory: join(__dirname, 'hard-source-cache/[confighash]'),
     }),
   ],
+  optimization: {
+    usedExports: true,
+  },
 });
