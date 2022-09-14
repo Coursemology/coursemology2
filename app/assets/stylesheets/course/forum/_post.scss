@@ -1,5 +1,5 @@
 @mixin course-forum-post {
-  .contents {
+  .post-contents {
     border: 1px solid $course-discussion-post-border-color;
     border-radius: $course-discussion-post-border-radius;
     box-shadow: 0 1px 1px $course-discussion-post-shadow-color;
@@ -31,7 +31,7 @@
     }
   }
 
-  &.unread > .contents {
+  &.unread > .post-contents {
     background-color: $course-forum-unread-highlight;
   }
 }
