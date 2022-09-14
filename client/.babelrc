@@ -10,6 +10,7 @@
     "@babel/preset-typescript"
   ],
   "plugins": [
+    "lodash",
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-class-properties",
     [
@@ -41,7 +42,12 @@
   "env": {
     "production": {
       "plugins": [
-        ["react-remove-properties", {"properties": ["data-testid"]}]
+        [
+          "react-remove-properties",
+          {
+            "properties": ["data-testid"]
+          }
+        ]
       ]
     }
   }
