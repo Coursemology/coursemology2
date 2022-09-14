@@ -12,6 +12,7 @@
     "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -w --node-env=production --config webpack.prod.js",
     "build:production": "export NODE_ENV=production && yarn run build:translations && webpack --node-env=production --config webpack.prod.js",
     "build:development": "yarn run build:translations && webpack serve --config webpack.dev.js",
+    "build:profile": "yarn run build:translations && webpack serve --config webpack.profile.js --progress=profile",
     "build:translations": "babel-node scripts/aggregate-translations.js",
     "extract-translations": "yarn run build:production && babel-node scripts/extract-translations.js",
     "lint-src": "eslint . --ext .js --ext .jsx --ext .ts --ext .tsx --cache --ignore-pattern '**/__test__/**' --ignore-pattern 'coverage/**'",
