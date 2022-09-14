@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import Immutable from 'immutable';
+import { Map } from 'immutable';
 
 import { Component } from 'react';
 import ReactTooltip from 'react-tooltip';
@@ -40,7 +40,7 @@ import styles from './ProgrammingQuestionForm.scss';
 import translations from './ProgrammingQuestionForm.intl';
 
 const propTypes = {
-  data: PropTypes.instanceOf(Immutable.Map).isRequired,
+  data: PropTypes.instanceOf(Map).isRequired,
   actions: PropTypes.shape({
     submitForm: PropTypes.func.isRequired,
     updateProgrammingQuestion: PropTypes.func.isRequired,

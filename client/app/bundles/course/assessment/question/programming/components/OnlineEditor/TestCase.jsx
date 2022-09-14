@@ -1,4 +1,4 @@
-import Immutable from 'immutable';
+import { Map } from 'immutable';
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
@@ -151,7 +151,7 @@ TestCase.propTypes = {
   isLoading: PropTypes.bool.isRequired,
   type: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
-  test: PropTypes.instanceOf(Immutable.Map).isRequired,
+  test: PropTypes.instanceOf(Map).isRequired,
   expression: PropTypes.string.isRequired,
   expected: PropTypes.string.isRequired,
   hint: PropTypes.string.isRequired,

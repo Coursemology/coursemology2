@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Immutable from 'immutable';
+import { Map } from 'immutable';
 
 import ProgrammingQuestionForm from './containers/ProgrammingQuestionForm/ProgrammingQuestionForm';
 import * as onlineEditorActionCreators from './actions/onlineEditorActionCreators';
@@ -13,7 +13,7 @@ function mapStateToProps(state) {
 
 const propTypes = {
   dispatch: PropTypes.func.isRequired,
-  programmingQuestion: PropTypes.instanceOf(Immutable.Map).isRequired,
+  programmingQuestion: PropTypes.instanceOf(Map).isRequired,
 };
 
 const ProgrammingQuestion = (props) => {
