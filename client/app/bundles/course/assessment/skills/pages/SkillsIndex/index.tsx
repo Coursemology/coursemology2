@@ -143,7 +143,7 @@ const SkillsIndex: FC<Props> = (props) => {
 
   return (
     <>
-      <PageHeader title={intl.formatMessage({ ...translations.skills })} />
+      <PageHeader title={intl.formatMessage(translations.skills)} />
       {isLoading ? (
         <LoadingIndicator />
       ) : (

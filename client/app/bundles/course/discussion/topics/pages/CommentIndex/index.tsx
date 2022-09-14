@@ -197,7 +197,7 @@ const CommentIndex: FC<Props> = (props) => {
         title={
           settings.title
             ? settings.title
-            : intl.formatMessage({ ...translations.comments })
+            : intl.formatMessage(translations.comments)
         }
       />
       {isLoading ? (
