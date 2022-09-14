@@ -7,14 +7,14 @@ import {
   FormattedMessage,
   WrappedComponentProps,
 } from 'react-intl';
-import Group from '@mui/icons-material/Group';
-import Person from '@mui/icons-material/Person';
+import { Group, Person, AutoFixHigh, EmojiEvents } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
-import { Grid, Tab, Tabs, useMediaQuery, useTheme } from '@mui/material';
+import { Grid, Tab, Tabs } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import palette from 'theme/palette';
-import { AutoFixHigh, EmojiEvents } from '@mui/icons-material';
 import fetchLeaderboard from '../../operations';
 import LeaderboardTable from '../../components/tables/LeaderboardTable';
 import {
@@ -92,7 +92,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
         title={
           settings.groupleaderboardTitle
             ? settings.groupleaderboardTitle
-            : intl.formatMessage({ ...translations.leaderboard })
+            : intl.formatMessage(translations.leaderboard)
         }
       />
       {isLoading ? (

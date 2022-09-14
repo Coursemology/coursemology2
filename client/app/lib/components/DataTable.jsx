@@ -1,4 +1,4 @@
-import { createTheme, ThemeProvider, useTheme } from '@mui/material';
+import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
 
 const options = {
