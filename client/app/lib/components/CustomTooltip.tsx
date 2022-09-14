@@ -1,4 +1,6 @@
-import { styled, Tooltip, tooltipClasses, TooltipProps } from '@mui/material';
+import { Tooltip, TooltipProps } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { tooltipClasses } from '@mui/material/Tooltip';
 
 /**
  * This is meant for adding styling to the tooltip provided by MUI. Can refer to StartEndTime for usage example.

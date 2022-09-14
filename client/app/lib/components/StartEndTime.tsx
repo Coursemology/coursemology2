@@ -1,7 +1,9 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-import { styled, Tooltip, tooltipClasses, TooltipProps } from '@mui/material';
+import { Tooltip, TooltipProps } from '@mui/material';
 import { AccessTime, Lock } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+import { tooltipClasses } from '@mui/material/Tooltip';
 import { getFullDateTime } from 'lib/helpers/timehelper';
 
 interface Props extends WrappedComponentProps {
@@ -40,7 +42,7 @@ const CustomTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 /*
 This component is meant for displaying effective and reference time differences
-when a personalized timeline is in use. For an example, you can make use of the courses 
+when a personalized timeline is in use. For an example, you can make use of the courses
 home page.
 */
 const StartEndTime: FC<Props> = (props) => {

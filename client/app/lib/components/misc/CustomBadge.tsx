@@ -1,4 +1,5 @@
-import { Badge, BadgeProps, styled } from '@mui/material';
+import { Badge, BadgeProps } from '@mui/material';
+import { styled } from '@mui/material/styles';
 
 const CustomBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   '& .MuiBadge-badge': {

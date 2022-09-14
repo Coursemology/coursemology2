@@ -18,6 +18,24 @@
         "idInterpolationPattern": "[sha512:contenthash:base64:6]",
         "ast": true
       }
+    ],
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "@mui/material",
+        "libraryDirectory": "",
+        "camel2DashComponentName": false
+      },
+      "core"
+    ],
+    [
+      "babel-plugin-import",
+      {
+        "libraryName": "@mui/icons-material",
+        "libraryDirectory": "",
+        "camel2DashComponentName": false
+      },
+      "icons"
     ]
   ],
   "env": {
