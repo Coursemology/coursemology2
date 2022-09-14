@@ -9,9 +9,9 @@
   "scripts": {
     "test": "TZ=Asia/Singapore yarn run jest --coverage",
     "testci": "TZ=Asia/Singapore yarn run jest --maxWorkers=4 --coverage",
-    "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -w --node-env=production",
-    "build:production": "export NODE_ENV=production && yarn run build:translations && webpack --node-env=production",
-    "build:development": "yarn run build:translations && webpack serve",
+    "build:test": "export NODE_ENV=test && yarn run build:translations && webpack -w --node-env=production --config webpack.prod.js",
+    "build:production": "export NODE_ENV=production && yarn run build:translations && webpack --node-env=production --config webpack.prod.js",
+    "build:development": "yarn run build:translations && webpack serve --config webpack.dev.js",
     "build:translations": "babel-node scripts/aggregate-translations.js",
     "extract-translations": "yarn run build:production && babel-node scripts/extract-translations.js",
     "lint-src": "eslint . --ext .js --ext .jsx --ext .ts --ext .tsx --cache --ignore-pattern '**/__test__/**' --ignore-pattern 'coverage/**'",
@@ -161,8 +161,8 @@
     "babel-jest": "^29.0.3",
     "babel-loader": "^8.2.5",
     "babel-plugin-react-remove-properties": "^0.3.0",
-    "cssnano": "^5.1.13",
     "css-loader": "^6.7.1",
+    "cssnano": "^5.1.13",
     "enzyme": "^3.11.0",
     "enzyme-to-json": "^3.6.2",
     "eslint": "^7.32.0",
@@ -196,7 +196,8 @@
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^4.11.0",
-    "webpack-manifest-plugin": "^5.0.0"
+    "webpack-manifest-plugin": "^5.0.0",
+    "webpack-merge": "^5.8.0"
   },
   "license": "MIT",
   "repository": "git+https://github.com/Coursemology/coursemology2.git",
