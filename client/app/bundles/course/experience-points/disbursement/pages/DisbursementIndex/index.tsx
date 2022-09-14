@@ -76,9 +76,7 @@ const DisbursementIndex: FC<Props> = (props) => {
 
   return (
     <>
-      <PageHeader
-        title={intl.formatMessage({ ...translations.disbursements })}
-      />
+      <PageHeader title={intl.formatMessage(translations.disbursements)} />
       {isLoading ? (
         <LoadingIndicator />
       ) : (
