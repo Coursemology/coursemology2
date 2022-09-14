@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const path = require('path');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const env = process.env.NODE_ENV || 'development';
 const development = env === 'development';
@@ -62,18 +63,28 @@ const config = {
       /moment\/locale$/,
       /^\.\/(en-.*|zh-.*)$/,
     ),
+    new ForkTsCheckerWebpackPlugin({
+      typescript: {
+        diagnosticOptions: {
+          semantic: true,
+          syntactic: true,
+        },
+        mode: 'write-references',
+      },
+    }),
   ],
 
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
-        use: 'babel-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
+        test: /\.(js|jsx|ts|tsx)$/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheCompression: false,
+            cacheDirectory: true,
+          },
+        },
         exclude: /node_modules/,
       },
       {
