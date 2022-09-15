@@ -6,7 +6,7 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
   with_tenant(:instance) do
     let(:instance_admin) { create(:instance_user, role: :administrator).user }
     let(:normal_user) { create(:user) }
-    
+
     describe '#index' do
       subject { get :index }
 
