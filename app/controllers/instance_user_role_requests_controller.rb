@@ -9,7 +9,7 @@ class InstanceUserRoleRequestsController < ApplicationController
 
     respond_to do |format|
       format.html { render 'system/admin/instance/admin/index' }
-      format.json { render 'instance_user_role_requests/index' }
+      format.json
     end
   end
 
@@ -51,18 +51,18 @@ class InstanceUserRoleRequestsController < ApplicationController
     @success, instance_user = @user_role_request.approve!
     if @success && @user_role_request.save
       InstanceUserRoleRequestMailer.role_request_approved(instance_user).deliver_later
-      approve_success
+      render partial: 'instance_user_role_request_list_data', locals: { role_request: @user_role_request }, status: :ok
     else
-      approve_failure(instance_user)
+      render json: { errors: instance_user.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   def reject
-    if reject_role_request
+    if @user_role_request.update(user_role_request_rejection_params.reverse_merge(reject: true))
       send_rejection_email
-      reject_success
+      render partial: 'instance_user_role_request_list_data', locals: { role_request: @user_role_request }, status: :ok
     else
-      reject_failure
+      render json: { errors: @user_role_request.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -76,41 +76,9 @@ class InstanceUserRoleRequestsController < ApplicationController
     params.fetch(:user_role_request, {}).permit(:rejection_message)
   end
 
-  def reject_role_request
-    @user_role_request.update(user_role_request_rejection_params.reverse_merge(reject: true))
-  end
-
   def send_rejection_email
     @instance_user = InstanceUser.find_by(user_id: @user_role_request.user_id)
     InstanceUserRoleRequestMailer.role_request_rejected(@instance_user, @user_role_request.rejection_message).
       deliver_later
-  end
-
-  def approve_success
-    respond_to do |format|
-      format.json do
-        render '_instance_user_role_request_list_data', locals: { role_request: @user_role_request }, status: :ok
-      end
-    end
-  end
-
-  def approve_failure(instance_user)
-    respond_to do |format|
-      format.json { render json: { errors: instance_user.errors.full_messages.to_sentence }, status: :bad_request }
-    end
-  end
-
-  def reject_success
-    respond_to do |format|
-      format.json do
-        render '_instance_user_role_request_list_data', locals: { role_request: @user_role_request }, status: :ok
-      end
-    end
-  end
-
-  def reject_failure
-    respond_to do |format|
-      format.json { render json: { errors: @user_role_request.errors.full_messages.to_sentence }, status: :bad_request }
-    end
   end
 end

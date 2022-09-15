@@ -17,6 +17,10 @@ const translations = defineMessages({
     id: 'components.table.column.createdAt',
     defaultMessage: 'Created At',
   },
+  requestedAt: {
+    id: 'components.table.column.requestedAt',
+    defaultMessage: 'Requested At',
+  },
   role: {
     id: 'components.table.column.role',
     defaultMessage: 'Role',

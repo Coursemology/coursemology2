@@ -75,6 +75,22 @@ const RejectWithMessageForm: FC<Props> = (props) => {
             disabled
             required
             fullWidth
+            label={intl.formatMessage(tableTranslations.name)}
+            defaultValue={roleRequest.name}
+            variant="standard"
+          />
+          <TextField
+            disabled
+            required
+            fullWidth
+            label={intl.formatMessage(tableTranslations.email)}
+            defaultValue={roleRequest.email}
+            variant="standard"
+          />
+          <TextField
+            disabled
+            required
+            fullWidth
             label={intl.formatMessage(tableTranslations.requestToBe)}
             defaultValue={roleRequest.role}
             variant="standard"
@@ -122,7 +138,14 @@ const RejectWithMessageForm: FC<Props> = (props) => {
           />
         </Stack>
       </form>
-      <Grid container justifyContent="space-between" sx={{ marginTop: '24px' }}>
+      <Grid container className="mt-6" justifyContent="space-between">
+        <Button
+          color="secondary"
+          onClick={(): void => handleClose(isDirty)}
+          disabled={isLoading}
+        >
+          {intl.formatMessage(translations.cancel)}
+        </Button>
         <LoadingButton
           loading={isLoading}
           disabled={disabled}
@@ -134,13 +157,6 @@ const RejectWithMessageForm: FC<Props> = (props) => {
         >
           {intl.formatMessage(translations.reject)}
         </LoadingButton>
-        <Button
-          color="secondary"
-          onClick={(): void => handleClose(isDirty)}
-          disabled={isLoading}
-        >
-          {intl.formatMessage(translations.cancel)}
-        </Button>
       </Grid>
     </>
   );

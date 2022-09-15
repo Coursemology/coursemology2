@@ -301,17 +301,9 @@ export function approveRoleRequest(
       });
 }
 
-export function rejectRoleRequest(requestId: number): Operation<void> {
-  return async (dispatch) =>
-    SystemAPI.instance.rejectRoleRequest(requestId).then((response) => {
-      const roleRequest = response.data;
-      dispatch(actions.saveRoleRequest(roleRequest));
-    });
-}
-
-export function rejectRoleRequestWithMessage(
+export function rejectRoleRequest(
   requestId: number,
-  message: string,
+  message?: string,
 ): Operation<void> {
   return async (dispatch) =>
     SystemAPI.instance

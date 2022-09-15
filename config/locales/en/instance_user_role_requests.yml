@@ -1,20 +1,5 @@
 en:
   instance_user_role_requests:
-    index:
-      header: 'Role Requests'
-      pending_header: 'Pending requests'
-      approved_header: 'Accepted requests'
-      rejected_header: 'Rejected requests'
-      empty: 'No pending requests'
-      designation: 'Designation'
-      organization: 'Organization'
-      reason: 'Reason'
-      requested_at: 'Requested at'
-      approver: 'Approver'
-      approved_at: 'Approved at'
-      rejector: 'Rejector'
-      rejected_at: 'Rejected at'
-      rejection_message: 'Rejection Message'
     new:
       header: 'Request to be an instructor or administrator'
     edit:
@@ -34,13 +19,3 @@ en:
       success: 'Your role request was submitted.'
     update:
       success: 'Your role request was updated.'
-    user_role_request:
-      approve: 'Approve user role request'
-      reject_with_message: 'Reject user role request and send message'
-      reject: 'Reject user role request'
-    user_role_request_rejection_form:
-      role_request_approved: 'The request below has been approved.'
-      role_request_rejected: 'The request below has been rejected.'
-      role_label: 'Request to be'
-      reject_with_message: 'Reject and send message'
-      cancel: 'Cancel'

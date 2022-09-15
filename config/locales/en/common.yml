@@ -1,10 +1,7 @@
 en:
   common:
     serial_number: "S/N"
-    name: "Name"
-    email: "Email"
     new: "New"
-    role: "Role"
     not_started: "Not started"
     ended: "Ended"
     plain_text_link: "%{text} (%{url})"

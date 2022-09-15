@@ -24,13 +24,13 @@ const translations = defineMessages({
   totalUsers: {
     id: 'system.admin.users.totalUsers',
     defaultMessage:
-      '<strong>Total Users: {allCount}</strong> ({adminCount} Administrators' +
+      'Total Users: {allCount} ({adminCount} Administrators' +
       ', {instructorCount} Instructors, {normalCount} Normal)',
   },
   activeUsers: {
     id: 'system.admin.users.activeUsers',
     defaultMessage:
-      '<strong>Active Users: {allCount}</strong> ({adminCount} Administrators' +
+      'Active Users: {allCount} ({adminCount} Administrators' +
       ', {instructorCount} Instructors, {normalCount} Normal){br}' +
       '(active in the past 7 days)',
   },

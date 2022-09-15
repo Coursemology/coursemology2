@@ -1,4 +1,4 @@
-import { FC, ReactElement, memo } from 'react';
+import { FC, ReactElement, memo, useMemo } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Box, MenuItem, TextField, Typography } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
@@ -25,7 +25,7 @@ interface Props extends WrappedComponentProps {
 const translations = defineMessages({
   noEnrolRequests: {
     id: 'system.admin.instance.enrolRequests.components.tables.EnrolRequestsTable.noEnrolRequests',
-    defaultMessage: 'There are no {enrolRequestsType}',
+    defaultMessage: 'There is no {enrolRequestsType}',
   },
   approved: {
     id: 'system.admin.instance.enrolRequests.components.tables.EnrolRequestsTable.requestType.approved',
@@ -51,7 +51,19 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
     renderRowActionComponent = null,
     intl,
   } = props;
-  let columns: TableColumns[] = [];
+
+  const requestTypePrefix: string = useMemo((): string => {
+    if (approvedRoleRequests) {
+      return intl.formatMessage(translations.approved);
+    }
+    if (rejectedRoleRequests) {
+      return intl.formatMessage(translations.rejected);
+    }
+    if (pendingRoleRequests) {
+      return intl.formatMessage(translations.pending);
+    }
+    return '';
+  }, [approvedRoleRequests, rejectedRoleRequests, pendingRoleRequests]);
 
   if (roleRequests && roleRequests.length === 0) {
     return (
@@ -62,19 +74,6 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
       />
     );
   }
-
-  const requestTypePrefix: string = ((): string => {
-    /* eslint-disable no-else-return */
-    if (approvedRoleRequests) {
-      return intl.formatMessage(translations.approved);
-    } else if (rejectedRoleRequests) {
-      return intl.formatMessage(translations.rejected);
-    } else if (pendingRoleRequests) {
-      return intl.formatMessage(translations.pending);
-    }
-    return '';
-    /* eslint-enable no-else-return */
-  })();
 
   const options: TableOptions = {
     download: false,
@@ -102,7 +101,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
     viewColumns: false,
   };
 
-  const basicColumns: TableColumns[] = [
+  const columns: TableColumns[] = [
     {
       name: 'id',
       label: intl.formatMessage(tableTranslations.id),
@@ -132,14 +131,6 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.email),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const roleRequest = roleRequests[dataIndex];
-          return (
-            <Typography key={`email-${roleRequest.id}`} variant="body2">
-              {roleRequest.email}
-            </Typography>
-          );
-        },
       },
     },
     {
@@ -147,14 +138,6 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.organization),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const roleRequest = roleRequests[dataIndex];
-          return (
-            <Typography key={`organization-${roleRequest.id}`} variant="body2">
-              {roleRequest.organization}
-            </Typography>
-          );
-        },
       },
     },
     {
@@ -162,14 +145,6 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.designation),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const roleRequest = roleRequests[dataIndex];
-          return (
-            <Typography key={`designation-${roleRequest.id}`} variant="body2">
-              {roleRequest.designation}
-            </Typography>
-          );
-        },
       },
     },
     {
@@ -189,164 +164,145 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
     },
   ];
 
-  const pendingRoleRequestsColumns: TableColumns[] = [
-    ...basicColumns,
-    {
-      name: 'role',
-      label: intl.formatMessage(tableTranslations.role),
-      options: {
-        alignCenter: false,
-        customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const roleRequest = roleRequests[tableMeta.rowIndex];
-          return (
-            <TextField
-              id={`role-${roleRequest.id}`}
-              select
-              value={value || 'normal'}
-              onChange={(e): React.ChangeEvent => updateValue(e.target.value)}
-              variant="standard"
-            >
-              {Object.keys(ROLE_REQUEST_ROLES).map((option) => (
-                <MenuItem
-                  key={`role-${roleRequest.id}-${option}`}
-                  value={option}
-                >
-                  {ROLE_REQUEST_ROLES[option]}
-                </MenuItem>
-              ))}
-            </TextField>
-          );
+  if (approvedRoleRequests) {
+    columns.push(
+      ...[
+        {
+          name: 'role',
+          label: intl.formatMessage(tableTranslations.role),
+          options: {
+            alignCenter: false,
+          },
         },
-      },
-    },
-    ...(renderRowActionComponent
-      ? [
-          {
-            name: 'actions',
-            label: intl.formatMessage(tableTranslations.actions),
-            options: {
-              empty: true,
-              sort: false,
-              alignCenter: true,
-              customBodyRender: (_value, tableMeta): JSX.Element => {
-                const rowData = tableMeta.rowData as RoleRequestRowData;
-                const enrolRequest = rebuildObjectFromRow(columns, rowData);
-                const actionComponent = renderRowActionComponent(enrolRequest);
-                return actionComponent;
-              },
+        {
+          name: 'createdAt',
+          label: intl.formatMessage(tableTranslations.requestedAt),
+          options: {
+            alignCenter: false,
+          },
+        },
+        {
+          name: 'confirmedBy',
+          label: intl.formatMessage(tableTranslations.approver),
+          options: {
+            alignCenter: false,
+          },
+        },
+        {
+          name: 'confirmedAt',
+          label: intl.formatMessage(tableTranslations.approvedAt),
+          options: {
+            alignCenter: false,
+            customBodyRenderLite: (dataIndex: number): JSX.Element => {
+              const roleRequest = roleRequests[dataIndex];
+              return (
+                <Typography
+                  key={`approvedAt-${roleRequest.id}`}
+                  variant="body2"
+                >
+                  {roleRequest.confirmedAt}
+                </Typography>
+              );
             },
           },
-        ]
-      : []),
-  ];
-
-  const approvedRoleRequestsColumns: TableColumns[] = [
-    ...basicColumns,
-    {
-      name: 'role',
-      label: intl.formatMessage(tableTranslations.role),
-      options: {
-        alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const roleRequest = roleRequests[dataIndex];
-          return (
-            <Typography key={`role-${roleRequest.id}`} variant="body2">
-              {roleRequest.role ? ROLE_REQUEST_ROLES[roleRequest.role] : '-'}
-            </Typography>
-          );
         },
-      },
-    },
-    {
-      name: 'approver',
-      label: intl.formatMessage(tableTranslations.approver),
-      options: {
-        alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const roleRequest = roleRequests[dataIndex];
-          return (
-            <Typography key={`rejector-${roleRequest.id}`} variant="body2">
-              {roleRequest.confirmedBy}
-            </Typography>
-          );
+      ],
+    );
+  } else if (pendingRoleRequests) {
+    columns.push(
+      ...[
+        {
+          name: 'role',
+          label: intl.formatMessage(tableTranslations.role),
+          options: {
+            alignCenter: false,
+            customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
+              const roleRequest = roleRequests[tableMeta.rowIndex];
+              return (
+                <TextField
+                  id={`role-${roleRequest.id}`}
+                  select
+                  value={value || 'normal'}
+                  onChange={(e): React.ChangeEvent =>
+                    updateValue(e.target.value)
+                  }
+                  variant="standard"
+                >
+                  {Object.keys(ROLE_REQUEST_ROLES).map((option) => (
+                    <MenuItem
+                      key={`role-${roleRequest.id}-${option}`}
+                      value={option}
+                    >
+                      {ROLE_REQUEST_ROLES[option]}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              );
+            },
+          },
         },
-      },
-    },
-    {
-      name: 'approvedAt',
-      label: intl.formatMessage(tableTranslations.approvedAt),
-      options: {
-        alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const roleRequest = roleRequests[dataIndex];
-          return (
-            <Typography key={`approvedAt-${roleRequest.id}`} variant="body2">
-              {roleRequest.confirmedAt}
-            </Typography>
-          );
+        {
+          name: 'createdAt',
+          label: intl.formatMessage(tableTranslations.requestedAt),
+          options: {
+            alignCenter: false,
+          },
         },
-      },
-    },
-  ];
-
-  const rejectedRoleRequestsColumns: TableColumns[] = [
-    ...basicColumns,
-    {
-      name: 'rejector',
-      label: intl.formatMessage(tableTranslations.rejector),
-      options: {
-        alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const roleRequest = roleRequests[dataIndex];
-          return (
-            <Typography key={`rejector-${roleRequest.id}`} variant="body2">
-              {roleRequest.confirmedBy}
-            </Typography>
-          );
-        },
-      },
-    },
-    {
-      name: 'rejectedAt',
-      label: intl.formatMessage(tableTranslations.rejectedAt),
-      options: {
-        alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const roleRequest = roleRequests[dataIndex];
-          return (
-            <Typography key={`rejectedAt-${roleRequest.id}`} variant="body2">
-              {roleRequest.confirmedAt}
-            </Typography>
-          );
-        },
-      },
-    },
-    {
-      name: 'rejectionMessage',
-      label: intl.formatMessage(tableTranslations.rejectionMessage),
-      options: {
-        alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
-          const roleRequest = roleRequests[dataIndex];
-          return (
-            <Typography
-              key={`rejectionMessage-${roleRequest.id}`}
-              variant="body2"
-            >
-              {roleRequest.rejectionMessage}
-            </Typography>
-          );
-        },
-      },
-    },
-  ];
-
-  if (pendingRoleRequests) {
-    columns = pendingRoleRequestsColumns;
-  } else if (approvedRoleRequests) {
-    columns = approvedRoleRequestsColumns;
+        ...(renderRowActionComponent
+          ? [
+              {
+                name: 'actions',
+                label: intl.formatMessage(tableTranslations.actions),
+                options: {
+                  empty: true,
+                  sort: false,
+                  alignCenter: true,
+                  customBodyRender: (_value, tableMeta): JSX.Element => {
+                    const rowData = tableMeta.rowData as RoleRequestRowData;
+                    const enrolRequest = rebuildObjectFromRow(columns, rowData);
+                    const actionComponent =
+                      renderRowActionComponent(enrolRequest);
+                    return actionComponent;
+                  },
+                },
+              },
+            ]
+          : []),
+      ],
+    );
   } else if (rejectedRoleRequests) {
-    columns = rejectedRoleRequestsColumns;
+    columns.push(
+      ...[
+        {
+          name: 'createdAt',
+          label: intl.formatMessage(tableTranslations.requestedAt),
+          options: {
+            alignCenter: false,
+          },
+        },
+        {
+          name: 'confirmedBy',
+          label: intl.formatMessage(tableTranslations.rejector),
+          options: {
+            alignCenter: false,
+          },
+        },
+        {
+          name: 'confirmedAt',
+          label: intl.formatMessage(tableTranslations.rejectedAt),
+          options: {
+            alignCenter: false,
+          },
+        },
+        {
+          name: 'rejectionMessage',
+          label: intl.formatMessage(tableTranslations.rejectionMessage),
+          options: {
+            alignCenter: false,
+          },
+        },
+      ],
+    );
   }
 
   return (
