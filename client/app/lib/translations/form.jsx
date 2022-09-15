@@ -77,6 +77,14 @@ const translations = defineMessages({
     id: 'lib.form.validation.startEndDateValidationError',
     defaultMessage: 'Must be after Start Date',
   },
+  submissionError: {
+    id: 'lib.form.submissionError',
+    defaultMessage: 'Failed to submit form. Please try again later.',
+  },
+  characters: {
+    id: 'lib.form.validation.characters',
+    defaultMessage: 'Must be less than 255 characters',
+  },
 });
 
 export default translations;

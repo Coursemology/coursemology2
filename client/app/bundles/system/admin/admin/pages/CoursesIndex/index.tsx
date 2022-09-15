@@ -1,10 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import PageHeader from 'lib/components/pages/PageHeader';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { useSelector, useDispatch } from 'react-redux';
@@ -93,20 +88,14 @@ const CoursesIndex: FC<Props> = (props) => {
   const renderSummaryContent: JSX.Element = (
     <>
       <Typography variant="body2">
-        <FormattedMessage
-          {...translations.totalCourses}
-          values={{
-            count: totalCount,
-          }}
-        />
+        {intl.formatMessage(translations.totalCourses, {
+          count: totalCount,
+        })}
       </Typography>
       <Typography variant="body2">
-        <FormattedMessage
-          {...translations.activeCourses}
-          values={{
-            count: activeCount,
-          }}
-        />
+        {intl.formatMessage(translations.activeCourses, {
+          count: activeCount,
+        })}
       </Typography>
     </>
   );

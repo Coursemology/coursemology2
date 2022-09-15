@@ -66,24 +66,19 @@ const InstanceUsersInvitations: FC<Props> = (props) => {
   const renderBody: JSX.Element = (
     <>
       <InstanceUsersTabs currentTab="invitations-tab" />
-      {pendingInvitations.length > 0 && (
-        <UserInvitationsTable
-          title={intl.formatMessage(translations.pending)}
-          invitations={pendingInvitations}
-          pendingInvitations
-          renderRowActionComponent={(invitation): JSX.Element => (
-            <PendingInvitationsButtons invitation={invitation} />
-          )}
-        />
-      )}
-
-      {acceptedInvitations.length > 0 && (
-        <UserInvitationsTable
-          title={intl.formatMessage(translations.accepted)}
-          invitations={acceptedInvitations}
-          acceptedInvitations
-        />
-      )}
+      <UserInvitationsTable
+        title={intl.formatMessage(translations.pending)}
+        invitations={pendingInvitations}
+        pendingInvitations
+        renderRowActionComponent={(invitation): JSX.Element => (
+          <PendingInvitationsButtons invitation={invitation} />
+        )}
+      />
+      <UserInvitationsTable
+        title={intl.formatMessage(translations.accepted)}
+        invitations={acceptedInvitations}
+        acceptedInvitations
+      />
     </>
   );
 

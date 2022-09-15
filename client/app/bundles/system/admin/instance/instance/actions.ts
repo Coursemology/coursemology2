@@ -20,10 +20,9 @@ import {
   DeleteCourseAction,
   SaveCourseListAction,
   SaveRoleRequestListAction,
-  UpdateRoleRequestAction,
-  SaveUserInvitationListAction,
-  UpdateInvitationAction,
-  UpdateInvitationListAction,
+  SaveRoleRequestAction,
+  SaveInvitationAction,
+  SaveInvitationListAction,
   DeleteInvitationAction,
   SAVE_ANNOUNCEMENT_LIST,
   DELETE_ANNOUNCEMENT,
@@ -34,10 +33,9 @@ import {
   DELETE_COURSE,
   SAVE_COURSE_LIST,
   SAVE_ROLE_REQUEST_LIST,
-  UPDATE_ROLE_REQUEST,
-  SAVE_USER_INVITATION_LIST,
-  UPDATE_INVITATION,
-  UPDATE_INVITATION_LIST,
+  SAVE_ROLE_REQUEST,
+  SAVE_INVITATION,
+  SAVE_INVITATION_LIST,
   DELETE_INVITATION,
 } from './types';
 
@@ -119,38 +117,29 @@ export function saveRoleRequestList(
   };
 }
 
-export function updateRoleRequest(
+export function saveRoleRequest(
   roleRequest: RoleRequestListData,
-): UpdateRoleRequestAction {
+): SaveRoleRequestAction {
   return {
-    type: UPDATE_ROLE_REQUEST,
+    type: SAVE_ROLE_REQUEST,
     roleRequest,
   };
 }
 
-export function saveUserInvitationList(
-  invitations: InvitationListData[],
-): SaveUserInvitationListAction {
-  return {
-    type: SAVE_USER_INVITATION_LIST,
-    invitations,
-  };
-}
-
-export function updateInvitation(
+export function saveInvitation(
   invitation: InvitationListData,
-): UpdateInvitationAction {
+): SaveInvitationAction {
   return {
-    type: UPDATE_INVITATION,
+    type: SAVE_INVITATION,
     invitation,
   };
 }
 
-export function updateInvitationList(
+export function saveInvitationList(
   invitationList: InvitationListData[],
-): UpdateInvitationListAction {
+): SaveInvitationListAction {
   return {
-    type: UPDATE_INVITATION_LIST,
+    type: SAVE_INVITATION_LIST,
     invitationList,
   };
 }

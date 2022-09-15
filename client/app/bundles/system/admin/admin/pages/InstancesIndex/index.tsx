@@ -17,15 +17,15 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.instances.header',
+    id: 'system.admin.instance.header',
     defaultMessage: 'Instances',
   },
   title: {
-    id: 'system.admin.instances.title',
+    id: 'system.admin.instance.title',
     defaultMessage: 'Instances ({count})',
   },
   fetchInstancesFailure: {
-    id: 'system.admin.admin.fetchInstances.failure',
+    id: 'system.admin.instance.fetchInstances.failure',
     defaultMessage: 'Failed to get instances',
   },
   newInstance: {

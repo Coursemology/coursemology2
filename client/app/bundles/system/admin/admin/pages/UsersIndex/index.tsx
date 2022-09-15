@@ -1,10 +1,5 @@
-import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import PageHeader from 'lib/components/pages/PageHeader';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { useSelector, useDispatch } from 'react-redux';
@@ -36,13 +31,13 @@ const translations = defineMessages({
   totalUsers: {
     id: 'system.admin.users.totalUsers',
     defaultMessage:
-      '<strong>Total Users: {allCount}</strong> ({adminCount} Administrators' +
+      'Total Users: {allCount} ({adminCount} Administrators' +
       ', {normalCount} Normal)',
   },
   activeUsers: {
     id: 'system.admin.users.activeUsers',
     defaultMessage:
-      '<strong>Active Users: {allCount}</strong> ({adminCount} Administrators' +
+      'Active Users: {allCount} ({adminCount} Administrators' +
       ', {normalCount} Normal){br}' +
       '(active in the past 7 days)',
   },
@@ -150,27 +145,19 @@ const UsersIndex: FC<Props> = (props) => {
   const renderSummaryContent: JSX.Element = (
     <>
       <Typography variant="body2">
-        <FormattedMessage
-          {...translations.totalUsers}
-          values={{
-            strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
-            allCount: totalUser,
-            adminCount: totalAdmin,
-            normalCount: totalNormal,
-          }}
-        />
+        {intl.formatMessage(translations.totalUsers, {
+          allCount: totalUser,
+          adminCount: totalAdmin,
+          normalCount: totalNormal,
+        })}
       </Typography>
       <Typography variant="body2">
-        <FormattedMessage
-          {...translations.activeUsers}
-          values={{
-            strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
-            allCount: totalActiveUser,
-            adminCount: totalActiveAdmin,
-            normalCount: totalActiveNormal,
-            br: <br />,
-          }}
-        />
+        {intl.formatMessage(translations.activeUsers, {
+          allCount: totalActiveUser,
+          adminCount: totalActiveAdmin,
+          normalCount: totalActiveNormal,
+          br: <br />,
+        })}
       </Typography>
     </>
   );

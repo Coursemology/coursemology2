@@ -29,15 +29,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   removeInvitation: {
-    id: 'course.userInvitations.IndividualInvitations.remove',
+    id: 'system.admin.instance.userInvitations.IndividualInvitations.remove',
     defaultMessage: 'Remove Invitation',
   },
   namePlaceholder: {
-    id: 'course.userInvitations.IndividualInvitations.name.placeholder',
+    id: 'system.admin.instance.userInvitations.IndividualInvitations.name.placeholder',
     defaultMessage: 'Name',
   },
   emailPlaceholder: {
-    id: 'course.userInvitations.IndividualInvitations.email.placeholder',
+    id: 'system.admin.instance.userInvitations.IndividualInvitations.email.placeholder',
     defaultMessage: 'user@example.com',
   },
 });

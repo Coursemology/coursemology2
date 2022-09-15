@@ -48,7 +48,7 @@ const translations = defineMessages({
   },
   rejectFailure: {
     id: 'roleRequests.reject.fail',
-    defaultMessage: 'Failed to reject role request. {error}',
+    defaultMessage: 'Failed to reject role request - {error}',
   },
 });
 

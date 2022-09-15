@@ -34,9 +34,8 @@ const ResendInvitationsButton: FC<Props> = (props) => {
       .then(() => {
         toast.success(intl.formatMessage(translations.resendSuccess));
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(intl.formatMessage(translations.resendFailure));
-        throw error;
       })
       .finally(() => setIsLoading(false));
   };

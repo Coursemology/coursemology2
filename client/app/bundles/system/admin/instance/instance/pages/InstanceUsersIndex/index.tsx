@@ -1,10 +1,5 @@
-import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
+import { FC, useEffect, useMemo, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import PageHeader from 'lib/components/pages/PageHeader';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { useSelector, useDispatch } from 'react-redux';
@@ -37,13 +32,13 @@ const translations = defineMessages({
   totalUsers: {
     id: 'system.admin.users.totalUsers',
     defaultMessage:
-      '<strong>Total Users: {allCount}</strong> ({adminCount} Administrators' +
+      'Total Users: {allCount}({adminCount} Administrators' +
       ', {instructorCount} Instructors, {normalCount} Normal)',
   },
   activeUsers: {
     id: 'system.admin.users.activeUsers',
     defaultMessage:
-      '<strong>Active Users: {allCount}</strong> ({adminCount} Administrators' +
+      'Active Users: {allCount} ({adminCount} Administrators' +
       ', {instructorCount} Instructors, {normalCount} Normal){br}' +
       '(active in the past 7 days)',
   },
@@ -172,29 +167,21 @@ const UsersIndex: FC<Props> = (props) => {
   const renderSummaryContent: JSX.Element = (
     <>
       <Typography variant="body2">
-        <FormattedMessage
-          {...translations.totalUsers}
-          values={{
-            strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
-            allCount: totalUser,
-            adminCount: totalAdmin,
-            instructorCount: totalInstructor,
-            normalCount: totalNormal,
-          }}
-        />
+        {intl.formatMessage(translations.totalUsers, {
+          allCount: totalUser,
+          adminCount: totalAdmin,
+          instructorCount: totalInstructor,
+          normalCount: totalNormal,
+        })}
       </Typography>
       <Typography variant="body2">
-        <FormattedMessage
-          {...translations.activeUsers}
-          values={{
-            strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
-            allCount: totalActiveUser,
-            adminCount: totalActiveAdmin,
-            instructorCount: totalActiveInstructor,
-            normalCount: totalActiveNormal,
-            br: <br />,
-          }}
-        />
+        {intl.formatMessage(translations.totalUsers, {
+          allCount: totalActiveUser,
+          adminCount: totalActiveAdmin,
+          instructorCount: totalActiveInstructor,
+          normalCount: totalActiveNormal,
+          br: <br />,
+        })}
       </Typography>
     </>
   );
@@ -202,7 +189,7 @@ const UsersIndex: FC<Props> = (props) => {
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.header)} />
-      <InstanceUsersTabs currentTab="users-tab" />
+      <InstanceUsersTabs currentTab="instance-users-tab" />
       <SummaryCard renderContent={renderSummaryContent} />
 
       {isLoading ? (

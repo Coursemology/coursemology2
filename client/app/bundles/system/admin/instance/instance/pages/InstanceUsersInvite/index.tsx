@@ -47,22 +47,17 @@ const InstanceUsersInvite: FC<Props> = (props) => {
     setShowInvitationResultDialog(true);
   };
 
-  const renderBody: JSX.Element = (
-    <>
-      <InstanceUsersTabs currentTab="invite-users-tab" />
-      <IndividualInviteForm openResultDialog={openResultDialog} />
-    </>
-  );
-
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.header)} />
-      {renderBody}
-      <InvitationResultDialog
-        open={showInvitationResultDialog}
-        handleClose={(): void => setShowInvitationResultDialog(false)}
-        invitationResult={invitationResult}
-      />
+      <InstanceUsersTabs currentTab="invite-users-tab" />
+      <IndividualInviteForm openResultDialog={openResultDialog} />
+      {showInvitationResultDialog && (
+        <InvitationResultDialog
+          handleClose={(): void => setShowInvitationResultDialog(false)}
+          invitationResult={invitationResult}
+        />
+      )}
     </>
   );
 };

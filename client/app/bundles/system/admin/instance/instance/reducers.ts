@@ -17,12 +17,11 @@ import {
   SAVE_ANNOUNCEMENT_LIST,
   SAVE_COURSE_LIST,
   SAVE_ROLE_REQUEST_LIST,
+  SAVE_ROLE_REQUEST,
   SAVE_USER,
   SAVE_USER_LIST,
-  SAVE_USER_INVITATION_LIST,
-  UPDATE_INVITATION,
-  UPDATE_INVITATION_LIST,
-  UPDATE_ROLE_REQUEST,
+  SAVE_INVITATION,
+  SAVE_INVITATION_LIST,
 } from './types';
 
 const initialState: InstanceAdminState = {
@@ -104,13 +103,7 @@ const reducer = produce(
         }
         break;
       }
-      case UPDATE_INVITATION: {
-        const newInvitation = action.invitation;
-        const invitationEntity = { ...newInvitation };
-        saveEntityToStore(draft.invitations, invitationEntity);
-        break;
-      }
-      case UPDATE_INVITATION_LIST: {
+      case SAVE_INVITATION_LIST: {
         const invitationList = action.invitationList;
         const entityList = invitationList.map((data) => ({
           ...data,
@@ -118,19 +111,17 @@ const reducer = produce(
         saveListToStore(draft.invitations, entityList);
         break;
       }
+      case SAVE_INVITATION: {
+        const newInvitation = action.invitation;
+        const invitationEntity = { ...newInvitation };
+        saveEntityToStore(draft.invitations, invitationEntity);
+        break;
+      }
       case DELETE_INVITATION: {
         const invitationId = action.invitationId;
         if (draft.invitations.byId[invitationId]) {
           removeFromStore(draft.invitations, invitationId);
         }
-        break;
-      }
-      case SAVE_USER_INVITATION_LIST: {
-        const invitationsList = action.invitations;
-        const entityList = invitationsList.map((data) => ({
-          ...data,
-        }));
-        saveListToStore(draft.invitations, entityList);
         break;
       }
       case SAVE_COURSE_LIST: {
@@ -161,7 +152,7 @@ const reducer = produce(
         saveListToStore(draft.roleRequests, entityList);
         break;
       }
-      case UPDATE_ROLE_REQUEST: {
+      case SAVE_ROLE_REQUEST: {
         const roleRequest = action.roleRequest;
         const roleRequestMiniEntity = { ...roleRequest };
         saveEntityToStore(draft.roleRequests, roleRequestMiniEntity);

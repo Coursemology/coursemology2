@@ -35,11 +35,9 @@ export const DELETE_USER = 'system/instance/DELETE_USER';
 export const SAVE_COURSE_LIST = 'system/instance/SAVE_COURSE_LIST';
 export const DELETE_COURSE = 'system/instance/DELETE_COURSE';
 export const SAVE_ROLE_REQUEST_LIST = 'system/instance/SAVE_ROLE_REQUEST_LIST';
-export const UPDATE_ROLE_REQUEST = 'system/instance/UPDATE_ROLE_REQUEST';
-export const SAVE_USER_INVITATION_LIST =
-  'system/instance/SAVE_USER_INVITATION_LIST';
-export const UPDATE_INVITATION = 'system/instance/UPDATE_INVITATION';
-export const UPDATE_INVITATION_LIST = 'system/instance/UPDATE_INVITATION_LIST';
+export const SAVE_ROLE_REQUEST = 'system/instance/SAVE_ROLE_REQUEST';
+export const SAVE_INVITATION = 'system/instance/SAVE_INVITATION';
+export const SAVE_INVITATION_LIST = 'system/instance/SAVE_INVITATION_LIST';
 export const DELETE_INVITATION = 'system/instance/DELETE_INVITATION';
 
 // Action Types
@@ -89,23 +87,18 @@ export interface SaveRoleRequestListAction {
   roleRequests: RoleRequestListData[];
 }
 
-export interface UpdateRoleRequestAction {
-  type: typeof UPDATE_ROLE_REQUEST;
+export interface SaveRoleRequestAction {
+  type: typeof SAVE_ROLE_REQUEST;
   roleRequest: RoleRequestListData;
 }
 
-export interface SaveUserInvitationListAction {
-  type: typeof SAVE_USER_INVITATION_LIST;
-  invitations: InvitationListData[];
-}
-
-export interface UpdateInvitationAction {
-  type: typeof UPDATE_INVITATION;
+export interface SaveInvitationAction {
+  type: typeof SAVE_INVITATION;
   invitation: InvitationListData;
 }
 
-export interface UpdateInvitationListAction {
-  type: typeof UPDATE_INVITATION_LIST;
+export interface SaveInvitationListAction {
+  type: typeof SAVE_INVITATION_LIST;
   invitationList: InvitationListData[];
 }
 
@@ -124,10 +117,9 @@ export type InstanceAdminActionType =
   | SaveCourseListAction
   | DeleteCourseAction
   | SaveRoleRequestListAction
-  | UpdateRoleRequestAction
-  | SaveUserInvitationListAction
-  | UpdateInvitationAction
-  | UpdateInvitationListAction
+  | SaveRoleRequestAction
+  | SaveInvitationAction
+  | SaveInvitationListAction
   | DeleteInvitationAction;
 
 // State Types

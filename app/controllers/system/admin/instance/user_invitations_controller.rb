@@ -9,19 +9,21 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
     @invitations = @instance.invitations.order(name: :asc)
     respond_to do |format|
       format.html { render 'system/admin/instance/admin/index' }
-      format.json { render 'system/admin/instance/user_invitations/index' }
+      format.json
     end
   end
 
   def new
-    @instance.invitations.build
     render 'system/admin/instance/admin/index'
   end
 
   def create
     result = invite
     if result
-      create_invitation_success(result)
+      render json: {
+        newInvitations: result[0].length,
+        invitationResult: parse_invitation_result(*result)
+      }, status: :ok
     else
       head :bad_request
     end
@@ -30,26 +32,28 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
   def destroy
     @invitation = Instance::UserInvitation.find(params[:id])
     if @invitation.destroy
-      destroy_invitation_success
+      head :ok
     else
-      destroy_invitation_failure
+      render json: { errors: @invitation.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   def resend_invitation
     @invitation = invitations.first
     if @invitation && invitation_service.resend_invitation(invitations)
-      resend_invitation_success
+      render partial: 'instance_user_invitation_list_data', locals: { invitation: @invitation.reload },
+             status: :ok
     else
-      resend_invitation_failure
+      head :bad_request
     end
   end
 
   def resend_invitations
     if invitation_service.resend_invitation(invitations)
-      resend_invitations_success
+      render 'index', locals: { invitations: @invitations.reload },
+                      status: :ok
     else
-      resend_invitations_failure
+      head :bad_request
     end
   end
 
@@ -102,57 +106,5 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
                                                                   new_instance_users: new_instance_users,
                                                                   existing_instance_users: existing_instance_users,
                                                                   duplicate_users: duplicate_users })
-  end
-
-  def create_invitation_success(result)
-    respond_to do |format|
-      format.json do
-        render json: {
-          newInvitations: result[0].length,
-          invitationResult: parse_invitation_result(*result)
-        }, status: :ok
-      end
-    end
-  end
-
-  def resend_invitation_success
-    respond_to do |format|
-      format.json do
-        render partial: 'instance_user_invitation_list_data', locals: { invitation: @invitation.reload }, status: :ok
-      end
-    end
-  end
-
-  def resend_invitation_failure
-    respond_to do |format|
-      format.json { head :bad_request }
-    end
-  end
-
-  def resend_invitations_success
-    respond_to do |format|
-      format.json do
-        render partial: 'system/admin/instance/user_invitations/index', locals: { invitations: @invitations.reload },
-               status: :ok
-      end
-    end
-  end
-
-  def resend_invitations_failure
-    respond_to do |format|
-      format.json { head :bad_request }
-    end
-  end
-
-  def destroy_invitation_success
-    respond_to do |format|
-      format.json { render json: { id: @invitation.id }, status: :ok }
-    end
-  end
-
-  def destroy_invitation_failure
-    respond_to do |format|
-      format.json { render json: { errors: @invitation.errors.full_messages.to_sentence }, status: :bad_request }
-    end
   end
 end

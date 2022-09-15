@@ -129,6 +129,19 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
   }
 
   /**
+   * Deletes an invitation.
+   *
+   * @param {number} invitationId Invitation to delete
+   * @return {Promise}
+   * error response: { errors: [] } - An array of errors will be returned upon validation error.
+   */
+  deleteInvitation(invitationId: number): Promise<AxiosResponse> {
+    return this.getClient().delete(
+      `${InstanceAdminAPI._getUrlPrefix()}/user_invitations/${invitationId}`,
+    );
+  }
+
+  /**
    * Invites users
    *
    * @param {FormData} data Cleaned form data from react-hook-form
@@ -150,20 +163,6 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
   }
 
   /**
-   * Resends all invitation emails.
-   *
-   * @return {Promise} updated invitations
-   * error response: { errors: [] } - An array of errors will be returned upon validation error.
-   */
-  resendAllInvitations(): Promise<
-    AxiosResponse<{ invitations: InvitationListData[] }>
-  > {
-    return this.getClient().post(
-      `${InstanceAdminAPI._getUrlPrefix()}/users/resend_invitations`,
-    );
-  }
-
-  /**
    * Resends an invitation email.
    *
    * @param {number} invitationId Invitation to resend email to
@@ -179,15 +178,16 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
   }
 
   /**
-   * Deletes an invitation.
+   * Resends all invitation emails.
    *
-   * @param {number} invitationId Invitation to delete
-   * @return {Promise}
+   * @return {Promise} updated invitations
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
-  deleteInvitation(invitationId: number): Promise<AxiosResponse> {
-    return this.getClient().delete(
-      `${InstanceAdminAPI._getUrlPrefix()}/user_invitations/${invitationId}`,
+  resendAllInvitations(): Promise<
+    AxiosResponse<{ invitations: InvitationListData[] }>
+  > {
+    return this.getClient().post(
+      `${InstanceAdminAPI._getUrlPrefix()}/users/resend_invitations`,
     );
   }
 

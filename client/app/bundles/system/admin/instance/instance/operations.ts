@@ -61,7 +61,9 @@ const formatUserAttributes = (data: InstanceUserMiniEntity): FormData => {
  *     { name, role }
  *   }
  */
-const formatInvitations = (invitations: InvitationPostData[]): FormData => {
+const formatInvitationAttributes = (
+  invitations: InvitationPostData[],
+): FormData => {
   const payload = new FormData();
 
   invitations.forEach((invite, index) => {
@@ -80,32 +82,13 @@ const formatInvitations = (invitations: InvitationPostData[]): FormData => {
 };
 
 /**
- * Prepares and maps role request attributes to a FormData object for an post/patch request.
- * Expected FormData attributes shape:
- *   { user_role_request :
- *     { role, organization, designation, reason }
- *   }
- */
-const formatRoleRequestAttributes = (data: RoleRequestMiniEntity): FormData => {
-  const payload = new FormData();
-
-  ['role', 'organization', 'designation', 'reason'].forEach((field) => {
-    if (data[field] !== undefined && data[field] !== null) {
-      payload.append(`user_role_request[${field}]`, data[field]);
-    }
-  });
-
-  return payload;
-};
-
-/**
  * Converts component data into server side format.
  * Expected FormData attributes shape:
  * { settings_components :
  *   enabled_component_ids[]
  * }
  */
-const formatComponentData = (
+const formatComponentAttributes = (
   components: ComponentData[],
   updatedComponentKey: string,
 ): FormData => {
@@ -128,6 +111,25 @@ const formatComponentData = (
   return payload;
 };
 
+/**
+ * Prepares and maps role request attributes to a FormData object for an post/patch request.
+ * Expected FormData attributes shape:
+ *   { user_role_request :
+ *     { role, organization, designation, reason }
+ *   }
+ */
+const formatRoleRequestAttributes = (data: RoleRequestMiniEntity): FormData => {
+  const payload = new FormData();
+
+  ['role', 'organization', 'designation', 'reason'].forEach((field) => {
+    if (data[field] !== undefined && data[field] !== null) {
+      payload.append(`user_role_request[${field}]`, data[field]);
+    }
+  });
+
+  return payload;
+};
+
 export const fetchInstance = async (): Promise<InstanceBasicListData> => {
   const response = await SystemAPI.instance.fetchInstance();
   return response.data.instance;
@@ -135,17 +137,12 @@ export const fetchInstance = async (): Promise<InstanceBasicListData> => {
 
 export function indexAnnouncements(): Operation<void> {
   return async (dispatch) =>
-    SystemAPI.instance
-      .indexAnnouncements()
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveAnnouncementList(data.announcements, data.permissions),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    SystemAPI.instance.indexAnnouncements().then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveAnnouncementList(data.announcements, data.permissions),
+      );
+    });
 }
 
 export function createAnnouncement(
@@ -153,14 +150,9 @@ export function createAnnouncement(
 ): Operation<void> {
   const attributes = formatAnnouncementAttributes(formData);
   return async (dispatch) =>
-    SystemAPI.instance
-      .createAnnouncement(attributes)
-      .then((response) => {
-        dispatch(actions.saveAnnouncement(response.data));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    SystemAPI.instance.createAnnouncement(attributes).then((response) => {
+      dispatch(actions.saveAnnouncement(response.data));
+    });
 }
 
 export function updateAnnouncement(
@@ -173,35 +165,22 @@ export function updateAnnouncement(
       .updateAnnouncement(announcementId, attributes)
       .then((response) => {
         dispatch(actions.saveAnnouncement(response.data));
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 
 export function deleteAnnouncement(announcementId: number): Operation<void> {
   return async (dispatch) =>
-    SystemAPI.instance
-      .deleteAnnouncement(announcementId)
-      .then(() => {
-        dispatch(actions.deleteAnnouncement(announcementId));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    SystemAPI.instance.deleteAnnouncement(announcementId).then(() => {
+      dispatch(actions.deleteAnnouncement(announcementId));
+    });
 }
 
 export function indexUsers(params?): Operation<void> {
   return async (dispatch) =>
-    SystemAPI.instance
-      .indexUsers(params)
-      .then((response) => {
-        const data = response.data;
-        dispatch(actions.saveUserList(data.users, data.counts));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    SystemAPI.instance.indexUsers(params).then((response) => {
+      const data = response.data;
+      dispatch(actions.saveUserList(data.users, data.counts));
+    });
 }
 
 export function updateUser(
@@ -210,56 +189,36 @@ export function updateUser(
 ): Operation<void> {
   const attributes = formatUserAttributes(userEntity);
   return async (dispatch) =>
-    SystemAPI.instance
-      .updateUser(userId, attributes)
-      .then((response) => {
-        dispatch(actions.saveUser(response.data));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    SystemAPI.instance.updateUser(userId, attributes).then((response) => {
+      dispatch(actions.saveUser(response.data));
+    });
 }
 
 export function deleteUser(userId: number): Operation<void> {
   return async (dispatch) =>
-    SystemAPI.instance
-      .deleteUser(userId)
-      .then(() => {
-        dispatch(actions.deleteUser(userId));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    SystemAPI.instance.deleteUser(userId).then(() => {
+      dispatch(actions.deleteUser(userId));
+    });
 }
 
 export function indexCourses(params?): Operation<void> {
   return async (dispatch) =>
-    SystemAPI.instance
-      .indexCourses(params)
-      .then((response) => {
-        const data = response.data;
-        const counts = {
-          totalCourses: data.totalCourses,
-          activeCourses: data.activeCourses,
-          coursesCount: data.coursesCount,
-        };
-        dispatch(actions.saveCourseList(data.courses, counts));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    SystemAPI.instance.indexCourses(params).then((response) => {
+      const data = response.data;
+      const counts = {
+        totalCourses: data.totalCourses,
+        activeCourses: data.activeCourses,
+        coursesCount: data.coursesCount,
+      };
+      dispatch(actions.saveCourseList(data.courses, counts));
+    });
 }
 
 export function deleteCourse(courseId: number): Operation<void> {
   return async (dispatch) =>
-    SystemAPI.instance
-      .deleteCourse(courseId)
-      .then(() => {
-        dispatch(actions.deleteCourse(courseId));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    SystemAPI.instance.deleteCourse(courseId).then(() => {
+      dispatch(actions.deleteCourse(courseId));
+    });
 }
 
 export const indexComponents = async (): Promise<ComponentData[]> => {
@@ -271,22 +230,60 @@ export const updateComponents = async (
   components: ComponentData[],
   updatedComponentKey: string,
 ): Promise<ComponentData[]> => {
-  const formattedData = formatComponentData(components, updatedComponentKey);
+  const formattedData = formatComponentAttributes(
+    components,
+    updatedComponentKey,
+  );
   const response = await SystemAPI.instance.updateComponents(formattedData);
   return response.data.components;
 };
 
+export function fetchInvitations(): Operation<void> {
+  return async (dispatch) =>
+    SystemAPI.instance.indexInvitations().then((response) => {
+      const data = response.data;
+      dispatch(actions.saveInvitationList(data.invitations));
+    });
+}
+
+export function deleteInvitation(invitationId: number): Operation<void> {
+  return async (dispatch) =>
+    SystemAPI.instance.deleteInvitation(invitationId).then(() => {
+      dispatch(actions.deleteInvitation(invitationId));
+    });
+}
+
+export function inviteUsers(
+  postData: InvitationsPostData,
+): Operation<InvitationResult> {
+  const formattedData = formatInvitationAttributes(postData.invitations);
+  return async () =>
+    SystemAPI.instance.inviteUsers(formattedData).then((response) => {
+      const data = response.data;
+      return JSON.parse(data.invitationResult);
+    });
+}
+
+export function resendAllInvitations(): Operation<void> {
+  return async (dispatch) =>
+    SystemAPI.instance.resendAllInvitations().then((response) => {
+      dispatch(actions.saveInvitationList(response.data.invitations));
+    });
+}
+
+export function resendInvitationEmail(invitationId: number): Operation<void> {
+  return async (dispatch) =>
+    SystemAPI.instance.resendInvitationEmail(invitationId).then((response) => {
+      dispatch(actions.saveInvitation(response.data));
+    });
+}
+
 export function fetchRoleRequests(): Operation<void> {
   return async (dispatch) =>
-    SystemAPI.instance
-      .indexRoleRequests()
-      .then((response) => {
-        const data = response.data;
-        dispatch(actions.saveRoleRequestList(data.roleRequests));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    SystemAPI.instance.indexRoleRequests().then((response) => {
+      const data = response.data;
+      dispatch(actions.saveRoleRequestList(data.roleRequests));
+    });
 }
 
 export function approveRoleRequest(
@@ -300,11 +297,16 @@ export function approveRoleRequest(
       )
       .then((response) => {
         const roleRequestToUpdate = response.data;
-        dispatch(actions.updateRoleRequest(roleRequestToUpdate));
-      })
-      .catch((error) => {
-        throw error;
+        dispatch(actions.saveRoleRequest(roleRequestToUpdate));
       });
+}
+
+export function rejectRoleRequest(requestId: number): Operation<void> {
+  return async (dispatch) =>
+    SystemAPI.instance.rejectRoleRequest(requestId).then((response) => {
+      const roleRequest = response.data;
+      dispatch(actions.saveRoleRequest(roleRequest));
+    });
 }
 
 export function rejectRoleRequestWithMessage(
@@ -316,77 +318,6 @@ export function rejectRoleRequestWithMessage(
       .rejectRoleRequest(requestId, message)
       .then((response) => {
         const roleRequest = response.data;
-        dispatch(actions.updateRoleRequest(roleRequest));
-      })
-      .catch((error) => {
-        throw error;
+        dispatch(actions.saveRoleRequest(roleRequest));
       });
-}
-
-export function rejectRoleRequest(requestId: number): Operation<void> {
-  return async (dispatch) =>
-    SystemAPI.instance
-      .rejectRoleRequest(requestId)
-      .then((response) => {
-        const roleRequest = response.data;
-        dispatch(actions.updateRoleRequest(roleRequest));
-      })
-      .catch((error) => {
-        throw error;
-      });
-}
-
-export function inviteUsersFromForm(
-  postData: InvitationsPostData,
-): Operation<InvitationResult> {
-  const formattedData = formatInvitations(postData.invitations);
-  return async () =>
-    SystemAPI.instance.inviteUsers(formattedData).then((response) => {
-      const data = response.data;
-      return JSON.parse(data.invitationResult);
-    });
-}
-
-export function fetchInvitations(): Operation<void> {
-  return async (dispatch) =>
-    SystemAPI.instance
-      .indexInvitations()
-      .then((response) => {
-        const data = response.data;
-        dispatch(actions.saveUserInvitationList(data.invitations));
-      })
-      .catch((error) => {
-        throw error;
-      });
-}
-
-export function resendAllInvitations(): Operation<void> {
-  return async (dispatch) =>
-    SystemAPI.instance
-      .resendAllInvitations()
-      .then((response) => {
-        dispatch(actions.updateInvitationList(response.data.invitations));
-      })
-      .catch((error) => {
-        throw error;
-      });
-}
-
-export function resendInvitationEmail(invitationId: number): Operation<void> {
-  return async (dispatch) =>
-    SystemAPI.instance
-      .resendInvitationEmail(invitationId)
-      .then((response) => {
-        dispatch(actions.updateInvitation(response.data));
-      })
-      .catch((error) => {
-        throw error;
-      });
-}
-
-export function deleteInvitation(invitationId: number): Operation<void> {
-  return async (dispatch) =>
-    SystemAPI.instance.deleteInvitation(invitationId).then(() => {
-      dispatch(actions.deleteInvitation(invitationId));
-    });
 }

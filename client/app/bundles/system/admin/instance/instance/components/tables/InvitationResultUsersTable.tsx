@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Box, Typography } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
@@ -6,7 +6,6 @@ import { InstanceUserListData } from 'types/system/instance/users';
 import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import tableTranslations from 'lib/translations/table';
-import equal from 'fast-deep-equal';
 
 interface Props extends WrappedComponentProps {
   title: JSX.Element;
@@ -15,10 +14,6 @@ interface Props extends WrappedComponentProps {
 
 const InvitationResultUsersTable: FC<Props> = (props) => {
   const { title, users, intl } = props;
-
-  if (users && users.length === 0) {
-    return <></>;
-  }
 
   const options: TableOptions = {
     download: true,
@@ -103,9 +98,4 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
   );
 };
 
-export default memo(
-  injectIntl(InvitationResultUsersTable),
-  (prevProps, nextProps) => {
-    return equal(prevProps.users, nextProps.users);
-  },
-);
+export default injectIntl(InvitationResultUsersTable);

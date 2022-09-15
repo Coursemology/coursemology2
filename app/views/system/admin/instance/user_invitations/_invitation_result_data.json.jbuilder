@@ -15,18 +15,20 @@ json.existingInvitations existing_invitations.each do |invitation|
   json.sentAt format_datetime(invitation.sent_at, :short) if invitation.sent_at
 end
 
-json.newInstanceUsers new_instance_users.each do |course_user|
-  json.id course_user.id if course_user.id
-  json.name course_user.name.strip
-  json.email course_user.user.email
-  json.role course_user.role
+json.newInstanceUsers new_instance_users.each do |instance_user|
+  user = instance_user.user
+  json.id user.id if user.id
+  json.name user.name.strip
+  json.email user.email
+  json.role user.role
 end
 
-json.existingInstanceUsers existing_instance_users.each do |course_user|
-  json.id course_user.id if course_user.id
-  json.name course_user.name.strip
-  json.email course_user.user.email
-  json.role course_user.role
+json.existingInstanceUsers existing_instance_users.each do |instance_user|
+  user = instance_user.user
+  json.id user.id if user.id
+  json.name user.name.strip
+  json.email user.email
+  json.role user.role
 end
 
 json.duplicateUsers duplicate_users.each do |duplicate_user, index|

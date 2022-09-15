@@ -3,7 +3,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import PageHeader from 'lib/components/pages/PageHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { toast } from 'react-toastify';
 import { RoleRequestRowData } from 'types/system/instance/roleRequests';
@@ -78,21 +78,6 @@ const InstanceUserRoleRequestsIndex: FC<Props> = (props) => {
     return <LoadingIndicator />;
   }
 
-  const renderEmptyState = (): JSX.Element | undefined => {
-    if (
-      pendingRoleRequests.length === 0 &&
-      approvedRoleRequests.length === 0 &&
-      rejectedRoleRequests.length === 0
-    ) {
-      return (
-        <Typography className="mt-2" variant="body1">
-          {intl.formatMessage(translations.noRoleRequests)}
-        </Typography>
-      );
-    }
-    return undefined;
-  };
-
   const rejectWithMessageDialog = currentRoleRequest && (
     <RejectWithMessageDialog
       open={isRejectDialogOpen}
@@ -109,34 +94,27 @@ const InstanceUserRoleRequestsIndex: FC<Props> = (props) => {
   return (
     <Box>
       <PageHeader title={intl.formatMessage(translations.header)} />
-      {renderEmptyState()}
-      {pendingRoleRequests.length > 0 && (
-        <InstanceUserRoleRequestsTable
-          title={intl.formatMessage(translations.pending)}
-          roleRequests={pendingRoleRequests}
-          pendingRoleRequests
-          renderRowActionComponent={(roleRequest): JSX.Element => (
-            <PendingRoleRequestsButtons
-              roleRequest={roleRequest}
-              openRejectDialog={openRejectDialog}
-            />
-          )}
-        />
-      )}
-      {approvedRoleRequests.length > 0 && (
-        <InstanceUserRoleRequestsTable
-          title={intl.formatMessage(translations.approved)}
-          roleRequests={approvedRoleRequests}
-          approvedRoleRequests
-        />
-      )}
-      {rejectedRoleRequests.length > 0 && (
-        <InstanceUserRoleRequestsTable
-          title={intl.formatMessage(translations.rejected)}
-          roleRequests={rejectedRoleRequests}
-          rejectedRoleRequests
-        />
-      )}
+      <InstanceUserRoleRequestsTable
+        title={intl.formatMessage(translations.pending)}
+        roleRequests={pendingRoleRequests}
+        pendingRoleRequests
+        renderRowActionComponent={(roleRequest): JSX.Element => (
+          <PendingRoleRequestsButtons
+            roleRequest={roleRequest}
+            openRejectDialog={openRejectDialog}
+          />
+        )}
+      />
+      <InstanceUserRoleRequestsTable
+        title={intl.formatMessage(translations.approved)}
+        roleRequests={approvedRoleRequests}
+        approvedRoleRequests
+      />
+      <InstanceUserRoleRequestsTable
+        title={intl.formatMessage(translations.rejected)}
+        roleRequests={rejectedRoleRequests}
+        rejectedRoleRequests
+      />
       {rejectWithMessageDialog}
     </Box>
   );

@@ -1,10 +1,5 @@
 import { FC, ReactElement, memo } from 'react';
-import {
-  defineMessages,
-  injectIntl,
-  FormattedMessage,
-  WrappedComponentProps,
-} from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Box, MenuItem, TextField, Typography } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import Note from 'lib/components/Note';
@@ -29,19 +24,19 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   noEnrolRequests: {
-    id: 'course.enrolRequests.components.tables.EnrolRequestsTable.noEnrolRequests',
+    id: 'system.admin.instance.enrolRequests.components.tables.EnrolRequestsTable.noEnrolRequests',
     defaultMessage: 'There are no {enrolRequestsType}',
   },
   approved: {
-    id: 'course.enrolRequests.components.tables.EnrolRequestsTable.requestType.approved',
+    id: 'system.admin.instance.enrolRequests.components.tables.EnrolRequestsTable.requestType.approved',
     defaultMessage: 'approved',
   },
   rejected: {
-    id: 'course.enrolRequests.components.tables.EnrolRequestsTable.requestType.rejected',
+    id: 'system.admin.instance.enrolRequests.components.tables.EnrolRequestsTable.requestType.rejected',
     defaultMessage: 'rejected',
   },
   pending: {
-    id: 'course.enrolRequests.components.tables.EnrolRequestsTable.requestType.pending',
+    id: 'system.admin.instance.enrolRequests.components.tables.EnrolRequestsTable.requestType.pending',
     defaultMessage: 'pending',
   },
 });
@@ -61,12 +56,9 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
   if (roleRequests && roleRequests.length === 0) {
     return (
       <Note
-        message={
-          <FormattedMessage
-            {...translations.noEnrolRequests}
-            values={{ enrolRequestsType: title.toLowerCase() }}
-          />
-        }
+        message={intl.formatMessage(translations.noEnrolRequests, {
+          enrolRequestsType: title.toLowerCase(),
+        })}
       />
     );
   }

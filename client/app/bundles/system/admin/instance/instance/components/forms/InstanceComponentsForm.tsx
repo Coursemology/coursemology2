@@ -62,7 +62,9 @@ const InstanceComponentsForm: FC<Props> = (props) => {
       .finally(() => setIsUpdating(false));
   };
 
-  const renderBody: JSX.Element = (
+  if (isLoading) return <LoadingIndicator />;
+
+  return (
     <Table size="small">
       <TableHead>
         <TableRow>
@@ -91,10 +93,6 @@ const InstanceComponentsForm: FC<Props> = (props) => {
       </TableBody>
     </Table>
   );
-
-  if (isLoading) return <LoadingIndicator />;
-
-  return renderBody;
 };
 
 export default injectIntl(InstanceComponentsForm);
