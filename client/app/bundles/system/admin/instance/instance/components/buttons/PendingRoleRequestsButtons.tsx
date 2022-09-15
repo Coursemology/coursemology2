@@ -23,7 +23,7 @@ const translations = defineMessages({
   },
   approveSuccess: {
     id: 'roleRequests.approve.success',
-    defaultMessage: '{name} has been approved as %{role}',
+    defaultMessage: '{name} has been approved as {role}',
   },
   approveFailure: {
     id: 'roleRequests.approve.fail',
@@ -66,6 +66,7 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
         toast.success(
           intl.formatMessage(translations.approveSuccess, {
             name: roleRequest.name,
+            role: roleRequest.role,
           }),
         );
       })

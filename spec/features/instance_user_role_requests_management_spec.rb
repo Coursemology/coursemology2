@@ -84,7 +84,7 @@ RSpec.feature 'Instance::UserRoleRequests' do
         within find("tr.pending_role_request_#{sample_request.id}") do
           find("button.role-request-approve-#{sample_request.id}").click
         end
-        expect_toastify("Approved role request of #{sample_request.user.name}!")
+        expect_toastify("#{sample_request.user.name} has been approved as #{sample_request.role}")
 
         expect(sample_request.user.instance_users.first.reload.role).to eq(sample_request.role)
       end
@@ -98,7 +98,7 @@ RSpec.feature 'Instance::UserRoleRequests' do
         end
         accept_confirm_dialog
 
-        expect_toastify("Role request for #{sample_request.user.name} was rejected.")
+        expect_toastify("The role request made by #{sample_request.user.name} has been rejected.")
         sample_request.reload
 
         expect(sample_request.workflow_state).to eq('rejected')
