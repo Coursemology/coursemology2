@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import sharedConstants from 'lib/constants/sharedConstants';
+import { STAFF_ROLES } from 'lib/constants/sharedConstants';
 import { AppState, SelectionKey } from 'types/store';
 import {
   selectMiniEntity,
@@ -30,10 +30,7 @@ export function getAllStaffMiniEntities(state: AppState) {
   return selectMiniEntities(
     getLocalState(state).users,
     getLocalState(state).users.ids,
-  ).filter(
-    (entity) =>
-      Object.keys(sharedConstants.STAFF_ROLES).indexOf(entity.role) > -1,
-  );
+  ).filter((entity) => Object.keys(STAFF_ROLES).indexOf(entity.role) > -1);
 }
 
 export function getAllUserOptionMiniEntities(state: AppState) {

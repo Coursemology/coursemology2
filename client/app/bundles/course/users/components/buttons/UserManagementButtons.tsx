@@ -5,7 +5,7 @@ import DeleteButton from 'lib/components/buttons/DeleteButton';
 import { CourseUserRowData } from 'types/course/courseUsers';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import equal from 'fast-deep-equal';
 import { deleteUser } from '../../operations';
 
@@ -64,7 +64,7 @@ const UserManagementButtons: FC<Props> = (props) => {
         loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
-          role: sharedConstants.COURSE_USER_ROLES[user.role],
+          role: COURSE_USER_ROLES[user.role],
           name: user.name,
           email: user.email,
         })}

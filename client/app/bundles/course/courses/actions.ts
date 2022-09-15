@@ -9,21 +9,21 @@ import {
   REMOVE_TODO,
   SUBMIT_ENROL,
   CANCEL_ENROL,
-  SaveCoursesListAction,
+  SaveCourseListAction,
   SaveCourseAction,
   RemoveTodoAction,
   SubmitEnrolAction,
   CancelEnrolAction,
 } from './types';
 
-export function saveCoursesList(
-  coursesList: CourseListData[],
+export function saveCourseList(
+  courseList: CourseListData[],
   instanceUserRoleRequestId: number,
   coursesPermissions: CoursePermissions,
-): SaveCoursesListAction {
+): SaveCourseListAction {
   return {
     type: SAVE_COURSE_LIST,
-    coursesList,
+    courseList,
     instanceUserRoleRequestId,
     coursesPermissions,
   };

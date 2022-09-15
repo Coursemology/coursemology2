@@ -11,7 +11,7 @@ module AnnouncementConcern
     after_create :mark_as_read_by_creator
     after_update :mark_as_read_by_updater
 
-    validate :validate_start_at_cannot_be_after_end_at
+    validate :validate_end_at_cannot_be_before_start_at
   end
 
   private
@@ -32,9 +32,9 @@ module AnnouncementConcern
     mark_as_read! for: updater
   end
 
-  def validate_start_at_cannot_be_after_end_at
+  def validate_end_at_cannot_be_before_start_at
     return unless end_at && start_at && start_at > end_at
 
-    errors.add(:start_at, :cannot_be_after_end_at)
+    errors.add(:end_at, :cannot_be_before_start_at)
   end
 end

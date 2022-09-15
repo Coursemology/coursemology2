@@ -28,7 +28,7 @@ export function fetchCourses(): Operation<void> {
         const data = response.data;
 
         dispatch(
-          actions.saveCoursesList(
+          actions.saveCourseList(
             data.courses,
             data.instanceUserRoleRequestId,
             data.permissions,

@@ -1,7 +1,10 @@
 import { AxiosResponse } from 'axios';
-import { AnnouncementListData } from 'types/system/announcements';
+import {
+  AnnouncementListData,
+  AnnouncementPermissions,
+} from 'types/course/announcements';
 import { CourseListData } from 'types/system/courses';
-import { ComponentListData } from 'types/system/instance/components';
+import { ComponentData } from 'types/system/instance/components';
 import { InvitationListData } from 'types/system/instance/invitations';
 import { RoleRequestListData } from 'types/system/instance/roleRequests';
 import {
@@ -33,6 +36,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
   indexAnnouncements(): Promise<
     AxiosResponse<{
       announcements: AnnouncementListData[];
+      permissions: AnnouncementPermissions;
     }>
   > {
     return this.getClient().get(
@@ -222,10 +226,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
    */
   indexComponents(): Promise<
     AxiosResponse<{
-      components: {
-        enabled?: ComponentListData[];
-        disabled?: ComponentListData[];
-      };
+      components: ComponentData[];
     }>
   > {
     return this.getClient().get(
@@ -238,10 +239,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
    */
   updateComponents(params): Promise<
     AxiosResponse<{
-      components: {
-        enabled?: ComponentListData[];
-        disabled?: ComponentListData[];
-      };
+      components: ComponentData[];
     }>
   > {
     return this.getClient().patch(

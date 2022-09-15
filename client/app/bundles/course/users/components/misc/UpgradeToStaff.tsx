@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { toast } from 'react-toastify';
 import { AppDispatch, AppState } from 'types/store';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { STAFF_ROLES } from 'lib/constants/sharedConstants';
 import { CourseUserBasicMiniEntity, StaffRole } from 'types/course/courseUsers';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -61,7 +61,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
     CourseUserBasicMiniEntity[]
   >([]);
   const [role, setRole] = useState<StaffRole>(
-    Object.keys(sharedConstants.STAFF_ROLES)[0] as StaffRole, // object.keys returns string[]; we know it is a StaffRole
+    Object.keys(STAFF_ROLES)[0] as StaffRole, // object.keys returns string[]; we know it is a StaffRole
   );
   const dispatch = useDispatch<AppDispatch>();
 
@@ -70,7 +70,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
     setSelectedStudents([]);
     return dispatch(upgradeToStaff(selectedStudents, role))
       .then(() => {
-        const roleLabel = sharedConstants.STAFF_ROLES[role];
+        const roleLabel = STAFF_ROLES[role];
         toast.success(
           intl.formatMessage(translations.upgradeSuccess, {
             count: selectedStudents.length,
@@ -149,9 +149,9 @@ const UpgradeToStaff: FC<Props> = (props) => {
           sx={{ minWidth: '300px', marginRight: '12px' }}
         >
           {/* eslint-disable-next-line @typescript-eslint/no-shadow */}
-          {Object.keys(sharedConstants.STAFF_ROLES).map((role) => (
+          {Object.keys(STAFF_ROLES).map((role) => (
             <MenuItem key={`upgrade-student-role-${role}`} value={role}>
-              {sharedConstants.STAFF_ROLES[role]}
+              {STAFF_ROLES[role]}
             </MenuItem>
           ))}
         </TextField>

@@ -4,5 +4,5 @@ json.announcements @announcements do |announcement|
 end
 
 json.permissions do
-  json.canCreateAnnouncement can?(:create, Instance::Announcement.new)
+  json.canCreate can?(:create, Instance::Announcement.new)
 end

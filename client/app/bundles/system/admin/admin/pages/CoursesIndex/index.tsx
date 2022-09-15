@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
   defineMessages,
   FormattedMessage,
@@ -10,14 +10,13 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AppState, AppDispatch } from 'types/store';
-import { Typography } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 import SummaryCard from 'lib/components/SummaryCard';
-import { Link, useLocation } from 'react-router-dom';
-import { getUrlParameter } from 'lib/helpers/url-helpers';
-import { indexCourses } from '../../operations';
+import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { deleteCourse, indexCourses } from '../../operations';
 import CoursesTable from '../../components/tables/CoursesTable';
 import CoursesButtons from '../../components/buttons/CoursesButtons';
-import { getAdminCounts } from '../../selectors';
+import { getAdminCounts, getAllCourseMiniEntities } from '../../selectors';
 
 type Props = WrappedComponentProps;
 
@@ -36,38 +35,60 @@ const translations = defineMessages({
   },
   totalCourses: {
     id: 'system.admin.courses.totalCourses',
-    defaultMessage: `Total Courses: <strong>{count}</strong>`,
+    defaultMessage: `Total Courses: {count}`,
   },
   activeCourses: {
     id: 'system.admin.courses.activeCourses',
-    defaultMessage: `Active Courses (in the past 7 days): {link}`,
+    defaultMessage: `Active Courses (in the past 7 days): {count}`,
   },
 });
 
 const CoursesIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(false);
-  const counts = useSelector((state: AppState) => getAdminCounts(state));
-  const dispatch = useDispatch<AppDispatch>();
-  const location = useLocation();
-  const [tableTitle, setTableTitle] = useState(
-    intl.formatMessage(translations.title),
+  const [filter, setFilter] = useState({ active: false });
+  const courseCounts = useSelector((state: AppState) => getAdminCounts(state));
+  const courses = useSelector((state: AppState) =>
+    getAllCourseMiniEntities(state),
   );
+  const dispatch = useDispatch<AppDispatch>();
+  const totalCount =
+    filter.active && courseCounts.totalCourses !== 0 ? (
+      <Link
+        component="button"
+        onClick={(): void => setFilter({ active: false })}
+      >
+        <strong>{courseCounts.totalCourses}</strong>
+      </Link>
+    ) : (
+      <strong>{courseCounts.totalCourses}</strong>
+    );
+
+  const activeCount =
+    !filter.active && courseCounts.activeCourses !== 0 ? (
+      <Link
+        component="button"
+        onClick={(): void => setFilter({ active: true })}
+      >
+        <strong>{courseCounts.activeCourses}</strong>
+      </Link>
+    ) : (
+      <strong>{courseCounts.activeCourses}</strong>
+    );
 
   useEffect(() => {
-    const active = getUrlParameter('active');
-    if (active === 'true') {
-      setTableTitle(`${intl.formatMessage(translations.title)} (Active)`);
-    } else {
-      setTableTitle(intl.formatMessage(translations.title));
-    }
     setIsLoading(true);
-    dispatch(indexCourses({ 'filter[length]': 100, active }))
+    dispatch(
+      indexCourses({
+        'filter[length]': TABLE_ROWS_PER_PAGE,
+        active: filter.active,
+      }),
+    )
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchCoursesFailure)),
       )
       .finally(() => setIsLoading(false));
-  }, [dispatch, location]);
+  }, [dispatch, filter.active]);
 
   const renderSummaryContent: JSX.Element = (
     <>
@@ -75,8 +96,7 @@ const CoursesIndex: FC<Props> = (props) => {
         <FormattedMessage
           {...translations.totalCourses}
           values={{
-            strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
-            count: counts.totalCourses,
+            count: totalCount,
           }}
         />
       </Typography>
@@ -84,33 +104,31 @@ const CoursesIndex: FC<Props> = (props) => {
         <FormattedMessage
           {...translations.activeCourses}
           values={{
-            link: (
-              <Link to={{ search: `?active=true` }}>
-                <strong>{counts.activeCourses}</strong>
-              </Link>
-            ),
+            count: activeCount,
           }}
         />
       </Typography>
     </>
   );
 
-  const renderBody: JSX.Element = (
-    <>
-      <SummaryCard renderContent={renderSummaryContent} />
-      <CoursesTable
-        title={tableTitle}
-        renderRowActionComponent={(course): JSX.Element => (
-          <CoursesButtons course={course} />
-        )}
-      />
-    </>
-  );
-
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.header)} />
-      {isLoading ? <LoadingIndicator /> : <>{renderBody}</>}
+      <SummaryCard renderContent={renderSummaryContent} />
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <CoursesTable
+          filter={filter}
+          courses={courses}
+          courseCounts={courseCounts}
+          title={intl.formatMessage(translations.title)}
+          renderRowActionComponent={(course): JSX.Element => (
+            <CoursesButtons course={course} deleteOperation={deleteCourse} />
+          )}
+          indexOperation={indexCourses}
+        />
+      )}
     </>
   );
 };

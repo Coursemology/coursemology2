@@ -3,7 +3,8 @@ import {
   AnnouncementData,
   AnnouncementListData,
   AnnouncementMiniEntity,
-} from 'types/system/announcements';
+  AnnouncementPermissions,
+} from 'types/course/announcements';
 import {
   CourseListData,
   CourseMiniEntity,
@@ -17,10 +18,10 @@ import {
 import { UserListData, UserMiniEntity, AdminStats } from 'types/users';
 
 // Action Names
-export const SAVE_ANNOUNCEMENTS_LIST = 'system/admin/SAVE_ANNOUNCEMENTS_LIST';
+export const SAVE_ANNOUNCEMENT_LIST = 'system/admin/SAVE_ANNOUNCEMENT_LIST';
 export const SAVE_ANNOUNCEMENT = 'system/admin/SAVE_ANNOUNCEMENT';
 export const DELETE_ANNOUNCEMENT = 'system/admin/DELETE_ANNOUNCEMENT';
-export const SAVE_USERS_LIST = 'system/admin/SAVE_USERS_LIST';
+export const SAVE_USER_LIST = 'system/admin/SAVE_USER_LIST';
 export const SAVE_USER = 'system/admin/SAVE_USER';
 export const DELETE_USER = 'system/admin/DELETE_USER';
 export const SAVE_COURSE_LIST = 'system/admin/SAVE_COURSE_LIST';
@@ -30,9 +31,10 @@ export const SAVE_INSTANCE = 'system/admin/SAVE_INSTANCE';
 export const DELETE_INSTANCE = 'system/admin/DELETE_INSTANCE';
 
 // Action Types
-export interface SaveAnnouncementsListAction {
-  type: typeof SAVE_ANNOUNCEMENTS_LIST;
+export interface SaveAnnouncementListAction {
+  type: typeof SAVE_ANNOUNCEMENT_LIST;
   announcementList: AnnouncementListData[];
+  announcementPermissions: AnnouncementPermissions;
 }
 
 export interface SaveAnnouncementAction {
@@ -45,8 +47,8 @@ export interface DeleteAnnouncementAction {
   id: number;
 }
 
-export interface SaveUsersListAction {
-  type: typeof SAVE_USERS_LIST;
+export interface SaveUserListAction {
+  type: typeof SAVE_USER_LIST;
   userList: UserListData[];
   counts: AdminStats;
 }
@@ -59,7 +61,7 @@ export interface DeleteUserAction {
   id: number;
 }
 
-export interface SaveCoursesListAction {
+export interface SaveCourseListAction {
   type: typeof SAVE_COURSE_LIST;
   courseList: CourseListData[];
   counts: CourseStats;
@@ -88,13 +90,13 @@ export interface DeleteInstanceAction {
 }
 
 export type AdminActionType =
-  | SaveAnnouncementsListAction
+  | SaveAnnouncementListAction
   | SaveAnnouncementAction
   | DeleteAnnouncementAction
-  | SaveUsersListAction
+  | SaveUserListAction
   | SaveUserAction
   | DeleteUserAction
-  | SaveCoursesListAction
+  | SaveCourseListAction
   | DeleteCourseAction
   | SaveInstanceListAction
   | SaveInstanceAction

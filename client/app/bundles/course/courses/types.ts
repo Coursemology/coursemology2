@@ -9,16 +9,16 @@ import {
 import { EntityStore } from 'types/store';
 
 // eslint-disable-next-line import/prefer-default-export
-export const SAVE_COURSE_LIST = 'course/courses/SAVE_COURSES_LIST';
+export const SAVE_COURSE_LIST = 'course/courses/SAVE_COURSE_LIST';
 export const SAVE_COURSE = 'course/courses/SAVE_COURSE';
 export const REMOVE_TODO = 'course/courses/REMOVE_TODO';
 export const SUBMIT_ENROL = 'course/courses/SUBMIT_ENROL';
 export const CANCEL_ENROL = 'course/courses/CANCEL_ENROL';
 // Action Types
 
-export interface SaveCoursesListAction {
+export interface SaveCourseListAction {
   type: typeof SAVE_COURSE_LIST;
-  coursesList: CourseListData[];
+  courseList: CourseListData[];
   instanceUserRoleRequestId: number | null;
   coursesPermissions: CoursePermissions;
 }
@@ -47,7 +47,7 @@ export interface CancelEnrolAction {
 }
 
 export type CoursesActionType =
-  | SaveCoursesListAction
+  | SaveCourseListAction
   | SaveCourseAction
   | RemoveTodoAction
   | SubmitEnrolAction

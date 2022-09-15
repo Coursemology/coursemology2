@@ -1,22 +1,16 @@
 import { FC, useState, memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { AppDispatch } from 'types/store';
+import { AppDispatch, Operation } from 'types/store';
 import DeleteButton from 'lib/components/buttons/DeleteButton';
 import { CourseMiniEntity } from 'types/system/courses';
 import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
-import { deleteCourse } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   course: CourseMiniEntity;
+  deleteOperation: (courseId: number) => Operation<void>;
 }
-
-const styles = {
-  buttonStyle: {
-    padding: '0px 8px',
-  },
-};
 
 const translations = defineMessages({
   deletionSuccess: {
@@ -34,13 +28,13 @@ const translations = defineMessages({
 });
 
 const CourseManagementButtons: FC<Props> = (props) => {
-  const { intl, course } = props;
+  const { intl, course, deleteOperation } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const onDelete = (): Promise<void> => {
     setIsDeleting(true);
-    return dispatch(deleteCourse(course.id))
+    return dispatch(deleteOperation(course.id))
       .then(() => {
         toast.success(
           intl.formatMessage(translations.deletionSuccess, {
@@ -49,6 +43,7 @@ const CourseManagementButtons: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
+        setIsDeleting(false);
         const errorMessage = error.response?.data?.errors
           ? error.response.data.errors
           : '';
@@ -58,22 +53,21 @@ const CourseManagementButtons: FC<Props> = (props) => {
             error: errorMessage,
           }),
         );
-      })
-      .finally(() => setIsDeleting(false));
+        throw error;
+      });
   };
 
   const managementButtons = (
-    <div style={{ whiteSpace: 'nowrap' }} key={`buttons-${course.id}`}>
+    <div key={`buttons-${course.id}`}>
       <DeleteButton
         tooltip="Delete Course"
-        className={`course-delete-${course.id}`}
+        className={`course-delete-${course.id} p-0`}
         disabled={isDeleting}
         loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
           title: course.title,
         })}
-        sx={styles.buttonStyle}
       />
     </div>
   );

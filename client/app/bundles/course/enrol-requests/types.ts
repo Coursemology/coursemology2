@@ -9,14 +9,14 @@ import {
 import { EntityStore } from 'types/store';
 
 // Action Names
-export const SAVE_ENROL_REQUESTS_LIST =
-  'course/enrolRequests/SAVE_ENROL_REQUESTS_LIST';
+export const SAVE_ENROL_REQUEST_LIST =
+  'course/enrolRequests/SAVE_ENROL_REQUEST_LIST';
 export const UPDATE_ENROL_REQUEST = 'course/enrolRequests/UPDATE_ENROL_REQUEST';
 
 // Action Types
-export interface SaveEnrolRequestsListAction {
-  type: typeof SAVE_ENROL_REQUESTS_LIST;
-  enrolRequestsList: EnrolRequestListData[];
+export interface SaveEnrolRequestListAction {
+  type: typeof SAVE_ENROL_REQUEST_LIST;
+  enrolRequestList: EnrolRequestListData[];
   manageCourseUsersPermissions: ManageCourseUsersPermissions;
   manageCourseUsersData: ManageCourseUsersSharedData;
 }
@@ -26,7 +26,7 @@ export interface UpdateEnrolRequestAction {
 }
 
 export type EnrolRequestsActionType =
-  | SaveEnrolRequestsListAction
+  | SaveEnrolRequestListAction
   | UpdateEnrolRequestAction;
 
 // State Types

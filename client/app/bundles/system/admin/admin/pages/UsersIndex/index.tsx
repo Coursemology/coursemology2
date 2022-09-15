@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react';
 import {
   defineMessages,
   FormattedMessage,
@@ -10,11 +10,10 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AppState, AppDispatch } from 'types/store';
-import { Typography } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 import SummaryCard from 'lib/components/SummaryCard';
-import { getUrlParameter } from 'lib/helpers/url-helpers';
-import { Link, useLocation } from 'react-router-dom';
-import { getAdminCounts } from '../../selectors';
+import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { getAdminCounts, getAllUserMiniEntities } from '../../selectors';
 import { indexUsers } from '../../operations';
 import UsersButtons from '../../components/buttons/UsersButtons';
 import UsersTable from '../../components/tables/UsersTable';
@@ -49,58 +48,104 @@ const translations = defineMessages({
   },
 });
 
+const countWithLink = (
+  count: number,
+  disableLink: boolean,
+  linkCallbak: () => void,
+): JSX.Element => {
+  if (disableLink || count === 0) {
+    return <strong>{count}</strong>;
+  }
+  return (
+    <Link component="button" onClick={linkCallbak}>
+      <strong>{count}</strong>
+    </Link>
+  );
+};
+
 const UsersIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(false);
-  const counts = useSelector((state: AppState) => getAdminCounts(state));
+  const [filter, setFilter] = useState({ active: false, role: '' });
+  const userCounts = useSelector((state: AppState) => getAdminCounts(state));
+  const users = useSelector((state: AppState) => getAllUserMiniEntities(state));
   const dispatch = useDispatch<AppDispatch>();
-  const location = useLocation();
-  const [tableTitle, setTableTitle] = useState(
-    intl.formatMessage(translations.title),
+  const { activeUsers: activeCounts, totalUsers: totalCounts } = userCounts;
+
+  const totalUser = useMemo(
+    () =>
+      countWithLink(
+        totalCounts.allCount,
+        !filter.active && !filter.role,
+        (): void => setFilter({ active: false, role: '' }),
+      ),
+    [totalCounts.allCount, filter.active, filter.role],
   );
 
-  const { activeUsers: activeCounts, totalUsers: totalCounts } = counts;
+  const totalActiveUser = useMemo(
+    () =>
+      countWithLink(
+        activeCounts.allCount,
+        filter.active && !filter.role,
+        (): void => setFilter({ active: true, role: '' }),
+      ),
+    [totalCounts.allCount, filter.active, filter.role],
+  );
 
-  const updateTableTitle = (
-    role: string | true,
-    active: string | true,
-  ): void => {
-    if (role === true || active === true) {
-      return;
-    }
-    if (role !== '' || active !== '') {
-      const roleString = role.replace(/^\w/, (c) => c.toUpperCase()); // capitalize first letter
-      let activeString = '';
-      if (active === 'true') {
-        activeString = ', Active';
-      }
-      setTableTitle(
-        `${intl.formatMessage(
-          translations.title,
-        )} — (${roleString}${activeString})`,
-      );
-    } else {
-      setTableTitle(intl.formatMessage(translations.title));
-    }
-  };
+  const totalAdmin = useMemo(
+    () =>
+      countWithLink(
+        totalCounts.adminCount ?? 0,
+        !filter.active && filter.role === 'administrator',
+        (): void => setFilter({ active: false, role: 'administrator' }),
+      ),
+    [totalCounts.allCount, filter.active, filter.role],
+  );
+
+  const totalActiveAdmin = useMemo(
+    () =>
+      countWithLink(
+        activeCounts.adminCount ?? 0,
+        filter.active && filter.role === 'administrator',
+        (): void => setFilter({ active: true, role: 'administrator' }),
+      ),
+    [totalCounts.allCount, filter.active, filter.role],
+  );
+
+  const totalNormal = useMemo(
+    () =>
+      countWithLink(
+        totalCounts.normalCount ?? 0,
+        !filter.active && filter.role === 'normal',
+        (): void => setFilter({ active: false, role: 'normal' }),
+      ),
+    [totalCounts.allCount, filter.active, filter.role],
+  );
+
+  const totalActiveNormal = useMemo(
+    () =>
+      countWithLink(
+        activeCounts.normalCount ?? 0,
+        filter.active && filter.role === 'normal',
+        (): void => setFilter({ active: true, role: 'normal' }),
+      ),
+    [totalCounts.allCount, filter.active, filter.role],
+  );
 
   useEffect(() => {
     setIsLoading(true);
-    const role = getUrlParameter('role');
-    const active = getUrlParameter('active');
-    updateTableTitle(role, active);
     dispatch(
       indexUsers({
-        'filter[length]': 100,
-        role,
-        active,
+        'filter[length]': TABLE_ROWS_PER_PAGE,
+        role: filter.role,
+        active: filter.active,
       }),
     )
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchUsersFailure)),
       )
       .finally(() => setIsLoading(false));
-  }, [dispatch, location]);
+  }, [dispatch, filter.role, filter.active]);
 
   const renderSummaryContent: JSX.Element = (
     <>
@@ -109,17 +154,9 @@ const UsersIndex: FC<Props> = (props) => {
           {...translations.totalUsers}
           values={{
             strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
-            allCount: totalCounts.allCount,
-            adminCount: (
-              <Link to={{ search: `?role=administrator` }}>
-                <strong>{totalCounts.adminCount ?? 0}</strong>
-              </Link>
-            ),
-            normalCount: (
-              <Link to={{ search: `?role=normal` }}>
-                <strong>{totalCounts.normalCount ?? 0}</strong>
-              </Link>
-            ),
+            allCount: totalUser,
+            adminCount: totalAdmin,
+            normalCount: totalNormal,
           }}
         />
       </Typography>
@@ -128,17 +165,9 @@ const UsersIndex: FC<Props> = (props) => {
           {...translations.activeUsers}
           values={{
             strong: (str: ReactNode[]): JSX.Element => <strong>{str}</strong>,
-            allCount: activeCounts.allCount ?? 0,
-            adminCount: (
-              <Link to={{ search: `?active=true&role=administrator` }}>
-                <strong>{activeCounts.adminCount ?? 0}</strong>
-              </Link>
-            ),
-            normalCount: (
-              <Link to={{ search: `?active=true&role=normal` }}>
-                <strong>{activeCounts.normalCount ?? 0}</strong>
-              </Link>
-            ),
+            allCount: totalActiveUser,
+            adminCount: totalActiveAdmin,
+            normalCount: totalActiveNormal,
             br: <br />,
           }}
         />
@@ -146,24 +175,23 @@ const UsersIndex: FC<Props> = (props) => {
     </>
   );
 
-  const renderBody: JSX.Element = (
-    <>
-      <div>
-        <SummaryCard renderContent={renderSummaryContent} />
-      </div>
-      <UsersTable
-        title={tableTitle}
-        renderRowActionComponent={(user): JSX.Element => (
-          <UsersButtons user={user} />
-        )}
-      />
-    </>
-  );
-
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.header)} />
-      {isLoading ? <LoadingIndicator /> : <>{renderBody}</>}
+      <SummaryCard renderContent={renderSummaryContent} />
+      {isLoading ? (
+        <LoadingIndicator />
+      ) : (
+        <UsersTable
+          users={users}
+          userCounts={userCounts}
+          filter={filter}
+          title={intl.formatMessage(translations.title)}
+          renderRowActionComponent={(user): JSX.Element => (
+            <UsersButtons user={user} />
+          )}
+        />
+      )}
     </>
   );
 };

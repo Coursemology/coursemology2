@@ -93,6 +93,7 @@ const AnnouncementCard: FC<Props> = (props) => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
       })
       .catch((error) => {
+        setIsDeleting(false);
         const errorMessage = error.response?.data?.errors
           ? error.response.data.errors
           : '';
@@ -101,8 +102,8 @@ const AnnouncementCard: FC<Props> = (props) => {
             error: errorMessage,
           }),
         );
-      })
-      .finally(() => setIsDeleting(false));
+        throw error;
+      });
   };
 
   const onEdit = (): void => setIsOpen(true);
@@ -179,7 +180,6 @@ const AnnouncementCard: FC<Props> = (props) => {
                 <EditButton
                   id={`announcement-edit-button-${announcement.id}`}
                   onClick={onEdit}
-                  sx={{ paddingTop: 0, paddingBottom: 0, paddingRight: 0 }}
                 />
               )}
               {announcement.permissions.canDelete && (
@@ -191,7 +191,6 @@ const AnnouncementCard: FC<Props> = (props) => {
                     translations.deleteConfirmation,
                   )} (${announcement.title})?`}
                   onClick={onDelete}
-                  sx={{ paddingTop: 0, paddingBottom: 0 }}
                 />
               )}
             </div>

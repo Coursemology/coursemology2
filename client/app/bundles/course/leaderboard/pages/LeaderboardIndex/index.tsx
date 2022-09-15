@@ -42,11 +42,11 @@ const translations = defineMessages({
     defaultMessage: 'Group Leaderboard',
   },
   experience: {
-    id: 'course.leaderboards.index.leaderboard',
+    id: 'course.leaderboards.index.experience',
     defaultMessage: 'By Experience Points',
   },
-  achievemnt: {
-    id: 'course.leaderboards.index.groupLeaderboard',
+  achievement: {
+    id: 'course.leaderboards.index.achievement',
     defaultMessage: 'By Achievements',
   },
 });
@@ -166,7 +166,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
                 icon={<EmojiEvents />}
                 label={
                   settings.groupleaderboardTitle ?? (
-                    <FormattedMessage {...translations.achievemnt} />
+                    <FormattedMessage {...translations.achievement} />
                   )
                 }
                 value="achievement-tab"

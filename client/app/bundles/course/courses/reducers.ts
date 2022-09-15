@@ -23,8 +23,8 @@ const initialState: CoursesState = {
 const reducer = produce((draft: CoursesState, action: CoursesActionType) => {
   switch (action.type) {
     case SAVE_COURSE_LIST: {
-      const coursesList = action.coursesList;
-      const entityList = coursesList.map((data) => ({
+      const courseList = action.courseList;
+      const entityList = courseList.map((data) => ({
         ...data,
       }));
       saveListToStore(draft.courses, entityList);

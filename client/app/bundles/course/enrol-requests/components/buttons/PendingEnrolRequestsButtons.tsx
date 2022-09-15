@@ -5,7 +5,7 @@ import DeleteButton from 'lib/components/buttons/DeleteButton';
 import AcceptButton from 'lib/components/buttons/AcceptButton';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import { EnrolRequestRowData } from 'types/course/enrolRequests';
 import equal from 'fast-deep-equal';
 import { approveEnrolRequest, rejectEnrolRequest } from '../../operations';
@@ -50,8 +50,6 @@ const translations = defineMessages({
     defaultMessage: 'Failed to reject enrol request. {error}',
   },
 });
-
-const ROLES = sharedConstants.COURSE_USER_ROLES;
 
 const PendingEnrolRequestsButtons: FC<Props> = (props) => {
   const { intl, enrolRequest } = props;
@@ -121,7 +119,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
         loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.rejectConfirm, {
-          role: ROLES[enrolRequest.role!],
+          role: COURSE_USER_ROLES[enrolRequest.role!],
           name: enrolRequest.name,
           email: enrolRequest.email,
         })}

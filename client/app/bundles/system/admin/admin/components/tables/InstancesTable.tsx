@@ -15,6 +15,7 @@ import { AppDispatch, AppState } from 'types/store';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import { toast } from 'react-toastify';
 import LoadingOverlay from 'lib/components/LoadingOverlay';
+import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getAdminCounts, getAllInstanceMiniEntities } from '../../selectors';
 import { indexInstances, updateInstance } from '../../operations';
 
@@ -126,7 +127,10 @@ const InstancesTable: FC<Props> = (props) => {
       page,
     });
     dispatch(
-      indexInstances({ 'filter[page_num]': page, 'filter[length]': 100 }),
+      indexInstances({
+        'filter[page_num]': page,
+        'filter[length]': TABLE_ROWS_PER_PAGE,
+      }),
     )
       .catch(() =>
         toast.error(
@@ -153,8 +157,8 @@ const InstancesTable: FC<Props> = (props) => {
     },
     pagination: true,
     print: false,
-    rowsPerPage: 100,
-    rowsPerPageOptions: [100],
+    rowsPerPage: TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
     search: false,
     selectableRows: 'none',
     serverSide: true,
@@ -254,7 +258,7 @@ const InstancesTable: FC<Props> = (props) => {
               className="instance_activeTotalUsers"
               variant="body2"
             >
-              <a href={`//${instance.host}/admin/users/?active=true`}>
+              <a href={`//${instance.host}/admin/users?active=true`}>
                 {instance.activeUserCount}
               </a>
               {' / '}
@@ -281,7 +285,7 @@ const InstancesTable: FC<Props> = (props) => {
               className="instance_activeTotalCourses"
               variant="body2"
             >
-              <a href={`//${instance.host}/admin/courses/?active=true`}>
+              <a href={`//${instance.host}/admin/courses?active=true`}>
                 {instance.activeCourseCount}
               </a>
               {' / '}
@@ -311,17 +315,14 @@ const InstancesTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box sx={{ margin: '12px 0px', position: 'relative' }}>
+    <Box className="mx-0 my-3 relative">
       {isLoading && <LoadingOverlay />}
       <DataTable
         title={
           <Typography variant="h6">
             {title}
             {isLoading && (
-              <CircularProgress
-                size={24}
-                style={{ marginLeft: 15, position: 'relative', top: 4 }}
-              />
+              <CircularProgress className="ml-4 relative top-1" size={24} />
             )}
           </Typography>
         }

@@ -15,7 +15,10 @@ import {
   IndividualInvite,
   IndividualInvites,
 } from 'types/course/userInvitations';
-import sharedConstants from 'lib/constants/sharedConstants';
+import {
+  COURSE_USER_ROLES,
+  TIMELINE_ALGORITHMS,
+} from 'lib/constants/sharedConstants';
 import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
 import tableTranslations from 'lib/translations/table';
 
@@ -60,12 +63,10 @@ const translations = defineMessages({
   },
 });
 
-const userRoleOptions = Object.keys(sharedConstants.COURSE_USER_ROLES).map(
-  (roleValue) => ({
-    label: sharedConstants.COURSE_USER_ROLES[roleValue],
-    value: roleValue,
-  }),
-);
+const userRoleOptions = Object.keys(COURSE_USER_ROLES).map((roleValue) => ({
+  label: COURSE_USER_ROLES[roleValue],
+  value: roleValue,
+}));
 
 const IndividualInvitation: FC<Props> = (props) => {
   const { permissions, fieldsConfig, index, intl } = props;
@@ -126,7 +127,7 @@ const IndividualInvitation: FC<Props> = (props) => {
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              options={sharedConstants.TIMELINE_ALGORITHMS}
+              options={TIMELINE_ALGORITHMS}
               // @ts-ignore: component is still written in JS
               label={intl.formatMessage(tableTranslations.timelineAlgorithm)}
             />

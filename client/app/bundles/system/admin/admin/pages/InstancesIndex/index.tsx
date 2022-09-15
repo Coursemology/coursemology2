@@ -6,6 +6,7 @@ import { AppState, AppDispatch } from 'types/store';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { toast } from 'react-toastify';
 import AddButton from 'lib/components/buttons/AddButton';
+import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { indexInstances } from '../../operations';
 import InstancesTable from '../../components/tables/InstancesTable';
 import InstancesButtons from '../../components/buttons/InstancesButtons';
@@ -13,12 +14,6 @@ import { getAdminCounts, getPermissions } from '../../selectors';
 import InstanceNew from '../InstanceNew';
 
 type Props = WrappedComponentProps;
-
-const styles = {
-  newButton: {
-    color: 'white',
-  },
-};
 
 const translations = defineMessages({
   header: {
@@ -49,7 +44,7 @@ const InstancesIndex: FC<Props> = (props) => {
   const headerToolbars: ReactElement[] = [];
 
   useEffect(() => {
-    dispatch(indexInstances({ 'filter[length]': 100 }))
+    dispatch(indexInstances({ 'filter[length]': TABLE_ROWS_PER_PAGE }))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchInstancesFailure)),
       )
@@ -59,13 +54,13 @@ const InstancesIndex: FC<Props> = (props) => {
   if (permissions.canCreateInstances) {
     headerToolbars.push(
       <AddButton
+        className="text-white"
         id="new-instance-button"
         key="new-instance-button"
         onClick={(): void => {
           setIsOpen(true);
         }}
         tooltip={intl.formatMessage(translations.newInstance)}
-        sx={styles.newButton}
       />,
     );
   }

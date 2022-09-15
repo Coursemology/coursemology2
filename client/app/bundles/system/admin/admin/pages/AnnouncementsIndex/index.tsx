@@ -18,12 +18,6 @@ import AnnouncementNew from '../../../../../course/announcements/pages/Announcem
 
 type Props = WrappedComponentProps;
 
-const styles = {
-  newButton: {
-    color: 'white',
-  },
-};
-
 const translations = defineMessages({
   header: {
     id: 'system.admin.announcements.header',
@@ -59,13 +53,13 @@ const AnnouncementsIndex: FC<Props> = (props) => {
 
   headerToolbars.push(
     <AddButton
+      className="text-white"
       id="new-announcement-button"
       key="new-announcement-button"
       onClick={(): void => {
         setIsOpen(true);
       }}
       tooltip={intl.formatMessage(translations.newAnnouncement)}
-      sx={styles.newButton}
     />,
   );
 

@@ -27,9 +27,11 @@ class System::Admin::Instance::CoursesController < System::Admin::Instance::Cont
     params.permit(:search)[:search]
   end
 
-  def preload_courses
+  def preload_courses # rubocop:disable Metrics/AbcSize
     @courses = @instance.courses.search(search_param).calculated(:active_user_count, :user_count)
-    @courses = @courses.active_in_past_7_days.order('active_user_count DESC, user_count') if params[:active].present?
+    if ActiveRecord::Type::Boolean.new.cast(params[:active])
+      @courses = @courses.active_in_past_7_days
+    end
     @courses = @courses.ordered_by_title
     @courses_count = @courses.count.is_a?(Hash) ? @courses.count.count : @courses.count
     @courses = @courses.paginated(new_page_params)

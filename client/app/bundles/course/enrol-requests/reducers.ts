@@ -7,7 +7,7 @@ import {
 import {
   EnrolRequestsActionType,
   EnrolRequestsState,
-  SAVE_ENROL_REQUESTS_LIST,
+  SAVE_ENROL_REQUEST_LIST,
   UPDATE_ENROL_REQUEST,
 } from './types';
 
@@ -29,8 +29,8 @@ const initialState: EnrolRequestsState = {
 const reducer = produce(
   (draft: EnrolRequestsState, action: EnrolRequestsActionType) => {
     switch (action.type) {
-      case SAVE_ENROL_REQUESTS_LIST: {
-        const enrolRequestsList = action.enrolRequestsList;
+      case SAVE_ENROL_REQUEST_LIST: {
+        const enrolRequestsList = action.enrolRequestList;
         const entityList = enrolRequestsList.map((data) => ({
           ...data,
         }));

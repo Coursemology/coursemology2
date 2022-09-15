@@ -65,13 +65,7 @@ const InstanceForm: FC<Props> = (props) => {
   const disabled = isSubmitting;
 
   const actionButtons = (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        paddingTop: '20px',
-      }}
-    >
+    <div className="flex justify-end pt-5">
       <Button
         color="primary"
         className="btn-cancel"
@@ -145,8 +139,6 @@ const InstanceForm: FC<Props> = (props) => {
             />
           )}
         />
-        <div style={{ marginBottom: 12 }} />
-
         {actionButtons}
       </form>
     </>

@@ -54,9 +54,6 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
-  concern :paginatable do
-    get '(page/:page)', action: :index, on: :collection, as: ''
-  end
 
   concern :conditional do
     namespace :condition do
@@ -98,15 +95,15 @@ Rails.application.routes.draw do
   scope module: 'system' do
     namespace :admin do
       get '/' => 'admin#index'
-      resources :announcements, only: [:index, :create, :update, :destroy], concerns: :paginatable
+      resources :announcements, only: [:index, :create, :update, :destroy]
       resources :instances, only: [:index, :create, :update, :destroy]
-      resources :users, only: [:index, :update, :destroy], concerns: :paginatable
-      resources :courses, only: [:index, :destroy], concerns: :paginatable
+      resources :users, only: [:index, :update, :destroy]
+      resources :courses, only: [:index, :destroy]
 
       namespace :instance do
         get '/' => 'admin#index', as: :admin
-        resources :announcements, only: [:index, :create, :update, :destroy], concerns: :paginatable
-        resources :users, only: [:index, :update, :destroy], concerns: :paginatable
+        resources :announcements, only: [:index, :create, :update, :destroy]
+        resources :users, only: [:index, :update, :destroy]
         resources :users do
           get 'invite' => 'user_invitations#new', on: :collection
           post 'invite' => 'user_invitations#create', on: :collection
@@ -115,8 +112,8 @@ Rails.application.routes.draw do
         resources :user_invitations, only: [:index, :destroy] do
           post 'resend_invitation'
         end
-        resources :courses, only: [:index, :destroy], concerns: :paginatable
-        get 'components' => 'components#edit'
+        resources :courses, only: [:index, :destroy]
+        get 'components' => 'components#index'
         patch 'components' => 'components#update'
       end
     end

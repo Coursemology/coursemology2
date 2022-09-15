@@ -104,7 +104,7 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
                                                                   duplicate_users: duplicate_users })
   end
 
-  def create_invitation_success(result) # :nodoc:
+  def create_invitation_success(result)
     respond_to do |format|
       format.json do
         render json: {
@@ -115,7 +115,7 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
     end
   end
 
-  def resend_invitation_success # :nodoc:
+  def resend_invitation_success
     respond_to do |format|
       format.json do
         render partial: 'instance_user_invitation_list_data', locals: { invitation: @invitation.reload }, status: :ok
@@ -123,13 +123,13 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
     end
   end
 
-  def resend_invitation_failure # :nodoc:
+  def resend_invitation_failure
     respond_to do |format|
       format.json { head :bad_request }
     end
   end
 
-  def resend_invitations_success # :nodoc:
+  def resend_invitations_success
     respond_to do |format|
       format.json do
         render partial: 'system/admin/instance/user_invitations/index', locals: { invitations: @invitations.reload },
@@ -138,19 +138,19 @@ class System::Admin::Instance::UserInvitationsController < System::Admin::Instan
     end
   end
 
-  def resend_invitations_failure # :nodoc:
+  def resend_invitations_failure
     respond_to do |format|
       format.json { head :bad_request }
     end
   end
 
-  def destroy_invitation_success # :nodoc:
+  def destroy_invitation_success
     respond_to do |format|
       format.json { render json: { id: @invitation.id }, status: :ok }
     end
   end
 
-  def destroy_invitation_failure # :nodoc:
+  def destroy_invitation_failure
     respond_to do |format|
       format.json { render json: { errors: @invitation.errors.full_messages.to_sentence }, status: :bad_request }
     end

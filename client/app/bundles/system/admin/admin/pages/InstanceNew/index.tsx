@@ -17,13 +17,6 @@ interface Props extends WrappedComponentProps {
   open: boolean;
   handleClose: () => void;
 }
-
-const styles = {
-  dialog: {
-    minWidth: '400px',
-  },
-};
-
 const translations = defineMessages({
   newAnnouncement: {
     id: 'system.admin.instance.new.newInstance',
@@ -79,6 +72,7 @@ const InstanceNew: FC<Props> = (props) => {
   return (
     <>
       <Dialog
+        className="top-10"
         onClose={(): void => {
           if (isDirty) {
             setConfirmationDialogOpen(true);
@@ -88,14 +82,11 @@ const InstanceNew: FC<Props> = (props) => {
         }}
         open={open}
         maxWidth="lg"
-        style={{
-          top: 40,
-        }}
       >
         <DialogTitle>
           {intl.formatMessage(translations.newAnnouncement)}
         </DialogTitle>
-        <DialogContent sx={styles.dialog}>
+        <DialogContent className="min-w-[400px]">
           <InstanceForm
             handleClose={(): void => {
               if (isDirty) {

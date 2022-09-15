@@ -1,6 +1,6 @@
 import { Operation } from 'types/store';
 import SystemAPI from 'api/system';
-import { AnnouncementFormData } from 'types/system/announcements';
+import { AnnouncementFormData } from 'types/course/announcements';
 import { UserMiniEntity } from 'types/users';
 import { InstanceFormData, InstanceMiniEntity } from 'types/system/instances';
 import * as actions from './actions';
@@ -9,7 +9,7 @@ import * as actions from './actions';
  * Prepares and maps announcement object attributes to a FormData object for an post/patch request.
  * Expected FormData attributes shape:
  *   { announcement :
- *     { title, content, sticky, startAt, endAt }
+ *     { title, content, startAt, endAt }
  *   }
  */
 const formatAnnouncementAttributes = (data: AnnouncementFormData): FormData => {
@@ -79,7 +79,9 @@ export function indexAnnouncements(): Operation<void> {
       .indexAnnouncements()
       .then((response) => {
         const data = response.data;
-        dispatch(actions.saveAnnouncementsList(data.announcements));
+        dispatch(
+          actions.saveAnnouncementList(data.announcements, data.permissions),
+        );
       })
       .catch((error) => {
         throw error;
@@ -135,7 +137,7 @@ export function indexUsers(params?): Operation<void> {
       .indexUsers(params)
       .then((response) => {
         const data = response.data;
-        dispatch(actions.saveUsersList(data.users, data.counts));
+        dispatch(actions.saveUserList(data.users, data.counts));
       })
       .catch((error) => {
         throw error;

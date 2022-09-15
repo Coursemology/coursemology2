@@ -6,7 +6,7 @@ import EmailButton from 'lib/components/buttons/EmailButton';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
 import { InvitationRowData } from 'types/course/userInvitations';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import equal from 'fast-deep-equal';
 import { resendInvitationEmail, deleteInvitation } from '../../operations';
 
@@ -50,8 +50,6 @@ const translations = defineMessages({
     defaultMessage: 'Failed to delete user - {error}',
   },
 });
-
-const ROLES = sharedConstants.COURSE_USER_ROLES;
 
 const PendingInvitationsButtons: FC<Props> = (props) => {
   const { intl, invitation } = props;
@@ -121,7 +119,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
         loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
-          role: ROLES[invitation.role],
+          role: COURSE_USER_ROLES[invitation.role],
           name: invitation.name,
           email: invitation.email,
         })}

@@ -1,19 +1,18 @@
 # frozen_string_literal: true
 class System::Admin::Instance::ComponentsController < System::Admin::Instance::Controller
-  before_action :load_settings
+  before_action :settings
   add_breadcrumb :edit, :admin_instance_components_path
 
-  def edit # :nodoc:
+  def index
     respond_to do |format|
       format.html { render 'system/admin/instance/admin/index' }
-      format.json { render 'system/admin/instance/components/index' }
+      format.json
     end
   end
 
-  def update # :nodoc:
+  def update
     if @settings.update(settings_components_params) && current_tenant.save!
-      render 'system/admin/instance/components/index',
-             status: :ok
+      render 'index', status: :ok
     else
       head :bad_request
     end
@@ -26,7 +25,7 @@ class System::Admin::Instance::ComponentsController < System::Admin::Instance::C
   end
 
   # Load our settings adapter to handle component settings
-  def load_settings
+  def settings
     @settings ||= Instance::Settings::Components.new(current_tenant)
   end
 end

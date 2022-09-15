@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, ReactElement, useState } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
@@ -12,18 +12,23 @@ import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { debounceSearchRender } from 'mui-datatables';
 import DataTable from 'lib/components/DataTable';
 import { CourseMiniEntity } from 'types/system/courses';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, AppState } from 'types/store';
-import { UserBasicMiniEntity } from 'types/users';
-import { getUrlParameter } from 'lib/helpers/url-helpers';
-import { FIELD_DEBOUNCE_DELAY } from 'lib/constants/sharedConstants';
+import { useDispatch } from 'react-redux';
+import { AppDispatch, Operation } from 'types/store';
+import { AdminStats, UserBasicMiniEntity } from 'types/users';
+import { InstanceAdminStats } from 'types/system/instance/users';
+import {
+  FIELD_DEBOUNCE_DELAY,
+  TABLE_ROWS_PER_PAGE,
+} from 'lib/constants/sharedConstants';
 import LoadingOverlay from 'lib/components/LoadingOverlay';
-import { getAdminCounts, getAllCourseMiniEntities } from '../../selectors';
-import { indexCourses } from '../../operations';
 
 interface Props extends WrappedComponentProps {
+  filter: { active: boolean };
+  courses: CourseMiniEntity[];
+  courseCounts: AdminStats | InstanceAdminStats;
   title: string;
   renderRowActionComponent: (course: CourseMiniEntity) => ReactElement;
+  indexOperation: (params?) => Operation<void>;
 }
 
 const translations = defineMessages({
@@ -37,62 +42,74 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  list: {
-    paddingLeft: 0,
-    marginBottom: 0,
-  },
-  listItem: {
-    listStyle: 'none',
-  },
-};
-
 const CoursesTable: FC<Props> = (props) => {
-  const { title, renderRowActionComponent, intl } = props;
+  const {
+    filter,
+    courses,
+    courseCounts,
+    title,
+    renderRowActionComponent,
+    intl,
+    indexOperation,
+  } = props;
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(false);
-  const courses = useSelector((state: AppState) =>
-    getAllCourseMiniEntities(state),
-  );
-  const counts = useSelector((state: AppState) => getAdminCounts(state));
-  const active = getUrlParameter('active');
 
   const [tableState, setTableState] = useState<TableState>({
-    count: counts.coursesCount,
+    count: courseCounts.coursesCount,
     page: 1,
     searchText: '',
   });
 
-  useEffect((): void => {
-    setTableState({
-      ...tableState,
-      count: counts.coursesCount,
-    });
-  }, [counts]);
-
   const renderOwnerLink = (owner: UserBasicMiniEntity): JSX.Element => {
     if (owner.id === -1 && owner.name === 'Deleted') {
       return (
-        <li key={owner.id} style={styles.listItem}>
+        <li key={owner.id} className="list-none">
           {owner.name}
         </li>
       );
     }
     return (
-      <li key={owner.id} style={styles.listItem}>
+      <li key={owner.id} className="list-none">
         <a href={`/users/${owner.id}`}>{owner.name}</a>
       </li>
     );
   };
 
-  const changePage = (page): void => {
+  const changePage = (page: number): void => {
     setIsLoading(true);
-    setTableState({
-      ...tableState,
-      page,
-    });
     dispatch(
-      indexCourses({ 'filter[page_num]': page, 'filter[length]': 30, active }),
+      indexOperation({
+        'filter[page_num]': page,
+        'filter[length]': TABLE_ROWS_PER_PAGE,
+        active: filter.active,
+      }),
+    )
+      .then(() =>
+        setTableState({
+          ...tableState,
+          page,
+        }),
+      )
+      .catch(() =>
+        toast.error(
+          intl.formatMessage(translations.fetchFilteredCoursesFailure),
+        ),
+      )
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const search = (page: number, searchText?: string): void => {
+    setIsLoading(true);
+    dispatch(
+      indexOperation({
+        'filter[page_num]': page,
+        'filter[length]': TABLE_ROWS_PER_PAGE,
+        active: filter.active,
+        search: searchText ? searchText.trim() : searchText,
+      }),
     )
       .catch(() =>
         toast.error(
@@ -104,33 +121,12 @@ const CoursesTable: FC<Props> = (props) => {
       });
   };
 
-  const search = (page, searchText): void => {
-    if (searchText !== null) {
-      setIsLoading(true);
-      dispatch(
-        indexCourses({
-          'filter[page_num]': page,
-          'filter[length]': 100,
-          active,
-          search: searchText ? searchText.trim() : searchText,
-        }),
-      )
-        .catch(() =>
-          toast.error(
-            intl.formatMessage(translations.fetchFilteredCoursesFailure),
-          ),
-        )
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
-  };
-
   const options: TableOptions = {
     count: tableState.count,
     customSearchRender: debounceSearchRender(FIELD_DEBOUNCE_DELAY),
     download: false,
     filter: false,
+    jumpToPage: true,
     onTableChange: (action, newTableState) => {
       switch (action) {
         case 'search':
@@ -145,8 +141,8 @@ const CoursesTable: FC<Props> = (props) => {
     },
     pagination: true,
     print: false,
-    rowsPerPage: 100,
-    rowsPerPageOptions: [100],
+    rowsPerPage: TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',
@@ -271,7 +267,7 @@ const CoursesTable: FC<Props> = (props) => {
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const course = courses[dataIndex];
           return (
-            <ul style={styles.list}>
+            <ul className="pl-0 mb-0">
               {course.owners.map((owner) => renderOwnerLink(owner))}
             </ul>
           );
@@ -296,24 +292,20 @@ const CoursesTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box sx={{ margin: '12px 0px', position: 'relative' }}>
+    <Box className="mx-0 my-3 relative">
       {isLoading && <LoadingOverlay />}
       <DataTable
         title={
           <Typography variant="h6">
             {title}
             {isLoading && (
-              <CircularProgress
-                size={24}
-                style={{ marginLeft: 15, position: 'relative', top: 4 }}
-              />
+              <CircularProgress className="ml-4 relative top-1" size={24} />
             )}
           </Typography>
         }
         data={courses}
         columns={columns}
         options={options}
-        includeRowNumber
       />
     </Box>
   );

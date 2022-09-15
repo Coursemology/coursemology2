@@ -11,11 +11,6 @@ import { deleteInstance } from '../../operations';
 interface Props extends WrappedComponentProps {
   instance: InstanceMiniEntity;
 }
-const styles = {
-  buttonStyle: {
-    padding: '0px 8px',
-  },
-};
 
 const translations = defineMessages({
   deletionSuccess: {
@@ -61,18 +56,17 @@ const InstancesButtons: FC<Props> = (props) => {
   };
 
   const managementButtons = (
-    <div style={{ whiteSpace: 'nowrap' }} key={`buttons-${instance.id}`}>
+    <div key={`buttons-${instance.id}`}>
       {instance.permissions.canDelete && (
         <DeleteButton
           tooltip="Delete Instance"
-          className={`instance-delete-${instance.id}`}
+          className={`instance-delete-${instance.id} p-0`}
           disabled={isDeleting}
           loading={isDeleting}
           onClick={onDelete}
           confirmMessage={intl.formatMessage(translations.deletionConfirm, {
             name: instance.name,
           })}
-          sx={styles.buttonStyle}
         />
       )}
     </div>
