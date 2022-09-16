@@ -41,16 +41,14 @@ RSpec.feature 'System: Administration: Components', type: :feature, js: true do
       within find("tr#component_#{component_to_modify}") do
         find('input', visible: false).click
       end
-      find('.btn-submit').click
-      expect_toastify('Successfully updated instance components.')
+      expect_toastify('Instance component setting was updated successfully.')
 
       within find("tr#component_#{component_to_modify}") do
         expect(find('input', visible: false)).not_to be_checked
         find('input', visible: false).click
       end
 
-      find('.btn-submit').click
-      expect_toastify('Successfully updated instance components.')
+      expect_toastify('Instance component setting was updated successfully.')
 
       within find("tr#component_#{component_to_modify}") do
         expect(find('input', visible: false)).to be_checked
