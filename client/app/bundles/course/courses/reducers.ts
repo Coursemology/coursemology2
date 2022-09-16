@@ -10,26 +10,27 @@ import {
   REMOVE_TODO,
   SUBMIT_ENROL,
   CANCEL_ENROL,
+  SAVE_INSTANCE_ROLE_REQUEST,
   CoursesState,
   CoursesActionType,
 } from './types';
 
 const initialState: CoursesState = {
   courses: createEntityStore(),
-  instanceUserRoleRequestId: null,
   permissions: { canCreate: false },
+  instanceUserRoleRequest: undefined,
 };
 
 const reducer = produce((draft: CoursesState, action: CoursesActionType) => {
   switch (action.type) {
     case SAVE_COURSE_LIST: {
-      const coursesList = action.coursesList;
-      const entityList = coursesList.map((data) => ({
+      const courseList = action.courseList;
+      const entityList = courseList.map((data) => ({
         ...data,
       }));
       saveListToStore(draft.courses, entityList);
       draft.permissions = action.coursesPermissions;
-      draft.instanceUserRoleRequestId = action.instanceUserRoleRequestId;
+      draft.instanceUserRoleRequest = action.instanceUserRoleRequest;
       break;
     }
 
@@ -89,6 +90,11 @@ const reducer = produce((draft: CoursesState, action: CoursesActionType) => {
       if (course?.registrationInfo) {
         course.registrationInfo.enrolRequestId = null;
       }
+      break;
+    }
+
+    case SAVE_INSTANCE_ROLE_REQUEST: {
+      draft.instanceUserRoleRequest = action.instanceUserRoleRequest;
       break;
     }
 
