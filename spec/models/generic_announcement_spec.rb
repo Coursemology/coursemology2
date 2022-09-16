@@ -16,9 +16,9 @@ RSpec.describe GenericAnnouncement, type: :model do
         before { subject.start_at = subject.end_at + 3.days }
         it 'is invalid' do
           expect(subject).to be_invalid
-          expect(subject.errors[:start_at]).to include(I18n.t('activerecord.errors.models.' \
-                                                              'generic_announcement.attributes.' \
-                                                              'start_at.cannot_be_after_end_at'))
+          expect(subject.errors[:end_at]).to include(I18n.t('activerecord.errors.models.' \
+                                                            'generic_announcement.attributes.' \
+                                                            'end_at.cannot_be_before_start_at'))
         end
       end
     end

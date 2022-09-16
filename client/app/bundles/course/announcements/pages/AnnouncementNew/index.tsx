@@ -30,7 +30,7 @@ const translations = defineMessages({
   },
   creationFailure: {
     id: 'course.announcement.new.creationFailure',
-    defaultMessage: 'Failed to created new announcement',
+    defaultMessage: 'Failed to create the new announcement',
   },
 });
 

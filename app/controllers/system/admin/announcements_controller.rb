@@ -7,7 +7,7 @@ class System::Admin::AnnouncementsController < System::Admin::Controller
     respond_to do |format|
       format.html { render 'system/admin/admin/index' }
       format.json do
-        @announcements = @announcements.includes(:creator).sorted_by_date.page(page_param)
+        @announcements = @announcements.includes(:creator).sorted_by_date
       end
     end
   end

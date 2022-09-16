@@ -9,6 +9,7 @@ RSpec.describe Course::AnnouncementsController, type: :controller do
     let!(:course) { create(:course) }
     let!(:announcement_stub) do
       stub = create(:course_announcement, course: course)
+      allow(stub).to receive(:save).and_return(false)
       allow(stub).to receive(:destroy).and_return(false)
       stub
     end
@@ -25,6 +26,19 @@ RSpec.describe Course::AnnouncementsController, type: :controller do
         it 'raises an component not found error' do
           expect { subject }.to raise_error(ComponentNotFoundError)
         end
+      end
+    end
+
+    describe '#create' do
+      subject { post :create, params: { course_id: course } }
+
+      context 'when create fails' do
+        before do
+          controller.instance_variable_set(:@announcement, announcement_stub)
+          subject
+        end
+
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 

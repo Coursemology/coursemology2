@@ -6,23 +6,21 @@ import { toast } from 'react-toastify';
 import { AppState, AppDispatch } from 'types/store';
 import AddButton from 'lib/components/buttons/AddButton';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
+import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
 import {
   indexAnnouncements,
   updateAnnouncement,
   createAnnouncement,
   deleteAnnouncement,
 } from '../../operations';
-import { getAllAnnouncementMiniEntities } from '../../selectors';
-import AnnouncementsDisplay from '../../../../../course/announcements/components/misc/AnnouncementsDisplay';
-import AnnouncementNew from '../../../../../course/announcements/pages/AnnouncementNew';
+import {
+  getAllAnnouncementMiniEntities,
+  getAnnouncementPermission,
+} from '../../selectors';
 
 type Props = WrappedComponentProps;
 
-const styles = {
-  newButton: {
-    color: 'white',
-  },
-};
 const translations = defineMessages({
   header: {
     id: 'system.admin.instance.announcements.header',
@@ -36,6 +34,10 @@ const translations = defineMessages({
     id: 'system.admin.instance.announcements.new',
     defaultMessage: 'New Announcement',
   },
+  noAnnouncements: {
+    id: 'system.admin.instance.announcements.noAnnouncement',
+    defaultMessage: 'There is no announcement',
+  },
 });
 
 const InstanceAnnouncementsIndex: FC<Props> = (props) => {
@@ -45,6 +47,9 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
   const headerToolbars: ReactElement[] = [];
   const announcements = useSelector((state: AppState) =>
     getAllAnnouncementMiniEntities(state),
+  );
+  const announcementPermission = useSelector((state: AppState) =>
+    getAnnouncementPermission(state),
   );
   const dispatch = useDispatch<AppDispatch>();
 
@@ -56,29 +61,35 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
       .finally(() => setIsLoading(false));
   }, [dispatch]);
 
-  headerToolbars.push(
-    <AddButton
-      id="new-announcement-button"
-      key="new-announcement-button"
-      onClick={(): void => {
-        setIsOpen(true);
-      }}
-      tooltip={intl.formatMessage(translations.newAnnouncement)}
-      sx={styles.newButton}
-    />,
-  );
+  if (announcementPermission) {
+    headerToolbars.push(
+      <AddButton
+        className="text-white"
+        id="new-announcement-button"
+        key="new-announcement-button"
+        onClick={(): void => {
+          setIsOpen(true);
+        }}
+        tooltip={intl.formatMessage(translations.newAnnouncement)}
+      />,
+    );
+  }
 
   const renderBody: JSX.Element = (
     <>
-      <AnnouncementsDisplay
-        announcements={announcements.sort(
-          (a, b) => Date.parse(b.startTime) - Date.parse(a.startTime),
-        )}
-        announcementPermissions={{ canCreate: true }}
-        updateOperation={updateAnnouncement}
-        deleteOperation={deleteAnnouncement}
-        canSticky={false}
-      />
+      {announcements.length === 0 ? (
+        <div>{intl.formatMessage(translations.noAnnouncements)}</div>
+      ) : (
+        <AnnouncementsDisplay
+          announcements={announcements.sort(
+            (a, b) => Date.parse(b.startTime) - Date.parse(a.startTime),
+          )}
+          announcementPermissions={{ canCreate: announcementPermission }}
+          updateOperation={updateAnnouncement}
+          deleteOperation={deleteAnnouncement}
+          canSticky={false}
+        />
+      )}
       <AnnouncementNew
         open={isOpen}
         handleClose={(): void => setIsOpen(false)}

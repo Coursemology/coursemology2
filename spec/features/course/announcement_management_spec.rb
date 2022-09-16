@@ -35,20 +35,11 @@ RSpec.feature 'Course: Announcements' do
 
       scenario 'I can edit announcements', js: true do
         announcement = create(:course_announcement, course: course)
-        time_zone = user.time_zone || Application.config.x.default_user_time_zone
         visit course_announcements_path(course)
 
         find("#announcement-edit-button-#{announcement.id}").click
 
-        fill_in 'title',
-                with: 'this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.'
+        fill_in 'title', with: 'long string' * 100
         find('#announcement-form-update-button').click
         expect_toastify('Failed to update the announcement')
         expect(page).to have_selector('#announcement-form-update-button')
