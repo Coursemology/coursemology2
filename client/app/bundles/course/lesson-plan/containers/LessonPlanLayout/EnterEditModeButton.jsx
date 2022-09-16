@@ -10,20 +10,14 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  button: {
-    marginRight: 16,
-  },
-};
-
 const EnterEditModeButton = () => {
   const navigate = useNavigate();
   const courseId = getCourseId();
   return (
     <Button
+      className="mr-4"
       variant="outlined"
       onClick={() => navigate(`/courses/${courseId}/lesson_plan/edit/`)}
-      style={styles.button}
     >
       <FormattedMessage {...translations.enterEditMode} />
     </Button>
