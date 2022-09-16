@@ -3,9 +3,8 @@ import { FC } from 'react';
 import { CardContent, Typography, Grid, Link } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { CourseMiniEntity } from 'types/course/courses';
-
-import './CourseInfoBox.scss';
 import { getCourseURL } from 'lib/helpers/url-builders';
+import styles from './CourseInfoBox.scss';
 
 interface Props extends WrappedComponentProps {
   course: CourseMiniEntity;
@@ -44,6 +43,7 @@ const CourseInfoBox: FC<Props> = (props) => {
               marginBottom: 0,
               marginTop: 10,
             }}
+            className={styles.coursePicture}
             dangerouslySetInnerHTML={{ __html: course.logoUrl }}
           />
           <CardContent style={{ padding: 5 }}>
