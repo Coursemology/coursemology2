@@ -26,7 +26,7 @@ $(() => {
     };
 
     render(
-      <ProviderWrapper {...{ store }}>
+      <ProviderWrapper store={store}>
         <BrowserRouter>
           <AppLayout
             renderSidebar={renderSidebar}
