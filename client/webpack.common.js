@@ -23,6 +23,7 @@ module.exports = {
       theme: resolve('./app/theme'),
       types: resolve('./app/types'),
       utilities: resolve('./app/utilities'),
+      bundles: resolve('./app/bundles'),
       course: resolve('./app/bundles/course'),
       testUtils: resolve('./app/__test__/utils'),
     },
