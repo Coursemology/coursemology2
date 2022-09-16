@@ -36,7 +36,7 @@ const styles = {
       },
     },
   },
-  buttonStyle: { padding: '0px 8px', minWidth: '0px', color: 'inherit' },
+  buttonStyle: { padding: '4px 4px', minWidth: '0px', color: 'inherit' },
 };
 
 const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
