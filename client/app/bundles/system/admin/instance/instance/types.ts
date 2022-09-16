@@ -3,22 +3,18 @@ import {
   AnnouncementData,
   AnnouncementListData,
   AnnouncementMiniEntity,
-} from 'types/system/announcements';
-import { CourseMiniEntity, CourseStats } from 'types/system/courses';
-import { CourseListData } from 'types/system/instance/courses';
+  AnnouncementPermissions,
+} from 'types/course/announcements';
 import {
-  ComponentListData,
-  ComponentMiniEntity,
-} from 'types/system/instance/components';
+  CourseListData,
+  CourseMiniEntity,
+  CourseStats,
+} from 'types/system/courses';
 import {
   RoleRequestListData,
   RoleRequestMiniEntity,
 } from 'types/system/instance/roleRequests';
-import {
-  InstanceBasicListData,
-  InstanceBasicMiniEntity,
-  InstancePermissions,
-} from 'types/system/instances';
+import { InstancePermissions } from 'types/system/instances';
 import {
   InstanceUserListData,
   InstanceAdminStats,
@@ -30,35 +26,25 @@ import {
 } from 'types/system/instance/invitations';
 
 // Action Names
-export const SAVE_INSTANCE = 'system/instance/SAVE_INSTANCE';
-export const SAVE_ANNOUNCEMENTS_LIST =
-  'system/instance/SAVE_ANNOUNCEMENTS_LIST';
+export const SAVE_ANNOUNCEMENT_LIST = 'system/instance/SAVE_ANNOUNCEMENT_LIST';
 export const SAVE_ANNOUNCEMENT = 'system/instance/SAVE_ANNOUNCEMENT';
 export const DELETE_ANNOUNCEMENT = 'system/instance/DELETE_ANNOUNCEMENT';
-export const SAVE_USERS_LIST = 'system/instance/SAVE_USERS_LIST';
+export const SAVE_USER_LIST = 'system/instance/SAVE_USER_LIST';
 export const SAVE_USER = 'system/instance/SAVE_USER';
 export const DELETE_USER = 'system/instance/DELETE_USER';
 export const SAVE_COURSE_LIST = 'system/instance/SAVE_COURSE_LIST';
 export const DELETE_COURSE = 'system/instance/DELETE_COURSE';
-export const SAVE_COMPONENTS_LIST = 'system/instance/SAVE_COMPONENTS_LIST';
-export const SAVE_ROLE_REQUESTS_LIST =
-  'system/instance/SAVE_ROLE_REQUESTS_LIST';
-export const UPDATE_ROLE_REQUEST = 'system/instance/UPDATE_ROLE_REQUEST';
-export const SAVE_USER_INVITATIONS_LIST =
-  'system/instance/SAVE_USER_INVITATIONS_LIST';
-export const UPDATE_INVITATION = 'system/instance/UPDATE_INVITATION';
-export const UPDATE_INVITATION_LIST = 'system/instance/UPDATE_INVITATION_LIST';
+export const SAVE_ROLE_REQUEST_LIST = 'system/instance/SAVE_ROLE_REQUEST_LIST';
+export const SAVE_ROLE_REQUEST = 'system/instance/SAVE_ROLE_REQUEST';
+export const SAVE_INVITATION = 'system/instance/SAVE_INVITATION';
+export const SAVE_INVITATION_LIST = 'system/instance/SAVE_INVITATION_LIST';
 export const DELETE_INVITATION = 'system/instance/DELETE_INVITATION';
 
 // Action Types
-export interface SaveInstanceAction {
-  type: typeof SAVE_INSTANCE;
-  instance: InstanceBasicListData;
-}
-
-export interface SaveAnnouncementsListAction {
-  type: typeof SAVE_ANNOUNCEMENTS_LIST;
+export interface SaveAnnouncementListAction {
+  type: typeof SAVE_ANNOUNCEMENT_LIST;
   announcementList: AnnouncementListData[];
+  announcementPermissions: AnnouncementPermissions;
 }
 
 export interface SaveAnnouncementAction {
@@ -71,8 +57,8 @@ export interface DeleteAnnouncementAction {
   id: number;
 }
 
-export interface SaveUsersListAction {
-  type: typeof SAVE_USERS_LIST;
+export interface SaveUserListAction {
+  type: typeof SAVE_USER_LIST;
   userList: InstanceUserListData[];
   counts: InstanceAdminStats;
 }
@@ -85,7 +71,7 @@ export interface DeleteUserAction {
   id: number;
 }
 
-export interface SaveCoursesListAction {
+export interface SaveCourseListAction {
   type: typeof SAVE_COURSE_LIST;
   courseList: CourseListData[];
   counts: CourseStats;
@@ -96,36 +82,23 @@ export interface DeleteCourseAction {
   id: number;
 }
 
-export interface SaveComponentsListAction {
-  type: typeof SAVE_COMPONENTS_LIST;
-  componentsList: {
-    enabled?: ComponentListData[];
-    disabled?: ComponentListData[];
-  };
-}
-
-export interface SaveRoleRequestsListAction {
-  type: typeof SAVE_ROLE_REQUESTS_LIST;
+export interface SaveRoleRequestListAction {
+  type: typeof SAVE_ROLE_REQUEST_LIST;
   roleRequests: RoleRequestListData[];
 }
 
-export interface UpdateRoleRequestAction {
-  type: typeof UPDATE_ROLE_REQUEST;
+export interface SaveRoleRequestAction {
+  type: typeof SAVE_ROLE_REQUEST;
   roleRequest: RoleRequestListData;
 }
 
-export interface SaveUserInvitationsListAction {
-  type: typeof SAVE_USER_INVITATIONS_LIST;
-  invitations: InvitationListData[];
-}
-
-export interface UpdateInvitationAction {
-  type: typeof UPDATE_INVITATION;
+export interface SaveInvitationAction {
+  type: typeof SAVE_INVITATION;
   invitation: InvitationListData;
 }
 
-export interface UpdateInvitationListAction {
-  type: typeof UPDATE_INVITATION_LIST;
+export interface SaveInvitationListAction {
+  type: typeof SAVE_INVITATION_LIST;
   invitationList: InvitationListData[];
 }
 
@@ -135,32 +108,27 @@ export interface DeleteInvitationAction {
 }
 
 export type InstanceAdminActionType =
-  | SaveInstanceAction
-  | SaveAnnouncementsListAction
+  | SaveAnnouncementListAction
   | SaveAnnouncementAction
   | DeleteAnnouncementAction
-  | SaveUsersListAction
+  | SaveUserListAction
   | SaveUserAction
   | DeleteUserAction
-  | SaveCoursesListAction
+  | SaveCourseListAction
   | DeleteCourseAction
-  | SaveComponentsListAction
-  | SaveRoleRequestsListAction
-  | UpdateRoleRequestAction
-  | SaveUserInvitationsListAction
-  | UpdateInvitationAction
-  | UpdateInvitationListAction
+  | SaveRoleRequestListAction
+  | SaveRoleRequestAction
+  | SaveInvitationAction
+  | SaveInvitationListAction
   | DeleteInvitationAction;
 
 // State Types
 export interface InstanceAdminState {
   announcements: EntityStore<AnnouncementMiniEntity>;
   courses: EntityStore<CourseMiniEntity>;
-  components: EntityStore<ComponentMiniEntity>;
   roleRequests: EntityStore<RoleRequestMiniEntity>;
   users: EntityStore<InstanceUserMiniEntity>;
   invitations: EntityStore<InvitationMiniEntity>;
-  instance: InstanceBasicMiniEntity;
   counts: InstanceAdminStats;
   permissions: InstancePermissions;
 }

@@ -29,7 +29,7 @@ $(() => {
     };
 
     render(
-      <ProviderWrapper {...{ store }}>
+      <ProviderWrapper store={store}>
         <BrowserRouter>
           <AppLayout
             renderSidebar={renderSidebar}
@@ -44,6 +44,14 @@ $(() => {
                   element={<InstanceAnnouncementsIndex />}
                 />
                 <Route
+                  path="/admin/instance/components"
+                  element={<InstanceComponentsIndex />}
+                />
+                <Route
+                  path="/admin/instance/courses"
+                  element={<InstanceCoursesIndex />}
+                />
+                <Route
                   path="/admin/instance/users"
                   element={<InstanceUsersIndex />}
                 />
@@ -54,14 +62,6 @@ $(() => {
                 <Route
                   path="/admin/instance/user_invitations"
                   element={<InstanceUsersInvitations />}
-                />
-                <Route
-                  path="/admin/instance/courses"
-                  element={<InstanceCoursesIndex />}
-                />
-                <Route
-                  path="/admin/instance/components"
-                  element={<InstanceComponentsIndex />}
                 />
                 <Route
                   path="/role_requests"
