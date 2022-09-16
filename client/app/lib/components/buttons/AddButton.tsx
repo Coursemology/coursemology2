@@ -14,11 +14,9 @@ const DeleteButton = ({
 }: Props): JSX.Element => {
   return (
     <CustomTooltip title={tooltip}>
-      <span>
-        <IconButton onClick={onClick} {...props}>
-          <AddBoxOutlined />
-        </IconButton>
-      </span>
+      <IconButton onClick={onClick} {...props}>
+        <AddBoxOutlined />
+      </IconButton>
     </CustomTooltip>
   );
 };

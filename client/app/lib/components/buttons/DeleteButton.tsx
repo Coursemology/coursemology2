@@ -25,23 +25,21 @@ const DeleteButton = ({
   return (
     <>
       <CustomTooltip title={tooltip}>
-        <span>
-          <IconButton
-            disabled={disabled}
-            onClick={(): void => {
-              if (confirmMessage) {
-                setDialogOpen(true);
-              } else {
-                onClick();
-              }
-            }}
-            color="error"
-            {...props}
-            data-testid="DeleteIconButton"
-          >
-            <Delete data-testid="DeleteIcon" />
-          </IconButton>
-        </span>
+        <IconButton
+          disabled={disabled}
+          onClick={(): void => {
+            if (confirmMessage) {
+              setDialogOpen(true);
+            } else {
+              onClick();
+            }
+          }}
+          color="error"
+          {...props}
+          data-testid="DeleteIconButton"
+        >
+          <Delete data-testid="DeleteIcon" />
+        </IconButton>
       </CustomTooltip>
       {dialogOpen && (
         <ConfirmationDialog
