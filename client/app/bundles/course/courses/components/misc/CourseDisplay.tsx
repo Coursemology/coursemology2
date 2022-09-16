@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
 import { Grid } from '@mui/material';
 import { CourseMiniEntity } from 'types/course/courses';
+import Note from 'lib/components/Note';
 import Pagination from 'lib/components/Pagination';
 import SearchBar from 'lib/components/SearchBar';
 import { injectIntl, defineMessages, WrappedComponentProps } from 'react-intl';
@@ -17,7 +18,7 @@ const translations = defineMessages({
   },
   noCourse: {
     id: 'course.courses.components.misc.noCourse',
-    defaultMessage: 'There are no courses.',
+    defaultMessage: 'There is no course yet...',
   },
 });
 
@@ -34,7 +35,7 @@ const CourseDisplay: FC<Props> = (props) => {
   const [shavedCourses, setShavedCourses] = useState(courses);
 
   if (courses.length === 0) {
-    return <div>{intl.formatMessage(translations.noCourse)}</div>;
+    return <Note message={intl.formatMessage(translations.noCourse)} />;
   }
 
   const handleSearchBarChange = (
