@@ -6,7 +6,15 @@ end
 
 request = current_tenant.user_role_requests.find_by(user_id: current_user&.id, workflow_state: 'pending')
 
-json.instanceUserRoleRequestId request&.id
+if request
+  json.instanceUserRoleRequest do
+    json.id request.id
+    json.role request.role
+    json.organization request.organization
+    json.designation request.designation
+    json.reason format_html(request.reason)
+  end
+end
 
 json.permissions do
   json.canCreate can?(:create, Course.new)

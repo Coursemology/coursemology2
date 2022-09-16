@@ -1,13 +1,16 @@
 import { RoleRequestRole } from './users';
 
-export interface RoleRequestListData {
+export interface RoleRequestBasicListData {
   id: number;
-  name: string;
-  email: string;
+  role: RoleRequestRole;
   organization: string;
   designation: string;
-  role: RoleRequestRole;
   reason: string;
+}
+
+export interface RoleRequestListData extends RoleRequestBasicListData {
+  name: string;
+  email: string;
   status: string;
   createdAt: string;
   confirmedBy?: string;
@@ -15,14 +18,9 @@ export interface RoleRequestListData {
   rejectionMessage?: string;
 }
 
-export interface RoleRequestMiniEntity {
-  id: number;
+export interface RoleRequestMiniEntity extends RoleRequestBasicListData {
   name: string;
   email: string;
-  organization: string;
-  designation: string;
-  role: RoleRequestRole;
-  reason: string;
   status: string;
   createdAt: string;
   confirmedBy?: string;
@@ -36,4 +34,11 @@ export interface RoleRequestMiniEntity {
 export interface RoleRequestRowData extends RoleRequestMiniEntity {
   'S/N'?: number;
   actions?: undefined;
+}
+
+export interface UserRoleRequestForm {
+  role: RoleRequestRole;
+  organization: string;
+  designation: string;
+  reason: string;
 }

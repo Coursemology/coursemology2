@@ -15,6 +15,7 @@ import {
 } from '../../selectors';
 import CourseDisplay from '../../components/misc/CourseDisplay';
 import CoursesNew from '../CoursesNew';
+import InstanceUserRoleRequestForm from '../../../../system/admin/instance/instance/components/forms/InstanceUserRoleRequestForm';
 
 type Props = WrappedComponentProps;
 
@@ -47,9 +48,9 @@ const translations = defineMessages({
 const CoursesIndex: FC<Props> = (props) => {
   const { intl } = props;
 
-  const [isOpen, setIsOpen] = useState(false); // For creating new course
+  const [isNewCourseDialogOpen, setIsNewCourseDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [isRoleRequestDialogOpen, setRoleRequestDialogOpen] = useState(false);
   const courses = useSelector((state: AppState) =>
     getAllCourseMiniEntities(state),
   );
@@ -58,7 +59,7 @@ const CoursesIndex: FC<Props> = (props) => {
     getCoursePermissions(state),
   );
 
-  const instanceUserRoleRequestId = useSelector((state: AppState) =>
+  const instanceUserRoleRequest = useSelector((state: AppState) =>
     getCourseInstanceUserRoleRequest(state),
   );
 
@@ -81,7 +82,7 @@ const CoursesIndex: FC<Props> = (props) => {
         key="new-course-button"
         variant="outlined"
         color="primary"
-        onClick={(): void => setIsOpen(true)}
+        onClick={(): void => setIsNewCourseDialogOpen(true)}
         style={styles.newButton}
       >
         {intl.formatMessage(translations.newCourse)}
@@ -94,17 +95,10 @@ const CoursesIndex: FC<Props> = (props) => {
         id="role-request-button"
         variant="outlined"
         color="primary"
-        // TODO Route this properly after role_request page is refactored
-        onClick={(): void => {
-          if (instanceUserRoleRequestId) {
-            window.location.href = `role_requests/${instanceUserRoleRequestId}/edit`;
-          } else {
-            window.location.href = 'role_requests/new';
-          }
-        }}
+        onClick={(): void => setRoleRequestDialogOpen(true)}
         style={styles.newButton}
       >
-        {instanceUserRoleRequestId
+        {instanceUserRoleRequest
           ? intl.formatMessage(translations.editRequest)
           : intl.formatMessage(translations.newRequest)}
       </Button>,
@@ -125,10 +119,17 @@ const CoursesIndex: FC<Props> = (props) => {
       ) : (
         <>
           <CourseDisplay courses={courses} />
-          <CoursesNew
-            open={isOpen}
-            handleClose={(): void => setIsOpen(false)}
-          />{' '}
+          {isNewCourseDialogOpen && (
+            <CoursesNew
+              handleClose={(): void => setIsNewCourseDialogOpen(false)}
+            />
+          )}
+          {isRoleRequestDialogOpen && (
+            <InstanceUserRoleRequestForm
+              handleClose={(): void => setRoleRequestDialogOpen(false)}
+              instanceUserRoleRequest={instanceUserRoleRequest}
+            />
+          )}
         </>
       )}
     </>
