@@ -15,7 +15,6 @@ import NewCourseForm from '../../components/forms/NewCourseForm';
 import { createCourse } from '../../operations';
 
 interface Props extends WrappedComponentProps {
-  open: boolean;
   handleClose: () => void;
 }
 const translations = defineMessages({
@@ -39,15 +38,11 @@ const initialValues = {
 };
 
 const CoursesNew: FC<Props> = (props) => {
-  const { open, handleClose, intl } = props;
+  const { handleClose, intl } = props;
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const [isDirty, setIsDirty] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-
-  if (!open) {
-    return null;
-  }
 
   const onSubmit = (data: NewCourseFormData, setError): Promise<void> =>
     dispatch(createCourse(data))
@@ -80,7 +75,7 @@ const CoursesNew: FC<Props> = (props) => {
             handleClose();
           }
         }}
-        open={open}
+        open
         maxWidth="lg"
         style={{
           top: 40,
