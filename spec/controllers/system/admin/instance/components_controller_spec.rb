@@ -7,12 +7,6 @@ RSpec.describe System::Admin::Instance::ComponentsController, type: :controller 
     let(:admin) { create(:administrator) }
     before { sign_in(admin) }
 
-    describe '#edit' do
-      subject { get :edit }
-
-      it { is_expected.to render_template(:index) }
-    end
-
     describe '#update' do
       let(:ids_to_enable) do
         all_component_ids = instance.disableable_components.map { |c| c.key.to_s }
