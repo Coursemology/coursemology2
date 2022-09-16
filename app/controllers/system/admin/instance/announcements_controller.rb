@@ -8,12 +8,9 @@ class System::Admin::Instance::AnnouncementsController < System::Admin::Instance
     respond_to do |format|
       format.html { render 'system/admin/instance/admin/index' }
       format.json do
-        @announcements = @announcements.includes(:creator).sorted_by_date.page(page_param)
+        @announcements = @announcements.includes(:creator).sorted_by_date
       end
     end
-  end
-
-  def new
   end
 
   def create

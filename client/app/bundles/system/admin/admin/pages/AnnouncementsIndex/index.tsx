@@ -6,6 +6,8 @@ import { toast } from 'react-toastify';
 import { AppState, AppDispatch } from 'types/store';
 import AddButton from 'lib/components/buttons/AddButton';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
+import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
 import { getAllAnnouncementMiniEntities } from '../../selectors';
 import {
   indexAnnouncements,
@@ -13,16 +15,8 @@ import {
   updateAnnouncement,
   createAnnouncement,
 } from '../../operations';
-import AnnouncementsDisplay from '../../../../../course/announcements/components/misc/AnnouncementsDisplay';
-import AnnouncementNew from '../../../../../course/announcements/pages/AnnouncementNew';
 
 type Props = WrappedComponentProps;
-
-const styles = {
-  newButton: {
-    color: 'white',
-  },
-};
 
 const translations = defineMessages({
   header: {
@@ -59,13 +53,13 @@ const AnnouncementsIndex: FC<Props> = (props) => {
 
   headerToolbars.push(
     <AddButton
+      className="text-white"
       id="new-announcement-button"
       key="new-announcement-button"
       onClick={(): void => {
         setIsOpen(true);
       }}
       tooltip={intl.formatMessage(translations.newAnnouncement)}
-      sx={styles.newButton}
     />,
   );
 

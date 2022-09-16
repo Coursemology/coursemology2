@@ -44,9 +44,9 @@ const translations = defineMessages({
     id: 'course.announcements.delete.failure',
     defaultMessage: 'Announcement could not be deleted - {error}',
   },
-  timeSeperator: {
-    id: 'course.announcements.timeSeperator',
-    defaultMessage: ' by ',
+  timeSeparator: {
+    id: 'course.announcements.timeSeparator',
+    defaultMessage: 'by',
   },
   pinnedTooltip: {
     id: 'course.announcements.pinnedTooltip',
@@ -93,6 +93,7 @@ const AnnouncementCard: FC<Props> = (props) => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
       })
       .catch((error) => {
+        setIsDeleting(false);
         const errorMessage = error.response?.data?.errors
           ? error.response.data.errors
           : '';
@@ -101,8 +102,8 @@ const AnnouncementCard: FC<Props> = (props) => {
             error: errorMessage,
           }),
         );
-      })
-      .finally(() => setIsDeleting(false));
+        throw error;
+      });
   };
 
   const onEdit = (): void => setIsOpen(true);
@@ -179,7 +180,6 @@ const AnnouncementCard: FC<Props> = (props) => {
                 <EditButton
                   id={`announcement-edit-button-${announcement.id}`}
                   onClick={onEdit}
-                  sx={{ paddingTop: 0, paddingBottom: 0, paddingRight: 0 }}
                 />
               )}
               {announcement.permissions.canDelete && (
@@ -191,7 +191,6 @@ const AnnouncementCard: FC<Props> = (props) => {
                     translations.deleteConfirmation,
                   )} (${announcement.title})?`}
                   onClick={onDelete}
-                  sx={{ paddingTop: 0, paddingBottom: 0 }}
                 />
               )}
             </div>
@@ -199,9 +198,8 @@ const AnnouncementCard: FC<Props> = (props) => {
         </div>
 
         <em className="timestamp">
-          {getFullDateTime(announcement.startTime)}
-          {intl.formatMessage(translations.timeSeperator)}
-          {renderUserLink()}
+          {getFullDateTime(announcement.startTime)}{' '}
+          {intl.formatMessage(translations.timeSeparator)} {renderUserLink()}
         </em>
         <div
           style={{ marginTop: 15, overflowWrap: 'anywhere' }}

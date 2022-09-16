@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { AnnouncementPermissions } from 'types/course/announcements';
 import { AppState, SelectionKey } from 'types/store';
 import { selectMiniEntities, selectMiniEntity } from 'utilities/store';
 
@@ -19,5 +18,5 @@ export function getAllAnnouncementMiniEntities(state: AppState) {
 }
 
 export function getAnnouncementPermissions(state: AppState) {
-  return getLocalState(state).permissions as AnnouncementPermissions;
+  return getLocalState(state).permissions;
 }
