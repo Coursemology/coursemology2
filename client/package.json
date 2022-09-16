@@ -61,6 +61,7 @@
       "^lib(.*)$": "<rootDir>/app/lib$1",
       "^theme(.*)$": "<rootDir>/app/theme$1",
       "^testUtils(.*)$": "<rootDir>/app/__test__/utils$1",
+      "^bundles(.*)$": "<rootDir>/app/bundles$1",
       "^course(.*)$": "<rootDir>/app/bundles/course$1"
     },
     "coveragePathIgnorePatterns": [
