@@ -1,5 +1,8 @@
 import { AxiosResponse } from 'axios';
-import { AnnouncementListData } from 'types/system/announcements';
+import {
+  AnnouncementListData,
+  AnnouncementPermissions,
+} from 'types/course/announcements';
 import { CourseListData } from 'types/system/courses';
 import { InstanceListData, InstancePermissions } from 'types/system/instances';
 import { UserListData, AdminStats } from 'types/users';
@@ -16,6 +19,7 @@ export default class AdminAPI extends BaseSystemAPI {
   indexAnnouncements(): Promise<
     AxiosResponse<{
       announcements: AnnouncementListData[];
+      permissions: AnnouncementPermissions;
     }>
   > {
     return this.getClient().get(`${AdminAPI._getUrlPrefix()}/announcements`);
