@@ -79,65 +79,50 @@ const formatUpdateExperiencePointsRecord = (
 
 export function fetchUsers(asBasicData: boolean = false): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.users
-      .index(asBasicData)
-      .then((response) => {
-        const data = response.data;
-        if (data.userOptions && data.userOptions.length > 0) {
-          dispatch(
-            actions.saveManageUserList(
-              data.users,
-              data.permissions!,
-              data.manageCourseUsersData!,
-              data.userOptions,
-            ),
-          );
-        } else {
-          dispatch(actions.saveUserList(data.users, data.permissions!));
-        }
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.users.index(asBasicData).then((response) => {
+      const data = response.data;
+      if (data.userOptions && data.userOptions.length > 0) {
+        dispatch(
+          actions.saveManageUserList(
+            data.users,
+            data.permissions!,
+            data.manageCourseUsersData!,
+            data.userOptions,
+          ),
+        );
+      } else {
+        dispatch(actions.saveUserList(data.users, data.permissions!));
+      }
+    });
 }
 
 export function fetchStudents(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.users
-      .indexStudents()
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveManageUserList(
-            data.users,
-            data.permissions,
-            data.manageCourseUsersData,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.users.indexStudents().then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveManageUserList(
+          data.users,
+          data.permissions,
+          data.manageCourseUsersData,
+        ),
+      );
+    });
 }
 
 export function fetchStaff(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.users
-      .indexStaff()
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveManageUserList(
-            data.users,
-            data.permissions,
-            data.manageCourseUsersData,
-            data.userOptions,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.users.indexStaff().then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveManageUserList(
+          data.users,
+          data.permissions,
+          data.manageCourseUsersData,
+          data.userOptions,
+        ),
+      );
+    });
 }
 
 export function loadUser(userId: number): Operation<SaveUserAction> {
@@ -153,22 +138,17 @@ export function updateUser(
 ): Operation<void> {
   const attributes = formatUpdateUser(data);
   return async (dispatch) =>
-    CourseAPI.users
-      .update(userId, attributes)
-      .then((response) => {
-        // if we are downgrading to student, we'll also need to add this student back to userOptions
-        if (data.role === 'student') {
-          const userOption: CourseUserBasicListData = {
-            id: response.data.id,
-            name: response.data.name,
-          };
-          dispatch(actions.updateUserOption(userOption));
-        }
-        dispatch(actions.saveUser(response.data));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.users.update(userId, attributes).then((response) => {
+      // if we are downgrading to student, we'll also need to add this student back to userOptions
+      if (data.role === 'student') {
+        const userOption: CourseUserBasicListData = {
+          id: response.data.id,
+          name: response.data.name,
+        };
+        dispatch(actions.updateUserOption(userOption));
+      }
+      dispatch(actions.saveUser(response.data));
+    });
 }
 
 export function upgradeToStaff(
@@ -176,41 +156,26 @@ export function upgradeToStaff(
   role: StaffRole,
 ): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.users
-      .upgradeToStaff(users, role)
-      .then((response) => {
-        response.data.users.forEach((user) => {
-          dispatch(actions.deleteUserOption(user.id));
-          dispatch(actions.saveUser(user));
-        });
-      })
-      .catch((error) => {
-        throw error;
+    CourseAPI.users.upgradeToStaff(users, role).then((response) => {
+      response.data.users.forEach((user) => {
+        dispatch(actions.deleteUserOption(user.id));
+        dispatch(actions.saveUser(user));
       });
+    });
 }
 
 export function deleteUser(userId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.users
-      .delete(userId)
-      .then(() => {
-        dispatch(actions.deleteUser(userId));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.users.delete(userId).then(() => {
+      dispatch(actions.deleteUser(userId));
+    });
 }
 
 export function fetchPersonalTimes(userId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.personalTimes
-      .index(userId)
-      .then((response) => {
-        dispatch(actions.savePersonalTimeList(response.data.personalTimes));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.personalTimes.index(userId).then((response) => {
+      dispatch(actions.savePersonalTimeList(response.data.personalTimes));
+    });
 }
 
 export function recomputePersonalTimes(userId: number): Operation<void> {
@@ -239,10 +204,7 @@ export function deletePersonalTime(
   return async (dispatch) =>
     CourseAPI.personalTimes
       .delete(personalTimeId, userId)
-      .then(() => dispatch(actions.deletePersonalTime(personalTimeId)))
-      .catch((error) => {
-        throw error;
-      });
+      .then(() => dispatch(actions.deletePersonalTime(personalTimeId)));
 }
 
 export function fetchExperiencePointsRecord(
@@ -250,21 +212,16 @@ export function fetchExperiencePointsRecord(
   pageNum: number = 1,
 ): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.experiencePointsRecord
-      .index(userId, pageNum)
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveExperiencePointsRecordList(
-            data.courseUserName,
-            data.rowCount,
-            data.experiencePointRecords,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.experiencePointsRecord.index(userId, pageNum).then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveExperiencePointsRecordList(
+          data.courseUserName,
+          data.rowCount,
+          data.experiencePointRecords,
+        ),
+      );
+    });
 }
 
 export function updateExperiencePointsRecord(

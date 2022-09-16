@@ -22,34 +22,24 @@ const formatAttributes = (data: NewCourseFormData): FormData => {
 
 export function fetchCourses(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.courses
-      .index()
-      .then((response) => {
-        const data = response.data;
+    CourseAPI.courses.index().then((response) => {
+      const data = response.data;
 
-        dispatch(
-          actions.saveCourseList(
-            data.courses,
-            data.permissions,
-            data.instanceUserRoleRequest,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+      dispatch(
+        actions.saveCourseList(
+          data.courses,
+          data.permissions,
+          data.instanceUserRoleRequest,
+        ),
+      );
+    });
 }
 
 export function loadCourse(courseId: number): Operation<SaveCourseAction> {
   return async (dispatch) =>
-    CourseAPI.courses
-      .fetch(courseId)
-      .then((response) => {
-        return dispatch(actions.saveCourse(response.data.course));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.courses.fetch(courseId).then((response) => {
+      return dispatch(actions.saveCourse(response.data.course));
+    });
 }
 
 export function createCourse(data: NewCourseFormData): Operation<
@@ -69,14 +59,9 @@ export function removeTodo(
   todoId: number,
 ): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.courses
-      .removeTodo(ignoreLink)
-      .then(() => {
-        dispatch(actions.removeTodo(courseId, todoType, todoId));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.courses.removeTodo(ignoreLink).then(() => {
+      dispatch(actions.removeTodo(courseId, todoType, todoId));
+    });
 }
 
 export function sendNewRegistrationCode(
@@ -92,14 +77,9 @@ export function submitEnrolRequest(
   courseId: number,
 ): Operation<SubmitEnrolAction> {
   return async (dispatch) =>
-    CourseAPI.courses
-      .submitEnrolRequest(link)
-      .then((response) => {
-        return dispatch(actions.submitEnrolRequest(courseId, response.data.id));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.courses.submitEnrolRequest(link).then((response) => {
+      return dispatch(actions.submitEnrolRequest(courseId, response.data.id));
+    });
 }
 
 export function cancelEnrolRequest(
@@ -107,12 +87,7 @@ export function cancelEnrolRequest(
   courseId: number,
 ): Operation<CancelEnrolAction> {
   return async (dispatch) =>
-    CourseAPI.courses
-      .cancelEnrolRequest(link)
-      .then(() => {
-        return dispatch(actions.cancelEnrolRequest(courseId));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.courses.cancelEnrolRequest(link).then(() => {
+      return dispatch(actions.cancelEnrolRequest(courseId));
+    });
 }

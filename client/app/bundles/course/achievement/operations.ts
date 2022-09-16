@@ -29,18 +29,13 @@ const formatAttributes = (data: AchievementFormData): FormData => {
 
 export function fetchAchievements(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.achievements
-      .index()
-      .then((response) => {
-        const data = response.data;
+    CourseAPI.achievements.index().then((response) => {
+      const data = response.data;
 
-        dispatch(
-          actions.saveAchievementList(data.achievements, data.permissions),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+      dispatch(
+        actions.saveAchievementList(data.achievements, data.permissions),
+      );
+    });
 }
 
 export function loadAchievement(
@@ -67,9 +62,6 @@ export function loadAchievementCourseUsers(
             response.data.achievementCourseUsers,
           ),
         );
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 

@@ -4,82 +4,62 @@ import * as actions from './actions';
 
 export function fetchSubmissions(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.submissions
-      .index()
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveSubmissionList(
-            data.submissions,
-            data.metaData,
-            data.permissions,
-            false,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.submissions.index().then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveSubmissionList(
+          data.submissions,
+          data.metaData,
+          data.permissions,
+          false,
+        ),
+      );
+    });
 }
 
 export function fetchMyStudentsPendingSubmissions(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.submissions
-      .pending(true)
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveSubmissionList(
-            data.submissions,
-            data.metaData,
-            data.permissions,
-            true,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.submissions.pending(true).then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveSubmissionList(
+          data.submissions,
+          data.metaData,
+          data.permissions,
+          true,
+        ),
+      );
+    });
 }
 
 export function fetchAllStudentsPendingSubmissions(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.submissions
-      .pending(false)
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveSubmissionList(
-            data.submissions,
-            data.metaData,
-            data.permissions,
-            true,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.submissions.pending(false).then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveSubmissionList(
+          data.submissions,
+          data.metaData,
+          data.permissions,
+          true,
+        ),
+      );
+    });
 }
 
 export function fetchCategorySubmissions(categoryId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.submissions
-      .category(categoryId)
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveSubmissionList(
-            data.submissions,
-            data.metaData,
-            data.permissions,
-            true,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.submissions.category(categoryId).then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveSubmissionList(
+          data.submissions,
+          data.metaData,
+          data.permissions,
+          true,
+        ),
+      );
+    });
 }
 
 export function filterSubmissions(
@@ -102,9 +82,6 @@ export function filterSubmissions(
             true,
           ),
         );
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 
@@ -125,8 +102,5 @@ export function filterPendingSubmissions(
             true,
           ),
         );
-      })
-      .catch((error) => {
-        throw error;
       });
 }

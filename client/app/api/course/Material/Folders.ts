@@ -108,9 +108,6 @@ export default class FoldersAPI extends BaseCourseAPI {
           },
           onFailure,
         );
-      })
-      .catch((error) => {
-        throw error;
       });
   }
 }

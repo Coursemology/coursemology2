@@ -22,21 +22,16 @@ const formatAttributes = (
 
 export function fetchEnrolRequests(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.enrolRequests
-      .index()
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveEnrolRequestList(
-            data.enrolRequests,
-            data.permissions,
-            data.manageCourseUsersData,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.enrolRequests.index().then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveEnrolRequestList(
+          data.enrolRequests,
+          data.permissions,
+          data.manageCourseUsersData,
+        ),
+      );
+    });
 }
 
 export function approveEnrolRequest(
@@ -48,21 +43,13 @@ export function approveEnrolRequest(
       .then((response) => {
         const enrolRequestToUpdate = response.data;
         dispatch(actions.updateEnrolRequest(enrolRequestToUpdate));
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 
 export function rejectEnrolRequest(requestId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.enrolRequests
-      .reject(requestId)
-      .then((response) => {
-        const enrolRequest = response.data;
-        dispatch(actions.updateEnrolRequest(enrolRequest));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.enrolRequests.reject(requestId).then((response) => {
+      const enrolRequest = response.data;
+      dispatch(actions.updateEnrolRequest(enrolRequest));
+    });
 }

@@ -42,21 +42,16 @@ const formatInvitations = (invitations: InvitationPostData[]): FormData => {
 
 export function fetchInvitations(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.userInvitations
-      .index()
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveInvitationList(
-            data.invitations,
-            data.permissions,
-            data.manageCourseUsersData,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.userInvitations.index().then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveInvitationList(
+          data.invitations,
+          data.permissions,
+          data.manageCourseUsersData,
+        ),
+      );
+    });
 }
 
 export function fetchPermissionsAndSharedData(): Operation<void> {
@@ -71,16 +66,11 @@ export function inviteUsersFromFile(
   fileEntity: InvitationFileEntity,
 ): Operation<InvitationResult> {
   return async (dispatch) =>
-    CourseAPI.userInvitations
-      .invite(fileEntity)
-      .then((response) => {
-        const data = response.data;
-        dispatch(actions.updateInvitationCounts(data.newInvitations));
-        return JSON.parse(data.invitationResult);
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.userInvitations.invite(fileEntity).then((response) => {
+      const data = response.data;
+      dispatch(actions.updateInvitationCounts(data.newInvitations));
+      return JSON.parse(data.invitationResult);
+    });
 }
 
 export function inviteUsersFromForm(
@@ -97,14 +87,9 @@ export function inviteUsersFromForm(
 
 export function resendAllInvitations(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.userInvitations
-      .resendAllInvitations()
-      .then((response) => {
-        dispatch(actions.updateInvitationList(response.data.invitations));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.userInvitations.resendAllInvitations().then((response) => {
+      dispatch(actions.updateInvitationList(response.data.invitations));
+    });
 }
 
 export function resendInvitationEmail(invitationId: number): Operation<void> {
@@ -113,9 +98,6 @@ export function resendInvitationEmail(invitationId: number): Operation<void> {
       .resendInvitationEmail(invitationId)
       .then((response) => {
         dispatch(actions.updateInvitation(response.data));
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 

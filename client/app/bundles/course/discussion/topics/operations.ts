@@ -50,18 +50,13 @@ export function fetchTabData(): Operation<
   }>
 > {
   return async (dispatch) =>
-    CourseAPI.comments
-      .index()
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveCommentTab(data.permissions, data.settings, data.tabs),
-        );
-        return response;
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.comments.index().then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveCommentTab(data.permissions, data.settings, data.tabs),
+      );
+      return response;
+    });
 }
 
 export function fetchCommentData(
@@ -84,34 +79,21 @@ export function fetchCommentData(
         const data = response.data;
         dispatch(actions.saveCommentList(data.topicCount, data.topicList));
         return response;
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 
 export function updatePending(topicId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.comments
-      .togglePending(topicId)
-      .then(() => {
-        dispatch(actions.savePending(topicId));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.comments.togglePending(topicId).then(() => {
+      dispatch(actions.savePending(topicId));
+    });
 }
 
 export function updateRead(topicId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.comments
-      .markAsRead(topicId)
-      .then(() => {
-        dispatch(actions.saveRead(topicId));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.comments.markAsRead(topicId).then(() => {
+      dispatch(actions.saveRead(topicId));
+    });
 }
 
 export function createPost(
@@ -124,9 +106,6 @@ export function createPost(
       .then((response) => {
         dispatch(actions.createPost(response.data));
         return response;
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 
@@ -143,9 +122,6 @@ export function updatePost(
       )
       .then((response) => {
         dispatch(actions.updatePost(response.data));
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 
@@ -163,9 +139,6 @@ export function updatePostCodaveri(
       )
       .then((response) => {
         dispatch(actions.updatePost(response.data));
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 
@@ -175,8 +148,5 @@ export function deletePost(post: CommentPostMiniEntity): Operation<void> {
       .delete(post.topicId.toString(), post.id.toString())
       .then(() => {
         dispatch(actions.deletePost(post.id));
-      })
-      .catch((error) => {
-        throw error;
       });
 }

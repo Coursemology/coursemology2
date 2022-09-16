@@ -76,24 +76,19 @@ export function createFolder(
   const attributes = formatFolderAttributes(formData);
   attributes.append('material_folder[parent_id]', `${folderId}`);
   return async (dispatch) =>
-    CourseAPI.folders
-      .createFolder(folderId, attributes)
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveFolder(
-            data.currFolderInfo,
-            data.subfolders,
-            data.materials,
-            data.breadcrumbs,
-            data.advanceStartAt,
-            data.permissions,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.folders.createFolder(folderId, attributes).then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveFolder(
+          data.currFolderInfo,
+          data.subfolders,
+          data.materials,
+          data.breadcrumbs,
+          data.advanceStartAt,
+          data.permissions,
+        ),
+      );
+    });
 }
 
 export function updateFolder(
@@ -102,24 +97,19 @@ export function updateFolder(
 ): Operation<void> {
   const attributes = formatFolderAttributes(formData);
   return async (dispatch) =>
-    CourseAPI.folders
-      .updateFolder(folderId, attributes)
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveFolder(
-            data.currFolderInfo,
-            data.subfolders,
-            data.materials,
-            data.breadcrumbs,
-            data.advanceStartAt,
-            data.permissions,
-          ),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.folders.updateFolder(folderId, attributes).then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveFolder(
+          data.currFolderInfo,
+          data.subfolders,
+          data.materials,
+          data.breadcrumbs,
+          data.advanceStartAt,
+          data.permissions,
+        ),
+      );
+    });
 }
 
 export function deleteFolder(folderId: number): Operation<void> {
@@ -172,9 +162,6 @@ export function uploadMaterials(
             data.permissions,
           ),
         );
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 
@@ -200,9 +187,6 @@ export function updateMaterial(
       .then((response) => {
         const data = response.data;
         dispatch(actions.saveMaterialList(data));
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 
