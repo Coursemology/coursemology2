@@ -132,6 +132,25 @@ const InstanceAdminSidebar: FC<Props> = (props) => {
       >
         <Grid item>
           <List style={{ marginTop: '60px' }}>
+            <ListItem button onClick={handleExpandClick}>
+              <ListItemIcon sx={{ minWidth: '32px' }}>
+                {isExpanded ? (
+                  <KeyboardDoubleArrowLeft />
+                ) : (
+                  <Tooltip
+                    placement="right"
+                    title={intl.formatMessage(translations.expandSidebar)}
+                  >
+                    <KeyboardDoubleArrowRight />
+                  </Tooltip>
+                )}
+              </ListItemIcon>
+              {isExpanded && (
+                <ListItemText
+                  primary={intl.formatMessage(translations.collapseSidebar)}
+                />
+              )}
+            </ListItem>
             <ListItemLink
               to="/admin/instance/announcements"
               primary={intl.formatMessage(translations.announcements)}
@@ -167,29 +186,6 @@ const InstanceAdminSidebar: FC<Props> = (props) => {
               icon={<AssignmentInd />}
               expanded={isExpanded}
             />
-          </List>
-        </Grid>
-        <Grid item>
-          <List>
-            <ListItem button onClick={handleExpandClick}>
-              <ListItemIcon sx={{ minWidth: '32px' }}>
-                {isExpanded ? (
-                  <KeyboardDoubleArrowLeft />
-                ) : (
-                  <Tooltip
-                    placement="right"
-                    title={intl.formatMessage(translations.expandSidebar)}
-                  >
-                    <KeyboardDoubleArrowRight />
-                  </Tooltip>
-                )}
-              </ListItemIcon>
-              {isExpanded && (
-                <ListItemText
-                  primary={intl.formatMessage(translations.collapseSidebar)}
-                />
-              )}
-            </ListItem>
           </List>
         </Grid>
       </Grid>

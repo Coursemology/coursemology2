@@ -1,67 +1,52 @@
 import {
   AnnouncementData,
   AnnouncementListData,
-} from 'types/system/announcements';
-import { CourseStats } from 'types/system/courses';
-import { ComponentListData } from 'types/system/instance/components';
-import { CourseListData } from 'types/system/instance/courses';
+  AnnouncementPermissions,
+} from 'types/course/announcements';
+import { CourseListData, CourseStats } from 'types/system/courses';
 import { InvitationListData } from 'types/system/instance/invitations';
 import { RoleRequestListData } from 'types/system/instance/roleRequests';
 import {
   InstanceUserListData,
   InstanceAdminStats,
 } from 'types/system/instance/users';
-import { InstanceBasicListData } from 'types/system/instances';
 import {
-  SaveInstanceAction,
-  SaveAnnouncementsListAction,
+  SaveAnnouncementListAction,
   DeleteAnnouncementAction,
   SaveAnnouncementAction,
   DeleteUserAction,
   SaveUserAction,
-  SaveUsersListAction,
+  SaveUserListAction,
   DeleteCourseAction,
-  SaveCoursesListAction,
-  SaveComponentsListAction,
-  SaveRoleRequestsListAction,
-  UpdateRoleRequestAction,
-  SaveUserInvitationsListAction,
-  UpdateInvitationAction,
-  UpdateInvitationListAction,
+  SaveCourseListAction,
+  SaveRoleRequestListAction,
+  SaveRoleRequestAction,
+  SaveInvitationAction,
+  SaveInvitationListAction,
   DeleteInvitationAction,
-  SAVE_INSTANCE,
-  SAVE_ANNOUNCEMENTS_LIST,
+  SAVE_ANNOUNCEMENT_LIST,
   DELETE_ANNOUNCEMENT,
   SAVE_ANNOUNCEMENT,
   DELETE_USER,
   SAVE_USER,
-  SAVE_USERS_LIST,
+  SAVE_USER_LIST,
   DELETE_COURSE,
   SAVE_COURSE_LIST,
-  SAVE_COMPONENTS_LIST,
-  SAVE_ROLE_REQUESTS_LIST,
-  UPDATE_ROLE_REQUEST,
-  SAVE_USER_INVITATIONS_LIST,
-  UPDATE_INVITATION,
-  UPDATE_INVITATION_LIST,
+  SAVE_ROLE_REQUEST_LIST,
+  SAVE_ROLE_REQUEST,
+  SAVE_INVITATION,
+  SAVE_INVITATION_LIST,
   DELETE_INVITATION,
 } from './types';
 
-export function saveInstance(
-  instance: InstanceBasicListData,
-): SaveInstanceAction {
-  return {
-    type: SAVE_INSTANCE,
-    instance,
-  };
-}
-
-export function saveAnnouncementsList(
+export function saveAnnouncementList(
   announcementList: AnnouncementListData[],
-): SaveAnnouncementsListAction {
+  announcementPermissions: AnnouncementPermissions,
+): SaveAnnouncementListAction {
   return {
-    type: SAVE_ANNOUNCEMENTS_LIST,
+    type: SAVE_ANNOUNCEMENT_LIST,
     announcementList,
+    announcementPermissions,
   };
 }
 
@@ -80,12 +65,12 @@ export function deleteAnnouncement(
   };
 }
 
-export function saveUsersList(
+export function saveUserList(
   userList: InstanceUserListData[],
   counts: InstanceAdminStats,
-): SaveUsersListAction {
+): SaveUserListAction {
   return {
-    type: SAVE_USERS_LIST,
+    type: SAVE_USER_LIST,
     userList,
     counts,
   };
@@ -108,7 +93,7 @@ export function deleteUser(id: number): DeleteUserAction {
 export function saveCourseList(
   courseList: CourseListData[],
   counts: CourseStats,
-): SaveCoursesListAction {
+): SaveCourseListAction {
   return {
     type: SAVE_COURSE_LIST,
     courseList,
@@ -123,57 +108,38 @@ export function deleteCourse(courseId: number): DeleteCourseAction {
   };
 }
 
-export function saveComponentsList(componentsList: {
-  enabled?: ComponentListData[];
-  disabled?: ComponentListData[];
-}): SaveComponentsListAction {
-  return {
-    type: SAVE_COMPONENTS_LIST,
-    componentsList,
-  };
-}
-
-export function saveRoleRequestsList(
+export function saveRoleRequestList(
   roleRequests: RoleRequestListData[],
-): SaveRoleRequestsListAction {
+): SaveRoleRequestListAction {
   return {
-    type: SAVE_ROLE_REQUESTS_LIST,
+    type: SAVE_ROLE_REQUEST_LIST,
     roleRequests,
   };
 }
 
-export function updateRoleRequest(
+export function saveRoleRequest(
   roleRequest: RoleRequestListData,
-): UpdateRoleRequestAction {
+): SaveRoleRequestAction {
   return {
-    type: UPDATE_ROLE_REQUEST,
+    type: SAVE_ROLE_REQUEST,
     roleRequest,
   };
 }
 
-export function saveUserInvitationsList(
-  invitations: InvitationListData[],
-): SaveUserInvitationsListAction {
-  return {
-    type: SAVE_USER_INVITATIONS_LIST,
-    invitations,
-  };
-}
-
-export function updateInvitation(
+export function saveInvitation(
   invitation: InvitationListData,
-): UpdateInvitationAction {
+): SaveInvitationAction {
   return {
-    type: UPDATE_INVITATION,
+    type: SAVE_INVITATION,
     invitation,
   };
 }
 
-export function updateInvitationList(
+export function saveInvitationList(
   invitationList: InvitationListData[],
-): UpdateInvitationListAction {
+): SaveInvitationListAction {
   return {
-    type: UPDATE_INVITATION_LIST,
+    type: SAVE_INVITATION_LIST,
     invitationList,
   };
 }

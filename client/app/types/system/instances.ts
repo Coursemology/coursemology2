@@ -1,6 +1,8 @@
 import { Permissions } from 'types';
 
-export type InstancePermissions = Permissions<'canCreateInstances'>;
+export type InstancePermissions = Permissions<
+  'canCreateInstances' | 'canCreateAnnouncement'
+>;
 
 export type InstanceMiniEntityPermissions = Permissions<
   'canEdit' | 'canDelete'

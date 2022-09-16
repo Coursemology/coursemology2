@@ -6,15 +6,15 @@ function getLocalState(state: AppState) {
   return state.instanceAdmin;
 }
 
-export function getInstance(state: AppState) {
-  return getLocalState(state).instance;
-}
-
 export function getAllAnnouncementMiniEntities(state: AppState) {
   return selectMiniEntities(
     getLocalState(state).announcements,
     getLocalState(state).announcements.ids,
   );
+}
+
+export function getAnnouncementPermission(state: AppState) {
+  return getLocalState(state).permissions.canCreateAnnouncement;
 }
 
 export function getAllUserMiniEntities(state: AppState) {
@@ -39,13 +39,6 @@ export function getAllCourseMiniEntities(state: AppState) {
   return selectMiniEntities(
     getLocalState(state).courses,
     getLocalState(state).courses.ids,
-  );
-}
-
-export function getAllComponentsMiniEntities(state: AppState) {
-  return selectMiniEntities(
-    getLocalState(state).components,
-    getLocalState(state).components.ids,
   );
 }
 

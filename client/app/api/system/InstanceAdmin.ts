@@ -1,7 +1,10 @@
 import { AxiosResponse } from 'axios';
-import { AnnouncementListData } from 'types/system/announcements';
+import {
+  AnnouncementListData,
+  AnnouncementPermissions,
+} from 'types/course/announcements';
 import { CourseListData } from 'types/system/courses';
-import { ComponentListData } from 'types/system/instance/components';
+import { ComponentData } from 'types/system/instance/components';
 import { InvitationListData } from 'types/system/instance/invitations';
 import { RoleRequestListData } from 'types/system/instance/roleRequests';
 import {
@@ -33,6 +36,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
   indexAnnouncements(): Promise<
     AxiosResponse<{
       announcements: AnnouncementListData[];
+      permissions: AnnouncementPermissions;
     }>
   > {
     return this.getClient().get(
@@ -125,6 +129,19 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
   }
 
   /**
+   * Deletes an invitation.
+   *
+   * @param {number} invitationId Invitation to delete
+   * @return {Promise}
+   * error response: { errors: [] } - An array of errors will be returned upon validation error.
+   */
+  deleteInvitation(invitationId: number): Promise<AxiosResponse> {
+    return this.getClient().delete(
+      `${InstanceAdminAPI._getUrlPrefix()}/user_invitations/${invitationId}`,
+    );
+  }
+
+  /**
    * Invites users
    *
    * @param {FormData} data Cleaned form data from react-hook-form
@@ -146,20 +163,6 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
   }
 
   /**
-   * Resends all invitation emails.
-   *
-   * @return {Promise} updated invitations
-   * error response: { errors: [] } - An array of errors will be returned upon validation error.
-   */
-  resendAllInvitations(): Promise<
-    AxiosResponse<{ invitations: InvitationListData[] }>
-  > {
-    return this.getClient().post(
-      `${InstanceAdminAPI._getUrlPrefix()}/users/resend_invitations`,
-    );
-  }
-
-  /**
    * Resends an invitation email.
    *
    * @param {number} invitationId Invitation to resend email to
@@ -175,15 +178,16 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
   }
 
   /**
-   * Deletes an invitation.
+   * Resends all invitation emails.
    *
-   * @param {number} invitationId Invitation to delete
-   * @return {Promise}
+   * @return {Promise} updated invitations
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
-  deleteInvitation(invitationId: number): Promise<AxiosResponse> {
-    return this.getClient().delete(
-      `${InstanceAdminAPI._getUrlPrefix()}/user_invitations/${invitationId}`,
+  resendAllInvitations(): Promise<
+    AxiosResponse<{ invitations: InvitationListData[] }>
+  > {
+    return this.getClient().post(
+      `${InstanceAdminAPI._getUrlPrefix()}/users/resend_invitations`,
     );
   }
 
@@ -222,10 +226,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
    */
   indexComponents(): Promise<
     AxiosResponse<{
-      components: {
-        enabled?: ComponentListData[];
-        disabled?: ComponentListData[];
-      };
+      components: ComponentData[];
     }>
   > {
     return this.getClient().get(
@@ -238,10 +239,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
    */
   updateComponents(params): Promise<
     AxiosResponse<{
-      components: {
-        enabled?: ComponentListData[];
-        disabled?: ComponentListData[];
-      };
+      components: ComponentData[];
     }>
   > {
     return this.getClient().patch(
@@ -259,6 +257,23 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
     }>
   > {
     return this.getClient().get('/role_requests');
+  }
+
+  /**
+   * Creates a role request.
+   */
+  createRoleRequest(params: FormData): Promise<AxiosResponse<{ id: number }>> {
+    return this.getClient().post(`/role_requests`, params);
+  }
+
+  /**
+   * Updates a role request.
+   */
+  updateRoleRequest(
+    roleRequestId: number,
+    params: FormData,
+  ): Promise<AxiosResponse<{ id: number }>> {
+    return this.getClient().patch(`/role_requests/${roleRequestId}`, params);
   }
 
   /**

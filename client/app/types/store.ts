@@ -13,7 +13,7 @@ import { DisbursementState } from 'bundles/course/experience-points/disbursement
 import { CommentState } from 'bundles/course/discussion/topics/types';
 import { FoldersState } from 'bundles/course/material/folders/types';
 import { AdminState } from 'bundles/system/admin/admin/types';
-import { InstanceAdminState } from 'bundles/system/admin/instance/types';
+import { InstanceAdminState } from 'bundles/system/admin/instance/instance/types';
 import { GlobalUserState } from 'bundles/users/types';
 
 /**
