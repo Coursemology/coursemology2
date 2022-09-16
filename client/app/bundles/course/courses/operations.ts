@@ -30,8 +30,8 @@ export function fetchCourses(): Operation<void> {
         dispatch(
           actions.saveCourseList(
             data.courses,
-            data.instanceUserRoleRequestId,
             data.permissions,
+            data.instanceUserRoleRequest,
           ),
         );
       })

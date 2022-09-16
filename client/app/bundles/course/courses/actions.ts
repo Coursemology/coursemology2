@@ -3,29 +3,41 @@ import {
   CourseListData,
   CoursePermissions,
 } from 'types/course/courses';
+import { RoleRequestBasicListData } from 'types/system/instance/roleRequests';
 import {
   SAVE_COURSE_LIST,
   SAVE_COURSE,
   REMOVE_TODO,
   SUBMIT_ENROL,
   CANCEL_ENROL,
+  SAVE_INSTANCE_ROLE_REQUEST,
   SaveCourseListAction,
   SaveCourseAction,
   RemoveTodoAction,
   SubmitEnrolAction,
   CancelEnrolAction,
+  SaveInstanceRoleRequest,
 } from './types';
 
 export function saveCourseList(
   courseList: CourseListData[],
-  instanceUserRoleRequestId: number,
   coursesPermissions: CoursePermissions,
+  instanceUserRoleRequest?: RoleRequestBasicListData,
 ): SaveCourseListAction {
   return {
     type: SAVE_COURSE_LIST,
     courseList,
-    instanceUserRoleRequestId,
+    instanceUserRoleRequest,
     coursesPermissions,
+  };
+}
+
+export function saveInstanceRoleRequest(
+  instanceUserRoleRequest: RoleRequestBasicListData,
+): SaveInstanceRoleRequest {
+  return {
+    type: SAVE_INSTANCE_ROLE_REQUEST,
+    instanceUserRoleRequest,
   };
 }
 

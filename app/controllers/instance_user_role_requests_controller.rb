@@ -13,35 +13,21 @@ class InstanceUserRoleRequestsController < ApplicationController
     end
   end
 
-  def new
-    @existing_role_request = @user_role_request.
-                             instance.user_role_requests.
-                             where(user_id: current_user.id, workflow_state: :pending).first
-    if @existing_role_request
-      redirect_to edit_instance_user_role_request_path(@existing_role_request)
-    else
-      render 'new'
-    end
-  end
-
   def create
     @user_role_request.user = current_user
     if @user_role_request.save
       @user_role_request.send_new_request_email(current_tenant)
-      redirect_to courses_path, success: t('.success')
+      render json: { id: @user_role_request.id }, status: :ok
     else
-      render 'new'
+      render json: { errors: @user_role_request.errors }, status: :bad_request
     end
-  end
-
-  def edit
   end
 
   def update
     if @user_role_request.pending? && @user_role_request.update(user_role_request_params)
-      redirect_to courses_path, success: t('.success')
+      render json: { id: @user_role_request.id }, status: :ok
     else
-      render 'edit'
+      render json: { errors: @user_role_request.errors }, status: :bad_request
     end
   end
 

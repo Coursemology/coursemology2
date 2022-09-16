@@ -14,7 +14,7 @@ const ErrorText = ({ errors }) => {
     return null;
   }
   if (errors.constructor === String) {
-    return <div style={{ color: red[500] }}>{`- ${errors}`}</div>;
+    return <div style={{ color: red[500] }}>{errors}</div>;
   }
   if (errors.constructor === Array) {
     return (

@@ -24,12 +24,6 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  button: {
-    marginRight: 15,
-  },
-};
-
 class NewSectionButton extends Component {
   createSectionHandler = (data, setError) => {
     const { dispatch } = this.props;
@@ -58,13 +52,13 @@ class NewSectionButton extends Component {
   render() {
     return (
       <Button
+        className="mr-4"
         variant="contained"
         color="primary"
         disabled={this.props.disabled}
         onClick={this.showNewSectionForm}
-        style={styles.button}
       >
-        <FormattedMessage {...translations.newSection} />{' '}
+        <FormattedMessage {...translations.newSection} />
       </Button>
     );
   }

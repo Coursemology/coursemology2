@@ -133,7 +133,7 @@ export default class ForumPostSelect extends Component {
             values={{ maxPosts }}
             {...translations.selectInstructions}
           />
-        </strong>{' '}
+        </strong>
         <FormattedMessage
           values={{ numPosts: postPacks.length }}
           {...translations.selectedPostsInstructions}

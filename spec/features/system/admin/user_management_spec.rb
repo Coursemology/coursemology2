@@ -23,8 +23,8 @@ RSpec.feature 'System: Administration: Users', js: true do
       end
 
       scenario 'I can filter users by role and view only administrators' do
-        visit admin_users_path(role: :administrator)
-
+        visit admin_users_path
+        find(:xpath, '//*[@id="system-admin-component"]/div[1]/div[4]/div[2]/div[2]/p[1]/button[1]').click
         User.human_users.normal.ordered_by_name.limit(3).each do |user|
           expect(page).to have_no_selector('div.user_name', exact_text: user.name)
           expect(page).to have_no_selector('p.user_email', exact_text: user.email)
@@ -58,7 +58,7 @@ RSpec.feature 'System: Administration: Users', js: true do
         find("#role-#{user_to_change.id}-administrator").select_option
         # Disabled due to flaky test
         # expect_toastify("Successfully changed #{new_name}'s role to Administrator.")
-
+        sleep 0.2
         expect(user_to_change.reload).to be_administrator
         expect(user_to_change.name).to eq(new_name)
       end

@@ -25,10 +25,10 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
       end
 
       context 'when a user creates a new role request' do
-        it 'redirects and sets the proper success flash message' do
+        it 'returns the correct JSON response' do
           subject
-          is_expected.to redirect_to(courses_path)
-          expect(flash[:success]).to eq(I18n.t('instance_user_role_requests.create.success'))
+          is_expected.to have_http_status(:ok)
+          expect(JSON.parse(response.body)).to have_key('id')
         end
 
         it 'sends an email notification to the admin', type: :mailer do
@@ -43,9 +43,13 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
 
       context 'there is an existing request' do
         let!(:request) { create(:instance_user_role_request, :pending, instance: instance, user: user) }
-        it 'returns to the "new" page' do
+        it 'returns bad request header with the correct error message' do
           subject
-          is_expected.to render_template(:new)
+          is_expected.to have_http_status(:bad_request)
+          json_response = JSON.parse(response.body, { symbolize_names: true })
+          expect(json_response[:errors][:base]).to include(I18n.t('activerecord.errors.models.'\
+                                                                  'instance/user_role_request.attributes.'\
+                                                                  'base.existing_pending_request'))
         end
       end
     end
@@ -63,16 +67,21 @@ RSpec.describe InstanceUserRoleRequestsController, type: :controller do
       end
 
       context 'when a user updates an existing role request' do
-        it 'redirects to courses path' do
-          is_expected.to redirect_to(courses_path)
+        it 'returns the correct JSON response' do
+          subject
+          is_expected.to have_http_status(:ok)
+          json_response = JSON.parse(response.body, { symbolize_names: true })
+          expect(json_response[:id]).to eq(request.id)
         end
       end
 
       context 'when a field input is invalid' do
         let(:designation) { 'Boss' * 100 }
-        it 'renders "edit" page' do
+        it 'returns bad request header with the correct error message' do
           subject
-          is_expected.to render_template(:edit)
+          is_expected.to have_http_status(:bad_request)
+          json_response = JSON.parse(response.body, { symbolize_names: true })
+          expect(json_response[:errors][:designation]).to include('is too long (maximum is 255 characters)')
         end
       end
     end

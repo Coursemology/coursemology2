@@ -4,6 +4,7 @@ import {
   CourseListData,
   CoursePermissions,
 } from 'types/course/courses';
+import { RoleRequestBasicListData } from 'types/system/instance/roleRequests';
 import BaseCourseAPI from './Base';
 
 export default class CoursesAPI extends BaseCourseAPI {
@@ -15,7 +16,7 @@ export default class CoursesAPI extends BaseCourseAPI {
   index(): Promise<
     AxiosResponse<{
       courses: CourseListData[];
-      instanceUserRoleRequestId: number;
+      instanceUserRoleRequest?: RoleRequestBasicListData;
       permissions: CoursePermissions;
     }>
   > {

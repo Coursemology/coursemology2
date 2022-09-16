@@ -15,11 +15,15 @@ RSpec.feature 'Instance::UserRoleRequests' do
         find('#role-request-button').click
 
         request = build(:role_request)
-        fill_in 'user_role_request[organization]', with: request.organization
-        fill_in 'user_role_request[designation]', with: request.designation
-        fill_in 'user_role_request[reason]', with: request.reason
 
-        expect { click_button 'create' }.to change(ActionMailer::Base.deliveries, :count)
+        fill_in 'Organization', with: request.organization
+        fill_in 'Designation', with: request.designation
+        fill_in 'Reason', with: request.reason
+
+        expect do
+          find('button.btn-submit').click
+          sleep 0.2
+        end.to change(ActionMailer::Base.deliveries, :count)
 
         request_created = instance.user_role_requests.last
 
@@ -35,40 +39,10 @@ RSpec.feature 'Instance::UserRoleRequests' do
         find('#role-request-button').click
 
         new_reason = 'New Reason'
-        fill_in 'user_role_request[reason]', with: new_reason
-        click_button 'edit'
-
+        fill_in 'Reason', with: new_reason
+        find('button.btn-submit').click
+        sleep 0.2
         expect(request.reload.reason).to eq(new_reason)
-      end
-
-      scenario 'when there is an existing user request, I am redirected to the edit page', js: true do
-        request = create(:role_request, user: user, instance: instance)
-        visit new_instance_user_role_request_path
-        expect(current_path).to eq(edit_instance_user_role_request_path(request))
-      end
-
-      scenario 'when I access a approved user request edit page', js: true do
-        request = create(:role_request, :approved, user: user, instance: instance)
-        visit edit_instance_user_role_request_path(request)
-        expect(page).to have_text(I18n.t('instance_user_role_requests.form.role_request_approved'))
-
-        expect(page).to have_field('user_role_request[organization]', visible: false, disabled: true)
-        expect(page).to have_field('user_role_request[designation]', visible: false, disabled: true)
-        expect(page).to have_field('user_role_request[reason]', visible: false, disabled: true)
-
-        expect(page).not_to have_button(I18n.t('instance_user_role_requests.form.edit_button'))
-      end
-
-      scenario 'when I access a rejected user request edit page', js: true do
-        request = create(:role_request, :rejected, user: user, instance: instance)
-        visit edit_instance_user_role_request_path(request)
-        expect(page).to have_text(I18n.t('instance_user_role_requests.form.role_request_rejected'))
-
-        expect(page).to have_field('user_role_request[organization]', visible: false, disabled: true)
-        expect(page).to have_field('user_role_request[designation]', visible: false, disabled: true)
-        expect(page).to have_field('user_role_request[reason]', visible: false, disabled: true)
-
-        expect(page).not_to have_button(I18n.t('instance_user_role_requests.form.edit_button'))
       end
     end
 

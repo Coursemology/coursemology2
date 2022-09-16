@@ -8,7 +8,7 @@ exports[`<ErrorText /> when input is a string displays it 1`] = `
     }
   }
 >
-  - An error.
+  An error.
 </div>
 `;
 

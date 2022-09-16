@@ -42,7 +42,6 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
           find('div.user_role').click
         end
         find("#role-#{user_to_change.id}-administrator").select_option
-        # byebug
         expect_toastify("Successfully changed #{user_to_change.user.name}'s role to Administrator.")
 
         expect(user_to_change.reload).to be_administrator

@@ -36,15 +36,7 @@ RSpec.feature 'System: Administration: Instance Announcements', js: true do
 
         find("#announcement-edit-button-#{announcement.id}").click
 
-        fill_in 'title',
-                with: 'this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.
-                       this is a very long string. this is a very long string. this is a very long string.'
+        fill_in 'title', with: 'long string' * 100
         find('#announcement-form-update-button').click
         expect_toastify('Failed to update the announcement')
         expect(page).to have_selector('#announcement-form-update-button')

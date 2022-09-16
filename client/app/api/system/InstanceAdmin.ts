@@ -260,6 +260,23 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
   }
 
   /**
+   * Creates a role request.
+   */
+  createRoleRequest(params: FormData): Promise<AxiosResponse<{ id: number }>> {
+    return this.getClient().post(`/role_requests`, params);
+  }
+
+  /**
+   * Updates a role request.
+   */
+  updateRoleRequest(
+    roleRequestId: number,
+    params: FormData,
+  ): Promise<AxiosResponse<{ id: number }>> {
+    return this.getClient().patch(`/role_requests/${roleRequestId}`, params);
+  }
+
+  /**
    * Approve an instance user role request
    * success response: RoleRequestListData - Data of the changed instance user
    * error response: { errors: [] } - An array of errors will be returned upon error.

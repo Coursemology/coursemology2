@@ -44,9 +44,9 @@ const translations = defineMessages({
     id: 'course.announcements.delete.failure',
     defaultMessage: 'Announcement could not be deleted - {error}',
   },
-  timeSeperator: {
-    id: 'course.announcements.timeSeperator',
-    defaultMessage: ' by ',
+  timeSeparator: {
+    id: 'course.announcements.timeSeparator',
+    defaultMessage: 'by',
   },
   pinnedTooltip: {
     id: 'course.announcements.pinnedTooltip',
@@ -198,9 +198,8 @@ const AnnouncementCard: FC<Props> = (props) => {
         </div>
 
         <em className="timestamp">
-          {getFullDateTime(announcement.startTime)}
-          {intl.formatMessage(translations.timeSeperator)}
-          {renderUserLink()}
+          {getFullDateTime(announcement.startTime)}{' '}
+          {intl.formatMessage(translations.timeSeparator)} {renderUserLink()}
         </em>
         <div
           style={{ marginTop: 15, overflowWrap: 'anywhere' }}

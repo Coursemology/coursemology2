@@ -8,7 +8,10 @@ import {
   InvitationsPostData,
 } from 'types/system/instance/invitations';
 import { ComponentData } from 'types/system/instance/components';
-import { RoleRequestMiniEntity } from 'types/system/instance/roleRequests';
+import {
+  RoleRequestMiniEntity,
+  UserRoleRequestForm,
+} from 'types/system/instance/roleRequests';
 import { InstanceBasicListData } from 'types/system/instances';
 import * as actions from './actions';
 
@@ -118,7 +121,9 @@ const formatComponentAttributes = (
  *     { role, organization, designation, reason }
  *   }
  */
-const formatRoleRequestAttributes = (data: RoleRequestMiniEntity): FormData => {
+const formatRoleRequestAttributes = (
+  data: RoleRequestMiniEntity | UserRoleRequestForm,
+): FormData => {
   const payload = new FormData();
 
   ['role', 'organization', 'designation', 'reason'].forEach((field) => {
@@ -285,6 +290,26 @@ export function fetchRoleRequests(): Operation<void> {
       dispatch(actions.saveRoleRequestList(data.roleRequests));
     });
 }
+
+export const createRoleRequest = async (
+  roleRequest: UserRoleRequestForm,
+): Promise<{ id: number }> => {
+  const formattedData = formatRoleRequestAttributes(roleRequest);
+  const response = await SystemAPI.instance.createRoleRequest(formattedData);
+  return response.data;
+};
+
+export const updateRoleRequest = async (
+  roleRequest: UserRoleRequestForm,
+  roleRequestId: number,
+): Promise<{ id: number }> => {
+  const formattedData = formatRoleRequestAttributes(roleRequest);
+  const response = await SystemAPI.instance.updateRoleRequest(
+    roleRequestId,
+    formattedData,
+  );
+  return response.data;
+};
 
 export function approveRoleRequest(
   roleRequest: RoleRequestMiniEntity,
