@@ -9,9 +9,9 @@ import {
 import {
   AdminState,
   AdminActionType,
-  SAVE_ANNOUNCEMENTS_LIST,
+  SAVE_ANNOUNCEMENT_LIST,
   DELETE_ANNOUNCEMENT,
-  SAVE_USERS_LIST,
+  SAVE_USER_LIST,
   SAVE_COURSE_LIST,
   SAVE_INSTANCE_LIST,
   DELETE_COURSE,
@@ -45,17 +45,20 @@ const initialState: AdminState = {
   instances: createEntityStore(),
   courses: createEntityStore(),
   permissions: {
+    canCreateAnnouncement: false,
     canCreateInstances: false,
   },
 };
 
 const reducer = produce((draft: AdminState, action: AdminActionType) => {
   switch (action.type) {
-    case SAVE_ANNOUNCEMENTS_LIST: {
+    case SAVE_ANNOUNCEMENT_LIST: {
       const announcementList = action.announcementList;
       const entityList = announcementList.map((data) => ({ ...data }));
       removeAllFromStore(draft.announcements);
       saveListToStore(draft.announcements, entityList);
+      draft.permissions.canCreateAnnouncement =
+        action.announcementPermissions.canCreate;
       break;
     }
     case SAVE_ANNOUNCEMENT: {
@@ -71,7 +74,7 @@ const reducer = produce((draft: AdminState, action: AdminActionType) => {
       }
       break;
     }
-    case SAVE_USERS_LIST: {
+    case SAVE_USER_LIST: {
       const userList = action.userList;
       const counts = action.counts;
       const entityList = userList.map((data) => ({

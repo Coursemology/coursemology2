@@ -7,19 +7,21 @@ import {
 } from 'types/course/courses';
 
 import { EntityStore } from 'types/store';
+import { RoleRequestBasicListData } from 'types/system/instance/roleRequests';
 
 // eslint-disable-next-line import/prefer-default-export
-export const SAVE_COURSE_LIST = 'course/courses/SAVE_COURSES_LIST';
+export const SAVE_COURSE_LIST = 'course/courses/SAVE_COURSE_LIST';
 export const SAVE_COURSE = 'course/courses/SAVE_COURSE';
 export const REMOVE_TODO = 'course/courses/REMOVE_TODO';
 export const SUBMIT_ENROL = 'course/courses/SUBMIT_ENROL';
 export const CANCEL_ENROL = 'course/courses/CANCEL_ENROL';
+export const SAVE_INSTANCE_ROLE_REQUEST = 'instance/SAVE_INSTANCE_ROLE_REQUEST';
 // Action Types
 
-export interface SaveCoursesListAction {
+export interface SaveCourseListAction {
   type: typeof SAVE_COURSE_LIST;
-  coursesList: CourseListData[];
-  instanceUserRoleRequestId: number | null;
+  courseList: CourseListData[];
+  instanceUserRoleRequest?: RoleRequestBasicListData;
   coursesPermissions: CoursePermissions;
 }
 
@@ -46,16 +48,22 @@ export interface CancelEnrolAction {
   courseId: number;
 }
 
+export interface SaveInstanceRoleRequest {
+  type: typeof SAVE_INSTANCE_ROLE_REQUEST;
+  instanceUserRoleRequest: RoleRequestBasicListData;
+}
+
 export type CoursesActionType =
-  | SaveCoursesListAction
+  | SaveCourseListAction
   | SaveCourseAction
   | RemoveTodoAction
   | SubmitEnrolAction
-  | CancelEnrolAction;
+  | CancelEnrolAction
+  | SaveInstanceRoleRequest;
 // State Types
 
 export interface CoursesState {
   courses: EntityStore<CourseMiniEntity, CourseEntity>;
-  instanceUserRoleRequestId: number | null;
+  instanceUserRoleRequest?: RoleRequestBasicListData;
   permissions: CoursePermissions;
 }

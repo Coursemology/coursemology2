@@ -27,7 +27,7 @@ export function fetchEnrolRequests(): Operation<void> {
       .then((response) => {
         const data = response.data;
         dispatch(
-          actions.saveEnrolRequestsList(
+          actions.saveEnrolRequestList(
             data.enrolRequests,
             data.permissions,
             data.manageCourseUsersData,

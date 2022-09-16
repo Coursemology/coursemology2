@@ -85,7 +85,7 @@ export function fetchUsers(asBasicData: boolean = false): Operation<void> {
         const data = response.data;
         if (data.userOptions && data.userOptions.length > 0) {
           dispatch(
-            actions.saveManageUsersList(
+            actions.saveManageUserList(
               data.users,
               data.permissions!,
               data.manageCourseUsersData!,
@@ -93,7 +93,7 @@ export function fetchUsers(asBasicData: boolean = false): Operation<void> {
             ),
           );
         } else {
-          dispatch(actions.saveUsersList(data.users, data.permissions!));
+          dispatch(actions.saveUserList(data.users, data.permissions!));
         }
       })
       .catch((error) => {
@@ -108,7 +108,7 @@ export function fetchStudents(): Operation<void> {
       .then((response) => {
         const data = response.data;
         dispatch(
-          actions.saveManageUsersList(
+          actions.saveManageUserList(
             data.users,
             data.permissions,
             data.manageCourseUsersData,
@@ -127,7 +127,7 @@ export function fetchStaff(): Operation<void> {
       .then((response) => {
         const data = response.data;
         dispatch(
-          actions.saveManageUsersList(
+          actions.saveManageUserList(
             data.users,
             data.permissions,
             data.manageCourseUsersData,
@@ -206,7 +206,7 @@ export function fetchPersonalTimes(userId: number): Operation<void> {
     CourseAPI.personalTimes
       .index(userId)
       .then((response) => {
-        dispatch(actions.savePersonalTimesList(response.data.personalTimes));
+        dispatch(actions.savePersonalTimeList(response.data.personalTimes));
       })
       .catch((error) => {
         throw error;
@@ -216,7 +216,7 @@ export function fetchPersonalTimes(userId: number): Operation<void> {
 export function recomputePersonalTimes(userId: number): Operation<void> {
   return async (dispatch) =>
     CourseAPI.personalTimes.recompute(userId).then((response) => {
-      dispatch(actions.savePersonalTimesList(response.data.personalTimes));
+      dispatch(actions.savePersonalTimeList(response.data.personalTimes));
     });
 }
 
