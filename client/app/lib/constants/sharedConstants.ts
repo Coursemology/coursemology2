@@ -7,37 +7,41 @@ import type { UserRoles } from 'types/users';
 
 // Form options
 
-export const FIELD_DEBOUNCE_DELAY = 500;
+export const FIELD_DEBOUNCE_DELAY = 250;
+
+// Table options
+
+export const TABLE_ROWS_PER_PAGE = 100;
 
 /**
  * constants needed by both server and client
  */
-const SUPPORTED_VOICE_FILE_TYPES = ['audio/mp3', 'audio/wav'];
+export const SUPPORTED_VOICE_FILE_TYPES = ['audio/mp3', 'audio/wav'];
 
-const TIMELINE_ALGORITHMS = [
+export const TIMELINE_ALGORITHMS = [
   { value: 'fixed', label: 'Fixed' },
   { value: 'fomo', label: 'Fomo' },
   { value: 'stragglers', label: 'Stragglers' },
   { value: 'otot', label: 'Otot' },
 ];
 
-const USER_ROLES: UserRoles = {
+export const USER_ROLES: UserRoles = {
   normal: 'Normal',
   administrator: 'Administrator',
 };
 
-const INSTANCE_USER_ROLES: InstanceUserRoles = {
+export const INSTANCE_USER_ROLES: InstanceUserRoles = {
   normal: 'Normal',
   instructor: 'Instructor',
   administrator: 'Administrator',
 };
 
-const ROLE_REQUEST_ROLES: RoleRequestRoles = {
+export const ROLE_REQUEST_ROLES: RoleRequestRoles = {
   instructor: 'Instructor',
   administrator: 'Administrator',
 };
 
-const COURSE_USER_ROLES: CourseUserRoles = {
+export const COURSE_USER_ROLES: CourseUserRoles = {
   student: 'Student',
   teaching_assistant: 'Teaching Assistant',
   manager: 'Manager',
@@ -46,10 +50,10 @@ const COURSE_USER_ROLES: CourseUserRoles = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { student, ...staffRoles } = COURSE_USER_ROLES;
-const STAFF_ROLES: StaffRoles = staffRoles;
+export const { student, ...staffRoles } = COURSE_USER_ROLES;
+export const STAFF_ROLES: StaffRoles = staffRoles;
 
-const ITEM_ACTABLE_TYPES = {
+export const ITEM_ACTABLE_TYPES = {
   video: {
     name: 'Course::Video',
     value: 'video',

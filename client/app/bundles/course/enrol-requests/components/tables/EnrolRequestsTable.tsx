@@ -13,7 +13,10 @@ import {
   EnrolRequestMiniEntity,
   EnrolRequestRowData,
 } from 'types/course/enrolRequests';
-import sharedConstants from 'lib/constants/sharedConstants';
+import {
+  COURSE_USER_ROLES,
+  TIMELINE_ALGORITHMS,
+} from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/translations/table';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
@@ -212,12 +215,12 @@ const EnrolRequestsTable: FC<Props> = (props) => {
               onChange={(e): React.ChangeEvent => updateValue(e.target.value)}
               variant="standard"
             >
-              {Object.keys(sharedConstants.COURSE_USER_ROLES).map((option) => (
+              {Object.keys(COURSE_USER_ROLES).map((option) => (
                 <MenuItem
                   key={`role-${enrolRequest.id}-${option}`}
                   value={option}
                 >
-                  {sharedConstants.COURSE_USER_ROLES[option]}
+                  {COURSE_USER_ROLES[option]}
                 </MenuItem>
               ))}
             </TextField>
@@ -266,7 +269,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
                     }
                     variant="standard"
                   >
-                    {sharedConstants.TIMELINE_ALGORITHMS.map((option) => (
+                    {TIMELINE_ALGORITHMS.map((option) => (
                       <MenuItem
                         key={`timeline-algorithm-option-${enrolRequest.id}-${option.value}`}
                         value={option.value}
@@ -328,9 +331,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`role-${enrolRequest.id}`} variant="body2">
-              {enrolRequest.role
-                ? sharedConstants.COURSE_USER_ROLES[enrolRequest.role]
-                : '-'}
+              {enrolRequest.role ? COURSE_USER_ROLES[enrolRequest.role] : '-'}
             </Typography>
           );
         },

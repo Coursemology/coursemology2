@@ -6,7 +6,6 @@ import EmailButton from 'lib/components/buttons/EmailButton';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
 import { InvitationRowData } from 'types/course/userInvitations';
-import sharedConstants from 'lib/constants/sharedConstants';
 import equal from 'fast-deep-equal';
 import { resendInvitationEmail, deleteInvitation } from '../../operations';
 
@@ -39,7 +38,7 @@ const translations = defineMessages({
   deletionConfirm: {
     id: 'course.userInvitations.delete.confirm',
     defaultMessage:
-      'Are you sure you wish to delete invitation to {role} {name} ({email})?',
+      'Are you sure you wish to delete invitation to {name} ({email})?',
   },
   deletionSuccess: {
     id: 'course.userInvitations.delete.success',
@@ -50,8 +49,6 @@ const translations = defineMessages({
     defaultMessage: 'Failed to delete user - {error}',
   },
 });
-
-const ROLES = sharedConstants.COURSE_USER_ROLES;
 
 const PendingInvitationsButtons: FC<Props> = (props) => {
   const { intl, invitation } = props;
@@ -93,6 +90,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
         );
       })
       .catch((error) => {
+        setIsDeleting(false);
         const errorMessage = error.response?.data?.errors
           ? error.response.data.errors
           : '';
@@ -101,8 +99,8 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
             error: errorMessage,
           }),
         );
-      })
-      .finally(() => setIsDeleting(false));
+        throw error;
+      });
   };
 
   const managementButtons = (
@@ -121,7 +119,6 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
         loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
-          role: ROLES[invitation.role],
           name: invitation.name,
           email: invitation.email,
         })}

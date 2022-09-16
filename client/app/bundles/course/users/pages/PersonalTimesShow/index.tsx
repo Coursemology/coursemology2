@@ -15,7 +15,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { TIMELINE_ALGORITHMS } from 'lib/constants/sharedConstants';
 import { CourseUserEntity } from 'types/course/courseUsers';
 import { TimelineAlgorithm } from 'types/course/personalTimes';
 import {
@@ -190,7 +190,7 @@ const PersonalTimesShow: FC<Props> = (props) => {
               sx={{ minWidth: '300px', marginRight: '12px' }}
             >
               {/* eslint-disable-next-line @typescript-eslint/no-shadow */}
-              {sharedConstants.TIMELINE_ALGORITHMS.map((timeline) => (
+              {TIMELINE_ALGORITHMS.map((timeline) => (
                 <MenuItem
                   key={`change-timeline-${timeline.value}`}
                   value={timeline.value}

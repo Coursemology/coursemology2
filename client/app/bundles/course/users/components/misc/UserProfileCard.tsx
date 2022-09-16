@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { scroller } from 'react-scroll';
 import { CourseUserEntity } from 'types/course/courseUsers';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import { Link as RouterLink } from 'react-router-dom';
 import UserProfileCardStats from './UserProfileCardStats';
 import styles from './UserProfileCard.scss';
@@ -54,7 +54,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
       return (
         <Box>
           <Typography variant="body1" component="span">
-            {user.email} &mdash;{' '}
+            {user.email} &mdash;
           </Typography>
           <Link
             href={user.manageEmailSubscriptionUrl}
@@ -141,7 +141,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
           >
             <Typography variant="h4">{user.name}</Typography>
             <Typography variant="body1">
-              <strong>{sharedConstants.COURSE_USER_ROLES[user.role]}</strong>
+              <strong>{COURSE_USER_ROLES[user.role]}</strong>
             </Typography>
             {renderManageEmail()}
             {renderUserStats()}
