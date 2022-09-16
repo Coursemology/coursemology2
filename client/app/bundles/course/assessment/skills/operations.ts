@@ -51,17 +51,12 @@ const formatSkillBranchAttributes = (data: SkillFormData): FormData => {
 
 export function fetchSkillBranches(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.assessment.skills
-      .index()
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveSkillBranchList(data.skillBranches, data.permissions),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.assessment.skills.index().then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveSkillBranchList(data.skillBranches, data.permissions),
+      );
+    });
 }
 
 export function createSkill(

@@ -29,17 +29,12 @@ const formatAttributes = (data: AnnouncementFormData): FormData => {
 
 export function fetchAnnouncements(): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.announcements
-      .index()
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveAnnouncementList(data.announcements, data.permissions),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.announcements.index().then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveAnnouncementList(data.announcements, data.permissions),
+      );
+    });
 }
 
 export function createAnnouncement(
@@ -47,17 +42,12 @@ export function createAnnouncement(
 ): Operation<void> {
   const attributes = formatAttributes(formData);
   return async (dispatch) =>
-    CourseAPI.announcements
-      .create(attributes)
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveAnnouncementList(data.announcements, data.permissions),
-        );
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.announcements.create(attributes).then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveAnnouncementList(data.announcements, data.permissions),
+      );
+    });
 }
 
 export function updateAnnouncement(
@@ -70,20 +60,12 @@ export function updateAnnouncement(
       .update(announcementId, attributes)
       .then((response) => {
         dispatch(actions.saveAnnouncement(response.data));
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 
 export function deleteAnnouncement(accouncementId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.announcements
-      .delete(accouncementId)
-      .then(() => {
-        dispatch(actions.deleteAnnouncement(accouncementId));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.announcements.delete(accouncementId).then(() => {
+      dispatch(actions.deleteAnnouncement(accouncementId));
+    });
 }

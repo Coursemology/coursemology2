@@ -120,22 +120,17 @@ export function fetchDisbursements(): Operation<
   }>
 > {
   return async (dispatch) =>
-    CourseAPI.disbursement
-      .index()
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveDisbursementList(
-            data.currentGroup,
-            data.courseGroups,
-            data.courseUsers,
-          ),
-        );
-        return response;
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.disbursement.index().then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveDisbursementList(
+          data.currentGroup,
+          data.courseGroups,
+          data.courseUsers,
+        ),
+      );
+      return response;
+    });
 }
 
 export function fetchForumDisbursements(): Operation<
@@ -145,18 +140,13 @@ export function fetchForumDisbursements(): Operation<
   }>
 > {
   return async (dispatch) =>
-    CourseAPI.disbursement
-      .forumDisbursementIndex()
-      .then((response) => {
-        const data = response.data;
-        dispatch(
-          actions.saveForumDisbursementList(data.filters, data.forumUsers),
-        );
-        return response;
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.disbursement.forumDisbursementIndex().then((response) => {
+      const data = response.data;
+      dispatch(
+        actions.saveForumDisbursementList(data.filters, data.forumUsers),
+      );
+      return response;
+    });
 }
 
 export function fetchFilteredForumDisbursements(
@@ -179,9 +169,6 @@ export function fetchFilteredForumDisbursements(
           actions.saveForumDisbursementList(data.filters, data.forumUsers),
         );
         return response;
-      })
-      .catch((error) => {
-        throw error;
       });
 }
 
