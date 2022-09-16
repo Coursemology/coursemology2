@@ -575,7 +575,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
       </Section>
 
       <Section
-        title={intl.formatMessage(t.organisation)}
+        title={intl.formatMessage(t.organization)}
         sticksToNavbar={editing}
       >
         {editing && renderTabs()}

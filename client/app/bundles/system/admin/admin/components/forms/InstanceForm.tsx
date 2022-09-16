@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,7 +11,7 @@ import formTranslations from 'lib/translations/form';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { InstanceFormData } from 'types/system/instances';
 
-interface Props {
+interface Props extends WrappedComponentProps {
   handleClose: (isDirty: boolean) => void;
   onSubmit: (data: InstanceFormData, setError: unknown) => void;
   setIsDirty?: (value: boolean) => void;
@@ -25,11 +25,11 @@ interface IFormInputs {
 
 const translations = defineMessages({
   name: {
-    id: 'system.admin.instances.form.name',
+    id: 'system.admin.instance.form.name',
     defaultMessage: 'Name',
   },
   host: {
-    id: 'system.admin.instances.form.host',
+    id: 'system.admin.instance.form.host',
     defaultMessage: 'Host',
   },
 });
@@ -40,7 +40,7 @@ const validationSchema = yup.object({
 });
 
 const InstanceForm: FC<Props> = (props) => {
-  const { handleClose, initialValues, onSubmit, setIsDirty } = props;
+  const { handleClose, initialValues, onSubmit, setIsDirty, intl } = props;
 
   const {
     control,
@@ -65,13 +65,7 @@ const InstanceForm: FC<Props> = (props) => {
   const disabled = isSubmitting;
 
   const actionButtons = (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        paddingTop: '20px',
-      }}
-    >
+    <div className="flex justify-end pt-5">
       <Button
         color="primary"
         className="btn-cancel"
@@ -79,7 +73,7 @@ const InstanceForm: FC<Props> = (props) => {
         key="instance-form-cancel-button"
         onClick={(): void => handleClose(isDirty)}
       >
-        <FormattedMessage {...formTranslations.cancel} />
+        {intl.formatMessage(formTranslations.cancel)}
       </Button>
       <Button
         id="instance-form-submit-button"
@@ -90,7 +84,7 @@ const InstanceForm: FC<Props> = (props) => {
         key="instance-form-submit-button"
         type="submit"
       >
-        <FormattedMessage {...formTranslations.submit} />
+        {intl.formatMessage(formTranslations.submit)}
       </Button>
     </div>
   );
@@ -113,7 +107,7 @@ const InstanceForm: FC<Props> = (props) => {
                 field={field}
                 fieldState={fieldState}
                 disabled={disabled}
-                label={<FormattedMessage {...translations.name} />}
+                label={intl.formatMessage(translations.name)}
                 // @ts-ignore: component is still written in JS
                 fullWidth
                 InputLabelProps={{
@@ -134,7 +128,7 @@ const InstanceForm: FC<Props> = (props) => {
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations.host} />}
+              label={intl.formatMessage(translations.host)}
               // @ts-ignore: component is still written in JS
               fullWidth
               InputLabelProps={{
@@ -145,12 +139,10 @@ const InstanceForm: FC<Props> = (props) => {
             />
           )}
         />
-        <div style={{ marginBottom: 12 }} />
-
         {actionButtons}
       </form>
     </>
   );
 };
 
-export default InstanceForm;
+export default injectIntl(InstanceForm);

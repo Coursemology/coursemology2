@@ -97,8 +97,8 @@ describe('<AssessmentForm />', () => {
     expect(form.getByLabelText('Show MCQ/MRQ solution(s)')).not.toBeChecked();
   });
 
-  it('renders organisation section options', () => {
-    expect(form.getByText('Organisation')).toBeVisible();
+  it('renders organization section options', () => {
+    expect(form.getByText('Organization')).toBeVisible();
     expect(form.getByText('Single Page')).toBeVisible();
   });
 

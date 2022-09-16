@@ -258,9 +258,9 @@ const translations = defineMessages({
     id: 'course.assessment.form.answersAndTestCases',
     defaultMessage: 'Answers and test cases',
   },
-  organisation: {
-    id: 'course.assessment.form.organisation',
-    defaultMessage: 'Organisation',
+  organization: {
+    id: 'course.assessment.form.organization',
+    defaultMessage: 'Organization',
   },
   examsAndAccessControl: {
     id: 'course.assessment.form.examsAndAccessControl',
