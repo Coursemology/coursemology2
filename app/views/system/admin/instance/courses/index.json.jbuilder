@@ -7,5 +7,5 @@ json.activeCourses active_course
 json.coursesCount @courses_count
 
 json.courses @courses.each do |course|
-  json.partial! 'course_list_data', course: course
+  json.partial! 'system/admin/courses/course_list_data', course: course
 end
