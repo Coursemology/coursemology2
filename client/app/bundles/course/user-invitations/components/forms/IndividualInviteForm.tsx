@@ -4,13 +4,15 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { AppDispatch, AppState } from 'types/store';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { toast } from 'react-toastify';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   IndividualInvites,
   InvitationsPostData,
   InvitationResult,
 } from 'types/course/userInvitations';
 import ErrorText from 'lib/components/ErrorText';
+import formTranslations from 'lib/translations/form';
 import IndividualInvitations from './IndividualInvitations';
 import { inviteUsersFromForm } from '../../operations';
 import {
@@ -22,25 +24,17 @@ interface Props extends WrappedComponentProps {
   openResultDialog: (invitationResult: InvitationResult) => void;
 }
 
-const translations = defineMessages({
-  required: {
-    id: 'course.userInvitations.IndividualInvitations.error.required',
-    defaultMessage: 'Required',
-  },
-  emailFormat: {
-    id: 'course.userInvitations.IndividualInvitations.error.emailFormat',
-    defaultMessage: 'Enter a valid email format',
-  },
-});
-
 const validationSchema = yup.object({
   invitations: yup.array().of(
     yup.object({
-      name: yup.string().required(translations.required),
+      name: yup
+        .string()
+        .required(formTranslations.required)
+        .max(254, formTranslations.characters),
       email: yup
         .string()
-        .email(translations.emailFormat)
-        .required(translations.required),
+        .email(formTranslations.email)
+        .required(formTranslations.required),
       phantom: yup.bool(),
       role: yup.string(),
       timelineAlgorithm: yup.string(),
@@ -49,7 +43,7 @@ const validationSchema = yup.object({
 });
 
 const IndividualInviteForm: FC<Props> = (props) => {
-  const { openResultDialog } = props;
+  const { openResultDialog, intl } = props;
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const sharedData = useSelector((state: AppState) =>
@@ -122,6 +116,10 @@ const IndividualInviteForm: FC<Props> = (props) => {
     return dispatch(inviteUsersFromForm(data))
       .then((response) => {
         openResultDialog(response);
+      })
+      .catch((error) => {
+        toast.error(intl.formatMessage(formTranslations.submissionError));
+        throw error;
       })
       .finally(() => {
         setIsLoading(false);
