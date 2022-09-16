@@ -34,7 +34,8 @@ class System::Admin::CoursesController < System::Admin::Controller
 
   def preload_courses
     @courses = Course.includes(:instance).search(search_param).calculated(:active_user_count, :user_count)
-    @courses = @courses.active_in_past_7_days.order('active_user_count DESC, user_count') if params[:active].present?
+    @courses = @courses.active_in_past_7_days if ActiveRecord::Type::Boolean.new.cast(params[:active])
+
     @courses = @courses.ordered_by_title
     @courses_count = @courses.count.is_a?(Hash) ? @courses.count.count : @courses.count
     @courses = @courses.paginated(new_page_params)

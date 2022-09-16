@@ -8,32 +8,32 @@ import { AppState, AppDispatch } from 'types/store';
 import { Link, Typography } from '@mui/material';
 import SummaryCard from 'lib/components/SummaryCard';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import CoursesButtons from 'bundles/system/admin/admin/components/buttons/CoursesButtons';
+import CoursesTable from 'bundles/system/admin/admin/components/tables/CoursesTable';
 import { deleteCourse, indexCourses } from '../../operations';
-import CoursesTable from '../../components/tables/CoursesTable';
-import CoursesButtons from '../../components/buttons/CoursesButtons';
 import { getAdminCounts, getAllCourseMiniEntities } from '../../selectors';
 
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.courses.header',
+    id: 'system.admin.instance.courses.header',
     defaultMessage: 'Courses',
   },
   title: {
-    id: 'system.admin.courses.title',
+    id: 'system.admin.instance.courses.title',
     defaultMessage: 'Courses',
   },
   fetchCoursesFailure: {
-    id: 'system.admin.courses.fetch.failure',
+    id: 'system.admin.instance.courses.fetch.failure',
     defaultMessage: 'Failed to fetch courses.',
   },
   totalCourses: {
-    id: 'system.admin.courses.totalCourses',
+    id: 'system.admin.instance.courses.totalCourses',
     defaultMessage: `Total Courses: {count}`,
   },
   activeCourses: {
-    id: 'system.admin.courses.activeCourses',
+    id: 'system.admin.instance.courses.activeCourses',
     defaultMessage: `Active Courses (in the past 7 days): {count}`,
   },
 });
@@ -88,14 +88,10 @@ const CoursesIndex: FC<Props> = (props) => {
   const renderSummaryContent: JSX.Element = (
     <>
       <Typography variant="body2">
-        {intl.formatMessage(translations.totalCourses, {
-          count: totalCount,
-        })}
+        {intl.formatMessage(translations.totalCourses, { count: totalCount })}
       </Typography>
       <Typography variant="body2">
-        {intl.formatMessage(translations.activeCourses, {
-          count: activeCount,
-        })}
+        {intl.formatMessage(translations.activeCourses, { count: activeCount })}
       </Typography>
     </>
   );
@@ -104,6 +100,7 @@ const CoursesIndex: FC<Props> = (props) => {
     <>
       <PageHeader title={intl.formatMessage(translations.header)} />
       <SummaryCard renderContent={renderSummaryContent} />
+
       {isLoading ? (
         <LoadingIndicator />
       ) : (

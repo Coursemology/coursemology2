@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { UserCourseMiniEntity } from 'types/users';
 import tableTranslations from 'lib/translations/table';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -49,16 +49,26 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
               </TableCell>
               <TableCell style={{ maxWidth: '400px' }}>
                 <Typography variant="body2" className="course_title">
-                  <a href={`/courses/${course.id}`}>{course.title}</a>
+                  <a
+                    href={`/courses/${course.id}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {course.title}
+                  </a>
                 </Typography>
               </TableCell>
               <TableCell>
-                <a href={`/users/${course.courseUserId}`}>
+                <a
+                  href={`/users/${course.courseUserId}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   {course.courseUserName}
                 </a>
               </TableCell>
               <TableCell style={{ maxWidth: '100px' }}>
-                {sharedConstants.COURSE_USER_ROLES[course.courseUserRole]}
+                {COURSE_USER_ROLES[course.courseUserRole]}
               </TableCell>
               <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>
                 {course.courseUserLevel}
