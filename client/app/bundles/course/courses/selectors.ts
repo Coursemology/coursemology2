@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { CoursePermissions } from 'types/course/courses';
 import { AppState, SelectionKey } from 'types/store';
 import { selectMiniEntities, selectEntity } from 'utilities/store';
 
@@ -19,9 +18,9 @@ export function getAllCourseMiniEntities(state: AppState) {
 }
 
 export function getCoursePermissions(state: AppState) {
-  return getLocalState(state).permissions as CoursePermissions;
+  return getLocalState(state).permissions;
 }
 
 export function getCourseInstanceUserRoleRequest(state: AppState) {
-  return getLocalState(state).instanceUserRoleRequestId as number;
+  return getLocalState(state).instanceUserRoleRequest;
 }

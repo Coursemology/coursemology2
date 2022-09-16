@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { AppState } from 'types/store';
 import { selectMiniEntities } from 'utilities/store';
-import { SubmissionPermissions } from 'types/course/assessment/submissions';
 
 function getLocalState(state: AppState) {
   return state.submissions;
@@ -31,5 +30,5 @@ export function getFilter(state: AppState) {
 }
 
 export function getSubmissionPermissions(state: AppState) {
-  return getLocalState(state).permissions as SubmissionPermissions;
+  return getLocalState(state).permissions;
 }
