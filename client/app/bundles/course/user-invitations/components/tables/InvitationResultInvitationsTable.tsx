@@ -2,7 +2,10 @@ import { FC, memo } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Box, Typography } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
-import sharedConstants from 'lib/constants/sharedConstants';
+import {
+  COURSE_USER_ROLES,
+  TABLE_ROWS_PER_PAGE,
+} from 'lib/constants/sharedConstants';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import tableTranslations from 'lib/translations/table';
 import equal from 'fast-deep-equal';
@@ -25,8 +28,8 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
     filter: false,
     pagination: true,
     print: false,
-    rowsPerPage: 100,
-    rowsPerPageOptions: [100],
+    rowsPerPage: TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
     search: false,
     selectableRows: 'none',
     setTableProps: (): object => {
@@ -101,7 +104,7 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
               className="invitation_result_invitation_role"
               variant="body2"
             >
-              {sharedConstants.COURSE_USER_ROLES[invitation.role]}
+              {COURSE_USER_ROLES[invitation.role]}
             </Typography>
           );
         },

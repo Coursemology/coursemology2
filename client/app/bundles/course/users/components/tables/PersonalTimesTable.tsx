@@ -13,7 +13,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { PersonalTimeMiniEntity } from 'types/course/personalTimes';
 import tableTranslations from 'lib/translations/table';
 import { getAssessmentURL, getVideoURL } from 'lib/helpers/url-builders';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { ITEM_ACTABLE_TYPES } from 'lib/constants/sharedConstants';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import PersonalTimeEditor from '../misc/PersonalTimeEditor';
 
@@ -36,9 +36,9 @@ const icons = {
 const getLink = (item: PersonalTimeMiniEntity): JSX.Element => {
   let url = '';
   const courseId = getCourseId();
-  if (item.type === sharedConstants.ITEM_ACTABLE_TYPES.video.name) {
+  if (item.type === ITEM_ACTABLE_TYPES.video.name) {
     url = getVideoURL(courseId, item.actableId);
-  } else if (item.type === sharedConstants.ITEM_ACTABLE_TYPES.assessment.name) {
+  } else if (item.type === ITEM_ACTABLE_TYPES.assessment.name) {
     url = getAssessmentURL(courseId, item.actableId);
   }
 
@@ -52,9 +52,9 @@ const getLink = (item: PersonalTimeMiniEntity): JSX.Element => {
 const getIcon = (item: PersonalTimeMiniEntity): JSX.Element => {
   let materialType = '';
 
-  if (item.type === sharedConstants.ITEM_ACTABLE_TYPES.video.name) {
+  if (item.type === ITEM_ACTABLE_TYPES.video.name) {
     materialType = 'video';
-  } else if (item.type === sharedConstants.ITEM_ACTABLE_TYPES.assessment.name) {
+  } else if (item.type === ITEM_ACTABLE_TYPES.assessment.name) {
     materialType = 'assessment';
   }
 

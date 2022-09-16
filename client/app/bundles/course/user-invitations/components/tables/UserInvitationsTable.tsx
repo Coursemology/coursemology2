@@ -14,7 +14,11 @@ import {
   InvitationRowData,
 } from 'types/course/userInvitations';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
-import sharedConstants from 'lib/constants/sharedConstants';
+import {
+  COURSE_USER_ROLES,
+  TIMELINE_ALGORITHMS,
+  TABLE_ROWS_PER_PAGE,
+} from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/translations/table';
 import equal from 'fast-deep-equal';
 import { useSelector } from 'react-redux';
@@ -80,8 +84,8 @@ const UserInvitationsTable: FC<Props> = (props) => {
     filter: false,
     pagination: true,
     print: false,
-    rowsPerPage: 100,
-    rowsPerPageOptions: [100],
+    rowsPerPage: TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
     search: true,
     selectableRows: 'none',
     setTableProps: (): Record<string, unknown> => {
@@ -149,7 +153,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={`role-${invitation.id}`} variant="body2">
-              {sharedConstants.COURSE_USER_ROLES[invitation.role]}
+              {COURSE_USER_ROLES[invitation.role]}
             </Typography>
           );
         },
@@ -215,7 +219,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={invitation.id} variant="body2">
-              {sharedConstants.TIMELINE_ALGORITHMS.find(
+              {TIMELINE_ALGORITHMS.find(
                 (timeline) => timeline.value === invitation.timelineAlgorithm,
               )?.label ?? '-'}
             </Typography>

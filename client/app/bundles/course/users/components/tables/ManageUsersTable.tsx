@@ -14,7 +14,11 @@ import {
 } from 'types/course/courseUsers';
 import Note from 'lib/components/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
-import sharedConstants from 'lib/constants/sharedConstants';
+import {
+  COURSE_USER_ROLES,
+  TIMELINE_ALGORITHMS,
+  TABLE_ROWS_PER_PAGE,
+} from 'lib/constants/sharedConstants';
 import {
   TableDownloadOptions,
   TableColumns,
@@ -194,7 +198,7 @@ const ManageUsersTable: FC<Props> = (props) => {
         toast.success(
           intl.formatMessage(translations.changeRoleSuccess, {
             name: user.name,
-            role: sharedConstants.COURSE_USER_ROLES[newRole],
+            role: COURSE_USER_ROLES[newRole],
           }),
         );
       })
@@ -205,7 +209,7 @@ const ManageUsersTable: FC<Props> = (props) => {
         toast.error(
           intl.formatMessage(translations.changeRoleFailure, {
             name: user.name,
-            role: sharedConstants.COURSE_USER_ROLES[newRole],
+            role: COURSE_USER_ROLES[newRole],
             error: errorMessage,
           }),
         );
@@ -232,7 +236,7 @@ const ManageUsersTable: FC<Props> = (props) => {
           intl.formatMessage(translations.changeTimelineSuccess, {
             name: user.name,
             timeline:
-              sharedConstants.TIMELINE_ALGORITHMS.find(
+              TIMELINE_ALGORITHMS.find(
                 (timeline) => timeline.value === newTimeline,
               )?.label ?? 'Unknown',
           }),
@@ -243,7 +247,7 @@ const ManageUsersTable: FC<Props> = (props) => {
           intl.formatMessage(translations.changeTimelineFailure, {
             name: user.name,
             timeline:
-              sharedConstants.TIMELINE_ALGORITHMS.find(
+              TIMELINE_ALGORITHMS.find(
                 (timeline) => timeline.value === newTimeline,
               )?.label ?? 'Unknown',
             error: error.response.data.errors,
@@ -258,8 +262,8 @@ const ManageUsersTable: FC<Props> = (props) => {
     filter: false,
     pagination: true,
     print: false,
-    rowsPerPage: 100,
-    rowsPerPageOptions: [100],
+    rowsPerPage: TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',
@@ -374,7 +378,7 @@ const ManageUsersTable: FC<Props> = (props) => {
               }
               variant="standard"
             >
-              {sharedConstants.TIMELINE_ALGORITHMS.map((option) => (
+              {TIMELINE_ALGORITHMS.map((option) => (
                 <MenuItem
                   id={`timeline-algorithm-option-${user.id}-${option.value}`}
                   key={`timeline-algorithm-option-${user.id}-${option.value}`}
@@ -410,13 +414,13 @@ const ManageUsersTable: FC<Props> = (props) => {
               }
               variant="standard"
             >
-              {Object.keys(sharedConstants.COURSE_USER_ROLES).map((option) => (
+              {Object.keys(COURSE_USER_ROLES).map((option) => (
                 <MenuItem
                   id={`role-${user.id}-${option}`}
                   key={`role-${user.id}-${option}`}
                   value={option}
                 >
-                  {sharedConstants.COURSE_USER_ROLES[option]}
+                  {COURSE_USER_ROLES[option]}
                 </MenuItem>
               ))}
             </TextField>

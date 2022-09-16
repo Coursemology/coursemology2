@@ -1,4 +1,4 @@
-import sharedConstants from 'lib/constants/sharedConstants';
+import { COURSE_USER_ROLES, STAFF_ROLES } from 'lib/constants/sharedConstants';
 import { Permissions, Roles } from 'types';
 import type {
   AchievementListData,
@@ -25,8 +25,8 @@ export type StaffRoles = Roles<
   'teaching_assistant' | 'manager' | 'owner' | 'observer'
 >;
 
-export type CourseUserRole = keyof typeof sharedConstants.COURSE_USER_ROLES;
-export type StaffRole = keyof typeof sharedConstants.STAFF_ROLES;
+export type CourseUserRole = keyof typeof COURSE_USER_ROLES;
+export type StaffRole = keyof typeof STAFF_ROLES;
 
 export interface CourseUserBasicListData {
   id: number;
