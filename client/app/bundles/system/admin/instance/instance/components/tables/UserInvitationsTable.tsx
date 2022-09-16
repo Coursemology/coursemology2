@@ -1,10 +1,5 @@
 import { FC, ReactElement, memo } from 'react';
-import {
-  defineMessages,
-  injectIntl,
-  FormattedMessage,
-  WrappedComponentProps,
-} from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Box, Typography } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import Note from 'lib/components/Note';
@@ -14,7 +9,7 @@ import {
   InvitationRowData,
 } from 'types/system/instance/invitations';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/translations/table';
 import equal from 'fast-deep-equal';
 import ResendAllInvitationsButton from '../buttons/ResendAllInvitationsButton';
@@ -29,15 +24,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   noInvitations: {
-    id: 'course.userInvitations.components.tables.UserInvitationsTable.noInvitations',
+    id: 'system.admin.instance.userInvitations.components.tables.UserInvitationsTable.noInvitations',
     defaultMessage: 'There are no {invitationType}',
   },
   pending: {
-    id: 'course.userInvitations.components.tables.UserInvitationsTable.invitationType.pending',
+    id: 'system.admin.instance.userInvitations.components.tables.UserInvitationsTable.invitationType.pending',
     defaultMessage: 'pending',
   },
   accepted: {
-    id: 'course.userInvitations.components.tables.UserInvitationsTable.invitationType.accepted',
+    id: 'system.admin.instance.userInvitations.components.tables.UserInvitationsTable.invitationType.accepted',
     defaultMessage: 'accepted',
   },
 });
@@ -55,12 +50,9 @@ const UserInvitationsTable: FC<Props> = (props) => {
   if (invitations && invitations.length === 0) {
     return (
       <Note
-        message={
-          <FormattedMessage
-            {...translations.noInvitations}
-            values={{ invitationType: title.toLowerCase() }}
-          />
-        }
+        message={intl.formatMessage(translations.noInvitations, {
+          invitationType: title.toLowerCase(),
+        })}
       />
     );
   }
@@ -143,7 +135,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={`role-${invitation.id}`} variant="body2">
-              {sharedConstants.INSTANCE_USER_ROLES[invitation.role]}
+              {INSTANCE_USER_ROLES[invitation.role]}
             </Typography>
           );
         },
@@ -164,10 +156,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
         },
       },
     },
-  ];
-
-  if (pendingInvitations) {
-    columns.push({
+    {
       name: 'sentAt',
       label: intl.formatMessage(tableTranslations.invitationSentAt),
       options: {
@@ -181,8 +170,8 @@ const UserInvitationsTable: FC<Props> = (props) => {
           );
         },
       },
-    });
-  }
+    },
+  ];
 
   if (acceptedInvitations) {
     columns.push({
@@ -221,7 +210,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
   }
 
   return (
-    <Box sx={{ margin: '12px 0px' }}>
+    <Box className="mx-0 my-3">
       <DataTable
         title={title}
         data={invitations}

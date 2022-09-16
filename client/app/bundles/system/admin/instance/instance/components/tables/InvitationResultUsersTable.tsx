@@ -1,12 +1,11 @@
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Box, Typography } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import { InstanceUserListData } from 'types/system/instance/users';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import tableTranslations from 'lib/translations/table';
-import equal from 'fast-deep-equal';
 
 interface Props extends WrappedComponentProps {
   title: JSX.Element;
@@ -15,10 +14,6 @@ interface Props extends WrappedComponentProps {
 
 const InvitationResultUsersTable: FC<Props> = (props) => {
   const { title, users, intl } = props;
-
-  if (users && users.length === 0) {
-    return <></>;
-  }
 
   const options: TableOptions = {
     download: true,
@@ -82,7 +77,7 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
               className="invitation_result_user_role"
               variant="body2"
             >
-              {sharedConstants.INSTANCE_USER_ROLES[user.role]}
+              {INSTANCE_USER_ROLES[user.role]}
             </Typography>
           );
         },
@@ -91,7 +86,7 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box sx={{ margin: '12px 0px' }}>
+    <Box className="mx-0 my-3">
       <DataTable
         title={title}
         data={users}
@@ -103,9 +98,4 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
   );
 };
 
-export default memo(
-  injectIntl(InvitationResultUsersTable),
-  (prevProps, nextProps) => {
-    return equal(prevProps.users, nextProps.users);
-  },
-);
+export default injectIntl(InvitationResultUsersTable);

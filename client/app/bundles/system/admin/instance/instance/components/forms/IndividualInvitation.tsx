@@ -14,7 +14,7 @@ import {
   IndividualInvite,
   IndividualInvites,
 } from 'types/system/instance/invitations';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
@@ -27,42 +27,25 @@ interface Props extends WrappedComponentProps {
   index: number;
 }
 
-const styles = {
-  invitation: {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-  },
-  inputs: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  textInput: {
-    width: '100%',
-  },
-};
-
 const translations = defineMessages({
   removeInvitation: {
-    id: 'course.userInvitations.IndividualInvitations.remove',
+    id: 'system.admin.instance.userInvitations.IndividualInvitations.remove',
     defaultMessage: 'Remove Invitation',
   },
   namePlaceholder: {
-    id: 'course.userInvitations.IndividualInvitations.name.placeholder',
+    id: 'system.admin.instance.userInvitations.IndividualInvitations.name.placeholder',
     defaultMessage: 'Name',
   },
   emailPlaceholder: {
-    id: 'course.userInvitations.IndividualInvitations.email.placeholder',
+    id: 'system.admin.instance.userInvitations.IndividualInvitations.email.placeholder',
     defaultMessage: 'user@example.com',
   },
 });
 
-const userRoleOptions = Object.keys(sharedConstants.INSTANCE_USER_ROLES).map(
-  (roleValue) => ({
-    label: sharedConstants.INSTANCE_USER_ROLES[roleValue],
-    value: roleValue,
-  }),
-);
+const userRoleOptions = Object.keys(INSTANCE_USER_ROLES).map((roleValue) => ({
+  label: INSTANCE_USER_ROLES[roleValue],
+  value: roleValue,
+}));
 
 const IndividualInvitation: FC<Props> = (props) => {
   const { fieldsConfig, index, intl } = props;
@@ -77,11 +60,11 @@ const IndividualInvitation: FC<Props> = (props) => {
             field={field}
             fieldState={fieldState}
             // @ts-ignore: component is still written in JS
+            fullWidth
             placeholder={intl.formatMessage(translations.namePlaceholder)}
             label={intl.formatMessage(tableTranslations.name)}
             variant="standard"
             id={`name-${index}`}
-            sx={styles.textInput}
           />
         )}
       />
@@ -93,11 +76,11 @@ const IndividualInvitation: FC<Props> = (props) => {
             field={field}
             fieldState={fieldState}
             // @ts-ignore: component is still written in JS
+            fullWidth
             placeholder={intl.formatMessage(translations.emailPlaceholder)}
             label={intl.formatMessage(tableTranslations.email)}
             variant="standard"
             id={`email-${index}`}
-            sx={styles.textInput}
           />
         )}
       />
@@ -111,7 +94,6 @@ const IndividualInvitation: FC<Props> = (props) => {
             options={userRoleOptions}
             // @ts-ignore: component is still written in JS
             label={intl.formatMessage(tableTranslations.role)}
-            sx={styles.textInput}
           />
         )}
       />
@@ -119,7 +101,7 @@ const IndividualInvitation: FC<Props> = (props) => {
   );
 
   return (
-    <Box key={index} style={styles.invitation}>
+    <Box className="flex justify-start items-center" key={index}>
       {renderInvitationBody}
       <Tooltip title={intl.formatMessage(translations.removeInvitation)}>
         <IconButton onClick={(): void => fieldsConfig.remove(index)}>

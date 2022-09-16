@@ -15,78 +15,58 @@ import InvitationResultUsersTable from '../tables/InvitationResultUsersTable';
 import InvitationResultInvitationsTable from '../tables/InvitationResultInvitationsTable';
 
 interface Props extends WrappedComponentProps {
-  open: boolean;
   handleClose: () => void;
   invitationResult: InvitationResult;
 }
 
-const styles = {
-  icon: {
-    fontSize: '16px',
-    marginRight: '4px',
-  },
-  dialogStyle: {
-    top: 40,
-    '& .MuiDialog-paper': {
-      overflowY: 'hidden',
-    },
-  },
-};
-
 const translations = defineMessages({
   header: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.header',
+    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.header',
     defaultMessage: 'Invitation Summary',
   },
   close: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.close',
+    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.close',
     defaultMessage: 'Close',
   },
-  body: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.body',
-    defaultMessage:
-      '{newInvitationsCount, plural, =0 {No new users were} one {# new user was} other {# new users were}} invited to this instance. ' +
-      '{newInstanceUsersCount, plural, =0 {No users outside of this instance were} one {# user out of this instance was} other {# users outside of this instance were}} invited to this course.',
-  },
   duplicateInfo: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.duplicateUsers.info',
+    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.duplicateUsers.info',
     defaultMessage:
-      'Duplicate users were found in the invitation. Only the first instance of this user will be invited.',
+      'Duplicate users were found in the invitation. Only the first instance of this user is invited.',
   },
   duplicateUsers: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.duplicateUsers',
+    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.duplicateUsers',
     defaultMessage: 'Users with Duplicate Emails ({count})',
   },
   existingInstanceUsersInfo: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.existingInstanceUsers.info',
+    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.existingInstanceUsers.info',
     defaultMessage:
       'Existing instance users with this email were found in the invitation. They were not invited.',
   },
   existingInstanceUsers: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.existingInstanceUsers',
+    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.existingInstanceUsers',
     defaultMessage: 'Existing Instance Users ({count})',
   },
   existingInvitationsInfo: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.existingInvitations.info',
+    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.existingInvitations.info',
     defaultMessage:
       'Existing invitations for these users with this email already exist. They were not invited.',
   },
   existingInvitations: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.existingInvitations',
+    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.existingInvitations',
     defaultMessage: 'Existing Invitations ({count})',
   },
   newInstanceUsers: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.newInstanceUsers',
+    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.newInstanceUsers',
     defaultMessage: 'New Instance Users ({count})',
   },
   newInvitations: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.newInvitations',
+    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.newInvitations',
     defaultMessage: 'New Invitations ({count})',
   },
 });
 
 const InvitationResultDialog: FC<Props> = (props) => {
-  const { open, handleClose, invitationResult, intl } = props;
+  const { handleClose, invitationResult, intl } = props;
   const {
     duplicateUsers,
     existingInstanceUsers,
@@ -94,10 +74,6 @@ const InvitationResultDialog: FC<Props> = (props) => {
     newInstanceUsers,
     newInvitations,
   } = invitationResult;
-
-  if (!open) {
-    return null;
-  }
 
   const handleDialogClose = (_event: object, reason: string): void => {
     if (reason && reason !== 'backdropClick') {
@@ -107,21 +83,15 @@ const InvitationResultDialog: FC<Props> = (props) => {
 
   return (
     <Dialog
+      className="top-10"
       onClose={handleDialogClose}
       disableEscapeKeyDown
-      open={open}
+      open
       fullWidth
       maxWidth="lg"
-      sx={styles.dialogStyle}
     >
       <DialogTitle>{`${intl.formatMessage(translations.header)}`}</DialogTitle>
       <DialogContent>
-        <Typography variant="body2" gutterBottom>
-          {intl.formatMessage(translations.body, {
-            newInvitationsCount: newInvitations?.length ?? 0,
-            newInstanceUsersCount: newInstanceUsers?.length ?? 0,
-          })}
-        </Typography>
         {duplicateUsers && duplicateUsers.length > 0 && (
           <div className="duplicates">
             <InvitationResultUsersTable
@@ -131,7 +101,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
                   <Tooltip
                     title={intl.formatMessage(translations.duplicateInfo)}
                   >
-                    <HelpIcon style={styles.icon} />
+                    <HelpIcon className="text-3xl mr-1" />
                   </Tooltip>
                   {intl.formatMessage(translations.duplicateUsers, {
                     count: duplicateUsers.length,
@@ -152,7 +122,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
                       translations.existingInvitationsInfo,
                     )}
                   >
-                    <HelpIcon style={styles.icon} />
+                    <HelpIcon className="text-3xl mr-1" />
                   </Tooltip>
                   {intl.formatMessage(translations.existingInvitations, {
                     count: existingInvitations.length,
@@ -173,7 +143,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
                       translations.existingInstanceUsersInfo,
                     )}
                   >
-                    <HelpIcon style={styles.icon} />
+                    <HelpIcon className="text-3xl mr-1" />
                   </Tooltip>
                   {intl.formatMessage(translations.existingInstanceUsers, {
                     count: existingInstanceUsers.length,

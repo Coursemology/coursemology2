@@ -45,7 +45,7 @@ class System::Admin::UsersController < System::Admin::Controller
 
   def load_users
     @users = @users.human_users.includes(:emails).ordered_by_name.search(search_param)
-    @users = @users.active_in_past_7_days if params[:active].present?
+    @users = @users.active_in_past_7_days if ActiveRecord::Type::Boolean.new.cast(params[:active])
     @users = @users.where(role: params[:role]) if params[:role].present? && User.roles.key?(params[:role])
     @users_count = @users.count.is_a?(Hash) ? @users.count.count : @users.count
     @users = @users.paginated(new_page_params)

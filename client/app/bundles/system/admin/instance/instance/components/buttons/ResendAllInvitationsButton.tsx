@@ -8,16 +8,16 @@ import { resendAllInvitations } from '../../operations';
 
 const translations = defineMessages({
   buttonText: {
-    id: 'course.userInvitations.components.buttons.resendInvitations',
+    id: 'system.admin.instance.userInvitations.components.buttons.resendInvitations',
     defaultMessage: 'Resend All Invitations',
   },
   resendSuccess: {
-    id: 'course.userInvitations.components.buttons.resendInvitations.success',
+    id: 'system.admin.instance.userInvitations.components.buttons.resendInvitations.success',
     defaultMessage: 'Email invitations were successfully resent.',
   },
   resendFailure: {
-    id: 'course.userInvitations.components.buttons.resendInvitations.failure',
-    defaultMessage: 'Email invitations failed to resend.',
+    id: 'system.admin.instance.userInvitations.components.buttons.resendInvitations.failure',
+    defaultMessage: 'Failed to resend email invitations.',
   },
 });
 
@@ -34,23 +34,20 @@ const ResendAllInvitationsButton: FC<Props> = (props) => {
       .then(() => {
         toast.success(intl.formatMessage(translations.resendSuccess));
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(intl.formatMessage(translations.resendFailure));
-        throw error;
       })
       .finally(() => setIsLoading(false));
   };
 
   return (
-    <>
-      <LoadingButton
-        loading={isLoading}
-        variant="contained"
-        onClick={handleResend}
-      >
-        {intl.formatMessage(translations.buttonText)}
-      </LoadingButton>
-    </>
+    <LoadingButton
+      loading={isLoading}
+      variant="contained"
+      onClick={handleResend}
+    >
+      {intl.formatMessage(translations.buttonText)}
+    </LoadingButton>
   );
 };
 

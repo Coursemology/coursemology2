@@ -37,7 +37,11 @@ const InstancesTable: FC<Props> = ({ title, instances, intl }: Props) => {
             <TableRow key={`instance-${instance.id}`} hover>
               <TableCell>
                 <Typography variant="body2" className="instance_title">
-                  <a href={`//${instance.host}/users/${userId}`}>
+                  <a
+                    href={`//${instance.host}/users/${userId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     {instance.name}
                   </a>
                 </Typography>
