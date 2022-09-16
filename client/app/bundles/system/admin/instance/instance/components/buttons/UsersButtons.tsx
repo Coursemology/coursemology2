@@ -2,7 +2,7 @@ import { FC, useState, memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { AppDispatch } from 'types/store';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { USER_ROLES } from 'lib/constants/sharedConstants';
 import DeleteButton from 'lib/components/buttons/DeleteButton';
 import equal from 'fast-deep-equal';
 import { toast } from 'react-toastify';
@@ -12,12 +12,6 @@ import { deleteUser } from '../../operations';
 interface Props extends WrappedComponentProps {
   user: InstanceUserMiniEntity;
 }
-
-const styles = {
-  buttonStyle: {
-    padding: '0px 8px',
-  },
-};
 
 const translations = defineMessages({
   deletionSuccess: {
@@ -58,6 +52,7 @@ const UserManagementButtons: FC<Props> = (props) => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
       })
       .catch((error) => {
+        setIsDeleting(false);
         const errorMessage = error.response?.data?.errors
           ? error.response.data.errors
           : '';
@@ -66,24 +61,23 @@ const UserManagementButtons: FC<Props> = (props) => {
             error: errorMessage,
           }),
         );
-      })
-      .finally(() => setIsDeleting(false));
+        throw error;
+      });
   };
 
   const managementButtons = (
-    <div style={{ whiteSpace: 'nowrap' }} key={`buttons-${user.id}`}>
+    <div key={`buttons-${user.id}`}>
       <DeleteButton
         tooltip={intl.formatMessage(translations.deleteTooltip)}
-        className={`user-delete-${user.id}`}
+        className={`user-delete-${user.id} p-0`}
         disabled={isDeleting}
         loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
-          role: sharedConstants.USER_ROLES[user.role],
+          role: USER_ROLES[user.role],
           name: user.name,
           email: user.email,
         })}
-        sx={styles.buttonStyle}
       />
     </div>
   );

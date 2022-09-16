@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, ReactElement, useState } from 'react';
 import {
   Box,
   CircularProgress,
@@ -6,7 +6,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   TableColumns,
@@ -14,101 +13,71 @@ import {
   TableState,
 } from 'types/components/DataTable';
 import tableTranslations from 'lib/translations/table';
-import sharedConstants, {
+import {
+  INSTANCE_USER_ROLES,
   FIELD_DEBOUNCE_DELAY,
+  TABLE_ROWS_PER_PAGE,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { debounceSearchRender } from 'mui-datatables';
 import DataTable from 'lib/components/DataTable';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, AppState } from 'types/store';
-import { getUrlParameter } from 'lib/helpers/url-helpers';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'types/store';
 import LoadingOverlay from 'lib/components/LoadingOverlay';
 import {
+  InstanceAdminStats,
   InstanceUserMiniEntity,
   InstanceUserRole,
 } from 'types/system/instance/users';
 import { indexUsers, updateUser } from '../../operations';
-import { getAdminCounts, getAllUserMiniEntities } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
+  users: InstanceUserMiniEntity[];
+  userCounts: InstanceAdminStats;
   title: string;
+  filter: { active: boolean; role: string };
   renderRowActionComponent: (user: InstanceUserMiniEntity) => ReactElement;
 }
 
 const translations = defineMessages({
   searchText: {
-    id: 'system.admin.components.tables.UsersTable.searchPlaceholder',
+    id: 'system.admin.instance.components.tables.UsersTable.searchPlaceholder',
     defaultMessage: 'Search user name or emails',
   },
   renameSuccess: {
-    id: 'system.admin.user.rename.success',
+    id: 'system.admin.instance.user.rename.success',
     defaultMessage: '{oldName} was renamed to {newName}.',
   },
   changeRoleSuccess: {
-    id: 'system.admin.user.changeRole.success',
+    id: 'system.admin.instance.user.changeRole.success',
     defaultMessage: "Successfully changed {name}'s role to {role}.",
   },
   updateNameFailure: {
-    id: 'system.admin.user.update.updateNameFailure',
+    id: 'system.admin.instance.user.update.updateNameFailure',
     defaultMessage: "Failed to update user's name.",
   },
   updateRoleFailure: {
-    id: 'system.admin.user.update.updateRoleFailure',
+    id: 'system.admin.instance.user.update.updateRoleFailure',
     defaultMessage: "Failed to update user's role.",
   },
   fetchFilteredUsersFailure: {
-    id: 'system.admin.users.fetchFiltered.failure',
+    id: 'system.admin.instance.users.fetchFiltered.failure',
     defaultMessage: 'Failed to fetch users.',
   },
 });
 
 const UsersTable: FC<Props> = (props) => {
-  const { title, renderRowActionComponent, intl } = props;
+  const { title, renderRowActionComponent, intl, users, userCounts, filter } =
+    props;
   const [isLoading, setIsLoading] = useState(false);
-  const users = useSelector((state: AppState) => getAllUserMiniEntities(state));
-  const counts = useSelector((state: AppState) => getAdminCounts(state));
-  const role = getUrlParameter('role');
-  const active = getUrlParameter('active');
   const dispatch = useDispatch<AppDispatch>();
 
   const [tableState, setTableState] = useState<TableState>({
-    count: counts.usersCount,
+    count: userCounts.usersCount,
     page: 1,
     searchText: '',
   });
-
-  useEffect((): void => {
-    setTableState({
-      ...tableState,
-      count: counts.usersCount,
-    });
-  }, [counts]);
-
-  const handleNameUpdate = (rowData, newName: string): Promise<void> => {
-    const user = rebuildObjectFromRow(
-      columns, // eslint-disable-line @typescript-eslint/no-use-before-define
-      rowData,
-    ) as InstanceUserMiniEntity;
-    const newUser = {
-      ...user,
-      name: newName,
-    };
-    return dispatch(updateUser(user.id, newUser))
-      .then(() => {
-        toast.success(
-          intl.formatMessage(translations.renameSuccess, {
-            oldName: user.name,
-            newName,
-          }),
-        );
-      })
-      .catch((error) => {
-        toast.error(intl.formatMessage(translations.updateNameFailure));
-        throw error;
-      });
-  };
 
   const handleRoleUpdate = (
     rowData,
@@ -129,7 +98,7 @@ const UsersTable: FC<Props> = (props) => {
         toast.success(
           intl.formatMessage(translations.changeRoleSuccess, {
             name: user.name,
-            role: sharedConstants.INSTANCE_USER_ROLES[newRole],
+            role: INSTANCE_USER_ROLES[newRole],
           }),
         );
       })
@@ -147,9 +116,9 @@ const UsersTable: FC<Props> = (props) => {
     dispatch(
       indexUsers({
         'filter[page_num]': page,
-        'filter[length]': 100,
-        role,
-        active,
+        'filter[length]': TABLE_ROWS_PER_PAGE,
+        role: filter.role,
+        active: filter.active,
       }),
     )
       .catch(() =>
@@ -160,31 +129,27 @@ const UsersTable: FC<Props> = (props) => {
       });
   };
 
-  const search = (page, searchText): void => {
-    if (searchText !== null) {
-      setIsLoading(true);
-      setTableState({
-        ...tableState,
-        count: counts.usersCount,
-      });
-      dispatch(
-        indexUsers({
-          'filter[page_num]': page,
-          'filter[length]': 100,
-          role,
-          active,
-          search: searchText.trim(),
-        }),
+  const search = (page: number, searchText?: string): void => {
+    setIsLoading(true);
+    setTableState({
+      ...tableState,
+      count: userCounts.usersCount,
+    });
+    dispatch(
+      indexUsers({
+        'filter[page_num]': page,
+        'filter[length]': TABLE_ROWS_PER_PAGE,
+        role: filter.role,
+        active: filter.active,
+        search: searchText ? searchText.trim() : searchText,
+      }),
+    )
+      .catch(() =>
+        toast.error(intl.formatMessage(translations.fetchFilteredUsersFailure)),
       )
-        .catch(() =>
-          toast.error(
-            intl.formatMessage(translations.fetchFilteredUsersFailure),
-          ),
-        )
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const options: TableOptions = {
@@ -192,6 +157,7 @@ const UsersTable: FC<Props> = (props) => {
     customSearchRender: debounceSearchRender(FIELD_DEBOUNCE_DELAY),
     download: false,
     filter: false,
+    jumpToPage: true,
     onTableChange: (action, newTableState) => {
       switch (action) {
         case 'search':
@@ -206,8 +172,8 @@ const UsersTable: FC<Props> = (props) => {
     },
     pagination: true,
     print: false,
-    rowsPerPage: 100,
-    rowsPerPageOptions: [100],
+    rowsPerPage: TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',
@@ -268,21 +234,6 @@ const UsersTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         sort: false,
-        customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const userId = tableMeta.rowData[0];
-          return (
-            <InlineEditTextField
-              key={`name-${userId}`}
-              value={value}
-              className="user_name"
-              updateValue={updateValue}
-              variant="standard"
-              onUpdate={(newName): Promise<void> =>
-                handleNameUpdate(tableMeta.rowData, newName)
-              }
-            />
-          );
-        },
       },
     },
     {
@@ -319,7 +270,9 @@ const UsersTable: FC<Props> = (props) => {
               className="user_courses"
               variant="body2"
             >
-              <a href={`/users/${user.id}`}>{user.courses}</a>
+              <a href={`/users/${user.id}`} target="_blank" rel="noreferrer">
+                {user.courses}
+              </a>
             </Typography>
           );
         },
@@ -345,17 +298,15 @@ const UsersTable: FC<Props> = (props) => {
               }
               variant="standard"
             >
-              {Object.keys(sharedConstants.INSTANCE_USER_ROLES).map(
-                (option) => (
-                  <MenuItem
-                    id={`role-${userId}-${option}`}
-                    key={`role-${userId}-${option}`}
-                    value={option}
-                  >
-                    {sharedConstants.INSTANCE_USER_ROLES[option]}
-                  </MenuItem>
-                ),
-              )}
+              {Object.keys(INSTANCE_USER_ROLES).map((option) => (
+                <MenuItem
+                  id={`role-${userId}-${option}`}
+                  key={`role-${userId}-${option}`}
+                  value={option}
+                >
+                  {INSTANCE_USER_ROLES[option]}
+                </MenuItem>
+              ))}
             </TextField>
           );
         },
@@ -379,17 +330,14 @@ const UsersTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box sx={{ margin: '12px 0px', position: 'relative' }}>
+    <Box className="mx-0 my-3">
       {isLoading && <LoadingOverlay />}
       <DataTable
         title={
           <Typography variant="h6">
             {title}
             {isLoading && (
-              <CircularProgress
-                size={24}
-                style={{ marginLeft: 15, position: 'relative', top: 4 }}
-              />
+              <CircularProgress className="ml-4 relative top-1" size={24} />
             )}
           </Typography>
         }

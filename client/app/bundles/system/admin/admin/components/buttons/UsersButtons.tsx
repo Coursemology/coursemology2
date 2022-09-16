@@ -2,7 +2,7 @@ import { FC, useState, memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { AppDispatch } from 'types/store';
-import sharedConstants from 'lib/constants/sharedConstants';
+import { USER_ROLES } from 'lib/constants/sharedConstants';
 import { UserMiniEntity } from 'types/users';
 import MasqueradeButton from 'lib/components/buttons/MasqueradeButton';
 import DeleteButton from 'lib/components/buttons/DeleteButton';
@@ -13,12 +13,6 @@ import { deleteUser } from '../../operations';
 interface Props extends WrappedComponentProps {
   user: UserMiniEntity;
 }
-
-const styles = {
-  buttonStyle: {
-    padding: '0px 8px',
-  },
-};
 
 const translations = defineMessages({
   deletionSuccess: {
@@ -59,6 +53,7 @@ const UserManagementButtons: FC<Props> = (props) => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
       })
       .catch((error) => {
+        setIsDeleting(false);
         const errorMessage = error.response?.data?.errors
           ? error.response.data.errors
           : '';
@@ -67,8 +62,8 @@ const UserManagementButtons: FC<Props> = (props) => {
             error: errorMessage,
           }),
         );
-      })
-      .finally(() => setIsDeleting(false));
+        throw error;
+      });
   };
 
   const handleMasquerade = (userToMasquerade: UserMiniEntity): void => {
@@ -76,19 +71,18 @@ const UserManagementButtons: FC<Props> = (props) => {
   };
 
   const managementButtons = (
-    <div style={{ whiteSpace: 'nowrap' }} key={`buttons-${user.id}`}>
+    <div className="whitespace-nowrap" key={`buttons-${user.id}`}>
       <DeleteButton
         tooltip={intl.formatMessage(translations.deleteTooltip)}
-        className={`user-delete-${user.id}`}
+        className={`user-delete-${user.id} p-0`}
         disabled={isDeleting}
         loading={isDeleting}
         onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
-          role: sharedConstants.USER_ROLES[user.role],
+          role: USER_ROLES[user.role],
           name: user.name,
           email: user.email,
         })}
-        sx={styles.buttonStyle}
       />
       <MasqueradeButton
         tooltip={
@@ -96,10 +90,9 @@ const UserManagementButtons: FC<Props> = (props) => {
             ? intl.formatMessage(translations.masqueradeTooltip)
             : intl.formatMessage(translations.masqueradeDisabledTooltip)
         }
-        className={`user-masquerade-${user.id}`}
+        className={`user-masquerade-${user.id} p-0 ml-4`}
         disabled={!user.canMasquerade}
         onClick={(): void => handleMasquerade(user)}
-        sx={styles.buttonStyle}
       />
     </div>
   );

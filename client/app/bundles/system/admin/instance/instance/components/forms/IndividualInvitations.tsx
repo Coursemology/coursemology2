@@ -25,11 +25,11 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   appendNewRow: {
-    id: 'course.userInvitations.IndividualInvitations.add',
+    id: 'system.admin.instance.userInvitations.IndividualInvitations.add',
     defaultMessage: 'Add Row',
   },
   invite: {
-    id: 'course.userInvitations.IndividualInvitations.remove',
+    id: 'system.admin.instance.userInvitations.IndividualInvitations.remove',
     defaultMessage: 'Invite All Users',
   },
 });
@@ -58,13 +58,12 @@ const IndividualInvitations: FC<Props> = (props) => {
         ),
       )}
 
-      <Divider sx={{ margin: '12px 0px' }} />
+      <Divider className="my-3 mx-0" />
       <Grid container alignItems="center">
         <LoadingButton
-          className="btn-submit"
+          className="btn-submit mr-1"
           loading={isLoading}
           variant="contained"
-          sx={{ marginRight: '4px' }}
           form="invite-users-individual-form"
           key="invite-users-individual-form-submit-button"
           type="submit"

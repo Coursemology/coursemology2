@@ -15,20 +15,21 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
         visit admin_instance_users_path
 
         instance_users.each do |instance_user|
-          expect(page).to have_selector('div.user_name', text: instance_user.user.name)
+          expect(page).to have_text(instance_user.user.name)
           expect(page).to have_selector('p.user_email', text: instance_user.user.email)
         end
       end
 
       scenario 'I can filter users by role and view only administrators' do
-        visit admin_instance_users_path(role: :administrator)
-
+        visit admin_instance_users_path
+        find(:xpath,
+             '//*[@id="system-instance-admin-component"]/div[1]/div[4]/div[3]/div[2]/p[2]/button[1]').click
         instance_users.each do |instance_user|
-          expect(page).to have_no_selector('div.user_name', exact_text: instance_user.user.name)
+          expect(page).not_to have_text(instance_user.user.name)
           expect(page).to have_no_selector('p.user_email', exact_text: instance_user.user.email)
         end
 
-        expect(page).to have_selector('div.user_name', exact_text: instance_admin.name)
+        expect(page).to have_text(instance_admin.name)
         expect(page).to have_selector('p.user_email', exact_text: instance_admin.email)
       end
 
@@ -41,7 +42,6 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
           find('div.user_role').click
         end
         find("#role-#{user_to_change.id}-administrator").select_option
-        # byebug
         expect_toastify("Successfully changed #{user_to_change.user.name}'s role to Administrator.")
 
         expect(user_to_change.reload).to be_administrator
@@ -69,7 +69,7 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
         sleep 0.5 # timeout for search debouncing
 
         instance_users_to_search.each do |instance_user|
-          expect(page).to have_selector('div.user_name', text: instance_user.user.name)
+          expect(page).to have_text(instance_user.user.name)
         end
         expect(all('.instance_user').count).to eq(2)
 
@@ -78,7 +78,7 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
         find('div[aria-label="Search"]').find('input').set(random_instance_user.user.email)
         sleep 0.5 # timeout for search debouncing
 
-        expect(page).to have_selector('div.user_name', text: random_instance_user.user.name)
+        expect(page).to have_text(random_instance_user.user.name)
         expect(all('.instance_user').count).to eq(1)
       end
     end

@@ -12,6 +12,7 @@ import { getAdminCounts, getAllUserMiniEntities } from '../../selectors';
 import { indexUsers } from '../../operations';
 import UsersButtons from '../../components/buttons/UsersButtons';
 import UsersTable from '../../components/tables/UsersTable';
+import InstanceUsersTabs from '../../components/navigation/InstanceUsersTabs';
 
 type Props = WrappedComponentProps;
 
@@ -31,14 +32,14 @@ const translations = defineMessages({
   totalUsers: {
     id: 'system.admin.users.totalUsers',
     defaultMessage:
-      'Total Users: {allCount} ({adminCount} Administrators' +
-      ', {normalCount} Normal)',
+      'Total Users: {allCount}({adminCount} Administrators' +
+      ', {instructorCount} Instructors, {normalCount} Normal)',
   },
   activeUsers: {
     id: 'system.admin.users.activeUsers',
     defaultMessage:
       'Active Users: {allCount} ({adminCount} Administrators' +
-      ', {normalCount} Normal){br}' +
+      ', {instructorCount} Instructors, {normalCount} Normal){br}' +
       '(active in the past 7 days)',
   },
 });
@@ -62,9 +63,10 @@ const UsersIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState({ active: false, role: '' });
-  const userCounts = useSelector((state: AppState) => getAdminCounts(state));
   const users = useSelector((state: AppState) => getAllUserMiniEntities(state));
+  const userCounts = useSelector((state: AppState) => getAdminCounts(state));
   const dispatch = useDispatch<AppDispatch>();
+
   const { activeUsers: activeCounts, totalUsers: totalCounts } = userCounts;
 
   const totalUser = useMemo(
@@ -103,6 +105,26 @@ const UsersIndex: FC<Props> = (props) => {
         activeCounts.adminCount ?? 0,
         filter.active && filter.role === 'administrator',
         (): void => setFilter({ active: true, role: 'administrator' }),
+      ),
+    [totalCounts.allCount, filter.active, filter.role],
+  );
+
+  const totalInstructor = useMemo(
+    () =>
+      countWithLink(
+        totalCounts.instructorCount ?? 0,
+        !filter.active && filter.role === 'instructor',
+        (): void => setFilter({ active: false, role: 'instructor' }),
+      ),
+    [totalCounts.allCount, filter.active, filter.role],
+  );
+
+  const totalActiveInstructor = useMemo(
+    () =>
+      countWithLink(
+        activeCounts.instructorCount ?? 0,
+        filter.active && filter.role === 'instructor',
+        (): void => setFilter({ active: true, role: 'instructor' }),
       ),
     [totalCounts.allCount, filter.active, filter.role],
   );
@@ -148,13 +170,15 @@ const UsersIndex: FC<Props> = (props) => {
         {intl.formatMessage(translations.totalUsers, {
           allCount: totalUser,
           adminCount: totalAdmin,
+          instructorCount: totalInstructor,
           normalCount: totalNormal,
         })}
       </Typography>
       <Typography variant="body2">
-        {intl.formatMessage(translations.activeUsers, {
+        {intl.formatMessage(translations.totalUsers, {
           allCount: totalActiveUser,
           adminCount: totalActiveAdmin,
+          instructorCount: totalActiveInstructor,
           normalCount: totalActiveNormal,
           br: <br />,
         })}
@@ -165,7 +189,9 @@ const UsersIndex: FC<Props> = (props) => {
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.header)} />
+      <InstanceUsersTabs currentTab="instance-users-tab" />
       <SummaryCard renderContent={renderSummaryContent} />
+
       {isLoading ? (
         <LoadingIndicator />
       ) : (

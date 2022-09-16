@@ -3,40 +3,34 @@ import { useDispatch } from 'react-redux';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { AppDispatch } from 'types/store';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   IndividualInvites,
   InvitationsPostData,
   InvitationResult,
 } from 'types/system/instance/invitations';
 import ErrorText from 'lib/components/ErrorText';
+import formTranslations from 'lib/translations/form';
 import IndividualInvitations from './IndividualInvitations';
-import { inviteUsersFromForm } from '../../operations';
+import { inviteUsers } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   openResultDialog: (invitationResult: InvitationResult) => void;
 }
 
-const translations = defineMessages({
-  required: {
-    id: 'course.userInvitations.IndividualInvitations.error.required',
-    defaultMessage: 'Required',
-  },
-  emailFormat: {
-    id: 'course.userInvitations.IndividualInvitations.error.emailFormat',
-    defaultMessage: 'Enter a valid email format',
-  },
-});
-
 const validationSchema = yup.object({
   invitations: yup.array().of(
     yup.object({
-      name: yup.string().required(translations.required),
+      name: yup
+        .string()
+        .required(formTranslations.required)
+        .max(254, formTranslations.characters),
       email: yup
         .string()
-        .email(translations.emailFormat)
-        .required(translations.required),
+        .email(formTranslations.email)
+        .required(formTranslations.required),
       phantom: yup.bool(),
       role: yup.string(),
       timelineAlgorithm: yup.string(),
@@ -45,7 +39,7 @@ const validationSchema = yup.object({
 });
 
 const IndividualInviteForm: FC<Props> = (props) => {
-  const { openResultDialog } = props;
+  const { openResultDialog, intl } = props;
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const emptyInvitation = {
@@ -93,7 +87,7 @@ const IndividualInviteForm: FC<Props> = (props) => {
     if (invitationsFields.length === 0) {
       invitationsAppend(emptyInvitation);
     }
-  }, [invitationsFields.length === 0]);
+  }, [invitationsFields.length]);
 
   // It's recommended to reset in useEffect as execution order matters
   useEffect(() => {
@@ -104,9 +98,13 @@ const IndividualInviteForm: FC<Props> = (props) => {
 
   const onSubmit = (data: InvitationsPostData): Promise<void> => {
     setIsLoading(true);
-    return dispatch(inviteUsersFromForm(data))
+    return dispatch(inviteUsers(data))
       .then((response) => {
         openResultDialog(response);
+      })
+      .catch((error) => {
+        toast.error(intl.formatMessage(formTranslations.submissionError));
+        throw error;
       })
       .finally(() => {
         setIsLoading(false);

@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
 import { getAllInvitationMiniEntities } from '../../selectors';
-import InstanceUsersTabs from '../../components/navigation/InstanceUsersTabs';
 import { fetchInvitations } from '../../operations';
+import InstanceUsersTabs from '../../components/navigation/InstanceUsersTabs';
 import UserInvitationsTable from '../../components/tables/UserInvitationsTable';
 import PendingInvitationsButtons from '../../components/buttons/PendingInvitationsButtons';
 
@@ -66,24 +66,19 @@ const InstanceUsersInvitations: FC<Props> = (props) => {
   const renderBody: JSX.Element = (
     <>
       <InstanceUsersTabs currentTab="invitations-tab" />
-      {pendingInvitations.length > 0 && (
-        <UserInvitationsTable
-          title={intl.formatMessage(translations.pending)}
-          invitations={pendingInvitations}
-          pendingInvitations
-          renderRowActionComponent={(invitation): JSX.Element => (
-            <PendingInvitationsButtons invitation={invitation} />
-          )}
-        />
-      )}
-
-      {acceptedInvitations.length > 0 && (
-        <UserInvitationsTable
-          title={intl.formatMessage(translations.accepted)}
-          invitations={acceptedInvitations}
-          acceptedInvitations
-        />
-      )}
+      <UserInvitationsTable
+        title={intl.formatMessage(translations.pending)}
+        invitations={pendingInvitations}
+        pendingInvitations
+        renderRowActionComponent={(invitation): JSX.Element => (
+          <PendingInvitationsButtons invitation={invitation} />
+        )}
+      />
+      <UserInvitationsTable
+        title={intl.formatMessage(translations.accepted)}
+        invitations={acceptedInvitations}
+        acceptedInvitations
+      />
     </>
   );
 

@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, ReactElement, useState } from 'react';
 import {
   Box,
   CircularProgress,
@@ -13,23 +13,26 @@ import {
   TableOptions,
   TableState,
 } from 'types/components/DataTable';
-import { UserMiniEntity, UserRole } from 'types/users';
+import { AdminStats, UserMiniEntity, UserRole } from 'types/users';
 import tableTranslations from 'lib/translations/table';
-import sharedConstants, {
+import {
+  USER_ROLES,
   FIELD_DEBOUNCE_DELAY,
+  TABLE_ROWS_PER_PAGE,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { debounceSearchRender } from 'mui-datatables';
 import DataTable from 'lib/components/DataTable';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, AppState } from 'types/store';
-import { getUrlParameter } from 'lib/helpers/url-helpers';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'types/store';
 import LoadingOverlay from 'lib/components/LoadingOverlay';
 import { indexUsers, updateUser } from '../../operations';
-import { getAdminCounts, getAllUserMiniEntities } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
+  users: UserMiniEntity[];
+  userCounts: AdminStats;
+  filter: { active: boolean; role: string };
   title: string;
   renderRowActionComponent: (user: UserMiniEntity) => ReactElement;
 }
@@ -61,37 +64,17 @@ const translations = defineMessages({
   },
 });
 
-const styles = {
-  list: {
-    paddingLeft: 0,
-    marginBottom: 0,
-  },
-  listItem: {
-    listStyle: 'none',
-  },
-};
-
 const UsersTable: FC<Props> = (props) => {
-  const { title, renderRowActionComponent, intl } = props;
+  const { title, renderRowActionComponent, intl, filter, users, userCounts } =
+    props;
   const [isLoading, setIsLoading] = useState(false);
-  const users = useSelector((state: AppState) => getAllUserMiniEntities(state));
-  const counts = useSelector((state: AppState) => getAdminCounts(state));
-  const role = getUrlParameter('role');
-  const active = getUrlParameter('active');
   const dispatch = useDispatch<AppDispatch>();
 
   const [tableState, setTableState] = useState<TableState>({
-    count: counts.usersCount,
+    count: userCounts.usersCount,
     page: 1,
     searchText: '',
   });
-
-  useEffect((): void => {
-    setTableState({
-      ...tableState,
-      count: counts.usersCount,
-    });
-  }, [counts]);
 
   const handleNameUpdate = (rowData, newName: string): Promise<void> => {
     const user = rebuildObjectFromRow(
@@ -136,7 +119,7 @@ const UsersTable: FC<Props> = (props) => {
         toast.success(
           intl.formatMessage(translations.changeRoleSuccess, {
             name: user.name,
-            role: sharedConstants.USER_ROLES[newRole],
+            role: USER_ROLES[newRole],
           }),
         );
       })
@@ -145,7 +128,7 @@ const UsersTable: FC<Props> = (props) => {
       });
   };
 
-  const changePage = (page): void => {
+  const changePage = (page: number): void => {
     setIsLoading(true);
     setTableState({
       ...tableState,
@@ -154,9 +137,9 @@ const UsersTable: FC<Props> = (props) => {
     dispatch(
       indexUsers({
         'filter[page_num]': page,
-        'filter[length]': 100,
-        role,
-        active,
+        'filter[length]': TABLE_ROWS_PER_PAGE,
+        role: filter.role,
+        active: filter.active,
       }),
     )
       .catch(() =>
@@ -167,31 +150,27 @@ const UsersTable: FC<Props> = (props) => {
       });
   };
 
-  const search = (page, searchText): void => {
-    if (searchText !== null) {
-      setIsLoading(true);
-      setTableState({
-        ...tableState,
-        count: counts.usersCount,
-      });
-      dispatch(
-        indexUsers({
-          'filter[page_num]': page,
-          'filter[length]': 100,
-          role,
-          active,
-          search: searchText ? searchText.trim() : searchText,
-        }),
+  const search = (page: number, searchText?: string): void => {
+    setIsLoading(true);
+    setTableState({
+      ...tableState,
+      count: userCounts.usersCount,
+    });
+    dispatch(
+      indexUsers({
+        'filter[page_num]': page,
+        'filter[length]': TABLE_ROWS_PER_PAGE,
+        role: filter.role,
+        active: filter.active,
+        search: searchText ? searchText.trim() : searchText,
+      }),
+    )
+      .catch(() =>
+        toast.error(intl.formatMessage(translations.fetchFilteredUsersFailure)),
       )
-        .catch(() =>
-          toast.error(
-            intl.formatMessage(translations.fetchFilteredUsersFailure),
-          ),
-        )
-        .finally(() => {
-          setIsLoading(false);
-        });
-    }
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   const options: TableOptions = {
@@ -199,6 +178,7 @@ const UsersTable: FC<Props> = (props) => {
     customSearchRender: debounceSearchRender(FIELD_DEBOUNCE_DELAY),
     download: false,
     filter: false,
+    jumpToPage: true,
     onTableChange: (action, newTableState) => {
       switch (action) {
         case 'search':
@@ -213,8 +193,8 @@ const UsersTable: FC<Props> = (props) => {
     },
     pagination: true,
     print: false,
-    rowsPerPage: 100,
-    rowsPerPageOptions: [100],
+    rowsPerPage: TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',
@@ -312,9 +292,9 @@ const UsersTable: FC<Props> = (props) => {
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const user = users[dataIndex];
           return (
-            <ul style={styles.list}>
+            <ul className="pl-0 mb-0">
               {user.instances.map((instance) => (
-                <li key={instance.name} style={styles.listItem}>
+                <li key={instance.name} className="list-none">
                   <a href={`//${instance.host}/admin/users`}>{instance.name}</a>
                 </li>
               ))}
@@ -343,13 +323,13 @@ const UsersTable: FC<Props> = (props) => {
               }
               variant="standard"
             >
-              {Object.keys(sharedConstants.USER_ROLES).map((option) => (
+              {Object.keys(USER_ROLES).map((option) => (
                 <MenuItem
                   id={`role-${userId}-${option}`}
                   key={`role-${userId}-${option}`}
                   value={option}
                 >
-                  {sharedConstants.USER_ROLES[option]}
+                  {USER_ROLES[option]}
                 </MenuItem>
               ))}
             </TextField>
@@ -375,17 +355,14 @@ const UsersTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box sx={{ margin: '12px 0px', position: 'relative' }}>
+    <Box className="mx-0 my-3 relative">
       {isLoading && <LoadingOverlay />}
       <DataTable
         title={
           <Typography variant="h6">
             {title}
             {isLoading && (
-              <CircularProgress
-                size={24}
-                style={{ marginLeft: 15, position: 'relative', top: 4 }}
-              />
+              <CircularProgress className="ml-4 relative top-1" size={24} />
             )}
           </Typography>
         }

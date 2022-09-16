@@ -7,6 +7,22 @@ RSpec.describe System::Admin::Instance::UserInvitationsController, type: :contro
     let(:instance_admin) { create(:instance_user, role: :administrator).user }
     let(:normal_user) { create(:user) }
 
+    describe '#index' do
+      subject { get :index }
+
+      context 'when a system administrator visits the page' do
+        before { sign_in(instance_admin) }
+
+        it { is_expected.to render_template(:index) }
+      end
+
+      context 'when a normal user visits the page' do
+        before { sign_in(normal_user) }
+
+        it { expect { subject }.to raise_exception(CanCan::AccessDenied) }
+      end
+    end
+
     describe '#create' do
       before { sign_in(normal_user) }
       let(:invite_params) do
