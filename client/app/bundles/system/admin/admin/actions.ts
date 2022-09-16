@@ -1,25 +1,26 @@
 import {
   AnnouncementData,
   AnnouncementListData,
-} from 'types/system/announcements';
+  AnnouncementPermissions,
+} from 'types/course/announcements';
 import { CourseListData, CourseStats } from 'types/system/courses';
 import { InstanceListData, InstancePermissions } from 'types/system/instances';
 import { UserListData, AdminStats } from 'types/users';
 import {
-  SaveAnnouncementsListAction,
+  SaveAnnouncementListAction,
   SaveAnnouncementAction,
   DeleteAnnouncementAction,
-  SaveUsersListAction,
-  SaveCoursesListAction,
+  SaveUserListAction,
+  SaveCourseListAction,
   SaveInstanceListAction,
   DeleteCourseAction,
   SaveUserAction,
   DeleteUserAction,
   SaveInstanceAction,
   DeleteInstanceAction,
-  SAVE_ANNOUNCEMENTS_LIST,
+  SAVE_ANNOUNCEMENT_LIST,
   DELETE_ANNOUNCEMENT,
-  SAVE_USERS_LIST,
+  SAVE_USER_LIST,
   SAVE_COURSE_LIST,
   SAVE_INSTANCE_LIST,
   DELETE_COURSE,
@@ -30,12 +31,14 @@ import {
   DELETE_INSTANCE,
 } from './types';
 
-export function saveAnnouncementsList(
+export function saveAnnouncementList(
   announcementList: AnnouncementListData[],
-): SaveAnnouncementsListAction {
+  announcementPermissions: AnnouncementPermissions,
+): SaveAnnouncementListAction {
   return {
-    type: SAVE_ANNOUNCEMENTS_LIST,
+    type: SAVE_ANNOUNCEMENT_LIST,
     announcementList,
+    announcementPermissions,
   };
 }
 
@@ -54,12 +57,12 @@ export function deleteAnnouncement(
   };
 }
 
-export function saveUsersList(
+export function saveUserList(
   userList: UserListData[],
   counts: AdminStats,
-): SaveUsersListAction {
+): SaveUserListAction {
   return {
-    type: SAVE_USERS_LIST,
+    type: SAVE_USER_LIST,
     userList,
     counts,
   };
@@ -82,7 +85,7 @@ export function deleteUser(id: number): DeleteUserAction {
 export function saveCourseList(
   courseList: CourseListData[],
   counts: CourseStats,
-): SaveCoursesListAction {
+): SaveCourseListAction {
   return {
     type: SAVE_COURSE_LIST,
     courseList,

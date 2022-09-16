@@ -20,11 +20,11 @@ import {
 import { EntityStore } from 'types/store';
 
 // Action Names
-export const SAVE_USERS_LIST = 'course/users/SAVE_USERS_LIST';
+export const SAVE_USER_LIST = 'course/users/SAVE_USER_LIST';
 export const SAVE_USER = 'course/users/SAVE_USER';
-export const SAVE_MANAGE_USERS_LIST = 'course/users/SAVE_MANAGE_USERS_LIST';
+export const SAVE_MANAGE_USER_LIST = 'course/users/SAVE_MANAGE_USER_LIST';
 export const DELETE_USER = 'course/users/DELETE_USER';
-export const SAVE_PERSONAL_TIMES_LIST = 'course/users/SAVE_PERSONAL_TIMES_LIST';
+export const SAVE_PERSONAL_TIME_LIST = 'course/users/SAVE_PERSONAL_TIME_LIST';
 export const UPDATE_PERSONAL_TIME = 'course/users/UPDATE_PERSONAL_TIME';
 export const DELETE_PERSONAL_TIME = 'course/users/DELETE_PERSONAL_TIME';
 export const UPDATE_USER_OPTION = 'course/users/UPDATE_USER_OPTION';
@@ -37,8 +37,8 @@ export const DELETE_EXPERIENCE_POINTS_RECORD =
   'course/users/DELETE_EXPERIENCE_POINTS_RECORD';
 
 // Action Types
-export interface SaveUsersListAction {
-  type: typeof SAVE_USERS_LIST;
+export interface SaveUserListAction {
+  type: typeof SAVE_USER_LIST;
   userList: CourseUserListData[];
   manageCourseUsersPermissions: ManageCourseUsersPermissions;
 }
@@ -48,8 +48,8 @@ export interface SaveUserAction {
   user: CourseUserData;
 }
 
-export interface SaveManageUsersListAction {
-  type: typeof SAVE_MANAGE_USERS_LIST;
+export interface SaveManageUserListAction {
+  type: typeof SAVE_MANAGE_USER_LIST;
   userList: CourseUserListData[];
   manageCourseUsersPermissions: ManageCourseUsersPermissions;
   manageCourseUsersData: ManageCourseUsersSharedData;
@@ -60,8 +60,8 @@ export interface DeleteUserAction {
   userId: number;
 }
 
-export interface SavePersonalTimesListAction {
-  type: typeof SAVE_PERSONAL_TIMES_LIST;
+export interface SavePersonalTimeListAction {
+  type: typeof SAVE_PERSONAL_TIME_LIST;
   personalTimes: PersonalTimeListData[];
 }
 export interface UpdatePersonalTimeAction {
@@ -101,11 +101,11 @@ export interface DeleteExperiencePointsRecordAction {
 }
 
 export type UsersActionType =
-  | SaveUsersListAction
+  | SaveUserListAction
   | SaveUserAction
-  | SaveManageUsersListAction
+  | SaveManageUserListAction
   | DeleteUserAction
-  | SavePersonalTimesListAction
+  | SavePersonalTimeListAction
   | UpdatePersonalTimeAction
   | DeletePersonalTimeAction
   | UpdateUserOptionAction

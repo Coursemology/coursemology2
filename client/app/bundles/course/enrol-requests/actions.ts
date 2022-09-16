@@ -4,20 +4,20 @@ import {
 } from 'types/course/courseUsers';
 import { EnrolRequestListData } from 'types/course/enrolRequests';
 import {
-  SAVE_ENROL_REQUESTS_LIST,
+  SAVE_ENROL_REQUEST_LIST,
   UPDATE_ENROL_REQUEST,
-  SaveEnrolRequestsListAction,
+  SaveEnrolRequestListAction,
   UpdateEnrolRequestAction,
 } from './types';
 
-export function saveEnrolRequestsList(
-  enrolRequestsList: EnrolRequestListData[],
+export function saveEnrolRequestList(
+  enrolRequestList: EnrolRequestListData[],
   manageCourseUsersPermissions: ManageCourseUsersPermissions,
   manageCourseUsersData: ManageCourseUsersSharedData,
-): SaveEnrolRequestsListAction {
+): SaveEnrolRequestListAction {
   return {
-    type: SAVE_ENROL_REQUESTS_LIST,
-    enrolRequestsList,
+    type: SAVE_ENROL_REQUEST_LIST,
+    enrolRequestList,
     manageCourseUsersPermissions,
     manageCourseUsersData,
   };

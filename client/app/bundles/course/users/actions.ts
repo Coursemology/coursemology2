@@ -8,20 +8,20 @@ import {
 import { ExperiencePointsRecordListData } from 'types/course/experiencePointsRecords';
 import { PersonalTimeListData } from 'types/course/personalTimes';
 import {
-  SAVE_USERS_LIST,
+  SAVE_USER_LIST,
   SAVE_USER,
-  SAVE_MANAGE_USERS_LIST,
+  SAVE_MANAGE_USER_LIST,
   DELETE_USER,
-  SAVE_PERSONAL_TIMES_LIST,
+  SAVE_PERSONAL_TIME_LIST,
   UPDATE_PERSONAL_TIME,
   DELETE_PERSONAL_TIME,
   UPDATE_USER_OPTION,
   DELETE_USER_OPTION,
   SaveUserAction,
-  SaveUsersListAction,
-  SaveManageUsersListAction,
+  SaveUserListAction,
+  SaveManageUserListAction,
   DeleteUserAction,
-  SavePersonalTimesListAction,
+  SavePersonalTimeListAction,
   UpdatePersonalTimeAction,
   DeletePersonalTimeAction,
   UpdateUserOptionAction,
@@ -34,25 +34,25 @@ import {
   DELETE_EXPERIENCE_POINTS_RECORD,
 } from './types';
 
-export function saveUsersList(
+export function saveUserList(
   userList: CourseUserListData[],
   manageCourseUsersPermissions: ManageCourseUsersPermissions,
-): SaveUsersListAction {
+): SaveUserListAction {
   return {
-    type: SAVE_USERS_LIST,
+    type: SAVE_USER_LIST,
     userList,
     manageCourseUsersPermissions,
   };
 }
 
-export function saveManageUsersList(
+export function saveManageUserList(
   userList: CourseUserListData[],
   manageCourseUsersPermissions: ManageCourseUsersPermissions,
   manageCourseUsersData: ManageCourseUsersSharedData,
   userOptions: CourseUserBasicListData[] = [],
-): SaveManageUsersListAction {
+): SaveManageUserListAction {
   return {
-    type: SAVE_MANAGE_USERS_LIST,
+    type: SAVE_MANAGE_USER_LIST,
     userList,
     manageCourseUsersPermissions,
     manageCourseUsersData,
@@ -74,11 +74,11 @@ export function saveUser(user: CourseUserData): SaveUserAction {
   };
 }
 
-export function savePersonalTimesList(
+export function savePersonalTimeList(
   personalTimes: PersonalTimeListData[],
-): SavePersonalTimesListAction {
+): SavePersonalTimeListAction {
   return {
-    type: SAVE_PERSONAL_TIMES_LIST,
+    type: SAVE_PERSONAL_TIME_LIST,
     personalTimes,
   };
 }

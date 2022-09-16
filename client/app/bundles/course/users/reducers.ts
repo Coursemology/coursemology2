@@ -10,10 +10,10 @@ import {
   UsersState,
   UsersActionType,
   SAVE_USER,
-  SAVE_USERS_LIST,
-  SAVE_MANAGE_USERS_LIST,
+  SAVE_USER_LIST,
+  SAVE_MANAGE_USER_LIST,
   DELETE_USER,
-  SAVE_PERSONAL_TIMES_LIST,
+  SAVE_PERSONAL_TIME_LIST,
   UPDATE_PERSONAL_TIME,
   DELETE_PERSONAL_TIME,
   UPDATE_USER_OPTION,
@@ -47,7 +47,7 @@ const initialState: UsersState = {
 
 const reducer = produce((draft: UsersState, action: UsersActionType) => {
   switch (action.type) {
-    case SAVE_USERS_LIST: {
+    case SAVE_USER_LIST: {
       const userList = action.userList;
       const entityList = userList.map((data) => ({
         ...data,
@@ -62,7 +62,7 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
       saveEntityToStore(draft.users, userEntity);
       break;
     }
-    case SAVE_MANAGE_USERS_LIST: {
+    case SAVE_MANAGE_USER_LIST: {
       const usersList = action.userList;
       const entityList = usersList.map((data) => ({
         ...data,
@@ -85,7 +85,7 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
       }
       break;
     }
-    case SAVE_PERSONAL_TIMES_LIST: {
+    case SAVE_PERSONAL_TIME_LIST: {
       const personalTimesList = action.personalTimes;
       const entityList = personalTimesList.map((data) => ({ ...data }));
       saveListToStore(draft.personalTimes, entityList);
