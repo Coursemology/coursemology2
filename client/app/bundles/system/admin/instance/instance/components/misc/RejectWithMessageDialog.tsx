@@ -6,11 +6,10 @@ import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
 import { RoleRequestRowData } from 'types/system/instance/roleRequests';
-import { rejectRoleRequestWithMessage } from '../../operations';
+import { rejectRoleRequest } from '../../operations';
 import RejectWithMessageForm from '../forms/RejectWithMessageForm';
 
 interface Props extends WrappedComponentProps {
-  open: boolean;
   handleClose: () => void;
   roleRequest: RoleRequestRowData;
 }
@@ -22,24 +21,20 @@ const translations = defineMessages({
   },
   rejectSuccess: {
     id: 'roleRequests.reject.success',
-    defaultMessage: 'Role request for {name} was rejected.',
+    defaultMessage: 'The role request made by {name} has been rejected.',
   },
   rejectFailure: {
     id: 'roleRequests.reject.fail',
-    defaultMessage: 'Failed to reject role request. {error}',
+    defaultMessage: 'Failed to reject role request - {error}',
   },
 });
 
 const RejectWithMessageDialog: FC<Props> = (props) => {
-  const { open, handleClose, roleRequest, intl } = props;
+  const { handleClose, roleRequest, intl } = props;
   const [isDirty, setIsDirty] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [discardDialogOpen, setDiscardDialogOpen] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-
-  if (!open) {
-    return null;
-  }
 
   const confirmIfDirty = (): void => {
     if (isDirty) {
@@ -52,7 +47,7 @@ const RejectWithMessageDialog: FC<Props> = (props) => {
   const onSubmit = (message: string): Promise<void> => {
     setIsLoading(true);
 
-    return dispatch(rejectRoleRequestWithMessage(roleRequest.id, message))
+    return dispatch(rejectRoleRequest(roleRequest.id, message))
       .then(() => {
         toast.success(
           intl.formatMessage(translations.rejectSuccess, {
@@ -77,13 +72,11 @@ const RejectWithMessageDialog: FC<Props> = (props) => {
   return (
     <>
       <Dialog
+        className="top-40"
         onClose={confirmIfDirty}
-        open={open}
+        open
         fullWidth
-        maxWidth="lg"
-        style={{
-          top: 0,
-        }}
+        maxWidth="md"
       >
         <DialogTitle>{`${intl.formatMessage(
           translations.header,
@@ -98,7 +91,6 @@ const RejectWithMessageDialog: FC<Props> = (props) => {
           />
         </DialogContent>
       </Dialog>
-
       <ConfirmationDialog
         confirmDiscard
         open={discardDialogOpen}

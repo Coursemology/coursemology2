@@ -5,7 +5,7 @@ json.email role_request.user.email
 json.organization role_request.organization
 json.designation role_request.designation
 json.role role_request.role
-json.reason role_request.reason
+json.reason format_html(role_request.reason)
 json.status role_request.workflow_state
 json.createdAt format_datetime(role_request.created_at, :short)
 json.confirmedBy role_request.confirmer.name unless role_request.pending?

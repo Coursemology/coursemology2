@@ -3,12 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import ErrorText from 'lib/components/ErrorText';
 import { LoadingButton } from '@mui/lab';
 import { Grid, Button, TextField, Stack } from '@mui/material';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import FormTextField from 'lib/components/form/fields/TextField';
 import tableTranslations from 'lib/translations/table';
 import { RoleRequestRowData } from 'types/system/instance/roleRequests';
@@ -80,28 +75,44 @@ const RejectWithMessageForm: FC<Props> = (props) => {
             disabled
             required
             fullWidth
-            label={<FormattedMessage {...tableTranslations.requestToBe} />}
+            label={intl.formatMessage(tableTranslations.name)}
+            defaultValue={roleRequest.name}
+            variant="standard"
+          />
+          <TextField
+            disabled
+            required
+            fullWidth
+            label={intl.formatMessage(tableTranslations.email)}
+            defaultValue={roleRequest.email}
+            variant="standard"
+          />
+          <TextField
+            disabled
+            required
+            fullWidth
+            label={intl.formatMessage(tableTranslations.requestToBe)}
             defaultValue={roleRequest.role}
             variant="standard"
           />
           <TextField
             disabled
             fullWidth
-            label={<FormattedMessage {...tableTranslations.organization} />}
+            label={intl.formatMessage(tableTranslations.organization)}
             defaultValue={roleRequest.organization}
             variant="standard"
           />
           <TextField
             disabled
             fullWidth
-            label={<FormattedMessage {...tableTranslations.designation} />}
+            label={intl.formatMessage(tableTranslations.designation)}
             defaultValue={roleRequest.designation}
             variant="standard"
           />
           <TextField
             disabled
             fullWidth
-            label={<FormattedMessage {...tableTranslations.reason} />}
+            label={intl.formatMessage(tableTranslations.reason)}
             defaultValue={roleRequest.reason}
             variant="standard"
           />
@@ -112,9 +123,7 @@ const RejectWithMessageForm: FC<Props> = (props) => {
               <FormTextField
                 field={field}
                 fieldState={fieldState}
-                label={
-                  <FormattedMessage {...tableTranslations.rejectionMessage} />
-                }
+                label={intl.formatMessage(tableTranslations.rejectionMessage)}
                 // @ts-ignore: component is still written in JS
                 className="rejectionMessage"
                 fullWidth
@@ -129,7 +138,14 @@ const RejectWithMessageForm: FC<Props> = (props) => {
           />
         </Stack>
       </form>
-      <Grid container justifyContent="space-between" sx={{ marginTop: '24px' }}>
+      <Grid container className="mt-6" justifyContent="space-between">
+        <Button
+          color="secondary"
+          onClick={(): void => handleClose(isDirty)}
+          disabled={isLoading}
+        >
+          {intl.formatMessage(translations.cancel)}
+        </Button>
         <LoadingButton
           loading={isLoading}
           disabled={disabled}
@@ -141,13 +157,6 @@ const RejectWithMessageForm: FC<Props> = (props) => {
         >
           {intl.formatMessage(translations.reject)}
         </LoadingButton>
-        <Button
-          color="secondary"
-          onClick={(): void => handleClose(isDirty)}
-          disabled={isLoading}
-        >
-          {intl.formatMessage(translations.cancel)}
-        </Button>
       </Grid>
     </>
   );
