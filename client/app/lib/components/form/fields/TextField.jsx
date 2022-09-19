@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
 import TextField from 'lib/components/TextField';
@@ -44,18 +44,25 @@ const FormTextField = (props) => {
     [],
   );
 
+  const processValue = (e, trimStart = false) => {
+    let value = trimStart ? e.target.value.trimStart() : e.target.value.trim();
+
+    if (custom.type === 'number') value = parseInt(value, 10) || 0;
+    return value;
+  };
+
   // Custom onChange handler to keep track of this component's value internally
   const handleChange = (e) => {
     e.persist();
     // To remove leading whitespace
-    setOwnValue(e.target.value.trimStart());
-    syncFormState(e);
+    setOwnValue(processValue(e, true));
+    syncFormState(processValue(e, true));
   };
 
   const handleBlur = (e) => {
     // To remove trailing whitespace when blurring from the field
-    setOwnValue(e.target.value.trim()); // Update internal field value
-    field.onChange(e.target.value.trim()); // Update form field value
+    setOwnValue(processValue(e)); // Update internal field value
+    field.onChange(processValue(e)); // Update form field value
     // Default react hook form controller onBlur function
     field.onBlur(e);
   };
@@ -65,8 +72,8 @@ const FormTextField = (props) => {
 
     // To remove trailing whitespace when clicking enter within the field.
     if (e.charCode === 13) {
-      setOwnValue(e.target.value.trim()); // Update internal field value
-      field.onChange(e.target.value.trim()); // Update form field value
+      setOwnValue(processValue(e)); // Update internal field value
+      field.onChange(processValue(e)); // Update form field value
     }
   };
 
