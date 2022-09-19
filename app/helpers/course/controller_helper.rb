@@ -82,6 +82,10 @@ module Course::ControllerHelper
            locals: { course_user: course_user }
   end
 
+  def url_to_course_logo(course)
+    asset_url(course_logo_local_url(course))
+  end
+
   # Helper method to display the course logo. If logo is present, returns the medium version
   # of the logo (see ImageUploader for more versions). Otherwise, returns the default course
   # logo.
@@ -89,7 +93,13 @@ module Course::ControllerHelper
   # @return [String] HTML string to render the course logo
   def display_course_logo(course)
     content_tag(:span, class: ['image']) do
-      image_tag(course.logo.medium.url || 'course_default_logo.svg')
+      image_tag(course_logo_local_url(course))
     end
+  end
+
+  private
+
+  def course_logo_local_url(course)
+    course.logo.medium.url || 'course_default_logo.svg'
   end
 end
