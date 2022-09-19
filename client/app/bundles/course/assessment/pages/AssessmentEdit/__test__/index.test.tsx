@@ -63,7 +63,7 @@ beforeEach(() => {
 
 describe('<AssessmentEdit />', () => {
   it('submits correct form data', async () => {
-    const user = userEvent.setup();
+    const user = userEvent.setup({ delay: 3 });
 
     const title = form.getByLabelText('Title *');
     await user.type(title, '{Control>}a{/Control}{Delete}');
