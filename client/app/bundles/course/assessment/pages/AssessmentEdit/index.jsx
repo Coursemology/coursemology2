@@ -55,7 +55,7 @@ class EditPage extends Component {
 
     return (
       <>
-        <div className="absolute -mt-24 right-8">
+        <div className="absolute right-8 -mt-24">
           <Button
             variant="contained"
             color="primary"

@@ -115,13 +115,13 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
     <div className="whitespace-nowrap">
       <AcceptButton
         tooltip={intl.formatMessage(translations.approveTooltip)}
-        className={`role-request-approve-${roleRequest.id} p-0 mr-4`}
+        className={`role-request-approve-${roleRequest.id} mr-4 p-0`}
         disabled={isApproving || isDeleting}
         onClick={onApprove}
       />
       <EmailButton
         tooltip={intl.formatMessage(translations.rejectMessageTooltip)}
-        className={`role-request-reject-message-${roleRequest.id} p-0 mr-4`}
+        className={`role-request-reject-message-${roleRequest.id} mr-4 p-0`}
         disabled={isApproving || isDeleting}
         onClick={onRejectWithMessage}
       />

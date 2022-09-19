@@ -101,7 +101,7 @@ const IndividualInvitation: FC<Props> = (props) => {
   );
 
   return (
-    <Box className="flex justify-start items-center" key={index}>
+    <Box className="flex items-center justify-start" key={index}>
       {renderInvitationBody}
       <Tooltip title={intl.formatMessage(translations.removeInvitation)}>
         <IconButton onClick={(): void => fieldsConfig.remove(index)}>

@@ -17,7 +17,7 @@ function Submission(props) {
         <Grid item xs={12} lg={8}>
           <VideoPlayer />
         </Grid>
-        <Grid className="h-[calc(95vh-70px)] sticky top-0" item xs={12} lg={4}>
+        <Grid className="sticky top-0 h-[calc(95vh-70px)]" item xs={12} lg={4}>
           <Discussion />
         </Grid>
       </Grid>
