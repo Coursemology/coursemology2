@@ -126,6 +126,8 @@ Rails.application.routes.draw do
         patch '/' => 'admin#update'
         delete '/' => 'admin#destroy'
 
+        get 'time_zones' => 'admin#time_zones'
+
         get 'components' => 'component_settings#edit'
         patch 'components' => 'component_settings#update'
 
