@@ -90,7 +90,7 @@ const UserManagementButtons: FC<Props> = (props) => {
             ? intl.formatMessage(translations.masqueradeTooltip)
             : intl.formatMessage(translations.masqueradeDisabledTooltip)
         }
-        className={`user-masquerade-${user.id} p-0 ml-4`}
+        className={`user-masquerade-${user.id} ml-4 p-0`}
         disabled={!user.canMasquerade}
         onClick={(): void => handleMasquerade(user)}
       />

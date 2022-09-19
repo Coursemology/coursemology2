@@ -11,7 +11,7 @@ interface IconRadioProps {
 
 const IconRadio = (props: IconRadioProps): JSX.Element => (
   <label
-    className={`py-2 cursor-pointer flex ${
+    className={`flex cursor-pointer py-2 ${
       props.description ? 'items-start' : 'items-center'
     }`}
   >
