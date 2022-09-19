@@ -3,14 +3,17 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
   add_breadcrumb :index, :course_admin_assessments_path
 
   def edit
-    @categories = current_course.assessment_categories.includes(:tabs)
+    respond_to do |format|
+      format.html { render 'course/admin/index' }
+      format.json
+    end
   end
 
   def update
     if current_course.update(category_params)
-      redirect_to course_admin_assessments_path, success: t('.success')
-    else
       render 'edit'
+    else
+      render json: { errors: current_course.errors }, status: :bad_request
     end
   end
 

@@ -16,10 +16,9 @@ class Course::Admin::Assessments::TabsController < Course::Admin::Controller
 
   def create
     if @tab.save
-      redirect_to course_admin_assessments_path(current_course),
-                  success: t('.success', title: @tab.title)
+      render 'course/admin/assessment_settings/edit'
     else
-      render 'new'
+      render json: { errors: @tab.errors }, status: :bad_request
     end
   end
 
@@ -27,11 +26,9 @@ class Course::Admin::Assessments::TabsController < Course::Admin::Controller
     if @tab.destroy
       Course::Settings::AssessmentsComponent.delete_lesson_plan_item_setting(current_course,
                                                                              @tab.id)
-      redirect_to course_admin_assessments_path(current_course),
-                  success: t('.success', title: @tab.title)
+      render 'course/admin/assessment_settings/edit'
     else
-      redirect_to course_admin_assessments_path(current_course),
-                  danger: t('.failure', error: @tab.errors.full_messages.to_sentence)
+      render json: { errors: @tab.errors }, status: :bad_request
     end
   end
 
