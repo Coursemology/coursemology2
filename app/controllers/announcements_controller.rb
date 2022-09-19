@@ -6,7 +6,12 @@ class AnnouncementsController < ApplicationController
   add_breadcrumb :index, :announcements_path
 
   def index
-    @announcements = global_announcements.includes(:creator)
+    respond_to do |format|
+      format.html
+      format.json do
+        @announcements = global_announcements.includes(:creator)
+      end
+    end
   end
 
   # Marks the current GenericAnnouncement as read by the current user and responds without a body.
