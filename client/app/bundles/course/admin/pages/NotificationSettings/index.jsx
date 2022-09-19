@@ -11,9 +11,13 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import NotificationPopup from 'lib/containers/NotificationPopup';
-import updateNotificationSettings from '../../actions/notifications';
+
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import adminTranslations from 'course/translations.intl';
+import {
+  fetchNotificationSettings,
+  updateNotificationSettings,
+} from './operations';
 import translations, {
   settingComponents,
   settingTitles,
@@ -28,6 +32,17 @@ const styles = {
 };
 
 class NotificationSettings extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { isLoading: true };
+  }
+
+  componentDidMount = () => {
+    this.props.dispatch(
+      fetchNotificationSettings(() => this.setState({ isLoading: false })),
+    );
+  };
+
   handleComponentNotificationSettingUpdate = (setting, type) => {
     const { dispatch, intl } = this.props;
     const componentTitle =
@@ -176,14 +191,14 @@ class NotificationSettings extends Component {
   }
 
   render() {
+    if (this.state.isLoading) return <LoadingIndicator />;
+
     return (
       <>
         <h2>
           <FormattedMessage {...translations.emailSettings} />
         </h2>
         {this.renderEmailSettingsTable()}
-
-        <NotificationPopup />
       </>
     );
   }
