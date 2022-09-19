@@ -36,7 +36,7 @@ module CourseComponentQueryConcern
 
   # @return [Array<Class>] Components specified as 'enabled' by the user.
   def user_enabled_components
-    @user_enabled_components ||= available_components.select do |component|
+    @user_enabled_components = available_components.select do |component|
       enabled = component_setting(component.key).enabled
       enabled.nil? ? component.enabled_by_default? : enabled
     end
