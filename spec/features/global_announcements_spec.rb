@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Global announcements' do
+RSpec.feature 'Global announcements', js: true do
   subject { page }
   let(:instance) { Instance.default }
 
@@ -30,7 +30,7 @@ RSpec.feature 'Global announcements' do
           with_tag('div.panel-heading', text: format('×%<title>s', title: announcement.title))
           with_tag('div.panel-body', text: announcement.content)
         end
-        expect(page).to have_content_tag_for(announcement)
+        expect(page).to have_selector("div#announcement-#{announcement.id}")
       end
 
       scenario 'I should see system announcements' do
@@ -41,7 +41,7 @@ RSpec.feature 'Global announcements' do
           with_tag('div.panel-heading', text: format('×%<title>s', title: announcement.title))
           with_tag('div.panel-body', text: announcement.content)
         end
-        expect(page).to have_content_tag_for(announcement)
+        expect(page).to have_selector("div#announcement-#{announcement.id}")
       end
 
       scenario 'I should see both types of announcements' do
@@ -61,24 +61,12 @@ RSpec.feature 'Global announcements' do
           with_tag('div.panel-body', text: announcements.last.content)
         end
 
-        announcements.select(&:currently_active?).each do |s|
-          expect(page).to have_content_tag_for(s)
+        announcements.select(&:currently_active?).each do |announcement|
+          expect(page).to have_selector("div#announcement-#{announcement.id}")
         end
-        announcements.reject(&:currently_active?).each do |s|
-          expect(page).to have_no_content_tag_for(s)
+        announcements.reject(&:currently_active?).each do |announcement|
+          expect(page).not_to have_selector("div#announcement-#{announcement.id}")
         end
-      end
-
-      scenario 'I can hide announcements that I have read' do
-        announcement = create(:instance_announcement, instance: instance)
-        expect(announcement.unread?(user)).to be_truthy
-
-        visit root_path
-        find_link(nil, href: announcement_mark_as_read_path(announcement)).click
-        expect(announcement.unread?(user)).to be_falsey
-
-        visit root_path
-        expect(page).not_to have_selector('div.global-announcement')
       end
     end
   end

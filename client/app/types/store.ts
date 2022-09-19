@@ -15,6 +15,7 @@ import { FoldersState } from 'bundles/course/material/folders/types';
 import { AdminState } from 'bundles/system/admin/admin/types';
 import { InstanceAdminState } from 'bundles/system/admin/instance/instance/types';
 import { GlobalUserState } from 'bundles/users/types';
+import { GlobalAnnouncementState } from 'bundles/announcements/types';
 
 /**
  * Describes the overall shape of the application's Redux store state.
@@ -34,7 +35,7 @@ export interface AppState {
   enrolRequests: EnrolRequestsState;
   disbursement: DisbursementState;
   comments: CommentState;
-  global: { user: GlobalUserState };
+  global: { user: GlobalUserState; announcements: GlobalAnnouncementState };
 }
 
 export type Operation<R> = ThunkAction<

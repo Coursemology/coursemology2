@@ -1,9 +1,0 @@
-@import 'announcement';
-
-.course-announcements {
-  &.index {
-    .announcement {
-      @include announcement;
-    }
-  }
-}
