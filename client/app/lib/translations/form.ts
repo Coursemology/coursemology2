@@ -33,6 +33,14 @@ const translations = defineMessages({
     id: 'lib.form.buttons.save',
     defaultMessage: 'Save',
   },
+  saveChanges: {
+    id: 'lib.form.buttons.saveChanges',
+    defaultMessage: 'Save changes',
+  },
+  reset: {
+    id: 'lib.form.buttons.reset',
+    defaultMessage: 'Reset',
+  },
   submit: {
     id: 'lib.form.buttons.submit',
     defaultMessage: 'Submit',
@@ -64,6 +72,19 @@ const translations = defineMessages({
   discardChanges: {
     id: 'lib.form.messages.discardChanges',
     defaultMessage: 'Discard Changes?',
+  },
+  unsavedChanges: {
+    id: 'lib.form.messages.unsavedChanges',
+    defaultMessage: 'You have unsaved changes.',
+  },
+  changesSaved: {
+    id: 'lib.form.messages.changesSaved',
+    defaultMessage: 'Your changes have been saved.',
+  },
+  changesSavedAndRefresh: {
+    id: 'lib.form.messages.changesSaved',
+    defaultMessage:
+      'Your changes have been saved. Refresh to see the new changes.',
   },
   areYouSure: {
     id: 'lib.form.messages.areYouSure',
