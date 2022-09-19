@@ -1,0 +1,13 @@
+# frozen_string_literal: true
+json.title current_course.title
+json.description current_course.description
+json.logo url_to_course_logo(current_course)
+json.published current_course.published
+json.enrollable current_course.enrollable
+json.startAt current_course.start_at
+json.endAt current_course.end_at
+json.gamified current_course.gamified
+json.showPersonalizedTimelineFeatures current_course.show_personalized_timeline_features
+json.defaultTimelineAlgorithm current_course.default_timeline_algorithm
+json.timeZone current_course.time_zone
+json.advanceStartAtDurationDays current_course.advance_start_at_duration_days

@@ -1,14 +1,17 @@
 # frozen_string_literal: true
 class Course::Admin::AdminController < Course::Admin::Controller
   def index
+    respond_to do |format|
+      format.html { render 'course/admin/index' }
+      format.json
+    end
   end
 
   def update
     if current_course.update(course_setting_params)
-      redirect_to course_admin_path(current_course),
-                  success: t('.success', title: current_course.title)
-    else
       render 'index'
+    else
+      render json: { errors: current_course.errors }, status: :bad_request
     end
   end
 
@@ -30,14 +33,10 @@ class Course::Admin::AdminController < Course::Admin::Controller
   end
 
   def destroy_success
-    redirect_to courses_path,
-                success: t('course.admin.admin.destroy.success',
-                           title: current_course.title)
+    head :ok
   end
 
   def destroy_failure
-    redirect_to course_admin_path(current_course),
-                danger: t('course.admin.admin.destroy.failure',
-                          error: current_course.errors.full_messages.to_sentence)
+    render json: { errors: current_course.errors.full_messages.to_sentence }, status: :bad_request
   end
 end
