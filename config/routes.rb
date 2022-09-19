@@ -131,6 +131,7 @@ Rails.application.routes.draw do
         get 'components' => 'component_settings#edit'
         patch 'components' => 'component_settings#update'
 
+        get 'options' => 'sidebar_settings#show'
         get 'sidebar' => 'sidebar_settings#edit'
         patch 'sidebar' => 'sidebar_settings#update'
 
