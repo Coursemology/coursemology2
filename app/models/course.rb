@@ -161,6 +161,10 @@ class Course < ApplicationRecord
     settings(:course).advance_start_at_duration || 0
   end
 
+  def advance_start_at_duration_days
+    advance_start_at_duration / 86_400
+  end
+
   def advance_start_at_duration=(time)
     settings(:course).advance_start_at_duration = time
   end
