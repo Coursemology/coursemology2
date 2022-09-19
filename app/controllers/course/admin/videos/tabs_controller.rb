@@ -7,24 +7,22 @@ class Course::Admin::Videos::TabsController < Course::Admin::Controller
 
   add_breadcrumb :index, :course_admin_videos_path
 
-  def new; end
+  def new
+  end
 
   def create
     if @tab.save
-      redirect_to course_admin_videos_path(current_course),
-                  success: t('.success', title: @tab.title)
+      render 'course/admin/video_settings/edit'
     else
-      render 'new'
+      render json: { errors: @tab.errors }, status: :bad_request
     end
   end
 
   def destroy
     if @tab.destroy
-      redirect_to course_admin_videos_path(current_course),
-                  success: t('.success', title: @tab.title)
+      render 'course/admin/video_settings/edit'
     else
-      redirect_to course_admin_videos_path(current_course),
-                  danger: t('.failure', error: @tab.errors.full_messages.to_sentence)
+      render json: { errors: @tab.errors }, status: :bad_request
     end
   end
 
