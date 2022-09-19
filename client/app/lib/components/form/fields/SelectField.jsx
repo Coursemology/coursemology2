@@ -33,6 +33,7 @@ const FormSelectField = (props) => {
     displayEmpty,
     className,
     variant = 'standard',
+    native,
     ...custom
   } = props;
   const isError = !!fieldState.error;
@@ -45,6 +46,9 @@ const FormSelectField = (props) => {
       ...sx,
     };
   }
+
+  const Option = (optionProps) =>
+    native ? <option {...optionProps} /> : <MenuItem {...optionProps} />;
 
   return (
     <FormControl
@@ -63,6 +67,7 @@ const FormSelectField = (props) => {
             ? onChangeCustom(event.target.value)
             : field.onChange(event)
         }
+        native={native}
         {...custom}
         variant={variant}
         displayEmpty={displayEmpty}
@@ -72,19 +77,19 @@ const FormSelectField = (props) => {
         }}
       >
         {noneSelected && (
-          <MenuItem value="" key={noneSelected}>
+          <Option value="" key={noneSelected}>
             {noneSelected}
-          </MenuItem>
+          </Option>
         )}
         {options &&
           options.map((option) => (
-            <MenuItem
+            <Option
               key={option.value}
               id={`select-${option.value}`}
               value={option.value}
             >
               {option.label}
-            </MenuItem>
+            </Option>
           ))}
       </Select>
       {isError && (
@@ -116,6 +121,7 @@ FormSelectField.propTypes = {
   className: PropTypes.string,
   variant: PropTypes.string,
   type: PropTypes.string,
+  native: PropTypes.bool,
 };
 
 export default memo(FormSelectField, propsAreEqual);
