@@ -11,10 +11,9 @@ class Course::Admin::Assessments::CategoriesController < Course::Admin::Controll
 
   def create
     if @category.save
-      redirect_to course_admin_assessments_path(current_course),
-                  success: t('.success', title: @category.title)
+      render 'course/admin/assessment_settings/edit'
     else
-      render 'new'
+      render json: { errors: @category.errors }, status: :bad_request
     end
   end
 
@@ -25,11 +24,9 @@ class Course::Admin::Assessments::CategoriesController < Course::Admin::Controll
         Course::Settings::AssessmentsComponent.delete_lesson_plan_item_setting(current_course,
                                                                                tab_id)
       end
-      redirect_to course_admin_assessments_path(current_course),
-                  success: t('.success', title: @category.title)
+      render 'course/admin/assessment_settings/edit'
     else
-      redirect_to course_admin_assessments_path(current_course),
-                  danger: t('.failure', error: @category.errors.full_messages.to_sentence)
+      render json: { errors: @category.errors }, status: :bad_request
     end
   end
 
