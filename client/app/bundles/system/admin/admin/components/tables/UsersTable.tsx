@@ -292,7 +292,7 @@ const UsersTable: FC<Props> = (props) => {
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const user = users[dataIndex];
           return (
-            <ul className="pl-0 mb-0">
+            <ul className="mb-0 pl-0">
               {user.instances.map((instance) => (
                 <li key={instance.name} className="list-none">
                   <a href={`//${instance.host}/admin/users`}>{instance.name}</a>
@@ -355,14 +355,14 @@ const UsersTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box className="mx-0 my-3 relative">
+    <Box className="relative mx-0 my-3">
       {isLoading && <LoadingOverlay />}
       <DataTable
         title={
           <Typography variant="h6">
             {title}
             {isLoading && (
-              <CircularProgress className="ml-4 relative top-1" size={24} />
+              <CircularProgress className="relative top-1 ml-4" size={24} />
             )}
           </Typography>
         }

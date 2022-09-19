@@ -315,14 +315,14 @@ const InstancesTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box className="mx-0 my-3 relative">
+    <Box className="relative mx-0 my-3">
       {isLoading && <LoadingOverlay />}
       <DataTable
         title={
           <Typography variant="h6">
             {title}
             {isLoading && (
-              <CircularProgress className="ml-4 relative top-1" size={24} />
+              <CircularProgress className="relative top-1 ml-4" size={24} />
             )}
           </Typography>
         }

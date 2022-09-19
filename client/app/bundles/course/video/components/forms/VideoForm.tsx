@@ -129,7 +129,7 @@ const VideoForm: FC<Props> = (props) => {
   const disabled = isSubmitting;
 
   const actionButtons = initialValues.id ? (
-    <div className="flex justify-end mt-2">
+    <div className="mt-2 flex justify-end">
       <Button
         variant="contained"
         color="primary"
@@ -143,7 +143,7 @@ const VideoForm: FC<Props> = (props) => {
       </Button>
     </div>
   ) : (
-    <div className="flex justify-end mt-2">
+    <div className="mt-2 flex justify-end">
       <Button
         color="secondary"
         className="btn-cancel"

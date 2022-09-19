@@ -9,7 +9,6 @@ import translations from '../../translations';
 
 const propTypes = {
   intl: PropTypes.object.isRequired,
-
   url: PropTypes.string,
 };
 

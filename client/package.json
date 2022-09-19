@@ -192,6 +192,7 @@
     "postcss": "^8.4.18",
     "postcss-loader": "^7.0.1",
     "prettier": "^2.7.1",
+    "prettier-plugin-tailwindcss": "^0.1.13",
     "react-dnd-test-backend": "^15.1.2",
     "redux-logger": "^3.0.6",
     "sass-loader": "^13.1.0",
