@@ -27,4 +27,8 @@ class Course::Settings::SidebarItem
     result = @settings.settings(id).weight if id
     result || @sidebar_item[:weight]
   end
+
+  def icon
+    @sidebar_item[:icon]
+  end
 end
