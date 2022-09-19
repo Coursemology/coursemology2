@@ -4,13 +4,17 @@ class Course::Admin::SidebarSettingsController < Course::Admin::Controller
   add_breadcrumb :index, :course_admin_sidebar_path
 
   def edit
+    respond_to do |format|
+      format.html { render 'course/admin/index' }
+      format.json
+    end
   end
 
   def update
     if @settings.update(settings_sidebar_params) && current_course.save
-      redirect_to course_admin_sidebar_path(current_course), success: t('.success')
-    else
       render 'edit'
+    else
+      render json: { errors: @settings.errors }, status: :bad_request
     end
   end
 

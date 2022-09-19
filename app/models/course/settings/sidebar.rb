@@ -29,7 +29,7 @@ class Course::Settings::Sidebar
   #
   # @param [Array<Hash>] attributes the attributes which indicates the new order.
   def sidebar_items_attributes=(attributes)
-    attributes.each_value do |attribute|
+    attributes.each do |attribute|
       key = attribute[:id]
       new_weight = attribute[:weight].to_i
       @settings.settings(key).weight = new_weight
