@@ -21,9 +21,9 @@ import {
 } from '@mui/material';
 import { blue, yellow, red, grey } from '@mui/material/colors';
 
-/* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
 import ErrorText from 'lib/components/ErrorText';
+import usePrompt from 'lib/hooks/router/usePrompt';
 import {
   explanationShape,
   questionShape,
@@ -130,6 +130,7 @@ const SubmissionEditForm = (props) => {
     setValue,
     formState: { errors, isDirty },
   } = methods;
+  usePrompt(isDirty);
 
   useEffect(() => {
     reset(initialValues);

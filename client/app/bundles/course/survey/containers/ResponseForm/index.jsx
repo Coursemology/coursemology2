@@ -5,6 +5,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
 import { useFieldArray, useForm } from 'react-hook-form';
 import ErrorText from 'lib/components/ErrorText';
+import { usePrompt } from 'lib/hooks/router/usePrompt';
 import formTranslations from 'lib/translations/form';
 import { responseShape } from 'course/survey/propTypes';
 import ResponseSection from './ResponseSection';
@@ -92,6 +93,8 @@ const ResponseForm = (props) => {
   } = useForm({
     defaultValues: initialValues,
   });
+  usePrompt(isDirty);
+
   const { fields } = useFieldArray({
     control,
     name: 'sections',
