@@ -33,15 +33,14 @@ const FormTextField = (props) => {
 
   const [ownValue, setOwnValue] = useState(field.value);
 
+  useEffect(() => {
+    setOwnValue(field.value);
+  }, [field.value]);
+
   // Debounced function to sync the value of this component with the form. This helps to reduce the cost of re-rendering
   // the entire form when the form state changes, especially in large forms.
   const syncFormState = useCallback(
-    debounce(
-      (e) => {
-        field.onChange(e);
-      },
-      enableDebouncing ? FIELD_DEBOUNCE_DELAY : 0,
-    ),
+    debounce(field.onChange, enableDebouncing ? FIELD_DEBOUNCE_DELAY : 0),
     [],
   );
 
