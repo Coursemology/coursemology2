@@ -166,7 +166,7 @@ class Level extends Component {
 
     return (
       <div style={styles.body}>
-        <Table className="table levels-list">
+        <Table className="levels-list table">
           {Level.renderTableHeader()}
           <TableBody>{rows}</TableBody>
           {canManage && this.renderTableFooter()}

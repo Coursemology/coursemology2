@@ -101,7 +101,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
                   <Tooltip
                     title={intl.formatMessage(translations.duplicateInfo)}
                   >
-                    <HelpIcon className="text-3xl mr-1" />
+                    <HelpIcon className="mr-1 text-3xl" />
                   </Tooltip>
                   {intl.formatMessage(translations.duplicateUsers, {
                     count: duplicateUsers.length,
@@ -122,7 +122,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
                       translations.existingInvitationsInfo,
                     )}
                   >
-                    <HelpIcon className="text-3xl mr-1" />
+                    <HelpIcon className="mr-1 text-3xl" />
                   </Tooltip>
                   {intl.formatMessage(translations.existingInvitations, {
                     count: existingInvitations.length,
@@ -143,7 +143,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
                       translations.existingInstanceUsersInfo,
                     )}
                   >
-                    <HelpIcon className="text-3xl mr-1" />
+                    <HelpIcon className="mr-1 text-3xl" />
                   </Tooltip>
                   {intl.formatMessage(translations.existingInstanceUsers, {
                     count: existingInstanceUsers.length,

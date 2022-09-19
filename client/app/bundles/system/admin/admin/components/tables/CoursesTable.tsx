@@ -271,7 +271,7 @@ const CoursesTable: FC<Props> = (props) => {
         customBodyRenderLite: (dataIndex: number): JSX.Element => {
           const course = courses[dataIndex];
           return (
-            <ul className="pl-0 mb-0">
+            <ul className="mb-0 pl-0">
               {course.owners.map((owner) => renderOwnerLink(owner))}
             </ul>
           );
@@ -296,14 +296,14 @@ const CoursesTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box className="mx-0 my-3 relative">
+    <Box className="relative mx-0 my-3">
       {isLoading && <LoadingOverlay />}
       <DataTable
         title={
           <Typography variant="h6">
             {title}
             {isLoading && (
-              <CircularProgress className="ml-4 relative top-1" size={24} />
+              <CircularProgress className="relative top-1 ml-4" size={24} />
             )}
           </Typography>
         }
