@@ -1,7 +1,9 @@
 import { mount } from 'enzyme';
+import MockAdapter from 'axios-mock-adapter';
+
+import { act } from 'utilities/test-utils';
 import CourseAPI from 'api/course';
 import { store } from '../../../store';
-import { update } from '../../../reducers/notificationSettings';
 import NotificationSettings from '../index';
 
 const emailSettings = [
@@ -14,16 +16,24 @@ const emailSettings = [
   },
 ];
 
+const client = CourseAPI.admin.notifications.getClient();
+const mock = new MockAdapter(client);
+
 describe('<NotificationSettings />', () => {
-  it('allow emails notification settings to be set', () => {
+  it('allow emails notification settings to be set', async () => {
     const spy = jest.spyOn(CourseAPI.admin.notifications, 'update');
 
-    store.dispatch(update(emailSettings));
+    mock
+      .onGet(`/courses/${global.courseId}/admin/notifications`)
+      .reply(200, emailSettings);
 
-    const notificationSettings = mount(
+    const notificationSettings = await mount(
       <NotificationSettings />,
       buildContextOptions(store),
     );
+
+    await act(() => Promise.resolve());
+    notificationSettings.update();
 
     const toggles = notificationSettings.find('ForwardRef(Switch)');
     expect(toggles).toHaveLength(2);
