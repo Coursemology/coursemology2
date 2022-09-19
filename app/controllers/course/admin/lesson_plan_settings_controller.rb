@@ -4,7 +4,10 @@ class Course::Admin::LessonPlanSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_lesson_plan_path
 
   def edit
-    @page_data = page_data.to_json
+    respond_to do |format|
+      format.html { render 'course/admin/index' }
+      format.json { @page_data = page_data }
+    end
   end
 
   def update
