@@ -163,13 +163,13 @@ Rails.application.routes.draw do
         patch 'lesson_plan' => 'lesson_plan_settings#update'
 
         namespace 'assessments' do
-          resources :categories, only: [:new, :create, :destroy] do
-            resources :tabs, only: [:new, :create, :destroy]
+          resources :categories, only: [:create, :destroy] do
+            resources :tabs, only: [:create, :destroy]
           end
         end
 
         namespace 'videos' do
-          resources :tabs, only: [:new, :create, :destroy]
+          resources :tabs, only: [:create, :destroy]
         end
       end
 
