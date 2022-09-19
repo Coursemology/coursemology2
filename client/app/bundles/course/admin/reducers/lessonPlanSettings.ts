@@ -1,26 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
-interface LessonPlanItemSettings {
-  component: string;
-  enabled: boolean;
-  visible: boolean;
-  category_title?: string;
-  tab_title?: string;
-  options?: {
-    category_id: number;
-    tab_id: number;
-  };
-}
+import type { LessonPlanSettings } from 'types/course/admin/lessonPlan';
 
-interface LessonPlanSettingsState {
-  items_settings: LessonPlanItemSettings[];
-  component_settings: {
-    milestones_expanded?: 'all' | 'none' | 'current';
-  };
-}
-
-const initialState: LessonPlanSettingsState = {
+const initialState: LessonPlanSettings = {
   items_settings: [],
   component_settings: {},
 };
@@ -29,7 +12,7 @@ export const lessonPlanSettingsSlice = createSlice({
   name: 'lessonPlanSettings',
   initialState,
   reducers: {
-    update: (_state, action: PayloadAction<LessonPlanSettingsState>) =>
+    update: (_state, action: PayloadAction<LessonPlanSettings>) =>
       action.payload,
   },
 });

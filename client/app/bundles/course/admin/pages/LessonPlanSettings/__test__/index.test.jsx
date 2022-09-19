@@ -1,7 +1,9 @@
 import { mount } from 'enzyme';
+import MockAdapter from 'axios-mock-adapter';
+
+import { act } from 'utilities/test-utils';
 import CourseAPI from 'api/course';
 import { store } from '../../../store';
-import { update } from '../../../reducers/lessonPlanSettings';
 import LessonPlanSettings from '../index';
 
 const itemSettings = [
@@ -14,21 +16,25 @@ const itemSettings = [
   },
 ];
 
+const client = CourseAPI.admin.lessonPlan.getClient();
+const mock = new MockAdapter(client);
+
 describe('<LessonPlanSettings />', () => {
-  it('allow lesson plan item settings to be set', () => {
+  it('allow lesson plan item settings to be set', async () => {
     const spy = jest.spyOn(CourseAPI.admin.lessonPlan, 'update');
 
-    store.dispatch(
-      update({
-        items_settings: itemSettings,
-        component_settings: {},
-      }),
-    );
+    mock.onGet(`/courses/${global.courseId}/admin/lesson_plan`).reply(200, {
+      items_settings: itemSettings,
+      component_settings: {},
+    });
 
     const lessonPlanSettings = mount(
       <LessonPlanSettings />,
       buildContextOptions(store),
     );
+
+    await act(() => Promise.resolve());
+    lessonPlanSettings.update();
 
     const toggles = lessonPlanSettings.find('ForwardRef(Switch)');
     // Enabled? and Visible? toggles.
