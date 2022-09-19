@@ -2,10 +2,19 @@ import { AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 
 import CourseAPI from 'api/course';
-import { update } from '../reducers/lessonPlanSettings';
+import { update } from '../../reducers/lessonPlanSettings';
 
-const updateLessonPlanSettings =
-  (value, successMessage, failureMessage) => async (dispatch) => {
+export const fetchLessonPlanSettings =
+  (action: () => void) =>
+  async (dispatch): Promise<void> => {
+    const response = await CourseAPI.admin.lessonPlan.index();
+    dispatch(update(response.data));
+    action();
+  };
+
+export const updateLessonPlanSettings =
+  (value, successMessage, failureMessage) =>
+  async (dispatch): Promise<void> => {
     const payload = { lesson_plan_settings: value };
 
     try {
@@ -16,5 +25,3 @@ const updateLessonPlanSettings =
       if (error instanceof AxiosError) toast.error(failureMessage);
     }
   };
-
-export default updateLessonPlanSettings;
