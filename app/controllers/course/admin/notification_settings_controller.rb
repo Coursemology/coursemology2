@@ -3,8 +3,10 @@ class Course::Admin::NotificationSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_notifications_path
 
   def edit
-    @page_data = current_course.email_settings_with_enabled_components.
-                 sorted_for_page_setting.to_json
+    respond_to do |format|
+      format.html { render 'course/admin/index' }
+      format.json { @page_data = page_data }
+    end
   end
 
   def update
@@ -16,6 +18,10 @@ class Course::Admin::NotificationSettingsController < Course::Admin::Controller
   end
 
   private
+
+  def page_data
+    current_course.email_settings_with_enabled_components.sorted_for_page_setting
+  end
 
   def notification_settings_params
     params.require(:email_settings).permit(:component, :course_assessment_category_id, :setting)
