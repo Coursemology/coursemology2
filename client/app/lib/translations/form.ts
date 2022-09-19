@@ -25,6 +25,10 @@ const translations = defineMessages({
     id: 'lib.form.endAt',
     defaultMessage: 'End At',
   },
+  ok: {
+    id: 'lib.form.buttons.ok',
+    defaultMessage: 'OK',
+  },
   cancel: {
     id: 'lib.form.buttons.cancel',
     defaultMessage: 'Cancel',
