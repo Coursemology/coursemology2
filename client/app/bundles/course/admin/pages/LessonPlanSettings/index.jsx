@@ -12,12 +12,27 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import NotificationPopup from 'lib/containers/NotificationPopup';
-import updateLessonPlanSettings from '../../actions/lessonPlan';
+
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import {
+  fetchLessonPlanSettings,
+  updateLessonPlanSettings,
+} from './operations';
 import translations from './translations.intl';
 import MilestoneGroupSettings from './MilestoneGroupSettings';
 
 class LessonPlanSettings extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { isLoading: true };
+  }
+
+  componentDidMount = () => {
+    this.props.dispatch(
+      fetchLessonPlanSettings(() => this.setState({ isLoading: false })),
+    );
+  };
+
   // Ensure both enabled and visible values are sent in the payload.
   // Send the current value for visible when changing enabled.
   handleLessonPlanItemEnabledUpdate = (setting) => {
@@ -222,6 +237,8 @@ class LessonPlanSettings extends Component {
   }
 
   render() {
+    if (this.state.isLoading) return <LoadingIndicator />;
+
     return (
       <>
         <MilestoneGroupSettings />
@@ -231,8 +248,6 @@ class LessonPlanSettings extends Component {
         </h2>
         {this.renderLessonPlanItemAssessmentSettingsTable()}
         {this.renderLessonPlanItemSettingsForComponentsTable()}
-
-        <NotificationPopup />
       </>
     );
   }
