@@ -6,6 +6,8 @@ interface SectionProps {
   subtitle?: string;
   children?: ReactNode;
   sticksToNavbar?: boolean;
+  titleColor?: string;
+  contentClassName?: string;
 }
 
 const Section = (props: SectionProps): JSX.Element => (
@@ -20,19 +22,24 @@ const Section = (props: SectionProps): JSX.Element => (
         }`}
       >
         {props.title && (
-          <Typography variant="h6" color="text.primary">
+          <Typography variant="h6" color={props.titleColor ?? 'text.primary'}>
             {props.title}
           </Typography>
         )}
 
         {props.subtitle && (
-          <Typography variant="subtitle1" color="text.secondary">
+          <Typography variant="body1" color="text.secondary">
             {props.subtitle}
           </Typography>
         )}
       </Grid>
 
-      <Grid item xs={12} lg={9} className="space-y-5">
+      <Grid
+        item
+        xs={12}
+        lg={9}
+        className={`space-y-5 ${props.contentClassName}`}
+      >
         {props.children}
       </Grid>
     </Grid>
