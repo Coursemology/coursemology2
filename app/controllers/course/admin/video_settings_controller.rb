@@ -2,16 +2,20 @@
 class Course::Admin::VideoSettingsController < Course::Admin::Controller
   add_breadcrumb :edit, :course_admin_videos_path
 
-  def edit; end
+  def edit
+    respond_to do |format|
+      format.html { render 'course/admin/index' }
+      format.json
+    end
+  end
 
   def update
     if @settings.update(video_settings_params) &&
        current_course.update(video_tabs_params) &&
        current_course.save
-
-      redirect_to course_admin_videos_path(current_course), success: t('.success')
-    else
       render 'edit'
+    else
+      render json: { errors: @settings.errors }, status: :bad_request
     end
   end
 
