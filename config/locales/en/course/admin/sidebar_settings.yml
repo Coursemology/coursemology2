@@ -4,8 +4,3 @@ en:
       sidebar_settings:
         edit:
           header: 'Sidebar Ordering'
-          name: 'Name'
-          weight: 'Weight'
-          button: 'Update Sidebar Ordering'
-        update:
-          success: 'Settings updated successfully'

@@ -6,8 +6,3 @@ en:
           header: 'Components'
         edit:
           header: 'Enable/Disable Components'
-          name: 'Name'
-          enabled: 'Enabled?'
-          button: 'Update Component Settings'
-        update:
-          success: 'Settings updated successfully.'
