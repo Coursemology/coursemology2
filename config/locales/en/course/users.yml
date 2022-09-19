@@ -9,11 +9,6 @@ en:
         manager: 'Manager'
         owner: 'Owner'
         phantom: 'Phantom'
-      algorithm:
-        fixed: 'Fixed'
-        stragglers: 'Stragglers'
-        otot: 'Otot'
-        fomo: 'Fomo'
       new:
         already_registered: 'You are already registered as a %{role}.'
       students:
