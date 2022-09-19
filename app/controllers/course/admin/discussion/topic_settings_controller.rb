@@ -3,13 +3,17 @@ class Course::Admin::Discussion::TopicSettingsController < Course::Admin::Contro
   add_breadcrumb :edit, :course_admin_topics_path
 
   def edit
+    respond_to do |format|
+      format.html { render 'course/admin/index' }
+      format.json
+    end
   end
 
   def update
     if @settings.update(topic_settings_params) && current_course.save
-      redirect_to course_admin_topics_path(current_course), success: t('.success')
-    else
       render 'edit'
+    else
+      render json: { errors: @settings.errors }, status: :bad_request
     end
   end
 
