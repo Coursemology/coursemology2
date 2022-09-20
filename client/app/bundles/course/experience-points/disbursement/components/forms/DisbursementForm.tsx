@@ -17,7 +17,7 @@ import {
   PointListData,
 } from 'types/course/disbursement';
 import ErrorText from 'lib/components/ErrorText';
-import FormTextField from 'lib/components/form/fields/TextField';
+import FormTextField from 'lib/components/form/fields/DebouncedTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import { CourseUserBasicMiniEntity } from 'types/course/courseUsers';
 import { Button, Grid, Paper } from '@mui/material';

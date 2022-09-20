@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Control, Controller } from 'react-hook-form';
 import { DisbursementFormData } from 'types/course/disbursement';
-import FormTextField from 'lib/components/form/fields/TextField';
+import FormTextField from 'lib/components/form/fields/DebouncedTextField';
 
 interface Props {
   control: Control<DisbursementFormData>;

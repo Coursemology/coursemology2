@@ -164,7 +164,7 @@ const FilterForm: FC<Props> = (props) => {
                 onWheel={(event): void => event.currentTarget.blur()}
                 type="number"
                 variant="standard"
-                margins={false}
+                disableMargins
                 required
                 label={intl.formatMessage(translations.weeklyCap)}
               />
