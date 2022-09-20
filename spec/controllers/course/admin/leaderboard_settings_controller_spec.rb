@@ -9,7 +9,7 @@ RSpec.describe Course::Admin::LeaderboardSettingsController, type: :controller d
     before { sign_in(user) }
 
     describe '#edit' do
-      subject { get :edit, params: { course_id: course } }
+      subject { get :edit, params: { course_id: course, format: :json } }
       it { is_expected.to render_template(:edit) }
     end
 
@@ -20,7 +20,10 @@ RSpec.describe Course::Admin::LeaderboardSettingsController, type: :controller d
       end
       context 'when course cannot be saved' do
         subject { patch :update, params: { course_id: course, settings_leaderboard_component: { title: '' } } }
-        it { is_expected.to render_template(:edit) }
+        it 'returns bad_request with errors' do
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
+        end
       end
     end
   end

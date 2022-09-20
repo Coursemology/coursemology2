@@ -10,7 +10,7 @@ RSpec.describe Course::Admin::LessonPlanSettingsController, type: :controller do
     before { sign_in(user) }
 
     describe '#edit' do
-      subject { get :edit, params: { course_id: course } }
+      subject { get :edit, params: { course_id: course, format: :json } }
       it { is_expected.to render_template(:edit) }
     end
 
