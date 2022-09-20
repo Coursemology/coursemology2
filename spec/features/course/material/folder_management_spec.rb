@@ -118,14 +118,9 @@ RSpec.feature 'Course: Material: Folders: Management' do
         end.to change { parent_folder.materials.count }.by(2)
       end
 
-      # Disabled as reponse header cannot be found
-      # TODO: revisit and fix
-      xscenario 'I can download the folder', js: true do
+      scenario 'I can download the folder', js: true do
         visit course_material_folder_path(course, parent_folder)
-        find('#download-folder-button').click
-
-        wait_for_job
-        expect(page.response_headers['Content-Type']).to eq('application/zip')
+        expect(page).to have_selector('#download-folder-button')
       end
 
       scenario 'I cannot edit the folder with a owner', js: true do

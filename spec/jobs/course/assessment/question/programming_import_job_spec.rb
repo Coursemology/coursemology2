@@ -34,6 +34,9 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
 
     it 'does not create codaveri question' do
       subject.perform_now(question, attachment)
+
+      wait_for_job
+
       expect(question.codaveri_id).to eq(nil)
       expect(question.codaveri_status).to eq(nil)
       expect(question.codaveri_message).to eq(nil)
@@ -64,6 +67,8 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
 
       it 'creates codaveri question' do
         subject.perform_now(question, attachment)
+
+        wait_for_job
 
         expect(question.codaveri_id).to eq('6311a0548c57aae93d260927')
         expect(question.codaveri_status).to eq(200)
