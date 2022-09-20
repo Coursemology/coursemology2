@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Administration: Discussion:: Topics' do
+RSpec.feature 'Course: Administration: Discussion:: Topics', js: true do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -17,16 +17,16 @@ RSpec.feature 'Course: Administration: Discussion:: Topics' do
         invalid_pagination_count = -1
         valid_pagination_count = 20
 
-        pagination_field = 'settings_topics_component_pagination'
+        pagination_field = 'pagination'
         fill_in pagination_field, with: invalid_pagination_count
-        click_button 'update'
-        expect(page).to have_css('div.has-error')
+        click_button 'Save changes'
+        expect_toastify('Your changes have been saved.')
+        expect(page).
+          to have_field(pagination_field, with: invalid_pagination_count.abs)
 
         fill_in pagination_field, with: valid_pagination_count
-        click_button 'update'
-        expect(page).
-          to have_selector('div',
-                           text: I18n.t('course.admin.discussion.topic_settings.update.success'))
+        click_button 'Save changes'
+        expect_toastify('Your changes have been saved.')
         expect(page).
           to have_field(pagination_field, with: valid_pagination_count)
       end
@@ -37,17 +37,19 @@ RSpec.feature 'Course: Administration: Discussion:: Topics' do
         new_title = 'Discussions'
         empty_title = ''
 
-        title_field = 'settings_topics_component_title'
+        title_field = 'title'
         fill_in title_field, with: new_title
-        click_button 'update'
-        expect(page).
-          to have_selector('div',
-                           text: I18n.t('course.admin.discussion.topic_settings.update.success'))
+        click_button 'Save changes'
+        expect_toastify('Your changes have been saved.')
         expect(page).to have_field(title_field, with: new_title)
+
+        visit current_path
         expect(page).to have_selector('li a', text: new_title)
 
         fill_in title_field, with: empty_title
-        click_button 'update'
+        click_button 'Save changes'
+        expect_toastify('Your changes have been saved.')
+        visit current_path
         expect(page).
           to have_selector('li a', text: I18n.t('course.discussion.topics.sidebar_title'))
       end
