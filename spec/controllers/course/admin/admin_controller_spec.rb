@@ -31,12 +31,12 @@ RSpec.describe Course::Admin::AdminController do
 
     describe '#update' do
       let(:title) { 'New Title' }
-      subject { patch :update, params: { course_id: course, course: { title: title } } }
+      subject { patch :update, params: { course_id: course, course: { title: title }, format: :json } }
 
       context 'when the user is a Course Manager' do
         let(:user) { create(:course_manager, course: course).user }
 
-        it { is_expected.to redirect_to(course_admin_path(course)) }
+        it { is_expected.to render_template(:index) }
 
         it 'changes the title' do
           subject
@@ -70,12 +70,7 @@ RSpec.describe Course::Admin::AdminController do
           expect(controller.current_course).to be_destroyed
         end
 
-        it { is_expected.to redirect_to(courses_path) }
-
-        it 'sets the proper flash message' do
-          subject
-          expect(flash[:success]).to eq(I18n.t('course.admin.admin.destroy.success'))
-        end
+        it { is_expected.to have_http_status(:ok) }
 
         context 'when the course cannot be destroyed' do
           before do
@@ -83,10 +78,9 @@ RSpec.describe Course::Admin::AdminController do
             subject
           end
 
-          it { is_expected.to redirect_to(course_admin_path(course)) }
-
-          it 'sets an error flash message' do
-            expect(flash[:danger]).to eq(I18n.t('course.admin.admin.destroy.failure'))
+          it 'returns bad_request with errors' do
+            expect(subject).to have_http_status(:bad_request)
+            expect(JSON.parse(subject.body)['errors']).not_to be_nil
           end
         end
       end

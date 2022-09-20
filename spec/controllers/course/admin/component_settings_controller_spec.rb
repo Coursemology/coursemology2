@@ -9,7 +9,7 @@ RSpec.describe Course::Admin::ComponentSettingsController, type: :controller do
     before { sign_in(user) }
 
     describe '#edit' do
-      subject { get :edit, params: { course_id: course } }
+      subject { get :edit, params: { course_id: course, format: :json } }
       it { is_expected.to render_template(:edit) }
     end
 
@@ -22,7 +22,7 @@ RSpec.describe Course::Admin::ComponentSettingsController, type: :controller do
       let(:settings) { Course::Settings::Components.new(course.reload) }
 
       subject do
-        patch :update, params: { settings_components: components_params, course_id: course }
+        patch :update, params: { settings_components: components_params, course_id: course, format: :json }
       end
 
       it 'enables the specified component and disables all other components' do
@@ -35,6 +35,7 @@ RSpec.describe Course::Admin::ComponentSettingsController, type: :controller do
           stub = double
           allow(stub).to receive(:valid_params?).and_return(true)
           allow(stub).to receive(:update).and_return(false)
+          allow(stub).to receive(:errors).and_return({})
           stub
         end
 
@@ -43,7 +44,10 @@ RSpec.describe Course::Admin::ComponentSettingsController, type: :controller do
           subject
         end
 
-        it { is_expected.to render_template(:edit) }
+        it 'returns bad_request with errors' do
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
+        end
       end
 
       context 'when parameters are invalid' do
