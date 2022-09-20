@@ -80,7 +80,9 @@ const LineNumberColumn = (props) => {
 
     if (expanded[lineNumber - 1]) {
       return (
-        <ClickAwayListener onClickAway={() => collapseComment(lineNumber)}>
+        <ClickAwayListener
+          onClickAway={(event) => collapseComment(lineNumber, event)}
+        >
           <div
             style={{
               width: Math.max(0, editorWidth - 2),
@@ -171,8 +173,14 @@ export default function NarrowEditor(props) {
     props.toggleLine(lineNumber);
   };
 
-  const collapseComment = (lineNumber) => {
-    props.collapseLine(lineNumber);
+  const collapseComment = (lineNumber, event) => {
+    // CKEditor's Link popup dialog is rendered separately in a separate wrapper (ck-body-wrapper)
+    // and not rendered as a child of the main CKEditor's toolbar.
+    // As a result, the clickawaylistener would be triggered when the Link popup dialog is clicked.
+    // Here, we check the class' of the clicked element and if contains "ck", the comment is not collapsed.
+    // There is a downside to this that lets say if another ckeditor toolbar is clicked, the comment is also
+    // not collapsed, however, this is not a big issue as the former issue would be more disruptive for users.
+    if (!event.target.classList.contains('ck')) props.collapseLine(lineNumber);
   };
 
   const renderLineNumberColumn = (lineNumber) => (
