@@ -120,6 +120,7 @@ class VisibleGradingPanel extends Component {
             type="number"
             min={0}
             max={1}
+            step="any"
             value={expMultiplier}
             onChange={(e) => this.handleMultiplierField(e.target.value)}
             ref={(ref) => {
