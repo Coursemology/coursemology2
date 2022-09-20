@@ -194,7 +194,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               fullWidth
               required
               variant="filled"
-              margins={false}
+              disableMargins
             />
           )}
         />
@@ -348,7 +348,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                     onWheel={(event): void => event.currentTarget.blur()}
                     type="number"
                     variant="filled"
-                    margins={false}
+                    disableMargins
                   />
                 )}
               />
@@ -368,7 +368,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                     onWheel={(event): void => event.currentTarget.blur()}
                     type="number"
                     variant="filled"
-                    margins={false}
+                    disableMargins
                   />
                 )}
               />
