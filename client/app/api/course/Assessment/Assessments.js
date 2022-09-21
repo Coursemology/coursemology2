@@ -1,6 +1,10 @@
 import BaseCourseAPI from './Base';
 
 export default class AssessmentsAPI extends BaseCourseAPI {
+  fetchEditData(assessmentId) {
+    return this.getClient().get(`${this._getUrlPrefix()}/${assessmentId}/edit`);
+  }
+
   /**
    * Create an assessment.
    *
