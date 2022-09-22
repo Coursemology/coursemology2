@@ -166,49 +166,46 @@ const SurveyForm = (props) => {
         />
       </div>
       <div style={styles.columns}>
-        <div style={styles.oneColumn}>
-          <Controller
-            name="base_exp"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormTextField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                fullWidth
-                label={intl.formatMessage(translations.basePoints)}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onWheel={(event) => event.currentTarget.blur()}
-                type="number"
-                variant="standard"
-              />
-            )}
-          />
-        </div>
-        <div style={styles.oneColumn}>
-          <Controller
-            name="time_bonus_exp"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormTextField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                fullWidth
-                label={intl.formatMessage(translations.bonusPoints)}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onWheel={(event) => event.currentTarget.blur()}
-                style={styles.flexChild}
-                type="number"
-                variant="standard"
-              />
-            )}
-          />
-        </div>
+        <Controller
+          name="base_exp"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              fullWidth
+              label={intl.formatMessage(translations.basePoints)}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onWheel={(event) => event.currentTarget.blur()}
+              style={styles.flexChild}
+              type="number"
+              variant="standard"
+            />
+          )}
+        />
+        <Controller
+          name="time_bonus_exp"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormTextField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              fullWidth
+              label={intl.formatMessage(translations.bonusPoints)}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              onWheel={(event) => event.currentTarget.blur()}
+              style={styles.flexChild}
+              type="number"
+              variant="standard"
+            />
+          )}
+        />
       </div>
       <Controller
         name="allow_response_after_end"
