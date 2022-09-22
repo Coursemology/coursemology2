@@ -67,7 +67,7 @@ const InstanceForm: FC<Props> = (props) => {
   const actionButtons = (
     <div className="flex justify-end pt-5">
       <Button
-        color="primary"
+        color="secondary"
         className="btn-cancel"
         disabled={disabled}
         key="instance-form-cancel-button"

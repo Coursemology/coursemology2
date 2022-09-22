@@ -98,7 +98,7 @@ const SkillForm: FC<Props> = (props) => {
       style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '8px' }}
     >
       <Button
-        color="primary"
+        color="secondary"
         className="btn-cancel"
         disabled={disabled}
         key="skill-form-cancel-button"
