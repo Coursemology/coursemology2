@@ -130,7 +130,7 @@ const AchievementForm: FC<Props> = (props) => {
       style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '8px' }}
     >
       <Button
-        color="primary"
+        color="secondary"
         className="btn-cancel"
         disabled={disabled}
         key="achievement-form-cancel-button"

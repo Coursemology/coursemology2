@@ -115,7 +115,7 @@ const AnnouncementForm: FC<Props> = (props) => {
       }}
     >
       <Button
-        color="primary"
+        color="secondary"
         className="btn-cancel"
         disabled={disabled}
         key="announcement-form-cancel-button"

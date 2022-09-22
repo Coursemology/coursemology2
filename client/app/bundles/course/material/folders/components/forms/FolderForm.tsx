@@ -121,7 +121,7 @@ const FolderForm: FC<Props> = (props) => {
       }}
     >
       <Button
-        color="primary"
+        color="secondary"
         className="btn-cancel"
         disabled={disabled}
         key="folder-form-cancel-button"

@@ -34,7 +34,7 @@ const MaterialUploadForm: FC<Props> = (props) => {
       }}
     >
       <Button
-        color="primary"
+        color="secondary"
         className="btn-cancel"
         disabled={isSubmitting}
         key="material-upload-form-cancel-button"

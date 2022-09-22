@@ -116,7 +116,7 @@ const NewCourseForm: FC<Props> = (props) => {
           }}
         >
           <Button
-            color="primary"
+            color="secondary"
             className="btn-cancel"
             disabled={disabled}
             key="new-course-form-cancel-button"
