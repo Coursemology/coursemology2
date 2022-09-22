@@ -11,11 +11,11 @@ import {
   Select,
 } from '@mui/material';
 import { yellow } from '@mui/material/colors';
+import { formatLongDateTime } from 'lib/moment';
 
 import selectPastAnswers from '../actions/history';
 import translations from '../translations';
 import { answerShape, questionShape } from '../propTypes';
-import { formatDateTime } from '../utils';
 import PastProgrammingAnswer from '../components/pastAnswers/PastProgrammingAnswer';
 import PastMultipleResponseAnswer from '../components/pastAnswers/PastMultipleResponseAnswer';
 import TextResponseSolutions from '../components/TextResponseSolutions';
@@ -70,7 +70,7 @@ class PastAnswers extends Component {
       const answer = answers[answerId];
       return (
         <MenuItem key={index} value={answer}>
-          {formatDateTime(answer.createdAt)}
+          {formatLongDateTime(answer.createdAt)}
         </MenuItem>
       );
     };
@@ -93,7 +93,7 @@ class PastAnswers extends Component {
   renderReadOnlyPastAnswer = (answerId) => {
     const { answers, intl, question } = this.props;
     const answer = answers[answerId];
-    const date = formatDateTime(answer.createdAt);
+    const date = formatLongDateTime(answer.createdAt);
 
     return (
       <div key={answer.id}>

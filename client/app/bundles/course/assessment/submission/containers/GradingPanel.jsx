@@ -14,7 +14,7 @@ import {
 import ReactTooltip from 'react-tooltip';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
-import { formatDateTime } from '../utils';
+import { formatLongDateTime } from 'lib/moment';
 import { gradingShape, questionShape, submissionShape } from '../propTypes';
 import actionTypes, { workflowStates } from '../constants';
 import translations from '../translations';
@@ -291,11 +291,11 @@ class VisibleGradingPanel extends Component {
               ? tableRow('expAwarded', this.renderExperiencePoints())
               : null}
             {bonusEndAt
-              ? tableRow('bonusEndAt', formatDateTime(bonusEndAt))
+              ? tableRow('bonusEndAt', formatLongDateTime(bonusEndAt))
               : null}
-            {dueAt ? tableRow('dueAt', formatDateTime(dueAt)) : null}
-            {tableRow('attemptedAt', formatDateTime(attemptedAt))}
-            {tableRow('submittedAt', formatDateTime(submittedAt))}
+            {dueAt ? tableRow('dueAt', formatLongDateTime(dueAt)) : null}
+            {tableRow('attemptedAt', formatLongDateTime(attemptedAt))}
+            {tableRow('submittedAt', formatLongDateTime(submittedAt))}
             {shouldRenderGrading
               ? tableRow(
                   'grader',
@@ -303,7 +303,7 @@ class VisibleGradingPanel extends Component {
                 )
               : null}
             {shouldRenderGrading
-              ? tableRow('gradedAt', formatDateTime(gradedAt))
+              ? tableRow('gradedAt', formatLongDateTime(gradedAt))
               : null}
           </TableBody>
         </Table>

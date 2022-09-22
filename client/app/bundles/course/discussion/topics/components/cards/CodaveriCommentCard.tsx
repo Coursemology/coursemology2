@@ -12,7 +12,7 @@ import { LoadingButton } from '@mui/lab';
 import { grey, orange } from '@mui/material/colors';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import moment from 'lib/moment';
+import { formatLongDateTime } from 'lib/moment';
 import { FC, useState } from 'react';
 import { CommentPostMiniEntity } from 'types/course/comments';
 import { useDispatch } from 'react-redux';
@@ -80,9 +80,6 @@ const CodaveriCommentCard: FC<Props> = (props) => {
 
   const editPostIdentifier = (field: string): string => {
     return `edit_post_${field}`;
-  };
-  const formatDateTime = (dateTime: Date): string | null => {
-    return dateTime ? moment(dateTime).format('MMM DD, YYYY h:mma') : null;
   };
   const postIdentifier = (field: string): string => {
     return `post_${field}`;
@@ -272,7 +269,7 @@ const CodaveriCommentCard: FC<Props> = (props) => {
           }
           title={post.creator.name}
           titleTypographyProps={{ display: 'block', marginright: 20 }}
-          subheader={formatDateTime(post.createdAt)}
+          subheader={formatLongDateTime(post.createdAt)}
           subheaderTypographyProps={{ display: 'block' }}
           style={{ padding: 6 }}
         />

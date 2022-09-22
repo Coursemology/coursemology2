@@ -8,7 +8,7 @@ import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import equal from 'fast-deep-equal';
 
-import moment from 'moment';
+import { formatLongDateTime } from 'lib/moment';
 import { Link } from 'react-router-dom';
 import PointManagementButtons from '../buttons/PointManagementButtons';
 
@@ -102,9 +102,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
 
   return (
     <TableRow hover key={record.id} id={`record-${record.id}`}>
-      <TableCell>
-        {moment(record.updatedAt).format('YYYY-MM-DD HH:mm:ss ZZ')}
-      </TableCell>
+      <TableCell>{formatLongDateTime(record.updatedAt)}</TableCell>
 
       <TableCell>
         <Link

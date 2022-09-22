@@ -11,7 +11,7 @@ import {
 } from 'react-intl';
 import CKEditorRichText from 'lib/components/CKEditorRichText';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import moment from 'lib/moment';
+import { formatLongDateTime } from 'lib/moment';
 import { FC, useState } from 'react';
 import { CommentPostMiniEntity } from 'types/course/comments';
 import { useDispatch } from 'react-redux';
@@ -70,9 +70,7 @@ const CommentCard: FC<Props> = (props) => {
   const editPostIdentifier = (field: string): string => {
     return `edit_post_${field}`;
   };
-  const formatDateTime = (dateTime: Date): string | null => {
-    return dateTime ? moment(dateTime).format('MMM DD, YYYY h:mma') : null;
-  };
+
   const postIdentifier = (field: string): string => {
     return `post_${field}`;
   };
@@ -210,7 +208,7 @@ const CommentCard: FC<Props> = (props) => {
             )
           }
           titleTypographyProps={{ display: 'block', marginright: 20 }}
-          subheader={`${formatDateTime(post.createdAt)}${
+          subheader={`${formatLongDateTime(post.createdAt)}${
             post.isDelayed ? ' (delayed comment)' : ''
           }`}
           subheaderTypographyProps={{ display: 'block' }}

@@ -13,7 +13,7 @@ import { orange, grey } from '@mui/material/colors';
 import { ArrowBack, Check, Clear, Reply } from '@mui/icons-material';
 import { defineMessages, injectIntl } from 'react-intl';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import moment from 'lib/moment';
+import { formatLongDateTime } from 'lib/moment';
 import { postShape } from '../../propTypes';
 
 const translations = defineMessages({
@@ -89,9 +89,6 @@ const styles = {
 };
 
 const editPostIdentifier = (field) => `edit_post_${field}`;
-
-const formatDateTime = (dateTime) =>
-  dateTime ? moment(dateTime).format('MMM DD, YYYY h:mma') : null;
 
 const postIdentifier = (field) => `post_${field}`;
 
@@ -249,7 +246,7 @@ const CodaveriCommentCard = (props) => {
           avatar={<Avatar src={avatar} style={styles.avatar} />}
           title={name}
           titleTypographyProps={{ display: 'block', marginright: 20 }}
-          subheader={formatDateTime(createdAt)}
+          subheader={formatLongDateTime(createdAt)}
           subheaderTypographyProps={{ display: 'block' }}
           style={styles.cardHeader}
         />
