@@ -7,7 +7,6 @@ import { FIELD_DEBOUNCE_DELAY } from 'lib/constants/sharedConstants';
 
 const styles = {
   textFieldStyle: { margin: '8px 10px 8px 0px' },
-  empty: { margin: '0px 0px 0px 0px' },
 };
 
 const onlyNumberInput = (e) => {
