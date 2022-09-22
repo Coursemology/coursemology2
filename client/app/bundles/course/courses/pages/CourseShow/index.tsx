@@ -30,14 +30,6 @@ const translations = defineMessages({
     id: 'course.courses.show.instructors',
     defaultMessage: 'Instructors',
   },
-  pendingAssessmentsHeader: {
-    id: 'course.courses.show.pendingAssessments',
-    defaultMessage: 'Pending Assessments',
-  },
-  latestActivityHeader: {
-    id: 'course.courses.show.latestActivity',
-    defaultMessage: 'Latest Activity',
-  },
 });
 
 const CourseShow: FC<Props> = (props) => {

@@ -25,10 +25,6 @@ const translations = defineMessages({
     id: 'course.achievement.containers.tables.AchievementTable.noCategory',
     defaultMessage: "You don't have an achievement created! Create one now!",
   },
-  achievementDraft: {
-    id: 'course.achievement.containers.tables.AchievementTable.AchievementDraft',
-    defaultMessage: 'Draft',
-  },
 });
 
 const styles = {
