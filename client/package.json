@@ -132,7 +132,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.1",
     "reselect": "^4.1.6",
-    "sass": "^1.54.9",
+    "sass": "^1.55.0",
     "webfontloader": "^1.6.28",
     "yup": "^0.32.11"
   },
