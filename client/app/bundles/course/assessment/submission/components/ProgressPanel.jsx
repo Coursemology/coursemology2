@@ -13,8 +13,7 @@ import {
 } from '@mui/material';
 import { blue, green, grey, red, yellow } from '@mui/material/colors';
 import Warning from '@mui/icons-material/Warning';
-
-import { formatDateTime } from '../utils';
+import { formatLongDateTime } from 'lib/moment';
 import { submissionShape } from '../propTypes';
 import translations from '../translations';
 import { workflowStates } from '../constants';
@@ -76,7 +75,9 @@ class ProgressPanel extends Component {
             <TableCell>
               {intl.formatMessage(translations[displayedTime])}
             </TableCell>
-            <TableCell>{formatDateTime(submission[displayedTime])}</TableCell>
+            <TableCell>
+              {formatLongDateTime(submission[displayedTime])}
+            </TableCell>
           </TableRow>
           {workflowState === workflowStates.Graded ||
           workflowState === workflowStates.Published ? (

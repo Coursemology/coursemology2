@@ -1,11 +1,5 @@
-import moment from 'lib/moment';
-
 export function arrayToObjectById(array) {
   return array.reduce((obj, item) => ({ ...obj, [item.id]: item }), {});
-}
-
-export function formatDateTime(dateTime) {
-  return dateTime ? moment(dateTime).format('DD MMM YYYY, h:mma') : null;
 }
 
 export function capitaliseFirstLetter(word) {

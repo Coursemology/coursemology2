@@ -7,7 +7,7 @@ import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
 import CKEditorRichText from 'lib/components/CKEditorRichText';
 import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import moment from 'lib/moment';
+import { formatLongDateTime } from 'lib/moment';
 
 import { postShape } from '../../propTypes';
 
@@ -79,10 +79,6 @@ const styles = {
 export default class CommentCard extends Component {
   static editPostIdentifier(field) {
     return `edit_post_${field}`;
-  }
-
-  static formatDateTime(dateTime) {
-    return dateTime ? moment(dateTime).format('MMM DD, YYYY h:mma') : null;
   }
 
   static postIdentifier(field) {
@@ -179,7 +175,7 @@ export default class CommentCard extends Component {
             avatar={<Avatar src={imageUrl} style={styles.avatar} />}
             title={name}
             titleTypographyProps={{ display: 'block', marginright: 20 }}
-            subheader={`${CommentCard.formatDateTime(createdAt)}${
+            subheader={`${formatLongDateTime(createdAt)}${
               isDelayed ? ' (delayed comment)' : ''
             }`}
             subheaderTypographyProps={{ display: 'block' }}

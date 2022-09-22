@@ -8,8 +8,8 @@ import {
   Divider,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import moment from 'lib/moment';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { formatLongDateTime } from 'lib/moment';
 
 const MAX_POST_HEIGHT = 60;
 
@@ -59,9 +59,7 @@ export default class ForumPost extends Component {
         <CardHeader
           avatar={<Avatar src={this.props.post.avatar} />}
           title={this.props.post.userName}
-          subheader={moment(this.props.post.updatedAt).format(
-            'MMM DD, YYYY h:mma',
-          )}
+          subheader={formatLongDateTime(this.props.post.updatedAt)}
         />
         <Divider />
         <CardContent>
