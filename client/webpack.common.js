@@ -105,6 +105,27 @@ module.exports = {
         exclude: [/node_modules/, resolve(__dirname, 'app/lib/styles')],
       },
       {
+        test: /\.svg$/i,
+        type: 'asset',
+        resourceQuery: /url/, // *.svg?url
+        exclude: /node_modules/,
+      },
+      {
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        resourceQuery: { not: [/url/] }, // exclude react component if *.svg?url
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              typescript: true,
+              ext: 'tsx',
+            },
+          },
+        ],
+        exclude: /node_modules/,
+      },
+      {
         test: require.resolve('jquery'),
         loader: 'expose-loader',
         options: {
