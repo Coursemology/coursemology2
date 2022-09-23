@@ -1,7 +1,4 @@
 en:
   course:
     material:
-      materials:
-        edit:
-          header: "Edit Material"
       sidebar_title: "Materials"
