@@ -84,7 +84,7 @@
     "@mui/lab": "^5.0.0-alpha.100",
     "@mui/material": "^5.10.6",
     "@mui/styles": "^5.10.6",
-    "@mui/x-date-pickers": "^5.0.2",
+    "@mui/x-date-pickers": "^5.0.3",
     "ace-builds": "^1.11.1",
     "axios": "^0.27.2",
     "babel-plugin-formatjs": "^10.3.28",
