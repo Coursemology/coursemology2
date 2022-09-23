@@ -3,8 +3,6 @@ en:
     courses:
       index:
         header: "Courses"
-      new:
-        header: "New Course"
       form:
         title_label: "Give it an awesome name"
         title_placeholder: "e.g. Maths Universe, Geovengers"

@@ -4,7 +4,3 @@ en:
       sidebar_title: :'course.announcements.index.header'
       index:
         header: "Announcements"
-      new:
-        header: "New Announcement"
-      edit:
-        header: "Edit Announcement"
