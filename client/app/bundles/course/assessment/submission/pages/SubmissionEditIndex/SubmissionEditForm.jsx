@@ -273,6 +273,10 @@ const SubmissionEditForm = (props) => {
       isResetting,
     } = questionsFlags[id] || {};
 
+    if (question.type !== questionTypes.Programming) {
+      return null;
+    }
+
     if (!attempting && graderView) {
       return (
         <Button
@@ -292,77 +296,74 @@ const SubmissionEditForm = (props) => {
       return null;
     }
 
-    if (question.type === questionTypes.Programming) {
-      const runCodeLabel = attemptLimit
-        ? intl.formatMessage(translations.runCodeWithLimit, { attemptsLeft })
-        : intl.formatMessage(translations.runCode);
+    const runCodeLabel = attemptLimit
+      ? intl.formatMessage(translations.runCodeWithLimit, { attemptsLeft })
+      : intl.formatMessage(translations.runCode);
 
-      return (
-        <>
-          {jobError ? (
-            <>
-              {jobErrorMessage ? (
-                <Paper
-                  style={{
-                    padding: 10,
-                    backgroundColor: red[100],
-                    marginBottom: 20,
-                  }}
-                >
-                  {jobErrorMessage}
-                </Paper>
-              ) : (
-                <Paper
-                  style={{
-                    padding: 10,
-                    backgroundColor: red[100],
-                    marginBottom: 20,
-                  }}
-                >
-                  {intl.formatMessage(translations.autogradeFailure)}
-                </Paper>
-              )}
-            </>
-          ) : null}
-          <Button
-            variant="contained"
-            disabled={isAutogradingQuestion || isResetting || isSaving}
-            onClick={() => {
-              setResetConfirmation(true);
-              setResetAnswerId(answerId);
-            }}
-            style={styles.formButton}
-          >
-            {intl.formatMessage(translations.reset)}
-          </Button>
-          {autogradable ? (
-            <>
-              <Button
-                variant="contained"
-                color="secondary"
-                disabled={
-                  isAutogradingQuestion ||
-                  isResetting ||
-                  isSaving ||
-                  (!graderView && attemptsLeft === 0)
-                }
-                id="run-code"
-                onClick={() =>
-                  onSubmitAnswer(answerId, getValues(`${answerId}`), setValue)
-                }
-                style={styles.formButton}
+    return (
+      <>
+        {jobError ? (
+          <>
+            {jobErrorMessage ? (
+              <Paper
+                style={{
+                  padding: 10,
+                  backgroundColor: red[100],
+                  marginBottom: 20,
+                }}
               >
-                {runCodeLabel}
-              </Button>
-            </>
-          ) : null}
-          {isAutogradingQuestion || isResetting ? (
-            <CircularProgress size={36} style={{ position: 'absolute' }} />
-          ) : null}
-        </>
-      );
-    }
-    return null;
+                {jobErrorMessage}
+              </Paper>
+            ) : (
+              <Paper
+                style={{
+                  padding: 10,
+                  backgroundColor: red[100],
+                  marginBottom: 20,
+                }}
+              >
+                {intl.formatMessage(translations.autogradeFailure)}
+              </Paper>
+            )}
+          </>
+        ) : null}
+        <Button
+          variant="contained"
+          disabled={isAutogradingQuestion || isResetting || isSaving}
+          onClick={() => {
+            setResetConfirmation(true);
+            setResetAnswerId(answerId);
+          }}
+          style={styles.formButton}
+        >
+          {intl.formatMessage(translations.reset)}
+        </Button>
+        {autogradable ? (
+          <>
+            <Button
+              variant="contained"
+              color="secondary"
+              disabled={
+                isAutogradingQuestion ||
+                isResetting ||
+                isSaving ||
+                (!graderView && attemptsLeft === 0)
+              }
+              id="run-code"
+              onClick={() =>
+                onSubmitAnswer(answerId, getValues(`${answerId}`), setValue)
+              }
+              style={styles.formButton}
+            >
+              {runCodeLabel}
+            </Button>
+          </>
+        ) : null}
+        {isAutogradingQuestion || isResetting ? (
+          <CircularProgress size={36} style={{ position: 'absolute' }} />
+        ) : null}
+      </>
+    );
   };
 
   const renderPublishButton = () => {
