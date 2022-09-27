@@ -11,17 +11,12 @@ $grey-light: #cccccc !default;
 
 //## Variables for colors used in Coursemology.
 $unread-highlight: #f8e3e3 !default;
-$course-achievement-granted-bg: $state-success-bg !default;
-$course-achievement-locked-bg: $gray-lighter !default;
 $course-assessment-not-started-bg: $gray-lighter !default;
-$course-course-hover-bg: #87cefa !default;
 $course-discussion-post-border: 1px solid $panel-default-border !default;
 $course-discussion-post-border-color: $panel-default-border !default;
 $course-discussion-post-border-radius: $border-radius-base !default;
 $course-discussion-post-shadow-color: $gray-lighter !default;
 $course-forum-unread-highlight: $unread-highlight !default;
-$course-video-not-started-bg: $gray-lighter !default;
-$course-video-submission-not-started: $red !default;
 
 //== Fonts
 //
@@ -39,20 +34,11 @@ $picture-medium: 100px !default;
 $picture-large: 140px !default;
 
 //## Variables for icons or logos used in Coursemology.
-$course-achievement-form-badge: $picture-small !default;
-$course-achievement-user-profile: $picture-small !default;
 $course-assessment-achievement-badge: $picture-thumb !default;
-$course-user-achievement-badge: $picture-medium !default;
-$course-leaderboard-groupuser-picture: $picture-small !default;
-$course-leaderboard-user-picture: $picture-small !default;
-$course-leaderboard-achievement-badge: $picture-thumb !default;
 $course-user-badge-achievement-badge: $picture-thumb !default;
-$course-user-listing-picture: $picture-small !default;
-$course-user-profile-picture: $picture-large !default;
 
 $course-admin-form-logo: $picture-small !default;
 $course-layout-sidebar-logo: $picture-medium !default;
-$course-course-listing-logo: $picture-medium !default;
 
 $user-profile-picture: $picture-large !default;
 
@@ -61,4 +47,3 @@ $user-profile-picture: $picture-large !default;
 // Shadows
 $course-assessment-question-card-shadow: rgba(0, 0, 0, 0.12) !default;
 $course-assessment-question-card-hover-shadow: rgba(0, 0, 0, 0.25) !default;
-$course-course-hover-shadow: rgba(0, 0, 0, 0.1) !default;
