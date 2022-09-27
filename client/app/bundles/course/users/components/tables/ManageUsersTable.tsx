@@ -149,16 +149,15 @@ const ManageUsersTable: FC<Props> = (props) => {
       });
   };
 
-  const handlePhantomUpdate = (rowData, newValue: boolean): Promise<void> => {
-    const user = rebuildObjectFromRow(
-      columns, // eslint-disable-line @typescript-eslint/no-use-before-define
-      rowData,
-    ) as CourseUserMiniEntity;
+  const handlePhantomUpdate = (
+    user: CourseUserMiniEntity,
+    newValue: boolean,
+  ): Promise<void> => {
     const newUser = {
       ...user,
       phantom: newValue,
     };
-    return dispatch(updateUser(rowData[1], newUser))
+    return dispatch(updateUser(user.id, newUser))
       .then(() => {
         toast.success(
           intl.formatMessage(translations.phantomSuccess, {
@@ -336,17 +335,17 @@ const ManageUsersTable: FC<Props> = (props) => {
       name: 'phantom',
       label: intl.formatMessage(tableTranslations.phantom),
       options: {
-        customBodyRender: (value, tableMeta, _updateValue): JSX.Element => {
-          const user = users[tableMeta.rowIndex];
+        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+          const user = users[dataIndex];
           return (
             <Checkbox
               id={`phantom-${user.id}`}
               key={`phantom-${user.id}`}
               className="course_user_phantom"
-              checked={value}
+              checked={user.phantom}
               style={styles.checkbox}
               onChange={(event): Promise<void> =>
-                handlePhantomUpdate(tableMeta.rowData, event.target.checked)
+                handlePhantomUpdate(user, event.target.checked)
               }
             />
           );
