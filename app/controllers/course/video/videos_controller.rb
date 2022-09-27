@@ -1,50 +1,62 @@
 # frozen_string_literal: true
 class Course::Video::VideosController < Course::Video::Controller
-  skip_load_and_authorize_resource :video, only: [:new, :create]
-  build_and_authorize_new_lesson_plan_item :video, class: Course::Video, through: :course, only: [:new, :create]
+  skip_load_and_authorize_resource :video, only: [:create]
+  build_and_authorize_new_lesson_plan_item :video, class: Course::Video, through: :course, only: [:create]
+  before_action :load_video_tabs
 
   def index
-    @videos = @videos.
-              from_tab(current_tab).
-              with_student_submission_count.
-              ordered_by_date_and_title.
-              with_submissions_by(current_user)
-
-    @course_students = current_course.course_users.students
+    respond_to do |format|
+      format.html
+      format.json do
+        preload_student_submission_count if can?(:analyze, @videos)
+        preload_video_item
+        @videos = @videos.
+                  from_tab(current_tab).
+                  ordered_by_date_and_title.
+                  includes(:statistic).
+                  with_submissions_by(current_user)
+        @course_students = current_course.course_users.students
+      end
+    end
   end
 
-  def show; end
-
-  def new
-    @video.tab = current_tab
+  def show
+    respond_to do |format|
+      format.html do
+        add_breadcrumb @video.title
+        render 'index'
+      end
+      format.json { render 'show' }
+    end
   end
 
   def create
     if @video.save
-      redirect_to course_videos_path(current_course, tab: @video.tab),
-                  success: t('.success', title: @video.title)
+      respond_to do |format|
+        format.json { render 'show' }
+      end
     else
-      render 'new'
+      render json: { errors: @video.errors }, status: :bad_request
     end
   end
 
-  def edit; end
-
   def update
     if @video.update(video_params)
-      redirect_to course_videos_path(current_course, tab: @video.tab),
-                  success: t('.success', title: @video.title)
+      respond_to do |format|
+        format.json { render 'show' }
+      end
     else
-      render 'edit'
+      respond_to do |format|
+        format.json { render json: { errors: @video.errors }, status: :bad_request }
+      end
     end
   end
 
   def destroy
     if @video.destroy
-      redirect_to course_videos_path(current_course, tab: @video.tab), success: t('.success', title: @video.title)
+      head :ok
     else
-      redirect_to course_videos_path(current_course, tab: @video.tab),
-                  danger: t('.failure', error: @video.errors.full_messages.to_sentence)
+      head :bad_request
     end
   end
 
@@ -62,5 +74,27 @@ class Course::Video::VideosController < Course::Video::Controller
              else
                current_course.default_video_tab
              end
+  end
+
+  def load_video_tabs
+    @video_tabs = current_course.video_tabs
+  end
+
+  def preload_video_item
+    @video_items_hash = @course.lesson_plan_items.where(actable_id: @videos.pluck(:id),
+                                                        actable_type: Course::Video.name).
+                        preload(actable: :conditions).
+                        with_reference_times_for(current_course_user).
+                        with_personal_times_for(current_course_user).
+                        to_h do |item|
+      [item.actable_id, item]
+    end
+  end
+
+  def preload_student_submission_count
+    @video_submission_count_hash = @videos.calculated(:student_submission_count).
+                                   to_h do |video|
+      [video.id, video.student_submission_count]
+    end
   end
 end

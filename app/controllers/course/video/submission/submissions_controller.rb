@@ -5,33 +5,38 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
   skip_authorize_resource :submission, only: :edit
 
   def index
-    @submissions = @submissions.includes([{ experience_points_record: :course_user }, :statistic])
-    @my_students = current_course_user.try(:my_students) || []
-    @course_students = current_course.course_users.students.order_alphabetically
+    respond_to do |format|
+      format.html do
+        add_breadcrumb t('.submissions')
+      end
+      format.json do
+        @submissions = @submissions.includes([{ experience_points_record: :course_user }, :statistic])
+        @my_students = current_course_user.try(:my_students) || []
+        @course_students = current_course.course_users.students.order_alphabetically
+      end
+    end
   end
 
   def show
-    @sessions = @submission.sessions.with_events_present
+    respond_to do |format|
+      format.html { render 'index' }
+      format.json do
+        @sessions = @submission.sessions.with_events_present
+      end
+    end
   end
 
   def create
     if @submission.save
       respond_to do |format|
-        format.html { redirect_to edit_course_video_submission_path(current_course, @video, @submission) }
         format.json { render json: { submissionId: @submission.id }, status: :ok }
       end
     elsif @submission.existing_submission.present?
       respond_to do |format|
-        format.html do
-          redirect_to edit_course_video_submission_path(current_course,
-                                                        @video,
-                                                        @submission.existing_submission)
-        end
         format.json { render json: { submissionId: @submission.existing_submission.id }, status: :ok }
       end
     else
-      redirect_to course_videos_path(current_course),
-                  danger: t('.failure', error: @submission.errors.full_messages.to_sentence)
+      render json: { errors: @submission.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -40,13 +45,16 @@ class Course::Video::Submission::SubmissionsController < Course::Video::Submissi
     # here for a custom access denied behaviour to be implemented
     authorize!(:edit, @submission)
 
-    @topics = @video.topics.includes(posts: :children).order(:timestamp)
-    @topics = @topics.reject { |topic| topic.posts.empty? }
-    @posts = @topics.map(&:posts).reduce(Course::Discussion::Post.none, :+)
-    set_seek_and_scroll
-    set_monitoring
-  rescue CanCan::AccessDenied
-    redirect_to course_video_path(current_course, @video)
+    respond_to do |format|
+      format.html { render 'index' }
+      format.json do
+        @topics = @video.topics.includes(posts: :children).order(:timestamp)
+        @topics = @topics.reject { |topic| topic.posts.empty? }
+        @posts = @topics.map(&:posts).reduce(Course::Discussion::Post.none, :+)
+        set_seek_and_scroll
+        set_monitoring
+      end
+    end
   end
 
   private
