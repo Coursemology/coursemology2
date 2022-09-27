@@ -1,4 +1,3 @@
-import { getVideoId, getVideoSubmissionId } from 'lib/helpers/url-helpers';
 import BaseVideoAPI from './Base';
 
 export default class SessionsAPI extends BaseVideoAPI {
@@ -55,6 +54,6 @@ export default class SessionsAPI extends BaseVideoAPI {
   }
 
   _getUrlPrefix() {
-    return `/courses/${this.getCourseId()}/videos/${getVideoId()}/submissions/${getVideoSubmissionId()}/sessions`;
+    return `/courses/${this.getCourseId()}/videos/${this.getVideoId()}/submissions/${this.getVideoSubmissionId()}/sessions`;
   }
 }
