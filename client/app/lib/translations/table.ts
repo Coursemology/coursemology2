@@ -21,6 +21,10 @@ const translations = defineMessages({
     id: 'components.table.column.requestedAt',
     defaultMessage: 'Requested At',
   },
+  watchedAt: {
+    id: 'components.table.column.watchedAt',
+    defaultMessage: 'Watched At',
+  },
   role: {
     id: 'components.table.column.role',
     defaultMessage: 'Role',
@@ -172,6 +176,14 @@ const translations = defineMessages({
   requestToBe: {
     id: 'components.table.column.requestToBe',
     defaultMessage: 'Request to be',
+  },
+  percentWatched: {
+    id: 'components.table.column.percentWatched',
+    defaultMessage: '% Watched',
+  },
+  status: {
+    id: 'components.table.column.id',
+    defaultMessage: 'Status',
   },
 });
 

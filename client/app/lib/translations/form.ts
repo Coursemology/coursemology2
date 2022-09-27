@@ -2,8 +2,28 @@ import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
   close: {
-    id: 'lib.form.buttons.close',
-    defaultMessage: 'Close',
+    id: 'lib.form.title',
+    defaultMessage: 'Title',
+  },
+  title: {
+    id: 'lib.form.title',
+    defaultMessage: 'Title',
+  },
+  content: {
+    id: 'lib.form.content',
+    defaultMessage: 'Content',
+  },
+  description: {
+    id: 'lib.form.description',
+    defaultMessage: 'Description',
+  },
+  startAt: {
+    id: 'lib.form.startAt',
+    defaultMessage: 'Start At',
+  },
+  endAt: {
+    id: 'lib.form.endAt',
+    defaultMessage: 'End At',
   },
   cancel: {
     id: 'lib.form.buttons.cancel',
