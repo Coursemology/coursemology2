@@ -86,7 +86,7 @@
     "@mui/styles": "^5.10.6",
     "@mui/x-date-pickers": "^5.0.3",
     "@reduxjs/toolkit": "^1.8.5",
-    "ace-builds": "^1.11.1",
+    "ace-builds": "^1.11.2",
     "axios": "^0.27.2",
     "babel-plugin-formatjs": "^10.3.28",
     "chart.js": "^3.8.2",
