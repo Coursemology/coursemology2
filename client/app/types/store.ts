@@ -12,6 +12,7 @@ import { SubmissionsState } from 'bundles/course/assessment/submissions/types';
 import { DisbursementState } from 'bundles/course/experience-points/disbursement/types';
 import { CommentState } from 'bundles/course/discussion/topics/types';
 import { FoldersState } from 'bundles/course/material/folders/types';
+import { VideosState } from 'bundles/course/video/types';
 import { AdminState } from 'bundles/system/admin/admin/types';
 import { InstanceAdminState } from 'bundles/system/admin/instance/instance/types';
 import { GlobalUserState } from 'bundles/users/types';
@@ -35,6 +36,7 @@ export interface AppState {
   enrolRequests: EnrolRequestsState;
   disbursement: DisbursementState;
   comments: CommentState;
+  videos: VideosState;
   global: { user: GlobalUserState; announcements: GlobalAnnouncementState };
 }
 

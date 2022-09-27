@@ -25,6 +25,7 @@ const FormTextField = (props) => {
     rows = 1,
     margins = true,
     enableDebouncing = false,
+    helperText,
     ...custom
   } = props;
 
@@ -79,11 +80,12 @@ const FormTextField = (props) => {
       onKeyPress={handleKeyPress}
       disabled={disabled}
       label={label}
-      error={!!fieldState.error}
+      error={!!fieldState.error || !!helperText}
       multiline={multiline}
       rows={rows}
       helperText={
-        fieldState.error && formatErrorMessage(fieldState.error.message)
+        (fieldState.error && formatErrorMessage(fieldState.error.message)) ??
+        helperText
       }
       {...(margins ? { style: styles.textFieldStyle } : null)}
       {...custom}
@@ -115,6 +117,7 @@ FormTextField.propTypes = {
   className: PropTypes.string,
   multiline: PropTypes.bool,
   rows: PropTypes.number,
+  helperText: PropTypes.string,
 };
 
 export default FormTextField;

@@ -57,11 +57,19 @@ export const getEditAssessmentSubmissionURL = (
 ) =>
   `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
 
+export const getVideosURL = (courseId) => `/courses/${courseId}/videos`;
+
 export const getVideoURL = (courseId, videoId) =>
   `/courses/${courseId}/videos/${videoId}`;
 
 export const getVideoSubmissionsURL = (courseId, videoId) =>
   `/courses/${courseId}/videos/${videoId}/submissions`;
+
+export const getVideoSubmissionURL = (courseId, videoId, submissionId) =>
+  `/courses/${courseId}/videos/${videoId}/submissions/${submissionId}`;
+
+export const getEditVideoSubmissionURL = (courseId, videoId, submissionId) =>
+  `/courses/${courseId}/videos/${videoId}/submissions/${submissionId}/edit`;
 
 export const getVideoAttemptURL = (courseId, videoId) =>
   `/courses/${courseId}/videos/${videoId}/attempt`;

@@ -50,7 +50,7 @@ const DeleteButton = ({
           open={dialogOpen}
           onCancel={(): void => setDialogOpen(false)}
           onConfirm={(): void => {
-            onClick().catch(() => setDialogOpen(false));
+            onClick().finally(() => setDialogOpen(false));
           }}
         />
       )}
