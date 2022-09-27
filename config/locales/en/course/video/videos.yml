@@ -5,35 +5,3 @@ en:
         sidebar_title: :'course.video.videos.index.header'
         index:
           header: "Videos"
-          title: "Title"
-          start_at: "Start At"
-          percent_watched: "Average % Watched"
-          submissions_count: "Watch Count"
-        video:
-          progress: "%{progress} %"
-          submissions_count: "%{submissions_count} / %{students_count}"
-        new:
-          header: "New Video"
-        create:
-          success: "%{title} was created."
-        show:
-          description: "Description"
-          start_at: :'course.video.videos.index.start_at'
-          statistics: "Statistics"
-        edit:
-          header: "Edit Video"
-        update:
-          success: "Video %{title} was updated."
-        destroy:
-          success: "%{title} was deleted."
-          failure: "Could not delete video: %{error}"
-        video_attempt_button:
-          watch: "Watch"
-          rewatch: "Re-Watch"
-        form:
-          url_placeholder: >
-            Please provide a valid youtube URL,
-            eg. https://www.youtube.com/watch?v=dQw4w9WgXcQ
-          url_change_warning: >
-            Warning: Changing url for this video would cause all its submissions and
-            sessions data to be destroyed.
