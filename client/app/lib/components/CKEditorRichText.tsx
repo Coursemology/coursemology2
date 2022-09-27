@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { FC, forwardRef, useEffect, useState } from 'react';
+import { FC, forwardRef, useState } from 'react';
 import { InputLabel } from '@mui/material';
 import { cyan } from '@mui/material/colors';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -18,6 +18,32 @@ interface Props {
   disableMargins?: boolean;
 }
 
+const uploadAdapter = (loader) => {
+  return {
+    upload: () =>
+      new Promise((resolve, reject) => {
+        const formData = new FormData();
+
+        loader.file.then((file) => {
+          formData.append('file', file);
+          formData.append('name', file.name);
+          axios
+            .post('/attachments', formData)
+            .then((response) => response.data)
+            .then((data) => {
+              if (data.success) {
+                resolve({ default: `/attachments/${data.id}` });
+              }
+            })
+            .catch((err) => {
+              reject(err);
+            });
+        });
+      }),
+    abort: () => {},
+  };
+};
+
 const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
   const {
     label,
@@ -32,46 +58,7 @@ const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
   } = props;
 
   const [isFocused, setIsFocused] = useState(false);
-  const testFieldLabelColor = isFocused ? cyan[500] : undefined;
-
-  // Any type used as there is no documentation on the typing of CKEditor's editor object
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [myEditor, setMyEditor] = useState<any>();
-
-  // Reset value in the ckeditor field when it is empty.
-  // This is needed when a field is emptied after its previous content
-  // has been stored to the backend (eg comment field)
-  useEffect(() => {
-    if (value === '' && myEditor) {
-      myEditor.setData(value);
-    }
-  }, [value]);
-
-  const uploadAdapter = (loader) => {
-    return {
-      upload: () =>
-        new Promise((resolve, reject) => {
-          const formData = new FormData();
-
-          loader.file.then((file) => {
-            formData.append('file', file);
-            formData.append('name', file.name);
-            axios
-              .post('/attachments', formData)
-              .then((response) => response.data)
-              .then((data) => {
-                if (data.success) {
-                  resolve({ default: `/attachments/${data.id}` });
-                }
-              })
-              .catch((err) => {
-                reject(err);
-              });
-          });
-        }),
-      abort: () => {},
-    };
-  };
+  const textFieldLabelColor = isFocused ? cyan[500] : undefined;
 
   return (
     <div
@@ -94,13 +81,12 @@ const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
           shrink
           style={{
             pointerEvents: 'none',
-            color: disabled ? 'rgba(0, 0, 0, 0.3)' : testFieldLabelColor,
+            color: disabled ? 'rgba(0, 0, 0, 0.3)' : textFieldLabelColor,
           }}
         >
           {label}
         </InputLabel>
       )}
-
       <textarea
         name={name}
         id={inputId}
@@ -112,7 +98,6 @@ const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
         }}
         disabled={disabled}
       />
-
       <div className="react-ck">
         <CKEditor
           ref={ref}
@@ -142,12 +127,8 @@ const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
               },
             },
           }}
-          data=""
+          data={value}
           onReady={(editor) => {
-            setMyEditor(editor);
-            if (value) {
-              editor.setData(value);
-            }
             // Enable the following to set a max height for ckeditor
             editor.editing.view.change((writer) => {
               writer.setStyle(
@@ -171,7 +152,6 @@ const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
           onFocus={(_event, _editor) => {
             setIsFocused(true);
           }}
-          style={{ minHeight: 500 }}
         />
       </div>
     </div>
