@@ -1,8 +1,6 @@
-import { getVideoId } from 'lib/helpers/url-helpers';
+import BaseVideoAPI from './Base';
 
-import BaseCourseAPI from '../Base';
-
-export default class TopicsAPI extends BaseCourseAPI {
+export default class TopicsAPI extends BaseVideoAPI {
   /**
    * topic = {
    *    timestamp: int
@@ -84,6 +82,6 @@ export default class TopicsAPI extends BaseCourseAPI {
   }
 
   _getUrlPrefix() {
-    return `/courses/${this.getCourseId()}/videos/${getVideoId()}/topics`;
+    return `/courses/${this.getCourseId()}/videos/${this.getVideoId()}/topics`;
   }
 }
