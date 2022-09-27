@@ -501,15 +501,15 @@ var ROUTES = (function() {
 // admin_announcement => /admin/announcements/:id(.:format)
   // function(id, options)
   admin_announcement_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"announcements",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
-// admin_announcements => /admin/announcements(/page/:page)(.:format)
+// admin_announcements => /admin/announcements(.:format)
   // function(options)
-  admin_announcements_path: Utils.route([["page",false],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"announcements",false],[2,[1,[2,[7,"/",false],[2,[6,"page",false],[2,[7,"/",false],[3,"page",false]]]],false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]),
+  admin_announcements_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"announcements",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
 // admin_course => /admin/courses/:id(.:format)
   // function(id, options)
   admin_course_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
-// admin_courses => /admin/courses(/page/:page)(.:format)
+// admin_courses => /admin/courses(.:format)
   // function(options)
-  admin_courses_path: Utils.route([["page",false],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"courses",false],[2,[1,[2,[7,"/",false],[2,[6,"page",false],[2,[7,"/",false],[3,"page",false]]]],false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]),
+  admin_courses_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"courses",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
 // admin_instance => /admin/instances/:id(.:format)
   // function(id, options)
   admin_instance_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instances",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
@@ -519,18 +519,18 @@ var ROUTES = (function() {
 // admin_instance_announcement => /admin/instance/announcements/:id(.:format)
   // function(id, options)
   admin_instance_announcement_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"announcements",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
-// admin_instance_announcements => /admin/instance/announcements(/page/:page)(.:format)
+// admin_instance_announcements => /admin/instance/announcements(.:format)
   // function(options)
-  admin_instance_announcements_path: Utils.route([["page",false],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"announcements",false],[2,[1,[2,[7,"/",false],[2,[6,"page",false],[2,[7,"/",false],[3,"page",false]]]],false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]),
+  admin_instance_announcements_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"announcements",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
 // admin_instance_components => /admin/instance/components(.:format)
   // function(options)
   admin_instance_components_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"components",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
 // admin_instance_course => /admin/instance/courses/:id(.:format)
   // function(id, options)
   admin_instance_course_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
-// admin_instance_courses => /admin/instance/courses(/page/:page)(.:format)
+// admin_instance_courses => /admin/instance/courses(.:format)
   // function(options)
-  admin_instance_courses_path: Utils.route([["page",false],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"courses",false],[2,[1,[2,[7,"/",false],[2,[6,"page",false],[2,[7,"/",false],[3,"page",false]]]],false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]),
+  admin_instance_courses_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"courses",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
 // admin_instance_user => /admin/instance/users/:id(.:format)
   // function(id, options)
   admin_instance_user_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
@@ -543,18 +543,21 @@ var ROUTES = (function() {
 // admin_instance_user_invitations => /admin/instance/user_invitations(.:format)
   // function(options)
   admin_instance_user_invitations_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"user_invitations",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
-// admin_instance_users => /admin/instance/users(/page/:page)(.:format)
+// admin_instance_users => /admin/instance/users(.:format)
   // function(options)
-  admin_instance_users_path: Utils.route([["page",false],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"users",false],[2,[1,[2,[7,"/",false],[2,[6,"page",false],[2,[7,"/",false],[3,"page",false]]]],false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]),
+  admin_instance_users_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"users",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
 // admin_instances => /admin/instances(.:format)
   // function(options)
   admin_instances_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instances",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
 // admin_user => /admin/users/:id(.:format)
   // function(id, options)
   admin_user_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
-// admin_users => /admin/users(/page/:page)(.:format)
+// admin_users => /admin/users(.:format)
   // function(options)
-  admin_users_path: Utils.route([["page",false],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"users",false],[2,[1,[2,[7,"/",false],[2,[6,"page",false],[2,[7,"/",false],[3,"page",false]]]],false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]),
+  admin_users_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"users",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
+// all_course_topics => /courses/:course_id/comments/all(.:format)
+  // function(course_id, options)
+  all_course_topics_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"comments",false],[2,[7,"/",false],[2,[6,"all",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
 // all_posts_course_forums => /courses/:course_id/forums/all_posts(.:format)
   // function(course_id, options)
   all_posts_course_forums_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"forums",false],[2,[7,"/",false],[2,[6,"all_posts",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
@@ -687,6 +690,9 @@ var ROUTES = (function() {
 // course_assessment => /courses/:course_id/assessments/:id(.:format)
   // function(course_id, id, options)
   course_assessment_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
+// course_assessment_attempt => /courses/:course_id/assessments/:assessment_id/attempt(.:format)
+  // function(course_id, assessment_id, options)
+  course_assessment_attempt_path: Utils.route([["course_id",true],["assessment_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"assessment_id",false],[2,[7,"/",false],[2,[6,"attempt",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
 // course_assessment_condition_achievement => /courses/:course_id/assessments/:assessment_id/condition/achievements/:id(.:format)
   // function(course_id, assessment_id, id, options)
   course_assessment_condition_achievement_path: Utils.route([["course_id",true],["assessment_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"assessment_id",false],[2,[7,"/",false],[2,[6,"condition",false],[2,[7,"/",false],[2,[6,"achievements",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]]]),
@@ -915,9 +921,9 @@ var ROUTES = (function() {
 // course_statistics_staff => /courses/:course_id/statistics/staff(.:format)
   // function(course_id, options)
   course_statistics_staff_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"statistics",false],[2,[7,"/",false],[2,[6,"staff",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
-// course_submissions => /courses/:course_id/assessments/submissions(/page/:page)(.:format)
+// course_submissions => /courses/:course_id/assessments/submissions(.:format)
   // function(course_id, options)
-  course_submissions_path: Utils.route([["course_id",true],["page",false],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[6,"submissions",false],[2,[1,[2,[7,"/",false],[2,[6,"page",false],[2,[7,"/",false],[3,"page",false]]]],false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]),
+  course_submissions_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[6,"submissions",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
 // course_survey => /courses/:course_id/surveys/:id(.:format)
   // function(course_id, id, options)
   course_survey_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"surveys",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
@@ -1005,6 +1011,9 @@ var ROUTES = (function() {
 // course_video => /courses/:course_id/videos/:id(.:format)
   // function(course_id, id, options)
   course_video_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"videos",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
+// course_video_attempt => /courses/:course_id/videos/:video_id/attempt(.:format)
+  // function(course_id, video_id, options)
+  course_video_attempt_path: Utils.route([["course_id",true],["video_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"videos",false],[2,[7,"/",false],[2,[3,"video_id",false],[2,[7,"/",false],[2,[6,"attempt",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
 // course_video_submission => /courses/:course_id/videos/:video_id/submissions/:id(.:format)
   // function(course_id, video_id, id, options)
   course_video_submission_path: Utils.route([["course_id",true],["video_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"videos",false],[2,[7,"/",false],[2,[3,"video_id",false],[2,[7,"/",false],[2,[6,"submissions",false],[2,[7,"/",false],[2,[3,"id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]),
@@ -1065,15 +1074,6 @@ var ROUTES = (function() {
 // duplicate_course_assessment_question => /courses/:course_id/assessments/:assessment_id/questions/:id/duplicate/:destination_assessment_id(.:format)
   // function(course_id, assessment_id, id, destination_assessment_id, options)
   duplicate_course_assessment_question_path: Utils.route([["course_id",true],["assessment_id",true],["id",true],["destination_assessment_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"assessment_id",false],[2,[7,"/",false],[2,[6,"questions",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"duplicate",false],[2,[7,"/",false],[2,[3,"destination_assessment_id",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]]]]]),
-// edit_admin_announcement => /admin/announcements/:id/edit(.:format)
-  // function(id, options)
-  edit_admin_announcement_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"announcements",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"edit",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
-// edit_admin_instance => /admin/instances/:id/edit(.:format)
-  // function(id, options)
-  edit_admin_instance_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instances",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"edit",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
-// edit_admin_instance_announcement => /admin/instance/announcements/:id/edit(.:format)
-  // function(id, options)
-  edit_admin_instance_announcement_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"announcements",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"edit",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
 // edit_admin_instance_user => /admin/instance/users/:id/edit(.:format)
   // function(id, options)
   edit_admin_instance_user_path: Utils.route([["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"edit",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
@@ -1167,9 +1167,6 @@ var ROUTES = (function() {
 // edit_course_user_notification => /courses/:course_id/user_notifications/:id/edit(.:format)
   // function(course_id, id, options)
   edit_course_user_notification_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"user_notifications",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"edit",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
-// edit_course_video => /courses/:course_id/videos/:id/edit(.:format)
-  // function(course_id, id, options)
-  edit_course_video_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"videos",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"edit",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
 // edit_course_video_submission => /courses/:course_id/videos/:video_id/submissions/:id/edit(.:format)
   // function(course_id, video_id, id, options)
   edit_course_video_submission_path: Utils.route([["course_id",true],["video_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"videos",false],[2,[7,"/",false],[2,[3,"video_id",false],[2,[7,"/",false],[2,[6,"submissions",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"edit",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]]]),
@@ -1254,21 +1251,9 @@ var ROUTES = (function() {
 // my_students_pending_course_topics => /courses/:course_id/comments/my_students_pending(.:format)
   // function(course_id, options)
   my_students_pending_course_topics_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"comments",false],[2,[7,"/",false],[2,[6,"my_students_pending",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
-// new_admin_announcement => /admin/announcements/new(.:format)
-  // function(options)
-  new_admin_announcement_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"announcements",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
-// new_admin_instance => /admin/instances/new(.:format)
-  // function(options)
-  new_admin_instance_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instances",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
-// new_admin_instance_announcement => /admin/instance/announcements/new(.:format)
-  // function(options)
-  new_admin_instance_announcement_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"announcements",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
 // new_admin_instance_user => /admin/instance/users/new(.:format)
   // function(options)
   new_admin_instance_user_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"admin",false],[2,[7,"/",false],[2,[6,"instance",false],[2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
-// new_course => /courses/new(.:format)
-  // function(options)
-  new_course_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
 // new_course_achievement_condition_achievement => /courses/:course_id/achievements/:achievement_id/condition/achievements/new(.:format)
   // function(course_id, achievement_id, options)
   new_course_achievement_condition_achievement_path: Utils.route([["course_id",true],["achievement_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"achievements",false],[2,[7,"/",false],[2,[3,"achievement_id",false],[2,[7,"/",false],[2,[6,"condition",false],[2,[7,"/",false],[2,[6,"achievements",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]]]),
@@ -1359,21 +1344,12 @@ var ROUTES = (function() {
 // new_course_user_notification => /courses/:course_id/user_notifications/new(.:format)
   // function(course_id, options)
   new_course_user_notification_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"user_notifications",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
-// new_course_video => /courses/:course_id/videos/new(.:format)
-  // function(course_id, options)
-  new_course_video_path: Utils.route([["course_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"videos",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]),
 // new_instance_user_role_request => /role_requests/new(.:format)
   // function(options)
   new_instance_user_role_request_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"role_requests",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]),
-// new_materials_course_material_folder => /courses/:course_id/materials/folders/:id/new/files(.:format)
-  // function(course_id, id, options)
-  new_materials_course_material_folder_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"materials",false],[2,[7,"/",false],[2,[6,"folders",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"new",false],[2,[7,"/",false],[2,[6,"files",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]]]),
 // new_rails_conductor_inbound_email => /rails/conductor/action_mailbox/inbound_emails/new(.:format)
   // function(options)
   new_rails_conductor_inbound_email_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"rails",false],[2,[7,"/",false],[2,[6,"conductor",false],[2,[7,"/",false],[2,[6,"action_mailbox",false],[2,[7,"/",false],[2,[6,"inbound_emails",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
-// new_subfolder_course_material_folder => /courses/:course_id/materials/folders/:id/new/subfolder(.:format)
-  // function(course_id, id, options)
-  new_subfolder_course_material_folder_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"materials",false],[2,[7,"/",false],[2,[6,"folders",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"new",false],[2,[7,"/",false],[2,[6,"subfolder",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]]]),
 // new_user_confirmation => /users/confirmation/new(.:format)
   // function(options)
   new_user_confirmation_path: Utils.route([["format",false]], {}, [2,[7,"/",false],[2,[6,"users",false],[2,[7,"/",false],[2,[6,"confirmation",false],[2,[7,"/",false],[2,[6,"new",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]),
@@ -1464,6 +1440,9 @@ var ROUTES = (function() {
 // recompute_course_assessment_question_bundle_assignments => /courses/:course_id/assessments/:assessment_id/question_bundle_assignments/recompute(.:format)
   // function(course_id, assessment_id, options)
   recompute_course_assessment_question_bundle_assignments_path: Utils.route([["course_id",true],["assessment_id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"assessment_id",false],[2,[7,"/",false],[2,[6,"question_bundle_assignments",false],[2,[7,"/",false],[2,[6,"recompute",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]),
+// reevaluate_answer_course_assessment_submission => /courses/:course_id/assessments/:assessment_id/submissions/:id/reevaluate_answer(.:format)
+  // function(course_id, assessment_id, id, options)
+  reevaluate_answer_course_assessment_submission_path: Utils.route([["course_id",true],["assessment_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"assessments",false],[2,[7,"/",false],[2,[3,"assessment_id",false],[2,[7,"/",false],[2,[6,"submissions",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"reevaluate_answer",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]]]]]),
 // reject_course_enrol_request => /courses/:course_id/enrol_requests/:id/reject(.:format)
   // function(course_id, id, options)
   reject_course_enrol_request_path: Utils.route([["course_id",true],["id",true],["format",false]], {}, [2,[7,"/",false],[2,[6,"courses",false],[2,[7,"/",false],[2,[3,"course_id",false],[2,[7,"/",false],[2,[6,"enrol_requests",false],[2,[7,"/",false],[2,[3,"id",false],[2,[7,"/",false],[2,[6,"reject",false],[1,[2,[8,".",false],[3,"format",false]],false]]]]]]]]]]]),
