@@ -92,7 +92,7 @@ class Course::Discussion::Post < ApplicationRecord
   # @return [Course::Discussion::Post::Vote] The vote that the user cast.
   # @return [nil] The user has not cast a vote.
   def vote_for(user)
-    votes.loaded? ? votes.find { |vote| vote.creator == user } : votes.find_by(creator: user)
+    votes.loaded? ? votes.find { |vote| vote.creator_id == user.id } : votes.find_by(creator: user)
   end
 
   # Allows a user to cast a vote for this post.
