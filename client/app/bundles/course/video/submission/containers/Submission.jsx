@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
+import { Grid } from '@mui/material';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
 import VideoPlayer from './VideoPlayer';
 import Discussion from './Discussion';
-import styles from './Submission.scss';
 
 const propTypes = {
   notification: notificationShape,
@@ -12,15 +12,17 @@ const propTypes = {
 
 function Submission(props) {
   return (
-    <div className={styles.submissionContainer}>
-      <div className={styles.videoAndAnswers}>
-        <VideoPlayer />
-      </div>
-      <div className={styles.discussion}>
-        <Discussion />
-      </div>
+    <>
+      <Grid container spacing={2}>
+        <Grid item xs={12} lg={8}>
+          <VideoPlayer />
+        </Grid>
+        <Grid className="h-[calc(95vh-70px)] sticky top-0" item xs={12} lg={4}>
+          <Discussion />
+        </Grid>
+      </Grid>
       <NotificationBar notification={props.notification} />
-    </div>
+    </>
   );
 }
 

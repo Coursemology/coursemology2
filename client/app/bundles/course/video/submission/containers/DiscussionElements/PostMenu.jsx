@@ -37,12 +37,12 @@ const PostMenu = (props) => {
   }
 
   return (
-    <div style={{ float: 'right' }}>
+    <div className="float-right">
       <IconButton onClick={handleClick}>
         <MoreVert />
       </IconButton>
       <Menu
-        id="postn-menu"
+        id="post-menu"
         anchorEl={anchorEl}
         disableAutoFocusItem
         onClick={handleClose}

@@ -17,7 +17,7 @@ const defaultProps = {
 
 function PlayBackRateSelector(props) {
   const rateElements = props.availableRates.map((rate) => (
-    <MenuItem key={rate} style={{ fontSize: '0.9em' }} value={rate}>
+    <MenuItem key={rate} className="text-xl" value={rate}>
       {`${rate}X`}
     </MenuItem>
   ));
@@ -25,8 +25,8 @@ function PlayBackRateSelector(props) {
   return (
     <span className={styles.playbackRate}>
       <Select
+        className="text-xl"
         onChange={(event) => props.rateChanged(event.target.value)}
-        style={{ fontSize: '0.9em' }}
         value={props.rate}
         variant="standard"
       >

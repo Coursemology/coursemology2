@@ -32,7 +32,7 @@ function Topic(props) {
       <div className={styles.topicTimestamp}>
         <span className="glyphicon glyphicon-chevron-down" />
         &nbsp;
-        <a style={{ cursor: 'pointer' }} onClick={props.onTimeStampClick}>
+        <a className="cursor-pointer" onClick={props.onTimeStampClick}>
           <b>
             Time:
             {formatTimestamp(props.timestamp)}
@@ -41,7 +41,7 @@ function Topic(props) {
         &nbsp;
         <span className="glyphicon glyphicon-chevron-down" />
       </div>
-      <Divider style={{ marginBottom: '1em' }} />
+      <Divider className="mb-4" />
       <>
         {props.postIds.map((id) => (
           <PostContainer key={id.toString()} postId={id} isRoot />

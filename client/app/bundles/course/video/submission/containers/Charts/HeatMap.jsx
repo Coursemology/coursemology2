@@ -103,7 +103,7 @@ const defaultProps = {
 class HeatMap extends Component {
   static renderUnscaledChart(data, options) {
     return (
-      <div style={{ width: '100%' }}>
+      <div className="w-full">
         <Bar
           data={data}
           options={options}
@@ -165,7 +165,7 @@ class HeatMap extends Component {
     };
 
     return (
-      <div style={{ overflowX: 'scroll' }}>
+      <div className="overflow-x-scroll">
         <div style={{ width }}>
           <Bar
             data={data}

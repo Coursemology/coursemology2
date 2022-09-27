@@ -52,11 +52,11 @@ function Editor(props) {
       <div className={style.editorButtons}>
         {props.showCancel && (
           <Button
+            className="mr-4"
             variant="contained"
             color="secondary"
             disabled={props.disabled}
             onClick={props.onCancel}
-            style={{ marginRight: 8 }}
           >
             {props.cancelButtonText}
           </Button>
@@ -70,7 +70,7 @@ function Editor(props) {
           {props.submitButtonText}
         </Button>
       </div>
-      <div style={{ clear: 'both' }} />
+      <div className="clear-both" />
     </>
   );
 }
