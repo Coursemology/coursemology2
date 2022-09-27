@@ -168,4 +168,22 @@ const ProviderWrapper = ({ store, persistor, children }) => {
 
 ProviderWrapper.propTypes = propTypes;
 
+export const StoreProviderWrapper = ({ store, persistor, children }) => {
+  let providers = children;
+
+  if (store && persistor) {
+    providers = (
+      <PersistGate loading={<LoadingIndicator />} persistor={persistor}>
+        {providers}
+      </PersistGate>
+    );
+  }
+
+  if (store) providers = <Provider store={store}>{providers}</Provider>;
+
+  return providers;
+};
+
+StoreProviderWrapper.propTypes = propTypes;
+
 export default ProviderWrapper;
