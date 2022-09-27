@@ -184,7 +184,9 @@ const CoursesTable: FC<Props> = (props) => {
               key={`title-${course.id}`}
               className="course_title"
             >
-              <a href={`/courses/${course.id}`}>{course.title}</a>
+              <a href={`//${course.instance.host}/courses/${course.id}`}>
+                {course.title}
+              </a>
             </Typography>
           );
         },
@@ -226,7 +228,9 @@ const CoursesTable: FC<Props> = (props) => {
               className="course_active_total_users"
               variant="body2"
             >
-              <a href={`/courses/${course.id}/students`}>
+              <a
+                href={`//${course.instance.host}/courses/${course.id}/students`}
+              >
                 {course.activeUserCount} / {course.userCount}
               </a>
             </Typography>
