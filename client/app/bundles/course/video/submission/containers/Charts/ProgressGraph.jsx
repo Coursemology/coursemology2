@@ -226,17 +226,17 @@ class ProgressGraph extends Component {
     });
 
     return (
-      <div style={{ padding: '20px 0' }}>
+      <div className="mt-5 mb-5">
         <FormControl variant="standard">
           <InputLabel>
             {this.props.intl.formatMessage(translations.selectSession)}
           </InputLabel>
           <Select
+            className="max-h-96 w-80"
             value={this.state.selectedSessionId}
             onChange={(event) =>
               this.setState({ selectedSessionId: event.target.value })
             }
-            style={{ maxHeight: 300, width: 200 }}
             variant="standard"
           >
             {items}

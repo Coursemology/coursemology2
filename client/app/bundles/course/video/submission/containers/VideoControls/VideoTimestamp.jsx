@@ -12,8 +12,8 @@ function VideoTimestamp(props) {
   return (
     <span className={styles.timestamp}>
       <span>{formatTimestamp(props.progress)}</span>
-      <span style={{ marginLeft: '0.5em', marginRight: '0.5em' }}>/</span>
-      <span style={{ color: 'grey' }}>{formatTimestamp(props.duration)}</span>
+      <span className="mr-2 ml-2">/</span>
+      <span className="text-gray-400">{formatTimestamp(props.duration)}</span>
     </span>
   );
 }

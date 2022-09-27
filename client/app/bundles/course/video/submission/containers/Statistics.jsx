@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Tab, Tabs } from '@mui/material';
 import ProgressGraph from './Charts/ProgressGraph';
 import HeatMap from './Charts/HeatMap';
-import styles from './Statistics.scss';
 
 const propTypes = {
   sessions: PropTypes.objectOf(
@@ -29,10 +28,10 @@ const Statistics = ({ watchFrequency, sessions }) => {
 
   const tabContent = () => (
     <>
-      <div style={{ ...(tabValue === 1 ? {} : { display: 'none' }) }}>
+      <div className={tabValue === 1 ? '' : 'hidden'}>
         <HeatMap watchFrequency={watchFrequency} />
       </div>
-      <div style={{ ...(tabValue === 2 ? {} : { display: 'none' }) }}>
+      <div className={tabValue === 2 ? '' : 'hidden'}>
         <ProgressGraph sessions={sessions} />
       </div>
     </>
@@ -42,11 +41,9 @@ const Statistics = ({ watchFrequency, sessions }) => {
       <Tabs
         indicatorColor="primary"
         textColor="inherit"
-        className={styles.statisticsGraphView}
         onChange={(event, value) => {
           setTabValue(value);
         }}
-        style={{ paddingBottom: 0 }}
         value={tabValue}
         variant="fullWidth"
       >
