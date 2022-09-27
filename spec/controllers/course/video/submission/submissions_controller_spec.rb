@@ -13,7 +13,7 @@ RSpec.describe Course::Video::Submission::SubmissionsController do
 
     describe '#create' do
       subject do
-        post :create, params: { course_id: course, video_id: video }
+        post :create, params: { course_id: course, video_id: video }, format: :json
       end
 
       context 'when create fails' do
@@ -29,17 +29,19 @@ RSpec.describe Course::Video::Submission::SubmissionsController do
           subject
         end
 
-        it { is_expected.to redirect_to(course_videos_path(course)) }
-        it 'sets the proper flash message' do
-          expect(flash[:danger]).
-            to eq(I18n.t('course.video.submission.submissions.create.failure', error: ''))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
+      # let(:json_response) { JSON.parse(response.body) }
 
       context 'when submission by user exists' do
         let!(:old_submission) { create(:video_submission, video: video, creator: user) }
 
-        it { is_expected.to redirect_to(edit_course_video_submission_path(course, video, old_submission)) }
+        it 'returns the correct JSON response' do
+          subject
+          is_expected.to have_http_status(:ok)
+          json_response = JSON.parse(response.body)
+          expect(json_response['submissionId']).to eq(old_submission.id)
+        end
       end
     end
 
@@ -55,7 +57,9 @@ RSpec.describe Course::Video::Submission::SubmissionsController do
 
         before { sign_in(student1.user) }
 
-        it { is_expected.to redirect_to(course_video_path(course, video)) }
+        it 'raises an error' do
+          expect { subject }.to raise_exception(CanCan::AccessDenied)
+        end
       end
     end
   end

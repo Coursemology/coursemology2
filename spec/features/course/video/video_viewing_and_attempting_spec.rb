@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Videos: Viewing' do
+RSpec.describe 'Course: Videos: Viewing', js: true do
   let!(:instance) { create(:instance, :with_video_component_enabled) }
 
   with_tenant(:instance) do
@@ -19,36 +19,32 @@ RSpec.describe 'Course: Videos: Viewing' do
         videos
         visit course_videos_path(course)
 
-        expect(page).to have_no_content_tag_for(unpublished_video)
-        expect(page).to have_content_tag_for(published_video)
-        expect(page).to have_content_tag_for(published_not_started_video)
+        expect(page).to have_link(published_video.title, href: course_video_path(course, published_video))
+        expect(page).to have_link(published_not_started_video.title,
+                                  href: course_video_path(course, published_not_started_video))
+        expect(page).not_to have_link(unpublished_video.title, href: course_video_path(course, unpublished_video))
 
-        within find(content_tag_selector(published_not_started_video)) do
-          expect(page).to have_css('a.btn.btn-info.disabled')
+        within find("tr.video_#{published_not_started_video.id}") do
+          expect(page).to have_button('Watch', disabled: true)
         end
 
-        within find(content_tag_selector(published_video)) do
-          find('.btn.btn-info').click
+        within find("tr.video_#{published_video.id}") do
+          expect(page).to have_button('Watch', disabled: false)
+          find_button('Watch').click
+          sleep 0.2 # Wait for submission to be created
+          submission = Course::Video::Submission.where(video: published_video, creator: user).first
 
-          submission =
-            Course::Video::Submission.where(video: published_video, creator: user).first
           expect(current_path).
             to eq(edit_course_video_submission_path(course, published_video, submission))
-
-          expect(page).to have_tag('div', with: { id: 'video-component' })
         end
 
         # Button is updated when submission exists
         visit course_videos_path(course)
-        within find(content_tag_selector(published_video)) do
-          expect(page).to have_text(I18n.t('course.video.videos.video_attempt_button.rewatch'))
-          find('.btn.btn-info').click
+        within find("tr.video_#{published_video.id}") do
+          expect(page).to have_button('Rewatch', disabled: false)
+          find_button('Rewatch').click
         end
-
-        expect(page).to have_tag('div', with: { id: 'video-component' })
-        data = JSON.parse(page.find('#video-component')['data'])
-
-        expect(data['video']['videoUrl']).to eq(published_video.url)
+        expect(page).to have_selector('#video-component')
       end
     end
   end

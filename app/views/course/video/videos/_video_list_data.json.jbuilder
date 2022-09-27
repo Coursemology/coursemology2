@@ -22,9 +22,7 @@ end
 
 json.videoSubmissionId video.submissions.first&.id
 
-if can_manage
-  json.videoChildrenExist video.children_exist?
-end
+json.videoChildrenExist video.children_exist? if can_manage
 
 if can_analyze
   json.watchCount @video_submission_count_hash ? @video_submission_count_hash[video.id] : video.student_submission_count

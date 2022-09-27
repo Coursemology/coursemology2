@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Video: Submissions Viewing' do
+RSpec.describe 'Course: Video: Submissions Viewing', js: true do
   let(:instance) { create(:instance, :with_video_component_enabled) }
 
   with_tenant(:instance) do
@@ -23,14 +23,16 @@ RSpec.describe 'Course: Video: Submissions Viewing' do
         visit course_video_submissions_path(course, video)
 
         # Submissions page should not have show staff submissions.
-        expect(page).to have_no_content_tag_for(staff_submission)
+        expect(page).not_to have_selector("tr.course_user_#{course_manager.id}")
+        expect(page).not_to have_link('Watched', href: course_video_submission_path(course, video, staff_submission))
 
-        within find(content_tag_selector(submission)) do
-          expect(page).
-            to have_text(I18n.t('course.video.submission.submissions.submission.watched'))
+        within find("tr.course_user_#{students.first.id}") do
+          expect(page).to have_text('Watched')
+          expect(page).to have_link('Watched', href: course_video_submission_path(course, video, submission))
         end
-        expect(page).
-          to have_text(I18n.t('course.video.submission.submissions.submission.not_watched'))
+        within find("tr.course_user_#{students.second.id}") do
+          expect(page).to have_text('Has Not Started')
+        end
       end
     end
   end
