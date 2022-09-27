@@ -58,7 +58,7 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'off',
     'jsx-a11y/mouse-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
-    'max-len': ['warn', 120],
+    'max-len': ['warn', 125],
     camelcase: ['warn', { properties: 'never', allow: ['^UNSAFE_'] }],
     'comma-dangle': ['error', 'always-multiline'],
     'func-names': 'off',
