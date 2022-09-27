@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { IconButton, Tooltip } from '@mui/material';
 import SkipNext from '@mui/icons-material/SkipNext';
 import { connect } from 'react-redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import styles from '../VideoPlayer.scss';
 import translations from '../../translations';
@@ -21,7 +21,7 @@ const defaultProps = {
 function NextVideoButton(props) {
   if (!props.url) {
     return (
-      <Tooltip title={<FormattedMessage {...translations.noNextVideo} />}>
+      <Tooltip title={props.intl.formatMessage(translations.noNextVideo)}>
         <div className={styles.nextVideo}>
           <IconButton disabled>
             <SkipNext />
@@ -32,7 +32,7 @@ function NextVideoButton(props) {
   }
 
   return (
-    <Tooltip title={<FormattedMessage {...translations.watchNextVideo} />}>
+    <Tooltip title={props.intl.formatMessage(translations.watchNextVideo)}>
       <IconButton className={styles.nextVideo} href={props.url}>
         <SkipNext htmlColor="black" />
       </IconButton>

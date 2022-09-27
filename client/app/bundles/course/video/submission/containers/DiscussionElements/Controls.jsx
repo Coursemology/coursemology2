@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { IconButton, Tooltip } from '@mui/material';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { injectIntl } from 'react-intl';
 import {
   cyan as activeColor,
   grey as inactiveColor,
@@ -30,7 +30,7 @@ function Controls(props) {
       <IconButton onClick={props.onRefresh}>
         <Refresh />
       </IconButton>
-      <Tooltip title={<FormattedMessage {...translations.toggleLive} />}>
+      <Tooltip title={props.intl.formatMessage(translations.toggleLive)}>
         <IconButton onClick={() => props.onAutoScrollToggle(!props.autoScroll)}>
           <OndemandVideo
             htmlColor={props.autoScroll ? activeColor[500] : inactiveColor[700]}
