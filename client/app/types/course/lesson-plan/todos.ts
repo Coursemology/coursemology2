@@ -5,13 +5,13 @@ export interface TodoData {
   isPersonalTime: boolean;
   startTimeInfo: {
     isFixed: boolean;
-    effectiveTime: string;
-    referenceTime: string;
+    effectiveTime?: string;
+    referenceTime?: string;
   };
   endTimeInfo: {
     isFixed: boolean;
-    effectiveTime: string;
-    referenceTime: string;
+    effectiveTime?: string;
+    referenceTime?: string;
   };
   progress: 'not_started' | 'in_progress';
   itemActableSpecificId: number;

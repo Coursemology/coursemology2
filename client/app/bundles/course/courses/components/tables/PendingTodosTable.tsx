@@ -24,7 +24,7 @@ import {
   getVideoSubmissionsURL,
 } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import StartEndTime from 'lib/components/StartEndTime';
+import PersonalStartEndTime from 'lib/components/PersonalStartEndTime';
 import TodoAccessButton from '../buttons/TodoAccessButton';
 import TodoIgnoreButton from '../buttons/TodoIgnoreButton';
 
@@ -196,7 +196,10 @@ const PendingTodosTable: FC<Props> = (props) => {
 
   const getBackgroundColor = (todo: TodoData): React.CSSProperties => {
     let backgroundColor = '#ffffff';
-    if (Date.parse(todo.endTimeInfo.effectiveTime) < Date.now()) {
+    if (
+      todo.endTimeInfo.effectiveTime &&
+      Date.parse(todo.endTimeInfo.effectiveTime) < Date.now()
+    ) {
       backgroundColor = '#ffe8e8';
     }
     return { background: backgroundColor };
@@ -258,10 +261,10 @@ const PendingTodosTable: FC<Props> = (props) => {
                 </Link>
               </TableCell>
               <TableCell>
-                <StartEndTime timeInfo={todo.startTimeInfo} />
+                <PersonalStartEndTime timeInfo={todo.startTimeInfo} />
               </TableCell>
               <TableCell>
-                <StartEndTime timeInfo={todo.endTimeInfo} />
+                <PersonalStartEndTime timeInfo={todo.endTimeInfo} />
               </TableCell>
               <TableCell>{renderButtons(todo)}</TableCell>
             </TableRow>
