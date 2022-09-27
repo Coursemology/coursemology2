@@ -108,7 +108,7 @@ class VideoPlayer extends Component {
 
   componentWillUnmount() {
     if (this.timer) {
-      this.clearInterval(this.timer);
+      clearInterval(this.timer);
       this.props.onUnmount();
       window.removeEventListener('beforeunload', this.props.onUnmount);
     }
