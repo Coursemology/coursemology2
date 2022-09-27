@@ -29,7 +29,7 @@ RSpec.feature 'System: Administration: Courses', js: true do
         courses.each do |course|
           expect(page).to have_selector('p.course_title', text: course.title)
           expect(page).
-            to have_link(nil, href: "/courses/#{course.id}")
+            to have_link(nil, href: "//#{course.instance.host}/courses/#{course.id}")
         end
       end
 
@@ -41,7 +41,7 @@ RSpec.feature 'System: Administration: Courses', js: true do
 
         find(:xpath, '//*[@id="system-admin-component"]/div[1]/div[4]/div[2]/div[2]/p[2]/button').click
         expect(page).to have_selector('p.course_title', text: active_course.title)
-        expect(page).to have_link(nil, href: "/courses/#{active_course.id}")
+        expect(page).to have_link(nil, href: "//#{active_course.instance.host}/courses/#{active_course.id}")
 
         expect(page).not_to have_selector('p.course_title', text: inactive_course.title)
       end

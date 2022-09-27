@@ -24,7 +24,7 @@ RSpec.feature 'System: Administration: Instance: Courses', js: true do
         courses.each do |course|
           expect(page).to have_selector('p.course_title', text: course.title)
           expect(page).
-            to have_link(nil, href: "/courses/#{course.id}")
+            to have_link(nil, href: "//#{course.instance.host}/courses/#{course.id}")
 
           # It shows and only shows the owners
           course.course_users.owner.each do |course_user|
