@@ -12,7 +12,7 @@ if request
     json.role request.role
     json.organization request.organization
     json.designation request.designation
-    json.reason format_html(request.reason)
+    json.reason format_ckeditor_rich_text(request.reason)
   end
 end
 
