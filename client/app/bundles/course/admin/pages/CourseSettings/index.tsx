@@ -48,7 +48,7 @@ const CourseSettings = (): JSX.Element => {
   const uploadCourseLogo = (file: File, onSuccess: () => void): void => {
     toast
       .promise(updateCourseLogo(file), {
-        pending: 'Uploading your new logo...',
+        pending: t(translations.uploadingLogo),
         success: t(translations.courseLogoUpdated),
       })
       .then((newData) => {
