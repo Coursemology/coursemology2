@@ -10,13 +10,14 @@ class Course::Assessment::Submission::ForceSubmittingJob < ApplicationJob
   # Performs the force submitting job.
   #
   # @param [Course::Assessment] assessment The assessment of which the submissions are to be force submitted.
+  # @param [Array<Integer>] user_ids Ids of users for their submissions to be submitted.
   # @param [Array<Integer>] user_ids_without_submission User Ids who have not created any submission.
   # @param [User] submitter The user object who would be submitting the submission.
-  def perform_tracked(assessment, user_ids_without_submission, submitter)
+  def perform_tracked(assessment, user_ids, user_ids_without_submission, submitter)
     instance = Course.unscoped { assessment.course.instance }
 
     ActsAsTenant.with_tenant(instance) do
-      force_create_and_submit_submissions(assessment, user_ids_without_submission, submitter)
+      force_create_and_submit_submissions(assessment, user_ids, user_ids_without_submission, submitter)
     end
 
     redirect_to course_assessment_submissions_path(assessment.course, assessment)
@@ -27,17 +28,18 @@ class Course::Assessment::Submission::ForceSubmittingJob < ApplicationJob
   # Force creates unattempted submissions and submits all attempting submissions for a given assessment.
   #
   # @param [Course::Assessment] assessment The assessment of which the submissions are to be force submitted.
+  # @param [Array<Integer>] user_ids Ids of users for their submissions to be submitted.
   # @param [Array<Integer>] user_ids_without_submission Ids of users who have not created any submission.
   # @param [User] submitter The user object who would be force submitting the submission.
-  def force_create_and_submit_submissions(assessment, user_ids_without_submission, submitter)
+  def force_create_and_submit_submissions(assessment, user_ids, user_ids_without_submission, submitter)
     User.with_stamper(submitter) do
       ActiveRecord::Base.transaction do
         user_ids_without_submission.each do |user|
           course_user = assessment.course.course_users.find_by(user: user)
           create_submission(assessment, course_user)
         end
-
-        assessment.submissions.with_attempting_state.each do |submission|
+        submissions_to_be_submitted = assessment.submissions.by_users(user_ids).with_attempting_state
+        submissions_to_be_submitted.each do |submission|
           submission.update!('finalise' => 'true')
           grade_submission(assessment, submission)
         end
@@ -55,7 +57,9 @@ class Course::Assessment::Submission::ForceSubmittingJob < ApplicationJob
     assessment.submissions.new(creator: course_user.user)
     success = assessment.create_new_submission(submission, course_user)
 
-    submission.create_new_answers if success
+    raise ActiveRecord::Rollback unless success
+
+    submission.create_new_answers
   end
 
   # Force submit and grade all unsubmitted submissions. For autograded assessment, the submission will be graded.
