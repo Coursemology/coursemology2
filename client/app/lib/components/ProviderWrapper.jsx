@@ -28,7 +28,7 @@ const propTypes = {
     getState: PropTypes.func.isRequired,
   }),
   persistor: PropTypes.object,
-  children: PropTypes.element.isRequired,
+  children: PropTypes.node.isRequired,
 };
 
 const tailwindConfig = resolveConfig(tailwindUserConfig);
@@ -129,17 +129,7 @@ const ProviderWrapper = ({ store, persistor, children }) => {
   let providers = (
     <>
       {children}
-      <ToastContainer
-        position="bottom-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+      <ToastContainer position="bottom-center" />
     </>
   );
 
