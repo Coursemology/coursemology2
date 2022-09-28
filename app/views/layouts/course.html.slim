@@ -28,7 +28,7 @@
               h4#admin-header-sidebar = t('.administration')
               = sidebar_items(admin_sidebar_items)
 
-    div#root.col-lg-10.col-md-9.col-sm-8 class=page_class
+    div.col-lg-10.col-md-9.col-sm-8 class=page_class
       = yield
 
     - if current_course_user && UserNotification.next_unread_popup_for(current_course_user).present?

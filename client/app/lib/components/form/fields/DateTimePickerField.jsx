@@ -63,7 +63,6 @@ const FormDateTimePickerField = (props) => {
           label={label}
           mask="__-__-____ __:__"
           onCancel={() => null}
-          PopperProps={{ disablePortal: true }}
           {...custom}
           renderInput={(params) => (
             <TextField
