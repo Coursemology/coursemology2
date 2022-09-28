@@ -132,7 +132,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     attempting_submissions = @assessment.submissions.by_users(course_user_ids).with_attempting_state
     if !attempting_submissions.empty? || !user_ids_without_submission.empty?
       job = Course::Assessment::Submission::ForceSubmittingJob.
-            perform_later(@assessment, user_ids_without_submission, current_user).job
+            perform_later(@assessment, course_user_ids.pluck(:user_id), user_ids_without_submission, current_user).job
       respond_to do |format|
         format.html { redirect_to(job_path(job)) }
         format.json { render json: { redirect_url: job_path(job) } }
@@ -329,20 +329,20 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def course_user_ids # rubocop:disable Metrics/AbcSize
-    case params[:course_users]
-    when COURSE_USERS[:my_students]
-      current_course_user.my_students.without_phantom_users
-    when COURSE_USERS[:my_students_w_phantom]
-      current_course_user.my_students
-    when COURSE_USERS[:students_w_phantom]
-      @assessment.course.course_users.students
-    when COURSE_USERS[:staff]
-      @assessment.course.course_users.staff.without_phantom_users
-    when COURSE_USERS[:staff_w_phantom]
-      @assessment.course.course_users.staff
-    else
-      @assessment.course.course_users.students.without_phantom_users
-    end.select(:user_id)
+    @course_user_ids ||= case params[:course_users]
+                         when COURSE_USERS[:my_students]
+                           current_course_user.my_students.without_phantom_users
+                         when COURSE_USERS[:my_students_w_phantom]
+                           current_course_user.my_students
+                         when COURSE_USERS[:students_w_phantom]
+                           @assessment.course.course_users.students
+                         when COURSE_USERS[:staff]
+                           @assessment.course.course_users.staff.without_phantom_users
+                         when COURSE_USERS[:staff_w_phantom]
+                           @assessment.course.course_users.staff
+                         else
+                           @assessment.course.course_users.students.without_phantom_users
+                         end.select(:user_id)
   end
 
   def user_ids_without_submission
