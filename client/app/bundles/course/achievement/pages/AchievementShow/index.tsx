@@ -18,21 +18,6 @@ import {
 
 type Props = WrappedComponentProps;
 
-const styles = {
-  badge: {
-    maxHeight: 75,
-    maxWidth: 75,
-    marginRight: 16,
-  },
-  courseUserImage: {
-    maxHeight: 75,
-    maxWidth: 75,
-  },
-  description: {
-    maxWidth: 1200,
-  },
-};
-
 const translations = defineMessages({
   studentsWithAchievement: {
     id: 'course.achievement.show.studentsWithAchievement',
@@ -92,39 +77,32 @@ const AchievementShow: FC<Props> = (props) => {
       ) : (
         achievement && (
           <Grid container>
-            <Grid
-              item
-              xs={12}
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              style={{ marginBottom: 8 }}
-            >
-              <Tooltip
-                title={
-                  achievement.achievementStatus
-                    ? achievement.achievementStatus
-                    : ''
-                }
-              >
-                <img
-                  src={achievement.badge.url}
-                  alt={achievement.badge.name}
-                  style={styles.badge}
-                />
-              </Tooltip>
-              <div style={styles.description}>
-                <p
-                  style={{ whiteSpace: 'normal' }}
-                  dangerouslySetInnerHTML={{ __html: achievement.description }}
+            <Grid item xs={12} className="flex justify-center">
+              <div className="flex max-w-7xl items-center space-x-8 p-8">
+                <Tooltip title={achievement.achievementStatus ?? ''}>
+                  <img
+                    src={achievement.badge.url}
+                    alt={achievement.badge.name}
+                    className="h-32"
+                  />
+                </Tooltip>
+
+                <Typography
+                  variant="body1"
+                  className="whitespace-normal"
+                  dangerouslySetInnerHTML={{
+                    __html: achievement.description,
+                  }}
                 />
               </div>
             </Grid>
+
             <Grid item xs={12} display="flex" justifyContent="center">
               <Typography variant="h5">
                 {intl.formatMessage(translations.studentsWithAchievement)}
               </Typography>
             </Grid>
+
             {achievement.achievementUsers.map((courseUser) => (
               <>
                 {courseUser.obtainedAt !== null && (
