@@ -4,7 +4,7 @@ json.currFolderInfo do
   json.id @folder.id
   json.parentId @folder.parent_id
   json.name @folder.root? ? component.settings.title : @folder.name
-  json.description @folder.description
+  json.description format_ckeditor_rich_text(@folder.description)
   json.isConcrete @folder.concrete?
   json.startAt @folder.start_at
   json.endAt @folder.end_at
@@ -13,7 +13,7 @@ end
 json.subfolders @subfolders do |subfolder|
   json.id subfolder.id
   json.name subfolder.name
-  json.description subfolder.description
+  json.description format_ckeditor_rich_text(subfolder.description)
   json.itemCount subfolder.material_count + subfolder.children_count
   json.updatedAt subfolder.updated_at
   json.startAt subfolder.start_at
@@ -32,7 +32,7 @@ end
 json.materials @folder.materials.includes(:updater) do |material|
   json.id material.id
   json.name material.name
-  json.description material.description
+  json.description format_ckeditor_rich_text(material.description)
   json.updatedAt material.updated_at
 
   updater = material.updater

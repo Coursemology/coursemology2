@@ -2,7 +2,7 @@
 
 json.id announcement.id
 json.title announcement.title
-json.content announcement.content
+json.content format_ckeditor_rich_text(announcement.content)
 json.startTime announcement.start_at
 json.endTime announcement.end_at
 

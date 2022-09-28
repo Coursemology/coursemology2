@@ -2,7 +2,7 @@
 
 json.id achievement.id
 json.title achievement.title
-json.description achievement.description
+json.description format_ckeditor_rich_text(achievement.description)
 json.badge do
   json.name achievement[:badge]
   if can?(:display_badge, achievement)

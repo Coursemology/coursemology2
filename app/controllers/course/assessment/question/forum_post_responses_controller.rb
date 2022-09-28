@@ -17,7 +17,7 @@ class Course::Assessment::Question::ForumPostResponsesController < Course::Asses
   end
 
   def edit
-    @forum_post_response_question.description = helpers.format_html(@forum_post_response_question.description)
+    @forum_post_response_question.description = helpers.format_ckeditor_rich_text(@forum_post_response_question.description)
   end
 
   def update

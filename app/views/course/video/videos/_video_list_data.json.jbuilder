@@ -6,7 +6,7 @@ can_manage = can?(:manage, video)
 json.id video.id
 json.tabId video.tab_id
 json.title video.title
-json.description video.description
+json.description format_ckeditor_rich_text(video.description)
 json.url video.url
 json.published video.published
 json.hasPersonalTimes video.has_personal_times?
