@@ -24,13 +24,6 @@ import translations, {
   settingDescriptions,
 } from './translations.intl';
 
-const styles = {
-  wrapText: {
-    whiteSpace: 'normal',
-    wordWrap: 'break-word',
-  },
-};
-
 class NotificationSettings extends Component {
   constructor(props) {
     super(props);
@@ -163,7 +156,7 @@ class NotificationSettings extends Component {
       >
         <TableCell colSpan={1}>{componentTitle}</TableCell>
         <TableCell colSpan={2}>{settingTitle}</TableCell>
-        <TableCell colSpan={6} style={styles.wrapText}>
+        <TableCell colSpan={6} className="whitespace-normal break-words">
           {settingDescription}
         </TableCell>
         <TableCell>
