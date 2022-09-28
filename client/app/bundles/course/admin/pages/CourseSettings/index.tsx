@@ -5,7 +5,7 @@ import { CourseInfo } from 'types/course/admin/course';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
-import suspend from 'lib/hooks/suspended';
+import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 import { FormEmitter } from 'lib/components/form/Form';
 import CourseSettingsForm from './CourseSettingsForm';
 import {
@@ -18,12 +18,9 @@ import {
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 import translations from './translations';
 
-const settingsResource = suspend(fetchCourseSettings());
-const timeZonesResource = suspend(fetchTimeZones());
-
 const CourseSettings = (): JSX.Element => {
-  const settings = settingsResource.read();
-  const timeZones = timeZonesResource.read();
+  const { data: settings } = useSuspendedFetch(fetchCourseSettings);
+  const { data: timeZones } = useSuspendedFetch(fetchTimeZones);
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
@@ -48,11 +45,16 @@ const CourseSettings = (): JSX.Element => {
       });
   };
 
-  const uploadCourseLogo = (files: File[]): void => {
-    const file = files[0];
-    updateCourseLogo(file)
+  const uploadCourseLogo = (file: File, onSuccess: () => void): void => {
+    toast
+      .promise(updateCourseLogo(file), {
+        pending: 'Uploading your new logo...',
+        success: t(translations.courseLogoUpdated),
+      })
       .then((newData) => {
-        updateFormAndToast(newData, t(translations.courseLogoUpdated));
+        if (!newData) return;
+        form?.resetTo?.(newData);
+        onSuccess();
       })
       .catch((error: Error) => {
         toast.error(error.message);
