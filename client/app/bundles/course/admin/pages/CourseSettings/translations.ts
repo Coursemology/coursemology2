@@ -56,7 +56,19 @@ export default defineMessages({
   },
   uploadANewImage: {
     id: 'course.admin.course.uploadANewImage',
-    defaultMessage: 'Upload a new image',
+    defaultMessage: 'Choose a new image',
+  },
+  uploadImage: {
+    id: 'course.admin.course.uploadImage',
+    defaultMessage: 'Upload image',
+  },
+  uploadingLogo: {
+    id: 'course.admin.course.uploadingLogo',
+    defaultMessage: 'Uploading your new logo...',
+  },
+  clearChanges: {
+    id: 'course.admin.course.clearChanges',
+    defaultMessage: 'Clear changes',
   },
   imageFormatsInfo: {
     id: 'course.admin.course.imageFormatsInfo',
