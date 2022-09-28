@@ -30,12 +30,13 @@ interface CourseSettingsFormProps extends Emits<FormEmitter> {
   timeZones: TimeZones;
   onSubmit: (data: CourseInfo) => void;
   onDeleteCourse: () => void;
-  onUploadCourseLogo: (files: File[]) => void;
+  onUploadCourseLogo: (file: File, onSuccess: () => void) => void;
 }
 
 const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
   const { t } = useTranslation();
   const [deletingCourse, setDeletingCourse] = useState(false);
+  const [stagedLogo, setStagedLogo] = useState<File>();
 
   const closeDeleteCoursePrompt = (): void => setDeletingCourse(false);
 
@@ -48,16 +49,22 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
     [],
   );
 
-  const uploadCourseLogo: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const stageCourseLogo: ChangeEventHandler<HTMLInputElement> = (e) => {
     e.preventDefault();
 
     const input = e.target;
     const files = input.files;
-    if (!files) return;
+    if (!files || files.length <= 0) return;
 
-    props.onUploadCourseLogo?.(Array.from(files));
+    const file = Array.from(files)[0];
+    setStagedLogo(file);
 
     input.value = '';
+  };
+
+  const uploadCourseLogo = (): void => {
+    if (!stagedLogo) return;
+    props.onUploadCourseLogo?.(stagedLogo, () => setStagedLogo(undefined));
   };
 
   return (
@@ -105,21 +112,37 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
               contentClassName="flex flex-col items-start"
             >
               <img
-                src={watch('logo')}
+                src={
+                  stagedLogo ? URL.createObjectURL(stagedLogo) : watch('logo')
+                }
                 className="mb-8 h-48 w-48"
                 alt={t(translations.courseLogo)}
               />
 
-              <Button variant="outlined" component="label" className="mb-4">
-                {t(translations.uploadANewImage)}
-                <input
-                  hidden
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={uploadCourseLogo}
-                />
-              </Button>
+              <div className="mb-4 flex flex-col items-start space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
+                <Button variant="outlined" component="label">
+                  {t(translations.uploadANewImage)}
+                  <input
+                    hidden
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={stageCourseLogo}
+                  />
+                </Button>
+
+                {stagedLogo && (
+                  <>
+                    <Button variant="outlined" onClick={uploadCourseLogo}>
+                      {t(translations.uploadImage)}
+                    </Button>
+
+                    <Button onClick={(): void => setStagedLogo(undefined)}>
+                      {t(translations.clearChanges)}
+                    </Button>
+                  </>
+                )}
+              </div>
 
               <InfoLabel label={t(translations.imageFormatsInfo)} />
             </Subsection>

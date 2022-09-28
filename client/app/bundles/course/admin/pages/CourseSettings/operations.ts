@@ -28,7 +28,6 @@ export const updateCourseSettings = async (
       enrollable: data.enrollable,
       start_at: data.startAt,
       end_at: data.endAt,
-      logo: data.logo,
       gamified: data.gamified,
       show_personalized_timeline_features:
         data.showPersonalizedTimelineFeatures,
