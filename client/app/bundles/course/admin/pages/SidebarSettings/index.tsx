@@ -2,15 +2,13 @@ import { toast } from 'react-toastify';
 
 import { SidebarItems } from 'types/course/admin/sidebar';
 import useTranslation from 'lib/hooks/useTranslation';
-import suspend from 'lib/hooks/suspended';
+import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 import SidebarSettingsForm from './SidebarSettingsForm';
 import { fetchSidebarItems, updateSidebarItems } from './operations';
 import translations from './translations';
 
-const resource = suspend(fetchSidebarItems());
-
 const SidebarSettings = (): JSX.Element => {
-  const settings = resource.read();
+  const { data: settings } = useSuspendedFetch(fetchSidebarItems);
   const { t } = useTranslation();
 
   const submit = (

@@ -5,14 +5,12 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import CourseAPI from 'api/course';
 import { CourseAdminOptions } from 'types/course/admin/course';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import suspend from 'lib/hooks/suspended';
+import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 
 const fetchOptions = async (): Promise<CourseAdminOptions> => {
   const response = await CourseAPI.admin.course.options();
   return response.data;
 };
-
-const resource = suspend(fetchOptions());
 
 const OptionsReloaderContext = createContext(() => {});
 
@@ -20,7 +18,8 @@ export const useOptionsReloader = (): (() => void) =>
   useContext(OptionsReloaderContext);
 
 const SettingsNavigationLayout = (): JSX.Element => {
-  const [options, setOptions] = useState(resource.read());
+  const { data: settings } = useSuspendedFetch(fetchOptions);
+  const [options, setOptions] = useState(settings);
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -45,7 +44,9 @@ const SettingsNavigationLayout = (): JSX.Element => {
           ))}
         </div>
 
-        <Outlet />
+        <Suspense fallback={<LoadingIndicator />}>
+          <Outlet />
+        </Suspense>
       </div>
     </OptionsReloaderContext.Provider>
   );

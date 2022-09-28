@@ -5,15 +5,13 @@ import { ForumsSettingsData } from 'types/course/admin/forums';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
-import suspend from 'lib/hooks/suspended';
+import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 import ForumsSettingsForm from './ForumsSettingsForm';
 import { fetchForumsSettings, updateForumsSettings } from './operations';
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 
-const resource = suspend(fetchForumsSettings());
-
 const ForumsSettings = (): JSX.Element => {
-  const settings = resource.read();
+  const { data: settings } = useSuspendedFetch(fetchForumsSettings);
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();

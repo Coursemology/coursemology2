@@ -5,15 +5,13 @@ import { CommentsSettingsData } from 'types/course/admin/comments';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
-import suspend from 'lib/hooks/suspended';
+import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 import CommentsSettingsForm from './CommentsSettingsForm';
 import { fetchCommentsSettings, updateCommentsSettings } from './operations';
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 
-const resource = suspend(fetchCommentsSettings());
-
 const CommentsSettings = (): JSX.Element => {
-  const settings = resource.read();
+  const { data: settings } = useSuspendedFetch(fetchCommentsSettings);
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
