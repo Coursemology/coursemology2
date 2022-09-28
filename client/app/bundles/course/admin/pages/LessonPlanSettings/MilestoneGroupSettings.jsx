@@ -68,19 +68,19 @@ class MilestoneGroupSettings extends Component {
         >
           <FormControlLabel
             key="all"
-            control={<Radio style={{ padding: 0, paddingLeft: 12 }} />}
+            control={<Radio className="p-0 px-4" />}
             value="all"
             label={<FormattedMessage {...translations.expandAll} />}
           />
           <FormControlLabel
             key="none"
-            control={<Radio style={{ padding: 0, paddingLeft: 12 }} />}
+            control={<Radio className="p-0 px-4" />}
             value="none"
             label={<FormattedMessage {...translations.expandNone} />}
           />
           <FormControlLabel
             key="current"
-            control={<Radio style={{ padding: 0, paddingLeft: 12 }} />}
+            control={<Radio className="p-0 px-4" />}
             value="current"
             label={<FormattedMessage {...translations.expandCurrent} />}
           />
