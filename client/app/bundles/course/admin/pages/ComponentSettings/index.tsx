@@ -3,15 +3,13 @@ import { toast } from 'react-toastify';
 import { CourseComponents } from 'types/course/admin/components';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
-import suspend from 'lib/hooks/suspended';
+import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 import ComponentSettingsForm from './ComponentSettingsForm';
 import { fetchComponentSettings, updateComponentSettings } from './operations';
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 
-const resource = suspend(fetchComponentSettings());
-
 const ComponentSettings = (): JSX.Element => {
-  const settings = resource.read();
+  const { data: settings } = useSuspendedFetch(fetchComponentSettings);
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
 

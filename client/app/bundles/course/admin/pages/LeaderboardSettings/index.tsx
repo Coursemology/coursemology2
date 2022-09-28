@@ -5,7 +5,7 @@ import { LeaderboardSettingsData } from 'types/course/admin/leaderboard';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
-import suspend from 'lib/hooks/suspended';
+import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 import LeaderboardSettingsForm from './LeaderboardSettingsForm';
 import {
   fetchLeaderboardSettings,
@@ -13,10 +13,8 @@ import {
 } from './operations';
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 
-const resource = suspend(fetchLeaderboardSettings());
-
 const LeaderboardSettings = (): JSX.Element => {
-  const settings = resource.read();
+  const { data: settings } = useSuspendedFetch(fetchLeaderboardSettings);
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();

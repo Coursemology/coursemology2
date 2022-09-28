@@ -9,7 +9,7 @@ import {
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
-import suspend from 'lib/hooks/suspended';
+import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 import AssessmentSettingsForm from './AssessmentSettingsForm';
 import {
   updateAssessmentSettings,
@@ -24,7 +24,9 @@ import commonTranslations from '../../translations';
 const resource = suspend(fetchAssessmentsSettings());
 
 const AssessmentSettings = (): JSX.Element => {
-  const settings = resource.read();
+  const { data: settings, update } = useSuspendedFetch(
+    fetchAssessmentsSettings,
+  );
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
 
@@ -33,6 +35,7 @@ const AssessmentSettings = (): JSX.Element => {
     message: string,
   ): void => {
     if (!data) return;
+    update(data);
     form?.resetTo?.(data);
     toast.success(message);
   };

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { VideosSettingsData, VideosTab } from 'types/course/admin/videos';
+import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
-import suspend from 'lib/hooks/suspended';
 import VideosSettingsForm from './VideosSettingsForm';
 import {
   createTab,
@@ -16,10 +16,9 @@ import {
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 import commonTranslations from '../../translations';
 
-const resource = suspend(fetchVideosSettings());
-
 const VideosSettings = (): JSX.Element => {
-  const settings = resource.read();
+  const { data: settings } = useSuspendedFetch(fetchVideosSettings);
+
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
