@@ -1,4 +1,5 @@
 import { render } from 'react-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import Level from 'course/level/pages/Level';
@@ -12,10 +13,19 @@ $(() => {
 
     render(
       <ProviderWrapper store={store}>
-        <div>
-          <NotificationPopup />
-          <Level />
-        </div>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/courses/:courseId/levels"
+              element={
+                <div>
+                  <NotificationPopup />
+                  <Level />
+                </div>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
       </ProviderWrapper>,
       mountNode,
     );
