@@ -6,10 +6,9 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
   before_action :add_group_breadcrumb
 
   def index
-    if viewable_group_categories.exists?
-      redirect_to course_group_category_path(current_course, viewable_group_categories.ordered_by_name.first)
-    else
-      render 'index'
+    respond_to do |format|
+      format.html
+      format.json
     end
   end
 

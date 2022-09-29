@@ -344,6 +344,7 @@ const GroupUserManager = ({
     selectedStaff,
     originalMemberMap,
   ]);
+  const [isDirty, setIsDirty] = useState(false);
 
   return (
     <>
@@ -418,6 +419,7 @@ const GroupUserManager = ({
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.dialogTitle)}
         expectedDialogTypes={[dialogTypes.UPDATE_GROUP]}
+        skipConfirmation={!isDirty}
       >
         <NameDescriptionForm
           onSubmit={onFormSubmit}
@@ -425,6 +427,9 @@ const GroupUserManager = ({
             name: group.name,
             description: group.description,
           }}
+          emitsVia={(nameDescriptionForm) =>
+            setIsDirty(nameDescriptionForm.isDirty)
+          }
         />
       </GroupFormDialog>
       <ConfirmationDialog

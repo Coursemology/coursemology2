@@ -1,8 +1,1 @@
-= page_header do
-  - if can?(:create, Course::GroupCategory.new(course: current_course))
-    div.pull-right
-      div.new-btn
-
-= display_groups_tabs
-
-#course-group-show-component data="#{{ group_category_id: @group_category.id }.to_json}"
+#course-group-component

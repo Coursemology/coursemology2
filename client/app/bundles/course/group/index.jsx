@@ -1,51 +1,27 @@
 import { render } from 'react-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import storeCreator from './store';
 import GroupIndex from './pages/GroupIndex';
 import GroupShow from './pages/GroupShow';
-import GroupNew from './pages/GroupNew';
 
 $(() => {
-  const categoryShowMountNode = document.getElementById(
-    'course-group-show-component',
-  );
-  const categoryIndexMountNode = document.getElementById(
-    'course-group-index-component',
-  );
-  const newButtonMountNode = $('.new-btn')[0];
+  const mountNode = document.getElementById('course-group-component');
 
-  let store;
-  if (categoryShowMountNode || newButtonMountNode) {
-    store = storeCreator();
-  }
+  const store = storeCreator();
 
-  if (categoryShowMountNode) {
-    const data = categoryShowMountNode.getAttribute('data');
-    const attributes = JSON.parse(data);
-
+  if (mountNode) {
     render(
       <ProviderWrapper store={store}>
-        <GroupShow groupCategoryId={attributes.group_category_id} />
+        <BrowserRouter>
+          <Routes>
+            <Route path="courses/:courseId/groups" element={<GroupIndex />}>
+              <Route path=":groupCategoryId" element={<GroupShow />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
       </ProviderWrapper>,
-      categoryShowMountNode,
-    );
-  }
-
-  if (categoryIndexMountNode) {
-    render(
-      <ProviderWrapper>
-        <GroupIndex />
-      </ProviderWrapper>,
-      categoryIndexMountNode,
-    );
-  }
-
-  if (newButtonMountNode) {
-    render(
-      <ProviderWrapper store={store}>
-        <GroupNew />
-      </ProviderWrapper>,
-      newButtonMountNode,
+      mountNode,
     );
   }
 });
