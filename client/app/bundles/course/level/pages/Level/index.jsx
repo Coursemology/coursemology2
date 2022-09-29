@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 
 import {
@@ -25,6 +24,7 @@ import {
   TableRow,
 } from '@mui/material';
 import LevelRow from 'course/level/components/LevelRow';
+import PageHeader from 'lib/components/pages/PageHeader';
 
 const translations = defineMessages({
   levelHeader: {
@@ -216,8 +216,8 @@ class Level extends Component {
 
   render() {
     return (
-      <div>
-        <TitleBar
+      <>
+        <PageHeader
           title={
             <FormattedMessage
               {...defaultComponentTitles.course_levels_component}
@@ -225,7 +225,7 @@ class Level extends Component {
           }
         />
         {this.props.isLoading ? <LoadingIndicator /> : this.renderBody()}
-      </div>
+      </>
     );
   }
 }

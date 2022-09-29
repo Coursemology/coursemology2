@@ -1,15 +1,13 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Routes, Route, useNavigate, useParams } from 'react-router-dom';
-import { IconButton } from '@mui/material';
-import ArrowBack from '@mui/icons-material/ArrowBack';
-import TitleBar from 'lib/components/TitleBar';
+import { Routes, Route, useParams } from 'react-router-dom';
 import { surveyShape } from 'course/survey/propTypes';
 import SurveyShow from 'course/survey/pages/SurveyShow';
 import SurveyResults from 'course/survey/pages/SurveyResults';
 import ResponseShow from 'course/survey/pages/ResponseShow';
 import ResponseEdit from 'course/survey/pages/ResponseEdit';
 import ResponseIndex from 'course/survey/pages/ResponseIndex';
+import PageHeader from 'lib/components/pages/PageHeader';
 import AdminMenu from './AdminMenu';
 
 const backLocations = (courseId, surveyId, Page) => {
@@ -27,7 +25,6 @@ const backLocations = (courseId, surveyId, Page) => {
 
 const PageWithTitleBar = (props) => {
   const { page, survey, surveyId, courseId } = props;
-  const navigate = useNavigate();
 
   let pageToRender = <></>;
 
@@ -54,18 +51,14 @@ const PageWithTitleBar = (props) => {
   return (
     <>
       {survey && (
-        <TitleBar
+        <PageHeader
           title={survey.title}
-          iconElementRight={
-            surveyId ? <AdminMenu {...{ survey, surveyId }} /> : null
+          toolbars={
+            surveyId
+              ? [<AdminMenu key="admin-menu" {...{ survey, surveyId }} />]
+              : null
           }
-          iconElementLeft={
-            <IconButton
-              onClick={() => navigate(backLocations(courseId, surveyId, page))}
-            >
-              <ArrowBack htmlColor="white" />
-            </IconButton>
-          }
+          returnLink={backLocations(courseId, surveyId, page)}
         />
       )}
       {pageToRender}

@@ -9,7 +9,6 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material';
-import TitleBar from 'lib/components/TitleBar';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import DateTimePicker from 'lib/components/fields/DateTimePicker';
 import {
@@ -24,6 +23,7 @@ import {
 } from 'course/duplication/propTypes';
 import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 
+import PageHeader from 'lib/components/pages/PageHeader';
 import ItemsSelector from './ItemsSelector';
 import DuplicateAllButton from './DuplicateAllButton';
 import DestinationCourseSelector from './DestinationCourseSelector';
@@ -273,12 +273,12 @@ class Duplication extends Component {
 
   render() {
     return (
-      <div>
-        <TitleBar
+      <>
+        <PageHeader
           title={<FormattedMessage {...translations.duplicateData} />}
         />
         {this.renderBody()}
-      </div>
+      </>
     );
   }
 }

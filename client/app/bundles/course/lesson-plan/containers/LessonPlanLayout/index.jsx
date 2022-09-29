@@ -7,7 +7,6 @@ import { ListSubheader } from '@mui/material';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
-import TitleBar from 'lib/components/TitleBar';
 import { lessonPlanTypesGroups } from 'lib/types';
 import { fetchLessonPlan } from 'course/lesson-plan/actions';
 import LessonPlanShow from 'course/lesson-plan/pages/LessonPlanShow';
@@ -16,6 +15,7 @@ import LessonPlanFilter from 'course/lesson-plan/containers/LessonPlanFilter';
 import LessonPlanNav from 'course/lesson-plan/containers/LessonPlanNav';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
 import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
+import PageHeader from 'lib/components/pages/PageHeader';
 
 const translations = defineMessages({
   empty: {
@@ -81,7 +81,7 @@ class LessonPlanLayout extends Component {
   render() {
     return (
       <div style={styles.mainBody}>
-        <TitleBar title={<FormattedMessage {...translations.lessonPlan} />} />
+        <PageHeader title={<FormattedMessage {...translations.lessonPlan} />} />
         {this.renderBody()}
         <div style={styles.tools}>
           <LessonPlanNav />
