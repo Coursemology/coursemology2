@@ -10,28 +10,12 @@ import {
 import useTranslation from 'lib/hooks/useTranslation';
 import Category from './Category';
 import translations from '../translations';
+import { useAssessmentSettings } from '../AssessmentSettingsContext';
+import { sortCategories } from './utils';
 
 interface Props {
   categories: AssessmentCategory[];
   onUpdate?: (categories: AssessmentCategory[]) => void;
-  onDeleteCategory?: (
-    id: AssessmentCategory['id'],
-    title: AssessmentCategory['title'],
-  ) => void;
-  onDeleteTabInCategory?: (
-    id: AssessmentCategory['id'],
-    tabId: AssessmentTab['id'],
-    title: AssessmentTab['title'],
-  ) => void;
-  onCreateCategory?: (
-    title: AssessmentCategory['title'],
-    weight: AssessmentCategory['weight'],
-  ) => void;
-  onCreateTabInCategory?: (
-    id: AssessmentCategory['id'],
-    title: AssessmentTab['title'],
-    weight: AssessmentTab['weight'],
-  ) => void;
 }
 
 export const BOARD = 'board';
@@ -40,6 +24,7 @@ export const TABS = 'tabs';
 const AssessmentCategoriesManager = (props: Props): JSX.Element => {
   const { categories } = props;
   const { t } = useTranslation();
+  const { createCategory } = useAssessmentSettings();
 
   const renameCategory = (
     index: number,
@@ -63,23 +48,11 @@ const AssessmentCategoriesManager = (props: Props): JSX.Element => {
     );
 
   const setCategories = (unsortedCategories: AssessmentCategory[]): void => {
-    const sortedCategories = unsortedCategories.map((category, index) => ({
-      id: category.id,
-      title: category.title,
-      weight: index + 1,
-      tabs: category.tabs.map((tab, tabIndex) => ({
-        id: tab.id,
-        title: tab.title,
-        weight: tabIndex + 1,
-        categoryId: tab.categoryId,
-      })),
-    }));
-
-    props.onUpdate?.(sortedCategories);
+    props.onUpdate?.(sortCategories(unsortedCategories));
   };
 
-  const createCategory = (): void =>
-    props.onCreateCategory?.(
+  const handleCreateCategory = (): void =>
+    createCategory?.(
       t(translations.newCategoryDefaultName),
       categories[categories.length - 1].weight + 1,
     );
@@ -111,11 +84,11 @@ const AssessmentCategoriesManager = (props: Props): JSX.Element => {
           const destinationCategoryIndex = destination.droppableId.match(/\d+/);
           if (!sourceCategoryIndex || !destinationCategoryIndex) return;
 
-          const srcid = parseInt(sourceCategoryIndex[0], 10);
-          const destid = parseInt(destinationCategoryIndex[0], 10);
+          const sourceId = parseInt(sourceCategoryIndex[0], 10);
+          const sourceCategory = draft[sourceId];
 
-          const sourceCategory = draft[srcid];
-          const destinationCategory = draft[destid];
+          const destinationId = parseInt(destinationCategoryIndex[0], 10);
+          const destinationCategory = draft[destinationId];
 
           const [tab] = sourceCategory.tabs.splice(source.index, 1);
           destinationCategory.tabs.splice(destination.index, 0, tab);
@@ -139,17 +112,15 @@ const AssessmentCategoriesManager = (props: Props): JSX.Element => {
         key={category.id}
         category={category}
         index={index}
-        onDelete={props.onDeleteCategory}
-        onDeleteTab={props.onDeleteTabInCategory}
         onRename={renameCategory}
         onRenameTab={renameTabInCategory}
-        onCreateTab={props.onCreateTabInCategory}
+        stationary={categories.length <= 1}
       />
     ));
 
   return (
     <>
-      <Button startIcon={<Add />} onClick={createCategory}>
+      <Button startIcon={<Add />} onClick={handleCreateCategory}>
         {t(translations.addACategory)}
       </Button>
 

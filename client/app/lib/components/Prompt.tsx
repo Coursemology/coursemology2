@@ -21,6 +21,7 @@ interface PromptProps {
   onPrimaryAction?: () => void;
   cancel?: string;
   onCancel?: () => void;
+  secondaryAction?: ReactNode;
 }
 
 const Prompt = (props: PromptProps): JSX.Element => {
@@ -40,17 +41,21 @@ const Prompt = (props: PromptProps): JSX.Element => {
         </DialogContent>
       )}
 
-      <DialogActions>
-        <Button onClick={props.onCancel}>
-          {props.cancel ?? t(formTranslations.cancel)}
-        </Button>
+      <DialogActions className="flex justify-between">
+        <div>{props.secondaryAction}</div>
 
-        <Button
-          color={props.primaryActionColor}
-          onClick={props.onPrimaryAction}
-        >
-          {props.primaryAction ?? t(formTranslations.ok)}
-        </Button>
+        <div>
+          <Button onClick={props.onCancel}>
+            {props.cancel ?? t(formTranslations.cancel)}
+          </Button>
+
+          <Button
+            color={props.primaryActionColor}
+            onClick={props.onPrimaryAction}
+          >
+            {props.primaryAction ?? t(formTranslations.ok)}
+          </Button>
+        </div>
       </DialogActions>
     </Dialog>
   );

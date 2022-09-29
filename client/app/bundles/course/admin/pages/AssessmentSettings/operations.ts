@@ -150,3 +150,16 @@ export const createTabInCategory = async (
     return undefined;
   }
 };
+
+export const moveAssessmentsToTab = (
+  assessmentIds: number[],
+  tabId: AssessmentTab['id'],
+): Promise<unknown[]> => {
+  const promises = assessmentIds.map((id) =>
+    CourseAPI.assessment.assessments.update(id, {
+      assessment: { tab_id: tabId },
+    }),
+  );
+
+  return Promise.all(promises);
+};
