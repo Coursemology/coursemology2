@@ -62,8 +62,7 @@ RSpec.feature 'Course: Duplication' do
 
           find('.items-selector-menu span span', text: 'Assessments').click
           find(:xpath, '//*[@id="course-duplication"]
-                        /div/div/div[2]/div[6]/div/div[2]/div[2]/label/span[1]', visible: false).click
-
+                        /div[1]/div[2]/div[6]/div/div[2]/div[2]/label/span[1]', visible: false).click
           click_on 'Duplicate Items'
           click_on 'Duplicate'
 
