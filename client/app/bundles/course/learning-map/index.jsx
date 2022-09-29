@@ -1,4 +1,5 @@
 import { render } from 'react-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import LearningMap from './containers/LearningMap';
 import storeCreator from './store';
@@ -10,7 +11,14 @@ $(() => {
   if (mountNode) {
     render(
       <ProviderWrapper {...{ store }}>
-        <LearningMap />
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/courses/:courseId/learning_map"
+              element={<LearningMap />}
+            />
+          </Routes>
+        </BrowserRouter>
       </ProviderWrapper>,
       mountNode,
     );
