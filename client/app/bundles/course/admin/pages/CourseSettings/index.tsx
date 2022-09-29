@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
-import { CourseInfo } from 'types/course/admin/course';
+import { CourseInfo, TimeZones } from 'types/course/admin/course';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
-import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 import { FormEmitter } from 'lib/components/form/Form';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import CourseSettingsForm from './CourseSettingsForm';
 import {
   deleteCourse,
@@ -19,11 +19,18 @@ import { useOptionsReloader } from '../../components/SettingsNavigation';
 import translations from './translations';
 
 const CourseSettings = (): JSX.Element => {
-  const { data: settings } = useSuspendedFetch(fetchCourseSettings);
-  const { data: timeZones } = useSuspendedFetch(fetchTimeZones);
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
+  const [settings, setSettings] = useState<CourseInfo>();
+  const [timeZones, setTimeZones] = useState<TimeZones>();
   const [form, setForm] = useState<FormEmitter>();
+
+  useEffect(() => {
+    fetchCourseSettings().then(setSettings);
+    fetchTimeZones().then(setTimeZones);
+  }, []);
+
+  if (!settings || !timeZones) return <LoadingIndicator />;
 
   const updateFormAndToast = (
     data: CourseInfo | undefined,
