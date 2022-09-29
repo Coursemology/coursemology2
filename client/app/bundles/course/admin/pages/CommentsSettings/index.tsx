@@ -1,20 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { CommentsSettingsData } from 'types/course/admin/comments';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
-import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import CommentsSettingsForm from './CommentsSettingsForm';
 import { fetchCommentsSettings, updateCommentsSettings } from './operations';
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 
 const CommentsSettings = (): JSX.Element => {
-  const { data: settings } = useSuspendedFetch(fetchCommentsSettings);
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
+  const [settings, setSettings] = useState<CommentsSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
+
+  useEffect(() => {
+    fetchCommentsSettings().then(setSettings);
+  }, []);
+
+  if (!settings) return <LoadingIndicator />;
 
   const handleSubmit = (data: CommentsSettingsData): void => {
     updateCommentsSettings(data)

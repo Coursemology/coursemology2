@@ -2,14 +2,21 @@ import { toast } from 'react-toastify';
 
 import { SidebarItems } from 'types/course/admin/sidebar';
 import useTranslation from 'lib/hooks/useTranslation';
-import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import { useState, useEffect } from 'react';
 import SidebarSettingsForm from './SidebarSettingsForm';
 import { fetchSidebarItems, updateSidebarItems } from './operations';
 import translations from './translations';
 
 const SidebarSettings = (): JSX.Element => {
-  const { data: settings } = useSuspendedFetch(fetchSidebarItems);
   const { t } = useTranslation();
+  const [settings, setSettings] = useState<SidebarItems>();
+
+  useEffect(() => {
+    fetchSidebarItems().then(setSettings);
+  }, []);
+
+  if (!settings) return <LoadingIndicator />;
 
   const submit = (
     data: SidebarItems,

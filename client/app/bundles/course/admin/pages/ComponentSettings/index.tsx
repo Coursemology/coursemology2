@@ -3,15 +3,22 @@ import { toast } from 'react-toastify';
 import { CourseComponents } from 'types/course/admin/components';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
-import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
+import { useState, useEffect } from 'react';
 import ComponentSettingsForm from './ComponentSettingsForm';
 import { fetchComponentSettings, updateComponentSettings } from './operations';
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 
 const ComponentSettings = (): JSX.Element => {
-  const { data: settings } = useSuspendedFetch(fetchComponentSettings);
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
+  const [settings, setSettings] = useState<CourseComponents>();
+
+  useEffect(() => {
+    fetchComponentSettings().then(setSettings);
+  }, []);
+
+  if (!settings) return <LoadingIndicator />;
 
   const submit = (
     components: CourseComponents,
