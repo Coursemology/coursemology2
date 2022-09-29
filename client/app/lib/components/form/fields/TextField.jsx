@@ -22,7 +22,7 @@ const FormTextField = (props) => {
     label,
     renderIf,
     multiline = false,
-    rows = 1,
+    rows,
     margins = true,
     enableDebouncing = false,
     helperText,
@@ -82,7 +82,7 @@ const FormTextField = (props) => {
       label={label}
       error={!!fieldState.error || !!helperText}
       multiline={multiline}
-      rows={rows}
+      {...(rows || null)}
       helperText={
         (fieldState.error && formatErrorMessage(fieldState.error.message)) ??
         helperText
