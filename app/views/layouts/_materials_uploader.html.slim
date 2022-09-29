@@ -1,5 +1,0 @@
-- folder = f.object.folder
-- unless folder.materials.empty?
-  div#uploaded-files data="#{folder.materials.map { |m| { url: course_material_folder_material_path(current_course, folder, m), name: format_inline_text(m.name), updated_at: m.updated_at } }.to_json}"
-
-= f.file_field :files_attributes, multiple: true
