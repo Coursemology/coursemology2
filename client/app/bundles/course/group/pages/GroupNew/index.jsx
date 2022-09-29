@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@mui/material';
@@ -32,6 +32,7 @@ const styles = {
 
 // Assumption: If the new button shows, it means that the user is able to create categories.
 const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
+  const [isDirty, setIsDirty] = useState(false);
   const onFormSubmit = useCallback(
     (data, setError) =>
       dispatch(
@@ -52,7 +53,9 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
   return (
     <>
       <Button
-        variant="contained"
+        className="new-group-category-button bg-white"
+        key="new-group-category-button"
+        variant="outlined"
         color="primary"
         disabled={isManagingGroups}
         onClick={handleOpen}
@@ -63,6 +66,7 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.new)}
         expectedDialogTypes={[dialogTypes.CREATE_CATEGORY]}
+        skipConfirmation={!isDirty}
       >
         <NameDescriptionForm
           onSubmit={onFormSubmit}
@@ -70,6 +74,9 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
             name: '',
             description: '',
           }}
+          emitsVia={(nameDescriptionForm) =>
+            setIsDirty(nameDescriptionForm.isDirty)
+          }
         />
       </GroupFormDialog>
       <NotificationPopup />

@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from 'course/survey/actions/sections';
@@ -21,6 +22,7 @@ const SectionFormDialogue = ({
   initialValues,
   onSubmit,
 }) => {
+  const [isDirty, setIsDirty] = useState(false);
   const { hideSectionForm } = bindActionCreators(actionCreators, dispatch);
 
   return (
@@ -28,11 +30,14 @@ const SectionFormDialogue = ({
       title={formTitle}
       open={visible}
       disabled={disabled}
-      skipConfirmation={false}
+      skipConfirmation={!isDirty}
       form="survey-section-form"
       hideForm={hideSectionForm}
     >
-      <SectionForm {...{ initialValues, onSubmit, disabled }} />
+      <SectionForm
+        {...{ initialValues, onSubmit, disabled }}
+        emitsVia={(sectionForm) => setIsDirty(sectionForm.isDirty)}
+      />
     </FormDialogue>
   );
 };
