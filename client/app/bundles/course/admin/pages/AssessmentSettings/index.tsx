@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { AssessmentSettingsData } from 'types/course/admin/assessments';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
-import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import AssessmentSettingsForm from './AssessmentSettingsForm';
 import {
   updateAssessmentSettings,
@@ -24,18 +24,22 @@ import {
 import translations from './translations';
 
 const AssessmentSettings = (): JSX.Element => {
-  const { data: settings, update } = useSuspendedFetch(
-    fetchAssessmentsSettings,
-  );
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
+  const [settings, setSettings] = useState<AssessmentSettingsData>();
+
+  useEffect(() => {
+    fetchAssessmentsSettings().then(setSettings);
+  }, []);
+
+  if (!settings) return <LoadingIndicator />;
 
   const updateFormAndToast = (
     data: AssessmentSettingsData | undefined,
     message: string,
   ): void => {
     if (!data) return;
-    update(data);
+    setSettings(data);
     form?.resetTo?.(data);
     toast.success(message);
   };

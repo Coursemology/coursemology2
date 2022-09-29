@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { AnnouncementsSettingsData } from 'types/course/admin/announcements';
 import translations from 'lib/translations/form';
 import useTranslation from 'lib/hooks/useTranslation';
-import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 import { FormEmitter } from 'lib/components/form/Form';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import AnnouncementsSettingsForm from './AnnouncementsSettingsForm';
 import {
   fetchAnnouncementsSettings,
@@ -14,10 +14,16 @@ import {
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 
 const AnnouncementsSettings = (): JSX.Element => {
-  const { data: settings } = useSuspendedFetch(fetchAnnouncementsSettings);
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
+  const [settings, setSettings] = useState<AnnouncementsSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
+
+  useEffect(() => {
+    fetchAnnouncementsSettings().then(setSettings);
+  }, []);
+
+  if (!settings) return <LoadingIndicator />;
 
   const submit = (data: AnnouncementsSettingsData): void => {
     updateAnnouncementsSettings(data)
