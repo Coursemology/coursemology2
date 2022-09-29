@@ -349,7 +349,6 @@ const GroupUserManager = ({
   return (
     <>
       <GroupCard
-        className="group-user-manager"
         title={group.name}
         subtitle={
           <FormattedMessage

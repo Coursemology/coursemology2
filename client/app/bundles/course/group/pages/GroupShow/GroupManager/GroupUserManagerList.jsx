@@ -90,7 +90,6 @@ const GroupUserManagerListItem = ({
 }) => (
   <ListItem
     button
-    className={showDropdown ? 'has-dropdown' : ''}
     disablePadding
     style={
       colour
@@ -113,7 +112,6 @@ const GroupUserManagerListItem = ({
     {showDropdown ? (
       <div style={styles.listItemWithDropdown}>
         <Select
-          className="group-user-manager-list-item-dropdown"
           onClick={() => {}}
           onChange={(event) => onChangeDropdown(event.target.value, user)}
           value={user.groupRole}
