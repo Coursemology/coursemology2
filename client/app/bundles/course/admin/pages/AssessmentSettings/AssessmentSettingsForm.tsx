@@ -1,11 +1,7 @@
 import { Controller } from 'react-hook-form';
 import { Emits } from 'react-emitter-factory';
 
-import {
-  AssessmentCategory,
-  AssessmentSettingsData,
-  AssessmentTab,
-} from 'types/course/admin/assessments';
+import { AssessmentSettingsData } from 'types/course/admin/assessments';
 import useTranslation from 'lib/hooks/useTranslation';
 import Section from 'lib/components/layouts/Section';
 import Subsection from 'lib/components/layouts/Subsection';
@@ -17,24 +13,6 @@ import translations from './translations';
 interface AssessmentsSettingsFormProps extends Emits<FormEmitter> {
   data: AssessmentSettingsData;
   onSubmit?: (data: AssessmentSettingsData) => void;
-  onDeleteCategory?: (
-    id: AssessmentCategory['id'],
-    title: AssessmentCategory['title'],
-  ) => void;
-  onDeleteTabInCategory?: (
-    id: AssessmentCategory['id'],
-    tabId: AssessmentTab['id'],
-    title: AssessmentTab['title'],
-  ) => void;
-  onCreateCategory?: (
-    title: AssessmentCategory['title'],
-    weight: AssessmentCategory['weight'],
-  ) => void;
-  onCreateTabInCategory?: (
-    id: AssessmentCategory['id'],
-    title: AssessmentTab['title'],
-    weight: AssessmentTab['weight'],
-  ) => void;
 }
 
 const AssessmentsSettingsForm = (
@@ -121,10 +99,6 @@ const AssessmentsSettingsForm = (
                 <AssessmentCategoriesManager
                   categories={field.value}
                   onUpdate={field.onChange}
-                  onDeleteCategory={props.onDeleteCategory}
-                  onDeleteTabInCategory={props.onDeleteTabInCategory}
-                  onCreateCategory={props.onCreateCategory}
-                  onCreateTabInCategory={props.onCreateTabInCategory}
                 />
               )}
             />
