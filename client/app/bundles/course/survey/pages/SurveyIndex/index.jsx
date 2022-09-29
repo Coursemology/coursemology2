@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { ListSubheader } from '@mui/material';
-import TitleBar from 'lib/components/TitleBar';
 import { fetchSurveys } from 'course/survey/actions/surveys';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import withRouter from 'lib/components/withRouter';
+import PageHeader from 'lib/components/pages/PageHeader';
 import SurveysTable from './SurveysTable';
 import NewSurveyButton from './NewSurveyButton';
 
@@ -49,7 +49,7 @@ class SurveyIndex extends Component {
   render() {
     return (
       <>
-        <TitleBar
+        <PageHeader
           title={<FormattedMessage {...surveyTranslations.surveys} />}
         />
         {this.renderBody()}
