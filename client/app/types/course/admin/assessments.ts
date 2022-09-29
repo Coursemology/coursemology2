@@ -11,6 +11,9 @@ export interface AssessmentCategory {
   title: string;
   weight: number;
   tabs: AssessmentTab[];
+  assessmentsCount: number;
+  assessmentsIds: number[];
+  topAssessmentsTitles: string[];
 }
 
 export interface AssessmentTab {
@@ -18,6 +21,10 @@ export interface AssessmentTab {
   title: string;
   weight: number;
   categoryId: AssessmentCategory['id'];
+  assessmentsCount: number;
+  assessmentsIds: number[];
+  topAssessmentsTitles: string[];
+  fullTabTitle?: string;
 }
 
 export interface AssessmentTabInCategoryPostData {

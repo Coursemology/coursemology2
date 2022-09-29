@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import { Button, Card, IconButton } from '@mui/material';
+import {
+  Button,
+  Card,
+  IconButton,
+  Typography,
+  DialogContentText,
+} from '@mui/material';
 import { Add, Delete, DragIndicator, Create } from '@mui/icons-material';
 
 import {
@@ -12,35 +18,31 @@ import SwitchableTextField from 'lib/components/SwitchableTextField';
 import Prompt from 'lib/components/Prompt';
 import Tab from './Tab';
 import translations from '../translations';
+import { useAssessmentSettings } from '../AssessmentSettingsContext';
+import { getTabsInCategories } from './utils';
+import MoveAssessmentsMenu from './MoveAssessmentsMenu';
 
 interface CategoryProps {
   category: AssessmentCategory;
   index: number;
-  onDelete?: (
-    id: AssessmentCategory['id'],
-    title: AssessmentCategory['title'],
-  ) => void;
-  onDeleteTab?: (
-    id: AssessmentCategory['id'],
-    tabId: AssessmentTab['id'],
-    title: AssessmentTab['title'],
-  ) => void;
+  stationary: boolean;
   onRename?: (index: number, newTitle: AssessmentCategory['title']) => void;
   onRenameTab?: (
     index: number,
     tabIndex: number,
     newTitle: AssessmentTab['title'],
   ) => void;
-  onCreateTab?: (
-    id: AssessmentCategory['id'],
-    title: AssessmentTab['title'],
-    weight: AssessmentTab['weight'],
-  ) => void;
 }
 
 const Category = (props: CategoryProps): JSX.Element => {
   const { category, index } = props;
   const { t } = useTranslation();
+  const {
+    settings,
+    createTabInCategory,
+    deleteCategory,
+    moveAssessmentsToTab,
+  } = useAssessmentSettings();
 
   const [newTitle, setNewTitle] = useState(category.title);
   const [renaming, setRenaming] = useState(false);
@@ -48,22 +50,17 @@ const Category = (props: CategoryProps): JSX.Element => {
 
   const closeDeleteCategoryDialog = (): void => setDeleting(false);
 
-  const deleteTab = (
-    id: AssessmentTab['id'],
-    title: AssessmentTab['title'],
-  ): void => props.onDeleteTab?.(category.id, id, title);
-
-  const deleteCategory = (): void => {
-    props.onDelete?.(category.id, category.title);
-    closeDeleteCategoryDialog();
-  };
-
   const resetCategoryTitle = (): void => {
     setNewTitle(category.title);
     setRenaming(false);
   };
 
-  const renameCategory = (): void => {
+  const handleDeleteCategory = (): void => {
+    deleteCategory?.(category.id, category.title);
+    closeDeleteCategoryDialog();
+  };
+
+  const handleRenameCategory = (): void => {
     const trimmedNewTitle = newTitle.trim();
     if (!trimmedNewTitle) return resetCategoryTitle();
 
@@ -71,16 +68,52 @@ const Category = (props: CategoryProps): JSX.Element => {
     return setRenaming(false);
   };
 
-  const renameTab = (
+  const handleRenameTab = (
     tabIndex: number,
     newTabTitle: AssessmentTab['title'],
   ): void => {
     props.onRenameTab?.(index, tabIndex, newTabTitle);
   };
 
-  useEffect(() => {
-    resetCategoryTitle();
-  }, [category.title]);
+  const handleCreateTab = (): void =>
+    createTabInCategory?.(
+      category.id,
+      t(translations.newTabDefaultName),
+      category.tabs[category.tabs.length - 1].weight + 1,
+    );
+
+  const handleClickDelete = (): void => {
+    if (category.assessmentsCount > 0) {
+      setDeleting(true);
+    } else {
+      handleDeleteCategory();
+    }
+  };
+
+  const handleMoveAssessmentsAndDelete = (tab: AssessmentTab): void => {
+    moveAssessmentsToTab?.(
+      category.assessmentsIds,
+      tab.id,
+      tab.fullTabTitle ?? tab.title,
+    ).then(() => {
+      handleDeleteCategory();
+      setDeleting(false);
+    });
+  };
+
+  const renderMoveMenu = (): JSX.Element | undefined => {
+    const tabIds = new Set(category.tabs.map((tab) => tab.id));
+    const tabs = getTabsInCategories(settings?.categories, (tab) =>
+      tabIds.has(tab.id),
+    );
+
+    return (
+      <MoveAssessmentsMenu
+        tabs={tabs}
+        onSelectTab={handleMoveAssessmentsAndDelete}
+      />
+    );
+  };
 
   const renderTabs = (
     tabs: AssessmentTab[],
@@ -93,17 +126,13 @@ const Category = (props: CategoryProps): JSX.Element => {
         index={tabIndex}
         disabled={disabled}
         stationary={tabs.length <= 1}
-        onDelete={deleteTab}
-        onRename={renameTab}
+        onRename={handleRenameTab}
       />
     ));
 
-  const createTab = (): void =>
-    props.onCreateTab?.(
-      category.id,
-      'New Tab',
-      category.tabs[category.tabs.length - 1].weight + 1,
-    );
+  useEffect(() => {
+    resetCategoryTitle();
+  }, [category.title]);
 
   return (
     <>
@@ -129,15 +158,24 @@ const Category = (props: CategoryProps): JSX.Element => {
                 <div className="flex items-center">
                   <DragIndicator fontSize="small" color="disabled" />
 
-                  <SwitchableTextField
-                    editable={renaming}
-                    onChange={(e): void => setNewTitle(e.target.value)}
-                    onBlur={(): void => renameCategory()}
-                    onPressEnter={renameCategory}
-                    onPressEscape={resetCategoryTitle}
-                    value={newTitle}
-                    className="ml-4"
-                  />
+                  <div className="ml-4 flex items-center">
+                    <SwitchableTextField
+                      editable={renaming}
+                      onChange={(e): void => setNewTitle(e.target.value)}
+                      onBlur={(): void => handleRenameCategory()}
+                      onPressEnter={handleRenameCategory}
+                      onPressEscape={resetCategoryTitle}
+                      value={newTitle}
+                    />
+
+                    {!renaming && category.assessmentsCount > 0 && (
+                      <Typography variant="body2" color="text.secondary">
+                        {t(translations.containsNAssessments, {
+                          n: category.assessmentsCount.toString(),
+                        })}
+                      </Typography>
+                    )}
+                  </div>
                 </div>
 
                 {!renaming && (
@@ -153,19 +191,21 @@ const Category = (props: CategoryProps): JSX.Element => {
               </div>
 
               <div className="flex min-w-fit items-center">
-                <IconButton
-                  color="error"
-                  disabled={isDragging}
-                  className="mx-4 sm:mx-0"
-                  onClick={(): void => setDeleting(true)}
-                >
-                  <Delete />
-                </IconButton>
+                {!props.stationary && (
+                  <IconButton
+                    color="error"
+                    disabled={isDragging}
+                    className="mx-4 sm:mx-0"
+                    onClick={handleClickDelete}
+                  >
+                    <Delete />
+                  </IconButton>
+                )}
 
                 <Button
                   startIcon={<Add />}
                   disabled={isDragging}
-                  onClick={createTab}
+                  onClick={handleCreateTab}
                 >
                   {t(translations.addATab)}
                 </Button>
@@ -199,12 +239,37 @@ const Category = (props: CategoryProps): JSX.Element => {
         title={t(translations.deleteCategoryPromptTitle, {
           title: category.title,
         })}
-        content={t(translations.deleteCategoryPromptMessage)}
+        override
+        content={
+          <>
+            <DialogContentText>
+              {t(translations.deleteCategoryPromptMessage)}
+            </DialogContentText>
+
+            <DialogContentText className="mt-4">
+              {t(translations.thisCategoryContains)}
+
+              {category.topAssessmentsTitles.map((assessment) => (
+                <li key={assessment}>{assessment}</li>
+              ))}
+
+              {category.assessmentsCount >
+                category.topAssessmentsTitles.length &&
+                t(translations.andNMoreItems, {
+                  n: (
+                    category.assessmentsCount -
+                    category.topAssessmentsTitles.length
+                  ).toString(),
+                })}
+            </DialogContentText>
+          </>
+        }
         primaryAction={t(translations.deleteCategoryPromptAction, {
           title: category.title,
         })}
         primaryActionColor="error"
-        onPrimaryAction={deleteCategory}
+        onPrimaryAction={handleDeleteCategory}
+        secondaryAction={renderMoveMenu()}
       />
     </>
   );

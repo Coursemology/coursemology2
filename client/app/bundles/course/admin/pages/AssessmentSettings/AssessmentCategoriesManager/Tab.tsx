@@ -1,26 +1,30 @@
 import { useState, useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { Card, IconButton } from '@mui/material';
+import { Card, DialogContentText, IconButton, Typography } from '@mui/material';
 import { Delete, DragIndicator, Create } from '@mui/icons-material';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import { AssessmentTab } from 'types/course/admin/assessments';
 import SwitchableTextField from 'lib/components/SwitchableTextField';
 import Prompt from 'lib/components/Prompt';
+import { useAssessmentSettings } from '../AssessmentSettingsContext';
 import translations from '../translations';
+import { getTabsInCategories } from './utils';
+import MoveAssessmentsMenu from './MoveAssessmentsMenu';
 
 interface TabProps {
   tab: AssessmentTab;
   index: number;
   stationary: boolean;
   disabled: boolean;
-  onDelete?: (id: AssessmentTab['id'], title: AssessmentTab['title']) => void;
   onRename?: (index: number, newTitle: AssessmentTab['title']) => void;
 }
 
 const Tab = (props: TabProps): JSX.Element => {
   const { tab, index, stationary, disabled } = props;
   const { t } = useTranslation();
+  const { settings, deleteTabInCategory, moveAssessmentsToTab } =
+    useAssessmentSettings();
 
   const [newTitle, setNewTitle] = useState(tab.title);
   const [renaming, setRenaming] = useState(false);
@@ -28,22 +32,55 @@ const Tab = (props: TabProps): JSX.Element => {
 
   const closeDeleteTabDialog = (): void => setDeleting(false);
 
-  const deleteTab = (): void => {
-    props.onDelete?.(tab.id, tab.title);
-    closeDeleteTabDialog();
-  };
-
   const resetTabTitle = (): void => {
     setNewTitle(tab.title);
     setRenaming(false);
   };
 
-  const renameTab = (): void => {
+  const handleRenameTab = (): void => {
     const trimmedNewTitle = newTitle.trim();
     if (!trimmedNewTitle) return resetTabTitle();
 
     props.onRename?.(index, trimmedNewTitle);
     return setRenaming(false);
+  };
+
+  const handleDeleteTab = (): void => {
+    deleteTabInCategory?.(tab.categoryId, tab.id, tab.title);
+    closeDeleteTabDialog();
+  };
+
+  const handleClickDelete = (): void => {
+    if (tab.assessmentsCount > 0) {
+      setDeleting(true);
+    } else {
+      handleDeleteTab();
+    }
+  };
+
+  const handleMoveAssessmentsAndDelete = (newTab: AssessmentTab): void => {
+    moveAssessmentsToTab?.(
+      tab.assessmentsIds,
+      newTab.id,
+      newTab.fullTabTitle ?? newTab.title,
+    ).then(() => {
+      handleDeleteTab();
+      setDeleting(false);
+    });
+  };
+
+  const renderMoveMenu = (): JSX.Element => {
+    const tabs = getTabsInCategories(
+      settings?.categories,
+      (other) => other.id === tab.id,
+    );
+
+    return (
+      <MoveAssessmentsMenu
+        tabs={tabs}
+        onSelectTab={handleMoveAssessmentsAndDelete}
+      />
+    );
   };
 
   useEffect(() => {
@@ -76,16 +113,25 @@ const Tab = (props: TabProps): JSX.Element => {
                   className={`${stationary && 'opacity-0'}`}
                 />
 
-                <SwitchableTextField
-                  editable={renaming}
-                  onChange={(e): void => setNewTitle(e.target.value)}
-                  onBlur={(): void => renameTab()}
-                  onPressEnter={renameTab}
-                  onPressEscape={resetTabTitle}
-                  value={newTitle}
-                  className="ml-4"
-                  textProps={{ variant: 'body2' }}
-                />
+                <div className="ml-4 flex items-center">
+                  <SwitchableTextField
+                    editable={renaming}
+                    onChange={(e): void => setNewTitle(e.target.value)}
+                    onBlur={(): void => handleRenameTab()}
+                    onPressEnter={handleRenameTab}
+                    onPressEscape={resetTabTitle}
+                    value={newTitle}
+                    textProps={{ variant: 'body2' }}
+                  />
+
+                  {!renaming && tab.assessmentsCount > 0 && (
+                    <Typography variant="body2" color="text.disabled">
+                      {t(translations.containsNAssessments, {
+                        n: tab.assessmentsCount.toString(),
+                      })}
+                    </Typography>
+                  )}
+                </div>
               </div>
 
               {!renaming && (
@@ -105,7 +151,7 @@ const Tab = (props: TabProps): JSX.Element => {
                 color="error"
                 disabled={disabled || isDragging}
                 className="ml-4 hoverable:ml-0 hoverable:opacity-0 hoverable:group-hover:opacity-100"
-                onClick={(): void => setDeleting(true)}
+                onClick={handleClickDelete}
               >
                 <Delete />
               </IconButton>
@@ -120,12 +166,35 @@ const Tab = (props: TabProps): JSX.Element => {
         title={t(translations.deleteTabPromptTitle, {
           title: tab.title,
         })}
-        content={t(translations.deleteTabPromptMessage)}
+        override
+        content={
+          <>
+            <DialogContentText>
+              {t(translations.deleteTabPromptMessage)}
+            </DialogContentText>
+
+            <DialogContentText className="mt-4">
+              {t(translations.thisTabContains)}
+
+              {tab.topAssessmentsTitles.map((assessment) => (
+                <li key={assessment}>{assessment}</li>
+              ))}
+
+              {tab.assessmentsCount > tab.topAssessmentsTitles.length &&
+                t(translations.andNMoreItems, {
+                  n: (
+                    tab.assessmentsCount - tab.topAssessmentsTitles.length
+                  ).toString(),
+                })}
+            </DialogContentText>
+          </>
+        }
         primaryAction={t(translations.deleteTabPromptAction, {
           title: tab.title,
         })}
         primaryActionColor="error"
-        onPrimaryAction={deleteTab}
+        onPrimaryAction={handleDeleteTab}
+        secondaryAction={renderMoveMenu()}
       />
     </>
   );

@@ -5,6 +5,10 @@ export default defineMessages({
     id: 'course.admin.assessment.assessmentSettings',
     defaultMessage: 'Assessment settings',
   },
+  containsNAssessments: {
+    id: 'course.admin.assessment.containsNAssessments',
+    defaultMessage: 'has {n, plural, one {# item} other {# items}}',
+  },
   categoriesAndTabs: {
     id: 'course.admin.assessment.categoriesAndTabs',
     defaultMessage: 'Categories and tabs',
@@ -79,5 +83,41 @@ export default defineMessages({
     id: 'course.admin.assessment.deleteTabPromptMessage',
     defaultMessage:
       'Deleting this tab will delete all its associated assessments and submissions. This action is irreversible.',
+  },
+  moveAssessmentsToTabThenDelete: {
+    id: 'course.admin.assessment.moveAssessmentsToTabThenDelete',
+    defaultMessage: 'Move assessments to {tab} then delete',
+  },
+  moveAssessmentsThenDelete: {
+    id: 'course.admin.assessment.moveAssessmentsThenDelete',
+    defaultMessage: 'Move assessments then delete',
+  },
+  toTab: {
+    id: 'course.admin.assessment.toTab',
+    defaultMessage: 'to {tab}',
+  },
+  thisCategoryContains: {
+    id: 'course.admin.assessment.thisCategoryContains',
+    defaultMessage: 'This category contains:',
+  },
+  thisTabContains: {
+    id: 'course.admin.assessment.thisTabContains',
+    defaultMessage: 'This tab contains:',
+  },
+  andNMoreItems: {
+    id: 'course.admin.assessment.andNMoreItems',
+    defaultMessage: 'and {n, plural, one {# more item} other {# more items}}',
+  },
+  movingAssessmentsTo: {
+    id: 'course.admin.assessment.movingAssessmentsTo',
+    defaultMessage: 'Moving assessments to {tab}...',
+  },
+  nAssessmentsMoved: {
+    id: 'course.admin.assessment.nAssessmentsMoved',
+    defaultMessage: '{n} were successfully moved to {tab}.',
+  },
+  errorWhenMovingAssessments: {
+    id: 'course.admin.assessment.errorWhenMovingAssessments',
+    defaultMessage: 'An error occurred when moving assessments to {tab}.',
   },
 });
