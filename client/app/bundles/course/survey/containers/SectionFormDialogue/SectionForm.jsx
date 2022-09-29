@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
+import useEmitterFactory from 'react-emitter-factory';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import ErrorText from 'lib/components/ErrorText';
@@ -19,11 +20,19 @@ const SectionForm = (props) => {
     control,
     handleSubmit,
     setError,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
   });
+
+  useEmitterFactory(
+    props,
+    {
+      isDirty,
+    },
+    [isDirty],
+  );
 
   return (
     <form

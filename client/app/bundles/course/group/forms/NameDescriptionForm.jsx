@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
+import useEmitterFactory from 'react-emitter-factory';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import ErrorText from 'lib/components/ErrorText';
@@ -46,11 +47,19 @@ const NameDescriptionForm = (props) => {
     control,
     handleSubmit,
     setError,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
   });
+
+  useEmitterFactory(
+    props,
+    {
+      isDirty,
+    },
+    [isDirty],
+  );
 
   return (
     <form

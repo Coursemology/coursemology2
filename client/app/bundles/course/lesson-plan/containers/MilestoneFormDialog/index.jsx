@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FormDialogue from 'lib/components/FormDialogue';
@@ -13,18 +14,22 @@ const MilestoneFormDialog = ({
   onSubmit,
   dispatch,
 }) => {
+  const [isDirty, setIsDirty] = useState(false);
   const { hideMilestoneForm } = bindActionCreators(actionCreators, dispatch);
 
   return (
     <FormDialogue
       title={formTitle}
       open={visible}
-      skipConfirmation={false}
+      skipConfirmation={!isDirty}
       disabled={disabled}
       form="milestone-form"
       hideForm={hideMilestoneForm}
     >
-      <MilestoneForm {...{ initialValues, onSubmit, disabled }} />
+      <MilestoneForm
+        {...{ initialValues, onSubmit, disabled }}
+        emitsVia={(milestoneForm) => setIsDirty(milestoneForm.isDirty)}
+      />
     </FormDialogue>
   );
 };

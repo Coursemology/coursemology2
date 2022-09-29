@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import FormDialogue from 'lib/components/FormDialogue';
@@ -14,6 +15,7 @@ const EventFormDialog = ({
   dispatch,
   items,
 }) => {
+  const [isDirty, setIsDirty] = useState(false);
   const { hideEventForm } = bindActionCreators(actionCreators, dispatch);
 
   const { eventTypes, eventLocations } = items.reduce(
@@ -34,7 +36,7 @@ const EventFormDialog = ({
     <FormDialogue
       title={formTitle}
       open={visible}
-      skipConfirmation={false}
+      skipConfirmation={!isDirty}
       disabled={disabled}
       form="event-form"
       hideForm={hideEventForm}
@@ -43,6 +45,7 @@ const EventFormDialog = ({
         {...{ initialValues, onSubmit, disabled }}
         eventTypes={[...new Set(eventTypes)]}
         eventLocations={[...new Set(eventLocations)]}
+        emitsVia={(eventForm) => setIsDirty(eventForm.isDirty)}
       />
     </FormDialogue>
   );

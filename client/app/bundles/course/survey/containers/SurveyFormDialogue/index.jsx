@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from 'course/survey/actions/surveys';
@@ -38,6 +39,7 @@ const SurveyFormDialogue = ({
   initialValues,
   onSubmit,
 }) => {
+  const [isDirty, setIsDirty] = useState(false);
   const { hideSurveyForm } = bindActionCreators(actionCreators, dispatch);
 
   const surveyFormProps = {
@@ -53,12 +55,15 @@ const SurveyFormDialogue = ({
     <FormDialogue
       title={formTitle}
       open={visible}
-      skipConfirmation={false}
+      skipConfirmation={!isDirty}
       disabled={disabled}
       form="survey-form"
       hideForm={hideSurveyForm}
     >
-      <SurveyForm {...surveyFormProps} />
+      <SurveyForm
+        {...surveyFormProps}
+        emitsVia={(surveyForm) => setIsDirty(surveyForm.isDirty)}
+      />
     </FormDialogue>
   );
 };

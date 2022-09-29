@@ -5,6 +5,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import * as yup from 'yup';
+import useEmitterFactory from 'react-emitter-factory';
 import { ListSubheader, TextField } from '@mui/material';
 import { red } from '@mui/material/colors';
 import FormSelectField from 'lib/components/form/fields/SelectField';
@@ -209,7 +210,7 @@ const QuestionForm = (props) => {
     handleSubmit,
     setError,
     watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),
@@ -222,6 +223,14 @@ const QuestionForm = (props) => {
     control,
     name: 'options',
   });
+
+  useEmitterFactory(
+    props,
+    {
+      isDirty,
+    },
+    [isDirty],
+  );
 
   const {
     fields: deletedOptionsFields,
