@@ -23,7 +23,7 @@ RSpec.feature 'Courses: Groups' do
       scenario 'I can view all the group categories in course', js: true do
         visit course_group_category_path(course, group_category1)
 
-        expect(page).to have_selector('h1', text: I18n.t('course.group.group_categories.show.header'))
+        expect(page).to have_selector('h5', text: 'Groups')
 
         expect(page).to have_selector('h3', text: group_category1.name)
         expect(page).to have_link(group_category2.name, href: course_group_category_path(course, group_category2))

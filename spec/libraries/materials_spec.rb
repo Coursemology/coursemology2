@@ -71,30 +71,4 @@ RSpec.describe 'Extension: Materials' do
       end
     end
   end
-
-  describe 'form_builder helper' do
-    class self::AssessmentView < ActionView::Base; end
-
-    class self::FormBuilder < ActionView::Helpers::FormBuilder; end
-
-    let(:template) { self.class::AssessmentView.new(ActionView::LookupContext.new(Rails.root.join('app', 'views'))) }
-    let(:resource) do
-      assessment = self.class::Assessment.new
-      assessment.build_folder
-      assessment
-    end
-    let(:form_builder) { self.class::FormBuilder.new(:form_builder, resource, template, {}) }
-    subject { form_builder }
-
-    it { is_expected.to respond_to(:folder) }
-
-    describe '#folder' do
-      subject { form_builder.folder }
-
-      it do
-        is_expected.
-          to have_tag('input[type=file]')
-      end
-    end
-  end
 end
