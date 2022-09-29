@@ -10,12 +10,7 @@ import translations from '../../translations';
 const propTypes = {
   intl: PropTypes.object.isRequired,
 
-  isPostRequest: PropTypes.bool,
   url: PropTypes.string,
-};
-
-const defaultProps = {
-  isPostRequest: false,
 };
 
 function NextVideoButton(props) {
@@ -41,7 +36,6 @@ function NextVideoButton(props) {
 }
 
 NextVideoButton.propTypes = propTypes;
-NextVideoButton.defaultProps = defaultProps;
 
 function mapStateToProps(state) {
   return {
