@@ -8,6 +8,7 @@ import Note from 'lib/components/Note';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/NotificationBar';
+import { useParams } from 'react-router-dom';
 import CategoryCard from './CategoryCard';
 import GroupTableCard from './GroupTableCard';
 import { categoryShape, groupShape } from '../../propTypes';
@@ -34,7 +35,6 @@ const translations = defineMessages({
 const Category = ({
   dispatch,
   groupCategory,
-  groupCategoryId,
   groups,
   isFetching,
   isManagingGroups,
@@ -43,6 +43,8 @@ const Category = ({
   canManageCategory,
   canManageGroups,
 }) => {
+  const { groupCategoryId } = useParams();
+
   useEffect(() => {
     if (groupCategoryId) {
       dispatch(fetchGroupData(groupCategoryId));
@@ -73,7 +75,7 @@ const Category = ({
   }
 
   return (
-    <>
+    <div className="mt-8">
       {canManageGroups && isManagingGroups ? (
         <GroupManager category={groupCategory} groups={groups} />
       ) : (
@@ -96,7 +98,7 @@ const Category = ({
         </>
       )}
       <NotificationBar notification={notification} />
-    </>
+    </div>
   );
 };
 
@@ -106,7 +108,6 @@ Category.propTypes = {
   canManageCategory: PropTypes.bool.isRequired,
   canManageGroups: PropTypes.bool.isRequired,
   hasFetchError: PropTypes.bool.isRequired,
-  groupCategoryId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   groupCategory: categoryShape,
   groups: PropTypes.arrayOf(groupShape).isRequired,
   dispatch: PropTypes.func.isRequired,

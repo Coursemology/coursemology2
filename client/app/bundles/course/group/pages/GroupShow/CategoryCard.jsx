@@ -155,6 +155,7 @@ const CategoryCard = ({
     canManageCategory,
     canManageGroups,
   ]);
+  const [isDirty, setIsDirty] = useState(false);
 
   return (
     <>
@@ -174,6 +175,7 @@ const CategoryCard = ({
           <GroupFormDialog
             dialogTitle={intl.formatMessage(translations.dialogTitle)}
             expectedDialogTypes={[dialogTypes.UPDATE_CATEGORY]}
+            skipConfirmation={!isDirty}
           >
             <NameDescriptionForm
               onSubmit={onFormSubmit}
@@ -181,6 +183,9 @@ const CategoryCard = ({
                 name: category.name,
                 description: category.description,
               }}
+              emitsVia={(nameDescriptionForm) =>
+                setIsDirty(nameDescriptionForm.isDirty)
+              }
             />
           </GroupFormDialog>
           <ConfirmationDialog
