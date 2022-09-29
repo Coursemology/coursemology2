@@ -1,11 +1,10 @@
-import { createContext, Suspense, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { Chip } from '@mui/material';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import CourseAPI from 'api/course';
 import { CourseAdminOptions } from 'types/course/admin/course';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
-import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 
 const fetchOptions = async (): Promise<CourseAdminOptions> => {
   const response = await CourseAPI.admin.course.options();
@@ -17,9 +16,12 @@ const OptionsReloaderContext = createContext(() => {});
 export const useOptionsReloader = (): (() => void) =>
   useContext(OptionsReloaderContext);
 
-const SettingsNavigationLayout = (): JSX.Element => {
-  const { data: settings } = useSuspendedFetch(fetchOptions);
-  const [options, setOptions] = useState(settings);
+const SettingsNavigation = (): JSX.Element => {
+  const [options, setOptions] = useState<CourseAdminOptions>();
+
+  useEffect(() => {
+    fetchOptions().then(setOptions);
+  }, []);
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -27,6 +29,8 @@ const SettingsNavigationLayout = (): JSX.Element => {
   const reloadOptions = (): void => {
     fetchOptions().then(setOptions);
   };
+
+  if (!options) return <LoadingIndicator />;
 
   return (
     <OptionsReloaderContext.Provider value={reloadOptions}>
@@ -44,19 +48,9 @@ const SettingsNavigationLayout = (): JSX.Element => {
           ))}
         </div>
 
-        <Suspense fallback={<LoadingIndicator />}>
-          <Outlet />
-        </Suspense>
+        <Outlet />
       </div>
     </OptionsReloaderContext.Provider>
-  );
-};
-
-const SettingsNavigation = (): JSX.Element => {
-  return (
-    <Suspense fallback={<LoadingIndicator />}>
-      <SettingsNavigationLayout />
-    </Suspense>
   );
 };
 

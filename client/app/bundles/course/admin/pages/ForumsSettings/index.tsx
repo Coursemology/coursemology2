@@ -1,20 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 import { ForumsSettingsData } from 'types/course/admin/forums';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
-import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import ForumsSettingsForm from './ForumsSettingsForm';
 import { fetchForumsSettings, updateForumsSettings } from './operations';
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 
 const ForumsSettings = (): JSX.Element => {
-  const { data: settings } = useSuspendedFetch(fetchForumsSettings);
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
+  const [settings, setSettings] = useState<ForumsSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
+
+  useEffect(() => {
+    fetchForumsSettings().then(setSettings);
+  }, []);
+
+  if (!settings) return <LoadingIndicator />;
 
   const submit = (data: ForumsSettingsData): void => {
     updateForumsSettings(data)

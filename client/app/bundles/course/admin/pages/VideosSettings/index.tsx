@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { VideosSettingsData, VideosTab } from 'types/course/admin/videos';
-import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import VideosSettingsForm from './VideosSettingsForm';
 import {
   createTab,
@@ -17,11 +17,16 @@ import { useOptionsReloader } from '../../components/SettingsNavigation';
 import commonTranslations from '../../translations';
 
 const VideosSettings = (): JSX.Element => {
-  const { data: settings } = useSuspendedFetch(fetchVideosSettings);
-
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
+  const [settings, setSettings] = useState<VideosSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
+
+  useEffect(() => {
+    fetchVideosSettings().then(setSettings);
+  }, []);
+
+  if (!settings) return <LoadingIndicator />;
 
   const updateFormAndToast = (
     data: VideosSettingsData | undefined,

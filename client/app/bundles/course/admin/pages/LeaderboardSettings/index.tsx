@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { LeaderboardSettingsData } from 'types/course/admin/leaderboard';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
-import useSuspendedFetch from 'lib/hooks/useSuspendedFetch';
+import LoadingIndicator from 'lib/components/LoadingIndicator';
 import LeaderboardSettingsForm from './LeaderboardSettingsForm';
 import {
   fetchLeaderboardSettings,
@@ -14,10 +14,16 @@ import {
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 
 const LeaderboardSettings = (): JSX.Element => {
-  const { data: settings } = useSuspendedFetch(fetchLeaderboardSettings);
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
+  const [settings, setSettings] = useState<LeaderboardSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
+
+  useEffect(() => {
+    fetchLeaderboardSettings().then(setSettings);
+  }, []);
+
+  if (!settings) return <LoadingIndicator />;
 
   const submit = (data: LeaderboardSettingsData): void => {
     updateLeaderboardSettings(data)
