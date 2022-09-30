@@ -1,19 +1,15 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Administration: Components' do
+RSpec.feature 'Course: Administration: Components', js: true do
   let!(:instance) do
     create(:instance, :with_video_component_enabled)
   end
 
   with_tenant(:instance) do
-    let(:course) do
-      create(:course, :with_video_component_enabled)
-    end
+    let(:course) { create(:course, :with_video_component_enabled) }
     let(:components) { course.disableable_components }
-    let(:sample_component_id) do
-      "settings_components_enabled_component_ids_#{components.sample.key}"
-    end
+    let(:sample_component) { components.sample }
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
@@ -22,32 +18,28 @@ RSpec.feature 'Course: Administration: Components' do
       scenario 'I can view the list of enabled/disabled components' do
         visit course_admin_components_path(course)
 
+        enabled_components = course.enabled_components
         components.each do |component|
-          expect(page).to have_selector('th', text: component.display_name)
-          enabled = course.enabled_components.include?(component)
-          checkbox = find("#settings_components_enabled_component_ids_#{component.key}")
-          if enabled
-            expect(checkbox).to be_checked
-          else
-            expect(checkbox).not_to be_checked
-          end
+          expect(page).to have_selector('label', text: component.display_name)
+          option = find('label', text: component.display_name).find('input', visible: false)
+          expect(option.checked?).to be(enabled_components.include?(component))
         end
       end
 
-      scenario 'I can enable a component' do
+      scenario 'I can disable and enable a component' do
         visit course_admin_components_path(course)
 
-        check(sample_component_id)
-        click_button I18n.t('course.admin.component_settings.edit.button')
-        expect(page).to have_checked_field(sample_component_id)
-      end
+        control = find('label', text: sample_component.display_name)
+        control.click
+        expect_toastify('Your changes have been saved. Refresh to see the new changes.')
 
-      scenario 'I can disable a component' do
-        visit course_admin_components_path(course)
+        option = control.find('input', visible: false)
+        expect(option).not_to be_checked
 
-        uncheck(sample_component_id)
-        click_button I18n.t('course.admin.component_settings.edit.button')
-        expect(page).to have_unchecked_field(sample_component_id)
+        control.click
+        expect_toastify('Your changes have been saved. Refresh to see the new changes.')
+
+        expect(option).to be_checked
       end
     end
   end
