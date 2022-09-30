@@ -1,11 +1,4 @@
-import {
-  Button,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Typography,
-  Grid,
-} from '@mui/material';
+import { Button, RadioGroup, Typography, Grid } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { Emits } from 'react-emitter-factory';
 import { ChangeEventHandler, useMemo, useState } from 'react';
@@ -22,6 +15,7 @@ import FormSelectField from 'lib/components/form/fields/SelectField';
 import InfoLabel from 'lib/components/InfoLabel';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import Prompt from 'lib/components/Prompt';
+import RadioButton from 'lib/components/RadioButton';
 import validationSchema from './validationSchema';
 import translations from './translations';
 
@@ -252,37 +246,40 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             />
 
             {watch('showPersonalizedTimelineFeatures') && (
-              <Subsection title={t(translations.defaultTimelineAlgorithm)}>
+              <Subsection
+                title={t(translations.defaultTimelineAlgorithm)}
+                className="!mt-12"
+              >
                 <Controller
                   name="defaultTimelineAlgorithm"
                   control={control}
                   render={({ field }): JSX.Element => (
-                    <RadioGroup {...field}>
-                      <FormControlLabel
-                        control={<Radio />}
+                    <RadioGroup {...field} className="space-y-5">
+                      <RadioButton
                         value="fixed"
                         label={t(translations.fixed)}
+                        description={t(translations.fixedDescription)}
                         className="my-0"
                       />
 
-                      <FormControlLabel
-                        control={<Radio />}
+                      <RadioButton
                         value="fomo"
                         label={t(translations.fomo)}
+                        description={t(translations.fomoDescription)}
                         className="my-0"
                       />
 
-                      <FormControlLabel
-                        control={<Radio />}
+                      <RadioButton
                         value="stragglers"
                         label={t(translations.stragglers)}
+                        description={t(translations.stragglersDescription)}
                         className="my-0"
                       />
 
-                      <FormControlLabel
-                        control={<Radio />}
+                      <RadioButton
                         value="otot"
                         label={t(translations.otot)}
+                        description={t(translations.ototDescription)}
                         className="my-0"
                       />
                     </RadioGroup>
@@ -294,6 +291,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             <Subsection
               title={t(translations.earlyPreview)}
               subtitle={t(translations.earlyPreviewDescription)}
+              className="!mt-12"
             >
               <Controller
                 name="advanceStartAtDurationDays"
