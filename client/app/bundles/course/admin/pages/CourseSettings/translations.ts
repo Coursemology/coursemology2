@@ -102,7 +102,7 @@ export default defineMessages({
   },
   fomo: {
     id: 'course.admin.course.fomo',
-    defaultMessage: 'FOMO',
+    defaultMessage: 'FOMO (Fear of Missing Out)',
   },
   stragglers: {
     id: 'course.admin.course.stragglers',
@@ -110,7 +110,27 @@ export default defineMessages({
   },
   otot: {
     id: 'course.admin.course.otot',
-    defaultMessage: 'OTOT',
+    defaultMessage: 'OTOT (Own Time, Own Target)',
+  },
+  fixedDescription: {
+    id: 'course.admin.course.fixedDescription',
+    defaultMessage:
+      'Assessments will open and close according to their default opening and closing reference times.',
+  },
+  fomoDescription: {
+    id: 'course.admin.course.fomoDescription',
+    defaultMessage:
+      'Subsequent opening reference timings will be brought forward if students complete their assessments early.',
+  },
+  stragglersDescription: {
+    id: 'course.admin.course.stragglersDescription',
+    defaultMessage:
+      'Leave no one behind; subsequent closing reference timings will be pushed back if students complete their assessments late.',
+  },
+  ototDescription: {
+    id: 'course.admin.course.ototDescription',
+    defaultMessage:
+      'Both opening and closing reference timings can be adjusted based on FOMO and Stragglers rules.',
   },
   earlyPreview: {
     id: 'course.admin.course.earlyPreview',

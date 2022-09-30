@@ -26,12 +26,6 @@ interface Props {
 }
 
 const styles = {
-  field: {
-    marginBottom: 0,
-  },
-  checkbox: {
-    padding: '0 8px',
-  },
   description: {
     marginLeft: '30px',
   },
@@ -66,35 +60,35 @@ const FormCheckboxField = (props: Props): JSX.Element => {
             checked={field.value}
             color="primary"
             onChange={field.onChange}
-            sx={styles.checkbox}
+            className="py-0 px-4"
             icon={icon}
             checkedIcon={checkedIcon}
           />
         }
         disabled={disabled}
         label={label}
-        sx={styles.field}
+        className="mb-0"
       />
 
-      {description ? (
+      {description && (
         <Typography
           variant="body2"
-          sx={styles.description}
+          className="ml-[34px]"
           color={disabled ? 'text.disabled' : 'text.secondary'}
         >
           {description}
         </Typography>
-      ) : null}
+      )}
 
-      {disabledHint && disabled ? (
+      {disabledHint && disabled && (
         <div style={styles.disabledHint}>{disabledHint}</div>
-      ) : null}
+      )}
 
-      {isError ? (
+      {isError && (
         <FormHelperText error={isError} sx={styles.description}>
           {formatErrorMessage(fieldState.error?.message)}
         </FormHelperText>
-      ) : null}
+      )}
     </Box>
   );
 };
