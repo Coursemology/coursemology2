@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Administration: Materials' do
+RSpec.feature 'Course: Administration: Materials', js: true do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -17,18 +17,20 @@ RSpec.feature 'Course: Administration: Materials' do
         new_title = 'New Title'
         empty_title = ''
 
-        title_field = 'settings_materials_component_title'
+        title_field = 'title'
         fill_in title_field, with: new_title
-        click_button 'update'
-        expect(page).
-          to have_selector('div', text: I18n.t('course.admin.material_settings.update.success'))
+        click_button 'Save changes'
+        expect_toastify('Your changes have been saved.')
         expect(page).to have_field(title_field, with: new_title)
+
+        visit current_path
         expect(page).to have_selector('li a', text: new_title)
 
         fill_in title_field, with: empty_title
-        click_button 'update'
-        expect(page).
-          to have_selector('div', text: I18n.t('course.admin.material_settings.update.success'))
+        click_button 'Save changes'
+        expect_toastify('Your changes have been saved.')
+
+        visit current_path
         expect(page).to have_selector('li a', text: I18n.t('course.material.sidebar_title'))
       end
     end
