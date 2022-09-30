@@ -13,6 +13,7 @@ import translations from './translations';
 interface AssessmentsSettingsFormProps extends Emits<FormEmitter> {
   data: AssessmentSettingsData;
   onSubmit?: (data: AssessmentSettingsData) => void;
+  disabled?: boolean;
 }
 
 const AssessmentsSettingsForm = (
@@ -26,6 +27,7 @@ const AssessmentsSettingsForm = (
       initialValues={props.data}
       headsUp
       emitsVia={props.emitsVia}
+      disabled={props.disabled}
     >
       {(control): JSX.Element => (
         <>
@@ -39,6 +41,7 @@ const AssessmentsSettingsForm = (
                     field={field}
                     fieldState={fieldState}
                     label={t(translations.outputsOfPublicTestCases)}
+                    disabled={props.disabled}
                   />
                 )}
               />
@@ -51,6 +54,7 @@ const AssessmentsSettingsForm = (
                     field={field}
                     fieldState={fieldState}
                     label={t(translations.standardOutputsAndStandardErrors)}
+                    disabled={props.disabled}
                   />
                 )}
               />
@@ -69,6 +73,7 @@ const AssessmentsSettingsForm = (
                     field={field}
                     fieldState={fieldState}
                     label={t(translations.enableRandomisedAssessments)}
+                    disabled={props.disabled}
                   />
                 )}
               />
@@ -81,6 +86,7 @@ const AssessmentsSettingsForm = (
                     field={field}
                     fieldState={fieldState}
                     label={t(translations.enableMcqChoicesRandomisations)}
+                    disabled={props.disabled}
                   />
                 )}
               />
@@ -99,6 +105,7 @@ const AssessmentsSettingsForm = (
                 <AssessmentCategoriesManager
                   categories={field.value}
                   onUpdate={field.onChange}
+                  disabled={props.disabled}
                 />
               )}
             />

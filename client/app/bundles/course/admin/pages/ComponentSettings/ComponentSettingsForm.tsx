@@ -13,25 +13,22 @@ interface ComponentSettingsFormProps {
     components: CourseComponents,
     action: (data: CourseComponents) => void,
   ) => void;
+  disabled?: boolean;
 }
 
 const ComponentSettingsForm = (
   props: ComponentSettingsFormProps,
 ): JSX.Element => {
   const { t } = useTranslation();
-  const [submitting, setSubmitting] = useState(false);
   const [components, setComponents] = useState(props.data);
 
   const toggleComponent = (index: number, enabled: boolean): void => {
-    setSubmitting(true);
-
     const newEnabledComponents = produce(components, (draft) => {
       draft[index].enabled = enabled;
     });
 
     props.onChangeComponents(newEnabledComponents, (newData) => {
       setComponents(newData);
-      setSubmitting(false);
     });
   };
 
@@ -49,7 +46,7 @@ const ComponentSettingsForm = (
           label={component.displayName}
           checked={component.enabled}
           className="mb-0"
-          disabled={submitting}
+          disabled={props.disabled}
           onChange={(_, checked): void => toggleComponent(index, checked)}
         />
       ))}

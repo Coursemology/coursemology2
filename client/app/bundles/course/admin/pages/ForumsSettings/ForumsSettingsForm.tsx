@@ -14,6 +14,7 @@ import commonTranslations from '../../translations';
 interface ForumsSettingsFormProps extends Emits<FormEmitter> {
   data: ForumsSettingsData;
   onSubmit: (data: ForumsSettingsData) => void;
+  disabled?: boolean;
 }
 
 const validationSchema = object({
@@ -33,6 +34,7 @@ const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
       onSubmit={props.onSubmit}
       validates={validationSchema}
       headsUp
+      disabled={props.disabled}
     >
       {(control): JSX.Element => (
         <Section title={t(translations.forumsSettings)} sticksToNavbar>
@@ -46,6 +48,7 @@ const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
                 variant="filled"
                 label={t(commonTranslations.title)}
                 fullWidth
+                disabled={props.disabled}
               />
             )}
           />
@@ -69,6 +72,7 @@ const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
                 label={t(commonTranslations.pagination)}
                 type="number"
                 fullWidth
+                disabled={props.disabled}
               />
             )}
           />

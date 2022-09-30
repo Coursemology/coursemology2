@@ -93,7 +93,7 @@ const Tab = (props: TabProps): JSX.Element => {
         key={tab.id}
         draggableId={`tab-${tab.id}`}
         index={index}
-        isDragDisabled={stationary}
+        isDragDisabled={disabled || stationary}
       >
         {(provided, { isDragging }): JSX.Element => (
           <Card
@@ -110,7 +110,7 @@ const Tab = (props: TabProps): JSX.Element => {
                 <DragIndicator
                   fontSize="small"
                   color="disabled"
-                  className={`${stationary && 'opacity-0'}`}
+                  className={`${(disabled || stationary) && 'opacity-0'}`}
                 />
 
                 <div className="ml-4 flex items-center">
@@ -122,6 +122,7 @@ const Tab = (props: TabProps): JSX.Element => {
                     onPressEscape={resetTabTitle}
                     value={newTitle}
                     textProps={{ variant: 'body2' }}
+                    disabled={disabled}
                   />
 
                   {!renaming && tab.assessmentsCount > 0 && (
