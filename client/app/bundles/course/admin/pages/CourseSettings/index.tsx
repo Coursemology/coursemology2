@@ -24,6 +24,7 @@ const CourseSettings = (): JSX.Element => {
   const [settings, setSettings] = useState<CourseInfo>();
   const [timeZones, setTimeZones] = useState<TimeZones>();
   const [form, setForm] = useState<FormEmitter>();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchCourseSettings().then(setSettings);
@@ -32,43 +33,51 @@ const CourseSettings = (): JSX.Element => {
 
   if (!settings || !timeZones) return <LoadingIndicator />;
 
-  const updateFormAndToast = (
-    data: CourseInfo | undefined,
-    message: string,
-  ): void => {
+  const updateForm = (data?: CourseInfo): void => {
     if (!data) return;
     form?.resetTo?.(data);
+  };
+
+  const updateFormAndToast = (message: string, data?: CourseInfo): void => {
+    updateForm(data);
     toast.success(message);
   };
 
   const submit = (data: CourseInfo): void => {
+    setSubmitting(true);
+
     updateCourseSettings(data)
       .then((newData) => {
         reloadOptions();
-        updateFormAndToast(newData, t(formTranslations.changesSaved));
+        updateFormAndToast(t(formTranslations.changesSaved), newData);
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   const uploadCourseLogo = (file: File, onSuccess: () => void): void => {
+    setSubmitting(true);
+
     toast
       .promise(updateCourseLogo(file), {
         pending: t(translations.uploadingLogo),
         success: t(translations.courseLogoUpdated),
       })
       .then((newData) => {
-        if (!newData) return;
-        form?.resetTo?.(newData);
+        updateForm(newData);
         onSuccess();
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   const handleDeleteCourse = (): void => {
+    setSubmitting(true);
+
     deleteCourse()
       .then(() => {
         toast.success(t(translations.deleteCourseSuccess));
@@ -77,7 +86,8 @@ const CourseSettings = (): JSX.Element => {
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -88,6 +98,7 @@ const CourseSettings = (): JSX.Element => {
       onSubmit={submit}
       onUploadCourseLogo={uploadCourseLogo}
       onDeleteCourse={handleDeleteCourse}
+      disabled={submitting}
     />
   );
 };

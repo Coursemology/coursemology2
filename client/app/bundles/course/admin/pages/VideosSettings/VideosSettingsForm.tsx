@@ -16,6 +16,7 @@ interface VideosSettingsFormProps extends Emits<FormEmitter> {
   onCreateTab: (title: VideosTab['title'], weight: VideosTab['weight']) => void;
   onDeleteTab: (id: VideosTab['id'], title: VideosTab['title']) => void;
   canCreateTabs?: boolean;
+  disabled?: boolean;
 }
 
 const VideosSettingsForm = (props: VideosSettingsFormProps): JSX.Element => {
@@ -41,6 +42,7 @@ const VideosSettingsForm = (props: VideosSettingsFormProps): JSX.Element => {
                   variant="filled"
                   label={t(commonTranslations.title)}
                   fullWidth
+                  disabled={props.disabled}
                 />
               )}
             />
@@ -69,6 +71,7 @@ const VideosSettingsForm = (props: VideosSettingsFormProps): JSX.Element => {
                   onCreateTab={props.onCreateTab}
                   onDeleteTab={props.onDeleteTab}
                   canCreateTabs={props.canCreateTabs}
+                  disabled={props.disabled}
                 />
               )}
             />

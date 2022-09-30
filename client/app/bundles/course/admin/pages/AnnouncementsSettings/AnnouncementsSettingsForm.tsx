@@ -13,6 +13,7 @@ import commonTranslations from '../../translations';
 interface AnnouncementsSettingsFormProps extends Emits<FormEmitter> {
   data: AnnouncementsSettingsData;
   onSubmit: (data: AnnouncementsSettingsData) => void;
+  disabled?: boolean;
 }
 
 const AnnouncementsSettingsForm = (
@@ -39,6 +40,7 @@ const AnnouncementsSettingsForm = (
                 variant="filled"
                 label={t(commonTranslations.title)}
                 fullWidth
+                disabled={props.disabled}
               />
             )}
           />

@@ -18,6 +18,7 @@ const LeaderboardSettings = (): JSX.Element => {
   const { t } = useTranslation();
   const [settings, setSettings] = useState<LeaderboardSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchLeaderboardSettings().then(setSettings);
@@ -26,6 +27,8 @@ const LeaderboardSettings = (): JSX.Element => {
   if (!settings) return <LoadingIndicator />;
 
   const submit = (data: LeaderboardSettingsData): void => {
+    setSubmitting(true);
+
     updateLeaderboardSettings(data)
       .then((newData) => {
         if (!newData) return;
@@ -35,7 +38,8 @@ const LeaderboardSettings = (): JSX.Element => {
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -43,6 +47,7 @@ const LeaderboardSettings = (): JSX.Element => {
       data={settings}
       onSubmit={submit}
       emitsVia={setForm}
+      disabled={submitting}
     />
   );
 };

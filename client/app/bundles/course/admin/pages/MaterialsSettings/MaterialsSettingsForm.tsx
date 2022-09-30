@@ -13,6 +13,7 @@ import commonTranslations from '../../translations';
 interface MaterialsSettingsFormProps extends Emits<FormEmitter> {
   data: MaterialsSettingsData;
   onSubmit: (data: MaterialsSettingsData) => void;
+  disabled?: boolean;
 }
 
 const MaterialsSettingsForm = (
@@ -39,6 +40,7 @@ const MaterialsSettingsForm = (
                 variant="filled"
                 label={t(commonTranslations.title)}
                 fullWidth
+                disabled={props.disabled}
               />
             )}
           />

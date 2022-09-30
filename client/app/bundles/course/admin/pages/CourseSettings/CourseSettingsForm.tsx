@@ -25,6 +25,7 @@ interface CourseSettingsFormProps extends Emits<FormEmitter> {
   onSubmit: (data: CourseInfo) => void;
   onDeleteCourse: () => void;
   onUploadCourseLogo: (file: File, onSuccess: () => void) => void;
+  disabled?: boolean;
 }
 
 const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
@@ -82,6 +83,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                   label={t(translations.courseName)}
                   variant="filled"
                   fullWidth
+                  disabled={props.disabled}
                 />
               )}
             />
@@ -96,6 +98,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                     fieldState={fieldState}
                     fullWidth
                     disableMargins
+                    disabled={props.disabled}
                   />
                 )}
               />
@@ -114,7 +117,11 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
               />
 
               <div className="mb-4 flex flex-col items-start space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                <Button variant="outlined" component="label">
+                <Button
+                  variant="outlined"
+                  component="label"
+                  disabled={props.disabled}
+                >
                   {t(translations.uploadANewImage)}
                   <input
                     hidden
@@ -122,16 +129,24 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                     accept="image/*"
                     className="hidden"
                     onChange={stageCourseLogo}
+                    disabled={props.disabled}
                   />
                 </Button>
 
                 {stagedLogo && (
                   <>
-                    <Button variant="outlined" onClick={uploadCourseLogo}>
+                    <Button
+                      variant="outlined"
+                      onClick={uploadCourseLogo}
+                      disabled={props.disabled}
+                    >
                       {t(translations.uploadImage)}
                     </Button>
 
-                    <Button onClick={(): void => setStagedLogo(undefined)}>
+                    <Button
+                      onClick={(): void => setStagedLogo(undefined)}
+                      disabled={props.disabled}
+                    >
                       {t(translations.clearChanges)}
                     </Button>
                   </>
@@ -152,6 +167,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                   fieldState={fieldState}
                   label={t(translations.published)}
                   description={t(translations.publishedDescription)}
+                  disabled={props.disabled}
                 />
               )}
             />
@@ -164,6 +180,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                   field={field}
                   fieldState={fieldState}
                   label={t(translations.allowUsersToSendEnrolmentRequests)}
+                  disabled={props.disabled}
                 />
               )}
             />
@@ -181,6 +198,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                       fieldState={fieldState}
                       label={t(translations.startsAt)}
                       variant="filled"
+                      disabled={props.disabled}
                     />
                   )}
                 />
@@ -196,6 +214,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                       fieldState={fieldState}
                       label={t(translations.endsAt)}
                       variant="filled"
+                      disabled={props.disabled}
                     />
                   )}
                 />
@@ -213,6 +232,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                   variant="filled"
                   options={timeZonesOptions}
                   native
+                  disabled={props.disabled}
                 />
               )}
             />
@@ -228,6 +248,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                   fieldState={fieldState}
                   label={t(translations.gamified)}
                   description={t(translations.gamifiedDescription)}
+                  disabled={props.disabled}
                 />
               )}
             />
@@ -241,6 +262,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                   fieldState={fieldState}
                   label={t(translations.enablePersonalisedTimelines)}
                   description={t(translations.personalisedTimelinesDescription)}
+                  disabled={props.disabled}
                 />
               )}
             />
@@ -260,6 +282,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                         label={t(translations.fixed)}
                         description={t(translations.fixedDescription)}
                         className="my-0"
+                        disabled={props.disabled}
                       />
 
                       <RadioButton
@@ -267,6 +290,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                         label={t(translations.fomo)}
                         description={t(translations.fomoDescription)}
                         className="my-0"
+                        disabled={props.disabled}
                       />
 
                       <RadioButton
@@ -274,6 +298,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                         label={t(translations.stragglers)}
                         description={t(translations.stragglersDescription)}
                         className="my-0"
+                        disabled={props.disabled}
                       />
 
                       <RadioButton
@@ -281,6 +306,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                         label={t(translations.otot)}
                         description={t(translations.ototDescription)}
                         className="my-0"
+                        disabled={props.disabled}
                       />
                     </RadioGroup>
                   )}
@@ -304,6 +330,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                     variant="filled"
                     fullWidth
                     type="number"
+                    disabled={props.disabled}
                   />
                 )}
               />
@@ -323,6 +350,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
               variant="outlined"
               color="error"
               onClick={(): void => setDeletingCourse(true)}
+              disabled={props.disabled}
             >
               {t(translations.deleteThisCourse)}
             </Button>

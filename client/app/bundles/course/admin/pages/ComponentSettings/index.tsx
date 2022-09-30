@@ -13,6 +13,7 @@ const ComponentSettings = (): JSX.Element => {
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
   const [settings, setSettings] = useState<CourseComponents>();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchComponentSettings().then(setSettings);
@@ -24,6 +25,8 @@ const ComponentSettings = (): JSX.Element => {
     components: CourseComponents,
     action: (data: CourseComponents) => void,
   ): void => {
+    setSubmitting(true);
+
     updateComponentSettings(components)
       .then((data) => {
         if (!data) return;
@@ -34,10 +37,17 @@ const ComponentSettings = (): JSX.Element => {
       .catch((error: Error) => {
         action(components);
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
-  return <ComponentSettingsForm data={settings} onChangeComponents={submit} />;
+  return (
+    <ComponentSettingsForm
+      data={settings}
+      onChangeComponents={submit}
+      disabled={submitting}
+    />
+  );
 };
 
 export default ComponentSettings;

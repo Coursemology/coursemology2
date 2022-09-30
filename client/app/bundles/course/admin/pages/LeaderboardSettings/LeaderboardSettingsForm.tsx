@@ -14,6 +14,7 @@ import commonTranslations from '../../translations';
 interface LeaderboardSettingsFormProps extends Emits<FormEmitter> {
   data: LeaderboardSettingsData;
   onSubmit: (data: LeaderboardSettingsData) => void;
+  disabled?: boolean;
 }
 
 const LeaderboardSettingsForm = (
@@ -40,6 +41,7 @@ const LeaderboardSettingsForm = (
                 variant="filled"
                 label={t(commonTranslations.title)}
                 fullWidth
+                disabled={props.disabled}
               />
             )}
           />
@@ -63,6 +65,7 @@ const LeaderboardSettingsForm = (
                 label={t(translations.displayUserCount)}
                 type="number"
                 fullWidth
+                disabled={props.disabled}
               />
             )}
           />
@@ -75,6 +78,7 @@ const LeaderboardSettingsForm = (
                 field={field}
                 fieldState={fieldState}
                 label={t(translations.enableGroupLeaderboard)}
+                disabled={props.disabled}
               />
             )}
           />
@@ -89,6 +93,7 @@ const LeaderboardSettingsForm = (
                 variant="filled"
                 label={t(translations.groupLeaderboardTitle)}
                 fullWidth
+                disabled={props.disabled}
               />
             )}
           />

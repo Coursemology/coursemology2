@@ -7,7 +7,7 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { DragIndicator } from '@mui/icons-material';
 import {
   DragDropContext,
@@ -28,6 +28,7 @@ interface SidebarSettingsFormProps {
     data: SidebarItems,
     action: (newData: SidebarItems) => void,
   ) => void;
+  disabled?: boolean;
 }
 
 const Outlined = (props): JSX.Element => (
@@ -74,50 +75,65 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
       // https://html.spec.whatwg.org/multipage/interaction.html#tracking-user-activation
       navigator.vibrate?.(strength);
 
-  const renderRows = useCallback(
-    (item: SidebarItem, index: number): JSX.Element => (
-      <Draggable key={item.id} draggableId={item.id} index={index}>
-        {(provided, { isDragging }): JSX.Element => {
-          let transform = provided.draggableProps?.style?.transform;
+  const renderRows = (item: SidebarItem, index: number): JSX.Element => (
+    <Draggable
+      key={item.id}
+      draggableId={item.id}
+      index={index}
+      isDragDisabled={props.disabled}
+    >
+      {(provided, { isDragging }): JSX.Element => {
+        let transform = provided.draggableProps?.style?.transform;
 
-          if (isDragging && transform) {
-            // Reset the x-axis transform to prevent horizontal dragging
-            transform = transform.replace(/\(.+,/, '(0,');
-          }
+        if (isDragging && transform) {
+          // Reset the x-axis transform to prevent horizontal dragging
+          transform = transform.replace(/\(.+,/, '(0,');
+        }
 
-          const style = {
-            ...provided.draggableProps.style,
-            transform,
-          };
+        const style = {
+          ...provided.draggableProps.style,
+          transform,
+        };
 
-          return (
-            <TableRow
-              className={`w-full cursor-grab select-none active:cursor-grabbing ${
-                isDragging && 'rounded-lg bg-white opacity-80 drop-shadow-md'
-              }`}
-              ref={provided.innerRef}
-              hover
-              {...provided.draggableProps}
-              style={style}
-              {...provided.dragHandleProps}
-            >
-              <TableCell className="w-0 border-none">
-                <DragIndicator fontSize="small" color="disabled" />
-              </TableCell>
+        return (
+          <TableRow
+            className={`w-full select-none ${
+              isDragging && 'rounded-lg bg-white opacity-80 drop-shadow-md'
+            }`}
+            ref={provided.innerRef}
+            hover
+            {...provided.draggableProps}
+            style={style}
+            {...provided.dragHandleProps}
+          >
+            <TableCell className="w-0 border-none">
+              <DragIndicator
+                fontSize="small"
+                color="disabled"
+                className={`${props.disabled && 'opacity-0'}`}
+              />
+            </TableCell>
 
-              <TableCell className="w-0 border-none">
-                <div className={`${item.iconClassName} w-0`} />
-              </TableCell>
+            <TableCell className="w-0 border-none">
+              <div
+                className={`${item.iconClassName} w-0 ${
+                  props.disabled && 'text-neutral-400'
+                }`}
+              />
+            </TableCell>
 
-              <TableCell className="border-none">
-                <Typography variant="body2">{item.title}</Typography>
-              </TableCell>
-            </TableRow>
-          );
-        }}
-      </Draggable>
-    ),
-    [],
+            <TableCell className="border-none">
+              <Typography
+                variant="body2"
+                color={props.disabled ? 'text.disabled' : 'text.primary'}
+              >
+                {item.title}
+              </Typography>
+            </TableCell>
+          </TableRow>
+        );
+      }}
+    </Draggable>
   );
 
   return (

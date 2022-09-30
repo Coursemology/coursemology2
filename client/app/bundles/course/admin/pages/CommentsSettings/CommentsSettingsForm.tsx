@@ -14,6 +14,7 @@ import commonTranslations from '../../translations';
 interface CommentsSettingsFormProps extends Emits<FormEmitter> {
   data: CommentsSettingsData;
   onSubmit: (data: CommentsSettingsData) => void;
+  disabled?: boolean;
 }
 
 const validationSchema = object({
@@ -46,6 +47,7 @@ const CommentsSettingsForm = (
                 variant="filled"
                 label={t(commonTranslations.title)}
                 fullWidth
+                disabled={props.disabled}
               />
             )}
           />
@@ -69,6 +71,7 @@ const CommentsSettingsForm = (
                 label={t(commonTranslations.pagination)}
                 type="number"
                 fullWidth
+                disabled={props.disabled}
               />
             )}
           />

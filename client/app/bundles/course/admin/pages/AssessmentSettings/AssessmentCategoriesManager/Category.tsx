@@ -32,6 +32,7 @@ interface CategoryProps {
     tabIndex: number,
     newTitle: AssessmentTab['title'],
   ) => void;
+  disabled?: boolean;
 }
 
 const Category = (props: CategoryProps): JSX.Element => {
@@ -140,6 +141,7 @@ const Category = (props: CategoryProps): JSX.Element => {
         key={category.id}
         draggableId={`category-${category.id}`}
         index={index}
+        isDragDisabled={props.disabled}
       >
         {(provided, { isDragging }): JSX.Element => (
           <Card
@@ -156,7 +158,11 @@ const Category = (props: CategoryProps): JSX.Element => {
             >
               <div className="flex w-full items-center justify-between sm:w-fit">
                 <div className="flex items-center">
-                  <DragIndicator fontSize="small" color="disabled" />
+                  <DragIndicator
+                    fontSize="small"
+                    color="disabled"
+                    className={`${props.disabled && 'opacity-0'}`}
+                  />
 
                   <div className="ml-4 flex items-center">
                     <SwitchableTextField
@@ -166,6 +172,7 @@ const Category = (props: CategoryProps): JSX.Element => {
                       onPressEnter={handleRenameCategory}
                       onPressEscape={resetCategoryTitle}
                       value={newTitle}
+                      disabled={props.disabled}
                     />
 
                     {!renaming && category.assessmentsCount > 0 && (
@@ -181,7 +188,7 @@ const Category = (props: CategoryProps): JSX.Element => {
                 {!renaming && (
                   <IconButton
                     size="small"
-                    disabled={isDragging}
+                    disabled={props.disabled ?? isDragging}
                     className="ml-4 hoverable:opacity-0 hoverable:group-hover:opacity-100"
                     onClick={(): void => setRenaming(true)}
                   >
@@ -194,7 +201,7 @@ const Category = (props: CategoryProps): JSX.Element => {
                 {!props.stationary && (
                   <IconButton
                     color="error"
-                    disabled={isDragging}
+                    disabled={props.disabled ?? isDragging}
                     className="mx-4 sm:mx-0"
                     onClick={handleClickDelete}
                   >
@@ -204,7 +211,7 @@ const Category = (props: CategoryProps): JSX.Element => {
 
                 <Button
                   startIcon={<Add />}
-                  disabled={isDragging}
+                  disabled={props.disabled ?? isDragging}
                   onClick={handleCreateTab}
                 >
                   {t(translations.addATab)}
@@ -224,7 +231,7 @@ const Category = (props: CategoryProps): JSX.Element => {
                   ref={droppableProvided.innerRef}
                   {...droppableProvided.droppableProps}
                 >
-                  {renderTabs(category.tabs, isDragging)}
+                  {renderTabs(category.tabs, props.disabled ?? isDragging)}
                   {droppableProvided.placeholder}
                 </div>
               )}

@@ -11,6 +11,7 @@ import translations from './translations';
 const SidebarSettings = (): JSX.Element => {
   const { t } = useTranslation();
   const [settings, setSettings] = useState<SidebarItems>();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchSidebarItems().then(setSettings);
@@ -22,6 +23,8 @@ const SidebarSettings = (): JSX.Element => {
     data: SidebarItems,
     action: (newData: SidebarItems) => void,
   ): void => {
+    setSubmitting(true);
+
     updateSidebarItems(data)
       .then((newData) => {
         if (!newData) return;
@@ -31,10 +34,17 @@ const SidebarSettings = (): JSX.Element => {
       .catch((error: Error) => {
         action(data);
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
-  return <SidebarSettingsForm data={settings} onSubmit={submit} />;
+  return (
+    <SidebarSettingsForm
+      data={settings}
+      onSubmit={submit}
+      disabled={submitting}
+    />
+  );
 };
 
 export default SidebarSettings;
