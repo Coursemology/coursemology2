@@ -27,6 +27,7 @@ const AssessmentSettings = (): JSX.Element => {
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
   const [settings, setSettings] = useState<AssessmentSettingsData>();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchAssessmentsSettings().then(setSettings);
@@ -45,55 +46,72 @@ const AssessmentSettings = (): JSX.Element => {
   };
 
   const submit = (data: AssessmentSettingsData): void => {
+    setSubmitting(true);
+
     updateAssessmentSettings(data)
       .then((newData) => {
         updateFormAndToast(newData, t(formTranslations.changesSaved));
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   const assessmentSettings: AssessmentSettingsContextType = {
     settings,
     createCategory: (title, weight) => {
+      setSubmitting(true);
+
       createCategory(title, weight)
         .then((newData) => {
           updateFormAndToast(newData, t(commonTranslations.created, { title }));
         })
         .catch((error: Error) => {
           toast.error(error.message);
-        });
+        })
+        .finally(() => setSubmitting(false));
     },
     createTabInCategory: (id, title, weight) => {
+      setSubmitting(true);
+
       createTabInCategory(id, title, weight)
         .then((newData) => {
           updateFormAndToast(newData, t(commonTranslations.created, { title }));
         })
         .catch((error: Error) => {
           toast.error(error.message);
-        });
+        })
+        .finally(() => setSubmitting(false));
     },
     deleteCategory: (id, title) => {
+      setSubmitting(true);
+
       deleteCategory(id)
         .then((newData) => {
           updateFormAndToast(newData, t(commonTranslations.deleted, { title }));
         })
         .catch((error: Error) => {
           toast.error(error.message);
-        });
+        })
+        .finally(() => setSubmitting(false));
     },
     deleteTabInCategory: (id, tabId, title) => {
+      setSubmitting(true);
+
       deleteTabInCategory(id, tabId)
         .then((newData) => {
           updateFormAndToast(newData, t(commonTranslations.deleted, { title }));
         })
         .catch((error: Error) => {
           toast.error(error.message);
-        });
+        })
+        .finally(() => setSubmitting(false));
     },
-    moveAssessmentsToTab: (assessmentIds, tabId, fullTabTitle) =>
-      toast.promise(moveAssessmentsToTab(assessmentIds, tabId), {
+    moveAssessmentsToTab: async (assessmentIds, tabId, fullTabTitle) => {
+      setSubmitting(true);
+
+      await toast.promise(moveAssessmentsToTab(assessmentIds, tabId), {
         pending: t(translations.movingAssessmentsTo, { tab: fullTabTitle }),
         success: t(translations.nAssessmentsMoved, {
           n: assessmentIds.length.toString(),
@@ -102,7 +120,10 @@ const AssessmentSettings = (): JSX.Element => {
         error: t(translations.errorWhenMovingAssessments, {
           tab: fullTabTitle,
         }),
-      }),
+      });
+
+      setSubmitting(false);
+    },
   };
 
   return (
@@ -111,6 +132,7 @@ const AssessmentSettings = (): JSX.Element => {
         data={settings}
         emitsVia={setForm}
         onSubmit={submit}
+        disabled={submitting}
       />
     </AssessmentSettingsProvider>
   );

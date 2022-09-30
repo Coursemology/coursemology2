@@ -15,6 +15,7 @@ const MaterialsSettings = (): JSX.Element => {
   const { t } = useTranslation();
   const [settings, setSettings] = useState<MaterialsSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchMaterialsSettings().then(setSettings);
@@ -23,6 +24,8 @@ const MaterialsSettings = (): JSX.Element => {
   if (!settings) return <LoadingIndicator />;
 
   const submit = (data: MaterialsSettingsData): void => {
+    setSubmitting(true);
+
     updateMaterialsSettings(data)
       .then((newData) => {
         if (!newData) return;
@@ -32,7 +35,8 @@ const MaterialsSettings = (): JSX.Element => {
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -40,6 +44,7 @@ const MaterialsSettings = (): JSX.Element => {
       data={settings}
       onSubmit={submit}
       emitsVia={setForm}
+      disabled={submitting}
     />
   );
 };

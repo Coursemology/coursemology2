@@ -17,6 +17,7 @@ interface VideosTabsManagerProps {
   ) => void;
   onDeleteTab?: (id: VideosTab['id'], title: VideosTab['title']) => void;
   canCreateTabs?: boolean;
+  disabled?: boolean;
 }
 
 const VideosTabsManager = (props: VideosTabsManagerProps): JSX.Element => {
@@ -76,13 +77,18 @@ const VideosTabsManager = (props: VideosTabsManagerProps): JSX.Element => {
         index={index}
         onDelete={props.onDeleteTab}
         onRename={renameTab}
+        disabled={props.disabled}
       />
     ));
 
   return (
     <>
       {props.canCreateTabs && (
-        <Button startIcon={<Add />} onClick={createTab}>
+        <Button
+          startIcon={<Add />}
+          onClick={createTab}
+          disabled={props.disabled}
+        >
           {t(translations.addATab)}
         </Button>
       )}

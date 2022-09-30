@@ -30,7 +30,7 @@ export interface AssessmentSettingsContextType {
     assessmentIds: number[],
     tabId: AssessmentTab['id'],
     fullTabTitle: string,
-  ) => Promise<unknown[]>;
+  ) => Promise<void>;
 }
 
 const AssessmentSettingsContext = createContext<AssessmentSettingsContextType>(

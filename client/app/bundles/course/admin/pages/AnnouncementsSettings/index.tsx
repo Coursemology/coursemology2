@@ -18,6 +18,7 @@ const AnnouncementsSettings = (): JSX.Element => {
   const { t } = useTranslation();
   const [settings, setSettings] = useState<AnnouncementsSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchAnnouncementsSettings().then(setSettings);
@@ -26,6 +27,8 @@ const AnnouncementsSettings = (): JSX.Element => {
   if (!settings) return <LoadingIndicator />;
 
   const submit = (data: AnnouncementsSettingsData): void => {
+    setSubmitting(true);
+
     updateAnnouncementsSettings(data)
       .then((newData) => {
         if (!newData) return;
@@ -35,7 +38,8 @@ const AnnouncementsSettings = (): JSX.Element => {
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -43,6 +47,7 @@ const AnnouncementsSettings = (): JSX.Element => {
       data={settings}
       onSubmit={submit}
       emitsVia={setForm}
+      disabled={submitting}
     />
   );
 };

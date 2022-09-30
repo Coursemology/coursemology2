@@ -16,6 +16,7 @@ import { sortCategories } from './utils';
 interface Props {
   categories: AssessmentCategory[];
   onUpdate?: (categories: AssessmentCategory[]) => void;
+  disabled?: boolean;
 }
 
 export const BOARD = 'board';
@@ -115,12 +116,17 @@ const AssessmentCategoriesManager = (props: Props): JSX.Element => {
         onRename={renameCategory}
         onRenameTab={renameTabInCategory}
         stationary={categories.length <= 1}
+        disabled={props.disabled}
       />
     ));
 
   return (
     <>
-      <Button startIcon={<Add />} onClick={handleCreateCategory}>
+      <Button
+        startIcon={<Add />}
+        onClick={handleCreateCategory}
+        disabled={props.disabled}
+      >
         {t(translations.addACategory)}
       </Button>
 
