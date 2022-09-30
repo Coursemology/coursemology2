@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Administration: Forums' do
+RSpec.feature 'Course: Administration: Forums', js: true do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -17,18 +17,20 @@ RSpec.feature 'Course: Administration: Forums' do
         new_title = 'New Title'
         empty_title = ''
 
-        title_field = 'settings_forums_component_title'
+        title_field = 'title'
         fill_in title_field, with: new_title
-        click_button 'update'
-        expect(page).
-          to have_selector('div', text: I18n.t('course.admin.forum_settings.update.success'))
+        click_button 'Save changes'
+        expect_toastify('Your changes have been saved.')
         expect(page).to have_field(title_field, with: new_title)
+
+        visit current_path
         expect(page).to have_selector('li a', text: new_title)
 
         fill_in title_field, with: empty_title
-        click_button 'update'
-        expect(page).
-          to have_selector('div', text: I18n.t('course.admin.forum_settings.update.success'))
+        click_button 'Save changes'
+        expect_toastify('Your changes have been saved.')
+
+        visit current_path
         expect(page).to have_selector('li a', text: I18n.t('course.forum.forums.sidebar_title'))
       end
 
@@ -38,15 +40,16 @@ RSpec.feature 'Course: Administration: Forums' do
         invalid_pagination_count = -1
         valid_pagination_count = 100
 
-        pagination_field = 'settings_forums_component_pagination'
+        pagination_field = 'pagination'
         fill_in pagination_field, with: invalid_pagination_count
-        click_button 'update'
-        expect(page).to have_css('div.has-error')
+        click_button 'Save changes'
+        expect_toastify('Your changes have been saved.')
+        expect(page).
+          to have_field(pagination_field, with: invalid_pagination_count.abs)
 
         fill_in pagination_field, with: valid_pagination_count
-        click_button 'update'
-        expect(page).
-          to have_selector('div', text: I18n.t('course.admin.forum_settings.update.success'))
+        click_button 'Save changes'
+        expect_toastify('Your changes have been saved.')
         expect(page).to have_field(pagination_field, with: valid_pagination_count)
       end
     end
