@@ -85,6 +85,40 @@ module Capybara::TestGroupHelpers
       end
       sleep 0.5 # To ensure toast is closed
     end
+
+    # Finds a react-beautiful-dnd draggable element
+    def find_rbd_with_draggable_id(draggable_id)
+      find("div[data-rbd-draggable-id='#{draggable_id}']")
+    end
+
+    # Finds a react-beautiful-dnd draggable drag handle element
+    #
+    # Note that not all draggable elements have their entire element as the drag handle.
+    # For example, an assessment category is a draggable, but only the header in which the
+    # category title is contained is the drag handle.
+    def find_rbd_with_drag_handle_id(drag_handle_id)
+      find("div[data-rbd-drag-handle-draggable-id='#{drag_handle_id}']")
+    end
+
+    # Finds a react-beautiful-dnd draggable assessment category
+    def find_rbd_category(category_id)
+      find_rbd_with_drag_handle_id("category-#{category_id}")
+    end
+
+    # Finds a react-beautiful-dnd draggable assessment tab
+    def find_rbd_tab(tab_id)
+      find_rbd_with_draggable_id("tab-#{tab_id}")
+    end
+
+    # Drags a react-beautiful-dnd draggable from one to another element's location
+    def drag_rbd(source, destination)
+      page.driver.browser.action.move_to(source.native).
+        click_and_hold.
+        move_by(0, -5). # rbd needs a nudge to trigger
+        move_to(destination.native).
+        release.
+        perform
+    end
   end
 end
 
