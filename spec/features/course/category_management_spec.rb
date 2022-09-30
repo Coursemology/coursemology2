@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Category: Management' do
+RSpec.feature 'Course: Category: Management', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -10,78 +10,96 @@ RSpec.feature 'Course: Category: Management' do
 
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
+
       scenario 'I can create a new category' do
-        category = attributes_for(:course_assessment_category)
-
         visit course_admin_assessments_path(course)
-        find_link(nil, href: new_course_admin_assessments_category_path(course)).click
 
-        expect(current_path).to eq(new_course_admin_assessments_category_path(course))
-        fill_in 'title', with: category[:title]
-        fill_in 'weight', with: category[:weight]
-        click_button 'submit'
+        click_button 'Add a category'
 
-        expect(current_path).to eq(course_admin_assessments_path(course))
-        expect(page).to have_selector('div.alert.alert-success')
+        expect_toastify('New Category was successfully created.')
+        expect(page).to have_content('New Category')
       end
 
-      scenario 'I can edit category fields' do
+      scenario 'I can rename a category' do
         category = course.assessment_categories.first
         category_edited = attributes_for(:course_assessment_category)
 
         visit course_admin_assessments_path(course)
+        category_element = find_rbd_category(category.id)
+        rename_button = category_element.all('button', visible: false).first
+        previous_title = category.title
 
-        title_field = find(:css, "#{content_tag_selector(category)} input.category_title")
-        weight_field = find(:css, "#{content_tag_selector(category)} input.category_weight")
-
-        expect(title_field.value).to eq(category.title)
-        expect(weight_field.value.to_i).to eq(category.weight)
-
+        rename_button.click
+        title_field = category_element.find('input')
         title_field.set(category_edited[:title])
-        weight_field.set(category_edited[:weight])
-        click_button 'submit'
+        title_field.native.send_keys(:return)
+        click_button 'Save changes'
 
-        expect(title_field.value).to eq(category_edited[:title])
-        expect(weight_field.value.to_i).to eq(category_edited[:weight])
-        expect(page).
-          to have_selector('div.alert.alert-success',
-                           text: "x#{I18n.t('course.admin.assessment_settings.update.success')}")
+        expect_toastify('Your changes have been saved.')
+        visit current_path
+        expect(page).to have_content(category_element[:title])
+        expect(page).not_to have_content(previous_title)
+      end
+
+      scenario 'I can reorder a category' do
+        first_category = course.assessment_categories.first
+        category_to_move = create(:course_assessment_category, course: course)
+        previous_categories = course.assessment_categories
+        expect(previous_categories[0]).to eq(first_category)
+        expect(previous_categories[1]).to eq(category_to_move)
+
+        visit course_admin_assessments_path(course)
+        category_to_move_element = find_rbd_category(category_to_move.id)
+        category_element = find_rbd_category(first_category.id)
+
+        drag_rbd(category_to_move_element, category_element)
+        click_button 'Save changes'
+
+        expect_toastify('Your changes have been saved.')
+        updated_categories = course.reload.assessment_categories
+        expect(updated_categories[0]).to eq(category_to_move)
+        expect(updated_categories[1]).to eq(first_category)
       end
 
       scenario 'I can delete a category' do
         category = create(:course_assessment_category, course: course)
         visit course_admin_assessments_path(course)
-        deletion_path = course_admin_assessments_category_path(course, category)
-        find_link(nil, href: deletion_path).click
-        expect(page).to have_selector('div.alert.alert-success')
+        category_element = find_rbd_category(category.id)
+        delete_button = category_element.all('button', visible: false)[1]
+
+        delete_button.click
+
+        expect_toastify("#{category.title} was successfully deleted.")
+
+        visit current_path
+        expect(page).not_to have_content(category.title)
       end
 
       scenario 'I cannot delete the last category' do
         visit course_admin_assessments_path(course)
         category = course.assessment_categories.first
-        deletion_path =
-          course_admin_assessments_category_path(course, category)
-        find_link(nil, href: deletion_path).click
-        expect(page).not_to have_selector('div.alert.alert-success')
-        expect(page).to have_selector('div.alert.alert-danger')
-        expect(page).to have_content_tag_for(category)
+        category_element = find_rbd_category(category.id)
+        buttons = category_element.all('button', visible: false)
+
+        expect(buttons.length).to be(2)
+        expect(category_element).not_to have_selector('[data-testid="DeleteIcon"]')
+        expect(page).to have_content(category.title)
       end
 
-      scenario 'I can move tab to another category' do
+      scenario 'I can move a tab to another category' do
         default_category = course.assessment_categories.first
         tab = create(:course_assessment_tab, course: course)
         assessment = create(:assessment, course: course, tab: tab)
-
-        visit course_admin_assessments_path(course)
-
         expect(assessment.folder.parent).not_to eq(default_category.folder)
 
-        # Move tab from its current category to the default category.
-        find("#tab_#{tab.id}").
-          find('#course_assessment_categories_attributes_1_tabs_attributes_1_category_id').
-          find(:xpath, 'option[2]').select_option
+        visit course_admin_assessments_path(course)
+        tab_element = find_rbd_tab(tab.id)
+        default_category_element = find_rbd_category(default_category.id)
 
-        click_button 'submit'
+        drag_rbd(tab_element, default_category_element)
+        click_button 'Save changes'
+
+        expect_toastify('Your changes have been saved.')
         expect(tab.reload.category).to eq(default_category)
         expect(assessment.reload.folder.parent).to eq(default_category.folder)
       end

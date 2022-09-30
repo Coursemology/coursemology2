@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Assessments: Management' do
+RSpec.feature 'Course: Assessments: Management', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -14,59 +14,79 @@ RSpec.feature 'Course: Assessments: Management' do
       let(:tab) { category.tabs.first }
 
       scenario 'I can create a new tab' do
-        new_tab = attributes_for(:course_assessment_tab)
-
         visit course_admin_assessments_path(course)
-        find_link(nil, href: new_course_admin_assessments_category_tab_path(course, category)).click
+        category_element = find_rbd_category(category.id)
 
-        expect(current_path).to eq(new_course_admin_assessments_category_tab_path(course, category))
-        fill_in 'title', with: new_tab[:title]
-        fill_in 'weight', with: new_tab[:weight]
-        click_button 'submit'
+        within category_element do
+          click_button 'Tab'
+        end
 
-        expect(current_path).to eq(course_admin_assessments_path(course))
-        expect(page).to have_selector('div.alert.alert-success')
+        expect_toastify('New Tab was successfully created.')
+        expect(page).to have_content('New Tab')
       end
 
-      scenario 'I can edit tab fields' do
+      scenario 'I can rename a tab' do
         tab_edited = attributes_for(:course_assessment_tab)
 
         visit course_admin_assessments_path(course)
+        tab_element = find_rbd_tab(tab.id)
+        rename_button = tab_element.all('button', visible: false).first
+        previous_title = tab.title
 
-        title_field = find(:css, "#{content_tag_selector(tab)} input.tab_title")
-        weight_field = find(:css, "#{content_tag_selector(tab)} input.tab_weight")
-
-        expect(title_field.value).to eq(tab.title)
-        expect(weight_field.value.to_i).to eq(tab.weight)
-
+        rename_button.click
+        title_field = tab_element.find('input')
         title_field.set(tab_edited[:title])
-        weight_field.set(tab_edited[:weight])
-        click_button 'submit'
+        title_field.native.send_keys(:return)
+        click_button 'Save changes'
 
-        expect(page).
-          to have_selector('div.alert.alert-success',
-                           text: "x#{I18n.t('course.admin.assessment_settings.update.success')}")
-        expect(title_field.value).to eq(tab_edited[:title])
-        expect(weight_field.value.to_i).to eq(tab_edited[:weight])
+        expect_toastify('Your changes have been saved.')
+        expect(page).to have_content(tab_edited[:title])
+        expect(page).not_to have_content(previous_title)
+      end
+
+      scenario 'I can reorder a tab' do
+        first_tab = tab
+        tab_to_move = create(:course_assessment_tab, course: course, category: category)
+        previous_tabs = category.tabs
+        expect(previous_tabs[0]).to eq(first_tab)
+        expect(previous_tabs[1]).to eq(tab_to_move)
+
+        visit course_admin_assessments_path(course)
+        tab_to_move_element = find_rbd_tab(tab_to_move.id)
+        category_element = find_rbd_category(category.id)
+
+        drag_rbd(tab_to_move_element, category_element)
+        click_button 'Save changes'
+
+        expect_toastify('Your changes have been saved.')
+        updated_tabs = category.reload.tabs
+        expect(updated_tabs[0]).to eq(tab_to_move)
+        expect(updated_tabs[1]).to eq(first_tab)
       end
 
       scenario 'I can delete a tab' do
-        tab2 = create(:course_assessment_tab, course: course, category: category)
+        tab_to_delete = create(:course_assessment_tab, course: course, category: category)
 
         visit course_admin_assessments_path(course)
-        find_link(nil,
-                  href: course_admin_assessments_category_tab_path(course, category, tab)).click
-        expect(page).to have_selector('div.alert.alert-success')
-        expect(page).to have_no_content_tag_for(tab)
-        expect(page).to have_content_tag_for(tab2)
+        tab_to_delete_element = find_rbd_tab(tab_to_delete.id)
+        delete_button = tab_to_delete_element.all('button', visible: false).last
+
+        delete_button.click
+
+        expect_toastify("#{tab_to_delete.title} was successfully deleted.")
+        expect(page).not_to have_content(tab_to_delete.title)
+        expect(page).to have_content(tab.title)
       end
 
       scenario 'I cannot delete the last tab of the last category' do
         visit course_admin_assessments_path(course)
-        find_link(nil,
-                  href: course_admin_assessments_category_tab_path(course, category, tab)).click
-        expect(page).to have_selector('div.alert.alert-danger')
-        expect(page).to have_content_tag_for(tab)
+
+        tab_element = find_rbd_tab(tab.id)
+        buttons = tab_element.all('button', visible: false)
+
+        expect(buttons.length).to be(1)
+        expect(tab_element).not_to have_selector('[data-testid="DeleteIcon"]')
+        expect(page).to have_content(tab.title)
       end
     end
   end
