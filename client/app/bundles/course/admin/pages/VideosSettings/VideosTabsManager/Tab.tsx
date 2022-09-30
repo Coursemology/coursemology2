@@ -12,6 +12,7 @@ interface TabProps {
   index: number;
   onDelete?: (id: VideosTab['id'], title: VideosTab['title']) => void;
   onRename?: (index: number, newTitle: VideosTab['title']) => void;
+  disabled?: boolean;
 }
 
 const Tab = (props: TabProps): JSX.Element => {
@@ -83,13 +84,14 @@ const Tab = (props: TabProps): JSX.Element => {
                   value={newTitle}
                   className="ml-4"
                   textProps={{ variant: 'body2' }}
+                  disabled={props.disabled}
                 />
 
                 {!renaming && (
                   <IconButton
                     size="small"
-                    disabled={isDragging}
-                    className="hoverable:opacity-0 hoverable:group-hover:opacity-100 ml-4"
+                    disabled={props.disabled ?? isDragging}
+                    className="ml-4 hoverable:opacity-0 hoverable:group-hover:opacity-100"
                     onClick={(): void => setRenaming(true)}
                   >
                     <Create />
@@ -100,8 +102,8 @@ const Tab = (props: TabProps): JSX.Element => {
               {tab.canDeleteTab && (
                 <IconButton
                   color="error"
-                  disabled={isDragging}
-                  className="hoverable:ml-0 hoverable:opacity-0 hoverable:group-hover:opacity-100 ml-4"
+                  disabled={props.disabled ?? isDragging}
+                  className="ml-4 hoverable:ml-0 hoverable:opacity-0 hoverable:group-hover:opacity-100"
                   onClick={(): void => setDeleting(true)}
                 >
                   <Delete />

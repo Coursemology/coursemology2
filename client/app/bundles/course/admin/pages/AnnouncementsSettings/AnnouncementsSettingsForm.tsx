@@ -13,6 +13,7 @@ import commonTranslations from '../../translations';
 interface AnnouncementsSettingsFormProps extends Emits<FormEmitter> {
   data: AnnouncementsSettingsData;
   onSubmit: (data: AnnouncementsSettingsData) => void;
+  disabled?: boolean;
 }
 
 const AnnouncementsSettingsForm = (
@@ -26,6 +27,7 @@ const AnnouncementsSettingsForm = (
       headsUp
       emitsVia={props.emitsVia}
       onSubmit={props.onSubmit}
+      disabled={props.disabled}
     >
       {(control): JSX.Element => (
         <Section title={t(translations.announcementsSettings)} sticksToNavbar>
@@ -39,6 +41,7 @@ const AnnouncementsSettingsForm = (
                 variant="filled"
                 label={t(commonTranslations.title)}
                 fullWidth
+                disabled={props.disabled}
               />
             )}
           />

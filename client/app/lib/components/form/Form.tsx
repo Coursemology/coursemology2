@@ -24,6 +24,7 @@ interface FormProps extends Emits<FormEmitter> {
     watch: UseFormWatch<any>,
     formState: FormState<any>,
   ) => ReactNode;
+  disabled?: boolean;
 }
 
 const Form = (props: FormProps): JSX.Element => {
@@ -47,11 +48,21 @@ const Form = (props: FormProps): JSX.Element => {
             </Typography>
 
             <div className="ml-10">
-              <Button onClick={(): void => reset()} className="mr-4">
+              <Button
+                onClick={(): void => reset()}
+                className={`mr-4 ${props.disabled && 'text-neutral-500'}`}
+                disabled={props.disabled}
+              >
                 {t(translations.reset)}
               </Button>
 
-              <Button type="submit" variant="contained" disableElevation>
+              <Button
+                type="submit"
+                variant="contained"
+                disableElevation
+                className={`${props.disabled && 'bg-neutral-500'}`}
+                disabled={props.disabled}
+              >
                 {t(translations.saveChanges)}
               </Button>
             </div>

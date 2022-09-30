@@ -15,6 +15,7 @@ const ForumsSettings = (): JSX.Element => {
   const { t } = useTranslation();
   const [settings, setSettings] = useState<ForumsSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchForumsSettings().then(setSettings);
@@ -23,6 +24,8 @@ const ForumsSettings = (): JSX.Element => {
   if (!settings) return <LoadingIndicator />;
 
   const submit = (data: ForumsSettingsData): void => {
+    setSubmitting(true);
+
     updateForumsSettings(data)
       .then((newData) => {
         if (!newData) return;
@@ -32,11 +35,17 @@ const ForumsSettings = (): JSX.Element => {
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
-    <ForumsSettingsForm data={settings} onSubmit={submit} emitsVia={setForm} />
+    <ForumsSettingsForm
+      data={settings}
+      onSubmit={submit}
+      emitsVia={setForm}
+      disabled={submitting}
+    />
   );
 };
 

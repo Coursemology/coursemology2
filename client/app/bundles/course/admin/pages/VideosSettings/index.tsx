@@ -21,6 +21,7 @@ const VideosSettings = (): JSX.Element => {
   const { t } = useTranslation();
   const [settings, setSettings] = useState<VideosSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchVideosSettings().then(setSettings);
@@ -38,6 +39,8 @@ const VideosSettings = (): JSX.Element => {
   };
 
   const submit = (data: VideosSettingsData): void => {
+    setSubmitting(true);
+
     updateVideosSettings(data)
       .then((newData) => {
         reloadOptions();
@@ -45,33 +48,40 @@ const VideosSettings = (): JSX.Element => {
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   const handleCreateTab = (
     title: VideosTab['title'],
     weight: VideosTab['weight'],
   ): void => {
+    setSubmitting(true);
+
     createTab(title, weight)
       .then((newData) => {
         updateFormAndToast(newData, t(commonTranslations.created, { title }));
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   const handleDeleteTab = (
     id: VideosTab['id'],
     title: VideosTab['title'],
   ): void => {
+    setSubmitting(true);
+
     deleteTab(id)
       .then((newData) => {
         updateFormAndToast(newData, t(commonTranslations.deleted, { title }));
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -82,6 +92,7 @@ const VideosSettings = (): JSX.Element => {
       onCreateTab={handleCreateTab}
       onDeleteTab={handleDeleteTab}
       canCreateTabs={settings.canCreateTabs}
+      disabled={submitting}
     />
   );
 };

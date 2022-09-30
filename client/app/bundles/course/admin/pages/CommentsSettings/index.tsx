@@ -15,6 +15,7 @@ const CommentsSettings = (): JSX.Element => {
   const { t } = useTranslation();
   const [settings, setSettings] = useState<CommentsSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     fetchCommentsSettings().then(setSettings);
@@ -23,6 +24,8 @@ const CommentsSettings = (): JSX.Element => {
   if (!settings) return <LoadingIndicator />;
 
   const handleSubmit = (data: CommentsSettingsData): void => {
+    setSubmitting(true);
+
     updateCommentsSettings(data)
       .then((newData) => {
         if (!newData) return;
@@ -32,7 +35,8 @@ const CommentsSettings = (): JSX.Element => {
       })
       .catch((error: Error) => {
         toast.error(error.message);
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   return (
@@ -40,6 +44,7 @@ const CommentsSettings = (): JSX.Element => {
       data={settings}
       onSubmit={handleSubmit}
       emitsVia={setForm}
+      disabled={submitting}
     />
   );
 };
