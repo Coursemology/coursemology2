@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Assessments' do
+RSpec.feature 'Course: Assessments', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -22,41 +22,44 @@ RSpec.feature 'Course: Assessments' do
 
       scenario 'I can create a assessment condition' do
         valid_assessment_as_condition = create(:assessment, course: course)
+        visit edit_course_assessment_path(course, assessment)
 
-        visit new_course_assessment_condition_assessment_path(course, assessment)
+        expect do
+          click_button 'Add a condition'
+          find('li', text: 'Assessment', exact_text: true).click
+          find_field('Assessment').click
+          find('li', text: valid_assessment_as_condition.title).click
+          click_button 'Create condition'
 
-        find('#condition_assessment_assessment_id').
-          find(:css, "option[value='#{valid_assessment_as_condition.id}']").
-          select_option
-        click_button I18n.t('helpers.submit.condition_assessment.create')
-        expect(page).to have_selector('div',
-                                      text: I18n.t('course.condition.assessments.create.success'))
+          expect_toastify('Condition was successfully created.')
+          expect(all('tr', text: 'Assessment').length).to be(2)
+        end.to change { assessment.conditions.count }.by(1)
       end
 
       scenario 'I can edit a assessment condition' do
         assessment_to_change_to = create(:assessment, course: course)
+        visit edit_course_assessment_path(course, assessment)
+        condition_row = find('tr', text: assessment_condition.title)
+        edit_button = condition_row.first('button', visible: false)
 
-        visit edit_course_assessment_condition_assessment_path(course, assessment,
-                                                               assessment_condition)
-        find('#condition_assessment_assessment_id').
-          find(:css, "option[value='#{assessment_to_change_to.id}']").
-          select_option
-        click_button I18n.t('helpers.submit.condition_assessment.update')
-        expect(assessment_condition.reload.assessment).to eq(assessment_to_change_to)
-        expect(current_path).to eq edit_course_assessment_path(course, assessment)
-        expect(page).to have_selector('div',
-                                      text: I18n.t('course.condition.assessments.update.success'))
+        edit_button.click
+        find_field('Assessment').click
+        find('li', text: assessment_to_change_to.title).click
+        click_button 'Update condition'
+
+        expect_toastify('Your changes have been saved.')
+        condition_row.first('button', visible: false).click
+        expect(find_field('Assessment').value).to eq(assessment_to_change_to.title)
       end
 
-      scenario 'I can delete a assessment condition', js: true do
+      scenario 'I can delete a assessment condition' do
         visit edit_course_assessment_path(course, assessment)
+        condition_row = find('tr', text: assessment_condition.title)
+        delete_button = condition_row.all('button', visible: false).last
 
-        condition_delete_path =
-          course_assessment_condition_assessment_path(course, assessment, assessment_condition)
         expect do
-          find_button(condition_delete_path).click
-          accept_confirm_dialog
-          expect(page).to have_selector('div.alert-success')
+          delete_button.click
+          expect_toastify('Condition was successfully deleted.')
         end.to change { assessment.conditions.count }.by(-1)
       end
     end
