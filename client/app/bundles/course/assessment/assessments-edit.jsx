@@ -34,7 +34,7 @@ $(async () => {
           }
           randomizationAllowed={data.randomization_allowed}
           folderAttributes={data.folder_attributes}
-          conditionAttributes={data.condition_attributes}
+          conditionAttributes={data.conditionsData}
           initialValues={{
             ...data.attributes,
             tabs: [currentTab],

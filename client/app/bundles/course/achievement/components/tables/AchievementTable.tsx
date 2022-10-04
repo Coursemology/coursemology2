@@ -167,7 +167,7 @@ const AchievementTable: FC<Props> = (props) => {
           return (
             <div key={achievements[dataIndex].id}>
               {conditions.map((condition) => (
-                <li key={condition.id}>{condition.title}</li>
+                <li key={condition.id}>{condition.description}</li>
               ))}
             </div>
           );

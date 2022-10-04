@@ -1,7 +1,5 @@
 en:
   activerecord:
-    models:
-      course/condition/achievement: Achievement Condition
     errors:
       models:
         course/condition/achievement:
