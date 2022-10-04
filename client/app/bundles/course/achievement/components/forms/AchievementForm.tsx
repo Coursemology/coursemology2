@@ -4,7 +4,6 @@ import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
-import ConditionList from 'lib/components/course/ConditionList';
 import ErrorText from 'lib/components/ErrorText';
 import formTranslations from 'lib/translations/form';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
@@ -17,7 +16,8 @@ import {
   AchievementEditFormData,
   AchievementFormData,
 } from 'types/course/achievements';
-import { ConditionData, Conditions } from 'types/course/conditions';
+import { ConditionsData } from 'types/course/conditions';
+import ConditionsManager from 'lib/components/form/fields/ConditionsManager';
 
 interface Props extends WrappedComponentProps {
   editing: boolean; // If the Form is in editing mode, `Add Conditions` button will be displayed.
@@ -27,10 +27,7 @@ interface Props extends WrappedComponentProps {
     setError: unknown,
   ) => void;
   setIsDirty?: (value: boolean) => void;
-  conditionAttributes?: {
-    enabledConditions: Conditions[];
-    conditions: ConditionData[];
-  };
+  conditionAttributes?: ConditionsData;
   initialValues?: Object;
 }
 
@@ -222,11 +219,10 @@ const AchievementForm: FC<Props> = (props) => {
           )}
         />
         {editing && conditionAttributes && (
-          <ConditionList
+          <ConditionsManager
             title={intl.formatMessage(translations.unlockConditions)}
             description={intl.formatMessage(translations.unlockConditionsHint)}
-            newConditionUrls={conditionAttributes.enabledConditions}
-            conditions={conditionAttributes.conditions}
+            conditionsData={conditionAttributes}
           />
         )}
         {actionButtons}
