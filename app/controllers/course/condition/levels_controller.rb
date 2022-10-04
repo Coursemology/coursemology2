@@ -4,39 +4,28 @@ class Course::Condition::LevelsController < Course::ConditionsController
   before_action :set_course, only: [:new, :create]
   authorize_resource :level_condition, class: Course::Condition::Level.name
 
-  def new
-  end
-
   def create
     @level_condition.conditional = @conditional
-
-    if @level_condition.save
-      redirect_to return_to_path, success: t('course.condition.levels.create.success')
-    else
-      render :new
-    end
-  end
-
-  def edit
+    try_to_perform @level_condition.save
   end
 
   def update
-    if @level_condition.update(level_condition_params)
-      redirect_to return_to_path, success: t('course.condition.levels.update.success')
-    else
-      render :edit
-    end
+    try_to_perform @level_condition.update(level_condition_params)
   end
 
   def destroy
-    if @level_condition.destroy
-      redirect_to return_to_path, success: t('course.condition.levels.destroy.success')
-    else
-      redirect_to return_to_path, danger: t('course.condition.levels.destroy.error')
-    end
+    try_to_perform @level_condition.destroy
   end
 
   private
+
+  def try_to_perform(operation_succeeded)
+    if operation_succeeded
+      success_action
+    else
+      render json: { errors: @level_condition.errors }, status: :bad_request
+    end
+  end
 
   def level_condition_params
     params.require(:condition_level).permit(:minimum_level)

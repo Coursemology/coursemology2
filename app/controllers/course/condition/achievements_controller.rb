@@ -14,33 +14,26 @@ class Course::Condition::AchievementsController < Course::ConditionsController
     @achievement_condition.course = current_course
     authorize!(:create, @achievement_condition)
 
-    if @achievement_condition.save
-      redirect_to return_to_path, success: t('course.condition.achievements.create.success')
-    else
-      render :new
-    end
-  end
-
-  def edit
+    try_to_perform @achievement_condition.save
   end
 
   def update
-    if @achievement_condition.update(achievement_condition_params)
-      redirect_to return_to_path, success: t('course.condition.achievements.update.success')
-    else
-      render :edit
-    end
+    try_to_perform @achievement_condition.update(achievement_condition_params)
   end
 
   def destroy
-    if @achievement_condition.destroy
-      redirect_to return_to_path, success: t('course.condition.achievements.destroy.success')
-    else
-      redirect_to return_to_path, danger: t('course.condition.achievements.destroy.error')
-    end
+    try_to_perform @achievement_condition.destroy
   end
 
   private
+
+  def try_to_perform(operation_succeeded)
+    if operation_succeeded
+      success_action
+    else
+      render json: { errors: @achievement_condition.errors }, status: :bad_request
+    end
+  end
 
   def achievement_condition_params
     params.require(:condition_achievement).permit(:achievement_id)
