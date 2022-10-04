@@ -44,7 +44,7 @@ beforeEach(() => {
     randomizationAllowed: false,
     conditionAttributes: {
       conditions: [],
-      new_condition_urls: [],
+      enabledConditions: [],
     },
     folderAttributes: {
       folder_id: 1,

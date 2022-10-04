@@ -1,7 +1,5 @@
 en:
   activerecord:
-    models:
-      course/condition/assessment: Assessment Condition
     attributes:
       course/condition/assessment/title:
         minimum_score: 'Score at least %{minimum_grade_percentage} for %{assessment_title}'

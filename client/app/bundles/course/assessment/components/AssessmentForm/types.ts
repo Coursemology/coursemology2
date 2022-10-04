@@ -3,6 +3,7 @@ import { WrappedComponentProps } from 'react-intl';
 import { FieldValues, UseFormSetError } from 'react-hook-form';
 import { Emits } from 'react-emitter-factory';
 
+import { ConditionsData } from 'types/course/conditions';
 import { Material } from '../FileManager';
 
 interface Tab {
@@ -18,20 +19,6 @@ interface FolderAttributes {
    * If `true`, Materials component in Course Settings is enabled
    */
   enable_materials_action?: boolean;
-}
-
-interface AchievementTypesConditionAttributes {
-  new_condition_urls?: {
-    name?: string;
-    url?: string;
-  }[];
-
-  conditions?: {
-    name?: string;
-    description?: string;
-    edit_url?: string;
-    delete_url?: string;
-  }[];
 }
 
 export interface AssessmentFormEmitter {
@@ -53,7 +40,7 @@ export interface AssessmentFormProps
   showPersonalizedTimelineFeatures?: boolean;
   randomizationAllowed?: boolean;
   folderAttributes?: FolderAttributes;
-  conditionAttributes?: AchievementTypesConditionAttributes;
+  conditionAttributes?: ConditionsData;
 
   /**
    * If `true`, this component is displayed on Edit Assessment page
