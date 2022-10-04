@@ -86,6 +86,7 @@
     "@mui/styles": "^5.10.8",
     "@mui/x-date-pickers": "^5.0.3",
     "@reduxjs/toolkit": "^1.8.5",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "ace-builds": "^1.11.2",
     "axios": "^0.27.2",
     "babel-plugin-formatjs": "^10.3.29",
