@@ -126,6 +126,10 @@ const translations = defineMessages({
     id: 'lib.form.submissionError',
     defaultMessage: 'Failed to submit form. Please try again later.',
   },
+  fetchingError: {
+    id: 'lib.form.fetchingError',
+    defaultMessage: 'An error occurred when loading your data.',
+  },
   characters: {
     id: 'lib.form.validation.characters',
     defaultMessage: 'Must be less than 255 characters',
