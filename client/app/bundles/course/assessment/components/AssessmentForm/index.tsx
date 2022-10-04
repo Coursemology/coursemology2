@@ -17,7 +17,7 @@ import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import ErrorText from 'lib/components/ErrorText';
-import ConditionList from 'lib/components/course/ConditionList';
+import ConditionsManager from 'lib/components/form/fields/ConditionsManager';
 import Section from 'lib/components/layouts/Section';
 import IconRadio from 'lib/components/IconRadio';
 import InfoLabel from 'lib/components/InfoLabel';
@@ -376,11 +376,10 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           </Grid>
 
           {editing && conditionAttributes && (
-            <ConditionList
+            <ConditionsManager
               title={intl.formatMessage(t.unlockConditions)}
               description={intl.formatMessage(t.unlockConditionsHint)}
-              newConditionUrls={conditionAttributes.new_condition_urls}
-              conditions={conditionAttributes.conditions}
+              conditionsData={conditionAttributes}
             />
           )}
         </Section>
