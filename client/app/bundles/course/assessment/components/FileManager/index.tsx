@@ -195,6 +195,7 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
         pagination: false,
         selectableRows: !disabled ? 'multiple' : 'none',
         setTableProps: () => ({ size: 'small', sx: { overflow: 'hidden' } }),
+        fixedHeader: false,
       }}
       components={{
         Checkbox: RowStartComponent,
