@@ -40,8 +40,8 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
 
     return (
       <MuiTextField
-        ref={ref}
         {...textFieldProps}
+        inputRef={ref}
         {...(props.type === 'password' && {
           type: showPassword ? 'text' : 'password',
           InputProps: {
