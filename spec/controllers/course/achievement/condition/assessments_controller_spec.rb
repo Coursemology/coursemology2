@@ -33,9 +33,9 @@ RSpec.describe Course::Achievement::Condition::AssessmentsController, type: :con
           subject
         end
 
-        it { is_expected.to redirect_to(edit_course_achievement_path(course, achievement)) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.condition.assessments.destroy.error'))
+        it 'returns bad_request with errors' do
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
         end
       end
     end
@@ -59,7 +59,10 @@ RSpec.describe Course::Achievement::Condition::AssessmentsController, type: :con
           subject
         end
 
-        it { is_expected.to render_template(:new) }
+        it 'returns bad_request with errors' do
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
+        end
       end
     end
 
@@ -90,7 +93,10 @@ RSpec.describe Course::Achievement::Condition::AssessmentsController, type: :con
           subject
         end
 
-        it { is_expected.to render_template(:edit) }
+        it 'returns bad_request with errors' do
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
+        end
       end
     end
   end

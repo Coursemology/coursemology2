@@ -33,9 +33,9 @@ RSpec.describe Course::Achievement::Condition::SurveysController, type: :control
           subject
         end
 
-        it 'redirects with a flash message' do
-          expect(subject).to redirect_to(edit_course_achievement_path(course, achievement))
-          expect(flash[:danger]).to eq(I18n.t('course.condition.surveys.destroy.error'))
+        it 'returns bad_request with errors' do
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
         end
       end
     end
@@ -59,8 +59,9 @@ RSpec.describe Course::Achievement::Condition::SurveysController, type: :control
           subject
         end
 
-        it 'shows the form' do
-          expect(subject).to render_template('new')
+        it 'returns bad_request with errors' do
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
         end
       end
     end
@@ -91,8 +92,9 @@ RSpec.describe Course::Achievement::Condition::SurveysController, type: :control
           subject
         end
 
-        it 'shows the form' do
-          expect(subject).to render_template('edit')
+        it 'returns bad_request with errors' do
+          expect(subject).to have_http_status(:bad_request)
+          expect(JSON.parse(subject.body)['errors']).not_to be_nil
         end
       end
     end

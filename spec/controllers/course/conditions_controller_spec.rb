@@ -5,8 +5,8 @@ RSpec.describe Course::ConditionsController, type: :controller do
   controller(Course::ConditionsController) do
   end
 
-  describe '#return_to_path' do
-    it { expect { controller.return_to_path }.to raise_error(NotImplementedError) }
+  describe '#success_action' do
+    it { expect { controller.success_action }.to raise_error(NotImplementedError) }
   end
 
   describe '#set_conditional' do
