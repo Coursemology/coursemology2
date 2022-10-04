@@ -1,28 +1,54 @@
 export interface ConditionListData {
   id: number;
-  title: string;
+  description?: string;
 }
 
 export interface ConditionData extends ConditionListData {
   type: 'Achievement' | 'Assessment' | 'Level' | 'Survey' | 'Video';
-  editUrl: string;
-  deleteUrl: string;
+  url?: string;
 }
 
-export interface Conditions {
-  name:
-    | 'Achievement Condition'
-    | 'Assessment Condition'
-    | 'Level Condition'
-    | 'Survey Condition'
-    | 'Video Condition';
+export interface ConditionAbility {
+  type: ConditionData['type'];
   url: string;
 }
 
-export enum ConditionEnum {
-  Achievement = 'Achievement',
-  Assessment = 'Assessment',
-  Level = 'Level',
-  Survey = 'Survey',
-  Video = 'Video',
+export type EnabledConditions = ConditionAbility[];
+
+export interface ConditionsData {
+  conditions: ConditionData[];
+  enabledConditions: EnabledConditions;
+}
+
+export interface AchievementConditionData extends ConditionData {
+  achievementId?: number;
+}
+
+export interface AssessmentConditionData extends ConditionData {
+  assessmentId?: number;
+  minimumGradePercentage?: number | null;
+}
+
+export interface LevelConditionData extends ConditionData {
+  minimumLevel?: number;
+}
+
+export interface SurveyConditionData extends ConditionData {
+  surveyId?: number;
+}
+
+export interface ConditionPostData {
+  condition_achievement?: {
+    achievement_id: AchievementConditionData['achievementId'];
+  };
+  condition_assessment?: {
+    assessment_id: AssessmentConditionData['assessmentId'];
+    minimum_grade_percentage: AssessmentConditionData['minimumGradePercentage'];
+  };
+  condition_level?: {
+    minimum_level: LevelConditionData['minimumLevel'];
+  };
+  condition_survey?: {
+    survey_id: SurveyConditionData['surveyId'];
+  };
 }

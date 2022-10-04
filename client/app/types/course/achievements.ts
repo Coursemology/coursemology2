@@ -1,5 +1,5 @@
 import { Permissions } from 'types';
-import { ConditionData, ConditionListData, Conditions } from './conditions';
+import { ConditionListData, ConditionsData } from './conditions';
 import type { CourseUserListData, CourseUserMiniEntity } from './courseUsers';
 
 export interface BadgeEntity {
@@ -36,9 +36,8 @@ export interface AchievementListData extends Achievement {
 }
 
 export interface AchievementData extends AchievementListData {
-  conditions: ConditionData[];
+  conditionsData: ConditionsData;
   achievementUsers: CourseUserListData[];
-  enabledConditions: Conditions[];
 }
 
 export interface AchievementCourseUserData extends CourseUserListData {
@@ -60,9 +59,8 @@ export interface AchievementMiniEntity extends Achievement {
 }
 
 export interface AchievementEntity extends AchievementMiniEntity {
-  conditions: ConditionData[];
+  conditionsData: ConditionsData;
   achievementUsers: AchievementCourseUserEntity[];
-  enabledConditions: Conditions[];
 }
 
 export interface AchievementCourseUserEntity extends CourseUserMiniEntity {
