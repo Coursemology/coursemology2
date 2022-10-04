@@ -1,21 +1,31 @@
-import { FC } from 'react';
 import { CircularProgress } from '@mui/material';
 
-const styles = {
-  loading: {
-    display: 'flex',
-    justifyContent: 'center',
-    marginTop: 24,
-    width: '100%',
-  },
-};
+interface LoadingIndicatorProps {
+  size?: number;
+  bare?: boolean;
+  fit?: boolean;
+  className?: string;
+  containerClassName?: string;
+}
 
-const LoadingIndicator: FC = () => (
-  <div style={styles.loading}>
-    <div style={{ position: 'absolute' }}>
-      <CircularProgress size={60} data-testid="CircularProgress" />
+const LoadingIndicator = (props: LoadingIndicatorProps): JSX.Element => {
+  const indicator = (
+    <CircularProgress
+      size={!props.fit ? props.size ?? 60 : undefined}
+      className={props.className}
+      data-testid="CircularProgress"
+    />
+  );
+
+  if (props.bare) return indicator;
+
+  return (
+    <div
+      className={`mt-10 flex w-full justify-center ${props.containerClassName}`}
+    >
+      {indicator}
     </div>
-  </div>
-);
+  );
+};
 
 export default LoadingIndicator;
