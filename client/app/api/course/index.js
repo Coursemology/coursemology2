@@ -26,12 +26,14 @@ import ForumAPI from './Forum';
 import ExperiencePointsRecordAPI from './ExperiencePointsRecord';
 import FoldersAPI from './Material/Folders';
 import VideoSubmissionsAPI from './VideoSubmissions';
+import ConditionsAPI from './Conditions';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
   announcements: new AnnouncementsAPI(),
   assessment: AssessmentAPI,
   comments: new CommentsAPI(),
+  conditions: new ConditionsAPI(),
   courses: new CoursesAPI(),
   folders: new FoldersAPI(),
   materials: new MaterialsAPI(),
