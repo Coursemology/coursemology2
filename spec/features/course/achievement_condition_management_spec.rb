@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Achievements' do
+RSpec.feature 'Course: Achievements', js: true do
   let!(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -28,181 +28,163 @@ RSpec.feature 'Course: Achievements' do
       let!(:achievement) { create(:course_achievement, course: course) }
 
       # Achievement condition
-      scenario 'I can create, edit and delete an achievement condition', js: true do
+      scenario 'I can create, edit, and delete an achievement condition' do
         valid_achievement_as_condition = create(:course_achievement, course: course)
         achievement_to_change_to = create(:course_achievement, course: course)
-
         visit edit_course_achievement_path(course, achievement)
 
         # Create achievement condition
-        find_button('Add a condition').click
-        # Wait for the menu to expand fully. This scenario didn't fail for this but added
-        # first for consistency.
-        sleep 0.5
-        find_link(
-          nil, href: new_course_achievement_condition_achievement_path(course, achievement)
-        ).click
+        expect do
+          click_button 'Add a condition'
+          find('li', text: 'Achievement', exact_text: true).click
+          find_field('Achievement').click
+          find('li', text: valid_achievement_as_condition.title).click
+          click_button 'Create condition'
 
-        expect(page).to have_text(I18n.t('course.condition.achievements.new.header'))
-        find('#condition_achievement_achievement_id', visible: false).
-          find(:css, "option[value='#{valid_achievement_as_condition.id}']", visible: false).
-          select_option
-        click_button I18n.t('helpers.submit.condition_achievement.create')
-        expect(current_path).to eq edit_course_achievement_path(course, achievement)
-        expect(page).
-          to have_selector('.conditions-list', text: valid_achievement_as_condition.title)
+          expect_toastify('Condition was successfully created.')
+          expect(page).to have_selector('tr', text: valid_achievement_as_condition.title)
+        end.to change { achievement.conditions.count }.by(1)
 
         # Edit achievement condition
-        find_link(
-          nil, href: edit_course_achievement_condition_achievement_path(course, achievement,
-                                                                        achievement_condition)
-        ).click
-        expect(page).to have_text(I18n.t('course.condition.achievements.edit.header'))
-        find('#condition_achievement_achievement_id', visible: false).
-          find(:css, "option[value='#{achievement_to_change_to.id}']", visible: false).
-          select_option
-        click_button I18n.t('helpers.submit.condition_achievement.update')
-        expect(current_path).to eq edit_course_achievement_path(course, achievement)
-        expect(page).to have_selector('.conditions-list', text: achievement_to_change_to.title)
+        condition_row = find('tr', text: achievement_condition.title)
+        edit_button = condition_row.first('button', visible: false)
+
+        edit_button.click
+        find_field('Achievement').click
+        find('li', text: achievement_to_change_to.title).click
+        click_button 'Update condition'
+
+        expect_toastify('Your changes have been saved.')
+        expect(page).to have_selector('tr', text: achievement_to_change_to.title)
 
         # Delete achievement condition
+        achievement_condition.reload
+        condition_row = find('tr', text: achievement_condition.title)
+        delete_button = condition_row.all('button', visible: false).last
+
         expect do
-          find_button(
-            course_achievement_condition_achievement_path(course, achievement, achievement_condition)
-          ).click
-          accept_confirm_dialog
+          delete_button.click
+          expect_toastify('Condition was successfully deleted.')
         end.to change { achievement.conditions.count }.by(-1)
       end
 
-      scenario 'I can create, edit and delete an assessment condition', js: true do
+      scenario 'I can create, edit, and delete an assessment condition' do
         valid_assessment_as_condition = create(:assessment, course: course)
         assessment_to_change_to = create(:assessment, course: course)
-
         visit edit_course_achievement_path(course, achievement)
 
         # Create assessment condition
-        find_button('Add a condition').click
-        sleep 0.5 # Wait for the menu to expand fully
-        find_link(
-          nil, href: new_course_achievement_condition_assessment_path(course, achievement)
-        ).click
+        expect do
+          click_button 'Add a condition'
+          find('li', text: 'Assessment', exact_text: true).click
+          find_field('Assessment').click
+          find('li', text: valid_assessment_as_condition.title).click
+          click_button 'Create condition'
 
-        expect(page).to have_text(I18n.t('course.condition.assessments.new.header'))
-        find('#condition_assessment_assessment_id', visible: false).
-          find(:css, "option[value='#{valid_assessment_as_condition.id}']", visible: false).
-          select_option
-        click_button I18n.t('helpers.submit.condition_assessment.create')
-        expect(current_path).to eq edit_course_achievement_path(course, achievement)
-        title = I18n.t('activerecord.attributes.course/condition/assessment/title.complete',
-                       assessment_title: valid_assessment_as_condition.title)
-        expect(page).to have_selector('.conditions-list', text: title)
+          expect_toastify('Condition was successfully created.')
+        end.to change { achievement.conditions.count }.by(1)
 
         # Edit assessment condition
-        find_link(
-          nil, href: edit_course_achievement_condition_assessment_path(course, achievement,
-                                                                       assessment_condition)
-        ).click
-        expect(page).to have_text(I18n.t('course.condition.assessments.edit.header'))
-        find('#condition_assessment_assessment_id', visible: false).
-          find(:css, "option[value='#{assessment_to_change_to.id}']", visible: false).
-          select_option
-        click_button I18n.t('helpers.submit.condition_assessment.update')
-        expect(current_path).to eq edit_course_achievement_path(course, achievement)
-        title = I18n.t('activerecord.attributes.course/condition/assessment/title.complete',
-                       assessment_title: assessment_to_change_to.title)
-        expect(page).to have_selector('.conditions-list', text: title)
+        condition_row = all('tr', text: 'Assessment').last
+        edit_button = condition_row.first('button', visible: false)
+
+        edit_button.click
+        assessment_field = find_field('Assessment')
+        expect(assessment_field.value).to eq(valid_assessment_as_condition.title)
+        assessment_field.click
+        find('li', text: assessment_to_change_to.title).click
+        click_button 'Update condition'
+
+        expect_toastify('Your changes have been saved.')
+        condition_row.first('button', visible: false).click
+        expect(find_field('Assessment').value).to eq(assessment_to_change_to.title)
+        click_button 'Cancel'
 
         # Delete achievement condition
+        delete_button = condition_row.all('button', visible: false).last
+
         expect do
-          find_button(
-            course_achievement_condition_assessment_path(course, achievement, assessment_condition)
-          ).click
-          accept_confirm_dialog
+          delete_button.click
+          expect_toastify('Condition was successfully deleted.')
         end.to change { achievement.conditions.count }.by(-1)
       end
 
-      scenario 'I can create, edit and delete a level condition', js: true do
+      scenario 'I can create, edit, and delete a level condition' do
         visit edit_course_achievement_path(course, achievement)
+        minimum_level = '10'
 
         # Create level condition
-        find_button('Add a condition').click
-        sleep 0.5 # need to wait for the menu to expand fully so we don't click the wrong button
-        # TODO: disable animations globally in test env
-        find_link(nil, href: new_course_achievement_condition_level_path(course, achievement)).click
+        expect do
+          click_button 'Add a condition'
+          find('li', text: 'Level', exact_text: true).click
+          fill_in 'minimumLevel', with: minimum_level
+          click_button 'Create condition'
 
-        expect(page).to have_text(I18n.t('course.condition.levels.new.header'))
-        fill_in 'minimum_level', with: '10'
-        click_button I18n.t('helpers.submit.condition_level.create')
-        expect(current_path).to eq edit_course_achievement_path(course, achievement)
-        level_title = I18n.t('activerecord.attributes.course/condition/level/title.title',
-                             value: 10)
-        expect(page).to have_selector('.conditions-list', text: level_title)
+          expect_toastify('Condition was successfully created.')
+        end.to change { achievement.conditions.count }.by(1)
 
         # Edit level condition
-        find_link(
-          nil, href: edit_course_achievement_condition_level_path(course, achievement,
-                                                                  level_condition)
-        ).click
-        expect(page).to have_text(I18n.t('course.condition.levels.edit.header'))
-        fill_in 'minimum_level', with: '13'
-        click_button I18n.t('helpers.submit.condition_level.update')
-        expect(current_path).to eq edit_course_achievement_path(course, achievement)
-        level_title = I18n.t('activerecord.attributes.course/condition/level/title.title',
-                             value: 13)
-        expect(page).to have_selector('.conditions-list', text: level_title)
+        new_minimum_level = '13'
+        condition_row = all('tr', text: 'Level').last
+        edit_button = condition_row.first('button', visible: false)
+
+        edit_button.click
+        expect(find_field('minimumLevel').value).to eq(minimum_level)
+        fill_in 'minimumLevel', with: new_minimum_level
+        click_button 'Update condition'
+
+        expect_toastify('Your changes have been saved.')
+        condition_row.first('button', visible: false).click
+        expect(find_field('minimumLevel').value).to eq(new_minimum_level)
+        click_button 'Cancel'
 
         # Delete level condition
+        delete_button = condition_row.all('button', visible: false).last
+
         expect do
-          find_button(
-            course_achievement_condition_level_path(course, achievement, level_condition)
-          ).click
-          accept_confirm_dialog
+          delete_button.click
+          expect_toastify('Condition was successfully deleted.')
         end.to change { achievement.conditions.count }.by(-1)
       end
 
-      scenario 'I can create, edit and delete a survey condition', js: true do
+      scenario 'I can create, edit, and delete a survey condition' do
         valid_survey_as_condition = create(:survey, course: course)
         survey_to_change_to = create(:survey, course: course)
-
         visit edit_course_achievement_path(course, achievement)
 
         # Create survey condition
-        find_button('Add a condition').click
-        sleep 0.5 # need to wait for the menu to expand fully so we don't click the wrong button
-        # TODO: disable animations globally in test env
-        find_link(nil, href: new_course_achievement_condition_survey_path(course, achievement)).click
+        expect do
+          click_button 'Add a condition'
+          find('li', text: 'Survey', exact_text: true).click
+          find_field('Survey').click
+          find('li', text: valid_survey_as_condition.title).click
+          click_button 'Create condition'
 
-        expect(page).to have_text(I18n.t('course.condition.surveys.new.header'))
-        find('#condition_survey_survey_id', visible: false).
-          find(:css, "option[value='#{valid_survey_as_condition.id}']", visible: false).
-          select_option
-        click_button I18n.t('helpers.submit.condition_survey.create')
-        expect(current_path).to eq edit_course_achievement_path(course, achievement)
-        title = I18n.t('activerecord.attributes.course/condition/survey/title.complete',
-                       survey_title: valid_survey_as_condition.title)
-        expect(page).to have_selector('.conditions-list', text: title)
+          expect_toastify('Condition was successfully created.')
+        end.to change { achievement.conditions.count }.by(1)
 
         # Edit survey condition
-        find_link(
-          nil, href: edit_course_achievement_condition_survey_path(course, achievement,
-                                                                   survey_condition)
-        ).click
-        expect(page).to have_text(I18n.t('course.condition.surveys.edit.header'))
-        find('#condition_survey_survey_id', visible: false).
-          find(:css, "option[value='#{survey_to_change_to.id}']", visible: false).
-          select_option
-        click_button I18n.t('helpers.submit.condition_survey.update')
-        expect(current_path).to eq edit_course_achievement_path(course, achievement)
-        title = I18n.t('activerecord.attributes.course/condition/survey/title.complete',
-                       survey_title: survey_to_change_to.title)
-        expect(page).to have_selector('.conditions-list', text: title)
+        condition_row = all('tr', text: 'Survey').last
+        edit_button = condition_row.first('button', visible: false)
+
+        edit_button.click
+        survey_field = find_field('Survey')
+        expect(survey_field.value).to eq(valid_survey_as_condition.title)
+        survey_field.click
+        find('li', text: survey_to_change_to.title).click
+        click_button 'Update condition'
+
+        expect_toastify('Your changes have been saved.')
+        condition_row.first('button', visible: false).click
+        expect(find_field('Survey').value).to eq(survey_to_change_to.title)
+        click_button 'Cancel'
 
         # Delete survey condition
+        delete_button = condition_row.all('button', visible: false).last
+
         expect do
-          find_button(
-            course_achievement_condition_survey_path(course, achievement, survey_condition)
-          ).click
-          accept_confirm_dialog
+          delete_button.click
+          expect_toastify('Condition was successfully deleted.')
         end.to change { achievement.conditions.count }.by(-1)
       end
     end
