@@ -1,4 +1,5 @@
 const plugin = require('tailwindcss/plugin');
+const lineClamp = require('@tailwindcss/line-clamp');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -17,6 +18,7 @@ module.exports = {
       addVariant('no-hover', '@media (hover: none)');
       addVariant('hoverable', '@media (hover: hover)');
     }),
+    lineClamp,
   ],
   important: '#root',
 };
