@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 class Course::ConditionsController < Course::ComponentController
   before_action :load_and_authorize_conditional
-  helper_method :return_to_path
+  helper_method :success_action
 
-  # @return [String] The path to return to when successfully executing or failing an action,
-  #         or when the user clicks on the `Back` button.
-  # @return [Symbol] Similar to above.
-  def return_to_path
+  def success_action
     raise NotImplementedError, 'To be implemented by the condition controllers of a specific'\
                                'conditional.'
   end

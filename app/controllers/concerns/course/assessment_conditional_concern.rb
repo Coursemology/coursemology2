@@ -6,8 +6,8 @@ module Course::AssessmentConditionalConcern
     before_action :add_conditional_breadcrumbs
   end
 
-  def return_to_path
-    edit_course_assessment_path(current_course, @conditional)
+  def success_action
+    render partial: 'course/condition/conditions.json', locals: { conditional: @conditional }
   end
 
   def set_conditional
