@@ -35,6 +35,7 @@ const WatchVideoButton: FC<Props> = (props) => {
     if (video.videoSubmissionId) {
       return (
         <Button
+          className="bg-white"
           variant="outlined"
           color="primary"
           onClick={(): void =>
@@ -53,6 +54,7 @@ const WatchVideoButton: FC<Props> = (props) => {
     }
     return (
       <Button
+        className="bg-white"
         variant="outlined"
         color="primary"
         onClick={(): void => {

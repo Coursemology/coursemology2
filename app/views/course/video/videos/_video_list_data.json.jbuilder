@@ -30,6 +30,6 @@ if can_analyze
 end
 
 json.permissions do
-  json.canAttempt can_attempt && current_course_user
+  json.canAttempt can_attempt && current_course_user.present?
   json.canManage can_manage
 end
