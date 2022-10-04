@@ -44,7 +44,7 @@ commands:
             - ./.bundle
           key: v3.0.4-ruby-{{ checksum "Gemfile.lock" }}
 
-  restore_node_cache:
+  build_and_restore_node_cache:
     steps:
       # Use the desired Node version
       - run:
@@ -77,11 +77,32 @@ commands:
             - ./client/node_modules
           key: v14.18.2-node-{{ checksum "client/yarn.lock" }}
 
-  build_client:
+  restore_node_cache:
+    steps:
+      - restore_cache:
+          name: Restore Node cache
+          keys:
+            - v14.18.2-node-{{ checksum "client/yarn.lock" }}
+            # Fallback to using the latest cache if no exact match is found
+            - v14.18.2-node-
+
+  build_and_cache_client:
     steps:
       - run:
           name: Build client
           command: cd client && yarn build:production && cd -
+      - save_cache:
+          paths:
+            - ./client/build
+            - ./public/webpack
+          key: v1-yarn-build-{{ .Revision }}
+
+  restore_client_cache:
+    steps:
+      - restore_cache:
+          name: Restore client cache
+          keys:
+            - v1-yarn-build-{{ .Revision }}
 
 jobs:
   test:
@@ -115,7 +136,7 @@ jobs:
       - restore_ruby_cache
       - restore_node_cache
 
-      - build_client
+      - restore_client_cache
 
       # Install ghostscript so `identify` in ImageMagick works with PDF files.
       # Remove pdf security policy for imagemagick (ubuntu 20.04)
@@ -128,7 +149,9 @@ jobs:
             sudo apt install ghostscript
             sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
-      - setup_remote_docker
+      - setup_remote_docker:
+          version: 20.10.2
+          docker_layer_caching: true
 
       # Database setup
       - run:
@@ -177,9 +200,9 @@ jobs:
     steps:
       - checkout_with_submodules
 
-      - restore_node_cache
+      - build_and_restore_node_cache
 
-      - build_client
+      - build_and_cache_client
 
       - run:
           name: Run yarn checks
@@ -200,9 +223,9 @@ jobs:
     steps:
       - checkout_with_submodules
 
-      - restore_node_cache
+      - build_and_restore_node_cache
 
-      - build_client
+      - build_and_cache_client
 
       # Build frontend JS
       - run:
