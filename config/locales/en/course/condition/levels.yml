@@ -1,17 +1,8 @@
 en:
   course:
     condition:
-      level:
-        title: 'Level'
       levels:
         new:
           header: 'New Level Condition'
-        create:
-          success: 'Level condition was created.'
         edit:
           header: 'Edit Level Condition'
-        update:
-          success: 'Level condition was updated.'
-        destroy:
-          success: 'Level condition was deleted.'
-          error: 'Failed to delete level condition.'
