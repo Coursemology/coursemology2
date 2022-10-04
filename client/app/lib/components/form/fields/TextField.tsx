@@ -10,11 +10,13 @@ const styles = {
   textFieldStyle: { margin: '8px 10px 8px 0px' },
 };
 
+type Value = string | number | null;
+
 type FormTextFieldProps = ComponentProps<typeof TextField> & {
   field: {
-    onChange: (value: string | number) => void;
+    onChange: (value: Value) => void;
     onBlur: () => void;
-    value?: string | number;
+    value?: Value;
     name: string;
     ref: Ref<HTMLInputElement>;
   };
