@@ -1,7 +1,5 @@
 en:
   activerecord:
-    models:
-      course/condition/video: Video Condition
     attributes:
       course/condition/video/title:
         complete: 'Watch %{video_title}'

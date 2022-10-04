@@ -1,7 +1,5 @@
 en:
   activerecord:
-    models:
-      course/condition/survey: Survey Condition
     attributes:
       course/condition/survey/title:
         complete: 'Complete %{survey_title}'

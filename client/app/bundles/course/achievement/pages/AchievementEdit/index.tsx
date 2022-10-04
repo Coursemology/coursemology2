@@ -106,10 +106,7 @@ const AchievementEdit: FC<Props> = (props) => {
         returnLink={`/courses/${courseId}/achievements/`}
       />
       <AchievementForm
-        conditionAttributes={{
-          enabledConditions: achievement.enabledConditions,
-          conditions: achievement.conditions,
-        }}
+        conditionAttributes={achievement.conditionsData}
         editing
         handleClose={(isDirty): void => {
           if (isDirty) {
