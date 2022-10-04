@@ -32,4 +32,4 @@ json.folder_attributes do
   end
 end
 
-json.partial! 'course/condition/conditions.json', conditional: @assessment
+json.partial! 'course/condition/condition_data.json', conditional: @assessment
