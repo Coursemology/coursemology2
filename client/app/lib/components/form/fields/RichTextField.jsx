@@ -25,6 +25,7 @@ FormRichTextField.propTypes = {
   InputLabelProps: PropTypes.object,
   variant: PropTypes.string,
   disableMargins: PropTypes.bool,
+  placeholder: PropTypes.string,
 };
 
 export default memo(FormRichTextField, propsAreEqual);
