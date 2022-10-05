@@ -33,8 +33,8 @@ Do NOT, ever, use inline styles, [MUI's `sx` prop](https://mui.com/system/gettin
 #### ✅ Only use relative unit values.
 Use `pt` or `rem` as units for values. Do not use `px`; it is an absolute unit. There are [many articles](https://uxdesign.cc/why-designers-should-move-from-px-to-rem-and-how-to-do-that-in-figma-c0ea23e07a15) that support this, but essentially, using relative units means we are respecting the display scaling of the browser and target device, allowing our site to be more accessible and independent of media display scaling.
 
-#### ✅ Start from small screens, work towards large screens.
-Tailwind's media modifiers, e.g., `sm:`, `md:`, etc. are `min-width` media queries. So, start your designs from small screens, then slowly work towards large screens and apply your media modifiers appropriately. [This is the usual recommendation when building responsive websites](https://web.dev/responsive-web-design-basics/#major-breakpoints).
+#### ✅ Mobile-first approach: Start from small screens, work towards large screens.
+Tailwind's media modifiers, e.g., `sm:`, `md:`, etc. are `min-width` media queries. So, start your designs from small screens, then slowly work towards large screens and apply your media modifiers appropriately. This is known as the mobile-first approach, and [is the usual recommendation when building responsive websites](https://web.dev/responsive-web-design-basics/#major-breakpoints).
 
 #### ✅ Embrace defaults.
 For brevity, keep our class names short and brief. If you have added `flex`, there is no need to add `flex-row` if `flex-col` is not applied, because `flex-direction` is `row` by default. Use defaults to override non-default values. This also applies to code styling and default React props, actually.
