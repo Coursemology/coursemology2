@@ -16,6 +16,7 @@ interface Props {
   name: string;
   inputId: string;
   disableMargins?: boolean;
+  placeholder?: string;
 }
 
 const uploadAdapter = (loader) => {
@@ -55,6 +56,7 @@ const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
     name,
     inputId,
     disableMargins,
+    placeholder,
   } = props;
 
   const [isFocused, setIsFocused] = useState(false);
@@ -126,6 +128,7 @@ const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
                 },
               },
             },
+            placeholder,
           }}
           data={value}
           onReady={(editor) => {
