@@ -7,7 +7,7 @@ import { CourseAdminOptions } from 'types/course/admin/course';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 
 const fetchOptions = async (): Promise<CourseAdminOptions> => {
-  const response = await CourseAPI.admin.course.options();
+  const response = await CourseAPI.admin.course.items();
   return response.data;
 };
 
