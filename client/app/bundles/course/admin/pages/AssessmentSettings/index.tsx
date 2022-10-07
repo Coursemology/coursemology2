@@ -14,7 +14,8 @@ import {
   createTabInCategory,
   createCategory,
   fetchAssessmentsSettings,
-  moveAssessmentsToTab,
+  moveAssessments,
+  moveTabs,
 } from './operations';
 import commonTranslations from '../../translations';
 import {
@@ -108,19 +109,59 @@ const AssessmentSettings = (): JSX.Element => {
         })
         .finally(() => setSubmitting(false));
     },
-    moveAssessmentsToTab: async (assessmentIds, tabId, fullTabTitle) => {
+    moveAssessments: (
+      sourceTabId,
+      destinationTabId,
+      destinationTabTitle,
+      onSuccess,
+      onError,
+    ) => {
       setSubmitting(true);
 
-      await toast.promise(moveAssessmentsToTab(assessmentIds, tabId), {
-        pending: t(translations.movingAssessmentsTo, { tab: fullTabTitle }),
-        success: t(translations.nAssessmentsMoved, {
-          n: assessmentIds.length.toString(),
-          tab: fullTabTitle,
-        }),
-        error: t(translations.errorWhenMovingAssessments, {
-          tab: fullTabTitle,
-        }),
-      });
+      moveAssessments(sourceTabId, destinationTabId)
+        .then((count) => {
+          toast.success(
+            t(translations.nAssessmentsMoved, {
+              n: count.toString(),
+              tab: destinationTabTitle,
+            }),
+          );
+
+          onSuccess?.();
+        })
+        .catch(() => {
+          toast.error(t(translations.errorOccurredWhenMovingAssessments));
+          onError?.();
+        })
+        .finally(() => setSubmitting(false));
+
+      setSubmitting(false);
+    },
+    moveTabs: (
+      sourceCategoryId,
+      destinationCategoryId,
+      destinationCategoryTitle,
+      onSuccess,
+      onError,
+    ) => {
+      setSubmitting(true);
+
+      moveTabs(sourceCategoryId, destinationCategoryId)
+        .then((count) => {
+          toast.success(
+            t(translations.nTabsMoved, {
+              n: count.toString(),
+              category: destinationCategoryTitle,
+            }),
+          );
+
+          onSuccess?.();
+        })
+        .catch(() => {
+          toast.error(t(translations.errorOccurredWhenMovingTabs));
+          onError?.();
+        })
+        .finally(() => setSubmitting(false));
 
       setSubmitting(false);
     },

@@ -26,11 +26,20 @@ export interface AssessmentSettingsContextType {
     tabId: AssessmentTab['id'],
     title: AssessmentTab['title'],
   ) => void;
-  moveAssessmentsToTab?: (
-    assessmentIds: number[],
-    tabId: AssessmentTab['id'],
-    fullTabTitle: string,
-  ) => Promise<void>;
+  moveAssessments?: (
+    sourceTabId: AssessmentTab['id'],
+    destinationTabId: AssessmentTab['id'],
+    destinationTabTitle: AssessmentTab['title'],
+    onSuccess?: () => void,
+    onError?: () => void,
+  ) => void;
+  moveTabs?: (
+    sourceCategoryId: AssessmentCategory['id'],
+    destinationCategoryId: AssessmentCategory['id'],
+    destinationCategoryTitle: AssessmentCategory['title'],
+    onSuccess?: () => void,
+    onError?: () => void,
+  ) => void;
 }
 
 const AssessmentSettingsContext = createContext<AssessmentSettingsContextType>(
