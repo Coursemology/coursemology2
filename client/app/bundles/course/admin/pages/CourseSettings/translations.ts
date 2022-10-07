@@ -9,9 +9,18 @@ export default defineMessages({
     id: 'course.admin.course.courseName',
     defaultMessage: 'Course name',
   },
+  courseNamePlaceholder: {
+    id: 'course.admin.course.courseNamePlaceholder',
+    defaultMessage: 'e.g., Maths Universe, Geovengers',
+  },
   courseDescription: {
     id: 'course.admin.course.courseDescription',
     defaultMessage: 'Course description',
+  },
+  courseDescriptionPlaceholder: {
+    id: 'course.admin.course.courseDescriptionPlaceholder',
+    defaultMessage:
+      'e.g., Darth Vader is taking over the universe. We need you to save the day!',
   },
   courseLogo: {
     id: 'course.admin.course.courseLogo',
