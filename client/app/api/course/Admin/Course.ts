@@ -17,8 +17,8 @@ export default class CourseAdminAPI extends BaseAdminAPI {
     return this.getClient().get(`${this._getUrlPrefix()}/time_zones`);
   }
 
-  options(): Promise<AxiosResponse<CourseAdminOptions>> {
-    return this.getClient().get(`${this._getUrlPrefix()}/options`);
+  items(): Promise<AxiosResponse<CourseAdminOptions>> {
+    return this.getClient().get(`${this._getUrlPrefix()}/items`);
   }
 
   update(data: CourseInfoPostData): Promise<AxiosResponse<CourseInfo>> {
