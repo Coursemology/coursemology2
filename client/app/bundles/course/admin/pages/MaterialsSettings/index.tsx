@@ -23,7 +23,7 @@ const MaterialsSettings = (): JSX.Element => {
 
   if (!settings) return <LoadingIndicator />;
 
-  const submit = (data: MaterialsSettingsData): void => {
+  const handleSubmit = (data: MaterialsSettingsData): void => {
     setSubmitting(true);
 
     updateMaterialsSettings(data)
@@ -42,7 +42,7 @@ const MaterialsSettings = (): JSX.Element => {
   return (
     <MaterialsSettingsForm
       data={settings}
-      onSubmit={submit}
+      onSubmit={handleSubmit}
       emitsVia={setForm}
       disabled={submitting}
     />

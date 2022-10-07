@@ -23,7 +23,7 @@ const ForumsSettings = (): JSX.Element => {
 
   if (!settings) return <LoadingIndicator />;
 
-  const submit = (data: ForumsSettingsData): void => {
+  const handleSubmit = (data: ForumsSettingsData): void => {
     setSubmitting(true);
 
     updateForumsSettings(data)
@@ -42,7 +42,7 @@ const ForumsSettings = (): JSX.Element => {
   return (
     <ForumsSettingsForm
       data={settings}
-      onSubmit={submit}
+      onSubmit={handleSubmit}
       emitsVia={setForm}
       disabled={submitting}
     />
