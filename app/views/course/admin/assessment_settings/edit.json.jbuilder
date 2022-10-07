@@ -6,37 +6,39 @@ json.showStdoutAndStderr current_course.show_stdout_and_stderr
 json.allowRandomization current_course.allow_randomization
 json.allowMrqOptionsRandomization current_course.allow_mrq_options_randomization
 
-categories_assessments_hash = Course::Assessment::Category.includes(:assessments).to_h do |category|
-  [category.id, category.assessments]
-end
+json.canCreateCategories can?(:create, Course::Assessment::Category.new(course: current_course))
 
-tabs_assessments_hash = Course::Assessment::Tab.includes(:assessments).to_h do |tab|
-  [tab.id, tab.assessments]
-end
+tabs = categories.includes(:tabs).flat_map(&:tabs)
+tabs_assessments_count_hash = Course::Assessment.where(tab: tabs).group(:tab_id).count
 
-json.categories do
-  json.array! categories do |category|
-    json.id category.id
-    json.title category.title
-    json.weight category.weight
+json.categories categories do |category|
+  json.id category.id
+  json.title category.title
+  json.weight category.weight
 
-    category_assessments = categories_assessments_hash[category.id]
-    json.assessmentsIds category_assessments.map(&:id)
-    json.assessmentsCount category_assessments.count
-    json.topAssessmentsTitles category_assessments.first(3).map(&:title)
+  json.canDeleteCategory can?(:destroy, category)
+  json.canCreateTabs can?(:create, Course::Assessment::Tab.new(category: category))
 
-    json.tabs do
-      json.array! category.tabs do |tab|
-        json.id tab.id
-        json.title tab.title
-        json.weight tab.weight
-        json.categoryId category.id
+  category_assessment_count = 0
+  category_top_assessment_titles = nil
 
-        tab_assessments = tabs_assessments_hash[tab.id]
-        json.assessmentsIds tab_assessments.map(&:id)
-        json.assessmentsCount tab_assessments.count
-        json.topAssessmentsTitles tab_assessments.first(3).map(&:title)
-      end
-    end
+  json.tabs category.tabs.calculated(:top_assessment_titles) do |tab|
+    json.id tab.id
+    json.title tab.title
+    json.weight tab.weight
+    json.categoryId category.id
+
+    json.canDeleteTab can?(:destroy, tab)
+
+    tab_assessment_count = tabs_assessments_count_hash[tab.id] || 0
+    tab_top_assessment_titles = tab.top_assessment_titles || []
+    json.assessmentsCount tab_assessment_count
+    json.topAssessmentTitles tab_top_assessment_titles
+
+    category_assessment_count += tab_assessment_count
+    category_top_assessment_titles ||= tab_top_assessment_titles
   end
+
+  json.assessmentsCount category_assessment_count
+  json.topAssessmentTitles category_top_assessment_titles || []
 end

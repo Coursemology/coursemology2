@@ -17,7 +17,52 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
     end
   end
 
+  def move_assessments
+    source_tab_id, destination_tab_id = move_assessments_params
+
+    source_tab = Course::Assessment::Tab.find(source_tab_id)
+    destination_tab = Course::Assessment::Tab.find(destination_tab_id)
+    moved_assessments_count = 0
+
+    ActiveRecord::Base.transaction do
+      source_tab.assessments.each do |assessment|
+        assessment.update!(tab: destination_tab)
+        moved_assessments_count += 1
+      end
+    end
+
+    render json: { moved_assessments_count: moved_assessments_count }
+  rescue StandardError
+    head :bad_request
+  end
+
+  def move_tabs
+    source_category_id, destination_category_id = move_tabs_params
+
+    source_category = Course::Assessment::Category.find(source_category_id)
+    moved_tabs_count = 0
+
+    ActiveRecord::Base.transaction do
+      source_category.tabs.each do |tab|
+        tab.update!(category_id: destination_category_id)
+        moved_tabs_count += 1
+      end
+    end
+
+    render json: { moved_tabs_count: moved_tabs_count }
+  rescue StandardError
+    head :bad_request
+  end
+
   private
+
+  def move_assessments_params
+    params.require([:source_tab_id, :destination_tab_id])
+  end
+
+  def move_tabs_params
+    params.require([:source_category_id, :destination_category_id])
+  end
 
   def category_params
     params.require(:course).permit(:show_public_test_cases_output, :show_stdout_and_stderr,

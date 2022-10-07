@@ -142,6 +142,8 @@ Rails.application.routes.draw do
         patch 'announcements' => 'announcement_settings#update'
 
         get 'assessments' => 'assessment_settings#edit'
+        post 'move_tabs' => 'assessment_settings#move_tabs'
+        post 'move_assessments' => 'assessment_settings#move_assessments'
         patch 'assessments' => 'assessment_settings#update'
 
         get 'materials' => 'material_settings#edit'
