@@ -26,7 +26,7 @@ const AnnouncementsSettings = (): JSX.Element => {
 
   if (!settings) return <LoadingIndicator />;
 
-  const submit = (data: AnnouncementsSettingsData): void => {
+  const handleSubmit = (data: AnnouncementsSettingsData): void => {
     setSubmitting(true);
 
     updateAnnouncementsSettings(data)
@@ -45,7 +45,7 @@ const AnnouncementsSettings = (): JSX.Element => {
   return (
     <AnnouncementsSettingsForm
       data={settings}
-      onSubmit={submit}
+      onSubmit={handleSubmit}
       emitsVia={setForm}
       disabled={submitting}
     />

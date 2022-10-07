@@ -38,7 +38,7 @@ const VideosSettings = (): JSX.Element => {
     toast.success(message);
   };
 
-  const submit = (data: VideosSettingsData): void => {
+  const handleSubmit = (data: VideosSettingsData): void => {
     setSubmitting(true);
 
     updateVideosSettings(data)
@@ -88,7 +88,7 @@ const VideosSettings = (): JSX.Element => {
     <VideosSettingsForm
       data={settings}
       emitsVia={setForm}
-      onSubmit={submit}
+      onSubmit={handleSubmit}
       onCreateTab={handleCreateTab}
       onDeleteTab={handleDeleteTab}
       canCreateTabs={settings.canCreateTabs}

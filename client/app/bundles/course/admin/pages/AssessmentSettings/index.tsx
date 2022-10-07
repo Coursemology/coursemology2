@@ -45,7 +45,7 @@ const AssessmentSettings = (): JSX.Element => {
     toast.success(message);
   };
 
-  const submit = (data: AssessmentSettingsData): void => {
+  const handleSubmit = (data: AssessmentSettingsData): void => {
     setSubmitting(true);
 
     updateAssessmentSettings(data)
@@ -131,7 +131,7 @@ const AssessmentSettings = (): JSX.Element => {
       <AssessmentSettingsForm
         data={settings}
         emitsVia={setForm}
-        onSubmit={submit}
+        onSubmit={handleSubmit}
         disabled={submitting}
       />
     </AssessmentSettingsProvider>

@@ -19,7 +19,7 @@ const SidebarSettings = (): JSX.Element => {
 
   if (!settings) return <LoadingIndicator />;
 
-  const submit = (
+  const handleSubmit = (
     data: SidebarItems,
     action: (newData: SidebarItems) => void,
   ): void => {
@@ -40,7 +40,7 @@ const SidebarSettings = (): JSX.Element => {
   return (
     <SidebarSettingsForm
       data={settings}
-      onSubmit={submit}
+      onSubmit={handleSubmit}
       disabled={submitting}
     />
   );
