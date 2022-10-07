@@ -26,7 +26,7 @@ const LeaderboardSettings = (): JSX.Element => {
 
   if (!settings) return <LoadingIndicator />;
 
-  const submit = (data: LeaderboardSettingsData): void => {
+  const handleSubmit = (data: LeaderboardSettingsData): void => {
     setSubmitting(true);
 
     updateLeaderboardSettings(data)
@@ -45,7 +45,7 @@ const LeaderboardSettings = (): JSX.Element => {
   return (
     <LeaderboardSettingsForm
       data={settings}
-      onSubmit={submit}
+      onSubmit={handleSubmit}
       emitsVia={setForm}
       disabled={submitting}
     />
