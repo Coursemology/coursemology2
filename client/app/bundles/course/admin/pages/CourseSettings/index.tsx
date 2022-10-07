@@ -43,7 +43,7 @@ const CourseSettings = (): JSX.Element => {
     toast.success(message);
   };
 
-  const submit = (data: CourseInfo): void => {
+  const handleSubmit = (data: CourseInfo): void => {
     setSubmitting(true);
 
     updateCourseSettings(data)
@@ -57,7 +57,7 @@ const CourseSettings = (): JSX.Element => {
       .finally(() => setSubmitting(false));
   };
 
-  const uploadCourseLogo = (file: File, onSuccess: () => void): void => {
+  const handleUploadCourseLogo = (file: File, onSuccess: () => void): void => {
     setSubmitting(true);
 
     toast
@@ -95,8 +95,8 @@ const CourseSettings = (): JSX.Element => {
       data={settings}
       timeZones={timeZones}
       emitsVia={setForm}
-      onSubmit={submit}
-      onUploadCourseLogo={uploadCourseLogo}
+      onSubmit={handleSubmit}
+      onUploadCourseLogo={handleUploadCourseLogo}
       onDeleteCourse={handleDeleteCourse}
       disabled={submitting}
     />

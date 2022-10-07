@@ -21,7 +21,7 @@ const ComponentSettings = (): JSX.Element => {
 
   if (!settings) return <LoadingIndicator />;
 
-  const submit = (
+  const handleSubmit = (
     components: CourseComponents,
     action: (data: CourseComponents) => void,
   ): void => {
@@ -43,7 +43,7 @@ const ComponentSettings = (): JSX.Element => {
   return (
     <ComponentSettingsForm
       data={settings}
-      onChangeComponents={submit}
+      onChangeComponents={handleSubmit}
       disabled={submitting}
     />
   );
