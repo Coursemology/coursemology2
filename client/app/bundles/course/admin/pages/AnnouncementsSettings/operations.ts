@@ -7,7 +7,6 @@ import {
 } from 'types/course/admin/announcements';
 
 type Data = Promise<AnnouncementsSettingsData>;
-type ProbableData = Promise<AnnouncementsSettingsData | undefined>;
 
 export const fetchAnnouncementsSettings = async (): Data => {
   const response = await CourseAPI.admin.announcements.index();
@@ -16,7 +15,7 @@ export const fetchAnnouncementsSettings = async (): Data => {
 
 export const updateAnnouncementsSettings = async (
   data: AnnouncementsSettingsData,
-): ProbableData => {
+): Data => {
   const adaptedData: AnnouncementsSettingsPostData = {
     settings_announcements_component: {
       title: data.title,
@@ -27,9 +26,7 @@ export const updateAnnouncementsSettings = async (
     const response = await CourseAPI.admin.announcements.update(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
-
-    return undefined;
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };

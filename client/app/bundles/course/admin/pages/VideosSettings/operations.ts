@@ -9,16 +9,13 @@ import {
 } from 'types/course/admin/videos';
 
 type Data = Promise<VideosSettingsData>;
-type ProbableData = Promise<VideosSettingsData | undefined>;
 
 export const fetchVideosSettings = async (): Data => {
   const response = await CourseAPI.admin.videos.index();
   return response.data;
 };
 
-export const updateVideosSettings = async (
-  data: VideosSettingsData,
-): ProbableData => {
+export const updateVideosSettings = async (data: VideosSettingsData): Data => {
   const adaptedData: VideosSettingsPostData = {
     settings_videos_component: {
       title: data.title,
@@ -32,38 +29,32 @@ export const updateVideosSettings = async (
     const response = await CourseAPI.admin.videos.update(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
-
-    return undefined;
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };
 
-export const deleteTab = async (id: VideosTab['id']): ProbableData => {
+export const deleteTab = async (id: VideosTab['id']): Data => {
   try {
     const response = await CourseAPI.admin.videos.deleteTab(id);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
-
-    return undefined;
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };
 
 export const createTab = async (
   title: VideosTab['title'],
   weight: VideosTab['weight'],
-): ProbableData => {
+): Data => {
   const adaptedData: VideosTabPostData = { tab: { title, weight } };
 
   try {
     const response = await CourseAPI.admin.videos.createTab(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
-
-    return undefined;
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };
