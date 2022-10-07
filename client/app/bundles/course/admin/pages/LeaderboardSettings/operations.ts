@@ -7,7 +7,6 @@ import {
 } from 'types/course/admin/leaderboard';
 
 type Data = Promise<LeaderboardSettingsData>;
-type ProbableData = Promise<LeaderboardSettingsData | undefined>;
 
 export const fetchLeaderboardSettings = async (): Data => {
   const response = await CourseAPI.admin.leaderboard.index();
@@ -16,7 +15,7 @@ export const fetchLeaderboardSettings = async (): Data => {
 
 export const updateLeaderboardSettings = async (
   data: LeaderboardSettingsData,
-): ProbableData => {
+): Data => {
   const adaptedData: LeaderboardSettingsPostData = {
     settings_leaderboard_component: {
       title: data.title,
@@ -30,9 +29,7 @@ export const updateLeaderboardSettings = async (
     const response = await CourseAPI.admin.leaderboard.update(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
-
-    return undefined;
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };

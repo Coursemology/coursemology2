@@ -12,7 +12,6 @@ import {
 } from 'types/course/admin/assessments';
 
 type Data = Promise<AssessmentSettingsData>;
-type ProbableData = Promise<AssessmentSettingsData | undefined>;
 
 type CategoriesHash = Record<
   AssessmentCategory['id'],
@@ -41,7 +40,7 @@ const rearrangeCategoriesAndTabs = (
 
 export const updateAssessmentSettings = async (
   data: AssessmentSettingsData,
-): ProbableData => {
+): Data => {
   const categoriesHash = rearrangeCategoriesAndTabs(data.categories);
 
   const adaptedData: AssessmentSettingsPostData = {
@@ -63,10 +62,8 @@ export const updateAssessmentSettings = async (
     const response = await CourseAPI.admin.assessments.update(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
-
-    return undefined;
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };
 
@@ -75,24 +72,20 @@ export const fetchAssessmentsSettings = async (): Data => {
   return response.data;
 };
 
-export const deleteCategory = async (
-  id: AssessmentCategory['id'],
-): ProbableData => {
+export const deleteCategory = async (id: AssessmentCategory['id']): Data => {
   try {
     const response = await CourseAPI.admin.assessments.deleteCategory(id);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
-
-    return undefined;
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };
 
 export const deleteTabInCategory = async (
   id: AssessmentCategory['id'],
   tabId: AssessmentTab['id'],
-): ProbableData => {
+): Data => {
   try {
     const response = await CourseAPI.admin.assessments.deleteTabInCategory(
       id,
@@ -100,17 +93,15 @@ export const deleteTabInCategory = async (
     );
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
-
-    return undefined;
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };
 
 export const createCategory = async (
   title: AssessmentCategory['title'],
   weight: AssessmentCategory['weight'],
-): ProbableData => {
+): Data => {
   const adaptedData: AssessmentCategoryPostData = {
     category: { title, weight },
   };
@@ -121,10 +112,8 @@ export const createCategory = async (
     );
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
-
-    return undefined;
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };
 
@@ -132,7 +121,7 @@ export const createTabInCategory = async (
   id: AssessmentCategory['id'],
   title: AssessmentTab['title'],
   weight: AssessmentTab['weight'],
-): ProbableData => {
+): Data => {
   const adaptedData: AssessmentTabPostData = {
     tab: { title, weight },
   };
@@ -144,10 +133,8 @@ export const createTabInCategory = async (
     );
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
-
-    return undefined;
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };
 
