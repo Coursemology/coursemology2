@@ -23,7 +23,7 @@ interface TabProps {
 const Tab = (props: TabProps): JSX.Element => {
   const { tab, index, stationary, disabled } = props;
   const { t } = useTranslation();
-  const { settings, deleteTabInCategory, moveAssessmentsToTab } =
+  const { settings, deleteTabInCategory, moveAssessments } =
     useAssessmentSettings();
 
   const [newTitle, setNewTitle] = useState(tab.title);
@@ -59,14 +59,13 @@ const Tab = (props: TabProps): JSX.Element => {
   };
 
   const handleMoveAssessmentsAndDelete = (newTab: AssessmentTab): void => {
-    moveAssessmentsToTab?.(
-      tab.assessmentsIds,
+    moveAssessments?.(
+      tab.id,
       newTab.id,
       newTab.fullTabTitle ?? newTab.title,
-    ).then(() => {
-      handleDeleteTab();
-      setDeleting(false);
-    });
+      handleDeleteTab,
+      closeDeleteTabDialog,
+    );
   };
 
   const renderMoveMenu = (): JSX.Element => {
@@ -147,7 +146,7 @@ const Tab = (props: TabProps): JSX.Element => {
               )}
             </div>
 
-            {!stationary && (
+            {tab.canDeleteTab && !stationary && (
               <IconButton
                 color="error"
                 disabled={disabled || isDragging}
@@ -177,14 +176,14 @@ const Tab = (props: TabProps): JSX.Element => {
             <DialogContentText className="mt-4">
               {t(translations.thisTabContains)}
 
-              {tab.topAssessmentsTitles.map((assessment) => (
+              {tab.topAssessmentTitles.map((assessment) => (
                 <li key={assessment}>{assessment}</li>
               ))}
 
-              {tab.assessmentsCount > tab.topAssessmentsTitles.length &&
+              {tab.assessmentsCount > tab.topAssessmentTitles.length &&
                 t(translations.andNMoreItems, {
                   n: (
-                    tab.assessmentsCount - tab.topAssessmentsTitles.length
+                    tab.assessmentsCount - tab.topAssessmentTitles.length
                   ).toString(),
                 })}
             </DialogContentText>

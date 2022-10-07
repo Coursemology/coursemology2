@@ -7,10 +7,16 @@ import type {
   AssessmentSettingsPostData,
   AssessmentTab,
   AssessmentTabPostData,
+  MoveAssessmentsPostData,
+  MovedAssessmentsResult,
+  MovedTabsResult,
+  MoveTabsPostData,
 } from 'types/course/admin/assessments';
 import BaseAdminAPI from './Base';
 
 type Response = Promise<AxiosResponse<AssessmentSettingsData>>;
+type MovedAssessmentsResponse = Promise<AxiosResponse<MovedAssessmentsResult>>;
+type MovedTabsResponse = Promise<AxiosResponse<MovedTabsResult>>;
 
 export default class AssessmentsAdminAPI extends BaseAdminAPI {
   override _getUrlPrefix(): string {
@@ -50,5 +56,16 @@ export default class AssessmentsAdminAPI extends BaseAdminAPI {
     return this.getClient().delete(
       `${this._getUrlPrefix()}/categories/${id}/tabs/${tabId}`,
     );
+  }
+
+  moveAssessments(data: MoveAssessmentsPostData): MovedAssessmentsResponse {
+    return this.getClient().post(
+      `${super._getUrlPrefix()}/move_assessments`,
+      data,
+    );
+  }
+
+  moveTabs(data: MoveTabsPostData): MovedTabsResponse {
+    return this.getClient().post(`${super._getUrlPrefix()}/move_tabs`, data);
   }
 }

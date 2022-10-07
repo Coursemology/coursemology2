@@ -9,6 +9,8 @@ import {
   AssessmentTab,
   AssessmentTabInCategoryPostData,
   AssessmentTabPostData,
+  MoveAssessmentsPostData,
+  MoveTabsPostData,
 } from 'types/course/admin/assessments';
 
 type Data = Promise<AssessmentSettingsData>;
@@ -138,15 +140,40 @@ export const createTabInCategory = async (
   }
 };
 
-export const moveAssessmentsToTab = (
-  assessmentIds: number[],
-  tabId: AssessmentTab['id'],
-): Promise<unknown[]> => {
-  const promises = assessmentIds.map((id) =>
-    CourseAPI.assessment.assessments.update(id, {
-      assessment: { tab_id: tabId },
-    }),
-  );
+export const moveAssessments = async (
+  sourceTabId: AssessmentTab['id'],
+  destinationTabId: AssessmentTab['id'],
+): Promise<number> => {
+  const adaptedData: MoveAssessmentsPostData = {
+    source_tab_id: sourceTabId,
+    destination_tab_id: destinationTabId,
+  };
 
-  return Promise.all(promises);
+  try {
+    const response = await CourseAPI.admin.assessments.moveAssessments(
+      adaptedData,
+    );
+    return response.data.moved_assessments_count;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
+  }
+};
+
+export const moveTabs = async (
+  sourceCategoryId: AssessmentCategory['id'],
+  destinationCategoryId: AssessmentCategory['id'],
+): Promise<number> => {
+  const adaptedData: MoveTabsPostData = {
+    source_category_id: sourceCategoryId,
+    destination_category_id: destinationCategoryId,
+  };
+
+  try {
+    const response = await CourseAPI.admin.assessments.moveTabs(adaptedData);
+    return response.data.moved_tabs_count;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
+  }
 };

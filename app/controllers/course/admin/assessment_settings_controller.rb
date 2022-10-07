@@ -17,7 +17,41 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
     end
   end
 
+  def move_assessments
+    source_tab_id, destination_tab_id = move_assessments_params
+
+    ActiveRecord::Base.transaction do
+      @moved_count = Course::Assessment.where(tab_id: source_tab_id).update_all(tab_id: destination_tab_id)
+    end
+
+    render json: { moved_assessments_count: @moved_count }
+  rescue ActiveRecord::StatementInvalid
+    head :bad_request
+  end
+
+  def move_tabs
+    source_category_id, destination_category_id = move_tabs_params
+
+    ActiveRecord::Base.transaction do
+      @moved_count = Course::Assessment::Tab.where(category_id: source_category_id).update_all(
+        category_id: destination_category_id
+      )
+    end
+
+    render json: { moved_tabs_count: @moved_count }
+  rescue ActiveRecord::StatementInvalid
+    head :bad_request
+  end
+
   private
+
+  def move_assessments_params
+    params.require([:source_tab_id, :destination_tab_id])
+  end
+
+  def move_tabs_params
+    params.require([:source_category_id, :destination_category_id])
+  end
 
   def category_params
     params.require(:course).permit(:show_public_test_cases_output, :show_stdout_and_stderr,

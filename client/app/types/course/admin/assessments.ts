@@ -4,6 +4,7 @@ export interface AssessmentSettingsData {
   allowRandomization: boolean;
   allowMrqOptionsRandomization: boolean;
   categories: AssessmentCategory[];
+  canCreateCategories: boolean;
 }
 
 export interface AssessmentCategory {
@@ -12,8 +13,9 @@ export interface AssessmentCategory {
   weight: number;
   tabs: AssessmentTab[];
   assessmentsCount: number;
-  assessmentsIds: number[];
-  topAssessmentsTitles: string[];
+  topAssessmentTitles: string[];
+  canCreateTabs: boolean;
+  canDeleteCategory: boolean;
 }
 
 export interface AssessmentTab {
@@ -22,9 +24,27 @@ export interface AssessmentTab {
   weight: number;
   categoryId: AssessmentCategory['id'];
   assessmentsCount: number;
-  assessmentsIds: number[];
-  topAssessmentsTitles: string[];
+  topAssessmentTitles: string[];
   fullTabTitle?: string;
+  canDeleteTab?: boolean;
+}
+
+export interface MovedAssessmentsResult {
+  moved_assessments_count: number;
+}
+
+export interface MovedTabsResult {
+  moved_tabs_count: number;
+}
+
+export interface MoveAssessmentsPostData {
+  source_tab_id: AssessmentTab['id'];
+  destination_tab_id: AssessmentTab['id'];
+}
+
+export interface MoveTabsPostData {
+  source_category_id: AssessmentCategory['id'];
+  destination_category_id: AssessmentCategory['id'];
 }
 
 export interface AssessmentTabInCategoryPostData {

@@ -25,7 +25,7 @@ export const TABS = 'tabs';
 const AssessmentCategoriesManager = (props: Props): JSX.Element => {
   const { categories } = props;
   const { t } = useTranslation();
-  const { createCategory } = useAssessmentSettings();
+  const { createCategory, settings } = useAssessmentSettings();
 
   const renameCategory = (
     index: number,
@@ -122,13 +122,15 @@ const AssessmentCategoriesManager = (props: Props): JSX.Element => {
 
   return (
     <>
-      <Button
-        startIcon={<Add />}
-        onClick={handleCreateCategory}
-        disabled={props.disabled}
-      >
-        {t(translations.addACategory)}
-      </Button>
+      {settings?.canCreateCategories && (
+        <Button
+          startIcon={<Add />}
+          onClick={handleCreateCategory}
+          disabled={props.disabled}
+        >
+          {t(translations.addACategory)}
+        </Button>
+      )}
 
       <DragDropContext
         onDragStart={vibrate()}
