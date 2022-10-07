@@ -85,6 +85,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                   variant="filled"
                   fullWidth
                   disabled={props.disabled}
+                  placeholder={t(translations.courseNamePlaceholder)}
                 />
               )}
             />
@@ -100,6 +101,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                     fullWidth
                     disableMargins
                     disabled={props.disabled}
+                    placeholder={t(translations.courseDescriptionPlaceholder)}
                   />
                 )}
               />
