@@ -1,4 +1,10 @@
-import { useState, forwardRef, ComponentProps } from 'react';
+import {
+  useState,
+  forwardRef,
+  ComponentProps,
+  ChangeEventHandler,
+  FocusEventHandler,
+} from 'react';
 import {
   InputAdornment,
   TextField as MuiTextField,
@@ -6,16 +12,36 @@ import {
 } from '@mui/material';
 import { VisibilityOff, Visibility } from '@mui/icons-material';
 
-type TextFieldProps = ComponentProps<typeof MuiTextField>;
+type TextFieldProps = ComponentProps<typeof MuiTextField> & {
+  trims?: boolean;
+};
 
 const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
   (props, ref): JSX.Element => {
+    const { trims, ...textFieldProps } = props;
     const [showPassword, setShowPassword] = useState(false);
+
+    const handleChange: ChangeEventHandler<HTMLInputElement> = (e): void => {
+      if (trims) {
+        e.target.value = e.target.value.trimStart();
+      }
+
+      return props.onChange?.(e);
+    };
+
+    const handleBlur: FocusEventHandler<HTMLInputElement> = (e): void => {
+      if (trims) {
+        e.target.value = e.target.value.trim();
+        props.onChange?.(e);
+      }
+
+      return props.onBlur?.(e);
+    };
 
     return (
       <MuiTextField
         ref={ref}
-        {...props}
+        {...textFieldProps}
         {...(props.type === 'password' && {
           type: showPassword ? 'text' : 'password',
           InputProps: {
@@ -32,6 +58,8 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
             ),
           },
         })}
+        onChange={handleChange}
+        onBlur={handleBlur}
       />
     );
   },

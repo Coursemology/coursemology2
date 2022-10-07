@@ -123,10 +123,10 @@ describe('<AssessmentForm />', () => {
     expect(form.getByText('Gamification')).toBeVisible();
     expect(form.getByLabelText('Bonus ends at')).toBeVisible();
     expect(form.getByLabelText('Base EXP')).toHaveValue(
-      INITIAL_VALUES.base_exp,
+      INITIAL_VALUES.base_exp.toString(),
     );
     expect(form.getByLabelText('Time Bonus EXP')).toHaveValue(
-      INITIAL_VALUES.time_bonus_exp,
+      INITIAL_VALUES.time_bonus_exp.toString(),
     );
   });
 
