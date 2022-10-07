@@ -19,8 +19,7 @@ import Prompt from 'lib/components/Prompt';
 import Tab from './Tab';
 import translations from '../translations';
 import { useAssessmentSettings } from '../AssessmentSettingsContext';
-import { getTabsInCategories } from './utils';
-import MoveAssessmentsMenu from './MoveAssessmentsMenu';
+import MoveTabsMenu from './MoveTabsMenu';
 
 interface CategoryProps {
   category: AssessmentCategory;
@@ -38,12 +37,8 @@ interface CategoryProps {
 const Category = (props: CategoryProps): JSX.Element => {
   const { category, index } = props;
   const { t } = useTranslation();
-  const {
-    settings,
-    createTabInCategory,
-    deleteCategory,
-    moveAssessmentsToTab,
-  } = useAssessmentSettings();
+  const { settings, createTabInCategory, deleteCategory, moveTabs } =
+    useAssessmentSettings();
 
   const [newTitle, setNewTitle] = useState(category.title);
   const [renaming, setRenaming] = useState(false);
@@ -91,27 +86,25 @@ const Category = (props: CategoryProps): JSX.Element => {
     }
   };
 
-  const handleMoveAssessmentsAndDelete = (tab: AssessmentTab): void => {
-    moveAssessmentsToTab?.(
-      category.assessmentsIds,
-      tab.id,
-      tab.fullTabTitle ?? tab.title,
-    ).then(() => {
-      handleDeleteCategory();
-      setDeleting(false);
-    });
+  const handleMoveTabsAndDelete = (newCategory: AssessmentCategory): void => {
+    moveTabs?.(
+      category.id,
+      newCategory.id,
+      newCategory.title,
+      handleDeleteCategory,
+      closeDeleteCategoryDialog,
+    );
   };
 
   const renderMoveMenu = (): JSX.Element | undefined => {
-    const tabIds = new Set(category.tabs.map((tab) => tab.id));
-    const tabs = getTabsInCategories(settings?.categories, (tab) =>
-      tabIds.has(tab.id),
+    const categories = settings?.categories.filter(
+      (other) => other.id !== category.id,
     );
 
     return (
-      <MoveAssessmentsMenu
-        tabs={tabs}
-        onSelectTab={handleMoveAssessmentsAndDelete}
+      <MoveTabsMenu
+        categories={categories}
+        onSelectCategory={handleMoveTabsAndDelete}
       />
     );
   };
@@ -198,7 +191,7 @@ const Category = (props: CategoryProps): JSX.Element => {
               </div>
 
               <div className="flex min-w-fit items-center">
-                {!props.stationary && (
+                {category.canDeleteCategory && !props.stationary && (
                   <IconButton
                     color="error"
                     disabled={props.disabled ?? isDragging}
@@ -209,13 +202,15 @@ const Category = (props: CategoryProps): JSX.Element => {
                   </IconButton>
                 )}
 
-                <Button
-                  startIcon={<Add />}
-                  disabled={props.disabled ?? isDragging}
-                  onClick={handleCreateTab}
-                >
-                  {t(translations.addATab)}
-                </Button>
+                {category.canCreateTabs && (
+                  <Button
+                    startIcon={<Add />}
+                    disabled={props.disabled ?? isDragging}
+                    onClick={handleCreateTab}
+                  >
+                    {t(translations.addATab)}
+                  </Button>
+                )}
               </div>
             </div>
 
@@ -256,16 +251,16 @@ const Category = (props: CategoryProps): JSX.Element => {
             <DialogContentText className="mt-4">
               {t(translations.thisCategoryContains)}
 
-              {category.topAssessmentsTitles.map((assessment) => (
+              {category.topAssessmentTitles.map((assessment) => (
                 <li key={assessment}>{assessment}</li>
               ))}
 
               {category.assessmentsCount >
-                category.topAssessmentsTitles.length &&
+                category.topAssessmentTitles.length &&
                 t(translations.andNMoreItems, {
                   n: (
                     category.assessmentsCount -
-                    category.topAssessmentsTitles.length
+                    category.topAssessmentTitles.length
                   ).toString(),
                 })}
             </DialogContentText>

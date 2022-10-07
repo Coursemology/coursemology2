@@ -16,6 +16,14 @@ class Course::Assessment::Tab < ApplicationRecord
 
   default_scope { order(:weight) }
 
+  calculated :top_assessment_titles, (lambda do
+    Course::Assessment.
+      where('course_assessments.tab_id = course_assessment_tabs.id').
+      joins('INNER JOIN course_lesson_plan_items ON course_assessments.id = actable_id').
+      limit(3).
+      select('(array_agg(title))[0:3]')
+  end)
+
   # Returns a boolean value indicating if there are other tabs
   # besides this one remaining in its category.
   #

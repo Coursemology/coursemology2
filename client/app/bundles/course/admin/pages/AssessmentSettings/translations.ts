@@ -92,6 +92,14 @@ export default defineMessages({
     id: 'course.admin.assessment.moveAssessmentsThenDelete',
     defaultMessage: 'Move assessments then delete',
   },
+  moveTabsToCategoryThenDelete: {
+    id: 'course.admin.assessment.moveTabsToCategoryThenDelete',
+    defaultMessage: 'Move tabs to {category} then delete',
+  },
+  moveTabsThenDelete: {
+    id: 'course.admin.assessment.moveTabsThenDelete',
+    defaultMessage: 'Move tabs then delete',
+  },
   toTab: {
     id: 'course.admin.assessment.toTab',
     defaultMessage: 'to {tab}',
@@ -106,18 +114,22 @@ export default defineMessages({
   },
   andNMoreItems: {
     id: 'course.admin.assessment.andNMoreItems',
-    defaultMessage: 'and {n, plural, one {# more item} other {# more items}}',
-  },
-  movingAssessmentsTo: {
-    id: 'course.admin.assessment.movingAssessmentsTo',
-    defaultMessage: 'Moving assessments to {tab}...',
+    defaultMessage: 'and {n, plural, one {# more item} other {# more items}}.',
   },
   nAssessmentsMoved: {
     id: 'course.admin.assessment.nAssessmentsMoved',
-    defaultMessage: '{n} were successfully moved to {tab}.',
+    defaultMessage: '{n} assessments were successfully moved to {tab}.',
   },
-  errorWhenMovingAssessments: {
-    id: 'course.admin.assessment.errorWhenMovingAssessments',
-    defaultMessage: 'An error occurred when moving assessments to {tab}.',
+  nTabsMoved: {
+    id: 'course.admin.assessment.nTabsMoved',
+    defaultMessage: '{n} tabs were successfully moved to {category}.',
+  },
+  errorOccurredWhenMovingAssessments: {
+    id: 'course.admin.assessment.errorOccurredWhenMovingAssessments',
+    defaultMessage: 'An error occurred while moving the assessments.',
+  },
+  errorOccurredWhenMovingTabs: {
+    id: 'course.admin.assessment.errorOccurredWhenMovingTabs',
+    defaultMessage: 'An error occurred while moving the tabs.',
   },
 });
