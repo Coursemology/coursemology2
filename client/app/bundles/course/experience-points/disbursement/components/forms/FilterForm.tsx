@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC, memo, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import {
@@ -9,7 +9,8 @@ import {
 } from 'react-intl';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import { Button, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import * as yup from 'yup';
 import formTranslations from 'lib/translations/form';
 import { ForumDisbursementFilters } from 'types/course/disbursement';
@@ -20,6 +21,7 @@ import { AppDispatch } from 'types/store';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import equal from 'fast-deep-equal';
 import { fetchFilteredForumDisbursements } from '../../operations';
+import { removeForumDisbursementList } from '../../actions';
 
 interface Props extends WrappedComponentProps {
   initialValues: ForumDisbursementFilters;
@@ -41,10 +43,6 @@ const translations = defineMessages({
   submit: {
     id: 'course.experience-points.disbursement.FilterForm.submit',
     defaultMessage: 'Search',
-  },
-  fetchFilterSuccess: {
-    id: 'course.experience-points.disbursement.DisbursementForm.fetchFilterSuccess',
-    defaultMessage: 'Successfully filtered forum users.',
   },
   fetchFilterNone: {
     id: 'course.experience-points.disbursement.DisbursementForm.fetchFilterNone',
@@ -76,6 +74,7 @@ const validationSchema = yup.object({
 
 const FilterForm: FC<Props> = (props) => {
   const { intl, initialValues } = props;
+  const [isSearching, setIsSearching] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
   const {
@@ -89,15 +88,17 @@ const FilterForm: FC<Props> = (props) => {
   });
 
   const onFormSubmit = (data: ForumDisbursementFilters): void => {
+    setIsSearching(true);
+    dispatch(removeForumDisbursementList());
     dispatch(fetchFilteredForumDisbursements(data))
       .then((response) => {
+        setIsSearching(false);
         if (response.data.forumUsers.length === 0) {
           toast.error(intl.formatMessage(translations.fetchFilterNone));
-        } else {
-          toast.success(intl.formatMessage(translations.fetchFilterSuccess));
         }
       })
       .catch((error) => {
+        setIsSearching(false);
         toast.error(intl.formatMessage(translations.fetchFilterFailure));
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
@@ -126,7 +127,7 @@ const FilterForm: FC<Props> = (props) => {
                 className="start_time"
                 field={field}
                 fieldState={fieldState}
-                disabled={false}
+                disabled={isSearching}
                 label={<FormattedMessage {...translations.startTime} />}
               />
             )}
@@ -141,7 +142,7 @@ const FilterForm: FC<Props> = (props) => {
                 className="end_time"
                 field={field}
                 fieldState={fieldState}
-                disabled={false}
+                disabled={isSearching}
                 label={<FormattedMessage {...translations.endTime} />}
               />
             )}
@@ -157,6 +158,7 @@ const FilterForm: FC<Props> = (props) => {
                 fieldState={fieldState}
                 // @ts-ignore: component is still written in JS
                 className="weekly_cap"
+                disabled={isSearching}
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
@@ -172,7 +174,7 @@ const FilterForm: FC<Props> = (props) => {
           />
         </Grid>
         <Grid item>
-          <Button
+          <LoadingButton
             color="primary"
             className="filter-btn-submit"
             form="filter-form"
@@ -180,9 +182,11 @@ const FilterForm: FC<Props> = (props) => {
             type="submit"
             variant="outlined"
             style={{ marginBottom: '10px', marginTop: '10px' }}
+            disabled={isSearching}
+            loading={isSearching}
           >
             <FormattedMessage {...translations.submit} />
-          </Button>
+          </LoadingButton>
         </Grid>
       </Grid>
     </form>

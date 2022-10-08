@@ -7,7 +7,7 @@ class Course::ExperiencePoints::DisbursementController < Course::ComponentContro
   def new
     respond_to do |format|
       format.html { render 'new' }
-      format.json { render 'index' }
+      format.json { render 'new' }
     end
   end
 

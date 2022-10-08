@@ -1,10 +1,3 @@
-import {
-  CourseUserBasicListData,
-  CourseUserBasicMiniEntity,
-  CourseUserData,
-  CourseUserEntity,
-} from './courseUsers';
-
 /**
  * Data types for disbursement data retrieved from backend through API call.
  */
@@ -15,7 +8,11 @@ export interface ForumDisbursementFilters {
   weeklyCap: string;
 }
 
-export interface ForumDisbursementUserData extends CourseUserData {
+export interface ForumDisbursementUserData {
+  id: number;
+  name: string;
+  level: number;
+  exp: number;
   postCount: number;
   voteTally: number;
   points: number;
@@ -31,10 +28,15 @@ export interface ForumPostData {
   createdAt: Date;
 }
 
-export interface CourseGroupListData {
+export interface DisbursementCourseGroupListData {
   id: number;
   name: string;
-  users: CourseUserBasicListData[];
+}
+
+export interface DisbursementCourseUserListData {
+  id: number;
+  name: string;
+  groupIds: number[];
 }
 
 /**
@@ -42,27 +44,36 @@ export interface CourseGroupListData {
  * received backend data.
  */
 
-export interface CourseGroupMiniEntity {
-  id: number;
-  name: string;
-  users: CourseUserBasicMiniEntity[];
+export interface DisbursementCourseGroupMiniEntity {
+  id: DisbursementCourseGroupListData['id'];
+  name: DisbursementCourseGroupListData['name'];
 }
 
-export interface ForumDisbursementUserEntity extends CourseUserEntity {
-  postCount: number;
-  voteTally: number;
-  points: number;
+export interface DisbursementCourseUserMiniEntity {
+  id: DisbursementCourseUserListData['id'];
+  name: DisbursementCourseUserListData['name'];
+  groupIds: DisbursementCourseUserListData['groupIds'];
+}
+
+export interface ForumDisbursementUserEntity {
+  id: ForumDisbursementUserData['id'];
+  name: ForumDisbursementUserData['name'];
+  level: ForumDisbursementUserData['level'];
+  exp: ForumDisbursementUserData['exp'];
+  postCount: ForumDisbursementUserData['postCount'];
+  voteTally: ForumDisbursementUserData['voteTally'];
+  points: ForumDisbursementUserData['points'];
 }
 
 export interface ForumPostEntity {
-  id: number;
+  id: ForumPostData['id'];
+  title: ForumPostData['title'];
+  topicSlug: ForumPostData['topicSlug'];
+  forumSlug: ForumPostData['forumSlug'];
+  content: ForumPostData['content'];
+  voteTally: ForumPostData['voteTally'];
+  createdAt: ForumPostData['createdAt'];
   userId: number;
-  title: string;
-  topicSlug: string;
-  forumSlug: string;
-  content: string;
-  voteTally: number;
-  createdAt: Date;
 }
 
 /**
@@ -71,22 +82,11 @@ export interface ForumPostEntity {
 
 export interface DisbursementFormData {
   reason: string;
-  currentGroup?: string;
-  pointList: PointListData[];
+  [key: `courseUser_${number}`]: string;
 }
 export interface ForumDisbursementFormData
   extends ForumDisbursementFilters,
     DisbursementFormData {}
-
-export interface PointListData {
-  points: string;
-  id?: number;
-}
-
-export interface CourseGroupOptions {
-  value: number;
-  label: string;
-}
 
 /**
  * Data types for forum disbursement data sent to backend

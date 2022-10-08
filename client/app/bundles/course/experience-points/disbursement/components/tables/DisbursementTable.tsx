@@ -1,20 +1,20 @@
+import equal from 'fast-deep-equal';
 import DataTable from 'lib/components/DataTable';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import { FC } from 'react';
+import { FC, memo } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
-import { CourseUserBasicMiniEntity } from 'types/course/courseUsers';
+import { DisbursementCourseUserMiniEntity } from 'types/course/disbursement';
 import DuplicateButton from '../buttons/DuplicateButton';
 import RemoveAllButton from '../buttons/RemoveAllButton';
+import PointField from '../fields/PointField';
 
 interface Props extends WrappedComponentProps {
-  filteredUsers: CourseUserBasicMiniEntity[];
-  pointTextFieldArray: JSX.Element[];
+  filteredUsers: DisbursementCourseUserMiniEntity[];
   onClickRemove: () => void;
   onClickCopy: () => void;
-  indexList: number[];
 }
 
 const translations = defineMessages({
@@ -37,15 +37,7 @@ const translations = defineMessages({
 });
 
 const DisbursementTable: FC<Props> = (props: Props) => {
-  const {
-    filteredUsers: data,
-    pointTextFieldArray,
-    indexList,
-    onClickCopy,
-    onClickRemove,
-    intl,
-  } = props;
-  const renderFilteredPointTextFields = pointTextFieldArray;
+  const { filteredUsers, onClickCopy, onClickRemove, intl } = props;
 
   const columns: TableColumns[] = [
     {
@@ -83,8 +75,12 @@ const DisbursementTable: FC<Props> = (props: Props) => {
           },
         }),
         customBodyRenderLite: (dataIndex: number): JSX.Element => (
-          <a href={getCourseUserURL(getCourseId(), data[dataIndex].id)}>
-            {data[dataIndex].name}
+          <a
+            href={getCourseUserURL(getCourseId(), filteredUsers[dataIndex].id)}
+            target="_blank"
+            rel="noreferrer"
+          >
+            {filteredUsers[dataIndex].name}
           </a>
         ),
       },
@@ -105,8 +101,12 @@ const DisbursementTable: FC<Props> = (props: Props) => {
             padding: '5px 14px',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): JSX.Element =>
-          renderFilteredPointTextFields[indexList[dataIndex]],
+        customBodyRenderLite: (dataIndex: number): JSX.Element => (
+          <PointField
+            key={filteredUsers[dataIndex].id}
+            courseUserId={filteredUsers[dataIndex].id}
+          />
+        ),
       },
     },
     {
@@ -158,13 +158,22 @@ const DisbursementTable: FC<Props> = (props: Props) => {
     selectToolbarPlacement: 'none',
     viewColumns: false,
     setRowProps: (_row, dataIndex, _rowIndex) => ({
-      className: `course_user_${data[dataIndex].id}`,
+      className: `course_user_${filteredUsers[dataIndex].id}`,
     }),
   };
 
   return (
-    <DataTable data={data} options={options} columns={columns} height="10px" />
+    <DataTable
+      data={filteredUsers}
+      options={options}
+      columns={columns}
+      height="10px"
+    />
   );
 };
 
-export default injectIntl(DisbursementTable);
+export default injectIntl(
+  memo(DisbursementTable, (prevProps, nextProps) =>
+    equal(prevProps.filteredUsers, nextProps.filteredUsers),
+  ),
+);

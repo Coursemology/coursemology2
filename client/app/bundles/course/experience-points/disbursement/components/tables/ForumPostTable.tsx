@@ -2,7 +2,7 @@ import { CardContent, TableCell, TableRow, Typography } from '@mui/material';
 import DataTable from 'lib/components/DataTable';
 import { getForumTopicURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import moment from 'moment';
+import { formatLongDateTime } from 'lib/moment';
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
@@ -130,7 +130,7 @@ const ForumPostTable: FC<Props> = (props: Props) => {
         }),
         customBodyRenderLite: (_dataIndex: number): JSX.Element => (
           <div style={{ width: 'max-content' }}>
-            {moment(data[_dataIndex].createdAt).format('MMM DD, YYYY HH:mm')}
+            {formatLongDateTime(data[_dataIndex].createdAt)}
           </div>
         ),
       },

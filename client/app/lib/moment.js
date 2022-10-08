@@ -22,5 +22,6 @@ const formatDateTime =
     return dateTime.isValid() ? dateTime.format(format) : defaultString;
   };
 
+export const formatLongDate = formatDateTime(longDate);
 export const formatLongDateTime = formatDateTime(longDateTime);
 export const formatShortDateTime = formatDateTime(shortDateTime);

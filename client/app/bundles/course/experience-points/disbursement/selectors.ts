@@ -20,10 +20,6 @@ export function getAllFilteredUserMiniEntities(state: AppState) {
   );
 }
 
-export function getCurrentGroup(state: AppState) {
-  return getLocalState(state).currentGroup ?? null;
-}
-
 export function getFilters(state: AppState) {
   return getLocalState(state).filters;
 }
@@ -35,9 +31,15 @@ export function getAllForumDisbursementUserEntities(state: AppState) {
   );
 }
 
-export function getAllForumPostEntities(state: AppState) {
-  return selectMiniEntities(
-    getLocalState(state).forumPosts,
-    getLocalState(state).forumPosts.ids,
-  );
+export function getAllForumPostEntitiesForUser(
+  state: AppState,
+  userId?: number,
+) {
+  if (userId) {
+    return selectMiniEntities(
+      getLocalState(state).forumPosts,
+      getLocalState(state).forumPosts.ids,
+    ).filter((post) => post.userId === userId);
+  }
+  return [];
 }

@@ -1,10 +1,8 @@
 import {
-  CourseUserBasicListData,
-  CourseUserBasicMiniEntity,
-} from 'types/course/courseUsers';
-import {
-  CourseGroupListData,
-  CourseGroupMiniEntity,
+  DisbursementCourseGroupListData,
+  DisbursementCourseGroupMiniEntity,
+  DisbursementCourseUserListData,
+  DisbursementCourseUserMiniEntity,
   ForumDisbursementFilters,
   ForumDisbursementUserData,
   ForumDisbursementUserEntity,
@@ -19,6 +17,8 @@ export const SAVE_DISBURSEMENT_LIST =
   'course/experience-points/disbursement/SAVE_DISBURSEMENT_LIST';
 export const SAVE_FORUM_DISBURSEMENT_LIST =
   'course/experience-points/disbursement/SAVE_FORUM_DISBURSEMENT_LIST';
+export const REMOVE_FORUM_DISBURSEMENT_LIST =
+  'course/experience-points/disbursement/REMOVE_FORUM_DISBURSEMENT_LIST';
 export const SAVE_FORUM_POST_LIST =
   'course/experience-points/disbursement/SAVE_FORUM_POST_LIST';
 
@@ -26,14 +26,17 @@ export const SAVE_FORUM_POST_LIST =
 
 export interface SaveDisbursementListAction {
   type: typeof SAVE_DISBURSEMENT_LIST;
-  currentGroup: CourseGroupListData | null;
-  courseGroups: CourseGroupListData[];
-  courseUsers: CourseUserBasicListData[];
+  courseGroups: DisbursementCourseGroupListData[];
+  courseUsers: DisbursementCourseUserListData[];
 }
 export interface SaveForumDisbursementListAction {
   type: typeof SAVE_FORUM_DISBURSEMENT_LIST;
   filters: ForumDisbursementFilters;
   forumUsers: ForumDisbursementUserData[];
+}
+
+export interface RemoveForumDisbursementListAction {
+  type: typeof REMOVE_FORUM_DISBURSEMENT_LIST;
 }
 
 export interface SaveForumPostListAction {
@@ -45,14 +48,14 @@ export interface SaveForumPostListAction {
 export type DisbursementActionType =
   | SaveDisbursementListAction
   | SaveForumDisbursementListAction
+  | RemoveForumDisbursementListAction
   | SaveForumPostListAction;
 
 // State Types
 
 export interface DisbursementState {
-  courseGroups: EntityStore<CourseGroupMiniEntity>;
-  courseUsers: EntityStore<CourseUserBasicMiniEntity>;
-  currentGroup: CourseGroupMiniEntity | null;
+  courseGroups: EntityStore<DisbursementCourseGroupMiniEntity>;
+  courseUsers: EntityStore<DisbursementCourseUserMiniEntity>;
   filters: ForumDisbursementFilters;
   forumUsers: EntityStore<ForumDisbursementUserEntity>;
   forumPosts: EntityStore<ForumPostEntity>;

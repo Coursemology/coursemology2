@@ -1,6 +1,6 @@
-import { CourseUserListData } from 'types/course/courseUsers';
 import {
-  CourseGroupListData,
+  DisbursementCourseGroupListData,
+  DisbursementCourseUserListData,
   ForumDisbursementFilters,
   ForumDisbursementUserData,
   ForumPostData,
@@ -8,20 +8,20 @@ import {
 import {
   SaveDisbursementListAction,
   SaveForumDisbursementListAction,
+  RemoveForumDisbursementListAction,
   SaveForumPostListAction,
   SAVE_DISBURSEMENT_LIST,
   SAVE_FORUM_DISBURSEMENT_LIST,
+  REMOVE_FORUM_DISBURSEMENT_LIST,
   SAVE_FORUM_POST_LIST,
 } from './types';
 
 export function saveDisbursementList(
-  currentGroup: CourseGroupListData | null,
-  courseGroups: CourseGroupListData[],
-  courseUsers: CourseUserListData[],
+  courseGroups: DisbursementCourseGroupListData[],
+  courseUsers: DisbursementCourseUserListData[],
 ): SaveDisbursementListAction {
   return {
     type: SAVE_DISBURSEMENT_LIST,
-    currentGroup,
     courseGroups,
     courseUsers,
   };
@@ -35,6 +35,12 @@ export function saveForumDisbursementList(
     type: SAVE_FORUM_DISBURSEMENT_LIST,
     filters,
     forumUsers,
+  };
+}
+
+export function removeForumDisbursementList(): RemoveForumDisbursementListAction {
+  return {
+    type: REMOVE_FORUM_DISBURSEMENT_LIST,
   };
 }
 
