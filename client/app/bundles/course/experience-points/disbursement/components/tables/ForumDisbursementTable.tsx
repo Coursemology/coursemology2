@@ -14,10 +14,10 @@ import {
 import ReactTooltip from 'react-tooltip';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumDisbursementUserEntity } from 'types/course/disbursement';
+import PointField from '../fields/PointField';
 
 interface Props extends WrappedComponentProps {
   forumUsers: ForumDisbursementUserEntity[];
-  pointTextFieldArray: JSX.Element[];
   onPostClick: (user: ForumDisbursementUserEntity) => void;
 }
 
@@ -53,8 +53,7 @@ const translations = defineMessages({
 });
 
 const ForumDisbursementTable: FC<Props> = (props: Props) => {
-  const { intl, forumUsers, pointTextFieldArray, onPostClick } = props;
-  const renderFilteredPointTextFields = pointTextFieldArray;
+  const { intl, forumUsers, onPostClick } = props;
 
   const columns: TableColumns[] = [
     {
@@ -88,7 +87,11 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
           style: { overflowWrap: 'anywhere', padding: '5px 14px' },
         }),
         customBodyRenderLite: (dataIndex: number): JSX.Element => (
-          <a href={getCourseUserURL(getCourseId(), forumUsers[dataIndex].id)}>
+          <a
+            href={getCourseUserURL(getCourseId(), forumUsers[dataIndex].id)}
+            target="_blank"
+            rel="noreferrer"
+          >
             {forumUsers[dataIndex].name}
           </a>
         ),
@@ -207,8 +210,12 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
           id: `course_user_${forumUsers[rowIndex].id}`,
           style: { overflowWrap: 'anywhere', padding: '5px 14px' },
         }),
-        customBodyRenderLite: (dataIndex: number): JSX.Element =>
-          renderFilteredPointTextFields[dataIndex],
+        customBodyRenderLite: (dataIndex: number): JSX.Element => (
+          <PointField
+            key={forumUsers[dataIndex].id}
+            courseUserId={forumUsers[dataIndex].id}
+          />
+        ),
       },
     },
   ];

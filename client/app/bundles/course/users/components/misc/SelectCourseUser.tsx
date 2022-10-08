@@ -45,7 +45,7 @@ const SelectCourseUser: FC<Props> = (props) => {
 
   return (
     <Autocomplete
-      id="upgrade-student-name"
+      id="filter-course-user"
       value={user}
       onChange={handleChange}
       options={users}

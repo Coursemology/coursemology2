@@ -26,11 +26,27 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
           expect(page).to have_selector("tr.course_user_#{student.id}")
         end
 
-        find('div.filter-group').click
+        find('.filter-group').click
         find('li', text: group1.name).click
         expect(page).to have_selector("tr.course_user_#{group1_student.id}")
         expect(page).to have_no_selector("tr.course_user_#{group2_student.id}")
         expect(page).to have_no_selector("tr.course_user_#{ungrouped_student.id}")
+
+        find('div.experience_points_disbursement_reason').find('input').set('a reason')
+        find("tr.course_user_#{group1_student.id}").find('div.points_awarded').find('input').set '59'
+
+        expect do
+          find('button.general-btn-submit').click
+          sleep 0.5
+        end.to change(Course::ExperiencePointsRecord, :count).by(1)
+
+        expect(group1_student.experience_points).to eq(59)
+        expect(group2_student.experience_points).to eq(0)
+        expect(ungrouped_student.experience_points).to eq(0)
+
+        expect(group1_student.experience_points_records.first.reason).to eq('a reason')
+        expect(group2_student.experience_points_records.size).to eq(0)
+        expect(ungrouped_student.experience_points_records.size).to eq(0)
       end
 
       scenario 'I can copy points awarded for first student to all students', js: true do
@@ -39,13 +55,23 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
         find('button#general-disbursement-tab').click
 
         first('tbody').first('tr').find('div.points_awarded').find('input').set '100'
-        sleep 0.5 # Added due to debounced field
 
         find('.experience-points-disbursement-copy-button').click
 
+        find('div.experience_points_disbursement_reason').find('input').set('a reason')
         course_students.each do |student|
           points_awarded = find("tr.course_user_#{student.id}").find('div.points_awarded').find('input').value
           expect(points_awarded).to eq('100')
+        end
+
+        expect do
+          find('button.general-btn-submit').click
+          sleep 0.5
+        end.to change(Course::ExperiencePointsRecord, :count).by(course_students.length)
+
+        course_students.each do |course_student|
+          expect(course_student.experience_points).to eq(100)
+          expect(course_student.experience_points_records.first.reason).to eq('a reason')
         end
       end
 
@@ -64,12 +90,23 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
         find("tr.course_user_#{student_to_award_points.id}").find('div.points_awarded').find('input').set '100'
         find("tr.course_user_#{student_to_set_one.id}").find('div.points_awarded').find('input').set '1'
         find("tr.course_user_#{student_to_set_zero.id}").find('div.points_awarded').find('input').set '0'
-        sleep 0.5 # Added due to debounced field
 
         expect do
           find('button.general-btn-submit').click
           sleep 0.5
         end.to change(Course::ExperiencePointsRecord, :count).by(2)
+
+        expect(student_to_award_points.experience_points).to eq(100)
+        expect(student_to_award_points.experience_points_records.first.reason).to eq('a reason')
+
+        expect(student_to_set_one.experience_points).to eq(1)
+        expect(student_to_set_one.experience_points_records.first.reason).to eq('a reason')
+
+        expect(student_to_set_zero.experience_points).to eq(0)
+        expect(student_to_set_zero.experience_points_records.size).to eq(0)
+
+        expect(student_to_leave_blank.experience_points).to eq(0)
+        expect(student_to_leave_blank.experience_points_records.size).to eq(0)
       end
     end
   end
