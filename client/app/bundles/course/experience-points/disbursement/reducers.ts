@@ -11,13 +11,13 @@ import {
   DisbursementActionType,
   DisbursementState,
   SAVE_FORUM_DISBURSEMENT_LIST,
+  REMOVE_FORUM_DISBURSEMENT_LIST,
   SAVE_FORUM_POST_LIST,
 } from './types';
 
 const initialState: DisbursementState = {
   courseGroups: createEntityStore(),
   courseUsers: createEntityStore(),
-  currentGroup: null,
   filters: {} as ForumDisbursementFilters,
   forumUsers: createEntityStore(),
   forumPosts: createEntityStore(),
@@ -33,11 +33,9 @@ const reducer = produce(
         const courseUsers = action.courseUsers.map((data) => ({
           ...data,
         }));
-        const currentGroup = action.currentGroup && { ...action.currentGroup };
 
         saveListToStore(draft.courseGroups, courseGroups);
         saveListToStore(draft.courseUsers, courseUsers);
-        draft.currentGroup = currentGroup ?? null;
         break;
       }
       case SAVE_FORUM_DISBURSEMENT_LIST: {
@@ -51,6 +49,11 @@ const reducer = produce(
         removeAllFromStore(draft.forumPosts);
         saveListToStore(draft.forumUsers, forumUserEntity);
         draft.filters = filters;
+        break;
+      }
+      case REMOVE_FORUM_DISBURSEMENT_LIST: {
+        removeAllFromStore(draft.forumUsers);
+        removeAllFromStore(draft.forumPosts);
         break;
       }
       case SAVE_FORUM_POST_LIST: {

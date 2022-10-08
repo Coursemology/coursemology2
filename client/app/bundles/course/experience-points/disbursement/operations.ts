@@ -1,15 +1,16 @@
 import CourseAPI from 'api/course';
 import { AxiosResponse } from 'axios';
-import { CourseUserListData } from 'types/course/courseUsers';
 import {
-  CourseGroupListData,
+  DisbursementCourseGroupListData,
+  DisbursementCourseUserListData,
   DisbursementFormData,
+  DisbursementCourseUserMiniEntity,
   ForumDisbursementFilters,
   ForumDisbursementFormData,
   ForumDisbursementFilterParams,
   ForumDisbursementUserData,
-  PointListData,
   ForumPostData,
+  ForumDisbursementUserEntity,
 } from 'types/course/disbursement';
 import { ForumSearchParams } from 'types/course/forum';
 import { Operation } from 'types/store';
@@ -26,25 +27,28 @@ import * as actions from './actions';
  *     ]
  *   }
  */
-const formatDisbursementAttribute = (data: DisbursementFormData): FormData => {
+const formatDisbursementAttribute = (
+  data: DisbursementFormData,
+  filteredCourseUsers: DisbursementCourseUserMiniEntity[],
+): FormData => {
   const payload = new FormData();
 
-  if (data.reason !== undefined && data.reason !== null) {
+  if (data.reason) {
     payload.append('experience_points_disbursement[reason]', data.reason);
   }
-
-  data.pointList.forEach((point: PointListData, index) => {
-    if (point.id) {
+  filteredCourseUsers.forEach((courseUser, index) => {
+    if (data[`courseUser_${courseUser.id}`]) {
       payload.append(
         `experience_points_disbursement[experience_points_records_attributes][${index}][points_awarded]`,
-        point.points,
+        data[`courseUser_${courseUser.id}`],
       );
       payload.append(
         `experience_points_disbursement[experience_points_records_attributes][${index}][course_user_id]`,
-        point.id?.toString() ?? '',
+        courseUser.id.toString(),
       );
     }
   });
+
   return payload;
 };
 
@@ -61,6 +65,7 @@ const formatDisbursementAttribute = (data: DisbursementFormData): FormData => {
  */
 const formatForumDisbursementAttribute = (
   data: ForumDisbursementFormData,
+  forumUsers: ForumDisbursementUserEntity[],
 ): FormData => {
   const payload = new FormData();
 
@@ -76,15 +81,15 @@ const formatForumDisbursementAttribute = (
     }
   });
 
-  data.pointList.forEach((point: PointListData, index) => {
-    if (point.id) {
+  forumUsers.forEach((forumUser, index) => {
+    if (data[`courseUser_${forumUser.id}`]) {
       payload.append(
         `experience_points_forum_disbursement[experience_points_records_attributes][${index}][points_awarded]`,
-        point.points,
+        data[`courseUser_${forumUser.id}`],
       );
       payload.append(
         `experience_points_forum_disbursement[experience_points_records_attributes][${index}][course_user_id]`,
-        point.id?.toString() ?? '',
+        forumUser.id.toString(),
       );
     }
   });
@@ -103,7 +108,7 @@ const formatFilterAttribute = (
 
 const formatSearchAttribute = (
   filter: ForumDisbursementFilters,
-  user: ForumDisbursementUserData,
+  user: ForumDisbursementUserEntity,
 ): ForumSearchParams => ({
   params: {
     'search[course_user_id]': user.id,
@@ -114,20 +119,15 @@ const formatSearchAttribute = (
 
 export function fetchDisbursements(): Operation<
   AxiosResponse<{
-    currentGroup: CourseGroupListData | null;
-    courseGroups: CourseGroupListData[];
-    courseUsers: CourseUserListData[];
+    courseGroups: DisbursementCourseGroupListData[];
+    courseUsers: DisbursementCourseUserListData[];
   }>
 > {
   return async (dispatch) =>
     CourseAPI.disbursement.index().then((response) => {
       const data = response.data;
       dispatch(
-        actions.saveDisbursementList(
-          data.currentGroup,
-          data.courseGroups,
-          data.courseUsers,
-        ),
+        actions.saveDisbursementList(data.courseGroups, data.courseUsers),
       );
       return response;
     });
@@ -173,7 +173,7 @@ export function fetchFilteredForumDisbursements(
 }
 
 export function fetchForumPost(
-  user: ForumDisbursementUserData,
+  user: ForumDisbursementUserEntity,
   filter: ForumDisbursementFilters,
 ): Operation<
   AxiosResponse<{
@@ -194,24 +194,28 @@ export function fetchForumPost(
     });
 }
 
-export function createDisbursement(data: DisbursementFormData): Operation<
+export function createDisbursement(
+  data: DisbursementFormData,
+  filteredCourseUsers: DisbursementCourseUserMiniEntity[],
+): Operation<
   AxiosResponse<{
     count: number;
   }>
 > {
-  const attributes = formatDisbursementAttribute(data);
+  const attributes = formatDisbursementAttribute(data, filteredCourseUsers);
   return async () =>
     CourseAPI.disbursement.create(attributes).then((response) => response);
 }
 
 export function createForumDisbursement(
   data: ForumDisbursementFormData,
+  forumUsers: ForumDisbursementUserEntity[],
 ): Operation<
   AxiosResponse<{
     count: number;
   }>
 > {
-  const attributes = formatForumDisbursementAttribute(data);
+  const attributes = formatForumDisbursementAttribute(data, forumUsers);
   return async (dispatch) =>
     CourseAPI.disbursement
       .forumDisbursementCreate(attributes)

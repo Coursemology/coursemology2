@@ -1,4 +1,4 @@
-import { FC, useEffect, useState, memo } from 'react';
+import { FC, useState, memo, useMemo } from 'react';
 import {
   defineMessages,
   FormattedMessage,
@@ -7,33 +7,26 @@ import {
 } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Controller, useForm, useFieldArray } from 'react-hook-form';
+import { Controller, useForm, FormProvider } from 'react-hook-form';
 import * as yup from 'yup';
 import formTranslations from 'lib/translations/form';
 import {
-  CourseGroupMiniEntity,
-  CourseGroupOptions,
+  DisbursementCourseGroupMiniEntity,
+  DisbursementCourseUserMiniEntity,
   DisbursementFormData,
-  PointListData,
 } from 'types/course/disbursement';
 import ErrorText from 'lib/components/ErrorText';
-import FormTextField from 'lib/components/form/fields/DebouncedTextField';
-import FormSelectField from 'lib/components/form/fields/SelectField';
-import { CourseUserBasicMiniEntity } from 'types/course/courseUsers';
-import { Button, Grid, Paper } from '@mui/material';
+import FormTextField from 'lib/components/form/fields/TextField';
+import { Autocomplete, Button, Grid, TextField } from '@mui/material';
 import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { createDisbursement } from '../../operations';
-import {
-  getAllCourseGroupMiniEntities,
-  getCurrentGroup,
-} from '../../selectors';
-import PointTextField from '../fields/PointTextField';
+import { getAllCourseGroupMiniEntities } from '../../selectors';
 import DisbursementTable from '../tables/DisbursementTable';
 
 interface Props extends WrappedComponentProps {
-  users: CourseUserBasicMiniEntity[];
+  courseUsers: DisbursementCourseUserMiniEntity[];
 }
 
 const translations = defineMessages({
@@ -45,13 +38,9 @@ const translations = defineMessages({
     id: 'course.experience-points.disbursement.DisbursementForm.filter',
     defaultMessage: 'Filter by group',
   },
-  noneSelected: {
-    id: 'course.experience-points.disbursement.DisbursementForm.noneSelected',
-    defaultMessage: 'Show all students',
-  },
   fetchDisbursementFailure: {
     id: 'course.experience-points.disbursement.DisbursementForm.fetch.failure',
-    defaultMessage: 'Failed to retrieve Disbursements.',
+    defaultMessage: 'Failed to retrieve data.',
   },
   submit: {
     id: 'course.experience-points.disbursement.DisbursementForm.submit',
@@ -78,32 +67,46 @@ const translations = defineMessages({
 
 const validationSchema = yup.object({
   reason: yup.string().required(formTranslations.required),
-  currentGroup: yup.string().nullable(),
-  pointList: yup.array().of(
-    yup.object().shape({
-      points: yup
-        .number()
-        .transform((value, originalValue) =>
-          originalValue === '' ? null : value,
-        )
-        .nullable(),
-    }),
-  ),
 });
 
 const DisbursementForm: FC<Props> = (props) => {
-  const { intl, users } = props;
-  const currentGroup = useSelector((state: AppState) => getCurrentGroup(state));
+  const { intl, courseUsers } = props;
+
   const courseGroups = useSelector((state: AppState) =>
     getAllCourseGroupMiniEntities(state),
   );
+
+  const [filteredGroup, setFilteredGroup] =
+    useState<DisbursementCourseGroupMiniEntity | null>(null);
+  const filteredCourseUsers = useMemo(() => {
+    if (filteredGroup) {
+      const filteredData = courseUsers.filter((courseUser) =>
+        courseUser.groupIds.includes(filteredGroup.id),
+      );
+      return filteredData;
+    }
+    return courseUsers;
+  }, [filteredGroup]);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const dispatch = useDispatch<AppDispatch>();
 
-  const initialValues: DisbursementFormData = {
-    currentGroup: currentGroup === null ? '' : currentGroup.id.toString(),
-    reason: '',
-    pointList: Array(users.length).fill({ points: '' }),
-  };
+  const initialValues: DisbursementFormData = useMemo(() => {
+    const obj = courseUsers.reduce(
+      (accumulator, value) => {
+        return { ...accumulator, [`courseUser_${value.id}`]: '' };
+      },
+      { reason: '' },
+    );
+
+    return obj;
+  }, []);
+
+  const methods = useForm({
+    defaultValues: initialValues,
+    resolver: yupResolver(validationSchema),
+  });
 
   const {
     control,
@@ -112,77 +115,34 @@ const DisbursementForm: FC<Props> = (props) => {
     setValue,
     watch,
     formState: { errors, isDirty },
-  } = useForm({
-    defaultValues: initialValues,
-    resolver: yupResolver(validationSchema),
-  });
-  const [courseUsers, setCourseUsers] = useState(
-    [] as CourseUserBasicMiniEntity[],
-  );
-  const [userIdMap, setUserIdMap] = useState([] as number[]);
-  const [indexFilteredMap, setIndexFilteredMap] = useState([] as number[]);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  } = methods;
 
-  useEffect(() => {
-    setCourseUsers(users);
-    setIndexFilteredMap([...Array(users.length).keys()]);
-    setUserIdMap(users.map((user: CourseUserBasicMiniEntity) => user.id));
-  }, [users]);
-
-  const disbursementOptions: CourseGroupOptions[] = courseGroups.map(
-    (group: CourseGroupMiniEntity) => ({
-      value: group.id,
-      label: group.name,
-    }),
-  );
-
-  // For group filtering, name: controller name, value: groupId
-  const onChangeFilter = (value: string): void => {
-    if (value && !Number.isNaN(+value)) {
-      const filteredUsers: CourseUserBasicMiniEntity[] = courseGroups.filter(
-        (group: CourseGroupMiniEntity) => group.id === +value,
-      )[0].users;
-      const filteredIds = filteredUsers.map(
-        (user: CourseUserBasicMiniEntity) => user.id,
-      );
-      const newUserIdMap = users.map(
-        (user: CourseUserBasicMiniEntity) => user.id,
-      );
-      const newIndexMap = newUserIdMap
-        .map((id, index) => (filteredIds.includes(id) ? index : -1))
-        .filter((x) => x !== -1);
-      setIndexFilteredMap(newIndexMap);
-      setCourseUsers(filteredUsers);
-    } else {
-      setIndexFilteredMap([...Array(users.length).keys()]);
-      setCourseUsers(users);
-    }
-    setValue('currentGroup', value);
+  const onChangeFilter = (
+    _event,
+    value: DisbursementCourseGroupMiniEntity | null,
+  ): void => {
+    setFilteredGroup(value);
   };
 
   const onFormSubmit = (data: DisbursementFormData): void => {
     setIsSubmitting(true);
-    const newPointList = [] as PointListData[];
-    const tempList = data.pointList.map(
-      (pointData, index): PointListData => ({
-        ...pointData,
-        id: userIdMap[index],
-      }),
+    const courseUserFields = filteredCourseUsers.map(
+      (user) => `courseUser_${user.id}`,
     );
-    indexFilteredMap.forEach((index) => newPointList.push(tempList[index]));
-    if (
-      (newPointList.filter((obj) => obj.points !== null || obj.points <= 0)
-        .length ?? 0) === 0
-    ) {
+    const filteredPoints = Object.keys(data)
+      .filter((key) => courseUserFields.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = data[key];
+        return obj;
+      }, {});
+
+    const isPointEmpty = !Object.values(filteredPoints).some(Boolean);
+
+    if (isPointEmpty) {
       toast.error(intl.formatMessage(translations.noDisbursement));
       setIsSubmitting(false);
     } else {
-      const newData: DisbursementFormData = {
-        ...data,
-        pointList: newPointList,
-      };
-
-      dispatch(createDisbursement(newData))
+      dispatch(createDisbursement(data, filteredCourseUsers))
         .then((response) => {
           const recipientCount = response.data?.count;
           toast.success(
@@ -200,127 +160,105 @@ const DisbursementForm: FC<Props> = (props) => {
             setReactHookFormError(setError, error.response.data.errors);
           }
           setIsSubmitting(false);
-          throw error;
         });
     }
   };
 
-  // Creation of text field array
-  const { fields, update } = useFieldArray({
-    control,
-    name: 'pointList',
-    shouldUnregister: false,
-  });
-
-  const pointTextFieldArray: JSX.Element[] = fields.map((field, index) => (
-    <PointTextField
-      index={index}
-      control={control}
-      fieldId={field.id}
-      key={field.id}
-      className="points_awarded"
-    />
-  ));
-
   const onClickRemove = (): void => {
-    indexFilteredMap.forEach((index) => update(index, { points: '' }));
+    filteredCourseUsers.forEach((user) =>
+      setValue(`courseUser_${user.id}`, ''),
+    );
   };
 
   const onClickCopy = (): void => {
-    const first = watch('pointList')[indexFilteredMap[0]].points;
-    indexFilteredMap.forEach((index) => update(index, { points: first ?? '' }));
+    const firstPoint = watch(`courseUser_${filteredCourseUsers[0].id}`);
+    filteredCourseUsers.forEach((user) =>
+      setValue(`courseUser_${user.id}`, firstPoint),
+    );
   };
 
   return (
-    <form
-      encType="multipart/form-data"
-      id="disbursement-form"
-      noValidate
-      onSubmit={handleSubmit((data) => {
-        onFormSubmit(data);
-      })}
-    >
-      <Paper
-        elevation={3}
-        sx={{
-          padding: '5px 10px 8px 10px',
-          marginBottom: '22px',
-          display: 'flex',
-          alignItems: 'center',
-          backgroundColor: '#eeeeee',
-          maxWidth: '400px',
-        }}
-      >
-        <Controller
-          name="currentGroup"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormSelectField
-              className="filter-group"
-              field={field}
-              fieldState={fieldState}
-              label={<FormattedMessage {...translations.filter} />}
-              options={disbursementOptions}
-              noneSelected={intl.formatMessage(translations.noneSelected)}
-              onChangeCustom={onChangeFilter}
-              margin="0px"
-              shrink
-              displayEmpty
+    <>
+      <Autocomplete
+        className="filter-group max-w-lg"
+        disablePortal
+        clearOnEscape
+        options={courseGroups}
+        getOptionLabel={(option): string => option.name}
+        isOptionEqualToValue={(option, val): boolean =>
+          option.name === val.name
+        }
+        renderInput={(params): React.ReactNode => {
+          return (
+            <TextField
+              {...params}
+              label={intl.formatMessage(translations.filter)}
             />
-          )}
-        />
-      </Paper>
-      <ErrorText errors={errors} />
-      <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
-        <Grid item xs>
-          <Controller
-            control={control}
-            name="reason"
-            render={({ field, fieldState }): JSX.Element => (
-              <FormTextField
-                field={field}
-                fieldState={fieldState}
-                enableDebouncing
-                label={<FormattedMessage {...translations.reason} />}
-                // @ts-ignore: component is still written in JS
-                className="experience_points_disbursement_reason"
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                required
-                variant="standard"
-              />
-            )}
-          />
-        </Grid>
-        <Grid item>
-          <Button
-            color="primary"
-            className="general-btn-submit"
-            disabled={!isDirty || isSubmitting}
-            form="disbursement-form"
-            key="disbursement-form-submit-button"
-            type="submit"
-            variant="outlined"
-            style={{ marginBottom: '10px', marginTop: '10px' }}
-          >
-            <FormattedMessage {...translations.submit} />
-          </Button>
-        </Grid>
-      </Grid>
-      <DisbursementTable
-        indexList={indexFilteredMap}
-        filteredUsers={courseUsers}
-        pointTextFieldArray={pointTextFieldArray}
-        onClickRemove={onClickRemove}
-        onClickCopy={onClickCopy}
+          );
+        }}
+        onChange={onChangeFilter}
+        value={filteredGroup}
       />
-    </form>
+      <FormProvider {...methods}>
+        <form
+          encType="multipart/form-data"
+          id="disbursement-form"
+          noValidate
+          onSubmit={handleSubmit((data) => {
+            onFormSubmit(data);
+          })}
+        >
+          <ErrorText errors={errors} />
+          <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
+            <Grid item xs>
+              <Controller
+                control={control}
+                name="reason"
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormTextField
+                    field={field}
+                    fieldState={fieldState}
+                    label={<FormattedMessage {...translations.reason} />}
+                    // @ts-ignore: component is still written in JS
+                    className="experience_points_disbursement_reason"
+                    fullWidth
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    required
+                    variant="standard"
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item>
+              <Button
+                color="primary"
+                className="general-btn-submit"
+                disabled={!isDirty || isSubmitting}
+                form="disbursement-form"
+                key="disbursement-form-submit-button"
+                type="submit"
+                variant="outlined"
+                style={{ marginBottom: '10px', marginTop: '10px' }}
+              >
+                <FormattedMessage {...translations.submit} />
+              </Button>
+            </Grid>
+          </Grid>
+          <DisbursementTable
+            filteredUsers={filteredCourseUsers}
+            onClickRemove={onClickRemove}
+            onClickCopy={onClickCopy}
+          />
+        </form>
+      </FormProvider>
+    </>
   );
 };
 
 export default memo(
   injectIntl(DisbursementForm),
-  (prevProps, nextProps) => prevProps.users.length === nextProps.users.length,
+  (prevProps, nextProps) =>
+    prevProps.courseUsers.length === nextProps.courseUsers.length,
 );

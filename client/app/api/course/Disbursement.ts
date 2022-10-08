@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
-import { CourseUserListData } from 'types/course/courseUsers';
 import {
-  CourseGroupListData,
+  DisbursementCourseGroupListData,
+  DisbursementCourseUserListData,
   ForumDisbursementFilters,
   ForumDisbursementFilterParams,
   ForumDisbursementUserData,
@@ -22,9 +22,8 @@ export default class DisbursementAPI extends BaseCourseAPI {
    */
   index(): Promise<
     AxiosResponse<{
-      currentGroup: CourseGroupListData | null;
-      courseGroups: CourseGroupListData[];
-      courseUsers: CourseUserListData[];
+      courseGroups: DisbursementCourseGroupListData[];
+      courseUsers: DisbursementCourseUserListData[];
     }>
   > {
     return this.getClient().get(this._getUrlPrefix());

@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import moment, { longDate } from 'lib/moment';
+import { formatLongDate } from 'lib/moment';
 import LessonPlanItem from './LessonPlanItem';
 import MilestoneAdminTools from './MilestoneAdminTools';
 
@@ -94,7 +94,7 @@ class LessonPlanGroup extends Component {
         style={{ backgroundColor: grey[50] }}
         subheader={
           <span>
-            {moment(start_at).format(longDate)}
+            {formatLongDate(start_at)}
             <br />
             <span dangerouslySetInnerHTML={{ __html: description }} />
           </span>

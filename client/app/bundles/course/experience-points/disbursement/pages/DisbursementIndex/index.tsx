@@ -5,32 +5,25 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch, AppState } from 'types/store';
+import { AppDispatch } from 'types/store';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import PageHeader from 'lib/components/pages/PageHeader';
-import { Grid, Paper, Tab, Tabs } from '@mui/material';
+import { Grid, Tab, Tabs } from '@mui/material';
 import palette from 'theme/palette';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { Group } from '@mui/icons-material';
-import {
-  getAllFilteredUserMiniEntities,
-  getAllForumDisbursementUserEntities,
-  getAllForumPostEntities,
-  getFilters,
-} from '../../selectors';
-import DisbursementForm from '../../components/forms/DisbursementForm';
 import { fetchDisbursements, fetchForumDisbursements } from '../../operations';
-import ForumDisbursementForm from '../../components/forms/ForumDisbursementForm';
-import FilterForm from '../../components/forms/FilterForm';
+import GeneralDisbursement from '../GeneralDisbursement';
+import ForumDisbursement from '../ForumDisbursement';
 
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   fetchDisbursementFailure: {
     id: 'course.experience-points.disbursement.index.fetch.failure',
-    defaultMessage: 'Failed to retrieve Disbursements.',
+    defaultMessage: 'Failed to retrieve data.',
   },
   disbursements: {
     id: 'course.experience-points.disbursement.index.disbursement',
@@ -52,25 +45,14 @@ const DisbursementIndex: FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [tabValue, setTabValue] = useState('forum-disbursement-tab');
 
-  const users = useSelector((state: AppState) =>
-    getAllFilteredUserMiniEntities(state),
-  );
-  const filters = useSelector((state: AppState) => getFilters(state));
-  const forumUsers = useSelector((state: AppState) =>
-    getAllForumDisbursementUserEntities(state),
-  );
-  const forumPosts = useSelector((state: AppState) =>
-    getAllForumPostEntities(state),
-  );
-
   useEffect(() => {
     Promise.all([
       dispatch(fetchDisbursements()),
       dispatch(fetchForumDisbursements()),
     ])
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchDisbursementFailure)),
-      )
+      .catch(() => {
+        toast.error(intl.formatMessage(translations.fetchDisbursementFailure));
+      })
       .finally(() => setIsLoading(false));
   }, [dispatch]);
 
@@ -116,9 +98,7 @@ const DisbursementIndex: FC<Props> = (props) => {
             id="general-disbursement-tab"
             display={tabValue === 'general-disbursement-tab' ? 'flex' : 'none'}
           >
-            <Grid item xs>
-              <DisbursementForm users={users} />
-            </Grid>
+            <GeneralDisbursement />
           </Grid>
           <Grid
             container
@@ -128,34 +108,7 @@ const DisbursementIndex: FC<Props> = (props) => {
             id="forum-disbursement-tab"
             display={tabValue === 'forum-disbursement-tab' ? 'flex' : 'none'}
           >
-            <Grid item xs>
-              <Paper
-                elevation={3}
-                sx={{
-                  padding: '5px 10px 0px 10px',
-                  marginBottom: '5px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  backgroundColor: '#eeeeee',
-                }}
-              >
-                <FilterForm
-                  initialValues={{
-                    startTime: filters.startTime,
-                    endTime: filters.endTime,
-                    weeklyCap: filters.weeklyCap,
-                  }}
-                />
-              </Paper>
-            </Grid>
-            <Grid item xs>
-              <ForumDisbursementForm
-                numberOfUsers={users.length}
-                forumUsers={forumUsers}
-                filters={filters}
-                forumPosts={forumPosts}
-              />
-            </Grid>
+            <ForumDisbursement />
           </Grid>
         </>
       )}
