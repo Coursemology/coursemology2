@@ -3,8 +3,8 @@ import { Controller, useForm } from 'react-hook-form';
 import { LevelConditionData } from 'types/course/conditions';
 import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
+import Prompt from 'lib/components/Prompt';
 import { AnyConditionProps } from './AnyCondition';
-import ConditionDialog from './ConditionDialog';
 import translations from '../translations';
 
 const LevelCondition = (
@@ -25,17 +25,17 @@ const LevelCondition = (
   const isNewCondition = !props.condition;
 
   return (
-    <ConditionDialog
+    <Prompt
       open={props.open}
       onClose={props.onClose}
       title={t(translations.specifyLevel)}
-      onPrimaryAction={handleSubmit(updateLevel)}
-      primaryAction={
+      onClickPrimary={handleSubmit(updateLevel)}
+      primaryLabel={
         isNewCondition
           ? t(translations.createCondition)
           : t(translations.updateCondition)
       }
-      primaryActionDisabled={!isNewCondition && !formState.isDirty}
+      primaryDisabled={!isNewCondition && !formState.isDirty}
     >
       <Controller
         name="minimumLevel"
@@ -51,7 +51,7 @@ const LevelCondition = (
           />
         )}
       />
-    </ConditionDialog>
+    </Prompt>
   );
 };
 

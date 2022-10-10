@@ -7,8 +7,8 @@ import TextField from 'lib/components/TextField';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import Preload from 'lib/components/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
+import Prompt from 'lib/components/Prompt';
 import { AnyConditionProps } from './AnyCondition';
-import ConditionDialog from './ConditionDialog';
 import { formatErrorMessage } from '../../utils/mapError';
 import translations from '../translations';
 
@@ -38,17 +38,17 @@ const SurveyConditionForm = (
   const isNewCondition = !props.condition;
 
   return (
-    <ConditionDialog
+    <Prompt
       open={props.open}
       onClose={props.onClose}
       title={t(translations.chooseASurvey)}
-      onPrimaryAction={handleSubmit(updateSurvey)}
-      primaryAction={
+      onClickPrimary={handleSubmit(updateSurvey)}
+      primaryLabel={
         isNewCondition
           ? t(translations.createCondition)
           : t(translations.updateCondition)
       }
-      primaryActionDisabled={!isNewCondition && !formState.isDirty}
+      primaryDisabled={!isNewCondition && !formState.isDirty}
     >
       <Controller
         name="surveyId"
@@ -74,7 +74,7 @@ const SurveyConditionForm = (
           />
         )}
       />
-    </ConditionDialog>
+    </Prompt>
   );
 };
 

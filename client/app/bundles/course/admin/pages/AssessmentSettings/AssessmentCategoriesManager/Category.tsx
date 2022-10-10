@@ -105,6 +105,7 @@ const Category = (props: CategoryProps): JSX.Element => {
       <MoveTabsMenu
         categories={categories}
         onSelectCategory={handleMoveTabsAndDelete}
+        disabled={props.disabled}
       />
     );
   };
@@ -237,42 +238,37 @@ const Category = (props: CategoryProps): JSX.Element => {
 
       <Prompt
         open={deleting}
-        onCancel={closeDeleteCategoryDialog}
+        onClose={closeDeleteCategoryDialog}
         title={t(translations.deleteCategoryPromptTitle, {
           title: category.title,
         })}
-        override
-        content={
-          <>
-            <DialogContentText>
-              {t(translations.deleteCategoryPromptMessage)}
-            </DialogContentText>
-
-            <DialogContentText className="mt-4">
-              {t(translations.thisCategoryContains)}
-
-              {category.topAssessmentTitles.map((assessment) => (
-                <li key={assessment}>{assessment}</li>
-              ))}
-
-              {category.assessmentsCount >
-                category.topAssessmentTitles.length &&
-                t(translations.andNMoreItems, {
-                  n: (
-                    category.assessmentsCount -
-                    category.topAssessmentTitles.length
-                  ).toString(),
-                })}
-            </DialogContentText>
-          </>
-        }
-        primaryAction={t(translations.deleteCategoryPromptAction, {
+        primaryLabel={t(translations.deleteCategoryPromptAction, {
           title: category.title,
         })}
-        primaryActionColor="error"
-        onPrimaryAction={handleDeleteCategory}
-        secondaryAction={renderMoveMenu()}
-      />
+        primaryColor="error"
+        onClickPrimary={handleDeleteCategory}
+        secondary={renderMoveMenu()}
+        disabled={props.disabled}
+      >
+        <DialogContentText>
+          {t(translations.deleteCategoryPromptMessage)}
+        </DialogContentText>
+
+        <DialogContentText className="mt-4">
+          {t(translations.thisCategoryContains)}
+
+          {category.topAssessmentTitles.map((assessment) => (
+            <li key={assessment}>{assessment}</li>
+          ))}
+
+          {category.assessmentsCount > category.topAssessmentTitles.length &&
+            t(translations.andNMoreItems, {
+              n: (
+                category.assessmentsCount - category.topAssessmentTitles.length
+              ).toString(),
+            })}
+        </DialogContentText>
+      </Prompt>
     </>
   );
 };

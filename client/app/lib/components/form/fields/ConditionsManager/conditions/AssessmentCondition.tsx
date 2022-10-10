@@ -14,8 +14,8 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import Checkbox from 'lib/components/Checkbox';
 import Preload from 'lib/components/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
+import Prompt from 'lib/components/Prompt';
 import { AnyConditionProps } from './AnyCondition';
-import ConditionDialog from './ConditionDialog';
 import translations from '../translations';
 
 // TODO: Change string to Assessment['title'] once Assessment is typed
@@ -80,17 +80,17 @@ const AssessmentConditionForm = (
   const isNewCondition = !props.condition;
 
   return (
-    <ConditionDialog
+    <Prompt
       open={props.open}
       onClose={props.onClose}
       title={t(translations.chooseAnAssessment)}
-      onPrimaryAction={handleSubmit(updateAssessment)}
-      primaryAction={
+      onClickPrimary={handleSubmit(updateAssessment)}
+      primaryLabel={
         isNewCondition
           ? t(translations.createCondition)
           : t(translations.updateCondition)
       }
-      primaryActionDisabled={!isNewCondition && !formState.isDirty}
+      primaryDisabled={!isNewCondition && !formState.isDirty}
     >
       <div className="flex flex-col space-y-4">
         <Typography variant="body1" className="whitespace-nowrap">
@@ -157,7 +157,7 @@ const AssessmentConditionForm = (
       <Alert severity="info" className="mt-8">
         {t(translations.scoreZeroPercentNotice)}
       </Alert>
-    </ConditionDialog>
+    </Prompt>
   );
 };
 

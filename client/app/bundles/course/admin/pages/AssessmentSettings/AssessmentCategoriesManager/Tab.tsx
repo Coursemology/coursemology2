@@ -78,6 +78,7 @@ const Tab = (props: TabProps): JSX.Element => {
       <MoveAssessmentsMenu
         tabs={tabs}
         onSelectTab={handleMoveAssessmentsAndDelete}
+        disabled={props.disabled}
       />
     );
   };
@@ -162,40 +163,36 @@ const Tab = (props: TabProps): JSX.Element => {
 
       <Prompt
         open={deleting}
-        onCancel={closeDeleteTabDialog}
+        onClose={closeDeleteTabDialog}
         title={t(translations.deleteTabPromptTitle, {
           title: tab.title,
         })}
-        override
-        content={
-          <>
-            <DialogContentText>
-              {t(translations.deleteTabPromptMessage)}
-            </DialogContentText>
-
-            <DialogContentText className="mt-4">
-              {t(translations.thisTabContains)}
-
-              {tab.topAssessmentTitles.map((assessment) => (
-                <li key={assessment}>{assessment}</li>
-              ))}
-
-              {tab.assessmentsCount > tab.topAssessmentTitles.length &&
-                t(translations.andNMoreItems, {
-                  n: (
-                    tab.assessmentsCount - tab.topAssessmentTitles.length
-                  ).toString(),
-                })}
-            </DialogContentText>
-          </>
-        }
-        primaryAction={t(translations.deleteTabPromptAction, {
+        primaryLabel={t(translations.deleteTabPromptAction, {
           title: tab.title,
         })}
-        primaryActionColor="error"
-        onPrimaryAction={handleDeleteTab}
-        secondaryAction={renderMoveMenu()}
-      />
+        primaryColor="error"
+        onClickPrimary={handleDeleteTab}
+        secondary={renderMoveMenu()}
+        disabled={props.disabled}
+      >
+        <DialogContentText>
+          {t(translations.deleteTabPromptMessage)}
+        </DialogContentText>
+        <DialogContentText className="mt-4">
+          {t(translations.thisTabContains)}
+
+          {tab.topAssessmentTitles.map((assessment) => (
+            <li key={assessment}>{assessment}</li>
+          ))}
+
+          {tab.assessmentsCount > tab.topAssessmentTitles.length &&
+            t(translations.andNMoreItems, {
+              n: (
+                tab.assessmentsCount - tab.topAssessmentTitles.length
+              ).toString(),
+            })}
+        </DialogContentText>
+      </Prompt>
     </>
   );
 };

@@ -133,10 +133,8 @@ const AssessmentSettings = (): JSX.Element => {
         .catch(() => {
           toast.error(t(translations.errorOccurredWhenMovingAssessments));
           onError?.();
-        })
-        .finally(() => setSubmitting(false));
-
-      setSubmitting(false);
+          setSubmitting(false);
+        });
     },
     moveTabs: (
       sourceCategoryId,
@@ -161,10 +159,8 @@ const AssessmentSettings = (): JSX.Element => {
         .catch(() => {
           toast.error(t(translations.errorOccurredWhenMovingTabs));
           onError?.();
-        })
-        .finally(() => setSubmitting(false));
-
-      setSubmitting(false);
+          setSubmitting(false);
+        });
     },
   };
 

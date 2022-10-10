@@ -151,4 +151,7 @@ ConfirmationDialog.propTypes = {
   intl: PropTypes.object.isRequired,
 };
 
+/**
+ * @deprecated Use `Prompt` instead.
+ */
 export default injectIntl(ConfirmationDialog);
