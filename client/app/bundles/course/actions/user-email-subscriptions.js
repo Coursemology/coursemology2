@@ -3,7 +3,13 @@ import CourseAPI from 'api/course';
 import actionTypes from '../constants';
 import { setNotification } from './index';
 
-export function fetchUserEmailSubscriptions() {
+export async function fetchUserEmailSubscriptions() {
+  const response = await CourseAPI.userEmailSubscriptions.fetch();
+
+  return response.data;
+}
+
+export function fetchUserEmailSubscriptionsAndStore() {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_USER_EMAIL_SUBSCRIPTION_REQUEST });
     return CourseAPI.userEmailSubscriptions

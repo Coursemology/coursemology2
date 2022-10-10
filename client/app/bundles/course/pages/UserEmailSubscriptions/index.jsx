@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import {
-  fetchUserEmailSubscriptions,
+  fetchUserEmailSubscriptionsAndStore,
   updateUserEmailSubscriptions,
 } from 'course/actions/user-email-subscriptions';
 import { setNotification } from 'lib/actions';
@@ -33,7 +33,7 @@ const styles = {
 class UserEmailSubscriptions extends Component {
   handleFetchAllUserEmailSubscriptions = () => {
     const { dispatch } = this.props;
-    dispatch(fetchUserEmailSubscriptions());
+    dispatch(fetchUserEmailSubscriptionsAndStore());
   };
 
   handleUserEmailSubscriptionsUpdate = (setting) => {

@@ -2,18 +2,18 @@ import { render } from 'react-dom';
 import ProviderWrapper from 'lib/components/ProviderWrapper';
 import UserEmailSubscriptions from 'course/pages/UserEmailSubscriptions';
 import storeCreator from './store';
+import { fetchUserEmailSubscriptions } from './actions/user-email-subscriptions';
 
-$(() => {
+$(async () => {
   const mountNode = document.getElementById('user-email-subscriptions');
 
   if (mountNode) {
-    const data = mountNode.getAttribute('data');
-    const attributes = JSON.parse(data);
+    const data = await fetchUserEmailSubscriptions();
     const initialData = {
       course: {
         userEmailSubscriptions: {
-          settings: attributes.settings,
-          pageFilter: attributes.subscription_page_filter,
+          settings: data.settings,
+          pageFilter: data.subscription_page_filter,
         },
       },
     };
