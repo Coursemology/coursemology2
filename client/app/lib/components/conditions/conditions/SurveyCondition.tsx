@@ -8,8 +8,8 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import Preload from 'lib/components/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import Prompt from 'lib/components/Prompt';
-import { AnyConditionProps } from './AnyCondition';
-import { formatErrorMessage } from '../../utils/mapError';
+import { AnyConditionProps } from '../AnyCondition';
+import { formatErrorMessage } from '../../form/fields/utils/mapError';
 import translations from '../translations';
 
 // TODO: Change string to Survey['title'] once Survey is typed

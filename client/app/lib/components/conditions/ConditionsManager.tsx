@@ -32,7 +32,7 @@ import useToggle from 'lib/hooks/useToggle';
 import Subsection from 'lib/components/layouts/Subsection';
 import formTranslations from 'lib/translations/form';
 import translations from './translations';
-import Condition from './conditions';
+import Condition from './Condition';
 import specify from './specifiers';
 import {
   createCondition,
