@@ -6,6 +6,8 @@ import { Draggable } from 'react-beautiful-dnd';
 import { VideosTab } from 'types/course/admin/videos';
 import Prompt from 'lib/components/Prompt';
 import SwitchableTextField from 'lib/components/SwitchableTextField';
+import useTranslation from 'lib/hooks/useTranslation';
+import translations from '../translations';
 
 interface TabProps {
   tab: VideosTab;
@@ -18,6 +20,7 @@ interface TabProps {
 const Tab = (props: TabProps): JSX.Element => {
   const { tab, index } = props;
 
+  const { t } = useTranslation();
   const [newTitle, setNewTitle] = useState(tab.title);
   const [renaming, setRenaming] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -116,13 +119,15 @@ const Tab = (props: TabProps): JSX.Element => {
 
       <Prompt
         open={deleting}
-        onCancel={closeDeleteTabDialog}
-        title={`Delete ${tab.title} tab?`}
-        content="Deleting this tab will delete all its associated videos and statistics. This action is irreversible."
-        primaryAction={`Delete ${tab.title} tab`}
-        primaryActionColor="error"
-        onPrimaryAction={deleteTab}
-      />
+        onClose={closeDeleteTabDialog}
+        title={t(translations.deleteTabPromptTitle, { tab: tab.title })}
+        primaryLabel={t(translations.deleteTabPromptAction, { tab: tab.title })}
+        primaryColor="error"
+        onClickPrimary={deleteTab}
+        disabled={props.disabled}
+      >
+        {t(translations.deleteTabPromptMessage)}
+      </Prompt>
     </>
   );
 };
