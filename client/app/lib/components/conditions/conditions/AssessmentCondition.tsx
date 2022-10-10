@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Alert, Autocomplete, Typography } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { isNumber } from 'lodash';
@@ -32,9 +32,16 @@ const AssessmentConditionForm = (
   },
 ): JSX.Element => {
   const { assessments } = props;
-  const autocompleteOptions = Object.keys(assessments);
-
   const { t } = useTranslation();
+
+  const autocompleteOptions = useMemo(() => {
+    const keys = Object.keys(assessments);
+    return keys.sort((a, b) => {
+      const assessmentA = assessments[parseInt(a, 10)];
+      const assessmentB = assessments[parseInt(b, 10)];
+      return assessmentA.localeCompare(assessmentB);
+    });
+  }, [assessments]);
 
   const [hasPassingGrade, setHasPassingGrade] = useState(
     isNumber(props.condition?.minimumGradePercentage),
