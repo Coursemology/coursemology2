@@ -122,17 +122,24 @@ const AssessmentConditionForm = (
           )}
         />
 
-        <div className="flex items-center">
-          <Checkbox
-            checked={hasPassingGrade}
-            onChange={(_, checked): void => setHasPassingGrade(checked)}
-            label={t(translations.scoringAtLeast)}
-          />
+        <Controller
+          name="minimumGradePercentage"
+          control={control}
+          render={({ field, fieldState }): JSX.Element => (
+            <div className="flex items-center">
+              <Checkbox
+                checked={hasPassingGrade}
+                label={t(translations.scoringAtLeast)}
+                onChange={(_, checked): void => {
+                  setHasPassingGrade(checked);
+                  if (checked) {
+                    field.onChange(field.value ?? 50);
+                  } else {
+                    field.onChange(null);
+                  }
+                }}
+              />
 
-          <Controller
-            name="minimumGradePercentage"
-            control={control}
-            render={({ field, fieldState }): JSX.Element => (
               <FormTextField
                 field={field}
                 fieldState={fieldState}
@@ -145,13 +152,13 @@ const AssessmentConditionForm = (
                 disableMargins
                 disabled={!hasPassingGrade}
               />
-            )}
-          />
 
-          <Typography variant="body1" className="ml-4">
-            %
-          </Typography>
-        </div>
+              <Typography variant="body1" className="ml-4">
+                %
+              </Typography>
+            </div>
+          )}
+        />
       </div>
 
       <Alert severity="info" className="mt-8">
