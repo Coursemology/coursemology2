@@ -182,8 +182,12 @@ const translations = defineMessages({
     defaultMessage: '% Watched',
   },
   status: {
-    id: 'components.table.column.id',
+    id: 'components.table.column.status',
     defaultMessage: 'Status',
+  },
+  videoNAme: {
+    id: 'components.table.column.videoName',
+    defaultMessage: 'Video Name',
   },
 });
 

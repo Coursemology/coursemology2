@@ -45,15 +45,10 @@ const formatAttributes = (data: VideoFormData): FormData => {
 
 export function fetchVideos(currentTabId?: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.video.videos
-      .index(currentTabId)
-      .then((response) => {
-        const data = response.data;
-        dispatch(saveVideoList(data));
-      })
-      .catch((error) => {
-        throw error;
-      });
+    CourseAPI.video.videos.index(currentTabId).then((response) => {
+      const data = response.data;
+      dispatch(saveVideoList(data));
+    });
 }
 
 export function loadVideo(videoId: number): Operation<void> {

@@ -25,6 +25,7 @@ import DisbursementAPI from './Disbursement';
 import ForumAPI from './Forum';
 import ExperiencePointsRecordAPI from './ExperiencePointsRecord';
 import FoldersAPI from './Material/Folders';
+import VideoSubmissionsAPI from './VideoSubmissions';
 
 const CourseAPI = {
   achievements: new AchievementsAPI(),
@@ -54,6 +55,7 @@ const CourseAPI = {
   disbursement: new DisbursementAPI(),
   forum: new ForumAPI(),
   experiencePointsRecord: new ExperiencePointsRecordAPI(),
+  videoSubmissions: new VideoSubmissionsAPI(),
 };
 
 Object.freeze(CourseAPI);

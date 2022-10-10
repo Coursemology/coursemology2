@@ -8,10 +8,10 @@ class Course::VideoSubmissionsController < Course::ComponentController
   before_action :add_breadcrumbs
 
   def index
-    @videos = @course.videos
-    @video_submissions = @video_submissions.
-                         includes([:video, { experience_points_record: :course_user }, :statistic]).
-                         page(page_param)
+    @videos = @course.videos.ordered_by_date_and_title
+    @video_submissions_hash = @video_submissions.
+                              includes([:video, { experience_points_record: :course_user },
+                                        :statistic]).to_h { |s| [s.video.id, s] }
   end
 
   private
@@ -29,7 +29,7 @@ class Course::VideoSubmissionsController < Course::ComponentController
 
   # Load video submissions.
   def load_video_submissions
-    @video_submissions = Course::Video::Submission.by_user(@course_user.user).page(page_param)
+    @video_submissions = Course::Video::Submission.by_user(@course_user.user)
   end
 
   def authorize_analyze_video!
