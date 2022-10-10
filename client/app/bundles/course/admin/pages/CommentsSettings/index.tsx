@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { CommentsSettingsData } from 'types/course/admin/comments';
@@ -6,6 +6,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import Preload from 'lib/components/Preload';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CommentsSettingsForm from './CommentsSettingsForm';
 import { fetchCommentsSettings, updateCommentsSettings } from './operations';
@@ -14,15 +15,8 @@ import { useOptionsReloader } from '../../components/SettingsNavigation';
 const CommentsSettings = (): JSX.Element => {
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
-  const [settings, setSettings] = useState<CommentsSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    fetchCommentsSettings().then(setSettings);
-  }, []);
-
-  if (!settings) return <LoadingIndicator />;
 
   const handleSubmit = (data: CommentsSettingsData): void => {
     setSubmitting(true);
@@ -41,12 +35,16 @@ const CommentsSettings = (): JSX.Element => {
   };
 
   return (
-    <CommentsSettingsForm
-      data={settings}
-      onSubmit={handleSubmit}
-      emitsVia={setForm}
-      disabled={submitting}
-    />
+    <Preload while={fetchCommentsSettings} render={<LoadingIndicator />}>
+      {(data): JSX.Element => (
+        <CommentsSettingsForm
+          data={data}
+          onSubmit={handleSubmit}
+          emitsVia={setForm}
+          disabled={submitting}
+        />
+      )}
+    </Preload>
   );
 };
 
