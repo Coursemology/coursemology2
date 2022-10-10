@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { CourseInfo, TimeZones } from 'types/course/admin/course';
@@ -7,6 +7,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import Preload from 'lib/components/Preload';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CourseSettingsForm from './CourseSettingsForm';
 import {
@@ -22,17 +23,8 @@ import translations from './translations';
 const CourseSettings = (): JSX.Element => {
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
-  const [settings, setSettings] = useState<CourseInfo>();
-  const [timeZones, setTimeZones] = useState<TimeZones>();
   const [form, setForm] = useState<FormEmitter>();
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    fetchCourseSettings().then(setSettings);
-    fetchTimeZones().then(setTimeZones);
-  }, []);
-
-  if (!settings || !timeZones) return <LoadingIndicator />;
 
   const updateForm = (data?: CourseInfo): void => {
     if (!data) return;
@@ -91,16 +83,23 @@ const CourseSettings = (): JSX.Element => {
       .finally(() => setSubmitting(false));
   };
 
+  const fetchSettingsAndTimeZones = (): Promise<[CourseInfo, TimeZones]> =>
+    Promise.all([fetchCourseSettings(), fetchTimeZones()]);
+
   return (
-    <CourseSettingsForm
-      data={settings}
-      timeZones={timeZones}
-      emitsVia={setForm}
-      onSubmit={handleSubmit}
-      onUploadCourseLogo={handleUploadCourseLogo}
-      onDeleteCourse={handleDeleteCourse}
-      disabled={submitting}
-    />
+    <Preload while={fetchSettingsAndTimeZones} render={<LoadingIndicator />}>
+      {([settings, timeZones]): JSX.Element => (
+        <CourseSettingsForm
+          data={settings}
+          timeZones={timeZones}
+          emitsVia={setForm}
+          onSubmit={handleSubmit}
+          onUploadCourseLogo={handleUploadCourseLogo}
+          onDeleteCourse={handleDeleteCourse}
+          disabled={submitting}
+        />
+      )}
+    </Preload>
   );
 };
 

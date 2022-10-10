@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { ForumsSettingsData } from 'types/course/admin/forums';
@@ -6,6 +6,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import Preload from 'lib/components/Preload';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import ForumsSettingsForm from './ForumsSettingsForm';
 import { fetchForumsSettings, updateForumsSettings } from './operations';
@@ -14,15 +15,8 @@ import { useOptionsReloader } from '../../components/SettingsNavigation';
 const ForumsSettings = (): JSX.Element => {
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
-  const [settings, setSettings] = useState<ForumsSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    fetchForumsSettings().then(setSettings);
-  }, []);
-
-  if (!settings) return <LoadingIndicator />;
 
   const handleSubmit = (data: ForumsSettingsData): void => {
     setSubmitting(true);
@@ -41,12 +35,16 @@ const ForumsSettings = (): JSX.Element => {
   };
 
   return (
-    <ForumsSettingsForm
-      data={settings}
-      onSubmit={handleSubmit}
-      emitsVia={setForm}
-      disabled={submitting}
-    />
+    <Preload while={fetchForumsSettings} render={<LoadingIndicator />}>
+      {(data): JSX.Element => (
+        <ForumsSettingsForm
+          data={data}
+          onSubmit={handleSubmit}
+          emitsVia={setForm}
+          disabled={submitting}
+        />
+      )}
+    </Preload>
   );
 };
 

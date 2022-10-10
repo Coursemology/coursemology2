@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { AssessmentSettingsData } from 'types/course/admin/assessments';
@@ -6,6 +6,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import Preload from 'lib/components/Preload';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import AssessmentSettingsForm from './AssessmentSettingsForm';
 import {
@@ -25,17 +26,17 @@ import {
 } from './AssessmentSettingsContext';
 import translations from './translations';
 
-const AssessmentSettings = (): JSX.Element => {
+interface LoadedAssessmentSettingsProps {
+  data: AssessmentSettingsData;
+}
+
+const LoadedAssessmentSettings = (
+  props: LoadedAssessmentSettingsProps,
+): JSX.Element | null => {
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
-  const [settings, setSettings] = useState<AssessmentSettingsData>();
+  const [settings, setSettings] = useState(props.data);
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    fetchAssessmentsSettings().then(setSettings);
-  }, []);
-
-  if (!settings) return <LoadingIndicator />;
 
   const updateFormAndToast = (
     data: AssessmentSettingsData | undefined,
@@ -175,5 +176,11 @@ const AssessmentSettings = (): JSX.Element => {
     </AssessmentSettingsProvider>
   );
 };
+
+const AssessmentSettings = (): JSX.Element => (
+  <Preload while={fetchAssessmentsSettings} render={<LoadingIndicator />}>
+    {(data): JSX.Element => <LoadedAssessmentSettings data={data} />}
+  </Preload>
+);
 
 export default AssessmentSettings;

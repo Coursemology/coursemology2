@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 
 import { MaterialsSettingsData } from 'types/course/admin/materials';
@@ -6,6 +6,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import Preload from 'lib/components/Preload';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import MaterialsSettingsForm from './MaterialsSettingsForm';
 import { fetchMaterialsSettings, updateMaterialsSettings } from './operations';
@@ -14,15 +15,8 @@ import { useOptionsReloader } from '../../components/SettingsNavigation';
 const MaterialsSettings = (): JSX.Element => {
   const reloadOptions = useOptionsReloader();
   const { t } = useTranslation();
-  const [settings, setSettings] = useState<MaterialsSettingsData>();
   const [form, setForm] = useState<FormEmitter>();
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    fetchMaterialsSettings().then(setSettings);
-  }, []);
-
-  if (!settings) return <LoadingIndicator />;
 
   const handleSubmit = (data: MaterialsSettingsData): void => {
     setSubmitting(true);
@@ -41,12 +35,16 @@ const MaterialsSettings = (): JSX.Element => {
   };
 
   return (
-    <MaterialsSettingsForm
-      data={settings}
-      onSubmit={handleSubmit}
-      emitsVia={setForm}
-      disabled={submitting}
-    />
+    <Preload while={fetchMaterialsSettings} render={<LoadingIndicator />}>
+      {(data): JSX.Element => (
+        <MaterialsSettingsForm
+          data={data}
+          onSubmit={handleSubmit}
+          emitsVia={setForm}
+          disabled={submitting}
+        />
+      )}
+    </Preload>
   );
 };
 
