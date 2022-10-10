@@ -8,10 +8,10 @@ import { AchievementConditionData } from 'types/course/conditions';
 import TextField from 'lib/components/TextField';
 import { getAchievementId } from 'lib/helpers/url-helpers';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import Prompt from 'lib/components/Prompt';
 import Preload from 'lib/components/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import { AnyConditionProps } from './AnyCondition';
-import ConditionDialog from './ConditionDialog';
 import { formatErrorMessage } from '../../utils/mapError';
 import translations from '../translations';
 
@@ -51,17 +51,17 @@ const AchievementConditionForm = (
   const isNewCondition = !props.condition;
 
   return (
-    <ConditionDialog
+    <Prompt
       open={props.open}
       onClose={props.onClose}
       title={t(translations.chooseAnAchievement)}
-      onPrimaryAction={handleSubmit(updateAchievement)}
-      primaryAction={
+      onClickPrimary={handleSubmit(updateAchievement)}
+      primaryLabel={
         isNewCondition
           ? t(translations.createCondition)
           : t(translations.updateCondition)
       }
-      primaryActionDisabled={!isNewCondition && !formState.isDirty}
+      primaryDisabled={!isNewCondition && !formState.isDirty}
     >
       <Controller
         name="achievementId"
@@ -125,7 +125,7 @@ const AchievementConditionForm = (
           />
         )}
       />
-    </ConditionDialog>
+    </Prompt>
   );
 };
 

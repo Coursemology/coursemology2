@@ -7,6 +7,7 @@ import translations from '../translations';
 interface MoveAssessmentsMenuProps {
   tabs?: AssessmentTab[];
   onSelectTab: (tab: AssessmentTab) => void;
+  disabled?: boolean;
 }
 
 const MoveAssessmentsMenu = (
@@ -20,14 +21,20 @@ const MoveAssessmentsMenu = (
 
   if (tabs.length === 1)
     return (
-      <Button onClick={(): void => onSelectTab(tabs[0])}>
+      <Button
+        onClick={(): void => onSelectTab(tabs[0])}
+        disabled={props.disabled}
+      >
         {t(translations.moveAssessmentsToTabThenDelete, { tab: tabs[0].title })}
       </Button>
     );
 
   return (
     <>
-      <Button onClick={(e): void => setButton(e.currentTarget)}>
+      <Button
+        onClick={(e): void => setButton(e.currentTarget)}
+        disabled={props.disabled}
+      >
         {t(translations.moveAssessmentsThenDelete)}
       </Button>
 
@@ -37,7 +44,13 @@ const MoveAssessmentsMenu = (
         onClose={(): void => setButton(undefined)}
       >
         {tabs.map((tab) => (
-          <MenuItem key={tab.id} onClick={(): void => onSelectTab(tab)}>
+          <MenuItem
+            key={tab.id}
+            onClick={(): void => {
+              setButton(undefined);
+              onSelectTab(tab);
+            }}
+          >
             {t(translations.toTab, { tab: tab.fullTabTitle ?? '' })}
           </MenuItem>
         ))}

@@ -365,12 +365,14 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             title={t(translations.deleteCoursePromptTitle, {
               title: props.data.title,
             })}
-            content={t(translations.deleteCourseWarning)}
-            primaryAction={t(translations.deleteCourse)}
-            primaryActionColor="error"
-            onPrimaryAction={props.onDeleteCourse}
-            onCancel={closeDeleteCoursePrompt}
-          />
+            primaryLabel={t(translations.deleteCourse)}
+            primaryColor="error"
+            onClickPrimary={props.onDeleteCourse}
+            onClose={closeDeleteCoursePrompt}
+            disabled={props.disabled}
+          >
+            {t(translations.deleteCourseWarning)}
+          </Prompt>
         </>
       )}
     </Form>

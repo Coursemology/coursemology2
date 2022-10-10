@@ -7,6 +7,7 @@ import translations from '../translations';
 interface MoveTabsMenuProps {
   categories?: AssessmentCategory[];
   onSelectCategory: (category: AssessmentCategory) => void;
+  disabled?: boolean;
 }
 
 const MoveTabsMenu = (props: MoveTabsMenuProps): JSX.Element | null => {
@@ -18,7 +19,10 @@ const MoveTabsMenu = (props: MoveTabsMenuProps): JSX.Element | null => {
 
   if (categories.length === 1)
     return (
-      <Button onClick={(): void => onSelectCategory(categories[0])}>
+      <Button
+        onClick={(): void => onSelectCategory(categories[0])}
+        disabled={props.disabled}
+      >
         {t(translations.moveTabsToCategoryThenDelete, {
           category: categories[0].title,
         })}
@@ -27,7 +31,10 @@ const MoveTabsMenu = (props: MoveTabsMenuProps): JSX.Element | null => {
 
   return (
     <>
-      <Button onClick={(e): void => setButton(e.currentTarget)}>
+      <Button
+        onClick={(e): void => setButton(e.currentTarget)}
+        disabled={props.disabled}
+      >
         {t(translations.moveTabsThenDelete)}
       </Button>
 
@@ -39,7 +46,10 @@ const MoveTabsMenu = (props: MoveTabsMenuProps): JSX.Element | null => {
         {categories.map((category) => (
           <MenuItem
             key={category.id}
-            onClick={(): void => onSelectCategory(category)}
+            onClick={(): void => {
+              setButton(undefined);
+              onSelectCategory(category);
+            }}
           >
             {t(translations.toTab, { tab: category.title ?? '' })}
           </MenuItem>
