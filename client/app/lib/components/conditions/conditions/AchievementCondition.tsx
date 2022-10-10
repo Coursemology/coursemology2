@@ -18,6 +18,7 @@ import translations from '../translations';
 type AchievementOptions = Record<
   AchievementMiniEntity['id'],
   {
+    id: AchievementMiniEntity['id'];
     title: AchievementMiniEntity['title'];
     description: AchievementMiniEntity['description'];
     badge: AchievementMiniEntity['badge'];
@@ -91,6 +92,7 @@ const AchievementConditionForm = (
                   component="li"
                   {...optionProps}
                   className={`${optionProps.className} space-x-8`}
+                  key={achievement.id}
                 >
                   <img
                     src={achievement.badge.url}
@@ -138,6 +140,7 @@ const fetchAchievements =
       (options, achievement) => {
         if (!exclude(achievement.id))
           options[achievement.id] = {
+            id: achievement.id,
             title: achievement.title,
             description: achievement.description,
             badge: achievement.badge,
