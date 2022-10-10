@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { Autocomplete } from '@mui/material';
 
@@ -19,9 +20,16 @@ const SurveyConditionForm = (
   props: AnyConditionProps<SurveyConditionData> & { surveys: SurveyOptions },
 ): JSX.Element => {
   const { surveys } = props;
-  const autocompleteOptions = Object.keys(surveys);
-
   const { t } = useTranslation();
+
+  const autocompleteOptions = useMemo(() => {
+    const keys = Object.keys(surveys);
+    return keys.sort((a, b) => {
+      const surveyA = surveys[parseInt(a, 10)];
+      const surveyB = surveys[parseInt(b, 10)];
+      return surveyA.localeCompare(surveyB);
+    });
+  }, [surveys]);
 
   const { control, handleSubmit, setError, formState } = useForm({
     defaultValues: props.condition ?? {
