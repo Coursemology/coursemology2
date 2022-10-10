@@ -4,7 +4,7 @@ import { LevelConditionData } from 'types/course/conditions';
 import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
 import Prompt from 'lib/components/Prompt';
-import { AnyConditionProps } from './AnyCondition';
+import { AnyConditionProps } from '../AnyCondition';
 import translations from '../translations';
 
 const LevelCondition = (

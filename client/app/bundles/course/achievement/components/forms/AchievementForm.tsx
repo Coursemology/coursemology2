@@ -17,7 +17,7 @@ import {
   AchievementFormData,
 } from 'types/course/achievements';
 import { ConditionsData } from 'types/course/conditions';
-import ConditionsManager from 'lib/components/form/fields/ConditionsManager';
+import ConditionsManager from 'lib/components/conditions/ConditionsManager';
 
 interface Props extends WrappedComponentProps {
   editing: boolean; // If the Form is in editing mode, `Add Conditions` button will be displayed.

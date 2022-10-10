@@ -2,86 +2,86 @@ import { defineMessages } from 'react-intl';
 
 export default defineMessages({
   addCondition: {
-    id: 'lib.components.form.fields.conditions.addCondition',
+    id: 'lib.components.conditions.addCondition',
     defaultMessage: 'Add a condition',
   },
   type: {
-    id: 'lib.components.form.fields.conditions.type',
+    id: 'lib.components.conditions.type',
     defaultMessage: 'Type',
   },
   condition: {
-    id: 'lib.components.form.fields.conditions.condition',
+    id: 'lib.components.conditions.condition',
     defaultMessage: 'Condition',
   },
   empty: {
-    id: 'lib.components.form.fields.conditions.empty',
+    id: 'lib.components.conditions.empty',
     defaultMessage: 'No conditions added',
   },
   deleteConfirm: {
-    id: 'lib.components.form.fields.conditions.deleteConfirm',
+    id: 'lib.components.conditions.deleteConfirm',
     defaultMessage: 'Are you sure that you want to delete the condition?',
   },
   chooseAnAchievement: {
-    id: 'lib.components.form.fields.conditions.chooseAnAchievement',
+    id: 'lib.components.conditions.chooseAnAchievement',
     defaultMessage: 'Choose an achievement',
   },
   createCondition: {
-    id: 'lib.components.form.fields.conditions.createCondition',
+    id: 'lib.components.conditions.createCondition',
     defaultMessage: 'Create condition',
   },
   updateCondition: {
-    id: 'lib.components.form.fields.conditions.updateCondition',
+    id: 'lib.components.conditions.updateCondition',
     defaultMessage: 'Update condition',
   },
   achievement: {
-    id: 'lib.components.form.fields.conditions.achievement',
+    id: 'lib.components.conditions.achievement',
     defaultMessage: 'Achievement',
   },
   assessment: {
-    id: 'lib.components.form.fields.conditions.assessment',
+    id: 'lib.components.conditions.assessment',
     defaultMessage: 'Assessment',
   },
   chooseAnAssessment: {
-    id: 'lib.components.form.fields.conditions.chooseAnAssessment',
+    id: 'lib.components.conditions.chooseAnAssessment',
     defaultMessage: 'Specify an assessment condition',
   },
   completeThisAssessment: {
-    id: 'lib.components.form.fields.conditions.completeThisAssessment',
+    id: 'lib.components.conditions.completeThisAssessment',
     defaultMessage: 'Complete this assessment',
   },
   scoringAtLeast: {
-    id: 'lib.components.form.fields.conditions.scoringAtLeast',
+    id: 'lib.components.conditions.scoringAtLeast',
     defaultMessage: 'scoring at least',
   },
   scoreZeroPercentNotice: {
-    id: 'lib.components.form.fields.conditions.scoreZeroPercentNotice',
+    id: 'lib.components.conditions.scoreZeroPercentNotice',
     defaultMessage:
       "Note that 'scoring at least 0%' requires this assessment to be graded \
       before this condition is fulfilled. If no minimum grade is specified, \
       this condition only requires submission.",
   },
   specifyLevel: {
-    id: 'lib.components.form.fields.conditions.specifyLevel',
+    id: 'lib.components.conditions.specifyLevel',
     defaultMessage: 'Specify a minimum level',
   },
   level: {
-    id: 'lib.components.form.fields.conditions.level',
+    id: 'lib.components.conditions.level',
     defaultMessage: 'Level',
   },
   chooseASurvey: {
-    id: 'lib.components.form.fields.conditions.chooseASurvey',
+    id: 'lib.components.conditions.chooseASurvey',
     defaultMessage: 'Choose a survey',
   },
   survey: {
-    id: 'lib.components.form.fields.conditions.survey',
+    id: 'lib.components.conditions.survey',
     defaultMessage: 'Survey',
   },
   conditionCreated: {
-    id: 'lib.components.form.fields.conditions.conditionCreated',
+    id: 'lib.components.conditions.conditionCreated',
     defaultMessage: 'Condition was successfully created.',
   },
   conditionDeleted: {
-    id: 'lib.components.form.fields.conditions.conditionDeleted',
+    id: 'lib.components.conditions.conditionDeleted',
     defaultMessage: 'Condition was successfully deleted.',
   },
 });

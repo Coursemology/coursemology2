@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 import { ConditionData, ConditionsData } from 'types/course/conditions';
 import useToggle from 'lib/hooks/useToggle';
-import specify from '../specifiers';
+import specify from './specifiers';
 
 interface ConditionProps<AnyConditionData extends ConditionData> {
   condition: AnyConditionData;
