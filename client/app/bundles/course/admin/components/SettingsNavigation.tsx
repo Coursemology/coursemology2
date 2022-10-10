@@ -5,6 +5,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import CourseAPI from 'api/course';
 import { CourseAdminOptions } from 'types/course/admin/course';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import Preload from 'lib/components/Preload';
 
 const fetchOptions = async (): Promise<CourseAdminOptions> => {
   const response = await CourseAPI.admin.course.items();
@@ -16,8 +17,14 @@ const OptionsReloaderContext = createContext(() => {});
 export const useOptionsReloader = (): (() => void) =>
   useContext(OptionsReloaderContext);
 
-const SettingsNavigation = (): JSX.Element => {
-  const [options, setOptions] = useState<CourseAdminOptions>();
+interface LoadedSettingsNavigationProps {
+  data: CourseAdminOptions;
+}
+
+const LoadedSettingsNavigation = (
+  props: LoadedSettingsNavigationProps,
+): JSX.Element => {
+  const [options, setOptions] = useState(props.data);
 
   useEffect(() => {
     fetchOptions().then(setOptions);
@@ -53,5 +60,11 @@ const SettingsNavigation = (): JSX.Element => {
     </OptionsReloaderContext.Provider>
   );
 };
+
+const SettingsNavigation = (): JSX.Element => (
+  <Preload while={fetchOptions} render={<LoadingIndicator />}>
+    {(data): JSX.Element => <LoadedSettingsNavigation data={data} />}
+  </Preload>
+);
 
 export default SettingsNavigation;
