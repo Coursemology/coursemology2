@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { Autocomplete, Box, Typography } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { Controller, useForm } from 'react-hook-form';
@@ -31,9 +32,16 @@ const AchievementConditionForm = (
   },
 ): JSX.Element => {
   const { achievements } = props;
-  const autocompleteOptions = Object.keys(achievements);
-
   const { t } = useTranslation();
+
+  const autocompleteOptions = useMemo(() => {
+    const keys = Object.keys(achievements);
+    return keys.sort((a, b) => {
+      const achievementA = achievements[parseInt(a, 10)].title;
+      const achievementB = achievements[parseInt(b, 10)].title;
+      return achievementA.localeCompare(achievementB);
+    });
+  }, [achievements]);
 
   const { control, handleSubmit, setError, formState } = useForm({
     defaultValues: props.condition ?? {
