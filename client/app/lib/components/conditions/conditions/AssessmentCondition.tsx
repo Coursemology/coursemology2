@@ -15,7 +15,7 @@ import Checkbox from 'lib/components/Checkbox';
 import Preload from 'lib/components/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import Prompt from 'lib/components/Prompt';
-import { AnyConditionProps } from './AnyCondition';
+import { AnyConditionProps } from '../AnyCondition';
 import translations from '../translations';
 
 // TODO: Change string to Assessment['title'] once Assessment is typed

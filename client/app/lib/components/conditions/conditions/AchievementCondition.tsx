@@ -11,8 +11,8 @@ import LoadingIndicator from 'lib/components/LoadingIndicator';
 import Prompt from 'lib/components/Prompt';
 import Preload from 'lib/components/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
-import { AnyConditionProps } from './AnyCondition';
-import { formatErrorMessage } from '../../utils/mapError';
+import { AnyConditionProps } from '../AnyCondition';
+import { formatErrorMessage } from '../../form/fields/utils/mapError';
 import translations from '../translations';
 
 type AchievementOptions = Record<

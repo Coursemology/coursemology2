@@ -17,7 +17,7 @@ import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import ErrorText from 'lib/components/ErrorText';
-import ConditionsManager from 'lib/components/form/fields/ConditionsManager';
+import ConditionsManager from 'lib/components/conditions/ConditionsManager';
 import Section from 'lib/components/layouts/Section';
 import IconRadio from 'lib/components/IconRadio';
 import InfoLabel from 'lib/components/InfoLabel';
