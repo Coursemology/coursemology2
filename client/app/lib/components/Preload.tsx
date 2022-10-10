@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
+import useToggle from 'lib/hooks/useToggle';
 
 interface PreloadProps<Data> {
   while: () => Promise<Data>;
@@ -14,15 +15,17 @@ interface PreloadProps<Data> {
   children: (data: Data) => JSX.Element;
 }
 
-const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
+const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element | null => {
   const { t } = useTranslation();
   const [data, setData] = useState<Data>();
+  const [failed, toggleFailed] = useToggle();
 
   useEffect(() => {
     props
       .while()
       .then(setData)
       .catch((error: AxiosError) => {
+        toggleFailed();
         props.onErrorDo?.(error.response?.data);
         if (!props.silently)
           toast.error(
@@ -30,6 +33,8 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
           );
       });
   }, []);
+
+  if (failed) return null;
 
   return data ? props.children(data) : props.render;
 };
