@@ -69,7 +69,7 @@ class Course::Assessment::Submission::ForceSubmittingJob < ApplicationJob
   # @param [Course::Assessment::Submission] submission The submission to be graded.
   def grade_submission(assessment, submission)
     if assessment.autograded
-      submission.auto_grade_now!
+      submission.auto_grade!
     else
       grade_answers(submission)
 
