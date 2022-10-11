@@ -6,6 +6,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import AssessmentSettingsForm from './AssessmentSettingsForm';
 import {
   updateAssessmentSettings,
@@ -53,8 +54,8 @@ const AssessmentSettings = (): JSX.Element => {
       .then((newData) => {
         updateFormAndToast(newData, t(formTranslations.changesSaved));
       })
-      .catch((error: Error) => {
-        toast.error(error.message);
+      .catch((errors) => {
+        setReactHookFormError(form?.setError, errors);
       })
       .finally(() => setSubmitting(false));
   };

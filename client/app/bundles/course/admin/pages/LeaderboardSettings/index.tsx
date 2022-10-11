@@ -6,6 +6,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import LeaderboardSettingsForm from './LeaderboardSettingsForm';
 import {
   fetchLeaderboardSettings,
@@ -36,8 +37,8 @@ const LeaderboardSettings = (): JSX.Element => {
         reloadOptions();
         toast.success(t(translations.changesSaved));
       })
-      .catch((error: Error) => {
-        toast.error(error.message);
+      .catch((errors) => {
+        setReactHookFormError(form?.setError, errors);
       })
       .finally(() => setSubmitting(false));
   };

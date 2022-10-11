@@ -6,6 +6,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CommentsSettingsForm from './CommentsSettingsForm';
 import { fetchCommentsSettings, updateCommentsSettings } from './operations';
 import { useOptionsReloader } from '../../components/SettingsNavigation';
@@ -33,8 +34,8 @@ const CommentsSettings = (): JSX.Element => {
         reloadOptions();
         toast.success(t(translations.changesSaved));
       })
-      .catch((error: Error) => {
-        toast.error(error.message);
+      .catch((errors) => {
+        setReactHookFormError(form?.setError, errors);
       })
       .finally(() => setSubmitting(false));
   };
