@@ -47,7 +47,7 @@ RSpec.feature 'Course: Administration: Administration', js: true do
           find('label', text: 'Choose a new image', visible: false).click
         end
 
-        click_button 'Upload image'
+        click_button 'Save changes'
         sleep 0.5
         expect_toastify('The new course logo was successfully uploaded.')
 
