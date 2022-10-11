@@ -6,6 +6,7 @@ import translations from 'lib/translations/form';
 import useTranslation from 'lib/hooks/useTranslation';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import AnnouncementsSettingsForm from './AnnouncementsSettingsForm';
 import {
   fetchAnnouncementsSettings,
@@ -36,8 +37,8 @@ const AnnouncementsSettings = (): JSX.Element => {
         reloadOptions();
         toast.success(t(translations.changesSaved));
       })
-      .catch((error: Error) => {
-        toast.error(error.message);
+      .catch((errors) => {
+        setReactHookFormError(form?.setError, errors);
       })
       .finally(() => setSubmitting(false));
   };

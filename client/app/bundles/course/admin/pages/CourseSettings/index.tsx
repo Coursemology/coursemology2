@@ -7,6 +7,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CourseSettingsForm from './CourseSettingsForm';
 import {
   deleteCourse,
@@ -51,8 +52,8 @@ const CourseSettings = (): JSX.Element => {
         reloadOptions();
         updateFormAndToast(t(formTranslations.changesSaved), newData);
       })
-      .catch((error: Error) => {
-        toast.error(error.message);
+      .catch((errors) => {
+        setReactHookFormError(form?.setError, errors);
       })
       .finally(() => setSubmitting(false));
   };
