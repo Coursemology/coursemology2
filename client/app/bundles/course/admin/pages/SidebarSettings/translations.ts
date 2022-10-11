@@ -14,4 +14,8 @@ export default defineMessages({
     defaultMessage:
       'The new sidebar ordering has been applied. Refresh to see the latest changes.',
   },
+  errorOccurredWhenUpdatingSidebar: {
+    id: 'course.admin.sidebar.errorOccurredWhenUpdatingSidebar',
+    defaultMessage: 'An error occurred while updating the sidebar ordering.',
+  },
 });

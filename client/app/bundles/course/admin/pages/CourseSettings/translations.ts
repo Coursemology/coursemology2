@@ -193,4 +193,16 @@ export default defineMessages({
     defaultMessage:
       'This course has been deleted. Redirecting you to courses page...',
   },
+  pleaseTypeChallengeToConfirmDelete: {
+    id: 'course.admin.assessment.pleaseTypeChallengeToConfirmDelete',
+    defaultMessage: 'Please type {challenge} to confirm deletion.',
+  },
+  confirmDeletePlaceholder: {
+    id: 'course.admin.assessment.confirmDeletePlaceholder',
+    defaultMessage: 'This is your last chance to go back!',
+  },
+  errorOccurredWhenDeletingCourse: {
+    id: 'course.admin.assessment.errorOccurredWhenDeletingCourse',
+    defaultMessage: 'An error occurred while deleting this course.',
+  },
 });

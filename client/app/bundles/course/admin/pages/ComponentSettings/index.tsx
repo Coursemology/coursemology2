@@ -2,12 +2,13 @@ import { toast } from 'react-toastify';
 
 import { CourseComponents } from 'types/course/admin/components';
 import useTranslation from 'lib/hooks/useTranslation';
-import translations from 'lib/translations/form';
+import formTranslations from 'lib/translations/form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { useState, useEffect } from 'react';
 import ComponentSettingsForm from './ComponentSettingsForm';
 import { fetchComponentSettings, updateComponentSettings } from './operations';
 import { useOptionsReloader } from '../../components/SettingsNavigation';
+import translations from './translations';
 
 const ComponentSettings = (): JSX.Element => {
   const reloadOptions = useOptionsReloader();
@@ -32,10 +33,10 @@ const ComponentSettings = (): JSX.Element => {
         if (!data) return;
         action(data);
         reloadOptions();
-        toast.success(t(translations.changesSavedAndRefresh));
+        toast.success(t(formTranslations.changesSavedAndRefresh));
       })
-      .catch((error: Error) => {
-        toast.error(error.message);
+      .catch(() => {
+        toast.error(t(translations.errorOccurredWhenUpdatingComponents));
       })
       .finally(() => setSubmitting(false));
   };

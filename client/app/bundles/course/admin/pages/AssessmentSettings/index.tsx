@@ -69,8 +69,8 @@ const AssessmentSettings = (): JSX.Element => {
         .then((newData) => {
           updateFormAndToast(newData, t(commonTranslations.created, { title }));
         })
-        .catch((error: Error) => {
-          toast.error(error.message);
+        .catch(() => {
+          toast.error(t(translations.errorOccurredWhenCreatingCategory));
         })
         .finally(() => setSubmitting(false));
     },
@@ -81,8 +81,8 @@ const AssessmentSettings = (): JSX.Element => {
         .then((newData) => {
           updateFormAndToast(newData, t(commonTranslations.created, { title }));
         })
-        .catch((error: Error) => {
-          toast.error(error.message);
+        .catch(() => {
+          toast.error(t(translations.errorOccurredWhenCreatingTab));
         })
         .finally(() => setSubmitting(false));
     },
@@ -93,8 +93,8 @@ const AssessmentSettings = (): JSX.Element => {
         .then((newData) => {
           updateFormAndToast(newData, t(commonTranslations.deleted, { title }));
         })
-        .catch((error: Error) => {
-          toast.error(error.message);
+        .catch(() => {
+          toast.error(t(translations.errorOccurredWhenDeletingCategory));
         })
         .finally(() => setSubmitting(false));
     },
@@ -105,8 +105,8 @@ const AssessmentSettings = (): JSX.Element => {
         .then((newData) => {
           updateFormAndToast(newData, t(commonTranslations.deleted, { title }));
         })
-        .catch((error: Error) => {
-          toast.error(error.message);
+        .catch(() => {
+          toast.error(t(translations.errorOccurredWhenDeletingTab));
         })
         .finally(() => setSubmitting(false));
     },
