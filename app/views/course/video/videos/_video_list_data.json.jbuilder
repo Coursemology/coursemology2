@@ -20,7 +20,7 @@ json.startTimeInfo do
                 datetime_format: :long
 end
 
-json.videoSubmissionId video.submissions.first&.id
+json.videoSubmissionId submission if can_attempt && current_course_user.present?
 
 json.videoChildrenExist video.children_exist? if can_manage
 

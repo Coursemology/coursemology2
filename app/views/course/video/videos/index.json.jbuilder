@@ -8,7 +8,7 @@ json.videoTabs @video_tabs do |video_tab|
 end
 
 json.videos @videos do |video|
-  json.partial! 'video_list_data', video: video, can_analyze: can_analyze
+  json.partial! 'video_list_data', video: video, can_analyze: can_analyze, submission: video.submissions.first&.id
 end
 
 json.metadata do
