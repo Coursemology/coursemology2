@@ -57,19 +57,30 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
     input.value = '';
   };
 
-  const uploadCourseLogo = (): void => {
-    if (!stagedLogo) return;
-    props.onUploadCourseLogo?.(stagedLogo, () => setStagedLogo(undefined));
+  const handleSubmit = (data: CourseInfo): void => {
+    if (stagedLogo) {
+      props.onUploadCourseLogo(stagedLogo, () => {
+        setStagedLogo(undefined);
+        props.onSubmit(data);
+      });
+    } else {
+      props.onSubmit(data);
+    }
   };
 
   return (
     <Form
       initialValues={props.data}
-      onSubmit={props.onSubmit}
+      onSubmit={handleSubmit}
       emitsVia={props.emitsVia}
       validates={validationSchema}
       headsUp
       disabled={props.disabled}
+      dirty={Boolean(stagedLogo)}
+      onReset={(reset): void => {
+        setStagedLogo(undefined);
+        reset?.();
+      }}
     >
       {(control, watch): JSX.Element => (
         <>
@@ -137,22 +148,12 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                 </Button>
 
                 {stagedLogo && (
-                  <>
-                    <Button
-                      variant="outlined"
-                      onClick={uploadCourseLogo}
-                      disabled={props.disabled}
-                    >
-                      {t(translations.uploadImage)}
-                    </Button>
-
-                    <Button
-                      onClick={(): void => setStagedLogo(undefined)}
-                      disabled={props.disabled}
-                    >
-                      {t(translations.clearChanges)}
-                    </Button>
-                  </>
+                  <Button
+                    onClick={(): void => setStagedLogo(undefined)}
+                    disabled={props.disabled}
+                  >
+                    {t(translations.clearChanges)}
+                  </Button>
                 )}
               </div>
 

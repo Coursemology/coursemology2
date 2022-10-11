@@ -18,6 +18,7 @@ interface FormProps extends Emits<FormEmitter> {
   initialValues?: Record<string, any>;
   onSubmit?: (data) => void;
   headsUp?: boolean;
+  dirty?: boolean;
   validates?: AnyObjectSchema;
   children?: (
     control: Control,
@@ -25,6 +26,7 @@ interface FormProps extends Emits<FormEmitter> {
     formState: FormState<any>,
   ) => ReactNode;
   disabled?: boolean;
+  onReset?: (reset: FormEmitter['reset']) => void;
 }
 
 const Form = (props: FormProps): JSX.Element => {
@@ -41,7 +43,11 @@ const Form = (props: FormProps): JSX.Element => {
       {props.children?.(control, watch, formState)}
 
       {props.headsUp && (
-        <Slide in={formState.isDirty} direction="up" unmountOnExit>
+        <Slide
+          in={formState.isDirty || props.dirty}
+          direction="up"
+          unmountOnExit
+        >
           <div className="fixed inset-x-0 bottom-0 z-10 flex w-full items-center justify-between bg-neutral-800 px-8 py-4 text-white sm:bottom-8 sm:mx-auto sm:w-fit sm:rounded-lg sm:drop-shadow-xl">
             <Typography variant="body1">
               {t(translations.unsavedChanges)}
@@ -49,7 +55,7 @@ const Form = (props: FormProps): JSX.Element => {
 
             <div className="ml-10">
               <Button
-                onClick={(): void => reset()}
+                onClick={(): void => props.onReset?.(reset) ?? reset()}
                 className={`mr-4 ${props.disabled && 'text-neutral-500'}`}
                 disabled={props.disabled}
               >
