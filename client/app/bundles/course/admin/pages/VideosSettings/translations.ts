@@ -34,4 +34,12 @@ export default defineMessages({
     defaultMessage:
       'Deleting this tab will delete all its associated videos and statistics. This action is irreversible.',
   },
+  errorOccurredWhenCreatingTab: {
+    id: 'course.admin.videos.errorOccurredWhenCreatingTab',
+    defaultMessage: 'An error occurred while creating a tab.',
+  },
+  errorOccurredWhenDeletingTab: {
+    id: 'course.admin.videos.errorOccurredWhenDeletingTab',
+    defaultMessage: 'An error occurred while deleting the tab.',
+  },
 });

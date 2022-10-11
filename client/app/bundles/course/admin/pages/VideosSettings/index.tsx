@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 
 import { VideosSettingsData, VideosTab } from 'types/course/admin/videos';
 import useTranslation from 'lib/hooks/useTranslation';
-import translations from 'lib/translations/form';
+import formTranslations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
@@ -16,6 +16,7 @@ import {
 } from './operations';
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 import commonTranslations from '../../translations';
+import translations from './translations';
 
 const VideosSettings = (): JSX.Element => {
   const reloadOptions = useOptionsReloader();
@@ -45,7 +46,7 @@ const VideosSettings = (): JSX.Element => {
     updateVideosSettings(data)
       .then((newData) => {
         reloadOptions();
-        updateFormAndToast(newData, t(translations.changesSaved));
+        updateFormAndToast(newData, t(formTranslations.changesSaved));
       })
       .catch((errors) => {
         setReactHookFormError(form?.setError, errors);
@@ -63,8 +64,8 @@ const VideosSettings = (): JSX.Element => {
       .then((newData) => {
         updateFormAndToast(newData, t(commonTranslations.created, { title }));
       })
-      .catch((error: Error) => {
-        toast.error(error.message);
+      .catch(() => {
+        toast.error(t(translations.errorOccurredWhenCreatingTab));
       })
       .finally(() => setSubmitting(false));
   };
@@ -79,8 +80,8 @@ const VideosSettings = (): JSX.Element => {
       .then((newData) => {
         updateFormAndToast(newData, t(commonTranslations.deleted, { title }));
       })
-      .catch((error: Error) => {
-        toast.error(error.message);
+      .catch(() => {
+        toast.error(t(translations.errorOccurredWhenDeletingTab));
       })
       .finally(() => setSubmitting(false));
   };

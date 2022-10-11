@@ -10,7 +10,7 @@ export const fetchSidebarItems = async (): Promise<SidebarItems> => {
 
 export const updateSidebarItems = async (
   data: SidebarItems,
-): Promise<SidebarItems | undefined> => {
+): Promise<SidebarItems> => {
   const adaptedData: SidebarItemsPostData = {
     settings_sidebar: {
       sidebar_items_attributes: data.map(({ id, weight }) => ({ id, weight })),
@@ -21,9 +21,7 @@ export const updateSidebarItems = async (
     const response = await CourseAPI.admin.sidebar.update(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
-
-    return undefined;
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };

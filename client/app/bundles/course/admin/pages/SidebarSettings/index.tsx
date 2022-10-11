@@ -31,8 +31,8 @@ const SidebarSettings = (): JSX.Element => {
         action(newData);
         toast.success(t(translations.sidebarSettingsUpdated));
       })
-      .catch((error: Error) => {
-        toast.error(error.message);
+      .catch(() => {
+        toast.error(t(translations.errorOccurredWhenUpdatingSidebar));
       })
       .finally(() => setSubmitting(false));
   };
