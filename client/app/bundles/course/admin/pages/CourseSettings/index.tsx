@@ -85,8 +85,8 @@ const CourseSettings = (): JSX.Element => {
         // TODO: Replace this with useNavigate()('/courses') once SPA
         window.location.replace('/courses');
       })
-      .catch((error: Error) => {
-        toast.error(error.message);
+      .catch(() => {
+        toast.error(t(translations.errorOccurredWhenDeletingCourse));
       })
       .finally(() => setSubmitting(false));
   };

@@ -132,4 +132,20 @@ export default defineMessages({
     id: 'course.admin.assessment.errorOccurredWhenMovingTabs',
     defaultMessage: 'An error occurred while moving the tabs.',
   },
+  errorOccurredWhenCreatingCategory: {
+    id: 'course.admin.assessment.errorOccurredWhenCreatingCategory',
+    defaultMessage: 'An error occurred while creating a category.',
+  },
+  errorOccurredWhenCreatingTab: {
+    id: 'course.admin.assessment.errorOccurredWhenCreatingTab',
+    defaultMessage: 'An error occurred while creating a tab.',
+  },
+  errorOccurredWhenDeletingCategory: {
+    id: 'course.admin.assessment.errorOccurredWhenDeletingCategory',
+    defaultMessage: 'An error occurred while deleting the category.',
+  },
+  errorOccurredWhenDeletingTab: {
+    id: 'course.admin.assessment.errorOccurredWhenDeletingTab',
+    defaultMessage: 'An error occurred while deleting the tab.',
+  },
 });

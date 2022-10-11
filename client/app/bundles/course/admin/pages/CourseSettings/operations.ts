@@ -41,9 +41,7 @@ export const updateCourseSettings = async (
   return response.data;
 };
 
-export const updateCourseLogo = async (
-  image: File,
-): Promise<CourseInfo | undefined> => {
+export const updateCourseLogo = async (image: File): Promise<CourseInfo> => {
   try {
     const response = await CourseAPI.admin.course.updateLogo(image);
     return response.data;
@@ -51,7 +49,7 @@ export const updateCourseLogo = async (
     if (error instanceof AxiosError)
       throw new Error(error.response?.data.errors.logo);
 
-    return undefined;
+    throw error;
   }
 };
 
@@ -59,7 +57,7 @@ export const deleteCourse = async (): Promise<void> => {
   try {
     await CourseAPI.admin.course.delete();
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data.errors);
+    if (error instanceof AxiosError) throw error.response?.data.errors;
+    throw error;
   }
 };
