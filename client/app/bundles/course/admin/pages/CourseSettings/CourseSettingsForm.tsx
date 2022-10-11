@@ -14,10 +14,10 @@ import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerFi
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import InfoLabel from 'lib/components/InfoLabel';
 import Form, { FormEmitter } from 'lib/components/form/Form';
-import Prompt from 'lib/components/Prompt';
 import RadioButton from 'lib/components/RadioButton';
 import validationSchema from './validationSchema';
 import translations from './translations';
+import DeleteCoursePrompt from './DeleteCoursePrompt';
 
 interface CourseSettingsFormProps extends Emits<FormEmitter> {
   data: CourseInfo;
@@ -360,19 +360,13 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             </Button>
           </Section>
 
-          <Prompt
+          <DeleteCoursePrompt
             open={deletingCourse}
-            title={t(translations.deleteCoursePromptTitle, {
-              title: props.data.title,
-            })}
-            primaryLabel={t(translations.deleteCourse)}
-            primaryColor="error"
-            onClickPrimary={props.onDeleteCourse}
             onClose={closeDeleteCoursePrompt}
+            courseTitle={props.data.title}
+            onConfirmDelete={props.onDeleteCourse}
             disabled={props.disabled}
-          >
-            {t(translations.deleteCourseWarning)}
-          </Prompt>
+          />
         </>
       )}
     </Form>
