@@ -5,7 +5,9 @@ import { toast } from 'react-toastify';
 
 import { ConditionData, ConditionsData } from 'types/course/conditions';
 import useToggle from 'lib/hooks/useToggle';
+import useTranslation from 'lib/hooks/useTranslation';
 import specify from './specifiers';
+import translations from './translations';
 
 interface ConditionProps<AnyConditionData extends ConditionData> {
   condition: AnyConditionData;
@@ -17,6 +19,7 @@ interface ConditionProps<AnyConditionData extends ConditionData> {
 const Condition = <AnyConditionData extends ConditionData>(
   props: ConditionProps<AnyConditionData>,
 ): JSX.Element => {
+  const { t } = useTranslation();
   const [editing, toggleEditing] = useToggle(false);
   const { component } = specify(props.condition.type);
 
@@ -28,7 +31,11 @@ const Condition = <AnyConditionData extends ConditionData>(
   };
 
   const deleteCondition = (): void => {
-    props.onDelete(props.condition.url).catch(toast.error);
+    props
+      .onDelete(props.condition.url)
+      .catch(() =>
+        toast.error(t(translations.errorOccurredWhenDeletingCondition)),
+      );
   };
 
   return (

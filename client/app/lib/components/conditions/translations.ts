@@ -84,4 +84,8 @@ export default defineMessages({
     id: 'lib.components.conditions.conditionDeleted',
     defaultMessage: 'Condition was successfully deleted.',
   },
+  errorOccurredWhenDeletingCondition: {
+    id: 'lib.components.conditions.errorOccurredWhenDeletingCondition',
+    defaultMessage: 'An error occurred while deleting this condition.',
+  },
 });
