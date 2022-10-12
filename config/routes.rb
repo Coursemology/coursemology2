@@ -57,10 +57,10 @@ Rails.application.routes.draw do
 
   concern :conditional do
     namespace :condition do
-      resources :achievements, except: [:index]
-      resources :levels, except: [:index]
-      resources :assessments, except: [:index]
-      resources :surveys, except: [:index]
+      resources :achievements, except: [:new, :edit]
+      resources :levels, except: [:new, :edit]
+      resources :assessments, except: [:new, :edit]
+      resources :surveys, except: [:new, :edit]
     end
   end
 

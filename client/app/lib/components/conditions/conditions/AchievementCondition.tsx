@@ -7,7 +7,6 @@ import CourseAPI from 'api/course';
 import { AchievementMiniEntity } from 'types/course/achievements';
 import { AchievementConditionData } from 'types/course/conditions';
 import TextField from 'lib/components/TextField';
-import { getAchievementId } from 'lib/helpers/url-helpers';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import Prompt from 'lib/components/Prompt';
 import Preload from 'lib/components/Preload';
@@ -19,10 +18,9 @@ import translations from '../translations';
 type AchievementOptions = Record<
   AchievementMiniEntity['id'],
   {
-    id: AchievementMiniEntity['id'];
     title: AchievementMiniEntity['title'];
     description: AchievementMiniEntity['description'];
-    badge: AchievementMiniEntity['badge'];
+    badge: AchievementMiniEntity['badge']['url'];
   }
 >;
 
@@ -36,6 +34,7 @@ const AchievementConditionForm = (
 
   const autocompleteOptions = useMemo(() => {
     const keys = Object.keys(achievements);
+
     return keys.sort((a, b) => {
       const achievementA = achievements[parseInt(a, 10)].title;
       const achievementB = achievements[parseInt(b, 10)].title;
@@ -100,11 +99,11 @@ const AchievementConditionForm = (
                   component="li"
                   {...optionProps}
                   className={`${optionProps.className} space-x-8`}
-                  key={achievement.id}
+                  key={option}
                 >
                   <img
-                    src={achievement.badge.url}
-                    alt={achievement.badge.name}
+                    src={achievement.badge}
+                    alt={achievement.title}
                     className="max-h-20 w-20"
                   />
 
@@ -139,43 +138,29 @@ const AchievementConditionForm = (
   );
 };
 
-const fetchAchievements =
-  (exclude: (id: number) => boolean): (() => Promise<AchievementOptions>) =>
-  async () => {
-    const response = await CourseAPI.achievements.index();
-    const fetchedAchievements = response.data.achievements;
-    return fetchedAchievements.reduce<AchievementOptions>(
-      (options, achievement) => {
-        if (!exclude(achievement.id))
-          options[achievement.id] = {
-            id: achievement.id,
-            title: achievement.title,
-            description: achievement.description,
-            badge: achievement.badge,
-          };
-        return options;
-      },
-      {},
-    );
-  };
-
 const AchievementCondition = (
   props: AnyConditionProps<AchievementConditionData>,
-): JSX.Element => (
-  <Preload
-    while={fetchAchievements((id): boolean => {
-      const isCurrentAchievement = getAchievementId() === id.toString();
-      const isAnotherCondition =
-        id !== props.condition?.achievementId && props.otherConditions?.has(id);
-      return isCurrentAchievement || isAnotherCondition;
-    })}
-    render={<LoadingIndicator bare fit className="p-2" />}
-    onErrorDo={props.onClose}
-  >
-    {(data): JSX.Element => (
-      <AchievementConditionForm {...props} achievements={data} />
-    )}
-  </Preload>
-);
+): JSX.Element => {
+  const url = props.condition?.url ?? props.conditionAbility?.url;
+  if (!url)
+    throw new Error(`AchievementCondition received ${url} condition endpoint`);
+
+  const fetchAchievements = async (): Promise<AchievementOptions> => {
+    const response = await CourseAPI.conditions.fetchAchievements(url);
+    return response.data;
+  };
+
+  return (
+    <Preload
+      while={fetchAchievements}
+      render={<LoadingIndicator bare fit className="p-2" />}
+      onErrorDo={props.onClose}
+    >
+      {(data): JSX.Element => (
+        <AchievementConditionForm {...props} achievements={data} />
+      )}
+    </Preload>
+  );
+};
 
 export default AchievementCondition;

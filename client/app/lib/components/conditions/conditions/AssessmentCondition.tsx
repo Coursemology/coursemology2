@@ -9,7 +9,6 @@ import { AssessmentConditionData } from 'types/course/conditions';
 import TextField from 'lib/components/TextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
-import { getAssessmentId } from 'lib/helpers/url-helpers';
 import LoadingIndicator from 'lib/components/LoadingIndicator';
 import Checkbox from 'lib/components/Checkbox';
 import Preload from 'lib/components/Preload';
@@ -175,36 +174,29 @@ const AssessmentConditionForm = (
   );
 };
 
-const fetchAssessments =
-  (exclude: (id: number) => boolean): (() => Promise<AssessmentOptions>) =>
-  async () => {
-    const response = await CourseAPI.assessment.assessments.index();
-    const fetchedAssessments = response.data;
-
-    // TODO: Add <AssessmentOptions> to reduce once AssessmentAPI is typed
-    return fetchedAssessments.reduce((options, assessment) => {
-      if (!exclude(assessment.id)) options[assessment.id] = assessment.title;
-      return options;
-    }, {});
-  };
-
 const AssessmentCondition = (
   props: AnyConditionProps<AssessmentConditionData>,
-): JSX.Element => (
-  <Preload
-    while={fetchAssessments((id): boolean => {
-      const isCurrentAssessment = getAssessmentId() === id.toString();
-      const isAnotherCondition =
-        id !== props.condition?.assessmentId && props.otherConditions?.has(id);
-      return isCurrentAssessment || isAnotherCondition;
-    })}
-    render={<LoadingIndicator bare fit className="p-2" />}
-    onErrorDo={props.onClose}
-  >
-    {(data): JSX.Element => (
-      <AssessmentConditionForm {...props} assessments={data} />
-    )}
-  </Preload>
-);
+): JSX.Element => {
+  const url = props.condition?.url ?? props.conditionAbility?.url;
+  if (!url)
+    throw new Error(`AssessmentCondition received ${url} condition endpoint`);
+
+  const fetchAssessments = async (): Promise<AssessmentOptions> => {
+    const response = await CourseAPI.conditions.fetchAssessments(url);
+    return response.data;
+  };
+
+  return (
+    <Preload
+      while={fetchAssessments}
+      render={<LoadingIndicator bare fit className="p-2" />}
+      onErrorDo={props.onClose}
+    >
+      {(data): JSX.Element => (
+        <AssessmentConditionForm {...props} assessments={data} />
+      )}
+    </Preload>
+  );
+};
 
 export default AssessmentCondition;

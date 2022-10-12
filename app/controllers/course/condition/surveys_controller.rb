@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 class Course::Condition::SurveysController < Course::ConditionsController
   load_resource :survey_condition, class: Course::Condition::Survey.name, parent: false
-  before_action :set_course_and_conditional, only: [:new, :create]
+  before_action :set_course_and_conditional, only: [:create]
   authorize_resource :survey_condition, class: Course::Condition::Survey.name
+
+  def index
+    render_available_surveys
+  end
+
+  def show
+    render_available_surveys
+  end
 
   def create
     try_to_perform @survey_condition.save
@@ -17,6 +25,13 @@ class Course::Condition::SurveysController < Course::ConditionsController
   end
 
   private
+
+  def render_available_surveys
+    surveys = current_course.surveys
+    existing_conditions = @conditional.specific_conditions - [@survey_condition]
+    available_surveys = surveys - existing_conditions.map(&:dependent_object)
+    render json: available_surveys.to_h { |survey| [survey.id, survey.title] }
+  end
 
   def try_to_perform(operation_succeeded)
     if operation_succeeded
