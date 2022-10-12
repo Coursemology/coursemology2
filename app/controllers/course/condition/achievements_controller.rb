@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 class Course::Condition::AchievementsController < Course::ConditionsController
   load_resource :achievement_condition, class: Course::Condition::Achievement.name, parent: false
-  before_action :set_course, only: [:new, :create]
+  before_action :set_course, only: [:create]
   authorize_resource :achievement_condition, class: Course::Condition::Achievement.name
 
-  def new
-    @achievement_condition.course = current_course
-    authorize!(:new, @achievement_condition)
+  def index
+    render_available_achievements
+  end
+
+  def show
+    render_available_achievements
   end
 
   def create
@@ -26,6 +29,22 @@ class Course::Condition::AchievementsController < Course::ConditionsController
   end
 
   private
+
+  def render_available_achievements
+    achievements = current_course.achievements
+    existing_conditions = @conditional.specific_conditions - [@achievement_condition]
+    available_achievements = achievements - existing_conditions.map(&:dependent_object)
+    available_achievements_hash = available_achievements.to_h do |achievement|
+      [
+        achievement.id,
+        title: achievement.title,
+        description: achievement.description,
+        badge: achievement.badge.url
+      ]
+    end
+
+    render json: available_achievements_hash
+  end
 
   def try_to_perform(operation_succeeded)
     if operation_succeeded

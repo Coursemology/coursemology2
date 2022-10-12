@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 class Course::Condition::AssessmentsController < Course::ConditionsController
   load_resource :assessment_condition, class: Course::Condition::Assessment.name, parent: false
-  before_action :set_course_and_conditional, only: [:new, :create]
+  before_action :set_course_and_conditional, only: [:create]
   authorize_resource :assessment_condition, class: Course::Condition::Assessment.name
+
+  def index
+    render_available_assessments
+  end
+
+  def show
+    render_available_assessments
+  end
 
   def create
     try_to_perform @assessment_condition.save
@@ -17,6 +25,13 @@ class Course::Condition::AssessmentsController < Course::ConditionsController
   end
 
   private
+
+  def render_available_assessments
+    assessments = current_course.assessments.ordered_by_date_and_title
+    existing_conditions = @conditional.specific_conditions - [@assessment_condition]
+    available_assessments = assessments - existing_conditions.map(&:dependent_object)
+    render json: available_assessments.to_h { |assessment| [assessment.id, assessment.title] }
+  end
 
   def try_to_perform(operation_succeeded)
     if operation_succeeded
