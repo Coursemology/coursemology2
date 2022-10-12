@@ -77,7 +77,7 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
       toast.success(message);
     };
 
-  const createConditionOfType =
+  const createConditionHandlerFor =
     (ability: ConditionAbility) =>
     (data: Partial<ConditionData>, onError?: (errors) => void): void => {
       createCondition(
@@ -137,8 +137,9 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
           createElement(specify(conditionToCreate.type).component, {
             open: Boolean(conditionToCreate),
             otherConditions: conditionsByType[conditionToCreate.type],
-            onUpdate: createConditionOfType(conditionToCreate),
+            onUpdate: createConditionHandlerFor(conditionToCreate),
             onClose: () => setConditionToCreate(undefined),
+            conditionAbility: conditionToCreate,
           })}
       </div>
 

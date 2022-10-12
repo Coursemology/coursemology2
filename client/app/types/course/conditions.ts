@@ -37,6 +37,19 @@ export interface SurveyConditionData extends ConditionData {
   surveyId?: number;
 }
 
+export type AvailableAssessments = Record<string, string>;
+
+export type AvailableSurveys = Record<string, string>;
+
+export type AvailableAchievements = Record<
+  string,
+  {
+    title: string;
+    description: string;
+    badge: string;
+  }
+>;
+
 export interface ConditionPostData {
   condition_achievement?: {
     achievement_id: AchievementConditionData['achievementId'];

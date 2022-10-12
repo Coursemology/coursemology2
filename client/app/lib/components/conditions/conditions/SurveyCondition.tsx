@@ -86,32 +86,27 @@ const SurveyConditionForm = (
   );
 };
 
-const fetchSurveys =
-  (exclude: (id: number) => boolean): (() => Promise<SurveyOptions>) =>
-  async () => {
-    const response = await CourseAPI.survey.surveys.index();
-    const fetchedSurveys = response.data.surveys;
-
-    // TODO: Add <SurveyOptions> to reduce once SurveyAPI is typed
-    return fetchedSurveys.reduce((options, survey) => {
-      if (!exclude(survey.id)) options[survey.id] = survey.title;
-      return options;
-    }, {});
-  };
-
 const SurveyCondition = (
   props: AnyConditionProps<SurveyConditionData>,
-): JSX.Element => (
-  <Preload
-    while={fetchSurveys(
-      (id): boolean =>
-        id !== props.condition?.surveyId && props.otherConditions?.has(id),
-    )}
-    render={<LoadingIndicator bare fit className="p-2" />}
-    onErrorDo={props.onClose}
-  >
-    {(data): JSX.Element => <SurveyConditionForm {...props} surveys={data} />}
-  </Preload>
-);
+): JSX.Element => {
+  const url = props.condition?.url ?? props.conditionAbility?.url;
+  if (!url)
+    throw new Error(`SurveyCondition received ${url} condition endpoint`);
+
+  const fetchSurveys = async (): Promise<SurveyOptions> => {
+    const response = await CourseAPI.conditions.fetchSurveys(url);
+    return response.data;
+  };
+
+  return (
+    <Preload
+      while={fetchSurveys}
+      render={<LoadingIndicator bare fit className="p-2" />}
+      onErrorDo={props.onClose}
+    >
+      {(data): JSX.Element => <SurveyConditionForm {...props} surveys={data} />}
+    </Preload>
+  );
+};
 
 export default SurveyCondition;
