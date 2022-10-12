@@ -26,7 +26,8 @@ interface SidebarSettingsFormProps {
   data: SidebarItems;
   onSubmit: (
     data: SidebarItems,
-    action: (newData: SidebarItems) => void,
+    onSuccess: (newData: SidebarItems) => void,
+    onError: () => void,
   ) => void;
   disabled?: boolean;
 }
@@ -40,6 +41,7 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
   const [settings, setSettings] = useState(props.data);
 
   const moveItem = (sourceIndex: number, destinationIndex: number): void => {
+    const currentSettings = settings;
     const newOrdering = produce(settings, (draft) => {
       const [removed] = draft.splice(sourceIndex, 1);
       draft.splice(destinationIndex, 0, removed);
@@ -54,7 +56,9 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
       iconClassName: item.iconClassName,
     }));
 
-    props.onSubmit(newSidebarItems, setSettings);
+    props.onSubmit(newSidebarItems, setSettings, () =>
+      setSettings(currentSettings),
+    );
   };
 
   const rearrange = (result: DropResult): void => {
