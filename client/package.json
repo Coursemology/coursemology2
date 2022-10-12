@@ -82,7 +82,7 @@
     "@hookform/resolvers": "^2.9.8",
     "@mui/icons-material": "^5.10.9",
     "@mui/lab": "^5.0.0-alpha.103",
-    "@mui/material": "^5.10.8",
+    "@mui/material": "^5.10.9",
     "@mui/styles": "^5.10.9",
     "@mui/x-date-pickers": "^5.0.3",
     "@reduxjs/toolkit": "^1.8.6",
