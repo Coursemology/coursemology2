@@ -21,17 +21,19 @@ const SidebarSettings = (): JSX.Element => {
 
   const handleSubmit = (
     data: SidebarItems,
-    action: (newData: SidebarItems) => void,
+    onSuccess: (newData: SidebarItems) => void,
+    onError: () => void,
   ): void => {
     setSubmitting(true);
 
     updateSidebarItems(data)
       .then((newData) => {
         if (!newData) return;
-        action(newData);
+        onSuccess(newData);
         toast.success(t(translations.sidebarSettingsUpdated));
       })
       .catch(() => {
+        onError();
         toast.error(t(translations.errorOccurredWhenUpdatingSidebar));
       })
       .finally(() => setSubmitting(false));
