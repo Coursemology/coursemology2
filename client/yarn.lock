@@ -8037,13 +8037,13 @@ react-toastify@^9.0.8:
   dependencies:
     clsx "^1.1.1"
 
-react-tooltip@^4.2.21:
-  version "4.2.21"
-  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-4.2.21.tgz#840123ed86cf33d50ddde8ec8813b2960bfded7f"
-  integrity sha512-zSLprMymBDowknr0KVDiJ05IjZn9mQhhg4PRsqln0OZtURAJ1snt1xi5daZfagsh6vfsziZrc9pErPTDY1ACig==
+react-tooltip@^4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/react-tooltip/-/react-tooltip-4.3.1.tgz#8f3309c0e49abbc413199f194066bb76595005bd"
+  integrity sha512-YhlhaTTpxc2lDPutc3pzutlWT5GIhYVcdEp4vZ60wmBymWF5I4Qm1nxOaEMtmhrUDarHVXQ2IapwiM5RYM9aVg==
   dependencies:
-    prop-types "^15.7.2"
-    uuid "^7.0.3"
+    prop-types "^15.8.1"
+    uuid "9.0.0"
 
 react-transition-group@^4.4.5:
   version "4.4.5"
@@ -9213,10 +9213,10 @@ utils-merge@1.0.1:
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha512-pMZTvIkT1d+TFGvDOqodOclx0QWkkgi6Tdoa8gC8ffGAAqz9pzPTZWAybbsHHoED/ztMtkv/VoYTYyShUn81hA==
 
-uuid@^7.0.3:
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-7.0.3.tgz#c5c9f2c8cf25dc0a372c4df1441c41f5bd0c680b"
-  integrity sha512-DPSke0pXhTZgoF/d+WSt2QaKMCFSfx7QegxEWT+JOuHF5aWrKEn0G+ztjuJg/gG8/ItK+rbPCD/yNv8yyih6Cg==
+uuid@9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
+  integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
 
 uuid@^8.3.2:
   version "8.3.2"
