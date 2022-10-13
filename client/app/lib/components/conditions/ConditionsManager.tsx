@@ -80,23 +80,34 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
   const createConditionHandlerFor =
     (ability: ConditionAbility) =>
     (data: Partial<ConditionData>, onError?: (errors) => void): void => {
-      createCondition(
-        ability.url,
-        produce(data, (draft) => {
-          draft.type = ability.type;
-        }),
-      )
+      const typedConditionData = produce(data, (draft) => {
+        draft.type = ability.type;
+      });
+
+      createCondition(ability.url, typedConditionData)
         .then(updateConditionsAndToast(t(translations.conditionCreated)))
         .then(() => setConditionToCreate(undefined))
-        .catch(onError);
+        .catch((error) => {
+          if (error?.errors) return onError?.(error);
+          return toast.error(
+            t(translations.errorOccurredWhenCreatingCondition),
+          );
+        });
     };
 
   const handleUpdateCondition = (
     data: Partial<ConditionData>,
-  ): Promise<void | ConditionsData[]> =>
-    updateCondition(data).then(
-      updateConditionsAndToast(t(formTranslations.changesSaved)),
-    );
+    onSuccess?: () => void,
+    onError?: (errors) => void,
+  ): void => {
+    updateCondition(data)
+      .then(updateConditionsAndToast(t(formTranslations.changesSaved)))
+      .then(onSuccess)
+      .catch((error) => {
+        if (error?.errors) return onError?.(error);
+        return toast.error(t(translations.errorOccurredWhenUpdatingCondition));
+      });
+  };
 
   const handleDeleteCondition = (
     url: ConditionData['url'],
