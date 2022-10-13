@@ -88,4 +88,12 @@ export default defineMessages({
     id: 'lib.components.conditions.errorOccurredWhenDeletingCondition',
     defaultMessage: 'An error occurred while deleting this condition.',
   },
+  errorOccurredWhenCreatingCondition: {
+    id: 'lib.components.conditions.errorOccurredWhenCreatingCondition',
+    defaultMessage: 'An error occurred while creating this condition.',
+  },
+  errorOccurredWhenUpdatingCondition: {
+    id: 'lib.components.conditions.errorOccurredWhenUpdatingCondition',
+    defaultMessage: 'An error occurred while updating this condition.',
+  },
 });

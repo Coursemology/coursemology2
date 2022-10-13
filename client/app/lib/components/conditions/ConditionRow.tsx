@@ -12,7 +12,11 @@ import translations from './translations';
 interface ConditionProps<AnyConditionData extends ConditionData> {
   condition: AnyConditionData;
   otherConditions: Set<number>;
-  onUpdate: (data: Partial<ConditionData>) => Promise<void | ConditionsData[]>;
+  onUpdate: (
+    data: Partial<ConditionData>,
+    onSuccess?: () => void,
+    onError?: (error) => void,
+  ) => void;
   onDelete: (url: ConditionData['url']) => Promise<void | ConditionsData[]>;
 }
 
@@ -34,7 +38,7 @@ const ConditionRow = <AnyConditionData extends ConditionData>(
     data: ConditionData,
     onError?: (errors) => void,
   ): void => {
-    props.onUpdate(data).then(toggleEditing).catch(onError);
+    props.onUpdate(data, toggleEditing, onError);
   };
 
   const deleteCondition = (): void => {
