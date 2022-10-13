@@ -187,7 +187,7 @@
     "fork-ts-checker-webpack-plugin": "^7.2.13",
     "jest": "^27.5.1",
     "jest-localstorage-mock": "^2.4.22",
-    "postcss": "^8.4.17",
+    "postcss": "^8.4.18",
     "postcss-loader": "^7.0.1",
     "prettier": "^2.7.1",
     "react-dnd-test-backend": "^15.1.2",
