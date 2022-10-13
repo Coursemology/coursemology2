@@ -119,7 +119,7 @@
     "react-emitter-factory": "^1.1.2",
     "react-hook-form": "^7.36.1",
     "react-hot-keys": "^2.7.2",
-    "react-intl": "^6.1.2",
+    "react-intl": "^6.2.0",
     "react-player": "^2.11.0",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.3.0",
