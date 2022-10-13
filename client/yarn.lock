@@ -1251,6 +1251,14 @@
     "@formatjs/intl-localematcher" "0.2.31"
     tslib "2.4.0"
 
+"@formatjs/ecma402-abstract@1.13.0":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@formatjs/ecma402-abstract/-/ecma402-abstract-1.13.0.tgz#df6db3cbee0182bbd2fd6217103781c802aee819"
+  integrity sha512-CQ8Ykd51jYD1n05dtoX6ns6B9n/+6ZAxnWUAonvHC4kkuAemROYBhHkEB4tm1uVrRlE7gLDqXkAnY51Y0pRCWQ==
+  dependencies:
+    "@formatjs/intl-localematcher" "0.2.31"
+    tslib "2.4.0"
+
 "@formatjs/fast-memoize@1.2.6":
   version "1.2.6"
   resolved "https://registry.yarnpkg.com/@formatjs/fast-memoize/-/fast-memoize-1.2.6.tgz#a442970db7e9634af556919343261a7bbe5e88c3"
@@ -1267,12 +1275,29 @@
     "@formatjs/icu-skeleton-parser" "1.3.13"
     tslib "2.4.0"
 
+"@formatjs/icu-messageformat-parser@2.1.9":
+  version "2.1.9"
+  resolved "https://registry.yarnpkg.com/@formatjs/icu-messageformat-parser/-/icu-messageformat-parser-2.1.9.tgz#abd5ba32ad9f2f5226e0b78e0313ecf438835c30"
+  integrity sha512-KFwi1cDZ6sFbsZ6xuXpg/UtdVtcwmpEt2WY355k33Z+3fpzRe1EulwX65qEoho0af3+ZsiJxuhIvUIlSSFWASg==
+  dependencies:
+    "@formatjs/ecma402-abstract" "1.13.0"
+    "@formatjs/icu-skeleton-parser" "1.3.14"
+    tslib "2.4.0"
+
 "@formatjs/icu-skeleton-parser@1.3.13":
   version "1.3.13"
   resolved "https://registry.yarnpkg.com/@formatjs/icu-skeleton-parser/-/icu-skeleton-parser-1.3.13.tgz#f7e186e72ed73c3272d22a3aacb646e77368b099"
   integrity sha512-qb1kxnA4ep76rV+d9JICvZBThBpK5X+nh1dLmmIReX72QyglicsaOmKEcdcbp7/giCWfhVs6CXPVA2JJ5/ZvAw==
   dependencies:
     "@formatjs/ecma402-abstract" "1.12.0"
+    tslib "2.4.0"
+
+"@formatjs/icu-skeleton-parser@1.3.14":
+  version "1.3.14"
+  resolved "https://registry.yarnpkg.com/@formatjs/icu-skeleton-parser/-/icu-skeleton-parser-1.3.14.tgz#b99ef7f855f8a58cab2519ec4f921f11c2bf74a7"
+  integrity sha512-7bv60HQQcBb3+TSj+45tOb/CHV5z1hOpwdtS50jsSBXfB+YpGhnoRsZxSRksXeCxMy6xn6tA6VY2601BrrK+OA==
+  dependencies:
+    "@formatjs/ecma402-abstract" "1.13.0"
     tslib "2.4.0"
 
 "@formatjs/intl-displaynames@6.1.3":
@@ -1313,12 +1338,12 @@
     intl-messageformat "10.1.5"
     tslib "2.4.0"
 
-"@formatjs/ts-transformer@3.10.1":
-  version "3.10.1"
-  resolved "https://registry.yarnpkg.com/@formatjs/ts-transformer/-/ts-transformer-3.10.1.tgz#b0eafbea6c338c33f29e1bd2ba94412997c3fe73"
-  integrity sha512-D3ZmZIpoenKN3KCm6cGvwxtVbH5Y1VbSmwT1h67OFTYMnyL11IYitVDe7MoUJ5UoTklMyMtqn9oruTsl7dpT/w==
+"@formatjs/ts-transformer@3.11.0":
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/@formatjs/ts-transformer/-/ts-transformer-3.11.0.tgz#c3ca558aec2f519df5c36132bafff3754d4316be"
+  integrity sha512-Hc0Xls0JPLvIX7v0NRnLPIhW7Jj26FQLBqwPviQ1IoFHSkmgJrjySYahT7jxxPaH4BaNn2660DemVNnaZDNCvA==
   dependencies:
-    "@formatjs/icu-messageformat-parser" "2.1.8"
+    "@formatjs/icu-messageformat-parser" "2.1.9"
     "@types/json-stable-stringify" "^1.0.32"
     "@types/node" "14 || 16 || 17"
     chalk "^4.0.0"
@@ -2975,18 +3000,18 @@ babel-plugin-dynamic-import-node@^2.3.3:
   dependencies:
     object.assign "^4.1.0"
 
-babel-plugin-formatjs@^10.3.29:
-  version "10.3.29"
-  resolved "https://registry.yarnpkg.com/babel-plugin-formatjs/-/babel-plugin-formatjs-10.3.29.tgz#ce91bd568d8963dfe26de8e59e13a616d57b04bd"
-  integrity sha512-cgKfH8pOyWxQZ0AdQc9e2mU+Dy4aWLEXLWYn82yOP+WB4zhvqp0sFKsKmFjUGH/rpLGFnBPK+Y+oZ+/GhbBIcw==
+babel-plugin-formatjs@^10.3.30:
+  version "10.3.30"
+  resolved "https://registry.yarnpkg.com/babel-plugin-formatjs/-/babel-plugin-formatjs-10.3.30.tgz#54791e2253ac5377a3af87c1c6fc5fd22aa5b24f"
+  integrity sha512-IUkBEDYsdpueexHobAHFMuktPcWemySn6nGaQMmV19x0f0dBa0d06if43Dwv+kC2sJG7El2n0vDL+ie/vKTjiA==
   dependencies:
     "@babel/core" "^7.10.4"
     "@babel/helper-plugin-utils" "^7.10.4"
     "@babel/plugin-syntax-jsx" "7"
     "@babel/traverse" "7"
     "@babel/types" "^7.12.11"
-    "@formatjs/icu-messageformat-parser" "2.1.8"
-    "@formatjs/ts-transformer" "3.10.1"
+    "@formatjs/icu-messageformat-parser" "2.1.9"
+    "@formatjs/ts-transformer" "3.11.0"
     "@types/babel__core" "^7.1.7"
     "@types/babel__helper-plugin-utils" "^7.10.0"
     "@types/babel__traverse" "^7.1.7"
