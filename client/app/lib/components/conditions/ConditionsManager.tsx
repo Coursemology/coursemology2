@@ -32,7 +32,7 @@ import useToggle from 'lib/hooks/useToggle';
 import Subsection from 'lib/components/layouts/Subsection';
 import formTranslations from 'lib/translations/form';
 import translations from './translations';
-import Condition from './Condition';
+import ConditionRow from './ConditionRow';
 import specify from './specifiers';
 import {
   createCondition,
@@ -106,7 +106,7 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
     );
 
   const renderCondition = (condition: ConditionData): JSX.Element => (
-    <Condition
+    <ConditionRow
       key={condition.type + condition.id}
       condition={condition}
       otherConditions={conditionsByType[condition.type]}

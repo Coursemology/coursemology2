@@ -12,6 +12,9 @@ import AssessmentCondition from './conditions/AssessmentCondition';
 import LevelCondition from './conditions/LevelCondition';
 import SurveyCondition from './conditions/SurveyCondition';
 
+/**
+ * A construct that defines the necessary attributes for an unlock condition type.
+ */
 interface Specifier<AnyConditionData extends ConditionData> {
   component: AnyCondition;
   extractUniqueData: (condition: AnyConditionData) => number | void;
@@ -63,6 +66,11 @@ const SPECIFIERS: Specifiers = {
   Video: achievementSpecifier,
 };
 
+/**
+ * Returns the `Specifier` for a given unlock condition type that contains
+ * many condition-specific attributes, such as the `AnyCondition` component
+ * and the POST request data adaptors.
+ */
 const specify = (type: ConditionData['type']): Specifier<ConditionData> =>
   SPECIFIERS[type];
 
