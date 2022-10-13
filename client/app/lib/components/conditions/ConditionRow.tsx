@@ -16,7 +16,14 @@ interface ConditionProps<AnyConditionData extends ConditionData> {
   onDelete: (url: ConditionData['url']) => Promise<void | ConditionsData[]>;
 }
 
-const Condition = <AnyConditionData extends ConditionData>(
+/**
+ * A table row used by `ConditionsManager` to display an unlock condition.
+ *
+ * Accepts a generic `condition` that will be mapped to a presentable `Dialog`
+ * of generic type `AnyCondition` for editing the `condition` of the generic
+ * `AnyConditionData` type.
+ */
+const ConditionRow = <AnyConditionData extends ConditionData>(
   props: ConditionProps<AnyConditionData>,
 ): JSX.Element => {
   const { t } = useTranslation();
@@ -73,4 +80,4 @@ const Condition = <AnyConditionData extends ConditionData>(
   );
 };
 
-export default Condition;
+export default ConditionRow;

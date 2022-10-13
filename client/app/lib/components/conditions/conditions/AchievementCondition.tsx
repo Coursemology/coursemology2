@@ -83,7 +83,7 @@ const AchievementConditionForm = (
             options={autocompleteOptions}
             fullWidth
             getOptionLabel={(id): string =>
-              achievements[parseInt(id, 10)].title ?? ''
+              achievements[parseInt(id, 10)]?.title ?? ''
             }
             filterOptions={createFilterOptions({
               stringify: (option) => {
