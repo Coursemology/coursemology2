@@ -623,7 +623,7 @@ GEM
     uniform_notifier (1.16.0)
     unread (0.11.0)
       activerecord (>= 3)
-    validates_hostname (1.0.11)
+    validates_hostname (1.0.13)
       activerecord (>= 3.0)
       activesupport (>= 3.0)
     warden (1.2.9)
