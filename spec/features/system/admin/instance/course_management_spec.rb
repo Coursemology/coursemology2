@@ -42,7 +42,10 @@ RSpec.feature 'System: Administration: Instance: Courses', js: true do
         visit admin_instance_courses_path
 
         find("button.course-delete-#{course_to_delete.id}").click
-        accept_confirm_dialog
+        expect(page).to have_button('Delete course', disabled: true)
+        fill_in 'confirmDeleteField', with: 'coursemology'
+        click_button('Delete course')
+        sleep 0.2
         expect_toastify("#{course_to_delete.title} was deleted.")
       end
 

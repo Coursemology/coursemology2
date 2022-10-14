@@ -81,6 +81,8 @@ RSpec.feature 'Course: Administration: Administration', js: true do
 
         expect_delete_action = expect do
           click_button('Delete this course')
+          expect(page).to have_button('Delete course', disabled: true)
+          fill_in 'confirmDeleteField', with: 'coursemology'
           click_button('Delete course')
           expect(page).to have_current_path(courses_path)
         end
