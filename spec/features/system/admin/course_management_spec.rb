@@ -50,9 +50,15 @@ RSpec.feature 'System: Administration: Courses', js: true do
         course_to_delete = create(:course, title: Course.unscoped.ordered_by_title.first.title)
         visit admin_courses_path
 
-        find("button.course-delete-#{course_to_delete.id}").click
-        accept_confirm_dialog
-        expect_toastify("#{course_to_delete.title} was deleted.")
+        expect_delete_action = expect do
+          find("button.course-delete-#{course_to_delete.id}").click
+          expect(page).to have_button('Delete course', disabled: true)
+          fill_in 'confirmDeleteField', with: 'coursemology'
+          click_button('Delete course')
+          expect_toastify("#{course_to_delete.title} was deleted.")
+        end
+
+        expect_delete_action.to change(instance.courses, :count).by(-1)
       end
 
       scenario 'I can search courses' do
