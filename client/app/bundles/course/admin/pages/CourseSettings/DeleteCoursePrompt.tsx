@@ -12,7 +12,7 @@ interface DeleteCoursePromptProps {
   open?: boolean;
   onClose?: () => void;
   onConfirmDelete?: () => void;
-  disabled?: boolean;
+  disabled: boolean;
 }
 
 const DeleteCoursePrompt = (props: DeleteCoursePromptProps): JSX.Element => {
@@ -28,7 +28,7 @@ const DeleteCoursePrompt = (props: DeleteCoursePromptProps): JSX.Element => {
       title={t(translations.deleteCoursePromptTitle, {
         title: props.courseTitle,
       })}
-      primaryDisabled={props.disabled ?? inputChallenge !== challengeText}
+      primaryDisabled={props.disabled || inputChallenge !== challengeText}
       disabled={props.disabled}
       primaryLabel={t(translations.deleteCourse)}
       primaryColor="error"
@@ -51,6 +51,7 @@ const DeleteCoursePrompt = (props: DeleteCoursePromptProps): JSX.Element => {
       />
 
       <TextField
+        name="confirmDeleteField"
         value={inputChallenge}
         onChange={(e): void => setInputChallenge(e.target.value)}
         variant="filled"
