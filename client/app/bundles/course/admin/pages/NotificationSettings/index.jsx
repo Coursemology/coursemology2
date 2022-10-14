@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import messagesTranslations from 'lib/translations/messages';
 import adminTranslations from 'course/translations.intl';
 import {
   fetchNotificationSettings,
@@ -32,7 +33,10 @@ class NotificationSettings extends Component {
 
   componentDidMount = () => {
     this.props.dispatch(
-      fetchNotificationSettings(() => this.setState({ isLoading: false })),
+      fetchNotificationSettings(
+        () => this.setState({ isLoading: false }),
+        <FormattedMessage {...messagesTranslations.fetchingError} />,
+      ),
     );
   };
 

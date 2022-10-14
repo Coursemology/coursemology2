@@ -5,11 +5,16 @@ import CourseAPI from 'api/course';
 import { update } from '../../reducers/notificationSettings';
 
 export const fetchNotificationSettings =
-  (action: () => void) =>
+  (action: () => void, failureMessage) =>
   async (dispatch): Promise<void> => {
-    const response = await CourseAPI.admin.notifications.index();
-    dispatch(update(response.data));
-    action();
+    try {
+      const response = await CourseAPI.admin.notifications.index();
+      dispatch(update(response.data));
+      action();
+    } catch (error) {
+      if (error instanceof AxiosError) toast.error(failureMessage);
+      action();
+    }
   };
 
 export const updateNotificationSettings =
