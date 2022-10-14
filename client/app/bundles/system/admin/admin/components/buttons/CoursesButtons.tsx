@@ -2,10 +2,12 @@ import { FC, useState, memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { AppDispatch, Operation } from 'types/store';
-import DeleteButton from 'lib/components/buttons/DeleteButton';
 import { CourseMiniEntity } from 'types/system/courses';
 import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
+import DeleteCoursePrompt from 'bundles/course/admin/pages/CourseSettings/DeleteCoursePrompt';
+import { IconButton } from '@mui/material';
+import { Delete } from '@mui/icons-material';
 
 interface Props extends WrappedComponentProps {
   course: CourseMiniEntity;
@@ -27,12 +29,13 @@ const translations = defineMessages({
   },
 });
 
-const CourseManagementButtons: FC<Props> = (props) => {
+const CoursesButtons: FC<Props> = (props) => {
   const { intl, course, deleteOperation } = props;
   const dispatch = useDispatch<AppDispatch>();
+  const [openPrompt, setOpenPrompt] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const onDelete = (): Promise<void> => {
+  const handleDelete = (): Promise<void> => {
     setIsDeleting(true);
     return dispatch(deleteOperation(course.id))
       .then(() => {
@@ -59,15 +62,20 @@ const CourseManagementButtons: FC<Props> = (props) => {
 
   const managementButtons = (
     <div key={`buttons-${course.id}`}>
-      <DeleteButton
-        tooltip="Delete Course"
+      <IconButton
         className={`course-delete-${course.id} p-0`}
         disabled={isDeleting}
-        loading={isDeleting}
-        onClick={onDelete}
-        confirmMessage={intl.formatMessage(translations.deletionConfirm, {
-          title: course.title,
-        })}
+        onClick={(): void => setOpenPrompt(true)}
+        color="error"
+      >
+        <Delete />
+      </IconButton>
+      <DeleteCoursePrompt
+        open={openPrompt}
+        onClose={(): void => setOpenPrompt(false)}
+        courseTitle={course.title}
+        onConfirmDelete={handleDelete}
+        disabled={isDeleting}
       />
     </div>
   );
@@ -75,9 +83,6 @@ const CourseManagementButtons: FC<Props> = (props) => {
   return managementButtons;
 };
 
-export default memo(
-  injectIntl(CourseManagementButtons),
-  (prevProps, nextProps) => {
-    return equal(prevProps.course, nextProps.course);
-  },
-);
+export default memo(injectIntl(CoursesButtons), (prevProps, nextProps) => {
+  return equal(prevProps.course, nextProps.course);
+});

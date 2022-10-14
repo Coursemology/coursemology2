@@ -7,7 +7,6 @@ export interface CourseListData {
   createdAt: string;
   activeUserCount: number;
   userCount: number;
-  name: string;
   instance: InstanceMiniEntity;
   owners: UserBasicMiniEntity[];
 }
@@ -18,7 +17,6 @@ export interface CourseMiniEntity {
   createdAt: string;
   activeUserCount: number;
   userCount: number;
-  name: string;
   instance: InstanceMiniEntity;
   owners: UserBasicMiniEntity[];
 }
