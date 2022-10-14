@@ -25,7 +25,7 @@ interface CourseSettingsFormProps extends Emits<FormEmitter> {
   onSubmit: (data: CourseInfo) => void;
   onDeleteCourse: () => void;
   onUploadCourseLogo: (file: File, onSuccess: () => void) => void;
-  disabled?: boolean;
+  disabled: boolean;
 }
 
 const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
