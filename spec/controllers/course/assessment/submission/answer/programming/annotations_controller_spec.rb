@@ -22,7 +22,7 @@ RSpec.describe Course::Assessment::Submission::Answer::Programming::AnnotationsC
       let(:post_text) { 'test post text' }
       let(:workflow_state) { 'published' }
       subject do
-        post :create, as: :js, params: {
+        post :create, as: :json, params: {
           course_id: course, assessment_id: assessment,
           submission_id: submission, answer_id: answer, file_id: file,
           id: immutable_annotation, line: 1,

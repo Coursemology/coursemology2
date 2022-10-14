@@ -13,7 +13,7 @@ RSpec.describe Course::Assessment::SubmissionQuestion::CommentsController do
     describe '#create' do
       let(:workflow_state) { 'published' }
       subject do
-        post :create, as: :js, params: {
+        post :create, as: :json, params: {
           course_id: course, assessment_id: assessment,
           submission_question_id: submission_question,
           discussion_post: {

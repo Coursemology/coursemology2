@@ -55,7 +55,6 @@ class Course::Assessment::SubmissionQuestion::CommentsController < Course::Asses
 
   def render_create_response
     respond_to do |format|
-      format.js
       format.json { render partial: @post }
     end
   end
