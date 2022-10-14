@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 
 import LoadingIndicator from 'lib/components/LoadingIndicator';
+import messagesTranslations from 'lib/translations/messages';
 import {
   fetchLessonPlanSettings,
   updateLessonPlanSettings,
@@ -29,7 +30,10 @@ class LessonPlanSettings extends Component {
 
   componentDidMount = () => {
     this.props.dispatch(
-      fetchLessonPlanSettings(() => this.setState({ isLoading: false })),
+      fetchLessonPlanSettings(
+        () => this.setState({ isLoading: false }),
+        <FormattedMessage {...messagesTranslations.fetchingError} />,
+      ),
     );
   };
 

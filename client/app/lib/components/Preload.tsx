@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
 import useToggle from 'lib/hooks/useToggle';
+import ErrorCard from './ErrorCard';
 
 interface PreloadProps<Data> {
   while: () => Promise<Data>;
@@ -34,7 +35,8 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element | null => {
       });
   }, []);
 
-  if (failed) return null;
+  if (failed)
+    return <ErrorCard message={t(messagesTranslations.fetchingError)} />;
 
   return data ? props.children(data) : props.render;
 };
