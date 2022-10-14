@@ -3,15 +3,6 @@ module Course::Assessment::Submission::SubmissionsHelper
   include Course::Assessment::Submission::SubmissionsAutogradedHelper
   include Course::Assessment::Answer::ProgrammingTestCaseHelper
 
-  # Gets the ID for the given submission_question's comments container.
-  #
-  # @param [Course::Assessment::SubmissionQuestion] submission_question The submission_question
-  #   to get the ID for
-  # @return [String] The ID for the given submission_question's comments container.
-  def comments_container_id(submission_question)
-    "course_assessment_submission_question_#{submission_question.id}_comments"
-  end
-
   # Return the last non-current attempt if the submission is being attempted,
   # or the current_answer if it's in other states.
   # If there are no non-current attempts, just return the current attempt.

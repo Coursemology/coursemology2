@@ -76,7 +76,6 @@ class Course::Assessment::Submission::Answer::Programming::AnnotationsController
 
   def render_create_response
     respond_to do |format|
-      format.js
       format.json { render partial: @post }
     end
   end
