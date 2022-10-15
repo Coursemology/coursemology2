@@ -295,7 +295,7 @@ GEM
       activesupport (>= 5.0)
     high_voltage (3.1.2)
     highline (2.0.3)
-    html-pipeline (2.14.2)
+    html-pipeline (2.14.3)
       activesupport (>= 2)
       nokogiri (>= 1.4)
     htmlentities (4.3.4)
