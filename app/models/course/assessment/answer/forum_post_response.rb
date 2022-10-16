@@ -48,7 +48,28 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
     same_text && same_post_packs_length && same_post_packs
   end
 
+  def csv_download
+    stripped_answer_to_array.to_json
+  end
+
   private
+
+  def stripped_answer_to_array
+    post_packs.map do |post|
+      {
+        selectedPost: readable_string_of(post.post_text),
+        parentPost: readable_string_of(post.parent_text),
+        textAnswer: readable_string_of(answer_text)
+      }.compact
+    end
+  end
+
+  def readable_string_of(text)
+    return nil unless text
+
+    cleaned_text = text.gsub('</p>', "</p>\n").gsub('<br />', "<br />\n").squish
+    ActionController::Base.helpers.strip_tags(cleaned_text)
+  end
 
   def destroy_previous_selection
     post_packs.destroy_all

@@ -34,4 +34,8 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
 
     errors.add(:max_posts, "has to be between 1 and #{max_posts_allowed}")
   end
+
+  def csv_downloadable?
+    true
+  end
 end
