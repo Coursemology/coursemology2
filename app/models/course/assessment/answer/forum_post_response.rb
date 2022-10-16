@@ -52,6 +52,16 @@ class Course::Assessment::Answer::ForumPostResponse < ApplicationRecord
     stripped_answer_to_array.to_json
   end
 
+  def download(dir)
+    return if post_packs.empty?
+
+    answer_json_path = File.join(dir, 'answer.json')
+    File.open(answer_json_path, 'w') do |file|
+      json = JSON.pretty_generate(stripped_answer_to_array)
+      file.write(json)
+    end
+  end
+
   private
 
   def stripped_answer_to_array
