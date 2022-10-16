@@ -38,4 +38,8 @@ class Course::Assessment::Question::ForumPostResponse < ApplicationRecord
   def csv_downloadable?
     true
   end
+
+  def files_downloadable?
+    true
+  end
 end
