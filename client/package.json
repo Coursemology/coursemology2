@@ -89,7 +89,7 @@
     "@tailwindcss/line-clamp": "^0.4.2",
     "ace-builds": "^1.11.2",
     "axios": "^0.27.2",
-    "babel-plugin-formatjs": "^10.3.30",
+    "babel-plugin-formatjs": "^10.3.31",
     "chart.js": "^3.8.2",
     "dnd-core": "^14.0.1",
     "fabric": "^5.2.4",

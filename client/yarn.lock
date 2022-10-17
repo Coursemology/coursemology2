@@ -1329,12 +1329,12 @@
     intl-messageformat "10.2.1"
     tslib "2.4.0"
 
-"@formatjs/ts-transformer@3.11.0":
-  version "3.11.0"
-  resolved "https://registry.yarnpkg.com/@formatjs/ts-transformer/-/ts-transformer-3.11.0.tgz#c3ca558aec2f519df5c36132bafff3754d4316be"
-  integrity sha512-Hc0Xls0JPLvIX7v0NRnLPIhW7Jj26FQLBqwPviQ1IoFHSkmgJrjySYahT7jxxPaH4BaNn2660DemVNnaZDNCvA==
+"@formatjs/ts-transformer@3.11.1":
+  version "3.11.1"
+  resolved "https://registry.yarnpkg.com/@formatjs/ts-transformer/-/ts-transformer-3.11.1.tgz#c63df7d059f6e47af023dd0793905f04a3777f69"
+  integrity sha512-mZw3cgok/4zdqR3KAKayncy7IvTypwzJeENq6N+Tcx7rc2NtyihfPFVDn2W2AGRjVH9GRFibkNiu4nVI9xF0Og==
   dependencies:
-    "@formatjs/icu-messageformat-parser" "2.1.9"
+    "@formatjs/icu-messageformat-parser" "2.1.10"
     "@types/json-stable-stringify" "^1.0.32"
     "@types/node" "14 || 16 || 17"
     chalk "^4.0.0"
@@ -3149,18 +3149,18 @@ babel-plugin-dynamic-import-node@^2.3.3:
   dependencies:
     object.assign "^4.1.0"
 
-babel-plugin-formatjs@^10.3.30:
-  version "10.3.30"
-  resolved "https://registry.yarnpkg.com/babel-plugin-formatjs/-/babel-plugin-formatjs-10.3.30.tgz#54791e2253ac5377a3af87c1c6fc5fd22aa5b24f"
-  integrity sha512-IUkBEDYsdpueexHobAHFMuktPcWemySn6nGaQMmV19x0f0dBa0d06if43Dwv+kC2sJG7El2n0vDL+ie/vKTjiA==
+babel-plugin-formatjs@^10.3.31:
+  version "10.3.31"
+  resolved "https://registry.yarnpkg.com/babel-plugin-formatjs/-/babel-plugin-formatjs-10.3.31.tgz#5d7621023ebddad55ad2db8cd3f1cb59a46b2b96"
+  integrity sha512-zdtWGbHHPlLB2305Uea3etfOwt3jAp5/JxcgDchF+XgWZCjjZ5VT5aXsm3mxxO4kUTZF5nuUG7E811Cm0FJRkQ==
   dependencies:
     "@babel/core" "^7.10.4"
     "@babel/helper-plugin-utils" "^7.10.4"
     "@babel/plugin-syntax-jsx" "7"
     "@babel/traverse" "7"
     "@babel/types" "^7.12.11"
-    "@formatjs/icu-messageformat-parser" "2.1.9"
-    "@formatjs/ts-transformer" "3.11.0"
+    "@formatjs/icu-messageformat-parser" "2.1.10"
+    "@formatjs/ts-transformer" "3.11.1"
     "@types/babel__core" "^7.1.7"
     "@types/babel__helper-plugin-utils" "^7.10.0"
     "@types/babel__traverse" "^7.1.7"
