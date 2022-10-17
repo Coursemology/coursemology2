@@ -18,7 +18,7 @@ import {
 import produce from 'immer';
 
 import { SidebarItem, SidebarItems } from 'types/course/admin/sidebar';
-import Section from 'lib/components/layouts/Section';
+import Section from 'lib/components/core/layouts/Section';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from './translations';
 

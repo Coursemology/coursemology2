@@ -1,6 +1,6 @@
 import { render } from 'react-dom';
 import { fromJS } from 'immutable';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import storeCreator from './programming/store';
 import ProgrammingQuestion from './programming/ProgrammingQuestion';
 

@@ -5,8 +5,8 @@ import { AssessmentSettingsData } from 'types/course/admin/assessments';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import Preload from 'lib/components/Preload';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Preload from 'lib/components/wrappers/Preload';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import AssessmentSettingsForm from './AssessmentSettingsForm';
 import {

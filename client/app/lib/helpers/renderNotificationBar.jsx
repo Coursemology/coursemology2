@@ -1,6 +1,6 @@
 import { render } from 'react-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
-import NotificationBar from 'lib/components/NotificationBar';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+import NotificationBar from 'lib/components/core/NotificationBar';
 import { getOrCreateNode } from 'lib/helpers/rails-helpers';
 
 /**

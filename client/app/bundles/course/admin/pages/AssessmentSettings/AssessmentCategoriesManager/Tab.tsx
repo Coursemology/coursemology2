@@ -5,8 +5,8 @@ import { Delete, DragIndicator, Create } from '@mui/icons-material';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import { AssessmentTab } from 'types/course/admin/assessments';
-import SwitchableTextField from 'lib/components/SwitchableTextField';
-import Prompt from 'lib/components/Prompt';
+import SwitchableTextField from 'lib/components/core/fields/SwitchableTextField';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import { useAssessmentSettings } from '../AssessmentSettingsContext';
 import translations from '../translations';
 import { getTabsInCategories } from './utils';

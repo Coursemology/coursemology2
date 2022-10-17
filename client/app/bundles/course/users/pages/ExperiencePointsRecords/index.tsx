@@ -1,11 +1,11 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { useSelector } from 'react-redux';
 import { AppState } from 'types/store';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId, getCourseUserId } from 'lib/helpers/url-helpers';
-import BackendPagination from 'lib/components/BackendPagination';
+import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import ExperiencePointsTable from '../../components/tables/ExperiencePointsTable';
 import { getExperiencePointsRecordsSettings } from '../../selectors';
 

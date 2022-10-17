@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 
 import {
   fetchLevels,
@@ -24,7 +24,7 @@ import {
   TableRow,
 } from '@mui/material';
 import LevelRow from 'course/level/components/LevelRow';
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 
 const translations = defineMessages({
   levelHeader: {

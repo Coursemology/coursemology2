@@ -17,14 +17,14 @@ import {
 import Group from '@mui/icons-material/Group';
 import Person from '@mui/icons-material/Person';
 import PersonOutline from '@mui/icons-material/PersonOutline';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import NotificationBar, {
   notificationShape,
-} from 'lib/components/NotificationBar';
-import withRouter from 'lib/components/withRouter';
+} from 'lib/components/core/NotificationBar';
+import withRouter from 'lib/components/navigation/withRouter';
 import palette from 'theme/palette';
-import BarChart from 'lib/components/BarChart';
+import BarChart from 'lib/components/core/BarChart';
 import {
   fetchSubmissions,
   publishSubmissions,

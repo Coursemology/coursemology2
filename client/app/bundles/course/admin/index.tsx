@@ -1,7 +1,7 @@
 import { render } from 'react-dom';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import { store } from './store';
 import CourseSettings from './pages/CourseSettings';
 import ComponentSettings from './pages/ComponentSettings';

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import { getScribingId } from 'lib/helpers/url-helpers';
 import ScribingQuestionForm from './containers/ScribingQuestionForm';

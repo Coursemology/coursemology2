@@ -8,8 +8,8 @@ import {
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import PageHeader from 'lib/components/pages/PageHeader';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { Grid, Tab, Tabs } from '@mui/material';
 import palette from 'theme/palette';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';

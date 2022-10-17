@@ -1,4 +1,4 @@
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { getCourseId, getVideoId } from 'lib/helpers/url-helpers';
 import {
   Card,
@@ -14,8 +14,8 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CourseAPI from 'api/course';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import Note from 'lib/components/Note';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
 import { formatLongDateTime } from 'lib/moment';
 import { getVideoSubmissionsURL } from 'lib/helpers/url-builders';
 import { VideoSubmissionData } from 'types/course/video/submissions';

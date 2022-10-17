@@ -14,8 +14,8 @@ import {
   AssessmentTab,
 } from 'types/course/admin/assessments';
 import useTranslation from 'lib/hooks/useTranslation';
-import SwitchableTextField from 'lib/components/SwitchableTextField';
-import Prompt from 'lib/components/Prompt';
+import SwitchableTextField from 'lib/components/core/fields/SwitchableTextField';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import Tab from './Tab';
 import translations from '../translations';
 import { useAssessmentSettings } from '../AssessmentSettingsContext';

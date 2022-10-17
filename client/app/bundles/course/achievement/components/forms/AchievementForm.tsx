@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSingleFileInput, {
@@ -17,7 +17,7 @@ import {
   AchievementFormData,
 } from 'types/course/achievements';
 import { ConditionsData } from 'types/course/conditions';
-import ConditionsManager from 'lib/components/conditions/ConditionsManager';
+import ConditionsManager from 'lib/components/extensions/conditions/ConditionsManager';
 
 interface Props extends WrappedComponentProps {
   editing: boolean; // If the Form is in editing mode, `Add Conditions` button will be displayed.

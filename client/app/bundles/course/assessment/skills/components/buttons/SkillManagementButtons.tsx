@@ -3,8 +3,8 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
-import DeleteButton from 'lib/components/buttons/DeleteButton';
-import EditButton from 'lib/components/buttons/EditButton';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import EditButton from 'lib/components/core/buttons/EditButton';
 import {
   SkillBranchMiniEntity,
   SkillMiniEntity,

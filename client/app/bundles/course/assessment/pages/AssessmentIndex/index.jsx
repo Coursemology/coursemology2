@@ -11,8 +11,8 @@ import {
 } from '@mui/material';
 import NotificationBar, {
   notificationShape,
-} from 'lib/components/NotificationBar';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+} from 'lib/components/core/NotificationBar';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';
 import AssessmentForm from '../../components/AssessmentForm';
 import * as actions from '../../actions';

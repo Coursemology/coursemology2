@@ -7,7 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab, Tabs } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
 import actionTypes, { formNames } from '../constants';

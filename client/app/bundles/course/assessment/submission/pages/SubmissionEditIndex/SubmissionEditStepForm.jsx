@@ -20,8 +20,8 @@ import {
 import { blue, green, lightBlue, red } from '@mui/material/colors';
 
 /* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import ErrorText from 'lib/components/ErrorText';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import ErrorText from 'lib/components/core/ErrorText';
 import { usePrompt } from 'lib/hooks/router/usePrompt';
 import {
   explanationShape,

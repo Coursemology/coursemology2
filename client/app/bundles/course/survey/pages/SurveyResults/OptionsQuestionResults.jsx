@@ -15,7 +15,7 @@ import {
 } from '@mui/material';
 import { cyan, grey } from '@mui/material/colors';
 
-import Thumbnail from 'lib/components/Thumbnail';
+import Thumbnail from 'lib/components/core/Thumbnail';
 import { sorts } from 'course/survey/utils';
 import { questionTypes } from 'course/survey/constants';
 import { optionShape } from 'course/survey/propTypes';

@@ -6,7 +6,7 @@ import {
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
-import CustomBadge from 'lib/components/misc/CustomBadge';
+import CustomBadge from 'lib/components/extensions/CustomBadge';
 import { getCurrentPath, getCourseId } from 'lib/helpers/url-helpers';
 import { getCourseURL } from 'lib/helpers/url-builders';
 import { tabsStyle } from 'theme/mui-style';

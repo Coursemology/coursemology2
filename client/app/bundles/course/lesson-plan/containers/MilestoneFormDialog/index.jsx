@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import FormDialogue from 'lib/components/FormDialogue';
+import FormDialogue from 'lib/components/form/FormDialogue';
 import * as actionCreators from 'course/lesson-plan/actions';
 import MilestoneForm from './MilestoneForm';
 

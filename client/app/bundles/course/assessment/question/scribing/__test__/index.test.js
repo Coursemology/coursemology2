@@ -2,7 +2,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
 import { mount } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/assessment/question/scribing/store';
 import ScribingQuestion from 'course/assessment/question/scribing/ScribingQuestion';

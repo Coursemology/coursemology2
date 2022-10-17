@@ -1,7 +1,7 @@
 import { Box, Drawer, IconButton } from '@mui/material';
 import { FC, useState } from 'react';
 import Menu from '@mui/icons-material/Menu';
-import styles from '../layouts/layout.scss';
+import styles from 'lib/components/core/layouts/layout.scss';
 
 interface Props {
   renderDrawer: (

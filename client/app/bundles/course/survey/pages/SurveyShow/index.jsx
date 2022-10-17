@@ -9,7 +9,7 @@ import { ListSubheader } from '@mui/material';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
 import * as surveyActions from 'course/survey/actions/surveys';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import SurveyDetails from './SurveyDetails';
 import Section from './Section';
 

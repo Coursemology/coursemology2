@@ -6,8 +6,8 @@ import { AppDispatch } from 'types/store';
 
 import { Stack } from '@mui/material';
 
-import EditButton from 'lib/components/buttons/EditButton';
-import DeleteButton from 'lib/components/buttons/DeleteButton';
+import EditButton from 'lib/components/core/buttons/EditButton';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 
 import { deleteFolder, deleteMaterial } from '../../operations';
 import FolderEdit from '../../pages/FolderEdit';

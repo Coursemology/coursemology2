@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import { Card, CardContent, ListSubheader } from '@mui/material';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import {
   hideDuplicateItemsConfirmation,
   duplicateItems,

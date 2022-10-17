@@ -5,7 +5,7 @@ import { Checkbox, IconButton, Radio } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import Close from '@mui/icons-material/Close';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Thumbnail from 'lib/components/Thumbnail';
+import Thumbnail from 'lib/components/core/Thumbnail';
 import ImageField from './components/ImageField';
 
 const optionTranslations = defineMessages({

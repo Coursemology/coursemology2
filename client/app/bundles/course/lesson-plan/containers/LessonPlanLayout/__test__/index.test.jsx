@@ -1,7 +1,7 @@
 import { MemoryRouter } from 'react-router-dom';
 import { mount } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import CourseAPI from 'api/course';
 import storeCreator from 'course/lesson-plan/store';
 import LessonPlanLayout from 'course/lesson-plan/containers/LessonPlanLayout';

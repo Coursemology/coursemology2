@@ -15,7 +15,7 @@ import { FormControlLabel, Switch } from '@mui/material';
 import { injectIntl } from 'react-intl';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import { videoDefaults } from 'lib/constants/videoConstants';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { seekToDirectly } from '../../actions/video';
 import translations from '../../translations';
 

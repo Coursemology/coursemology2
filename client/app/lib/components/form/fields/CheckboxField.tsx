@@ -1,7 +1,7 @@
 import { memo, ComponentProps } from 'react';
 import { ControllerFieldState } from 'react-hook-form';
 
-import Checkbox from 'lib/components/Checkbox';
+import Checkbox from 'lib/components/core/buttons/Checkbox';
 import { formatErrorMessage } from './utils/mapError';
 import propsAreEqual from './utils/propsAreEqual';
 

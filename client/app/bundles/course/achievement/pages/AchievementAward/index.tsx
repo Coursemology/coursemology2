@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { AppDispatch, AppState } from 'types/store';
 import AchievementAwardManager from './AchievementAwardManager';
 import { loadAchievementCourseUsers } from '../../operations';

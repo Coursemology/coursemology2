@@ -6,9 +6,9 @@ import { ListSubheader } from '@mui/material';
 import { fetchSurveys } from 'course/survey/actions/surveys';
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import withRouter from 'lib/components/withRouter';
-import PageHeader from 'lib/components/pages/PageHeader';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import withRouter from 'lib/components/navigation/withRouter';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import SurveysTable from './SurveysTable';
 import NewSurveyButton from './NewSurveyButton';
 

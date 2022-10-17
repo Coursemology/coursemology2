@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import ErrorCard from 'lib/components/ErrorCard';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import Note from 'lib/components/Note';
+import ErrorCard from 'lib/components/core/ErrorCard';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
 import NotificationBar, {
   notificationShape,
-} from 'lib/components/NotificationBar';
+} from 'lib/components/core/NotificationBar';
 import { useParams } from 'react-router-dom';
 import CategoryCard from './CategoryCard';
 import GroupTableCard from './GroupTableCard';

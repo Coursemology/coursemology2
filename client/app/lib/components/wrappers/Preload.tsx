@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
 import useToggle from 'lib/hooks/useToggle';
-import ErrorCard from './ErrorCard';
+import ErrorCard from 'lib/components/core/ErrorCard';
 
 interface PreloadProps<Data> {
   while: () => Promise<Data>;
@@ -16,7 +16,7 @@ interface PreloadProps<Data> {
   children: (data: Data) => JSX.Element;
 }
 
-const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element | null => {
+const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
   const { t } = useTranslation();
   const [data, setData] = useState<Data>();
   const [failed, toggleFailed] = useToggle();

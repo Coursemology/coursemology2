@@ -8,7 +8,7 @@ import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 import { toast } from 'react-toastify';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { InstanceFormData } from 'types/system/instances';
 import { createInstance } from '../../operations';
 import InstanceForm from '../../components/forms/InstanceForm';

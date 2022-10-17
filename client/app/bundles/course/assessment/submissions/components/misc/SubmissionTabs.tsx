@@ -3,7 +3,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Tab, Tabs } from '@mui/material';
-import CustomBadge from 'lib/components/misc/CustomBadge';
+import CustomBadge from 'lib/components/extensions/CustomBadge';
 import { SubmissionsTabData } from 'types/course/assessment/submissions';
 import { AppDispatch } from 'types/store';
 import { tabsStyle } from 'theme/mui-style';

@@ -28,8 +28,8 @@ import {
 import { blue, grey, red } from '@mui/material/colors';
 import { HelpOutline } from '@mui/icons-material';
 
-import CKEditorRichText from 'lib/components/CKEditorRichText';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 import BuildLog from '../../components/BuildLog';
 import OnlineEditor, {

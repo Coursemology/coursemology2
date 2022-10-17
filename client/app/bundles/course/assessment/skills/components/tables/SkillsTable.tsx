@@ -22,7 +22,7 @@ import {
   Button,
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import SkillManagementButtons from '../buttons/SkillManagementButtons';
 import { TableEnum } from '../../types';
 import './SkillsTable.scss';

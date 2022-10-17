@@ -3,8 +3,8 @@ import { toast } from 'react-toastify';
 
 import { SidebarItems } from 'types/course/admin/sidebar';
 import useTranslation from 'lib/hooks/useTranslation';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import Preload from 'lib/components/Preload';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Preload from 'lib/components/wrappers/Preload';
 import SidebarSettingsForm from './SidebarSettingsForm';
 import { fetchSidebarItems, updateSidebarItems } from './operations';
 import translations from './translations';

@@ -9,8 +9,8 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import DateTimePicker from 'lib/components/fields/DateTimePicker';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
 import {
   fetchObjectsList,
   setDuplicationMode,
@@ -23,7 +23,7 @@ import {
 } from 'course/duplication/propTypes';
 import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import ItemsSelector from './ItemsSelector';
 import DuplicateAllButton from './DuplicateAllButton';
 import DestinationCourseSelector from './DestinationCourseSelector';

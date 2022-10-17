@@ -4,13 +4,13 @@ import { Autocomplete } from '@mui/material';
 
 import CourseAPI from 'api/course';
 import { SurveyConditionData } from 'types/course/conditions';
-import TextField from 'lib/components/TextField';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import Preload from 'lib/components/Preload';
+import TextField from 'lib/components/core/fields/TextField';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
-import Prompt from 'lib/components/Prompt';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import { AnyConditionProps } from '../AnyCondition';
-import { formatErrorMessage } from '../../form/fields/utils/mapError';
+import { formatErrorMessage } from '../../../form/fields/utils/mapError';
 import translations from '../translations';
 
 // TODO: Change string to Survey['title'] once Survey is typed

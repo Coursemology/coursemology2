@@ -3,7 +3,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import {
   scribingTools,
   scribingShapes,

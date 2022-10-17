@@ -4,7 +4,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import { useForm } from 'react-hook-form';
 import { Button, Card } from '@mui/material';
 import history from 'lib/history';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import GradingPanel from '../../containers/GradingPanel';
 import { formNames } from '../../constants';
 import translations from '../../translations';

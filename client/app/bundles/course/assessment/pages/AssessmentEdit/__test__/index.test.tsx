@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event';
 
 import { fireEvent, render, RenderResult, waitFor } from 'utilities/test-utils';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import CourseAPI from 'api/course';
 import storeCreator from '../../../store';
 import AssessmentEdit from '..';

@@ -1,5 +1,5 @@
 import { mount } from 'enzyme';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import SubmissionsTable from '../SubmissionsTable';
 
 const defaultAssessmentProps = {

@@ -2,7 +2,7 @@ import { FC, useState, memo } from 'react';
 import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { AppDispatch } from 'types/store';
-import DeleteButton from 'lib/components/buttons/DeleteButton';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { InstanceMiniEntity } from 'types/system/instances';
 import equal from 'fast-deep-equal';
 import { toast } from 'react-toastify';

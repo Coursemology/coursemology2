@@ -11,7 +11,7 @@ import { red } from '@mui/material/colors';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/survey/translations';
 import { questionTypes } from 'course/survey/constants';

@@ -15,7 +15,7 @@ import {
   ForumDisbursementFormData,
   ForumDisbursementUserEntity,
 } from 'types/course/disbursement';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { Button, Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';

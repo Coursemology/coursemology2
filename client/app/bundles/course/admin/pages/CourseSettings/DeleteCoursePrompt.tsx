@@ -1,6 +1,6 @@
 import { DialogContentText, Typography } from '@mui/material';
-import Prompt from 'lib/components/Prompt';
-import TextField from 'lib/components/TextField';
+import Prompt from 'lib/components/core/dialogs/Prompt';
+import TextField from 'lib/components/core/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
 import { useState } from 'react';
 import translations from './translations';

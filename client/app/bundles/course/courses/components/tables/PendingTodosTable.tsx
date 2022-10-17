@@ -24,7 +24,7 @@ import {
   getVideoSubmissionsURL,
 } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import PersonalStartEndTime from 'lib/components/PersonalStartEndTime';
+import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import TodoAccessButton from '../buttons/TodoAccessButton';
 import TodoIgnoreButton from '../buttons/TodoIgnoreButton';
 

@@ -3,7 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
 import { Button, CircularProgress } from '@mui/material';
 import PropTypes from 'prop-types';
-import CKEditorRichText from 'lib/components/CKEditorRichText';
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 
 const translations = defineMessages({
   prompt: {

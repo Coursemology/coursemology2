@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import FormMultiSelectField from 'lib/components/form/fields/MultiSelectField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSingleFileInput, {

@@ -1,8 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import PageHeader from 'lib/components/pages/PageHeader';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { VideoSubmissionListData } from 'types/course/videoSubmissions';
 import { fetchVideoSubmissions } from '../../operations';
 import UserVideoSubmissionTable from '../../components/tables/UserVideoSubmissionTable';

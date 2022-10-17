@@ -21,8 +21,8 @@ import {
 } from '@mui/material';
 import { blue, yellow, red, grey } from '@mui/material/colors';
 
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
-import ErrorText from 'lib/components/ErrorText';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import ErrorText from 'lib/components/core/ErrorText';
 import usePrompt from 'lib/hooks/router/usePrompt';
 import {
   explanationShape,

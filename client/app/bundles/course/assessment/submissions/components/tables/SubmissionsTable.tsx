@@ -18,8 +18,8 @@ import { SubmissionMiniEntity } from 'types/course/assessment/submissions';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { getAssessmentURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getDayMonthTime } from 'lib/helpers/timehelper';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import CustomTooltip from 'lib/components/CustomTooltip';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import CustomTooltip from 'lib/components/core/CustomTooltip';
 import palette from 'theme/palette';
 
 import SubmissionsTableButton from '../buttons/SubmissionsTableButton';

@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import surveyTranslations from 'course/survey/translations';
 import { fetchResults } from 'course/survey/actions/surveys';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { surveyShape, sectionShape } from 'course/survey/propTypes';
 import ResultsSection from './ResultsSection';
 

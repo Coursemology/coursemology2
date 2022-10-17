@@ -4,8 +4,8 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import CourseAPI from 'api/course';
 import { CourseAdminOptions } from 'types/course/admin/course';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import Preload from 'lib/components/Preload';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Preload from 'lib/components/wrappers/Preload';
 
 const fetchOptions = async (): Promise<CourseAdminOptions> => {
   const response = await CourseAPI.admin.course.items();

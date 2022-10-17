@@ -1,4 +1,4 @@
-import BarChart from 'lib/components/BarChart';
+import BarChart from 'lib/components/core/BarChart';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import palette from 'theme/palette';
 

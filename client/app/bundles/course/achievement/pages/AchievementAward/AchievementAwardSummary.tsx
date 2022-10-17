@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import { AchievementCourseUserEntity } from 'types/course/achievements';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 
 interface Props {
   achievementUsers: AchievementCourseUserEntity[];

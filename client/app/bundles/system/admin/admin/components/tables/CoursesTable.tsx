@@ -10,7 +10,7 @@ import {
 import tableTranslations from 'lib/translations/table';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { debounceSearchRender } from 'mui-datatables';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import { CourseMiniEntity } from 'types/system/courses';
 import { useDispatch } from 'react-redux';
 import { AppDispatch, Operation } from 'types/store';
@@ -20,7 +20,7 @@ import {
   FIELD_DEBOUNCE_DELAY,
   TABLE_ROWS_PER_PAGE,
 } from 'lib/constants/sharedConstants';
-import LoadingOverlay from 'lib/components/LoadingOverlay';
+import LoadingOverlay from 'lib/components/core/LoadingOverlay';
 
 interface Props extends WrappedComponentProps {
   filter: { active: boolean };

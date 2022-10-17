@@ -8,8 +8,8 @@ import CourseAPI from 'api/course';
 import { formatLongDateTime } from 'lib/moment';
 import { getWorkbinFileURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import DataTable from 'lib/components/DataTable';
-import InfoLabel from 'lib/components/InfoLabel';
+import DataTable from 'lib/components/core/layouts/DataTable';
+import InfoLabel from 'lib/components/core/InfoLabel';
 import Toolbar from './Toolbar';
 import t from './translations.intl';
 

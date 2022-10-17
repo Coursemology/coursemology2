@@ -20,11 +20,11 @@ import {
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { debounceSearchRender } from 'mui-datatables';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'types/store';
-import LoadingOverlay from 'lib/components/LoadingOverlay';
+import LoadingOverlay from 'lib/components/core/LoadingOverlay';
 import {
   InstanceAdminStats,
   InstanceUserMiniEntity,

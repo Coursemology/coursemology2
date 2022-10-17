@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import { LoadingButton } from '@mui/lab';
 import { Grid, Button, TextField, Stack } from '@mui/material';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';

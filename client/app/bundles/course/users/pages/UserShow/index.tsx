@@ -3,7 +3,7 @@ import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
 import { getUserEntity } from '../../selectors';
 import { loadUser } from '../../operations';

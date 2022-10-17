@@ -7,7 +7,7 @@ import SurveyResults from 'course/survey/pages/SurveyResults';
 import ResponseShow from 'course/survey/pages/ResponseShow';
 import ResponseEdit from 'course/survey/pages/ResponseEdit';
 import ResponseIndex from 'course/survey/pages/ResponseIndex';
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import AdminMenu from './AdminMenu';
 
 const backLocations = (courseId, surveyId, Page) => {

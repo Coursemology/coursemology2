@@ -1,6 +1,6 @@
 import { render, unmountComponentAtNode } from 'react-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
-import RailsConfirmationDialog from 'lib/components/RailsConfirmationDialog';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+import RailsConfirmationDialog from 'lib/components/core/dialogs/RailsConfirmationDialog';
 import { getOrCreateNode } from 'lib/helpers/rails-helpers';
 
 // Replaces Rail's UJS implementation of the Confirm Dialogue using a react component.

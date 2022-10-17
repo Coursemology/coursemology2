@@ -1,9 +1,9 @@
 import { FC, useState } from 'react';
 import { Grid } from '@mui/material';
 import { CourseMiniEntity } from 'types/course/courses';
-import Note from 'lib/components/Note';
-import Pagination from 'lib/components/Pagination';
-import SearchBar from 'lib/components/SearchBar';
+import Note from 'lib/components/core/Note';
+import Pagination from 'lib/components/core/layouts/Pagination';
+import SearchBar from 'lib/components/core/fields/SearchBar';
 import { injectIntl, defineMessages, WrappedComponentProps } from 'react-intl';
 import CourseInfoBox from './CourseInfoBox';
 

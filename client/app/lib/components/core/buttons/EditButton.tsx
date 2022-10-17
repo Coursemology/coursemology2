@@ -1,7 +1,7 @@
 import { SyntheticEvent } from 'react';
 import { IconButton, IconButtonProps } from '@mui/material';
 import Edit from '@mui/icons-material/Edit';
-import CustomTooltip from '../CustomTooltip';
+import CustomTooltip from 'lib/components/core/CustomTooltip';
 
 interface Props extends IconButtonProps {
   onClick: (e: SyntheticEvent) => void;

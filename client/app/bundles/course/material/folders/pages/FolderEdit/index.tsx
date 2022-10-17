@@ -9,7 +9,7 @@ import { FolderFormData } from 'types/course/material/folders';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 import FolderForm from '../../components/forms/FolderForm';
 import { updateFolder } from '../../operations';

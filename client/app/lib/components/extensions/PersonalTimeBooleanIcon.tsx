@@ -1,7 +1,7 @@
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
 import { AccessTime, Shuffle } from '@mui/icons-material';
-import CustomTooltip from './CustomTooltip';
+import CustomTooltip from 'lib/components/core/CustomTooltip';
 
 interface Props extends WrappedComponentProps {
   showPersonalizedTimelineFeatures: boolean;

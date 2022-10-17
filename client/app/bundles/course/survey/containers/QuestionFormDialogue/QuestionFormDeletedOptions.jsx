@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Checkbox, IconButton, Radio } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import Close from '@mui/icons-material/Close';
-import Thumbnail from 'lib/components/Thumbnail';
+import Thumbnail from 'lib/components/core/Thumbnail';
 
 const styles = {
   option: {

@@ -1,6 +1,6 @@
 import { render } from 'react-dom';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import storeCreator from './store';
 import GroupIndex from './pages/GroupIndex';
 import GroupShow from './pages/GroupShow';

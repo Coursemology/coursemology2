@@ -15,8 +15,8 @@ import {
 import surveyTranslations from 'course/survey/translations';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { fetchResponse } from 'course/survey/actions/responses';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import withRouter from 'lib/components/withRouter';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import withRouter from 'lib/components/navigation/withRouter';
 import ResponseForm, {
   buildInitialValues,
 } from 'course/survey/containers/ResponseForm';

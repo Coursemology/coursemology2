@@ -18,10 +18,10 @@ import {
   TableRow,
 } from '@mui/material';
 import { red } from '@mui/material/colors';
-import BarChart from 'lib/components/BarChart';
+import BarChart from 'lib/components/core/BarChart';
 import { fetchResponses } from 'course/survey/actions/responses';
 import surveyTranslations from 'course/survey/translations';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { useTheme } from '@mui/material/styles';
 import ReactTooltip from 'react-tooltip';

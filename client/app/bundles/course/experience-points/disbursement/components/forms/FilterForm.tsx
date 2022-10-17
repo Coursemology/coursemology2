@@ -14,7 +14,7 @@ import { LoadingButton } from '@mui/lab';
 import * as yup from 'yup';
 import formTranslations from 'lib/translations/form';
 import { ForumDisbursementFilters } from 'types/course/disbursement';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'types/store';

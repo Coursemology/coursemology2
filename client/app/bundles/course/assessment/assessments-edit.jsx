@@ -1,5 +1,5 @@
 import { render } from 'react-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import { getAssessmentId } from 'lib/helpers/url-helpers';
 import storeCreator from './store';
 import AssessmentEditPage from './pages/AssessmentEdit';

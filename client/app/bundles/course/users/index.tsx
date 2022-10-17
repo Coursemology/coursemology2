@@ -1,6 +1,6 @@
 import { render } from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import UsersIndex from './pages/UsersIndex';
 import UserShow from './pages/UserShow';
 import ManageStudents from './pages/ManageStudents';

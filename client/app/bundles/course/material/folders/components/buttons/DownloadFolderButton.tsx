@@ -11,7 +11,7 @@ import {
   Downloading as DownloadingIcon,
 } from '@mui/icons-material';
 
-import CustomTooltip from 'lib/components/CustomTooltip';
+import CustomTooltip from 'lib/components/core/CustomTooltip';
 
 import { downloadFolder } from '../../operations';
 

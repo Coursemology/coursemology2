@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { ListSubheader } from '@mui/material';
-import Thumbnail from 'lib/components/Thumbnail';
+import Thumbnail from 'lib/components/core/Thumbnail';
 import { defaultComponentTitles } from 'course/translations.intl';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { setItemSelectedBoolean } from 'course/duplication/actions';

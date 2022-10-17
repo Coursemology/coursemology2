@@ -1,8 +1,8 @@
 import { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import DeleteButton from 'lib/components/buttons/DeleteButton';
-import SaveButton from 'lib/components/buttons/SaveButton';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import SaveButton from 'lib/components/core/buttons/SaveButton';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
 import {

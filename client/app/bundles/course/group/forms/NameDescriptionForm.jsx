@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import useEmitterFactory from 'react-emitter-factory';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
 import { formNames } from '../constants';

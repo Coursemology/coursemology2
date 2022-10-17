@@ -1,5 +1,5 @@
 import { mount } from 'enzyme';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import { VisibleTestCaseView } from 'course/assessment/submission/containers/TestCaseView';
 
 import { workflowStates } from '../../../constants';

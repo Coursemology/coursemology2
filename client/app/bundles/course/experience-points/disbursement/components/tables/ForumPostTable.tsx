@@ -1,5 +1,5 @@
 import { CardContent, TableCell, TableRow, Typography } from '@mui/material';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import { getForumTopicURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatLongDateTime } from 'lib/moment';

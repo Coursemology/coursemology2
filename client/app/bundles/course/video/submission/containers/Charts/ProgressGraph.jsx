@@ -11,7 +11,7 @@ import {
 } from 'chart.js';
 import { Scatter } from 'react-chartjs-2';
 import { injectIntl } from 'react-intl';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 import { videoDefaults } from 'lib/constants/videoConstants';
 import { connect } from 'react-redux';

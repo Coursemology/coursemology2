@@ -3,12 +3,12 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Icon, Switch } from '@mui/material';
 import equal from 'fast-deep-equal';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import {
   AchievementMiniEntity,
   AchievementPermissions,
 } from 'types/course/achievements';
-import Note from 'lib/components/Note';
+import Note from 'lib/components/core/Note';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import { TableColumns, TableOptions } from 'types/components/DataTable';

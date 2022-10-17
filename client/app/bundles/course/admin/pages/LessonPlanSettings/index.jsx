@@ -13,7 +13,7 @@ import {
   TableRow,
 } from '@mui/material';
 
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import messagesTranslations from 'lib/translations/messages';
 import {
   fetchLessonPlanSettings,

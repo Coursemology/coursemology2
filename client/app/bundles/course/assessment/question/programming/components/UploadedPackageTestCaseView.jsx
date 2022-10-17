@@ -10,7 +10,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import ExpandableText from 'lib/components/ExpandableText';
+import ExpandableText from 'lib/components/core/ExpandableText';
 
 import styles from './UploadedPackageTestCaseView.scss';
 

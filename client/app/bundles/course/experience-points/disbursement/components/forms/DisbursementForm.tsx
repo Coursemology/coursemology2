@@ -15,7 +15,7 @@ import {
   DisbursementCourseUserMiniEntity,
   DisbursementFormData,
 } from 'types/course/disbursement';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { Autocomplete, Button, Grid, TextField } from '@mui/material';
 import { AppDispatch, AppState } from 'types/store';

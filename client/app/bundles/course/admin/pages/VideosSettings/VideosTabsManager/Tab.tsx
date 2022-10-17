@@ -4,8 +4,8 @@ import { IconButton } from '@mui/material';
 import { Draggable } from 'react-beautiful-dnd';
 
 import { VideosTab } from 'types/course/admin/videos';
-import Prompt from 'lib/components/Prompt';
-import SwitchableTextField from 'lib/components/SwitchableTextField';
+import Prompt from 'lib/components/core/dialogs/Prompt';
+import SwitchableTextField from 'lib/components/core/fields/SwitchableTextField';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../translations';
 

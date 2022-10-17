@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { ListSubheader } from '@mui/material';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 import { lessonPlanTypesGroups } from 'lib/types';
@@ -15,7 +15,7 @@ import LessonPlanFilter from 'course/lesson-plan/containers/LessonPlanFilter';
 import LessonPlanNav from 'course/lesson-plan/containers/LessonPlanNav';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
 import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 
 const translations = defineMessages({
   empty: {

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button, IconButton } from '@mui/material';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { unsubmitResponse } from 'course/survey/actions/responses';
 
 const styles = {

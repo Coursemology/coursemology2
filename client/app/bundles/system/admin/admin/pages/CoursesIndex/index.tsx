@@ -1,12 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/pages/PageHeader';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AppState, AppDispatch } from 'types/store';
 import { Link, Typography } from '@mui/material';
-import SummaryCard from 'lib/components/SummaryCard';
+import SummaryCard from 'lib/components/core/layouts/SummaryCard';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { deleteCourse, indexCourses } from '../../operations';
 import CoursesTable from '../../components/tables/CoursesTable';

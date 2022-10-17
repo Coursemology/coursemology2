@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { IconButton, IconButtonProps } from '@mui/material';
 import Delete from '@mui/icons-material/Delete';
-import ConfirmationDialog from '../ConfirmationDialog';
-import CustomTooltip from '../CustomTooltip';
+import CustomTooltip from 'lib/components/core/CustomTooltip';
+import ConfirmationDialog from '../dialogs/ConfirmationDialog';
 
 interface Props extends IconButtonProps {
   disabled: boolean;
