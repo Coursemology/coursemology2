@@ -1,8 +1,8 @@
 import { FC, ReactElement, memo, useMemo } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Box, MenuItem, TextField, Typography } from '@mui/material';
-import DataTable from 'lib/components/DataTable';
-import Note from 'lib/components/Note';
+import DataTable from 'lib/components/core/layouts/DataTable';
+import Note from 'lib/components/core/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/translations/table';

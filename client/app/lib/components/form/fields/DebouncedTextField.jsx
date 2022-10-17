@@ -1,7 +1,7 @@
 import { useCallback, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { debounce } from 'lodash';
-import TextField from 'lib/components/TextField';
+import TextField from 'lib/components/core/fields/TextField';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import { FIELD_DEBOUNCE_DELAY } from 'lib/constants/sharedConstants';
 

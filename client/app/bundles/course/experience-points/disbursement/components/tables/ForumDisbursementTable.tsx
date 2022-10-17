@@ -1,6 +1,6 @@
 import { Link } from '@mui/material';
 import equal from 'fast-deep-equal';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';

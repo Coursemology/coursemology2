@@ -12,12 +12,12 @@ import {
 import resolveConfig from 'tailwindcss/resolveConfig';
 
 import { i18nLocale } from 'lib/helpers/server-context';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import palette from 'theme/palette';
 import { grey } from 'theme/colors';
-import tailwindUserConfig from '../../../tailwind.config';
+import tailwindUserConfig from '../../../../tailwind.config';
 import ErrorBoundary from './ErrorBoundary';
-import translations from '../../../build/locales/locales.json';
+import translations from '../../../../build/locales/locales.json';
 
 injectStyle();
 

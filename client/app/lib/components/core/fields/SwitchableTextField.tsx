@@ -2,7 +2,7 @@ import { ComponentProps, KeyboardEventHandler } from 'react';
 import { Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-import TextField from 'lib/components/TextField';
+import TextField from 'lib/components/core/fields/TextField';
 
 type SwitchableTextFieldProps = ComponentProps<typeof TextField> & {
   editable: boolean;

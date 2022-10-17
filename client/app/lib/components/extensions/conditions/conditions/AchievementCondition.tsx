@@ -6,13 +6,13 @@ import { Controller, useForm } from 'react-hook-form';
 import CourseAPI from 'api/course';
 import { AchievementMiniEntity } from 'types/course/achievements';
 import { AchievementConditionData } from 'types/course/conditions';
-import TextField from 'lib/components/TextField';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import Prompt from 'lib/components/Prompt';
-import Preload from 'lib/components/Preload';
+import TextField from 'lib/components/core/fields/TextField';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Prompt from 'lib/components/core/dialogs/Prompt';
+import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import { AnyConditionProps } from '../AnyCondition';
-import { formatErrorMessage } from '../../form/fields/utils/mapError';
+import { formatErrorMessage } from '../../../form/fields/utils/mapError';
 import translations from '../translations';
 
 type AchievementOptions = Record<

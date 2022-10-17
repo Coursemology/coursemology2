@@ -2,9 +2,9 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { useParams } from 'react-router-dom';
 import { LoadingButton } from '@mui/lab';
 import {

@@ -7,9 +7,9 @@ import {
 } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { toast } from 'react-toastify';
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import {
   CommentPermissions,
   CommentTabData,
@@ -17,7 +17,7 @@ import {
   CommentTabTypes,
 } from 'types/course/comments';
 import { Tab, Tabs } from '@mui/material';
-import CustomBadge from 'lib/components/misc/CustomBadge';
+import CustomBadge from 'lib/components/extensions/CustomBadge';
 import { tabsStyle } from 'theme/mui-style';
 import {
   getPermissions,

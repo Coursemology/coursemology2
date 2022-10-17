@@ -5,8 +5,8 @@ import { toast } from 'react-toastify';
 
 import { AppDispatch, AppState } from 'types/store';
 
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import PageHeader from 'lib/components/pages/PageHeader';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 
 import {
   fetchAnnouncements,

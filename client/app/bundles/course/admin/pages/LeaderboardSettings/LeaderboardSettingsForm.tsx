@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Section from 'lib/components/layouts/Section';
+import Section from 'lib/components/core/layouts/Section';
 import useTranslation from 'lib/hooks/useTranslation';
 import { Emits } from 'react-emitter-factory';
 import { Controller } from 'react-hook-form';

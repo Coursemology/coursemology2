@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 
 import FolderForm from '../../components/forms/FolderForm';

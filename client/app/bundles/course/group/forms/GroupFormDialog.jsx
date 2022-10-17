@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import FormDialogue from 'lib/components/FormDialogue';
+import FormDialogue from 'lib/components/form/FormDialogue';
 import actionTypes, { formNames } from '../constants';
 
 const GroupFormDialog = ({

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button, CircularProgress } from '@mui/material';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { duplicationModes } from 'course/duplication/constants';
 
 const translations = defineMessages({

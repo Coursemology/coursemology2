@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';

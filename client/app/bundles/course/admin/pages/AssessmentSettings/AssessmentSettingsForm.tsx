@@ -3,8 +3,8 @@ import { Emits } from 'react-emitter-factory';
 
 import { AssessmentSettingsData } from 'types/course/admin/assessments';
 import useTranslation from 'lib/hooks/useTranslation';
-import Section from 'lib/components/layouts/Section';
-import Subsection from 'lib/components/layouts/Subsection';
+import Section from 'lib/components/core/layouts/Section';
+import Subsection from 'lib/components/core/layouts/Subsection';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import AssessmentCategoriesManager from './AssessmentCategoriesManager';

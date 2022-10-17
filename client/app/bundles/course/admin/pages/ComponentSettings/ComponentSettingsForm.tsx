@@ -2,7 +2,7 @@ import { useState } from 'react';
 import produce from 'immer';
 import { FormControlLabel, Switch } from '@mui/material';
 
-import Section from 'lib/components/layouts/Section';
+import Section from 'lib/components/core/layouts/Section';
 import { CourseComponents } from 'types/course/admin/components';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from './translations';

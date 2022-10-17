@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/pages/PageHeader';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';

@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 
 type Props = WrappedComponentProps;
 

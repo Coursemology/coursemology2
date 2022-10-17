@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Tab, Tabs } from '@mui/material';
 import { Outlet, useParams, useNavigate, Link } from 'react-router-dom';
-import Note from 'lib/components/Note';
+import Note from 'lib/components/core/Note';
 import CourseAPI from 'api/course';
-import PageHeader from 'lib/components/pages/PageHeader';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import GroupNew from '../GroupNew';
 
 const translations = defineMessages({

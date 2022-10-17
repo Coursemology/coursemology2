@@ -11,10 +11,10 @@ import {
   SubmissionUserFilterData,
 } from 'types/course/assessment/submissions';
 
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import PageHeader from 'lib/components/pages/PageHeader';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 
-import BackendPagination from 'lib/components/BackendPagination';
+import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import {
   getAllSubmissionMiniEntities,
   getFilter,

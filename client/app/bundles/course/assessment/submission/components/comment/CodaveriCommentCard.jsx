@@ -12,7 +12,7 @@ import {
 import { orange, grey } from '@mui/material/colors';
 import { ArrowBack, Check, Clear, Reply } from '@mui/icons-material';
 import { defineMessages, injectIntl } from 'react-intl';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { formatLongDateTime } from 'lib/moment';
 import { postShape } from '../../propTypes';
 

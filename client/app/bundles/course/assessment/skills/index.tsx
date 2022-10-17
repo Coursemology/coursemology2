@@ -1,5 +1,5 @@
 import { render } from 'react-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import configureStore from './store';
 import SkillsIndex from './pages/SkillsIndex';

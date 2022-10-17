@@ -11,11 +11,11 @@ import {
   Switch,
 } from '@mui/material';
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import NotificationBar, {
   notificationShape,
-} from 'lib/components/NotificationBar';
-import withRouter from 'lib/components/withRouter';
+} from 'lib/components/core/NotificationBar';
+import withRouter from 'lib/components/navigation/withRouter';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 import ProgressPanel from '../../components/ProgressPanel';
 import SubmissionEditForm from './SubmissionEditForm';

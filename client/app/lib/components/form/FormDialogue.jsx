@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import formTranslations from 'lib/translations/form';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 const propTypes = {
   title: PropTypes.string,

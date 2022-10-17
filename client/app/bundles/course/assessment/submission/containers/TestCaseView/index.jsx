@@ -18,7 +18,7 @@ import { green, yellow, red } from '@mui/material/colors';
 import Check from '@mui/icons-material/Check';
 import Clear from '@mui/icons-material/Clear';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandableText from 'lib/components/ExpandableText';
+import ExpandableText from 'lib/components/core/ExpandableText';
 import { testCaseShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 

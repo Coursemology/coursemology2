@@ -1,8 +1,8 @@
 import { FC, memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import DeleteButton from 'lib/components/buttons/DeleteButton';
-import AcceptButton from 'lib/components/buttons/AcceptButton';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import AcceptButton from 'lib/components/core/buttons/AcceptButton';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';

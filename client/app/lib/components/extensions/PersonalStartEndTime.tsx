@@ -2,7 +2,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
 import { AccessTime, Lock } from '@mui/icons-material';
 import { getDayMonthTime } from 'lib/helpers/timehelper';
-import CustomTooltip from './CustomTooltip';
+import CustomTooltip from 'lib/components/core/CustomTooltip';
 
 interface Props extends WrappedComponentProps {
   timeInfo: {

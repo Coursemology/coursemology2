@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { Grid } from '@mui/material';
 import NotificationBar, {
   notificationShape,
-} from 'lib/components/NotificationBar';
+} from 'lib/components/core/NotificationBar';
 import VideoPlayer from './VideoPlayer';
 import Discussion from './Discussion';
 

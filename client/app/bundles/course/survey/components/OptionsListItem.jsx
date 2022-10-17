@@ -1,7 +1,7 @@
 import { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
-import Thumbnail from 'lib/components/Thumbnail';
+import Thumbnail from 'lib/components/core/Thumbnail';
 
 const styles = {
   option: {

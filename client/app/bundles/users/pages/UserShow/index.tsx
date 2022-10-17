@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { AppDispatch, AppState } from 'types/store';
 import { Grid, Avatar, Typography } from '@mui/material';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import {
   getAllCurrentCourseMiniEntities,
   getAllCompletedCourseMiniEntities,

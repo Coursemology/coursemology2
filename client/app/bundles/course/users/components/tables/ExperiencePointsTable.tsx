@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import { getCourseUserId } from 'lib/helpers/url-helpers';
 import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { fetchExperiencePointsRecord } from '../../operations';
 import { getAllExperiencePointsRecordsEntities } from '../../selectors';
 import ExperiencePointsTableRow from './ExperiencePointsTableRow';

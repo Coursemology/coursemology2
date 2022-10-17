@@ -3,9 +3,9 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Typography } from '@mui/material';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import manageUsersTranslations from 'lib/translations/course/users/index';
 import { fetchStudents } from '../../operations';
 import {

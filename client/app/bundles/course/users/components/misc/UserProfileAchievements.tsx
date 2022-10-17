@@ -4,7 +4,7 @@ import { Grid, Typography } from '@mui/material';
 import { AchievementMiniEntity } from 'types/course/achievements';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { getAchievementURL } from 'lib/helpers/url-builders';
-import AvatarWithLabel from 'lib/components/AvatarWithLabel';
+import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 
 interface Props extends WrappedComponentProps {
   achievements: AchievementMiniEntity[];

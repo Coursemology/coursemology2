@@ -6,8 +6,8 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import { Box, Typography } from '@mui/material';
-import DataTable from 'lib/components/DataTable';
-import Note from 'lib/components/Note';
+import DataTable from 'lib/components/core/layouts/DataTable';
+import Note from 'lib/components/core/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import {
   InvitationMiniEntity,

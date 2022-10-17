@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab';
-import CKEditorRichText from 'lib/components/CKEditorRichText';
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import { FC, useEffect, useState } from 'react';
 import {
   defineMessages,

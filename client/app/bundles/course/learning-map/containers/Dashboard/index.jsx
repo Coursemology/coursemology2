@@ -8,7 +8,7 @@ import {
   toggleSatisfiabilityType,
 } from 'course/learning-map/actions';
 import ReactTooltip from 'react-tooltip';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
 import { elementTypes, satisfiabilityTypes } from '../../constants';

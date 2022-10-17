@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
 import { useFieldArray, useForm } from 'react-hook-form';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import { usePrompt } from 'lib/hooks/router/usePrompt';
 import formTranslations from 'lib/translations/form';
 import { responseShape } from 'course/survey/propTypes';

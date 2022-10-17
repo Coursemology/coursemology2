@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
 import { connect } from 'react-redux';
 
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 import GroupUserManager from './GroupUserManager';
 import ChangeSummaryTable from './ChangeSummaryTable';

@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { UserSkillBranchMiniEntity } from 'types/course/assessment/skills/userSkills';
-import LinearProgressWithLabel from 'lib/components/LinearProgressWithLabel';
+import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 
 interface Props extends WrappedComponentProps {
   skillBranches: UserSkillBranchMiniEntity[];

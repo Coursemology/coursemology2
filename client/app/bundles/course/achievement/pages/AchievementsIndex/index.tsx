@@ -3,10 +3,10 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
-import PageHeader from 'lib/components/pages/PageHeader';
-import AddButton from 'lib/components/buttons/AddButton';
+import PageHeader from 'lib/components/navigation/PageHeader';
+import AddButton from 'lib/components/core/buttons/AddButton';
 
 import {
   fetchAchievements,

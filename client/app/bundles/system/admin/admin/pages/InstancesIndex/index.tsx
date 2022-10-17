@@ -1,11 +1,11 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState, AppDispatch } from 'types/store';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { toast } from 'react-toastify';
-import AddButton from 'lib/components/buttons/AddButton';
+import AddButton from 'lib/components/core/buttons/AddButton';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { indexInstances } from '../../operations';
 import InstancesTable from '../../components/tables/InstancesTable';

@@ -11,16 +11,16 @@ import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
 import { Button, Checkbox, Grid, Tooltip } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
-import Note from 'lib/components/Note';
+import Note from 'lib/components/core/Note';
 import {
   AchievementCourseUserEntity,
   AchievementEntity,
 } from 'types/course/achievements';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
-import DataTable from 'lib/components/DataTable';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import DataTable from 'lib/components/core/layouts/DataTable';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { formatShortDateTime } from 'lib/moment';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { AppDispatch } from 'types/store';
 import { getAchievementURL } from 'lib/helpers/url-builders';

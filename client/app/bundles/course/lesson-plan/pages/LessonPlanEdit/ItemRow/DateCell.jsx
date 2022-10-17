@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'lib/moment';
-import DateTimePicker from 'lib/components/fields/DateTimePicker';
+import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
 
 const sameDate = (a, b) =>
   (!a && !b) || (a && b && moment(a).isSame(b, 'minute'));

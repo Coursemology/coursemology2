@@ -8,13 +8,13 @@ import {
 } from 'types/components/DataTable';
 import tableTranslations from 'lib/translations/table';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import { InstanceMiniEntity } from 'types/system/instances';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import { toast } from 'react-toastify';
-import LoadingOverlay from 'lib/components/LoadingOverlay';
+import LoadingOverlay from 'lib/components/core/LoadingOverlay';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getAdminCounts, getAllInstanceMiniEntities } from '../../selectors';
 import { indexInstances, updateInstance } from '../../operations';

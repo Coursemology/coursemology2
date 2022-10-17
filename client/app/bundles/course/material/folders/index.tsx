@@ -1,6 +1,6 @@
 import { render } from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import FolderShow from './pages/FolderShow';
 import configureStore from './store';
 

@@ -1,10 +1,10 @@
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CourseAPI from 'api/course';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { VideoEditSubmissionData } from 'types/course/video/submissions';
 import SubmissionEditWithStore from './SubmissionEditWithStore';
 import DescriptionCard from '../../components/misc/DescriptionCard';

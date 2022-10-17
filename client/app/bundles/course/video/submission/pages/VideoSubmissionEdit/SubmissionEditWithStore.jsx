@@ -2,9 +2,9 @@ import PropTypes from 'prop-types';
 import { memo, useEffect, useState } from 'react';
 import equal from 'fast-deep-equal';
 import { Card, CardContent } from '@mui/material';
-import { StoreProviderWrapper } from 'lib/components/ProviderWrapper';
+import { StoreProviderWrapper } from 'lib/components/wrappers/ProviderWrapper';
 import CourseAPI from 'api/course';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Submission from '../../containers/Submission';
 import storeCreator from '../../store';
 

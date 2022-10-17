@@ -1,6 +1,6 @@
 import { IconButton, IconButtonProps } from '@mui/material';
 import { AddBoxOutlined } from '@mui/icons-material';
-import CustomTooltip from '../CustomTooltip';
+import CustomTooltip from 'lib/components/core/CustomTooltip';
 
 interface Props extends IconButtonProps {
   onClick: () => void;

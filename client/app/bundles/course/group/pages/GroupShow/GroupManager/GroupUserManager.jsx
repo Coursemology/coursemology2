@@ -7,7 +7,7 @@ import CompareArrows from '@mui/icons-material/CompareArrows';
 import Delete from '@mui/icons-material/Delete';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 import { courseUserShape, groupShape } from '../../../propTypes';
 import actionTypes, { dialogTypes } from '../../../constants';

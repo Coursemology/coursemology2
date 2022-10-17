@@ -8,9 +8,9 @@ import { AppDispatch, AppState } from 'types/store';
 import { Breadcrumbs, Paper } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
-import EditButton from 'lib/components/buttons/EditButton';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import PageHeader from 'lib/components/pages/PageHeader';
+import EditButton from 'lib/components/core/buttons/EditButton';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { getWorkbinFolderURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 

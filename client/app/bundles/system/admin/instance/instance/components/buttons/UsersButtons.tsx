@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { AppDispatch } from 'types/store';
 import { USER_ROLES } from 'lib/constants/sharedConstants';
-import DeleteButton from 'lib/components/buttons/DeleteButton';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import equal from 'fast-deep-equal';
 import { toast } from 'react-toastify';
 import { InstanceUserMiniEntity } from 'types/system/instance/users';

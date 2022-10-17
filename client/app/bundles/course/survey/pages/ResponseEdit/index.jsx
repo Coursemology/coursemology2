@@ -10,8 +10,8 @@ import {
   fetchEditableResponse,
   updateResponse,
 } from 'course/survey/actions/responses';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import withRouter from 'lib/components/withRouter';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import withRouter from 'lib/components/navigation/withRouter';
 import ResponseForm, {
   buildInitialValues,
   buildResponsePayload,

@@ -9,8 +9,8 @@ import {
   SkillMiniEntity,
 } from 'types/course/assessment/skills/skills';
 import { AppDispatch, AppState } from 'types/store';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import PageHeader from 'lib/components/pages/PageHeader';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { fetchSkillBranches } from '../../operations';
 import {
   getAllSkillBranchMiniEntities,

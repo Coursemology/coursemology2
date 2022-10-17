@@ -18,7 +18,7 @@ import Delete from '@mui/icons-material/Delete';
 import GetApp from '@mui/icons-material/GetApp'; // TODO MUI - Change to download once icons lib is updated
 import MoreVert from '@mui/icons-material/MoreVert';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { assessmentShape } from '../../propTypes';
 import { workflowStates } from '../../constants';
 import translations from '../../translations';

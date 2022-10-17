@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 import actionTypes, { dialogTypes } from '../../constants';
 import { deleteCategory, updateCategory } from '../../actions';

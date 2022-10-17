@@ -1,6 +1,6 @@
 import { FC, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import { LoadingButton } from '@mui/lab';
 import {
   Grid,

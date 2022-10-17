@@ -8,8 +8,8 @@ import {
 import equal from 'fast-deep-equal';
 import { Operation } from 'types/store';
 import { Grid, Stack } from '@mui/material';
-import SearchBar from 'lib/components/SearchBar';
-import Pagination from 'lib/components/Pagination';
+import SearchBar from 'lib/components/core/fields/SearchBar';
+import Pagination from 'lib/components/core/layouts/Pagination';
 import AnnouncementCard from './AnnouncementCard';
 
 interface Props extends WrappedComponentProps {

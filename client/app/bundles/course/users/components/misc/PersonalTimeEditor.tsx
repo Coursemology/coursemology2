@@ -16,8 +16,8 @@ import { LoadingButton } from '@mui/lab';
 import { Grid, TableCell, Tooltip } from '@mui/material';
 import LockOutlined from '@mui/icons-material/LockOutlined';
 import LockOpenOutlined from '@mui/icons-material/LockOpenOutlined';
-import DeleteButton from 'lib/components/buttons/DeleteButton';
-import SaveButton from 'lib/components/buttons/SaveButton';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import SaveButton from 'lib/components/core/buttons/SaveButton';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import {

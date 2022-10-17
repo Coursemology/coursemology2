@@ -2,7 +2,7 @@ import { FC, ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@mui/material';
 import ArrowBack from '@mui/icons-material/ArrowBack';
-import TitleBar from 'lib/components/TitleBar';
+import TitleBar from 'lib/components/navigation/TitleBar';
 
 interface Props {
   title: string;

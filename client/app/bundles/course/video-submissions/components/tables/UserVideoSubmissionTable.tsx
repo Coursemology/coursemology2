@@ -1,14 +1,14 @@
 import { FC } from 'react';
 import { Box } from '@mui/material';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import tableTranslations from 'lib/translations/table';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
-import LinearProgressWithLabel from 'lib/components/LinearProgressWithLabel';
+import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import { Link } from 'react-router-dom';
 import { formatShortDateTime } from 'lib/moment';
 import { VideoSubmissionListData } from 'types/course/videoSubmissions';
-import Note from 'lib/components/Note';
+import Note from 'lib/components/core/Note';
 
 interface Props extends WrappedComponentProps {
   videoSubmissions: VideoSubmissionListData[] | null;

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { Button, Card, CardContent } from '@mui/material';
-import withRouter from 'lib/components/withRouter';
+import withRouter from 'lib/components/navigation/withRouter';
 import { postShape, annotationShape } from '../propTypes';
 import CodaveriCommentCard from '../components/comment/CodaveriCommentCard';
 import CommentCard from '../components/comment/CommentCard';

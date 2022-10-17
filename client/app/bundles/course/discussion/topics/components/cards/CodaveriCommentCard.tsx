@@ -11,7 +11,7 @@ import { ArrowBack, Check, Clear, Reply } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 import { grey, orange } from '@mui/material/colors';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { formatLongDateTime } from 'lib/moment';
 import { FC, useState } from 'react';
 import { CommentPostMiniEntity } from 'types/course/comments';

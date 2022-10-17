@@ -7,7 +7,7 @@ import {
   Tooltip,
   useMediaQuery,
 } from '@mui/material';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import { FC, memo, useEffect, useState } from 'react';
 import {
   GroupLeaderboardAchievement,

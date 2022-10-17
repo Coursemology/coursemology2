@@ -5,8 +5,8 @@ import { AnnouncementsSettingsData } from 'types/course/admin/announcements';
 import translations from 'lib/translations/form';
 import useTranslation from 'lib/hooks/useTranslation';
 import { FormEmitter } from 'lib/components/form/Form';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import Preload from 'lib/components/Preload';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Preload from 'lib/components/wrappers/Preload';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import AnnouncementsSettingsForm from './AnnouncementsSettingsForm';
 import {

@@ -5,8 +5,8 @@ import { Avatar, Button, CardHeader } from '@mui/material';
 import { grey, orange, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
-import CKEditorRichText from 'lib/components/CKEditorRichText';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { formatLongDateTime } from 'lib/moment';
 
 import { postShape } from '../../propTypes';

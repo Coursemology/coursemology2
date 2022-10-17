@@ -4,7 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import useEmitterFactory from 'react-emitter-factory';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';

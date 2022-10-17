@@ -6,13 +6,13 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import { Box, Checkbox, MenuItem, TextField, Typography } from '@mui/material';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import {
   CourseUserRowData,
   CourseUserMiniEntity,
   CourseUserRole,
 } from 'types/course/courseUsers';
-import Note from 'lib/components/Note';
+import Note from 'lib/components/core/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import {
   COURSE_USER_ROLES,

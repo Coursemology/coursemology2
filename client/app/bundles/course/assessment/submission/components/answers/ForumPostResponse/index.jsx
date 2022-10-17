@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
 import { questionShape } from 'course/assessment/submission/propTypes';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
-import NotificationBar from 'lib/components/NotificationBar';
-import Error from 'lib/components/ErrorCard';
+import NotificationBar from 'lib/components/core/NotificationBar';
+import Error from 'lib/components/core/ErrorCard';
 import ForumPostSelect from './ForumPostSelect';
 
 const ForumPostResponse = (props) => {

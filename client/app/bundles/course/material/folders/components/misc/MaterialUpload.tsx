@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 import MaterialUploadForm from '../forms/MaterialUploadForm';
 import { uploadMaterials } from '../../operations';

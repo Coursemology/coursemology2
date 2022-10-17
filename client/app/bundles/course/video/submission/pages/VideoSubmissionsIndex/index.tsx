@@ -1,9 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
-import PageHeader from 'lib/components/pages/PageHeader';
-import Note from 'lib/components/Note';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+import Note from 'lib/components/core/Note';
 import CourseAPI from 'api/course';
 import { VideoSubmission } from 'types/course/video/submissions';
 import { getCourseId } from 'lib/helpers/url-helpers';

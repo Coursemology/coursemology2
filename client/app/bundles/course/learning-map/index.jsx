@@ -1,6 +1,6 @@
 import { render } from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import LearningMap from './containers/LearningMap';
 import storeCreator from './store';
 

@@ -17,9 +17,9 @@ import { getUserURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { getFullDateTime } from 'lib/helpers/timehelper';
 
-import DeleteButton from 'lib/components/buttons/DeleteButton';
-import EditButton from 'lib/components/buttons/EditButton';
-import CustomTooltip from 'lib/components/CustomTooltip';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import EditButton from 'lib/components/core/buttons/EditButton';
+import CustomTooltip from 'lib/components/core/CustomTooltip';
 
 import AnnouncementEdit from '../../pages/AnnouncementEdit';
 

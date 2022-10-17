@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 
 import { AppDispatch } from 'types/store';

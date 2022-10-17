@@ -1,6 +1,6 @@
 import { render } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import PopupNotifier from 'course/user-notification/containers/PopupNotifier';
 import storeCreator from 'course/user-notification/store';
 

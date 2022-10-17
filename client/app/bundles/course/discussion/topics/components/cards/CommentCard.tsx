@@ -9,8 +9,8 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import CKEditorRichText from 'lib/components/CKEditorRichText';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { formatLongDateTime } from 'lib/moment';
 import { FC, useState } from 'react';
 import { CommentPostMiniEntity } from 'types/course/comments';

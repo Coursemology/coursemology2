@@ -29,7 +29,7 @@ import {
 } from 'types/course/conditions';
 import useTranslation from 'lib/hooks/useTranslation';
 import useToggle from 'lib/hooks/useToggle';
-import Subsection from 'lib/components/layouts/Subsection';
+import Subsection from 'lib/components/core/layouts/Subsection';
 import formTranslations from 'lib/translations/form';
 import translations from './translations';
 import ConditionRow from './ConditionRow';

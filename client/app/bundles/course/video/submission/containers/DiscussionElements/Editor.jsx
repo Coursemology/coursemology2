@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
-import CKEditorRichText from 'lib/components/CKEditorRichText';
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 
 import style from '../Discussion.scss';
 

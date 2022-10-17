@@ -9,7 +9,7 @@ import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerFi
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import translations from 'course/lesson-plan/translations';
 import { fields } from 'course/lesson-plan/constants';

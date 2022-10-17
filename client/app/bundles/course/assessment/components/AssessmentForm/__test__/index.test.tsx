@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react';
 
 import { fireEvent, render, RenderResult } from 'utilities/test-utils';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import storeCreator from '../../../store';
 import AssessmentForm from '..';
 

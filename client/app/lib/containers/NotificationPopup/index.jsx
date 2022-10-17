@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import NotificationBar, {
   notificationShape,
-} from 'lib/components/NotificationBar';
+} from 'lib/components/core/NotificationBar';
 
 const NotificationPopup = ({ notification }) => (
   <NotificationBar notification={notification} />

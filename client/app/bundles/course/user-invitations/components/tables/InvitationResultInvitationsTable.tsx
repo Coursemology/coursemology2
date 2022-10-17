@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Box, Typography } from '@mui/material';
-import DataTable from 'lib/components/DataTable';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import {
   COURSE_USER_ROLES,
   TABLE_ROWS_PER_PAGE,

@@ -6,7 +6,7 @@ import { number, object, string } from 'yup';
 import { ForumsSettingsData } from 'types/course/admin/forums';
 import useTranslation from 'lib/hooks/useTranslation';
 import FormTextField from 'lib/components/form/fields/TextField';
-import Section from 'lib/components/layouts/Section';
+import Section from 'lib/components/core/layouts/Section';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import translations from './translations';
 import commonTranslations from '../../translations';

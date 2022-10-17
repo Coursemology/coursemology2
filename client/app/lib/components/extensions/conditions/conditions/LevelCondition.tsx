@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { LevelConditionData } from 'types/course/conditions';
 import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
-import Prompt from 'lib/components/Prompt';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import { AnyConditionProps } from '../AnyCondition';
 import translations from '../translations';
 

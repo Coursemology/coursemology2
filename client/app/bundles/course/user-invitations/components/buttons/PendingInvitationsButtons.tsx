@@ -1,8 +1,8 @@
 import { FC, memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import DeleteButton from 'lib/components/buttons/DeleteButton';
-import EmailButton from 'lib/components/buttons/EmailButton';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import EmailButton from 'lib/components/core/buttons/EmailButton';
 import { toast } from 'react-toastify';
 import { AppDispatch } from 'types/store';
 import { InvitationRowData } from 'types/course/userInvitations';

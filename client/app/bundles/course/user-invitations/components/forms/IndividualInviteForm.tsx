@@ -11,7 +11,7 @@ import {
   InvitationsPostData,
   InvitationResult,
 } from 'types/course/userInvitations';
-import ErrorText from 'lib/components/ErrorText';
+import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import IndividualInvitations from './IndividualInvitations';
 import { inviteUsersFromForm } from '../../operations';

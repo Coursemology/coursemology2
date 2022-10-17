@@ -14,7 +14,7 @@ import { useTheme } from '@mui/material/styles';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import {
   getCourseUserURL,
   getEditSubmissionURL,

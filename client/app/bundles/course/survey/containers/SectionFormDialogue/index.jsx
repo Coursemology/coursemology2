@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from 'course/survey/actions/sections';
-import FormDialogue from 'lib/components/FormDialogue';
+import FormDialogue from 'lib/components/form/FormDialogue';
 import { sectionShape } from 'course/survey/propTypes';
 import SectionForm from './SectionForm';
 

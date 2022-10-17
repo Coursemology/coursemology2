@@ -1,7 +1,7 @@
 import { render } from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProviderWrapper from 'lib/components/ProviderWrapper';
-import AppLayout from 'lib/components/layouts/AppLayout';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+import AppLayout from 'lib/components/core/layouts/AppLayout';
 import AdminIndex from './pages/AdminIndex';
 import AnnouncementsIndex from './pages/AnnouncementsIndex';
 import CoursesIndex from './pages/CoursesIndex';

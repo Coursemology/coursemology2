@@ -16,7 +16,7 @@ import {
 
 import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
-import ConfirmationDialog from 'lib/components/ConfirmationDialog';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import {
   InvitationFileEntity,
   InvitationResult,

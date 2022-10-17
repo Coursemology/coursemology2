@@ -1,10 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/pages/PageHeader';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AppState, AppDispatch } from 'types/store';
-import LoadingIndicator from 'lib/components/LoadingIndicator';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import { getAllAnnouncementMiniEntities } from '../../selectors';
 import { indexAnnouncements } from '../../operations';

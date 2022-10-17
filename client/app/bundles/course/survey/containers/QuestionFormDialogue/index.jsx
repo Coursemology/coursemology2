@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from 'course/survey/actions/questions';
-import FormDialogue from 'lib/components/FormDialogue';
+import FormDialogue from 'lib/components/form/FormDialogue';
 import QuestionForm from './QuestionForm';
 
 function mapStateToProps({ questionForm, ...state }) {

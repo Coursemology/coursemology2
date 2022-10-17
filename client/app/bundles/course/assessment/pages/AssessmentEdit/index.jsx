@@ -5,7 +5,7 @@ import { injectIntl, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
 import NotificationBar, {
   notificationShape,
-} from 'lib/components/NotificationBar';
+} from 'lib/components/core/NotificationBar';
 import { achievementTypesConditionAttributes } from 'lib/types';
 import AssessmentForm from '../../components/AssessmentForm';
 import * as actions from '../../actions';

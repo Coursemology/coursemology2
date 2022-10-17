@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Element } from 'react-scroll';
 import moment from 'lib/moment';
-import DateTimePicker from 'lib/components/fields/DateTimePicker';
+import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
 import { updateMilestone } from 'course/lesson-plan/actions';
 import { fields } from 'course/lesson-plan/constants';
 
