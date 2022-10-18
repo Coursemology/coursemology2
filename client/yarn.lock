@@ -1274,15 +1274,6 @@
     "@formatjs/icu-skeleton-parser" "1.3.14"
     tslib "2.4.0"
 
-"@formatjs/icu-messageformat-parser@2.1.9":
-  version "2.1.9"
-  resolved "https://registry.yarnpkg.com/@formatjs/icu-messageformat-parser/-/icu-messageformat-parser-2.1.9.tgz#abd5ba32ad9f2f5226e0b78e0313ecf438835c30"
-  integrity sha512-KFwi1cDZ6sFbsZ6xuXpg/UtdVtcwmpEt2WY355k33Z+3fpzRe1EulwX65qEoho0af3+ZsiJxuhIvUIlSSFWASg==
-  dependencies:
-    "@formatjs/ecma402-abstract" "1.13.0"
-    "@formatjs/icu-skeleton-parser" "1.3.14"
-    tslib "2.4.0"
-
 "@formatjs/icu-skeleton-parser@1.3.14":
   version "1.3.14"
   resolved "https://registry.yarnpkg.com/@formatjs/icu-skeleton-parser/-/icu-skeleton-parser-1.3.14.tgz#b99ef7f855f8a58cab2519ec4f921f11c2bf74a7"

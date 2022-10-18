@@ -226,6 +226,7 @@ export class VisibleTestCaseView extends Component {
     const {
       collapsible,
       testCases: { canReadTests },
+      graderView,
     } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
@@ -271,7 +272,7 @@ export class VisibleTestCaseView extends Component {
                 {canReadTests && tableHeaderColumnFor('identifier')}
                 {tableHeaderColumnFor('expression')}
                 {tableHeaderColumnFor('expected')}
-                {(canReadTests || showPublicTestCasesOutput) &&
+                {((graderView && canReadTests) || showPublicTestCasesOutput) &&
                   tableHeaderColumnFor('output')}
                 {tableHeaderColumnFor('passed')}
               </TableRow>
