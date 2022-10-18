@@ -2732,10 +2732,10 @@ accepts@~1.3.4, accepts@~1.3.5, accepts@~1.3.8:
     mime-types "~2.1.34"
     negotiator "0.6.3"
 
-ace-builds@^1.12.1, ace-builds@^1.4.14:
-  version "1.12.1"
-  resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.12.1.tgz#4937a1857b856203d266d987eddf4941f8cca802"
-  integrity sha512-irh8sJ9Hp2AkeCunX00BEWdGVoz3Rclp6RRMGbhRnFWv8tfalgTEEiBOuua0S/OIUwu7NHaPtPkXs7jgz/S3tA==
+ace-builds@^1.12.3, ace-builds@^1.4.14:
+  version "1.12.3"
+  resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.12.3.tgz#db77530a5854ee38a0c660e9904d2cb29a247c2f"
+  integrity sha512-LHAsa5oOaRqmIlb8gBe81nj2kOqlfbV0XkWkFZL4mIfPXL4zoeTUcandHvBgHQCyjif3tGfoLTXelWSlnCT/dA==
 
 acorn-globals@^6.0.0:
   version "6.0.0"
