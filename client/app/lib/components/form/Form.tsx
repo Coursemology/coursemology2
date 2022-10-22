@@ -5,13 +5,24 @@ import useEmitterFactory, { Emits } from 'react-emitter-factory';
 import { Control, FormState, useForm, UseFormWatch } from 'react-hook-form';
 import { AnyObjectSchema } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { toast } from 'react-toastify';
+
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import messagesTranslations from 'lib/translations/messages';
 
 export interface FormEmitter {
   reset?: () => void;
   resetTo?: (data) => void;
   setError?: (fieldName: string, errors: Record<string, string>) => void;
+
+  /**
+   * Sets errors for fields in `errors` with `setReactHookFormError`. If `errors` is
+   * `undefined`, pops a toast up with a generic update error message.
+   * @param errors The same `errors` parameter of `setReactHookFormError`
+   */
+  receiveErrors?: (errors?) => void;
 }
 
 interface FormProps extends Emits<FormEmitter> {
@@ -36,7 +47,18 @@ const Form = (props: FormProps): JSX.Element => {
     resolver: props.validates && yupResolver(props.validates),
   });
 
-  useEmitterFactory(props, { reset: () => reset(), resetTo: reset, setError });
+  useEmitterFactory(props, {
+    reset: () => reset(),
+    resetTo: reset,
+    setError,
+    receiveErrors: (errors) => {
+      if (errors) {
+        setReactHookFormError(setError, errors);
+      } else {
+        toast.error(t(messagesTranslations.formUpdateError));
+      }
+    },
+  });
 
   return (
     <form onSubmit={props.onSubmit && handleSubmit(props.onSubmit)}>
