@@ -111,11 +111,12 @@ export default defineMessages({
   },
   profilePictureUpdated: {
     id: 'user.profilePictureUpdated',
-    defaultMessage: 'Profile picture was successfully updated.',
+    defaultMessage: 'Your profile picture was successfully updated.',
   },
   emailAdded: {
     id: 'user.emailAdded',
-    defaultMessage: '{email} was successfully added.',
+    defaultMessage:
+      '{email} was successfully added. A confirmation email is on the way.',
   },
   errorAddingEmail: {
     id: 'user.errorAddingEmail',
@@ -146,5 +147,26 @@ export default defineMessages({
     id: 'user.errorSendingConfirmationEmail',
     defaultMessage:
       'An error occurred while sending a confirmation email to {email}.',
+  },
+  removeEmail: {
+    id: 'user.removeEmail',
+    defaultMessage: 'Remove email',
+  },
+  removeEmailPromptTitle: {
+    id: 'user.removeEmailPromptTitle',
+    defaultMessage: "Sure you're removing {email}?",
+  },
+  removeEmailPromptMessage: {
+    id: 'user.removeEmailPromptMessage',
+    defaultMessage:
+      'If you remove {email}, you must confirm it again before you can use it.',
+  },
+  emailCanLogIn: {
+    id: 'user.emailCanLogIn',
+    defaultMessage: 'You can log in using this email.',
+  },
+  emailMustConfirm: {
+    id: 'user.emailMustConfirm',
+    defaultMessage: 'You must confirm this email before you can use it.',
   },
 });
