@@ -33,7 +33,7 @@ nav.navbar.navbar-inverse.navbar-fixed-top role="navigation"
               span.caret
             ul.dropdown-menu
               li
-                = link_to(t('user.admin.navbar.account_settings'), edit_user_registration_path)
+                = link_to(t('user.admin.navbar.account_settings'), edit_user_profile_path)
               - if can?(:manage, :all)
                 li
                   = link_to(t('layout.navbar.admin_panel'), admin_path)

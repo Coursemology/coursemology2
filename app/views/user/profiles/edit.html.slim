@@ -1,19 +1,8 @@
-= page_header
-
-= simple_form_for current_user, url: user_profile_path do |f|
-  = f.error_notification
-  = f.input :name, required: true
-  = f.input :time_zone
-  = f.label t('.profile_photo')
-  div = display_user_image(current_user)
-  = f.file_field :profile_photo, class: 'upload-btn'
-
-  = f.button :submit, t('.submit')
-
-  // NOTE: Facebook login feature is currently disabled.
-  // hr
-  // span
-    - if current_user.identities.facebook.empty?
-      div.facebook
-        = link_to user_facebook_omniauth_authorize_path do
-          = fa_icon 'facebook-square'.freeze, text: t('.link_to_facebook'), class: ['fa-2x'.freeze]
+div#user-admin-component
+// NOTE: Facebook login feature is currently disabled.
+// hr
+// span
+  - if current_user.identities.facebook.empty?
+    div.facebook
+      = link_to user_facebook_omniauth_authorize_path do
+        = fa_icon 'facebook-square'.freeze, text: t('.link_to_facebook'), class: ['fa-2x'.freeze]
