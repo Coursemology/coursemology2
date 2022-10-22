@@ -50,6 +50,7 @@ const AddEmailSubsection = (props: AddEmailSubsectionProps): JSX.Element => {
       spaced
     >
       <TextField
+        name="newEmail"
         label={t(translations.emailAddress)}
         type="email"
         value={email}
