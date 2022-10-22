@@ -1,25 +1,23 @@
 # frozen_string_literal: true
 class User::EmailsController < ApplicationController
   load_and_authorize_resource :email, through: :current_user, class: User::Email.name
-  layout 'user_admin'
 
   def index
-    @new_email = current_user.emails.build
   end
 
   def create
     if @email.save
-      redirect_to user_emails_path, success: t('.success')
+      render partial: 'email_list_data', locals: { email: @email }
     else
-      redirect_to user_emails_path, danger: @email.errors.full_messages.to_sentence
+      render json: { errors: @email.errors }, status: :bad_request
     end
   end
 
   def destroy
     if @email.destroy
-      redirect_to user_emails_path, success: t('.success')
+      head :ok
     else
-      redirect_to user_emails_path, error: @email.errors.full_messages.to_sentence
+      render json: { errors: @email.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
@@ -27,18 +25,18 @@ class User::EmailsController < ApplicationController
   def set_primary
     current_user.email = @email.email
     if current_user.save
-      redirect_to user_emails_path, success: t('.success')
+      render partial: 'email_list_data', locals: { email: @email }
     else
-      redirect_to user_emails_path, error: @email.errors.full_messages.to_sentence
+      render json: { errors: @email.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   def send_confirmation
     if @email.confirmed?
-      redirect_to user_emails_path, warning: t('.already_confirmed', email: @email.email)
+      render json: { errors: t('.already_confirmed', email: @email.email) }, status: :bad_request
     else
       @email.send_confirmation_instructions
-      redirect_to user_emails_path, success: t('.success', email: @email.email)
+      head :ok
     end
   end
 

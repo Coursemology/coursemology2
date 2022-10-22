@@ -15,7 +15,7 @@ RSpec.describe User::EmailsController, type: :controller do
         it 'cannot be deleted' do
           expect { subject }.to change { user.emails.count }.by(0)
         end
-        it { is_expected.to redirect_to(user_emails_path) }
+        it { is_expected.to have_http_status(:bad_request) }
       end
 
       context 'when destroying a primary email' do
@@ -33,7 +33,7 @@ RSpec.describe User::EmailsController, type: :controller do
 
     describe '#set_primary' do
       let(:email) { create(:user_email, :unconfirmed, user: user, primary: false) }
-      subject { post :set_primary, params: { id: email } }
+      subject { post :set_primary, params: { id: email }, format: :json }
 
       context 'when email is not confirmed' do
         it 'does not change the primary email' do
@@ -42,7 +42,7 @@ RSpec.describe User::EmailsController, type: :controller do
           expect(user.reload.emails.find(&:primary?)).not_to be_nil
         end
 
-        it { is_expected.to redirect_to(user_emails_path) }
+        it { is_expected.to have_http_status(:ok) }
       end
     end
 
@@ -60,7 +60,8 @@ RSpec.describe User::EmailsController, type: :controller do
         it 'sets an error message' do
           subject
 
-          expect(flash[:warning]).to eq(I18n.t('user.emails.send_confirmation.already_confirmed'))
+          json_result = JSON.parse(response.body)
+          expect(json_result['errors']).to eq(I18n.t('user.emails.send_confirmation.already_confirmed'))
         end
       end
 
@@ -73,7 +74,7 @@ RSpec.describe User::EmailsController, type: :controller do
           end
         end
 
-        it { is_expected.to redirect_to(user_emails_path) }
+        it { is_expected.to have_http_status(:ok) }
       end
     end
   end
