@@ -3,7 +3,7 @@ class User::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
   before_action :load_invitation, only: [:new, :create]
   before_action :load_other_invitations, only: [:create]
-  layout :select_layout
+  respond_to :json
 
   # GET /resource/sign_up
   def new
@@ -86,17 +86,6 @@ class User::RegistrationsController < Devise::RegistrationsController
   # def after_inactive_sign_up_path_for(resource)
   #   super(resource)
   # end
-
-  # Selects the layout for this controller.
-  #
-  # This controller uses two layouts, one specially for editing users because it is in the context
-  # of the user administration panel.
-  #
-  # @return [String]
-  # @return [nil]
-  def select_layout
-    'user_admin' if ['edit', 'update'].include?(params['action'])
-  end
 
   # Override Devise::RegistrationsController#build_resource
   # This is for updating the user with invitation.
