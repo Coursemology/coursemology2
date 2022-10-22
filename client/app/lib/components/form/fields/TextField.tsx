@@ -34,7 +34,6 @@ const FormTextField = (props: FormTextFieldProps): JSX.Element => {
     field,
     fieldState: { error },
     disableMargins,
-    type,
     ...textFieldProps
   } = props;
 
@@ -47,7 +46,7 @@ const FormTextField = (props: FormTextFieldProps): JSX.Element => {
     ...textFieldProps,
   };
 
-  if (type === 'number')
+  if (props.type === 'number')
     return (
       <NumberTextField
         {...elementProps}
