@@ -127,7 +127,7 @@ class User < ApplicationRecord
   #
   # @return [User::Email] The user's primary email address record.
   def default_email_record
-    valid_emails = emails.each.select do |email_record|
+    valid_emails = emails.confirmed.each.select do |email_record|
       !email_record.destroyed? && !email_record.marked_for_destruction?
     end
     result = valid_emails.find(&:primary?)

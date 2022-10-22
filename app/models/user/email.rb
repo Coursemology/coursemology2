@@ -17,6 +17,10 @@ class User::Email < ApplicationRecord
 
   def set_new_user_primary_email
     return if user.destroying?
-    raise ActiveRecord::Rollback unless user.set_next_email_as_primary
+
+    return if user.set_next_email_as_primary
+
+    errors.add(:base, I18n.t('user.emails.set_primary.no_confirmed_emails'))
+    raise ActiveRecord::Rollback
   end
 end
