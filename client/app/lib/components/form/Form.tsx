@@ -33,10 +33,17 @@ export interface FormEmitter {
    * @param errors The same `errors` parameter of `setReactHookFormError`
    */
   receiveErrors?: (errors?) => void;
+
+  /**
+   * Sets the values in `data` as part of the `initialValues` without modifying the
+   * `Form`'s current state. The keys of `data` must be valid field names.
+   * @param data The (partial) form data to merge.
+   */
+  mutate?: (data: Data) => void;
 }
 
 interface FormProps extends Emits<FormEmitter> {
-  initialValues?: Record<string, any>;
+  initialValues?: Data;
   onSubmit?: (data) => void;
   headsUp?: boolean;
   dirty?: boolean;
@@ -76,6 +83,20 @@ const Form = (props: FormProps): JSX.Element => {
       } else {
         toast.error(t(messagesTranslations.formUpdateError));
       }
+    },
+    mutate: (data) => {
+      const newInitialValues = { ...initialValues, ...data };
+
+      reset(newInitialValues, {
+        keepValues: true,
+        keepDirty: true,
+      });
+
+      setInitialValues(newInitialValues);
+
+      Object.entries(data).forEach(([fieldName, value]) => {
+        setValue(fieldName, value);
+      });
     },
   });
 
