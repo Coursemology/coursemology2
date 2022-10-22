@@ -122,6 +122,7 @@ FormSelectField.propTypes = {
   variant: PropTypes.string,
   type: PropTypes.string,
   native: PropTypes.bool,
+  required: PropTypes.bool,
 };
 
 export default memo(FormSelectField, propsAreEqual);
