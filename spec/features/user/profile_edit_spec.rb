@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'User: Profile' do
+RSpec.feature 'User: Profile', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -14,22 +14,30 @@ RSpec.feature 'User: Profile' do
     context 'As a registered user' do
       scenario 'I can change my profile' do
         new_name = 'New Name'
-        empty_name = ''
         time_zone = 'Singapore'
 
-        fill_in :user_name, with: empty_name
-        click_button 'submit'
-        expect(page).to have_selector('div.alert-danger')
+        fill_in 'name', with: new_name
+        select time_zone, from: 'timezone'
+        click_button 'Save changes'
 
-        fill_in :user_name, with: new_name
-        find('#user_time_zone').find(:xpath, "option[@value='#{time_zone}']").select_option
-        attach_file :user_profile_photo, File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
-        click_button 'submit'
-
-        expect(page).to have_selector('div', text: I18n.t('user.profiles.update.success'))
-        expect(page).to have_field('user_name', with: new_name)
-        expect(user.reload.profile_photo.url).to be_present
+        expect_toastify('Your changes have been saved.')
+        expect(page).to have_field('name', with: new_name)
         expect(user.reload.time_zone).to eq(time_zone)
+      end
+
+      scenario 'I can change my profile photo' do
+        photo = File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
+
+        attach_file(photo) do
+          find('label', text: 'Change', visible: false).click
+        end
+
+        click_button 'Done'
+        click_button 'Save changes'
+        sleep 0.5
+
+        expect_toastify('Your changes have been saved.')
+        expect(user.reload.profile_photo.url).to be_present
       end
 
       # NOTE: Facebook login feature is currently disabled.
