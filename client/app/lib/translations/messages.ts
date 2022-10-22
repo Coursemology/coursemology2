@@ -6,6 +6,11 @@ const messagesTranslations = defineMessages({
     defaultMessage:
       'An error occurred when loading your data. Please reload and try again.',
   },
+  formUpdateError: {
+    id: 'lib.translations.messages.formUpdateError',
+    defaultMessage:
+      'An error occurred when saving your changes. You may reload and try again.',
+  },
   passwordIsVisible: {
     id: 'lib.translations.messages.passwordIsVisible',
     defaultMessage:

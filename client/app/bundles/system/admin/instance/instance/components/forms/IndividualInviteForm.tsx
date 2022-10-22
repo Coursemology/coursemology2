@@ -13,6 +13,7 @@ import {
 } from 'types/system/instance/invitations';
 import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
+import messagesTranslations from 'lib/translations/messages';
 import IndividualInvitations from './IndividualInvitations';
 import { inviteUsers } from '../../operations';
 
@@ -103,7 +104,7 @@ const IndividualInviteForm: FC<Props> = (props) => {
         openResultDialog(response);
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(formTranslations.submissionError));
+        toast.error(intl.formatMessage(messagesTranslations.formUpdateError));
         throw error;
       })
       .finally(() => {
