@@ -89,7 +89,10 @@ Rails.application.routes.draw do
       post 'set_primary', on: :member
       post 'send_confirmation', on: :member
     end
-    resource :profile, only: [:edit, :update]
+
+    resource :profile, only: [:edit, :update] do
+      get 'time_zones'
+    end
   end
 
   scope module: 'system' do

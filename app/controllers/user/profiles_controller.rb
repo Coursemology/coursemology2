@@ -11,6 +11,10 @@ class User::ProfilesController < ApplicationController
     end
   end
 
+  def time_zones
+    render 'course/admin/admin/time_zones'
+  end
+
   private
 
   def profile_params
