@@ -1,5 +1,11 @@
 import { ReactNode } from 'react';
-import { Grid, Typography, Divider, Container } from '@mui/material';
+import {
+  Grid,
+  Typography,
+  Divider,
+  Container,
+  Breakpoint,
+} from '@mui/material';
 
 interface SectionProps {
   title: string;
@@ -8,10 +14,11 @@ interface SectionProps {
   sticksToNavbar?: boolean;
   titleColor?: string;
   contentClassName?: string;
+  size?: Breakpoint;
 }
 
 const Section = (props: SectionProps): JSX.Element => (
-  <Container disableGutters maxWidth="lg" className="mb-6">
+  <Container disableGutters maxWidth={props.size ?? 'lg'} className="mb-6">
     <Grid container spacing={2}>
       <Grid
         item
