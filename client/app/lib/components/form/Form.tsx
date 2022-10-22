@@ -55,6 +55,13 @@ interface FormProps extends Emits<FormEmitter> {
   ) => ReactNode;
   disabled?: boolean;
   onReset?: (reset: FormEmitter['reset']) => void;
+
+  /**
+   * Due to performance concerns, dirty fields are determined by strict equality,
+   * i.e., with `===`, against the latest `initialValues`. There is no deep equality
+   * performed.
+   */
+  submitsDirtyFieldsOnly?: boolean;
 }
 
 const Form = (props: FormProps): JSX.Element => {
@@ -100,8 +107,25 @@ const Form = (props: FormProps): JSX.Element => {
     },
   });
 
+  const processAndSubmit = (data: Data): void => {
+    if (!props.onSubmit) return;
+
+    let submittedData = data;
+
+    if (initialValues && props.submitsDirtyFieldsOnly) {
+      submittedData = Object.keys(data).reduce((newData, fieldName) => {
+        const value = data[fieldName];
+        if (value !== initialValues[fieldName]) newData[fieldName] = value;
+
+        return newData;
+      }, {});
+    }
+
+    props.onSubmit(submittedData);
+  };
+
   return (
-    <form onSubmit={props.onSubmit && handleSubmit(props.onSubmit)}>
+    <form onSubmit={handleSubmit(processAndSubmit)} className="pb-32">
       {props.children?.(control, watch, formState)}
 
       {props.headsUp && (
