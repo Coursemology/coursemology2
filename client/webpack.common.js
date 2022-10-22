@@ -74,7 +74,13 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
-        include: [resolve(__dirname, 'node_modules/rc-slider/assets')],
+        include: [
+          resolve(__dirname, 'node_modules/rc-slider/assets'),
+          resolve(
+            __dirname,
+            'node_modules/react-image-crop/dist/ReactCrop.css',
+          ),
+        ],
       },
       {
         test: /\.css$/,
