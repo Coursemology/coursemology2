@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 
-const translations = defineMessages({
+const formTranslations = defineMessages({
   close: {
     id: 'lib.form.title',
     defaultMessage: 'Title',
@@ -28,6 +28,10 @@ const translations = defineMessages({
   ok: {
     id: 'lib.form.buttons.ok',
     defaultMessage: 'OK',
+  },
+  done: {
+    id: 'lib.form.buttons.done',
+    defaultMessage: 'Done',
   },
   cancel: {
     id: 'lib.form.buttons.cancel',
@@ -132,4 +136,4 @@ const translations = defineMessages({
   },
 });
 
-export default translations;
+export default formTranslations;
