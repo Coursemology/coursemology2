@@ -8,7 +8,6 @@ import formTranslations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
-import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CourseSettingsForm from './CourseSettingsForm';
 import {
   deleteCourse,
@@ -19,6 +18,9 @@ import {
 } from './operations';
 import { useOptionsReloader } from '../../components/SettingsNavigation';
 import translations from './translations';
+
+const fetchSettingsAndTimeZones = (): Promise<[CourseInfo, TimeZones]> =>
+  Promise.all([fetchCourseSettings(), fetchTimeZones()]);
 
 const CourseSettings = (): JSX.Element => {
   const reloadOptions = useOptionsReloader();
@@ -44,9 +46,7 @@ const CourseSettings = (): JSX.Element => {
         reloadOptions();
         updateFormAndToast(t(formTranslations.changesSaved), newData);
       })
-      .catch((errors) => {
-        setReactHookFormError(form?.setError, errors);
-      })
+      .catch(form?.receiveErrors)
       .finally(() => setSubmitting(false));
   };
 
@@ -82,9 +82,6 @@ const CourseSettings = (): JSX.Element => {
       })
       .finally(() => setSubmitting(false));
   };
-
-  const fetchSettingsAndTimeZones = (): Promise<[CourseInfo, TimeZones]> =>
-    Promise.all([fetchCourseSettings(), fetchTimeZones()]);
 
   return (
     <Preload while={fetchSettingsAndTimeZones} render={<LoadingIndicator />}>

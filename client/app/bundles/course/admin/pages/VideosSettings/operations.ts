@@ -29,7 +29,7 @@ export const updateVideosSettings = async (data: VideosSettingsData): Data => {
     const response = await CourseAPI.admin.videos.update(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };
@@ -39,7 +39,7 @@ export const deleteTab = async (id: VideosTab['id']): Data => {
     const response = await CourseAPI.admin.videos.deleteTab(id);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };
@@ -54,7 +54,7 @@ export const createTab = async (
     const response = await CourseAPI.admin.videos.createTab(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };

@@ -29,7 +29,7 @@ export const updateLeaderboardSettings = async (
     const response = await CourseAPI.admin.leaderboard.update(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };

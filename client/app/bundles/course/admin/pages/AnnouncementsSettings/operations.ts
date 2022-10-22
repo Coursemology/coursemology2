@@ -26,7 +26,7 @@ export const updateAnnouncementsSettings = async (
     const response = await CourseAPI.admin.announcements.update(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };

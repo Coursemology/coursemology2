@@ -25,7 +25,7 @@ export const updateForumsSettings = async (data: ForumsSettingsData): Data => {
     const response = await CourseAPI.admin.forums.update(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };
