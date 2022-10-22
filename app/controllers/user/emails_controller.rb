@@ -7,7 +7,7 @@ class User::EmailsController < ApplicationController
 
   def create
     if @email.save
-      render partial: 'email_list_data', locals: { email: @email }
+      render_emails
     else
       render json: { errors: @email.errors }, status: :bad_request
     end
@@ -15,7 +15,7 @@ class User::EmailsController < ApplicationController
 
   def destroy
     if @email.destroy
-      head :ok
+      render_emails
     else
       render json: { errors: @email.errors.full_messages.to_sentence }, status: :bad_request
     end
@@ -25,7 +25,7 @@ class User::EmailsController < ApplicationController
   def set_primary
     current_user.email = @email.email
     if current_user.save
-      render partial: 'email_list_data', locals: { email: @email }
+      render_emails
     else
       render json: { errors: @email.errors.full_messages.to_sentence }, status: :bad_request
     end
@@ -41,6 +41,11 @@ class User::EmailsController < ApplicationController
   end
 
   private
+
+  def render_emails
+    @emails = current_user.reload.emails
+    render 'index'
+  end
 
   def email_params
     params.require(:user_email).permit(:email)
