@@ -7,7 +7,6 @@ import formTranslations from 'lib/translations/form';
 import { FormEmitter } from 'lib/components/form/Form';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
-import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import VideosSettingsForm from './VideosSettingsForm';
 import {
   createTab,
@@ -42,9 +41,7 @@ const VideosSettings = (): JSX.Element => {
         reloadOptions();
         updateFormAndToast(newData, t(formTranslations.changesSaved));
       })
-      .catch((errors) => {
-        setReactHookFormError(form?.setError, errors);
-      })
+      .catch(form?.receiveErrors)
       .finally(() => setSubmitting(false));
   };
 

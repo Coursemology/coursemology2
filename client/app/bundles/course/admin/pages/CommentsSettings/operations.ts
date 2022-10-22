@@ -27,7 +27,7 @@ export const updateCommentsSettings = async (
     const response = await CourseAPI.admin.comments.update(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };

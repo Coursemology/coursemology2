@@ -64,7 +64,7 @@ export const updateAssessmentSettings = async (
     const response = await CourseAPI.admin.assessments.update(adaptedData);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };
@@ -79,7 +79,7 @@ export const deleteCategory = async (id: AssessmentCategory['id']): Data => {
     const response = await CourseAPI.admin.assessments.deleteCategory(id);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };
@@ -95,7 +95,7 @@ export const deleteTabInCategory = async (
     );
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };
@@ -114,7 +114,7 @@ export const createCategory = async (
     );
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };
@@ -135,7 +135,7 @@ export const createTabInCategory = async (
     );
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };
@@ -155,7 +155,7 @@ export const moveAssessments = async (
     );
     return response.data.moved_assessments_count;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };
@@ -173,7 +173,7 @@ export const moveTabs = async (
     const response = await CourseAPI.admin.assessments.moveTabs(adaptedData);
     return response.data.moved_tabs_count;
   } catch (error) {
-    if (error instanceof AxiosError) throw error.response?.data.errors;
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
   }
 };
