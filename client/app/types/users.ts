@@ -82,3 +82,51 @@ export interface AdminStats {
   activeCourses: number;
   instancesCount: number;
 }
+
+export interface ProfileData {
+  id: string;
+  name: string;
+  timezone: string;
+  imageUrl: string;
+}
+
+export interface EmailData {
+  id: number;
+  email: string;
+  isConfirmed: boolean;
+  isPrimary: boolean;
+  confirmationEmailPath?: string;
+  setPrimaryUserEmailPath?: string;
+}
+
+export interface EmailsData {
+  emails: EmailData[];
+}
+
+export interface PasswordData {
+  currentPassword: string;
+  password: string;
+  passwordConfirmation: string;
+}
+
+export interface ProfilePostData {
+  user: {
+    name?: ProfileData['name'];
+    time_zone?: ProfileData['timezone'];
+    profile_photo?: ProfileData['imageUrl'];
+  };
+}
+
+export interface EmailPostData {
+  user_email: {
+    email?: EmailData['email'];
+  };
+}
+
+export interface PasswordPostData {
+  user: {
+    current_password?: PasswordData['currentPassword'];
+    password?: PasswordData['password'];
+    password_confirmation?: PasswordData['passwordConfirmation'];
+  };
+}
