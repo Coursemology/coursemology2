@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Slide, Typography } from '@mui/material';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import useEmitterFactory, { Emits } from 'react-emitter-factory';
 import { Control, FormState, useForm, UseFormWatch } from 'react-hook-form';
 import { AnyObjectSchema } from 'yup';
@@ -12,9 +12,19 @@ import translations from 'lib/translations/form';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import messagesTranslations from 'lib/translations/messages';
 
+type Data = Record<string, any>;
+
 export interface FormEmitter {
   reset?: () => void;
-  resetTo?: (data) => void;
+  resetTo?: (data: Data) => void;
+
+  /**
+   * Resets the `Form` by merging its `initialValues` with the given `data`.
+   * @param data The (partial) form data to merge.
+   */
+  resetByMerging?: (data: Data) => void;
+
+  setValue?: (fieldName: string, value) => void;
   setError?: (fieldName: string, errors: Record<string, string>) => void;
 
   /**
@@ -42,14 +52,23 @@ interface FormProps extends Emits<FormEmitter> {
 
 const Form = (props: FormProps): JSX.Element => {
   const { t } = useTranslation();
-  const { control, formState, reset, watch, handleSubmit, setError } = useForm({
-    defaultValues: props.initialValues,
-    resolver: props.validates && yupResolver(props.validates),
-  });
+  const [initialValues, setInitialValues] = useState(props.initialValues);
+  const { control, formState, reset, watch, handleSubmit, setValue, setError } =
+    useForm({
+      defaultValues: props.initialValues,
+      resolver: props.validates && yupResolver(props.validates),
+    });
+
+  const resetTo = (data: Data): void => {
+    reset(data);
+    setInitialValues(data);
+  };
 
   useEmitterFactory(props, {
     reset: () => reset(),
-    resetTo: reset,
+    resetTo,
+    resetByMerging: (data) => resetTo({ ...initialValues, ...data }),
+    setValue,
     setError,
     receiveErrors: (errors) => {
       if (errors) {
