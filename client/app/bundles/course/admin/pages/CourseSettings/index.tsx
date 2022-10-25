@@ -50,11 +50,11 @@ const CourseSettings = (): JSX.Element => {
       .finally(() => setSubmitting(false));
   };
 
-  const handleUploadCourseLogo = (file: File, onSuccess: () => void): void => {
+  const handleUploadCourseLogo = (image: Blob, onSuccess: () => void): void => {
     setSubmitting(true);
 
     toast
-      .promise(updateCourseLogo(file), {
+      .promise(updateCourseLogo(image), {
         pending: t(translations.uploadingLogo),
         success: t(translations.courseLogoUpdated),
       })

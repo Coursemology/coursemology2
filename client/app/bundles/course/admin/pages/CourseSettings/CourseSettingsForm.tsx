@@ -1,7 +1,7 @@
 import { Button, RadioGroup, Typography, Grid } from '@mui/material';
 import { Controller } from 'react-hook-form';
 import { Emits } from 'react-emitter-factory';
-import { ChangeEventHandler, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { CourseInfo, TimeZones } from 'types/course/admin/course';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -15,6 +15,7 @@ import FormSelectField from 'lib/components/form/fields/SelectField';
 import InfoLabel from 'lib/components/core/InfoLabel';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import RadioButton from 'lib/components/core/buttons/RadioButton';
+import AvatarSelector from 'lib/components/core/AvatarSelector';
 import validationSchema from './validationSchema';
 import translations from './translations';
 import DeleteCoursePrompt from './DeleteCoursePrompt';
@@ -24,14 +25,14 @@ interface CourseSettingsFormProps extends Emits<FormEmitter> {
   timeZones: TimeZones;
   onSubmit: (data: CourseInfo) => void;
   onDeleteCourse: () => void;
-  onUploadCourseLogo: (file: File, onSuccess: () => void) => void;
+  onUploadCourseLogo: (image: Blob, onSuccess: () => void) => void;
   disabled: boolean;
 }
 
 const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
   const { t } = useTranslation();
   const [deletingCourse, setDeletingCourse] = useState(false);
-  const [stagedLogo, setStagedLogo] = useState<File>();
+  const [stagedLogo, setStagedLogo] = useState<Blob>();
 
   const closeDeleteCoursePrompt = (): void => setDeletingCourse(false);
 
@@ -43,19 +44,6 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
       })),
     [],
   );
-
-  const stageCourseLogo: ChangeEventHandler<HTMLInputElement> = (e) => {
-    e.preventDefault();
-
-    const input = e.target;
-    const files = input.files;
-    if (!files || files.length <= 0) return;
-
-    const file = Array.from(files)[0];
-    setStagedLogo(file);
-
-    input.value = '';
-  };
 
   const handleSubmit = (data: CourseInfo): void => {
     if (stagedLogo) {
@@ -118,47 +106,15 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
               />
             </Subsection>
 
-            <Subsection
+            <AvatarSelector
               title={t(translations.courseLogo)}
-              contentClassName="flex flex-col items-start"
-            >
-              <img
-                src={
-                  stagedLogo ? URL.createObjectURL(stagedLogo) : watch('logo')
-                }
-                className="mb-8 h-48 w-48"
-                alt={t(translations.courseLogo)}
-              />
+              defaultImageUrl={watch('logo')}
+              stagedImage={stagedLogo}
+              onSelectImage={setStagedLogo}
+              disabled={props.disabled}
+            />
 
-              <div className="mb-4 flex flex-col items-start space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4">
-                <Button
-                  variant="outlined"
-                  component="label"
-                  disabled={props.disabled}
-                >
-                  {t(translations.uploadANewImage)}
-                  <input
-                    hidden
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={stageCourseLogo}
-                    disabled={props.disabled}
-                  />
-                </Button>
-
-                {stagedLogo && (
-                  <Button
-                    onClick={(): void => setStagedLogo(undefined)}
-                    disabled={props.disabled}
-                  >
-                    {t(translations.clearChanges)}
-                  </Button>
-                )}
-              </div>
-
-              <InfoLabel label={t(translations.imageFormatsInfo)} />
-            </Subsection>
+            <InfoLabel label={t(translations.imageFormatsInfo)} />
           </Section>
 
           <Section title={t(translations.publicity)} sticksToNavbar>

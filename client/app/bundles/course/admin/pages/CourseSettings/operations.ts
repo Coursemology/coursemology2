@@ -46,9 +46,11 @@ export const updateCourseSettings = async (
   }
 };
 
-export const updateCourseLogo = async (image: File): Promise<CourseInfo> => {
+export const updateCourseLogo = async (image: Blob): Promise<CourseInfo> => {
+  const file = new File([image], 'image.jpeg', { type: image.type });
+
   try {
-    const response = await CourseAPI.admin.course.updateLogo(image);
+    const response = await CourseAPI.admin.course.updateLogo(file);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError)
