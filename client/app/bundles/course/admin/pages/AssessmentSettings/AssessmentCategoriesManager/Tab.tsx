@@ -110,7 +110,7 @@ const Tab = (props: TabProps): JSX.Element => {
                 <DragIndicator
                   fontSize="small"
                   color="disabled"
-                  className={`${(stationary || disabled) && 'opacity-0'}`}
+                  className={`${(stationary || disabled) && 'invisible'}`}
                 />
 
                 <div className="ml-4 flex items-center">
@@ -139,7 +139,7 @@ const Tab = (props: TabProps): JSX.Element => {
                 <IconButton
                   size="small"
                   disabled={isDragging || disabled}
-                  className="ml-4 hoverable:opacity-0 hoverable:group-hover:opacity-100"
+                  className="hoverable:invisible hoverable:group-hover:visible ml-4"
                   onClick={(): void => setRenaming(true)}
                 >
                   <Create />
@@ -151,7 +151,7 @@ const Tab = (props: TabProps): JSX.Element => {
               <IconButton
                 color="error"
                 disabled={isDragging || disabled}
-                className="ml-4 hoverable:ml-0 hoverable:opacity-0 hoverable:group-hover:opacity-100"
+                className="hoverable:invisible hoverable:group-hover:visible ml-4 hoverable:ml-0"
                 onClick={handleClickDelete}
               >
                 <Delete />

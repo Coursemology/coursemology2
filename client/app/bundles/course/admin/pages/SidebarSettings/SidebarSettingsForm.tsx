@@ -114,7 +114,7 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
               <DragIndicator
                 fontSize="small"
                 color="disabled"
-                className={`${props.disabled && 'opacity-0'}`}
+                className={`${props.disabled && 'invisible'}`}
               />
             </TableCell>
 

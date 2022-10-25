@@ -155,7 +155,7 @@ const Category = (props: CategoryProps): JSX.Element => {
                   <DragIndicator
                     fontSize="small"
                     color="disabled"
-                    className={`${props.disabled && 'opacity-0'}`}
+                    className={`${props.disabled && 'invisible'}`}
                   />
 
                   <div className="ml-4 flex items-center">
@@ -183,7 +183,7 @@ const Category = (props: CategoryProps): JSX.Element => {
                   <IconButton
                     size="small"
                     disabled={isDragging || props.disabled}
-                    className="ml-4 hoverable:opacity-0 hoverable:group-hover:opacity-100"
+                    className="hoverable:invisible hoverable:group-hover:visible ml-4"
                     onClick={(): void => setRenaming(true)}
                   >
                     <Create />
