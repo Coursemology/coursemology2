@@ -29,7 +29,7 @@ RSpec.feature 'Course: Category: Management', js: true do
         rename_button = category_element.all('button', visible: false).first
         previous_title = category.title
 
-        rename_button.click
+        hover_then_click rename_button
         title_field = category_element.find('input')
         title_field.set(category_edited[:title])
         title_field.native.send_keys(:return)
@@ -67,7 +67,7 @@ RSpec.feature 'Course: Category: Management', js: true do
         category_element = find_rbd_category(category.id)
         delete_button = category_element.all('button', visible: false)[1]
 
-        delete_button.click
+        hover_then_click delete_button
 
         expect_toastify("#{category.title} was successfully deleted.")
 
