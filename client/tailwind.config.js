@@ -9,6 +9,11 @@ module.exports = {
   },
   corePlugins: {
     preflight: false,
+
+    // TODO: Re-enable once Bootstrap components are purged
+    // Temporarily disabled because Tailwind 3.2.0 adds a new `collapse` utility
+    // that conflicts with Bootstrap's Collapse component used in our sidebar.
+    visibility: false,
   },
   plugins: [
     plugin(({ addVariant }) => {
