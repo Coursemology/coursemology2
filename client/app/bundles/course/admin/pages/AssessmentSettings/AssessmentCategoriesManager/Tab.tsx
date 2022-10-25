@@ -16,7 +16,7 @@ interface TabProps {
   tab: AssessmentTab;
   index: number;
   stationary: boolean;
-  disabled: boolean;
+  disabled?: boolean;
   onRename?: (index: number, newTitle: AssessmentTab['title']) => void;
 }
 
@@ -93,7 +93,7 @@ const Tab = (props: TabProps): JSX.Element => {
         key={tab.id}
         draggableId={`tab-${tab.id}`}
         index={index}
-        isDragDisabled={disabled || stationary}
+        isDragDisabled={stationary || disabled}
       >
         {(provided, { isDragging }): JSX.Element => (
           <Card
@@ -110,7 +110,7 @@ const Tab = (props: TabProps): JSX.Element => {
                 <DragIndicator
                   fontSize="small"
                   color="disabled"
-                  className={`${(disabled || stationary) && 'opacity-0'}`}
+                  className={`${(stationary || disabled) && 'opacity-0'}`}
                 />
 
                 <div className="ml-4 flex items-center">
@@ -138,7 +138,7 @@ const Tab = (props: TabProps): JSX.Element => {
               {!renaming && (
                 <IconButton
                   size="small"
-                  disabled={disabled || isDragging}
+                  disabled={isDragging || disabled}
                   className="ml-4 hoverable:opacity-0 hoverable:group-hover:opacity-100"
                   onClick={(): void => setRenaming(true)}
                 >
@@ -150,7 +150,7 @@ const Tab = (props: TabProps): JSX.Element => {
             {tab.canDeleteTab && !stationary && (
               <IconButton
                 color="error"
-                disabled={disabled || isDragging}
+                disabled={isDragging || disabled}
                 className="ml-4 hoverable:ml-0 hoverable:opacity-0 hoverable:group-hover:opacity-100"
                 onClick={handleClickDelete}
               >
