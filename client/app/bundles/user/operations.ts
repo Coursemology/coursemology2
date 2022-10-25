@@ -39,7 +39,7 @@ export const fetchAccountSettings = async (): Promise<AccountSettingsData> => {
 
 export const updateProfile = async (
   data: Partial<ProfileData>,
-): Promise<ProfileData | undefined> => {
+): Promise<Partial<ProfileData> | undefined> => {
   if (!data.name && !data.timezone) return undefined;
 
   const adaptedData: ProfilePostData = {
@@ -51,7 +51,7 @@ export const updateProfile = async (
 
   try {
     const response = await GlobalUsersAPI.users.updateProfile(adaptedData);
-    return response.data;
+    return { name: response.data.name, timezone: response.data.timezone };
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
@@ -97,12 +97,12 @@ export const updateAccountSettings = async (
 
 export const updateProfilePicture = async (
   image: Blob,
-): Promise<ProfileData> => {
+): Promise<Partial<ProfileData>> => {
   const file = new File([image], 'image.jpeg', { type: image.type });
 
   try {
     const response = await GlobalUsersAPI.users.updateProfilePicture(file);
-    return response.data;
+    return { imageUrl: response.data.imageUrl };
   } catch (error) {
     if (error instanceof AxiosError)
       throw new Error(error.response?.data?.errors?.profile_photo);
