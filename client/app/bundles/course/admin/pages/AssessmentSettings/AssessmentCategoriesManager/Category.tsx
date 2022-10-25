@@ -112,7 +112,7 @@ const Category = (props: CategoryProps): JSX.Element => {
 
   const renderTabs = (
     tabs: AssessmentTab[],
-    disabled: boolean,
+    disabled?: boolean,
   ): JSX.Element[] =>
     tabs.map((tab: AssessmentTab, tabIndex: number) => (
       <Tab
@@ -182,7 +182,7 @@ const Category = (props: CategoryProps): JSX.Element => {
                 {!renaming && (
                   <IconButton
                     size="small"
-                    disabled={props.disabled ?? isDragging}
+                    disabled={isDragging || props.disabled}
                     className="ml-4 hoverable:opacity-0 hoverable:group-hover:opacity-100"
                     onClick={(): void => setRenaming(true)}
                   >
@@ -195,7 +195,7 @@ const Category = (props: CategoryProps): JSX.Element => {
                 {category.canDeleteCategory && !props.stationary && (
                   <IconButton
                     color="error"
-                    disabled={props.disabled ?? isDragging}
+                    disabled={isDragging || props.disabled}
                     className="mx-4 sm:mx-0"
                     onClick={handleClickDelete}
                   >
@@ -206,7 +206,7 @@ const Category = (props: CategoryProps): JSX.Element => {
                 {category.canCreateTabs && (
                   <Button
                     startIcon={<Add />}
-                    disabled={props.disabled ?? isDragging}
+                    disabled={isDragging || props.disabled}
                     onClick={handleCreateTab}
                   >
                     {t(translations.addATab)}
@@ -227,7 +227,7 @@ const Category = (props: CategoryProps): JSX.Element => {
                   ref={droppableProvided.innerRef}
                   {...droppableProvided.droppableProps}
                 >
-                  {renderTabs(category.tabs, props.disabled ?? isDragging)}
+                  {renderTabs(category.tabs, isDragging || props.disabled)}
                   {droppableProvided.placeholder}
                 </div>
               )}
