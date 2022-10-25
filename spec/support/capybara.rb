@@ -125,6 +125,11 @@ module Capybara::TestGroupHelpers
         release.
         perform
     end
+
+    def hover_then_click(element)
+      element.hover
+      element.click
+    end
   end
 end
 

@@ -33,7 +33,7 @@ RSpec.feature 'Course: Assessments: Management', js: true do
         rename_button = tab_element.all('button', visible: false).first
         previous_title = tab.title
 
-        rename_button.click
+        hover_then_click rename_button
         title_field = tab_element.find('input')
         title_field.set(tab_edited[:title])
         title_field.native.send_keys(:return)
@@ -71,7 +71,7 @@ RSpec.feature 'Course: Assessments: Management', js: true do
         tab_to_delete_element = find_rbd_tab(tab_to_delete.id)
         delete_button = tab_to_delete_element.all('button', visible: false).last
 
-        delete_button.click
+        hover_then_click delete_button
 
         expect_toastify("#{tab_to_delete.title} was successfully deleted.")
         expect(page).not_to have_content(tab_to_delete.title)

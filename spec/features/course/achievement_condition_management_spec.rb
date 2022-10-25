@@ -49,7 +49,7 @@ RSpec.feature 'Course: Achievements', js: true do
         condition_row = find('tr', text: achievement_condition.title)
         edit_button = condition_row.first('button', visible: false)
 
-        edit_button.click
+        hover_then_click edit_button
         find_field('Achievement').click
         find('li', text: achievement_to_change_to.title).click
         click_button 'Update condition'
@@ -63,7 +63,7 @@ RSpec.feature 'Course: Achievements', js: true do
         delete_button = condition_row.all('button', visible: false).last
 
         expect do
-          delete_button.click
+          hover_then_click delete_button
           expect_toastify('Condition was successfully deleted.')
         end.to change { achievement.conditions.count }.by(-1)
       end
@@ -88,7 +88,7 @@ RSpec.feature 'Course: Achievements', js: true do
         condition_row = all('tr', text: 'Assessment').last
         edit_button = condition_row.first('button', visible: false)
 
-        edit_button.click
+        hover_then_click edit_button
         assessment_field = find_field('Assessment')
         expect(assessment_field.value).to eq(valid_assessment_as_condition.title)
         assessment_field.click
@@ -96,7 +96,7 @@ RSpec.feature 'Course: Achievements', js: true do
         click_button 'Update condition'
 
         expect_toastify('Your changes have been saved.')
-        condition_row.first('button', visible: false).click
+        hover_then_click condition_row.first('button', visible: false)
         expect(find_field('Assessment').value).to eq(assessment_to_change_to.title)
         click_button 'Cancel'
 
@@ -104,7 +104,7 @@ RSpec.feature 'Course: Achievements', js: true do
         delete_button = condition_row.all('button', visible: false).last
 
         expect do
-          delete_button.click
+          hover_then_click delete_button
           expect_toastify('Condition was successfully deleted.')
         end.to change { achievement.conditions.count }.by(-1)
       end
@@ -128,13 +128,13 @@ RSpec.feature 'Course: Achievements', js: true do
         condition_row = all('tr', text: 'Level').last
         edit_button = condition_row.first('button', visible: false)
 
-        edit_button.click
+        hover_then_click edit_button
         expect(find_field('minimumLevel').value).to eq(minimum_level)
         fill_in 'minimumLevel', with: new_minimum_level
         click_button 'Update condition'
 
         expect_toastify('Your changes have been saved.')
-        condition_row.first('button', visible: false).click
+        hover_then_click condition_row.first('button', visible: false)
         expect(find_field('minimumLevel').value).to eq(new_minimum_level)
         click_button 'Cancel'
 
@@ -142,7 +142,7 @@ RSpec.feature 'Course: Achievements', js: true do
         delete_button = condition_row.all('button', visible: false).last
 
         expect do
-          delete_button.click
+          hover_then_click delete_button
           expect_toastify('Condition was successfully deleted.')
         end.to change { achievement.conditions.count }.by(-1)
       end
@@ -167,7 +167,7 @@ RSpec.feature 'Course: Achievements', js: true do
         condition_row = all('tr', text: 'Survey').last
         edit_button = condition_row.first('button', visible: false)
 
-        edit_button.click
+        hover_then_click edit_button
         survey_field = find_field('Survey')
         expect(survey_field.value).to eq(valid_survey_as_condition.title)
         survey_field.click
@@ -175,7 +175,7 @@ RSpec.feature 'Course: Achievements', js: true do
         click_button 'Update condition'
 
         expect_toastify('Your changes have been saved.')
-        condition_row.first('button', visible: false).click
+        hover_then_click condition_row.first('button', visible: false)
         expect(find_field('Survey').value).to eq(survey_to_change_to.title)
         click_button 'Cancel'
 
@@ -183,7 +183,7 @@ RSpec.feature 'Course: Achievements', js: true do
         delete_button = condition_row.all('button', visible: false).last
 
         expect do
-          delete_button.click
+          hover_then_click delete_button
           expect_toastify('Condition was successfully deleted.')
         end.to change { achievement.conditions.count }.by(-1)
       end

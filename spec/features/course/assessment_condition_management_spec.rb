@@ -42,13 +42,13 @@ RSpec.feature 'Course: Assessments', js: true do
         condition_row = find('tr', text: assessment_condition.title)
         edit_button = condition_row.first('button', visible: false)
 
-        edit_button.click
+        hover_then_click edit_button
         find_field('Assessment').click
         find('li', text: assessment_to_change_to.title).click
         click_button 'Update condition'
 
         expect_toastify('Your changes have been saved.')
-        condition_row.first('button', visible: false).click
+        hover_then_click condition_row.first('button', visible: false)
         expect(find_field('Assessment').value).to eq(assessment_to_change_to.title)
       end
 
@@ -58,7 +58,7 @@ RSpec.feature 'Course: Assessments', js: true do
         delete_button = condition_row.all('button', visible: false).last
 
         expect do
-          delete_button.click
+          hover_then_click delete_button
           expect_toastify('Condition was successfully deleted.')
         end.to change { assessment.conditions.count }.by(-1)
       end
