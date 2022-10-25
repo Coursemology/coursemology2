@@ -8,13 +8,15 @@ import Subsection from 'lib/components/core/layouts/Subsection';
 import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
-import translations from '../translations';
+import translations from 'bundles/user/translations';
 
 interface AvatarSelectorProps {
+  title: string;
   defaultImageUrl?: string;
   stagedImage?: Blob;
   onSelectImage?: (image: Blob) => void;
   disabled?: boolean;
+  circular?: boolean;
 }
 
 const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
@@ -33,7 +35,7 @@ const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
   };
 
   return (
-    <Subsection title={t(translations.profilePicture)}>
+    <Subsection title={props.title}>
       <div className="relative">
         <Avatar
           src={
@@ -42,6 +44,7 @@ const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
               : props.defaultImageUrl
           }
           className="h-80 w-80"
+          variant={props.circular ? 'circular' : 'square'}
         />
 
         <Button
@@ -70,7 +73,7 @@ const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
           onClose={toggleCropping}
           src={URL.createObjectURL(selectedImage)}
           aspect={1}
-          circular
+          circular={props.circular}
           onConfirmImage={props.onSelectImage}
           onLoadError={(): void => {
             setSelectedImage(undefined);

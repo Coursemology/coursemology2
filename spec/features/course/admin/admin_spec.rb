@@ -44,9 +44,10 @@ RSpec.feature 'Course: Administration: Administration', js: true do
         logo = File.join(Rails.root, '/spec/fixtures/files/picture.jpg')
 
         attach_file(logo) do
-          find('label', text: 'Choose a new image', visible: false).click
+          find('label', text: 'Change', visible: false).click
         end
 
+        click_button 'Done'
         click_button 'Save changes'
         sleep 0.5
         expect_toastify('The new course logo was successfully uploaded.')

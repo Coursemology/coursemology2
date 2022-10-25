@@ -10,12 +10,12 @@ import FormTextField from 'lib/components/form/fields/TextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import Section from 'lib/components/core/layouts/Section';
+import AvatarSelector from 'lib/components/core/AvatarSelector';
 import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 import EmailsList from '../components/EmailsList';
 import { AccountSettingsData } from '../operations';
 import AddEmailSubsection from '../components/AddEmailSubsection';
-import AvatarSelector from '../components/AvatarSelector';
 import translations from '../translations';
 
 interface AccountSettingsFormProps extends Emits<FormEmitter> {
@@ -167,10 +167,12 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
             />
 
             <AvatarSelector
+              title={t(translations.profilePicture)}
               defaultImageUrl={watch('imageUrl')}
               stagedImage={stagedImage}
               onSelectImage={setStagedImage}
               disabled={props.disabled}
+              circular
             />
           </Section>
 
