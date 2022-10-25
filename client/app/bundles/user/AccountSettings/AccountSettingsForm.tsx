@@ -255,6 +255,9 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
                     type="password"
                     fullWidth
                     disablePasswordVisibilitySwitch
+                    onCut={(e): void => e.preventDefault()}
+                    onCopy={(e): void => e.preventDefault()}
+                    onPaste={(e): void => e.preventDefault()}
                   />
                 )}
               />
