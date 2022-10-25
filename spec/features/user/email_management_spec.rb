@@ -11,7 +11,7 @@ RSpec.feature 'User: Emails', js: true do
 
     before do
       login_as(user, scope: :user)
-      visit user_emails_path
+      visit edit_user_profile_path
     end
 
     scenario 'I can view all my emails' do

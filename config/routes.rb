@@ -64,6 +64,10 @@ Rails.application.routes.draw do
     end
   end
 
+  devise_scope :user do
+    get 'users/edit' => nil
+  end
+
   devise_for :users, controllers: {
     registrations: 'user/registrations',
     sessions: 'user/sessions',

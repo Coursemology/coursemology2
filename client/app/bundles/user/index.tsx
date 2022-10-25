@@ -12,9 +12,7 @@ $(() => {
     <ProviderWrapper>
       <BrowserRouter>
         <Routes>
-          <Route path="/users/edit" element={<AccountSettings />} />
           <Route path="/user/profile/edit" element={<AccountSettings />} />
-          <Route path="/user/emails" element={<AccountSettings />} />
         </Routes>
       </BrowserRouter>
     </ProviderWrapper>,

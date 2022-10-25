@@ -9,7 +9,7 @@ RSpec.feature 'Users: Change password' do
 
     context 'As a User' do
       scenario 'I am able to change my password' do
-        visit edit_user_registration_path
+        visit edit_user_profile_path
       end
     end
   end

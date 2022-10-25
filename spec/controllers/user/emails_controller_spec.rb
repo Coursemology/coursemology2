@@ -9,7 +9,7 @@ RSpec.describe User::EmailsController, type: :controller do
     before { sign_in(user) }
 
     describe '#destroy' do
-      subject { delete :destroy, params: { id: user.send(:default_email_record) } }
+      subject { delete :destroy, as: :json, params: { id: user.send(:default_email_record) } }
 
       context 'when the user only has one email address' do
         it 'cannot be deleted' do
