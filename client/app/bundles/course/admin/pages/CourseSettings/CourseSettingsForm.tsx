@@ -65,10 +65,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
       headsUp
       disabled={props.disabled}
       dirty={Boolean(stagedLogo)}
-      onReset={(reset): void => {
-        setStagedLogo(undefined);
-        reset?.();
-      }}
+      onReset={(): void => setStagedLogo(undefined)}
     >
       {(control, watch): JSX.Element => (
         <>

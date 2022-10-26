@@ -54,7 +54,12 @@ interface FormProps extends Emits<FormEmitter> {
     formState: FormState<any>,
   ) => ReactNode;
   disabled?: boolean;
-  onReset?: (reset: FormEmitter['reset']) => void;
+
+  /**
+   * Dispatched when the form is reset. Return `true` to prevent the default form
+   * reset from executing.
+   */
+  onReset?: () => boolean | void;
 
   /**
    * Due to performance concerns, dirty fields are determined by strict equality,
@@ -73,13 +78,17 @@ const Form = (props: FormProps): JSX.Element => {
       resolver: props.validates && yupResolver(props.validates),
     });
 
+  const resetForm = (): void => {
+    if (!props.onReset?.()) reset();
+  };
+
   const resetTo = (data: Data): void => {
     reset(data);
     setInitialValues(data);
   };
 
   useEmitterFactory(props, {
-    reset: () => reset(),
+    reset: resetForm,
     resetTo,
     resetByMerging: (data) => resetTo({ ...initialValues, ...data }),
     setValue,
@@ -141,7 +150,7 @@ const Form = (props: FormProps): JSX.Element => {
 
             <div className="ml-10">
               <Button
-                onClick={(): void => props.onReset?.(reset) ?? reset()}
+                onClick={resetForm}
                 className={`mr-4 ${props.disabled && 'text-neutral-500'}`}
                 disabled={props.disabled}
               >
