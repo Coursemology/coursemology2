@@ -49,6 +49,10 @@ export default defineMessages({
     id: 'user.emailAddress',
     defaultMessage: 'Email address',
   },
+  emailAddressPlaceholder: {
+    id: 'user.emailAddressPlaceholder',
+    defaultMessage: 'e.g., john.doe@company.com',
+  },
   addEmailAddress: {
     id: 'user.addEmailAddress',
     defaultMessage: 'Add email address',

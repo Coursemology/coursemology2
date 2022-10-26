@@ -34,6 +34,7 @@ RSpec.feature 'User: Emails', js: true do
       valid_email = build(:user_email).email
 
       expect do
+        click_button 'Add email address'
         fill_in 'newEmail', with: invalid_email
         click_button 'Add email address'
         expect(page).to have_text('is invalid')
