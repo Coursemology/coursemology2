@@ -1,6 +1,7 @@
 import { KeyboardEventHandler, useState, useRef } from 'react';
 import { Add } from '@mui/icons-material';
 import { Button, Collapse } from '@mui/material';
+import useEmitterFactory, { Emits } from 'react-emitter-factory';
 
 import { EmailData } from 'types/users';
 import Subsection from 'lib/components/core/layouts/Subsection';
@@ -10,7 +11,11 @@ import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../translations';
 
-interface AddEmailSubsectionProps {
+export interface AddEmailSubsectionEmitter {
+  reset?: () => void;
+}
+
+interface AddEmailSubsectionProps extends Emits<AddEmailSubsectionEmitter> {
   disabled?: boolean;
   onClickAddEmail?: (
     email: EmailData['email'],
@@ -55,6 +60,8 @@ const AddEmailSubsection = (props: AddEmailSubsectionProps): JSX.Element => {
       handleClickAddEmail();
     }
   };
+
+  useEmitterFactory(props, { reset: resetField });
 
   return (
     <div className="!mt-10 space-y-5">

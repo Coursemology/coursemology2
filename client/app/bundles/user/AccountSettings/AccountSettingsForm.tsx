@@ -14,8 +14,10 @@ import AvatarSelector from 'lib/components/core/AvatarSelector';
 import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 import EmailsList from '../components/EmailsList';
+import AddEmailSubsection, {
+  AddEmailSubsectionEmitter,
+} from '../components/AddEmailSubsection';
 import { AccountSettingsData } from '../operations';
-import AddEmailSubsection from '../components/AddEmailSubsection';
 import translations from '../translations';
 
 interface AccountSettingsFormProps extends Emits<FormEmitter> {
@@ -45,6 +47,9 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
   const [stagedImage, setStagedImage] = useState<Blob>();
   const [requirePasswordConfirmation, toggleRequirePasswordConfirmation] =
     useToggle(true);
+
+  const [addEmailSubsection, setAddEmailSubsection] =
+    useState<AddEmailSubsectionEmitter>();
 
   const validationSchema = useMemo(
     () =>
@@ -123,9 +128,9 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
       disabled={props.disabled}
       emitsVia={props.emitsVia}
       dirty={Boolean(stagedImage)}
-      onReset={(reset): void => {
+      onReset={(): void => {
         setStagedImage(undefined);
-        reset?.();
+        addEmailSubsection?.reset?.();
       }}
       submitsDirtyFieldsOnly
       validates={validationSchema}
@@ -192,6 +197,7 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
             />
 
             <AddEmailSubsection
+              emitsVia={setAddEmailSubsection}
               onClickAddEmail={props.onAddEmail}
               disabled={props.disabled}
             />
