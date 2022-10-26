@@ -1,8 +1,9 @@
-import { ComponentProps, Ref } from 'react';
+import { ComponentProps, HTMLInputTypeAttribute, Ref } from 'react';
 import { ControllerFieldState } from 'react-hook-form';
 
 import TextField from 'lib/components/core/fields/TextField';
 import NumberTextField from 'lib/components/core/fields/NumberTextField';
+import PasswordTextField from 'lib/components/core/fields/PasswordTextField';
 import { formatErrorMessage } from './utils/mapError';
 
 // Adapted from old TextField.jsx and DebouncedTextField.jsx
@@ -12,7 +13,27 @@ const styles = {
 
 type Value = string | number | null;
 
-type FormTextFieldProps = ComponentProps<typeof TextField> & {
+type TextFieldTypes = HTMLInputTypeAttribute;
+
+const TEXT_FIELDS = {
+  number: NumberTextField,
+  password: PasswordTextField,
+};
+
+type CustomTextFields = typeof TEXT_FIELDS;
+type CustomTextFieldTypes = keyof CustomTextFields;
+type TextFieldOf<Type extends TextFieldTypes> =
+  Type extends CustomTextFieldTypes ? CustomTextFields[Type] : typeof TextField;
+type PropsOf<Type extends TextFieldTypes> = ComponentProps<TextFieldOf<Type>>;
+
+type TextFieldProps<Type extends TextFieldTypes> = Omit<
+  PropsOf<Type>,
+  'type'
+> & {
+  type?: Type;
+};
+
+type FormTextFieldProps<Type extends TextFieldTypes> = TextFieldProps<Type> & {
   field: {
     onChange: (value: Value) => void;
     onBlur: () => void;
@@ -24,12 +45,9 @@ type FormTextFieldProps = ComponentProps<typeof TextField> & {
   disableMargins?: boolean;
 };
 
-type TextFieldPropsWithoutOnChange = Omit<
-  ComponentProps<typeof TextField>,
-  'onChange'
->;
-
-const FormTextField = (props: FormTextFieldProps): JSX.Element => {
+const FormTextField = <Type extends TextFieldTypes>(
+  props: FormTextFieldProps<Type>,
+): JSX.Element => {
   const {
     field,
     fieldState: { error },
@@ -37,7 +55,7 @@ const FormTextField = (props: FormTextFieldProps): JSX.Element => {
     ...textFieldProps
   } = props;
 
-  const elementProps: TextFieldPropsWithoutOnChange = {
+  const elementProps = {
     trims: true,
     ...field,
     error: Boolean(error),
@@ -54,9 +72,17 @@ const FormTextField = (props: FormTextFieldProps): JSX.Element => {
       />
     );
 
+  if (props.type === 'password')
+    return (
+      <PasswordTextField
+        {...(elementProps as ComponentProps<typeof PasswordTextField>)}
+        onChange={(e): void => field.onChange(e.target.value)}
+      />
+    );
+
   return (
     <TextField
-      {...elementProps}
+      {...(elementProps as ComponentProps<typeof TextField>)}
       onChange={(e): void => field.onChange(e.target.value)}
     />
   );
