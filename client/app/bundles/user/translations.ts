@@ -29,6 +29,10 @@ export default defineMessages({
     id: 'user.primaryEmail',
     defaultMessage: 'Primary',
   },
+  confirmedEmail: {
+    id: 'user.confirmedEmail',
+    defaultMessage: 'Confirmed',
+  },
   unconfirmedEmail: {
     id: 'user.unconfirmedEmail',
     defaultMessage: 'Unconfirmed',
@@ -167,7 +171,11 @@ export default defineMessages({
   },
   emailCanLogIn: {
     id: 'user.emailCanLogIn',
-    defaultMessage: 'You can log in using this email.',
+    defaultMessage: 'Can be used to log in',
+  },
+  emailReceivesNotifications: {
+    id: 'user.emailReceivesNotifications',
+    defaultMessage: 'Receives notifications',
   },
   emailMustConfirm: {
     id: 'user.emailMustConfirm',

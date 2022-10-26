@@ -181,7 +181,12 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
             />
           </Section>
 
-          <Section title={t(translations.emails)} size="sm" sticksToNavbar>
+          <Section
+            title={t(translations.emails)}
+            size="sm"
+            sticksToNavbar
+            contentClassName="space-y-0"
+          >
             <Controller
               name="emails"
               control={control}

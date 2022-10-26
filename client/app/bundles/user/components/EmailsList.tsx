@@ -1,13 +1,18 @@
 import { useState } from 'react';
 import {
-  Alert,
   Card,
   Chip,
   Divider,
   IconButton,
+  Tooltip,
   Typography,
 } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import {
+  Delete,
+  AccountCircle,
+  Notifications,
+  Warning,
+} from '@mui/icons-material';
 
 import { EmailData } from 'types/users';
 import Link from 'lib/components/core/Link';
@@ -46,11 +51,130 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
     }
   };
 
+  const renderStatusBadge = (email: EmailData): JSX.Element => {
+    if (email.isPrimary)
+      return (
+        <Chip
+          size="small"
+          label={t(translations.primaryEmail)}
+          color="success"
+          className="select-none"
+        />
+      );
+
+    if (email.isConfirmed)
+      return (
+        <Chip
+          size="small"
+          label={t(translations.confirmedEmail)}
+          color="success"
+          variant="outlined"
+          className="select-none"
+        />
+      );
+
+    return (
+      <Chip
+        size="small"
+        label={t(translations.unconfirmedEmail)}
+        color="warning"
+        variant="outlined"
+        className="select-none"
+      />
+    );
+  };
+
+  const renderAbilityBadges = (email: EmailData): JSX.Element => (
+    <>
+      {email.isConfirmed && (
+        <Tooltip title={t(translations.emailCanLogIn)}>
+          <AccountCircle className="text-neutral-500" />
+        </Tooltip>
+      )}
+
+      {email.isPrimary && (
+        <Tooltip title={t(translations.emailReceivesNotifications)}>
+          <Notifications className="text-neutral-500" />
+        </Tooltip>
+      )}
+    </>
+  );
+
+  const renderActions = (email: EmailData): JSX.Element | null => {
+    if (email.isPrimary) return null;
+
+    const confirmationUrl = email.confirmationEmailPath;
+    const setPrimaryUrl = email.setPrimaryUserEmailPath;
+
+    const isConfirmable = !email.isConfirmed && Boolean(confirmationUrl);
+    const canSetAsPrimary = email.isConfirmed && Boolean(setPrimaryUrl);
+
+    return (
+      <div className="mb-2 flex flex-col space-y-3">
+        {canSetAsPrimary && (
+          <Link
+            variant="body2"
+            color="links"
+            className="w-fit"
+            opensInNewTab
+            onClick={(): void =>
+              props.onSetEmailAsPrimary?.(setPrimaryUrl!, email.email)
+            }
+          >
+            {t(translations.setEmailAsPrimary)}
+          </Link>
+        )}
+
+        {isConfirmable && (
+          <>
+            <div className="flex items-center space-x-2 text-amber-600">
+              <Warning fontSize="small" />
+
+              <Typography variant="body2">
+                {t(translations.emailMustConfirm)}
+              </Typography>
+            </div>
+
+            <Link
+              variant="body2"
+              color="links"
+              className="w-fit"
+              opensInNewTab
+              onClick={(): void =>
+                props.onResendConfirmationEmail?.(confirmationUrl!, email.email)
+              }
+            >
+              {t(translations.resendConfirmationEmail)}
+            </Link>
+          </>
+        )}
+      </div>
+    );
+  };
+
   return (
     <>
+      <div className="-mx-4 -mt-2 mb-4 flex flex-row flex-wrap hoverable:hidden">
+        <div className="mx-4 my-2 flex items-center space-x-2 text-neutral-400">
+          <AccountCircle />
+
+          <Typography variant="body2">
+            {t(translations.emailCanLogIn)}
+          </Typography>
+        </div>
+
+        <div className="mx-4 my-2 flex items-center space-x-2 text-neutral-400">
+          <Notifications />
+
+          <Typography variant="body2">
+            {t(translations.emailReceivesNotifications)}
+          </Typography>
+        </div>
+      </div>
+
       <Card variant="outlined">
         {props.emails.map((email, index) => (
-          <section key={email.id} className="hover:bg-neutral-100">
+          <section key={email.id} className="hoverable:hover:bg-neutral-100">
             <div className="flex flex-col px-5 py-2">
               <div className="flex min-h-[4rem] items-center justify-between space-x-4">
                 <div className="flex space-x-4">
@@ -58,34 +182,9 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
                     {email.email}
                   </Typography>
 
-                  {email.isPrimary && (
-                    <Chip
-                      size="small"
-                      label={t(translations.primaryEmail)}
-                      color="success"
-                      className="select-none"
-                    />
-                  )}
+                  {renderStatusBadge(email)}
 
-                  {!email.isPrimary && email.isConfirmed && (
-                    <Chip
-                      size="small"
-                      label="Confirmed"
-                      color="success"
-                      variant="outlined"
-                      className="select-none"
-                    />
-                  )}
-
-                  {!email.isConfirmed && (
-                    <Chip
-                      size="small"
-                      label={t(translations.unconfirmedEmail)}
-                      color="warning"
-                      variant="outlined"
-                      className="select-none"
-                    />
-                  )}
+                  {renderAbilityBadges(email)}
                 </div>
 
                 {!email.isPrimary && (
@@ -100,55 +199,7 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
                 )}
               </div>
 
-              <div className="mb-2 flex flex-col space-y-3">
-                {email.isConfirmed && (
-                  <Typography variant="body2" color="text.secondary">
-                    {t(translations.emailCanLogIn)}
-                  </Typography>
-                )}
-
-                {!email.isPrimary &&
-                  email.isConfirmed &&
-                  email.setPrimaryUserEmailPath && (
-                    <Link
-                      variant="body2"
-                      color="links"
-                      className="w-fit"
-                      opensInNewTab
-                      onClick={(): void =>
-                        props.onSetEmailAsPrimary?.(
-                          email.setPrimaryUserEmailPath!,
-                          email.email,
-                        )
-                      }
-                    >
-                      {t(translations.setEmailAsPrimary)}
-                    </Link>
-                  )}
-
-                {!email.isConfirmed && email.confirmationEmailPath && (
-                  <Alert severity="warning">
-                    {t(translations.emailMustConfirm)}
-
-                    <br />
-
-                    <Link
-                      variant="body2"
-                      color="links"
-                      className="w-fit"
-                      opensInNewTab
-                      onClick={(): void =>
-                        props.onResendConfirmationEmail?.(
-                          email.confirmationEmailPath!,
-                          email.email,
-                        )
-                      }
-                    >
-                      {t(translations.resendConfirmationEmail)}
-                    </Link>
-                  </Alert>
-                )}
-              </div>
+              {renderActions(email)}
             </div>
 
             {index < props.emails.length - 1 && <Divider />}
