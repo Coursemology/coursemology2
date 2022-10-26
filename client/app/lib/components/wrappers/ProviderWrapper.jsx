@@ -58,12 +58,21 @@ const ProviderWrapper = ({ store, persistor, children }) => {
       },
     },
     components: {
-      MuiDialog: { defaultProps: { container: rootElement } },
-      MuiPopover: { defaultProps: { container: rootElement } },
-      MuiPopper: { defaultProps: { container: rootElement } },
+      MuiDialog: {
+        defaultProps: { container: rootElement },
+        styleOverrides: { root: { zIndex: 100 } },
+      },
+      MuiPopover: {
+        defaultProps: { container: rootElement },
+        styleOverrides: { root: { zIndex: 100 } },
+      },
+      MuiPopper: {
+        defaultProps: { container: rootElement },
+        styleOverrides: { root: { zIndex: 100 } },
+      },
       MuiCard: { styleOverrides: { root: { overflow: 'visible' } } },
       MuiMenuItem: { styleOverrides: { root: { height: '48px' } } },
-      MuiModal: { styleOverrides: { root: { zIndex: 1 } } },
+      MuiModal: { styleOverrides: { root: { zIndex: 100 } } },
       MuiAppBar: {
         styleOverrides: {
           // When there is a MUI Dialog component, somehow
