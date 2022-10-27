@@ -9,10 +9,10 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import ForumsSettingsForm from './ForumsSettingsForm';
 import { fetchForumsSettings, updateForumsSettings } from './operations';
-import { useOptionsReloader } from '../../components/SettingsNavigation';
+import { useItemsReloader } from '../../components/SettingsNavigation';
 
 const ForumsSettings = (): JSX.Element => {
-  const reloadOptions = useOptionsReloader();
+  const reloadItems = useItemsReloader();
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
   const [submitting, setSubmitting] = useState(false);
@@ -24,7 +24,7 @@ const ForumsSettings = (): JSX.Element => {
       .then((newData) => {
         if (!newData) return;
         form?.resetTo?.(newData);
-        reloadOptions();
+        reloadItems();
         toast.success(t(translations.changesSaved));
       })
       .catch(form?.receiveErrors)

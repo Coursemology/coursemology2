@@ -12,10 +12,10 @@ import {
   fetchAnnouncementsSettings,
   updateAnnouncementsSettings,
 } from './operations';
-import { useOptionsReloader } from '../../components/SettingsNavigation';
+import { useItemsReloader } from '../../components/SettingsNavigation';
 
 const AnnouncementsSettings = (): JSX.Element => {
-  const reloadOptions = useOptionsReloader();
+  const reloadItems = useItemsReloader();
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
   const [submitting, setSubmitting] = useState(false);
@@ -27,7 +27,7 @@ const AnnouncementsSettings = (): JSX.Element => {
       .then((newData) => {
         if (!newData) return;
         form?.resetTo?.(newData);
-        reloadOptions();
+        reloadItems();
         toast.success(t(translations.changesSaved));
       })
       .catch(form?.receiveErrors)

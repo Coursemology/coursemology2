@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import type {
   CourseInfo,
-  CourseAdminOptions,
+  CourseAdminItems,
   CourseInfoPostData,
   TimeZones,
 } from 'types/course/admin/course';
@@ -17,7 +17,7 @@ export default class CourseAdminAPI extends BaseAdminAPI {
     return this.getClient().get(`${this._getUrlPrefix()}/time_zones`);
   }
 
-  items(): Promise<AxiosResponse<CourseAdminOptions>> {
+  items(): Promise<AxiosResponse<CourseAdminItems>> {
     return this.getClient().get(`${this._getUrlPrefix()}/items`);
   }
 

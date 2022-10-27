@@ -8,11 +8,11 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import ComponentSettingsForm from './ComponentSettingsForm';
 import { fetchComponentSettings, updateComponentSettings } from './operations';
-import { useOptionsReloader } from '../../components/SettingsNavigation';
+import { useItemsReloader } from '../../components/SettingsNavigation';
 import translations from './translations';
 
 const ComponentSettings = (): JSX.Element => {
-  const reloadOptions = useOptionsReloader();
+  const reloadItems = useItemsReloader();
   const { t } = useTranslation();
   const [submitting, setSubmitting] = useState(false);
 
@@ -26,7 +26,7 @@ const ComponentSettings = (): JSX.Element => {
       .then((data) => {
         if (!data) return;
         action(data);
-        reloadOptions();
+        reloadItems();
         toast.success(t(formTranslations.changesSavedAndRefresh));
       })
       .catch(() => {
