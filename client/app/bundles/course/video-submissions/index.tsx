@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import UserVideoSubmissionsIndex from './pages/UserVideoSubmissionsIndex';
@@ -7,7 +8,9 @@ $(() => {
   const mountNode = document.getElementById('video-submissions-component');
 
   if (mountNode) {
-    render(
+    const root = createRoot(mountNode);
+
+    root.render(
       <ProviderWrapper>
         <BrowserRouter>
           <Routes>
@@ -18,7 +21,6 @@ $(() => {
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,
-      mountNode,
     );
   }
 });

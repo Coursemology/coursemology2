@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import storeCreator from './store';
@@ -8,10 +9,11 @@ import GroupShow from './pages/GroupShow';
 $(() => {
   const mountNode = document.getElementById('course-group-component');
 
-  const store = storeCreator();
-
   if (mountNode) {
-    render(
+    const store = storeCreator();
+    const root = createRoot(mountNode);
+
+    root.render(
       <ProviderWrapper store={store}>
         <BrowserRouter>
           <Routes>
@@ -21,7 +23,6 @@ $(() => {
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,
-      mountNode,
     );
   }
 });

@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import NotificationPopup from 'lib/containers/NotificationPopup';
@@ -10,8 +11,9 @@ $(() => {
 
   if (mountNode) {
     const store = storeCreator({});
+    const root = createRoot(mountNode);
 
-    render(
+    root.render(
       <ProviderWrapper store={store}>
         <BrowserRouter>
           <Routes>
@@ -27,7 +29,6 @@ $(() => {
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,
-      mountNode,
     );
   }
 });

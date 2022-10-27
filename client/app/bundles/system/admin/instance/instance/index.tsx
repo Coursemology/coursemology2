@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import AppLayout from 'lib/components/core/layouts/AppLayout';
@@ -18,6 +19,7 @@ $(() => {
 
   if (mountNode) {
     const store = configureStore();
+    const root = createRoot(mountNode);
 
     const renderSidebar = (isExpanded, handleExpand): JSX.Element => {
       return (
@@ -28,7 +30,7 @@ $(() => {
       );
     };
 
-    render(
+    root.render(
       <ProviderWrapper store={store}>
         <BrowserRouter>
           <AppLayout
@@ -72,7 +74,6 @@ $(() => {
           />
         </BrowserRouter>
       </ProviderWrapper>,
-      mountNode,
     );
   }
 });

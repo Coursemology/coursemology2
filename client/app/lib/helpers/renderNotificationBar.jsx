@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import NotificationBar from 'lib/components/core/NotificationBar';
 import { getOrCreateNode } from 'lib/helpers/rails-helpers';
@@ -11,11 +12,12 @@ import { getOrCreateNode } from 'lib/helpers/rails-helpers';
  */
 function renderNotificationBar(id, message) {
   const mountNode = getOrCreateNode(id);
-  render(
+  const root = createRoot(mountNode);
+
+  root.render(
     <ProviderWrapper>
       <NotificationBar notification={{ message }} />
     </ProviderWrapper>,
-    mountNode,
   );
 }
 

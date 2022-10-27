@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import UserEmailSubscriptions from 'course/pages/UserEmailSubscriptions';
 import storeCreator from './store';
@@ -17,13 +18,14 @@ $(async () => {
         },
       },
     };
+
     const store = storeCreator(initialData);
-    const Page = () => (
+    const root = createRoot(mountNode);
+
+    root.render(
       <ProviderWrapper store={store}>
         <UserEmailSubscriptions />
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
-
-    render(<Page />, mountNode);
   }
 });

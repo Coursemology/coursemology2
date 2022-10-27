@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import storeCreator from './scribing/store';
 import ScribingQuestion from './scribing/ScribingQuestion';
@@ -8,12 +9,12 @@ $(() => {
 
   if (mountNode) {
     const store = storeCreator({ scribingQuestion: {} });
+    const root = createRoot(mountNode);
 
-    render(
+    root.render(
       <ProviderWrapper store={store}>
         <ScribingQuestion />
       </ProviderWrapper>,
-      mountNode,
     );
   }
 });

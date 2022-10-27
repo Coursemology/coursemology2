@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import AchievementEdit from './pages/AchievementEdit';
@@ -11,9 +12,10 @@ $(() => {
 
   if (mountNode) {
     const store = configureStore();
+    const root = createRoot(mountNode);
 
-    render(
-      <ProviderWrapper {...{ store }}>
+    root.render(
+      <ProviderWrapper store={store}>
         <BrowserRouter>
           <Routes>
             <Route
@@ -31,7 +33,6 @@ $(() => {
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,
-      mountNode,
     );
   }
 });
