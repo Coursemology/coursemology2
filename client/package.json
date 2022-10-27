@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
-    "@babel/runtime": "^7.19.4",
+    "@babel/runtime": "^7.20.0",
     "@ckeditor/ckeditor5-build-custom": "github:ekowidianto/CKEditor5-build-coursemology#v1",
     "@ckeditor/ckeditor5-react": "^5.0.2",
     "@emotion/react": "^11.10.5",
