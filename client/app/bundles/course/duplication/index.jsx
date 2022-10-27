@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { BrowserRouter } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import DuplicationLayout from 'course/duplication/containers/DuplicationLayout';
@@ -9,14 +10,14 @@ $(() => {
 
   if (mountNode) {
     const store = storeCreator({ duplication: {} });
+    const root = createRoot(mountNode);
 
-    render(
-      <ProviderWrapper {...{ store }}>
+    root.render(
+      <ProviderWrapper store={store}>
         <BrowserRouter>
           <DuplicationLayout />
         </BrowserRouter>
       </ProviderWrapper>,
-      mountNode,
     );
   }
 });

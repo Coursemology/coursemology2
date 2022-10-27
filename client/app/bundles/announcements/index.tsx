@@ -1,4 +1,4 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import configureStore from './store';
@@ -9,8 +9,9 @@ $(() => {
 
   if (mountNode) {
     const store = configureStore();
+    const root = createRoot(mountNode);
 
-    render(
+    root.render(
       <ProviderWrapper store={store}>
         <BrowserRouter>
           <Routes>
@@ -21,7 +22,6 @@ $(() => {
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,
-      mountNode,
     );
   }
 });
