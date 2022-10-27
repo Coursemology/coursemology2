@@ -6,6 +6,7 @@ import { Control, FormState, useForm, UseFormWatch } from 'react-hook-form';
 import { AnyObjectSchema } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { toast } from 'react-toastify';
+import { isEmpty } from 'lodash';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
@@ -90,7 +91,10 @@ const Form = (props: FormProps): JSX.Element => {
   useEmitterFactory(props, {
     reset: resetForm,
     resetTo,
-    resetByMerging: (data) => resetTo({ ...initialValues, ...data }),
+    resetByMerging: (data) => {
+      if (!data || isEmpty(data)) return;
+      resetTo({ ...initialValues, ...data });
+    },
     setValue,
     setError,
     receiveErrors: (errors) => {
