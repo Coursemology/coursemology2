@@ -33,7 +33,11 @@ const CodaveriSettingsForm = (
   };
 
   return (
-    <Section title={t(translations.codaveriSettings)} sticksToNavbar>
+    <Section
+      title={t(translations.codaveriSettings)}
+      subtitle={t(translations.codaverSettingsSubtitle)}
+      sticksToNavbar
+    >
       <FormControlLabel
         control={<Switch />}
         label={t(translations.enableIsOnlyITSP)}
