@@ -153,6 +153,9 @@ Rails.application.routes.draw do
         post 'move_assessments' => 'assessment_settings#move_assessments'
         patch 'assessments' => 'assessment_settings#update'
 
+        get 'codaveri' => 'codaveri_settings#edit'
+        patch 'codaveri' => 'codaveri_settings#update'
+
         get 'materials' => 'material_settings#edit'
         patch 'materials' => 'material_settings#update'
 

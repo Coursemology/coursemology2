@@ -11,6 +11,19 @@ class Course::CodaveriComponent < SimpleDelegator
   end
 
   def sidebar_items
-    []
+    settings_sidebar_items
+  end
+
+  private
+
+  def settings_sidebar_items
+    [
+      {
+        title: t('layouts.course_admin.codaveri.title'),
+        type: :settings,
+        weight: 6,
+        path: course_admin_codaveri_path(current_course)
+      }
+    ]
   end
 end

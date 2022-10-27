@@ -16,6 +16,7 @@ import ForumsSettings from './pages/ForumsSettings';
 import MaterialsSettings from './pages/MaterialsSettings';
 import AnnouncementSettings from './pages/AnnouncementsSettings';
 import SettingsNavigation from './components/SettingsNavigation';
+import CodaveriSettings from './pages/CodaveriSettings';
 
 const pages = [
   { path: 'components', element: <ComponentSettings /> },
@@ -29,6 +30,7 @@ const pages = [
   { path: 'comments', element: <CommentsSettings /> },
   { path: 'videos', element: <VideosSettings /> },
   { path: 'lesson_plan', element: <LessonPlanSettings /> },
+  { path: 'codaveri', element: <CodaveriSettings /> },
 ];
 
 $(() => {

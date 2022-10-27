@@ -11,6 +11,7 @@ import LessonPlanSettingsAPI from './LessonPlan';
 import NotificationsSettingsAPI from './Notifications';
 import ForumsAdminAPI from './Forums';
 import VideosAdminAPI from './Videos';
+import CodaveriAdminAPI from './Codaveri';
 
 const AdminAPI = {
   system: new BaseAdminAPI(),
@@ -26,6 +27,7 @@ const AdminAPI = {
   forums: new ForumsAdminAPI(),
   videos: new VideosAdminAPI(),
   notifications: new NotificationsSettingsAPI(),
+  codaveri: new CodaveriAdminAPI(),
 };
 
 Object.freeze(AdminAPI);
