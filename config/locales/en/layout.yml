@@ -29,6 +29,8 @@ en:
         title: 'Email'
       lesson_plan:
         title: 'Lesson Plan'
+      codaveri:
+        title: 'Codaveri Evaluation and Feedback'
     course_users:
       title: 'Manage Users'
     duplication:

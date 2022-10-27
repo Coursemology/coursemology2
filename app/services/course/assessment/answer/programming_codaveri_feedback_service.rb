@@ -35,6 +35,8 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
     @answer_object[:language_version][:language] = @question.polyglot_language_name
     @answer_object[:language_version][:version] = @question.polyglot_language_version
 
+    @answer_object[:is_only_itsp] = true if @assessment.course.codaveri_itsp_enabled?
+
     @answer_files.each do |file|
       file_template = default_codaveri_student_file_template
       file_template[:path] = file.filename
