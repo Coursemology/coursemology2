@@ -96,10 +96,8 @@ export const updateAccountSettings = async (
 };
 
 export const updateProfilePicture = async (
-  image: Blob,
+  file: File,
 ): Promise<Partial<ProfileData>> => {
-  const file = new File([image], 'image.jpeg', { type: image.type });
-
   try {
     const response = await GlobalUsersAPI.users.updateProfilePicture(file);
     return { imageUrl: response.data.imageUrl };

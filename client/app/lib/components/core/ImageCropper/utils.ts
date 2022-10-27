@@ -26,6 +26,7 @@ export const getImage = (
   image: HTMLImageElement,
   crop: PixelCrop,
   rotation: number,
+  type: string,
 ): Promise<Blob> => {
   const canvas = document.createElement('canvas');
   const ctx = canvas.getContext('2d');
@@ -70,6 +71,6 @@ export const getImage = (
   );
 
   return new Promise((resolve, reject) =>
-    canvas.toBlob((blob) => (blob ? resolve(blob) : reject()), 'image/jpeg'),
+    canvas.toBlob((blob) => (blob ? resolve(blob) : reject()), type),
   );
 };

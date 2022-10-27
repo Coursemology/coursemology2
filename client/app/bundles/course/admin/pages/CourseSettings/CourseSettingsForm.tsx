@@ -25,14 +25,14 @@ interface CourseSettingsFormProps extends Emits<FormEmitter> {
   timeZones: TimeZones;
   onSubmit: (data: CourseInfo) => void;
   onDeleteCourse: () => void;
-  onUploadCourseLogo: (image: Blob, onSuccess: () => void) => void;
+  onUploadCourseLogo: (image: File, onSuccess: () => void) => void;
   disabled: boolean;
 }
 
 const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
   const { t } = useTranslation();
   const [deletingCourse, setDeletingCourse] = useState(false);
-  const [stagedLogo, setStagedLogo] = useState<Blob>();
+  const [stagedLogo, setStagedLogo] = useState<File>();
 
   const closeDeleteCoursePrompt = (): void => setDeletingCourse(false);
 

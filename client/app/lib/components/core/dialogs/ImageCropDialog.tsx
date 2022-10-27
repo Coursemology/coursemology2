@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ComponentProps, useState } from 'react';
 
 import ImageCropper, {
   ImageCropperEmitter,
@@ -10,14 +10,15 @@ import formTranslations from 'lib/translations/form';
 
 interface ImageCropDialogProps {
   open: boolean;
-  src?: string;
-  alt?: string;
-  circular?: boolean;
-  aspect?: number;
   title?: string;
   onConfirmImage?: (image: Blob) => void;
   onLoadError?: () => void;
   onClose?: () => void;
+  src?: ComponentProps<typeof ImageCropper>['src'];
+  alt?: ComponentProps<typeof ImageCropper>['alt'];
+  circular?: ComponentProps<typeof ImageCropper>['circular'];
+  aspect?: ComponentProps<typeof ImageCropper>['aspect'];
+  type?: ComponentProps<typeof ImageCropper>['type'];
 }
 
 const ImageCropDialog = (props: ImageCropDialogProps): JSX.Element => {
@@ -51,12 +52,13 @@ const ImageCropDialog = (props: ImageCropDialogProps): JSX.Element => {
       }}
     >
       <ImageCropper
+        emitsVia={setImageCropper}
+        onLoadError={handleLoadError}
         src={props.src}
         alt={props.alt}
         circular={props.circular}
         aspect={props.aspect}
-        emitsVia={setImageCropper}
-        onLoadError={handleLoadError}
+        type={props.type}
       />
     </Prompt>
   );

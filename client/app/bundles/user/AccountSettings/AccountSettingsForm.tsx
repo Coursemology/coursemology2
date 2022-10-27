@@ -25,7 +25,7 @@ interface AccountSettingsFormProps extends Emits<FormEmitter> {
   timeZones: TimeZones;
   disabled?: boolean;
   onSubmit?: (data: Partial<AccountSettingsData>) => void;
-  onUpdateProfilePicture?: (image: Blob, onSuccess: () => void) => void;
+  onUpdateProfilePicture?: (image: File, onSuccess: () => void) => void;
   onAddEmail?: (
     email: EmailData['email'],
     onSuccess: () => void,
@@ -44,7 +44,7 @@ interface AccountSettingsFormProps extends Emits<FormEmitter> {
 
 const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
   const { t } = useTranslation();
-  const [stagedImage, setStagedImage] = useState<Blob>();
+  const [stagedImage, setStagedImage] = useState<File>();
   const [requirePasswordConfirmation, toggleRequirePasswordConfirmation] =
     useToggle(true);
 
@@ -135,7 +135,7 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
       submitsDirtyFieldsOnly
       validates={validationSchema}
     >
-      {(control, watch): JSX.Element => (
+      {(control): JSX.Element => (
         <>
           <Section title={t(translations.profile)} size="sm" sticksToNavbar>
             <Controller
@@ -171,13 +171,19 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
               )}
             />
 
-            <AvatarSelector
-              title={t(translations.profilePicture)}
-              defaultImageUrl={watch('imageUrl')}
-              stagedImage={stagedImage}
-              onSelectImage={setStagedImage}
-              disabled={props.disabled}
-              circular
+            <Controller
+              name="imageUrl"
+              control={control}
+              render={({ field }): JSX.Element => (
+                <AvatarSelector
+                  title={t(translations.profilePicture)}
+                  defaultImageUrl={field.value}
+                  stagedImage={stagedImage}
+                  onSelectImage={setStagedImage}
+                  disabled={props.disabled}
+                  circular
+                />
+              )}
             />
           </Section>
 

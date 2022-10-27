@@ -46,7 +46,7 @@ const AccountSettings = (): JSX.Element => {
   };
 
   const handleUploadProfilePicture = (
-    image: Blob,
+    image: File,
     onSuccess: () => void,
   ): void => {
     setSubmitting(true);

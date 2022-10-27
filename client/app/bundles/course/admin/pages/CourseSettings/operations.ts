@@ -46,9 +46,7 @@ export const updateCourseSettings = async (
   }
 };
 
-export const updateCourseLogo = async (image: Blob): Promise<CourseInfo> => {
-  const file = new File([image], 'image.jpeg', { type: image.type });
-
+export const updateCourseLogo = async (file: File): Promise<CourseInfo> => {
   try {
     const response = await CourseAPI.admin.course.updateLogo(file);
     return response.data;

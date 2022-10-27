@@ -50,7 +50,7 @@ const CourseSettings = (): JSX.Element => {
       .finally(() => setSubmitting(false));
   };
 
-  const handleUploadCourseLogo = (image: Blob, onSuccess: () => void): void => {
+  const handleUploadCourseLogo = (image: File, onSuccess: () => void): void => {
     setSubmitting(true);
 
     toast
