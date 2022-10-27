@@ -303,29 +303,17 @@ const SubmissionEditForm = (props) => {
     return (
       <>
         {jobError ? (
-          <>
-            {jobErrorMessage ? (
-              <Paper
-                style={{
-                  padding: 10,
-                  backgroundColor: red[100],
-                  marginBottom: 20,
-                }}
-              >
-                {jobErrorMessage}
-              </Paper>
-            ) : (
-              <Paper
-                style={{
-                  padding: 10,
-                  backgroundColor: red[100],
-                  marginBottom: 20,
-                }}
-              >
-                {intl.formatMessage(translations.autogradeFailure)}
-              </Paper>
-            )}
-          </>
+          <Paper
+            style={{
+              padding: 10,
+              backgroundColor: red[100],
+              marginBottom: 20,
+            }}
+          >
+            {jobErrorMessage
+              ? intl.formatMessage(translations.codaveriAutogradeFailure)
+              : intl.formatMessage(translations.autogradeFailure)}
+          </Paper>
         ) : null}
         <Button
           variant="contained"

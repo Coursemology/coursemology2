@@ -296,6 +296,13 @@ const translations = defineMessages({
       '(T_T) Sorry, the autograder is having mood swings and quit on us. \
                     Try submitting your code again in a couple of minutes.',
   },
+  codaveriAutogradeFailure: {
+    id: 'course.assessment.submission.codaveriAutogradeFailure',
+    defaultMessage:
+      '(T_T) Sorry, the codaveri autograder is having mood swings and quit on us. \
+                    Try submitting your code again in a couple of minutes \
+                    or check the error message in the network response.',
+  },
   autogradeSubmissionSuccess: {
     id: 'course.assessment.submission.autogradeSubmissionSuccess',
     defaultMessage: 'All answers have been evaluated.',
