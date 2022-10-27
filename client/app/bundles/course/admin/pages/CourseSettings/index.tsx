@@ -16,14 +16,14 @@ import {
   updateCourseLogo,
   updateCourseSettings,
 } from './operations';
-import { useOptionsReloader } from '../../components/SettingsNavigation';
+import { useItemsReloader } from '../../components/SettingsNavigation';
 import translations from './translations';
 
 const fetchSettingsAndTimeZones = (): Promise<[CourseInfo, TimeZones]> =>
   Promise.all([fetchCourseSettings(), fetchTimeZones()]);
 
 const CourseSettings = (): JSX.Element => {
-  const reloadOptions = useOptionsReloader();
+  const reloadItems = useItemsReloader();
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
   const [submitting, setSubmitting] = useState(false);
@@ -43,7 +43,7 @@ const CourseSettings = (): JSX.Element => {
 
     updateCourseSettings(data)
       .then((newData) => {
-        reloadOptions();
+        reloadItems();
         updateFormAndToast(t(formTranslations.changesSaved), newData);
       })
       .catch(form?.receiveErrors)

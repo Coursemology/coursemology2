@@ -9,10 +9,10 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import CommentsSettingsForm from './CommentsSettingsForm';
 import { fetchCommentsSettings, updateCommentsSettings } from './operations';
-import { useOptionsReloader } from '../../components/SettingsNavigation';
+import { useItemsReloader } from '../../components/SettingsNavigation';
 
 const CommentsSettings = (): JSX.Element => {
-  const reloadOptions = useOptionsReloader();
+  const reloadItems = useItemsReloader();
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
   const [submitting, setSubmitting] = useState(false);
@@ -24,7 +24,7 @@ const CommentsSettings = (): JSX.Element => {
       .then((newData) => {
         if (!newData) return;
         form?.resetTo?.(newData);
-        reloadOptions();
+        reloadItems();
         toast.success(t(translations.changesSaved));
       })
       .catch(form?.receiveErrors)

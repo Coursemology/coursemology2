@@ -13,7 +13,7 @@ export interface CourseInfo {
   advanceStartAtDurationDays: number;
 }
 
-export interface CourseAdminOption {
+export interface CourseAdminItem {
   title: string;
   weight: number;
   path: string;
@@ -36,7 +36,7 @@ export interface CourseInfoPostData {
   };
 }
 
-export type CourseAdminOptions = CourseAdminOption[];
+export type CourseAdminItems = CourseAdminItem[];
 
 export interface TimeZone {
   name: string;
