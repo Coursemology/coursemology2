@@ -10,26 +10,65 @@ import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
 import translations from 'bundles/user/translations';
 
+const IMAGE_MIMES_MAP = {
+  'image/jpeg': 'jpg',
+  'image/png': 'png',
+  'image/gif': 'gif',
+};
+const IMAGE_MIMES = Object.keys(IMAGE_MIMES_MAP);
+const IMAGE_MIMES_SET = new Set(IMAGE_MIMES);
+const IMAGE_MIMES_STRING = IMAGE_MIMES.join(', ');
+
+const DEFAULT_IMAGE_NAME = 'image';
+
 interface AvatarSelectorProps {
   title: string;
   defaultImageUrl?: string;
-  stagedImage?: Blob;
-  onSelectImage?: (image: Blob) => void;
+  stagedImage?: File;
+  onSelectImage?: (image: File) => void;
   disabled?: boolean;
   circular?: boolean;
 }
 
+/**
+ * Renders an avatar and a button to choose a new image. Supports JPG, PNG, and
+ * GIF. GIFs will skip cropping and immediately be passed to `onSelectImage`.
+ */
 const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
   const { t } = useTranslation();
-  const [selectedImage, setSelectedImage] = useState<Blob>();
+  const [selectedImage, setSelectedImage] = useState<File>();
   const [cropping, toggleCropping] = useToggle();
+
+  const raiseInvalidImageError = (): void => {
+    setSelectedImage(undefined);
+    toast.error(t(messagesTranslations.loadImageError));
+  };
+
+  const stageImage = (image: Blob): void => {
+    const extension = IMAGE_MIMES_MAP[image.type];
+    if (!extension)
+      throw new Error(`Extension for MIME ${image.type} is ${extension}`);
+
+    const fileName = `${DEFAULT_IMAGE_NAME}.${extension}`;
+    const file = new File([image], fileName, { type: image.type });
+
+    props.onSelectImage?.(file);
+  };
 
   const selectImage: ChangeEventHandler<HTMLInputElement> = (e) => {
     e.preventDefault();
     if (!e.target.files || e.target.files.length <= 0) return;
 
-    setSelectedImage(e.target.files[0]);
-    toggleCropping();
+    const file = e.target.files[0];
+
+    if (file.type === 'image/gif') {
+      props.onSelectImage?.(file);
+    } else if (IMAGE_MIMES_SET.has(file.type)) {
+      setSelectedImage(file);
+      toggleCropping();
+    } else {
+      raiseInvalidImageError();
+    }
 
     e.target.value = '';
   };
@@ -59,7 +98,7 @@ const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
           <input
             hidden
             type="file"
-            accept="image/*"
+            accept={IMAGE_MIMES_STRING}
             className="hidden"
             onChange={selectImage}
             disabled={props.disabled}
@@ -74,11 +113,9 @@ const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
           src={URL.createObjectURL(selectedImage)}
           aspect={1}
           circular={props.circular}
-          onConfirmImage={props.onSelectImage}
-          onLoadError={(): void => {
-            setSelectedImage(undefined);
-            toast.error(t(messagesTranslations.loadImageError));
-          }}
+          type={selectedImage.type}
+          onConfirmImage={stageImage}
+          onLoadError={raiseInvalidImageError}
         />
       )}
     </Subsection>

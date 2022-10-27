@@ -34,6 +34,7 @@ interface ImageCropperProps extends Emits<ImageCropperEmitter> {
   grids?: boolean;
   aspect?: number;
   onLoadError?: () => void;
+  type?: string;
 }
 
 const ImageCropper = (props: ImageCropperProps): JSX.Element => {
@@ -44,7 +45,12 @@ const ImageCropper = (props: ImageCropperProps): JSX.Element => {
 
   const generateImage = async (): Promise<Blob | undefined> => {
     if (!imgRef.current || !completedCrop) return undefined;
-    return getImage(imgRef.current!, completedCrop, rotation);
+    return getImage(
+      imgRef.current!,
+      completedCrop,
+      rotation,
+      props.type ?? 'image/jpeg',
+    );
   };
 
   const handleImageLoad: ReactEventHandler<HTMLImageElement> = (e) => {
