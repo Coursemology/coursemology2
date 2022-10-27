@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import { fromJS } from 'immutable';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import storeCreator from './programming/store';
@@ -10,13 +11,12 @@ $(() => {
     const data = mountNode.getAttribute('data');
     const props = fromJS(JSON.parse(data));
     const store = storeCreator(props);
+    const root = createRoot(mountNode);
 
-    const Page = () => (
-      <ProviderWrapper {...{ store }}>
+    root.render(
+      <ProviderWrapper store={store}>
         <ProgrammingQuestion />
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
-
-    render(<Page />, mountNode);
   }
 });

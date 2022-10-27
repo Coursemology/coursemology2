@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import storeCreator from './store';
 import AssessmentIndexPage from './pages/AssessmentIndex';
@@ -10,7 +11,9 @@ $(() => {
     const data = mountNode.getAttribute('data');
     const attributes = JSON.parse(data);
     const store = storeCreator({ assessments: {} });
-    const Page = () => (
+    const root = createRoot(mountNode);
+
+    root.render(
       <ProviderWrapper store={store}>
         <AssessmentIndexPage
           gamified={attributes.gamified}
@@ -18,9 +21,7 @@ $(() => {
           categoryId={attributes.category_id}
           tabId={attributes.tab_id}
         />
-      </ProviderWrapper>
+      </ProviderWrapper>,
     );
-
-    render(<Page />, mountNode);
   }
 });

@@ -1,4 +1,4 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
@@ -37,7 +37,9 @@ $(() => {
   const mountNode = document.getElementById('course-admin');
   if (!mountNode) return;
 
-  render(
+  const root = createRoot(mountNode);
+
+  root.render(
     <ProviderWrapper store={store}>
       <BrowserRouter>
         <Routes>
@@ -54,6 +56,5 @@ $(() => {
         </Routes>
       </BrowserRouter>
     </ProviderWrapper>,
-    mountNode,
   );
 });
