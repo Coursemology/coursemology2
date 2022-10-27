@@ -302,16 +302,16 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/node@^7.19.1":
-  version "7.19.1"
-  resolved "https://registry.yarnpkg.com/@babel/node/-/node-7.19.1.tgz#10237a480dfd9f84dee9b68ba5cb991de4b2e0fb"
-  integrity sha512-gfxJNrawPso6kx7SwKfAdX1rEzVc09speJLFKrdxuZXGlve92pjbB3nJVmuwrxNN4+jvytj2zvliNXuW6uaSOw==
+"@babel/node@^7.20.0":
+  version "7.20.0"
+  resolved "https://registry.yarnpkg.com/@babel/node/-/node-7.20.0.tgz#2c4cbebdd408998ebdbb01b82335aa3b2096c724"
+  integrity sha512-FEWKq7XC2I4ci05L46B9ghJVZc5mkqx1UKtxed0BUq7jaw+8HbpwjF4nsE7I5A4iolIWlMXycGRal1CcAe0PZA==
   dependencies:
     "@babel/register" "^7.18.9"
     commander "^4.0.1"
     core-js "^3.25.1"
     node-environment-flags "^1.0.5"
-    regenerator-runtime "^0.13.4"
+    regenerator-runtime "^0.13.10"
     v8flags "^3.1.1"
 
 "@babel/parser@^7.1.0", "@babel/parser@^7.14.7", "@babel/parser@^7.18.10", "@babel/parser@^7.19.6", "@babel/parser@^7.7.0":
