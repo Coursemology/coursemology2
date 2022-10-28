@@ -5,6 +5,20 @@ const onCancel = jest.fn();
 const imageFile = { name: 'foo', type: 'image/jpeg' };
 
 describe('<SingleFileInput />', () => {
+  beforeEach(() => {
+    // As of jest 29.2.2 and jest-environment-jsdom 29.2.2, jsdom does not
+    // implement `URL.createObjectURL` so it has to be mocked.
+    // See https://github.com/jsdom/jsdom/issues/1721.
+    // `jest.spyOn` cannot be used here because `URL.createObjectURL` is not
+    // even available in the environment to begin with to be mocked.
+    // eslint-disable-next-line jest/prefer-spy-on
+    URL.createObjectURL = jest.fn();
+  });
+
+  afterEach(() => {
+    URL.createObjectURL.mockReset();
+  });
+
   it('renders with url and name', () => {
     const imagePreview = mount(
       <ImagePreview originalName="bar" originalUrl="foo" />,

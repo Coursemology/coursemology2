@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Material: Folders: Management' do
+RSpec.feature 'Course: Material: Folders: Management', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -34,7 +34,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
 
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
-      scenario 'I can view all the subfolders', js: true do
+      scenario 'I can view all the subfolders' do
         visit course_material_folder_path(course, parent_folder)
         concrete_subfolders.each do |subfolder|
           expect(page).to have_selector("#subfolder-#{subfolder.id}")
@@ -54,7 +54,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
         end
       end
 
-      scenario 'I can create a subfolder', js: true do
+      scenario 'I can create a subfolder' do
         visit course_material_folder_path(course, parent_folder)
         find('#new-subfolder-button').click
 
@@ -73,7 +73,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
         expect(page).to have_selector("#subfolder-#{new_folder.id}")
       end
 
-      scenario 'I can edit a subfolder', js: true do
+      scenario 'I can edit a subfolder' do
         sample_folder = concrete_subfolders.sample
         visit course_material_folder_path(course, parent_folder)
         find("#subfolder-edit-button-#{sample_folder.id}").click
@@ -92,7 +92,7 @@ RSpec.feature 'Course: Material: Folders: Management' do
         end
       end
 
-      scenario 'I can delete a subfolder', js: true do
+      scenario 'I can delete a subfolder' do
         visit course_material_folder_path(course, parent_folder)
         sample_folder = concrete_subfolders.sample
 
@@ -105,12 +105,15 @@ RSpec.feature 'Course: Material: Folders: Management' do
         expect(page).not_to have_selector("#subfolder-#{sample_folder.id}")
       end
 
-      scenario 'I can upload a file to the folder', js: true do
+      scenario 'I can upload a file to the folder' do
+        file1 = File.join(Rails.root, '/spec/fixtures/files/text.txt')
+        file2 = File.join(Rails.root, '/spec/fixtures/files/text2.txt')
+
         visit course_material_folder_path(course, parent_folder)
         find('#upload-files-button').click
-        # Only use this (without locator) if there is only 1 possible file input field
-        attach_file File.join(Rails.root, '/spec/fixtures/files/text.txt')
-        attach_file File.join(Rails.root, '/spec/fixtures/files/text2.txt')
+        attach_file [file1, file2] do
+          find_all('div', text: 'upload files').last.click
+        end
 
         expect do
           click_button 'Upload'
@@ -118,12 +121,12 @@ RSpec.feature 'Course: Material: Folders: Management' do
         end.to change { parent_folder.materials.count }.by(2)
       end
 
-      scenario 'I can download the folder', js: true do
+      scenario 'I can download the folder' do
         visit course_material_folder_path(course, parent_folder)
         expect(page).to have_selector('#download-folder-button')
       end
 
-      scenario 'I cannot edit the folder with a owner', js: true do
+      scenario 'I cannot edit the folder with a owner' do
         folder_with_owner = create(:course_assessment_category, course: course).folder
 
         visit course_material_folder_path(course, folder_with_owner)
@@ -137,13 +140,13 @@ RSpec.feature 'Course: Material: Folders: Management' do
     context 'As a Course Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I can view the Material Sidebar item', js: true do
+      scenario 'I can view the Material Sidebar item' do
         visit course_path(course)
 
         expect(page).to have_selector('li', text: 'course.material.sidebar_title')
       end
 
-      scenario 'I can view valid subfolders', js: true do
+      scenario 'I can view valid subfolders' do
         visible_folders = concrete_subfolders.select do |f|
           f.start_at < Time.zone.now && (f.end_at.nil? || f.end_at > Time.zone.now)
         end + [published_started_folder]
@@ -163,13 +166,17 @@ RSpec.feature 'Course: Material: Folders: Management' do
         end
       end
 
-      scenario 'I can upload a file to the folder', js: true do
+      scenario 'I can upload a file to the folder' do
         folder = create(:folder, parent: parent_folder, course: course, can_student_upload: true)
+        file1 = File.join(Rails.root, '/spec/fixtures/files/text.txt')
+        file2 = File.join(Rails.root, '/spec/fixtures/files/text2.txt')
+
         visit course_material_folder_path(course, folder)
         find('#upload-files-button').click
+        attach_file [file1, file2] do
+          find_all('div', text: 'upload files').last.click
+        end
 
-        attach_file File.join(Rails.root, '/spec/fixtures/files/text.txt')
-        attach_file File.join(Rails.root, '/spec/fixtures/files/text2.txt')
         expect do
           click_button 'Upload'
           sleep 0.3 # wait for upload to complete

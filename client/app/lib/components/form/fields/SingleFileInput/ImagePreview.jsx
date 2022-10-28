@@ -43,7 +43,7 @@ export default class ImagePreview extends Component {
 
     let imageSrc = null;
     if (isImage) {
-      imageSrc = file.preview;
+      imageSrc = URL.createObjectURL(file);
     } else if (originalUrl) {
       imageSrc = originalUrl;
     }
