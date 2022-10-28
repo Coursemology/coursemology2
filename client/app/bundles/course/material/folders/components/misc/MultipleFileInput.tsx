@@ -1,10 +1,8 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import Dropzone from 'react-dropzone';
-
 import { FileUpload as FileUploadIcon } from '@mui/icons-material';
 import { Chip } from '@mui/material';
-import { grey } from '@mui/material/colors';
 import { toast } from 'react-toastify';
 
 interface Props extends WrappedComponentProps {
@@ -30,50 +28,35 @@ const MultipleFileInput: FC<Props> = (props) => {
 
   const [dropZoneActive, setDropZoneActive] = useState(false);
 
-  const displayFileNames = (files: File[]): JSX.Element => {
-    if (dropZoneActive) {
-      return <FileUploadIcon style={{ width: 60, height: 60 }} />;
-    }
-    if (files.length === 0) {
+  const displayFileNames = (files: File[]): JSX.Element | JSX.Element[] => {
+    if (dropZoneActive) return <FileUploadIcon className="h-20 w-20" />;
+
+    if (files.length === 0)
       return (
-        <p
-          style={{
-            marginBottom: 0,
-            wordBreak: 'break-all',
-            whiteSpace: 'normal',
-          }}
-        >
+        <p className="m-0 whitespace-normal break-all">
           {intl.formatMessage(translations.uploadLabel)}
         </p>
       );
-    }
-    return (
-      <>
-        {files.map((file) => {
-          return (
-            <Chip
-              key={file.name}
-              label={file.name}
-              style={{ margin: 4 }}
-              onDelete={(): void => {
-                setUploadedFiles(
-                  uploadedFiles.filter(
-                    (uploadedFile) => uploadedFile.name !== file.name,
-                  ),
-                );
-              }}
-            />
-          );
-        })}
-      </>
-    );
+
+    return files.map((file) => (
+      <Chip
+        key={file.name}
+        label={file.name}
+        className="m-2"
+        onDelete={(): void =>
+          setUploadedFiles(
+            uploadedFiles.filter(
+              (uploadedFile) => uploadedFile.name !== file.name,
+            ),
+          )
+        }
+      />
+    ));
   };
 
   return (
     <Dropzone
-      id="material-upload"
       disabled={disabled}
-      width="100%"
       onDragEnter={(): void => setDropZoneActive(true)}
       onDragLeave={(): void => setDropZoneActive(false)}
       onDrop={(files): void => {
@@ -86,42 +69,32 @@ const MultipleFileInput: FC<Props> = (props) => {
           const isValidName = uploadedFiles.every(
             (uploadedFile): boolean => uploadedFile.name !== file.name,
           );
-          if (!isValidName) {
+
+          if (!isValidName)
             toast.error(
               `${file.name} ${intl.formatMessage(
                 translations.sameFileNameError,
               )}`,
             );
-          }
+
           return isValidName;
         });
 
         setUploadedFiles([...uploadedFiles, ...files]);
         setDropZoneActive(false);
       }}
-      style={{
-        width: '100%',
-        borderWidth: 2,
-        borderColor: grey[500],
-        borderStyle: 'dashed',
-        borderRadius: 5,
-        marginTop: 10,
-        marginBottom: 10,
-      }}
     >
-      <div
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          minHeight: 100,
-          margin: 10,
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}
-      >
-        {displayFileNames(uploadedFiles)}
-      </div>
+      {({ getRootProps, getInputProps }): JSX.Element => (
+        <div
+          {...getRootProps({
+            className:
+              'my-8 flex min-h-[12rem] w-full flex-wrap items-center justify-center rounded-lg border-2 border-dashed border-neutral-400 p-4 text-center select-none cursor-pointer',
+          })}
+        >
+          <input {...getInputProps()} />
+          {displayFileNames(uploadedFiles)}
+        </div>
+      )}
     </Dropzone>
   );
 };
