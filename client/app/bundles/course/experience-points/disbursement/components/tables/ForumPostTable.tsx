@@ -101,7 +101,7 @@ const ForumPostTable: FC<Props> = (props: Props) => {
           style: {
             overflowWrap: 'anywhere',
             padding: '5px 10px',
-            textAlign: '-webkit-center',
+            textAlign: 'center',
           },
         }),
         customBodyRenderLite: (dataIndex: number): JSX.Element => (
