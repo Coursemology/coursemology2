@@ -68,7 +68,10 @@ class FileInput extends Component {
   }
 
   displayFileNames(files) {
-    const { disabled } = this.props;
+    const {
+      disabled,
+      field: { onChange },
+    } = this.props;
     const { dropzoneActive } = this.state;
     if (dropzoneActive) {
       return <FileUpload style={{ width: 60, height: 60 }} />;
@@ -88,7 +91,14 @@ class FileInput extends Component {
     return (
       <div style={styles.wrapper}>
         {files.map((f) => (
-          <Chip key={f.name} label={f.name} style={styles.chip} />
+          <Chip
+            key={f.name}
+            label={f.name}
+            style={styles.chip}
+            onDelete={() =>
+              onChange(files.filter((file) => file.name !== f.name))
+            }
+          />
         ))}
       </div>
     );
