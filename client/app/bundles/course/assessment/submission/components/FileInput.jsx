@@ -108,16 +108,22 @@ class FileInput extends Component {
       <div className={className}>
         <Dropzone
           {...inputOptions}
-          disableClick={disabled}
+          disabled={disabled}
           onDragEnter={() => this.onDragEnter()}
           onDragLeave={() => this.onDragLeave()}
           onDrop={(files) => this.onDrop(files)}
-          className="dropzone-input"
-          name={name}
         >
-          <Card style={styles.paper}>
-            <CardContent>{this.displayFileNames(value)}</CardContent>
-          </Card>
+          {({ getRootProps, getInputProps }) => (
+            <Card
+              {...getRootProps({
+                className: 'dropzone-input select-none cursor-pointer',
+                style: styles.paper,
+              })}
+            >
+              <input {...getInputProps({ name })} />
+              <CardContent>{this.displayFileNames(value)}</CardContent>
+            </Card>
+          )}
         </Dropzone>
         {error || ''}
       </div>
