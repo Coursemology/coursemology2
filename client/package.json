@@ -210,6 +210,9 @@
     "webpack-manifest-plugin": "^5.0.0",
     "webpack-merge": "^5.8.0"
   },
+  "resolutions": {
+    "cheerio": "1.0.0-rc.10"
+  },
   "license": "MIT",
   "repository": "git+https://github.com/Coursemology/coursemology2.git",
   "main": "app/index.js"
