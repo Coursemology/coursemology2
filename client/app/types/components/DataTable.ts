@@ -1,4 +1,4 @@
-import { CSSProperties } from '@mui/styles';
+import { CSSProperties } from 'react';
 
 export interface TableColumns {
   name: string;
@@ -24,8 +24,8 @@ export interface TableColumns {
       cellValue: string,
       rowIndex: number,
       columnIndex: number,
-    ) => CSSProperties;
-    setCellHeaderProps?: () => CSSProperties;
+    ) => { style: CSSProperties };
+    setCellHeaderProps?: () => { style: CSSProperties };
     sort?: boolean;
   };
 }
