@@ -3,7 +3,7 @@
 exports[`<ErrorText /> when input is a string displays it 1`] = `
 <div
   style={
-    Object {
+    {
       "color": "#f44336",
     }
   }

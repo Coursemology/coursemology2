@@ -10,9 +10,9 @@ exports[`<NewMilestoneButton /> is hidden when canManageLessonPlan is false 1`] 
       canManageLessonPlan={false}
       dispatch={[Function]}
       intl={
-        Object {
+        {
           "$t": [Function],
-          "defaultFormats": Object {},
+          "defaultFormats": {},
           "defaultLocale": "en",
           "defaultRichTextElements": undefined,
           "fallbackOnEmptyString": true,
@@ -29,8 +29,8 @@ exports[`<NewMilestoneButton /> is hidden when canManageLessonPlan is false 1`] 
           "formatRelativeTime": [Function],
           "formatTime": [Function],
           "formatTimeToParts": [Function],
-          "formats": Object {},
-          "formatters": Object {
+          "formats": {},
+          "formatters": {
             "getDateTimeFormat": [Function],
             "getDisplayNames": [Function],
             "getListFormat": [Function],
@@ -40,7 +40,7 @@ exports[`<NewMilestoneButton /> is hidden when canManageLessonPlan is false 1`] 
             "getRelativeTimeFormat": [Function],
           },
           "locale": "en",
-          "messages": Object {},
+          "messages": {},
           "onError": [Function],
           "onWarn": [Function],
           "textComponent": Symbol(react.fragment),
