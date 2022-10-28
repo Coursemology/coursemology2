@@ -83,7 +83,6 @@
     "@mui/icons-material": "^5.10.9",
     "@mui/lab": "^5.0.0-alpha.104",
     "@mui/material": "^5.10.11",
-    "@mui/styles": "^5.10.10",
     "@mui/x-date-pickers": "^5.0.6",
     "@reduxjs/toolkit": "^1.8.6",
     "@tailwindcss/line-clamp": "^0.4.2",
