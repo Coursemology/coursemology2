@@ -58,23 +58,13 @@ class FormSingleFileInput extends Component {
     onChange({ file, url, name });
   };
 
-  renderErrorMessage = () => {
-    const {
-      fieldState: { error },
-    } = this.props;
-    return error ? (
-      <div className="error-message" style={styles.fileLabelError}>
-        {formatErrorMessage(error.message)}
-      </div>
-    ) : null;
-  };
-
   render() {
     const { accept, disabled, previewComponent: PreviewComponent } = this.props;
     const {
       field: {
         value: { name, url },
       },
+      fieldState: { error },
     } = this.props;
 
     return (
@@ -83,17 +73,30 @@ class FormSingleFileInput extends Component {
         disabled={disabled}
         multiple={false}
         onDrop={this.onDrop}
-        style={styles.dropzone}
       >
-        <div>
-          <PreviewComponent
-            file={this.state.file}
-            originalName={name}
-            originalUrl={url}
-            handleCancel={this.onCancel}
-          />
-        </div>
-        {this.renderErrorMessage()}
+        {({ getRootProps, getInputProps }) => (
+          <div
+            {...getRootProps({
+              style: styles.dropzone,
+              className: 'select-none cursor-pointer',
+            })}
+          >
+            <input {...getInputProps()} />
+
+            <PreviewComponent
+              file={this.state.file}
+              originalName={name}
+              originalUrl={url}
+              handleCancel={this.onCancel}
+            />
+
+            {error && (
+              <div className="error-message" style={styles.fileLabelError}>
+                {formatErrorMessage(error.message)}
+              </div>
+            )}
+          </div>
+        )}
       </Dropzone>
     );
   }
