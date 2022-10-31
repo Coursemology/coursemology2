@@ -5,6 +5,7 @@ import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
 import ProgrammingFile from './ProgrammingFile';
 import ProgrammingImportEditor from '../../../containers/ProgrammingImportEditor';
 import TestCaseView from '../../../containers/TestCaseView';
+import CodaveriFeedbackStatus from '../../../containers/CodaveriFeedbackStatus';
 import { parseLanguages } from '../../../utils';
 import { questionShape } from '../../../propTypes';
 
@@ -63,6 +64,7 @@ const Programming = (props) => {
         />
       )}
       <TestCaseView questionId={question.id} />
+      <CodaveriFeedbackStatus questionId={question.id} answerId={answerId} />
     </div>
   );
 };

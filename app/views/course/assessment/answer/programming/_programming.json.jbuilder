@@ -110,3 +110,14 @@ json.explanation do
 end
 
 json.attemptsLeft answer.attempting_times_left if question.attempt_limit
+
+if answer.codaveri_feedback_job_id && question.is_codaveri
+  codaveri_job = answer.codaveri_feedback_job
+  json.codaveriFeedback do
+    json.jobId answer.codaveri_feedback_job_id
+    json.jobStatus codaveri_job.status
+    if codaveri_job.error && codaveri_job.error['class'] == 'CodaveriError'
+      json.errorMessage codaveri_job.error['message']
+    end
+  end
+end
