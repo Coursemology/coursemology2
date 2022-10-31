@@ -106,6 +106,11 @@ module Capybara::TestGroupHelpers
       find("div[data-rbd-drag-handle-draggable-id='#{drag_handle_id}']")
     end
 
+    # Finds a react-beautiful-dnd draggable survey question
+    def find_rbd_question(question_id)
+      find_rbd_with_drag_handle_id("question-#{question_id}")
+    end
+
     # Finds a react-beautiful-dnd draggable assessment category
     def find_rbd_category(category_id)
       find_rbd_with_drag_handle_id("category-#{category_id}")
