@@ -244,3 +244,8 @@ export const forumTopicPostPackShape = PropTypes.shape({
     }),
   ),
 });
+
+export const codaveriFeedbackStatusShape = PropTypes.shape({
+  jobStatus: PropTypes.oneOf(['submitted', 'completed', 'errored']),
+  errorMessage: PropTypes.string,
+});

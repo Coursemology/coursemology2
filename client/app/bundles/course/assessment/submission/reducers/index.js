@@ -3,6 +3,7 @@ import answers from './answers';
 import annotations from './annotations';
 import assessment from './assessment';
 import attachments from './attachments';
+import codaveriFeedbackStatus from './codaveriFeedbackStatus';
 import commentForms from './commentForms';
 import explanations from './explanations';
 import notification from './notification';
@@ -24,6 +25,7 @@ export default combineReducers({
   answers,
   attachments,
   assessment,
+  codaveriFeedbackStatus,
   commentForms,
   explanations,
   notification,
