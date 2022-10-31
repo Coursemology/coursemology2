@@ -2,11 +2,11 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages } from 'react-intl';
 import { connect } from 'react-redux';
-import { DragSource, DropTarget } from 'react-dnd';
+import { Draggable } from 'react-beautiful-dnd';
+
 import { showDeleteConfirmation } from 'course/survey/actions';
 import { formatQuestionFormData } from 'course/survey/utils';
 import { questionShape } from 'course/survey/propTypes';
-import { draggableTypes } from 'course/survey/constants';
 import * as questionActions from 'course/survey/actions/questions';
 import QuestionCard from './QuestionCard';
 
@@ -34,14 +34,6 @@ const translations = defineMessages({
   deleteFailure: {
     id: 'course.surveys.Question.deleteFailure',
     defaultMessage: 'Failed to delete question.',
-  },
-  reorderSuccess: {
-    id: 'course.surveys.Question.reorderSuccess',
-    defaultMessage: 'Question moved.',
-  },
-  reorderFailure: {
-    id: 'course.surveys.Question.reorderFailure',
-    defaultMessage: 'Failed to move question.',
   },
 });
 
@@ -114,141 +106,35 @@ class Question extends Component {
   }
 
   render() {
-    const {
-      question,
-      expanded,
-      isDragging,
-      connectDragSource,
-      connectDropTarget,
-    } = this.props;
-    const opacity = isDragging ? 0.2 : 1;
-    return connectDropTarget(
-      connectDragSource(
-        <div
-          style={{ opacity }}
-          ref={(node) => {
-            this.DOMNode = node;
-          }}
-        >
-          <QuestionCard
-            {...{ question, expanded }}
-            adminFunctions={this.adminFunctions()}
-          />
-        </div>,
-      ),
+    const { question, expanded, index } = this.props;
+
+    return (
+      <Draggable draggableId={`question-${question.id}`} index={index}>
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            className="mb-5"
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+          >
+            <QuestionCard
+              {...{ question, expanded }}
+              adminFunctions={this.adminFunctions()}
+            />
+          </div>
+        )}
+      </Draggable>
     );
   }
 }
 
-const questionSource = {
-  isDragging(props, monitor) {
-    return monitor.getItem().id === props.question.id;
-  },
-
-  beginDrag(props) {
-    props.dispatch(
-      questionActions.setDraggedQuestion(
-        props.index,
-        props.sectionIndex,
-        props.question.section_id,
-      ),
-    );
-
-    return { id: props.question.id };
-  },
-
-  endDrag(props) {
-    const successMessage = props.intl.formatMessage(
-      translations.reorderSuccess,
-    );
-    const failureMessage = props.intl.formatMessage(
-      translations.reorderFailure,
-    );
-    props.dispatch(
-      questionActions.finalizeOrder(successMessage, failureMessage),
-    );
-  },
-};
-
-const questionTarget = {
-  /**
-   * Handles reordering of question within section
-   */
-  hover(props, monitor, component) {
-    const sourceId = monitor.getItem().id;
-    const {
-      index: sourceIndex,
-      sectionIndex: sourceSectionIndex,
-      sectionId: sourceSectionId,
-    } = props.draggedQuestion;
-    const hoverIndex = props.index;
-    const hoverId = props.question.id;
-    const hoverSectionId = props.question.section_id;
-
-    // Do not replace question cards with themselves
-    if (sourceId === hoverId) {
-      return;
-    }
-
-    // Do not handle questions cards from other sections
-    if (sourceSectionId !== hoverSectionId) {
-      return;
-    }
-
-    // Only perform the move when source question has been dragged past half of the target question
-    const hoverBoundingRect = component.DOMNode.getBoundingClientRect();
-    const hoverMiddleY = (hoverBoundingRect.bottom + hoverBoundingRect.top) / 2;
-    const pointerY = monitor.getClientOffset().y;
-    const draggedUpwardPastMidLine =
-      sourceIndex > hoverIndex && pointerY < hoverMiddleY;
-    const draggedDownwardPastMidLine =
-      sourceIndex < hoverIndex && pointerY > hoverMiddleY;
-    if (draggedUpwardPastMidLine || draggedDownwardPastMidLine) {
-      props.dispatch(
-        questionActions.reorder(sourceSectionIndex, sourceIndex, hoverIndex),
-      );
-    }
-  },
-};
-
 Question.propTypes = {
   question: questionShape,
   expanded: PropTypes.bool.isRequired,
+  index: PropTypes.number.isRequired,
 
   dispatch: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
-  connectDropTarget: PropTypes.func.isRequired,
-  connectDragSource: PropTypes.func.isRequired,
-  isDragging: PropTypes.bool.isRequired,
 };
 
-function targetCollect(connector) {
-  return {
-    connectDropTarget: connector.dropTarget(),
-  };
-}
-
-function sourceCollect(connector, monitor) {
-  return {
-    connectDragSource: connector.dragSource(),
-    isDragging: monitor.isDragging(),
-  };
-}
-
-// TODO By default, React DnD takes a screenshot of the element being dragged using the HTML5
-// backend. However, any overlapping elements also appears in the screenshot. To fix this.
-export default connect()(
-  injectIntl(
-    DropTarget(
-      draggableTypes.QUESTION,
-      questionTarget,
-      targetCollect,
-    )(
-      DragSource(
-        draggableTypes.QUESTION,
-        questionSource,
-        sourceCollect,
-      )(Question),
-    ),
-  ),
-);
+export default connect()(injectIntl(Question));

@@ -38,9 +38,6 @@ const styles = {
     right: 8,
     top: 0,
   },
-  card: {
-    marginBottom: 15,
-  },
   fields: {
     marginTop: 0,
     paddingTop: 0,
@@ -124,7 +121,7 @@ class QuestionCard extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { anchorEl: null, hovered: false };
+    this.state = { anchorEl: null };
   }
 
   handleClick = (event) => {
@@ -172,22 +169,17 @@ class QuestionCard extends Component {
 
   render() {
     const { question, expanded } = this.props;
-    const cursorStyle = this.state.hovered ? { cursor: 'move' } : null;
+
     return (
-      <Accordion
-        expanded={expanded}
-        onMouseOver={() => this.setState({ hovered: true })}
-        onMouseOut={() => this.setState({ hovered: false })}
-        style={{ ...styles.card, ...cursorStyle }}
-      >
+      <Accordion expanded={expanded}>
         <AccordionSummary>
           <div style={styles.panelSummaryText}>
             <p dangerouslySetInnerHTML={{ __html: question.description }} />
-            {question.required ? (
+            {question.required && (
               <p style={styles.required}>
                 <FormattedMessage {...formTranslations.starRequired} />
               </p>
-            ) : null}
+            )}
           </div>
           {this.renderAdminMenu()}
         </AccordionSummary>

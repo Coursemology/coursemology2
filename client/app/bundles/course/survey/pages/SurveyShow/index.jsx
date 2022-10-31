@@ -1,15 +1,16 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages } from 'react-intl';
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import { createDragDropManager } from 'dnd-core';
+import { defineMessages } from 'react-intl';
 import { ListSubheader } from '@mui/material';
-import surveyTranslations from 'course/survey/translations';
-import { surveyShape } from 'course/survey/propTypes';
-import * as surveyActions from 'course/survey/actions/surveys';
+import { DragDropContext } from 'react-beautiful-dnd';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import useTranslation from 'lib/hooks/useTranslation';
+import surveyTranslations from '../../translations';
+import { surveyShape } from '../../propTypes';
+import { fetchSurvey } from '../../actions/surveys';
+import { reorder, changeSection, finalizeOrder } from '../../actions/questions';
 import SurveyDetails from './SurveyDetails';
 import Section from './Section';
 
@@ -18,6 +19,14 @@ const translations = defineMessages({
     id: 'course.surveys.SurveyShow.empty',
     defaultMessage: 'This survey does not have any questions.',
   },
+  reorderSuccess: {
+    id: 'course.surveys.Question.reorderSuccess',
+    defaultMessage: 'Question moved.',
+  },
+  reorderFailure: {
+    id: 'course.surveys.Question.reorderFailure',
+    defaultMessage: 'Failed to move question.',
+  },
 });
 
 const SurveyShow = ({
@@ -25,80 +34,99 @@ const SurveyShow = ({
   surveyId,
   isLoading,
   disabled,
-  intl,
   survey,
   courseId,
-  manager,
 }) => {
+  const { t } = useTranslation();
+
   useEffect(() => {
-    dispatch(surveyActions.fetchSurvey(surveyId));
+    dispatch(fetchSurvey(surveyId));
   }, [dispatch, surveyId]);
 
-  const managerToUse = useMemo(
-    () => manager ?? createDragDropManager(HTML5Backend),
-    [manager],
-  );
+  if (isLoading) return <LoadingIndicator />;
+
+  const reorderQuestion = (result) => {
+    if (!result.destination) return;
+
+    const src = result.source;
+    const dest = result.destination;
+
+    if (src.droppableId === dest.droppableId && src.index === dest.index)
+      return;
+
+    const srcSectionIndex = parseInt(src.droppableId.match(/\d+/)[0], 10);
+    const destSectionIndex = parseInt(dest.droppableId.match(/\d+/)[0], 10);
+    if (Number.isNaN(srcSectionIndex) || Number.isNaN(destSectionIndex)) return;
+
+    if (srcSectionIndex === destSectionIndex) {
+      dispatch(reorder(srcSectionIndex, src.index, dest.index));
+    } else {
+      dispatch(
+        changeSection(true, src.index, srcSectionIndex, destSectionIndex),
+      );
+      dispatch(reorder(destSectionIndex, 0, dest.index));
+    }
+
+    dispatch(
+      finalizeOrder(
+        t(translations.reorderSuccess),
+        t(translations.reorderFailure),
+      ),
+    );
+  };
 
   const renderBody = () => {
     const { sections, canUpdate } = survey;
-    if (isLoading) {
-      return <LoadingIndicator />;
-    }
-    if (!canUpdate) {
-      return null;
-    }
-    if (!sections || sections.length < 1) {
+    if (!canUpdate) return null;
+
+    if (!sections || sections.length < 1)
       return (
-        <ListSubheader disableSticky>
-          {intl.formatMessage(translations.empty)}
-        </ListSubheader>
+        <ListSubheader disableSticky>{t(translations.empty)}</ListSubheader>
       );
-    }
+
     const lastIndex = sections.length - 1;
 
     return (
       <>
         <ListSubheader disableSticky>
-          {intl.formatMessage(surveyTranslations.questions)}
+          {t(surveyTranslations.questions)}
         </ListSubheader>
-        {sections.map((section, index) => (
-          <Section
-            key={section.id}
-            first={index === 0}
-            last={index === lastIndex}
-            {...{ section, index, survey, disabled }}
-          />
-        ))}
+
+        <DragDropContext onDragEnd={reorderQuestion}>
+          {sections.map((section, index) => (
+            <Section
+              key={section.id}
+              first={index === 0}
+              last={index === lastIndex}
+              {...{ section, index, survey, disabled }}
+            />
+          ))}
+        </DragDropContext>
       </>
     );
   };
 
   return (
-    <DndProvider manager={managerToUse} key={1}>
+    <>
       <SurveyDetails {...{ survey, courseId, disabled }} />
-      {renderBody(survey)}
-    </DndProvider>
+      {renderBody()}
+    </>
   );
 };
 
 SurveyShow.propTypes = {
   dispatch: PropTypes.func.isRequired,
   survey: surveyShape,
-  intl: PropTypes.object.isRequired,
   isLoading: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   courseId: PropTypes.string.isRequired,
   surveyId: PropTypes.string.isRequired,
-
-  // Used for injecting dependencies for testing DnD
-  manager: PropTypes.object,
 };
 
 const mapStateToProps = (state) => ({
   isLoading: state.surveysFlags.isLoadingSurvey,
   disabled: state.surveysFlags.disableSurveyShow,
 });
-export const ConnectedSurveyShow = connect(mapStateToProps)(
-  injectIntl(SurveyShow),
-);
+
+export const ConnectedSurveyShow = connect(mapStateToProps)(SurveyShow);
 export default ConnectedSurveyShow;

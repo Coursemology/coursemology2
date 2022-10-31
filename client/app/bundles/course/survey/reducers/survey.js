@@ -5,11 +5,6 @@ import { sortSurveyElements } from '../utils';
 
 const initialState = {
   sections: [],
-  draggedQuestion: {
-    index: null,
-    sectionIndex: null,
-    sectionId: null,
-  },
 };
 
 export default function (survey = initialState, action) {
@@ -35,16 +30,6 @@ export default function (survey = initialState, action) {
       const sections = deleteIfFound(survey.sections, action.sectionId);
       return { ...survey, sections };
     }
-    case actionTypes.SET_DRAGGED_QUESTION: {
-      return {
-        ...survey,
-        draggedQuestion: {
-          index: action.index,
-          sectionIndex: action.sectionIndex,
-          sectionId: action.sectionId,
-        },
-      };
-    }
     case actionTypes.REORDER_QUESTION: {
       const section = survey.sections[action.sectionIndex];
       const questions = [...section.questions];
@@ -57,11 +42,6 @@ export default function (survey = initialState, action) {
       return {
         ...survey,
         sections,
-        draggedQuestion: {
-          index: action.targetIndex,
-          sectionIndex: action.sectionIndex,
-          sectionId: section.id,
-        },
       };
     }
     case actionTypes.CHANGE_QUESTION_SECTION: {
@@ -89,11 +69,6 @@ export default function (survey = initialState, action) {
       return {
         ...survey,
         sections,
-        draggedQuestion: {
-          index: action.prepend ? 0 : targetSectionQuestions.length - 1,
-          sectionIndex: action.targetSectionIndex,
-          sectionId: targetSection.id,
-        },
       };
     }
     default:

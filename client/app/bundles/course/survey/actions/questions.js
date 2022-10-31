@@ -13,26 +13,6 @@ export function hideQuestionForm() {
 }
 
 /**
- * Sets the index of the current question being dragged, as well as the id and index of the section
- * it currently belongs to. These values may change as the question is being dragged around,
- * which is why they are not specified in the item descriptor created by `beginDrag` instead.
- *
- * @param {number} index
- * @param {number} sectionIndex
- * @param {number} sectionId
- * @return {Object} The action
- */
-export function setDraggedQuestion(index, sectionIndex, sectionId) {
-  return {
-    type: actionTypes.SET_DRAGGED_QUESTION,
-    surveyId: getSurveyId(),
-    index,
-    sectionIndex,
-    sectionId,
-  };
-}
-
-/**
  * Changes which section the specified question belongs to.
  *
  * @param {boolean} prepend
