@@ -29,7 +29,6 @@ export default function (state = [], action) {
       return deleteIfFound(state, action.surveyId);
     }
 
-    case actionTypes.SET_DRAGGED_QUESTION:
     case actionTypes.REORDER_QUESTION:
     case actionTypes.CHANGE_QUESTION_SECTION:
     case actionTypes.UPDATE_SURVEY_SECTION_SUCCESS:
