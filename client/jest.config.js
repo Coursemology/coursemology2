@@ -13,6 +13,7 @@ const config = {
   setupFilesAfterEnv: ['<rootDir>/app/__test__/setup.js'],
   snapshotSerializers: ['<rootDir>/node_modules/enzyme-to-json/serializer'],
   moduleNameMapper: {
+    '^react(.*)$': '<rootDir>/node_modules/react$1',
     '.scss$': '<rootDir>/SassStub.js',
     '^api(.*)$': '<rootDir>/app/api$1',
     '^lib(.*)$': '<rootDir>/app/lib$1',
