@@ -9,7 +9,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import useTranslation from 'lib/hooks/useTranslation';
 import surveyTranslations from '../../translations';
 import { surveyShape } from '../../propTypes';
-import { fetchSurvey } from '../../actions/surveys';
+import { fetchSurvey, loadSurvey } from '../../actions/surveys';
 import { reorder, changeSection, finalizeOrder } from '../../actions/questions';
 import SurveyDetails from './SurveyDetails';
 import Section from './Section';
@@ -58,6 +58,8 @@ const SurveyShow = ({
     const destSectionIndex = parseInt(dest.droppableId.match(/\d+/)[0], 10);
     if (Number.isNaN(srcSectionIndex) || Number.isNaN(destSectionIndex)) return;
 
+    const previousState = survey;
+
     if (srcSectionIndex === destSectionIndex) {
       dispatch(reorder(srcSectionIndex, src.index, dest.index));
     } else {
@@ -71,6 +73,7 @@ const SurveyShow = ({
       finalizeOrder(
         t(translations.reorderSuccess),
         t(translations.reorderFailure),
+        () => dispatch(loadSurvey(previousState)),
       ),
     );
   };

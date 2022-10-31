@@ -47,16 +47,22 @@ export function createSurvey(
   };
 }
 
+export function loadSurvey(survey) {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.LOAD_SURVEY_SUCCESS,
+      survey,
+    });
+  };
+}
+
 export function fetchSurvey(surveyId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_SURVEY_REQUEST, surveyId });
     return CourseAPI.survey.surveys
       .fetch(surveyId)
       .then((response) => {
-        dispatch({
-          type: actionTypes.LOAD_SURVEY_SUCCESS,
-          survey: response.data,
-        });
+        loadSurvey(response.data)(dispatch);
       })
       .catch(() => {
         dispatch({ type: actionTypes.LOAD_SURVEY_FAILURE, surveyId });

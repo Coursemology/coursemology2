@@ -68,8 +68,9 @@ export function reorder(sectionIndex, sourceIndex, targetIndex) {
  *
  * @param {string} successMessage
  * @param {string} failureMessage
+ * @param {() => void} onError
  */
-export function finalizeOrder(successMessage, failureMessage) {
+export function finalizeOrder(successMessage, failureMessage, onError) {
   return (dispatch, getState) => {
     const {
       surveysFlags: { isQuestionMoved },
@@ -99,6 +100,7 @@ export function finalizeOrder(successMessage, failureMessage) {
       .catch(() => {
         dispatch({ type: actionTypes.UPDATE_QUESTION_ORDER_FAILURE });
         setNotification(failureMessage)(dispatch);
+        onError();
       });
   };
 }
