@@ -156,7 +156,7 @@
     "@types/react": "^18.0.17",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-dom": "^18.0.6",
-    "@typescript-eslint/eslint-plugin": "^5.41.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.41.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
     "autoprefixer": "^10.4.13",
