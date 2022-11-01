@@ -237,14 +237,6 @@ Devise.setup do |config|
   # up on your models and hooks.
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
 
-  # Facebook login feature has previously been implemented, but in the current state,
-  # it has been decided to remove this feature. However, instead of completely removing
-  # the implementation, this feature is detached/disabled in case in the future, we decide
-  # to re-introduce the feature or to add other platforms login for use in terms of a
-  # wider ecosystem.
-  # Note that related facebook login rspec tests are still kept but disabled.
-  # :facebook, ENV['OMNIAUTH_FACEBOOK_APP_ID'], ENV['OMNIAUTH_FACEBOOK_APP_SECRET']
-
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.

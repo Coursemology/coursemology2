@@ -39,14 +39,6 @@ RSpec.feature 'User: Profile', js: true do
         expect_toastify('Your changes have been saved.')
         expect(user.reload.profile_photo.url).to be_present
       end
-
-      # NOTE: Facebook login feature is currently disabled.
-      xscenario 'I can link my account to facebook' do
-        facebook_link = find_link(nil, href: user_facebook_omniauth_authorize_path)
-        expect { facebook_link.click }.to change { user.identities.count }.by(1)
-        expect(page).to have_selector('div',
-                                      text: I18n.t('user.omniauth_callbacks.facebook.success'))
-      end
     end
   end
 end

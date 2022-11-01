@@ -36,8 +36,3 @@ if @learning_rate_record.present?
   json.learningRateEffectiveMin @learning_rate_record.effective_min
   json.learningRateEffectiveMax @learning_rate_record.effective_max
 end
-
-# NOTE: Facebook login feature is currently disabled
-# if facebook = course_user.user.identities.facebook.first
-#   json.facebookUrl "https://www.facebook.com/#{facebook.uid}"
-# end

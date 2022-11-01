@@ -103,31 +103,6 @@ RSpec.describe User do
       end
     end
 
-    # NOTE: Facebook login feature is currently disabled.
-    xdescribe '.new_with_session' do
-      context 'when facebook data is provided' do
-        let(:params) { {} }
-        let(:facebook_data) { build(:omniauth_facebook) }
-        let(:session) { { 'devise.facebook_data' => facebook_data } }
-        subject { User.new_with_session(params, session) }
-
-        it 'builds the user with information from facebook' do
-          expect(subject.name).to eq(facebook_data.info.name)
-          expect(subject.email).to eq(facebook_data.info.email)
-        end
-
-        context 'when the user did not authorize access to his email address' do
-          let(:facebook_data) { build(:omniauth_facebook, :without_email) }
-          let(:email) { generate(:email) }
-          let(:params) { { email: email } }
-
-          it 'does not override the value provided in the params' do
-            expect(subject.email).to eq(email)
-          end
-        end
-      end
-    end
-
     describe '.search' do
       let(:keyword) { 'KeyWord' }
       let!(:user_with_keyword_in_name) do

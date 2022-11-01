@@ -13,8 +13,6 @@ module UserAuthenticationConcern
     after_create :create_instance_user
     after_create :delete_unused_instance_invitation
 
-    # NOTE: Facebook login feature is currently disabled.
-    # include UserOmniauthConcern
     include ReplacementMethods
   end
 
