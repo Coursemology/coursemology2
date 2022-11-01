@@ -41,6 +41,11 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def create # rubocop:disable Metrics/AbcSize
+    if cannot?(:access, @assessment)
+      head :forbidden
+      return
+    end
+
     existing_submission = @assessment.submissions.find_by(creator: current_user)
     if existing_submission
       @submission = existing_submission
