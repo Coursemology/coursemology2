@@ -102,6 +102,8 @@ function itemsPayload(selectedItemsHash) {
 export function duplicateItems(
   destinationCourseId,
   selectedItems,
+  successMessage,
+  pendingMessage,
   failureMessage,
 ) {
   const payload = {
@@ -114,18 +116,32 @@ export function duplicateItems(
   return (dispatch, getState) => {
     const sourceCourseId = getState().duplication.sourceCourse.id;
 
+    const handleSuccess = (successData) => {
+      dispatch(setNotification(successMessage));
+      window.location.href = successData.redirect_url;
+      dispatch({ type: actionTypes.DUPLICATE_ITEMS_SUCCESS });
+    };
+
+    const handleFailure = () => {
+      dispatch({ type: actionTypes.DUPLICATE_ITEMS_FAILURE });
+      dispatch(hideDuplicateItemsConfirmation());
+      setNotification(failureMessage)(dispatch);
+    };
+
     dispatch({ type: actionTypes.DUPLICATE_ITEMS_REQUEST });
     return CourseAPI.duplication
       .duplicateItems(sourceCourseId, payload)
-      .then((response) => {
-        dispatch({ type: actionTypes.DUPLICATE_ITEMS_SUCCESS });
-        window.location = response.data.redirect_url;
+      .then((response) => response.data)
+      .then((data) => {
+        dispatch(setNotification(pendingMessage));
+        pollJob(
+          data.redirect_url,
+          DUPLICATE_JOB_POLL_INTERVAL,
+          handleSuccess,
+          handleFailure,
+        );
       })
-      .catch(() => {
-        dispatch({ type: actionTypes.DUPLICATE_ITEMS_FAILURE });
-        dispatch(hideDuplicateItemsConfirmation());
-        setNotification(failureMessage)(dispatch);
-      });
+      .catch(handleFailure);
   };
 }
 
