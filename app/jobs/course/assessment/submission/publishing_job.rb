@@ -11,8 +11,6 @@ class Course::Assessment::Submission::PublishingJob < ApplicationJob
       submissions = assessment.submissions.find(graded_submission_ids)
       publish_submissions(submissions, publisher)
     end
-
-    redirect_to course_assessment_submissions_path(assessment.course, assessment)
   end
 
   private
