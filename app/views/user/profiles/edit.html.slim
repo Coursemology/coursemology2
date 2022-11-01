@@ -1,8 +1,1 @@
 div#user-admin-component
-// NOTE: Facebook login feature is currently disabled.
-// hr
-// span
-  - if current_user.identities.facebook.empty?
-    div.facebook
-      = link_to user_facebook_omniauth_authorize_path do
-        = fa_icon 'facebook-square'.freeze, text: t('.link_to_facebook'), class: ['fa-2x'.freeze]
