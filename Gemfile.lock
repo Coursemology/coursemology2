@@ -236,7 +236,7 @@ GEM
       warden (~> 1.2.3)
     devise-multi_email (3.0.1)
       devise
-    devise_masquerade (2.0.2)
+    devise_masquerade (2.0.3)
       devise (>= 4.7.0)
       globalid (>= 0.3.6)
       railties (>= 5.2.0)
@@ -650,7 +650,7 @@ GEM
       nokogiri (~> 1.8)
     yard (0.9.28)
       webrick (~> 1.7.0)
-    zeitwerk (2.6.1)
+    zeitwerk (2.6.3)
 
 PLATFORMS
   ruby
