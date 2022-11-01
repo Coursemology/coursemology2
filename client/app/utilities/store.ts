@@ -48,7 +48,7 @@ export function saveEntityToStore<M extends WithId, E extends M = M>(
   entity: E,
   isDetailed = true,
 ): void {
-  const existing = store.byId[entity.id] || { lastFullUpdate: 0 };
+  const existing = store.byId[entity.id] ?? { lastFullUpdate: 0 };
 
   // delete all keys that are set to undefined, to avoid overriding existing values
   Object.keys(entity).forEach(
