@@ -29,9 +29,17 @@ const translations = defineMessages({
     id: 'course.duplication.DuplicateItemsConfirmation.duplicate',
     defaultMessage: 'Duplicate',
   },
+  pendingMessage: {
+    id: 'course.duplication.DuplicateItemsConfirmation.pendingMessage',
+    defaultMessage: 'Duplicating items...',
+  },
+  successMessage: {
+    id: 'course.duplication.DuplicateItemsConfirmation.successMessage',
+    defaultMessage: 'Duplication successful.',
+  },
   failureMessage: {
     id: 'course.duplication.DuplicateItemsConfirmation.failureMessage',
-    defaultMessage: 'Duplication Failed.',
+    defaultMessage: 'Duplication failed.',
   },
   itemUnpublished: {
     id: 'course.duplication.DuplicateItemsConfirmation.itemUnpublished',
@@ -97,6 +105,12 @@ class DuplicateItemsConfirmation extends Component {
     if (!open) {
       return null;
     }
+    const successMessage = (
+      <FormattedMessage {...translations.successMessage} />
+    );
+    const pendingMessage = (
+      <FormattedMessage {...translations.pendingMessage} />
+    );
     const failureMessage = (
       <FormattedMessage {...translations.failureMessage} />
     );
@@ -107,7 +121,13 @@ class DuplicateItemsConfirmation extends Component {
         onCancel={() => dispatch(hideDuplicateItemsConfirmation())}
         onConfirm={() =>
           dispatch(
-            duplicateItems(destinationCourseId, selectedItems, failureMessage),
+            duplicateItems(
+              destinationCourseId,
+              selectedItems,
+              successMessage,
+              pendingMessage,
+              failureMessage,
+            ),
           )
         }
         confirmButtonText={<FormattedMessage {...translations.duplicate} />}
