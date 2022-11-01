@@ -11,8 +11,6 @@ class Course::Assessment::Submission::DeletingJob < ApplicationJob
       submissions = assessment.submissions.find(submission_ids)
       delete_submission(assessment, submissions, deleter)
     end
-
-    redirect_to course_assessment_submissions_path(assessment.course, assessment)
   end
 
   private

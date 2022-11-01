@@ -19,8 +19,6 @@ class Course::Assessment::Submission::ForceSubmittingJob < ApplicationJob
     ActsAsTenant.with_tenant(instance) do
       force_create_and_submit_submissions(assessment, user_ids, user_ids_without_submission, submitter)
     end
-
-    redirect_to course_assessment_submissions_path(assessment.course, assessment)
   end
 
   private

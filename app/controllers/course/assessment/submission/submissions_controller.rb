@@ -120,7 +120,6 @@ class Course::Assessment::Submission::SubmissionsController < \
       job = Course::Assessment::Submission::PublishingJob.
             perform_later(graded_submission_ids, @assessment, current_user).job
       respond_to do |format|
-        format.html { redirect_to(job_path(job)) }
         format.json { render json: { redirect_url: job_path(job) } }
       end
     end
@@ -134,7 +133,6 @@ class Course::Assessment::Submission::SubmissionsController < \
       job = Course::Assessment::Submission::ForceSubmittingJob.
             perform_later(@assessment, course_user_ids.pluck(:user_id), user_ids_without_submission, current_user).job
       respond_to do |format|
-        format.html { redirect_to(job_path(job)) }
         format.json { render json: { redirect_url: job_path(job) } }
       end
     else
@@ -194,11 +192,9 @@ class Course::Assessment::Submission::SubmissionsController < \
     submission_ids = @assessment.submissions.by_users(course_user_ids).pluck(:id)
     return head :ok if submission_ids.empty?
 
-    redirect_to_path = course_assessment_submissions_path(@assessment.course, @assessment)
     job = Course::Assessment::Submission::UnsubmittingJob.
-          perform_later(current_user, submission_ids, @assessment, nil, redirect_to_path).job
+          perform_later(current_user, submission_ids, @assessment, nil).job
     respond_to do |format|
-      format.html { redirect_to(job_path(job)) }
       format.json { render json: { redirect_url: job_path(job) } }
     end
   end
