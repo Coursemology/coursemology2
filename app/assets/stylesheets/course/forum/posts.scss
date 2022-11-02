@@ -1,9 +1,0 @@
-@import 'post';
-
-.course-forum-posts {
-  &.reply {
-    .post {
-      @include course-forum-post;
-    }
-  }
-}
