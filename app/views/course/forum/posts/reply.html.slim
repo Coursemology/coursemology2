@@ -1,9 +1,0 @@
-= page_header
-
-= render partial: 'post_chain', locals: { post_chain: @post_chain }
-hr
-
-h3 = t('.reply')
-= render partial: 'form',
-         locals: { post: @reply_post,
-                   url: course_forum_topic_posts_path(current_course, @forum, @topic) }
