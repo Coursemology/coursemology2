@@ -13,9 +13,11 @@ const MasqueradeButton = ({
   ...props
 }: Props): JSX.Element => (
   <Tooltip title={tooltip}>
-    <IconButton onClick={onClick} color="inherit" {...props}>
-      <TheaterComedy />
-    </IconButton>
+    <span>
+      <IconButton onClick={onClick} color="inherit" {...props}>
+        <TheaterComedy />
+      </IconButton>
+    </span>
   </Tooltip>
 );
 
