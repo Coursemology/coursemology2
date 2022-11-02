@@ -134,11 +134,11 @@ en:
       forum:
         forums:
           index: :'course.forum.forums.index.header'
-          new_forum: :'course.forum.forums.new_forum.header'
-          edit_forum: :'course.forum.forums.edit_forum.header'
-        topics:
-          new_topic: :'course.forum.topics.new_topic.header'
-          edit_topic: :'course.forum.topics.edit_topic.header'
+        #   new_forum: :'course.forum.forums.new_forum.header'
+        #   edit_forum: :'course.forum.forums.edit_forum.header'
+        # topics:
+        #   new_topic: :'course.forum.topics.new_topic.header'
+        #   edit_topic: :'course.forum.topics.edit_topic.header'
       leaderboards:
         index: :'course.leaderboards.title'
       experience_points_records:
