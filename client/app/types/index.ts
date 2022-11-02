@@ -13,6 +13,11 @@ export type Roles<T extends string> = {
 };
 
 /**
+ * Recursive array of type T (eg [1, 2, [1, 2]])
+ */
+export type RecursiveArray<T> = (T | RecursiveArray<T>)[];
+
+/**
  * Declare global types below.
  */
 declare global {
