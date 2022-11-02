@@ -16,6 +16,7 @@ export interface TableColumns {
     empty?: boolean;
     filter?: boolean;
     filterList?: string[];
+    hideInSmallScreen?: boolean;
     justifyCenter?: boolean;
     justifyLeft?: boolean;
     justifyRight?: boolean;
@@ -27,6 +28,7 @@ export interface TableColumns {
     ) => { style: CSSProperties };
     setCellHeaderProps?: () => { style: CSSProperties };
     sort?: boolean;
+    sortCompare?: (order: string) => (value1, value2) => number;
   };
 }
 
@@ -54,6 +56,7 @@ export interface TableOptions {
   onTableChange?: (action: string, newTableState: TableState) => void;
   print?: boolean;
   pagination?: boolean;
+  rowHover?: boolean;
   rowsPerPage?: number;
   rowsPerPageOptions?: number[];
   search?: boolean;
