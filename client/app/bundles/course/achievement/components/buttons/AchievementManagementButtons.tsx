@@ -53,7 +53,7 @@ const AchievementManagementButtons: FC<Props> = (props) => {
       .then(() => {
         toast.success(intl.formatMessage(translations.deletionSuccess));
         if (navigateToIndex) {
-          navigate(`/courses/${getCourseId()}/achievements/`);
+          navigate(`/courses/${getCourseId()}/achievements`);
         }
       })
       .catch((error) => {

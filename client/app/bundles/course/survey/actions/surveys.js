@@ -129,7 +129,7 @@ export function deleteSurvey(
     return CourseAPI.survey.surveys
       .delete(surveyId)
       .then(() => {
-        navigate(`/courses/${getCourseId()}/surveys/`);
+        navigate(`/courses/${getCourseId()}/surveys`);
         dispatch({
           surveyId,
           type: actionTypes.DELETE_SURVEY_SUCCESS,

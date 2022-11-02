@@ -45,7 +45,7 @@ export default class ResponsesAPI extends BaseSurveyAPI {
    * error response: {}
    */
   fetch(responseId) {
-    return this.getClient().get(`${this._getUrlPrefix()}/${responseId}/`);
+    return this.getClient().get(`${this._getUrlPrefix()}/${responseId}`);
   }
 
   /**
