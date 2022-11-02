@@ -8,10 +8,6 @@ const styles = {
   toggleField: {
     width: '100%',
   },
-  toggleFieldStyle: {
-    height: '30px',
-    margin: '8px 0px 0px -8px',
-  },
   errorText: { margin: 0 },
 };
 
@@ -36,7 +32,6 @@ const FormToggleField = (props) => {
         disabled={disabled}
         label={<b>{label}</b>}
         {...custom}
-        style={styles.toggleFieldStyle}
       />
       {isError && (
         <FormHelperText error={isError} style={styles.errorText}>
