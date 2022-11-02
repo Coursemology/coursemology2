@@ -12,7 +12,7 @@ import {
   ForumPostData,
   ForumDisbursementUserEntity,
 } from 'types/course/disbursement';
-import { ForumSearchParams } from 'types/course/forum';
+import { ForumSearchParams } from 'types/course/forums';
 import { Operation } from 'types/store';
 import * as actions from './actions';
 
@@ -177,8 +177,6 @@ export function fetchForumPost(
   filter: ForumDisbursementFilters,
 ): Operation<
   AxiosResponse<{
-    id: number;
-    name: string;
     userPosts: ForumPostData[];
   }>
 > {
@@ -187,7 +185,7 @@ export function fetchForumPost(
     user,
   );
   return async (dispatch) =>
-    CourseAPI.forum.search(searchAttributes).then((response) => {
+    CourseAPI.forum.forums.search(searchAttributes).then((response) => {
       const data = response.data;
       dispatch(actions.saveForumPostList(data.userPosts, user.id));
       return response;
