@@ -301,10 +301,9 @@ Rails.application.routes.draw do
       end
 
       scope module: :forum do
-        resources :forums do
-          resources :topics do
-            resources :posts, only: [:create, :edit, :update, :destroy] do
-              get 'reply', on: :member
+        resources :forums, except: [:new, :edit] do
+          resources :topics, except: [:new, :edit] do
+            resources :posts, only: [:create, :update, :destroy] do
               put 'vote', on: :member
               put 'toggle_answer', on: :member
             end
@@ -316,13 +315,11 @@ Rails.application.routes.draw do
             put 'hidden' => 'topics#set_hidden', on: :member
           end
 
+          get 'subscribe', on: :member
           get 'unsubscribe', on: :member
-          post 'subscribe', on: :member
-          delete 'unsubscribe', on: :member
 
           get 'all_posts', on: :collection
           get 'search', on: :collection
-          get 'next_unread', on: :collection
           patch 'mark_all_as_read', on: :collection
           patch 'mark_as_read', on: :member
         end
