@@ -55,7 +55,7 @@ const CourseAPI = {
   personalTimes: new PersonalTimesAPI(),
   submissions: new SubmissionsAPI(),
   disbursement: new DisbursementAPI(),
-  forum: new ForumAPI(),
+  forum: ForumAPI,
   experiencePointsRecord: new ExperiencePointsRecordAPI(),
   videoSubmissions: new VideoSubmissionsAPI(),
 };
