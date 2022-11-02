@@ -17,13 +17,15 @@ export default class DeleteButton extends Component {
   renderIcon() {
     return (
       <Tooltip title={<FormattedMessage {...translations.removeFile} />}>
-        <IconButton
-          onClick={this.props.handleCancel}
-          size="small"
-          style={styles.badgeStyle}
-        >
-          <Close />
-        </IconButton>
+        <span>
+          <IconButton
+            onClick={this.props.handleCancel}
+            size="small"
+            style={styles.badgeStyle}
+          >
+            <Close />
+          </IconButton>
+        </span>
       </Tooltip>
     );
   }

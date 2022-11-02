@@ -13,9 +13,11 @@ const AcceptButton = ({
   ...props
 }: Props): JSX.Element => (
   <Tooltip title={tooltip}>
-    <IconButton onClick={onClick} color="inherit" {...props}>
-      <Done />
-    </IconButton>
+    <span>
+      <IconButton onClick={onClick} color="inherit" {...props}>
+        <Done />
+      </IconButton>
+    </span>
   </Tooltip>
 );
 

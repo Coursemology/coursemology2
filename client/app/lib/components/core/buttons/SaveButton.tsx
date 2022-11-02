@@ -15,14 +15,16 @@ const SaveButton = ({
   ...props
 }: Props): JSX.Element => (
   <Tooltip title={tooltip}>
-    <IconButton
-      onClick={onClick}
-      color="inherit"
-      disabled={disabled}
-      {...props}
-    >
-      <Save />
-    </IconButton>
+    <span>
+      <IconButton
+        onClick={onClick}
+        color="inherit"
+        disabled={disabled}
+        {...props}
+      >
+        <Save />
+      </IconButton>
+    </span>
   </Tooltip>
 );
 
