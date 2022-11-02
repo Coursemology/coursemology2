@@ -4,7 +4,7 @@
 - host = course.instance.host
 - topic_author = format_inline_text(topic.creator.name)
 
-- unsubscribe_url = unsubscribe_course_forum_url(course, topic.forum, host: host)
+- unsubscribe_url = course_forum_url(course, topic.forum, host: host, subscribe_forum: false)
 - topic_url = course_forum_topic_url(course, topic.forum, topic, host: host)
 
 - course_title = format_inline_text(course.title)
