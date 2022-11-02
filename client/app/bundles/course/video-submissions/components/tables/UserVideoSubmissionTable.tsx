@@ -34,11 +34,6 @@ const UserVideoSubmissionsTable: FC<Props> = (props) => {
     setTableProps: (): object => {
       return { size: 'small' };
     },
-    // setRowProps: (_row, dataIndex, _rowIndex): Record<string, unknown> => {
-    //   return {
-    //     className: `course_user_${videoSubmissions[dataIndex].courseUserId}`,
-    //   };
-    // },
     viewColumns: false,
   };
 
