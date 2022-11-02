@@ -17,7 +17,7 @@ const EnterEditModeButton = () => {
     <Button
       className="mr-4"
       variant="outlined"
-      onClick={() => navigate(`/courses/${courseId}/lesson_plan/edit/`)}
+      onClick={() => navigate(`/courses/${courseId}/lesson_plan/edit`)}
     >
       <FormattedMessage {...translations.enterEditMode} />
     </Button>

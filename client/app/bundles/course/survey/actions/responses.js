@@ -111,7 +111,7 @@ export function updateResponse(
 
         if (payload.response.submit && !data.flags.canModify) {
           const courseId = getCourseId();
-          navigate(`/courses/${courseId}/surveys/`);
+          navigate(`/courses/${courseId}/surveys`);
         }
 
         setNotification(successMessage)(dispatch);

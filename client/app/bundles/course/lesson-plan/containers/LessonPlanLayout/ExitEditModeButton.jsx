@@ -22,7 +22,7 @@ const ExitEditModeButton = () => {
   return (
     <Button
       variant="outlined"
-      onClick={() => navigate(`/courses/${courseId}/lesson_plan/`)}
+      onClick={() => navigate(`/courses/${courseId}/lesson_plan`)}
       style={styles.button}
     >
       <FormattedMessage {...translations.exitEditMode} />
