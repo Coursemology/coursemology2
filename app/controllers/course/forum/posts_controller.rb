@@ -18,75 +18,44 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
     if result
       send_created_notification(@post)
-      redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                  success: t('course.discussion.posts.create.success')
+      render 'create'
     else
-      redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                  danger: t('course.discussion.posts.create.failure',
-                            error: @post.errors.full_messages.to_sentence)
+      render json: { errors: @post.errors.full_messages.to_sentence }, status: :bad_request
     end
-  end
-
-  def edit
-    # Sanitize input before passing to the form helper for display when editing in case the text
-    # has not been sanitized before save.
-    @post.text = helpers.format_ckeditor_rich_text(@post.text)
   end
 
   def update
     if @post.update(post_params)
-      redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                  success: t('course.discussion.posts.update.success')
+      render partial: 'post_list_data', locals: { post: @post }, status: :ok
     else
-      render 'edit'
+      render json: { errors: @post.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   def vote
     @post.cast_vote!(current_user, post_vote_param)
-    redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                success: t('.success')
+    render partial: 'post_list_data', locals: { post: @post }, status: :ok
   end
 
   # Mark/unmark the post as the correct answer
   def toggle_answer
     authorize!(:toggle_answer, @topic)
     if @post.toggle_answer
-      redirect_to course_forum_topic_path(current_course, @forum, @topic), success: t('.success')
+      head :ok
     else
-      redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                  danger: @post.errors.full_messages.to_sentence
+      render json: { errors: @post.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   def destroy
     if @topic.posts.count == 1 && @topic.destroy
-      redirect_to course_forum_path(current_course, @forum),
-                  success: t('course.forum.topics.destroy.success', title: @topic.title)
+      render json: { isTopicDeleted: true }, status: :ok
     elsif @post.destroy
       @topic.update_column(:latest_post_at, @topic.posts.last&.created_at || @topic.created_at)
-      redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                  success: t('course.discussion.posts.destroy.success')
+      render json: { topicId: @topic.id, postTreeIds: @topic.posts.ordered_topologically.sorted_ids }
     else
-      redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                  danger: t('course.discussion.posts.destroy.failure',
-                            error: @post.errors.full_messages.to_sentence)
+      render json: { errors: @post.errors.full_messages.to_sentence }, status: :bad_request
     end
-  end
-
-  # Render a new post in a separate page
-  def reply
-    node = @post
-    @post_chain = [node]
-    # Show up to reply-post + 2 parent posts
-    2.times do
-      break if node.parent.nil?
-
-      @post_chain << node.parent
-      node = node.parent
-    end
-    @post_chain = @post_chain.reverse
-    @reply_post = @post.children.build
   end
 
   protected

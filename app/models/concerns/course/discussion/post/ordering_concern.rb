@@ -33,6 +33,14 @@ module Course::Discussion::Post::OrderingConcern
       current_thread.first
     end
 
+    # Returns a set of recursive arrays indicating the parent-child relationships of post ids.
+    #
+    # @return [Enumerable]
+    # @return [[]] When there are no posts.
+    def sorted_ids
+      retrieve_id(@sorted)
+    end
+
     private
 
     def sort(post_id)
@@ -40,6 +48,15 @@ module Course::Discussion::Post::OrderingConcern
       children_posts.map do |child_post|
         [child_post].push(sort(child_post.id))
       end
+    end
+
+    def retrieve_id(sorted_enum)
+      sorted_ids = []
+      sorted_enum.each do |element|
+        sorted_ids.push(element.id) if element.instance_of?(Course::Discussion::Post)
+        sorted_ids.push(retrieve_id(element)) if element.instance_of?(Array)
+      end
+      sorted_ids
     end
   end
 
