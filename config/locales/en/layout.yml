@@ -43,8 +43,6 @@ en:
       uploaded_by: 'Uploaded By: %{name}'
     mailer:
       greeting: 'Hello, %{user}:'
-    search_form:
-      search_button: :'common.search'
     course_user_badge:
       achievements: '+ %{difference} More'
       level: 'Level %{level}'
