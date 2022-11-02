@@ -21,7 +21,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
     before { sign_in(user) }
 
     describe '#show' do
-      subject { get :show, params: { course_id: course, forum_id: forum, id: topic } }
+      subject { get :show, params: { course_id: course, forum_id: forum, id: topic }, format: :json }
 
       it 'marks the topic as read' do
         subject
@@ -43,11 +43,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           subject
         end
 
-        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.forum.topics.destroy.failure',
-                                              error: topic_stub.errors.full_messages.to_sentence))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
@@ -63,9 +59,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
                params: { course_id: course, forum_id: forum, id: topic_stub, subscribe: 'true', format: 'js' }
         end
 
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.forum.topics.subscribe.failure'))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
 
       context 'when unsubscribe fails' do
@@ -74,9 +68,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
                params: { course_id: course, forum_id: forum, id: topic_stub, subscribe: 'false', format: 'js' }
         end
 
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.forum.topics.unsubscribe.failure'))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
@@ -91,10 +83,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           put :set_locked, params: { course_id: course, forum_id: forum, id: topic_stub, locked: true }
         end
 
-        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.forum.topics.locked.failure'))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
 
       context 'when set unlocked fails' do
@@ -102,10 +91,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           put :set_locked, params: { course_id: course, forum_id: forum, id: topic_stub, locked: false }
         end
 
-        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.forum.topics.unlocked.failure'))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
@@ -120,10 +106,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           put :set_hidden, params: { course_id: course, forum_id: forum, id: topic_stub, hidden: true }
         end
 
-        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.forum.topics.hidden.failure'))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
 
       context 'when set unhidden fails' do
@@ -131,10 +114,7 @@ RSpec.describe Course::Forum::TopicsController, type: :controller do
           put :set_hidden, params: { course_id: course, forum_id: forum, id: topic_stub, hidden: false }
         end
 
-        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic_stub)) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.forum.topics.unhidden.failure'))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
   end

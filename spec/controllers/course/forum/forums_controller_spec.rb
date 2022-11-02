@@ -12,7 +12,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
       allow(stub).to receive(:save).and_return(false)
       allow(stub).to receive(:destroy).and_return(false)
       allow(stub).to receive_message_chain(:subscriptions, :create).and_return(false)
-      allow(stub).to receive_message_chain(:subscriptions, :where, delete_all: 0)
+      allow(stub).to receive_message_chain(:subscriptions, :where, delete_all: 0).and_return(false)
       stub
     end
 
@@ -35,7 +35,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
       let!(:second_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
 
       it 'preloads the latest post for each topics of the forum' do
-        get :show, params: { course_id: course, id: forum }
+        get :show, params: { course_id: course, id: forum, format: :json }
         expect(controller.instance_variable_get(:@topics).first.posts.first).
           to eq(second_topic_post)
       end
@@ -57,7 +57,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
           subject
         end
 
-        it { is_expected.to render_template('new') }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
@@ -76,7 +76,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
           subject
         end
 
-        it { is_expected.to render_template('edit') }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
@@ -89,12 +89,12 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
           subject
         end
 
-        it { is_expected.to redirect_to(course_forum_path(course, forum_stub)) }
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
     describe '#subscribe' do
-      subject { post :subscribe, params: { course_id: course, id: forum_stub, format: 'js' } }
+      subject { post :subscribe, params: { course_id: course, id: forum_stub } }
 
       context 'when subscribe fails' do
         before do
@@ -102,14 +102,12 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
           subject
         end
 
-        it 'sets a failure flash message' do
-          expect(flash.now[:danger]).to eq(I18n.t('course.forum.forums.subscribe.failure'))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 
     describe '#unsubscribe' do
-      subject { delete :unsubscribe, params: { course_id: course, id: forum_stub, format: 'js' } }
+      subject { delete :unsubscribe, params: { course_id: course, id: forum_stub, format: :json } }
 
       context 'when there is no subscription for the forum' do
         before do
@@ -117,9 +115,7 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
           subject
         end
 
-        it 'sets a failure flash message' do
-          expect(flash.now[:danger]).to eq(I18n.t('course.forum.forums.unsubscribe.failure'))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
     end
 

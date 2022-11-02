@@ -33,11 +33,7 @@ RSpec.describe Course::Forum::PostsController, type: :controller do
           subject
         end
 
-        it { is_expected.to redirect_to(course_forum_topic_path(course, forum, topic)) }
-        it 'sets an error flash message' do
-          expect(flash[:danger]).to eq(I18n.t('course.discussion.posts.destroy.failure',
-                                              error: post.errors.full_messages.to_sentence))
-        end
+        it { is_expected.to have_http_status(:bad_request) }
       end
 
       context 'when the only post in the topic is deleted' do
@@ -47,31 +43,6 @@ RSpec.describe Course::Forum::PostsController, type: :controller do
 
         it 'destroys the topic' do
           expect(forum.topics).to be_empty
-        end
-      end
-    end
-
-    describe '#edit' do
-      subject do
-        get :edit,
-            params: { course_id: course, forum_id: forum, topic_id: topic, id: post.id }
-      end
-
-      context 'when edit page is loaded' do
-        let!(:topic) do
-          topic = create(:forum_topic, forum: forum)
-          create(:course_discussion_post, topic: topic.acting_as)
-          topic
-        end
-        let!(:post) do
-          # Bypass before_save callback which strips `script` tags.
-          topic.posts.first.update_column(:text, "<script>alert('boo');</script>")
-          topic.posts.first
-        end
-
-        it 'sanitizes the post text' do
-          subject
-          expect(assigns(:post).text).not_to include('script')
         end
       end
     end

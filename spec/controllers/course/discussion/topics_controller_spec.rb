@@ -60,7 +60,7 @@ RSpec.describe Course::Discussion::TopicsController do
       context 'when a course staff visits the page' do
         before { sign_in(staff) }
 
-        it { is_expected.to render_template(:topics_list_data) }
+        it { is_expected.to render_template(:discussion_topic_list_data) }
 
         it 'only shows the pending topics' do
           subject
@@ -71,7 +71,7 @@ RSpec.describe Course::Discussion::TopicsController do
       context 'when a course student visits the page' do
         before { sign_in(student) }
 
-        it { is_expected.to render_template(:topics_list_data) }
+        it { is_expected.to render_template(:discussion_topic_list_data) }
 
         it 'only shows the unread topics' do
           subject
@@ -86,7 +86,7 @@ RSpec.describe Course::Discussion::TopicsController do
       context 'when a course staff visits the page' do
         before { sign_in(staff) }
 
-        it { is_expected.to render_template(:topics_list_data) }
+        it { is_expected.to render_template(:discussion_topic_list_data) }
 
         context 'when the user does not have any students' do
           it 'shows nothing' do
@@ -125,7 +125,7 @@ RSpec.describe Course::Discussion::TopicsController do
       context 'when a course staff visits the page' do
         before { sign_in(staff) }
 
-        it { is_expected.to render_template(:topics_list_data) }
+        it { is_expected.to render_template(:discussion_topic_list_data) }
 
         context 'when the user does not have any students' do
           it 'shows nothing' do
