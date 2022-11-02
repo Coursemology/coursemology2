@@ -39,10 +39,6 @@ const translations = defineMessages({
     id: 'course.materials.folders.defaultHeader',
     defaultMessage: 'Materials',
   },
-  editFolderTooltip: {
-    id: 'course.materials.folders.editFolderTooltip',
-    defaultMessage: 'Edit Folder',
-  },
 });
 
 const FolderShow: FC<Props> = (props) => {
@@ -116,7 +112,6 @@ const FolderShow: FC<Props> = (props) => {
         onClick={(): void => setIsEditFolderOpen(true)}
         style={{ padding: 6 }}
         color="default"
-        tooltip={intl.formatMessage(translations.editFolderTooltip)}
       />,
     );
   }

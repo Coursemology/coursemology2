@@ -36,10 +36,6 @@ interface Props extends WrappedComponentProps {
 }
 
 const translations = defineMessages({
-  tableButtonEditTooltip: {
-    id: 'course.materials.folders.tableButtonEditTooltip',
-    defaultMessage: 'Edit',
-  },
   tableButtonDeleteTooltip: {
     id: 'course.materials.folders.tableButtonDeleteTooltip',
     defaultMessage: 'Delete',
@@ -162,7 +158,6 @@ const WorkbinTableButtons: FC<Props> = (props) => {
             id={`${type}-edit-button-${itemId}`}
             onClick={onEdit}
             style={{ padding: 5 }}
-            tooltip={intl.formatMessage(translations.tableButtonEditTooltip)}
           />
         )}
         {canDelete && isConcrete && (
