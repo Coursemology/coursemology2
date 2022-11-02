@@ -28,7 +28,7 @@ module Course::ForumsAbilityComponent
   end
 
   def allow_show_forums
-    can [:read, :mark_as_read, :mark_all_as_read, :next_unread, :all_posts], Course::Forum, course_id: course.id
+    can [:read, :mark_as_read, :mark_all_as_read, :all_posts], Course::Forum, course_id: course.id
     can [:subscribe, :unsubscribe], Course::Forum, course_id: course.id
   end
 
