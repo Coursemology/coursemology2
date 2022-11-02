@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { FC, forwardRef, useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { InputLabel } from '@mui/material';
 import { cyan } from '@mui/material/colors';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
@@ -10,13 +10,14 @@ interface Props {
   label?: string;
   value: string;
   onChange: (text: string) => void;
-  disabled: boolean;
+  disabled?: boolean;
   field?: string | undefined;
   required?: boolean | undefined;
   name: string;
   inputId: string;
   disableMargins?: boolean;
   placeholder?: string;
+  autofocus?: boolean;
 }
 
 const uploadAdapter = (loader) => {
@@ -45,7 +46,7 @@ const uploadAdapter = (loader) => {
   };
 };
 
-const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
+const CKEditorRichText = forwardRef((props: Props, ref) => {
   const {
     label,
     value,
@@ -57,6 +58,7 @@ const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
     inputId,
     disableMargins,
     placeholder,
+    autofocus,
   } = props;
 
   const [isFocused, setIsFocused] = useState(false);
@@ -145,6 +147,7 @@ const CKEditorRichText: FC<Props> = forwardRef((props: Props, ref) => {
             ) => {
               return uploadAdapter(loader);
             };
+            if (autofocus) editor.focus();
           }}
           onChange={(_event, editor) => {
             onChange(editor.getData());
