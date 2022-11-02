@@ -1,22 +1,29 @@
 # frozen_string_literal: true
 class Course::Forum::TopicsController < Course::Forum::ComponentController
+  include Course::UsersHelper
   include Course::Forum::TopicControllerHidingConcern
   include Course::Forum::TopicControllerLockingConcern
   include Course::Forum::TopicControllerSubscriptionConcern
 
-  before_action :load_topic, except: [:new, :create]
-  load_resource :topic, class: Course::Forum::Topic.name, through: :forum, only: [:new, :create]
+  before_action :load_topic, except: [:create]
+  load_resource :topic, class: Course::Forum::Topic.name, through: :forum, only: [:create]
   authorize_resource :topic, class: Course::Forum::Topic.name, except: [:set_resolved]
   before_action :add_topic_breadcrumb
   after_action :mark_posts_read, only: [:show]
 
   def show
-    @topic.viewed_by(current_user)
-    @topic.mark_as_read!(for: current_user)
-    @reply_post = @topic.posts.build
-  end
-
-  def new
+    respond_to do |format|
+      format.html { render 'course/forum/forums/index' }
+      format.json do
+        @topic.viewed_by(current_user)
+        @topic.mark_as_read!(for: current_user)
+        @posts = @topic.posts.with_read_marks_for(current_user).
+                 calculated(:upvotes, :downvotes).
+                 with_user_votes(current_user).
+                 ordered_topologically
+        @course_users_hash = preload_course_users_hash(current_course)
+      end
+    end
   end
 
   def create
@@ -25,14 +32,10 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
     if @topic.save
       send_created_notification(@topic)
       @topic.ensure_subscribed_by(current_user) if @forum.forum_topics_auto_subscribe
-      redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                  success: t('.success', title: @topic.title)
+      render json: { redirectUrl: course_forum_topic_path(current_course, @forum, @topic) }, status: :ok
     else
-      render 'new'
+      render json: { errors: @topic.errors }, status: :bad_request
     end
-  end
-
-  def edit
   end
 
   def update
@@ -40,20 +43,17 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
     authorize_topic_type!(@topic.topic_type)
 
     if @topic.save
-      redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                  success: t('.success', title: @topic.title)
+      render partial: 'topic_list_data', locals: { forum: @topic.forum, topic: @topic }, status: :ok
     else
-      render 'edit'
+      render json: { errors: @topic.errors }, status: :bad_request
     end
   end
 
   def destroy
     if @topic.destroy
-      redirect_to course_forum_path(current_course, @forum),
-                  success: t('.success', title: @topic.title)
+      head :ok
     else
-      redirect_to course_forum_topic_path(current_course, @forum, @topic),
-                  danger: t('.failure', error: @topic.errors.full_messages.to_sentence)
+      render json: { errors: @topic.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
