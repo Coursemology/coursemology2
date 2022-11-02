@@ -3,8 +3,7 @@
 - course = topic.course
 - course_user = CourseUser.find_by(course: course, user: post.creator)
 - host = course.instance.host
-- unsubscribe_url = subscribe_course_forum_topic_url(course, topic.forum, topic, subscribe: false,
-                                                     host: host)
+- unsubscribe_url = course_forum_topic_url(course, topic.forum, topic, host: host, subscribe_topic: false)
 
 - course_title = format_inline_text(course.title)
 - topic_title = format_inline_text(topic.title)
