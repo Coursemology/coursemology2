@@ -54,7 +54,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
       return (
         <Box>
           <Typography variant="body1" component="span">
-            {user.email} &mdash;
+            {user.email} &mdash;{' '}
           </Typography>
           <Link
             href={user.manageEmailSubscriptionUrl}
