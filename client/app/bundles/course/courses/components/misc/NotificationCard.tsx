@@ -41,8 +41,8 @@ const translations = defineMessages({
     id: 'course.courses.show.notification.reachLevel',
     defaultMessage: 'reached Level',
   },
-  createForumTopic: {
-    id: 'course.courses.show.notification.createForumTopic',
+  createTopic: {
+    id: 'course.courses.show.notification.createTopic',
     defaultMessage: 'created topic',
   },
   replyForumTopic: {
@@ -83,7 +83,7 @@ const NotificationCard: FC<Props> = (props) => {
       concatMessage = intl.formatMessage(translations.reachLevel);
       break;
     case 'topicCreate':
-      concatMessage = intl.formatMessage(translations.createForumTopic);
+      concatMessage = intl.formatMessage(translations.createTopic);
       actableLink = getForumTopicURL(
         getCourseId(),
         notification.forumName,
