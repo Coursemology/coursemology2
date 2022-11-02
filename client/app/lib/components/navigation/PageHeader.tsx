@@ -5,7 +5,7 @@ import ArrowBack from '@mui/icons-material/ArrowBack';
 import TitleBar from 'lib/components/navigation/TitleBar';
 
 interface Props {
-  title: string;
+  title: ReactElement | string;
   returnLink?: string;
   toolbars?: ReactElement[];
 }
