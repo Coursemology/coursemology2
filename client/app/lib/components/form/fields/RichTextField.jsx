@@ -26,6 +26,7 @@ FormRichTextField.propTypes = {
   variant: PropTypes.string,
   disableMargins: PropTypes.bool,
   placeholder: PropTypes.string,
+  required: PropTypes.bool,
 };
 
 export default memo(FormRichTextField, propsAreEqual);
