@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Forum: Topic: Management' do
+RSpec.feature 'Course: Forum: Topic: Management', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -13,123 +13,160 @@ RSpec.feature 'Course: Forum: Topic: Management' do
       let(:user) { create(:course_manager, course: course).user }
       scenario 'I can see topics' do
         topics = create_list(:forum_topic, 2, forum: forum)
+        hidden_topic = create(:forum_topic, forum: forum, hidden: true)
+
         visit course_forum_path(course, forum)
         topics.each do |topic|
-          expect(page).to have_link(topic.title,
-                                    href: course_forum_topic_path(course, forum, topic))
-          expect(page).to have_content_tag_for(topic)
+          within find("tr.topic_#{topic.id}") do
+            expect(page).to have_link(topic.title, href: course_forum_topic_path(course, forum, topic))
+            find("button.topic-action-#{topic.id}").hover
+            expect(page).to have_selector("button.topic-subscribe-#{topic.id}")
+            expect(page).to have_selector("button.topic-hide-#{topic.id}")
+            expect(page).to have_selector("button.topic-lock-#{topic.id}")
+            expect(page).to have_selector("button.topic-edit-#{topic.id}")
+            expect(page).to have_selector("button.topic-delete-#{topic.id}")
+          end
         end
+
+        expect(page).to have_selector("tr.topic_#{hidden_topic.id}")
       end
 
       scenario 'I can create a new topic with all types' do
         topic = build_stubbed(:forum_topic, forum: forum)
 
         visit course_forum_path(course, forum)
-        find_link(nil, href: new_course_forum_topic_path(course, forum)).click
 
-        expect(current_path).to eq(new_course_forum_topic_path(course, forum))
+        find('button.new-topic-button').click
+        expect(page).to have_selector('h2', text: 'New Topic')
 
         # Create a topic with a missing title.
-        click_button 'submit'
-
-        expect(current_path).to eq(course_forum_topics_path(course, forum))
-        expect(page).to have_selector('div.alert.alert-danger')
+        fill_in_react_ck 'textarea[name=text]', 'test'
+        find('button.btn-submit').click
+        find_react_hook_form_error
 
         # Create an announcement topic with a title.
         fill_in 'title', with: topic.title
-        fill_in 'text', with: 'test'
 
-        within '.topic_topic_type' do
-          find("input[value='announcement']").click
-        end
-        click_button 'submit'
+        find('#select').click
+        find('#select-announcement').click
 
-        expect(current_path).to eq(course_forum_topic_path(course, forum, forum.topics.last))
+        find('button.btn-submit').click
+        sleep 0.2
+
         expect(forum.topics.last.topic_type).to eq('announcement')
-        expect(forum.topics.last.posts.first.text).to eq('test')
+        expect(forum.topics.last.posts.first.text).to eq('<p>test</p>')
 
         # Create a sticky topic with a title.
         visit course_forum_path(course, forum)
-        find_link(nil, href: new_course_forum_topic_path(course, forum)).click
+        find('button.new-topic-button').click
 
         fill_in 'title', with: topic.title
-        fill_in 'text', with: 'awesome text'
+        fill_in_react_ck 'textarea[name=text]', 'awesome text'
 
-        within '.topic_topic_type' do
-          find("input[value='sticky']").click
-        end
-        click_button 'submit'
+        find('#select').click
+        find('#select-sticky').click
+        find('button.btn-submit').click
+        sleep 0.2
 
-        expect(current_path).to eq(course_forum_topic_path(course, forum, forum.topics.last))
         expect(forum.topics.last.topic_type).to eq('sticky')
       end
 
-      scenario 'I can edit a topic' do
+      scenario 'I can edit a topic from the topic show page' do
         topic = create(:forum_topic, forum: forum)
 
         # Edit with valid information.
         visit course_forum_topic_path(course, forum, topic)
-        find_link(nil, href: edit_course_forum_topic_path(course, forum, topic)).click
+        expect(page).to have_no_selector("button.topic-subscribe-#{topic.id}")
+        expect(page).to have_selector("button.topic-hide-#{topic.id}")
+        expect(page).to have_selector("button.topic-lock-#{topic.id}")
+        expect(page).to have_selector("button.topic-edit-#{topic.id}")
+        expect(page).to have_selector("button.topic-delete-#{topic.id}")
+
+        find("button.topic-edit-#{topic.id}").click
 
         new_title = 'new title'
         fill_in 'title', with: new_title
-        click_button 'submit'
+        find('.btn-submit').click
 
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic.reload))
-        expect(page).to have_selector('h1', text: new_title)
+        expect_toastify("Topic #{new_title} has been updated.")
+        expect(page).to have_text(new_title)
 
         # Edit with invalid information.
-        visit course_forum_topic_path(course, forum, topic)
-        find_link(nil, href: edit_course_forum_topic_path(course, forum, topic)).click
+        find("button.topic-edit-#{topic.id}").click
 
         fill_in 'title', with: ''
-        click_button 'submit'
-
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic.reload))
-        expect(page).to have_selector('div.alert.alert-danger')
+        find('.btn-submit').click
+        find_react_hook_form_error
       end
 
-      scenario 'I can delete a topic' do
+      scenario 'I can edit a topic from the topic index page' do
         topic = create(:forum_topic, forum: forum)
-        visit course_forum_topic_path(course, forum, topic)
 
-        within find(:css, '.page-header') do
-          expect { find(:css, 'a.delete').click }.to \
-            change { forum.topics.exists?(topic.id) }.to(false)
+        # Edit with valid information.
+        visit course_forum_path(course, forum)
+        expect(page).to have_selector("tr.topic_#{topic.id}")
+
+        find("button.topic-action-#{topic.id}").hover
+        find("button.topic-edit-#{topic.id}").click
+
+        new_title = 'new title'
+        fill_in 'title', with: new_title
+        find('.btn-submit').click
+
+        expect_toastify("Topic #{new_title} has been updated.")
+        within find("tr.topic_#{topic.id}") do
+          expect(page).to have_text(new_title)
         end
+
+        # Edit with invalid information.
+        find("button.topic-action-#{topic.id}").hover
+        find("button.topic-edit-#{topic.id}").click
+
+        fill_in 'title', with: ''
+        find('.btn-submit').click
+        find_react_hook_form_error
+      end
+
+      scenario 'I can delete a topic from the topic show page' do
+        topic = create(:forum_topic, forum: forum)
+        visit course_forum_topic_path(course, forum, topic)
+
+        expect do
+          find("button.topic-delete-#{topic.id}").click
+          accept_confirm_dialog
+        end.to change { forum.topics.exists?(topic.id) }.to(false)
+
         expect(current_path).to eq(course_forum_path(course, forum))
-
-        expect(page).to have_no_content_tag_for(topic)
+        expect(page).to have_no_selector("tr.topic_#{topic.id}")
       end
 
-      scenario 'I can subscribe to a topic', js: true do
+      scenario 'I can delete a topic from the topic index page' do
         topic = create(:forum_topic, forum: forum)
-        visit course_forum_topic_path(course, forum, topic)
-        find_link(nil,
-                  href: subscribe_course_forum_topic_path(course, forum, topic,
-                                                          subscribe: true)).click
+        visit course_forum_path(course, forum)
 
-        wait_for_ajax
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(nil,
-                                  href: subscribe_course_forum_topic_path(course, forum, topic,
-                                                                          subscribe: false))
+        expect(page).to have_selector("tr.topic_#{topic.id}")
+
+        expect do
+          find("button.topic-action-#{topic.id}").hover
+          find("button.topic-delete-#{topic.id}").click
+          accept_confirm_dialog
+        end.to change { forum.topics.exists?(topic.id) }.to(false)
+
+        expect(page).to have_no_selector("tr.topic_#{topic.id}")
+      end
+
+      scenario 'I can subscribe to a topic' do
+        topic = create(:forum_topic, forum: forum)
+        visit course_forum_path(course, forum)
+
+        find("button.topic-action-#{topic.id}").hover
+        find("button.topic-subscribe-#{topic.id}").click
+        expect_toastify("You have successfully been subscribed to the forum topic #{topic.title}.")
         expect(topic.subscriptions.where(user: user).count).to eq(1)
-      end
 
-      scenario 'I can unsubscribe from a topic', js: true do
-        topic = create(:forum_topic, forum: forum)
-        topic.subscriptions.create(user: user)
-        visit course_forum_topic_path(course, forum, topic)
-        find_link(nil,
-                  href: subscribe_course_forum_topic_path(course, forum, topic,
-                                                          subscribe: false)).click
-
-        wait_for_ajax
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(nil,
-                                  href: subscribe_course_forum_topic_path(course, forum, topic,
-                                                                          subscribe: true))
+        find("button.topic-action-#{topic.id}").hover
+        find("button.topic-subscribe-#{topic.id}").click
+        expect_toastify("You have successfully been unsubscribed from the forum topic #{topic.title}.")
         expect(topic.subscriptions.where(user: user).empty?).to eq(true)
       end
 
@@ -138,22 +175,14 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         # Set locked
         visit course_forum_topic_path(course, forum, topic)
-        find_link(I18n.t('course.forum.topics.locked.tag'),
-                  href: locked_course_forum_topic_path(course, forum, topic, locked: true)).click
+        find("button.topic-lock-#{topic.id}").click
 
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(I18n.t('course.forum.topics.unlocked.tag'),
-                                  href: locked_course_forum_topic_path(course, forum, topic,
-                                                                       locked: false))
+        expect_toastify("The topic \"#{topic.title}\" has successfully been locked.")
         expect(topic.reload.locked).to eq(true)
 
         # Set unlocked
-        find_link(I18n.t('course.forum.topics.unlocked.tag'),
-                  href: locked_course_forum_topic_path(course, forum, topic, locked: false)).click
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(I18n.t('course.forum.topics.locked.tag'),
-                                  href: locked_course_forum_topic_path(course, forum, topic,
-                                                                       locked: true))
+        find("button.topic-lock-#{topic.id}").click
+        expect_toastify("The topic \"#{topic.title}\" has successfully been unlocked.")
         expect(topic.reload.locked).to eq(false)
       end
 
@@ -162,22 +191,15 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         # Set hidden
         visit course_forum_topic_path(course, forum, topic)
-        find_link(I18n.t('course.forum.topics.hidden.tag'),
-                  href: hidden_course_forum_topic_path(course, forum, topic, hidden: true)).click
+        find("button.topic-hide-#{topic.id}").click
 
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(I18n.t('course.forum.topics.unhidden.tag'),
-                                  href: hidden_course_forum_topic_path(course, forum, topic,
-                                                                       hidden: false))
+        expect_toastify("The topic \"#{topic.title}\" has successfully been hidden.")
         expect(topic.reload.hidden).to eq(true)
 
         # Set shown
-        find_link(I18n.t('course.forum.topics.unhidden.tag'),
-                  href: hidden_course_forum_topic_path(course, forum, topic, hidden: false)).click
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(I18n.t('course.forum.topics.hidden.tag'),
-                                  href: hidden_course_forum_topic_path(course, forum, topic,
-                                                                       hidden: true))
+        find("button.topic-hide-#{topic.id}").click
+
+        expect_toastify("The topic \"#{topic.title}\" has successfully been unhidden.")
         expect(topic.reload.hidden).to eq(false)
       end
     end
@@ -192,58 +214,61 @@ RSpec.feature 'Course: Forum: Topic: Management' do
       end
 
       scenario 'I can see shown topics' do
-        topic = create(:forum_topic, forum: forum)
+        topics = create_list(:forum_topic, 3, forum: forum)
         hidden_topic = create(:forum_topic, forum: forum, hidden: true)
 
         visit course_forum_path(course, forum)
-        expect(page).to have_link(topic.title,
-                                  href: course_forum_topic_path(course, forum, topic))
-        expect(page).to have_content_tag_for(topic)
-        expect(page).not_to have_link(hidden_topic.title,
-                                      href: course_forum_topic_path(course, forum, hidden_topic))
-        expect(page).to have_no_content_tag_for(hidden_topic)
+        topics.each do |topic|
+          within find("tr.topic_#{topic.id}") do
+            expect(page).to have_link(topic.title, href: course_forum_topic_path(course, forum, topic))
+            expect(page).to have_selector("button.topic-subscribe-#{topic.id}")
+            expect(page).to have_no_selector("button.topic-hide-#{topic.id}")
+            expect(page).to have_no_selector("button.topic-lock-#{topic.id}")
+            expect(page).to have_no_selector("button.topic-edit-#{topic.id}")
+            expect(page).to have_no_selector("button.topic-delete-#{topic.id}")
+          end
+        end
+
+        expect(page).to have_no_selector("tr.topic_#{hidden_topic.id}")
       end
 
       scenario 'I can create a new topic with normal and question types' do
         topic = build_stubbed(:forum_topic, forum: forum)
 
         visit course_forum_path(course, forum)
-        find_link(nil, href: new_course_forum_topic_path(course, forum)).click
 
-        expect(current_path).to eq(new_course_forum_topic_path(course, forum))
+        find('button.new-topic-button').click
+        expect(page).to have_selector('h2', text: 'New Topic')
 
         # Create a topic with a missing title.
-        click_button 'submit'
+        fill_in_react_ck 'textarea[name=text]', 'test'
+        find('button.btn-submit').click
+        find_react_hook_form_error
 
-        expect(current_path).to eq(course_forum_topics_path(course, forum))
-        expect(page).to have_selector('div.alert.alert-danger')
-
-        # Create an announcement topic with a title.
+        # Create a normal topic with a title.
         fill_in 'title', with: topic.title
-        fill_in 'text', with: 'test'
 
-        within '.topic_topic_type' do
-          find("input[value='normal']").click
-        end
-        click_button 'submit'
+        find('#select').click
+        find('#select-normal').click
 
-        expect(current_path).to eq(course_forum_topic_path(course, forum, forum.topics.last))
+        find('button.btn-submit').click
+        sleep 0.2
+
         expect(forum.topics.last.topic_type).to eq('normal')
-        expect(forum.topics.last.posts.first.text).to eq('test')
+        expect(forum.topics.last.posts.first.text).to eq('<p>test</p>')
 
-        # Create a sticky topic with a title.
+        # Create a question topic with a title.
         visit course_forum_path(course, forum)
-        find_link(nil, href: new_course_forum_topic_path(course, forum)).click
+        find('button.new-topic-button').click
 
         fill_in 'title', with: topic.title
-        fill_in 'text', with: 'awesome text'
+        fill_in_react_ck 'textarea[name=text]', 'awesome text'
 
-        within '.topic_topic_type' do
-          find("input[value='question']").click
-        end
-        click_button 'submit'
+        find('#select').click
+        find('#select-question').click
+        find('button.btn-submit').click
+        sleep 0.2
 
-        expect(current_path).to eq(course_forum_topic_path(course, forum, forum.topics.last))
         expect(forum.topics.last.topic_type).to eq('question')
       end
 
@@ -253,70 +278,58 @@ RSpec.feature 'Course: Forum: Topic: Management' do
 
         # Edit with valid information.
         visit course_forum_topic_path(course, forum, topic)
-        find_link(nil, href: edit_course_forum_topic_path(course, forum, topic)).click
+        expect(page).to have_no_selector("button.topic-subscribe-#{topic.id}")
+        expect(page).to have_no_selector("button.topic-hide-#{topic.id}")
+        expect(page).to have_no_selector("button.topic-lock-#{topic.id}")
+        expect(page).to have_selector("button.topic-edit-#{topic.id}")
+        expect(page).to have_no_selector("button.topic-delete-#{topic.id}")
+
+        find("button.topic-edit-#{topic.id}").click
 
         new_title = 'new title'
         fill_in 'title', with: new_title
-        click_button 'submit'
+        find('.btn-submit').click
 
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic.reload))
-        expect(page).to have_selector('h1', text: new_title)
+        expect_toastify("Topic #{new_title} has been updated.")
+        expect(page).to have_text(new_title)
 
         # Edit with invalid information.
-        visit course_forum_topic_path(course, forum, topic)
-        find_link(nil, href: edit_course_forum_topic_path(course, forum, topic)).click
+        find("button.topic-edit-#{topic.id}").click
 
         fill_in 'title', with: ''
-        click_button 'submit'
-
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic.reload))
-        expect(page).to have_selector('div.alert.alert-danger')
+        find('.btn-submit').click
+        find_react_hook_form_error
 
         # Can not edit others' topic
         visit course_forum_topic_path(course, forum, other_topic)
-        expect(page).not_to have_link(nil, href: edit_course_forum_topic_path(course, forum,
-                                                                              other_topic))
+        expect(page).to have_no_selector("button.topic-edit-#{topic.id}")
+        expect(page).to have_no_selector("button.topic-delete-#{topic.id}")
       end
 
-      scenario 'I can subscribe to a topic', js: true do
+      scenario 'I can subscribe to a topic' do
         topic = create(:forum_topic, forum: forum)
-        visit course_forum_topic_path(course, forum, topic)
-        find_link(nil,
-                  href: subscribe_course_forum_topic_path(course, forum, topic,
-                                                          subscribe: true)).click
+        visit course_forum_path(course, forum)
 
-        wait_for_ajax
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(nil,
-                                  href: subscribe_course_forum_topic_path(course, forum, topic,
-                                                                          subscribe: false))
+        find("button.topic-subscribe-#{topic.id}").click
+        expect_toastify("You have successfully been subscribed to the forum topic #{topic.title}.")
         expect(topic.subscriptions.where(user: user).count).to eq(1)
-      end
 
-      scenario 'I can unsubscribe from a topic', js: true do
-        topic = create(:forum_topic, forum: forum)
-        topic.subscriptions.create(user: user)
-        visit course_forum_topic_path(course, forum, topic)
-        find_link(nil,
-                  href: subscribe_course_forum_topic_path(course, forum, topic,
-                                                          subscribe: false)).click
-        wait_for_ajax
-
-        expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_link(nil,
-                                  href: subscribe_course_forum_topic_path(course, forum, topic,
-                                                                          subscribe: true))
+        find("button.topic-subscribe-#{topic.id}").click
+        expect_toastify("You have successfully been unsubscribed from the forum topic #{topic.title}.")
         expect(topic.subscriptions.where(user: user).empty?).to eq(true)
       end
 
       scenario 'I can click unsubscribe forum topic link from an email' do
         topic = create(:forum_topic, forum: forum)
         topic.subscriptions.create(user: user)
-        visit subscribe_course_forum_topic_path(course, forum, topic, subscribe: false)
+        visit course_forum_topic_path(course, topic.forum, topic, subscribe_topic: false)
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
-        expect(page).to have_selector('div.alert.alert-success')
-        expect(page).to have_text(I18n.t('course.forum.topics.unsubscribe.success'))
+        expect_toastify("You have successfully been unsubscribed from the forum topic #{topic.title}.")
         expect(Course::Discussion::Topic::Subscription.where(user: user, topic: topic).empty?).to eq(true)
+
+        # Go to the same link again
+        visit course_forum_topic_path(course, topic.forum, topic, subscribe_topic: false)
+        expect_toastify("You have successfully been unsubscribed from the forum topic #{topic.title}.")
       end
     end
   end

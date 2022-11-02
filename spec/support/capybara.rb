@@ -84,7 +84,7 @@ module Capybara::TestGroupHelpers
         within toast do
           toast_text = find('div.Toastify__toast-body', visible: true).text
           found = true if toast_text == message
-          find('button.Toastify__close-button').click
+          find('div.Toastify__toast-body', visible: true).click
           break if found
         end
       end
@@ -134,6 +134,10 @@ module Capybara::TestGroupHelpers
     def hover_then_click(element)
       element.hover
       element.click
+    end
+
+    def find_react_hook_form_error
+      expect(page).to have_text('Failed submitting this form. Please try again.')
     end
   end
 end
