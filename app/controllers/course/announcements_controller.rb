@@ -39,7 +39,7 @@ class Course::AnnouncementsController < Course::ComponentController
     if @announcement.destroy
       head :ok
     else
-      render json: { errors: @announcement.errors }, status: :bad_request
+      render json: { errors: @announcement.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
