@@ -68,18 +68,39 @@ const processColumns = (includeRowNumber, columns) => {
   }
 
   return columns.map((c) => {
-    if (c.options?.alignCenter) {
+    if (c.options?.alignCenter || c.options?.hideInSmallScreen) {
       return {
         ...c,
         options: {
           ...c.options,
-          setCellHeaderProps: () => ({
-            align: 'center',
-            className: 'centered-table-head',
-          }),
-          setCellProps: () => ({
-            align: 'center',
-          }),
+          setCellHeaderProps: () => {
+            let align = null;
+            let className = '';
+            if (c.options?.alignCenter) {
+              className += 'centered-table-head';
+              align = 'center';
+            }
+            if (c.options?.hideInSmallScreen) {
+              className += ' !hidden sm:!table-cell';
+            }
+            return {
+              ...(align && { align }),
+              className,
+            };
+          },
+          setCellProps: () => {
+            let align = null;
+            let className = '';
+            if (c.options?.alignCenter) {
+              align = 'center';
+            }
+            if (c.options?.hideInSmallScreen)
+              className += ' !hidden sm:!table-cell';
+            return {
+              ...(align && { align }),
+              className,
+            };
+          },
         },
       };
     }
