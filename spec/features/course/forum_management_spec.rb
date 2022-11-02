@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Forum: Management' do
+RSpec.feature 'Course: Forum: Management', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -14,8 +14,12 @@ RSpec.feature 'Course: Forum: Management' do
         forums = create_list(:forum, 2, course: course)
         visit course_forums_path(course)
         forums.each do |forum|
-          expect(page).to have_link(forum.name, href: course_forum_path(course, forum))
-          expect(page).to have_content_tag_for(forum)
+          within find("tr.forum_#{forum.id}") do
+            expect(page).to have_link(forum.name, href: course_forum_path(course, forum))
+            expect(page).to have_selector("button.forum-subscribe-#{forum.id}", visible: false)
+            expect(page).to have_selector("button.forum-edit-#{forum.id}", visible: false)
+            expect(page).to have_selector("button.forum-delete-#{forum.id}", visible: false)
+          end
         end
       end
 
@@ -23,80 +27,125 @@ RSpec.feature 'Course: Forum: Management' do
         forum = build_stubbed(:forum)
 
         visit course_forums_path(course)
-        find_link(nil, href: new_course_forum_path(course)).click
 
-        expect(current_path).to eq(new_course_forum_path(course))
+        find('button.new-forum-button').click
+        expect(page).to have_selector('h2', text: 'New Forum')
 
         # Create a forum with a missing name.
-        fill_in 'forum_description', with: forum.description
-
-        click_button 'submit'
-
-        expect(current_path).to eq(course_forums_path(course))
-        expect(page).to have_selector('div.alert.alert-danger')
-        expect(page).to have_field('forum_description', with: forum.description)
+        fill_in_react_ck 'textarea[name=description]', forum.description
+        find('button.btn-submit').click
+        find_react_hook_form_error
 
         # Create a forum with a name.
-        fill_in 'forum_name', with: forum.name
-        click_button 'submit'
+        fill_in 'name', with: forum.name
 
-        expect(page).to have_content_tag_for(course.forums.last)
+        expect do
+          find('button.btn-submit').click
+          expect(page).not_to have_selector('h2', text: 'New Forum')
+        end.to change { course.forums.count }.by(1)
+
+        expect_toastify("Forum #{forum.name} has been created.")
+
+        forum_created = course.forums.last
+        expect(page).to have_selector("tr.forum_#{forum_created.id}")
       end
 
-      scenario 'I can edit a forum' do
+      scenario 'I can edit a forum from the forum show page' do
         forum = create(:forum, course: course)
 
         # Edit with valid information.
         visit course_forum_path(course, forum)
-        find_link(nil, href: edit_course_forum_path(course, forum)).click
+        expect(page).to have_no_selector("button.forum-subscribe-#{forum.id}")
+        expect(page).to have_selector("button.forum-edit-#{forum.id}")
+        expect(page).to have_selector("button.forum-delete-#{forum.id}")
+        find("button.forum-edit-#{forum.id}").click
 
         new_name = 'new name'
-        fill_in 'forum_name', with: new_name
-        click_button 'submit'
+        fill_in 'name', with: new_name
+        find('.btn-submit').click
 
-        expect(current_path).to eq(course_forum_path(course, forum.reload))
-        expect(page).to have_selector('h1', text: new_name)
+        expect_toastify("Forum #{new_name} has been updated.")
+
+        expect(page).to have_text(new_name)
 
         # Edit with invalid information.
-        visit course_forum_path(course, forum)
-        find_link(nil, href: edit_course_forum_path(course, forum)).click
+        find("button.forum-edit-#{forum.id}").click
 
-        fill_in 'forum_name', with: ''
-        click_button 'submit'
-
-        expect(current_path).to eq(course_forum_path(course, forum.reload))
-        expect(page).to have_selector('div.alert.alert-danger')
+        fill_in 'name', with: ''
+        find('.btn-submit').click
+        find_react_hook_form_error
       end
 
-      scenario 'I can delete a forum' do
+      scenario 'I can edit a forum from the forum index page' do
+        forum = create(:forum, course: course)
+
+        # Edit with valid information.
+        visit course_forums_path(course)
+        expect(page).to have_selector("tr.forum_#{forum.id}")
+        find("button.forum-action-#{forum.id}").hover
+        find("button.forum-edit-#{forum.id}").click
+
+        new_name = 'new name'
+        fill_in 'name', with: new_name
+        find('.btn-submit').click
+
+        expect_toastify("Forum #{new_name} has been updated.")
+
+        expect(forum.reload.name).to eq(new_name)
+        within find("tr.forum_#{forum.id}") do
+          expect(page).to have_text(new_name)
+        end
+        # Edit with invalid information.
+        find("button.forum-action-#{forum.id}").hover
+        find("button.forum-edit-#{forum.id}").click
+
+        fill_in 'name', with: ''
+        find('.btn-submit').click
+        find_react_hook_form_error
+      end
+
+      scenario 'I can delete a forum from the forum show page' do
         forum = create(:forum, course: course)
         visit course_forum_path(course, forum)
 
-        within find(:css, '.page-header') do
-          expect { find(:css, 'a.delete').click }.to \
-            change { course.forums.exists?(forum.id) }.to(false)
-        end
-        expect(current_path).to eq(course_forums_path(course))
+        expect do
+          find("button.forum-delete-#{forum.id}").click
+          accept_confirm_dialog
+        end.to change { course.forums.exists?(forum.id) }.to(false)
 
-        expect(page).to have_no_content_tag_for(forum)
+        expect(current_path).to eq(course_forums_path(course))
+        expect(page).to have_no_selector("tr.forum_#{forum.id}")
       end
 
-      scenario 'I can subscribe and unsubscribe to a forum ', js: true do
+      scenario 'I can delete a forum from the forum index page' do
+        forum = create(:forum, course: course)
+        visit course_forums_path(course)
+
+        expect(page).to have_selector("tr.forum_#{forum.id}")
+
+        expect do
+          find("button.forum-action-#{forum.id}").hover
+          find("button.forum-delete-#{forum.id}").click
+          accept_confirm_dialog
+        end.to change { course.forums.exists?(forum.id) }.to(false)
+
+        expect(page).to have_no_selector("tr.forum_#{forum.id}")
+      end
+
+      scenario 'I can subscribe and unsubscribe to a forum ' do
         forum = create(:forum, course: course)
 
         # Subscribe and unsubscribe at the course forums page
         visit course_forums_path(course)
-        find_link(nil, href: subscribe_course_forum_path(course, forum)).click
-        wait_for_ajax
 
+        find("button.forum-action-#{forum.id}").hover
+        find("button.forum-subscribe-#{forum.id}").click
+        expect_toastify("You have successfully been subscribed to #{forum.name}.")
         expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
-        expect(page).to have_selector('div.alert.alert-success')
 
-        find_link(nil, href: unsubscribe_course_forum_path(course, forum)).click
-        wait_for_ajax
-
-        expect(page).to have_link(nil, href: subscribe_course_forum_path(course, forum))
-        expect(page).to have_selector('div.alert.alert-success')
+        find("button.forum-action-#{forum.id}").hover
+        find("button.forum-subscribe-#{forum.id}").click
+        expect_toastify("You have successfully been unsubscribed from #{forum.name}.")
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
     end
@@ -107,38 +156,40 @@ RSpec.feature 'Course: Forum: Management' do
         forums = create_list(:forum, 2, course: course)
         visit course_forums_path(course)
         forums.each do |forum|
-          expect(page).to have_link(forum.name, href: course_forum_path(course, forum))
-          expect(page).to have_content_tag_for(forum)
+          within find("tr.forum_#{forum.id}") do
+            expect(page).to have_link(forum.name, href: course_forum_path(course, forum))
+            expect(page).to have_selector("button.forum-subscribe-#{forum.id}")
+            expect(page).to have_no_selector("button.forum-edit-#{forum.id}")
+            expect(page).to have_no_selector("button.forum-delete-#{forum.id}")
+          end
         end
       end
 
-      scenario 'I can subscribe and unsubscribe to a forum ', js: true do
+      scenario 'I can subscribe and unsubscribe to a forum ' do
         forum = create(:forum, course: course)
 
         # Subscribe and unsubscribe at the course forums page
         visit course_forums_path(course)
-        find_link(nil, href: subscribe_course_forum_path(course, forum)).click
-        wait_for_ajax
-
+        find("button.forum-subscribe-#{forum.id}").click
+        expect_toastify("You have successfully been subscribed to #{forum.name}.")
         expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
-        expect(page).to have_selector('div.alert.alert-success')
 
-        find_link(nil, href: unsubscribe_course_forum_path(course, forum)).click
-        wait_for_ajax
-
-        expect(page).to have_link(nil, href: subscribe_course_forum_path(course, forum))
-        expect(page).to have_selector('div.alert.alert-success')
+        find("button.forum-subscribe-#{forum.id}").click
+        expect_toastify("You have successfully been unsubscribed from #{forum.name}.")
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
 
       scenario 'I can click unsubscribe forum link from an email' do
         forum = create(:forum, course: course)
         forum.subscriptions.create(user: user)
-        visit unsubscribe_course_forum_path(course, forum)
+        visit course_forum_path(course, forum, subscribe_forum: false)
         expect(current_path).to eq(course_forum_path(course, forum))
-        expect(page).to have_selector('div.alert.alert-success')
-        expect(page).to have_text(I18n.t('course.forum.forums.unsubscribe.success'))
+        expect_toastify("You have successfully been unsubscribed from #{forum.name}.")
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
+
+        # Go to the same link again
+        visit course_forum_path(course, forum, subscribe_forum: false)
+        expect_toastify("You have successfully been unsubscribed from #{forum.name}.")
       end
 
       scenario 'I can mark all forum topics in the course as read' do
@@ -150,8 +201,8 @@ RSpec.feature 'Course: Forum: Management' do
         expect(topics.all? { |t| t.unread?(user) }).to be_truthy
 
         visit course_forums_path(course)
-        find_link(I18n.t('course.forum.forums.index.mark_all_as_read'),
-                  href: mark_all_as_read_course_forums_path(course)).click
+        find('button.mark-all-as-read-button').click
+        sleep 0.2
 
         expect(current_path).to eq(course_forums_path(course))
         expect(topics.all? { |t| t.unread?(user) }).to be_falsy
@@ -163,8 +214,11 @@ RSpec.feature 'Course: Forum: Management' do
         expect(topics.all? { |t| t.unread?(user) }).to be_truthy
 
         visit course_forum_path(course, forum)
-        find_link(I18n.t('course.forum.forums.controls.mark_as_read'),
-                  href: mark_as_read_course_forum_path(course, forum)).click
+        expect(page).to have_no_selector("button.forum-subscribe-#{forum.id}")
+        expect(page).to have_no_selector("button.forum-edit-#{forum.id}")
+        expect(page).to have_no_selector("button.forum-delete-#{forum.id}")
+        find('button.mark-all-as-read-button').click
+        sleep 0.2
 
         expect(current_path).to eq(course_forum_path(course, forum))
         expect(topics.all? { |t| t.unread?(user) }).to be_falsy
@@ -173,9 +227,8 @@ RSpec.feature 'Course: Forum: Management' do
       scenario 'I can go to next unread topic' do
         forum = create(:forum, course: course)
         topic = create(:forum_topic, forum: forum)
-        visit course_forum_path(course, forum)
-        find_link(I18n.t('course.forum.forums.next_unread.title'),
-                  href: next_unread_course_forums_path(course)).click
+        visit course_forums_path(course)
+        find_link('Next Unread', href: course_forum_topic_path(course, forum, topic)).click
 
         expect(current_path).to eq(course_forum_topic_path(course, forum, topic))
         expect(page).to have_selector('div', text: topic.title)
