@@ -111,6 +111,6 @@ class Course::Discussion::TopicsController < Course::ComponentController
 
     @course_users_hash = preload_course_users_hash(current_course)
 
-    render 'topics_list_data'
+    render 'discussion_topic_list_data'
   end
 end
