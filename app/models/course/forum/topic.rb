@@ -81,7 +81,7 @@ class Course::Forum::Topic < ApplicationRecord
   # @!method self.with_topic_statistics
   #   Augments all returned records with the number of posts and views in that topic.
   scope :with_topic_statistics,
-        -> { all.calculated(:post_count, :view_count) }
+        -> { all.calculated(:post_count, :view_count, :vote_count) }
 
   # Get all the topics from specified course.
   scope :from_course, ->(course) { joins(:forum).where('course_forums.course_id = ?', course.id) }
