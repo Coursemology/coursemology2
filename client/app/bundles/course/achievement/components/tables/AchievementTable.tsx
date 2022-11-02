@@ -21,9 +21,9 @@ interface Props {
 }
 
 const translations = defineMessages({
-  noCategory: {
-    id: 'course.achievement.containers.tables.AchievementTable.noCategory',
-    defaultMessage: "You don't have an achievement created! Create one now!",
+  noAchievement: {
+    id: 'course.achievement.containers.tables.AchievementTable.noAchievement',
+    defaultMessage: 'No achievement',
   },
 });
 
@@ -39,7 +39,9 @@ const AchievementTable: FC<Props> = (props) => {
   const { achievements, permissions, onTogglePublished } = props;
 
   if (achievements && achievements.length === 0) {
-    return <Note message={<FormattedMessage {...translations.noCategory} />} />;
+    return (
+      <Note message={<FormattedMessage {...translations.noAchievement} />} />
+    );
   }
 
   const options: TableOptions = {
