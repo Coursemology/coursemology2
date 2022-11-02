@@ -1,24 +1,6 @@
 import PropTypes from 'prop-types';
 import { Card, CardHeader, CardContent, Typography } from '@mui/material';
-import { orange } from '@mui/material/colors';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
-const styles = {
-  card: {
-    marginTop: 30,
-    marginBottom: 30,
-    borderRadius: 5,
-  },
-  cardHeader: {
-    borderRadius: '5px 5px 0 0',
-    padding: 12,
-    backgroundColor: orange[200],
-  },
-  cardHeaderTitle: {
-    color: orange[900],
-    fontWeight: 'bold',
-  },
-};
 
 const translations = defineMessages({
   noteHeader: {
@@ -28,13 +10,16 @@ const translations = defineMessages({
 });
 
 const Note = ({ message }) => (
-  <Card style={styles.card}>
+  <Card className="my-5">
     <CardHeader
-      style={styles.cardHeader}
+      className="bg-orange-200 p-5"
       title={<FormattedMessage {...translations.noteHeader} />}
-      titleTypographyProps={{ variant: 'body2', style: styles.cardHeaderTitle }}
+      titleTypographyProps={{
+        variant: 'body2',
+        className: 'font-bold text-orange-600',
+      }}
     />
-    <CardContent>
+    <CardContent className="p-5">
       <Typography variant="body2">{message}</Typography>
     </CardContent>
   </Card>
