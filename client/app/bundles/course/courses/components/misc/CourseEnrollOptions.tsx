@@ -29,11 +29,11 @@ const translations = defineMessages({
   },
   directEnrolSubmitSuccess: {
     id: 'course.courses.show.directEnrolSubmitSuccess',
-    defaultMessage: 'Enrol request has been submitted',
+    defaultMessage: 'Your enrol request has been submitted.',
   },
   directEnrolCancelSuccess: {
     id: 'course.courses.show.directEnrolCancelSuccess',
-    defaultMessage: 'Enrol request has been cancelled',
+    defaultMessage: 'Your enrol request has been cancelled.',
   },
   requestFailedMessage: {
     id: 'course.courses.show.enrolRequestFailed',

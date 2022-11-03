@@ -3,9 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Typography } from '@mui/material';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
@@ -64,11 +64,7 @@ const AchievementEdit: FC<Props> = (props) => {
   }
 
   if (!achievement) {
-    return (
-      <Typography variant="h5">
-        {intl.formatMessage(translations.noAchievement)}
-      </Typography>
-    );
+    return <Note message={intl.formatMessage(translations.noAchievement)} />;
   }
 
   const onSubmit = (data, setError): Promise<void> =>

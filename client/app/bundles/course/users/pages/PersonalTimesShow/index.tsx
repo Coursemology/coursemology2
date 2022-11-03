@@ -69,7 +69,7 @@ const translations = defineMessages({
   updateFailure: {
     id: 'course.users.manage.personalTimes.update.failure',
     defaultMessage:
-      "Failted to update {name}'s timeline to {timeline} - {error}",
+      "Failed to update {name}'s timeline to {timeline} - {error}",
   },
   learningRate: {
     id: 'course.users.manage.personalTimes.learningRate.rate',
