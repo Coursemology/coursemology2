@@ -124,7 +124,7 @@
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.3.0",
     "react-scroll": "^1.8.8",
-    "react-toastify": "^9.1.0",
+    "react-toastify": "^9.1.1",
     "react-tooltip": "^4.4.3",
     "react-xarrows": "^2.0.2",
     "react-zoom-pan-pinch": "^2.1.3",
