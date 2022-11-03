@@ -5,7 +5,7 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { Box, Checkbox, MenuItem, TextField, Typography } from '@mui/material';
+import { Checkbox, MenuItem, TextField, Typography } from '@mui/material';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import {
   CourseUserRowData,
@@ -449,15 +449,14 @@ const ManageUsersTable: FC<Props> = (props) => {
   }
 
   return (
-    <Box sx={{ margin: '12px 0px' }}>
-      <DataTable
-        title={title}
-        data={users}
-        columns={columns}
-        options={options}
-        includeRowNumber
-      />
-    </Box>
+    <DataTable
+      title={title}
+      data={users}
+      columns={columns}
+      options={options}
+      includeRowNumber
+      withMargin
+    />
   );
 };
 

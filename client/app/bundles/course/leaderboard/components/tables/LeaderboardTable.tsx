@@ -412,7 +412,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
       title={title}
       titleGrid
       titleAlignCenter
-      padding="0px"
+      withMargin
     />
   );
 };

@@ -146,6 +146,7 @@ const AchievementTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: false,
+        hideInSmallScreen: true,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const achievement = achievements[dataIndex];
           return (
@@ -164,6 +165,7 @@ const AchievementTable: FC<Props> = (props) => {
       options: {
         filter: false,
         sort: false,
+        hideInSmallScreen: true,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const conditions = achievements[dataIndex].conditions;
           return (
@@ -186,6 +188,7 @@ const AchievementTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: true,
+        hideInSmallScreen: true,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const achievementId = achievements[dataIndex].id;
           const isPublished = achievements[dataIndex].published;
@@ -222,7 +225,14 @@ const AchievementTable: FC<Props> = (props) => {
     });
   }
 
-  return <DataTable data={achievements} columns={columns} options={options} />;
+  return (
+    <DataTable
+      data={achievements}
+      columns={columns}
+      options={options}
+      withMargin
+    />
+  );
 };
 
 export default memo(AchievementTable, (prevProps, nextProps) => {

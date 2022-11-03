@@ -1,5 +1,4 @@
 import { FC } from 'react';
-import { Box } from '@mui/material';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import tableTranslations from 'lib/translations/table';
@@ -93,14 +92,13 @@ const UserVideoSubmissionsTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box className="mx-0 my-3">
-      <DataTable
-        data={videoSubmissions}
-        columns={columns}
-        options={options}
-        includeRowNumber
-      />
-    </Box>
+    <DataTable
+      data={videoSubmissions}
+      columns={columns}
+      options={options}
+      includeRowNumber
+      withMargin
+    />
   );
 };
 

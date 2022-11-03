@@ -181,7 +181,7 @@ const ForumPostTable: FC<Props> = (props: Props) => {
   };
 
   return (
-    <DataTable data={data} options={options} columns={columns} height="8px" />
+    <DataTable data={data} options={options} columns={columns} withMargin />
   );
 };
 

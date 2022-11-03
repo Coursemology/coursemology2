@@ -238,7 +238,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
       data={forumUsers}
       options={options}
       columns={columns}
-      height="10px"
+      withMargin
     />
   );
 };
