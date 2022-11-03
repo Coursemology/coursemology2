@@ -41,7 +41,7 @@ module Course::ForumsAbilityComponent
   end
 
   def allow_update_topics
-    can :update, Course::Forum::Topic, topic_course_hash.reverse_merge(hidden: false, creator: user)
+    can :update, Course::Forum::Topic, topic_course_hash.reverse_merge(hidden: false, creator_id: user.id)
   end
 
   def allow_reply_unlocked_topics
@@ -50,16 +50,25 @@ module Course::ForumsAbilityComponent
   end
 
   def allow_resolve_own_topics
-    can :toggle_answer, Course::Forum::Topic, creator_id: user.id
+    if course.settings(:course_forums_component).mark_post_as_answer_setting == 'everyone'
+      can :toggle_answer, Course::Forum::Topic, topic_course_hash
+    else
+      can :toggle_answer, Course::Forum::Topic, topic_course_hash.reverse_merge(creator_id: user.id)
+    end
   end
 
   def define_staff_forum_permissions
     allow_staff_show_all_topics
+    allow_staff_resolve_topics
   end
 
   def allow_staff_show_all_topics
     can :read, Course::Forum::Topic, topic_course_hash
     can :subscribe, Course::Forum::Topic, topic_course_hash
+  end
+
+  def allow_staff_resolve_topics
+    can :toggle_answer, Course::Forum::Topic, topic_course_hash
   end
 
   def define_teaching_staff_forum_permissions

@@ -28,7 +28,7 @@ const MarkAnswerButton: FC<Props> = ({ topic, handleClick, isAnswer }) => {
   if (
     !topic ||
     topic.topicType !== TopicType.QUESTION ||
-    !topic.permissions.canResolveTopic
+    !topic.permissions.canToggleAnswer
   )
     return null;
 

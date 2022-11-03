@@ -52,7 +52,6 @@ json.permissions do
   json.canSubscribeTopic can?(:subscribe, topic)
   json.canSetHiddenTopic can?(:set_hidden, topic)
   json.canSetLockedTopic can?(:set_locked, topic)
-  json.canResolveTopic can?(:resolve, topic)
   json.canReplyTopic can?(:reply, topic)
   json.canToggleAnswer can?(:toggle_answer, topic)
 end
