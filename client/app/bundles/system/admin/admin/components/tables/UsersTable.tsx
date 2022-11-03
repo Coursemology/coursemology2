@@ -1,6 +1,5 @@
 import { FC, ReactElement, useState } from 'react';
 import {
-  Box,
   CircularProgress,
   MenuItem,
   TextField,
@@ -26,7 +25,6 @@ import DataTable from 'lib/components/core/layouts/DataTable';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'types/store';
-import LoadingOverlay from 'lib/components/core/LoadingOverlay';
 import { indexUsers, updateUser } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -355,22 +353,21 @@ const UsersTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box className="relative mx-0 my-3">
-      {isLoading && <LoadingOverlay />}
-      <DataTable
-        title={
-          <Typography variant="h6">
-            {title}
-            {isLoading && (
-              <CircularProgress className="relative top-1 ml-4" size={24} />
-            )}
-          </Typography>
-        }
-        data={users}
-        columns={columns}
-        options={options}
-      />
-    </Box>
+    <DataTable
+      title={
+        <Typography variant="h6">
+          {title}
+          {isLoading && (
+            <CircularProgress className="relative top-1 ml-4" size={24} />
+          )}
+        </Typography>
+      }
+      data={users}
+      columns={columns}
+      options={options}
+      isLoading={isLoading}
+      withMargin
+    />
   );
 };
 

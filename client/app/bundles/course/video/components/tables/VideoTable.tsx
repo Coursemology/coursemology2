@@ -1,5 +1,5 @@
 import { FC, memo } from 'react';
-import { Switch, Box } from '@mui/material';
+import { Switch } from '@mui/material';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -134,6 +134,7 @@ const VideoTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: false,
+        hideInSmallScreen: true,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const video = videos[dataIndex];
           const watchCount = video.watchCount;
@@ -159,6 +160,7 @@ const VideoTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: false,
+        hideInSmallScreen: true,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const video = videos[dataIndex];
           const percentWatched = video.percentWatched!;
@@ -176,6 +178,7 @@ const VideoTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: true,
+        hideInSmallScreen: true,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const videoId = videos[dataIndex].id;
           const isPublished = videos[dataIndex].published;
@@ -199,6 +202,7 @@ const VideoTable: FC<Props> = (props) => {
         filter: false,
         sort: false,
         alignCenter: true,
+        hideInSmallScreen: true,
         customBodyRenderLite: (dataIndex) => {
           const video = videos[dataIndex];
           return (
@@ -210,9 +214,7 @@ const VideoTable: FC<Props> = (props) => {
   }
 
   return (
-    <Box className="mx-0 my-3">
-      <DataTable data={videos} columns={columns} options={options} />
-    </Box>
+    <DataTable data={videos} columns={columns} options={options} withMargin />
   );
 };
 

@@ -1,5 +1,5 @@
 import { FC, ReactElement, useState } from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { CircularProgress, Typography } from '@mui/material';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 import {
@@ -20,7 +20,6 @@ import {
   FIELD_DEBOUNCE_DELAY,
   TABLE_ROWS_PER_PAGE,
 } from 'lib/constants/sharedConstants';
-import LoadingOverlay from 'lib/components/core/LoadingOverlay';
 
 interface Props extends WrappedComponentProps {
   filter: { active: boolean };
@@ -296,22 +295,21 @@ const CoursesTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box className="relative mx-0 my-3">
-      {isLoading && <LoadingOverlay />}
-      <DataTable
-        title={
-          <Typography variant="h6">
-            {title}
-            {isLoading && (
-              <CircularProgress className="relative top-1 ml-4" size={24} />
-            )}
-          </Typography>
-        }
-        data={courses}
-        columns={columns}
-        options={options}
-      />
-    </Box>
+    <DataTable
+      title={
+        <Typography variant="h6">
+          {title}
+          {isLoading && (
+            <CircularProgress className="relative top-1 ml-4" size={24} />
+          )}
+        </Typography>
+      }
+      data={courses}
+      columns={columns}
+      options={options}
+      isLoading={isLoading}
+      withMargin
+    />
   );
 };
 

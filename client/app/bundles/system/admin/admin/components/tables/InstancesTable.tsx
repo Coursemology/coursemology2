@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { CircularProgress, Typography } from '@mui/material';
 import { FC, ReactElement, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import {
@@ -14,7 +14,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import { toast } from 'react-toastify';
-import LoadingOverlay from 'lib/components/core/LoadingOverlay';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getAdminCounts, getAllInstanceMiniEntities } from '../../selectors';
 import { indexInstances, updateInstance } from '../../operations';
@@ -315,23 +314,22 @@ const InstancesTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box className="relative mx-0 my-3">
-      {isLoading && <LoadingOverlay />}
-      <DataTable
-        title={
-          <Typography variant="h6">
-            {title}
-            {isLoading && (
-              <CircularProgress className="relative top-1 ml-4" size={24} />
-            )}
-          </Typography>
-        }
-        data={instances}
-        columns={columns}
-        options={options}
-        includeRowNumber
-      />
-    </Box>
+    <DataTable
+      title={
+        <Typography variant="h6">
+          {title}
+          {isLoading && (
+            <CircularProgress className="relative top-1 ml-4" size={24} />
+          )}
+        </Typography>
+      }
+      data={instances}
+      columns={columns}
+      options={options}
+      isLoading={isLoading}
+      includeRowNumber
+      withMargin
+    />
   );
 };
 

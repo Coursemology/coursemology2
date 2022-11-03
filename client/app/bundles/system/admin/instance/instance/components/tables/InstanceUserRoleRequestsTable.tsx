@@ -1,6 +1,6 @@
 import { FC, ReactElement, memo, useMemo } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Box, MenuItem, TextField, Typography } from '@mui/material';
+import { MenuItem, TextField, Typography } from '@mui/material';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
@@ -306,15 +306,14 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
   }
 
   return (
-    <Box className="mx-0 my-3">
-      <DataTable
-        title={title}
-        data={roleRequests}
-        columns={columns}
-        options={options}
-        includeRowNumber
-      />
-    </Box>
+    <DataTable
+      title={title}
+      data={roleRequests}
+      columns={columns}
+      options={options}
+      includeRowNumber
+      withMargin
+    />
   );
 };
 

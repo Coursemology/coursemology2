@@ -5,7 +5,7 @@ import {
   FormattedMessage,
   WrappedComponentProps,
 } from 'react-intl';
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
@@ -266,15 +266,14 @@ const UserInvitationsTable: FC<Props> = (props) => {
   }
 
   return (
-    <Box sx={{ margin: '12px 0px' }}>
-      <DataTable
-        title={title}
-        data={invitations}
-        columns={columns}
-        options={options}
-        includeRowNumber
-      />
-    </Box>
+    <DataTable
+      title={title}
+      data={invitations}
+      columns={columns}
+      options={options}
+      includeRowNumber
+      withMargin
+    />
   );
 };
 

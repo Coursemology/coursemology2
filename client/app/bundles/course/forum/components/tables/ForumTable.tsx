@@ -162,9 +162,7 @@ const ForumTable: FC<Props> = (props) => {
   ];
 
   return (
-    <div className="mx-0 my-3">
-      <DataTable data={forums} columns={columns} options={options} />
-    </div>
+    <DataTable data={forums} columns={columns} options={options} withMargin />
   );
 };
 

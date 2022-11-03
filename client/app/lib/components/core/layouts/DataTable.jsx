@@ -1,5 +1,6 @@
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
+import LoadingOverlay from 'lib/components/core/LoadingOverlay';
 
 const options = {
   filter: true,
@@ -126,12 +127,15 @@ const DataTable = (props) => {
         props.padding,
       )}
     >
-      <MUIDataTable
-        {...props}
-        columns={processColumns(props.includeRowNumber, props.columns)}
-        elevation={1}
-        options={{ ...options, ...(props.options ?? {}) }}
-      />
+      <div className={`relative ${props.withMargin && 'mx-0 my-3'}`}>
+        {props.isLoading && <LoadingOverlay />}
+        <MUIDataTable
+          {...props}
+          columns={processColumns(props.includeRowNumber, props.columns)}
+          elevation={1}
+          options={{ ...options, ...(props.options ?? {}) }}
+        />
+      </div>
     </ThemeProvider>
   );
 };

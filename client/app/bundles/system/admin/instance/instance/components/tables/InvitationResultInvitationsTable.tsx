@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
@@ -94,15 +94,14 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box className="mx-0 my-3">
-      <DataTable
-        title={title}
-        data={invitations}
-        columns={columns}
-        options={options}
-        includeRowNumber
-      />
-    </Box>
+    <DataTable
+      title={title}
+      data={invitations}
+      columns={columns}
+      options={options}
+      includeRowNumber
+      withMargin
+    />
   );
 };
 

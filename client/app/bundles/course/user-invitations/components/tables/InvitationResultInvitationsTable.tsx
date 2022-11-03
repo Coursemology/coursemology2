@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import {
   COURSE_USER_ROLES,
@@ -121,15 +121,14 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
   ];
 
   return (
-    <Box sx={{ margin: '12px 0px' }}>
-      <DataTable
-        title={title}
-        data={invitations}
-        columns={columns}
-        options={options}
-        includeRowNumber
-      />
-    </Box>
+    <DataTable
+      title={title}
+      data={invitations}
+      columns={columns}
+      options={options}
+      includeRowNumber
+      withMargin
+    />
   );
 };
 
