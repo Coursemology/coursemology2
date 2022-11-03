@@ -45,12 +45,12 @@ RSpec.feature 'Courses: Registration' do
 
         expect(ActionMailer::Base.deliveries.count).to eq(0)
         find('#submit-enrol-request-button').click
-        expect(page).to have_selector('div.Toastify__toast-body', text: 'Enrol request has been submitted')
+        expect(page).to have_selector('div.Toastify__toast-body', text: 'Your enrol request has been submitted.')
         expect(ActionMailer::Base.deliveries.count).not_to eq(0)
 
         # Cancel request
         find('#cancel-enrol-request-button').click
-        expect(page).to have_selector('div.Toastify__toast-body', text: 'Enrol request has been cancelled')
+        expect(page).to have_selector('div.Toastify__toast-body', text: 'Your enrol request has been cancelled.')
       end
 
       context 'when the user has been enrolled' do
