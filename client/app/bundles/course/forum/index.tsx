@@ -1,6 +1,7 @@
 import { render } from 'react-dom';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+import ScrollToTop from 'lib/components/navigation/ScrollToTop';
 import { store } from './store';
 
 import ForumsIndex from './pages/ForumsIndex';
@@ -14,6 +15,7 @@ $(() => {
     render(
       <ProviderWrapper store={store}>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="courses/:courseId/forums" element={<ForumsIndex />} />
             <Route
