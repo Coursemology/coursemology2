@@ -2,10 +2,10 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Typography } from '@mui/material';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import Note from 'lib/components/core/Note';
 import manageUsersTranslations from 'lib/translations/course/users/index';
 import { fetchStaff } from '../../operations';
 import {
@@ -27,7 +27,7 @@ const translations = defineMessages({
   },
   noStaff: {
     id: 'course.users.manage.noStaff',
-    defaultMessage: 'No staff in course',
+    defaultMessage: 'No staff in course.',
   },
 });
 
@@ -56,11 +56,7 @@ const ManageStaff: FC<Props> = (props) => {
   }, [dispatch]);
 
   const renderEmptyState = (): JSX.Element => {
-    return (
-      <Typography variant="body1">
-        {intl.formatMessage(translations.noStaff)}
-      </Typography>
-    );
+    return <Note message={intl.formatMessage(translations.noStaff)} />;
   };
 
   return (

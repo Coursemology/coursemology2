@@ -4,14 +4,16 @@ import { CommentSettings, CommentTopicEntity } from 'types/course/comments';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
+import useTranslation from 'lib/hooks/useTranslation';
 import { fetchCommentData } from '../../operations';
 import { getAllCommentTopicEntities, getTopicCount } from '../../selectors';
 import TopicCard from '../cards/TopicCard';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   tabValue: string;
   settings: CommentSettings;
 }
@@ -26,13 +28,27 @@ const translations = defineMessages({
     id: 'course.discussion.topics.TopicList.fetch.failure',
     defaultMessage: 'Failed to retrieve topics.',
   },
+  noTopic: {
+    id: 'course.discussion.topics.TopicList.fetch.noTopic',
+    defaultMessage:
+      'Congrats! There is currently no pending/existing comments!',
+  },
 });
 
 const TopicList: FC<TopicListProps> = (props) => {
   const { listIsLoading, topicList } = props;
+  const { t } = useTranslation();
 
   if (listIsLoading) {
     return <LoadingIndicator />;
+  }
+
+  if (topicList.length === 0) {
+    return (
+      <Grid item xs style={{ position: 'relative', width: '100%' }}>
+        <Note message={t(translations.noTopic)} />
+      </Grid>
+    );
   }
 
   return (
@@ -52,8 +68,9 @@ const TopicList: FC<TopicListProps> = (props) => {
 };
 
 const TopicListWithPagination: FC<Props> = (props) => {
-  const { intl, settings, tabValue } = props;
+  const { settings, tabValue } = props;
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
 
   const [pageNum, setPageNum] = useState(1);
   const [listIsLoading, setListIsLoading] = useState(false);
@@ -66,9 +83,7 @@ const TopicListWithPagination: FC<Props> = (props) => {
 
   useEffect(() => {
     dispatch(fetchCommentData(tabValue, pageNum))
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchTopicsFailure)),
-      )
+      .catch(() => toast.error(t(translations.fetchTopicsFailure)))
       .finally(() => {
         setPageIsLoading(false);
       });
@@ -83,7 +98,7 @@ const TopicListWithPagination: FC<Props> = (props) => {
     setPageNum(newPageNumber);
     dispatch(fetchCommentData(tabValue, newPageNumber))
       .catch(() => {
-        toast.error(intl.formatMessage(translations.fetchTopicsFailure));
+        toast.error(t(translations.fetchTopicsFailure));
       })
       .finally(() => setListIsLoading(false));
   };
@@ -112,4 +127,4 @@ const TopicListWithPagination: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(TopicListWithPagination);
+export default TopicListWithPagination;

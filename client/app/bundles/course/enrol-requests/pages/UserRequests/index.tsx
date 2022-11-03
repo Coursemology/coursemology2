@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { FC, useEffect, useState } from 'react';
@@ -6,6 +6,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AppDispatch, AppState } from 'types/store';
+import Note from 'lib/components/core/Note';
 import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
 import { fetchEnrolRequests } from '../../operations';
 import {
@@ -37,7 +38,7 @@ const translations = defineMessages({
   },
   noEnrolRequests: {
     id: 'course.users.enrolRequests.empty',
-    defaultMessage: 'There are no enrol requests',
+    defaultMessage: 'There is no enrol request.',
   },
   fetchEnrolRequestsFailure: {
     id: 'course.users.enrolRequests.fetch.failure',
@@ -87,9 +88,7 @@ const UserRequests: FC<Props> = (props) => {
       rejectedEnrolRequests.length === 0
     ) {
       return (
-        <Typography variant="body1">
-          {intl.formatMessage(translations.noEnrolRequests)}
-        </Typography>
+        <Note message={intl.formatMessage(translations.noEnrolRequests)} />
       );
     }
     return undefined;
