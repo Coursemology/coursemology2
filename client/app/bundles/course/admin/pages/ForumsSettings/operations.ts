@@ -18,6 +18,7 @@ export const updateForumsSettings = async (data: ForumsSettingsData): Data => {
     settings_forums_component: {
       title: data.title,
       pagination: data.pagination,
+      mark_post_as_answer_setting: data.markPostAsAnswerSetting,
     },
   };
 

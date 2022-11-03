@@ -99,8 +99,9 @@ const ForumTopicShow: FC = () => {
             {forumTopic.isResolved
               ? t(translations.topicResolved)
               : `${t(translations.topicUnresolved)} ${
-                  forumTopic.permissions.canResolveTopic &&
-                  t(translations.topicUnresolvedNote)
+                  forumTopic.permissions.canToggleAnswer
+                    ? t(translations.topicUnresolvedNote)
+                    : ''
                 }`}
           </li>
         )}

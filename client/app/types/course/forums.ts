@@ -22,8 +22,8 @@ export type ForumTopicListDataPermissions = Permissions<
   | 'canSubscribeTopic'
   | 'canSetHiddenTopic'
   | 'canSetLockedTopic'
-  | 'canResolveTopic'
   | 'canReplyTopic'
+  | 'canToggleAnswer'
 >;
 
 export type ForumTopicPostListDataPermissions = Permissions<
