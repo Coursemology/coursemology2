@@ -197,7 +197,7 @@ GEM
     calculated_attributes (0.5.0)
       activerecord (>= 3.2.20)
     cancancan (3.3.0)
-    capybara (3.37.1)
+    capybara (3.38.0)
       addressable
       matrix
       mini_mime (>= 0.1.3)
