@@ -196,7 +196,6 @@ const PersonalTimeEditor: FC<Props> = (props) => {
           }),
         );
         setReactHookFormError(setError, error.response.data.errors);
-        throw error;
       });
   };
 

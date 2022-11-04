@@ -152,9 +152,8 @@ const AchievementAwardManager: FC<Props> = (props) => {
           navigate(getAchievementURL(getCourseId(), achievementId));
         }, 100);
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(intl.formatMessage(translations.awardFailure));
-        throw error;
       });
 
   const options: TableOptions = {
