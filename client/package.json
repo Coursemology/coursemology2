@@ -41,7 +41,7 @@
     "@mui/lab": "^5.0.0-alpha.106",
     "@mui/material": "^5.10.12",
     "@mui/x-date-pickers": "^5.0.7",
-    "@reduxjs/toolkit": "^1.8.6",
+    "@reduxjs/toolkit": "^1.9.0",
     "@tailwindcss/line-clamp": "^0.4.2",
     "ace-builds": "^1.12.5",
     "axios": "^1.1.3",
