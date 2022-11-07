@@ -3,7 +3,10 @@ import { MessageDescriptor, useIntl } from 'react-intl';
 type Descriptor = MessageDescriptor;
 
 type TranslationHook = () => {
-  t: (descriptor: Descriptor, values?: Record<string, string>) => string;
+  t: (
+    descriptor: Descriptor,
+    values?: Record<string, string | JSX.Element>,
+  ) => string;
 };
 
 const useTranslation: TranslationHook = () => {

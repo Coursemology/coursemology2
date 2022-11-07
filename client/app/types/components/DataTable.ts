@@ -25,8 +25,8 @@ export interface TableColumns {
       cellValue: string,
       rowIndex: number,
       columnIndex: number,
-    ) => { style: CSSProperties };
-    setCellHeaderProps?: () => { style: CSSProperties };
+    ) => { className?: string; style?: CSSProperties };
+    setCellHeaderProps?: () => { className?: string; style?: CSSProperties };
     sort?: boolean;
     sortCompare?: (order: string) => (value1, value2) => number;
   };

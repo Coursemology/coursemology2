@@ -4,6 +4,7 @@ export interface EmailSubscriptionSetting {
   isCourseEmailSettingEnabled: boolean;
   isUserEmailSettingEnabled: boolean;
   isUserSubscribed: boolean;
+  manageEmailSubscriptionUrl?: string;
 }
 
 export interface ForumMetadata {

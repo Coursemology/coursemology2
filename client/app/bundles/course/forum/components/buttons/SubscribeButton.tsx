@@ -7,6 +7,7 @@ import { defineMessages } from 'react-intl';
 import { NotificationsActive, NotificationsOff } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'types/store';
+import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 import {
   updateForumSubscription,
@@ -14,6 +15,10 @@ import {
 } from '../../operations';
 
 const commonTranslations = {
+  manageMySubscriptions: {
+    id: 'course.forum.components.buttons.subcribeButton.manageMySubscription',
+    defaultMessage: 'Manage My Subscriptions',
+  },
   updateSubscriptionFailure: {
     id: 'course.forum.components.buttons.subcribeButton.updateSubscriptionFailure',
     defaultMessage: 'Failed to update subscription - {error}',
@@ -34,7 +39,7 @@ const forumTranslations = defineMessages({
   userSettingSubscribed: {
     id: 'course.forum.components.buttons.subcribeButton.userSettingSubscribed',
     defaultMessage:
-      'You have unsubscribed from "New Topic" for forums in this course. Please go to "manage my subscription" to enable it.',
+      'You have unsubscribed from "New Topic" for forums in this course. Please go to {manageMySubscriptionLink} to enable it.',
   },
   adminSettingSubscribed: {
     id: 'course.forum.components.buttons.subcribeButton.adminSettingSubscribed',
@@ -65,7 +70,7 @@ const forumTopicTranslations = defineMessages({
   userSettingSubscribed: {
     id: 'course.forum.topic.components.buttons.subcribeButton.userSettingSubscribed',
     defaultMessage:
-      'You have unsubscribed from "New Post and Reply" for forums in this course. Please go to "manage my subscription" to enable it.',
+      'You have unsubscribed from "New Post and Reply" for forums in this course. Please go to {manageMySubscriptionLink} to enable it.',
   },
   adminSettingSubscribed: {
     id: 'course.forum.topic.components.buttons.subcribeButton.adminSettingSubscribed',
@@ -117,8 +122,17 @@ const SubscribeButton: FC<Props> = ({
   let unsubscribedTooltip = t(translations.subscribeTag);
 
   if (!emailSubscription.isUserEmailSettingEnabled) {
-    subscribedTooltip = t(translations.userSettingSubscribed);
-    unsubscribedTooltip = t(translations.userSettingSubscribed);
+    subscribedTooltip = t(translations.userSettingSubscribed, {
+      manageMySubscriptionLink: (
+        <Link
+          opensInNewTab
+          href={emailSubscription.manageEmailSubscriptionUrl ?? ''}
+        >
+          {t(commonTranslations.manageMySubscriptions)}
+        </Link>
+      ),
+    });
+    unsubscribedTooltip = subscribedTooltip;
   }
 
   if (!emailSubscription.isCourseEmailSettingEnabled) {
