@@ -77,6 +77,7 @@ const ForumTopicNew: FC<Props> = (props) => {
   return (
     <>
       <Dialog
+        className="top-10"
         disableEnforceFocus
         onClose={(): void => {
           if (isDirty) {
@@ -87,9 +88,6 @@ const ForumTopicNew: FC<Props> = (props) => {
         }}
         open={open}
         maxWidth="lg"
-        style={{
-          top: 40,
-        }}
       >
         <DialogTitle>{t(translations.newTopic)}</DialogTitle>
         <DialogContent>
