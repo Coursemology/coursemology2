@@ -15,6 +15,9 @@ json.emailSubscription do
   json.isCourseEmailSettingEnabled email_setting_enabled_current_course_user(:forums, :new_topic)
   json.isUserEmailSettingEnabled email_subscription_enabled_current_course_user(:forums, :new_topic)
   json.isUserSubscribed forum.subscribed_by?(current_user)
+  if current_course_user && can?(:manage, Course::UserEmailUnsubscription.new(course_user: current_course_user))
+    json.manageEmailSubscriptionUrl course_user_manage_email_subscription_path(current_course, current_course_user)
+  end
 end
 
 json.permissions do

@@ -44,6 +44,9 @@ json.emailSubscription do
                          topic.subscribed_by?(current_user)
                        end
   json.isUserSubscribed is_user_subscribed
+  if current_course_user && can?(:manage, Course::UserEmailUnsubscription.new(course_user: current_course_user))
+    json.manageEmailSubscriptionUrl course_user_manage_email_subscription_path(current_course, current_course_user)
+  end
 end
 
 json.permissions do
