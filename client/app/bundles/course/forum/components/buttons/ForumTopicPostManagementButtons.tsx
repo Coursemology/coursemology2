@@ -69,7 +69,7 @@ const ForumTopicPostManagementButtons: FC<Props> = (props) => {
   };
 
   return (
-    <div style={{ whiteSpace: 'nowrap' }}>
+    <div className="whitespace-nowrap">
       {post.parentId === null && post.permissions.canReplyPost && (
         <ReplyButton
           className={`post-reply-${post.id}`}
