@@ -77,26 +77,24 @@ const AnnouncementForm: FC<Props> = (props) => {
     >
       {(control, formState): JSX.Element => (
         <>
-          <div id="announcement-title">
-            <Controller
-              control={control}
-              name="title"
-              render={({ field, fieldState }): JSX.Element => (
-                <FormTextField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={formState.isSubmitting}
-                  label={<FormattedMessage {...translations.title} />}
-                  fullWidth
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  required
-                  variant="standard"
-                />
-              )}
-            />
-          </div>
+          <Controller
+            control={control}
+            name="title"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={<FormattedMessage {...translations.title} />}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                variant="standard"
+              />
+            )}
+          />
 
           <Controller
             name="content"

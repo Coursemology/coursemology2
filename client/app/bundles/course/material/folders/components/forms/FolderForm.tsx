@@ -88,27 +88,25 @@ const FolderForm: FC<Props> = (props) => {
     >
       {(control, formState): JSX.Element => (
         <>
-          <div id="folder-name">
-            <Controller
-              control={control}
-              name="name"
-              render={({ field, fieldState }): JSX.Element => (
-                <FormTextField
-                  field={field}
-                  fieldState={fieldState}
-                  disabled={formState.isSubmitting}
-                  label={t(translations.name)}
-                  // @ts-ignore: component is still written in JS
-                  fullWidth
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  required
-                  variant="standard"
-                />
-              )}
-            />
-          </div>
+          <Controller
+            control={control}
+            name="name"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.name)}
+                // @ts-ignore: component is still written in JS
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                variant="standard"
+              />
+            )}
+          />
 
           <Controller
             name="description"

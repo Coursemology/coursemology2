@@ -95,6 +95,7 @@ const ForumTopicForm: FC<Props> = (props) => {
               />
             )}
           />
+
           {!editing && (
             <Controller
               name="text"
@@ -112,6 +113,7 @@ const ForumTopicForm: FC<Props> = (props) => {
               )}
             />
           )}
+
           <Controller
             name="topicType"
             control={control}

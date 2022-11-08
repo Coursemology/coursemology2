@@ -125,6 +125,7 @@ const VideoForm: FC<Props> = (props) => {
               />
             )}
           />
+
           <Controller
             name="tab"
             control={control}
@@ -143,6 +144,7 @@ const VideoForm: FC<Props> = (props) => {
               />
             )}
           />
+
           <Controller
             name="description"
             control={control}
@@ -161,6 +163,7 @@ const VideoForm: FC<Props> = (props) => {
               />
             )}
           />
+
           <Controller
             control={control}
             name="url"
@@ -183,6 +186,7 @@ const VideoForm: FC<Props> = (props) => {
               />
             )}
           />
+
           <Controller
             name="startAt"
             control={control}
@@ -195,6 +199,7 @@ const VideoForm: FC<Props> = (props) => {
               />
             )}
           />
+
           <Controller
             name="published"
             control={control}
@@ -207,6 +212,7 @@ const VideoForm: FC<Props> = (props) => {
               />
             )}
           />
+
           {/* Videos cannot affect personal times because we have no clean measure of when they "complete" the video */}
           {videoMetadata.showPersonalizedTimelineFeatures && (
             <Controller
