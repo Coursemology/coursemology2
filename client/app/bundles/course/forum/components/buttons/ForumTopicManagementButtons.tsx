@@ -14,7 +14,7 @@ import EditButton from 'lib/components/core/buttons/EditButton';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 import SubscribeButton from './SubscribeButton';
-import TopicEdit from '../../pages/ForumTopicEdit';
+import ForumTopicEdit from '../../pages/ForumTopicEdit';
 import { deleteForumTopic } from '../../operations';
 import HideButton from './HideButton';
 import LockButton from './LockButton';
@@ -156,10 +156,10 @@ const ForumTopicManagementButtons: FC<Props> = (props) => {
           </IconButton>
         )}
         {managementButtons}
-        <TopicEdit
+        <ForumTopicEdit
           topic={topic}
           isOpen={isEditOpen}
-          handleClose={(): void => {
+          onClose={(): void => {
             setIsEditOpen(false);
           }}
           navigateToShowAfterUpdate={navigateToShowAfterUpdate}

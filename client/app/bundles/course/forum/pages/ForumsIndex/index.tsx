@@ -165,7 +165,7 @@ const ForumsIndex: FC = () => {
       {!isLoading && isForumNewDialogOpen && (
         <ForumNew
           open={isForumNewDialogOpen}
-          handleClose={(): void => setIsForumNewDialogOpen(false)}
+          onClose={(): void => setIsForumNewDialogOpen(false)}
         />
       )}
       {isLoading ? <LoadingIndicator /> : <ForumTable forums={forums} />}

@@ -1,24 +1,24 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { Controller, useForm, UseFormSetError } from 'react-hook-form';
+import { Controller, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button } from '@mui/material';
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 import useTranslation from 'lib/hooks/useTranslation';
 import { ForumFormData } from 'types/course/forums';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
 
 interface Props {
-  handleClose: (isDirty: boolean) => void;
+  open: boolean;
+  editing: boolean;
+  title: string;
+  onClose: () => void;
   onSubmit: (
     data: ForumFormData,
     setError: UseFormSetError<ForumFormData>,
   ) => void;
-  setIsDirty?: (value: boolean) => void;
   initialValues: ForumFormData;
 }
 
@@ -45,129 +45,73 @@ const validationSchema = yup.object({
 });
 
 const ForumForm: FC<Props> = (props) => {
-  const { handleClose, initialValues, onSubmit, setIsDirty } = props;
+  const { open, editing, title, onClose, initialValues, onSubmit } = props;
   const { t } = useTranslation();
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isDirty, isSubmitting },
-  } = useForm<ForumFormData>({
-    defaultValues: initialValues,
-    resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
-  });
-
-  useEffect(() => {
-    if (setIsDirty) {
-      if (isDirty) {
-        setIsDirty(true);
-      } else {
-        setIsDirty(false);
-      }
-    }
-  }, [isDirty]);
-
-  const disabled = isSubmitting;
-
-  const actionButtons = (
-    <div className="mt-2 flex justify-end space-x-2">
-      <Button
-        color="secondary"
-        className="btn-cancel"
-        disabled={disabled}
-        key="forum-form-cancel-button"
-        onClick={(): void => handleClose(isDirty)}
-      >
-        {t(formTranslations.cancel)}
-      </Button>
-      {initialValues.id ? (
-        <Button
-          variant="contained"
-          color="primary"
-          className="btn-submit"
-          disabled={disabled || !isDirty}
-          form="forum-form"
-          key="forum-form-update-button"
-          type="submit"
-        >
-          {t(formTranslations.update)}
-        </Button>
-      ) : (
-        <Button
-          color="primary"
-          className="btn-submit"
-          disabled={disabled || !isDirty}
-          form="forum-form"
-          key="forum-form-submit-button"
-          type="submit"
-        >
-          {t(formTranslations.submit)}
-        </Button>
-      )}
-    </div>
-  );
 
   return (
-    <>
-      <form
-        encType="multipart/form-data"
-        id="forum-form"
-        noValidate
-        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-      >
-        <ErrorText errors={errors} />
-        <Controller
-          control={control}
-          name="name"
-          render={({ field, fieldState }): JSX.Element => (
-            <FormTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={t(translations.name)}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-              variant="standard"
-            />
-          )}
-        />
-        <Controller
-          name="description"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormRichTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={t(translations.description)}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
-            />
-          )}
-        />
-        <Controller
-          name="forumTopicsAutoSubscribe"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormToggleField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={t(translations.forumTopicsAutoSubscribe)}
-            />
-          )}
-        />
-        {actionButtons}
-      </form>
-    </>
+    <FormDialog
+      open={open}
+      editing={editing}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      title={title}
+      formName="forum-form"
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+    >
+      {(control, formState): JSX.Element => (
+        <>
+          <Controller
+            control={control}
+            name="name"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.name)}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                variant="standard"
+              />
+            )}
+          />
+          <Controller
+            name="description"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormRichTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.description)}
+                // @ts-ignore: component is still written in JS
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="standard"
+              />
+            )}
+          />
+          <Controller
+            name="forumTopicsAutoSubscribe"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.forumTopicsAutoSubscribe)}
+              />
+            )}
+          />
+        </>
+      )}
+    </FormDialog>
   );
 };
 

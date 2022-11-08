@@ -1,24 +1,24 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { Controller, useForm, UseFormSetError } from 'react-hook-form';
+import { Controller, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button } from '@mui/material';
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import useTranslation from 'lib/hooks/useTranslation';
 import { ForumTopicFormData, TopicType } from 'types/course/forums';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
 
 interface Props {
-  handleClose: (isDirty: boolean) => void;
+  open: boolean;
+  editing: boolean;
+  title: string;
+  onClose: () => void;
   onSubmit: (
     data: ForumTopicFormData,
     setError: UseFormSetError<ForumTopicFormData>,
   ) => void;
-  setIsDirty?: (value: boolean) => void;
   initialValues: ForumTopicFormData;
   availableTopicTypes?: TopicType[];
 }
@@ -50,34 +50,15 @@ const defaultTopicTypes = [
 
 const ForumTopicForm: FC<Props> = (props) => {
   const {
-    handleClose,
+    open,
+    title,
+    editing,
+    onClose,
     initialValues,
     onSubmit,
-    setIsDirty,
     availableTopicTypes,
   } = props;
   const { t } = useTranslation();
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isDirty, isSubmitting },
-  } = useForm<ForumTopicFormData>({
-    defaultValues: initialValues,
-    resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
-  });
-
-  useEffect(() => {
-    if (setIsDirty) {
-      if (isDirty) {
-        setIsDirty(true);
-      } else {
-        setIsDirty(false);
-      }
-    }
-  }, [isDirty]);
-
-  const disabled = isSubmitting;
 
   const topicTypeOptions = availableTopicTypes
     ? availableTopicTypes.map((type) => ({
@@ -86,102 +67,68 @@ const ForumTopicForm: FC<Props> = (props) => {
       }))
     : defaultTopicTypes;
 
-  const actionButtons = (
-    <div className="mt-2 flex justify-end space-x-2">
-      <Button
-        color="secondary"
-        className="btn-cancel"
-        disabled={disabled}
-        key="forum-topic-form-cancel-button"
-        onClick={(): void => handleClose(isDirty)}
-      >
-        {t(formTranslations.cancel)}
-      </Button>
-      {initialValues.id ? (
-        <Button
-          variant="contained"
-          color="primary"
-          className="btn-submit"
-          disabled={disabled || !isDirty}
-          form="forum-topic-form"
-          key="forum-topic-form-update-button"
-          type="submit"
-        >
-          {t(formTranslations.update)}
-        </Button>
-      ) : (
-        <Button
-          color="primary"
-          className="btn-submit"
-          disabled={disabled || !isDirty}
-          form="forum-topic-form"
-          key="forum-topic-form-submit-button"
-          type="submit"
-        >
-          {t(formTranslations.submit)}
-        </Button>
-      )}
-    </div>
-  );
-
   return (
-    <>
-      <form
-        encType="multipart/form-data"
-        id="forum-topic-form"
-        noValidate
-        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-      >
-        <ErrorText errors={errors} />
-        <Controller
-          control={control}
-          name="title"
-          render={({ field, fieldState }): JSX.Element => (
-            <FormTextField
-              field={field}
-              fieldState={fieldState}
-              label={t(translations.title)}
-              variant="filled"
-              fullWidth
-              disabled={disabled}
-              required
-            />
-          )}
-        />
-        {!initialValues.id && (
+    <FormDialog
+      open={open}
+      editing={editing}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      title={title}
+      formName="forum-topic-form"
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+    >
+      {(control, formState): JSX.Element => (
+        <>
           <Controller
-            name="text"
             control={control}
+            name="title"
             render={({ field, fieldState }): JSX.Element => (
-              <FormRichTextField
+              <FormTextField
                 field={field}
                 fieldState={fieldState}
+                label={t(translations.title)}
+                variant="filled"
                 fullWidth
-                disableMargins
-                disabled={disabled}
-                label={t(translations.text)}
+                disabled={formState.isSubmitting}
                 required
               />
             )}
           />
-        )}
-        <Controller
-          name="topicType"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormSelectField
-              field={field}
-              fieldState={fieldState}
-              label={t(translations.topicType)}
-              variant="filled"
-              options={topicTypeOptions}
-              disabled={disabled}
+          {!editing && (
+            <Controller
+              name="text"
+              control={control}
+              render={({ field, fieldState }): JSX.Element => (
+                <FormRichTextField
+                  field={field}
+                  fieldState={fieldState}
+                  fullWidth
+                  disableMargins
+                  disabled={formState.isSubmitting}
+                  label={t(translations.text)}
+                  required
+                />
+              )}
             />
           )}
-        />
-        {actionButtons}
-      </form>
-    </>
+          <Controller
+            name="topicType"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormSelectField
+                field={field}
+                fieldState={fieldState}
+                label={t(translations.topicType)}
+                variant="filled"
+                options={topicTypeOptions}
+                disabled={formState.isSubmitting}
+              />
+            )}
+          />
+        </>
+      )}
+    </FormDialog>
   );
 };
 

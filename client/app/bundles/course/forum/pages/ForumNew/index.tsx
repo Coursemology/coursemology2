@@ -1,9 +1,7 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
 import { AppDispatch } from 'types/store';
@@ -12,7 +10,7 @@ import ForumForm from '../../components/forms/ForumForm';
 
 interface Props {
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void;
 }
 
 const translations = defineMessages({
@@ -38,9 +36,7 @@ const initialValues = {
 
 const ForumNew: FC<Props> = (props) => {
   const { t } = useTranslation();
-  const { open, handleClose } = props;
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
+  const { open, onClose } = props;
   const dispatch = useDispatch<AppDispatch>();
 
   if (!open) {
@@ -50,8 +46,7 @@ const ForumNew: FC<Props> = (props) => {
   const handleSubmit = (data, setError): Promise<void> =>
     dispatch(createForum(data))
       .then(() => {
-        handleClose();
-        setConfirmationDialogOpen(false);
+        onClose();
         toast.success(
           t(translations.creationSuccess, {
             title: data.name,
@@ -66,46 +61,14 @@ const ForumNew: FC<Props> = (props) => {
       });
 
   return (
-    <>
-      <Dialog
-        className="top-10"
-        disableEnforceFocus
-        onClose={(): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          } else {
-            handleClose();
-          }
-        }}
-        open={open}
-        maxWidth="lg"
-      >
-        <DialogTitle>{t(translations.newForum)}</DialogTitle>
-        <DialogContent>
-          <ForumForm
-            handleClose={(): void => {
-              if (isDirty) {
-                setConfirmationDialogOpen(true);
-              } else {
-                handleClose();
-              }
-            }}
-            initialValues={initialValues}
-            onSubmit={handleSubmit}
-            setIsDirty={setIsDirty}
-          />
-        </DialogContent>
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <ForumForm
+      open={open}
+      editing={false}
+      title={t(translations.newForum)}
+      onClose={onClose}
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+    />
   );
 };
 

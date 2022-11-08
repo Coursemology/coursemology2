@@ -150,7 +150,7 @@ const ForumManagementButtons: FC<Props> = (props) => {
         <ForumEdit
           forum={forum}
           isOpen={isEditOpen}
-          handleClose={(): void => {
+          onClose={(): void => {
             setIsEditOpen(false);
           }}
           navigateToShowAfterUpdate={navigateToShowAfterUpdate}
