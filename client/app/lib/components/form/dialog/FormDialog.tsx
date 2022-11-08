@@ -28,6 +28,7 @@ interface Props {
   formName: string;
   validationSchema?: AnyObjectSchema;
   children?: (control: Control, formState: FormState<any>) => ReactNode;
+  primaryActionText?: string;
 }
 
 const FormDialog = (props: Props): JSX.Element => {
@@ -41,6 +42,7 @@ const FormDialog = (props: Props): JSX.Element => {
     formName,
     validationSchema,
     children,
+    primaryActionText,
   } = props;
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
@@ -79,7 +81,7 @@ const FormDialog = (props: Props): JSX.Element => {
             {children?.(control, formState)}
           </form>
         </DialogContent>
-        <DialogActions className="flex justify-end">
+        <DialogActions>
           <Button
             color="secondary"
             className="btn-cancel"
@@ -102,7 +104,10 @@ const FormDialog = (props: Props): JSX.Element => {
             form={formName}
             type="submit"
           >
-            {editing ? t(formTranslations.update) : t(formTranslations.submit)}
+            {primaryActionText ??
+              (editing
+                ? t(formTranslations.update)
+                : t(formTranslations.submit))}
           </Button>
         </DialogActions>
       </Dialog>
