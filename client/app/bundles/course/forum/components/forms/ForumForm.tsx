@@ -79,6 +79,7 @@ const ForumForm: FC<Props> = (props) => {
               />
             )}
           />
+
           <Controller
             name="description"
             control={control}
@@ -97,6 +98,7 @@ const ForumForm: FC<Props> = (props) => {
               />
             )}
           />
+
           <Controller
             name="forumTopicsAutoSubscribe"
             control={control}
