@@ -1,27 +1,28 @@
-import { FC, useEffect } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Controller, useForm, UseFormSetError } from 'react-hook-form';
+import { FC } from 'react';
+import { defineMessages } from 'react-intl';
+import { Controller, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Button } from '@mui/material';
-
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { InstanceFormData } from 'types/system/instances';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
+import useTranslation from 'lib/hooks/useTranslation';
 
-interface Props extends WrappedComponentProps {
-  handleClose: (isDirty: boolean) => void;
+interface Props {
+  open: boolean;
+  onClose: () => void;
   onSubmit: (
     data: InstanceFormData,
     setError: UseFormSetError<InstanceFormData>,
   ) => void;
-  setIsDirty?: (value: boolean) => void;
-  initialValues?: Object;
 }
 
 const translations = defineMessages({
+  newInstance: {
+    id: 'system.admin.instance.new.newInstance',
+    defaultMessage: 'New Instance',
+  },
   name: {
     id: 'system.admin.instance.form.name',
     defaultMessage: 'Name',
@@ -32,71 +33,33 @@ const translations = defineMessages({
   },
 });
 
+const initialValues = {
+  name: '',
+  host: '',
+};
+
 const validationSchema = yup.object({
   name: yup.string().required(formTranslations.required),
   host: yup.string().required(formTranslations.required),
 });
 
 const InstanceForm: FC<Props> = (props) => {
-  const { handleClose, initialValues, onSubmit, setIsDirty, intl } = props;
-
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isDirty, isSubmitting },
-  } = useForm<InstanceFormData>({
-    defaultValues: initialValues,
-    resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
-  });
-
-  useEffect(() => {
-    if (setIsDirty) {
-      if (isDirty) {
-        setIsDirty(true);
-      } else {
-        setIsDirty(false);
-      }
-    }
-  }, [isDirty]);
-
-  const disabled = isSubmitting;
-
-  const actionButtons = (
-    <div className="flex justify-end pt-5">
-      <Button
-        color="secondary"
-        className="btn-cancel"
-        disabled={disabled}
-        key="instance-form-cancel-button"
-        onClick={(): void => handleClose(isDirty)}
-      >
-        {intl.formatMessage(formTranslations.cancel)}
-      </Button>
-      <Button
-        id="instance-form-submit-button"
-        color="primary"
-        className="btn-submit"
-        disabled={disabled || !isDirty}
-        form="instance-form"
-        key="instance-form-submit-button"
-        type="submit"
-      >
-        {intl.formatMessage(formTranslations.submit)}
-      </Button>
-    </div>
-  );
+  const { open, onClose, onSubmit } = props;
+  const { t } = useTranslation();
 
   return (
-    <>
-      <form
-        encType="multipart/form-data"
-        id="instance-form"
-        noValidate
-        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-      >
-        <ErrorText errors={errors} />
-        <div id="instance-name">
+    <FormDialog
+      open={open}
+      editing={false}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      title={t(translations.newInstance)}
+      formName="instance-form"
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+    >
+      {(control, formState): JSX.Element => (
+        <>
           <Controller
             control={control}
             name="name"
@@ -104,9 +67,8 @@ const InstanceForm: FC<Props> = (props) => {
               <FormTextField
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled}
-                label={intl.formatMessage(translations.name)}
-                // @ts-ignore: component is still written in JS
+                disabled={formState.isSubmitting}
+                label={t(translations.name)}
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
@@ -116,31 +78,29 @@ const InstanceForm: FC<Props> = (props) => {
               />
             )}
           />
-        </div>
 
-        <Controller
-          name="host"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={intl.formatMessage(translations.host)}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-              variant="standard"
-            />
-          )}
-        />
-        {actionButtons}
-      </form>
-    </>
+          <Controller
+            name="host"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.host)}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                variant="standard"
+              />
+            )}
+          />
+        </>
+      )}
+    </FormDialog>
   );
 };
 
-export default injectIntl(InstanceForm);
+export default InstanceForm;
