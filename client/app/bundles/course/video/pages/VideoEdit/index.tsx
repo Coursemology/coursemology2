@@ -1,20 +1,19 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { FC, useState } from 'react';
+import { defineMessages } from 'react-intl';
+import { FC } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch } from 'types/store';
 
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-
 import { toast } from 'react-toastify';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import useTranslation from 'lib/hooks/useTranslation';
 import { VideoFormData, VideoListData } from 'types/course/videos';
 import VideoForm from '../../components/forms/VideoForm';
 import { updateVideo } from '../../operations';
 
-interface Props extends WrappedComponentProps {
-  handleClose: () => void;
+interface Props {
+  open: boolean;
+  onClose: () => void;
   video: VideoListData;
 }
 
@@ -34,11 +33,8 @@ const translations = defineMessages({
 });
 
 const VideoEdit: FC<Props> = (props) => {
-  const { intl, handleClose, video } = props;
-
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
-
+  const { open, onClose, video } = props;
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
   const initialValues = {
@@ -55,15 +51,12 @@ const VideoEdit: FC<Props> = (props) => {
   const onSubmit = (data: VideoFormData, setError): void => {
     dispatch(updateVideo(video.id, data))
       .then(() => {
-        handleClose();
-        setConfirmationDialogOpen(false);
-        toast.success(
-          intl.formatMessage(translations.updateSuccess, { title: data.title }),
-        );
+        onClose();
+        toast.success(t(translations.updateSuccess, { title: data.title }));
       })
       .catch((error) => {
         toast.error(
-          intl.formatMessage(translations.updateFailure, {
+          t(translations.updateFailure, {
             title: data.title,
           }),
         );
@@ -75,51 +68,16 @@ const VideoEdit: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <Dialog
-        className="top-10"
-        disableEnforceFocus
-        onClose={(): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          } else {
-            handleClose();
-          }
-        }}
-        open
-        maxWidth="lg"
-      >
-        <DialogTitle>
-          {intl.formatMessage(translations.updateVideo)}
-        </DialogTitle>
-        <DialogContent>
-          <VideoForm
-            editing
-            handleClose={(): void => {
-              if (isDirty) {
-                setConfirmationDialogOpen(true);
-              } else {
-                handleClose();
-              }
-            }}
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            setIsDirty={setIsDirty}
-            childrenExists={video.videoChildrenExist}
-          />
-        </DialogContent>
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <VideoForm
+      open={open}
+      editing
+      title={t(translations.updateVideo)}
+      onClose={onClose}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      childrenExists={video.videoChildrenExist}
+    />
   );
 };
 
-export default injectIntl(VideoEdit);
+export default VideoEdit;

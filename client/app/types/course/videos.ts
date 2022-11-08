@@ -59,6 +59,7 @@ export interface VideoData extends VideoListData {
  */
 
 export interface VideoFormData {
+  id?: number;
   title: string;
   tab: number;
   description: string;
@@ -66,8 +67,4 @@ export interface VideoFormData {
   startAt: Date;
   published: boolean;
   hasPersonalTimes: boolean;
-}
-
-export interface VideoEditFormData extends VideoFormData {
-  id: number;
 }
