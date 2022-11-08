@@ -81,7 +81,7 @@ const FileUploadForm: FC<Props> = (props) => {
               disabled={isLoading}
               field={field}
               fieldState={fieldState}
-              accept="text/csv"
+              accept={{ 'text/csv': [] }}
               previewComponent={FilePreview}
             />
           )}

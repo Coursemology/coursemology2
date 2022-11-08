@@ -8,7 +8,6 @@ import { red } from '@mui/material/colors';
 import Mic from '@mui/icons-material/Mic';
 import Stop from '@mui/icons-material/Stop';
 import FormSingleFileInput from 'lib/components/form/fields/SingleFileInput';
-import { SUPPORTED_VOICE_FILE_TYPES } from 'lib/constants/sharedConstants';
 import recorderHelper from '../../utils/recorderHelper';
 import {
   setRecording,
@@ -146,7 +145,7 @@ class VoiceResponseAnswer extends Component {
             field={field}
             fieldState={fieldState}
             disabled={readOnly}
-            accept={SUPPORTED_VOICE_FILE_TYPES.join()}
+            accept={{ 'audio/mp3': [], 'audio/wav': [] }}
             previewComponent={this.renderSingleFileInputChildren}
           />
         </div>

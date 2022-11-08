@@ -200,7 +200,7 @@ const AchievementForm: FC<Props> = (props) => {
             <FormSingleFileInput
               field={field}
               fieldState={fieldState}
-              accept="image/*"
+              accept={{ 'image/jpg': [], 'image/png': [], 'image/gif': [] }}
               disabled={disabled}
               previewComponent={BadgePreview}
             />
