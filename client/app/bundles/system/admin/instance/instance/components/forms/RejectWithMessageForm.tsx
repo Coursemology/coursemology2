@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, UseFormSetError } from 'react-hook-form';
 import ErrorText from 'lib/components/core/ErrorText';
 import { LoadingButton } from '@mui/lab';
 import { Grid, Button, TextField, Stack } from '@mui/material';
@@ -9,7 +9,7 @@ import tableTranslations from 'lib/translations/table';
 import { RoleRequestRowData } from 'types/system/instance/roleRequests';
 
 interface Props extends WrappedComponentProps {
-  onSubmit: (data: string, setError: unknown) => void;
+  onSubmit: (message: string, setError: UseFormSetError<IFormInputs>) => void;
   handleClose: (isDirty: boolean) => void;
   setIsDirty?: (value: boolean) => void;
   roleRequest: RoleRequestRowData;
@@ -65,7 +65,7 @@ const RejectWithMessageForm: FC<Props> = (props) => {
         encType="multipart/form-data"
         id="reject-with-message-form"
         noValidate
-        onSubmit={handleSubmit((data: IFormInputs) =>
+        onSubmit={handleSubmit((data) =>
           onSubmit(data.rejectionMessage, setError),
         )}
       >

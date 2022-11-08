@@ -5,7 +5,7 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
@@ -22,17 +22,14 @@ import { DialogTypes } from '../../types';
 
 interface Props extends WrappedComponentProps {
   handleClose: (isDirty: boolean) => void;
-  onSubmit: (data: SkillFormData, setError: unknown) => void;
+  onSubmit: (
+    data: SkillFormData,
+    setError: UseFormSetError<SkillFormData>,
+  ) => void;
   setIsDirty?: (value: boolean) => void;
   initialValues?: Object;
   skillBranchOptions: SkillBranchOptions[];
   dialogType: DialogTypes;
-}
-
-interface IFormInputs {
-  title: string;
-  description: string;
-  skillBranchId?: number;
 }
 
 const translations = defineMessages({
@@ -76,7 +73,7 @@ const SkillForm: FC<Props> = (props) => {
     handleSubmit,
     setError,
     formState: { errors, isDirty, isSubmitting },
-  } = useForm<IFormInputs>({
+  } = useForm<SkillFormData>({
     defaultValues: initialValues,
     resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
   });

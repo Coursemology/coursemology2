@@ -1,5 +1,5 @@
 import { FC, useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, UseFormSetError } from 'react-hook-form';
 import FormSingleFileInput, {
   FilePreview,
 } from 'lib/components/form/fields/SingleFileInput';
@@ -10,7 +10,10 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { InvitationFileEntity } from 'types/course/userInvitations';
 
 interface Props extends WrappedComponentProps {
-  onSubmit: (data: InvitationFileEntity, setError: unknown) => void;
+  onSubmit: (
+    data: InvitationFileEntity,
+    setError: UseFormSetError<IFormInputs>,
+  ) => void;
   handleClose: (isDirty: boolean) => void;
   setIsDirty?: (value: boolean) => void;
   initialValues?: Object;
@@ -68,9 +71,7 @@ const FileUploadForm: FC<Props> = (props) => {
         encType="multipart/form-data"
         id="invite-users-file-upload-form"
         noValidate
-        onSubmit={handleSubmit((data: IFormInputs) =>
-          onSubmit(data.file, setError),
-        )}
+        onSubmit={handleSubmit((data) => onSubmit(data.file, setError))}
       >
         <ErrorText errors={errors} />
         <Controller

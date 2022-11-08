@@ -94,6 +94,7 @@ const VideoEdit: FC<Props> = (props) => {
         </DialogTitle>
         <DialogContent>
           <VideoForm
+            editing
             handleClose={(): void => {
               if (isDirty) {
                 setConfirmationDialogOpen(true);

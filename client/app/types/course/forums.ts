@@ -176,12 +176,14 @@ export interface ForumTopicPostEntity {
  */
 
 export interface ForumFormData {
+  id?: number;
   name: string;
   description: string;
   forumTopicsAutoSubscribe: boolean;
 }
 
 export interface ForumTopicFormData {
+  id?: number;
   title: string;
   text?: string;
   topicType: TopicType;

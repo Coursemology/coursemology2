@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
@@ -24,18 +24,11 @@ interface Props extends WrappedComponentProps {
   handleClose: (isDirty: boolean) => void;
   onSubmit: (
     data: AchievementFormData | AchievementEditFormData,
-    setError: unknown,
+    setError: UseFormSetError<AchievementFormData | AchievementEditFormData>,
   ) => void;
   setIsDirty?: (value: boolean) => void;
   conditionAttributes?: ConditionsData;
   initialValues?: Object;
-}
-
-interface IFormInputs {
-  title: string;
-  description: string;
-  badge: { name: string; url: string };
-  published: boolean;
 }
 
 const translations = defineMessages({
@@ -91,7 +84,7 @@ const AchievementForm: FC<Props> = (props) => {
     handleSubmit,
     setError,
     formState: { errors, isDirty, isSubmitting },
-  } = useForm<IFormInputs>({
+  } = useForm<AchievementFormData | AchievementEditFormData>({
     defaultValues: initialValues,
     resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
   });

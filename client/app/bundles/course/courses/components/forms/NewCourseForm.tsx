@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
@@ -12,14 +12,12 @@ import { NewCourseFormData } from 'types/course/courses';
 
 interface Props {
   handleClose: (isDirty: boolean) => void;
-  onSubmit: (data: NewCourseFormData, setError: unknown) => void;
+  onSubmit: (
+    data: NewCourseFormData,
+    setError: UseFormSetError<NewCourseFormData>,
+  ) => void;
   setIsDirty?: (value: boolean) => void;
   initialValues?: Object;
-}
-
-interface IFormInputs {
-  title: string;
-  description: string;
 }
 
 const translations = defineMessages({
@@ -45,7 +43,7 @@ const NewCourseForm: FC<Props> = (props) => {
     handleSubmit,
     setError,
     formState: { errors, isDirty, isSubmitting },
-  } = useForm<IFormInputs>({
+  } = useForm<NewCourseFormData>({
     defaultValues: initialValues,
     resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
   });
