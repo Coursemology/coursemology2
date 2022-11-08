@@ -112,7 +112,7 @@
     "@types/react": "^18.0.25",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-dom": "^18.0.8",
-    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.7.0",
     "autoprefixer": "^10.4.13",
