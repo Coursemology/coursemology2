@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -7,12 +7,13 @@ import { AchievementMiniEntity } from 'types/course/achievements';
 import { AppDispatch } from 'types/store';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
+import useTranslation from 'lib/hooks/useTranslation';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import { getAchievementURL } from 'lib/helpers/url-builders';
 import { deleteAchievement } from '../../operations';
 import AwardButton from './AwardButton';
+import AchievementEdit from '../../pages/AchievementEdit';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   achievement: AchievementMiniEntity;
   navigateToIndex: boolean;
 }
@@ -38,26 +39,24 @@ const translations = defineMessages({
 });
 
 const AchievementManagementButtons: FC<Props> = (props) => {
-  const { achievement, intl, navigateToIndex } = props;
+  const { achievement, navigateToIndex } = props;
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
-
-  const onEdit = (): void => {
-    navigate(`${getAchievementURL(getCourseId(), achievement.id)}/edit`);
-  };
+  const [isEditing, setIsEditing] = useState(false);
 
   const onDelete = (): Promise<void> => {
     setIsDeleting(true);
     return dispatch(deleteAchievement(achievement.id))
       .then(() => {
-        toast.success(intl.formatMessage(translations.deletionSuccess));
+        toast.success(t(translations.deletionSuccess));
         if (navigateToIndex) {
           navigate(`/courses/${getCourseId()}/achievements`);
         }
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.deletionFailure));
+        toast.error(t(translations.deletionFailure));
         throw error;
       })
       .finally(() => setIsDeleting(false));
@@ -69,13 +68,22 @@ const AchievementManagementButtons: FC<Props> = (props) => {
         className={`achievement-award-${achievement.id}`}
         achievementId={achievement.id}
         disabled={!achievement.permissions.canAward}
-        tooltipText={intl.formatMessage(translations.automaticAward)}
+        tooltipText={t(translations.automaticAward)}
       />
       {achievement.permissions.canEdit && (
-        <EditButton
-          className={`achievement-edit-${achievement.id}`}
-          onClick={onEdit}
-        />
+        <>
+          <EditButton
+            className={`achievement-edit-${achievement.id}`}
+            onClick={(): void => setIsEditing(true)}
+          />
+          {isEditing && (
+            <AchievementEdit
+              achievementId={achievement.id}
+              open={isEditing}
+              onClose={(): void => setIsEditing(false)}
+            />
+          )}
+        </>
       )}
       {achievement.permissions.canDelete && (
         <DeleteButton
@@ -83,7 +91,7 @@ const AchievementManagementButtons: FC<Props> = (props) => {
           disabled={isDeleting}
           loading={isDeleting}
           onClick={onDelete}
-          confirmMessage={intl.formatMessage(translations.deletionConfirm)}
+          confirmMessage={t(translations.deletionConfirm)}
         />
       )}
     </div>
@@ -92,4 +100,4 @@ const AchievementManagementButtons: FC<Props> = (props) => {
   return managementButtons;
 };
 
-export default injectIntl(AchievementManagementButtons);
+export default AchievementManagementButtons;

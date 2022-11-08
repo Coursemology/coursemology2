@@ -1,20 +1,19 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
 import { AppDispatch } from 'types/store';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import AchievementForm from '../../components/forms/AchievementForm';
 import { createAchievement } from '../../operations';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void;
 }
 
 const translations = defineMessages({
@@ -40,9 +39,8 @@ const initialValues = {
 };
 
 const AchievementNew: FC<Props> = (props) => {
-  const { open, handleClose, intl } = props;
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
+  const { open, onClose } = props;
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
@@ -53,7 +51,7 @@ const AchievementNew: FC<Props> = (props) => {
   const onSubmit = (data, setError): Promise<void> =>
     dispatch(createAchievement(data))
       .then((response) => {
-        toast.success(intl.formatMessage(translations.creationSuccess));
+        toast.success(t(translations.creationSuccess));
         setTimeout(() => {
           if (response.data?.id) {
             navigate(getAchievementURL(getCourseId(), response.data.id));
@@ -61,60 +59,22 @@ const AchievementNew: FC<Props> = (props) => {
         }, 200);
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.creationFailure));
+        toast.error(t(translations.creationFailure));
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
-        throw error;
       });
 
   return (
-    <>
-      <Dialog
-        disableEnforceFocus
-        onClose={(): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          } else {
-            handleClose();
-          }
-        }}
-        open={open}
-        maxWidth="lg"
-        style={{
-          top: 40,
-        }}
-      >
-        <DialogTitle>
-          {intl.formatMessage(translations.newAchievement)}
-        </DialogTitle>
-        <DialogContent>
-          <AchievementForm
-            editing={false}
-            handleClose={(): void => {
-              if (isDirty) {
-                setConfirmationDialogOpen(true);
-              } else {
-                handleClose();
-              }
-            }}
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            setIsDirty={setIsDirty}
-          />
-        </DialogContent>
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <AchievementForm
+      open={open}
+      editing={false}
+      title={t(translations.newAchievement)}
+      onClose={onClose}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+    />
   );
 };
 
-export default injectIntl(AchievementNew);
+export default AchievementNew;

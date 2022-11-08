@@ -1,5 +1,5 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -7,6 +7,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import AddButton from 'lib/components/core/buttons/AddButton';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import {
   fetchAchievements,
@@ -20,8 +21,6 @@ import {
 import AchievementTable from '../../components/tables/AchievementTable';
 import AchievementReordering from '../../components/misc/AchievementReordering';
 import AchievementNew from '../AchievementNew';
-
-type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   newAchievement: {
@@ -42,8 +41,8 @@ const translations = defineMessages({
   },
 });
 
-const AchievementsIndex: FC<Props> = (props) => {
-  const { intl } = props;
+const AchievementsIndex: FC = () => {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const achievements = useSelector((state: AppState) =>
@@ -57,9 +56,7 @@ const AchievementsIndex: FC<Props> = (props) => {
   useEffect(() => {
     dispatch(fetchAchievements())
       .finally(() => setIsLoading(false))
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchAchievementsFailure)),
-      );
+      .catch(() => toast.error(t(translations.fetchAchievementsFailure)));
   }, [dispatch]);
 
   const headerToolbars: ReactElement[] = []; // To Add: Reorder Button
@@ -76,7 +73,7 @@ const AchievementsIndex: FC<Props> = (props) => {
         className="new-achievement-button"
         key="new-achievement-button"
         onClick={(): void => setIsOpen(true)}
-        tooltip={intl.formatMessage(translations.newAchievement)}
+        tooltip={t(translations.newAchievement)}
       />,
     );
   }
@@ -87,17 +84,16 @@ const AchievementsIndex: FC<Props> = (props) => {
   ): Promise<void> =>
     dispatch(updatePublishedAchievement(achievementId, data))
       .then(() => {
-        toast.success(intl.formatMessage(translations.toggleSuccess));
+        toast.success(t(translations.toggleSuccess));
       })
-      .catch((error) => {
-        toast.error(intl.formatMessage(translations.toggleFailure));
-        throw error;
+      .catch(() => {
+        toast.error(t(translations.toggleFailure));
       });
 
   return (
     <>
       <PageHeader
-        title={intl.formatMessage({
+        title={t({
           id: 'course.achievement.header',
           defaultMessage: 'Achievements',
         })}
@@ -109,7 +105,7 @@ const AchievementsIndex: FC<Props> = (props) => {
         <>
           <AchievementNew
             open={isOpen}
-            handleClose={(): void => setIsOpen(false)}
+            onClose={(): void => setIsOpen(false)}
           />
           <AchievementTable
             achievements={achievements}
@@ -122,4 +118,4 @@ const AchievementsIndex: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(AchievementsIndex);
+export default AchievementsIndex;

@@ -72,12 +72,9 @@ export interface AchievementCourseUserEntity extends CourseUserMiniEntity {
  */
 
 export interface AchievementFormData {
+  id?: number;
   title: string;
   description: string;
   badge: BadgeEntity;
   published: boolean;
-}
-
-export interface AchievementEditFormData extends AchievementFormData {
-  id: number;
 }

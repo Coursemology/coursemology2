@@ -77,6 +77,7 @@ const Prompt = (props: PromptProps): JSX.Element => {
       <DialogActions className="flex-wrap">
         {props.secondaryLabel ? (
           <Button
+            className="prompt-secondary-btn"
             color={props.secondaryColor}
             disabled={props.secondaryDisabled ?? props.disabled}
             onClick={props.onClickSecondary}
@@ -89,6 +90,7 @@ const Prompt = (props: PromptProps): JSX.Element => {
 
         {!props.cancel ? (
           <Button
+            className="prompt-cancel-btn"
             color={props.cancelColor}
             disabled={props.cancelDisabled ?? props.disabled}
             onClick={props.onClickCancel ?? handleClose}
@@ -101,6 +103,7 @@ const Prompt = (props: PromptProps): JSX.Element => {
 
         {props.primaryLabel ? (
           <Button
+            className="prompt-primary-btn"
             color={props.primaryColor}
             disabled={props.primaryDisabled ?? props.disabled}
             onClick={props.onClickPrimary}
