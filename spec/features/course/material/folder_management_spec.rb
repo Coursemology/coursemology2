@@ -61,12 +61,12 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
         new_folder = build(:folder, course: course)
         fill_in_react_ck 'textarea[name="description"]', new_folder.description
 
-        find('#folder-form-submit-button').click
+        find('#form-dialog-submit-button').click
 
         expect(page).to have_text('Failed submitting this form. Please try again.')
 
         find('input[name="name"]').set(new_folder.name)
-        find('#folder-form-submit-button').click
+        find('#form-dialog-submit-button').click
 
         expect(page).to have_text(new_folder.name)
         new_folder = parent_folder.children.find_by(name: new_folder.name)
@@ -79,12 +79,12 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
         find("#subfolder-edit-button-#{sample_folder.id}").click
 
         find('input[name="name"]').set(' ')
-        find('#folder-form-update-button').click
+        find('#form-dialog-update-button').click
         expect(page).to have_text('Failed submitting this form. Please try again.')
 
         new_name = 'new name'
         find('input[name="name"]').set(new_name)
-        find('#folder-form-update-button').click
+        find('#form-dialog-update-button').click
 
         expect(current_path).to eq(course_material_folder_path(course, parent_folder))
         within find("#subfolder-#{sample_folder.id}") do

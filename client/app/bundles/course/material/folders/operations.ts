@@ -16,10 +16,15 @@ const formatFolderAttributes = (data: FolderFormData): FormData => {
       if (data[field] !== undefined && data[field] !== null) {
         switch (field) {
           case 'startAt':
-            payload.append('material_folder[start_at]', data[field]);
+            payload.append('material_folder[start_at]', data[field].toString());
             break;
           case 'endAt':
-            payload.append('material_folder[end_at]', `${data[field]}`);
+            if (data[field]) {
+              payload.append(
+                'material_folder[end_at]',
+                data[field]!.toString(),
+              );
+            }
             break;
           case 'canStudentUpload':
             payload.append(

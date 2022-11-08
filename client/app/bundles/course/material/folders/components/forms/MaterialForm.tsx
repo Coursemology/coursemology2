@@ -1,17 +1,7 @@
-import { FC, useEffect } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
-import { Controller, useForm, UseFormSetError } from 'react-hook-form';
+import { FC } from 'react';
+import { defineMessages } from 'react-intl';
+import { Controller, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-
-import { Button } from '@mui/material';
-
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
@@ -20,17 +10,19 @@ import FormSingleFileInput, {
 } from 'lib/components/form/fields/SingleFileInput';
 
 import { MaterialFormData } from 'types/course/material/folders';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
+import useTranslation from 'lib/hooks/useTranslation';
 
-interface Props extends WrappedComponentProps {
+interface Props {
+  open: boolean;
   editing: boolean;
-  handleClose: (isDirty: boolean) => void;
+  onClose: () => void;
   onSubmit: (
     data: MaterialFormData,
     setError: UseFormSetError<MaterialFormData>,
   ) => void;
-  setIsDirty: (value: boolean) => void;
-  initialValues: Object;
-  isSubmitting: boolean;
+  title: string;
+  initialValues: MaterialFormData;
 }
 
 const translations = defineMessages({
@@ -54,88 +46,22 @@ const validationSchema = yup.object({
 });
 
 const MaterialForm: FC<Props> = (props) => {
-  const {
-    intl,
-    editing,
-    handleClose,
-    initialValues,
-    onSubmit,
-    setIsDirty,
-    isSubmitting,
-  } = props;
-
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isDirty },
-  } = useForm<MaterialFormData>({
-    defaultValues: initialValues,
-    resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
-  });
-
-  useEffect(() => {
-    setIsDirty(isDirty);
-  }, [isDirty]);
-
-  const disabled = isSubmitting;
-
-  const actionButtons = (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        paddingTop: '20px',
-      }}
-    >
-      <Button
-        color="secondary"
-        className="btn-cancel"
-        disabled={disabled}
-        key="material-form-cancel-button"
-        onClick={(): void => handleClose(isDirty)}
-      >
-        <FormattedMessage {...formTranslations.cancel} />
-      </Button>
-      {editing ? (
-        <Button
-          id="material-form-update-button"
-          variant="contained"
-          color="primary"
-          className="btn-submit"
-          disabled={disabled || !isDirty}
-          form="material-form"
-          key="material-form-update-button"
-          type="submit"
-        >
-          <FormattedMessage {...formTranslations.update} />
-        </Button>
-      ) : (
-        <Button
-          id="material-form-submit-button"
-          color="primary"
-          className="btn-submit"
-          disabled={disabled || !isDirty}
-          form="material-form"
-          key="material-form-submit-button"
-          type="submit"
-        >
-          <FormattedMessage {...formTranslations.submit} />
-        </Button>
-      )}
-    </div>
-  );
+  const { open, editing, onClose, onSubmit, title, initialValues } = props;
+  const { t } = useTranslation();
 
   return (
-    <>
-      <form
-        encType="multipart/form-data"
-        id="material-form"
-        noValidate
-        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-      >
-        <ErrorText errors={errors} />
-        <div id="material-name">
+    <FormDialog
+      open={open}
+      editing={editing}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      title={title}
+      formName="material-form"
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+    >
+      {(control, formState): JSX.Element => (
+        <>
           <Controller
             control={control}
             name="name"
@@ -143,9 +69,8 @@ const MaterialForm: FC<Props> = (props) => {
               <FormTextField
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.name} />}
-                // @ts-ignore: component is still written in JS
+                disabled={formState.isSubmitting}
+                label={t(translations.name)}
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
@@ -155,46 +80,44 @@ const MaterialForm: FC<Props> = (props) => {
               />
             )}
           />
-        </div>
 
-        <Controller
-          name="description"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormRichTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.description} />}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
-            />
-          )}
-        />
-        <Controller
-          name="file"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormSingleFileInput
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              previewComponent={FilePreview}
-            />
-          )}
-        />
-        <i style={{ fontSize: 13 }}>
-          {intl.formatMessage(translations.fileHelpMessage)}
-        </i>
+          <Controller
+            name="description"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormRichTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.description)}
+                // @ts-ignore: component is still written in JS
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="standard"
+              />
+            )}
+          />
 
-        {actionButtons}
-      </form>
-    </>
+          <Controller
+            name="file"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormSingleFileInput
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                previewComponent={FilePreview}
+              />
+            )}
+          />
+
+          <i style={{ fontSize: 13 }}>{t(translations.fileHelpMessage)}</i>
+        </>
+      )}
+    </FormDialog>
   );
 };
 
-export default injectIntl(MaterialForm);
+export default MaterialForm;

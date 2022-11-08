@@ -1,39 +1,31 @@
-import { FC, useEffect } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
-import { Controller, useForm, UseFormSetError } from 'react-hook-form';
+import { FC } from 'react';
+import { defineMessages } from 'react-intl';
+import { Controller, UseFormSetError } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-
-import { Button } from '@mui/material';
-
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { FolderFormData } from 'types/course/material/folders';
 import { AppState } from 'types/store';
 
 import { getAdvanceStartAt } from '../../selectors';
 
-interface Props extends WrappedComponentProps {
+interface Props {
+  open: boolean;
   editing: boolean;
-  handleClose: (isDirty: boolean) => void;
+  onClose: () => void;
   onSubmit: (
     data: FolderFormData,
     setError: UseFormSetError<FolderFormData>,
   ) => void;
-  setIsDirty: (value: boolean) => void;
-  initialValues: Object;
-  isSubmitting: boolean;
+  title: string;
+  initialValues: FolderFormData;
 }
 
 const translations = defineMessages({
@@ -77,187 +69,120 @@ const validationSchema = yup.object({
 });
 
 const FolderForm: FC<Props> = (props) => {
-  const {
-    intl,
-    editing,
-    handleClose,
-    initialValues,
-    onSubmit,
-    setIsDirty,
-    isSubmitting,
-  } = props;
-
+  const { open, editing, onClose, initialValues, onSubmit, title } = props;
+  const { t } = useTranslation();
   const advanceStartAt = useSelector((state: AppState) =>
     getAdvanceStartAt(state),
   );
 
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isDirty },
-  } = useForm<FolderFormData>({
-    defaultValues: initialValues,
-    resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
-  });
-
-  useEffect(() => {
-    setIsDirty(isDirty);
-  }, [isDirty]);
-
-  const disabled = isSubmitting;
-
-  const actionButtons = (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        paddingTop: '20px',
-      }}
-    >
-      <Button
-        color="secondary"
-        className="btn-cancel"
-        disabled={disabled}
-        key="folder-form-cancel-button"
-        onClick={(): void => handleClose(isDirty)}
-      >
-        <FormattedMessage {...formTranslations.cancel} />
-      </Button>
-      {editing ? (
-        <Button
-          id="folder-form-update-button"
-          variant="contained"
-          color="primary"
-          className="btn-submit"
-          disabled={disabled || !isDirty}
-          form="folder-form"
-          key="folder-form-update-button"
-          type="submit"
-        >
-          <FormattedMessage {...formTranslations.update} />
-        </Button>
-      ) : (
-        <Button
-          id="folder-form-submit-button"
-          color="primary"
-          className="btn-submit"
-          disabled={disabled || !isDirty}
-          form="folder-form"
-          key="folder-form-submit-button"
-          type="submit"
-        >
-          <FormattedMessage {...formTranslations.submit} />
-        </Button>
-      )}
-    </div>
-  );
-
   return (
-    <>
-      <form
-        encType="multipart/form-data"
-        id="folder-form"
-        noValidate
-        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-      >
-        <ErrorText errors={errors} />
-        <div id="folder-name">
+    <FormDialog
+      open={open}
+      editing={editing}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      title={title}
+      formName="folder-form"
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+    >
+      {(control, formState): JSX.Element => (
+        <>
+          <div id="folder-name">
+            <Controller
+              control={control}
+              name="name"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormTextField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={formState.isSubmitting}
+                  label={t(translations.name)}
+                  // @ts-ignore: component is still written in JS
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  required
+                  variant="standard"
+                />
+              )}
+            />
+          </div>
+
           <Controller
+            name="description"
             control={control}
-            name="name"
             render={({ field, fieldState }): JSX.Element => (
-              <FormTextField
+              <FormRichTextField
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.name} />}
+                disabled={formState.isSubmitting}
+                label={t(translations.description)}
                 // @ts-ignore: component is still written in JS
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
-                required
                 variant="standard"
               />
             )}
           />
-        </div>
-
-        <Controller
-          name="description"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormRichTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.description} />}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
-            />
-          )}
-        />
-        <Controller
-          name="canStudentUpload"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormToggleField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.canStudentUpload} />}
-            />
-          )}
-        />
-        <div style={{ marginBottom: 12 }} />
-
-        <div style={{ display: 'flex' }}>
           <Controller
-            name="startAt"
+            name="canStudentUpload"
             control={control}
             render={({ field, fieldState }): JSX.Element => (
-              <FormDateTimePickerField
+              <FormToggleField
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.startAt} />}
-                style={{ flex: 1 }}
+                disabled={formState.isSubmitting}
+                label={t(translations.canStudentUpload)}
               />
             )}
           />
-          <Controller
-            name="endAt"
-            control={control}
-            render={({ field, fieldState }): JSX.Element => (
-              <FormDateTimePickerField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.endAt} />}
-                style={{ flex: 1 }}
-              />
-            )}
-          />
-        </div>
+          <div style={{ marginBottom: 12 }} />
 
-        {editing && advanceStartAt !== 0 && (
-          <div style={{ marginTop: 12 }}>{`${intl.formatMessage(
-            translations.earlyAccessMessage,
-            {
-              numDays: Math.ceil(advanceStartAt / (24 * 60 * 60)),
-            },
-          )}`}</div>
-        )}
+          <div style={{ display: 'flex' }}>
+            <Controller
+              name="startAt"
+              control={control}
+              render={({ field, fieldState }): JSX.Element => (
+                <FormDateTimePickerField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={formState.isSubmitting}
+                  label={t(translations.startAt)}
+                  style={{ flex: 1 }}
+                />
+              )}
+            />
+            <Controller
+              name="endAt"
+              control={control}
+              render={({ field, fieldState }): JSX.Element => (
+                <FormDateTimePickerField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={formState.isSubmitting}
+                  label={t(translations.endAt)}
+                  style={{ flex: 1 }}
+                />
+              )}
+            />
+          </div>
 
-        {actionButtons}
-      </form>
-    </>
+          {editing && advanceStartAt !== 0 && (
+            <div style={{ marginTop: 12 }}>{`${t(
+              translations.earlyAccessMessage,
+              {
+                numDays: Math.ceil(advanceStartAt / (24 * 60 * 60)),
+              },
+            )}`}</div>
+          )}
+        </>
+      )}
+    </FormDialog>
   );
 };
 
-export default injectIntl(FolderForm);
+export default FolderForm;

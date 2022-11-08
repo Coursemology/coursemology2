@@ -1,5 +1,5 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 
@@ -13,6 +13,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { getWorkbinFolderURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { loadFolder } from '../../operations';
 import {
@@ -32,8 +33,6 @@ import MaterialUpload from '../../components/misc/MaterialUpload';
 import FolderNew from '../FolderNew';
 import FolderEdit from '../FolderEdit';
 
-interface Props extends WrappedComponentProps {}
-
 const translations = defineMessages({
   defaultHeader: {
     id: 'course.materials.folders.defaultHeader',
@@ -41,9 +40,9 @@ const translations = defineMessages({
   },
 });
 
-const FolderShow: FC<Props> = (props) => {
-  const { intl } = props;
+const FolderShow: FC = () => {
   const { folderId } = useParams();
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
   // For new folder form dialog
@@ -162,7 +161,7 @@ const FolderShow: FC<Props> = (props) => {
         key={`workbin-folder-${currFolderInfo.name}-${currFolderInfo.id}`}
         title={
           currFolderInfo.name === null
-            ? intl.formatMessage(translations.defaultHeader)
+            ? t(translations.defaultHeader)
             : currFolderInfo.name
         }
         toolbars={headerToolbars}
@@ -185,11 +184,11 @@ const FolderShow: FC<Props> = (props) => {
       <FolderNew
         folderId={+folderId!}
         isOpen={isNewFolderOpen}
-        handleClose={(): void => setIsNewFolderOpen(false)}
+        onClose={(): void => setIsNewFolderOpen(false)}
       />
       <FolderEdit
         isOpen={isEditFolderOpen}
-        handleClose={(): void => {
+        onClose={(): void => {
           setIsEditFolderOpen(false);
         }}
         folderId={currFolderInfo.id}
@@ -204,4 +203,4 @@ const FolderShow: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(FolderShow);
+export default FolderShow;
