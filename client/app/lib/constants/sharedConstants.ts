@@ -13,11 +13,6 @@ export const FIELD_DEBOUNCE_DELAY = 250;
 
 export const TABLE_ROWS_PER_PAGE = 100;
 
-/**
- * constants needed by both server and client
- */
-export const SUPPORTED_VOICE_FILE_TYPES = ['audio/mp3', 'audio/wav'];
-
 export const TIMELINE_ALGORITHMS = [
   { value: 'fixed', label: 'Fixed' },
   { value: 'fomo', label: 'Fomo' },
@@ -65,7 +60,6 @@ export const ITEM_ACTABLE_TYPES = {
 };
 
 export default {
-  SUPPORTED_VOICE_FILE_TYPES,
   TIMELINE_ALGORITHMS,
   USER_ROLES,
   INSTANCE_USER_ROLES,

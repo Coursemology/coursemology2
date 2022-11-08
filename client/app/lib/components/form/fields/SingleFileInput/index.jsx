@@ -105,7 +105,7 @@ class FormSingleFileInput extends Component {
 FormSingleFileInput.propTypes = {
   field: PropTypes.object.isRequired,
   fieldState: PropTypes.object.isRequired,
-  accept: PropTypes.string,
+  accept: PropTypes.object,
   disabled: PropTypes.bool,
   previewComponent: PropTypes.func,
 };
