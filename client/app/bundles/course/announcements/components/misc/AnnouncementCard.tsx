@@ -209,7 +209,7 @@ const AnnouncementCard: FC<Props> = (props) => {
       {showEditOptions && updateOperation && (
         <AnnouncementEdit
           open={isOpen}
-          handleClose={(): void => setIsOpen(false)}
+          onClose={(): void => setIsOpen(false)}
           announcementId={announcement.id}
           initialValues={initialValues}
           updateOperation={updateOperation}

@@ -1,41 +1,27 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Button } from '@mui/material';
-
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 
-import {
-  AnnouncementEditFormData,
-  AnnouncementFormData,
-} from 'types/course/announcements';
+import { AnnouncementFormData } from 'types/course/announcements';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
 
 interface Props {
+  open: boolean;
   editing: boolean;
-  handleClose: (isDirty: boolean) => void;
-  onSubmit: (
-    data: AnnouncementFormData | AnnouncementEditFormData,
-    setError: unknown,
-  ) => void;
-  setIsDirty?: (value: boolean) => void;
-  initialValues?: Object;
-  canSticky: boolean;
-}
-
-interface IFormInputs {
   title: string;
-  content: string;
-  sticky: boolean;
-  startAt: string;
-  endAt: string;
+  initialValues: AnnouncementFormData;
+  onClose: () => void;
+  onSubmit: (
+    data: AnnouncementFormData,
+    setError: UseFormSetError<AnnouncementFormData>,
+  ) => void;
   canSticky: boolean;
 }
 
@@ -75,180 +61,108 @@ const validationSchema = yup.object({
 });
 
 const AnnouncementForm: FC<Props> = (props) => {
-  const {
-    editing,
-    handleClose,
-    initialValues,
-    onSubmit,
-    setIsDirty,
-    canSticky,
-  } = props;
-
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isDirty, isSubmitting },
-  } = useForm<IFormInputs>({
-    defaultValues: initialValues,
-    resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
-  });
-
-  useEffect(() => {
-    if (setIsDirty) {
-      if (isDirty) {
-        setIsDirty(true);
-      } else {
-        setIsDirty(false);
-      }
-    }
-  }, [isDirty]);
-
-  const disabled = isSubmitting;
-
-  const actionButtons = (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        paddingTop: '20px',
-      }}
-    >
-      <Button
-        color="secondary"
-        className="btn-cancel"
-        disabled={disabled}
-        key="announcement-form-cancel-button"
-        onClick={(): void => handleClose(isDirty)}
-      >
-        <FormattedMessage {...formTranslations.cancel} />
-      </Button>
-      {editing ? (
-        <Button
-          id="announcement-form-update-button"
-          variant="contained"
-          color="primary"
-          className="btn-submit"
-          disabled={disabled || !isDirty}
-          form="announcement-form"
-          key="announcement-form-update-button"
-          type="submit"
-        >
-          <FormattedMessage {...formTranslations.update} />
-        </Button>
-      ) : (
-        <Button
-          id="announcement-form-submit-button"
-          color="primary"
-          className="btn-submit"
-          disabled={disabled || !isDirty}
-          form="announcement-form"
-          key="announcement-form-submit-button"
-          type="submit"
-        >
-          <FormattedMessage {...formTranslations.submit} />
-        </Button>
-      )}
-    </div>
-  );
+  const { open, editing, title, onClose, initialValues, onSubmit, canSticky } =
+    props;
 
   return (
-    <>
-      <form
-        encType="multipart/form-data"
-        id="announcement-form"
-        noValidate
-        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-      >
-        <ErrorText errors={errors} />
-        <div id="announcement-title">
+    <FormDialog
+      open={open}
+      editing={editing}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      title={title}
+      formName="announcement-form"
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+    >
+      {(control, formState): JSX.Element => (
+        <>
+          <div id="announcement-title">
+            <Controller
+              control={control}
+              name="title"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormTextField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={formState.isSubmitting}
+                  label={<FormattedMessage {...translations.title} />}
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  required
+                  variant="standard"
+                />
+              )}
+            />
+          </div>
+
           <Controller
+            name="content"
             control={control}
-            name="title"
             render={({ field, fieldState }): JSX.Element => (
-              <FormTextField
+              <FormRichTextField
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.title} />}
+                disabled={formState.isSubmitting}
+                label={<FormattedMessage {...translations.content} />}
                 // @ts-ignore: component is still written in JS
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
-                required
                 variant="standard"
               />
             )}
           />
-        </div>
-
-        <Controller
-          name="content"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormRichTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.content} />}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
+          {canSticky && (
+            <Controller
+              name="sticky"
+              control={control}
+              render={({ field, fieldState }): JSX.Element => (
+                <FormToggleField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={formState.isSubmitting}
+                  label={<FormattedMessage {...translations.sticky} />}
+                />
+              )}
             />
           )}
-        />
-        {canSticky && (
-          <Controller
-            name="sticky"
-            control={control}
-            render={({ field, fieldState }): JSX.Element => (
-              <FormToggleField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.sticky} />}
-              />
-            )}
-          />
-        )}
-        <div style={{ marginBottom: 12 }} />
+          <div style={{ marginBottom: 12 }} />
 
-        <div style={{ display: 'flex' }}>
-          <Controller
-            name="startAt"
-            control={control}
-            render={({ field, fieldState }): JSX.Element => (
-              <FormDateTimePickerField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.startAt} />}
-                style={{ flex: 1 }}
-              />
-            )}
-          />
-          <Controller
-            name="endAt"
-            control={control}
-            render={({ field, fieldState }): JSX.Element => (
-              <FormDateTimePickerField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.endAt} />}
-                style={{ flex: 1 }}
-              />
-            )}
-          />
-        </div>
-
-        {actionButtons}
-      </form>
-    </>
+          <div style={{ display: 'flex' }}>
+            <Controller
+              name="startAt"
+              control={control}
+              render={({ field, fieldState }): JSX.Element => (
+                <FormDateTimePickerField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={formState.isSubmitting}
+                  label={<FormattedMessage {...translations.startAt} />}
+                  style={{ flex: 1 }}
+                />
+              )}
+            />
+            <Controller
+              name="endAt"
+              control={control}
+              render={({ field, fieldState }): JSX.Element => (
+                <FormDateTimePickerField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={formState.isSubmitting}
+                  label={<FormattedMessage {...translations.endAt} />}
+                  style={{ flex: 1 }}
+                />
+              )}
+            />
+          </div>
+        </>
+      )}
+    </FormDialog>
   );
 };
 

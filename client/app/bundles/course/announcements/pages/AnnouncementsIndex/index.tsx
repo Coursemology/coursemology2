@@ -99,7 +99,7 @@ const AnnouncementsIndex: FC<Props> = (props) => {
           )}
           <AnnouncementNew
             open={isOpen}
-            handleClose={(): void => setIsOpen(false)}
+            onClose={(): void => setIsOpen(false)}
             createOperation={createAnnouncement}
           />
         </>

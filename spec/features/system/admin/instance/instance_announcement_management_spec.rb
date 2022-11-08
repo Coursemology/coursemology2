@@ -37,13 +37,13 @@ RSpec.feature 'System: Administration: Instance Announcements', js: true do
         find("#announcement-edit-button-#{announcement.id}").click
 
         fill_in 'title', with: 'long string' * 100
-        find('#announcement-form-update-button').click
+        find('#form-dialog-update-button').click
         expect_toastify('Failed to update the announcement')
-        expect(page).to have_selector('#announcement-form-update-button')
+        expect(page).to have_selector('#form-dialog-update-button')
 
         new_title = 'New Title'
         fill_in 'title', with: new_title
-        find('#announcement-form-update-button').click
+        find('#form-dialog-update-button').click
 
         # Commented due to flaky test
         # expect_toastify('Announcement updated')

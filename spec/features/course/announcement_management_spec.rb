@@ -24,7 +24,7 @@ RSpec.feature 'Course: Announcements' do
 
         announcement = build_stubbed(:course_announcement, course: course)
         fill_in 'title', with: announcement.title
-        find('#announcement-form-submit-button').click
+        find('#form-dialog-submit-button').click
 
         expect(page).to have_selector('h3', text: announcement.title)
 
@@ -40,13 +40,13 @@ RSpec.feature 'Course: Announcements' do
         find("#announcement-edit-button-#{announcement.id}").click
 
         fill_in 'title', with: 'long string' * 100
-        find('#announcement-form-update-button').click
+        find('#form-dialog-update-button').click
         expect_toastify('Failed to update the announcement')
-        expect(page).to have_selector('#announcement-form-update-button')
+        expect(page).to have_selector('#form-dialog-update-button')
 
         new_title = 'New Title'
         fill_in 'title', with: new_title
-        find('#announcement-form-update-button').click
+        find('#form-dialog-update-button').click
 
         expect(current_path).to eq course_announcements_path(course)
         within find("#announcement-#{announcement.id}") do

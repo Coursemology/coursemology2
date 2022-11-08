@@ -52,13 +52,10 @@ export interface AnnouncementMiniEntity {
 
 export interface AnnouncementEntity extends AnnouncementMiniEntity {}
 export interface AnnouncementFormData {
+  id?: number;
   title: string;
   content: string;
   sticky: boolean;
-  startAt: string;
-  endAt: string;
-}
-
-export interface AnnouncementEditFormData extends AnnouncementFormData {
-  id: number;
+  startAt: Date;
+  endAt: Date;
 }
