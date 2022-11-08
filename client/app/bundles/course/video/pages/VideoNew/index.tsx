@@ -58,7 +58,6 @@ const VideoNew: FC<Props> = (props) => {
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
-        throw error;
       });
 
   const initialValues = {

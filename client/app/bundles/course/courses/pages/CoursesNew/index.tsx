@@ -59,7 +59,6 @@ const CoursesNew: FC<Props> = (props) => {
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
-        throw error;
       });
 
   return (
