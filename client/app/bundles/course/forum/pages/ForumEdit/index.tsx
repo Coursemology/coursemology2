@@ -1,5 +1,5 @@
 import { defineMessages } from 'react-intl';
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
@@ -7,10 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { AppDispatch } from 'types/store';
 import { ForumFormData, ForumEntity } from 'types/course/forums';
 
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ForumForm from '../../components/forms/ForumForm';
@@ -19,7 +16,7 @@ import { updateForum } from '../../operations';
 interface Props {
   forum: ForumEntity;
   isOpen: boolean;
-  handleClose: () => void;
+  onClose: () => void;
   navigateToShowAfterUpdate?: boolean;
 }
 
@@ -39,10 +36,8 @@ const translations = defineMessages({
 });
 
 const ForumEdit: FC<Props> = (props) => {
-  const { isOpen, handleClose, forum, navigateToShowAfterUpdate } = props;
+  const { isOpen, onClose, forum, navigateToShowAfterUpdate } = props;
   const { t } = useTranslation();
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
   const navigate = useNavigate();
 
   const initialValues = {
@@ -65,8 +60,7 @@ const ForumEdit: FC<Props> = (props) => {
           navigate(response.forumUrl);
         }
         toast.success(t(translations.updateSuccess, { title: data.name }));
-        handleClose();
-        setConfirmationDialogOpen(false);
+        onClose();
       })
       .catch((error) => {
         toast.error(t(translations.updateFailure));
@@ -78,46 +72,14 @@ const ForumEdit: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <Dialog
-        className="top-10"
-        disableEnforceFocus
-        onClose={(): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          } else {
-            handleClose();
-          }
-        }}
-        open={isOpen}
-        maxWidth="lg"
-      >
-        <DialogTitle>{t(translations.editForum)}</DialogTitle>
-        <DialogContent>
-          <ForumForm
-            handleClose={(): void => {
-              if (isDirty) {
-                setConfirmationDialogOpen(true);
-              } else {
-                handleClose();
-              }
-            }}
-            initialValues={initialValues}
-            onSubmit={handleSubmit}
-            setIsDirty={setIsDirty}
-          />
-        </DialogContent>
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <ForumForm
+      open={isOpen}
+      editing
+      title={t(translations.editForum)}
+      onClose={onClose}
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+    />
   );
 };
 

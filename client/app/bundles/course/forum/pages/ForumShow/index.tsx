@@ -164,7 +164,7 @@ const ForumShow: FC = () => {
       {!isLoading && isOpen && (
         <ForumTopicNew
           open={isOpen}
-          handleClose={(): void => setIsOpen(false)}
+          onClose={(): void => setIsOpen(false)}
           availableTopicTypes={forum?.availableTopicTypes}
         />
       )}
