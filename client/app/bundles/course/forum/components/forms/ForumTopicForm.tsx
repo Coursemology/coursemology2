@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { defineMessages } from 'react-intl';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
@@ -14,17 +14,13 @@ import { ForumTopicFormData, TopicType } from 'types/course/forums';
 
 interface Props {
   handleClose: (isDirty: boolean) => void;
-  onSubmit: (data: ForumTopicFormData, setError: unknown) => void;
+  onSubmit: (
+    data: ForumTopicFormData,
+    setError: UseFormSetError<ForumTopicFormData>,
+  ) => void;
   setIsDirty?: (value: boolean) => void;
-  initialValues: IFormInputs;
+  initialValues: ForumTopicFormData;
   availableTopicTypes?: TopicType[];
-}
-
-interface IFormInputs {
-  id?: number;
-  title: string;
-  text?: string;
-  topicType: TopicType;
 }
 
 const translations = defineMessages({
@@ -66,7 +62,7 @@ const ForumTopicForm: FC<Props> = (props) => {
     handleSubmit,
     setError,
     formState: { errors, isDirty, isSubmitting },
-  } = useForm<IFormInputs>({
+  } = useForm<ForumTopicFormData>({
     defaultValues: initialValues,
     resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
   });

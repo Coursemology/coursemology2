@@ -5,7 +5,7 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, UseFormSetError } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -27,18 +27,13 @@ import { getAdvanceStartAt } from '../../selectors';
 interface Props extends WrappedComponentProps {
   editing: boolean;
   handleClose: (isDirty: boolean) => void;
-  onSubmit: (data: FolderFormData, setError: unknown) => void;
+  onSubmit: (
+    data: FolderFormData,
+    setError: UseFormSetError<FolderFormData>,
+  ) => void;
   setIsDirty: (value: boolean) => void;
   initialValues: Object;
   isSubmitting: boolean;
-}
-
-interface IFormInputs {
-  name: string;
-  description: string;
-  canStudentUpload: boolean;
-  startAt: string;
-  endAt: string;
 }
 
 const translations = defineMessages({
@@ -101,7 +96,7 @@ const FolderForm: FC<Props> = (props) => {
     handleSubmit,
     setError,
     formState: { errors, isDirty },
-  } = useForm<IFormInputs>({
+  } = useForm<FolderFormData>({
     defaultValues: initialValues,
     resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
   });

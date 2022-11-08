@@ -5,7 +5,7 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -24,16 +24,13 @@ import { MaterialFormData } from 'types/course/material/folders';
 interface Props extends WrappedComponentProps {
   editing: boolean;
   handleClose: (isDirty: boolean) => void;
-  onSubmit: (data: MaterialFormData, setError: unknown) => void;
+  onSubmit: (
+    data: MaterialFormData,
+    setError: UseFormSetError<MaterialFormData>,
+  ) => void;
   setIsDirty: (value: boolean) => void;
   initialValues: Object;
   isSubmitting: boolean;
-}
-
-interface IFormInputs {
-  name: string;
-  description: string;
-  file: { name: string; url: string };
 }
 
 const translations = defineMessages({
@@ -72,7 +69,7 @@ const MaterialForm: FC<Props> = (props) => {
     handleSubmit,
     setError,
     formState: { errors, isDirty },
-  } = useForm<IFormInputs>({
+  } = useForm<MaterialFormData>({
     defaultValues: initialValues,
     resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
   });

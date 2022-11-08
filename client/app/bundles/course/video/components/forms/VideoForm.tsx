@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
 import { useSelector } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -17,25 +17,15 @@ import { AppState } from 'types/store';
 import { getVideoMetadata, getVideoTabs } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
+  editing?: boolean;
   handleClose: (isDirty: boolean) => void;
   onSubmit: (
     data: VideoFormData | VideoEditFormData,
-    setError: unknown,
+    setError: UseFormSetError<VideoFormData | VideoEditFormData>,
   ) => void;
   setIsDirty?: (value: boolean) => void;
-  initialValues: IFormInputs;
+  initialValues: Object;
   childrenExists?: boolean;
-}
-
-interface IFormInputs {
-  id?: number;
-  title: string;
-  tab: number;
-  description: string;
-  url: string;
-  startAt: Date;
-  published: boolean;
-  hasPersonalTimes: boolean;
 }
 
 const translations = defineMessages({
@@ -94,6 +84,7 @@ const validationSchema = yup.object({
 
 const VideoForm: FC<Props> = (props) => {
   const {
+    editing,
     handleClose,
     initialValues,
     onSubmit,
@@ -111,7 +102,7 @@ const VideoForm: FC<Props> = (props) => {
     handleSubmit,
     setError,
     formState: { errors, isDirty, isSubmitting },
-  } = useForm<IFormInputs>({
+  } = useForm<VideoFormData | VideoEditFormData>({
     defaultValues: initialValues,
     resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
   });
@@ -128,7 +119,7 @@ const VideoForm: FC<Props> = (props) => {
 
   const disabled = isSubmitting;
 
-  const actionButtons = initialValues.id ? (
+  const actionButtons = editing ? (
     <div className="mt-2 flex justify-end">
       <Button
         variant="contained"

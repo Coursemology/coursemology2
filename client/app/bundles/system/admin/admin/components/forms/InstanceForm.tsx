@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, useForm, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -13,14 +13,12 @@ import { InstanceFormData } from 'types/system/instances';
 
 interface Props extends WrappedComponentProps {
   handleClose: (isDirty: boolean) => void;
-  onSubmit: (data: InstanceFormData, setError: unknown) => void;
+  onSubmit: (
+    data: InstanceFormData,
+    setError: UseFormSetError<InstanceFormData>,
+  ) => void;
   setIsDirty?: (value: boolean) => void;
   initialValues?: Object;
-}
-
-interface IFormInputs {
-  name: string;
-  host: string;
 }
 
 const translations = defineMessages({
@@ -47,7 +45,7 @@ const InstanceForm: FC<Props> = (props) => {
     handleSubmit,
     setError,
     formState: { errors, isDirty, isSubmitting },
-  } = useForm<IFormInputs>({
+  } = useForm<InstanceFormData>({
     defaultValues: initialValues,
     resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
   });
