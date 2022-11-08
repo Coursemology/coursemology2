@@ -1,23 +1,21 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { FC, useState } from 'react';
+import { defineMessages } from 'react-intl';
+import { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'types/store';
 
 import { FolderFormData } from 'types/course/material/folders';
 import { toast } from 'react-toastify';
 
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import FolderForm from '../../components/forms/FolderForm';
 import { createFolder } from '../../operations';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   folderId: number;
   isOpen: boolean;
-  handleClose: () => void;
+  onClose: () => void;
 }
 
 const translations = defineMessages({
@@ -37,19 +35,15 @@ const translations = defineMessages({
 
 const initialValues = {
   name: '',
-  description: null,
+  description: '',
   canStudentUpload: false,
   startAt: new Date(),
   endAt: null,
 };
 
 const FolderNew: FC<Props> = (props) => {
-  const { intl, folderId, isOpen, handleClose } = props;
-
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
-
+  const { folderId, isOpen, onClose } = props;
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
   if (!isOpen) {
@@ -57,18 +51,13 @@ const FolderNew: FC<Props> = (props) => {
   }
 
   const onSubmit = (data: FolderFormData, setError): void => {
-    setIsSubmitting(true);
-
     dispatch(createFolder(data, folderId))
-      .then((_) => {
-        setIsSubmitting(false);
-        handleClose();
-        setConfirmationDialogOpen(false);
-        toast.success(intl.formatMessage(translations.folderCreationSuccess));
+      .then(() => {
+        onClose();
+        toast.success(t(translations.folderCreationSuccess));
       })
       .catch((error) => {
-        setIsSubmitting(false);
-        toast.error(intl.formatMessage(translations.folderCreationFailure));
+        toast.error(t(translations.folderCreationFailure));
 
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
@@ -77,53 +66,15 @@ const FolderNew: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <Dialog
-        disableEnforceFocus
-        onClose={(): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          } else {
-            handleClose();
-          }
-        }}
-        open={isOpen}
-        maxWidth="lg"
-        style={{
-          top: 40,
-        }}
-      >
-        <DialogTitle>
-          {intl.formatMessage(translations.newSubfolderTitle)}
-        </DialogTitle>
-        <DialogContent>
-          <FolderForm
-            editing={false}
-            handleClose={(): void => {
-              if (isDirty) {
-                setConfirmationDialogOpen(true);
-              } else {
-                handleClose();
-              }
-            }}
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            setIsDirty={setIsDirty}
-            isSubmitting={isSubmitting}
-          />
-        </DialogContent>
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <FolderForm
+      open={isOpen}
+      editing={false}
+      title={t(translations.newSubfolderTitle)}
+      onClose={onClose}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+    />
   );
 };
 
-export default injectIntl(FolderNew);
+export default FolderNew;

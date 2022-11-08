@@ -1,27 +1,25 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { FC, useState } from 'react';
+import { defineMessages } from 'react-intl';
+import { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { AppDispatch } from 'types/store';
 import { MaterialFormData } from 'types/course/material/folders';
 
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-
+import useTranslation from 'lib/hooks/useTranslation';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 import { updateMaterial } from '../../operations';
 import MaterialForm from '../forms/MaterialForm';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   isOpen: boolean;
-  handleClose: () => void;
+  onClose: () => void;
   folderId: number;
   materialId: number;
   initialValues: {
     name: string;
-    description: string | null;
+    description: string;
     file: { name: string; url: string };
   };
 }
@@ -41,30 +39,19 @@ const translations = defineMessages({
   },
 });
 
-const FolderEdit: FC<Props> = (props) => {
-  const { intl, isOpen, handleClose, folderId, materialId, initialValues } =
-    props;
-
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [isDirty, setIsDirty] = useState(false);
-
+const MaterialEdit: FC<Props> = (props) => {
+  const { isOpen, onClose, folderId, materialId, initialValues } = props;
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
-  const onSubmit = (data: MaterialFormData, setError): void => {
-    setIsSubmitting(true);
-
+  const handleSubmit = (data: MaterialFormData, setError): void => {
     dispatch(updateMaterial(data, folderId, materialId))
-      .then((_) => {
-        setIsSubmitting(false);
-        handleClose();
-        setConfirmationDialogOpen(false);
-        toast.success(intl.formatMessage(translations.materialEditSuccess));
+      .then(() => {
+        onClose();
+        toast.success(t(translations.materialEditSuccess));
       })
       .catch((error) => {
-        setIsSubmitting(false);
-        toast.error(intl.formatMessage(translations.materialEditFailure));
+        toast.error(t(translations.materialEditFailure));
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
@@ -76,53 +63,15 @@ const FolderEdit: FC<Props> = (props) => {
   }
 
   return (
-    <>
-      <Dialog
-        disableEnforceFocus
-        onClose={(): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          } else {
-            handleClose();
-          }
-        }}
-        open={isOpen}
-        maxWidth="lg"
-        style={{
-          top: 40,
-        }}
-      >
-        <DialogTitle>
-          {intl.formatMessage(translations.editMaterialTitle)}
-        </DialogTitle>
-        <DialogContent>
-          <MaterialForm
-            editing
-            handleClose={(): void => {
-              if (isDirty) {
-                setConfirmationDialogOpen(true);
-              } else {
-                handleClose();
-              }
-            }}
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            setIsDirty={setIsDirty}
-            isSubmitting={isSubmitting}
-          />
-        </DialogContent>
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <MaterialForm
+      open={isOpen}
+      editing
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      title={t(translations.editMaterialTitle)}
+      initialValues={initialValues}
+    />
   );
 };
 
-export default injectIntl(FolderEdit);
+export default MaterialEdit;

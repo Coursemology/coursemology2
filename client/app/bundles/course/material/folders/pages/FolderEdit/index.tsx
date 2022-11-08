@@ -1,30 +1,22 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { FC, useState } from 'react';
+import { defineMessages } from 'react-intl';
+import { FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
 import { AppDispatch } from 'types/store';
 import { FolderFormData } from 'types/course/material/folders';
 
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import FolderForm from '../../components/forms/FolderForm';
 import { updateFolder } from '../../operations';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   isOpen: boolean;
-  handleClose: () => void;
+  onClose: () => void;
   folderId: number;
-  initialValues: {
-    name: string;
-    description: string | null;
-    canStudentUpload: boolean;
-    startAt: Date;
-    endAt: Date | null;
-  };
+  initialValues: FolderFormData;
 }
 
 const translations = defineMessages({
@@ -43,27 +35,19 @@ const translations = defineMessages({
 });
 
 const FolderEdit: FC<Props> = (props) => {
-  const { intl, isOpen, handleClose, folderId, initialValues } = props;
-
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
+  const { isOpen, onClose, folderId, initialValues } = props;
+  const { t } = useTranslation();
 
   const dispatch = useDispatch<AppDispatch>();
 
   const onSubmit = (data: FolderFormData, setError): void => {
-    setIsSubmitting(true);
-
     dispatch(updateFolder(data, folderId))
-      .then((_) => {
-        setIsSubmitting(false);
-        handleClose();
-        setConfirmationDialogOpen(false);
-        toast.success(intl.formatMessage(translations.folderEditSuccess));
+      .then(() => {
+        onClose();
+        toast.success(t(translations.folderEditSuccess));
       })
       .catch((error) => {
-        setIsSubmitting(false);
-        toast.error(intl.formatMessage(translations.folderEditFailure));
+        toast.error(t(translations.folderEditFailure));
 
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
@@ -76,53 +60,15 @@ const FolderEdit: FC<Props> = (props) => {
   }
 
   return (
-    <>
-      <Dialog
-        disableEnforceFocus
-        onClose={(): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          } else {
-            handleClose();
-          }
-        }}
-        open={isOpen}
-        maxWidth="lg"
-        style={{
-          top: 40,
-        }}
-      >
-        <DialogTitle>
-          {intl.formatMessage(translations.editSubfolderTitle)}
-        </DialogTitle>
-        <DialogContent>
-          <FolderForm
-            editing
-            handleClose={(): void => {
-              if (isDirty) {
-                setConfirmationDialogOpen(true);
-              } else {
-                handleClose();
-              }
-            }}
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            setIsDirty={setIsDirty}
-            isSubmitting={isSubmitting}
-          />
-        </DialogContent>
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <FolderForm
+      open={isOpen}
+      editing
+      title={t(translations.editSubfolderTitle)}
+      onClose={onClose}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+    />
   );
 };
 
-export default injectIntl(FolderEdit);
+export default FolderEdit;

@@ -1,4 +1,4 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { FC, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -8,12 +8,13 @@ import { Stack } from '@mui/material';
 
 import EditButton from 'lib/components/core/buttons/EditButton';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteFolder, deleteMaterial } from '../../operations';
 import FolderEdit from '../../pages/FolderEdit';
 import MaterialEdit from '../misc/MaterialEdit';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   currFolderId: number;
   itemId: number;
   itemName: string;
@@ -23,14 +24,14 @@ interface Props extends WrappedComponentProps {
   type: 'subfolder' | 'material';
   folderInitialValues?: {
     name: string;
-    description: string | null;
+    description: string;
     canStudentUpload: boolean;
     startAt: Date;
     endAt: Date | null;
   };
   materialInitialValues?: {
     name: string;
-    description: string | null;
+    description: string;
     file: { name: string; url: string };
   };
 }
@@ -56,7 +57,6 @@ const translations = defineMessages({
 
 const WorkbinTableButtons: FC<Props> = (props) => {
   const {
-    intl,
     currFolderId,
     itemId,
     itemName,
@@ -67,7 +67,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
     folderInitialValues,
     materialInitialValues,
   } = props;
-
+  const { t } = useTranslation();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -82,9 +82,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
     if (type === 'subfolder') {
       return dispatch(deleteFolder(itemId))
         .then(() => {
-          toast.success(
-            `"${itemName}" ${intl.formatMessage(translations.deletionSuccess)}`,
-          );
+          toast.success(`"${itemName}" ${t(translations.deletionSuccess)}`);
         })
         .catch((error) => {
           setIsDeleting(false);
@@ -92,7 +90,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
             ? error.response.data.errors
             : '';
           toast.error(
-            `"${itemName}" ${intl.formatMessage(
+            `"${itemName}" ${t(
               translations.deletionFailure,
             )} - ${errorMessage}`,
           );
@@ -101,9 +99,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
     }
     return dispatch(deleteMaterial(currFolderId, itemId))
       .then(() => {
-        toast.success(
-          `"${itemName}" ${intl.formatMessage(translations.deletionSuccess)}`,
-        );
+        toast.success(`"${itemName}" ${t(translations.deletionSuccess)}`);
       })
       .catch((error) => {
         setIsDeleting(false);
@@ -111,9 +107,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
           ? error.response.data.errors
           : '';
         toast.error(
-          `"${itemName}" ${intl.formatMessage(
-            translations.deletionFailure,
-          )} - ${errorMessage}`,
+          `"${itemName}" ${t(translations.deletionFailure)} - ${errorMessage}`,
         );
         throw error;
       });
@@ -124,7 +118,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
       return (
         <FolderEdit
           isOpen={isEditOpen}
-          handleClose={(): void => {
+          onClose={(): void => {
             setIsEditOpen(false);
           }}
           folderId={itemId}
@@ -137,7 +131,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
       return (
         <MaterialEdit
           isOpen={isEditOpen}
-          handleClose={(): void => {
+          onClose={(): void => {
             setIsEditOpen(false);
           }}
           folderId={currFolderId}
@@ -165,11 +159,11 @@ const WorkbinTableButtons: FC<Props> = (props) => {
             id={`${type}-delete-button-${itemId}`}
             onClick={onDelete}
             disabled={isDeleting}
-            confirmMessage={`${intl.formatMessage(
+            confirmMessage={`${t(
               translations.deleteConfirmation,
             )} "${itemName}"`}
             style={{ padding: 5 }}
-            tooltip={intl.formatMessage(translations.tableButtonDeleteTooltip)}
+            tooltip={t(translations.tableButtonDeleteTooltip)}
           />
         )}
       </Stack>
@@ -178,4 +172,4 @@ const WorkbinTableButtons: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(WorkbinTableButtons);
+export default WorkbinTableButtons;

@@ -67,7 +67,7 @@ const FormDialog = (props: Props): JSX.Element => {
         disableEnforceFocus
         onClose={handleCloseDialog}
         open={open}
-        maxWidth="lg"
+        maxWidth="md"
       >
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>

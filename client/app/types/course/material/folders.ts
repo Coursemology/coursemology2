@@ -19,7 +19,7 @@ export type MaterialPermissions = Permissions<'canEdit' | 'canDelete'>;
 export interface FolderListData {
   id: number;
   name: string;
-  description: string | null;
+  description: string;
   itemCount: number;
   updatedAt: string;
   startAt: string;
@@ -37,7 +37,7 @@ export interface Updater {
 export interface MaterialListData {
   id: number;
   name: string;
-  description: string | null;
+  description: string;
   updatedAt: string;
   updater: Updater;
   permissions: MaterialPermissions;
@@ -46,7 +46,7 @@ export interface MaterialListData {
 export interface FolderMiniEntity {
   id: number;
   name: string;
-  description: string | null;
+  description: string;
   itemCount: number;
   updatedAt: string;
   startAt: string;
@@ -58,7 +58,7 @@ export interface FolderMiniEntity {
 export interface MaterialMiniEntity {
   id: number;
   name: string;
-  description: string | null;
+  description: string;
   updatedAt: string;
   updater: Updater;
   permissions: MaterialPermissions;
@@ -83,10 +83,10 @@ export interface FolderData {
 
 export interface FolderFormData {
   name: string;
-  description: string | null;
+  description: string;
   canStudentUpload: boolean;
-  startAt: string;
-  endAt: string | null;
+  startAt: Date;
+  endAt: Date | null;
 }
 
 export interface MaterialUploadFormData {
