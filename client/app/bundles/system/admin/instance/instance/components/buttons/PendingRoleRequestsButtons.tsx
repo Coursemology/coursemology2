@@ -1,6 +1,6 @@
 import { FC, memo, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import AcceptButton from 'lib/components/core/buttons/AcceptButton';
 import { toast } from 'react-toastify';
@@ -9,10 +9,11 @@ import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
 import { RoleRequestRowData } from 'types/system/instance/roleRequests';
 import equal from 'fast-deep-equal';
 import EmailButton from 'lib/components/core/buttons/EmailButton';
+import useTranslation from 'lib/hooks/useTranslation';
 import { approveRoleRequest, rejectRoleRequest } from '../../operations';
-import RejectWithMessageDialog from '../misc/RejectWithMessageDialog';
+import RejectWithMessageForm from '../forms/RejectWithMessageForm';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   roleRequest: RoleRequestRowData;
 }
 
@@ -53,7 +54,8 @@ const translations = defineMessages({
 });
 
 const PendingRoleRequestsButtons: FC<Props> = (props) => {
-  const { intl, roleRequest } = props;
+  const { roleRequest } = props;
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const [isApproving, setIsApproving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -64,7 +66,7 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
     return dispatch(approveRoleRequest(roleRequest))
       .then(() => {
         toast.success(
-          intl.formatMessage(translations.approveSuccess, {
+          t(translations.approveSuccess, {
             name: roleRequest.name,
             role: roleRequest.role,
           }),
@@ -75,7 +77,7 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
           ? error.response.data.errors
           : '';
         toast.error(
-          intl.formatMessage(translations.approveFailure, {
+          t(translations.approveFailure, {
             error: errorMessage,
           }),
         );
@@ -92,7 +94,7 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
     return dispatch(rejectRoleRequest(roleRequest.id))
       .then(() => {
         toast.success(
-          intl.formatMessage(translations.rejectSuccess, {
+          t(translations.rejectSuccess, {
             name: roleRequest.name,
           }),
         );
@@ -103,7 +105,7 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
           ? error.response.data.errors
           : '';
         toast.error(
-          intl.formatMessage(translations.rejectFailure, {
+          t(translations.rejectFailure, {
             error: errorMessage,
           }),
         );
@@ -114,24 +116,24 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
   const managementButtons = (
     <div className="whitespace-nowrap">
       <AcceptButton
-        tooltip={intl.formatMessage(translations.approveTooltip)}
+        tooltip={t(translations.approveTooltip)}
         className={`role-request-approve-${roleRequest.id} mr-4 p-0`}
         disabled={isApproving || isDeleting}
         onClick={onApprove}
       />
       <EmailButton
-        tooltip={intl.formatMessage(translations.rejectMessageTooltip)}
+        tooltip={t(translations.rejectMessageTooltip)}
         className={`role-request-reject-message-${roleRequest.id} mr-4 p-0`}
         disabled={isApproving || isDeleting}
         onClick={onRejectWithMessage}
       />
       <DeleteButton
-        tooltip={intl.formatMessage(translations.rejectTooltip)}
+        tooltip={t(translations.rejectTooltip)}
         className={`role-request-reject-${roleRequest.id} p-0`}
         disabled={isApproving || isDeleting}
         loading={isDeleting}
         onClick={onReject}
-        confirmMessage={intl.formatMessage(translations.rejectConfirm, {
+        confirmMessage={t(translations.rejectConfirm, {
           role: ROLE_REQUEST_ROLES[roleRequest.role!],
           name: roleRequest.name,
           email: roleRequest.email,
@@ -144,18 +146,16 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
     <>
       {managementButtons}
       {isRejectDialogOpen && (
-        <RejectWithMessageDialog
+        <RejectWithMessageForm
+          open={isRejectDialogOpen}
           roleRequest={roleRequest}
-          handleClose={(): void => setIsRejectDialogOpen(false)}
+          onClose={(): void => setIsRejectDialogOpen(false)}
         />
       )}
     </>
   );
 };
 
-export default memo(
-  injectIntl(PendingRoleRequestsButtons),
-  (prevProps, nextProps) => {
-    return equal(prevProps.roleRequest, nextProps.roleRequest);
-  },
-);
+export default memo(PendingRoleRequestsButtons, (prevProps, nextProps) => {
+  return equal(prevProps.roleRequest, nextProps.roleRequest);
+});
