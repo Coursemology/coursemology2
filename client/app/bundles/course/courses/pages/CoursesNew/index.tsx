@@ -1,11 +1,9 @@
-import { FC, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FC } from 'react';
+import { defineMessages } from 'react-intl';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import useTranslation from 'lib/hooks/useTranslation';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 
 import { AppDispatch } from 'types/store';
@@ -14,8 +12,9 @@ import { NewCourseFormData } from 'types/course/courses';
 import NewCourseForm from '../../components/forms/NewCourseForm';
 import { createCourse } from '../../operations';
 
-interface Props extends WrappedComponentProps {
-  handleClose: () => void;
+interface Props {
+  open: boolean;
+  onClose: () => void;
 }
 const translations = defineMessages({
   newCourse: {
@@ -38,16 +37,15 @@ const initialValues = {
 };
 
 const CoursesNew: FC<Props> = (props) => {
-  const { handleClose, intl } = props;
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
+  const { open, onClose } = props;
+  const { t } = useTranslation();
 
   const dispatch = useDispatch<AppDispatch>();
 
   const onSubmit = (data: NewCourseFormData, setError): Promise<void> =>
     dispatch(createCourse(data))
       .then((response) => {
-        toast.success(intl.formatMessage(translations.courseCreationSuccess));
+        toast.success(t(translations.courseCreationSuccess));
         setTimeout(() => {
           if (response.data?.id) {
             // TODO Change this to a react router after the courses home page has been implemented
@@ -57,7 +55,7 @@ const CoursesNew: FC<Props> = (props) => {
         }, 200);
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.courseCreationFailure));
+        toast.error(t(translations.courseCreationFailure));
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
@@ -65,49 +63,14 @@ const CoursesNew: FC<Props> = (props) => {
       });
 
   return (
-    <>
-      <Dialog
-        disableEnforceFocus
-        onClose={(): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          } else {
-            handleClose();
-          }
-        }}
-        open
-        maxWidth="lg"
-        style={{
-          top: 40,
-        }}
-      >
-        <DialogTitle>{intl.formatMessage(translations.newCourse)}</DialogTitle>
-        <DialogContent>
-          <NewCourseForm
-            onSubmit={onSubmit}
-            handleClose={(): void => {
-              if (isDirty) {
-                setConfirmationDialogOpen(true);
-              } else {
-                handleClose();
-              }
-            }}
-            initialValues={initialValues}
-            setIsDirty={setIsDirty}
-          />
-        </DialogContent>
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <NewCourseForm
+      open={open}
+      title={t(translations.newCourse)}
+      onSubmit={onSubmit}
+      onClose={onClose}
+      initialValues={initialValues}
+    />
   );
 };
 
-export default injectIntl(CoursesNew);
+export default CoursesNew;
