@@ -1,16 +1,6 @@
-import { FC, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
-import ErrorText from 'lib/components/core/ErrorText';
-import { LoadingButton } from '@mui/lab';
-import {
-  Grid,
-  Button,
-  Stack,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-} from '@mui/material';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FC } from 'react';
+import { Controller } from 'react-hook-form';
+import { defineMessages } from 'react-intl';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import tableTranslations from 'lib/translations/table';
@@ -23,10 +13,13 @@ import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'types/store';
 import { saveInstanceRoleRequest } from 'bundles/course/courses/actions';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
+import useTranslation from 'lib/hooks/useTranslation';
 import { createRoleRequest, updateRoleRequest } from '../../operations';
 
-interface Props extends WrappedComponentProps {
-  handleClose: () => void;
+interface Props {
+  open: boolean;
+  onClose: () => void;
   instanceUserRoleRequest?: RoleRequestBasicListData;
 }
 
@@ -67,8 +60,8 @@ const translations = defineMessages({
 });
 
 const InstanceUserRoleRequestForm: FC<Props> = (props) => {
-  const { handleClose, instanceUserRoleRequest, intl } = props;
-  const [isLoading, setIsLoading] = useState(false);
+  const { open, onClose, instanceUserRoleRequest } = props;
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
   let initialValues = { ...instanceUserRoleRequest };
@@ -82,17 +75,7 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
     };
   }
 
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isSubmitting },
-  } = useForm<UserRoleRequestForm>({
-    defaultValues: initialValues,
-  });
-
-  const onSubmit = (data: UserRoleRequestForm): void => {
-    setIsLoading(true);
+  const onSubmit = (data: UserRoleRequestForm, setError): void => {
     const handleOperations = instanceUserRoleRequest?.id
       ? (): Promise<{ id: number }> =>
           updateRoleRequest(data, instanceUserRoleRequest.id)
@@ -100,30 +83,34 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
 
     handleOperations()
       .then((response) => {
-        toast.success(intl.formatMessage(translations.requestSuccess));
+        toast.success(t(translations.requestSuccess));
         dispatch(saveInstanceRoleRequest({ ...response, ...data }));
-        handleClose();
+        onClose();
       })
       .catch((error) => {
-        setIsLoading(false);
-        toast.error(intl.formatMessage(translations.requestFailed));
+        toast.error(t(translations.requestFailed));
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
-        throw error;
       });
   };
 
-  const userRoleRequestForm = (
-    <>
-      <form
-        encType="multipart/form-data"
-        id="instance-user-role-request-form"
-        noValidate
-        onSubmit={handleSubmit((data: UserRoleRequestForm) => onSubmit(data))}
-      >
-        <ErrorText errors={errors} />
-        <Stack spacing={2}>
+  return (
+    <FormDialog
+      open={open}
+      editing={!!instanceUserRoleRequest}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      title={
+        instanceUserRoleRequest
+          ? t(translations.editRoleRequest)
+          : t(translations.newRoleRequest)
+      }
+      formName="instance-user-role-request-form"
+      initialValues={initialValues}
+    >
+      {(control, formState): JSX.Element => (
+        <div className="space-y-2">
           <Controller
             name="role"
             control={control}
@@ -131,16 +118,16 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
               <FormSelectField
                 field={field}
                 fieldState={fieldState}
-                disabled={isLoading}
-                label={intl.formatMessage(tableTranslations.requestToBe)}
+                disabled={formState.isSubmitting}
+                label={t(tableTranslations.requestToBe)}
                 options={[
                   {
                     value: 'instructor',
-                    label: intl.formatMessage(translations.instructor),
+                    label: t(translations.instructor),
                   },
                   {
                     value: 'administrator',
-                    label: intl.formatMessage(translations.administrator),
+                    label: t(translations.administrator),
                   },
                 ]}
                 type="string"
@@ -156,9 +143,8 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
               <FormTextField
                 field={field}
                 fieldState={fieldState}
-                label={intl.formatMessage(tableTranslations.organization)}
-                disabled={isLoading}
-                // @ts-ignore: component is still written in JS
+                label={t(tableTranslations.organization)}
+                disabled={formState.isSubmitting}
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
@@ -174,9 +160,8 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
               <FormTextField
                 field={field}
                 fieldState={fieldState}
-                label={intl.formatMessage(tableTranslations.designation)}
-                disabled={isLoading}
-                // @ts-ignore: component is still written in JS
+                label={t(tableTranslations.designation)}
+                disabled={formState.isSubmitting}
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
@@ -192,9 +177,8 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
               <FormTextField
                 field={field}
                 fieldState={fieldState}
-                label={intl.formatMessage(tableTranslations.reason)}
-                disabled={isLoading}
-                // @ts-ignore: component is still written in JS
+                label={t(tableTranslations.reason)}
+                disabled={formState.isSubmitting}
                 fullWidth
                 InputLabelProps={{
                   shrink: true,
@@ -203,48 +187,10 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
               />
             )}
           />
-        </Stack>
-      </form>
-      <Grid container className="mt-6" justifyContent="space-between">
-        <Button
-          color="secondary"
-          onClick={(): void => handleClose()}
-          disabled={isLoading}
-        >
-          {intl.formatMessage(translations.cancel)}
-        </Button>
-        <LoadingButton
-          loading={isLoading}
-          disabled={isLoading || isSubmitting}
-          variant="contained"
-          className="btn-submit instance-user-role-request-form"
-          form="instance-user-role-request-form"
-          type="submit"
-        >
-          {intl.formatMessage(translations.submit)}
-        </LoadingButton>
-      </Grid>
-    </>
-  );
-
-  return (
-    <Dialog
-      onClose={handleClose}
-      open
-      fullWidth
-      maxWidth="md"
-      style={{
-        top: 40,
-      }}
-    >
-      <DialogTitle>
-        {instanceUserRoleRequest
-          ? intl.formatMessage(translations.editRoleRequest)
-          : intl.formatMessage(translations.newRoleRequest)}
-      </DialogTitle>
-      <DialogContent>{userRoleRequestForm}</DialogContent>
-    </Dialog>
+        </div>
+      )}
+    </FormDialog>
   );
 };
 
-export default injectIntl(InstanceUserRoleRequestForm);
+export default InstanceUserRoleRequestForm;

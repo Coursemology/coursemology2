@@ -1,5 +1,5 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { AppDispatch, AppState } from 'types/store';
@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import useTranslation from 'lib/hooks/useTranslation';
 import { fetchCourses } from '../../operations';
 import {
   getAllCourseMiniEntities,
@@ -17,8 +18,6 @@ import CourseDisplay from '../../components/misc/CourseDisplay';
 import CoursesNew from '../CoursesNew';
 import InstanceUserRoleRequestForm from '../../../../system/admin/instance/instance/components/forms/InstanceUserRoleRequestForm';
 
-type Props = WrappedComponentProps;
-
 const styles = {
   newButton: {
     background: 'white',
@@ -27,6 +26,10 @@ const styles = {
 };
 
 const translations = defineMessages({
+  header: {
+    id: 'course.header',
+    defaultMessage: 'Courses',
+  },
   newCourse: {
     id: 'course.new',
     defaultMessage: 'New Course',
@@ -45,9 +48,8 @@ const translations = defineMessages({
   },
 });
 
-const CoursesIndex: FC<Props> = (props) => {
-  const { intl } = props;
-
+const CoursesIndex: FC = () => {
+  const { t } = useTranslation();
   const [isNewCourseDialogOpen, setIsNewCourseDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isRoleRequestDialogOpen, setRoleRequestDialogOpen] = useState(false);
@@ -68,9 +70,7 @@ const CoursesIndex: FC<Props> = (props) => {
   useEffect(() => {
     dispatch(fetchCourses())
       .finally(() => setIsLoading(false))
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchCoursesFailure)),
-      );
+      .catch(() => toast.error(t(translations.fetchCoursesFailure)));
   }, [dispatch]);
 
   // Adding appropriate button to the header
@@ -85,7 +85,7 @@ const CoursesIndex: FC<Props> = (props) => {
         onClick={(): void => setIsNewCourseDialogOpen(true)}
         style={styles.newButton}
       >
-        {intl.formatMessage(translations.newCourse)}
+        {t(translations.newCourse)}
       </Button>,
     );
   } else if (!isLoading) {
@@ -99,21 +99,15 @@ const CoursesIndex: FC<Props> = (props) => {
         style={styles.newButton}
       >
         {instanceUserRoleRequest
-          ? intl.formatMessage(translations.editRequest)
-          : intl.formatMessage(translations.newRequest)}
+          ? t(translations.editRequest)
+          : t(translations.newRequest)}
       </Button>,
     );
   }
 
   return (
     <>
-      <PageHeader
-        title={intl.formatMessage({
-          id: 'course.header',
-          defaultMessage: 'Courses',
-        })}
-        toolbars={headerToolbars}
-      />
+      <PageHeader title={t(translations.header)} toolbars={headerToolbars} />
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -126,7 +120,8 @@ const CoursesIndex: FC<Props> = (props) => {
           )}
           {isRoleRequestDialogOpen && (
             <InstanceUserRoleRequestForm
-              handleClose={(): void => setRoleRequestDialogOpen(false)}
+              open={isRoleRequestDialogOpen}
+              onClose={(): void => setRoleRequestDialogOpen(false)}
               instanceUserRoleRequest={instanceUserRoleRequest}
             />
           )}
@@ -136,4 +131,4 @@ const CoursesIndex: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(CoursesIndex);
+export default CoursesIndex;
