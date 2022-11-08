@@ -13,10 +13,10 @@ const formatAttributes = (data: AnnouncementFormData): FormData => {
     if (data[field] !== undefined && data[field] !== null) {
       switch (field) {
         case 'startAt':
-          payload.append('announcement[start_at]', data[field]);
+          payload.append('announcement[start_at]', data[field].toString());
           break;
         case 'endAt':
-          payload.append('announcement[end_at]', data[field]);
+          payload.append('announcement[end_at]', data[field].toString());
           break;
         default:
           payload.append(`announcement[${field}]`, data[field]);

@@ -1,20 +1,18 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { FC, useState } from 'react';
+import { defineMessages } from 'react-intl';
+import { FC } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { AppDispatch, Operation } from 'types/store';
 
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-
 import { toast } from 'react-toastify';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import useTranslation from 'lib/hooks/useTranslation';
 import { AnnouncementFormData } from 'types/course/announcements';
 import AnnouncementForm from '../../components/forms/AnnouncementForm';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void;
   createOperation: (formData: AnnouncementFormData) => Operation<void>;
   canSticky?: boolean;
 }
@@ -44,26 +42,25 @@ const initialValues = {
 };
 
 const AnnouncementNew: FC<Props> = (props) => {
-  const { intl, open, handleClose, createOperation, canSticky = true } = props;
-
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
-
+  const { open, onClose, createOperation, canSticky = true } = props;
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
   if (!open) {
     return null;
   }
 
-  const onSubmit = (data: AnnouncementFormData, setError): void => {
-    dispatch(createOperation(data))
+  const handleSubmit = (
+    data: AnnouncementFormData,
+    setError,
+  ): Promise<void> => {
+    return dispatch(createOperation(data))
       .then((_) => {
-        handleClose();
-        setConfirmationDialogOpen(false);
-        toast.success(intl.formatMessage(translations.creationSuccess));
+        onClose();
+        toast.success(t(translations.creationSuccess));
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.creationFailure));
+        toast.error(t(translations.creationFailure));
 
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
@@ -72,53 +69,16 @@ const AnnouncementNew: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <Dialog
-        disableEnforceFocus
-        onClose={(): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          } else {
-            handleClose();
-          }
-        }}
-        open={open}
-        maxWidth="lg"
-        style={{
-          top: 40,
-        }}
-      >
-        <DialogTitle>
-          {intl.formatMessage(translations.newAnnouncement)}
-        </DialogTitle>
-        <DialogContent>
-          <AnnouncementForm
-            editing={false}
-            handleClose={(): void => {
-              if (isDirty) {
-                setConfirmationDialogOpen(true);
-              } else {
-                handleClose();
-              }
-            }}
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            setIsDirty={setIsDirty}
-            canSticky={canSticky}
-          />
-        </DialogContent>
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <AnnouncementForm
+      open={open}
+      editing={false}
+      onClose={onClose}
+      title={t(translations.newAnnouncement)}
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+      canSticky={canSticky}
+    />
   );
 };
 
-export default injectIntl(AnnouncementNew);
+export default AnnouncementNew;
