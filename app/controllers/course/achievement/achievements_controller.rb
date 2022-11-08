@@ -24,13 +24,6 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
     end
   end
 
-  def edit
-    respond_to do |format|
-      format.html { render 'index' }
-      format.json { render 'show' }
-    end
-  end
-
   def update
     if @achievement.update(achievement_params)
       @achievement_users = @achievement.course_users.without_phantom_users.students.includes([:user, :course])

@@ -31,7 +31,8 @@ RSpec.feature 'Course: Achievements', js: true do
       scenario 'I can create, edit, and delete an achievement condition' do
         valid_achievement_as_condition = create(:course_achievement, course: course)
         achievement_to_change_to = create(:course_achievement, course: course)
-        visit edit_course_achievement_path(course, achievement)
+        visit course_achievement_path(course, achievement)
+        find("button.achievement-edit-#{achievement.id}").click
 
         # Create achievement condition
         expect do
@@ -71,7 +72,8 @@ RSpec.feature 'Course: Achievements', js: true do
       scenario 'I can create, edit, and delete an assessment condition' do
         valid_assessment_as_condition = create(:assessment, course: course)
         assessment_to_change_to = create(:assessment, course: course)
-        visit edit_course_achievement_path(course, achievement)
+        visit course_achievement_path(course, achievement)
+        find("button.achievement-edit-#{achievement.id}").click
 
         # Create assessment condition
         expect do
@@ -98,7 +100,7 @@ RSpec.feature 'Course: Achievements', js: true do
         expect_toastify('Your changes have been saved.')
         hover_then_click condition_row.first('button', visible: false)
         expect(find_field('Assessment').value).to eq(assessment_to_change_to.title)
-        click_button 'Cancel'
+        find('button.prompt-cancel-btn').click
 
         # Delete achievement condition
         delete_button = condition_row.all('button', visible: false).last
@@ -110,7 +112,8 @@ RSpec.feature 'Course: Achievements', js: true do
       end
 
       scenario 'I can create, edit, and delete a level condition' do
-        visit edit_course_achievement_path(course, achievement)
+        visit course_achievement_path(course, achievement)
+        find("button.achievement-edit-#{achievement.id}").click
         minimum_level = '10'
 
         # Create level condition
@@ -136,7 +139,7 @@ RSpec.feature 'Course: Achievements', js: true do
         expect_toastify('Your changes have been saved.')
         hover_then_click condition_row.first('button', visible: false)
         expect(find_field('minimumLevel').value).to eq(new_minimum_level)
-        click_button 'Cancel'
+        find('button.prompt-cancel-btn').click
 
         # Delete level condition
         delete_button = condition_row.all('button', visible: false).last
@@ -150,7 +153,8 @@ RSpec.feature 'Course: Achievements', js: true do
       scenario 'I can create, edit, and delete a survey condition' do
         valid_survey_as_condition = create(:survey, course: course)
         survey_to_change_to = create(:survey, course: course)
-        visit edit_course_achievement_path(course, achievement)
+        visit course_achievement_path(course, achievement)
+        find("button.achievement-edit-#{achievement.id}").click
 
         # Create survey condition
         expect do
@@ -177,7 +181,7 @@ RSpec.feature 'Course: Achievements', js: true do
         expect_toastify('Your changes have been saved.')
         hover_then_click condition_row.first('button', visible: false)
         expect(find_field('Survey').value).to eq(survey_to_change_to.title)
-        click_button 'Cancel'
+        find('button.prompt-cancel-btn').click
 
         # Delete survey condition
         delete_button = condition_row.all('button', visible: false).last

@@ -1,10 +1,7 @@
-import { FC, useEffect } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Controller, useForm, UseFormSetError } from 'react-hook-form';
+import { FC } from 'react';
+import { defineMessages } from 'react-intl';
+import { Controller, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button } from '@mui/material';
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSingleFileInput, {
@@ -12,23 +9,23 @@ import FormSingleFileInput, {
 } from 'lib/components/form/fields/SingleFileInput';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
-import {
-  AchievementEditFormData,
-  AchievementFormData,
-} from 'types/course/achievements';
+import { AchievementFormData } from 'types/course/achievements';
 import { ConditionsData } from 'types/course/conditions';
 import ConditionsManager from 'lib/components/extensions/conditions/ConditionsManager';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
+import useTranslation from 'lib/hooks/useTranslation';
 
-interface Props extends WrappedComponentProps {
+interface Props {
+  open: boolean;
+  title: string;
   editing: boolean; // If the Form is in editing mode, `Add Conditions` button will be displayed.
-  handleClose: (isDirty: boolean) => void;
+  onClose: () => void;
   onSubmit: (
-    data: AchievementFormData | AchievementEditFormData,
-    setError: UseFormSetError<AchievementFormData | AchievementEditFormData>,
+    data: AchievementFormData,
+    setError: UseFormSetError<AchievementFormData>,
   ) => void;
-  setIsDirty?: (value: boolean) => void;
   conditionAttributes?: ConditionsData;
-  initialValues?: Object;
+  initialValues: AchievementFormData;
 }
 
 const translations = defineMessages({
@@ -71,157 +68,101 @@ const validationSchema = yup.object({
 
 const AchievementForm: FC<Props> = (props) => {
   const {
+    open,
+    title,
     conditionAttributes,
     editing,
-    handleClose,
+    onClose,
     initialValues,
     onSubmit,
-    setIsDirty,
-    intl,
   } = props;
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isDirty, isSubmitting },
-  } = useForm<AchievementFormData | AchievementEditFormData>({
-    defaultValues: initialValues,
-    resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
-  });
+  const { t } = useTranslation();
 
-  useEffect(() => {
-    if (setIsDirty) {
-      if (isDirty) {
-        setIsDirty(true);
-      } else {
-        setIsDirty(false);
-      }
-    }
-  }, [isDirty]);
-
-  const disabled = isSubmitting;
-
-  const actionButtons = editing ? (
-    <div style={{ marginTop: 16, marginLeft: 16 }}>
-      <Button
-        variant="contained"
-        color="primary"
-        className="btn-submit"
-        disabled={disabled || !isDirty}
-        form="achievement-form"
-        key="achievement-form-update-button"
-        type="submit"
-      >
-        {intl.formatMessage(translations.update)}
-      </Button>
-    </div>
-  ) : (
-    <div
-      style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '8px' }}
-    >
-      <Button
-        color="secondary"
-        className="btn-cancel"
-        disabled={disabled}
-        key="achievement-form-cancel-button"
-        onClick={(): void => handleClose(isDirty)}
-      >
-        {intl.formatMessage(formTranslations.cancel)}
-      </Button>
-      <Button
-        color="primary"
-        className="btn-submit"
-        disabled={disabled || !isDirty}
-        form="achievement-form"
-        key="achievement-form-submit-button"
-        type="submit"
-      >
-        {intl.formatMessage(formTranslations.submit)}
-      </Button>
-    </div>
-  );
   return (
-    <>
-      <form
-        encType="multipart/form-data"
-        id="achievement-form"
-        noValidate
-        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-      >
-        <ErrorText errors={errors} />
-        <Controller
-          control={control}
-          name="title"
-          render={({ field, fieldState }): JSX.Element => (
-            <FormTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={intl.formatMessage(translations.title)}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-              variant="standard"
-            />
-          )}
-        />
-        <Controller
-          name="description"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormRichTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={intl.formatMessage(translations.description)}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
-            />
-          )}
-        />
-        <Controller
-          name="badge"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormSingleFileInput
-              field={field}
-              fieldState={fieldState}
-              accept={{ 'image/jpg': [], 'image/png': [], 'image/gif': [] }}
-              disabled={disabled}
-              previewComponent={BadgePreview}
-            />
-          )}
-        />
-        <Controller
-          name="published"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormToggleField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={intl.formatMessage(translations.published)}
-            />
-          )}
-        />
-        {editing && conditionAttributes && (
-          <ConditionsManager
-            title={intl.formatMessage(translations.unlockConditions)}
-            description={intl.formatMessage(translations.unlockConditionsHint)}
-            conditionsData={conditionAttributes}
+    <FormDialog
+      open={open}
+      editing={editing}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      title={title}
+      formName="achievement-form"
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+    >
+      {(control, formState): JSX.Element => (
+        <>
+          <Controller
+            control={control}
+            name="title"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.title)}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                variant="standard"
+              />
+            )}
           />
-        )}
-        {actionButtons}
-      </form>
-    </>
+          <Controller
+            name="description"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormRichTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.description)}
+                // @ts-ignore: component is still written in JS
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="standard"
+              />
+            )}
+          />
+          <Controller
+            name="badge"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormSingleFileInput
+                field={field}
+                fieldState={fieldState}
+                accept={{ 'image/jpg': [], 'image/png': [], 'image/gif': [] }}
+                disabled={formState.isSubmitting}
+                previewComponent={BadgePreview}
+              />
+            )}
+          />
+          <Controller
+            name="published"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormToggleField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.published)}
+              />
+            )}
+          />
+          {editing && conditionAttributes && (
+            <ConditionsManager
+              title={t(translations.unlockConditions)}
+              description={t(translations.unlockConditionsHint)}
+              conditionsData={conditionAttributes}
+            />
+          )}
+        </>
+      )}
+    </FormDialog>
   );
 };
 
-export default injectIntl(AchievementForm);
+export default AchievementForm;

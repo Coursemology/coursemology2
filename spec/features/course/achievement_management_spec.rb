@@ -33,14 +33,14 @@ RSpec.feature 'Course: Achievements' do
         expect(current_path).to eq(course_achievement_path(course, achievement_created))
 
         # Edit the achivement
-        visit edit_course_achievement_path(course, achievement_created)
-        expect(page).to have_selector('h5', text: 'Edit Achievement')
+        find("button.achievement-edit-#{achievement_created.id}").click
+        expect(page).to have_selector('h2', text: 'Edit Achievement')
         new_achievement = attributes_for(:course_achievement, course: course)
         fill_in 'title', with: new_achievement[:title]
 
         # Edit the achievement
         find('.btn-submit').click
-        expect(page).not_to have_selector('h5', text: 'Edit Achievement')
+        expect(page).not_to have_selector('h2', text: 'Edit Achievement')
         expect(current_path).to eq(course_achievements_path(course))
         expect(page).to have_text(new_achievement[:title])
       end

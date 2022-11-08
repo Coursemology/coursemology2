@@ -1,25 +1,26 @@
-import { FC, useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FC, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import Note from 'lib/components/core/Note';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
 import { AppDispatch, AppState } from 'types/store';
 import AchievementForm from '../../components/forms/AchievementForm';
 import { loadAchievement, updateAchievement } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
 
-type Props = WrappedComponentProps;
+interface Props {
+  achievementId: number;
+  open: boolean;
+  onClose: () => void;
+}
 
 const translations = defineMessages({
-  noAchievement: {
-    id: 'course.achievement.edit.noAchievement',
-    defaultMessage: 'No Achievement',
+  editAchievement: {
+    id: 'course.achievement.edit.editAchievement',
+    defaultMessage: 'Edit Achievement',
   },
   updateSuccess: {
     id: 'course.achievement.update.success',
@@ -32,55 +33,35 @@ const translations = defineMessages({
 });
 
 const AchievementEdit: FC<Props> = (props) => {
-  const { intl } = props;
-  const courseId = getCourseId();
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const { achievementId, open, onClose } = props;
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { achievementId } = useParams();
   const achievement = useSelector((state: AppState) =>
-    getAchievementEntity(state, +achievementId!),
+    getAchievementEntity(state, achievementId!),
   );
 
   useEffect(() => {
-    if (achievementId) {
-      dispatch(loadAchievement(+achievementId)).finally(() =>
-        setIsLoading(false),
-      );
-    }
+    dispatch(loadAchievement(achievementId));
   }, [dispatch, achievementId]);
 
-  if (isLoading) {
-    return (
-      <>
-        <PageHeader
-          title="Edit Achievement"
-          returnLink={`/courses/${courseId}/achievements/`}
-        />
-        <LoadingIndicator />
-      </>
-    );
-  }
-
   if (!achievement) {
-    return <Note message={intl.formatMessage(translations.noAchievement)} />;
+    return null;
   }
 
   const onSubmit = (data, setError): Promise<void> =>
     dispatch(updateAchievement(data.id, data))
       .then(() => {
-        toast.success(intl.formatMessage(translations.updateSuccess));
+        toast.success(t(translations.updateSuccess));
         setTimeout(() => {
           navigate(`/courses/${getCourseId()}/achievements`);
         }, 500);
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.updateFailure));
+        toast.error(t(translations.updateFailure));
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
         }
-        throw error;
       });
 
   const initialValues = {
@@ -91,37 +72,21 @@ const AchievementEdit: FC<Props> = (props) => {
     badge: {
       name: achievement.badge?.name,
       url: achievement.badge?.url,
-      file: '',
+      file: undefined,
     },
   };
 
   return (
-    <>
-      <PageHeader
-        title={`Edit Achievement - ${achievement.title}`}
-        returnLink={`/courses/${courseId}/achievements/`}
-      />
-      <AchievementForm
-        conditionAttributes={achievement.conditionsData}
-        editing
-        handleClose={(isDirty): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          }
-        }}
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-      />
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-        }}
-      />
-    </>
+    <AchievementForm
+      open={open}
+      editing
+      title={t(translations.editAchievement)}
+      onClose={onClose}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      conditionAttributes={achievement.conditionsData}
+    />
   );
 };
 
-export default injectIntl(AchievementEdit);
+export default AchievementEdit;
