@@ -1,18 +1,19 @@
 import { FC, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { VideoListData } from 'types/course/videos';
 import { AppDispatch } from 'types/store';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
+import useTranslation from 'lib/hooks/useTranslation';
 import { useNavigate } from 'react-router-dom';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { getVideosURL } from 'lib/helpers/url-builders';
 import { deleteVideo } from '../../operations';
 import VideoEdit from '../../pages/VideoEdit';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   video: VideoListData;
   navigateToIndex: boolean;
 }
@@ -33,7 +34,8 @@ const translations = defineMessages({
 });
 
 const VideoManagementButtons: FC<Props> = (props) => {
-  const { video, intl, navigateToIndex } = props;
+  const { video, navigateToIndex } = props;
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
@@ -44,7 +46,7 @@ const VideoManagementButtons: FC<Props> = (props) => {
     return dispatch(deleteVideo(video.id))
       .then(() => {
         toast.success(
-          intl.formatMessage(translations.deletionSuccess, {
+          t(translations.deletionSuccess, {
             title: video.title,
           }),
         );
@@ -55,7 +57,7 @@ const VideoManagementButtons: FC<Props> = (props) => {
       .catch((error) => {
         setIsDeleting(false);
         toast.error(
-          intl.formatMessage(translations.deletionFailure, {
+          t(translations.deletionFailure, {
             title: video.title,
           }),
         );
@@ -73,8 +75,9 @@ const VideoManagementButtons: FC<Props> = (props) => {
           />
           {isEditing && (
             <VideoEdit
+              open={isEditing}
               video={video}
-              handleClose={(): void => setIsEditing(false)}
+              onClose={(): void => setIsEditing(false)}
             />
           )}
         </>
@@ -84,7 +87,7 @@ const VideoManagementButtons: FC<Props> = (props) => {
           className={`video-delete-${video.id}`}
           disabled={isDeleting}
           onClick={onDelete}
-          confirmMessage={intl.formatMessage(translations.deletionConfirm, {
+          confirmMessage={t(translations.deletionConfirm, {
             title: video.title,
           })}
         />
@@ -95,4 +98,4 @@ const VideoManagementButtons: FC<Props> = (props) => {
   return managementButtons;
 };
 
-export default injectIntl(VideoManagementButtons);
+export default VideoManagementButtons;

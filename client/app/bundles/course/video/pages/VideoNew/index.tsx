@@ -1,19 +1,19 @@
-import { FC, useState, memo } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FC, memo } from 'react';
+import { defineMessages } from 'react-intl';
 import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import useTranslation from 'lib/hooks/useTranslation';
 import { AppDispatch, AppState } from 'types/store';
 import { createVideo } from '../../operations';
 import VideoForm from '../../components/forms/VideoForm';
 import { getVideoTabs } from '../../selectors';
 
-interface Props extends WrappedComponentProps {
+interface Props {
+  open: boolean;
   currentTab?: number;
-  handleClose: () => void;
+  onClose: () => void;
 }
 
 const translations = defineMessages({
@@ -32,18 +32,17 @@ const translations = defineMessages({
 });
 
 const VideoNew: FC<Props> = (props) => {
-  const { handleClose, intl, currentTab } = props;
+  const { open, onClose, currentTab } = props;
+  const { t } = useTranslation();
   const [, setSearchParams] = useSearchParams();
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
   const videoTabs = useSelector((state: AppState) => getVideoTabs(state));
   const dispatch = useDispatch<AppDispatch>();
   const onSubmit = (data, setError): Promise<void> =>
     dispatch(createVideo(data))
       .then(() => {
-        handleClose();
+        onClose();
         toast.success(
-          intl.formatMessage(translations.creationSuccess, {
+          t(translations.creationSuccess, {
             title: data.title,
           }),
         );
@@ -52,7 +51,7 @@ const VideoNew: FC<Props> = (props) => {
       })
       .catch((error) => {
         toast.error(
-          intl.formatMessage(translations.creationFailure, {
+          t(translations.creationFailure, {
             title: data.title,
           }),
         );
@@ -73,47 +72,15 @@ const VideoNew: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <Dialog
-        className="top-10"
-        disableEnforceFocus
-        onClose={(): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          } else {
-            handleClose();
-          }
-        }}
-        open
-        maxWidth="lg"
-      >
-        <DialogTitle>{intl.formatMessage(translations.newVideo)}</DialogTitle>
-        <DialogContent>
-          <VideoForm
-            handleClose={(): void => {
-              if (isDirty) {
-                setConfirmationDialogOpen(true);
-              } else {
-                handleClose();
-              }
-            }}
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            setIsDirty={setIsDirty}
-          />
-        </DialogContent>
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <VideoForm
+      open={open}
+      editing={false}
+      title={t(translations.newVideo)}
+      onClose={onClose}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+    />
   );
 };
 
-export default injectIntl(memo(VideoNew));
+export default memo(VideoNew);

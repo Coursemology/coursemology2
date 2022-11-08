@@ -1,5 +1,5 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
@@ -7,6 +7,7 @@ import { useSearchParams } from 'react-router-dom';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import useTranslation from 'lib/hooks/useTranslation';
 import { fetchVideos, updatePublishedVideo } from '../../operations';
 import {
   getVideoPermissions,
@@ -16,8 +17,6 @@ import {
 import VideoTable from '../../components/tables/VideoTable';
 import VideoNew from '../VideoNew';
 import VideoTabs from '../../components/misc/VideoTabs';
-
-type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   newVideo: {
@@ -38,8 +37,8 @@ const translations = defineMessages({
   },
 });
 
-const VideosIndex: FC<Props> = (props) => {
-  const { intl } = props;
+const VideosIndex: FC = () => {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const videoMetadata = useSelector((state: AppState) =>
@@ -67,9 +66,7 @@ const VideosIndex: FC<Props> = (props) => {
     setIsLoading(true);
     dispatch(fetchVideos(tabId))
       .finally(() => setIsLoading(false))
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchVideosFailure)),
-      );
+      .catch(() => toast.error(t(translations.fetchVideosFailure)));
   }, [dispatch, tabId]);
 
   const headerToolbars: ReactElement[] = [];
@@ -83,7 +80,7 @@ const VideosIndex: FC<Props> = (props) => {
         color="primary"
         onClick={(): void => setIsOpen(true)}
       >
-        {intl.formatMessage(translations.newVideo)}
+        {t(translations.newVideo)}
       </Button>,
     );
   }
@@ -91,17 +88,17 @@ const VideosIndex: FC<Props> = (props) => {
   const onTogglePublished = (videoId: number, data: boolean): Promise<void> =>
     dispatch(updatePublishedVideo(videoId, data))
       .then(() => {
-        toast.success(intl.formatMessage(translations.toggleSuccess));
+        toast.success(t(translations.toggleSuccess));
       })
       .catch((error) => {
-        toast.error(intl.formatMessage(translations.toggleFailure));
+        toast.error(t(translations.toggleFailure));
         throw error;
       });
 
   return (
     <>
       <PageHeader
-        title={intl.formatMessage({
+        title={t({
           id: 'course.video.header',
           defaultMessage: 'Videos',
         })}
@@ -109,7 +106,8 @@ const VideosIndex: FC<Props> = (props) => {
       />
       {!isLoading && isOpen && (
         <VideoNew
-          handleClose={(): void => setIsOpen(false)}
+          open={isOpen}
+          onClose={(): void => setIsOpen(false)}
           currentTab={tabId}
         />
       )}
@@ -127,4 +125,4 @@ const VideosIndex: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(VideosIndex);
+export default VideosIndex;
