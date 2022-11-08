@@ -115,7 +115,8 @@ const CoursesIndex: FC = () => {
           <CourseDisplay courses={courses} />
           {isNewCourseDialogOpen && (
             <CoursesNew
-              handleClose={(): void => setIsNewCourseDialogOpen(false)}
+              open={isNewCourseDialogOpen}
+              onClose={(): void => setIsNewCourseDialogOpen(false)}
             />
           )}
           {isRoleRequestDialogOpen && (

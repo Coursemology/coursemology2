@@ -1,23 +1,23 @@
-import { FC, useEffect } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { Controller, useForm, UseFormSetError } from 'react-hook-form';
+import { FC } from 'react';
+import { defineMessages } from 'react-intl';
+import { Controller, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button } from '@mui/material';
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { NewCourseFormData } from 'types/course/courses';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
+import useTranslation from 'lib/hooks/useTranslation';
 
 interface Props {
-  handleClose: (isDirty: boolean) => void;
+  open: boolean;
+  title: string;
+  onClose: () => void;
   onSubmit: (
     data: NewCourseFormData,
     setError: UseFormSetError<NewCourseFormData>,
   ) => void;
-  setIsDirty?: (value: boolean) => void;
-  initialValues?: Object;
+  initialValues: NewCourseFormData;
 }
 
 const translations = defineMessages({
@@ -37,104 +37,62 @@ const validationSchema = yup.object({
 });
 
 const NewCourseForm: FC<Props> = (props) => {
-  const { handleClose, initialValues, onSubmit, setIsDirty } = props;
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isDirty, isSubmitting },
-  } = useForm<NewCourseFormData>({
-    defaultValues: initialValues,
-    resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
-  });
-
-  useEffect(() => {
-    if (setIsDirty) {
-      if (isDirty) {
-        setIsDirty(true);
-      } else {
-        setIsDirty(false);
-      }
-    }
-  }, [isDirty]);
-
-  const disabled = isSubmitting;
+  const { open, title, onClose, initialValues, onSubmit } = props;
+  const { t } = useTranslation();
 
   return (
-    <>
-      <form
-        encType="multipart/form-data"
-        id="new-course-form"
-        noValidate
-        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-      >
-        <ErrorText errors={errors} />
-        <Controller
-          name="title"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.title} />}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-              variant="standard"
-            />
-          )}
-        />
-        <Controller
-          name="description"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormRichTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.description} />}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
-            />
-          )}
-        />
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            paddingTop: '8px',
-          }}
-        >
-          <Button
-            color="secondary"
-            className="btn-cancel"
-            disabled={disabled}
-            key="new-course-form-cancel-button"
-            onClick={(): void => handleClose(isDirty)}
-          >
-            <FormattedMessage {...formTranslations.cancel} />
-          </Button>
-          <Button
-            color="primary"
-            className="btn-submit"
-            disabled={disabled || !isDirty}
-            form="new-course-form"
-            key="new-course-form-submit-button"
-            type="submit"
-          >
-            <FormattedMessage {...formTranslations.submit} />
-          </Button>
-        </div>
-      </form>
-    </>
+    <FormDialog
+      open={open}
+      editing={false}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      title={title}
+      formName="new-course-form"
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+    >
+      {(control, formState): JSX.Element => (
+        <>
+          <Controller
+            name="title"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.title)}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                variant="standard"
+              />
+            )}
+          />
+
+          <Controller
+            name="description"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormRichTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.description)}
+                // @ts-ignore: component is still written in JS
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="standard"
+              />
+            )}
+          />
+        </>
+      )}
+    </FormDialog>
   );
 };
 
