@@ -1,165 +1,152 @@
-import { FC, useEffect } from 'react';
-import { Controller, useForm, UseFormSetError } from 'react-hook-form';
-import ErrorText from 'lib/components/core/ErrorText';
-import { LoadingButton } from '@mui/lab';
-import { Grid, Button, TextField, Stack } from '@mui/material';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FC } from 'react';
+import { Controller } from 'react-hook-form';
+import { toast } from 'react-toastify';
+import { TextField } from '@mui/material';
+import { defineMessages } from 'react-intl';
 import FormTextField from 'lib/components/form/fields/TextField';
 import tableTranslations from 'lib/translations/table';
 import { RoleRequestRowData } from 'types/system/instance/roleRequests';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
+import useTranslation from 'lib/hooks/useTranslation';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'types/store';
+import { rejectRoleRequest } from '../../operations';
 
-interface Props extends WrappedComponentProps {
-  onSubmit: (message: string, setError: UseFormSetError<IFormInputs>) => void;
-  handleClose: (isDirty: boolean) => void;
-  setIsDirty?: (value: boolean) => void;
+interface Props {
+  open: boolean;
+  onClose: () => void;
   roleRequest: RoleRequestRowData;
-  isLoading: boolean;
-}
-
-interface IFormInputs {
-  rejectionMessage: string;
 }
 
 const translations = defineMessages({
-  reject: {
-    id: 'roleRequests.reject',
-    defaultMessage: 'Reject and send message',
+  header: {
+    id: 'roleRequests.header',
+    defaultMessage: 'Role Request Rejection',
   },
-  cancel: {
-    id: 'roleRequests.cancel',
-    defaultMessage: 'Cancel',
+  rejectSuccess: {
+    id: 'roleRequests.reject.success',
+    defaultMessage: 'The role request made by {name} has been rejected.',
+  },
+  rejectFailure: {
+    id: 'roleRequests.reject.fail',
+    defaultMessage: 'Failed to reject role request - {error}',
   },
 });
 
-const RejectWithMessageForm: FC<Props> = (props) => {
-  const { onSubmit, handleClose, setIsDirty, roleRequest, isLoading, intl } =
-    props;
+const initialValues = {
+  rejectionMessage: '',
+};
 
-  const initialValues = {
-    rejectionMessage: '',
+const RejectWithMessageForm: FC<Props> = (props) => {
+  const { open, onClose, roleRequest } = props;
+  const { t } = useTranslation();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const onSubmit = (data): Promise<void> => {
+    return dispatch(rejectRoleRequest(roleRequest.id, data.rejectionMessage))
+      .then(() => {
+        toast.success(
+          t(translations.rejectSuccess, {
+            name: roleRequest.name,
+          }),
+        );
+        onClose();
+      })
+      .catch((error) => {
+        const errorMessage = error.response?.data?.errors
+          ? error.response.data.errors
+          : '';
+        toast.error(
+          t(translations.rejectFailure, {
+            error: errorMessage,
+          }),
+        );
+      });
   };
 
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isDirty, isSubmitting },
-  } = useForm<IFormInputs>({
-    defaultValues: initialValues,
-  });
-
-  useEffect(() => {
-    if (setIsDirty) {
-      if (isDirty) {
-        setIsDirty(true);
-      } else {
-        setIsDirty(false);
-      }
-    }
-  }, [isDirty]);
-
-  const disabled = isSubmitting || !isDirty;
   return (
     <>
-      <form
-        encType="multipart/form-data"
-        id="reject-with-message-form"
-        noValidate
-        onSubmit={handleSubmit((data) =>
-          onSubmit(data.rejectionMessage, setError),
-        )}
+      <FormDialog
+        open={open}
+        editing={false}
+        onClose={onClose}
+        onSubmit={onSubmit}
+        title={t(translations.header)}
+        formName="reject-with-message-form"
+        initialValues={initialValues}
       >
-        <ErrorText errors={errors} />
-        <Stack spacing={2}>
-          <TextField
-            disabled
-            required
-            fullWidth
-            label={intl.formatMessage(tableTranslations.name)}
-            defaultValue={roleRequest.name}
-            variant="standard"
-          />
-          <TextField
-            disabled
-            required
-            fullWidth
-            label={intl.formatMessage(tableTranslations.email)}
-            defaultValue={roleRequest.email}
-            variant="standard"
-          />
-          <TextField
-            disabled
-            required
-            fullWidth
-            label={intl.formatMessage(tableTranslations.requestToBe)}
-            defaultValue={roleRequest.role}
-            variant="standard"
-          />
-          <TextField
-            disabled
-            fullWidth
-            label={intl.formatMessage(tableTranslations.organization)}
-            defaultValue={roleRequest.organization}
-            variant="standard"
-          />
-          <TextField
-            disabled
-            fullWidth
-            label={intl.formatMessage(tableTranslations.designation)}
-            defaultValue={roleRequest.designation}
-            variant="standard"
-          />
-          <TextField
-            disabled
-            fullWidth
-            label={intl.formatMessage(tableTranslations.reason)}
-            defaultValue={roleRequest.reason}
-            variant="standard"
-          />
-          <Controller
-            name="rejectionMessage"
-            control={control}
-            render={({ field, fieldState }): JSX.Element => (
-              <FormTextField
-                field={field}
-                fieldState={fieldState}
-                label={intl.formatMessage(tableTranslations.rejectionMessage)}
-                // @ts-ignore: component is still written in JS
-                className="rejectionMessage"
-                fullWidth
-                multiline
-                rows={2}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                variant="standard"
-              />
-            )}
-          />
-        </Stack>
-      </form>
-      <Grid container className="mt-6" justifyContent="space-between">
-        <Button
-          color="secondary"
-          onClick={(): void => handleClose(isDirty)}
-          disabled={isLoading}
-        >
-          {intl.formatMessage(translations.cancel)}
-        </Button>
-        <LoadingButton
-          loading={isLoading}
-          disabled={disabled}
-          variant="contained"
-          className="btn-submit reject-with-message-submit"
-          form="reject-with-message-form"
-          key="reject-with-message-form-submit-button"
-          type="submit"
-        >
-          {intl.formatMessage(translations.reject)}
-        </LoadingButton>
-      </Grid>
+        {(control, formState): JSX.Element => (
+          <div className="space-y-2">
+            <TextField
+              disabled
+              required
+              fullWidth
+              label={t(tableTranslations.name)}
+              defaultValue={roleRequest.name}
+              variant="standard"
+            />
+            <TextField
+              disabled
+              required
+              fullWidth
+              label={t(tableTranslations.email)}
+              defaultValue={roleRequest.email}
+              variant="standard"
+            />
+            <TextField
+              disabled
+              required
+              fullWidth
+              label={t(tableTranslations.requestToBe)}
+              defaultValue={roleRequest.role}
+              variant="standard"
+            />
+            <TextField
+              disabled
+              fullWidth
+              label={t(tableTranslations.organization)}
+              defaultValue={roleRequest.organization}
+              variant="standard"
+            />
+            <TextField
+              disabled
+              fullWidth
+              label={t(tableTranslations.designation)}
+              defaultValue={roleRequest.designation}
+              variant="standard"
+            />
+            <TextField
+              disabled
+              fullWidth
+              label={t(tableTranslations.reason)}
+              defaultValue={roleRequest.reason}
+              variant="standard"
+            />
+            <Controller
+              name="rejectionMessage"
+              control={control}
+              render={({ field, fieldState }): JSX.Element => (
+                <FormTextField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={formState.isSubmitting}
+                  label={t(tableTranslations.rejectionMessage)}
+                  className="rejectionMessage"
+                  fullWidth
+                  multiline
+                  rows={2}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  variant="standard"
+                />
+              )}
+            />
+          </div>
+        )}
+      </FormDialog>
     </>
   );
 };
 
-export default injectIntl(RejectWithMessageForm);
+export default RejectWithMessageForm;
