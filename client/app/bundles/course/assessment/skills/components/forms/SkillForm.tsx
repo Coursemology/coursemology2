@@ -1,33 +1,28 @@
-import { FC, useEffect } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
-import { Controller, useForm, UseFormSetError } from 'react-hook-form';
+import { FC } from 'react';
+import { defineMessages } from 'react-intl';
+import { Controller, UseFormSetError } from 'react-hook-form';
 import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Button } from '@mui/material';
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
+import useTranslation from 'lib/hooks/useTranslation';
 import {
   SkillBranchOptions,
   SkillFormData,
 } from 'types/course/assessment/skills/skills';
 import { DialogTypes } from '../../types';
 
-interface Props extends WrappedComponentProps {
-  handleClose: (isDirty: boolean) => void;
+interface Props {
+  open: boolean;
+  title: string;
+  onClose: () => void;
   onSubmit: (
     data: SkillFormData,
     setError: UseFormSetError<SkillFormData>,
   ) => void;
-  setIsDirty?: (value: boolean) => void;
-  initialValues?: Object;
+  initialValues: SkillFormData;
   skillBranchOptions: SkillBranchOptions[];
   dialogType: DialogTypes;
 }
@@ -59,151 +54,109 @@ const validationSchema = yup.object({
 
 const SkillForm: FC<Props> = (props) => {
   const {
-    handleClose,
+    open,
+    title,
+    onClose,
     initialValues,
     onSubmit,
-    setIsDirty,
     skillBranchOptions,
     dialogType,
-    intl,
   } = props;
+  const { t } = useTranslation();
 
-  const {
-    control,
-    handleSubmit,
-    setError,
-    formState: { errors, isDirty, isSubmitting },
-  } = useForm<SkillFormData>({
-    defaultValues: initialValues,
-    resolver: yupResolver<yup.AnyObjectSchema>(validationSchema),
-  });
-
-  useEffect(() => {
-    if (setIsDirty) {
-      if (isDirty) {
-        setIsDirty(true);
-      } else {
-        setIsDirty(false);
-      }
+  const handleSubmit = (data, setError): void => {
+    const skillBranchFormData = {
+      title: data.title,
+      description: data.description,
+    };
+    switch (dialogType) {
+      case DialogTypes.NewSkill:
+        onSubmit(data, setError);
+        break;
+      case DialogTypes.NewSkillBranch:
+        onSubmit(skillBranchFormData, setError);
+        break;
+      case DialogTypes.EditSkill:
+        onSubmit(data, setError);
+        break;
+      case DialogTypes.EditSkillBranch:
+        onSubmit(skillBranchFormData, setError);
+        break;
+      default:
+        break;
     }
-  }, [isDirty]);
-
-  const disabled = isSubmitting;
-
-  const actionButtons = (
-    <div
-      style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: '8px' }}
-    >
-      <Button
-        color="secondary"
-        className="btn-cancel"
-        disabled={disabled}
-        key="skill-form-cancel-button"
-        onClick={(): void => handleClose(isDirty)}
-      >
-        <FormattedMessage {...formTranslations.cancel} />
-      </Button>
-      <Button
-        color="primary"
-        className="btn-submit"
-        disabled={disabled || !isDirty}
-        form="skill-form"
-        key="skill-form-submit-button"
-        type="submit"
-      >
-        <FormattedMessage {...formTranslations.submit} />
-      </Button>
-    </div>
-  );
+  };
 
   return (
-    <>
-      <form
-        encType="multipart/form-data"
-        id="skill-form"
-        noValidate
-        onSubmit={handleSubmit((data) => {
-          const skillBranchFormData = {
-            title: data.title,
-            description: data.description,
-          };
-          switch (dialogType) {
-            case DialogTypes.NewSkill:
-              onSubmit(data, setError);
-              break;
-            case DialogTypes.NewSkillBranch:
-              onSubmit(skillBranchFormData, setError);
-              break;
-            case DialogTypes.EditSkill:
-              onSubmit(data, setError);
-              break;
-            case DialogTypes.EditSkillBranch:
-              onSubmit(skillBranchFormData, setError);
-              break;
-            default:
-              break;
-          }
-        })}
-      >
-        <ErrorText errors={errors} />
-        <Controller
-          control={control}
-          name="title"
-          render={({ field, fieldState }): JSX.Element => (
-            <FormTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.title} />}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-              variant="standard"
-            />
-          )}
-        />
-        <Controller
-          name="description"
-          control={control}
-          render={({ field, fieldState }): JSX.Element => (
-            <FormRichTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.description} />}
-              // @ts-ignore: component is still written in JS
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="standard"
-            />
-          )}
-        />
-        {(dialogType === DialogTypes.NewSkill ||
-          dialogType === DialogTypes.EditSkill) && (
+    <FormDialog
+      open={open}
+      editing={false}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      title={title}
+      formName="skill-form"
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+    >
+      {(control, formState): JSX.Element => (
+        <>
           <Controller
-            name="skillBranchId"
             control={control}
+            name="title"
             render={({ field, fieldState }): JSX.Element => (
-              <FormSelectField
+              <FormTextField
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations.branches} />}
-                options={skillBranchOptions}
-                noneSelected={intl.formatMessage(translations.noneSelected)}
+                disabled={formState.isSubmitting}
+                label={t(translations.title)}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                required
+                variant="standard"
               />
             )}
           />
-        )}
-        {actionButtons}
-      </form>
-    </>
+          <Controller
+            name="description"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormRichTextField
+                field={field}
+                fieldState={fieldState}
+                disabled={formState.isSubmitting}
+                label={t(translations.description)}
+                // @ts-ignore: component is still written in JS
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="standard"
+              />
+            )}
+          />
+          {(dialogType === DialogTypes.NewSkill ||
+            dialogType === DialogTypes.EditSkill) && (
+            <Controller
+              name="skillBranchId"
+              control={control}
+              render={({ field, fieldState }): JSX.Element => (
+                <FormSelectField
+                  field={field}
+                  fieldState={fieldState}
+                  disabled={formState.isSubmitting}
+                  label={t(translations.branches)}
+                  options={skillBranchOptions}
+                  noneSelected={t(translations.noneSelected)}
+                />
+              )}
+            />
+          )}
+        </>
+      )}
+    </FormDialog>
   );
 };
 
-export default injectIntl(SkillForm);
+export default SkillForm;

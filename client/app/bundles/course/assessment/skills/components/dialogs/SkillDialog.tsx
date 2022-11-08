@@ -1,10 +1,9 @@
-import { FC, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { FC } from 'react';
+import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import useTranslation from 'lib/hooks/useTranslation';
 import { AppDispatch } from 'types/store';
 import {
   SkillBranchOptions,
@@ -21,10 +20,10 @@ import {
   updateSkillBranch,
 } from '../../operations';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   dialogType: DialogTypes;
   open: boolean;
-  handleClose: () => void;
+  onClose: () => void;
   skillBranchOptions: SkillBranchOptions[];
   data?: SkillMiniEntity | SkillBranchMiniEntity | null;
   skillBranchId: number;
@@ -74,7 +73,7 @@ const translations = defineMessages({
   },
   updateSkillBranchSuccess: {
     id: 'course.assessment.skills.components.SkillDialog.updateSkillBranchSuccess',
-    defaultMessage: 'Skill branch was update.',
+    defaultMessage: 'Skill branch was updated.',
   },
   updateSkillBranchFailure: {
     id: 'course.assessment.skills.components.SkillDialog.updateSkillBranchFailure',
@@ -90,16 +89,14 @@ const initialValues: SkillFormData = {
 const SkillDialog: FC<Props> = (props) => {
   const {
     open,
-    handleClose,
-    intl,
+    onClose,
     dialogType,
     skillBranchOptions,
     data,
     skillBranchId,
     setNewSelected,
   } = props;
-  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
-  const [isDirty, setIsDirty] = useState(false);
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
   if (!open) {
@@ -126,80 +123,68 @@ const SkillDialog: FC<Props> = (props) => {
       case DialogTypes.NewSkill:
         return dispatch(createSkill(formData))
           .then((response) => {
-            toast.success(intl.formatMessage(translations.createSkillSuccess));
+            toast.success(t(translations.createSkillSuccess));
             setTimeout(() => {
               if (response.data?.id) {
-                handleClose();
+                onClose();
                 setNewSelected(response.data.branchId ?? -1, response.data.id);
               }
             }, 200);
           })
           .catch((error) => {
-            toast.error(intl.formatMessage(translations.createSkillFailure));
+            toast.error(t(translations.createSkillFailure));
             if (error.response?.data) {
               setReactHookFormError(setError, error.response.data.errors);
             }
-            throw error;
           });
       case DialogTypes.NewSkillBranch:
         return dispatch(createSkillBranch(formData))
           .then((response) => {
-            toast.success(
-              intl.formatMessage(translations.createSkillBranchSuccess),
-            );
+            toast.success(t(translations.createSkillBranchSuccess));
             setTimeout(() => {
               if (response.data?.id) {
-                handleClose();
+                onClose();
                 setNewSelected(response.data.id ?? -1);
               }
             }, 200);
           })
           .catch((error) => {
-            toast.error(
-              intl.formatMessage(translations.createSkillBranchFailure),
-            );
+            toast.error(t(translations.createSkillBranchFailure));
             if (error.response?.data) {
               setReactHookFormError(setError, error.response.data.errors);
             }
-            throw error;
           });
       case DialogTypes.EditSkill:
         return dispatch(updateSkill(data?.id ?? -1, formData))
           .then((response) => {
-            toast.success(intl.formatMessage(translations.updateSkillSuccess));
+            toast.success(t(translations.updateSkillSuccess));
             setTimeout(() => {
               if (response.data?.id) {
-                handleClose();
+                onClose();
               }
             }, 200);
           })
           .catch((error) => {
-            toast.error(intl.formatMessage(translations.updateSkillFailure));
+            toast.error(t(translations.updateSkillFailure));
             if (error.response?.data) {
               setReactHookFormError(setError, error.response.data.errors);
             }
-            throw error;
           });
       case DialogTypes.EditSkillBranch:
         return dispatch(updateSkillBranch(data?.id ?? -1, formData))
           .then((response) => {
-            toast.success(
-              intl.formatMessage(translations.updateSkillBranchSuccess),
-            );
+            toast.success(t(translations.updateSkillBranchSuccess));
             setTimeout(() => {
               if (response.data?.id) {
-                handleClose();
+                onClose();
               }
             }, 200);
           })
           .catch((error) => {
-            toast.error(
-              intl.formatMessage(translations.updateSkillBranchFailure),
-            );
+            toast.error(t(translations.updateSkillBranchFailure));
             if (error.response?.data) {
               setReactHookFormError(setError, error.response.data.errors);
             }
-            throw error;
           });
       default:
         return Promise.reject();
@@ -209,67 +194,32 @@ const SkillDialog: FC<Props> = (props) => {
   let title = '';
   switch (dialogType) {
     case DialogTypes.NewSkill:
-      title = intl.formatMessage(translations.newSkill);
+      title = t(translations.newSkill);
       break;
     case DialogTypes.NewSkillBranch:
-      title = intl.formatMessage(translations.newSkillBranch);
+      title = t(translations.newSkillBranch);
       break;
     case DialogTypes.EditSkill:
-      title = intl.formatMessage(translations.editSkill);
+      title = t(translations.editSkill);
       break;
     case DialogTypes.EditSkillBranch:
-      title = intl.formatMessage(translations.editSkillBranch);
+      title = t(translations.editSkillBranch);
       break;
     default:
       break;
   }
 
   return (
-    <>
-      <Dialog
-        disableEnforceFocus
-        onClose={(): void => {
-          if (isDirty) {
-            setConfirmationDialogOpen(true);
-          } else {
-            handleClose();
-          }
-        }}
-        open={open}
-        maxWidth="lg"
-        style={{
-          top: 40,
-        }}
-      >
-        <DialogTitle>{title}</DialogTitle>
-        <DialogContent>
-          <SkillForm
-            handleClose={(): void => {
-              if (isDirty) {
-                setConfirmationDialogOpen(true);
-              } else {
-                handleClose();
-              }
-            }}
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            setIsDirty={setIsDirty}
-            skillBranchOptions={skillBranchOptions}
-            dialogType={dialogType}
-          />
-        </DialogContent>
-      </Dialog>
-      <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
-        onCancel={(): void => setConfirmationDialogOpen(false)}
-        onConfirm={(): void => {
-          setConfirmationDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <SkillForm
+      open={open}
+      title={title}
+      onClose={onClose}
+      initialValues={initialValues}
+      onSubmit={onSubmit}
+      skillBranchOptions={skillBranchOptions}
+      dialogType={dialogType}
+    />
   );
 };
 
-export default injectIntl(SkillDialog);
+export default SkillDialog;

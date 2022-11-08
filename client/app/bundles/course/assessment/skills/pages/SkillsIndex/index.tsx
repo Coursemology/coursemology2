@@ -177,7 +177,7 @@ const SkillsIndex: FC<Props> = (props) => {
           <SkillDialog
             dialogType={dialogType}
             open={isDialogOpen}
-            handleClose={(): void => setIsDialogOpen(false)}
+            onClose={(): void => setIsDialogOpen(false)}
             skillBranchOptions={skillBranchOptions}
             data={dialogData ?? null}
             skillBranchId={
