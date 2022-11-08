@@ -103,9 +103,8 @@ const IndividualInviteForm: FC<Props> = (props) => {
       .then((response) => {
         openResultDialog(response);
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(intl.formatMessage(messagesTranslations.formUpdateError));
-        throw error;
       })
       .finally(() => {
         setIsLoading(false);

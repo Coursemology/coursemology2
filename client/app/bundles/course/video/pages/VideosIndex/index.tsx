@@ -90,9 +90,8 @@ const VideosIndex: FC = () => {
       .then(() => {
         toast.success(t(translations.toggleSuccess));
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(t(translations.toggleFailure));
-        throw error;
       });
 
   return (

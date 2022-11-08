@@ -113,9 +113,8 @@ const SubmissionsIndex: FC<Props> = (props) => {
       .then(() => {
         setTableIsLoading(false);
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(intl.formatMessage(translations.filterGetFailure));
-        throw error;
       });
   };
 
@@ -127,9 +126,8 @@ const SubmissionsIndex: FC<Props> = (props) => {
         .then(() => {
           setTableIsLoading(false);
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(intl.formatMessage(translations.filterGetFailure));
-          throw error;
         });
     } else {
       handleFilter(newPageNumber);

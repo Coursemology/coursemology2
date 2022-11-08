@@ -38,9 +38,8 @@ const TodoIgnoreButton: FC<Props> = (props) => {
       .then(() => {
         toast.success(intl.formatMessage(translations.ignoreSuccess));
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error(intl.formatMessage(translations.ignoreFailure));
-        throw error;
       });
   };
 
