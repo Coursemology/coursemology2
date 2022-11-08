@@ -1,28 +1,14 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Link,
-  Typography,
-} from '@mui/material';
+import { Link, Typography } from '@mui/material';
 
 import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
-import {
-  InvitationFileEntity,
-  InvitationResult,
-} from 'types/course/userInvitations';
+import { InvitationResult } from 'types/course/userInvitations';
 import DownloadIcon from '@mui/icons-material/Download';
 import CourseAPI from 'api/course';
+import useTranslation from 'lib/hooks/useTranslation';
 import FileUploadForm from '../../components/forms/InviteUsersFileUploadForm';
 import {
   getManageCourseUserPermissions,
@@ -30,17 +16,13 @@ import {
 } from '../../selectors';
 import { inviteUsersFromFile } from '../../operations';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   open: boolean;
   openResultDialog: (invitationResult: InvitationResult) => void;
-  handleClose: () => void;
+  onClose: () => void;
 }
 
 const translations = defineMessages({
-  fileUpload: {
-    id: 'course.userInvitation.fileUpload',
-    defaultMessage: 'File Upload',
-  },
   fileUploadInfo: {
     id: 'course.userInvitation.fileUpload.info',
     defaultMessage: 'Upload a .csv file with the following format:',
@@ -90,30 +72,16 @@ const translations = defineMessages({
       '\nJohn,test1@example.org[,student,y,otot]' +
       '\nMary,test2@example.org[,teaching_assistant,n,fixed]',
   },
-  invite: {
-    id: 'course.userInvitation.registrationCode.invite',
-    defaultMessage: 'Invite Users from File',
-  },
   failure: {
     id: 'course.userInvitation.registrationCode.failure',
     defaultMessage:
       'Failed to invite users. Please ensure your data is formatted correctly - {error}',
   },
-  cancel: {
-    id: 'course.userInvitation.registrationCode.cancel',
-    defaultMessage: 'Cancel',
-  },
 });
 
-const initialValues = {
-  file: { name: '', url: '', file: undefined },
-};
-
 const InviteUsersFileUpload: FC<Props> = (props) => {
-  const { open, handleClose, openResultDialog, intl } = props;
-  const [isDirty, setIsDirty] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [discardDialogOpen, setDiscardDialogOpen] = useState(false);
+  const { open, onClose, openResultDialog } = props;
+  const { t } = useTranslation();
   const [downloadTemplatePath, setDownloadTemplatePath] = useState('');
   const dispatch = useDispatch<AppDispatch>();
 
@@ -136,19 +104,10 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
     return null;
   }
 
-  const confirmIfDirty = (): void => {
-    if (isDirty) {
-      setDiscardDialogOpen(true);
-    } else {
-      handleClose();
-    }
-  };
-
-  const onSubmit = (data: InvitationFileEntity): Promise<void> => {
-    setIsLoading(true);
-    return dispatch(inviteUsersFromFile(data))
+  const onSubmit = (data): Promise<void> => {
+    return dispatch(inviteUsersFromFile(data.file))
       .then((response) => {
-        handleClose();
+        onClose();
         openResultDialog(response);
       })
       .catch((error) => {
@@ -156,22 +115,17 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
           ? error.response.data.errors
           : '';
         toast.error(
-          intl.formatMessage(translations.failure, {
+          t(translations.failure, {
             error: errorMessage,
           }),
           { autoClose: false },
         );
-      })
-      .finally(() => {
-        setIsLoading(false);
       });
   };
 
-  const renderHelperText = (
+  const formSubtitle = (
     <>
-      <Typography variant="body2">
-        {intl.formatMessage(translations.fileUploadInfo)}
-      </Typography>
+      <Typography variant="body2">{t(translations.fileUploadInfo)}</Typography>
       <ul>
         <li>
           <Typography variant="body2">
@@ -198,7 +152,7 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
         )}
       </ul>
       <Typography variant="body2">
-        <strong>{intl.formatMessage(translations.exampleHeader)}</strong>
+        <strong>{t(translations.exampleHeader)}</strong>
         <Link
           variant="inherit"
           href={downloadTemplatePath}
@@ -206,7 +160,7 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
           target="_blank"
           style={{ textDecoration: 'none', cursor: 'pointer' }}
         >
-          {intl.formatMessage(translations.template)}
+          {t(translations.template)}
           <DownloadIcon
             fontSize="small"
             style={{
@@ -218,15 +172,13 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
       {permissions.canManagePersonalTimes ? (
         <pre
           dangerouslySetInnerHTML={{
-            __html: intl.formatMessage(
-              translations.fileUploadExamplePersonalTimeline,
-            ),
+            __html: t(translations.fileUploadExamplePersonalTimeline),
           }}
         />
       ) : (
         <pre
           dangerouslySetInnerHTML={{
-            __html: intl.formatMessage(translations.fileUploadExample),
+            __html: t(translations.fileUploadExample),
           }}
         />
       )}
@@ -234,42 +186,13 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
   );
 
   return (
-    <>
-      <Dialog
-        onClose={confirmIfDirty}
-        open={open}
-        fullWidth
-        maxWidth="lg"
-        style={{
-          top: 40,
-        }}
-      >
-        <DialogTitle>
-          {`${intl.formatMessage(translations.fileUpload)}`}
-        </DialogTitle>
-        <DialogContent>
-          {renderHelperText}
-          <FileUploadForm
-            initialValues={initialValues}
-            onSubmit={onSubmit}
-            setIsDirty={setIsDirty}
-            handleClose={confirmIfDirty}
-            isLoading={isLoading}
-          />
-        </DialogContent>
-      </Dialog>
-
-      <ConfirmationDialog
-        confirmDiscard
-        open={discardDialogOpen}
-        onCancel={(): void => setDiscardDialogOpen(false)}
-        onConfirm={(): void => {
-          setDiscardDialogOpen(false);
-          handleClose();
-        }}
-      />
-    </>
+    <FileUploadForm
+      open={open}
+      onSubmit={onSubmit}
+      onClose={onClose}
+      formSubtitle={formSubtitle}
+    />
   );
 };
 
-export default injectIntl(InviteUsersFileUpload);
+export default InviteUsersFileUpload;

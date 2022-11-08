@@ -2,6 +2,7 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { grey, red } from '@mui/material/colors';
+import { InputLabel } from '@mui/material';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import FilePreview from './FilePreview';
 import ImagePreview from './ImagePreview';
@@ -59,7 +60,12 @@ class FormSingleFileInput extends Component {
   };
 
   render() {
-    const { accept, disabled, previewComponent: PreviewComponent } = this.props;
+    const {
+      accept,
+      disabled,
+      previewComponent: PreviewComponent,
+      label,
+    } = this.props;
     const {
       field: {
         value: { name, url },
@@ -68,36 +74,39 @@ class FormSingleFileInput extends Component {
     } = this.props;
 
     return (
-      <Dropzone
-        accept={accept}
-        disabled={disabled}
-        multiple={false}
-        onDrop={this.onDrop}
-      >
-        {({ getRootProps, getInputProps }) => (
-          <div
-            {...getRootProps({
-              style: styles.dropzone,
-              className: 'select-none cursor-pointer',
-            })}
-          >
-            <input {...getInputProps()} />
+      <>
+        {label && <InputLabel disabled={disabled}>{label}</InputLabel>}
+        <Dropzone
+          accept={accept}
+          disabled={disabled}
+          multiple={false}
+          onDrop={this.onDrop}
+        >
+          {({ getRootProps, getInputProps }) => (
+            <div
+              {...getRootProps({
+                style: styles.dropzone,
+                className: 'select-none cursor-pointer',
+              })}
+            >
+              <input {...getInputProps()} />
 
-            <PreviewComponent
-              file={this.state.file}
-              originalName={name}
-              originalUrl={url}
-              handleCancel={this.onCancel}
-            />
+              <PreviewComponent
+                file={this.state.file}
+                originalName={name}
+                originalUrl={url}
+                handleCancel={this.onCancel}
+              />
 
-            {error && (
-              <div className="error-message" style={styles.fileLabelError}>
-                {formatErrorMessage(error.message)}
-              </div>
-            )}
-          </div>
-        )}
-      </Dropzone>
+              {error && (
+                <div className="error-message" style={styles.fileLabelError}>
+                  {formatErrorMessage(error.message)}
+                </div>
+              )}
+            </div>
+          )}
+        </Dropzone>
+      </>
     );
   }
 }
@@ -108,6 +117,7 @@ FormSingleFileInput.propTypes = {
   accept: PropTypes.object,
   disabled: PropTypes.bool,
   previewComponent: PropTypes.func,
+  label: PropTypes.string,
 };
 
 FormSingleFileInput.defaultProps = {

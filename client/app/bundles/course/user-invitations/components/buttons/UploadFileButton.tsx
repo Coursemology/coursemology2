@@ -1,10 +1,11 @@
 import { FC, useState } from 'react';
 import { Button } from '@mui/material';
-import { injectIntl, defineMessages, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
+import useTranslation from 'lib/hooks/useTranslation';
 import { InvitationResult } from 'types/course/userInvitations';
 import InviteUsersFileUpload from '../../pages/InviteUsersFileUpload';
 
-interface Props extends WrappedComponentProps {
+interface Props {
   openResultDialog: (invitationResult: InvitationResult) => void;
 }
 
@@ -16,12 +17,13 @@ const translations = defineMessages({
 });
 
 const UploadFileButton: FC<Props> = (props) => {
-  const { openResultDialog, intl } = props;
+  const { openResultDialog } = props;
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
 
   const uploadFileButton = (
     <Button variant="contained" onClick={(): void => setIsOpen(true)}>
-      {intl.formatMessage(translations.uploadFile)}
+      {t(translations.uploadFile)}
     </Button>
   );
 
@@ -29,7 +31,7 @@ const UploadFileButton: FC<Props> = (props) => {
     <InviteUsersFileUpload
       open={isOpen}
       openResultDialog={openResultDialog}
-      handleClose={(): void => setIsOpen(false)}
+      onClose={(): void => setIsOpen(false)}
     />
   );
 
@@ -41,4 +43,4 @@ const UploadFileButton: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(UploadFileButton);
+export default UploadFileButton;
