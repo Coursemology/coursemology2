@@ -1,20 +1,26 @@
-/* eslint-disable no-nested-ternary */
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC, useEffect, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
-import { AppDispatch, AppState } from 'types/store';
 import {
   SubmissionAssessmentFilterData,
   SubmissionGroupFilterData,
   SubmissionUserFilterData,
 } from 'types/course/assessment/submissions';
+import { AppDispatch, AppState } from 'types/store';
 
+import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
-import BackendPagination from 'lib/components/core/layouts/BackendPagination';
+import SubmissionFilter from '../../components/misc/SubmissionFilter';
+import SubmissionTabs from '../../components/misc/SubmissionTabs';
+import SubmissionsTable from '../../components/tables/SubmissionsTable';
+import {
+  fetchSubmissions,
+  filterPendingSubmissions,
+  filterSubmissions,
+} from '../../operations';
 import {
   getAllSubmissionMiniEntities,
   getFilter,
@@ -23,15 +29,6 @@ import {
   getSubmissionPermissions,
   getTabs,
 } from '../../selectors';
-
-import {
-  fetchSubmissions,
-  filterPendingSubmissions,
-  filterSubmissions,
-} from '../../operations';
-import SubmissionsTable from '../../components/tables/SubmissionsTable';
-import SubmissionFilter from '../../components/misc/SubmissionFilter';
-import SubmissionTabs from '../../components/misc/SubmissionTabs';
 
 interface Props extends WrappedComponentProps {}
 
@@ -155,51 +152,51 @@ const SubmissionsIndex: FC<Props> = (props) => {
           <SubmissionTabs
             canManage={submissionPermissions.canManage}
             isTeachingStaff={submissionPermissions.isTeachingStaff}
+            setIsTabChanging={setIsTabChanging}
+            setPageNum={setPageNum}
+            setTableIsLoading={setTableIsLoading}
+            setTabValue={setTabValue}
             tabs={tabs}
             tabValue={tabValue}
-            setTabValue={setTabValue}
-            setIsTabChanging={setIsTabChanging}
-            setTableIsLoading={setTableIsLoading}
-            setPageNum={setPageNum}
           />
 
           <SubmissionFilter
             key={`submission-filter-${tabValue}`}
-            showDetailFilter={submissionPermissions.canManage && tabValue > 1}
-            tabCategories={tabs.categories}
             categoryNum={tabValue - 2}
             filter={filter}
-            setPageNum={setPageNum}
-            setTableIsLoading={setTableIsLoading}
-            selectedFilter={selectedFilter}
-            setSelectedFilter={setSelectedFilter}
             handleFilterOnClick={handleFilter}
+            selectedFilter={selectedFilter}
+            setPageNum={setPageNum}
+            setSelectedFilter={setSelectedFilter}
+            setTableIsLoading={setTableIsLoading}
+            showDetailFilter={submissionPermissions.canManage && tabValue > 1}
+            tabCategories={tabs.categories}
           />
 
           {!isTabChanging && (
             <BackendPagination
+              handlePageChange={handlePageChange}
+              pageNum={pageNum}
               rowCount={submissionCount}
               rowsPerPage={ROWS_PER_PAGE}
-              pageNum={pageNum}
-              handlePageChange={handlePageChange}
             />
           )}
 
           <SubmissionsTable
             isGamified={isGamified}
-            submissions={submissions}
             isPendingTab={submissionPermissions.isTeachingStaff && tabValue < 2}
-            tableIsLoading={tableIsLoading}
-            rowsPerPage={ROWS_PER_PAGE}
             pageNum={pageNum}
+            rowsPerPage={ROWS_PER_PAGE}
+            submissions={submissions}
+            tableIsLoading={tableIsLoading}
           />
 
           {!isTabChanging && submissions.length > 15 && !tableIsLoading && (
             <BackendPagination
+              handlePageChange={handlePageChange}
+              pageNum={pageNum}
               rowCount={submissionCount}
               rowsPerPage={ROWS_PER_PAGE}
-              pageNum={pageNum}
-              handlePageChange={handlePageChange}
             />
           )}
         </>

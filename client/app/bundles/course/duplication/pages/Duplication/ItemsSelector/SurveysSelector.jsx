@@ -1,16 +1,17 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { ListSubheader } from '@mui/material';
-import { defaultComponentTitles } from 'course/translations.intl';
-import { duplicableItemTypes } from 'course/duplication/constants';
+import PropTypes from 'prop-types';
+
 import { setItemSelectedBoolean } from 'course/duplication/actions';
-import { surveyShape } from 'course/duplication/propTypes';
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
 import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
+import { duplicableItemTypes } from 'course/duplication/constants';
+import { surveyShape } from 'course/duplication/propTypes';
+import { defaultComponentTitles } from 'course/translations.intl';
 
 const translations = defineMessages({
   noItems: {
@@ -35,7 +36,7 @@ class SurveysSelector extends Component {
 
     if (surveys.length < 1) {
       return (
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...translations.noItems} />
         </ListSubheader>
       );
@@ -68,8 +69,8 @@ class SurveysSelector extends Component {
     return (
       <IndentedCheckbox
         key={survey.id}
-        label={label}
         checked={checked}
+        label={label}
         onChange={(e, value) =>
           dispatch(
             setItemSelectedBoolean(

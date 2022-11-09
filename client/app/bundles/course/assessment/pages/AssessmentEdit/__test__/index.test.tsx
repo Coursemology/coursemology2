@@ -1,8 +1,9 @@
 import userEvent from '@testing-library/user-event';
-
 import { fireEvent, render, RenderResult, waitFor } from 'utilities/test-utils';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import CourseAPI from 'api/course';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import storeCreator from '../../../store';
 import AssessmentEdit from '..';
 
@@ -49,7 +50,7 @@ let updateApi: jest.SpyInstance;
 const getComponent = (): JSX.Element => (
   <ProviderWrapper store={store}>
     {/* @ts-ignore until AssessmentEdit/index.jsx is fully typed */}
-    <AssessmentEdit modeSwitching initialValues={initialValues} />
+    <AssessmentEdit initialValues={initialValues} modeSwitching={true} />
   </ProviderWrapper>
 );
 

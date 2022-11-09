@@ -3,13 +3,16 @@ import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Tooltip } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { Button, Tooltip } from '@mui/material';
 import { AppDispatch, AppState } from 'types/store';
-import PageHeader from 'lib/components/navigation/PageHeader';
+
 import AddButton from 'lib/components/core/buttons/AddButton';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
+
+import ForumTable from '../../components/tables/ForumTable';
 import { fetchForums, markAllAsRead } from '../../operations';
 import {
   getAllForums,
@@ -17,7 +20,6 @@ import {
   getForumPermissions,
 } from '../../selectors';
 import ForumNew from '../ForumNew';
-import ForumTable from '../../components/tables/ForumTable';
 
 const translations = defineMessages({
   header: {
@@ -113,8 +115,8 @@ const ForumsIndex: FC = () => {
             key="next-unread-button"
             className="next-unread-button mr-2"
             color="inherit"
-            disabled={!forumMetadata.nextUnreadPostUrl || isMarking}
             component={Link}
+            disabled={!forumMetadata.nextUnreadPostUrl || isMarking}
             to={forumMetadata.nextUnreadPostUrl ?? '#'}
           >
             {t(translations.nextUnread)}
@@ -164,8 +166,8 @@ const ForumsIndex: FC = () => {
       <PageHeader title={t(translations.header)} toolbars={headerToolbars} />
       {!isLoading && isForumNewDialogOpen && (
         <ForumNew
-          open={isForumNewDialogOpen}
           onClose={(): void => setIsForumNewDialogOpen(false)}
+          open={isForumNewDialogOpen}
         />
       )}
       {isLoading ? <LoadingIndicator /> : <ForumTable forums={forums} />}

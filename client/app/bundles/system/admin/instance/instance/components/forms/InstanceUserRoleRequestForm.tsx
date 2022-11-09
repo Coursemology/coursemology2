@@ -1,20 +1,22 @@
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
-import FormTextField from 'lib/components/form/fields/TextField';
-import FormSelectField from 'lib/components/form/fields/SelectField';
-import tableTranslations from 'lib/translations/table';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { AppDispatch } from 'types/store';
 import {
   RoleRequestBasicListData,
   UserRoleRequestForm,
 } from 'types/system/instance/roleRequests';
-import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'types/store';
+
 import { saveInstanceRoleRequest } from 'bundles/course/courses/actions';
 import FormDialog from 'lib/components/form/dialog/FormDialog';
+import FormSelectField from 'lib/components/form/fields/SelectField';
+import FormTextField from 'lib/components/form/fields/TextField';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
+import tableTranslations from 'lib/translations/table';
+
 import { createRoleRequest, updateRoleRequest } from '../../operations';
 
 interface Props {
@@ -97,29 +99,30 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
 
   return (
     <FormDialog
-      open={open}
       editing={!!instanceUserRoleRequest}
+      formName="instance-user-role-request-form"
+      initialValues={initialValues}
       onClose={onClose}
       onSubmit={onSubmit}
+      open={open}
       title={
         instanceUserRoleRequest
           ? t(translations.editRoleRequest)
           : t(translations.newRoleRequest)
       }
-      formName="instance-user-role-request-form"
-      initialValues={initialValues}
     >
       {(control, formState): JSX.Element => (
         <div className="space-y-2">
           <Controller
-            name="role"
             control={control}
+            name="role"
             render={({ field, fieldState }): JSX.Element => (
               <FormSelectField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
                 label={t(tableTranslations.requestToBe)}
+                margin="0"
                 options={[
                   {
                     value: 'instructor',
@@ -130,62 +133,61 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
                     label: t(translations.administrator),
                   },
                 ]}
+                shrink={true}
                 type="string"
-                margin="0"
-                shrink
               />
             )}
           />
 
           <Controller
+            control={control}
             name="organization"
-            control={control}
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
+                fullWidth={true}
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 label={t(tableTranslations.organization)}
-                disabled={formState.isSubmitting}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
                 variant="standard"
               />
             )}
           />
 
           <Controller
+            control={control}
             name="designation"
-            control={control}
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                label={t(tableTranslations.designation)}
-                disabled={formState.isSubmitting}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={t(tableTranslations.designation)}
                 variant="standard"
               />
             )}
           />
 
           <Controller
-            name="reason"
             control={control}
+            name="reason"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                label={t(tableTranslations.reason)}
-                disabled={formState.isSubmitting}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={t(tableTranslations.reason)}
                 variant="standard"
               />
             )}

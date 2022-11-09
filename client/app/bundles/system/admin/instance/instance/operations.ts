@@ -1,18 +1,20 @@
-import { Operation } from 'types/store';
-import SystemAPI from 'api/system';
 import { AnnouncementFormData } from 'types/course/announcements';
-import { InstanceUserMiniEntity } from 'types/system/instance/users';
+import { Operation } from 'types/store';
+import { ComponentData } from 'types/system/instance/components';
 import {
-  InvitationResult,
   InvitationPostData,
+  InvitationResult,
   InvitationsPostData,
 } from 'types/system/instance/invitations';
-import { ComponentData } from 'types/system/instance/components';
 import {
   RoleRequestMiniEntity,
   UserRoleRequestForm,
 } from 'types/system/instance/roleRequests';
+import { InstanceUserMiniEntity } from 'types/system/instance/users';
 import { InstanceBasicListData } from 'types/system/instances';
+
+import SystemAPI from 'api/system';
+
 import * as actions from './actions';
 
 /**

@@ -1,13 +1,13 @@
-import { defineMessages } from 'react-intl';
 import { FC } from 'react';
+import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
-
+import { toast } from 'react-toastify';
+import { VideoFormData, VideoListData } from 'types/course/videos';
 import { AppDispatch } from 'types/store';
 
-import { toast } from 'react-toastify';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
-import { VideoFormData, VideoListData } from 'types/course/videos';
+
 import VideoForm from '../../components/forms/VideoForm';
 import { updateVideo } from '../../operations';
 
@@ -69,13 +69,13 @@ const VideoEdit: FC<Props> = (props) => {
 
   return (
     <VideoForm
-      open={open}
-      editing
-      title={t(translations.updateVideo)}
-      onClose={onClose}
-      initialValues={initialValues}
-      onSubmit={onSubmit}
       childrenExists={video.videoChildrenExist}
+      editing={true}
+      initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+      title={t(translations.updateVideo)}
     />
   );
 };

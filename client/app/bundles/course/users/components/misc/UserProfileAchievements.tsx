@@ -2,9 +2,10 @@ import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Grid, Typography } from '@mui/material';
 import { AchievementMiniEntity } from 'types/course/achievements';
-import { getCourseId } from 'lib/helpers/url-helpers';
-import { getAchievementURL } from 'lib/helpers/url-builders';
+
 import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
+import { getAchievementURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
 interface Props extends WrappedComponentProps {
   achievements: AchievementMiniEntity[];
@@ -36,25 +37,25 @@ const translations = defineMessages({
 const UserProfileAchievements: FC<Props> = ({ achievements, intl }: Props) => {
   return (
     <>
-      <Typography variant="h4" component="h2" id="user-profile-achievements">
+      <Typography component="h2" id="user-profile-achievements" variant="h4">
         {intl.formatMessage(translations.achivementsHeader)}
       </Typography>
       {achievements.length > 0 ? (
-        <Grid container spacing={1}>
+        <Grid container={true} spacing={1}>
           {achievements.map((achievement) => (
             <Grid
-              item
-              id={`achievement_${achievement.id}`}
               key={achievement.id}
-              xs={4}
-              sm={3}
+              id={`achievement_${achievement.id}`}
+              item={true}
               lg={2}
+              sm={3}
+              xs={4}
             >
-              <Grid container sx={styles.achievementMiniEntityContainer}>
+              <Grid container={true} sx={styles.achievementMiniEntityContainer}>
                 <a href={getAchievementURL(getCourseId(), achievement.id)}>
                   <AvatarWithLabel
-                    label={achievement.title}
                     imageUrl={achievement.badge.url}
+                    label={achievement.title}
                     size="md"
                   />
                 </a>

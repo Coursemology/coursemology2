@@ -1,5 +1,4 @@
 import { AxiosResponse } from 'axios';
-
 import type {
   AssessmentCategory,
   AssessmentCategoryPostData,
@@ -12,6 +11,7 @@ import type {
   MovedTabsResult,
   MoveTabsPostData,
 } from 'types/course/admin/assessments';
+
 import BaseAdminAPI from './Base';
 
 type Response = Promise<AxiosResponse<AssessmentSettingsData>>;

@@ -10,8 +10,9 @@ import {
   Typography,
 } from '@mui/material';
 import { UserCourseMiniEntity } from 'types/users';
-import tableTranslations from 'lib/translations/table';
+
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
+import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -43,16 +44,16 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
         </TableHead>
         <TableBody>
           {courses.map((course) => (
-            <TableRow key={`course-${course.id}`} hover>
+            <TableRow key={`course-${course.id}`} hover={true}>
               <TableCell style={{ maxWidth: '120px' }}>
                 {course.createdAt}
               </TableCell>
               <TableCell style={{ maxWidth: '400px' }}>
-                <Typography variant="body2" className="course_title">
+                <Typography className="course_title" variant="body2">
                   <a
                     href={`/courses/${course.id}`}
-                    target="_blank"
                     rel="noreferrer"
+                    target="_blank"
                   >
                     {course.title}
                   </a>
@@ -61,8 +62,8 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
               <TableCell>
                 <a
                   href={`/users/${course.courseUserId}`}
-                  target="_blank"
                   rel="noreferrer"
+                  target="_blank"
                 >
                   {course.courseUserName}
                 </a>

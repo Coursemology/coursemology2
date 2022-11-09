@@ -1,13 +1,14 @@
 import { FC } from 'react';
-import { defineMessages } from 'react-intl';
 import { Controller, UseFormSetError } from 'react-hook-form';
+import { defineMessages } from 'react-intl';
+import { NewCourseFormData } from 'types/course/courses';
 import * as yup from 'yup';
-import formTranslations from 'lib/translations/form';
+
+import FormDialog from 'lib/components/form/dialog/FormDialog';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import { NewCourseFormData } from 'types/course/courses';
-import FormDialog from 'lib/components/form/dialog/FormDialog';
 import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 interface Props {
   open: boolean;
@@ -42,50 +43,49 @@ const NewCourseForm: FC<Props> = (props) => {
 
   return (
     <FormDialog
-      open={open}
       editing={false}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      title={title}
       formName="new-course-form"
       initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+      title={title}
       validationSchema={validationSchema}
     >
       {(control, formState): JSX.Element => (
         <>
           <Controller
-            name="title"
             control={control}
+            name="title"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.title)}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                required
+                label={t(translations.title)}
+                required={true}
                 variant="standard"
               />
             )}
           />
 
           <Controller
-            name="description"
             control={control}
+            name="description"
             render={({ field, fieldState }): JSX.Element => (
               <FormRichTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.description)}
-                // @ts-ignore: component is still written in JS
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={t(translations.description)}
                 variant="standard"
               />
             )}

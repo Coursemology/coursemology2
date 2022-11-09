@@ -1,4 +1,5 @@
 import {
+  CommentPageState,
   CommentPermissions,
   CommentPostListData,
   CommentPostMiniEntity,
@@ -6,9 +7,7 @@ import {
   CommentTabInfo,
   CommentTopicData,
   CommentTopicEntity,
-  CommentPageState,
 } from 'types/course/comments';
-
 import { EntityStore } from 'types/store';
 
 // Action Names

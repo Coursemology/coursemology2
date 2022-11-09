@@ -1,5 +1,5 @@
+import { Checkbox, FormControlLabel } from '@mui/material';
 import PropTypes from 'prop-types';
-import { FormControlLabel, Checkbox } from '@mui/material';
 
 const styles = {
   tabSize: 15,

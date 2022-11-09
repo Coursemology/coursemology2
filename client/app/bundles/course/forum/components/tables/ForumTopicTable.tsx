@@ -1,14 +1,16 @@
 import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
-import equal from 'fast-deep-equal';
 import { Link } from 'react-router-dom';
-import DataTable from 'lib/components/core/layouts/DataTable';
-import { ForumEntity, ForumTopicEntity } from 'types/course/forums';
-import Note from 'lib/components/core/Note';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
-import useTranslation from 'lib/hooks/useTranslation';
 import { Icon, Typography } from '@mui/material';
+import equal from 'fast-deep-equal';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { ForumEntity, ForumTopicEntity } from 'types/course/forums';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
+import Note from 'lib/components/core/Note';
+import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
+
 import ForumTopicManagementButtons from '../buttons/ForumTopicManagementButtons';
 
 interface Props {
@@ -258,11 +260,11 @@ const ForumTopicTable: FC<Props> = (props) => {
           const topic = forumTopics[dataIndex];
           return (
             <ForumTopicManagementButtons
-              topic={topic}
               showOnHover={
                 topic.permissions.canSetHiddenTopic ||
                 topic.permissions.canSetLockedTopic
               }
+              topic={topic}
             />
           );
         },
@@ -272,10 +274,10 @@ const ForumTopicTable: FC<Props> = (props) => {
 
   return (
     <DataTable
-      data={forumTopics}
       columns={columns}
+      data={forumTopics}
       options={options}
-      withMargin
+      withMargin={true}
     />
   );
 };

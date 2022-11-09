@@ -1,4 +1,5 @@
-import { FC, useState, memo, useMemo } from 'react';
+import { FC, memo, useMemo, useState } from 'react';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import {
   defineMessages,
   FormattedMessage,
@@ -6,21 +7,22 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Controller, useForm, FormProvider } from 'react-hook-form';
-import * as yup from 'yup';
-import formTranslations from 'lib/translations/form';
+import { Autocomplete, Button, Grid, TextField } from '@mui/material';
 import {
   DisbursementCourseGroupMiniEntity,
   DisbursementCourseUserMiniEntity,
   DisbursementFormData,
 } from 'types/course/disbursement';
+import { AppDispatch, AppState } from 'types/store';
+import * as yup from 'yup';
+
 import ErrorText from 'lib/components/core/ErrorText';
 import FormTextField from 'lib/components/form/fields/TextField';
-import { Autocomplete, Button, Grid, TextField } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
-import { toast } from 'react-toastify';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import formTranslations from 'lib/translations/form';
+
 import { createDisbursement } from '../../operations';
 import { getAllCourseGroupMiniEntities } from '../../selectors';
 import DisbursementTable from '../tables/DisbursementTable';
@@ -181,13 +183,14 @@ const DisbursementForm: FC<Props> = (props) => {
     <>
       <Autocomplete
         className="filter-group max-w-lg"
-        disablePortal
-        clearOnEscape
-        options={courseGroups}
+        clearOnEscape={true}
+        disablePortal={true}
         getOptionLabel={(option): string => option.name}
         isOptionEqualToValue={(option, val): boolean =>
           option.name === val.name
         }
+        onChange={onChangeFilter}
+        options={courseGroups}
         renderInput={(params): React.ReactNode => {
           return (
             <TextField
@@ -196,51 +199,54 @@ const DisbursementForm: FC<Props> = (props) => {
             />
           );
         }}
-        onChange={onChangeFilter}
         value={filteredGroup}
       />
       <FormProvider {...methods}>
         <form
           encType="multipart/form-data"
           id="disbursement-form"
-          noValidate
+          noValidate={true}
           onSubmit={handleSubmit((data) => {
             onFormSubmit(data);
           })}
         >
           <ErrorText errors={errors} />
-          <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
-            <Grid item xs>
+          <Grid
+            columnSpacing={2}
+            container={true}
+            direction="row"
+            rowSpacing={2}
+          >
+            <Grid item={true} xs={true}>
               <Controller
                 control={control}
                 name="reason"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
+                    className="experience_points_disbursement_reason"
                     field={field}
                     fieldState={fieldState}
-                    label={<FormattedMessage {...translations.reason} />}
-                    // @ts-ignore: component is still written in JS
-                    className="experience_points_disbursement_reason"
-                    fullWidth
+                    fullWidth={true}
                     InputLabelProps={{
                       shrink: true,
                     }}
-                    required
+                    label={<FormattedMessage {...translations.reason} />}
+                    required={true}
                     variant="standard"
                   />
                 )}
               />
             </Grid>
-            <Grid item>
+            <Grid item={true}>
               <Button
-                color="primary"
+                key="disbursement-form-submit-button"
                 className="general-btn-submit"
+                color="primary"
                 disabled={!isDirty || isSubmitting}
                 form="disbursement-form"
-                key="disbursement-form-submit-button"
+                style={{ marginBottom: '10px', marginTop: '10px' }}
                 type="submit"
                 variant="outlined"
-                style={{ marginBottom: '10px', marginTop: '10px' }}
               >
                 <FormattedMessage {...translations.submit} />
               </Button>
@@ -248,8 +254,8 @@ const DisbursementForm: FC<Props> = (props) => {
           </Grid>
           <DisbursementTable
             filteredUsers={filteredCourseUsers}
-            onClickRemove={onClickRemove}
             onClickCopy={onClickCopy}
+            onClickRemove={onClickRemove}
           />
         </form>
       </FormProvider>

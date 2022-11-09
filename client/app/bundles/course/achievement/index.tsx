@@ -1,9 +1,10 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import AchievementsIndex from './pages/AchievementsIndex';
+
 import AchievementShow from './pages/AchievementShow';
+import AchievementsIndex from './pages/AchievementsIndex';
 import configureStore from './store';
 
 $(() => {
@@ -18,12 +19,12 @@ $(() => {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/courses/:courseId/achievements/"
               element={<AchievementsIndex />}
+              path="/courses/:courseId/achievements/"
             />
             <Route
-              path="/courses/:courseId/achievements/:achievementId"
               element={<AchievementShow />}
+              path="/courses/:courseId/achievements/:achievementId"
             />
           </Routes>
         </BrowserRouter>

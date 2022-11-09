@@ -1,12 +1,14 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
 import { useForm } from 'react-hook-form';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Button, Card } from '@mui/material';
-import history from 'lib/history';
+import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
-import GradingPanel from '../../containers/GradingPanel';
+import history from 'lib/history';
+
 import { formNames } from '../../constants';
+import GradingPanel from '../../containers/GradingPanel';
 import translations from '../../translations';
 
 const styles = {
@@ -86,11 +88,11 @@ const SubmissionEmptyForm = (props) => {
     }
     return (
       <Button
-        variant="contained"
         color="primary"
         disabled={isSaving}
         onClick={handleSaveGrade}
         style={styles.formButton}
+        variant="contained"
       >
         {intl.formatMessage(translations.saveGrade)}
       </Button>
@@ -106,12 +108,12 @@ const SubmissionEmptyForm = (props) => {
       <div style={styles.submitContainer}>
         <FormattedMessage {...translations.submitNoQuestionExplain} />
         <Button
-          variant="contained"
           color="primary"
           disabled={isSaving}
           form={formNames.SUBMISSION}
-          type="submit"
           style={styles.formButton}
+          type="submit"
+          variant="contained"
         >
           {intl.formatMessage(translations.ok)}
         </Button>
@@ -126,11 +128,11 @@ const SubmissionEmptyForm = (props) => {
     }
     return (
       <Button
-        variant="contained"
         color="secondary"
         disabled={isSaving}
         onClick={() => setUnsubmitConfirmation(true)}
         style={styles.formButton}
+        variant="contained"
       >
         {intl.formatMessage(translations.unsubmit)}
       </Button>
@@ -139,13 +141,13 @@ const SubmissionEmptyForm = (props) => {
 
   const renderUnsubmitDialog = () => (
     <ConfirmationDialog
-      open={unsubmitConfirmation}
+      message={intl.formatMessage(translations.unsubmitConfirmation)}
       onCancel={() => setUnsubmitConfirmation(false)}
       onConfirm={() => {
         setUnsubmitConfirmation(false);
         handleUnsubmit();
       }}
-      message={intl.formatMessage(translations.unsubmitConfirmation)}
+      open={unsubmitConfirmation}
     />
   );
 

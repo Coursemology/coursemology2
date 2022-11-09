@@ -1,9 +1,9 @@
-import { connect, ConnectedProps } from 'react-redux';
-import { WrappedComponentProps } from 'react-intl';
-import { FieldValues, UseFormSetError } from 'react-hook-form';
 import { Emits } from 'react-emitter-factory';
-
+import { FieldValues, UseFormSetError } from 'react-hook-form';
+import { WrappedComponentProps } from 'react-intl';
+import { connect, ConnectedProps } from 'react-redux';
 import { ConditionsData } from 'types/course/conditions';
+
 import { Material } from '../FileManager';
 
 interface Tab {

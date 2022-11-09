@@ -5,11 +5,9 @@ import {
   CourseMiniEntity,
   CoursePermissions,
 } from 'types/course/courses';
-
 import { EntityStore } from 'types/store';
 import { RoleRequestBasicListData } from 'types/system/instance/roleRequests';
 
-// eslint-disable-next-line import/prefer-default-export
 export const SAVE_COURSE_LIST = 'course/courses/SAVE_COURSE_LIST';
 export const SAVE_COURSE = 'course/courses/SAVE_COURSE';
 export const REMOVE_TODO = 'course/courses/REMOVE_TODO';

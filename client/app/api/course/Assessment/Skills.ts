@@ -4,6 +4,7 @@ import {
   SkillListData,
   SkillPermissions,
 } from 'types/course/assessment/skills/skills';
+
 import BaseCourseAPI from './Base';
 
 export default class SkillsAPI extends BaseCourseAPI {

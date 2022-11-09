@@ -1,15 +1,17 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/navigation/PageHeader';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
-import { getAllInvitationMiniEntities } from '../../selectors';
-import { fetchInvitations } from '../../operations';
+import { AppDispatch, AppState } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+
+import PendingInvitationsButtons from '../../components/buttons/PendingInvitationsButtons';
 import InstanceUsersTabs from '../../components/navigation/InstanceUsersTabs';
 import UserInvitationsTable from '../../components/tables/UserInvitationsTable';
-import PendingInvitationsButtons from '../../components/buttons/PendingInvitationsButtons';
+import { fetchInvitations } from '../../operations';
+import { getAllInvitationMiniEntities } from '../../selectors';
 
 type Props = WrappedComponentProps;
 
@@ -67,17 +69,17 @@ const InstanceUsersInvitations: FC<Props> = (props) => {
     <>
       <InstanceUsersTabs currentTab="invitations-tab" />
       <UserInvitationsTable
-        title={intl.formatMessage(translations.pending)}
         invitations={pendingInvitations}
-        pendingInvitations
+        pendingInvitations={true}
         renderRowActionComponent={(invitation): JSX.Element => (
           <PendingInvitationsButtons invitation={invitation} />
         )}
+        title={intl.formatMessage(translations.pending)}
       />
       <UserInvitationsTable
-        title={intl.formatMessage(translations.accepted)}
+        acceptedInvitations={true}
         invitations={acceptedInvitations}
-        acceptedInvitations
+        title={intl.formatMessage(translations.accepted)}
       />
     </>
   );

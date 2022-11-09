@@ -1,10 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Button, MenuItem, MenuList, Popover } from '@mui/material';
 import Done from '@mui/icons-material/Done';
-import { scribingTranslations as translations } from '../../translations';
+import { Button, MenuItem, MenuList, Popover } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { scribbleShape } from '../../propTypes';
+import { scribingTranslations as translations } from '../../translations';
 
 const propTypes = {
   intl: PropTypes.object.isRequired,
@@ -43,10 +44,10 @@ class LayersComponent extends Component {
 
     return layers && layers.length !== 0 ? (
       <Popover
-        open={open}
         anchorEl={anchorEl}
         anchorOrigin={popoverStyles.anchorOrigin}
         onClose={onRequestClose}
+        open={open}
         transformOrigin={popoverStyles.transformOrigin}
       >
         <MenuList>
@@ -73,7 +74,7 @@ class LayersComponent extends Component {
         <label style={popoverStyles.layersLabel}>
           {intl.formatMessage(translations.layersLabelText)}
         </label>
-        <Button variant="contained" onClick={onClick} disabled={disabled}>
+        <Button disabled={disabled} onClick={onClick} variant="contained">
           {layers && `${layers[0].creator_name.substring(0, 6)}...`}
         </Button>
         {this.renderLayersPopover()}

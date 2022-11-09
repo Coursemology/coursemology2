@@ -1,10 +1,11 @@
 import { MemoryRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+import { mount } from 'enzyme';
+
 import CourseAPI from 'api/course';
-import storeCreator from 'course/survey/store';
 import SurveysLayout from 'course/survey/containers/SurveysLayout';
+import storeCreator from 'course/survey/store';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
 // Mock axios
 const client = CourseAPI.survey.surveys.getClient();

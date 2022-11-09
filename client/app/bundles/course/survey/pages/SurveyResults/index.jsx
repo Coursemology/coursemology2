@@ -1,18 +1,20 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import {
   Card,
   CardContent,
-  ListSubheader,
   FormControlLabel,
+  ListSubheader,
   Switch,
 } from '@mui/material';
-import surveyTranslations from 'course/survey/translations';
+import PropTypes from 'prop-types';
+
 import { fetchResults } from 'course/survey/actions/surveys';
+import { sectionShape, surveyShape } from 'course/survey/propTypes';
+import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { surveyShape, sectionShape } from 'course/survey/propTypes';
+
 import ResultsSection from './ResultsSection';
 
 const translations = defineMessages({
@@ -75,7 +77,7 @@ class SurveyResults extends Component {
     }
     if (noSections) {
       return (
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...translations.noSections} />
         </ListSubheader>
       );
@@ -120,7 +122,7 @@ class SurveyResults extends Component {
             )}
           </CardContent>
         </Card>
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...surveyTranslations.questions} />
         </ListSubheader>
         {this.props.sections.map((section, index) => (

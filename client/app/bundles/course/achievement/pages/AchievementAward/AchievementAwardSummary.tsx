@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import { Grid } from '@mui/material';
 import { green, red } from '@mui/material/colors';
-import { AchievementCourseUserEntity } from 'types/course/achievements';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { AchievementCourseUserEntity } from 'types/course/achievements';
+
 import DataTable from 'lib/components/core/layouts/DataTable';
 
 interface Props {
@@ -102,21 +103,21 @@ const AchievementAwardSummary: FC<Props> = (props) => {
   ];
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={6}>
+    <Grid container={true} spacing={1}>
+      <Grid item={true} xs={6}>
         <DataTable
-          title={`Awarded Students (${awardedUsers.length})`}
-          data={awardedUsers}
           columns={awardedTableColumns}
+          data={awardedUsers}
           options={awardedTableOptions}
+          title={`Awarded Students (${awardedUsers.length})`}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item={true} xs={6}>
         <DataTable
-          title={`Revoked Students (${removedUsers.length})`}
-          data={removedUsers}
           columns={removedTableColumns}
+          data={removedUsers}
           options={removedTableOptions}
+          title={`Revoked Students (${removedUsers.length})`}
         />
       </Grid>
     </Grid>

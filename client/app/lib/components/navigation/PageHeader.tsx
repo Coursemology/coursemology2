@@ -1,7 +1,8 @@
 import { FC, ReactElement } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IconButton } from '@mui/material';
 import ArrowBack from '@mui/icons-material/ArrowBack';
+import { IconButton } from '@mui/material';
+
 import TitleBar from 'lib/components/navigation/TitleBar';
 
 interface Props {
@@ -16,19 +17,19 @@ const PageHeader: FC<Props> = (props) => {
 
   return (
     <TitleBar
-      title={title}
-      iconElementRight={toolbars && toolbars.length > 0 ? toolbars : null}
+      data-testid="TitleBar"
       iconElementLeft={
         returnLink ? (
           <IconButton
-            onClick={(): void => navigate(returnLink)}
             data-testid="ArrowBackIconButton"
+            onClick={(): void => navigate(returnLink)}
           >
-            <ArrowBack htmlColor="white" data-testid="ArrowBack" />
+            <ArrowBack data-testid="ArrowBack" htmlColor="white" />
           </IconButton>
         ) : null
       }
-      data-testid="TitleBar"
+      iconElementRight={toolbars && toolbars.length > 0 ? toolbars : null}
+      title={title}
     />
   );
 };

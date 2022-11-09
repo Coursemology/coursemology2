@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import moment, { formatLongDateTime } from 'lib/moment';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import mirrorCreator from 'mirror-creator';
+import ReactTooltip from 'react-tooltip';
 import {
   Card,
   CardContent,
@@ -18,17 +16,22 @@ import {
   TableRow,
 } from '@mui/material';
 import { red } from '@mui/material/colors';
-import BarChart from 'lib/components/core/BarChart';
-import { fetchResponses } from 'course/survey/actions/responses';
-import surveyTranslations from 'course/survey/translations';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { surveyShape, responseShape } from 'course/survey/propTypes';
 import { useTheme } from '@mui/material/styles';
-import ReactTooltip from 'react-tooltip';
-import RemindButton from './RemindButton';
+import mirrorCreator from 'mirror-creator';
+import PropTypes from 'prop-types';
+
+import { fetchResponses } from 'course/survey/actions/responses';
+import { responseShape, surveyShape } from 'course/survey/propTypes';
+import surveyTranslations from 'course/survey/translations';
+import BarChart from 'lib/components/core/BarChart';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import moment, { formatLongDateTime } from 'lib/moment';
+
 import { workflowStates } from '../../constants';
-import translations from './translations';
 import UnsubmitButton from '../../containers/UnsubmitButton';
+
+import RemindButton from './RemindButton';
+import translations from './translations';
 
 const styles = {
   red: {
@@ -189,9 +192,9 @@ const ResponseIndex = (props) => {
               {response.status === responseStatus.SUBMITTED &&
               response.canUnsubmit ? (
                 <UnsubmitButton
-                  isIcon
-                  responseId={response.id}
                   color={palette.submissionIcon.unsubmit}
+                  isIcon={true}
+                  responseId={response.id}
                 />
               ) : null}
             </TableCell>
@@ -288,7 +291,7 @@ const ResponseIndex = (props) => {
         {renderStats(realResponsesStatuses, phantomResponsesStatuses)}
         {renderTable(realResponsesWithStatuses)}
         {renderPhantomTable(phantomResponsesWithStatuses)}
-        <ReactTooltip id="unsubmit-button" effect="solid">
+        <ReactTooltip effect="solid" id="unsubmit-button">
           <FormattedMessage {...translations.unsubmit} />
         </ReactTooltip>
       </div>

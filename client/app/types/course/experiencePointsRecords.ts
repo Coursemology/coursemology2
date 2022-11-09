@@ -1,4 +1,5 @@
 import { Permissions } from 'types';
+
 import {
   CourseUserBasicListData,
   CourseUserBasicMiniEntity,

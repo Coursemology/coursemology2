@@ -37,8 +37,8 @@ const SwitchableTextField = (props: SwitchableTextFieldProps): JSX.Element => {
   if (!editable)
     return (
       <Typography
-        variant="body1"
         className={`break-all px-4 py-3 ${props.className}`}
+        variant="body1"
         {...textProps}
       >
         {typeof props.value === 'string' || typeof props.value === 'number'
@@ -49,12 +49,12 @@ const SwitchableTextField = (props: SwitchableTextFieldProps): JSX.Element => {
 
   return (
     <TextField
+      autoFocus={true}
+      hiddenLabel={true}
+      onKeyDown={handleKeyDown}
+      size="small"
       value={props.value}
       variant="filled"
-      size="small"
-      hiddenLabel
-      autoFocus
-      onKeyDown={handleKeyDown}
       {...textFieldProps}
       InputProps={{
         ...textFieldProps.InputProps,

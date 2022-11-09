@@ -1,7 +1,9 @@
-import { mount, shallow } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
+import { mount, shallow } from 'enzyme';
+
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
+
 import ResponseShow, { UnconnectedResponseShow } from '../index';
 
 describe('<ResponseShow />', () => {

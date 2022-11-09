@@ -1,9 +1,12 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
+
 import scribingViewLoader from 'course/assessment/submission/loaders/ScribingViewLoader';
-import ScribingToolbar from './ScribingToolbar';
-import ScribingCanvas from './ScribingCanvas';
+
 import { submissionShape } from '../../propTypes';
+
+import ScribingCanvas from './ScribingCanvas';
+import ScribingToolbar from './ScribingToolbar';
 
 const propTypes = {
   answerId: PropTypes.number.isRequired,

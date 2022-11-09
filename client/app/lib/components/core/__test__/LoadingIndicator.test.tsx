@@ -1,4 +1,5 @@
 import { render, RenderResult } from 'utilities/test-utils';
+
 import LoadingIndicator from '../LoadingIndicator';
 
 let documentBody: RenderResult;

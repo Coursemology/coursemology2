@@ -1,28 +1,30 @@
-import { FC, ReactElement, memo } from 'react';
+import { FC, memo, ReactElement } from 'react';
 import {
   defineMessages,
-  injectIntl,
   FormattedMessage,
+  injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
+import { useSelector } from 'react-redux';
 import { Checkbox, MenuItem, TextField, Typography } from '@mui/material';
-import DataTable from 'lib/components/core/layouts/DataTable';
-import Note from 'lib/components/core/Note';
-import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import equal from 'fast-deep-equal';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 import {
   EnrolRequestMiniEntity,
   EnrolRequestRowData,
 } from 'types/course/enrolRequests';
+import { AppState } from 'types/store';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
+import Note from 'lib/components/core/Note';
+import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import {
   COURSE_USER_ROLES,
   TIMELINE_ALGORITHMS,
 } from 'lib/constants/sharedConstants';
+import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import tableTranslations from 'lib/translations/table';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
-import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
-import equal from 'fast-deep-equal';
-import { useSelector } from 'react-redux';
-import { AppState } from 'types/store';
+
 import {
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
@@ -189,11 +191,11 @@ const EnrolRequestsTable: FC<Props> = (props) => {
           return (
             <InlineEditTextField
               key={`name-${enrolRequest.id}`}
-              value={value}
+              alwaysEditable={true}
               className="enrol_request_name"
               updateValue={updateValue}
+              value={value}
               variant="standard"
-              alwaysEditable
             />
           );
         },
@@ -210,9 +212,9 @@ const EnrolRequestsTable: FC<Props> = (props) => {
           return (
             <TextField
               id={`role-${enrolRequest.id}`}
-              select
-              value={value || 'student'}
               onChange={(e): React.ChangeEvent => updateValue(e.target.value)}
+              select={true}
+              value={value || 'student'}
               variant="standard"
             >
               {Object.keys(COURSE_USER_ROLES).map((option) => (
@@ -236,11 +238,11 @@ const EnrolRequestsTable: FC<Props> = (props) => {
           const enrolRequest = enrolRequests[tableMeta.rowIndex];
           return (
             <Checkbox
-              id={`checkbox_${enrolRequest.id}`}
               key={`checkbox_${enrolRequest.id}`}
               checked={value || false}
-              style={styles.checkbox}
+              id={`checkbox_${enrolRequest.id}`}
               onChange={(e): React.ChangeEvent => updateValue(e.target.checked)}
+              style={styles.checkbox}
             />
           );
         },
@@ -262,11 +264,11 @@ const EnrolRequestsTable: FC<Props> = (props) => {
                 return (
                   <TextField
                     id={`timeline-algorithm-${enrolRequest.id}`}
-                    select
-                    value={value || defaultTimelineAlgorithm}
                     onChange={(e): React.ChangeEvent =>
                       updateValue(e.target.value)
                     }
+                    select={true}
+                    value={value || defaultTimelineAlgorithm}
                     variant="standard"
                   >
                     {TIMELINE_ALGORITHMS.map((option) => (
@@ -449,12 +451,12 @@ const EnrolRequestsTable: FC<Props> = (props) => {
 
   return (
     <DataTable
-      title={title}
-      data={enrolRequests}
       columns={columns}
+      data={enrolRequests}
+      includeRowNumber={true}
       options={options}
-      includeRowNumber
-      withMargin
+      title={title}
+      withMargin={true}
     />
   );
 };

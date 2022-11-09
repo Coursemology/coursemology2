@@ -1,6 +1,7 @@
 import { enableMapSet } from 'immer';
-import { applyMiddleware, createStore, compose, combineReducers } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+
 import enrolRequestsReducer from './reducers';
 
 const defaultReducers = {};

@@ -1,6 +1,10 @@
 import { FC, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import { LoadingButton } from '@mui/lab';
 import {
   Autocomplete,
   Box,
@@ -11,13 +15,11 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { toast } from 'react-toastify';
-import { AppDispatch, AppState } from 'types/store';
-import { STAFF_ROLES } from 'lib/constants/sharedConstants';
 import { CourseUserBasicMiniEntity, StaffRole } from 'types/course/courseUsers';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { LoadingButton } from '@mui/lab';
+import { AppDispatch, AppState } from 'types/store';
+
+import { STAFF_ROLES } from 'lib/constants/sharedConstants';
+
 import { upgradeToStaff } from '../../operations';
 import { getStudentOptionMiniEntities } from '../../selectors';
 
@@ -103,33 +105,20 @@ const UpgradeToStaff: FC<Props> = (props) => {
 
   return (
     <Paper
-      sx={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}
       elevation={3}
+      sx={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}
     >
-      <Typography variant="h6" sx={{ marginBottom: '24px' }}>
+      <Typography sx={{ marginBottom: '24px' }} variant="h6">
         {intl.formatMessage(translations.upgradeHeader)}
       </Typography>
-      <Grid container flexDirection="row" alignItems="flex-end">
+      <Grid alignItems="flex-end" container={true} flexDirection="row">
         <Autocomplete
-          multiple
-          disableCloseOnSelect
+          disableCloseOnSelect={true}
+          getOptionLabel={(option): string => option.name}
           id="upgrade-student-name"
-          value={selectedStudents}
+          multiple={true}
           onChange={handleNameChange}
           options={students}
-          getOptionLabel={(option): string => option.name}
-          // eslint-disable-next-line @typescript-eslint/no-shadow
-          renderOption={(props, option, { selected }): JSX.Element => (
-            <Box component="li" {...props} key={option.id}>
-              <Checkbox
-                icon={icon}
-                checkedIcon={checkedIcon}
-                style={{ marginRight: 8 }}
-                checked={selected}
-              />
-              {option.name}
-            </Box>
-          )}
           renderInput={(params): JSX.Element => (
             <TextField
               {...params}
@@ -137,16 +126,28 @@ const UpgradeToStaff: FC<Props> = (props) => {
               variant="standard"
             />
           )}
+          renderOption={(optionProps, option, { selected }): JSX.Element => (
+            <Box component="li" {...optionProps} key={option.id}>
+              <Checkbox
+                checked={selected}
+                checkedIcon={checkedIcon}
+                icon={icon}
+                style={{ marginRight: 8 }}
+              />
+              {option.name}
+            </Box>
+          )}
           sx={{ minWidth: '300px', maxWidth: '450px', marginRight: '12px' }}
+          value={selectedStudents}
         />
         <TextField
-          label="Role"
           id="upgrade-student-role"
-          select
+          label="Role"
+          onChange={handleRoleChange}
+          select={true}
+          sx={{ minWidth: '300px', marginRight: '12px' }}
           value={role}
           variant="standard"
-          onChange={handleRoleChange}
-          sx={{ minWidth: '300px', marginRight: '12px' }}
         >
           {/* eslint-disable-next-line @typescript-eslint/no-shadow */}
           {Object.keys(STAFF_ROLES).map((role) => (
@@ -158,9 +159,9 @@ const UpgradeToStaff: FC<Props> = (props) => {
         <LoadingButton
           disabled={selectedStudents.length === 0}
           loading={isLoading}
-          variant="contained"
           onClick={onSubmit}
           style={{ marginTop: '4px' }}
+          variant="contained"
         >
           {intl.formatMessage(translations.upgradeButton)}
         </LoadingButton>

@@ -1,7 +1,7 @@
 import {
-  setNotification,
   resetDeleteConfirmation,
+  setNotification,
   showDeleteConfirmation,
 } from 'lib/actions';
 
-export { setNotification, resetDeleteConfirmation, showDeleteConfirmation };
+export { resetDeleteConfirmation, setNotification, showDeleteConfirmation };

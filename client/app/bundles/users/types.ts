@@ -1,7 +1,7 @@
 import { EntityStore } from 'types/store';
 import {
-  InstanceBasicMiniEntity,
   InstanceBasicListData,
+  InstanceBasicMiniEntity,
 } from 'types/system/instances';
 import {
   UserBasicListData,

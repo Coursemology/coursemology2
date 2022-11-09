@@ -1,12 +1,13 @@
 import { render } from 'react-dom';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import ScrollToTop from 'lib/components/navigation/ScrollToTop';
-import { store } from './store';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import ForumsIndex from './pages/ForumsIndex';
+import ScrollToTop from 'lib/components/navigation/ScrollToTop';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import ForumShow from './pages/ForumShow';
+import ForumsIndex from './pages/ForumsIndex';
 import ForumTopicShow from './pages/ForumTopicShow';
+import { store } from './store';
 
 $(() => {
   const mountNode = document.getElementById('course-forum-component');
@@ -17,14 +18,14 @@ $(() => {
         <BrowserRouter>
           <ScrollToTop />
           <Routes>
-            <Route path="courses/:courseId/forums" element={<ForumsIndex />} />
+            <Route element={<ForumsIndex />} path="courses/:courseId/forums" />
             <Route
-              path="courses/:courseId/forums/:forumId"
               element={<ForumShow />}
+              path="courses/:courseId/forums/:forumId"
             />
             <Route
-              path="courses/:courseId/forums/:forumId/topics/:topicId"
               element={<ForumTopicShow />}
+              path="courses/:courseId/forums/:forumId/topics/:topicId"
             />
           </Routes>
         </BrowserRouter>

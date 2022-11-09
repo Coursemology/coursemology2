@@ -1,7 +1,8 @@
 import { memo } from 'react';
-import PropTypes from 'prop-types';
 import { Checkbox } from '@mui/material';
 import { red } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import OptionsListItem from 'course/survey/components/OptionsListItem';
 import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
 
@@ -38,9 +39,8 @@ const MultipleResponseOptionsField = (props) => {
         {options.map((option) => {
           const widget = (
             <Checkbox
-              style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
-              disabled={disabled}
               checked={value.indexOf(option.id) !== -1}
+              disabled={disabled}
               onChange={(event, checked) => {
                 const newValue = [...value];
                 if (checked) {
@@ -50,6 +50,7 @@ const MultipleResponseOptionsField = (props) => {
                 }
                 return onChange(newValue);
               }}
+              style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
             />
           );
           const { option: optionText, image_url: imageUrl } = option;

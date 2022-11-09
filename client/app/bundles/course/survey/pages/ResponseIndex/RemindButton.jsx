@@ -1,10 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Button } from '@mui/material';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import PropTypes from 'prop-types';
+
 import { sendReminderEmail } from 'course/survey/actions/surveys';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 const translations = defineMessages({
   remind: {
@@ -60,13 +61,12 @@ class RemindButton extends Component {
     return (
       <>
         <Button
-          variant="outlined"
           onClick={() => this.setState({ open: true })}
+          variant="outlined"
         >
           <FormattedMessage {...translations.remind} />
         </Button>
         <ConfirmationDialog
-          open={this.state.open}
           message={
             <>
               <FormattedMessage {...translations.explanation} />
@@ -81,6 +81,7 @@ class RemindButton extends Component {
           }
           onCancel={() => this.setState({ open: false })}
           onConfirm={this.handleConfirm}
+          open={this.state.open}
         />
       </>
     );

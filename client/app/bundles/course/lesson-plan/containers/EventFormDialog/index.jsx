@@ -1,9 +1,11 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import FormDialogue from 'lib/components/form/FormDialogue';
+
 import * as actionCreators from 'course/lesson-plan/actions';
+import FormDialogue from 'lib/components/form/FormDialogue';
+
 import EventForm from './EventForm';
 
 const EventFormDialog = ({
@@ -34,18 +36,18 @@ const EventFormDialog = ({
 
   return (
     <FormDialogue
-      title={formTitle}
-      open={visible}
-      skipConfirmation={!isDirty}
       disabled={disabled}
       form="event-form"
       hideForm={hideEventForm}
+      open={visible}
+      skipConfirmation={!isDirty}
+      title={formTitle}
     >
       <EventForm
         {...{ initialValues, onSubmit, disabled }}
-        eventTypes={[...new Set(eventTypes)]}
-        eventLocations={[...new Set(eventLocations)]}
         emitsVia={(eventForm) => setIsDirty(eventForm.isDirty)}
+        eventLocations={[...new Set(eventLocations)]}
+        eventTypes={[...new Set(eventTypes)]}
       />
     </FormDialogue>
   );

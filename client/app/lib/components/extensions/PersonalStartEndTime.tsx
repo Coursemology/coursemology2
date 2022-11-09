@@ -1,8 +1,9 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { AccessTime, Lock } from '@mui/icons-material';
-import { getDayMonthTime } from 'lib/helpers/timehelper';
+
 import CustomTooltip from 'lib/components/core/CustomTooltip';
+import { getDayMonthTime } from 'lib/helpers/timehelper';
 
 interface Props extends WrappedComponentProps {
   timeInfo: {
@@ -49,8 +50,8 @@ const PersonalStartEndTime: FC<Props> = (props) => {
       <div style={{ marginLeft: 5, marginBottom: -6 }}>
         {timeInfo.isFixed && (
           <CustomTooltip
+            arrow={true}
             title={intl.formatMessage(translations.lockTooltip)}
-            arrow
           >
             <Lock fontSize="small" />
           </CustomTooltip>
@@ -62,6 +63,7 @@ const PersonalStartEndTime: FC<Props> = (props) => {
         timeInfo.referenceTime && (
           <div style={{ marginLeft: 0, marginBottom: -6 }}>
             <CustomTooltip
+              arrow={true}
               title={
                 timeInfo.referenceTime
                   ? `${intl.formatMessage(
@@ -69,7 +71,6 @@ const PersonalStartEndTime: FC<Props> = (props) => {
                     )} ${getDayMonthTime(timeInfo.referenceTime)}`
                   : intl.formatMessage(translations.altTimeTooltip)
               }
-              arrow
             >
               <AccessTime fontSize="small" />
             </CustomTooltip>

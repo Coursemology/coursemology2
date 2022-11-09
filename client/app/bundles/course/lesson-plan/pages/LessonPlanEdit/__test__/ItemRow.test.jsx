@@ -1,7 +1,9 @@
-import { mount } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
+import { mount } from 'enzyme';
+
 import CourseAPI from 'api/course';
 import storeCreator from 'course/lesson-plan/store';
+
 import ItemRow from '../ItemRow';
 
 const client = CourseAPI.lessonPlan.getClient();
@@ -59,13 +61,13 @@ describe('<ItemRow />', () => {
       <table>
         <tbody>
           <ItemRow
-            id={itemData.id}
-            type={itemData.itemTypeKey}
-            title={itemData.title}
-            startAt={itemData.start_at}
             bonusEndAt={itemData.bonus_end_at}
             endAt={itemData.end_at}
+            id={itemData.id}
             published={itemData.published}
+            startAt={itemData.start_at}
+            title={itemData.title}
+            type={itemData.itemTypeKey}
           />
         </tbody>
       </table>,
@@ -99,13 +101,13 @@ describe('<ItemRow />', () => {
       <table>
         <tbody>
           <ItemRow
-            id={itemData.id}
-            type={itemData.itemTypeKey}
-            title={itemData.title}
-            startAt={itemData.start_at}
             bonusEndAt={itemData.bonus_end_at}
             endAt={itemData.end_at}
+            id={itemData.id}
             published={itemData.published}
+            startAt={itemData.start_at}
+            title={itemData.title}
+            type={itemData.itemTypeKey}
           />
         </tbody>
       </table>,

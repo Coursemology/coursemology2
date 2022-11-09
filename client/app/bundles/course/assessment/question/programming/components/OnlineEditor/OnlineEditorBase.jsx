@@ -1,8 +1,8 @@
-import translations from './OnlineEditorView.intl';
+import EditorCard from './EditorCard';
 import ExistingPackageFile from './ExistingPackageFile';
 import NewPackageFile from './NewPackageFile';
+import translations from './OnlineEditorView.intl';
 import TestCase from './TestCase';
-import EditorCard from './EditorCard';
 
 export function validation(data, pathOfKeysToData, intl) {
   const errors = [];
@@ -61,4 +61,4 @@ export function validation(data, pathOfKeysToData, intl) {
   return errors;
 }
 
-export { ExistingPackageFile, NewPackageFile, TestCase, EditorCard };
+export { EditorCard, ExistingPackageFile, NewPackageFile, TestCase };

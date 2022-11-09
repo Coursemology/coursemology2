@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/core/NotificationBar';

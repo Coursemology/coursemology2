@@ -1,12 +1,13 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Element } from 'react-scroll';
-import moment from 'lib/moment';
-import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
+import PropTypes from 'prop-types';
+
 import { updateMilestone } from 'course/lesson-plan/actions';
 import { fields } from 'course/lesson-plan/constants';
+import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
+import moment from 'lib/moment';
 
 const translations = defineMessages({
   updateSuccess: {
@@ -58,8 +59,8 @@ class MilestoneRow extends Component {
           <td>
             <DateTimePicker
               name="start_at"
-              value={startAt}
               onChange={this.updateMilestoneStartAt}
+              value={startAt}
             />
           </td>
         ) : null}

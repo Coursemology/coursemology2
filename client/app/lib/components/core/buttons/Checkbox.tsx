@@ -20,26 +20,26 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
     return (
       <div>
         <FormControlLabel
+          className="mb-0"
           control={
             <MuiCheckbox
               ref={ref}
               {...checkboxProps}
-              color="primary"
               className="py-0 px-4"
+              color="primary"
             />
           }
           disabled={checkboxProps.disabled}
           label={label}
-          className="mb-0"
         />
 
         <div className="ml-[34px] space-y-2">
           {description && (
             <Typography
-              variant="body2"
               color={
                 checkboxProps.disabled ? 'text.disabled' : 'text.secondary'
               }
+              variant="body2"
             >
               {description}
             </Typography>

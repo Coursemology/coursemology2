@@ -1,16 +1,18 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Divider, Paper } from '@mui/material';
-import styles from './Discussion.scss';
-import NewPostContainer from './DiscussionElements/NewPostContainer';
-import Topic from './DiscussionElements/Topic';
-import Controls from './DiscussionElements/Controls';
+import PropTypes from 'prop-types';
+
 import { unsetScrollTopic } from '../actions/discussion';
 import {
   inverseCreatedAtOrderedTopicsSelector,
   orderedTopicIdsSelector,
 } from '../selectors/discussion';
+
+import Controls from './DiscussionElements/Controls';
+import NewPostContainer from './DiscussionElements/NewPostContainer';
+import Topic from './DiscussionElements/Topic';
+import styles from './Discussion.scss';
 
 const propTypes = {
   topicIds: PropTypes.arrayOf(PropTypes.string),

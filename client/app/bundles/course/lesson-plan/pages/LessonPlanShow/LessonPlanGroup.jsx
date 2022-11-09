@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Element } from 'react-scroll';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Card,
   CardContent,
@@ -12,8 +12,10 @@ import {
   IconButton,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import PropTypes from 'prop-types';
+
 import { formatLongDate } from 'lib/moment';
+
 import LessonPlanItem from './LessonPlanItem';
 import MilestoneAdminTools from './MilestoneAdminTools';
 
@@ -137,7 +139,7 @@ class LessonPlanGroup extends Component {
           {milestone
             ? this.renderMilestoneCardTitle(milestone)
             : this.renderDefaultMilestone()}
-          <Collapse in={this.state.expanded} unmountOnExit>
+          <Collapse in={this.state.expanded} unmountOnExit={true}>
             <CardContent style={styles.items}>
               {items.length > 0
                 ? items.map((item) => (

@@ -1,9 +1,11 @@
-import CourseAPI from 'api/course';
 import {
   ApproveEnrolRequestPatchData,
   EnrolRequestMiniEntity,
 } from 'types/course/enrolRequests';
 import { Operation } from 'types/store';
+
+import CourseAPI from 'api/course';
+
 import * as actions from './actions';
 
 const formatAttributes = (

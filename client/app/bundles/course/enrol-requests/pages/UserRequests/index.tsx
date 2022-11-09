@@ -1,21 +1,23 @@
-import { Box } from '@mui/material';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { Box } from '@mui/material';
 import { AppDispatch, AppState } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
+import PageHeader from 'lib/components/navigation/PageHeader';
+
 import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
+import PendingEnrolRequestsButtons from '../../components/buttons/PendingEnrolRequestsButtons';
+import EnrolRequestsTable from '../../components/tables/EnrolRequestsTable';
 import { fetchEnrolRequests } from '../../operations';
 import {
   getAllEnrolRequestEntities,
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
-import EnrolRequestsTable from '../../components/tables/EnrolRequestsTable';
-import PendingEnrolRequestsButtons from '../../components/buttons/PendingEnrolRequestsButtons';
 
 type Props = WrappedComponentProps;
 
@@ -108,26 +110,26 @@ const UserRequests: FC<Props> = (props) => {
           {renderEmptyState()}
           {pendingEnrolRequests.length > 0 && (
             <EnrolRequestsTable
-              title={intl.formatMessage(translations.pending)}
               enrolRequests={pendingEnrolRequests}
-              pendingEnrolRequests
+              pendingEnrolRequests={true}
               renderRowActionComponent={(enrolRequest): JSX.Element => (
                 <PendingEnrolRequestsButtons enrolRequest={enrolRequest} />
               )}
+              title={intl.formatMessage(translations.pending)}
             />
           )}
           {approvedEnrolRequests.length > 0 && (
             <EnrolRequestsTable
-              title={intl.formatMessage(translations.approved)}
+              approvedEnrolRequests={true}
               enrolRequests={approvedEnrolRequests}
-              approvedEnrolRequests
+              title={intl.formatMessage(translations.approved)}
             />
           )}
           {rejectedEnrolRequests.length > 0 && (
             <EnrolRequestsTable
-              title={intl.formatMessage(translations.rejected)}
               enrolRequests={rejectedEnrolRequests}
-              rejectedEnrolRequests
+              rejectedEnrolRequests={true}
+              title={intl.formatMessage(translations.rejected)}
             />
           )}
         </>

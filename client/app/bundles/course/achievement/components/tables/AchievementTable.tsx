@@ -3,15 +3,17 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Icon, Switch } from '@mui/material';
 import equal from 'fast-deep-equal';
-import DataTable from 'lib/components/core/layouts/DataTable';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 import {
   AchievementMiniEntity,
   AchievementPermissions,
 } from 'types/course/achievements';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { getAchievementURL } from 'lib/helpers/url-builders';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { getCourseId } from 'lib/helpers/url-helpers';
+
 import AchievementManagementButtons from '../buttons/AchievementManagementButtons';
 
 interface Props {
@@ -110,9 +112,9 @@ const AchievementTable: FC<Props> = (props) => {
           return (
             <img
               key={achievements[dataIndex].id}
-              style={styles.badge}
-              src={badge.url}
               alt={badge.name}
+              src={badge.url}
+              style={styles.badge}
             />
           );
         },
@@ -152,8 +154,8 @@ const AchievementTable: FC<Props> = (props) => {
           return (
             <p
               key={achievements[dataIndex].id}
-              style={{ whiteSpace: 'normal' }}
               dangerouslySetInnerHTML={{ __html: achievement.description }}
+              style={{ whiteSpace: 'normal' }}
             />
           );
         },
@@ -227,10 +229,10 @@ const AchievementTable: FC<Props> = (props) => {
 
   return (
     <DataTable
-      data={achievements}
       columns={columns}
+      data={achievements}
       options={options}
-      withMargin
+      withMargin={true}
     />
   );
 };

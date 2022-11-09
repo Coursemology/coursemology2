@@ -1,23 +1,25 @@
 import { useState } from 'react';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import ReactTooltip from 'react-tooltip';
 import { Card, CardContent, CircularProgress, Icon } from '@mui/material';
 import { green, orange, red } from '@mui/material/colors';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import {
   removeParentNode,
   resetSelection,
   toggleSatisfiabilityType,
 } from 'course/learning-map/actions';
-import ReactTooltip from 'react-tooltip';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
-import { FormattedMessage, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
+
 import { elementTypes, satisfiabilityTypes } from '../../constants';
-import translations from '../../translations.intl';
 import {
   nodeShape,
   responseShape,
   selectedElementShape,
 } from '../../propTypes';
+import translations from '../../translations.intl';
 
 const styles = {
   content: {
@@ -139,10 +141,10 @@ const Dashboard = (props) => {
       <>
         <Icon
           className="fa fa-trash"
-          data-tip
           data-for={tooltipId}
-          style={{ ...styles.icon, color: 'red' }}
+          data-tip={true}
           onClick={() => setDeleteArrowConfirmation(true)}
+          style={{ ...styles.icon, color: 'red' }}
         />
         <ReactTooltip id={tooltipId}>
           <FormattedMessage {...translations.deleteCondition} />
@@ -160,10 +162,10 @@ const Dashboard = (props) => {
       <>
         <Icon
           className="fa fa-toggle-on"
-          data-tip
           data-for={tooltipId}
-          style={styles.icon}
+          data-tip={true}
           onClick={() => toggleNodeSatisfiabilityType()}
+          style={styles.icon}
         />
         <ReactTooltip id={tooltipId}>
           <FormattedMessage
@@ -206,8 +208,8 @@ const Dashboard = (props) => {
           {(!isEmptyResponse || selectedElement.type) && (
             <Icon
               className="fa fa-window-close"
-              style={{ ...styles.icon }}
               onClick={() => reset()}
+              style={{ ...styles.icon }}
             />
           )}
           {isLoading && (
@@ -216,11 +218,11 @@ const Dashboard = (props) => {
         </CardContent>
       </Card>
       <ConfirmationDialog
-        confirmDelete
-        open={deleteArrowConfirmation}
+        confirmDelete={true}
         message={intl.formatMessage(translations.conditionDeletionConfirmation)}
         onCancel={() => setDeleteArrowConfirmation(false)}
         onConfirm={() => deleteArrow()}
+        open={deleteArrowConfirmation}
       />
     </>
   );

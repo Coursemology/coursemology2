@@ -12,10 +12,10 @@ const LinearProgressWithLabel: FC<Props> = (props: Props) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <Box sx={{ width: '100%', mr: 1 }}>
-        <LinearProgress variant="determinate" value={props.value ?? 0} />
+        <LinearProgress value={props.value ?? 0} variant="determinate" />
       </Box>
       <Box sx={{ minWidth: 35 }}>
-        <Typography variant="body2" color="text.secondary">{`${Math.round(
+        <Typography color="text.secondary" variant="body2">{`${Math.round(
           props.value ?? 0,
         )}%`}</Typography>
       </Box>

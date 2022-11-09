@@ -1,8 +1,9 @@
 import {
-  getCourseId,
   getAssessmentId,
+  getCourseId,
   getSubmissionId,
 } from 'lib/helpers/url-helpers';
+
 import BaseAssessmentAPI from '../../Base';
 
 export default class ForumPostResponseAPI extends BaseAssessmentAPI {

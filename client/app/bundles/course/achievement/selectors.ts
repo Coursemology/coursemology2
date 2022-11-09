@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { AchievementPermissions } from 'types/course/achievements';
 import { AppState, SelectionKey } from 'types/store';
 import {
-  selectMiniEntity,
-  selectMiniEntities,
   selectEntity,
+  selectMiniEntities,
+  selectMiniEntity,
 } from 'utilities/store';
-import { AchievementPermissions } from 'types/course/achievements';
 
 function getLocalState(state: AppState) {
   return state.achievements;

@@ -1,10 +1,11 @@
 import { AxiosResponse } from 'axios';
-import BaseCourseAPI from 'api/course/Base';
 import {
   SubmissionListData,
   SubmissionPermissions,
   SubmissionsMetaData,
 } from 'types/course/assessment/submissions';
+
+import BaseCourseAPI from 'api/course/Base';
 
 export default class SubmissionsAPI extends BaseCourseAPI {
   _getUrlPrefix(): string {

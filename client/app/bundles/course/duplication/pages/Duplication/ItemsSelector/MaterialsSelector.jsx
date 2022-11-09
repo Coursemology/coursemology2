@@ -1,15 +1,16 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { ListSubheader } from '@mui/material';
-import { defaultComponentTitles } from 'course/translations.intl';
-import { duplicableItemTypes } from 'course/duplication/constants';
+import PropTypes from 'prop-types';
+
 import { setItemSelectedBoolean } from 'course/duplication/actions';
-import { folderShape } from 'course/duplication/propTypes';
-import TypeBadge from 'course/duplication/components/TypeBadge';
-import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
+import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
+import TypeBadge from 'course/duplication/components/TypeBadge';
+import { duplicableItemTypes } from 'course/duplication/constants';
+import { folderShape } from 'course/duplication/propTypes';
+import { defaultComponentTitles } from 'course/translations.intl';
 
 const { FOLDER, MATERIAL } = duplicableItemTypes;
 
@@ -102,7 +103,7 @@ class MaterialsSelector extends Component {
         {folders.length > 0 ? (
           folders.map((rootFolder) => this.renderFolder(rootFolder, 0))
         ) : (
-          <ListSubheader disableSticky>
+          <ListSubheader disableSticky={true}>
             <FormattedMessage {...translations.noItems} />
           </ListSubheader>
         )}

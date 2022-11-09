@@ -1,12 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
-import { grey, red } from '@mui/material/colors';
 import { InputLabel } from '@mui/material';
+import { grey, red } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
+
+import BadgePreview from './BadgePreview';
 import FilePreview from './FilePreview';
 import ImagePreview from './ImagePreview';
-import BadgePreview from './BadgePreview';
 
 const styles = {
   dropzone: {
@@ -93,9 +95,9 @@ class FormSingleFileInput extends Component {
 
               <PreviewComponent
                 file={this.state.file}
+                handleCancel={this.onCancel}
                 originalName={name}
                 originalUrl={url}
-                handleCancel={this.onCancel}
               />
 
               {error && (
@@ -126,4 +128,4 @@ FormSingleFileInput.defaultProps = {
 
 export default FormSingleFileInput;
 
-export { FilePreview, ImagePreview, BadgePreview };
+export { BadgePreview, FilePreview, ImagePreview };

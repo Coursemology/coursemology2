@@ -1,9 +1,12 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { MenuItem, Select } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { videoDefaults } from 'lib/constants/videoConstants';
-import styles from '../VideoPlayer.scss';
+
 import { changePlaybackRate } from '../../actions/video';
+
+import styles from '../VideoPlayer.scss';
 
 const propTypes = {
   rate: PropTypes.number.isRequired,

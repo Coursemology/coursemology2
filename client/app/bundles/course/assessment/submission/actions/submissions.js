@@ -1,10 +1,10 @@
-/* eslint-disable import/no-unresolved, import/extensions, import/no-extraneous-dependencies */
 import CourseAPI from 'api/course';
 import pollJob from 'lib/helpers/job-helpers';
-/* eslint-enable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
-import { setNotification } from './index';
-import translations from '../translations';
+
 import actionTypes from '../constants';
+import translations from '../translations';
+
+import { setNotification } from './index';
 
 const DOWNLOAD_JOB_POLL_INTERVAL = 2000;
 const PUBLISH_JOB_POLL_INTERVAL = 1000;

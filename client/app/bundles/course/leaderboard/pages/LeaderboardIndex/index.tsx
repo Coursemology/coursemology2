@@ -1,22 +1,24 @@
 import { FC, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, AppState } from 'types/store';
 import {
   defineMessages,
-  injectIntl,
   FormattedMessage,
+  injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { Group, Person, AutoFixHigh, EmojiEvents } from '@mui/icons-material';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
+import { AutoFixHigh, EmojiEvents, Group, Person } from '@mui/icons-material';
 import { Grid, Tab, Tabs } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import palette from 'theme/palette';
-import fetchLeaderboard from '../../operations';
+import { AppDispatch, AppState } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+
 import LeaderboardTable from '../../components/tables/LeaderboardTable';
+import fetchLeaderboard from '../../operations';
 import {
   getGroupLeaderboardAchievements,
   getGroupLeaderboardPoints,
@@ -107,31 +109,31 @@ const LeaderboardIndex: FC<Props> = (props) => {
               style={{
                 backgroundColor: palette.background.default,
               }}
+              sx={{ marginBottom: 2 }}
               TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
               value={tabValue}
               variant="fullWidth"
-              sx={{ marginBottom: 2 }}
             >
               <Tab
-                id="leaderboard-tab"
-                style={{ color: palette.submissionIcon.person }}
                 icon={<Person />}
+                id="leaderboard-tab"
                 label={
                   settings.leaderboardTitle ?? (
                     <FormattedMessage {...translations.leaderboard} />
                   )
                 }
+                style={{ color: palette.submissionIcon.person }}
                 value="leaderboard-tab"
               />
               <Tab
-                id="group-leaderboard-tab"
-                style={{ color: palette.submissionIcon.person }}
                 icon={<Group />}
+                id="group-leaderboard-tab"
                 label={
                   settings.groupleaderboardTitle ?? (
                     <FormattedMessage {...translations.groupLeaderboard} />
                   )
                 }
+                style={{ color: palette.submissionIcon.person }}
                 value="group-leaderboard-tab"
               />
             </Tabs>
@@ -144,44 +146,44 @@ const LeaderboardIndex: FC<Props> = (props) => {
               style={{
                 backgroundColor: palette.background.default,
               }}
+              sx={{ marginBottom: 2 }}
               TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
               value={innerTabValue}
               variant="fullWidth"
-              sx={{ marginBottom: 2 }}
             >
               <Tab
-                id="points-tab"
-                style={{ color: palette.submissionIcon.person }}
                 icon={<AutoFixHigh />}
+                id="points-tab"
                 label={
                   settings.leaderboardTitle ?? (
                     <FormattedMessage {...translations.experience} />
                   )
                 }
+                style={{ color: palette.submissionIcon.person }}
                 value="points-tab"
               />
               <Tab
-                id="achievement-tab"
-                style={{ color: palette.submissionIcon.person }}
                 icon={<EmojiEvents />}
+                id="achievement-tab"
                 label={
                   settings.groupleaderboardTitle ?? (
                     <FormattedMessage {...translations.achievement} />
                   )
                 }
+                style={{ color: palette.submissionIcon.person }}
                 value="achievement-tab"
               />
             </Tabs>
           )}
           <Grid
-            container
-            direction="row"
             columnSpacing={2}
-            rowSpacing={2}
+            container={true}
+            direction="row"
             display={tabValue === 'leaderboard-tab' ? 'flex' : 'none'}
+            rowSpacing={2}
           >
             {(!tabView || innerTabValue === 'points-tab') && (
-              <Grid item xs id="leaderboard-level">
+              <Grid id="leaderboard-level" item={true} xs={true}>
                 <LeaderboardTable
                   data={leaderboardPoints}
                   id={LeaderboardTableType.LeaderboardPoints}
@@ -190,7 +192,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
             )}
             {!isAchievementHidden &&
               (!tabView || innerTabValue === 'achievement-tab') && (
-                <Grid item xs id="leaderboard-achievement">
+                <Grid id="leaderboard-achievement" item={true} xs={true}>
                   <LeaderboardTable
                     data={leaderboardAchievements}
                     id={LeaderboardTableType.LeaderboardAchievement}
@@ -199,14 +201,14 @@ const LeaderboardIndex: FC<Props> = (props) => {
               )}
           </Grid>
           <Grid
-            container
-            direction="row"
             columnSpacing={2}
-            rowSpacing={2}
+            container={true}
+            direction="row"
             display={tabValue !== 'leaderboard-tab' ? 'flex' : 'none'}
+            rowSpacing={2}
           >
             {(!tabView || innerTabValue === 'points-tab') && (
-              <Grid item xs id="group-leaderboard-level">
+              <Grid id="group-leaderboard-level" item={true} xs={true}>
                 <LeaderboardTable
                   data={groupLeaderboardPoints}
                   id={LeaderboardTableType.GroupLeaderboardPoints}
@@ -215,7 +217,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
             )}
             {!isAchievementHidden &&
               (!tabView || innerTabValue === 'achievement-tab') && (
-                <Grid item xs id="group-leaderboard-achievement">
+                <Grid id="group-leaderboard-achievement" item={true} xs={true}>
                   <LeaderboardTable
                     data={groupLeaderboardAchievements}
                     id={LeaderboardTableType.GroupLeaderboardAchievement}

@@ -1,18 +1,20 @@
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { defineMessages } from 'react-intl';
-import { ListSubheader } from '@mui/material';
 import { DragDropContext } from 'react-beautiful-dnd';
+import { defineMessages } from 'react-intl';
+import { connect } from 'react-redux';
+import { ListSubheader } from '@mui/material';
+import PropTypes from 'prop-types';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import useTranslation from 'lib/hooks/useTranslation';
-import surveyTranslations from '../../translations';
-import { surveyShape } from '../../propTypes';
+
+import { changeSection, finalizeOrder, reorder } from '../../actions/questions';
 import { fetchSurvey, loadSurvey } from '../../actions/surveys';
-import { reorder, changeSection, finalizeOrder } from '../../actions/questions';
-import SurveyDetails from './SurveyDetails';
+import { surveyShape } from '../../propTypes';
+import surveyTranslations from '../../translations';
+
 import Section from './Section';
+import SurveyDetails from './SurveyDetails';
 
 const translations = defineMessages({
   empty: {
@@ -84,14 +86,16 @@ const SurveyShow = ({
 
     if (!sections || sections.length < 1)
       return (
-        <ListSubheader disableSticky>{t(translations.empty)}</ListSubheader>
+        <ListSubheader disableSticky={true}>
+          {t(translations.empty)}
+        </ListSubheader>
       );
 
     const lastIndex = sections.length - 1;
 
     return (
       <>
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           {t(surveyTranslations.questions)}
         </ListSubheader>
 

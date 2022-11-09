@@ -1,8 +1,9 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
-import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import formTranslations from 'lib/translations/form';
 
 const buttonStyle = {
@@ -57,25 +58,25 @@ class ConfirmationDialog extends Component {
 
     const actions = [
       <Button
-        color="secondary"
-        className="cancel-btn"
-        disabled={disableCancelButton}
         key="confirmation-dialog-cancel-button"
-        onClick={onCancel}
         ref={(button) => {
           // eslint-disable-next-line react/no-unused-class-component-methods
           this.cancelButton = button;
         }}
+        className="cancel-btn"
+        color="secondary"
+        disabled={disableCancelButton}
+        onClick={onCancel}
         style={buttonStyle}
       >
         {cancelButtonText || intl.formatMessage(formTranslations.cancel)}
       </Button>,
       <LoadingButton
-        color="primary"
+        key="confirmation-dialog-confirm-button"
         className="confirm-btn"
+        color="primary"
         disabled={disableConfirmButton}
         loading={loadingConfirmButton}
-        key="confirmation-dialog-confirm-button"
         onClick={onConfirm}
         {...(form ? { form, type: 'submit' } : {})}
         ref={(button) => {
@@ -91,15 +92,15 @@ class ConfirmationDialog extends Component {
     if (onConfirmSecondary) {
       const confirmButtonSecondary = [
         <Button
-          color="primary"
-          className="confirm-btn"
-          disabled={disableConfirmButton}
           key="confirmation-dialog-confirm-secondary-button"
-          onClick={onConfirmSecondary}
           ref={(button) => {
             // eslint-disable-next-line react/no-unused-class-component-methods
             this.confirmButtonSecondary = button;
           }}
+          className="confirm-btn"
+          color="primary"
+          disabled={disableConfirmButton}
+          onClick={onConfirmSecondary}
           style={buttonStyle}
         >
           {confirmationSecondaryButtonText}
@@ -116,17 +117,17 @@ class ConfirmationDialog extends Component {
 
     return (
       <Dialog
-        fullWidth
+        data-testid="ConfirmationDialog"
         disableEscapeKeyDown={disableCancelButton || disableConfirmButton}
+        fullWidth={true}
+        maxWidth="md"
         onClose={
           disableCancelButton || disableConfirmButton
             ? handleDialogClose
             : onCancel
         }
         open={open}
-        maxWidth="md"
         style={{ zIndex: 9999 }}
-        data-testid="ConfirmationDialog"
       >
         <DialogContent>{confirmationMessage}</DialogContent>
         <DialogActions>{actions}</DialogActions>

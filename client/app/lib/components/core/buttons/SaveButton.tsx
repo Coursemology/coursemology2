@@ -1,6 +1,6 @@
 import { SyntheticEvent } from 'react';
-import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import Save from '@mui/icons-material/Save';
+import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 
 interface Props extends IconButtonProps {
   onClick: (e: SyntheticEvent) => void;
@@ -17,9 +17,9 @@ const SaveButton = ({
   <Tooltip title={tooltip}>
     <span>
       <IconButton
-        onClick={onClick}
         color="inherit"
         disabled={disabled}
+        onClick={onClick}
         {...props}
       >
         <Save />

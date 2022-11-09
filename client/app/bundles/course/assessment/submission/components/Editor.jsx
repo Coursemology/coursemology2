@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
+import PropTypes from 'prop-types';
+
 import AceEditorField from 'lib/components/form/fields/AceEditorField';
 
 const Editor = (props) => {
@@ -8,21 +9,21 @@ const Editor = (props) => {
 
   return (
     <Controller
-      name={name}
       control={control}
+      name={name}
       render={({ field }) => (
         <AceEditorField
+          editorProps={{ $blockScrolling: true }}
           field={field}
           filename={filename}
+          maxLines={25}
+          minLines={25}
           mode={language}
+          readOnly={readOnly}
+          setOptions={{ useSoftTabs: true }}
+          style={{ marginBottom: 10 }}
           theme="github"
           width="100%"
-          minLines={25}
-          maxLines={25}
-          editorProps={{ $blockScrolling: true }}
-          setOptions={{ useSoftTabs: true }}
-          readOnly={readOnly}
-          style={{ marginBottom: 10 }}
         />
       )}
     />

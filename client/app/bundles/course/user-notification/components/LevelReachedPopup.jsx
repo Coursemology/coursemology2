@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
+import Star from '@mui/icons-material/Star';
 import { Avatar, Button } from '@mui/material';
 import { deepOrange, yellow } from '@mui/material/colors';
-import Star from '@mui/icons-material/Star';
-import { getCourseId } from 'lib/helpers/url-helpers';
+import PropTypes from 'prop-types';
+
 import Popup from 'course/user-notification/components/Popup';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
 const translations = defineMessages({
   reached: {
@@ -42,8 +43,8 @@ const styles = {
 const LevelReachedPopup = ({ notification, onDismiss, intl }) => {
   const leaderboardButton = notification.leaderboardEnabled ? (
     <Button
-      color="primary"
       key="leaderboard-button"
+      color="primary"
       onClick={() => {
         onDismiss();
         window.location.href = `/courses/${getCourseId()}/leaderboard`;
@@ -55,11 +56,11 @@ const LevelReachedPopup = ({ notification, onDismiss, intl }) => {
 
   return (
     <Popup
+      actionButtons={[leaderboardButton]}
+      onDismiss={onDismiss}
       title={intl.formatMessage(translations.reached, {
         levelNumber: notification.levelNumber,
       })}
-      actionButtons={[leaderboardButton]}
-      onDismiss={onDismiss}
     >
       <Avatar style={styles.avatar}>
         <Star style={styles.starSvg} />

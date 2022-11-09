@@ -1,13 +1,15 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/navigation/PageHeader';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppState, AppDispatch } from 'types/store';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { AppDispatch, AppState } from 'types/store';
+
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
-import { getAllAnnouncementMiniEntities } from '../../selectors';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+
 import { indexAnnouncements } from '../../operations';
+import { getAllAnnouncementMiniEntities } from '../../selectors';
 
 type Props = WrappedComponentProps;
 
@@ -40,10 +42,10 @@ const GlobalAnnouncementsIndex: FC<Props> = (props) => {
 
   const renderBody: JSX.Element = (
     <AnnouncementsDisplay
+      announcementPermissions={{ canCreate: false }}
       announcements={announcements.sort(
         (a, b) => Date.parse(b.startTime) - Date.parse(a.startTime),
       )}
-      announcementPermissions={{ canCreate: false }}
       canSticky={false}
     />
   );

@@ -1,13 +1,12 @@
-import { defineMessages } from 'react-intl';
 import { FC, useState } from 'react';
+import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { Stack } from '@mui/material';
 import { AppDispatch } from 'types/store';
 
-import { Stack } from '@mui/material';
-
-import EditButton from 'lib/components/core/buttons/EditButton';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import EditButton from 'lib/components/core/buttons/EditButton';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteFolder, deleteMaterial } from '../../operations';
@@ -117,12 +116,12 @@ const WorkbinTableButtons: FC<Props> = (props) => {
     if (type === 'subfolder' && folderInitialValues) {
       return (
         <FolderEdit
+          folderId={itemId}
+          initialValues={folderInitialValues}
           isOpen={isEditOpen}
           onClose={(): void => {
             setIsEditOpen(false);
           }}
-          folderId={itemId}
-          initialValues={folderInitialValues}
         />
       );
     }
@@ -130,13 +129,13 @@ const WorkbinTableButtons: FC<Props> = (props) => {
     if (type === 'material' && materialInitialValues) {
       return (
         <MaterialEdit
+          folderId={currFolderId}
+          initialValues={materialInitialValues}
           isOpen={isEditOpen}
+          materialId={itemId}
           onClose={(): void => {
             setIsEditOpen(false);
           }}
-          folderId={currFolderId}
-          materialId={itemId}
-          initialValues={materialInitialValues}
         />
       );
     }
@@ -156,12 +155,12 @@ const WorkbinTableButtons: FC<Props> = (props) => {
         )}
         {canDelete && isConcrete && (
           <DeleteButton
-            id={`${type}-delete-button-${itemId}`}
-            onClick={onDelete}
-            disabled={isDeleting}
             confirmMessage={`${t(
               translations.deleteConfirmation,
             )} "${itemName}"`}
+            disabled={isDeleting}
+            id={`${type}-delete-button-${itemId}`}
+            onClick={onDelete}
             style={{ padding: 5 }}
             tooltip={t(translations.tableButtonDeleteTooltip)}
           />

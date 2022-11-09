@@ -1,7 +1,6 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import {
   Switch,
   Table,
@@ -10,8 +9,11 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import tableTranslations from 'lib/translations/table';
 import { ComponentData } from 'types/system/instance/components';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import tableTranslations from 'lib/translations/table';
+
 import { indexComponents, updateComponents } from '../../operations';
 
 type Props = WrappedComponentProps;

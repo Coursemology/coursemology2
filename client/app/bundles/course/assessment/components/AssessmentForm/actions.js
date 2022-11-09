@@ -1,5 +1,6 @@
 /* eslint-disable import/prefer-default-export */
 import CourseAPI from 'api/course';
+
 import actionTypes from '../../constants';
 import { mapCategoriesData } from '../../utils';
 

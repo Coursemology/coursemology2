@@ -1,6 +1,6 @@
-import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-
+import { createEntityAdapter, createSlice } from '@reduxjs/toolkit';
+import { RecursiveArray } from 'types';
 import {
   ForumData,
   ForumEntity,
@@ -13,7 +13,7 @@ import {
   ForumTopicPostEntity,
   ForumTopicPostListData,
 } from 'types/course/forums';
-import { RecursiveArray } from 'types';
+
 import { ForumsState } from './types';
 
 export const forumAdapter = createEntityAdapter<ForumEntity>({});

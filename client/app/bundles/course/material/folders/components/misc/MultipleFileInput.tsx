@@ -1,9 +1,9 @@
 import { FC, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import Dropzone from 'react-dropzone';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { toast } from 'react-toastify';
 import { FileUpload as FileUploadIcon } from '@mui/icons-material';
 import { Chip } from '@mui/material';
-import { toast } from 'react-toastify';
 
 interface Props extends WrappedComponentProps {
   uploadedFiles: File[];
@@ -41,8 +41,8 @@ const MultipleFileInput: FC<Props> = (props) => {
     return files.map((file) => (
       <Chip
         key={file.name}
-        label={file.name}
         className="m-2"
+        label={file.name}
         onDelete={(): void =>
           setUploadedFiles(
             uploadedFiles.filter(

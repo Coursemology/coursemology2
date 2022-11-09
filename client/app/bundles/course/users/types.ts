@@ -1,12 +1,12 @@
 import {
-  CourseUserEntity,
-  CourseUserMiniEntity,
-  CourseUserListData,
+  CourseUserBasicListData,
+  CourseUserBasicMiniEntity,
   CourseUserData,
+  CourseUserEntity,
+  CourseUserListData,
+  CourseUserMiniEntity,
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
-  CourseUserBasicMiniEntity,
-  CourseUserBasicListData,
 } from 'types/course/courseUsers';
 import {
   ExperiencePointsRecordListData,

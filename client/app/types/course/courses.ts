@@ -1,7 +1,8 @@
 import { Permissions } from 'types';
+
+import { TodoData } from './lesson-plan/todos';
 import { AnnouncementListData, AnnouncementMiniEntity } from './announcements';
 import { CourseUserListData } from './courseUsers';
-import { TodoData } from './lesson-plan/todos';
 import { NotificationData } from './notifications';
 
 export type CoursePermissions = Permissions<'canCreate'>;

@@ -1,7 +1,9 @@
 import { memo } from 'react';
-import PropTypes from 'prop-types';
 import { Autocomplete, TextField } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
+
 import propsAreEqual from './utils/propsAreEqual';
 
 const styles = {
@@ -25,23 +27,22 @@ const FormMultiSelectField = (props) => {
     <Autocomplete
       {...field}
       disabled={disabled}
-      filterSelectedOptions
-      fullWidth
+      filterSelectedOptions={true}
+      fullWidth={true}
       getOptionLabel={(option) => option.title}
       isOptionEqualToValue={(option, val) => option.id === val.id}
       ListboxProps={{ style: styles.listboxStyle }}
-      multiple
-      options={options}
+      multiple={true}
       onChange={(event, val) => {
         const selectedOptionIds = val.map((option) => option.id);
         field.onChange(selectedOptionIds);
       }}
+      options={options}
       value={selectedOptions}
       {...custom}
       renderInput={(params) => (
         <TextField
           {...params}
-          label={label}
           error={!!fieldState.error}
           helperText={
             fieldState.error && formatErrorMessage(fieldState.error.message)
@@ -49,6 +50,7 @@ const FormMultiSelectField = (props) => {
           InputLabelProps={{
             shrink: true,
           }}
+          label={label}
           variant="standard"
         />
       )}

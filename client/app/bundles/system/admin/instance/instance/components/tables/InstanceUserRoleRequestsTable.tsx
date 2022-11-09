@@ -1,17 +1,18 @@
-import { FC, ReactElement, memo, useMemo } from 'react';
+import { FC, memo, ReactElement, useMemo } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { MenuItem, TextField, Typography } from '@mui/material';
-import DataTable from 'lib/components/core/layouts/DataTable';
-import Note from 'lib/components/core/Note';
-import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
-import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
-import tableTranslations from 'lib/translations/table';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
 import equal from 'fast-deep-equal';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 import {
   RoleRequestMiniEntity,
   RoleRequestRowData,
 } from 'types/system/instance/roleRequests';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
+import Note from 'lib/components/core/Note';
+import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
+import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -221,11 +222,11 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
               return (
                 <TextField
                   id={`role-${roleRequest.id}`}
-                  select
-                  value={value || 'normal'}
                   onChange={(e): React.ChangeEvent =>
                     updateValue(e.target.value)
                   }
+                  select={true}
+                  value={value || 'normal'}
                   variant="standard"
                 >
                   {Object.keys(ROLE_REQUEST_ROLES).map((option) => (
@@ -307,12 +308,12 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
 
   return (
     <DataTable
-      title={title}
-      data={roleRequests}
       columns={columns}
+      data={roleRequests}
+      includeRowNumber={true}
       options={options}
-      includeRowNumber
-      withMargin
+      title={title}
+      withMargin={true}
     />
   );
 };

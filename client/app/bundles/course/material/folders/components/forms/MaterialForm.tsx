@@ -1,17 +1,17 @@
 import { FC } from 'react';
-import { defineMessages } from 'react-intl';
 import { Controller, UseFormSetError } from 'react-hook-form';
+import { defineMessages } from 'react-intl';
+import { MaterialFormData } from 'types/course/material/folders';
 import * as yup from 'yup';
-import formTranslations from 'lib/translations/form';
+
+import FormDialog from 'lib/components/form/dialog/FormDialog';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
-import FormTextField from 'lib/components/form/fields/TextField';
 import FormSingleFileInput, {
   FilePreview,
 } from 'lib/components/form/fields/SingleFileInput';
-
-import { MaterialFormData } from 'types/course/material/folders';
-import FormDialog from 'lib/components/form/dialog/FormDialog';
+import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 interface Props {
   open: boolean;
@@ -51,13 +51,13 @@ const MaterialForm: FC<Props> = (props) => {
 
   return (
     <FormDialog
-      open={open}
       editing={editing}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      title={title}
       formName="material-form"
       initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+      title={title}
       validationSchema={validationSchema}
     >
       {(control, formState): JSX.Element => (
@@ -67,47 +67,46 @@ const MaterialForm: FC<Props> = (props) => {
             name="name"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.name)}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                required
+                label={t(translations.name)}
+                required={true}
                 variant="standard"
               />
             )}
           />
 
           <Controller
-            name="description"
             control={control}
+            name="description"
             render={({ field, fieldState }): JSX.Element => (
               <FormRichTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.description)}
-                // @ts-ignore: component is still written in JS
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={t(translations.description)}
                 variant="standard"
               />
             )}
           />
 
           <Controller
-            name="file"
             control={control}
+            name="file"
             render={({ field, fieldState }): JSX.Element => (
               <FormSingleFileInput
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
                 previewComponent={FilePreview}
               />
             )}

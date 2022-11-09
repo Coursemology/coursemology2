@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import {
   Button,
@@ -8,8 +7,10 @@ import {
   DialogContent,
   DialogTitle,
 } from '@mui/material';
-import formTranslations from 'lib/translations/form';
+import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import formTranslations from 'lib/translations/form';
 
 const propTypes = {
   title: PropTypes.string,
@@ -59,21 +60,21 @@ class FormDialogue extends Component {
       this.props;
     const formActions = [
       <Button
-        color="secondary"
         key="form-dialogue-cancel-button"
+        color="secondary"
         onClick={this.handleFormClose}
         {...{ disabled }}
       >
         {intl.formatMessage(formTranslations.cancel)}
       </Button>,
       <Button
+        key="form-dialogue-submit-button"
         ref={(button) => {
           // eslint-disable-next-line react/no-unused-class-component-methods
           this.submitButton = button;
         }}
-        color="primary"
         className="btn-submit"
-        key="form-dialogue-submit-button"
+        color="primary"
         {...(form ? { form, type: 'submit' } : { onClick: submitForm })}
         {...{ disabled }}
       >
@@ -84,11 +85,11 @@ class FormDialogue extends Component {
     return (
       <>
         <Dialog
-          disableEnforceFocus
-          fullWidth
+          disableEnforceFocus={true}
+          fullWidth={true}
           maxWidth="md"
-          open={open}
           onClose={this.handleFormClose}
+          open={open}
           style={{
             top: 40,
           }}
@@ -98,10 +99,10 @@ class FormDialogue extends Component {
           <DialogActions>{formActions}</DialogActions>
         </Dialog>
         <ConfirmationDialog
-          confirmDiscard
-          open={this.state.discardConfirmationOpen}
+          confirmDiscard={true}
           onCancel={this.handleDiscardCancel}
           onConfirm={this.handleDiscard}
+          open={this.state.discardConfirmationOpen}
         />
       </>
     );

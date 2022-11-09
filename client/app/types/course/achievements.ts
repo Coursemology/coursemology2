@@ -1,4 +1,5 @@
 import { Permissions } from 'types';
+
 import { ConditionListData, ConditionsData } from './conditions';
 import type { CourseUserListData, CourseUserMiniEntity } from './courseUsers';
 

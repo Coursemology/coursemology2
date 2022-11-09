@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { downloadSurvey } from 'course/survey/actions/surveys';
 
 const translations = defineMessages({
@@ -19,9 +20,9 @@ const styles = {
 
 const DownloadResponsesButton = ({ dispatch }) => (
   <Button
-    variant="outlined"
     onClick={() => dispatch(downloadSurvey())}
     style={styles.button}
+    variant="outlined"
   >
     <FormattedMessage {...translations.download} />
   </Button>

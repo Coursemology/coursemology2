@@ -1,7 +1,8 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'lib/moment';
+
 import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
+import moment from 'lib/moment';
 
 const sameDate = (a, b) =>
   (!a && !b) || (a && b && moment(a).isSame(b, 'minute'));
@@ -53,10 +54,10 @@ class DateCell extends Component {
     return (
       <td>
         <DateTimePicker
-          name={fieldName}
           clearable={fieldName === 'end_at'}
-          value={fieldValue}
+          name={fieldName}
           onChange={this.updateItemDate}
+          value={fieldValue}
         />
       </td>
     );

@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { PersonalTimeListData } from 'types/course/personalTimes';
+
 import BaseCourseAPI from './Base';
 
 export default class PersonalTimesAPI extends BaseCourseAPI {

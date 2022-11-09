@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import MoreVert from '@mui/icons-material/MoreVert';
 import {
   Accordion,
   AccordionSummary,
@@ -12,12 +12,13 @@ import {
   Radio,
   TextField,
 } from '@mui/material';
-import MoreVert from '@mui/icons-material/MoreVert';
-import formTranslations from 'lib/translations/form';
+import PropTypes from 'prop-types';
+
+import OptionsListItem from 'course/survey/components/OptionsListItem';
 import { questionTypes } from 'course/survey/constants';
 import { questionShape } from 'course/survey/propTypes';
 import translations from 'course/survey/translations';
-import OptionsListItem from 'course/survey/components/OptionsListItem';
+import formTranslations from 'lib/translations/form';
 
 const styles = {
   optionWidget: {
@@ -70,11 +71,13 @@ class QuestionCard extends Component {
       <div style={styles.grid}>
         {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
-          const widget = <Widget disabled style={styles.gridOptionWidget} />;
+          const widget = (
+            <Widget disabled={true} style={styles.gridOptionWidget} />
+          );
           return (
             <OptionsListItem
-              grid
               key={option.id}
+              grid={true}
               {...{ optionText, imageUrl, widget }}
             />
           );
@@ -88,7 +91,7 @@ class QuestionCard extends Component {
       <>
         {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
-          const widget = <Widget disabled style={styles.optionWidget} />;
+          const widget = <Widget disabled={true} style={styles.optionWidget} />;
           return (
             <OptionsListItem
               key={option.id}
@@ -111,8 +114,8 @@ class QuestionCard extends Component {
   static renderTextField() {
     return (
       <TextField
-        disabled
-        fullWidth
+        disabled={true}
+        fullWidth={true}
         label={<FormattedMessage {...translations.textResponse} />}
         variant="standard"
       />
@@ -150,9 +153,9 @@ class QuestionCard extends Component {
           <MoreVert />
         </IconButton>
         <Menu
-          id="question-admin-menu"
           anchorEl={this.state.anchorEl}
-          disableAutoFocusItem
+          disableAutoFocusItem={true}
+          id="question-admin-menu"
           onClick={this.handleClose}
           onClose={this.handleClose}
           open={Boolean(this.state.anchorEl)}

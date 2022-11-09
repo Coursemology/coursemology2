@@ -1,21 +1,23 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, AppState } from 'types/store';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { toast } from 'react-toastify';
 import { Box, Typography } from '@mui/material';
+import { AppDispatch, AppState } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+
+import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
+import PendingInvitationsButtons from '../../components/buttons/PendingInvitationsButtons';
+import InvitationsBarChart from '../../components/misc/InvitationsBarChart';
+import UserInvitationsTable from '../../components/tables/UserInvitationsTable';
+import { fetchInvitations } from '../../operations';
 import {
   getAllInvitationsMiniEntities,
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
-import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
-import { fetchInvitations } from '../../operations';
-import UserInvitationsTable from '../../components/tables/UserInvitationsTable';
-import InvitationsBarChart from '../../components/misc/InvitationsBarChart';
-import PendingInvitationsButtons from '../../components/buttons/PendingInvitationsButtons';
 
 type Props = WrappedComponentProps;
 
@@ -83,32 +85,32 @@ const InviteUsers: FC<Props> = (props) => {
             permissions={permissions}
             sharedData={sharedData}
           />
-          <Box sx={{ margin: '12px 0px' }} className="invitations-bar-chart">
+          <Box className="invitations-bar-chart" sx={{ margin: '12px 0px' }}>
             <InvitationsBarChart
               accepted={acceptedInvitations.length}
               pending={pendingInvitations.length}
             />
           </Box>
-          <Typography variant="body2" style={{ whiteSpace: 'pre-line' }}>
+          <Typography style={{ whiteSpace: 'pre-line' }} variant="body2">
             {intl.formatMessage(translations.invitationsInfo)}
           </Typography>
 
           {pendingInvitations.length > 0 && (
             <UserInvitationsTable
-              title={intl.formatMessage(translations.pending)}
               invitations={pendingInvitations}
-              pendingInvitations
+              pendingInvitations={true}
               renderRowActionComponent={(invitation): JSX.Element => (
                 <PendingInvitationsButtons invitation={invitation} />
               )}
+              title={intl.formatMessage(translations.pending)}
             />
           )}
 
           {acceptedInvitations.length > 0 && (
             <UserInvitationsTable
-              title={intl.formatMessage(translations.accepted)}
+              acceptedInvitations={true}
               invitations={acceptedInvitations}
-              acceptedInvitations
+              title={intl.formatMessage(translations.accepted)}
             />
           )}
         </>

@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios';
-
 import type {
   SidebarItems,
   SidebarItemsPostData,
 } from 'types/course/admin/sidebar';
+
 import BaseAdminAPI from './Base';
 
 export default class SidebarAPI extends BaseAdminAPI {

@@ -1,9 +1,10 @@
 import { createRoot } from 'react-dom/client';
 
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import UserEmailSubscriptions from 'course/pages/UserEmailSubscriptions';
-import storeCreator from './store';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import { fetchUserEmailSubscriptions } from './actions/user-email-subscriptions';
+import storeCreator from './store';
 
 $(async () => {
   const mountNode = document.getElementById('user-email-subscriptions');

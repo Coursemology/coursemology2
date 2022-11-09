@@ -1,4 +1,4 @@
-import type { StaffRoles, CourseUserRoles } from 'types/course/courseUsers';
+import type { CourseUserRoles, StaffRoles } from 'types/course/courseUsers';
 import {
   InstanceUserRoles,
   RoleRequestRoles,
@@ -44,7 +44,6 @@ export const COURSE_USER_ROLES: CourseUserRoles = {
   observer: 'Observer',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const { student, ...staffRoles } = COURSE_USER_ROLES;
 export const STAFF_ROLES: StaffRoles = staffRoles;
 

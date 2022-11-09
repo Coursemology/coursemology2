@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 import { Create, Delete, DragIndicator } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
-import { Draggable } from 'react-beautiful-dnd';
-
 import { VideosTab } from 'types/course/admin/videos';
+
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import SwitchableTextField from 'lib/components/core/fields/SwitchableTextField';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import translations from '../translations';
 
 interface TabProps {
@@ -67,35 +68,35 @@ const Tab = (props: TabProps): JSX.Element => {
 
           return (
             <div
+              ref={provided.innerRef}
               className={`group flex w-full select-none items-center justify-between px-4 ${
                 isDragging && 'rounded-lg bg-white opacity-80 drop-shadow-md'
               }`}
-              ref={provided.innerRef}
               {...provided.draggableProps}
               style={style}
               {...provided.dragHandleProps}
             >
               <div className="flex w-full items-center sm:w-fit">
-                <DragIndicator fontSize="small" color="disabled" />
+                <DragIndicator color="disabled" fontSize="small" />
 
                 <SwitchableTextField
+                  className="ml-4"
+                  disabled={props.disabled}
                   editable={!isDragging && renaming}
-                  onChange={(e): void => setNewTitle(e.target.value)}
                   onBlur={(): void => renameTab()}
+                  onChange={(e): void => setNewTitle(e.target.value)}
                   onPressEnter={renameTab}
                   onPressEscape={resetTabTitle}
-                  value={newTitle}
-                  className="ml-4"
                   textProps={{ variant: 'body2' }}
-                  disabled={props.disabled}
+                  value={newTitle}
                 />
 
                 {!renaming && (
                   <IconButton
-                    size="small"
-                    disabled={isDragging || props.disabled}
                     className="hoverable:invisible hoverable:group-hover:visible ml-4"
+                    disabled={isDragging || props.disabled}
                     onClick={(): void => setRenaming(true)}
+                    size="small"
                   >
                     <Create />
                   </IconButton>
@@ -104,9 +105,9 @@ const Tab = (props: TabProps): JSX.Element => {
 
               {tab.canDeleteTab && (
                 <IconButton
+                  className="hoverable:invisible hoverable:group-hover:visible ml-4 hoverable:ml-0"
                   color="error"
                   disabled={isDragging || props.disabled}
-                  className="hoverable:invisible hoverable:group-hover:visible ml-4 hoverable:ml-0"
                   onClick={(): void => setDeleting(true)}
                 >
                   <Delete />
@@ -118,13 +119,13 @@ const Tab = (props: TabProps): JSX.Element => {
       </Draggable>
 
       <Prompt
-        open={deleting}
-        onClose={closeDeleteTabDialog}
-        title={t(translations.deleteTabPromptTitle, { tab: tab.title })}
-        primaryLabel={t(translations.deleteTabPromptAction, { tab: tab.title })}
-        primaryColor="error"
-        onClickPrimary={deleteTab}
         disabled={props.disabled}
+        onClickPrimary={deleteTab}
+        onClose={closeDeleteTabDialog}
+        open={deleting}
+        primaryColor="error"
+        primaryLabel={t(translations.deleteTabPromptAction, { tab: tab.title })}
+        title={t(translations.deleteTabPromptTitle, { tab: tab.title })}
       >
         {t(translations.deleteTabPromptMessage)}
       </Prompt>

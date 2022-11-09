@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios';
-
-import CourseAPI from 'api/course';
 import {
   MaterialsSettingsData,
   MaterialsSettingsPostData,
 } from 'types/course/admin/materials';
+
+import CourseAPI from 'api/course';
 
 type Data = Promise<MaterialsSettingsData>;
 

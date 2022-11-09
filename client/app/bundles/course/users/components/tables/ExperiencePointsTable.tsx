@@ -1,3 +1,7 @@
+import { FC, useEffect, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import {
   Paper,
   Table,
@@ -6,16 +10,15 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import tableTranslations from 'lib/translations/table';
-import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
-import { getCourseUserId } from 'lib/helpers/url-helpers';
-import { toast } from 'react-toastify';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { getCourseUserId } from 'lib/helpers/url-helpers';
+import tableTranslations from 'lib/translations/table';
+
 import { fetchExperiencePointsRecord } from '../../operations';
 import { getAllExperiencePointsRecordsEntities } from '../../selectors';
+
 import ExperiencePointsTableRow from './ExperiencePointsTableRow';
 
 interface Props extends WrappedComponentProps {
@@ -79,9 +82,9 @@ const ExperiencePointsTable: FC<Props> = (props) => {
           <TableBody>
             {experiencePointsRecords.map((item) => (
               <ExperiencePointsTableRow
+                key={item.id}
                 id={item.id}
                 record={item}
-                key={item.id}
               />
             ))}
           </TableBody>

@@ -6,17 +6,18 @@ import {
   saveEntityToStore,
   saveListToStore,
 } from 'utilities/store';
+
 import {
-  CommentState,
+  CHANGE_TAB_VALUE,
   CommentActionType,
+  CommentState,
+  CREATE_POST,
+  DELETE_POST,
   SAVE_COMMENT_LIST,
   SAVE_COMMENT_TAB,
   SAVE_PENDING,
   SAVE_READ,
-  CREATE_POST,
   UPDATE_POST,
-  DELETE_POST,
-  CHANGE_TAB_VALUE,
 } from './types';
 
 const initialState: CommentState = {

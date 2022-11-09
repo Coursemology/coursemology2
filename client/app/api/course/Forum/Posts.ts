@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { RecursiveArray } from 'types';
 import { ForumTopicPostListData } from 'types/course/forums';
+
 import BaseCourseAPI from '../Base';
 
 export default class PostsAPI extends BaseCourseAPI {

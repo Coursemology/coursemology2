@@ -1,6 +1,7 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { AccessTime, Shuffle } from '@mui/icons-material';
+
 import CustomTooltip from 'lib/components/core/CustomTooltip';
 
 interface Props extends WrappedComponentProps {
@@ -36,16 +37,16 @@ const PersonalTimeBooleanIcons: FC<Props> = (props) => {
     <>
       {hasPersonalTimes && (
         <CustomTooltip
+          arrow={true}
           title={intl.formatMessage(translations.hasPersonalTimesHint)}
-          arrow
         >
           <AccessTime className="mr-2" fontSize="small" />
         </CustomTooltip>
       )}
       {affectsPersonalTimes && (
         <CustomTooltip
+          arrow={true}
           title={intl.formatMessage(translations.affectsPersonalTimesHint)}
-          arrow
         >
           <Shuffle className="mr-2" fontSize="small" />
         </CustomTooltip>

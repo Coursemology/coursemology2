@@ -1,9 +1,10 @@
 import { Controller, useForm } from 'react-hook-form';
-
 import { LevelConditionData } from 'types/course/conditions';
+
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
-import Prompt from 'lib/components/core/dialogs/Prompt';
+
 import { AnyConditionProps } from '../AnyCondition';
 import translations from '../translations';
 
@@ -26,28 +27,28 @@ const LevelCondition = (
 
   return (
     <Prompt
-      open={props.open}
-      onClose={props.onClose}
-      title={t(translations.specifyLevel)}
       onClickPrimary={handleSubmit(updateLevel)}
+      onClose={props.onClose}
+      open={props.open}
+      primaryDisabled={!isNewCondition && !formState.isDirty}
       primaryLabel={
         isNewCondition
           ? t(translations.createCondition)
           : t(translations.updateCondition)
       }
-      primaryDisabled={!isNewCondition && !formState.isDirty}
+      title={t(translations.specifyLevel)}
     >
       <Controller
-        name="minimumLevel"
         control={control}
+        name="minimumLevel"
         render={({ field, fieldState }): JSX.Element => (
           <FormTextField
             field={field}
             fieldState={fieldState}
-            variant="filled"
-            type="number"
-            fullWidth
+            fullWidth={true}
             label={t(translations.level)}
+            type="number"
+            variant="filled"
           />
         )}
       />

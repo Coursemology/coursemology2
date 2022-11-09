@@ -1,4 +1,5 @@
-import { fireEvent, render, screen, RenderResult } from 'utilities/test-utils';
+import { fireEvent, render, RenderResult, screen } from 'utilities/test-utils';
+
 import DeleteButton from '../DeleteButton';
 
 let documentBody: RenderResult;
@@ -7,7 +8,7 @@ describe('<DeleteButton />', () => {
   describe('when the delete button is rendered without confirmation dialog', () => {
     beforeEach(() => {
       documentBody = render(
-        <DeleteButton disabled={false} onClick={jest.fn()} loading={false} />,
+        <DeleteButton disabled={false} loading={false} onClick={jest.fn()} />,
       );
     });
 
@@ -35,10 +36,10 @@ describe('<DeleteButton />', () => {
     beforeEach(() => {
       documentBody = render(
         <DeleteButton
-          disabled
-          onClick={jest.fn()}
-          loading={false}
           confirmMessage="Are you sure you wish to delete?"
+          disabled={true}
+          loading={false}
+          onClick={jest.fn()}
         />,
       );
     });
@@ -54,10 +55,10 @@ describe('<DeleteButton />', () => {
     beforeEach(() => {
       documentBody = render(
         <DeleteButton
-          disabled={false}
-          onClick={jest.fn()}
-          loading={false}
           confirmMessage="Are you sure you wish to delete?"
+          disabled={false}
+          loading={false}
+          onClick={jest.fn()}
         />,
       );
     });

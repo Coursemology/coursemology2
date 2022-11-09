@@ -1,11 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { AppDispatch, AppState } from 'types/store';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
 import {
   Grid,
@@ -15,9 +12,17 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { TIMELINE_ALGORITHMS } from 'lib/constants/sharedConstants';
 import { CourseUserEntity } from 'types/course/courseUsers';
 import { TimelineAlgorithm } from 'types/course/personalTimes';
+import { AppDispatch, AppState } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+import { TIMELINE_ALGORITHMS } from 'lib/constants/sharedConstants';
+
+import SelectCourseUser from '../../components/misc/SelectCourseUser';
+import UserManagementTabs from '../../components/navigation/UserManagementTabs';
+import PersonalTimesTable from '../../components/tables/PersonalTimesTable';
 import {
   fetchPersonalTimes,
   fetchUsers,
@@ -31,9 +36,6 @@ import {
   getManageCourseUsersSharedData,
   getUserEntity,
 } from '../../selectors';
-import UserManagementTabs from '../../components/navigation/UserManagementTabs';
-import SelectCourseUser from '../../components/misc/SelectCourseUser';
-import PersonalTimesTable from '../../components/tables/PersonalTimesTable';
 
 type Props = WrappedComponentProps;
 
@@ -178,16 +180,16 @@ const PersonalTimesShow: FC<Props> = (props) => {
           <Typography variant="h6">
             {intl.formatMessage(translations.courseUserHeader)}
           </Typography>
-          <Grid container flexDirection="row" alignItems="flex-end">
+          <Grid alignItems="flex-end" container={true} flexDirection="row">
             <SelectCourseUser initialUser={currentUser} />
             <TextField
-              label="Timeline Algorithm"
               id="change-timeline"
-              select
+              label="Timeline Algorithm"
+              onChange={handleTimelineChange}
+              select={true}
+              sx={{ minWidth: '300px', marginRight: '12px' }}
               value={timeline}
               variant="standard"
-              onChange={handleTimelineChange}
-              sx={{ minWidth: '300px', marginRight: '12px' }}
             >
               {/* eslint-disable-next-line @typescript-eslint/no-shadow */}
               {TIMELINE_ALGORITHMS.map((timeline) => (

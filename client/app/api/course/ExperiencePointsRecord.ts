@@ -3,6 +3,7 @@ import {
   ExperiencePointsRecordListData,
   UpdateExperiencePointsRecordPatchData,
 } from 'types/course/experiencePointsRecords';
+
 import BaseCourseAPI from './Base';
 
 export default class ExperiencePointsRecordAPI extends BaseCourseAPI {

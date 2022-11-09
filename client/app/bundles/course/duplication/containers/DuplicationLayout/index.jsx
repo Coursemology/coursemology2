@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
-import NotificationPopup from 'lib/containers/NotificationPopup';
+
 import Duplication from 'course/duplication/pages/Duplication';
+import NotificationPopup from 'lib/containers/NotificationPopup';
 
 const DuplicationLayout = () => (
   <div>
@@ -8,9 +9,9 @@ const DuplicationLayout = () => (
 
     <Routes>
       <Route
-        exact
-        path="/courses/:courseId/duplication"
         element={<Duplication />}
+        exact={true}
+        path="/courses/:courseId/duplication"
       />
     </Routes>
   </div>

@@ -1,10 +1,10 @@
-import { FC, useState, memo } from 'react';
-import { Box, IconButton, TextField } from '@mui/material';
-import Edit from '@mui/icons-material/Edit';
+import { FC, memo, useState } from 'react';
 import Check from '@mui/icons-material/Check';
 import Clear from '@mui/icons-material/Clear';
-import equal from 'fast-deep-equal';
+import Edit from '@mui/icons-material/Edit';
 import { LoadingButton } from '@mui/lab';
+import { Box, IconButton, TextField } from '@mui/material';
+import equal from 'fast-deep-equal';
 
 interface Props {
   value: string;
@@ -101,14 +101,14 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
   };
 
   const renderDisplayField = (
-    <Box sx={styles.displayFieldStyle} className={className}>
+    <Box className={className} sx={styles.displayFieldStyle}>
       <>
         {link ? <a href={link}>{controlledVal}</a> : controlledVal}
         {!disabled && (
           <IconButton
+            className="inline-edit-button"
             onClick={(): void => setIsEditing(true)}
             sx={styles.buttonStyle}
-            className="inline-edit-button"
           >
             <Edit />
           </IconButton>
@@ -120,31 +120,31 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
   const renderEditingField = (
     <Box display="flex" flexDirection="row">
       <TextField
-        value={controlledVal}
-        onChange={handleChange}
         className={className}
         disabled={disabled ?? isSaving}
+        helperText={helperText}
         label={label}
         onBlur={handleBlur}
-        helperText={helperText}
+        onChange={handleChange}
+        value={controlledVal}
         {...custom}
         style={styles.textFieldStyle}
       />
       {!alwaysEditable && (
         <>
           <LoadingButton
+            className="confirm-btn"
             loading={isSaving}
             onClick={handleSave}
             sx={styles.buttonStyle}
-            className="confirm-btn"
           >
             <Check />
           </LoadingButton>
           <IconButton
+            className="cancel-btn"
+            disabled={isSaving}
             onClick={handleCancel}
             sx={styles.buttonStyle}
-            disabled={isSaving}
-            className="cancel-btn"
           >
             <Clear />
           </IconButton>

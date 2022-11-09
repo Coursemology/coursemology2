@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { useState, ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { Control, FormState, useForm, UseFormSetError } from 'react-hook-form';
-import { AnyObjectSchema } from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
   Dialog,
@@ -10,9 +10,10 @@ import {
   DialogContent,
   DialogTitle,
 } from '@mui/material';
+import { AnyObjectSchema } from 'yup';
+
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
-import { yupResolver } from '@hookform/resolvers/yup';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
@@ -64,17 +65,17 @@ const FormDialog = (props: Props): JSX.Element => {
     <>
       <Dialog
         className="top-10"
-        disableEnforceFocus
+        disableEnforceFocus={true}
+        maxWidth="md"
         onClose={handleCloseDialog}
         open={open}
-        maxWidth="md"
       >
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
           <form
             encType="multipart/form-data"
             id={formName}
-            noValidate
+            noValidate={true}
             onSubmit={handleSubmit((data) => onSubmit(data, setError))}
           >
             <ErrorText errors={formState.errors} />
@@ -83,26 +84,26 @@ const FormDialog = (props: Props): JSX.Element => {
         </DialogContent>
         <DialogActions>
           <Button
-            color="secondary"
-            className="btn-cancel"
-            disabled={formState.isSubmitting}
             key="form-dialog-cancel-button"
+            className="btn-cancel"
+            color="secondary"
+            disabled={formState.isSubmitting}
             onClick={handleCloseDialog}
           >
             {t(formTranslations.cancel)}
           </Button>
           <Button
+            className="btn-submit"
+            color="primary"
+            disabled={formState.isSubmitting || !formState.isDirty}
+            form={formName}
             id={
               editing
                 ? 'form-dialog-update-button'
                 : 'form-dialog-submit-button'
             }
-            variant="contained"
-            color="primary"
-            className="btn-submit"
-            disabled={formState.isSubmitting || !formState.isDirty}
-            form={formName}
             type="submit"
+            variant="contained"
           >
             {primaryActionText ??
               (editing
@@ -112,13 +113,13 @@ const FormDialog = (props: Props): JSX.Element => {
         </DialogActions>
       </Dialog>
       <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
+        confirmDiscard={true}
         onCancel={(): void => setConfirmationDialogOpen(false)}
         onConfirm={(): void => {
           setConfirmationDialogOpen(false);
           onClose();
         }}
+        open={confirmationDialogOpen}
       />
     </>
   );

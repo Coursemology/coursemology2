@@ -1,15 +1,17 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { VideoListData } from 'types/course/videos';
 import { AppDispatch } from 'types/store';
+
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
-import useTranslation from 'lib/hooks/useTranslation';
-import { useNavigate } from 'react-router-dom';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { getVideosURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import { deleteVideo } from '../../operations';
 import VideoEdit from '../../pages/VideoEdit';
 
@@ -75,9 +77,9 @@ const VideoManagementButtons: FC<Props> = (props) => {
           />
           {isEditing && (
             <VideoEdit
+              onClose={(): void => setIsEditing(false)}
               open={isEditing}
               video={video}
-              onClose={(): void => setIsEditing(false)}
             />
           )}
         </>
@@ -85,11 +87,11 @@ const VideoManagementButtons: FC<Props> = (props) => {
       {video.permissions.canManage && (
         <DeleteButton
           className={`video-delete-${video.id}`}
-          disabled={isDeleting}
-          onClick={onDelete}
           confirmMessage={t(translations.deletionConfirm, {
             title: video.title,
           })}
+          disabled={isDeleting}
+          onClick={onDelete}
         />
       )}
     </div>

@@ -1,3 +1,5 @@
+import { FC } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   Icon,
   Link,
@@ -8,13 +10,13 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { FC } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { PersonalTimeMiniEntity } from 'types/course/personalTimes';
-import tableTranslations from 'lib/translations/table';
-import { getAssessmentURL, getVideoURL } from 'lib/helpers/url-builders';
+
 import { ITEM_ACTABLE_TYPES } from 'lib/constants/sharedConstants';
+import { getAssessmentURL, getVideoURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import tableTranslations from 'lib/translations/table';
+
 import PersonalTimeEditor from '../misc/PersonalTimeEditor';
 
 interface Props extends WrappedComponentProps {
@@ -75,7 +77,7 @@ const PersonalTimesTable: FC<Props> = (props) => {
 
   const renderRow = (item: PersonalTimeMiniEntity): JSX.Element => {
     return (
-      <TableRow hover key={item.id}>
+      <TableRow key={item.id} hover={true}>
         <TableCell>
           {getIcon(item)}
           {getLink(item)}

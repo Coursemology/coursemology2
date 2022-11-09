@@ -3,11 +3,11 @@ import { isNumber } from 'lodash';
 
 import actions, {
   canvasActionTypes,
-  scribingTools,
   scribingShapes,
   scribingToolColor,
-  scribingToolThickness,
   scribingToolLineStyle,
+  scribingTools,
+  scribingToolThickness,
 } from '../constants';
 
 function initializeToolColor() {

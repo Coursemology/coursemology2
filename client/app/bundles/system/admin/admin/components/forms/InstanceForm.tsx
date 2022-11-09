@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import { defineMessages } from 'react-intl';
 import { Controller, UseFormSetError } from 'react-hook-form';
+import { defineMessages } from 'react-intl';
+import { InstanceFormData } from 'types/system/instances';
 import * as yup from 'yup';
 
-import formTranslations from 'lib/translations/form';
-import FormTextField from 'lib/components/form/fields/TextField';
-import { InstanceFormData } from 'types/system/instances';
 import FormDialog from 'lib/components/form/dialog/FormDialog';
+import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 interface Props {
   open: boolean;
@@ -49,13 +49,13 @@ const InstanceForm: FC<Props> = (props) => {
 
   return (
     <FormDialog
-      open={open}
       editing={false}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      title={t(translations.newInstance)}
       formName="instance-form"
       initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+      title={t(translations.newInstance)}
       validationSchema={validationSchema}
     >
       {(control, formState): JSX.Element => (
@@ -65,34 +65,34 @@ const InstanceForm: FC<Props> = (props) => {
             name="name"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.name)}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                required
+                label={t(translations.name)}
+                required={true}
                 variant="standard"
               />
             )}
           />
 
           <Controller
-            name="host"
             control={control}
+            name="host"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.host)}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                required
+                label={t(translations.host)}
+                required={true}
                 variant="standard"
               />
             )}

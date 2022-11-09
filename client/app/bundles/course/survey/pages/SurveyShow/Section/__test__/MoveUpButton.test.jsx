@@ -1,6 +1,8 @@
 import { mount } from 'enzyme';
+
 import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
+
 import MoveUpButton from '../MoveUpButton';
 
 const surveys = [

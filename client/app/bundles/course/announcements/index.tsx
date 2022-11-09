@@ -1,7 +1,8 @@
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import AnnouncementsIndex from './pages/AnnouncementsIndex';
 import configureStore from './store';
 
@@ -17,8 +18,8 @@ $(() => {
         <BrowserRouter>
           <Routes>
             <Route
-              path="courses/:courseId/announcements"
               element={<AnnouncementsIndex />}
+              path="courses/:courseId/announcements"
             />
           </Routes>
         </BrowserRouter>

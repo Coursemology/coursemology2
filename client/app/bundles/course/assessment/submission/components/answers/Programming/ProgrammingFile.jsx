@@ -1,16 +1,16 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import Warning from '@mui/icons-material/Warning';
 import { Paper } from '@mui/material';
 import { yellow } from '@mui/material/colors';
-import Warning from '@mui/icons-material/Warning';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import withRouter from 'lib/components/navigation/withRouter';
+import PropTypes from 'prop-types';
 
+import withRouter from 'lib/components/navigation/withRouter';
 import { getProgrammingFileURL } from 'lib/helpers/url-builders';
 
-import Editor from '../../Editor';
 import ReadOnlyEditor from '../../../containers/ReadOnlyEditor';
 import { fileShape } from '../../../propTypes';
+import Editor from '../../Editor';
 
 const translations = defineMessages({
   sizeTooBig: {
@@ -37,9 +37,9 @@ class ProgrammingFile extends Component {
       <>
         <h5>{file.filename}</h5>
         <Editor
-          name={`${fieldName}.content`}
           filename={file.filename}
           language={language}
+          name={`${fieldName}.content`}
         />
       </>
     );
@@ -74,7 +74,7 @@ class ProgrammingFile extends Component {
 
     const content = file.highlighted_content.split('\n');
     return (
-      <ReadOnlyEditor answerId={answerId} fileId={file.id} content={content} />
+      <ReadOnlyEditor answerId={answerId} content={content} fileId={file.id} />
     );
   }
 

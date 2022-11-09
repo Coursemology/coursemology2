@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
 import { SketchPicker } from 'react-color';
+import { injectIntl } from 'react-intl';
 import { Checkbox, FormControlLabel, Popover } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
@@ -106,8 +107,9 @@ const ColorPickerField = (props) => {
           {intl.formatMessage(translations.colour)}
         </label>
         <div
+          aria-label="Color Picker"
+          onClick={noFillValue ? undefined : onClickColorPicker}
           role="button"
-          tabIndex="0"
           style={
             noFillValue
               ? {
@@ -118,16 +120,15 @@ const ColorPickerField = (props) => {
                 }
               : { background: colorPickerColor, ...styles.colorPicker }
           }
-          onClick={noFillValue ? undefined : onClickColorPicker}
-          aria-label="Color Picker"
+          tabIndex="0"
         />
         <Popover
-          open={colorPickerPopoverOpen}
           anchorEl={colorPickerPopoverAnchorEl}
           anchorOrigin={popoverStyles.anchorOrigin}
           onClose={onRequestCloseColorPickerPopover}
-          transformOrigin={popoverStyles.transformOrigin}
+          open={colorPickerPopoverOpen}
           style={styles.toolDropdowns}
+          transformOrigin={popoverStyles.transformOrigin}
         >
           <SketchPicker
             color={colorPickerColor}

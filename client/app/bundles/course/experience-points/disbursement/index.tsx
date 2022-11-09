@@ -1,9 +1,10 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import configureStore from './store';
+
 import DisbursementIndex from './pages/DisbursementIndex';
+import configureStore from './store';
 
 $(() => {
   const mountNode = document.getElementById('course-disbursement-component');
@@ -17,8 +18,8 @@ $(() => {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/courses/:courseId/users/disburse_experience_points"
               element={<DisbursementIndex />}
+              path="/courses/:courseId/users/disburse_experience_points"
             />
           </Routes>
         </BrowserRouter>

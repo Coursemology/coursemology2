@@ -1,8 +1,10 @@
 import { connect } from 'react-redux';
+
 import { postRequestingStatuses } from 'lib/constants/videoConstants';
 
-import Editor from './Editor';
 import { submitNewPostToServer, updateNewPost } from '../../actions/discussion';
+
+import Editor from './Editor';
 
 function mapStateToProps(state, ownProps) {
   const newTopicPost = state.discussion.newTopicPost;

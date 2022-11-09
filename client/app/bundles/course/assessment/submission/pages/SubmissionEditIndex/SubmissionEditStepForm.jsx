@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { useForm, FormProvider } from 'react-hook-form';
-import { FormattedMessage, injectIntl } from 'react-intl';
+import { FormProvider, useForm } from 'react-hook-form';
 import Hotkeys from 'react-hot-keys';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import {
   Button,
   Card,
@@ -11,30 +10,31 @@ import {
   CircularProgress,
   Paper,
   Step,
-  Stepper,
   StepButton,
   StepLabel,
+  Stepper,
   SvgIcon,
   Tooltip,
 } from '@mui/material';
 import { blue, green, lightBlue, red } from '@mui/material/colors';
+import PropTypes from 'prop-types';
 
-/* eslint-disable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
 import { usePrompt } from 'lib/hooks/router/usePrompt';
+
+import SubmissionAnswer from '../../components/SubmissionAnswer';
+import { formNames, questionTypes } from '../../constants';
+import Comments from '../../containers/Comments';
+import GradingPanel from '../../containers/GradingPanel';
+import QuestionGrade from '../../containers/QuestionGrade';
 import {
   explanationShape,
-  questionShape,
   historyQuestionShape,
   questionFlagsShape,
+  questionShape,
   topicShape,
 } from '../../propTypes';
-import SubmissionAnswer from '../../components/SubmissionAnswer';
-import QuestionGrade from '../../containers/QuestionGrade';
-import GradingPanel from '../../containers/GradingPanel';
-import Comments from '../../containers/Comments';
-import { formNames, questionTypes } from '../../constants';
 import translations from '../../translations';
 
 const styles = {
@@ -191,13 +191,13 @@ const SubmissionEditStepForm = (props) => {
     }
     return (
       <Button
-        variant="contained"
         disabled={disabled}
         onClick={() => handleNext()}
         style={{
           ...styles.formButton,
           ...(!disabled && styles.contineButton),
         }}
+        variant="contained"
       >
         {intl.formatMessage(translations.continue)}
       </Button>
@@ -259,11 +259,11 @@ const SubmissionEditStepForm = (props) => {
     if (attempting && (allowPartialSubmission || allConsideredCorrect)) {
       return (
         <Button
-          variant="contained"
           color="secondary"
           disabled={isSaving}
           onClick={() => setSubmitConfirmation(true)}
           style={styles.formButton}
+          variant="contained"
         >
           {intl.formatMessage(translations.finalise)}
         </Button>
@@ -283,7 +283,7 @@ const SubmissionEditStepForm = (props) => {
     const editable = !attempting && graderView;
     const visible = editable || published;
 
-    return visible ? <QuestionGrade id={id} editable={editable} /> : null;
+    return visible ? <QuestionGrade editable={editable} id={id} /> : null;
   };
 
   const renderReevaluateButton = () => {
@@ -297,12 +297,12 @@ const SubmissionEditStepForm = (props) => {
 
     return (
       <Button
-        variant="contained"
         color="secondary"
         disabled={isAutograding || isSaving}
         id="re-evaluate-code"
         onClick={() => onReevaluateAnswer(answerId, question.id)}
         style={styles.formButton}
+        variant="contained"
       >
         {intl.formatMessage(translations.reevaluate)}
       </Button>
@@ -318,7 +318,6 @@ const SubmissionEditStepForm = (props) => {
     if (question.type === questionTypes.Programming) {
       return (
         <Button
-          variant="outlined"
           color="info"
           disabled={isAutograding || isResetting || isSaving}
           onClick={() => {
@@ -326,6 +325,7 @@ const SubmissionEditStepForm = (props) => {
             setResetAnswerId(answerId);
           }}
           style={styles.formButton}
+          variant="outlined"
         >
           {intl.formatMessage(translations.reset)}
         </Button>
@@ -336,7 +336,7 @@ const SubmissionEditStepForm = (props) => {
 
   const renderResetDialog = () => (
     <ConfirmationDialog
-      open={resetConfirmation}
+      message={intl.formatMessage(translations.resetConfirmation)}
       onCancel={() => {
         setResetConfirmation(false);
         setResetAnswerId(null);
@@ -346,7 +346,7 @@ const SubmissionEditStepForm = (props) => {
         setResetAnswerId(null);
         onReset(resetAnswerId, setValue);
       }}
-      message={intl.formatMessage(translations.resetConfirmation)}
+      open={resetConfirmation}
     />
   );
 
@@ -356,11 +356,11 @@ const SubmissionEditStepForm = (props) => {
     }
     return (
       <Button
-        variant="contained"
         color="primary"
         disabled={!isDirty || isSaving}
         onClick={handleSubmit((data) => onSaveDraft({ ...data }))}
         style={styles.formButton}
+        variant="contained"
       >
         {intl.formatMessage(translations.saveDraft)}
       </Button>
@@ -374,11 +374,11 @@ const SubmissionEditStepForm = (props) => {
     }
     return (
       <Button
-        variant="contained"
         color="primary"
         disabled={isSaving}
         onClick={handleSaveGrade}
         style={styles.formButton}
+        variant="contained"
       >
         {intl.formatMessage(translations.saveGrade)}
       </Button>
@@ -402,22 +402,22 @@ const SubmissionEditStepForm = (props) => {
     return (
       <>
         <Hotkeys
+          disabled={isAutograding || isResetting || isSaving}
+          filter={() => true}
           keyName="command+enter,control+enter"
           onKeyDown={() =>
             onSubmitAnswer(answerId, getValues(`${answerId}`), setValue)
           }
-          disabled={isAutograding || isResetting || isSaving}
-          filter={() => true}
         />
         <Tooltip title={<FormattedMessage {...translations.submitTooltip} />}>
           <Button
-            variant="contained"
             color="secondary"
             disabled={isAutograding || isResetting || isSaving}
             onClick={() =>
               onSubmitAnswer(answerId, getValues(`${answerId}`), setValue)
             }
             style={styles.formButton}
+            variant="contained"
           >
             {intl.formatMessage(translations.submit)}
           </Button>
@@ -428,11 +428,11 @@ const SubmissionEditStepForm = (props) => {
 
   const renderSubmitDialog = () => (
     <ConfirmationDialog
-      open={submitConfirmation}
-      onCancel={() => setSubmitConfirmation(false)}
-      onConfirm={() => setSubmitConfirmation(false)}
       form={formNames.SUBMISSION}
       message={intl.formatMessage(translations.submitConfirmation)}
+      onCancel={() => setSubmitConfirmation(false)}
+      onConfirm={() => setSubmitConfirmation(false)}
+      open={submitConfirmation}
     />
   );
 
@@ -443,11 +443,11 @@ const SubmissionEditStepForm = (props) => {
     }
     return (
       <Button
-        variant="contained"
         color="secondary"
         disabled={isSaving}
         onClick={() => setUnsubmitConfirmation(true)}
         style={styles.formButton}
+        variant="contained"
       >
         {intl.formatMessage(translations.unsubmit)}
       </Button>
@@ -456,13 +456,13 @@ const SubmissionEditStepForm = (props) => {
 
   const renderUnsubmitDialog = () => (
     <ConfirmationDialog
-      open={unsubmitConfirmation}
+      message={intl.formatMessage(translations.unsubmitConfirmation)}
       onCancel={() => setUnsubmitConfirmation(false)}
       onConfirm={() => {
         setUnsubmitConfirmation(false);
         handleUnsubmit();
       }}
-      message={intl.formatMessage(translations.unsubmitConfirmation)}
+      open={unsubmitConfirmation}
     />
   );
 
@@ -523,7 +523,7 @@ const SubmissionEditStepForm = (props) => {
       <Stepper
         activeStep={stepIndex}
         connector={<div />}
-        nonLinear
+        nonLinear={true}
         style={{ justifyContent: 'center', flexWrap: 'wrap', padding: 24 }}
       >
         {questionIds.map((questionId, index) => {
@@ -542,11 +542,11 @@ const SubmissionEditStepForm = (props) => {
                     <SvgIcon htmlColor={stepButtonColor}>
                       <circle cx="12" cy="12" r="12" />
                       <text
+                        fill="#fff"
+                        fontSize="12"
+                        textAnchor="middle"
                         x="12"
                         y="16"
-                        textAnchor="middle"
-                        fontSize="12"
-                        fill="#fff"
                       >
                         {index + 1}
                       </text>
@@ -576,8 +576,8 @@ const SubmissionEditStepForm = (props) => {
           <form
             encType="multipart/form-data"
             id={formNames.SUBMISSION}
+            noValidate={true}
             onSubmit={handleSubmit((data) => onSubmit({ ...data }))}
-            noValidate
           >
             <ErrorText errors={errors} />
             {renderStepQuestion()}

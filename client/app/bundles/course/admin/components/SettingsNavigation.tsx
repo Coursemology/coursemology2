@@ -5,11 +5,11 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Chip } from '@mui/material';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Chip } from '@mui/material';
+import { CourseAdminItems } from 'types/course/admin/course';
 
 import CourseAPI from 'api/course';
-import { CourseAdminItems } from 'types/course/admin/course';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
@@ -52,10 +52,10 @@ const LoadedSettingsNavigation = (
           {items.map(({ title, path }) => (
             <Chip
               key={path}
-              label={title}
-              onClick={(): void => navigate(path)}
               className={`m-2 ${path === pathname && 'p-[1px]'}`}
               clickable={path !== pathname}
+              label={title}
+              onClick={(): void => navigate(path)}
               variant={path === pathname ? 'filled' : 'outlined'}
             />
           ))}
@@ -68,7 +68,7 @@ const LoadedSettingsNavigation = (
 };
 
 const SettingsNavigation = (): JSX.Element => (
-  <Preload while={fetchItems} render={<LoadingIndicator />}>
+  <Preload render={<LoadingIndicator />} while={fetchItems}>
     {(data): JSX.Element => <LoadedSettingsNavigation data={data} />}
   </Preload>
 );

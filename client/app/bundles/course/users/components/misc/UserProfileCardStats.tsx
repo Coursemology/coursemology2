@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Paper, Typography } from '@mui/material';
+
 import styles from './UserProfileCard.scss';
 
 interface Props {
@@ -11,11 +12,11 @@ interface Props {
 const UserProfileCardStats: FC<Props> = (props: Props) => {
   return (
     <Paper
-      variant="outlined"
       className={`${styles.userStatsCard} ${props.className}`}
+      variant="outlined"
     >
       <Typography variant="overline">{props.title}</Typography>
-      <Typography variant="h5" className={`${props.className}-value`}>
+      <Typography className={`${props.className}-value`} variant="h5">
         {props.value}
       </Typography>
     </Paper>

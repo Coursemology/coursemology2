@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios';
-
-import CourseAPI from 'api/course';
 import {
   CodaveriSettingsData,
   CodaveriSettingsPostData,
 } from 'types/course/admin/codaveri';
+
+import CourseAPI from 'api/course';
 
 type Data = Promise<CodaveriSettingsData>;
 

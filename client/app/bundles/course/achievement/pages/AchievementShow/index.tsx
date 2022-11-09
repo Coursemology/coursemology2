@@ -3,12 +3,14 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Grid, Tooltip, Typography } from '@mui/material';
+import { AppDispatch, AppState } from 'types/store';
+
+import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import { AppDispatch, AppState } from 'types/store';
-import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
+
 import AchievementManagementButtons from '../../components/buttons/AchievementManagementButtons';
 import { loadAchievement } from '../../operations';
 import {
@@ -60,7 +62,7 @@ const AchievementShow: FC<Props> = (props) => {
       <AchievementManagementButtons
         key={achievementMiniEntity.id}
         achievement={achievementMiniEntity}
-        navigateToIndex
+        navigateToIndex={true}
       />,
     );
   }
@@ -68,36 +70,36 @@ const AchievementShow: FC<Props> = (props) => {
   return (
     <>
       <PageHeader
-        title={`Achievement - ${achievementMiniEntity.title}`}
         returnLink={`/courses/${courseId}/achievements/`}
+        title={`Achievement - ${achievementMiniEntity.title}`}
         toolbars={headerToolbars}
       />
       {isLoading ? (
         <LoadingIndicator />
       ) : (
         achievement && (
-          <Grid container>
-            <Grid item xs={12} className="flex justify-center">
+          <Grid container={true}>
+            <Grid className="flex justify-center" item={true} xs={12}>
               <div className="flex max-w-7xl items-center space-x-8 p-8">
                 <Tooltip title={achievement.achievementStatus ?? ''}>
                   <img
-                    src={achievement.badge.url}
                     alt={achievement.badge.name}
                     className="h-32"
+                    src={achievement.badge.url}
                   />
                 </Tooltip>
 
                 <Typography
-                  variant="body1"
                   className="whitespace-normal"
                   dangerouslySetInnerHTML={{
                     __html: achievement.description,
                   }}
+                  variant="body1"
                 />
               </div>
             </Grid>
 
-            <Grid item xs={12} display="flex" justifyContent="center">
+            <Grid display="flex" item={true} justifyContent="center" xs={12}>
               <Typography variant="h5">
                 {intl.formatMessage(translations.studentsWithAchievement)}
               </Typography>
@@ -106,11 +108,11 @@ const AchievementShow: FC<Props> = (props) => {
             {achievement.achievementUsers.map((courseUser) => {
               if (courseUser.obtainedAt !== null)
                 return (
-                  <Grid item key={courseUser.id} xs={4} sm={3} lg={1}>
+                  <Grid key={courseUser.id} item={true} lg={1} sm={3} xs={4}>
                     <a href={getCourseUserURL(courseId, courseUser.id)}>
                       <AvatarWithLabel
-                        label={courseUser.name}
                         imageUrl={courseUser.imageUrl!}
+                        label={courseUser.name}
                         size="sm"
                       />
                     </a>

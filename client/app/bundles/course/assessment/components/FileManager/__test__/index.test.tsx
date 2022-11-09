@@ -1,5 +1,4 @@
 import MockAdapter from 'axios-mock-adapter';
-
 import {
   act,
   fireEvent,
@@ -7,7 +6,9 @@ import {
   RenderResult,
   waitFor,
 } from 'utilities/test-utils';
+
 import CourseAPI from 'api/course';
+
 import FileManager from '..';
 
 const FOLDER_ID = 1;
@@ -40,7 +41,7 @@ const mock = new MockAdapter(client);
 let fileManager: RenderResult;
 beforeEach(() => {
   fileManager = render(
-    <FileManager materials={MATERIALS} folderId={FOLDER_ID} />,
+    <FileManager folderId={FOLDER_ID} materials={MATERIALS} />,
   );
 });
 

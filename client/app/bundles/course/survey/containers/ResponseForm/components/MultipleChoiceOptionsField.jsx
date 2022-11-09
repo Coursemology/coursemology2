@@ -1,7 +1,8 @@
 import { memo } from 'react';
-import PropTypes from 'prop-types';
 import { Radio } from '@mui/material';
 import { red } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import OptionsListItem from 'course/survey/components/OptionsListItem';
 import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
 
@@ -42,11 +43,11 @@ const MultipleChoiceOptionsField = (props) => {
           const id = option.id;
           const widget = (
             <Radio
-              value={id}
-              style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
-              onChange={(event) => onChange([parseInt(event.target.value, 10)])}
               checked={id === selectedOption}
               disabled={disabled}
+              onChange={(event) => onChange([parseInt(event.target.value, 10)])}
+              style={grid ? styles.gridOptionWidget : styles.listOptionWidget}
+              value={id}
             />
           );
           return (

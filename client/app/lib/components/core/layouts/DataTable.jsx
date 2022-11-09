@@ -1,5 +1,6 @@
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
+
 import LoadingOverlay from 'lib/components/core/LoadingOverlay';
 
 const options = {

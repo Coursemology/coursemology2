@@ -1,24 +1,25 @@
-import { Button, RadioGroup, Typography, Grid } from '@mui/material';
-import { Controller } from 'react-hook-form';
-import { Emits } from 'react-emitter-factory';
 import { useMemo, useState } from 'react';
-
+import { Emits } from 'react-emitter-factory';
+import { Controller } from 'react-hook-form';
+import { Button, Grid, RadioGroup, Typography } from '@mui/material';
 import { CourseInfo, TimeZones } from 'types/course/admin/course';
-import useTranslation from 'lib/hooks/useTranslation';
+
+import AvatarSelector from 'lib/components/core/AvatarSelector';
+import RadioButton from 'lib/components/core/buttons/RadioButton';
+import InfoLabel from 'lib/components/core/InfoLabel';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
-import FormRichTextField from 'lib/components/form/fields/RichTextField';
-import FormTextField from 'lib/components/form/fields/TextField';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
-import InfoLabel from 'lib/components/core/InfoLabel';
+import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
-import RadioButton from 'lib/components/core/buttons/RadioButton';
-import AvatarSelector from 'lib/components/core/AvatarSelector';
-import validationSchema from './validationSchema';
-import translations from './translations';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import DeleteCoursePrompt from './DeleteCoursePrompt';
+import translations from './translations';
+import validationSchema from './validationSchema';
 
 interface CourseSettingsFormProps extends Emits<FormEmitter> {
   data: CourseInfo;
@@ -58,45 +59,45 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
 
   return (
     <Form
-      initialValues={props.data}
-      onSubmit={handleSubmit}
-      emitsVia={props.emitsVia}
-      validates={validationSchema}
-      headsUp
-      disabled={props.disabled}
       dirty={Boolean(stagedLogo)}
+      disabled={props.disabled}
+      emitsVia={props.emitsVia}
+      headsUp={true}
+      initialValues={props.data}
       onReset={(): void => setStagedLogo(undefined)}
+      onSubmit={handleSubmit}
+      validates={validationSchema}
     >
       {(control, watch): JSX.Element => (
         <>
-          <Section title={t(translations.courseSettings)} sticksToNavbar>
+          <Section sticksToNavbar={true} title={t(translations.courseSettings)}>
             <Controller
-              name="title"
               control={control}
+              name="title"
               render={({ field, fieldState }): JSX.Element => (
                 <FormTextField
+                  disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
+                  fullWidth={true}
                   label={t(translations.courseName)}
-                  variant="filled"
-                  fullWidth
-                  disabled={props.disabled}
                   placeholder={t(translations.courseNamePlaceholder)}
+                  variant="filled"
                 />
               )}
             />
 
             <Subsection title={t(translations.courseDescription)}>
               <Controller
-                name="description"
                 control={control}
+                name="description"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormRichTextField
+                    disabled={props.disabled}
+                    disableMargins={true}
                     field={field}
                     fieldState={fieldState}
-                    fullWidth
-                    disableMargins
-                    disabled={props.disabled}
+                    fullWidth={true}
                     placeholder={t(translations.courseDescriptionPlaceholder)}
                   />
                 )}
@@ -104,74 +105,74 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             </Subsection>
 
             <AvatarSelector
-              title={t(translations.courseLogo)}
               defaultImageUrl={watch('logo')}
-              stagedImage={stagedLogo}
-              onSelectImage={setStagedLogo}
               disabled={props.disabled}
+              onSelectImage={setStagedLogo}
+              stagedImage={stagedLogo}
+              title={t(translations.courseLogo)}
             />
 
             <InfoLabel label={t(translations.imageFormatsInfo)} />
           </Section>
 
-          <Section title={t(translations.publicity)} sticksToNavbar>
+          <Section sticksToNavbar={true} title={t(translations.publicity)}>
             <Controller
-              name="published"
               control={control}
+              name="published"
               render={({ field, fieldState }): JSX.Element => (
                 <FormCheckboxField
+                  description={t(translations.publishedDescription)}
+                  disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
                   label={t(translations.published)}
-                  description={t(translations.publishedDescription)}
-                  disabled={props.disabled}
                 />
               )}
             />
 
             <Controller
-              name="enrollable"
               control={control}
+              name="enrollable"
               render={({ field, fieldState }): JSX.Element => (
                 <FormCheckboxField
+                  disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
                   label={t(translations.allowUsersToSendEnrolmentRequests)}
-                  disabled={props.disabled}
                 />
               )}
             />
           </Section>
 
-          <Section title={t(translations.timeSettings)} sticksToNavbar>
-            <Grid container columnSpacing={1} direction="row">
-              <Grid item xs>
+          <Section sticksToNavbar={true} title={t(translations.timeSettings)}>
+            <Grid columnSpacing={1} container={true} direction="row">
+              <Grid item={true} xs={true}>
                 <Controller
-                  name="startAt"
                   control={control}
+                  name="startAt"
                   render={({ field, fieldState }): JSX.Element => (
                     <FormDateTimePickerField
+                      disabled={props.disabled}
                       field={field}
                       fieldState={fieldState}
                       label={t(translations.startsAt)}
                       variant="filled"
-                      disabled={props.disabled}
                     />
                   )}
                 />
               </Grid>
 
-              <Grid item xs>
+              <Grid item={true} xs={true}>
                 <Controller
-                  name="endAt"
                   control={control}
+                  name="endAt"
                   render={({ field, fieldState }): JSX.Element => (
                     <FormDateTimePickerField
+                      disabled={props.disabled}
                       field={field}
                       fieldState={fieldState}
                       label={t(translations.endsAt)}
                       variant="filled"
-                      disabled={props.disabled}
                     />
                   )}
                 />
@@ -179,91 +180,91 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             </Grid>
 
             <Controller
-              name="timeZone"
               control={control}
+              name="timeZone"
               render={({ field, fieldState }): JSX.Element => (
                 <FormSelectField
+                  disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
                   label={t(translations.timeZone)}
-                  variant="filled"
+                  native={true}
                   options={timeZonesOptions}
-                  native
-                  disabled={props.disabled}
+                  variant="filled"
                 />
               )}
             />
           </Section>
 
-          <Section title={t(translations.courseDelivery)} sticksToNavbar>
+          <Section sticksToNavbar={true} title={t(translations.courseDelivery)}>
             <Controller
-              name="gamified"
               control={control}
+              name="gamified"
               render={({ field, fieldState }): JSX.Element => (
                 <FormCheckboxField
+                  description={t(translations.gamifiedDescription)}
+                  disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
                   label={t(translations.gamified)}
-                  description={t(translations.gamifiedDescription)}
-                  disabled={props.disabled}
                 />
               )}
             />
 
             <Controller
-              name="showPersonalizedTimelineFeatures"
               control={control}
+              name="showPersonalizedTimelineFeatures"
               render={({ field, fieldState }): JSX.Element => (
                 <FormCheckboxField
+                  description={t(translations.personalisedTimelinesDescription)}
+                  disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
                   label={t(translations.enablePersonalisedTimelines)}
-                  description={t(translations.personalisedTimelinesDescription)}
-                  disabled={props.disabled}
                 />
               )}
             />
 
             {watch('showPersonalizedTimelineFeatures') && (
               <Subsection
-                title={t(translations.defaultTimelineAlgorithm)}
                 className="!mt-12"
+                title={t(translations.defaultTimelineAlgorithm)}
               >
                 <Controller
-                  name="defaultTimelineAlgorithm"
                   control={control}
+                  name="defaultTimelineAlgorithm"
                   render={({ field }): JSX.Element => (
                     <RadioGroup {...field} className="space-y-5">
                       <RadioButton
-                        value="fixed"
-                        label={t(translations.fixed)}
+                        className="my-0"
                         description={t(translations.fixedDescription)}
-                        className="my-0"
                         disabled={props.disabled}
+                        label={t(translations.fixed)}
+                        value="fixed"
                       />
 
                       <RadioButton
-                        value="fomo"
-                        label={t(translations.fomo)}
+                        className="my-0"
                         description={t(translations.fomoDescription)}
-                        className="my-0"
                         disabled={props.disabled}
+                        label={t(translations.fomo)}
+                        value="fomo"
                       />
 
                       <RadioButton
-                        value="stragglers"
-                        label={t(translations.stragglers)}
+                        className="my-0"
                         description={t(translations.stragglersDescription)}
-                        className="my-0"
                         disabled={props.disabled}
+                        label={t(translations.stragglers)}
+                        value="stragglers"
                       />
 
                       <RadioButton
-                        value="otot"
-                        label={t(translations.otot)}
-                        description={t(translations.ototDescription)}
                         className="my-0"
+                        description={t(translations.ototDescription)}
                         disabled={props.disabled}
+                        label={t(translations.otot)}
+                        value="otot"
                       />
                     </RadioGroup>
                   )}
@@ -272,22 +273,22 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             )}
 
             <Subsection
-              title={t(translations.earlyPreview)}
-              subtitle={t(translations.earlyPreviewDescription)}
               className="!mt-12"
+              subtitle={t(translations.earlyPreviewDescription)}
+              title={t(translations.earlyPreview)}
             >
               <Controller
-                name="advanceStartAtDurationDays"
                 control={control}
+                name="advanceStartAtDurationDays"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
+                    disabled={props.disabled}
                     field={field}
                     fieldState={fieldState}
+                    fullWidth={true}
                     label={t(translations.daysInAdvance)}
-                    variant="filled"
-                    fullWidth
                     type="number"
-                    disabled={props.disabled}
+                    variant="filled"
                   />
                 )}
               />
@@ -295,8 +296,8 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
           </Section>
 
           <Section
+            sticksToNavbar={true}
             title={t(translations.deleteCourse)}
-            sticksToNavbar
             titleColor="error"
           >
             <Typography variant="body2">
@@ -304,21 +305,21 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             </Typography>
 
             <Button
-              variant="outlined"
               color="error"
-              onClick={(): void => setDeletingCourse(true)}
               disabled={props.disabled}
+              onClick={(): void => setDeletingCourse(true)}
+              variant="outlined"
             >
               {t(translations.deleteThisCourse)}
             </Button>
           </Section>
 
           <DeleteCoursePrompt
-            open={deletingCourse}
-            onClose={closeDeleteCoursePrompt}
             courseTitle={props.data.title}
-            onConfirmDelete={props.onDeleteCourse}
             disabled={props.disabled}
+            onClose={closeDeleteCoursePrompt}
+            onConfirmDelete={props.onDeleteCourse}
+            open={deletingCourse}
           />
         </>
       )}

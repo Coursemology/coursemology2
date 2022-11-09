@@ -1,3 +1,9 @@
+import { FC, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { ArrowBack, Check, Clear, Reply } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 import {
   Avatar,
   CardHeader,
@@ -7,17 +13,13 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { ArrowBack, Check, Clear, Reply } from '@mui/icons-material';
-import { LoadingButton } from '@mui/lab';
 import { grey, orange } from '@mui/material/colors';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { CommentPostMiniEntity } from 'types/course/comments';
+import { AppDispatch } from 'types/store';
+
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { formatLongDateTime } from 'lib/moment';
-import { FC, useState } from 'react';
-import { CommentPostMiniEntity } from 'types/course/comments';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'types/store';
-import { toast } from 'react-toastify';
+
 import { deletePost, updatePostCodaveri } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -137,9 +139,8 @@ const CodaveriCommentCard: FC<Props> = (props) => {
           </IconButton>
         )}
         <Rating
-          name={`codaveri-feedback-rating-${post.id}`}
-          value={rating}
           max={5}
+          name={`codaveri-feedback-rating-${post.id}`}
           onChange={(_event, newValue): void => {
             // To prevent the rating to be reset to null when clicking on the same previous rating
             if (newValue !== null) {
@@ -151,6 +152,7 @@ const CodaveriCommentCard: FC<Props> = (props) => {
             }
           }}
           size="medium"
+          value={rating}
         />
         <Typography color={grey[800]} variant="subtitle1">
           {editMode
@@ -167,10 +169,10 @@ const CodaveriCommentCard: FC<Props> = (props) => {
         <>
           {renderRating()}
           <TextField
-            disabled={isSaving}
             key={editPostIdentifier(post.id.toString())}
-            fullWidth
-            multiline
+            disabled={isSaving}
+            fullWidth={true}
+            multiline={true}
             onChange={(event): void => {
               setEditValue(event.target.value);
             }}
@@ -218,9 +220,9 @@ const CodaveriCommentCard: FC<Props> = (props) => {
               <Tooltip title={intl.formatMessage(translations.finalise)}>
                 <LoadingButton
                   className="approve-comment"
-                  onClick={onSave}
                   disabled={isRejecting || isSaving}
                   loading={isSaving}
+                  onClick={onSave}
                 >
                   <Check
                     htmlColor={isRejecting || isSaving ? 'grey' : 'green'}
@@ -267,11 +269,11 @@ const CodaveriCommentCard: FC<Props> = (props) => {
               style={{ height: '25px', width: '25px' }}
             />
           }
-          title={post.creator.name}
-          titleTypographyProps={{ display: 'block', marginright: 20 }}
+          style={{ padding: 6 }}
           subheader={formatLongDateTime(post.createdAt)}
           subheaderTypographyProps={{ display: 'block' }}
-          style={{ padding: 6 }}
+          title={post.creator.name}
+          titleTypographyProps={{ display: 'block', marginright: 20 }}
         />
       </div>
       <div
@@ -283,14 +285,14 @@ const CodaveriCommentCard: FC<Props> = (props) => {
         {renderCommentContent()}
       </div>
       <ConfirmationDialog
-        confirmDelete
+        confirmDelete={true}
         disableCancelButton={isRejecting}
         disableConfirmButton={isRejecting}
         loadingConfirmButton={isRejecting}
-        open={rejectConfirmation}
         message={intl.formatMessage(translations.rejectConfirmation)}
         onCancel={(): void => setRejectConfirmation(false)}
         onConfirm={onConfirmReject}
+        open={rejectConfirmation}
       />
     </div>
   );

@@ -1,20 +1,21 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, Typography } from '@mui/material';
-
-import { AppDispatch, AppState } from 'types/store';
 import { toast } from 'react-toastify';
-import { InvitationResult } from 'types/course/userInvitations';
 import DownloadIcon from '@mui/icons-material/Download';
+import { Link, Typography } from '@mui/material';
+import { InvitationResult } from 'types/course/userInvitations';
+import { AppDispatch, AppState } from 'types/store';
+
 import CourseAPI from 'api/course';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import FileUploadForm from '../../components/forms/InviteUsersFileUploadForm';
+import { inviteUsersFromFile } from '../../operations';
 import {
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
-import { inviteUsersFromFile } from '../../operations';
 
 interface Props {
   open: boolean;
@@ -154,11 +155,11 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
       <Typography variant="body2">
         <strong>{t(translations.exampleHeader)}</strong>
         <Link
-          variant="inherit"
-          href={downloadTemplatePath}
           download="template.csv"
-          target="_blank"
+          href={downloadTemplatePath}
           style={{ textDecoration: 'none', cursor: 'pointer' }}
+          target="_blank"
+          variant="inherit"
         >
           {t(translations.template)}
           <DownloadIcon
@@ -187,10 +188,10 @@ const InviteUsersFileUpload: FC<Props> = (props) => {
 
   return (
     <FileUploadForm
-      open={open}
-      onSubmit={onSubmit}
-      onClose={onClose}
       formSubtitle={formSubtitle}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
     />
   );
 };

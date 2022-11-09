@@ -5,13 +5,14 @@ import {
   saveEntityToStore,
   saveListToStore,
 } from 'utilities/store';
+
 import {
-  SAVE_ACHIEVEMENT_LIST,
-  SAVE_ACHIEVEMENT,
-  DELETE_ACHIEVEMENT,
-  SAVE_ACHIEVEMENT_COURSE_USERS,
-  AchievementsState,
   AchievementsActionType,
+  AchievementsState,
+  DELETE_ACHIEVEMENT,
+  SAVE_ACHIEVEMENT,
+  SAVE_ACHIEVEMENT_COURSE_USERS,
+  SAVE_ACHIEVEMENT_LIST,
 } from './types';
 
 const initialState: AchievementsState = {

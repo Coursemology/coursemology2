@@ -1,7 +1,8 @@
+import { defineMessages, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import { Paper } from '@mui/material';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { defineMessages, injectIntl } from 'react-intl';
+
 import { workflowStates } from '../constants';
 import { codaveriFeedbackStatusShape } from '../propTypes';
 

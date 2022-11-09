@@ -1,4 +1,3 @@
-import produce from 'immer';
 import {
   ComponentProps,
   createElement,
@@ -6,6 +5,8 @@ import {
   useRef,
   useState,
 } from 'react';
+import { toast } from 'react-toastify';
+import { Add } from '@mui/icons-material';
 import {
   Button,
   Menu,
@@ -19,26 +20,26 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import { Add } from '@mui/icons-material';
-import { toast } from 'react-toastify';
-
+import produce from 'immer';
 import {
   ConditionAbility,
   ConditionData,
   ConditionsData,
 } from 'types/course/conditions';
-import useTranslation from 'lib/hooks/useTranslation';
-import useToggle from 'lib/hooks/useToggle';
+
 import Subsection from 'lib/components/core/layouts/Subsection';
+import useToggle from 'lib/hooks/useToggle';
+import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
-import translations from './translations';
+
 import ConditionRow from './ConditionRow';
-import specify from './specifiers';
 import {
   createCondition,
   deleteCondition,
   updateCondition,
 } from './operations';
+import specify from './specifiers';
+import translations from './translations';
 
 interface ConditionsManagerProps {
   title: string;
@@ -120,26 +121,26 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
     <ConditionRow
       key={condition.type + condition.id}
       condition={condition}
-      otherConditions={conditionsByType[condition.type]}
-      onUpdate={handleUpdateCondition}
       onDelete={handleDeleteCondition}
+      onUpdate={handleUpdateCondition}
+      otherConditions={conditionsByType[condition.type]}
     />
   );
 
   return (
     <Subsection
-      title={props.title}
-      subtitle={props.description}
       className="mt-4"
+      subtitle={props.description}
+      title={props.title}
     >
       <div className="flex h-16 items-center space-x-4">
         <Button
           ref={addConditionButton}
+          disabled={adding}
+          onClick={toggleAdding}
+          size="small"
           startIcon={<Add />}
           variant="outlined"
-          size="small"
-          onClick={toggleAdding}
-          disabled={adding}
         >
           {t(translations.addCondition)}
         </Button>
@@ -155,7 +156,7 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
       </div>
 
       {conditions.length > 0 && (
-        <TableContainer component={Outlined} className="mt-8">
+        <TableContainer className="mt-8" component={Outlined}>
           <Table>
             <TableHead>
               <TableRow>
@@ -179,9 +180,9 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
       )}
 
       <Menu
-        open={adding}
         anchorEl={addConditionButton.current}
         onClose={toggleAdding}
+        open={adding}
       >
         {props.conditionsData.enabledConditions.map((ability) => (
           <MenuItem

@@ -1,7 +1,8 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import UserShow from './pages/UserShow';
 import configureStore from './store';
 
@@ -16,7 +17,7 @@ $(() => {
       <ProviderWrapper store={store}>
         <BrowserRouter>
           <Routes>
-            <Route path="/users/:userId" element={<UserShow />} />
+            <Route element={<UserShow />} path="/users/:userId" />
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,

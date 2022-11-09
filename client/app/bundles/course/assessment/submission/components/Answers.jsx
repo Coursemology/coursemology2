@@ -1,15 +1,17 @@
+import { Component } from 'react';
+
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-github';
 
-import { Component } from 'react';
 import ScribingView from '../containers/ScribingView';
 import VoiceResponseAnswer from '../containers/VoiceResponseAnswer';
+
+import FileUploadAnswer from './answers/FileUpload';
+import ForumPostResponseAnswer from './answers/ForumPostResponse';
 import MultipleChoiceAnswer from './answers/MultipleChoice';
 import MultipleResponseAnswer from './answers/MultipleResponse';
-import TextResponseAnswer from './answers/TextResponse';
-import FileUploadAnswer from './answers/FileUpload';
 import ProgrammingAnswer from './answers/Programming';
-import ForumPostResponseAnswer from './answers/ForumPostResponse';
+import TextResponseAnswer from './answers/TextResponse';
 
 export default class Answers extends Component {
   static renderFileUpload({ question, readOnly, answerId }) {
@@ -25,9 +27,9 @@ export default class Answers extends Component {
     return (
       <ForumPostResponseAnswer
         key={`question_${question.id}`}
+        answerId={answerId}
         question={question}
         readOnly={readOnly}
-        answerId={answerId}
       />
     );
   }
@@ -75,9 +77,9 @@ export default class Answers extends Component {
     return (
       <ScribingView
         key={`question_${question.id}`}
-        scribing={question}
-        readOnly={readOnly}
         answerId={answerId}
+        readOnly={readOnly}
+        scribing={question}
       />
     );
   }
@@ -95,9 +97,9 @@ export default class Answers extends Component {
     return (
       <VoiceResponseAnswer
         key={`question_${question.id}`}
+        answerId={answerId}
         question={question}
         readOnly={readOnly}
-        answerId={answerId}
       />
     );
   }

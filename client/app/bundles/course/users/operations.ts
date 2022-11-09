@@ -1,5 +1,3 @@
-import CourseAPI from 'api/course';
-import { Operation } from 'types/store';
 import {
   CourseUserBasicListData,
   CourseUserBasicMiniEntity,
@@ -9,13 +7,17 @@ import {
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
 import {
-  PersonalTimeFormData,
-  PersonalTimePostData,
-} from 'types/course/personalTimes';
-import {
   ExperiencePointsRowData,
   UpdateExperiencePointsRecordPatchData,
 } from 'types/course/experiencePointsRecords';
+import {
+  PersonalTimeFormData,
+  PersonalTimePostData,
+} from 'types/course/personalTimes';
+import { Operation } from 'types/store';
+
+import CourseAPI from 'api/course';
+
 import * as actions from './actions';
 import {
   DeleteExperiencePointsRecordAction,

@@ -1,19 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-
-import {
-  fetchLevels,
-  updateExpThreshold,
-  sortLevels,
-  addLevel,
-  deleteLevel,
-  saveLevels,
-} from 'course/level/actions';
-import { defaultComponentTitles } from 'course/translations.intl';
+import { connect } from 'react-redux';
 import {
   Button,
   Table,
@@ -23,7 +10,19 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import PropTypes from 'prop-types';
+
+import {
+  addLevel,
+  deleteLevel,
+  fetchLevels,
+  saveLevels,
+  sortLevels,
+  updateExpThreshold,
+} from 'course/level/actions';
 import LevelRow from 'course/level/components/LevelRow';
+import { defaultComponentTitles } from 'course/translations.intl';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
 const translations = defineMessages({
@@ -153,12 +152,12 @@ class Level extends Component {
       const key = `level-row-${index}`;
       return (
         <LevelRow
+          key={key}
           deleteLevel={this.handleDeleteLevel}
           disabled={isSaving}
           levelNumber={index + 1}
           sortLevels={this.handleLevelTextBlur}
           updateExpThreshold={this.handleUpdateExpThreshold}
-          key={key}
           {...{ canManage, experiencePointsThreshold }}
         />
       );
@@ -197,12 +196,12 @@ class Level extends Component {
         <TableRow>
           <TableCell style={styles.saveLevels}>
             <Button
-              variant="contained"
               color="primary"
               disabled={isSaving}
               id="save-levels"
               onClick={this.handleSaveLevels()}
               style={styles.formButton}
+              variant="contained"
             >
               <FormattedMessage {...translations.saveLevels} />
             </Button>

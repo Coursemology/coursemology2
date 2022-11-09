@@ -1,11 +1,12 @@
 import produce from 'immer';
 import { createEntityStore, saveListToStore } from 'utilities/store';
+
 import {
   GlobalActionType,
   GlobalUserState,
   SAVE_COURSE_LIST,
-  SAVE_USER,
   SAVE_INSTANCE_LIST,
+  SAVE_USER,
 } from './types';
 
 const initialState: GlobalUserState = {

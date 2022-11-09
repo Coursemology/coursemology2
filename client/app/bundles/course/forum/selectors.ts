@@ -2,6 +2,7 @@
 import { EntityId } from '@reduxjs/toolkit';
 import { ForumTopicEntity } from 'types/course/forums';
 import { AppState } from 'types/store';
+
 import {
   forumAdapter,
   forumTopicAdapter,

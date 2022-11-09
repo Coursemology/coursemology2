@@ -1,8 +1,7 @@
 /* eslint-disable camelcase */
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import {
   ListSubheader,
   Switch,
@@ -12,15 +11,17 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import PropTypes from 'prop-types';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import messagesTranslations from 'lib/translations/messages';
+
+import MilestoneGroupSettings from './MilestoneGroupSettings';
 import {
   fetchLessonPlanSettings,
   updateLessonPlanSettings,
 } from './operations';
 import translations from './translations.intl';
-import MilestoneGroupSettings from './MilestoneGroupSettings';
 
 class LessonPlanSettings extends Component {
   constructor(props) {
@@ -154,7 +155,7 @@ class LessonPlanSettings extends Component {
 
     if (assessmentItemSettings.length < 1) {
       return (
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...translations.noLessonPlanItems} />
         </ListSubheader>
       );
@@ -205,7 +206,7 @@ class LessonPlanSettings extends Component {
 
     if (componentItemSettings.length < 1) {
       return (
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...translations.noLessonPlanItems} />
         </ListSubheader>
       );

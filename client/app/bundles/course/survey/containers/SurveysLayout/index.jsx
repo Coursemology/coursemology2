@@ -1,11 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
-import NotificationPopup from 'lib/containers/NotificationPopup';
-import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
-import SurveyFormDialogue from 'course/survey/containers/SurveyFormDialogue';
+
 import QuestionFormDialogue from 'course/survey/containers/QuestionFormDialogue';
 import SectionFormDialogue from 'course/survey/containers/SectionFormDialogue';
+import SurveyFormDialogue from 'course/survey/containers/SurveyFormDialogue';
 import SurveyLayout from 'course/survey/containers/SurveyLayout';
 import SurveyIndex from 'course/survey/pages/SurveyIndex';
+import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
+import NotificationPopup from 'lib/containers/NotificationPopup';
 
 const SurveysLayout = () => {
   const surveyRoot = '/courses/:courseId/surveys';
@@ -17,8 +18,8 @@ const SurveysLayout = () => {
       <DeleteConfirmation />
       <NotificationPopup />
       <Routes>
-        <Route exact path={surveyRoot} element={<SurveyIndex />} />
-        <Route path={`${surveyRoot}/:surveyId/*`} element={<SurveyLayout />} />
+        <Route element={<SurveyIndex />} exact={true} path={surveyRoot} />
+        <Route element={<SurveyLayout />} path={`${surveyRoot}/:surveyId/*`} />
       </Routes>
     </>
   );

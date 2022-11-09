@@ -1,20 +1,23 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Box } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { Box } from '@mui/material';
+import { TopicType } from 'types/course/forums';
 import { AppDispatch, AppState } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
-import Note from 'lib/components/core/Note';
-import { TopicType } from 'types/course/forums';
+
+import ForumTopicManagementButtons from '../../components/buttons/ForumTopicManagementButtons';
 import { fetchForumTopic } from '../../operations';
 import { getForumTopic } from '../../selectors';
-import ForumTopicManagementButtons from '../../components/buttons/ForumTopicManagementButtons';
-import Topics from './Topics';
+
 import NewPostDialog from './NewPostDialog';
+import Topics from './Topics';
 
 const translations = defineMessages({
   header: {
@@ -80,9 +83,9 @@ const ForumTopicShow: FC = () => {
     forumPageHeaderTitle = forumTopic.title;
     headerToolbars.push(
       <ForumTopicManagementButtons
+        navigateToIndexAfterDelete={true}
+        navigateToShowAfterUpdate={true}
         topic={forumTopic}
-        navigateToIndexAfterDelete
-        navigateToShowAfterUpdate
       />,
     );
   }
@@ -116,7 +119,7 @@ const ForumTopicShow: FC = () => {
     ) : (
       <Box className="my-3 space-y-6">
         {topicNote && <Note message={topicNote} />}
-        <Topics postIdsArray={forumTopic.postTreeIds} level={0} />
+        <Topics level={0} postIdsArray={forumTopic.postTreeIds} />
         <NewPostDialog forumTopic={forumTopic} />
       </Box>
     );

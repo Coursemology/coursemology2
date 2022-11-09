@@ -1,13 +1,15 @@
 import { FC, memo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import DeleteButton from 'lib/components/core/buttons/DeleteButton';
-import AcceptButton from 'lib/components/core/buttons/AcceptButton';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch } from 'types/store';
-import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
-import { EnrolRequestRowData } from 'types/course/enrolRequests';
 import equal from 'fast-deep-equal';
+import { EnrolRequestRowData } from 'types/course/enrolRequests';
+import { AppDispatch } from 'types/store';
+
+import AcceptButton from 'lib/components/core/buttons/AcceptButton';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
+
 import { approveEnrolRequest, rejectEnrolRequest } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -106,24 +108,24 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
   const managementButtons = (
     <div style={{ whiteSpace: 'nowrap' }}>
       <AcceptButton
-        tooltip={intl.formatMessage(translations.approveTooltip)}
         className={`enrol-request-approve-${enrolRequest.id}`}
         disabled={isApproving || isDeleting}
         onClick={onApprove}
         sx={styles.buttonStyle}
+        tooltip={intl.formatMessage(translations.approveTooltip)}
       />
       <DeleteButton
-        tooltip={intl.formatMessage(translations.rejectTooltip)}
         className={`enrol-request-reject-${enrolRequest.id}`}
-        disabled={isApproving || isDeleting}
-        loading={isDeleting}
-        onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.rejectConfirm, {
           role: COURSE_USER_ROLES[enrolRequest.role!],
           name: enrolRequest.name,
           email: enrolRequest.email,
         })}
+        disabled={isApproving || isDeleting}
+        loading={isDeleting}
+        onClick={onDelete}
         sx={styles.buttonStyle}
+        tooltip={intl.formatMessage(translations.rejectTooltip)}
       />
     </div>
   );

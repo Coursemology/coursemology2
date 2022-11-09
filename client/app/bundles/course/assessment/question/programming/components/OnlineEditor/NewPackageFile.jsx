@@ -1,8 +1,9 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Button, TableCell, TableRow } from '@mui/material';
 import { injectIntl } from 'react-intl';
+import { Button, TableCell, TableRow } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import styles from './OnlineEditorView.scss';
 
 class NewPackageFile extends Component {
@@ -27,7 +28,6 @@ class NewPackageFile extends Component {
     if (showDeleteButton) {
       deleteButton = (
         <Button
-          variant="contained"
           disabled={isLoading}
           onClick={() => {
             this.props.deleteNewPackageFile(this.props.fileType, index);
@@ -39,6 +39,7 @@ class NewPackageFile extends Component {
             minWidth: '40px',
             width: '40px',
           }}
+          variant="contained"
         >
           <i className="fa fa-trash" />
         </Button>
@@ -54,20 +55,20 @@ class NewPackageFile extends Component {
         </TableCell>
         <TableCell>
           <Button
-            variant="contained"
+            className={styles.fileInputButton}
             color="primary"
             component="label"
-            className={styles.fileInputButton}
             disabled={isLoading}
             style={addFileButtonStyle}
+            variant="contained"
           >
             {this.props.buttonLabel}
             <input
-              type="file"
-              name={NewPackageFile.getPackageFileName(this.props.fileType)}
               className={styles.uploadInput}
               disabled={isLoading}
+              name={NewPackageFile.getPackageFileName(this.props.fileType)}
               onChange={this.newPackageFileChangeHandler(index)}
+              type="file"
             />
           </Button>
           <div style={{ display: 'inline-block' }}>{filename}</div>

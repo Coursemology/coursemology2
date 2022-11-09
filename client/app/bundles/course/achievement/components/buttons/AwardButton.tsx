@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
-import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import EmojiEvents from '@mui/icons-material/EmojiEvents';
+import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
+
 import AchievementAward from '../../pages/AchievementAward';
 
 interface Props extends IconButtonProps {
@@ -19,9 +20,9 @@ const AwardButton: FC<Props> = ({
 
   const awardButton = (
     <IconButton
-      onClick={(): void => setIsOpen(true)}
       color="inherit"
       disabled={disabled}
+      onClick={(): void => setIsOpen(true)}
       {...props}
     >
       <EmojiEvents />
@@ -31,8 +32,8 @@ const AwardButton: FC<Props> = ({
   const awardDialog = (
     <AchievementAward
       achievementId={achievementId}
-      open={isOpen}
       handleClose={(): void => setIsOpen(false)}
+      open={isOpen}
     />
   );
 

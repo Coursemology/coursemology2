@@ -3,17 +3,19 @@ import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Icon, Tooltip, Button } from '@mui/material';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { Button, Icon, Tooltip } from '@mui/material';
 import { AppDispatch, AppState } from 'types/store';
-import PageHeader from 'lib/components/navigation/PageHeader';
+
 import AddButton from 'lib/components/core/buttons/AddButton';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
+
+import ForumManagementButtons from '../../components/buttons/ForumManagementButtons';
+import ForumTopicTable from '../../components/tables/ForumTopicTable';
 import { fetchForum, markAsRead } from '../../operations';
 import { getForum, getForumTopics } from '../../selectors';
 import ForumTopicNew from '../ForumTopicNew';
-import ForumTopicTable from '../../components/tables/ForumTopicTable';
-import ForumManagementButtons from '../../components/buttons/ForumManagementButtons';
 
 const translations = defineMessages({
   header: {
@@ -139,10 +141,10 @@ const ForumShow: FC = () => {
     );
     headerToolbars.push(
       <ForumManagementButtons
-        forum={forum}
-        navigateToIndexAfterDelete
-        navigateToShowAfterUpdate
         disabled={isMarking}
+        forum={forum}
+        navigateToIndexAfterDelete={true}
+        navigateToShowAfterUpdate={true}
       />,
     );
   }
@@ -163,9 +165,9 @@ const ForumShow: FC = () => {
       <PageHeader title={forumPageHeaderTitle} toolbars={headerToolbars} />
       {!isLoading && isOpen && (
         <ForumTopicNew
-          open={isOpen}
-          onClose={(): void => setIsOpen(false)}
           availableTopicTypes={forum?.availableTopicTypes}
+          onClose={(): void => setIsOpen(false)}
+          open={isOpen}
         />
       )}
       {isLoading ? (

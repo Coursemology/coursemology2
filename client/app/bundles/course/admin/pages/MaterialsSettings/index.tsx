@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { MaterialsSettingsData } from 'types/course/admin/materials';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { FormEmitter } from 'lib/components/form/Form';
+import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
-import { FormEmitter } from 'lib/components/form/Form';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import Preload from 'lib/components/wrappers/Preload';
+
+import { useItemsReloader } from '../../components/SettingsNavigation';
+
 import MaterialsSettingsForm from './MaterialsSettingsForm';
 import { fetchMaterialsSettings, updateMaterialsSettings } from './operations';
-import { useItemsReloader } from '../../components/SettingsNavigation';
 
 const MaterialsSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
@@ -32,13 +34,13 @@ const MaterialsSettings = (): JSX.Element => {
   };
 
   return (
-    <Preload while={fetchMaterialsSettings} render={<LoadingIndicator />}>
+    <Preload render={<LoadingIndicator />} while={fetchMaterialsSettings}>
       {(data): JSX.Element => (
         <MaterialsSettingsForm
           data={data}
-          onSubmit={handleSubmit}
-          emitsVia={setForm}
           disabled={submitting}
+          emitsVia={setForm}
+          onSubmit={handleSubmit}
         />
       )}
     </Preload>

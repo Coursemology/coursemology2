@@ -1,15 +1,17 @@
-import { Typography } from '@mui/material';
-import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
-import FormTextField from 'lib/components/form/fields/TextField';
-import Section from 'lib/components/core/layouts/Section';
-import useTranslation from 'lib/hooks/useTranslation';
 import { Emits } from 'react-emitter-factory';
 import { Controller } from 'react-hook-form';
-
+import { Typography } from '@mui/material';
 import { LeaderboardSettingsData } from 'types/course/admin/leaderboard';
+
+import Section from 'lib/components/core/layouts/Section';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
+import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
-import translations from './translations';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import commonTranslations from '../../translations';
+
+import translations from './translations';
 
 interface LeaderboardSettingsFormProps extends Emits<FormEmitter> {
   data: LeaderboardSettingsData;
@@ -24,82 +26,85 @@ const LeaderboardSettingsForm = (
 
   return (
     <Form
-      initialValues={props.data}
-      headsUp
-      emitsVia={props.emitsVia}
-      onSubmit={props.onSubmit}
       disabled={props.disabled}
+      emitsVia={props.emitsVia}
+      headsUp={true}
+      initialValues={props.data}
+      onSubmit={props.onSubmit}
     >
       {(control): JSX.Element => (
-        <Section title={t(translations.leaderboardSettings)} sticksToNavbar>
+        <Section
+          sticksToNavbar={true}
+          title={t(translations.leaderboardSettings)}
+        >
           <Controller
-            name="title"
             control={control}
+            name="title"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                variant="filled"
+                fullWidth={true}
                 label={t(commonTranslations.title)}
-                fullWidth
-                disabled={props.disabled}
+                variant="filled"
               />
             )}
           />
 
           <Typography
-            variant="body2"
-            color="text.secondary"
             className="!mt-2 !mb-4"
+            color="text.secondary"
+            variant="body2"
           >
             {t(commonTranslations.leaveEmptyToUseDefaultTitle)}
           </Typography>
 
           <Controller
-            name="displayUserCount"
             control={control}
+            name="displayUserCount"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                variant="filled"
+                fullWidth={true}
                 label={t(translations.displayUserCount)}
                 type="number"
-                fullWidth
-                disabled={props.disabled}
+                variant="filled"
               />
             )}
           />
 
           <Controller
-            name="enableGroupLeaderboard"
             control={control}
+            name="enableGroupLeaderboard"
             render={({ field, fieldState }): JSX.Element => (
               <FormCheckboxField
+                disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
                 label={t(translations.enableGroupLeaderboard)}
-                disabled={props.disabled}
               />
             )}
           />
 
           <Controller
-            name="groupLeaderboardTitle"
             control={control}
+            name="groupLeaderboardTitle"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                variant="filled"
+                fullWidth={true}
                 label={t(translations.groupLeaderboardTitle)}
-                fullWidth
-                disabled={props.disabled}
+                variant="filled"
               />
             )}
           />
 
-          <Typography variant="body2" color="text.secondary" className="!mt-2">
+          <Typography className="!mt-2" color="text.secondary" variant="body2">
             {t(commonTranslations.leaveEmptyToUseDefaultTitle)}
           </Typography>
         </Section>

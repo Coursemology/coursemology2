@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Paper, Popover } from '@mui/material';
+import PropTypes from 'prop-types';
+
+import { scribingTranslations as translations } from '../../../translations';
+import ColorPickerField from '../fields/ColorPickerField';
 import LineStyleField from '../fields/LineStyleField';
 import LineThicknessField from '../fields/LineThicknessField';
-import ColorPickerField from '../fields/ColorPickerField';
-import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
   intl: PropTypes.object.isRequired,
@@ -67,31 +68,31 @@ const LinePopover = (props) => {
 
   return (
     <Popover
-      open={open}
       anchorEl={anchorEl}
       anchorOrigin={popoverStyles.anchorOrigin}
       onClose={onRequestClose}
-      transformOrigin={popoverStyles.transformOrigin}
+      open={open}
       style={styles.toolDropdowns}
+      transformOrigin={popoverStyles.transformOrigin}
     >
       <Paper style={styles.paper}>
         <h4>{intl.formatMessage(translations.line)} </h4>
         <LineStyleField
           lineToolType={lineToolType}
-          selectedLineStyle={selectedLineStyle}
           onClickLineStyleChip={onClickLineStyleChip}
+          selectedLineStyle={selectedLineStyle}
         />
         <LineThicknessField
-          toolThicknessValue={toolThicknessValue}
           onChangeSliderThickness={onChangeSliderThickness}
+          toolThicknessValue={toolThicknessValue}
         />
         <ColorPickerField
-          onClickColorPicker={onClickColorPicker}
-          colorPickerPopoverOpen={colorPickerPopoverOpen}
-          colorPickerPopoverAnchorEl={colorPickerPopoverAnchorEl}
-          onRequestCloseColorPickerPopover={onRequestCloseColorPickerPopover}
           colorPickerColor={colorPickerColor}
+          colorPickerPopoverAnchorEl={colorPickerPopoverAnchorEl}
+          colorPickerPopoverOpen={colorPickerPopoverOpen}
           onChangeCompleteColorPicker={onChangeCompleteColorPicker}
+          onClickColorPicker={onClickColorPicker}
+          onRequestCloseColorPickerPopover={onRequestCloseColorPickerPopover}
         />
       </Paper>
     </Popover>

@@ -1,13 +1,15 @@
 /* eslint-disable camelcase */
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
-import { useFieldArray, useForm } from 'react-hook-form';
+import PropTypes from 'prop-types';
+
+import { responseShape } from 'course/survey/propTypes';
 import ErrorText from 'lib/components/core/ErrorText';
 import { usePrompt } from 'lib/hooks/router/usePrompt';
 import formTranslations from 'lib/translations/form';
-import { responseShape } from 'course/survey/propTypes';
+
 import ResponseSection from './ResponseSection';
 
 const styles = {
@@ -116,11 +118,11 @@ const ResponseForm = (props) => {
 
     return (
       <Button
-        variant="contained"
         color="primary"
         disabled={isSubmitting || !isDirty}
-        style={styles.formButton}
         onClick={handleSave}
+        style={styles.formButton}
+        variant="contained"
       >
         <FormattedMessage {...formTranslations.save} />
       </Button>
@@ -141,14 +143,14 @@ const ResponseForm = (props) => {
 
     return (
       <Button
-        variant="contained"
         color="primary"
         disabled={isSubmitting || !!response.submitted_at}
-        style={styles.formButton}
         onClick={handleSubmit((data) =>
           onSubmit({ ...data, submit: true }, setError),
         )}
+        style={styles.formButton}
         type="submit"
+        variant="contained"
       >
         <FormattedMessage {...submitButtonTranslation} />
       </Button>
@@ -156,7 +158,11 @@ const ResponseForm = (props) => {
   };
 
   return (
-    <form encType="multipart/form-data" id="survey-response-form" noValidate>
+    <form
+      encType="multipart/form-data"
+      id="survey-response-form"
+      noValidate={true}
+    >
       <ErrorText errors={errors} />
       {fields.map((section, sectionIndex) => {
         const disabled = isSubmitting || readOnly || !(canModify || canSubmit);

@@ -1,16 +1,18 @@
-import produce from 'immer';
+import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { Add } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-
+import produce from 'immer';
 import {
   AssessmentCategory,
   AssessmentTab,
 } from 'types/course/admin/assessments';
+
 import useTranslation from 'lib/hooks/useTranslation';
-import Category from './Category';
-import translations from '../translations';
+
 import { useAssessmentSettings } from '../AssessmentSettingsContext';
+import translations from '../translations';
+
+import Category from './Category';
 import { sortCategories } from './utils';
 
 interface Props {
@@ -112,11 +114,11 @@ const AssessmentCategoriesManager = (props: Props): JSX.Element => {
       <Category
         key={category.id}
         category={category}
+        disabled={props.disabled}
         index={index}
         onRename={renameCategory}
         onRenameTab={renameTabInCategory}
         stationary={categories.length <= 1}
-        disabled={props.disabled}
       />
     ));
 
@@ -124,24 +126,24 @@ const AssessmentCategoriesManager = (props: Props): JSX.Element => {
     <>
       {settings?.canCreateCategories && (
         <Button
-          startIcon={<Add />}
-          onClick={handleCreateCategory}
           disabled={props.disabled}
+          onClick={handleCreateCategory}
+          startIcon={<Add />}
         >
           {t(translations.addACategory)}
         </Button>
       )}
 
       <DragDropContext
+        onDragEnd={rearrange}
         onDragStart={vibrate()}
         onDragUpdate={vibrate(30)}
-        onDragEnd={rearrange}
       >
         <Droppable droppableId={BOARD} type={BOARD}>
           {(provided): JSX.Element => (
             <div
-              className="-mb-5"
               ref={provided.innerRef}
+              className="-mb-5"
               {...provided.droppableProps}
             >
               {renderCategories(categories)}

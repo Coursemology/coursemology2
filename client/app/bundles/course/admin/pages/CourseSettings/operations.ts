@@ -1,11 +1,11 @@
 import { AxiosError } from 'axios';
-
-import CourseAPI from 'api/course';
 import {
   CourseInfo,
   CourseInfoPostData,
   TimeZones,
 } from 'types/course/admin/course';
+
+import CourseAPI from 'api/course';
 
 export const fetchCourseSettings = async (): Promise<CourseInfo> => {
   const response = await CourseAPI.admin.course.index();

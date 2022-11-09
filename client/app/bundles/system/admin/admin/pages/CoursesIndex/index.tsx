@@ -1,16 +1,18 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/navigation/PageHeader';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppState, AppDispatch } from 'types/store';
 import { Link, Typography } from '@mui/material';
+import { AppDispatch, AppState } from 'types/store';
+
 import SummaryCard from 'lib/components/core/layouts/SummaryCard';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
-import { deleteCourse, indexCourses } from '../../operations';
-import CoursesTable from '../../components/tables/CoursesTable';
+
 import CoursesButtons from '../../components/buttons/CoursesButtons';
+import CoursesTable from '../../components/tables/CoursesTable';
+import { deleteCourse, indexCourses } from '../../operations';
 import { getAdminCounts, getAllCourseMiniEntities } from '../../selectors';
 
 type Props = WrappedComponentProps;
@@ -108,14 +110,14 @@ const CoursesIndex: FC<Props> = (props) => {
         <LoadingIndicator />
       ) : (
         <CoursesTable
-          filter={filter}
-          courses={courses}
           courseCounts={courseCounts}
-          title={intl.formatMessage(translations.title)}
+          courses={courses}
+          filter={filter}
+          indexOperation={indexCourses}
           renderRowActionComponent={(course): JSX.Element => (
             <CoursesButtons course={course} deleteOperation={deleteCourse} />
           )}
-          indexOperation={indexCourses}
+          title={intl.formatMessage(translations.title)}
         />
       )}
     </>

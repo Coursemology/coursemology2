@@ -1,13 +1,12 @@
-import { defineMessages } from 'react-intl';
 import { FC } from 'react';
+import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-
-import { AppDispatch } from 'types/store';
 import { MaterialFormData } from 'types/course/material/folders';
+import { AppDispatch } from 'types/store';
 
-import useTranslation from 'lib/hooks/useTranslation';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { updateMaterial } from '../../operations';
 import MaterialForm from '../forms/MaterialForm';
@@ -64,12 +63,12 @@ const MaterialEdit: FC<Props> = (props) => {
 
   return (
     <MaterialForm
-      open={isOpen}
-      editing
+      editing={true}
+      initialValues={initialValues}
       onClose={onClose}
       onSubmit={handleSubmit}
+      open={isOpen}
       title={t(translations.editMaterialTitle)}
-      initialValues={initialValues}
     />
   );
 };

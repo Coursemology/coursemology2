@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios';
-
 import type {
   MaterialsSettingsData,
   MaterialsSettingsPostData,
 } from 'types/course/admin/materials';
+
 import BaseAdminAPI from './Base';
 
 export default class MaterialsAdminAPI extends BaseAdminAPI {

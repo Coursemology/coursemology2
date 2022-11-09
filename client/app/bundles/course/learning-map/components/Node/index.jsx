@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { Card, CardContent, Icon } from '@mui/material';
-import { connect } from 'react-redux';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { Card, CardContent, Icon } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
-import ConnectionPoint from '../ConnectionPoint';
-import UnlockRateDisplay from '../UnlockRateDisplay';
-import NodeMenu from '../NodeMenu';
-import translations from '../../translations.intl';
+
 import { nodeShape } from '../../propTypes';
+import translations from '../../translations.intl';
+import ConnectionPoint from '../ConnectionPoint';
+import NodeMenu from '../NodeMenu';
+import UnlockRateDisplay from '../UnlockRateDisplay';
 
 // Allows NodeMenu to overflow the Card MUI component (i.e. the Node)
 const theme = createTheme({
@@ -132,7 +133,7 @@ const Node = (props) => {
           <div style={styles.content}>
             <CardContent style={styles.contentText}>
               <div>
-                <a target="_blank" href={`${node.contentUrl}`} rel="noreferrer">
+                <a href={`${node.contentUrl}`} rel="noreferrer" target="_blank">
                   {node.title}
                 </a>
               </div>

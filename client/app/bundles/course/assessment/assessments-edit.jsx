@@ -2,10 +2,11 @@ import { createRoot } from 'react-dom/client';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import { getAssessmentId } from 'lib/helpers/url-helpers';
-import storeCreator from './store';
+
 import AssessmentEditPage from './pages/AssessmentEdit';
-import { categoryAndTabTitle } from './utils';
 import { fetchAssessmentEditData } from './actions';
+import storeCreator from './store';
+import { categoryAndTabTitle } from './utils';
 
 $(async () => {
   const mountNode = document.getElementById('assessment-edit');
@@ -29,15 +30,10 @@ $(async () => {
     root.render(
       <ProviderWrapper store={store}>
         <AssessmentEditPage
-          modeSwitching={data.mode_switching}
-          containsCodaveri={data.contains_codaveri}
-          gamified={data.gamified}
-          showPersonalizedTimelineFeatures={
-            data.show_personalized_timeline_features
-          }
-          randomizationAllowed={data.randomization_allowed}
-          folderAttributes={data.folder_attributes}
           conditionAttributes={data.conditionsData}
+          containsCodaveri={data.contains_codaveri}
+          folderAttributes={data.folder_attributes}
+          gamified={data.gamified}
           initialValues={{
             ...data.attributes,
             tabs: [currentTab],
@@ -45,6 +41,11 @@ $(async () => {
               data.attributes.view_password || data.attributes.session_password
             ),
           }}
+          modeSwitching={data.mode_switching}
+          randomizationAllowed={data.randomization_allowed}
+          showPersonalizedTimelineFeatures={
+            data.show_personalized_timeline_features
+          }
         />
       </ProviderWrapper>,
     );

@@ -1,6 +1,6 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import ErrorIcon from '@mui/icons-material/Error';
 import {
   Chip,
   Link,
@@ -11,16 +11,14 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import ErrorIcon from '@mui/icons-material/Error';
-
+import palette from 'theme/palette';
 import { SubmissionMiniEntity } from 'types/course/assessment/submissions';
 
-import { getCourseId } from 'lib/helpers/url-helpers';
-import { getAssessmentURL, getCourseUserURL } from 'lib/helpers/url-builders';
-import { getDayMonthTime } from 'lib/helpers/timehelper';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import CustomTooltip from 'lib/components/core/CustomTooltip';
-import palette from 'theme/palette';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { getDayMonthTime } from 'lib/helpers/timehelper';
+import { getAssessmentURL, getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
 import SubmissionsTableButton from '../buttons/SubmissionsTableButton';
 
@@ -189,11 +187,11 @@ const SubmissionsTable: FC<Props> = (props) => {
             </TableCell>
             <TableCell align="center">
               <Chip
+                label={translateStatus(submission.status)}
                 style={{
                   width: 100,
                   backgroundColor: palette.submissionStatus[submission.status],
                 }}
-                label={translateStatus(submission.status)}
               />
             </TableCell>
             {isPendingTab && (
@@ -241,8 +239,8 @@ const SubmissionsTable: FC<Props> = (props) => {
                       title={intl.formatMessage(translations.gradeTooltip)}
                     >
                       <ErrorIcon
-                        fontSize="small"
                         color="error"
+                        fontSize="small"
                         style={{ marginLeft: 5, marginTop: -4 }}
                       />
                     </CustomTooltip>
@@ -259,8 +257,8 @@ const SubmissionsTable: FC<Props> = (props) => {
             )}
             <TableCell>
               <SubmissionsTableButton
-                canGrade={submission.permissions.canGrade}
                 assessmentId={submission.assessmentId}
+                canGrade={submission.permissions.canGrade}
                 submissionId={submission.id}
               />
             </TableCell>

@@ -1,11 +1,12 @@
 import { FC } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Typography } from '@mui/material';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { InvitationListData } from 'types/system/instance/invitations';
+
 import DataTable from 'lib/components/core/layouts/DataTable';
 import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
 import tableTranslations from 'lib/translations/table';
-import { InvitationListData } from 'types/system/instance/invitations';
 
 interface Props extends WrappedComponentProps {
   title: JSX.Element;
@@ -95,12 +96,12 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
 
   return (
     <DataTable
-      title={title}
-      data={invitations}
       columns={columns}
+      data={invitations}
+      includeRowNumber={true}
       options={options}
-      includeRowNumber
-      withMargin
+      title={title}
+      withMargin={true}
     />
   );
 };

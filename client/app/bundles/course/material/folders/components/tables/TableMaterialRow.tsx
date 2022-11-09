@@ -1,11 +1,13 @@
 import { FC, memo } from 'react';
-import { Stack, TableCell, TableRow } from '@mui/material';
 import { Description as DescriptionIcon } from '@mui/icons-material';
+import { Stack, TableCell, TableRow } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { MaterialMiniEntity } from 'types/course/material/folders';
+
 import { getFullDateTime } from 'lib/helpers/timehelper';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
+
 import WorkbinTableButtons from '../buttons/WorkbinTableButtons';
 
 interface Props {
@@ -22,19 +24,19 @@ const TableMaterialRow: FC<Props> = (props) => {
     <TableRow id={`material-${material.id}`}>
       <TableCell style={{ padding: 2, minWidth: '200px' }}>
         <Stack spacing={1}>
-          <Stack direction="row" spacing={0.5} alignItems="center">
+          <Stack alignItems="center" direction="row" spacing={0.5}>
             <DescriptionIcon htmlColor="grey" />
             <a
-              target="_blank"
-              rel="noopener noreferrer"
               href={`/courses/${getCourseId()}/materials/folders/${currFolderId}/files/${
                 material.id
               }`}
+              rel="noopener noreferrer"
               style={{
                 textOverflow: 'initial',
                 whiteSpace: 'normal',
                 wordBreak: 'break-word',
               }}
+              target="_blank"
             >
               {material.name}
             </a>
@@ -95,13 +97,12 @@ const TableMaterialRow: FC<Props> = (props) => {
         }}
       >
         <WorkbinTableButtons
+          canDelete={material.permissions.canDelete}
+          canEdit={material.permissions.canEdit}
           currFolderId={currFolderId}
+          isConcrete={isConcrete}
           itemId={material.id}
           itemName={material.name}
-          isConcrete={isConcrete}
-          canEdit={material.permissions.canEdit}
-          canDelete={material.permissions.canDelete}
-          type="material"
           materialInitialValues={{
             name: material.name,
             description: material.description,
@@ -112,6 +113,7 @@ const TableMaterialRow: FC<Props> = (props) => {
               }`,
             },
           }}
+          type="material"
         />
       </TableCell>
     </TableRow>

@@ -2,21 +2,23 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
-import PageHeader from 'lib/components/navigation/PageHeader';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import manageUsersTranslations from 'lib/translations/course/users/index';
+
+import UserManagementButtons from '../../components/buttons/UserManagementButtons';
+import UpgradeToStaff from '../../components/misc/UpgradeToStaff';
+import UserManagementTabs from '../../components/navigation/UserManagementTabs';
+import ManageUsersTable from '../../components/tables/ManageUsersTable';
 import { fetchStaff } from '../../operations';
 import {
   getAllStaffMiniEntities,
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
-import UserManagementTabs from '../../components/navigation/UserManagementTabs';
-import ManageUsersTable from '../../components/tables/ManageUsersTable';
-import UpgradeToStaff from '../../components/misc/UpgradeToStaff';
-import UserManagementButtons from '../../components/buttons/UserManagementButtons';
 
 type Props = WrappedComponentProps;
 
@@ -75,13 +77,13 @@ const ManageStaff: FC<Props> = (props) => {
           <UpgradeToStaff />
           {staff.length > 0 ? (
             <ManageUsersTable
-              title={intl.formatMessage(translations.manageStaffTitle)}
-              users={staff}
-              manageStaff
+              csvDownloadOptions={{ filename: 'Staff List' }}
+              manageStaff={true}
               renderRowActionComponent={(user): JSX.Element => (
                 <UserManagementButtons user={user} />
               )}
-              csvDownloadOptions={{ filename: 'Staff List' }}
+              title={intl.formatMessage(translations.manageStaffTitle)}
+              users={staff}
             />
           ) : (
             renderEmptyState()

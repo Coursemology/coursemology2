@@ -1,4 +1,5 @@
 import CourseAPI from 'api/course';
+
 import actions, { canvasActionTypes } from '../constants';
 
 export function setCanvasLoaded(answerId, loaded, canvas) {

@@ -1,18 +1,18 @@
-import { useCallback, useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
+import { useCallback, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
+import { red } from '@mui/material/colors';
+import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
-import actionTypes, { dialogTypes } from '../../constants';
 import { deleteCategory, updateCategory } from '../../actions';
-import { categoryShape } from '../../propTypes';
+import GroupCard from '../../components/GroupCard';
+import actionTypes, { dialogTypes } from '../../constants';
 import GroupFormDialog from '../../forms/GroupFormDialog';
 import NameDescriptionForm from '../../forms/NameDescriptionForm';
-import GroupCard from '../../components/GroupCard';
+import { categoryShape } from '../../propTypes';
 
 const translations = defineMessages({
   updateSuccess: {
@@ -160,11 +160,11 @@ const CategoryCard = ({
   return (
     <>
       <GroupCard
-        title={category.name}
+        bottomButtons={bottomButtons}
         subtitle={
           <FormattedMessage values={{ numGroups }} {...translations.subtitle} />
         }
-        bottomButtons={bottomButtons}
+        title={category.name}
       >
         {category.description ?? (
           <FormattedMessage {...translations.noDescription} />
@@ -178,29 +178,29 @@ const CategoryCard = ({
             skipConfirmation={!isDirty}
           >
             <NameDescriptionForm
-              onSubmit={onFormSubmit}
+              emitsVia={(nameDescriptionForm) =>
+                setIsDirty(nameDescriptionForm.isDirty)
+              }
               initialValues={{
                 name: category.name,
                 description: category.description,
               }}
-              emitsVia={(nameDescriptionForm) =>
-                setIsDirty(nameDescriptionForm.isDirty)
-              }
+              onSubmit={onFormSubmit}
             />
           </GroupFormDialog>
           <ConfirmationDialog
-            confirmDiscard={!isConfirmingDelete}
             confirmDelete={isConfirmingDelete}
-            open={isConfirmingDelete}
+            confirmDiscard={!isConfirmingDelete}
+            message={intl.formatMessage(translations.confirmDelete, {
+              categoryName: category.name,
+            })}
             onCancel={() => {
               setIsConfirmingDelete(false);
             }}
             onConfirm={() => {
               handleDelete();
             }}
-            message={intl.formatMessage(translations.confirmDelete, {
-              categoryName: category.name,
-            })}
+            open={isConfirmingDelete}
           />
         </>
       )}

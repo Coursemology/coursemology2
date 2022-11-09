@@ -1,7 +1,9 @@
-import { Button, Menu, MenuItem } from '@mui/material';
-import useTranslation from 'lib/hooks/useTranslation';
 import { useState } from 'react';
+import { Button, Menu, MenuItem } from '@mui/material';
 import { AssessmentCategory } from 'types/course/admin/assessments';
+
+import useTranslation from 'lib/hooks/useTranslation';
+
 import translations from '../translations';
 
 interface MoveTabsMenuProps {
@@ -20,8 +22,8 @@ const MoveTabsMenu = (props: MoveTabsMenuProps): JSX.Element | null => {
   if (categories.length === 1)
     return (
       <Button
-        onClick={(): void => onSelectCategory(categories[0])}
         disabled={props.disabled}
+        onClick={(): void => onSelectCategory(categories[0])}
       >
         {t(translations.moveTabsToCategoryThenDelete, {
           category: categories[0].title,
@@ -32,16 +34,16 @@ const MoveTabsMenu = (props: MoveTabsMenuProps): JSX.Element | null => {
   return (
     <>
       <Button
-        onClick={(e): void => setButton(e.currentTarget)}
         disabled={props.disabled}
+        onClick={(e): void => setButton(e.currentTarget)}
       >
         {t(translations.moveTabsThenDelete)}
       </Button>
 
       <Menu
-        open={Boolean(button)}
         anchorEl={button}
         onClose={(): void => setButton(undefined)}
+        open={Boolean(button)}
       >
         {categories.map((category) => (
           <MenuItem

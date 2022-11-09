@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { CodaveriSettingsData } from 'types/course/admin/codaveri';
-import useTranslation from 'lib/hooks/useTranslation';
-import formTranslations from 'lib/translations/form';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
-import translations from './translations';
+import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
+
+import { useItemsReloader } from '../../components/SettingsNavigation';
+
 import CodaveriSettingsForm from './CodaveriSettingsForm';
 import { fetchCodaveriSettings, updateCodaveriSettings } from './operations';
-import { useItemsReloader } from '../../components/SettingsNavigation';
+import translations from './translations';
 
 const CodaveriSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
@@ -36,12 +38,12 @@ const CodaveriSettings = (): JSX.Element => {
   };
 
   return (
-    <Preload while={fetchCodaveriSettings} render={<LoadingIndicator />}>
+    <Preload render={<LoadingIndicator />} while={fetchCodaveriSettings}>
       {(data): JSX.Element => (
         <CodaveriSettingsForm
           data={data}
-          onSubmit={handleSubmit}
           disabled={submitting}
+          onSubmit={handleSubmit}
         />
       )}
     </Preload>

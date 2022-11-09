@@ -1,12 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages } from 'react-intl';
 import { Chip } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
-import { attachmentShape } from '../propTypes';
+
 import destroy from '../actions/attachments';
 import { workflowStates } from '../constants';
+import { attachmentShape } from '../propTypes';
 
 const translations = defineMessages({
   uploadedFiles: {
@@ -60,12 +62,12 @@ class VisibleUploadedFileView extends Component {
 
     return (
       <Chip
-        clickable
         key={attachment.id}
+        clickable={true}
         label={
           <a
+            download={true}
             href={VisibleUploadedFileView.buildAttachmentUrl(attachment)}
-            download
           >
             {attachment.name}
           </a>
@@ -81,7 +83,7 @@ class VisibleUploadedFileView extends Component {
     const { intl, deleteAttachment } = this.props;
     return (
       <ConfirmationDialog
-        open={deleteConfirmation}
+        message={intl.formatMessage(translations.deleteConfirmation)}
         onCancel={() =>
           this.setState({ deleteConfirmation: false, deleteAttachmentId: null })
         }
@@ -92,7 +94,7 @@ class VisibleUploadedFileView extends Component {
             deleteAttachmentId: null,
           });
         }}
-        message={intl.formatMessage(translations.deleteConfirmation)}
+        open={deleteConfirmation}
       />
     );
   }

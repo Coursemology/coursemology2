@@ -1,8 +1,8 @@
-import { Typography, Box } from '@mui/material';
 import {
-  WarningAmber as WarningIcon,
   InfoOutlined as InfoIcon,
+  WarningAmber as WarningIcon,
 } from '@mui/icons-material';
+import { Box, Typography } from '@mui/material';
 
 interface InfoLabelProps {
   label?: string;
@@ -14,12 +14,12 @@ const InfoLabel = (props: InfoLabelProps): JSX.Element => {
   return (
     <Box
       className="flex items-center"
-      marginTop={props.marginTop}
       color={props.warning ? 'warning.main' : 'text.secondary'}
+      marginTop={props.marginTop}
     >
       {props.warning ? <WarningIcon /> : <InfoIcon />}
 
-      <Typography variant="body2" className="ml-2">
+      <Typography className="ml-2" variant="body2">
         {props.label}
       </Typography>
     </Box>

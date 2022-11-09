@@ -1,22 +1,24 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
-import { useSearchParams } from 'react-router-dom';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
+
+import VideoTabs from '../../components/misc/VideoTabs';
+import VideoTable from '../../components/tables/VideoTable';
 import { fetchVideos, updatePublishedVideo } from '../../operations';
 import {
-  getVideoPermissions,
   getAllVideos,
   getVideoMetadata,
+  getVideoPermissions,
 } from '../../selectors';
-import VideoTable from '../../components/tables/VideoTable';
 import VideoNew from '../VideoNew';
-import VideoTabs from '../../components/misc/VideoTabs';
 
 const translations = defineMessages({
   newVideo: {
@@ -74,11 +76,11 @@ const VideosIndex: FC = () => {
   if (videoPermissions?.canManage) {
     headerToolbars.push(
       <Button
-        className="new-video-button bg-white"
         key="new-video-button"
-        variant="outlined"
+        className="new-video-button bg-white"
         color="primary"
         onClick={(): void => setIsOpen(true)}
+        variant="outlined"
       >
         {t(translations.newVideo)}
       </Button>,
@@ -105,9 +107,9 @@ const VideosIndex: FC = () => {
       />
       {!isLoading && isOpen && (
         <VideoNew
-          open={isOpen}
-          onClose={(): void => setIsOpen(false)}
           currentTab={tabId}
+          onClose={(): void => setIsOpen(false)}
+          open={isOpen}
         />
       )}
       <VideoTabs currentTab={tabId} setCurrentTab={setSearchParams} />
@@ -115,9 +117,9 @@ const VideosIndex: FC = () => {
         <LoadingIndicator />
       ) : (
         <VideoTable
-          videos={videos}
-          permissions={videoPermissions}
           onTogglePublished={onTogglePublished}
+          permissions={videoPermissions}
+          videos={videos}
         />
       )}
     </>

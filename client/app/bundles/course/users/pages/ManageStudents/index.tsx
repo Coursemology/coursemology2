@@ -2,20 +2,22 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
-import PageHeader from 'lib/components/navigation/PageHeader';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import manageUsersTranslations from 'lib/translations/course/users/index';
+
+import UserManagementButtons from '../../components/buttons/UserManagementButtons';
+import UserManagementTabs from '../../components/navigation/UserManagementTabs';
+import ManageUsersTable from '../../components/tables/ManageUsersTable';
 import { fetchStudents } from '../../operations';
 import {
   getAllStudentMiniEntities,
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
-import UserManagementTabs from '../../components/navigation/UserManagementTabs';
-import ManageUsersTable from '../../components/tables/ManageUsersTable';
-import UserManagementButtons from '../../components/buttons/UserManagementButtons';
 
 type Props = WrappedComponentProps;
 
@@ -75,12 +77,12 @@ const ManageStudents: FC<Props> = (props) => {
           />
           {students.length > 0 ? (
             <ManageUsersTable
-              title={intl.formatMessage(translations.manageStudentsTitle)}
-              users={students}
+              csvDownloadOptions={{ filename: 'Student List' }}
               renderRowActionComponent={(user): JSX.Element => (
                 <UserManagementButtons user={user} />
               )}
-              csvDownloadOptions={{ filename: 'Student List' }}
+              title={intl.formatMessage(translations.manageStudentsTitle)}
+              users={students}
             />
           ) : (
             renderEmptyState()

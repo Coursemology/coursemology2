@@ -1,8 +1,9 @@
-import { mount } from 'enzyme';
 import MockAdapter from 'axios-mock-adapter';
-
+import { mount } from 'enzyme';
 import { act } from 'utilities/test-utils';
+
 import CourseAPI from 'api/course';
+
 import { store } from '../../../store';
 import NotificationSettings from '../index';
 

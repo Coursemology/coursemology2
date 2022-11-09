@@ -1,14 +1,16 @@
 import { FC, useEffect, useState } from 'react';
+import { defineMessages } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Grid } from '@mui/material';
 import { CommentSettings, CommentTopicEntity } from 'types/course/comments';
-import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
-import { toast } from 'react-toastify';
-import { defineMessages } from 'react-intl';
+
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import { fetchCommentData } from '../../operations';
 import { getAllCommentTopicEntities, getTopicCount } from '../../selectors';
 import TopicCard from '../cards/TopicCard';
@@ -45,7 +47,11 @@ const TopicList: FC<TopicListProps> = (props) => {
 
   if (topicList.length === 0) {
     return (
-      <Grid item xs style={{ position: 'relative', width: '100%' }}>
+      <Grid
+        item={true}
+        style={{ position: 'relative', width: '100%' }}
+        xs={true}
+      >
         <Note message={t(translations.noTopic)} />
       </Grid>
     );
@@ -55,10 +61,10 @@ const TopicList: FC<TopicListProps> = (props) => {
     <>
       {Object.keys(topicList).map((key: string) => (
         <Grid
-          item
           key={topicList[key].id}
-          xs
+          item={true}
           style={{ position: 'relative', width: '100%' }}
+          xs={true}
         >
           <TopicCard topic={topicList[key]} />
         </Grid>
@@ -105,23 +111,23 @@ const TopicListWithPagination: FC<Props> = (props) => {
 
   const renderPagination = (): JSX.Element => (
     <BackendPagination
+      handlePageChange={handlePageChange}
+      pageNum={pageNum}
       rowCount={topicCount}
       rowsPerPage={settings.topicsPerPage}
-      pageNum={pageNum}
-      handlePageChange={handlePageChange}
     />
   );
 
   return (
     <Grid
-      container
-      direction="column"
       columnSpacing={2}
+      container={true}
+      direction="column"
       rowSpacing={2}
       style={{ marginTop: '0px' }}
     >
       {renderPagination()}
-      <TopicList topicList={topicList} listIsLoading={listIsLoading} />
+      <TopicList listIsLoading={listIsLoading} topicList={topicList} />
       {topicList.length > 5 && !listIsLoading && renderPagination()}
     </Grid>
   );

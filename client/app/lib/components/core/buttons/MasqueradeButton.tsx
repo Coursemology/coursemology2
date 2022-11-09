@@ -1,6 +1,6 @@
 import { SyntheticEvent } from 'react';
-import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import TheaterComedy from '@mui/icons-material/TheaterComedy';
+import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 
 interface Props extends IconButtonProps {
   onClick: (e: SyntheticEvent) => void;
@@ -14,7 +14,7 @@ const MasqueradeButton = ({
 }: Props): JSX.Element => (
   <Tooltip title={tooltip}>
     <span>
-      <IconButton onClick={onClick} color="inherit" {...props}>
+      <IconButton color="inherit" onClick={onClick} {...props}>
         <TheaterComedy />
       </IconButton>
     </span>

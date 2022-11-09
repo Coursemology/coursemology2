@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
+import PropTypes from 'prop-types';
 
 const AceEditorField = (props) => {
   const {

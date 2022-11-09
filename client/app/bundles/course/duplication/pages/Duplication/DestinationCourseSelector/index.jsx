@@ -1,15 +1,17 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, injectIntl } from 'react-intl';
-import moment, { shortDateTime } from 'lib/moment';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import {
-  setDestinationCourseId,
   duplicateCourse,
+  setDestinationCourseId,
 } from 'course/duplication/actions';
-import { duplicationModes } from 'course/duplication/constants';
 import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
+import { duplicationModes } from 'course/duplication/constants';
 import { courseShape, sourceCourseShape } from 'course/duplication/propTypes';
+import moment, { shortDateTime } from 'lib/moment';
+
 import NewCourseForm from './NewCourseForm';
 
 const translations = defineMessages({
@@ -51,16 +53,16 @@ class DestinationCourseSelector extends Component {
 
     return (
       <CourseDropdownMenu
-        dropDownMenuProps={{ className: 'destination-course-dropdown' }}
-        currentHost={currentHost}
         courses={courses}
-        selectedCourseId={destinationCourseId}
         currentCourseId={currentCourseId}
-        prompt={intl.formatMessage(translations.selectDestinationCoursePrompt)}
+        currentHost={currentHost}
+        dropDownMenuProps={{ className: 'destination-course-dropdown' }}
         onChange={(event) =>
           dispatch(setDestinationCourseId(event.target.value))
         }
         onHome={() => dispatch(setDestinationCourseId(currentCourseId))}
+        prompt={intl.formatMessage(translations.selectDestinationCoursePrompt)}
+        selectedCourseId={destinationCourseId}
       />
     );
   };

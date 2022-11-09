@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import moment from 'lib/moment';
-import { Button } from '@mui/material';
-import { createResponse } from 'course/survey/actions/responses';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+
+import { createResponse } from 'course/survey/actions/responses';
+import moment from 'lib/moment';
 
 const translations = defineMessages({
   start: {
@@ -74,7 +75,7 @@ const RespondButton = ({
   }
 
   return (
-    <Button variant="contained" color="primary" {...{ onClick, disabled }}>
+    <Button color="primary" variant="contained" {...{ onClick, disabled }}>
       <FormattedMessage {...labelTranslation} />
     </Button>
   );

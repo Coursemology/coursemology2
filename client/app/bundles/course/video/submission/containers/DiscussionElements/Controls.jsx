@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { IconButton, Tooltip } from '@mui/material';
 import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import OndemandVideo from '@mui/icons-material/OndemandVideo';
+import Refresh from '@mui/icons-material/Refresh';
+import { IconButton, Tooltip } from '@mui/material';
 import {
   cyan as activeColor,
   grey as inactiveColor,
 } from '@mui/material/colors';
-import OndemandVideo from '@mui/icons-material/OndemandVideo';
-import Refresh from '@mui/icons-material/Refresh';
+import PropTypes from 'prop-types';
 
 import { changeAutoScroll, refreshDiscussion } from '../../actions/discussion';
 import translations from '../../translations';

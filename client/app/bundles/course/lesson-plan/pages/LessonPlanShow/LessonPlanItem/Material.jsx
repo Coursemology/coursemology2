@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
 import Description from '@mui/icons-material/Description';
 import { grey } from '@mui/material/colors';
+import PropTypes from 'prop-types';
 
 const styles = {
   material: {
@@ -23,7 +23,7 @@ const Material = (props) => {
   const { name, url } = props;
   return (
     <div style={styles.material}>
-      <Description style={styles.icon} htmlColor={grey[700]} />
+      <Description htmlColor={grey[700]} style={styles.icon} />
       <a href={url}>{name}</a>
     </div>
   );

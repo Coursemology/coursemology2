@@ -1,6 +1,4 @@
 import { AxiosError } from 'axios';
-
-import GlobalUsersAPI from 'api/Users';
 import { TimeZones } from 'types/course/admin/course';
 import {
   EmailData,
@@ -11,6 +9,8 @@ import {
   ProfileData,
   ProfilePostData,
 } from 'types/users';
+
+import GlobalUsersAPI from 'api/Users';
 
 export type AccountSettingsData = ProfileData & EmailsData & PasswordData;
 

@@ -1,6 +1,7 @@
-import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Button } from '@mui/material';
+
 import axios from 'lib/axios';
 
 interface Props extends WrappedComponentProps {
@@ -21,7 +22,6 @@ const TodoAccessButton: FC<Props> = (props) => {
   } = props;
   return (
     <Button
-      variant="contained"
       color="primary"
       onClick={(): void => {
         if (isVideo) {
@@ -43,6 +43,7 @@ const TodoAccessButton: FC<Props> = (props) => {
         }
       }}
       style={{ width: 80 }}
+      variant="contained"
     >
       {accessButtonText}
     </Button>

@@ -1,6 +1,7 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+
 import { getCourseId } from 'lib/helpers/url-helpers';
 
 const translations = defineMessages({
@@ -21,9 +22,9 @@ const ExitEditModeButton = () => {
   const courseId = getCourseId();
   return (
     <Button
-      variant="outlined"
       onClick={() => navigate(`/courses/${courseId}/lesson_plan`)}
       style={styles.button}
+      variant="outlined"
     >
       <FormattedMessage {...translations.exitEditMode} />
     </Button>

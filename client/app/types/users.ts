@@ -1,4 +1,5 @@
 import { Roles } from 'types';
+
 import { CourseUserRole } from './course/courseUsers';
 
 export type UserRoles = Roles<'normal' | 'administrator'>;

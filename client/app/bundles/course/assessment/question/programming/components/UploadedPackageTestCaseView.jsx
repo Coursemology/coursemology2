@@ -1,6 +1,5 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, defineMessages } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import {
   Card,
   CardHeader,
@@ -10,6 +9,8 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import ExpandableText from 'lib/components/core/ExpandableText';
 
 import styles from './UploadedPackageTestCaseView.scss';
@@ -67,9 +68,9 @@ class UploadedPackageTestCaseView extends Component {
     if (tests.size > 0) {
       const rows = tests.map((test) => (
         <TableRow
+          key={test.get('id')}
           className="question_programming_test_case"
           id={`question_programming_test_case_${test.get('id')}`}
-          key={test.get('id')}
         >
           <TableCell className={styles.testCaseCell}>
             {test.get('identifier')}

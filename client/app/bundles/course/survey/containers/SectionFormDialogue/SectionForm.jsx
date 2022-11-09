@@ -1,13 +1,14 @@
-import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import { yupResolver } from '@hookform/resolvers/yup';
 import useEmitterFactory from 'react-emitter-factory';
 import { Controller, useForm } from 'react-hook-form';
+import { FormattedMessage } from 'react-intl';
+import { yupResolver } from '@hookform/resolvers/yup';
+import PropTypes from 'prop-types';
 import * as yup from 'yup';
+
+import translations from 'course/survey/translations';
 import ErrorText from 'lib/components/core/ErrorText';
 import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
-import translations from 'course/survey/translations';
 
 const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
@@ -37,42 +38,42 @@ const SectionForm = (props) => {
   return (
     <form
       id="survey-section-form"
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
       <Controller
-        name="title"
         control={control}
+        name="title"
         render={({ field, fieldState }) => (
           <FormTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
-            label={<FormattedMessage {...translations.title} />}
-            fullWidth
+            fullWidth={true}
             InputLabelProps={{
               shrink: true,
             }}
-            required
+            label={<FormattedMessage {...translations.title} />}
+            required={true}
             variant="standard"
           />
         )}
       />
       <Controller
-        name="description"
         control={control}
+        name="description"
         render={({ field, fieldState }) => (
           <FormTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
-            label={<FormattedMessage {...translations.description} />}
-            fullWidth
-            multiline
+            fullWidth={true}
             InputLabelProps={{
               shrink: true,
             }}
+            label={<FormattedMessage {...translations.description} />}
+            multiline={true}
             rows={2}
             variant="standard"
           />

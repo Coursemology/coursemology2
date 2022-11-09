@@ -1,6 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-
+import { createSlice } from '@reduxjs/toolkit';
 import {
   VideoData,
   VideoListData,
@@ -8,6 +7,7 @@ import {
   VideoPermissions,
   VideoTab,
 } from 'types/course/videos';
+
 import { VideosState } from './types';
 
 const initialState: VideosState = {

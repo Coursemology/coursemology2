@@ -1,6 +1,8 @@
 import { AxiosResponse } from 'axios';
-import pollJob from 'lib/helpers/job-helpers';
 import { FolderData } from 'types/course/material/folders';
+
+import pollJob from 'lib/helpers/job-helpers';
+
 import BaseCourseAPI from '../Base';
 
 export default class FoldersAPI extends BaseCourseAPI {

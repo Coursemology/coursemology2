@@ -1,20 +1,23 @@
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import ErrorCard from 'lib/components/core/ErrorCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/core/NotificationBar';
-import { useParams } from 'react-router-dom';
-import CategoryCard from './CategoryCard';
-import GroupTableCard from './GroupTableCard';
-import { categoryShape, groupShape } from '../../propTypes';
+
 import { fetchCourseUsers, fetchGroupData } from '../../actions';
-import GroupManager from './GroupManager';
 import actionTypes from '../../constants';
+import { categoryShape, groupShape } from '../../propTypes';
+
+import CategoryCard from './CategoryCard';
+import GroupManager from './GroupManager';
+import GroupTableCard from './GroupTableCard';
 
 const translations = defineMessages({
   fetchFailure: {
@@ -81,13 +84,13 @@ const Category = ({
       ) : (
         <>
           <CategoryCard
+            canManageCategory={canManageCategory}
+            canManageGroups={canManageGroups}
             category={groupCategory}
             numGroups={groups.length}
             onManageGroups={() =>
               dispatch({ type: actionTypes.MANAGE_GROUPS_START })
             }
-            canManageCategory={canManageCategory}
-            canManageGroups={canManageGroups}
           />
           {groups.map((group) => (
             <GroupTableCard key={group.id} group={group} />

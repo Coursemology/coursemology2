@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
+import Warning from '@mui/icons-material/Warning';
 import {
   Card,
   CardContent,
@@ -12,11 +12,13 @@ import {
   TableRow,
 } from '@mui/material';
 import { blue, green, grey, red, yellow } from '@mui/material/colors';
-import Warning from '@mui/icons-material/Warning';
+import PropTypes from 'prop-types';
+
 import { formatLongDateTime } from 'lib/moment';
+
+import { workflowStates } from '../constants';
 import { submissionShape } from '../propTypes';
 import translations from '../translations';
-import { workflowStates } from '../constants';
 
 const styles = {
   header: {
@@ -105,11 +107,11 @@ class ProgressPanel extends Component {
       <Card>
         <CardHeader
           id="submission-by"
-          title={intl.formatMessage(translations.submissionBy, { name })}
-          titleTypographyProps={{ variant: 'subtitle1' }}
+          style={styles.header[workflowState]}
           subheader={title}
           subheaderTypographyProps={{ variant: 'subtitle2' }}
-          style={styles.header[workflowState]}
+          title={intl.formatMessage(translations.submissionBy, { name })}
+          titleTypographyProps={{ variant: 'subtitle1' }}
         />
         {late && workflowState === workflowStates.Submitted
           ? this.renderLateWarning()

@@ -1,7 +1,9 @@
 import { Component } from 'react';
-import { PropTypes } from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import Group from '@mui/icons-material/Group';
+import Person from '@mui/icons-material/Person';
+import PersonOutline from '@mui/icons-material/PersonOutline';
 import {
   Button,
   Card,
@@ -14,35 +16,36 @@ import {
   Tab,
   Tabs,
 } from '@mui/material';
-import Group from '@mui/icons-material/Group';
-import Person from '@mui/icons-material/Person';
-import PersonOutline from '@mui/icons-material/PersonOutline';
+import { PropTypes } from 'prop-types';
+import palette from 'theme/palette';
+
+import BarChart from 'lib/components/core/BarChart';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/core/NotificationBar';
 import withRouter from 'lib/components/navigation/withRouter';
-import palette from 'theme/palette';
-import BarChart from 'lib/components/core/BarChart';
+
 import {
-  fetchSubmissions,
-  publishSubmissions,
-  forceSubmitSubmissions,
-  downloadSubmissions,
-  downloadStatistics,
-  unsubmitAllSubmissions,
   deleteAllSubmissions,
+  downloadStatistics,
+  downloadSubmissions,
+  fetchSubmissions,
+  forceSubmitSubmissions,
+  publishSubmissions,
   sendAssessmentReminderEmail,
+  unsubmitAllSubmissions,
 } from '../../actions/submissions';
-import SubmissionsTable from './SubmissionsTable';
-import { assessmentShape } from '../../propTypes';
 import {
-  workflowStates,
   selectedUserType,
   selectedUserTypeDisplay,
+  workflowStates,
 } from '../../constants';
+import { assessmentShape } from '../../propTypes';
 import translations from '../../translations';
+
+import SubmissionsTable from './SubmissionsTable';
 import submissionsTranslations from './translations';
 
 class VisibleSubmissionsIndex extends Component {
@@ -84,7 +87,7 @@ class VisibleSubmissionsIndex extends Component {
       // This is safe since there will not be infinite re-renderings caused.
       // Follows the guidelines as recommended on React's website.
       // https://reactjs.org/docs/react-component.html#componentdidupdate
-      // eslint-disable-next-line react/no-did-update-set-state
+
       this.setState({ tab: 'students-tab' });
     }
   }
@@ -107,13 +110,13 @@ class VisibleSubmissionsIndex extends Component {
 
     return (
       <ConfirmationDialog
-        open={forceSubmitConfirmation}
+        message={<FormattedMessage {...message} values={values} />}
         onCancel={() => this.setState({ forceSubmitConfirmation: false })}
         onConfirm={() => {
           dispatch(forceSubmitSubmissions(handleForceSubmitParams));
           this.setState({ forceSubmitConfirmation: false });
         }}
-        message={<FormattedMessage {...message} values={values} />}
+        open={forceSubmitConfirmation}
       />
     );
   }
@@ -173,7 +176,7 @@ class VisibleSubmissionsIndex extends Component {
 
     return (
       <Card style={{ marginBottom: 20 }}>
-        <CardHeader title={<h3>{title}</h3>} subheader="Submissions" />
+        <CardHeader subheader="Submissions" title={<h3>{title}</h3>} />
         <CardContent style={{ paddingTop: 0, paddingBottom: 0 }}>
           {this.renderBarChart(shownSubmissions)}
           <FormControlLabel
@@ -200,7 +203,6 @@ class VisibleSubmissionsIndex extends Component {
         <CardActions>
           {canPublishGrades && (
             <Button
-              variant="contained"
               color="primary"
               disabled={
                 disableButtons ||
@@ -208,13 +210,13 @@ class VisibleSubmissionsIndex extends Component {
               }
               endIcon={isPublishing && <CircularProgress size={24} />}
               onClick={() => this.setState({ publishConfirmation: true })}
+              variant="contained"
             >
               <FormattedMessage {...submissionsTranslations.publishGrades} />
             </Button>
           )}
           {canForceSubmit && (
             <Button
-              variant="contained"
               color="primary"
               disabled={
                 disableButtons ||
@@ -224,13 +226,13 @@ class VisibleSubmissionsIndex extends Component {
               }
               endIcon={isForceSubmitting && <CircularProgress size={24} />}
               onClick={() => this.setState({ forceSubmitConfirmation: true })}
+              variant="contained"
             >
               <FormattedMessage {...submissionsTranslations.forceSubmit} />
             </Button>
           )}
           {showRemindButton && (
             <Button
-              variant="contained"
               color="primary"
               disabled={
                 disableButtons ||
@@ -240,6 +242,7 @@ class VisibleSubmissionsIndex extends Component {
               }
               endIcon={isReminding && <CircularProgress size={24} />}
               onClick={() => this.setState({ remindConfirmation: true })}
+              variant="contained"
             >
               <FormattedMessage {...submissionsTranslations.remind} />
             </Button>
@@ -262,18 +265,18 @@ class VisibleSubmissionsIndex extends Component {
 
     return (
       <ConfirmationDialog
-        open={publishConfirmation}
-        onCancel={() => this.setState({ publishConfirmation: false })}
-        onConfirm={() => {
-          dispatch(publishSubmissions(handlePublishParams));
-          this.setState({ publishConfirmation: false });
-        }}
         message={
           <FormattedMessage
             {...translations.publishConfirmation}
             values={values}
           />
         }
+        onCancel={() => this.setState({ publishConfirmation: false })}
+        onConfirm={() => {
+          dispatch(publishSubmissions(handlePublishParams));
+          this.setState({ publishConfirmation: false });
+        }}
+        open={publishConfirmation}
       />
     );
   }
@@ -294,7 +297,12 @@ class VisibleSubmissionsIndex extends Component {
 
     return (
       <ConfirmationDialog
-        open={remindConfirmation}
+        message={
+          <FormattedMessage
+            {...translations.sendReminderEmailConfirmation}
+            values={values}
+          />
+        }
         onCancel={() => this.setState({ remindConfirmation: false })}
         onConfirm={() => {
           dispatch(
@@ -302,12 +310,7 @@ class VisibleSubmissionsIndex extends Component {
           );
           this.setState({ remindConfirmation: false });
         }}
-        message={
-          <FormattedMessage
-            {...translations.sendReminderEmailConfirmation}
-            values={values}
-          />
-        }
+        open={remindConfirmation}
       />
     );
   }
@@ -343,6 +346,9 @@ class VisibleSubmissionsIndex extends Component {
     return (
       <SubmissionsTable
         confirmDialogValue={confirmDialogValue}
+        handleDeleteAll={() =>
+          dispatch(deleteAllSubmissions(handleActionParams))
+        }
         handleDownload={(downloadFormat) =>
           dispatch(downloadSubmissions(handleActionParams, downloadFormat))
         }
@@ -351,9 +357,6 @@ class VisibleSubmissionsIndex extends Component {
         }
         handleUnsubmitAll={() =>
           dispatch(unsubmitAllSubmissions(handleActionParams))
-        }
-        handleDeleteAll={() =>
-          dispatch(deleteAllSubmissions(handleActionParams))
         }
         isActive={isActive}
         submissions={shownSubmissions}
@@ -378,25 +381,25 @@ class VisibleSubmissionsIndex extends Component {
       >
         {myStudentsExist && (
           <Tab
-            id="my-students-tab"
-            style={{ color: palette.submissionIcon.person }}
             icon={<Group style={{ color: palette.submissionIcon.person }} />}
+            id="my-students-tab"
             label={<FormattedMessage {...submissionsTranslations.myStudents} />}
+            style={{ color: palette.submissionIcon.person }}
             value="my-students-tab"
           />
         )}
         <Tab
-          id="students-tab"
           icon={<Person style={{ color: palette.submissionIcon.person }} />}
+          id="students-tab"
           label={<FormattedMessage {...submissionsTranslations.students} />}
           value="students-tab"
         />
 
         <Tab
-          id="staff-tab"
           icon={
             <PersonOutline style={{ color: palette.submissionIcon.person }} />
           }
+          id="staff-tab"
           label={<FormattedMessage {...submissionsTranslations.staff} />}
           value="staff-tab"
         />

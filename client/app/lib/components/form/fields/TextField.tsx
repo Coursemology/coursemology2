@@ -1,9 +1,10 @@
 import { ComponentProps, HTMLInputTypeAttribute, Ref } from 'react';
 import { ControllerFieldState } from 'react-hook-form';
 
-import TextField from 'lib/components/core/fields/TextField';
 import NumberTextField from 'lib/components/core/fields/NumberTextField';
 import PasswordTextField from 'lib/components/core/fields/PasswordTextField';
+import TextField from 'lib/components/core/fields/TextField';
+
 import { formatErrorMessage } from './utils/mapError';
 
 // Adapted from old TextField.jsx and DebouncedTextField.jsx

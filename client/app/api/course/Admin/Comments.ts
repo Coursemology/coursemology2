@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios';
-
 import type {
   CommentsSettingsData,
   CommentsSettingsPostData,
 } from 'types/course/admin/comments';
+
 import BaseAdminAPI from './Base';
 
 export default class CommentsAdminAPI extends BaseAdminAPI {

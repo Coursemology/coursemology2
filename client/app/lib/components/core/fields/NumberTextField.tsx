@@ -1,4 +1,3 @@
-import { isNaN } from 'lodash';
 import {
   ChangeEvent,
   ChangeEventHandler,
@@ -7,6 +6,7 @@ import {
   FocusEventHandler,
   forwardRef,
 } from 'react';
+import { isNaN } from 'lodash';
 
 import TextField from './TextField';
 
@@ -42,9 +42,9 @@ const NumberTextField = forwardRef<HTMLDivElement, NumberTextFieldProps>(
       <TextField
         {...props}
         ref={ref}
-        type="text"
-        onChange={handleChange}
         onBlur={handleBlur}
+        onChange={handleChange}
+        type="text"
       />
     );
   },

@@ -1,4 +1,5 @@
 import { UserBasicMiniEntity } from 'types/users';
+
 import { InstanceMiniEntity } from './instances';
 
 export interface CourseListData {

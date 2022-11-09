@@ -1,7 +1,6 @@
-/* eslint-disable import/no-unresolved, import/extensions, import/no-extraneous-dependencies */
 import CourseAPI from 'api/course';
 import pollJob from 'lib/helpers/job-helpers';
-/* eslint-enable import/extensions, import/no-extraneous-dependencies, import/no-unresolved */
+
 import actionTypes from '../constants';
 import translations from '../translations';
 

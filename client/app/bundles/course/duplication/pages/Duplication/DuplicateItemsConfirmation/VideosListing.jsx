@@ -1,14 +1,15 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Card, CardContent, ListSubheader } from '@mui/material';
-import { defaultComponentTitles } from 'course/translations.intl';
-import { duplicableItemTypes } from 'course/duplication/constants';
-import { videoTabShape } from 'course/duplication/propTypes';
+import PropTypes from 'prop-types';
+
+import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
-import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
+import { duplicableItemTypes } from 'course/duplication/constants';
+import { videoTabShape } from 'course/duplication/propTypes';
+import { defaultComponentTitles } from 'course/translations.intl';
 
 const { VIDEO_TAB, VIDEO } = duplicableItemTypes;
 
@@ -23,7 +24,7 @@ class VideoListing extends Component {
   static renderDefaultTabRow() {
     return (
       <IndentedCheckbox
-        disabled
+        disabled={true}
         indentLevel={0}
         label={<FormattedMessage {...translations.defaultTab} />}
       />
@@ -42,7 +43,7 @@ class VideoListing extends Component {
   static renderTabRow(tab) {
     return (
       <IndentedCheckbox
-        checked
+        checked={true}
         indentLevel={0}
         label={
           <span>
@@ -57,8 +58,8 @@ class VideoListing extends Component {
   static renderVideoRow(video) {
     return (
       <IndentedCheckbox
-        checked
         key={`video_${video.id}`}
+        checked={true}
         indentLevel={1}
         label={
           <span style={{ display: 'flex', alignItems: 'centre' }}>
@@ -99,7 +100,7 @@ class VideoListing extends Component {
 
     return (
       <>
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage
             {...defaultComponentTitles.course_videos_component}
           />

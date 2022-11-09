@@ -1,16 +1,17 @@
 /* eslint-disable camelcase */
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages } from 'react-intl';
-import { Button } from '@mui/material';
-import Edit from '@mui/icons-material/Edit';
 import Delete from '@mui/icons-material/Delete';
+import Edit from '@mui/icons-material/Edit';
+import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import {
-  showEventForm,
-  updateEvent,
   deleteEvent,
   showDeleteConfirmation,
+  showEventForm,
+  updateEvent,
 } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
@@ -117,17 +118,17 @@ class AdminTools extends PureComponent {
     return (
       <span style={styles.tools}>
         <Button
-          variant="outlined"
           onClick={this.showEditEventDialog}
           style={styles.edit}
+          variant="outlined"
         >
           <Edit />
         </Button>
         <Button
-          variant="outlined"
           color="secondary"
           onClick={this.deleteEventHandler}
           style={styles.delete}
+          variant="outlined"
         >
           <Delete />
         </Button>

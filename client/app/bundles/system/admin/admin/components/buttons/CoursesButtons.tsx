@@ -1,13 +1,14 @@
-import { FC, useState, memo } from 'react';
-import { useDispatch } from 'react-redux';
+import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { Delete } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import equal from 'fast-deep-equal';
 import { AppDispatch, Operation } from 'types/store';
 import { CourseMiniEntity } from 'types/system/courses';
-import { toast } from 'react-toastify';
-import equal from 'fast-deep-equal';
+
 import DeleteCoursePrompt from 'bundles/course/admin/pages/CourseSettings/DeleteCoursePrompt';
-import { IconButton } from '@mui/material';
-import { Delete } from '@mui/icons-material';
 
 interface Props extends WrappedComponentProps {
   course: CourseMiniEntity;
@@ -64,18 +65,18 @@ const CoursesButtons: FC<Props> = (props) => {
     <div key={`buttons-${course.id}`}>
       <IconButton
         className={`course-delete-${course.id} p-0`}
+        color="error"
         disabled={isDeleting}
         onClick={(): void => setOpenPrompt(true)}
-        color="error"
       >
         <Delete />
       </IconButton>
       <DeleteCoursePrompt
-        open={openPrompt}
-        onClose={(): void => setOpenPrompt(false)}
         courseTitle={course.title}
-        onConfirmDelete={handleDelete}
         disabled={isDeleting}
+        onClose={(): void => setOpenPrompt(false)}
+        onConfirmDelete={handleDelete}
+        open={openPrompt}
       />
     </div>
   );

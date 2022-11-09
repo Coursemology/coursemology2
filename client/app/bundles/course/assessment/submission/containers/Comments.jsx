@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
-import { postShape, topicShape } from '../propTypes';
+
+import * as commentActions from '../actions/comments';
 import CommentCard from '../components/comment/CommentCard';
 import CommentField from '../components/comment/CommentField';
-import * as commentActions from '../actions/comments';
-import translations from '../translations';
 import { workflowStates } from '../constants';
+import { postShape, topicShape } from '../propTypes';
+import translations from '../translations';
 
 class VisibleComments extends Component {
   static newCommentIdentifier(field) {
@@ -40,11 +41,11 @@ class VisibleComments extends Component {
             (graderView || !post.isDelayed) && (
               <CommentCard
                 key={post.id}
-                post={post}
-                editValue={commentForms.posts[post.id]}
-                updateComment={(value) => updateComment(post.id, value)}
                 deleteComment={() => deleteComment(post.id)}
+                editValue={commentForms.posts[post.id]}
                 handleChange={(value) => handleUpdateChange(post.id, value)}
+                post={post}
+                updateComment={(value) => updateComment(post.id, value)}
               />
             ),
         )}
@@ -52,11 +53,11 @@ class VisibleComments extends Component {
           createComment={createComment}
           handleChange={handleCreateChange}
           inputId={VisibleComments.newCommentIdentifier(topic.id)}
-          isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
           isSubmittingDelayedComment={commentForms.isSubmittingDelayedComment}
+          isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
           isUpdatingComment={commentForms.isUpdatingComment}
-          value={commentForms.topics[topic.id]}
           renderDelayedCommentButton={renderDelayedCommentButton}
+          value={commentForms.topics[topic.id]}
         />
       </div>
     );

@@ -1,12 +1,14 @@
 import { FC, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { AppDispatch, AppState } from 'types/store';
+
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
-import { AppDispatch, AppState } from 'types/store';
+
 import AchievementForm from '../../components/forms/AchievementForm';
 import { loadAchievement, updateAchievement } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
@@ -78,13 +80,13 @@ const AchievementEdit: FC<Props> = (props) => {
 
   return (
     <AchievementForm
-      open={open}
-      editing
-      title={t(translations.editAchievement)}
-      onClose={onClose}
-      initialValues={initialValues}
-      onSubmit={onSubmit}
       conditionAttributes={achievement.conditionsData}
+      editing={true}
+      initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+      title={t(translations.editAchievement)}
     />
   );
 };

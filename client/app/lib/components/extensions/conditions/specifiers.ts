@@ -1,16 +1,17 @@
 import {
-  ConditionData,
   AchievementConditionData,
   AssessmentConditionData,
-  SurveyConditionData,
-  LevelConditionData,
+  ConditionData,
   ConditionPostData,
+  LevelConditionData,
+  SurveyConditionData,
 } from 'types/course/conditions';
+
 import AchievementCondition from './conditions/AchievementCondition';
-import { AnyCondition } from './AnyCondition';
 import AssessmentCondition from './conditions/AssessmentCondition';
 import LevelCondition from './conditions/LevelCondition';
 import SurveyCondition from './conditions/SurveyCondition';
+import { AnyCondition } from './AnyCondition';
 
 /**
  * A construct that defines the necessary attributes for an unlock condition type.

@@ -1,19 +1,20 @@
 import { FC } from 'react';
-import { defineMessages } from 'react-intl';
 import { Controller, UseFormSetError } from 'react-hook-form';
+import { defineMessages } from 'react-intl';
+import { AchievementFormData } from 'types/course/achievements';
+import { ConditionsData } from 'types/course/conditions';
 import * as yup from 'yup';
-import formTranslations from 'lib/translations/form';
+
+import ConditionsManager from 'lib/components/extensions/conditions/ConditionsManager';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSingleFileInput, {
   BadgePreview,
 } from 'lib/components/form/fields/SingleFileInput';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
-import { AchievementFormData } from 'types/course/achievements';
-import { ConditionsData } from 'types/course/conditions';
-import ConditionsManager from 'lib/components/extensions/conditions/ConditionsManager';
-import FormDialog from 'lib/components/form/dialog/FormDialog';
 import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 interface Props {
   open: boolean;
@@ -80,13 +81,13 @@ const AchievementForm: FC<Props> = (props) => {
 
   return (
     <FormDialog
-      open={open}
       editing={editing}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      title={title}
       formName="achievement-form"
       initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+      title={title}
       validationSchema={validationSchema}
     >
       {(control, formState): JSX.Element => (
@@ -96,67 +97,66 @@ const AchievementForm: FC<Props> = (props) => {
             name="title"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.title)}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                required
+                label={t(translations.title)}
+                required={true}
                 variant="standard"
               />
             )}
           />
           <Controller
-            name="description"
             control={control}
+            name="description"
             render={({ field, fieldState }): JSX.Element => (
               <FormRichTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.description)}
-                // @ts-ignore: component is still written in JS
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={t(translations.description)}
                 variant="standard"
               />
             )}
           />
           <Controller
-            name="badge"
             control={control}
+            name="badge"
             render={({ field, fieldState }): JSX.Element => (
               <FormSingleFileInput
-                field={field}
-                fieldState={fieldState}
                 accept={{ 'image/jpg': [], 'image/png': [], 'image/gif': [] }}
                 disabled={formState.isSubmitting}
+                field={field}
+                fieldState={fieldState}
                 previewComponent={BadgePreview}
               />
             )}
           />
           <Controller
-            name="published"
             control={control}
+            name="published"
             render={({ field, fieldState }): JSX.Element => (
               <FormToggleField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
                 label={t(translations.published)}
               />
             )}
           />
           {editing && conditionAttributes && (
             <ConditionsManager
-              title={t(translations.unlockConditions)}
-              description={t(translations.unlockConditionsHint)}
               conditionsData={conditionAttributes}
+              description={t(translations.unlockConditionsHint)}
+              title={t(translations.unlockConditions)}
             />
           )}
         </>

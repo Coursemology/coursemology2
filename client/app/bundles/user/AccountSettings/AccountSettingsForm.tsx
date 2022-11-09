@@ -1,22 +1,23 @@
 import { useMemo, useState } from 'react';
+import { Emits } from 'react-emitter-factory';
 import { Controller } from 'react-hook-form';
 import { Alert } from '@mui/material';
-import { Emits } from 'react-emitter-factory';
-import { object, string, ref } from 'yup';
-
-import { EmailData } from 'types/users';
 import { TimeZones } from 'types/course/admin/course';
-import FormTextField from 'lib/components/form/fields/TextField';
-import FormSelectField from 'lib/components/form/fields/SelectField';
-import Form, { FormEmitter } from 'lib/components/form/Form';
-import Section from 'lib/components/core/layouts/Section';
+import { EmailData } from 'types/users';
+import { object, ref, string } from 'yup';
+
 import AvatarSelector from 'lib/components/core/AvatarSelector';
+import Section from 'lib/components/core/layouts/Section';
+import FormSelectField from 'lib/components/form/fields/SelectField';
+import FormTextField from 'lib/components/form/fields/TextField';
+import Form, { FormEmitter } from 'lib/components/form/Form';
 import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
-import EmailsList from '../components/EmailsList';
+
 import AddEmailSubsection, {
   AddEmailSubsectionEmitter,
 } from '../components/AddEmailSubsection';
+import EmailsList from '../components/EmailsList';
 import { AccountSettingsData } from '../operations';
 import translations from '../translations';
 
@@ -122,161 +123,165 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
 
   return (
     <Form
-      initialValues={props.settings}
-      onSubmit={handleSubmit}
-      headsUp
+      dirty={Boolean(stagedImage)}
       disabled={props.disabled}
       emitsVia={props.emitsVia}
-      dirty={Boolean(stagedImage)}
+      headsUp={true}
+      initialValues={props.settings}
       onReset={(): void => {
         setStagedImage(undefined);
         addEmailSubsection?.reset?.();
       }}
-      submitsDirtyFieldsOnly
+      onSubmit={handleSubmit}
+      submitsDirtyFieldsOnly={true}
       validates={validationSchema}
     >
       {(control): JSX.Element => (
         <>
-          <Section title={t(translations.profile)} size="sm" sticksToNavbar>
+          <Section
+            size="sm"
+            sticksToNavbar={true}
+            title={t(translations.profile)}
+          >
             <Controller
               control={control}
               name="name"
               render={({ field, fieldState }): JSX.Element => (
                 <FormTextField
+                  disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
+                  fullWidth={true}
                   label={t(translations.name)}
+                  required={true}
                   variant="filled"
-                  disabled={props.disabled}
-                  fullWidth
-                  required
                 />
               )}
             />
 
             <Controller
-              name="timezone"
               control={control}
+              name="timezone"
               render={({ field, fieldState }): JSX.Element => (
                 <FormSelectField
+                  disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
                   label={t(translations.timeZone)}
-                  variant="filled"
+                  native={true}
                   options={timeZonesOptions}
-                  native
-                  disabled={props.disabled}
-                  required
+                  required={true}
+                  variant="filled"
                 />
               )}
             />
 
             <Controller
-              name="imageUrl"
               control={control}
+              name="imageUrl"
               render={({ field }): JSX.Element => (
                 <AvatarSelector
-                  title={t(translations.profilePicture)}
+                  circular={true}
                   defaultImageUrl={field.value}
-                  stagedImage={stagedImage}
-                  onSelectImage={setStagedImage}
                   disabled={props.disabled}
-                  circular
+                  onSelectImage={setStagedImage}
+                  stagedImage={stagedImage}
+                  title={t(translations.profilePicture)}
                 />
               )}
             />
           </Section>
 
           <Section
-            title={t(translations.emails)}
-            size="sm"
-            sticksToNavbar
             contentClassName="space-y-0"
+            size="sm"
+            sticksToNavbar={true}
+            title={t(translations.emails)}
           >
             <Controller
-              name="emails"
               control={control}
+              name="emails"
               render={({ field }): JSX.Element => (
                 <EmailsList
-                  emails={field.value}
                   disabled={props.disabled}
+                  emails={field.value}
                   onRemoveEmail={props.onRemoveEmail}
-                  onSetEmailAsPrimary={props.onSetEmailAsPrimary}
                   onResendConfirmationEmail={props.onResendConfirmationEmail}
+                  onSetEmailAsPrimary={props.onSetEmailAsPrimary}
                 />
               )}
             />
 
             <AddEmailSubsection
+              disabled={props.disabled}
               emitsVia={setAddEmailSubsection}
               onClickAddEmail={props.onAddEmail}
-              disabled={props.disabled}
             />
           </Section>
 
           <Section
-            title={t(translations.changePassword)}
             size="sm"
-            sticksToNavbar
+            sticksToNavbar={true}
+            title={t(translations.changePassword)}
           >
             <Controller
-              name="currentPassword"
               control={control}
+              name="currentPassword"
               render={({ field, fieldState }): JSX.Element => (
                 <FormTextField
+                  disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
-                  label={t(translations.currentPassword)}
-                  variant="filled"
-                  disabled={props.disabled}
-                  type="password"
+                  fullWidth={true}
                   inputProps={{ autoComplete: 'off' }}
-                  fullWidth
-                  showPasswordVisibilityHint
+                  label={t(translations.currentPassword)}
+                  showPasswordVisibilityHint={true}
+                  type="password"
+                  variant="filled"
                 />
               )}
             />
 
-            <Alert severity="info" className="!my-4">
+            <Alert className="!my-4" severity="info">
               {t(translations.newPasswordRequirementHint)}
             </Alert>
 
             <Controller
-              name="password"
               control={control}
+              name="password"
               render={({ field, fieldState }): JSX.Element => (
                 <FormTextField
+                  disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
-                  label={t(translations.newPassword)}
-                  variant="filled"
-                  disabled={props.disabled}
-                  type="password"
+                  fullWidth={true}
                   inputProps={{ autoComplete: 'new-password' }}
-                  fullWidth
+                  label={t(translations.newPassword)}
                   onChangePasswordVisibility={toggleRequirePasswordConfirmation}
-                  showPasswordVisibilityHint
+                  showPasswordVisibilityHint={true}
+                  type="password"
+                  variant="filled"
                 />
               )}
             />
 
             {requirePasswordConfirmation && (
               <Controller
-                name="passwordConfirmation"
                 control={control}
+                name="passwordConfirmation"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
+                    disabled={props.disabled}
+                    disablePasswordVisibilitySwitch={true}
                     field={field}
                     fieldState={fieldState}
+                    fullWidth={true}
                     label={t(translations.newPasswordConfirmation)}
-                    variant="filled"
-                    disabled={props.disabled}
-                    type="password"
-                    fullWidth
-                    disablePasswordVisibilitySwitch
-                    onCut={(e): void => e.preventDefault()}
                     onCopy={(e): void => e.preventDefault()}
+                    onCut={(e): void => e.preventDefault()}
                     onPaste={(e): void => e.preventDefault()}
+                    type="password"
+                    variant="filled"
                   />
                 )}
               />

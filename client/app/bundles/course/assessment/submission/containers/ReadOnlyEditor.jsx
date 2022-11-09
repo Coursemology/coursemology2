@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import ReadOnlyEditorComponent from '../components/ReadOnlyEditor';
 import { topicShape } from '../propTypes';
@@ -15,10 +15,10 @@ class ReadOnlyEditorContainer extends Component {
     // content has <div> tags at first and last index, increasing line count
     return (
       <ReadOnlyEditorComponent
-        answerId={answerId}
-        fileId={fileId}
         annotations={Object.values(annotations)}
+        answerId={answerId}
         content={content}
+        fileId={fileId}
       />
     );
   }

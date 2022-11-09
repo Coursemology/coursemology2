@@ -1,3 +1,4 @@
+import { FC, memo, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Avatar,
@@ -7,17 +8,18 @@ import {
   Tooltip,
   useMediaQuery,
 } from '@mui/material';
-import DataTable from 'lib/components/core/layouts/DataTable';
-import { FC, memo, useEffect, useState } from 'react';
+import { TableColumns } from 'types/components/DataTable';
 import {
   GroupLeaderboardAchievement,
   GroupLeaderboardPoints,
   LeaderboardAchievement,
   LeaderboardPoints,
 } from 'types/course/leaderboard';
-import { TableColumns } from 'types/components/DataTable';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
 import { getAchievementURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+
 import { LeaderboardTableType } from '../../types';
 
 interface Props {
@@ -130,12 +132,11 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         }),
         customBodyRenderLite: (dataIndex) => (
           <Box
-            sx={styles.avatar}
             className="course_user"
             id={`course_user_${individualData[dataIndex].id}`}
+            sx={styles.avatar}
           >
             <Avatar
-              src={individualData[dataIndex].imageUrl}
               alt={individualData[dataIndex].name}
               component={Link}
               href={getCourseUserURL(
@@ -143,6 +144,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
                 individualData[dataIndex].id,
               )}
               marginRight={1}
+              src={individualData[dataIndex].imageUrl}
             />
             <a
               href={getCourseUserURL(
@@ -212,9 +214,6 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
         }),
         customBodyRenderLite: (dataIndex) => (
           <AvatarGroup
-            total={achievementData[dataIndex].achievementCount}
-            max={maxAvatars}
-            sx={styles.avatarGroup}
             componentsProps={{
               additionalAvatar: {
                 onClick: (): void => {
@@ -226,17 +225,20 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
                 sx: { cursor: 'pointer' },
               },
             }}
+            max={maxAvatars}
+            sx={styles.avatarGroup}
+            total={achievementData[dataIndex].achievementCount}
           >
             {achievementData[dataIndex].achievements.map((achievement) => {
               return (
-                <Tooltip title={achievement.title} key={achievement.id}>
+                <Tooltip key={achievement.id} title={achievement.title}>
                   <Avatar
-                    src={achievement.badge.url}
                     alt={achievement.badge.name}
+                    className="achievement"
                     component={Link}
                     href={getAchievementURL(getCourseId(), achievement.id)}
-                    className="achievement"
                     id={`achievement_${achievement.id}`}
+                    src={achievement.badge.url}
                   />
                 </Tooltip>
               );
@@ -285,17 +287,17 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
           }),
           customBodyRenderLite: (dataIndex) => (
             <AvatarGroup
-              total={groupData[dataIndex].group.length}
               max={maxAvatars}
               sx={styles.avatarGroup}
+              total={groupData[dataIndex].group.length}
             >
               {groupData[dataIndex].group.map((user) => (
-                <Tooltip title={user.name} key={user.id}>
+                <Tooltip key={user.id} title={user.name}>
                   <Avatar
-                    src={user.imageUrl}
                     alt={user.name}
                     component={Link}
                     href={getCourseUserURL(getCourseId(), user.id)}
+                    src={user.imageUrl}
                   />
                 </Tooltip>
               ))}
@@ -406,13 +408,13 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
   updateColumns();
   return (
     <DataTable
+      columns={columns}
       data={data}
       options={options}
-      columns={columns}
       title={title}
-      titleGrid
-      titleAlignCenter
-      withMargin
+      titleAlignCenter={true}
+      titleGrid={true}
+      withMargin={true}
     />
   );
 };

@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Button,
   Dialog,
@@ -8,7 +9,6 @@ import {
 } from '@mui/material';
 import { cyan } from '@mui/material/colors';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
 
 import {
   forumTopicPostPackShape,
@@ -94,7 +94,7 @@ export default class ForumPostSelectDialog extends Component {
       prevProps.selectedPostPacks.length !== this.props.selectedPostPacks.length
     ) {
       // Safe and suggested by React documentation
-      // eslint-disable-next-line react/no-did-update-set-state
+
       this.setState({ selectedPostPacks: this.props.selectedPostPacks });
     }
   }
@@ -173,15 +173,15 @@ export default class ForumPostSelectDialog extends Component {
       <div style={styles.dialogContent}>
         {forumTopicPostPacks.map((forumTopicPostPack, index) => (
           <ForumCard
+            key={forumTopicPostPack.forum.id}
             forumTopicPostPack={forumTopicPostPack}
-            selectedPostPacks={this.state.selectedPostPacks}
-            onSelectPostPack={(postPack, isSelected) =>
-              this.onSelectPostPack(postPack, isSelected)
-            }
             isExpandedOnLoad={this.isForumExpandedOnFirstLoad(
               forumTopicPostPack,
             )}
-            key={forumTopicPostPack.forum.id}
+            onSelectPostPack={(postPack, isSelected) =>
+              this.onSelectPostPack(postPack, isSelected)
+            }
+            selectedPostPacks={this.state.selectedPostPacks}
             style={
               index < forumTopicPostPacks.length - 1
                 ? styles.nonLastForumCard
@@ -205,17 +205,17 @@ export default class ForumPostSelectDialog extends Component {
 
     const actions = [
       <Button
-        color="secondary"
         key="forum-post-dialog-cancel-button"
+        color="secondary"
         onClick={() => this.props.setIsVisible(false)}
       >
         <FormattedMessage {...translations.cancelButton} />
       </Button>,
       <Button
-        color="primary"
-        className="select-posts-button"
-        disabled={hasNoChanges}
         key="forum-post-dialog-select-button"
+        className="select-posts-button"
+        color="primary"
+        disabled={hasNoChanges}
         onClick={() => this.saveChanges()}
         style={styles.expandButton}
       >
@@ -228,10 +228,10 @@ export default class ForumPostSelectDialog extends Component {
 
     return (
       <Dialog
-        fullWidth
+        fullWidth={true}
         maxWidth="md"
-        open={this.props.isVisible}
         onClose={() => this.props.setIsVisible(false)}
+        open={this.props.isVisible}
         style={{
           top: 40,
         }}

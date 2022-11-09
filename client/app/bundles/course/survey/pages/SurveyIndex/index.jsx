@@ -1,16 +1,18 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { ListSubheader } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { fetchSurveys } from 'course/survey/actions/surveys';
-import surveyTranslations from 'course/survey/translations';
 import { surveyShape } from 'course/survey/propTypes';
+import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import withRouter from 'lib/components/navigation/withRouter';
 import PageHeader from 'lib/components/navigation/PageHeader';
-import SurveysTable from './SurveysTable';
+import withRouter from 'lib/components/navigation/withRouter';
+
 import NewSurveyButton from './NewSurveyButton';
+import SurveysTable from './SurveysTable';
 
 const translations = defineMessages({
   noSurveys: {
@@ -38,7 +40,7 @@ class SurveyIndex extends Component {
     }
     if (surveys.length < 1) {
       return (
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...translations.noSurveys} />
         </ListSubheader>
       );

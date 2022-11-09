@@ -1,17 +1,18 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { ListSubheader } from '@mui/material';
-import Thumbnail from 'lib/components/core/Thumbnail';
-import { defaultComponentTitles } from 'course/translations.intl';
-import { duplicableItemTypes } from 'course/duplication/constants';
+import PropTypes from 'prop-types';
+
 import { setItemSelectedBoolean } from 'course/duplication/actions';
-import { achievementShape } from 'course/duplication/propTypes';
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
 import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
+import { duplicableItemTypes } from 'course/duplication/constants';
+import { achievementShape } from 'course/duplication/propTypes';
+import { defaultComponentTitles } from 'course/translations.intl';
+import Thumbnail from 'lib/components/core/Thumbnail';
 
 const translations = defineMessages({
   noItems: {
@@ -53,7 +54,7 @@ class AchievementsSelector extends Component {
 
     if (achievements.length < 1) {
       return (
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...translations.noItems} />
         </ListSubheader>
       );
@@ -81,9 +82,9 @@ class AchievementsSelector extends Component {
         <TypeBadge itemType={duplicableItemTypes.ACHIEVEMENT} />
         {achievement.published || <UnpublishedIcon />}
         <Thumbnail
+          rootStyle={styles.badgeContainer}
           src={achievement.url}
           style={styles.badge}
-          rootStyle={styles.badgeContainer}
         />
         {achievement.title}
       </span>
@@ -91,8 +92,8 @@ class AchievementsSelector extends Component {
     return (
       <IndentedCheckbox
         key={achievement.id}
-        label={label}
         checked={checked}
+        label={label}
         onChange={(e, value) =>
           dispatch(
             setItemSelectedBoolean(

@@ -6,12 +6,13 @@ import {
   saveEntityToStore,
   saveListToStore,
 } from 'utilities/store';
+
 import {
-  SAVE_SKILL_BRANCH_LIST,
-  SAVE_SKILL_BRANCH,
-  SAVE_SKILL,
-  DELETE_SKILL_BRANCH,
   DELETE_SKILL,
+  DELETE_SKILL_BRANCH,
+  SAVE_SKILL,
+  SAVE_SKILL_BRANCH,
+  SAVE_SKILL_BRANCH_LIST,
   SkillsActionType,
   SkillState,
 } from './types';

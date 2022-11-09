@@ -1,7 +1,7 @@
 import { ChangeEventHandler } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { Button, Grid } from '@mui/material';
 import { Add as AddIcon, Delete as DeleteIcon } from '@mui/icons-material';
+import { Button, Grid } from '@mui/material';
 
 import t from './translations.intl';
 
@@ -38,27 +38,27 @@ const Toolbar = (props: ToolbarProps): JSX.Element => {
   };
 
   return (
-    <Grid container spacing={1}>
-      <Grid item>
-        <Button startIcon={<AddIcon />} variant="outlined" size="small">
+    <Grid container={true} spacing={1}>
+      <Grid item={true}>
+        <Button size="small" startIcon={<AddIcon />} variant="outlined">
           {intl.formatMessage(t.addFiles)}
           <input
-            type="file"
-            multiple
             className="absolute top-0 bottom-0 right-0 left-0 cursor-pointer opacity-0"
-            onChange={handleFileInputChange}
             data-testid="FileInput"
+            multiple={true}
+            onChange={handleFileInputChange}
+            type="file"
           />
         </Button>
       </Grid>
 
       {props.selectedRows && (
-        <Grid item>
+        <Grid item={true}>
           <Button
-            startIcon={<DeleteIcon />}
-            size="small"
             color="error"
             onClick={handleDeleteFiles}
+            size="small"
+            startIcon={<DeleteIcon />}
           >
             {intl.formatMessage(t.deleteSelected)}
           </Button>

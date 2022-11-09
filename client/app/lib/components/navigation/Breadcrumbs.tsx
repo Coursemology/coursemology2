@@ -1,3 +1,4 @@
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
   Breadcrumbs as MuiBreadcrumbs,
   Paper,
@@ -5,7 +6,6 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import Link, { LinkProps } from '@mui/material/Link';
-import { Link as RouterLink, useLocation } from 'react-router-dom';
 
 const breadcrumbNameMap: { [key: string]: string } = {
   '/admin': 'Administration',
@@ -38,13 +38,13 @@ const Breadcrumbs = (): JSX.Element => {
 
   return (
     <Paper
-      variant="outlined"
       sx={{
         marginBottom: '4px',
         padding: '4px 8px',
         backgroundColor: grey[100],
         border: '0',
       }}
+      variant="outlined"
     >
       <MuiBreadcrumbs aria-label="breadcrumb">
         {pathnames.map((_value, index) => {
@@ -52,11 +52,11 @@ const Breadcrumbs = (): JSX.Element => {
           const to = `/${pathnames.slice(0, index + 1).join('/')}`;
 
           return last ? (
-            <Typography color="text.primary" key={to} variant="body2">
+            <Typography key={to} color="text.primary" variant="body2">
               {breadcrumbNameMap[to]}
             </Typography>
           ) : (
-            <LinkRouter underline="hover" color="inherit" to={to} key={to}>
+            <LinkRouter key={to} color="inherit" to={to} underline="hover">
               {breadcrumbNameMap[to]}
             </LinkRouter>
           );

@@ -1,8 +1,9 @@
-import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
 import { useFieldArray } from 'react-hook-form';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Card, CardContent, CardHeader } from '@mui/material';
 import { red } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import ResponseAnswer from './ResponseAnswer';
 
 const styles = {
@@ -37,10 +38,10 @@ const ResponseSection = (props) => {
   return (
     <Card style={styles.card}>
       <CardHeader
-        title={section.title}
         subheader={
           <div dangerouslySetInnerHTML={{ __html: section.description }} />
         }
+        title={section.title}
       />
       <CardContent>
         {questionFields.map((question, questionIndex) => (

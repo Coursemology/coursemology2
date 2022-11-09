@@ -5,6 +5,7 @@ import {
   saveEntityToStore,
   saveListToStore,
 } from 'utilities/store';
+
 import {
   DELETE_INVITATION,
   InvitationsActionType,

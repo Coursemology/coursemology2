@@ -1,5 +1,6 @@
 import { FormControlLabel, Radio } from '@mui/material';
 import { green } from '@mui/material/colors';
+
 import { answerShape, questionShape } from '../../propTypes';
 
 const MultipleResponse = ({ question, answer }) => {
@@ -8,19 +9,19 @@ const MultipleResponse = ({ question, answer }) => {
     <>
       {question.options.map((option) => (
         <FormControlLabel
+          key={option.id}
           checked={selectedOptions.indexOf(option.id) !== -1}
           control={<Radio style={{ padding: '0 12px' }} />}
-          disabled
-          key={option.id}
+          disabled={true}
           label={
             <b>
               <div
+                dangerouslySetInnerHTML={{ __html: option.option.trim() }}
                 style={
                   option.correct && selectedOptions.indexOf(option.id) !== -1
                     ? { backgroundColor: green[50] }
                     : null
                 }
-                dangerouslySetInnerHTML={{ __html: option.option.trim() }}
               />
             </b>
           }

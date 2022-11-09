@@ -7,6 +7,7 @@ import {
   ApproveEnrolRequestPatchData,
   EnrolRequestListData,
 } from 'types/course/enrolRequests';
+
 import BaseCourseAPI from './Base';
 
 export default class UserInvitationsAPI extends BaseCourseAPI {

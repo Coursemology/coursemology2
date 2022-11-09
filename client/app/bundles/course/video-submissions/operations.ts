@@ -1,6 +1,7 @@
 /* eslint-disable import/prefer-default-export */
-import CourseAPI from 'api/course';
 import { VideoSubmissionListData } from 'types/course/videoSubmissions';
+
+import CourseAPI from 'api/course';
 
 export const fetchVideoSubmissions = async (): Promise<
   VideoSubmissionListData[]

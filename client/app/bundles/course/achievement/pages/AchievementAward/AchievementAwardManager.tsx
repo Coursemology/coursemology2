@@ -8,24 +8,27 @@ import {
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import equal from 'fast-deep-equal';
 import { Button, Checkbox, Grid, Tooltip } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
-import Note from 'lib/components/core/Note';
+import equal from 'fast-deep-equal';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 import {
   AchievementCourseUserEntity,
   AchievementEntity,
 } from 'types/course/achievements';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { AppDispatch } from 'types/store';
+
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { formatShortDateTime } from 'lib/moment';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
-import { getCourseId } from 'lib/helpers/url-helpers';
-import { AppDispatch } from 'types/store';
+import Note from 'lib/components/core/Note';
 import { getAchievementURL } from 'lib/helpers/url-builders';
-import AchievementAwardSummary from './AchievementAwardSummary';
+import { getCourseId } from 'lib/helpers/url-helpers';
+import { formatShortDateTime } from 'lib/moment';
+
 import { awardAchievement } from '../../operations';
+
+import AchievementAwardSummary from './AchievementAwardSummary';
 
 interface Props extends WrappedComponentProps {
   achievement: AchievementEntity;
@@ -251,9 +254,9 @@ const AchievementAwardManager: FC<Props> = (props) => {
           const isChecked = selectedUserIds.has(userId);
           return (
             <Checkbox
-              id={`checkbox_${userId}`}
               key={`checkbox_${userId}`}
               checked={isChecked}
+              id={`checkbox_${userId}`}
               onChange={(_event, checked): void => {
                 if (checked) {
                   setSelectedUserIds((prev) => new Set(prev.add(userId)));
@@ -291,14 +294,14 @@ const AchievementAwardManager: FC<Props> = (props) => {
 
   return (
     <>
-      <Grid container>
+      <Grid container={true}>
         <Grid
-          item
-          xs={12}
-          display="flex"
           alignItems="center"
+          display="flex"
+          item={true}
           justifyContent="center"
           style={{ marginBottom: 8 }}
+          xs={12}
         >
           <Tooltip
             title={
@@ -306,41 +309,32 @@ const AchievementAwardManager: FC<Props> = (props) => {
             }
           >
             <img
-              src={achievement.badge.url}
               alt={achievement.badge.name}
+              src={achievement.badge.url}
               style={styles.badge}
             />
           </Tooltip>
           <div style={styles.description}>
             <p
-              style={{ whiteSpace: 'normal' }}
               dangerouslySetInnerHTML={{ __html: achievement.description }}
+              style={{ whiteSpace: 'normal' }}
             />
           </div>
         </Grid>
-        <Grid item xs={12}>
+        <Grid item={true} xs={12}>
           <DataTable
-            data={achievementUsers}
             columns={columns}
+            data={achievementUsers}
+            includeRowNumber={true}
             options={options}
-            includeRowNumber
           />
         </Grid>
       </Grid>
       {openConfirmation && (
         <ConfirmationDialog
-          open={openConfirmation}
-          onCancel={(): void => setOpenConfirmation(false)}
-          onConfirm={(): void => {
-            setIsSubmitting(true);
-            onSubmit(achievement.id, Array.from(selectedUserIds))
-              .then(() => handleClose(true))
-              .catch(() => {
-                setIsSubmitting(false);
-                setOpenConfirmation(false);
-              });
-          }}
           confirmButtonText={<FormattedMessage {...translations.saveChanges} />}
+          disableCancelButton={isSubmitting}
+          disableConfirmButton={isSubmitting}
           message={
             <>
               <p>
@@ -353,8 +347,17 @@ const AchievementAwardManager: FC<Props> = (props) => {
               />
             </>
           }
-          disableCancelButton={isSubmitting}
-          disableConfirmButton={isSubmitting}
+          onCancel={(): void => setOpenConfirmation(false)}
+          onConfirm={(): void => {
+            setIsSubmitting(true);
+            onSubmit(achievement.id, Array.from(selectedUserIds))
+              .then(() => handleClose(true))
+              .catch(() => {
+                setIsSubmitting(false);
+                setOpenConfirmation(false);
+              });
+          }}
+          open={openConfirmation}
         />
       )}
     </>

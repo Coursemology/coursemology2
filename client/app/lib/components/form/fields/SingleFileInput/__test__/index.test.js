@@ -1,4 +1,5 @@
 import { mount } from 'enzyme';
+
 import SingleFileInput from '../index';
 
 const reactHookFormControllerFieldStateDefaults = {
@@ -43,8 +44,10 @@ describe('<SingleFileInput />', () => {
   it('renders required error message', () => {
     const singleFileInput = mount(
       <SingleFileInput
-        isNotBadge
-        required
+        field={{
+          value: {},
+          onChange: jest.fn(),
+        }}
         fieldState={{
           ...reactHookFormControllerFieldStateDefaults,
           error: {
@@ -52,10 +55,8 @@ describe('<SingleFileInput />', () => {
             defaultMessage: 'File attachment required.',
           },
         }}
-        field={{
-          value: {},
-          onChange: jest.fn(),
-        }}
+        isNotBadge={true}
+        required={true}
       />,
       buildContextOptions(),
     );

@@ -4,6 +4,7 @@ import {
   AnnouncementListData,
   AnnouncementPermissions,
 } from 'types/course/announcements';
+
 import BaseCourseAPI from './Base';
 
 export default class AnnouncementsAPI extends BaseCourseAPI {

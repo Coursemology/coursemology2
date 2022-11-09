@@ -1,15 +1,17 @@
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
+import { defineMessages } from 'react-intl';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { TextField } from '@mui/material';
-import { defineMessages } from 'react-intl';
-import FormTextField from 'lib/components/form/fields/TextField';
-import tableTranslations from 'lib/translations/table';
-import { RoleRequestRowData } from 'types/system/instance/roleRequests';
-import FormDialog from 'lib/components/form/dialog/FormDialog';
-import useTranslation from 'lib/hooks/useTranslation';
-import { useDispatch } from 'react-redux';
 import { AppDispatch } from 'types/store';
+import { RoleRequestRowData } from 'types/system/instance/roleRequests';
+
+import FormDialog from 'lib/components/form/dialog/FormDialog';
+import FormTextField from 'lib/components/form/fields/TextField';
+import useTranslation from 'lib/hooks/useTranslation';
+import tableTranslations from 'lib/translations/table';
+
 import { rejectRoleRequest } from '../../operations';
 
 interface Props {
@@ -66,77 +68,77 @@ const RejectWithMessageForm: FC<Props> = (props) => {
 
   return (
     <FormDialog
-      open={open}
       editing={false}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      title={t(translations.header)}
       formName="reject-with-message-form"
       initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+      title={t(translations.header)}
     >
       {(control, formState): JSX.Element => (
         <div className="space-y-2">
           <TextField
-            disabled
-            required
-            fullWidth
-            label={t(tableTranslations.name)}
             defaultValue={roleRequest.name}
+            disabled={true}
+            fullWidth={true}
+            label={t(tableTranslations.name)}
+            required={true}
             variant="standard"
           />
           <TextField
-            disabled
-            required
-            fullWidth
-            label={t(tableTranslations.email)}
             defaultValue={roleRequest.email}
+            disabled={true}
+            fullWidth={true}
+            label={t(tableTranslations.email)}
+            required={true}
             variant="standard"
           />
           <TextField
-            disabled
-            required
-            fullWidth
-            label={t(tableTranslations.requestToBe)}
             defaultValue={roleRequest.role}
+            disabled={true}
+            fullWidth={true}
+            label={t(tableTranslations.requestToBe)}
+            required={true}
             variant="standard"
           />
           <TextField
-            disabled
-            fullWidth
-            label={t(tableTranslations.organization)}
             defaultValue={roleRequest.organization}
+            disabled={true}
+            fullWidth={true}
+            label={t(tableTranslations.organization)}
             variant="standard"
           />
           <TextField
-            disabled
-            fullWidth
-            label={t(tableTranslations.designation)}
             defaultValue={roleRequest.designation}
+            disabled={true}
+            fullWidth={true}
+            label={t(tableTranslations.designation)}
             variant="standard"
           />
           <TextField
-            disabled
-            fullWidth
-            label={t(tableTranslations.reason)}
             defaultValue={roleRequest.reason}
+            disabled={true}
+            fullWidth={true}
+            label={t(tableTranslations.reason)}
             variant="standard"
           />
           <Controller
-            name="rejectionMessage"
             control={control}
+            name="rejectionMessage"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                className="rejectionMessage"
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(tableTranslations.rejectionMessage)}
-                className="rejectionMessage"
-                fullWidth
-                multiline
-                rows={2}
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={t(tableTranslations.rejectionMessage)}
+                multiline={true}
+                rows={2}
                 variant="standard"
               />
             )}

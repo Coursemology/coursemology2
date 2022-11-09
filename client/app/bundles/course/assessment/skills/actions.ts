@@ -3,17 +3,18 @@ import {
   SkillListData,
   SkillPermissions,
 } from 'types/course/assessment/skills/skills';
+
 import {
-  SAVE_SKILL_BRANCH_LIST,
-  SAVE_SKILL_BRANCH,
-  SAVE_SKILL,
-  DELETE_SKILL_BRANCH,
   DELETE_SKILL,
-  SaveSkillBranchListAction,
-  SaveSkillBranchAction,
-  SaveSkillAction,
-  DeleteSkillBranchAction,
+  DELETE_SKILL_BRANCH,
   DeleteSkillAction,
+  DeleteSkillBranchAction,
+  SAVE_SKILL,
+  SAVE_SKILL_BRANCH,
+  SAVE_SKILL_BRANCH_LIST,
+  SaveSkillAction,
+  SaveSkillBranchAction,
+  SaveSkillBranchListAction,
 } from './types';
 
 export function saveSkillBranchList(

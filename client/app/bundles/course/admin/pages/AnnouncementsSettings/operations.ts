@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios';
-
-import CourseAPI from 'api/course';
 import {
   AnnouncementsSettingsData,
   AnnouncementsSettingsPostData,
 } from 'types/course/admin/announcements';
+
+import CourseAPI from 'api/course';
 
 type Data = Promise<AnnouncementsSettingsData>;
 

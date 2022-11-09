@@ -1,5 +1,3 @@
-import { Close } from '@mui/icons-material';
-import { Box, Grid, IconButton, Tooltip } from '@mui/material';
 import { FC } from 'react';
 import {
   Control,
@@ -7,13 +5,16 @@ import {
   UseFieldArrayAppend,
   UseFieldArrayRemove,
 } from 'react-hook-form';
-import { defineMessages, WrappedComponentProps, injectIntl } from 'react-intl';
-import FormTextField from 'lib/components/form/fields/TextField';
-import FormSelectField from 'lib/components/form/fields/SelectField';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { Close } from '@mui/icons-material';
+import { Box, Grid, IconButton, Tooltip } from '@mui/material';
 import {
   IndividualInvite,
   IndividualInvites,
 } from 'types/system/instance/invitations';
+
+import FormSelectField from 'lib/components/form/fields/SelectField';
+import FormTextField from 'lib/components/form/fields/TextField';
 import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/translations/table';
 
@@ -51,49 +52,46 @@ const IndividualInvitation: FC<Props> = (props) => {
   const { fieldsConfig, index, intl } = props;
 
   const renderInvitationBody = (
-    <Grid container flexWrap="nowrap" alignItems="center">
+    <Grid alignItems="center" container={true} flexWrap="nowrap">
       <Controller
+        control={fieldsConfig.control}
         name={`invitations.${index}.name`}
-        control={fieldsConfig.control}
         render={({ field, fieldState }): JSX.Element => (
           <FormTextField
             field={field}
             fieldState={fieldState}
-            // @ts-ignore: component is still written in JS
-            fullWidth
-            placeholder={intl.formatMessage(translations.namePlaceholder)}
-            label={intl.formatMessage(tableTranslations.name)}
-            variant="standard"
+            fullWidth={true}
             id={`name-${index}`}
+            label={intl.formatMessage(tableTranslations.name)}
+            placeholder={intl.formatMessage(translations.namePlaceholder)}
+            variant="standard"
           />
         )}
       />
       <Controller
-        name={`invitations.${index}.email`}
         control={fieldsConfig.control}
+        name={`invitations.${index}.email`}
         render={({ field, fieldState }): JSX.Element => (
           <FormTextField
             field={field}
             fieldState={fieldState}
-            // @ts-ignore: component is still written in JS
-            fullWidth
-            placeholder={intl.formatMessage(translations.emailPlaceholder)}
-            label={intl.formatMessage(tableTranslations.email)}
-            variant="standard"
+            fullWidth={true}
             id={`email-${index}`}
+            label={intl.formatMessage(tableTranslations.email)}
+            placeholder={intl.formatMessage(translations.emailPlaceholder)}
+            variant="standard"
           />
         )}
       />
       <Controller
-        name={`invitations.${index}.role`}
         control={fieldsConfig.control}
+        name={`invitations.${index}.role`}
         render={({ field, fieldState }): JSX.Element => (
           <FormSelectField
             field={field}
             fieldState={fieldState}
-            options={userRoleOptions}
-            // @ts-ignore: component is still written in JS
             label={intl.formatMessage(tableTranslations.role)}
+            options={userRoleOptions}
           />
         )}
       />
@@ -101,7 +99,7 @@ const IndividualInvitation: FC<Props> = (props) => {
   );
 
   return (
-    <Box className="flex items-center justify-start" key={index}>
+    <Box key={index} className="flex items-center justify-start">
       {renderInvitationBody}
       <Tooltip title={intl.formatMessage(translations.removeInvitation)}>
         <IconButton onClick={(): void => fieldsConfig.remove(index)}>

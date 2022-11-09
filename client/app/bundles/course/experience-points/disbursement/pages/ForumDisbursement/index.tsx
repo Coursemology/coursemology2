@@ -1,3 +1,8 @@
+import { FC, useState } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import CloseIcon from '@mui/icons-material/Close';
 import {
   Dialog,
   DialogContent,
@@ -6,25 +11,22 @@ import {
   IconButton,
   Paper,
 } from '@mui/material';
-import { toast } from 'react-toastify';
-import { defineMessages, useIntl } from 'react-intl';
-import { FC, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { ForumDisbursementUserEntity } from 'types/course/disbursement';
 import { AppDispatch, AppState } from 'types/store';
-import CloseIcon from '@mui/icons-material/Close';
+
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatLongDateTime } from 'lib/moment';
-import { ForumDisbursementUserEntity } from 'types/course/disbursement';
+
 import FilterForm from '../../components/forms/FilterForm';
 import ForumDisbursementForm from '../../components/forms/ForumDisbursementForm';
 import ForumPostTable from '../../components/tables/ForumPostTable';
+import { fetchForumPost } from '../../operations';
 import {
   getAllForumDisbursementUserEntities,
-  getFilters,
   getAllForumPostEntitiesForUser,
+  getFilters,
 } from '../../selectors';
-import { fetchForumPost } from '../../operations';
 
 const translations = defineMessages({
   fetchForumPostsFailure: {
@@ -65,7 +67,7 @@ const ForumDisbursement: FC = () => {
 
   return (
     <>
-      <Grid item xs>
+      <Grid item={true} xs={true}>
         <Paper
           elevation={3}
           sx={{
@@ -85,7 +87,7 @@ const ForumDisbursement: FC = () => {
           />
         </Paper>
       </Grid>
-      <Grid item xs>
+      <Grid item={true} xs={true}>
         <ForumDisbursementForm
           filters={filters}
           forumUsers={forumUsers}
@@ -93,13 +95,13 @@ const ForumDisbursement: FC = () => {
         />
         {selectedForumPostUser && (
           <Dialog
-            open={!!forumPosts}
+            fullWidth={true}
             maxWidth="lg"
-            fullWidth
+            onClose={(): void => setSelectedForumPostUser(null)}
+            open={!!forumPosts}
             PaperProps={{
               style: { overflowY: 'inherit' },
             }}
-            onClose={(): void => setSelectedForumPostUser(null)}
             style={{
               top: 40,
             }}

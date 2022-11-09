@@ -1,5 +1,7 @@
-import CourseAPI from 'api/course';
 import { Operation } from 'types/store';
+
+import CourseAPI from 'api/course';
+
 import * as actions from './actions';
 
 export function fetchSubmissions(): Operation<void> {

@@ -2,14 +2,15 @@ import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { Tab, Tabs } from '@mui/material';
+import { tabsStyle } from 'theme/mui-style';
 import {
   ManageCourseUsersPermissions,
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
+
 import CustomBadge from 'lib/components/extensions/CustomBadge';
-import { getCurrentPath, getCourseId } from 'lib/helpers/url-helpers';
 import { getCourseURL } from 'lib/helpers/url-builders';
-import { tabsStyle } from 'theme/mui-style';
+import { getCourseId, getCurrentPath } from 'lib/helpers/url-helpers';
 
 interface Props extends WrappedComponentProps {
   permissions: ManageCourseUsersPermissions;
@@ -123,24 +124,24 @@ const UserManagementTabs: FC<Props> = (props) => {
 
   const managementTabs = (
     <Tabs
-      value={getCurrentTabIndex()}
-      variant="scrollable"
       scrollButtons="auto"
       sx={tabsStyle}
+      value={getCurrentTabIndex()}
+      variant="scrollable"
     >
       {tabs.map((tab) => (
         <Tab
           key={tab.label.id}
-          label={intl.formatMessage(tab.label)}
+          component={Link}
           icon={<CustomBadge badgeContent={tab.count} color="error" />}
           iconPosition="end"
-          component={Link}
-          to={tab.href}
+          label={intl.formatMessage(tab.label)}
           style={{
             minHeight: 48,
             paddingRight: tab.count === 0 || tab.count === undefined ? 8 : 26,
             textDecoration: 'none',
           }}
+          to={tab.href}
         />
       ))}
     </Tabs>

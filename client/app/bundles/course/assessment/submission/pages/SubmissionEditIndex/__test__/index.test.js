@@ -1,8 +1,11 @@
-import 'ace-builds';
 import { mount } from 'enzyme';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import store from 'course/assessment/submission/store';
-import actionTypes, { questionTypes, formNames } from '../../../constants';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
+import 'ace-builds';
+
+import actionTypes, { formNames, questionTypes } from '../../../constants';
 import SubmissionEditIndex from '../index';
 
 const assessmentId = 1;

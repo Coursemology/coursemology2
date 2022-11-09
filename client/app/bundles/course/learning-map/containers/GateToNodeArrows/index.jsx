@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import Xarrow from 'react-xarrows';
 import PropTypes from 'prop-types';
+
 import { arrowPropertiesShape, nodeShape } from '../../propTypes';
 
 const GateToNodeArrows = (props) => {
@@ -17,13 +18,13 @@ const GateToNodeArrows = (props) => {
       node.depth > 0 && (
         <Xarrow
           key={node.id}
-          start={getGateConnectionPointId(node.id)}
-          startAnchor={arrowAnchorPositions}
-          end={node.id}
-          endAnchor={arrowAnchorPositions}
           color={arrowProperties.defaultColor}
           divContainerStyle={{ position: 'relative' }}
+          end={node.id}
+          endAnchor={arrowAnchorPositions}
           headSize={arrowProperties.headSize}
+          start={getGateConnectionPointId(node.id)}
+          startAnchor={arrowAnchorPositions}
           strokeWidth={arrowProperties.strokeWidth * scale}
           SVGcanvasStyle={{ transform: `scale(${1 / scale})` }}
         />

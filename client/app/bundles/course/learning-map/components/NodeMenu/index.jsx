@@ -1,17 +1,19 @@
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import {
   Icon,
   ListItemText,
   ListSubheader,
-  MenuList,
   MenuItem,
+  MenuList,
 } from '@mui/material';
-import { addParentNode } from 'course/learning-map/actions';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
-import translations from '../../translations.intl';
+
+import { addParentNode } from 'course/learning-map/actions';
+
 import { nodeShape, relatedNodeShape } from '../../propTypes';
+import translations from '../../translations.intl';
 
 // Remove padding from top of MenuList
 const theme = createTheme({

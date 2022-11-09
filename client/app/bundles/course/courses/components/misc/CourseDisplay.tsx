@@ -1,10 +1,12 @@
 import { FC, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Grid } from '@mui/material';
 import { CourseMiniEntity } from 'types/course/courses';
-import Note from 'lib/components/core/Note';
-import Pagination from 'lib/components/core/layouts/Pagination';
+
 import SearchBar from 'lib/components/core/fields/SearchBar';
-import { injectIntl, defineMessages, WrappedComponentProps } from 'react-intl';
+import Pagination from 'lib/components/core/layouts/Pagination';
+import Note from 'lib/components/core/Note';
+
 import CourseInfoBox from './CourseInfoBox';
 
 interface Props extends WrappedComponentProps {
@@ -56,42 +58,42 @@ const CourseDisplay: FC<Props> = (props) => {
 
   return (
     <>
-      <Grid style={{ padding: 0 }} container columns={{ xs: 1, lg: 3 }}>
+      <Grid columns={{ xs: 1, lg: 3 }} container={true} style={{ padding: 0 }}>
         <Grid
-          item
-          xs={1}
+          item={true}
           style={{
             display: 'flex',
             justifyContent: 'left',
           }}
+          xs={1}
         >
           <div style={{ paddingTop: 16, paddingBottom: 16 }}>
             <SearchBar
+              onChange={handleSearchBarChange}
               placeholder={intl.formatMessage(
                 translations.searchBarPlaceholder,
               )}
-              onChange={handleSearchBarChange}
             />
           </div>
         </Grid>
-        <Grid item xs={1}>
+        <Grid item={true} xs={1}>
           <Pagination
             items={shavedCourses}
             itemsPerPage={ITEMS_PER_PAGE}
-            setSlicedItems={setSlicedCorses}
             page={page}
             setPage={setPage}
+            setSlicedItems={setSlicedCorses}
           />
         </Grid>
-        <Grid item xs={1} />
+        <Grid item={true} xs={1} />
       </Grid>
 
       <Grid
         // MUI applies default marginLeft: -16
-        style={{ padding: 0 }}
-        container
         columns={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 4 }}
+        container={true}
         p={1}
+        style={{ padding: 0 }}
       >
         {slicedCourses.map((course: CourseMiniEntity) => (
           <CourseInfoBox key={course.id} course={course} />
@@ -101,9 +103,9 @@ const CourseDisplay: FC<Props> = (props) => {
         <Pagination
           items={shavedCourses}
           itemsPerPage={ITEMS_PER_PAGE}
-          setSlicedItems={setSlicedCorses}
           page={page}
           setPage={setPage}
+          setSlicedItems={setSlicedCorses}
         />
       )}
     </>

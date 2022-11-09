@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import { Switch } from '@mui/material';
+import PropTypes from 'prop-types';
 
 const styles = {
   toggle: {

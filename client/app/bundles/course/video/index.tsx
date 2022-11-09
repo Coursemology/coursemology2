@@ -1,13 +1,14 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import { store } from './store';
-import VideosIndex from './pages/VideosIndex';
+
 import VideoShow from './pages/VideoShow';
-import VideoSubmissionsIndex from './submission/pages/VideoSubmissionsIndex';
-import VideoSubmissionShow from './submission/pages/VideoSubmissionShow';
+import VideosIndex from './pages/VideosIndex';
 import VideoSubmissionEdit from './submission/pages/VideoSubmissionEdit';
+import VideoSubmissionShow from './submission/pages/VideoSubmissionShow';
+import VideoSubmissionsIndex from './submission/pages/VideoSubmissionsIndex';
+import { store } from './store';
 
 $(() => {
   const mountNode = document.getElementById('videos-component');
@@ -19,22 +20,22 @@ $(() => {
       <ProviderWrapper store={store}>
         <BrowserRouter>
           <Routes>
-            <Route path="courses/:courseId/videos" element={<VideosIndex />} />
+            <Route element={<VideosIndex />} path="courses/:courseId/videos" />
             <Route
-              path="courses/:courseId/videos/:videoId"
               element={<VideoShow />}
+              path="courses/:courseId/videos/:videoId"
             />
             <Route
-              path="courses/:courseId/videos/:videoId/submissions"
               element={<VideoSubmissionsIndex />}
+              path="courses/:courseId/videos/:videoId/submissions"
             />
             <Route
-              path="courses/:courseId/videos/:videoId/submissions/:submissionId"
               element={<VideoSubmissionShow />}
+              path="courses/:courseId/videos/:videoId/submissions/:submissionId"
             />
             <Route
-              path="courses/:courseId/videos/:videoId/submissions/:submissionId/edit"
               element={<VideoSubmissionEdit />}
+              path="courses/:courseId/videos/:videoId/submissions/:submissionId/edit"
             />
           </Routes>
         </BrowserRouter>

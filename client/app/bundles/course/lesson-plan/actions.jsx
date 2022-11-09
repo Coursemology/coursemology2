@@ -1,13 +1,13 @@
 import CourseAPI from 'api/course';
-import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import actionTypes from 'course/lesson-plan/constants';
 import {
-  setNotification,
   resetDeleteConfirmation,
+  setNotification,
   showDeleteConfirmation,
 } from 'lib/actions';
-import actionTypes from 'course/lesson-plan/constants';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 
-export { setNotification, resetDeleteConfirmation, showDeleteConfirmation };
+export { resetDeleteConfirmation, setNotification, showDeleteConfirmation };
 
 export function setItemTypeVisibility(itemType, isVisible) {
   return {

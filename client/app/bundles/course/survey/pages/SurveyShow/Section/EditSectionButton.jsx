@@ -1,8 +1,8 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
 
 import {
   showSectionForm,

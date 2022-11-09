@@ -1,7 +1,9 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-import { NotificationData } from 'types/course/notifications';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Avatar } from '@mui/material';
+import { NotificationData } from 'types/course/notifications';
+
+import { getFullDateTime } from 'lib/helpers/timehelper';
 import {
   getAchievementURL,
   getAssessmentURL,
@@ -11,7 +13,6 @@ import {
   getVideoURL,
 } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import { getFullDateTime } from 'lib/helpers/timehelper';
 
 interface Props extends WrappedComponentProps {
   notification: NotificationData;

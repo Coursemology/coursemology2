@@ -1,4 +1,5 @@
-import { object, string, bool, number, date, ref, mixed } from 'yup';
+import { bool, date, mixed, number, object, ref, string } from 'yup';
+
 import translations from './translations';
 
 const validationSchema = object({

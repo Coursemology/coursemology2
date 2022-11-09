@@ -1,25 +1,26 @@
-import {
-  Table,
-  TableContainer,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-  Typography,
-} from '@mui/material';
 import { useState } from 'react';
-import { DragIndicator } from '@mui/icons-material';
 import {
   DragDropContext,
   Draggable,
   Droppable,
   DropResult,
 } from 'react-beautiful-dnd';
+import { DragIndicator } from '@mui/icons-material';
+import {
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import produce from 'immer';
-
 import { SidebarItem, SidebarItems } from 'types/course/admin/sidebar';
+
 import Section from 'lib/components/core/layouts/Section';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import translations from './translations';
 
 interface SidebarSettingsFormProps {
@@ -101,20 +102,20 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
 
         return (
           <TableRow
+            ref={provided.innerRef}
             className={`w-full select-none ${
               isDragging && 'rounded-lg bg-white opacity-80 drop-shadow-md'
             }`}
-            ref={provided.innerRef}
-            hover
+            hover={true}
             {...provided.draggableProps}
             style={style}
             {...provided.dragHandleProps}
           >
             <TableCell className="w-0 border-none">
               <DragIndicator
-                fontSize="small"
-                color="disabled"
                 className={`${props.disabled && 'invisible'}`}
+                color="disabled"
+                fontSize="small"
               />
             </TableCell>
 
@@ -128,8 +129,8 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
 
             <TableCell className="border-none">
               <Typography
-                variant="body2"
                 color={props.disabled ? 'text.disabled' : 'text.primary'}
+                variant="body2"
               >
                 {item.title}
               </Typography>
@@ -142,16 +143,16 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
 
   return (
     <Section
-      title={t(translations.sidebarSettings)}
+      sticksToNavbar={true}
       subtitle={t(translations.sidebarSettingsSubtitle)}
-      sticksToNavbar
+      title={t(translations.sidebarSettings)}
     >
-      <TableContainer component={Outlined} className="overflow-hidden">
+      <TableContainer className="overflow-hidden" component={Outlined}>
         <Table>
           <DragDropContext
+            onDragEnd={rearrange}
             onDragStart={vibrate()}
             onDragUpdate={vibrate(30)}
-            onDragEnd={rearrange}
           >
             <Droppable droppableId="droppable">
               {(provided): JSX.Element => (

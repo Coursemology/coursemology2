@@ -1,4 +1,5 @@
 import { render, RenderResult } from 'utilities/test-utils';
+
 import PageHeader from '../PageHeader';
 
 jest.mock('react-router-dom', () => ({
@@ -33,7 +34,7 @@ describe('<PageHeader />', () => {
   describe('when there is a return link', () => {
     beforeEach(() => {
       documentBody = render(
-        <PageHeader title="Test Title 2" returnLink="some/link" />,
+        <PageHeader returnLink="some/link" title="Test Title 2" />,
       );
     });
 

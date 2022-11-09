@@ -1,7 +1,7 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-import { IconButton, Tooltip } from '@mui/material';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { CreateNewFolderTwoTone as CreateNewFolderIcon } from '@mui/icons-material';
+import { IconButton, Tooltip } from '@mui/material';
 
 interface Props extends WrappedComponentProps {
   handleOnClick: () => void;
@@ -19,13 +19,13 @@ const NewSubfolderButton: FC<Props> = (props) => {
 
   return (
     <Tooltip
-      title={intl.formatMessage(translations.newSubfolderTooltip)}
       placement="top"
+      title={intl.formatMessage(translations.newSubfolderTooltip)}
     >
       <IconButton
         id="new-subfolder-button"
-        style={{ padding: 6 }}
         onClick={handleOnClick}
+        style={{ padding: 6 }}
       >
         <CreateNewFolderIcon />
       </IconButton>

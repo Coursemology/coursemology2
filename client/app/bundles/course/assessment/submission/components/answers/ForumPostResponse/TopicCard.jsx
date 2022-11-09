@@ -1,21 +1,20 @@
 import { Component } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
-  Button,
   Accordion,
   AccordionActions,
   AccordionSummary,
+  Button,
   Divider,
   Icon,
 } from '@mui/material';
 import { indigo } from '@mui/material/colors';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
 
 import {
-  topicOverviewShape,
   postPackShape,
+  topicOverviewShape,
 } from 'course/assessment/submission/propTypes';
 import { getForumTopicURL } from 'lib/helpers/url-builders';
 
@@ -80,10 +79,10 @@ export default class TopicCard extends Component {
 
     return (
       <Accordion
+        className="topic-card"
         expanded={this.state.isExpanded}
         onChange={this.handleIsExpandedChange}
         style={this.props.style}
-        className="topic-card"
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -110,12 +109,12 @@ export default class TopicCard extends Component {
         <Divider />
         <AccordionActions style={styles.AccordionActions}>
           <Button
-            variant="contained"
             endIcon={
               <Icon className="fa fa-external-link" style={styles.icon} />
             }
             href={getForumTopicURL(courseId, forumId, topicPostPack.topic.ic)}
             target="_blank"
+            variant="contained"
           >
             <FormattedMessage {...translations.viewTopicInNewTab} />
           </Button>
@@ -124,12 +123,12 @@ export default class TopicCard extends Component {
         <div style={styles.container}>
           {topicPostPack.postPacks.map((postPack, index) => (
             <ForumPostOption
-              postPack={postPack}
+              key={`post-pack-${postPack.corePost.id}`}
               isSelected={selectedPostIds.has(postPack.corePost.id)}
               onSelectPostPack={(postPackSelected, isSelected) =>
                 this.props.onSelectPostPack(postPackSelected, isSelected)
               }
-              key={`post-pack-${postPack.corePost.id}`}
+              postPack={postPack}
               style={
                 index < topicPostPack.postPacks.length - 1
                   ? styles.nonLastPostOption

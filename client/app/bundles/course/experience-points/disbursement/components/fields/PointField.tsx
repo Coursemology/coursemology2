@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+
 import FormTextField from 'lib/components/form/fields/TextField';
 
 interface Props {
@@ -11,22 +12,21 @@ const PointField: FC<Props> = (props: Props) => {
 
   return (
     <Controller
-      name={`courseUser_${courseUserId}`}
       control={control}
+      name={`courseUser_${courseUserId}`}
       render={({ field, fieldState }): JSX.Element => (
         <FormTextField
+          className="points_awarded"
+          disableMargins={true}
           field={field}
           fieldState={fieldState}
-          // @ts-ignore: component is still written in JS
-          fullWidth
+          fullWidth={true}
           InputLabelProps={{
             shrink: true,
           }}
           onWheel={(event): void => event.currentTarget.blur()}
           type="number"
           variant="standard"
-          disableMargins
-          className="points_awarded"
         />
       )}
     />

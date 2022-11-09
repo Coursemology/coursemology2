@@ -1,10 +1,11 @@
 import { FC } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Typography } from '@mui/material';
-import DataTable from 'lib/components/core/layouts/DataTable';
-import { InstanceUserListData } from 'types/system/instance/users';
-import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { InstanceUserListData } from 'types/system/instance/users';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
+import { INSTANCE_USER_ROLES } from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
@@ -87,12 +88,12 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
 
   return (
     <DataTable
-      title={title}
-      data={users}
       columns={columns}
+      data={users}
+      includeRowNumber={true}
       options={options}
-      includeRowNumber
-      withMargin
+      title={title}
+      withMargin={true}
     />
   );
 };

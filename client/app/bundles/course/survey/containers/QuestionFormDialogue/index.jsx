@@ -1,9 +1,11 @@
-import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+
 import * as actionCreators from 'course/survey/actions/questions';
 import FormDialogue from 'lib/components/form/FormDialogue';
+
 import QuestionForm from './QuestionForm';
 
 function mapStateToProps({ questionForm, ...state }) {
@@ -41,12 +43,12 @@ const QuestionFormDialogue = ({
 
   return (
     <FormDialogue
-      title={formTitle}
-      open={visible}
-      skipConfirmation={!isDirty}
       disabled={disabled}
       form="survey-section-question-form"
       hideForm={hideQuestionForm}
+      open={visible}
+      skipConfirmation={!isDirty}
+      title={formTitle}
     >
       <QuestionForm
         {...{

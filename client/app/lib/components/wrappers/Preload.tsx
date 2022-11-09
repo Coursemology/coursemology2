@@ -1,11 +1,11 @@
-import { AxiosError } from 'axios';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
 
+import ErrorCard from 'lib/components/core/ErrorCard';
+import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
-import useToggle from 'lib/hooks/useToggle';
-import ErrorCard from 'lib/components/core/ErrorCard';
 
 interface PreloadProps<Data> {
   while: () => Promise<Data>;

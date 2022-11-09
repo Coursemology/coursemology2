@@ -1,7 +1,8 @@
-import PropTypes from 'prop-types';
+import Close from '@mui/icons-material/Close';
 import { Checkbox, IconButton, Radio } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import Close from '@mui/icons-material/Close';
+import PropTypes from 'prop-types';
+
 import Thumbnail from 'lib/components/core/Thumbnail';
 
 const styles = {
@@ -54,9 +55,9 @@ const QuestionFormDeletedOptions = (props) => {
   const renderWidget = () => {
     let widget = null;
     if (multipleChoice) {
-      widget = <Radio disabled style={styles.widget} />;
+      widget = <Radio disabled={true} style={styles.widget} />;
     } else if (multipleResponse) {
-      widget = <Checkbox disabled style={styles.widget} />;
+      widget = <Checkbox disabled={true} style={styles.widget} />;
     }
     return widget;
   };
@@ -64,13 +65,13 @@ const QuestionFormDeletedOptions = (props) => {
   return (
     <>
       {fields.map((field, index) => (
-        <div style={styles.option} key={field.id}>
+        <div key={field.id} style={styles.option}>
           {renderWidget()}
           {field.image_url ? (
             <Thumbnail
+              containerStyle={styles.imageContainer}
               src={field.image_url}
               style={styles.image}
-              containerStyle={styles.imageContainer}
             />
           ) : (
             <div style={styles.imageSpacer} />

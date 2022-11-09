@@ -1,8 +1,9 @@
-import PropTypes from 'prop-types';
 import { CardContent, Divider } from '@mui/material';
+import PropTypes from 'prop-types';
+
+import AdminTools from './AdminTools';
 import Details from './Details';
 import Material from './Material';
-import AdminTools from './AdminTools';
 
 const styles = {
   item: {

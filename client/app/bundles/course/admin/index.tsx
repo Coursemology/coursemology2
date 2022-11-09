@@ -2,21 +2,22 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import { store } from './store';
-import CourseSettings from './pages/CourseSettings';
-import ComponentSettings from './pages/ComponentSettings';
-import SidebarSettings from './pages/SidebarSettings';
-import LessonPlanSettings from './pages/LessonPlanSettings';
-import NotificationSettings from './pages/NotificationSettings';
-import AssessmentSettings from './pages/AssessmentSettings';
-import VideosSettings from './pages/VideosSettings';
-import LeaderboardSettings from './pages/LeaderboardSettings';
-import CommentsSettings from './pages/CommentsSettings';
-import ForumsSettings from './pages/ForumsSettings';
-import MaterialsSettings from './pages/MaterialsSettings';
-import AnnouncementSettings from './pages/AnnouncementsSettings';
+
 import SettingsNavigation from './components/SettingsNavigation';
+import AnnouncementSettings from './pages/AnnouncementsSettings';
+import AssessmentSettings from './pages/AssessmentSettings';
 import CodaveriSettings from './pages/CodaveriSettings';
+import CommentsSettings from './pages/CommentsSettings';
+import ComponentSettings from './pages/ComponentSettings';
+import CourseSettings from './pages/CourseSettings';
+import ForumsSettings from './pages/ForumsSettings';
+import LeaderboardSettings from './pages/LeaderboardSettings';
+import LessonPlanSettings from './pages/LessonPlanSettings';
+import MaterialsSettings from './pages/MaterialsSettings';
+import NotificationSettings from './pages/NotificationSettings';
+import SidebarSettings from './pages/SidebarSettings';
+import VideosSettings from './pages/VideosSettings';
+import { store } from './store';
 
 const pages = [
   { path: 'components', element: <ComponentSettings /> },
@@ -44,13 +45,13 @@ $(() => {
       <BrowserRouter>
         <Routes>
           <Route
-            path="/courses/:course_id/admin"
             element={<SettingsNavigation />}
+            path="/courses/:course_id/admin"
           >
-            <Route index element={<CourseSettings />} />
+            <Route element={<CourseSettings />} index={true} />
 
             {pages.map(({ path, element }) => (
-              <Route key={path} path={path} element={element} />
+              <Route key={path} element={element} path={path} />
             ))}
           </Route>
         </Routes>

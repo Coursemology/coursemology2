@@ -1,12 +1,14 @@
+import { FC, memo } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import equal from 'fast-deep-equal';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { DisbursementCourseUserMiniEntity } from 'types/course/disbursement';
+
 import DataTable from 'lib/components/core/layouts/DataTable';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import { FC, memo } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
-import { DisbursementCourseUserMiniEntity } from 'types/course/disbursement';
+
 import DuplicateButton from '../buttons/DuplicateButton';
 import RemoveAllButton from '../buttons/RemoveAllButton';
 import PointField from '../fields/PointField';
@@ -77,8 +79,8 @@ const DisbursementTable: FC<Props> = (props: Props) => {
         customBodyRenderLite: (dataIndex: number): JSX.Element => (
           <a
             href={getCourseUserURL(getCourseId(), filteredUsers[dataIndex].id)}
-            target="_blank"
             rel="noreferrer"
+            target="_blank"
           >
             {filteredUsers[dataIndex].name}
           </a>
@@ -126,16 +128,16 @@ const DisbursementTable: FC<Props> = (props: Props) => {
             return (
               <>
                 <DuplicateButton
+                  className="experience-points-disbursement-copy-button"
                   disabled={false}
                   onClick={onClickCopy}
                   title={intl.formatMessage(translations.copy)}
-                  className="experience-points-disbursement-copy-button"
                 />
                 <RemoveAllButton
+                  className="experience-points-disbursement-remove-button"
                   disabled={false}
                   onClick={onClickRemove}
                   title={intl.formatMessage(translations.remove)}
-                  className="experience-points-disbursement-remove-button"
                 />
               </>
             );
@@ -164,10 +166,10 @@ const DisbursementTable: FC<Props> = (props: Props) => {
 
   return (
     <DataTable
+      columns={columns}
       data={filteredUsers}
       options={options}
-      columns={columns}
-      withMargin
+      withMargin={true}
     />
   );
 };

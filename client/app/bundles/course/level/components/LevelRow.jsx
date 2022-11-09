@@ -1,8 +1,8 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button, TableRow, TableCell, TextField } from '@mui/material';
 import Delete from '@mui/icons-material/Delete';
+import { Button, TableCell, TableRow, TextField } from '@mui/material';
+import PropTypes from 'prop-types';
 
 const translations = defineMessages({
   zeroThresholdError: {
@@ -35,13 +35,13 @@ class LevelRow extends Component {
 
     return (
       <Button
-        variant="contained"
         color="secondary"
         disabled={disabled}
         id={`delete_${levelNumber}`}
         name={`delete_${levelNumber}`}
         onClick={deleteLevel(levelNumber)}
         style={{ minWidth: '40px', width: '40px' }}
+        variant="contained"
       >
         <Delete />
       </Button>

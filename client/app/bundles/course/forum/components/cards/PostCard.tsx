@@ -1,34 +1,35 @@
 import { FC, useEffect, useState } from 'react';
+import { defineMessages } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { Element, scroller } from 'react-scroll';
+import { toast } from 'react-toastify';
 import {
   Avatar,
+  Button,
+  Card,
+  CardActions,
   CardContent,
   CardHeader,
   Divider,
   Link,
   Typography,
-  Card,
-  CardActions,
-  Button,
 } from '@mui/material';
-import { useParams } from 'react-router-dom';
-import { scroller, Element } from 'react-scroll';
-import { AppState, AppDispatch } from 'types/store';
-import { useSelector, useDispatch } from 'react-redux';
-import { formatLongDateTime } from 'lib/moment';
-import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import { AppDispatch, AppState } from 'types/store';
 
-import { defineMessages } from 'react-intl';
-import { toast } from 'react-toastify';
-import formTranslations from 'lib/translations/form';
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import useTranslation from 'lib/hooks/useTranslation';
-import { getForumTopic, getForumTopicPost } from '../../selectors';
-import ForumTopicPostManagementButtons from '../buttons/ForumTopicPostManagementButtons';
+import { formatLongDateTime } from 'lib/moment';
+import formTranslations from 'lib/translations/form';
+
 import {
   createForumTopicPost,
   toggleForumTopicPostAnswer,
   updateForumTopicPost,
   voteTopicPost,
 } from '../../operations';
+import { getForumTopic, getForumTopicPost } from '../../selectors';
+import ForumTopicPostManagementButtons from '../buttons/ForumTopicPostManagementButtons';
 import MarkAnswerButton from '../buttons/MarkAnswerButton';
 import VotePostButton from '../buttons/VotePostButton';
 
@@ -196,19 +197,8 @@ const PostCard: FC<Props> = (props) => {
       >
         <Card className={postClassName(post.isUnread, post.isAnswer)}>
           <CardHeader
-            className="pb-0"
-            avatar={
-              <Avatar
-                className="h-20 w-20"
-                src={post.creator.imageUrl}
-                alt={post.creator.name}
-                component={Link}
-                href={post.creator.userUrl}
-              />
-            }
             action={
               <ForumTopicPostManagementButtons
-                post={post}
                 handleEdit={(): void => {
                   setIsEditing((prevState) => !prevState);
                   setEditValue(post.text);
@@ -216,22 +206,33 @@ const PostCard: FC<Props> = (props) => {
                 handleReply={(): void => {
                   setIsReplying((prevState) => !prevState);
                 }}
+                post={post}
               />
             }
-            title={<a href={post.creator.userUrl}>{post.creator.name}</a>}
-            titleTypographyProps={{ variant: 'body1' }}
+            avatar={
+              <Avatar
+                alt={post.creator.name}
+                className="h-20 w-20"
+                component={Link}
+                href={post.creator.userUrl}
+                src={post.creator.imageUrl}
+              />
+            }
+            className="pb-0"
             subheader={formatLongDateTime(post.createdAt)}
             subheaderTypographyProps={{ variant: 'body1' }}
+            title={<a href={post.creator.userUrl}>{post.creator.name}</a>}
+            titleTypographyProps={{ variant: 'body1' }}
           />
           <Divider />
           <CardContent className="py-2">
             {isEditing ? (
               <CKEditorRichText
-                name={`postEditText_${postId}`}
+                disableMargins={true}
                 inputId={postId.toString()}
+                name={`postEditText_${postId}`}
                 onChange={(nextValue): void => setEditValue(nextValue)}
                 value={editValue}
-                disableMargins
               />
             ) : (
               <Typography
@@ -244,29 +245,29 @@ const PostCard: FC<Props> = (props) => {
             {isEditing ? (
               <>
                 <Button
-                  color="secondary"
-                  onClick={(): void => setIsEditing(false)}
-                  id={`post_${postId}`}
                   className="cancel-edit-button"
+                  color="secondary"
+                  id={`post_${postId}`}
+                  onClick={(): void => setIsEditing(false)}
                 >
                   {t(formTranslations.cancel)}
                 </Button>
                 <Button
-                  color="primary"
-                  onClick={handleSaveUpdate}
-                  id={`post_${post.id}`}
                   className="save-button"
+                  color="primary"
+                  id={`post_${post.id}`}
+                  onClick={handleSaveUpdate}
                 >
                   {t(formTranslations.save)}
                 </Button>
               </>
             ) : (
               <>
-                <VotePostButton post={post} handleClick={handleVotePost} />
+                <VotePostButton handleClick={handleVotePost} post={post} />
                 <MarkAnswerButton
-                  topic={topic}
                   handleClick={handleMarkAnswer}
                   isAnswer={post.isAnswer}
+                  topic={topic}
                 />
               </>
             )}
@@ -277,29 +278,29 @@ const PostCard: FC<Props> = (props) => {
             <Card className="ml-20 mt-4">
               <CardContent className="pb-0">
                 <CKEditorRichText
-                  name={`postReplyText_${postId}`}
+                  autofocus={true}
+                  disableMargins={true}
                   inputId={postId.toString()}
+                  name={`postReplyText_${postId}`}
                   onChange={(nextValue): void => setReplyValue(nextValue)}
-                  value={replyValue}
                   placeholder={`Reply to ${post.creator.name}`}
-                  disableMargins
-                  autofocus
+                  value={replyValue}
                 />
               </CardContent>
               <CardActions className="pt-0">
                 <Button
-                  color="secondary"
-                  onClick={(): void => setIsReplying(false)}
-                  id={`post_${postId}`}
                   className="cancel-reply-button"
+                  color="secondary"
+                  id={`post_${postId}`}
+                  onClick={(): void => setIsReplying(false)}
                 >
                   {t(formTranslations.cancel)}
                 </Button>
                 <Button
-                  color="primary"
-                  onClick={handleReply}
-                  id={`post_${post.id}`}
                   className="reply-button"
+                  color="primary"
+                  id={`post_${post.id}`}
+                  onClick={handleReply}
                 >
                   {t(formTranslations.reply)}
                 </Button>

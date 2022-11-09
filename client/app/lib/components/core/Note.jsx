@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import { Card, CardHeader, CardContent, Typography } from '@mui/material';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Card, CardContent, CardHeader, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 
 const translations = defineMessages({
   noteHeader: {

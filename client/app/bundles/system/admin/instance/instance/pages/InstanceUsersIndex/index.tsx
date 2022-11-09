@@ -1,18 +1,20 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/navigation/PageHeader';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppState, AppDispatch } from 'types/store';
 import { Link, Typography } from '@mui/material';
+import { AppDispatch, AppState } from 'types/store';
+
 import SummaryCard from 'lib/components/core/layouts/SummaryCard';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
-import { getAdminCounts, getAllUserMiniEntities } from '../../selectors';
-import { indexUsers } from '../../operations';
+
 import UsersButtons from '../../components/buttons/UsersButtons';
-import UsersTable from '../../components/tables/UsersTable';
 import InstanceUsersTabs from '../../components/navigation/InstanceUsersTabs';
+import UsersTable from '../../components/tables/UsersTable';
+import { indexUsers } from '../../operations';
+import { getAdminCounts, getAllUserMiniEntities } from '../../selectors';
 
 type Props = WrappedComponentProps;
 
@@ -196,13 +198,13 @@ const UsersIndex: FC<Props> = (props) => {
         <LoadingIndicator />
       ) : (
         <UsersTable
-          users={users}
-          userCounts={userCounts}
           filter={filter}
-          title={intl.formatMessage(translations.title)}
           renderRowActionComponent={(user): JSX.Element => (
             <UsersButtons user={user} />
           )}
+          title={intl.formatMessage(translations.title)}
+          userCounts={userCounts}
+          users={users}
         />
       )}
     </>

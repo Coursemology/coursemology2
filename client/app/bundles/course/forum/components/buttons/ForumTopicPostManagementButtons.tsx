@@ -5,11 +5,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ForumTopicPostEntity } from 'types/course/forums';
 import { AppDispatch } from 'types/store';
+
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
-import useTranslation from 'lib/hooks/useTranslation';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import { deleteForumTopicPost } from '../../operations';
+
 import ReplyButton from './ReplyButton';
 
 interface Props {
@@ -79,17 +82,17 @@ const ForumTopicPostManagementButtons: FC<Props> = (props) => {
       {post.permissions.canEditPost && (
         <EditButton
           className={`post-edit-${post.id}`}
-          onClick={handleEdit}
           disabled={disableButton}
+          onClick={handleEdit}
         />
       )}
       {post.permissions.canDeletePost && (
         <DeleteButton
           className={`post-delete-${post.id}`}
+          confirmMessage={t(translations.deletionConfirm)}
           disabled={disableButton}
           loading={isDeleting}
           onClick={handleDelete}
-          confirmMessage={t(translations.deletionConfirm)}
         />
       )}
     </div>

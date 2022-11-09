@@ -1,12 +1,14 @@
-import { connect } from 'react-redux';
-import { selectGate } from 'course/learning-map/actions';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
-import { red, green } from '@mui/material/colors';
-import ConnectionPoint from '../ConnectionPoint';
+
+import { selectGate } from 'course/learning-map/actions';
+
 import { elementTypes, satisfiabilityTypes } from '../../constants';
-import translations from '../../translations.intl';
 import { nodeShape, selectedElementShape } from '../../propTypes';
+import translations from '../../translations.intl';
+import ConnectionPoint from '../ConnectionPoint';
 
 const styles = {
   andGate: {
@@ -100,8 +102,8 @@ const Gate = (props) => {
 
           return (
             <div
-              id={inputId}
               key={inputId}
+              id={inputId}
               style={{
                 ...gateInputStyle,
                 backgroundColor: getGateBackgroundColor(node.unlocked),

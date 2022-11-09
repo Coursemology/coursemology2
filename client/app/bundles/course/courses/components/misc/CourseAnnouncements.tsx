@@ -1,7 +1,8 @@
-import { injectIntl, defineMessages, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-import { AnnouncementMiniEntity } from 'types/course/announcements';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Stack } from '@mui/material';
+import { AnnouncementMiniEntity } from 'types/course/announcements';
+
 import AnnouncementCard from '../../../announcements/components/misc/AnnouncementCard';
 
 interface Props extends WrappedComponentProps {

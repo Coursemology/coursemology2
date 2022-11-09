@@ -1,9 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { updateItem } from 'course/lesson-plan/actions';
 import { fields } from 'course/lesson-plan/constants';
+
 import DateCell from './DateCell';
 import PublishedCell from './PublishedCell';
 
@@ -81,8 +83,8 @@ class ItemRow extends Component {
         ) : null}
         {columnsVisible[fields.PUBLISHED] ? (
           <PublishedCell
-            published={published}
             onToggle={this.updatePublished}
+            published={published}
           />
         ) : null}
       </tr>

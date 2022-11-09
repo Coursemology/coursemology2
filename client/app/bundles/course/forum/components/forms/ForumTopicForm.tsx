@@ -1,14 +1,15 @@
 import { FC } from 'react';
-import { defineMessages } from 'react-intl';
 import { Controller, UseFormSetError } from 'react-hook-form';
-import * as yup from 'yup';
-import formTranslations from 'lib/translations/form';
-import FormRichTextField from 'lib/components/form/fields/RichTextField';
-import FormTextField from 'lib/components/form/fields/TextField';
-import FormSelectField from 'lib/components/form/fields/SelectField';
-import useTranslation from 'lib/hooks/useTranslation';
+import { defineMessages } from 'react-intl';
 import { ForumTopicFormData, TopicType } from 'types/course/forums';
+import * as yup from 'yup';
+
 import FormDialog from 'lib/components/form/dialog/FormDialog';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
+import FormSelectField from 'lib/components/form/fields/SelectField';
+import FormTextField from 'lib/components/form/fields/TextField';
+import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 interface Props {
   open: boolean;
@@ -69,13 +70,13 @@ const ForumTopicForm: FC<Props> = (props) => {
 
   return (
     <FormDialog
-      open={open}
       editing={editing}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      title={title}
       formName="forum-topic-form"
       initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+      title={title}
       validationSchema={validationSchema}
     >
       {(control, formState): JSX.Element => (
@@ -85,46 +86,46 @@ const ForumTopicForm: FC<Props> = (props) => {
             name="title"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
+                fullWidth={true}
                 label={t(translations.title)}
+                required={true}
                 variant="filled"
-                fullWidth
-                disabled={formState.isSubmitting}
-                required
               />
             )}
           />
 
           {!editing && (
             <Controller
-              name="text"
               control={control}
+              name="text"
               render={({ field, fieldState }): JSX.Element => (
                 <FormRichTextField
+                  disabled={formState.isSubmitting}
+                  disableMargins={true}
                   field={field}
                   fieldState={fieldState}
-                  fullWidth
-                  disableMargins
-                  disabled={formState.isSubmitting}
+                  fullWidth={true}
                   label={t(translations.text)}
-                  required
+                  required={true}
                 />
               )}
             />
           )}
 
           <Controller
-            name="topicType"
             control={control}
+            name="topicType"
             render={({ field, fieldState }): JSX.Element => (
               <FormSelectField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
                 label={t(translations.topicType)}
-                variant="filled"
                 options={topicTypeOptions}
-                disabled={formState.isSubmitting}
+                variant="filled"
               />
             )}
           />

@@ -1,21 +1,23 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { Bar } from 'react-chartjs-2';
+import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { FormControlLabel, Switch } from '@mui/material';
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
 } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import { FormControlLabel, Switch } from '@mui/material';
-import { injectIntl } from 'react-intl';
-import { formatTimestamp } from 'lib/helpers/videoHelpers';
-import { videoDefaults } from 'lib/constants/videoConstants';
+import PropTypes from 'prop-types';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { videoDefaults } from 'lib/constants/videoConstants';
+import { formatTimestamp } from 'lib/helpers/videoHelpers';
+
 import { seekToDirectly } from '../../actions/video';
 import translations from '../../translations';
 
@@ -106,8 +108,8 @@ class HeatMap extends Component {
       <div className="w-full">
         <Bar
           data={data}
-          options={options}
           height={(window.innerHeight - heightOffset) * heightScale}
+          options={options}
         />
       </div>
     );
@@ -169,8 +171,8 @@ class HeatMap extends Component {
         <div style={{ width }}>
           <Bar
             data={data}
-            options={optionsWithResolution}
             height={(window.innerHeight - heightOffset) * heightScale}
+            options={optionsWithResolution}
           />
         </div>
       </div>

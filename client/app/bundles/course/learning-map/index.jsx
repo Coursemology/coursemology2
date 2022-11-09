@@ -1,7 +1,8 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import LearningMap from './containers/LearningMap';
 import storeCreator from './store';
 
@@ -17,8 +18,8 @@ $(() => {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/courses/:courseId/learning_map"
               element={<LearningMap />}
+              path="/courses/:courseId/learning_map"
             />
           </Routes>
         </BrowserRouter>

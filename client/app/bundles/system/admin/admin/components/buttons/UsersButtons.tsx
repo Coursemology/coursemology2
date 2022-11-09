@@ -1,13 +1,15 @@
-import { FC, useState, memo } from 'react';
-import { useDispatch } from 'react-redux';
+import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { AppDispatch } from 'types/store';
-import { USER_ROLES } from 'lib/constants/sharedConstants';
-import { UserMiniEntity } from 'types/users';
-import MasqueradeButton from 'lib/components/core/buttons/MasqueradeButton';
-import DeleteButton from 'lib/components/core/buttons/DeleteButton';
-import equal from 'fast-deep-equal';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import equal from 'fast-deep-equal';
+import { AppDispatch } from 'types/store';
+import { UserMiniEntity } from 'types/users';
+
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import MasqueradeButton from 'lib/components/core/buttons/MasqueradeButton';
+import { USER_ROLES } from 'lib/constants/sharedConstants';
+
 import { deleteUser } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -71,28 +73,28 @@ const UserManagementButtons: FC<Props> = (props) => {
   };
 
   const managementButtons = (
-    <div className="whitespace-nowrap" key={`buttons-${user.id}`}>
+    <div key={`buttons-${user.id}`} className="whitespace-nowrap">
       <DeleteButton
-        tooltip={intl.formatMessage(translations.deleteTooltip)}
         className={`user-delete-${user.id} p-0`}
-        disabled={isDeleting}
-        loading={isDeleting}
-        onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
           role: USER_ROLES[user.role],
           name: user.name,
           email: user.email,
         })}
+        disabled={isDeleting}
+        loading={isDeleting}
+        onClick={onDelete}
+        tooltip={intl.formatMessage(translations.deleteTooltip)}
       />
       <MasqueradeButton
+        className={`user-masquerade-${user.id} ml-4 p-0`}
+        disabled={!user.canMasquerade}
+        onClick={(): void => handleMasquerade(user)}
         tooltip={
           user.canMasquerade
             ? intl.formatMessage(translations.masqueradeTooltip)
             : intl.formatMessage(translations.masqueradeDisabledTooltip)
         }
-        className={`user-masquerade-${user.id} ml-4 p-0`}
-        disabled={!user.canMasquerade}
-        onClick={(): void => handleMasquerade(user)}
       />
     </div>
   );

@@ -1,25 +1,26 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Paper } from '@mui/material';
 import { connect } from 'react-redux';
+import { Paper } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import {
-  playerStates,
   captionsStates,
+  playerStates,
   videoDefaults,
   youtubeOpts,
 } from 'lib/constants/videoConstants';
 import { isPlayingState } from 'lib/helpers/videoHelpers';
 
-import styles from './VideoPlayer.scss';
 import {
-  changePlayerState,
   changeCaptionsState,
+  changePlayerState,
   endSession,
   seekToDirectly,
   sendEvents,
   updatePlayerDuration,
   updateProgressAndBuffer,
 } from '../actions/video';
+
 import {
   CaptionsButton,
   NextVideoButton,
@@ -30,6 +31,7 @@ import {
   VolumeButton,
   VolumeSlider,
 } from './VideoControls';
+import styles from './VideoPlayer.scss';
 
 const tickMilliseconds = 5000;
 
@@ -173,30 +175,30 @@ class VideoPlayer extends Component {
       <div className={styles.playerContainer}>
         <VideoPlayer.ReactPlayer
           ref={this.setRef}
-          url={this.props.videoUrl}
-          playing={isPlayingState(this.props.playerState)}
-          volume={this.props.playerVolume}
-          playbackRate={this.props.playbackRate}
-          onStart={() => {
-            this.toggleCaptions(this.props.captionsState);
-          }}
+          config={{ youtube: youtubeOpts }}
+          height="100%"
+          onBuffer={() =>
+            this.props.onPlayerStateChanged(playerStates.BUFFERING)
+          }
           onDuration={this.props.onDurationReceived}
+          onEnded={() => this.props.onPlayerStateChanged(playerStates.ENDED)}
+          onPause={() => this.props.onPlayerStateChanged(playerStates.PAUSED)}
+          onPlay={() => this.props.onPlayerStateChanged(playerStates.PLAYING)}
           onProgress={({ playedSeconds, loadedSeconds }) => {
             this.props.onPlayerProgress(playedSeconds, loadedSeconds);
           }}
           onReady={this.readyCallback}
-          onPlay={() => this.props.onPlayerStateChanged(playerStates.PLAYING)}
-          onPause={() => this.props.onPlayerStateChanged(playerStates.PAUSED)}
-          onBuffer={() =>
-            this.props.onPlayerStateChanged(playerStates.BUFFERING)
-          }
-          onEnded={() => this.props.onPlayerStateChanged(playerStates.ENDED)}
-          playsinline
+          onStart={() => {
+            this.toggleCaptions(this.props.captionsState);
+          }}
+          playbackRate={this.props.playbackRate}
+          playing={isPlayingState(this.props.playerState)}
+          playsinline={true}
           progressInterval={videoDefaults.progressUpdateFrequencyMs}
           style={reactPlayerStyle}
+          url={this.props.videoUrl}
+          volume={this.props.playerVolume}
           width="100%"
-          height="100%"
-          config={{ youtube: youtubeOpts }}
         />
       </div>
     );
@@ -211,8 +213,8 @@ class VideoPlayer extends Component {
           <VolumeButton />
           <VolumeSlider />
           <VideoTimestamp
-            progress={this.props.playerProgress}
             duration={this.props.duration}
+            progress={this.props.playerProgress}
           />
           <CaptionsButton />
           <PlayBackRateSelector />
@@ -222,7 +224,7 @@ class VideoPlayer extends Component {
     );
 
     return (
-      <Paper elevation={2} className={styles.videoPaperContainer}>
+      <Paper className={styles.videoPaperContainer} elevation={2}>
         {videoPlayer}
         {controls}
       </Paper>

@@ -1,18 +1,19 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import AppLayout from 'lib/components/core/layouts/AppLayout';
-import configureStore from './store';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
+import InstanceAdminSidebar from './components/navigation/InstanceAdminSidebar';
 import InstanceAdminIndex from './pages/InstanceAdminIndex';
 import InstanceAnnouncementsIndex from './pages/InstanceAnnouncementsIndex';
-import InstanceAdminSidebar from './components/navigation/InstanceAdminSidebar';
-import InstanceUsersIndex from './pages/InstanceUsersIndex';
-import InstanceCoursesIndex from './pages/InstanceCoursesIndex';
 import InstanceComponentsIndex from './pages/InstanceComponentsIndex';
+import InstanceCoursesIndex from './pages/InstanceCoursesIndex';
 import InstanceUserRoleRequestsIndex from './pages/InstanceUserRoleRequestsIndex';
-import InstanceUsersInvite from './pages/InstanceUsersInvite';
+import InstanceUsersIndex from './pages/InstanceUsersIndex';
 import InstanceUsersInvitations from './pages/InstanceUsersInvitations';
+import InstanceUsersInvite from './pages/InstanceUsersInvite';
+import configureStore from './store';
 
 $(() => {
   const mountNode = document.getElementById('system-instance-admin-component');
@@ -24,8 +25,8 @@ $(() => {
     const renderSidebar = (isExpanded, handleExpand): JSX.Element => {
       return (
         <InstanceAdminSidebar
-          isExpanded={isExpanded}
           handleExpand={handleExpand}
+          isExpanded={isExpanded}
         />
       );
     };
@@ -38,36 +39,36 @@ $(() => {
             routes={
               <Routes>
                 <Route
-                  path="/admin/instance"
                   element={<InstanceAdminIndex />}
+                  path="/admin/instance"
                 />
                 <Route
-                  path="/admin/instance/announcements"
                   element={<InstanceAnnouncementsIndex />}
+                  path="/admin/instance/announcements"
                 />
                 <Route
-                  path="/admin/instance/components"
                   element={<InstanceComponentsIndex />}
+                  path="/admin/instance/components"
                 />
                 <Route
-                  path="/admin/instance/courses"
                   element={<InstanceCoursesIndex />}
+                  path="/admin/instance/courses"
                 />
                 <Route
-                  path="/admin/instance/users"
                   element={<InstanceUsersIndex />}
+                  path="/admin/instance/users"
                 />
                 <Route
-                  path="/admin/instance/users/invite"
                   element={<InstanceUsersInvite />}
+                  path="/admin/instance/users/invite"
                 />
                 <Route
-                  path="/admin/instance/user_invitations"
                   element={<InstanceUsersInvitations />}
+                  path="/admin/instance/user_invitations"
                 />
                 <Route
-                  path="/role_requests"
                   element={<InstanceUserRoleRequestsIndex />}
+                  path="/role_requests"
                 />
               </Routes>
             }

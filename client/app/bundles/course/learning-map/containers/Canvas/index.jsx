@@ -1,9 +1,10 @@
 import { useRef, useState } from 'react';
-import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import { Xwrapper } from 'react-xarrows';
-import Levels from '../Levels';
-import ArrowOverlay from '../ArrowOverlay';
+import { TransformComponent, TransformWrapper } from 'react-zoom-pan-pinch';
+
 import ZoomActionElements from '../../components/ZoomActionElements';
+import ArrowOverlay from '../ArrowOverlay';
+import Levels from '../Levels';
 
 const styles = {
   cursorPosition: {
@@ -56,12 +57,12 @@ const Canvas = () => {
 
   return (
     <TransformWrapper
+      ref={transformRef}
       doubleClick={{ disabled: true }}
       limitToBounds={false}
-      pinch={{ disabled: true }}
-      minScale={0.2}
       maxScale={1.5}
-      ref={transformRef}
+      minScale={0.2}
+      pinch={{ disabled: true }}
       wheel={{ disabled: true }}
       zoomIn={styles.zoomAnimation}
       zoomOut={styles.zoomAnimation}

@@ -1,14 +1,16 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
-import useTranslation from 'lib/hooks/useTranslation';
-import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { toast } from 'react-toastify';
+import { ForumTopicFormData, TopicType } from 'types/course/forums';
 import { AppDispatch } from 'types/store';
-import { TopicType, ForumTopicFormData } from 'types/course/forums';
-import { createForumTopic } from '../../operations';
+
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import ForumTopicForm from '../../components/forms/ForumTopicForm';
+import { createForumTopic } from '../../operations';
 
 interface Props {
   open: boolean;
@@ -72,13 +74,13 @@ const ForumTopicNew: FC<Props> = (props) => {
 
   return (
     <ForumTopicForm
-      open={open}
-      editing={false}
-      title={t(translations.newTopic)}
-      onClose={onClose}
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
       availableTopicTypes={availableTopicTypes}
+      editing={false}
+      initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      open={open}
+      title={t(translations.newTopic)}
     />
   );
 };

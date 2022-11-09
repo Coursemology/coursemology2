@@ -1,8 +1,6 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Autocomplete, Button, Grid, Stack, TextField } from '@mui/material';
-
 import {
   SubmissionAssessmentFilterData,
   SubmissionFilterData,
@@ -69,18 +67,27 @@ const SubmissionFilter: FC<Props> = (props) => {
   if (!showDetailFilter) return null;
 
   return (
-    <Stack spacing={1} className="submissions-filter">
+    <Stack className="submissions-filter" spacing={1}>
       <h3 style={{ marginTop: 0, marginBottom: 0 }}>
         {intl.formatMessage(translations.filterHeader)}
       </h3>
-      <Grid container columns={{ xs: 1, md: 3 }}>
-        <Grid item xs={1} paddingRight={1} paddingBottom={1}>
+      <Grid columns={{ xs: 1, md: 3 }} container={true}>
+        <Grid item={true} paddingBottom={1} paddingRight={1} xs={1}>
           <Autocomplete
             key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-assesment-selector`}
-            disablePortal
-            clearOnEscape
-            options={filter.assessments}
+            clearOnEscape={true}
+            disablePortal={true}
             getOptionLabel={(option): string => option.title}
+            onChange={(
+              _event: React.SyntheticEvent,
+              value: { id: number; title: string } | null,
+            ): void => {
+              setSelectedFilter({
+                ...selectedFilter,
+                assessment: value,
+              });
+            }}
+            options={filter.assessments}
             renderInput={(params): React.ReactNode => {
               return (
                 <TextField
@@ -91,25 +98,25 @@ const SubmissionFilter: FC<Props> = (props) => {
                 />
               );
             }}
-            onChange={(
-              _event: React.SyntheticEvent,
-              value: { id: number; title: string } | null,
-            ): void => {
-              setSelectedFilter({
-                ...selectedFilter,
-                assessment: value,
-              });
-            }}
             value={selectedFilter.assessment}
           />
         </Grid>
-        <Grid item xs={1} paddingRight={1} paddingBottom={1}>
+        <Grid item={true} paddingBottom={1} paddingRight={1} xs={1}>
           <Autocomplete
             key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-group-selector`}
-            disablePortal
-            clearOnEscape
-            options={filter.groups}
+            clearOnEscape={true}
+            disablePortal={true}
             getOptionLabel={(option): string => option.name}
+            onChange={(
+              _event: React.SyntheticEvent,
+              value: { id: number; name: string } | null,
+            ): void => {
+              setSelectedFilter({
+                ...selectedFilter,
+                group: value,
+              });
+            }}
+            options={filter.groups}
             renderInput={(params): React.ReactNode => {
               return (
                 <TextField
@@ -120,25 +127,25 @@ const SubmissionFilter: FC<Props> = (props) => {
                 />
               );
             }}
+            value={selectedFilter.group}
+          />
+        </Grid>
+        <Grid item={true} paddingRight={1} xs={1}>
+          <Autocomplete
+            key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-user-selector`}
+            clearOnEscape={true}
+            disablePortal={true}
+            getOptionLabel={(option): string => option.name}
             onChange={(
               _event: React.SyntheticEvent,
               value: { id: number; name: string } | null,
             ): void => {
               setSelectedFilter({
                 ...selectedFilter,
-                group: value,
+                user: value,
               });
             }}
-            value={selectedFilter.group}
-          />
-        </Grid>
-        <Grid item xs={1} paddingRight={1}>
-          <Autocomplete
-            key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-user-selector`}
-            disablePortal
-            clearOnEscape
             options={filter.users}
-            getOptionLabel={(option): string => option.name}
             renderInput={(params): React.ReactNode => {
               return (
                 <TextField
@@ -149,31 +156,21 @@ const SubmissionFilter: FC<Props> = (props) => {
                 />
               );
             }}
-            onChange={(
-              _event: React.SyntheticEvent,
-              value: { id: number; name: string } | null,
-            ): void => {
-              setSelectedFilter({
-                ...selectedFilter,
-                user: value,
-              });
-            }}
             value={selectedFilter.user}
           />
         </Grid>
       </Grid>
-      <Grid container>
+      <Grid container={true}>
         <Button
           disabled={disableButton}
-          variant="contained"
           onClick={(): void => handleFilterOnClick(1)}
+          variant="contained"
         >
           {intl.formatMessage(translations.applyFilterButton)}
         </Button>
         <Button
-          disabled={disableButton}
           color="secondary"
-          variant="contained"
+          disabled={disableButton}
           onClick={(): void => {
             setSelectedFilter({
               assessment: null,
@@ -182,6 +179,7 @@ const SubmissionFilter: FC<Props> = (props) => {
             });
           }}
           style={{ marginLeft: 10 }}
+          variant="contained"
         >
           {intl.formatMessage(translations.clearFilterButton)}
         </Button>

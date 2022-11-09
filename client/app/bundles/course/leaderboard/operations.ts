@@ -1,6 +1,8 @@
-import CourseAPI from 'api/course';
 import { LeaderboardData } from 'types/course/leaderboard';
 import { Operation } from 'types/store';
+
+import CourseAPI from 'api/course';
+
 import * as actions from './actions';
 
 const fetchLeaderboard = (): Operation<void> => {

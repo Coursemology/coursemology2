@@ -1,14 +1,15 @@
 import { FC } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { VideoSubmissionListData } from 'types/course/video/submissions';
-import DataTable from 'lib/components/core/layouts/DataTable';
-import tableTranslations from 'lib/translations/table';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
-import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import { Link } from 'react-router-dom';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { VideoSubmissionListData } from 'types/course/video/submissions';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
+import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import { getVideoSubmissionURL } from 'lib/helpers/url-builders';
 import { getCourseId, getVideoId } from 'lib/helpers/url-helpers';
 import { formatShortDateTime } from 'lib/moment';
+import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -106,12 +107,12 @@ const VideoSubmissionsTable: FC<Props> = (props) => {
 
   return (
     <DataTable
-      title={title}
-      data={videoSubmissions}
       columns={columns}
+      data={videoSubmissions}
+      includeRowNumber={true}
       options={options}
-      includeRowNumber
-      withMargin
+      title={title}
+      withMargin={true}
     />
   );
 };

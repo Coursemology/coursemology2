@@ -1,14 +1,16 @@
 /* eslint-disable camelcase */
 import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages } from 'react-intl';
-import { IconButton, Menu, MenuItem } from '@mui/material';
-import MoreVert from '@mui/icons-material/MoreVert';
-import * as surveyActions from 'course/survey/actions/surveys';
-import { showDeleteConfirmation } from 'course/survey/actions';
-import { surveyShape } from 'course/survey/propTypes';
 import { useNavigate } from 'react-router-dom';
+import MoreVert from '@mui/icons-material/MoreVert';
+import { IconButton, Menu, MenuItem } from '@mui/material';
+import PropTypes from 'prop-types';
+
+import { showDeleteConfirmation } from 'course/survey/actions';
+import * as surveyActions from 'course/survey/actions/surveys';
+import { surveyShape } from 'course/survey/propTypes';
+
 import { formatSurveyFormData } from '../../utils';
 
 const translations = defineMessages({
@@ -128,9 +130,9 @@ const AdminMenu = (props) => {
         <MoreVert htmlColor="white" />
       </IconButton>
       <Menu
-        id="admin-menu"
         anchorEl={anchorEl}
-        disableAutoFocusItem
+        disableAutoFocusItem={true}
+        id="admin-menu"
         onClick={handleClose}
         onClose={handleClose}
         open={Boolean(anchorEl)}

@@ -6,6 +6,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+
 import { questionShape } from '../propTypes';
 import translations from '../translations';
 

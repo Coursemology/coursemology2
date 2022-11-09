@@ -4,12 +4,13 @@ import {
   removeFromStore,
   saveListToStore,
 } from 'utilities/store';
+
 import {
+  DELETE_FOLDER_LIST,
+  DELETE_MATERIAL_LIST,
   FoldersActionType,
   FoldersState,
   SAVE_FOLDER,
-  DELETE_FOLDER_LIST,
-  DELETE_MATERIAL_LIST,
   SAVE_MATERIAL_LIST,
 } from './types';
 

@@ -1,5 +1,3 @@
-import { LoadingButton } from '@mui/lab';
-import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import { FC, useEffect, useState } from 'react';
 import {
   defineMessages,
@@ -9,8 +7,12 @@ import {
 } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { LoadingButton } from '@mui/lab';
 import { CommentTopicEntity } from 'types/course/comments';
 import { AppDispatch } from 'types/store';
+
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+
 import { createPost } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -70,20 +72,20 @@ const CommentField: FC<Props> = (props: Props) => {
   return (
     <div id={`comment-field-${topic.id}`}>
       <CKEditorRichText
-        name={intl.formatMessage(translations.comment)}
         disabled={isSubmitting}
         inputId={topic.id.toString()}
-        value={value}
+        name={intl.formatMessage(translations.comment)}
         onChange={(text: string): void => setValue(text)}
+        value={value}
       />
       <LoadingButton
-        id={`comment-submit-${topic.id.toString()}`}
-        variant="contained"
         color="primary"
         disabled={disableCommentButton}
+        id={`comment-submit-${topic.id.toString()}`}
         loading={isSubmitting}
         onClick={createComment}
         style={{ marginRight: 10, marginBottom: 10 }}
+        variant="contained"
       >
         <FormattedMessage {...translations.comment} />
       </LoadingButton>

@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 /* Get the given parameter from the URL.
  * e.g. With this URL -> http://dummy.com/?technology=jquery&blog=jquerybyexample
  *
@@ -138,17 +136,16 @@ function getCurrentPath() {
   return match && match[1];
 }
 
-/* eslint-disable import/prefer-default-export */
 export {
-  getUrlParameter,
-  getCourseId,
-  getSurveyId,
   getAchievementId,
   getAssessmentId,
-  getSubmissionId,
-  getScribingId,
-  getVideoId,
-  getVideoSubmissionId,
+  getCourseId,
   getCourseUserId,
   getCurrentPath,
+  getScribingId,
+  getSubmissionId,
+  getSurveyId,
+  getUrlParameter,
+  getVideoId,
+  getVideoSubmissionId,
 };

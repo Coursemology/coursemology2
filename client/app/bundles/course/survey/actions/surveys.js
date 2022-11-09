@@ -1,9 +1,11 @@
-import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CourseAPI from 'api/course';
 import pollJob from 'lib/helpers/job-helpers';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import translations from '../translations';
+
 import actionTypes from '../constants';
+import translations from '../translations';
+
 import { setNotification } from './index';
 
 const DOWNLOAD_JOB_POLL_INTERVAL = 2000;

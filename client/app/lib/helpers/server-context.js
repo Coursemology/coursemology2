@@ -13,4 +13,4 @@ const timeZone = getServerContextAttribute('data-time-zone');
 const csrfTag = document.querySelector('meta[name="csrf-token"]');
 const csrfToken = csrfTag ? csrfTag.getAttribute('content') : null;
 
-export { modulePath, i18nLocale, timeZone, csrfToken };
+export { csrfToken, i18nLocale, modulePath, timeZone };

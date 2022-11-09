@@ -1,10 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Button, CircularProgress } from '@mui/material';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import PropTypes from 'prop-types';
+
 import { duplicationModes } from 'course/duplication/constants';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 const translations = defineMessages({
   duplicateCourse: {
@@ -48,10 +49,10 @@ class DuplicateAllButton extends Component {
       <>
         <div style={styles.buttonContainer}>
           <Button
-            variant="contained"
             color="secondary"
             disabled={disabled}
             onClick={() => this.setState({ confirmationOpen: true })}
+            variant="contained"
           >
             <FormattedMessage {...translations.duplicateCourse} />
           </Button>
@@ -60,7 +61,7 @@ class DuplicateAllButton extends Component {
           )}
         </div>
         <ConfirmationDialog
-          open={this.state.confirmationOpen}
+          form="new-course-form"
           message={
             <>
               <FormattedMessage {...translations.info} />
@@ -70,10 +71,10 @@ class DuplicateAllButton extends Component {
             </>
           }
           onCancel={() => this.setState({ confirmationOpen: false })}
-          form="new-course-form"
           onConfirm={() => {
             this.setState({ confirmationOpen: false });
           }}
+          open={this.state.confirmationOpen}
         />
       </>
     );

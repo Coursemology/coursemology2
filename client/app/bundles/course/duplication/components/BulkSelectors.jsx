@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 
 const translations = defineMessages({
   selectAll: {

@@ -1,3 +1,5 @@
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import {
   Table,
   TableBody,
@@ -7,8 +9,7 @@ import {
 } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
+
 import GroupCard from '../../../components/GroupCard';
 import { groupShape } from '../../../propTypes';
 import { getSummaryOfModifications } from '../../../utils/groups';
@@ -85,13 +86,13 @@ const ChangeSummaryTable = ({ groups, modifiedGroups }) => {
 
   return (
     <GroupCard
-      title={<FormattedMessage {...translations.title} />}
       subtitle={
         <FormattedMessage
           values={{ numGroups: modifiedGroupSummaries.length }}
           {...translations.subtitle}
         />
       }
+      title={<FormattedMessage {...translations.title} />}
     >
       {modifiedGroupSummaries.map((group, groupIndex) => (
         <div key={`group_${group.id}`}>

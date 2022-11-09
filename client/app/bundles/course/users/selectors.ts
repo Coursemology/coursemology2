@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { STAFF_ROLES } from 'lib/constants/sharedConstants';
 import { AppState, SelectionKey } from 'types/store';
 import {
-  selectMiniEntity,
-  selectMiniEntities,
   selectEntity,
+  selectMiniEntities,
+  selectMiniEntity,
 } from 'utilities/store';
+
+import { STAFF_ROLES } from 'lib/constants/sharedConstants';
 
 function getLocalState(state: AppState) {
   return state.users;

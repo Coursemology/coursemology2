@@ -1,12 +1,13 @@
-import { Controller } from 'react-hook-form';
 import { Emits } from 'react-emitter-factory';
-
+import { Controller } from 'react-hook-form';
 import { AssessmentSettingsData } from 'types/course/admin/assessments';
-import useTranslation from 'lib/hooks/useTranslation';
+
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import AssessmentCategoriesManager from './AssessmentCategoriesManager';
 import translations from './translations';
 
@@ -23,70 +24,76 @@ const AssessmentsSettingsForm = (
 
   return (
     <Form
-      onSubmit={props.onSubmit}
-      initialValues={props.data}
-      headsUp
-      emitsVia={props.emitsVia}
       disabled={props.disabled}
+      emitsVia={props.emitsVia}
+      headsUp={true}
+      initialValues={props.data}
+      onSubmit={props.onSubmit}
     >
       {(control): JSX.Element => (
         <>
-          <Section title={t(translations.assessmentSettings)} sticksToNavbar>
-            <Subsection title={t(translations.allowStudentsToView)} spaced>
+          <Section
+            sticksToNavbar={true}
+            title={t(translations.assessmentSettings)}
+          >
+            <Subsection
+              spaced={true}
+              title={t(translations.allowStudentsToView)}
+            >
               <Controller
-                name="showPublicTestCasesOutput"
                 control={control}
+                name="showPublicTestCasesOutput"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormCheckboxField
+                    disabled={props.disabled}
                     field={field}
                     fieldState={fieldState}
                     label={t(translations.outputsOfPublicTestCases)}
-                    disabled={props.disabled}
                   />
                 )}
               />
 
               <Controller
-                name="showStdoutAndStderr"
                 control={control}
+                name="showStdoutAndStderr"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormCheckboxField
+                    disabled={props.disabled}
                     field={field}
                     fieldState={fieldState}
                     label={t(translations.standardOutputsAndStandardErrors)}
-                    disabled={props.disabled}
                   />
                 )}
               />
             </Subsection>
 
             <Subsection
-              title={t(translations.randomisation)}
               className="!mt-8"
-              spaced
+              spaced={true}
+              title={t(translations.randomisation)}
             >
               <Controller
-                name="allowRandomization"
                 control={control}
+                name="allowRandomization"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormCheckboxField
+                    disabled={props.disabled}
                     field={field}
                     fieldState={fieldState}
                     label={t(translations.enableRandomisedAssessments)}
-                    disabled={props.disabled}
                   />
                 )}
               />
 
               <Controller
-                name="allowMrqOptionsRandomization"
                 control={control}
+                name="allowMrqOptionsRandomization"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormCheckboxField
+                    disabled={props.disabled}
                     field={field}
                     fieldState={fieldState}
                     label={t(translations.enableMcqChoicesRandomisations)}
-                    disabled={props.disabled}
                   />
                 )}
               />
@@ -94,18 +101,18 @@ const AssessmentsSettingsForm = (
           </Section>
 
           <Section
-            title={t(translations.categoriesAndTabs)}
+            sticksToNavbar={true}
             subtitle={t(translations.categoriesAndTabsSubtitle)}
-            sticksToNavbar
+            title={t(translations.categoriesAndTabs)}
           >
             <Controller
-              name="categories"
               control={control}
+              name="categories"
               render={({ field }): JSX.Element => (
                 <AssessmentCategoriesManager
                   categories={field.value}
-                  onUpdate={field.onChange}
                   disabled={props.disabled}
+                  onUpdate={field.onChange}
                 />
               )}
             />

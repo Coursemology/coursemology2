@@ -1,11 +1,12 @@
 import { createElement } from 'react';
-import { Create, Delete } from '@mui/icons-material';
-import { TableRow, TableCell, IconButton, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
-
+import { Create, Delete } from '@mui/icons-material';
+import { IconButton, TableCell, TableRow, Typography } from '@mui/material';
 import { ConditionData, ConditionsData } from 'types/course/conditions';
+
 import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import specify from './specifiers';
 import translations from './translations';
 
@@ -50,7 +51,7 @@ const ConditionRow = <AnyConditionData extends ConditionData>(
   };
 
   return (
-    <TableRow className="group" hover>
+    <TableRow className="group" hover={true}>
       <TableCell className="w-48 group-last:border-0">
         <Typography variant="body2">{props.condition.type}</Typography>
       </TableCell>

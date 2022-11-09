@@ -6,22 +6,23 @@ import {
   saveEntityToStore,
   saveListToStore,
 } from 'utilities/store';
+
 import {
-  InstanceAdminActionType,
-  InstanceAdminState,
   DELETE_ANNOUNCEMENT,
   DELETE_COURSE,
   DELETE_INVITATION,
   DELETE_USER,
+  InstanceAdminActionType,
+  InstanceAdminState,
   SAVE_ANNOUNCEMENT,
   SAVE_ANNOUNCEMENT_LIST,
   SAVE_COURSE_LIST,
-  SAVE_ROLE_REQUEST_LIST,
-  SAVE_ROLE_REQUEST,
-  SAVE_USER,
-  SAVE_USER_LIST,
   SAVE_INVITATION,
   SAVE_INVITATION_LIST,
+  SAVE_ROLE_REQUEST,
+  SAVE_ROLE_REQUEST_LIST,
+  SAVE_USER,
+  SAVE_USER_LIST,
 } from './types';
 
 const initialState: InstanceAdminState = {

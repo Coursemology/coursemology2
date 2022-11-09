@@ -1,23 +1,25 @@
-import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/lib/integration/react';
 import { IntlProvider } from 'react-intl';
+import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import { injectStyle } from 'react-toastify/dist/inject-style';
 import {
   createTheme,
-  ThemeProvider,
   StyledEngineProvider,
+  ThemeProvider,
 } from '@mui/material/styles';
+import PropTypes from 'prop-types';
+import { PersistGate } from 'redux-persist/lib/integration/react';
 import resolveConfig from 'tailwindcss/resolveConfig';
-
-import { i18nLocale } from 'lib/helpers/server-context';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import palette from 'theme/palette';
 import { grey } from 'theme/colors';
-import tailwindUserConfig from '../../../../tailwind.config';
-import ErrorBoundary from './ErrorBoundary';
+import palette from 'theme/palette';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { i18nLocale } from 'lib/helpers/server-context';
+
 import translations from '../../../../build/locales/locales.json';
+import tailwindUserConfig from '../../../../tailwind.config';
+
+import ErrorBoundary from './ErrorBoundary';
 
 injectStyle();
 
@@ -152,7 +154,7 @@ const ProviderWrapper = ({ store, persistor, children }) => {
 
   providers = (
     <IntlProvider locale={i18nLocale} messages={messages} textComponent="span">
-      <StyledEngineProvider injectFirst>
+      <StyledEngineProvider injectFirst={true}>
         <ThemeProvider theme={theme}>{providers}</ThemeProvider>
       </StyledEngineProvider>
     </IntlProvider>

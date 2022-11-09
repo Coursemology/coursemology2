@@ -1,7 +1,8 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import FolderShow from './pages/FolderShow';
 import configureStore from './store';
 
@@ -17,8 +18,8 @@ $(() => {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/courses/:courseId/materials/folders/:folderId"
               element={<FolderShow />}
+              path="/courses/:courseId/materials/folders/:folderId"
             />
           </Routes>
         </BrowserRouter>

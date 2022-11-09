@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+
 import classStyles from './ConnectionPoint.scss';
 
 const styles = {

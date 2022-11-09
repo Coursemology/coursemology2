@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { IconButton, Menu, MenuItem } from '@mui/material';
 import MoreVert from '@mui/icons-material/MoreVert';
+import { IconButton, Menu, MenuItem } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { deletePostFromServer, updatePost } from '../../actions/discussion';
 
 const propTypes = {
@@ -42,9 +43,9 @@ const PostMenu = (props) => {
         <MoreVert />
       </IconButton>
       <Menu
-        id="post-menu"
         anchorEl={anchorEl}
-        disableAutoFocusItem
+        disableAutoFocusItem={true}
+        id="post-menu"
         onClick={handleClose}
         onClose={handleClose}
         open={Boolean(anchorEl)}

@@ -1,17 +1,18 @@
 import { FC } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Button, Divider, Grid } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import {
-  IndividualInvite,
-  IndividualInvites,
-} from 'types/course/userInvitations';
-import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
 import {
   Control,
   UseFieldArrayAppend,
   UseFieldArrayRemove,
 } from 'react-hook-form';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { LoadingButton } from '@mui/lab';
+import { Button, Divider, Grid } from '@mui/material';
+import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
+import {
+  IndividualInvite,
+  IndividualInvites,
+} from 'types/course/userInvitations';
+
 import IndividualInvitation from './IndividualInvitation';
 
 interface Props extends WrappedComponentProps {
@@ -65,15 +66,15 @@ const IndividualInvitations: FC<Props> = (props) => {
       )}
 
       <Divider sx={{ margin: '12px 0px' }} />
-      <Grid container alignItems="center">
+      <Grid alignItems="center" container={true}>
         <LoadingButton
-          className="btn-submit"
-          loading={isLoading}
-          variant="contained"
-          sx={{ marginRight: '4px' }}
-          form="invite-users-individual-form"
           key="invite-users-individual-form-submit-button"
+          className="btn-submit"
+          form="invite-users-individual-form"
+          loading={isLoading}
+          sx={{ marginRight: '4px' }}
           type="submit"
+          variant="contained"
         >
           {intl.formatMessage(translations.invite)}
         </LoadingButton>

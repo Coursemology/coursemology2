@@ -1,9 +1,9 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
-import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AceEditor from 'react-ace';
+import { injectIntl } from 'react-intl';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import PropTypes from 'prop-types';
 
 const styles = {
   panel: {
@@ -38,7 +38,7 @@ class EditorCard extends Component {
     const { mode, field, value, header, subtitle, isLoading, error } =
       this.props;
     return (
-      <Accordion defaultExpanded style={styles.panel}>
+      <Accordion defaultExpanded={true} style={styles.panel}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           style={styles.panelSummary}
@@ -60,21 +60,21 @@ class EditorCard extends Component {
         <AccordionDetails style={{ padding: 0 }}>
           <textarea
             name={EditorCard.getInputName(field)}
-            value={value}
+            readOnly={true}
             style={{ display: 'none' }}
-            readOnly
+            value={value}
           />
           <AceEditor
-            mode={mode}
-            theme="monokai"
-            width="100%"
-            minLines={10}
-            maxLines={Math.max(20, value.split(/\r\n|\r|\n/).length)}
-            name={EditorCard.getInputName(field)}
-            value={value}
-            onChange={this.codeChangeHandler(field)}
             editorProps={{ $blockScrolling: true }}
+            maxLines={Math.max(20, value.split(/\r\n|\r|\n/).length)}
+            minLines={10}
+            mode={mode}
+            name={EditorCard.getInputName(field)}
+            onChange={this.codeChangeHandler(field)}
             setOptions={{ useSoftTabs: true, readOnly: isLoading }}
+            theme="monokai"
+            value={value}
+            width="100%"
           />
         </AccordionDetails>
       </Accordion>

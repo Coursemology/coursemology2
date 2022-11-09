@@ -1,21 +1,23 @@
 import { FC, memo } from 'react';
-import { Switch } from '@mui/material';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Switch } from '@mui/material';
 import equal from 'fast-deep-equal';
-import DataTable from 'lib/components/core/layouts/DataTable';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { VideoListData, VideoPermissions } from 'types/course/videos';
+import { AppState } from 'types/store';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import Note from 'lib/components/core/Note';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import PersonalTimeBooleanIcon from 'lib/components/extensions/PersonalTimeBooleanIcon';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { getVideoSubmissionsURL, getVideoURL } from 'lib/helpers/url-builders';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
-import { AppState } from 'types/store';
-import VideoManagementButtons from '../buttons/VideoManagementButtons';
+import { getCourseId } from 'lib/helpers/url-helpers';
+
 import { getVideoMetadata } from '../../selectors';
+import VideoManagementButtons from '../buttons/VideoManagementButtons';
 import WatchVideoButton from '../buttons/WatchVideoButton';
 
 interface Props extends WrappedComponentProps {
@@ -83,11 +85,11 @@ const VideoTable: FC<Props> = (props) => {
                 (videoMetadata.timelineAlgorithm &&
                   videoMetadata.timelineAlgorithm !== 'fixed' && (
                     <PersonalTimeBooleanIcon
+                      affectsPersonalTimes={video.affectsPersonalTimes}
+                      hasPersonalTimes={video.hasPersonalTimes}
                       showPersonalizedTimelineFeatures={
                         videoMetadata.showPersonalizedTimelineFeatures
                       }
-                      hasPersonalTimes={video.hasPersonalTimes}
-                      affectsPersonalTimes={video.affectsPersonalTimes}
                     />
                   ))}
               <Link key={video.id} to={getVideoURL(getCourseId(), video.id)}>
@@ -206,7 +208,7 @@ const VideoTable: FC<Props> = (props) => {
         customBodyRenderLite: (dataIndex) => {
           const video = videos[dataIndex];
           return (
-            <VideoManagementButtons video={video} navigateToIndex={false} />
+            <VideoManagementButtons navigateToIndex={false} video={video} />
           );
         },
       },
@@ -214,7 +216,12 @@ const VideoTable: FC<Props> = (props) => {
   }
 
   return (
-    <DataTable data={videos} columns={columns} options={options} withMargin />
+    <DataTable
+      columns={columns}
+      data={videos}
+      options={options}
+      withMargin={true}
+    />
   );
 };
 

@@ -1,8 +1,8 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
 
 import { changeSectionOrder } from 'course/survey/actions/sections';
 
@@ -39,9 +39,9 @@ class MoveUpButton extends Component {
   render() {
     return (
       <Button
-        variant="outlined"
         disabled={this.props.disabled}
         onClick={this.moveSectionUp}
+        variant="outlined"
       >
         <FormattedMessage {...translations.moveSectionUp} />
       </Button>

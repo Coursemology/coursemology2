@@ -1,5 +1,4 @@
 import { createContext, useContext } from 'react';
-
 import {
   AssessmentCategory,
   AssessmentSettingsData,

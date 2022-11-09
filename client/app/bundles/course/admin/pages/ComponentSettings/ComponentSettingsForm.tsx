@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import produce from 'immer';
 import { FormControlLabel, Switch } from '@mui/material';
+import produce from 'immer';
+import { CourseComponents } from 'types/course/admin/components';
 
 import Section from 'lib/components/core/layouts/Section';
-import { CourseComponents } from 'types/course/admin/components';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import translations from './translations';
 
 interface ComponentSettingsFormProps {
@@ -34,19 +35,19 @@ const ComponentSettingsForm = (
 
   return (
     <Section
-      title={t(translations.componentSettings)}
-      subtitle={t(translations.componentSettingsSubtitle)}
-      sticksToNavbar
       contentClassName="flex flex-col space-y-3"
+      sticksToNavbar={true}
+      subtitle={t(translations.componentSettingsSubtitle)}
+      title={t(translations.componentSettings)}
     >
       {components.map((component, index) => (
         <FormControlLabel
           key={component.id}
-          control={<Switch />}
-          label={component.displayName}
           checked={component.enabled}
           className="mb-0"
+          control={<Switch />}
           disabled={props.disabled}
+          label={component.displayName}
           onChange={(_, checked): void => toggleComponent(index, checked)}
         />
       ))}

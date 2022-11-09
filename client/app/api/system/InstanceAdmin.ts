@@ -12,6 +12,7 @@ import {
   InstanceUserListData,
 } from 'types/system/instance/users';
 import { InstanceBasicListData } from 'types/system/instances';
+
 import BaseSystemAPI from '../Base';
 
 export default class InstanceAdminAPI extends BaseSystemAPI {

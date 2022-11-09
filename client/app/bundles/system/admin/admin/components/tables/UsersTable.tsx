@@ -1,30 +1,32 @@
 import { FC, ReactElement, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import {
   CircularProgress,
   MenuItem,
   TextField,
   Typography,
 } from '@mui/material';
-import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { debounceSearchRender } from 'mui-datatables';
 import {
   TableColumns,
   TableOptions,
   TableState,
 } from 'types/components/DataTable';
+import { AppDispatch } from 'types/store';
 import { AdminStats, UserMiniEntity, UserRole } from 'types/users';
-import tableTranslations from 'lib/translations/table';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
+import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import {
-  USER_ROLES,
   FIELD_DEBOUNCE_DELAY,
   TABLE_ROWS_PER_PAGE,
+  USER_ROLES,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
-import { debounceSearchRender } from 'mui-datatables';
-import DataTable from 'lib/components/core/layouts/DataTable';
-import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'types/store';
+import tableTranslations from 'lib/translations/table';
+
 import { indexUsers, updateUser } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -249,13 +251,13 @@ const UsersTable: FC<Props> = (props) => {
           return (
             <InlineEditTextField
               key={`name-${userId}`}
-              value={value}
               className="user_name"
-              updateValue={updateValue}
-              variant="standard"
               onUpdate={(newName): Promise<void> =>
                 handleNameUpdate(tableMeta.rowData, newName)
               }
+              updateValue={updateValue}
+              value={value}
+              variant="standard"
             />
           );
         },
@@ -311,20 +313,20 @@ const UsersTable: FC<Props> = (props) => {
           const userId = tableMeta.rowData[0];
           return (
             <TextField
-              id={`role-${userId}`}
               key={`role-${userId}`}
               className="user_role"
-              select
-              value={value}
+              id={`role-${userId}`}
               onChange={(e): Promise<void> =>
                 handleRoleUpdate(tableMeta.rowData, e.target.value, updateValue)
               }
+              select={true}
+              value={value}
               variant="standard"
             >
               {Object.keys(USER_ROLES).map((option) => (
                 <MenuItem
-                  id={`role-${userId}-${option}`}
                   key={`role-${userId}-${option}`}
+                  id={`role-${userId}-${option}`}
                   value={option}
                 >
                   {USER_ROLES[option]}
@@ -354,6 +356,10 @@ const UsersTable: FC<Props> = (props) => {
 
   return (
     <DataTable
+      columns={columns}
+      data={users}
+      isLoading={isLoading}
+      options={options}
       title={
         <Typography variant="h6">
           {title}
@@ -362,11 +368,7 @@ const UsersTable: FC<Props> = (props) => {
           )}
         </Typography>
       }
-      data={users}
-      columns={columns}
-      options={options}
-      isLoading={isLoading}
-      withMargin
+      withMargin={true}
     />
   );
 };

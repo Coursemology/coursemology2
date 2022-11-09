@@ -1,8 +1,6 @@
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { formatLongDateTime } from 'lib/moment';
 import {
   Button,
   Card,
@@ -14,13 +12,17 @@ import {
   TableCell,
   TableRow,
 } from '@mui/material';
-import libTranslations from 'lib/translations';
-import surveyTranslations from 'course/survey/translations';
-import { surveyShape } from 'course/survey/propTypes';
+import PropTypes from 'prop-types';
+
 import { updateSurvey } from 'course/survey/actions/surveys';
 import RespondButton from 'course/survey/containers/RespondButton';
-import NewSectionButton from './NewSectionButton';
+import { surveyShape } from 'course/survey/propTypes';
+import surveyTranslations from 'course/survey/translations';
+import { formatLongDateTime } from 'lib/moment';
+import libTranslations from 'lib/translations';
+
 import DownloadResponsesButton from './DownloadResponsesButton';
+import NewSectionButton from './NewSectionButton';
 
 const styles = {
   table: {
@@ -68,8 +70,8 @@ const SurveyDetails = (props) => {
           <FormattedMessage {...surveyTranslations.description} />
         </h4>
         <p
-          style={{ whiteSpace: 'pre-line' }}
           dangerouslySetInnerHTML={{ __html: survey.description }}
+          style={{ whiteSpace: 'pre-line' }}
         />
       </CardContent>
     );
@@ -189,20 +191,20 @@ const SurveyDetails = (props) => {
         {survey.canViewResults ? (
           <>
             <Button
-              variant="outlined"
               onClick={() =>
                 navigate(`/courses/${courseId}/surveys/${survey.id}/results`)
               }
               style={styles.button}
+              variant="outlined"
             >
               <FormattedMessage {...surveyTranslations.results} />
             </Button>
             <Button
-              variant="outlined"
               onClick={() =>
                 navigate(`/courses/${courseId}/surveys/${survey.id}/responses`)
               }
               style={styles.button}
+              variant="outlined"
             >
               <FormattedMessage {...surveyTranslations.responses} />
             </Button>
@@ -211,15 +213,15 @@ const SurveyDetails = (props) => {
         ) : null}
 
         <RespondButton
-          courseId={courseId}
-          surveyId={survey.id}
-          responseId={survey.response && survey.response.id}
-          canRespond={survey.canRespond}
           canModify={!!survey.response && survey.response.canModify}
+          canRespond={survey.canRespond}
           canSubmit={!!survey.response && survey.response.canSubmit}
-          startAt={survey.start_at}
+          courseId={courseId}
           endAt={survey.end_at}
+          responseId={survey.response && survey.response.id}
+          startAt={survey.start_at}
           submittedAt={survey.response && survey.response.submitted_at}
+          surveyId={survey.id}
         />
       </CardContent>
     </Card>

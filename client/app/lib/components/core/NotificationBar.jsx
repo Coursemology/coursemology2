@@ -1,7 +1,7 @@
-import { useState, useEffect, memo } from 'react';
-import PropTypes from 'prop-types';
+import { memo, useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Snackbar } from '@mui/material';
+import PropTypes from 'prop-types';
 
 export const notificationShape = PropTypes.shape({
   message: PropTypes.oneOfType([
@@ -45,16 +45,16 @@ const NotificationBar = (props) => {
   return (
     <Snackbar
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      autoHideDuration={autoHideDuration}
+      message={notificationNode}
+      onClose={handleClose}
+      open={open}
       style={{
         height: 'auto',
         maxWidth: '100%',
         whiteSpace: 'pre-line',
         zIndex: 9999,
       }}
-      open={open}
-      onClose={handleClose}
-      message={notificationNode}
-      autoHideDuration={autoHideDuration}
       {...options}
     />
   );

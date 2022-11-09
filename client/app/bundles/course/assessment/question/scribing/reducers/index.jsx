@@ -1,5 +1,7 @@
 import { combineReducers } from 'redux';
+
 import notificationPopup from 'lib/reducers/notificationPopup';
+
 import scribingQuestionReducer, {
   initialState as scribingQuestionState,
 } from './scribingQuestionReducer';

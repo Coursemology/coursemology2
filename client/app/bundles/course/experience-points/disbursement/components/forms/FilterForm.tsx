@@ -1,5 +1,4 @@
 import { FC, memo, useState } from 'react';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import {
   defineMessages,
@@ -7,21 +6,24 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { LoadingButton } from '@mui/lab';
+import { Grid } from '@mui/material';
+import equal from 'fast-deep-equal';
+import { ForumDisbursementFilters } from 'types/course/disbursement';
+import { AppDispatch } from 'types/store';
+import * as yup from 'yup';
+
+import ErrorText from 'lib/components/core/ErrorText';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import { Grid } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import * as yup from 'yup';
-import formTranslations from 'lib/translations/form';
-import { ForumDisbursementFilters } from 'types/course/disbursement';
-import ErrorText from 'lib/components/core/ErrorText';
-import { toast } from 'react-toastify';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'types/store';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import equal from 'fast-deep-equal';
-import { fetchFilteredForumDisbursements } from '../../operations';
+import formTranslations from 'lib/translations/form';
+
 import { removeForumDisbursementList } from '../../actions';
+import { fetchFilteredForumDisbursements } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   initialValues: ForumDisbursementFilters;
@@ -108,81 +110,80 @@ const FilterForm: FC<Props> = (props) => {
 
   return (
     <form
-      encType="multipart/form-data"
       className="forum-participation-search-panel"
+      encType="multipart/form-data"
       id="filter-form"
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((data) => onFormSubmit(data))}
       style={{ width: '100%' }}
     >
       <ErrorText errors={errors} />
-      <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
-        <Grid item xs>
+      <Grid columnSpacing={2} container={true} direction="row" rowSpacing={2}>
+        <Grid item={true} xs={true}>
           <Controller
-            name="startTime"
             control={control}
+            name="startTime"
             render={({ field, fieldState }): JSX.Element => (
               <FormDateTimePickerField
                 className="start_time"
+                disabled={isSearching}
                 field={field}
                 fieldState={fieldState}
-                disabled={isSearching}
                 label={<FormattedMessage {...translations.startTime} />}
               />
             )}
           />
         </Grid>
-        <Grid item xs>
+        <Grid item={true} xs={true}>
           <Controller
-            name="endTime"
             control={control}
+            name="endTime"
             render={({ field, fieldState }): JSX.Element => (
               <FormDateTimePickerField
                 className="end_time"
+                disabled={isSearching}
                 field={field}
                 fieldState={fieldState}
-                disabled={isSearching}
                 label={<FormattedMessage {...translations.endTime} />}
               />
             )}
           />
         </Grid>
-        <Grid item xs>
+        <Grid item={true} xs={true}>
           <Controller
-            name="weeklyCap"
             control={control}
+            name="weeklyCap"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
-                field={field}
-                fieldState={fieldState}
-                // @ts-ignore: component is still written in JS
                 className="weekly_cap"
                 disabled={isSearching}
-                fullWidth
+                disableMargins={true}
+                field={field}
+                fieldState={fieldState}
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={intl.formatMessage(translations.weeklyCap)}
                 onWheel={(event): void => event.currentTarget.blur()}
+                required={true}
                 type="number"
                 variant="standard"
-                disableMargins
-                required
-                label={intl.formatMessage(translations.weeklyCap)}
               />
             )}
           />
         </Grid>
-        <Grid item>
+        <Grid item={true}>
           <LoadingButton
-            color="primary"
-            className="filter-btn-submit"
-            form="filter-form"
             key="filter-form-submit-button"
+            className="filter-btn-submit"
+            color="primary"
+            disabled={isSearching}
+            form="filter-form"
+            loading={isSearching}
+            style={{ marginBottom: '10px', marginTop: '10px' }}
             type="submit"
             variant="outlined"
-            style={{ marginBottom: '10px', marginTop: '10px' }}
-            disabled={isSearching}
-            loading={isSearching}
           >
             <FormattedMessage {...translations.submit} />
           </LoadingButton>

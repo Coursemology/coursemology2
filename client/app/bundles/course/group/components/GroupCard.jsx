@@ -69,7 +69,7 @@ const styles = {
 function mapButtonObjectToElement(button, isLast) {
   if (button.icon) {
     return (
-      <Tooltip title={button.label} key={`tooltip_${button.label.props.id}`}>
+      <Tooltip key={`tooltip_${button.label.props.id}`} title={button.label}>
         <IconButton
           key={button.label.props.id}
           onClick={button.onClick}
@@ -85,11 +85,11 @@ function mapButtonObjectToElement(button, isLast) {
   }
   return (
     <Button
-      variant="contained"
-      color="primary"
       key={button.label.props.id}
+      color="primary"
       onClick={button.onClick}
       style={isLast ? undefined : styles.nonLastButton}
+      variant="contained"
     >
       {button.label}
     </Button>
@@ -107,9 +107,11 @@ const GroupCard = ({
   className = '',
   children,
 }) => (
-  <Card style={styles.card} className={className}>
+  <Card className={className} style={styles.card}>
     {title || subtitle ? (
       <CardHeader
+        subheader={subtitle}
+        subheaderTypographyProps={{ variant: 'subtitle2' }}
         title={
           <div style={styles.cardHeader}>
             <h3 style={styles.title}>{title}</h3>
@@ -130,8 +132,6 @@ const GroupCard = ({
             ? { style: styles.cardHeaderFullWidthTitle }
             : {}
         }
-        subheader={subtitle}
-        subheaderTypographyProps={{ variant: 'subtitle2' }}
       />
     ) : null}
     <CardContent style={styles.body}>{children}</CardContent>

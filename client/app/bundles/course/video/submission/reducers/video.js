@@ -1,13 +1,14 @@
 import { List as makeImmutableList } from 'immutable';
+import { createTransform } from 'redux-persist';
+
 import {
-  playerStates,
   captionsStates,
+  playerStates,
   sessionActionTypes,
   videoActionTypes,
   videoDefaults,
 } from 'lib/constants/videoConstants';
 import { isPlayingState, timeIsPastRestricted } from 'lib/helpers/videoHelpers';
-import { createTransform } from 'redux-persist';
 
 export const initialState = {
   videoUrl: null,

@@ -1,5 +1,5 @@
-import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 
 interface Props extends IconButtonProps {
   disabled: boolean;
@@ -19,8 +19,8 @@ const DuplicateButton = ({
     <Tooltip placement="top" title={title}>
       <IconButton
         className={className}
-        onClick={onClick}
         color="inherit"
+        onClick={onClick}
         {...props}
       >
         <ContentCopyIcon />

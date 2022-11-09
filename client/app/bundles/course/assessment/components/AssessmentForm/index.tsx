@@ -1,31 +1,32 @@
-/* eslint-disable camelcase */
 import { useEffect } from 'react';
-import { injectIntl } from 'react-intl';
-import { Controller } from 'react-hook-form';
-import { RadioGroup, Typography, Grid } from '@mui/material';
-import {
-  Public as PublishedIcon,
-  Block as DraftIcon,
-  Create as ManualIcon,
-  CheckCircle as AutogradedIcon,
-} from '@mui/icons-material';
 import useEmitterFactory from 'react-emitter-factory';
+import { Controller } from 'react-hook-form';
+import { injectIntl } from 'react-intl';
+import {
+  Block as DraftIcon,
+  CheckCircle as AutogradedIcon,
+  Create as ManualIcon,
+  Public as PublishedIcon,
+} from '@mui/icons-material';
+import { Grid, RadioGroup, Typography } from '@mui/material';
 
+import IconRadio from 'lib/components/core/buttons/IconRadio';
+import ErrorText from 'lib/components/core/ErrorText';
+import InfoLabel from 'lib/components/core/InfoLabel';
+import Section from 'lib/components/core/layouts/Section';
+import ConditionsManager from 'lib/components/extensions/conditions/ConditionsManager';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
-import ErrorText from 'lib/components/core/ErrorText';
-import ConditionsManager from 'lib/components/extensions/conditions/ConditionsManager';
-import Section from 'lib/components/core/layouts/Section';
-import IconRadio from 'lib/components/core/buttons/IconRadio';
-import InfoLabel from 'lib/components/core/InfoLabel';
-import t from './translations.intl';
+
 import FileManager from '../FileManager';
+
 import { fetchTabs } from './actions';
+import t from './translations.intl';
+import { AssessmentFormProps, connector } from './types';
 import useFormValidation from './useFormValidation';
-import { connector, AssessmentFormProps } from './types';
 
 const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const {
@@ -81,36 +82,36 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const renderPasswordFields = (): JSX.Element => (
     <>
       <Controller
-        name="view_password"
         control={control}
+        name="view_password"
         render={({ field, fieldState }): JSX.Element => (
           <FormTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
+            fullWidth={true}
             label={intl.formatMessage(t.viewPassword)}
-            fullWidth
-            required
-            variant="filled"
+            required={true}
             type="password"
+            variant="filled"
           />
         )}
       />
 
-      <Typography variant="body2" color="text.secondary" className="!mt-0">
+      <Typography className="!mt-0" color="text.secondary" variant="body2">
         {intl.formatMessage(t.viewPasswordHint)}
       </Typography>
 
       <Controller
-        name="session_protected"
         control={control}
+        name="session_protected"
         render={({ field, fieldState }): JSX.Element => (
           <FormCheckboxField
+            description={intl.formatMessage(t.sessionProtectionHint)}
+            disabled={disabled ?? autograded}
             field={field}
             fieldState={fieldState}
-            disabled={disabled ?? autograded}
             label={intl.formatMessage(t.sessionProtection)}
-            description={intl.formatMessage(t.sessionProtectionHint)}
           />
         )}
       />
@@ -118,23 +119,23 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
       {sessionProtected && (
         <>
           <Controller
-            name="session_password"
             control={control}
+            name="session_password"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={disabled}
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled}
+                fullWidth={true}
                 label={intl.formatMessage(t.sessionPassword)}
-                fullWidth
-                required
-                variant="filled"
+                required={true}
                 type="password"
+                variant="filled"
               />
             )}
           />
 
-          <Typography variant="body2" color="text.secondary" className="!mt-0">
+          <Typography className="!mt-0" color="text.secondary" variant="body2">
             {intl.formatMessage(t.sessionPasswordHint)}
           </Typography>
         </>
@@ -152,17 +153,17 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
 
     return (
       <Controller
-        name="tab_id"
         control={control}
+        name="tab_id"
         render={({ field, fieldState }): JSX.Element => (
           <FormSelectField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
             label={intl.formatMessage(t.tab)}
+            margin="0"
             options={options}
             variant="filled"
-            margin="0"
           />
         )}
       />
@@ -173,83 +174,83 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     <form
       encType="multipart/form-data"
       id="assessment-form"
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
 
       <Section
-        title={intl.formatMessage(t.assessmentDetails)}
         sticksToNavbar={editing}
+        title={intl.formatMessage(t.assessmentDetails)}
       >
         <Controller
-          name="title"
           control={control}
+          name="title"
           render={({ field, fieldState }): JSX.Element => (
             <FormTextField
+              disabled={disabled}
+              disableMargins={true}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
+              fullWidth={true}
               label={intl.formatMessage(t.title)}
-              fullWidth
-              required
+              required={true}
               variant="filled"
-              disableMargins
             />
           )}
         />
 
-        <Grid container columnSpacing={2} direction="row">
-          <Grid item xs>
+        <Grid columnSpacing={2} container={true} direction="row">
+          <Grid item={true} xs={true}>
             <Controller
-              name="start_at"
               control={control}
+              name="start_at"
               render={({ field, fieldState }): JSX.Element => (
                 <FormDateTimePickerField
+                  disabled={disabled}
+                  disableMargins={true}
+                  disableShrinkingLabel={true}
                   field={field}
                   fieldState={fieldState}
-                  disabled={disabled}
                   label={intl.formatMessage(t.startAt)}
                   variant="filled"
-                  disableMargins
-                  disableShrinkingLabel
                 />
               )}
             />
           </Grid>
 
-          <Grid item xs>
+          <Grid item={true} xs={true}>
             <Controller
-              name="end_at"
               control={control}
+              name="end_at"
               render={({ field, fieldState }): JSX.Element => (
                 <FormDateTimePickerField
+                  disabled={disabled}
+                  disableMargins={true}
+                  disableShrinkingLabel={true}
                   field={field}
                   fieldState={fieldState}
-                  disabled={disabled}
                   label={intl.formatMessage(t.endAt)}
                   variant="filled"
-                  disableMargins
-                  disableShrinkingLabel
                 />
               )}
             />
           </Grid>
 
           {gamified && (
-            <Grid item xs>
+            <Grid item={true} xs={true}>
               <Controller
-                name="bonus_end_at"
                 control={control}
+                name="bonus_end_at"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormDateTimePickerField
+                    disabled={disabled}
+                    disableMargins={true}
+                    disableShrinkingLabel={true}
                     field={field}
                     fieldState={fieldState}
-                    disabled={disabled}
                     label={intl.formatMessage(t.bonusEndAt)}
                     variant="filled"
-                    disableMargins
-                    disableShrinkingLabel
                   />
                 )}
               />
@@ -262,16 +263,16 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
         </Typography>
 
         <Controller
-          name="description"
           control={control}
+          name="description"
           render={({ field, fieldState }): JSX.Element => (
             <FormRichTextField
+              disabled={disabled}
+              disableMargins={true}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
-              fullWidth
+              fullWidth={true}
               variant="standard"
-              disableMargins
             />
           )}
         />
@@ -283,29 +284,29 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             </Typography>
 
             <Controller
-              name="published"
               control={control}
+              name="published"
               render={({ field }): JSX.Element => (
                 <RadioGroup
                   {...field}
-                  value={field.value === true ? 'published' : 'draft'}
                   onChange={(e): void => {
                     const isPublished = e.target.value === 'published';
                     field.onChange(isPublished);
                   }}
+                  value={field.value === true ? 'published' : 'draft'}
                 >
                   <IconRadio
-                    value="published"
-                    label={intl.formatMessage(t.published)}
-                    icon={PublishedIcon}
                     description={intl.formatMessage(t.publishedHint)}
+                    icon={PublishedIcon}
+                    label={intl.formatMessage(t.published)}
+                    value="published"
                   />
 
                   <IconRadio
-                    value="draft"
-                    label={intl.formatMessage(t.draft)}
-                    icon={DraftIcon}
                     description={intl.formatMessage(t.draftHint)}
+                    icon={DraftIcon}
+                    label={intl.formatMessage(t.draft)}
+                    value="draft"
                   />
                 </RadioGroup>
               )}
@@ -330,45 +331,45 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
 
       {gamified && (
         <Section
-          title={intl.formatMessage(t.gamification)}
           sticksToNavbar={editing}
+          title={intl.formatMessage(t.gamification)}
         >
-          <Grid container spacing={2} direction="row">
-            <Grid item xs>
+          <Grid container={true} direction="row" spacing={2}>
+            <Grid item={true} xs={true}>
               <Controller
-                name="base_exp"
                 control={control}
+                name="base_exp"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
+                    disabled={disabled}
+                    disableMargins={true}
                     field={field}
                     fieldState={fieldState}
-                    disabled={disabled}
-                    fullWidth
+                    fullWidth={true}
                     label={intl.formatMessage(t.baseExp)}
                     onWheel={(event): void => event.currentTarget.blur()}
                     type="number"
                     variant="filled"
-                    disableMargins
                   />
                 )}
               />
             </Grid>
 
-            <Grid item xs>
+            <Grid item={true} xs={true}>
               <Controller
-                name="time_bonus_exp"
                 control={control}
+                name="time_bonus_exp"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
+                    disabled={disabled}
+                    disableMargins={true}
                     field={field}
                     fieldState={fieldState}
-                    disabled={disabled}
-                    fullWidth
+                    fullWidth={true}
                     label={intl.formatMessage(t.timeBonusExp)}
                     onWheel={(event): void => event.currentTarget.blur()}
                     type="number"
                     variant="filled"
-                    disableMargins
                   />
                 )}
               />
@@ -377,15 +378,15 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
 
           {editing && conditionAttributes && (
             <ConditionsManager
-              title={intl.formatMessage(t.unlockConditions)}
-              description={intl.formatMessage(t.unlockConditionsHint)}
               conditionsData={conditionAttributes}
+              description={intl.formatMessage(t.unlockConditionsHint)}
+              title={intl.formatMessage(t.unlockConditions)}
             />
           )}
         </Section>
       )}
 
-      <Section title={intl.formatMessage(t.grading)} sticksToNavbar={editing}>
+      <Section sticksToNavbar={editing} title={intl.formatMessage(t.grading)}>
         <Typography variant="body1">
           {intl.formatMessage(t.gradingMode)}
         </Typography>
@@ -399,30 +400,30 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
         )}
 
         <Controller
-          name="autograded"
           control={control}
+          name="autograded"
           render={({ field }): JSX.Element => (
             <RadioGroup
               {...field}
-              value={field.value === true ? 'autograded' : 'manual'}
               onChange={(e): void => {
                 const isAutograded = e.target.value === 'autograded';
                 field.onChange(isAutograded);
               }}
+              value={field.value === true ? 'autograded' : 'manual'}
             >
               <IconRadio
-                value="autograded"
-                label="Autograded"
-                icon={AutogradedIcon}
                 description={intl.formatMessage(t.autogradedHint)}
                 disabled={!!containsCodaveri || !!disabled || !modeSwitching}
+                icon={AutogradedIcon}
+                label="Autograded"
+                value="autograded"
               />
 
               <IconRadio
-                value="manual"
-                label="Manual"
-                icon={ManualIcon}
                 disabled={!!containsCodaveri || !!disabled || !modeSwitching}
+                icon={ManualIcon}
+                label="Manual"
+                value="manual"
               />
             </RadioGroup>
           )}
@@ -433,95 +434,95 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
         </Typography>
 
         <Controller
-          name="use_public"
           control={control}
+          name="use_public"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
               label={intl.formatMessage(t.usePublic)}
             />
           )}
         />
         <Controller
-          name="use_private"
           control={control}
+          name="use_private"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
               label={intl.formatMessage(t.usePrivate)}
             />
           )}
         />
         <Controller
-          name="use_evaluation"
           control={control}
+          name="use_evaluation"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
               label={intl.formatMessage(t.useEvaluation)}
             />
           )}
         />
 
         <Controller
-          name="delayed_grade_publication"
           control={control}
+          name="delayed_grade_publication"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled ?? autograded}
-              label={intl.formatMessage(t.delayedGradePublication)}
               description={intl.formatMessage(t.delayedGradePublicationHint)}
+              disabled={disabled ?? autograded}
               disabledHint={
                 <InfoLabel
                   label={intl.formatMessage(t.unavailableInAutograded)}
                 />
               }
+              field={field}
+              fieldState={fieldState}
+              label={intl.formatMessage(t.delayedGradePublication)}
             />
           )}
         />
       </Section>
 
       <Section
-        title={intl.formatMessage(t.answersAndTestCases)}
         sticksToNavbar={editing}
+        title={intl.formatMessage(t.answersAndTestCases)}
       >
         <Controller
-          name="skippable"
           control={control}
+          name="skippable"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
-              field={field}
-              fieldState={fieldState}
               disabled={disabled ?? !autograded}
-              label={intl.formatMessage(t.skippable)}
               disabledHint={
                 <InfoLabel label={intl.formatMessage(t.skippableManualHint)} />
               }
+              field={field}
+              fieldState={fieldState}
+              label={intl.formatMessage(t.skippable)}
             />
           )}
         />
         <Controller
-          name="allow_partial_submission"
           control={control}
+          name="allow_partial_submission"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
-              field={field}
-              fieldState={fieldState}
               disabled={disabled ?? !autograded}
-              label={intl.formatMessage(t.allowPartialSubmission)}
               disabledHint={
                 <InfoLabel
                   label={intl.formatMessage(t.unavailableInManuallyGraded)}
                 />
               }
+              field={field}
+              fieldState={fieldState}
+              label={intl.formatMessage(t.allowPartialSubmission)}
             />
           )}
         />
@@ -531,40 +532,40 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
         </Typography>
 
         <Controller
-          name="show_private"
           control={control}
+          name="show_private"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
+              description={intl.formatMessage(t.forProgrammingQuestions)}
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
               label={intl.formatMessage(t.showPrivate)}
-              description={intl.formatMessage(t.forProgrammingQuestions)}
             />
           )}
         />
         <Controller
-          name="show_evaluation"
           control={control}
+          name="show_evaluation"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
+              description={intl.formatMessage(t.forProgrammingQuestions)}
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
               label={intl.formatMessage(t.showEvaluation)}
-              description={intl.formatMessage(t.forProgrammingQuestions)}
             />
           )}
         />
 
         <Controller
-          name="show_mcq_mrq_solution"
           control={control}
+          name="show_mcq_mrq_solution"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
               label={intl.formatMessage(t.showMcqMrqSolution)}
             />
           )}
@@ -572,20 +573,21 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
       </Section>
 
       <Section
-        title={intl.formatMessage(t.organization)}
         sticksToNavbar={editing}
+        title={intl.formatMessage(t.organization)}
       >
         {editing && renderTabs()}
 
         <Controller
-          name="tabbed_view"
           control={control}
+          name="tabbed_view"
           render={({ field, fieldState }): JSX.Element => (
             <FormSelectField
+              disabled={disabled ?? autograded}
               field={field}
               fieldState={fieldState}
-              disabled={disabled ?? autograded}
               label={intl.formatMessage(t.displayAssessmentAs)}
+              margin="0"
               options={[
                 {
                   value: false,
@@ -598,24 +600,23 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               ]}
               type="boolean"
               variant="filled"
-              margin="0"
             />
           )}
         />
       </Section>
 
       <Section
-        title={intl.formatMessage(t.examsAndAccessControl)}
         sticksToNavbar={editing}
+        title={intl.formatMessage(t.examsAndAccessControl)}
       >
         <Controller
-          name="block_student_viewing_after_submitted"
           control={control}
+          name="block_student_viewing_after_submitted"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
               label={intl.formatMessage(t.blockStudentViewingAfterSubmitted)}
             />
           )}
@@ -623,53 +624,53 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
 
         {randomizationAllowed && (
           <Controller
-            name="randomization"
             control={control}
+            name="randomization"
             render={({ field, fieldState }): JSX.Element => (
               <FormCheckboxField
+                description={intl.formatMessage(t.enableRandomizationHint)}
+                disabled={disabled}
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled}
                 label={intl.formatMessage(t.enableRandomization)}
-                description={intl.formatMessage(t.enableRandomizationHint)}
               />
             )}
           />
         )}
 
         <Controller
-          name="show_mcq_answer"
           control={control}
+          name="show_mcq_answer"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled ?? !autograded}
-              label={intl.formatMessage(t.showMcqAnswer)}
               description={intl.formatMessage(t.showMcqAnswerHint)}
+              disabled={disabled ?? !autograded}
               disabledHint={
                 <InfoLabel
                   label={intl.formatMessage(t.unavailableInManuallyGraded)}
                 />
               }
+              field={field}
+              fieldState={fieldState}
+              label={intl.formatMessage(t.showMcqAnswer)}
             />
           )}
         />
 
         <Controller
-          name="password_protected"
           control={control}
+          name="password_protected"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
-              field={field}
-              fieldState={fieldState}
               disabled={disabled ?? autograded}
-              label={intl.formatMessage(t.passwordProtection)}
               disabledHint={
                 <InfoLabel
                   label={intl.formatMessage(t.unavailableInAutograded)}
                 />
               }
+              field={field}
+              fieldState={fieldState}
+              label={intl.formatMessage(t.passwordProtection)}
             />
           )}
         />
@@ -679,33 +680,33 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
 
       {showPersonalizedTimelineFeatures && (
         <Section
-          title={intl.formatMessage(t.personalisedTimelines)}
           sticksToNavbar={editing}
+          title={intl.formatMessage(t.personalisedTimelines)}
         >
           <Controller
-            name="has_personal_times"
             control={control}
+            name="has_personal_times"
             render={({ field, fieldState }): JSX.Element => (
               <FormCheckboxField
+                description={intl.formatMessage(t.hasPersonalTimesHint)}
+                disabled={disabled}
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled}
                 label={intl.formatMessage(t.hasPersonalTimes)}
-                description={intl.formatMessage(t.hasPersonalTimesHint)}
               />
             )}
           />
 
           <Controller
-            name="affects_personal_times"
             control={control}
+            name="affects_personal_times"
             render={({ field, fieldState }): JSX.Element => (
               <FormCheckboxField
+                description={intl.formatMessage(t.affectsPersonalTimesHint)}
+                disabled={disabled}
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled}
                 label={intl.formatMessage(t.affectsPersonalTimes)}
-                description={intl.formatMessage(t.affectsPersonalTimesHint)}
               />
             )}
           />

@@ -1,23 +1,24 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { Scatter } from 'react-chartjs-2';
+import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import {
   Chart as ChartJS,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Tooltip,
   Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
+  Tooltip,
 } from 'chart.js';
-import { Scatter } from 'react-chartjs-2';
-import { injectIntl } from 'react-intl';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { formatTimestamp } from 'lib/helpers/videoHelpers';
-import { videoDefaults } from 'lib/constants/videoConstants';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-import translations from '../../translations';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { videoDefaults } from 'lib/constants/videoConstants';
+import { formatTimestamp } from 'lib/helpers/videoHelpers';
+
 import { seekToDirectly } from '../../actions/video';
+import translations from '../../translations';
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -233,10 +234,10 @@ class ProgressGraph extends Component {
           </InputLabel>
           <Select
             className="max-h-96 w-80"
-            value={this.state.selectedSessionId}
             onChange={(event) =>
               this.setState({ selectedSessionId: event.target.value })
             }
+            value={this.state.selectedSessionId}
             variant="standard"
           >
             {items}

@@ -1,13 +1,15 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
-import Note from 'lib/components/core/Note';
-import CourseAPI from 'api/course';
 import { VideoSubmission } from 'types/course/video/submissions';
-import { getCourseId } from 'lib/helpers/url-helpers';
+
+import CourseAPI from 'api/course';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { getVideosURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
+
 import VideoSubmissionsTable from '../../components/tables/VideoSubmissionsTable';
 
 type Props = WrappedComponentProps;
@@ -62,11 +64,11 @@ const VideoSubmissionsIndex: FC<Props> = (props) => {
   return (
     <>
       <PageHeader
+        returnLink={returnLink}
         title={`${intl.formatMessage({
           id: 'course.video.submissions.header',
           defaultMessage: 'Video Submissions',
         })} ${data?.videoTitle ? `- ${data.videoTitle}` : ''}`}
-        returnLink={returnLink}
       />
       {data &&
         data.myStudentSubmissions.length === 0 &&

@@ -3,15 +3,16 @@ import {
   FolderPermissions,
   MaterialListData,
 } from 'types/course/material/folders';
+
 import {
-  SaveFolderAction,
+  DELETE_FOLDER_LIST,
+  DELETE_MATERIAL_LIST,
   DeleteFolderListAction,
   DeleteMaterialListAction,
   SAVE_FOLDER,
-  DELETE_FOLDER_LIST,
-  DELETE_MATERIAL_LIST,
-  SaveMaterialListAction,
   SAVE_MATERIAL_LIST,
+  SaveFolderAction,
+  SaveMaterialListAction,
 } from './types';
 
 export function saveFolder(

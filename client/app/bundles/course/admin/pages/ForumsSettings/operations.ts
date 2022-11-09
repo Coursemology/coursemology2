@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios';
-
-import CourseAPI from 'api/course';
 import {
   ForumsSettingsData,
   ForumsSettingsPostData,
 } from 'types/course/admin/forums';
+
+import CourseAPI from 'api/course';
 
 type Data = Promise<ForumsSettingsData>;
 

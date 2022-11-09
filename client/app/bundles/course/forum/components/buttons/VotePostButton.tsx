@@ -1,12 +1,12 @@
 import { FC } from 'react';
+import {
+  ThumbDownAlt,
+  ThumbDownOffAlt,
+  ThumbUpAlt,
+  ThumbUpOffAlt,
+} from '@mui/icons-material';
 import { IconButton, IconButtonProps } from '@mui/material';
 import { ForumTopicPostEntity } from 'types/course/forums';
-import {
-  ThumbDownOffAlt,
-  ThumbUpOffAlt,
-  ThumbUpAlt,
-  ThumbDownAlt,
-} from '@mui/icons-material';
 
 interface Props extends IconButtonProps {
   post: ForumTopicPostEntity;
@@ -20,16 +20,16 @@ const VotePostButton: FC<Props> = ({ post, handleClick }) => {
     return (
       <div className="flex items-center">
         <IconButton
-          onClick={(): void => handleClick(1)}
           color="info"
+          onClick={(): void => handleClick(1)}
           title="Upvote"
         >
           <ThumbUpOffAlt />
         </IconButton>
         <div className="vote-tally font-bold">{post.voteTally}</div>
         <IconButton
-          onClick={(): void => handleClick(-1)}
           color="info"
+          onClick={(): void => handleClick(-1)}
           title="Downvote"
         >
           <ThumbDownOffAlt />
@@ -41,8 +41,8 @@ const VotePostButton: FC<Props> = ({ post, handleClick }) => {
   return (
     <div className="flex items-center">
       <IconButton
-        onClick={(): void => handleClick(0)}
         color="info"
+        onClick={(): void => handleClick(0)}
         title="Upvote"
       >
         {post.userVoteFlag ? <ThumbUpAlt /> : <ThumbUpOffAlt />}
@@ -50,8 +50,8 @@ const VotePostButton: FC<Props> = ({ post, handleClick }) => {
       <div className="vote-tally font-bold">{post.voteTally}</div>
 
       <IconButton
-        onClick={(): void => handleClick(0)}
         color="info"
+        onClick={(): void => handleClick(0)}
         title="Downvote"
       >
         {post.userVoteFlag ? <ThumbDownOffAlt /> : <ThumbDownAlt />}

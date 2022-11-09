@@ -1,14 +1,17 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/core/NotificationBar';
 import { achievementTypesConditionAttributes } from 'lib/types';
-import AssessmentForm from '../../components/AssessmentForm';
+
 import * as actions from '../../actions';
+import AssessmentForm from '../../components/AssessmentForm';
+
 import translations from './translations.intl';
 
 class EditPage extends Component {
@@ -57,12 +60,12 @@ class EditPage extends Component {
       <>
         <div className="absolute right-8 -mt-24">
           <Button
-            variant="contained"
-            color="primary"
             className="btn-submit"
+            color="primary"
             disabled={disabled}
             form="assessment-form"
             type="submit"
+            variant="contained"
           >
             <FormattedMessage {...translations.updateAssessment} />
           </Button>
@@ -70,13 +73,13 @@ class EditPage extends Component {
 
         <AssessmentForm
           conditionAttributes={conditionAttributes}
+          containsCodaveri={containsCodaveri}
           disabled={disabled}
-          editing
+          editing={true}
           folderAttributes={folderAttributes}
           gamified={gamified}
           initialValues={initialValues}
           modeSwitching={modeSwitching}
-          containsCodaveri={containsCodaveri}
           onSubmit={this.onFormSubmit}
           randomizationAllowed={randomizationAllowed}
           showPersonalizedTimelineFeatures={showPersonalizedTimelineFeatures}

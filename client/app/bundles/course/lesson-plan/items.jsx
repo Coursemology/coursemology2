@@ -1,8 +1,9 @@
 import { createRoot } from 'react-dom/client';
-
 import { BrowserRouter } from 'react-router-dom';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import LessonPlanLayout from 'course/lesson-plan/containers/LessonPlanLayout';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import storeCreator from './store';
 
 $(() => {

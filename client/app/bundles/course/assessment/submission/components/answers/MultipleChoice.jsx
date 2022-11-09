@@ -1,9 +1,11 @@
 import { memo } from 'react';
-import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
 import { FormControlLabel, Radio } from '@mui/material';
 import { green } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
+
 import { questionShape } from '../../propTypes';
 
 const MultipleChoiceOptions = ({
@@ -16,13 +18,14 @@ const MultipleChoiceOptions = ({
   <>
     {question.options.map((option) => (
       <FormControlLabel
+        key={option.id}
         checked={value && value.length > 0 && option.id === value[0]}
         control={<Radio style={{ padding: '0 12px', marginBottom: 10 }} />}
         disabled={readOnly}
-        key={option.id}
         label={
           <b>
             <div
+              dangerouslySetInnerHTML={{ __html: option.option.trim() }}
               style={
                 option.correct && readOnly && (showMcqMrqSolution || graderView)
                   ? {
@@ -32,7 +35,6 @@ const MultipleChoiceOptions = ({
                     }
                   : { verticalAlign: 'middle', marginBottom: 10 }
               }
-              dangerouslySetInnerHTML={{ __html: option.option.trim() }}
             />
           </b>
         }
@@ -81,8 +83,8 @@ const MultipleChoice = (props) => {
 
   return (
     <Controller
-      name={`${answerId}.option_ids`}
       control={control}
+      name={`${answerId}.option_ids`}
       render={({ field, fieldState }) => (
         <MemoMultipleChoiceOptions
           field={field}

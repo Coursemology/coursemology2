@@ -1,8 +1,10 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Slider } from '@mui/material';
-import styles from '../VideoPlayer.scss';
+import PropTypes from 'prop-types';
+
 import { changePlayerVolume } from '../../actions/video';
+
+import styles from '../VideoPlayer.scss';
 
 const propTypes = {
   volume: PropTypes.number.isRequired,
@@ -17,14 +19,14 @@ const defaultProps = {
 const VolumeSlider = (props) => (
   <span className={styles.volumeSlider}>
     <Slider
-      min={0}
       max={props.fineTuningScale}
-      size="small"
-      step={1}
-      value={props.volume * props.fineTuningScale}
+      min={0}
       onChange={(event, newValue) => {
         props.onVolumeChange(newValue / props.fineTuningScale);
       }}
+      size="small"
+      step={1}
+      value={props.volume * props.fineTuningScale}
     />
   </span>
 );

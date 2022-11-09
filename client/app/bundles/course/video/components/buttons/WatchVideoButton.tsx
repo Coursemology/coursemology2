@@ -1,12 +1,13 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 import { VideoListData } from 'types/course/videos';
-import { useNavigate } from 'react-router-dom';
-import { getCourseId } from 'lib/helpers/url-helpers';
-import { getEditVideoSubmissionURL } from 'lib/helpers/url-builders';
+
 import CourseAPI from 'api/course';
-import { toast } from 'react-toastify';
+import { getEditVideoSubmissionURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
 interface Props extends WrappedComponentProps {
   video: VideoListData;
@@ -36,7 +37,6 @@ const WatchVideoButton: FC<Props> = (props) => {
       return (
         <Button
           className="bg-white"
-          variant="outlined"
           color="primary"
           onClick={(): void =>
             navigate(
@@ -47,6 +47,7 @@ const WatchVideoButton: FC<Props> = (props) => {
               ),
             )
           }
+          variant="outlined"
         >
           {intl.formatMessage(translations.reWatch)}
         </Button>
@@ -55,7 +56,6 @@ const WatchVideoButton: FC<Props> = (props) => {
     return (
       <Button
         className="bg-white"
-        variant="outlined"
         color="primary"
         onClick={(): void => {
           CourseAPI.video.submissions
@@ -81,13 +81,14 @@ const WatchVideoButton: FC<Props> = (props) => {
               );
             });
         }}
+        variant="outlined"
       >
         {intl.formatMessage(translations.watch)}
       </Button>
     );
   }
   return (
-    <Button variant="outlined" color="primary" disabled>
+    <Button color="primary" disabled={true} variant="outlined">
       {intl.formatMessage(translations.watch)}
     </Button>
   );

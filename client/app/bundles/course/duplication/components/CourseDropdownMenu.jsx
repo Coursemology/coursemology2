@@ -1,11 +1,12 @@
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import MyLocation from '@mui/icons-material/MyLocation';
 import { IconButton, MenuItem, Select, Tooltip } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import MyLocation from '@mui/icons-material/MyLocation';
-import { courseListingShape } from 'course/duplication/propTypes';
+import PropTypes from 'prop-types';
+
 import TypeBadge from 'course/duplication/components/TypeBadge';
+import { courseListingShape } from 'course/duplication/propTypes';
 
 const styles = {
   prompt: {
@@ -67,8 +68,8 @@ class CourseDropdownMenu extends PureComponent {
           <Select
             disabled={disabled}
             onChange={onChange}
-            value={selectedCourseId || ''}
             style={styles.dropDown}
+            value={selectedCourseId || ''}
             {...dropDownMenuProps}
             variant="standard"
           >

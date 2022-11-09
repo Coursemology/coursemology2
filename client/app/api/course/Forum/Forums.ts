@@ -1,13 +1,14 @@
 import { AxiosResponse } from 'axios';
 import { ForumPostData } from 'types/course/disbursement';
 import {
-  ForumListData,
-  ForumTopicListData,
   ForumData,
+  ForumListData,
   ForumMetadata,
   ForumPermissions,
   ForumSearchParams,
+  ForumTopicListData,
 } from 'types/course/forums';
+
 import BaseCourseAPI from '../Base';
 
 export default class ForumsAPI extends BaseCourseAPI {

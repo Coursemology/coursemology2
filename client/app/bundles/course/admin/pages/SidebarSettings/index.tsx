@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { SidebarItems } from 'types/course/admin/sidebar';
-import useTranslation from 'lib/hooks/useTranslation';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
-import SidebarSettingsForm from './SidebarSettingsForm';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import { fetchSidebarItems, updateSidebarItems } from './operations';
+import SidebarSettingsForm from './SidebarSettingsForm';
 import translations from './translations';
 
 const SidebarSettings = (): JSX.Element => {
@@ -34,12 +35,12 @@ const SidebarSettings = (): JSX.Element => {
   };
 
   return (
-    <Preload while={fetchSidebarItems} render={<LoadingIndicator />}>
+    <Preload render={<LoadingIndicator />} while={fetchSidebarItems}>
       {(data): JSX.Element => (
         <SidebarSettingsForm
           data={data}
-          onSubmit={handleSubmit}
           disabled={submitting}
+          onSubmit={handleSubmit}
         />
       )}
     </Preload>

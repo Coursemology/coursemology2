@@ -1,6 +1,7 @@
 import { enableMapSet } from 'immer';
-import { applyMiddleware, createStore, compose, combineReducers } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+
 import globalAnnouncementReducer from './reducers';
 
 const defaultReducers = {};

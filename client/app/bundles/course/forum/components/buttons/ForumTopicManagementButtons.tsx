@@ -3,21 +3,24 @@ import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { ForumTopicEntity } from 'types/course/forums';
-import { AppDispatch } from 'types/store';
 import { MoreHoriz } from '@mui/icons-material';
 import { ClickAwayListener, IconButton } from '@mui/material';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import colors from 'tailwindcss/colors';
+import { ForumTopicEntity } from 'types/course/forums';
+import { AppDispatch } from 'types/store';
+
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
-import SubscribeButton from './SubscribeButton';
-import ForumTopicEdit from '../../pages/ForumTopicEdit';
+
 import { deleteForumTopic } from '../../operations';
+import ForumTopicEdit from '../../pages/ForumTopicEdit';
+
 import HideButton from './HideButton';
 import LockButton from './LockButton';
+import SubscribeButton from './SubscribeButton';
 
 interface Props {
   topic: ForumTopicEntity;
@@ -109,35 +112,35 @@ const ForumTopicManagementButtons: FC<Props> = (props) => {
       }
     >
       <SubscribeButton
-        emailSubscription={topic.emailSubscription}
-        entityType="topic"
-        entityId={topic.id}
-        entityUrl={topic.topicUrl}
-        entityTitle={topic.title}
         disabled={disableButton}
+        emailSubscription={topic.emailSubscription}
+        entityId={topic.id}
+        entityTitle={topic.title}
+        entityType="topic"
+        entityUrl={topic.topicUrl}
       />
       {topic.permissions.canSetHiddenTopic && (
-        <HideButton topic={topic} disabled={disableButton} />
+        <HideButton disabled={disableButton} topic={topic} />
       )}
       {topic.permissions.canSetLockedTopic && (
-        <LockButton topic={topic} disabled={disableButton} />
+        <LockButton disabled={disableButton} topic={topic} />
       )}
       {topic.permissions.canEditTopic && (
         <EditButton
           className={`topic-edit-${topic.id}`}
-          onClick={handleEdit}
           disabled={disableButton}
+          onClick={handleEdit}
         />
       )}
       {topic.permissions.canDeleteTopic && (
         <DeleteButton
           className={`topic-delete-${topic.id}`}
-          disabled={disableButton}
-          loading={isDeleting}
-          onClick={handleDelete}
           confirmMessage={t(translations.deletionConfirm, {
             title: topic.title,
           })}
+          disabled={disableButton}
+          loading={isDeleting}
+          onClick={handleDelete}
         />
       )}
     </div>
@@ -157,12 +160,12 @@ const ForumTopicManagementButtons: FC<Props> = (props) => {
         )}
         {managementButtons}
         <ForumTopicEdit
-          topic={topic}
           isOpen={isEditOpen}
+          navigateToShowAfterUpdate={navigateToShowAfterUpdate}
           onClose={(): void => {
             setIsEditOpen(false);
           }}
-          navigateToShowAfterUpdate={navigateToShowAfterUpdate}
+          topic={topic}
         />
       </div>
     </ClickAwayListener>

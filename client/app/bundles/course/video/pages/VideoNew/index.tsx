@@ -1,13 +1,15 @@
 import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
-import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { AppDispatch, AppState } from 'types/store';
+
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
-import { AppDispatch, AppState } from 'types/store';
-import { createVideo } from '../../operations';
+
 import VideoForm from '../../components/forms/VideoForm';
+import { createVideo } from '../../operations';
 import { getVideoTabs } from '../../selectors';
 
 interface Props {
@@ -72,12 +74,12 @@ const VideoNew: FC<Props> = (props) => {
 
   return (
     <VideoForm
-      open={open}
       editing={false}
-      title={t(translations.newVideo)}
-      onClose={onClose}
       initialValues={initialValues}
+      onClose={onClose}
       onSubmit={onSubmit}
+      open={open}
+      title={t(translations.newVideo)}
     />
   );
 };

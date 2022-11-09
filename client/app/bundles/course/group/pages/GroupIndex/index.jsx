@@ -1,13 +1,15 @@
-import { defineMessages, injectIntl } from 'react-intl';
-import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
+import { defineMessages, injectIntl } from 'react-intl';
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Tab, Tabs } from '@mui/material';
-import { Outlet, useParams, useNavigate, Link } from 'react-router-dom';
-import Note from 'lib/components/core/Note';
+import PropTypes from 'prop-types';
+
 import CourseAPI from 'api/course';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
+import PageHeader from 'lib/components/navigation/PageHeader';
+
 import GroupNew from '../GroupNew';
 
 const translations = defineMessages({
@@ -61,19 +63,19 @@ const GroupIndex = (props) => {
   const renderTabs =
     groupCategories.groupCategories.length > 1 ? (
       <Tabs
+        scrollButtons="auto"
         value={
           parseInt(groupCategoryId, 10) ?? groupCategories.groupCategories[0].id
         }
         variant="scrollable"
-        scrollButtons="auto"
       >
         {groupCategories.groupCategories.map((category) => (
           <Tab
             key={category.id}
-            label={category.name}
-            value={category.id}
-            to={`${category.id}`}
             component={Link}
+            label={category.name}
+            to={`${category.id}`}
+            value={category.id}
           />
         ))}
       </Tabs>

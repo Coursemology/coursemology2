@@ -1,4 +1,5 @@
 import { defineMessages } from 'react-intl';
+
 import { fields } from 'course/lesson-plan/constants';
 
 const {

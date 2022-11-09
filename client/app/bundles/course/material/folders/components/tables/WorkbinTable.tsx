@@ -1,7 +1,9 @@
-import { FC, useState, memo, useMemo, ReactNode } from 'react';
+import { FC, memo, ReactNode, useMemo, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import equal from 'fast-deep-equal';
-
+import {
+  ArrowDropDown as ArrowDropDownIcon,
+  ArrowDropUp as ArrowDropUpIcon,
+} from '@mui/icons-material';
 import {
   Button,
   Table,
@@ -10,18 +12,14 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import {
-  ArrowDropDown as ArrowDropDownIcon,
-  ArrowDropUp as ArrowDropUpIcon,
-} from '@mui/icons-material';
-
+import equal from 'fast-deep-equal';
 import {
   FolderMiniEntity,
   MaterialMiniEntity,
 } from 'types/course/material/folders';
 
-import TableSubfolderRow from './TableSubfolderRow';
 import TableMaterialRow from './TableMaterialRow';
+import TableSubfolderRow from './TableSubfolderRow';
 
 interface Props extends WrappedComponentProps {
   currFolderId: number;
@@ -118,12 +116,12 @@ const WorkbinTable: FC<Props> = (props) => {
 
     return (
       <Button
+        disableFocusRipple={true}
+        disableRipple={true}
+        endIcon={endIcon}
         onClick={(): void => {
           sort(columnName);
         }}
-        endIcon={endIcon}
-        disableFocusRipple
-        disableRipple
         style={{ padding: 0, alignItems: 'center', justifyContent: 'start' }}
       >
         {columnName}
@@ -154,11 +152,11 @@ const WorkbinTable: FC<Props> = (props) => {
           return (
             <TableSubfolderRow
               key={`subfolder-${subfolder.id}`}
-              currFolderId={currFolderId}
-              subfolder={subfolder}
-              isCurrentCourseStudent={isCurrentCourseStudent}
               canEditSubfolders={canEditSubfolders}
+              currFolderId={currFolderId}
               isConcrete={isConcrete}
+              isCurrentCourseStudent={isCurrentCourseStudent}
+              subfolder={subfolder}
             />
           );
         })}
@@ -166,10 +164,10 @@ const WorkbinTable: FC<Props> = (props) => {
           return (
             <TableMaterialRow
               key={`material-${material.id}`}
-              currFolderId={currFolderId}
-              material={material}
               canEditSubfolders={canEditSubfolders}
+              currFolderId={currFolderId}
               isConcrete={isConcrete}
+              material={material}
             />
           );
         })}

@@ -1,5 +1,5 @@
 import { createElement } from 'react';
-import { Radio, Typography, SvgIcon } from '@mui/material';
+import { Radio, SvgIcon, Typography } from '@mui/material';
 
 interface IconRadioProps {
   value?: string;
@@ -15,7 +15,7 @@ const IconRadio = (props: IconRadioProps): JSX.Element => (
       props.description ? 'items-start' : 'items-center'
     }`}
   >
-    <Radio value={props.value} className="pl-0" disabled={props.disabled} />
+    <Radio className="pl-0" disabled={props.disabled} value={props.value} />
 
     {props.icon &&
       createElement(props.icon, {
@@ -26,16 +26,16 @@ const IconRadio = (props: IconRadioProps): JSX.Element => (
 
     <div>
       <Typography
-        variant="body1"
         color={props.disabled ? 'text.disabled' : 'text.primary'}
+        variant="body1"
       >
         {props.label}
       </Typography>
 
       {props.description && (
         <Typography
-          variant="body2"
           color={props.disabled ? 'text.disabled' : 'text.secondary'}
+          variant="body2"
         >
           {props.description}
         </Typography>

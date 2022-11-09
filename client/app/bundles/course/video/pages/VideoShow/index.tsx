@@ -1,20 +1,23 @@
-import PageHeader from 'lib/components/navigation/PageHeader';
-import { getCourseId } from 'lib/helpers/url-helpers';
-import { Card, CardContent, CardHeader } from '@mui/material';
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useDispatch, useSelector } from 'react-redux';
+import { Card, CardContent, CardHeader } from '@mui/material';
 import { AppDispatch, AppState } from 'types/store';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { getVideosURL } from 'lib/helpers/url-builders';
-import { loadVideo } from '../../operations';
-import VideoPlayerWithStore from './VideoPlayerWithStore';
+import { getCourseId } from 'lib/helpers/url-helpers';
+
 import VideoManagementButtons from '../../components/buttons/VideoManagementButtons';
+import WatchVideoButton from '../../components/buttons/WatchVideoButton';
+import { loadVideo } from '../../operations';
 import { getVideo } from '../../selectors';
 import DescriptionCard from '../../submission/components/misc/DescriptionCard';
-import WatchVideoButton from '../../components/buttons/WatchVideoButton';
+
+import VideoPlayerWithStore from './VideoPlayerWithStore';
 
 type Props = WrappedComponentProps;
 
@@ -67,7 +70,7 @@ const VideoShow: FC<Props> = (props) => {
 
   if (video?.permissions?.canManage) {
     headerToolbars.push(
-      <VideoManagementButtons video={video} navigateToIndex />,
+      <VideoManagementButtons navigateToIndex={true} video={video} />,
     );
   }
 
@@ -79,8 +82,8 @@ const VideoShow: FC<Props> = (props) => {
           <CardHeader title={intl.formatMessage(translations.statistics)} />
           <CardContent>
             <VideoPlayerWithStore
-              video={video.videoStatistics.video}
               statistics={video.videoStatistics.statistics}
+              video={video.videoStatistics.video}
             />
           </CardContent>
         </Card>
@@ -93,8 +96,8 @@ const VideoShow: FC<Props> = (props) => {
   return (
     <>
       <PageHeader
-        title={`Video - ${video?.title}`}
         returnLink={returnLink}
+        title={`Video - ${video?.title}`}
         toolbars={headerToolbars}
       />
       {isLoading ? <LoadingIndicator /> : renderBody}

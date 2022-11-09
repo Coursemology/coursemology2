@@ -1,15 +1,17 @@
-import CourseAPI from 'api/course';
 import { AxiosResponse } from 'axios';
 import {
   CommentPermissions,
   CommentPostListData,
   CommentPostMiniEntity,
   CommentSettings,
-  CommentTabTypes,
   CommentTabInfo,
+  CommentTabTypes,
   CommentTopicData,
 } from 'types/course/comments';
 import { Operation } from 'types/store';
+
+import CourseAPI from 'api/course';
+
 import * as actions from './actions';
 
 const formatPostAttributes = (formattedText: string): Object => {

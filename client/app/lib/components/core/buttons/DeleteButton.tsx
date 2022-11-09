@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import Delete from '@mui/icons-material/Delete';
+import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
+
 import ConfirmationDialog from '../dialogs/ConfirmationDialog';
 
 interface Props extends IconButtonProps {
@@ -26,6 +27,7 @@ const DeleteButton = ({
       <Tooltip title={tooltip || 'Delete'}>
         <span>
           <IconButton
+            color="error"
             disabled={disabled}
             onClick={(): void => {
               if (confirmMessage) {
@@ -34,7 +36,6 @@ const DeleteButton = ({
                 onClick();
               }
             }}
-            color="error"
             {...props}
             data-testid="DeleteIconButton"
           >
@@ -44,15 +45,15 @@ const DeleteButton = ({
       </Tooltip>
       {dialogOpen && (
         <ConfirmationDialog
-          message={confirmMessage}
           disableCancelButton={disabled}
           disableConfirmButton={disabled}
           loadingConfirmButton={loading}
-          open={dialogOpen}
+          message={confirmMessage}
           onCancel={(): void => setDialogOpen(false)}
           onConfirm={(): void => {
             onClick().finally(() => setDialogOpen(false));
           }}
+          open={dialogOpen}
         />
       )}
     </>

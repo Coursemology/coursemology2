@@ -1,11 +1,13 @@
 import { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button } from '@mui/material';
-import { injectIntl, FormattedMessage, defineMessages } from 'react-intl';
+import PropTypes from 'prop-types';
+
 import NotificationPopup from 'lib/containers/NotificationPopup';
-import actionTypes, { dialogTypes } from '../../constants';
+
 import { createCategory } from '../../actions';
+import actionTypes, { dialogTypes } from '../../constants';
 import GroupFormDialog from '../../forms/GroupFormDialog';
 import NameDescriptionForm from '../../forms/NameDescriptionForm';
 
@@ -53,13 +55,13 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
   return (
     <>
       <Button
-        className="new-group-category-button bg-white"
         key="new-group-category-button"
-        variant="outlined"
+        className="new-group-category-button bg-white"
         color="primary"
         disabled={isManagingGroups}
         onClick={handleOpen}
         style={styles.newButton}
+        variant="outlined"
       >
         <FormattedMessage {...translations.new} />
       </Button>
@@ -69,14 +71,14 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
         skipConfirmation={!isDirty}
       >
         <NameDescriptionForm
-          onSubmit={onFormSubmit}
+          emitsVia={(nameDescriptionForm) =>
+            setIsDirty(nameDescriptionForm.isDirty)
+          }
           initialValues={{
             name: '',
             description: '',
           }}
-          emitsVia={(nameDescriptionForm) =>
-            setIsDirty(nameDescriptionForm.isDirty)
-          }
+          onSubmit={onFormSubmit}
         />
       </GroupFormDialog>
       <NotificationPopup />

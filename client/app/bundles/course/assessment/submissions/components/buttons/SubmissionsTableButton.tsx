@@ -1,6 +1,5 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Button } from '@mui/material';
 
 import { getEditAssessmentSubmissionURL } from 'lib/helpers/url-builders';
@@ -28,15 +27,15 @@ const SubmissionsTableButton: FC<Props> = (props) => {
 
   return (
     <Button
-      id={`submission-button-${submissionId}`}
+      color={canGrade ? 'primary' : 'info'}
       href={getEditAssessmentSubmissionURL(
         getCourseId(),
         assessmentId,
         submissionId,
       )}
-      variant="contained"
+      id={`submission-button-${submissionId}`}
       size="small"
-      color={canGrade ? 'primary' : 'info'}
+      variant="contained"
     >
       {canGrade
         ? intl.formatMessage(translations.gradeButton)

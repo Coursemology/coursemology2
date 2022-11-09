@@ -1,9 +1,3 @@
-import { Link } from '@mui/material';
-import equal from 'fast-deep-equal';
-import DataTable from 'lib/components/core/layouts/DataTable';
-import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
-import { getCourseUserURL } from 'lib/helpers/url-builders';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { FC, memo } from 'react';
 import {
   defineMessages,
@@ -12,8 +6,16 @@ import {
   WrappedComponentProps,
 } from 'react-intl';
 import ReactTooltip from 'react-tooltip';
+import { Link } from '@mui/material';
+import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumDisbursementUserEntity } from 'types/course/disbursement';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
+import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
+
 import PointField from '../fields/PointField';
 
 interface Props extends WrappedComponentProps {
@@ -89,8 +91,8 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         customBodyRenderLite: (dataIndex: number): JSX.Element => (
           <a
             href={getCourseUserURL(getCourseId(), forumUsers[dataIndex].id)}
-            target="_blank"
             rel="noreferrer"
+            target="_blank"
           >
             {forumUsers[dataIndex].name}
           </a>
@@ -161,14 +163,14 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
               </ReactTooltip>
             )}
             <Link
-              component="button"
               className={`view-posts-${forumUsers[dataIndex].id}`}
+              component="button"
+              data-for="view-posts"
+              data-tip={true}
               form=""
               onClick={(): void => {
                 onPostClick(forumUsers[dataIndex]);
               }}
-              data-tip
-              data-for="view-posts"
             >
               {forumUsers[dataIndex].postCount}
             </Link>
@@ -235,10 +237,10 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
 
   return (
     <DataTable
+      columns={columns}
       data={forumUsers}
       options={options}
-      columns={columns}
-      withMargin
+      withMargin={true}
     />
   );
 };

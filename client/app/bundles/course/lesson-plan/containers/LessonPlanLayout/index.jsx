@@ -1,21 +1,22 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
-import { defineMessages, FormattedMessage } from 'react-intl';
 import { ListSubheader } from '@mui/material';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import NotificationPopup from 'lib/containers/NotificationPopup';
-import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
-import { lessonPlanTypesGroups } from 'lib/types';
+import PropTypes from 'prop-types';
+
 import { fetchLessonPlan } from 'course/lesson-plan/actions';
-import LessonPlanShow from 'course/lesson-plan/pages/LessonPlanShow';
-import LessonPlanEdit from 'course/lesson-plan/pages/LessonPlanEdit';
+import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
 import LessonPlanFilter from 'course/lesson-plan/containers/LessonPlanFilter';
 import LessonPlanNav from 'course/lesson-plan/containers/LessonPlanNav';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
-import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
+import LessonPlanEdit from 'course/lesson-plan/pages/LessonPlanEdit';
+import LessonPlanShow from 'course/lesson-plan/pages/LessonPlanShow';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
+import NotificationPopup from 'lib/containers/NotificationPopup';
+import { lessonPlanTypesGroups } from 'lib/types';
 
 const translations = defineMessages({
   empty: {
@@ -60,7 +61,7 @@ class LessonPlanLayout extends Component {
 
     if (!groups || groups.length < 1) {
       return (
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...translations.empty} />
         </ListSubheader>
       );
@@ -68,11 +69,15 @@ class LessonPlanLayout extends Component {
 
     return (
       <Routes>
-        <Route exact path={lessonPlanPath} element={<LessonPlanShow />} />
         <Route
-          exact
-          path={`${lessonPlanPath}/edit`}
+          element={<LessonPlanShow />}
+          exact={true}
+          path={lessonPlanPath}
+        />
+        <Route
           element={<LessonPlanEdit />}
+          exact={true}
+          path={`${lessonPlanPath}/edit`}
         />
       </Routes>
     );

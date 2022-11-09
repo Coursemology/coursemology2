@@ -1,26 +1,27 @@
 import { produce } from 'immer';
 import {
   createEntityStore,
+  removeAllFromStore,
+  removeFromStore,
   saveEntityToStore,
   saveListToStore,
-  removeFromStore,
-  removeAllFromStore,
 } from 'utilities/store';
+
 import {
-  UsersState,
-  UsersActionType,
-  SAVE_USER,
-  SAVE_USER_LIST,
-  SAVE_MANAGE_USER_LIST,
-  DELETE_USER,
-  SAVE_PERSONAL_TIME_LIST,
-  UPDATE_PERSONAL_TIME,
+  DELETE_EXPERIENCE_POINTS_RECORD,
   DELETE_PERSONAL_TIME,
-  UPDATE_USER_OPTION,
+  DELETE_USER,
   DELETE_USER_OPTION,
   SAVE_EXPERIENCE_POINTS_RECORD_LIST,
+  SAVE_MANAGE_USER_LIST,
+  SAVE_PERSONAL_TIME_LIST,
+  SAVE_USER,
+  SAVE_USER_LIST,
   UPDATE_EXPERIENCE_POINTS_RECORD,
-  DELETE_EXPERIENCE_POINTS_RECORD,
+  UPDATE_PERSONAL_TIME,
+  UPDATE_USER_OPTION,
+  UsersActionType,
+  UsersState,
 } from './types';
 
 const initialState: UsersState = {

@@ -1,11 +1,12 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import {
-  showQuestionForm,
   createSurveyQuestion,
+  showQuestionForm,
 } from 'course/survey/actions/questions';
 import { questionTypes } from 'course/survey/constants';
 import { formatQuestionFormData } from 'course/survey/utils';
@@ -97,10 +98,10 @@ class NewQuestionButton extends Component {
   render() {
     return (
       <Button
-        variant="contained"
         color="primary"
         disabled={this.props.disabled}
         onClick={this.showNewQuestionForm}
+        variant="contained"
       >
         <FormattedMessage {...translations.addQuestion} />
       </Button>

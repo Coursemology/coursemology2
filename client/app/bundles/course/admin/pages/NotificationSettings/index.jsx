@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import {
   ListSubheader,
   Switch,
@@ -11,18 +10,20 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import PropTypes from 'prop-types';
 
+import adminTranslations from 'course/translations.intl';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import messagesTranslations from 'lib/translations/messages';
-import adminTranslations from 'course/translations.intl';
+
 import {
   fetchNotificationSettings,
   updateNotificationSettings,
 } from './operations';
 import translations, {
   settingComponents,
-  settingTitles,
   settingDescriptions,
+  settingTitles,
 } from './translations.intl';
 
 class NotificationSettings extends Component {
@@ -93,7 +94,7 @@ class NotificationSettings extends Component {
 
     if (emailSettings.length < 1) {
       return (
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...translations.noEmailSettings} />
         </ListSubheader>
       );
@@ -160,7 +161,7 @@ class NotificationSettings extends Component {
       >
         <TableCell colSpan={1}>{componentTitle}</TableCell>
         <TableCell colSpan={2}>{settingTitle}</TableCell>
-        <TableCell colSpan={6} className="whitespace-normal break-words">
+        <TableCell className="whitespace-normal break-words" colSpan={6}>
           {settingDescription}
         </TableCell>
         <TableCell>

@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Checkbox,
   List,
@@ -9,7 +9,8 @@ import {
   Select,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+
 import { memberShape } from '../../../propTypes';
 
 const translations = defineMessages({
@@ -89,8 +90,8 @@ const GroupUserManagerListItem = ({
   isChecked,
 }) => (
   <ListItem
-    button
-    disablePadding
+    button={true}
+    disablePadding={true}
     style={
       colour
         ? { ...styles.listItem, backgroundColor: colour.light }
@@ -112,16 +113,16 @@ const GroupUserManagerListItem = ({
     {showDropdown ? (
       <div style={styles.listItemWithDropdown}>
         <Select
-          onClick={() => {}}
           onChange={(event) => onChangeDropdown(event.target.value, user)}
-          value={user.groupRole}
+          onClick={() => {}}
           style={styles.listItemTextSize}
+          value={user.groupRole}
           variant="standard"
         >
-          <MenuItem value="normal" style={styles.listItemTextSize}>
+          <MenuItem style={styles.listItemTextSize} value="normal">
             <FormattedMessage {...translations.normal} />
           </MenuItem>
-          <MenuItem value="manager" style={styles.listItemTextSize}>
+          <MenuItem style={styles.listItemTextSize} value="manager">
             <FormattedMessage {...translations.manager} />
           </MenuItem>
         </Select>
@@ -165,12 +166,12 @@ const GroupUserManagerList = ({
         return (
           <GroupUserManagerListItem
             key={user.id}
-            user={user}
             colour={colour}
+            isChecked={isChecked}
+            onChangeDropdown={onChangeDropdown}
             onCheck={onCheck}
             showDropdown={showDropdown}
-            onChangeDropdown={onChangeDropdown}
-            isChecked={isChecked}
+            user={user}
           />
         );
       })}
@@ -180,7 +181,7 @@ const GroupUserManagerList = ({
   return (
     <List style={styles.list}>
       {students.length === 0 && staff.length === 0 ? (
-        <ListItem button style={{ color: grey[400] }}>
+        <ListItem button={true} style={{ color: grey[400] }}>
           <ListItemText>
             <FormattedMessage {...translations.noUsersFound} />
           </ListItemText>

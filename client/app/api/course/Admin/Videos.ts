@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios';
-
 import type {
   VideosSettingsData,
   VideosSettingsPostData,
   VideosTab,
   VideosTabPostData,
 } from 'types/course/admin/videos';
+
 import BaseAdminAPI from './Base';
 
 type Response = Promise<AxiosResponse<VideosSettingsData>>;

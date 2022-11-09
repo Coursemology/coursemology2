@@ -1,16 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Slide, Typography } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import useEmitterFactory, { Emits } from 'react-emitter-factory';
 import { Control, FormState, useForm, UseFormWatch } from 'react-hook-form';
-import { AnyObjectSchema } from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { toast } from 'react-toastify';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Button, Slide, Typography } from '@mui/material';
 import { isEmpty } from 'lodash';
+import { AnyObjectSchema } from 'yup';
 
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
-import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import messagesTranslations from 'lib/translations/messages';
 
 type Data = Record<string, any>;
@@ -138,14 +138,14 @@ const Form = (props: FormProps): JSX.Element => {
   };
 
   return (
-    <form onSubmit={handleSubmit(processAndSubmit)} className="pb-32">
+    <form className="pb-32" onSubmit={handleSubmit(processAndSubmit)}>
       {props.children?.(control, watch, formState)}
 
       {props.headsUp && (
         <Slide
-          in={formState.isDirty || props.dirty}
           direction="up"
-          unmountOnExit
+          in={formState.isDirty || props.dirty}
+          unmountOnExit={true}
         >
           <div className="fixed inset-x-0 bottom-0 z-10 flex w-full items-center justify-between bg-neutral-800 px-8 py-4 text-white sm:bottom-8 sm:mx-auto sm:w-fit sm:rounded-lg sm:drop-shadow-xl">
             <Typography variant="body1">
@@ -154,19 +154,19 @@ const Form = (props: FormProps): JSX.Element => {
 
             <div className="ml-10">
               <Button
-                onClick={resetForm}
                 className={`mr-4 ${props.disabled && 'text-neutral-500'}`}
                 disabled={props.disabled}
+                onClick={resetForm}
               >
                 {t(translations.reset)}
               </Button>
 
               <Button
-                type="submit"
-                variant="contained"
-                disableElevation
                 className={`${props.disabled && 'bg-neutral-500'}`}
                 disabled={props.disabled}
+                disableElevation={true}
+                type="submit"
+                variant="contained"
               >
                 {t(translations.saveChanges)}
               </Button>

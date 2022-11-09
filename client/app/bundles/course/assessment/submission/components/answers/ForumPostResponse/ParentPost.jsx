@@ -1,6 +1,8 @@
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+
 import { forumPostShape } from 'course/assessment/submission/propTypes';
+
 import ForumPost from './ForumPost';
 import Labels from './Labels';
 
@@ -31,7 +33,7 @@ const ParentPost = ({ post, style = {} }) => (
       <FormattedMessage {...translations.postMadeInResponseTo} />
     </p>
     <Labels post={post} />
-    <ForumPost post={post} isExpandable style={styles.post} />
+    <ForumPost isExpandable={true} post={post} style={styles.post} />
   </div>
 );
 

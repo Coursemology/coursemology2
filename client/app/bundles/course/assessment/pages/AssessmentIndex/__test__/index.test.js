@@ -1,5 +1,7 @@
 import { mount } from 'enzyme';
+
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import storeCreator from '../../../store';
 import AssessmentIndex from '../index';
 

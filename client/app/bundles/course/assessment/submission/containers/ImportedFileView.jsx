@@ -1,11 +1,13 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages } from 'react-intl';
 import { Chip } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
-import { fileShape } from '../propTypes';
+
 import { workflowStates } from '../constants';
+import { fileShape } from '../propTypes';
 
 const translations = defineMessages({
   uploadedFiles: {
@@ -47,7 +49,7 @@ class VisibleImportedFileView extends Component {
     const { intl, handleDeleteFile } = this.props;
     return (
       <ConfirmationDialog
-        open={deleteConfirmation}
+        message={intl.formatMessage(translations.deleteConfirmation)}
         onCancel={() =>
           this.setState({ deleteConfirmation: false, deleteFileId: null })
         }
@@ -55,7 +57,7 @@ class VisibleImportedFileView extends Component {
           handleDeleteFile(deleteFileId);
           this.setState({ deleteConfirmation: false, deleteFileId: null });
         }}
-        message={intl.formatMessage(translations.deleteConfirmation)}
+        open={deleteConfirmation}
       />
     );
   }
@@ -75,9 +77,9 @@ class VisibleImportedFileView extends Component {
     const staged = file.staged || false;
     return staged ? null : (
       <Chip
-        clickable
-        color={chipColor}
         key={file.id}
+        clickable={true}
+        color={chipColor}
         label={file.filename}
         onClick={() => handleFileTabbing(index)}
         onDelete={onRequestDelete}

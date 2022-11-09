@@ -1,7 +1,9 @@
-import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
-import history from 'lib/history';
+import { mount } from 'enzyme';
+
 import storeCreator from 'course/survey/store';
+import history from 'lib/history';
+
 import SurveyLayout from '../index';
 
 const surveys = [

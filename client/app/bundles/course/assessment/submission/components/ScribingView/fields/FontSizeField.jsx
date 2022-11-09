@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
@@ -33,9 +34,9 @@ const FontSizeField = (props) => {
       <FormControl variant="standard">
         <InputLabel>{intl.formatMessage(translations.fontSize)}</InputLabel>
         <Select
-          value={fontSizeValue}
           onChange={onChangeFontSize}
           style={styles.select}
+          value={fontSizeValue}
           variant="standard"
         >
           {menuItems}

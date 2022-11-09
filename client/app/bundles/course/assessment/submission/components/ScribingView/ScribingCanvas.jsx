@@ -3,14 +3,14 @@ import { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+
 import {
-  scribingTools,
   scribingShapes,
   scribingToolColor,
-  scribingToolThickness,
   scribingToolLineStyle,
+  scribingTools,
+  scribingToolThickness,
 } from '../../constants';
-
 import { scribingShape } from '../../propTypes';
 
 const propTypes = {
@@ -1056,9 +1056,9 @@ export default class ScribingCanvas extends Component {
     const isCanvasLoaded = this.props.scribing.isCanvasLoaded;
 
     return (
-      <div style={styles.canvas_div} id={`canvas-container-${answerId}`}>
+      <div id={`canvas-container-${answerId}`} style={styles.canvas_div}>
         {!isCanvasLoaded ? <LoadingIndicator /> : null}
-        <canvas style={styles.canvas} id={`canvas-${answerId}`} />
+        <canvas id={`canvas-${answerId}`} style={styles.canvas} />
       </div>
     );
   }

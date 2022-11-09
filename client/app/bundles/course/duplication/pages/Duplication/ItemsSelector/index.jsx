@@ -1,13 +1,15 @@
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { itemSelectorPanels } from 'course/duplication/constants';
-import destinationCourseSelector from 'course/duplication/selectors/destinationCourse';
 import { courseShape } from 'course/duplication/propTypes';
-import AssessmentsSelector from './AssessmentsSelector';
-import SurveysSelector from './SurveysSelector';
+import destinationCourseSelector from 'course/duplication/selectors/destinationCourse';
+
 import AchievementsSelector from './AchievementsSelector';
+import AssessmentsSelector from './AssessmentsSelector';
 import MaterialsSelector from './MaterialsSelector';
+import SurveysSelector from './SurveysSelector';
 import VideosSelector from './VideosSelector';
 
 const translations = defineMessages({

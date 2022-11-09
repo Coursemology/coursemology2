@@ -1,13 +1,14 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, defineMessages } from 'react-intl';
-import { connect } from 'react-redux';
 import { Draggable } from 'react-beautiful-dnd';
+import { defineMessages, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 import { showDeleteConfirmation } from 'course/survey/actions';
-import { formatQuestionFormData } from 'course/survey/utils';
-import { questionShape } from 'course/survey/propTypes';
 import * as questionActions from 'course/survey/actions/questions';
+import { questionShape } from 'course/survey/propTypes';
+import { formatQuestionFormData } from 'course/survey/utils';
+
 import QuestionCard from './QuestionCard';
 
 const translations = defineMessages({

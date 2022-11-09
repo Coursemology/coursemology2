@@ -2,15 +2,17 @@ import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
-import PropTypes from 'prop-types';
 import { Button, Card, CardContent } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import withRouter from 'lib/components/navigation/withRouter';
-import { postShape, annotationShape } from '../propTypes';
+
+import * as annotationActions from '../actions/annotations';
 import CodaveriCommentCard from '../components/comment/CodaveriCommentCard';
 import CommentCard from '../components/comment/CommentCard';
 import CommentField from '../components/comment/CommentField';
-import * as annotationActions from '../actions/annotations';
 import { workflowStates } from '../constants';
+import { annotationShape, postShape } from '../propTypes';
 
 const translations = defineMessages({
   comment: {
@@ -56,20 +58,20 @@ class VisibleAnnotations extends Component {
       if (posts.length === 0 || fieldVisible)
         return (
           <CommentField
-            value={commentForms.annotations[fileId][lineNumber]}
-            isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
-            isSubmittingDelayedComment={commentForms.isSubmittingDelayedComment}
-            isUpdatingComment={commentForms.isUpdatingComment}
             createComment={createComment}
             handleChange={handleCreateChange}
+            isSubmittingDelayedComment={commentForms.isSubmittingDelayedComment}
+            isSubmittingNormalComment={commentForms.isSubmittingNormalComment}
+            isUpdatingComment={commentForms.isUpdatingComment}
             renderDelayedCommentButton={renderDelayedCommentButton}
+            value={commentForms.annotations[fileId][lineNumber]}
           />
         );
       return (
         <Button
-          variant="contained"
           color="primary"
           onClick={() => this.setState({ fieldVisible: true })}
+          variant="contained"
         >
           <FormattedMessage {...translations.comment} />
         </Button>
@@ -86,11 +88,11 @@ class VisibleAnnotations extends Component {
               return (
                 <CodaveriCommentCard
                   key={post.id}
-                  post={post}
-                  editValue={commentForms.posts[post.id]}
-                  updateComment={updateCodaveriFeedback}
                   deleteComment={() => deleteComment(post.id)}
+                  editValue={commentForms.posts[post.id]}
                   handleChange={(value) => handleUpdateChange(post.id, value)}
+                  post={post}
+                  updateComment={updateCodaveriFeedback}
                 />
               );
             }
@@ -98,11 +100,11 @@ class VisibleAnnotations extends Component {
               return (
                 <CommentCard
                   key={post.id}
-                  post={post}
-                  editValue={commentForms.posts[post.id]}
-                  updateComment={(value) => updateComment(post.id, value)}
                   deleteComment={() => deleteComment(post.id)}
+                  editValue={commentForms.posts[post.id]}
                   handleChange={(value) => handleUpdateChange(post.id, value)}
+                  post={post}
+                  updateComment={(value) => updateComment(post.id, value)}
                 />
               );
             }
@@ -127,7 +129,7 @@ VisibleAnnotations.propTypes = {
   fileId: PropTypes.number.isRequired,
   lineNumber: PropTypes.number.isRequired,
   posts: PropTypes.arrayOf(postShape),
-  /* eslint-disable react/no-unused-prop-types */
+
   match: PropTypes.shape({
     params: PropTypes.shape({
       courseId: PropTypes.string,
@@ -139,7 +141,6 @@ VisibleAnnotations.propTypes = {
   answerId: PropTypes.number.isRequired,
   graderView: PropTypes.bool.isRequired,
   renderDelayedCommentButton: PropTypes.bool,
-  /* eslint-enable react/no-unused-prop-types */
 
   handleCreateChange: PropTypes.func.isRequired,
   handleUpdateChange: PropTypes.func.isRequired,

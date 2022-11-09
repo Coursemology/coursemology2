@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
 
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import NotificationBar from 'lib/components/core/NotificationBar';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import { getOrCreateNode } from 'lib/helpers/rails-helpers';
 
 /**

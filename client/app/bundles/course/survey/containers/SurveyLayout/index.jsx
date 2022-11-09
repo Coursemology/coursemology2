@@ -1,13 +1,15 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Routes, Route, useParams } from 'react-router-dom';
-import { surveyShape } from 'course/survey/propTypes';
-import SurveyShow from 'course/survey/pages/SurveyShow';
-import SurveyResults from 'course/survey/pages/SurveyResults';
-import ResponseShow from 'course/survey/pages/ResponseShow';
+import { Route, Routes, useParams } from 'react-router-dom';
+import PropTypes from 'prop-types';
+
 import ResponseEdit from 'course/survey/pages/ResponseEdit';
 import ResponseIndex from 'course/survey/pages/ResponseIndex';
+import ResponseShow from 'course/survey/pages/ResponseShow';
+import SurveyResults from 'course/survey/pages/SurveyResults';
+import SurveyShow from 'course/survey/pages/SurveyShow';
+import { surveyShape } from 'course/survey/propTypes';
 import PageHeader from 'lib/components/navigation/PageHeader';
+
 import AdminMenu from './AdminMenu';
 
 const backLocations = (courseId, surveyId, Page) => {
@@ -52,13 +54,13 @@ const PageWithTitleBar = (props) => {
     <>
       {survey && (
         <PageHeader
+          returnLink={backLocations(courseId, surveyId, page)}
           title={survey.title}
           toolbars={
             surveyId
               ? [<AdminMenu key="admin-menu" {...{ survey, surveyId }} />]
               : null
           }
-          returnLink={backLocations(courseId, surveyId, page)}
         />
       )}
       {pageToRender}
@@ -85,48 +87,48 @@ const SurveyLayout = ({ surveys }) => {
   return (
     <Routes>
       <Route
-        path=""
         element={
           <PageWithTitleBar
             {...{ page: 'SurveyShow', survey, courseId, surveyId }}
           />
         }
+        path=""
       />
       <Route
-        exact
-        path="/results"
         element={
           <PageWithTitleBar
             {...{ page: 'SurveyResults', survey, courseId, surveyId }}
           />
         }
+        exact={true}
+        path="/results"
       />
       <Route
-        exact
-        path="/responses"
         element={
           <PageWithTitleBar
             {...{ page: 'ResponseIndex', survey, courseId, surveyId }}
           />
         }
+        exact={true}
+        path="/responses"
       />
       <Route
-        exact
-        path="/responses/:responseId"
         element={
           <PageWithTitleBar
             {...{ page: 'ResponseShow', survey, courseId, surveyId }}
           />
         }
+        exact={true}
+        path="/responses/:responseId"
       />
       <Route
-        exact
-        path="/responses/:responseId/edit"
         element={
           <PageWithTitleBar
             {...{ page: 'ResponseEdit', survey, courseId, surveyId }}
           />
         }
+        exact={true}
+        path="/responses/:responseId/edit"
       />
     </Routes>
   );

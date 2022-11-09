@@ -1,15 +1,17 @@
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 import { getScribingId } from 'lib/helpers/url-helpers';
-import ScribingQuestionForm from './containers/ScribingQuestionForm';
+
 import * as scribingQuestionActionCreators from './actions/scribingQuestionActionCreators';
-import { questionShape } from './propTypes';
+import ScribingQuestionForm from './containers/ScribingQuestionForm';
 import translations from './containers/ScribingQuestionForm/ScribingQuestionForm.intl';
+import { questionShape } from './propTypes';
 
 function buildInitialValues(scribingQuestion) {
   return scribingQuestion.question

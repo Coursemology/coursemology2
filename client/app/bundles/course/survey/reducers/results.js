@@ -1,5 +1,5 @@
 import actionTypes from '../constants';
-import { sorts, sortResultsSectionElements } from '../utils';
+import { sortResultsSectionElements, sorts } from '../utils';
 
 const initialState = {
   isLoading: false,

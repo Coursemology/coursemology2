@@ -1,8 +1,10 @@
-import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
+import { mount } from 'enzyme';
+
 import CourseAPI from 'api/course';
-import storeCreator from 'course/lesson-plan/store';
 import MilestoneFormDialog from 'course/lesson-plan/containers/MilestoneFormDialog';
+import storeCreator from 'course/lesson-plan/store';
+
 import NewMilestoneButton from '../NewMilestoneButton';
 
 beforeEach(() => {

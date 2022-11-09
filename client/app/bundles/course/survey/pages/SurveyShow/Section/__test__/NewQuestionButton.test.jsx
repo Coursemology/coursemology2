@@ -1,9 +1,11 @@
 import ReactDOM from 'react-dom';
 import ReactTestUtils from 'react-dom/test-utils';
 import { mount } from 'enzyme';
+
 import CourseAPI from 'api/course';
-import storeCreator from 'course/survey/store';
 import QuestionFormDialogue from 'course/survey/containers/QuestionFormDialogue';
+import storeCreator from 'course/survey/store';
+
 import NewQuestionButton from '../NewQuestionButton';
 
 describe('<NewQuestionButton />', () => {

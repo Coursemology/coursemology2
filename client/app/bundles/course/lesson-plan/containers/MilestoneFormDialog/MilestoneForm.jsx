@@ -1,16 +1,17 @@
-import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
-import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import useEmitterFactory from 'react-emitter-factory';
+import { Controller, useForm } from 'react-hook-form';
+import { FormattedMessage } from 'react-intl';
+import { yupResolver } from '@hookform/resolvers/yup';
+import PropTypes from 'prop-types';
+import * as yup from 'yup';
+
+import { fields } from 'course/lesson-plan/constants';
+import translations from 'course/lesson-plan/translations';
+import ErrorText from 'lib/components/core/ErrorText';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
-import translations from 'course/lesson-plan/translations';
-import { fields } from 'course/lesson-plan/constants';
 
 const { TITLE, DESCRIPTION, START_AT } = fields;
 
@@ -47,55 +48,55 @@ const MilestoneForm = (props) => {
   return (
     <form
       id="milestone-form"
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
       <Controller
-        name="title"
         control={control}
+        name="title"
         render={({ field, fieldState }) => (
           <FormTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
-            label={<FormattedMessage {...translations[TITLE]} />}
-            fullWidth
+            fullWidth={true}
             InputLabelProps={{
               shrink: true,
             }}
-            required
+            label={<FormattedMessage {...translations[TITLE]} />}
+            required={true}
             variant="standard"
           />
         )}
       />
       <Controller
-        name="description"
         control={control}
+        name="description"
         render={({ field, fieldState }) => (
           <FormRichTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
-            label={<FormattedMessage {...translations[DESCRIPTION]} />}
-            fullWidth
-            multiline
+            fullWidth={true}
             InputLabelProps={{
               shrink: true,
             }}
+            label={<FormattedMessage {...translations[DESCRIPTION]} />}
+            multiline={true}
             rows={2}
             variant="standard"
           />
         )}
       />
       <Controller
-        name="start_at"
         control={control}
+        name="start_at"
         render={({ field, fieldState }) => (
           <FormDateTimePickerField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
             label={<FormattedMessage {...translations[START_AT]} />}
           />
         )}

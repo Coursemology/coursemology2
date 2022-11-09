@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Tab, Tabs } from '@mui/material';
-import ProgressGraph from './Charts/ProgressGraph';
+import PropTypes from 'prop-types';
+
 import HeatMap from './Charts/HeatMap';
+import ProgressGraph from './Charts/ProgressGraph';
 
 const propTypes = {
   sessions: PropTypes.objectOf(
@@ -40,10 +41,10 @@ const Statistics = ({ watchFrequency, sessions }) => {
     <>
       <Tabs
         indicatorColor="primary"
-        textColor="inherit"
         onChange={(event, value) => {
           setTabValue(value);
         }}
+        textColor="inherit"
         value={tabValue}
         variant="fullWidth"
       >

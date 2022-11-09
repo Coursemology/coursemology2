@@ -5,23 +5,24 @@ import {
   CommentTabInfo,
   CommentTopicData,
 } from 'types/course/comments';
+
 import {
+  CHANGE_TAB_VALUE,
+  ChangeTabValueAction,
   CREATE_POST,
+  CreatePostAction,
   DELETE_POST,
+  DeletePostAction,
   SAVE_COMMENT_LIST,
   SAVE_COMMENT_TAB,
   SAVE_PENDING,
   SAVE_READ,
-  UPDATE_POST,
-  CHANGE_TAB_VALUE,
-  SaveCommentTabAction,
   SaveCommentListAction,
+  SaveCommentTabAction,
   SavePendingAction,
   SaveReadAction,
-  CreatePostAction,
+  UPDATE_POST,
   UpdatePostAction,
-  DeletePostAction,
-  ChangeTabValueAction,
 } from './types';
 
 export function saveCommentTab(

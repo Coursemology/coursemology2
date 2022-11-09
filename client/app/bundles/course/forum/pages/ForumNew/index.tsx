@@ -2,11 +2,13 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { AppDispatch } from 'types/store';
+
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
-import { AppDispatch } from 'types/store';
-import { createForum } from '../../operations';
+
 import ForumForm from '../../components/forms/ForumForm';
+import { createForum } from '../../operations';
 
 interface Props {
   open: boolean;
@@ -62,12 +64,12 @@ const ForumNew: FC<Props> = (props) => {
 
   return (
     <ForumForm
-      open={open}
       editing={false}
-      title={t(translations.newForum)}
-      onClose={onClose}
       initialValues={initialValues}
+      onClose={onClose}
       onSubmit={handleSubmit}
+      open={open}
+      title={t(translations.newForum)}
     />
   );
 };

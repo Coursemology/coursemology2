@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { CourseInfo, TimeZones } from 'types/course/admin/course';
 
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { FormEmitter } from 'lib/components/form/Form';
+import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
-import { FormEmitter } from 'lib/components/form/Form';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import Preload from 'lib/components/wrappers/Preload';
+
+import { useItemsReloader } from '../../components/SettingsNavigation';
+
 import CourseSettingsForm from './CourseSettingsForm';
 import {
   deleteCourse,
@@ -16,7 +18,6 @@ import {
   updateCourseLogo,
   updateCourseSettings,
 } from './operations';
-import { useItemsReloader } from '../../components/SettingsNavigation';
 import translations from './translations';
 
 const fetchSettingsAndTimeZones = (): Promise<[CourseInfo, TimeZones]> =>
@@ -84,16 +85,16 @@ const CourseSettings = (): JSX.Element => {
   };
 
   return (
-    <Preload while={fetchSettingsAndTimeZones} render={<LoadingIndicator />}>
+    <Preload render={<LoadingIndicator />} while={fetchSettingsAndTimeZones}>
       {([settings, timeZones]): JSX.Element => (
         <CourseSettingsForm
           data={settings}
-          timeZones={timeZones}
+          disabled={submitting}
           emitsVia={setForm}
+          onDeleteCourse={handleDeleteCourse}
           onSubmit={handleSubmit}
           onUploadCourseLogo={handleUploadCourseLogo}
-          onDeleteCourse={handleDeleteCourse}
-          disabled={submitting}
+          timeZones={timeZones}
         />
       )}
     </Preload>

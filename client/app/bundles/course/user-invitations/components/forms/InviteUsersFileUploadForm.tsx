@@ -1,11 +1,12 @@
 import { FC } from 'react';
 import { Controller, UseFormSetError } from 'react-hook-form';
+import { defineMessages } from 'react-intl';
+import { InvitationFileEntity } from 'types/course/userInvitations';
+
+import FormDialog from 'lib/components/form/dialog/FormDialog';
 import FormSingleFileInput, {
   FilePreview,
 } from 'lib/components/form/fields/SingleFileInput';
-import { defineMessages } from 'react-intl';
-import { InvitationFileEntity } from 'types/course/userInvitations';
-import FormDialog from 'lib/components/form/dialog/FormDialog';
 import useTranslation from 'lib/hooks/useTranslation';
 
 interface Props {
@@ -47,28 +48,28 @@ const FileUploadForm: FC<Props> = (props) => {
 
   return (
     <FormDialog
-      open={open}
       editing={false}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      title={t(translations.fileUpload)}
       formName="invite-users-file-upload-form"
       initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
       primaryActionText={t(translations.invite)}
+      title={t(translations.fileUpload)}
     >
       {(control, formState): JSX.Element => (
         <>
           {formSubtitle}
           <Controller
-            name="file"
             control={control}
+            name="file"
             render={({ field, fieldState }): JSX.Element => (
               <FormSingleFileInput
+                accept={{ 'text/csv': [] }}
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
                 label={t(translations.fileUploadField)}
-                accept={{ 'text/csv': [] }}
                 previewComponent={FilePreview}
               />
             )}

@@ -1,10 +1,11 @@
 import { createRoot } from 'react-dom/client';
-
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import storeCreator from './store';
+
 import GroupIndex from './pages/GroupIndex';
 import GroupShow from './pages/GroupShow';
+import storeCreator from './store';
 
 $(() => {
   const mountNode = document.getElementById('course-group-component');
@@ -17,8 +18,8 @@ $(() => {
       <ProviderWrapper store={store}>
         <BrowserRouter>
           <Routes>
-            <Route path="courses/:courseId/groups" element={<GroupIndex />}>
-              <Route path=":groupCategoryId" element={<GroupShow />} />
+            <Route element={<GroupIndex />} path="courses/:courseId/groups">
+              <Route element={<GroupShow />} path=":groupCategoryId" />
             </Route>
           </Routes>
         </BrowserRouter>

@@ -1,13 +1,15 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-import { Button } from '@mui/material';
-import { toast } from 'react-toastify';
-import { AppDispatch } from 'types/store';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
-import { getCourseId } from 'lib/helpers/url-helpers';
+import { toast } from 'react-toastify';
+import { Button } from '@mui/material';
+import { AppDispatch } from 'types/store';
+
 import { getEnrolRequestURL } from 'lib/helpers/url-builders';
-import CourseInvitationCodeForm from '../forms/CourseInvitationCodeForm';
+import { getCourseId } from 'lib/helpers/url-helpers';
+
 import { cancelEnrolRequest, submitEnrolRequest } from '../../operations';
+import CourseInvitationCodeForm from '../forms/CourseInvitationCodeForm';
 
 interface Props extends WrappedComponentProps {
   registrationInfo: {
@@ -99,10 +101,10 @@ const CourseEnrollOptions: FC<Props> = (props) => {
             {registrationInfo.enrolRequestId && (
               <Button
                 id="cancel-enrol-request-button"
-                size="small"
-                variant="contained"
-                style={{ height: 40 }}
                 onClick={handleCancel}
+                size="small"
+                style={{ height: 40 }}
+                variant="contained"
               >
                 {intl.formatMessage(translations.directEnrolCancel)}
               </Button>
@@ -111,10 +113,10 @@ const CourseEnrollOptions: FC<Props> = (props) => {
               registrationInfo.isEnrollable && (
                 <Button
                   id="submit-enrol-request-button"
-                  size="small"
-                  variant="contained"
-                  style={{ height: 40 }}
                   onClick={handleSubmit}
+                  size="small"
+                  style={{ height: 40 }}
+                  variant="contained"
                 >
                   {intl.formatMessage(translations.directEnrolSubmit)}
                 </Button>
