@@ -1,5 +1,5 @@
 module.exports = {
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   plugins: ['jest'],
   extends: [
     'airbnb',
@@ -34,10 +34,18 @@ module.exports = {
   rules: {
     'react/destructuring-assignment': 'off',
     'react/forbid-prop-types': ['error', { forbid: ['any', 'array'] }],
+    'react/function-component-definition': [
+      'error',
+      {
+        namedComponents: 'arrow-function',
+        unnamedComponents: 'arrow-function',
+      },
+    ],
     'react/jsx-props-no-spreading': 'off',
     'react/no-array-index-key': 'warn',
     'react/no-danger': 'off',
     'react/no-unused-prop-types': ['warn', { skipShapeProps: true }],
+    'react/no-unstable-nested-components': ['off', { allowAsProps: true }],
     'react/prefer-stateless-function': 'off',
     'react/require-default-props': 'off',
     'import/extensions': [
@@ -58,10 +66,11 @@ module.exports = {
     'jsx-a11y/label-has-associated-control': 'off',
     'jsx-a11y/mouse-events-have-key-events': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
-    'max-len': ['warn', 125],
     camelcase: ['warn', { properties: 'never', allow: ['^UNSAFE_'] }],
     'comma-dangle': ['error', 'always-multiline'],
+    'default-param-last': 'off',
     'func-names': 'off',
+    'max-len': ['warn', 125],
     'no-multi-str': 'off',
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     // Use `_` to indicate that the method is private
