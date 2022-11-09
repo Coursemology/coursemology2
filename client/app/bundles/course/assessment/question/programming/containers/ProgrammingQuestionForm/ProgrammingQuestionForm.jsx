@@ -374,22 +374,6 @@ class ProgrammingQuestionForm extends Component {
     return null;
   }
 
-  renderCodaveriAlertView() {
-    const codaveriResult = this.props.data.get('codaveri_result');
-
-    if (codaveriResult && codaveriResult.get('codaveri_status')) {
-      return (
-        <div
-          className={codaveriResult.get('class')}
-        >{`Codaveri Status: ${codaveriResult.get(
-          'codaveri_status',
-        )}. Message: ${codaveriResult.get('codaveri_message')}.`}</div>
-      );
-    }
-
-    return null;
-  }
-
   renderInputField(
     label,
     field,
@@ -713,7 +697,6 @@ class ProgrammingQuestionForm extends Component {
     return (
       <div>
         {this.renderImportAlertView()}
-        {/* {this.renderCodaveriAlertView()} */}
         {this.props.data.get('save_errors') ? (
           <div className="alert alert-danger">
             {this.props.data.get('save_errors').map((errorMessage, index) => (

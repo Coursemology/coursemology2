@@ -19,9 +19,7 @@ interface Props extends WrappedComponentProps {
 const InvitationResultUsersTable: FC<Props> = (props) => {
   const { title, users, intl } = props;
 
-  if (users && users.length === 0) {
-    return <></>;
-  }
+  if (users && users.length === 0) return null;
 
   const options: TableOptions = {
     download: true,

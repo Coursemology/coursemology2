@@ -188,11 +188,11 @@ const Dashboard = (props) => {
         case elementTypes.gate:
           return selectedGateIcon();
         default:
-          return <></>;
+          return null;
       }
     }
 
-    return <></>;
+    return null;
   };
 
   const { color, text } = getDisplay();

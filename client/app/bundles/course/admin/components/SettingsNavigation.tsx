@@ -1,4 +1,10 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { Chip } from '@mui/material';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -33,9 +39,9 @@ const LoadedSettingsNavigation = (
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const reloadItems = (): void => {
+  const reloadItems = useCallback(() => {
     fetchItems().then(setItems);
-  };
+  }, [fetchItems, setItems]);
 
   if (!items) return <LoadingIndicator />;
 

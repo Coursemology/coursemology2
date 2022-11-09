@@ -77,26 +77,24 @@ export default class ForumPost extends Component {
             }}
           />
           {this.state.isExpandable && (
-            <>
-              <Button
-                color="primary"
-                className="forum-post-expand-button"
-                id="add-level"
-                onClick={(event) => {
-                  event.persist();
-                  this.setState((oldState) => ({
-                    isExpanded: !oldState.isExpanded,
-                  }));
-                }}
-                style={styles.expandButton}
-              >
-                {this.state.isExpanded ? (
-                  <FormattedMessage {...translations.showLess} />
-                ) : (
-                  <FormattedMessage {...translations.showMore} />
-                )}
-              </Button>
-            </>
+            <Button
+              color="primary"
+              className="forum-post-expand-button"
+              id="add-level"
+              onClick={(event) => {
+                event.persist();
+                this.setState((oldState) => ({
+                  isExpanded: !oldState.isExpanded,
+                }));
+              }}
+              style={styles.expandButton}
+            >
+              {this.state.isExpanded ? (
+                <FormattedMessage {...translations.showLess} />
+              ) : (
+                <FormattedMessage {...translations.showMore} />
+              )}
+            </Button>
           )}
         </CardContent>
       </Card>

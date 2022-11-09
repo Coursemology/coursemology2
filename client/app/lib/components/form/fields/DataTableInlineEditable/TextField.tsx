@@ -103,7 +103,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
   const renderDisplayField = (
     <Box sx={styles.displayFieldStyle} className={className}>
       <>
-        {link ? <a href={link}>{controlledVal}</a> : <>{controlledVal}</>}
+        {link ? <a href={link}>{controlledVal}</a> : controlledVal}
         {!disabled && (
           <IconButton
             onClick={(): void => setIsEditing(true)}

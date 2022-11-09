@@ -10,21 +10,19 @@ const propTypes = {
   notification: notificationShape,
 };
 
-function Submission(props) {
-  return (
-    <>
-      <Grid container spacing={2}>
-        <Grid item xs={12} lg={8}>
-          <VideoPlayer />
-        </Grid>
-        <Grid className="sticky top-0 h-[calc(95vh-70px)]" item xs={12} lg={4}>
-          <Discussion />
-        </Grid>
+const Submission = (props) => (
+  <>
+    <Grid container spacing={2}>
+      <Grid item xs={12} lg={8}>
+        <VideoPlayer />
       </Grid>
-      <NotificationBar notification={props.notification} />
-    </>
-  );
-}
+      <Grid className="sticky top-0 h-[calc(95vh-70px)]" item xs={12} lg={4}>
+        <Discussion />
+      </Grid>
+    </Grid>
+    <NotificationBar notification={props.notification} />
+  </>
+);
 
 Submission.propTypes = propTypes;
 

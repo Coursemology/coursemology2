@@ -13,9 +13,9 @@ const propTypes = {
   onClick: PropTypes.func,
 };
 
-function CaptionsButton(props) {
+const CaptionsButton = (props) => {
   if (props.captionsState === captionsStates.NOT_LOADED) {
-    return <></>;
+    return null;
   }
   return (
     <IconButton
@@ -29,7 +29,7 @@ function CaptionsButton(props) {
       />
     </IconButton>
   );
-}
+};
 
 CaptionsButton.propTypes = propTypes;
 

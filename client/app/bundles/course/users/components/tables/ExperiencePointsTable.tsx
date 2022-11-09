@@ -54,42 +54,40 @@ const ExperiencePointsTable: FC<Props> = (props) => {
   }
 
   return (
-    <>
-      <Paper elevation={4} sx={{ margin: '12px 0px' }}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.updatedAt)}
-              </TableCell>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.updater)}
-              </TableCell>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.reason)}
-              </TableCell>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.experiencePointsAwarded)}
-              </TableCell>
-              <TableCell />
-            </TableRow>
-          </TableHead>
-          {isLoading ? (
-            <LoadingIndicator />
-          ) : (
-            <TableBody>
-              {experiencePointsRecords.map((item) => (
-                <ExperiencePointsTableRow
-                  id={item.id}
-                  record={item}
-                  key={item.id}
-                />
-              ))}
-            </TableBody>
-          )}
-        </Table>
-      </Paper>
-    </>
+    <Paper elevation={4} sx={{ margin: '12px 0px' }}>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>
+              {intl.formatMessage(tableTranslations.updatedAt)}
+            </TableCell>
+            <TableCell>
+              {intl.formatMessage(tableTranslations.updater)}
+            </TableCell>
+            <TableCell>
+              {intl.formatMessage(tableTranslations.reason)}
+            </TableCell>
+            <TableCell>
+              {intl.formatMessage(tableTranslations.experiencePointsAwarded)}
+            </TableCell>
+            <TableCell />
+          </TableRow>
+        </TableHead>
+        {isLoading ? (
+          <LoadingIndicator />
+        ) : (
+          <TableBody>
+            {experiencePointsRecords.map((item) => (
+              <ExperiencePointsTableRow
+                id={item.id}
+                record={item}
+                key={item.id}
+              />
+            ))}
+          </TableBody>
+        )}
+      </Table>
+    </Paper>
   );
 };
 

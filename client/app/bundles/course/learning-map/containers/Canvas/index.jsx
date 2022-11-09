@@ -67,34 +67,30 @@ const Canvas = () => {
       zoomOut={styles.zoomAnimation}
     >
       {({ setTransform }) => (
-        <>
-          <Xwrapper>
-            <ZoomActionElements
-              zoomIn={() => onZoom(setTransform, true)}
-              zoomOut={() => onZoom(setTransform, false)}
-            />
-            <div style={styles.wrapper}>
-              <TransformComponent
-                wrapperStyle={styles.transformComponentWrapper}
-              >
-                <Levels
-                  gateInputSizeThreshold={gateInputSizeThreshold}
-                  getGateConnectionPointId={getGateConnectionPointId}
-                  getGateId={getGateId}
-                  getGateInputId={getGateInputId}
-                  getNodeConnectionPointId={getNodeConnectionPointId}
-                />
-                <ArrowOverlay
-                  gateInputSizeThreshold={gateInputSizeThreshold}
-                  getGateConnectionPointId={getGateConnectionPointId}
-                  getGateInputId={getGateInputId}
-                  getNodeConnectionPointId={getNodeConnectionPointId}
-                  scale={scale}
-                />
-              </TransformComponent>
-            </div>
-          </Xwrapper>
-        </>
+        <Xwrapper>
+          <ZoomActionElements
+            zoomIn={() => onZoom(setTransform, true)}
+            zoomOut={() => onZoom(setTransform, false)}
+          />
+          <div style={styles.wrapper}>
+            <TransformComponent wrapperStyle={styles.transformComponentWrapper}>
+              <Levels
+                gateInputSizeThreshold={gateInputSizeThreshold}
+                getGateConnectionPointId={getGateConnectionPointId}
+                getGateId={getGateId}
+                getGateInputId={getGateInputId}
+                getNodeConnectionPointId={getNodeConnectionPointId}
+              />
+              <ArrowOverlay
+                gateInputSizeThreshold={gateInputSizeThreshold}
+                getGateConnectionPointId={getGateConnectionPointId}
+                getGateInputId={getGateInputId}
+                getNodeConnectionPointId={getNodeConnectionPointId}
+                scale={scale}
+              />
+            </TransformComponent>
+          </div>
+        </Xwrapper>
       )}
     </TransformWrapper>
   );

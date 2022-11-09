@@ -81,7 +81,7 @@ const InstancesIndex: FC = () => {
   return (
     <>
       <PageHeader title={t(translations.header)} toolbars={headerToolbars} />
-      {isLoading ? <LoadingIndicator /> : <>{renderBody}</>}
+      {isLoading ? <LoadingIndicator /> : renderBody}
     </>
   );
 };

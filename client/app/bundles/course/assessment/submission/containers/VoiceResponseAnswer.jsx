@@ -107,6 +107,7 @@ class VoiceResponseAnswer extends Component {
     return `voice_response_${question.id}`;
   };
 
+  // eslint-disable-next-line class-methods-use-this
   renderAudio = (field) => {
     const {
       value: { file, url },
@@ -199,6 +200,7 @@ class VoiceResponseAnswer extends Component {
     );
   };
 
+  // eslint-disable-next-line class-methods-use-this
   renderSingleFileInputChildren = (props) => (
     <div style={styles.singleFileInputChildrenWrapper}>
       <div style={styles.singleFileInputChildren}>

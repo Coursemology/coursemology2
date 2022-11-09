@@ -114,26 +114,6 @@ class ReadOnlyEditor extends Component {
     return annotations.length > 0;
   }
 
-  isIndeterminateState() {
-    const { expanded } = this.state;
-    const { annotations } = this.props;
-
-    let hasExpanded = false;
-    let hasCollapsed = false;
-    for (let i = 0; i < expanded.length; i++) {
-      if (expanded[i]) {
-        hasExpanded = true;
-      } else if (annotations.find((a) => a.line === i + 1)) {
-        hasCollapsed = true;
-      }
-
-      if (hasExpanded && hasCollapsed) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   toggleCommentLine(lineNumber) {
     const { expanded } = this.state;
     const newExpanded = expanded.slice(0);

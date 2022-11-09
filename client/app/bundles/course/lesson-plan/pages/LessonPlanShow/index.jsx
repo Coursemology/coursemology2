@@ -75,6 +75,7 @@ class LessonPlanShow extends Component {
     );
   }
 
+  // eslint-disable-next-line class-methods-use-this
   renderHeader = () => (
     <Card>
       <CardContent>

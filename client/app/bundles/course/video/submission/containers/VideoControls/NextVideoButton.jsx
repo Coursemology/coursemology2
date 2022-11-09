@@ -12,7 +12,7 @@ const propTypes = {
   url: PropTypes.string,
 };
 
-function NextVideoButton(props) {
+const NextVideoButton = (props) => {
   if (!props.url) {
     return (
       <Tooltip title={props.intl.formatMessage(translations.noNextVideo)}>
@@ -32,7 +32,7 @@ function NextVideoButton(props) {
       </IconButton>
     </Tooltip>
   );
-}
+};
 
 NextVideoButton.propTypes = propTypes;
 

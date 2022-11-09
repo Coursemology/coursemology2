@@ -50,23 +50,21 @@ const Levels = (props) => {
             .sort((node1, node2) => node1.id.localeCompare(node2.id))
             .map((node) => (
               <div key={node.id} style={styles.nodeWithGate}>
-                <>
-                  {node.depth > 0 && (
-                    <Gate
-                      gateInputSizeThreshold={gateInputSizeThreshold}
-                      getGateConnectionPointId={getGateConnectionPointId}
-                      getGateId={getGateId}
-                      getGateInputId={getGateInputId}
-                      key={getGateId(node.id)}
-                      node={node}
-                    />
-                  )}
-                  <Node
-                    key={node.id}
+                {node.depth > 0 && (
+                  <Gate
+                    gateInputSizeThreshold={gateInputSizeThreshold}
+                    getGateConnectionPointId={getGateConnectionPointId}
+                    getGateId={getGateId}
+                    getGateInputId={getGateInputId}
+                    key={getGateId(node.id)}
                     node={node}
-                    getNodeConnectionPointId={getNodeConnectionPointId}
                   />
-                </>
+                )}
+                <Node
+                  key={node.id}
+                  node={node}
+                  getNodeConnectionPointId={getNodeConnectionPointId}
+                />
               </div>
             ))}
         </div>

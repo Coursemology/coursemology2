@@ -2,7 +2,7 @@ import { FormControlLabel, Radio } from '@mui/material';
 import { green } from '@mui/material/colors';
 import { answerShape, questionShape } from '../../propTypes';
 
-function MultipleResponse({ question, answer }) {
+const MultipleResponse = ({ question, answer }) => {
   const selectedOptions = answer.option_ids;
   return (
     <>
@@ -30,7 +30,7 @@ function MultipleResponse({ question, answer }) {
       ))}
     </>
   );
-}
+};
 
 MultipleResponse.propTypes = {
   question: questionShape,

@@ -19,7 +19,7 @@ const defaultProps = {
   postIds: [],
 };
 
-function Topic(props) {
+const Topic = (props) => {
   if (props.postIds.length === 0) {
     return null;
   }
@@ -42,16 +42,14 @@ function Topic(props) {
         <span className="glyphicon glyphicon-chevron-down" />
       </div>
       <Divider className="mb-4" />
-      <>
-        {props.postIds.map((id) => (
-          <PostContainer key={id.toString()} postId={id} isRoot />
-        ))}
-      </>
+      {props.postIds.map((id) => (
+        <PostContainer key={id.toString()} postId={id} isRoot />
+      ))}
       <Reply topicId={props.topicId} />
       <Divider />
     </div>
   );
-}
+};
 
 Topic.propTypes = propTypes;
 Topic.defaultProps = defaultProps;

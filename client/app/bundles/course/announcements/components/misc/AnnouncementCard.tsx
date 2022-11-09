@@ -118,7 +118,7 @@ const AnnouncementCard: FC<Props> = (props) => {
       : getUserURL(announcement.userId);
 
     if (announcement.userId === -1) {
-      return <>{userName}</>;
+      return <span>{userName}</span>;
     }
     return (
       <Link href={userLink} style={{ textDecoration: 'none' }}>

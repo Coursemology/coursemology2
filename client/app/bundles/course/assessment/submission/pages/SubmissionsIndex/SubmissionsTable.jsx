@@ -261,6 +261,7 @@ export default class SubmissionsTable extends Component {
     );
   }
 
+  // eslint-disable-next-line class-methods-use-this
   renderRowTooltips = () => {
     const tooltipIds = [
       'phantom-user',

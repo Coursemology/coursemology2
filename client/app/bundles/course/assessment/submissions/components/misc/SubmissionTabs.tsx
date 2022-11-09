@@ -87,132 +87,123 @@ const SubmissionTabs: FC<Props> = (props) => {
   1 - all students pending
   2+ - respective category tabs, category 0 will correspond to value 2 and so on
   */
+  if (tabValue === null) return null;
   return (
-    <>
-      {tabValue !== null && (
-        <Tabs
-          value={tabValue}
-          variant="scrollable"
-          scrollButtons="auto"
-          onChange={handleTabChange}
-          TabIndicatorProps={{ style: { transition: 'none' } }}
-          sx={tabsStyle}
-        >
-          {isTeachingStaff && (
-            <Tab
-              id="my-students-pending-tab"
-              value={0}
-              label={intl.formatMessage(translations.myStudentsPending)}
-              icon={
-                <CustomBadge
-                  badgeContent={tabs.myStudentsPendingCount}
-                  color="primary"
-                />
-              }
-              iconPosition="end"
-              style={{
-                minHeight: 48,
-                paddingRight: tabs.myStudentsPendingCount === 0 ? 8 : 26,
-                textDecoration: 'none',
-              }}
-              onClick={(): Promise<string | number | void> => {
-                // Prevent API calls when spam clicking the tab
-                if (tabValue !== 0) {
-                  setTableIsLoading(true);
-                  setIsTabChanging(true);
-                  return dispatch(fetchMyStudentsPendingSubmissions())
-                    .finally(() => {
-                      setTableIsLoading(false);
-                      setIsTabChanging(false);
-                    })
-                    .catch(() => {
-                      setTableIsLoading(false);
-                      setIsTabChanging(false);
-                      toast.error(
-                        intl.formatMessage(
-                          translations.fetchSubmissionsFailure,
-                        ),
-                      );
-                    });
-                }
-                return new Promise(() => {});
-              }}
+    <Tabs
+      value={tabValue}
+      variant="scrollable"
+      scrollButtons="auto"
+      onChange={handleTabChange}
+      TabIndicatorProps={{ style: { transition: 'none' } }}
+      sx={tabsStyle}
+    >
+      {isTeachingStaff && (
+        <Tab
+          id="my-students-pending-tab"
+          value={0}
+          label={intl.formatMessage(translations.myStudentsPending)}
+          icon={
+            <CustomBadge
+              badgeContent={tabs.myStudentsPendingCount}
+              color="primary"
             />
-          )}
-
-          {isTeachingStaff && (
-            <Tab
-              id="all-students-pending-tab"
-              value={1}
-              label={intl.formatMessage(translations.allStudentsPending)}
-              icon={
-                <CustomBadge
-                  badgeContent={tabs.allStudentsPendingCount}
-                  color="primary"
-                />
-              }
-              iconPosition="end"
-              style={{
-                paddingRight: tabs.allStudentsPendingCount === 0 ? 8 : 26,
-              }}
-              onClick={(): Promise<string | number | void> => {
-                // Prevent API calls when spam clicking the tab
-                if (tabValue !== 1) {
-                  setTableIsLoading(true);
-                  setIsTabChanging(true);
-                  return dispatch(fetchAllStudentsPendingSubmissions())
-                    .finally(() => {
-                      setTableIsLoading(false);
-                      setIsTabChanging(false);
-                    })
-                    .catch(() => {
-                      setTableIsLoading(false);
-                      setIsTabChanging(false);
-                      toast.error(
-                        intl.formatMessage(
-                          translations.fetchSubmissionsFailure,
-                        ),
-                      );
-                    });
-                }
-                return new Promise(() => {});
-              }}
-            />
-          )}
-
-          {tabs.categories.map((tab, index) => (
-            <Tab
-              id={`category-tab-${tab.id}`}
-              key={tab.id}
-              value={index + 2}
-              label={tab.title}
-              onClick={(): Promise<string | number | void> => {
-                // Prevent API calls when spam clicking the tab
-                if (tabValue !== index + 2) {
-                  setTableIsLoading(true);
-                  setIsTabChanging(true);
-                  dispatch(fetchCategorySubmissions(tab.id))
-                    .finally(() => {
-                      setTableIsLoading(false);
-                      setIsTabChanging(false);
-                    })
-                    .catch(() => {
-                      setTableIsLoading(false);
-                      setIsTabChanging(false);
-                      toast.error(
-                        intl.formatMessage(
-                          translations.fetchSubmissionsFailure,
-                        ),
-                      );
-                    });
-                }
-                return new Promise(() => {});
-              }}
-            />
-          ))}
-        </Tabs>
+          }
+          iconPosition="end"
+          style={{
+            minHeight: 48,
+            paddingRight: tabs.myStudentsPendingCount === 0 ? 8 : 26,
+            textDecoration: 'none',
+          }}
+          onClick={(): Promise<string | number | void> => {
+            // Prevent API calls when spam clicking the tab
+            if (tabValue !== 0) {
+              setTableIsLoading(true);
+              setIsTabChanging(true);
+              return dispatch(fetchMyStudentsPendingSubmissions())
+                .finally(() => {
+                  setTableIsLoading(false);
+                  setIsTabChanging(false);
+                })
+                .catch(() => {
+                  setTableIsLoading(false);
+                  setIsTabChanging(false);
+                  toast.error(
+                    intl.formatMessage(translations.fetchSubmissionsFailure),
+                  );
+                });
+            }
+            return new Promise(() => {});
+          }}
+        />
       )}
-    </>
+
+      {isTeachingStaff && (
+        <Tab
+          id="all-students-pending-tab"
+          value={1}
+          label={intl.formatMessage(translations.allStudentsPending)}
+          icon={
+            <CustomBadge
+              badgeContent={tabs.allStudentsPendingCount}
+              color="primary"
+            />
+          }
+          iconPosition="end"
+          style={{
+            paddingRight: tabs.allStudentsPendingCount === 0 ? 8 : 26,
+          }}
+          onClick={(): Promise<string | number | void> => {
+            // Prevent API calls when spam clicking the tab
+            if (tabValue !== 1) {
+              setTableIsLoading(true);
+              setIsTabChanging(true);
+              return dispatch(fetchAllStudentsPendingSubmissions())
+                .finally(() => {
+                  setTableIsLoading(false);
+                  setIsTabChanging(false);
+                })
+                .catch(() => {
+                  setTableIsLoading(false);
+                  setIsTabChanging(false);
+                  toast.error(
+                    intl.formatMessage(translations.fetchSubmissionsFailure),
+                  );
+                });
+            }
+            return new Promise(() => {});
+          }}
+        />
+      )}
+
+      {tabs.categories.map((tab, index) => (
+        <Tab
+          id={`category-tab-${tab.id}`}
+          key={tab.id}
+          value={index + 2}
+          label={tab.title}
+          onClick={(): Promise<string | number | void> => {
+            // Prevent API calls when spam clicking the tab
+            if (tabValue !== index + 2) {
+              setTableIsLoading(true);
+              setIsTabChanging(true);
+              dispatch(fetchCategorySubmissions(tab.id))
+                .finally(() => {
+                  setTableIsLoading(false);
+                  setIsTabChanging(false);
+                })
+                .catch(() => {
+                  setTableIsLoading(false);
+                  setIsTabChanging(false);
+                  toast.error(
+                    intl.formatMessage(translations.fetchSubmissionsFailure),
+                  );
+                });
+            }
+            return new Promise(() => {});
+          }}
+        />
+      ))}
+    </Tabs>
   );
 };
 

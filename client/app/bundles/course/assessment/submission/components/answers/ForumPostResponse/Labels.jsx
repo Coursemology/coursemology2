@@ -33,7 +33,7 @@ const styles = {
   },
 };
 
-function Labels({ post }) {
+const Labels = ({ post }) => {
   const isPostUpdated = post.isUpdated === true;
   const isPostDeleted = post.isDeleted === true;
   return (
@@ -66,7 +66,7 @@ function Labels({ post }) {
       )}
     </>
   );
-}
+};
 
 Labels.propTypes = {
   post: PropTypes.object.isRequired,

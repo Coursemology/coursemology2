@@ -102,7 +102,7 @@ const LineNumberColumn = (props) => {
         </ClickAwayListener>
       );
     }
-    return <></>;
+    return null;
   };
 
   return (
@@ -143,7 +143,7 @@ LineNumberColumn.propTypes = {
   annotations: PropTypes.arrayOf(annotationShape),
 };
 
-export default function NarrowEditor(props) {
+const NarrowEditor = (props) => {
   const editorRef = useRef();
   const [editorWidth, setEditorWidth] = useState(0);
   const [lineHovered, setLineHovered] = useState(0);
@@ -236,7 +236,7 @@ export default function NarrowEditor(props) {
       </table>
     </div>
   );
-}
+};
 
 NarrowEditor.propTypes = {
   expanded: PropTypes.arrayOf(PropTypes.bool).isRequired,
@@ -254,3 +254,5 @@ NarrowEditor.defaultProps = {
   collapseLine: () => {},
   toggleLine: () => {},
 };
+
+export default NarrowEditor;

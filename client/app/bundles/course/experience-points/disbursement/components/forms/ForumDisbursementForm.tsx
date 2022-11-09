@@ -126,66 +126,64 @@ const ForumDisbursementForm: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <FormProvider {...methods}>
-        <form
-          encType="multipart/form-data"
-          id="forum-form"
-          noValidate
-          onSubmit={handleSubmit((data) => {
-            const forumData: ForumDisbursementFormData = {
-              ...filters,
-              ...data,
-            };
-            onFormSubmit(forumData);
-          })}
-          style={{ display: forumUsers.length === 0 ? 'none' : 'contents' }}
-        >
-          <ErrorText errors={errors} />
-          <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
-            <Grid item xs>
-              <Controller
-                control={control}
-                name="reason"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormTextField
-                    field={field}
-                    fieldState={fieldState}
-                    label={<FormattedMessage {...translations.reason} />}
-                    // @ts-ignore: component is still written in JS
-                    className="forum_disbursement_reason"
-                    fullWidth
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    required
-                    variant="standard"
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item>
-              <Button
-                color="primary"
-                className="forum-btn-submit"
-                disabled={isSubmitting}
-                form="forum-form"
-                key="forum-form-submit-button"
-                type="submit"
-                variant="outlined"
-                style={{ marginBottom: '10px', marginTop: '10px' }}
-              >
-                <FormattedMessage {...translations.submit} />
-              </Button>
-            </Grid>
+    <FormProvider {...methods}>
+      <form
+        encType="multipart/form-data"
+        id="forum-form"
+        noValidate
+        onSubmit={handleSubmit((data) => {
+          const forumData: ForumDisbursementFormData = {
+            ...filters,
+            ...data,
+          };
+          onFormSubmit(forumData);
+        })}
+        style={{ display: forumUsers.length === 0 ? 'none' : 'contents' }}
+      >
+        <ErrorText errors={errors} />
+        <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
+          <Grid item xs>
+            <Controller
+              control={control}
+              name="reason"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormTextField
+                  field={field}
+                  fieldState={fieldState}
+                  label={<FormattedMessage {...translations.reason} />}
+                  // @ts-ignore: component is still written in JS
+                  className="forum_disbursement_reason"
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  required
+                  variant="standard"
+                />
+              )}
+            />
           </Grid>
-          <ForumDisbursementTable
-            forumUsers={forumUsers}
-            onPostClick={onPostClick}
-          />
-        </form>
-      </FormProvider>
-    </>
+          <Grid item>
+            <Button
+              color="primary"
+              className="forum-btn-submit"
+              disabled={isSubmitting}
+              form="forum-form"
+              key="forum-form-submit-button"
+              type="submit"
+              variant="outlined"
+              style={{ marginBottom: '10px', marginTop: '10px' }}
+            >
+              <FormattedMessage {...translations.submit} />
+            </Button>
+          </Grid>
+        </Grid>
+        <ForumDisbursementTable
+          forumUsers={forumUsers}
+          onPostClick={onPostClick}
+        />
+      </form>
+    </FormProvider>
   );
 };
 

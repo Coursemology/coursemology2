@@ -103,9 +103,9 @@ const AchievementShow: FC<Props> = (props) => {
               </Typography>
             </Grid>
 
-            {achievement.achievementUsers.map((courseUser) => (
-              <>
-                {courseUser.obtainedAt !== null && (
+            {achievement.achievementUsers.map((courseUser) => {
+              if (courseUser.obtainedAt !== null)
+                return (
                   <Grid item key={courseUser.id} xs={4} sm={3} lg={1}>
                     <a href={getCourseUserURL(courseId, courseUser.id)}>
                       <AvatarWithLabel
@@ -115,9 +115,9 @@ const AchievementShow: FC<Props> = (props) => {
                       />
                     </a>
                   </Grid>
-                )}
-              </>
-            ))}
+                );
+              return null;
+            })}
           </Grid>
         )
       )}

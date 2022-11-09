@@ -101,7 +101,7 @@ const TopicTypeIcon: FC<{ topic: ForumTopicEntity }> = (props) => {
       tooltip = t(translations.announcement);
       break;
     default:
-      return <></>;
+      return null;
   }
   return <Icon className={className} title={tooltip} />;
 };
@@ -206,9 +206,9 @@ const ForumTopicTable: FC<Props> = (props) => {
             );
           };
         },
-        customBodyRenderLite: (dataIndex): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element | null => {
           const latestPost = forumTopics[dataIndex].latestPost;
-          if (!latestPost) return <></>;
+          if (!latestPost) return null;
           return (
             <>
               <a href={latestPost.creator.userUrl}>{latestPost.creator.name}</a>

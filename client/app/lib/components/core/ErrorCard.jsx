@@ -19,23 +19,16 @@ const styles = {
   },
 };
 
-export default function ErrorCard({
-  message,
-  cardStyles,
-  headerStyles,
-  messageStyles,
-}) {
-  return (
-    <Card style={{ ...styles.card, ...cardStyles }}>
-      <CardHeader
-        style={{ ...styles.header, ...headerStyles }}
-        title="Error"
-        titleTypographyProps={{ variant: 'body2', style: styles.headerTitle }}
-      />
-      <CardContent style={messageStyles}>{message}</CardContent>
-    </Card>
-  );
-}
+const ErrorCard = ({ message, cardStyles, headerStyles, messageStyles }) => (
+  <Card style={{ ...styles.card, ...cardStyles }}>
+    <CardHeader
+      style={{ ...styles.header, ...headerStyles }}
+      title="Error"
+      titleTypographyProps={{ variant: 'body2', style: styles.headerTitle }}
+    />
+    <CardContent style={messageStyles}>{message}</CardContent>
+  </Card>
+);
 
 ErrorCard.propTypes = {
   message: PropTypes.oneOfType([
@@ -47,3 +40,5 @@ ErrorCard.propTypes = {
   headerStyles: PropTypes.object,
   messageStyles: PropTypes.object,
 };
+
+export default ErrorCard;

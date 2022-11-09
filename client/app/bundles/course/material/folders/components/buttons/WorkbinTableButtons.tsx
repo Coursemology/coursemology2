@@ -113,7 +113,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
       });
   };
 
-  const renderForm = (): JSX.Element => {
+  const renderForm = (): JSX.Element | null => {
     if (type === 'subfolder' && folderInitialValues) {
       return (
         <FolderEdit
@@ -141,7 +141,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
       );
     }
 
-    return <></>;
+    return null;
   };
 
   return (

@@ -26,7 +26,7 @@ const backLocations = (courseId, surveyId, Page) => {
 const PageWithTitleBar = (props) => {
   const { page, survey, surveyId, courseId } = props;
 
-  let pageToRender = <></>;
+  let pageToRender = null;
 
   switch (page) {
     case 'SurveyResults':
@@ -45,7 +45,7 @@ const PageWithTitleBar = (props) => {
       pageToRender = <ResponseEdit {...{ survey, courseId, surveyId }} />;
       break;
     default:
-      return <></>;
+      return null;
   }
 
   return (
@@ -83,54 +83,52 @@ const SurveyLayout = ({ surveys }) => {
       : {};
 
   return (
-    <>
-      <Routes>
-        <Route
-          path=""
-          element={
-            <PageWithTitleBar
-              {...{ page: 'SurveyShow', survey, courseId, surveyId }}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/results"
-          element={
-            <PageWithTitleBar
-              {...{ page: 'SurveyResults', survey, courseId, surveyId }}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/responses"
-          element={
-            <PageWithTitleBar
-              {...{ page: 'ResponseIndex', survey, courseId, surveyId }}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/responses/:responseId"
-          element={
-            <PageWithTitleBar
-              {...{ page: 'ResponseShow', survey, courseId, surveyId }}
-            />
-          }
-        />
-        <Route
-          exact
-          path="/responses/:responseId/edit"
-          element={
-            <PageWithTitleBar
-              {...{ page: 'ResponseEdit', survey, courseId, surveyId }}
-            />
-          }
-        />
-      </Routes>
-    </>
+    <Routes>
+      <Route
+        path=""
+        element={
+          <PageWithTitleBar
+            {...{ page: 'SurveyShow', survey, courseId, surveyId }}
+          />
+        }
+      />
+      <Route
+        exact
+        path="/results"
+        element={
+          <PageWithTitleBar
+            {...{ page: 'SurveyResults', survey, courseId, surveyId }}
+          />
+        }
+      />
+      <Route
+        exact
+        path="/responses"
+        element={
+          <PageWithTitleBar
+            {...{ page: 'ResponseIndex', survey, courseId, surveyId }}
+          />
+        }
+      />
+      <Route
+        exact
+        path="/responses/:responseId"
+        element={
+          <PageWithTitleBar
+            {...{ page: 'ResponseShow', survey, courseId, surveyId }}
+          />
+        }
+      />
+      <Route
+        exact
+        path="/responses/:responseId/edit"
+        element={
+          <PageWithTitleBar
+            {...{ page: 'ResponseEdit', survey, courseId, surveyId }}
+          />
+        }
+      />
+    </Routes>
   );
 };
 

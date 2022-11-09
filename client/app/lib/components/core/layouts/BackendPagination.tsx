@@ -22,20 +22,16 @@ const BackendPagination: FC<Props> = (props) => {
       handlePageChange(newPageNumber);
     }
   };
-
+  if (count <= 1) return null;
   return (
-    <>
-      {count > 1 && (
-        <Pagination
-          color="primary"
-          variant="outlined"
-          style={{ padding: 10, display: 'flex', justifyContent: 'center' }}
-          count={count}
-          page={pageNum}
-          onChange={handleChange}
-        />
-      )}
-    </>
+    <Pagination
+      color="primary"
+      variant="outlined"
+      style={{ padding: 10, display: 'flex', justifyContent: 'center' }}
+      count={count}
+      page={pageNum}
+      onChange={handleChange}
+    />
   );
 };
 

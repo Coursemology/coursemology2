@@ -14,7 +14,7 @@ function formatBytes(bytes, decimals) {
   return `${parseFloat((bytes / k ** i).toFixed(dm))} ${sizes[i]}`;
 }
 
-function ExistingPackageFile(props) {
+const ExistingPackageFile = (props) => {
   const {
     filename,
     fileType,
@@ -64,7 +64,7 @@ function ExistingPackageFile(props) {
       <TableCell>{formatBytes(filesize, 2)}</TableCell>
     </TableRow>
   );
-}
+};
 
 ExistingPackageFile.propTypes = {
   filename: PropTypes.string.isRequired,
