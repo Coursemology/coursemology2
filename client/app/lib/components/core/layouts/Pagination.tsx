@@ -55,23 +55,21 @@ const Pagination: FC<Props> = (props) => {
     setPage(pageNum);
   };
 
+  if (count <= 1) return null;
+
   return (
-    <>
-      {count > 1 && (
-        <PaginationMUI
-          color="primary"
-          variant="outlined"
-          style={{
-            padding: padding ?? 24,
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-          count={count}
-          page={page}
-          onChange={handleChange}
-        />
-      )}
-    </>
+    <PaginationMUI
+      color="primary"
+      variant="outlined"
+      style={{
+        padding: padding ?? 24,
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+      count={count}
+      page={page}
+      onChange={handleChange}
+    />
   );
 };
 

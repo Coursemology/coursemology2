@@ -53,18 +53,16 @@ const Toolbar = (props: ToolbarProps): JSX.Element => {
       </Grid>
 
       {props.selectedRows && (
-        <>
-          <Grid item>
-            <Button
-              startIcon={<DeleteIcon />}
-              size="small"
-              color="error"
-              onClick={handleDeleteFiles}
-            >
-              {intl.formatMessage(t.deleteSelected)}
-            </Button>
-          </Grid>
-        </>
+        <Grid item>
+          <Button
+            startIcon={<DeleteIcon />}
+            size="small"
+            color="error"
+            onClick={handleDeleteFiles}
+          >
+            {intl.formatMessage(t.deleteSelected)}
+          </Button>
+        </Grid>
       )}
     </Grid>
   );

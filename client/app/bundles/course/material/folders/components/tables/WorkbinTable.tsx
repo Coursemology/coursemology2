@@ -1,4 +1,4 @@
-import { FC, useState, memo, useMemo } from 'react';
+import { FC, useState, memo, useMemo, ReactNode } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import equal from 'fast-deep-equal';
 
@@ -109,7 +109,7 @@ const WorkbinTable: FC<Props> = (props) => {
   };
 
   const columnHeaderWithSort = (columnName: string): JSX.Element => {
-    let endIcon = <></>;
+    let endIcon: ReactNode = null;
     if (sortBy === columnName && sortDirection === 'desc') {
       endIcon = <ArrowDropDownIcon />;
     } else if (sortBy === columnName && sortDirection === 'asc') {

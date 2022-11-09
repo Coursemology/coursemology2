@@ -327,25 +327,23 @@ const SubmissionEditForm = (props) => {
           {intl.formatMessage(translations.reset)}
         </Button>
         {autogradable ? (
-          <>
-            <Button
-              variant="contained"
-              color="secondary"
-              disabled={
-                isAutogradingQuestion ||
-                isResetting ||
-                isSaving ||
-                (!graderView && attemptsLeft === 0)
-              }
-              id="run-code"
-              onClick={() =>
-                onSubmitAnswer(answerId, getValues(`${answerId}`), setValue)
-              }
-              style={styles.formButton}
-            >
-              {runCodeLabel}
-            </Button>
-          </>
+          <Button
+            variant="contained"
+            color="secondary"
+            disabled={
+              isAutogradingQuestion ||
+              isResetting ||
+              isSaving ||
+              (!graderView && attemptsLeft === 0)
+            }
+            id="run-code"
+            onClick={() =>
+              onSubmitAnswer(answerId, getValues(`${answerId}`), setValue)
+            }
+            style={styles.formButton}
+          >
+            {runCodeLabel}
+          </Button>
         ) : null}
         {isAutogradingQuestion || isResetting ? (
           <CircularProgress size={36} style={{ position: 'absolute' }} />

@@ -71,6 +71,7 @@ export const getImage = (
   );
 
   return new Promise((resolve, reject) =>
+    // eslint-disable-next-line no-promise-executor-return
     canvas.toBlob((blob) => (blob ? resolve(blob) : reject()), type),
   );
 };

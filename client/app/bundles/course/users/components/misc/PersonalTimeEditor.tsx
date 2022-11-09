@@ -207,124 +207,124 @@ const PersonalTimeEditor: FC<Props> = (props) => {
       });
   };
 
+  if (!isCreating) {
+    return (
+      <TableCell colSpan={4}>
+        <Grid container flexDirection="column" alignItems="center">
+          <LoadingButton
+            loading={isCreating}
+            onClick={handleCreate}
+            startIcon={<Add />}
+            size="small"
+          >
+            {intl.formatMessage(translations.buttonLabel)}
+          </LoadingButton>
+        </Grid>
+      </TableCell>
+    );
+  }
+
   return (
     <>
-      {!isCreating ? (
-        <TableCell colSpan={4}>
-          <Grid container flexDirection="column" alignItems="center">
-            <LoadingButton
-              loading={isCreating}
-              onClick={handleCreate}
-              startIcon={<Add />}
-              size="small"
-            >
-              {intl.formatMessage(translations.buttonLabel)}
-            </LoadingButton>
-          </Grid>
+      <Tooltip
+        title={intl.formatMessage(translations.fixedDescription)}
+        placement="top"
+        arrow
+      >
+        <TableCell>
+          <Controller
+            name="fixed"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormCheckboxField
+                field={field}
+                fieldState={fieldState}
+                icon={<LockOpenOutlined />}
+                checkedIcon={<LockOutlined />}
+              />
+            )}
+          />
         </TableCell>
-      ) : (
-        <>
-          <Tooltip
-            title={intl.formatMessage(translations.fixedDescription)}
-            placement="top"
-            arrow
-          >
-            <TableCell>
-              <Controller
-                name="fixed"
-                control={control}
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormCheckboxField
-                    field={field}
-                    fieldState={fieldState}
-                    icon={<LockOpenOutlined />}
-                    checkedIcon={<LockOutlined />}
-                  />
-                )}
-              />
-            </TableCell>
-          </Tooltip>
-          <TableCell>
-            <Controller
-              name="startAt"
-              control={control}
-              render={({ field, fieldState }): JSX.Element => (
-                <FormDateTimePickerField
-                  field={field}
-                  fieldState={fieldState}
-                  label={<FormattedMessage {...tableTranslations.startAt} />}
-                />
-              )}
+      </Tooltip>
+      <TableCell>
+        <Controller
+          name="startAt"
+          control={control}
+          render={({ field, fieldState }): JSX.Element => (
+            <FormDateTimePickerField
+              field={field}
+              fieldState={fieldState}
+              label={<FormattedMessage {...tableTranslations.startAt} />}
             />
-          </TableCell>
-          <TableCell>
-            <Controller
-              name="bonusEndAt"
-              control={control}
-              render={({ field, fieldState }): JSX.Element => (
-                <FormDateTimePickerField
-                  field={field}
-                  fieldState={fieldState}
-                  label={<FormattedMessage {...tableTranslations.bonusEndAt} />}
-                />
-              )}
+          )}
+        />
+      </TableCell>
+      <TableCell>
+        <Controller
+          name="bonusEndAt"
+          control={control}
+          render={({ field, fieldState }): JSX.Element => (
+            <FormDateTimePickerField
+              field={field}
+              fieldState={fieldState}
+              label={<FormattedMessage {...tableTranslations.bonusEndAt} />}
             />
-          </TableCell>
-          <TableCell>
-            <Grid
-              container
-              flexDirection="row"
-              flexWrap="nowrap"
-              alignItems="center"
-            >
-              <Controller
-                name="endAt"
-                control={control}
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormDateTimePickerField
-                    field={field}
-                    fieldState={fieldState}
-                    label={<FormattedMessage {...tableTranslations.endAt} />}
-                  />
-                )}
+          )}
+        />
+      </TableCell>
+      <TableCell>
+        <Grid
+          container
+          flexDirection="row"
+          flexWrap="nowrap"
+          alignItems="center"
+        >
+          <Controller
+            name="endAt"
+            control={control}
+            render={({ field, fieldState }): JSX.Element => (
+              <FormDateTimePickerField
+                field={field}
+                fieldState={fieldState}
+                label={<FormattedMessage {...tableTranslations.endAt} />}
               />
-              {isDirty && (
-                <SaveButton
-                  tooltip={intl.formatMessage(translations.update)}
-                  disabled={isSaving || isDeleting}
-                  onClick={(): UseFormHandleSubmit<IFormInputs> => handleSubmit}
-                  className="btn-submit"
-                  form={`personal-time-form-${item.id}-${item.personalTimeId}`}
-                  type="submit"
-                  size="small"
-                  sx={styles.buttonStyle}
-                />
-              )}
-              <DeleteButton
-                tooltip={intl.formatMessage(translations.delete)}
-                disabled={isSaving || isDeleting}
-                loading={isDeleting}
-                onClick={handleDelete}
-                confirmMessage={
-                  item.new
-                    ? undefined
-                    : intl.formatMessage(translations.deleteConfirm, {
-                        title: item.title,
-                      })
-                }
-                size="small"
-                sx={styles.buttonStyle}
-              />
-              <form
-                encType="multipart/form-data"
-                id={`personal-time-form-${item.id}-${item.personalTimeId}`}
-                noValidate
-                onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-              />
-            </Grid>
-          </TableCell>
-        </>
-      )}
+            )}
+          />
+          {isDirty && (
+            <SaveButton
+              tooltip={intl.formatMessage(translations.update)}
+              disabled={isSaving || isDeleting}
+              onClick={(): UseFormHandleSubmit<IFormInputs> => handleSubmit}
+              className="btn-submit"
+              form={`personal-time-form-${item.id}-${item.personalTimeId}`}
+              type="submit"
+              size="small"
+              sx={styles.buttonStyle}
+            />
+          )}
+          <DeleteButton
+            tooltip={intl.formatMessage(translations.delete)}
+            disabled={isSaving || isDeleting}
+            loading={isDeleting}
+            onClick={handleDelete}
+            confirmMessage={
+              item.new
+                ? undefined
+                : intl.formatMessage(translations.deleteConfirm, {
+                    title: item.title,
+                  })
+            }
+            size="small"
+            sx={styles.buttonStyle}
+          />
+          <form
+            encType="multipart/form-data"
+            id={`personal-time-form-${item.id}-${item.personalTimeId}`}
+            noValidate
+            onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+          />
+        </Grid>
+      </TableCell>
     </>
   );
 };

@@ -22,6 +22,7 @@ const styles = {
 };
 
 class LessonPlanEdit extends Component {
+  // eslint-disable-next-line class-methods-use-this
   renderGroup = (group) => {
     const { id, milestone, items } = group;
 
@@ -56,6 +57,7 @@ class LessonPlanEdit extends Component {
     return rows;
   };
 
+  // eslint-disable-next-line class-methods-use-this
   renderHeader = () => (
     <Card>
       <CardContent>

@@ -402,31 +402,29 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           name="autograded"
           control={control}
           render={({ field }): JSX.Element => (
-            <>
-              <RadioGroup
-                {...field}
-                value={field.value === true ? 'autograded' : 'manual'}
-                onChange={(e): void => {
-                  const isAutograded = e.target.value === 'autograded';
-                  field.onChange(isAutograded);
-                }}
-              >
-                <IconRadio
-                  value="autograded"
-                  label="Autograded"
-                  icon={AutogradedIcon}
-                  description={intl.formatMessage(t.autogradedHint)}
-                  disabled={!!containsCodaveri || !!disabled || !modeSwitching}
-                />
+            <RadioGroup
+              {...field}
+              value={field.value === true ? 'autograded' : 'manual'}
+              onChange={(e): void => {
+                const isAutograded = e.target.value === 'autograded';
+                field.onChange(isAutograded);
+              }}
+            >
+              <IconRadio
+                value="autograded"
+                label="Autograded"
+                icon={AutogradedIcon}
+                description={intl.formatMessage(t.autogradedHint)}
+                disabled={!!containsCodaveri || !!disabled || !modeSwitching}
+              />
 
-                <IconRadio
-                  value="manual"
-                  label="Manual"
-                  icon={ManualIcon}
-                  disabled={!!containsCodaveri || !!disabled || !modeSwitching}
-                />
-              </RadioGroup>
-            </>
+              <IconRadio
+                value="manual"
+                label="Manual"
+                icon={ManualIcon}
+                disabled={!!containsCodaveri || !!disabled || !modeSwitching}
+              />
+            </RadioGroup>
           )}
         />
 

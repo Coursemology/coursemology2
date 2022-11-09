@@ -38,11 +38,9 @@ const AwardButton: FC<Props> = ({
 
   if (disabled && tooltipText) {
     return (
-      <>
-        <Tooltip title={tooltipText}>
-          <span>{awardButton}</span>
-        </Tooltip>
-      </>
+      <Tooltip title={tooltipText}>
+        <span>{awardButton}</span>
+      </Tooltip>
     );
   }
 

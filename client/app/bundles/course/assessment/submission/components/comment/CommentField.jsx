@@ -31,14 +31,6 @@ export default class CommentField extends Component {
     handleChange(nextValue);
   }
 
-  onKeyDown(e) {
-    const { createComment, isSubmittingNormalComment, value } = this.props;
-    if (e.ctrlKey && e.keyCode === 13 && !isSubmittingNormalComment) {
-      e.preventDefault();
-      createComment(value);
-    }
-  }
-
   render() {
     const {
       createComment,

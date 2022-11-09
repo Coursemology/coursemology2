@@ -39,41 +39,39 @@ const defaultProps = {
   submitButtonText: <FormattedMessage {...translations.comment} />,
 };
 
-function Editor(props) {
-  return (
-    <>
-      <CKEditorRichText
-        disabled={props.disabled}
-        label={<FormattedMessage {...translations.prompt} />}
-        onChange={(nextValue) => props.onContentUpdate(nextValue)}
-        value={props.content}
-      />
-      <div className={style.editorExtraElement}>{props.children}</div>
-      <div className={style.editorButtons}>
-        {props.showCancel && (
-          <Button
-            className="mr-4"
-            variant="contained"
-            color="secondary"
-            disabled={props.disabled}
-            onClick={props.onCancel}
-          >
-            {props.cancelButtonText}
-          </Button>
-        )}
+const Editor = (props) => (
+  <>
+    <CKEditorRichText
+      disabled={props.disabled}
+      label={<FormattedMessage {...translations.prompt} />}
+      onChange={(nextValue) => props.onContentUpdate(nextValue)}
+      value={props.content}
+    />
+    <div className={style.editorExtraElement}>{props.children}</div>
+    <div className={style.editorButtons}>
+      {props.showCancel && (
         <Button
+          className="mr-4"
           variant="contained"
-          color="primary"
+          color="secondary"
           disabled={props.disabled}
-          onClick={props.onSubmit}
+          onClick={props.onCancel}
         >
-          {props.submitButtonText}
+          {props.cancelButtonText}
         </Button>
-      </div>
-      <div className="clear-both" />
-    </>
-  );
-}
+      )}
+      <Button
+        variant="contained"
+        color="primary"
+        disabled={props.disabled}
+        onClick={props.onSubmit}
+      >
+        {props.submitButtonText}
+      </Button>
+    </div>
+    <div className="clear-both" />
+  </>
+);
 
 Editor.propTypes = propTypes;
 Editor.defaultProps = defaultProps;

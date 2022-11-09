@@ -77,54 +77,52 @@ const CourseEnrollOptions: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'left',
-          marginTop: 5,
-        }}
-      >
-        <div style={{ marginRight: 15 }}>
-          {registrationInfo.isDisplayCodeForm && <CourseInvitationCodeForm />}
-        </div>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'left',
+        marginTop: 5,
+      }}
+    >
+      <div style={{ marginRight: 15 }}>
+        {registrationInfo.isDisplayCodeForm && <CourseInvitationCodeForm />}
+      </div>
 
-        {!registrationInfo.isInvited && (
-          <>
-            {registrationInfo.isDisplayCodeForm &&
+      {!registrationInfo.isInvited && (
+        <>
+          {registrationInfo.isDisplayCodeForm &&
+            registrationInfo.isEnrollable && (
+              <h5 style={{ marginRight: 15 }}>OR</h5>
+            )}
+
+          <div>
+            {registrationInfo.enrolRequestId && (
+              <Button
+                id="cancel-enrol-request-button"
+                size="small"
+                variant="contained"
+                style={{ height: 40 }}
+                onClick={handleCancel}
+              >
+                {intl.formatMessage(translations.directEnrolCancel)}
+              </Button>
+            )}
+            {registrationInfo.enrolRequestId === null &&
               registrationInfo.isEnrollable && (
-                <h5 style={{ marginRight: 15 }}>OR</h5>
-              )}
-
-            <div>
-              {registrationInfo.enrolRequestId && (
                 <Button
-                  id="cancel-enrol-request-button"
+                  id="submit-enrol-request-button"
                   size="small"
                   variant="contained"
                   style={{ height: 40 }}
-                  onClick={handleCancel}
+                  onClick={handleSubmit}
                 >
-                  {intl.formatMessage(translations.directEnrolCancel)}
+                  {intl.formatMessage(translations.directEnrolSubmit)}
                 </Button>
               )}
-              {registrationInfo.enrolRequestId === null &&
-                registrationInfo.isEnrollable && (
-                  <Button
-                    id="submit-enrol-request-button"
-                    size="small"
-                    variant="contained"
-                    style={{ height: 40 }}
-                    onClick={handleSubmit}
-                  >
-                    {intl.formatMessage(translations.directEnrolSubmit)}
-                  </Button>
-                )}
-            </div>
-          </>
-        )}
-      </div>
-    </>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 

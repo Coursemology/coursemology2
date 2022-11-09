@@ -51,7 +51,7 @@ const GlobalAnnouncementsIndex: FC<Props> = (props) => {
   return (
     <>
       <PageHeader title={intl.formatMessage(translations.header)} />
-      {isLoading ? <LoadingIndicator /> : <>{renderBody}</>}
+      {isLoading ? <LoadingIndicator /> : renderBody}
     </>
   );
 };

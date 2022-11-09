@@ -7,7 +7,9 @@ export interface TableColumns {
     alignCenter?: boolean;
     alignLeft?: boolean;
     alignRight?: boolean;
-    customBodyRenderLite?: (dataIndex: number) => string | JSX.Element | number;
+    customBodyRenderLite?: (
+      dataIndex: number,
+    ) => JSX.Element | string | number | null;
     customBodyRender?: (value, tableMeta, updateValue) => JSX.Element;
     customHeadLabelRender?: () => JSX.Element | null;
     customHeadRender?: () => JSX.Element | null;

@@ -89,7 +89,7 @@ const AnnouncementsIndex: FC<Props> = (props) => {
         title={intl.formatMessage(translations.header)}
         toolbars={headerToolbars}
       />
-      {isLoading ? <LoadingIndicator /> : <>{renderBody}</>}
+      {isLoading ? <LoadingIndicator /> : renderBody}
     </>
   );
 };

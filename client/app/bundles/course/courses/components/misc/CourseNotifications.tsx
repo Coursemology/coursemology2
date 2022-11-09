@@ -21,7 +21,7 @@ const CourseNotifications: FC<Props> = (props) => {
   const { intl, notifications } = props;
 
   if (!notifications || notifications.length === 0) {
-    return <></>;
+    return null;
   }
 
   return (

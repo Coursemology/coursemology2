@@ -77,9 +77,7 @@ const GroupIndex = (props) => {
           />
         ))}
       </Tabs>
-    ) : (
-      <></>
-    );
+    ) : null;
 
   const renderBody =
     groupCategories.groupCategories.length === 0 ? (

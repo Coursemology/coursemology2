@@ -154,7 +154,7 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
             {intl.formatMessage(translations.registrationCodeNote)}
           </Alert>
           {registrationCode.length > 0 ? (
-            <>{renderRegistrationCode}</>
+            renderRegistrationCode
           ) : (
             <Typography variant="body2">
               {intl.formatMessage(translations.currentlyDisabled)}

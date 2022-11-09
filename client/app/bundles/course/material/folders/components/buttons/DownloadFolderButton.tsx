@@ -40,45 +40,42 @@ const DownloadFolderButton: FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
+
+  if (isLoading) {
+    return (
+      <CustomTooltip title={intl.formatMessage(translations.downloading)}>
+        <DownloadingIcon style={{ padding: 4 }} />
+      </CustomTooltip>
+    );
+  }
+
   return (
-    <>
-      {isLoading ? (
-        <CustomTooltip title={intl.formatMessage(translations.downloading)}>
-          <DownloadingIcon style={{ padding: 4 }} />
-        </CustomTooltip>
-      ) : (
-        <>
-          <Tooltip
-            title={intl.formatMessage(translations.downloadTooltip)}
-            placement="top"
-          >
-            <IconButton
-              id="download-folder-button"
-              style={{ padding: 6 }}
-              onClick={(): void => {
-                setIsLoading(true);
-                dispatch(
-                  downloadFolder(
-                    currFolderId,
-                    () => setIsLoading(false),
-                    () => {
-                      toast.error(
-                        intl.formatMessage(
-                          translations.downloadFolderErrorMessage,
-                        ),
-                      );
-                      setIsLoading(false);
-                    },
-                  ),
+    <Tooltip
+      title={intl.formatMessage(translations.downloadTooltip)}
+      placement="top"
+    >
+      <IconButton
+        id="download-folder-button"
+        style={{ padding: 6 }}
+        onClick={(): void => {
+          setIsLoading(true);
+          dispatch(
+            downloadFolder(
+              currFolderId,
+              () => setIsLoading(false),
+              () => {
+                toast.error(
+                  intl.formatMessage(translations.downloadFolderErrorMessage),
                 );
-              }}
-            >
-              <DownloadIcon />
-            </IconButton>
-          </Tooltip>
-        </>
-      )}
-    </>
+                setIsLoading(false);
+              },
+            ),
+          );
+        }}
+      >
+        <DownloadIcon />
+      </IconButton>
+    </Tooltip>
   );
 };
 

@@ -22,7 +22,7 @@ const defaultProps = {
   isRoot: false,
 };
 
-function PostPresentation(props) {
+const PostPresentation = (props) => {
   let childrenElements = null;
   const childrenNodes = props.childrenIds.map((childId) => (
     <PostContainer key={childId} postId={childId} />
@@ -55,7 +55,7 @@ function PostPresentation(props) {
       {childrenElements}
     </>
   );
-}
+};
 
 PostPresentation.propTypes = propTypes;
 PostPresentation.defaultProps = defaultProps;

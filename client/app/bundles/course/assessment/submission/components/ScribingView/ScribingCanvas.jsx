@@ -1,5 +1,4 @@
-/* eslint react/sort-comp: "off" */
-/* eslint no-undef: "off" */ // For usage of fabric
+/* eslint-disable no-undef, react/sort-comp */
 import { Component } from 'react';
 import PropTypes from 'prop-types';
 
@@ -665,6 +664,7 @@ export default class ScribingCanvas extends Component {
     return userScribbles;
   };
 
+  // eslint-disable-next-line class-methods-use-this
   getMousePoint = (event) => ({
     x: event.clientX,
     y: event.clientY,
@@ -753,6 +753,7 @@ export default class ScribingCanvas extends Component {
   };
 
   // Utility Helpers
+  // eslint-disable-next-line class-methods-use-this
   cloneText = (obj) => {
     const newObj = new fabric.IText(obj.text, {
       left: obj.left,
@@ -811,6 +812,7 @@ export default class ScribingCanvas extends Component {
   }
 
   // Generates the left, top, width and height of the drag
+  // eslint-disable-next-line class-methods-use-this
   generateMouseDragProperties = (point1, point2) => ({
     left: point1.x < point2.x ? point1.x : point2.x,
     top: point1.y < point2.y ? point1.y : point2.y,

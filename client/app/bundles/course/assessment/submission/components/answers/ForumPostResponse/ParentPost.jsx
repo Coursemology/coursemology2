@@ -25,17 +25,15 @@ const styles = {
   },
 };
 
-function ParentPost({ post, style = {} }) {
-  return (
-    <div style={{ ...styles.parentPost, ...style }}>
-      <p style={styles.subtext}>
-        <FormattedMessage {...translations.postMadeInResponseTo} />
-      </p>
-      <Labels post={post} />
-      <ForumPost post={post} isExpandable style={styles.post} />
-    </div>
-  );
-}
+const ParentPost = ({ post, style = {} }) => (
+  <div style={{ ...styles.parentPost, ...style }}>
+    <p style={styles.subtext}>
+      <FormattedMessage {...translations.postMadeInResponseTo} />
+    </p>
+    <Labels post={post} />
+    <ForumPost post={post} isExpandable style={styles.post} />
+  </div>
+);
 
 ParentPost.propTypes = {
   post: forumPostShape.isRequired,

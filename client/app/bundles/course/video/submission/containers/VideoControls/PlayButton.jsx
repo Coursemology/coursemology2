@@ -11,7 +11,7 @@ const propTypes = {
   onClick: PropTypes.func,
 };
 
-function PlayButton(props) {
+const PlayButton = (props) => {
   const playIconClass = props.playing ? 'fa fa-pause' : 'fa fa-play';
   return (
     <span
@@ -21,7 +21,7 @@ function PlayButton(props) {
       <i className={playIconClass} />
     </span>
   );
-}
+};
 
 PlayButton.propTypes = propTypes;
 

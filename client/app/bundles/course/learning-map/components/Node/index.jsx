@@ -99,78 +99,68 @@ const Node = (props) => {
   };
 
   return (
-    <>
-      <div style={{ ...styles.wrapper, zIndex }}>
-        <ThemeProvider theme={theme}>
-          <Card
-            id={node.id}
-            style={{
-              ...styles.node,
-              opacity: `${!canModify && !node.unlocked ? 0.2 : 1.0}`,
-              zIndex,
-            }}
-          >
-            <CardContent style={styles.header}>
-              {node.unlockLevel > 0 && (
-                <>
-                  <div style={styles.unlockLevel}>
-                    <FormattedMessage
-                      {...translations.unlockLevel}
-                      values={{ unlockLevel: node.unlockLevel }}
-                    />
-                  </div>
-                </>
-              )}
+    <div style={{ ...styles.wrapper, zIndex }}>
+      <ThemeProvider theme={theme}>
+        <Card
+          id={node.id}
+          style={{
+            ...styles.node,
+            opacity: `${!canModify && !node.unlocked ? 0.2 : 1.0}`,
+            zIndex,
+          }}
+        >
+          <CardContent style={styles.header}>
+            {node.unlockLevel > 0 && (
+              <div style={styles.unlockLevel}>
+                <FormattedMessage
+                  {...translations.unlockLevel}
+                  values={{ unlockLevel: node.unlockLevel }}
+                />
+              </div>
+            )}
+            <Icon
+              className={icons[node.courseMaterialType]}
+              style={styles.icon}
+            />
+            {!canModify && !node.unlocked && (
               <Icon
-                className={icons[node.courseMaterialType]}
-                style={styles.icon}
+                className={icons.lock}
+                style={{ ...styles.icon, ...styles.lockIcon }}
               />
-              {!canModify && !node.unlocked && (
-                <>
-                  <Icon
-                    className={icons.lock}
-                    style={{ ...styles.icon, ...styles.lockIcon }}
-                  />
-                </>
+            )}
+          </CardContent>
+          <div style={styles.content}>
+            <CardContent style={styles.contentText}>
+              <div>
+                <a target="_blank" href={`${node.contentUrl}`} rel="noreferrer">
+                  {node.title}
+                </a>
+              </div>
+              {canModify && (
+                <UnlockRateDisplay
+                  nodeId={node.id}
+                  unlockRate={node.unlockRate}
+                  width={0.6 * styles.wrapper.width}
+                />
               )}
             </CardContent>
-            <div style={styles.content}>
-              <CardContent style={styles.contentText}>
-                <div>
-                  <a
-                    target="_blank"
-                    href={`${node.contentUrl}`}
-                    rel="noreferrer"
-                  >
-                    {node.title}
-                  </a>
-                </div>
-                {canModify && (
-                  <UnlockRateDisplay
-                    nodeId={node.id}
-                    unlockRate={node.unlockRate}
-                    width={0.6 * styles.wrapper.width}
-                  />
-                )}
-              </CardContent>
-              <div style={styles.connectionPoint}>
-                <ConnectionPoint
-                  id={getNodeConnectionPointId(node.id)}
-                  isActive={canModify}
-                  onClick={(event) => onConnectionPointClick(event, node.id)}
+            <div style={styles.connectionPoint}>
+              <ConnectionPoint
+                id={getNodeConnectionPointId(node.id)}
+                isActive={canModify}
+                onClick={(event) => onConnectionPointClick(event, node.id)}
+              />
+              {isNodeMenuDisplayed && (
+                <NodeMenu
+                  onCloseMenu={() => setIsNodeMenuDisplayed(false)}
+                  parentNode={node}
                 />
-                {isNodeMenuDisplayed && (
-                  <NodeMenu
-                    onCloseMenu={() => setIsNodeMenuDisplayed(false)}
-                    parentNode={node}
-                  />
-                )}
-              </div>
+              )}
             </div>
-          </Card>
-        </ThemeProvider>
-      </div>
-    </>
+          </div>
+        </Card>
+      </ThemeProvider>
+    </div>
   );
 };
 

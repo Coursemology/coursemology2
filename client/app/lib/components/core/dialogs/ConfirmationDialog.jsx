@@ -63,6 +63,7 @@ class ConfirmationDialog extends Component {
         key="confirmation-dialog-cancel-button"
         onClick={onCancel}
         ref={(button) => {
+          // eslint-disable-next-line react/no-unused-class-component-methods
           this.cancelButton = button;
         }}
         style={buttonStyle}
@@ -78,6 +79,7 @@ class ConfirmationDialog extends Component {
         onClick={onConfirm}
         {...(form ? { form, type: 'submit' } : {})}
         ref={(button) => {
+          // eslint-disable-next-line react/no-unused-class-component-methods
           this.confirmButton = button;
         }}
         style={buttonStyle}
@@ -95,6 +97,7 @@ class ConfirmationDialog extends Component {
           key="confirmation-dialog-confirm-secondary-button"
           onClick={onConfirmSecondary}
           ref={(button) => {
+            // eslint-disable-next-line react/no-unused-class-component-methods
             this.confirmButtonSecondary = button;
           }}
           style={buttonStyle}

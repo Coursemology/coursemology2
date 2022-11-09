@@ -146,7 +146,7 @@ function renderTextResponseComprehension(question) {
   );
 }
 
-function SolutionsTable({ question }) {
+const SolutionsTable = ({ question }) => {
   if (question.comprehension && question.groups) {
     return renderTextResponseComprehension(question);
   }
@@ -154,7 +154,7 @@ function SolutionsTable({ question }) {
     return renderTextResponseSolutions(question);
   }
   return null;
-}
+};
 
 SolutionsTable.propTypes = {
   question: questionShape,

@@ -31,14 +31,14 @@ class NotificationSettings extends Component {
     this.state = { isLoading: true };
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.props.dispatch(
       fetchNotificationSettings(
         () => this.setState({ isLoading: false }),
         <FormattedMessage {...messagesTranslations.fetchingError} />,
       ),
     );
-  };
+  }
 
   handleComponentNotificationSettingUpdate = (setting, type) => {
     const { dispatch, intl } = this.props;

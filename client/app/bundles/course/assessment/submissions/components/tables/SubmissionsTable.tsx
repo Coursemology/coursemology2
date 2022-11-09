@@ -115,171 +115,159 @@ const SubmissionsTable: FC<Props> = (props) => {
     return <LoadingIndicator />;
   }
 
+  if (submissions.length === 0) {
+    return (
+      <div style={{ marginTop: 10 }}>
+        {intl.formatMessage(translations.noSubmissionsMessage)}
+      </div>
+    );
+  }
+
   return (
-    <>
-      {submissions.length === 0 ? (
-        <div style={{ marginTop: 10 }}>
-          {intl.formatMessage(translations.noSubmissionsMessage)}
-        </div>
-      ) : (
-        <>
-          <Table sx={{ marginBottom: 2 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">
-                  {intl.formatMessage(translations.tableHeaderSn)}
-                </TableCell>
-                <TableCell>
-                  {intl.formatMessage(translations.tableHeaderName)}
-                </TableCell>
-                <TableCell>
-                  {intl.formatMessage(translations.tableHeaderTitle)}
-                </TableCell>
-                <TableCell align="center">
-                  {intl.formatMessage(translations.tableHeaderSubmittedAt)}
-                </TableCell>
-                <TableCell align="center">
-                  {intl.formatMessage(translations.tableHeaderStatus)}
-                </TableCell>
-                {isPendingTab && (
-                  <TableCell>
-                    {intl.formatMessage(translations.tableHeaderTutor)}
-                  </TableCell>
-                )}
-                <TableCell align="center">
-                  {intl.formatMessage(translations.tableHeaderTotalGrade)}
-                </TableCell>
-                {isGamified && (
-                  <TableCell align="center">
-                    {intl.formatMessage(translations.tableHeaderExp)}
-                  </TableCell>
-                )}
-                <TableCell />
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {submissions.map((submission, index) => (
-                <TableRow
-                  key={`submission_${submission.id}`}
-                  className="submission"
-                  id={`submission_${submission.id}`}
-                >
-                  <TableCell align="center">
-                    {index + 1 + (pageNum - 1) * rowsPerPage}
-                  </TableCell>
-                  <TableCell>
-                    <Link
-                      href={getCourseUserURL(
-                        getCourseId(),
-                        submission.courseUserId,
-                      )}
-                      underline="hover"
-                    >
-                      {submission.courseUserName}
-                    </Link>
-                  </TableCell>
-                  <TableCell>
-                    <Link
-                      href={getAssessmentURL(
-                        getCourseId(),
-                        submission.assessmentId,
-                      )}
-                      underline="hover"
-                    >
-                      {submission.assessmentTitle}
-                    </Link>
-                  </TableCell>
-                  <TableCell align="center">
-                    {getDayMonthTime(submission.submittedAt)}
-                  </TableCell>
-                  <TableCell align="center">
-                    <Chip
-                      style={{
-                        width: 100,
-                        backgroundColor:
-                          palette.submissionStatus[submission.status],
-                      }}
-                      label={translateStatus(submission.status)}
-                    />
-                  </TableCell>
-                  {isPendingTab && (
-                    <TableCell>
-                      {submission.teachingStaff?.length !== 0 ? (
-                        <Stack>
-                          {submission.teachingStaff?.map((staff) => (
-                            <Link
-                              key={staff.teachingStaffId}
-                              href={getCourseUserURL(
-                                getCourseId(),
-                                staff.teachingStaffId,
-                              )}
-                              underline="hover"
-                            >
-                              {staff.teachingStaffName}
-                            </Link>
-                          ))}
-                        </Stack>
-                      ) : (
-                        <div>--</div>
-                      )}
-                    </TableCell>
-                  )}
-
-                  <TableCell align="center">
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <div>
-                        {`${
-                          submission.permissions.canSeeGrades &&
-                          submission.currentGrade
-                            ? submission.currentGrade
-                            : '--'
-                        } / ${submission.maxGrade}`}
-                      </div>
-                      {submission.permissions.canSeeGrades &&
-                        submission.isGradedNotPublished && (
-                          <CustomTooltip
-                            title={intl.formatMessage(
-                              translations.gradeTooltip,
-                            )}
-                          >
-                            <ErrorIcon
-                              fontSize="small"
-                              color="error"
-                              style={{ marginLeft: 5, marginTop: -4 }}
-                            />
-                          </CustomTooltip>
+    <Table sx={{ marginBottom: 2 }}>
+      <TableHead>
+        <TableRow>
+          <TableCell align="center">
+            {intl.formatMessage(translations.tableHeaderSn)}
+          </TableCell>
+          <TableCell>
+            {intl.formatMessage(translations.tableHeaderName)}
+          </TableCell>
+          <TableCell>
+            {intl.formatMessage(translations.tableHeaderTitle)}
+          </TableCell>
+          <TableCell align="center">
+            {intl.formatMessage(translations.tableHeaderSubmittedAt)}
+          </TableCell>
+          <TableCell align="center">
+            {intl.formatMessage(translations.tableHeaderStatus)}
+          </TableCell>
+          {isPendingTab && (
+            <TableCell>
+              {intl.formatMessage(translations.tableHeaderTutor)}
+            </TableCell>
+          )}
+          <TableCell align="center">
+            {intl.formatMessage(translations.tableHeaderTotalGrade)}
+          </TableCell>
+          {isGamified && (
+            <TableCell align="center">
+              {intl.formatMessage(translations.tableHeaderExp)}
+            </TableCell>
+          )}
+          <TableCell />
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {submissions.map((submission, index) => (
+          <TableRow
+            key={`submission_${submission.id}`}
+            className="submission"
+            id={`submission_${submission.id}`}
+          >
+            <TableCell align="center">
+              {index + 1 + (pageNum - 1) * rowsPerPage}
+            </TableCell>
+            <TableCell>
+              <Link
+                href={getCourseUserURL(getCourseId(), submission.courseUserId)}
+                underline="hover"
+              >
+                {submission.courseUserName}
+              </Link>
+            </TableCell>
+            <TableCell>
+              <Link
+                href={getAssessmentURL(getCourseId(), submission.assessmentId)}
+                underline="hover"
+              >
+                {submission.assessmentTitle}
+              </Link>
+            </TableCell>
+            <TableCell align="center">
+              {getDayMonthTime(submission.submittedAt)}
+            </TableCell>
+            <TableCell align="center">
+              <Chip
+                style={{
+                  width: 100,
+                  backgroundColor: palette.submissionStatus[submission.status],
+                }}
+                label={translateStatus(submission.status)}
+              />
+            </TableCell>
+            {isPendingTab && (
+              <TableCell>
+                {submission.teachingStaff?.length !== 0 ? (
+                  <Stack>
+                    {submission.teachingStaff?.map((staff) => (
+                      <Link
+                        key={staff.teachingStaffId}
+                        href={getCourseUserURL(
+                          getCourseId(),
+                          staff.teachingStaffId,
                         )}
-                    </div>
-                  </TableCell>
+                        underline="hover"
+                      >
+                        {staff.teachingStaffName}
+                      </Link>
+                    ))}
+                  </Stack>
+                ) : (
+                  <div>--</div>
+                )}
+              </TableCell>
+            )}
 
-                  {isGamified && (
-                    <TableCell align="center">
-                      {submission.pointsAwarded &&
-                      submission.permissions.canSeeGrades
-                        ? submission.pointsAwarded
-                        : '-'}
-                    </TableCell>
+            <TableCell align="center">
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <div>
+                  {`${
+                    submission.permissions.canSeeGrades &&
+                    submission.currentGrade
+                      ? submission.currentGrade
+                      : '--'
+                  } / ${submission.maxGrade}`}
+                </div>
+                {submission.permissions.canSeeGrades &&
+                  submission.isGradedNotPublished && (
+                    <CustomTooltip
+                      title={intl.formatMessage(translations.gradeTooltip)}
+                    >
+                      <ErrorIcon
+                        fontSize="small"
+                        color="error"
+                        style={{ marginLeft: 5, marginTop: -4 }}
+                      />
+                    </CustomTooltip>
                   )}
-                  <TableCell>
-                    <SubmissionsTableButton
-                      canGrade={submission.permissions.canGrade}
-                      assessmentId={submission.assessmentId}
-                      submissionId={submission.id}
-                    />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </>
-      )}
-    </>
+              </div>
+            </TableCell>
+
+            {isGamified && (
+              <TableCell align="center">
+                {submission.pointsAwarded && submission.permissions.canSeeGrades
+                  ? submission.pointsAwarded
+                  : '-'}
+              </TableCell>
+            )}
+            <TableCell>
+              <SubmissionsTableButton
+                canGrade={submission.permissions.canGrade}
+                assessmentId={submission.assessmentId}
+                submissionId={submission.id}
+              />
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 };
 

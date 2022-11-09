@@ -41,15 +41,13 @@ const ResendInvitationsButton: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <LoadingButton
-        loading={isLoading}
-        variant="contained"
-        onClick={handleResend}
-      >
-        {intl.formatMessage(translations.buttonText)}
-      </LoadingButton>
-    </>
+    <LoadingButton
+      loading={isLoading}
+      variant="contained"
+      onClick={handleResend}
+    >
+      {intl.formatMessage(translations.buttonText)}
+    </LoadingButton>
   );
 };
 

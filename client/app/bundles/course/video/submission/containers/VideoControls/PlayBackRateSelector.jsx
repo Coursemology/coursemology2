@@ -15,7 +15,7 @@ const defaultProps = {
   availableRates: videoDefaults.availablePlaybackRates,
 };
 
-function PlayBackRateSelector(props) {
+const PlayBackRateSelector = (props) => {
   const rateElements = props.availableRates.map((rate) => (
     <MenuItem key={rate} className="text-xl" value={rate}>
       {`${rate}X`}
@@ -34,7 +34,7 @@ function PlayBackRateSelector(props) {
       </Select>
     </span>
   );
-}
+};
 
 PlayBackRateSelector.propTypes = propTypes;
 PlayBackRateSelector.defaultProps = defaultProps;

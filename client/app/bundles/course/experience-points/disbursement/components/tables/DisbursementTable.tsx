@@ -121,7 +121,7 @@ const DisbursementTable: FC<Props> = (props: Props) => {
         setCellProps: () => ({
           style: { width: '30vw', padding: '0px' },
         }),
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex: number): JSX.Element | null => {
           if (dataIndex === 0) {
             return (
               <>
@@ -140,7 +140,7 @@ const DisbursementTable: FC<Props> = (props: Props) => {
               </>
             );
           }
-          return <></>;
+          return null;
         },
       },
     },

@@ -64,9 +64,7 @@ const VideoSubmissionEdit: FC<Props> = (props) => {
         <SubmissionEditWithStore data={editVideoSubmission.videoData} />
       )}
     </>
-  ) : (
-    <></>
-  );
+  ) : null;
   return (
     <>
       <PageHeader title={`Watching ${editVideoSubmission?.videoTitle}`} />

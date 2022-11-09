@@ -106,7 +106,7 @@ class VisibleAnnotations extends Component {
                 />
               );
             }
-            return <></>;
+            return null;
           })}
           {shouldRenderCommentButton && renderCommentField()}
         </CardContent>

@@ -28,14 +28,14 @@ class LessonPlanSettings extends Component {
     this.state = { isLoading: true };
   }
 
-  componentDidMount = () => {
+  componentDidMount() {
     this.props.dispatch(
       fetchLessonPlanSettings(
         () => this.setState({ isLoading: false }),
         <FormattedMessage {...messagesTranslations.fetchingError} />,
       ),
     );
-  };
+  }
 
   // Ensure both enabled and visible values are sent in the payload.
   // Send the current value for visible when changing enabled.

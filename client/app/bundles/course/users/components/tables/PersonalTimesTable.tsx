@@ -92,48 +92,40 @@ const PersonalTimesTable: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <Paper elevation={4} sx={{ overflowX: 'scroll', margin: '12px 0px' }}>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell colSpan={3}>
-                {intl.formatMessage(tableTranslations.referenceTimeline)}
-              </TableCell>
-              <TableCell colSpan={4}>
-                {intl.formatMessage(tableTranslations.personalizedTimeline)}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.item)}
-              </TableCell>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.startAt)}
-              </TableCell>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.bonusEndAt)}
-              </TableCell>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.endAt)}
-              </TableCell>
-              <TableCell>{intl.formatMessage(translations.fixed)}</TableCell>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.startAt)}
-              </TableCell>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.bonusEndAt)}
-              </TableCell>
-              <TableCell>
-                {intl.formatMessage(tableTranslations.endAt)}
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>{personalTimes.map((item) => renderRow(item))}</TableBody>
-        </Table>
-      </Paper>
-    </>
+    <Paper elevation={4} sx={{ overflowX: 'scroll', margin: '12px 0px' }}>
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell />
+            <TableCell colSpan={3}>
+              {intl.formatMessage(tableTranslations.referenceTimeline)}
+            </TableCell>
+            <TableCell colSpan={4}>
+              {intl.formatMessage(tableTranslations.personalizedTimeline)}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>{intl.formatMessage(tableTranslations.item)}</TableCell>
+            <TableCell>
+              {intl.formatMessage(tableTranslations.startAt)}
+            </TableCell>
+            <TableCell>
+              {intl.formatMessage(tableTranslations.bonusEndAt)}
+            </TableCell>
+            <TableCell>{intl.formatMessage(tableTranslations.endAt)}</TableCell>
+            <TableCell>{intl.formatMessage(translations.fixed)}</TableCell>
+            <TableCell>
+              {intl.formatMessage(tableTranslations.startAt)}
+            </TableCell>
+            <TableCell>
+              {intl.formatMessage(tableTranslations.bonusEndAt)}
+            </TableCell>
+            <TableCell>{intl.formatMessage(tableTranslations.endAt)}</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>{personalTimes.map((item) => renderRow(item))}</TableBody>
+      </Table>
+    </Paper>
   );
 };
 

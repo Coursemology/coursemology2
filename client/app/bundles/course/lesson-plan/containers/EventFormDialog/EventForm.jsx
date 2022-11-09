@@ -80,127 +80,125 @@ const EventForm = (props) => {
   );
 
   return (
-    <>
-      <form
-        id="event-form"
-        noValidate
-        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-      >
-        <ErrorText errors={errors} />
+    <form
+      id="event-form"
+      noValidate
+      onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+    >
+      <ErrorText errors={errors} />
+      <Controller
+        name="title"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations[TITLE]} />}
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            required
+            variant="standard"
+          />
+        )}
+      />
+      <div style={styles.columns}>
         <Controller
-          name="title"
+          name="event_type"
           control={control}
           render={({ field, fieldState }) => (
-            <FormTextField
+            <FormAutoCompleteField
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations[TITLE]} />}
               fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-              variant="standard"
+              label={<FormattedMessage {...translations[EVENT_TYPE]} />}
+              options={eventTypes}
+              selectOnFocus
+              style={styles.eventType}
             />
           )}
         />
-        <div style={styles.columns}>
-          <Controller
-            name="event_type"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormAutoCompleteField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                fullWidth
-                label={<FormattedMessage {...translations[EVENT_TYPE]} />}
-                options={eventTypes}
-                selectOnFocus
-                style={styles.eventType}
-              />
-            )}
-          />
-          <Controller
-            name="location"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormAutoCompleteField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                fullWidth
-                label={<FormattedMessage {...translations[LOCATION]} />}
-                options={eventLocations}
-                selectOnFocus
-                style={styles.eventType}
-              />
-            )}
-          />
-        </div>
         <Controller
-          name="description"
+          name="location"
           control={control}
           render={({ field, fieldState }) => (
-            <FormRichTextField
+            <FormAutoCompleteField
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations[DESCRIPTION]} />}
               fullWidth
-              multiline
-              InputLabelProps={{
-                shrink: true,
-              }}
-              rows={2}
-              variant="standard"
+              label={<FormattedMessage {...translations[LOCATION]} />}
+              options={eventLocations}
+              selectOnFocus
+              style={styles.eventType}
             />
           )}
         />
-        <div style={styles.columns}>
-          <Controller
-            name="start_at"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormDateTimePickerField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations[START_AT]} />}
-                style={styles.oneColumn}
-              />
-            )}
+      </div>
+      <Controller
+        name="description"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormRichTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations[DESCRIPTION]} />}
+            fullWidth
+            multiline
+            InputLabelProps={{
+              shrink: true,
+            }}
+            rows={2}
+            variant="standard"
           />
-          <Controller
-            name="end_at"
-            control={control}
-            render={({ field, fieldState }) => (
-              <FormDateTimePickerField
-                field={field}
-                fieldState={fieldState}
-                disabled={disabled}
-                label={<FormattedMessage {...translations[END_AT]} />}
-                style={styles.oneColumn}
-              />
-            )}
-          />
-        </div>
+        )}
+      />
+      <div style={styles.columns}>
         <Controller
-          name="published"
+          name="start_at"
           control={control}
           render={({ field, fieldState }) => (
-            <FormToggleField
+            <FormDateTimePickerField
               field={field}
               fieldState={fieldState}
               disabled={disabled}
-              label={<FormattedMessage {...translations[PUBLISHED]} />}
-              style={styles.toggle}
+              label={<FormattedMessage {...translations[START_AT]} />}
+              style={styles.oneColumn}
             />
           )}
         />
-      </form>
-    </>
+        <Controller
+          name="end_at"
+          control={control}
+          render={({ field, fieldState }) => (
+            <FormDateTimePickerField
+              field={field}
+              fieldState={fieldState}
+              disabled={disabled}
+              label={<FormattedMessage {...translations[END_AT]} />}
+              style={styles.oneColumn}
+            />
+          )}
+        />
+      </div>
+      <Controller
+        name="published"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormToggleField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations[PUBLISHED]} />}
+            style={styles.toggle}
+          />
+        )}
+      />
+    </form>
   );
 };
 

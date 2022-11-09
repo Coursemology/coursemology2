@@ -232,7 +232,7 @@ const PersonalTimesShow: FC<Props> = (props) => {
     <>
       <PageHeader title={intl.formatMessage(translations.manageUsersHeader)} />
       <UserManagementTabs permissions={permissions} sharedData={sharedData} />
-      {isLoading ? <LoadingIndicator /> : <>{renderBody}</>}
+      {isLoading ? <LoadingIndicator /> : renderBody}
     </>
   );
 };

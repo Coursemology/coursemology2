@@ -120,9 +120,7 @@ const VideoSubmissionShow: FC<Props> = (props) => {
         <Note message={intl.formatMessage(translations.noSession)} />
       )}
     </>
-  ) : (
-    <></>
-  );
+  ) : null;
   return (
     <>
       <PageHeader

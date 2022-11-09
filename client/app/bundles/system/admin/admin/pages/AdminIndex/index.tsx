@@ -14,11 +14,7 @@ const translations = defineMessages({
 const AdminIndex: FC<Props> = (props) => {
   const { intl } = props;
 
-  return (
-    <>
-      <PageHeader title={intl.formatMessage(translations.header)} />
-    </>
-  );
+  return <PageHeader title={intl.formatMessage(translations.header)} />;
 };
 
 export default injectIntl(AdminIndex);

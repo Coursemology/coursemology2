@@ -53,7 +53,7 @@ class VisibleGradingPanel extends Component {
     }
     if (courseUser) {
       // System or deleted users should not be linked to
-      return <>{courseUser.name}</>;
+      return courseUser.name;
     }
     return null;
   }

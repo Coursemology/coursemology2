@@ -166,7 +166,7 @@ const TopicCard: FC<Props> = (props) => {
           </Link>
         );
       case CommentStatusTypes.read:
-        return <></>;
+        return null;
       case CommentStatusTypes.unread:
         return (
           <Link

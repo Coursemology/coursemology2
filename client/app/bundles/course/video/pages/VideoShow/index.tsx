@@ -86,9 +86,7 @@ const VideoShow: FC<Props> = (props) => {
         </Card>
       )}
     </>
-  ) : (
-    <></>
-  );
+  ) : null;
   const returnLink = video?.tabId
     ? `${getVideosURL(getCourseId())}?tab=${video.tabId}`
     : getVideosURL(getCourseId());

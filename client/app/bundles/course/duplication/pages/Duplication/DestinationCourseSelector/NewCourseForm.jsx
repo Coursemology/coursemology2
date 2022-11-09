@@ -38,45 +38,43 @@ const NewCourseForm = (props) => {
   });
 
   return (
-    <>
-      <form
-        id="new-course-form"
-        noValidate
-        onSubmit={handleSubmit((data) => onSubmit(data, setError))}
-      >
-        <ErrorText errors={errors} />
-        <Controller
-          name="new_title"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormTextField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.newTitle} />}
-              fullWidth
-              InputLabelProps={{
-                shrink: true,
-              }}
-              required
-              variant="standard"
-            />
-          )}
-        />
-        <Controller
-          name="new_start_at"
-          control={control}
-          render={({ field, fieldState }) => (
-            <FormDateTimePickerField
-              field={field}
-              fieldState={fieldState}
-              disabled={disabled}
-              label={<FormattedMessage {...translations.newStartAt} />}
-            />
-          )}
-        />
-      </form>
-    </>
+    <form
+      id="new-course-form"
+      noValidate
+      onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+    >
+      <ErrorText errors={errors} />
+      <Controller
+        name="new_title"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormTextField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.newTitle} />}
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+            required
+            variant="standard"
+          />
+        )}
+      />
+      <Controller
+        name="new_start_at"
+        control={control}
+        render={({ field, fieldState }) => (
+          <FormDateTimePickerField
+            field={field}
+            fieldState={fieldState}
+            disabled={disabled}
+            label={<FormattedMessage {...translations.newStartAt} />}
+          />
+        )}
+      />
+    </form>
   );
 };
 

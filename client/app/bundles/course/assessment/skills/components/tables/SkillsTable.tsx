@@ -333,9 +333,7 @@ const SkillsTable: FC<Props> = (props: Props) => {
                         />
                       </CardContent>
                     </>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                 </Box>
               </Slide>
             </TableCell>
