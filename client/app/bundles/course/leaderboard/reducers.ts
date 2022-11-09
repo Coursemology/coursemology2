@@ -1,5 +1,6 @@
 import { produce } from 'immer';
 import { createEntityStore, saveListToStore } from 'utilities/store';
+
 import {
   LeaderboardActionType,
   LeaderboardState,

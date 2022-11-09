@@ -1,22 +1,24 @@
-import { CircularProgress, Typography } from '@mui/material';
 import { FC, ReactElement, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { CircularProgress, Typography } from '@mui/material';
 import {
   TableColumns,
   TableOptions,
   TableState,
 } from 'types/components/DataTable';
-import tableTranslations from 'lib/translations/table';
-import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
-import DataTable from 'lib/components/core/layouts/DataTable';
-import { InstanceMiniEntity } from 'types/system/instances';
-import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, AppState } from 'types/store';
+import { InstanceMiniEntity } from 'types/system/instances';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
-import { toast } from 'react-toastify';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
-import { getAdminCounts, getAllInstanceMiniEntities } from '../../selectors';
+import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import tableTranslations from 'lib/translations/table';
+
 import { indexInstances, updateInstance } from '../../operations';
+import { getAdminCounts, getAllInstanceMiniEntities } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -204,15 +206,15 @@ const InstancesTable: FC<Props> = (props) => {
           return (
             <InlineEditTextField
               key={`name-${rowData[1]}`}
-              value={value}
               className={`instance_name instance_name_${rowData[1]}`}
-              updateValue={updateValue}
-              variant="standard"
+              disabled={!rowData[2].canEdit} // rowData[2] contains InstanceMiniEntityPermissions
               link={`//${rowData[4]}/admin/instances`}
               onUpdate={(newValue): Promise<void> =>
                 handleNameUpdate(rowData, newValue)
               }
-              disabled={!rowData[2].canEdit} // rowData[2] contains InstanceMiniEntityPermissions
+              updateValue={updateValue}
+              value={value}
+              variant="standard"
             />
           );
         },
@@ -229,14 +231,14 @@ const InstancesTable: FC<Props> = (props) => {
           return (
             <InlineEditTextField
               key={`host-${rowData[1]}`}
-              value={value}
               className={`instance_host instance_host_${rowData[1]}`}
-              updateValue={updateValue}
-              variant="standard"
+              disabled={!rowData[2].canEdit} // rowData[2] contains InstanceMiniEntityPermissions
               onUpdate={(newValue): Promise<void> =>
                 handleHostUpdate(rowData, newValue)
               }
-              disabled={!rowData[2].canEdit} // rowData[2] contains InstanceMiniEntityPermissions
+              updateValue={updateValue}
+              value={value}
+              variant="standard"
             />
           );
         },
@@ -315,6 +317,11 @@ const InstancesTable: FC<Props> = (props) => {
 
   return (
     <DataTable
+      columns={columns}
+      data={instances}
+      includeRowNumber={true}
+      isLoading={isLoading}
+      options={options}
       title={
         <Typography variant="h6">
           {title}
@@ -323,12 +330,7 @@ const InstancesTable: FC<Props> = (props) => {
           )}
         </Typography>
       }
-      data={instances}
-      columns={columns}
-      options={options}
-      isLoading={isLoading}
-      includeRowNumber
-      withMargin
+      withMargin={true}
     />
   );
 };

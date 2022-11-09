@@ -2,13 +2,15 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { AppDispatch, AppState } from 'types/store';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { Paper, Typography } from '@mui/material';
-import { fetchUsers } from '../../operations';
-import UserManagementTabs from '../../components/navigation/UserManagementTabs';
+import { AppDispatch, AppState } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+
 import SelectCourseUser from '../../components/misc/SelectCourseUser';
+import UserManagementTabs from '../../components/navigation/UserManagementTabs';
+import { fetchUsers } from '../../operations';
 import {
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
@@ -67,7 +69,7 @@ const PersonalTimes: FC<Props> = (props) => {
             elevation={3}
             sx={{ padding: '12px 24px 24px 24px', margin: '12px 0px' }}
           >
-            <Typography variant="h6" sx={{ marginBottom: '24px' }}>
+            <Typography sx={{ marginBottom: '24px' }} variant="h6">
               {intl.formatMessage(translations.courseUserHeader)}
             </Typography>
 

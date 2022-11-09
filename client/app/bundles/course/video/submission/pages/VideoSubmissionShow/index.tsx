@@ -1,5 +1,7 @@
-import PageHeader from 'lib/components/navigation/PageHeader';
-import { getCourseId, getVideoId } from 'lib/helpers/url-helpers';
+import { FC, useEffect, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   Card,
   CardContent,
@@ -9,18 +11,19 @@ import {
   TableCell,
   TableRow,
 } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { VideoSubmissionData } from 'types/course/video/submissions';
+
 import CourseAPI from 'api/course';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
-import { formatLongDateTime } from 'lib/moment';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { getVideoSubmissionsURL } from 'lib/helpers/url-builders';
-import { VideoSubmissionData } from 'types/course/video/submissions';
-import StatisticsWithStore from './StatisticsWithStore';
+import { getCourseId, getVideoId } from 'lib/helpers/url-helpers';
+import { formatLongDateTime } from 'lib/moment';
+
 import DescriptionCard from '../../components/misc/DescriptionCard';
+
+import StatisticsWithStore from './StatisticsWithStore';
 
 const renderSubmissionInfo = (
   videoSubmission: VideoSubmissionData,
@@ -88,8 +91,8 @@ const VideoSubmissionShow: FC<Props> = (props) => {
     return (
       <>
         <PageHeader
-          title="Video"
           returnLink={getVideoSubmissionsURL(getCourseId(), getVideoId())}
+          title="Video"
         />
         <LoadingIndicator />
       </>
@@ -111,8 +114,8 @@ const VideoSubmissionShow: FC<Props> = (props) => {
           />
           <CardContent>
             <StatisticsWithStore
-              video={videoSubmission.videoStatistics.video}
               statistics={videoSubmission.videoStatistics.statistics}
+              video={videoSubmission.videoStatistics.video}
             />
           </CardContent>
         </Card>
@@ -124,8 +127,8 @@ const VideoSubmissionShow: FC<Props> = (props) => {
   return (
     <>
       <PageHeader
-        title={`Video - ${videoSubmission?.videoTitle}`}
         returnLink={getVideoSubmissionsURL(getCourseId(), getVideoId())}
+        title={`Video - ${videoSubmission?.videoTitle}`}
       />
       {isLoading ? <LoadingIndicator /> : renderBody}
     </>

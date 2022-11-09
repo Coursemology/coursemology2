@@ -5,12 +5,13 @@ import {
   saveEntityToStore,
   saveListToStore,
 } from 'utilities/store';
+
 import {
-  SAVE_ANNOUNCEMENT_LIST,
   AnnouncementsActionType,
   AnnouncementsState,
-  SAVE_ANNOUNCEMENT,
   DELETE_ANNOUNCEMENT,
+  SAVE_ANNOUNCEMENT,
+  SAVE_ANNOUNCEMENT_LIST,
 } from './types';
 
 const initialState: AnnouncementsState = {

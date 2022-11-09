@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Avatar,
   Button,
@@ -8,7 +9,7 @@ import {
   Divider,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
+
 import { formatLongDateTime } from 'lib/moment';
 
 const MAX_POST_HEIGHT = 60;
@@ -58,16 +59,16 @@ export default class ForumPost extends Component {
       >
         <CardHeader
           avatar={<Avatar src={this.props.post.avatar} />}
-          title={this.props.post.userName}
           subheader={formatLongDateTime(this.props.post.updatedAt)}
+          title={this.props.post.userName}
         />
         <Divider />
         <CardContent>
           <div
-            dangerouslySetInnerHTML={{ __html: this.props.post.text }}
             ref={(divElement) => {
               this.divElement = divElement;
             }}
+            dangerouslySetInnerHTML={{ __html: this.props.post.text }}
             style={{
               height:
                 this.state.isExpanded || !this.state.isExpandable
@@ -78,8 +79,8 @@ export default class ForumPost extends Component {
           />
           {this.state.isExpandable && (
             <Button
-              color="primary"
               className="forum-post-expand-button"
+              color="primary"
               id="add-level"
               onClick={(event) => {
                 event.persist();

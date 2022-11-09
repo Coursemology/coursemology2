@@ -1,4 +1,5 @@
 import { render, RenderResult } from 'utilities/test-utils';
+
 import EditButton from '../EditButton';
 
 let documentBody: RenderResult;

@@ -6,6 +6,7 @@ import {
   CommentTabInfo,
   CommentTopicData,
 } from 'types/course/comments';
+
 import BaseCourseAPI from './Base';
 
 export default class CommentsAPI extends BaseCourseAPI {

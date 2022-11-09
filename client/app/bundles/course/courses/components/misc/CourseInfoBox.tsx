@@ -1,9 +1,11 @@
-import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-import { CardContent, Typography, Grid, Link } from '@mui/material';
+import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { CardContent, Grid, Link, Typography } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import { CourseMiniEntity } from 'types/course/courses';
+
 import { getCourseURL } from 'lib/helpers/url-builders';
+
 import styles from './CourseInfoBox.scss';
 
 interface Props extends WrappedComponentProps {
@@ -14,7 +16,15 @@ const CourseInfoBox: FC<Props> = (props) => {
   const { course } = props;
 
   return (
-    <Grid item xs={1} sm={1} md={1} lg={1} xl={1} style={{ padding: 10 }}>
+    <Grid
+      item={true}
+      lg={1}
+      md={1}
+      sm={1}
+      style={{ padding: 10 }}
+      xl={1}
+      xs={1}
+    >
       <div
         className="course"
         style={{
@@ -38,20 +48,20 @@ const CourseInfoBox: FC<Props> = (props) => {
           }}
         >
           <p
+            className={styles.coursePicture}
+            dangerouslySetInnerHTML={{ __html: course.logoUrl }}
             style={{
               textAlign: 'center',
               marginBottom: 0,
               marginTop: 10,
             }}
-            className={styles.coursePicture}
-            dangerouslySetInnerHTML={{ __html: course.logoUrl }}
           />
           <CardContent style={{ padding: 5 }}>
             <Typography
-              variant="h6"
-              component="div"
               align="center"
               color="black"
+              component="div"
+              variant="h6"
             >
               {course.title}
             </Typography>
@@ -71,8 +81,8 @@ const CourseInfoBox: FC<Props> = (props) => {
             }}
           >
             <Typography
-              variant="body2"
               dangerouslySetInnerHTML={{ __html: course.description }}
+              variant="body2"
             />
           </CardContent>
         )}

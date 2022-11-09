@@ -60,15 +60,15 @@ const Pagination: FC<Props> = (props) => {
   return (
     <PaginationMUI
       color="primary"
-      variant="outlined"
+      count={count}
+      onChange={handleChange}
+      page={page}
       style={{
         padding: padding ?? 24,
         display: 'flex',
         justifyContent: 'center',
       }}
-      count={count}
-      page={page}
-      onChange={handleChange}
+      variant="outlined"
     />
   );
 };

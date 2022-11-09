@@ -1,10 +1,10 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
-import configureStore from './store';
 import SubmissionsIndex from './pages/SubmissionsIndex/index';
+import configureStore from './store';
 
 $(() => {
   const mountNode = document.getElementById('course-submissions-component');
@@ -18,8 +18,8 @@ $(() => {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/courses/:courseId/assessments/submissions"
               element={<SubmissionsIndex />}
+              path="/courses/:courseId/assessments/submissions"
             />
           </Routes>
         </BrowserRouter>

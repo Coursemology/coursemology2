@@ -1,10 +1,12 @@
 import { Component } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
+
 import { postPackShape } from 'course/assessment/submission/propTypes';
 import { getForumTopicURL, getForumURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+
 import ForumPost from './ForumPost';
 import Labels from './Labels';
 import ParentPost from './ParentPost';
@@ -59,7 +61,7 @@ export default class SelectedPostCard extends Component {
       renderedName = `${renderedName.slice(0, MAX_NAME_LENGTH)}...`;
     }
     return (
-      <a href={url} target="_blank" rel="noreferrer">
+      <a href={url} rel="noreferrer" target="_blank">
         {renderedName} <i className="fa fa-external-link" />
       </a>
     );
@@ -123,8 +125,8 @@ export default class SelectedPostCard extends Component {
     return (
       <button
         className="pull-right"
-        style={styles.trashButton}
         onClick={() => this.props.onRemovePostPack()}
+        style={styles.trashButton}
         type="button"
       >
         <i className="fa fa-trash" />
@@ -136,8 +138,8 @@ export default class SelectedPostCard extends Component {
     const { postPack } = this.props;
 
     return (
-      <div style={styles.card} className="selected-forum-post-card">
-        <div style={styles.label} onClick={() => this.handleTogglePostView()}>
+      <div className="selected-forum-post-card" style={styles.card}>
+        <div onClick={() => this.handleTogglePostView()} style={styles.label}>
           {this.renderLabel()}
           {this.renderTrashIcon()}
         </div>

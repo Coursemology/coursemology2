@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 import {
   Button,
   CardContent,
@@ -11,6 +10,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import PropTypes from 'prop-types';
 
 const styles = {
   expandableThreshold: 10,
@@ -126,10 +126,10 @@ class TextResponseResults extends Component {
     return (
       <CardContent style={styles.expandToggleStyle}>
         <Button
-          variant="outlined"
           onClick={() =>
             this.setState((state) => ({ expanded: !state.expanded }))
           }
+          variant="outlined"
         >
           <FormattedMessage
             {...translations[labelTranslation]}

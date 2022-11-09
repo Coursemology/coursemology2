@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
+import { SidebarItems, SidebarItemsPostData } from 'types/course/admin/sidebar';
 
 import CourseAPI from 'api/course';
-import { SidebarItems, SidebarItemsPostData } from 'types/course/admin/sidebar';
 
 export const fetchSidebarItems = async (): Promise<SidebarItems> => {
   const response = await CourseAPI.admin.sidebar.index();

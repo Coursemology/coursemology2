@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import {
   Button,
@@ -7,6 +6,8 @@ import {
   DialogContent,
   DialogTitle,
 } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import translations from 'lib/translations/form';
 
 const styles = {
@@ -23,13 +24,13 @@ const styles = {
 const Popup = (props) => {
   const { title, children, actionButtons, onDismiss } = props;
   const dismissButton = (
-    <Button color="primary" key="dismiss-button" onClick={onDismiss}>
+    <Button key="dismiss-button" color="primary" onClick={onDismiss}>
       <FormattedMessage {...translations.dismiss} />
     </Button>
   );
 
   return (
-    <Dialog onClose={onDismiss} open maxWidth="xl">
+    <Dialog maxWidth="xl" onClose={onDismiss} open={true}>
       <DialogTitle style={styles.centralise}>{title}</DialogTitle>
       <DialogContent style={{ ...styles.dialog, ...styles.centralise }}>
         {children}

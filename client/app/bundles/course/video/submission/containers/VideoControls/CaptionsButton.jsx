@@ -1,12 +1,14 @@
-import PropTypes from 'prop-types';
-import { IconButton } from '@mui/material';
-import { captionsStates } from 'lib/constants/videoConstants';
 import { connect } from 'react-redux';
-import { grey } from '@mui/material/colors';
 import ClosedCaption from '@mui/icons-material/ClosedCaption';
+import { IconButton } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
+import { captionsStates } from 'lib/constants/videoConstants';
+
+import { changeCaptionsState } from '../../actions/video';
 
 import styles from '../VideoPlayer.scss';
-import { changeCaptionsState } from '../../actions/video';
 
 const propTypes = {
   captionsState: PropTypes.string.isRequired,

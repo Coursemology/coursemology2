@@ -1,4 +1,5 @@
 import { updateOrAppend } from 'lib/helpers/reducer-helpers';
+
 import actionTypes from '../constants';
 
 const initialState = {

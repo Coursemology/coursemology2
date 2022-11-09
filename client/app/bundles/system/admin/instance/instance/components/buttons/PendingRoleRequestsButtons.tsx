@@ -1,15 +1,17 @@
 import { FC, memo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { defineMessages } from 'react-intl';
-import DeleteButton from 'lib/components/core/buttons/DeleteButton';
-import AcceptButton from 'lib/components/core/buttons/AcceptButton';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch } from 'types/store';
-import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
-import { RoleRequestRowData } from 'types/system/instance/roleRequests';
 import equal from 'fast-deep-equal';
+import { AppDispatch } from 'types/store';
+import { RoleRequestRowData } from 'types/system/instance/roleRequests';
+
+import AcceptButton from 'lib/components/core/buttons/AcceptButton';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EmailButton from 'lib/components/core/buttons/EmailButton';
+import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import { approveRoleRequest, rejectRoleRequest } from '../../operations';
 import RejectWithMessageForm from '../forms/RejectWithMessageForm';
 
@@ -116,28 +118,28 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
   const managementButtons = (
     <div className="whitespace-nowrap">
       <AcceptButton
-        tooltip={t(translations.approveTooltip)}
         className={`role-request-approve-${roleRequest.id} mr-4 p-0`}
         disabled={isApproving || isDeleting}
         onClick={onApprove}
+        tooltip={t(translations.approveTooltip)}
       />
       <EmailButton
-        tooltip={t(translations.rejectMessageTooltip)}
         className={`role-request-reject-message-${roleRequest.id} mr-4 p-0`}
         disabled={isApproving || isDeleting}
         onClick={onRejectWithMessage}
+        tooltip={t(translations.rejectMessageTooltip)}
       />
       <DeleteButton
-        tooltip={t(translations.rejectTooltip)}
         className={`role-request-reject-${roleRequest.id} p-0`}
-        disabled={isApproving || isDeleting}
-        loading={isDeleting}
-        onClick={onReject}
         confirmMessage={t(translations.rejectConfirm, {
           role: ROLE_REQUEST_ROLES[roleRequest.role!],
           name: roleRequest.name,
           email: roleRequest.email,
         })}
+        disabled={isApproving || isDeleting}
+        loading={isDeleting}
+        onClick={onReject}
+        tooltip={t(translations.rejectTooltip)}
       />
     </div>
   );
@@ -147,9 +149,9 @@ const PendingRoleRequestsButtons: FC<Props> = (props) => {
       {managementButtons}
       {isRejectDialogOpen && (
         <RejectWithMessageForm
+          onClose={(): void => setIsRejectDialogOpen(false)}
           open={isRejectDialogOpen}
           roleRequest={roleRequest}
-          onClose={(): void => setIsRejectDialogOpen(false)}
         />
       )}
     </>

@@ -1,15 +1,13 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-
-import { AppDispatch } from 'types/store';
-
-import { IconButton, Tooltip } from '@mui/material';
 import {
   Download as DownloadIcon,
   Downloading as DownloadingIcon,
 } from '@mui/icons-material';
+import { IconButton, Tooltip } from '@mui/material';
+import { AppDispatch } from 'types/store';
 
 import CustomTooltip from 'lib/components/core/CustomTooltip';
 
@@ -51,12 +49,11 @@ const DownloadFolderButton: FC<Props> = (props) => {
 
   return (
     <Tooltip
-      title={intl.formatMessage(translations.downloadTooltip)}
       placement="top"
+      title={intl.formatMessage(translations.downloadTooltip)}
     >
       <IconButton
         id="download-folder-button"
-        style={{ padding: 6 }}
         onClick={(): void => {
           setIsLoading(true);
           dispatch(
@@ -72,6 +69,7 @@ const DownloadFolderButton: FC<Props> = (props) => {
             ),
           );
         }}
+        style={{ padding: 6 }}
       >
         <DownloadIcon />
       </IconButton>

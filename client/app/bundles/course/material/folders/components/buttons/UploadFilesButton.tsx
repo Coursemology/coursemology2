@@ -1,7 +1,7 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-import { IconButton, Tooltip } from '@mui/material';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Upload as UploadIcon } from '@mui/icons-material';
+import { IconButton, Tooltip } from '@mui/material';
 
 interface Props extends WrappedComponentProps {
   handleOnClick: () => void;
@@ -19,13 +19,13 @@ const UploadFilesButton: FC<Props> = (props) => {
 
   return (
     <Tooltip
-      title={intl.formatMessage(translations.uploadFilesTooltip)}
       placement="top"
+      title={intl.formatMessage(translations.uploadFilesTooltip)}
     >
       <IconButton
         id="upload-files-button"
-        style={{ padding: 6 }}
         onClick={handleOnClick}
+        style={{ padding: 6 }}
       >
         <UploadIcon />
       </IconButton>

@@ -3,19 +3,22 @@ import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { ClickAwayListener, IconButton } from '@mui/material';
 import { MoreHoriz } from '@mui/icons-material';
+import { ClickAwayListener, IconButton } from '@mui/material';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import colors from 'tailwindcss/colors';
 import { ForumEntity } from 'types/course/forums';
 import { AppDispatch } from 'types/store';
+
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
-import SubscribeButton from './SubscribeButton';
-import ForumEdit from '../../pages/ForumEdit';
+
 import { deleteForum } from '../../operations';
+import ForumEdit from '../../pages/ForumEdit';
+
+import SubscribeButton from './SubscribeButton';
 
 interface Props {
   forum: ForumEntity;
@@ -105,30 +108,30 @@ const ForumManagementButtons: FC<Props> = (props) => {
       }
     >
       <SubscribeButton
-        emailSubscription={forum.emailSubscription}
-        entityType="forum"
-        entityId={forum.id}
-        entityUrl={forum.forumUrl}
-        entityTitle={forum.name}
         disabled={disableButton}
+        emailSubscription={forum.emailSubscription}
+        entityId={forum.id}
+        entityTitle={forum.name}
+        entityType="forum"
+        entityUrl={forum.forumUrl}
       />
 
       {forum.permissions.canEditForum && (
         <EditButton
           className={`forum-edit-${forum.id}`}
-          onClick={handleEdit}
           disabled={disableButton}
+          onClick={handleEdit}
         />
       )}
       {forum.permissions.canDeleteForum && (
         <DeleteButton
           className={`forum-delete-${forum.id}`}
-          disabled={disableButton}
-          loading={isDeleting}
-          onClick={handleDelete}
           confirmMessage={t(translations.deletionConfirm, {
             title: forum.name,
           })}
+          disabled={disableButton}
+          loading={isDeleting}
+          onClick={handleDelete}
         />
       )}
     </div>
@@ -150,10 +153,10 @@ const ForumManagementButtons: FC<Props> = (props) => {
         <ForumEdit
           forum={forum}
           isOpen={isEditOpen}
+          navigateToShowAfterUpdate={navigateToShowAfterUpdate}
           onClose={(): void => {
             setIsEditOpen(false);
           }}
-          navigateToShowAfterUpdate={navigateToShowAfterUpdate}
         />
       </div>
     </ClickAwayListener>

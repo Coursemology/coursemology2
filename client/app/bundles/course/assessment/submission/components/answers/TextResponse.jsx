@@ -1,10 +1,12 @@
-import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
+import PropTypes from 'prop-types';
+
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
-import { questionShape } from '../../propTypes';
+
 import UploadedFileView from '../../containers/UploadedFileView';
-import TextResponseSolutions from '../TextResponseSolutions';
+import { questionShape } from '../../propTypes';
 import FileInput from '../FileInput';
+import TextResponseSolutions from '../TextResponseSolutions';
 
 const TextResponse = (props) => {
   const { question, readOnly, answerId, graderView } = props;
@@ -13,8 +15,8 @@ const TextResponse = (props) => {
 
   const readOnlyAnswer = (
     <Controller
-      name={`${answerId}.answer_text`}
       control={control}
+      name={`${answerId}.answer_text`}
       render={({ field }) => (
         <div dangerouslySetInnerHTML={{ __html: field.value }} />
       )}
@@ -23,20 +25,20 @@ const TextResponse = (props) => {
 
   const richtextAnswer = (
     <Controller
-      name={`${answerId}.answer_text`}
       control={control}
+      name={`${answerId}.answer_text`}
       render={({ field, fieldState }) => (
         <FormRichTextField
+          disabled={readOnly}
           field={field}
           fieldState={fieldState}
-          fullWidth
+          fullWidth={true}
           InputLabelProps={{
             shrink: true,
           }}
-          multiline
+          multiline={true}
           renderIf={!readOnly && !question.autogradable}
           variant="standard"
-          disabled={readOnly}
         />
       )}
     />
@@ -44,15 +46,15 @@ const TextResponse = (props) => {
 
   const plaintextAnswer = (
     <Controller
-      name={`${answerId}.answer_text`}
       control={control}
+      name={`${answerId}.answer_text`}
       render={({ field }) => (
         <textarea
           name={`${answerId}.answer_text`}
           onChange={field.onChange}
-          value={field.value || ''}
-          style={{ width: '100%' }}
           rows={5}
+          style={{ width: '100%' }}
+          value={field.value || ''}
         />
       )}
     />
@@ -70,8 +72,8 @@ const TextResponse = (props) => {
       {allowUpload && !readOnly && (
         <FileInput
           control={control}
-          name={`${answerId}.files`}
           disabled={readOnly}
+          name={`${answerId}.files`}
         />
       )}
     </div>

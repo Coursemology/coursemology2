@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios';
-
-import CourseAPI from 'api/course';
 import {
   CommentsSettingsData,
   CommentsSettingsPostData,
 } from 'types/course/admin/comments';
+
+import CourseAPI from 'api/course';
 
 type Data = Promise<CommentsSettingsData>;
 

@@ -1,12 +1,13 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Divider, Paper, Popover } from '@mui/material';
+import PropTypes from 'prop-types';
+
+import { scribingTranslations as translations } from '../../../translations';
+import ColorPickerField from '../fields/ColorPickerField';
 import LineStyleField from '../fields/LineStyleField';
 import LineThicknessField from '../fields/LineThicknessField';
-import ColorPickerField from '../fields/ColorPickerField';
 import ShapeField from '../fields/ShapeField';
-import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
   intl: PropTypes.object.isRequired,
@@ -81,22 +82,22 @@ class ShapePopover extends Component {
         <h4>{intl.formatMessage(translations.border)}</h4>
         <LineStyleField
           lineToolType={lineToolType}
-          selectedLineStyle={selectedLineStyle}
           onClickLineStyleChip={onClickLineStyleChip}
+          selectedLineStyle={selectedLineStyle}
         />
         <LineThicknessField
-          toolThicknessValue={toolThicknessValue}
           onChangeSliderThickness={onChangeSliderThickness}
+          toolThicknessValue={toolThicknessValue}
         />
         <ColorPickerField
-          onClickColorPicker={onClickBorderColorPicker}
-          colorPickerPopoverOpen={borderColorPickerPopoverOpen}
+          colorPickerColor={borderColorPickerColor}
           colorPickerPopoverAnchorEl={borderColorPickerPopoverAnchorEl}
+          colorPickerPopoverOpen={borderColorPickerPopoverOpen}
+          onChangeCompleteColorPicker={onChangeCompleteBorderColorPicker}
+          onClickColorPicker={onClickBorderColorPicker}
           onRequestCloseColorPickerPopover={
             onRequestCloseBorderColorPickerPopover
           }
-          colorPickerColor={borderColorPickerColor}
-          onChangeCompleteColorPicker={onChangeCompleteBorderColorPicker}
         />
       </>
     );
@@ -119,16 +120,16 @@ class ShapePopover extends Component {
       <>
         <h4>{intl.formatMessage(translations.fill)}</h4>
         <ColorPickerField
-          onClickColorPicker={onClickFillColorPicker}
-          colorPickerPopoverOpen={fillColorPickerPopoverOpen}
+          colorPickerColor={fillColorPickerColor}
           colorPickerPopoverAnchorEl={fillColorPickerPopoverAnchorEl}
+          colorPickerPopoverOpen={fillColorPickerPopoverOpen}
+          noFillOnCheck={noFillOnCheck}
+          noFillValue={noFillValue}
+          onChangeCompleteColorPicker={onChangeCompleteFillColorPicker}
+          onClickColorPicker={onClickFillColorPicker}
           onRequestCloseColorPickerPopover={
             onRequestCloseFillColorPickerPopover
           }
-          colorPickerColor={fillColorPickerColor}
-          onChangeCompleteColorPicker={onChangeCompleteFillColorPicker}
-          noFillValue={noFillValue}
-          noFillOnCheck={noFillOnCheck}
         />
       </>
     );
@@ -154,12 +155,12 @@ class ShapePopover extends Component {
 
     return (
       <Popover
-        open={open}
         anchorEl={anchorEl}
         anchorOrigin={popoverStyles.anchorOrigin}
         onClose={onRequestClose}
-        transformOrigin={popoverStyles.transformOrigin}
+        open={open}
         style={styles.toolDropdowns}
+        transformOrigin={popoverStyles.transformOrigin}
       >
         <Paper style={styles.paper}>
           {displayShapeField ? this.renderShapeComponent() : undefined}

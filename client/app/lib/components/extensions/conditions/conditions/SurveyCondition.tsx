@@ -1,16 +1,17 @@
 import { useMemo } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Autocomplete } from '@mui/material';
+import { SurveyConditionData } from 'types/course/conditions';
 
 import CourseAPI from 'api/course';
-import { SurveyConditionData } from 'types/course/conditions';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
-import Prompt from 'lib/components/core/dialogs/Prompt';
-import { AnyConditionProps } from '../AnyCondition';
+
 import { formatErrorMessage } from '../../../form/fields/utils/mapError';
+import { AnyConditionProps } from '../AnyCondition';
 import translations from '../translations';
 
 // TODO: Change string to Survey['title'] once Survey is typed
@@ -47,38 +48,38 @@ const SurveyConditionForm = (
 
   return (
     <Prompt
-      open={props.open}
-      onClose={props.onClose}
-      title={t(translations.chooseASurvey)}
       onClickPrimary={handleSubmit(updateSurvey)}
+      onClose={props.onClose}
+      open={props.open}
+      primaryDisabled={!isNewCondition && !formState.isDirty}
       primaryLabel={
         isNewCondition
           ? t(translations.createCondition)
           : t(translations.updateCondition)
       }
-      primaryDisabled={!isNewCondition && !formState.isDirty}
+      title={t(translations.chooseASurvey)}
     >
       <Controller
-        name="surveyId"
         control={control}
+        name="surveyId"
         render={({ field, fieldState: { error } }): JSX.Element => (
           <Autocomplete
             {...field}
-            value={field.value?.toString()}
-            onChange={(_, value): void => field.onChange(parseInt(value, 10))}
-            disableClearable
-            options={autocompleteOptions}
-            fullWidth
+            disableClearable={true}
+            fullWidth={true}
             getOptionLabel={(id): string => surveys[id] ?? ''}
+            onChange={(_, value): void => field.onChange(parseInt(value, 10))}
+            options={autocompleteOptions}
             renderInput={(inputProps): JSX.Element => (
               <TextField
                 {...inputProps}
-                variant="filled"
-                label={t(translations.survey)}
                 error={Boolean(error)}
                 helperText={error && formatErrorMessage(error.message)}
+                label={t(translations.survey)}
+                variant="filled"
               />
             )}
+            value={field.value?.toString()}
           />
         )}
       />
@@ -100,9 +101,9 @@ const SurveyCondition = (
 
   return (
     <Preload
-      while={fetchSurveys}
-      render={<LoadingIndicator bare fit className="p-2" />}
       onErrorDo={props.onClose}
+      render={<LoadingIndicator bare={true} className="p-2" fit={true} />}
+      while={fetchSurveys}
     >
       {(data): JSX.Element => <SurveyConditionForm {...props} surveys={data} />}
     </Preload>

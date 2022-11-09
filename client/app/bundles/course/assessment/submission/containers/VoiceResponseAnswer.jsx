@@ -1,19 +1,21 @@
 import { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
-import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@mui/material';
-import { red } from '@mui/material/colors';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import Mic from '@mui/icons-material/Mic';
 import Stop from '@mui/icons-material/Stop';
+import { Button } from '@mui/material';
+import { red } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import FormSingleFileInput from 'lib/components/form/fields/SingleFileInput';
+
 import recorderHelper from '../../utils/recorderHelper';
 import {
-  setRecording,
-  setNotRecording,
   recorderComponentMount,
   recorderComponentUnmount,
+  setNotRecording,
+  setRecording,
 } from '../actions/index';
 
 const translations = defineMessages({
@@ -120,7 +122,7 @@ class VoiceResponseAnswer extends Component {
     }
     if (finalUrl) {
       return (
-        <audio controls src={finalUrl}>
+        <audio controls={true} src={finalUrl}>
           <track kind="captions" />
         </audio>
       );
@@ -143,10 +145,10 @@ class VoiceResponseAnswer extends Component {
       <div>
         <div style={styles.fileInputWrapper}>
           <FormSingleFileInput
+            accept={{ 'audio/mp3': [], 'audio/wav': [] }}
+            disabled={readOnly}
             field={field}
             fieldState={fieldState}
-            disabled={readOnly}
-            accept={{ 'audio/mp3': [], 'audio/wav': [] }}
             previewComponent={this.renderSingleFileInputChildren}
           />
         </div>
@@ -225,8 +227,8 @@ class VoiceResponseAnswer extends Component {
     return (
       <div>
         <Controller
-          name={`${answerId}.file`}
           control={control}
+          name={`${answerId}.file`}
           render={({ field, fieldState }) =>
             this.renderFile({
               field,

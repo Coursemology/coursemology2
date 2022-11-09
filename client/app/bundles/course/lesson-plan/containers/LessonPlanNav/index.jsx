@@ -1,10 +1,10 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
-import { Button, MenuItem, MenuList, Popover } from '@mui/material';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
+import { Button, MenuItem, MenuList, Popover } from '@mui/material';
+import PropTypes from 'prop-types';
 
 const translations = defineMessages({
   goto: {
@@ -54,19 +54,19 @@ class LessonPlanNav extends Component {
     return (
       <>
         <Button
-          variant="contained"
           color="secondary"
           endIcon={<KeyboardArrowUp />}
           onClick={this.handleClick}
           style={styles.navButton}
+          variant="contained"
         >
           <FormattedMessage {...translations.goto} />
         </Button>
         <Popover
-          open={this.state.open}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
           onClose={this.handleRequestClose}
+          open={this.state.open}
           transformOrigin={{ horizontal: 'left', vertical: 'bottom' }}
         >
           <MenuList style={{ maxHeight: 450 }}>

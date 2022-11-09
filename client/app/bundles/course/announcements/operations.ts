@@ -1,6 +1,8 @@
-import CourseAPI from 'api/course';
 import { AnnouncementFormData } from 'types/course/announcements';
 import { Operation } from 'types/store';
+
+import CourseAPI from 'api/course';
+
 import * as actions from './actions';
 
 /**

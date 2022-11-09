@@ -1,7 +1,9 @@
 import { memo } from 'react';
-import PropTypes from 'prop-types';
 import { FormControlLabel, FormHelperText, Switch } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
+
 import propsAreEqual from './utils/propsAreEqual';
 
 const styles = {

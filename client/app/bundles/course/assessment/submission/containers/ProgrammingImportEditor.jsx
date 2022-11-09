@@ -1,17 +1,19 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { useFieldArray, useFormContext, useWatch } from 'react-hook-form';
-import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import { Button } from '@mui/material';
-import ImportedFileView from './ImportedFileView';
+import PropTypes from 'prop-types';
+
+import { deleteFile, importFiles } from '../actions';
 import Editor from '../components/Editor';
 import FileInputField from '../components/FileInput';
-import ReadOnlyEditor from './ReadOnlyEditor';
-import { importFiles, deleteFile } from '../actions';
+import { fileShape, questionShape } from '../propTypes';
 import translations from '../translations';
-import { questionShape, fileShape } from '../propTypes';
 import { parseLanguages } from '../utils';
+
+import ImportedFileView from './ImportedFileView';
+import ReadOnlyEditor from './ReadOnlyEditor';
 
 const styles = {
   formButton: {
@@ -55,19 +57,19 @@ const SelectProgrammingFileEditor = ({
             <ReadOnlyEditor
               key={file.id}
               answerId={answerId}
-              fileId={file.id}
               content={content}
+              fileId={file.id}
             />
           );
         }
         if (index === displayFileIndex && !file.staged) {
           return (
             <Editor
-              control={control}
               key={file.id}
-              name={`${answerId}.files_attributes.${index}.content`}
+              control={control}
               filename={file.filename}
               language={language}
+              name={`${answerId}.files_attributes.${index}.content`}
             />
           );
         }
@@ -95,8 +97,8 @@ const renderProgrammingHistoryEditor = (answer, displayFileIndex) => {
     <ReadOnlyEditor
       key={answer.id}
       answerId={answer.id}
-      fileId={file.id}
       content={content}
+      fileId={file.id}
     />
   );
 };
@@ -153,7 +155,8 @@ const VisibleProgrammingImportEditor = (props) => {
     isSaving,
     viewHistory,
   } = props;
-  const answers = viewHistory ? historyAnswers : useWatch({ control });
+  const currentAnswer = useWatch({ control });
+  const answers = viewHistory ? historyAnswers : currentAnswer;
 
   // When an assessment is submitted/unsubmitted,
   // the form is somehow not reset yet and the answers for the new answerId
@@ -177,12 +180,12 @@ const VisibleProgrammingImportEditor = (props) => {
     <>
       {readOnly ? null : (
         <ImportedFileView
-          submissionId={submissionId}
-          questionId={questionId}
           displayFileIndex={displayFileIndex}
+          files={files}
           handleDeleteFile={handleDeleteFile}
           handleFileTabbing={(index) => setDisplayFileIndex(index)}
-          files={files}
+          questionId={questionId}
+          submissionId={submissionId}
           viewHistory={viewHistory}
         />
       )}
@@ -203,8 +206,6 @@ const VisibleProgrammingImportEditor = (props) => {
       {readOnly || viewHistory ? null : (
         <>
           <FileInputField
-            name={`${answerId}.import_files`}
-            disabled={isSaving}
             callback={(filesToImport) =>
               stageFiles({
                 answerId,
@@ -213,9 +214,10 @@ const VisibleProgrammingImportEditor = (props) => {
                 setValue,
               })
             }
+            disabled={isSaving}
+            name={`${answerId}.import_files`}
           />
           <Button
-            variant="contained"
             disabled={disableImport}
             onClick={() =>
               dispatch(
@@ -223,6 +225,7 @@ const VisibleProgrammingImportEditor = (props) => {
               )
             }
             style={styles.formButton}
+            variant="contained"
           >
             {intl.formatMessage(translations.uploadFiles)}
           </Button>

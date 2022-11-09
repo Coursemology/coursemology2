@@ -1,22 +1,24 @@
-import { Avatar, Button, CardHeader, Link } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import { grey, orange, red } from '@mui/material/colors';
-import Delete from '@mui/icons-material/Delete';
-import Edit from '@mui/icons-material/Edit';
+import { FC, useState } from 'react';
 import {
   defineMessages,
   FormattedMessage,
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
-import { formatLongDateTime } from 'lib/moment';
-import { FC, useState } from 'react';
-import { CommentPostMiniEntity } from 'types/course/comments';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'types/store';
 import { toast } from 'react-toastify';
+import Delete from '@mui/icons-material/Delete';
+import Edit from '@mui/icons-material/Edit';
+import { LoadingButton } from '@mui/lab';
+import { Avatar, Button, CardHeader, Link } from '@mui/material';
+import { grey, orange, red } from '@mui/material/colors';
+import { CommentPostMiniEntity } from 'types/course/comments';
+import { AppDispatch } from 'types/store';
+
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import { formatLongDateTime } from 'lib/moment';
+
 import { deletePost, updatePost } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -127,11 +129,11 @@ const CommentCard: FC<Props> = (props) => {
   const renderCommentContent = (): JSX.Element => {
     if (editMode) {
       return (
-        <div id={`edit_post_${post.id}`} className="edit-discussion-post-form">
+        <div className="edit-discussion-post-form" id={`edit_post_${post.id}`}>
           <CKEditorRichText
             disabled={isSaving}
-            name={intl.formatMessage(translations.comment)}
             inputId={editPostIdentifier(post.id.toString())}
+            name={intl.formatMessage(translations.comment)}
             onChange={(value): void => {
               setEditValue(value);
             }}
@@ -145,20 +147,20 @@ const CommentCard: FC<Props> = (props) => {
             }}
           >
             <Button
-              color="secondary"
-              onClick={(): void => setEditMode(false)}
-              id={`post_${post.id}`}
               className="cancel-button"
+              color="secondary"
+              id={`post_${post.id}`}
+              onClick={(): void => setEditMode(false)}
             >
               <FormattedMessage {...translations.cancel} />
             </Button>
             <LoadingButton
-              color="primary"
-              onClick={onSave}
-              disabled={isDeleting || isSaving}
-              loading={isSaving}
-              id={`post_${post.id}`}
               className="submit-button"
+              color="primary"
+              disabled={isDeleting || isSaving}
+              id={`post_${post.id}`}
+              loading={isSaving}
+              onClick={onSave}
             >
               <FormattedMessage {...translations.save} />
             </LoadingButton>
@@ -193,13 +195,18 @@ const CommentCard: FC<Props> = (props) => {
         <CardHeader
           avatar={
             <Avatar
-              src={post.creator.imageUrl}
               alt={post.creator.name}
-              style={{ height: '25px', width: '25px' }}
               component={Link}
               href={post.creator.userUrl}
+              src={post.creator.imageUrl}
+              style={{ height: '25px', width: '25px' }}
             />
           }
+          style={{ padding: 6 }}
+          subheader={`${formatLongDateTime(post.createdAt)}${
+            post.isDelayed ? ' (delayed comment)' : ''
+          }`}
+          subheaderTypographyProps={{ display: 'block' }}
           title={
             post.creator.userUrl ? (
               <a href={post.creator.userUrl}>{post.creator.name}</a>
@@ -208,11 +215,6 @@ const CommentCard: FC<Props> = (props) => {
             )
           }
           titleTypographyProps={{ display: 'block', marginright: 20 }}
-          subheader={`${formatLongDateTime(post.createdAt)}${
-            post.isDelayed ? ' (delayed comment)' : ''
-          }`}
-          subheaderTypographyProps={{ display: 'block' }}
-          style={{ padding: 6 }}
         />
         <div
           style={{
@@ -261,14 +263,14 @@ const CommentCard: FC<Props> = (props) => {
         {renderCommentContent()}
       </div>
       <ConfirmationDialog
-        confirmDelete
+        confirmDelete={true}
         disableCancelButton={isDeleting}
         disableConfirmButton={isDeleting}
         loadingConfirmButton={isDeleting}
-        open={deleteConfirmation}
         message={<FormattedMessage {...translations.deleteConfirmation} />}
         onCancel={(): void => setDeleteConfirmation(false)}
         onConfirm={onConfirmDelete}
+        open={deleteConfirmation}
       />
     </div>
   );

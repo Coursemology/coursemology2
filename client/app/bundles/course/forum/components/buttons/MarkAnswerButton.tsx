@@ -1,9 +1,10 @@
 import { FC, SyntheticEvent } from 'react';
-import { IconButton, IconButtonProps } from '@mui/material';
+import { defineMessages } from 'react-intl';
 import Check from '@mui/icons-material/Check';
 import Clear from '@mui/icons-material/Clear';
+import { IconButton, IconButtonProps } from '@mui/material';
 import { ForumTopicEntity, TopicType } from 'types/course/forums';
-import { defineMessages } from 'react-intl';
+
 import useTranslation from 'lib/hooks/useTranslation';
 
 interface Props extends IconButtonProps {
@@ -34,8 +35,8 @@ const MarkAnswerButton: FC<Props> = ({ topic, handleClick, isAnswer }) => {
 
   return (
     <IconButton
-      onClick={handleClick}
       color="info"
+      onClick={handleClick}
       title={
         isAnswer ? t(translations.unmarkAsAnswer) : t(translations.markAsAnswer)
       }

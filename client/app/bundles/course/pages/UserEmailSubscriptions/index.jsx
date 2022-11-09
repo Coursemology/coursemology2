@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import {
   ListSubheader,
   Switch,
@@ -11,16 +10,19 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import NotificationPopup from 'lib/containers/NotificationPopup';
+import PropTypes from 'prop-types';
+
 import {
   fetchUserEmailSubscriptionsAndStore,
   updateUserEmailSubscriptions,
 } from 'course/actions/user-email-subscriptions';
 import { setNotification } from 'lib/actions';
+import NotificationPopup from 'lib/containers/NotificationPopup';
+
 import translations, {
   subscriptionComponents,
-  subscriptionTitles,
   subscriptionDescriptions,
+  subscriptionTitles,
 } from './translations.intl';
 
 const styles = {
@@ -94,7 +96,7 @@ class UserEmailSubscriptions extends Component {
 
     if (userEmailSubscriptions.length === 0) {
       return (
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...translations.noEmailSubscriptionSettings} />
         </ListSubheader>
       );

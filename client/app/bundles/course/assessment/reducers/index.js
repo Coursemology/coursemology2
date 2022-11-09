@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
-import formDialog from './formDialog';
+
 import editPage from './editPage';
+import formDialog from './formDialog';
 
 export default combineReducers({
   formDialog,

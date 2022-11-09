@@ -1,5 +1,5 @@
-import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import { RemoveCircle } from '@mui/icons-material';
+import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 
 interface Props extends IconButtonProps {
   disabled: boolean;
@@ -19,8 +19,8 @@ const RemoveAllButton = ({
     <Tooltip placement="top" title={title}>
       <IconButton
         className={className}
-        onClick={onClick}
         color="error"
+        onClick={onClick}
         {...props}
       >
         <RemoveCircle />

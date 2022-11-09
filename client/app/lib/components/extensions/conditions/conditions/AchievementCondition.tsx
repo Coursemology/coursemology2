@@ -1,18 +1,19 @@
 import { useMemo } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { Autocomplete, Box, Typography } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
-import { Controller, useForm } from 'react-hook-form';
-
-import CourseAPI from 'api/course';
 import { AchievementMiniEntity } from 'types/course/achievements';
 import { AchievementConditionData } from 'types/course/conditions';
+
+import CourseAPI from 'api/course';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import Prompt from 'lib/components/core/dialogs/Prompt';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
-import { AnyConditionProps } from '../AnyCondition';
+
 import { formatErrorMessage } from '../../../form/fields/utils/mapError';
+import { AnyConditionProps } from '../AnyCondition';
 import translations from '../translations';
 
 type AchievementOptions = Record<
@@ -60,37 +61,45 @@ const AchievementConditionForm = (
 
   return (
     <Prompt
-      open={props.open}
-      onClose={props.onClose}
-      title={t(translations.chooseAnAchievement)}
       onClickPrimary={handleSubmit(updateAchievement)}
+      onClose={props.onClose}
+      open={props.open}
+      primaryDisabled={!isNewCondition && !formState.isDirty}
       primaryLabel={
         isNewCondition
           ? t(translations.createCondition)
           : t(translations.updateCondition)
       }
-      primaryDisabled={!isNewCondition && !formState.isDirty}
+      title={t(translations.chooseAnAchievement)}
     >
       <Controller
-        name="achievementId"
         control={control}
+        name="achievementId"
         render={({ field, fieldState: { error } }): JSX.Element => (
           <Autocomplete
             {...field}
-            value={field.value?.toString()}
-            onChange={(_, value): void => field.onChange(parseInt(value, 10))}
-            disableClearable
-            options={autocompleteOptions}
-            fullWidth
-            getOptionLabel={(id): string =>
-              achievements[parseInt(id, 10)]?.title ?? ''
-            }
+            disableClearable={true}
             filterOptions={createFilterOptions({
               stringify: (option) => {
                 const achievement = achievements[parseInt(option, 10)];
                 return `${achievement.title} ${achievement.description}`;
               },
             })}
+            fullWidth={true}
+            getOptionLabel={(id): string =>
+              achievements[parseInt(id, 10)]?.title ?? ''
+            }
+            onChange={(_, value): void => field.onChange(parseInt(value, 10))}
+            options={autocompleteOptions}
+            renderInput={(inputProps): JSX.Element => (
+              <TextField
+                {...inputProps}
+                error={Boolean(error)}
+                helperText={error && formatErrorMessage(error.message)}
+                label={t(translations.achievement)}
+                variant="filled"
+              />
+            )}
             renderOption={(optionProps, option): JSX.Element => {
               const achievement = achievements[parseInt(option, 10)];
 
@@ -98,39 +107,31 @@ const AchievementConditionForm = (
                 <Box
                   component="li"
                   {...optionProps}
-                  className={`${optionProps.className} space-x-8`}
                   key={option}
+                  className={`${optionProps.className} space-x-8`}
                 >
                   <img
-                    src={achievement.badge}
                     alt={achievement.title}
                     className="max-h-20 w-20"
+                    src={achievement.badge}
                   />
 
                   <div>
                     <Typography variant="body1">{achievement.title}</Typography>
 
                     <Typography
-                      variant="body2"
-                      color="text.secondary"
                       className="line-clamp-3"
+                      color="text.secondary"
                       dangerouslySetInnerHTML={{
                         __html: achievement.description,
                       }}
+                      variant="body2"
                     />
                   </div>
                 </Box>
               );
             }}
-            renderInput={(inputProps): JSX.Element => (
-              <TextField
-                {...inputProps}
-                variant="filled"
-                label={t(translations.achievement)}
-                error={Boolean(error)}
-                helperText={error && formatErrorMessage(error.message)}
-              />
-            )}
+            value={field.value?.toString()}
           />
         )}
       />
@@ -152,9 +153,9 @@ const AchievementCondition = (
 
   return (
     <Preload
-      while={fetchAchievements}
-      render={<LoadingIndicator bare fit className="p-2" />}
       onErrorDo={props.onClose}
+      render={<LoadingIndicator bare={true} className="p-2" fit={true} />}
+      while={fetchAchievements}
     >
       {(data): JSX.Element => (
         <AchievementConditionForm {...props} achievements={data} />

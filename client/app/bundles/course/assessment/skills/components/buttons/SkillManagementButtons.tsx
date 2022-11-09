@@ -2,13 +2,15 @@ import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch } from 'types/store';
-import DeleteButton from 'lib/components/core/buttons/DeleteButton';
-import EditButton from 'lib/components/core/buttons/EditButton';
 import {
   SkillBranchMiniEntity,
   SkillMiniEntity,
 } from 'types/course/assessment/skills/skills';
+import { AppDispatch } from 'types/store';
+
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import EditButton from 'lib/components/core/buttons/EditButton';
+
 import { deleteSkill, deleteSkillBranch } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -120,10 +122,10 @@ const SkillManagementButtons: FC<Props> = (props) => {
       )}
       {canDestroy && (
         <DeleteButton
-          confirmMessage={message}
           className={
             isSkillBranch ? `skill-branch-delete-${id}` : `skill-delete-${id}`
           }
+          confirmMessage={message}
           disabled={isDeleting}
           loading={isDeleting}
           onClick={onDelete}

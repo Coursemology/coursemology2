@@ -1,10 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button, MenuItem, MenuList, Popover } from '@mui/material';
+import { connect } from 'react-redux';
 import Done from '@mui/icons-material/Done';
 import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
+import { Button, MenuItem, MenuList, Popover } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { setItemTypeVisibility } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
@@ -50,18 +51,18 @@ class LessonPlanFilter extends Component {
     return (
       <>
         <Button
-          variant="contained"
           color="secondary"
           endIcon={<KeyboardArrowUp />}
           onClick={this.handleClick}
+          variant="contained"
         >
           <FormattedMessage {...translations.filter} />
         </Button>
         <Popover
-          open={this.state.open}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
           onClose={this.handleRequestClose}
+          open={this.state.open}
           transformOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
           <MenuList>

@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { LeaderboardData } from 'types/course/leaderboard';
+
 import BaseCourseAPI from './Base';
 
 export default class LeaderboardsAPI extends BaseCourseAPI {

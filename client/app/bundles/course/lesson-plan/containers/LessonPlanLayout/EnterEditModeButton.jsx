@@ -1,6 +1,7 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
+
 import { getCourseId } from 'lib/helpers/url-helpers';
 
 const translations = defineMessages({
@@ -16,8 +17,8 @@ const EnterEditModeButton = () => {
   return (
     <Button
       className="mr-4"
-      variant="outlined"
       onClick={() => navigate(`/courses/${courseId}/lesson_plan/edit`)}
+      variant="outlined"
     >
       <FormattedMessage {...translations.enterEditMode} />
     </Button>

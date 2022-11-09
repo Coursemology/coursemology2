@@ -1,11 +1,12 @@
-import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
+import PropTypes from 'prop-types';
+import * as yup from 'yup';
+
+import ErrorText from 'lib/components/core/ErrorText';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 
 const translations = defineMessages({
@@ -40,36 +41,36 @@ const NewCourseForm = (props) => {
   return (
     <form
       id="new-course-form"
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
       <Controller
-        name="new_title"
         control={control}
+        name="new_title"
         render={({ field, fieldState }) => (
           <FormTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
-            label={<FormattedMessage {...translations.newTitle} />}
-            fullWidth
+            fullWidth={true}
             InputLabelProps={{
               shrink: true,
             }}
-            required
+            label={<FormattedMessage {...translations.newTitle} />}
+            required={true}
             variant="standard"
           />
         )}
       />
       <Controller
-        name="new_start_at"
         control={control}
+        name="new_start_at"
         render={({ field, fieldState }) => (
           <FormDateTimePickerField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
             label={<FormattedMessage {...translations.newStartAt} />}
           />
         )}

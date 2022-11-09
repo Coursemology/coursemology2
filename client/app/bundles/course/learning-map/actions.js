@@ -1,4 +1,5 @@
 import CourseAPI from 'api/course';
+
 import { actionTypes } from './constants';
 
 function getErrorMessage(error) {

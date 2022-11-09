@@ -1,6 +1,7 @@
 import { FC, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Button } from '@mui/material';
-import { injectIntl, defineMessages, WrappedComponentProps } from 'react-intl';
+
 import InviteUsersRegistrationCode from '../../pages/InviteUsersRegistrationCode';
 
 type Props = WrappedComponentProps;
@@ -18,9 +19,9 @@ const RegistrationCodeButton: FC<Props> = (props) => {
 
   const registrationCodeButton = (
     <Button
-      variant="contained"
-      onClick={(): void => setIsOpen(true)}
       className="registration-code"
+      onClick={(): void => setIsOpen(true)}
+      variant="contained"
     >
       {intl.formatMessage(translations.registrationCode)}
     </Button>
@@ -28,8 +29,8 @@ const RegistrationCodeButton: FC<Props> = (props) => {
 
   const registrationCodeDialog = (
     <InviteUsersRegistrationCode
-      open={isOpen}
       handleClose={(): void => setIsOpen(false)}
+      open={isOpen}
     />
   );
 

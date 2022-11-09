@@ -1,8 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { formatLongDateTime } from 'lib/moment';
+import { connect } from 'react-redux';
 import {
   Card,
   CardContent,
@@ -12,16 +10,19 @@ import {
   TableCell,
   TableRow,
 } from '@mui/material';
-import surveyTranslations from 'course/survey/translations';
-import { surveyShape, responseShape } from 'course/survey/propTypes';
+import PropTypes from 'prop-types';
+
 import { fetchResponse } from 'course/survey/actions/responses';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import withRouter from 'lib/components/navigation/withRouter';
+import RespondButton from 'course/survey/containers/RespondButton';
 import ResponseForm, {
   buildInitialValues,
 } from 'course/survey/containers/ResponseForm';
-import RespondButton from 'course/survey/containers/RespondButton';
 import UnsubmitButton from 'course/survey/containers/UnsubmitButton';
+import { responseShape, surveyShape } from 'course/survey/propTypes';
+import surveyTranslations from 'course/survey/translations';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import withRouter from 'lib/components/navigation/withRouter';
+import { formatLongDateTime } from 'lib/moment';
 
 const translations = defineMessages({
   notSubmitted: {
@@ -58,10 +59,10 @@ class ResponseShow extends Component {
     return (
       <>
         {this.renderSubmissionInfo()}
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...surveyTranslations.questions} />
         </ListSubheader>
-        <ResponseForm readOnly {...{ response, flags, initialValues }} />
+        <ResponseForm readOnly={true} {...{ response, flags, initialValues }} />
       </>
     );
   }
@@ -79,14 +80,14 @@ class ResponseShow extends Component {
 
     return (
       <RespondButton
-        courseId={courseId}
-        surveyId={survey.id}
-        responseId={response.id}
         canModify={canModify}
         canSubmit={canSubmit}
-        startAt={survey.start_at}
+        courseId={courseId}
         endAt={survey.end_at}
+        responseId={response.id}
+        startAt={survey.start_at}
         submittedAt={response.submitted_at}
+        surveyId={survey.id}
       />
     );
   }
@@ -135,7 +136,7 @@ class ResponseShow extends Component {
     }
     return (
       <span style={{ marginLeft: 12 }}>
-        <UnsubmitButton responseId={response.id} isIcon={false} />
+        <UnsubmitButton isIcon={false} responseId={response.id} />
       </span>
     );
   }

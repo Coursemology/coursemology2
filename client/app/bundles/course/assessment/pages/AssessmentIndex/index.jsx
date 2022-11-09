@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage } from 'react-intl';
 import {
   Button,
   Dialog,
@@ -9,15 +8,19 @@ import {
   DialogContent,
   DialogTitle,
 } from '@mui/material';
+import PropTypes from 'prop-types';
+
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/core/NotificationBar';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import formTranslations from 'lib/translations/form';
-import AssessmentForm from '../../components/AssessmentForm';
+
 import * as actions from '../../actions';
-import translations from './translations.intl';
+import AssessmentForm from '../../components/AssessmentForm';
 import actionTypes from '../../constants';
+
+import translations from './translations.intl';
 
 class PopupDialog extends Component {
   constructor(props) {
@@ -77,9 +80,9 @@ class PopupDialog extends Component {
 
     const formActions = [
       <Button
+        key="assessment-popup-dialog-cancel-button"
         color={this.state.assessmentForm?.isDirty ? 'error' : 'primary'}
         disabled={disabled}
-        key="assessment-popup-dialog-cancel-button"
         onClick={this.handleClose}
       >
         {this.state.assessmentForm?.isDirty ? (
@@ -89,11 +92,11 @@ class PopupDialog extends Component {
         )}
       </Button>,
       <Button
-        color="primary"
+        key="assessment-popup-dialog-submit-button"
         className="btn-submit"
+        color="primary"
         disabled={disabled}
         form="assessment-form"
-        key="assessment-popup-dialog-submit-button"
         type="submit"
       >
         <FormattedMessage {...translations.createAsDraft} />
@@ -133,18 +136,18 @@ class PopupDialog extends Component {
     return (
       <>
         <Button
-          variant="contained"
           color="primary"
           disabled={disabled}
           onClick={this.handleOpen}
+          variant="contained"
         >
           {intl.formatMessage(translations.newAssessment)}
         </Button>
         <Dialog
-          disableEnforceFocus
+          disableEnforceFocus={true}
+          maxWidth="lg"
           onClose={this.handleClose}
           open={visible}
-          maxWidth="lg"
           style={{
             top: 40,
           }}
@@ -155,25 +158,25 @@ class PopupDialog extends Component {
           <DialogContent>
             <AssessmentForm
               disabled={disabled}
+              emitsVia={(assessmentForm) => this.setState({ assessmentForm })}
               gamified={gamified}
               initialValues={initialValues}
-              modeSwitching
+              modeSwitching={true}
               onSubmit={this.onFormSubmit}
               randomizationAllowed={randomizationAllowed}
-              emitsVia={(assessmentForm) => this.setState({ assessmentForm })}
             />
           </DialogContent>
           <DialogActions>{formActions}</DialogActions>
         </Dialog>
         <ConfirmationDialog
-          confirmDiscard
-          open={confirmationDialogOpen}
+          confirmDiscard={true}
           onCancel={() =>
             dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_CANCEL })
           }
           onConfirm={() =>
             dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_DISCARD })
           }
+          open={confirmationDialogOpen}
         />
         <NotificationBar notification={notification} />
       </>

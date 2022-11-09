@@ -1,15 +1,17 @@
-import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
-import { yupResolver } from '@hookform/resolvers/yup';
 import useEmitterFactory from 'react-emitter-factory';
 import { Controller, useForm } from 'react-hook-form';
+import { injectIntl } from 'react-intl';
+import { yupResolver } from '@hookform/resolvers/yup';
+import PropTypes from 'prop-types';
 import * as yup from 'yup';
+
 import ErrorText from 'lib/components/core/ErrorText';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
 import formTranslations from 'lib/translations/form';
+
 import translations from '../../translations';
 
 const styles = {
@@ -92,42 +94,42 @@ const SurveyForm = (props) => {
   return (
     <form
       id="survey-form"
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
       <Controller
-        name="title"
         control={control}
+        name="title"
         render={({ field, fieldState }) => (
           <FormTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
-            label={intl.formatMessage(translations.title)}
-            fullWidth
+            fullWidth={true}
             InputLabelProps={{
               shrink: true,
             }}
-            required
+            label={intl.formatMessage(translations.title)}
+            required={true}
             variant="standard"
           />
         )}
       />
       <Controller
-        name="description"
         control={control}
+        name="description"
         render={({ field, fieldState }) => (
           <FormRichTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
-            label={intl.formatMessage(translations.description)}
-            fullWidth
-            multiline
+            fullWidth={true}
             InputLabelProps={{
               shrink: true,
             }}
+            label={intl.formatMessage(translations.description)}
+            multiline={true}
             rows={2}
             variant="standard"
           />
@@ -135,39 +137,39 @@ const SurveyForm = (props) => {
       />
       <div style={styles.columns}>
         <Controller
-          name="start_at"
           control={control}
+          name="start_at"
           render={({ field, fieldState }) => (
             <FormDateTimePickerField
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
               label={intl.formatMessage(translations.opensAt)}
               style={styles.oneColumn}
             />
           )}
         />
         <Controller
-          name="end_at"
           control={control}
+          name="end_at"
           render={({ field, fieldState }) => (
             <FormDateTimePickerField
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
               label={intl.formatMessage(translations.expiresAt)}
               style={styles.oneColumn}
             />
           )}
         />
         <Controller
-          name="bonus_end_at"
           control={control}
+          name="bonus_end_at"
           render={({ field, fieldState }) => (
             <FormDateTimePickerField
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
               label={intl.formatMessage(translations.bonusEndsAt)}
               style={styles.oneColumn}
             />
@@ -176,18 +178,18 @@ const SurveyForm = (props) => {
       </div>
       <div style={styles.columns}>
         <Controller
-          name="base_exp"
           control={control}
+          name="base_exp"
           render={({ field, fieldState }) => (
             <FormTextField
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
-              fullWidth
-              label={intl.formatMessage(translations.basePoints)}
+              fullWidth={true}
               InputLabelProps={{
                 shrink: true,
               }}
+              label={intl.formatMessage(translations.basePoints)}
               onWheel={(event) => event.currentTarget.blur()}
               style={styles.flexChild}
               type="number"
@@ -196,18 +198,18 @@ const SurveyForm = (props) => {
           )}
         />
         <Controller
-          name="time_bonus_exp"
           control={control}
+          name="time_bonus_exp"
           render={({ field, fieldState }) => (
             <FormTextField
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
-              fullWidth
-              label={intl.formatMessage(translations.bonusPoints)}
+              fullWidth={true}
               InputLabelProps={{
                 shrink: true,
               }}
+              label={intl.formatMessage(translations.bonusPoints)}
               onWheel={(event) => event.currentTarget.blur()}
               style={styles.flexChild}
               type="number"
@@ -217,26 +219,26 @@ const SurveyForm = (props) => {
         />
       </div>
       <Controller
-        name="allow_response_after_end"
         control={control}
+        name="allow_response_after_end"
         render={({ field, fieldState }) => (
           <FormToggleField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
             label={intl.formatMessage(translations.allowResponseAfterEnd)}
             style={styles.toggle}
           />
         )}
       />
       <Controller
-        name="allow_modify_after_submit"
         control={control}
+        name="allow_modify_after_submit"
         render={({ field, fieldState }) => (
           <FormToggleField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
             label={intl.formatMessage(translations.allowModifyAfterSubmit)}
             style={styles.toggle}
           />
@@ -246,13 +248,13 @@ const SurveyForm = (props) => {
         {intl.formatMessage(translations.allowModifyAfterSubmitHint)}
       </div>
       <Controller
-        name="anonymous"
         control={control}
+        name="anonymous"
         render={({ field, fieldState }) => (
           <FormToggleField
+            disabled={disabled || disableAnonymousToggle}
             field={field}
             fieldState={fieldState}
-            disabled={disabled || disableAnonymousToggle}
             label={intl.formatMessage(translations.anonymous)}
             style={styles.toggle}
           />

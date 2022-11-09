@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
+
 import Popup from 'course/user-notification/components/Popup';
 
 const styles = {
@@ -26,18 +27,18 @@ const translations = defineMessages({
 
 const AchievementGainedPopup = ({ notification, onDismiss, intl }) => (
   <Popup
-    title={intl.formatMessage(translations.unlocked)}
     onDismiss={onDismiss}
+    title={intl.formatMessage(translations.unlocked)}
   >
     <img
-      src={notification.badgeUrl}
       alt={notification.title}
+      src={notification.badgeUrl}
       style={styles.badge}
     />
     <span style={styles.title}>{notification.title}</span>
     <span
-      style={styles.description}
       dangerouslySetInnerHTML={{ __html: notification.description }}
+      style={styles.description}
     />
   </Popup>
 );

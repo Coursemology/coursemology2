@@ -1,21 +1,22 @@
 import { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { Checkbox, FormControlLabel, TextField } from '@mui/material';
-import { blue, green, red } from '@mui/material/colors';
 import CompareArrows from '@mui/icons-material/CompareArrows';
 import Delete from '@mui/icons-material/Delete';
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import { Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { blue, green, red } from '@mui/material/colors';
+import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
-import { courseUserShape, groupShape } from '../../../propTypes';
-import actionTypes, { dialogTypes } from '../../../constants';
-import { sortByGroupRole, sortByName } from '../../../utils/sort';
 import { deleteGroup, updateGroup } from '../../../actions';
-import NameDescriptionForm from '../../../forms/NameDescriptionForm';
-import GroupFormDialog from '../../../forms/GroupFormDialog';
 import GroupCard from '../../../components/GroupCard';
+import actionTypes, { dialogTypes } from '../../../constants';
+import GroupFormDialog from '../../../forms/GroupFormDialog';
+import NameDescriptionForm from '../../../forms/NameDescriptionForm';
+import { courseUserShape, groupShape } from '../../../propTypes';
+import { sortByGroupRole, sortByName } from '../../../utils/sort';
+
 import GroupUserManagerList from './GroupUserManagerList';
 
 const translations = defineMessages({
@@ -349,13 +350,13 @@ const GroupUserManager = ({
   return (
     <>
       <GroupCard
-        title={group.name}
         subtitle={
           <FormattedMessage
             values={{ numMembers: group.members?.length ?? 0 }}
             {...translations.subtitle}
           />
         }
+        title={group.name}
         titleButtons={titleButtons}
       >
         <p style={styles.groupDescription}>
@@ -374,10 +375,10 @@ const GroupUserManager = ({
               variant="standard"
             />
             <GroupUserManagerList
-              students={availableStudents}
-              staff={availableStaff}
-              onCheck={onCheck}
               colourMap={colours}
+              onCheck={onCheck}
+              staff={availableStaff}
+              students={availableStudents}
             />
           </div>
           <div style={styles.middleBar}>
@@ -393,13 +394,13 @@ const GroupUserManager = ({
               variant="standard"
             />
             <GroupUserManagerList
-              students={selectedStudents}
-              staff={selectedStaff}
-              onCheck={onUncheck}
               colourMap={colours}
-              showDropdown
+              isChecked={true}
               onChangeDropdown={onChangeRole}
-              isChecked
+              onCheck={onUncheck}
+              showDropdown={true}
+              staff={selectedStaff}
+              students={selectedStudents}
             />
           </div>
         </div>
@@ -421,26 +422,26 @@ const GroupUserManager = ({
         skipConfirmation={!isDirty}
       >
         <NameDescriptionForm
-          onSubmit={onFormSubmit}
+          emitsVia={(nameDescriptionForm) =>
+            setIsDirty(nameDescriptionForm.isDirty)
+          }
           initialValues={{
             name: group.name,
             description: group.description,
           }}
-          emitsVia={(nameDescriptionForm) =>
-            setIsDirty(nameDescriptionForm.isDirty)
-          }
+          onSubmit={onFormSubmit}
         />
       </GroupFormDialog>
       <ConfirmationDialog
-        confirmDiscard={!isConfirmingDelete}
         confirmDelete={isConfirmingDelete}
-        open={isConfirmingDelete}
+        confirmDiscard={!isConfirmingDelete}
         onCancel={() => {
           setIsConfirmingDelete(false);
         }}
         onConfirm={() => {
           handleDelete();
         }}
+        open={isConfirmingDelete}
       />
     </>
   );

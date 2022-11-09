@@ -1,22 +1,23 @@
-/* eslint-disable camelcase */
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
+import useEmitterFactory from 'react-emitter-factory';
+import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Controller, useFieldArray, useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import useEmitterFactory from 'react-emitter-factory';
 import { ListSubheader, TextField } from '@mui/material';
 import { red } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+import * as yup from 'yup';
+
+import { questionTypes } from 'course/survey/constants';
+import translations from 'course/survey/translations';
+import ErrorText from 'lib/components/core/ErrorText';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
-import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
-import translations from 'course/survey/translations';
-import { questionTypes } from 'course/survey/constants';
-import QuestionFormOptions from './QuestionFormOptions';
+
 import QuestionFormDeletedOptions from './QuestionFormDeletedOptions';
+import QuestionFormOptions from './QuestionFormOptions';
 
 const styles = {
   questionType: {
@@ -286,7 +287,7 @@ const QuestionForm = (props) => {
     }
     return (
       <div>
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...questionFormTranslations.optionsToDelete} />
         </ListSubheader>
         <QuestionFormDeletedOptions
@@ -296,11 +297,11 @@ const QuestionForm = (props) => {
             append: deletedOptionsAppend,
             remove: deletedOptionsRemove,
           }}
-          optionsAppend={optionsAppend}
           multipleChoice={isMultipleChoice}
           multipleResponse={isMultipleResponse}
+          optionsAppend={optionsAppend}
         />
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...questionFormTranslations.optionsToKeep} />
         </ListSubheader>
       </div>
@@ -313,13 +314,13 @@ const QuestionForm = (props) => {
     return (
       <div>
         <Controller
-          name="grid_view"
           control={control}
+          name="grid_view"
           render={({ field, fieldState }) => (
             <FormToggleField
+              disabled={disabled}
               field={field}
               fieldState={fieldState}
-              disabled={disabled}
               label={
                 <FormattedMessage {...questionFormTranslations.gridView} />
               }
@@ -333,31 +334,31 @@ const QuestionForm = (props) => {
 
         <div style={styles.numberOfResponsesDiv}>
           <TextField
-            disabled
-            name="filled_options"
-            value={numberOfFilledOptions}
+            disabled={true}
+            fullWidth={true}
             label={
               <FormattedMessage {...questionFormTranslations.optionCount} />
             }
-            fullWidth
+            name="filled_options"
             style={{ marginBottom: 12, marginTop: 14, marginRight: 16 }}
+            value={numberOfFilledOptions}
             variant="standard"
           />
           {isMultipleResponse && (
             <>
               <Controller
-                name="min_options"
                 control={control}
+                name="min_options"
                 render={({ field, fieldState }) => (
                   <FormTextField
+                    disabled={disabled}
                     field={field}
                     fieldState={fieldState}
-                    disabled={disabled}
-                    fullWidth
-                    label={<FormattedMessage {...translations.minOptions} />}
+                    fullWidth={true}
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    label={<FormattedMessage {...translations.minOptions} />}
                     onWheel={(event) => event.currentTarget.blur()}
                     placeholder={intl.formatMessage(
                       questionFormTranslations.noRestriction,
@@ -370,18 +371,18 @@ const QuestionForm = (props) => {
                 )}
               />
               <Controller
-                name="max_options"
                 control={control}
+                name="max_options"
                 render={({ field, fieldState }) => (
                   <FormTextField
+                    disabled={disabled}
                     field={field}
                     fieldState={fieldState}
-                    disabled={disabled}
-                    fullWidth
-                    label={<FormattedMessage {...translations.maxOptions} />}
+                    fullWidth={true}
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    label={<FormattedMessage {...translations.maxOptions} />}
                     onWheel={(event) => event.currentTarget.blur()}
                     placeholder={intl.formatMessage(
                       questionFormTranslations.noRestriction,
@@ -404,13 +405,13 @@ const QuestionForm = (props) => {
             </div>
           )}
           <QuestionFormOptions
+            deletedOptionsAppend={deletedOptionsAppend}
             fieldsConfig={{
               control,
               fields: controlledOptionsFields,
               append: optionsAppend,
               remove: optionsRemove,
             }}
-            deletedOptionsAppend={deletedOptionsAppend}
             multipleChoice={isMultipleChoice}
             multipleResponse={isMultipleResponse}
           />
@@ -423,53 +424,53 @@ const QuestionForm = (props) => {
     <form
       encType="multipart/form-data"
       id="survey-section-question-form"
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
       <Controller
-        name="question_type"
         control={control}
+        name="question_type"
         render={({ field, fieldState }) => (
           <FormSelectField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
             label={<FormattedMessage {...translations.questionType} />}
             options={questionOptions}
-            required
+            required={true}
             style={styles.questionType}
           />
         )}
       />
       <Controller
-        name="description"
         control={control}
+        name="description"
         render={({ field, fieldState }) => (
           <FormTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
-            label={<FormattedMessage {...translations.questionText} />}
-            fullWidth
+            fullWidth={true}
             InputLabelProps={{
               shrink: true,
             }}
+            label={<FormattedMessage {...translations.questionText} />}
             minRows={4}
-            multiline
-            required
+            multiline={true}
+            required={true}
             variant="standard"
           />
         )}
       />
       <Controller
-        name="required"
         control={control}
+        name="required"
         render={({ field, fieldState }) => (
           <FormToggleField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
             label={<FormattedMessage {...questionFormTranslations.required} />}
             style={styles.toggle}
           />

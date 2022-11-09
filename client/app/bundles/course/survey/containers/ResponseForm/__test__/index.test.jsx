@@ -1,6 +1,8 @@
-import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
+import { mount } from 'enzyme';
+
 import storeCreator from 'course/survey/store';
+
 import ResponseForm, {
   buildInitialValues,
   buildResponsePayload,

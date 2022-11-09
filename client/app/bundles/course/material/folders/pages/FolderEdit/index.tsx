@@ -1,10 +1,9 @@
-import { defineMessages } from 'react-intl';
 import { FC } from 'react';
+import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-
-import { AppDispatch } from 'types/store';
 import { FolderFormData } from 'types/course/material/folders';
+import { AppDispatch } from 'types/store';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -61,12 +60,12 @@ const FolderEdit: FC<Props> = (props) => {
 
   return (
     <FolderForm
-      open={isOpen}
-      editing
-      title={t(translations.editSubfolderTitle)}
-      onClose={onClose}
+      editing={true}
       initialValues={initialValues}
+      onClose={onClose}
       onSubmit={onSubmit}
+      open={isOpen}
+      title={t(translations.editSubfolderTitle)}
     />
   );
 };

@@ -1,5 +1,3 @@
-import { Card, CardContent, CardHeader } from '@mui/material';
-import { grey } from '@mui/material/colors';
 import { FC } from 'react';
 import {
   defineMessages,
@@ -7,6 +5,8 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
+import { Card, CardContent, CardHeader } from '@mui/material';
+import { grey } from '@mui/material/colors';
 
 interface Props extends WrappedComponentProps {
   renderContent: JSX.Element;

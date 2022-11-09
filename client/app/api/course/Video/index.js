@@ -1,6 +1,6 @@
-import TopicsAPI from './Topics';
 import SessionsAPI from './Sessions';
 import SubmissionsAPI from './Submissions';
+import TopicsAPI from './Topics';
 import VideosAPI from './Videos';
 
 const VideoAPI = {

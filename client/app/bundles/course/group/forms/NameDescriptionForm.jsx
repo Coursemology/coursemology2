@@ -1,12 +1,14 @@
-import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
-import { Controller, useForm } from 'react-hook-form';
 import useEmitterFactory from 'react-emitter-factory';
-import * as yup from 'yup';
+import { Controller, useForm } from 'react-hook-form';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
+import PropTypes from 'prop-types';
+import * as yup from 'yup';
+
 import ErrorText from 'lib/components/core/ErrorText';
 import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
+
 import { formNames } from '../constants';
 
 const translations = defineMessages({
@@ -64,46 +66,46 @@ const NameDescriptionForm = (props) => {
   return (
     <form
       id={formNames.GROUP}
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
       <div style={styles.flexCol}>
         <Controller
-          name="name"
           control={control}
+          name="name"
           render={({ field, fieldState }) => (
             <FormTextField
+              disabled={isSubmitting}
               field={field}
               fieldState={fieldState}
-              disabled={isSubmitting}
-              label={<FormattedMessage {...translations.name} />}
-              fullWidth
+              fullWidth={true}
               InputLabelProps={{
                 shrink: true,
               }}
-              required
+              label={<FormattedMessage {...translations.name} />}
+              required={true}
               style={styles.flexChild}
               variant="standard"
             />
           )}
         />
         <Controller
-          name="description"
           control={control}
+          name="description"
           render={({ field, fieldState }) => (
             <FormTextField
+              disabled={isSubmitting}
               field={field}
               fieldState={fieldState}
-              disabled={isSubmitting}
-              label={<FormattedMessage {...translations.description} />}
-              fullWidth
-              multiline
+              fullWidth={true}
               InputLabelProps={{
                 shrink: true,
               }}
-              minRows={2}
+              label={<FormattedMessage {...translations.description} />}
               maxRows={4}
+              minRows={2}
+              multiline={true}
               style={styles.flexChild}
               variant="standard"
             />

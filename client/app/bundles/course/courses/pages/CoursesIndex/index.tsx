@@ -1,22 +1,23 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-
-import PageHeader from 'lib/components/navigation/PageHeader';
-import { AppDispatch, AppState } from 'types/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
+import { AppDispatch, AppState } from 'types/store';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
+
+import InstanceUserRoleRequestForm from '../../../../system/admin/instance/instance/components/forms/InstanceUserRoleRequestForm';
+import CourseDisplay from '../../components/misc/CourseDisplay';
 import { fetchCourses } from '../../operations';
 import {
   getAllCourseMiniEntities,
   getCourseInstanceUserRoleRequest,
   getCoursePermissions,
 } from '../../selectors';
-import CourseDisplay from '../../components/misc/CourseDisplay';
 import CoursesNew from '../CoursesNew';
-import InstanceUserRoleRequestForm from '../../../../system/admin/instance/instance/components/forms/InstanceUserRoleRequestForm';
 
 const styles = {
   newButton: {
@@ -78,12 +79,12 @@ const CoursesIndex: FC = () => {
   if (coursesPermissions?.canCreate) {
     headerToolbars.push(
       <Button
-        className="new-course-button"
         key="new-course-button"
-        variant="outlined"
+        className="new-course-button"
         color="primary"
         onClick={(): void => setIsNewCourseDialogOpen(true)}
         style={styles.newButton}
+        variant="outlined"
       >
         {t(translations.newCourse)}
       </Button>,
@@ -92,11 +93,11 @@ const CoursesIndex: FC = () => {
     headerToolbars.push(
       <Button
         key="role-request-button"
-        id="role-request-button"
-        variant="outlined"
         color="primary"
+        id="role-request-button"
         onClick={(): void => setRoleRequestDialogOpen(true)}
         style={styles.newButton}
+        variant="outlined"
       >
         {instanceUserRoleRequest
           ? t(translations.editRequest)
@@ -115,15 +116,15 @@ const CoursesIndex: FC = () => {
           <CourseDisplay courses={courses} />
           {isNewCourseDialogOpen && (
             <CoursesNew
-              open={isNewCourseDialogOpen}
               onClose={(): void => setIsNewCourseDialogOpen(false)}
+              open={isNewCourseDialogOpen}
             />
           )}
           {isRoleRequestDialogOpen && (
             <InstanceUserRoleRequestForm
-              open={isRoleRequestDialogOpen}
-              onClose={(): void => setRoleRequestDialogOpen(false)}
               instanceUserRoleRequest={instanceUserRoleRequest}
+              onClose={(): void => setRoleRequestDialogOpen(false)}
+              open={isRoleRequestDialogOpen}
             />
           )}
         </>

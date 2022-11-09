@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import produce from 'immer';
 import { FormControlLabel, Switch } from '@mui/material';
+import produce from 'immer';
+import { CodaveriSettingsData } from 'types/course/admin/codaveri';
 
 import Section from 'lib/components/core/layouts/Section';
-import { CodaveriSettingsData } from 'types/course/admin/codaveri';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import translations from './translations';
 
 interface CodaveriSettingsFormProps {
@@ -34,16 +35,16 @@ const CodaveriSettingsForm = (
 
   return (
     <Section
-      title={t(translations.codaveriSettings)}
+      sticksToNavbar={true}
       subtitle={t(translations.codaverSettingsSubtitle)}
-      sticksToNavbar
+      title={t(translations.codaveriSettings)}
     >
       <FormControlLabel
-        control={<Switch />}
-        label={t(translations.enableIsOnlyITSP)}
         checked={codaveriSetting.isOnlyITSP}
         className="mb-0"
+        control={<Switch />}
         disabled={props.disabled}
+        label={t(translations.enableIsOnlyITSP)}
         onChange={(_, checked): void => toggleITSP(checked)}
       />
     </Section>

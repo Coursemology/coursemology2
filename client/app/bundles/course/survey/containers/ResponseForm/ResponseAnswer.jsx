@@ -1,9 +1,11 @@
-import PropTypes from 'prop-types';
-import { defineMessages, injectIntl } from 'react-intl';
 import { Controller } from 'react-hook-form';
+import { defineMessages, injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
+
+import { questionTypes } from 'course/survey/constants';
 import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
-import { questionTypes } from 'course/survey/constants';
+
 import MultipleChoiceOptionsField from './components/MultipleChoiceOptionsField';
 import MultipleResponseOptionsField from './components/MultipleResponseOptionsField';
 
@@ -61,18 +63,18 @@ const renderTextResponseField = (props) => {
 
   return (
     <Controller
-      name={`sections.${sectionIndex}.questions.${questionIndex}.answer.text_response`}
       control={control}
+      name={`sections.${sectionIndex}.questions.${questionIndex}.answer.text_response`}
       render={({ field, fieldState }) => (
         <FormTextField
+          disabled={disabled}
           field={field}
           fieldState={fieldState}
-          disabled={disabled}
-          fullWidth
+          fullWidth={true}
           InputLabelProps={{
             shrink: true,
           }}
-          multiline
+          multiline={true}
           variant="standard"
         />
       )}
@@ -87,13 +89,13 @@ const renderMultipleChoiceField = (props) => {
 
   return (
     <Controller
-      name={`sections.${sectionIndex}.questions.${questionIndex}.answer.question_option_ids`}
       control={control}
+      name={`sections.${sectionIndex}.questions.${questionIndex}.answer.question_option_ids`}
       render={({ field, fieldState }) => (
         <MultipleChoiceOptionsField
+          disabled={disabled}
           field={field}
           fieldState={fieldState}
-          disabled={disabled}
           question={question}
         />
       )}
@@ -110,13 +112,13 @@ const renderMultipleResponseField = (props) => {
 
   return (
     <Controller
-      name={`sections.${sectionIndex}.questions.${questionIndex}.answer.question_option_ids`}
       control={control}
+      name={`sections.${sectionIndex}.questions.${questionIndex}.answer.question_option_ids`}
       render={({ field, fieldState }) => (
         <MultipleResponseOptionsField
+          disabled={disabled}
           field={field}
           fieldState={fieldState}
-          disabled={disabled}
           question={question}
         />
       )}

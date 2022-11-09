@@ -1,11 +1,12 @@
-import { useRef, useState, useCallback, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { grey } from '@mui/material/colors';
-
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { ClickAwayListener } from '@mui/material';
-import AddCommentIcon from './AddCommentIcon';
+import { grey } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import Annotations from '../../containers/Annotations';
 import { annotationShape } from '../../propTypes';
+
+import AddCommentIcon from './AddCommentIcon';
 
 const styles = {
   editor: {
@@ -92,10 +93,10 @@ const LineNumberColumn = (props) => {
           >
             <div style={styles.tooltipInnerStyle}>
               <Annotations
+                annotation={annotation}
                 answerId={answerId}
                 fileId={fileId}
                 lineNumber={lineNumber}
-                annotation={annotation}
               />
             </div>
           </div>
@@ -108,19 +109,19 @@ const LineNumberColumn = (props) => {
   return (
     <>
       <div
+        onClick={() => toggleComment(lineNumber)}
+        onMouseOut={() => setLineHovered(0)}
+        onMouseOver={() => setLineHovered(lineNumber)}
         style={
           annotation
             ? styles.editorLineNumberWithComments
             : styles.editorLineNumber
         }
-        onClick={() => toggleComment(lineNumber)}
-        onMouseOver={() => setLineHovered(lineNumber)}
-        onMouseOut={() => setLineHovered(0)}
       >
         <div>{lineNumber}</div>
         <AddCommentIcon
-          onClick={() => expandComment(lineNumber)}
           hovered={lineHovered === lineNumber}
+          onClick={() => expandComment(lineNumber)}
         />
       </div>
       {renderComments(lineNumber)}
@@ -185,13 +186,13 @@ const NarrowEditor = (props) => {
 
   const renderLineNumberColumn = (lineNumber) => (
     <LineNumberColumn
-      lineNumber={lineNumber}
-      lineHovered={lineHovered}
-      setLineHovered={setLineHovered}
-      toggleComment={toggleComment}
-      expandComment={expandComment}
       collapseComment={collapseComment}
       editorWidth={editorWidth}
+      expandComment={expandComment}
+      lineHovered={lineHovered}
+      lineNumber={lineNumber}
+      setLineHovered={setLineHovered}
+      toggleComment={toggleComment}
       {...props}
     />
   );
@@ -200,7 +201,7 @@ const NarrowEditor = (props) => {
 
   return (
     <div style={{ overflow: 'auto' }}>
-      <table className="codehilite" style={styles.editor} ref={editorRef}>
+      <table ref={editorRef} className="codehilite" style={styles.editor}>
         <tbody>
           {content.map((line, index) => (
             // eslint-disable-next-line react/no-array-index-key

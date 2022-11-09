@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Button, Icon } from '@mui/material';
 import { blue } from '@mui/material/colors';
-import { scribingTranslations as translations } from '../../../translations';
+import PropTypes from 'prop-types';
+
 import { scribingShapes } from '../../../constants';
+import { scribingTranslations as translations } from '../../../translations';
 
 const propTypes = {
   intl: PropTypes.object.isRequired,
@@ -17,8 +18,8 @@ const ShapeField = (props) => {
   return (
     <>
       <Button
-        color={currentShape === scribingShapes.RECT ? 'primary' : 'info'}
         className="forum-post-expand-button"
+        color={currentShape === scribingShapes.RECT ? 'primary' : 'info'}
         onClick={() => setSelectedShape(scribingShapes.RECT)}
       >
         <Icon
@@ -33,8 +34,8 @@ const ShapeField = (props) => {
       </Button>
 
       <Button
-        color={currentShape === scribingShapes.ELLIPSE ? 'primary' : 'info'}
         className="forum-post-expand-button"
+        color={currentShape === scribingShapes.ELLIPSE ? 'primary' : 'info'}
         onClick={() => setSelectedShape(scribingShapes.ELLIPSE)}
       >
         <Icon

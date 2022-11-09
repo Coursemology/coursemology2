@@ -1,13 +1,15 @@
 import { FC, memo, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import equal from 'fast-deep-equal';
+import { InvitationRowData } from 'types/course/userInvitations';
+import { AppDispatch } from 'types/store';
+
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EmailButton from 'lib/components/core/buttons/EmailButton';
-import { toast } from 'react-toastify';
-import { AppDispatch } from 'types/store';
-import { InvitationRowData } from 'types/course/userInvitations';
-import equal from 'fast-deep-equal';
-import { resendInvitationEmail, deleteInvitation } from '../../operations';
+
+import { deleteInvitation, resendInvitationEmail } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   invitation: InvitationRowData;
@@ -106,23 +108,23 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
   const managementButtons = (
     <div style={{ whiteSpace: 'nowrap' }}>
       <EmailButton
-        tooltip={intl.formatMessage(translations.resendTooltip)}
         className={`invitation-resend-${invitation.id}`}
         disabled={isResending || isDeleting}
         onClick={onResend}
         sx={styles.buttonStyle}
+        tooltip={intl.formatMessage(translations.resendTooltip)}
       />
       <DeleteButton
-        tooltip={intl.formatMessage(translations.deletionTooltip)}
         className={`invitation-delete-${invitation.id}`}
-        disabled={isResending || isDeleting}
-        loading={isDeleting}
-        onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
           name: invitation.name,
           email: invitation.email,
         })}
+        disabled={isResending || isDeleting}
+        loading={isDeleting}
+        onClick={onDelete}
         sx={styles.buttonStyle}
+        tooltip={intl.formatMessage(translations.deletionTooltip)}
       />
     </div>
   );

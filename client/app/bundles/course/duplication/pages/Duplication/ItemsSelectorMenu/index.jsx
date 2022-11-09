@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import {
   Avatar,
   List,
@@ -10,13 +9,16 @@ import {
   ListItemText,
 } from '@mui/material';
 import { cyan } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
+import { setItemSelectorPanel } from 'course/duplication/actions';
 import {
   duplicableItemTypes,
   itemSelectorPanels as panels,
 } from 'course/duplication/constants';
-import { setItemSelectorPanel } from 'course/duplication/actions';
-import { defaultComponentTitles } from 'course/translations.intl';
 import { courseShape } from 'course/duplication/propTypes';
+import { defaultComponentTitles } from 'course/translations.intl';
+
 import DuplicateButton from '../DuplicateButton';
 
 const {
@@ -54,7 +56,10 @@ class ItemsSelectorMenu extends Component {
     }
 
     return (
-      <ListItem button onClick={() => dispatch(setItemSelectorPanel(panelKey))}>
+      <ListItem
+        button={true}
+        onClick={() => dispatch(setItemSelectorPanel(panelKey))}
+      >
         <ListItemAvatar>
           <Avatar
             style={{

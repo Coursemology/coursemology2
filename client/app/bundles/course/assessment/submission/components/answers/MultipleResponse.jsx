@@ -1,9 +1,11 @@
 import { memo } from 'react';
-import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
-import { FormControlLabel, Checkbox } from '@mui/material';
+import { Checkbox, FormControlLabel } from '@mui/material';
 import { green } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import propsAreEqual from 'lib/components/form/fields/utils/propsAreEqual';
+
 import { questionShape } from '../../propTypes';
 
 const MultipleResponseOptions = ({
@@ -16,13 +18,14 @@ const MultipleResponseOptions = ({
   <>
     {question.options.map((option) => (
       <FormControlLabel
+        key={option.id}
         checked={value.indexOf(option.id) !== -1}
         control={<Checkbox style={{ padding: '0 12px', marginBottom: 10 }} />}
         disabled={readOnly}
-        key={option.id}
         label={
           <b>
             <div
+              dangerouslySetInnerHTML={{ __html: option.option.trim() }}
               style={
                 option.correct && readOnly && (showMcqMrqSolution || graderView)
                   ? {
@@ -32,7 +35,6 @@ const MultipleResponseOptions = ({
                     }
                   : { verticalAlign: 'middle', marginBottom: 10 }
               }
-              dangerouslySetInnerHTML={{ __html: option.option.trim() }}
             />
           </b>
         }
@@ -91,8 +93,8 @@ const MultipleResponse = (props) => {
 
   return (
     <Controller
-      name={`${answerId}.option_ids`}
       control={control}
+      name={`${answerId}.option_ids`}
       render={({ field, fieldState }) => (
         <MemoMultipleResponseOptions
           field={field}

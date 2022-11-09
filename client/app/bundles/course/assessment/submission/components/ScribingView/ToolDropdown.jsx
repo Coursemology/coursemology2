@@ -1,7 +1,7 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { Icon, Tooltip } from '@mui/material';
 import { blue } from '@mui/material/colors';
+import PropTypes from 'prop-types';
 
 const propTypes = {
   activeObject: PropTypes.object,
@@ -104,16 +104,16 @@ export default class ToolDropdown extends Component {
     return (
       <Tooltip placement="top" title={tooltip}>
         <div
-          role="button"
-          tabIndex="0"
-          style={disabled ? { ...style.tool, ...style.disabled } : style.tool}
           onClick={(event) => (disabled ? () => {} : onClick && onClick(event))}
+          role="button"
+          style={disabled ? { ...style.tool, ...style.disabled } : style.tool}
+          tabIndex="0"
         >
           <div
-            role="button"
-            tabIndex="0"
-            style={style.innerTool}
             onClick={onClickIcon}
+            role="button"
+            style={style.innerTool}
+            tabIndex="0"
           >
             {this.renderIcon()}
             {this.renderColorBar()}
@@ -121,12 +121,12 @@ export default class ToolDropdown extends Component {
           <div style={style.innerTool}>
             <Icon
               className="fa fa-chevron-down"
+              onClick={!disabled ? onClickChevron : undefined}
               style={
                 disabled
                   ? { ...style.chevron, ...style.disabled }
                   : style.chevron
               }
-              onClick={!disabled ? onClickChevron : undefined}
             />
           </div>
         </div>

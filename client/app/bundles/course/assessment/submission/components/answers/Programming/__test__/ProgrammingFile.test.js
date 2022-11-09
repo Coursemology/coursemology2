@@ -1,8 +1,10 @@
-import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
+import { mount } from 'enzyme';
+
 import store from 'course/assessment/submission/store';
-import ProgrammingFile from '../ProgrammingFile';
+
 import actionTypes from '../../../../constants';
+import ProgrammingFile from '../ProgrammingFile';
 
 const courseId = 1;
 const assessmentId = 2;

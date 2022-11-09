@@ -5,26 +5,29 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
+import { Add } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  CardContent,
+  Slide,
+  TableCell,
+  TableFooter,
+  TableRow,
+  Typography,
+} from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import {
   SkillBranchMiniEntity,
   SkillMiniEntity,
 } from 'types/course/assessment/skills/skills';
-import {
-  Slide,
-  Typography,
-  Box,
-  CardContent,
-  TableFooter,
-  TableCell,
-  TableRow,
-  Button,
-} from '@mui/material';
-import { Add } from '@mui/icons-material';
+
 import DataTable from 'lib/components/core/layouts/DataTable';
-import SkillManagementButtons from '../buttons/SkillManagementButtons';
+
 import { TableEnum } from '../../types';
+import SkillManagementButtons from '../buttons/SkillManagementButtons';
+
 import './SkillsTable.scss';
 
 interface Props extends WrappedComponentProps {
@@ -170,15 +173,15 @@ const SkillsTable: FC<Props> = (props: Props) => {
                 ? 'new-skill-button'
                 : 'new-skill-branch-button'
             }
-            variant="outlined"
             color="primary"
+            disabled={addDisabled}
             onClick={addClick}
             style={{
               background: 'white',
               fontSize: 14,
               marginLeft: 12,
             }}
-            disabled={addDisabled}
+            variant="outlined"
           >
             <Add />
             {tableType === TableEnum.Skills ? (
@@ -258,16 +261,16 @@ const SkillsTable: FC<Props> = (props: Props) => {
         <TableFooter>
           <TableRow>
             <TableCell
+              ref={containerRef}
               style={{
                 overflow: 'hidden',
                 height: '20vh',
                 display: isOpen ? 'block' : 'none',
                 padding: '0px 0px',
               }}
-              ref={containerRef}
             >
               <Slide
-                appear
+                appear={true}
                 container={containerRef.current}
                 direction="up"
                 in={isOpen}
@@ -285,29 +288,29 @@ const SkillsTable: FC<Props> = (props: Props) => {
                     <>
                       <Box display="flex">
                         <Typography
-                          variant="subtitle1"
                           style={{
                             alignSelf: 'center',
                             marginRight: 'auto',
                             wordBreak: 'break-word',
                             paddingLeft: '8px',
                           }}
+                          variant="subtitle1"
                         >
                           {tableData[indexSelected].title}
                         </Typography>
                         <SkillManagementButtons
-                          id={tableData[indexSelected].id}
                           key={tableData[indexSelected].id}
-                          isSkillBranch={tableType === TableEnum.SkillBranches}
+                          branchHasSkills={branchHasSkills ?? false}
                           canDestroy={
                             tableData[indexSelected].permissions.canDestroy
                           }
                           canUpdate={
                             tableData[indexSelected].permissions.canUpdate
                           }
-                          editClick={editClick}
                           data={tableData[indexSelected]}
-                          branchHasSkills={branchHasSkills ?? false}
+                          editClick={editClick}
+                          id={tableData[indexSelected].id}
+                          isSkillBranch={tableType === TableEnum.SkillBranches}
                         />
                       </Box>
                       <CardContent
@@ -323,13 +326,13 @@ const SkillsTable: FC<Props> = (props: Props) => {
                         }}
                       >
                         <Typography
-                          variant="body2"
-                          style={{
-                            wordBreak: 'break-word',
-                          }}
                           dangerouslySetInnerHTML={{
                             __html: tableData[indexSelected].description ?? '',
                           }}
+                          style={{
+                            wordBreak: 'break-word',
+                          }}
+                          variant="body2"
                         />
                       </CardContent>
                     </>
@@ -345,10 +348,10 @@ const SkillsTable: FC<Props> = (props: Props) => {
 
   return (
     <DataTable
-      data={tableData}
-      options={options}
       columns={columns}
+      data={tableData}
       height="30px"
+      options={options}
     />
   );
 };

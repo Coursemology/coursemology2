@@ -1,5 +1,3 @@
-import { Close } from '@mui/icons-material';
-import { Box, Grid, IconButton, Tooltip } from '@mui/material';
 import { FC } from 'react';
 import {
   Control,
@@ -7,19 +5,22 @@ import {
   UseFieldArrayAppend,
   UseFieldArrayRemove,
 } from 'react-hook-form';
-import { defineMessages, WrappedComponentProps, injectIntl } from 'react-intl';
-import FormTextField from 'lib/components/form/fields/TextField';
-import FormSelectField from 'lib/components/form/fields/SelectField';
-import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { Close } from '@mui/icons-material';
+import { Box, Grid, IconButton, Tooltip } from '@mui/material';
+import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
 import {
   IndividualInvite,
   IndividualInvites,
 } from 'types/course/userInvitations';
+
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
+import FormSelectField from 'lib/components/form/fields/SelectField';
+import FormTextField from 'lib/components/form/fields/TextField';
 import {
   COURSE_USER_ROLES,
   TIMELINE_ALGORITHMS,
 } from 'lib/constants/sharedConstants';
-import { ManageCourseUsersPermissions } from 'types/course/courseUsers';
 import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
@@ -72,71 +73,67 @@ const IndividualInvitation: FC<Props> = (props) => {
   const { permissions, fieldsConfig, index, intl } = props;
 
   const renderInvitationBody = (
-    <Grid container flexWrap="nowrap" alignItems="center">
+    <Grid alignItems="center" container={true} flexWrap="nowrap">
       <Controller
+        control={fieldsConfig.control}
         name={`invitations.${index}.name`}
-        control={fieldsConfig.control}
         render={({ field, fieldState }): JSX.Element => (
           <FormTextField
             field={field}
             fieldState={fieldState}
-            // @ts-ignore: component is still written in JS
-            placeholder={intl.formatMessage(translations.namePlaceholder)}
-            label={intl.formatMessage(tableTranslations.name)}
-            variant="standard"
             id={`name-${index}`}
+            label={intl.formatMessage(tableTranslations.name)}
+            placeholder={intl.formatMessage(translations.namePlaceholder)}
             sx={styles.textInput}
+            variant="standard"
           />
         )}
       />
       <Controller
-        name={`invitations.${index}.email`}
         control={fieldsConfig.control}
+        name={`invitations.${index}.email`}
         render={({ field, fieldState }): JSX.Element => (
           <FormTextField
             field={field}
             fieldState={fieldState}
-            // @ts-ignore: component is still written in JS
-            placeholder={intl.formatMessage(translations.emailPlaceholder)}
-            label={intl.formatMessage(tableTranslations.email)}
-            variant="standard"
             id={`email-${index}`}
+            label={intl.formatMessage(tableTranslations.email)}
+            placeholder={intl.formatMessage(translations.emailPlaceholder)}
             sx={styles.textInput}
+            variant="standard"
           />
         )}
       />
       <Controller
-        name={`invitations.${index}.role`}
         control={fieldsConfig.control}
+        name={`invitations.${index}.role`}
         render={({ field, fieldState }): JSX.Element => (
           <FormSelectField
             field={field}
             fieldState={fieldState}
-            options={userRoleOptions}
-            // @ts-ignore: component is still written in JS
             label={intl.formatMessage(tableTranslations.role)}
+            options={userRoleOptions}
             sx={styles.textInput}
           />
         )}
       />
       {permissions.canManagePersonalTimes && (
         <Controller
-          name={`invitations.${index}.timelineAlgorithm`}
           control={fieldsConfig.control}
+          name={`invitations.${index}.timelineAlgorithm`}
           render={({ field, fieldState }): JSX.Element => (
             <FormSelectField
               field={field}
               fieldState={fieldState}
-              options={TIMELINE_ALGORITHMS}
-              // @ts-ignore: component is still written in JS
               label={intl.formatMessage(tableTranslations.timelineAlgorithm)}
+              options={TIMELINE_ALGORITHMS}
             />
           )}
         />
       )}
       <Controller
-        name={`invitations.${index}.phantom`}
         control={fieldsConfig.control}
+        name={`invitations.${index}.phantom`}
         render={({ field, fieldState }): JSX.Element => (
           <FormCheckboxField
             field={field}

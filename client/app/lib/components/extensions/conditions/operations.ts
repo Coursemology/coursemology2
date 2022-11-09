@@ -1,6 +1,8 @@
-import CourseAPI from 'api/course';
 import { AxiosError } from 'axios';
 import { ConditionAbility, ConditionData } from 'types/course/conditions';
+
+import CourseAPI from 'api/course';
+
 import specify from './specifiers';
 
 type Data = Promise<ConditionData[]>;

@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import {
   FormControlLabel,
   ListSubheader,
@@ -9,24 +8,26 @@ import {
   Radio,
   RadioGroup,
 } from '@mui/material';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
+import PropTypes from 'prop-types';
+
 import {
+  changeSourceCourse,
   fetchObjectsList,
   setDuplicationMode,
-  changeSourceCourse,
 } from 'course/duplication/actions';
+import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 import { duplicationModes } from 'course/duplication/constants';
 import {
-  sourceCourseShape,
   courseListingShape,
+  sourceCourseShape,
 } from 'course/duplication/propTypes';
-import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
-
+import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
-import ItemsSelector from './ItemsSelector';
-import DuplicateAllButton from './DuplicateAllButton';
+
 import DestinationCourseSelector from './DestinationCourseSelector';
+import DuplicateAllButton from './DuplicateAllButton';
+import ItemsSelector from './ItemsSelector';
 import ItemsSelectorMenu from './ItemsSelectorMenu';
 
 const translations = defineMessages({
@@ -117,14 +118,14 @@ class Duplication extends Component {
 
     if (!modesAllowed || modesAllowed.length < 1) {
       return (
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...translations.duplicationDisabled} />
         </ListSubheader>
       );
     }
     if (!enabledComponents || enabledComponents.length < 1) {
       return (
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...translations.noComponentsEnabled} />
         </ListSubheader>
       );
@@ -170,21 +171,21 @@ class Duplication extends Component {
     return (
       <>
         <CourseDropdownMenu
-          dropDownMenuProps={{ className: 'source-course-dropdown' }}
-          currentHost={currentHost}
           courses={sourceCourses}
-          selectedCourseId={sourceCourse.id}
           currentCourseId={currentCourseId}
-          prompt={intl.formatMessage(translations.selectSourceCourse)}
+          currentHost={currentHost}
+          disabled={isChangingCourse}
+          dropDownMenuProps={{ className: 'source-course-dropdown' }}
           onChange={(event) => dispatch(changeSourceCourse(event.target.value))}
           onHome={() => dispatch(changeSourceCourse(currentCourseId))}
-          disabled={isChangingCourse}
+          prompt={intl.formatMessage(translations.selectSourceCourse)}
+          selectedCourseId={sourceCourse.id}
         />
         <DateTimePicker
-          disabled
+          disabled={true}
+          label={intl.formatMessage(translations.startAt)}
           name="start_at"
           value={sourceCourse.start_at}
-          label={intl.formatMessage(translations.startAt)}
         />
       </>
     );
@@ -218,29 +219,29 @@ class Duplication extends Component {
     return (
       <RadioGroup
         name="duplicationMode"
-        value={duplicationMode}
         onChange={(_, mode) => dispatch(setDuplicationMode(mode))}
         style={styles.radioButtonGroup}
+        value={duplicationMode}
       >
         <FormControlLabel
           key={duplicationModes.COURSE}
           control={<Radio style={{ padding: 0, paddingLeft: 12 }} />}
-          value={duplicationModes.COURSE}
           label={
             <b>
               <FormattedMessage {...translations.newCourse} />
             </b>
           }
+          value={duplicationModes.COURSE}
         />
         <FormControlLabel
           key={duplicationModes.OBJECT}
           control={<Radio style={{ padding: 0, paddingLeft: 12 }} />}
-          value={duplicationModes.OBJECT}
           label={
             <b>
               <FormattedMessage {...translations.existingCourse} />
             </b>
           }
+          value={duplicationModes.OBJECT}
         />
       </RadioGroup>
     );

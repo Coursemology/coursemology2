@@ -1,25 +1,26 @@
 import { FC, ReactElement, useState } from 'react';
-import { CircularProgress, Typography } from '@mui/material';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { CircularProgress, Typography } from '@mui/material';
+import { debounceSearchRender } from 'mui-datatables';
 import {
   TableColumns,
   TableOptions,
   TableState,
 } from 'types/components/DataTable';
-import tableTranslations from 'lib/translations/table';
-import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
-import { debounceSearchRender } from 'mui-datatables';
-import DataTable from 'lib/components/core/layouts/DataTable';
-import { CourseMiniEntity } from 'types/system/courses';
-import { useDispatch } from 'react-redux';
 import { AppDispatch, Operation } from 'types/store';
-import { AdminStats, UserBasicMiniEntity } from 'types/users';
+import { CourseMiniEntity } from 'types/system/courses';
 import { InstanceAdminStats } from 'types/system/instance/users';
+import { AdminStats, UserBasicMiniEntity } from 'types/users';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
 import {
   FIELD_DEBOUNCE_DELAY,
   TABLE_ROWS_PER_PAGE,
 } from 'lib/constants/sharedConstants';
+import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
   filter: { active: boolean };
@@ -179,9 +180,9 @@ const CoursesTable: FC<Props> = (props) => {
           const course = courses[dataIndex];
           return (
             <Typography
-              variant="body2"
               key={`title-${course.id}`}
               className="course_title"
+              variant="body2"
             >
               <a href={`//${course.instance.host}/courses/${course.id}`}>
                 {course.title}
@@ -296,6 +297,10 @@ const CoursesTable: FC<Props> = (props) => {
 
   return (
     <DataTable
+      columns={columns}
+      data={courses}
+      isLoading={isLoading}
+      options={options}
       title={
         <Typography variant="h6">
           {title}
@@ -304,11 +309,7 @@ const CoursesTable: FC<Props> = (props) => {
           )}
         </Typography>
       }
-      data={courses}
-      columns={columns}
-      options={options}
-      isLoading={isLoading}
-      withMargin
+      withMargin={true}
     />
   );
 };

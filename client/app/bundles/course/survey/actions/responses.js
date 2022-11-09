@@ -1,7 +1,9 @@
-import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import CourseAPI from 'api/course';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
+
 import actionTypes from '../constants';
+
 import { setNotification } from './index';
 
 export function createResponse(surveyId, navigate) {

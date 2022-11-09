@@ -1,4 +1,5 @@
 import store from 'course/assessment/submission/store';
+
 import actionTypes from '../../constants';
 import { updateScribingAnswerInLocal } from '../scribing';
 

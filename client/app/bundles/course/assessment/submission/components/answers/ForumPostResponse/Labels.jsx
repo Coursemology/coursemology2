@@ -1,6 +1,6 @@
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { orange, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
 
 const translations = defineMessages({
   postEdited: {
@@ -43,8 +43,8 @@ const Labels = ({ post }) => {
       {isPostUpdated && !isPostDeleted && (
         <div style={{ ...styles.label, ...styles.labelEdited }}>
           <i
-            className="fa fa-refresh"
             aria-hidden="true"
+            className="fa fa-refresh"
             style={styles.iconWidth}
           />
           <div>
@@ -55,8 +55,8 @@ const Labels = ({ post }) => {
       {isPostDeleted && (
         <div style={{ ...styles.label, ...styles.labelDeleted }}>
           <i
-            className="fa fa-trash"
             aria-hidden="true"
+            className="fa fa-trash"
             style={styles.iconWidth}
           />
           <div>

@@ -1,7 +1,5 @@
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, defineMessages } from 'react-intl';
-import moment from 'lib/moment';
+import { defineMessages, injectIntl } from 'react-intl';
 import { TextField } from '@mui/material';
 import {
   DatePicker,
@@ -9,6 +7,9 @@ import {
   TimePicker,
 } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import PropTypes from 'prop-types';
+
+import moment from 'lib/moment';
 
 const translations = defineMessages({
   invalidDate: {
@@ -214,12 +215,12 @@ class DateTimePicker extends PureComponent {
             renderInput={(params) => (
               <TextField
                 {...params}
-                name={name}
                 error={!!errorText || !!this.state.dateError}
                 helperText={this.state.dateError || errorText}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                name={name}
                 style={styles.dateTextField}
                 variant="standard"
               />
@@ -237,12 +238,12 @@ class DateTimePicker extends PureComponent {
             renderInput={(params) => (
               <TextField
                 {...params}
-                name={name}
                 error={!!this.state.timeError}
                 helperText={this.state.timeError}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                name={name}
                 style={styles.timeTextField}
                 variant="standard"
               />

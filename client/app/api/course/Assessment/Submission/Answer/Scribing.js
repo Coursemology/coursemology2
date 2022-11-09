@@ -1,9 +1,9 @@
-/* eslint class-methods-use-this: "off" */
 import {
-  getCourseId,
   getAssessmentId,
+  getCourseId,
   getSubmissionId,
 } from 'lib/helpers/url-helpers';
+
 import BaseAssessmentAPI from '../../Base';
 
 export default class ScribingsAPI extends BaseAssessmentAPI {
@@ -17,6 +17,7 @@ export default class ScribingsAPI extends BaseAssessmentAPI {
     );
   }
 
+  // eslint-disable-next-line class-methods-use-this
   _getUrlPrefix() {
     const prefix = `/courses/${getCourseId()}/assessments/${getAssessmentId()}\
 /submissions/${getSubmissionId()}/answers`;

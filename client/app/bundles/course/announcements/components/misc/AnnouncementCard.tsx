@@ -1,25 +1,23 @@
+import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { FC, useState, memo } from 'react';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { DateRange, PushPin } from '@mui/icons-material';
+import { Link } from '@mui/material';
+import { grey } from '@mui/material/colors';
+import equal from 'fast-deep-equal';
 import {
   AnnouncementFormData,
   AnnouncementMiniEntity,
 } from 'types/course/announcements';
-import { useDispatch } from 'react-redux';
 import { AppDispatch, Operation } from 'types/store';
-import { toast } from 'react-toastify';
-import equal from 'fast-deep-equal';
-
-import { grey } from '@mui/material/colors';
-import { Link } from '@mui/material';
-import { DateRange, PushPin } from '@mui/icons-material';
-
-import { getUserURL, getCourseUserURL } from 'lib/helpers/url-builders';
-import { getCourseId } from 'lib/helpers/url-helpers';
-import { getFullDateTime } from 'lib/helpers/timehelper';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import CustomTooltip from 'lib/components/core/CustomTooltip';
+import { getFullDateTime } from 'lib/helpers/timehelper';
+import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 
 import AnnouncementEdit from '../../pages/AnnouncementEdit';
 
@@ -132,9 +130,9 @@ const AnnouncementCard: FC<Props> = (props) => {
   return (
     <>
       <div
-        id={`announcement-${announcement.id}`}
-        className="announcement"
         key={key}
+        className="announcement"
+        id={`announcement-${announcement.id}`}
         style={{
           borderStyle: 'solid',
           borderWidth: 0.2,
@@ -184,12 +182,12 @@ const AnnouncementCard: FC<Props> = (props) => {
               )}
               {announcement.permissions.canDelete && (
                 <DeleteButton
-                  id={`announcement-delete-button-${announcement.id}`}
-                  disabled={isDeleting}
-                  loading={isDeleting}
                   confirmMessage={`${intl.formatMessage(
                     translations.deleteConfirmation,
                   )} (${announcement.title})?`}
+                  disabled={isDeleting}
+                  id={`announcement-delete-button-${announcement.id}`}
+                  loading={isDeleting}
                   onClick={onDelete}
                 />
               )}
@@ -202,18 +200,18 @@ const AnnouncementCard: FC<Props> = (props) => {
           {intl.formatMessage(translations.timeSeparator)} {renderUserLink()}
         </em>
         <div
-          style={{ marginTop: 15, overflowWrap: 'anywhere' }}
           dangerouslySetInnerHTML={{ __html: announcement.content }}
+          style={{ marginTop: 15, overflowWrap: 'anywhere' }}
         />
       </div>
       {showEditOptions && updateOperation && (
         <AnnouncementEdit
-          open={isOpen}
-          onClose={(): void => setIsOpen(false)}
           announcementId={announcement.id}
-          initialValues={initialValues}
-          updateOperation={updateOperation}
           canSticky={canSticky}
+          initialValues={initialValues}
+          onClose={(): void => setIsOpen(false)}
+          open={isOpen}
+          updateOperation={updateOperation}
         />
       )}
     </>

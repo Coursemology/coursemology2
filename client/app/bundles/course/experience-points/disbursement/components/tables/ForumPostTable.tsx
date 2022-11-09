@@ -1,12 +1,13 @@
+import { FC } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { CardContent, TableCell, TableRow, Typography } from '@mui/material';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { ForumPostEntity } from 'types/course/disbursement';
+
 import DataTable from 'lib/components/core/layouts/DataTable';
 import { getForumTopicURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatLongDateTime } from 'lib/moment';
-import { FC } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
-import { ForumPostEntity } from 'types/course/disbursement';
 
 interface Props extends WrappedComponentProps {
   posts: ForumPostEntity[];
@@ -166,13 +167,13 @@ const ForumPostTable: FC<Props> = (props: Props) => {
             }}
           >
             <Typography
-              variant="body2"
-              style={{
-                wordBreak: 'break-word',
-              }}
               dangerouslySetInnerHTML={{
                 __html: data[rowMeta.rowIndex].content,
               }}
+              style={{
+                wordBreak: 'break-word',
+              }}
+              variant="body2"
             />
           </CardContent>
         </TableCell>
@@ -181,7 +182,12 @@ const ForumPostTable: FC<Props> = (props: Props) => {
   };
 
   return (
-    <DataTable data={data} options={options} columns={columns} withMargin />
+    <DataTable
+      columns={columns}
+      data={data}
+      options={options}
+      withMargin={true}
+    />
   );
 };
 

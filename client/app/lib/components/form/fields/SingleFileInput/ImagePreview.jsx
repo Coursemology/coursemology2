@@ -1,8 +1,9 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import InsertDriveFile from '@mui/icons-material/InsertDriveFile';
 import { grey } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import DeleteButton from './DeleteButton';
 import translations from './translations';
 
@@ -23,7 +24,7 @@ const styles = {
 
 function renderImage(imageSrc, fileName) {
   return imageSrc ? (
-    <img src={imageSrc} style={styles.image} alt={fileName} />
+    <img alt={fileName} src={imageSrc} style={styles.image} />
   ) : (
     <div>
       <InsertDriveFile

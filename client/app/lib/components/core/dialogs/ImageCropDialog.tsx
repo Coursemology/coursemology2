@@ -1,9 +1,9 @@
 import { ComponentProps, useState } from 'react';
 
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import ImageCropper, {
   ImageCropperEmitter,
 } from 'lib/components/core/ImageCropper';
-import Prompt from 'lib/components/core/dialogs/Prompt';
 import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
@@ -41,23 +41,23 @@ const ImageCropDialog = (props: ImageCropDialogProps): JSX.Element => {
 
   return (
     <Prompt
-      open={props.open}
-      onClose={props.onClose}
       disabled={disabled}
-      title={props.title}
-      primaryLabel={t(formTranslations.done)}
       onClickPrimary={(): void => {
         toggleDisabled();
         handleConfirmImage().finally(toggleDisabled);
       }}
+      onClose={props.onClose}
+      open={props.open}
+      primaryLabel={t(formTranslations.done)}
+      title={props.title}
     >
       <ImageCropper
+        alt={props.alt}
+        aspect={props.aspect}
+        circular={props.circular}
         emitsVia={setImageCropper}
         onLoadError={handleLoadError}
         src={props.src}
-        alt={props.alt}
-        circular={props.circular}
-        aspect={props.aspect}
         type={props.type}
       />
     </Prompt>

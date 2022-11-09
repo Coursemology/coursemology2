@@ -1,7 +1,8 @@
-import { Grid } from '@mui/material';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
+import { Grid } from '@mui/material';
 import { AppState } from 'types/store';
+
 import DisbursementForm from '../../components/forms/DisbursementForm';
 import { getAllFilteredUserMiniEntities } from '../../selectors';
 
@@ -10,7 +11,7 @@ const GeneralDisbursement: FC = () => {
     getAllFilteredUserMiniEntities(state),
   );
   return (
-    <Grid item xs>
+    <Grid item={true} xs={true}>
       <DisbursementForm courseUsers={courseUsers} />
     </Grid>
   );

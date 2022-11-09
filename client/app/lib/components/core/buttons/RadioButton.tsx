@@ -15,18 +15,18 @@ const RadioButton = (props: RadioButtonProps): JSX.Element => {
   return (
     <div className="w-full">
       <FormControlLabel
-        control={<Radio className="py-0 px-4" />}
-        value={props.value}
-        label={props.label}
         className={props.className}
+        control={<Radio className="py-0 px-4" />}
         disabled={props.disabled}
+        label={props.label}
+        value={props.value}
       />
 
       {props.description && (
         <Typography
-          variant="body2"
-          color={props.disabled ? 'text.disabled' : 'text.secondary'}
           className="ml-[34px]"
+          color={props.disabled ? 'text.disabled' : 'text.secondary'}
+          variant="body2"
         >
           {props.description}
         </Typography>

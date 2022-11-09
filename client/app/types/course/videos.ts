@@ -1,4 +1,5 @@
 import { Permissions } from 'types';
+
 import { TimelineAlgorithm } from './personalTimes';
 
 export interface VideoMetadata {

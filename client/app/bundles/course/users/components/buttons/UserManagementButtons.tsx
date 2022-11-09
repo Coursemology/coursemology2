@@ -1,12 +1,14 @@
-import { FC, useState, memo } from 'react';
-import { useDispatch } from 'react-redux';
+import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import DeleteButton from 'lib/components/core/buttons/DeleteButton';
-import { CourseUserRowData } from 'types/course/courseUsers';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch } from 'types/store';
-import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
 import equal from 'fast-deep-equal';
+import { CourseUserRowData } from 'types/course/courseUsers';
+import { AppDispatch } from 'types/store';
+
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
+
 import { deleteUser } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -56,19 +58,19 @@ const UserManagementButtons: FC<Props> = (props) => {
   };
 
   const managementButtons = (
-    <div style={{ whiteSpace: 'nowrap' }} key={`buttons-${user.id}`}>
+    <div key={`buttons-${user.id}`} style={{ whiteSpace: 'nowrap' }}>
       <DeleteButton
-        tooltip="Delete User"
         className={`user-delete-${user.id}`}
-        disabled={isDeleting}
-        loading={isDeleting}
-        onClick={onDelete}
         confirmMessage={intl.formatMessage(translations.deletionConfirm, {
           role: COURSE_USER_ROLES[user.role],
           name: user.name,
           email: user.email,
         })}
+        disabled={isDeleting}
+        loading={isDeleting}
+        onClick={onDelete}
         sx={styles.buttonStyle}
+        tooltip="Delete User"
       />
     </div>
   );

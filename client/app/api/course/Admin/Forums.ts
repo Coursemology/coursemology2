@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios';
-
 import type {
   ForumsSettingsData,
   ForumsSettingsPostData,
 } from 'types/course/admin/forums';
+
 import BaseAdminAPI from './Base';
 
 export default class ForumsAdminAPI extends BaseAdminAPI {

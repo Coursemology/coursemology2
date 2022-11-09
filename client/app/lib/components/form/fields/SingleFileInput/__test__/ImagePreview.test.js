@@ -1,4 +1,5 @@
 import { mount } from 'enzyme';
+
 import ImagePreview from '../ImagePreview';
 
 const onCancel = jest.fn();

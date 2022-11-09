@@ -1,6 +1,6 @@
 import { SyntheticEvent } from 'react';
-import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 import Edit from '@mui/icons-material/Edit';
+import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 
 interface Props extends IconButtonProps {
   onClick: (e: SyntheticEvent) => void;
@@ -15,8 +15,8 @@ const EditButton = ({
   <Tooltip title="Edit">
     <span>
       <IconButton
-        onClick={onClick}
         color="inherit"
+        onClick={onClick}
         {...props}
         data-testid="EditIconButton"
       >

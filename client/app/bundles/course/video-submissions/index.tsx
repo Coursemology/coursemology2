@@ -1,7 +1,8 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import UserVideoSubmissionsIndex from './pages/UserVideoSubmissionsIndex';
 
 $(() => {
@@ -15,8 +16,8 @@ $(() => {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/courses/:courseId/users/:userId/video_submissions"
               element={<UserVideoSubmissionsIndex />}
+              path="/courses/:courseId/users/:userId/video_submissions"
             />
           </Routes>
         </BrowserRouter>

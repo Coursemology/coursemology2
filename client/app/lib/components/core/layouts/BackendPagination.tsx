@@ -1,6 +1,6 @@
-import { Pagination } from '@mui/material';
 import { FC } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { Pagination } from '@mui/material';
 
 interface Props extends WrappedComponentProps {
   rowCount: number;
@@ -26,11 +26,11 @@ const BackendPagination: FC<Props> = (props) => {
   return (
     <Pagination
       color="primary"
-      variant="outlined"
-      style={{ padding: 10, display: 'flex', justifyContent: 'center' }}
       count={count}
-      page={pageNum}
       onChange={handleChange}
+      page={pageNum}
+      style={{ padding: 10, display: 'flex', justifyContent: 'center' }}
+      variant="outlined"
     />
   );
 };

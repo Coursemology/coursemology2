@@ -1,18 +1,20 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import UsersIndex from './pages/UsersIndex';
-import UserShow from './pages/UserShow';
-import ManageStudents from './pages/ManageStudents';
+
+import UserRequests from '../enrol-requests/pages/UserRequests';
+import InvitationsIndex from '../user-invitations/pages/InvitationsIndex';
+import InviteUsers from '../user-invitations/pages/InviteUsers';
+
+import ExperiencePointsRecords from './pages/ExperiencePointsRecords';
 import ManageStaff from './pages/ManageStaff';
+import ManageStudents from './pages/ManageStudents';
 import PersonalTimes from './pages/PersonalTimes';
 import PersonalTimesShow from './pages/PersonalTimesShow';
-import UserRequests from '../enrol-requests/pages/UserRequests';
-import InviteUsers from '../user-invitations/pages/InviteUsers';
-import InvitationsIndex from '../user-invitations/pages/InvitationsIndex';
+import UserShow from './pages/UserShow';
+import UsersIndex from './pages/UsersIndex';
 import configureStore from './store';
-import ExperiencePointsRecords from './pages/ExperiencePointsRecords';
 
 $(() => {
   const mountNode = document.getElementById('course-users-component');
@@ -25,39 +27,39 @@ $(() => {
       <ProviderWrapper store={store}>
         <BrowserRouter>
           <Routes>
-            <Route path="/courses/:courseId/users" element={<UsersIndex />} />
+            <Route element={<UsersIndex />} path="/courses/:courseId/users" />
             <Route
-              path="/courses/:courseId/users/:userId"
               element={<UserShow />}
+              path="/courses/:courseId/users/:userId"
             />
             <Route
-              path="/courses/:courseId/students"
               element={<ManageStudents />}
+              path="/courses/:courseId/students"
             />
             <Route
-              path="/courses/:courseId/enrol_requests"
               element={<UserRequests />}
+              path="/courses/:courseId/enrol_requests"
             />
             <Route
-              path="/courses/:courseId/users/invite/"
               element={<InviteUsers />}
+              path="/courses/:courseId/users/invite/"
             />
             <Route
-              path="/courses/:courseId/user_invitations"
               element={<InvitationsIndex />}
+              path="/courses/:courseId/user_invitations"
             />
-            <Route path="/courses/:courseId/staff" element={<ManageStaff />} />
+            <Route element={<ManageStaff />} path="/courses/:courseId/staff" />
             <Route
-              path="/courses/:courseId/users/personal_times"
               element={<PersonalTimes />}
+              path="/courses/:courseId/users/personal_times"
             />
             <Route
-              path="/courses/:courseId/users/:userId/personal_times"
               element={<PersonalTimesShow />}
+              path="/courses/:courseId/users/:userId/personal_times"
             />
             <Route
-              path="/courses/:courseId/users/:userId/experience_points_records"
               element={<ExperiencePointsRecords />}
+              path="/courses/:courseId/users/:userId/experience_points_records"
             />
           </Routes>
         </BrowserRouter>

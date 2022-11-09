@@ -1,5 +1,6 @@
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
+import PropTypes from 'prop-types';
+
 import { scribingTranslations as translations } from '../../translations';
 
 const propTypes = {

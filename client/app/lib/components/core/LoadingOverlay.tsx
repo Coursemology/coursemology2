@@ -1,6 +1,7 @@
+import Box from '@mui/material/Box';
 import { alpha } from '@mui/material/styles';
 import palette from 'theme/palette';
-import Box from '@mui/material/Box';
+
 import LoadingIndicator from './LoadingIndicator';
 
 const styles = {

@@ -2,32 +2,34 @@ import { FC, useEffect, useState } from 'react';
 import {
   defineMessages,
   injectIntl,
-  WrappedComponentProps,
   IntlShape,
+  WrappedComponentProps,
 } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, AppState } from 'types/store';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { toast } from 'react-toastify';
-import PageHeader from 'lib/components/navigation/PageHeader';
+import { Tab, Tabs } from '@mui/material';
+import { tabsStyle } from 'theme/mui-style';
 import {
   CommentPermissions,
   CommentTabData,
   CommentTabInfo,
   CommentTabTypes,
 } from 'types/course/comments';
-import { Tab, Tabs } from '@mui/material';
+import { AppDispatch, AppState } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import CustomBadge from 'lib/components/extensions/CustomBadge';
-import { tabsStyle } from 'theme/mui-style';
+import PageHeader from 'lib/components/navigation/PageHeader';
+
+import { changeTabValue } from '../../actions';
+import TopicList from '../../components/lists/TopicList';
+import { fetchTabData } from '../../operations';
 import {
   getPermissions,
   getSettings,
   getTabInfo,
   getTabValue,
 } from '../../selectors';
-import { fetchTabData } from '../../operations';
-import { changeTabValue } from '../../actions';
-import TopicList from '../../components/lists/TopicList';
 
 type Props = WrappedComponentProps;
 
@@ -147,26 +149,26 @@ const CommentTabs: FC<CommentTabProps> = (props) => {
       onChange={(_, value): void => {
         dispatch(changeTabValue(value));
       }}
+      scrollButtons="auto"
+      sx={tabsStyle}
       TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
       value={tabValue}
       variant="scrollable"
-      scrollButtons="auto"
-      sx={tabsStyle}
     >
       {tabTypesToRender.length > 0 &&
         tabTypesToRender.map((tabData: CommentTabData) => (
           <Tab
-            id={`${tabData.type}_tab`}
             key={tabData.type}
             icon={<CustomBadge badgeContent={tabData.count} color="primary" />}
             iconPosition="end"
+            id={`${tabData.type}_tab`}
+            label={tabTranslation(intl, tabData.type)}
             style={{
               minHeight: 48,
               paddingRight:
                 tabData.count === 0 || tabData.count === undefined ? 8 : 26,
               textDecoration: 'none',
             }}
-            label={tabTranslation(intl, tabData.type)}
             value={tabData.type}
           />
         ))}
@@ -204,8 +206,8 @@ const CommentIndex: FC<Props> = (props) => {
         <LoadingIndicator />
       ) : (
         <>
-          <CommentTabs tabValue={tabValue} intl={intl} />
-          <TopicList key={tabValue} tabValue={tabValue} settings={settings} />
+          <CommentTabs intl={intl} tabValue={tabValue} />
+          <TopicList key={tabValue} settings={settings} tabValue={tabValue} />
         </>
       )}
     </>

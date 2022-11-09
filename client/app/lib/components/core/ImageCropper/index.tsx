@@ -1,11 +1,11 @@
 import { ReactEventHandler, useRef, useState } from 'react';
 import useEmitterFactory, { Emits } from 'react-emitter-factory';
+import ReactCrop, { PercentCrop, PixelCrop } from 'react-image-crop';
 import { RotateRight } from '@mui/icons-material';
 import { Slider } from '@mui/material';
-import ReactCrop, { PercentCrop, PixelCrop } from 'react-image-crop';
-import 'react-image-crop/dist/ReactCrop.css';
 
-import { getImage, centerAspectCrop } from './utils';
+import { centerAspectCrop, getImage } from './utils';
+import 'react-image-crop/dist/ReactCrop.css';
 
 const DEFAULT_CROP: PercentCrop = {
   unit: '%',
@@ -76,22 +76,22 @@ const ImageCropper = (props: ImageCropperProps): JSX.Element => {
   return (
     <div>
       <ReactCrop
+        aspect={props.aspect}
+        circularCrop={props.circular}
         crop={crop}
+        keepSelection={true}
         onChange={(_, percentCrop): void => setCrop(percentCrop)}
         onComplete={setCompletedCrop}
         ruleOfThirds={props.grids ?? true}
-        circularCrop={props.circular}
-        aspect={props.aspect}
-        keepSelection
       >
         <img
           ref={imgRef}
           alt={props.alt}
-          src={props.src}
-          onLoad={handleImageLoad}
-          onError={props.onLoadError}
-          style={{ transform: `rotate(${rotation}deg)` }}
           className="pointer-events-none select-none"
+          onError={props.onLoadError}
+          onLoad={handleImageLoad}
+          src={props.src}
+          style={{ transform: `rotate(${rotation}deg)` }}
         />
       </ReactCrop>
 
@@ -99,10 +99,10 @@ const ImageCropper = (props: ImageCropperProps): JSX.Element => {
         <RotateRight className="mr-8" />
 
         <Slider
-          value={rotation}
-          onChange={(_, angle): void => setRotation(angle as number)}
-          min={0}
           max={180}
+          min={0}
+          onChange={(_, angle): void => setRotation(angle as number)}
+          value={rotation}
           valueLabelDisplay="auto"
           valueLabelFormat={(degree): string => `${degree}\u00B0`}
         />

@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Button, TableCell, TableRow } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import PropTypes from 'prop-types';
 
 import styles from './OnlineEditorView.scss';
 
@@ -37,7 +37,6 @@ const ExistingPackageFile = (props) => {
     <TableRow style={rowStyle}>
       <TableCell className={styles.deleteButtonCell}>
         <Button
-          variant="contained"
           disabled={isLoading}
           onClick={() => {
             deleteExistingPackageFile(props.fileType, filename, !toDelete);
@@ -49,15 +48,16 @@ const ExistingPackageFile = (props) => {
             minWidth: '40px',
             width: '40px',
           }}
+          variant="contained"
         >
           <i className={buttonClass} />
         </Button>
         <input
-          type="checkbox"
-          hidden
-          name={`question_programming[${`${fileType}_to_delete`}][${filename}]`}
-          readOnly
           checked={toDelete}
+          hidden={true}
+          name={`question_programming[${`${fileType}_to_delete`}][${filename}]`}
+          readOnly={true}
+          type="checkbox"
         />
       </TableCell>
       <TableCell>{filename}</TableCell>

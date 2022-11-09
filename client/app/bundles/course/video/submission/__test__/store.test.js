@@ -1,10 +1,11 @@
 import { playerStates } from 'lib/constants/videoConstants';
-import store from '../store';
+
 import {
   changePlayerState,
-  updatePlayerProgress,
   updatePlayerDuration,
+  updatePlayerProgress,
 } from '../actions/video';
+import store from '../store';
 
 const videoStateObject = {
   videoUrl: 'https://www.youtube.com/watch?v=sTSA_sWGM44',

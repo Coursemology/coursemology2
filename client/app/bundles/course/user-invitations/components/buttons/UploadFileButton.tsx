@@ -1,8 +1,10 @@
 import { FC, useState } from 'react';
-import { Button } from '@mui/material';
 import { defineMessages } from 'react-intl';
-import useTranslation from 'lib/hooks/useTranslation';
+import { Button } from '@mui/material';
 import { InvitationResult } from 'types/course/userInvitations';
+
+import useTranslation from 'lib/hooks/useTranslation';
+
 import InviteUsersFileUpload from '../../pages/InviteUsersFileUpload';
 
 interface Props {
@@ -22,16 +24,16 @@ const UploadFileButton: FC<Props> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const uploadFileButton = (
-    <Button variant="contained" onClick={(): void => setIsOpen(true)}>
+    <Button onClick={(): void => setIsOpen(true)} variant="contained">
       {t(translations.uploadFile)}
     </Button>
   );
 
   const uploadFileDialog = (
     <InviteUsersFileUpload
+      onClose={(): void => setIsOpen(false)}
       open={isOpen}
       openResultDialog={openResultDialog}
-      onClose={(): void => setIsOpen(false)}
     />
   );
 

@@ -1,7 +1,9 @@
-import { Button, Menu, MenuItem } from '@mui/material';
-import useTranslation from 'lib/hooks/useTranslation';
 import { useState } from 'react';
+import { Button, Menu, MenuItem } from '@mui/material';
 import { AssessmentTab } from 'types/course/admin/assessments';
+
+import useTranslation from 'lib/hooks/useTranslation';
+
 import translations from '../translations';
 
 interface MoveAssessmentsMenuProps {
@@ -22,8 +24,8 @@ const MoveAssessmentsMenu = (
   if (tabs.length === 1)
     return (
       <Button
-        onClick={(): void => onSelectTab(tabs[0])}
         disabled={props.disabled}
+        onClick={(): void => onSelectTab(tabs[0])}
       >
         {t(translations.moveAssessmentsToTabThenDelete, { tab: tabs[0].title })}
       </Button>
@@ -32,16 +34,16 @@ const MoveAssessmentsMenu = (
   return (
     <>
       <Button
-        onClick={(e): void => setButton(e.currentTarget)}
         disabled={props.disabled}
+        onClick={(e): void => setButton(e.currentTarget)}
       >
         {t(translations.moveAssessmentsThenDelete)}
       </Button>
 
       <Menu
-        open={Boolean(button)}
         anchorEl={button}
         onClose={(): void => setButton(undefined)}
+        open={Boolean(button)}
       >
         {tabs.map((tab) => (
           <MenuItem

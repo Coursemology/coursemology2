@@ -1,4 +1,5 @@
-import { Routes, Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
+
 import SubmissionEditIndex from '../pages/SubmissionEditIndex';
 import SubmissionsIndex from '../pages/SubmissionsIndex';
 
@@ -10,8 +11,16 @@ const SubmissionsLayout = () => {
 
   return (
     <Routes>
-      <Route exact path={submissionsIndex} element={<SubmissionsIndex />} />
-      <Route exact path={submissionEdit} element={<SubmissionEditIndex />} />
+      <Route
+        element={<SubmissionsIndex />}
+        exact={true}
+        path={submissionsIndex}
+      />
+      <Route
+        element={<SubmissionEditIndex />}
+        exact={true}
+        path={submissionEdit}
+      />
     </Routes>
   );
 };

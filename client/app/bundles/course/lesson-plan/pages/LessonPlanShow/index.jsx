@@ -1,13 +1,15 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
 import { Card, CardContent } from '@mui/material';
+import PropTypes from 'prop-types';
+
+import EnterEditModeButton from 'course/lesson-plan/containers/LessonPlanLayout/EnterEditModeButton';
+import NewEventButton from 'course/lesson-plan/containers/LessonPlanLayout/NewEventButton';
+import NewMilestoneButton from 'course/lesson-plan/containers/LessonPlanLayout/NewMilestoneButton';
 import moment from 'lib/moment';
 import { lessonPlanTypesGroups } from 'lib/types';
-import EnterEditModeButton from 'course/lesson-plan/containers/LessonPlanLayout/EnterEditModeButton';
-import NewMilestoneButton from 'course/lesson-plan/containers/LessonPlanLayout/NewMilestoneButton';
-import NewEventButton from 'course/lesson-plan/containers/LessonPlanLayout/NewEventButton';
+
 import LessonPlanGroup from './LessonPlanGroup';
 
 class LessonPlanShow extends Component {
@@ -67,10 +69,10 @@ class LessonPlanShow extends Component {
     return (
       <LessonPlanGroup
         key={id}
+        group={{ ...group, items: visibleItems }}
         initiallyExpanded={
           initiallyExpanded === undefined ? true : initiallyExpanded
         }
-        group={{ ...group, items: visibleItems }}
       />
     );
   }

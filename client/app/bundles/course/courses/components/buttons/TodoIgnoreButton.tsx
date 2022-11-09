@@ -1,10 +1,12 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
-import { Button } from '@mui/material';
-import { toast } from 'react-toastify';
-import { getCourseId } from 'lib/helpers/url-helpers';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { Button } from '@mui/material';
 import { AppDispatch } from 'types/store';
+
+import { getCourseId } from 'lib/helpers/url-helpers';
+
 import { removeTodo } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -45,13 +47,13 @@ const TodoIgnoreButton: FC<Props> = (props) => {
 
   return (
     <Button
-      id={`todo-ignore-button-${todoId}`}
-      variant="outlined"
       color="secondary"
+      id={`todo-ignore-button-${todoId}`}
       onClick={(): void => {
         onIgnore();
       }}
       style={{ width: 80 }}
+      variant="outlined"
     >
       {intl.formatMessage(translations.ignoreButtonText)}
     </Button>

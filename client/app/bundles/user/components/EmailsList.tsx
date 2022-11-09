@@ -1,5 +1,11 @@
 import { useState } from 'react';
 import {
+  AccountCircle,
+  Delete,
+  Notifications,
+  Warning,
+} from '@mui/icons-material';
+import {
   Card,
   Chip,
   Divider,
@@ -7,17 +13,12 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import {
-  Delete,
-  AccountCircle,
-  Notifications,
-  Warning,
-} from '@mui/icons-material';
-
 import { EmailData } from 'types/users';
-import Link from 'lib/components/core/Link';
+
 import Prompt from 'lib/components/core/dialogs/Prompt';
+import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import translations from '../translations';
 
 interface EmailCardProps {
@@ -55,31 +56,31 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
     if (email.isPrimary)
       return (
         <Chip
-          size="small"
-          label={t(translations.primaryEmail)}
-          color="success"
           className="select-none"
+          color="success"
+          label={t(translations.primaryEmail)}
+          size="small"
         />
       );
 
     if (email.isConfirmed)
       return (
         <Chip
-          size="small"
-          label={t(translations.confirmedEmail)}
-          color="success"
-          variant="outlined"
           className="select-none"
+          color="success"
+          label={t(translations.confirmedEmail)}
+          size="small"
+          variant="outlined"
         />
       );
 
     return (
       <Chip
-        size="small"
-        label={t(translations.unconfirmedEmail)}
-        color="warning"
-        variant="outlined"
         className="select-none"
+        color="warning"
+        label={t(translations.unconfirmedEmail)}
+        size="small"
+        variant="outlined"
       />
     );
   };
@@ -113,13 +114,13 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
       <div className="mb-2 flex flex-col space-y-3">
         {canSetAsPrimary && (
           <Link
-            variant="body2"
-            color="links"
             className="w-fit"
-            opensInNewTab
+            color="links"
             onClick={(): void =>
               props.onSetEmailAsPrimary?.(setPrimaryUrl!, email.email)
             }
+            opensInNewTab={true}
+            variant="body2"
           >
             {t(translations.setEmailAsPrimary)}
           </Link>
@@ -136,13 +137,13 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
             </div>
 
             <Link
-              variant="body2"
-              color="links"
               className="w-fit"
-              opensInNewTab
+              color="links"
               onClick={(): void =>
                 props.onResendConfirmationEmail?.(confirmationUrl!, email.email)
               }
+              opensInNewTab={true}
+              variant="body2"
             >
               {t(translations.resendConfirmationEmail)}
             </Link>
@@ -178,7 +179,7 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
             <div className="flex flex-col px-5 py-2">
               <div className="flex min-h-[4rem] items-center justify-between space-x-4">
                 <div className="flex space-x-4">
-                  <Typography variant="body1" className="break-all">
+                  <Typography className="break-all" variant="body1">
                     {email.email}
                   </Typography>
 
@@ -189,10 +190,10 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
 
                 {!email.isPrimary && (
                   <IconButton
-                    color="error"
                     className="!-mr-4"
-                    onClick={(): void => handleClickRemoveEmail(email)}
+                    color="error"
                     disabled={props.disabled}
+                    onClick={(): void => handleClickRemoveEmail(email)}
                   >
                     <Delete />
                   </IconButton>
@@ -209,15 +210,15 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
 
       {emailToRemove && (
         <Prompt
-          open={Boolean(emailToRemove)}
-          title={t(translations.removeEmailPromptTitle, {
-            email: emailToRemove.email,
-          })}
+          onClickPrimary={(): void => removeEmail(emailToRemove)}
           onClose={(): void => setEmailToRemove(undefined)}
+          open={Boolean(emailToRemove)}
           primaryColor="error"
           primaryDisabled={props.disabled}
           primaryLabel={t(translations.removeEmail)}
-          onClickPrimary={(): void => removeEmail(emailToRemove)}
+          title={t(translations.removeEmailPromptTitle, {
+            email: emailToRemove.email,
+          })}
         >
           {t(translations.removeEmailPromptMessage, {
             email: emailToRemove.email,

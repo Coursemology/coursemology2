@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
 import {
   Card,
   CardContent,
@@ -11,15 +10,17 @@ import {
   Select,
 } from '@mui/material';
 import { yellow } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import { formatLongDateTime } from 'lib/moment';
 
 import selectPastAnswers from '../actions/history';
-import translations from '../translations';
-import { answerShape, questionShape } from '../propTypes';
-import PastProgrammingAnswer from '../components/pastAnswers/PastProgrammingAnswer';
 import PastMultipleResponseAnswer from '../components/pastAnswers/PastMultipleResponseAnswer';
+import PastProgrammingAnswer from '../components/pastAnswers/PastProgrammingAnswer';
 import TextResponseSolutions from '../components/TextResponseSolutions';
 import { questionTypes } from '../constants';
+import { answerShape, questionShape } from '../propTypes';
+import translations from '../translations';
 
 const styles = {
   horizontalRule: {
@@ -33,11 +34,11 @@ class PastAnswers extends Component {
     const { intl } = this.props;
     switch (question.type) {
       case questionTypes.Programming:
-        return <PastProgrammingAnswer question={question} answer={answer} />;
+        return <PastProgrammingAnswer answer={answer} question={question} />;
       case questionTypes.MultipleChoice:
       case questionTypes.MultipleResponse:
         return (
-          <PastMultipleResponseAnswer question={question} answer={answer} />
+          <PastMultipleResponseAnswer answer={answer} question={question} />
         );
       case questionTypes.Comprehension:
       case questionTypes.TextResponse:
@@ -79,9 +80,9 @@ class PastAnswers extends Component {
       <FormControl style={{ float: 'right', width: 300 }} variant="standard">
         <InputLabel>{intl.formatMessage(translations.pastAnswers)}</InputLabel>
         <Select
-          multiple
-          value={selectedAnswers || 'test'}
+          multiple={true}
           onChange={handleSelectPastAnswers}
+          value={selectedAnswers || 'test'}
           variant="standard"
         >
           {answerIds.map(renderOption)}

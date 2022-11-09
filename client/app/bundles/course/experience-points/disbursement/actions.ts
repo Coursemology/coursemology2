@@ -5,15 +5,16 @@ import {
   ForumDisbursementUserData,
   ForumPostData,
 } from 'types/course/disbursement';
+
 import {
-  SaveDisbursementListAction,
-  SaveForumDisbursementListAction,
+  REMOVE_FORUM_DISBURSEMENT_LIST,
   RemoveForumDisbursementListAction,
-  SaveForumPostListAction,
   SAVE_DISBURSEMENT_LIST,
   SAVE_FORUM_DISBURSEMENT_LIST,
-  REMOVE_FORUM_DISBURSEMENT_LIST,
   SAVE_FORUM_POST_LIST,
+  SaveDisbursementListAction,
+  SaveForumDisbursementListAction,
+  SaveForumPostListAction,
 } from './types';
 
 export function saveDisbursementList(

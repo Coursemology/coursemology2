@@ -1,13 +1,15 @@
 import { memo } from 'react';
-import PropTypes from 'prop-types';
 import {
   FormControl,
-  InputLabel,
   FormHelperText,
-  Select,
+  InputLabel,
   MenuItem,
+  Select,
 } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
+
 import propsAreEqual from './utils/propsAreEqual';
 
 const styles = {
@@ -54,7 +56,7 @@ const FormSelectField = (props) => {
     <FormControl
       disabled={disabled}
       error={isError}
-      fullWidth
+      fullWidth={true}
       sx={{ margin: margin ?? styles.selectFieldStyle.margin }}
       variant={variant}
     >
@@ -62,22 +64,22 @@ const FormSelectField = (props) => {
       <Select
         id="select"
         {...field}
+        native={native}
         onChange={(event) =>
           onChangeCustom
             ? onChangeCustom(event.target.value)
             : field.onChange(event)
         }
-        native={native}
         {...custom}
-        variant={variant}
-        displayEmpty={displayEmpty}
         className={className}
+        displayEmpty={displayEmpty}
         MenuProps={{
           style: { maxHeight: '50vh' },
         }}
+        variant={variant}
       >
         {noneSelected && (
-          <Option value="" key={noneSelected}>
+          <Option key={noneSelected} value="">
             {noneSelected}
           </Option>
         )}

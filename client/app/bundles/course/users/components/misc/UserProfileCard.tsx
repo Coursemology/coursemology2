@@ -1,5 +1,7 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { Link as RouterLink } from 'react-router-dom';
+import { scroller } from 'react-scroll';
 import {
   Avatar,
   Box,
@@ -9,10 +11,10 @@ import {
   Link,
   Typography,
 } from '@mui/material';
-import { scroller } from 'react-scroll';
 import { CourseUserEntity } from 'types/course/courseUsers';
+
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
-import { Link as RouterLink } from 'react-router-dom';
+
 import UserProfileCardStats from './UserProfileCardStats';
 import styles from './UserProfileCard.scss';
 
@@ -53,13 +55,13 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
     if (user.manageEmailSubscriptionUrl) {
       return (
         <Box>
-          <Typography variant="body1" component="span">
+          <Typography component="span" variant="body1">
             {user.email} &mdash;{' '}
           </Typography>
           <Link
             href={user.manageEmailSubscriptionUrl}
-            variant="body1"
             underline="hover"
+            variant="body1"
           >
             {intl.formatMessage(translations.manageEmailSubscription)}
           </Link>
@@ -67,7 +69,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
       );
     }
     return (
-      <Typography variant="body1" component="span">
+      <Typography component="span" variant="body1">
         {user.email}
       </Typography>
     );
@@ -76,25 +78,25 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
   const renderUserStats = (): JSX.Element | null => {
     return (
       <Grid
-        item
-        container
-        direction="row"
-        justifyContent={{ xs: 'center', sm: 'start' }}
         className={styles.userStatsContainer}
+        container={true}
+        direction="row"
+        item={true}
+        justifyContent={{ xs: 'center', sm: 'start' }}
       >
         {user.level !== undefined && (
           <UserProfileCardStats
+            className="user-level-stat"
             title={intl.formatMessage(translations.level)}
             value={user.level}
-            className="user-level-stat"
           />
         )}
         {user.exp !== undefined && (
           <RouterLink to={user.experiencePointsRecordsUrl ?? ''}>
             <UserProfileCardStats
+              className="user-exp-stat"
               title={intl.formatMessage(translations.exp)}
               value={user.exp}
-              className="user-exp-stat"
             />
           </RouterLink>
         )}
@@ -104,9 +106,9 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
             onClick={(e): void => handleScrollToAchievements(e)}
           >
             <UserProfileCardStats
+              className="user-achievements-stat"
               title={intl.formatMessage(translations.achievements)}
               value={user.achievements.length}
-              className="user-achievements-stat"
             />
           </a>
         )}
@@ -118,26 +120,26 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
     <Card>
       <CardContent>
         <Grid
-          container
+          container={true}
           direction="row"
           flexWrap={{ xs: 'wrap', sm: 'nowrap' }}
           spacing={{ xs: 1, sm: 4 }}
         >
           <Grid
-            item
-            container
-            direction="column"
             alignItems="center"
-            xs={12}
+            container={true}
+            direction="column"
+            item={true}
             sm="auto"
+            xs={12}
           >
-            <Avatar src={user.imageUrl} className={styles.courseUserImage} />
+            <Avatar className={styles.courseUserImage} src={user.imageUrl} />
           </Grid>
           <Grid
-            item
-            container
-            direction="column"
             alignItems={{ xs: 'center', sm: 'start' }}
+            container={true}
+            direction="column"
+            item={true}
           >
             <Typography variant="h4">{user.name}</Typography>
             <Typography variant="body1">

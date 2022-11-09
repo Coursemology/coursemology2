@@ -1,12 +1,13 @@
 import { AxiosResponse } from 'axios';
 import {
-  ConditionData,
-  ConditionAbility,
-  ConditionPostData,
+  AvailableAchievements,
   AvailableAssessments,
   AvailableSurveys,
-  AvailableAchievements,
+  ConditionAbility,
+  ConditionData,
+  ConditionPostData,
 } from 'types/course/conditions';
+
 import BaseCourseAPI from './Base';
 
 type Response<Data> = Promise<AxiosResponse<Data>>;

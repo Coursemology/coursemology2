@@ -1,10 +1,12 @@
-import CourseAPI from 'api/course';
 import {
   FolderFormData,
   MaterialFormData,
   MaterialUploadFormData,
 } from 'types/course/material/folders';
 import { Operation } from 'types/store';
+
+import CourseAPI from 'api/course';
+
 import * as actions from './actions';
 import { SaveFolderAction } from './types';
 

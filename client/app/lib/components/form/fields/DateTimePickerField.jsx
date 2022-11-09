@@ -1,11 +1,12 @@
-import PropTypes from 'prop-types';
-import { injectIntl, defineMessages } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import { TextField } from '@mui/material';
 import {
   DateTimePicker as MuiDateTimePicker,
   LocalizationProvider,
 } from '@mui/x-date-pickers';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import PropTypes from 'prop-types';
+
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 
 const translations = defineMessages({
@@ -55,9 +56,9 @@ const FormDateTimePickerField = (props) => {
       <div style={{ ...styles.dateTimePicker, ...style }}>
         <MuiDateTimePicker
           {...field}
-          ampm
+          ampm={true}
+          clearable={true}
           DialogProps={{ sx: styles.dialogStyle }}
-          clearable
           disabled={disabled}
           inputFormat="DD-MM-YYYY HH:mm"
           label={label}
@@ -69,7 +70,7 @@ const FormDateTimePickerField = (props) => {
               className={className}
               {...params}
               error={!!fieldState.error || params.error}
-              fullWidth
+              fullWidth={true}
               helperText={
                 fieldState.error
                   ? formatErrorMessage(fieldState.error.message)

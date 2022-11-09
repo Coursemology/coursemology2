@@ -1,11 +1,12 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button, IconButton } from '@mui/material';
+import { connect } from 'react-redux';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import { Button, IconButton } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { unsubmitResponse } from 'course/survey/actions/responses';
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 const styles = {
   formButton: {
@@ -57,10 +58,14 @@ class UnsubmitButton extends Component {
     return (
       <>
         {isIcon ? (
-          <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
+          <span
+            className="unsubmit-button"
+            data-for="unsubmit-button"
+            data-tip={true}
+          >
             <IconButton
-              id={`unsubmit-button-${responseId}`}
               disabled={disabled}
+              id={`unsubmit-button-${responseId}`}
               onClick={() => this.setState({ open: true })}
               size="large"
               style={styles.formButton}
@@ -72,20 +77,20 @@ class UnsubmitButton extends Component {
           </span>
         ) : (
           <Button
-            variant="contained"
             color="secondary"
             disabled={disabled}
             onClick={() => this.setState({ open: true })}
             style={styles.formButton}
+            variant="contained"
           >
             <FormattedMessage {...translations.unsubmit} />
           </Button>
         )}
         <ConfirmationDialog
           message={<FormattedMessage {...translations.confirm} />}
-          open={this.state.open}
           onCancel={() => this.setState({ open: false })}
           onConfirm={this.handleUnsubmitResponse}
+          open={this.state.open}
         />
       </>
     );

@@ -4,19 +4,20 @@ import {
   CoursePermissions,
 } from 'types/course/courses';
 import { RoleRequestBasicListData } from 'types/system/instance/roleRequests';
+
 import {
-  SAVE_COURSE_LIST,
-  SAVE_COURSE,
-  REMOVE_TODO,
-  SUBMIT_ENROL,
   CANCEL_ENROL,
-  SAVE_INSTANCE_ROLE_REQUEST,
-  SaveCourseListAction,
-  SaveCourseAction,
-  RemoveTodoAction,
-  SubmitEnrolAction,
   CancelEnrolAction,
+  REMOVE_TODO,
+  RemoveTodoAction,
+  SAVE_COURSE,
+  SAVE_COURSE_LIST,
+  SAVE_INSTANCE_ROLE_REQUEST,
+  SaveCourseAction,
+  SaveCourseListAction,
   SaveInstanceRoleRequest,
+  SUBMIT_ENROL,
+  SubmitEnrolAction,
 } from './types';
 
 export function saveCourseList(

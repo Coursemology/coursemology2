@@ -2,11 +2,9 @@ import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
-
-import { AppDispatch, AppState } from 'types/store';
-
 import { Breadcrumbs, Paper } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import { AppDispatch, AppState } from 'types/store';
 
 import EditButton from 'lib/components/core/buttons/EditButton';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -15,6 +13,11 @@ import { getWorkbinFolderURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import DownloadFolderButton from '../../components/buttons/DownloadFolderButton';
+import NewSubfolderButton from '../../components/buttons/NewSubfolderButton';
+import UploadFilesButton from '../../components/buttons/UploadFilesButton';
+import MaterialUpload from '../../components/misc/MaterialUpload';
+import WorkbinTable from '../../components/tables/WorkbinTable';
 import { loadFolder } from '../../operations';
 import {
   getBreadcrumbs,
@@ -23,15 +26,8 @@ import {
   getFolderPermissions,
   getFolderSubfolders,
 } from '../../selectors';
-
-import WorkbinTable from '../../components/tables/WorkbinTable';
-import NewSubfolderButton from '../../components/buttons/NewSubfolderButton';
-import UploadFilesButton from '../../components/buttons/UploadFilesButton';
-import DownloadFolderButton from '../../components/buttons/DownloadFolderButton';
-import MaterialUpload from '../../components/misc/MaterialUpload';
-
-import FolderNew from '../FolderNew';
 import FolderEdit from '../FolderEdit';
+import FolderNew from '../FolderNew';
 
 const translations = defineMessages({
   defaultHeader: {
@@ -106,11 +102,11 @@ const FolderShow: FC = () => {
   if (currFolderInfo.isConcrete && permissions.canEdit) {
     headerToolbars.push(
       <EditButton
-        id="edit-folder-button"
         key="edit-folder-button"
+        color="default"
+        id="edit-folder-button"
         onClick={(): void => setIsEditFolderOpen(true)}
         style={{ padding: 6 }}
-        color="default"
       />,
     );
   }
@@ -127,13 +123,13 @@ const FolderShow: FC = () => {
   return (
     <>
       <Paper
-        variant="outlined"
         sx={{
           marginBottom: '4px',
           padding: '4px 8px',
           backgroundColor: grey[100],
           border: '0',
         }}
+        variant="outlined"
       >
         <Breadcrumbs>
           {breadcrumbs.map((breadcrumb, index) => {
@@ -159,26 +155,26 @@ const FolderShow: FC = () => {
       </Paper>
       <PageHeader
         key={`workbin-folder-${currFolderInfo.name}-${currFolderInfo.id}`}
+        returnLink={
+          currFolderInfo.parentId !== null
+            ? getWorkbinFolderURL(getCourseId(), currFolderInfo.parentId)
+            : undefined
+        }
         title={
           currFolderInfo.name === null
             ? t(translations.defaultHeader)
             : currFolderInfo.name
         }
         toolbars={headerToolbars}
-        returnLink={
-          currFolderInfo.parentId !== null
-            ? getWorkbinFolderURL(getCourseId(), currFolderInfo.parentId)
-            : undefined
-        }
       />
       <WorkbinTable
         key={currFolderInfo.id}
-        currFolderId={currFolderInfo.id}
-        subfolders={subfolders}
-        materials={materials}
         canEditSubfolders={permissions.canEditSubfolders}
-        isCurrentCourseStudent={permissions.isCurrentCourseStudent}
+        currFolderId={currFolderInfo.id}
         isConcrete={currFolderInfo.isConcrete}
+        isCurrentCourseStudent={permissions.isCurrentCourseStudent}
+        materials={materials}
+        subfolders={subfolders}
       />
 
       <FolderNew
@@ -187,17 +183,17 @@ const FolderShow: FC = () => {
         onClose={(): void => setIsNewFolderOpen(false)}
       />
       <FolderEdit
+        folderId={currFolderInfo.id}
+        initialValues={folderInitialValues}
         isOpen={isEditFolderOpen}
         onClose={(): void => {
           setIsEditFolderOpen(false);
         }}
-        folderId={currFolderInfo.id}
-        initialValues={folderInitialValues}
       />
       <MaterialUpload
-        isOpen={isMaterialUploadOpen}
-        handleClose={(): void => setIsMaterialUploadOpen(false)}
         currFolderId={currFolderInfo.id}
+        handleClose={(): void => setIsMaterialUploadOpen(false)}
+        isOpen={isMaterialUploadOpen}
       />
     </>
   );

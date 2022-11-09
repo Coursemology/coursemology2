@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { DialogContentText, Typography } from '@mui/material';
+
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
-import { useState } from 'react';
+
 import translations from './translations';
 
 const DEFAULT_CHALLENGE = 'coursemology';
@@ -23,17 +25,17 @@ const DeleteCoursePrompt = (props: DeleteCoursePromptProps): JSX.Element => {
 
   return (
     <Prompt
-      open={props.open}
+      contentClassName="space-y-4"
+      disabled={props.disabled}
+      onClickPrimary={props.onConfirmDelete}
       onClose={props.onClose}
+      open={props.open}
+      primaryColor="error"
+      primaryDisabled={props.disabled || inputChallenge !== challengeText}
+      primaryLabel={t(translations.deleteCourse)}
       title={t(translations.deleteCoursePromptTitle, {
         title: props.courseTitle,
       })}
-      primaryDisabled={props.disabled || inputChallenge !== challengeText}
-      disabled={props.disabled}
-      primaryLabel={t(translations.deleteCourse)}
-      primaryColor="error"
-      onClickPrimary={props.onConfirmDelete}
-      contentClassName="space-y-4"
     >
       <DialogContentText>
         {t(translations.deleteCourseWarning)}
@@ -41,25 +43,25 @@ const DeleteCoursePrompt = (props: DeleteCoursePromptProps): JSX.Element => {
 
       {/* TODO: Find a way to more elegantly handle HTML markups in translations */}
       <Typography
-        variant="body1"
         color="text.secondary"
         dangerouslySetInnerHTML={{
           __html: t(translations.pleaseTypeChallengeToConfirmDelete, {
             challenge: `<code>${challengeText}</code>`,
           }),
         }}
+        variant="body1"
       />
 
       <TextField
-        name="confirmDeleteField"
-        value={inputChallenge}
-        onChange={(e): void => setInputChallenge(e.target.value)}
-        variant="filled"
-        size="small"
-        placeholder={t(translations.confirmDeletePlaceholder)}
         disabled={props.disabled}
-        fullWidth
-        hiddenLabel
+        fullWidth={true}
+        hiddenLabel={true}
+        name="confirmDeleteField"
+        onChange={(e): void => setInputChallenge(e.target.value)}
+        placeholder={t(translations.confirmDeletePlaceholder)}
+        size="small"
+        value={inputChallenge}
+        variant="filled"
       />
     </Prompt>
   );

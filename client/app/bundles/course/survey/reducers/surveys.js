@@ -1,7 +1,9 @@
-import { updateOrAppend, deleteIfFound } from 'lib/helpers/reducer-helpers';
+import { deleteIfFound, updateOrAppend } from 'lib/helpers/reducer-helpers';
+
 import actionTypes from '../constants';
-import surveyReducer from './survey';
 import { sortSurveyElements, sortSurveysByDate } from '../utils';
+
+import surveyReducer from './survey';
 
 export default function (state = [], action) {
   switch (action.type) {

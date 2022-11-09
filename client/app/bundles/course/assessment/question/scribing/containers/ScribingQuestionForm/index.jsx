@@ -1,9 +1,10 @@
-import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
 import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { FormattedMessage } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+import * as yup from 'yup';
+
 import ErrorText from 'lib/components/core/ErrorText';
 import FormMultiSelectField from 'lib/components/form/fields/MultiSelectField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
@@ -13,10 +14,10 @@ import FormSingleFileInput, {
 import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
 
-import styles from './ScribingQuestionForm.scss';
-import translations from './ScribingQuestionForm.intl';
-
 import { dataShape } from '../../propTypes';
+
+import translations from './ScribingQuestionForm.intl';
+import styles from './ScribingQuestionForm.scss';
 
 const validationSchema = yup.object({
   title: yup.string().nullable(),
@@ -82,9 +83,9 @@ const ScribingQuestionForm = (props) => {
     <div className={styles.row}>
       <label htmlFor="question_scribing_attachment">File uploaded:</label>
       <img
+        alt={data.question.attachment_reference.name}
         className={styles.uploadedImage}
         src={data.question.attachment_reference.image_url}
-        alt={data.question.attachment_reference.name}
       />
     </div>
   );
@@ -95,93 +96,93 @@ const ScribingQuestionForm = (props) => {
     <form
       encType="multipart/form-data"
       id="scribing-question-form"
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((newData) => onSubmit(newData, setError))}
     >
       <ErrorText errors={errors} />
       <Controller
-        name="title"
         control={control}
+        name="title"
         render={({ field, fieldState }) => (
           <FormTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
+            fullWidth={true}
+            InputLabelProps={{
+              shrink: true,
+            }}
             label={<FormattedMessage {...translations.titleFieldLabel} />}
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
             variant="standard"
           />
         )}
       />
       <Controller
+        control={control}
         name="description"
-        control={control}
         render={({ field, fieldState }) => (
           <FormRichTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
-            label={<FormattedMessage {...translations.descriptionFieldLabel} />}
-            fullWidth
+            fullWidth={true}
             InputLabelProps={{
               shrink: true,
             }}
+            label={<FormattedMessage {...translations.descriptionFieldLabel} />}
             variant="standard"
           />
         )}
       />
       <Controller
-        name="staff_only_comments"
         control={control}
+        name="staff_only_comments"
         render={({ field, fieldState }) => (
           <FormRichTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
+            fullWidth={true}
+            InputLabelProps={{
+              shrink: true,
+            }}
             label={
               <FormattedMessage {...translations.staffOnlyCommentsFieldLabel} />
             }
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
             variant="standard"
           />
         )}
       />
       <Controller
-        name="skill_ids"
         control={control}
+        name="skill_ids"
         render={({ field, fieldState }) => (
           <FormMultiSelectField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
             label={<FormattedMessage {...translations.skillsFieldLabel} />}
             options={skillsOptions}
           />
         )}
       />
       <Controller
-        name="maximum_grade"
         control={control}
+        name="maximum_grade"
         render={({ field, fieldState }) => (
           <FormTextField
+            disabled={disabled}
             field={field}
             fieldState={fieldState}
-            disabled={disabled}
-            fullWidth
-            label={
-              <FormattedMessage {...translations.maximumGradeFieldLabel} />
-            }
+            fullWidth={true}
             InputLabelProps={{
               shrink: true,
             }}
+            label={
+              <FormattedMessage {...translations.maximumGradeFieldLabel} />
+            }
             onWheel={(event) => event.currentTarget.blur()}
-            required
+            required={true}
             type="number"
             variant="standard"
           />
@@ -194,16 +195,16 @@ const ScribingQuestionForm = (props) => {
       ) : (
         <>
           <Controller
-            name="attachment"
             control={control}
+            name="attachment"
             render={({ field, fieldState }) => (
               <FormSingleFileInput
+                disabled={disabled}
                 field={field}
                 fieldState={fieldState}
-                disabled={disabled}
                 label={<FormattedMessage {...translations.chooseFileButton} />}
                 previewComponent={ImagePreview}
-                required
+                required={true}
               />
             )}
           />
@@ -214,7 +215,6 @@ const ScribingQuestionForm = (props) => {
       )}
 
       <Button
-        variant="contained"
         className={styles.submitButton}
         color="primary"
         disabled={disabled}
@@ -223,8 +223,9 @@ const ScribingQuestionForm = (props) => {
             <i className="fa fa-spinner fa-lg fa-spin" />
           ) : null
         }
-        type="submit"
         style={{ marginBottom: '1em' }}
+        type="submit"
+        variant="contained"
       >
         {submitButtonText()}
       </Button>

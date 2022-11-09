@@ -1,7 +1,8 @@
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Button, Dialog, DialogActions, DialogContent } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import formTranslations from 'lib/translations/form';
 
 const styles = {
@@ -81,8 +82,8 @@ class Thumbnail extends PureComponent {
 
     const actions = [
       <Button
-        color="primary"
         key="thumbnail-close-button"
+        color="primary"
         onClick={() => this.setState({ open: false })}
       >
         <FormattedMessage {...formTranslations.close} />
@@ -93,7 +94,7 @@ class Thumbnail extends PureComponent {
       <div style={rootStyle}>
         <div style={containerStyle}>
           <a onClick={onThumbnailClick}>
-            <img src={source} alt={altText} style={thumbnailStyle} {...props} />
+            <img alt={altText} src={source} style={thumbnailStyle} {...props} />
           </a>
         </div>
         <Dialog
@@ -103,8 +104,8 @@ class Thumbnail extends PureComponent {
         >
           <DialogContent style={{ ...styles.dialogContent }}>
             <img
-              src={source}
               alt={altText}
+              src={source}
               style={expandedImageStyle}
               {...props}
             />

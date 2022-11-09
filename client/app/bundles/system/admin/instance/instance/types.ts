@@ -1,29 +1,29 @@
-import { EntityStore } from 'types/store';
 import {
   AnnouncementData,
   AnnouncementListData,
   AnnouncementMiniEntity,
   AnnouncementPermissions,
 } from 'types/course/announcements';
+import { EntityStore } from 'types/store';
 import {
   CourseListData,
   CourseMiniEntity,
   CourseStats,
 } from 'types/system/courses';
 import {
-  RoleRequestListData,
-  RoleRequestMiniEntity,
-} from 'types/system/instance/roleRequests';
-import { InstancePermissions } from 'types/system/instances';
-import {
-  InstanceUserListData,
-  InstanceAdminStats,
-  InstanceUserMiniEntity,
-} from 'types/system/instance/users';
-import {
   InvitationListData,
   InvitationMiniEntity,
 } from 'types/system/instance/invitations';
+import {
+  RoleRequestListData,
+  RoleRequestMiniEntity,
+} from 'types/system/instance/roleRequests';
+import {
+  InstanceAdminStats,
+  InstanceUserListData,
+  InstanceUserMiniEntity,
+} from 'types/system/instance/users';
+import { InstancePermissions } from 'types/system/instances';
 
 // Action Names
 export const SAVE_ANNOUNCEMENT_LIST = 'system/instance/SAVE_ANNOUNCEMENT_LIST';

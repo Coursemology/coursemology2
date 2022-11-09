@@ -1,6 +1,5 @@
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Button,
@@ -11,11 +10,13 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { formatShortDateTime } from 'lib/moment';
-import translations from 'course/survey/translations';
-import { surveyShape } from 'course/survey/propTypes';
+import PropTypes from 'prop-types';
+
 import { updateSurvey } from 'course/survey/actions/surveys';
 import RespondButton from 'course/survey/containers/RespondButton';
+import { surveyShape } from 'course/survey/propTypes';
+import translations from 'course/survey/translations';
+import { formatShortDateTime } from 'lib/moment';
 
 const styles = {
   buttonsColumn: {
@@ -127,40 +128,40 @@ const SurveysTable = (props) => {
               <div style={styles.buttonsColumn}>
                 {survey.canViewResults ? (
                   <Button
-                    variant="outlined"
                     onClick={() =>
                       navigate(
                         `/courses/${courseId}/surveys/${survey.id}/results`,
                       )
                     }
                     style={styles.button}
+                    variant="outlined"
                   >
                     <FormattedMessage {...translations.results} />
                   </Button>
                 ) : null}
                 {survey.canViewResults ? (
                   <Button
-                    variant="outlined"
                     onClick={() =>
                       navigate(
                         `/courses/${courseId}/surveys/${survey.id}/responses`,
                       )
                     }
                     style={styles.button}
+                    variant="outlined"
                   >
                     <FormattedMessage {...translations.responses} />
                   </Button>
                 ) : null}
                 <RespondButton
-                  courseId={courseId}
-                  surveyId={survey.id}
-                  responseId={survey.response && survey.response.id}
-                  canRespond={survey.canRespond}
                   canModify={!!survey.response && survey.response.canModify}
+                  canRespond={survey.canRespond}
                   canSubmit={!!survey.response && survey.response.canSubmit}
-                  startAt={survey.start_at}
+                  courseId={courseId}
                   endAt={survey.end_at}
+                  responseId={survey.response && survey.response.id}
+                  startAt={survey.start_at}
                   submittedAt={survey.response && survey.response.submitted_at}
+                  surveyId={survey.id}
                 />
               </div>
             </TableCell>

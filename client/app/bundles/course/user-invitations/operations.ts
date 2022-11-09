@@ -1,11 +1,13 @@
-import CourseAPI from 'api/course';
 import {
   InvitationFileEntity,
   InvitationPostData,
-  InvitationsPostData,
   InvitationResult,
+  InvitationsPostData,
 } from 'types/course/userInvitations';
 import { Operation } from 'types/store';
+
+import CourseAPI from 'api/course';
+
 import * as actions from './actions';
 
 /**

@@ -1,12 +1,13 @@
 import { InstanceBasicListData } from 'types/system/instances';
 import { UserBasicListData, UserCourseListData } from 'types/users';
+
 import {
-  SaveUserAction,
-  SAVE_USER,
   SAVE_COURSE_LIST,
+  SAVE_INSTANCE_LIST,
+  SAVE_USER,
   SaveCourseListAction,
   SaveInstanceListAction,
-  SAVE_INSTANCE_LIST,
+  SaveUserAction,
 } from './types';
 
 export function saveUser(user: UserBasicListData): SaveUserAction {

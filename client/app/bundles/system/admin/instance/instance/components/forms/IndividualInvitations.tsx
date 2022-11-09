@@ -1,16 +1,17 @@
 import { FC } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Button, Divider, Grid } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import {
-  IndividualInvite,
-  IndividualInvites,
-} from 'types/system/instance/invitations';
 import {
   Control,
   UseFieldArrayAppend,
   UseFieldArrayRemove,
 } from 'react-hook-form';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { LoadingButton } from '@mui/lab';
+import { Button, Divider, Grid } from '@mui/material';
+import {
+  IndividualInvite,
+  IndividualInvites,
+} from 'types/system/instance/invitations';
+
 import IndividualInvitation from './IndividualInvitation';
 
 interface Props extends WrappedComponentProps {
@@ -59,14 +60,14 @@ const IndividualInvitations: FC<Props> = (props) => {
       )}
 
       <Divider className="my-3 mx-0" />
-      <Grid container alignItems="center">
+      <Grid alignItems="center" container={true}>
         <LoadingButton
-          className="btn-submit mr-1"
-          loading={isLoading}
-          variant="contained"
-          form="invite-users-individual-form"
           key="invite-users-individual-form-submit-button"
+          className="btn-submit mr-1"
+          form="invite-users-individual-form"
+          loading={isLoading}
           type="submit"
+          variant="contained"
         >
           {intl.formatMessage(translations.invite)}
         </LoadingButton>

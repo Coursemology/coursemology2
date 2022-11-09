@@ -1,7 +1,9 @@
 import { useCallback } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import FormDialogue from 'lib/components/form/FormDialogue';
+
 import actionTypes, { formNames } from '../constants';
 
 const GroupFormDialog = ({
@@ -26,12 +28,12 @@ const GroupFormDialog = ({
 
   return (
     <FormDialogue
-      title={dialogTitle}
-      open={isShown && isExpectedDialogType}
       disabled={isDisabled}
-      hideForm={handleClose}
-      skipConfirmation={skipConfirmation}
       form={formNames.GROUP}
+      hideForm={handleClose}
+      open={isShown && isExpectedDialogType}
+      skipConfirmation={skipConfirmation}
+      title={dialogTitle}
     >
       {children}
     </FormDialogue>

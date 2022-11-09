@@ -1,12 +1,14 @@
-import CourseAPI from 'api/course';
 import { AxiosResponse } from 'axios';
 import { NewCourseFormData } from 'types/course/courses';
 import { Operation } from 'types/store';
+
+import CourseAPI from 'api/course';
+
 import * as actions from './actions';
 import {
+  CancelEnrolAction,
   SaveCourseAction,
   SubmitEnrolAction,
-  CancelEnrolAction,
 } from './types';
 
 const formatAttributes = (data: NewCourseFormData): FormData => {

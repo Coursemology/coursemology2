@@ -1,9 +1,10 @@
 import { createRoot } from 'react-dom/client';
-
 import { fromJS } from 'immutable';
+
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import storeCreator from './programming/store';
+
 import ProgrammingQuestion from './programming/ProgrammingQuestion';
+import storeCreator from './programming/store';
 
 $(() => {
   const mountNode = document.getElementById('programming-question');

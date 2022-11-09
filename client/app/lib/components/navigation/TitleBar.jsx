@@ -1,5 +1,5 @@
-import PropTypes from 'prop-types';
 import { AppBar, Toolbar, Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 
 const styles = {
   bar: {
@@ -24,7 +24,7 @@ const TitleBar = ({ iconElementLeft, iconElementRight, title, ...props }) => (
     <AppBar style={{ ...styles.bar }} {...props}>
       <Toolbar>
         <div style={styles.leftIcon}>{iconElementLeft}</div>
-        <Typography variant="h5" color="inherit" style={styles.text}>
+        <Typography color="inherit" style={styles.text} variant="h5">
           {title}
         </Typography>
         {iconElementRight}

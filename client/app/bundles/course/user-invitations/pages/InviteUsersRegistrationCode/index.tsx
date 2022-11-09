@@ -1,6 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { LoadingButton } from '@mui/lab';
 import {
   Alert,
   Button,
@@ -12,10 +14,8 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-
-import { LoadingButton } from '@mui/lab';
 import { AppDispatch, AppState } from 'types/store';
-import { toast } from 'react-toastify';
+
 import {
   fetchRegistrationCode,
   toggleRegistrationCode,
@@ -121,12 +121,12 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
   const renderRegistrationCode = (
     <Tooltip title={intl.formatMessage(translations.copy)}>
       <pre
-        role="presentation"
-        style={styles.registrationCode}
         onClick={(): void => {
           navigator.clipboard.writeText(registrationCode);
           toast.info(intl.formatMessage(translations.copySuccess));
         }}
+        role="presentation"
+        style={styles.registrationCode}
       >
         {registrationCode}
       </pre>
@@ -135,10 +135,10 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
 
   return (
     <Dialog
+      fullWidth={true}
+      maxWidth="lg"
       onClose={handleClose}
       open={open}
-      fullWidth
-      maxWidth="lg"
       style={{
         top: 40,
       }}
@@ -162,15 +162,15 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
           )}
         </Stack>
         <Grid
-          container
+          container={true}
           justifyContent="space-between"
           sx={{ marginTop: '24px' }}
         >
           <LoadingButton
-            loading={isLoading}
-            variant="contained"
-            onClick={handleToggleRegistrationCode}
             className="toggle-registration-code"
+            loading={isLoading}
+            onClick={handleToggleRegistrationCode}
+            variant="contained"
           >
             {registrationCode.length > 0
               ? intl.formatMessage(translations.disable)

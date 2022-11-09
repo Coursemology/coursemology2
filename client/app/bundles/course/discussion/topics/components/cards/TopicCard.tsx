@@ -1,20 +1,23 @@
-import { Card, CardContent, CardHeader, Link } from '@mui/material';
-import { getCourseUserURL } from 'lib/helpers/url-builders';
-import { getCourseId } from 'lib/helpers/url-helpers';
-import { FC, lazy, useEffect, useState, Suspense } from 'react';
+import { FC, lazy, Suspense, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { CommentStatusTypes, CommentTopicEntity } from 'types/course/comments';
-import { AppDispatch, AppState } from 'types/store';
 import {
   CheckCircleOutline,
   PendingOutlined,
   ScheduleOutlined,
 } from '@mui/icons-material';
+import { Card, CardContent, CardHeader, Link } from '@mui/material';
+import { CommentStatusTypes, CommentTopicEntity } from 'types/course/comments';
+import { AppDispatch, AppState } from 'types/store';
+
+import { getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
+
 import { updatePending, updateRead } from '../../operations';
 import { getAllCommentPostMiniEntities } from '../../selectors';
-import CommentCard from './CommentCard';
+
 import CodaveriCommentCard from './CodaveriCommentCard';
+import CommentCard from './CommentCard';
 
 const CommentField = lazy(
   () =>
@@ -135,6 +138,7 @@ const TopicCard: FC<Props> = (props) => {
         return (
           <Link
             className="clickable"
+            id={`mark-as-pending-${topic.id}`}
             onClick={(): void => onClickPending(topic.id)}
             style={{
               cursor: 'pointer',
@@ -142,7 +146,6 @@ const TopicCard: FC<Props> = (props) => {
               alignItems: 'center',
               flexWrap: 'wrap',
             }}
-            id={`mark-as-pending-${topic.id}`}
           >
             <ScheduleOutlined />
             {intl.formatMessage(translations.pendingStatus)}
@@ -152,6 +155,7 @@ const TopicCard: FC<Props> = (props) => {
         return (
           <Link
             className="clickable"
+            id={`unmark-as-pending-${topic.id}`}
             onClick={(): void => onClickPending(topic.id)}
             style={{
               cursor: 'pointer',
@@ -159,7 +163,6 @@ const TopicCard: FC<Props> = (props) => {
               alignItems: 'center',
               flexWrap: 'wrap',
             }}
-            id={`unmark-as-pending-${topic.id}`}
           >
             <CheckCircleOutline />
             {intl.formatMessage(translations.notPendingStatus)}
@@ -171,6 +174,7 @@ const TopicCard: FC<Props> = (props) => {
         return (
           <Link
             className="clickable"
+            id={`mark-as-read-${topic.id}`}
             onClick={(): void => onClickRead(topic.id)}
             style={{
               cursor: 'pointer',
@@ -178,7 +182,6 @@ const TopicCard: FC<Props> = (props) => {
               alignItems: 'center',
               flexWrap: 'wrap',
             }}
-            id={`mark-as-read-${topic.id}`}
           >
             <CheckCircleOutline />
             {intl.formatMessage(translations.unreadStatus)}
@@ -192,19 +195,7 @@ const TopicCard: FC<Props> = (props) => {
   return (
     <Card>
       <CardHeader
-        title={
-          <a
-            href={topic.links.titleLink}
-            className={`topic-${topic.id}`}
-            id={`topic-${topic.id}-${
-              topic.timestamp?.toString().replaceAll(':', '-') ?? ''
-            }`}
-          >
-            {topic.timestamp
-              ? `${topic.title}: ${topic.timestamp.toString()}`
-              : topic.title}
-          </a>
-        }
+        style={{ paddingBottom: '0px' }}
         subheader={
           <>
             <div>{renderStatus()}</div>
@@ -216,7 +207,19 @@ const TopicCard: FC<Props> = (props) => {
             </div>
           </>
         }
-        style={{ paddingBottom: '0px' }}
+        title={
+          <a
+            className={`topic-${topic.id}`}
+            href={topic.links.titleLink}
+            id={`topic-${topic.id}-${
+              topic.timestamp?.toString().replaceAll(':', '-') ?? ''
+            }`}
+          >
+            {topic.timestamp
+              ? `${topic.title}: ${topic.timestamp.toString()}`
+              : topic.title}
+          </a>
+        }
       />
       <CardContent>
         {topic.content && (

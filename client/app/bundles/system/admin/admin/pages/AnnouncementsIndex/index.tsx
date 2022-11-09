@@ -1,20 +1,22 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/navigation/PageHeader';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppState, AppDispatch } from 'types/store';
-import AddButton from 'lib/components/core/buttons/AddButton';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { AppDispatch, AppState } from 'types/store';
+
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
-import { getAllAnnouncementMiniEntities } from '../../selectors';
+import AddButton from 'lib/components/core/buttons/AddButton';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+
 import {
-  indexAnnouncements,
-  deleteAnnouncement,
-  updateAnnouncement,
   createAnnouncement,
+  deleteAnnouncement,
+  indexAnnouncements,
+  updateAnnouncement,
 } from '../../operations';
+import { getAllAnnouncementMiniEntities } from '../../selectors';
 
 type Props = WrappedComponentProps;
 
@@ -53,9 +55,9 @@ const AnnouncementsIndex: FC<Props> = (props) => {
 
   headerToolbars.push(
     <AddButton
+      key="new-announcement-button"
       className="text-white"
       id="new-announcement-button"
-      key="new-announcement-button"
       onClick={(): void => {
         setIsOpen(true);
       }}
@@ -66,19 +68,19 @@ const AnnouncementsIndex: FC<Props> = (props) => {
   const renderBody: JSX.Element = (
     <>
       <AnnouncementsDisplay
+        announcementPermissions={{ canCreate: true }}
         announcements={announcements.sort(
           (a, b) => Date.parse(b.startTime) - Date.parse(a.startTime),
         )}
-        announcementPermissions={{ canCreate: true }}
-        updateOperation={updateAnnouncement}
-        deleteOperation={deleteAnnouncement}
         canSticky={false}
+        deleteOperation={deleteAnnouncement}
+        updateOperation={updateAnnouncement}
       />
       <AnnouncementNew
-        open={isOpen}
-        onClose={(): void => setIsOpen(false)}
-        createOperation={createAnnouncement}
         canSticky={false}
+        createOperation={createAnnouncement}
+        onClose={(): void => setIsOpen(false)}
+        open={isOpen}
       />
     </>
   );

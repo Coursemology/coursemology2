@@ -1,15 +1,15 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
-  Button,
   Accordion,
   AccordionActions,
   AccordionSummary,
+  Button,
   Divider,
   Icon,
 } from '@mui/material';
 import { cyan } from '@mui/material/colors';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import PropTypes from 'prop-types';
 
 import {
@@ -88,10 +88,10 @@ export default class ForumCard extends Component {
 
     return (
       <Accordion
+        className="forum-card"
         expanded={this.state.isExpanded}
         onChange={this.handleIsExpandedChange}
         style={this.props.style}
-        className="forum-card"
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -118,12 +118,12 @@ export default class ForumCard extends Component {
         <Divider />
         <AccordionActions style={styles.AccordionActions}>
           <Button
-            variant="contained"
             href={getForumURL(
               forumTopicPostPack.course.id,
               forumTopicPostPack.forum.id,
             )}
             target="_blank"
+            variant="contained"
           >
             <FormattedMessage {...translations.viewForumInNewTab} />
             <Icon className="fa fa-external-link" style={styles.icon} />
@@ -133,20 +133,20 @@ export default class ForumCard extends Component {
         <div style={styles.container}>
           {forumTopicPostPack.topicPostPacks.map((topicPostPack, index) => (
             <TopicCard
-              topicPostPack={topicPostPack}
-              selectedPostPacks={this.props.selectedPostPacks}
+              key={`forum-topic-${topicPostPack.topic.id}`}
               courseId={this.props.forumTopicPostPack.course.id}
               forumId={this.props.forumTopicPostPack.forum.id}
+              isExpandedOnLoad={this.isTopicExpandedOnFirstLoad(topicPostPack)}
               onSelectPostPack={(postPackSelected, isSelected) =>
                 this.props.onSelectPostPack(postPackSelected, isSelected)
               }
-              isExpandedOnLoad={this.isTopicExpandedOnFirstLoad(topicPostPack)}
-              key={`forum-topic-${topicPostPack.topic.id}`}
+              selectedPostPacks={this.props.selectedPostPacks}
               style={
                 index < forumTopicPostPack.topicPostPacks.length - 1
                   ? styles.nonLastTopicCard
                   : {}
               }
+              topicPostPack={topicPostPack}
             />
           ))}
         </div>

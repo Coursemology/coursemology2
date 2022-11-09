@@ -1,5 +1,7 @@
 import * as colors from '@mui/material/colors';
+
 import { workflowStates } from '../bundles/course/assessment/submission/constants';
+
 import { black, white } from './colors';
 
 const palette = {

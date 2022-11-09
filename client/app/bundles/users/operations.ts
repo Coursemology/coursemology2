@@ -1,5 +1,7 @@
-import GlobalUsersAPI from 'api/Users';
 import { Operation } from 'types/store';
+
+import GlobalUsersAPI from 'api/Users';
+
 import * as actions from './actions';
 
 // eslint-disable-next-line import/prefer-default-export

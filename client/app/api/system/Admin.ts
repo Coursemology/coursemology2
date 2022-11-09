@@ -5,7 +5,8 @@ import {
 } from 'types/course/announcements';
 import { CourseListData } from 'types/system/courses';
 import { InstanceListData, InstancePermissions } from 'types/system/instances';
-import { UserListData, AdminStats } from 'types/users';
+import { AdminStats, UserListData } from 'types/users';
+
 import BaseSystemAPI from '../Base';
 
 export default class AdminAPI extends BaseSystemAPI {

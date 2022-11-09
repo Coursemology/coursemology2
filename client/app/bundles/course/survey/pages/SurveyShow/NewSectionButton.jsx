@@ -1,12 +1,12 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
 
 import {
-  showSectionForm,
   createSurveySection,
+  showSectionForm,
 } from 'course/survey/actions/sections';
 
 const translations = defineMessages({
@@ -53,10 +53,10 @@ class NewSectionButton extends Component {
     return (
       <Button
         className="mr-4"
-        variant="contained"
         color="primary"
         disabled={this.props.disabled}
         onClick={this.showNewSectionForm}
+        variant="contained"
       >
         <FormattedMessage {...translations.newSection} />
       </Button>

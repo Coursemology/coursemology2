@@ -6,6 +6,7 @@ import {
   VideoPermissions,
   VideoTab,
 } from 'types/course/videos';
+
 import BaseVideoAPI from './Base';
 
 export default class VideosAPI extends BaseVideoAPI {

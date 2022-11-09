@@ -1,6 +1,7 @@
-import { Box, Drawer, IconButton } from '@mui/material';
 import { FC, useState } from 'react';
 import Menu from '@mui/icons-material/Menu';
+import { Box, Drawer, IconButton } from '@mui/material';
+
 import styles from 'lib/components/core/layouts/layout.scss';
 
 interface Props {
@@ -23,41 +24,41 @@ const Sidebar: FC<Props> = (props) => {
   };
 
   return (
-    <Box component="nav" aria-label="sidebar" sx={{ width: '100%' }}>
+    <Box aria-label="sidebar" component="nav" sx={{ width: '100%' }}>
       {/* Mobile */}
       <Drawer
-        variant="temporary"
-        open={isDrawerOpen}
-        onClose={handleDrawerToggle}
         ModalProps={{
           keepMounted: true, // Better open performance on mobile.
         }}
+        onClose={handleDrawerToggle}
+        open={isDrawerOpen}
         sx={{
           display: { xs: 'block', sm: 'none' },
           '& .MuiDrawer-paper': { boxSizing: 'border-box', width: '80%' },
         }}
+        variant="temporary"
       >
         {renderDrawer(isDrawerOpen, handleDrawerToggle)}
       </Drawer>
       <IconButton
+        onClick={handleDrawerToggle}
         sx={{
           display: { xs: 'block', sm: 'none' },
           padding: '2px 8px',
         }}
-        onClick={handleDrawerToggle}
       >
         <Menu />
       </IconButton>
 
       {/* Desktop */}
       <Drawer
-        variant="permanent"
+        className={`${styles.sidebarContainer}`}
         style={{ marginRight: '12px' }}
         sx={{
           display: { xs: 'none', sm: 'block' },
         }}
-        className={`${styles.sidebarContainer}`}
         transitionDuration={1000}
+        variant="permanent"
       >
         {renderDrawer(isDrawerOpen, handleDrawerToggle)}
       </Drawer>

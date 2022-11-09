@@ -1,12 +1,14 @@
 import { FC, useState } from 'react';
-import { IconButton, Tooltip } from '@mui/material';
-import { toast } from 'react-toastify';
-import { ForumTopicEntity } from 'types/course/forums';
 import { defineMessages } from 'react-intl';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { IconButton, Tooltip } from '@mui/material';
+import { ForumTopicEntity } from 'types/course/forums';
 import { AppDispatch } from 'types/store';
+
 import useTranslation from 'lib/hooks/useTranslation';
+
 import { updateForumTopicHidden } from '../../operations';
 
 const translations = defineMessages({

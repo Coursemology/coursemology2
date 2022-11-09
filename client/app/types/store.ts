@@ -1,23 +1,24 @@
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+
+import { GlobalAnnouncementState } from 'bundles/announcements/types';
 import { AchievementsState } from 'bundles/course/achievement/types';
-import { CoursesState } from 'bundles/course/courses/types';
-import { UsersState } from 'bundles/course/users/types';
-import { LeaderboardState } from 'bundles/course/leaderboard/types';
-import { SkillState } from 'bundles/course/assessment/skills/types';
-import { InvitationsState } from 'bundles/course/user-invitations/types';
-import { EnrolRequestsState } from 'bundles/course/enrol-requests/types';
 import { AnnouncementsState } from 'bundles/course/announcements/types';
+import { SkillState } from 'bundles/course/assessment/skills/types';
 import { SubmissionsState } from 'bundles/course/assessment/submissions/types';
-import { DisbursementState } from 'bundles/course/experience-points/disbursement/types';
+import { CoursesState } from 'bundles/course/courses/types';
 import { CommentState } from 'bundles/course/discussion/topics/types';
+import { EnrolRequestsState } from 'bundles/course/enrol-requests/types';
+import { DisbursementState } from 'bundles/course/experience-points/disbursement/types';
+import { ForumsState } from 'bundles/course/forum/types';
+import { LeaderboardState } from 'bundles/course/leaderboard/types';
 import { FoldersState } from 'bundles/course/material/folders/types';
+import { InvitationsState } from 'bundles/course/user-invitations/types';
+import { UsersState } from 'bundles/course/users/types';
 import { VideosState } from 'bundles/course/video/types';
 import { AdminState } from 'bundles/system/admin/admin/types';
 import { InstanceAdminState } from 'bundles/system/admin/instance/instance/types';
 import { GlobalUserState } from 'bundles/users/types';
-import { GlobalAnnouncementState } from 'bundles/announcements/types';
-import { ForumsState } from 'bundles/course/forum/types';
 
 /**
  * Describes the overall shape of the application's Redux store state.

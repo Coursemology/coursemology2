@@ -9,6 +9,7 @@ import {
   StaffRole,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
+
 import BaseCourseAPI from './Base';
 
 export default class UsersAPI extends BaseCourseAPI {

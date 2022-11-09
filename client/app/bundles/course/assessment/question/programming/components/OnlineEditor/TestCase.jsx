@@ -1,11 +1,12 @@
-import { Map } from 'immutable';
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { Button, TableCell, TableRow, TextField } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import styles from './OnlineEditorView.scss';
+import { Map } from 'immutable';
+import PropTypes from 'prop-types';
+
 import translations from './OnlineEditorView.intl';
+import styles from './OnlineEditorView.scss';
 
 class TestCase extends Component {
   static getTestInputName(type, field) {
@@ -36,12 +37,12 @@ class TestCase extends Component {
       <TableCell style={{ paddingLeft: 10, paddingRight: 10 }}>
         {showCodeEditor ? (
           <Button
-            variant="contained"
             className={styles.codeEditorButtonCell}
             color="primary"
             disabled={this.props.isLoading}
             onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
             style={{ marginRight: 0, width: 30 }}
+            variant="contained"
           >
             {this.props.intl.formatMessage(
               translations.hideTestCaseCodeEditorButton,
@@ -49,12 +50,12 @@ class TestCase extends Component {
           </Button>
         ) : (
           <Button
-            variant="contained"
             className={styles.codeEditorButtonCell}
             color="primary"
             disabled={this.props.isLoading}
             onClick={this.inlineCodeEditorHandler(type, index, !showCodeEditor)}
             style={{ marginRight: 0, width: 30 }}
+            variant="contained"
           >
             {this.props.intl.formatMessage(
               translations.showTestCaseCodeEditorButton,
@@ -70,12 +71,12 @@ class TestCase extends Component {
       <TextField
         disabled={this.props.isLoading}
         error={!!test.getIn(['error', field])}
-        fullWidth
+        fullWidth={true}
         helperText={test.getIn(['error', field]) && placeholder}
         InputLabelProps={{
           shrink: true,
         }}
-        multiline
+        multiline={true}
         name={TestCase.getTestInputName(this.props.type, field)}
         onChange={(event) => {
           this.props.updateTestCase(
@@ -109,7 +110,6 @@ class TestCase extends Component {
       <TableRow>
         <TableCell className={styles.deleteButtonCell}>
           <Button
-            variant="contained"
             disabled={isLoading}
             name={TestCase.getTestInputName(type, 'inlineCode')}
             onClick={this.testCaseDeleteHandler(type, index)}
@@ -120,6 +120,7 @@ class TestCase extends Component {
               minWidth: '40px',
               width: '40px',
             }}
+            variant="contained"
           >
             <i className="fa fa-trash" />
           </Button>

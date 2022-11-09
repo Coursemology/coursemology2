@@ -4,13 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Grid } from '@mui/material';
 import {
-  SkillBranchOptions,
   SkillBranchMiniEntity,
+  SkillBranchOptions,
   SkillMiniEntity,
 } from 'types/course/assessment/skills/skills';
 import { AppDispatch, AppState } from 'types/store';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+
+import SkillDialog from '../../components/dialogs/SkillDialog';
+import SkillsTable from '../../components/tables/SkillsTable';
 import { fetchSkillBranches } from '../../operations';
 import {
   getAllSkillBranchMiniEntities,
@@ -18,8 +22,6 @@ import {
   getSkillPermissions,
 } from '../../selectors';
 import { DialogTypes, TableEnum } from '../../types';
-import SkillDialog from '../../components/dialogs/SkillDialog';
-import SkillsTable from '../../components/tables/SkillsTable';
 
 type Props = WrappedComponentProps;
 
@@ -148,45 +150,45 @@ const SkillsIndex: FC<Props> = (props) => {
         <LoadingIndicator />
       ) : (
         <>
-          <Grid container direction="row" columnGap={0.2}>
-            <Grid item xs id="skill-branches">
+          <Grid columnGap={0.2} container={true} direction="row">
+            <Grid id="skill-branches" item={true} xs={true}>
               <SkillsTable
-                data={data}
-                editClick={editSkillBranchClick}
                 addClick={newSkillBranchClick}
                 addDisabled={!skillPermissions.canCreateSkill}
-                tableType={TableEnum.SkillBranches}
+                changeSkillBranch={changeSkillBranch}
+                data={data}
+                editClick={editSkillBranchClick}
                 skillBranchIndex={branchSelected}
                 skillIndex={skillSelected}
-                changeSkillBranch={changeSkillBranch}
+                tableType={TableEnum.SkillBranches}
               />
             </Grid>
-            <Grid item xs id="skills">
+            <Grid id="skills" item={true} xs={true}>
               <SkillsTable
-                data={data}
-                editClick={editSkillClick}
                 addClick={newSkillClick}
                 addDisabled={!skillPermissions.canCreateSkill}
-                tableType={TableEnum.Skills}
+                changeSkillBranch={changeSkillBranch}
+                data={data}
+                editClick={editSkillClick}
                 skillBranchIndex={branchSelected}
                 skillIndex={skillSelected}
-                changeSkillBranch={changeSkillBranch}
+                tableType={TableEnum.Skills}
               />
             </Grid>
           </Grid>
           <SkillDialog
-            dialogType={dialogType}
-            open={isDialogOpen}
-            onClose={(): void => setIsDialogOpen(false)}
-            skillBranchOptions={skillBranchOptions}
             data={dialogData ?? null}
+            dialogType={dialogType}
+            onClose={(): void => setIsDialogOpen(false)}
+            open={isDialogOpen}
+            setNewSelected={setNewSelected}
             skillBranchId={
               (dialogType === DialogTypes.NewSkill &&
                 branchSelected !== -1 &&
                 data[branchSelected].id) ||
               -1
             }
-            setNewSelected={setNewSelected}
+            skillBranchOptions={skillBranchOptions}
           />
         </>
       )}

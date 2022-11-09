@@ -1,9 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { initialState as defaultSettings } from 'course/lesson-plan/reducers/flags';
+
 import { updateLessonPlanSettings } from './operations';
 
 const translations = defineMessages({
@@ -61,28 +63,28 @@ class MilestoneGroupSettings extends Component {
         </p>
         <RadioGroup
           name="milestonesExpanded"
+          onChange={this.handleUpdate}
           value={
             this.props.milestonesExpanded || defaultSettings.milestonesExpanded
           }
-          onChange={this.handleUpdate}
         >
           <FormControlLabel
             key="all"
             control={<Radio className="p-0 px-4" />}
-            value="all"
             label={<FormattedMessage {...translations.expandAll} />}
+            value="all"
           />
           <FormControlLabel
             key="none"
             control={<Radio className="p-0 px-4" />}
-            value="none"
             label={<FormattedMessage {...translations.expandNone} />}
+            value="none"
           />
           <FormControlLabel
             key="current"
             control={<Radio className="p-0 px-4" />}
-            value="current"
             label={<FormattedMessage {...translations.expandCurrent} />}
+            value="current"
           />
         </RadioGroup>
       </>

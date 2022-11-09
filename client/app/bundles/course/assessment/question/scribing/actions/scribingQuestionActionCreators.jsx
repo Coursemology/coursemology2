@@ -1,12 +1,13 @@
 import CourseAPI from 'api/course';
 import { setNotification } from 'lib/actions';
-import history from 'lib/history';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import {
-  getCourseId,
   getAssessmentId,
+  getCourseId,
   getScribingId,
 } from 'lib/helpers/url-helpers';
+import history from 'lib/history';
+
 import actionTypes from '../constants';
 
 // Helper function to redirect to assessment main page

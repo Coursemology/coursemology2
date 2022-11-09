@@ -1,8 +1,8 @@
 import {
-  forwardRef,
-  ComponentProps,
   ChangeEventHandler,
+  ComponentProps,
   FocusEventHandler,
+  forwardRef,
 } from 'react';
 import { TextField as MuiTextField } from '@mui/material';
 
@@ -35,8 +35,8 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
       <MuiTextField
         {...textFieldProps}
         inputRef={ref}
-        onChange={handleChange}
         onBlur={handleBlur}
+        onChange={handleChange}
       />
     );
   },

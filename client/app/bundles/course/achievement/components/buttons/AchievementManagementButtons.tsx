@@ -5,13 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AchievementMiniEntity } from 'types/course/achievements';
 import { AppDispatch } from 'types/store';
+
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
-import useTranslation from 'lib/hooks/useTranslation';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import { deleteAchievement } from '../../operations';
-import AwardButton from './AwardButton';
 import AchievementEdit from '../../pages/AchievementEdit';
+
+import AwardButton from './AwardButton';
 
 interface Props {
   achievement: AchievementMiniEntity;
@@ -65,8 +68,8 @@ const AchievementManagementButtons: FC<Props> = (props) => {
   const managementButtons = (
     <div style={{ whiteSpace: 'nowrap' }}>
       <AwardButton
-        className={`achievement-award-${achievement.id}`}
         achievementId={achievement.id}
+        className={`achievement-award-${achievement.id}`}
         disabled={!achievement.permissions.canAward}
         tooltipText={t(translations.automaticAward)}
       />
@@ -79,8 +82,8 @@ const AchievementManagementButtons: FC<Props> = (props) => {
           {isEditing && (
             <AchievementEdit
               achievementId={achievement.id}
-              open={isEditing}
               onClose={(): void => setIsEditing(false)}
+              open={isEditing}
             />
           )}
         </>
@@ -88,10 +91,10 @@ const AchievementManagementButtons: FC<Props> = (props) => {
       {achievement.permissions.canDelete && (
         <DeleteButton
           className={`achievement-delete-${achievement.id}`}
+          confirmMessage={t(translations.deletionConfirm)}
           disabled={isDeleting}
           loading={isDeleting}
           onClick={onDelete}
-          confirmMessage={t(translations.deletionConfirm)}
         />
       )}
     </div>

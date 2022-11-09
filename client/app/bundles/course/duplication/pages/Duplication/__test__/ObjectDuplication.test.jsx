@@ -1,8 +1,10 @@
-import { mount } from 'enzyme';
 import { MemoryRouter } from 'react-router-dom';
-import CourseAPI from 'api/course';
 import MockAdapter from 'axios-mock-adapter';
+import { mount } from 'enzyme';
+
+import CourseAPI from 'api/course';
 import storeCreator from 'course/duplication/store';
+
 import ObjectDuplication from '../index';
 
 const client = CourseAPI.duplication.getClient();

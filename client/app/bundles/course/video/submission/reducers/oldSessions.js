@@ -1,5 +1,6 @@
 import { List as makeImmutableList, Map as makeImmutableMap } from 'immutable';
 import { createTransform } from 'redux-persist';
+
 import { sessionActionTypes } from 'lib/constants/videoConstants';
 
 /**

@@ -1,13 +1,13 @@
-import { defineMessages } from 'react-intl';
 import { FC } from 'react';
+import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
-
+import { toast } from 'react-toastify';
+import { AnnouncementFormData } from 'types/course/announcements';
 import { AppDispatch, Operation } from 'types/store';
 
-import { toast } from 'react-toastify';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import { AnnouncementFormData } from 'types/course/announcements';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import AnnouncementForm from '../../components/forms/AnnouncementForm';
 
 interface Props {
@@ -79,13 +79,13 @@ const AnnouncementEdit: FC<Props> = (props) => {
 
   return (
     <AnnouncementForm
-      open={open}
-      editing
-      onClose={onClose}
-      title={t(translations.updateAnnouncement)}
-      initialValues={initialValues}
-      onSubmit={handleSubmit}
       canSticky={canSticky}
+      editing={true}
+      initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      open={open}
+      title={t(translations.updateAnnouncement)}
     />
   );
 };

@@ -1,9 +1,10 @@
-import { LoadingButton } from '@mui/lab';
-import { useDispatch } from 'react-redux';
 import { FC, useState } from 'react';
-import { injectIntl, defineMessages, WrappedComponentProps } from 'react-intl';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { LoadingButton } from '@mui/lab';
 import { AppDispatch } from 'types/store';
+
 import { resendAllInvitations } from '../../operations';
 
 const translations = defineMessages({
@@ -43,8 +44,8 @@ const ResendAllInvitationsButton: FC<Props> = (props) => {
   return (
     <LoadingButton
       loading={isLoading}
-      variant="contained"
       onClick={handleResend}
+      variant="contained"
     >
       {intl.formatMessage(translations.buttonText)}
     </LoadingButton>

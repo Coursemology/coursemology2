@@ -1,3 +1,4 @@
+import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Table,
   TableBody,
@@ -7,10 +8,9 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 
-import { defineMessages, FormattedMessage } from 'react-intl';
+import GroupCard from '../../components/GroupCard';
 import { groupShape } from '../../propTypes';
 import { sortByGroupRole, sortByName } from '../../utils/sort';
-import GroupCard from '../../components/GroupCard';
 
 const translations = defineMessages({
   subtitle: {
@@ -59,13 +59,13 @@ const GroupTableCard = ({ group }) => {
 
   return (
     <GroupCard
-      title={group.name}
       subtitle={
         <FormattedMessage
           values={{ numMembers: members.length ?? 0 }}
           {...translations.subtitle}
         />
       }
+      title={group.name}
     >
       <Table>
         <TableHead>

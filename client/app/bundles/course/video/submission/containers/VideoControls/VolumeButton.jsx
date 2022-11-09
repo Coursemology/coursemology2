@@ -1,9 +1,11 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { videoDefaults } from 'lib/constants/videoConstants';
 
-import styles from '../VideoPlayer.scss';
 import { changePlayerVolume } from '../../actions/video';
+
+import styles from '../VideoPlayer.scss';
 
 const propTypes = {
   volume: PropTypes.number.isRequired,

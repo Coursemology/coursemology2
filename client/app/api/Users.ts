@@ -1,6 +1,4 @@
-/* eslint class-methods-use-this: "off" */
 import { AxiosResponse } from 'axios';
-
 import { TimeZones } from 'types/course/admin/course';
 import { InstanceBasicListData } from 'types/system/instances';
 import {
@@ -13,11 +11,13 @@ import {
   UserBasicMiniEntity,
   UserCourseListData,
 } from 'types/users';
+
 import BaseAPI from './Base';
 
 type Response<Data> = Promise<AxiosResponse<Data>>;
 
 class UsersAPI extends BaseAPI {
+  // eslint-disable-next-line class-methods-use-this
   _getUrlPrefix(): string {
     return '/users';
   }

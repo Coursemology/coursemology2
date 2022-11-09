@@ -1,5 +1,6 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+
 import AddButton from 'lib/components/core/buttons/AddButton';
 
 interface Props extends WrappedComponentProps {

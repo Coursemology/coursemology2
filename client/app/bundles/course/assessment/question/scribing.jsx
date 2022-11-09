@@ -1,8 +1,9 @@
 import { createRoot } from 'react-dom/client';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import storeCreator from './scribing/store';
+
 import ScribingQuestion from './scribing/ScribingQuestion';
+import storeCreator from './scribing/store';
 
 $(() => {
   const mountNode = document.getElementById('scribing-question');

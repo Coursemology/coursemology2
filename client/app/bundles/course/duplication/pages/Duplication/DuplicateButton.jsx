@@ -1,8 +1,10 @@
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { showDuplicateItemsConfirmation } from 'course/duplication/actions';
+
 import DuplicateItemsConfirmation from './DuplicateItemsConfirmation';
 
 const translations = defineMessages({
@@ -42,11 +44,11 @@ const DuplicateButton = (props) => {
   return (
     <>
       <Button
-        variant="contained"
         color="secondary"
         disabled={!isCourseSelected || !isItemSelected || isChangingCourse}
         onClick={() => dispatch(showDuplicateItemsConfirmation())}
         style={styles.button}
+        variant="contained"
       >
         <FormattedMessage {...translations[label]} />
       </Button>

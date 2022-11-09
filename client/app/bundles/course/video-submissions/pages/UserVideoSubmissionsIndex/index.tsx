@@ -1,11 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
+import { VideoSubmissionListData } from 'types/course/videoSubmissions';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
-import { VideoSubmissionListData } from 'types/course/videoSubmissions';
-import { fetchVideoSubmissions } from '../../operations';
+
 import UserVideoSubmissionTable from '../../components/tables/UserVideoSubmissionTable';
+import { fetchVideoSubmissions } from '../../operations';
 
 type Props = WrappedComponentProps;
 

@@ -1,7 +1,7 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import ReactTooltip from 'react-tooltip';
 import {
   Card,
   CardContent,
@@ -11,12 +11,14 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import ReactTooltip from 'react-tooltip';
-import { getCourseId } from 'lib/helpers/url-helpers';
+import PropTypes from 'prop-types';
+
 import { getCourseUserURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatLongDateTime } from 'lib/moment';
-import { gradingShape, questionShape, submissionShape } from '../propTypes';
+
 import actionTypes, { workflowStates } from '../constants';
+import { gradingShape, questionShape, submissionShape } from '../propTypes';
 import translations from '../translations';
 
 const styles = {
@@ -97,17 +99,17 @@ class VisibleGradingPanel extends Component {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <div>
           <input
-            className="exp"
-            style={{ width: 50 }}
-            type="number"
-            min={0}
-            step={1}
-            value={exp !== null ? exp : ''}
-            onChange={(e) => this.handleExpField(e.target.value)}
             ref={(ref) => {
               this.expInputRef = ref;
             }}
+            className="exp"
+            min={0}
+            onChange={(e) => this.handleExpField(e.target.value)}
             onWheel={() => this.expInputRef.blur()}
+            step={1}
+            style={{ width: 50 }}
+            type="number"
+            value={exp !== null ? exp : ''}
           />
           {bonusAwarded > 0
             ? ` / (${basePoints} + ${bonusAwarded})`
@@ -116,17 +118,17 @@ class VisibleGradingPanel extends Component {
         <div style={{ marginLeft: 20 }}>
           <FormattedMessage {...translations.multiplier} />
           <input
-            style={{ marginLeft: 5, width: 70 }}
-            type="number"
-            min={0}
-            max={1}
-            step="any"
-            value={expMultiplier}
-            onChange={(e) => this.handleMultiplierField(e.target.value)}
             ref={(ref) => {
               this.multiplierInputRef = ref;
             }}
+            max={1}
+            min={0}
+            onChange={(e) => this.handleMultiplierField(e.target.value)}
             onWheel={() => this.multiplierInputRef.blur()}
+            step="any"
+            style={{ marginLeft: 5, width: 70 }}
+            type="number"
+            value={expMultiplier}
           />
         </div>
       </div>
@@ -158,7 +160,7 @@ class VisibleGradingPanel extends Component {
     }
     return (
       <TableRow key={question.id}>
-        <TableCell style={styles.headerColumn} colSpan={2}>
+        <TableCell colSpan={2} style={styles.headerColumn}>
           {question.displayTitle}
         </TableCell>
         {showGrader ? (
@@ -196,7 +198,7 @@ class VisibleGradingPanel extends Component {
         <Table style={styles.table}>
           <TableHead>
             <TableRow>
-              <TableCell style={styles.headerColumn} colSpan={2}>
+              <TableCell colSpan={2} style={styles.headerColumn}>
                 {intl.formatMessage(translations.question)}
               </TableCell>
               {showGrader ? (
@@ -230,13 +232,13 @@ class VisibleGradingPanel extends Component {
         {workflowState === workflowStates.Graded ? (
           <span style={{ display: 'inline-block', marginLeft: 5 }}>
             <a
-              data-tip
               data-for="unpublished-grades"
               data-offset="{'left' : -8}"
+              data-tip={true}
             >
               <i className="fa fa-exclamation-triangle" />
             </a>
-            <ReactTooltip id="unpublished-grades" effect="solid">
+            <ReactTooltip effect="solid" id="unpublished-grades">
               <FormattedMessage {...translations.unpublishedGrades} />
             </ReactTooltip>
           </span>

@@ -1,11 +1,13 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { formatTimestamp } from 'lib/helpers/videoHelpers';
-import 'rc-slider/assets/index.css';
+import PropTypes from 'prop-types';
 
-import styles from '../VideoPlayer.scss';
+import { formatTimestamp } from 'lib/helpers/videoHelpers';
+
 import { seekEnd, seekStart, updatePlayerProgress } from '../../actions/video';
+
+import 'rc-slider/assets/index.css';
+import styles from '../VideoPlayer.scss';
 
 const unbufferedColour = '#e9e9e9';
 const bufferedColour = '#afe9ff';
@@ -60,19 +62,19 @@ class VideoPlayerSlider extends Component {
     return (
       <span className={styles.progressBar}>
         <VideoPlayerSlider.TippedSlider
-          max={this.props.duration}
-          step={1}
-          value={this.props.playerProgress}
           handleStyle={[{ borderColor: playedColour }]}
-          trackStyle={{ backgroundColor: playedColour }}
+          max={this.props.duration}
+          onAfterChange={this.props.onDragStop}
+          onBeforeChange={this.props.onDragBegin}
+          onChange={this.props.onDragged}
           railStyle={generateRailStyle(
             this.props.bufferProgress,
             this.props.duration,
           )}
+          step={1}
           tipFormatter={formatTimestamp}
-          onChange={this.props.onDragged}
-          onBeforeChange={this.props.onDragBegin}
-          onAfterChange={this.props.onDragStop}
+          trackStyle={{ backgroundColor: playedColour }}
+          value={this.props.playerProgress}
         />
       </span>
     );

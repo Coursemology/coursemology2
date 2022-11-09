@@ -1,7 +1,10 @@
 import { Component } from 'react';
-import ReactTooltip from 'react-tooltip';
-import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import ReactTooltip from 'react-tooltip';
+import Delete from '@mui/icons-material/Delete';
+import GetApp from '@mui/icons-material/GetApp'; // TODO MUI - Change to download once icons lib is updated
+import MoreVert from '@mui/icons-material/MoreVert';
+import RemoveCircle from '@mui/icons-material/RemoveCircle';
 import {
   CircularProgress,
   IconButton,
@@ -14,16 +17,16 @@ import {
   TableRow,
 } from '@mui/material';
 import { pink, red } from '@mui/material/colors';
-import Delete from '@mui/icons-material/Delete';
-import GetApp from '@mui/icons-material/GetApp'; // TODO MUI - Change to download once icons lib is updated
-import MoreVert from '@mui/icons-material/MoreVert';
-import RemoveCircle from '@mui/icons-material/RemoveCircle';
+import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
-import { assessmentShape } from '../../propTypes';
+
 import { workflowStates } from '../../constants';
+import { assessmentShape } from '../../propTypes';
 import translations from '../../translations';
-import submissionsTranslations from './translations';
+
 import SubmissionsTableRow from './SubmissionsTableRow';
+import submissionsTranslations from './translations';
 
 const styles = {
   hideTable: {
@@ -113,18 +116,18 @@ export default class SubmissionsTable extends Component {
     const { deleteAllConfirmation } = this.state;
     return (
       <ConfirmationDialog
-        open={deleteAllConfirmation}
-        onCancel={() => this.setState({ deleteAllConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ deleteAllConfirmation: false });
-          handleDeleteAll();
-        }}
         message={
           <FormattedMessage
             {...translations.deleteAllConfirmation}
             values={{ users: confirmDialogValue }}
           />
         }
+        onCancel={() => this.setState({ deleteAllConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ deleteAllConfirmation: false });
+          handleDeleteAll();
+        }}
+        open={deleteAllConfirmation}
       />
     );
   }
@@ -163,9 +166,9 @@ export default class SubmissionsTable extends Component {
           <MoreVert />
         </IconButton>
         <Menu
-          id="submissions-table-menu"
           anchorEl={this.state.anchorEl}
-          disableAutoFocusItem
+          disableAutoFocusItem={true}
+          id="submissions-table-menu"
           onClick={this.handleCloseMenu}
           onClose={this.handleCloseMenu}
           open={Boolean(this.state.anchorEl)}
@@ -278,7 +281,7 @@ export default class SubmissionsTable extends Component {
       submissionsTranslations.deleteSubmission,
     ];
     return tooltipIds.map((tooltipId, index) => (
-      <ReactTooltip key={tooltipId} id={tooltipId} effect="solid">
+      <ReactTooltip key={tooltipId} effect="solid" id={tooltipId}>
         <FormattedMessage {...formattedMessages[index]} />
       </ReactTooltip>
     ));
@@ -324,18 +327,18 @@ export default class SubmissionsTable extends Component {
     const { unsubmitAllConfirmation } = this.state;
     return (
       <ConfirmationDialog
-        open={unsubmitAllConfirmation}
-        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
-        onConfirm={() => {
-          this.setState({ unsubmitAllConfirmation: false });
-          handleUnsubmitAll();
-        }}
         message={
           <FormattedMessage
             {...translations.unsubmitAllConfirmation}
             values={{ users: confirmDialogValue }}
           />
         }
+        onCancel={() => this.setState({ unsubmitAllConfirmation: false })}
+        onConfirm={() => {
+          this.setState({ unsubmitAllConfirmation: false });
+          handleUnsubmitAll();
+        }}
+        open={unsubmitAllConfirmation}
       />
     );
   }

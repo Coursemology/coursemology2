@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
-
 import type { NotificationSettings } from 'types/course/admin/notifications';
+
 import BaseAdminAPI from './Base';
 
 export default class NotificationsSettingsAPI extends BaseAdminAPI {

@@ -1,11 +1,13 @@
-import PropTypes from 'prop-types';
-import { defineMessages, injectIntl } from 'react-intl';
 import { Controller } from 'react-hook-form';
+import { defineMessages, injectIntl } from 'react-intl';
+import Close from '@mui/icons-material/Close';
 import { Checkbox, IconButton, Radio } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import Close from '@mui/icons-material/Close';
-import FormTextField from 'lib/components/form/fields/TextField';
+import PropTypes from 'prop-types';
+
 import Thumbnail from 'lib/components/core/Thumbnail';
+import FormTextField from 'lib/components/form/fields/TextField';
+
 import ImageField from './components/ImageField';
 
 const optionTranslations = defineMessages({
@@ -85,9 +87,9 @@ const QuestionFormOption = (props) => {
   const renderWidget = () => {
     let widget = null;
     if (multipleChoice) {
-      widget = <Radio disabled style={styles.widget} />;
+      widget = <Radio disabled={true} style={styles.widget} />;
     } else if (multipleResponse) {
-      widget = <Checkbox disabled style={styles.widget} />;
+      widget = <Checkbox disabled={true} style={styles.widget} />;
     }
     return widget;
   };
@@ -119,25 +121,24 @@ const QuestionFormOption = (props) => {
         {fileOrSrc.file || fileOrSrc.src ? (
           <Thumbnail
             {...fileOrSrc}
-            style={styles.image}
             containerStyle={styles.imageContainer}
+            style={styles.image}
           />
         ) : null}
         <small>{imageFileName}</small>
         <Controller
-          name={`options.${index}.option`}
           control={fieldsConfig.control}
-          // eslint-disable-next-line no-shadow
-          render={({ field, fieldState }) => (
+          name={`options.${index}.option`}
+          render={({ field: optionfield, fieldState }) => (
             <FormTextField
-              field={field}
-              fieldState={fieldState}
               disabled={disabled}
-              fullWidth
-              multiline
+              field={optionfield}
+              fieldState={fieldState}
+              fullWidth={true}
               InputLabelProps={{
                 shrink: true,
               }}
+              multiline={true}
               placeholder={placeholder}
               variant="standard"
             />
@@ -152,11 +153,10 @@ const QuestionFormOption = (props) => {
       {renderWidget()}
       {renderOptionBody()}
       <Controller
-        name={`options.${index}.file`}
         control={fieldsConfig.control}
-        // eslint-disable-next-line no-shadow
-        render={({ field }) => (
-          <ImageField field={field} index={index} disabled={disabled} />
+        name={`options.${index}.file`}
+        render={({ field: optionField }) => (
+          <ImageField disabled={disabled} field={optionField} index={index} />
         )}
       />
       <IconButton

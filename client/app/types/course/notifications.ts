@@ -1,4 +1,5 @@
 import { InstanceUserBasicPhotoListData } from 'types/system/instance/users';
+
 import { CourseUserListData } from './courseUsers';
 
 export interface NotificationData {

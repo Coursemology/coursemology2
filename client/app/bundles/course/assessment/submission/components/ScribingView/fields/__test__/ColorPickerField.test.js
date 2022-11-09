@@ -1,4 +1,5 @@
 import { mount } from 'enzyme';
+
 import ColorPickerField from 'course/assessment/submission/components/ScribingView/fields/ColorPickerField';
 
 const props = {

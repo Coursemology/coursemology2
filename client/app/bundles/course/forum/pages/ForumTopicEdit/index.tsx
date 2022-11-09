@@ -1,17 +1,16 @@
-import { defineMessages } from 'react-intl';
 import { FC } from 'react';
+import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
-import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
-import { AppDispatch } from 'types/store';
+import { toast } from 'react-toastify';
 import { ForumTopicEntity, ForumTopicFormData } from 'types/course/forums';
+import { AppDispatch } from 'types/store';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { updateForumTopic } from '../../operations';
 import ForumTopicForm from '../../components/forms/ForumTopicForm';
+import { updateForumTopic } from '../../operations';
 
 interface Props {
   topic: ForumTopicEntity;
@@ -72,12 +71,12 @@ const ForumTopicEdit: FC<Props> = (props) => {
 
   return (
     <ForumTopicForm
-      open={isOpen}
-      editing
-      title={t(translations.editForum)}
-      onClose={onClose}
+      editing={true}
       initialValues={initialValues}
+      onClose={onClose}
       onSubmit={handleSubmit}
+      open={isOpen}
+      title={t(translations.editForum)}
     />
   );
 };

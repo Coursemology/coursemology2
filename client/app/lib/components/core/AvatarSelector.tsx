@@ -1,14 +1,14 @@
-import { useState, ChangeEventHandler } from 'react';
+import { ChangeEventHandler, useState } from 'react';
+import { toast } from 'react-toastify';
 import { Create } from '@mui/icons-material';
 import { Avatar, Button } from '@mui/material';
-import { toast } from 'react-toastify';
 
+import translations from 'bundles/user/translations';
 import ImageCropDialog from 'lib/components/core/dialogs/ImageCropDialog';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
-import translations from 'bundles/user/translations';
 
 const IMAGE_MIMES_MAP = {
   'image/jpeg': 'jpg',
@@ -77,45 +77,45 @@ const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
     <Subsection title={props.title}>
       <div className="relative">
         <Avatar
+          className="h-80 w-80"
           src={
             props.stagedImage
               ? URL.createObjectURL(props.stagedImage)
               : props.defaultImageUrl
           }
-          className="h-80 w-80"
           variant={props.circular ? 'circular' : 'square'}
         />
 
         <Button
-          variant="outlined"
+          className="absolute bottom-4 left-4 bg-white bg-opacity-90"
           component="label"
           disabled={props.disabled}
-          startIcon={<Create />}
           size="small"
-          className="absolute bottom-4 left-4 bg-white bg-opacity-90"
+          startIcon={<Create />}
+          variant="outlined"
         >
           {t(translations.changeProfilePicture)}
           <input
-            hidden
-            type="file"
             accept={IMAGE_MIMES_STRING}
             className="hidden"
-            onChange={selectImage}
             disabled={props.disabled}
+            hidden={true}
+            onChange={selectImage}
+            type="file"
           />
         </Button>
       </div>
 
       {selectedImage && (
         <ImageCropDialog
-          open={cropping}
-          onClose={toggleCropping}
-          src={URL.createObjectURL(selectedImage)}
           aspect={1}
           circular={props.circular}
-          type={selectedImage.type}
+          onClose={toggleCropping}
           onConfirmImage={stageImage}
           onLoadError={raiseInvalidImageError}
+          open={cropping}
+          src={URL.createObjectURL(selectedImage)}
+          type={selectedImage.type}
         />
       )}
     </Subsection>

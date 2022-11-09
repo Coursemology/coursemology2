@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl } from 'react-intl';
+import { ArrowBack, Check, Clear, Reply } from '@mui/icons-material';
 import {
   Avatar,
   CardHeader,
@@ -9,11 +10,12 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { orange, grey } from '@mui/material/colors';
-import { ArrowBack, Check, Clear, Reply } from '@mui/icons-material';
-import { defineMessages, injectIntl } from 'react-intl';
+import { grey, orange } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { formatLongDateTime } from 'lib/moment';
+
 import { postShape } from '../../propTypes';
 
 const translations = defineMessages({
@@ -143,9 +145,8 @@ const CodaveriCommentCard = (props) => {
           </IconButton>
         )}
         <Rating
-          name={`codaveri-feedback-rating-${id}`}
-          value={rating}
           max={5}
+          name={`codaveri-feedback-rating-${id}`}
           onChange={(event, newValue) => {
             // To prevent the rating to be reset to null when clicking on the same previous rating
             if (newValue !== null) {
@@ -157,6 +158,7 @@ const CodaveriCommentCard = (props) => {
             }
           }}
           size="medium"
+          value={rating}
         />
         <Typography
           color={grey[600]}
@@ -177,8 +179,8 @@ const CodaveriCommentCard = (props) => {
           {renderRating()}
           <TextField
             key={editPostIdentifier(id)}
-            fullWidth
-            multiline
+            fullWidth={true}
+            multiline={true}
             onChange={(event) => {
               handleChange(event.target.value);
             }}
@@ -244,20 +246,20 @@ const CodaveriCommentCard = (props) => {
       <div style={styles.header}>
         <CardHeader
           avatar={<Avatar src={avatar} style={styles.avatar} />}
-          title={name}
-          titleTypographyProps={{ display: 'block', marginright: 20 }}
+          style={styles.cardHeader}
           subheader={formatLongDateTime(createdAt)}
           subheaderTypographyProps={{ display: 'block' }}
-          style={styles.cardHeader}
+          title={name}
+          titleTypographyProps={{ display: 'block', marginright: 20 }}
         />
       </div>
       <div style={styles.commentContent}>{renderCommentContent()}</div>
       <ConfirmationDialog
-        confirmDelete
-        open={rejectConfirmation}
+        confirmDelete={true}
         message={intl.formatMessage(translations.rejectConfirmation)}
         onCancel={() => setRejectConfirmation(false)}
         onConfirm={onConfirmReject}
+        open={rejectConfirmation}
       />
     </div>
   );

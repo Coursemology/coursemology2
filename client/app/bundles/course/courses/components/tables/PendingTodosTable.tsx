@@ -1,6 +1,5 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC, memo, useEffect, useState } from 'react';
-import { TodoData } from 'types/course/lesson-plan/todos';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   Button,
   Link,
@@ -12,6 +11,9 @@ import {
   TableRow,
 } from '@mui/material';
 import equal from 'fast-deep-equal';
+import { TodoData } from 'types/course/lesson-plan/todos';
+
+import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import {
   getAssessmentAttemptURL,
   getAssessmentSubmissionURL,
@@ -24,7 +26,7 @@ import {
   getVideoSubmissionsURL,
 } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
+
 import TodoAccessButton from '../buttons/TodoAccessButton';
 import TodoIgnoreButton from '../buttons/TodoIgnoreButton';
 
@@ -169,26 +171,26 @@ const PendingTodosTable: FC<Props> = (props) => {
 
     return (
       <Stack
-        direction={{ xs: 'column', sm: 'row' }}
-        spacing={1}
-        justifyContent="center"
         alignItems="center"
+        direction={{ xs: 'column', sm: 'row' }}
+        justifyContent="center"
+        spacing={1}
       >
         <TodoAccessButton
-          accessButtonText={accessButtonText}
           accessButtonLink={accessButtonLink}
-          isVideo={todoType === 'videos'}
+          accessButtonText={accessButtonText}
           isNewAttempt={
             todo.progress === 'not_started' &&
             todo.canAccess! &&
             todo.canAttempt!
           }
+          isVideo={todoType === 'videos'}
           submissionUrl={submissionUrl ?? accessButtonLink}
         />
         <TodoIgnoreButton
           ignoreLink={getIgnoreTodoURL(getCourseId(), todo.id)}
-          todoType={todoType}
           todoId={todo.id}
+          todoType={todoType}
         />
       </Stack>
     );
@@ -246,8 +248,8 @@ const PendingTodosTable: FC<Props> = (props) => {
         <TableBody>
           {shavedTodos.map((todo) => (
             <TableRow
-              id={`todo-${todo.id}`}
               key={todo.id}
+              id={`todo-${todo.id}`}
               style={{ ...getBackgroundColor(todo) }}
             >
               <TableCell>

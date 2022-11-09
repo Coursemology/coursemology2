@@ -1,16 +1,18 @@
 import { FC, memo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
-import equal from 'fast-deep-equal';
-import { Stack, TableCell, TableRow, Tooltip } from '@mui/material';
 import {
   Block as BlockIcon,
   Folder as FolderIcon,
   Visibility as VisibilityIcon,
 } from '@mui/icons-material';
+import { Stack, TableCell, TableRow, Tooltip } from '@mui/material';
+import equal from 'fast-deep-equal';
 import { FolderMiniEntity } from 'types/course/material/folders';
+
 import { getFullDateTime } from 'lib/helpers/timehelper';
 import { getCourseId } from 'lib/helpers/url-helpers';
+
 import WorkbinTableButtons from '../buttons/WorkbinTableButtons';
 
 interface Props {
@@ -48,28 +50,28 @@ const TableSubfolderRow: FC<Props> = (props) => {
     <TableRow id={`subfolder-${subfolder.id}`}>
       <TableCell style={{ padding: 2, minWidth: '200px' }}>
         <Stack spacing={1}>
-          <Stack direction="row" spacing={0.5} alignItems="center">
+          <Stack alignItems="center" direction="row" spacing={0.5}>
             <FolderIcon htmlColor="grey" />
             <Link
-              to={`/courses/${getCourseId()}/materials/folders/${
-                subfolder.id
-              }/`}
               style={{
                 textOverflow: 'initial',
                 whiteSpace: 'normal',
                 wordBreak: 'break-word',
               }}
+              to={`/courses/${getCourseId()}/materials/folders/${
+                subfolder.id
+              }/`}
             >
               {`${subfolder.name} (${subfolder.itemCount})`}
             </Link>
             {new Date(subfolder.effectiveStartAt).getTime() > Date.now() &&
               !isCurrentCourseStudent && (
                 <Tooltip
+                  arrow={true}
+                  placement="top"
                   title={intl.formatMessage(
                     translations.subfolderBlockedTooltip,
                   )}
-                  placement="top"
-                  arrow
                 >
                   <BlockIcon color="error" fontSize="small" />
                 </Tooltip>
@@ -111,7 +113,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
             minWidth: '60px',
           }}
         >
-          <Stack direction="row" spacing={0.5} alignItems="center">
+          <Stack alignItems="center" direction="row" spacing={0.5}>
             {subfolder.permissions.showSdlWarning && (
               <Tooltip
                 title={intl.formatMessage(
@@ -134,7 +136,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
               minWidth: '60px',
             }}
           >
-            <Stack direction="row" spacing={0.5} alignItems="center">
+            <Stack alignItems="center" direction="row" spacing={0.5}>
               <div>-</div>
             </Stack>
           </TableCell>
@@ -149,13 +151,9 @@ const TableSubfolderRow: FC<Props> = (props) => {
         }}
       >
         <WorkbinTableButtons
-          currFolderId={currFolderId}
-          itemId={subfolder.id}
-          itemName={subfolder.name}
-          isConcrete={isConcrete}
-          canEdit={subfolder.permissions.canEdit}
           canDelete={subfolder.permissions.canDelete}
-          type="subfolder"
+          canEdit={subfolder.permissions.canEdit}
+          currFolderId={currFolderId}
           folderInitialValues={{
             name: subfolder.name,
             description: subfolder.description,
@@ -163,6 +161,10 @@ const TableSubfolderRow: FC<Props> = (props) => {
             startAt: new Date(subfolder.startAt),
             endAt: subfolder.endAt !== null ? new Date(subfolder.endAt) : null,
           }}
+          isConcrete={isConcrete}
+          itemId={subfolder.id}
+          itemName={subfolder.name}
+          type="subfolder"
         />
       </TableCell>
     </TableRow>

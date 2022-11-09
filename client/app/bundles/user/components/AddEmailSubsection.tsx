@@ -1,14 +1,15 @@
-import { KeyboardEventHandler, useState, useRef } from 'react';
+import { KeyboardEventHandler, useRef, useState } from 'react';
+import useEmitterFactory, { Emits } from 'react-emitter-factory';
 import { Add } from '@mui/icons-material';
 import { Button, Collapse } from '@mui/material';
-import useEmitterFactory, { Emits } from 'react-emitter-factory';
-
 import { EmailData } from 'types/users';
-import Subsection from 'lib/components/core/layouts/Subsection';
+
 import TextField from 'lib/components/core/fields/TextField';
+import Subsection from 'lib/components/core/layouts/Subsection';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import translations from '../translations';
 
 export interface AddEmailSubsectionEmitter {
@@ -65,33 +66,33 @@ const AddEmailSubsection = (props: AddEmailSubsectionProps): JSX.Element => {
 
   return (
     <div className="!mt-10 space-y-5">
-      <Collapse in={expanded} collapsedSize={0}>
-        <Subsection title={t(translations.addAnotherEmail)} spaced>
+      <Collapse collapsedSize={0} in={expanded}>
+        <Subsection spaced={true} title={t(translations.addAnotherEmail)}>
           <TextField
-            name="newEmail"
             ref={emailInputRef}
+            error={Boolean(error)}
+            fullWidth={true}
+            helperText={formatErrorMessage(error)}
+            inputProps={{ autoComplete: 'off' }}
             label={t(translations.emailAddress)}
-            type="email"
-            value={email}
+            name="newEmail"
             onChange={(e): void => setEmail(e.target.value)}
             onKeyUp={handleKeyUp}
-            variant="filled"
-            fullWidth
-            trims
-            inputProps={{ autoComplete: 'off' }}
-            error={Boolean(error)}
-            helperText={formatErrorMessage(error)}
             placeholder={t(translations.emailAddressPlaceholder)}
+            trims={true}
+            type="email"
+            value={email}
+            variant="filled"
           />
         </Subsection>
       </Collapse>
 
       <Button
-        startIcon={<Add />}
-        variant="outlined"
-        size="small"
         disabled={(expanded && email === '') || props.disabled}
         onClick={handleClickAddEmail}
+        size="small"
+        startIcon={<Add />}
+        variant="outlined"
       >
         {t(translations.addEmailAddress)}
       </Button>

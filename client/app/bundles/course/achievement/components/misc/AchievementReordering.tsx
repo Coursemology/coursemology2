@@ -1,8 +1,9 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Button } from '@mui/material';
-import axios from 'lib/axios';
 import { toast } from 'react-toastify';
+import { Button } from '@mui/material';
+
+import axios from 'lib/axios';
 
 require('jquery-ui/ui/widgets/sortable');
 
@@ -62,9 +63,8 @@ const AchievementReordering: FC<Props> = (props: Props) => {
 
   return (
     <Button
-      className="achievement-reordering-button"
       key="achievement-reordering-button"
-      variant="outlined"
+      className="achievement-reordering-button"
       color="primary"
       onClick={(): void => {
         if (isReordering) {
@@ -86,6 +86,7 @@ const AchievementReordering: FC<Props> = (props: Props) => {
         }
       }}
       style={styles.AchievementReorderingButton}
+      variant="outlined"
     >
       {isReordering
         ? intl.formatMessage(translations.endReorderAchievement)

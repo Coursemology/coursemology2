@@ -1,8 +1,7 @@
 import { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
-
-import { Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { Button } from '@mui/material';
 
 import formTranslations from 'lib/translations/form';
 
@@ -34,23 +33,23 @@ const MaterialUploadForm: FC<Props> = (props) => {
       }}
     >
       <Button
-        color="secondary"
-        className="btn-cancel"
-        disabled={isSubmitting}
         key="material-upload-form-cancel-button"
+        className="btn-cancel"
+        color="secondary"
+        disabled={isSubmitting}
         onClick={(): void => handleClose()}
       >
         <FormattedMessage {...formTranslations.cancel} />
       </Button>
       <LoadingButton
-        id="material-upload-form-upload-button"
-        variant="contained"
-        color="primary"
-        className="btn-submit"
-        disabled={isSubmitting || uploadedFiles.length === 0}
         key="material-upload-form-upload-button"
-        onClick={(): void => onSubmit()}
+        className="btn-submit"
+        color="primary"
+        disabled={isSubmitting || uploadedFiles.length === 0}
+        id="material-upload-form-upload-button"
         loading={isSubmitting}
+        onClick={(): void => onSubmit()}
+        variant="contained"
       >
         <FormattedMessage {...formTranslations.upload} />
       </LoadingButton>
@@ -61,8 +60,8 @@ const MaterialUploadForm: FC<Props> = (props) => {
     <>
       <MultipleFileInput
         disabled={isSubmitting}
-        uploadedFiles={uploadedFiles}
         setUploadedFiles={setUploadedFiles}
+        uploadedFiles={uploadedFiles}
       />
       {actionButtons}
     </>

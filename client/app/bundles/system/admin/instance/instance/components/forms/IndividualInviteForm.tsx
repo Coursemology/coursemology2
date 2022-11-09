@@ -1,21 +1,24 @@
 import { FC, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useForm, useFieldArray } from 'react-hook-form';
-import { AppDispatch } from 'types/store';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { toast } from 'react-toastify';
-import * as yup from 'yup';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { AppDispatch } from 'types/store';
 import {
   IndividualInvites,
-  InvitationsPostData,
   InvitationResult,
+  InvitationsPostData,
 } from 'types/system/instance/invitations';
+import * as yup from 'yup';
+
 import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import messagesTranslations from 'lib/translations/messages';
-import IndividualInvitations from './IndividualInvitations';
+
 import { inviteUsers } from '../../operations';
+
+import IndividualInvitations from './IndividualInvitations';
 
 interface Props extends WrappedComponentProps {
   openResultDialog: (invitationResult: InvitationResult) => void;
@@ -115,18 +118,18 @@ const IndividualInviteForm: FC<Props> = (props) => {
     <form
       encType="multipart/form-data"
       id="invite-users-individual-form"
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((data) => onSubmit(data))}
     >
       <ErrorText errors={errors} />
       <IndividualInvitations
-        isLoading={isLoading}
         fieldsConfig={{
           control,
           fields: controlledInvitationsFields,
           append: invitationsAppend,
           remove: invitationsRemove,
         }}
+        isLoading={isLoading}
       />
     </form>
   );

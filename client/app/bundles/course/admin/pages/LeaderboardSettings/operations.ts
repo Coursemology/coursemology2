@@ -1,10 +1,10 @@
 import { AxiosError } from 'axios';
-
-import CourseAPI from 'api/course';
 import {
   LeaderboardSettingsData,
   LeaderboardSettingsPostData,
 } from 'types/course/admin/leaderboard';
+
+import CourseAPI from 'api/course';
 
 type Data = Promise<LeaderboardSettingsData>;
 

@@ -1,10 +1,11 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Button, MenuItem, MenuList, Popover } from '@mui/material';
+import { connect } from 'react-redux';
 import Done from '@mui/icons-material/Done';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import { Button, MenuItem, MenuList, Popover } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { setColumnVisibility } from 'course/lesson-plan/actions';
 import { fields } from 'course/lesson-plan/constants';
 import fieldTranslations from 'course/lesson-plan/translations';
@@ -56,18 +57,18 @@ class ColumnVisibilityDropdown extends Component {
     return (
       <div style={styles.dropdown}>
         <Button
-          variant="contained"
           color="secondary"
           endIcon={<KeyboardArrowDown />}
           onClick={this.handleClick}
+          variant="contained"
         >
           <FormattedMessage {...translations.label} />
         </Button>
         <Popover
-          open={this.state.open}
           anchorEl={this.state.anchorEl}
           anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
           onClose={this.handleRequestClose}
+          open={this.state.open}
           transformOrigin={{ horizontal: 'left', vertical: 'top' }}
         >
           <MenuList style={{ maxHeight: 450 }}>

@@ -1,7 +1,9 @@
-import CourseAPI from 'api/course';
 import { VideoFormData } from 'types/course/videos';
 import { Operation } from 'types/store';
-import { saveVideoList, saveVideo, removeVideo } from './reducers';
+
+import CourseAPI from 'api/course';
+
+import { removeVideo, saveVideo, saveVideoList } from './reducers';
 
 /**
  * Prepares and maps object attributes to a FormData object for an post/patch request.

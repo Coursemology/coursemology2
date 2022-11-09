@@ -1,9 +1,10 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import CoursesIndex from './pages/CoursesIndex';
+
 import CourseShow from './pages/CourseShow';
+import CoursesIndex from './pages/CoursesIndex';
 import configureStore from './store';
 
 $(() => {
@@ -17,8 +18,8 @@ $(() => {
       <ProviderWrapper store={store}>
         <BrowserRouter>
           <Routes>
-            <Route path="/courses" element={<CoursesIndex />} />
-            <Route path="/courses/:courseId" element={<CourseShow />} />
+            <Route element={<CoursesIndex />} path="/courses" />
+            <Route element={<CourseShow />} path="/courses/:courseId" />
           </Routes>
         </BrowserRouter>
       </ProviderWrapper>,

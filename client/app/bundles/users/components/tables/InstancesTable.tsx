@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   Table,
@@ -9,9 +10,9 @@ import {
   TableRow,
   Typography,
 } from '@mui/material';
-import tableTranslations from 'lib/translations/table';
-import { useParams } from 'react-router-dom';
 import { InstanceBasicMiniEntity } from 'types/system/instances';
+
+import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -34,13 +35,13 @@ const InstancesTable: FC<Props> = ({ title, instances, intl }: Props) => {
         </TableHead>
         <TableBody>
           {instances.map((instance) => (
-            <TableRow key={`instance-${instance.id}`} hover>
+            <TableRow key={`instance-${instance.id}`} hover={true}>
               <TableCell>
-                <Typography variant="body2" className="instance_title">
+                <Typography className="instance_title" variant="body2">
                   <a
                     href={`//${instance.host}/users/${userId}`}
-                    target="_blank"
                     rel="noreferrer"
+                    target="_blank"
                   >
                     {instance.name}
                   </a>

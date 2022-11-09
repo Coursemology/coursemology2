@@ -1,12 +1,14 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Autocomplete, Box, TextField } from '@mui/material';
 import { CourseUserBasicMiniEntity } from 'types/course/courseUsers';
-import { useNavigate } from 'react-router-dom';
+import { AppState } from 'types/store';
+
 import { getCourseURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import { useSelector } from 'react-redux';
-import { AppState } from 'types/store';
+
 import { getAllUserOptionMiniEntities } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
@@ -45,17 +47,11 @@ const SelectCourseUser: FC<Props> = (props) => {
 
   return (
     <Autocomplete
+      getOptionLabel={(option): string => option.name}
       id="filter-course-user"
-      value={user}
+      isOptionEqualToValue={(option, value): boolean => option.id === value.id}
       onChange={handleChange}
       options={users}
-      getOptionLabel={(option): string => option.name}
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      renderOption={(props, option): JSX.Element => (
-        <Box component="li" {...props} key={option.id}>
-          {option.name}
-        </Box>
-      )}
       renderInput={(params): JSX.Element => (
         <TextField
           {...params}
@@ -63,8 +59,13 @@ const SelectCourseUser: FC<Props> = (props) => {
           variant="standard"
         />
       )}
-      isOptionEqualToValue={(option, value): boolean => option.id === value.id}
+      renderOption={(optionProps, option): JSX.Element => (
+        <Box component="li" {...optionProps} key={option.id}>
+          {option.name}
+        </Box>
+      )}
       sx={{ minWidth: '300px', marginRight: '12px' }}
+      value={user}
     />
   );
 };

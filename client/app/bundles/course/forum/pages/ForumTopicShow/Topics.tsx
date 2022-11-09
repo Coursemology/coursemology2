@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import { ForumTopicEntity } from 'types/course/forums';
+
 import PostCard from '../../components/cards/PostCard';
 
 interface Props {
@@ -19,8 +20,8 @@ const Topics: FC<Props> = (props) => {
           return (
             <PostCard
               key={`post_${arrayContent}`}
-              postId={arrayContent}
               level={level}
+              postId={arrayContent}
             />
           );
         }
@@ -28,8 +29,8 @@ const Topics: FC<Props> = (props) => {
           <Topics
             // The first member of the nested array will always be number
             key={`topic_${postIdsArray[0][0] as number}`}
-            postIdsArray={arrayContent}
             level={level + 1}
+            postIdsArray={arrayContent}
           />
         );
       })}

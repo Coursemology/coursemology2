@@ -1,16 +1,17 @@
 /* eslint-disable camelcase */
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages } from 'react-intl';
-import { Button } from '@mui/material';
-import Edit from '@mui/icons-material/Edit';
 import Delete from '@mui/icons-material/Delete';
+import Edit from '@mui/icons-material/Edit';
+import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import {
-  showMilestoneForm,
-  updateMilestone,
   deleteMilestone,
   showDeleteConfirmation,
+  showMilestoneForm,
+  updateMilestone,
 } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
@@ -100,17 +101,17 @@ class MilestoneAdminTools extends PureComponent {
     return (
       <span>
         <Button
-          variant="outlined"
           onClick={this.showEditMilestoneDialog}
           style={styles.edit}
+          variant="outlined"
         >
           <Edit />
         </Button>
         <Button
-          variant="outlined"
           color="secondary"
           onClick={this.deleteMilestoneHandler}
           style={styles.delete}
+          variant="outlined"
         >
           <Delete />
         </Button>

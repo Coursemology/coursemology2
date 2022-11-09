@@ -1,10 +1,11 @@
 import { AxiosResponse } from 'axios';
 import {
-  AchievementData,
   AchievementCourseUserData,
+  AchievementData,
   AchievementListData,
   AchievementPermissions,
 } from 'types/course/achievements';
+
 import BaseCourseAPI from './Base';
 
 export default class AchievementsAPI extends BaseCourseAPI {

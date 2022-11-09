@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios';
-
 import type {
-  CourseInfo,
   CourseAdminItems,
+  CourseInfo,
   CourseInfoPostData,
   TimeZones,
 } from 'types/course/admin/course';
+
 import BaseAdminAPI from './Base';
 
 export default class CourseAdminAPI extends BaseAdminAPI {

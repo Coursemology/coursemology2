@@ -1,15 +1,17 @@
 import { FC, useEffect, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import Box from '@mui/material/Box';
 import { useParams } from 'react-router-dom';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Box from '@mui/material/Box';
 import { AppDispatch, AppState } from 'types/store';
-import { getUserEntity } from '../../selectors';
-import { loadUser } from '../../operations';
-import UserProfileCard from '../../components/misc/UserProfileCard';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+
 import UserProfileAchievements from '../../components/misc/UserProfileAchievements';
+import UserProfileCard from '../../components/misc/UserProfileCard';
 import UserProfileSkills from '../../components/misc/UserProfileSkills';
+import { loadUser } from '../../operations';
+import { getUserEntity } from '../../selectors';
 
 type Props = WrappedComponentProps;
 

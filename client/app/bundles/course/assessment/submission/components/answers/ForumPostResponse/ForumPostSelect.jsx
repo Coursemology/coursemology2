@@ -1,8 +1,8 @@
 import { Component } from 'react';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
-import { defineMessages, FormattedMessage } from 'react-intl';
 
 import CourseAPI from 'api/course';
 import { questionShape } from 'course/assessment/submission/propTypes';
@@ -150,9 +150,9 @@ export default class ForumPostSelect extends Component {
     return postPacks.map((postPack) => (
       <div key={`selected-post-pack-${postPack.corePost.id}`}>
         <SelectedPostCard
+          onRemovePostPack={() => this.handleRemovePostPack(postPack)}
           postPack={postPack}
           readOnly={this.props.readOnly}
-          onRemovePostPack={() => this.handleRemovePostPack(postPack)}
         />
       </div>
     ));
@@ -168,18 +168,18 @@ export default class ForumPostSelect extends Component {
         {!this.props.readOnly && (
           <>
             <Button
-              variant="contained"
               color="primary"
               disabled={this.state.hasErrorFetchingPosts || maxPosts === 0}
               onClick={() => this.setState({ isDialogVisible: true })}
               startIcon={
                 <i
+                  aria-hidden="true"
                   className="fa fa-paperclip"
                   style={styles.clipIcon}
-                  aria-hidden="true"
                 />
               }
               style={{ marginBottom: 16 }}
+              variant="contained"
             >
               <FormattedMessage
                 values={{ maxPosts }}
@@ -188,16 +188,16 @@ export default class ForumPostSelect extends Component {
             </Button>
             <ForumPostSelectDialog
               forumTopicPostPacks={this.state.forumTopicPostPacks}
-              selectedPostPacks={postPacks}
-              maxPosts={this.props.question.maxPosts}
-              updateSelectedPostPacks={(packs) =>
-                this.updatePostPackSelection(packs)
-              }
+              handleNotificationMessage={this.props.handleNotificationMessage}
               isVisible={this.state.isDialogVisible}
+              maxPosts={this.props.question.maxPosts}
+              selectedPostPacks={postPacks}
               setIsVisible={(isDialogVisible) =>
                 this.setState({ isDialogVisible })
               }
-              handleNotificationMessage={this.props.handleNotificationMessage}
+              updateSelectedPostPacks={(packs) =>
+                this.updatePostPackSelection(packs)
+              }
             />
           </>
         )}

@@ -1,8 +1,10 @@
-import { Operation } from 'types/store';
-import SystemAPI from 'api/system';
 import { AnnouncementFormData } from 'types/course/announcements';
-import { UserMiniEntity } from 'types/users';
+import { Operation } from 'types/store';
 import { InstanceFormData, InstanceMiniEntity } from 'types/system/instances';
+import { UserMiniEntity } from 'types/users';
+
+import SystemAPI from 'api/system';
+
 import * as actions from './actions';
 
 /**

@@ -1,35 +1,32 @@
 import { FC, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { AppDispatch } from 'types/store';
-import { PersonalTimeMiniEntity } from 'types/course/personalTimes';
-import {
-  Controller,
-  useForm,
-  UseFormHandleSubmit,
-  UseFormSetError,
-} from 'react-hook-form';
-import * as yup from 'yup';
-import Add from '@mui/icons-material/Add';
-import { LoadingButton } from '@mui/lab';
-import { Grid, TableCell, Tooltip } from '@mui/material';
-import LockOutlined from '@mui/icons-material/LockOutlined';
-import LockOpenOutlined from '@mui/icons-material/LockOpenOutlined';
-import DeleteButton from 'lib/components/core/buttons/DeleteButton';
-import SaveButton from 'lib/components/core/buttons/SaveButton';
-import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
-import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
+import { Controller, useForm, UseFormHandleSubmit } from 'react-hook-form';
 import {
   defineMessages,
   FormattedMessage,
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Add from '@mui/icons-material/Add';
+import LockOpenOutlined from '@mui/icons-material/LockOpenOutlined';
+import LockOutlined from '@mui/icons-material/LockOutlined';
+import { LoadingButton } from '@mui/lab';
+import { Grid, TableCell, Tooltip } from '@mui/material';
+import { PersonalTimeMiniEntity } from 'types/course/personalTimes';
+import { AppDispatch } from 'types/store';
+import * as yup from 'yup';
+
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import SaveButton from 'lib/components/core/buttons/SaveButton';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
+import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import formTranslations from 'lib/translations/form';
 import tableTranslations from 'lib/translations/table';
-import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+
 import { deletePersonalTime, updatePersonalTime } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -167,11 +164,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
       });
   };
 
-  const onSubmit = (
-    formData: IFormInputs,
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    setError: UseFormSetError<IFormInputs>,
-  ): Promise<void> => {
+  const onSubmit = (formData: IFormInputs): Promise<void> => {
     const data = {
       ...formData,
       id: item.id,
@@ -210,12 +203,12 @@ const PersonalTimeEditor: FC<Props> = (props) => {
   if (!isCreating) {
     return (
       <TableCell colSpan={4}>
-        <Grid container flexDirection="column" alignItems="center">
+        <Grid alignItems="center" container={true} flexDirection="column">
           <LoadingButton
             loading={isCreating}
             onClick={handleCreate}
-            startIcon={<Add />}
             size="small"
+            startIcon={<Add />}
           >
             {intl.formatMessage(translations.buttonLabel)}
           </LoadingButton>
@@ -227,20 +220,20 @@ const PersonalTimeEditor: FC<Props> = (props) => {
   return (
     <>
       <Tooltip
-        title={intl.formatMessage(translations.fixedDescription)}
+        arrow={true}
         placement="top"
-        arrow
+        title={intl.formatMessage(translations.fixedDescription)}
       >
         <TableCell>
           <Controller
-            name="fixed"
             control={control}
+            name="fixed"
             render={({ field, fieldState }): JSX.Element => (
               <FormCheckboxField
+                checkedIcon={<LockOutlined />}
                 field={field}
                 fieldState={fieldState}
                 icon={<LockOpenOutlined />}
-                checkedIcon={<LockOutlined />}
               />
             )}
           />
@@ -248,8 +241,8 @@ const PersonalTimeEditor: FC<Props> = (props) => {
       </Tooltip>
       <TableCell>
         <Controller
-          name="startAt"
           control={control}
+          name="startAt"
           render={({ field, fieldState }): JSX.Element => (
             <FormDateTimePickerField
               field={field}
@@ -261,8 +254,8 @@ const PersonalTimeEditor: FC<Props> = (props) => {
       </TableCell>
       <TableCell>
         <Controller
-          name="bonusEndAt"
           control={control}
+          name="bonusEndAt"
           render={({ field, fieldState }): JSX.Element => (
             <FormDateTimePickerField
               field={field}
@@ -274,14 +267,14 @@ const PersonalTimeEditor: FC<Props> = (props) => {
       </TableCell>
       <TableCell>
         <Grid
-          container
+          alignItems="center"
+          container={true}
           flexDirection="row"
           flexWrap="nowrap"
-          alignItems="center"
         >
           <Controller
-            name="endAt"
             control={control}
+            name="endAt"
             render={({ field, fieldState }): JSX.Element => (
               <FormDateTimePickerField
                 field={field}
@@ -292,21 +285,17 @@ const PersonalTimeEditor: FC<Props> = (props) => {
           />
           {isDirty && (
             <SaveButton
-              tooltip={intl.formatMessage(translations.update)}
-              disabled={isSaving || isDeleting}
-              onClick={(): UseFormHandleSubmit<IFormInputs> => handleSubmit}
               className="btn-submit"
+              disabled={isSaving || isDeleting}
               form={`personal-time-form-${item.id}-${item.personalTimeId}`}
-              type="submit"
+              onClick={(): UseFormHandleSubmit<IFormInputs> => handleSubmit}
               size="small"
               sx={styles.buttonStyle}
+              tooltip={intl.formatMessage(translations.update)}
+              type="submit"
             />
           )}
           <DeleteButton
-            tooltip={intl.formatMessage(translations.delete)}
-            disabled={isSaving || isDeleting}
-            loading={isDeleting}
-            onClick={handleDelete}
             confirmMessage={
               item.new
                 ? undefined
@@ -314,14 +303,18 @@ const PersonalTimeEditor: FC<Props> = (props) => {
                     title: item.title,
                   })
             }
+            disabled={isSaving || isDeleting}
+            loading={isDeleting}
+            onClick={handleDelete}
             size="small"
             sx={styles.buttonStyle}
+            tooltip={intl.formatMessage(translations.delete)}
           />
           <form
             encType="multipart/form-data"
             id={`personal-time-form-${item.id}-${item.personalTimeId}`}
-            noValidate
-            onSubmit={handleSubmit((data) => onSubmit(data, setError))}
+            noValidate={true}
+            onSubmit={handleSubmit((data) => onSubmit(data))}
           />
         </Grid>
       </TableCell>

@@ -1,6 +1,8 @@
 import { memo } from 'react';
 import PropTypes from 'prop-types';
+
 import CKEditorRichText from '../../core/fields/CKEditorRichText';
+
 import propsAreEqual from './utils/propsAreEqual';
 
 const FormRichTextField = (props) => {

@@ -1,15 +1,16 @@
 import { FC, memo } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
 import { Typography } from '@mui/material';
+import equal from 'fast-deep-equal';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { InvitationListData } from 'types/course/userInvitations';
+
 import DataTable from 'lib/components/core/layouts/DataTable';
 import {
   COURSE_USER_ROLES,
   TABLE_ROWS_PER_PAGE,
 } from 'lib/constants/sharedConstants';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
 import tableTranslations from 'lib/translations/table';
-import equal from 'fast-deep-equal';
-import { InvitationListData } from 'types/course/userInvitations';
 
 interface Props extends WrappedComponentProps {
   title: JSX.Element;
@@ -120,12 +121,12 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
 
   return (
     <DataTable
-      title={title}
-      data={invitations}
       columns={columns}
+      data={invitations}
+      includeRowNumber={true}
       options={options}
-      includeRowNumber
-      withMargin
+      title={title}
+      withMargin={true}
     />
   );
 };

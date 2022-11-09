@@ -1,12 +1,14 @@
-import { Paper, Button } from '@mui/material';
 import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
-import produce from 'immer';
 import { Add } from '@mui/icons-material';
-
+import { Button, Paper } from '@mui/material';
+import produce from 'immer';
 import { VideosTab } from 'types/course/admin/videos';
+
 import useTranslation from 'lib/hooks/useTranslation';
-import Tab from './Tab';
+
 import translations from '../translations';
+
+import Tab from './Tab';
 
 interface VideosTabsManagerProps {
   tabs: VideosTab[];
@@ -73,11 +75,11 @@ const VideosTabsManager = (props: VideosTabsManagerProps): JSX.Element => {
     tabs.map((tab, index) => (
       <Tab
         key={tab.id}
-        tab={tab}
+        disabled={props.disabled}
         index={index}
         onDelete={props.onDeleteTab}
         onRename={renameTab}
-        disabled={props.disabled}
+        tab={tab}
       />
     ));
 
@@ -85,9 +87,9 @@ const VideosTabsManager = (props: VideosTabsManagerProps): JSX.Element => {
     <>
       {props.canCreateTabs && (
         <Button
-          startIcon={<Add />}
-          onClick={createTab}
           disabled={props.disabled}
+          onClick={createTab}
+          startIcon={<Add />}
         >
           {t(translations.addATab)}
         </Button>
@@ -95,9 +97,9 @@ const VideosTabsManager = (props: VideosTabsManagerProps): JSX.Element => {
 
       <Paper variant="outlined">
         <DragDropContext
+          onDragEnd={rearrange}
           onDragStart={vibrate()}
           onDragUpdate={vibrate(30)}
-          onDragEnd={rearrange}
         >
           <Droppable droppableId="droppable">
             {(provided): JSX.Element => (

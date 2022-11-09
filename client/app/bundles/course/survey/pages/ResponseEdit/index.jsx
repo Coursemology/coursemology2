@@ -1,21 +1,22 @@
 import { useEffect } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { defineMessages, FormattedMessage } from 'react-intl';
 import { Card, CardContent, ListSubheader } from '@mui/material';
-import surveyTranslations from 'course/survey/translations';
-import { surveyShape, responseShape } from 'course/survey/propTypes';
+import PropTypes from 'prop-types';
+
 import {
   fetchEditableResponse,
   updateResponse,
 } from 'course/survey/actions/responses';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import withRouter from 'lib/components/navigation/withRouter';
 import ResponseForm, {
   buildInitialValues,
   buildResponsePayload,
 } from 'course/survey/containers/ResponseForm';
+import { responseShape, surveyShape } from 'course/survey/propTypes';
+import surveyTranslations from 'course/survey/translations';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import withRouter from 'lib/components/navigation/withRouter';
 
 const translations = defineMessages({
   saveSuccess: {
@@ -83,7 +84,7 @@ const ResponseEdit = (props) => {
     const initialValues = buildInitialValues(survey, response);
     return (
       <>
-        <ListSubheader disableSticky>
+        <ListSubheader disableSticky={true}>
           <FormattedMessage {...surveyTranslations.questions} />
         </ListSubheader>
         <ResponseForm

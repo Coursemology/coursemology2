@@ -1,10 +1,10 @@
-import { EntityStore } from 'types/store';
 import {
   AnnouncementData,
   AnnouncementListData,
   AnnouncementMiniEntity,
   AnnouncementPermissions,
 } from 'types/course/announcements';
+import { EntityStore } from 'types/store';
 import {
   CourseListData,
   CourseMiniEntity,
@@ -15,7 +15,7 @@ import {
   InstanceMiniEntity,
   InstancePermissions,
 } from 'types/system/instances';
-import { UserListData, UserMiniEntity, AdminStats } from 'types/users';
+import { AdminStats, UserListData, UserMiniEntity } from 'types/users';
 
 // Action Names
 export const SAVE_ANNOUNCEMENT_LIST = 'system/admin/SAVE_ANNOUNCEMENT_LIST';

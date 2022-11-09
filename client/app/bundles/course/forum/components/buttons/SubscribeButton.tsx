@@ -1,14 +1,16 @@
 import { FC, useEffect, useState } from 'react';
-import { IconButton, Tooltip } from '@mui/material';
-import { toast } from 'react-toastify';
-import { useSearchParams } from 'react-router-dom';
-import { EmailSubscriptionSetting } from 'types/course/forums';
 import { defineMessages } from 'react-intl';
-import { NotificationsActive, NotificationsOff } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { NotificationsActive, NotificationsOff } from '@mui/icons-material';
+import { IconButton, Tooltip } from '@mui/material';
+import { EmailSubscriptionSetting } from 'types/course/forums';
 import { AppDispatch } from 'types/store';
+
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import {
   updateForumSubscription,
   updateForumTopicSubscription,
@@ -125,8 +127,8 @@ const SubscribeButton: FC<Props> = ({
     subscribedTooltip = t(translations.userSettingSubscribed, {
       manageMySubscriptionLink: (
         <Link
-          opensInNewTab
           href={emailSubscription.manageEmailSubscriptionUrl ?? ''}
+          opensInNewTab={true}
         >
           {t(commonTranslations.manageMySubscriptions)}
         </Link>

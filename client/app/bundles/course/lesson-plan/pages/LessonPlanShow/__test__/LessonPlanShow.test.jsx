@@ -1,5 +1,7 @@
 import { mount } from 'enzyme';
+
 import storeCreator from 'course/lesson-plan/store';
+
 import { UnconnectedLessonPlanShow as LessonPlanShow } from '../index';
 
 const data = {
@@ -48,7 +50,11 @@ describe('<LessonPlanShow />', () => {
 
   describe('when all milestones are expanded by default', () => {
     const wrapper = mount(
-      <LessonPlanShow milestonesExpanded="all" canManageLessonPlan {...data} />,
+      <LessonPlanShow
+        canManageLessonPlan={true}
+        milestonesExpanded="all"
+        {...data}
+      />,
       contextOptions,
     );
 
@@ -60,8 +66,8 @@ describe('<LessonPlanShow />', () => {
   describe('when none of the milestones are expanded by default', () => {
     const wrapper = mount(
       <LessonPlanShow
+        canManageLessonPlan={true}
         milestonesExpanded="none"
-        canManageLessonPlan
         {...data}
       />,
       contextOptions,
@@ -75,8 +81,8 @@ describe('<LessonPlanShow />', () => {
   describe('when only of the current milestone is expanded by default', () => {
     const wrapper = mount(
       <LessonPlanShow
+        canManageLessonPlan={true}
         milestonesExpanded="current"
-        canManageLessonPlan
         {...data}
       />,
       contextOptions,

@@ -1,9 +1,9 @@
-import { History, Transition } from 'history';
 import { useCallback, useContext, useEffect } from 'react';
 import {
-  UNSAFE_NavigationContext as NavigationContext,
   Navigator,
+  UNSAFE_NavigationContext as NavigationContext,
 } from 'react-router-dom';
+import { History, Transition } from 'history';
 
 type ExtendNavigator = Navigator & Pick<History, 'block'>;
 

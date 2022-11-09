@@ -1,20 +1,21 @@
 import { useCallback, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Button } from '@mui/material';
-import { FormattedMessage, injectIntl, defineMessages } from 'react-intl';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
-import GroupUserManager from './GroupUserManager';
-import ChangeSummaryTable from './ChangeSummaryTable';
-import { categoryShape, groupShape } from '../../../propTypes';
-import actionTypes, { dialogTypes } from '../../../constants';
-import GroupFormDialog from '../../../forms/GroupFormDialog';
-import GroupCreationForm from '../../../forms/GroupCreationForm';
 import { createGroups, updateGroupMembers } from '../../../actions';
-import { combineGroups, getFinalModifiedGroups } from '../../../utils/groups';
 import GroupCard from '../../../components/GroupCard';
+import actionTypes, { dialogTypes } from '../../../constants';
+import GroupCreationForm from '../../../forms/GroupCreationForm';
+import GroupFormDialog from '../../../forms/GroupFormDialog';
+import { categoryShape, groupShape } from '../../../propTypes';
+import { combineGroups, getFinalModifiedGroups } from '../../../utils/groups';
+
+import ChangeSummaryTable from './ChangeSummaryTable';
+import GroupUserManager from './GroupUserManager';
 
 const translations = defineMessages({
   createSingleSuccess: {
@@ -241,16 +242,16 @@ const GroupManager = ({
   return (
     <>
       <GroupCard
-        title={
-          <FormattedMessage
-            {...translations.title}
-            values={{ categoryName: category.name }}
-          />
-        }
         subtitle={
           <FormattedMessage
             values={{ numGroups: groups.length }}
             {...translations.subtitle}
+          />
+        }
+        title={
+          <FormattedMessage
+            {...translations.title}
+            values={{ categoryName: category.name }}
           />
         }
         titleButtons={titleButtons}
@@ -265,11 +266,11 @@ const GroupManager = ({
         <div>
           {groups.map((group) => (
             <Button
-              variant={group.id === selectedGroupId ? 'contained' : 'outlined'}
-              color="secondary"
               key={group.id}
-              style={styles.groupButton}
+              color="secondary"
               onClick={() => handleGroupSelect(group.id)}
+              style={styles.groupButton}
+              variant={group.id === selectedGroupId ? 'contained' : 'outlined'}
             >
               {`${group.name} (${group.members.length})`}
             </Button>
@@ -285,9 +286,8 @@ const GroupManager = ({
       ) : null}
       <div style={styles.bottomButtonContainer}>
         <Button
-          variant="contained"
           color="secondary"
-          style={styles.cancelButton}
+          disabled={isUpdating}
           onClick={() => {
             if (modifiedGroups.length > 0) {
               setIsConfirmingCancel(true);
@@ -295,17 +295,18 @@ const GroupManager = ({
             }
             handleCancel();
           }}
-          disabled={isUpdating}
+          style={styles.cancelButton}
+          variant="contained"
         >
           <FormattedMessage {...translations.cancel} />
         </Button>
         <Button
-          variant="contained"
           color="primary"
           disabled={
             selectedGroup == null || modifiedGroups.length === 0 || isUpdating
           }
           onClick={() => setIsConfirmingSave(true)}
+          variant="contained"
         >
           <FormattedMessage {...translations.saveChanges} />
         </Button>
@@ -318,20 +319,24 @@ const GroupManager = ({
         expectedDialogTypes={[dialogTypes.CREATE_GROUP]}
       >
         <GroupCreationForm
-          onSubmit={onCreateFormSubmit}
+          existingGroups={groups}
           initialValues={{
             name: '',
             description: '',
             num_to_create: 0,
             is_single: true,
           }}
-          existingGroups={groups}
+          onSubmit={onCreateFormSubmit}
         />
       </GroupFormDialog>
       <ConfirmationDialog
         confirmDiscard={isConfirmingCancel}
         confirmSubmit={isConfirmingSave}
-        open={isConfirmingCancel || isConfirmingSave}
+        message={
+          isConfirmingCancel
+            ? intl.formatMessage(translations.confirmDiscard)
+            : intl.formatMessage(translations.confirmSave)
+        }
         onCancel={() => {
           if (isConfirmingCancel) {
             setIsConfirmingCancel(false);
@@ -349,11 +354,7 @@ const GroupManager = ({
             handleSave();
           }
         }}
-        message={
-          isConfirmingCancel
-            ? intl.formatMessage(translations.confirmDiscard)
-            : intl.formatMessage(translations.confirmSave)
-        }
+        open={isConfirmingCancel || isConfirmingSave}
       />
     </>
   );

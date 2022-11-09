@@ -1,27 +1,28 @@
-/* eslint-disable import/prefer-default-export */
-import CourseAPI from 'api/course';
 import { AxiosResponse } from 'axios';
 import { ForumFormData, ForumTopicFormData } from 'types/course/forums';
 import { Operation } from 'types/store';
+
+import CourseAPI from 'api/course';
+
 import {
-  saveAllForumListData,
-  saveForumListData,
-  updateForumListData,
-  saveForumData,
-  updateForumSubscription as changeForumSubscription,
-  removeForum,
-  markAllPostsAsRead,
-  markForumPostsAsRead,
-  updateForumTopicListData,
-  removeForumTopic,
-  changeForumTopicSubscription,
   changeForumTopicHidden,
   changeForumTopicLocked,
-  updateForumTopicPostIds,
+  changeForumTopicSubscription,
+  markAllPostsAsRead,
+  markForumPostsAsRead,
+  removeForum,
+  removeForumTopic,
+  removeForumTopicPost,
+  saveAllForumListData,
+  saveForumData,
+  saveForumListData,
   saveForumTopicData,
   saveForumTopicPostListData,
+  updateForumListData,
+  updateForumSubscription as changeForumSubscription,
+  updateForumTopicListData,
+  updateForumTopicPostIds,
   updateForumTopicPostListData,
-  removeForumTopicPost,
   updatePostAsAnswer,
 } from './reducers';
 

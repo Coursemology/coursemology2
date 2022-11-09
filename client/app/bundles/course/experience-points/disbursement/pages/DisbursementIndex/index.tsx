@@ -7,16 +7,18 @@ import {
 } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch } from 'types/store';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
+import { Group } from '@mui/icons-material';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { Grid, Tab, Tabs } from '@mui/material';
 import palette from 'theme/palette';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import { Group } from '@mui/icons-material';
+import { AppDispatch } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+
 import { fetchDisbursements, fetchForumDisbursements } from '../../operations';
-import GeneralDisbursement from '../GeneralDisbursement';
 import ForumDisbursement from '../ForumDisbursement';
+import GeneralDisbursement from '../GeneralDisbursement';
 
 type Props = WrappedComponentProps;
 
@@ -70,43 +72,43 @@ const DisbursementIndex: FC<Props> = (props) => {
             style={{
               backgroundColor: palette.background.default,
             }}
+            sx={{ marginBottom: 2 }}
             TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
             value={tabValue}
             variant="fullWidth"
-            sx={{ marginBottom: 2 }}
           >
             <Tab
-              id="forum-disbursement-tab"
-              style={{ color: palette.submissionIcon.person }}
               icon={<FormatListBulletedIcon />}
+              id="forum-disbursement-tab"
               label={<FormattedMessage {...translations.forumTab} />}
+              style={{ color: palette.submissionIcon.person }}
               value="forum-disbursement-tab"
             />
             <Tab
-              id="general-disbursement-tab"
-              style={{ color: palette.submissionIcon.person }}
               icon={<Group />}
+              id="general-disbursement-tab"
               label={<FormattedMessage {...translations.generalTab} />}
+              style={{ color: palette.submissionIcon.person }}
               value="general-disbursement-tab"
             />
           </Tabs>
           <Grid
-            container
-            direction="row"
             columnSpacing={2}
-            rowSpacing={2}
-            id="general-disbursement-tab"
+            container={true}
+            direction="row"
             display={tabValue === 'general-disbursement-tab' ? 'flex' : 'none'}
+            id="general-disbursement-tab"
+            rowSpacing={2}
           >
             <GeneralDisbursement />
           </Grid>
           <Grid
-            container
-            direction="column"
             columnSpacing={2}
-            rowSpacing={2}
-            id="forum-disbursement-tab"
+            container={true}
+            direction="column"
             display={tabValue === 'forum-disbursement-tab' ? 'flex' : 'none'}
+            id="forum-disbursement-tab"
+            rowSpacing={2}
           >
             <ForumDisbursement />
           </Grid>

@@ -1,17 +1,19 @@
-import { RadioGroup, Typography } from '@mui/material';
 import { Emits } from 'react-emitter-factory';
 import { Controller } from 'react-hook-form';
+import { RadioGroup, Typography } from '@mui/material';
+import { ForumsSettingsData } from 'types/course/admin/forums';
 import { number, object, string } from 'yup';
 
-import { ForumsSettingsData } from 'types/course/admin/forums';
-import useTranslation from 'lib/hooks/useTranslation';
-import FormTextField from 'lib/components/form/fields/TextField';
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
+import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
-import translations from './translations';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import commonTranslations from '../../translations';
+
+import translations from './translations';
 
 interface ForumsSettingsFormProps extends Emits<FormEmitter> {
   data: ForumsSettingsData;
@@ -31,78 +33,78 @@ const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
 
   return (
     <Form
-      initialValues={props.data}
+      disabled={props.disabled}
       emitsVia={props.emitsVia}
+      headsUp={true}
+      initialValues={props.data}
       onSubmit={props.onSubmit}
       validates={validationSchema}
-      headsUp
-      disabled={props.disabled}
     >
       {(control): JSX.Element => (
-        <Section title={t(translations.forumsSettings)} sticksToNavbar>
+        <Section sticksToNavbar={true} title={t(translations.forumsSettings)}>
           <Controller
-            name="title"
             control={control}
+            name="title"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                variant="filled"
+                fullWidth={true}
                 label={t(commonTranslations.title)}
-                fullWidth
-                disabled={props.disabled}
+                variant="filled"
               />
             )}
           />
 
           <Typography
-            variant="body2"
-            color="text.secondary"
             className="!mt-2 !mb-4"
+            color="text.secondary"
+            variant="body2"
           >
             {t(commonTranslations.leaveEmptyToUseDefaultTitle)}
           </Typography>
 
           <Controller
-            name="pagination"
             control={control}
+            name="pagination"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                variant="filled"
+                fullWidth={true}
                 label={t(commonTranslations.pagination)}
                 type="number"
-                fullWidth
-                disabled={props.disabled}
+                variant="filled"
               />
             )}
           />
 
           <Subsection
-            title={t(translations.markPostAsAnswerSetting)}
             className="!mt-8"
-            spaced
+            spaced={true}
+            title={t(translations.markPostAsAnswerSetting)}
           >
             <Controller
-              name="markPostAsAnswerSetting"
               control={control}
+              name="markPostAsAnswerSetting"
               render={({ field }): JSX.Element => (
                 <RadioGroup {...field} className="space-y-5">
                   <RadioButton
-                    value="creator_only"
-                    label={t(translations.creatorOnly)}
-                    description={t(translations.creatorOnlyDescription)}
                     className="my-0"
+                    description={t(translations.creatorOnlyDescription)}
                     disabled={props.disabled}
+                    label={t(translations.creatorOnly)}
+                    value="creator_only"
                   />
 
                   <RadioButton
-                    value="everyone"
-                    label={t(translations.everyone)}
-                    description={t(translations.everyoneDescription)}
                     className="my-0"
+                    description={t(translations.everyoneDescription)}
                     disabled={props.disabled}
+                    label={t(translations.everyone)}
+                    value="everyone"
                   />
                 </RadioGroup>
               )}

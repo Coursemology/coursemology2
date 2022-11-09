@@ -1,27 +1,27 @@
-/* eslint react/sort-comp: "off" */
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Grid, Icon, Tooltip } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
-import SavingIndicator from './SavingIndicator';
-import ToolDropdown from './ToolDropdown';
-import LayersComponent from './LayersComponent';
-import TypePopover from './popovers/TypePopover';
+import PropTypes from 'prop-types';
+
+import {
+  scribingPopoverTypes,
+  scribingShapes,
+  scribingToolColor,
+  scribingToolLineStyle,
+  scribingTools,
+  scribingToolThickness,
+} from '../../constants';
+import { scribingShape } from '../../propTypes';
+import { scribingTranslations as translations } from '../../translations';
+
 import DrawPopover from './popovers/DrawPopover';
 import LinePopover from './popovers/LinePopover';
 import ShapePopover from './popovers/ShapePopover';
-
-import { scribingShape } from '../../propTypes';
-import { scribingTranslations as translations } from '../../translations';
-import {
-  scribingTools,
-  scribingShapes,
-  scribingToolColor,
-  scribingToolThickness,
-  scribingToolLineStyle,
-  scribingPopoverTypes,
-} from '../../constants';
+import TypePopover from './popovers/TypePopover';
+import LayersComponent from './LayersComponent';
+import SavingIndicator from './SavingIndicator';
+import ToolDropdown from './ToolDropdown';
 
 const propTypes = {
   intl: PropTypes.object.isRequired,
@@ -349,10 +349,10 @@ class ScribingToolbar extends Component {
 
     return (
       <Grid
-        container
+        alignItems="center"
+        container={true}
         direction="row"
         justifyContent="space-between"
-        alignItems="center"
         style={{
           ...toolBarStyle,
           backgroundColor: grey[200],
@@ -363,117 +363,117 @@ class ScribingToolbar extends Component {
         }}
       >
         <Grid
-          item
-          xs={3}
+          item={true}
           style={{ display: 'flex', justifyContent: 'flex-end' }}
+          xs={3}
         >
           <ToolDropdown
             activeObject={scribing.activeObject}
+            colorBarBackground={
+              this.props.scribing.colors[scribingToolColor.TYPE]
+            }
+            currentTool={this.props.scribing.selectedTool}
             disabled={
               (scribing.activeObject &&
                 scribing.activeObject.type !== 'i-text') ||
               false
             }
-            toolType={scribingTools.TYPE}
-            tooltip={<FormattedMessage {...translations.text} />}
-            currentTool={this.props.scribing.selectedTool}
-            onClickIcon={this.onClickTypingIcon}
-            colorBarBackground={
-              this.props.scribing.colors[scribingToolColor.TYPE]
-            }
-            onClickChevron={this.onClickTypingChevron}
             iconClassname="fa fa-font"
+            onClickChevron={this.onClickTypingChevron}
+            onClickIcon={this.onClickTypingIcon}
+            tooltip={<FormattedMessage {...translations.text} />}
+            toolType={scribingTools.TYPE}
           />
           {scribing.activeObject && scribing.activeObject.type === 'i-text' ? (
             <TypePopover
               {...typePopoverProps}
-              onRequestClose={() => {
-                this.props.setCanvasSave(this.props.answerId);
-                this.setToSelectTool();
-                this.onRequestClosePopover(scribingPopoverTypes.TYPE);
-              }}
-              fontFamilyValue={scribing.activeObject.fontFamily}
-              onChangeFontFamily={(event) => {
-                scribing.activeObject.set({ fontFamily: event.target.value });
-                this.props.setCanvasDirty(this.props.answerId);
-              }}
-              fontSizeValue={scribing.activeObject.fontSize}
-              onChangeFontSize={(event) => {
-                scribing.activeObject.set({ fontSize: event.target.value });
-                this.props.setCanvasDirty(this.props.answerId);
-              }}
               colorPickerColor={scribing.activeObject.fill}
+              fontFamilyValue={scribing.activeObject.fontFamily}
+              fontSizeValue={scribing.activeObject.fontSize}
               onChangeCompleteColorPicker={(color) => {
                 scribing.activeObject.set({ fill: color });
                 this.props.setCanvasDirty(this.props.answerId);
                 this.onRequestCloseColorPicker(scribingToolColor.TYPE);
               }}
+              onChangeFontFamily={(event) => {
+                scribing.activeObject.set({ fontFamily: event.target.value });
+                this.props.setCanvasDirty(this.props.answerId);
+              }}
+              onChangeFontSize={(event) => {
+                scribing.activeObject.set({ fontSize: event.target.value });
+                this.props.setCanvasDirty(this.props.answerId);
+              }}
+              onRequestClose={() => {
+                this.props.setCanvasSave(this.props.answerId);
+                this.setToSelectTool();
+                this.onRequestClosePopover(scribingPopoverTypes.TYPE);
+              }}
             />
           ) : (
             <TypePopover
               {...typePopoverProps}
-              onRequestClose={() =>
-                this.onRequestClosePopover(scribingPopoverTypes.TYPE)
-              }
-              fontFamilyValue={this.props.scribing.fontFamily}
-              onChangeFontFamily={this.onChangeFontFamily}
-              fontSizeValue={this.props.scribing.fontSize}
-              onChangeFontSize={this.onChangeFontSize}
               colorPickerColor={
                 this.props.scribing.colors[scribingToolColor.TYPE]
               }
+              fontFamilyValue={this.props.scribing.fontFamily}
+              fontSizeValue={this.props.scribing.fontSize}
               onChangeCompleteColorPicker={(color) =>
                 this.onChangeCompleteColor(color, scribingToolColor.TYPE)
+              }
+              onChangeFontFamily={this.onChangeFontFamily}
+              onChangeFontSize={this.onChangeFontSize}
+              onRequestClose={() =>
+                this.onRequestClosePopover(scribingPopoverTypes.TYPE)
               }
             />
           )}
           <ToolDropdown
             activeObject={scribing.activeObject}
+            colorBarBackground={
+              this.props.scribing.colors[scribingToolColor.DRAW]
+            }
+            currentTool={this.props.scribing.selectedTool}
             disabled={
               (scribing.activeObject &&
                 scribing.activeObject.type !== 'path') ||
               false
             }
-            toolType={scribingTools.DRAW}
-            tooltip={<FormattedMessage {...translations.pencil} />}
-            currentTool={this.props.scribing.selectedTool}
+            iconClassname="fa fa-pencil"
             onClick={this.onClickDrawingMode}
-            colorBarBackground={
-              this.props.scribing.colors[scribingToolColor.DRAW]
-            }
             onClickChevron={(event) =>
               this.onClickPopover(event, scribingPopoverTypes.DRAW)
             }
-            iconClassname="fa fa-pencil"
+            tooltip={<FormattedMessage {...translations.pencil} />}
+            toolType={scribingTools.DRAW}
           />
           {scribing.activeObject && scribing.activeObject.type === 'path' ? (
             <DrawPopover
               {...drawPopoverProps}
-              onRequestClose={() => {
-                this.props.setCanvasSave(this.props.answerId);
-                this.setToSelectTool();
-                this.onRequestClosePopover(scribingPopoverTypes.DRAW);
-              }}
-              toolThicknessValue={scribing.activeObject.strokeWidth}
-              onChangeSliderThickness={(event, newValue) => {
-                scribing.activeObject.set({ strokeWidth: newValue });
-                this.props.setCanvasDirty(this.props.answerId);
-              }}
               colorPickerColor={scribing.activeObject.stroke}
               onChangeCompleteColorPicker={(color) => {
                 scribing.activeObject.set({ stroke: color });
                 this.props.setCanvasDirty(this.props.answerId);
                 this.onRequestCloseColorPicker(scribingToolColor.DRAW);
               }}
+              onChangeSliderThickness={(event, newValue) => {
+                scribing.activeObject.set({ strokeWidth: newValue });
+                this.props.setCanvasDirty(this.props.answerId);
+              }}
+              onRequestClose={() => {
+                this.props.setCanvasSave(this.props.answerId);
+                this.setToSelectTool();
+                this.onRequestClosePopover(scribingPopoverTypes.DRAW);
+              }}
+              toolThicknessValue={scribing.activeObject.strokeWidth}
             />
           ) : (
             <DrawPopover
               {...drawPopoverProps}
-              onRequestClose={() =>
-                this.onRequestClosePopover(scribingPopoverTypes.DRAW)
+              colorPickerColor={
+                this.props.scribing.colors[scribingToolColor.DRAW]
               }
-              toolThicknessValue={
-                this.props.scribing.thickness[scribingToolThickness.DRAW]
+              onChangeCompleteColorPicker={(color) =>
+                this.onChangeCompleteColor(color, scribingToolColor.DRAW)
               }
               onChangeSliderThickness={(event, newValue) =>
                 this.onChangeSliderThickness(
@@ -482,31 +482,25 @@ class ScribingToolbar extends Component {
                   newValue,
                 )
               }
-              colorPickerColor={
-                this.props.scribing.colors[scribingToolColor.DRAW]
+              onRequestClose={() =>
+                this.onRequestClosePopover(scribingPopoverTypes.DRAW)
               }
-              onChangeCompleteColorPicker={(color) =>
-                this.onChangeCompleteColor(color, scribingToolColor.DRAW)
+              toolThicknessValue={
+                this.props.scribing.thickness[scribingToolThickness.DRAW]
               }
             />
           )}
 
           <ToolDropdown
             activeObject={scribing.activeObject}
+            colorBarBackground={
+              this.props.scribing.colors[scribingToolColor.LINE]
+            }
+            currentTool={this.props.scribing.selectedTool}
             disabled={
               (scribing.activeObject &&
                 scribing.activeObject.type !== 'line') ||
               false
-            }
-            toolType={scribingTools.LINE}
-            tooltip={<FormattedMessage {...translations.line} />}
-            currentTool={this.props.scribing.selectedTool}
-            onClick={this.onClickLineMode}
-            colorBarBackground={
-              this.props.scribing.colors[scribingToolColor.LINE]
-            }
-            onClickChevron={(event) =>
-              this.onClickPopover(event, scribingPopoverTypes.LINE)
             }
             iconComponent={() => (
               <div
@@ -517,16 +511,29 @@ class ScribingToolbar extends Component {
                 }
               />
             )}
+            onClick={this.onClickLineMode}
+            onClickChevron={(event) =>
+              this.onClickPopover(event, scribingPopoverTypes.LINE)
+            }
+            tooltip={<FormattedMessage {...translations.line} />}
+            toolType={scribingTools.LINE}
           />
           {scribing.activeObject && scribing.activeObject.type === 'line' ? (
             <LinePopover
               {...linePopoverProps}
-              onRequestClose={() => {
-                this.props.setCanvasSave(this.props.answerId);
-                this.setToSelectTool();
-                this.onRequestClosePopover(scribingPopoverTypes.LINE);
+              colorPickerColor={scribing.activeObject.stroke}
+              onChangeCompleteColorPicker={(color) => {
+                scribing.activeObject.set({ stroke: color });
+                this.props.setCanvasDirty(this.props.answerId);
+                this.onRequestCloseColorPicker(scribingToolColor.LINE);
               }}
-              selectedLineStyle={this.getActiveObjectSelectedLineStyle()}
+              onChangeSliderThickness={(event, newValue) => {
+                scribing.activeObject.set({ strokeWidth: newValue });
+                this.props.setCanvasDirty(this.props.answerId);
+              }}
+              onClickColorPicker={(event) =>
+                this.onClickColorPicker(event, scribingToolColor.LINE)
+              }
               onClickLineStyleChip={(_, __, style) => {
                 let strokeDashArray = [];
                 if (style === 'dotted') {
@@ -537,33 +544,22 @@ class ScribingToolbar extends Component {
                 scribing.activeObject.set({ strokeDashArray });
                 this.props.setCanvasDirty(this.props.answerId);
               }}
+              onRequestClose={() => {
+                this.props.setCanvasSave(this.props.answerId);
+                this.setToSelectTool();
+                this.onRequestClosePopover(scribingPopoverTypes.LINE);
+              }}
+              selectedLineStyle={this.getActiveObjectSelectedLineStyle()}
               toolThicknessValue={scribing.activeObject.strokeWidth}
-              onChangeSliderThickness={(event, newValue) => {
-                scribing.activeObject.set({ strokeWidth: newValue });
-                this.props.setCanvasDirty(this.props.answerId);
-              }}
-              colorPickerColor={scribing.activeObject.stroke}
-              onClickColorPicker={(event) =>
-                this.onClickColorPicker(event, scribingToolColor.LINE)
-              }
-              onChangeCompleteColorPicker={(color) => {
-                scribing.activeObject.set({ stroke: color });
-                this.props.setCanvasDirty(this.props.answerId);
-                this.onRequestCloseColorPicker(scribingToolColor.LINE);
-              }}
             />
           ) : (
             <LinePopover
               {...linePopoverProps}
-              onRequestClose={() =>
-                this.onRequestClosePopover(scribingPopoverTypes.LINE)
+              colorPickerColor={
+                this.props.scribing.colors[scribingToolColor.LINE]
               }
-              selectedLineStyle={
-                this.props.scribing.lineStyles[scribingToolLineStyle.LINE]
-              }
-              onClickLineStyleChip={this.onClickLineStyleChip}
-              toolThicknessValue={
-                this.props.scribing.thickness[scribingToolThickness.LINE]
+              onChangeCompleteColorPicker={(color) =>
+                this.onChangeCompleteColor(color, scribingToolColor.LINE)
               }
               onChangeSliderThickness={(event, newValue) =>
                 this.onChangeSliderThickness(
@@ -572,54 +568,67 @@ class ScribingToolbar extends Component {
                   newValue,
                 )
               }
-              colorPickerColor={
-                this.props.scribing.colors[scribingToolColor.LINE]
-              }
               onClickColorPicker={(event) =>
                 this.onClickColorPicker(event, scribingToolColor.LINE)
               }
-              onChangeCompleteColorPicker={(color) =>
-                this.onChangeCompleteColor(color, scribingToolColor.LINE)
+              onClickLineStyleChip={this.onClickLineStyleChip}
+              onRequestClose={() =>
+                this.onRequestClosePopover(scribingPopoverTypes.LINE)
+              }
+              selectedLineStyle={
+                this.props.scribing.lineStyles[scribingToolLineStyle.LINE]
+              }
+              toolThicknessValue={
+                this.props.scribing.thickness[scribingToolThickness.LINE]
               }
             />
           )}
 
           <ToolDropdown
             activeObject={scribing.activeObject}
+            colorBarBackground={
+              this.props.scribing.colors[scribingToolColor.SHAPE_FILL]
+            }
+            colorBarBorder={
+              this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]
+            }
+            currentTool={this.props.scribing.selectedTool}
             disabled={
               (scribing.activeObject &&
                 scribing.activeObject.type !== 'rect' &&
                 scribing.activeObject.type !== 'ellipse') ||
               false
             }
-            toolType={scribingTools.SHAPE}
-            tooltip={<FormattedMessage {...translations.shape} />}
-            currentTool={this.props.scribing.selectedTool}
+            iconClassname={shapeIcon}
             onClick={this.onClickShapeMode}
-            colorBarBorder={
-              this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]
-            }
-            colorBarBackground={
-              this.props.scribing.colors[scribingToolColor.SHAPE_FILL]
-            }
             onClickChevron={(event) =>
               this.onClickPopover(event, scribingPopoverTypes.SHAPE)
             }
-            iconClassname={shapeIcon}
+            tooltip={<FormattedMessage {...translations.shape} />}
+            toolType={scribingTools.SHAPE}
           />
           {scribing.activeObject &&
           (scribing.activeObject.type === 'rect' ||
             scribing.activeObject.type === 'ellipse') ? (
             <ShapePopover
               {...shapePopoverProps}
-              onRequestClose={() => {
-                this.props.setCanvasSave(this.props.answerId);
-                this.setToSelectTool();
-                this.onRequestClosePopover(scribingPopoverTypes.SHAPE);
-                this.props.setNoFill(this.props.answerId, false);
-              }}
+              borderColorPickerColor={scribing.activeObject.stroke}
               displayShapeField={false}
-              selectedLineStyle={this.getActiveObjectSelectedLineStyle()}
+              fillColorPickerColor={scribing.activeObject.fill}
+              onChangeCompleteBorderColorPicker={(color) => {
+                scribing.activeObject.set({ stroke: color });
+                this.props.setCanvasDirty(this.props.answerId);
+                this.onRequestCloseColorPicker(scribingToolColor.SHAPE_BORDER);
+              }}
+              onChangeCompleteFillColorPicker={(color) => {
+                scribing.activeObject.set({ fill: color });
+                this.props.setCanvasDirty(this.props.answerId);
+                this.onRequestCloseColorPicker(scribingToolColor.SHAPE_FILL);
+              }}
+              onChangeSliderThickness={(event, newValue) => {
+                scribing.activeObject.set({ strokeWidth: newValue });
+                this.props.setCanvasDirty(this.props.answerId);
+              }}
               onClickLineStyleChip={(_, __, style) => {
                 let strokeDashArray = [];
                 if (style === 'dotted') {
@@ -630,42 +639,33 @@ class ScribingToolbar extends Component {
                 scribing.activeObject.set({ strokeDashArray });
                 this.props.setCanvasDirty(this.props.answerId);
               }}
+              onRequestClose={() => {
+                this.props.setCanvasSave(this.props.answerId);
+                this.setToSelectTool();
+                this.onRequestClosePopover(scribingPopoverTypes.SHAPE);
+                this.props.setNoFill(this.props.answerId, false);
+              }}
+              selectedLineStyle={this.getActiveObjectSelectedLineStyle()}
               toolThicknessValue={scribing.activeObject.strokeWidth}
-              onChangeSliderThickness={(event, newValue) => {
-                scribing.activeObject.set({ strokeWidth: newValue });
-                this.props.setCanvasDirty(this.props.answerId);
-              }}
-              borderColorPickerColor={scribing.activeObject.stroke}
-              onChangeCompleteBorderColorPicker={(color) => {
-                scribing.activeObject.set({ stroke: color });
-                this.props.setCanvasDirty(this.props.answerId);
-                this.onRequestCloseColorPicker(scribingToolColor.SHAPE_BORDER);
-              }}
-              fillColorPickerColor={scribing.activeObject.fill}
-              onChangeCompleteFillColorPicker={(color) => {
-                scribing.activeObject.set({ fill: color });
-                this.props.setCanvasDirty(this.props.answerId);
-                this.onRequestCloseColorPicker(scribingToolColor.SHAPE_FILL);
-              }}
             />
           ) : (
             <ShapePopover
               {...shapePopoverProps}
-              onRequestClose={() => {
-                this.onRequestClosePopover(scribingPopoverTypes.SHAPE);
-                this.props.setNoFill(this.props.answerId, false);
-              }}
-              displayShapeField
-              selectedLineStyle={
-                this.props.scribing.lineStyles[
-                  scribingToolLineStyle.SHAPE_BORDER
-                ]
+              borderColorPickerColor={
+                this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]
               }
-              onClickLineStyleChip={this.onClickLineStyleChip}
-              toolThicknessValue={
-                this.props.scribing.thickness[
-                  scribingToolThickness.SHAPE_BORDER
-                ]
+              displayShapeField={true}
+              fillColorPickerColor={
+                this.props.scribing.colors[scribingToolColor.SHAPE_FILL]
+              }
+              onChangeCompleteBorderColorPicker={(color) =>
+                this.onChangeCompleteColor(
+                  color,
+                  scribingToolColor.SHAPE_BORDER,
+                )
+              }
+              onChangeCompleteFillColorPicker={(color) =>
+                this.onChangeCompleteColor(color, scribingToolColor.SHAPE_FILL)
               }
               onChangeSliderThickness={(event, newValue) =>
                 this.onChangeSliderThickness(
@@ -674,39 +674,35 @@ class ScribingToolbar extends Component {
                   newValue,
                 )
               }
-              borderColorPickerColor={
-                this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]
+              onClickLineStyleChip={this.onClickLineStyleChip}
+              onRequestClose={() => {
+                this.onRequestClosePopover(scribingPopoverTypes.SHAPE);
+                this.props.setNoFill(this.props.answerId, false);
+              }}
+              selectedLineStyle={
+                this.props.scribing.lineStyles[
+                  scribingToolLineStyle.SHAPE_BORDER
+                ]
               }
-              onChangeCompleteBorderColorPicker={(color) =>
-                this.onChangeCompleteColor(
-                  color,
-                  scribingToolColor.SHAPE_BORDER,
-                )
-              }
-              fillColorPickerColor={
-                this.props.scribing.colors[scribingToolColor.SHAPE_FILL]
-              }
-              onChangeCompleteFillColorPicker={(color) =>
-                this.onChangeCompleteColor(color, scribingToolColor.SHAPE_FILL)
+              toolThicknessValue={
+                this.props.scribing.thickness[
+                  scribingToolThickness.SHAPE_BORDER
+                ]
               }
             />
           )}
         </Grid>
-        <Grid item xs={3}>
+        <Grid item={true} xs={3}>
           <LayersComponent
-            onClick={(event) =>
-              this.onClickPopover(event, scribingPopoverTypes.LAYER)
-            }
+            anchorEl={this.state.popoverAnchor}
             disabled={
               this.props.scribing.layers &&
               this.props.scribing.layers.length === 0
             }
-            open={this.state.popovers[scribingPopoverTypes.LAYER]}
-            anchorEl={this.state.popoverAnchor}
-            onRequestClose={() =>
-              this.onRequestClosePopover(scribingPopoverTypes.LAYER)
-            }
             layers={this.props.scribing.layers}
+            onClick={(event) =>
+              this.onClickPopover(event, scribingPopoverTypes.LAYER)
+            }
             onClickLayer={(layer) => {
               this.props.scribing.layers.forEach((l) => {
                 if (l.creator_id === layer.creator_id) {
@@ -720,9 +716,17 @@ class ScribingToolbar extends Component {
                 }
               });
             }}
+            onRequestClose={() =>
+              this.onRequestClosePopover(scribingPopoverTypes.LAYER)
+            }
+            open={this.state.popovers[scribingPopoverTypes.LAYER]}
           />
         </Grid>
-        <Grid item xs={2} style={{ display: 'flex', justifyContent: 'center' }}>
+        <Grid
+          item={true}
+          style={{ display: 'flex', justifyContent: 'center' }}
+          xs={2}
+        >
           <Tooltip
             placement="top"
             title={<FormattedMessage {...translations.select} />}
@@ -768,19 +772,23 @@ class ScribingToolbar extends Component {
             />
           </Tooltip>
         </Grid>
-        <Grid item xs={2} style={{ display: 'flex', justifyContent: 'center' }}>
+        <Grid
+          item={true}
+          style={{ display: 'flex', justifyContent: 'center' }}
+          xs={2}
+        >
           <Tooltip
             placement="top"
             title={<FormattedMessage {...translations.move} />}
           >
             <Icon
               className="fa fa-arrows"
+              onClick={this.onClickMoveMode}
               style={
                 this.props.scribing.selectedTool === scribingTools.MOVE
                   ? { color: blue[500], ...styles.tool }
                   : styles.tool
               }
-              onClick={this.onClickMoveMode}
             />
           </Tooltip>
           <Tooltip
@@ -804,7 +812,7 @@ class ScribingToolbar extends Component {
             />
           </Tooltip>
         </Grid>
-        <Grid item xs={1}>
+        <Grid item={true} xs={1}>
           <Tooltip
             placement="top"
             title={<FormattedMessage {...translations.delete} />}
@@ -816,11 +824,11 @@ class ScribingToolbar extends Component {
             />
           </Tooltip>
         </Grid>
-        <Grid item xs={1}>
+        <Grid item={true} xs={1}>
           <SavingIndicator
-            isSaving={this.props.scribing.isSaving}
-            isSaved={this.props.scribing.isSaved}
             hasError={this.props.scribing.hasError}
+            isSaved={this.props.scribing.isSaved}
+            isSaving={this.props.scribing.isSaving}
           />
         </Grid>
       </Grid>

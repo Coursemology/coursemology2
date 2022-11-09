@@ -1,6 +1,4 @@
 import { AxiosError } from 'axios';
-
-import CourseAPI from 'api/course';
 import {
   AssessmentCategory,
   AssessmentCategoryPostData,
@@ -12,6 +10,8 @@ import {
   MoveAssessmentsPostData,
   MoveTabsPostData,
 } from 'types/course/admin/assessments';
+
+import CourseAPI from 'api/course';
 
 type Data = Promise<AssessmentSettingsData>;
 

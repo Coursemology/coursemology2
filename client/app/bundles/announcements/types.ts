@@ -1,8 +1,8 @@
-import { EntityStore } from 'types/store';
 import {
   AnnouncementListData,
   AnnouncementMiniEntity,
 } from 'types/course/announcements';
+import { EntityStore } from 'types/store';
 
 // Action Names
 export const SAVE_ANNOUNCEMENT_LIST = 'system/admin/SAVE_ANNOUNCEMENTS_LIST';

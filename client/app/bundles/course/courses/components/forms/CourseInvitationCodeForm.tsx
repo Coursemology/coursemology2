@@ -1,11 +1,13 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC, useState } from 'react';
-import { Button, TextField } from '@mui/material';
-import { toast } from 'react-toastify';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { Button, TextField } from '@mui/material';
 import { AppDispatch } from 'types/store';
-import { getCourseId } from 'lib/helpers/url-helpers';
+
 import { getRegistrationURL } from 'lib/helpers/url-builders';
+import { getCourseId } from 'lib/helpers/url-helpers';
+
 import { sendNewRegistrationCode } from '../../operations';
 
 interface Props extends WrappedComponentProps {}
@@ -58,21 +60,21 @@ const CourseInvitationCodeForm: FC<Props> = (props) => {
       <TextField
         id="registration-code"
         label={intl.formatMessage(translations.placeholder)}
-        variant="outlined"
-        size="small"
-        value={code}
         onChange={(event): void => {
           setCode(event.target.value);
         }}
+        size="small"
         style={{ marginRight: 5 }}
+        value={code}
+        variant="outlined"
       />
 
       <Button
         id="register-button"
-        size="small"
-        variant="contained"
         onClick={handleSubmit}
+        size="small"
         style={{ height: 40 }}
+        variant="contained"
       >
         {intl.formatMessage(translations.registerButton)}
       </Button>

@@ -1,18 +1,20 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { LeaderboardSettingsData } from 'types/course/admin/leaderboard';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { FormEmitter } from 'lib/components/form/Form';
+import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
-import { FormEmitter } from 'lib/components/form/Form';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import Preload from 'lib/components/wrappers/Preload';
+
+import { useItemsReloader } from '../../components/SettingsNavigation';
+
 import LeaderboardSettingsForm from './LeaderboardSettingsForm';
 import {
   fetchLeaderboardSettings,
   updateLeaderboardSettings,
 } from './operations';
-import { useItemsReloader } from '../../components/SettingsNavigation';
 
 const LeaderboardSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
@@ -35,13 +37,13 @@ const LeaderboardSettings = (): JSX.Element => {
   };
 
   return (
-    <Preload while={fetchLeaderboardSettings} render={<LoadingIndicator />}>
+    <Preload render={<LoadingIndicator />} while={fetchLeaderboardSettings}>
       {(data): JSX.Element => (
         <LeaderboardSettingsForm
           data={data}
-          onSubmit={handleSubmit}
-          emitsVia={setForm}
           disabled={submitting}
+          emitsVia={setForm}
+          onSubmit={handleSubmit}
         />
       )}
     </Preload>

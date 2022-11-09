@@ -1,7 +1,9 @@
 import { AxiosResponse } from 'axios';
-import CourseAPI from 'api/course';
 import { AchievementFormData } from 'types/course/achievements';
 import { Operation } from 'types/store';
+
+import CourseAPI from 'api/course';
+
 import * as actions from './actions';
 import { SaveAchievementAction } from './types';
 

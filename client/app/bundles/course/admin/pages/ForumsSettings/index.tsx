@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { ForumsSettingsData } from 'types/course/admin/forums';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { FormEmitter } from 'lib/components/form/Form';
+import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations/form';
-import { FormEmitter } from 'lib/components/form/Form';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import Preload from 'lib/components/wrappers/Preload';
+
+import { useItemsReloader } from '../../components/SettingsNavigation';
+
 import ForumsSettingsForm from './ForumsSettingsForm';
 import { fetchForumsSettings, updateForumsSettings } from './operations';
-import { useItemsReloader } from '../../components/SettingsNavigation';
 
 const ForumsSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
@@ -32,13 +34,13 @@ const ForumsSettings = (): JSX.Element => {
   };
 
   return (
-    <Preload while={fetchForumsSettings} render={<LoadingIndicator />}>
+    <Preload render={<LoadingIndicator />} while={fetchForumsSettings}>
       {(data): JSX.Element => (
         <ForumsSettingsForm
           data={data}
-          onSubmit={handleSubmit}
-          emitsVia={setForm}
           disabled={submitting}
+          emitsVia={setForm}
+          onSubmit={handleSubmit}
         />
       )}
     </Preload>

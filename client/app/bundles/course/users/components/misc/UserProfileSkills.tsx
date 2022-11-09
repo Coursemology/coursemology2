@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { UserSkillBranchMiniEntity } from 'types/course/assessment/skills/userSkills';
+
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 
 interface Props extends WrappedComponentProps {
@@ -40,7 +41,7 @@ const UserProfileSkills: FC<Props> = ({ skillBranches, intl }: Props) => {
 
   return (
     <>
-      <Typography variant="h4" component="h2">
+      <Typography component="h2" variant="h4">
         {intl.formatMessage(translations.topicMasteryHeader)}
       </Typography>
       <Table>

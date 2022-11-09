@@ -1,16 +1,18 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import PageHeader from 'lib/components/navigation/PageHeader';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState, AppDispatch } from 'types/store';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { AppDispatch, AppState } from 'types/store';
+
 import AddButton from 'lib/components/core/buttons/AddButton';
-import useTranslation from 'lib/hooks/useTranslation';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
-import { indexInstances } from '../../operations';
-import InstancesTable from '../../components/tables/InstancesTable';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import InstancesButtons from '../../components/buttons/InstancesButtons';
+import InstancesTable from '../../components/tables/InstancesTable';
+import { indexInstances } from '../../operations';
 import { getAdminCounts, getPermissions } from '../../selectors';
 import InstanceNew from '../InstanceNew';
 
@@ -51,9 +53,9 @@ const InstancesIndex: FC = () => {
   if (permissions.canCreateInstances) {
     headerToolbars.push(
       <AddButton
+        key="new-instance-button"
         className="text-white"
         id="new-instance-button"
-        key="new-instance-button"
         onClick={(): void => {
           setIsOpen(true);
         }}
@@ -65,15 +67,15 @@ const InstancesIndex: FC = () => {
   const renderBody: JSX.Element = (
     <>
       <InstancesTable
-        title={t(translations.title, {
-          count: counts.instancesCount,
-        })}
         renderRowActionComponent={(instance): JSX.Element => (
           <InstancesButtons instance={instance} />
         )}
+        title={t(translations.title, {
+          count: counts.instancesCount,
+        })}
       />
       {isOpen && (
-        <InstanceNew open={isOpen} onClose={(): void => setIsOpen(false)} />
+        <InstanceNew onClose={(): void => setIsOpen(false)} open={isOpen} />
       )}
     </>
   );

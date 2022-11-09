@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
-import { selectArrow } from 'course/learning-map/actions';
 import Xarrow from 'react-xarrows';
 import PropTypes from 'prop-types';
+
+import { selectArrow } from 'course/learning-map/actions';
+
 import { elementTypes } from '../../constants';
 import {
   arrowPropertiesShape,
@@ -48,14 +50,6 @@ const NodeToGateArrows = (props) => {
           return (
             <Xarrow
               key={arrowId}
-              start={getNodeConnectionPointId(node.id)}
-              startAnchor={arrowAnchorPositions}
-              end={getGateInputId(
-                nodeIdsToIsSummaryGate[child.id],
-                node.id,
-                child.id,
-              )}
-              endAnchor={arrowAnchorPositions}
               color={
                 selectedElement.type === elementTypes.arrow &&
                 selectedElement.id === arrowId
@@ -69,8 +63,16 @@ const NodeToGateArrows = (props) => {
                 cursor: canModify && 'pointer',
                 zIndex: node.depth + 2,
               }}
+              end={getGateInputId(
+                nodeIdsToIsSummaryGate[child.id],
+                node.id,
+                child.id,
+              )}
+              endAnchor={arrowAnchorPositions}
               headSize={arrowProperties.headSize}
               passProps={{ onClick: (event) => onArrowClick(event, arrowId) }}
+              start={getNodeConnectionPointId(node.id)}
+              startAnchor={arrowAnchorPositions}
               strokeWidth={arrowProperties.strokeWidth * scale}
               SVGcanvasStyle={{ transform: `scale(${1 / scale})` }}
             />

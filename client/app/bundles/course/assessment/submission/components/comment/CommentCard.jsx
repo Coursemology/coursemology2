@@ -1,12 +1,13 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import PropTypes from 'prop-types';
-import { Avatar, Button, CardHeader } from '@mui/material';
-import { grey, orange, red } from '@mui/material/colors';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
-import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import { Avatar, Button, CardHeader } from '@mui/material';
+import { grey, orange, red } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import { formatLongDateTime } from 'lib/moment';
 
 import { postShape } from '../../propTypes';
@@ -173,13 +174,13 @@ export default class CommentCard extends Component {
         <div style={isDelayed ? styles.delayedHeader : styles.header}>
           <CardHeader
             avatar={<Avatar src={imageUrl} style={styles.avatar} />}
-            title={name}
-            titleTypographyProps={{ display: 'block', marginright: 20 }}
+            style={styles.cardHeader}
             subheader={`${formatLongDateTime(createdAt)}${
               isDelayed ? ' (delayed comment)' : ''
             }`}
             subheaderTypographyProps={{ display: 'block' }}
-            style={styles.cardHeader}
+            title={name}
+            titleTypographyProps={{ display: 'block', marginright: 20 }}
           />
           <div style={styles.buttonContainer}>
             {canUpdate ? (
@@ -204,11 +205,11 @@ export default class CommentCard extends Component {
         </div>
         <div style={styles.commentContent}>{this.renderCommentContent()}</div>
         <ConfirmationDialog
-          confirmDelete
-          open={this.state.deleteConfirmation}
+          confirmDelete={true}
           message={<FormattedMessage {...translations.deleteConfirmation} />}
           onCancel={() => this.setState({ deleteConfirmation: false })}
           onConfirm={() => this.onConfirmDelete()}
+          open={this.state.deleteConfirmation}
         />
       </div>
     );

@@ -1,8 +1,8 @@
 import { useRef } from 'react';
-import PropTypes from 'prop-types';
+import Photo from '@mui/icons-material/Photo';
 import { IconButton } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import Photo from '@mui/icons-material/Photo';
+import PropTypes from 'prop-types';
 
 const styles = {
   imageUploaderDiv: {
@@ -31,15 +31,15 @@ const RenderImageField = (props) => {
         </IconButton>
       </label>
       <input
+        ref={inputRef}
         id={fieldId}
-        type="file"
-        style={styles.imageUploader}
         onChange={(event) => {
           const image = event.target.files[0];
           field.onChange(image);
           field.onBlur();
         }}
-        ref={inputRef}
+        style={styles.imageUploader}
+        type="file"
         {...{ disabled }}
       />
     </div>

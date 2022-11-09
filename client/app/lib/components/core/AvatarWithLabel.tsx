@@ -28,14 +28,14 @@ const styles = {
 const AvatarWithLabel: FC<Props> = (props: Props) => {
   return (
     <>
-      <Grid container justifyContent="center">
+      <Grid container={true} justifyContent="center">
         <Avatar
-          src={props.imageUrl}
           alt={props.label}
+          src={props.imageUrl}
           sx={styles[props.size]}
         />
       </Grid>
-      <Typography variant="body2" align="center">
+      <Typography align="center" variant="body2">
         {props.label}
       </Typography>
     </>

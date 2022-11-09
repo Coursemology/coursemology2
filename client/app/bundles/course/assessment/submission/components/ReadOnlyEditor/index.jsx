@@ -1,11 +1,13 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
 import { FormControlLabel, Switch } from '@mui/material';
-import NarrowEditor from './NarrowEditor';
-import WideEditor from './WideEditor';
+import PropTypes from 'prop-types';
+
 import { annotationShape } from '../../propTypes';
 import translations from '../../translations';
+
+import NarrowEditor from './NarrowEditor';
+import WideEditor from './WideEditor';
 
 const EDITOR_MODE_NARROW = 'narrow';
 const EDITOR_MODE_WIDE = 'wide';
@@ -48,7 +50,7 @@ class ReadOnlyEditor extends Component {
     if (updatedLine.length > 0) {
       const newExpanded = expanded.slice(0);
       newExpanded[updatedLine[0] - 1] = false;
-      // eslint-disable-next-line react/no-did-update-set-state
+
       this.setState({ expanded: newExpanded });
     }
   }

@@ -3,10 +3,11 @@ import {
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
 import { EnrolRequestListData } from 'types/course/enrolRequests';
+
 import {
   SAVE_ENROL_REQUEST_LIST,
-  UPDATE_ENROL_REQUEST,
   SaveEnrolRequestListAction,
+  UPDATE_ENROL_REQUEST,
   UpdateEnrolRequestAction,
 } from './types';
 

@@ -3,13 +3,14 @@ import {
   AnnouncementListData,
   AnnouncementPermissions,
 } from 'types/course/announcements';
+
 import {
   DELETE_ANNOUNCEMENT,
-  SAVE_ANNOUNCEMENT_LIST,
   DeleteAnnouncementAction,
-  SaveAnnouncementListAction,
   SAVE_ANNOUNCEMENT,
+  SAVE_ANNOUNCEMENT_LIST,
   SaveAnnouncementAction,
+  SaveAnnouncementListAction,
 } from './types';
 
 export function saveAnnouncementList(

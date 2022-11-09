@@ -1,18 +1,20 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { AnnouncementsSettingsData } from 'types/course/admin/announcements';
-import translations from 'lib/translations/form';
-import useTranslation from 'lib/hooks/useTranslation';
-import { FormEmitter } from 'lib/components/form/Form';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { FormEmitter } from 'lib/components/form/Form';
 import Preload from 'lib/components/wrappers/Preload';
+import useTranslation from 'lib/hooks/useTranslation';
+import translations from 'lib/translations/form';
+
+import { useItemsReloader } from '../../components/SettingsNavigation';
+
 import AnnouncementsSettingsForm from './AnnouncementsSettingsForm';
 import {
   fetchAnnouncementsSettings,
   updateAnnouncementsSettings,
 } from './operations';
-import { useItemsReloader } from '../../components/SettingsNavigation';
 
 const AnnouncementsSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
@@ -35,13 +37,13 @@ const AnnouncementsSettings = (): JSX.Element => {
   };
 
   return (
-    <Preload while={fetchAnnouncementsSettings} render={<LoadingIndicator />}>
+    <Preload render={<LoadingIndicator />} while={fetchAnnouncementsSettings}>
       {(data): JSX.Element => (
         <AnnouncementsSettingsForm
           data={data}
-          onSubmit={handleSubmit}
-          emitsVia={setForm}
           disabled={submitting}
+          emitsVia={setForm}
+          onSubmit={handleSubmit}
         />
       )}
     </Preload>

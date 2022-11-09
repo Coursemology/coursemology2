@@ -1,10 +1,12 @@
 import ReactDOM from 'react-dom';
-import { shallow, mount } from 'enzyme';
 import ReactTestUtils, { act } from 'react-dom/test-utils';
+import { mount, shallow } from 'enzyme';
+
 import CourseAPI from 'api/course';
-import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
-import storeCreator from 'course/lesson-plan/store';
 import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
+import storeCreator from 'course/lesson-plan/store';
+import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
+
 import AdminTools from '../AdminTools';
 
 const buildShallowWrapper = (item) => {

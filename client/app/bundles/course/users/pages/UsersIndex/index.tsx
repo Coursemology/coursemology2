@@ -1,14 +1,16 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Avatar, Grid, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+
 import { fetchUsers } from '../../operations';
 import { getAllStudentMiniEntities } from '../../selectors';
 
@@ -71,35 +73,40 @@ const UsersIndex: FC<Props> = (props) => {
       {isLoading ? (
         <LoadingIndicator />
       ) : (
-        <Grid container>
+        <Grid container={true}>
           {users.length > 0
             ? users.map((courseUser) => (
                 <Grid
-                  item
-                  className={`course-user-${courseUser.id}`}
                   key={courseUser.id}
-                  xs={12}
-                  md={6}
+                  className={`course-user-${courseUser.id}`}
+                  item={true}
                   lg={4}
+                  md={6}
+                  xs={12}
                 >
                   <Link
-                    to={getCourseUserURL(courseId, courseUser.id)}
                     style={{ textDecoration: 'none' }}
+                    to={getCourseUserURL(courseId, courseUser.id)}
                   >
                     <Grid
-                      container
+                      alignItems="center"
+                      container={true}
                       direction="row"
                       spacing={1}
-                      alignItems="center"
                     >
-                      <Grid container item xs={3} justifyContent="center">
+                      <Grid
+                        container={true}
+                        item={true}
+                        justifyContent="center"
+                        xs={3}
+                      >
                         <Avatar
-                          src={courseUser.imageUrl}
                           alt={courseUser.name}
+                          src={courseUser.imageUrl}
                           sx={styles.courseUserImage}
                         />
                       </Grid>
-                      <Grid item xs style={styles.courseUserName}>
+                      <Grid item={true} style={styles.courseUserName} xs={true}>
                         <Typography variant="body1">
                           {courseUser.name}
                         </Typography>

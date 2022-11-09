@@ -5,17 +5,18 @@ import {
   LeaderboardPoints,
   LeaderboardSettings,
 } from 'types/course/leaderboard';
+
 import {
-  SaveGroupLeaderboardAchievementAction,
-  SaveGroupLeaderboardPointsAction,
-  SaveLeaderboardAchievementAction,
-  SaveLeaderboardPointsAction,
-  SaveLeaderboardSettingsAction,
   SAVE_GROUP_LEADERBOARD_ACHIEVEMENT,
   SAVE_GROUP_LEADERBOARD_POINTS,
   SAVE_LEADERBOARD_ACHIEVEMENT,
   SAVE_LEADERBOARD_POINTS,
   SAVE_LEADERBOARD_SETTINGS,
+  SaveGroupLeaderboardAchievementAction,
+  SaveGroupLeaderboardPointsAction,
+  SaveLeaderboardAchievementAction,
+  SaveLeaderboardPointsAction,
+  SaveLeaderboardSettingsAction,
 } from './types';
 
 export function saveLeaderboardPoints(

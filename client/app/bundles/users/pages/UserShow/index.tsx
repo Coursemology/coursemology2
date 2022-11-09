@@ -2,18 +2,20 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { Avatar, Grid, Typography } from '@mui/material';
 import { AppDispatch, AppState } from 'types/store';
-import { Grid, Avatar, Typography } from '@mui/material';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+
+import CoursesTable from '../../components/tables/CoursesTable';
+import InstancesTable from '../../components/tables/InstancesTable';
+import { fetchUser } from '../../operations';
 import {
-  getAllCurrentCourseMiniEntities,
   getAllCompletedCourseMiniEntities,
+  getAllCurrentCourseMiniEntities,
   getAllInstanceMiniEntities,
   getUserEntity,
 } from '../../selectors';
-import { fetchUser } from '../../operations';
-import CoursesTable from '../../components/tables/CoursesTable';
-import InstancesTable from '../../components/tables/InstancesTable';
 
 interface Props extends WrappedComponentProps {}
 
@@ -71,27 +73,27 @@ const UserShow: FC<Props> = (props) => {
     <>
       <Grid
         className="global-user-profile"
-        style={{ marginBottom: '8px' }}
-        container
+        container={true}
         direction="row"
         flexWrap={{ xs: 'wrap', sm: 'nowrap' }}
         spacing={{ xs: 1, sm: 4 }}
+        style={{ marginBottom: '8px' }}
       >
         <Grid
-          item
-          container
-          direction="column"
           alignItems="center"
-          xs={12}
+          container={true}
+          direction="column"
+          item={true}
           sm="auto"
+          xs={12}
         >
           <Avatar src={user.imageUrl} style={styles.image} />
         </Grid>
         <Grid
-          item
-          container
-          direction="row"
           alignItems="center"
+          container={true}
+          direction="row"
+          item={true}
           justifyContent={{ xs: 'center', sm: 'start' }}
         >
           <Typography variant="h4">{user.name}</Typography>
@@ -100,21 +102,21 @@ const UserShow: FC<Props> = (props) => {
       {currentCourses.length > 0 && (
         <CoursesTable
           key="current-courses"
-          title={intl.formatMessage(translations.currentCourses)}
           courses={currentCourses}
+          title={intl.formatMessage(translations.currentCourses)}
         />
       )}
       {completedCourses.length > 0 && (
         <CoursesTable
           key="completed-courses"
-          title={intl.formatMessage(translations.completedCourses)}
           courses={completedCourses}
+          title={intl.formatMessage(translations.completedCourses)}
         />
       )}
       {instances.length > 0 && (
         <InstancesTable
-          title={intl.formatMessage(translations.otherInstances)}
           instances={instances}
+          title={intl.formatMessage(translations.otherInstances)}
         />
       )}
     </>

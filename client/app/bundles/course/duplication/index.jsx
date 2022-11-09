@@ -1,8 +1,9 @@
 import { createRoot } from 'react-dom/client';
-
 import { BrowserRouter } from 'react-router-dom';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import DuplicationLayout from 'course/duplication/containers/DuplicationLayout';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import storeCreator from './store';
 
 $(() => {

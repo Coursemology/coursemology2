@@ -2,26 +2,24 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
 import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
+import NewAnnouncementButton from '../../components/buttons/NewAnnouncementButton';
+import AnnouncementsDisplay from '../../components/misc/AnnouncementsDisplay';
 import {
-  fetchAnnouncements,
   createAnnouncement,
-  updateAnnouncement,
   deleteAnnouncement,
+  fetchAnnouncements,
+  updateAnnouncement,
 } from '../../operations';
 import {
   getAllAnnouncementMiniEntities,
   getAnnouncementPermissions,
 } from '../../selectors';
-
-import NewAnnouncementButton from '../../components/buttons/NewAnnouncementButton';
 import AnnouncementNew from '../AnnouncementNew';
-import AnnouncementsDisplay from '../../components/misc/AnnouncementsDisplay';
 
 interface Props extends WrappedComponentProps {}
 
@@ -91,16 +89,16 @@ const AnnouncementsIndex: FC<Props> = (props) => {
             <div>{intl.formatMessage(translations.noAnnouncements)}</div>
           ) : (
             <AnnouncementsDisplay
-              announcements={announcements}
               announcementPermissions={announcementPermissions}
-              updateOperation={updateAnnouncement}
+              announcements={announcements}
               deleteOperation={deleteAnnouncement}
+              updateOperation={updateAnnouncement}
             />
           )}
           <AnnouncementNew
-            open={isOpen}
-            onClose={(): void => setIsOpen(false)}
             createOperation={createAnnouncement}
+            onClose={(): void => setIsOpen(false)}
+            open={isOpen}
           />
         </>
       )}

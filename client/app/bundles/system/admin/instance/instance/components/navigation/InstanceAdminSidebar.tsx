@@ -1,15 +1,6 @@
-import {
-  Grid,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Tooltip,
-} from '@mui/material';
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Link } from 'react-router-dom';
-import Sidebar from 'lib/components/navigation/Sidebar';
 import {
   AssignmentInd,
   AutoStories,
@@ -19,7 +10,17 @@ import {
   KeyboardDoubleArrowRight,
   ListAlt,
 } from '@mui/icons-material';
+import {
+  Grid,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tooltip,
+} from '@mui/material';
 import { grey } from '@mui/material/colors';
+
+import Sidebar from 'lib/components/navigation/Sidebar';
 
 interface Props extends WrappedComponentProps {
   isExpanded: boolean;
@@ -84,17 +85,17 @@ const ListItemLink = (props: ListItemLinkProps): JSX.Element => {
   return (
     <li>
       <ListItem
-        button
-        disablePadding
+        button={true}
         component={Link}
-        to={to}
+        disablePadding={true}
+        onClick={callback}
         style={{
           border: 'none',
           outline: 'none',
           textDecoration: 'none',
           padding: '4px 16px',
         }}
-        onClick={callback}
+        to={to}
       >
         {renderIcon()}
         <ListItemText primary={primary} sx={textStyle} />
@@ -125,14 +126,14 @@ const InstanceAdminSidebar: FC<Props> = (props) => {
 
     return (
       <Grid
-        container
+        container={true}
+        flexDirection="column"
         justifyContent="space-between"
         style={{ height: '100vh', backgroundColor }}
-        flexDirection="column"
       >
-        <Grid item>
+        <Grid item={true}>
           <List style={{ marginTop: '60px' }}>
-            <ListItem button onClick={handleExpandClick}>
+            <ListItem button={true} onClick={handleExpandClick}>
               <ListItemIcon sx={{ minWidth: '32px' }}>
                 {isExpanded ? (
                   <KeyboardDoubleArrowLeft />
@@ -152,39 +153,39 @@ const InstanceAdminSidebar: FC<Props> = (props) => {
               )}
             </ListItem>
             <ListItemLink
-              to="/admin/instance/announcements"
-              primary={intl.formatMessage(translations.announcements)}
               callback={handleListItemClick}
+              expanded={isExpanded}
               icon={<Campaign />}
-              expanded={isExpanded}
+              primary={intl.formatMessage(translations.announcements)}
+              to="/admin/instance/announcements"
             />
             <ListItemLink
-              to="/admin/instance/users"
-              primary={intl.formatMessage(translations.users)}
               callback={handleListItemClick}
+              expanded={isExpanded}
               icon={<Group />}
-              expanded={isExpanded}
+              primary={intl.formatMessage(translations.users)}
+              to="/admin/instance/users"
             />
             <ListItemLink
-              to="/admin/instance/courses"
-              primary={intl.formatMessage(translations.courses)}
               callback={handleListItemClick}
+              expanded={isExpanded}
               icon={<AutoStories />}
-              expanded={isExpanded}
+              primary={intl.formatMessage(translations.courses)}
+              to="/admin/instance/courses"
             />
             <ListItemLink
-              to="/admin/instance/components"
-              primary={intl.formatMessage(translations.components)}
               callback={handleListItemClick}
+              expanded={isExpanded}
               icon={<ListAlt />}
-              expanded={isExpanded}
+              primary={intl.formatMessage(translations.components)}
+              to="/admin/instance/components"
             />
             <ListItemLink
-              to="/role_requests"
-              primary={intl.formatMessage(translations.roleRequests)}
               callback={handleListItemClick}
-              icon={<AssignmentInd />}
               expanded={isExpanded}
+              icon={<AssignmentInd />}
+              primary={intl.formatMessage(translations.roleRequests)}
+              to="/role_requests"
             />
           </List>
         </Grid>
@@ -194,10 +195,10 @@ const InstanceAdminSidebar: FC<Props> = (props) => {
 
   return (
     <Sidebar
+      handleExpand={handleExpand}
       renderDrawer={(isDrawerOpen, handleDrawerToggle): JSX.Element =>
         renderDrawer(isDrawerOpen, handleDrawerToggle)
       }
-      handleExpand={handleExpand}
     />
   );
 };

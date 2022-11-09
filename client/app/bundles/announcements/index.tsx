@@ -1,8 +1,10 @@
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import configureStore from './store';
+
 import GlobalAnnouncementIndex from './pages/GlobalAnnouncementIndex';
+import configureStore from './store';
 
 $(() => {
   const mountNode = document.getElementById('global-announcements-component');
@@ -16,8 +18,8 @@ $(() => {
         <BrowserRouter>
           <Routes>
             <Route
-              path="/announcements"
               element={<GlobalAnnouncementIndex />}
+              path="/announcements"
             />
           </Routes>
         </BrowserRouter>

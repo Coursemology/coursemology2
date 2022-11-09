@@ -1,16 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
+import { Create, Delete, DragIndicator } from '@mui/icons-material';
 import { Card, DialogContentText, IconButton, Typography } from '@mui/material';
-import { Delete, DragIndicator, Create } from '@mui/icons-material';
-
-import useTranslation from 'lib/hooks/useTranslation';
 import { AssessmentTab } from 'types/course/admin/assessments';
-import SwitchableTextField from 'lib/components/core/fields/SwitchableTextField';
+
 import Prompt from 'lib/components/core/dialogs/Prompt';
+import SwitchableTextField from 'lib/components/core/fields/SwitchableTextField';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import { useAssessmentSettings } from '../AssessmentSettingsContext';
 import translations from '../translations';
-import { getTabsInCategories } from './utils';
+
 import MoveAssessmentsMenu from './MoveAssessmentsMenu';
+import { getTabsInCategories } from './utils';
 
 interface TabProps {
   tab: AssessmentTab;
@@ -76,9 +78,9 @@ const Tab = (props: TabProps): JSX.Element => {
 
     return (
       <MoveAssessmentsMenu
-        tabs={tabs}
-        onSelectTab={handleMoveAssessmentsAndDelete}
         disabled={props.disabled}
+        onSelectTab={handleMoveAssessmentsAndDelete}
+        tabs={tabs}
       />
     );
   };
@@ -97,36 +99,36 @@ const Tab = (props: TabProps): JSX.Element => {
       >
         {(provided, { isDragging }): JSX.Element => (
           <Card
-            variant="outlined"
+            ref={provided.innerRef}
             className={`group mb-4 flex min-h-[4rem] select-none items-center justify-between px-4 ${
               !stationary && 'hover:bg-neutral-100'
             } ${isDragging && 'opacity-80 drop-shadow-md'}`}
-            ref={provided.innerRef}
+            variant="outlined"
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
             <div className="flex w-full items-center justify-between sm:w-fit">
               <div className="flex items-center">
                 <DragIndicator
-                  fontSize="small"
-                  color="disabled"
                   className={`${(stationary || disabled) && 'invisible'}`}
+                  color="disabled"
+                  fontSize="small"
                 />
 
                 <div className="ml-4 flex items-center">
                   <SwitchableTextField
+                    disabled={disabled}
                     editable={renaming}
-                    onChange={(e): void => setNewTitle(e.target.value)}
                     onBlur={(): void => handleRenameTab()}
+                    onChange={(e): void => setNewTitle(e.target.value)}
                     onPressEnter={handleRenameTab}
                     onPressEscape={resetTabTitle}
-                    value={newTitle}
                     textProps={{ variant: 'body2' }}
-                    disabled={disabled}
+                    value={newTitle}
                   />
 
                   {!renaming && tab.assessmentsCount > 0 && (
-                    <Typography variant="body2" color="text.disabled">
+                    <Typography color="text.disabled" variant="body2">
                       {t(translations.containsNAssessments, {
                         n: tab.assessmentsCount.toString(),
                       })}
@@ -137,10 +139,10 @@ const Tab = (props: TabProps): JSX.Element => {
 
               {!renaming && (
                 <IconButton
-                  size="small"
-                  disabled={isDragging || disabled}
                   className="hoverable:invisible hoverable:group-hover:visible ml-4"
+                  disabled={isDragging || disabled}
                   onClick={(): void => setRenaming(true)}
+                  size="small"
                 >
                   <Create />
                 </IconButton>
@@ -149,9 +151,9 @@ const Tab = (props: TabProps): JSX.Element => {
 
             {tab.canDeleteTab && !stationary && (
               <IconButton
+                className="hoverable:invisible hoverable:group-hover:visible ml-4 hoverable:ml-0"
                 color="error"
                 disabled={isDragging || disabled}
-                className="hoverable:invisible hoverable:group-hover:visible ml-4 hoverable:ml-0"
                 onClick={handleClickDelete}
               >
                 <Delete />
@@ -162,18 +164,18 @@ const Tab = (props: TabProps): JSX.Element => {
       </Draggable>
 
       <Prompt
-        open={deleting}
+        disabled={props.disabled}
+        onClickPrimary={handleDeleteTab}
         onClose={closeDeleteTabDialog}
-        title={t(translations.deleteTabPromptTitle, {
-          title: tab.title,
-        })}
+        open={deleting}
+        primaryColor="error"
         primaryLabel={t(translations.deleteTabPromptAction, {
           title: tab.title,
         })}
-        primaryColor="error"
-        onClickPrimary={handleDeleteTab}
         secondary={renderMoveMenu()}
-        disabled={props.disabled}
+        title={t(translations.deleteTabPromptTitle, {
+          title: tab.title,
+        })}
       >
         <DialogContentText>
           {t(translations.deleteTabPromptMessage)}

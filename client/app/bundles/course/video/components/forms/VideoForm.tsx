@@ -1,18 +1,20 @@
 import { FC } from 'react';
-import { defineMessages } from 'react-intl';
 import { Controller, UseFormSetError } from 'react-hook-form';
-import * as yup from 'yup';
+import { defineMessages } from 'react-intl';
 import { useSelector } from 'react-redux';
-import formTranslations from 'lib/translations/form';
-import FormDialog from 'lib/components/form/dialog/FormDialog';
-import FormRichTextField from 'lib/components/form/fields/RichTextField';
-import FormTextField from 'lib/components/form/fields/TextField';
-import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
-import FormSelectField from 'lib/components/form/fields/SelectField';
-import FormToggleField from 'lib/components/form/fields/ToggleField';
-import useTranslation from 'lib/hooks/useTranslation';
 import { VideoFormData } from 'types/course/videos';
 import { AppState } from 'types/store';
+import * as yup from 'yup';
+
+import FormDialog from 'lib/components/form/dialog/FormDialog';
+import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
+import FormSelectField from 'lib/components/form/fields/SelectField';
+import FormTextField from 'lib/components/form/fields/TextField';
+import FormToggleField from 'lib/components/form/fields/ToggleField';
+import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
+
 import { getVideoMetadata, getVideoTabs } from '../../selectors';
 
 interface Props {
@@ -96,13 +98,13 @@ const VideoForm: FC<Props> = (props) => {
 
   return (
     <FormDialog
-      open={open}
       editing={editing}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      title={title}
       formName="video-form"
       initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+      title={title}
       validationSchema={validationSchema}
     >
       {(control, formState): JSX.Element => (
@@ -112,53 +114,52 @@ const VideoForm: FC<Props> = (props) => {
             name="title"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.title)}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                required
+                label={t(translations.title)}
+                required={true}
                 variant="standard"
               />
             )}
           />
 
           <Controller
-            name="tab"
             control={control}
+            name="tab"
             render={({ field, fieldState }): JSX.Element => (
               <FormSelectField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
                 label={t(translations.tab)}
+                margin="0"
                 options={videoTabs.map((tab) => ({
                   value: tab.id,
                   label: tab.title,
                 }))}
-                margin="0"
-                shrink
+                shrink={true}
               />
             )}
           />
 
           <Controller
-            name="description"
             control={control}
+            name="description"
             render={({ field, fieldState }): JSX.Element => (
               <FormRichTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.description)}
-                // @ts-ignore: component is still written in JS
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={t(translations.description)}
                 variant="standard"
               />
             )}
@@ -169,45 +170,45 @@ const VideoForm: FC<Props> = (props) => {
             name="url"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.url)}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                required
-                variant="standard"
-                placeholder={t(translations.urlPlaceholder)}
+                fullWidth={true}
                 helperText={
                   childrenExists ? t(translations.urlChangeWarning) : null
                 }
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                label={t(translations.url)}
+                placeholder={t(translations.urlPlaceholder)}
+                required={true}
+                variant="standard"
               />
             )}
           />
 
           <Controller
-            name="startAt"
             control={control}
+            name="startAt"
             render={({ field, fieldState }): JSX.Element => (
               <FormDateTimePickerField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
                 label={t(translations.startAt)}
               />
             )}
           />
 
           <Controller
-            name="published"
             control={control}
+            name="published"
             render={({ field, fieldState }): JSX.Element => (
               <FormToggleField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
                 label={t(translations.published)}
               />
             )}
@@ -216,13 +217,13 @@ const VideoForm: FC<Props> = (props) => {
           {/* Videos cannot affect personal times because we have no clean measure of when they "complete" the video */}
           {videoMetadata.showPersonalizedTimelineFeatures && (
             <Controller
-              name="hasPersonalTimes"
               control={control}
+              name="hasPersonalTimes"
               render={({ field, fieldState }): JSX.Element => (
                 <FormToggleField
+                  disabled={formState.isSubmitting}
                   field={field}
                   fieldState={fieldState}
-                  disabled={formState.isSubmitting}
                   label={t(translations.hasPersonalTimes)}
                 />
               )}

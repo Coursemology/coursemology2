@@ -1,10 +1,10 @@
+import AnswerAPI from './Submission/Answer';
 import AssessmentsAPI from './Assessments';
 import CategoriesAPI from './Categories';
-import SubmissionsAPI from './Submissions';
-import SubmissionQuestionsAPI from './SubmissionQuestions';
-import AnswerAPI from './Submission/Answer';
 import QuestionAPI from './Question';
 import SkillsAPI from './Skills';
+import SubmissionQuestionsAPI from './SubmissionQuestions';
+import SubmissionsAPI from './Submissions';
 
 const AssessmentAPI = {
   assessments: new AssessmentsAPI(),

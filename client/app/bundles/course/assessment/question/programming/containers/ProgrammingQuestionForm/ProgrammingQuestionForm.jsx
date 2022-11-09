@@ -1,43 +1,43 @@
 /* eslint-disable react/no-array-index-key */
-import { Map } from 'immutable';
-
 import { Component } from 'react';
-import ReactTooltip from 'react-tooltip';
-import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
+import ReactTooltip from 'react-tooltip';
+import { HelpOutline } from '@mui/icons-material';
 import {
   Autocomplete,
   Button,
   FormControl,
   FormControlLabel,
   FormHelperText,
+  Grid,
   InputLabel,
   MenuItem,
+  Radio,
+  RadioGroup,
   Select,
   Snackbar,
-  Switch,
   Stack,
+  Switch,
   Tab,
   Tabs,
   TextField,
-  Grid,
   Tooltip,
-  RadioGroup,
-  Radio,
 } from '@mui/material';
 import { blue, grey, red } from '@mui/material/colors';
-import { HelpOutline } from '@mui/icons-material';
+import { Map } from 'immutable';
+import PropTypes from 'prop-types';
 
-import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 
 import BuildLog from '../../components/BuildLog';
 import OnlineEditor, {
   validation as editorValidation,
 } from '../../components/OnlineEditor';
 import UploadedPackageView from '../../components/UploadedPackageView';
-import styles from './ProgrammingQuestionForm.scss';
+
 import translations from './ProgrammingQuestionForm.intl';
+import styles from './ProgrammingQuestionForm.scss';
 
 const propTypes = {
   data: PropTypes.instanceOf(Map).isRequired,
@@ -317,12 +317,12 @@ class ProgrammingQuestionForm extends Component {
     onChange,
   ) {
     const selectOptions = options.map((opt) => (
-      <option value={opt.id || ''} key={opt.id}>
+      <option key={opt.id} value={opt.id || ''}>
         {opt.name}
       </option>
     ));
     const selectFieldOptions = options.map((opt) => (
-      <MenuItem value={opt.id} key={opt.id}>
+      <MenuItem key={opt.id} value={opt.id}>
         {opt.name}
       </MenuItem>
     ));
@@ -335,12 +335,14 @@ class ProgrammingQuestionForm extends Component {
           style={{ marginTop: 14, width: '100%' }}
           variant="standard"
         >
-          <InputLabel shrink>{(required ? '* ' : '') + label}</InputLabel>
+          <InputLabel shrink={true}>
+            {(required ? '* ' : '') + label}
+          </InputLabel>
           <Select
-            value={value || ''}
             onChange={(event) => {
               onChange(event.target.value);
             }}
+            value={value || ''}
             variant="standard"
           >
             {selectFieldOptions}
@@ -348,13 +350,13 @@ class ProgrammingQuestionForm extends Component {
           <FormHelperText>{error}</FormHelperText>
         </FormControl>
         <select
-          name={ProgrammingQuestionForm.getInputName(field)}
-          value={value || ''}
-          style={{ display: 'none' }}
           disabled={this.props.data.get('is_loading')}
+          name={ProgrammingQuestionForm.getInputName(field)}
           onChange={(e) => {
             onChange(parseInt(e.target.value, 10) || null);
           }}
+          style={{ display: 'none' }}
+          value={value || ''}
         >
           {selectOptions}
         </select>
@@ -388,13 +390,13 @@ class ProgrammingQuestionForm extends Component {
         <TextField
           disabled={this.props.data.get('is_loading')}
           error={!!error}
-          fullWidth
-          label={(required ? '* ' : '') + label}
+          fullWidth={true}
           helperText={error}
           id={ProgrammingQuestionForm.getInputId(field)}
           InputLabelProps={{
             shrink: true,
           }}
+          label={(required ? '* ' : '') + label}
           name={ProgrammingQuestionForm.getInputName(field)}
           onChange={(event) => {
             this.handleChange(field, event.target.value);
@@ -417,14 +419,14 @@ class ProgrammingQuestionForm extends Component {
     return (
       <div key={field}>
         <Autocomplete
-          id={ProgrammingQuestionForm.getInputId(field)}
           disabled={this.props.data.get('is_loading')}
-          filterSelectedOptions
-          fullWidth
+          filterSelectedOptions={true}
+          fullWidth={true}
           getOptionLabel={(option) => option.title}
+          id={ProgrammingQuestionForm.getInputId(field)}
           isOptionEqualToValue={(option, val) => option.id === val.id}
           ListboxProps={{ style: { maxHeight: '80vh', overflowY: 'scroll' } }}
-          multiple
+          multiple={true}
           onChange={(event, val) => {
             const selectedOptionIds = val.map((option) => option.id);
             this.onChangeSkills(selectedOptionIds);
@@ -433,31 +435,31 @@ class ProgrammingQuestionForm extends Component {
           renderInput={(params) => (
             <TextField
               {...params}
-              variant="standard"
               error={!!error}
               helperText={error}
-              label={label}
               InputLabelProps={{
                 shrink: true,
               }}
+              label={label}
+              variant="standard"
             />
           )}
           value={value}
         />
         <select
+          disabled={this.props.data.get('is_loading')}
+          multiple={true}
           name={`${ProgrammingQuestionForm.getInputName(
             'question_assessment',
           )}[${field}][]`}
-          multiple
-          value={value.map((opt) => opt.id)}
-          style={{ display: 'none' }}
-          disabled={this.props.data.get('is_loading')}
           onChange={(e) => {
             this.onSelectSkills(parseInt(e.target.value, 10) || e.target.value);
           }}
+          style={{ display: 'none' }}
+          value={value.map((opt) => opt.id)}
         >
           {options.map((opt) => (
-            <option value={opt.id} key={opt.id}>
+            <option key={opt.id} value={opt.id}>
               {opt.title}
             </option>
           ))}
@@ -485,7 +487,7 @@ class ProgrammingQuestionForm extends Component {
             <span className={styles.uploadedPackageLabel}>
               {uploadedPackageLabel}:
             </span>
-            <a target="_blank" rel="noopener noreferrer" href={pkg.get('path')}>
+            <a href={pkg.get('path')} rel="noopener noreferrer" target="_blank">
               {pkg.get('name')}
             </a>
           </div>
@@ -516,18 +518,18 @@ class ProgrammingQuestionForm extends Component {
         {downloadNode}
         <Button
           className={styles.fileInputButton}
-          variant="contained"
           color="primary"
           disabled={this.props.data.get('is_loading')}
+          variant="contained"
         >
           {newPackageButton}
           <input
-            type="file"
-            name={ProgrammingQuestionForm.getInputName(field)}
-            id={ProgrammingQuestionForm.getInputId(field)}
             className={styles.uploadPackageInput}
             disabled={this.props.data.get('is_loading')}
+            id={ProgrammingQuestionForm.getInputId(field)}
+            name={ProgrammingQuestionForm.getInputName(field)}
             onChange={this.onPackageUploadFileChange}
+            type="file"
           />
         </Button>
         <div style={{ display: 'inline-block' }}>
@@ -543,14 +545,14 @@ class ProgrammingQuestionForm extends Component {
   renderCKEditorField(label, field, required, value) {
     return (
       <CKEditorRichText
+        disabled={this.props.data.get('is_loading')}
         field={field}
+        inputId={ProgrammingQuestionForm.getInputId(field)}
         label={label}
+        name={ProgrammingQuestionForm.getInputName(field)}
+        onChange={this.CKEditorHandler(field)}
         required={required}
         value={value}
-        disabled={this.props.data.get('is_loading')}
-        name={ProgrammingQuestionForm.getInputName(field)}
-        inputId={ProgrammingQuestionForm.getInputId(field)}
-        onChange={this.CKEditorHandler(field)}
       />
     );
   }
@@ -570,6 +572,7 @@ class ProgrammingQuestionForm extends Component {
 
     return (
       <Tabs
+        onChange={onTestTypeChange}
         style={{
           backgroundColor: grey[100],
           color: blue[500],
@@ -577,7 +580,6 @@ class ProgrammingQuestionForm extends Component {
         }}
         TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
         value={showEditOnline ? 'editor' : 'upload-package'}
-        onChange={onTestTypeChange}
         variant="fullWidth"
       >
         <Tab
@@ -705,18 +707,18 @@ class ProgrammingQuestionForm extends Component {
           </div>
         ) : null}
         <form
-          id="programming-question-form"
-          action={formData.get('path')}
-          method="post"
-          encType="multipart/form-data"
-          onSubmit={this.onSubmit}
           ref={(form) => {
             this.form = form;
           }}
+          action={formData.get('path')}
+          encType="multipart/form-data"
+          id="programming-question-form"
+          method="post"
+          onSubmit={this.onSubmit}
         >
           <input
-            type="hidden"
             name="authenticity_token"
+            type="hidden"
             value={formData.get('auth_token')}
           />
           <Stack>
@@ -806,33 +808,33 @@ class ProgrammingQuestionForm extends Component {
                         }}
                       />
                     }
-                    name={ProgrammingQuestionForm.getInputName('autograded')}
                     disabled={
                       this.props.data.get('is_loading') || hasAutoGradings
                     }
                     label={autogradedLabel}
+                    name={ProgrammingQuestionForm.getInputName('autograded')}
                   />
                   <input
-                    type="hidden"
-                    name={ProgrammingQuestionForm.getInputName('autograded')}
                     id={ProgrammingQuestionForm.getInputId('autograded')}
-                    value={autograded}
-                    style={{ display: 'none' }}
+                    name={ProgrammingQuestionForm.getInputName('autograded')}
                     readOnly={
                       this.props.data.get('is_loading') || hasAutoGradings
                     }
+                    style={{ display: 'none' }}
+                    type="hidden"
+                    value={autograded}
                   />
                 </>
               ) : null}
               {showIsCodaveri && (
                 <>
                   <RadioGroup
+                    disabled={this.props.data.get('is_loading')}
                     name={ProgrammingQuestionForm.getInputName('is_codaveri')}
-                    value={isCodaveri}
                     onChange={(e_, mode) => {
                       this.handleChange('is_codaveri', mode === 'true');
                     }}
-                    disabled={this.props.data.get('is_loading')}
+                    value={isCodaveri}
                   >
                     <div>
                       {this.props.intl.formatMessage(
@@ -842,7 +844,6 @@ class ProgrammingQuestionForm extends Component {
                     <FormControlLabel
                       key={0}
                       control={<Radio style={{ padding: 0, marginLeft: 10 }} />}
-                      value={false}
                       label={
                         <b>
                           {this.props.intl.formatMessage(
@@ -850,12 +851,12 @@ class ProgrammingQuestionForm extends Component {
                           )}
                         </b>
                       }
+                      value={false}
                     />
                     <FormControlLabel
                       key={1}
                       control={<Radio style={{ padding: 0, marginLeft: 10 }} />}
                       disabled={!enableCodaveri}
-                      value
                       label={
                         <Tooltip
                           title={this.props.intl.formatMessage(
@@ -876,25 +877,26 @@ class ProgrammingQuestionForm extends Component {
                           </div>
                         </Tooltip>
                       }
+                      value={true}
                     />
                   </RadioGroup>
                   <input
-                    type="hidden"
-                    name={ProgrammingQuestionForm.getInputName('is_codaveri')}
                     id={ProgrammingQuestionForm.getInputId('is_codaveri')}
-                    value={isCodaveri}
-                    style={{ display: 'none' }}
+                    name={ProgrammingQuestionForm.getInputName('is_codaveri')}
                     readOnly={this.props.data.get('is_loading')}
+                    style={{ display: 'none' }}
+                    type="hidden"
+                    value={isCodaveri}
                   />
                 </>
               )}
             </div>
             <Grid
-              container
               columns={{ xs: 1, sm: showAttemptLimit ? 3 : 2 }}
               columnSpacing={1}
+              container={true}
             >
-              <Grid item xs={1}>
+              <Grid item={true} xs={1}>
                 <div className={styles.memoryLimitInput}>
                   {autograded
                     ? this.renderInputField(
@@ -916,7 +918,7 @@ class ProgrammingQuestionForm extends Component {
                     : null}
                 </div>
               </Grid>
-              <Grid item xs={1}>
+              <Grid item={true} xs={1}>
                 <div className={styles.timeLimitInput}>
                   {autograded
                     ? this.renderInputField(
@@ -938,7 +940,7 @@ class ProgrammingQuestionForm extends Component {
                     : null}
                 </div>
               </Grid>
-              <Grid item xs={1}>
+              <Grid item={true} xs={1}>
                 {autograded && showAttemptLimit ? (
                   <div className={styles.attemptLimitInput}>
                     {this.renderInputField(
@@ -984,34 +986,33 @@ class ProgrammingQuestionForm extends Component {
 
           <Snackbar
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            open={this.props.data.get('has_errors')}
+            autoHideDuration={5000}
             message={this.props.intl.formatMessage(
               translations.resolveErrorsMessage,
             )}
-            autoHideDuration={5000}
             onClose={() => {
               this.props.actions.clearHasError();
             }}
+            open={this.props.data.get('has_errors')}
           />
           <Snackbar
             anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-            open={this.props.data.get('show_submission_message')}
-            message={this.props.data.get('submission_message')}
             autoHideDuration={2000}
+            message={this.props.data.get('submission_message')}
             onClose={() => {
               this.props.actions.clearSubmissionMessage();
             }}
+            open={this.props.data.get('show_submission_message')}
           />
           <ReactTooltip id="disabled-submit-tooltip">
             {this.props.intl.formatMessage(translations.submitButtonTooltip)}
           </ReactTooltip>
           <div
-            data-tip
             data-for="disabled-submit-tooltip"
+            data-tip={true}
             data-tip-disable={!disableSubmit}
           >
             <Button
-              variant="contained"
               className={styles.submitButton}
               color="primary"
               disabled={this.props.data.get('is_loading') || disableSubmit}
@@ -1022,6 +1023,7 @@ class ProgrammingQuestionForm extends Component {
               }
               id="programming-question-form-submit"
               type="submit"
+              variant="contained"
             >
               {this.submitButtonText()}
             </Button>
@@ -1031,12 +1033,12 @@ class ProgrammingQuestionForm extends Component {
               message={this.props.intl.formatMessage(
                 translations.submitConfirmation,
               )}
-              open={this.state.confirmationOpen}
               onCancel={() => this.setState({ confirmationOpen: false })}
               onConfirm={() => {
                 this.handleSubmit();
                 this.setState({ confirmationOpen: false });
               }}
+              open={this.state.confirmationOpen}
             />
           )}
         </form>

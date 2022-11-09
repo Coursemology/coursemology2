@@ -1,38 +1,40 @@
-import { FC, ReactElement, memo } from 'react';
+import { FC, memo, ReactElement } from 'react';
 import {
   defineMessages,
   FormattedMessage,
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { Checkbox, MenuItem, TextField, Typography } from '@mui/material';
-import DataTable from 'lib/components/core/layouts/DataTable';
+import equal from 'fast-deep-equal';
 import {
-  CourseUserRowData,
-  CourseUserMiniEntity,
-  CourseUserRole,
-} from 'types/course/courseUsers';
-import Note from 'lib/components/core/Note';
-import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
-import {
-  COURSE_USER_ROLES,
-  TIMELINE_ALGORITHMS,
-  TABLE_ROWS_PER_PAGE,
-} from 'lib/constants/sharedConstants';
-import {
-  TableDownloadOptions,
   TableColumns,
+  TableDownloadOptions,
   TableOptions,
 } from 'types/components/DataTable';
-import tableTranslations from 'lib/translations/table';
-import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
-import equal from 'fast-deep-equal';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, AppState } from 'types/store';
-import { toast } from 'react-toastify';
+import {
+  CourseUserMiniEntity,
+  CourseUserRole,
+  CourseUserRowData,
+} from 'types/course/courseUsers';
 import { TimelineAlgorithm } from 'types/course/personalTimes';
-import { getManageCourseUserPermissions } from '../../selectors';
+import { AppDispatch, AppState } from 'types/store';
+
+import DataTable from 'lib/components/core/layouts/DataTable';
+import Note from 'lib/components/core/Note';
+import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
+import {
+  COURSE_USER_ROLES,
+  TABLE_ROWS_PER_PAGE,
+  TIMELINE_ALGORITHMS,
+} from 'lib/constants/sharedConstants';
+import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import tableTranslations from 'lib/translations/table';
+
 import { updateUser } from '../../operations';
+import { getManageCourseUserPermissions } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
   title: string;
@@ -300,13 +302,13 @@ const ManageUsersTable: FC<Props> = (props) => {
           return (
             <InlineEditTextField
               key={`name-${userId}`}
-              value={value}
               className="course_user_name"
-              updateValue={updateValue}
-              variant="standard"
               onUpdate={(newName): Promise<void> =>
                 handleNameUpdate(tableMeta.rowData, newName)
               }
+              updateValue={updateValue}
+              value={value}
+              variant="standard"
             />
           );
         },
@@ -339,14 +341,14 @@ const ManageUsersTable: FC<Props> = (props) => {
           const user = users[dataIndex];
           return (
             <Checkbox
-              id={`phantom-${user.id}`}
               key={`phantom-${user.id}`}
-              className="course_user_phantom"
               checked={user.phantom}
-              style={styles.checkbox}
+              className="course_user_phantom"
+              id={`phantom-${user.id}`}
               onChange={(event): Promise<void> =>
                 handlePhantomUpdate(user, event.target.checked)
               }
+              style={styles.checkbox}
             />
           );
         },
@@ -364,10 +366,8 @@ const ManageUsersTable: FC<Props> = (props) => {
           const user = users[tableMeta.rowIndex];
           return (
             <TextField
-              id={`timeline-algorithm-${user.id}`}
               key={`timeline-algorithm-${user.id}`}
-              select
-              value={value}
+              id={`timeline-algorithm-${user.id}`}
               onChange={(e): Promise<void> =>
                 handleTimelineUpdate(
                   tableMeta.rowData,
@@ -375,12 +375,14 @@ const ManageUsersTable: FC<Props> = (props) => {
                   updateValue,
                 )
               }
+              select={true}
+              value={value}
               variant="standard"
             >
               {TIMELINE_ALGORITHMS.map((option) => (
                 <MenuItem
-                  id={`timeline-algorithm-option-${user.id}-${option.value}`}
                   key={`timeline-algorithm-option-${user.id}-${option.value}`}
+                  id={`timeline-algorithm-option-${user.id}-${option.value}`}
                   value={option.value}
                 >
                   {option.label}
@@ -403,20 +405,20 @@ const ManageUsersTable: FC<Props> = (props) => {
           const user = users[tableMeta.rowIndex];
           return (
             <TextField
-              id={`role-${user.id}`}
               key={`role-${user.id}`}
               className="course_user_role"
-              select
-              value={value}
+              id={`role-${user.id}`}
               onChange={(e): Promise<void> =>
                 handleRoleUpdate(tableMeta.rowData, e.target.value, updateValue)
               }
+              select={true}
+              value={value}
               variant="standard"
             >
               {Object.keys(COURSE_USER_ROLES).map((option) => (
                 <MenuItem
-                  id={`role-${user.id}-${option}`}
                   key={`role-${user.id}-${option}`}
+                  id={`role-${user.id}-${option}`}
                   value={option}
                 >
                   {COURSE_USER_ROLES[option]}
@@ -450,12 +452,12 @@ const ManageUsersTable: FC<Props> = (props) => {
 
   return (
     <DataTable
-      title={title}
-      data={users}
       columns={columns}
+      data={users}
+      includeRowNumber={true}
       options={options}
-      includeRowNumber
-      withMargin
+      title={title}
+      withMargin={true}
     />
   );
 };

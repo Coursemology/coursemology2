@@ -4,6 +4,7 @@ import { Stack } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import equal from 'fast-deep-equal';
 import { NotificationData } from 'types/course/notifications';
+
 import NotificationCard from './NotificationCard';
 
 interface Props extends WrappedComponentProps {

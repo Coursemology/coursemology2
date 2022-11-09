@@ -1,7 +1,6 @@
+import { defineMessages, injectIntl } from 'react-intl';
 import { Map } from 'immutable';
-
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages } from 'react-intl';
 
 const translations = defineMessages({
   header: {

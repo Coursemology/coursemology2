@@ -1,6 +1,7 @@
-import BarChart from 'lib/components/core/BarChart';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import palette from 'theme/palette';
+
+import BarChart from 'lib/components/core/BarChart';
 
 interface BarchartProps {
   accepted: number;

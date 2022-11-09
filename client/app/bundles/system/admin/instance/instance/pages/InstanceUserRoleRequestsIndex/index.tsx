@@ -1,12 +1,14 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, AppState } from 'types/store';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { toast } from 'react-toastify';
-import InstanceUserRoleRequestsTable from '../../components/tables/InstanceUserRoleRequestsTable';
+import { AppDispatch, AppState } from 'types/store';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+
 import PendingRoleRequestsButtons from '../../components/buttons/PendingRoleRequestsButtons';
+import InstanceUserRoleRequestsTable from '../../components/tables/InstanceUserRoleRequestsTable';
 import { fetchRoleRequests } from '../../operations';
 import { getAllRoleRequestsMiniEntities } from '../../selectors';
 
@@ -77,22 +79,22 @@ const InstanceUserRoleRequestsIndex: FC<Props> = (props) => {
       ) : (
         <>
           <InstanceUserRoleRequestsTable
-            title={intl.formatMessage(translations.pending)}
-            roleRequests={pendingRoleRequests}
-            pendingRoleRequests
+            pendingRoleRequests={true}
             renderRowActionComponent={(roleRequest): JSX.Element => (
               <PendingRoleRequestsButtons roleRequest={roleRequest} />
             )}
+            roleRequests={pendingRoleRequests}
+            title={intl.formatMessage(translations.pending)}
           />
           <InstanceUserRoleRequestsTable
-            title={intl.formatMessage(translations.approved)}
+            approvedRoleRequests={true}
             roleRequests={approvedRoleRequests}
-            approvedRoleRequests
+            title={intl.formatMessage(translations.approved)}
           />
           <InstanceUserRoleRequestsTable
-            title={intl.formatMessage(translations.rejected)}
+            rejectedRoleRequests={true}
             roleRequests={rejectedRoleRequests}
-            rejectedRoleRequests
+            title={intl.formatMessage(translations.rejected)}
           />
         </>
       )}

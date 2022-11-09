@@ -1,15 +1,16 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import AppLayout from 'lib/components/core/layouts/AppLayout';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
+import SystemAdminSidebar from './components/navigation/SystemAdminSidebar';
 import AdminIndex from './pages/AdminIndex';
 import AnnouncementsIndex from './pages/AnnouncementsIndex';
 import CoursesIndex from './pages/CoursesIndex';
 import InstancesIndex from './pages/InstancesIndex';
 import UsersIndex from './pages/UsersIndex';
 import configureStore from './store';
-import SystemAdminSidebar from './components/navigation/SystemAdminSidebar';
 
 $(() => {
   const mountNode = document.getElementById('system-admin-component');
@@ -21,8 +22,8 @@ $(() => {
     const renderSidebar = (isExpanded, handleExpand): JSX.Element => {
       return (
         <SystemAdminSidebar
-          isExpanded={isExpanded}
           handleExpand={handleExpand}
+          isExpanded={isExpanded}
         />
       );
     };
@@ -34,14 +35,14 @@ $(() => {
             renderSidebar={renderSidebar}
             routes={
               <Routes>
-                <Route path="/admin" element={<AdminIndex />} />
+                <Route element={<AdminIndex />} path="/admin" />
                 <Route
-                  path="/admin/announcements"
                   element={<AnnouncementsIndex />}
+                  path="/admin/announcements"
                 />
-                <Route path="/admin/users" element={<UsersIndex />} />
-                <Route path="/admin/instances" element={<InstancesIndex />} />
-                <Route path="/admin/courses" element={<CoursesIndex />} />
+                <Route element={<UsersIndex />} path="/admin/users" />
+                <Route element={<InstancesIndex />} path="/admin/instances" />
+                <Route element={<CoursesIndex />} path="/admin/courses" />
               </Routes>
             }
           />

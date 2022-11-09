@@ -1,11 +1,13 @@
-import { FC, useState, memo } from 'react';
-import { useDispatch } from 'react-redux';
+import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { AppDispatch } from 'types/store';
-import DeleteButton from 'lib/components/core/buttons/DeleteButton';
-import { InstanceMiniEntity } from 'types/system/instances';
-import equal from 'fast-deep-equal';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import equal from 'fast-deep-equal';
+import { AppDispatch } from 'types/store';
+import { InstanceMiniEntity } from 'types/system/instances';
+
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+
 import { deleteInstance } from '../../operations';
 
 interface Props extends WrappedComponentProps {
@@ -59,14 +61,14 @@ const InstancesButtons: FC<Props> = (props) => {
     <div key={`buttons-${instance.id}`}>
       {instance.permissions.canDelete && (
         <DeleteButton
-          tooltip="Delete Instance"
           className={`instance-delete-${instance.id} p-0`}
-          disabled={isDeleting}
-          loading={isDeleting}
-          onClick={onDelete}
           confirmMessage={intl.formatMessage(translations.deletionConfirm, {
             name: instance.name,
           })}
+          disabled={isDeleting}
+          loading={isDeleting}
+          onClick={onDelete}
+          tooltip="Delete Instance"
         />
       )}
     </div>

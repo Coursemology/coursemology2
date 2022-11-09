@@ -1,18 +1,20 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Box, Grid, Typography } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { InvitationResult } from 'types/course/userInvitations';
 import { AppDispatch, AppState } from 'types/store';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
-import { InvitationResult } from 'types/course/userInvitations';
+
 import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
-import { fetchPermissionsAndSharedData } from '../../operations';
 import RegistrationCodeButton from '../../components/buttons/RegistrationCodeButton';
 import UploadFileButton from '../../components/buttons/UploadFileButton';
 import IndividualInviteForm from '../../components/forms/IndividualInviteForm';
 import InvitationResultDialog from '../../components/misc/InvitationResultDialog';
+import { fetchPermissionsAndSharedData } from '../../operations';
 import {
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
@@ -76,16 +78,16 @@ const InviteUsers: FC<Props> = (props) => {
           />
           <Box>
             <Grid
-              container
+              alignItems="flex-end"
+              container={true}
               flexDirection="row"
               justifyContent="space-between"
-              alignItems="flex-end"
               sx={{ margin: '12px 0px' }}
             >
               <Typography variant="h5">
                 {intl.formatMessage(translations.inviteUsersHeader)}
               </Typography>
-              <Grid item style={{ display: 'flex', gap: 12 }}>
+              <Grid item={true} style={{ display: 'flex', gap: 12 }}>
                 <UploadFileButton openResultDialog={openResultDialog} />
                 <RegistrationCodeButton />
               </Grid>
@@ -93,9 +95,9 @@ const InviteUsers: FC<Props> = (props) => {
             <IndividualInviteForm openResultDialog={openResultDialog} />
           </Box>
           <InvitationResultDialog
-            open={showInvitationResultDialog}
             handleClose={(): void => setShowInvitationResultDialog(false)}
             invitationResult={invitationResult}
+            open={showInvitationResultDialog}
           />
         </>
       )}

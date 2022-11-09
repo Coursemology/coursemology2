@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
-
 import type { LessonPlanSettings } from 'types/course/admin/lessonPlan';
+
 import BaseAdminAPI from './Base';
 
 export default class LessonPlanSettingsAPI extends BaseAdminAPI {

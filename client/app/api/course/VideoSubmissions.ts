@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { VideoSubmissionListData } from 'types/course/videoSubmissions';
+
 import BaseCourseAPI from './Base';
 
 export default class VideoSubmissionsAPI extends BaseCourseAPI {

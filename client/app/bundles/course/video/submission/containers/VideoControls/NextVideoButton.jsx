@@ -1,11 +1,12 @@
-import PropTypes from 'prop-types';
-import { IconButton, Tooltip } from '@mui/material';
-import SkipNext from '@mui/icons-material/SkipNext';
-import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
+import { connect } from 'react-redux';
+import SkipNext from '@mui/icons-material/SkipNext';
+import { IconButton, Tooltip } from '@mui/material';
+import PropTypes from 'prop-types';
+
+import translations from '../../translations';
 
 import styles from '../VideoPlayer.scss';
-import translations from '../../translations';
 
 const propTypes = {
   intl: PropTypes.object.isRequired,
@@ -17,7 +18,7 @@ const NextVideoButton = (props) => {
     return (
       <Tooltip title={props.intl.formatMessage(translations.noNextVideo)}>
         <div className={styles.nextVideo}>
-          <IconButton disabled>
+          <IconButton disabled={true}>
             <SkipNext />
           </IconButton>
         </div>

@@ -5,6 +5,7 @@ import {
   ForumTopicListData,
   ForumTopicPostListData,
 } from 'types/course/forums';
+
 import BaseCourseAPI from '../Base';
 
 export default class TopicsAPI extends BaseCourseAPI {

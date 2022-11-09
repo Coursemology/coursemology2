@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { VideosSettingsData, VideosTab } from 'types/course/admin/videos';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { FormEmitter } from 'lib/components/form/Form';
+import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
-import { FormEmitter } from 'lib/components/form/Form';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import Preload from 'lib/components/wrappers/Preload';
-import VideosSettingsForm from './VideosSettingsForm';
+
+import { useItemsReloader } from '../../components/SettingsNavigation';
+import commonTranslations from '../../translations';
+
 import {
   createTab,
   deleteTab,
   fetchVideosSettings,
   updateVideosSettings,
 } from './operations';
-import { useItemsReloader } from '../../components/SettingsNavigation';
-import commonTranslations from '../../translations';
 import translations from './translations';
+import VideosSettingsForm from './VideosSettingsForm';
 
 const VideosSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
@@ -78,16 +80,16 @@ const VideosSettings = (): JSX.Element => {
   };
 
   return (
-    <Preload while={fetchVideosSettings} render={<LoadingIndicator />}>
+    <Preload render={<LoadingIndicator />} while={fetchVideosSettings}>
       {(data): JSX.Element => (
         <VideosSettingsForm
+          canCreateTabs={data.canCreateTabs}
           data={data}
+          disabled={submitting}
           emitsVia={setForm}
-          onSubmit={handleSubmit}
           onCreateTab={handleCreateTab}
           onDeleteTab={handleDeleteTab}
-          canCreateTabs={data.canCreateTabs}
-          disabled={submitting}
+          onSubmit={handleSubmit}
         />
       )}
     </Preload>

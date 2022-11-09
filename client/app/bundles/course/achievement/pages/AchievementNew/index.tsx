@@ -1,13 +1,15 @@
 import { FC } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { AppDispatch } from 'types/store';
+
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { getAchievementURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
-import { AppDispatch } from 'types/store';
-import { getAchievementURL } from 'lib/helpers/url-builders';
+
 import AchievementForm from '../../components/forms/AchievementForm';
 import { createAchievement } from '../../operations';
 
@@ -67,12 +69,12 @@ const AchievementNew: FC<Props> = (props) => {
 
   return (
     <AchievementForm
-      open={open}
       editing={false}
-      title={t(translations.newAchievement)}
-      onClose={onClose}
       initialValues={initialValues}
+      onClose={onClose}
       onSubmit={onSubmit}
+      open={open}
+      title={t(translations.newAchievement)}
     />
   );
 };

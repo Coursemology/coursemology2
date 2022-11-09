@@ -1,6 +1,7 @@
-import { Icon } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
+import { Icon } from '@mui/material';
 import PropTypes from 'prop-types';
+
 import translations from '../../translations.intl';
 
 const styles = {

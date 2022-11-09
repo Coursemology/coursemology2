@@ -1,13 +1,15 @@
-import { COURSE_USER_ROLES, STAFF_ROLES } from 'lib/constants/sharedConstants';
 import { Permissions, Roles } from 'types';
+
+import { COURSE_USER_ROLES, STAFF_ROLES } from 'lib/constants/sharedConstants';
+
+import {
+  UserSkillBranchListData,
+  UserSkillBranchMiniEntity,
+} from './assessment/skills/userSkills';
 import type {
   AchievementListData,
   AchievementMiniEntity,
 } from './achievements';
-import {
-  UserSkillBranchMiniEntity,
-  UserSkillBranchListData,
-} from './assessment/skills/userSkills';
 import { TimelineAlgorithm } from './personalTimes';
 
 export type ManageCourseUsersPermissions = Permissions<

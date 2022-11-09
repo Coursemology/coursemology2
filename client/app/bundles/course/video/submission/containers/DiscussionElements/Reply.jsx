@@ -1,10 +1,11 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
 
-import styles from '../Discussion.scss';
-import NewReplyContainer from './NewReplyContainer';
 import { addReply } from '../../actions/discussion';
+
+import NewReplyContainer from './NewReplyContainer';
+import styles from '../Discussion.scss';
 
 const propTypes = {
   topicId: PropTypes.string.isRequired,

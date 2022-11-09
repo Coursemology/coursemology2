@@ -1,14 +1,16 @@
 import { FC, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import DeleteButton from 'lib/components/core/buttons/DeleteButton';
-import SaveButton from 'lib/components/core/buttons/SaveButton';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch } from 'types/store';
 import {
   ExperiencePointsRecordPermissions,
   ExperiencePointsRowData,
 } from 'types/course/experiencePointsRecords';
+import { AppDispatch } from 'types/store';
+
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import SaveButton from 'lib/components/core/buttons/SaveButton';
+
 import {
   deleteExperiencePointsRecord,
   updateExperiencePointsRecord,
@@ -98,25 +100,25 @@ const PointManagementButtons: FC<Props> = (props) => {
   };
 
   const managementButtons = (
-    <div style={{ whiteSpace: 'nowrap' }} key={`buttons-${data.id}`}>
+    <div key={`buttons-${data.id}`} style={{ whiteSpace: 'nowrap' }}>
       {permissions.canUpdate && (
         <SaveButton
-          tooltip="Save Changes"
           className={`record-save-${data.id}`}
           disabled={isSaving || isDeleting || !isDirty}
           onClick={onSave}
+          tooltip="Save Changes"
         />
       )}
       {permissions.canDestroy && isManuallyAwarded && (
         <DeleteButton
-          tooltip="Delete Experience Point"
           className={`record-delete-${data.id}`}
-          disabled={isSaving || isDeleting}
-          loading={isDeleting}
-          onClick={onDelete}
           confirmMessage={intl.formatMessage(translations.deletionConfirm, {
             pointsAwarded: data.pointsAwarded.toString(),
           })}
+          disabled={isSaving || isDeleting}
+          loading={isDeleting}
+          onClick={onDelete}
+          tooltip="Delete Experience Point"
         />
       )}
     </div>

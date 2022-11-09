@@ -4,15 +4,16 @@ import {
   saveEntityToStore,
   saveListToStore,
 } from 'utilities/store';
+
 import {
-  SAVE_COURSE_LIST,
-  SAVE_COURSE,
-  REMOVE_TODO,
-  SUBMIT_ENROL,
   CANCEL_ENROL,
-  SAVE_INSTANCE_ROLE_REQUEST,
-  CoursesState,
   CoursesActionType,
+  CoursesState,
+  REMOVE_TODO,
+  SAVE_COURSE,
+  SAVE_COURSE_LIST,
+  SAVE_INSTANCE_ROLE_REQUEST,
+  SUBMIT_ENROL,
 } from './types';
 
 const initialState: CoursesState = {

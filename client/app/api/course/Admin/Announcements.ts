@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios';
-
 import type {
   AnnouncementsSettingsData,
   AnnouncementsSettingsPostData,
 } from 'types/course/admin/announcements';
+
 import BaseAdminAPI from './Base';
 
 export default class AnnouncementsAdminAPI extends BaseAdminAPI {

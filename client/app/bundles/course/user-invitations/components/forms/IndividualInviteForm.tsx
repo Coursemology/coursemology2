@@ -1,25 +1,28 @@
 import { FC, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useForm, useFieldArray } from 'react-hook-form';
-import { AppDispatch, AppState } from 'types/store';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import { toast } from 'react-toastify';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
   IndividualInvites,
-  InvitationsPostData,
   InvitationResult,
+  InvitationsPostData,
 } from 'types/course/userInvitations';
+import { AppDispatch, AppState } from 'types/store';
+import * as yup from 'yup';
+
 import ErrorText from 'lib/components/core/ErrorText';
 import formTranslations from 'lib/translations/form';
 import messagesTranslations from 'lib/translations/messages';
-import IndividualInvitations from './IndividualInvitations';
+
 import { inviteUsersFromForm } from '../../operations';
 import {
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
+
+import IndividualInvitations from './IndividualInvitations';
 
 interface Props extends WrappedComponentProps {
   openResultDialog: (invitationResult: InvitationResult) => void;
@@ -131,19 +134,19 @@ const IndividualInviteForm: FC<Props> = (props) => {
     <form
       encType="multipart/form-data"
       id="invite-users-individual-form"
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((data) => onSubmit(data))}
     >
       <ErrorText errors={errors} />
       <IndividualInvitations
-        isLoading={isLoading}
-        permissions={permissions}
         fieldsConfig={{
           control,
           fields: controlledInvitationsFields,
           append: invitationsAppend,
           remove: invitationsRemove,
         }}
+        isLoading={isLoading}
+        permissions={permissions}
       />
     </form>
   );

@@ -1,25 +1,27 @@
 import { useEffect, useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { Add, Create, Delete, DragIndicator } from '@mui/icons-material';
 import {
   Button,
   Card,
+  DialogContentText,
   IconButton,
   Typography,
-  DialogContentText,
 } from '@mui/material';
-import { Add, Delete, DragIndicator, Create } from '@mui/icons-material';
-
 import {
   AssessmentCategory,
   AssessmentTab,
 } from 'types/course/admin/assessments';
-import useTranslation from 'lib/hooks/useTranslation';
-import SwitchableTextField from 'lib/components/core/fields/SwitchableTextField';
+
 import Prompt from 'lib/components/core/dialogs/Prompt';
-import Tab from './Tab';
-import translations from '../translations';
+import SwitchableTextField from 'lib/components/core/fields/SwitchableTextField';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import { useAssessmentSettings } from '../AssessmentSettingsContext';
+import translations from '../translations';
+
 import MoveTabsMenu from './MoveTabsMenu';
+import Tab from './Tab';
 
 interface CategoryProps {
   category: AssessmentCategory;
@@ -104,8 +106,8 @@ const Category = (props: CategoryProps): JSX.Element => {
     return (
       <MoveTabsMenu
         categories={categories}
-        onSelectCategory={handleMoveTabsAndDelete}
         disabled={props.disabled}
+        onSelectCategory={handleMoveTabsAndDelete}
       />
     );
   };
@@ -117,11 +119,11 @@ const Category = (props: CategoryProps): JSX.Element => {
     tabs.map((tab: AssessmentTab, tabIndex: number) => (
       <Tab
         key={tab.id}
-        tab={tab}
-        index={tabIndex}
         disabled={disabled}
-        stationary={tabs.length <= 1}
+        index={tabIndex}
         onRename={handleRenameTab}
+        stationary={tabs.length <= 1}
+        tab={tab}
       />
     ));
 
@@ -139,11 +141,11 @@ const Category = (props: CategoryProps): JSX.Element => {
       >
         {(provided, { isDragging }): JSX.Element => (
           <Card
-            variant="outlined"
+            ref={provided.innerRef}
             className={`mb-5 select-none overflow-hidden ${
               isDragging && 'opacity-80 drop-shadow-md'
             }`}
-            ref={provided.innerRef}
+            variant="outlined"
             {...provided.draggableProps}
           >
             <div
@@ -153,24 +155,24 @@ const Category = (props: CategoryProps): JSX.Element => {
               <div className="flex w-full items-center justify-between sm:w-fit">
                 <div className="flex items-center">
                   <DragIndicator
-                    fontSize="small"
-                    color="disabled"
                     className={`${props.disabled && 'invisible'}`}
+                    color="disabled"
+                    fontSize="small"
                   />
 
                   <div className="ml-4 flex items-center">
                     <SwitchableTextField
+                      disabled={props.disabled}
                       editable={renaming}
-                      onChange={(e): void => setNewTitle(e.target.value)}
                       onBlur={(): void => handleRenameCategory()}
+                      onChange={(e): void => setNewTitle(e.target.value)}
                       onPressEnter={handleRenameCategory}
                       onPressEscape={resetCategoryTitle}
                       value={newTitle}
-                      disabled={props.disabled}
                     />
 
                     {!renaming && category.assessmentsCount > 0 && (
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography color="text.secondary" variant="body2">
                         {t(translations.containsNAssessments, {
                           n: category.assessmentsCount.toString(),
                         })}
@@ -181,10 +183,10 @@ const Category = (props: CategoryProps): JSX.Element => {
 
                 {!renaming && (
                   <IconButton
-                    size="small"
-                    disabled={isDragging || props.disabled}
                     className="hoverable:invisible hoverable:group-hover:visible ml-4"
+                    disabled={isDragging || props.disabled}
                     onClick={(): void => setRenaming(true)}
+                    size="small"
                   >
                     <Create />
                   </IconButton>
@@ -194,9 +196,9 @@ const Category = (props: CategoryProps): JSX.Element => {
               <div className="flex min-w-fit items-center">
                 {category.canDeleteCategory && !props.stationary && (
                   <IconButton
+                    className="mx-4 sm:mx-0"
                     color="error"
                     disabled={isDragging || props.disabled}
-                    className="mx-4 sm:mx-0"
                     onClick={handleClickDelete}
                   >
                     <Delete />
@@ -205,9 +207,9 @@ const Category = (props: CategoryProps): JSX.Element => {
 
                 {category.canCreateTabs && (
                   <Button
-                    startIcon={<Add />}
                     disabled={isDragging || props.disabled}
                     onClick={handleCreateTab}
+                    startIcon={<Add />}
                   >
                     {t(translations.addATab)}
                   </Button>
@@ -221,10 +223,10 @@ const Category = (props: CategoryProps): JSX.Element => {
                 { isDraggingOver, draggingFromThisWith },
               ): JSX.Element => (
                 <div
+                  ref={droppableProvided.innerRef}
                   className={`-mb-4 p-4 ${
                     draggingFromThisWith && 'bg-neutral-50'
                   } ${isDraggingOver && 'bg-yellow-50'}`}
-                  ref={droppableProvided.innerRef}
                   {...droppableProvided.droppableProps}
                 >
                   {renderTabs(category.tabs, isDragging || props.disabled)}
@@ -237,18 +239,18 @@ const Category = (props: CategoryProps): JSX.Element => {
       </Draggable>
 
       <Prompt
-        open={deleting}
+        disabled={props.disabled}
+        onClickPrimary={handleDeleteCategory}
         onClose={closeDeleteCategoryDialog}
-        title={t(translations.deleteCategoryPromptTitle, {
-          title: category.title,
-        })}
+        open={deleting}
+        primaryColor="error"
         primaryLabel={t(translations.deleteCategoryPromptAction, {
           title: category.title,
         })}
-        primaryColor="error"
-        onClickPrimary={handleDeleteCategory}
         secondary={renderMoveMenu()}
-        disabled={props.disabled}
+        title={t(translations.deleteCategoryPromptTitle, {
+          title: category.title,
+        })}
       >
         <DialogContentText>
           {t(translations.deleteCategoryPromptMessage)}

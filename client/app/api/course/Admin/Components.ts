@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios';
-
 import type {
   CourseComponents,
   CourseComponentsPostData,
 } from 'types/course/admin/components';
+
 import BaseAdminAPI from './Base';
 
 export default class ComponentsAdminAPI extends BaseAdminAPI {

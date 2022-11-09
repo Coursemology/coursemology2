@@ -1,19 +1,20 @@
-import produce from 'immer';
 import { useEffect, useMemo, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import { Alert, Autocomplete, Typography } from '@mui/material';
-import { useForm, Controller } from 'react-hook-form';
+import produce from 'immer';
 import { isNumber } from 'lodash';
+import { AssessmentConditionData } from 'types/course/conditions';
 
 import CourseAPI from 'api/course';
-import { AssessmentConditionData } from 'types/course/conditions';
+import Checkbox from 'lib/components/core/buttons/Checkbox';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import Checkbox from 'lib/components/core/buttons/Checkbox';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
-import Prompt from 'lib/components/core/dialogs/Prompt';
+
 import { AnyConditionProps } from '../AnyCondition';
 import translations from '../translations';
 
@@ -87,50 +88,50 @@ const AssessmentConditionForm = (
 
   return (
     <Prompt
-      open={props.open}
-      onClose={props.onClose}
-      title={t(translations.chooseAnAssessment)}
       onClickPrimary={handleSubmit(updateAssessment)}
+      onClose={props.onClose}
+      open={props.open}
+      primaryDisabled={!isNewCondition && !formState.isDirty}
       primaryLabel={
         isNewCondition
           ? t(translations.createCondition)
           : t(translations.updateCondition)
       }
-      primaryDisabled={!isNewCondition && !formState.isDirty}
+      title={t(translations.chooseAnAssessment)}
     >
       <div className="flex flex-col space-y-4">
-        <Typography variant="body1" className="whitespace-nowrap">
+        <Typography className="whitespace-nowrap" variant="body1">
           {t(translations.completeThisAssessment)}
         </Typography>
 
         <Controller
-          name="assessmentId"
           control={control}
+          name="assessmentId"
           render={({ field, fieldState: { error } }): JSX.Element => (
             <Autocomplete
               {...field}
-              value={field.value?.toString()}
-              onChange={(_, value): void => field.onChange(parseInt(value, 10))}
-              disableClearable
-              options={autocompleteOptions}
+              disableClearable={true}
+              fullWidth={true}
               getOptionLabel={(id): string => assessments[id] ?? ''}
-              fullWidth
+              onChange={(_, value): void => field.onChange(parseInt(value, 10))}
+              options={autocompleteOptions}
               renderInput={(inputProps): JSX.Element => (
                 <TextField
                   {...inputProps}
-                  label={t(translations.assessment)}
-                  variant="filled"
                   error={Boolean(error)}
                   helperText={error && formatErrorMessage(error.message)}
+                  label={t(translations.assessment)}
+                  variant="filled"
                 />
               )}
+              value={field.value?.toString()}
             />
           )}
         />
 
         <Controller
-          name="minimumGradePercentage"
           control={control}
+          name="minimumGradePercentage"
           render={({ field, fieldState }): JSX.Element => (
             <div className="flex items-center">
               <Checkbox
@@ -147,19 +148,19 @@ const AssessmentConditionForm = (
               />
 
               <FormTextField
+                className="w-32"
+                disabled={!hasPassingGrade}
+                disableMargins={true}
                 field={field}
                 fieldState={fieldState}
-                value={field.value ?? 50}
-                className="w-32"
+                hiddenLabel={true}
                 size="small"
                 type="number"
+                value={field.value ?? 50}
                 variant="filled"
-                hiddenLabel
-                disableMargins
-                disabled={!hasPassingGrade}
               />
 
-              <Typography variant="body1" className="ml-4">
+              <Typography className="ml-4" variant="body1">
                 %
               </Typography>
             </div>
@@ -167,7 +168,7 @@ const AssessmentConditionForm = (
         />
       </div>
 
-      <Alert severity="info" className="mt-8">
+      <Alert className="mt-8" severity="info">
         {t(translations.scoreZeroPercentNotice)}
       </Alert>
     </Prompt>
@@ -188,9 +189,9 @@ const AssessmentCondition = (
 
   return (
     <Preload
-      while={fetchAssessments}
-      render={<LoadingIndicator bare fit className="p-2" />}
       onErrorDo={props.onClose}
+      render={<LoadingIndicator bare={true} className="p-2" fit={true} />}
+      while={fetchAssessments}
     >
       {(data): JSX.Element => (
         <AssessmentConditionForm {...props} assessments={data} />

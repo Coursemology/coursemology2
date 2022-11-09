@@ -2,11 +2,14 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import { AppDispatch, AppState } from 'types/store';
-import AchievementAwardManager from './AchievementAwardManager';
+
+import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+
 import { loadAchievementCourseUsers } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
+
+import AchievementAwardManager from './AchievementAwardManager';
 
 interface Props extends WrappedComponentProps {
   achievementId: number;
@@ -53,6 +56,8 @@ const AchievementAward: FC<Props> = (props) => {
   return (
     <>
       <Dialog
+        fullWidth={true}
+        maxWidth="lg"
         onClose={(): void => {
           if (isDirty) {
             setDiscardDialogOpen(true);
@@ -61,8 +66,6 @@ const AchievementAward: FC<Props> = (props) => {
           }
         }}
         open={open}
-        fullWidth
-        maxWidth="lg"
         style={{
           top: 40,
         }}
@@ -75,7 +78,6 @@ const AchievementAward: FC<Props> = (props) => {
         <DialogContent>
           <AchievementAwardManager
             achievement={achievement}
-            isLoading={isLoading}
             handleClose={(skipDialog: boolean): void => {
               if (isDirty && !skipDialog) {
                 setDiscardDialogOpen(true);
@@ -83,18 +85,19 @@ const AchievementAward: FC<Props> = (props) => {
                 handleClose();
               }
             }}
+            isLoading={isLoading}
             setIsDirty={setIsDirty}
           />
         </DialogContent>
       </Dialog>
       <ConfirmationDialog
-        confirmDiscard
-        open={discardDialogOpen}
+        confirmDiscard={true}
         onCancel={(): void => setDiscardDialogOpen(false)}
         onConfirm={(): void => {
           setDiscardDialogOpen(false);
           handleClose();
         }}
+        open={discardDialogOpen}
       />
     </>
   );

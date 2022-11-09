@@ -2,23 +2,25 @@ import { FC } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import useTranslation from 'lib/hooks/useTranslation';
-import { AppDispatch } from 'types/store';
 import {
+  SkillBranchMiniEntity,
   SkillBranchOptions,
   SkillFormData,
   SkillMiniEntity,
-  SkillBranchMiniEntity,
 } from 'types/course/assessment/skills/skills';
-import { DialogTypes } from '../../types';
-import SkillForm from '../forms/SkillForm';
+import { AppDispatch } from 'types/store';
+
+import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import useTranslation from 'lib/hooks/useTranslation';
+
 import {
   createSkill,
   createSkillBranch,
   updateSkill,
   updateSkillBranch,
 } from '../../operations';
+import { DialogTypes } from '../../types';
+import SkillForm from '../forms/SkillForm';
 
 interface Props {
   dialogType: DialogTypes;
@@ -211,13 +213,13 @@ const SkillDialog: FC<Props> = (props) => {
 
   return (
     <SkillForm
-      open={open}
-      title={title}
-      onClose={onClose}
-      initialValues={initialValues}
-      onSubmit={onSubmit}
-      skillBranchOptions={skillBranchOptions}
       dialogType={dialogType}
+      initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+      skillBranchOptions={skillBranchOptions}
+      title={title}
     />
   );
 };

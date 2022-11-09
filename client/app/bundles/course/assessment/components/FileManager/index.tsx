@@ -1,15 +1,16 @@
-import { useState, CSSProperties } from 'react';
+import { CSSProperties, useState } from 'react';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { Checkbox, CircularProgress } from '@mui/material';
 import { toast } from 'react-toastify';
+import { Checkbox, CircularProgress } from '@mui/material';
 import { AxiosError } from 'axios';
 
 import CourseAPI from 'api/course';
-import { formatLongDateTime } from 'lib/moment';
+import InfoLabel from 'lib/components/core/InfoLabel';
+import DataTable from 'lib/components/core/layouts/DataTable';
 import { getWorkbinFileURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import DataTable from 'lib/components/core/layouts/DataTable';
-import InfoLabel from 'lib/components/core/InfoLabel';
+import { formatLongDateTime } from 'lib/moment';
+
 import Toolbar from './Toolbar';
 import t from './translations.intl';
 
@@ -137,9 +138,9 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
 
         {materials.length > 0 && (
           <InfoLabel
-            warning
             label={messagesProps.intl.formatMessage(t.studentCannotSeeFiles)}
             marginTop={1}
+            warning={true}
           />
         )}
       </>
@@ -174,7 +175,7 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
     const url = getWorkbinFileURL(getCourseId(), props.folderId, material.id);
 
     return (
-      <a href={url} target="_blank" rel="noreferrer">
+      <a href={url} rel="noreferrer" target="_blank">
         {value}
       </a>
     );
@@ -182,7 +183,6 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
 
   return (
     <DataTable
-      data={loadData()}
       columns={[
         {
           name: intl.formatMessage(t.fileName),
@@ -190,13 +190,6 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
         },
         intl.formatMessage(t.dateAdded),
       ]}
-      options={{
-        elevation: 0,
-        pagination: false,
-        selectableRows: !disabled ? 'multiple' : 'none',
-        setTableProps: () => ({ size: 'small', sx: { overflow: 'hidden' } }),
-        fixedHeader: false,
-      }}
       components={{
         Checkbox: RowStartComponent,
         TableToolbar: !disabled ? ToolbarComponent : DisabledMessages,
@@ -207,6 +200,14 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
               TableHead: () => null,
             }
           : null),
+      }}
+      data={loadData()}
+      options={{
+        elevation: 0,
+        pagination: false,
+        selectableRows: !disabled ? 'multiple' : 'none',
+        setTableProps: () => ({ size: 'small', sx: { overflow: 'hidden' } }),
+        fixedHeader: false,
       }}
     />
   );

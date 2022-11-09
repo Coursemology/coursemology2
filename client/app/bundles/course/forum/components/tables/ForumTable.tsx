@@ -1,14 +1,16 @@
 import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
-import equal from 'fast-deep-equal';
 import { Link } from 'react-router-dom';
+import { Icon, Typography } from '@mui/material';
+import equal from 'fast-deep-equal';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
+import { ForumEntity } from 'types/course/forums';
+
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Note from 'lib/components/core/Note';
 import CustomBadge from 'lib/components/extensions/CustomBadge';
 import useTranslation from 'lib/hooks/useTranslation';
-import { ForumEntity } from 'types/course/forums';
-import Note from 'lib/components/core/Note';
-import { TableColumns, TableOptions } from 'types/components/DataTable';
-import { Icon, Typography } from '@mui/material';
+
 import ForumManagementButtons from '../buttons/ForumManagementButtons';
 
 interface Props {
@@ -84,8 +86,8 @@ const ForumTable: FC<Props> = (props) => {
           return (
             <>
               <div>
-                <Link className="font-bold" key={forum.id} to={forum.forumUrl}>
-                  <Typography variant="h6" className="space-x-2">
+                <Link key={forum.id} className="font-bold" to={forum.forumUrl}>
+                  <Typography className="space-x-2" variant="h6">
                     {forum.isUnresolved && (
                       <Icon
                         className="fa fa-question-circle text-3xl"
@@ -101,11 +103,11 @@ const ForumTable: FC<Props> = (props) => {
                 </Link>
               </div>
               <Typography
-                variant="body2"
                 className="whitespace-normal"
                 dangerouslySetInnerHTML={{
                   __html: forum.description,
                 }}
+                variant="body2"
               />
             </>
           );
@@ -162,7 +164,12 @@ const ForumTable: FC<Props> = (props) => {
   ];
 
   return (
-    <DataTable data={forums} columns={columns} options={options} withMargin />
+    <DataTable
+      columns={columns}
+      data={forums}
+      options={options}
+      withMargin={true}
+    />
   );
 };
 

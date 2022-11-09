@@ -1,15 +1,16 @@
-import { TableCell, TableRow, TextField } from '@mui/material';
 import { FC, memo, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { TableCell, TableRow, TextField } from '@mui/material';
+import equal from 'fast-deep-equal';
 import {
   ExperiencePointsRecordMiniEntity,
   ExperiencePointsRowData,
 } from 'types/course/experiencePointsRecords';
+
 import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
-import equal from 'fast-deep-equal';
-
 import { formatLongDateTime } from 'lib/moment';
-import { Link } from 'react-router-dom';
+
 import PointManagementButtons from '../buttons/PointManagementButtons';
 
 interface Props {
@@ -80,7 +81,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
   const renderReason = (): JSX.Element | string => {
     if (!record.reason.isManuallyAwarded) {
       return (
-        <a target="_blank" rel="noopener noreferrer" href={record.reason.link}>
+        <a href={record.reason.link} rel="noopener noreferrer" target="_blank">
           {rowData.reason}
         </a>
       );
@@ -88,12 +89,12 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
     if (record.permissions.canUpdate) {
       return (
         <TextField
-          id={`reason-${record.id}`}
           key={`reason-${record.id}`}
-          value={rowData.reason}
+          fullWidth={true}
+          id={`reason-${record.id}`}
           onChange={(e): void => onUpdateReason(e.target.value)}
+          value={rowData.reason}
           variant="standard"
-          fullWidth
         />
       );
     }
@@ -101,7 +102,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
   };
 
   return (
-    <TableRow hover key={record.id} id={`record-${record.id}`}>
+    <TableRow key={record.id} hover={true} id={`record-${record.id}`}>
       <TableCell>{formatLongDateTime(record.updatedAt)}</TableCell>
 
       <TableCell>
@@ -121,13 +122,13 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
       <TableCell>
         {record.permissions.canUpdate ? (
           <TextField
-            id={`points-${record.id}`}
             key={`points-${record.id}`}
-            value={rowData.pointsAwarded.toString()}
+            id={`points-${record.id}`}
             onChange={(e): void => onUpdatePoints(e.target.value)}
-            variant="standard"
-            type="number"
             onKeyPress={onlyNumberInput}
+            type="number"
+            value={rowData.pointsAwarded.toString()}
+            variant="standard"
           />
         ) : (
           record.pointsAwarded
@@ -136,11 +137,11 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
 
       <TableCell>
         <PointManagementButtons
-          permissions={record.permissions}
           data={rowData}
+          handleSave={handleSave}
           isDirty={isDirty}
           isManuallyAwarded={record.reason.isManuallyAwarded}
-          handleSave={handleSave}
+          permissions={record.permissions}
         />
       </TableCell>
     </TableRow>

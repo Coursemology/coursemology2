@@ -136,9 +136,9 @@ function shiftDateField(
 }
 
 export {
-  submitAndDisableForm,
   enableForm,
   parentFormForElement,
   removeParentForm,
   shiftDateField,
+  submitAndDisableForm,
 };

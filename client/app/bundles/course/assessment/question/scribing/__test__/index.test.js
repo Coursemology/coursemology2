@@ -1,14 +1,15 @@
-import { MemoryRouter } from 'react-router-dom';
 import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
+import { MemoryRouter } from 'react-router-dom';
 import MockAdapter from 'axios-mock-adapter';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import CourseAPI from 'api/course';
-import storeCreator from 'course/assessment/question/scribing/store';
-import ScribingQuestion from 'course/assessment/question/scribing/ScribingQuestion';
+import { mount } from 'enzyme';
 
-import { initialStates } from '../reducers';
+import CourseAPI from 'api/course';
+import ScribingQuestion from 'course/assessment/question/scribing/ScribingQuestion';
+import storeCreator from 'course/assessment/question/scribing/store';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
 import { updateScribingQuestion } from '../actions/scribingQuestionActionCreators';
+import { initialStates } from '../reducers';
 
 // Mock axios
 const client = CourseAPI.assessment.question.scribing.getClient();

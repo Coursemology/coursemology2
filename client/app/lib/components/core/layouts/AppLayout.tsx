@@ -1,6 +1,8 @@
-import Breadcrumbs from 'lib/components/navigation/Breadcrumbs';
-import Grid from '@mui/material/Grid';
 import { useState } from 'react';
+import Grid from '@mui/material/Grid';
+
+import Breadcrumbs from 'lib/components/navigation/Breadcrumbs';
+
 import './layout.scss';
 
 interface AppLayoutProps {
@@ -24,42 +26,42 @@ const AppLayout = (props: AppLayoutProps): JSX.Element => {
   };
 
   return (
-    <Grid container>
+    <Grid container={true}>
       <Grid
-        item
         className="sidebar"
-        xs={1}
-        sm={isExpanded ? 4 : 2}
-        md={isExpanded ? 3 : 1}
+        item={true}
         lg={isExpanded ? 2 : 1}
+        md={isExpanded ? 3 : 1}
+        sm={isExpanded ? 4 : 2}
+        xs={1}
       >
         {renderSidebar(isExpanded, handleExpand)}
       </Grid>
       <Grid
-        item
         className="breadcrumbs"
-        xs={11}
-        sm={isExpanded ? 8 : 10}
-        md={isExpanded ? 9 : 11}
+        item={true}
         lg={isExpanded ? 10 : 11}
+        md={isExpanded ? 9 : 11}
+        sm={isExpanded ? 8 : 10}
         sx={{ marginBottom: '4px' }}
+        xs={11}
       >
         <Breadcrumbs />
       </Grid>
       <Grid
-        item
-        xs={0}
-        sm={isExpanded ? 4 : 2}
-        md={isExpanded ? 3 : 1}
+        item={true}
         lg={isExpanded ? 2 : 1}
+        md={isExpanded ? 3 : 1}
+        sm={isExpanded ? 4 : 2}
+        xs={0}
       />
       <Grid
-        item
         className="content"
-        xs={12}
-        sm={isExpanded ? 8 : 10}
-        md={isExpanded ? 9 : 11}
+        item={true}
         lg={isExpanded ? 10 : 11}
+        md={isExpanded ? 9 : 11}
+        sm={isExpanded ? 8 : 10}
+        xs={12}
       >
         {routes}
       </Grid>

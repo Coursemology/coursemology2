@@ -4,9 +4,10 @@ import {
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
 import {
-  InvitationListData,
   InvitationFileEntity,
+  InvitationListData,
 } from 'types/course/userInvitations';
+
 import SubmissionsAPI from './Assessment/Submissions';
 import BaseCourseAPI from './Base';
 

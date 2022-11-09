@@ -1,15 +1,14 @@
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { FC, useState } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'types/store';
 import { toast } from 'react-toastify';
-
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
+import { AppDispatch } from 'types/store';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
-import MaterialUploadForm from '../forms/MaterialUploadForm';
 import { uploadMaterials } from '../../operations';
+import MaterialUploadForm from '../forms/MaterialUploadForm';
 
 interface Props extends WrappedComponentProps {
   isOpen: boolean;
@@ -70,6 +69,8 @@ const MaterialUpload: FC<Props> = (props) => {
   return (
     <>
       <Dialog
+        fullWidth={true}
+        maxWidth="md"
         onClose={(): void => {
           if (uploadedFiles.length > 0) {
             setConfirmationDialogOpen(true);
@@ -79,8 +80,6 @@ const MaterialUpload: FC<Props> = (props) => {
           }
         }}
         open={isOpen}
-        maxWidth="md"
-        fullWidth
       >
         <DialogTitle>
           {intl.formatMessage(translations.uploadMaterialsTitle)}
@@ -94,22 +93,22 @@ const MaterialUpload: FC<Props> = (props) => {
                 handleClose();
               }
             }}
-            onSubmit={onSubmit}
             isSubmitting={isSubmitting}
-            uploadedFiles={uploadedFiles}
+            onSubmit={onSubmit}
             setUploadedFiles={setUploadedFiles}
+            uploadedFiles={uploadedFiles}
           />
         </DialogContent>
       </Dialog>
       <ConfirmationDialog
-        confirmDiscard
-        open={confirmationDialogOpen}
+        confirmDiscard={true}
         onCancel={(): void => setConfirmationDialogOpen(false)}
         onConfirm={(): void => {
           setConfirmationDialogOpen(false);
           handleClose();
           setUploadedFiles([]);
         }}
+        open={confirmationDialogOpen}
       />
     </>
   );

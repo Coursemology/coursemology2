@@ -1,11 +1,11 @@
 import { AxiosError } from 'axios';
-
-import CourseAPI from 'api/course';
 import {
   CourseComponent,
   CourseComponents,
   CourseComponentsPostData,
 } from 'types/course/admin/components';
+
+import CourseAPI from 'api/course';
 
 type Data = Promise<CourseComponents>;
 

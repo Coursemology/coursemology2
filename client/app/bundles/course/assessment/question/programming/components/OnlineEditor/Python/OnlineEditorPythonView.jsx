@@ -1,8 +1,6 @@
-import { Map } from 'immutable';
-
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion,
   AccordionDetails,
@@ -17,19 +15,21 @@ import {
   TableRow,
 } from '@mui/material';
 import { red } from '@mui/material/colors';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Map } from 'immutable';
+import PropTypes from 'prop-types';
 
 import 'ace-builds/src-noconflict/mode-python';
 import 'ace-builds/src-noconflict/theme-monokai';
 
-import styles from '../OnlineEditorView.scss';
-import translations from '../OnlineEditorView.intl';
 import {
+  EditorCard,
   ExistingPackageFile,
   NewPackageFile,
   TestCase,
-  EditorCard,
 } from '../OnlineEditorBase';
+import translations from '../OnlineEditorView.intl';
+
+import styles from '../OnlineEditorView.scss';
 
 const MAX_TEST_CASES = 99;
 
@@ -118,13 +118,13 @@ class OnlineEditorPythonView extends Component {
         <h3>{intl.formatMessage(translations.testCasesHeader)}</h3>
         <div style={{ marginBottom: '0.5em' }}>
           <FormattedMessage
-            id="course.assessment.question.programming.OnlineEditorViewitorPythonView.testCasesDescription"
             defaultMessage={
               '{note}: The expression in the {expression} column will be compared with the ' +
               'expression in the {expected} column using the equality operator. The return value ' +
               'of {print} is {none} and the printed output should not be confused with the ' +
               'return value.'
             }
+            id="course.assessment.question.programming.OnlineEditorViewitorPythonView.testCasesDescription"
             values={{
               note: (
                 <b>
@@ -217,7 +217,7 @@ class OnlineEditorPythonView extends Component {
 
     return (
       <Accordion
-        defaultExpanded
+        defaultExpanded={true}
         style={{
           margin: 0,
         }}
@@ -275,7 +275,7 @@ class OnlineEditorPythonView extends Component {
 
     return (
       <Accordion
-        defaultExpanded
+        defaultExpanded={true}
         style={{
           margin: 0,
         }}
@@ -333,7 +333,7 @@ class OnlineEditorPythonView extends Component {
 
     return (
       <Accordion
-        defaultExpanded
+        defaultExpanded={true}
         style={{
           margin: 0,
         }}

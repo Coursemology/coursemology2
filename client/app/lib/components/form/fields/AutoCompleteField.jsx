@@ -1,7 +1,9 @@
 import { memo } from 'react';
-import PropTypes from 'prop-types';
 import { Autocomplete, TextField } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
+
 import propsAreEqual from './utils/propsAreEqual';
 
 const styles = {
@@ -21,15 +23,14 @@ const FormAutoCompleteField = (props) => {
     <Autocomplete
       {...field}
       disabled={disabled}
-      freeSolo
-      fullWidth
+      freeSolo={true}
+      fullWidth={true}
       onChange={(event, newValue) => field.onChange(newValue)}
       onInputChange={(event, newValue) => field.onChange(newValue)}
       options={options}
       renderInput={(params) => (
         <TextField
           {...params}
-          label={label}
           error={!!fieldState.error}
           helperText={
             fieldState.error && formatErrorMessage(fieldState.error.message)
@@ -37,6 +38,7 @@ const FormAutoCompleteField = (props) => {
           InputLabelProps={{
             shrink: true,
           }}
+          label={label}
           style={styles.autoCompleteFieldStyle}
           variant="standard"
         />

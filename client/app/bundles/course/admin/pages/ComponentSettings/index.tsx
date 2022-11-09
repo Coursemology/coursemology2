@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { CourseComponents } from 'types/course/admin/components';
-import useTranslation from 'lib/hooks/useTranslation';
-import formTranslations from 'lib/translations/form';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
+import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
+
+import { useItemsReloader } from '../../components/SettingsNavigation';
+
 import ComponentSettingsForm from './ComponentSettingsForm';
 import { fetchComponentSettings, updateComponentSettings } from './operations';
-import { useItemsReloader } from '../../components/SettingsNavigation';
 import translations from './translations';
 
 const ComponentSettings = (): JSX.Element => {
@@ -36,12 +38,12 @@ const ComponentSettings = (): JSX.Element => {
   };
 
   return (
-    <Preload while={fetchComponentSettings} render={<LoadingIndicator />}>
+    <Preload render={<LoadingIndicator />} while={fetchComponentSettings}>
       {(data): JSX.Element => (
         <ComponentSettingsForm
           data={data}
-          onChangeComponents={handleSubmit}
           disabled={submitting}
+          onChangeComponents={handleSubmit}
         />
       )}
     </Preload>

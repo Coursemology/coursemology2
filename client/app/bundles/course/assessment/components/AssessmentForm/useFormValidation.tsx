@@ -5,16 +5,17 @@
 // Probably fixed in yup 1.0+ with a new function signature with array destructuring
 // https://github.com/jquense/yup#:~:text=isBig%27%2C%20(-,%5BisBig%5D,-%2C%20schema)
 
-import * as yup from 'yup';
-import { yupResolver } from '@hookform/resolvers/yup';
 import {
   FieldValues,
   SubmitHandler,
   useForm,
   UseFormReturn,
 } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
 import ft from 'lib/translations/form';
+
 import t from './translations.intl';
 
 const validationSchema = yup.object({

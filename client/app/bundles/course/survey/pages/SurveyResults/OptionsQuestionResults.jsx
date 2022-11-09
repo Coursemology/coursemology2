@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 import {
   Button,
   CardContent,
@@ -14,11 +13,12 @@ import {
   TableRow,
 } from '@mui/material';
 import { cyan, grey } from '@mui/material/colors';
+import PropTypes from 'prop-types';
 
-import Thumbnail from 'lib/components/core/Thumbnail';
-import { sorts } from 'course/survey/utils';
 import { questionTypes } from 'course/survey/constants';
 import { optionShape } from 'course/survey/propTypes';
+import { sorts } from 'course/survey/utils';
+import Thumbnail from 'lib/components/core/Thumbnail';
 
 const styles = {
   percentageBarThreshold: 10,
@@ -149,9 +149,9 @@ class OptionsQuestionResults extends Component {
           <TableCell>
             {imageUrl ? (
               <Thumbnail
+                containerStyle={styles.imageContainer}
                 src={imageUrl}
                 style={styles.image}
-                containerStyle={styles.imageContainer}
               />
             ) : (
               []
@@ -192,7 +192,6 @@ class OptionsQuestionResults extends Component {
         {students.map((student) => (
           <Chip
             key={student.id}
-            style={styles.nameChip}
             label={
               <Link to={student.response_path}>
                 {student.phantom ? (
@@ -205,6 +204,7 @@ class OptionsQuestionResults extends Component {
                 )}
               </Link>
             }
+            style={styles.nameChip}
           />
         ))}
       </div>
@@ -261,10 +261,10 @@ class OptionsQuestionResults extends Component {
     return (
       <CardContent style={styles.expandToggleStyle}>
         <Button
-          variant="outlined"
           onClick={() =>
             this.setState((state) => ({ expanded: !state.expanded }))
           }
+          variant="outlined"
         >
           <FormattedMessage
             {...translations[labelTranslation]}

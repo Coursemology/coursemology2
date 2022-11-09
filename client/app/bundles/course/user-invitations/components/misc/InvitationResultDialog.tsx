@@ -1,4 +1,6 @@
 import { FC } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import HelpIcon from '@mui/icons-material/Help';
 import {
   Button,
   Dialog,
@@ -8,11 +10,10 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { InvitationResult } from 'types/course/userInvitations';
-import HelpIcon from '@mui/icons-material/Help';
-import InvitationResultUsersTable from '../tables/InvitationResultUsersTable';
+
 import InvitationResultInvitationsTable from '../tables/InvitationResultInvitationsTable';
+import InvitationResultUsersTable from '../tables/InvitationResultUsersTable';
 
 interface Props extends WrappedComponentProps {
   open: boolean;
@@ -107,16 +108,16 @@ const InvitationResultDialog: FC<Props> = (props) => {
 
   return (
     <Dialog
-      onClose={handleDialogClose}
-      disableEscapeKeyDown
-      open={open}
-      fullWidth
+      disableEscapeKeyDown={true}
+      fullWidth={true}
       maxWidth="lg"
+      onClose={handleDialogClose}
+      open={open}
       sx={styles.dialogStyle}
     >
       <DialogTitle>{`${intl.formatMessage(translations.header)}`}</DialogTitle>
       <DialogContent>
-        <Typography variant="body2" gutterBottom>
+        <Typography gutterBottom={true} variant="body2">
           {intl.formatMessage(translations.body, {
             newInvitationsCount: newInvitations?.length ?? 0,
             newCourseUsersCount: newCourseUsers?.length ?? 0,
@@ -125,7 +126,6 @@ const InvitationResultDialog: FC<Props> = (props) => {
         {duplicateUsers && duplicateUsers.length > 0 && (
           <div className="duplicates">
             <InvitationResultUsersTable
-              users={duplicateUsers}
               title={
                 <Typography variant="h6">
                   <Tooltip
@@ -138,6 +138,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
                   })}
                 </Typography>
               }
+              users={duplicateUsers}
             />
           </div>
         )}
@@ -165,7 +166,6 @@ const InvitationResultDialog: FC<Props> = (props) => {
         {existingCourseUsers && existingCourseUsers.length > 0 && (
           <div className="existingCourseUsers">
             <InvitationResultUsersTable
-              users={existingCourseUsers}
               title={
                 <Typography variant="h6">
                   <Tooltip
@@ -180,6 +180,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
                   })}
                 </Typography>
               }
+              users={existingCourseUsers}
             />
           </div>
         )}
@@ -200,7 +201,6 @@ const InvitationResultDialog: FC<Props> = (props) => {
         {newCourseUsers && newCourseUsers.length > 0 && (
           <div className="newCourseUsers">
             <InvitationResultUsersTable
-              users={newCourseUsers}
               title={
                 <Typography variant="h6">
                   {intl.formatMessage(translations.newCourseUsers, {
@@ -208,12 +208,13 @@ const InvitationResultDialog: FC<Props> = (props) => {
                   })}
                 </Typography>
               }
+              users={newCourseUsers}
             />
           </div>
         )}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} color="secondary">
+        <Button color="secondary" onClick={handleClose}>
           {intl.formatMessage(translations.close)}
         </Button>
       </DialogActions>

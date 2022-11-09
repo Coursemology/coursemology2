@@ -1,12 +1,12 @@
 import { AxiosError } from 'axios';
-
-import CourseAPI from 'api/course';
 import {
   VideosSettingsData,
   VideosSettingsPostData,
   VideosTab,
   VideosTabPostData,
 } from 'types/course/admin/videos';
+
+import CourseAPI from 'api/course';
 
 type Data = Promise<VideosSettingsData>;
 

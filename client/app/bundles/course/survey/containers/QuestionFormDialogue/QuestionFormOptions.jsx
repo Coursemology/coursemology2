@@ -1,7 +1,8 @@
 import { memo } from 'react';
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import QuestionFormOption from './QuestionFormOption';
 
 const styles = {
@@ -93,10 +94,10 @@ const QuestionFormOptions = (props) => {
         <Button color="primary" component="label" disabled={disabled}>
           <FormattedMessage {...optionsTranslations.bulkUploadImages} />
           <input
-            type="file"
-            style={styles.imageUploader}
+            multiple={true}
             onChange={(event) => handleSelectFiles(event, fieldsConfig)}
-            multiple
+            style={styles.imageUploader}
+            type="file"
             {...{ disabled }}
           />
         </Button>

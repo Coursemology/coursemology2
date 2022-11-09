@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+
 import { formatTimestamp } from 'lib/helpers/videoHelpers';
 
 import styles from '../VideoPlayer.scss';

@@ -1,9 +1,10 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { injectIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
-import { showEventForm, createEvent } from 'course/lesson-plan/actions';
+import PropTypes from 'prop-types';
+
+import { createEvent, showEventForm } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
   newEvent: {
@@ -53,7 +54,7 @@ class NewEventButton extends Component {
     }
 
     return (
-      <Button variant="contained" color="primary" onClick={this.showForm}>
+      <Button color="primary" onClick={this.showForm} variant="contained">
         <FormattedMessage {...translations.newEvent} />
       </Button>
     );

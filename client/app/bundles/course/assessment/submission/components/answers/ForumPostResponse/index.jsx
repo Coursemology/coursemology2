@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Controller, useFormContext } from 'react-hook-form';
+import PropTypes from 'prop-types';
+
 import { questionShape } from 'course/assessment/submission/propTypes';
-import FormRichTextField from 'lib/components/form/fields/RichTextField';
-import NotificationBar from 'lib/components/core/NotificationBar';
 import Error from 'lib/components/core/ErrorCard';
+import NotificationBar from 'lib/components/core/NotificationBar';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
+
 import ForumPostSelect from './ForumPostSelect';
 
 const ForumPostResponse = (props) => {
@@ -15,25 +17,25 @@ const ForumPostResponse = (props) => {
   const renderTextField = () =>
     readOnly ? (
       <Controller
-        name={`${answerId}.answer_text`}
         control={control}
+        name={`${answerId}.answer_text`}
         render={({ field }) => (
           <div dangerouslySetInnerHTML={{ __html: field.value }} />
         )}
       />
     ) : (
       <Controller
-        name={`${answerId}.answer_text`}
         control={control}
+        name={`${answerId}.answer_text`}
         render={({ field, fieldState }) => (
           <FormRichTextField
             field={field}
             fieldState={fieldState}
-            fullWidth
+            fullWidth={true}
             InputLabelProps={{
               shrink: true,
             }}
-            multiline
+            multiline={true}
             renderIf={!readOnly && question.hasTextResponse}
             variant="standard"
           />
@@ -43,28 +45,28 @@ const ForumPostResponse = (props) => {
   return (
     <>
       <Controller
-        name={`${answerId}.selected_post_packs`}
         control={control}
+        name={`${answerId}.selected_post_packs`}
         render={({ field }) => (
           <ForumPostSelect
-            field={field}
-            question={question}
-            readOnly={readOnly}
             answerId={answerId}
-            onErrorMessage={(message) => setErrorMessage(message)}
+            field={field}
             handleNotificationMessage={(message) =>
               setNotificationMessage(message)
             }
+            onErrorMessage={(message) => setErrorMessage(message)}
+            question={question}
+            readOnly={readOnly}
           />
         )}
       />
       {question.hasTextResponse && renderTextField(readOnly, answerId)}
       {errorMessage && <Error message={errorMessage} />}
       <NotificationBar
-        open={notificationMessage !== ''}
-        notification={{ message: notificationMessage }}
         autoHideDuration={4000}
+        notification={{ message: notificationMessage }}
         onClose={() => setNotificationMessage('')}
+        open={notificationMessage !== ''}
       />
     </>
   );

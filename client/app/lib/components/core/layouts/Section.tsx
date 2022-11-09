@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 import {
+  Breakpoint,
+  Container,
+  Divider,
   Grid,
   Typography,
-  Divider,
-  Container,
-  Breakpoint,
 } from '@mui/material';
 
 interface SectionProps {
@@ -18,34 +18,38 @@ interface SectionProps {
 }
 
 const Section = (props: SectionProps): JSX.Element => (
-  <Container disableGutters maxWidth={props.size ?? 'lg'} className="mb-6">
-    <Grid container spacing={2}>
+  <Container
+    className="mb-6"
+    disableGutters={true}
+    maxWidth={props.size ?? 'lg'}
+  >
+    <Grid container={true} spacing={2}>
       <Grid
-        item
-        xs={12}
-        lg={3}
         className={`lg:sticky lg:self-start ${
           props.sticksToNavbar ? 'lg:top-20' : 'lg:-top-6'
         }`}
+        item={true}
+        lg={3}
+        xs={12}
       >
         {props.title && (
-          <Typography variant="h6" color={props.titleColor ?? 'text.primary'}>
+          <Typography color={props.titleColor ?? 'text.primary'} variant="h6">
             {props.title}
           </Typography>
         )}
 
         {props.subtitle && (
-          <Typography variant="body1" color="text.secondary">
+          <Typography color="text.secondary" variant="body1">
             {props.subtitle}
           </Typography>
         )}
       </Grid>
 
       <Grid
-        item
-        xs={12}
-        lg={9}
         className={`space-y-5 ${props.contentClassName}`}
+        item={true}
+        lg={9}
+        xs={12}
       >
         {props.children}
       </Grid>

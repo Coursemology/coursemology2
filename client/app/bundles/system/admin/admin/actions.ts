@@ -5,30 +5,31 @@ import {
 } from 'types/course/announcements';
 import { CourseListData, CourseStats } from 'types/system/courses';
 import { InstanceListData, InstancePermissions } from 'types/system/instances';
-import { UserListData, AdminStats } from 'types/users';
+import { AdminStats, UserListData } from 'types/users';
+
 import {
-  SaveAnnouncementListAction,
-  SaveAnnouncementAction,
-  DeleteAnnouncementAction,
-  SaveUserListAction,
-  SaveCourseListAction,
-  SaveInstanceListAction,
-  DeleteCourseAction,
-  SaveUserAction,
-  DeleteUserAction,
-  SaveInstanceAction,
-  DeleteInstanceAction,
-  SAVE_ANNOUNCEMENT_LIST,
   DELETE_ANNOUNCEMENT,
-  SAVE_USER_LIST,
-  SAVE_COURSE_LIST,
-  SAVE_INSTANCE_LIST,
   DELETE_COURSE,
-  SAVE_ANNOUNCEMENT,
-  SAVE_USER,
-  DELETE_USER,
-  SAVE_INSTANCE,
   DELETE_INSTANCE,
+  DELETE_USER,
+  DeleteAnnouncementAction,
+  DeleteCourseAction,
+  DeleteInstanceAction,
+  DeleteUserAction,
+  SAVE_ANNOUNCEMENT,
+  SAVE_ANNOUNCEMENT_LIST,
+  SAVE_COURSE_LIST,
+  SAVE_INSTANCE,
+  SAVE_INSTANCE_LIST,
+  SAVE_USER,
+  SAVE_USER_LIST,
+  SaveAnnouncementAction,
+  SaveAnnouncementListAction,
+  SaveCourseListAction,
+  SaveInstanceAction,
+  SaveInstanceListAction,
+  SaveUserAction,
+  SaveUserListAction,
 } from './types';
 
 export function saveAnnouncementList(

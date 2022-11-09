@@ -1,10 +1,12 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { playerStates } from 'lib/constants/videoConstants';
 import { isPlayingState } from 'lib/helpers/videoHelpers';
 
-import styles from '../VideoPlayer.scss';
 import { changePlayerState } from '../../actions/video';
+
+import styles from '../VideoPlayer.scss';
 
 const propTypes = {
   playing: PropTypes.bool.isRequired,

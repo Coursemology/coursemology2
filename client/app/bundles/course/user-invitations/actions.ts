@@ -3,23 +3,24 @@ import {
   ManageCourseUsersSharedData,
 } from 'types/course/courseUsers';
 import { InvitationListData } from 'types/course/userInvitations';
+
 import {
-  SAVE_INVITATION_LIST,
   DELETE_INVITATION,
+  DeleteInvitationAction,
   SAVE_COURSE_REGISTRATION_KEY,
+  SAVE_INVITATION_LIST,
   SAVE_PERMISSIONS,
   SAVE_SHARED_DATA,
-  UPDATE_INVITATION,
-  UPDATE_INVITATION_LIST,
-  UPDATE_INVITATION_COUNTS,
-  SaveInvitationListAction,
-  DeleteInvitationAction,
   SaveCourseRegistrationKeyAction,
+  SaveInvitationListAction,
   SavePermissionsAction,
   SaveSharedDataAction,
+  UPDATE_INVITATION,
+  UPDATE_INVITATION_COUNTS,
+  UPDATE_INVITATION_LIST,
   UpdateInvitationAction,
-  UpdateInvitationListAction,
   UpdateInvitationCountsAction,
+  UpdateInvitationListAction,
 } from './types';
 
 export function saveInvitationList(

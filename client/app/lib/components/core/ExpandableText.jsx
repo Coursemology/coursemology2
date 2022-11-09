@@ -1,6 +1,6 @@
 import { Component } from 'react';
+import { defineMessages, injectIntl } from 'react-intl';
 import PropTypes from 'prop-types';
-import { injectIntl, defineMessages } from 'react-intl';
 
 const translations = defineMessages({
   showAll: {
@@ -58,11 +58,11 @@ class ExpandableText extends Component {
           : `${text.substr(0, maxLength - showAll.length)}\u2026`}
         <br />
         {this.state.expanded ? (
-          <a role="button" tabIndex={0} onClick={this.handleShowLess}>
+          <a onClick={this.handleShowLess} role="button" tabIndex={0}>
             {showLess}
           </a>
         ) : (
-          <a role="button" tabIndex={0} onClick={this.handleShowAll}>
+          <a onClick={this.handleShowAll} role="button" tabIndex={0}>
             {showAll}
           </a>
         )}

@@ -1,17 +1,19 @@
-import { FC, useState, useEffect } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Grid } from '@mui/material';
+import { AppDispatch, AppState } from 'types/store';
+
 import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
-import { AppDispatch, AppState } from 'types/store';
+
 import CourseAnnouncements from '../../components/misc/CourseAnnouncements';
-import PendingTodosTable from '../../components/tables/PendingTodosTable';
-import CourseNotifications from '../../components/misc/CourseNotifications';
 import CourseEnrollOptions from '../../components/misc/CourseEnrollOptions';
+import CourseNotifications from '../../components/misc/CourseNotifications';
+import PendingTodosTable from '../../components/tables/PendingTodosTable';
 import { loadCourse } from '../../operations';
 import { getCourseEntity } from '../../selectors';
 
@@ -65,8 +67,12 @@ const CourseShow: FC<Props> = (props) => {
 
       {!course.permissions.isCurrentCourseUser && (
         <>
-          <Grid container columns={{ xs: 1, lg: 4 }} direction="row-reverse">
-            <Grid item xs={1} lg={3}>
+          <Grid
+            columns={{ xs: 1, lg: 4 }}
+            container={true}
+            direction="row-reverse"
+          >
+            <Grid item={true} lg={3} xs={1}>
               <div style={{ display: 'flex', justifyContent: 'right' }}>
                 {course.registrationInfo && (
                   <CourseEnrollOptions
@@ -75,24 +81,24 @@ const CourseShow: FC<Props> = (props) => {
                 )}
               </div>
             </Grid>
-            <Grid item xs={1} lg={1}>
+            <Grid item={true} lg={1} xs={1}>
               <h2 style={{ marginRight: 20, marginTop: 5 }}>
                 {intl.formatMessage(translations.descriptionHeader)}
               </h2>
             </Grid>
           </Grid>
           <div
-            id="course-description"
             dangerouslySetInnerHTML={{ __html: course.description }}
+            id="course-description"
           />
           <h2>{intl.formatMessage(translations.instructorsHeader)}</h2>
-          <Grid container spacing={1}>
+          <Grid container={true} spacing={1}>
             {course.instructors?.map((instructor) => (
-              <Grid item key={instructor.id} xs={3} sm={2} lg={1}>
+              <Grid key={instructor.id} item={true} lg={1} sm={2} xs={3}>
                 <div id={`instructor-${instructor.id}`}>
                   <AvatarWithLabel
-                    label={instructor.name}
                     imageUrl={instructor.imageUrl!}
+                    label={instructor.name}
                     size="sm"
                   />
                 </div>

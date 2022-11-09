@@ -1,16 +1,15 @@
 import { FC } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
 import { Controller, UseFormSetError } from 'react-hook-form';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { AnnouncementFormData } from 'types/course/announcements';
 import * as yup from 'yup';
 
-import formTranslations from 'lib/translations/form';
+import FormDialog from 'lib/components/form/dialog/FormDialog';
+import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
-import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
-
-import { AnnouncementFormData } from 'types/course/announcements';
-import FormDialog from 'lib/components/form/dialog/FormDialog';
+import formTranslations from 'lib/translations/form';
 
 interface Props {
   open: boolean;
@@ -66,13 +65,13 @@ const AnnouncementForm: FC<Props> = (props) => {
 
   return (
     <FormDialog
-      open={open}
       editing={editing}
-      onClose={onClose}
-      onSubmit={onSubmit}
-      title={title}
       formName="announcement-form"
       initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      open={open}
+      title={title}
       validationSchema={validationSchema}
     >
       {(control, formState): JSX.Element => (
@@ -82,47 +81,46 @@ const AnnouncementForm: FC<Props> = (props) => {
             name="title"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={<FormattedMessage {...translations.title} />}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                required
+                label={<FormattedMessage {...translations.title} />}
+                required={true}
                 variant="standard"
               />
             )}
           />
 
           <Controller
-            name="content"
             control={control}
+            name="content"
             render={({ field, fieldState }): JSX.Element => (
               <FormRichTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={<FormattedMessage {...translations.content} />}
-                // @ts-ignore: component is still written in JS
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={<FormattedMessage {...translations.content} />}
                 variant="standard"
               />
             )}
           />
           {canSticky && (
             <Controller
-              name="sticky"
               control={control}
+              name="sticky"
               render={({ field, fieldState }): JSX.Element => (
                 <FormToggleField
+                  disabled={formState.isSubmitting}
                   field={field}
                   fieldState={fieldState}
-                  disabled={formState.isSubmitting}
                   label={<FormattedMessage {...translations.sticky} />}
                 />
               )}
@@ -132,26 +130,26 @@ const AnnouncementForm: FC<Props> = (props) => {
 
           <div style={{ display: 'flex' }}>
             <Controller
-              name="startAt"
               control={control}
+              name="startAt"
               render={({ field, fieldState }): JSX.Element => (
                 <FormDateTimePickerField
+                  disabled={formState.isSubmitting}
                   field={field}
                   fieldState={fieldState}
-                  disabled={formState.isSubmitting}
                   label={<FormattedMessage {...translations.startAt} />}
                   style={{ flex: 1 }}
                 />
               )}
             />
             <Controller
-              name="endAt"
               control={control}
+              name="endAt"
               render={({ field, fieldState }): JSX.Element => (
                 <FormDateTimePickerField
+                  disabled={formState.isSubmitting}
                   field={field}
                   fieldState={fieldState}
-                  disabled={formState.isSubmitting}
                   label={<FormattedMessage {...translations.endAt} />}
                   style={{ flex: 1 }}
                 />

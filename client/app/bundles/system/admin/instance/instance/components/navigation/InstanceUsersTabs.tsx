@@ -1,7 +1,7 @@
-import { Tabs, Tab } from '@mui/material';
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Link } from 'react-router-dom';
+import { Tab, Tabs } from '@mui/material';
 
 interface Props extends WrappedComponentProps {
   currentTab: string;
@@ -35,25 +35,25 @@ const InstanceUsersTabs: FC<Props> = (props) => {
       variant="fullWidth"
     >
       <Tab
+        component={Link}
         id="instance-users-tab"
         label={intl.formatMessage(translations.usersTab)}
-        value="users-tab"
         to="/admin/instance/users"
-        component={Link}
+        value="users-tab"
       />
       <Tab
+        component={Link}
         id="invite-users-tab"
         label={intl.formatMessage(translations.inviteTab)}
-        value="invite-users-tab"
         to="/admin/instance/users/invite"
-        component={Link}
+        value="invite-users-tab"
       />
       <Tab
+        component={Link}
         id="invitations-tab"
         label={intl.formatMessage(translations.invitationsTab)}
-        value="invitations-tab"
         to="/admin/instance/user_invitations"
-        component={Link}
+        value="invitations-tab"
       />
     </Tabs>
   );

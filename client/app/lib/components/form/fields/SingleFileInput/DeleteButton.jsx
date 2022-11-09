@@ -1,8 +1,9 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Badge, IconButton, Tooltip } from '@mui/material';
-import Close from '@mui/icons-material/Close';
 import { FormattedMessage } from 'react-intl';
+import Close from '@mui/icons-material/Close';
+import { Badge, IconButton, Tooltip } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import translations from './translations';
 
 const styles = {

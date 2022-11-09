@@ -1,15 +1,17 @@
+import { FC, memo, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { FC, useState, memo, useEffect } from 'react';
+import { Grid, Stack } from '@mui/material';
+import equal from 'fast-deep-equal';
 import {
   AnnouncementFormData,
   AnnouncementMiniEntity,
   AnnouncementPermissions,
 } from 'types/course/announcements';
-import equal from 'fast-deep-equal';
 import { Operation } from 'types/store';
-import { Grid, Stack } from '@mui/material';
+
 import SearchBar from 'lib/components/core/fields/SearchBar';
 import Pagination from 'lib/components/core/layouts/Pagination';
+
 import AnnouncementCard from './AnnouncementCard';
 
 interface Props extends WrappedComponentProps {
@@ -76,36 +78,36 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
 
   return (
     <>
-      <Grid style={{ padding: 0 }} container columns={{ xs: 1, lg: 3 }}>
+      <Grid columns={{ xs: 1, lg: 3 }} container={true} style={{ padding: 0 }}>
         <Grid
-          item
-          xs={1}
+          item={true}
           style={{
             display: 'flex',
             justifyContent: 'left',
           }}
+          xs={1}
         >
           <div style={{ paddingTop: 7, paddingBottom: 5 }}>
             <SearchBar
+              onChange={handleSearchBarChange}
               placeholder={intl.formatMessage(
                 translations.searchBarPlaceholder,
               )}
               width={350}
-              onChange={handleSearchBarChange}
             />
           </div>
         </Grid>
-        <Grid item xs={1}>
+        <Grid item={true} xs={1}>
           <Pagination
             items={shavedAnnouncements}
             itemsPerPage={ITEMS_PER_PAGE}
-            setSlicedItems={setslicedAnnouncements}
+            padding={12}
             page={page}
             setPage={setPage}
-            padding={12}
+            setSlicedItems={setslicedAnnouncements}
           />
         </Grid>
-        <Grid item xs={1} />
+        <Grid item={true} xs={1} />
       </Grid>
 
       <div id="course-announcements">
@@ -114,10 +116,10 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
             <AnnouncementCard
               key={announcement.id}
               announcement={announcement}
+              canSticky={canSticky}
+              deleteOperation={deleteOperation}
               showEditOptions={announcementPermissions.canCreate}
               updateOperation={updateOperation}
-              deleteOperation={deleteOperation}
-              canSticky={canSticky}
             />
           ))}
         </Stack>
@@ -127,10 +129,10 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
         <Pagination
           items={shavedAnnouncements}
           itemsPerPage={ITEMS_PER_PAGE}
-          setSlicedItems={setslicedAnnouncements}
+          padding={12}
           page={page}
           setPage={setPage}
-          padding={12}
+          setSlicedItems={setslicedAnnouncements}
         />
       )}
     </>

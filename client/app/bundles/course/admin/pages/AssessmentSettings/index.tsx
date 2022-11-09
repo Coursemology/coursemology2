@@ -1,28 +1,30 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { AssessmentSettingsData } from 'types/course/admin/assessments';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { FormEmitter } from 'lib/components/form/Form';
+import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
-import { FormEmitter } from 'lib/components/form/Form';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import Preload from 'lib/components/wrappers/Preload';
-import AssessmentSettingsForm from './AssessmentSettingsForm';
-import {
-  updateAssessmentSettings,
-  deleteCategory,
-  deleteTabInCategory,
-  createTabInCategory,
-  createCategory,
-  fetchAssessmentsSettings,
-  moveAssessments,
-  moveTabs,
-} from './operations';
+
 import commonTranslations from '../../translations';
+
 import {
   AssessmentSettingsContextType,
   AssessmentSettingsProvider,
 } from './AssessmentSettingsContext';
+import AssessmentSettingsForm from './AssessmentSettingsForm';
+import {
+  createCategory,
+  createTabInCategory,
+  deleteCategory,
+  deleteTabInCategory,
+  fetchAssessmentsSettings,
+  moveAssessments,
+  moveTabs,
+  updateAssessmentSettings,
+} from './operations';
 import translations from './translations';
 
 interface LoadedAssessmentSettingsProps {
@@ -166,16 +168,16 @@ const LoadedAssessmentSettings = (
     <AssessmentSettingsProvider value={assessmentSettings}>
       <AssessmentSettingsForm
         data={settings}
+        disabled={submitting}
         emitsVia={setForm}
         onSubmit={handleSubmit}
-        disabled={submitting}
       />
     </AssessmentSettingsProvider>
   );
 };
 
 const AssessmentSettings = (): JSX.Element => (
-  <Preload while={fetchAssessmentsSettings} render={<LoadingIndicator />}>
+  <Preload render={<LoadingIndicator />} while={fetchAssessmentsSettings}>
     {(data): JSX.Element => <LoadedAssessmentSettings data={data} />}
   </Preload>
 );

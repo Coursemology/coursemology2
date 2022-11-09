@@ -1,28 +1,30 @@
-import { FC, useEffect, useState, memo, useMemo } from 'react';
+import { FC, memo, useEffect, useMemo, useState } from 'react';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
 import {
   defineMessages,
   FormattedMessage,
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
-import * as yup from 'yup';
-import formTranslations from 'lib/translations/form';
+import { Button, Grid } from '@mui/material';
+import equal from 'fast-deep-equal';
 import {
   DisbursementFormData,
   ForumDisbursementFilters,
   ForumDisbursementFormData,
   ForumDisbursementUserEntity,
 } from 'types/course/disbursement';
+import { AppDispatch } from 'types/store';
+import * as yup from 'yup';
+
 import ErrorText from 'lib/components/core/ErrorText';
 import FormTextField from 'lib/components/form/fields/TextField';
-import { Button, Grid } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from 'types/store';
-import { toast } from 'react-toastify';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import equal from 'fast-deep-equal';
+import formTranslations from 'lib/translations/form';
+
 import { createForumDisbursement } from '../../operations';
 import ForumDisbursementTable from '../tables/ForumDisbursementTable';
 
@@ -130,7 +132,7 @@ const ForumDisbursementForm: FC<Props> = (props) => {
       <form
         encType="multipart/form-data"
         id="forum-form"
-        noValidate
+        noValidate={true}
         onSubmit={handleSubmit((data) => {
           const forumData: ForumDisbursementFormData = {
             ...filters,
@@ -141,38 +143,37 @@ const ForumDisbursementForm: FC<Props> = (props) => {
         style={{ display: forumUsers.length === 0 ? 'none' : 'contents' }}
       >
         <ErrorText errors={errors} />
-        <Grid container direction="row" columnSpacing={2} rowSpacing={2}>
-          <Grid item xs>
+        <Grid columnSpacing={2} container={true} direction="row" rowSpacing={2}>
+          <Grid item={true} xs={true}>
             <Controller
               control={control}
               name="reason"
               render={({ field, fieldState }): JSX.Element => (
                 <FormTextField
+                  className="forum_disbursement_reason"
                   field={field}
                   fieldState={fieldState}
-                  label={<FormattedMessage {...translations.reason} />}
-                  // @ts-ignore: component is still written in JS
-                  className="forum_disbursement_reason"
-                  fullWidth
+                  fullWidth={true}
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  required
+                  label={<FormattedMessage {...translations.reason} />}
+                  required={true}
                   variant="standard"
                 />
               )}
             />
           </Grid>
-          <Grid item>
+          <Grid item={true}>
             <Button
-              color="primary"
+              key="forum-form-submit-button"
               className="forum-btn-submit"
+              color="primary"
               disabled={isSubmitting}
               form="forum-form"
-              key="forum-form-submit-button"
+              style={{ marginBottom: '10px', marginTop: '10px' }}
               type="submit"
               variant="outlined"
-              style={{ marginBottom: '10px', marginTop: '10px' }}
             >
               <FormattedMessage {...translations.submit} />
             </Button>

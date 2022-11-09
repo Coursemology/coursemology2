@@ -1,19 +1,21 @@
 import { MemoryRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
-import shallowUntil from 'testUtils/shallowUntil';
 import MockAdapter from 'axios-mock-adapter';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+import { mount } from 'enzyme';
+
 import CourseAPI from 'api/course';
-import store from 'course/assessment/submission/store';
-import ScribingView from 'course/assessment/submission/containers/ScribingView';
 import ScribingToolbar from 'course/assessment/submission/components/ScribingView/ScribingToolbar';
+import ScribingView from 'course/assessment/submission/containers/ScribingView';
+import store from 'course/assessment/submission/store';
+import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+import shallowUntil from 'testUtils/shallowUntil';
+
 import { setColoringToolColor } from '../../../actions/scribing';
 import actionTypes, {
-  scribingTools,
-  scribingToolColor,
-  scribingToolThickness,
-  scribingToolLineStyle,
   scribingPopoverTypes,
+  scribingToolColor,
+  scribingToolLineStyle,
+  scribingTools,
+  scribingToolThickness,
 } from '../../../constants';
 
 const client = CourseAPI.assessment.answer.scribing.getClient();

@@ -1,6 +1,7 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { Droppable } from 'react-beautiful-dnd';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Card,
   CardActions,
@@ -8,16 +9,16 @@ import {
   CardHeader,
   ListSubheader,
 } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Droppable } from 'react-beautiful-dnd';
+import PropTypes from 'prop-types';
 
-import { surveyShape, sectionShape } from 'course/survey/propTypes';
-import Question from './Question';
-import NewQuestionButton from './NewQuestionButton';
-import EditSectionButton from './EditSectionButton';
+import { sectionShape, surveyShape } from 'course/survey/propTypes';
+
 import DeleteSectionButton from './DeleteSectionButton';
-import MoveUpButton from './MoveUpButton';
+import EditSectionButton from './EditSectionButton';
 import MoveDownButton from './MoveDownButton';
+import MoveUpButton from './MoveUpButton';
+import NewQuestionButton from './NewQuestionButton';
+import Question from './Question';
 
 const styles = {
   card: {
@@ -78,6 +79,10 @@ class Section extends Component {
     return (
       <Card style={styles.card}>
         <CardHeader
+          subheader={
+            <div dangerouslySetInnerHTML={{ __html: section.description }} />
+          }
+          subheaderTypographyProps={{ style: styles.subtitle }}
           title={
             <>
               {section.title}
@@ -97,16 +102,12 @@ class Section extends Component {
               )}
             </>
           }
-          subheader={
-            <div dangerouslySetInnerHTML={{ __html: section.description }} />
-          }
-          subheaderTypographyProps={{ style: styles.subtitle }}
         />
         {section.questions.length > 1 ? this.renderActions() : null}
 
         <CardContent>
           {section.questions.length < 1 ? (
-            <ListSubheader disableSticky>
+            <ListSubheader disableSticky={true}>
               <FormattedMessage {...translations.noQuestions} />
             </ListSubheader>
           ) : null}

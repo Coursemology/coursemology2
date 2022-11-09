@@ -1,6 +1,7 @@
 import { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { Card, CardContent } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import Thumbnail from 'lib/components/core/Thumbnail';
 
 const styles = {
@@ -54,9 +55,9 @@ class OptionsListItem extends PureComponent {
       <Card style={styles.gridCard}>
         {imageUrl ? (
           <Thumbnail
+            containerStyle={styles.tiledImageContainer}
             src={imageUrl}
             style={styles.tiledImage}
-            containerStyle={styles.tiledImageContainer}
           />
         ) : (
           []
@@ -80,9 +81,9 @@ class OptionsListItem extends PureComponent {
         {widget}
         {imageUrl ? (
           <Thumbnail
+            containerStyle={styles.imageContainer}
             src={imageUrl}
             style={styles.image}
-            containerStyle={styles.imageContainer}
           />
         ) : (
           []

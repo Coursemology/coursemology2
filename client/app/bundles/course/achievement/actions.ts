@@ -4,15 +4,16 @@ import {
   AchievementListData,
   AchievementPermissions,
 } from 'types/course/achievements';
+
 import {
-  SAVE_ACHIEVEMENT_LIST,
-  SAVE_ACHIEVEMENT,
   DELETE_ACHIEVEMENT,
-  SAVE_ACHIEVEMENT_COURSE_USERS,
-  SaveAchievementListAction,
-  SaveAchievementAction,
   DeleteAchievementAction,
+  SAVE_ACHIEVEMENT,
+  SAVE_ACHIEVEMENT_COURSE_USERS,
+  SAVE_ACHIEVEMENT_LIST,
+  SaveAchievementAction,
   SaveAchievementCourseUserAction,
+  SaveAchievementListAction,
 } from './types';
 
 export function saveAchievementList(

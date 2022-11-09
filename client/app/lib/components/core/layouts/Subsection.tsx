@@ -1,5 +1,5 @@
-import { Typography } from '@mui/material';
 import { ReactNode } from 'react';
+import { Typography } from '@mui/material';
 
 interface SubsectionProps {
   title: string;
@@ -14,13 +14,13 @@ const Subsection = (props: SubsectionProps): JSX.Element => (
   <div className={props.className}>
     <div className="mb-4">
       {props.title && (
-        <Typography variant="body1" color="text.primary">
+        <Typography color="text.primary" variant="body1">
           {props.title}
         </Typography>
       )}
 
       {props.subtitle && (
-        <Typography variant="body2" color="text.secondary">
+        <Typography color="text.secondary" variant="body2">
           {props.subtitle}
         </Typography>
       )}

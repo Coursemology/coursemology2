@@ -1,8 +1,9 @@
-import { Tabs, Tab } from '@mui/material';
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { URLSearchParamsInit } from 'react-router-dom';
+import { Tab, Tabs } from '@mui/material';
 import { AppState } from 'types/store';
+
 import { getVideoTabs } from '../../selectors';
 
 interface Props {
@@ -28,9 +29,9 @@ const VideoTabs: FC<Props> = (props) => {
       onChange={(_, value): void => {
         setCurrentTab({ tab: value });
       }}
+      scrollButtons="auto"
       value={currentTab ?? videoTabs[0]?.id}
       variant="scrollable"
-      scrollButtons="auto"
     >
       {videoTabs.map((tab) => (
         <Tab key={tab.id} label={tab.title} value={tab.id} />

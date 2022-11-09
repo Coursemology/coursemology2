@@ -1,8 +1,8 @@
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
-import SearchIcon from '@mui/icons-material/Search';
 import { FC } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
+import Divider from '@mui/material/Divider';
+import InputBase from '@mui/material/InputBase';
+import Paper from '@mui/material/Paper';
 
 interface Props {
   placeholder: string;
@@ -34,13 +34,13 @@ const SearchBar: FC<Props> = (props) => {
       }}
     >
       <InputBase
-        sx={{ ml: 1, flex: 1 }}
-        placeholder={placeholder}
         onChange={onChange}
+        placeholder={placeholder}
+        sx={{ ml: 1, flex: 1 }}
       />
       <SearchIcon />
 
-      <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
+      <Divider orientation="vertical" sx={{ height: 28, m: 0.5 }} />
     </Paper>
   );
 };

@@ -1,15 +1,17 @@
 import { useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Tab, Tabs } from '@mui/material';
 import { red } from '@mui/material/colors';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+import * as yup from 'yup';
+
 import ErrorText from 'lib/components/core/ErrorText';
 import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
+
 import actionTypes, { formNames } from '../constants';
 import { groupShape } from '../propTypes';
 
@@ -144,17 +146,17 @@ const GroupCreationForm = (props) => {
   return (
     <form
       id={formNames.GROUP}
-      noValidate
+      noValidate={true}
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
       <Tabs
         indicatorColor="primary"
-        textColor="inherit"
-        value={isSingle ? 'is_single' : 'is_multiple'}
         onChange={(event, value) =>
           setValue('is_single', value === 'is_single')
         }
+        textColor="inherit"
+        value={isSingle ? 'is_single' : 'is_multiple'}
         variant="fullWidth"
       >
         <Tab label="Single" value="is_single" />
@@ -163,41 +165,41 @@ const GroupCreationForm = (props) => {
       {isSingle && (
         <div style={styles.flexCol}>
           <Controller
-            name="name"
             control={control}
+            name="name"
             render={({ field, fieldState }) => (
               <FormTextField
+                disabled={isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={isSubmitting}
-                label={<FormattedMessage {...translations.name} />}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={<FormattedMessage {...translations.name} />}
                 renderIf={isSingle}
-                required
+                required={true}
                 style={styles.flexChild}
                 variant="standard"
               />
             )}
           />
           <Controller
-            name="description"
             control={control}
+            name="description"
             render={({ field, fieldState }) => (
               <FormTextField
+                disabled={isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={isSubmitting}
-                label={<FormattedMessage {...translations.description} />}
-                fullWidth
-                multiline
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                minRows={2}
+                label={<FormattedMessage {...translations.description} />}
                 maxRows={4}
+                minRows={2}
+                multiline={true}
                 renderIf={isSingle}
                 style={styles.flexChild}
                 variant="standard"
@@ -209,44 +211,44 @@ const GroupCreationForm = (props) => {
       {!isSingle && (
         <div style={styles.flexCol}>
           <Controller
-            name="name"
             control={control}
+            name="name"
             render={({ field, fieldState }) => (
               <FormTextField
+                disabled={isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={isSubmitting}
-                label={<FormattedMessage {...translations.prefix} />}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={<FormattedMessage {...translations.prefix} />}
                 renderIf={!isSingle}
-                required
+                required={true}
                 style={styles.flexChild}
                 variant="standard"
               />
             )}
           />
           <Controller
-            name="num_to_create"
             control={control}
+            name="num_to_create"
             render={({ field, fieldState }) => (
               <FormTextField
+                disabled={isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={isSubmitting}
-                fullWidth
-                label={<FormattedMessage {...translations.numToCreate} />}
+                fullWidth={true}
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 InputProps={{
                   inputProps: {
                     min: MIN_NUM_TO_CREATE,
                     max: MAX_NUM_TO_CREATE,
                   },
                 }}
-                InputLabelProps={{
-                  shrink: true,
-                }}
+                label={<FormattedMessage {...translations.numToCreate} />}
                 onWheel={(event) => event.currentTarget.blur()}
                 renderIf={!isSingle}
                 style={styles.flexChild}

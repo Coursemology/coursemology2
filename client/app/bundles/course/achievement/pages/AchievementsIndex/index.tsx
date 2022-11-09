@@ -2,13 +2,15 @@ import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { AppDispatch, AppState } from 'types/store';
-import PageHeader from 'lib/components/navigation/PageHeader';
+
 import AddButton from 'lib/components/core/buttons/AddButton';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import AchievementReordering from '../../components/misc/AchievementReordering';
+import AchievementTable from '../../components/tables/AchievementTable';
 import {
   fetchAchievements,
   updatePublishedAchievement,
@@ -17,9 +19,6 @@ import {
   getAchievementPermissions,
   getAllAchievementMiniEntities,
 } from '../../selectors';
-
-import AchievementTable from '../../components/tables/AchievementTable';
-import AchievementReordering from '../../components/misc/AchievementReordering';
 import AchievementNew from '../AchievementNew';
 
 const translations = defineMessages({
@@ -70,8 +69,8 @@ const AchievementsIndex: FC = () => {
   if (achievementPermissions?.canCreate) {
     headerToolbars.push(
       <AddButton
-        className="new-achievement-button"
         key="new-achievement-button"
+        className="new-achievement-button"
         onClick={(): void => setIsOpen(true)}
         tooltip={t(translations.newAchievement)}
       />,
@@ -104,13 +103,13 @@ const AchievementsIndex: FC = () => {
       ) : (
         <>
           <AchievementNew
-            open={isOpen}
             onClose={(): void => setIsOpen(false)}
+            open={isOpen}
           />
           <AchievementTable
             achievements={achievements}
-            permissions={achievementPermissions}
             onTogglePublished={onTogglePublished}
+            permissions={achievementPermissions}
           />
         </>
       )}

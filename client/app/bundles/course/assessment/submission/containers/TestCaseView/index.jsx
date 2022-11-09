@@ -1,8 +1,10 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
+import Check from '@mui/icons-material/Check';
+import Clear from '@mui/icons-material/Clear';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion,
   AccordionDetails,
@@ -14,13 +16,13 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { green, yellow, red } from '@mui/material/colors';
-import Check from '@mui/icons-material/Check';
-import Clear from '@mui/icons-material/Clear';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { green, red, yellow } from '@mui/material/colors';
+import PropTypes from 'prop-types';
+
 import ExpandableText from 'lib/components/core/ExpandableText';
-import { testCaseShape } from '../../propTypes';
+
 import { workflowStates } from '../../constants';
+import { testCaseShape } from '../../propTypes';
 
 const styles = {
   panel: {
@@ -133,13 +135,13 @@ export class VisibleTestCaseView extends Component {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>
         <a
-          data-tip
           data-for="staff-only-output-stream"
           data-offset="{'left' : -8}"
+          data-tip={true}
         >
           <i className="fa fa-exclamation-triangle" />
         </a>
-        <ReactTooltip id="staff-only-output-stream" effect="solid">
+        <ReactTooltip effect="solid" id="staff-only-output-stream">
           <FormattedMessage {...translations.staffOnlyOutputStream} />
         </ReactTooltip>
       </span>
@@ -150,13 +152,13 @@ export class VisibleTestCaseView extends Component {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>
         <a
-          data-tip
           data-for="staff-only-test-cases"
           data-offset="{'left' : -8}"
+          data-tip={true}
         >
           <i className="fa fa-exclamation-triangle" />
         </a>
-        <ReactTooltip id="staff-only-test-cases" effect="solid">
+        <ReactTooltip effect="solid" id="staff-only-test-cases">
           <FormattedMessage {...translations.staffOnlyTestCases} />
         </ReactTooltip>
       </span>

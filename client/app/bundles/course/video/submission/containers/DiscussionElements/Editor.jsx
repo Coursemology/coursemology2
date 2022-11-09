@@ -1,6 +1,7 @@
-import PropTypes from 'prop-types';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
+
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 
 import style from '../Discussion.scss';
@@ -52,19 +53,19 @@ const Editor = (props) => (
       {props.showCancel && (
         <Button
           className="mr-4"
-          variant="contained"
           color="secondary"
           disabled={props.disabled}
           onClick={props.onCancel}
+          variant="contained"
         >
           {props.cancelButtonText}
         </Button>
       )}
       <Button
-        variant="contained"
         color="primary"
         disabled={props.disabled}
         onClick={props.onSubmit}
+        variant="contained"
       >
         {props.submitButtonText}
       </Button>

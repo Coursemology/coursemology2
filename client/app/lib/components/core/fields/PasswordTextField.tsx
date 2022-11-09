@@ -1,9 +1,10 @@
 import { ComponentProps, forwardRef, useState } from 'react';
-import { InputAdornment, IconButton, Typography } from '@mui/material';
-import { VisibilityOff, Visibility } from '@mui/icons-material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { IconButton, InputAdornment, Typography } from '@mui/material';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
+
 import TextField from './TextField';
 
 type PasswordTextFieldProps = ComponentProps<typeof TextField> & {
@@ -40,9 +41,9 @@ const PasswordTextField = forwardRef<HTMLDivElement, PasswordTextFieldProps>(
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
+                  edge="end"
                   onClick={handleChangePasswordVisibility}
                   onMouseDown={(e): void => e.preventDefault()}
-                  edge="end"
                 >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>

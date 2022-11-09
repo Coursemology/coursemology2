@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { List } from 'immutable';
-import PropTypes from 'prop-types';
 import { Card, CardContent, Tab, Tabs } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import { List } from 'immutable';
+import PropTypes from 'prop-types';
 
 const propTypes = {
   templates: PropTypes.instanceOf(List).isRequired,
@@ -16,8 +16,8 @@ const UploadedPackageTemplateView = (props) => {
     const name = template.get('filename');
     return (
       <Tab
-        className="template-tab"
         key={id}
+        className="template-tab"
         label={name}
         style={{ textTransform: 'none', color: 'black' }}
         value={index}
@@ -29,9 +29,9 @@ const UploadedPackageTemplateView = (props) => {
     const id = `tab_content_${template.get('id')}`;
     return (
       <div
+        key={id}
         className="template-content"
         dangerouslySetInnerHTML={{ __html: template.get('content') }}
-        key={id}
         style={{ ...(index === tabValue ? {} : { display: 'none' }) }}
       />
     );

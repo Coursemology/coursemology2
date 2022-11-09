@@ -1,7 +1,7 @@
-import SurveysAPI from './Surveys';
 import QuestionsAPI from './Questions';
 import ResponsesAPI from './Responses';
 import SectionsAPI from './Sections';
+import SurveysAPI from './Surveys';
 
 const SurveyAPI = {
   surveys: new SurveysAPI(),

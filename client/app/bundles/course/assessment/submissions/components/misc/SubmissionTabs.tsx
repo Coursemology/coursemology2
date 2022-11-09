@@ -3,10 +3,12 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Tab, Tabs } from '@mui/material';
-import CustomBadge from 'lib/components/extensions/CustomBadge';
+import { tabsStyle } from 'theme/mui-style';
 import { SubmissionsTabData } from 'types/course/assessment/submissions';
 import { AppDispatch } from 'types/store';
-import { tabsStyle } from 'theme/mui-style';
+
+import CustomBadge from 'lib/components/extensions/CustomBadge';
+
 import {
   fetchAllStudentsPendingSubmissions,
   fetchCategorySubmissions,
@@ -90,18 +92,15 @@ const SubmissionTabs: FC<Props> = (props) => {
   if (tabValue === null) return null;
   return (
     <Tabs
+      onChange={handleTabChange}
+      scrollButtons="auto"
+      sx={tabsStyle}
+      TabIndicatorProps={{ style: { transition: 'none' } }}
       value={tabValue}
       variant="scrollable"
-      scrollButtons="auto"
-      onChange={handleTabChange}
-      TabIndicatorProps={{ style: { transition: 'none' } }}
-      sx={tabsStyle}
     >
       {isTeachingStaff && (
         <Tab
-          id="my-students-pending-tab"
-          value={0}
-          label={intl.formatMessage(translations.myStudentsPending)}
           icon={
             <CustomBadge
               badgeContent={tabs.myStudentsPendingCount}
@@ -109,11 +108,8 @@ const SubmissionTabs: FC<Props> = (props) => {
             />
           }
           iconPosition="end"
-          style={{
-            minHeight: 48,
-            paddingRight: tabs.myStudentsPendingCount === 0 ? 8 : 26,
-            textDecoration: 'none',
-          }}
+          id="my-students-pending-tab"
+          label={intl.formatMessage(translations.myStudentsPending)}
           onClick={(): Promise<string | number | void> => {
             // Prevent API calls when spam clicking the tab
             if (tabValue !== 0) {
@@ -134,14 +130,17 @@ const SubmissionTabs: FC<Props> = (props) => {
             }
             return new Promise(() => {});
           }}
+          style={{
+            minHeight: 48,
+            paddingRight: tabs.myStudentsPendingCount === 0 ? 8 : 26,
+            textDecoration: 'none',
+          }}
+          value={0}
         />
       )}
 
       {isTeachingStaff && (
         <Tab
-          id="all-students-pending-tab"
-          value={1}
-          label={intl.formatMessage(translations.allStudentsPending)}
           icon={
             <CustomBadge
               badgeContent={tabs.allStudentsPendingCount}
@@ -149,9 +148,8 @@ const SubmissionTabs: FC<Props> = (props) => {
             />
           }
           iconPosition="end"
-          style={{
-            paddingRight: tabs.allStudentsPendingCount === 0 ? 8 : 26,
-          }}
+          id="all-students-pending-tab"
+          label={intl.formatMessage(translations.allStudentsPending)}
           onClick={(): Promise<string | number | void> => {
             // Prevent API calls when spam clicking the tab
             if (tabValue !== 1) {
@@ -172,14 +170,17 @@ const SubmissionTabs: FC<Props> = (props) => {
             }
             return new Promise(() => {});
           }}
+          style={{
+            paddingRight: tabs.allStudentsPendingCount === 0 ? 8 : 26,
+          }}
+          value={1}
         />
       )}
 
       {tabs.categories.map((tab, index) => (
         <Tab
-          id={`category-tab-${tab.id}`}
           key={tab.id}
-          value={index + 2}
+          id={`category-tab-${tab.id}`}
           label={tab.title}
           onClick={(): Promise<string | number | void> => {
             // Prevent API calls when spam clicking the tab
@@ -201,6 +202,7 @@ const SubmissionTabs: FC<Props> = (props) => {
             }
             return new Promise(() => {});
           }}
+          value={index + 2}
         />
       ))}
     </Tabs>

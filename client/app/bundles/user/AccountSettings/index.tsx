@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-
 import { TimeZones } from 'types/course/admin/course';
+import { EmailData } from 'types/users';
+
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import Preload from 'lib/components/wrappers/Preload';
 import { FormEmitter } from 'lib/components/form/Form';
+import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
-import { EmailData } from 'types/users';
-import AccountSettingsForm from './AccountSettingsForm';
+
 import {
   AccountSettingsData,
   addEmail,
@@ -21,6 +21,8 @@ import {
   updateProfilePicture,
 } from '../operations';
 import translations from '../translations';
+
+import AccountSettingsForm from './AccountSettingsForm';
 
 const fetchAccountSettingsAndTimeZones = (): Promise<
   [AccountSettingsData, TimeZones]
@@ -141,21 +143,21 @@ const AccountSettings = (): JSX.Element => {
 
   return (
     <Preload
-      while={fetchAccountSettingsAndTimeZones}
       render={<LoadingIndicator />}
+      while={fetchAccountSettingsAndTimeZones}
     >
       {([settings, timeZones]): JSX.Element => (
         <AccountSettingsForm
-          settings={settings}
-          timeZones={timeZones}
-          onSubmit={handleUpdateAccountSettings}
-          onUpdateProfilePicture={handleUploadProfilePicture}
-          onAddEmail={handleAddEmail}
-          onRemoveEmail={handleRemoveEmail}
-          onSetEmailAsPrimary={handleSetEmailAsPrimary}
-          onResendConfirmationEmail={handleResendConfirmationEmail}
           disabled={submitting}
           emitsVia={setForm}
+          onAddEmail={handleAddEmail}
+          onRemoveEmail={handleRemoveEmail}
+          onResendConfirmationEmail={handleResendConfirmationEmail}
+          onSetEmailAsPrimary={handleSetEmailAsPrimary}
+          onSubmit={handleUpdateAccountSettings}
+          onUpdateProfilePicture={handleUploadProfilePicture}
+          settings={settings}
+          timeZones={timeZones}
         />
       )}
     </Preload>

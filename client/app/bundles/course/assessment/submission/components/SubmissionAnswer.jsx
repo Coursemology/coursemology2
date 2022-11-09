@@ -1,6 +1,5 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, defineMessages } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import {
   Card,
   CardContent,
@@ -10,15 +9,17 @@ import {
   Tooltip,
 } from '@mui/material';
 import { yellow } from '@mui/material/colors';
+import PropTypes from 'prop-types';
 
+import { questionTypes } from '../constants';
+import PastAnswers from '../containers/PastAnswers';
 import {
-  questionShape,
   historyQuestionShape,
   questionFlagsShape,
+  questionShape,
 } from '../propTypes';
-import { questionTypes } from '../constants';
+
 import Answers from './Answers';
-import PastAnswers from '../containers/PastAnswers';
 
 const translations = defineMessages({
   missingAnswer: {

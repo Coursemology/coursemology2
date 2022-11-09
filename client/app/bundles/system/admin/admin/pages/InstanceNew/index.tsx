@@ -1,15 +1,15 @@
-import { defineMessages } from 'react-intl';
 import { FC } from 'react';
+import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
-
-import { AppDispatch } from 'types/store';
-
 import { toast } from 'react-toastify';
+import { AppDispatch } from 'types/store';
+import { InstanceFormData } from 'types/system/instances';
+
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
-import { InstanceFormData } from 'types/system/instances';
-import { createInstance } from '../../operations';
+
 import InstanceForm from '../../components/forms/InstanceForm';
+import { createInstance } from '../../operations';
 
 interface Props {
   open: boolean;
@@ -51,7 +51,7 @@ const InstanceNew: FC<Props> = (props) => {
       });
   };
 
-  return <InstanceForm open={open} onClose={onClose} onSubmit={onSubmit} />;
+  return <InstanceForm onClose={onClose} onSubmit={onSubmit} open={open} />;
 };
 
 export default InstanceNew;

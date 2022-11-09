@@ -1,9 +1,10 @@
 import { memo } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { nodeShape } from '../../propTypes';
+
 import Gate from '../../components/Gate';
 import Node from '../../components/Node';
+import { nodeShape } from '../../propTypes';
 
 const styles = {
   level: {
@@ -52,18 +53,18 @@ const Levels = (props) => {
               <div key={node.id} style={styles.nodeWithGate}>
                 {node.depth > 0 && (
                   <Gate
+                    key={getGateId(node.id)}
                     gateInputSizeThreshold={gateInputSizeThreshold}
                     getGateConnectionPointId={getGateConnectionPointId}
                     getGateId={getGateId}
                     getGateInputId={getGateInputId}
-                    key={getGateId(node.id)}
                     node={node}
                   />
                 )}
                 <Node
                   key={node.id}
-                  node={node}
                   getNodeConnectionPointId={getNodeConnectionPointId}
+                  node={node}
                 />
               </div>
             ))}

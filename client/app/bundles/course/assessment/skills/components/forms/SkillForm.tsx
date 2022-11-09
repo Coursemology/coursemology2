@@ -1,17 +1,19 @@
 import { FC } from 'react';
-import { defineMessages } from 'react-intl';
 import { Controller, UseFormSetError } from 'react-hook-form';
-import * as yup from 'yup';
-import formTranslations from 'lib/translations/form';
-import FormDialog from 'lib/components/form/dialog/FormDialog';
-import FormRichTextField from 'lib/components/form/fields/RichTextField';
-import FormTextField from 'lib/components/form/fields/TextField';
-import FormSelectField from 'lib/components/form/fields/SelectField';
-import useTranslation from 'lib/hooks/useTranslation';
+import { defineMessages } from 'react-intl';
 import {
   SkillBranchOptions,
   SkillFormData,
 } from 'types/course/assessment/skills/skills';
+import * as yup from 'yup';
+
+import FormDialog from 'lib/components/form/dialog/FormDialog';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
+import FormSelectField from 'lib/components/form/fields/SelectField';
+import FormTextField from 'lib/components/form/fields/TextField';
+import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
+
 import { DialogTypes } from '../../types';
 
 interface Props {
@@ -89,13 +91,13 @@ const SkillForm: FC<Props> = (props) => {
 
   return (
     <FormDialog
-      open={open}
       editing={false}
-      onClose={onClose}
-      onSubmit={handleSubmit}
-      title={title}
       formName="skill-form"
       initialValues={initialValues}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+      open={open}
+      title={title}
       validationSchema={validationSchema}
     >
       {(control, formState): JSX.Element => (
@@ -105,33 +107,32 @@ const SkillForm: FC<Props> = (props) => {
             name="title"
             render={({ field, fieldState }): JSX.Element => (
               <FormTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.title)}
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                required
+                label={t(translations.title)}
+                required={true}
                 variant="standard"
               />
             )}
           />
           <Controller
-            name="description"
             control={control}
+            name="description"
             render={({ field, fieldState }): JSX.Element => (
               <FormRichTextField
+                disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                disabled={formState.isSubmitting}
-                label={t(translations.description)}
-                // @ts-ignore: component is still written in JS
-                fullWidth
+                fullWidth={true}
                 InputLabelProps={{
                   shrink: true,
                 }}
+                label={t(translations.description)}
                 variant="standard"
               />
             )}
@@ -139,16 +140,16 @@ const SkillForm: FC<Props> = (props) => {
           {(dialogType === DialogTypes.NewSkill ||
             dialogType === DialogTypes.EditSkill) && (
             <Controller
-              name="skillBranchId"
               control={control}
+              name="skillBranchId"
               render={({ field, fieldState }): JSX.Element => (
                 <FormSelectField
+                  disabled={formState.isSubmitting}
                   field={field}
                   fieldState={fieldState}
-                  disabled={formState.isSubmitting}
                   label={t(translations.branches)}
-                  options={skillBranchOptions}
                   noneSelected={t(translations.noneSelected)}
+                  options={skillBranchOptions}
                 />
               )}
             />

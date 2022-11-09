@@ -1,3 +1,14 @@
+import { FC } from 'react';
+import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { Link } from 'react-router-dom';
+import {
+  AutoStories,
+  Campaign,
+  Category,
+  Group,
+  KeyboardDoubleArrowLeft,
+  KeyboardDoubleArrowRight,
+} from '@mui/icons-material';
 import {
   Grid,
   List,
@@ -6,19 +17,9 @@ import {
   ListItemText,
   Tooltip,
 } from '@mui/material';
-import { FC } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Link } from 'react-router-dom';
-import Sidebar from 'lib/components/navigation/Sidebar';
-import {
-  AutoStories,
-  Category,
-  Group,
-  Campaign,
-  KeyboardDoubleArrowLeft,
-  KeyboardDoubleArrowRight,
-} from '@mui/icons-material';
 import { grey } from '@mui/material/colors';
+
+import Sidebar from 'lib/components/navigation/Sidebar';
 
 interface Props extends WrappedComponentProps {
   isExpanded: boolean;
@@ -79,17 +80,17 @@ const ListItemLink = (props: ListItemLinkProps): JSX.Element => {
   return (
     <li>
       <ListItem
-        button
-        disablePadding
+        button={true}
         component={Link}
-        to={to}
+        disablePadding={true}
+        onClick={callback}
         style={{
           border: 'none',
           outline: 'none',
           textDecoration: 'none',
           padding: '4px 16px',
         }}
-        onClick={callback}
+        to={to}
       >
         {renderIcon()}
         <ListItemText primary={primary} sx={textStyle} />
@@ -120,14 +121,14 @@ const SystemAdminSidebar: FC<Props> = (props) => {
 
     return (
       <Grid
-        container
+        container={true}
+        flexDirection="column"
         justifyContent="space-between"
         style={{ height: '100vh', backgroundColor }}
-        flexDirection="column"
       >
-        <Grid item>
+        <Grid item={true}>
           <List style={{ marginTop: '60px' }}>
-            <ListItem button onClick={handleExpandClick}>
+            <ListItem button={true} onClick={handleExpandClick}>
               <ListItemIcon sx={{ minWidth: '32px' }}>
                 {isExpanded ? (
                   <KeyboardDoubleArrowLeft />
@@ -147,32 +148,32 @@ const SystemAdminSidebar: FC<Props> = (props) => {
               )}
             </ListItem>
             <ListItemLink
-              to="/admin/announcements"
-              primary={intl.formatMessage(translations.announcements)}
               callback={handleListItemClick}
+              expanded={isExpanded}
               icon={<Campaign />}
-              expanded={isExpanded}
+              primary={intl.formatMessage(translations.announcements)}
+              to="/admin/announcements"
             />
             <ListItemLink
-              to="/admin/users"
-              primary={intl.formatMessage(translations.users)}
               callback={handleListItemClick}
+              expanded={isExpanded}
               icon={<Group />}
-              expanded={isExpanded}
+              primary={intl.formatMessage(translations.users)}
+              to="/admin/users"
             />
             <ListItemLink
-              to="/admin/instances"
-              primary={intl.formatMessage(translations.instances)}
               callback={handleListItemClick}
+              expanded={isExpanded}
               icon={<Category />}
-              expanded={isExpanded}
+              primary={intl.formatMessage(translations.instances)}
+              to="/admin/instances"
             />
             <ListItemLink
-              to="/admin/courses"
-              primary={intl.formatMessage(translations.courses)}
               callback={handleListItemClick}
-              icon={<AutoStories />}
               expanded={isExpanded}
+              icon={<AutoStories />}
+              primary={intl.formatMessage(translations.courses)}
+              to="/admin/courses"
             />
           </List>
         </Grid>
@@ -182,10 +183,10 @@ const SystemAdminSidebar: FC<Props> = (props) => {
 
   return (
     <Sidebar
+      handleExpand={handleExpand}
       renderDrawer={(isDrawerOpen, handleDrawerToggle): JSX.Element =>
         renderDrawer(isDrawerOpen, handleDrawerToggle)
       }
-      handleExpand={handleExpand}
     />
   );
 };

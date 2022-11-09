@@ -1,4 +1,5 @@
-import { updateOrAppend, deleteIfFound } from 'lib/helpers/reducer-helpers';
+import { deleteIfFound, updateOrAppend } from 'lib/helpers/reducer-helpers';
+
 import actionTypes from '../constants';
 import { sortSectionElements } from '../utils';
 

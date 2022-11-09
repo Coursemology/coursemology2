@@ -1,11 +1,10 @@
 import { Component } from 'react';
-import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 import { Controller, useFormContext } from 'react-hook-form';
-import { Card, CardContent, Chip } from '@mui/material';
-import FileUpload from '@mui/icons-material/FileUpload';
-
 import { defineMessages, FormattedMessage } from 'react-intl';
+import FileUpload from '@mui/icons-material/FileUpload';
+import { Card, CardContent, Chip } from '@mui/material';
+import PropTypes from 'prop-types';
 
 const translations = defineMessages({
   uploadDisabled: {
@@ -94,10 +93,10 @@ class FileInput extends Component {
           <Chip
             key={f.name}
             label={f.name}
-            style={styles.chip}
             onDelete={() =>
               onChange(files.filter((file) => file.name !== f.name))
             }
+            style={styles.chip}
           />
         ))}
       </div>
@@ -174,14 +173,14 @@ const FileInputField = ({ name, disabled, callback, ...custom }) => {
 
   return (
     <Controller
-      name={name}
       control={control}
+      name={name}
       render={({ field, fieldState }) => (
         <FileInput
+          callback={callback}
+          disabled={disabled}
           field={field}
           fieldState={fieldState}
-          disabled={disabled}
-          callback={callback}
           {...custom}
         />
       )}

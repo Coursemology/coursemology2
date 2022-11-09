@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { forwardRef, useState } from 'react';
+import CustomEditor from '@ckeditor/ckeditor5-build-custom';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { InputLabel } from '@mui/material';
 import { cyan } from '@mui/material/colors';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import CustomEditor from '@ckeditor/ckeditor5-build-custom';
+
 import axios from 'lib/axios';
 
 interface Props {
@@ -82,7 +83,7 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
           disabled={disabled}
           htmlFor={field}
           required={required}
-          shrink
+          shrink={true}
           style={{
             pointerEvents: 'none',
             color: disabled ? 'rgba(0, 0, 0, 0.3)' : textFieldLabelColor,
@@ -92,21 +93,19 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
         </InputLabel>
       )}
       <textarea
-        name={name}
+        disabled={disabled}
         id={inputId}
-        required={required}
-        value={value || ''}
-        style={{ display: 'none' }}
+        name={name}
         onChange={(event) => {
           onChange(event.target.value);
         }}
-        disabled={disabled}
+        required={required}
+        style={{ display: 'none' }}
+        value={value || ''}
       />
       <div className="react-ck">
         <CKEditor
           ref={ref}
-          disabled={disabled}
-          editor={CustomEditor}
           config={{
             // To format <pre> properly (summernote compatability).
             // CKEditor will change it to <pre><code> but on edit it will render properly
@@ -133,6 +132,17 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
             placeholder,
           }}
           data={value}
+          disabled={disabled}
+          editor={CustomEditor}
+          onBlur={(_event, _editor) => {
+            setIsFocused(false);
+          }}
+          onChange={(_event, editor) => {
+            onChange(editor.getData());
+          }}
+          onFocus={(_event, _editor) => {
+            setIsFocused(true);
+          }}
           onReady={(editor) => {
             // Enable the following to set a max height for ckeditor
             editor.editing.view.change((writer) => {
@@ -148,15 +158,6 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
               return uploadAdapter(loader);
             };
             if (autofocus) editor.focus();
-          }}
-          onChange={(_event, editor) => {
-            onChange(editor.getData());
-          }}
-          onBlur={(_event, _editor) => {
-            setIsFocused(false);
-          }}
-          onFocus={(_event, _editor) => {
-            setIsFocused(true);
           }}
         />
       </div>

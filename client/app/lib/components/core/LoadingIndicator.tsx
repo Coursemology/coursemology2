@@ -11,9 +11,9 @@ interface LoadingIndicatorProps {
 const LoadingIndicator = (props: LoadingIndicatorProps): JSX.Element => {
   const indicator = (
     <CircularProgress
-      size={!props.fit ? props.size ?? 60 : undefined}
       className={props.className}
       data-testid="CircularProgress"
+      size={!props.fit ? props.size ?? 60 : undefined}
     />
   );
 

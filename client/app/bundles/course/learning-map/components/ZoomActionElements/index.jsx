@@ -1,6 +1,7 @@
-import { Button } from '@mui/material';
 import { FormattedMessage } from 'react-intl';
+import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
+
 import translations from '../../translations.intl';
 
 const styles = {
@@ -25,9 +26,9 @@ const ZoomActionElements = (props) => {
   return (
     <div style={styles.wrapper}>
       <Button
-        label="Zoom In"
-        color="primary"
         className="btn-submit"
+        color="primary"
+        label="Zoom In"
         onClick={() => zoomIn()}
         style={styles.actionButton}
         variant="contained"
@@ -35,9 +36,9 @@ const ZoomActionElements = (props) => {
         <FormattedMessage {...translations.zoomIn} />
       </Button>
       <Button
-        label="Zoom Out"
-        color="primary"
         className="btn-submit"
+        color="primary"
+        label="Zoom Out"
         onClick={() => zoomOut()}
         style={styles.actionButton}
         variant="contained"

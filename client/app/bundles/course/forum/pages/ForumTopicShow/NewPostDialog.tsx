@@ -1,16 +1,17 @@
-import { Fab, Tooltip } from '@mui/material';
-import FormDialogue from 'lib/components/form/FormDialogue';
-import { useParams } from 'react-router-dom';
-
-import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import { FC, useState } from 'react';
-import { ForumTopicEntity } from 'types/course/forums';
-import { Add } from '@mui/icons-material';
-import { toast } from 'react-toastify';
 import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { Add } from '@mui/icons-material';
+import { Fab, Tooltip } from '@mui/material';
+import { ForumTopicEntity } from 'types/course/forums';
 import { AppDispatch } from 'types/store';
+
+import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import FormDialogue from 'lib/components/form/FormDialogue';
 import useTranslation from 'lib/hooks/useTranslation';
+
 import { createForumTopicPost } from '../../operations';
 
 interface Props {
@@ -88,19 +89,19 @@ const NewPostDialog: FC<Props> = (props) => {
 
       {open && (
         <FormDialogue
-          title={t(translations.header)}
           disabled={isSubmitting}
-          open={open}
           hideForm={(): void => setOpenDialog(false)}
-          skipConfirmation
+          open={open}
+          skipConfirmation={true}
           submitForm={handleSubmit}
+          title={t(translations.header)}
         >
           <CKEditorRichText
-            name="postNewText"
+            disableMargins={true}
             inputId={forumTopic.id.toString()}
+            name="postNewText"
             onChange={(nextValue): void => setPost(nextValue)}
             value={post}
-            disableMargins
           />
         </FormDialogue>
       )}
