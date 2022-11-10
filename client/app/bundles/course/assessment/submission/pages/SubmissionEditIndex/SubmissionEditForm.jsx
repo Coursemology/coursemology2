@@ -303,7 +303,7 @@ const SubmissionEditForm = (props) => {
 
     return (
       <>
-        {jobError ? (
+        {jobError && (
           <Paper
             style={{
               padding: 10,
@@ -315,7 +315,7 @@ const SubmissionEditForm = (props) => {
               ? intl.formatMessage(translations.codaveriAutogradeFailure)
               : intl.formatMessage(translations.autogradeFailure)}
           </Paper>
-        ) : null}
+        )}
         <Button
           disabled={isAutogradingQuestion || isResetting || isSaving}
           onClick={() => {
@@ -327,7 +327,7 @@ const SubmissionEditForm = (props) => {
         >
           {intl.formatMessage(translations.reset)}
         </Button>
-        {autogradable ? (
+        {autogradable && (
           <Button
             color="secondary"
             disabled={
@@ -345,10 +345,11 @@ const SubmissionEditForm = (props) => {
           >
             {runCodeLabel}
           </Button>
-        ) : null}
-        {isAutogradingQuestion || isResetting ? (
-          <CircularProgress size={36} style={{ position: 'absolute' }} />
-        ) : null}
+        )}
+        {isAutogradingQuestion ||
+          (isResetting && (
+            <CircularProgress size={36} style={{ position: 'absolute' }} />
+          ))}
       </>
     );
   };

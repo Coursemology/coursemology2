@@ -105,7 +105,7 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
       });
   };
 
-  const managementButtons = (
+  return (
     <div style={{ whiteSpace: 'nowrap' }}>
       <EmailButton
         className={`invitation-resend-${invitation.id}`}
@@ -128,8 +128,6 @@ const PendingInvitationsButtons: FC<Props> = (props) => {
       />
     </div>
   );
-
-  return managementButtons;
 };
 
 export default memo(

@@ -99,7 +99,7 @@ const PointManagementButtons: FC<Props> = (props) => {
       .finally(() => setIsDeleting(false));
   };
 
-  const managementButtons = (
+  return (
     <div key={`buttons-${data.id}`} style={{ whiteSpace: 'nowrap' }}>
       {permissions.canUpdate && (
         <SaveButton
@@ -123,8 +123,6 @@ const PointManagementButtons: FC<Props> = (props) => {
       )}
     </div>
   );
-
-  return managementButtons;
 };
 
 export default injectIntl(PointManagementButtons);

@@ -51,6 +51,13 @@ const defaultStaffViewProps = {
   },
 };
 
+const publicTestCases = '#publicTestCases';
+const privateTestCases = '#privateTestCases';
+const evaluationTestCases = '#evaluationTestCases';
+const standardOutput = '#standardOutput';
+const standardError = '#standardError';
+const warningIcon = 'i.fa-exclamation-triangle';
+
 describe('TestCaseView', () => {
   describe('when viewing as staff', () => {
     it('renders all test cases and standard streams', () => {
@@ -60,11 +67,11 @@ describe('TestCaseView', () => {
         </ProviderWrapper>,
       );
 
-      expect(testCaseView.find('#publicTestCases').exists()).toBe(true);
-      expect(testCaseView.find('#privateTestCases').exists()).toBe(true);
-      expect(testCaseView.find('#evaluationTestCases').exists()).toBe(true);
-      expect(testCaseView.find('#standardOutput').exists()).toBe(true);
-      expect(testCaseView.find('#standardError').exists()).toBe(true);
+      expect(testCaseView.find(publicTestCases).exists()).toBe(true);
+      expect(testCaseView.find(privateTestCases).exists()).toBe(true);
+      expect(testCaseView.find(evaluationTestCases).exists()).toBe(true);
+      expect(testCaseView.find(standardOutput).exists()).toBe(true);
+      expect(testCaseView.find(standardError).exists()).toBe(true);
     });
 
     it('renders staff-only warnings', () => {
@@ -75,29 +82,17 @@ describe('TestCaseView', () => {
       );
 
       expect(
-        testCaseView
-          .find('#privateTestCases')
-          .find('i.fa-exclamation-triangle')
-          .exists(),
+        testCaseView.find(privateTestCases).find(warningIcon).exists(),
       ).toBe(true);
       expect(
-        testCaseView
-          .find('#evaluationTestCases')
-          .find('i.fa-exclamation-triangle')
-          .exists(),
+        testCaseView.find(evaluationTestCases).find(warningIcon).exists(),
       ).toBe(true);
-      expect(
-        testCaseView
-          .find('#standardOutput')
-          .find('i.fa-exclamation-triangle')
-          .exists(),
-      ).toBe(true);
-      expect(
-        testCaseView
-          .find('#standardError')
-          .find('i.fa-exclamation-triangle')
-          .exists(),
-      ).toBe(true);
+      expect(testCaseView.find(standardOutput).find(warningIcon).exists()).toBe(
+        true,
+      );
+      expect(testCaseView.find(standardError).find(warningIcon).exists()).toBe(
+        true,
+      );
     });
 
     describe('when showEvaluation & showPrivate are true', () => {
@@ -114,16 +109,10 @@ describe('TestCaseView', () => {
         );
 
         expect(
-          testCaseView
-            .find('#privateTestCases')
-            .find('i.fa-exclamation-triangle')
-            .exists(),
+          testCaseView.find(privateTestCases).find(warningIcon).exists(),
         ).toBe(true);
         expect(
-          testCaseView
-            .find('#evaluationTestCases')
-            .find('i.fa-exclamation-triangle')
-            .exists(),
+          testCaseView.find(evaluationTestCases).find(warningIcon).exists(),
         ).toBe(true);
       });
 
@@ -139,16 +128,10 @@ describe('TestCaseView', () => {
         );
 
         expect(
-          testCaseView
-            .find('#privateTestCases')
-            .find('i.fa-exclamation-triangle')
-            .exists(),
+          testCaseView.find(privateTestCases).find(warningIcon).exists(),
         ).toBe(false);
         expect(
-          testCaseView
-            .find('#evaluationTestCases')
-            .find('i.fa-exclamation-triangle')
-            .exists(),
+          testCaseView.find(evaluationTestCases).find(warningIcon).exists(),
         ).toBe(false);
       });
     });
@@ -165,16 +148,10 @@ describe('TestCaseView', () => {
         );
 
         expect(
-          testCaseView
-            .find('#standardOutput')
-            .find('i.fa-exclamation-triangle')
-            .exists(),
+          testCaseView.find(standardOutput).find(warningIcon).exists(),
         ).toBe(false);
         expect(
-          testCaseView
-            .find('#standardError')
-            .find('i.fa-exclamation-triangle')
-            .exists(),
+          testCaseView.find(standardError).find(warningIcon).exists(),
         ).toBe(false);
       });
     });
@@ -193,9 +170,7 @@ describe('TestCaseView', () => {
         </ProviderWrapper>,
       );
 
-      expect(testCaseView.find('i.fa-exclamation-triangle').exists()).toBe(
-        false,
-      );
+      expect(testCaseView.find(warningIcon).exists()).toBe(false);
     });
 
     it('shows standard streams when the flag is enabled', () => {
@@ -208,8 +183,8 @@ describe('TestCaseView', () => {
         </ProviderWrapper>,
       );
 
-      expect(testCaseView.find('#standardOutput').exists()).toBe(true);
-      expect(testCaseView.find('#standardError').exists()).toBe(true);
+      expect(testCaseView.find(standardOutput).exists()).toBe(true);
+      expect(testCaseView.find(standardError).exists()).toBe(true);
     });
 
     describe('when showEvaluation & showPrivate flags are enabled', () => {
@@ -224,8 +199,8 @@ describe('TestCaseView', () => {
           </ProviderWrapper>,
         );
 
-        expect(testCaseView.find('#privateTestCases').exists()).toBe(true);
-        expect(testCaseView.find('#evaluationTestCases').exists()).toBe(true);
+        expect(testCaseView.find(privateTestCases).exists()).toBe(true);
+        expect(testCaseView.find(evaluationTestCases).exists()).toBe(true);
       });
 
       it('does not show private and evaluation tests before assessment is published', () => {
@@ -240,8 +215,8 @@ describe('TestCaseView', () => {
           </ProviderWrapper>,
         );
 
-        expect(testCaseView.find('#privateTestCases').exists()).toBe(false);
-        expect(testCaseView.find('#evaluationTestCases').exists()).toBe(false);
+        expect(testCaseView.find(privateTestCases).exists()).toBe(false);
+        expect(testCaseView.find(evaluationTestCases).exists()).toBe(false);
       });
     });
   });

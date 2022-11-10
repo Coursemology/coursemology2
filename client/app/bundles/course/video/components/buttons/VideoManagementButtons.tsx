@@ -67,7 +67,7 @@ const VideoManagementButtons: FC<Props> = (props) => {
       });
   };
 
-  const managementButtons = (
+  return (
     <div className="whitespace-nowrap">
       {video.permissions.canManage && (
         <>
@@ -96,8 +96,6 @@ const VideoManagementButtons: FC<Props> = (props) => {
       )}
     </div>
   );
-
-  return managementButtons;
 };
 
 export default VideoManagementButtons;

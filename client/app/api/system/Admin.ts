@@ -9,6 +9,14 @@ import { AdminStats, UserListData } from 'types/users';
 
 import BaseSystemAPI from '../Base';
 
+interface FilterParams {
+  'filter[page_num]'?: number;
+  'filter[length]'?: number;
+  role?: string;
+  active?: string;
+  search?: string;
+}
+
 export default class AdminAPI extends BaseSystemAPI {
   static _getUrlPrefix(): string {
     return `/admin`;
@@ -61,13 +69,7 @@ export default class AdminAPI extends BaseSystemAPI {
   /**
    * Fetches a list of system users.
    */
-  indexUsers(params?: {
-    'filter[page_num]'?: number;
-    'filter[length]'?: number;
-    role?: string;
-    active?: string;
-    search?: string;
-  }): Promise<
+  indexUsers(params?: FilterParams): Promise<
     AxiosResponse<{
       users: UserListData[];
       counts: AdminStats;
@@ -100,10 +102,7 @@ export default class AdminAPI extends BaseSystemAPI {
   /**
    * Fetches a list of instances.
    */
-  indexInstances(params?: {
-    'filter[page_num]'?: number;
-    'filter[length]'?: number;
-  }): Promise<
+  indexInstances(params?: FilterParams): Promise<
     AxiosResponse<{
       instances: InstanceListData[];
       permissions: InstancePermissions;
@@ -147,12 +146,7 @@ export default class AdminAPI extends BaseSystemAPI {
   /**
    * Fetches a list of courses.
    */
-  indexCourses(params?: {
-    'filter[page_num]'?: number;
-    'filter[length]'?: number;
-    active?: string;
-    search?: string;
-  }): Promise<
+  indexCourses(params?: FilterParams): Promise<
     AxiosResponse<{
       courses: CourseListData[];
       totalCourses: number;

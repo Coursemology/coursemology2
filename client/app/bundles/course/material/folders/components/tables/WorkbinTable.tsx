@@ -44,7 +44,7 @@ const WorkbinTable: FC<Props> = (props) => {
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   const sortedSubfolders = useMemo(() => {
-    const sortedData = subfolders.sort((a, b) => {
+    return subfolders.sort((a, b) => {
       switch (sortBy) {
         case 'Name':
           if (sortDirection === 'asc') {
@@ -68,11 +68,10 @@ const WorkbinTable: FC<Props> = (props) => {
           return 0;
       }
     });
-    return sortedData;
   }, [subfolders, sortBy, sortDirection]);
 
   const sortedMaterials = useMemo(() => {
-    const sortedData = materials.sort((a, b) => {
+    return materials.sort((a, b) => {
       switch (sortBy) {
         case 'Name':
           if (sortDirection === 'asc') {
@@ -90,7 +89,6 @@ const WorkbinTable: FC<Props> = (props) => {
           return 0;
       }
     });
-    return sortedData;
   }, [materials, sortBy, sortDirection]);
 
   const sort = (columnName: string): void => {

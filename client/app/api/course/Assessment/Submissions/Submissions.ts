@@ -65,7 +65,7 @@ export default class SubmissionsAPI extends BaseCourseAPI {
       permissions: SubmissionPermissions;
     }>
   > {
-    const data = this.getClient().get(this._getUrlPrefix(), {
+    return this.getClient().get(this._getUrlPrefix(), {
       params: {
         'filter[category_id]': categoryId,
         'filter[assessment_id]': assessmentId,
@@ -74,7 +74,6 @@ export default class SubmissionsAPI extends BaseCourseAPI {
         'filter[page_num]': pageNum,
       },
     });
-    return data;
   }
 
   /**
@@ -90,7 +89,7 @@ export default class SubmissionsAPI extends BaseCourseAPI {
       permissions: SubmissionPermissions;
     }>
   > {
-    const data = this.getClient().get(
+    return this.getClient().get(
       `${this._getUrlPrefix()}/pending?my_students=${myStudents}`,
       {
         params: {
@@ -98,6 +97,5 @@ export default class SubmissionsAPI extends BaseCourseAPI {
         },
       },
     );
-    return data;
   }
 }

@@ -13,9 +13,8 @@ function serializedOrdering() {
     attribute: 'data-question-dom-id',
     key: 'question_order[]',
   };
-  const ordering = $(QUESTIONS_SELECTOR).sortable('serialize', options);
 
-  return ordering;
+  return $(QUESTIONS_SELECTOR).sortable('serialize', options);
 }
 
 function getAssessmentId(target) {

@@ -33,8 +33,7 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
       permissions: AnnouncementPermissions;
     }>
   > {
-    const data = this.getClient().post(this._getUrlPrefix(), params);
-    return data;
+    return this.getClient().post(this._getUrlPrefix(), params);
   }
 
   /**

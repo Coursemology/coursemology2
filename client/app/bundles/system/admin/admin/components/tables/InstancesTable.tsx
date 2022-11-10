@@ -251,7 +251,7 @@ const InstancesTable: FC<Props> = (props) => {
         alignCenter: false,
         sort: false,
         search: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const instance = instances[dataIndex];
           return (
             <Typography
@@ -278,7 +278,7 @@ const InstancesTable: FC<Props> = (props) => {
         alignCenter: false,
         sort: false,
         search: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const instance = instances[dataIndex];
           return (
             <Typography
@@ -308,8 +308,7 @@ const InstancesTable: FC<Props> = (props) => {
         customBodyRender: (_value, tableMeta): JSX.Element => {
           const rowData = tableMeta.rowData as InstanceMiniEntity;
           const instance = rebuildObjectFromRow(columns, rowData);
-          const actionComponent = renderRowActionComponent(instance);
-          return actionComponent;
+          return renderRowActionComponent(instance);
         },
       },
     },

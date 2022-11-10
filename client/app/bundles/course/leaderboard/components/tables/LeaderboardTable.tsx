@@ -328,7 +328,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
             </div>
           </>
         ),
-        customBodyRenderLite: (_dataIndex: number) =>
+        customBodyRenderLite: (_dataIndex) =>
           groupPointData[_dataIndex].averageExperiencePoints.toFixed(2),
       },
     });
@@ -354,7 +354,7 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
             </div>
           </>
         ),
-        customBodyRenderLite: (_dataIndex: number) =>
+        customBodyRenderLite: (_dataIndex) =>
           groupAchievementData[_dataIndex].averageAchievementCount.toFixed(2),
       },
     });

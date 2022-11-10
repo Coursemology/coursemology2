@@ -37,7 +37,7 @@ import {
 const formatUpdateUser = (
   data: CourseUserEntity | CourseUserMiniEntity,
 ): UpdateCourseUserPatchData => {
-  const payload = {
+  return {
     course_user: {
       name: data.name,
       phantom: data.phantom,
@@ -45,8 +45,6 @@ const formatUpdateUser = (
       timeline_algorithm: data.timelineAlgorithm,
     },
   };
-
-  return payload;
 };
 
 const formatUpdatePersonalTime = (data: PersonalTimeFormData): FormData => {
@@ -70,13 +68,12 @@ const formatUpdatePersonalTime = (data: PersonalTimeFormData): FormData => {
 const formatUpdateExperiencePointsRecord = (
   data: ExperiencePointsRowData,
 ): UpdateExperiencePointsRecordPatchData => {
-  const payload = {
+  return {
     experience_points_record: {
       reason: data.reason ? data.reason.trim() : data.reason,
       points_awarded: parseInt(data.pointsAwarded.toString(), 10),
     },
   };
-  return payload;
 };
 
 export function fetchUsers(asBasicData: boolean = false): Operation<void> {

@@ -65,7 +65,7 @@ const AchievementManagementButtons: FC<Props> = (props) => {
       .finally(() => setIsDeleting(false));
   };
 
-  const managementButtons = (
+  return (
     <div style={{ whiteSpace: 'nowrap' }}>
       <AwardButton
         achievementId={achievement.id}
@@ -99,8 +99,6 @@ const AchievementManagementButtons: FC<Props> = (props) => {
       )}
     </div>
   );
-
-  return managementButtons;
 };
 
 export default AchievementManagementButtons;

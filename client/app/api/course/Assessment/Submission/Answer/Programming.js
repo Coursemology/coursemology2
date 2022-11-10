@@ -51,9 +51,8 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
   }
 
   _getUrlPrefix() {
-    const prefix = `/courses/${this.getCourseId()}/assessments/${this.getAssessmentId()}\
+    return `/courses/${this.getCourseId()}/assessments/${this.getAssessmentId()}\
 /submissions/${this.getSubmissionId()}/answers`;
-    return prefix;
   }
 
   static appendFormData(formData, data, name) {

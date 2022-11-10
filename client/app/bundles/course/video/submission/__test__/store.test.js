@@ -7,6 +7,9 @@ import {
 } from '../actions/video';
 import store from '../store';
 
+const videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+const localStorageVideoWatchSession = 'persist:videoWatchSessionStore:user-1';
+
 const videoStateObject = {
   videoUrl: 'https://www.youtube.com/watch?v=sTSA_sWGM44',
   watchNextVideoUrl: '',
@@ -75,7 +78,7 @@ const oldSessionsFixture = JSON.stringify({
 function createStore(courseUserId = '1', sessionId = '1') {
   return store({
     video: {
-      videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      videoUrl,
       sessionId,
     },
     courseUserId,
@@ -113,7 +116,7 @@ describe('persistor', () => {
 
         expect(spy).toHaveBeenCalled();
         const persistedState = JSON.parse(
-          localStorage['persist:videoWatchSessionStore:user-1'],
+          localStorage[localStorageVideoWatchSession],
         );
         expect(persistedState).toHaveProperty('video');
         const videoState = JSON.parse(persistedState.video);
@@ -135,9 +138,7 @@ describe('store', () => {
 
       const state = createdStore.store.getState();
       const newVideoState = state.video;
-      expect(newVideoState.videoUrl).toBe(
-        'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      );
+      expect(newVideoState.videoUrl).toBe(videoUrl);
       expect(newVideoState.sessionId).toBe('1');
       expect(newVideoState.playerState).toBe('UNSTARTED');
       expect(newVideoState.playerProgress).toBe(0);
@@ -150,7 +151,7 @@ describe('store', () => {
   describe('when old video state exists', () => {
     beforeEach(() => {
       localStorage.setItem(
-        'persist:videoWatchSessionStore:user-1',
+        localStorageVideoWatchSession,
         JSON.stringify({ video: videoStateFixture }),
       );
     });
@@ -161,9 +162,7 @@ describe('store', () => {
 
       const state = createdStore.store.getState();
       const newVideoState = state.video;
-      expect(newVideoState.videoUrl).toBe(
-        'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      );
+      expect(newVideoState.videoUrl).toBe(videoUrl);
       expect(newVideoState.sessionId).toBe('1');
       expect(newVideoState.playerState).toBe(playerStates.UNSTARTED);
       expect(newVideoState.playerProgress).toBe(0);
@@ -190,7 +189,7 @@ describe('store', () => {
   describe('when other oldSessions exists in storage', () => {
     beforeEach(() => {
       localStorage.setItem(
-        'persist:videoWatchSessionStore:user-1',
+        localStorageVideoWatchSession,
         JSON.stringify({
           video: videoStateFixture,
           oldSessions: oldSessionsFixture,
@@ -204,9 +203,7 @@ describe('store', () => {
 
       const state = createdStore.store.getState();
       const newVideoState = state.video;
-      expect(newVideoState.videoUrl).toBe(
-        'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      );
+      expect(newVideoState.videoUrl).toBe(videoUrl);
       expect(newVideoState.sessionId).toBe('1');
       expect(newVideoState.playerState).toBe(playerStates.UNSTARTED);
       expect(newVideoState.playerProgress).toBe(0);
@@ -254,7 +251,7 @@ describe('store', () => {
   describe('when old session belongs to another user', () => {
     beforeEach(() => {
       localStorage.setItem(
-        'persist:videoWatchSessionStore:user-1',
+        localStorageVideoWatchSession,
         JSON.stringify({
           video: videoStateFixture,
           oldSessions: oldSessionsFixture,
@@ -268,9 +265,7 @@ describe('store', () => {
 
       const state = createdStore.store.getState();
       const newVideoState = state.video;
-      expect(newVideoState.videoUrl).toBe(
-        'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      );
+      expect(newVideoState.videoUrl).toBe(videoUrl);
       expect(newVideoState.sessionId).toBe('1');
       expect(newVideoState.playerState).toBe(playerStates.UNSTARTED);
       expect(newVideoState.playerProgress).toBe(0);
@@ -283,7 +278,7 @@ describe('store', () => {
   describe('when old video session is closed', () => {
     beforeEach(() => {
       localStorage.setItem(
-        'persist:videoWatchSessionStore:user-1',
+        localStorageVideoWatchSession,
         JSON.stringify({
           video: closedVideoStateFixture,
           oldSessions: oldSessionsFixture,
@@ -297,9 +292,7 @@ describe('store', () => {
 
       const state = createdStore.store.getState();
       const newVideoState = state.video;
-      expect(newVideoState.videoUrl).toBe(
-        'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      );
+      expect(newVideoState.videoUrl).toBe(videoUrl);
       expect(newVideoState.sessionId).toBe('1');
       expect(newVideoState.playerState).toBe(playerStates.UNSTARTED);
       expect(newVideoState.playerProgress).toBe(0);

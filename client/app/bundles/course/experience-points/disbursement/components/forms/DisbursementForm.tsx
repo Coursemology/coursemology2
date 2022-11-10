@@ -82,10 +82,9 @@ const DisbursementForm: FC<Props> = (props) => {
     useState<DisbursementCourseGroupMiniEntity | null>(null);
   const filteredCourseUsers = useMemo(() => {
     if (filteredGroup) {
-      const filteredData = courseUsers.filter((courseUser) =>
+      return courseUsers.filter((courseUser) =>
         courseUser.groupIds.includes(filteredGroup.id),
       );
-      return filteredData;
     }
     return courseUsers;
   }, [filteredGroup]);
@@ -95,14 +94,12 @@ const DisbursementForm: FC<Props> = (props) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const initialValues: DisbursementFormData = useMemo(() => {
-    const obj = courseUsers.reduce(
+    return courseUsers.reduce(
       (accumulator, value) => {
         return { ...accumulator, [`courseUser_${value.id}`]: '' };
       },
       { reason: '' },
     );
-
-    return obj;
   }, []);
 
   const methods = useForm({

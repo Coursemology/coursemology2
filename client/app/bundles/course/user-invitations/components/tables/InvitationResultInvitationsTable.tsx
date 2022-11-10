@@ -75,7 +75,7 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.phantom),
       options: {
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
             <Typography
@@ -95,7 +95,7 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
             <Typography

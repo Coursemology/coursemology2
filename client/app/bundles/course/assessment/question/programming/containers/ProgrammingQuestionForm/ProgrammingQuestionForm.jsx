@@ -105,13 +105,15 @@ function validation(data, pathOfKeysToData, intl) {
   });
 
   // Check file uploaded when no previous package exists
-  if (!data.get('edit_online')) {
-    if (data.get('package') === null && data.get('package_filename') === null) {
-      questionErrors.package_filename = intl.formatMessage(
-        translations.noPackageValidationError,
-      );
-      hasError = true;
-    }
+  if (
+    !data.get('edit_online') &&
+    data.get('package') === null &&
+    data.get('package_filename') === null
+  ) {
+    questionErrors.package_filename = intl.formatMessage(
+      translations.noPackageValidationError,
+    );
+    hasError = true;
   }
 
   if (hasError) {

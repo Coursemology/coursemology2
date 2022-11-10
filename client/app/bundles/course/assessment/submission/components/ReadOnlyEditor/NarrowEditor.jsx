@@ -124,7 +124,7 @@ const LineNumberColumn = (props) => {
           onClick={() => expandComment(lineNumber)}
         />
       </div>
-      {renderComments(lineNumber)}
+      {renderComments()}
     </>
   );
 };

@@ -149,7 +149,7 @@ const Node = (props) => {
               <ConnectionPoint
                 id={getNodeConnectionPointId(node.id)}
                 isActive={canModify}
-                onClick={(event) => onConnectionPointClick(event, node.id)}
+                onClick={(event) => onConnectionPointClick(event)}
               />
               {isNodeMenuDisplayed && (
                 <NodeMenu

@@ -67,7 +67,7 @@ const UserManagementButtons: FC<Props> = (props) => {
       });
   };
 
-  const managementButtons = (
+  return (
     <div key={`buttons-${user.id}`}>
       <DeleteButton
         className={`user-delete-${user.id} p-0`}
@@ -83,8 +83,6 @@ const UserManagementButtons: FC<Props> = (props) => {
       />
     </div>
   );
-
-  return managementButtons;
 };
 
 export default memo(

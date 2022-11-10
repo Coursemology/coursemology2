@@ -70,14 +70,12 @@ const ForumDisbursementForm: FC<Props> = (props) => {
   const { intl, filters, forumUsers, onPostClick } = props;
 
   const initialValues: DisbursementFormData = useMemo(() => {
-    const obj = forumUsers.reduce(
+    return forumUsers.reduce(
       (accumulator, value) => {
         return { ...accumulator, [`courseUser_${value.id}`]: value.points };
       },
       { reason: intl.formatMessage(translations.reasonFill) },
     );
-
-    return obj;
   }, []);
 
   const dispatch = useDispatch<AppDispatch>();

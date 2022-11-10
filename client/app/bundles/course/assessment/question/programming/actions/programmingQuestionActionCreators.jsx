@@ -2,6 +2,8 @@ import axios from 'axios';
 
 import actionTypes from '../constants/programmingQuestionConstants';
 
+const headerType = 'application/json';
+
 export function updateProgrammingQuestion(field, newValue) {
   return {
     type: actionTypes.PROGRAMMING_QUESTION_UPDATE,
@@ -90,7 +92,7 @@ function fetchImportResult(redirectAssessment, successMessage, failureMessage) {
   return (dispatch) => {
     axios
       .get('', {
-        headers: { Accept: 'application/json' },
+        headers: { Accept: headerType },
       })
       .then((response) => {
         const {
@@ -126,7 +128,7 @@ function submitFormEvaluate(
 
     axios
       .get(importJobUrl, {
-        headers: { Accept: 'application/json' },
+        headers: { Accept: headerType },
       })
       .then((response) => {
         const status = response.data.status;
@@ -188,7 +190,7 @@ export function submitForm(url, method, data, failureMessage) {
       method,
       url,
       data,
-      headers: { Accept: 'application/json' },
+      headers: { Accept: headerType },
     })
       .then((response) => {
         const {

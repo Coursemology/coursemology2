@@ -16,6 +16,7 @@ module.exports = {
     'import',
     'eslint-comments',
     'simple-import-sort',
+    'sonarjs',
   ],
   extends: [
     'airbnb',
@@ -25,6 +26,7 @@ module.exports = {
     'plugin:jsx-a11y/strict',
     'plugin:import/recommended',
     'prettier',
+    'plugin:sonarjs/recommended',
   ],
   settings: {
     'import/resolver': {
@@ -127,6 +129,10 @@ module.exports = {
       },
     ],
     'simple-import-sort/exports': 'error',
+    'sonarjs/cognitive-complexity': 'off',
+    'sonarjs/no-duplicate-string': ['error', 5],
+    'sonarjs/no-small-switch': 'off',
+    'sonarjs/no-nested-template-literals': 'off',
     camelcase: ['warn', { properties: 'never', allow: ['^UNSAFE_'] }],
     'comma-dangle': ['error', 'always-multiline'],
     'default-param-last': 'off',

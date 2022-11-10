@@ -269,7 +269,7 @@ const UsersTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const user = users[dataIndex];
           return (
             <Typography
@@ -289,7 +289,7 @@ const UsersTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const user = users[dataIndex];
           return (
             <ul className="mb-0 pl-0">
@@ -347,8 +347,7 @@ const UsersTable: FC<Props> = (props) => {
         customBodyRender: (_value, tableMeta): JSX.Element => {
           const rowData = tableMeta.rowData as UserMiniEntity;
           const user = rebuildObjectFromRow(columns, rowData);
-          const actionComponent = renderRowActionComponent(user);
-          return actionComponent;
+          return renderRowActionComponent(user);
         },
       },
     },
