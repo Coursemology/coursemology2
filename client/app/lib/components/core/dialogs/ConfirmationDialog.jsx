@@ -42,12 +42,9 @@ class ConfirmationDialog extends Component {
       confirmationButtonText = intl.formatMessage(formTranslations.submit);
     }
 
-    let confirmationSecondaryButtonText = intl.formatMessage(
-      formTranslations.continue,
-    );
-    if (confirmSecondaryButtonText) {
-      confirmationSecondaryButtonText = confirmSecondaryButtonText;
-    }
+    const confirmationSecondaryButtonText =
+      confirmSecondaryButtonText ??
+      intl.formatMessage(formTranslations.continue);
 
     let confirmationMessage = intl.formatMessage(formTranslations.areYouSure);
     if (message) {
@@ -90,7 +87,7 @@ class ConfirmationDialog extends Component {
     ];
 
     if (onConfirmSecondary) {
-      const confirmButtonSecondary = [
+      actions.push(
         <Button
           key="confirmation-dialog-confirm-secondary-button"
           ref={(button) => {
@@ -105,8 +102,7 @@ class ConfirmationDialog extends Component {
         >
           {confirmationSecondaryButtonText}
         </Button>,
-      ];
-      actions.push(...confirmButtonSecondary);
+      );
     }
 
     const handleDialogClose = (_event, reason) => {

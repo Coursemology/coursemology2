@@ -109,7 +109,7 @@ const SkillManagementButtons: FC<Props> = (props) => {
     message += intl.formatMessage(translations.deletionSkillBranchWithSkills);
   }
 
-  const managementButtons = (
+  return (
     <div style={{ whiteSpace: 'nowrap', textAlign: 'end' }}>
       {canUpdate && (
         <EditButton
@@ -133,8 +133,6 @@ const SkillManagementButtons: FC<Props> = (props) => {
       )}
     </div>
   );
-
-  return managementButtons;
 };
 
 export default injectIntl(SkillManagementButtons);

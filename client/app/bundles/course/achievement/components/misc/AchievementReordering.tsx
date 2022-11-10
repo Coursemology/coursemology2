@@ -39,9 +39,7 @@ const translations = defineMessages({
 // Serialise the ordered achievements as data for the API call.
 function serializedOrdering(): string {
   const options = { attribute: 'achievementid', key: 'achievement_order[]' };
-  const ordering = $('tbody').first().sortable('serialize', options);
-
-  return ordering;
+  return $('tbody').first().sortable('serialize', options);
 }
 
 function submitReordering(ordering: string): Promise<void> {

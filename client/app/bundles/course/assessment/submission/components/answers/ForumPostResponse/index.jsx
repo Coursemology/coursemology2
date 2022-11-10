@@ -60,7 +60,7 @@ const ForumPostResponse = (props) => {
           />
         )}
       />
-      {question.hasTextResponse && renderTextField(readOnly, answerId)}
+      {question.hasTextResponse && renderTextField()}
       {errorMessage && <Error message={errorMessage} />}
       <NotificationBar
         autoHideDuration={4000}

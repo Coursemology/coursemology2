@@ -50,7 +50,7 @@ const ForumPostTable: FC<Props> = (props: Props) => {
             textAlign: 'center',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): number => dataIndex + 1,
+        customBodyRenderLite: (dataIndex): number => dataIndex + 1,
       },
     },
     {
@@ -70,7 +70,7 @@ const ForumPostTable: FC<Props> = (props: Props) => {
             width: '100%',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const post = data[dataIndex];
           return (
             <a
@@ -105,7 +105,7 @@ const ForumPostTable: FC<Props> = (props: Props) => {
             textAlign: 'center',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): JSX.Element => (
+        customBodyRenderLite: (dataIndex): JSX.Element => (
           <div style={{ width: 'max-content', minWidth: '70px' }}>
             {data[dataIndex].voteTally}
           </div>
@@ -129,7 +129,7 @@ const ForumPostTable: FC<Props> = (props: Props) => {
             minWidth: 'max-content',
           },
         }),
-        customBodyRenderLite: (_dataIndex: number): JSX.Element => (
+        customBodyRenderLite: (_dataIndex): JSX.Element => (
           <div style={{ width: 'max-content' }}>
             {formatLongDateTime(data[_dataIndex].createdAt)}
           </div>

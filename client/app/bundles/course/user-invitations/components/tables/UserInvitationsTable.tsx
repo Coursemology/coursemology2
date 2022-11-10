@@ -121,7 +121,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.name),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={`name-${invitation.id}`} variant="body2">
@@ -136,7 +136,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.email),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={`email-${invitation.id}`} variant="body2">
@@ -151,7 +151,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.role),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={`role-${invitation.id}`} variant="body2">
@@ -166,7 +166,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.phantom),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={`phantom-${invitation.id}`} variant="body2">
@@ -181,7 +181,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.invitationCode),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={`invitationCode-${invitation.id}`} variant="body2">
@@ -199,7 +199,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.invitationSentAt),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={invitation.id} variant="body2">
@@ -217,7 +217,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.personalizedTimeline),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={invitation.id} variant="body2">
@@ -237,7 +237,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.invitationAcceptedAt),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const invitation = invitations[dataIndex];
           return (
             <Typography key={invitation.id} variant="body2">
@@ -260,8 +260,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
         customBodyRender: (_value, tableMeta): JSX.Element => {
           const rowData = tableMeta.rowData;
           const invitation = rebuildObjectFromRow(columns, rowData);
-          const actionComponent = renderRowActionComponent(invitation);
-          return actionComponent;
+          return renderRowActionComponent(invitation);
         },
       },
     });

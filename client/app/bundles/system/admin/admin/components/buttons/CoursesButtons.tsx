@@ -61,7 +61,7 @@ const CoursesButtons: FC<Props> = (props) => {
       });
   };
 
-  const managementButtons = (
+  return (
     <div key={`buttons-${course.id}`}>
       <IconButton
         className={`course-delete-${course.id} p-0`}
@@ -80,8 +80,6 @@ const CoursesButtons: FC<Props> = (props) => {
       />
     </div>
   );
-
-  return managementButtons;
 };
 
 export default memo(injectIntl(CoursesButtons), (prevProps, nextProps) => {

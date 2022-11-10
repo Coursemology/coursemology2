@@ -57,7 +57,7 @@ const DisbursementTable: FC<Props> = (props: Props) => {
             padding: '5px 14px',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): number => dataIndex + 1,
+        customBodyRenderLite: (dataIndex): number => dataIndex + 1,
       },
     },
     {
@@ -76,7 +76,7 @@ const DisbursementTable: FC<Props> = (props: Props) => {
             width: '50vw',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): JSX.Element => (
+        customBodyRenderLite: (dataIndex): JSX.Element => (
           <a
             href={getCourseUserURL(getCourseId(), filteredUsers[dataIndex].id)}
             rel="noreferrer"
@@ -103,7 +103,7 @@ const DisbursementTable: FC<Props> = (props: Props) => {
             padding: '5px 14px',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): JSX.Element => (
+        customBodyRenderLite: (dataIndex): JSX.Element => (
           <PointField
             key={filteredUsers[dataIndex].id}
             courseUserId={filteredUsers[dataIndex].id}
@@ -123,7 +123,7 @@ const DisbursementTable: FC<Props> = (props: Props) => {
         setCellProps: () => ({
           style: { width: '30vw', padding: '0px' },
         }),
-        customBodyRenderLite: (dataIndex: number): JSX.Element | null => {
+        customBodyRenderLite: (dataIndex): JSX.Element | null => {
           if (dataIndex === 0) {
             return (
               <>

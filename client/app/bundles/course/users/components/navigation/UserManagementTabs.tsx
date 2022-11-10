@@ -122,7 +122,7 @@ const UserManagementTabs: FC<Props> = (props) => {
     return res === -1 ? 0 : res;
   };
 
-  const managementTabs = (
+  return (
     <Tabs
       scrollButtons="auto"
       sx={tabsStyle}
@@ -146,8 +146,6 @@ const UserManagementTabs: FC<Props> = (props) => {
       ))}
     </Tabs>
   );
-
-  return managementTabs;
 };
 
 export default injectIntl(UserManagementTabs);

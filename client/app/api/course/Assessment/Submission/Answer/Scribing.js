@@ -19,8 +19,6 @@ export default class ScribingsAPI extends BaseAssessmentAPI {
 
   // eslint-disable-next-line class-methods-use-this
   _getUrlPrefix() {
-    const prefix = `/courses/${getCourseId()}/assessments/${getAssessmentId()}\
-/submissions/${getSubmissionId()}/answers`;
-    return prefix;
+    return `/courses/${getCourseId()}/assessments/${getAssessmentId()}/submissions/${getSubmissionId()}/answers`;
   }
 }

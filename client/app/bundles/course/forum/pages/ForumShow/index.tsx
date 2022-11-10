@@ -118,7 +118,7 @@ const ForumShow: FC = () => {
             key="mark-all-as-read-button"
             className="mark-all-as-read-button"
             color="inherit"
-            disabled={!unreadTopicExists || isMarking}
+            disabled={isMarking}
             onClick={(): void => handleMarkAllAsRead(forum.id)}
           >
             {t(translations.markAllAsRead)}

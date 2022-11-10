@@ -57,7 +57,7 @@ const UserManagementButtons: FC<Props> = (props) => {
       .finally(() => setIsDeleting(false));
   };
 
-  const managementButtons = (
+  return (
     <div key={`buttons-${user.id}`} style={{ whiteSpace: 'nowrap' }}>
       <DeleteButton
         className={`user-delete-${user.id}`}
@@ -74,8 +74,6 @@ const UserManagementButtons: FC<Props> = (props) => {
       />
     </div>
   );
-
-  return managementButtons;
 };
 
 export default memo(

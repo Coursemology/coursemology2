@@ -57,7 +57,7 @@ const InstancesButtons: FC<Props> = (props) => {
       .finally(() => setIsDeleting(false));
   };
 
-  const managementButtons = (
+  return (
     <div key={`buttons-${instance.id}`}>
       {instance.permissions.canDelete && (
         <DeleteButton
@@ -73,8 +73,6 @@ const InstancesButtons: FC<Props> = (props) => {
       )}
     </div>
   );
-
-  return managementButtons;
 };
 
 export default memo(injectIntl(InstancesButtons), (prevProps, nextProps) => {

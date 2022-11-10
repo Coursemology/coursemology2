@@ -100,12 +100,10 @@ const formatComponentAttributes = (
   const payload = new FormData();
 
   components.forEach((component) => {
-    if (component.key === updatedComponentKey && !component.enabled) {
-      payload.append(
-        `settings_components[enabled_component_ids][]`,
-        component.key,
-      );
-    } else if (component.key !== updatedComponentKey && component.enabled) {
+    if (
+      (component.key === updatedComponentKey && !component.enabled) ||
+      (component.key !== updatedComponentKey && component.enabled)
+    ) {
       payload.append(
         `settings_components[enabled_component_ids][]`,
         component.key,

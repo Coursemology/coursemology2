@@ -153,7 +153,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.email),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`email-${enrolRequest.id}`} variant="body2">
@@ -168,7 +168,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.createdAt),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`createdAt-${enrolRequest.id}`} variant="body2">
@@ -298,8 +298,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
               customBodyRender: (_value, tableMeta): JSX.Element => {
                 const rowData = tableMeta.rowData as EnrolRequestRowData;
                 const enrolRequest = rebuildObjectFromRow(columns, rowData);
-                const actionComponent = renderRowActionComponent(enrolRequest);
-                return actionComponent;
+                return renderRowActionComponent(enrolRequest);
               },
             },
           },
@@ -313,7 +312,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.name),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`name-${enrolRequest.id}`} variant="body2">
@@ -329,7 +328,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.role),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`role-${enrolRequest.id}`} variant="body2">
@@ -344,7 +343,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.phantom),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           let phantomStatus: string;
           if (enrolRequest.phantom === null) {
@@ -365,7 +364,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.approver),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`rejector-${enrolRequest.id}`} variant="body2">
@@ -380,7 +379,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.approvedAt),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`approvedAt-${enrolRequest.id}`} variant="body2">
@@ -398,7 +397,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.name),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`name-${enrolRequest.id}`} variant="body2">
@@ -414,7 +413,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.rejector),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`rejector-${enrolRequest.id}`} variant="body2">
@@ -429,7 +428,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.rejectedAt),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const enrolRequest = enrolRequests[dataIndex];
           return (
             <Typography key={`rejectedAt-${enrolRequest.id}`} variant="body2">

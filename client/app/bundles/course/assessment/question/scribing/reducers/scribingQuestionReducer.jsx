@@ -28,11 +28,13 @@ export default function scribingQuestionReducer(state = initialState, action) {
         isSubmitting: false,
       };
     case actionTypes.CREATE_SCRIBING_QUESTION_REQUEST:
-    case actionTypes.UPDATE_SCRIBING_QUESTION_REQUEST: {
+    case actionTypes.UPDATE_SCRIBING_QUESTION_REQUEST:
+    case actionTypes.CREATE_SCRIBING_QUESTION_SUCCESS:
+    case actionTypes.UPDATE_SCRIBING_QUESTION_SUCCESS: {
       return {
         ...state,
         isLoading: false,
-        isSubmitting: true,
+        isSubmitting: true, // to provide transition to assessment page
       };
     }
     case actionTypes.FETCH_SKILLS_SUCCESS: {
@@ -54,22 +56,8 @@ export default function scribingQuestionReducer(state = initialState, action) {
         isSubmitting: false,
       };
     }
-    case actionTypes.CREATE_SCRIBING_QUESTION_SUCCESS:
-    case actionTypes.UPDATE_SCRIBING_QUESTION_SUCCESS: {
-      return {
-        ...state,
-        isLoading: false,
-        isSubmitting: true, // to provide transition to assessment page
-      };
-    }
     case actionTypes.FETCH_SKILLS_FAILURE:
-    case actionTypes.FETCH_SCRIBING_QUESTION_FAILURE: {
-      return {
-        ...state,
-        isLoading: false,
-        isSubmitting: false,
-      };
-    }
+    case actionTypes.FETCH_SCRIBING_QUESTION_FAILURE:
     case actionTypes.CREATE_SCRIBING_QUESTION_FAILURE:
     case actionTypes.UPDATE_SCRIBING_QUESTION_FAILURE: {
       return {

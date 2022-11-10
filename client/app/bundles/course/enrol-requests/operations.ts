@@ -11,7 +11,7 @@ import * as actions from './actions';
 const formatAttributes = (
   data: EnrolRequestMiniEntity,
 ): ApproveEnrolRequestPatchData => {
-  const payload = {
+  return {
     course_user: {
       name: data.name,
       phantom: data.phantom, // undefined if user doesn't change
@@ -19,7 +19,6 @@ const formatAttributes = (
       timeline_algorithm: data.timelineAlgorithm, // undefined if user doesn't change
     },
   };
-  return payload;
 };
 
 export function fetchEnrolRequests(): Operation<void> {

@@ -105,7 +105,7 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
       .finally(() => setIsDeleting(false));
   };
 
-  const managementButtons = (
+  return (
     <div style={{ whiteSpace: 'nowrap' }}>
       <AcceptButton
         className={`enrol-request-approve-${enrolRequest.id}`}
@@ -129,8 +129,6 @@ const PendingEnrolRequestsButtons: FC<Props> = (props) => {
       />
     </div>
   );
-
-  return managementButtons;
 };
 
 export default memo(

@@ -117,7 +117,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.name),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const roleRequest = roleRequests[dataIndex];
           return (
             <Typography key={`name-${roleRequest.id}`} variant="body2">
@@ -153,7 +153,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.reason),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const roleRequest = roleRequests[dataIndex];
           return (
             <Typography key={`reason-${roleRequest.id}`} variant="body2">
@@ -194,7 +194,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
           label: intl.formatMessage(tableTranslations.approvedAt),
           options: {
             alignCenter: false,
-            customBodyRenderLite: (dataIndex: number): JSX.Element => {
+            customBodyRenderLite: (dataIndex): JSX.Element => {
               const roleRequest = roleRequests[dataIndex];
               return (
                 <Typography
@@ -261,9 +261,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
                   customBodyRender: (_value, tableMeta): JSX.Element => {
                     const rowData = tableMeta.rowData as RoleRequestRowData;
                     const enrolRequest = rebuildObjectFromRow(columns, rowData);
-                    const actionComponent =
-                      renderRowActionComponent(enrolRequest);
-                    return actionComponent;
+                    return renderRowActionComponent(enrolRequest);
                   },
                 },
               },

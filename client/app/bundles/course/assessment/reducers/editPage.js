@@ -16,13 +16,7 @@ export default function (state = initialState, action) {
     case actionTypes.UPDATE_ASSESSMENT_REQUEST: {
       return { ...state, disabled: true };
     }
-    case actionTypes.UPDATE_ASSESSMENT_SUCCESS: {
-      return {
-        ...state,
-        disabled: false,
-        notification: { message: action.message },
-      };
-    }
+    case actionTypes.UPDATE_ASSESSMENT_SUCCESS:
     case actionTypes.UPDATE_ASSESSMENT_FAILURE: {
       return {
         ...state,

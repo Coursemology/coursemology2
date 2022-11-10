@@ -319,7 +319,7 @@ const ManageUsersTable: FC<Props> = (props) => {
       label: intl.formatMessage(tableTranslations.email),
       options: {
         alignCenter: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const user = users[dataIndex];
           return (
             <Typography
@@ -337,7 +337,7 @@ const ManageUsersTable: FC<Props> = (props) => {
       name: 'phantom',
       label: intl.formatMessage(tableTranslations.phantom),
       options: {
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const user = users[dataIndex];
           return (
             <Checkbox
@@ -442,8 +442,7 @@ const ManageUsersTable: FC<Props> = (props) => {
         customBodyRender: (_value, tableMeta): JSX.Element => {
           const rowData = tableMeta.rowData as CourseUserRowData;
           const user = rebuildObjectFromRow(columns, rowData);
-          const actionComponent = renderRowActionComponent(user);
-          return actionComponent;
+          return renderRowActionComponent(user);
         },
         download: false,
       },

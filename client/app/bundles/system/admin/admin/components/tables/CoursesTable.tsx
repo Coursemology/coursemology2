@@ -176,7 +176,7 @@ const CoursesTable: FC<Props> = (props) => {
       options: {
         alignCenter: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const course = courses[dataIndex];
           return (
             <Typography
@@ -199,7 +199,7 @@ const CoursesTable: FC<Props> = (props) => {
         alignCenter: false,
         search: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const course = courses[dataIndex];
           return (
             <Typography
@@ -220,7 +220,7 @@ const CoursesTable: FC<Props> = (props) => {
         alignCenter: false,
         search: false,
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const course = courses[dataIndex];
           return (
             <Typography
@@ -245,7 +245,7 @@ const CoursesTable: FC<Props> = (props) => {
         alignCenter: false,
         search: true,
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const course = courses[dataIndex];
           return (
             <a href={`//${course.instance.host}`}>
@@ -268,7 +268,7 @@ const CoursesTable: FC<Props> = (props) => {
         alignCenter: false,
         search: true,
         sort: false,
-        customBodyRenderLite: (dataIndex: number): JSX.Element => {
+        customBodyRenderLite: (dataIndex): JSX.Element => {
           const course = courses[dataIndex];
           return (
             <ul className="mb-0 pl-0">
@@ -288,8 +288,7 @@ const CoursesTable: FC<Props> = (props) => {
         customBodyRender: (_value, tableMeta): JSX.Element => {
           const rowData = tableMeta.rowData as CourseMiniEntity;
           const course = rebuildObjectFromRow(columns, rowData);
-          const actionComponent = renderRowActionComponent(course);
-          return actionComponent;
+          return renderRowActionComponent(course);
         },
       },
     },

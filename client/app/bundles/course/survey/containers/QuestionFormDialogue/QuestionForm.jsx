@@ -193,14 +193,11 @@ const validationSchema = yup.object({
   options: yup
     .array()
     .test('required', questionFormTranslations.atLeastOneOptions, function () {
-      if (
+      return !(
         (this.parent.question_type === MULTIPLE_CHOICE ||
           this.parent.question_type === MULTIPLE_RESPONSE) &&
         countFilledOptions(this.parent.options) < 1
-      ) {
-        return false;
-      }
-      return true;
+      );
     }),
 });
 

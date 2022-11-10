@@ -49,6 +49,7 @@ const reducer = produce((draft: CoursesState, action: CoursesActionType) => {
       const course = draft.courses.byId[courseId];
       // Inefficient: filter is O(n)
       if (course) {
+        // eslint-disable-next-line sonarjs/no-nested-switch
         switch (todoType) {
           case 'assessments':
             if (course.assessmentTodos) {

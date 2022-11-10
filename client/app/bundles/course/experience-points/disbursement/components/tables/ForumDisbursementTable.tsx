@@ -73,7 +73,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
             padding: '5px 14px',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): number => dataIndex + 1,
+        customBodyRenderLite: (dataIndex): number => dataIndex + 1,
       },
     },
     {
@@ -88,7 +88,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         setCellProps: () => ({
           style: { overflowWrap: 'anywhere', padding: '5px 14px' },
         }),
-        customBodyRenderLite: (dataIndex: number): JSX.Element => (
+        customBodyRenderLite: (dataIndex): JSX.Element => (
           <a
             href={getCourseUserURL(getCourseId(), forumUsers[dataIndex].id)}
             rel="noreferrer"
@@ -115,7 +115,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
             textAlign: 'end',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): string =>
+        customBodyRenderLite: (dataIndex): string =>
           forumUsers[dataIndex].level.toString(),
       },
     },
@@ -135,7 +135,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
             textAlign: 'end',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): string =>
+        customBodyRenderLite: (dataIndex): string =>
           forumUsers[dataIndex].exp.toString(),
       },
     },
@@ -155,7 +155,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
             textAlign: 'end',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): JSX.Element => (
+        customBodyRenderLite: (dataIndex): JSX.Element => (
           <>
             {dataIndex === 0 && (
               <ReactTooltip id="view-posts">
@@ -194,7 +194,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
             textAlign: 'end',
           },
         }),
-        customBodyRenderLite: (dataIndex: number): string =>
+        customBodyRenderLite: (dataIndex): string =>
           forumUsers[dataIndex].voteTally.toString(),
       },
     },
@@ -212,7 +212,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
           id: `course_user_${forumUsers[rowIndex].id}`,
           style: { overflowWrap: 'anywhere', padding: '5px 14px' },
         }),
-        customBodyRenderLite: (dataIndex: number): JSX.Element => (
+        customBodyRenderLite: (dataIndex): JSX.Element => (
           <PointField
             key={forumUsers[dataIndex].id}
             courseUserId={forumUsers[dataIndex].id}

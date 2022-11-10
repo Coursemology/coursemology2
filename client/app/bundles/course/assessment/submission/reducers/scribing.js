@@ -35,6 +35,7 @@ function initializeLineStyles() {
 }
 
 export default function (state = {}, action) {
+  // eslint-disable-next-line sonarjs/max-switch-cases
   switch (action.type) {
     case actions.FINALIZE_SUCCESS:
     case actions.UNSUBMIT_SUCCESS:

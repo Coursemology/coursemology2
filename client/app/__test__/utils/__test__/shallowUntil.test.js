@@ -5,10 +5,8 @@ import shallowUntil from '../shallowUntil';
 
 describe('#shallowUntil', () => {
   const Div = () => <div />;
-  const hoc = (Comp) => {
-    const component = () => <Comp />;
-    return component;
-  };
+  // eslint-disable-next-line react/display-name
+  const hoc = (Comp) => () => <Comp />;
 
   it('shallow renders the current wrapper one level deep', () => {
     const EnhancedDiv = hoc(Div);
