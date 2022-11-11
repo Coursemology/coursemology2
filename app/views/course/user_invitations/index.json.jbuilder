@@ -1,7 +1,5 @@
 # frozen_string_literal: true
-unless @without_invitations
-  json.partial! 'course_user_invitation_list'
-end
+json.partial! 'course_user_invitation_list' unless @without_invitations
 
 json.permissions do
   json.partial! 'course/users/permissions_data', current_course: current_course
