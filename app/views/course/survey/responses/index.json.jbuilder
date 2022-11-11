@@ -10,7 +10,7 @@ json.responses @course_students do |student|
     json.path course_user_path(current_course, student)
   end
 
-  json.present !!response
+  json.present !response.nil?
   if response
     json.id response.id
     json.submitted_at response.submitted_at&.iso8601
