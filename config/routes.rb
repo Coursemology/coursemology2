@@ -308,15 +308,14 @@ Rails.application.routes.draw do
               put 'toggle_answer', on: :member
             end
 
-            get 'subscribe', on: :member
             post 'subscribe', on: :member
             delete 'subscribe', on: :member
-            put 'locked' => 'topics#set_locked', on: :member
-            put 'hidden' => 'topics#set_hidden', on: :member
+            patch 'locked' => 'topics#set_locked', on: :member
+            patch 'hidden' => 'topics#set_hidden', on: :member
           end
 
-          get 'subscribe', on: :member
-          get 'unsubscribe', on: :member
+          post 'subscribe', on: :member
+          delete 'unsubscribe', on: :member
 
           get 'all_posts', on: :collection
           get 'search', on: :collection

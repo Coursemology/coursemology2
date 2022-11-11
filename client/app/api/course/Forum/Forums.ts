@@ -71,9 +71,9 @@ export default class ForumsAPI extends BaseCourseAPI {
     isCurrentlySubscribed: boolean,
   ): Promise<AxiosResponse> {
     if (isCurrentlySubscribed) {
-      return this.getClient().get(`${url}/unsubscribe`);
+      return this.getClient().delete(`${url}/unsubscribe`);
     }
-    return this.getClient().get(`${url}/subscribe`);
+    return this.getClient().post(`${url}/subscribe`);
   }
 
   /**
