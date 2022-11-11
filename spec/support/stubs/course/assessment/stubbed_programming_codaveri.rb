@@ -1,4 +1,4 @@
-# rubocop: disable Layout/LineEndStringConcatenationIndentation, Layout/SpaceAroundOperators, Style/StringConcatenation, Metrics/AbcSize
+# rubocop: disable Layout/LineEndStringConcatenationIndentation, Layout/SpaceAroundOperators, Style/StringConcatenation
 # frozen_string_literal: true
 module Course::Assessment::StubbedProgrammingCodaveriEvaluationService
   private
@@ -67,4 +67,4 @@ module Course::Assessment::StubbedProgrammingCodaveriEvaluationServiceWrongAnswe
   end
 end
 
-# rubocop: enable Layout/LineEndStringConcatenationIndentation, Layout/SpaceAroundOperators, Style/StringConcatenation, Metrics/AbcSize
+# rubocop: enable Layout/LineEndStringConcatenationIndentation, Layout/SpaceAroundOperators, Style/StringConcatenation
