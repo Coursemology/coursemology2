@@ -105,7 +105,7 @@ RSpec.describe Instance::UserInvitationService, type: :service do
 
         it 'succeeds' do
           expect(invite.map(&:size)).to eq([new_users.size - users_invited.size, users_invited.size,
-                                existing_users.size - users_in_instance.size, users_in_instance.size, 0])
+                                            existing_users.size - users_in_instance.size, users_in_instance.size, 0])
         end
 
         with_active_job_queue_adapter(:test) do
