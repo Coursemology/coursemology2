@@ -4,7 +4,7 @@ module Course::Discussion::Post::StubbedCodaveriFeedback
 
   def connect_to_codaveri(_payload)
     Excon::Response.new(status: 200,
-                        body: '{"success":true,"message":"OK",''"data":{}}')
+                        body: '{"success":true,"message":"OK","data":{}}')
   end
 end
 
