@@ -67,7 +67,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
       rescue => _e # TO REMOVE - Testing for production duplication error
         Rails.logger.debug(message: 'Course duplication error debugging', error: _e, error_message: _e.message)
         raise ActiveRecord::Rollback
-      end 
+      end
     end
     notify_duplication_complete(duplicated_course)
     duplicated_course
