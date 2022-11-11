@@ -97,7 +97,7 @@ module Course::LessonPlan::LearningRateConcern
       course_user.course.assessments.
       with_submissions_by(course_user.user).
       select { |x| x.submissions.present? && x.submissions.first.submitted_at.present? }.
-      map { |x| [x.lesson_plan_item.id, x.submissions.first.submitted_at] }.to_h
+      to_h { |x| [x.lesson_plan_item.id, x.submissions.first.submitted_at] }
     )
   end
 
@@ -114,7 +114,7 @@ module Course::LessonPlan::LearningRateConcern
       course_user.course.videos.
       with_submissions_by(course_user.user).
       select { |x| x.submissions.present? }.
-      map { |x| [x.lesson_plan_item.id, nil] }.to_h
+      to_h { |x| [x.lesson_plan_item.id, nil] }
     )
   end
 end

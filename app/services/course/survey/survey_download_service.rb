@@ -52,7 +52,7 @@ class Course::Survey::SurveyDownloadService
     end
 
     def generate_row(response, questions)
-      answers_hash = response.answers.map { |answer| [answer.question_id, answer] }.to_h
+      answers_hash = response.answers.to_h { |answer| [answer.question_id, answer] }
       values = questions.map do |question|
         answer = answers_hash[question.id]
         generate_value(answer)

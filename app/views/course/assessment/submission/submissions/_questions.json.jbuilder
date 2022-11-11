@@ -1,11 +1,11 @@
 # frozen_string_literal: true
-answer_ids_hash = answers.map do |a|
+answer_ids_hash = answers.to_h do |a|
   [a.question_id, a]
-end.to_h
+end
 
-sq_topic_ids_hash = submission_questions.map do |sq|
+sq_topic_ids_hash = submission_questions.to_h do |sq|
   [sq.question_id, [sq, sq.discussion_topic.id]]
-end.to_h
+end
 
 question_assessments = Course::QuestionAssessment.
                        where(question: submission.questions, assessment: assessment).

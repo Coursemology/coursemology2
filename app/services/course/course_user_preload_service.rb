@@ -10,9 +10,9 @@ class Course::CourseUserPreloadService
   # @return [Hash{User => CourseUser}] Hash that maps users to course_user
   def initialize(users, course)
     course_users = CourseUser.includes(:user, :course).where(user: users.uniq, course: course)
-    @user_course_user_hash = course_users.map do |course_user|
+    @user_course_user_hash = course_users.to_h do |course_user|
       [course_user.user, course_user]
-    end.to_h
+    end
   end
 
   # Finds the user's course_user for the given course.

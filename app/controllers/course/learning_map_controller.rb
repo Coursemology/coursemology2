@@ -121,9 +121,9 @@ class Course::LearningMapController < Course::ComponentController
   end
 
   def init_all_node_relations
-    { node_ids_to_children: @conditionals.map { |conditional| [get_node_id(conditional), []] }.to_h,
-      node_ids_to_parents: @conditionals.map { |conditional| [get_node_id(conditional), []] }.to_h,
-      node_ids_to_unlock_level: @conditionals.map { |conditional| [get_node_id(conditional), 0] }.to_h }
+    { node_ids_to_children: @conditionals.to_h { |conditional| [get_node_id(conditional), []] },
+      node_ids_to_parents: @conditionals.to_h { |conditional| [get_node_id(conditional), []] },
+      node_ids_to_unlock_level: @conditionals.to_h { |conditional| [get_node_id(conditional), 0] } }
   end
 
   def map_condition_to_parent(condition)
@@ -176,13 +176,13 @@ class Course::LearningMapController < Course::ComponentController
   end
 
   def init_depths(nodes)
-    nodes.map { |node| [node[:id], node[:parents].empty? ? 0 : NEGATIVE_INF] }.to_h
+    nodes.to_h { |node| [node[:id], node[:parents].empty? ? 0 : NEGATIVE_INF] }
   end
 
   def toposort(nodes)
     visited_node_ids = Set.new
     post_order_nodes = []
-    node_ids_to_nodes = nodes.map { |node| [node[:id], node] }.to_h
+    node_ids_to_nodes = nodes.to_h { |node| [node[:id], node] }
 
     nodes.each do |node|
       dfs(node, node_ids_to_nodes, visited_node_ids, post_order_nodes) unless visited_node_ids.include?(node[:id])

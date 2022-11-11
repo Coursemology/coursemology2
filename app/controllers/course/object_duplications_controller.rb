@@ -55,9 +55,9 @@ class Course::ObjectDuplicationsController < Course::ComponentController
                         where(role: CourseUser::MANAGER_ROLES.to_a)
       @destination_courses = Course.includes(:instance).find(course_managers.map(&:course_id))
       @root_folder_map = Course::Material::Folder.root.includes(:materials, :children).
-                         where(course_id: @destination_courses.map(&:id)).map do |folder|
+                         where(course_id: @destination_courses.map(&:id)).to_h do |folder|
                            [folder.course_id, folder]
-                         end.to_h
+                         end
     end
   end
 

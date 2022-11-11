@@ -95,7 +95,7 @@ module Course::Survey::ReorderingConcern
   #   Each element in the second-level array consist of a section's id and an ordered array
   #   of question_ids for questions belonging to that section.
   def update_questions_ordering(ordering)
-    questions_hash = @survey.questions.map { |question| [question.id, question] }.to_h
+    questions_hash = @survey.questions.to_h { |question| [question.id, question] }
     Course::Survey::Question.transaction do
       ordering.each do |section_id, question_ids|
         question_ids.each_with_index do |question_id, index|

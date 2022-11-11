@@ -58,8 +58,8 @@ class Course::Group::GroupCategoriesController < Course::ComponentController
   def update_group_members
     update_groups_params[:groups].each do |group|
       existing_group = Course::Group.preload(:group_users).find_by_id(group[:id])
-      existing_users = existing_group.group_users.map { |u| [u.course_user.id, u] }.to_h
-      new_users = group[:members].map { |u| [u[:id], u] }.to_h
+      existing_users = existing_group.group_users.to_h { |u| [u.course_user.id, u] }
+      new_users = group[:members].to_h { |u| [u[:id], u] }
       partitioned_users = partition_new_users(new_users, existing_users)
 
       add_new_members(partitioned_users[:to_add], existing_group)

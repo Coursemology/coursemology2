@@ -56,7 +56,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
   # @return [Array(Array<CourseUser>, Array<CourseUser>)] A tuple containing the list of users who were newly enrolled
   #   and already enrolled.
   def add_existing_users(users)
-    all_course_users = @current_course.course_users.map { |cu| [cu.user_id, cu] }.to_h
+    all_course_users = @current_course.course_users.to_h { |cu| [cu.user_id, cu] }
     existing_course_users = []
     new_course_users = []
     users.each do |user|
@@ -82,7 +82,7 @@ module Course::UserInvitationService::ProcessInvitationConcern
   # @return [Array(Array<Course::UserInvitation>, Array<Course::UserInvitation>)] A tuple containing the list of users
   #   who were newly invited and already invited.
   def invite_new_users(users)
-    all_invitations = @current_course.invitations.map { |i| [i.email.downcase, i] }.to_h
+    all_invitations = @current_course.invitations.to_h { |i| [i.email.downcase, i] }
     new_invitations = []
     existing_invitations = []
     users.each do |user|

@@ -96,9 +96,9 @@ class Course::Achievement::AchievementsController < Course::Achievement::Control
   #
   # @return [Hash{Integer => Course::Achievement}]
   def achievements_hash
-    @achievements_hash ||= current_course.achievements.map do |achievement|
+    @achievements_hash ||= current_course.achievements.to_h do |achievement|
       [achievement.id.to_s, achievement]
-    end.to_h
+    end
   end
 
   # Checks if a proposed achievement ordering is valid

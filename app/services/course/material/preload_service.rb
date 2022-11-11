@@ -15,9 +15,9 @@ class Course::Material::PreloadService
   private
 
   def folders_for_assessment_hash
-    @folders_for_assessment_hash ||= assessments_folders.map do |folder|
+    @folders_for_assessment_hash ||= assessments_folders.to_h do |folder|
       [folder.owner_id, folder]
-    end.to_h
+    end
   end
 
   def assessments_folders

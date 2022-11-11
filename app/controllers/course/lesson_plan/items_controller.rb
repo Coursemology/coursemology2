@@ -65,18 +65,18 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
   #
   # @return [Hash{Array<String> => Boolean}]
   def assessment_tabs_visibility_hash
-    @assessment_tabs_visibility_hash = assessment_item_settings.map do |setting|
+    @assessment_tabs_visibility_hash = assessment_item_settings.to_h do |setting|
       [assessment_tabs_titles_hash[setting[:options][:tab_id]], setting[:visible]]
-    end.to_h
+    end
   end
 
   # Returns a hash that maps the component title to its visibility setting.
   #
   # @return [Hash{Array<String> => Boolean}]
   def component_visibility_hash
-    @component_visibility_hash = component_item_settings.map do |setting|
+    @component_visibility_hash = component_item_settings.to_h do |setting|
       [[setting[:component_title]], setting[:visible]]
-    end.to_h
+    end
   end
 
   # Returns a hash that maps tab ids to an array containing:
@@ -87,9 +87,9 @@ class Course::LessonPlan::ItemsController < Course::LessonPlan::Controller
   def assessment_tabs_titles_hash
     @assessment_tabs_titles_hash ||=
       current_course.assessment_categories.includes(:tabs).map(&:tabs).flatten.
-      map do |tab|
+      to_h do |tab|
         [tab.id, tab_title_array(tab)]
-      end.to_h
+      end
   end
 
   # Maps an assessment tab to an array of strings that describes its title. If the

@@ -65,7 +65,7 @@ class Course::CoursesController < Course::Controller
                                current_user.id,
                                @assessment_todos.map(&:item).pluck(:actable_id)
                              ).
-                             map { |submission| [submission.assessment_id, submission] }.to_h
+                             to_h { |submission| [submission.assessment_id, submission] }
 
     @survey_todos_hash = Course::Survey::Response.
                          where(
@@ -73,7 +73,7 @@ class Course::CoursesController < Course::Controller
                            current_user.id,
                            @survey_todos.map(&:item).pluck(:actable_id)
                          ).
-                         map { |survey| [survey.survey_id, survey] }.to_h
+                         to_h { |survey| [survey.survey_id, survey] }
   end
 
   def load_items_with_timeline # rubocop:disable Metrics/AbcSize

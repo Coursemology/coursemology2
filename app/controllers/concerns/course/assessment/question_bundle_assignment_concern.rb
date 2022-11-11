@@ -27,7 +27,7 @@ module Course::Assessment::QuestionBundleAssignmentConcern
     attr_accessor :assignments, :group_bundles
 
     def initialize(students, group_bundles)
-      @assignments = students.map { |x| [x, nil => []] }.to_h
+      @assignments = students.to_h { |x| [x, nil => []] }
       @group_bundles = group_bundles
       @group_bundles_lookup = group_bundles.flat_map do |group, bundles|
         bundles.map { |bundle| [bundle, group] }
@@ -51,7 +51,7 @@ module Course::Assessment::QuestionBundleAssignmentConcern
     def initialize(assessment)
       @assessment = assessment
       @students = assessment.course.user_ids
-      @group_bundles = assessment.question_group_ids.map { |x| [x, []] }.to_h
+      @group_bundles = assessment.question_group_ids.to_h { |x| [x, []] }
       assessment.question_bundles.each { |bundle| @group_bundles[bundle.group_id].append(bundle.id) }
 
       # Reverse lookup of user_id -> course_user.name or user.name

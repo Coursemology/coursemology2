@@ -224,11 +224,11 @@ class Course::Assessment::ProgrammingPackage
   #   file.
   def get_folder_files(folder_path)
     ensure_file_open!
-    @file.glob("#{folder_path}/**/*").map do |entry|
+    @file.glob("#{folder_path}/**/*").to_h do |entry|
       entry_file_name = Pathname.new(entry.name)
       file_name = entry_file_name.relative_path_from(folder_path)
       [file_name, entry.get_input_stream(&:read)]
-    end.to_h
+    end
   end
 
   # Get the contents of a file.
