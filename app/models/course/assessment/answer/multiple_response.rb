@@ -20,7 +20,7 @@ class Course::Assessment::Answer::MultipleResponse < ApplicationRecord
     self.options = question.specific.options.select { |option| option_ids.include?(option.id) }
   end
 
-  def get_random_seed
+  def retrieve_random_seed
     self.random_seed ||= Random.new_seed
     save
 
