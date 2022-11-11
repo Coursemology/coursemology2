@@ -12,7 +12,6 @@ RSpec.feature 'System: Administration: Components', type: :feature, js: true do
       login_as(admin, scope: :user)
     end
 
-
     scenario 'Admin visits the page' do
       visit admin_instance_components_path
       settings = Instance::Settings::Components.new(instance)
