@@ -35,7 +35,9 @@ RSpec.describe Course::Material::FoldersController, type: :controller do
       let(:file) { Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'files', 'text.txt')) }
       subject do
         patch :upload_materials, as: :json,
-              params: { course_id: course, id: folder_stub, material_folder: { files_attributes: [file] } }
+                                 params: { course_id: course,
+                                           id: folder_stub,
+                                           material_folder: { files_attributes: [file] } }
       end
 
       context 'when files cannot be uploaded' do
