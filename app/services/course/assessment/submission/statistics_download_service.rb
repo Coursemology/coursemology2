@@ -24,7 +24,7 @@ class Course::Assessment::Submission::StatisticsDownloadService
                   calculated(:log_count, :graded_at, :grade, :grader_ids).
                   includes(:course_user, :publisher)
     assessment = submissions&.first&.assessment&.calculated(:maximum_grade)
-    @course_users_hash ||= @current_course.course_users.map { |cu| [cu.user_id, [cu.id, cu.name]] }.to_h
+    @course_users_hash ||= @current_course.course_users.to_h { |cu| [cu.user_id, [cu.id, cu.name]] }
     statistics_file_path = File.join(@base_dir, 'statistics.csv')
     CSV.open(statistics_file_path, 'w') do |csv|
       download_statistics_header csv

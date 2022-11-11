@@ -62,14 +62,14 @@ RSpec.describe Course::UserInvitationService, type: :service do
     let(:timeline_algorithms) { existing_timeline_algorithms + new_timeline_algorithms }
     let(:user_attributes) { existing_user_attributes + new_user_attributes + invalid_user_attributes }
     let(:user_form_attributes) do
-      user_attributes.map do |hash|
+      user_attributes.to_h do |hash|
         [generate(:nested_attribute_new_id),
          name: hash[:name],
          email: hash[:email],
          role: hash[:role],
          phantom: hash[:phantom],
          timeline_algorithm: hash[:timeline_algorithm]]
-      end.to_h
+      end
     end
 
     describe '#invite' do

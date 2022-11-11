@@ -6,11 +6,11 @@ RSpec.describe Instance::UserInvitationService, type: :service do
   let(:other_instance) { create(:instance) }
   with_tenant(:instance) do
     def temp_form_hash_from_attributes(records)
-      records.map do |record|
+      records.to_h do |record|
         [generate(:nested_attribute_new_id),
          name: record.name,
          email: record.email]
-      end.to_h
+      end
     end
 
     let(:user) { create(:user) }
@@ -56,12 +56,12 @@ RSpec.describe Instance::UserInvitationService, type: :service do
     let(:roles) { existing_roles + new_roles }
     let(:user_attributes) { existing_user_attributes + new_user_attributes + invalid_user_attributes }
     let(:user_form_attributes) do
-      user_attributes.map do |hash|
+      user_attributes.to_h do |hash|
         [generate(:nested_attribute_new_id),
          name: hash[:name],
          email: hash[:email],
          role: hash[:role]]
-      end.to_h
+      end
     end
 
     describe '#invite' do

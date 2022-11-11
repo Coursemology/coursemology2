@@ -12,7 +12,7 @@ module Course::Assessment::QuestionsConcern
   # @return [Array<Course::Assessment::Answer>] The answers for the questions, in the same order
   #   specified. Newly initialized answers will not be persisted.
   def attempt(submission)
-    current_answers = submission.current_answers.map { |answer| [answer.question, answer] }.to_h
+    current_answers = submission.current_answers.to_h { |answer| [answer.question, answer] }
 
     map do |question|
       current_answers.fetch(question) { question.attempt(submission) }

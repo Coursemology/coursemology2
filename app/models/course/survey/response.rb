@@ -70,12 +70,12 @@ class Course::Survey::Response < ApplicationRecord
   end
 
   def question_ids_hash
-    @question_ids_hash ||= answers.map { |answer| [answer.id, answer.question_id] }.to_h
+    @question_ids_hash ||= answers.to_h { |answer| [answer.id, answer.question_id] }
   end
 
   def valid_option_ids_hash
-    @valid_option_ids_hash ||= survey.questions.includes(:options).map do |question|
+    @valid_option_ids_hash ||= survey.questions.includes(:options).to_h do |question|
       [question.id, question.options.map(&:id).to_set]
-    end.to_h
+    end
   end
 end

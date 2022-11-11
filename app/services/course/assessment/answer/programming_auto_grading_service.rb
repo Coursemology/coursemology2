@@ -35,9 +35,9 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # @return [Hash{String => String}] The files in the answer, with the file names as keys, and
   #   the file content as values.
   def build_submission_files(answer)
-    answer.files.map do |file|
+    answer.files.to_h do |file|
       [file.filename, file.content]
-    end.to_h
+    end
   end
 
   # Evaluates the package to obtain the set of tests.
@@ -135,7 +135,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # @param [String] test_report The test case report from evaluating the package.
   # @return [Array<Course::Assessment::Question::ProgrammingTestCase>]
   def build_test_case_records_from_report(question, auto_grading, test_report)
-    test_cases = question.test_cases.map { |test_case| [test_case.identifier, test_case] }.to_h
+    test_cases = question.test_cases.to_h { |test_case| [test_case.identifier, test_case] }
     test_results = parse_test_report(question.language, test_report)
 
     test_results.map do |test_result|

@@ -7,8 +7,8 @@ class Course::Assessment::QuestionBundleAssignmentsController < Course::Assessme
   before_action :add_breadcrumbs
 
   def index
-    @question_group_lookup = @assessment.question_groups.select(:id, :title).map { |qg| [qg.id, qg.title] }.to_h
-    @question_bundle_lookup = @assessment.question_bundles.select(:id, :title).map { |qb| [qb.id, qb.title] }.to_h
+    @question_group_lookup = @assessment.question_groups.select(:id, :title).to_h { |qg| [qg.id, qg.title] }
+    @question_bundle_lookup = @assessment.question_bundles.select(:id, :title).to_h { |qb| [qb.id, qb.title] }
     @past_assignments = past_assignments_hash
     @assignment_randomizer = AssignmentRandomizer.new(@assessment)
     @assignment_set = @assignment_randomizer.load
@@ -81,15 +81,15 @@ class Course::Assessment::QuestionBundleAssignmentsController < Course::Assessme
   private
 
   def past_assignments_hash
-    @group_bundles_lookup = @assessment.question_bundles.map { |bundle| [bundle.id, bundle.group_id] }.to_h
-    @assessment.submissions.eager_load(:question_bundle_assignments).map do |submission|
+    @group_bundles_lookup = @assessment.question_bundles.to_h { |bundle| [bundle.id, bundle.group_id] }
+    @assessment.submissions.eager_load(:question_bundle_assignments).to_h do |submission|
       hash = { submission_id: submission.id, nil => [] }
       submission.question_bundle_assignments.each do |qba|
         group = @group_bundles_lookup[qba.bundle_id]
         hash[group].nil? ? hash[group] = qba.bundle_id : hash[nil].append(qba.bundle_id)
       end
       [submission.creator_id, hash]
-    end.to_h
+    end
   end
 
   def add_breadcrumbs

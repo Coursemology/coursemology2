@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-responses = @responses.map { |r| [r.course_user_id, r] }.to_h
+responses = @responses.to_h { |r| [r.course_user_id, r] }
 json.responses @course_students do |student|
   response = responses[student.id]
   can_read_answers = response.present? && can?(:read_answers, response)

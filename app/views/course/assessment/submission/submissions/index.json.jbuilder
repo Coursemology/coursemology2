@@ -1,6 +1,6 @@
 # frozen_string_literal: true
-submissions_hash ||= @submissions.map { |s| [s.creator_id, s] }.to_h
-course_users_hash ||= @course_users.map { |cu| [cu.user_id, [cu.id, cu.name]] }.to_h
+submissions_hash ||= @submissions.to_h { |s| [s.creator_id, s] }
+course_users_hash ||= @course_users.to_h { |cu| [cu.user_id, [cu.id, cu.name]] }
 course_users_hash[0] = [0, 'System']
 
 json.assessment do

@@ -59,7 +59,7 @@ module Instance::UserInvitationService::ProcessInvitationConcern
   #   A tuple containing the list of users who were newly enrolled
   #   and already enrolled.
   def add_existing_users(users)
-    all_instance_users = @current_instance.instance_users.map { |iu| [iu.user_id, iu] }.to_h
+    all_instance_users = @current_instance.instance_users.to_h { |iu| [iu.user_id, iu] }
     existing_instance_users = []
     new_instance_users = []
     users.each do |user|
@@ -82,7 +82,7 @@ module Instance::UserInvitationService::ProcessInvitationConcern
   #   A tuple containing the list of users
   #   who were newly invited and already invited.
   def invite_new_users(users)
-    all_invitations = @current_instance.invitations.map { |i| [i.email.downcase, i] }.to_h
+    all_invitations = @current_instance.invitations.to_h { |i| [i.email.downcase, i] }
     new_invitations = []
     existing_invitations = []
     users.each do |user|

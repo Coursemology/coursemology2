@@ -34,7 +34,7 @@ class Course::Assessment::Submission::ZipDownloadService
   def initialize(course_user, assessment, course_users)
     @course_user = course_user
     @assessment = assessment
-    @questions = assessment.questions.map { |q| [q.id, q] }.to_h
+    @questions = assessment.questions.to_h { |q| [q.id, q] }
     @course_users = course_users
     @base_dir = Dir.mktmpdir('coursemology-download-')
   end

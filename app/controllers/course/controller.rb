@@ -74,7 +74,7 @@ class Course::Controller < ApplicationController
     sidebar_settings = Course::Settings::Sidebar.new(current_course.settings,
                                                      current_component_host.sidebar_items)
     defined_sidebar_settings = sidebar_settings.sidebar_items.select { |item| item.id.present? }
-    defined_sidebar_settings.map { |item| [item.id, item.weight] }.to_h
+    defined_sidebar_settings.to_h { |item| [item.id, item.weight] }
   end
 
   def add_course_breadcrumb
