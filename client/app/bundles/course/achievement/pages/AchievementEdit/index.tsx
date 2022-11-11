@@ -1,12 +1,10 @@
 import { FC, useEffect } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AppDispatch, AppState } from 'types/store';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import AchievementForm from '../../components/forms/AchievementForm';
@@ -38,7 +36,6 @@ const AchievementEdit: FC<Props> = (props) => {
   const { achievementId, open, onClose } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const achievement = useSelector((state: AppState) =>
     getAchievementEntity(state, achievementId!),
   );
@@ -56,7 +53,8 @@ const AchievementEdit: FC<Props> = (props) => {
       .then(() => {
         toast.success(t(translations.updateSuccess));
         setTimeout(() => {
-          navigate(`/courses/${getCourseId()}/achievements`);
+          onClose();
+          // window.location.reload();
         }, 500);
       })
       .catch((error) => {

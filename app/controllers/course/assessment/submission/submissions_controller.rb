@@ -30,7 +30,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize!(:view_all_submissions, @assessment)
 
     respond_to do |format|
-      format.html {} # rubocop:disable Lint/EmptyBlock
+      format.html
       format.json do
         @assessment = @assessment.calculated(:maximum_grade)
         @submissions = @submissions.calculated(:log_count, :graded_at, :grade, :grader_ids)
@@ -72,7 +72,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     render 'blocked' if @submission.assessment.block_student_viewing_after_submitted? && current_course_user.student?
 
     respond_to do |format|
-      format.html {} # rubocop:disable Lint/EmptyBlock
+      format.html
       format.json do
         calculated_fields = [:graded_at, :grade]
         @submission = @submission.calculated(*calculated_fields)

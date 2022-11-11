@@ -359,13 +359,15 @@ RSpec.describe Course::Survey::SurveysController do
       let(:user) { admin }
 
       subject do
-        get :download, params: { course_id: course.id, id: survey.id }
+        get :download, as: :json, params: { course_id: course.id, id: survey.id }
       end
 
       it 'returns a html file' do
         subject
-        expect(response.header['Content-Type']).to include('text/html')
-        expect(response.status).to eq(302)
+        json_response = JSON.parse(response.body, { symbolize_names: true })
+        expect(response.header['Content-Type']).to include('application/json')
+        expect(json_response[:redirect_url]).not_to be_nil
+        expect(response.status).to eq(200)
       end
     end
   end
