@@ -3,21 +3,15 @@
 activity = notification.activity
 topic = activity.object
 course_user = @course_users_hash[activity.actor_id]
+user = course_user || activity.actor
 
 json.id notification.id
 
 json.userInfo do
-  if course_user
-    json.id course_user.id
-    json.name course_user.name
-  else
-    json.id activity.actor_id
-    json.name activity.actor.name
-  end
+  json.name user.name
+  json.userUrl url_to_user_or_course_user(current_course, user)
   json.imageUrl activity.actor.profile_photo.url
 end
-
-json.isCourseUser course_user.present?
 
 json.actableType 'topicCreate'
 json.actableId topic.id

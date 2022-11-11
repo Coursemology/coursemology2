@@ -7,8 +7,6 @@ import {
   ExperiencePointsRowData,
 } from 'types/course/experiencePointsRecords';
 
-import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatLongDateTime } from 'lib/moment';
 
 import PointManagementButtons from '../buttons/PointManagementButtons';
@@ -106,15 +104,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
       <TableCell>{formatLongDateTime(record.updatedAt)}</TableCell>
 
       <TableCell>
-        <Link
-          to={
-            record.updaterUser.isCourseUser
-              ? getCourseUserURL(getCourseId(), record.updaterUser.id)
-              : getUserURL(record.updaterUser.id)
-          }
-        >
-          {record.updaterUser.name}
-        </Link>
+        <Link to={record.updater.userUrl ?? '#'}>{record.updater.name}</Link>
       </TableCell>
 
       <TableCell>{renderReason()}</TableCell>

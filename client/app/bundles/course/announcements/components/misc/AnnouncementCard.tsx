@@ -15,8 +15,6 @@ import { AppDispatch, Operation } from 'types/store';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import CustomTooltip from 'lib/components/core/CustomTooltip';
-import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
-import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatFullDateTime } from 'lib/moment';
 
 import AnnouncementEdit from '../../pages/AnnouncementEdit';
@@ -106,21 +104,16 @@ const AnnouncementCard: FC<Props> = (props) => {
 
   const onEdit = (): void => setIsOpen(true);
 
-  const userName = announcement.courseUserName
-    ? announcement.courseUserName
-    : announcement.userName;
-
   const renderUserLink = (): JSX.Element => {
-    const userLink = announcement.courseUserId
-      ? getCourseUserURL(getCourseId(), announcement.courseUserId)
-      : getUserURL(announcement.userId);
-
-    if (announcement.userId === -1) {
-      return <span>{userName}</span>;
+    if (announcement.creator.id === -1) {
+      return <span>{announcement.creator.name}</span>;
     }
     return (
-      <Link href={userLink} style={{ textDecoration: 'none' }}>
-        {userName}
+      <Link
+        href={announcement.creator.userUrl ?? '#'}
+        style={{ textDecoration: 'none' }}
+      >
+        {announcement.creator.name}
       </Link>
     );
   };

@@ -1,5 +1,3 @@
-export const getUserURL = (userId) => `/users/${userId}`;
-
 export const getCourseURL = (courseId) => `/courses/${courseId}`;
 
 export const getCourseAnnouncementURL = (courseId, announcementId) =>

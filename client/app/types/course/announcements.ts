@@ -1,5 +1,10 @@
 import { Permissions } from 'types';
 
+import {
+  CourseUserBasicListData,
+  CourseUserBasicMiniEntity,
+} from './courseUsers';
+
 export type AnnouncementPermissions = Permissions<'canCreate'>;
 
 export type AnnouncementListDataPermissions = Permissions<
@@ -12,15 +17,7 @@ export interface AnnouncementListData {
   content: string; // HTML String
   startTime: string;
   endTime: string;
-
-  // Either this exists
-  courseUserId?: number;
-  courseUserName?: string;
-  // or this
-  userId?: number;
-  userName?: string;
-  // ------------------
-
+  creator: CourseUserBasicListData;
   isUnread: boolean;
   isSticky: boolean;
   isCurrentlyActive: boolean;
@@ -35,15 +32,7 @@ export interface AnnouncementMiniEntity {
   content: string; // HTML String
   startTime: string;
   endTime: string;
-
-  // Either this exists
-  courseUserId?: number;
-  courseUserName?: string;
-  // or this
-  userId?: number;
-  userName?: string;
-  // ------------------
-
+  creator: CourseUserBasicMiniEntity;
   isUnread: boolean;
   isSticky: boolean;
   isCurrentlyActive: boolean;

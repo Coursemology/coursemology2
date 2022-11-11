@@ -1,5 +1,10 @@
 import { Permissions } from 'types';
 
+import {
+  CourseUserBasicListData,
+  CourseUserBasicMiniEntity,
+} from '../courseUsers';
+
 // Permissions for rendering title bar buttons
 export type FolderPermissions = Permissions<
   | 'isCurrentCourseStudent'
@@ -20,6 +25,7 @@ export interface FolderListData {
   id: number;
   name: string;
   description: string;
+  materialUrl: string;
   itemCount: number;
   updatedAt: string;
   startAt: string;
@@ -28,18 +34,13 @@ export interface FolderListData {
   permissions: SubfolderPermissions;
 }
 
-export interface Updater {
-  id: number;
-  name: string;
-  isCourseUser: boolean;
-}
-
 export interface MaterialListData {
   id: number;
   name: string;
   description: string;
+  materialUrl: string;
   updatedAt: string;
-  updater: Updater;
+  updater: CourseUserBasicListData;
   permissions: MaterialPermissions;
 }
 
@@ -59,8 +60,9 @@ export interface MaterialMiniEntity {
   id: number;
   name: string;
   description: string;
+  materialUrl: string;
   updatedAt: string;
-  updater: Updater;
+  updater: CourseUserBasicMiniEntity;
   permissions: MaterialPermissions;
 }
 

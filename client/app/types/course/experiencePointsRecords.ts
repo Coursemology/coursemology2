@@ -20,14 +20,9 @@ export interface PointsReason {
   link: string;
 }
 
-export interface ExperiencePointsRecordUserListData
-  extends CourseUserBasicListData {
-  isCourseUser: boolean;
-}
-
 export interface ExperiencePointsRecordListData {
   id: number;
-  updaterUser: ExperiencePointsRecordUserListData;
+  updater: CourseUserBasicListData;
   reason: PointsReason;
   pointsAwarded: number;
   updatedAt: Date;
@@ -39,14 +34,9 @@ export interface ExperiencePointsRecordListData {
  * received backend data.
  */
 
-export interface ExperiencePointsRecordUserMiniEntity
-  extends CourseUserBasicMiniEntity {
-  isCourseUser: boolean;
-}
-
 export interface ExperiencePointsRecordMiniEntity {
   id: number;
-  updaterUser: ExperiencePointsRecordUserMiniEntity;
+  updater: CourseUserBasicMiniEntity;
   reason: PointsReason;
   pointsAwarded: number;
   updatedAt: Date;

@@ -11,18 +11,13 @@ class Course::Material::MaterialsController < Course::Material::Controller
   def update
     if @material.update(material_params)
       course_user = @material.updater.course_users.find_by(course: current_course)
-      if course_user
-        id = course_user.id
-        name = course_user.name
-      else
-        id = @material.updater.id
-        name = @material.updater.name
-      end
+      user = course_user || @material.updater
       render json: { id: @material.id,
                      name: @material.name,
                      description: @material.description,
                      updatedAt: @material.updated_at,
-                     updater: { id: id, name: name, isCourseUser: !course_user.present? } },
+                     updater: { id: user.id, name: user.name,
+                                userUrl: url_to_user_or_course_user(current_course, user) } },
              status: :ok
     else
       render json: { errors: @folder.errors.full_messages.to_sentence }, status: :bad_request
