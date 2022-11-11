@@ -33,19 +33,16 @@ json.materials @folder.materials.includes(:updater) do |material|
   json.id material.id
   json.name material.name
   json.description format_ckeditor_rich_text(material.description)
+  json.materialUrl url_for([current_course, @folder, material])
   json.updatedAt material.updated_at
 
   updater = material.updater
   json.updater do
-    course_user = updater.course_users.find_by(course: controller.current_course)
-    if course_user
-      json.id course_user.id
-      json.name course_user.name
-    else
-      json.id updater.id
-      json.name updater.name
-    end
-    json.isCourseUser course_user.present?
+    course_user = updater.course_users.find_by(course: current_course)
+    user = course_user || updater
+    json.id user.id
+    json.name user.name
+    json.userUrl url_to_user_or_course_user(current_course, user)
   end
 
   json.permissions do

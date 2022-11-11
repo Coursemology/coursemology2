@@ -4,7 +4,6 @@ import { Stack, TableCell, TableRow } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { MaterialMiniEntity } from 'types/course/material/folders';
 
-import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatFullDateTime } from 'lib/moment';
 
@@ -27,9 +26,7 @@ const TableMaterialRow: FC<Props> = (props) => {
           <Stack alignItems="center" direction="row" spacing={0.5}>
             <DescriptionIcon htmlColor="grey" />
             <a
-              href={`/courses/${getCourseId()}/materials/folders/${currFolderId}/files/${
-                material.id
-              }`}
+              href={material.materialUrl}
               rel="noopener noreferrer"
               style={{
                 textOverflow: 'initial',
@@ -66,15 +63,7 @@ const TableMaterialRow: FC<Props> = (props) => {
       >
         <Stack>
           <div>{formatFullDateTime(material.updatedAt)}</div>
-          <a
-            href={
-              material.updater.isCourseUser
-                ? getCourseUserURL(getCourseId(), material.updater.id)
-                : getUserURL(material.updater.id)
-            }
-          >
-            {material.updater.name}
-          </a>
+          <a href={material.updater.userUrl ?? '#'}>{material.updater.name}</a>
         </Stack>
       </TableCell>
       {canEditSubfolders && (

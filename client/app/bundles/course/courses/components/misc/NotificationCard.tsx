@@ -6,9 +6,7 @@ import { NotificationData } from 'types/course/notifications';
 import {
   getAchievementURL,
   getAssessmentURL,
-  getCourseUserURL,
   getForumTopicURL,
-  getUserURL,
   getVideoURL,
 } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
@@ -62,11 +60,6 @@ const translations = defineMessages({
 
 const NotificationCard: FC<Props> = (props) => {
   const { intl, notification } = props;
-
-  let userLink = getCourseUserURL(getCourseId(), notification.userInfo.id);
-  if (!notification.isCourseUser) {
-    userLink = getUserURL(notification.userInfo.id);
-  }
 
   let actableLink = '';
   let concatMessage = '';
@@ -126,7 +119,9 @@ const NotificationCard: FC<Props> = (props) => {
       />
       <div>
         <div>
-          <a href={userLink}>{notification.userInfo.name}</a>
+          <a href={notification.userInfo.userUrl}>
+            {notification.userInfo.name}
+          </a>
           {` ${concatMessage} `}
           {notification.actableName && (
             <a href={actableLink}>{notification.actableName}</a>

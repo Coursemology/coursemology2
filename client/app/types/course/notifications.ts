@@ -1,11 +1,6 @@
-import { InstanceUserBasicPhotoListData } from 'types/system/instance/users';
-
-import { CourseUserListData } from './courseUsers';
-
 export interface NotificationData {
   id: number;
-  userInfo: CourseUserListData | InstanceUserBasicPhotoListData;
-  isCourseUser: boolean;
+  userInfo: { name: string; userUrl: string; imageUrl: string };
   actableType:
     | 'achievement'
     | 'assessment'

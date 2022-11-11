@@ -6,11 +6,11 @@ json.courseUserName @course_user.name
 json.experiencePointRecords @experience_points_records do |experience_points_record|
   json.id experience_points_record.id
   course_user = @course_user_preload_service.course_user_for(experience_points_record.updater)
-  updater_user = course_user || experience_points_record.updater
-  json.updaterUser do
-    json.id updater_user.id
-    json.name updater_user.name
-    json.isCourseUser course_user.present?
+  user = course_user || experience_points_record.updater
+  json.updater do
+    json.id user.id
+    json.name user.name
+    json.userUrl url_to_user_or_course_user(current_course, user)
   end
 
   json.reason do

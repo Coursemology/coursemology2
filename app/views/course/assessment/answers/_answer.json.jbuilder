@@ -12,7 +12,7 @@ json.grading do
   json.id answer.id
 
   if answer&.grader && can_grade
-    course_user = answer.grader.course_users.find_by(course: controller.current_course)
+    course_user = answer.grader.course_users.find_by(course: current_course)
 
     json.grader do
       json.name display_user(answer.grader)
