@@ -22,6 +22,6 @@ module Course::Forum::TopicControllerSubscriptionConcern
   end
 
   def subscribe?
-    params[:subscribe] == 'true'
+    params[:subscribe] == true
   end
 end

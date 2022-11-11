@@ -71,10 +71,15 @@ export default class TopicsAPI extends BaseCourseAPI {
     urlSlug: string,
     isCurrentlySubscribed: boolean,
   ): Promise<AxiosResponse> {
-    return this.getClient().get(`${urlSlug}/subscribe`, {
-      params: {
-        subscribe: !isCurrentlySubscribed,
-      },
+    if (isCurrentlySubscribed) {
+      return this.getClient().delete(`${urlSlug}/subscribe`, {
+        params: {
+          subscribe: false,
+        },
+      });
+    }
+    return this.getClient().post(`${urlSlug}/subscribe`, {
+      subscribe: true,
     });
   }
 
@@ -85,7 +90,7 @@ export default class TopicsAPI extends BaseCourseAPI {
     urlSlug: string,
     isCurrentlyHidden: boolean,
   ): Promise<AxiosResponse> {
-    return this.getClient().put(`${urlSlug}/hidden`, {
+    return this.getClient().patch(`${urlSlug}/hidden`, {
       hidden: !isCurrentlyHidden,
     });
   }
@@ -97,7 +102,7 @@ export default class TopicsAPI extends BaseCourseAPI {
     urlSlug: string,
     isCurrentlyLocked: boolean,
   ): Promise<AxiosResponse> {
-    return this.getClient().put(`${urlSlug}/locked`, {
+    return this.getClient().patch(`${urlSlug}/locked`, {
       locked: !isCurrentlyLocked,
     });
   }

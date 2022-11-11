@@ -32,7 +32,7 @@ const translations = defineMessages({
     id: 'course.forum.topic.update.success',
     defaultMessage: 'Topic {title} has been updated.',
   },
-  updateFailre: {
+  updateFailure: {
     id: 'course.forum.topoc.update.failure',
     defaultMessage: 'Failed to update the topic.',
   },
@@ -68,7 +68,7 @@ const ForumTopicEdit: FC<Props> = (props) => {
         setConfirmationDialogOpen(false);
       })
       .catch((error) => {
-        toast.error(t(translations.updateFailre));
+        toast.error(t(translations.updateFailure));
 
         if (error.response?.data) {
           setReactHookFormError(setError, error.response.data.errors);
