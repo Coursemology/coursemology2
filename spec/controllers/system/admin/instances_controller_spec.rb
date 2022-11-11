@@ -18,7 +18,6 @@ RSpec.describe System::Admin::InstancesController do
 
       subject { delete :destroy, params: { id: instance_to_delete } }
 
-
       it 'succeeds with http status ok' do
         expect(subject).to have_http_status(:ok)
       end
