@@ -76,7 +76,7 @@ class Course::CoursesController < Course::Controller
                          to_h { |survey| [survey.survey_id, survey] }
   end
 
-  def load_items_with_timeline # rubocop:disable Metrics/AbcSize
+  def load_items_with_timeline # rubocop:disable Metrics/CyclomaticComplexity
     item_ids = [*@video_todos&.map { |todo| todo.item.id },
                 *@assessment_todos&.map { |todo| todo.item.id },
                 *@survey_todos&.map { |todo| todo.item.id }]
