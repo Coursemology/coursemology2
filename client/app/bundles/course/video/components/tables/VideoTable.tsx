@@ -64,6 +64,10 @@ const VideoTable: FC<Props> = (props) => {
         className: `video_${videos[dataIndex].id} ${backgroundColor}`,
       };
     },
+    sortOrder: {
+      name: 'startTimeInfo',
+      direction: 'asc',
+    },
     viewColumns: false,
   };
 
@@ -105,11 +109,22 @@ const VideoTable: FC<Props> = (props) => {
       label: 'Start At',
       options: {
         filter: false,
-        sort: false,
+        sort: true,
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const video = videos[dataIndex];
           return <PersonalStartEndTime timeInfo={video.startTimeInfo} />;
+        },
+        sortCompare: (order: string) => {
+          return (value1, value2) => {
+            const latestPost1 = value1.data as VideoListData['startTimeInfo'];
+            const latestPost2 = value2.data as VideoListData['startTimeInfo'];
+            const date1 = new Date(latestPost1.referenceTime!);
+            const date2 = new Date(latestPost2.referenceTime!);
+            return (
+              (date1.getTime() - date2.getTime()) * (order === 'asc' ? 1 : -1)
+            );
+          };
         },
       },
     },
