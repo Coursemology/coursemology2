@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { DependencyList, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
@@ -14,6 +14,7 @@ interface PreloadProps<Data> {
   onErrorToast?: string;
   onErrorDo?: (error: unknown) => void;
   children: (data: Data) => JSX.Element;
+  syncsWith?: DependencyList;
 }
 
 const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
@@ -41,7 +42,7 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, props.syncsWith ?? []);
 
   if (failed)
     return <ErrorCard message={t(messagesTranslations.fetchingError)} />;
