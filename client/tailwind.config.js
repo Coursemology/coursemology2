@@ -44,6 +44,12 @@ module.exports = {
         { values: flattenColorPalette(theme('colors')), type: 'color' },
       );
     }),
+    plugin(({ matchUtilities, theme }) => {
+      matchUtilities(
+        { wh: (value) => ({ width: value, height: value }) },
+        { values: theme('spacing'), type: 'number' },
+      );
+    }),
   ],
   important: '#root',
 };
