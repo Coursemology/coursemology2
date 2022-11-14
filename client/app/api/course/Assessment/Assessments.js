@@ -1,8 +1,16 @@
 import BaseCourseAPI from './Base';
 
 export default class AssessmentsAPI extends BaseCourseAPI {
-  index() {
-    return this.getClient().get(this._getUrlPrefix());
+  /**
+   * Fetches all assessments in the default tab, or a specified category and tab.
+   * @param {number=} categoryId
+   * @param {number=} tabId
+   * @returns An `AssessmentsListData` object
+   */
+  index(categoryId, tabId) {
+    return this.getClient().get(this._getUrlPrefix(), {
+      params: { category: categoryId, tab: tabId },
+    });
   }
 
   fetchEditData(assessmentId) {

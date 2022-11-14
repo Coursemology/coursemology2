@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
@@ -6,23 +7,21 @@ import AssessmentIndexPage from './pages/AssessmentIndex';
 import storeCreator from './store';
 
 $(() => {
-  const mountNode = $('.new-btn')[0];
+  const mountNode = document.getElementById('course-assessments');
+  if (!mountNode) return;
 
-  if (mountNode) {
-    const data = mountNode.getAttribute('data');
-    const attributes = JSON.parse(data);
-    const store = storeCreator({ assessments: {} });
-    const root = createRoot(mountNode);
-
-    root.render(
-      <ProviderWrapper store={store}>
-        <AssessmentIndexPage
-          categoryId={attributes.category_id}
-          gamified={attributes.gamified}
-          randomizationAllowed={attributes.randomization_allowed}
-          tabId={attributes.tab_id}
-        />
-      </ProviderWrapper>,
-    );
-  }
+  const store = storeCreator({ assessments: {} });
+  const root = createRoot(mountNode);
+  root.render(
+    <ProviderWrapper store={store}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            element={<AssessmentIndexPage />}
+            path="/courses/:courseId/assessments"
+          />
+        </Routes>
+      </BrowserRouter>
+    </ProviderWrapper>,
+  );
 });

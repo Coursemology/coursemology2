@@ -1,6 +1,6 @@
 import { MessageDescriptor, useIntl } from 'react-intl';
 
-type Descriptor = MessageDescriptor;
+export type Descriptor = MessageDescriptor;
 
 type TranslationHook = () => {
   t: (
