@@ -22,7 +22,7 @@ const Link = (props: LinkProps): JSX.Element => {
         rel: 'noopener noreferrer',
       })}
       className={`cursor-pointer ${
-        underlineOnHover && 'no-underline hoverable:hover:underline'
+        underlineOnHover && 'no-underline hover?:underline'
       } ${props.className}`}
     />
   );
