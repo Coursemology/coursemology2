@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessment: Submissions: Exam' do
+RSpec.describe 'Course: Assessment: Submissions: Exam', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -21,7 +21,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
     context 'As a Course Student' do
       let(:user) { student }
 
-      scenario 'I need to input the password when using a different session ', js: true do
+      scenario 'I need to input the password when using a different session ' do
         assessment
         visit course_assessments_path(course)
 
@@ -75,7 +75,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
     context 'As a Course Staff' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
 
-      scenario 'I can submit the grading for publishing', js: true do
+      scenario 'I can submit the grading for publishing' do
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         mrq_questions.each { |q| q.attempt(submission).save! }
