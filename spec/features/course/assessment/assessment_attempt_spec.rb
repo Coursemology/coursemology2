@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessments: Attempt' do
+RSpec.describe 'Course: Assessments: Attempt', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -53,10 +53,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         assessment_with_condition
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(assessment_with_condition)) do
-          expect(page).not_to have_button(
-            I18n.t('course.assessment.assessments.assessment.attempt')
-          )
+        within find('tr', text: assessment_with_condition.title) do
+          expect(page).not_to have_link('Attempt')
         end
       end
 
@@ -65,10 +63,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         assessment_with_condition
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(assessment_with_condition)) do
-          find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-                    href: course_assessment_attempt_path(course, assessment_with_condition)).
-            click
+        within find('tr', text: assessment_with_condition.title) do
+          click_link 'Attempt'
         end
 
         created_submission = assessment_with_condition.submissions.last
@@ -81,9 +77,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         assessment
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(assessment)) do
-          find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-                    href: course_assessment_attempt_path(course, assessment)).click
+        within find('tr', text: assessment.title) do
+          click_link 'Attempt'
         end
 
         created_submission = assessment.submissions.last
@@ -95,10 +90,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         not_started_assessment
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(not_started_assessment)) do
-          expect(page).not_to have_button(
-            I18n.t('course.assessment.assessments.assessment_management_buttons.attempt')
-          )
+        within find('tr', text: not_started_assessment.title) do
+          expect(page).not_to have_link('Attempt')
         end
       end
 
@@ -108,11 +101,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         assessment_tabbed_single_question
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(assessment_tabbed_single_question)) do
-          find_link(
-            I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-            href: course_assessment_attempt_path(course, assessment_tabbed_single_question)
-          ).click
+        within find('tr', text: assessment_tabbed_single_question.title) do
+          click_link 'Attempt'
         end
 
         expect(page).not_to have_selector('ul.nav.nav-tabs.tab-header')
@@ -120,11 +110,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         assessment_tabbed
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(assessment_tabbed)) do
-          find_link(
-            I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-            href: course_assessment_attempt_path(course, assessment_tabbed)
-          ).click
+        within find('tr', text: assessment_tabbed.title) do
+          click_link 'Attempt'
         end
 
         # Test that tabs are visible, and the first tab is loaded.
@@ -152,11 +139,9 @@ RSpec.describe 'Course: Assessments: Attempt' do
         submission
         visit course_assessments_path(course)
 
-        submission_path = edit_course_assessment_submission_path(course, assessment, submission)
-        expect(page).to have_link(
-          I18n.t('course.assessment.assessments.assessment_management_buttons.resume'),
-          href: submission_path
-        )
+        within find('tr', text: assessment.title) do
+          expect(page).to have_link('Resume')
+        end
       end
 
       pending 'I can view my submission statistics' do
@@ -185,10 +170,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         assessment_with_condition
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(assessment_with_condition)) do
-          find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-                    href: course_assessment_attempt_path(course, assessment_with_condition)).
-            click
+        within find('tr', text: assessment_with_condition.title) do
+          click_link 'Attempt'
         end
 
         created_submission = assessment_with_condition.submissions.last
@@ -201,9 +184,8 @@ RSpec.describe 'Course: Assessments: Attempt' do
         not_started_assessment
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(not_started_assessment)) do
-          find_link(I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
-                    href: course_assessment_attempt_path(course, not_started_assessment)).click
+        within find('tr', text: not_started_assessment.title) do
+          click_link 'Attempt'
         end
 
         created_submission = not_started_assessment.submissions.last
