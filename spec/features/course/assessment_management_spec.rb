@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.feature 'Course: Assessments: Management' do
+RSpec.feature 'Course: Assessments: Management', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -13,7 +13,7 @@ RSpec.feature 'Course: Assessments: Management' do
 
       # This test is disabled as CircleCI is unable to detect the following:
       # first("input[name='start_at']").click.set(assessment.start_at.strftime('%d-%m-%Y'))
-      xscenario 'I can create an assessment', js: true do
+      xscenario 'I can create an assessment' do
         assessment_tab = create(:course_assessment_tab,
                                 category: course.assessment_categories.first)
         assessment = build_stubbed(:assessment)
@@ -44,8 +44,11 @@ RSpec.feature 'Course: Assessments: Management' do
         category_id, tab_id = assessment.tab.category_id, assessment.tab_id
         visit course_assessment_path(course, assessment)
 
-        expect { find(:css, 'div.page-header a.btn-danger').click }.
-          to change { course.reload.assessments.count }.by(-1)
+        expect do
+          find(:css, 'div.page-header a.btn-danger').click
+          click_button 'Continue'
+        end.to change { course.reload.assessments.count }.by(-1)
+
         expect(page).
           to have_current_path course_assessments_path(course, category: category_id, tab: tab_id)
 
@@ -69,8 +72,13 @@ RSpec.feature 'Course: Assessments: Management' do
                             course: course, tab: category.tabs.first)
         visit course_assessments_path(course)
 
-        find_link(assessment.title, href: course_assessment_path(course, assessment)).click
-        expect(current_path).to eq(course_assessment_path(course, assessment))
+        assessment_page_in_new_tab = window_opened_by do
+          find_link(assessment.title, href: course_assessment_path(course, assessment)).click
+        end
+
+        within_window assessment_page_in_new_tab do
+          expect(current_path).to eq(course_assessment_path(course, assessment))
+        end
       end
     end
   end
