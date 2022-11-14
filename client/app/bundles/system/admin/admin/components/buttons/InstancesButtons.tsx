@@ -27,6 +27,10 @@ const translations = defineMessages({
     id: 'system.admin.instance.delete.confirm',
     defaultMessage: 'Are you sure you wish to delete {name}?',
   },
+  deleteInstance: {
+    id: 'system.admin.instance.delete.deleteInstance',
+    defaultMessage: 'Delete Instance',
+  },
 });
 
 const InstancesButtons: FC<Props> = (props) => {
@@ -68,7 +72,7 @@ const InstancesButtons: FC<Props> = (props) => {
           disabled={isDeleting}
           loading={isDeleting}
           onClick={onDelete}
-          tooltip="Delete Instance"
+          tooltip={intl.formatMessage(translations.deleteInstance)}
         />
       )}
     </div>

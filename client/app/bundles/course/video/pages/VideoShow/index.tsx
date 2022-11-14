@@ -30,6 +30,10 @@ const translations = defineMessages({
     id: 'course.video.show.video',
     defaultMessage: 'Video',
   },
+  videoTitle: {
+    id: 'course.video.show.videoTitle',
+    defaultMessage: 'Video - {title}',
+  },
   statistics: {
     id: 'course.video.show.statistics',
     defaultMessage: 'Statistics',
@@ -70,7 +74,7 @@ const VideoShow: FC<Props> = (props) => {
 
   if (video?.permissions?.canManage) {
     headerToolbars.push(
-      <VideoManagementButtons navigateToIndex={true} video={video} />,
+      <VideoManagementButtons navigateToIndex video={video} />,
     );
   }
 
@@ -97,7 +101,9 @@ const VideoShow: FC<Props> = (props) => {
     <>
       <PageHeader
         returnLink={returnLink}
-        title={`Video - ${video?.title}`}
+        title={intl.formatMessage(translations.videoTitle, {
+          title: video?.title,
+        })}
         toolbars={headerToolbars}
       />
       {isLoading ? <LoadingIndicator /> : renderBody}
