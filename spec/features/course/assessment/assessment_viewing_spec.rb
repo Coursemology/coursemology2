@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessments: Viewing' do
+RSpec.describe 'Course: Assessments: Viewing', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -16,16 +16,14 @@ RSpec.describe 'Course: Assessments: Viewing' do
         assessment
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(assessment)) do
-          click_link I18n.t('course.assessment.assessments.'\
-                            'assessment_management_buttons.submissions')
-        end
+        submissions_button = find('a[aria-label="Submissions"]', visible: false)
+        hover_then_click submissions_button
 
         expect(current_path).to eq(course_assessment_submissions_path(course, assessment))
 
         # Access submissions from the show assessment page
         visit course_assessment_path(course, assessment)
-        click_link I18n.t('course.assessment.assessments.'\
+        click_link I18n.t('course.assessment.assessments.' \
                           'assessment_management_buttons.submissions')
         expect(current_path).to eq(course_assessment_submissions_path(course, assessment))
       end
