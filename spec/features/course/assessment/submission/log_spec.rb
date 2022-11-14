@@ -43,6 +43,7 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
         # Logout and login again and visit the same submission
         logout
         login_as(user)
+        sleep 0.2
 
         expect do
           visit edit_course_assessment_submission_path(course, protected_assessment, submission)
@@ -52,6 +53,7 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
         expect do
           fill_in 'session_password', with: protected_assessment.session_password
           click_button I18n.t('course.assessment.sessions.new.continue')
+          sleep 0.2
         end.to change { submission.logs.count }.by(1)
         expect(submission.logs.last.valid_attempt?).to be(true)
       end
