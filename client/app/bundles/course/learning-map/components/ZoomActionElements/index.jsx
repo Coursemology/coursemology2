@@ -28,7 +28,6 @@ const ZoomActionElements = (props) => {
       <Button
         className="btn-submit"
         color="primary"
-        label="Zoom In"
         onClick={() => zoomIn()}
         style={styles.actionButton}
         variant="contained"
@@ -38,7 +37,6 @@ const ZoomActionElements = (props) => {
       <Button
         className="btn-submit"
         color="primary"
-        label="Zoom Out"
         onClick={() => zoomOut()}
         style={styles.actionButton}
         variant="contained"
