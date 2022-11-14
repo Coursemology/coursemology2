@@ -16,9 +16,9 @@ import { SubmissionMiniEntity } from 'types/course/assessment/submissions';
 
 import CustomTooltip from 'lib/components/core/CustomTooltip';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { getDayMonthTime } from 'lib/helpers/timehelper';
 import { getAssessmentURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { formatMiniDateTime } from 'lib/moment';
 
 import SubmissionsTableButton from '../buttons/SubmissionsTableButton';
 
@@ -183,7 +183,7 @@ const SubmissionsTable: FC<Props> = (props) => {
               </Link>
             </TableCell>
             <TableCell align="center">
-              {getDayMonthTime(submission.submittedAt)}
+              {formatMiniDateTime(submission.submittedAt)}
             </TableCell>
             <TableCell align="center">
               <Chip

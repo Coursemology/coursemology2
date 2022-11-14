@@ -10,7 +10,7 @@ import {
 import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 import { duplicationModes } from 'course/duplication/constants';
 import { courseShape, sourceCourseShape } from 'course/duplication/propTypes';
-import moment, { shortDateTime } from 'lib/moment';
+import moment, { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
 
 import NewCourseForm from './NewCourseForm';
 
@@ -80,7 +80,7 @@ class DestinationCourseSelector extends Component {
       date: tomorrow.date(),
     });
 
-    const timeNow = moment().format(shortDateTime);
+    const timeNow = moment().format(SHORT_DATE_TIME_FORMAT);
     const newTitleValues = { title: sourceCourse.title, timestamp: timeNow };
     const initialValues = {
       new_title: intl.formatMessage(translations.defaultTitle, newTitleValues),

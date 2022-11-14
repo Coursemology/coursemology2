@@ -4,9 +4,9 @@ import { Stack, TableCell, TableRow } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { MaterialMiniEntity } from 'types/course/material/folders';
 
-import { getFullDateTime } from 'lib/helpers/timehelper';
 import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { formatFullDateTime } from 'lib/moment';
 
 import WorkbinTableButtons from '../buttons/WorkbinTableButtons';
 
@@ -65,7 +65,7 @@ const TableMaterialRow: FC<Props> = (props) => {
         }}
       >
         <Stack>
-          <div>{getFullDateTime(material.updatedAt)}</div>
+          <div>{formatFullDateTime(material.updatedAt)}</div>
           <a
             href={
               material.updater.isCourseUser
