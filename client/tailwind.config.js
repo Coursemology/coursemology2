@@ -23,6 +23,13 @@ module.exports = {
       addVariant('no-hover', '@media (hover: none)');
       addVariant('hoverable', '@media (hover: hover)');
     }),
+    plugin(({ addVariant }) => {
+      addVariant('hover?', '@media (hover: hover) { &:hover }');
+      addVariant(
+        'group-hover?',
+        '@media (hover: hover) { :merge(.group):hover & }',
+      );
+    }),
     lineClamp,
   ],
   important: '#root',

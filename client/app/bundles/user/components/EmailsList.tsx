@@ -175,7 +175,7 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
 
       <Card variant="outlined">
         {props.emails.map((email, index) => (
-          <section key={email.id} className="hoverable:hover:bg-neutral-100">
+          <section key={email.id} className="hover?:bg-neutral-100">
             <div className="flex flex-col px-5 py-2">
               <div className="flex min-h-[4rem] items-center justify-between space-x-4">
                 <div className="flex space-x-4">

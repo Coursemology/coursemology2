@@ -61,7 +61,7 @@ const ConditionRow = <AnyConditionData extends ConditionData>(
           <Typography variant="body2">{props.condition.description}</Typography>
         </div>
 
-        <div className="hoverable:invisible hoverable:group-hover:visible flex items-center">
+        <div className="hoverable:invisible group-hover?:visible flex items-center">
           {editing ? (
             createElement(component, {
               condition: props.condition,
