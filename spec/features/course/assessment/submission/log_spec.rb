@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessment: Submissions: Logs' do
+RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -28,10 +28,8 @@ RSpec.describe 'Course: Assessment: Submissions: Logs' do
         protected_assessment
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(protected_assessment)) do
-          find_link(
-            I18n.t('course.assessment.assessments.assessment_management_buttons.attempt')
-          ).click
+        within find('tr', text: protected_assessment.title) do
+          click_link 'Attempt'
         end
 
         submission = protected_assessment.submissions.last
@@ -62,10 +60,8 @@ RSpec.describe 'Course: Assessment: Submissions: Logs' do
         assessment
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(assessment)) do
-          find_link(
-            I18n.t('course.assessment.assessments.assessment_management_buttons.attempt')
-          ).click
+        within find('tr', text: assessment.title) do
+          click_link 'Attempt'
         end
 
         submission = assessment.submissions.last
