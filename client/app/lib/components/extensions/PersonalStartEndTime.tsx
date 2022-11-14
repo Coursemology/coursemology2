@@ -1,82 +1,68 @@
-import { FC } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { AccessTime, Lock } from '@mui/icons-material';
+import { Typography } from '@mui/material';
 
 import CustomTooltip from 'lib/components/core/CustomTooltip';
-import { getDayMonthTime } from 'lib/helpers/timehelper';
+import useTranslation from 'lib/hooks/useTranslation';
+import { formatMiniDateTime } from 'lib/moment';
 
-interface Props extends WrappedComponentProps {
-  timeInfo: {
+interface Props {
+  timeInfo?: {
     isFixed: boolean;
     effectiveTime?: string;
     referenceTime?: string;
   };
+  className?: string;
 }
 
 const translations = defineMessages({
   timeTooltip: {
-    id: 'PersonalStartEndTime.timeTooltip',
-    defaultMessage: 'Personalized time is in effect. The original time is',
-  },
-  altTimeTooltip: {
-    id: 'PersonalStartEndTime.altTimeTooltip',
+    id: 'lib.components.extensions.personalStartEndTime.timeTooltip',
     defaultMessage:
-      'Personalized time is in effect. There is no original deadline.',
+      'Personalized time is in effect. The original time is {time}.',
   },
   lockTooltip: {
-    id: 'PersonalStartEndTime.lockTooltip',
+    id: 'lib.components.extensions.personalStartEndTime.lockTooltip',
     defaultMessage:
-      'The timeline for this is locked and will not be automatically modified',
+      'The timeline for this is fixed and will not be automatically modified.',
   },
 });
 
-/*
-This component is meant for displaying effective and reference time differences
-when a personalized timeline is in use. For an example, you can make use of the courses
-home page.
-*/
-const PersonalStartEndTime: FC<Props> = (props) => {
-  const { intl, timeInfo } = props;
-  // Dont leave the space blank
-  if (timeInfo.effectiveTime === null) {
-    return <div>-</div>;
-  }
+/**
+ * Displays the effective and reference time differences in a personalized timeline.
+ */
+const PersonalStartEndTime = (props: Props): JSX.Element => {
+  const { t } = useTranslation();
+
+  const { timeInfo, className } = props;
+  if (!timeInfo || !timeInfo.effectiveTime) return <div>-</div>;
 
   return (
-    <div style={{ display: 'flex' }}>
-      {timeInfo.effectiveTime && (
-        <div>{getDayMonthTime(timeInfo.effectiveTime)}</div>
-      )}
-      <div style={{ marginLeft: 5, marginBottom: -6 }}>
+    <div className="flex items-center">
+      <Typography className={className ?? ''} variant="body2">
+        {formatMiniDateTime(timeInfo.effectiveTime)}
+      </Typography>
+
+      <div className="ml-2 flex items-center space-x-1">
         {timeInfo.isFixed && (
-          <CustomTooltip
-            arrow
-            title={intl.formatMessage(translations.lockTooltip)}
-          >
-            <Lock fontSize="small" />
+          <CustomTooltip arrow title={t(translations.lockTooltip)}>
+            <Lock className="text-neutral-500" fontSize="small" />
           </CustomTooltip>
         )}
-      </div>
 
-      {timeInfo.effectiveTime !== timeInfo.referenceTime &&
-        timeInfo.effectiveTime &&
-        timeInfo.referenceTime && (
-          <div style={{ marginLeft: 0, marginBottom: -6 }}>
+        {timeInfo.effectiveTime !== timeInfo.referenceTime &&
+          timeInfo.referenceTime && (
             <CustomTooltip
               arrow
-              title={
-                timeInfo.referenceTime
-                  ? `${intl.formatMessage(
-                      translations.timeTooltip,
-                    )} ${getDayMonthTime(timeInfo.referenceTime)}`
-                  : intl.formatMessage(translations.altTimeTooltip)
-              }
+              title={t(translations.timeTooltip, {
+                time: formatMiniDateTime(timeInfo.referenceTime),
+              })}
             >
-              <AccessTime fontSize="small" />
+              <AccessTime className="text-neutral-500" fontSize="small" />
             </CustomTooltip>
-          </div>
-        )}
+          )}
+      </div>
     </div>
   );
 };
-export default injectIntl(PersonalStartEndTime);
+export default PersonalStartEndTime;
