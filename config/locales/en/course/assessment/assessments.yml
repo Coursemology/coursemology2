@@ -9,17 +9,11 @@ en:
         sidebar_title: :'course.assessment.assessments.index.header'
         index:
           header: "Assessments"
-          title: "Title"
           start_at: "Start At"
           bonus_cut_off: "Bonus Cut Off"
           end_at: "End At"
-          requirement_for: "Requirement For"
         assessment:
-          autograded_assessment: "Autograded assessment"
           attempt: "Attempt"
-          condition_not_satisfied: "You do not fulfill the requirements of the assessment"
-          assessment_not_started: "The assessment is not unlocked yet"
-          view_password_set: "Students need a password to view the assessment"
         show:
           type: "Assessment Type"
           autograded: "Autograded Assessment"
