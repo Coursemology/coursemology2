@@ -4,11 +4,20 @@ const {
   default: flattenColorPalette,
 } = require('tailwindcss/lib/util/flattenColorPalette');
 
+const SLOTTED_COLOR_VAR = '--tw-slotted-color';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'slot-1': `var(${SLOTTED_COLOR_VAR}-1)`,
+        'slot-2': `var(${SLOTTED_COLOR_VAR}-2)`,
+        'slot-3': `var(${SLOTTED_COLOR_VAR}-3)`,
+        'slot-4': `var(${SLOTTED_COLOR_VAR}-4)`,
+      },
+    },
   },
   corePlugins: {
     preflight: false,
@@ -48,6 +57,17 @@ module.exports = {
       matchUtilities(
         { wh: (value) => ({ width: value, height: value }) },
         { values: theme('spacing'), type: 'number' },
+      );
+    }),
+    plugin(({ matchUtilities, theme }) => {
+      matchUtilities(
+        {
+          'slot-1': (value) => ({ [`${SLOTTED_COLOR_VAR}-1`]: value }),
+          'slot-2': (value) => ({ [`${SLOTTED_COLOR_VAR}-2`]: value }),
+          'slot-3': (value) => ({ [`${SLOTTED_COLOR_VAR}-3`]: value }),
+          'slot-4': (value) => ({ [`${SLOTTED_COLOR_VAR}-4`]: value }),
+        },
+        { values: flattenColorPalette(theme('colors')), type: 'color' },
       );
     }),
   ],
