@@ -21,7 +21,12 @@ const styles = {
 // Hide menu icon by default. To revert once sidebar has been ported to MaterialUI.
 const TitleBar = ({ iconElementLeft, iconElementRight, title, ...props }) => (
   <div style={{ flexGrow: 1 }}>
-    <AppBar style={{ ...styles.bar }} {...props}>
+    <AppBar
+      style={{ ...styles.bar }}
+      {...props}
+      className="-mx-6 w-screen sm:mx-0 sm:w-full sm:rounded-md"
+      elevation={0}
+    >
       <Toolbar>
         <div style={styles.leftIcon}>{iconElementLeft}</div>
         <Typography color="inherit" style={styles.text} variant="h5">

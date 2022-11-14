@@ -7,7 +7,7 @@ exports[`<PageHeader /> when there is a return link matches the snapshot 1`] = `
       style="flex-grow: 1;"
     >
       <header
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-11b3ww9-MuiPaper-root-MuiAppBar-root"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed -mx-6 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-1hc7nu0-MuiPaper-root-MuiAppBar-root"
         data-testid="TitleBar"
         style="z-index: 0; position: static; margin-bottom: 0px;"
       >
@@ -60,7 +60,7 @@ exports[`<PageHeader /> when there is no return link matches the snapshot 1`] = 
       style="flex-grow: 1;"
     >
       <header
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed mui-fixed css-11b3ww9-MuiPaper-root-MuiAppBar-root"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed -mx-6 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-1hc7nu0-MuiPaper-root-MuiAppBar-root"
         data-testid="TitleBar"
         style="z-index: 0; position: static; margin-bottom: 0px;"
       >
