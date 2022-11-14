@@ -50,6 +50,14 @@ const renderSubmissionInfo = (
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
+  video: {
+    id: 'course.video.submission.show.video',
+    defaultMessage: 'Video',
+  },
+  videoTitle: {
+    id: 'course.video.submission.show.videoTitle',
+    defaultMessage: 'Video - {title}',
+  },
   fetchVideoSubmissionFailure: {
     id: 'course.video.submission.show.failure',
     defaultMessage: 'Failed to retrieve video submission.',
@@ -92,7 +100,7 @@ const VideoSubmissionShow: FC<Props> = (props) => {
       <>
         <PageHeader
           returnLink={getVideoSubmissionsURL(getCourseId(), getVideoId())}
-          title="Video"
+          title={intl.formatMessage(translations.video)}
         />
         <LoadingIndicator />
       </>
@@ -128,7 +136,9 @@ const VideoSubmissionShow: FC<Props> = (props) => {
     <>
       <PageHeader
         returnLink={getVideoSubmissionsURL(getCourseId(), getVideoId())}
-        title={`Video - ${videoSubmission?.videoTitle}`}
+        title={intl.formatMessage(translations.videoTitle, {
+          title: videoSubmission?.videoTitle,
+        })}
       />
       {isLoading ? <LoadingIndicator /> : renderBody}
     </>
