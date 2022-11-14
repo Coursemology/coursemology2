@@ -1,5 +1,8 @@
 const plugin = require('tailwindcss/plugin');
 const lineClamp = require('@tailwindcss/line-clamp');
+const {
+  default: flattenColorPalette,
+} = require('tailwindcss/lib/util/flattenColorPalette');
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -31,6 +34,16 @@ module.exports = {
       );
     }),
     lineClamp,
+    plugin(({ matchUtilities, theme }) => {
+      matchUtilities(
+        {
+          'bg-fade-to-l': (value) => ({
+            background: `linear-gradient(90deg, transparent 0%, ${value} 20%)`,
+          }),
+        },
+        { values: flattenColorPalette(theme('colors')), type: 'color' },
+      );
+    }),
   ],
   important: '#root',
 };

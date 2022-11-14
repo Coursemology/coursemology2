@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { MoreHoriz } from '@mui/icons-material';
 import { ClickAwayListener, IconButton } from '@mui/material';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import colors from 'tailwindcss/colors';
 import { ForumEntity } from 'types/course/forums';
 import { AppDispatch } from 'types/store';
 
@@ -96,15 +94,8 @@ const ForumManagementButtons: FC<Props> = (props) => {
         showOnHover
           ? `${
               showButtons ? '' : 'invisible group-hover:visible'
-            } absolute right-0 top-0 flex h-full items-center border-0 pl-20`
+            } absolute right-0 top-0 flex h-full items-center border-0 pl-20 bg-fade-to-l-neutral-100`
           : 'whitespace-nowrap'
-      }
-      style={
-        showOnHover || showButtons
-          ? {
-              background: `linear-gradient(90deg, transparent 0%, ${colors.neutral[100]} 20%)`,
-            }
-          : {}
       }
     >
       <SubscribeButton
