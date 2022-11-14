@@ -25,10 +25,8 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
         assessment
         visit course_assessments_path(course)
 
-        within find(content_tag_selector(assessment)) do
-          find_link(
-            I18n.t('course.assessment.assessments.assessment_management_buttons.attempt')
-          ).click
+        within find('tr', text: assessment.title) do
+          click_link 'Attempt'
         end
         # The user should be redirect to submission edit page
         expect(page).to have_selector('div#course-assessment-submission')
@@ -53,7 +51,7 @@ RSpec.describe 'Course: Assessment: Submissions: Exam' do
         expect(page).to have_selector('div#course-assessment-submission')
       end
 
-      scenario 'I can edit and save my submission', js: true do
+      scenario 'I can edit and save my submission' do
         submission
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
