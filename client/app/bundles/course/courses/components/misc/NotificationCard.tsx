@@ -3,7 +3,6 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Avatar } from '@mui/material';
 import { NotificationData } from 'types/course/notifications';
 
-import { getFullDateTime } from 'lib/helpers/timehelper';
 import {
   getAchievementURL,
   getAssessmentURL,
@@ -13,6 +12,7 @@ import {
   getVideoURL,
 } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { formatFullDateTime } from 'lib/moment';
 
 interface Props extends WrappedComponentProps {
   notification: NotificationData;
@@ -134,7 +134,7 @@ const NotificationCard: FC<Props> = (props) => {
           {notification.levelNumber && `${notification.levelNumber}`}
         </div>
         <i style={{ fontWeight: 'lighter' }}>
-          {getFullDateTime(notification.createdAt)}
+          {formatFullDateTime(notification.createdAt)}
         </i>
       </div>
     </div>

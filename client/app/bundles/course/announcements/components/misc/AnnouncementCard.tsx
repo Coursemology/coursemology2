@@ -15,9 +15,9 @@ import { AppDispatch, Operation } from 'types/store';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import CustomTooltip from 'lib/components/core/CustomTooltip';
-import { getFullDateTime } from 'lib/helpers/timehelper';
 import { getCourseUserURL, getUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { formatFullDateTime } from 'lib/moment';
 
 import AnnouncementEdit from '../../pages/AnnouncementEdit';
 
@@ -196,7 +196,7 @@ const AnnouncementCard: FC<Props> = (props) => {
         </div>
 
         <em className="timestamp">
-          {getFullDateTime(announcement.startTime)}{' '}
+          {formatFullDateTime(announcement.startTime)}{' '}
           {intl.formatMessage(translations.timeSeparator)} {renderUserLink()}
         </em>
         <div

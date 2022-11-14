@@ -10,8 +10,8 @@ import { Stack, TableCell, TableRow, Tooltip } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { FolderMiniEntity } from 'types/course/material/folders';
 
-import { getFullDateTime } from 'lib/helpers/timehelper';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { formatFullDateTime } from 'lib/moment';
 
 import WorkbinTableButtons from '../buttons/WorkbinTableButtons';
 
@@ -102,7 +102,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
           minWidth: '60px',
         }}
       >
-        {getFullDateTime(subfolder.updatedAt)}
+        {formatFullDateTime(subfolder.updatedAt)}
       </TableCell>
       {subfolder.permissions.canEdit ? (
         <TableCell
@@ -123,7 +123,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
                 <VisibilityIcon color="info" fontSize="small" />
               </Tooltip>
             )}
-            <div>{getFullDateTime(subfolder.startAt)}</div>
+            <div>{formatFullDateTime(subfolder.startAt)}</div>
           </Stack>
         </TableCell>
       ) : (
