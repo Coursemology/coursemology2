@@ -110,12 +110,12 @@ const SkillForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
                 label={t(translations.title)}
-                required={true}
+                required
                 variant="standard"
               />
             )}
@@ -128,7 +128,7 @@ const SkillForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}

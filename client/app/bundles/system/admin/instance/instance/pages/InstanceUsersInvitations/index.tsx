@@ -70,14 +70,14 @@ const InstanceUsersInvitations: FC<Props> = (props) => {
       <InstanceUsersTabs currentTab="invitations-tab" />
       <UserInvitationsTable
         invitations={pendingInvitations}
-        pendingInvitations={true}
+        pendingInvitations
         renderRowActionComponent={(invitation): JSX.Element => (
           <PendingInvitationsButtons invitation={invitation} />
         )}
         title={intl.formatMessage(translations.pending)}
       />
       <UserInvitationsTable
-        acceptedInvitations={true}
+        acceptedInvitations
         invitations={acceptedInvitations}
         title={intl.formatMessage(translations.accepted)}
       />

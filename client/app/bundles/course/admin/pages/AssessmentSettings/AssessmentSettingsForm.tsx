@@ -26,20 +26,14 @@ const AssessmentsSettingsForm = (
     <Form
       disabled={props.disabled}
       emitsVia={props.emitsVia}
-      headsUp={true}
+      headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
     >
       {(control): JSX.Element => (
         <>
-          <Section
-            sticksToNavbar={true}
-            title={t(translations.assessmentSettings)}
-          >
-            <Subsection
-              spaced={true}
-              title={t(translations.allowStudentsToView)}
-            >
+          <Section sticksToNavbar title={t(translations.assessmentSettings)}>
+            <Subsection spaced title={t(translations.allowStudentsToView)}>
               <Controller
                 control={control}
                 name="showPublicTestCasesOutput"
@@ -69,7 +63,7 @@ const AssessmentsSettingsForm = (
 
             <Subsection
               className="!mt-8"
-              spaced={true}
+              spaced
               title={t(translations.randomisation)}
             >
               <Controller
@@ -101,7 +95,7 @@ const AssessmentsSettingsForm = (
           </Section>
 
           <Section
-            sticksToNavbar={true}
+            sticksToNavbar
             subtitle={t(translations.categoriesAndTabsSubtitle)}
             title={t(translations.categoriesAndTabs)}
           >

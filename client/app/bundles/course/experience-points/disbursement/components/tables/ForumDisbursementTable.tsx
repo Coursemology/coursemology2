@@ -166,7 +166,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
               className={`view-posts-${forumUsers[dataIndex].id}`}
               component="button"
               data-for="view-posts"
-              data-tip={true}
+              data-tip
               form=""
               onClick={(): void => {
                 onPostClick(forumUsers[dataIndex]);
@@ -240,7 +240,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
       columns={columns}
       data={forumUsers}
       options={options}
-      withMargin={true}
+      withMargin
     />
   );
 };

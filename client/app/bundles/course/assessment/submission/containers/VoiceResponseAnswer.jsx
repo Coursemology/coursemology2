@@ -122,7 +122,7 @@ class VoiceResponseAnswer extends Component {
     }
     if (finalUrl) {
       return (
-        <audio controls={true} src={finalUrl}>
+        <audio controls src={finalUrl}>
           <track kind="captions" />
         </audio>
       );

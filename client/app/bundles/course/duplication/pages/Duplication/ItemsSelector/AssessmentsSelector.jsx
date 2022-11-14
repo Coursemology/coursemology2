@@ -138,7 +138,7 @@ class AssessmentsSelector extends Component {
         {categories.length > 0 ? (
           categories.map((category) => this.renderCategoryTree(category))
         ) : (
-          <ListSubheader disableSticky={true}>
+          <ListSubheader disableSticky>
             <FormattedMessage {...translations.noItems} />
           </ListSubheader>
         )}

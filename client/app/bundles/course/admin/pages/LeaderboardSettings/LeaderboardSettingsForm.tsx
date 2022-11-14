@@ -28,15 +28,12 @@ const LeaderboardSettingsForm = (
     <Form
       disabled={props.disabled}
       emitsVia={props.emitsVia}
-      headsUp={true}
+      headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
     >
       {(control): JSX.Element => (
-        <Section
-          sticksToNavbar={true}
-          title={t(translations.leaderboardSettings)}
-        >
+        <Section sticksToNavbar title={t(translations.leaderboardSettings)}>
           <Controller
             control={control}
             name="title"
@@ -45,7 +42,7 @@ const LeaderboardSettingsForm = (
                 disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 label={t(commonTranslations.title)}
                 variant="filled"
               />
@@ -68,7 +65,7 @@ const LeaderboardSettingsForm = (
                 disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 label={t(translations.displayUserCount)}
                 type="number"
                 variant="filled"
@@ -97,7 +94,7 @@ const LeaderboardSettingsForm = (
                 disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 label={t(translations.groupLeaderboardTitle)}
                 variant="filled"
               />

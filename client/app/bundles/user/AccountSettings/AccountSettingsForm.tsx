@@ -126,23 +126,19 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
       dirty={Boolean(stagedImage)}
       disabled={props.disabled}
       emitsVia={props.emitsVia}
-      headsUp={true}
+      headsUp
       initialValues={props.settings}
       onReset={(): void => {
         setStagedImage(undefined);
         addEmailSubsection?.reset?.();
       }}
       onSubmit={handleSubmit}
-      submitsDirtyFieldsOnly={true}
+      submitsDirtyFieldsOnly
       validates={validationSchema}
     >
       {(control): JSX.Element => (
         <>
-          <Section
-            size="sm"
-            sticksToNavbar={true}
-            title={t(translations.profile)}
-          >
+          <Section size="sm" sticksToNavbar title={t(translations.profile)}>
             <Controller
               control={control}
               name="name"
@@ -151,9 +147,9 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
                   disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
-                  fullWidth={true}
+                  fullWidth
                   label={t(translations.name)}
-                  required={true}
+                  required
                   variant="filled"
                 />
               )}
@@ -168,9 +164,9 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
                   field={field}
                   fieldState={fieldState}
                   label={t(translations.timeZone)}
-                  native={true}
+                  native
                   options={timeZonesOptions}
-                  required={true}
+                  required
                   variant="filled"
                 />
               )}
@@ -181,7 +177,7 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
               name="imageUrl"
               render={({ field }): JSX.Element => (
                 <AvatarSelector
-                  circular={true}
+                  circular
                   defaultImageUrl={field.value}
                   disabled={props.disabled}
                   onSelectImage={setStagedImage}
@@ -195,7 +191,7 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
           <Section
             contentClassName="space-y-0"
             size="sm"
-            sticksToNavbar={true}
+            sticksToNavbar
             title={t(translations.emails)}
           >
             <Controller
@@ -221,7 +217,7 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
 
           <Section
             size="sm"
-            sticksToNavbar={true}
+            sticksToNavbar
             title={t(translations.changePassword)}
           >
             <Controller
@@ -232,10 +228,10 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
                   disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
-                  fullWidth={true}
+                  fullWidth
                   inputProps={{ autoComplete: 'off' }}
                   label={t(translations.currentPassword)}
-                  showPasswordVisibilityHint={true}
+                  showPasswordVisibilityHint
                   type="password"
                   variant="filled"
                 />
@@ -254,11 +250,11 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
                   disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
-                  fullWidth={true}
+                  fullWidth
                   inputProps={{ autoComplete: 'new-password' }}
                   label={t(translations.newPassword)}
                   onChangePasswordVisibility={toggleRequirePasswordConfirmation}
-                  showPasswordVisibilityHint={true}
+                  showPasswordVisibilityHint
                   type="password"
                   variant="filled"
                 />
@@ -272,10 +268,10 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
                 render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
                     disabled={props.disabled}
-                    disablePasswordVisibilitySwitch={true}
+                    disablePasswordVisibilitySwitch
                     field={field}
                     fieldState={fieldState}
-                    fullWidth={true}
+                    fullWidth
                     label={t(translations.newPasswordConfirmation)}
                     onCopy={(e): void => e.preventDefault()}
                     onCut={(e): void => e.preventDefault()}

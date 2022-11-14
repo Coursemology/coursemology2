@@ -73,7 +73,7 @@ const IndividualInvitation: FC<Props> = (props) => {
   const { permissions, fieldsConfig, index, intl } = props;
 
   const renderInvitationBody = (
-    <Grid alignItems="center" container={true} flexWrap="nowrap">
+    <Grid alignItems="center" container flexWrap="nowrap">
       <Controller
         control={fieldsConfig.control}
         name={`invitations.${index}.name`}

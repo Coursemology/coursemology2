@@ -35,7 +35,7 @@ const CodaveriSettingsForm = (
 
   return (
     <Section
-      sticksToNavbar={true}
+      sticksToNavbar
       subtitle={t(translations.codaverSettingsSubtitle)}
       title={t(translations.codaveriSettings)}
     >

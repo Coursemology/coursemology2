@@ -135,7 +135,7 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
 
   return (
     <Dialog
-      fullWidth={true}
+      fullWidth
       maxWidth="lg"
       onClose={handleClose}
       open={open}
@@ -162,7 +162,7 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
           )}
         </Stack>
         <Grid
-          container={true}
+          container
           justifyContent="space-between"
           sx={{ marginTop: '24px' }}
         >

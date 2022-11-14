@@ -177,13 +177,13 @@ const LeaderboardIndex: FC<Props> = (props) => {
           )}
           <Grid
             columnSpacing={2}
-            container={true}
+            container
             direction="row"
             display={tabValue === 'leaderboard-tab' ? 'flex' : 'none'}
             rowSpacing={2}
           >
             {(!tabView || innerTabValue === 'points-tab') && (
-              <Grid id="leaderboard-level" item={true} xs={true}>
+              <Grid id="leaderboard-level" item xs>
                 <LeaderboardTable
                   data={leaderboardPoints}
                   id={LeaderboardTableType.LeaderboardPoints}
@@ -192,7 +192,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
             )}
             {!isAchievementHidden &&
               (!tabView || innerTabValue === 'achievement-tab') && (
-                <Grid id="leaderboard-achievement" item={true} xs={true}>
+                <Grid id="leaderboard-achievement" item xs>
                   <LeaderboardTable
                     data={leaderboardAchievements}
                     id={LeaderboardTableType.LeaderboardAchievement}
@@ -202,13 +202,13 @@ const LeaderboardIndex: FC<Props> = (props) => {
           </Grid>
           <Grid
             columnSpacing={2}
-            container={true}
+            container
             direction="row"
             display={tabValue !== 'leaderboard-tab' ? 'flex' : 'none'}
             rowSpacing={2}
           >
             {(!tabView || innerTabValue === 'points-tab') && (
-              <Grid id="group-leaderboard-level" item={true} xs={true}>
+              <Grid id="group-leaderboard-level" item xs>
                 <LeaderboardTable
                   data={groupLeaderboardPoints}
                   id={LeaderboardTableType.GroupLeaderboardPoints}
@@ -217,7 +217,7 @@ const LeaderboardIndex: FC<Props> = (props) => {
             )}
             {!isAchievementHidden &&
               (!tabView || innerTabValue === 'achievement-tab') && (
-                <Grid id="group-leaderboard-achievement" item={true} xs={true}>
+                <Grid id="group-leaderboard-achievement" item xs>
                   <LeaderboardTable
                     data={groupLeaderboardAchievements}
                     id={LeaderboardTableType.GroupLeaderboardAchievement}

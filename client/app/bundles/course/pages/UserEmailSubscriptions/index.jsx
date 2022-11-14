@@ -96,7 +96,7 @@ class UserEmailSubscriptions extends Component {
 
     if (userEmailSubscriptions.length === 0) {
       return (
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noEmailSubscriptionSettings} />
         </ListSubheader>
       );

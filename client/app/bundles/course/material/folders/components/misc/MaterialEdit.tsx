@@ -63,7 +63,7 @@ const MaterialEdit: FC<Props> = (props) => {
 
   return (
     <MaterialForm
-      editing={true}
+      editing
       initialValues={initialValues}
       onClose={onClose}
       onSubmit={handleSubmit}

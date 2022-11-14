@@ -182,12 +182,7 @@ const ForumPostTable: FC<Props> = (props: Props) => {
   };
 
   return (
-    <DataTable
-      columns={columns}
-      data={data}
-      options={options}
-      withMargin={true}
-    />
+    <DataTable columns={columns} data={data} options={options} withMargin />
   );
 };
 

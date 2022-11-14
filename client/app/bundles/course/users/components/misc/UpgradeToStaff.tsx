@@ -111,12 +111,12 @@ const UpgradeToStaff: FC<Props> = (props) => {
       <Typography sx={{ marginBottom: '24px' }} variant="h6">
         {intl.formatMessage(translations.upgradeHeader)}
       </Typography>
-      <Grid alignItems="flex-end" container={true} flexDirection="row">
+      <Grid alignItems="flex-end" container flexDirection="row">
         <Autocomplete
-          disableCloseOnSelect={true}
+          disableCloseOnSelect
           getOptionLabel={(option): string => option.name}
           id="upgrade-student-name"
-          multiple={true}
+          multiple
           onChange={handleNameChange}
           options={students}
           renderInput={(params): JSX.Element => (
@@ -144,7 +144,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
           id="upgrade-student-role"
           label="Role"
           onChange={handleRoleChange}
-          select={true}
+          select
           sx={{ minWidth: '300px', marginRight: '12px' }}
           value={role}
           variant="standard"

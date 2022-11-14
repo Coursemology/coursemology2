@@ -154,7 +154,7 @@ const ProviderWrapper = ({ store, persistor, children }) => {
 
   providers = (
     <IntlProvider locale={i18nLocale} messages={messages} textComponent="span">
-      <StyledEngineProvider injectFirst={true}>
+      <StyledEngineProvider injectFirst>
         <ThemeProvider theme={theme}>{providers}</ThemeProvider>
       </StyledEngineProvider>
     </IntlProvider>

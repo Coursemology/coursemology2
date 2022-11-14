@@ -75,7 +75,7 @@ class EditPage extends Component {
           conditionAttributes={conditionAttributes}
           containsCodaveri={containsCodaveri}
           disabled={disabled}
-          editing={true}
+          editing
           folderAttributes={folderAttributes}
           gamified={gamified}
           initialValues={initialValues}

@@ -167,7 +167,7 @@ export default class SubmissionsTable extends Component {
         </IconButton>
         <Menu
           anchorEl={this.state.anchorEl}
-          disableAutoFocusItem={true}
+          disableAutoFocusItem
           id="submissions-table-menu"
           onClick={this.handleCloseMenu}
           onClose={this.handleCloseMenu}

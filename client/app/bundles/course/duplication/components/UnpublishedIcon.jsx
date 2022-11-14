@@ -21,7 +21,7 @@ const UnpublishedIcon = ({ tooltipId }) => {
   return (
     <Block
       data-for={tooltipId}
-      data-tip={true}
+      data-tip
       style={{ ...styles.unpublishedIcon, ...styles.withTooltip }}
     />
   );

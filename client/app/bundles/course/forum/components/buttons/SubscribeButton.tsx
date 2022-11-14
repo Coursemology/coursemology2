@@ -128,7 +128,7 @@ const SubscribeButton: FC<Props> = ({
       manageMySubscriptionLink: (
         <Link
           href={emailSubscription.manageEmailSubscriptionUrl ?? ''}
-          opensInNewTab={true}
+          opensInNewTab
         >
           {t(commonTranslations.manageMySubscriptions)}
         </Link>

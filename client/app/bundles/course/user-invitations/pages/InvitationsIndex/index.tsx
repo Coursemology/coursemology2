@@ -98,7 +98,7 @@ const InviteUsers: FC<Props> = (props) => {
           {pendingInvitations.length > 0 && (
             <UserInvitationsTable
               invitations={pendingInvitations}
-              pendingInvitations={true}
+              pendingInvitations
               renderRowActionComponent={(invitation): JSX.Element => (
                 <PendingInvitationsButtons invitation={invitation} />
               )}
@@ -108,7 +108,7 @@ const InviteUsers: FC<Props> = (props) => {
 
           {acceptedInvitations.length > 0 && (
             <UserInvitationsTable
-              acceptedInvitations={true}
+              acceptedInvitations
               invitations={acceptedInvitations}
               title={intl.formatMessage(translations.accepted)}
             />

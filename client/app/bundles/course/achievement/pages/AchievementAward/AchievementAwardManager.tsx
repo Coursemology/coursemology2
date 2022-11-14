@@ -294,11 +294,11 @@ const AchievementAwardManager: FC<Props> = (props) => {
 
   return (
     <>
-      <Grid container={true}>
+      <Grid container>
         <Grid
           alignItems="center"
           display="flex"
-          item={true}
+          item
           justifyContent="center"
           style={{ marginBottom: 8 }}
           xs={12}
@@ -321,11 +321,11 @@ const AchievementAwardManager: FC<Props> = (props) => {
             />
           </div>
         </Grid>
-        <Grid item={true} xs={12}>
+        <Grid item xs={12}>
           <DataTable
             columns={columns}
             data={achievementUsers}
-            includeRowNumber={true}
+            includeRowNumber
             options={options}
           />
         </Grid>

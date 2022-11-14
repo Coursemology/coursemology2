@@ -26,10 +26,10 @@ const AppLayout = (props: AppLayoutProps): JSX.Element => {
   };
 
   return (
-    <Grid container={true}>
+    <Grid container>
       <Grid
         className="sidebar"
-        item={true}
+        item
         lg={isExpanded ? 2 : 1}
         md={isExpanded ? 3 : 1}
         sm={isExpanded ? 4 : 2}
@@ -39,7 +39,7 @@ const AppLayout = (props: AppLayoutProps): JSX.Element => {
       </Grid>
       <Grid
         className="breadcrumbs"
-        item={true}
+        item
         lg={isExpanded ? 10 : 11}
         md={isExpanded ? 9 : 11}
         sm={isExpanded ? 8 : 10}
@@ -49,7 +49,7 @@ const AppLayout = (props: AppLayoutProps): JSX.Element => {
         <Breadcrumbs />
       </Grid>
       <Grid
-        item={true}
+        item
         lg={isExpanded ? 2 : 1}
         md={isExpanded ? 3 : 1}
         sm={isExpanded ? 4 : 2}
@@ -57,7 +57,7 @@ const AppLayout = (props: AppLayoutProps): JSX.Element => {
       />
       <Grid
         className="content"
-        item={true}
+        item
         lg={isExpanded ? 10 : 11}
         md={isExpanded ? 9 : 11}
         sm={isExpanded ? 8 : 10}

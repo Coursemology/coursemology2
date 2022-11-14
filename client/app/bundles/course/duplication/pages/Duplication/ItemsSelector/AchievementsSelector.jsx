@@ -54,7 +54,7 @@ class AchievementsSelector extends Component {
 
     if (achievements.length < 1) {
       return (
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noItems} />
         </ListSubheader>
       );

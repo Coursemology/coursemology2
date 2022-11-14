@@ -56,8 +56,8 @@ const FormDateTimePickerField = (props) => {
       <div style={{ ...styles.dateTimePicker, ...style }}>
         <MuiDateTimePicker
           {...field}
-          ampm={true}
-          clearable={true}
+          ampm
+          clearable
           DialogProps={{ sx: styles.dialogStyle }}
           disabled={disabled}
           inputFormat="DD-MM-YYYY HH:mm"
@@ -70,7 +70,7 @@ const FormDateTimePickerField = (props) => {
               className={className}
               {...params}
               error={!!fieldState.error || params.error}
-              fullWidth={true}
+              fullWidth
               helperText={
                 fieldState.error
                   ? formatErrorMessage(fieldState.error.message)

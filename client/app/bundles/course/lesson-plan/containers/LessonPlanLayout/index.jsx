@@ -61,7 +61,7 @@ class LessonPlanLayout extends Component {
 
     if (!groups || groups.length < 1) {
       return (
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.empty} />
         </ListSubheader>
       );
@@ -69,14 +69,10 @@ class LessonPlanLayout extends Component {
 
     return (
       <Routes>
-        <Route
-          element={<LessonPlanShow />}
-          exact={true}
-          path={lessonPlanPath}
-        />
+        <Route element={<LessonPlanShow />} exact path={lessonPlanPath} />
         <Route
           element={<LessonPlanEdit />}
-          exact={true}
+          exact
           path={`${lessonPlanPath}/edit`}
         />
       </Routes>

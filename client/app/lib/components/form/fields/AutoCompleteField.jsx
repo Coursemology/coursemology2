@@ -23,8 +23,8 @@ const FormAutoCompleteField = (props) => {
     <Autocomplete
       {...field}
       disabled={disabled}
-      freeSolo={true}
-      fullWidth={true}
+      freeSolo
+      fullWidth
       onChange={(event, newValue) => field.onChange(newValue)}
       onInputChange={(event, newValue) => field.onChange(newValue)}
       options={options}

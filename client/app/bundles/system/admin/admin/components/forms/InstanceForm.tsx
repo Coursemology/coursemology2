@@ -68,12 +68,12 @@ const InstanceForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
                 label={t(translations.name)}
-                required={true}
+                required
                 variant="standard"
               />
             )}
@@ -87,12 +87,12 @@ const InstanceForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
                 label={t(translations.host)}
-                required={true}
+                required
                 variant="standard"
               />
             )}

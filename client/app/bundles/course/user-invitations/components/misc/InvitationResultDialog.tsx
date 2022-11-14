@@ -108,8 +108,8 @@ const InvitationResultDialog: FC<Props> = (props) => {
 
   return (
     <Dialog
-      disableEscapeKeyDown={true}
-      fullWidth={true}
+      disableEscapeKeyDown
+      fullWidth
       maxWidth="lg"
       onClose={handleDialogClose}
       open={open}
@@ -117,7 +117,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
     >
       <DialogTitle>{`${intl.formatMessage(translations.header)}`}</DialogTitle>
       <DialogContent>
-        <Typography gutterBottom={true} variant="body2">
+        <Typography gutterBottom variant="body2">
           {intl.formatMessage(translations.body, {
             newInvitationsCount: newInvitations?.length ?? 0,
             newCourseUsersCount: newCourseUsers?.length ?? 0,

@@ -73,13 +73,13 @@ const UsersIndex: FC<Props> = (props) => {
       {isLoading ? (
         <LoadingIndicator />
       ) : (
-        <Grid container={true}>
+        <Grid container>
           {users.length > 0
             ? users.map((courseUser) => (
                 <Grid
                   key={courseUser.id}
                   className={`course-user-${courseUser.id}`}
-                  item={true}
+                  item
                   lg={4}
                   md={6}
                   xs={12}
@@ -90,23 +90,18 @@ const UsersIndex: FC<Props> = (props) => {
                   >
                     <Grid
                       alignItems="center"
-                      container={true}
+                      container
                       direction="row"
                       spacing={1}
                     >
-                      <Grid
-                        container={true}
-                        item={true}
-                        justifyContent="center"
-                        xs={3}
-                      >
+                      <Grid container item justifyContent="center" xs={3}>
                         <Avatar
                           alt={courseUser.name}
                           src={courseUser.imageUrl}
                           sx={styles.courseUserImage}
                         />
                       </Grid>
-                      <Grid item={true} style={styles.courseUserName} xs={true}>
+                      <Grid item style={styles.courseUserName} xs>
                         <Typography variant="body1">
                           {courseUser.name}
                         </Typography>

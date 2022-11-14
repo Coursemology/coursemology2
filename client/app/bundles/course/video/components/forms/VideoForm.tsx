@@ -117,12 +117,12 @@ const VideoForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
                 label={t(translations.title)}
-                required={true}
+                required
                 variant="standard"
               />
             )}
@@ -142,7 +142,7 @@ const VideoForm: FC<Props> = (props) => {
                   value: tab.id,
                   label: tab.title,
                 }))}
-                shrink={true}
+                shrink
               />
             )}
           />
@@ -155,7 +155,7 @@ const VideoForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -173,7 +173,7 @@ const VideoForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 helperText={
                   childrenExists ? t(translations.urlChangeWarning) : null
                 }
@@ -182,7 +182,7 @@ const VideoForm: FC<Props> = (props) => {
                 }}
                 label={t(translations.url)}
                 placeholder={t(translations.urlPlaceholder)}
-                required={true}
+                required
                 variant="standard"
               />
             )}

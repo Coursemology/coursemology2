@@ -37,7 +37,7 @@ const PersonalTimeBooleanIcons: FC<Props> = (props) => {
     <>
       {hasPersonalTimes && (
         <CustomTooltip
-          arrow={true}
+          arrow
           title={intl.formatMessage(translations.hasPersonalTimesHint)}
         >
           <AccessTime className="mr-2" fontSize="small" />
@@ -45,7 +45,7 @@ const PersonalTimeBooleanIcons: FC<Props> = (props) => {
       )}
       {affectsPersonalTimes && (
         <CustomTooltip
-          arrow={true}
+          arrow
           title={intl.formatMessage(translations.affectsPersonalTimesHint)}
         >
           <Shuffle className="mr-2" fontSize="small" />

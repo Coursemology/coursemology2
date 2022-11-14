@@ -35,13 +35,13 @@ const CommentsSettingsForm = (
     <Form
       disabled={props.disabled}
       emitsVia={props.emitsVia}
-      headsUp={true}
+      headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
       validates={validationSchema}
     >
       {(control): JSX.Element => (
-        <Section sticksToNavbar={true} title={t(translations.commentsSettings)}>
+        <Section sticksToNavbar title={t(translations.commentsSettings)}>
           <Controller
             control={control}
             name="title"
@@ -50,7 +50,7 @@ const CommentsSettingsForm = (
                 disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 label={t(commonTranslations.title)}
                 variant="filled"
               />
@@ -73,7 +73,7 @@ const CommentsSettingsForm = (
                 disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 label={t(commonTranslations.pagination)}
                 type="number"
                 variant="filled"

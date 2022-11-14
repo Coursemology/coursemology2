@@ -31,7 +31,7 @@ class MaterialsListing extends Component {
   static renderRootRow() {
     return (
       <IndentedCheckbox
-        disabled={true}
+        disabled
         label={<FormattedMessage {...translations.root} />}
       />
     );
@@ -41,7 +41,7 @@ class MaterialsListing extends Component {
     return (
       <IndentedCheckbox
         key={`material_${item.id}`}
-        checked={true}
+        checked
         indentLevel={indentLevel}
         label={
           <span>
@@ -110,7 +110,7 @@ class MaterialsListing extends Component {
 
     return (
       <div>
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage
             {...defaultComponentTitles.course_materials_component}
           />

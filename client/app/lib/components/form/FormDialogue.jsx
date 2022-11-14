@@ -85,8 +85,8 @@ class FormDialogue extends Component {
     return (
       <>
         <Dialog
-          disableEnforceFocus={true}
-          fullWidth={true}
+          disableEnforceFocus
+          fullWidth
           maxWidth="md"
           onClose={this.handleFormClose}
           open={open}
@@ -99,7 +99,7 @@ class FormDialogue extends Component {
           <DialogActions>{formActions}</DialogActions>
         </Dialog>
         <ConfirmationDialog
-          confirmDiscard={true}
+          confirmDiscard
           onCancel={this.handleDiscardCancel}
           onConfirm={this.handleDiscard}
           open={this.state.discardConfirmationOpen}

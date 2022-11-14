@@ -48,7 +48,7 @@ $(() => {
             element={<SettingsNavigation />}
             path="/courses/:course_id/admin"
           >
-            <Route element={<CourseSettings />} index={true} />
+            <Route element={<CourseSettings />} index />
 
             {pages.map(({ path, element }) => (
               <Route key={path} element={element} path={path} />

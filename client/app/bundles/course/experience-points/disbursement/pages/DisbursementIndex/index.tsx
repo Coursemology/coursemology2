@@ -94,7 +94,7 @@ const DisbursementIndex: FC<Props> = (props) => {
           </Tabs>
           <Grid
             columnSpacing={2}
-            container={true}
+            container
             direction="row"
             display={tabValue === 'general-disbursement-tab' ? 'flex' : 'none'}
             id="general-disbursement-tab"
@@ -104,7 +104,7 @@ const DisbursementIndex: FC<Props> = (props) => {
           </Grid>
           <Grid
             columnSpacing={2}
-            container={true}
+            container
             direction="column"
             display={tabValue === 'forum-disbursement-tab' ? 'flex' : 'none'}
             id="forum-disbursement-tab"

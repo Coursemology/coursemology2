@@ -350,7 +350,7 @@ class ScribingToolbar extends Component {
     return (
       <Grid
         alignItems="center"
-        container={true}
+        container
         direction="row"
         justifyContent="space-between"
         style={{
@@ -363,7 +363,7 @@ class ScribingToolbar extends Component {
         }}
       >
         <Grid
-          item={true}
+          item
           style={{ display: 'flex', justifyContent: 'flex-end' }}
           xs={3}
         >
@@ -654,7 +654,7 @@ class ScribingToolbar extends Component {
               borderColorPickerColor={
                 this.props.scribing.colors[scribingToolColor.SHAPE_BORDER]
               }
-              displayShapeField={true}
+              displayShapeField
               fillColorPickerColor={
                 this.props.scribing.colors[scribingToolColor.SHAPE_FILL]
               }
@@ -692,7 +692,7 @@ class ScribingToolbar extends Component {
             />
           )}
         </Grid>
-        <Grid item={true} xs={3}>
+        <Grid item xs={3}>
           <LayersComponent
             anchorEl={this.state.popoverAnchor}
             disabled={
@@ -722,11 +722,7 @@ class ScribingToolbar extends Component {
             open={this.state.popovers[scribingPopoverTypes.LAYER]}
           />
         </Grid>
-        <Grid
-          item={true}
-          style={{ display: 'flex', justifyContent: 'center' }}
-          xs={2}
-        >
+        <Grid item style={{ display: 'flex', justifyContent: 'center' }} xs={2}>
           <Tooltip
             placement="top"
             title={<FormattedMessage {...translations.select} />}
@@ -772,11 +768,7 @@ class ScribingToolbar extends Component {
             />
           </Tooltip>
         </Grid>
-        <Grid
-          item={true}
-          style={{ display: 'flex', justifyContent: 'center' }}
-          xs={2}
-        >
+        <Grid item style={{ display: 'flex', justifyContent: 'center' }} xs={2}>
           <Tooltip
             placement="top"
             title={<FormattedMessage {...translations.move} />}
@@ -812,7 +804,7 @@ class ScribingToolbar extends Component {
             />
           </Tooltip>
         </Grid>
-        <Grid item={true} xs={1}>
+        <Grid item xs={1}>
           <Tooltip
             placement="top"
             title={<FormattedMessage {...translations.delete} />}
@@ -824,7 +816,7 @@ class ScribingToolbar extends Component {
             />
           </Tooltip>
         </Grid>
-        <Grid item={true} xs={1}>
+        <Grid item xs={1}>
           <SavingIndicator
             hasError={this.props.scribing.hasError}
             isSaved={this.props.scribing.isSaved}

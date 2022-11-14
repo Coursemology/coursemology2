@@ -80,46 +80,46 @@ const RejectWithMessageForm: FC<Props> = (props) => {
         <div className="space-y-2">
           <TextField
             defaultValue={roleRequest.name}
-            disabled={true}
-            fullWidth={true}
+            disabled
+            fullWidth
             label={t(tableTranslations.name)}
-            required={true}
+            required
             variant="standard"
           />
           <TextField
             defaultValue={roleRequest.email}
-            disabled={true}
-            fullWidth={true}
+            disabled
+            fullWidth
             label={t(tableTranslations.email)}
-            required={true}
+            required
             variant="standard"
           />
           <TextField
             defaultValue={roleRequest.role}
-            disabled={true}
-            fullWidth={true}
+            disabled
+            fullWidth
             label={t(tableTranslations.requestToBe)}
-            required={true}
+            required
             variant="standard"
           />
           <TextField
             defaultValue={roleRequest.organization}
-            disabled={true}
-            fullWidth={true}
+            disabled
+            fullWidth
             label={t(tableTranslations.organization)}
             variant="standard"
           />
           <TextField
             defaultValue={roleRequest.designation}
-            disabled={true}
-            fullWidth={true}
+            disabled
+            fullWidth
             label={t(tableTranslations.designation)}
             variant="standard"
           />
           <TextField
             defaultValue={roleRequest.reason}
-            disabled={true}
-            fullWidth={true}
+            disabled
+            fullWidth
             label={t(tableTranslations.reason)}
             variant="standard"
           />
@@ -132,12 +132,12 @@ const RejectWithMessageForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
                 label={t(tableTranslations.rejectionMessage)}
-                multiline={true}
+                multiline
                 rows={2}
                 variant="standard"
               />

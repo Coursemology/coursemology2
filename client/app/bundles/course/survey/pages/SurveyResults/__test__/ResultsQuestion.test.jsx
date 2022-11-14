@@ -65,7 +65,7 @@ const testExpandLongQuestion = (question) => {
       <ResultsQuestion
         {...{ question }}
         anonymous={false}
-        includePhantoms={true}
+        includePhantoms
         index={1}
       />
     </MemoryRouter>,

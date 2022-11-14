@@ -18,7 +18,7 @@ const SurveysLayout = () => {
       <DeleteConfirmation />
       <NotificationPopup />
       <Routes>
-        <Route element={<SurveyIndex />} exact={true} path={surveyRoot} />
+        <Route element={<SurveyIndex />} exact path={surveyRoot} />
         <Route element={<SurveyLayout />} path={`${surveyRoot}/:surveyId/*`} />
       </Routes>
     </>

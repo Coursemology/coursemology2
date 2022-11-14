@@ -29,9 +29,9 @@ describe('<RespondButton />', () => {
 
     const respondButton = mount(
       <RespondButton
-        canModify={true}
-        canRespond={true}
-        canSubmit={true}
+        canModify
+        canRespond
+        canSubmit
         {...{ courseId, surveyId }}
       />,
       buildContextOptions(storeCreator({})),

@@ -32,11 +32,11 @@ const TextResponse = (props) => {
           disabled={readOnly}
           field={field}
           fieldState={fieldState}
-          fullWidth={true}
+          fullWidth
           InputLabelProps={{
             shrink: true,
           }}
-          multiline={true}
+          multiline
           renderIf={!readOnly && !question.autogradable}
           variant="standard"
         />

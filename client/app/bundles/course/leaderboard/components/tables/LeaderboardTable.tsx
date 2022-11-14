@@ -412,9 +412,9 @@ const LeaderboardTable: FC<Props> = (props: Props) => {
       data={data}
       options={options}
       title={title}
-      titleAlignCenter={true}
-      titleGrid={true}
-      withMargin={true}
+      titleAlignCenter
+      titleGrid
+      withMargin
     />
   );
 };

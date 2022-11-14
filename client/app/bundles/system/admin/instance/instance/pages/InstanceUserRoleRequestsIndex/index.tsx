@@ -79,7 +79,7 @@ const InstanceUserRoleRequestsIndex: FC<Props> = (props) => {
       ) : (
         <>
           <InstanceUserRoleRequestsTable
-            pendingRoleRequests={true}
+            pendingRoleRequests
             renderRowActionComponent={(roleRequest): JSX.Element => (
               <PendingRoleRequestsButtons roleRequest={roleRequest} />
             )}
@@ -87,12 +87,12 @@ const InstanceUserRoleRequestsIndex: FC<Props> = (props) => {
             title={intl.formatMessage(translations.pending)}
           />
           <InstanceUserRoleRequestsTable
-            approvedRoleRequests={true}
+            approvedRoleRequests
             roleRequests={approvedRoleRequests}
             title={intl.formatMessage(translations.approved)}
           />
           <InstanceUserRoleRequestsTable
-            rejectedRoleRequests={true}
+            rejectedRoleRequests
             roleRequests={rejectedRoleRequests}
             title={intl.formatMessage(translations.rejected)}
           />

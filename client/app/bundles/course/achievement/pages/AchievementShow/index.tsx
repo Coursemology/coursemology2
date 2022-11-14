@@ -62,7 +62,7 @@ const AchievementShow: FC<Props> = (props) => {
       <AchievementManagementButtons
         key={achievementMiniEntity.id}
         achievement={achievementMiniEntity}
-        navigateToIndex={true}
+        navigateToIndex
       />,
     );
   }
@@ -78,8 +78,8 @@ const AchievementShow: FC<Props> = (props) => {
         <LoadingIndicator />
       ) : (
         achievement && (
-          <Grid container={true}>
-            <Grid className="flex justify-center" item={true} xs={12}>
+          <Grid container>
+            <Grid className="flex justify-center" item xs={12}>
               <div className="flex max-w-7xl items-center space-x-8 p-8">
                 <Tooltip title={achievement.achievementStatus ?? ''}>
                   <img
@@ -99,7 +99,7 @@ const AchievementShow: FC<Props> = (props) => {
               </div>
             </Grid>
 
-            <Grid display="flex" item={true} justifyContent="center" xs={12}>
+            <Grid display="flex" item justifyContent="center" xs={12}>
               <Typography variant="h5">
                 {intl.formatMessage(translations.studentsWithAchievement)}
               </Typography>
@@ -108,7 +108,7 @@ const AchievementShow: FC<Props> = (props) => {
             {achievement.achievementUsers.map((courseUser) => {
               if (courseUser.obtainedAt !== null)
                 return (
-                  <Grid key={courseUser.id} item={true} lg={1} sm={3} xs={4}>
+                  <Grid key={courseUser.id} item lg={1} sm={3} xs={4}>
                     <a href={getCourseUserURL(courseId, courseUser.id)}>
                       <AvatarWithLabel
                         imageUrl={courseUser.imageUrl!}

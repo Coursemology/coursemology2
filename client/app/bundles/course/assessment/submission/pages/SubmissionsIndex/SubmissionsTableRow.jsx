@@ -70,7 +70,7 @@ const renderPhantomUserIcon = (submission) => {
       <Icon
         className="fa fa-user-secret fa-xs"
         data-for="phantom-user"
-        data-tip={true}
+        data-tip
         style={styles.phantomIcon}
       />
     );
@@ -82,11 +82,7 @@ const renderUnpublishedWarning = (submission) => {
   if (submission.workflowState !== workflowStates.Graded) return null;
   return (
     <span style={{ display: 'inline-block', paddingLeft: 5 }}>
-      <div
-        data-for="unpublished-grades"
-        data-offset="{'left' : -8}"
-        data-tip={true}
-      >
+      <div data-for="unpublished-grades" data-offset="{'left' : -8}" data-tip>
         <i className="fa fa-exclamation-triangle" />
       </div>
     </span>
@@ -141,7 +137,7 @@ const SubmissionsTableRow = (props) => {
       return null;
 
     return (
-      <span className="delete-button" data-for="delete-button" data-tip={true}>
+      <span className="delete-button" data-for="delete-button" data-tip>
         <IconButton
           disabled={disabled}
           id={`delete-button-${submission.courseUser.id}`}
@@ -193,11 +189,7 @@ const SubmissionsTableRow = (props) => {
       return null;
 
     return (
-      <span
-        className="submission-access-logs"
-        data-for="access-logs"
-        data-tip={true}
-      >
+      <span className="submission-access-logs" data-for="access-logs" data-tip>
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
           <IconButton size="large" style={styles.button}>
             <History
@@ -233,7 +225,7 @@ const SubmissionsTableRow = (props) => {
       <FormattedMessage {...translations[submission.workflowState]}>
         {(msg) => (
           <Chip
-            clickable={true}
+            clickable
             component={Link}
             href={getEditSubmissionURL(courseId, assessmentId, submission.id)}
             icon={renderUnpublishedWarning(submission)}
@@ -261,11 +253,7 @@ const SubmissionsTableRow = (props) => {
     if (!assessment.canUnsubmitSubmission) return null;
 
     return (
-      <span
-        className="unsubmit-button"
-        data-for="unsubmit-button"
-        data-tip={true}
-      >
+      <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
         <IconButton
           disabled={disabled}
           id={`unsubmit-button-${submission.courseUser.id}`}

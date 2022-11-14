@@ -90,7 +90,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
       return (
         <TextField
           key={`reason-${record.id}`}
-          fullWidth={true}
+          fullWidth
           id={`reason-${record.id}`}
           onChange={(e): void => onUpdateReason(e.target.value)}
           value={rowData.reason}
@@ -102,7 +102,7 @@ const ExperiencePointsTableRow: FC<Props> = (props) => {
   };
 
   return (
-    <TableRow key={record.id} hover={true} id={`record-${record.id}`}>
+    <TableRow key={record.id} hover id={`record-${record.id}`}>
       <TableCell>{formatLongDateTime(record.updatedAt)}</TableCell>
 
       <TableCell>

@@ -109,10 +109,10 @@ const VideoSubmissionsTable: FC<Props> = (props) => {
     <DataTable
       columns={columns}
       data={videoSubmissions}
-      includeRowNumber={true}
+      includeRowNumber
       options={options}
       title={title}
-      withMargin={true}
+      withMargin
     />
   );
 };

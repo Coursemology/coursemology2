@@ -47,11 +47,7 @@ const TopicList: FC<TopicListProps> = (props) => {
 
   if (topicList.length === 0) {
     return (
-      <Grid
-        item={true}
-        style={{ position: 'relative', width: '100%' }}
-        xs={true}
-      >
+      <Grid item style={{ position: 'relative', width: '100%' }} xs>
         <Note message={t(translations.noTopic)} />
       </Grid>
     );
@@ -62,9 +58,9 @@ const TopicList: FC<TopicListProps> = (props) => {
       {Object.keys(topicList).map((key: string) => (
         <Grid
           key={topicList[key].id}
-          item={true}
+          item
           style={{ position: 'relative', width: '100%' }}
-          xs={true}
+          xs
         >
           <TopicCard topic={topicList[key]} />
         </Grid>
@@ -121,7 +117,7 @@ const TopicListWithPagination: FC<Props> = (props) => {
   return (
     <Grid
       columnSpacing={2}
-      container={true}
+      container
       direction="column"
       rowSpacing={2}
       style={{ marginTop: '0px' }}

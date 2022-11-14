@@ -94,7 +94,7 @@ const QuestionFormOptions = (props) => {
         <Button color="primary" component="label" disabled={disabled}>
           <FormattedMessage {...optionsTranslations.bulkUploadImages} />
           <input
-            multiple={true}
+            multiple
             onChange={(event) => handleSelectFiles(event, fieldsConfig)}
             style={styles.imageUploader}
             type="file"

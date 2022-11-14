@@ -84,7 +84,7 @@ const ResponseEdit = (props) => {
     const initialValues = buildInitialValues(survey, response);
     return (
       <>
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...surveyTranslations.questions} />
         </ListSubheader>
         <ResponseForm

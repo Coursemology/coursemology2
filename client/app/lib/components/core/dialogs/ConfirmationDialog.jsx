@@ -115,7 +115,7 @@ class ConfirmationDialog extends Component {
       <Dialog
         data-testid="ConfirmationDialog"
         disableEscapeKeyDown={disableCancelButton || disableConfirmButton}
-        fullWidth={true}
+        fullWidth
         maxWidth="md"
         onClose={
           disableCancelButton || disableConfirmButton

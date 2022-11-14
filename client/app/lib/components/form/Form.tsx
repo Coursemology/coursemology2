@@ -145,7 +145,7 @@ const Form = (props: FormProps): JSX.Element => {
         <Slide
           direction="up"
           in={formState.isDirty || props.dirty}
-          unmountOnExit={true}
+          unmountOnExit
         >
           <div className="fixed inset-x-0 bottom-0 z-10 flex w-full items-center justify-between bg-neutral-800 px-8 py-4 text-white sm:bottom-8 sm:mx-auto sm:w-fit sm:rounded-lg sm:drop-shadow-xl">
             <Typography variant="body1">
@@ -164,7 +164,7 @@ const Form = (props: FormProps): JSX.Element => {
               <Button
                 className={`${props.disabled && 'bg-neutral-500'}`}
                 disabled={props.disabled}
-                disableElevation={true}
+                disableElevation
                 type="submit"
                 variant="contained"
               >

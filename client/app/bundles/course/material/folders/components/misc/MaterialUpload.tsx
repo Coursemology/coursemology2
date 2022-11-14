@@ -69,7 +69,7 @@ const MaterialUpload: FC<Props> = (props) => {
   return (
     <>
       <Dialog
-        fullWidth={true}
+        fullWidth
         maxWidth="md"
         onClose={(): void => {
           if (uploadedFiles.length > 0) {
@@ -101,7 +101,7 @@ const MaterialUpload: FC<Props> = (props) => {
         </DialogContent>
       </Dialog>
       <ConfirmationDialog
-        confirmDiscard={true}
+        confirmDiscard
         onCancel={(): void => setConfirmationDialogOpen(false)}
         onConfirm={(): void => {
           setConfirmationDialogOpen(false);

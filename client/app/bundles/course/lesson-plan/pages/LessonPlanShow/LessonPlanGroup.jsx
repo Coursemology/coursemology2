@@ -139,7 +139,7 @@ class LessonPlanGroup extends Component {
           {milestone
             ? this.renderMilestoneCardTitle(milestone)
             : this.renderDefaultMilestone()}
-          <Collapse in={this.state.expanded} unmountOnExit={true}>
+          <Collapse in={this.state.expanded} unmountOnExit>
             <CardContent style={styles.items}>
               {items.length > 0
                 ? items.map((item) => (

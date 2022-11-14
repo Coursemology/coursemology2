@@ -318,7 +318,7 @@ const InstancesTable: FC<Props> = (props) => {
     <DataTable
       columns={columns}
       data={instances}
-      includeRowNumber={true}
+      includeRowNumber
       isLoading={isLoading}
       options={options}
       title={
@@ -329,7 +329,7 @@ const InstancesTable: FC<Props> = (props) => {
           )}
         </Typography>
       }
-      withMargin={true}
+      withMargin
     />
   );
 };

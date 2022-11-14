@@ -52,7 +52,7 @@ const IndividualInvitation: FC<Props> = (props) => {
   const { fieldsConfig, index, intl } = props;
 
   const renderInvitationBody = (
-    <Grid alignItems="center" container={true} flexWrap="nowrap">
+    <Grid alignItems="center" container flexWrap="nowrap">
       <Controller
         control={fieldsConfig.control}
         name={`invitations.${index}.name`}
@@ -60,7 +60,7 @@ const IndividualInvitation: FC<Props> = (props) => {
           <FormTextField
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             id={`name-${index}`}
             label={intl.formatMessage(tableTranslations.name)}
             placeholder={intl.formatMessage(translations.namePlaceholder)}
@@ -75,7 +75,7 @@ const IndividualInvitation: FC<Props> = (props) => {
           <FormTextField
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             id={`email-${index}`}
             label={intl.formatMessage(tableTranslations.email)}
             placeholder={intl.formatMessage(translations.emailPlaceholder)}

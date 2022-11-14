@@ -234,7 +234,7 @@ class VisibleGradingPanel extends Component {
             <a
               data-for="unpublished-grades"
               data-offset="{'left' : -8}"
-              data-tip={true}
+              data-tip
             >
               <i className="fa fa-exclamation-triangle" />
             </a>

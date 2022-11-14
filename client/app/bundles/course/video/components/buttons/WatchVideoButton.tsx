@@ -88,7 +88,7 @@ const WatchVideoButton: FC<Props> = (props) => {
     );
   }
   return (
-    <Button color="primary" disabled={true} variant="outlined">
+    <Button color="primary" disabled variant="outlined">
       {intl.formatMessage(translations.watch)}
     </Button>
   );

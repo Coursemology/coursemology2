@@ -84,12 +84,12 @@ const AnnouncementForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
                 label={<FormattedMessage {...translations.title} />}
-                required={true}
+                required
                 variant="standard"
               />
             )}
@@ -103,7 +103,7 @@ const AnnouncementForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}

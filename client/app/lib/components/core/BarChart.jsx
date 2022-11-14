@@ -29,7 +29,7 @@ const BarChart = (props) => (
         <div
           key={segment.color}
           data-for={segment.color}
-          data-tip={true}
+          data-tip
           style={segmentStyle}
         >
           {segment.count > 0 ? segment.count : null}

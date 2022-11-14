@@ -169,7 +169,7 @@ const DisbursementTable: FC<Props> = (props: Props) => {
       columns={columns}
       data={filteredUsers}
       options={options}
-      withMargin={true}
+      withMargin
     />
   );
 };

@@ -24,7 +24,7 @@ class VideoListing extends Component {
   static renderDefaultTabRow() {
     return (
       <IndentedCheckbox
-        disabled={true}
+        disabled
         indentLevel={0}
         label={<FormattedMessage {...translations.defaultTab} />}
       />
@@ -43,7 +43,7 @@ class VideoListing extends Component {
   static renderTabRow(tab) {
     return (
       <IndentedCheckbox
-        checked={true}
+        checked
         indentLevel={0}
         label={
           <span>
@@ -59,7 +59,7 @@ class VideoListing extends Component {
     return (
       <IndentedCheckbox
         key={`video_${video.id}`}
-        checked={true}
+        checked
         indentLevel={1}
         label={
           <span style={{ display: 'flex', alignItems: 'centre' }}>
@@ -100,7 +100,7 @@ class VideoListing extends Component {
 
     return (
       <>
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage
             {...defaultComponentTitles.course_videos_component}
           />

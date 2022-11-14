@@ -263,7 +263,7 @@ const CommentCard: FC<Props> = (props) => {
         {renderCommentContent()}
       </div>
       <ConfirmationDialog
-        confirmDelete={true}
+        confirmDelete
         disableCancelButton={isDeleting}
         disableConfirmButton={isDeleting}
         loadingConfirmButton={isDeleting}

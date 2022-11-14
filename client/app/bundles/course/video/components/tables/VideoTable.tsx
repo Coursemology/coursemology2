@@ -216,12 +216,7 @@ const VideoTable: FC<Props> = (props) => {
   }
 
   return (
-    <DataTable
-      columns={columns}
-      data={videos}
-      options={options}
-      withMargin={true}
-    />
+    <DataTable columns={columns} data={videos} options={options} withMargin />
   );
 };
 

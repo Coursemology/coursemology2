@@ -10,7 +10,7 @@ const DuplicationLayout = () => (
     <Routes>
       <Route
         element={<Duplication />}
-        exact={true}
+        exact
         path="/courses/:courseId/duplication"
       />
     </Routes>

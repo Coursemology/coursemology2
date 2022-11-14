@@ -65,8 +65,8 @@ const SurveyConditionForm = (
         render={({ field, fieldState: { error } }): JSX.Element => (
           <Autocomplete
             {...field}
-            disableClearable={true}
-            fullWidth={true}
+            disableClearable
+            fullWidth
             getOptionLabel={(id): string => surveys[id] ?? ''}
             onChange={(_, value): void => field.onChange(parseInt(value, 10))}
             options={autocompleteOptions}
@@ -102,7 +102,7 @@ const SurveyCondition = (
   return (
     <Preload
       onErrorDo={props.onClose}
-      render={<LoadingIndicator bare={true} className="p-2" fit={true} />}
+      render={<LoadingIndicator bare className="p-2" fit />}
       while={fetchSurveys}
     >
       {(data): JSX.Element => <SurveyConditionForm {...props} surveys={data} />}

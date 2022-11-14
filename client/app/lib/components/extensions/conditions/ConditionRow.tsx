@@ -51,7 +51,7 @@ const ConditionRow = <AnyConditionData extends ConditionData>(
   };
 
   return (
-    <TableRow className="group" hover={true}>
+    <TableRow className="group" hover>
       <TableCell className="w-48 group-last:border-0">
         <Typography variant="body2">{props.condition.type}</Typography>
       </TableCell>

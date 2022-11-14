@@ -72,7 +72,7 @@ const ForumEdit: FC<Props> = (props) => {
 
   return (
     <ForumForm
-      editing={true}
+      editing
       initialValues={initialValues}
       onClose={onClose}
       onSubmit={handleSubmit}

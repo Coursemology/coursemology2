@@ -96,9 +96,9 @@ const UserVideoSubmissionsTable: FC<Props> = (props) => {
     <DataTable
       columns={columns}
       data={videoSubmissions}
-      includeRowNumber={true}
+      includeRowNumber
       options={options}
-      withMargin={true}
+      withMargin
     />
   );
 };

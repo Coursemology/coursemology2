@@ -191,7 +191,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
           return (
             <InlineEditTextField
               key={`name-${enrolRequest.id}`}
-              alwaysEditable={true}
+              alwaysEditable
               className="enrol_request_name"
               updateValue={updateValue}
               value={value}
@@ -213,7 +213,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
             <TextField
               id={`role-${enrolRequest.id}`}
               onChange={(e): React.ChangeEvent => updateValue(e.target.value)}
-              select={true}
+              select
               value={value || 'student'}
               variant="standard"
             >
@@ -267,7 +267,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
                     onChange={(e): React.ChangeEvent =>
                       updateValue(e.target.value)
                     }
-                    select={true}
+                    select
                     value={value || defaultTimelineAlgorithm}
                     variant="standard"
                   >
@@ -452,10 +452,10 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     <DataTable
       columns={columns}
       data={enrolRequests}
-      includeRowNumber={true}
+      includeRowNumber
       options={options}
       title={title}
-      withMargin={true}
+      withMargin
     />
   );
 };

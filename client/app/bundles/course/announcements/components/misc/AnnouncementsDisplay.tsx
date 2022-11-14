@@ -78,9 +78,9 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
 
   return (
     <>
-      <Grid columns={{ xs: 1, lg: 3 }} container={true} style={{ padding: 0 }}>
+      <Grid columns={{ xs: 1, lg: 3 }} container style={{ padding: 0 }}>
         <Grid
-          item={true}
+          item
           style={{
             display: 'flex',
             justifyContent: 'left',
@@ -97,7 +97,7 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
             />
           </div>
         </Grid>
-        <Grid item={true} xs={1}>
+        <Grid item xs={1}>
           <Pagination
             items={shavedAnnouncements}
             itemsPerPage={ITEMS_PER_PAGE}
@@ -107,7 +107,7 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
             setSlicedItems={setslicedAnnouncements}
           />
         </Grid>
-        <Grid item={true} xs={1} />
+        <Grid item xs={1} />
       </Grid>
 
       <div id="course-announcements">

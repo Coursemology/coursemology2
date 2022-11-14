@@ -67,12 +67,8 @@ const CourseShow: FC<Props> = (props) => {
 
       {!course.permissions.isCurrentCourseUser && (
         <>
-          <Grid
-            columns={{ xs: 1, lg: 4 }}
-            container={true}
-            direction="row-reverse"
-          >
-            <Grid item={true} lg={3} xs={1}>
+          <Grid columns={{ xs: 1, lg: 4 }} container direction="row-reverse">
+            <Grid item lg={3} xs={1}>
               <div style={{ display: 'flex', justifyContent: 'right' }}>
                 {course.registrationInfo && (
                   <CourseEnrollOptions
@@ -81,7 +77,7 @@ const CourseShow: FC<Props> = (props) => {
                 )}
               </div>
             </Grid>
-            <Grid item={true} lg={1} xs={1}>
+            <Grid item lg={1} xs={1}>
               <h2 style={{ marginRight: 20, marginTop: 5 }}>
                 {intl.formatMessage(translations.descriptionHeader)}
               </h2>
@@ -92,9 +88,9 @@ const CourseShow: FC<Props> = (props) => {
             id="course-description"
           />
           <h2>{intl.formatMessage(translations.instructorsHeader)}</h2>
-          <Grid container={true} spacing={1}>
+          <Grid container spacing={1}>
             {course.instructors?.map((instructor) => (
-              <Grid key={instructor.id} item={true} lg={1} sm={2} xs={3}>
+              <Grid key={instructor.id} item lg={1} sm={2} xs={3}>
                 <div id={`instructor-${instructor.id}`}>
                   <AvatarWithLabel
                     imageUrl={instructor.imageUrl!}

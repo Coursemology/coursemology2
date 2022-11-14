@@ -111,7 +111,7 @@ const UserRequests: FC<Props> = (props) => {
           {pendingEnrolRequests.length > 0 && (
             <EnrolRequestsTable
               enrolRequests={pendingEnrolRequests}
-              pendingEnrolRequests={true}
+              pendingEnrolRequests
               renderRowActionComponent={(enrolRequest): JSX.Element => (
                 <PendingEnrolRequestsButtons enrolRequest={enrolRequest} />
               )}
@@ -120,7 +120,7 @@ const UserRequests: FC<Props> = (props) => {
           )}
           {approvedEnrolRequests.length > 0 && (
             <EnrolRequestsTable
-              approvedEnrolRequests={true}
+              approvedEnrolRequests
               enrolRequests={approvedEnrolRequests}
               title={intl.formatMessage(translations.approved)}
             />
@@ -128,7 +128,7 @@ const UserRequests: FC<Props> = (props) => {
           {rejectedEnrolRequests.length > 0 && (
             <EnrolRequestsTable
               enrolRequests={rejectedEnrolRequests}
-              rejectedEnrolRequests={true}
+              rejectedEnrolRequests
               title={intl.formatMessage(translations.rejected)}
             />
           )}

@@ -71,12 +71,12 @@ const SubmissionFilter: FC<Props> = (props) => {
       <h3 style={{ marginTop: 0, marginBottom: 0 }}>
         {intl.formatMessage(translations.filterHeader)}
       </h3>
-      <Grid columns={{ xs: 1, md: 3 }} container={true}>
-        <Grid item={true} paddingBottom={1} paddingRight={1} xs={1}>
+      <Grid columns={{ xs: 1, md: 3 }} container>
+        <Grid item paddingBottom={1} paddingRight={1} xs={1}>
           <Autocomplete
             key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-assesment-selector`}
-            clearOnEscape={true}
-            disablePortal={true}
+            clearOnEscape
+            disablePortal
             getOptionLabel={(option): string => option.title}
             onChange={(
               _event: React.SyntheticEvent,
@@ -101,11 +101,11 @@ const SubmissionFilter: FC<Props> = (props) => {
             value={selectedFilter.assessment}
           />
         </Grid>
-        <Grid item={true} paddingBottom={1} paddingRight={1} xs={1}>
+        <Grid item paddingBottom={1} paddingRight={1} xs={1}>
           <Autocomplete
             key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-group-selector`}
-            clearOnEscape={true}
-            disablePortal={true}
+            clearOnEscape
+            disablePortal
             getOptionLabel={(option): string => option.name}
             onChange={(
               _event: React.SyntheticEvent,
@@ -130,11 +130,11 @@ const SubmissionFilter: FC<Props> = (props) => {
             value={selectedFilter.group}
           />
         </Grid>
-        <Grid item={true} paddingRight={1} xs={1}>
+        <Grid item paddingRight={1} xs={1}>
           <Autocomplete
             key={`${tabCategories[categoryNum].id}-${tabCategories[categoryNum].title}-user-selector`}
-            clearOnEscape={true}
-            disablePortal={true}
+            clearOnEscape
+            disablePortal
             getOptionLabel={(option): string => option.name}
             onChange={(
               _event: React.SyntheticEvent,
@@ -160,7 +160,7 @@ const SubmissionFilter: FC<Props> = (props) => {
           />
         </Grid>
       </Grid>
-      <Grid container={true}>
+      <Grid container>
         <Button
           disabled={disableButton}
           onClick={(): void => handleFilterOnClick(1)}

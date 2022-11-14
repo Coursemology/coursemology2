@@ -89,9 +89,9 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             label={intl.formatMessage(t.viewPassword)}
-            required={true}
+            required
             type="password"
             variant="filled"
           />
@@ -126,9 +126,9 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                 disabled={disabled}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 label={intl.formatMessage(t.sessionPassword)}
-                required={true}
+                required
                 type="password"
                 variant="filled"
               />
@@ -174,7 +174,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     <form
       encType="multipart/form-data"
       id="assessment-form"
-      noValidate={true}
+      noValidate
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
@@ -189,27 +189,27 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           render={({ field, fieldState }): JSX.Element => (
             <FormTextField
               disabled={disabled}
-              disableMargins={true}
+              disableMargins
               field={field}
               fieldState={fieldState}
-              fullWidth={true}
+              fullWidth
               label={intl.formatMessage(t.title)}
-              required={true}
+              required
               variant="filled"
             />
           )}
         />
 
-        <Grid columnSpacing={2} container={true} direction="row">
-          <Grid item={true} xs={true}>
+        <Grid columnSpacing={2} container direction="row">
+          <Grid item xs>
             <Controller
               control={control}
               name="start_at"
               render={({ field, fieldState }): JSX.Element => (
                 <FormDateTimePickerField
                   disabled={disabled}
-                  disableMargins={true}
-                  disableShrinkingLabel={true}
+                  disableMargins
+                  disableShrinkingLabel
                   field={field}
                   fieldState={fieldState}
                   label={intl.formatMessage(t.startAt)}
@@ -219,15 +219,15 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             />
           </Grid>
 
-          <Grid item={true} xs={true}>
+          <Grid item xs>
             <Controller
               control={control}
               name="end_at"
               render={({ field, fieldState }): JSX.Element => (
                 <FormDateTimePickerField
                   disabled={disabled}
-                  disableMargins={true}
-                  disableShrinkingLabel={true}
+                  disableMargins
+                  disableShrinkingLabel
                   field={field}
                   fieldState={fieldState}
                   label={intl.formatMessage(t.endAt)}
@@ -238,15 +238,15 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           </Grid>
 
           {gamified && (
-            <Grid item={true} xs={true}>
+            <Grid item xs>
               <Controller
                 control={control}
                 name="bonus_end_at"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormDateTimePickerField
                     disabled={disabled}
-                    disableMargins={true}
-                    disableShrinkingLabel={true}
+                    disableMargins
+                    disableShrinkingLabel
                     field={field}
                     fieldState={fieldState}
                     label={intl.formatMessage(t.bonusEndAt)}
@@ -268,10 +268,10 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           render={({ field, fieldState }): JSX.Element => (
             <FormRichTextField
               disabled={disabled}
-              disableMargins={true}
+              disableMargins
               field={field}
               fieldState={fieldState}
-              fullWidth={true}
+              fullWidth
               variant="standard"
             />
           )}
@@ -334,18 +334,18 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           sticksToNavbar={editing}
           title={intl.formatMessage(t.gamification)}
         >
-          <Grid container={true} direction="row" spacing={2}>
-            <Grid item={true} xs={true}>
+          <Grid container direction="row" spacing={2}>
+            <Grid item xs>
               <Controller
                 control={control}
                 name="base_exp"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
                     disabled={disabled}
-                    disableMargins={true}
+                    disableMargins
                     field={field}
                     fieldState={fieldState}
-                    fullWidth={true}
+                    fullWidth
                     label={intl.formatMessage(t.baseExp)}
                     onWheel={(event): void => event.currentTarget.blur()}
                     type="number"
@@ -355,17 +355,17 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               />
             </Grid>
 
-            <Grid item={true} xs={true}>
+            <Grid item xs>
               <Controller
                 control={control}
                 name="time_bonus_exp"
                 render={({ field, fieldState }): JSX.Element => (
                   <FormTextField
                     disabled={disabled}
-                    disableMargins={true}
+                    disableMargins
                     field={field}
                     fieldState={fieldState}
-                    fullWidth={true}
+                    fullWidth
                     label={intl.formatMessage(t.timeBonusExp)}
                     onWheel={(event): void => event.currentTarget.blur()}
                     type="number"

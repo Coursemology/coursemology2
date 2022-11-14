@@ -36,7 +36,7 @@ const ComponentSettingsForm = (
   return (
     <Section
       contentClassName="flex flex-col space-y-3"
-      sticksToNavbar={true}
+      sticksToNavbar
       subtitle={t(translations.componentSettingsSubtitle)}
       title={t(translations.componentSettings)}
     >

@@ -83,7 +83,7 @@ const EventForm = (props) => {
   return (
     <form
       id="event-form"
-      noValidate={true}
+      noValidate
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
@@ -95,12 +95,12 @@ const EventForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
             label={<FormattedMessage {...translations[TITLE]} />}
-            required={true}
+            required
             variant="standard"
           />
         )}
@@ -114,10 +114,10 @@ const EventForm = (props) => {
               disabled={disabled}
               field={field}
               fieldState={fieldState}
-              fullWidth={true}
+              fullWidth
               label={<FormattedMessage {...translations[EVENT_TYPE]} />}
               options={eventTypes}
-              selectOnFocus={true}
+              selectOnFocus
               style={styles.eventType}
             />
           )}
@@ -130,10 +130,10 @@ const EventForm = (props) => {
               disabled={disabled}
               field={field}
               fieldState={fieldState}
-              fullWidth={true}
+              fullWidth
               label={<FormattedMessage {...translations[LOCATION]} />}
               options={eventLocations}
-              selectOnFocus={true}
+              selectOnFocus
               style={styles.eventType}
             />
           )}
@@ -147,12 +147,12 @@ const EventForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
             label={<FormattedMessage {...translations[DESCRIPTION]} />}
-            multiline={true}
+            multiline
             rows={2}
             variant="standard"
           />

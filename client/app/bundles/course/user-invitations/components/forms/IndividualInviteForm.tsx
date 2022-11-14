@@ -134,7 +134,7 @@ const IndividualInviteForm: FC<Props> = (props) => {
     <form
       encType="multipart/form-data"
       id="invite-users-individual-form"
-      noValidate={true}
+      noValidate
       onSubmit={handleSubmit((data) => onSubmit(data))}
     >
       <ErrorText errors={errors} />

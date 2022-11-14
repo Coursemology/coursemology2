@@ -35,7 +35,7 @@ const InstancesTable: FC<Props> = ({ title, instances, intl }: Props) => {
         </TableHead>
         <TableBody>
           {instances.map((instance) => (
-            <TableRow key={`instance-${instance.id}`} hover={true}>
+            <TableRow key={`instance-${instance.id}`} hover>
               <TableCell>
                 <Typography className="instance_title" variant="body2">
                   <a

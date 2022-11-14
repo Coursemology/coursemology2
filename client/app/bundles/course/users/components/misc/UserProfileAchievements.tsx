@@ -41,17 +41,17 @@ const UserProfileAchievements: FC<Props> = ({ achievements, intl }: Props) => {
         {intl.formatMessage(translations.achivementsHeader)}
       </Typography>
       {achievements.length > 0 ? (
-        <Grid container={true} spacing={1}>
+        <Grid container spacing={1}>
           {achievements.map((achievement) => (
             <Grid
               key={achievement.id}
               id={`achievement_${achievement.id}`}
-              item={true}
+              item
               lg={2}
               sm={3}
               xs={4}
             >
-              <Grid container={true} sx={styles.achievementMiniEntityContainer}>
+              <Grid container sx={styles.achievementMiniEntityContainer}>
                 <a href={getAchievementURL(getCourseId(), achievement.id)}>
                   <AvatarWithLabel
                     imageUrl={achievement.badge.url}

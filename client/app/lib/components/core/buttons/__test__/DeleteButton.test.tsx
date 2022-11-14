@@ -37,7 +37,7 @@ describe('<DeleteButton />', () => {
       documentBody = render(
         <DeleteButton
           confirmMessage="Are you sure you wish to delete?"
-          disabled={true}
+          disabled
           loading={false}
           onClick={jest.fn()}
         />,

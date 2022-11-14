@@ -131,7 +131,7 @@ const AdminMenu = (props) => {
       </IconButton>
       <Menu
         anchorEl={anchorEl}
-        disableAutoFocusItem={true}
+        disableAutoFocusItem
         id="admin-menu"
         onClick={handleClose}
         onClose={handleClose}

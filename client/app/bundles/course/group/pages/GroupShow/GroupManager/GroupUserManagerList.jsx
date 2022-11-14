@@ -90,8 +90,8 @@ const GroupUserManagerListItem = ({
   isChecked,
 }) => (
   <ListItem
-    button={true}
-    disablePadding={true}
+    button
+    disablePadding
     style={
       colour
         ? { ...styles.listItem, backgroundColor: colour.light }
@@ -181,7 +181,7 @@ const GroupUserManagerList = ({
   return (
     <List style={styles.list}>
       {students.length === 0 && staff.length === 0 ? (
-        <ListItem button={true} style={{ color: grey[400] }}>
+        <ListItem button style={{ color: grey[400] }}>
           <ListItemText>
             <FormattedMessage {...translations.noUsersFound} />
           </ListItemText>

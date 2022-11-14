@@ -71,13 +71,11 @@ class QuestionCard extends Component {
       <div style={styles.grid}>
         {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
-          const widget = (
-            <Widget disabled={true} style={styles.gridOptionWidget} />
-          );
+          const widget = <Widget disabled style={styles.gridOptionWidget} />;
           return (
             <OptionsListItem
               key={option.id}
-              grid={true}
+              grid
               {...{ optionText, imageUrl, widget }}
             />
           );
@@ -91,7 +89,7 @@ class QuestionCard extends Component {
       <>
         {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
-          const widget = <Widget disabled={true} style={styles.optionWidget} />;
+          const widget = <Widget disabled style={styles.optionWidget} />;
           return (
             <OptionsListItem
               key={option.id}
@@ -114,8 +112,8 @@ class QuestionCard extends Component {
   static renderTextField() {
     return (
       <TextField
-        disabled={true}
-        fullWidth={true}
+        disabled
+        fullWidth
         label={<FormattedMessage {...translations.textResponse} />}
         variant="standard"
       />
@@ -154,7 +152,7 @@ class QuestionCard extends Component {
         </IconButton>
         <Menu
           anchorEl={this.state.anchorEl}
-          disableAutoFocusItem={true}
+          disableAutoFocusItem
           id="question-admin-menu"
           onClick={this.handleClose}
           onClose={this.handleClose}

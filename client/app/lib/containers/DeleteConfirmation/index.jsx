@@ -6,7 +6,7 @@ import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 const DeleteConfirmation = ({ dispatch, deleteConfirmation }) => (
   <ConfirmationDialog
-    confirmDelete={true}
+    confirmDelete
     {...deleteConfirmation}
     onCancel={() => dispatch(resetDeleteConfirmation())}
   />

@@ -56,7 +56,7 @@ const AchievementAward: FC<Props> = (props) => {
   return (
     <>
       <Dialog
-        fullWidth={true}
+        fullWidth
         maxWidth="lg"
         onClose={(): void => {
           if (isDirty) {
@@ -91,7 +91,7 @@ const AchievementAward: FC<Props> = (props) => {
         </DialogContent>
       </Dialog>
       <ConfirmationDialog
-        confirmDiscard={true}
+        confirmDiscard
         onCancel={(): void => setDiscardDialogOpen(false)}
         onConfirm={(): void => {
           setDiscardDialogOpen(false);

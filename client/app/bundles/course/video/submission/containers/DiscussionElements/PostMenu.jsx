@@ -44,7 +44,7 @@ const PostMenu = (props) => {
       </IconButton>
       <Menu
         anchorEl={anchorEl}
-        disableAutoFocusItem={true}
+        disableAutoFocusItem
         id="post-menu"
         onClick={handleClose}
         onClose={handleClose}

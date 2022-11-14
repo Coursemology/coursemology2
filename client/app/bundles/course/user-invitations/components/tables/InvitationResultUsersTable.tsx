@@ -115,10 +115,10 @@ const InvitationResultUsersTable: FC<Props> = (props) => {
     <DataTable
       columns={columns}
       data={users}
-      includeRowNumber={true}
+      includeRowNumber
       options={options}
       title={title}
-      withMargin={true}
+      withMargin
     />
   );
 };

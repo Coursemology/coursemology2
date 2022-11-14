@@ -60,7 +60,7 @@ module.exports = {
         unnamedComponents: 'arrow-function',
       },
     ],
-    'react/jsx-boolean-value': ['error', 'always'],
+    'react/jsx-boolean-value': ['error', 'never'],
     'react/jsx-props-no-spreading': 'off',
     'react/jsx-sort-props': 'error',
     'react/no-array-index-key': 'warn',

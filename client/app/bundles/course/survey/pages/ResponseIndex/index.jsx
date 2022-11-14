@@ -193,7 +193,7 @@ const ResponseIndex = (props) => {
               response.canUnsubmit ? (
                 <UnsubmitButton
                   color={palette.submissionIcon.unsubmit}
-                  isIcon={true}
+                  isIcon
                   responseId={response.id}
                 />
               ) : null}

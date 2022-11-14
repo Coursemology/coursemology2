@@ -31,11 +31,11 @@ const ForumPostResponse = (props) => {
           <FormRichTextField
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
-            multiline={true}
+            multiline
             renderIf={!readOnly && question.hasTextResponse}
             variant="standard"
           />

@@ -89,9 +89,9 @@ const ForumTopicForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 label={t(translations.title)}
-                required={true}
+                required
                 variant="filled"
               />
             )}
@@ -104,12 +104,12 @@ const ForumTopicForm: FC<Props> = (props) => {
               render={({ field, fieldState }): JSX.Element => (
                 <FormRichTextField
                   disabled={formState.isSubmitting}
-                  disableMargins={true}
+                  disableMargins
                   field={field}
                   fieldState={fieldState}
-                  fullWidth={true}
+                  fullWidth
                   label={t(translations.text)}
-                  required={true}
+                  required
                 />
               )}
             />

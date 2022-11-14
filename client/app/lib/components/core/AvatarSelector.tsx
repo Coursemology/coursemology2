@@ -99,7 +99,7 @@ const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
             accept={IMAGE_MIMES_STRING}
             className="hidden"
             disabled={props.disabled}
-            hidden={true}
+            hidden
             onChange={selectImage}
             type="file"
           />

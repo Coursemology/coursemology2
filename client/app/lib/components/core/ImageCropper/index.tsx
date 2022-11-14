@@ -79,7 +79,7 @@ const ImageCropper = (props: ImageCropperProps): JSX.Element => {
         aspect={props.aspect}
         circularCrop={props.circular}
         crop={crop}
-        keepSelection={true}
+        keepSelection
         onChange={(_, percentCrop): void => setCrop(percentCrop)}
         onComplete={setCompletedCrop}
         ruleOfThirds={props.grids ?? true}

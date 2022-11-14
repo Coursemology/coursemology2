@@ -67,7 +67,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
             {new Date(subfolder.effectiveStartAt).getTime() > Date.now() &&
               !isCurrentCourseStudent && (
                 <Tooltip
-                  arrow={true}
+                  arrow
                   placement="top"
                   title={intl.formatMessage(
                     translations.subfolderBlockedTooltip,

@@ -395,10 +395,10 @@ const GroupUserManager = ({
             />
             <GroupUserManagerList
               colourMap={colours}
-              isChecked={true}
+              isChecked
               onChangeDropdown={onChangeRole}
               onCheck={onUncheck}
-              showDropdown={true}
+              showDropdown
               staff={selectedStaff}
               students={selectedStudents}
             />

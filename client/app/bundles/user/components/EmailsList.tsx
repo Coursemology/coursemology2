@@ -119,7 +119,7 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
             onClick={(): void =>
               props.onSetEmailAsPrimary?.(setPrimaryUrl!, email.email)
             }
-            opensInNewTab={true}
+            opensInNewTab
             variant="body2"
           >
             {t(translations.setEmailAsPrimary)}
@@ -142,7 +142,7 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
               onClick={(): void =>
                 props.onResendConfirmationEmail?.(confirmationUrl!, email.email)
               }
-              opensInNewTab={true}
+              opensInNewTab
               variant="body2"
             >
               {t(translations.resendConfirmationEmail)}

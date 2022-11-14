@@ -62,7 +62,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
       dirty={Boolean(stagedLogo)}
       disabled={props.disabled}
       emitsVia={props.emitsVia}
-      headsUp={true}
+      headsUp
       initialValues={props.data}
       onReset={(): void => setStagedLogo(undefined)}
       onSubmit={handleSubmit}
@@ -70,7 +70,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
     >
       {(control, watch): JSX.Element => (
         <>
-          <Section sticksToNavbar={true} title={t(translations.courseSettings)}>
+          <Section sticksToNavbar title={t(translations.courseSettings)}>
             <Controller
               control={control}
               name="title"
@@ -79,7 +79,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                   disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
-                  fullWidth={true}
+                  fullWidth
                   label={t(translations.courseName)}
                   placeholder={t(translations.courseNamePlaceholder)}
                   variant="filled"
@@ -94,10 +94,10 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                 render={({ field, fieldState }): JSX.Element => (
                   <FormRichTextField
                     disabled={props.disabled}
-                    disableMargins={true}
+                    disableMargins
                     field={field}
                     fieldState={fieldState}
-                    fullWidth={true}
+                    fullWidth
                     placeholder={t(translations.courseDescriptionPlaceholder)}
                   />
                 )}
@@ -115,7 +115,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             <InfoLabel label={t(translations.imageFormatsInfo)} />
           </Section>
 
-          <Section sticksToNavbar={true} title={t(translations.publicity)}>
+          <Section sticksToNavbar title={t(translations.publicity)}>
             <Controller
               control={control}
               name="published"
@@ -144,9 +144,9 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             />
           </Section>
 
-          <Section sticksToNavbar={true} title={t(translations.timeSettings)}>
-            <Grid columnSpacing={1} container={true} direction="row">
-              <Grid item={true} xs={true}>
+          <Section sticksToNavbar title={t(translations.timeSettings)}>
+            <Grid columnSpacing={1} container direction="row">
+              <Grid item xs>
                 <Controller
                   control={control}
                   name="startAt"
@@ -162,7 +162,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                 />
               </Grid>
 
-              <Grid item={true} xs={true}>
+              <Grid item xs>
                 <Controller
                   control={control}
                   name="endAt"
@@ -188,7 +188,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                   field={field}
                   fieldState={fieldState}
                   label={t(translations.timeZone)}
-                  native={true}
+                  native
                   options={timeZonesOptions}
                   variant="filled"
                 />
@@ -196,7 +196,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             />
           </Section>
 
-          <Section sticksToNavbar={true} title={t(translations.courseDelivery)}>
+          <Section sticksToNavbar title={t(translations.courseDelivery)}>
             <Controller
               control={control}
               name="gamified"
@@ -285,7 +285,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                     disabled={props.disabled}
                     field={field}
                     fieldState={fieldState}
-                    fullWidth={true}
+                    fullWidth
                     label={t(translations.daysInAdvance)}
                     type="number"
                     variant="filled"
@@ -296,7 +296,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
           </Section>
 
           <Section
-            sticksToNavbar={true}
+            sticksToNavbar
             title={t(translations.deleteCourse)}
             titleColor="error"
           >

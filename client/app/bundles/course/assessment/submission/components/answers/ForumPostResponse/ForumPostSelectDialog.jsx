@@ -228,7 +228,7 @@ export default class ForumPostSelectDialog extends Component {
 
     return (
       <Dialog
-        fullWidth={true}
+        fullWidth
         maxWidth="md"
         onClose={() => this.props.setIsVisible(false)}
         open={this.props.isVisible}

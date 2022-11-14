@@ -70,7 +70,7 @@ const VideoEdit: FC<Props> = (props) => {
   return (
     <VideoForm
       childrenExists={video.videoChildrenExist}
-      editing={true}
+      editing
       initialValues={initialValues}
       onClose={onClose}
       onSubmit={onSubmit}

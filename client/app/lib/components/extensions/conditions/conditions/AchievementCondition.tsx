@@ -78,14 +78,14 @@ const AchievementConditionForm = (
         render={({ field, fieldState: { error } }): JSX.Element => (
           <Autocomplete
             {...field}
-            disableClearable={true}
+            disableClearable
             filterOptions={createFilterOptions({
               stringify: (option) => {
                 const achievement = achievements[parseInt(option, 10)];
                 return `${achievement.title} ${achievement.description}`;
               },
             })}
-            fullWidth={true}
+            fullWidth
             getOptionLabel={(id): string =>
               achievements[parseInt(id, 10)]?.title ?? ''
             }
@@ -154,7 +154,7 @@ const AchievementCondition = (
   return (
     <Preload
       onErrorDo={props.onClose}
-      render={<LoadingIndicator bare={true} className="p-2" fit={true} />}
+      render={<LoadingIndicator bare className="p-2" fit />}
       while={fetchAchievements}
     >
       {(data): JSX.Element => (

@@ -308,7 +308,7 @@ const CoursesTable: FC<Props> = (props) => {
           )}
         </Typography>
       }
-      withMargin={true}
+      withMargin
     />
   );
 };

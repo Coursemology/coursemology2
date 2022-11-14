@@ -180,8 +180,8 @@ const DisbursementForm: FC<Props> = (props) => {
     <>
       <Autocomplete
         className="filter-group max-w-lg"
-        clearOnEscape={true}
-        disablePortal={true}
+        clearOnEscape
+        disablePortal
         getOptionLabel={(option): string => option.name}
         isOptionEqualToValue={(option, val): boolean =>
           option.name === val.name
@@ -202,19 +202,14 @@ const DisbursementForm: FC<Props> = (props) => {
         <form
           encType="multipart/form-data"
           id="disbursement-form"
-          noValidate={true}
+          noValidate
           onSubmit={handleSubmit((data) => {
             onFormSubmit(data);
           })}
         >
           <ErrorText errors={errors} />
-          <Grid
-            columnSpacing={2}
-            container={true}
-            direction="row"
-            rowSpacing={2}
-          >
-            <Grid item={true} xs={true}>
+          <Grid columnSpacing={2} container direction="row" rowSpacing={2}>
+            <Grid item xs>
               <Controller
                 control={control}
                 name="reason"
@@ -223,18 +218,18 @@ const DisbursementForm: FC<Props> = (props) => {
                     className="experience_points_disbursement_reason"
                     field={field}
                     fieldState={fieldState}
-                    fullWidth={true}
+                    fullWidth
                     InputLabelProps={{
                       shrink: true,
                     }}
                     label={<FormattedMessage {...translations.reason} />}
-                    required={true}
+                    required
                     variant="standard"
                   />
                 )}
               />
             </Grid>
-            <Grid item={true}>
+            <Grid item>
               <Button
                 key="disbursement-form-submit-button"
                 className="general-btn-submit"

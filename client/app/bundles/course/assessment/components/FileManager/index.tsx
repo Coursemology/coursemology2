@@ -140,7 +140,7 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
           <InfoLabel
             label={messagesProps.intl.formatMessage(t.studentCannotSeeFiles)}
             marginTop={1}
-            warning={true}
+            warning
           />
         )}
       </>

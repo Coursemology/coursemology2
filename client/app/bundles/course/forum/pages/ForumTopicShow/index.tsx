@@ -83,8 +83,8 @@ const ForumTopicShow: FC = () => {
     forumPageHeaderTitle = forumTopic.title;
     headerToolbars.push(
       <ForumTopicManagementButtons
-        navigateToIndexAfterDelete={true}
-        navigateToShowAfterUpdate={true}
+        navigateToIndexAfterDelete
+        navigateToShowAfterUpdate
         topic={forumTopic}
       />,
     );

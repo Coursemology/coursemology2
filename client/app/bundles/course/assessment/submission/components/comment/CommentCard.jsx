@@ -205,7 +205,7 @@ export default class CommentCard extends Component {
         </div>
         <div style={styles.commentContent}>{this.renderCommentContent()}</div>
         <ConfirmationDialog
-          confirmDelete={true}
+          confirmDelete
           message={<FormattedMessage {...translations.deleteConfirmation} />}
           onCancel={() => this.setState({ deleteConfirmation: false })}
           onConfirm={() => this.onConfirmDelete()}

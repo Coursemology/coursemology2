@@ -34,7 +34,7 @@ class AchievementsListing extends Component {
     return (
       <FormControlLabel
         key={`achievement_${achievement.id}`}
-        control={<Checkbox checked={true} />}
+        control={<Checkbox checked />}
         label={
           <span style={{ display: 'flex', alignItems: 'centre' }}>
             <TypeBadge itemType={duplicableItemTypes.ACHIEVEMENT} />
@@ -70,7 +70,7 @@ class AchievementsListing extends Component {
 
     return (
       <>
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage
             {...defaultComponentTitles.course_achievements_component}
           />

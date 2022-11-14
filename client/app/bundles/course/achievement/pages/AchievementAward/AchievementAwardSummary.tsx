@@ -103,8 +103,8 @@ const AchievementAwardSummary: FC<Props> = (props) => {
   ];
 
   return (
-    <Grid container={true} spacing={1}>
-      <Grid item={true} xs={6}>
+    <Grid container spacing={1}>
+      <Grid item xs={6}>
         <DataTable
           columns={awardedTableColumns}
           data={awardedUsers}
@@ -112,7 +112,7 @@ const AchievementAwardSummary: FC<Props> = (props) => {
           title={`Awarded Students (${awardedUsers.length})`}
         />
       </Grid>
-      <Grid item={true} xs={6}>
+      <Grid item xs={6}>
         <DataTable
           columns={removedTableColumns}
           data={removedUsers}

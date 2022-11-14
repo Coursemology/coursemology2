@@ -133,7 +133,7 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
                     label: t(translations.administrator),
                   },
                 ]}
-                shrink={true}
+                shrink
                 type="string"
               />
             )}
@@ -147,7 +147,7 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -165,7 +165,7 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
@@ -183,7 +183,7 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
