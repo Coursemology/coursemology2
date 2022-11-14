@@ -22,9 +22,13 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
   const [failed, toggleFailed] = useToggle();
 
   useEffect(() => {
+    let ignore = false;
+
     props
       .while()
-      .then(setData)
+      .then((result) => {
+        if (!ignore) setData(result);
+      })
       .catch((error: AxiosError) => {
         toggleFailed();
         props.onErrorDo?.(error.response?.data);
@@ -33,6 +37,10 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
             props.onErrorToast ?? t(messagesTranslations.fetchingError),
           );
       });
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
   if (failed)
