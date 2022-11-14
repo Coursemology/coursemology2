@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import actionTypes from '../constants/programmingQuestionConstants';
 
-const headerType = 'application/json';
+const HEADER_TYPE = 'application/json';
 
 export function updateProgrammingQuestion(field, newValue) {
   return {
@@ -92,7 +92,7 @@ function fetchImportResult(redirectAssessment, successMessage, failureMessage) {
   return (dispatch) => {
     axios
       .get('', {
-        headers: { Accept: headerType },
+        headers: { Accept: HEADER_TYPE },
       })
       .then((response) => {
         const {
@@ -128,7 +128,7 @@ function submitFormEvaluate(
 
     axios
       .get(importJobUrl, {
-        headers: { Accept: headerType },
+        headers: { Accept: HEADER_TYPE },
       })
       .then((response) => {
         const status = response.data.status;
@@ -190,7 +190,7 @@ export function submitForm(url, method, data, failureMessage) {
       method,
       url,
       data,
-      headers: { Accept: headerType },
+      headers: { Accept: HEADER_TYPE },
     })
       .then((response) => {
         const {
