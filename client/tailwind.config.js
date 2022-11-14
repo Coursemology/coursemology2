@@ -11,6 +11,12 @@ module.exports = {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      transitionProperty: {
+        position: 'opacity, left, right, top, bottom, visibility',
+        margin: 'margin, margin-left, margin-right, margin-top, margin-bottom',
+        outline:
+          'outline, outline-width, outline-style, outline-color, outline-offset',
+      },
       animation: {
         shake: 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
       },

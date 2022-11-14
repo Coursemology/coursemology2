@@ -3,7 +3,7 @@ import { mount } from 'enzyme';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
 import storeCreator from '../../../store';
-import AssessmentIndex from '../index';
+import AssessmentIndex from '../NewAssessmentFormButton';
 
 describe('<AssessmentIndex />', () => {
   it('renders the index page', async () => {

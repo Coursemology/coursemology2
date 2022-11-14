@@ -20,9 +20,9 @@ import * as actions from '../../actions';
 import AssessmentForm from '../../components/AssessmentForm';
 import actionTypes from '../../constants';
 
-import translations from './translations.intl';
+import translations from './translations';
 
-class PopupDialog extends Component {
+class NewAssessmentFormButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -136,13 +136,14 @@ class PopupDialog extends Component {
     return (
       <>
         <Button
-          color="primary"
+          className="bg-white"
           disabled={disabled}
           onClick={this.handleOpen}
-          variant="contained"
+          variant="outlined"
         >
           {intl.formatMessage(translations.newAssessment)}
         </Button>
+
         <Dialog
           disableEnforceFocus
           maxWidth="lg"
@@ -168,6 +169,7 @@ class PopupDialog extends Component {
           </DialogContent>
           <DialogActions>{formActions}</DialogActions>
         </Dialog>
+
         <ConfirmationDialog
           confirmDiscard
           onCancel={() =>
@@ -178,28 +180,27 @@ class PopupDialog extends Component {
           }
           open={confirmationDialogOpen}
         />
+
         <NotificationBar notification={notification} />
       </>
     );
   }
 }
 
-PopupDialog.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  intl: PropTypes.object,
-  // If the gamification feature is enabled in the course.
-  gamified: PropTypes.bool,
-  // If randomization is allowed for assessments in the current course
-  randomizationAllowed: PropTypes.bool,
+NewAssessmentFormButton.propTypes = {
   categoryId: PropTypes.number.isRequired,
   tabId: PropTypes.number.isRequired,
-  pristine: PropTypes.bool,
-  disabled: PropTypes.bool,
+  gamified: PropTypes.bool,
+  randomizationAllowed: PropTypes.bool,
+
+  notification: notificationShape,
+  dispatch: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
   confirmationDialogOpen: PropTypes.bool.isRequired,
-  notification: notificationShape,
+  disabled: PropTypes.bool,
+  intl: PropTypes.object,
 };
 
 export default connect((state) => ({
   ...state.formDialog,
-}))(injectIntl(PopupDialog));
+}))(injectIntl(NewAssessmentFormButton));
