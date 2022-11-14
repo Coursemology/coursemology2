@@ -41,7 +41,7 @@ class VideosSelector extends Component {
 
     if (tabs.length < 1) {
       return (
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noItems} />
         </ListSubheader>
       );

@@ -85,11 +85,11 @@ const InvitationResultDialog: FC<Props> = (props) => {
   return (
     <Dialog
       className="top-10"
-      disableEscapeKeyDown={true}
-      fullWidth={true}
+      disableEscapeKeyDown
+      fullWidth
       maxWidth="lg"
       onClose={handleDialogClose}
-      open={true}
+      open
     >
       <DialogTitle>{`${intl.formatMessage(translations.header)}`}</DialogTitle>
       <DialogContent>

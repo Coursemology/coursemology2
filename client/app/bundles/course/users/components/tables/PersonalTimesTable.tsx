@@ -77,7 +77,7 @@ const PersonalTimesTable: FC<Props> = (props) => {
 
   const renderRow = (item: PersonalTimeMiniEntity): JSX.Element => {
     return (
-      <TableRow key={item.id} hover={true}>
+      <TableRow key={item.id} hover>
         <TableCell>
           {getIcon(item)}
           {getLink(item)}

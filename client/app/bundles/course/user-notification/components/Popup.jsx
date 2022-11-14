@@ -30,7 +30,7 @@ const Popup = (props) => {
   );
 
   return (
-    <Dialog maxWidth="xl" onClose={onDismiss} open={true}>
+    <Dialog maxWidth="xl" onClose={onDismiss} open>
       <DialogTitle style={styles.centralise}>{title}</DialogTitle>
       <DialogContent style={{ ...styles.dialog, ...styles.centralise }}>
         {children}

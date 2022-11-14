@@ -118,14 +118,14 @@ class Duplication extends Component {
 
     if (!modesAllowed || modesAllowed.length < 1) {
       return (
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.duplicationDisabled} />
         </ListSubheader>
       );
     }
     if (!enabledComponents || enabledComponents.length < 1) {
       return (
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noComponentsEnabled} />
         </ListSubheader>
       );
@@ -182,7 +182,7 @@ class Duplication extends Component {
           selectedCourseId={sourceCourse.id}
         />
         <DateTimePicker
-          disabled={true}
+          disabled
           label={intl.formatMessage(translations.startAt)}
           name="start_at"
           value={sourceCourse.start_at}

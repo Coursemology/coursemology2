@@ -85,9 +85,9 @@ const ListItemLink = (props: ListItemLinkProps): JSX.Element => {
   return (
     <li>
       <ListItem
-        button={true}
+        button
         component={Link}
-        disablePadding={true}
+        disablePadding
         onClick={callback}
         style={{
           border: 'none',
@@ -126,14 +126,14 @@ const InstanceAdminSidebar: FC<Props> = (props) => {
 
     return (
       <Grid
-        container={true}
+        container
         flexDirection="column"
         justifyContent="space-between"
         style={{ height: '100vh', backgroundColor }}
       >
-        <Grid item={true}>
+        <Grid item>
           <List style={{ marginTop: '60px' }}>
-            <ListItem button={true} onClick={handleExpandClick}>
+            <ListItem button onClick={handleExpandClick}>
               <ListItemIcon sx={{ minWidth: '32px' }}>
                 {isExpanded ? (
                   <KeyboardDoubleArrowLeft />

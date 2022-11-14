@@ -130,7 +130,7 @@ const ForumDisbursementForm: FC<Props> = (props) => {
       <form
         encType="multipart/form-data"
         id="forum-form"
-        noValidate={true}
+        noValidate
         onSubmit={handleSubmit((data) => {
           const forumData: ForumDisbursementFormData = {
             ...filters,
@@ -141,8 +141,8 @@ const ForumDisbursementForm: FC<Props> = (props) => {
         style={{ display: forumUsers.length === 0 ? 'none' : 'contents' }}
       >
         <ErrorText errors={errors} />
-        <Grid columnSpacing={2} container={true} direction="row" rowSpacing={2}>
-          <Grid item={true} xs={true}>
+        <Grid columnSpacing={2} container direction="row" rowSpacing={2}>
+          <Grid item xs>
             <Controller
               control={control}
               name="reason"
@@ -151,18 +151,18 @@ const ForumDisbursementForm: FC<Props> = (props) => {
                   className="forum_disbursement_reason"
                   field={field}
                   fieldState={fieldState}
-                  fullWidth={true}
+                  fullWidth
                   InputLabelProps={{
                     shrink: true,
                   }}
                   label={<FormattedMessage {...translations.reason} />}
-                  required={true}
+                  required
                   variant="standard"
                 />
               )}
             />
           </Grid>
-          <Grid item={true}>
+          <Grid item>
             <Button
               key="forum-form-submit-button"
               className="forum-btn-submit"

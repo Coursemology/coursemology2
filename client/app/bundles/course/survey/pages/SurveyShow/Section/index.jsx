@@ -107,7 +107,7 @@ class Section extends Component {
 
         <CardContent>
           {section.questions.length < 1 ? (
-            <ListSubheader disableSticky={true}>
+            <ListSubheader disableSticky>
               <FormattedMessage {...translations.noQuestions} />
             </ListSubheader>
           ) : null}

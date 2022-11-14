@@ -55,8 +55,8 @@ describe('<SingleFileInput />', () => {
             defaultMessage: 'File attachment required.',
           },
         }}
-        isNotBadge={true}
-        required={true}
+        isNotBadge
+        required
       />,
       buildContextOptions(),
     );

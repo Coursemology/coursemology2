@@ -143,8 +143,8 @@ const ForumShow: FC = () => {
       <ForumManagementButtons
         disabled={isMarking}
         forum={forum}
-        navigateToIndexAfterDelete={true}
-        navigateToShowAfterUpdate={true}
+        navigateToIndexAfterDelete
+        navigateToShowAfterUpdate
       />,
     );
   }

@@ -79,9 +79,9 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
     return (
       <Grid
         className={styles.userStatsContainer}
-        container={true}
+        container
         direction="row"
-        item={true}
+        item
         justifyContent={{ xs: 'center', sm: 'start' }}
       >
         {user.level !== undefined && (
@@ -120,16 +120,16 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
     <Card>
       <CardContent>
         <Grid
-          container={true}
+          container
           direction="row"
           flexWrap={{ xs: 'wrap', sm: 'nowrap' }}
           spacing={{ xs: 1, sm: 4 }}
         >
           <Grid
             alignItems="center"
-            container={true}
+            container
             direction="column"
-            item={true}
+            item
             sm="auto"
             xs={12}
           >
@@ -137,9 +137,9 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
           </Grid>
           <Grid
             alignItems={{ xs: 'center', sm: 'start' }}
-            container={true}
+            container
             direction="column"
-            item={true}
+            item
           >
             <Typography variant="h4">{user.name}</Typography>
             <Typography variant="body1">

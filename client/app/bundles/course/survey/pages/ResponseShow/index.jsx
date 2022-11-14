@@ -59,10 +59,10 @@ class ResponseShow extends Component {
     return (
       <>
         {this.renderSubmissionInfo()}
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...surveyTranslations.questions} />
         </ListSubheader>
-        <ResponseForm readOnly={true} {...{ response, flags, initialValues }} />
+        <ResponseForm readOnly {...{ response, flags, initialValues }} />
       </>
     );
   }

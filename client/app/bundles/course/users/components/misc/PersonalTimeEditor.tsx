@@ -203,7 +203,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
   if (!isCreating) {
     return (
       <TableCell colSpan={4}>
-        <Grid alignItems="center" container={true} flexDirection="column">
+        <Grid alignItems="center" container flexDirection="column">
           <LoadingButton
             loading={isCreating}
             onClick={handleCreate}
@@ -220,7 +220,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
   return (
     <>
       <Tooltip
-        arrow={true}
+        arrow
         placement="top"
         title={intl.formatMessage(translations.fixedDescription)}
       >
@@ -268,7 +268,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
       <TableCell>
         <Grid
           alignItems="center"
-          container={true}
+          container
           flexDirection="row"
           flexWrap="nowrap"
         >
@@ -313,7 +313,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
           <form
             encType="multipart/form-data"
             id={`personal-time-form-${item.id}-${item.personalTimeId}`}
-            noValidate={true}
+            noValidate
             onSubmit={handleSubmit((data) => onSubmit(data))}
           />
         </Grid>

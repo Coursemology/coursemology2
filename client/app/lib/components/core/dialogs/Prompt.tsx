@@ -61,7 +61,7 @@ const Prompt = (props: PromptProps): JSX.Element => {
   };
 
   return (
-    <Dialog fullWidth={true} onClose={handleClose} open={props.open ?? false}>
+    <Dialog fullWidth onClose={handleClose} open={props.open ?? false}>
       {props.title && <DialogTitle>{props.title}</DialogTitle>}
 
       {props.children && (

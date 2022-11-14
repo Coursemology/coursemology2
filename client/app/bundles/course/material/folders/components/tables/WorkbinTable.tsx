@@ -114,8 +114,8 @@ const WorkbinTable: FC<Props> = (props) => {
 
     return (
       <Button
-        disableFocusRipple={true}
-        disableRipple={true}
+        disableFocusRipple
+        disableRipple
         endIcon={endIcon}
         onClick={(): void => {
           sort(columnName);

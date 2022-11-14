@@ -11,16 +11,8 @@ const SubmissionsLayout = () => {
 
   return (
     <Routes>
-      <Route
-        element={<SubmissionsIndex />}
-        exact={true}
-        path={submissionsIndex}
-      />
-      <Route
-        element={<SubmissionEditIndex />}
-        exact={true}
-        path={submissionEdit}
-      />
+      <Route element={<SubmissionsIndex />} exact path={submissionsIndex} />
+      <Route element={<SubmissionEditIndex />} exact path={submissionEdit} />
     </Routes>
   );
 };

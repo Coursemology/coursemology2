@@ -155,7 +155,7 @@ class LessonPlanSettings extends Component {
 
     if (assessmentItemSettings.length < 1) {
       return (
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noLessonPlanItems} />
         </ListSubheader>
       );
@@ -206,7 +206,7 @@ class LessonPlanSettings extends Component {
 
     if (componentItemSettings.length < 1) {
       return (
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noLessonPlanItems} />
         </ListSubheader>
       );

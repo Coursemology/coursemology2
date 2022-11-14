@@ -55,9 +55,9 @@ const QuestionFormDeletedOptions = (props) => {
   const renderWidget = () => {
     let widget = null;
     if (multipleChoice) {
-      widget = <Radio disabled={true} style={styles.widget} />;
+      widget = <Radio disabled style={styles.widget} />;
     } else if (multipleResponse) {
-      widget = <Checkbox disabled={true} style={styles.widget} />;
+      widget = <Checkbox disabled style={styles.widget} />;
     }
     return widget;
   };

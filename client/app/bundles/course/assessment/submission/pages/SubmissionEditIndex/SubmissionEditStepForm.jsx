@@ -523,7 +523,7 @@ const SubmissionEditStepForm = (props) => {
       <Stepper
         activeStep={stepIndex}
         connector={<div />}
-        nonLinear={true}
+        nonLinear
         style={{ justifyContent: 'center', flexWrap: 'wrap', padding: 24 }}
       >
         {questionIds.map((questionId, index) => {
@@ -576,7 +576,7 @@ const SubmissionEditStepForm = (props) => {
           <form
             encType="multipart/form-data"
             id={formNames.SUBMISSION}
-            noValidate={true}
+            noValidate
             onSubmit={handleSubmit((data) => onSubmit({ ...data }))}
           >
             <ErrorText errors={errors} />

@@ -193,7 +193,7 @@ class VideoPlayer extends Component {
           }}
           playbackRate={this.props.playbackRate}
           playing={isPlayingState(this.props.playerState)}
-          playsinline={true}
+          playsinline
           progressInterval={videoDefaults.progressUpdateFrequencyMs}
           style={reactPlayerStyle}
           url={this.props.videoUrl}

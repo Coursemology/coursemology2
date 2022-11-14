@@ -45,7 +45,7 @@ const LevelCondition = (
           <FormTextField
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             label={t(translations.level)}
             type="number"
             variant="filled"

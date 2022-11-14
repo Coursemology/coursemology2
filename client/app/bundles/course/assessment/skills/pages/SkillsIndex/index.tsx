@@ -150,8 +150,8 @@ const SkillsIndex: FC<Props> = (props) => {
         <LoadingIndicator />
       ) : (
         <>
-          <Grid columnGap={0.2} container={true} direction="row">
-            <Grid id="skill-branches" item={true} xs={true}>
+          <Grid columnGap={0.2} container direction="row">
+            <Grid id="skill-branches" item xs>
               <SkillsTable
                 addClick={newSkillBranchClick}
                 addDisabled={!skillPermissions.canCreateSkill}
@@ -163,7 +163,7 @@ const SkillsIndex: FC<Props> = (props) => {
                 tableType={TableEnum.SkillBranches}
               />
             </Grid>
-            <Grid id="skills" item={true} xs={true}>
+            <Grid id="skills" item xs>
               <SkillsTable
                 addClick={newSkillClick}
                 addDisabled={!skillPermissions.canCreateSkill}

@@ -60,7 +60,7 @@ const FolderEdit: FC<Props> = (props) => {
 
   return (
     <FolderForm
-      editing={true}
+      editing
       initialValues={initialValues}
       onClose={onClose}
       onSubmit={onSubmit}

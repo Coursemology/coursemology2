@@ -38,14 +38,14 @@ const Toolbar = (props: ToolbarProps): JSX.Element => {
   };
 
   return (
-    <Grid container={true} spacing={1}>
-      <Grid item={true}>
+    <Grid container spacing={1}>
+      <Grid item>
         <Button size="small" startIcon={<AddIcon />} variant="outlined">
           {intl.formatMessage(t.addFiles)}
           <input
             className="absolute top-0 bottom-0 right-0 left-0 cursor-pointer opacity-0"
             data-testid="FileInput"
-            multiple={true}
+            multiple
             onChange={handleFileInputChange}
             type="file"
           />
@@ -53,7 +53,7 @@ const Toolbar = (props: ToolbarProps): JSX.Element => {
       </Grid>
 
       {props.selectedRows && (
-        <Grid item={true}>
+        <Grid item>
           <Button
             color="error"
             onClick={handleDeleteFiles}

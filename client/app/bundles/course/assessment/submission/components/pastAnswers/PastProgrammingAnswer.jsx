@@ -14,12 +14,12 @@ export default class PastProgrammingAnswer extends Component {
         <ProgrammingImportEditor
           answerId={answer.id}
           questionId={answer.questionId}
-          viewHistory={true}
+          viewHistory
           {...{
             question,
           }}
         />
-        <TestCaseView answerId={answer.id} viewHistory={true} />
+        <TestCaseView answerId={answer.id} viewHistory />
       </div>
     );
   }
@@ -41,7 +41,7 @@ export default class PastProgrammingAnswer extends Component {
           content={content}
           fileId={file.id}
         />
-        <TestCaseView answerId={answer.id} viewHistory={true} />
+        <TestCaseView answerId={answer.id} viewHistory />
       </div>
     );
   }

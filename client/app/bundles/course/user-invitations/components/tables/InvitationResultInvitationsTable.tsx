@@ -123,10 +123,10 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
     <DataTable
       columns={columns}
       data={invitations}
-      includeRowNumber={true}
+      includeRowNumber
       options={options}
       title={title}
-      withMargin={true}
+      withMargin
     />
   );
 };

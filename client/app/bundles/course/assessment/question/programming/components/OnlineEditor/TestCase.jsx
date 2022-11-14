@@ -71,12 +71,12 @@ class TestCase extends Component {
       <TextField
         disabled={this.props.isLoading}
         error={!!test.getIn(['error', field])}
-        fullWidth={true}
+        fullWidth
         helperText={test.getIn(['error', field]) && placeholder}
         InputLabelProps={{
           shrink: true,
         }}
-        multiline={true}
+        multiline
         name={TestCase.getTestInputName(this.props.type, field)}
         onChange={(event) => {
           this.props.updateTestCase(

@@ -28,7 +28,7 @@ const styles = {
 const AvatarWithLabel: FC<Props> = (props: Props) => {
   return (
     <>
-      <Grid container={true} justifyContent="center">
+      <Grid container justifyContent="center">
         <Avatar
           alt={props.label}
           src={props.imageUrl}

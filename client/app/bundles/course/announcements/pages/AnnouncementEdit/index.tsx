@@ -80,7 +80,7 @@ const AnnouncementEdit: FC<Props> = (props) => {
   return (
     <AnnouncementForm
       canSticky={canSticky}
-      editing={true}
+      editing
       initialValues={initialValues}
       onClose={onClose}
       onSubmit={handleSubmit}

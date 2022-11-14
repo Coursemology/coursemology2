@@ -27,12 +27,12 @@ const FormMultiSelectField = (props) => {
     <Autocomplete
       {...field}
       disabled={disabled}
-      filterSelectedOptions={true}
-      fullWidth={true}
+      filterSelectedOptions
+      fullWidth
       getOptionLabel={(option) => option.title}
       isOptionEqualToValue={(option, val) => option.id === val.id}
       ListboxProps={{ style: styles.listboxStyle }}
-      multiple={true}
+      multiple
       onChange={(event, val) => {
         const selectedOptionIds = val.map((option) => option.id);
         field.onChange(selectedOptionIds);

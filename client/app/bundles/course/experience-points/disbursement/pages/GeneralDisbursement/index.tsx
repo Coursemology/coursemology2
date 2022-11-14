@@ -11,7 +11,7 @@ const GeneralDisbursement: FC = () => {
     getAllFilteredUserMiniEntities(state),
   );
   return (
-    <Grid item={true} xs={true}>
+    <Grid item xs>
       <DisbursementForm courseUsers={courseUsers} />
     </Grid>
   );

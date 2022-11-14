@@ -44,7 +44,7 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
         </TableHead>
         <TableBody>
           {courses.map((course) => (
-            <TableRow key={`course-${course.id}`} hover={true}>
+            <TableRow key={`course-${course.id}`} hover>
               <TableCell style={{ maxWidth: '120px' }}>
                 {course.createdAt}
               </TableCell>

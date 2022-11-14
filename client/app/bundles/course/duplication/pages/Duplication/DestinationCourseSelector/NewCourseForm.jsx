@@ -41,7 +41,7 @@ const NewCourseForm = (props) => {
   return (
     <form
       id="new-course-form"
-      noValidate={true}
+      noValidate
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
@@ -53,12 +53,12 @@ const NewCourseForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
             label={<FormattedMessage {...translations.newTitle} />}
-            required={true}
+            required
             variant="standard"
           />
         )}

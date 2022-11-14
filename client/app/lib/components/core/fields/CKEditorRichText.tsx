@@ -83,7 +83,7 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
           disabled={disabled}
           htmlFor={field}
           required={required}
-          shrink={true}
+          shrink
           style={{
             pointerEvents: 'none',
             color: disabled ? 'rgba(0, 0, 0, 0.3)' : textFieldLabelColor,

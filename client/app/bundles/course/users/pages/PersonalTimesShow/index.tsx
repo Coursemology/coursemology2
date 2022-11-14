@@ -180,13 +180,13 @@ const PersonalTimesShow: FC<Props> = (props) => {
           <Typography variant="h6">
             {intl.formatMessage(translations.courseUserHeader)}
           </Typography>
-          <Grid alignItems="flex-end" container={true} flexDirection="row">
+          <Grid alignItems="flex-end" container flexDirection="row">
             <SelectCourseUser initialUser={currentUser} />
             <TextField
               id="change-timeline"
               label="Timeline Algorithm"
               onChange={handleTimelineChange}
-              select={true}
+              select
               sx={{ minWidth: '300px', marginRight: '12px' }}
               value={timeline}
               variant="standard"

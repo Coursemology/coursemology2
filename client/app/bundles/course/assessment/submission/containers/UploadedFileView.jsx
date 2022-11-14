@@ -63,10 +63,10 @@ class VisibleUploadedFileView extends Component {
     return (
       <Chip
         key={attachment.id}
-        clickable={true}
+        clickable
         label={
           <a
-            download={true}
+            download
             href={VisibleUploadedFileView.buildAttachmentUrl(attachment)}
           >
             {attachment.name}

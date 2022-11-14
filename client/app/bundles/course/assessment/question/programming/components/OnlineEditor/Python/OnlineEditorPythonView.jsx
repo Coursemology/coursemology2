@@ -217,7 +217,7 @@ class OnlineEditorPythonView extends Component {
 
     return (
       <Accordion
-        defaultExpanded={true}
+        defaultExpanded
         style={{
           margin: 0,
         }}
@@ -275,7 +275,7 @@ class OnlineEditorPythonView extends Component {
 
     return (
       <Accordion
-        defaultExpanded={true}
+        defaultExpanded
         style={{
           margin: 0,
         }}
@@ -333,7 +333,7 @@ class OnlineEditorPythonView extends Component {
 
     return (
       <Accordion
-        defaultExpanded={true}
+        defaultExpanded
         style={{
           margin: 0,
         }}

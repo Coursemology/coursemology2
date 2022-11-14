@@ -96,7 +96,7 @@ const ScribingQuestionForm = (props) => {
     <form
       encType="multipart/form-data"
       id="scribing-question-form"
-      noValidate={true}
+      noValidate
       onSubmit={handleSubmit((newData) => onSubmit(newData, setError))}
     >
       <ErrorText errors={errors} />
@@ -108,7 +108,7 @@ const ScribingQuestionForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
@@ -125,7 +125,7 @@ const ScribingQuestionForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
@@ -142,7 +142,7 @@ const ScribingQuestionForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
@@ -174,7 +174,7 @@ const ScribingQuestionForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
@@ -182,7 +182,7 @@ const ScribingQuestionForm = (props) => {
               <FormattedMessage {...translations.maximumGradeFieldLabel} />
             }
             onWheel={(event) => event.currentTarget.blur()}
-            required={true}
+            required
             type="number"
             variant="standard"
           />
@@ -204,7 +204,7 @@ const ScribingQuestionForm = (props) => {
                 fieldState={fieldState}
                 label={<FormattedMessage {...translations.chooseFileButton} />}
                 previewComponent={ImagePreview}
-                required={true}
+                required
               />
             )}
           />

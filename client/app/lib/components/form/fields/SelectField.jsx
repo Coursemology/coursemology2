@@ -56,7 +56,7 @@ const FormSelectField = (props) => {
     <FormControl
       disabled={disabled}
       error={isError}
-      fullWidth={true}
+      fullWidth
       sx={{ margin: margin ?? styles.selectFieldStyle.margin }}
       variant={variant}
     >

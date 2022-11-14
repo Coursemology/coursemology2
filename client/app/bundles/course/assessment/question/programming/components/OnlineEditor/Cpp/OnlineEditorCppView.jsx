@@ -215,7 +215,7 @@ class OnlineEditorCppView extends Component {
 
     return (
       <Accordion
-        defaultExpanded={true}
+        defaultExpanded
         style={{
           margin: 0,
         }}
@@ -273,7 +273,7 @@ class OnlineEditorCppView extends Component {
 
     return (
       <Accordion
-        defaultExpanded={true}
+        defaultExpanded
         style={{
           margin: 0,
         }}
@@ -331,7 +331,7 @@ class OnlineEditorCppView extends Component {
 
     return (
       <Accordion
-        defaultExpanded={true}
+        defaultExpanded
         style={{
           margin: 0,
         }}

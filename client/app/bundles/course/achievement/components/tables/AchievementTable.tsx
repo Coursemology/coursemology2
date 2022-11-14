@@ -232,7 +232,7 @@ const AchievementTable: FC<Props> = (props) => {
       columns={columns}
       data={achievements}
       options={options}
-      withMargin={true}
+      withMargin
     />
   );
 };

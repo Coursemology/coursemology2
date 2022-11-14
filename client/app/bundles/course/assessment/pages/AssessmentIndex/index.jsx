@@ -144,7 +144,7 @@ class PopupDialog extends Component {
           {intl.formatMessage(translations.newAssessment)}
         </Button>
         <Dialog
-          disableEnforceFocus={true}
+          disableEnforceFocus
           maxWidth="lg"
           onClose={this.handleClose}
           open={visible}
@@ -161,7 +161,7 @@ class PopupDialog extends Component {
               emitsVia={(assessmentForm) => this.setState({ assessmentForm })}
               gamified={gamified}
               initialValues={initialValues}
-              modeSwitching={true}
+              modeSwitching
               onSubmit={this.onFormSubmit}
               randomizationAllowed={randomizationAllowed}
             />
@@ -169,7 +169,7 @@ class PopupDialog extends Component {
           <DialogActions>{formActions}</DialogActions>
         </Dialog>
         <ConfirmationDialog
-          confirmDiscard={true}
+          confirmDiscard
           onCancel={() =>
             dispatch({ type: actionTypes.ASSESSMENT_FORM_CONFIRM_CANCEL })
           }

@@ -50,7 +50,7 @@ let updateApi: jest.SpyInstance;
 const getComponent = (): JSX.Element => (
   <ProviderWrapper store={store}>
     {/* @ts-ignore until AssessmentEdit/index.jsx is fully typed */}
-    <AssessmentEdit initialValues={initialValues} modeSwitching={true} />
+    <AssessmentEdit initialValues={initialValues} modeSwitching />
   </ProviderWrapper>
 );
 

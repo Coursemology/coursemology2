@@ -137,7 +137,7 @@ export class VisibleTestCaseView extends Component {
         <a
           data-for="staff-only-output-stream"
           data-offset="{'left' : -8}"
-          data-tip={true}
+          data-tip
         >
           <i className="fa fa-exclamation-triangle" />
         </a>
@@ -154,7 +154,7 @@ export class VisibleTestCaseView extends Component {
         <a
           data-for="staff-only-test-cases"
           data-offset="{'left' : -8}"
-          data-tip={true}
+          data-tip
         >
           <i className="fa fa-exclamation-triangle" />
         </a>

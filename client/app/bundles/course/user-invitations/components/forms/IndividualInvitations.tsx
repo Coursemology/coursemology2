@@ -66,7 +66,7 @@ const IndividualInvitations: FC<Props> = (props) => {
       )}
 
       <Divider sx={{ margin: '12px 0px' }} />
-      <Grid alignItems="center" container={true}>
+      <Grid alignItems="center" container>
         <LoadingButton
           key="invite-users-individual-form-submit-button"
           className="btn-submit"

@@ -18,17 +18,13 @@ interface SectionProps {
 }
 
 const Section = (props: SectionProps): JSX.Element => (
-  <Container
-    className="mb-6"
-    disableGutters={true}
-    maxWidth={props.size ?? 'lg'}
-  >
-    <Grid container={true} spacing={2}>
+  <Container className="mb-6" disableGutters maxWidth={props.size ?? 'lg'}>
+    <Grid container spacing={2}>
       <Grid
         className={`lg:sticky lg:self-start ${
           props.sticksToNavbar ? 'lg:top-20' : 'lg:-top-6'
         }`}
-        item={true}
+        item
         lg={3}
         xs={12}
       >
@@ -47,7 +43,7 @@ const Section = (props: SectionProps): JSX.Element => (
 
       <Grid
         className={`space-y-5 ${props.contentClassName}`}
-        item={true}
+        item
         lg={9}
         xs={12}
       >

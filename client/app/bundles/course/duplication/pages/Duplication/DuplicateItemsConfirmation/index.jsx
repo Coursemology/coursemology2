@@ -80,7 +80,7 @@ class DuplicateItemsConfirmation extends Component {
 
     return (
       <>
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.destinationCourse} />
         </ListSubheader>
         <Card>

@@ -179,8 +179,8 @@ const CodaveriCommentCard = (props) => {
           {renderRating()}
           <TextField
             key={editPostIdentifier(id)}
-            fullWidth={true}
-            multiline={true}
+            fullWidth
+            multiline
             onChange={(event) => {
               handleChange(event.target.value);
             }}
@@ -255,7 +255,7 @@ const CodaveriCommentCard = (props) => {
       </div>
       <div style={styles.commentContent}>{renderCommentContent()}</div>
       <ConfirmationDialog
-        confirmDelete={true}
+        confirmDelete
         message={intl.formatMessage(translations.rejectConfirmation)}
         onCancel={() => setRejectConfirmation(false)}
         onConfirm={onConfirmReject}

@@ -36,7 +36,7 @@ class SurveysSelector extends Component {
 
     if (surveys.length < 1) {
       return (
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noItems} />
         </ListSubheader>
       );

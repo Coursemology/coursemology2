@@ -113,13 +113,13 @@ const FilterForm: FC<Props> = (props) => {
       className="forum-participation-search-panel"
       encType="multipart/form-data"
       id="filter-form"
-      noValidate={true}
+      noValidate
       onSubmit={handleSubmit((data) => onFormSubmit(data))}
       style={{ width: '100%' }}
     >
       <ErrorText errors={errors} />
-      <Grid columnSpacing={2} container={true} direction="row" rowSpacing={2}>
-        <Grid item={true} xs={true}>
+      <Grid columnSpacing={2} container direction="row" rowSpacing={2}>
+        <Grid item xs>
           <Controller
             control={control}
             name="startTime"
@@ -134,7 +134,7 @@ const FilterForm: FC<Props> = (props) => {
             )}
           />
         </Grid>
-        <Grid item={true} xs={true}>
+        <Grid item xs>
           <Controller
             control={control}
             name="endTime"
@@ -149,7 +149,7 @@ const FilterForm: FC<Props> = (props) => {
             )}
           />
         </Grid>
-        <Grid item={true} xs={true}>
+        <Grid item xs>
           <Controller
             control={control}
             name="weeklyCap"
@@ -157,23 +157,23 @@ const FilterForm: FC<Props> = (props) => {
               <FormTextField
                 className="weekly_cap"
                 disabled={isSearching}
-                disableMargins={true}
+                disableMargins
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 InputLabelProps={{
                   shrink: true,
                 }}
                 label={intl.formatMessage(translations.weeklyCap)}
                 onWheel={(event): void => event.currentTarget.blur()}
-                required={true}
+                required
                 type="number"
                 variant="standard"
               />
             )}
           />
         </Grid>
-        <Grid item={true}>
+        <Grid item>
           <LoadingButton
             key="filter-form-submit-button"
             className="filter-btn-submit"

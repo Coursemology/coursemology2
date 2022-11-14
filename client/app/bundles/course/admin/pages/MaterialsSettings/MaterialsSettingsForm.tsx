@@ -27,15 +27,12 @@ const MaterialsSettingsForm = (
     <Form
       disabled={props.disabled}
       emitsVia={props.emitsVia}
-      headsUp={true}
+      headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
     >
       {(control): JSX.Element => (
-        <Section
-          sticksToNavbar={true}
-          title={t(translations.materialsSettings)}
-        >
+        <Section sticksToNavbar title={t(translations.materialsSettings)}>
           <Controller
             control={control}
             name="title"
@@ -44,7 +41,7 @@ const MaterialsSettingsForm = (
                 disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 label={t(commonTranslations.title)}
                 variant="filled"
               />

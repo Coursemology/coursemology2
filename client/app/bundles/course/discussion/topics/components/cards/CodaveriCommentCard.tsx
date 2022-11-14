@@ -171,8 +171,8 @@ const CodaveriCommentCard: FC<Props> = (props) => {
           <TextField
             key={editPostIdentifier(post.id.toString())}
             disabled={isSaving}
-            fullWidth={true}
-            multiline={true}
+            fullWidth
+            multiline
             onChange={(event): void => {
               setEditValue(event.target.value);
             }}
@@ -285,7 +285,7 @@ const CodaveriCommentCard: FC<Props> = (props) => {
         {renderCommentContent()}
       </div>
       <ConfirmationDialog
-        confirmDelete={true}
+        confirmDelete
         disableCancelButton={isRejecting}
         disableConfirmButton={isRejecting}
         loadingConfirmButton={isRejecting}

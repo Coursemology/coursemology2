@@ -49,8 +49,8 @@ const SwitchableTextField = (props: SwitchableTextFieldProps): JSX.Element => {
 
   return (
     <TextField
-      autoFocus={true}
-      hiddenLabel={true}
+      autoFocus
+      hiddenLabel
       onKeyDown={handleKeyDown}
       size="small"
       value={props.value}

@@ -92,12 +92,12 @@ const NewPostDialog: FC<Props> = (props) => {
           disabled={isSubmitting}
           hideForm={(): void => setOpenDialog(false)}
           open={open}
-          skipConfirmation={true}
+          skipConfirmation
           submitForm={handleSubmit}
           title={t(translations.header)}
         >
           <CKEditorRichText
-            disableMargins={true}
+            disableMargins
             inputId={forumTopic.id.toString()}
             name="postNewText"
             onChange={(nextValue): void => setPost(nextValue)}

@@ -29,7 +29,7 @@ class AssessmentsListing extends Component {
     return (
       <IndentedCheckbox
         key={`assessment_${assessment.id}`}
-        checked={true}
+        checked
         indentLevel={2}
         label={
           <span style={{ display: 'flex', alignItems: 'centre' }}>
@@ -75,7 +75,7 @@ class AssessmentsListing extends Component {
   static renderCategoryRow(category) {
     return (
       <IndentedCheckbox
-        checked={true}
+        checked
         label={
           <span>
             <TypeBadge itemType={CATEGORY} />
@@ -89,7 +89,7 @@ class AssessmentsListing extends Component {
   static renderDefaultCategoryRow() {
     return (
       <IndentedCheckbox
-        disabled={true}
+        disabled
         label={<FormattedMessage {...translations.defaultCategory} />}
       />
     );
@@ -98,7 +98,7 @@ class AssessmentsListing extends Component {
   static renderDefaultTabRow() {
     return (
       <IndentedCheckbox
-        disabled={true}
+        disabled
         indentLevel={1}
         label={<FormattedMessage {...translations.defaultTab} />}
       />
@@ -108,7 +108,7 @@ class AssessmentsListing extends Component {
   static renderTabRow(tab) {
     return (
       <IndentedCheckbox
-        checked={true}
+        checked
         indentLevel={1}
         label={
           <span>
@@ -175,7 +175,7 @@ class AssessmentsListing extends Component {
 
     return (
       <>
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage
             {...defaultComponentTitles.course_assessments_component}
           />

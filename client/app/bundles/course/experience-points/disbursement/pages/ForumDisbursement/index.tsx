@@ -67,7 +67,7 @@ const ForumDisbursement: FC = () => {
 
   return (
     <>
-      <Grid item={true} xs={true}>
+      <Grid item xs>
         <Paper
           elevation={3}
           sx={{
@@ -87,7 +87,7 @@ const ForumDisbursement: FC = () => {
           />
         </Paper>
       </Grid>
-      <Grid item={true} xs={true}>
+      <Grid item xs>
         <ForumDisbursementForm
           filters={filters}
           forumUsers={forumUsers}
@@ -95,7 +95,7 @@ const ForumDisbursement: FC = () => {
         />
         {selectedForumPostUser && (
           <Dialog
-            fullWidth={true}
+            fullWidth
             maxWidth="lg"
             onClose={(): void => setSelectedForumPostUser(null)}
             open={!!forumPosts}

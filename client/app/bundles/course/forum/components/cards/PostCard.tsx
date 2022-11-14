@@ -228,7 +228,7 @@ const PostCard: FC<Props> = (props) => {
           <CardContent className="py-2">
             {isEditing ? (
               <CKEditorRichText
-                disableMargins={true}
+                disableMargins
                 inputId={postId.toString()}
                 name={`postEditText_${postId}`}
                 onChange={(nextValue): void => setEditValue(nextValue)}
@@ -278,8 +278,8 @@ const PostCard: FC<Props> = (props) => {
             <Card className="ml-20 mt-4">
               <CardContent className="pb-0">
                 <CKEditorRichText
-                  autofocus={true}
-                  disableMargins={true}
+                  autofocus
+                  disableMargins
                   inputId={postId.toString()}
                   name={`postReplyText_${postId}`}
                   onChange={(nextValue): void => setReplyValue(nextValue)}

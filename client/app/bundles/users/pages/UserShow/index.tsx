@@ -73,7 +73,7 @@ const UserShow: FC<Props> = (props) => {
     <>
       <Grid
         className="global-user-profile"
-        container={true}
+        container
         direction="row"
         flexWrap={{ xs: 'wrap', sm: 'nowrap' }}
         spacing={{ xs: 1, sm: 4 }}
@@ -81,9 +81,9 @@ const UserShow: FC<Props> = (props) => {
       >
         <Grid
           alignItems="center"
-          container={true}
+          container
           direction="column"
-          item={true}
+          item
           sm="auto"
           xs={12}
         >
@@ -91,9 +91,9 @@ const UserShow: FC<Props> = (props) => {
         </Grid>
         <Grid
           alignItems="center"
-          container={true}
+          container
           direction="row"
-          item={true}
+          item
           justifyContent={{ xs: 'center', sm: 'start' }}
         >
           <Typography variant="h4">{user.name}</Typography>

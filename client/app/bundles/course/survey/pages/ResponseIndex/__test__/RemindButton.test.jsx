@@ -12,7 +12,7 @@ describe('<RemindButton />', () => {
     const spyRemind = jest.spyOn(CourseAPI.survey.surveys, 'remind');
     const store = storeCreator({ surveys: {} });
     const remindButton = mount(
-      <RemindButton includePhantom={true} />,
+      <RemindButton includePhantom />,
       buildContextOptions(store),
     );
     remindButton.find('button').simulate('click');

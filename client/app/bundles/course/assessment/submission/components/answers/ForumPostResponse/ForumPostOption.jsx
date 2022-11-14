@@ -57,11 +57,7 @@ class ForumPostOption extends Component {
             this.handleClick(event, postPack);
           }}
         >
-          <ForumPost
-            isExpandable={true}
-            post={postPack.corePost}
-            style={postStyles}
-          />
+          <ForumPost isExpandable post={postPack.corePost} style={postStyles} />
         </div>
         {postPack.parentPost && <ParentPost post={postPack.parentPost} />}
       </div>

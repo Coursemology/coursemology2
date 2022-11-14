@@ -294,7 +294,7 @@ const UsersTable: FC<Props> = (props) => {
               onChange={(e): Promise<void> =>
                 handleRoleUpdate(tableMeta.rowData, e.target.value, updateValue)
               }
-              select={true}
+              select
               value={value}
               variant="standard"
             >
@@ -342,7 +342,7 @@ const UsersTable: FC<Props> = (props) => {
           )}
         </Typography>
       }
-      withMargin={true}
+      withMargin
     />
   );
 };

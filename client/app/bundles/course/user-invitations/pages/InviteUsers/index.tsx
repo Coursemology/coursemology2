@@ -79,7 +79,7 @@ const InviteUsers: FC<Props> = (props) => {
           <Box>
             <Grid
               alignItems="flex-end"
-              container={true}
+              container
               flexDirection="row"
               justifyContent="space-between"
               sx={{ margin: '12px 0px' }}
@@ -87,7 +87,7 @@ const InviteUsers: FC<Props> = (props) => {
               <Typography variant="h5">
                 {intl.formatMessage(translations.inviteUsersHeader)}
               </Typography>
-              <Grid item={true} style={{ display: 'flex', gap: 12 }}>
+              <Grid item style={{ display: 'flex', gap: 12 }}>
                 <UploadFileButton openResultDialog={openResultDialog} />
                 <RegistrationCodeButton />
               </Grid>

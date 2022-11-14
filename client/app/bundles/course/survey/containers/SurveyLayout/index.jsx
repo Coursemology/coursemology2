@@ -100,7 +100,7 @@ const SurveyLayout = ({ surveys }) => {
             {...{ page: 'SurveyResults', survey, courseId, surveyId }}
           />
         }
-        exact={true}
+        exact
         path="/results"
       />
       <Route
@@ -109,7 +109,7 @@ const SurveyLayout = ({ surveys }) => {
             {...{ page: 'ResponseIndex', survey, courseId, surveyId }}
           />
         }
-        exact={true}
+        exact
         path="/responses"
       />
       <Route
@@ -118,7 +118,7 @@ const SurveyLayout = ({ surveys }) => {
             {...{ page: 'ResponseShow', survey, courseId, surveyId }}
           />
         }
-        exact={true}
+        exact
         path="/responses/:responseId"
       />
       <Route
@@ -127,7 +127,7 @@ const SurveyLayout = ({ surveys }) => {
             {...{ page: 'ResponseEdit', survey, courseId, surveyId }}
           />
         }
-        exact={true}
+        exact
         path="/responses/:responseId/edit"
       />
     </Routes>

@@ -94,7 +94,7 @@ class NotificationSettings extends Component {
 
     if (emailSettings.length < 1) {
       return (
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noEmailSettings} />
         </ListSubheader>
       );

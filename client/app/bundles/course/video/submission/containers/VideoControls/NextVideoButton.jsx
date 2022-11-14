@@ -18,7 +18,7 @@ const NextVideoButton = (props) => {
     return (
       <Tooltip title={props.intl.formatMessage(translations.noNextVideo)}>
         <div className={styles.nextVideo}>
-          <IconButton disabled={true}>
+          <IconButton disabled>
             <SkipNext />
           </IconButton>
         </div>

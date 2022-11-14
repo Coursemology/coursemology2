@@ -29,13 +29,13 @@ const VideosSettingsForm = (props: VideosSettingsFormProps): JSX.Element => {
     <Form
       disabled={props.disabled}
       emitsVia={props.emitsVia}
-      headsUp={true}
+      headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
     >
       {(control): JSX.Element => (
         <>
-          <Section sticksToNavbar={true} title={t(translations.videosSettings)}>
+          <Section sticksToNavbar title={t(translations.videosSettings)}>
             <Controller
               control={control}
               name="title"
@@ -44,7 +44,7 @@ const VideosSettingsForm = (props: VideosSettingsFormProps): JSX.Element => {
                   disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
-                  fullWidth={true}
+                  fullWidth
                   label={t(commonTranslations.title)}
                   variant="filled"
                 />
@@ -61,7 +61,7 @@ const VideosSettingsForm = (props: VideosSettingsFormProps): JSX.Element => {
           </Section>
 
           <Section
-            sticksToNavbar={true}
+            sticksToNavbar
             subtitle={t(translations.videosTabsSubtitle)}
             title={t(translations.videosTabs)}
           >

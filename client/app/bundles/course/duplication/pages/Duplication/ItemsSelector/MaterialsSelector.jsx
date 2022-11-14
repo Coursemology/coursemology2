@@ -103,7 +103,7 @@ class MaterialsSelector extends Component {
         {folders.length > 0 ? (
           folders.map((rootFolder) => this.renderFolder(rootFolder, 0))
         ) : (
-          <ListSubheader disableSticky={true}>
+          <ListSubheader disableSticky>
             <FormattedMessage {...translations.noItems} />
           </ListSubheader>
         )}

@@ -54,8 +54,8 @@ const DeleteCoursePrompt = (props: DeleteCoursePromptProps): JSX.Element => {
 
       <TextField
         disabled={props.disabled}
-        fullWidth={true}
-        hiddenLabel={true}
+        fullWidth
+        hiddenLabel
         name="confirmDeleteField"
         onChange={(e): void => setInputChallenge(e.target.value)}
         placeholder={t(translations.confirmDeletePlaceholder)}

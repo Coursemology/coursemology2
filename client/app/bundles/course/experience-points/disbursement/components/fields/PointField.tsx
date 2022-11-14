@@ -17,10 +17,10 @@ const PointField: FC<Props> = (props: Props) => {
       render={({ field, fieldState }): JSX.Element => (
         <FormTextField
           className="points_awarded"
-          disableMargins={true}
+          disableMargins
           field={field}
           fieldState={fieldState}
-          fullWidth={true}
+          fullWidth
           InputLabelProps={{
             shrink: true,
           }}

@@ -78,7 +78,7 @@ class VisibleImportedFileView extends Component {
     return staged ? null : (
       <Chip
         key={file.id}
-        clickable={true}
+        clickable
         color={chipColor}
         label={file.filename}
         onClick={() => handleFileTabbing(index)}

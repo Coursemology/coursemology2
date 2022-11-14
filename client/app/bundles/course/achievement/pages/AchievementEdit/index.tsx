@@ -81,7 +81,7 @@ const AchievementEdit: FC<Props> = (props) => {
   return (
     <AchievementForm
       conditionAttributes={achievement.conditionsData}
-      editing={true}
+      editing
       initialValues={initialValues}
       onClose={onClose}
       onSubmit={onSubmit}

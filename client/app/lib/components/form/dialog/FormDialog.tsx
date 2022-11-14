@@ -65,7 +65,7 @@ const FormDialog = (props: Props): JSX.Element => {
     <>
       <Dialog
         className="top-10"
-        disableEnforceFocus={true}
+        disableEnforceFocus
         maxWidth="md"
         onClose={handleCloseDialog}
         open={open}
@@ -75,7 +75,7 @@ const FormDialog = (props: Props): JSX.Element => {
           <form
             encType="multipart/form-data"
             id={formName}
-            noValidate={true}
+            noValidate
             onSubmit={handleSubmit((data) => onSubmit(data, setError))}
           >
             <ErrorText errors={formState.errors} />
@@ -113,7 +113,7 @@ const FormDialog = (props: Props): JSX.Element => {
         </DialogActions>
       </Dialog>
       <ConfirmationDialog
-        confirmDiscard={true}
+        confirmDiscard
         onCancel={(): void => setConfirmationDialogOpen(false)}
         onConfirm={(): void => {
           setConfirmationDialogOpen(false);

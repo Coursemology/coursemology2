@@ -94,7 +94,7 @@ const SurveyForm = (props) => {
   return (
     <form
       id="survey-form"
-      noValidate={true}
+      noValidate
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
@@ -106,12 +106,12 @@ const SurveyForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
             label={intl.formatMessage(translations.title)}
-            required={true}
+            required
             variant="standard"
           />
         )}
@@ -124,12 +124,12 @@ const SurveyForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
             label={intl.formatMessage(translations.description)}
-            multiline={true}
+            multiline
             rows={2}
             variant="standard"
           />
@@ -185,7 +185,7 @@ const SurveyForm = (props) => {
               disabled={disabled}
               field={field}
               fieldState={fieldState}
-              fullWidth={true}
+              fullWidth
               InputLabelProps={{
                 shrink: true,
               }}
@@ -205,7 +205,7 @@ const SurveyForm = (props) => {
               disabled={disabled}
               field={field}
               fieldState={fieldState}
-              fullWidth={true}
+              fullWidth
               InputLabelProps={{
                 shrink: true,
               }}

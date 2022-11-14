@@ -70,11 +70,11 @@ const renderTextResponseField = (props) => {
           disabled={disabled}
           field={field}
           fieldState={fieldState}
-          fullWidth={true}
+          fullWidth
           InputLabelProps={{
             shrink: true,
           }}
-          multiline={true}
+          multiline
           variant="standard"
         />
       )}

@@ -71,7 +71,7 @@ class LineStyleField extends Component {
       chips.push(
         <Chip
           key={lineToolType + style.value}
-          clickable={true}
+          clickable
           color={selectedLineStyle === style.value ? 'primary' : undefined}
           label={style.key}
           onClick={(event) =>

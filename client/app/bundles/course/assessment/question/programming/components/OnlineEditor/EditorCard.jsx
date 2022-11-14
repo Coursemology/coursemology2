@@ -38,7 +38,7 @@ class EditorCard extends Component {
     const { mode, field, value, header, subtitle, isLoading, error } =
       this.props;
     return (
-      <Accordion defaultExpanded={true} style={styles.panel}>
+      <Accordion defaultExpanded style={styles.panel}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           style={styles.panelSummary}
@@ -60,7 +60,7 @@ class EditorCard extends Component {
         <AccordionDetails style={{ padding: 0 }}>
           <textarea
             name={EditorCard.getInputName(field)}
-            readOnly={true}
+            readOnly
             style={{ display: 'none' }}
             value={value}
           />

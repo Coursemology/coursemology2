@@ -54,9 +54,9 @@ const ExistingPackageFile = (props) => {
         </Button>
         <input
           checked={toDelete}
-          hidden={true}
+          hidden
           name={`question_programming[${`${fileType}_to_delete`}][${filename}]`}
-          readOnly={true}
+          readOnly
           type="checkbox"
         />
       </TableCell>

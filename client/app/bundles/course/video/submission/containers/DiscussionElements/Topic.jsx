@@ -45,7 +45,7 @@ const Topic = (props) => {
       </div>
       <Divider className="mb-4" />
       {props.postIds.map((id) => (
-        <PostContainer key={id.toString()} isRoot={true} postId={id} />
+        <PostContainer key={id.toString()} isRoot postId={id} />
       ))}
       <Reply topicId={props.topicId} />
       <Divider />

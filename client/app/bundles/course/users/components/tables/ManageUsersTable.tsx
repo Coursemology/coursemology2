@@ -375,7 +375,7 @@ const ManageUsersTable: FC<Props> = (props) => {
                   updateValue,
                 )
               }
-              select={true}
+              select
               value={value}
               variant="standard"
             >
@@ -411,7 +411,7 @@ const ManageUsersTable: FC<Props> = (props) => {
               onChange={(e): Promise<void> =>
                 handleRoleUpdate(tableMeta.rowData, e.target.value, updateValue)
               }
-              select={true}
+              select
               value={value}
               variant="standard"
             >
@@ -453,10 +453,10 @@ const ManageUsersTable: FC<Props> = (props) => {
     <DataTable
       columns={columns}
       data={users}
-      includeRowNumber={true}
+      includeRowNumber
       options={options}
       title={title}
-      withMargin={true}
+      withMargin
     />
   );
 };

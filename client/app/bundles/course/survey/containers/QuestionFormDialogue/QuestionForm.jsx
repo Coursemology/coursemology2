@@ -284,7 +284,7 @@ const QuestionForm = (props) => {
     }
     return (
       <div>
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...questionFormTranslations.optionsToDelete} />
         </ListSubheader>
         <QuestionFormDeletedOptions
@@ -298,7 +298,7 @@ const QuestionForm = (props) => {
           multipleResponse={isMultipleResponse}
           optionsAppend={optionsAppend}
         />
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...questionFormTranslations.optionsToKeep} />
         </ListSubheader>
       </div>
@@ -331,8 +331,8 @@ const QuestionForm = (props) => {
 
         <div style={styles.numberOfResponsesDiv}>
           <TextField
-            disabled={true}
-            fullWidth={true}
+            disabled
+            fullWidth
             label={
               <FormattedMessage {...questionFormTranslations.optionCount} />
             }
@@ -351,7 +351,7 @@ const QuestionForm = (props) => {
                     disabled={disabled}
                     field={field}
                     fieldState={fieldState}
-                    fullWidth={true}
+                    fullWidth
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -375,7 +375,7 @@ const QuestionForm = (props) => {
                     disabled={disabled}
                     field={field}
                     fieldState={fieldState}
-                    fullWidth={true}
+                    fullWidth
                     InputLabelProps={{
                       shrink: true,
                     }}
@@ -421,7 +421,7 @@ const QuestionForm = (props) => {
     <form
       encType="multipart/form-data"
       id="survey-section-question-form"
-      noValidate={true}
+      noValidate
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
@@ -435,7 +435,7 @@ const QuestionForm = (props) => {
             fieldState={fieldState}
             label={<FormattedMessage {...translations.questionType} />}
             options={questionOptions}
-            required={true}
+            required
             style={styles.questionType}
           />
         )}
@@ -448,14 +448,14 @@ const QuestionForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
             label={<FormattedMessage {...translations.questionText} />}
             minRows={4}
-            multiline={true}
-            required={true}
+            multiline
+            required
             variant="standard"
           />
         )}

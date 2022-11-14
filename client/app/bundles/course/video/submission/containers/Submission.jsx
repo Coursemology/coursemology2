@@ -14,16 +14,11 @@ const propTypes = {
 
 const Submission = (props) => (
   <>
-    <Grid container={true} spacing={2}>
-      <Grid item={true} lg={8} xs={12}>
+    <Grid container spacing={2}>
+      <Grid item lg={8} xs={12}>
         <VideoPlayer />
       </Grid>
-      <Grid
-        className="sticky top-0 h-[calc(95vh-70px)]"
-        item={true}
-        lg={4}
-        xs={12}
-      >
+      <Grid className="sticky top-0 h-[calc(95vh-70px)]" item lg={4} xs={12}>
         <Discussion />
       </Grid>
     </Grid>

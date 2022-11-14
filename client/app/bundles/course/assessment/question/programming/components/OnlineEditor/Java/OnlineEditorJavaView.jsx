@@ -299,7 +299,7 @@ class OnlineEditorJavaView extends Component {
 
     return (
       <Accordion
-        defaultExpanded={true}
+        defaultExpanded
         style={{
           margin: 0,
         }}
@@ -358,7 +358,7 @@ class OnlineEditorJavaView extends Component {
 
     return (
       <Accordion
-        defaultExpanded={true}
+        defaultExpanded
         style={{
           margin: 0,
         }}
@@ -429,7 +429,7 @@ class OnlineEditorJavaView extends Component {
           >
             <textarea
               name={OnlineEditorJavaView.getTestInputName(type, 'inline_code')}
-              readOnly={true}
+              readOnly
               style={{ display: 'none' }}
               value={test.get('inline_code')}
             />
@@ -461,7 +461,7 @@ class OnlineEditorJavaView extends Component {
 
     return (
       <Accordion
-        defaultExpanded={true}
+        defaultExpanded
         style={{
           margin: 0,
         }}
@@ -536,9 +536,9 @@ class OnlineEditorJavaView extends Component {
               label={<b>{toggleLabel}</b>}
             />
             <input
-              hidden={true}
+              hidden
               name="question_programming[submit_as_file]"
-              readOnly={true}
+              readOnly
               value={submitAsFile}
             />
             <br />

@@ -277,7 +277,7 @@ const ForumTopicTable: FC<Props> = (props) => {
       columns={columns}
       data={forumTopics}
       options={options}
-      withMargin={true}
+      withMargin
     />
   );
 };

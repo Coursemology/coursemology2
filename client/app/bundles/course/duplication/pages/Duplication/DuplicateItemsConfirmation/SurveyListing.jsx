@@ -29,7 +29,7 @@ class SurveyListing extends Component {
     return (
       <FormControlLabel
         key={`survey_${survey.id}`}
-        control={<Checkbox checked={true} />}
+        control={<Checkbox checked />}
         label={
           <span style={{ display: 'flex', alignItems: 'centre' }}>
             <TypeBadge itemType={duplicableItemTypes.SURVEY} />
@@ -59,7 +59,7 @@ class SurveyListing extends Component {
 
     return (
       <>
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage
             {...defaultComponentTitles.course_survey_component}
           />

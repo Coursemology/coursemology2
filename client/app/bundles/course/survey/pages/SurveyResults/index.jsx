@@ -77,7 +77,7 @@ class SurveyResults extends Component {
     }
     if (noSections) {
       return (
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...translations.noSections} />
         </ListSubheader>
       );
@@ -122,7 +122,7 @@ class SurveyResults extends Component {
             )}
           </CardContent>
         </Card>
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           <FormattedMessage {...surveyTranslations.questions} />
         </ListSubheader>
         {this.props.sections.map((section, index) => (

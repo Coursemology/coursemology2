@@ -142,7 +142,7 @@ const Dashboard = (props) => {
         <Icon
           className="fa fa-trash"
           data-for={tooltipId}
-          data-tip={true}
+          data-tip
           onClick={() => setDeleteArrowConfirmation(true)}
           style={{ ...styles.icon, color: 'red' }}
         />
@@ -163,7 +163,7 @@ const Dashboard = (props) => {
         <Icon
           className="fa fa-toggle-on"
           data-for={tooltipId}
-          data-tip={true}
+          data-tip
           onClick={() => toggleNodeSatisfiabilityType()}
           style={styles.icon}
         />
@@ -218,7 +218,7 @@ const Dashboard = (props) => {
         </CardContent>
       </Card>
       <ConfirmationDialog
-        confirmDelete={true}
+        confirmDelete
         message={intl.formatMessage(translations.conditionDeletionConfirmation)}
         onCancel={() => setDeleteArrowConfirmation(false)}
         onConfirm={() => deleteArrow()}

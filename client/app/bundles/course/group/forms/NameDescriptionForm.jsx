@@ -66,7 +66,7 @@ const NameDescriptionForm = (props) => {
   return (
     <form
       id={formNames.GROUP}
-      noValidate={true}
+      noValidate
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
@@ -79,12 +79,12 @@ const NameDescriptionForm = (props) => {
               disabled={isSubmitting}
               field={field}
               fieldState={fieldState}
-              fullWidth={true}
+              fullWidth
               InputLabelProps={{
                 shrink: true,
               }}
               label={<FormattedMessage {...translations.name} />}
-              required={true}
+              required
               style={styles.flexChild}
               variant="standard"
             />
@@ -98,14 +98,14 @@ const NameDescriptionForm = (props) => {
               disabled={isSubmitting}
               field={field}
               fieldState={fieldState}
-              fullWidth={true}
+              fullWidth
               InputLabelProps={{
                 shrink: true,
               }}
               label={<FormattedMessage {...translations.description} />}
               maxRows={4}
               minRows={2}
-              multiline={true}
+              multiline
               style={styles.flexChild}
               variant="standard"
             />

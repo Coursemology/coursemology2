@@ -337,9 +337,7 @@ class ProgrammingQuestionForm extends Component {
           style={{ marginTop: 14, width: '100%' }}
           variant="standard"
         >
-          <InputLabel shrink={true}>
-            {(required ? '* ' : '') + label}
-          </InputLabel>
+          <InputLabel shrink>{(required ? '* ' : '') + label}</InputLabel>
           <Select
             onChange={(event) => {
               onChange(event.target.value);
@@ -392,7 +390,7 @@ class ProgrammingQuestionForm extends Component {
         <TextField
           disabled={this.props.data.get('is_loading')}
           error={!!error}
-          fullWidth={true}
+          fullWidth
           helperText={error}
           id={ProgrammingQuestionForm.getInputId(field)}
           InputLabelProps={{
@@ -422,13 +420,13 @@ class ProgrammingQuestionForm extends Component {
       <div key={field}>
         <Autocomplete
           disabled={this.props.data.get('is_loading')}
-          filterSelectedOptions={true}
-          fullWidth={true}
+          filterSelectedOptions
+          fullWidth
           getOptionLabel={(option) => option.title}
           id={ProgrammingQuestionForm.getInputId(field)}
           isOptionEqualToValue={(option, val) => option.id === val.id}
           ListboxProps={{ style: { maxHeight: '80vh', overflowY: 'scroll' } }}
-          multiple={true}
+          multiple
           onChange={(event, val) => {
             const selectedOptionIds = val.map((option) => option.id);
             this.onChangeSkills(selectedOptionIds);
@@ -450,7 +448,7 @@ class ProgrammingQuestionForm extends Component {
         />
         <select
           disabled={this.props.data.get('is_loading')}
-          multiple={true}
+          multiple
           name={`${ProgrammingQuestionForm.getInputName(
             'question_assessment',
           )}[${field}][]`}
@@ -879,7 +877,7 @@ class ProgrammingQuestionForm extends Component {
                           </div>
                         </Tooltip>
                       }
-                      value={true}
+                      value
                     />
                   </RadioGroup>
                   <input
@@ -896,9 +894,9 @@ class ProgrammingQuestionForm extends Component {
             <Grid
               columns={{ xs: 1, sm: showAttemptLimit ? 3 : 2 }}
               columnSpacing={1}
-              container={true}
+              container
             >
-              <Grid item={true} xs={1}>
+              <Grid item xs={1}>
                 <div className={styles.memoryLimitInput}>
                   {autograded
                     ? this.renderInputField(
@@ -920,7 +918,7 @@ class ProgrammingQuestionForm extends Component {
                     : null}
                 </div>
               </Grid>
-              <Grid item={true} xs={1}>
+              <Grid item xs={1}>
                 <div className={styles.timeLimitInput}>
                   {autograded
                     ? this.renderInputField(
@@ -942,7 +940,7 @@ class ProgrammingQuestionForm extends Component {
                     : null}
                 </div>
               </Grid>
-              <Grid item={true} xs={1}>
+              <Grid item xs={1}>
                 {autograded && showAttemptLimit ? (
                   <div className={styles.attemptLimitInput}>
                     {this.renderInputField(
@@ -1011,7 +1009,7 @@ class ProgrammingQuestionForm extends Component {
           </ReactTooltip>
           <div
             data-for="disabled-submit-tooltip"
-            data-tip={true}
+            data-tip
             data-tip-disable={!disableSubmit}
           >
             <Button

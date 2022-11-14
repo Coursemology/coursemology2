@@ -33,7 +33,7 @@ const ParentPost = ({ post, style = {} }) => (
       <FormattedMessage {...translations.postMadeInResponseTo} />
     </p>
     <Labels post={post} />
-    <ForumPost isExpandable={true} post={post} style={styles.post} />
+    <ForumPost isExpandable post={post} style={styles.post} />
   </div>
 );
 

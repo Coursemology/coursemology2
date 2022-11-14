@@ -110,8 +110,8 @@ const AssessmentConditionForm = (
           render={({ field, fieldState: { error } }): JSX.Element => (
             <Autocomplete
               {...field}
-              disableClearable={true}
-              fullWidth={true}
+              disableClearable
+              fullWidth
               getOptionLabel={(id): string => assessments[id] ?? ''}
               onChange={(_, value): void => field.onChange(parseInt(value, 10))}
               options={autocompleteOptions}
@@ -150,10 +150,10 @@ const AssessmentConditionForm = (
               <FormTextField
                 className="w-32"
                 disabled={!hasPassingGrade}
-                disableMargins={true}
+                disableMargins
                 field={field}
                 fieldState={fieldState}
-                hiddenLabel={true}
+                hiddenLabel
                 size="small"
                 type="number"
                 value={field.value ?? 50}
@@ -190,7 +190,7 @@ const AssessmentCondition = (
   return (
     <Preload
       onErrorDo={props.onClose}
-      render={<LoadingIndicator bare={true} className="p-2" fit={true} />}
+      render={<LoadingIndicator bare className="p-2" fit />}
       while={fetchAssessments}
     >
       {(data): JSX.Element => (

@@ -67,11 +67,11 @@ const AddEmailSubsection = (props: AddEmailSubsectionProps): JSX.Element => {
   return (
     <div className="!mt-10 space-y-5">
       <Collapse collapsedSize={0} in={expanded}>
-        <Subsection spaced={true} title={t(translations.addAnotherEmail)}>
+        <Subsection spaced title={t(translations.addAnotherEmail)}>
           <TextField
             ref={emailInputRef}
             error={Boolean(error)}
-            fullWidth={true}
+            fullWidth
             helperText={formatErrorMessage(error)}
             inputProps={{ autoComplete: 'off' }}
             label={t(translations.emailAddress)}
@@ -79,7 +79,7 @@ const AddEmailSubsection = (props: AddEmailSubsectionProps): JSX.Element => {
             onChange={(e): void => setEmail(e.target.value)}
             onKeyUp={handleKeyUp}
             placeholder={t(translations.emailAddressPlaceholder)}
-            trims={true}
+            trims
             type="email"
             value={email}
             variant="filled"

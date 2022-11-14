@@ -86,16 +86,14 @@ const SurveyShow = ({
 
     if (!sections || sections.length < 1)
       return (
-        <ListSubheader disableSticky={true}>
-          {t(translations.empty)}
-        </ListSubheader>
+        <ListSubheader disableSticky>{t(translations.empty)}</ListSubheader>
       );
 
     const lastIndex = sections.length - 1;
 
     return (
       <>
-        <ListSubheader disableSticky={true}>
+        <ListSubheader disableSticky>
           {t(surveyTranslations.questions)}
         </ListSubheader>
 

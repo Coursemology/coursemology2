@@ -106,7 +106,7 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
             className={`w-full select-none ${
               isDragging && 'rounded-lg bg-white opacity-80 drop-shadow-md'
             }`}
-            hover={true}
+            hover
             {...provided.draggableProps}
             style={style}
             {...provided.dragHandleProps}
@@ -143,7 +143,7 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
 
   return (
     <Section
-      sticksToNavbar={true}
+      sticksToNavbar
       subtitle={t(translations.sidebarSettingsSubtitle)}
       title={t(translations.sidebarSettings)}
     >

@@ -270,7 +270,7 @@ const SkillsTable: FC<Props> = (props: Props) => {
               }}
             >
               <Slide
-                appear={true}
+                appear
                 container={containerRef.current}
                 direction="up"
                 in={isOpen}

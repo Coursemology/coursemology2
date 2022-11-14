@@ -225,7 +225,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
                   onChange={(e): React.ChangeEvent =>
                     updateValue(e.target.value)
                   }
-                  select={true}
+                  select
                   value={value || 'normal'}
                   variant="standard"
                 >
@@ -308,10 +308,10 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
     <DataTable
       columns={columns}
       data={roleRequests}
-      includeRowNumber={true}
+      includeRowNumber
       options={options}
       title={title}
-      withMargin={true}
+      withMargin
     />
   );
 };

@@ -38,7 +38,7 @@ const SectionForm = (props) => {
   return (
     <form
       id="survey-section-form"
-      noValidate={true}
+      noValidate
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
     >
       <ErrorText errors={errors} />
@@ -50,12 +50,12 @@ const SectionForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
             label={<FormattedMessage {...translations.title} />}
-            required={true}
+            required
             variant="standard"
           />
         )}
@@ -68,12 +68,12 @@ const SectionForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            fullWidth={true}
+            fullWidth
             InputLabelProps={{
               shrink: true,
             }}
             label={<FormattedMessage {...translations.description} />}
-            multiline={true}
+            multiline
             rows={2}
             variant="standard"
           />

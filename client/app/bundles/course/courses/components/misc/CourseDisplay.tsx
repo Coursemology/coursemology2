@@ -58,9 +58,9 @@ const CourseDisplay: FC<Props> = (props) => {
 
   return (
     <>
-      <Grid columns={{ xs: 1, lg: 3 }} container={true} style={{ padding: 0 }}>
+      <Grid columns={{ xs: 1, lg: 3 }} container style={{ padding: 0 }}>
         <Grid
-          item={true}
+          item
           style={{
             display: 'flex',
             justifyContent: 'left',
@@ -76,7 +76,7 @@ const CourseDisplay: FC<Props> = (props) => {
             />
           </div>
         </Grid>
-        <Grid item={true} xs={1}>
+        <Grid item xs={1}>
           <Pagination
             items={shavedCourses}
             itemsPerPage={ITEMS_PER_PAGE}
@@ -85,13 +85,13 @@ const CourseDisplay: FC<Props> = (props) => {
             setSlicedItems={setSlicedCorses}
           />
         </Grid>
-        <Grid item={true} xs={1} />
+        <Grid item xs={1} />
       </Grid>
 
       <Grid
         // MUI applies default marginLeft: -16
         columns={{ xs: 1, sm: 1, md: 2, lg: 3, xl: 4 }}
-        container={true}
+        container
         p={1}
         style={{ padding: 0 }}
       >

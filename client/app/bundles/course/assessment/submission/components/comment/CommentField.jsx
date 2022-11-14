@@ -76,7 +76,7 @@ export default class CommentField extends Component {
           <FormattedMessage {...translations.comment} />
         </Button>
         {renderDelayedCommentButton && (
-          <span data-for={`delayed-comment-button-${inputId}`} data-tip={true}>
+          <span data-for={`delayed-comment-button-${inputId}`} data-tip>
             <Button
               color="warning"
               disabled={disableCommentButton}

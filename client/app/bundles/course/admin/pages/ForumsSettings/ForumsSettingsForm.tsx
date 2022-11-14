@@ -35,13 +35,13 @@ const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
     <Form
       disabled={props.disabled}
       emitsVia={props.emitsVia}
-      headsUp={true}
+      headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
       validates={validationSchema}
     >
       {(control): JSX.Element => (
-        <Section sticksToNavbar={true} title={t(translations.forumsSettings)}>
+        <Section sticksToNavbar title={t(translations.forumsSettings)}>
           <Controller
             control={control}
             name="title"
@@ -50,7 +50,7 @@ const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
                 disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 label={t(commonTranslations.title)}
                 variant="filled"
               />
@@ -73,7 +73,7 @@ const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
                 disabled={props.disabled}
                 field={field}
                 fieldState={fieldState}
-                fullWidth={true}
+                fullWidth
                 label={t(commonTranslations.pagination)}
                 type="number"
                 variant="filled"
@@ -83,7 +83,7 @@ const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
 
           <Subsection
             className="!mt-8"
-            spaced={true}
+            spaced
             title={t(translations.markPostAsAnswerSetting)}
           >
             <Controller

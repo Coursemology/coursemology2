@@ -50,7 +50,7 @@ const PersonalStartEndTime: FC<Props> = (props) => {
       <div style={{ marginLeft: 5, marginBottom: -6 }}>
         {timeInfo.isFixed && (
           <CustomTooltip
-            arrow={true}
+            arrow
             title={intl.formatMessage(translations.lockTooltip)}
           >
             <Lock fontSize="small" />
@@ -63,7 +63,7 @@ const PersonalStartEndTime: FC<Props> = (props) => {
         timeInfo.referenceTime && (
           <div style={{ marginLeft: 0, marginBottom: -6 }}>
             <CustomTooltip
-              arrow={true}
+              arrow
               title={
                 timeInfo.referenceTime
                   ? `${intl.formatMessage(

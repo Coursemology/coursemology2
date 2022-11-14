@@ -158,11 +158,7 @@ const ResponseForm = (props) => {
   };
 
   return (
-    <form
-      encType="multipart/form-data"
-      id="survey-response-form"
-      noValidate={true}
-    >
+    <form encType="multipart/form-data" id="survey-response-form" noValidate>
       <ErrorText errors={errors} />
       {fields.map((section, sectionIndex) => {
         const disabled = isSubmitting || readOnly || !(canModify || canSubmit);

@@ -12,7 +12,7 @@ const MultipleResponse = ({ question, answer }) => {
           key={option.id}
           checked={selectedOptions.indexOf(option.id) !== -1}
           control={<Radio style={{ padding: '0 12px' }} />}
-          disabled={true}
+          disabled
           label={
             <b>
               <div

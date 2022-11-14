@@ -101,8 +101,8 @@ describe('TestCaseView', () => {
           <ProviderWrapper>
             <VisibleTestCaseView
               {...defaultStaffViewProps}
-              showEvaluation={true}
-              showPrivate={true}
+              showEvaluation
+              showPrivate
               submissionState={workflowStates.Attempting}
             />
           </ProviderWrapper>,
@@ -121,8 +121,8 @@ describe('TestCaseView', () => {
           <ProviderWrapper>
             <VisibleTestCaseView
               {...defaultStaffViewProps}
-              showEvaluation={true}
-              showPrivate={true}
+              showEvaluation
+              showPrivate
             />
           </ProviderWrapper>,
         );
@@ -142,7 +142,7 @@ describe('TestCaseView', () => {
           <ProviderWrapper>
             <VisibleTestCaseView
               {...defaultStaffViewProps}
-              showStdoutAndStderr={true}
+              showStdoutAndStderr
             />
           </ProviderWrapper>,
         );
@@ -163,9 +163,9 @@ describe('TestCaseView', () => {
         <ProviderWrapper>
           <VisibleTestCaseView
             {...defaultTestCaseViewProps}
-            showEvaluation={true}
-            showPrivate={true}
-            showStdoutAndStderr={true}
+            showEvaluation
+            showPrivate
+            showStdoutAndStderr
           />
         </ProviderWrapper>,
       );
@@ -178,7 +178,7 @@ describe('TestCaseView', () => {
         <ProviderWrapper>
           <VisibleTestCaseView
             {...defaultTestCaseViewProps}
-            showStdoutAndStderr={true}
+            showStdoutAndStderr
           />
         </ProviderWrapper>,
       );
@@ -193,8 +193,8 @@ describe('TestCaseView', () => {
           <ProviderWrapper>
             <VisibleTestCaseView
               {...defaultTestCaseViewProps}
-              showEvaluation={true}
-              showPrivate={true}
+              showEvaluation
+              showPrivate
             />
           </ProviderWrapper>,
         );
@@ -208,8 +208,8 @@ describe('TestCaseView', () => {
           <ProviderWrapper>
             <VisibleTestCaseView
               {...defaultTestCaseViewProps}
-              showEvaluation={true}
-              showPrivate={true}
+              showEvaluation
+              showPrivate
               submissionState={workflowStates.Attempting}
             />
           </ProviderWrapper>,

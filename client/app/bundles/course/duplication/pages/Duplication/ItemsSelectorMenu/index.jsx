@@ -56,10 +56,7 @@ class ItemsSelectorMenu extends Component {
     }
 
     return (
-      <ListItem
-        button={true}
-        onClick={() => dispatch(setItemSelectorPanel(panelKey))}
-      >
+      <ListItem button onClick={() => dispatch(setItemSelectorPanel(panelKey))}>
         <ListItemAvatar>
           <Avatar
             style={{
