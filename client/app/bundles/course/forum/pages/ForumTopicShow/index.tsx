@@ -112,9 +112,7 @@ const ForumTopicShow: FC = () => {
     );
 
   const renderBody =
-    !forumTopic ||
-    !forumTopic.postTreeIds ||
-    forumTopic.postTreeIds.length === 0 ? (
+    !forumTopic?.postTreeIds || forumTopic.postTreeIds.length === 0 ? (
       <Note message={t(translations.noPosts)} />
     ) : (
       <Box className="my-3 space-y-6">
