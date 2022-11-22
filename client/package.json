@@ -39,7 +39,7 @@
     "@hookform/resolvers": "^2.9.10",
     "@mui/icons-material": "^5.10.15",
     "@mui/lab": "^5.0.0-alpha.109",
-    "@mui/material": "^5.10.14",
+    "@mui/material": "^5.10.15",
     "@mui/x-date-pickers": "^5.0.8",
     "@reduxjs/toolkit": "^1.9.0",
     "@tailwindcss/line-clamp": "^0.4.2",
