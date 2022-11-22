@@ -75,6 +75,7 @@ class SubmissionAnswer extends Component {
     const { viewHistory } = question;
 
     if (viewHistory) {
+      // eslint-disable-next-line react/display-name
       return () => <PastAnswers question={question} />;
     }
 
