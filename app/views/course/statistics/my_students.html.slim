@@ -1,6 +1,6 @@
 = page_header
   = link_to course_statistics_download_path(only_my_students: true),
-            title: t('.download_my_students'), class: ['btn', 'btn-primary'] do
+            title: t('.download_my_students'), class: ['btn', 'btn-primary', 'download'] do
     = fa_icon 'download'.freeze
 
 = render partial: 'tabs'

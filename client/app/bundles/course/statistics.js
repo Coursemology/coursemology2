@@ -1,3 +1,5 @@
+import initializeDownloadLink from 'lib/helpers/initializeDownloadLink';
+
 const MY_STUDENT_SELECTOR = 'a[href="#my-students"]';
 
 function initializeTabs() {
@@ -5,3 +7,4 @@ function initializeTabs() {
 }
 
 $(initializeTabs);
+initializeDownloadLink('.btn.download');
