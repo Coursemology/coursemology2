@@ -67,3 +67,5 @@ node_modules
 # Ignore env files
 /.env
 /.env.*
+/client/.env
+/client/.env.*
