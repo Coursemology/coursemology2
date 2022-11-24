@@ -41,18 +41,19 @@ const TableMaterialRow: FC<Props> = (props) => {
               {material.name}
             </a>
           </Stack>
-          {material.description !== null && material.description.length !== 0 && (
-            <div
-              dangerouslySetInnerHTML={{
-                __html: material.description,
-              }}
-              style={{
-                textOverflow: 'initial',
-                whiteSpace: 'normal',
-                wordBreak: 'break-word',
-              }}
-            />
-          )}
+          {material.description !== null &&
+            material.description.length !== 0 && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: material.description,
+                }}
+                style={{
+                  textOverflow: 'initial',
+                  whiteSpace: 'normal',
+                  wordBreak: 'break-word',
+                }}
+              />
+            )}
         </Stack>
       </TableCell>
       <TableCell
