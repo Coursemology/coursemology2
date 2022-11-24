@@ -1,6 +1,7 @@
 const { join, resolve } = require('path');
 const { IgnorePlugin, ContextReplacementPlugin } = require('webpack');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const Dotenv = require('dotenv-webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
@@ -41,6 +42,7 @@ module.exports = {
     moduleIds: 'deterministic',
   },
   plugins: [
+    new Dotenv(),
     new IgnorePlugin({ resourceRegExp: /__test__/ }),
     new WebpackManifestPlugin({
       publicPath: '/webpack/',

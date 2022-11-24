@@ -1,5 +1,5 @@
 import { IntlProvider } from 'react-intl';
-import { Provider } from 'react-redux';
+import { Provider as ReduxProvider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import { injectStyle } from 'react-toastify/dist/inject-style';
 import {
@@ -20,6 +20,7 @@ import translations from '../../../../build/locales/locales.json';
 import tailwindUserConfig from '../../../../tailwind.config';
 
 import ErrorBoundary from './ErrorBoundary';
+import RollBarWrapper from './RollbarWrapper';
 
 injectStyle();
 
@@ -161,10 +162,14 @@ const ProviderWrapper = ({ store, persistor, children }) => {
   );
 
   if (store) {
-    providers = <Provider store={store}>{providers}</Provider>;
+    providers = <ReduxProvider store={store}>{providers}</ReduxProvider>;
   }
 
-  return <ErrorBoundary>{providers}</ErrorBoundary>;
+  return (
+    <RollBarWrapper>
+      <ErrorBoundary>{providers}</ErrorBoundary>
+    </RollBarWrapper>
+  );
 };
 
 ProviderWrapper.propTypes = propTypes;
@@ -180,7 +185,8 @@ export const StoreProviderWrapper = ({ store, persistor, children }) => {
     );
   }
 
-  if (store) providers = <Provider store={store}>{providers}</Provider>;
+  if (store)
+    providers = <ReduxProvider store={store}>{providers}</ReduxProvider>;
 
   return providers;
 };
