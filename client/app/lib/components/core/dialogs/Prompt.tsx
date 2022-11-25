@@ -53,6 +53,8 @@ type PromptProps = BasePromptProps &
   ActionProps<'secondary'> &
   ActionProps<'cancel'>;
 
+export const PromptText = DialogContentText;
+
 const Prompt = (props: PromptProps): JSX.Element => {
   const { t } = useTranslation();
 
@@ -67,7 +69,7 @@ const Prompt = (props: PromptProps): JSX.Element => {
       {props.children && (
         <DialogContent className={props.contentClassName}>
           {typeof props.children === 'string' ? (
-            <DialogContentText>{props.children}</DialogContentText>
+            <PromptText>{props.children}</PromptText>
           ) : (
             props.children
           )}
