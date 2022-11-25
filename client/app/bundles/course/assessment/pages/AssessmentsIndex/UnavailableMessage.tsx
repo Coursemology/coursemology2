@@ -14,16 +14,16 @@ const UnavailableMessage = (props: UnavailableMessageProps): JSX.Element => {
   const { for: assessment } = props;
   const { t } = useTranslation();
 
-  if (!assessment.isStartTimeBegin)
+  if (!assessment.isStartTimeBegin || !assessment.conditionSatisfied)
     return (
-      <Typography className="italic text-neutral-400" variant="body2">
-        {t(translations.openingSoon)}
-      </Typography>
-    );
-
-  if (!assessment.conditionSatisfied)
-    return (
-      <Tooltip disableInteractive title={t(translations.unlockableHint)}>
+      <Tooltip
+        disableInteractive
+        title={
+          !assessment.isStartTimeBegin
+            ? t(translations.openingSoon)
+            : t(translations.unlockableHint)
+        }
+      >
         <div className="flex min-w-[8.5rem] justify-center hover?:animate-shake">
           <Lock
             className="text-neutral-500 hover?:text-neutral-600"

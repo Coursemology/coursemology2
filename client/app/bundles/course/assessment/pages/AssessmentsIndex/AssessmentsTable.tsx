@@ -73,7 +73,11 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
         header: t(translations.startsAt),
         content: (assessment) => (
           <PersonalStartEndTime
-            className={assessment.isStartTimeBegin ? 'text-neutral-400' : ''}
+            className={
+              assessment.isStartTimeBegin
+                ? 'text-neutral-400'
+                : 'font-bold group-hover?:animate-pulse'
+            }
             timeInfo={assessment.startAt}
           />
         ),
