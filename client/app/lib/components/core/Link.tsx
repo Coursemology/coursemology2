@@ -3,15 +3,10 @@ import { Link as MuiLink, Typography } from '@mui/material';
 
 interface LinkProps extends ComponentProps<typeof MuiLink> {
   opensInNewTab?: boolean;
-  underlinesOnHover?: boolean;
 }
 
 const Link = (props: LinkProps): JSX.Element => {
-  const {
-    opensInNewTab,
-    underlinesOnHover: underlineOnHover,
-    ...linkProps
-  } = props;
+  const { opensInNewTab, ...linkProps } = props;
 
   if (!props.href && !props.onClick)
     return (
@@ -29,9 +24,6 @@ const Link = (props: LinkProps): JSX.Element => {
         target: '_blank',
         rel: 'noopener noreferrer',
       })}
-      className={`cursor-pointer ${
-        underlineOnHover && 'no-underline hover?:underline'
-      } ${props.className}`}
     />
   );
 };

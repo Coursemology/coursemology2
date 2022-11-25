@@ -36,7 +36,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
                 className="line-clamp-2 xl:line-clamp-1"
                 href={assessment.url}
                 opensInNewTab
-                underlinesOnHover
+                underline="hover"
               >
                 {assessment.title}
               </Link>

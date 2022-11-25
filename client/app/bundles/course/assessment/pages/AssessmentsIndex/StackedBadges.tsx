@@ -46,7 +46,7 @@ const StackedBadges = (props: StackedBadgesProps): JSX.Element => {
             className="transition-margin hoverable:group-hover/badges:-ml-1"
             href={badge.url}
             opensInNewTab
-            underlinesOnHover
+            underline="hover"
           >
             <StackableBadge src={badge.badgeUrl} title={badge.title} />
           </Link>
@@ -57,7 +57,7 @@ const StackedBadges = (props: StackedBadgesProps): JSX.Element => {
             className="transition-margin hoverable:group-hover/badges:-ml-1"
             href={props.assessmentUrl}
             opensInNewTab
-            underlinesOnHover
+            underline="hover"
           >
             <StackableBadge title={t(translations.seeAllRequirements)}>
               <Typography className="text-white" variant="body2">
