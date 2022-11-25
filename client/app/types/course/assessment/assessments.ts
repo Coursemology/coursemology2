@@ -4,7 +4,15 @@ export interface PersonalTimeData {
   referenceTime: string | null;
 }
 
-export interface AssessmentListData {
+interface AssessmentActionsData {
+  status: 'locked' | 'attempting' | 'submitted' | 'open' | 'unavailable';
+  actionButtonUrl: string | null;
+  submissionsUrl?: string;
+  editUrl?: string;
+  deleteUrl?: string;
+}
+
+export interface AssessmentListData extends AssessmentActionsData {
   id: number;
   title: string;
   passwordProtected: boolean;
@@ -13,15 +21,10 @@ export interface AssessmentListData {
   hasPersonalTimes: boolean;
   affectsPersonalTimes: boolean;
   url: string;
-  canAttempt: boolean;
-  status: 'locked' | 'attempting' | 'submitted' | 'open' | 'unavailable';
-  actionButtonUrl: string | null;
   conditionSatisfied: boolean;
   startAt: PersonalTimeData;
   isStartTimeBegin: boolean;
 
-  submissionsUrl?: string;
-  editUrl?: string;
   baseExp?: number;
   timeBonusExp?: number;
   bonusEndAt?: PersonalTimeData;
