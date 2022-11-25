@@ -32,12 +32,10 @@ class Course::Assessment::Question::ForumPostResponsesController < Course::Asses
 
   def destroy
     if @forum_post_response_question.destroy
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success')
+      head :ok
     else
       error = @forum_post_response_question.errors.full_messages.to_sentence
-      redirect_to course_assessment_path(current_course, @assessment),
-                  danger: t('.failure', error: error)
+      render json: { errors: error }, status: :bad_request
     end
   end
 
