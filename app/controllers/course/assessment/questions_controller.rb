@@ -9,11 +9,11 @@ class Course::Assessment::QuestionsController < Course::Assessment::Controller
   # the Duplicator like the usual process for duplicating question_assessments.
   def duplicate
     if duplicate_question_and_skills
-      flash.now[:success] =
-        t('.success', destination_name: @destination_assessment.title,
-                      destination_link: course_assessment_path(current_course, @destination_assessment))
+      render json: {
+        destinationUrl: course_assessment_path(current_course, @destination_assessment)
+      }
     else
-      flash.now[:danger] = @destination_assessment.errors.full_messages.to_sentence
+      render json: { errors: @destination_assessment.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
