@@ -33,12 +33,20 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
     return (
       <div>
         <FormControlLabel
-          className={`mb-0 ${labelClassName ?? ''}`}
+          className={`mb-0 ${props.readOnly ? 'cursor-auto' : ''} ${
+            labelClassName ?? ''
+          }`}
           control={createElement(component ?? MuiCheckbox, {
             ref,
             ...checkboxProps,
+            checked: props.readOnly ? Boolean(props.checked) : props.checked,
             className: `py-0 px-4 ${props.className ?? ''}`,
             color: props.color ?? 'primary',
+            disableRipple: props.disableRipple ?? props.readOnly,
+            inputProps: {
+              ...props.inputProps,
+              className: `cursor-default ${props.inputProps?.className ?? ''}`,
+            },
           })}
           disabled={props.disabled}
           label={
