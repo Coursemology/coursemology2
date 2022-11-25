@@ -11,7 +11,7 @@ interface SubsectionProps {
 }
 
 const Subsection = (props: SubsectionProps): JSX.Element => (
-  <div className={props.className}>
+  <div className={props.className ?? ''}>
     <div className="mb-4">
       {props.title && (
         <Typography color="text.primary">{props.title}</Typography>
@@ -24,7 +24,11 @@ const Subsection = (props: SubsectionProps): JSX.Element => (
       )}
     </div>
 
-    <div className={`${props.contentClassName} ${props.spaced && 'space-y-5'}`}>
+    <div
+      className={`${props.contentClassName ?? ''} ${
+        props.spaced ? 'space-y-5' : ''
+      }`}
+    >
       {props.children}
     </div>
   </div>
