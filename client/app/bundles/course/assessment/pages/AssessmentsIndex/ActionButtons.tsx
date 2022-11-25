@@ -14,12 +14,12 @@ const ACTION_LABELS: Record<AssessmentListData['status'], Descriptor> = {
   unavailable: translations.attempt,
 };
 
-interface ActionsProps {
+interface ActionButtonsProps {
   for: AssessmentListData;
   student: boolean;
 }
 
-const Actions = (props: ActionsProps): JSX.Element => {
+const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
   const { t } = useTranslation();
 
   const renderUnavailableMessage = (
@@ -119,4 +119,4 @@ const Actions = (props: ActionsProps): JSX.Element => {
   );
 };
 
-export default Actions;
+export default ActionButtons;
