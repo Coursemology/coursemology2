@@ -9,17 +9,22 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
                    students_w_phantom: 'students_w_phantom' }.freeze
 
   def index
-    @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
+    respond_to do |format|
+      format.html
+      format.json do
+        @assessments = @assessments.ordered_by_date_and_title.with_submissions_by(current_user)
 
-    @items_hash = @course.lesson_plan_items.where(actable_id: @assessments.pluck(:id),
-                                                  actable_type: Course::Assessment.name).
-                  preload(actable: :conditions).
-                  with_reference_times_for(current_course_user).
-                  with_personal_times_for(current_course_user).
-                  to_h do |item|
-      [item.actable_id, item]
+        @items_hash = @course.lesson_plan_items.where(actable_id: @assessments.pluck(:id),
+                                                      actable_type: Course::Assessment.name).
+                      preload(actable: :conditions).
+                      with_reference_times_for(current_course_user).
+                      with_personal_times_for(current_course_user).
+                      to_h do |item|
+          [item.actable_id, item]
+        end
+        @conditional_service = Course::Assessment::AchievementPreloadService.new(@assessments)
+      end
     end
-    @conditional_service = Course::Assessment::AchievementPreloadService.new(@assessments)
   end
 
   def show
