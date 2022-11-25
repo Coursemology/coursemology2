@@ -177,7 +177,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
       },
     },
     {
-      name: 'invitationCode',
+      name: 'invitationKey',
       label: intl.formatMessage(tableTranslations.invitationCode),
       options: {
         alignCenter: false,
@@ -213,7 +213,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
 
   if (permissions.canManagePersonalTimes) {
     columns.push({
-      name: 'personalTimes',
+      name: 'timelineAlgorithm',
       label: intl.formatMessage(tableTranslations.personalizedTimeline),
       options: {
         alignCenter: false,
@@ -233,7 +233,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
 
   if (acceptedInvitations) {
     columns.push({
-      name: 'acceptedAt',
+      name: 'confirmedAt',
       label: intl.formatMessage(tableTranslations.invitationAcceptedAt),
       options: {
         alignCenter: false,
