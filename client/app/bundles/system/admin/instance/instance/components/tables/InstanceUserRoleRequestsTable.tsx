@@ -12,6 +12,7 @@ import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
 import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import { formatLongDateTime } from 'lib/moment';
 import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
@@ -180,6 +181,14 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
           label: intl.formatMessage(tableTranslations.requestedAt),
           options: {
             alignCenter: false,
+            customBodyRenderLite: (dataIndex): JSX.Element => {
+              const roleRequest = roleRequests[dataIndex];
+              return (
+                <Typography key={`createdAt-${roleRequest.id}`} variant="body2">
+                  {formatLongDateTime(roleRequest.confirmedAt)}
+                </Typography>
+              );
+            },
           },
         },
         {
@@ -198,10 +207,10 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
               const roleRequest = roleRequests[dataIndex];
               return (
                 <Typography
-                  key={`approvedAt-${roleRequest.id}`}
+                  key={`confirmedAt-${roleRequest.id}`}
                   variant="body2"
                 >
-                  {roleRequest.confirmedAt}
+                  {formatLongDateTime(roleRequest.confirmedAt)}
                 </Typography>
               );
             },
@@ -247,6 +256,14 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
           label: intl.formatMessage(tableTranslations.requestedAt),
           options: {
             alignCenter: false,
+            customBodyRenderLite: (dataIndex): JSX.Element => {
+              const roleRequest = roleRequests[dataIndex];
+              return (
+                <Typography key={`createdAt-${roleRequest.id}`} variant="body2">
+                  {formatLongDateTime(roleRequest.confirmedAt)}
+                </Typography>
+              );
+            },
           },
         },
         ...(renderRowActionComponent
@@ -277,6 +294,14 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
           label: intl.formatMessage(tableTranslations.requestedAt),
           options: {
             alignCenter: false,
+            customBodyRenderLite: (dataIndex): JSX.Element => {
+              const roleRequest = roleRequests[dataIndex];
+              return (
+                <Typography key={`createdAt-${roleRequest.id}`} variant="body2">
+                  {formatLongDateTime(roleRequest.confirmedAt)}
+                </Typography>
+              );
+            },
           },
         },
         {
@@ -291,6 +316,17 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
           label: intl.formatMessage(tableTranslations.rejectedAt),
           options: {
             alignCenter: false,
+            customBodyRenderLite: (dataIndex): JSX.Element => {
+              const roleRequest = roleRequests[dataIndex];
+              return (
+                <Typography
+                  key={`confirmedAt-${roleRequest.id}`}
+                  variant="body2"
+                >
+                  {formatLongDateTime(roleRequest.confirmedAt)}
+                </Typography>
+              );
+            },
           },
         },
         {
