@@ -1,5 +1,5 @@
 import { ComponentProps } from 'react';
-import { Link as MuiLink } from '@mui/material';
+import { Link as MuiLink, Typography } from '@mui/material';
 
 interface LinkProps extends ComponentProps<typeof MuiLink> {
   opensInNewTab?: boolean;
@@ -12,6 +12,13 @@ const Link = (props: LinkProps): JSX.Element => {
     underlinesOnHover: underlineOnHover,
     ...linkProps
   } = props;
+
+  if (!props.href && !props.onClick)
+    return (
+      <Typography component="span" variant={props.variant ?? 'body2'}>
+        {props.children}
+      </Typography>
+    );
 
   return (
     <MuiLink
