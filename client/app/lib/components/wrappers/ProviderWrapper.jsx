@@ -129,6 +129,11 @@ const ProviderWrapper = ({ store, persistor, children }) => {
           },
         },
       },
+      MuiTableRow: {
+        styleOverrides: {
+          root: { '&:last-child td, &:last-child th': { border: 0 } },
+        },
+      },
     },
   });
 
