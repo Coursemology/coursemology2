@@ -13,6 +13,7 @@ interface Props {
     referenceTime?: string | null;
   };
   className?: string;
+  hideInfo?: boolean;
 }
 
 const translations = defineMessages({
@@ -34,7 +35,7 @@ const translations = defineMessages({
 const PersonalStartEndTime = (props: Props): JSX.Element => {
   const { t } = useTranslation();
 
-  const { timeInfo, className } = props;
+  const { timeInfo, className, hideInfo } = props;
   if (!timeInfo?.effectiveTime) return <div>-</div>;
 
   return (
@@ -43,25 +44,27 @@ const PersonalStartEndTime = (props: Props): JSX.Element => {
         {formatMiniDateTime(timeInfo.effectiveTime)}
       </Typography>
 
-      <div className="ml-2 flex items-center space-x-1">
-        {timeInfo.isFixed && (
-          <CustomTooltip arrow title={t(translations.lockTooltip)}>
-            <Lock className="text-neutral-500" fontSize="small" />
-          </CustomTooltip>
-        )}
-
-        {timeInfo.effectiveTime !== timeInfo.referenceTime &&
-          timeInfo.referenceTime && (
-            <CustomTooltip
-              arrow
-              title={t(translations.timeTooltip, {
-                time: formatMiniDateTime(timeInfo.referenceTime),
-              })}
-            >
-              <AccessTime className="text-neutral-500" fontSize="small" />
+      {!hideInfo && (
+        <div className="ml-2 flex items-center space-x-1">
+          {timeInfo.isFixed && (
+            <CustomTooltip arrow title={t(translations.lockTooltip)}>
+              <Lock className="text-neutral-500" fontSize="small" />
             </CustomTooltip>
           )}
-      </div>
+
+          {timeInfo.effectiveTime !== timeInfo.referenceTime &&
+            timeInfo.referenceTime && (
+              <CustomTooltip
+                arrow
+                title={t(translations.timeTooltip, {
+                  time: formatMiniDateTime(timeInfo.referenceTime),
+                })}
+              >
+                <AccessTime className="text-neutral-500" fontSize="small" />
+              </CustomTooltip>
+            )}
+        </div>
+      )}
     </div>
   );
 };
