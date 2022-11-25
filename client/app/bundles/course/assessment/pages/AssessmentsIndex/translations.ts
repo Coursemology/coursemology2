@@ -128,6 +128,10 @@ const translations = defineMessages({
     id: 'course.assessments.index.draftHint',
     defaultMessage: 'Only you and staff can see this assessment.',
   },
+  seeAllRequirements: {
+    id: 'course.assessments.index.seeAllRequirements',
+    defaultMessage: 'See all requirements',
+  },
 });
 
 export default translations;
