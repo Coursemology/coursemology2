@@ -3,10 +3,11 @@ import { useSearchParams } from 'react-router-dom';
 import { Tab, Tabs } from '@mui/material';
 import { AssessmentsListData } from 'types/course/assessment/assessments';
 
-import CourseAPI from 'api/course';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import Preload from 'lib/components/wrappers/Preload';
+
+import { fetchAssessments } from '../../actions';
 
 import AssessmentsTable from './AssessmentsTable';
 import NewAssessmentFormButton from './NewAssessmentFormButton';
@@ -16,24 +17,19 @@ const AssessmentsIndex = (): JSX.Element => {
   const [currentTab, setCurrentTab] =
     useState<AssessmentsListData['display']['tabId']>();
 
-  const fetchAssessments = async (): Promise<AssessmentsListData> => {
+  const fetchAssessmentsInTab = async (): Promise<AssessmentsListData> => {
     const categoryId = parseInt(params.get('category') ?? '', 10) || undefined;
     const tabId =
       currentTab ?? (parseInt(params.get('tab') ?? '', 10) || undefined);
 
-    const response = await CourseAPI.assessment.assessments.index(
-      categoryId,
-      tabId,
-    );
-
-    return response.data as AssessmentsListData;
+    return (await fetchAssessments(categoryId, tabId)) as AssessmentsListData;
   };
 
   return (
     <Preload
       render={<LoadingIndicator />}
       syncsWith={[currentTab]}
-      while={fetchAssessments}
+      while={fetchAssessmentsInTab}
     >
       {(data, refreshable): JSX.Element => (
         <>

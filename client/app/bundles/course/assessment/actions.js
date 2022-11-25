@@ -4,22 +4,31 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 
 import actionTypes from './constants';
 
-export async function fetchAssessmentEditData(assessmentId) {
+export const fetchAssessments = async (categoryId, tabId) => {
+  const response = await CourseAPI.assessment.assessments.index(
+    categoryId,
+    tabId,
+  );
+
+  return response.data;
+};
+
+export const fetchAssessmentEditData = async (assessmentId) => {
   const response = await CourseAPI.assessment.assessments.fetchEditData(
     assessmentId,
   );
 
   return response.data;
-}
+};
 
-export function createAssessment(
+export const createAssessment = (
   categoryId,
   tabId,
   data,
   successMessage,
   failureMessage,
   setError,
-) {
+) => {
   const attributes = { ...data, category: categoryId, tab: tabId };
   return (dispatch) => {
     dispatch({ type: actionTypes.CREATE_ASSESSMENT_REQUEST });
@@ -51,15 +60,15 @@ export function createAssessment(
         }
       });
   };
-}
+};
 
-export function updateAssessment(
+export const updateAssessment = (
   assessmentId,
   data,
   successMessage,
   failureMessage,
   setError,
-) {
+) => {
   const attributes = data;
   return (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_ASSESSMENT_REQUEST });
@@ -87,4 +96,4 @@ export function updateAssessment(
         }
       });
   };
-}
+};
