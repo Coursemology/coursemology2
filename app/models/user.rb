@@ -78,7 +78,9 @@ class User < ApplicationRecord
     where(id: InstanceUser.unscoped.active_in_past_7_days.select(:user_id).distinct)
   end)
   scope :with_email_addresses, (lambda do |email_addresses|
-    includes(:emails).joins(:emails).where('user_emails.email IN (?)', email_addresses)
+    includes(:emails).joins(:emails).
+      where('user_emails.email IN (?) AND user_emails.confirmed_at IS NOT NULL',
+            email_addresses)
   end)
 
   # Gets whether the current user is one of the the built in users.
@@ -108,17 +110,21 @@ class User < ApplicationRecord
     skip_confirmation!
     case invitation.invitation_key.first
     when Course::UserInvitation::INVITATION_KEY_IDENTIFIER
-      course_users.build(course: invitation.course,
-                         name: invitation.name,
-                         role: invitation.role,
-                         phantom: invitation.phantom,
-                         timeline_algorithm: invitation.timeline_algorithm ||
-                                             invitation.course&.default_timeline_algorithm,
-                         creator: self,
-                         updater: self)
+      build_course_user_from_invitation(invitation)
     when Instance::UserInvitation::INVITATION_KEY_IDENTIFIER
       @instance_invitation = invitation
     end
+  end
+
+  def build_course_user_from_invitation(invitation)
+    course_users.build(course: invitation.course,
+                       name: invitation.name,
+                       role: invitation.role,
+                       phantom: invitation.phantom,
+                       timeline_algorithm: invitation.timeline_algorithm ||
+                          invitation.course&.default_timeline_algorithm,
+                       creator: self,
+                       updater: self)
   end
 
   private
