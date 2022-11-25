@@ -9,10 +9,11 @@ import Table, { ColumnTemplate } from 'lib/components/core/table';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import translations from '../../translations';
+
 import ActionButtons from './ActionButtons';
 import StackedBadges from './StackedBadges';
 import StatusBadges from './StatusBadges';
-import translations from './translations';
 
 interface AssessmentsTableProps {
   assessments: AssessmentsListData;

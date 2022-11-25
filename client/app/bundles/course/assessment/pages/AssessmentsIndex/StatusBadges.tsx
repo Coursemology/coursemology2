@@ -10,7 +10,7 @@ import { AssessmentListData } from 'types/course/assessment/assessments';
 
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from './translations';
+import translations from '../../translations';
 
 interface StatusBadgesProps {
   for: AssessmentListData;

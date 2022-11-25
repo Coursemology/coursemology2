@@ -4,7 +4,8 @@ import { AssessmentListData } from 'types/course/assessment/assessments';
 
 import useTranslation, { Descriptor } from 'lib/hooks/useTranslation';
 
-import translations from './translations';
+import translations from '../../translations';
+
 import UnavailableMessage from './UnavailableMessage';
 
 const ACTION_LABELS: Record<AssessmentListData['status'], Descriptor> = {
