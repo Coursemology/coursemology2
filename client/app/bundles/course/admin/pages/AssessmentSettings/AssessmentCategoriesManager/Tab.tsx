@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { Create, Delete, DragIndicator } from '@mui/icons-material';
-import { Card, DialogContentText, IconButton, Typography } from '@mui/material';
+import { Card, IconButton, Typography } from '@mui/material';
 import { AssessmentTab } from 'types/course/admin/assessments';
 
-import Prompt from 'lib/components/core/dialogs/Prompt';
+import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import SwitchableTextField from 'lib/components/core/fields/SwitchableTextField';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -177,10 +177,9 @@ const Tab = (props: TabProps): JSX.Element => {
           title: tab.title,
         })}
       >
-        <DialogContentText>
-          {t(translations.deleteTabPromptMessage)}
-        </DialogContentText>
-        <DialogContentText className="mt-4">
+        <PromptText>{t(translations.deleteTabPromptMessage)}</PromptText>
+
+        <PromptText className="mt-4">
           {t(translations.thisTabContains)}
 
           {tab.topAssessmentTitles.map((assessment) => (
@@ -193,7 +192,7 @@ const Tab = (props: TabProps): JSX.Element => {
                 tab.assessmentsCount - tab.topAssessmentTitles.length
               ).toString(),
             })}
-        </DialogContentText>
+        </PromptText>
       </Prompt>
     </>
   );

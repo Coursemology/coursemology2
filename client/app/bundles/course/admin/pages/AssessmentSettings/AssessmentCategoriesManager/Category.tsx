@@ -1,19 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { Add, Create, Delete, DragIndicator } from '@mui/icons-material';
-import {
-  Button,
-  Card,
-  DialogContentText,
-  IconButton,
-  Typography,
-} from '@mui/material';
+import { Button, Card, IconButton, Typography } from '@mui/material';
 import {
   AssessmentCategory,
   AssessmentTab,
 } from 'types/course/admin/assessments';
 
-import Prompt from 'lib/components/core/dialogs/Prompt';
+import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import SwitchableTextField from 'lib/components/core/fields/SwitchableTextField';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -252,11 +246,9 @@ const Category = (props: CategoryProps): JSX.Element => {
           title: category.title,
         })}
       >
-        <DialogContentText>
-          {t(translations.deleteCategoryPromptMessage)}
-        </DialogContentText>
+        <PromptText>{t(translations.deleteCategoryPromptMessage)}</PromptText>
 
-        <DialogContentText className="mt-4">
+        <PromptText className="mt-4">
           {t(translations.thisCategoryContains)}
 
           {category.topAssessmentTitles.map((assessment) => (
@@ -269,7 +261,7 @@ const Category = (props: CategoryProps): JSX.Element => {
                 category.assessmentsCount - category.topAssessmentTitles.length
               ).toString(),
             })}
-        </DialogContentText>
+        </PromptText>
       </Prompt>
     </>
   );

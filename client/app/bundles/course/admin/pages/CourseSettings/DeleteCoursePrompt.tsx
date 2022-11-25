@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { DialogContentText, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 
-import Prompt from 'lib/components/core/dialogs/Prompt';
+import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -37,9 +37,7 @@ const DeleteCoursePrompt = (props: DeleteCoursePromptProps): JSX.Element => {
         title: props.courseTitle,
       })}
     >
-      <DialogContentText>
-        {t(translations.deleteCourseWarning)}
-      </DialogContentText>
+      <PromptText>{t(translations.deleteCourseWarning)}</PromptText>
 
       {/* TODO: Find a way to more elegantly handle HTML markups in translations */}
       <Typography
