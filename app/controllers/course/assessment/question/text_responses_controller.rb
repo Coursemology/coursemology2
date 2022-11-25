@@ -47,14 +47,11 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   end
 
   def destroy
-    title = question_type
     if @text_response_question.destroy
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success', name: title)
+      head :ok
     else
       error = @text_response_question.errors.full_messages.to_sentence
-      redirect_to course_assessment_path(current_course, @assessment),
-                  danger: t('.failure', name: title, error: error)
+      render json: { errors: error }, status: :bad_request
     end
   end
 
