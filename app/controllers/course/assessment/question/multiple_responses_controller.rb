@@ -28,23 +28,8 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
 
   def update
     if params.key?(:multiple_choice)
-      @message_success_switch = if params[:multiple_choice] == 'true' && params[:unsubmit] == 'false'
-                                  t('.switch_mrq_success', number: @question_number)
-                                elsif params[:multiple_choice] == 'true'
-                                  t('.switch_mrq_unsubmit_success', number: @question_number)
-                                elsif params[:multiple_choice] == 'false' && params[:unsubmit] == 'false'
-                                  t('.switch_mcq_success', number: @question_number)
-                                else
-                                  t('.switch_mcq_unsubmit_success', number: @question_number)
-                                end
-      @message_failure_switch = t('.failure')
-      switch_mcq_mrq_type(params[:multiple_choice], params[:unsubmit])
-
-      return render 'edit' unless params.key?(:redirect_to_assessment_show) &&
-                                  params[:redirect_to_assessment_show] == 'true'
-
-      return redirect_to course_assessment_path(current_course, @assessment),
-                         success: @message_success_switch
+      respond_to_switch_mcq_mrq_type
+      return
     end
 
     @question_assessment.skill_ids = multiple_response_question_params[:question_assessment][:skill_ids]
@@ -62,16 +47,58 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
 
   def destroy
     if @multiple_response_question.destroy
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success')
+      head :ok
     else
       error = @multiple_response_question.errors.full_messages.to_sentence
-      redirect_to course_assessment_path(current_course, @assessment),
-                  danger: t('.failure', error: error)
+      render json: { errors: error }, status: :bad_request
     end
   end
 
   private
+
+  # TODO: Remove once backend is fully API only
+  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def respond_to_switch_mcq_mrq_type_html(is_mcq, unsubmit)
+    @message_success_switch = if params[:multiple_choice] == 'true' && params[:unsubmit] == 'false'
+                                t('.switch_mrq_success', number: @question_number)
+                              elsif params[:multiple_choice] == 'true'
+                                t('.switch_mrq_unsubmit_success', number: @question_number)
+                              elsif params[:multiple_choice] == 'false' && params[:unsubmit] == 'false'
+                                t('.switch_mcq_success', number: @question_number)
+                              else
+                                t('.switch_mcq_unsubmit_success', number: @question_number)
+                              end
+
+    @message_failure_switch = t('.failure')
+    switch_mcq_mrq_type(is_mcq, unsubmit)
+
+    return render 'edit' unless params.key?(:redirect_to_assessment_show) &&
+                                params[:redirect_to_assessment_show] == 'true'
+
+    redirect_to course_assessment_path(current_course, @assessment), success: @message_success_switch
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+
+  def respond_to_switch_mcq_mrq_type
+    is_mcq = params[:multiple_choice] == 'true'
+    unsubmit = params[:unsubmit] != 'false'
+
+    respond_to do |format|
+      format.html { respond_to_switch_mcq_mrq_type_html(is_mcq, unsubmit) }
+
+      format.json do
+        if switch_mcq_mrq_type(is_mcq, unsubmit)
+          render partial: 'multiple_response_details', locals: {
+            assessment: @assessment,
+            question: @multiple_response_question,
+            new_question: false
+          }
+        else
+          render json: { errors: @multiple_response_question.errors.full_messsages.to_sentence }, status: :bad_request
+        end
+      end
+    end
+  end
 
   def multiple_response_question_params
     params.require(:question_multiple_response).permit(

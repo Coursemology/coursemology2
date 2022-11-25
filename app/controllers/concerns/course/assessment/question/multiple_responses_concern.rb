@@ -2,21 +2,17 @@
 module Course::Assessment::Question::MultipleResponsesConcern
   extend ActiveSupport::Concern
 
-  def switch_mcq_mrq_type(multiple_choice, unsubmit)
-    case multiple_choice
-    when 'true'
-      grading_scheme = :any_correct
-    when 'false'
-      grading_scheme = :all_correct
-    end
+  def switch_mcq_mrq_type(is_mcq, unsubmit)
+    grading_scheme = is_mcq ? :any_correct : :all_correct
 
-    if @multiple_response_question.update(grading_scheme: grading_scheme)
-      unsubmit_submissions unless unsubmit == 'false'
-      flash.now[:success] = @message_success_switch
+    result = @multiple_response_question.update(grading_scheme: grading_scheme)
+    if result
+      unsubmit_submissions if unsubmit
     else
       @multiple_response_question.reload
-      flash.now[:danger] = @message_failure_switch
     end
+
+    result
   end
 
   def unsubmit_submissions
