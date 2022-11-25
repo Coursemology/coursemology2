@@ -3,6 +3,9 @@ import { Avatar, Tooltip, Typography } from '@mui/material';
 import { AssessmentListData } from 'types/course/assessment/assessments';
 
 import Link from 'lib/components/core/Link';
+import useTranslation from 'lib/hooks/useTranslation';
+
+import translations from './translations';
 
 interface StackableBadgeProps {
   src?: string;
@@ -14,6 +17,7 @@ interface StackableBadgeProps {
 interface StackedBadgesProps {
   badges?: AssessmentListData['topConditionals'];
   remainingCount?: number;
+  assessmentUrl?: string;
 }
 
 const StackableBadge = (props: StackableBadgeProps): JSX.Element => (
@@ -28,34 +32,48 @@ const StackableBadge = (props: StackableBadgeProps): JSX.Element => (
   </Avatar>
 );
 
-const StackedBadges = (props: StackedBadgesProps): JSX.Element => (
-  <div className="group/badges relative min-w-[5rem]">
-    <div className="absolute flex h-full items-center -space-x-4 hoverable:group-hover/badges:space-x-0">
-      {props.badges?.map((badge) => (
-        <Link
-          key={badge.url}
-          className="transition-margin hoverable:group-hover/badges:-ml-1"
-          href={badge.url}
-          opensInNewTab
-          underlinesOnHover
-        >
-          <Tooltip disableInteractive title={badge.title}>
-            <StackableBadge alt={badge.title} src={badge.badgeUrl} />
-          </Tooltip>
-        </Link>
-      ))}
+const StackedBadges = (props: StackedBadgesProps): JSX.Element => {
+  const { t } = useTranslation();
 
-      {props.remainingCount && (
-        <div className="transition-margin hoverable:group-hover/badges:-ml-1">
-          <StackableBadge>
-            <Typography className="text-white" variant="body2">
-              +{props.remainingCount}
-            </Typography>
-          </StackableBadge>
-        </div>
-      )}
+  return (
+    <div className="group/badges relative min-w-[5rem]">
+      <div className="absolute flex h-full items-center -space-x-4 hoverable:group-hover/badges:space-x-0">
+        {props.badges?.map((badge) => (
+          <Link
+            key={badge.url}
+            className="transition-margin hoverable:group-hover/badges:-ml-1"
+            href={badge.url}
+            opensInNewTab
+            underlinesOnHover
+          >
+            <Tooltip disableInteractive title={badge.title}>
+              <StackableBadge alt={badge.title} src={badge.badgeUrl} />
+            </Tooltip>
+          </Link>
+        ))}
+
+        {props.remainingCount && (
+          <Link
+            className="transition-margin hoverable:group-hover/badges:-ml-1"
+            href={props.assessmentUrl}
+            opensInNewTab
+            underlinesOnHover
+          >
+            <Tooltip
+              disableInteractive
+              title={t(translations.seeAllRequirements)}
+            >
+              <StackableBadge>
+                <Typography className="text-white" variant="body2">
+                  +{props.remainingCount}
+                </Typography>
+              </StackableBadge>
+            </Tooltip>
+          </Link>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export default StackedBadges;
