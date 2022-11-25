@@ -19,7 +19,7 @@ const translations = defineMessages({
   },
   openingSoon: {
     id: 'course.assessments.index.openingSoon',
-    defaultMessage: 'Opening soon',
+    defaultMessage: 'This assessment will be unlocked at a later time.',
   },
   unlockableHint: {
     id: 'course.assessments.index.unlockableHint',
