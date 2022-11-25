@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArrowBack from '@mui/icons-material/ArrowBack';
 import { IconButton } from '@mui/material';
@@ -6,13 +6,14 @@ import { IconButton } from '@mui/material';
 import TitleBar from 'lib/components/navigation/TitleBar';
 
 interface Props {
-  title: ReactElement | string;
+  title: ReactNode | string;
   returnLink?: string;
-  toolbars?: ReactElement[];
+  toolbars?: ReactNode;
+  children?: ReactNode;
 }
 
 const PageHeader: FC<Props> = (props) => {
-  const { title, returnLink, toolbars } = props;
+  const { title, returnLink, toolbars, children } = props;
   const navigate = useNavigate();
 
   return (
@@ -28,7 +29,7 @@ const PageHeader: FC<Props> = (props) => {
           </IconButton>
         ) : null
       }
-      iconElementRight={toolbars && toolbars.length > 0 ? toolbars : null}
+      iconElementRight={children ?? toolbars ?? null}
       title={title}
     />
   );
