@@ -35,7 +35,7 @@ const PersonalStartEndTime = (props: Props): JSX.Element => {
   const { t } = useTranslation();
 
   const { timeInfo, className } = props;
-  if (!timeInfo || !timeInfo.effectiveTime) return <div>-</div>;
+  if (!timeInfo?.effectiveTime) return <div>-</div>;
 
   return (
     <div className="flex items-center">

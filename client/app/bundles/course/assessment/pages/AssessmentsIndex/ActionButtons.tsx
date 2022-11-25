@@ -1,10 +1,11 @@
-import { Create, Inventory, Lock, QuestionMark } from '@mui/icons-material';
-import { Button, IconButton, Tooltip, Typography } from '@mui/material';
+import { Create, Inventory, QuestionMark } from '@mui/icons-material';
+import { Button, IconButton, Tooltip } from '@mui/material';
 import { AssessmentListData } from 'types/course/assessment/assessments';
 
 import useTranslation, { Descriptor } from 'lib/hooks/useTranslation';
 
 import translations from './translations';
+import UnavailableMessage from './UnavailableMessage';
 
 const ACTION_LABELS: Record<AssessmentListData['status'], Descriptor> = {
   attempting: translations.resume,
@@ -20,40 +21,8 @@ interface ActionButtonsProps {
 }
 
 const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
-  const { t } = useTranslation();
-
-  const renderUnavailableMessage = (
-    assessment: AssessmentListData,
-  ): JSX.Element => {
-    if (!assessment.isStartTimeBegin)
-      return (
-        <Typography className="italic text-neutral-400" variant="body2">
-          {t(translations.openingSoon)}
-        </Typography>
-      );
-
-    if (!assessment.conditionSatisfied)
-      return (
-        <Tooltip disableInteractive title={t(translations.unlockableHint)}>
-          <div className="flex min-w-[8.5rem] justify-center hover?:animate-shake">
-            <Lock
-              className="text-neutral-500 hover?:text-neutral-600"
-              fontSize="small"
-            />
-          </div>
-        </Tooltip>
-      );
-
-    return (
-      <Tooltip disableInteractive title={t(translations.unavailableHint)}>
-        <Typography className="italic text-neutral-400" variant="body2">
-          {t(translations.unavailable)}
-        </Typography>
-      </Tooltip>
-    );
-  };
-
   const { for: assessment, student } = props;
+  const { t } = useTranslation();
 
   return (
     <div className="flex items-center">
@@ -95,8 +64,9 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
         </Button>
       )}
 
-      {assessment.status === 'unavailable' &&
-        renderUnavailableMessage(assessment)}
+      {assessment.status === 'unavailable' && (
+        <UnavailableMessage for={assessment} />
+      )}
 
       {assessment.status === 'attempting' && (
         <Tooltip
