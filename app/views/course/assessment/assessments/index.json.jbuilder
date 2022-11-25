@@ -107,7 +107,7 @@ json.assessments @assessments do |assessment|
   has_bonus_attributes = assessment_time.bonus_end_at.present? && assessment.time_bonus_exp > 0
   if show_bonus_attributes? && has_bonus_attributes
     json.timeBonusExp assessment.time_bonus_exp
-    json.isBonusEnded assessment.bonus_end_at <= Time.zone.now
+    json.isBonusEnded assessment_time.bonus_end_at < Time.zone.now
     json.bonusEndAt do
       json.partial! 'course/lesson_plan/items/personal_or_ref_time', locals: {
         item: @items_hash[assessment.id],
@@ -120,7 +120,7 @@ json.assessments @assessments do |assessment|
 
   has_end_time = assessment_time.end_at.present?
   if show_end_at? && has_end_time
-    json.isEndTimePassed assessment.ended?
+    json.isEndTimePassed assessment_time.end_at < Time.zone.now
     json.endAt do
       json.partial! 'course/lesson_plan/items/personal_or_ref_time', locals: {
         item: @items_hash[assessment.id],
