@@ -79,6 +79,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
                 ? 'text-neutral-400'
                 : 'font-bold group-hover?:animate-pulse'
             }
+            hideInfo={assessment.status === 'submitted'}
             timeInfo={assessment.startAt}
           />
         ),
@@ -89,6 +90,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
         content: (assessment) => (
           <PersonalStartEndTime
             className={assessment.isBonusEnded ? 'text-neutral-400' : ''}
+            hideInfo={assessment.status === 'submitted'}
             timeInfo={assessment.bonusEndAt}
           />
         ),
@@ -99,13 +101,14 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
         header: t(translations.endsAt),
         content: (assessment) => (
           <PersonalStartEndTime
-            className={
+            className={`${
               display.isStudent &&
               assessment.status !== 'submitted' &&
               assessment.isEndTimePassed
                 ? 'text-red-500'
                 : ''
-            }
+            } ${assessment.status === 'submitted' ? 'text-neutral-400' : ''}`}
+            hideInfo={assessment.status === 'submitted'}
             timeInfo={assessment.endAt}
           />
         ),
