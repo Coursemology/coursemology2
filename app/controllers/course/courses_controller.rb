@@ -11,7 +11,6 @@ class Course::CoursesController < Course::Controller
     respond_to do |format|
       format.html { render layout: 'course' }
       format.json do
-        @registration = Course::Registration.new
         @currently_active_announcements = current_course.announcements.
                                           currently_active.includes(:creator).
                                           sorted_by_sticky.sorted_by_date
