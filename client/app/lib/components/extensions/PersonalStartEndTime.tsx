@@ -4,7 +4,7 @@ import { Typography } from '@mui/material';
 
 import CustomTooltip from 'lib/components/core/CustomTooltip';
 import useTranslation from 'lib/hooks/useTranslation';
-import { formatMiniDateTime } from 'lib/moment';
+import { formatFullDateTime, formatMiniDateTime } from 'lib/moment';
 
 interface Props {
   timeInfo?: {
@@ -14,6 +14,7 @@ interface Props {
   };
   className?: string;
   hideInfo?: boolean;
+  long?: boolean;
 }
 
 const translations = defineMessages({
@@ -35,13 +36,15 @@ const translations = defineMessages({
 const PersonalStartEndTime = (props: Props): JSX.Element => {
   const { t } = useTranslation();
 
-  const { timeInfo, className, hideInfo } = props;
+  const { timeInfo, className, hideInfo, long } = props;
   if (!timeInfo?.effectiveTime) return <div>-</div>;
 
   return (
     <div className="flex items-center">
       <Typography className={className ?? ''} variant="body2">
-        {formatMiniDateTime(timeInfo.effectiveTime)}
+        {long
+          ? formatFullDateTime(timeInfo.effectiveTime)
+          : formatMiniDateTime(timeInfo.effectiveTime)}
       </Typography>
 
       {!hideInfo && (
@@ -57,7 +60,9 @@ const PersonalStartEndTime = (props: Props): JSX.Element => {
               <CustomTooltip
                 arrow
                 title={t(translations.timeTooltip, {
-                  time: formatMiniDateTime(timeInfo.referenceTime),
+                  time: long
+                    ? formatFullDateTime(timeInfo.referenceTime)
+                    : formatMiniDateTime(timeInfo.referenceTime),
                 })}
               >
                 <AccessTime className="text-neutral-500" fontSize="small" />
