@@ -3,10 +3,10 @@ achievements_enabled = !current_component_host[:course_achievements_component].n
 submissions_hash = @assessments.to_h { |assessment| [assessment.id, assessment.submissions] }
 
 json.display do
-  json.student current_course_user&.student? || false
-  json.gamified current_course.gamified?
-  json.randomization current_course.allow_randomization
-  json.achievements achievements_enabled
+  json.isStudent current_course_user&.student? || false
+  json.isGamified current_course.gamified?
+  json.allowRandomization current_course.allow_randomization
+  json.isAchievementsEnabled achievements_enabled
   json.bonusAttributes show_bonus_attributes?
   json.endTimes show_end_at?
   json.canCreateAssessments can?(:create, Course::Assessment.new(tab: @tab))
@@ -35,6 +35,7 @@ json.assessments @assessments do |assessment|
   json.url course_assessment_path(current_course, assessment)
 
   assessment_with_loaded_timeline = @items_hash[assessment.id].actable
+  # assessment_with_loaded_timeline is passed below since the timeline is already preloaded and will be checked
   can_attempt_assessment = can?(:attempt, assessment_with_loaded_timeline)
   json.canAttempt can_attempt_assessment
 
@@ -48,10 +49,10 @@ json.assessments @assessments do |assessment|
   elsif cannot?(:access, assessment) && can_attempt_assessment
     status = 'locked'
     action_url = course_assessment_path(current_course, assessment)
-  elsif !attempting_submission.nil?
+  elsif attempting_submission.present?
     status = 'attempting'
     action_url = edit_course_assessment_submission_path(current_course, assessment, attempting_submission)
-  elsif !submitted_submission.nil?
+  elsif submitted_submission.present?
     status = 'submitted'
     action_url = edit_course_assessment_submission_path(current_course, assessment, submitted_submission)
   else
@@ -60,7 +61,7 @@ json.assessments @assessments do |assessment|
   end
 
   json.status status
-  json.actionUrl action_url
+  json.actionButtonUrl action_url
 
   can_view_submissions = can?(:view_all_submissions, assessment)
   json.submissionsUrl course_assessment_submissions_path(current_course, assessment) if can_view_submissions
@@ -71,15 +72,17 @@ json.assessments @assessments do |assessment|
   if achievements_enabled
     achievement_conditionals = @conditional_service.achievement_conditional_for(assessment)
 
-    top_dependants = achievement_conditionals.first(3)
-    json.topDependants top_dependants do |achievement|
+    top_conditionals = achievement_conditionals.first(3)
+    json.topConditionals top_conditionals do |achievement|
       json.url course_achievement_path(current_course, achievement)
       json.badgeUrl achievement_badge_path(achievement)
       json.title achievement.title
     end
 
-    dependants_count = achievement_conditionals.size
-    json.remainingDependantsCount dependants_count - top_dependants.size if dependants_count > top_dependants.size
+    conditionals_count = achievement_conditionals.size
+    if conditionals_count > top_conditionals.size
+      json.remainingConditionalsCount conditionals_count - top_conditionals.size
+    end
   end
 
   json.baseExp assessment.base_exp if current_course.gamified? && assessment.base_exp > 0

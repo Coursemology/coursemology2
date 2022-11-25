@@ -46,10 +46,10 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
         </div>
       )}
 
-      {assessment.actionUrl && (
+      {assessment.actionButtonUrl && (
         <Button
           className="min-w-[8.5rem]"
-          href={assessment.actionUrl}
+          href={assessment.actionButtonUrl}
           size="small"
           variant={assessment.status === 'submitted' ? 'outlined' : 'contained'}
           // Temporary fix for blue link on hover caused by Bootstrap

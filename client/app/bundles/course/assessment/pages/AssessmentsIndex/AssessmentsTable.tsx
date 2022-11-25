@@ -23,7 +23,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
   const { display, assessments } = props.assessments;
   const { t } = useTranslation();
 
-  const template: ColumnTemplate<AssessmentListData>[] = useMemo(
+  const columns: ColumnTemplate<AssessmentListData>[] = useMemo(
     () => [
       {
         header: t(translations.title),
@@ -40,7 +40,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
               </Link>
             </label>
 
-            {!display.student && <StatusBadges for={assessment} />}
+            {!display.isStudent && <StatusBadges for={assessment} />}
           </div>
         ),
       },
@@ -48,7 +48,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
         header: t(translations.exp),
         content: (assessment) => assessment.baseExp ?? '-',
         align: 'right',
-        hideColumnWhen: !display.gamified,
+        hideColumnWhen: !display.isGamified,
         className: 'max-md:!hidden',
       },
       {
@@ -62,11 +62,11 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
         header: t(translations.neededFor),
         content: (assessment) => (
           <StackedBadges
-            badges={assessment.topDependants}
-            remainingCount={assessment.remainingDependantsCount}
+            badges={assessment.topConditionals}
+            remainingCount={assessment.remainingConditionalsCount}
           />
         ),
-        hideColumnWhen: !display.achievements,
+        hideColumnWhen: !display.isAchievementsEnabled,
         className: 'max-xl:!hidden whitespace-nowrap',
       },
       {
@@ -95,7 +95,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
         content: (assessment) => (
           <PersonalStartEndTime
             className={
-              display.student &&
+              display.isStudent &&
               assessment.status !== 'submitted' &&
               assessment.isEndTimePassed
                 ? 'text-red-500'
@@ -109,7 +109,9 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
       },
       {
         content: (assessment) => ({
-          render: <ActionButtons for={assessment} student={display.student} />,
+          render: (
+            <ActionButtons for={assessment} student={display.isStudent} />
+          ),
           className: 'relative',
         }),
       },
@@ -139,7 +141,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
       stickyHeader
       variant="outlined"
     >
-      {template}
+      {columns}
     </Table>
   );
 };

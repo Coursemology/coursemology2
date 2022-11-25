@@ -1,7 +1,7 @@
 export interface PersonalTimeData {
   isFixed: boolean;
-  effectiveTime: string;
-  referenceTime: string;
+  effectiveTime: string | null;
+  referenceTime: string | null;
 }
 
 export interface AssessmentListData {
@@ -15,7 +15,7 @@ export interface AssessmentListData {
   url: string;
   canAttempt: boolean;
   status: 'locked' | 'attempting' | 'submitted' | 'open' | 'unavailable';
-  actionUrl: string | null;
+  actionButtonUrl: string | null;
   conditionSatisfied: boolean;
   startAt: PersonalTimeData;
   isStartTimeBegin: boolean;
@@ -28,8 +28,8 @@ export interface AssessmentListData {
   endAt?: PersonalTimeData;
   isBonusEnded?: boolean;
   isEndTimePassed?: boolean;
-  remainingDependantsCount?: number;
-  topDependants?: {
+  remainingConditionalsCount?: number;
+  topConditionals?: {
     url: string;
     badgeUrl: string;
     title: string;
@@ -38,10 +38,10 @@ export interface AssessmentListData {
 
 export interface AssessmentsListData {
   display: {
-    student: boolean;
-    gamified: boolean;
-    randomization: boolean;
-    achievements: boolean;
+    isStudent: boolean;
+    isGamified: boolean;
+    allowRandomization: boolean;
+    isAchievementsEnabled: boolean;
     bonusAttributes: boolean;
     endTimes: boolean;
     canCreateAssessments: boolean;
