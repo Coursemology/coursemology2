@@ -9,17 +9,17 @@ import Table, { ColumnTemplate } from 'lib/components/core/table';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import Actions from './Actions';
+import ActionButtons from './ActionButtons';
 import StackedBadges from './StackedBadges';
 import StatusBadges from './StatusBadges';
 import translations from './translations';
 
-interface AssessmentIndexProps {
+interface AssessmentsTableProps {
   assessments: AssessmentsListData;
   top: string;
 }
 
-const AssessmentIndexPage = (props: AssessmentIndexProps): JSX.Element => {
+const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
   const { display, assessments } = props.assessments;
   const { t } = useTranslation();
 
@@ -109,7 +109,7 @@ const AssessmentIndexPage = (props: AssessmentIndexProps): JSX.Element => {
       },
       {
         content: (assessment) => ({
-          render: <Actions for={assessment} student={display.student} />,
+          render: <ActionButtons for={assessment} student={display.student} />,
           className: 'relative',
         }),
       },
@@ -144,4 +144,4 @@ const AssessmentIndexPage = (props: AssessmentIndexProps): JSX.Element => {
   );
 };
 
-export default AssessmentIndexPage;
+export default AssessmentsTable;

@@ -8,10 +8,10 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import Preload from 'lib/components/wrappers/Preload';
 
-import AssessmentIndexPage from './AssessmentIndexPage';
+import AssessmentsTable from './AssessmentsTable';
 import NewAssessmentFormButton from './NewAssessmentFormButton';
 
-const AssessmentIndex = (): JSX.Element => {
+const AssessmentsIndex = (): JSX.Element => {
   const [params, setParams] = useSearchParams();
   const [currentTab, setCurrentTab] =
     useState<AssessmentsListData['display']['tabId']>();
@@ -76,7 +76,7 @@ const AssessmentIndex = (): JSX.Element => {
           )}
 
           {refreshable(
-            <AssessmentIndexPage
+            <AssessmentsTable
               assessments={data}
               top={data.display.category.tabs.length > 1 ? 'top-40' : 'top-20'}
             />,
@@ -87,4 +87,4 @@ const AssessmentIndex = (): JSX.Element => {
   );
 };
 
-export default AssessmentIndex;
+export default AssessmentsIndex;

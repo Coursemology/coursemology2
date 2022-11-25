@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
-import AssessmentIndexPage from './pages/AssessmentIndex';
+import AssessmentsIndex from './pages/AssessmentsIndex';
 import storeCreator from './store';
 
 $(() => {
@@ -17,7 +17,7 @@ $(() => {
       <BrowserRouter>
         <Routes>
           <Route
-            element={<AssessmentIndexPage />}
+            element={<AssessmentsIndex />}
             path="/courses/:courseId/assessments"
           />
         </Routes>
