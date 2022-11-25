@@ -46,8 +46,8 @@ const AssessmentsIndex = (): JSX.Element => {
                       key={data.display.tabId}
                       // @ts-ignore: component is still written in JSX
                       categoryId={data.display.category.id}
-                      gamified={data.display.gamified}
-                      randomizationAllowed={data.display.randomization}
+                      gamified={data.display.isGamified}
+                      randomizationAllowed={data.display.allowRandomization}
                       tabId={data.display.tabId}
                     />,
                   ]

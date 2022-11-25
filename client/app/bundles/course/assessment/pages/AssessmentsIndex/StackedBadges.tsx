@@ -12,7 +12,7 @@ interface StackableBadgeProps {
 }
 
 interface StackedBadgesProps {
-  badges?: AssessmentListData['topDependants'];
+  badges?: AssessmentListData['topConditionals'];
   remainingCount?: number;
 }
 

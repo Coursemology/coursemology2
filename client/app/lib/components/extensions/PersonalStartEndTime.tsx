@@ -9,8 +9,8 @@ import { formatMiniDateTime } from 'lib/moment';
 interface Props {
   timeInfo?: {
     isFixed: boolean;
-    effectiveTime?: string;
-    referenceTime?: string;
+    effectiveTime?: string | null;
+    referenceTime?: string | null;
   };
   className?: string;
 }
