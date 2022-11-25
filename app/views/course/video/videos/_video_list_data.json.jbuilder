@@ -9,8 +9,8 @@ json.title video.title
 json.description format_ckeditor_rich_text(video.description)
 json.url video.url
 json.published video.published
-json.hasPersonalTimes video.has_personal_times?
-json.affectsPersonalTimes video_item.affects_personal_times?
+json.hasPersonalTimes current_course.show_personalized_timeline_features && video.has_personal_times?
+json.affectsPersonalTimes current_course.show_personalized_timeline_features && video_item.affects_personal_times?
 
 json.startTimeInfo do
   json.partial! 'course/lesson_plan/items/personal_or_ref_time',
