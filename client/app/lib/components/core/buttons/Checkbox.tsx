@@ -1,4 +1,4 @@
-import { ComponentProps, forwardRef } from 'react';
+import { ComponentProps, createElement, ElementType, forwardRef } from 'react';
 import {
   Checkbox as MuiCheckbox,
   FormControlLabel,
@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 
 type CheckboxProps = ComponentProps<typeof MuiCheckbox> & {
+  component?: ElementType;
   label?: string;
   description?: string;
   disabledHint?: string | JSX.Element;
@@ -15,20 +16,25 @@ type CheckboxProps = ComponentProps<typeof MuiCheckbox> & {
 
 const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
   (props, ref): JSX.Element => {
-    const { label, description, disabledHint, error, ...checkboxProps } = props;
+    const {
+      component,
+      label,
+      description,
+      disabledHint,
+      error,
+      ...checkboxProps
+    } = props;
 
     return (
       <div>
         <FormControlLabel
           className="mb-0"
-          control={
-            <MuiCheckbox
-              ref={ref}
-              {...checkboxProps}
-              className="py-0 px-4"
-              color="primary"
-            />
-          }
+          control={createElement(component ?? MuiCheckbox, {
+            ref,
+            ...checkboxProps,
+            className: `py-0 px-4 ${props.className ?? ''}`,
+            color: props.color ?? 'primary',
+          })}
           disabled={checkboxProps.disabled}
           label={label}
         />
@@ -36,16 +42,14 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
         <div className="ml-[34px] space-y-2">
           {description && (
             <Typography
-              color={
-                checkboxProps.disabled ? 'text.disabled' : 'text.secondary'
-              }
+              color={props.disabled ? 'text.disabled' : 'text.secondary'}
               variant="body2"
             >
               {description}
             </Typography>
           )}
 
-          {checkboxProps.disabled && disabledHint}
+          {props.disabled && disabledHint}
 
           {error && (
             <FormHelperText error={Boolean(error)}>{error}</FormHelperText>
