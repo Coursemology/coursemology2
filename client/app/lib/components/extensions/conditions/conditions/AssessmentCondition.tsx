@@ -100,7 +100,7 @@ const AssessmentConditionForm = (
       title={t(translations.chooseAnAssessment)}
     >
       <div className="flex flex-col space-y-4">
-        <Typography className="whitespace-nowrap" variant="body1">
+        <Typography className="whitespace-nowrap">
           {t(translations.completeThisAssessment)}
         </Typography>
 
@@ -160,9 +160,7 @@ const AssessmentConditionForm = (
                 variant="filled"
               />
 
-              <Typography className="ml-4" variant="body1">
-                %
-              </Typography>
+              <Typography className="ml-4">%</Typography>
             </div>
           )}
         />

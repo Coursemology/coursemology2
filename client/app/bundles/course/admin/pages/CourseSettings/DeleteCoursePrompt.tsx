@@ -49,7 +49,6 @@ const DeleteCoursePrompt = (props: DeleteCoursePromptProps): JSX.Element => {
             challenge: `<code>${challengeText}</code>`,
           }),
         }}
-        variant="body1"
       />
 
       <TextField

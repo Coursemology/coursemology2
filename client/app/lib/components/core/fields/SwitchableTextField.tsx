@@ -38,7 +38,6 @@ const SwitchableTextField = (props: SwitchableTextFieldProps): JSX.Element => {
     return (
       <Typography
         className={`break-all px-4 py-3 ${props.className}`}
-        variant="body1"
         {...textProps}
       >
         {typeof props.value === 'string' || typeof props.value === 'number'

@@ -179,9 +179,7 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
             <div className="flex flex-col px-5 py-2">
               <div className="flex min-h-[4rem] items-center justify-between space-x-4">
                 <div className="flex space-x-4">
-                  <Typography className="break-all" variant="body1">
-                    {email.email}
-                  </Typography>
+                  <Typography className="break-all">{email.email}</Typography>
 
                   {renderStatusBadge(email)}
 

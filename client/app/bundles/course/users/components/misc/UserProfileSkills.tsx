@@ -33,7 +33,7 @@ const translations = defineMessages({
 const UserProfileSkills: FC<Props> = ({ skillBranches, intl }: Props) => {
   const renderEmptyState = (): JSX.Element => {
     return (
-      <Typography variant="body1">
+      <Typography>
         {intl.formatMessage(translations.noSkillBranches)}
       </Typography>
     );
@@ -51,7 +51,7 @@ const UserProfileSkills: FC<Props> = ({ skillBranches, intl }: Props) => {
                 <Fragment key={`skill-branch-${skillBranch.id}`}>
                   <TableRow key={`skill-branch-title-${skillBranch.id}`}>
                     <TableCell colSpan={3}>
-                      <Typography variant="body1">
+                      <Typography>
                         <strong>{skillBranch.title}</strong>
                       </Typography>
                     </TableCell>
@@ -62,13 +62,13 @@ const UserProfileSkills: FC<Props> = ({ skillBranches, intl }: Props) => {
                     .map((skill) => (
                       <TableRow key={`skill-${skill.id}`}>
                         <TableCell style={{ textIndent: '30px', width: '25%' }}>
-                          <Typography variant="body1">{skill.title}</Typography>
+                          <Typography>{skill.title}</Typography>
                         </TableCell>
                         <TableCell>
                           <LinearProgressWithLabel value={skill.percentage} />
                         </TableCell>
                         <TableCell style={{ width: '25%' }}>
-                          <Typography variant="body1">
+                          <Typography>
                             {intl.formatMessage(translations.gradeForSkill, {
                               grade: skill.grade,
                               totalGrade: skill.totalGrade,

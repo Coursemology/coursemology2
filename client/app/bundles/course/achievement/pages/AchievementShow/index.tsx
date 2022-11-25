@@ -94,7 +94,6 @@ const AchievementShow: FC<Props> = (props) => {
                   dangerouslySetInnerHTML={{
                     __html: achievement.description,
                   }}
-                  variant="body1"
                 />
               </div>
             </Grid>

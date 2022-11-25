@@ -258,9 +258,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           )}
         </Grid>
 
-        <Typography variant="body1">
-          {intl.formatMessage(t.description)}
-        </Typography>
+        <Typography>{intl.formatMessage(t.description)}</Typography>
 
         <Controller
           control={control}
@@ -279,9 +277,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
 
         {editing && (
           <>
-            <Typography variant="body1">
-              {intl.formatMessage(t.visibility)}
-            </Typography>
+            <Typography>{intl.formatMessage(t.visibility)}</Typography>
 
             <Controller
               control={control}
@@ -316,9 +312,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
 
         {editing && folderAttributes && (
           <>
-            <Typography variant="body1">
-              {intl.formatMessage(t.files)}
-            </Typography>
+            <Typography>{intl.formatMessage(t.files)}</Typography>
 
             <FileManager
               disabled={!folderAttributes.enable_materials_action}
@@ -387,9 +381,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
       )}
 
       <Section sticksToNavbar={editing} title={intl.formatMessage(t.grading)}>
-        <Typography variant="body1">
-          {intl.formatMessage(t.gradingMode)}
-        </Typography>
+        <Typography>{intl.formatMessage(t.gradingMode)}</Typography>
 
         {!modeSwitching && (
           <InfoLabel label={intl.formatMessage(t.modeSwitchingDisabled)} />
@@ -429,9 +421,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           )}
         />
 
-        <Typography variant="body1">
-          {intl.formatMessage(t.calculateGradeWith)}
-        </Typography>
+        <Typography>{intl.formatMessage(t.calculateGradeWith)}</Typography>
 
         <Controller
           control={control}
@@ -527,9 +517,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           )}
         />
 
-        <Typography variant="body1">
-          {intl.formatMessage(t.afterSubmissionGraded)}
-        </Typography>
+        <Typography>{intl.formatMessage(t.afterSubmissionGraded)}</Typography>
 
         <Controller
           control={control}

@@ -14,9 +14,7 @@ const Subsection = (props: SubsectionProps): JSX.Element => (
   <div className={props.className}>
     <div className="mb-4">
       {props.title && (
-        <Typography color="text.primary" variant="body1">
-          {props.title}
-        </Typography>
+        <Typography color="text.primary">{props.title}</Typography>
       )}
 
       {props.subtitle && (

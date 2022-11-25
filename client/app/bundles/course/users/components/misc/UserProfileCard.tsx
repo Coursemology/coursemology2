@@ -55,24 +55,14 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
     if (user.manageEmailSubscriptionUrl) {
       return (
         <Box>
-          <Typography component="span" variant="body1">
-            {user.email} &mdash;{' '}
-          </Typography>
-          <Link
-            href={user.manageEmailSubscriptionUrl}
-            underline="hover"
-            variant="body1"
-          >
+          <Typography component="span">{user.email} &mdash; </Typography>
+          <Link href={user.manageEmailSubscriptionUrl} underline="hover">
             {intl.formatMessage(translations.manageEmailSubscription)}
           </Link>
         </Box>
       );
     }
-    return (
-      <Typography component="span" variant="body1">
-        {user.email}
-      </Typography>
-    );
+    return <Typography component="span">{user.email}</Typography>;
   };
 
   const renderUserStats = (): JSX.Element | null => {
@@ -142,7 +132,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
             item
           >
             <Typography variant="h4">{user.name}</Typography>
-            <Typography variant="body1">
+            <Typography>
               <strong>{COURSE_USER_ROLES[user.role]}</strong>
             </Typography>
             {renderManageEmail()}

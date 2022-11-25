@@ -25,10 +25,7 @@ const IconRadio = (props: IconRadioProps): JSX.Element => (
       })}
 
     <div>
-      <Typography
-        color={props.disabled ? 'text.disabled' : 'text.primary'}
-        variant="body1"
-      >
+      <Typography color={props.disabled ? 'text.disabled' : 'text.primary'}>
         {props.label}
       </Typography>
 
