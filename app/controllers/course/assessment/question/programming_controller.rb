@@ -57,12 +57,10 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   def destroy
     if @programming_question.destroy
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success')
+      head :ok
     else
       error = @programming_question.errors.full_messages.to_sentence
-      redirect_to course_assessment_path(current_course, @assessment),
-                  danger: t('.failure', error: error)
+      render json: { errors: error }, status: :bad_request
     end
   end
 
