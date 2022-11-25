@@ -31,7 +31,8 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
           <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
             <label className="m-0 font-normal" title={assessment.title}>
               <Link
-                className="line-clamp-1"
+                // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
+                className="line-clamp-2 xl:line-clamp-1"
                 href={assessment.url}
                 opensInNewTab
                 underlinesOnHover
@@ -109,7 +110,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
           />
         ),
         hideColumnWhen: !display.endTimes,
-        className: 'whitespace-nowrap no-hover:max-sm:!hidden',
+        className: 'whitespace-nowrap pointer-coarse:max-sm:!hidden',
       },
       {
         content: (assessment) => ({
