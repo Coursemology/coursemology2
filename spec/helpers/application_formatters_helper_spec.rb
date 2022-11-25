@@ -328,19 +328,6 @@ RSpec.describe ApplicationFormattersHelper do
       end
     end
 
-    describe '#draft_class' do
-      subject { helper.draft_class(stub) }
-      context 'when the object is not published' do
-        let(:published) { false }
-        it { is_expected.to eq(['draft']) }
-      end
-
-      context 'when the object is published' do
-        let(:published) { true }
-        it { is_expected.to eq([]) }
-      end
-    end
-
     describe '#draft_message' do
       subject { helper.draft_message(stub) }
       context 'when the object is not published' do
