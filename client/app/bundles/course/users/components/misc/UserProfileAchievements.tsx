@@ -64,7 +64,7 @@ const UserProfileAchievements: FC<Props> = ({ achievements, intl }: Props) => {
           ))}
         </Grid>
       ) : (
-        <Typography variant="body1">
+        <Typography>
           {intl.formatMessage(translations.noAchievements)}
         </Typography>
       )}

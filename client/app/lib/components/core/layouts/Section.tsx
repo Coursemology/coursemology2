@@ -35,9 +35,7 @@ const Section = (props: SectionProps): JSX.Element => (
         )}
 
         {props.subtitle && (
-          <Typography color="text.secondary" variant="body1">
-            {props.subtitle}
-          </Typography>
+          <Typography color="text.secondary">{props.subtitle}</Typography>
         )}
       </Grid>
 

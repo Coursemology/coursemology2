@@ -117,7 +117,7 @@ const AchievementConditionForm = (
                   />
 
                   <div>
-                    <Typography variant="body1">{achievement.title}</Typography>
+                    <Typography>{achievement.title}</Typography>
 
                     <Typography
                       className="line-clamp-3"

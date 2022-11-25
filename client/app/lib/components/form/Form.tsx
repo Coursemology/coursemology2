@@ -148,9 +148,7 @@ const Form = (props: FormProps): JSX.Element => {
           unmountOnExit
         >
           <div className="fixed inset-x-0 bottom-0 z-10 flex w-full items-center justify-between bg-neutral-800 px-8 py-4 text-white sm:bottom-8 sm:mx-auto sm:w-fit sm:rounded-lg sm:drop-shadow-xl">
-            <Typography variant="body1">
-              {t(translations.unsavedChanges)}
-            </Typography>
+            <Typography>{t(translations.unsavedChanges)}</Typography>
 
             <div className="ml-10">
               <Button

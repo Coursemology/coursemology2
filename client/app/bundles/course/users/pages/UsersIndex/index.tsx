@@ -61,9 +61,7 @@ const UsersIndex: FC<Props> = (props) => {
 
   const renderEmptyState = (): JSX.Element => {
     return (
-      <Typography variant="body1">
-        {intl.formatMessage(translations.noStudents)}
-      </Typography>
+      <Typography>{intl.formatMessage(translations.noStudents)}</Typography>
     );
   };
 
@@ -102,9 +100,7 @@ const UsersIndex: FC<Props> = (props) => {
                         />
                       </Grid>
                       <Grid item style={styles.courseUserName} xs>
-                        <Typography variant="body1">
-                          {courseUser.name}
-                        </Typography>
+                        <Typography>{courseUser.name}</Typography>
                       </Grid>
                     </Grid>
                   </Link>
