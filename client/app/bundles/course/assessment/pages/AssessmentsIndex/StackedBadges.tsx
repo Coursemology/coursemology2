@@ -8,8 +8,8 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from './translations';
 
 interface StackableBadgeProps {
+  title: string;
   src?: string;
-  alt?: string;
   children?: ReactNode;
   className?: string;
 }
@@ -21,15 +21,17 @@ interface StackedBadgesProps {
 }
 
 const StackableBadge = (props: StackableBadgeProps): JSX.Element => (
-  <Avatar
-    alt={props.alt}
-    className={`outline outline-2 outline-slot-1 transition-all wh-11 hoverable:group-hover/badges:ml-1 hoverable:group-hover/badges:shadow-lg hoverable:group-hover/badges:!outline-none group-hover?:outline-slot-2 ${
-      props.className ?? ''
-    }`}
-    src={props.src}
-  >
-    {props.children}
-  </Avatar>
+  <Tooltip disableInteractive title={props.title}>
+    <Avatar
+      alt={props.title}
+      className={`outline outline-2 outline-slot-1 transition-all wh-11 hoverable:group-hover/badges:ml-1 hoverable:group-hover/badges:shadow-lg hoverable:group-hover/badges:!outline-none group-hover?:outline-slot-2 ${
+        props.className ?? ''
+      }`}
+      src={props.src}
+    >
+      {props.children}
+    </Avatar>
+  </Tooltip>
 );
 
 const StackedBadges = (props: StackedBadgesProps): JSX.Element => {
@@ -46,9 +48,7 @@ const StackedBadges = (props: StackedBadgesProps): JSX.Element => {
             opensInNewTab
             underlinesOnHover
           >
-            <Tooltip disableInteractive title={badge.title}>
-              <StackableBadge alt={badge.title} src={badge.badgeUrl} />
-            </Tooltip>
+            <StackableBadge src={badge.badgeUrl} title={badge.title} />
           </Link>
         ))}
 
@@ -59,16 +59,11 @@ const StackedBadges = (props: StackedBadgesProps): JSX.Element => {
             opensInNewTab
             underlinesOnHover
           >
-            <Tooltip
-              disableInteractive
-              title={t(translations.seeAllRequirements)}
-            >
-              <StackableBadge>
-                <Typography className="text-white" variant="body2">
-                  +{props.remainingCount}
-                </Typography>
-              </StackableBadge>
-            </Tooltip>
+            <StackableBadge title={t(translations.seeAllRequirements)}>
+              <Typography className="text-white" variant="body2">
+                +{props.remainingCount}
+              </Typography>
+            </StackableBadge>
           </Link>
         )}
       </div>
