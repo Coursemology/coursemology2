@@ -16,6 +16,7 @@ const Link = (props: LinkProps): JSX.Element => {
   return (
     <MuiLink
       color="links"
+      variant="body2"
       {...linkProps}
       {...(opensInNewTab && {
         target: '_blank',
