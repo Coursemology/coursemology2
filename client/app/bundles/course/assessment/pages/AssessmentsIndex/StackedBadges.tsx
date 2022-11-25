@@ -5,7 +5,7 @@ import { AssessmentListData } from 'types/course/assessment/assessments';
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from './translations';
+import translations from '../../translations';
 
 interface StackableBadgeProps {
   title: string;

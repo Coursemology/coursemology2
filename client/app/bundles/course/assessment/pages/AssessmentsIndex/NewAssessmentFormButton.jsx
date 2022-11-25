@@ -19,8 +19,7 @@ import formTranslations from 'lib/translations/form';
 import * as actions from '../../actions';
 import AssessmentForm from '../../components/AssessmentForm';
 import actionTypes from '../../constants';
-
-import translations from './translations';
+import translations from '../../translations';
 
 class NewAssessmentFormButton extends Component {
   constructor(props) {
