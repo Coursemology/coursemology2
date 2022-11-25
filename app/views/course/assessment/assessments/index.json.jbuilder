@@ -37,37 +37,9 @@ json.assessments @assessments do |assessment|
   assessment_with_loaded_timeline = @items_hash[assessment.id].actable
   # assessment_with_loaded_timeline is passed below since the timeline is already preloaded and will be checked
   can_attempt_assessment = can?(:attempt, assessment_with_loaded_timeline)
-  json.canAttempt can_attempt_assessment
 
   submissions = submissions_hash[assessment.id]
-  attempting_submission = submissions.find(&:attempting?)
-  submitted_submission = submissions.find { |submission| !submission.attempting? }
-
-  action_url = nil
-  if !current_course_user || !can_attempt_assessment
-    status = 'unavailable'
-  elsif cannot?(:access, assessment) && can_attempt_assessment
-    status = 'locked'
-    action_url = course_assessment_path(current_course, assessment)
-  elsif attempting_submission.present?
-    status = 'attempting'
-    action_url = edit_course_assessment_submission_path(current_course, assessment, attempting_submission)
-  elsif submitted_submission.present?
-    status = 'submitted'
-    action_url = edit_course_assessment_submission_path(current_course, assessment, submitted_submission)
-  else
-    status = 'open'
-    action_url = course_assessment_attempt_path(current_course, assessment)
-  end
-
-  json.status status
-  json.actionButtonUrl action_url
-
-  can_view_submissions = can?(:view_all_submissions, assessment)
-  json.submissionsUrl course_assessment_submissions_path(current_course, assessment) if can_view_submissions
-
-  can_edit_assessment = can?(:manage, assessment)
-  json.editUrl edit_course_assessment_path(current_course, assessment) if can_edit_assessment
+  json.partial! 'assessment_actions', assessment: assessment_with_loaded_timeline, submissions: submissions
 
   if achievements_enabled
     achievement_conditionals = @conditional_service.achievement_conditional_for(assessment)
@@ -106,7 +78,7 @@ json.assessments @assessments do |assessment|
 
   has_bonus_attributes = assessment_time.bonus_end_at.present? && assessment.time_bonus_exp > 0
   if show_bonus_attributes? && has_bonus_attributes
-    json.timeBonusExp assessment.time_bonus_exp
+    json.timeBonusExp assessment.time_bonus_exp if assessment.time_bonus_exp > 0
     json.isBonusEnded assessment_time.bonus_end_at < Time.zone.now
     json.bonusEndAt do
       json.partial! 'course/lesson_plan/items/personal_or_ref_time', locals: {
