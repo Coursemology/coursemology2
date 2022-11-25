@@ -12,6 +12,7 @@ type CheckboxProps = ComponentProps<typeof MuiCheckbox> & {
   description?: string;
   disabledHint?: string | JSX.Element;
   error?: string;
+  labelClassName?: string;
 };
 
 const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
@@ -22,20 +23,21 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
       description,
       disabledHint,
       error,
+      labelClassName,
       ...checkboxProps
     } = props;
 
     return (
       <div>
         <FormControlLabel
-          className="mb-0"
+          className={`mb-0 ${labelClassName ?? ''}`}
           control={createElement(component ?? MuiCheckbox, {
             ref,
             ...checkboxProps,
             className: `py-0 px-4 ${props.className ?? ''}`,
             color: props.color ?? 'primary',
           })}
-          disabled={checkboxProps.disabled}
+          disabled={props.disabled}
           label={label}
         />
 
