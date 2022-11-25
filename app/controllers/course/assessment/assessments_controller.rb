@@ -30,9 +30,14 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def show
     render 'authenticate' unless can_access_assessment?
 
-    @question_assessments = @assessment.question_assessments.with_question_actables
-    @assessment_conditions = @assessment.assessment_conditions.includes({ conditional: :actable })
-    @questions = @assessment.questions.includes({ actable: :test_cases })
+    respond_to do |format|
+      format.html
+      format.json do
+        @question_assessments = @assessment.question_assessments.with_question_actables
+        @assessment_conditions = @assessment.assessment_conditions.includes({ conditional: :actable })
+        @questions = @assessment.questions.includes({ actable: :test_cases })
+      end
+    end
   end
 
   def new
@@ -63,24 +68,30 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def destroy
     if @assessment.destroy
-      redirect_to course_assessments_path(current_course, category: @assessment.tab.category_id,
-                                                          tab: @assessment.tab_id),
-                  success: t('.success', assessment: @assessment.title)
+      render json: {
+        redirect: course_assessments_path(current_course, category: @assessment.tab.category_id, tab: @assessment.tab_id)
+      }
     else
-      redirect_to course_assessment_path(current_course, @assessment),
-                  danger: t('.failure', error: @assessment.errors.full_messages.to_sentence)
+      render json: { errors: @assessment.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   # Reorder questions for an assessment
   def reorder
-    raise ArgumentError, 'Invalid ordering for assessment questions' unless valid_ordering?(question_order_ids)
+    unless valid_ordering?(question_order_ids)
+      render json: { errors: 'Invalid ordering for assessment questions' }, status: :bad_request
+      return
+    end
 
     Course::QuestionAssessment.transaction do
       question_order_ids.each_with_index do |id, index|
         question_assessments_hash[id].update_attribute(:weight, index)
       end
     end
+
+    head :ok
+  rescue StandardError
+    head :bad_request
   end
 
   def authenticate

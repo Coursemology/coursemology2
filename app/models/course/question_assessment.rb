@@ -16,14 +16,16 @@ class Course::QuestionAssessment < ApplicationRecord
 
   scope :with_question_actables, -> { includes({ question: { actable: [:options, :test_cases, :solutions] } }) }
 
+  def default_title(num = nil)
+    idx = num.present? ? num : question_number
+    I18n.t('activerecord.course/assessment/question.question_number', index: idx)
+  end
+
   # Prefixes a question number in front of the title
   #
   # @return [string]
   def display_title(num = nil)
-    idx = num.present? ? num : question_number
-    question_num = I18n.t('activerecord.course/assessment/question.question_number',
-                          index: idx)
-
+    question_num = default_title(num)
     return question_num if question.title.blank?
 
     I18n.t('activerecord.course/assessment/question.question_with_title',

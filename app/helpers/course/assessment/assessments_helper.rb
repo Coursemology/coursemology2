@@ -3,8 +3,8 @@ module Course::Assessment::AssessmentsHelper
   include Course::Achievement::AchievementsHelper
   include Course::Condition::ConditionsHelper
 
-  def condition_not_satisfied(can_attempt_assessment, assessment, assessment_time)
-    (!can_attempt_assessment &&
+  def condition_not_satisfied(can_attempt, assessment, assessment_time)
+    (!can_attempt &&
       !assessment.conditions_satisfied_by?(current_course_user)) ||
       assessment_not_started(assessment_time)
   end
