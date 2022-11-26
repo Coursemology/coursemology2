@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 # Represents an email address belonging to a user.
 class User::Email < ApplicationRecord
+  before_validation(on: :create) do
+    remove_existing_unconfirmed_secondary_email
+  end
   after_destroy :set_new_user_primary_email, if: :primary?
 
   validates :primary, inclusion: [true, false]
@@ -14,6 +17,11 @@ class User::Email < ApplicationRecord
   scope :confirmed, -> { where.not(confirmed_at: nil) }
 
   private
+
+  def remove_existing_unconfirmed_secondary_email
+    existing_email = User::Email.where(email: email, primary: false).first
+    existing_email.destroy! if existing_email && !existing_email.confirmed?
+  end
 
   def set_new_user_primary_email
     return if user.destroying?
