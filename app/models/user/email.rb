@@ -4,6 +4,7 @@ class User::Email < ApplicationRecord
   before_validation(on: :create) do
     remove_existing_unconfirmed_secondary_email
   end
+  after_save :accept_all_pending_invitations
   after_destroy :set_new_user_primary_email, if: :primary?
 
   validates :primary, inclusion: [true, false]
@@ -23,6 +24,21 @@ class User::Email < ApplicationRecord
     existing_email.destroy! if existing_email && !existing_email.confirmed?
   end
 
+  def accept_all_pending_invitations
+    return unless confirmed?
+
+    all_unconfirmed_invitations = Course::UserInvitation.where(email: email).unconfirmed
+
+    all_unconfirmed_invitations.each do |unconfirmed_invitation|
+      if enrolled_course_ids.include?(unconfirmed_invitation.course_id)
+        unconfirmed_invitation.confirm!(confirmer: user)
+        next
+      end
+      user.build_course_user_from_invitation(unconfirmed_invitation)
+      unconfirmed_invitation.confirm!(confirmer: user) if user.save && user.persisted?
+    end
+  end
+
   def set_new_user_primary_email
     return if user.destroying?
 
@@ -30,5 +46,9 @@ class User::Email < ApplicationRecord
 
     errors.add(:base, I18n.t('user.emails.set_primary.no_confirmed_emails'))
     raise ActiveRecord::Rollback
+  end
+
+  def enrolled_course_ids
+    user.reload.course_ids
   end
 end
