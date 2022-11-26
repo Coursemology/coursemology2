@@ -68,16 +68,13 @@ RSpec.feature 'Users: Sign Up' do
     context 'As a user invited by course staffs to multiple courses' do
       let(:course1) { create(:course) }
       let(:course2) { create(:course) }
-      let(:course3) { create(:course) }
       let!(:invitation1) { create(:course_user_invitation, :phantom, name: 'course1_user', course: course1) }
       let!(:invitation2) do
         create(:course_user_invitation, name: 'course2_user', email: invitation1.email, course: course2)
       end
-      let(:invitation3) { create(:course_user_invitation, :confirmed, email: invitation1.email, course: course3) }
       let(:invited_email) { invitation1.email }
 
       scenario 'I can register for an account via the registration links' do
-        invitation3
         visit new_user_registration_path(invitation: invitation1.invitation_key)
 
         invited_user = attributes_for(:user)
@@ -87,8 +84,7 @@ RSpec.feature 'Users: Sign Up' do
         expect do
           click_button I18n.t('user.registrations.new.sign_up')
         end.to change(course1.users, :count).by(1).
-          and change(course2.users, :count).by(1).
-          and change(course3.users, :count).by(0)
+          and change(course2.users, :count).by(1)
 
         email = User::Email.find_by(email: invited_email)
         user = email.user
@@ -119,6 +115,8 @@ RSpec.feature 'Users: Sign Up' do
 
         expect do
           click_button I18n.t('user.registrations.new.sign_up')
+          token = ActionMailer::Base.deliveries.last.body.match(/confirmation_token=\w*/)
+          visit "/users/confirmation?#{token}"
         end.to change(course1.users, :count).by(1).
           and change(course2.users, :count).by(1)
 
