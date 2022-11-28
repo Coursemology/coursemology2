@@ -61,3 +61,108 @@ export interface AssessmentsListData {
 
   assessments: AssessmentListData[];
 }
+
+export type QuestionType =
+  | 'multipleChoice'
+  | 'multipleResponse'
+  | 'textResponse'
+  | 'audioResponse'
+  | 'fileUpload'
+  | 'programming'
+  | 'scribing'
+  | 'forumPostResponse';
+
+interface NewQuestionBuilderData {
+  type: QuestionType;
+  url: string;
+}
+
+export interface QuestionData {
+  id: number;
+  number: number;
+  defaultTitle: string;
+  title: string;
+  unautogradable: boolean;
+  type: string;
+
+  description?: string;
+  editUrl?: string;
+  deleteUrl?: string;
+  duplicationUrls?: {
+    tab: string;
+    destinations: {
+      title: string;
+      duplicationUrl: string;
+    }[];
+  }[];
+}
+
+export interface McqData extends QuestionData {
+  mcqMrqType: 'mcq' | 'mrq';
+  convertUrl: string;
+  hasAnswers: boolean;
+  options: {
+    id: number;
+    option: string;
+    correct?: boolean;
+  }[];
+
+  unsubmitAndConvertUrl?: string;
+}
+
+export interface QuestionDuplicationResult {
+  destinationUrl: string;
+}
+
+export interface AssessmentData extends AssessmentActionsData {
+  id: number;
+  title: string;
+  description: string;
+  autograded: boolean;
+  startAt: PersonalTimeData;
+  hasAttempts: boolean;
+  permissions: {
+    canAttempt: boolean;
+    canManage: boolean;
+    canObserve: boolean;
+  };
+  requirements: {
+    title: string;
+    satisfied?: boolean;
+  }[];
+
+  endAt?: PersonalTimeData;
+  unlocks?: {
+    description: string;
+    title: string;
+    url: string;
+  }[];
+  baseExp?: number;
+  timeBonusExp?: number;
+  bonusEndAt?: PersonalTimeData;
+  willStartAt?: string;
+  materialsDisabled?: boolean;
+  componentsSettingsUrl?: string;
+  files?: {
+    id: number;
+    name: string;
+    url?: string;
+  }[];
+
+  showMcqMrqSolution?: boolean;
+  gradedTestCases?: string;
+  skippable?: boolean;
+  allowPartialSubmission?: boolean;
+  showMcqAnswer?: boolean;
+  hasUnautogradableQuestions?: boolean;
+  questions?: QuestionData[];
+  newQuestionUrls?: NewQuestionBuilderData[];
+}
+
+export interface AssessmentDeleteResult {
+  redirect: string;
+}
+
+export interface QuestionOrderPostData {
+  question_order: QuestionData['id'][];
+}
