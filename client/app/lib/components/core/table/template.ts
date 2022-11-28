@@ -21,3 +21,25 @@ export interface ColumnTemplate<RowData extends AnyRowData> {
   hideColumnWhen?: boolean;
   className?: string;
 }
+
+type Variants = 'outlined' | 'elevation';
+
+export interface TableContainerProps {
+  className?: string;
+  stickyHeader?: boolean;
+  variant?: Variants;
+  dense?: boolean;
+}
+
+interface AnyTableProps<RowData extends AnyRowData>
+  extends TableContainerProps {
+  data: RowData[];
+  children: ColumnTemplate<RowData>[];
+  rowKey: (row: RowData) => string;
+  rowClassName?: string | ((row: RowData) => string);
+  headerClassName?: string;
+}
+
+export type AnyTable = <RowData extends AnyRowData>(
+  props: AnyTableProps<RowData>,
+) => JSX.Element;
