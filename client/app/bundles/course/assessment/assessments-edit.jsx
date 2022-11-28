@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import { getAssessmentId } from 'lib/helpers/url-helpers';
@@ -29,24 +30,34 @@ $(async () => {
 
     root.render(
       <ProviderWrapper store={store}>
-        <AssessmentEditPage
-          conditionAttributes={data.conditionsData}
-          containsCodaveri={data.contains_codaveri}
-          folderAttributes={data.folder_attributes}
-          gamified={data.gamified}
-          initialValues={{
-            ...data.attributes,
-            tabs: [currentTab],
-            password_protected: !!(
-              data.attributes.view_password || data.attributes.session_password
-            ),
-          }}
-          modeSwitching={data.mode_switching}
-          randomizationAllowed={data.randomization_allowed}
-          showPersonalizedTimelineFeatures={
-            data.show_personalized_timeline_features
-          }
-        />
+        <BrowserRouter>
+          <Routes>
+            <Route
+              element={
+                <AssessmentEditPage
+                  conditionAttributes={data.conditionsData}
+                  containsCodaveri={data.contains_codaveri}
+                  folderAttributes={data.folder_attributes}
+                  gamified={data.gamified}
+                  initialValues={{
+                    ...data.attributes,
+                    tabs: [currentTab],
+                    password_protected: !!(
+                      data.attributes.view_password ||
+                      data.attributes.session_password
+                    ),
+                  }}
+                  modeSwitching={data.mode_switching}
+                  randomizationAllowed={data.randomization_allowed}
+                  showPersonalizedTimelineFeatures={
+                    data.show_personalized_timeline_features
+                  }
+                />
+              }
+              path="/courses/:courseId/assessments/:assessmentId/edit"
+            />
+          </Routes>
+        </BrowserRouter>
       </ProviderWrapper>,
     );
   }
