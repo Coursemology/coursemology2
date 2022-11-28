@@ -11,6 +11,9 @@ module.exports = {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      scale: {
+        200: '2',
+      },
       transitionProperty: {
         position: 'opacity, left, right, top, bottom, visibility',
         margin: 'margin, margin-left, margin-right, margin-top, margin-bottom',

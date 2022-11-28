@@ -13,6 +13,15 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     });
   }
 
+  /**
+   * Fetches the details for an assessment.
+   * @param {number} assessmentId
+   * @returns An `AssessmentData` object
+   */
+  fetch(assessmentId) {
+    return this.getClient().get(`${this._getUrlPrefix()}/${assessmentId}`);
+  }
+
   fetchEditData(assessmentId) {
     return this.getClient().get(`${this._getUrlPrefix()}/${assessmentId}/edit`);
   }
@@ -50,6 +59,14 @@ export default class AssessmentsAPI extends BaseCourseAPI {
   }
 
   /**
+   * Deletes an assessment.
+   * @param {string} deleteUrl
+   */
+  delete(deleteUrl) {
+    return this.getClient().delete(deleteUrl);
+  }
+
+  /**
    * Fetches assessment skills options
    *
    * @return {Promise}
@@ -73,6 +90,42 @@ export default class AssessmentsAPI extends BaseCourseAPI {
         course_users: courseUsers,
       },
     );
+  }
+
+  /**
+   * Deletes a question in an assessment.
+   * @param {string} questionUrl
+   */
+  deleteQuestion(questionUrl) {
+    return this.getClient().delete(questionUrl);
+  }
+
+  /**
+   * Reorders the questions in an assessment.
+   * @param {number} assessmentId
+   * @param {number[]} questionIds Question IDs in the new ordering
+   */
+  reorderQuestions(assessmentId, questionIds) {
+    return this.getClient().post(
+      `${this._getUrlPrefix()}/${assessmentId}/reorder`,
+      questionIds,
+    );
+  }
+
+  /**
+   * Duplicates a question to an assessment.
+   * @param {string} duplicationUrl
+   */
+  duplicateQuestion(duplicationUrl) {
+    return this.getClient().post(duplicationUrl);
+  }
+
+  /**
+   * Converts an MCQ to an MRQ, or vice versa.
+   * @param {string} convertUrl
+   */
+  convertMcqMrq(convertUrl) {
+    return this.getClient().patch(convertUrl);
   }
 
   _getUrlPrefix() {

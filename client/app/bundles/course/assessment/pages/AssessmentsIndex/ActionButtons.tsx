@@ -8,7 +8,7 @@ import translations from '../../translations';
 
 import UnavailableMessage from './UnavailableMessage';
 
-const ACTION_LABELS: Record<AssessmentListData['status'], Descriptor> = {
+export const ACTION_LABELS: Record<AssessmentListData['status'], Descriptor> = {
   attempting: translations.resume,
   locked: translations.unlock,
   open: translations.attempt,

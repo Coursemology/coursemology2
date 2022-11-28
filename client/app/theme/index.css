@@ -12,4 +12,8 @@
   .invisible {
     visibility: hidden;
   }
+
+  .key {
+    @apply rounded-xl border border-solid py-0.5 px-2;
+  }
 }
