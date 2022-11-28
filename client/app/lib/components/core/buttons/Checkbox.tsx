@@ -84,4 +84,8 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
 
 Checkbox.displayName = 'Checkbox';
 
+Checkbox.defaultProps = {
+  component: MuiCheckbox,
+};
+
 export default Checkbox;
