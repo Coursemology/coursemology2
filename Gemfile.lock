@@ -621,7 +621,7 @@ GEM
       execjs (>= 0.3.0, < 3)
     unicode-display_width (2.3.0)
     uniform_notifier (1.16.0)
-    unread (0.11.0)
+    unread (0.12.0)
       activerecord (>= 3)
     validates_hostname (1.0.13)
       activerecord (>= 3.0)
