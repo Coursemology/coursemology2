@@ -5,7 +5,7 @@ import {
 } from 'types/course/assessment/assessments';
 
 import Link from 'lib/components/core/Link';
-import Table, { ColumnTemplate } from 'lib/components/core/table';
+import { ColumnTemplate, VerticalTable } from 'lib/components/core/table';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -130,7 +130,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
   );
 
   return (
-    <Table
+    <VerticalTable
       className="-mx-6 w-screen sm:m-0 sm:mt-8 sm:w-full"
       data={assessments}
       headerClassName={`bg-neutral-50 z-10 ${props.top}`}
@@ -152,7 +152,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
       variant="outlined"
     >
       {columns}
-    </Table>
+    </VerticalTable>
   );
 };
 
