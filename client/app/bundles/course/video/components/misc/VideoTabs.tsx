@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { useSelector } from 'react-redux';
 import { URLSearchParamsInit } from 'react-router-dom';
-import { Tab, Tabs } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
 import { AppState } from 'types/store';
 
 import { getVideoTabs } from '../../selectors';
@@ -25,18 +25,22 @@ const VideoTabs: FC<Props> = (props) => {
   const videoTabs = useSelector((state: AppState) => getVideoTabs(state));
   if (videoTabs.length <= 1) return null;
   return (
-    <Tabs
-      onChange={(_, value): void => {
-        setCurrentTab({ tab: value });
-      }}
-      scrollButtons="auto"
-      value={currentTab ?? videoTabs[0]?.id}
-      variant="scrollable"
-    >
-      {videoTabs.map((tab) => (
-        <Tab key={tab.id} label={tab.title} value={tab.id} />
-      ))}
-    </Tabs>
+    <Box className="max-w-full">
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs
+          onChange={(_, value): void => {
+            setCurrentTab({ tab: value });
+          }}
+          scrollButtons="auto"
+          value={currentTab ?? videoTabs[0]?.id}
+          variant="scrollable"
+        >
+          {videoTabs.map((tab) => (
+            <Tab key={tab.id} label={tab.title} value={tab.id} />
+          ))}
+        </Tabs>
+      </Box>
+    </Box>
   );
 };
 
