@@ -77,7 +77,7 @@
     "react-hook-form": "^7.39.5",
     "react-hot-keys": "^2.7.2",
     "react-image-crop": "^10.0.9",
-    "react-intl": "^6.2.1",
+    "react-intl": "^6.2.2",
     "react-player": "^2.11.0",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.3.0",
