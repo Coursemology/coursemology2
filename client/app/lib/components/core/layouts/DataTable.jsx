@@ -1,6 +1,7 @@
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
 import MUIDataTable from 'mui-datatables';
 
+import styles from 'lib/components/core/layouts/layout.scss';
 import LoadingOverlay from 'lib/components/core/LoadingOverlay';
 
 const options = {
@@ -79,7 +80,7 @@ const processColumns = (includeRowNumber, columns) => {
             let align = null;
             let className = '';
             if (c.options?.alignCenter) {
-              className += 'centered-table-head';
+              className += `${styles.centeredTableHead}`;
               align = 'center';
             }
             if (c.options?.hideInSmallScreen) {
