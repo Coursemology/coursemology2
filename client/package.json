@@ -46,7 +46,7 @@
     "@tailwindcss/line-clamp": "^0.4.2",
     "ace-builds": "^1.13.1",
     "axios": "^1.2.0",
-    "babel-plugin-formatjs": "^10.3.31",
+    "babel-plugin-formatjs": "^10.3.32",
     "chart.js": "^3.8.2",
     "dotenv-webpack": "^8.0.1",
     "fabric": "^5.2.4",
