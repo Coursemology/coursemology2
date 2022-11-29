@@ -121,5 +121,8 @@ RSpec.configure do |config|
   end
 end
 
-Capybara.server = :puma, { Silent: true }
-Capybara.default_max_wait_time = 5
+Capybara.configure do |config|
+  config.server = :puma, { Silent: true }
+  config.default_max_wait_time = 5
+  config.enable_aria_label = true
+end

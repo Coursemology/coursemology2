@@ -79,7 +79,7 @@ RSpec.feature 'System: Administration: Users', js: true do
         visit admin_users_path
 
         # Search by username
-        find('button[aria-label="Search"]').click
+        find_button('Search').click
         find('div[aria-label="Search"]').find('input').set(user_name)
 
         sleep 0.5 # timeout for search debouncing
