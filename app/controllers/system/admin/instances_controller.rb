@@ -47,7 +47,7 @@ class System::Admin::InstancesController < System::Admin::Controller
 
   def preload_instances
     @instances_count = Instance.count
-    @instances = Instance.order_for_display.paginated(new_page_params).
+    @instances = Instance.order_for_display.
                  calculated(:active_course_count, :course_count, :active_user_count, :user_count)
   end
 end

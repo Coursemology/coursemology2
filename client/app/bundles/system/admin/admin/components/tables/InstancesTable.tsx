@@ -1,23 +1,19 @@
-import { FC, ReactElement, useState } from 'react';
+import { FC, ReactElement } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { CircularProgress, Typography } from '@mui/material';
-import {
-  TableColumns,
-  TableOptions,
-  TableState,
-} from 'types/components/DataTable';
+import { Typography } from '@mui/material';
+import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { AppDispatch, AppState } from 'types/store';
 import { InstanceMiniEntity } from 'types/system/instances';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
-import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import tableTranslations from 'lib/translations/table';
 
-import { indexInstances, updateInstance } from '../../operations';
+import { updateInstance } from '../../operations';
 import { getAdminCounts, getAllInstanceMiniEntities } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
@@ -55,15 +51,10 @@ const translations = defineMessages({
 const InstancesTable: FC<Props> = (props) => {
   const { renderRowActionComponent, title, intl } = props;
   const dispatch = useDispatch<AppDispatch>();
-  const [isLoading, setIsLoading] = useState(false);
   const instances = useSelector((state: AppState) =>
     getAllInstanceMiniEntities(state),
   );
   const counts = useSelector((state: AppState) => getAdminCounts(state));
-
-  const [tableState, setTableState] = useState<TableState>({
-    page: 1,
-  });
 
   const handleNameUpdate = (rowData, newName: string): Promise<void> => {
     const instance = rebuildObjectFromRow(
@@ -121,45 +112,14 @@ const InstancesTable: FC<Props> = (props) => {
       });
   };
 
-  const changePage = (page): void => {
-    setIsLoading(true);
-    setTableState({
-      ...tableState,
-      page,
-    });
-    dispatch(
-      indexInstances({
-        'filter[page_num]': page,
-        'filter[length]': TABLE_ROWS_PER_PAGE,
-      }),
-    )
-      .catch(() =>
-        toast.error(
-          intl.formatMessage(translations.fetchFilteredInstancesFailure),
-        ),
-      )
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
   const options: TableOptions = {
     count: counts.instancesCount,
     download: false,
     filter: false,
-    onTableChange: (action, newTableState) => {
-      switch (action) {
-        case 'changePage':
-          changePage(newTableState.page! + 1);
-          break;
-        default:
-          break;
-      }
-    },
     pagination: true,
     print: false,
-    rowsPerPage: TABLE_ROWS_PER_PAGE,
-    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
+    rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     search: false,
     selectableRows: 'none',
     serverSide: true,
@@ -319,16 +279,8 @@ const InstancesTable: FC<Props> = (props) => {
       columns={columns}
       data={instances}
       includeRowNumber
-      isLoading={isLoading}
       options={options}
-      title={
-        <Typography variant="h6">
-          {title}
-          {isLoading && (
-            <CircularProgress className="relative top-1 ml-4" size={24} />
-          )}
-        </Typography>
-      }
+      title={<Typography variant="h6">{title}</Typography>}
       withMargin
     />
   );

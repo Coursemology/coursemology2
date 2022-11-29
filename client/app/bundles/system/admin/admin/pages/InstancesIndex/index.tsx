@@ -7,7 +7,6 @@ import { AppDispatch, AppState } from 'types/store';
 import AddButton from 'lib/components/core/buttons/AddButton';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
-import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import InstancesButtons from '../../components/buttons/InstancesButtons';
@@ -45,7 +44,7 @@ const InstancesIndex: FC = () => {
   const headerToolbars: ReactElement[] = [];
 
   useEffect(() => {
-    dispatch(indexInstances({ 'filter[length]': TABLE_ROWS_PER_PAGE }))
+    dispatch(indexInstances())
       .catch(() => toast.error(t(translations.fetchInstancesFailure)))
       .finally(() => setIsLoading(false));
   }, [dispatch]);

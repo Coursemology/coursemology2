@@ -102,16 +102,14 @@ export default class AdminAPI extends BaseSystemAPI {
   /**
    * Fetches a list of instances.
    */
-  indexInstances(params?: FilterParams): Promise<
+  indexInstances(): Promise<
     AxiosResponse<{
       instances: InstanceListData[];
       permissions: InstancePermissions;
       counts: number;
     }>
   > {
-    return this.getClient().get(`${AdminAPI._getUrlPrefix()}/instances`, {
-      params,
-    });
+    return this.getClient().get(`${AdminAPI._getUrlPrefix()}/instances`);
   }
 
   /**
