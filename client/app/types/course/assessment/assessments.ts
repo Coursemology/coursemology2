@@ -130,6 +130,7 @@ export interface AssessmentData extends AssessmentActionsData {
     title: string;
     satisfied?: boolean;
   }[];
+  indexUrl: string;
 
   endAt?: PersonalTimeData;
   unlocks?: {

@@ -306,10 +306,9 @@ const translations = defineMessages({
     id: 'course.assessment.show.deletingAssessment',
     defaultMessage: 'No going back now. Deleting your assessment...',
   },
-  assessmentDeletedRedirecting: {
-    id: 'course.assessment.show assessmentDeletedRedirecting',
-    defaultMessage:
-      'Assessment successfully deleted. Redirecting you to the assessments page...',
+  assessmentDeleted: {
+    id: 'course.assessment.show assessmentDeleted',
+    defaultMessage: 'Assessment successfully deleted.',
   },
   errorDeletingAssessment: {
     id: 'course.assessment.show.errorDeletingAssessment',

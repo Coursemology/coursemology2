@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
   AssessmentData,
@@ -23,6 +24,7 @@ const DeleteAssessmentPrompt = (
   const { for: assessment } = props;
   const { t } = useTranslation();
   const [deleting, setDeleting] = useState(false);
+  const navigate = useNavigate();
 
   const handleDelete = (): void => {
     const deleteUrl = assessment.deleteUrl;
@@ -36,7 +38,7 @@ const DeleteAssessmentPrompt = (
     toast
       .promise(deleteAssessment(deleteUrl), {
         pending: t(translations.deletingAssessment),
-        success: t(translations.assessmentDeletedRedirecting),
+        success: t(translations.assessmentDeleted),
         error: {
           render: ({ data }) => {
             const error = (data as Error)?.message;
@@ -44,10 +46,7 @@ const DeleteAssessmentPrompt = (
           },
         },
       })
-      .then((data: AssessmentDeleteResult) => {
-        // TODO: Change to `navigate(data.redirect)` with `useNavigate` when SPA
-        window.location.replace(data.redirect);
-      })
+      .then((data: AssessmentDeleteResult) => navigate(data.redirect))
       .catch(() => setDeleting(false));
   };
 
