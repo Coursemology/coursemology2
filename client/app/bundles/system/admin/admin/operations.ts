@@ -164,9 +164,9 @@ export function deleteCourse(courseId: number): Operation<void> {
     });
 }
 
-export function indexInstances(params?): Operation<void> {
+export function indexInstances(): Operation<void> {
   return async (dispatch) =>
-    SystemAPI.admin.indexInstances(params).then((response) => {
+    SystemAPI.admin.indexInstances().then((response) => {
       const data = response.data;
       dispatch(
         actions.saveInstanceList(data.instances, data.permissions, data.counts),
