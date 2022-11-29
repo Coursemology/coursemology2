@@ -6,14 +6,23 @@ import PropTypes from 'prop-types';
 
 import ErrorCard from 'lib/components/core/ErrorCard';
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 
 import { studentsIndexShape } from '../../../propTypes/students';
 
 const options = {
-  filterType: 'multiselect',
   downloadOptions: {
-    filename: 'students',
+    filename: 'students_statistics',
+  },
+  print: false,
+  rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
+  rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
+  selectableRows: 'none',
+  sortOrder: {
+    name: 'experiencePoints',
+    direction: 'desc',
   },
 };
 
@@ -89,7 +98,6 @@ const StudentsStatistics = ({
   if (isError) {
     return <ErrorCard message={intl.formatMessage(translations.error)} />;
   }
-
   const columns = [
     {
       name: 'name',
@@ -125,6 +133,20 @@ const StudentsStatistics = ({
       options: {
         filter: false,
         sort: true,
+        alignCenter: true,
+        customBodyRenderLite: (dataIndex) => {
+          const student = students[dataIndex];
+          return (
+            <Link
+              key={student.id}
+              href={student.experiencePointsLink}
+              opensInNewTab
+              underlinesOnHover
+            >
+              {student.experiencePoints}
+            </Link>
+          );
+        },
       },
     });
   }
@@ -134,6 +156,22 @@ const StudentsStatistics = ({
       label: intl.formatMessage(translations.videoSubmissionCount, {
         courseVideoCount,
       }),
+      options: {
+        alignCenter: true,
+        customBodyRenderLite: (dataIndex) => {
+          const student = students[dataIndex];
+          return (
+            <Link
+              key={student.id}
+              href={student.videoSubmissionLink}
+              opensInNewTab
+              underlinesOnHover
+            >
+              {student.videoSubmissionCount}
+            </Link>
+          );
+        },
+      },
     });
     columns.push({
       name: 'videoPercentWatched',
@@ -141,6 +179,7 @@ const StudentsStatistics = ({
       options: {
         filter: false,
         sort: true,
+        alignCenter: true,
         customBodyRender: (value) => (
           <Box sx={{ width: '100%' }}>
             <LinearProgressWithLabel value={value} />
@@ -154,6 +193,7 @@ const StudentsStatistics = ({
     <DataTable
       columns={columns}
       data={students}
+      includeRowNumber
       options={options}
       title={intl.formatMessage(translations.tableTitle)}
     />
