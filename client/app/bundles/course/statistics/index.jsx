@@ -1,4 +1,5 @@
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
@@ -8,10 +9,18 @@ import storeCreator from './store';
 $(() => {
   const mountNode = document.getElementById('course-statistics-component');
   if (mountNode) {
+    const root = createRoot(mountNode);
     const store = storeCreator();
-    render(
+    root.render(
       <ProviderWrapper store={store}>
-        <StatisticsIndex />
+        <BrowserRouter>
+          <Routes>
+            <Route
+              element={<StatisticsIndex />}
+              path="/courses/:courseId/statistics"
+            />
+          </Routes>
+        </BrowserRouter>
       </ProviderWrapper>,
       mountNode,
     );
