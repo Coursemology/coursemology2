@@ -8,7 +8,7 @@ import ErrorCard from 'lib/components/core/ErrorCard';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 
 import { studentsIndexShape } from '../../../propTypes/students';
 
@@ -17,8 +17,8 @@ const options = {
     filename: 'students_statistics',
   },
   print: false,
-  rowsPerPage: TABLE_ROWS_PER_PAGE,
-  rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
+  rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
+  rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
   selectableRows: 'none',
   sortOrder: {
     name: 'experiencePoints',

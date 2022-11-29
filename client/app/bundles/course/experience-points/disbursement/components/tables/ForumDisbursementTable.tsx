@@ -12,7 +12,7 @@ import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumDisbursementUserEntity } from 'types/course/disbursement';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
-import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 
@@ -226,8 +226,8 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
     download: false,
     filter: false,
     pagination: true,
-    rowsPerPage: TABLE_ROWS_PER_PAGE,
-    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
+    rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     print: false,
     search: false,
     selectableRows: 'none',

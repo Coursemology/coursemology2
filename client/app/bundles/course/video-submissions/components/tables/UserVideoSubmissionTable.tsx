@@ -7,6 +7,7 @@ import { VideoSubmissionListData } from 'types/course/videoSubmissions';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import Note from 'lib/components/core/Note';
+import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { formatShortDateTime } from 'lib/moment';
 import tableTranslations from 'lib/translations/table';
 
@@ -27,8 +28,8 @@ const UserVideoSubmissionsTable: FC<Props> = (props) => {
     jumpToPage: true,
     pagination: true,
     print: false,
-    rowsPerPage: 100,
-    rowsPerPageOptions: [100],
+    rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     search: false,
     selectableRows: 'none',
     setTableProps: (): object => {
