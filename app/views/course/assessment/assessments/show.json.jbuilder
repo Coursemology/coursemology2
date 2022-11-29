@@ -8,6 +8,7 @@ json.id assessment.id
 json.title assessment.title
 json.description assessment.description unless @assessment.description.blank?
 json.autograded assessment.autograded?
+json.indexUrl course_assessments_path(current_course, category: assessment.tab.category_id, tab: assessment.tab)
 
 json.startAt do
   json.partial! 'course/lesson_plan/items/personal_or_ref_time', locals: {

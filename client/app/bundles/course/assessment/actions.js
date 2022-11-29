@@ -97,6 +97,7 @@ export const createAssessment = (
   successMessage,
   failureMessage,
   setError,
+  onSuccess,
 ) => {
   const attributes = { ...data, category: categoryId, tab: tabId };
   return (dispatch) => {
@@ -109,13 +110,11 @@ export const createAssessment = (
           type: actionTypes.CREATE_ASSESSMENT_SUCCESS,
           message: successMessage,
         });
-        // TODO: Remove redirection when assessment index is implemented using React.
         setTimeout(() => {
-          if (response.data && response.data.id) {
-            window.location = `/courses/${getCourseId()}/assessments/${
-              response.data.id
-            }`;
-          }
+          if (response.data && response.data.id)
+            onSuccess(
+              `/courses/${getCourseId()}/assessments/${response.data.id}`,
+            );
         }, 200);
       })
       .catch((error) => {

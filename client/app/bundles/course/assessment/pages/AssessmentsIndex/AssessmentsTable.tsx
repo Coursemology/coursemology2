@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
   AssessmentListData,
   AssessmentsListData,
 } from 'types/course/assessment/assessments';
 
-import Link from 'lib/components/core/Link';
 import { ColumnTemplate, VerticalTable } from 'lib/components/core/table';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -34,9 +34,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
               <Link
                 // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
                 className="line-clamp-2 xl:line-clamp-1"
-                href={assessment.url}
-                opensInNewTab
-                underline="hover"
+                to={assessment.url}
               >
                 {assessment.title}
               </Link>

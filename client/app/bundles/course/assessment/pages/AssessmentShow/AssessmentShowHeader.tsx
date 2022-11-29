@@ -25,7 +25,7 @@ const AssessmentShowHeader = (
 
   return (
     <>
-      <PageHeader title={assessment.title}>
+      <PageHeader returnLink={assessment.indexUrl} title={assessment.title}>
         {assessment.deleteUrl && (
           <Tooltip disableInteractive title={t(translations.deleteAssessment)}>
             <IconButton

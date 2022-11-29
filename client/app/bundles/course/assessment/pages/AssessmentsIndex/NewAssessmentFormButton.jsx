@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 import {
   Button,
   Dialog,
@@ -26,6 +27,7 @@ class NewAssessmentFormButton extends Component {
     super(props);
     this.state = {
       assessmentForm: undefined,
+      redirectUrl: undefined,
     };
   }
 
@@ -45,6 +47,7 @@ class NewAssessmentFormButton extends Component {
         intl.formatMessage(translations.creationSuccess),
         intl.formatMessage(translations.creationFailure),
         setError,
+        (redirectUrl) => this.setState({ redirectUrl }),
       ),
     );
   };
@@ -181,6 +184,8 @@ class NewAssessmentFormButton extends Component {
         />
 
         <NotificationBar notification={notification} />
+
+        {this.state.redirectUrl && <Navigate to={this.state.redirectUrl} />}
       </>
     );
   }
