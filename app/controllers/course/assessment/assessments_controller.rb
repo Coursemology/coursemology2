@@ -69,7 +69,9 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def destroy
     if @assessment.destroy
       render json: {
-        redirect: course_assessments_path(current_course, category: @assessment.tab.category_id, tab: @assessment.tab_id)
+        redirect: course_assessments_path(current_course,
+                                          category: @assessment.tab.category_id,
+                                          tab: @assessment.tab_id)
       }
     else
       render json: { errors: @assessment.errors.full_messages.to_sentence }, status: :bad_request
@@ -79,7 +81,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # Reorder questions for an assessment
   def reorder
     unless valid_ordering?(question_order_ids)
-      render json: { errors: 'Invalid ordering for assessment questions' }, status: :bad_request
+      render json: {
+        errors: I18n.t('course.assessment.assessments.invalid_questions_order')
+      }, status: :bad_request
+
       return
     end
 

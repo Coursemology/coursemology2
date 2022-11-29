@@ -3,14 +3,7 @@ en:
     assessment:
       question:
         multiple_responses:
-          new:
-            multiple_response_header: 'New Multiple Response Question'
-            multiple_choice_header: 'New Multiple Choice Question'
-          create:
-            success: 'The multiple response question was created.'
-          update:
-            success: 'The multiple response question was updated.'
-            failure: 'Failed to update the multiple response question'
+          respond_to_switch_mcq_mrq_type_html:
             switch_mcq_success: 'Question %{number} has been successfully switched to MRQ'
             switch_mrq_success: 'Question %{number} has been successfully switched to MCQ'
             switch_mcq_unsubmit_success: >
@@ -21,9 +14,15 @@ en:
               Question %{number} has been successfully switched to MCQ.
               All submissions to this assessment are being unsubmitted and all answers to this
               question are being removed.
-          destroy:
-            success: 'The multiple response question was deleted.'
-            failure: 'Could not delete multiple response question: %{error}'
+            failure: 'Failed to update the multiple response question'
+          new:
+            multiple_response_header: 'New Multiple Response Question'
+            multiple_choice_header: 'New Multiple Choice Question'
+          create:
+            success: 'The multiple response question was created.'
+          update:
+            success: 'The multiple response question was updated.'
+            failure: 'Failed to update the multiple response question'
           form:
             correct: 'Correct'
             option: 'Option'
@@ -46,7 +45,7 @@ en:
               There are no existing answers and/or submissions for Question %{number}
               and this question-type can be safely switched.
               Are you sure you want to proceed?
-            confirm_switch_to_mcq: > 
+            confirm_switch_to_mcq: >
               Are you sure you want to switch Question %{number} to MCQ?
               THERE ARE EXISTING ANSWERS AND/OR SUBMISSIONS! Changing the question-type may cause
               inconsistencies in the student's responses. To prevent this, you can unsubmit all submissions

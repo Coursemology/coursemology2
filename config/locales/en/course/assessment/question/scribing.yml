@@ -10,7 +10,4 @@ en:
             failure: 'Could not create scribing question.'
           update:
             failure: 'Could not update scribing question.'
-          destroy:
-            success: 'The scribing question was deleted.'
-            failure: 'Could not delete scribing question: %{error}'
           question_type: Scribing

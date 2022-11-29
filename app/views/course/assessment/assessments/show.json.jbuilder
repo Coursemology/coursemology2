@@ -120,35 +120,37 @@ if can_observe
     json.newQuestionUrls [
       {
         type: 'multipleChoice',
-        url: new_course_assessment_question_multiple_response_path(current_course, assessment, { multiple_choice: true }),
+        url: new_course_assessment_question_multiple_response_path(current_course, assessment, {
+          multiple_choice: true
+        })
       },
       {
         type: 'multipleResponse',
-        url: new_course_assessment_question_multiple_response_path(current_course, assessment),
+        url: new_course_assessment_question_multiple_response_path(current_course, assessment)
       },
       {
         type: 'textResponse',
-        url: new_course_assessment_question_text_response_path(current_course, assessment),
+        url: new_course_assessment_question_text_response_path(current_course, assessment)
       },
       {
         type: 'audioResponse',
-        url: new_course_assessment_question_voice_response_path(current_course, assessment),
+        url: new_course_assessment_question_voice_response_path(current_course, assessment)
       },
       {
         type: 'fileUpload',
-        url: new_course_assessment_question_text_response_path(current_course, assessment, { file_upload: true }),
+        url: new_course_assessment_question_text_response_path(current_course, assessment, { file_upload: true })
       },
       {
         type: 'programming',
-        url: new_course_assessment_question_programming_path(current_course, assessment),
+        url: new_course_assessment_question_programming_path(current_course, assessment)
       },
       {
         type: 'scribing',
-        url: new_course_assessment_question_scribing_path(current_course, assessment),
+        url: new_course_assessment_question_scribing_path(current_course, assessment)
       },
       {
         type: 'forumPostResponse',
-        url: new_course_assessment_question_forum_post_response_path(current_course, assessment),
+        url: new_course_assessment_question_forum_post_response_path(current_course, assessment)
       }
       # TODO: Uncomment when TextResponseComprehension is ready
       # {
