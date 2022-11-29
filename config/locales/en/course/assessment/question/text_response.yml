@@ -11,9 +11,6 @@ en:
             success: 'The %{name} was created.'
           update:
             success: 'The %{name} was updated.'
-          destroy:
-            success: 'The %{name} was deleted.'
-            failure: 'Could not delete %{name}: %{error}'
           form:
             allow_upload_file: 'Allow file upload in the answer'
             multiline_explanation_html: >

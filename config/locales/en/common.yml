@@ -1,6 +1,5 @@
 en:
   common:
-    new: "New"
     not_started: "Not started"
     ended: "Ended"
     plain_text_link: "%{text} (%{url})"

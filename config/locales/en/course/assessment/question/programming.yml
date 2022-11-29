@@ -11,9 +11,6 @@ en:
           update:
             success: 'The programming question was updated.'
             failure: 'Could not update programming question.'
-          destroy:
-            success: 'The programming question was deleted.'
-            failure: 'Could not delete programming question: %{error}'
           form:
             import_result:
               success: 'The package was successfully imported.'
