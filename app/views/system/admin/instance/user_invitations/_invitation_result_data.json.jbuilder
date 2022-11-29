@@ -20,7 +20,7 @@ json.newInstanceUsers new_instance_users.each do |instance_user|
   json.id user.id if user.id
   json.name user.name.strip
   json.email user.email
-  json.role user.role
+  json.role instance_user.role
 end
 
 json.existingInstanceUsers existing_instance_users.each do |instance_user|
@@ -28,7 +28,7 @@ json.existingInstanceUsers existing_instance_users.each do |instance_user|
   json.id user.id if user.id
   json.name user.name.strip
   json.email user.email
-  json.role user.role
+  json.role instance_user.role
 end
 
 json.duplicateUsers duplicate_users.each do |duplicate_user, index|
