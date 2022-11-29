@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 
 import NotificationBar from 'lib/components/core/NotificationBar';
+import PageHeader from 'lib/components/navigation/PageHeader';
 
 import { fetchStaffStatistics, fetchStudentsStatistics } from '../../actions';
 import { courseIndexShape } from '../../propTypes/course';
@@ -18,6 +19,10 @@ import StaffStatistics from './staff';
 import StudentsStatistics from './students';
 
 const translations = defineMessages({
+  statistics: {
+    id: 'course.statistics.header.statistics',
+    defaultMessage: 'Statistics',
+  },
   students: {
     id: 'course.statistics.tabs.students',
     defaultMessage: 'Students',
@@ -94,6 +99,7 @@ const StatisticsIndex = ({
 
   return (
     <>
+      <PageHeader title={intl.formatMessage(translations.statistics)} />
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
