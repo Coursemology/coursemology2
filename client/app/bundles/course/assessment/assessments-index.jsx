@@ -3,8 +3,9 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
-import AssessmentsIndex from './pages/AssessmentsIndex';
+import AssessmentEdit from './pages/AssessmentEdit';
 import AssessmentShow from './pages/AssessmentShow';
+import AssessmentsIndex from './pages/AssessmentsIndex';
 import storeCreator from './store';
 
 $(() => {
@@ -25,6 +26,11 @@ $(() => {
           <Route
             element={<AssessmentShow />}
             path="/courses/:courseId/assessments/:assessmentId"
+          />
+
+          <Route
+            element={<AssessmentEdit />}
+            path="/courses/:courseId/assessments/:assessmentId/edit"
           />
         </Routes>
       </BrowserRouter>
