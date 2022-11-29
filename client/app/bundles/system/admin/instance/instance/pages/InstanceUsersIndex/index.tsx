@@ -8,7 +8,7 @@ import { AppDispatch, AppState } from 'types/store';
 import SummaryCard from 'lib/components/core/layouts/SummaryCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
-import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 
 import UsersButtons from '../../components/buttons/UsersButtons';
 import InstanceUsersTabs from '../../components/navigation/InstanceUsersTabs';
@@ -34,7 +34,7 @@ const translations = defineMessages({
   totalUsers: {
     id: 'system.admin.users.totalUsers',
     defaultMessage:
-      'Total Users: {allCount}({adminCount} Administrators' +
+      'Total Users: {allCount} ({adminCount} Administrators' +
       ', {instructorCount} Instructors, {normalCount} Normal)',
   },
   activeUsers: {
@@ -155,7 +155,7 @@ const UsersIndex: FC<Props> = (props) => {
     setIsLoading(true);
     dispatch(
       indexUsers({
-        'filter[length]': TABLE_ROWS_PER_PAGE,
+        'filter[length]': DEFAULT_TABLE_ROWS_PER_PAGE,
         role: filter.role,
         active: filter.active,
       }),

@@ -8,7 +8,7 @@ import { InvitationListData } from 'types/course/userInvitations';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import {
   COURSE_USER_ROLES,
-  TABLE_ROWS_PER_PAGE,
+  DEFAULT_TABLE_ROWS_PER_PAGE,
 } from 'lib/constants/sharedConstants';
 import tableTranslations from 'lib/translations/table';
 
@@ -27,8 +27,8 @@ const InvitationResultInvitationsTable: FC<Props> = (props) => {
     filter: false,
     pagination: true,
     print: false,
-    rowsPerPage: TABLE_ROWS_PER_PAGE,
-    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
+    rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     search: false,
     selectableRows: 'none',
     setTableProps: (): object => {

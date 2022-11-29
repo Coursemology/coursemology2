@@ -10,7 +10,7 @@ import CoursesTable from 'bundles/system/admin/admin/components/tables/CoursesTa
 import SummaryCard from 'lib/components/core/layouts/SummaryCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
-import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 
 import { deleteCourse, indexCourses } from '../../operations';
 import { getAdminCounts, getAllCourseMiniEntities } from '../../selectors';
@@ -77,7 +77,7 @@ const CoursesIndex: FC<Props> = (props) => {
     setIsLoading(true);
     dispatch(
       indexCourses({
-        'filter[length]': TABLE_ROWS_PER_PAGE,
+        'filter[length]': DEFAULT_TABLE_ROWS_PER_PAGE,
         active: filter.active,
       }),
     )
