@@ -7,7 +7,7 @@ import {
 } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Tab, Tabs } from '@mui/material';
+import { Box, Tab, Tabs } from '@mui/material';
 import { tabsStyle } from 'theme/mui-style';
 import {
   CommentPermissions,
@@ -145,34 +145,40 @@ const CommentTabs: FC<CommentTabProps> = (props) => {
   }, [permissions, tabs]);
 
   return (
-    <Tabs
-      onChange={(_, value): void => {
-        dispatch(changeTabValue(value));
-      }}
-      scrollButtons="auto"
-      sx={tabsStyle}
-      TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
-      value={tabValue}
-      variant="scrollable"
-    >
-      {tabTypesToRender.length > 0 &&
-        tabTypesToRender.map((tabData: CommentTabData) => (
-          <Tab
-            key={tabData.type}
-            icon={<CustomBadge badgeContent={tabData.count} color="primary" />}
-            iconPosition="end"
-            id={`${tabData.type}_tab`}
-            label={tabTranslation(intl, tabData.type)}
-            style={{
-              minHeight: 48,
-              paddingRight:
-                tabData.count === 0 || tabData.count === undefined ? 8 : 26,
-              textDecoration: 'none',
-            }}
-            value={tabData.type}
-          />
-        ))}
-    </Tabs>
+    <Box className="max-w-full">
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs
+          onChange={(_, value): void => {
+            dispatch(changeTabValue(value));
+          }}
+          scrollButtons="auto"
+          sx={tabsStyle}
+          TabIndicatorProps={{ color: 'primary', style: { height: 5 } }}
+          value={tabValue}
+          variant="scrollable"
+        >
+          {tabTypesToRender.length > 0 &&
+            tabTypesToRender.map((tabData: CommentTabData) => (
+              <Tab
+                key={tabData.type}
+                icon={
+                  <CustomBadge badgeContent={tabData.count} color="primary" />
+                }
+                iconPosition="end"
+                id={`${tabData.type}_tab`}
+                label={tabTranslation(intl, tabData.type)}
+                style={{
+                  minHeight: 48,
+                  paddingRight:
+                    tabData.count === 0 || tabData.count === undefined ? 8 : 26,
+                  textDecoration: 'none',
+                }}
+                value={tabData.type}
+              />
+            ))}
+        </Tabs>
+      </Box>
+    </Box>
   );
 };
 
