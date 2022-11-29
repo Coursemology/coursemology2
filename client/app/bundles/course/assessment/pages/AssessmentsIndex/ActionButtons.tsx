@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Create, Inventory, QuestionMark } from '@mui/icons-material';
 import { Button, IconButton, Tooltip } from '@mui/material';
 import { AssessmentListData } from 'types/course/assessment/assessments';
@@ -31,15 +32,20 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
         <div className="hoverable:invisible group-hover?:visible flex h-full items-center transition-position no-hover:mr-4 hoverable:absolute hoverable:right-0 hoverable:pl-8 hoverable:opacity-0 hoverable:bg-fade-to-l-slot-2 group-hover?:right-full group-hover?:opacity-100">
           {assessment.editUrl && (
             <Tooltip disableInteractive title={t(translations.editAssessment)}>
-              <IconButton className="max-sm:!hidden" href={assessment.editUrl}>
-                <Create />
-              </IconButton>
+              <Link to={assessment.editUrl}>
+                <IconButton className="max-sm:!hidden">
+                  <Create />
+                </IconButton>
+              </Link>
             </Tooltip>
           )}
 
           {assessment.submissionsUrl && (
             <Tooltip disableInteractive title={t(translations.submissions)}>
-              <IconButton href={assessment.submissionsUrl}>
+              <IconButton
+                // TODO: Change to react-router Link once SPA
+                href={assessment.submissionsUrl}
+              >
                 <Inventory />
               </IconButton>
             </Tooltip>
@@ -50,6 +56,7 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
       {assessment.actionButtonUrl && (
         <Button
           className="min-w-[8.5rem]"
+          // TODO: Change to react-router Link once SPA
           href={assessment.actionButtonUrl}
           size="small"
           variant={assessment.status === 'submitted' ? 'outlined' : 'contained'}

@@ -1,20 +1,28 @@
 import { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/core/NotificationBar';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { achievementTypesConditionAttributes } from 'lib/types';
 
 import * as actions from '../../actions';
 import AssessmentForm from '../../components/AssessmentForm';
+import translations from '../../translations';
 
-import translations from './translations.intl';
+class AssessmentEditPage extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      redirectUrl: undefined,
+    };
+  }
 
-class EditPage extends Component {
   onFormSubmit = (data, setError) => {
     // Remove view_password and session_password field if password is disabled
     const viewPassword = data.password_protected ? data.view_password : null;
@@ -38,12 +46,14 @@ class EditPage extends Component {
         intl.formatMessage(translations.updateSuccess),
         intl.formatMessage(translations.updateFailure),
         setError,
+        (redirectUrl) => this.setState({ redirectUrl }),
       ),
     );
   };
 
   render() {
     const {
+      intl,
       conditionAttributes,
       containsCodaveri,
       disabled,
@@ -56,20 +66,21 @@ class EditPage extends Component {
       showPersonalizedTimelineFeatures,
     } = this.props;
 
+    // TODO: Add a source router props that can be used to determine where
+    // did the user come from, and initialise a Back button that goes there.
     return (
-      <>
-        <div className="absolute right-8 -mt-24">
+      <main className="space-y-5">
+        <PageHeader title={intl.formatMessage(translations.editAssessment)}>
           <Button
-            className="btn-submit"
-            color="primary"
+            className="bg-white"
             disabled={disabled}
             form="assessment-form"
             type="submit"
-            variant="contained"
+            variant="outlined"
           >
             <FormattedMessage {...translations.updateAssessment} />
           </Button>
-        </div>
+        </PageHeader>
 
         <AssessmentForm
           conditionAttributes={conditionAttributes}
@@ -86,12 +97,14 @@ class EditPage extends Component {
         />
 
         <NotificationBar notification={notification} />
-      </>
+
+        {this.state.redirectUrl && <Navigate to={this.state.redirectUrl} />}
+      </main>
     );
   }
 }
 
-EditPage.propTypes = {
+AssessmentEditPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   intl: PropTypes.object,
   // If the gamification feature is enabled in the course.
@@ -114,4 +127,6 @@ EditPage.propTypes = {
   notification: notificationShape,
 };
 
-export default connect((state) => state.editPage)(injectIntl(EditPage));
+export default connect((state) => state.editPage)(
+  injectIntl(AssessmentEditPage),
+);

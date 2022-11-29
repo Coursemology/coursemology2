@@ -1,3 +1,4 @@
+import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { fireEvent, render, RenderResult, waitFor } from 'utilities/test-utils';
 
@@ -5,7 +6,7 @@ import CourseAPI from 'api/course';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
 import storeCreator from '../../../store';
-import AssessmentEdit from '..';
+import AssessmentEdit from '../AssessmentEditPage';
 
 const INITIAL_VALUES = {
   id: 1,
@@ -49,8 +50,10 @@ let updateApi: jest.SpyInstance;
 
 const getComponent = (): JSX.Element => (
   <ProviderWrapper store={store}>
-    {/* @ts-ignore until AssessmentEdit/index.jsx is fully typed */}
-    <AssessmentEdit initialValues={initialValues} modeSwitching />
+    <BrowserRouter>
+      {/* @ts-ignore until AssessmentEdit/index.jsx is fully typed */}
+      <AssessmentEdit initialValues={initialValues} modeSwitching />
+    </BrowserRouter>
   </ProviderWrapper>
 );
 

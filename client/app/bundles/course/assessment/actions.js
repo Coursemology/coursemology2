@@ -136,6 +136,7 @@ export const updateAssessment = (
   successMessage,
   failureMessage,
   setError,
+  onSuccess,
 ) => {
   const attributes = data;
   return (dispatch) => {
@@ -148,10 +149,11 @@ export const updateAssessment = (
           type: actionTypes.UPDATE_ASSESSMENT_SUCCESS,
           message: successMessage,
         });
-        // TODO: Remove redirection when assessment index is implemented using React.
-        setTimeout(() => {
-          window.location = `/courses/${getCourseId()}/assessments/${assessmentId}`;
-        }, 500);
+        setTimeout(
+          () =>
+            onSuccess(`/courses/${getCourseId()}/assessments/${assessmentId}`),
+          500,
+        );
       })
       .catch((error) => {
         dispatch({
