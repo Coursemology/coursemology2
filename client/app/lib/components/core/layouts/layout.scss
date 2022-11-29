@@ -35,3 +35,9 @@ footer {
 img {
   max-width: 100%;
 }
+
+.centeredTableHead {
+  > span {
+    justify-content: center;
+  }
+}
