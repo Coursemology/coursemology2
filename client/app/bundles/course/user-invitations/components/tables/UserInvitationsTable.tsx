@@ -19,7 +19,7 @@ import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
 import {
   COURSE_USER_ROLES,
-  TABLE_ROWS_PER_PAGE,
+  DEFAULT_TABLE_ROWS_PER_PAGE,
   TIMELINE_ALGORITHMS,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
@@ -86,8 +86,8 @@ const UserInvitationsTable: FC<Props> = (props) => {
     filter: false,
     pagination: true,
     print: false,
-    rowsPerPage: TABLE_ROWS_PER_PAGE,
-    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
+    rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     search: true,
     selectableRows: 'none',
     setTableProps: (): Record<string, unknown> => {

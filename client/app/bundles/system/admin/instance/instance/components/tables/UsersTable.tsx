@@ -23,9 +23,9 @@ import {
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import {
+  DEFAULT_TABLE_ROWS_PER_PAGE,
   FIELD_DEBOUNCE_DELAY,
   INSTANCE_USER_ROLES,
-  TABLE_ROWS_PER_PAGE,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import tableTranslations from 'lib/translations/table';
@@ -116,7 +116,7 @@ const UsersTable: FC<Props> = (props) => {
     dispatch(
       indexUsers({
         'filter[page_num]': page,
-        'filter[length]': TABLE_ROWS_PER_PAGE,
+        'filter[length]': DEFAULT_TABLE_ROWS_PER_PAGE,
         role: filter.role,
         active: filter.active,
       }),
@@ -138,7 +138,7 @@ const UsersTable: FC<Props> = (props) => {
     dispatch(
       indexUsers({
         'filter[page_num]': page,
-        'filter[length]': TABLE_ROWS_PER_PAGE,
+        'filter[length]': DEFAULT_TABLE_ROWS_PER_PAGE,
         role: filter.role,
         active: filter.active,
         search: searchText ? searchText.trim() : searchText,
@@ -172,8 +172,8 @@ const UsersTable: FC<Props> = (props) => {
     },
     pagination: true,
     print: false,
-    rowsPerPage: TABLE_ROWS_PER_PAGE,
-    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
+    rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',

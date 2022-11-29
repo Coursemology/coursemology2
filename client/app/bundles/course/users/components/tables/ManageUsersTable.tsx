@@ -27,7 +27,7 @@ import Note from 'lib/components/core/Note';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import {
   COURSE_USER_ROLES,
-  TABLE_ROWS_PER_PAGE,
+  DEFAULT_TABLE_ROWS_PER_PAGE,
   TIMELINE_ALGORITHMS,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
@@ -263,8 +263,8 @@ const ManageUsersTable: FC<Props> = (props) => {
     filter: false,
     pagination: true,
     print: false,
-    rowsPerPage: TABLE_ROWS_PER_PAGE,
-    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
+    rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',

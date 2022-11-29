@@ -16,8 +16,8 @@ import { AdminStats, UserBasicMiniEntity } from 'types/users';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import {
+  DEFAULT_TABLE_ROWS_PER_PAGE,
   FIELD_DEBOUNCE_DELAY,
-  TABLE_ROWS_PER_PAGE,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import tableTranslations from 'lib/translations/table';
@@ -81,7 +81,7 @@ const CoursesTable: FC<Props> = (props) => {
     dispatch(
       indexOperation({
         'filter[page_num]': page,
-        'filter[length]': TABLE_ROWS_PER_PAGE,
+        'filter[length]': DEFAULT_TABLE_ROWS_PER_PAGE,
         active: filter.active,
       }),
     )
@@ -106,7 +106,7 @@ const CoursesTable: FC<Props> = (props) => {
     dispatch(
       indexOperation({
         'filter[page_num]': page,
-        'filter[length]': TABLE_ROWS_PER_PAGE,
+        'filter[length]': DEFAULT_TABLE_ROWS_PER_PAGE,
         active: filter.active,
         search: searchText ? searchText.trim() : searchText,
       }),
@@ -141,8 +141,8 @@ const CoursesTable: FC<Props> = (props) => {
     },
     pagination: true,
     print: false,
-    rowsPerPage: TABLE_ROWS_PER_PAGE,
-    rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
+    rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
+    rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     search: true,
     searchPlaceholder: intl.formatMessage(translations.searchText),
     selectableRows: 'none',

@@ -8,7 +8,7 @@ import { AppDispatch, AppState } from 'types/store';
 import SummaryCard from 'lib/components/core/layouts/SummaryCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
-import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 
 import CoursesButtons from '../../components/buttons/CoursesButtons';
 import CoursesTable from '../../components/tables/CoursesTable';
@@ -77,7 +77,7 @@ const CoursesIndex: FC<Props> = (props) => {
     setIsLoading(true);
     dispatch(
       indexCourses({
-        'filter[length]': TABLE_ROWS_PER_PAGE,
+        'filter[length]': DEFAULT_TABLE_ROWS_PER_PAGE,
         active: filter.active,
       }),
     )

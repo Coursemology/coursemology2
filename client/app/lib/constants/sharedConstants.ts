@@ -11,7 +11,7 @@ export const FIELD_DEBOUNCE_DELAY = 250;
 
 // Table options
 
-export const TABLE_ROWS_PER_PAGE = 100;
+export const DEFAULT_TABLE_ROWS_PER_PAGE = 100;
 
 export const TIMELINE_ALGORITHMS = [
   { value: 'fixed', label: 'Fixed' },
