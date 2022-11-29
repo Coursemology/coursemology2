@@ -9,8 +9,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   end
 
   def all_students
-    all_students = course_users.students.ordered_by_experience_points.with_video_statistics
-    @phantom_students, @students = all_students.partition(&:phantom?)
+    @all_students = course_users.students.ordered_by_experience_points.with_video_statistics
     @service = group_manager_preload_service
   end
 

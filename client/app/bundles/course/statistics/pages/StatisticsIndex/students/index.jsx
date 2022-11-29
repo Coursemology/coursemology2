@@ -8,7 +8,7 @@ import ErrorCard from 'lib/components/core/ErrorCard';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 
 import { studentsIndexShape } from '../../../propTypes/students';
 
@@ -17,8 +17,8 @@ const options = {
     filename: 'students_statistics',
   },
   print: false,
-  rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
-  rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
+  rowsPerPage: TABLE_ROWS_PER_PAGE,
+  rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
   selectableRows: 'none',
   sortOrder: {
     name: 'experiencePoints',
@@ -35,6 +35,10 @@ const translations = defineMessages({
   name: {
     id: 'course.statistics.student.name',
     defaultMessage: 'Name',
+  },
+  studentType: {
+    id: 'course.statistics.student.studentType',
+    defaultMessage: 'Student Type',
   },
   groupManagers: {
     id: 'course.statistics.student.groupManagers',
@@ -102,6 +106,14 @@ const StudentsStatistics = ({
     {
       name: 'name',
       label: intl.formatMessage(translations.name),
+      options: {
+        filter: false,
+        sort: true,
+      },
+    },
+    {
+      name: 'studentType',
+      label: intl.formatMessage(translations.studentType),
       options: {
         filter: false,
         sort: true,
@@ -193,6 +205,7 @@ const StudentsStatistics = ({
     <DataTable
       columns={columns}
       data={students}
+      height="30px"
       includeRowNumber
       options={options}
       title={intl.formatMessage(translations.tableTitle)}

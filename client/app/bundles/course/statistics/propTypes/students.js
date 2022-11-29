@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 export const studentShape = PropTypes.shape({
   name: PropTypes.string.isRequired,
   nameLink: PropTypes.string.isRequired,
-  isPhantom: PropTypes.bool.isRequired,
+  studentType: PropTypes.oneOf(['Phantom', 'Normal']).isRequired,
   groupManagers: PropTypes.string,
   level: PropTypes.number,
   experiencePoints: PropTypes.number,

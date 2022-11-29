@@ -4,7 +4,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import ErrorCard from 'lib/components/core/ErrorCard';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 
 import { staffIndexShape } from '../../../propTypes/staff';
 
@@ -12,9 +12,14 @@ const options = {
   downloadOptions: {
     filename: 'staff_statistics',
   },
-  rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
-  rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
+  print: false,
+  rowsPerPage: TABLE_ROWS_PER_PAGE,
+  rowsPerPageOptions: [TABLE_ROWS_PER_PAGE],
   selectableRows: 'none',
+  sortOrder: {
+    name: 'averageMarkingTime',
+    direction: 'asc',
+  },
 };
 
 const translations = defineMessages({
@@ -109,6 +114,7 @@ const StaffStatistics = ({ staff, isFetching, isError, intl }) => {
     <DataTable
       columns={columns}
       data={staff}
+      height="30px"
       includeRowNumber
       options={options}
       title={intl.formatMessage(translations.tableTitle)}
