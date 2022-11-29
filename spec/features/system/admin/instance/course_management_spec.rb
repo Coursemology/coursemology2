@@ -53,7 +53,7 @@ RSpec.feature 'System: Administration: Instance: Courses', js: true do
       scenario 'I can search courses' do
         visit admin_instance_courses_path
 
-        find('button[aria-label="Search"]').click
+        find_button('Search').click
         find('div[aria-label="Search"]').find('input').set(course_to_search.title)
 
         sleep 0.5 # timeout for search debouncing
