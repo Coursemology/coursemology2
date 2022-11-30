@@ -161,10 +161,10 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
       context 'when the question cannot be destroyed' do
         let(:programming_question) { immutable_programming_question }
 
-        it { is_expected.to redirect_to(course_assessment_path(course, assessment)) }
-        it 'sets the correct flash message' do
-          subject
-          expect(flash[:danger]).not_to be_empty
+        it 'responds bad request with an error message' do
+          expect(subject).to have_http_status(:bad_request)
+          json_response = JSON.parse(response.body, { symbolize_names: true })
+          expect(json_response[:errors]).to include(immutable_programming_question.errors.full_messages.to_sentence)
         end
       end
     end

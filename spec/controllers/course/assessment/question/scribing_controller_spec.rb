@@ -175,16 +175,16 @@ RSpec.describe Course::Assessment::Question::ScribingController do
           create(:course_assessment_question_scribing, assessment: assessment)
         end
 
-        it { is_expected.to redirect_to(course_assessment_path(course, assessment)) }
+        it { is_expected.to have_http_status(:ok) }
       end
 
       context 'when the question cannot be destroyed' do
         let(:scribing_question) { immutable_scribing_question }
 
-        it { is_expected.to redirect_to(course_assessment_path(course, assessment)) }
-        it 'sets the correct flash message' do
-          subject
-          expect(flash[:danger]).not_to be_empty
+        it 'responds bad request with an error message' do
+          expect(subject).to have_http_status(:bad_request)
+          json_response = JSON.parse(response.body, { symbolize_names: true })
+          expect(json_response[:errors]).to include(immutable_scribing_question.errors.full_messages.to_sentence)
         end
       end
     end

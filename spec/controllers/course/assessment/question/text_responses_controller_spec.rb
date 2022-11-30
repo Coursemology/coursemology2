@@ -116,12 +116,7 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
       let(:text_response) { immutable_text_response_question }
       subject { post :destroy, params: { course_id: course, assessment_id: assessment, id: text_response } }
 
-      it { is_expected.to redirect_to(course_assessment_path(course, assessment)) }
-
-      it 'sets the correct flash message' do
-        subject
-        expect(flash[:success]).not_to be_empty
-      end
+      it { is_expected.to have_http_status(:ok) }
     end
   end
 end
