@@ -45,14 +45,14 @@ RSpec.feature 'Course: Assessments: Management', js: true do
         visit course_assessment_path(course, assessment)
 
         expect do
-          find(:css, 'div.page-header a.btn-danger').click
-          click_button 'Continue'
+          click_button 'Delete Assessment'
+          Capybara.enable_aria_label = false
+          click_button 'Delete Assessment'
+          expect_toastify('Assessment successfully deleted.')
         end.to change { course.reload.assessments.count }.by(-1)
 
-        expect(page).
-          to have_current_path course_assessments_path(course, category: category_id, tab: tab_id)
-
-        expect(page).not_to have_selector("#assessment_#{assessment.id}")
+        visit course_assessments_path(course, category: category_id, tab: tab_id)
+        expect(page).not_to have_content(assessment.title)
       end
     end
 
@@ -72,13 +72,9 @@ RSpec.feature 'Course: Assessments: Management', js: true do
                             course: course, tab: category.tabs.first)
         visit course_assessments_path(course)
 
-        assessment_page_in_new_tab = window_opened_by do
-          find_link(assessment.title, href: course_assessment_path(course, assessment)).click
-        end
+        find_link(assessment.title, href: course_assessment_path(course, assessment)).click
 
-        within_window assessment_page_in_new_tab do
-          expect(current_path).to eq(course_assessment_path(course, assessment))
-        end
+        expect(current_path).to eq(course_assessment_path(course, assessment))
       end
     end
   end
