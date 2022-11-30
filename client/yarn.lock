@@ -8188,10 +8188,10 @@ rimraf@^3.0.2:
   dependencies:
     glob "^7.1.3"
 
-rollbar@^2.25.2:
-  version "2.25.2"
-  resolved "https://registry.yarnpkg.com/rollbar/-/rollbar-2.25.2.tgz#2501875ec1bedbbaa6660ecc8d1dc1868d9aefde"
-  integrity sha512-aZIr/wXaVgkY73ynIpgQNyPhS04WwWUF7BGW7sOS0sU04+C39vDoloqIAOxTCU8MLgGQIiGMKIpQ8hYTl2obAA==
+rollbar@^2.26.0:
+  version "2.26.0"
+  resolved "https://registry.yarnpkg.com/rollbar/-/rollbar-2.26.0.tgz#8c7267cac5d3b2f08956aa685974a7e806dc7efd"
+  integrity sha512-YWRzEY9CsqMhxA04x5SOlu5Ws+sSyIXs0E3GVzE4PYEexMcImFHuyniwmBD7eIKEipi9yO7Zw7lSMUwb5OVmXw==
   dependencies:
     async "~3.2.3"
     console-polyfill "0.3.0"
