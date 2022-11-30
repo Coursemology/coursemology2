@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessments: Questions: Programming Management' do
+RSpec.describe 'Course: Assessments: Questions: Programming Management', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -12,48 +12,50 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can create a new question', js: true do
+      scenario 'I can create a new question' do
         skill = create(:course_assessment_skill, course: course)
         visit course_assessment_path(course, assessment)
-        page.find('#new-question-dropdown').click
-        page.find('#programming-link').click
+        click_on 'New Question'
+        new_page = window_opened_by { click_link 'Programming' }
 
-        expect(current_path).to eq(
-          new_course_assessment_question_programming_path(course, assessment)
-        )
-        visit new_course_assessment_question_programming_path(course, assessment)
-        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
-        question_attributes = attributes_for(:course_assessment_question_programming)
-        fill_in 'question_programming[title]', with: question_attributes[:title]
+        within_window new_page do
+          expect(current_path).to eq(
+            new_course_assessment_question_programming_path(course, assessment)
+          )
+          visit new_course_assessment_question_programming_path(course, assessment)
+          expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
+          question_attributes = attributes_for(:course_assessment_question_programming)
+          fill_in 'question_programming[title]', with: question_attributes[:title]
 
-        fill_in_react_ck 'textarea#question_programming_description',
-                         question_attributes[:description]
-        fill_in_react_ck 'textarea#question_programming_staff_only_comments',
-                         question_attributes[:staff_only_comments]
-        fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
+          fill_in_react_ck 'textarea#question_programming_description',
+                           question_attributes[:description]
+          fill_in_react_ck 'textarea#question_programming_staff_only_comments',
+                           question_attributes[:staff_only_comments]
+          fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
 
-        page.execute_script("$('select[name=\"question_programming[question_assessment][skill_ids][]\"]').show()")
-        within find_field('question_programming[question_assessment][skill_ids][]') do
-          select skill.title
+          page.execute_script("$('select[name=\"question_programming[question_assessment][skill_ids][]\"]').show()")
+          within find_field('question_programming[question_assessment][skill_ids][]') do
+            select skill.title
+          end
+
+          page.execute_script("$('select[name=\"question_programming[language_id]\"]').show()")
+          select question_attributes[:language].name, from: 'question_programming[language_id]'
+          page.find('#programming-question-form-submit').click
+
+          expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
+          expect(current_path).to eq(course_assessment_path(course, assessment))
+
+          question_created = assessment.questions.first.specific.reload
+          expect(question_created.description).
+            to include(question_attributes[:description])
+          expect(question_created.staff_only_comments).
+            to include(question_attributes[:staff_only_comments])
+          expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
         end
-
-        page.execute_script("$('select[name=\"question_programming[language_id]\"]').show()")
-        select question_attributes[:language].name, from: 'question_programming[language_id]'
-        page.find('#programming-question-form-submit').click
-
-        expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
-        expect(current_path).to eq(course_assessment_path(course, assessment))
-
-        question_created = assessment.questions.first.specific.reload
-        expect(question_created.description).
-          to include(question_attributes[:description])
-        expect(question_created.staff_only_comments).
-          to include(question_attributes[:staff_only_comments])
-        expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
       end
 
       # Disabled as page.find('#programming-question-form-submit') somehow can't detect the button
-      xscenario 'I can upload a template package', js: true do
+      xscenario 'I can upload a template package' do
         question = create(:course_assessment_question_programming,
                           assessment: assessment, template_file_count: 0, package_type: :zip_upload)
         visit edit_course_assessment_question_programming_path(course, assessment, question)
@@ -92,7 +94,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         end
       end
 
-      scenario 'I can edit a question', js: true do
+      scenario 'I can edit a question' do
         question = create(:course_assessment_question_programming, assessment: assessment)
         visit course_assessment_path(course, assessment)
 
@@ -116,14 +118,14 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         question = create(:course_assessment_question_programming, assessment: assessment)
         visit course_assessment_path(course, assessment)
 
-        delete_path = course_assessment_question_programming_path(course, assessment, question)
-        find_link(nil, href: delete_path).click
+        within find('section', text: question.title) { click_button 'Delete' }
+        click_button 'Delete question'
 
-        expect(page).to have_current_path(course_assessment_path(course, assessment))
-        expect(page).to have_no_content_tag_for(question)
+        expect_toastify('Question successfully deleted.')
+        expect(page).not_to have_content(question.title)
       end
 
-      scenario 'I can create a new question and upload the template package', js: true do
+      scenario 'I can create a new question and upload the template package' do
         visit new_course_assessment_question_programming_path(course, assessment)
 
         expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
@@ -159,7 +161,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
         expect(question_created.attempt_limit).to eq(question_attributes[:attempt_limit])
       end
 
-      describe 'When updating a question', js: true do
+      describe 'When updating a question' do
         let(:assessment) { create(:assessment, :autograded, course: course) }
         let!(:question) do
           create(:course_assessment_question_programming, :auto_gradable, template_package: true,
@@ -199,7 +201,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management' do
     context 'As a Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I cannot add questions' do
+      scenario 'I cannot add questions', js: false do
         visit new_course_assessment_question_programming_path(course, assessment)
 
         expect(page.status_code).to eq(403)
