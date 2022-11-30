@@ -16,15 +16,14 @@ RSpec.describe 'Course: Assessments: Viewing', js: true do
         assessment
         visit course_assessments_path(course)
 
-        submissions_button = find('a[aria-label="Submissions"]', visible: false)
+        submissions_button = find_link('Submissions', visible: false)
         hover_then_click submissions_button
 
         expect(current_path).to eq(course_assessment_submissions_path(course, assessment))
 
         # Access submissions from the show assessment page
         visit course_assessment_path(course, assessment)
-        click_link I18n.t('course.assessment.assessments.' \
-                          'assessment_management_buttons.submissions')
+        click_link 'Submissions'
         expect(current_path).to eq(course_assessment_submissions_path(course, assessment))
       end
 
@@ -43,8 +42,8 @@ RSpec.describe 'Course: Assessments: Viewing', js: true do
 
         visit course_assessment_path(course, assessment)
 
-        expect(page).to have_content_tag_for(condition_with_assessment_conditional)
-        expect(page).to have_content_tag_for(condition_with_achievement_conditional)
+        expect(page).to have_content(condition_with_assessment_conditional.title)
+        expect(page).to have_content(condition_with_achievement_conditional.title)
       end
 
       scenario 'I attempt the assessment from the show assessment page' do
@@ -55,7 +54,7 @@ RSpec.describe 'Course: Assessments: Viewing', js: true do
         visit course_assessment_path(course, assessment)
 
         expect(page).to have_link(
-          I18n.t('course.assessment.assessments.assessment_management_buttons.attempt'),
+          'Attempt',
           href: course_assessment_attempt_path(course, assessment)
         )
       end
@@ -79,8 +78,8 @@ RSpec.describe 'Course: Assessments: Viewing', js: true do
 
         visit course_assessment_path(course, assessment)
 
-        expect(page).to have_content_tag_for(assessment_condition)
-        expect(page).to have_content_tag_for(achievement_condition)
+        expect(page).to have_content(assessment_condition.title)
+        expect(page).to have_content(achievement_condition.title)
       end
     end
   end
