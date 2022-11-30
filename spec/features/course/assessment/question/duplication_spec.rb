@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessments: Questions: Duplication Spec' do
+RSpec.describe 'Course: Assessments: Questions: Duplication Spec', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -20,19 +20,21 @@ RSpec.describe 'Course: Assessments: Questions: Duplication Spec' do
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can duplicate a question from one assessment to another', js: true do
+      scenario 'I can duplicate a question from one assessment to another' do
         destination_assessment
         visit course_assessment_path(course, source_assessment)
 
         expect(destination_assessment.questions.count).to be(1)
-        within find(content_tag_selector(source_assessment.questions.first)) do
-          click_button 'duplicate-question-dropdown'
-        end
-        click_link destination_assessment.title
-        accept_confirm_dialog
 
-        expect(page).to have_selector('div.alert.alert-success')
-        expect(destination_assessment.questions.count).to be(2)
+        within all('section', text: source_assessment.questions.first.title).first do
+          click_button 'Duplicate'
+        end
+
+        expect do
+          find('li', text: destination_assessment.title).click
+          expect_toastify('Your question has been duplicated.')
+        end.to change { destination_assessment.questions.count }.by(1)
+
         original_mcq_question = source_assessment.questions.last
         duplicated_mcq_question = destination_assessment.questions.last
         expect(duplicated_mcq_question.title).to eq(original_mcq_question.title)
