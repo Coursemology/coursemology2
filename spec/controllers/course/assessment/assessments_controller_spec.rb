@@ -142,9 +142,10 @@ RSpec.describe Course::Assessment::AssessmentsController do
       context 'when destroy fails' do
         before { controller.instance_variable_set(:@assessment, immutable_assessment) }
 
-        it 'redirects with a flash message' do
-          expect(subject).to redirect_to(course_assessment_path(course, immutable_assessment))
-          expect(flash[:danger]).to eq(I18n.t('course.assessment.assessments.destroy.failure'))
+        it 'responds bad request with an error message' do
+          expect(subject).to have_http_status(:bad_request)
+          json_response = JSON.parse(response.body, { symbolize_names: true })
+          expect(json_response[:errors]).to include(immutable_assessment.errors.full_messages.to_sentence)
         end
       end
     end
@@ -200,9 +201,10 @@ RSpec.describe Course::Assessment::AssessmentsController do
                params: { course_id: course, id: immutable_assessment, question_order: [questions.first.id] }
         end
 
-        it 'raises ArgumentError' do
-          expect { subject }.
-            to raise_error(ArgumentError, 'Invalid ordering for assessment questions')
+        it 'responds bad request with an error message' do
+          expect(subject).to have_http_status(:bad_request)
+          json_response = JSON.parse(response.body, { symbolize_names: true })
+          expect(json_response[:errors]).to include(I18n.t('course.assessment.assessments.invalid_questions_order'))
         end
       end
     end
