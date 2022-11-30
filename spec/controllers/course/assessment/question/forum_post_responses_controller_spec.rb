@@ -98,23 +98,17 @@ RSpec.describe Course::Assessment::Question::ForumPostResponsesController do
       let(:forum_post_response) { immutable_forum_post_response_question }
       subject { post :destroy, params: { course_id: course, assessment_id: assessment, id: forum_post_response } }
 
-      it { is_expected.to redirect_to(course_assessment_path(course, assessment)) }
-
-      it 'sets the correct flash message' do
-        subject
-        expect(flash[:success]).not_to be_empty
-      end
+      it { is_expected.to have_http_status(:ok) }
 
       context 'when destroy fails' do
         before do
           controller.instance_variable_set(:@forum_post_response_question, forum_post_response)
         end
 
-        it { is_expected.to redirect_to(course_assessment_path(course, assessment)) }
-
-        it 'sets the correct flash message' do
-          subject
-          expect(flash[:danger]).not_to be_empty
+        it 'responds bad response with an error message' do
+          expect(subject).to have_http_status(:bad_request)
+          json_response = JSON.parse(response.body, { symbolize_names: true })
+          expect(json_response[:errors]).to include(forum_post_response.errors.full_messages.to_sentence)
         end
       end
     end

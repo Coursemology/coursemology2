@@ -8,7 +8,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
     let(:user) { create(:user) }
     let(:course) { create(:course, creator: user) }
     let(:assessment) { create(:assessment, course: course) }
-    let(:immutable_multiple_response_question) do
+    let(:immutable_mrq) do
       create(:course_assessment_question_multiple_response, assessment: assessment).tap do |mrq|
         allow(mrq).to receive(:save).and_return(false)
         allow(mrq).to receive(:destroy).and_return(false)
@@ -34,7 +34,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
       end
 
       context 'when saving fails' do
-        let(:multiple_response) { immutable_multiple_response_question }
+        let(:multiple_response) { immutable_mrq }
         it do
           is_expected.to render_template('new')
         end
@@ -66,7 +66,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
     end
 
     describe '#update' do
-      let(:multiple_response) { immutable_multiple_response_question }
+      let(:multiple_response) { immutable_mrq }
       subject do
         question_multiple_response_attributes =
           attributes_for(:course_assessment_question_multiple_response).
@@ -211,13 +211,15 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
     end
 
     describe '#destroy' do
-      let(:multiple_response) { immutable_multiple_response_question }
+      let(:multiple_response) { immutable_mrq }
       subject { post :destroy, params: { course_id: course, assessment_id: assessment, id: multiple_response } }
 
-      it { is_expected.to redirect_to(course_assessment_path(course, assessment)) }
-      it 'sets the correct flash message' do
-        subject
-        expect(flash[:danger]).not_to be_empty
+      context 'when destroy fails' do
+        it 'responds bad response with an error message' do
+          expect(subject).to have_http_status(:bad_request)
+          json_response = JSON.parse(response.body, { symbolize_names: true })
+          expect(json_response[:errors]).to include(immutable_mrq.errors.full_messages.to_sentence)
+        end
       end
     end
   end
