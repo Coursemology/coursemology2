@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
+RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
@@ -15,49 +15,62 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
       scenario 'I can create a new text response question' do
         skill = create(:course_assessment_skill, course: course)
         visit course_assessment_path(course, assessment)
-        click_link I18n.t('course.assessment.assessments.show.new_question.text_response')
+        click_on 'New Question'
+        new_page = window_opened_by { click_link 'File Upload' }
 
-        expect(current_path).to eq(
-          new_course_assessment_question_text_response_path(course, assessment)
-        )
-        question_attributes = attributes_for(:course_assessment_question_text_response)
-        fill_in 'title', with: question_attributes[:title]
-        fill_in 'description', with: question_attributes[:description]
-        fill_in 'staff_only_comments', with: question_attributes[:staff_only_comments]
-        fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
-        check 'question_text_response_allow_attachment'
-        within find_field('skills') do
-          select skill.title
+        within_window new_page do
+          expect(current_path).to eq(
+            new_course_assessment_question_text_response_path(course, assessment)
+          )
+          question_attributes = attributes_for(:course_assessment_question_text_response)
+          fill_in 'title', with: question_attributes[:title]
+          fill_in_rails_summernote '.question_text_response_description', question_attributes[:description]
+          fill_in_rails_summernote '.question_text_response_staff_only_comments',
+                                   question_attributes[:staff_only_comments]
+          fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+
+          allow_attachment = "document.getElementById('question_text_response_allow_attachment').value = true"
+          page.execute_script allow_attachment
+
+          show_skills = "$('select[name=\"question_text_response[question_assessment][skill_ids][]\"]').show()"
+          page.execute_script show_skills
+          within find_field('skills') do
+            select skill.title
+          end
+          click_button I18n.t('helpers.buttons.create')
+
+          question_created = assessment.questions.first.specific
+          expect(page).to have_selector('div', text: I18n.t('course.assessment.question.text_responses.create.success'))
+          expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
+          expect(question_created.allow_attachment).to be_truthy
         end
-        click_button I18n.t('helpers.buttons.create')
-
-        question_created = assessment.questions.first.specific
-        expect(page).to have_selector('div', text: I18n.t('course.assessment.question.text_responses.create.success'))
-        expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
-        expect(question_created.allow_attachment).to be_truthy
       end
 
       scenario 'I can create a new file upload question' do
         visit course_assessment_path(course, assessment)
-        click_link I18n.t('course.assessment.assessments.show.new_question.file_upload')
+        click_on 'New Question'
+        new_page = window_opened_by { click_link 'File Upload' }
 
-        file_upload_path = new_course_assessment_question_text_response_path(course, assessment)
-        expect(current_path).to eq(file_upload_path)
+        within_window new_page do
+          file_upload_path = new_course_assessment_question_text_response_path(course, assessment)
+          expect(current_path).to eq(file_upload_path)
 
-        question_attributes = attributes_for(:course_assessment_question_text_response)
-        fill_in 'title', with: question_attributes[:title]
-        fill_in 'description', with: question_attributes[:description]
-        fill_in 'staff_only_comments', with: question_attributes[:staff_only_comments]
-        fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
-        click_button I18n.t('helpers.buttons.create')
+          question_attributes = attributes_for(:course_assessment_question_text_response)
+          fill_in 'title', with: question_attributes[:title]
+          fill_in_rails_summernote '.question_text_response_description', question_attributes[:description]
+          fill_in_rails_summernote '.question_text_response_staff_only_comments',
+                                   question_attributes[:staff_only_comments]
+          fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+          click_button I18n.t('helpers.buttons.create')
 
-        question_created = assessment.questions.first.specific
-        expect(page).to have_selector('div', text: I18n.t('course.assessment.question.text_responses.create.success'))
-        expect(question_created.hide_text).to be_truthy
-        expect(question_created.allow_attachment).to be_truthy
+          question_created = assessment.questions.first.specific
+          expect(page).to have_selector('div', text: I18n.t('course.assessment.question.text_responses.create.success'))
+          expect(question_created.hide_text).to be_truthy
+          expect(question_created.allow_attachment).to be_truthy
+        end
       end
 
-      scenario 'I can edit a text response question and delete options', js: true do
+      scenario 'I can edit a text response question and delete options' do
         question = create(:course_assessment_question_text_response, assessment: assessment,
                                                                      solutions: [])
         solutions = [
@@ -128,18 +141,19 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management' do
         question = create(:course_assessment_question_text_response, assessment: assessment)
         visit course_assessment_path(course, assessment)
 
-        delete_path = course_assessment_question_text_response_path(course, assessment, question)
-        find_link(nil, href: delete_path).click
+        within find('section', text: question.title) { click_button 'Delete' }
+        click_button 'Delete question'
 
+        expect_toastify('Question successfully deleted.')
         expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(page).to have_no_content_tag_for(question)
+        expect(page).not_to have_content(question.title)
       end
     end
 
     context 'As a Student' do
       let(:user) { create(:course_student, course: course).user }
 
-      scenario 'I cannot add questions' do
+      scenario 'I cannot add questions', js: false do
         visit new_course_assessment_question_text_response_path(course, assessment)
 
         expect(page.status_code).to eq(403)
