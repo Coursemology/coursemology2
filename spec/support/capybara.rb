@@ -83,7 +83,7 @@ module Capybara::TestGroupHelpers
       find_all('div.Toastify__toast').each do |toast|
         within toast do
           toast_text = find('div.Toastify__toast-body', visible: true).text
-          found = true if toast_text == message
+          found = true if toast_text.include? message
           find('div.Toastify__toast-body', visible: true).click
           break if found
         end
