@@ -139,6 +139,12 @@ module Capybara::TestGroupHelpers
     def find_react_hook_form_error
       expect(page).to have_text('Failed submitting this form. Please try again.')
     end
+
+    def confirm_registartion_token_via_email
+      sleep 0.3
+      token = ActionMailer::Base.deliveries.last.body.match(/confirmation_token=\w*/)
+      visit "/users/confirmation?#{token}"
+    end
   end
 end
 

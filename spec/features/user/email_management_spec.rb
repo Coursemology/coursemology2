@@ -5,6 +5,7 @@ RSpec.feature 'User: Emails', js: true do
   let(:instance) { Instance.default }
 
   with_tenant(:instance) do
+    let(:student) { create(:user) }
     let(:user) { create(:user) }
     let!(:confirmed_emails) { create_list(:user_email, 2, user: user, primary: false) }
     let!(:unconfirmed_email) { create(:user_email, :unconfirmed, user: user, primary: false) }
@@ -45,6 +46,52 @@ RSpec.feature 'User: Emails', js: true do
         click_button 'Add email address'
         expect(page).to have_selector('section', text: valid_email)
       end.to change { user.emails.count }.by(1)
+    end
+
+    context 'When a secondary email with existing course invitations is added' do
+      let(:course1) { create(:course) }
+      let(:course2) { create(:course) }
+      let(:user) { student }
+      let!(:invitation1) do
+        create(:course_user_invitation, name: 'course1_user', email: build(:user_email).email, course: course1)
+      end
+      let!(:invitation2) do
+        create(:course_user_invitation, name: 'course2_user', email: invitation1.email, course: course2)
+      end
+
+      it 'enrols the user to the new courses' do
+        expect do
+          click_button 'Add email address'
+          fill_in 'newEmail', with: invitation1.email
+          click_button 'Add email address'
+          expect(page).to have_selector('section', text: invitation1.email)
+        end.to change { user.emails.count }.by(1)
+
+        expect do
+          confirm_registartion_token_via_email
+        end.to change(course1.users, :count).by(1).
+          and change(course2.users, :count).by(1)
+      end
+    end
+
+    context 'When a secondary email has been used by someone else but unconfirmed' do
+      let(:other_user) { student }
+      let!(:non_primary_email) { create(:user_email, :unconfirmed, user: other_user, primary: false) }
+
+      let(:actual_user) { student }
+
+      it 'expects the actual user to be able to claim the email and confirm it' do
+        expect do
+          click_button 'Add email address'
+          fill_in 'newEmail', with: non_primary_email.email
+          click_button 'Add email address'
+          expect(page).to have_selector('section', text: non_primary_email.email)
+        end.to change(user.emails, :count).by(1).
+          and change(other_user.emails, :count).by(-1)
+
+        confirm_registartion_token_via_email
+        expect(user.emails.last.reload.confirmed_at).not_to be_nil
+      end
     end
 
     scenario 'I can delete a email' do

@@ -115,8 +115,7 @@ RSpec.feature 'Users: Sign Up' do
 
         expect do
           click_button I18n.t('user.registrations.new.sign_up')
-          token = ActionMailer::Base.deliveries.last.body.match(/confirmation_token=\w*/)
-          visit "/users/confirmation?#{token}"
+          confirm_registartion_token_via_email
         end.to change(course1.users, :count).by(1).
           and change(course2.users, :count).by(1)
 
