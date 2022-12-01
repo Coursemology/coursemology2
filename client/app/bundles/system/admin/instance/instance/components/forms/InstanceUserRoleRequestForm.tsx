@@ -11,7 +11,6 @@ import {
 
 import { saveInstanceRoleRequest } from 'bundles/course/courses/actions';
 import FormDialog from 'lib/components/form/dialog/FormDialog';
-import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -33,15 +32,6 @@ const translations = defineMessages({
   editRoleRequest: {
     id: 'system.admin.instance.editRoleRequest',
     defaultMessage: 'Edit Role Request',
-  },
-  instructor: {
-    id: 'system.admin.instance.instructor',
-    defaultMessage: 'Instructor (can create courses)',
-  },
-  administrator: {
-    id: 'system.admin.instance.administrator',
-    defaultMessage:
-      'Administrator (can create courses and give other instructors permissions)',
   },
   submit: {
     id: 'system.admin.instance.submit',
@@ -117,24 +107,16 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
             control={control}
             name="role"
             render={({ field, fieldState }): JSX.Element => (
-              <FormSelectField
-                disabled={formState.isSubmitting}
+              <FormTextField
+                disabled
                 field={field}
                 fieldState={fieldState}
+                fullWidth
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 label={t(tableTranslations.requestToBe)}
-                margin="0"
-                options={[
-                  {
-                    value: 'instructor',
-                    label: t(translations.instructor),
-                  },
-                  {
-                    value: 'administrator',
-                    label: t(translations.administrator),
-                  },
-                ]}
-                shrink
-                type="string"
+                variant="standard"
               />
             )}
           />
