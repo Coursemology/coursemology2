@@ -29,6 +29,10 @@ const translations = defineMessages({
     id: 'course.assessment.create.createAsDraft',
     defaultMessage: 'Create As Draft',
   },
+  noAssessments: {
+    id: 'course.assessments.index.noAssessments',
+    defaultMessage: 'Create an assessment to start populating {category}.',
+  },
   openingSoon: {
     id: 'course.assessments.index.openingSoon',
     defaultMessage: 'This assessment will be unlocked at a later time.',

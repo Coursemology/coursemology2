@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
+import { Typography } from '@mui/material';
 import {
   AssessmentListData,
   AssessmentsListData,
@@ -126,6 +127,13 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
     ],
     [display],
   );
+
+  if (assessments.length <= 0)
+    return (
+      <Typography className="mt-8 text-center text-neutral-500">
+        {t(translations.noAssessments, { category: display.category.title })}
+      </Typography>
+    );
 
   return (
     <VerticalTable
