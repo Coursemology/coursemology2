@@ -196,7 +196,9 @@ const DuplicationPrompt = (props: DuplicationPromptProps): JSX.Element => {
     >
       <PromptText>{t(translations.duplicatingThisQuestion)}</PromptText>
 
-      <PromptText className="italic line-clamp-2">{question.title}</PromptText>
+      <PromptText className="pb-7 italic line-clamp-2">
+        {question.title}
+      </PromptText>
 
       <TextField
         autoFocus
