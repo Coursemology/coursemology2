@@ -1,4 +1,10 @@
 .course-layout {
+  display: flex;
+
+  @media (max-width: $screen-sm-min) {
+    flex-direction: column;
+  }
+
   #course-badge-achievement {
     margin-bottom: 1em;
     margin-left: 0.5em;
@@ -106,5 +112,20 @@
     border: 0;
     position: absolute;
     z-index: 999;
+  }
+
+  #full-sidebar {
+    margin-right: 1.5rem;
+    width: 21rem;
+
+    @media (max-width: $screen-sm-min) {
+      margin-bottom: 1.5rem;
+      margin-right: 0;
+      width: 100%;
+    }
+  }
+
+  .page-content {
+    width: 100%;
   }
 }
