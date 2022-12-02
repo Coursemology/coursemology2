@@ -167,3 +167,5 @@ export interface AssessmentDeleteResult {
 export interface QuestionOrderPostData {
   question_order: QuestionData['id'][];
 }
+
+export type AssessmentUnlockRequirements = string[];

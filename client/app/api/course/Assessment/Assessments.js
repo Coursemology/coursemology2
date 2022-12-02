@@ -22,6 +22,17 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     return this.getClient().get(`${this._getUrlPrefix()}/${assessmentId}`);
   }
 
+  /**
+   * Fetches the remaining unlock requirements for an assessment.
+   * @param {number} assessmentId
+   * @returns An `AssessmentUnlockRequirements` object
+   */
+  fetchUnlockRequirements(assessmentId) {
+    return this.getClient().get(
+      `${this._getUrlPrefix()}/${assessmentId}/requirements`,
+    );
+  }
+
   fetchEditData(assessmentId) {
     return this.getClient().get(`${this._getUrlPrefix()}/${assessmentId}/edit`);
   }

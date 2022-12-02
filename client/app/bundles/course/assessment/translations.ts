@@ -35,7 +35,7 @@ const translations = defineMessages({
   },
   unlockableHint: {
     id: 'course.assessments.index.unlockableHint',
-    defaultMessage: 'Unlock this assessment by completing its requirements.',
+    defaultMessage: 'Unlock this assessment by fulfilling:',
   },
   title: {
     id: 'course.assessments.index.title',

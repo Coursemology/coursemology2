@@ -20,6 +20,12 @@ export const fetchAssessment = async (id) => {
   return response.data;
 };
 
+export const fetchAssessmentUnlockRequirements = async (id) => {
+  const response =
+    await CourseAPI.assessment.assessments.fetchUnlockRequirements(id);
+  return response.data;
+};
+
 export const fetchAssessmentEditData = async (assessmentId) => {
   const response = await CourseAPI.assessment.assessments.fetchEditData(
     assessmentId,

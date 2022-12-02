@@ -198,10 +198,12 @@ Rails.application.routes.draw do
           post 'reorder', on: :member
           post 'authenticate', on: :member
           post 'remind', on: :member
+          get :requirements, on: :member
 
           resources :questions, only: [] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate
           end
+
           namespace :question do
             resources :multiple_responses, only: [:new, :create, :edit, :update, :destroy]
             resources :text_responses, only: [:new, :create, :edit, :update, :destroy]
@@ -210,6 +212,7 @@ Rails.application.routes.draw do
             resources :scribing, only: [:show, :new, :create, :edit, :update, :destroy]
             resources :forum_post_responses, only: [:new, :create, :edit, :update, :destroy]
           end
+
           scope module: :submission do
             get 'attempt' => 'submissions#create'
             resources :submissions, only: [:index, :edit, :update] do
@@ -246,12 +249,14 @@ Rails.application.routes.draw do
               end
             end
           end
+
           scope module: :submission_question do
             resources :submission_questions, only: [] do
               get :past_answers, on: :member
               resources :comments, only: [:create]
             end
           end
+
           concerns :conditional
 
           collection do
@@ -263,6 +268,7 @@ Rails.application.routes.draw do
               get 'pending', on: :collection
             end
           end
+
           resources :sessions, only: [:new, :create]
 
           # Randomized Assessment is temporarily hidden (PR#5406)
