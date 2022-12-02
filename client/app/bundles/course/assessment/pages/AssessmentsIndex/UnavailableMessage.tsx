@@ -1,5 +1,5 @@
 import { Lock } from '@mui/icons-material';
-import { Tooltip, Typography } from '@mui/material';
+import { Tooltip } from '@mui/material';
 import { AssessmentListData } from 'types/course/assessment/assessments';
 
 import useTranslation from 'lib/hooks/useTranslation';
@@ -10,34 +10,29 @@ interface UnavailableMessageProps {
   for: AssessmentListData;
 }
 
-const UnavailableMessage = (props: UnavailableMessageProps): JSX.Element => {
+const UnavailableMessage = (
+  props: UnavailableMessageProps,
+): JSX.Element | null => {
   const { for: assessment } = props;
   const { t } = useTranslation();
 
-  if (!assessment.isStartTimeBegin || !assessment.conditionSatisfied)
-    return (
-      <Tooltip
-        disableInteractive
-        title={
-          !assessment.isStartTimeBegin
-            ? t(translations.openingSoon)
-            : t(translations.unlockableHint)
-        }
-      >
-        <div className="flex min-w-[8.5rem] justify-center hover?:animate-shake">
-          <Lock
-            className="text-neutral-500 hover?:text-neutral-600"
-            fontSize="small"
-          />
-        </div>
-      </Tooltip>
-    );
+  if (assessment.isStartTimeBegin && assessment.conditionSatisfied) return null;
 
   return (
-    <Tooltip disableInteractive title={t(translations.unavailableHint)}>
-      <Typography className="italic text-neutral-400" variant="body2">
-        {t(translations.unavailable)}
-      </Typography>
+    <Tooltip
+      disableInteractive
+      title={
+        !assessment.isStartTimeBegin
+          ? t(translations.openingSoon)
+          : t(translations.unlockableHint)
+      }
+    >
+      <div className="flex min-w-[8.5rem] justify-center hover?:animate-shake">
+        <Lock
+          className="text-neutral-500 hover?:text-neutral-600"
+          fontSize="small"
+        />
+      </div>
     </Tooltip>
   );
 };

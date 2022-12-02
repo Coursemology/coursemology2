@@ -37,15 +37,6 @@ const translations = defineMessages({
     id: 'course.assessments.index.unlockableHint',
     defaultMessage: 'Unlock this assessment by completing its requirements.',
   },
-  unavailable: {
-    id: 'course.assessments.index.unavailable',
-    defaultMessage: 'Unavailable',
-  },
-  unavailableHint: {
-    id: 'course.assessments.index.unavailableHint',
-    defaultMessage:
-      'You cannot attempt this assessment because you are not a user in this course.',
-  },
   title: {
     id: 'course.assessments.index.title',
     defaultMessage: 'Title',
