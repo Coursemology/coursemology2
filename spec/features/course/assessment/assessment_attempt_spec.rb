@@ -171,7 +171,7 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
         visit course_assessments_path(course)
 
         within find('tr', text: assessment_with_condition.title) do
-          click_link 'Attempt'
+          hover_then_click find_link('Attempt', visible: false)
         end
 
         created_submission = assessment_with_condition.submissions.last
@@ -185,7 +185,7 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
         visit course_assessments_path(course)
 
         within find('tr', text: not_started_assessment.title) do
-          click_link 'Attempt'
+          hover_then_click find_link('Attempt', visible: false)
         end
 
         created_submission = not_started_assessment.submissions.last
