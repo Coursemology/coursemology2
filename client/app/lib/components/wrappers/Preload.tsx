@@ -18,6 +18,7 @@ interface PreloadProps<Data> {
   silently?: boolean;
   onErrorToast?: string;
   syncsWith?: DependencyList;
+  after?: number;
 }
 
 const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
@@ -26,9 +27,8 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
   const [loading, setLoading] = useState(true);
   const [failed, toggleFailed] = useToggle();
 
-  useEffect(() => {
+  const fetch = (ignore: boolean): void => {
     setLoading(true);
-    let ignore = false;
 
     props
       .while()
@@ -44,9 +44,21 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
           );
       })
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    let ignore = false;
+    let timeout: NodeJS.Timeout;
+
+    if (props.after && props.after > 0) {
+      timeout = setTimeout(() => fetch(ignore), props.after);
+    } else {
+      fetch(ignore);
+    }
 
     return () => {
       ignore = true;
+      if (timeout) clearTimeout(timeout);
     };
   }, props.syncsWith ?? []);
 
