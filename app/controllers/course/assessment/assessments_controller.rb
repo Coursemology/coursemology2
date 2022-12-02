@@ -28,7 +28,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def show
-    render 'authenticate' unless can_access_assessment?
+    unless can_access_assessment?
+      render 'authenticate'
+      return
+    end
 
     respond_to do |format|
       format.html
@@ -119,6 +122,14 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     Course::Assessment::ReminderService.
       send_closing_reminder(@assessment, course_user_ids.pluck(:id), include_unsubscribed: true)
     head :ok
+  end
+
+  def requirements
+    requirements = @assessment.specific_conditions.filter_map do |condition|
+      condition.title unless current_course_user.present? && condition.satisfied_by?(current_course_user)
+    end
+
+    render json: requirements
   end
 
   protected
