@@ -143,6 +143,10 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
           assessment.status === 'submitted'
             ? '!slot-1-lime-50 !slot-2-lime-100'
             : ''
+        } ${
+          assessment.status === 'attempting'
+            ? 'shadow-[2px_0_0_0_inset] shadow-amber-500'
+            : ''
         }`
       }
       rowKey={(assessment): string => assessment.id.toString()}

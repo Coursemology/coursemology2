@@ -124,10 +124,6 @@ const translations = defineMessages({
     id: 'course.assessments.index.submissions',
     defaultMessage: 'Submissions',
   },
-  hasOngoingSubmissions: {
-    id: 'course.assessments.index.hasOngoingSubmissions',
-    defaultMessage: 'You have an ongoing submission.',
-  },
   needsPasswordToAccess: {
     id: 'course.assessments.index.needsPasswordToAccess',
     defaultMessage: 'You will need a password to access this assessment.',

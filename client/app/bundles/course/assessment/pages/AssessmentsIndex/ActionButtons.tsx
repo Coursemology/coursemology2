@@ -76,15 +76,6 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
         <UnavailableMessage for={assessment} />
       )}
 
-      {assessment.status === 'attempting' && (
-        <Tooltip
-          disableInteractive
-          title={t(translations.hasOngoingSubmissions)}
-        >
-          <div className="ml-4 rounded-full bg-amber-500 wh-4 group-hover?:animate-pulse" />
-        </Tooltip>
-      )}
-
       {student && assessment.status === 'locked' && (
         <Tooltip
           disableInteractive
