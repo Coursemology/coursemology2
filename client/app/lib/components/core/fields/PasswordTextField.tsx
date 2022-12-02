@@ -45,7 +45,7 @@ const PasswordTextField = forwardRef<HTMLDivElement, PasswordTextFieldProps>(
                   onClick={handleChangePasswordVisibility}
                   onMouseDown={(e): void => e.preventDefault()}
                 >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                  {showPassword ? <Visibility /> : <VisibilityOff />}
                 </IconButton>
               </InputAdornment>
             ),
