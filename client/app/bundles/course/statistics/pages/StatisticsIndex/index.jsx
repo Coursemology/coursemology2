@@ -10,11 +10,17 @@ import PropTypes from 'prop-types';
 import NotificationBar from 'lib/components/core/NotificationBar';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
-import { fetchStaffStatistics, fetchStudentsStatistics } from '../../actions';
+import {
+  fetchCoursePerformanceStatistics,
+  fetchCourseProgressionStatistics,
+  fetchStaffStatistics,
+  fetchStudentsStatistics,
+} from '../../actions';
 import { courseIndexShape } from '../../propTypes/course';
 import { staffIndexShape } from '../../propTypes/staff';
 import { studentsIndexShape } from '../../propTypes/students';
 
+import CourseStatistics from './course';
 import StaffStatistics from './staff';
 import StudentsStatistics from './students';
 
@@ -23,6 +29,10 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.header.statistics',
     defaultMessage: 'Statistics',
   },
+  course: {
+    id: 'course.statistics.tabs.course',
+    defaultMessage: 'Course',
+  },
   students: {
     id: 'course.statistics.StatisticsIndex.tabs.students',
     defaultMessage: 'Students',
@@ -30,6 +40,14 @@ const translations = defineMessages({
   staff: {
     id: 'course.statistics.StatisticsIndex.tabs.staff',
     defaultMessage: 'Staff',
+  },
+  courseProgressionFailure: {
+    id: 'course.statistics.failures.courseProgression',
+    defaultMessage: 'Failed to fetch course progression data!',
+  },
+  coursePerformanceFailure: {
+    id: 'course.statistics.failures.coursePerformance',
+    defaultMessage: 'Failed to fetch course performance data!',
   },
   studentsFailure: {
     id: 'course.statistics.StatisticsIndex.studentsFailure',
@@ -83,6 +101,22 @@ const StatisticsIndex = ({
 
   useEffect(() => {
     dispatch(
+      fetchCourseProgressionStatistics(
+        intl.formatMessage(translations.courseProgressionFailure),
+      ),
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(
+      fetchCoursePerformanceStatistics(
+        intl.formatMessage(translations.coursePerformanceFailure),
+      ),
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(
       fetchStudentsStatistics(intl.formatMessage(translations.studentsFailure)),
     );
   }, [dispatch]);
@@ -108,19 +142,26 @@ const StatisticsIndex = ({
             value={value}
           >
             <Tab
-              label={intl.formatMessage(translations.students)}
+              label={intl.formatMessage(translations.course)}
               {...a11yProps(0)}
             />
             <Tab
-              label={intl.formatMessage(translations.staff)}
+              label={intl.formatMessage(translations.students)}
               {...a11yProps(1)}
+            />
+            <Tab
+              label={intl.formatMessage(translations.staff)}
+              {...a11yProps(2)}
             />
           </Tabs>
         </Box>
         <TabPanel index={0} value={value}>
-          <StudentsStatistics {...studentsStatistics} />
+          <CourseStatistics {...courseStatistics} />
         </TabPanel>
         <TabPanel index={1} value={value}>
+          <StudentsStatistics {...studentsStatistics} />
+        </TabPanel>
+        <TabPanel index={2} value={value}>
           <StaffStatistics {...staffStatistics} />
         </TabPanel>
       </Box>
