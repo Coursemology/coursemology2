@@ -35,7 +35,7 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
 2. Download bundler to install dependencies
 
    ```sh
-   $ gem install bundler:2.2.22
+   $ gem install bundler:2.2.33
    ```
 
 3. Install ruby dependencies
@@ -71,6 +71,7 @@ Coursemology uses [Ruby on Rails](http://rubyonrails.org/). In addition, some fr
    ```
 
    Either way, run this command to compile the assets before running the test suite.
+
    ```
    $ cd client && yarn build:test
    ```
