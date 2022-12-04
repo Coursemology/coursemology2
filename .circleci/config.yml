@@ -21,8 +21,8 @@ commands:
     steps:
       # Install bundler version
       - run:
-          name: Install bundler version 2.2.22
-          command: gem install bundler:2.2.22
+          name: Install bundler version 2.2.33
+          command: gem install bundler:2.2.33
 
       # Restore cached Ruby dependencies
       - restore_cache:
