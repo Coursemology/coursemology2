@@ -26,6 +26,21 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
     return this.getClient().get(`${this._getUrlPrefix()}/staff`);
   }
 
+  /**
+   * Fetches course progression statistics, which comprise of assessment data and relevant student
+   * submission data.
+   */
+  fetchCourseProgressionStatistics() {
+    return this.getClient().get(`${this._getUrlPrefix()}/course/progression`);
+  }
+
+  /**
+   * Fetches course performance statistics, which comprises of various performance metrics.
+   */
+  fetchCoursePerformanceStatistics() {
+    return this.getClient().get(`${this._getUrlPrefix()}/course/performance`);
+  }
+
   _getUrlPrefix() {
     return `/courses/${this.getCourseId()}/statistics/course`;
   }
