@@ -10,10 +10,7 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
 
   def course_performance
     @students = students
-    @course_videos = current_course.videos
-    @course_video_count = @course_videos.exists? ? @course_videos.count : 0
     @correctness_hash = correctness_hash
-    @has_personalized_timeline = current_course.show_personalized_timeline_features?
   end
 
   def all_staff
