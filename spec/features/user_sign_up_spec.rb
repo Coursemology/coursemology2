@@ -104,7 +104,7 @@ RSpec.feature 'Users: Sign Up' do
         expect(second_course_user).not_to be_phantom
       end
 
-      scenario 'I can register for an account without using the registration link' do
+      scenario 'I can register for an account without using the registration link', type: :notifier do
         visit new_user_registration_path
 
         valid_user = attributes_for(:user).reverse_merge(email: invitation1.email)
