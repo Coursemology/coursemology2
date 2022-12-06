@@ -15,8 +15,7 @@ import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
-import { getCourseUserURL } from 'lib/helpers/url-builders';
-import { getCourseId } from 'lib/helpers/url-helpers';
+import Link from 'lib/components/core/Link';
 
 import { studentShape } from '../../../propTypes/course';
 
@@ -25,7 +24,7 @@ const translations = defineMessages({
     id: 'course.statistics.course.studentPerformanceTable.title',
     defaultMessage: 'Student Performance',
   },
-  phantom: {
+  includePhantom: {
     id: 'course.statistics.course.studentPerformanceTable.phantom',
     defaultMessage: 'Include phantom users',
   },
@@ -48,6 +47,22 @@ const translations = defineMessages({
   name: {
     id: 'course.statistics.course.studentPerformanceTable.name',
     defaultMessage: 'Name',
+  },
+  studentType: {
+    id: 'course.statistics.course.studentPerformanceTable.studentType',
+    defaultMessage: 'Student Type',
+  },
+  normal: {
+    id: 'course.statistics.course.studentPerformanceTable.studentType.normal',
+    defaultMessage: 'Normal',
+  },
+  phantom: {
+    id: 'course.statistics.course.studentPerformanceTable.studentType.phantom',
+    defaultMessage: 'Phantom',
+  },
+  groupManagers: {
+    id: 'course.statistics.course.studentPerformanceTable.groupManagers',
+    defaultMessage: 'Tutors',
   },
   level: {
     id: 'course.statistics.course.studentPerformanceTable.level',
@@ -136,34 +151,181 @@ LinearProgressWithLabel.propTypes = {
   value: PropTypes.number,
 };
 
-const getColumns = (
+const StudentPerformanceTable = ({
+  students,
   hasPersonalizedTimeline,
   isCourseGamified,
   showVideo,
   courseVideoCount,
+  hasGroupManagers,
   intl,
-) => {
-  const columns = [
-    {
-      name: 'id',
-      label: 'ID',
-      options: {
-        display: 'excluded',
+}) => {
+  const [showPhantoms, setShowPhantoms] = useState(false);
+  const [sortedColumn, setSortedColumn] = useState('experiencePoints');
+  const [sortDirection, setSortDirection] = useState('desc');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [highlightPercentage, setHighlightPercentage] = useState(5);
+
+  const displayedStudents = useMemo(
+    () => students.filter((s) => showPhantoms || !s.isPhantom),
+    [students, showPhantoms],
+  );
+
+  const length = useMemo(() => displayedStudents.length, [displayedStudents]);
+
+  const title = useMemo(
+    () =>
+      intl.formatMessage(translations.tableTitle, {
+        direction: intl.formatMessage(translations[sortDirection]),
+        column: intl.formatMessage(translations[sortedColumn]),
+      }),
+    [intl, sortDirection, sortedColumn],
+  );
+
+  const options = useMemo(
+    () => ({
+      filter: true,
+      print: false,
+      viewColumns: false,
+      selectableRows: 'none',
+      onColumnSortChange: (column, direction) => {
+        setSortedColumn(column);
+        setSortDirection(direction);
       },
-    },
+      onChangePage: (currentPage) => setPage(currentPage),
+      onChangeRowsPerPage: (numberOfRows) => {
+        setRowsPerPage(numberOfRows);
+        if (numberOfRows * page > length) {
+          setPage(Math.floor(length / numberOfRows));
+        }
+      },
+      sortOrder: {
+        name: sortedColumn,
+        direction: sortDirection,
+      },
+      setRowProps: (_row, _dataIndex, rowIndex) => {
+        const highlightRange = Math.floor((length * highlightPercentage) / 100);
+        const index = page * rowsPerPage + rowIndex;
+        if (index <= highlightRange) {
+          return {
+            style: {
+              backgroundColor: sortDirection === 'desc' ? green[50] : red[50],
+            },
+          };
+        }
+        if (index >= length - highlightRange) {
+          return {
+            style: {
+              backgroundColor: sortDirection === 'desc' ? red[50] : green[50],
+            },
+          };
+        }
+        return {};
+      },
+      downloadOptions: {
+        filename: 'student_performance_statistics',
+      },
+    }),
+    [
+      setSortedColumn,
+      setSortDirection,
+      setPage,
+      setRowsPerPage,
+      sortedColumn,
+      sortDirection,
+      page,
+      rowsPerPage,
+      highlightPercentage,
+      length,
+    ],
+  );
+
+  const columns = [
     {
       name: 'name',
       label: intl.formatMessage(translations.name),
       options: {
         filter: false,
         sort: true,
-        customBodyRender: (name, tableMeta) => {
-          const id = tableMeta.rowData[0];
-          return <a href={getCourseUserURL(getCourseId(), id)}>{name}</a>;
+        customBodyRenderLite: (dataIndex) => {
+          const student = displayedStudents[dataIndex];
+          return (
+            <Link
+              key={student.id}
+              href={student.nameLink}
+              opensInNewTab
+              underlinesOnHover
+            >
+              {student.name}
+            </Link>
+          );
         },
       },
     },
+    {
+      name: 'isPhantom',
+      label: intl.formatMessage(translations.studentType),
+      options: {
+        filter: false,
+        sort: false,
+        customBodyRenderLite: (dataIndex) =>
+          displayedStudents[dataIndex].isPhantom
+            ? intl.formatMessage(translations.phantom)
+            : intl.formatMessage(translations.normal),
+      },
+    },
   ];
+
+  if (hasGroupManagers) {
+    columns.push({
+      name: 'groupManagers',
+      label: intl.formatMessage(translations.groupManagers),
+      options: {
+        filter: true,
+        filterType: 'multiselect',
+        filterOptions: {
+          names: [
+            ...new Set(
+              students.flatMap((s) => s.groupManagers.map((m) => m.name)),
+            ),
+          ],
+          logic: (managers, filters) => {
+            if (filters) {
+              const filterSet = new Set(filters);
+              return !managers
+                .map((m) => m.name)
+                .some((name) => filterSet.has(name));
+            }
+            return false;
+          },
+          fullWidth: true,
+        },
+        customFilterListOptions: {
+          render: (name) => `Tutor: ${name}`,
+        },
+        sort: false,
+        customBodyRenderLite: (dataIndex) => {
+          const groupManagers = displayedStudents[dataIndex].groupManagers;
+          if (!groupManagers) {
+            return '';
+          }
+          return (
+            <>
+              {groupManagers.map((m, index) => (
+                <span key={m.id}>
+                  <Link href={m.nameLink} opensInNewTab underlinesOnHover>
+                    {m.name}
+                  </Link>
+                  {index < groupManagers.length - 1 && ', '}
+                </span>
+              ))}
+            </>
+          );
+        },
+      },
+    });
+  }
 
   if (isCourseGamified) {
     columns.push({
@@ -174,6 +336,13 @@ const getColumns = (
         sort: true,
         sortDescFirst: true,
         alignCenter: true,
+        filterType: 'multiselect',
+        filterOptions: {
+          fullWidth: true,
+        },
+        customFilterListOptions: {
+          render: (name) => `Level: ${name}`,
+        },
       },
     });
     columns.push({
@@ -184,6 +353,19 @@ const getColumns = (
         sort: true,
         sortDescFirst: true,
         alignCenter: true,
+        customBodyRenderLite: (dataIndex) => {
+          const student = displayedStudents[dataIndex];
+          return (
+            <Link
+              key={student.id}
+              href={student.experiencePointsLink}
+              opensInNewTab
+              underlinesOnHover
+            >
+              {student.experiencePoints}
+            </Link>
+          );
+        },
       },
     });
     columns.push({
@@ -248,6 +430,19 @@ const getColumns = (
         sort: true,
         alignCenter: true,
         sortDescFirst: true,
+        customBodyRenderLite: (dataIndex) => {
+          const student = displayedStudents[dataIndex];
+          return (
+            <Link
+              key={student.id}
+              href={student.videoSubmissionLink}
+              opensInNewTab
+              underlinesOnHover
+            >
+              {student.videoSubmissionCount}
+            </Link>
+          );
+        },
       },
     });
     columns.push({
@@ -265,115 +460,6 @@ const getColumns = (
       },
     });
   }
-
-  return columns;
-};
-
-const StudentPerformanceTable = ({
-  students,
-  hasPersonalizedTimeline,
-  isCourseGamified,
-  showVideo,
-  courseVideoCount,
-  intl,
-}) => {
-  const [showPhantoms, setShowPhantoms] = useState(false);
-  const [sortedColumn, setSortedColumn] = useState('experiencePoints');
-  const [sortDirection, setSortDirection] = useState('desc');
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [highlightPercentage, setHighlightPercentage] = useState(5);
-
-  const columns = useMemo(
-    () =>
-      getColumns(
-        hasPersonalizedTimeline,
-        isCourseGamified,
-        showVideo,
-        courseVideoCount,
-        intl,
-      ),
-    [
-      hasPersonalizedTimeline,
-      isCourseGamified,
-      showVideo,
-      courseVideoCount,
-      intl,
-    ],
-  );
-  const displayedStudents = useMemo(
-    () => students.filter((s) => showPhantoms || !s.isPhantom),
-    [students, showPhantoms],
-  );
-
-  const length = useMemo(() => displayedStudents.length, [displayedStudents]);
-
-  const title = useMemo(
-    () =>
-      intl.formatMessage(translations.tableTitle, {
-        direction: intl.formatMessage(translations[sortDirection]),
-        column: intl.formatMessage(translations[sortedColumn]),
-      }),
-    [intl, sortDirection, sortedColumn],
-  );
-
-  const options = useMemo(
-    () => ({
-      filter: false,
-      print: false,
-      viewColumns: false,
-      selectableRows: 'none',
-      onColumnSortChange: (column, direction) => {
-        setSortedColumn(column);
-        setSortDirection(direction);
-      },
-      onChangePage: (currentPage) => setPage(currentPage),
-      onChangeRowsPerPage: (numberOfRows) => {
-        setRowsPerPage(numberOfRows);
-        if (numberOfRows * page > length) {
-          setPage(Math.floor(length / numberOfRows));
-        }
-      },
-      sortOrder: {
-        name: sortedColumn,
-        direction: sortDirection,
-      },
-      setRowProps: (_row, _dataIndex, rowIndex) => {
-        const highlightRange = Math.floor((length * highlightPercentage) / 100);
-        const index = page * rowsPerPage + rowIndex;
-        if (index <= highlightRange) {
-          return {
-            style: {
-              backgroundColor: sortDirection === 'desc' ? green[50] : red[50],
-            },
-          };
-        }
-        if (index >= length - highlightRange) {
-          return {
-            style: {
-              backgroundColor: sortDirection === 'desc' ? red[50] : green[50],
-            },
-          };
-        }
-        return {};
-      },
-      downloadOptions: {
-        filename: 'student_performance_statistics',
-      },
-    }),
-    [
-      setSortedColumn,
-      setSortDirection,
-      setPage,
-      setRowsPerPage,
-      sortedColumn,
-      sortDirection,
-      page,
-      rowsPerPage,
-      highlightPercentage,
-      length,
-    ],
-  );
 
   return (
     <Card style={{ margin: '2rem 0' }} variant="outlined">
@@ -396,7 +482,7 @@ const StudentPerformanceTable = ({
                 onChange={(event) => setShowPhantoms(event.target.checked)}
               />
             }
-            label={intl.formatMessage(translations.phantom)}
+            label={intl.formatMessage(translations.includePhantom)}
           />
           <div style={styles.sliderRoot}>
             <span style={styles.sliderDescription}>
@@ -434,6 +520,7 @@ StudentPerformanceTable.propTypes = {
   isCourseGamified: PropTypes.bool.isRequired,
   showVideo: PropTypes.bool.isRequired,
   courseVideoCount: PropTypes.number.isRequired,
+  hasGroupManagers: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
 };
 

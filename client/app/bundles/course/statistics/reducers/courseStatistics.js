@@ -12,6 +12,7 @@ const initialState = {
   isCourseGamified: false,
   showVideo: false,
   courseVideoCount: 0,
+  hasGroupManagers: false,
   notification: {}, // Centralised notification shape across all the different reducers
 };
 
@@ -42,6 +43,7 @@ export default function (state = initialState, action) {
         isCourseGamified: action.isCourseGamified,
         showVideo: action.showVideo,
         courseVideoCount: action.courseVideoCount,
+        hasGroupManagers: action.hasGroupManagers,
       };
     }
     case actionTypes.FETCH_COURSE_PROGRESSION_STATISTICS_FAILURE: {

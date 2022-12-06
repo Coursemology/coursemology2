@@ -91,6 +91,7 @@ export function fetchCoursePerformanceStatistics(failureMessage) {
           isCourseGamified: response.data.isCourseGamified,
           showVideo: response.data.showVideo,
           courseVideoCount: parseInt(response.data.courseVideoCount, 10),
+          hasGroupManagers: response.data.hasGroupManagers,
         });
       })
       .catch(() => {

@@ -120,6 +120,7 @@ const StudentsStatistics = ({
       },
     },
   ];
+
   if (hasGroupManagers) {
     columns.push({
       name: 'groupManagers',

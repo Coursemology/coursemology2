@@ -45,6 +45,7 @@ export const courseIndexShape = PropTypes.shape({
   isCourseGamified: PropTypes.bool.isRequired,
   showVideo: PropTypes.bool.isRequired,
   courseVideoCount: PropTypes.number.isRequired,
+  hasGroupManagers: PropTypes.bool.isRequired,
 
   isFetchingProgression: PropTypes.bool.isRequired,
   isErrorProgression: PropTypes.bool.isRequired,
