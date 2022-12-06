@@ -9,8 +9,9 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
   end
 
   def course_performance
-    @students = students
+    @students = course_users.students.ordered_by_experience_points.with_performance_statistics
     @correctness_hash = correctness_hash
+    @service = group_manager_preload_service
   end
 
   def all_staff
@@ -97,10 +98,6 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
 
   def course_users
     @course_users ||= current_course.course_users.includes(:groups)
-  end
-
-  def students
-    @students = current_course.course_users.students.with_performance_statistics
   end
 
   def group_manager_preload_service

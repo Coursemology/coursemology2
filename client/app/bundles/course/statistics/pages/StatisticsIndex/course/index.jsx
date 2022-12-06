@@ -38,6 +38,7 @@ const CourseStatistics = ({
   isCourseGamified,
   showVideo,
   courseVideoCount,
+  hasGroupManagers,
   intl,
 }) => {
   if (isFetchingProgression && isFetchingPerformance) {
@@ -80,6 +81,7 @@ const CourseStatistics = ({
     return (
       <StudentPerformanceTable
         courseVideoCount={courseVideoCount}
+        hasGroupManagers={hasGroupManagers}
         hasPersonalizedTimeline={hasPersonalizedTimeline}
         isCourseGamified={isCourseGamified}
         showVideo={showVideo}
