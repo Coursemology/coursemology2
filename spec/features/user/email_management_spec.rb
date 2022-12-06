@@ -59,7 +59,7 @@ RSpec.feature 'User: Emails', js: true do
         create(:course_user_invitation, name: 'course2_user', email: invitation1.email, course: course2)
       end
 
-      it 'enrols the user to the new courses' do
+      it 'enrols the user to the new courses', type: :notifier do
         expect do
           click_button 'Add email address'
           fill_in 'newEmail', with: invitation1.email
@@ -74,7 +74,7 @@ RSpec.feature 'User: Emails', js: true do
       end
     end
 
-    context 'When a secondary email has been used by someone else but unconfirmed' do
+    context 'When a secondary email has been used by someone else but unconfirmed', type: :notifier do
       let(:other_user) { student }
       let!(:non_primary_email) { create(:user_email, :unconfirmed, user: other_user, primary: false) }
 
