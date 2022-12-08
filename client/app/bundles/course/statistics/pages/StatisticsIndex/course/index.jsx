@@ -1,4 +1,4 @@
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import ErrorCard from 'lib/components/core/ErrorCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -39,8 +39,8 @@ const CourseStatistics = ({
   showVideo,
   courseVideoCount,
   hasGroupManagers,
-  intl,
 }) => {
+  const intl = useIntl();
   if (isFetchingProgression && isFetchingPerformance) {
     return <LoadingIndicator />;
   }
@@ -100,4 +100,4 @@ const CourseStatistics = ({
 
 CourseStatistics.propTypes = courseIndexShape;
 
-export default injectIntl(CourseStatistics);
+export default CourseStatistics;

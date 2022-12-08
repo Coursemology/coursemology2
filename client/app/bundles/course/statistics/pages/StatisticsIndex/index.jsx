@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Typography from '@mui/material/Typography';
 import PropTypes from 'prop-types';
 
 import NotificationBar from 'lib/components/core/NotificationBar';
@@ -70,11 +69,7 @@ const TabPanel = (props) => {
       role="tabpanel"
       {...other}
     >
-      {value === index && (
-        <Box sx={{ pt: 3, pb: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ pt: 3, pb: 3 }}>{children}</Box>}
     </div>
   );
 };
@@ -95,9 +90,9 @@ const StatisticsIndex = ({
   courseStatistics,
   studentsStatistics,
   staffStatistics,
-  intl,
 }) => {
   const [value, setValue] = useState(0);
+  const intl = useIntl();
 
   useEffect(() => {
     dispatch(
@@ -172,14 +167,13 @@ const StatisticsIndex = ({
 
 StatisticsIndex.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  courseStatistics: courseIndexShape.isRequired,
-  studentsStatistics: studentsIndexShape.isRequired,
-  staffStatistics: staffIndexShape.isRequired,
-  intl: PropTypes.object.isRequired,
+  courseStatistics: PropTypes.shape(courseIndexShape),
+  studentsStatistics: PropTypes.shape(studentsIndexShape),
+  staffStatistics: PropTypes.shape(staffIndexShape),
 };
 
 export default connect((state) => ({
   courseStatistics: state.courseStatistics,
   studentsStatistics: state.studentsStatistics,
   staffStatistics: state.staffStatistics,
-}))(injectIntl(StatisticsIndex));
+}))(StatisticsIndex);

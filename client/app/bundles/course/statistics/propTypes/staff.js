@@ -8,9 +8,8 @@ export const staffShape = PropTypes.shape({
   stddev: PropTypes.string.isRequired,
 });
 
-export const staffIndexShape = PropTypes.shape({
+export const staffIndexShape = {
   staff: PropTypes.arrayOf(staffShape).isRequired,
   isFetching: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,
-  intl: PropTypes.object.isRequired,
-});
+};
