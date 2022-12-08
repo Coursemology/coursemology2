@@ -602,7 +602,15 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           name="block_student_viewing_after_submitted"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
-              disabled={disabled}
+              description={intl.formatMessage(
+                t.blockStudentViewingAfterSubmittedHint,
+              )}
+              disabled={disabled ?? autograded}
+              disabledHint={
+                <InfoLabel
+                  label={intl.formatMessage(t.unavailableInAutograded)}
+                />
+              }
               field={field}
               fieldState={fieldState}
               label={intl.formatMessage(t.blockStudentViewingAfterSubmitted)}

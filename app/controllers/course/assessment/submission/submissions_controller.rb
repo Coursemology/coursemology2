@@ -69,7 +69,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   def edit
     return if @submission.attempting?
 
-    render 'blocked' if @submission.assessment.block_student_viewing_after_submitted? && current_course_user.student?
+    render 'blocked' if @submission.submission_view_blocked?(current_course_user)
 
     respond_to do |format|
       format.html {} # rubocop:disable Lint/EmptyBlock
