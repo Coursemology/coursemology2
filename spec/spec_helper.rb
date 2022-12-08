@@ -112,6 +112,12 @@ RSpec.configure do |config|
     config.around :each, :js do |example|
       example.run_with_retry retry: 3
     end
+
+    # callback to be run between retries
+    config.retry_callback = proc do |_ex|
+      # run some additional clean up task - can be filtered by example metadata
+      Capybara.reset!
+    end
   end
 end
 
