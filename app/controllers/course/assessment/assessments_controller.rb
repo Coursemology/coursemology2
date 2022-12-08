@@ -81,16 +81,14 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   # Reorder questions for an assessment
   def reorder
     unless valid_ordering?(question_order_ids)
-      render json: {
+      return render json: {
         errors: I18n.t('course.assessment.assessments.invalid_questions_order')
       }, status: :bad_request
-
-      return
     end
 
     Course::QuestionAssessment.transaction do
       question_order_ids.each_with_index do |id, index|
-        question_assessments_hash[id].update_attribute(:weight, index)
+        question_assessments_hash[id].update!(weight: index)
       end
     end
 
