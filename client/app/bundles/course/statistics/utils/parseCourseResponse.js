@@ -18,11 +18,15 @@ export const processStudentPerformance = (student) => ({
   ...student,
   id: parseInt(student.id, 10),
   groupManagers:
-    student.groupManagers?.map((m) => ({
-      id: parseInt(m.id, 10),
-      name: m.name,
-      nameLink: m.nameLink,
-    })) ?? [],
+    student.groupManagers
+      ?.map((m) => ({
+        id: parseInt(m.id, 10),
+        name: m.name,
+        nameLink: m.nameLink,
+      }))
+      ?.sort((a, b) =>
+        a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+      ) ?? [],
   numSubmissions:
     student.numSubmissions != null ? parseInt(student.numSubmissions, 10) : 0,
   correctness:
