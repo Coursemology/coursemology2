@@ -37,7 +37,7 @@ export const studentShape = PropTypes.shape({
   videoPercentWatched: PropTypes.number,
 });
 
-export const courseIndexShape = PropTypes.shape({
+export const courseIndexShape = {
   assessments: PropTypes.arrayOf(assessmentShape),
   submissions: PropTypes.arrayOf(submissionShape),
   students: PropTypes.arrayOf(studentShape),
@@ -53,5 +53,4 @@ export const courseIndexShape = PropTypes.shape({
   isErrorPerformance: PropTypes.bool.isRequired,
 
   notification: notificationShape, // Centralised across course, students and staff
-  intl: PropTypes.object.isRequired,
-});
+};

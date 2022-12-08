@@ -1,4 +1,4 @@
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
@@ -94,8 +94,9 @@ const StudentsStatistics = ({
   students,
   isFetching,
   isError,
-  intl,
 }) => {
+  const intl = useIntl();
+
   if (isFetching) {
     return <LoadingIndicator />;
   }
@@ -154,7 +155,6 @@ const StudentsStatistics = ({
               key={student.id}
               href={student.experiencePointsLink}
               opensInNewTab
-              underlinesOnHover
             >
               {student.experiencePoints}
             </Link>
@@ -178,7 +178,6 @@ const StudentsStatistics = ({
               key={student.id}
               href={student.videoSubmissionLink}
               opensInNewTab
-              underlinesOnHover
             >
               {student.videoSubmissionCount}
             </Link>
@@ -216,4 +215,4 @@ const StudentsStatistics = ({
 
 StudentsStatistics.propTypes = studentsIndexShape;
 
-export default injectIntl(StudentsStatistics);
+export default StudentsStatistics;

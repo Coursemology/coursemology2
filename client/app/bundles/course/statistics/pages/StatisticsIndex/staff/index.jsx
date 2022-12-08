@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import ErrorCard from 'lib/components/core/ErrorCard';
 import DataTable from 'lib/components/core/layouts/DataTable';
@@ -54,7 +54,8 @@ const translations = defineMessages({
   },
 });
 
-const StaffStatistics = ({ staff, isFetching, isError, intl }) => {
+const StaffStatistics = ({ staff, isFetching, isError }) => {
+  const intl = useIntl();
   const columns = useMemo(
     () => [
       {
@@ -124,4 +125,4 @@ const StaffStatistics = ({ staff, isFetching, isError, intl }) => {
 
 StaffStatistics.propTypes = staffIndexShape;
 
-export default injectIntl(StaffStatistics);
+export default StaffStatistics;
