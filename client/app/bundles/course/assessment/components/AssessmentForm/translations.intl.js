@@ -33,6 +33,11 @@ const translations = defineMessages({
     id: 'course.assessment.form.blockStudentViewingAfterSubmitted',
     defaultMessage: 'Block students from viewing finalized submissions',
   },
+  blockStudentViewingAfterSubmittedHint: {
+    id: 'course.assessment.form.blockStudentViewingAfterSubmittedHint',
+    defaultMessage:
+      'Students will only be able to view their submissions after their grades have been published.',
+  },
   usePublic: {
     id: 'course.assessment.form.usePublic',
     defaultMessage: 'Public test cases',
@@ -68,7 +73,7 @@ const translations = defineMessages({
   },
   forProgrammingQuestions: {
     id: 'course.assessment.form.forProgrammingQuestions',
-    defaultMessage: 'for programming questions',
+    defaultMessage: 'for programming questions.',
   },
   hasPersonalTimes: {
     id: 'course.assessment.form.hasPersonalTimes',
@@ -77,7 +82,7 @@ const translations = defineMessages({
   hasPersonalTimesHint: {
     id: 'course.assessment.form.hasPersonalTimesHint',
     defaultMessage:
-      'Timings for this item will be automatically adjusted for users based on learning rate',
+      'Timings for this item will be automatically adjusted for users based on learning rate.',
   },
   affectsPersonalTimes: {
     id: 'course.assessment.form.affectsPersonalTimes',
@@ -87,7 +92,7 @@ const translations = defineMessages({
     id: 'course.assessment.form.affectsPersonalTimesHint',
     defaultMessage:
       "Student's submission time for this item will be taken into account \
-      when updating personal times for other items",
+      when updating personal times for other items.",
   },
   visibility: {
     id: 'course.assessment.form.visibility',
@@ -240,7 +245,7 @@ const translations = defineMessages({
   enableRandomizationHint: {
     id: 'course.assessment.form.enable_randomization_hint',
     defaultMessage:
-      'Enables randomized assignment of question bundles to students (per question group)',
+      'Enables randomized assignment of question bundles to students (per question group).',
   },
   assessmentDetails: {
     id: 'course.assessment.form.assessmentDetails',

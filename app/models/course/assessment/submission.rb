@@ -211,6 +211,10 @@ class Course::Assessment::Submission < ApplicationRecord
     !!@unsubmitting
   end
 
+  def submission_view_blocked?(course_user)
+    !attempting? && !published? && assessment.block_student_viewing_after_submitted? && course_user.student?
+  end
+
   def questions
     assessment.randomization.nil? ? assessment.questions : assigned_questions
   end
