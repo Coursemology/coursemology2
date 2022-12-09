@@ -159,7 +159,7 @@ jobs:
           command: |
             bundle exec rake db:setup
           environment:
-            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
       # Run tests!
       - run:
@@ -171,13 +171,13 @@ jobs:
               circleci tests split --split-by=timings)"
 
             bundle exec rspec \
-              --format progress \
+              --format documentation \
               --format RspecJunitFormatter \
               --out /tmp/test-results/rspec.xml \
               --format progress \
               $TEST_FILES
           environment:
-            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
       # Collect reports
       - store_test_results:
@@ -266,7 +266,7 @@ jobs:
           command: |
             bundle exec rake db:setup
           environment:
-            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
       # Run i18n checks!
       - run:
@@ -276,7 +276,7 @@ jobs:
             bundle exec i18n-tasks missing
             bundle exec rake factory_bot:lint
           environment:
-            DATABASE_URL: 'postgres://ubuntu@localhost:5432/coursemology_test'
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
     resource_class: large
 
 workflows:
