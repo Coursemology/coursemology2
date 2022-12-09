@@ -44,7 +44,9 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def create
-    @assessment.update_randomization(randomization_params)
+    # Randomized Assessment is temporarily hidden (PR#5406)
+    # @assessment.update_randomization(randomization_params)
+
     if @assessment.save
       render json: { id: @assessment.id }, status: :ok
     else
@@ -58,7 +60,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def update
     @assessment.update_mode(autograded_params)
-    @assessment.update_randomization(randomization_params)
+
+    # Randomized Assessment is temporarily hidden (PR#5406)
+    # @assessment.update_randomization(randomization_params)
+
     if @assessment.update(assessment_params)
       head :ok
     else
@@ -150,9 +155,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     params.require(:assessment).permit(:autograded)
   end
 
-  def randomization_params
-    params.require(:assessment).permit(:randomization)
-  end
+  # Randomized Assessment is temporarily hidden (PR#5406)
+  # def randomization_params
+  #   params.require(:assessment).permit(:randomization)
+  # end
 
   # Infer the autograded state from @assessment or params.
   def autograded?

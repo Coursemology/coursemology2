@@ -66,7 +66,8 @@ const AssessmentsSettingsForm = (
               spaced
               title={t(translations.randomisation)}
             >
-              <Controller
+              {/* Randomized Assessment is temporarily hidden (PR#5406) */}
+              {/* <Controller
                 control={control}
                 name="allowRandomization"
                 render={({ field, fieldState }): JSX.Element => (
@@ -77,7 +78,7 @@ const AssessmentsSettingsForm = (
                     label={t(translations.enableRandomisedAssessments)}
                   />
                 )}
-              />
+              /> */}
 
               <Controller
                 control={control}

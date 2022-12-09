@@ -265,12 +265,13 @@ Rails.application.routes.draw do
           end
           resources :sessions, only: [:new, :create]
 
-          resources :question_groups, except: :show
-          resources :question_bundles, except: :show
-          resources :question_bundle_questions, except: :show
-          resources :question_bundle_assignments, except: [:show, :new] do
-            post 'recompute', on: :collection
-          end
+          # Randomized Assessment is temporarily hidden (PR#5406)
+          # resources :question_groups, except: :show
+          # resources :question_bundles, except: :show
+          # resources :question_bundle_questions, except: :show
+          # resources :question_bundle_assignments, except: [:show, :new] do
+          #   post 'recompute', on: :collection
+          # end
         end
         resources :categories, only: [:index]
       end

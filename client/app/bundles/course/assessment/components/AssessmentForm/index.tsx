@@ -40,7 +40,8 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     initialValues,
     modeSwitching,
     onSubmit,
-    randomizationAllowed,
+    // Randomized Assessment is temporarily hidden (PR#5406)
+    // randomizationAllowed,
     showPersonalizedTimelineFeatures,
     tabs,
     intl,
@@ -618,7 +619,8 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           )}
         />
 
-        {randomizationAllowed && (
+        {/* Randomized Assessment is temporarily hidden (PR#5406) */}
+        {/* {randomizationAllowed && (
           <Controller
             control={control}
             name="randomization"
@@ -632,7 +634,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               />
             )}
           />
-        )}
+        )} */}
 
         <Controller
           control={control}
