@@ -23,6 +23,7 @@ const DEFAULT_IMAGE_NAME = 'image';
 
 interface AvatarSelectorProps {
   title: string;
+  alt?: string;
   defaultImageUrl?: string;
   stagedImage?: File;
   onSelectImage?: (image: File) => void;
@@ -77,6 +78,7 @@ const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
     <Subsection title={props.title}>
       <div className="relative">
         <Avatar
+          alt={props.alt}
           className="h-80 w-80"
           src={
             props.stagedImage

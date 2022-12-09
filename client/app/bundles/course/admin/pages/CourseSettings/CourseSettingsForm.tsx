@@ -105,6 +105,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             </Subsection>
 
             <AvatarSelector
+              alt={props.data.title}
               defaultImageUrl={watch('logo')}
               disabled={props.disabled}
               onSelectImage={setStagedLogo}
