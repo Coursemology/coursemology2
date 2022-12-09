@@ -1,25 +1,25 @@
 import { AddBoxOutlined } from '@mui/icons-material';
 import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 
-interface Props extends IconButtonProps {
+interface AddButtonProps extends IconButtonProps {
   onClick: () => void;
   tooltip?: string;
 }
 
-const DeleteButton = ({
-  onClick,
-  tooltip = '',
-  ...props
-}: Props): JSX.Element => {
+const AddButton = (props: AddButtonProps): JSX.Element => {
+  const button = (
+    <IconButton color="inherit" {...props}>
+      <AddBoxOutlined />
+    </IconButton>
+  );
+
+  if (!props.tooltip) return button;
+
   return (
-    <Tooltip title={tooltip}>
-      <span>
-        <IconButton color="inherit" onClick={onClick} {...props}>
-          <AddBoxOutlined />
-        </IconButton>
-      </span>
+    <Tooltip title={props.tooltip}>
+      <span>{button}</span>
     </Tooltip>
   );
 };
 
-export default DeleteButton;
+export default AddButton;
