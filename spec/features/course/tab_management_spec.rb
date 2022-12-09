@@ -52,10 +52,10 @@ RSpec.feature 'Course: Assessments: Management', js: true do
         expect(previous_tabs[1]).to eq(tab_to_move)
 
         visit course_admin_assessments_path(course)
+        first_tab_element = find_rbd_tab(first_tab.id)
         tab_to_move_element = find_rbd_tab(tab_to_move.id)
-        category_element = find_rbd_category(category.id)
 
-        drag_rbd(tab_to_move_element, category_element)
+        drag_rbd(tab_to_move_element, first_tab_element)
         click_button 'Save changes'
 
         expect_toastify('Your changes have been saved.')
