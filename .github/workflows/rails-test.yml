@@ -1,0 +1,104 @@
+name: rails-test
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: ubuntu
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: coursemology_test
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+
+    steps:
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Install Chromedriver
+        uses: nanasess/setup-chromedriver@v1
+
+      - name: Set up Docker
+        uses: docker-practice/actions-setup-docker@master
+
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+
+      - name: Set up Ruby 3.0
+        uses: ruby/setup-ruby@359bebbc29cbe6c87da6bc9ea3bc930432750108
+        with:
+          ruby-version: "3.0"
+
+      - name: Install bundler
+        run: gem install bundler:2.2.33
+
+      - name: Install Rails dependencies
+        run: |
+          bundle install --jobs=4 --retry=3 --path vendor/bundle --deployment
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.18.2
+
+      - name: Install ghostscript and imagemagick
+        run: |
+          sudo apt update
+          sudo apt install imagemagick
+          sudo apt install ghostscript
+          sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
+
+      - name: Update Node dependencies
+        run: cd client && yarn install && cd -
+
+      - name: Build client
+        run: cd client && yarn build:production && cd -
+
+      - name: Setup DB
+        env:
+          PG_HOST: localhost
+          PG_USER: ubuntu
+          RAILS_ENV: test
+          # DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+        run: bundle exec rake db:setup
+
+      - name: Run tests!
+        env:
+          PG_HOST: localhost
+          PG_USER: ubuntu
+          RAILS_ENV: test
+          # DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+        run: |
+          mkdir /tmp/test-results
+          TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
+            circleci tests split --split-by=timings)"
+
+          bundle exec rspec \
+            --format documentation \
+            --format RspecJunitFormatter \
+            --out /tmp/test-results/rspec.xml \
+            --format progress \
+            $TEST_FILES

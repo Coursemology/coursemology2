@@ -1,293 +1,293 @@
-# Ruby CircleCI 2.1 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-ruby/ for more details
-#
-version: 2.1
+# # Ruby CircleCI 2.1 configuration file
+# #
+# # Check https://circleci.com/docs/2.0/language-ruby/ for more details
+# #
+# version: 2.1
 
-orbs:
-  browser-tools: circleci/browser-tools@1.2.3
+# orbs:
+#   browser-tools: circleci/browser-tools@1.2.3
 
-commands:
-  checkout_with_submodules:
-    steps:
-      - checkout
+# commands:
+#   checkout_with_submodules:
+#     steps:
+#       - checkout
 
-      # Checkout submodules
-      - run:
-          name: Checkout submodules
-          command: git submodule update --init --recursive
+#       # Checkout submodules
+#       - run:
+#           name: Checkout submodules
+#           command: git submodule update --init --recursive
 
-  restore_ruby_cache:
-    steps:
-      # Install bundler version
-      - run:
-          name: Install bundler version 2.2.33
-          command: gem install bundler:2.2.33
+#   restore_ruby_cache:
+#     steps:
+#       # Install bundler version
+#       - run:
+#           name: Install bundler version 2.2.33
+#           command: gem install bundler:2.2.33
 
-      # Restore cached Ruby dependencies
-      - restore_cache:
-          keys:
-            - v3.0.4-ruby-{{ checksum "Gemfile.lock" }}
-            # Fallback to using the latest cache if no exact match is found
-            - v3.0.4-ruby-
+#       # Restore cached Ruby dependencies
+#       - restore_cache:
+#           keys:
+#             - v3.0.4-ruby-{{ checksum "Gemfile.lock" }}
+#             # Fallback to using the latest cache if no exact match is found
+#             - v3.0.4-ruby-
 
-      # Update Ruby dependencies
-      - run:
-          name: Install dependencies
-          command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle --without development:production --deployment
+#       # Update Ruby dependencies
+#       - run:
+#           name: Install dependencies
+#           command: |
+#             bundle install --jobs=4 --retry=3 --path vendor/bundle --without development:production --deployment
 
-      # Recache the updated Ruby dependencies
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-            - ./.bundle
-          key: v3.0.4-ruby-{{ checksum "Gemfile.lock" }}
+#       # Recache the updated Ruby dependencies
+#       - save_cache:
+#           paths:
+#             - ./vendor/bundle
+#             - ./.bundle
+#           key: v3.0.4-ruby-{{ checksum "Gemfile.lock" }}
 
-  build_and_restore_node_cache:
-    steps:
-      # Use the desired Node version
-      - run:
-          name: Swap Node versions
-          command: |
-            set +e
-            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-            nvm install v14.18.2
-            nvm alias default 14.18.2
+#   build_and_restore_node_cache:
+#     steps:
+#       # Use the desired Node version
+#       - run:
+#           name: Swap Node versions
+#           command: |
+#             set +e
+#             wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+#             export NVM_DIR="$HOME/.nvm"
+#             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+#             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+#             nvm install v14.18.2
+#             nvm alias default 14.18.2
 
-            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
-            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+#             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+#             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
 
-      # Restore cached Node dependencies
-      - restore_cache:
-          keys:
-            - v14.18.2-node-{{ checksum "client/yarn.lock" }}
-            # Fallback to using the latest cache if no exact match is found
-            - v14.18.2-node-
+#       # Restore cached Node dependencies
+#       - restore_cache:
+#           keys:
+#             - v14.18.2-node-{{ checksum "client/yarn.lock" }}
+#             # Fallback to using the latest cache if no exact match is found
+#             - v14.18.2-node-
 
-      # Update Node dependencies
-      - run: cd client && yarn install && cd -
+#       # Update Node dependencies
+#       - run: cd client && yarn install && cd -
 
-      # Recache the updated Node dependencies
-      - save_cache:
-          paths:
-            - ./client/node_modules
-          key: v14.18.2-node-{{ checksum "client/yarn.lock" }}
+#       # Recache the updated Node dependencies
+#       - save_cache:
+#           paths:
+#             - ./client/node_modules
+#           key: v14.18.2-node-{{ checksum "client/yarn.lock" }}
 
-  restore_node_cache:
-    steps:
-      - restore_cache:
-          name: Restore Node cache
-          keys:
-            - v14.18.2-node-{{ checksum "client/yarn.lock" }}
-            # Fallback to using the latest cache if no exact match is found
-            - v14.18.2-node-
+#   restore_node_cache:
+#     steps:
+#       - restore_cache:
+#           name: Restore Node cache
+#           keys:
+#             - v14.18.2-node-{{ checksum "client/yarn.lock" }}
+#             # Fallback to using the latest cache if no exact match is found
+#             - v14.18.2-node-
 
-  build_and_cache_client:
-    steps:
-      - run:
-          name: Build client
-          command: cd client && yarn build:production && cd -
-      - save_cache:
-          paths:
-            - ./client/build
-            - ./public/webpack
-          key: v1-yarn-build-{{ .Revision }}
+#   build_and_cache_client:
+#     steps:
+#       - run:
+#           name: Build client
+#           command: cd client && yarn build:production && cd -
+#       - save_cache:
+#           paths:
+#             - ./client/build
+#             - ./public/webpack
+#           key: v1-yarn-build-{{ .Revision }}
 
-  restore_client_cache:
-    steps:
-      - restore_cache:
-          name: Restore client cache
-          keys:
-            - v1-yarn-build-{{ .Revision }}
+#   restore_client_cache:
+#     steps:
+#       - restore_cache:
+#           name: Restore client cache
+#           keys:
+#             - v1-yarn-build-{{ .Revision }}
 
-jobs:
-  test:
-    docker:
-      # specify the version you desire here
-      - image: cimg/ruby:3.0.4-browsers
-        environment:
-          PG_HOST: localhost
-          PG_USER: ubuntu
-          RAILS_ENV: test
-          BUNDLE_APP_CONFIG: ~/repo/.bundle
+# jobs:
+#   test:
+#     docker:
+#       # specify the version you desire here
+#       - image: cimg/ruby:3.0.4-browsers
+#         environment:
+#           PG_HOST: localhost
+#           PG_USER: ubuntu
+#           RAILS_ENV: test
+#           BUNDLE_APP_CONFIG: ~/repo/.bundle
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: cimg/postgres:14.4
-        environment:
-          POSTGRES_USER: ubuntu
-          POSTGRES_DB: coursemology_test
+#       # Specify service dependencies here if necessary
+#       # CircleCI maintains a library of pre-built images
+#       # documented at https://circleci.com/docs/2.0/circleci-images/
+#       - image: cimg/postgres:14.4
+#         environment:
+#           POSTGRES_USER: ubuntu
+#           POSTGRES_DB: coursemology_test
 
-    parallelism: 25
+#     parallelism: 25
 
-    working_directory: ~/repo
+#     working_directory: ~/repo
 
-    steps:
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
+#     steps:
+#       - browser-tools/install-chrome
+#       - browser-tools/install-chromedriver
 
-      - checkout_with_submodules
+#       - checkout_with_submodules
 
-      - restore_ruby_cache
-      - restore_node_cache
+#       - restore_ruby_cache
+#       - restore_node_cache
 
-      - restore_client_cache
+#       - restore_client_cache
 
-      # Install ghostscript so `identify` in ImageMagick works with PDF files.
-      # Remove pdf security policy for imagemagick (ubuntu 20.04)
-      # https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion
-      - run:
-          name: install ghostscript and imagemagick
-          command: |
-            sudo apt update
-            sudo apt install imagemagick
-            sudo apt install ghostscript
-            sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
+#       # Install ghostscript so `identify` in ImageMagick works with PDF files.
+#       # Remove pdf security policy for imagemagick (ubuntu 20.04)
+#       # https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion
+#       - run:
+#           name: install ghostscript and imagemagick
+#           command: |
+#             sudo apt update
+#             sudo apt install imagemagick
+#             sudo apt install ghostscript
+#             sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
-      - setup_remote_docker:
-          version: 20.10.2
-          docker_layer_caching: true
+#       - setup_remote_docker:
+#           version: 20.10.2
+#           docker_layer_caching: true
 
-      # Database setup
-      - run:
-          name: Setup DB
-          command: |
-            bundle exec rake db:setup
-          environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+#       # Database setup
+#       - run:
+#           name: Setup DB
+#           command: |
+#             bundle exec rake db:setup
+#           environment:
+#             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
-      # Run tests!
-      - run:
-          name: run
-          no_output_timeout: 10m
-          command: |
-            mkdir /tmp/test-results
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-              circleci tests split --split-by=timings)"
+#       # Run tests!
+#       - run:
+#           name: run
+#           no_output_timeout: 10m
+#           command: |
+#             mkdir /tmp/test-results
+#             TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
+#               circleci tests split --split-by=timings)"
 
-            bundle exec rspec \
-              --format documentation \
-              --format RspecJunitFormatter \
-              --out /tmp/test-results/rspec.xml \
-              --format progress \
-              $TEST_FILES
-          environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+#             bundle exec rspec \
+#               --format documentation \
+#               --format RspecJunitFormatter \
+#               --out /tmp/test-results/rspec.xml \
+#               --format progress \
+#               $TEST_FILES
+#           environment:
+#             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
-      # Collect reports
-      - store_test_results:
-          path: /tmp/test-results
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: test-results
-    # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
-    resource_class: large
+#       # Collect reports
+#       - store_test_results:
+#           path: /tmp/test-results
+#       - store_artifacts:
+#           path: /tmp/test-results
+#           destination: test-results
+#     # The resource_class feature allows configuring CPU and RAM resources for each job. Different resource classes are available for different executors. https://circleci.com/docs/2.0/configuration-reference/#resourceclass
+#     resource_class: large
 
-  lint:
-    docker:
-      # specify the version you desire here
-      - image: cimg/ruby:3.0.4-browsers
-        environment:
-          RAILS_ENV: test
+#   lint:
+#     docker:
+#       # specify the version you desire here
+#       - image: cimg/ruby:3.0.4-browsers
+#         environment:
+#           RAILS_ENV: test
 
-    working_directory: ~/repo
+#     working_directory: ~/repo
 
-    steps:
-      - checkout_with_submodules
+#     steps:
+#       - checkout_with_submodules
 
-      - build_and_restore_node_cache
+#       - build_and_restore_node_cache
 
-      - build_and_cache_client
+#       - build_and_cache_client
 
-      - run:
-          name: Run yarn checks
-          command: |
-            cd client
-            yarn lint
-    resource_class: large
+#       - run:
+#           name: Run yarn checks
+#           command: |
+#             cd client
+#             yarn lint
+#     resource_class: large
 
-  jstest:
-    docker:
-      # specify the version you desire here
-      - image: cimg/ruby:3.0.4-browsers
-        environment:
-          RAILS_ENV: test
+#   jstest:
+#     docker:
+#       # specify the version you desire here
+#       - image: cimg/ruby:3.0.4-browsers
+#         environment:
+#           RAILS_ENV: test
 
-    working_directory: ~/repo
+#     working_directory: ~/repo
 
-    steps:
-      - checkout_with_submodules
+#     steps:
+#       - checkout_with_submodules
 
-      - build_and_restore_node_cache
+#       - build_and_restore_node_cache
 
-      - build_and_cache_client
+#       - build_and_cache_client
 
-      # Build frontend JS
-      - run:
-          name: Run yarn checks
-          command: |
-            cd client && yarn
-            yarn testci
-    resource_class: large
+#       # Build frontend JS
+#       - run:
+#           name: Run yarn checks
+#           command: |
+#             cd client && yarn
+#             yarn testci
+#     resource_class: large
 
-  i18n:
-    docker:
-      # specify the version you desire here
-      - image: cimg/ruby:3.0.4-browsers
-        environment:
-          PG_HOST: localhost
-          PG_USER: ubuntu
-          RAILS_ENV: test
-          BUNDLE_APP_CONFIG: ~/repo/.bundle
+#   i18n:
+#     docker:
+#       # specify the version you desire here
+#       - image: cimg/ruby:3.0.4-browsers
+#         environment:
+#           PG_HOST: localhost
+#           PG_USER: ubuntu
+#           RAILS_ENV: test
+#           BUNDLE_APP_CONFIG: ~/repo/.bundle
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: cimg/postgres:14.4
-        environment:
-          POSTGRES_USER: ubuntu
-          POSTGRES_DB: coursemology_test
+#       # Specify service dependencies here if necessary
+#       # CircleCI maintains a library of pre-built images
+#       # documented at https://circleci.com/docs/2.0/circleci-images/
+#       - image: cimg/postgres:14.4
+#         environment:
+#           POSTGRES_USER: ubuntu
+#           POSTGRES_DB: coursemology_test
 
-    working_directory: ~/repo
+#     working_directory: ~/repo
 
-    steps:
-      - checkout_with_submodules
+#     steps:
+#       - checkout_with_submodules
 
-      - restore_ruby_cache
+#       - restore_ruby_cache
 
-      # Database setup
-      - run:
-          name: Setup DB
-          command: |
-            bundle exec rake db:setup
-          environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+#       # Database setup
+#       - run:
+#           name: Setup DB
+#           command: |
+#             bundle exec rake db:setup
+#           environment:
+#             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
 
-      # Run i18n checks!
-      - run:
-          name: Run i18n checks
-          command: |
-            bundle exec i18n-tasks unused
-            bundle exec i18n-tasks missing
-            bundle exec rake factory_bot:lint
-          environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
-    resource_class: large
+#       # Run i18n checks!
+#       - run:
+#           name: Run i18n checks
+#           command: |
+#             bundle exec i18n-tasks unused
+#             bundle exec i18n-tasks missing
+#             bundle exec rake factory_bot:lint
+#           environment:
+#             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+#     resource_class: large
 
-workflows:
-  version: 2
-  build_and_test_and_lint:
-    jobs:
-      - lint
-      - jstest
-      - i18n
-      - test:
-          requires:
-            - lint
-            - jstest
-            - i18n
+# workflows:
+#   version: 2
+#   build_and_test_and_lint:
+#     jobs:
+#       - lint
+#       - jstest
+#       - i18n
+#       - test:
+#           requires:
+#             - lint
+#             - jstest
+#             - i18n
