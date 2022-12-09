@@ -1,10 +1,5 @@
 import { Draggable } from 'react-beautiful-dnd';
-import {
-  ContentCopy,
-  Create,
-  Delete,
-  DragIndicator,
-} from '@mui/icons-material';
+import { ContentCopy, Create, DragIndicator } from '@mui/icons-material';
 import { Chip, IconButton, Tooltip, Typography } from '@mui/material';
 import { QuestionData } from 'types/course/assessment/assessments';
 
@@ -13,7 +8,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
 
-import DeleteQuestionPrompt from './prompts/DeleteQuestionPrompt';
+import DeleteQuestionButtonPrompt from './prompts/DeleteQuestionButtonPrompt';
 import DuplicationPrompt from './prompts/DuplicationPrompt';
 import McqWidget from './McqWidget';
 
@@ -30,7 +25,6 @@ interface QuestionProps {
 const Question = (props: QuestionProps): JSX.Element => {
   const { of: question, index, dragging, draggedTo, disabled } = props;
   const { t } = useTranslation();
-  const [deleting, toggleDeleting] = useToggle();
   const [duplicating, toggleDuplicating] = useToggle();
 
   return (
@@ -140,17 +134,11 @@ const Question = (props: QuestionProps): JSX.Element => {
                   </Tooltip>
                 )}
 
-                <Tooltip disableInteractive title={t(translations.delete)}>
-                  <IconButton
-                    aria-label={t(translations.delete)}
-                    color="error"
-                    disabled={disabled || dragging}
-                    edge="end"
-                    onClick={toggleDeleting}
-                  >
-                    <Delete />
-                  </IconButton>
-                </Tooltip>
+                <DeleteQuestionButtonPrompt
+                  disabled={disabled || dragging}
+                  for={question}
+                  onDelete={props.onDelete}
+                />
               </div>
             </section>
 
@@ -174,13 +162,6 @@ const Question = (props: QuestionProps): JSX.Element => {
         for={question}
         onClose={toggleDuplicating}
         open={duplicating}
-      />
-
-      <DeleteQuestionPrompt
-        for={question}
-        onClose={toggleDeleting}
-        onDelete={props.onDelete}
-        open={deleting}
       />
     </>
   );

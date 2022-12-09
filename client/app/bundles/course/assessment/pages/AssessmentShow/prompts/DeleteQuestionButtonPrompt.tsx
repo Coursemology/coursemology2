@@ -2,30 +2,30 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { QuestionData } from 'types/course/assessment/assessments';
 
-import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
+import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import { PromptText } from 'lib/components/core/dialogs/Prompt';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteQuestion } from '../../../actions';
 import translations from '../../../translations';
 
-interface DeleteQuestionPromptProps {
+interface DeleteQuestionButtonPromptProps {
   for: QuestionData;
-  onClose: () => void;
   onDelete: () => void;
-  open: boolean;
+  disabled?: boolean;
 }
 
-const DeleteQuestionPrompt = (
-  props: DeleteQuestionPromptProps,
+const DeleteQuestionButtonPrompt = (
+  props: DeleteQuestionButtonPromptProps,
 ): JSX.Element => {
   const { for: question } = props;
   const { t } = useTranslation();
   const [deleting, setDeleting] = useState(false);
 
-  const handleDelete = (): void => {
+  const handleDelete = (): Promise<void> => {
     setDeleting(true);
 
-    toast
+    return toast
       .promise(deleteQuestion(question.deleteUrl), {
         pending: t(translations.deletingQuestion),
         success: t(translations.questionDeleted),
@@ -37,31 +37,25 @@ const DeleteQuestionPrompt = (
           },
         },
       })
-      .then(() => {
-        props.onDelete();
-        props.onClose();
-      })
+      .then(props.onDelete)
       .finally(() => setDeleting(false));
   };
 
   return (
-    <Prompt
-      contentClassName="space-y-4"
-      disabled={deleting}
-      onClickPrimary={handleDelete}
-      onClose={props.onClose}
-      open={props.open}
-      primaryColor="error"
-      primaryLabel={t(translations.deleteQuestion)}
+    <DeleteButton
+      aria-label={t(translations.delete)}
+      confirmLabel={t(translations.deleteQuestion)}
+      disabled={deleting || Boolean(props.disabled)}
+      edge="end"
+      onClick={handleDelete}
       title={t(translations.sureDeletingQuestion)}
+      tooltip={t(translations.delete)}
     >
       <PromptText>{t(translations.deletingThisQuestion)}</PromptText>
-
       <PromptText className="italic">{question.title}</PromptText>
-
       <PromptText>{t(translations.deleteQuestionWarning)}</PromptText>
-    </Prompt>
+    </DeleteButton>
   );
 };
 
-export default DeleteQuestionPrompt;
+export default DeleteQuestionButtonPrompt;
