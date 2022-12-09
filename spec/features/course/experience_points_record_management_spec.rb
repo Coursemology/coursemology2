@@ -66,7 +66,7 @@ RSpec.feature 'Courses: Experience Points Records: Management', js: true do
 
         expect(page).not_to have_selector(".record-delete-#{record.id}")
         find("button.record-delete-#{manual_record.id}").click
-        accept_confirm_dialog
+        accept_prompt
         expect(current_path).
           to eq(course_user_experience_points_records_path(course, course_student))
         expect(page).to have_no_selector("#record-#{manual_record.id}")

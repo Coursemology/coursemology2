@@ -57,7 +57,7 @@ RSpec.feature 'Course: Videos: Management', js: true do
         # Delete video
         expect do
           find("button.video-delete-#{unpublished_video.id}").click
-          accept_confirm_dialog
+          accept_prompt
         end.to change { course.videos.count }.by(-1)
       end
     end

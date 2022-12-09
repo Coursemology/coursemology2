@@ -79,7 +79,7 @@ RSpec.feature 'System: Administration: Instances', js: true do
 
         expect(page).to have_selector('div.instance_name', exact_text: instance.name)
         find("button.instance-delete-#{instance.id}").click
-        click_button('Continue')
+        click_button('Delete')
 
         expect(page).not_to have_selector('div.instance_name', exact_text: instance.name)
         expect_toastify("#{instance.name} was deleted.")

@@ -110,7 +110,7 @@ RSpec.feature 'Courses: Staff Management' do
 
         expect do
           find("button.user-delete-#{staff_to_delete.id}").click
-          accept_confirm_dialog
+          accept_prompt
         end.to change { page.all('tr.course_user').count }.by(-1)
 
         expect(page).to_not have_selector('div.course_user_name', text: staff_to_delete.name)

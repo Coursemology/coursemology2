@@ -114,6 +114,7 @@ RSpec.feature 'Courses: Invitations', js: true do
 
         # Resend user_invitation for entire course
         click_button('Resend All Invitations')
+        sleep 0.2
         expect(current_path).to eq(course_user_invitations_path(course))
         expect(invitation_to_delete.reload.sent_at).not_to eq(old_time)
 
@@ -121,8 +122,7 @@ RSpec.feature 'Courses: Invitations', js: true do
         within find("tr.pending_invitation_#{invitation_to_delete.id}") do
           find("button.invitation-delete-#{invitation_to_delete.id}").click
         end
-        expect(page).to have_selector('.confirm-btn')
-        accept_confirm_dialog
+        accept_prompt
 
         expect(current_path).to eq(course_user_invitations_path(course))
         expect(page).to_not have_selector("tr.pending_invitation_#{invitation_to_delete.id}")

@@ -49,7 +49,7 @@ RSpec.feature 'Course: Material: Files: Management' do
         material = materials.sample
 
         find("#material-delete-button-#{material.id}").click
-        click_button('Continue')
+        click_button('Delete')
 
         expect(page).not_to have_selector("#material-#{material.id}")
         expect(current_path).to eq(course_material_folder_path(course, folder))

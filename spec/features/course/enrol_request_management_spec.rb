@@ -41,7 +41,7 @@ RSpec.feature 'Course: EnrolRequests' do
         within find("tr.pending_enrol_request_#{enrol_request.id}") do
           find("button.enrol-request-reject-#{enrol_request.id}").click
         end
-        accept_confirm_dialog
+        accept_prompt
       end.to change(course.enrol_requests, :count).by(0)
 
       expect_toastify("Enrol request for #{enrol_request.user.name} was rejected.")

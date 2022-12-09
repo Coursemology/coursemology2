@@ -75,7 +75,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
 
         expect do
           find("button.post-delete-#{post.id}").click
-          accept_confirm_dialog
+          accept_prompt
         end.to change { topic.posts.exists?(post.id) }.to(false)
         expect(page).to have_no_selector("div.post_#{post.id}")
 
@@ -83,7 +83,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
 
         expect do
           find("button.post-delete-#{post.id}").click
-          accept_confirm_dialog
+          accept_prompt
         end.to change { topic.posts.exists?(post.id) }.to(false)
         expect(current_path).to eq(course_forum_path(course, forum))
         expect(page).to have_no_selector("tr.topic_#{topic.id}")

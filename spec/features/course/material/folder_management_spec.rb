@@ -97,7 +97,7 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
         sample_folder = concrete_subfolders.sample
 
         find("#subfolder-delete-button-#{sample_folder.id}").click
-        click_button('Continue')
+        click_button('Delete')
         expect(page).not_to have_selector("#subfolder-#{sample_folder.id}")
         expect(current_path).to eq(course_material_folder_path(course, parent_folder))
 

@@ -35,12 +35,16 @@ module Capybara::TestGroupHelpers
       end
     end
 
-    def accept_confirm_dialog
-      expect(page).to have_selector('button.confirm-btn')
-      find('button.confirm-btn').click
+    def accept_confirm_dialog(class_name = 'button.confirm-btn')
+      expect(page).to have_selector(class_name)
+      find(class_name).click
       yield if block_given?
       wait_for_ajax
-      expect(page).to have_no_selector('button.confirm-btn')
+      expect(page).to have_no_selector(class_name)
+    end
+
+    def accept_prompt
+      accept_confirm_dialog('button.prompt-primary-btn')
     end
 
     # Special helper to fill in CKEditor textarea defined by react.

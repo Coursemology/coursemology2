@@ -72,7 +72,7 @@ RSpec.feature 'System: Administration: Announcements' do
         visit admin_announcements_path
 
         find("#announcement-delete-button-#{announcement.id}").click
-        click_button('Continue')
+        click_button('Delete')
 
         expect(page).not_to have_selector("#announcement-#{announcement.id}")
         expect(page).not_to have_selector("#announcement-edit-button-#{announcement.id}")

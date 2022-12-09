@@ -110,7 +110,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
 
         expect do
           find("button.forum-delete-#{forum.id}").click
-          accept_confirm_dialog
+          accept_prompt
         end.to change { course.forums.exists?(forum.id) }.to(false)
 
         expect(current_path).to eq(course_forums_path(course))
@@ -126,7 +126,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
         expect do
           find("button.forum-action-#{forum.id}").hover
           find("button.forum-delete-#{forum.id}").click
-          accept_confirm_dialog
+          accept_prompt
         end.to change { course.forums.exists?(forum.id) }.to(false)
 
         expect(page).to have_no_selector("tr.forum_#{forum.id}")

@@ -52,7 +52,7 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
 
         user_to_delete = instance_users.sample
         find("button.user-delete-#{user_to_delete.id}").click
-        accept_confirm_dialog
+        accept_prompt
         expect_toastify('User was deleted.')
       end
 
