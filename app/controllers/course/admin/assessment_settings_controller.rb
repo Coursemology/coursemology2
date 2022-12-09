@@ -65,12 +65,24 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
   end
 
   def category_params
-    params.require(:course).permit(:show_public_test_cases_output, :show_stdout_and_stderr,
-                                   :allow_randomization, :allow_mrq_options_randomization,
-                                   assessment_categories_attributes: [:id, :title, :weight,
-                                                                      tabs_attributes: [:id, :title,
-                                                                                        :weight,
-                                                                                        :category_id]])
+    params.require(:course).permit(
+      :show_public_test_cases_output,
+      :show_stdout_and_stderr,
+      # Randomized Assessment is temporarily hidden (PR#5406)
+      # :allow_randomization,
+      :allow_mrq_options_randomization,
+      assessment_categories_attributes: [
+        :id,
+        :title,
+        :weight,
+        tabs_attributes: [
+          :id,
+          :title,
+          :weight,
+          :category_id
+        ]
+      ]
+    )
   end
 
   # @return [Course::AssessmentsComponent]

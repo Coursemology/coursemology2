@@ -252,14 +252,15 @@ describe('<AssessmentForm />', () => {
     expect(form.getByLabelText('Affects personal times')).toBeEnabled();
   });
 
-  it('renders randomization options when enabled', () => {
-    expect(
-      form.queryByLabelText('Enable Randomization'),
-    ).not.toBeInTheDocument();
+  // Randomized Assessment is temporarily hidden (PR#5406)
+  // it('renders randomization options when enabled', () => {
+  //   expect(
+  //     form.queryByLabelText('Enable Randomization'),
+  //   ).not.toBeInTheDocument();
 
-    props.randomizationAllowed = true;
-    form.rerender(getComponent());
+  //   props.randomizationAllowed = true;
+  //   form.rerender(getComponent());
 
-    expect(form.getByLabelText('Enable Randomization')).toBeEnabled();
-  });
+  //   expect(form.getByLabelText('Enable Randomization')).toBeEnabled();
+  // });
 });
