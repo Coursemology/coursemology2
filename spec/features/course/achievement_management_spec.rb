@@ -51,7 +51,7 @@ RSpec.feature 'Course: Achievements' do
 
         expect do
           find("button.achievement-delete-#{achievement.id}").click
-          accept_confirm_dialog
+          accept_prompt
         end.to change { course.achievements.count }.by(-1)
       end
 

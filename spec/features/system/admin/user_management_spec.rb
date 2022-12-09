@@ -69,7 +69,7 @@ RSpec.feature 'System: Administration: Users', js: true do
         visit admin_users_path
 
         find("button.user-delete-#{user_to_delete.id}").click
-        accept_confirm_dialog
+        accept_prompt
         expect_toastify('User was deleted.')
       end
 

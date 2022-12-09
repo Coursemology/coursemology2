@@ -4,6 +4,8 @@ import DeleteButton from '../DeleteButton';
 
 let documentBody: RenderResult;
 
+const PROMPT_TITLE = 'Are you sure you are deleting?' as const;
+
 describe('<DeleteButton />', () => {
   describe('when the delete button is rendered without confirmation dialog', () => {
     beforeEach(() => {
@@ -19,11 +21,11 @@ describe('<DeleteButton />', () => {
 
     it('does not show the confirmation dialog when clicked', () => {
       // Before clicking
-      expect(documentBody.queryByTestId('ConfirmationDialog')).toBeNull();
+      expect(documentBody.queryByTitle(PROMPT_TITLE)).toBeNull();
 
       fireEvent.click(screen.getByTestId('DeleteIconButton'));
       // After clicking
-      expect(documentBody.queryByTestId('ConfirmationDialog')).toBeNull();
+      expect(documentBody.queryByTitle(PROMPT_TITLE)).toBeNull();
     });
 
     it('matches the snapshot', () => {
@@ -36,7 +38,7 @@ describe('<DeleteButton />', () => {
     beforeEach(() => {
       documentBody = render(
         <DeleteButton
-          confirmMessage="Are you sure you wish to delete?"
+          confirmMessage={PROMPT_TITLE}
           disabled
           loading={false}
           onClick={jest.fn()}
@@ -55,7 +57,7 @@ describe('<DeleteButton />', () => {
     beforeEach(() => {
       documentBody = render(
         <DeleteButton
-          confirmMessage="Are you sure you wish to delete?"
+          confirmMessage={PROMPT_TITLE}
           disabled={false}
           loading={false}
           onClick={jest.fn()}
@@ -70,18 +72,18 @@ describe('<DeleteButton />', () => {
 
     it('shows the confirmation dialog when clicked', () => {
       // Before clicking delete button
-      expect(documentBody.queryByTestId('ConfirmationDialog')).toBeNull();
+      expect(documentBody.queryByTitle(PROMPT_TITLE)).toBeNull();
 
       fireEvent.click(screen.getByTestId('DeleteIconButton'));
       // After clicking delete button
-      expect(documentBody.getByTestId('ConfirmationDialog')).toBeVisible();
+      expect(documentBody.getByText(PROMPT_TITLE)).toBeVisible();
 
-      expect(documentBody.getByText('Continue')).toBeEnabled();
+      expect(documentBody.getByText('Delete')).toBeEnabled();
       expect(documentBody.getByText('Cancel')).toBeEnabled();
 
       // After clicking cancel in the confirmation dialog, it is closed
       fireEvent.click(screen.getByText('Cancel'));
-      expect(documentBody.queryByTestId('ConfirmationDialog')).toBeNull();
+      expect(documentBody.queryByTitle(PROMPT_TITLE)).toBeNull();
     });
   });
 });

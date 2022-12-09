@@ -70,7 +70,7 @@ RSpec.feature 'Instance::UserRoleRequests' do
         within find("tr.pending_role_request_#{sample_request.id}") do
           find("button.role-request-reject-#{sample_request.id}").click
         end
-        accept_confirm_dialog
+        accept_prompt
 
         expect_toastify("The role request made by #{sample_request.user.name} has been rejected.")
         sample_request.reload
