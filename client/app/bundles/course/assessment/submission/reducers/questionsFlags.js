@@ -51,7 +51,10 @@ export default function (state = {}, action) {
           ...state[questionId],
           isAutograding: false,
           jobError: !!jobError,
-          jobErrorMessage: payload.detailed_message,
+          jobErrorMessage:
+            payload && payload.detailed_message
+              ? payload.detailed_message
+              : null,
         },
       };
     }
