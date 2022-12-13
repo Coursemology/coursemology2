@@ -56,7 +56,7 @@
     "immer": "^9.0.16",
     "immutable": "^3.8.2",
     "intl": "^1.2.5",
-    "jquery": "^3.6.1",
+    "jquery": "^3.6.2",
     "jquery-ui": "^1.13.2",
     "lodash": "^4.17.21",
     "mirror-creator": "1.1.0",
