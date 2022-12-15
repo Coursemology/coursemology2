@@ -8,6 +8,7 @@ class Course::ReferenceTime < ApplicationRecord
   validates :lesson_plan_item, presence: true
 
   validate :start_at_cannot_be_after_end_at
+  validate :lesson_plan_item_in_same_course
 
   before_destroy :prevent_destroy_if_in_default_timeline, prepend: true
 
@@ -31,6 +32,10 @@ class Course::ReferenceTime < ApplicationRecord
     return unless (previous_changes.keys & ['start_at', 'end_at']).any?
 
     Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob.perform_later(lesson_plan_item)
+  end
+
+  def lesson_plan_item_in_same_course
+    errors.add(:lesson_plan_item, :must_be_in_same_course) if reference_timeline.course_id != lesson_plan_item.course_id
   end
 
   def prevent_destroy_if_in_default_timeline

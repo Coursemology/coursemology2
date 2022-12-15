@@ -8,3 +8,5 @@ en:
               cannot_destroy_in_default_timeline: 'cannot delete times in default reference timeline'
             start_at:
               cannot_be_after_end_at: 'cannot be after end at'
+            lesson_plan_item:
+              must_be_in_same_course: 'must be in the same course as the reference timeline'
