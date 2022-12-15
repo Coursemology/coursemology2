@@ -60,7 +60,9 @@ module Course::UsersControllerManagementConcern
   private
 
   def course_user_params
-    @course_user_params ||= params.require(:course_user).permit(:user_id, :name, :timeline_algorithm, :role, :phantom)
+    @course_user_params ||= params.require(:course_user).permit(
+      :user_id, :name, :timeline_algorithm, :role, :phantom, :reference_timeline_id
+    )
   end
 
   def upgrade_to_staff_params
