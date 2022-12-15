@@ -8,6 +8,7 @@ class Course::ReferenceTimeline < ApplicationRecord
 
   before_validation :set_weight, if: :new_record?
 
+  validates :default, inclusion: { in: [true, false] }, uniqueness: { scope: :course_id, if: :default }
   validates :course, presence: true
   validates :title, presence: true, unless: :default
   validates :weight, presence: true, numericality: { only_integer: true }
