@@ -12,7 +12,7 @@ module Course::CourseAbilityComponent
       allow_registered_users_showing_course
       allow_staff_show_course_users if course_user.staff?
       define_teaching_staff_course_permissions if course_user.teaching_staff?
-      allow_owners_managing_course if course_user.manager_or_owner?
+      define_owners_course_permissions if course_user.manager_or_owner?
     end
 
     super
@@ -55,9 +55,19 @@ module Course::CourseAbilityComponent
     can :analyze_videos, Course, id: course.id
   end
 
+  def define_owners_course_permissions
+    allow_owners_managing_course
+    allow_owners_managing_reference_timelines
+  end
+
   def allow_owners_managing_course
     can :manage, Course, id: course.id
     can :manage, CourseUser, course_id: course.id
     can :manage, Course::EnrolRequest,  course_id: course.id
+  end
+
+  def allow_owners_managing_reference_timelines
+    can :manage, Course::ReferenceTimeline, course_id: course.id
+    can :manage, Course::ReferenceTime, reference_timeline: { course_id: course.id }
   end
 end
