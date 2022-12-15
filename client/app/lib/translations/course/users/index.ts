@@ -2,12 +2,12 @@ import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
   manageUsersHeader: {
-    id: 'lib.course.users.manage.header',
+    id: 'lib.translations.course.users.manageUsersHeader',
     defaultMessage: 'Manage Users',
   },
   fetchUsersFailure: {
-    id: 'lib.course.users.manage.fetch.failure',
-    defaultMessage: 'Failed to fetch users',
+    id: 'lib.translations.course.users.fetchUsersFailure',
+    defaultMessage: 'Failed to fetch users.',
   },
 });
 

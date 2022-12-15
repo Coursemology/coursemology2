@@ -27,11 +27,11 @@ interface TopicListProps {
 
 const translations = defineMessages({
   fetchTopicsFailure: {
-    id: 'course.discussion.topics.TopicList.fetch.failure',
+    id: 'course.discussion.topics.TopicList.fetchTopicsFailure',
     defaultMessage: 'Failed to retrieve topics.',
   },
   noTopic: {
-    id: 'course.discussion.topics.TopicList.fetch.noTopic',
+    id: 'course.discussion.topics.TopicList.noTopic',
     defaultMessage:
       'Congrats! There is currently no pending/existing comments!',
   },

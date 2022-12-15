@@ -51,23 +51,23 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   video: {
-    id: 'course.video.submission.show.video',
+    id: 'course.video.submission.VideoSubmissionShow.video',
     defaultMessage: 'Video',
   },
   videoTitle: {
-    id: 'course.video.submission.show.videoTitle',
+    id: 'course.video.submission.VideoSubmissionShow.videoTitle',
     defaultMessage: 'Video - {title}',
   },
   fetchVideoSubmissionFailure: {
-    id: 'course.video.submission.show.failure',
+    id: 'course.video.submission.VideoSubmissionShow.fetchVideoSubmissionFailure',
     defaultMessage: 'Failed to retrieve video submission.',
   },
   sessionStatistics: {
-    id: 'course.video.submission.show.sessionStatistics',
+    id: 'course.video.submission.VideoSubmissionShow.sessionStatistics',
     defaultMessage: 'Session Statistics',
   },
   noSession: {
-    id: 'course.video.submission.show.noSession',
+    id: 'course.video.submission.VideoSubmissionShow.noSession',
     defaultMessage: 'No watch statistics available for this submission.',
   },
 });

@@ -11,15 +11,15 @@ import { formatSurveyFormData } from '../../utils';
 
 const translations = defineMessages({
   newSurvey: {
-    id: 'course.surveys.NewSurveyButton.title',
+    id: 'course.survey.NewSurveyButton.newSurvey',
     defaultMessage: 'New Survey',
   },
   success: {
-    id: 'course.surveys.NewSurveyButton.success',
+    id: 'course.survey.NewSurveyButton.success',
     defaultMessage: 'Survey "{title}" created.',
   },
   failure: {
-    id: 'course.surveys.NewSurveyButton.failure',
+    id: 'course.survey.NewSurveyButton.failure',
     defaultMessage: 'Failed to create survey.',
   },
 });

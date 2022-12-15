@@ -12,12 +12,12 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   hasPersonalTimesHint: {
-    id: 'PersonalTimeBooleanIcons.hasPersonalTimesHint',
+    id: 'lib.components.extensions.PersonalTimeBooleanIcons.hasPersonalTimesHint',
     defaultMessage:
       'Has personal times. Timings for this item will be automatically adjusted for users based on learning rate.',
   },
   affectsPersonalTimesHint: {
-    id: 'PersonalTimeBooleanIcons.affectsPersonalTimesHint',
+    id: 'lib.components.extensions.PersonalTimeBooleanIcons.affectsPersonalTimesHint',
     defaultMessage:
       "Affects personal times. Student's submission time for this item will be taken into account when updating personal times for other items.",
   },

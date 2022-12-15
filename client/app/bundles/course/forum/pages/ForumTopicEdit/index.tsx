@@ -21,15 +21,15 @@ interface Props {
 
 const translations = defineMessages({
   editForum: {
-    id: 'course.forum.topic.edit.header',
+    id: 'course.forum.ForumTopicEdit.editForum',
     defaultMessage: 'Edit Topic',
   },
   updateSuccess: {
-    id: 'course.forum.topic.update.success',
+    id: 'course.forum.ForumTopicEdit.updateSuccess',
     defaultMessage: 'Topic {title} has been updated.',
   },
   updateFailure: {
-    id: 'course.forum.topoc.update.failure',
+    id: 'course.forum.ForumTopicEdit.updateFailure',
     defaultMessage: 'Failed to update the topic.',
   },
 });

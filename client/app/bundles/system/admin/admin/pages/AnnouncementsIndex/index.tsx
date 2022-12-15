@@ -22,15 +22,15 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.announcements.header',
+    id: 'system.admin.admin.AnnouncementsIndex.header',
     defaultMessage: 'System Announcements',
   },
   fetchAnnouncementsFailure: {
-    id: 'system.admin.announcements.fetch.failure',
+    id: 'system.admin.admin.AnnouncementsIndex.fetchAnnouncementsFailure',
     defaultMessage: 'Unable to fetch announcements',
   },
   newAnnouncement: {
-    id: 'system.admin.announcements.new',
+    id: 'system.admin.admin.AnnouncementsIndex.newAnnouncement',
     defaultMessage: 'New Announcement',
   },
 });

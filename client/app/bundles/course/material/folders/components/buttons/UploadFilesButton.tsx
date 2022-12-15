@@ -9,7 +9,7 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   uploadFilesTooltip: {
-    id: 'course.materials.folders.uploadFilesTooltip',
+    id: 'course.material.folders.UploadFilesButton.uploadFilesTooltip',
     defaultMessage: 'Upload',
   },
 });

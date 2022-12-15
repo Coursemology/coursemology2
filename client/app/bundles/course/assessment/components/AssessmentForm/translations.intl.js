@@ -2,136 +2,136 @@ import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
   title: {
-    id: 'course.assessment.form.title',
+    id: 'course.assessment.AssessmentForm.title',
     defaultMessage: 'Title',
   },
   description: {
-    id: 'course.assessment.form.description',
+    id: 'course.assessment.AssessmentForm.description',
     defaultMessage: 'Description',
   },
   startAt: {
-    id: 'course.assessment.form.startAt',
+    id: 'course.assessment.AssessmentForm.startAt',
     defaultMessage: 'Starts at *',
   },
   endAt: {
-    id: 'course.assessment.form.endAt',
+    id: 'course.assessment.AssessmentForm.endAt',
     defaultMessage: 'Ends at',
   },
   bonusEndAt: {
-    id: 'course.assessment.form.bonusEndAt',
+    id: 'course.assessment.AssessmentForm.bonusEndAt',
     defaultMessage: 'Bonus ends at',
   },
   baseExp: {
-    id: 'course.assessment.form.baseExp',
+    id: 'course.assessment.AssessmentForm.baseExp',
     defaultMessage: 'Base EXP',
   },
   timeBonusExp: {
-    id: 'course.assessment.form.timeBonusExp',
+    id: 'course.assessment.AssessmentForm.timeBonusExp',
     defaultMessage: 'Time Bonus EXP',
   },
   blockStudentViewingAfterSubmitted: {
-    id: 'course.assessment.form.blockStudentViewingAfterSubmitted',
+    id: 'course.assessment.AssessmentForm.blockStudentViewingAfterSubmitted',
     defaultMessage: 'Block students from viewing finalized submissions',
   },
   blockStudentViewingAfterSubmittedHint: {
-    id: 'course.assessment.form.blockStudentViewingAfterSubmittedHint',
+    id: 'course.assessment.AssessmentForm.blockStudentViewingAfterSubmittedHint',
     defaultMessage:
       'Students will only be able to view their submissions after their grades have been published.',
   },
   usePublic: {
-    id: 'course.assessment.form.usePublic',
+    id: 'course.assessment.AssessmentForm.usePublic',
     defaultMessage: 'Public test cases',
   },
   usePrivate: {
-    id: 'course.assessment.form.usePrivate',
+    id: 'course.assessment.AssessmentForm.usePrivate',
     defaultMessage: 'Private test cases',
   },
   useEvaluation: {
-    id: 'course.assessment.form.useEvaluation',
+    id: 'course.assessment.AssessmentForm.useEvaluation',
     defaultMessage: 'Evaluation test cases',
   },
   allowPartialSubmission: {
-    id: 'course.assessment.form.allowPartialSubmission',
+    id: 'course.assessment.AssessmentForm.allowPartialSubmission',
     defaultMessage: 'Allow submission with incorrect answers',
   },
   showMcqAnswer: {
-    id: 'course.assessment.form.showMcqAnswer',
+    id: 'course.assessment.AssessmentForm.showMcqAnswer',
     defaultMessage: 'Show MCQ submit result',
   },
   showMcqAnswerHint: {
-    id: 'course.assessment.form.showMcqAnswerHint',
+    id: 'course.assessment.AssessmentForm.showMcqAnswerHint',
     defaultMessage:
       'When enabled, students can try to submit MCQ answers and get feedback until they get it right.',
   },
   showPrivate: {
-    id: 'course.assessment.form.showPrivate',
+    id: 'course.assessment.AssessmentForm.showPrivate',
     defaultMessage: 'Show private test cases',
   },
   showEvaluation: {
-    id: 'course.assessment.form.showEvaluation',
+    id: 'course.assessment.AssessmentForm.showEvaluation',
     defaultMessage: 'Show evaluation test cases',
   },
   forProgrammingQuestions: {
-    id: 'course.assessment.form.forProgrammingQuestions',
+    id: 'course.assessment.AssessmentForm.forProgrammingQuestions',
     defaultMessage: 'for programming questions.',
   },
   hasPersonalTimes: {
-    id: 'course.assessment.form.hasPersonalTimes',
+    id: 'course.assessment.AssessmentForm.hasPersonalTimes',
     defaultMessage: 'Has personal times',
   },
   hasPersonalTimesHint: {
-    id: 'course.assessment.form.hasPersonalTimesHint',
+    id: 'course.assessment.AssessmentForm.hasPersonalTimesHint',
     defaultMessage:
       'Timings for this item will be automatically adjusted for users based on learning rate.',
   },
   affectsPersonalTimes: {
-    id: 'course.assessment.form.affectsPersonalTimes',
+    id: 'course.assessment.AssessmentForm.affectsPersonalTimes',
     defaultMessage: 'Affects personal times',
   },
   affectsPersonalTimesHint: {
-    id: 'course.assessment.form.affectsPersonalTimesHint',
+    id: 'course.assessment.AssessmentForm.affectsPersonalTimesHint',
     defaultMessage:
       "Student's submission time for this item will be taken into account \
       when updating personal times for other items.",
   },
   visibility: {
-    id: 'course.assessment.form.visibility',
+    id: 'course.assessment.AssessmentForm.visibility',
     defaultMessage: 'Visibility',
   },
   published: {
-    id: 'course.assessment.form.published',
+    id: 'course.assessment.AssessmentForm.published',
     defaultMessage: 'Published',
   },
   draft: {
-    id: 'course.assessment.form.draft',
+    id: 'course.assessment.AssessmentForm.draft',
     defaultMessage: 'Draft',
   },
   publishedHint: {
-    id: 'course.assessment.form.publishedHint',
+    id: 'course.assessment.AssessmentForm.publishedHint',
     defaultMessage: 'Everyone can see this assessment.',
   },
   draftHint: {
-    id: 'course.assessment.form.draftHint',
+    id: 'course.assessment.AssessmentForm.draftHint',
     defaultMessage: 'Only you and staff can see this assessment.',
   },
   gradingMode: {
-    id: 'course.assessment.form.gradingMode',
+    id: 'course.assessment.AssessmentForm.gradingMode',
     defaultMessage: 'Grading mode',
   },
   autogradedHint: {
-    id: 'course.assessment.form.autogradedHint',
+    id: 'course.assessment.AssessmentForm.autogradedHint',
     defaultMessage:
       'Automatically assign grade and EXP upon submission. \
       Non-autogradeable questions will always receive the maximum grade.',
   },
   modeSwitchingDisabled: {
-    id: 'course.assessment.form.modeSwitchingHint',
+    id: 'course.assessment.AssessmentForm.modeSwitchingHint',
     defaultMessage:
       'You can no longer change the grading mode because there are already submissions \
       for this assessment.',
   },
   containsCodaveriQuestion: {
-    id: 'course.assessment.form.containsCodaveriQuestion',
+    id: 'course.assessment.AssessmentForm.containsCodaveriQuestion',
     defaultMessage:
       "Switch to autograded mode is not allowed as there's \
       codaveri programming question type in this assessment. \
@@ -139,156 +139,156 @@ const translations = defineMessages({
       in manually-graded assessment.",
   },
   calculateGradeWith: {
-    id: 'course.assessment.form.calculateGradeWith',
+    id: 'course.assessment.AssessmentForm.calculateGradeWith',
     defaultMessage: 'Calculate grade and EXP with',
   },
   skippable: {
-    id: 'course.assessment.form.skippable',
+    id: 'course.assessment.AssessmentForm.skippable',
     defaultMessage: 'Allow to skip steps',
   },
   skippableManualHint: {
-    id: 'course.assessment.form.skippableManualHint',
+    id: 'course.assessment.AssessmentForm.skippableManualHint',
     defaultMessage:
       'Students can already move between questions in manually graded assessments.',
   },
   unlockConditions: {
-    id: 'course.assessment.form.unlockConditions',
+    id: 'course.assessment.AssessmentForm.unlockConditions',
     defaultMessage: 'Unlock conditions',
   },
   unlockConditionsHint: {
-    id: 'course.assessment.form.unlockConditionsHint',
+    id: 'course.assessment.AssessmentForm.unlockConditionsHint',
     defaultMessage:
       'This assessment will be unlocked if a student meets the following conditions.',
   },
   displayAssessmentAs: {
-    id: 'course.assessment.form.displayAssessmentAs',
+    id: 'course.assessment.AssessmentForm.displayAssessmentAs',
     defaultMessage: 'Display assessment as',
   },
   tabbedView: {
-    id: 'course.assessment.form.tabbedView',
+    id: 'course.assessment.AssessmentForm.tabbedView',
     defaultMessage: 'Tabbed View',
   },
   singlePage: {
-    id: 'course.assessment.form.singlePage',
+    id: 'course.assessment.AssessmentForm.singlePage',
     defaultMessage: 'Single Page',
   },
   delayedGradePublication: {
-    id: 'course.assessment.form.delayedGradePublication',
+    id: 'course.assessment.AssessmentForm.delayedGradePublication',
     defaultMessage: 'Enable delayed grade publication',
   },
   delayedGradePublicationHint: {
-    id: 'course.assessment.form.delayedGradePublicationHint',
+    id: 'course.assessment.AssessmentForm.delayedGradePublicationHint',
     defaultMessage:
       'When delayed grade publication is on, gradings will not be immediately shown to students. \
       To publish all gradings, you may click Publish Grades in the Submissions page.',
   },
   showMcqMrqSolution: {
-    id: 'course.assessment.form.showMcqMrqSolution',
+    id: 'course.assessment.AssessmentForm.showMcqMrqSolution',
     defaultMessage: 'Show MCQ/MRQ solution(s)',
   },
   passwordRequired: {
-    id: 'course.assessment.form.passwordRequired',
+    id: 'course.assessment.AssessmentForm.passwordRequired',
     defaultMessage: 'At least one password is required',
   },
   passwordProtection: {
-    id: 'course.assessment.form.passwordProtection',
+    id: 'course.assessment.AssessmentForm.passwordProtection',
     defaultMessage: 'Enable password protection',
   },
   sessionProtection: {
-    id: 'course.assessment.form.sessionProtection',
+    id: 'course.assessment.AssessmentForm.sessionProtection',
     defaultMessage: 'Enable session protection',
   },
   sessionProtectionHint: {
-    id: 'course.assessment.form.sessionProtection',
+    id: 'course.assessment.AssessmentForm.sessionProtectionHint',
     defaultMessage:
       'When session protection is on, students can only access their attempt once. \
       Further access will require the session unlock password.',
   },
   viewPasswordHint: {
-    id: 'course.assessment.form.viewPasswordHint',
+    id: 'course.assessment.AssessmentForm.viewPasswordHint',
     defaultMessage:
       'Students need to input this password to View and Attempt this assessment.',
   },
   viewPassword: {
-    id: 'course.assessment.form.viewPassword',
+    id: 'course.assessment.AssessmentForm.viewPassword',
     defaultMessage: 'Assessment password',
   },
   sessionPasswordHint: {
-    id: 'course.assessment.form.sessionPasswordHint',
+    id: 'course.assessment.AssessmentForm.sessionPasswordHint',
     defaultMessage: 'Ideally, do NOT give this password to students.',
   },
   sessionPassword: {
-    id: 'course.assessment.form.sessionPassword',
+    id: 'course.assessment.AssessmentForm.sessionPassword',
     defaultMessage: 'Session unlock password',
   },
   startEndValidationError: {
-    id: 'course.assessment.form.startEndValidationError',
+    id: 'course.assessment.AssessmentForm.startEndValidationError',
     defaultMessage: 'Must be after starting time',
   },
   noTestCaseChosenError: {
-    id: 'course.assessment.form.noTestCaseChosenError',
+    id: 'course.assessment.AssessmentForm.noTestCaseChosenError',
     defaultMessage: 'Select at least one type of test case',
   },
   fetchTabFailure: {
-    id: 'course.assessment.form.fetchCategoryFailure',
+    id: 'course.assessment.AssessmentForm.fetchCategoryFailure',
     defaultMessage:
       'Loading of Tabs failed. Please refresh the page, or try again.',
   },
   tab: {
-    id: 'course.assessment.form.tab',
+    id: 'course.assessment.AssessmentForm.tab',
     defaultMessage: 'Tab',
   },
   enableRandomization: {
-    id: 'course.assessment.form.enable_randomization',
+    id: 'course.assessment.AssessmentForm.enableRandomization',
     defaultMessage: 'Enable Randomization',
   },
   enableRandomizationHint: {
-    id: 'course.assessment.form.enable_randomization_hint',
+    id: 'course.assessment.AssessmentForm.enableRandomizationHint',
     defaultMessage:
       'Enables randomized assignment of question bundles to students (per question group).',
   },
   assessmentDetails: {
-    id: 'course.assessment.form.assessmentDetails',
+    id: 'course.assessment.AssessmentForm.assessmentDetails',
     defaultMessage: 'Assessment details',
   },
   gamification: {
-    id: 'course.assessment.form.gamification',
+    id: 'course.assessment.AssessmentForm.gamification',
     defaultMessage: 'Gamification',
   },
   grading: {
-    id: 'course.assessment.form.grading',
+    id: 'course.assessment.AssessmentForm.grading',
     defaultMessage: 'Grading',
   },
   answersAndTestCases: {
-    id: 'course.assessment.form.answersAndTestCases',
+    id: 'course.assessment.AssessmentForm.answersAndTestCases',
     defaultMessage: 'Answers and test cases',
   },
   organization: {
-    id: 'course.assessment.form.organization',
+    id: 'course.assessment.AssessmentForm.organization',
     defaultMessage: 'Organization',
   },
   examsAndAccessControl: {
-    id: 'course.assessment.form.examsAndAccessControl',
+    id: 'course.assessment.AssessmentForm.examsAndAccessControl',
     defaultMessage: 'Exams and access control',
   },
   personalisedTimelines: {
-    id: 'course.assessment.form.personalisedTimelines',
+    id: 'course.assessment.AssessmentForm.personalisedTimelines',
     defaultMessage: 'Personalised timelines',
   },
   unavailableInAutograded: {
-    id: 'course.assessment.form.unavailableInAutograded',
+    id: 'course.assessment.AssessmentForm.unavailableInAutograded',
     defaultMessage: 'Unavailable in autograded assessments.',
   },
   unavailableInManuallyGraded: {
-    id: 'course.assessment.form.unavailableInManuallyGraded',
+    id: 'course.assessment.AssessmentForm.unavailableInManuallyGraded',
     defaultMessage: 'Unavailable in manually graded assessments.',
   },
   afterSubmissionGraded: {
-    id: 'course.assessment.form.afterSubmissionGraded',
+    id: 'course.assessment.AssessmentForm.afterSubmissionGraded',
     defaultMessage: 'After submission is graded and published',
   },
   files: {
-    id: 'course.assessment.form.files',
+    id: 'course.assessment.AssessmentForm.files',
     defaultMessage: 'Files',
   },
 });

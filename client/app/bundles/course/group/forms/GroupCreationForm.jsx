@@ -36,39 +36,39 @@ const styles = {
 
 const translations = defineMessages({
   name: {
-    id: 'course.group.groupForm.name',
+    id: 'course.group.GroupCreationForm.name',
     defaultMessage: 'Name',
   },
   description: {
-    id: 'course.group.groupForm.description',
+    id: 'course.group.GroupCreationForm.description',
     defaultMessage: 'Description (Optional)',
   },
   nameLength: {
-    id: 'course.group.groupForm.nameLength',
+    id: 'course.group.GroupCreationForm.nameLength',
     defaultMessage: 'The name is too long!',
   },
   prefix: {
-    id: 'course.group.groupForm.prefix',
+    id: 'course.group.GroupCreationForm.prefix',
     defaultMessage: 'Prefix',
   },
   numToCreate: {
-    id: 'course.group.groupForm.numToCreate',
+    id: 'course.group.GroupCreationForm.numToCreate',
     defaultMessage: 'Number to Create',
   },
   numToCreateMin: {
-    id: 'course.group.groupForm.numToCreateMin',
+    id: 'course.group.GroupCreationForm.numToCreateMin',
     defaultMessage: 'Minimum 2',
   },
   numToCreateMax: {
-    id: 'course.group.groupForm.numToCreateMax',
+    id: 'course.group.GroupCreationForm.numToCreateMax',
     defaultMessage: 'Maximum 50',
   },
   multipleGroupsWillBeCreated: {
-    id: 'course.group.groupForm.multipleGroupsWillBeCreated',
+    id: 'course.group.GroupCreationForm.multipleGroupsWillBeCreated',
     defaultMessage: 'This will create groups {name} 1 to {name} {numToCreate}.',
   },
   duplicateGroups: {
-    id: 'course.group.groupForm.duplicateGroups',
+    id: 'course.group.GroupCreationForm.duplicateGroups',
     defaultMessage:
       'The following group(s) already exist and will not be created again: {duplicateNames}.',
   },

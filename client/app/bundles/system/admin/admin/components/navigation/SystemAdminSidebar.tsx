@@ -28,27 +28,27 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   announcements: {
-    id: 'system.admin.components.navigation.sidebar.announcements',
+    id: 'system.admin.admin.SystemAdminSidebar.announcements',
     defaultMessage: 'System Announcements',
   },
   users: {
-    id: 'system.admin.components.navigation.sidebar.users',
+    id: 'system.admin.admin.SystemAdminSidebar.users',
     defaultMessage: 'Users',
   },
   instances: {
-    id: 'system.admin.components.navigation.sidebar.instances',
+    id: 'system.admin.admin.SystemAdminSidebar.instances',
     defaultMessage: 'Instances',
   },
   courses: {
-    id: 'system.admin.components.navigation.sidebar.courses',
+    id: 'system.admin.admin.SystemAdminSidebar.courses',
     defaultMessage: 'Courses',
   },
   collapseSidebar: {
-    id: 'system.admin.components.navigation.sidebar.collapse',
+    id: 'system.admin.admin.SystemAdminSidebar.collapseSidebar',
     defaultMessage: 'Collapse Sidebar',
   },
   expandSidebar: {
-    id: 'system.admin.components.navigation.sidebar.expand',
+    id: 'system.admin.admin.SystemAdminSidebar.expandSidebar',
     defaultMessage: 'Expand Sidebar',
   },
 });

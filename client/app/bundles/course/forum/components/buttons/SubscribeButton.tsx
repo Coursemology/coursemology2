@@ -18,74 +18,74 @@ import {
 
 const commonTranslations = {
   manageMySubscriptions: {
-    id: 'course.forum.components.buttons.subcribeButton.manageMySubscription',
+    id: 'course.forum.SubscribeButton.commonTranslations.manageMySubscription',
     defaultMessage: 'Manage My Subscriptions',
   },
   updateSubscriptionFailure: {
-    id: 'course.forum.components.buttons.subcribeButton.updateSubscriptionFailure',
+    id: 'course.forum.SubscribeButton.commonTranslations.updateSubscriptionFailure',
     defaultMessage: 'Failed to update subscription - {error}',
   },
 };
 
 const forumTranslations = defineMessages({
   subscribeTag: {
-    id: 'course.forum.components.buttons.subcribeButton.subscribeTag',
+    id: 'course.forum.SubscribeButton.forumTranslations.subscribeTag',
     defaultMessage:
       'Subscribe to receive an email notification when a new topic is created.',
   },
   unsubscribeTag: {
-    id: 'course.forum.components.buttons.subcribeButton.unsubscribeTag',
+    id: 'course.forum.SubscribeButton.forumTranslations.unsubscribeTag',
     defaultMessage:
       'Unsubscribe to stop receiving email notifications when a new topic is created.',
   },
   userSettingSubscribed: {
-    id: 'course.forum.components.buttons.subcribeButton.userSettingSubscribed',
+    id: 'course.forum.SubscribeButton.forumTranslations.userSettingSubscribed',
     defaultMessage:
       'You have unsubscribed from "New Topic" for forums in this course. Please go to {manageMySubscriptionLink} to enable it.',
   },
   adminSettingSubscribed: {
-    id: 'course.forum.components.buttons.subcribeButton.adminSettingSubscribed',
+    id: 'course.forum.SubscribeButton.forumTranslations.adminSettingSubscribed',
     defaultMessage:
       'Subscription of new forum topic is disabled by the course admin.',
   },
   subscribeSuccess: {
-    id: 'course.forum.components.buttons.subcribeButton.subscribeSuccess',
+    id: 'course.forum.SubscribeButton.forumTranslations.subscribeSuccess',
     defaultMessage: 'You have successfully been subscribed to {title}.',
   },
   unsubscribeSuccess: {
-    id: 'course.forum.components.buttons.subcribeButton.unsubscribeSuccess',
+    id: 'course.forum.SubscribeButton.forumTranslations.unsubscribeSuccess',
     defaultMessage: 'You have successfully been unsubscribed from {title}.',
   },
 });
 
 const forumTopicTranslations = defineMessages({
   subscribeTag: {
-    id: 'course.forum.topic.components.buttons.subcribeButton.subscribeTag',
+    id: 'course.forum.SubscribeButton.forumTopicTranslations.subscribeTag',
     defaultMessage:
       'Subscribe to receive email notifications when someone replies in this forum topic.',
   },
   unsubscribeTag: {
-    id: 'course.forum.topic.components.buttons.subcribeButton.unsubscribeTag',
+    id: 'course.forum.SubscribeButton.forumTopicTranslations.unsubscribeTag',
     defaultMessage:
       'Unsubscribe to stop receiving email notifications when someone replies in this forum topic.',
   },
   userSettingSubscribed: {
-    id: 'course.forum.topic.components.buttons.subcribeButton.userSettingSubscribed',
+    id: 'course.forum.SubscribeButton.forumTopicTranslations.userSettingSubscribed',
     defaultMessage:
       'You have unsubscribed from "New Post and Reply" for forums in this course. Please go to {manageMySubscriptionLink} to enable it.',
   },
   adminSettingSubscribed: {
-    id: 'course.forum.topic.components.buttons.subcribeButton.adminSettingSubscribed',
+    id: 'course.forum.SubscribeButton.forumTopicTranslations.adminSettingSubscribed',
     defaultMessage:
       'Subscription of forum topics is disabled by the course admin.',
   },
   subscribeSuccess: {
-    id: 'course.forum.topic.components.buttons.subcribeButton.subscribeSuccess',
+    id: 'course.forum.SubscribeButton.forumTopicTranslations.subscribeSuccess',
     defaultMessage:
       'You have successfully been subscribed to the forum topic {title}.',
   },
   unsubscribeSuccess: {
-    id: 'course.forum.topic.components.buttons.subcribeButton.unsubscribeSuccess',
+    id: 'course.forum.SubscribeButton.forumTopicTranslations.unsubscribeSuccess',
     defaultMessage:
       'You have successfully been unsubscribed from the forum topic {title}.',
   },
@@ -235,7 +235,7 @@ const SubscribeButton: FC<Props> = ({
           disabled={disabled}
           onClick={handleUpdate}
         >
-          {isSubscribed ? <NotificationsOff /> : <NotificationsActive />}
+          {isSubscribed ? <NotificationsActive /> : <NotificationsOff />}
         </IconButton>
       </span>
     </Tooltip>

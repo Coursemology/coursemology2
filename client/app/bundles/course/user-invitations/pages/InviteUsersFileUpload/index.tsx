@@ -25,11 +25,11 @@ interface Props {
 
 const translations = defineMessages({
   fileUploadInfo: {
-    id: 'course.userInvitation.fileUpload.info',
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfo',
     defaultMessage: 'Upload a .csv file with the following format:',
   },
   fileUploadInfoRole: {
-    id: 'course.userInvitation.fileUpload.info.role',
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoRole',
     defaultMessage:
       'Roles can be <code>[student, observer, teaching_assistant, manager, owner]</code>,\
      and defaults to student if omitted. Teaching assistants can only invite users as students.',
@@ -38,7 +38,7 @@ const translations = defineMessages({
     },
   },
   fileUploadInfoPhantom: {
-    id: 'course.userInvitation.fileUpload.info.phantom',
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoPhantom',
     defaultMessage: `Phantom can be true/false with the following true values <code>['t', 'true', 'y', 'yes']</code>\
      (case insenstitive), and defaults to false if omitted.`,
     values: {
@@ -46,35 +46,35 @@ const translations = defineMessages({
     },
   },
   fileUploadInfoPersonalTimeline: {
-    id: 'course.userInvitation.fileUpload.info.personalTimeline',
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoPersonalTimeline',
     defaultMessage:
       `Personal Timelines can be <code>[fixed, otot, stragglers, fomo]</code>, ` +
       `with course default: {defaultTimelineAlgorithm} if omitted.`,
   },
   exampleHeader: {
-    id: 'course.userInvitation.fileUpload.example.header',
+    id: 'course.userInvitations.InviteUsersFileUpload.exampleHeader',
     defaultMessage: 'Example ',
   },
   template: {
-    id: 'course.userInvitation.fileUpload.example.template',
+    id: 'course.userInvitations.InviteUsersFileUpload.template',
     defaultMessage: '(Template File)',
   },
   fileUploadExample: {
-    id: 'course.userInvitation.fileUpload.example',
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadExample',
     defaultMessage:
       'Name,Email[,Role,Phantom]' +
       '\nJohn,test1@example.org[,student,y]' +
       '\nMary,test2@example.org[,teaching_assistant,n]',
   },
   fileUploadExamplePersonalTimeline: {
-    id: 'course.userInvitation.fileUpload.examplePersonalTimeline',
+    id: 'course.userInvitations.InviteUsersFileUpload.fileUploadExamplePersonalTimeline',
     defaultMessage:
       'Name,Email[,Role,Phantom,PersonalTimeline]' +
       '\nJohn,test1@example.org[,student,y,otot]' +
       '\nMary,test2@example.org[,teaching_assistant,n,fixed]',
   },
   failure: {
-    id: 'course.userInvitation.registrationCode.failure',
+    id: 'course.userInvitations.InviteUsersFileUpload.failure',
     defaultMessage:
       'Failed to invite users. Please ensure your data is formatted correctly - {error}',
   },

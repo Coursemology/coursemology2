@@ -14,24 +14,24 @@ import { sortByGroupRole, sortByName } from '../../utils/sort';
 
 const translations = defineMessages({
   subtitle: {
-    id: 'course.group.show.groupTableCard.subtitle',
+    id: 'course.group.GroupShow.GroupTableCard.subtitle',
     defaultMessage:
       '{numMembers} {numMembers, plural, one {member} other {members}}',
   },
   serialNumber: {
-    id: 'course.group.show.groupTableCard.serialNumber',
+    id: 'course.group.GroupShow.GroupTableCard.serialNumber',
     defaultMessage: 'S/N',
   },
   name: {
-    id: 'course.group.show.groupTableCard.name',
+    id: 'course.group.GroupShow.GroupTableCard.name',
     defaultMessage: 'Name',
   },
   role: {
-    id: 'course.group.show.groupTableCard.role',
+    id: 'course.group.GroupShow.GroupTableCard.role',
     defaultMessage: 'Role',
   },
   noMembers: {
-    id: 'course.group.show.groupTableCard.noMembers',
+    id: 'course.group.GroupShow.GroupTableCard.noMembers',
     defaultMessage:
       'This group has no members! Manage groups to assign members now!',
   },

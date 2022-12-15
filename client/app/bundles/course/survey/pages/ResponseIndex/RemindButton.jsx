@@ -9,31 +9,31 @@ import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 const translations = defineMessages({
   remind: {
-    id: 'course.surveys.ResponseIndex.RemindButton.remind',
+    id: 'course.survey.ResponseIndex.RemindButton.remind',
     defaultMessage: 'Send Reminder Emails',
   },
   explanation: {
-    id: 'course.surveys.ResponseIndex.RemindButton.explanation',
+    id: 'course.survey.ResponseIndex.RemindButton.explanation',
     defaultMessage:
       'A reminder will be automatically emailed to students who have not completed \
       the survey one day before the survey expires.',
   },
   confirmation: {
-    id: 'course.surveys.ResponseIndex.RemindButton.confirmation',
+    id: 'course.survey.ResponseIndex.RemindButton.confirmation',
     defaultMessage:
       'Send emails to all students (excluding phantoms) who have not completed the survey?',
   },
   confirmationAll: {
-    id: 'course.surveys.ResponseIndex.RemindButton.confirmationAll',
+    id: 'course.survey.ResponseIndex.RemindButton.confirmationAll',
     defaultMessage:
       'Send emails to all students (including phantoms) who have not completed the survey?',
   },
   success: {
-    id: 'course.surveys.ResponseIndex.RemindButton.success',
+    id: 'course.survey.ResponseIndex.RemindButton.success',
     defaultMessage: 'Reminder emails have been dispatched.',
   },
   failure: {
-    id: 'course.surveys.ResponseIndex.RemindButton.failure',
+    id: 'course.survey.ResponseIndex.RemindButton.failure',
     defaultMessage: 'Failed to send reminder.',
   },
 });

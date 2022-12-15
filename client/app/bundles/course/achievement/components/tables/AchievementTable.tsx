@@ -24,7 +24,7 @@ interface Props {
 
 const translations = defineMessages({
   noAchievement: {
-    id: 'course.achievement.containers.tables.AchievementTable.noAchievement',
+    id: 'course.achievement.AchievementTable.noAchievement',
     defaultMessage: 'No achievement',
   },
 });

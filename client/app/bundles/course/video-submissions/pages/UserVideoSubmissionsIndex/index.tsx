@@ -13,19 +13,19 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   videoSubmissionsHeader: {
-    id: 'course.videoSubmissions.header',
+    id: 'course.videoSubmissions.UserVideoSubmissionsIndex.videoSubmissionsHeader',
     defaultMessage: 'Video Watch History',
   },
   fetchVideoSubmissionsFailure: {
-    id: 'course.videoSubmissions.index.fetch.failure',
+    id: 'course.videoSubmissions.UserVideoSubmissionsIndex.fetchVideoSubmissionsFailure',
     defaultMessage: 'Failed to retrieve video submissions.',
   },
   toggleSuccess: {
-    id: 'course.video.toggle.success',
+    id: 'course.videoSubmissions.UserVideoSubmissionsIndex.toggleSuccess',
     defaultMessage: 'Video was successfully updated.',
   },
   toggleFailure: {
-    id: 'course.video.toggle.fail',
+    id: 'course.videoSubmissions.UserVideoSubmissionsIndex.toggleFailure',
     defaultMessage: 'Failed to update the video.',
   },
 });

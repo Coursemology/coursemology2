@@ -37,55 +37,55 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   pendingAssessmentsHeader: {
-    id: 'course.courses.show.pendingAssessments',
+    id: 'course.courses.PendingTodosTable.pendingAssessmentsHeader',
     defaultMessage: 'Pending Assessments',
   },
   pendingVideosHeader: {
-    id: 'course.courses.show.pendingVideos',
+    id: 'course.courses.PendingTodosTable.pendingVideosHeader',
     defaultMessage: 'Pending Videos',
   },
   pendingSurveysHeader: {
-    id: 'course.courses.show.pendingSurveys',
+    id: 'course.courses.PendingTodosTable.pendingSurveysHeader',
     defaultMessage: 'Pending Surveys',
   },
   seeMoreFailure: {
-    id: 'course.courses.show.seeMoreFailure',
+    id: 'course.courses.PendingTodosTable.seeMoreFailure',
     defaultMessage: 'Failed to load more pending tasks',
   },
   tableHeaderTitle: {
-    id: 'course.courses.show.tableHeaderTitle',
+    id: 'course.courses.PendingTodosTable.tableHeaderTitle',
     defaultMessage: 'Title',
   },
   tableHeaderStartAt: {
-    id: 'course.courses.show.tableHeaderStartAt',
+    id: 'course.courses.PendingTodosTable.tableHeaderStartAt',
     defaultMessage: 'Start At',
   },
   tableHeaderEndAt: {
-    id: 'course.courses.show.tableHeaderEndAt',
+    id: 'course.courses.PendingTodosTable.tableHeaderEndAt',
     defaultMessage: 'End At',
   },
   tableSeeMore: {
-    id: 'course.courses.show.tableSeeMore',
+    id: 'course.courses.PendingTodosTable.tableSeeMore',
     defaultMessage: 'SEE MORE',
   },
   accessButtonRespond: {
-    id: 'course.courses.show.accessButtonRespond',
+    id: 'course.courses.PendingTodosTable.accessButtonRespond',
     defaultMessage: 'Respond',
   },
   accessButtonEnterPassword: {
-    id: 'course.courses.show.accessButtonEnterPassword',
+    id: 'course.courses.PendingTodosTable.accessButtonEnterPassword',
     defaultMessage: 'Enter Password',
   },
   accessButtonAttempt: {
-    id: 'course.courses.show.accessButtonAttempt',
+    id: 'course.courses.PendingTodosTable.accessButtonAttempt',
     defaultMessage: 'Attempt',
   },
   accessButtonResume: {
-    id: 'course.courses.show.accessButtonResume',
+    id: 'course.courses.PendingTodosTable.accessButtonResume',
     defaultMessage: 'Resume',
   },
   accessButtonWatch: {
-    id: 'course.courses.show.accessButtonWatch',
+    id: 'course.courses.PendingTodosTable.accessButtonWatch',
     defaultMessage: 'Watch',
   },
 });

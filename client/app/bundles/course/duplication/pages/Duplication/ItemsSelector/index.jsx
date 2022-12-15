@@ -14,11 +14,11 @@ import VideosSelector from './VideosSelector';
 
 const translations = defineMessages({
   pleaseSelectItems: {
-    id: 'course.duplication.ItemsSelector.pleaseSelectItems',
+    id: 'course.duplication.Duplication.ItemsSelector.pleaseSelectItems',
     defaultMessage: 'Please select items to duplicate via the sidebar.',
   },
   componentDisabled: {
-    id: 'course.duplication.ItemsSelector.componentDisabled',
+    id: 'course.duplication.Duplication.ItemsSelector.componentDisabled',
     defaultMessage: 'This component is not enabled for the destination course.',
   },
 });

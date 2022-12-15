@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 
 const translations = defineMessages({
   showAll: {
-    id: 'lib.ExpandableText.showAll',
+    id: 'lib.components.core.ExpandableText.showAll',
     defaultMessage: 'Show All',
   },
   showLess: {
-    id: 'lib.ExpandableText.showLess',
+    id: 'lib.components.core.ExpandableText.showLess',
     defaultMessage: 'Show Less',
   },
 });

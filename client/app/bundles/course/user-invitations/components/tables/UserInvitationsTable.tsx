@@ -38,15 +38,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   noInvitations: {
-    id: 'course.userInvitations.components.tables.UserInvitationsTable.noInvitations',
+    id: 'course.userInvitations.UserInvitationsTable.noInvitations',
     defaultMessage: 'There are no {invitationType}',
   },
   pending: {
-    id: 'course.userInvitations.components.tables.UserInvitationsTable.invitationType.pending',
+    id: 'course.userInvitations.UserInvitationsTable.pending',
     defaultMessage: 'pending',
   },
   accepted: {
-    id: 'course.userInvitations.components.tables.UserInvitationsTable.invitationType.accepted',
+    id: 'course.userInvitations.UserInvitationsTable.accepted',
     defaultMessage: 'accepted',
   },
 });

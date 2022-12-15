@@ -9,18 +9,18 @@ import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 const translations = defineMessages({
   duplicateCourse: {
-    id: 'course.duplication.DuplicateAllButton.duplicateCourse',
+    id: 'course.duplication.Duplication.DuplicateAllButton.duplicateCourse',
     defaultMessage: 'Duplicate Course',
   },
   info: {
-    id: 'course.duplication.DuplicateAllButton.info',
+    id: 'course.duplication.Duplication.DuplicateAllButton.info',
     defaultMessage:
       'Duplication usually takes some time to complete. \
     You may close the window while duplication is in progress.\
     You will receive an email with a link to the new course when it becomes available.',
   },
   confirmationMessage: {
-    id: 'course.duplication.DuplicateAllButton.confirmationMessage',
+    id: 'course.duplication.Duplication.DuplicateAllButton.confirmationMessage',
     defaultMessage: 'Proceed with course duplication?',
   },
 });

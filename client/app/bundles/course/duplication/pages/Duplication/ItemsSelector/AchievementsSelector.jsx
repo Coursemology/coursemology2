@@ -16,7 +16,7 @@ import Thumbnail from 'lib/components/core/Thumbnail';
 
 const translations = defineMessages({
   noItems: {
-    id: 'course.duplication.AchievementsSelector.noItems',
+    id: 'course.duplication.Duplication.ItemsSelector.AchievementsSelector.noItems',
     defaultMessage: 'There are no achievements to duplicate.',
   },
 });

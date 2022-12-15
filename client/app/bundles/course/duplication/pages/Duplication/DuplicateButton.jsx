@@ -9,15 +9,15 @@ import DuplicateItemsConfirmation from './DuplicateItemsConfirmation';
 
 const translations = defineMessages({
   duplicateItems: {
-    id: 'course.duplication.DuplicateButton.duplicateItems',
+    id: 'course.duplication.Duplication.DuplicateButton.duplicateItems',
     defaultMessage: 'Duplicate Items',
   },
   selectCourse: {
-    id: 'course.duplication.DuplicateButton.selectCourse',
+    id: 'course.duplication.Duplication.DuplicateButton.selectCourse',
     defaultMessage: 'Select Destination!',
   },
   selectItem: {
-    id: 'course.duplication.DuplicateButton.selectItem',
+    id: 'course.duplication.Duplication.DuplicateButton.selectItem',
     defaultMessage: 'Select An Item!',
   },
 });

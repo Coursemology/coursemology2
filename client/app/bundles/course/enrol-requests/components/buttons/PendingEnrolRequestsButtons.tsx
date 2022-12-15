@@ -23,32 +23,32 @@ const styles = {
 
 const translations = defineMessages({
   approveTooltip: {
-    id: 'course.enrolRequests.approve',
+    id: 'course.enrolRequests.PendingEnrolRequestsButtons.approveTooltip',
     defaultMessage: 'Approve enrol request',
   },
   approveSuccess: {
-    id: 'course.enrolRequests.approve.success',
+    id: 'course.enrolRequests.PendingEnrolRequestsButtons.approveSuccess',
     defaultMessage: 'Approved enrol request of {name}!',
   },
   approveFailure: {
-    id: 'course.enrolRequests.approve.fail',
+    id: 'course.enrolRequests.PendingEnrolRequestsButtons.approveFailure',
     defaultMessage: 'Failed to approve enrol request - {error}',
   },
   rejectTooltip: {
-    id: 'course.enrolRequests.reject',
+    id: 'course.enrolRequests.PendingEnrolRequestsButtons.rejectTooltip',
     defaultMessage: 'Reject enrol request',
   },
   rejectConfirm: {
-    id: 'course.enrolRequests.reject.confirm',
+    id: 'course.enrolRequests.PendingEnrolRequestsButtons.rejectConfirm',
     defaultMessage:
       'Are you sure you wish to reject enrol request of {role} {name} ({email})?',
   },
   rejectSuccess: {
-    id: 'course.enrolRequests.reject.success',
+    id: 'course.enrolRequests.PendingEnrolRequestsButtons.rejectSuccess',
     defaultMessage: 'Enrol request for {name} was rejected.',
   },
   rejectFailure: {
-    id: 'course.enrolRequests.reject.fail',
+    id: 'course.enrolRequests.PendingEnrolRequestsButtons.rejectFailure',
     defaultMessage: 'Failed to reject enrol request. {error}',
   },
 });

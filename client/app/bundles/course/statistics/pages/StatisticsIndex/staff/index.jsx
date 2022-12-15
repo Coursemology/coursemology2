@@ -24,32 +24,32 @@ const options = {
 
 const translations = defineMessages({
   error: {
-    id: 'course.statistics.staff.error',
+    id: 'course.statistics.StatisticsIndex.staff.error',
     defaultMessage:
       'Something went wrong when fetching staff statistics! Please refresh to try again.',
   },
   name: {
-    id: 'course.statistics.staff.name',
+    id: 'course.statistics.StatisticsIndex.staff.name',
     defaultMessage: 'Name',
   },
   numGraded: {
-    id: 'course.statistics.staff.numGraded',
+    id: 'course.statistics.StatisticsIndex.staff.numGraded',
     defaultMessage: '# Marked',
   },
   numStudents: {
-    id: 'course.statistics.staff.numStudents',
+    id: 'course.statistics.StatisticsIndex.staff.numStudents',
     defaultMessage: '# Students',
   },
   averageMarkingTime: {
-    id: 'course.statistics.staff.averageMarkingTime',
+    id: 'course.statistics.StatisticsIndex.staff.averageMarkingTime',
     defaultMessage: 'Avg Time / Assessment',
   },
   stddev: {
-    id: 'course.statistics.staff.stddev',
+    id: 'course.statistics.StatisticsIndex.staff.stddev',
     defaultMessage: 'Standard Deviation',
   },
   tableTitle: {
-    id: 'course.statistics.staff.tableTitle',
+    id: 'course.statistics.StatisticsIndex.staff.tableTitle',
     defaultMessage: 'Staff Statistics',
   },
 });

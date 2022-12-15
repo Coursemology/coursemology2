@@ -15,15 +15,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   topicTitle: {
-    id: 'course.experience-points.disbursement.ForumPostTable.topicTitle',
+    id: 'course.experiencePoints.disbursement.ForumPostTable.topicTitle',
     defaultMessage: 'Topic Title',
   },
   voteTally: {
-    id: 'course.experience-points.disbursement.ForumPostTable.voteTally',
+    id: 'course.experiencePoints.disbursement.ForumPostTable.voteTally',
     defaultMessage: 'Vote Tally',
   },
   datePosted: {
-    id: 'course.experience-points.disbursement.ForumPostTable.datePosted',
+    id: 'course.experiencePoints.disbursement.ForumPostTable.datePosted',
     defaultMessage: 'Date Posted',
   },
 });

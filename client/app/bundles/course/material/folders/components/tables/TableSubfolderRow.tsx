@@ -25,12 +25,12 @@ interface Props {
 
 const translations = defineMessages({
   subfolderBlockedTooltip: {
-    id: 'course.materials.folders.subfolderBlockedTooltip',
+    id: 'course.material.folders.TableSubfolderRow.subfolderBlockedTooltip',
     defaultMessage:
       "This folder is hidden from students as it's start time has not been reached",
   },
   visibleBecauseSdlTooltip: {
-    id: 'course.materials.folders.visibleBecauseSdlTooltip',
+    id: 'course.material.folders.TableSubfolderRow.visibleBecauseSdlTooltip',
     defaultMessage:
       'This folder is visible to students before the start time because of Self-Directed Learning',
   },

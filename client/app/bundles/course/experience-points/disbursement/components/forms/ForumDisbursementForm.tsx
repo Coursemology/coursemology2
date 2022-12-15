@@ -36,28 +36,28 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   reason: {
-    id: 'course.experience-points.disbursement.ForumDisbursementForm.reason',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementForm.reason',
     defaultMessage: 'Reason For Disbursement',
   },
   reasonFill: {
-    id: 'course.experience-points.disbursement.ForumDisbursementForm.reasonFill',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementForm.reasonFill',
     defaultMessage: 'Forum Participation',
   },
   submit: {
-    id: 'course.experience-points.disbursement.ForumDisbursementForm.submit',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementForm.submit',
     defaultMessage: 'Disburse Points',
   },
   createDisbursementSuccess: {
-    id: 'course.experience-points.disbursement.ForumDisbursementForm.createDisbursementSuccess',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementForm.createDisbursementSuccess',
     defaultMessage:
       'Experience points disbursed to {recipientCount} recipients.',
   },
   createDisbursementFailure: {
-    id: 'course.experience-points.disbursement.ForumDisbursementForm.createDisbursementFailure',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementForm.createDisbursementFailure',
     defaultMessage: 'Failed to award experience points.',
   },
   fetchForumPostsFailure: {
-    id: 'course.experience-points.disbursement.ForumDisbursementForm.fetchForumPosts',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementForm.fetchForumPostsFailure',
     defaultMessage: 'Failed to fetch forum posts.',
   },
 });

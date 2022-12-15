@@ -20,7 +20,7 @@ const styles = {
 
 const translations = defineMessages({
   noAnswer: {
-    id: 'course.surveys.ResponseForm.ResponseSection.noAnswer',
+    id: 'course.survey.ResponseForm.ResponseSection.noAnswer',
     defaultMessage:
       'Answer is missing. Question was likely created after response was made.',
   },

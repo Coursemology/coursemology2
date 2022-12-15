@@ -26,19 +26,19 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   noEnrolRequests: {
-    id: 'system.admin.instance.enrolRequests.components.tables.EnrolRequestsTable.noEnrolRequests',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestsTable.noEnrolRequests',
     defaultMessage: 'There is no {enrolRequestsType}',
   },
   approved: {
-    id: 'system.admin.instance.enrolRequests.components.tables.EnrolRequestsTable.requestType.approved',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestsTable.approved',
     defaultMessage: 'approved',
   },
   rejected: {
-    id: 'system.admin.instance.enrolRequests.components.tables.EnrolRequestsTable.requestType.rejected',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestsTable.rejected',
     defaultMessage: 'rejected',
   },
   pending: {
-    id: 'system.admin.instance.enrolRequests.components.tables.EnrolRequestsTable.requestType.pending',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestsTable.pending',
     defaultMessage: 'pending',
   },
 });

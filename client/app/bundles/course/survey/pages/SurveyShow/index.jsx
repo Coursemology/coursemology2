@@ -18,15 +18,15 @@ import SurveyDetails from './SurveyDetails';
 
 const translations = defineMessages({
   empty: {
-    id: 'course.surveys.SurveyShow.empty',
+    id: 'course.survey.SurveyShow.empty',
     defaultMessage: 'This survey does not have any questions.',
   },
   reorderSuccess: {
-    id: 'course.surveys.Question.reorderSuccess',
+    id: 'course.survey.Question.reorderSuccess',
     defaultMessage: 'Question moved.',
   },
   reorderFailure: {
-    id: 'course.surveys.Question.reorderFailure',
+    id: 'course.survey.Question.reorderFailure',
     defaultMessage: 'Failed to move question.',
   },
 });

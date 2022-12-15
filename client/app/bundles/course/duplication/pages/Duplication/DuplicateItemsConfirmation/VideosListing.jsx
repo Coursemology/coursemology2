@@ -15,7 +15,7 @@ const { VIDEO_TAB, VIDEO } = duplicableItemTypes;
 
 const translations = defineMessages({
   defaultTab: {
-    id: 'course.duplication.VideoListing.defaultTab',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.VideoListing.defaultTab',
     defaultMessage: 'Default Tab',
   },
 });

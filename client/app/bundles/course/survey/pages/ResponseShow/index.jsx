@@ -26,7 +26,7 @@ import { formatLongDateTime } from 'lib/moment';
 
 const translations = defineMessages({
   notSubmitted: {
-    id: 'course.surveys.ResponseShow.notSubmitted',
+    id: 'course.survey.ResponseShow.notSubmitted',
     defaultMessage: 'Not submitted',
   },
 });

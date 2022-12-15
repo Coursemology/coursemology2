@@ -13,7 +13,7 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   latestActivityHeader: {
-    id: 'course.courses.show.latestActivity',
+    id: 'course.courses.CourseNotifications.latestActivity',
     defaultMessage: 'Latest Activity',
   },
 });

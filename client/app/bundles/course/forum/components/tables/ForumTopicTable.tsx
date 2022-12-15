@@ -20,59 +20,59 @@ interface Props {
 
 const translations = defineMessages({
   noTopic: {
-    id: 'course.forum.components.tables.forumTopicTable.noTopic',
+    id: 'course.forum.ForumTopicTable.noTopic',
     defaultMessage: 'No Topic',
   },
   hidden: {
-    id: 'course.forum.containers.tables.forumTopicTable.hidden',
+    id: 'course.forum.ForumTopicTable.hidden',
     defaultMessage: 'This topic is hidden for students.',
   },
   locked: {
-    id: 'course.forum.containers.tables.forumTopicTable.locked',
+    id: 'course.forum.ForumTopicTable.locked',
     defaultMessage: 'This topic is closed; it no longer accepts new replies.',
   },
   question: {
-    id: 'course.forum.containers.tables.forumTopicTable.question',
+    id: 'course.forum.ForumTopicTable.question',
     defaultMessage: 'Question',
   },
   resolved: {
-    id: 'course.forum.containers.tables.forumTopicTable.resolved',
+    id: 'course.forum.ForumTopicTable.resolved',
     defaultMessage: 'Question (Resolved)',
   },
   unresolved: {
-    id: 'course.forum.containers.tables.forumTopicTable.unresolved',
+    id: 'course.forum.ForumTopicTable.unresolved',
     defaultMessage: 'Question (Unresolved)',
   },
   sticky: {
-    id: 'course.forum.containers.tables.forumTopicTable.sticky',
+    id: 'course.forum.ForumTopicTable.sticky',
     defaultMessage: 'Sticky',
   },
   announcement: {
-    id: 'course.forum.containers.tables.forumTopicTable.announcement',
+    id: 'course.forum.ForumTopicTable.announcement',
     defaultMessage: 'Announcement',
   },
   topics: {
-    id: 'course.forum.containers.tables.forumTopicTable.topics',
+    id: 'course.forum.ForumTopicTable.topics',
     defaultMessage: 'Topics',
   },
   votes: {
-    id: 'course.forum.containers.tables.forumTopicTable.votes',
+    id: 'course.forum.ForumTopicTable.votes',
     defaultMessage: 'Votes',
   },
   posts: {
-    id: 'course.forum.containers.tables.forumTopicTable.posts',
+    id: 'course.forum.ForumTopicTable.posts',
     defaultMessage: 'Posts',
   },
   views: {
-    id: 'course.forum.containers.tables.forumTopicTable.views',
+    id: 'course.forum.ForumTopicTable.views',
     defaultMessage: 'Views',
   },
   lastPostedBy: {
-    id: 'course.forum.containers.tables.forumTopicTable.lastPostedBy',
+    id: 'course.forum.ForumTopicTable.lastPostedBy',
     defaultMessage: 'Last Posted By',
   },
   startedBy: {
-    id: 'course.forum.containers.tables.forumTopicTable.startedBy',
+    id: 'course.forum.ForumTopicTable.startedBy',
     defaultMessage: 'Started By',
   },
 });

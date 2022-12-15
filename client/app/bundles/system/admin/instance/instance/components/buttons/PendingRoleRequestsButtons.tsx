@@ -21,36 +21,36 @@ interface Props {
 
 const translations = defineMessages({
   approveTooltip: {
-    id: 'roleRequests.approve',
+    id: 'system.admin.instance.instance.PendingRoleRequestsButton.approveTooltip',
     defaultMessage: 'Approve',
   },
   approveSuccess: {
-    id: 'roleRequests.approve.success',
+    id: 'system.admin.instance.instance.PendingRoleRequestsButton.approveSuccess',
     defaultMessage: '{name} has been approved as {role}',
   },
   approveFailure: {
-    id: 'roleRequests.approve.fail',
+    id: 'system.admin.instance.instance.PendingRoleRequestsButton.approveFailure',
     defaultMessage: 'Failed to approve role request - {error}',
   },
   rejectTooltip: {
-    id: 'roleRequests.reject',
+    id: 'system.admin.instance.instance.PendingRoleRequestsButton.rejectTooltip',
     defaultMessage: 'Reject',
   },
   rejectMessageTooltip: {
-    id: 'roleRequests.reject.message',
+    id: 'system.admin.instance.instance.PendingRoleRequestsButton.rejectMessageTooltip',
     defaultMessage: 'Reject with message',
   },
   rejectConfirm: {
-    id: 'roleRequests.reject.confirm',
+    id: 'system.admin.instance.instance.PendingRoleRequestsButton.rejectConfirm',
     defaultMessage:
       'Are you sure you wish to reject role request of {name} ({email})?',
   },
   rejectSuccess: {
-    id: 'roleRequests.reject.success',
+    id: 'system.admin.instance.instance.PendingRoleRequestsButton.rejectSuccess',
     defaultMessage: 'The role request made by {name} has been rejected.',
   },
   rejectFailure: {
-    id: 'roleRequests.reject.fail',
+    id: 'system.admin.instance.instance.PendingRoleRequestsButton.rejectFailure',
     defaultMessage: 'Failed to reject role request - {error}',
   },
 });

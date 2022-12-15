@@ -8,11 +8,11 @@ import PropTypes from 'prop-types';
 
 const translations = defineMessages({
   uploadDisabled: {
-    id: 'course.assessment.submission.UploadedFileView.uploadDisabled',
+    id: 'course.assessment.submission.FileInput.uploadDisabled',
     defaultMessage: 'File upload disabled',
   },
   uploadLabel: {
-    id: 'course.assessment.submission.UploadedFileView.uploadLabel',
+    id: 'course.assessment.submission.FileInput.uploadLabel',
     defaultMessage: 'Drag and drop or click to upload files',
   },
 });

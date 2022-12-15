@@ -8,15 +8,15 @@ import style from '../Discussion.scss';
 
 const translations = defineMessages({
   comment: {
-    id: 'course.video.DiscussionElements.Editor.commentDefault',
+    id: 'course.video.submission.DiscussionElements.Editor.comment',
     defaultMessage: 'Comment',
   },
   cancel: {
-    id: 'course.video.DiscussionElements.Editor.cancelDefault',
+    id: 'course.video.submission.DiscussionElements.Editor.cancel',
     defaultMessage: 'Cancel',
   },
   prompt: {
-    id: 'course.video.DiscussionElements.Editor.prompt',
+    id: 'course.video.submission.DiscussionElements.Editor.prompt',
     defaultMessage: 'Enter your comment here',
   },
 });

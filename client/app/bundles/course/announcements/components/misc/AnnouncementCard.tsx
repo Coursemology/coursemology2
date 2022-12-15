@@ -33,27 +33,27 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   deletionSuccess: {
-    id: 'course.announcements.delete.success',
+    id: 'course.announcements.AnnouncementCard.deletionSuccess',
     defaultMessage: 'Announcement was successfully deleted.',
   },
   deletionFailure: {
-    id: 'course.announcements.delete.failure',
+    id: 'course.announcements.AnnouncementCard.deletionFailure',
     defaultMessage: 'Announcement could not be deleted - {error}',
   },
   timeSeparator: {
-    id: 'course.announcements.timeSeparator',
+    id: 'course.announcements.AnnouncementCard.timeSeparator',
     defaultMessage: 'by',
   },
   pinnedTooltip: {
-    id: 'course.announcements.pinnedTooltip',
+    id: 'course.announcements.AnnouncementCard.pinnedTooltip',
     defaultMessage: 'Pinned',
   },
   notInRangeTooltip: {
-    id: 'course.announcements.notInRangeTooltip',
+    id: 'course.announcements.AnnouncementCard.notInRangeTooltip',
     defaultMessage: 'Out of date range',
   },
   deleteConfirmation: {
-    id: 'course.announcements.deleteConfirmation',
+    id: 'course.announcements.AnnouncementCard.deleteConfirmation',
     defaultMessage: 'Are you sure you want to delete the announcement',
   },
 });

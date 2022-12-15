@@ -17,7 +17,7 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   placeholder: {
-    id: 'course.users.components.misc.SelectCourseUser.placeholder',
+    id: 'course.users.SelectCourseUser.placeholder',
     defaultMessage: 'No course user selected',
   },
 });

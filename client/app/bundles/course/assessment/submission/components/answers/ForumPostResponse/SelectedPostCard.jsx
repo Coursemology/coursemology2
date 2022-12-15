@@ -15,11 +15,11 @@ const MAX_NAME_LENGTH = 30;
 
 const translations = defineMessages({
   topicDeleted: {
-    id: 'course.assessment.submission.answer.forumPostResponse.topicDeleted',
+    id: 'course.assessment.submission.answers.ForumPostResponse.SelectedPostCard.topicDeleted',
     defaultMessage: 'Post made under a topic that was subsequently deleted.',
   },
   postMadeUnder: {
-    id: 'course.assessment.submission.answer.forumPostResponse.postMadeUnder',
+    id: 'course.assessment.submission.answers.ForumPostResponse.SelectedPostCard.postMadeUnder',
     defaultMessage: 'Post made under {topicUrl} in {forumUrl}',
   },
 });

@@ -15,11 +15,11 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'announcements.header',
+    id: 'announcements.GlobalAnnouncementIndex.header',
     defaultMessage: 'All Announcements',
   },
   fetchAnnouncementsFailure: {
-    id: 'announcements.fetch.failure',
+    id: 'announcements.GlobalAnnouncementIndex.fetchAnnouncementsFailure',
     defaultMessage: 'Unable to fetch announcements',
   },
 });

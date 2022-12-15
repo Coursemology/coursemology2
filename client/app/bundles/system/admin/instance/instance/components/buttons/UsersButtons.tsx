@@ -17,27 +17,27 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   deletionSuccess: {
-    id: 'system.admin.instance.user.delete.success',
+    id: 'system.admin.instance.instance.UsersButton.deletionSuccess',
     defaultMessage: 'User was deleted.',
   },
   deletionFailure: {
-    id: 'system.admin.instance.user.delete.fail',
+    id: 'system.admin.instance.instance.UsersButton.deletionFailure',
     defaultMessage: 'Failed to delete user - {error}',
   },
   deletionConfirm: {
-    id: 'system.admin.instance.user.delete.confirm',
+    id: 'system.admin.instance.instance.UsersButton.deletionConfirm',
     defaultMessage: 'Are you sure you wish to delete {role} {name} ({email})?',
   },
   deleteTooltip: {
-    id: 'system.admin.instance.user.delete.tooltip',
+    id: 'system.admin.instance.instance.UsersButton.deleteTooltip',
     defaultMessage: 'Delete User',
   },
   masqueradeTooltip: {
-    id: 'system.admin.instance.user.masquerade.tooltip',
+    id: 'system.admin.instance.instance.UsersButton.masqueradeTooltip',
     defaultMessage: 'Masquerade',
   },
   masqueradeDisabledTooltip: {
-    id: 'system.admin.instance.user.masquerade.disabled.tooltip',
+    id: 'system.admin.instance.instance.UsersButton.masqueradeDisabledTooltip',
     defaultMessage: 'User not confirmed',
   },
 });

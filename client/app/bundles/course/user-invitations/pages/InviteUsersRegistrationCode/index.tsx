@@ -36,52 +36,52 @@ const styles = {
 
 const translations = defineMessages({
   registrationCode: {
-    id: 'course.userInvitation.registrationCode',
+    id: 'course.userInvitation.InviteUsersRegistrationCode.registrationCode',
     defaultMessage: 'Registration Code',
   },
   registrationCodeInfo: {
-    id: 'course.userInvitation.registrationCode.info',
+    id: 'course.userInvitation.InviteUsersRegistrationCode.registrationCodeInfo',
     defaultMessage:
       'Users having difficulty registering with their email invitation\
         can use this registration code to register instead.',
   },
   registrationCodeNote: {
-    id: 'course.userInvitation.registrationCode.note',
+    id: 'course.userInvitation.InviteUsersRegistrationCode.registrationCodeNote',
     defaultMessage:
       'Users who have been invited and use this invitation code to register for the course \
        would not have the proper status reflected in the Invitations page.',
   },
   currentlyDisabled: {
-    id: 'course.userInvitation.registrationCode.currentlyDisabled',
+    id: 'course.userInvitation.InviteUsersRegistrationCode.currentlyDisabled',
     defaultMessage:
       'Registration via registration codes is currently disabled.',
   },
   enable: {
-    id: 'course.userInvitation.registrationCode.enable',
+    id: 'course.userInvitation.InviteUsersRegistrationCode.enable',
     defaultMessage: 'Enable Registration Code',
   },
   disable: {
-    id: 'course.userInvitation.registrationCode.disable',
+    id: 'course.userInvitation.InviteUsersRegistrationCode.disable',
     defaultMessage: 'Disable Registration Code',
   },
   enableSuccess: {
-    id: 'course.userInvitation.registrationCode.enable.success',
+    id: 'course.userInvitation.InviteUsersRegistrationCode.enableSuccess',
     defaultMessage: 'Successfully enabled registration code!',
   },
   disableSuccess: {
-    id: 'course.userInvitation.registrationCode.disable.success',
+    id: 'course.userInvitation.InviteUsersRegistrationCode.disableSuccess',
     defaultMessage: 'Successfully disabled registration code!',
   },
   cancel: {
-    id: 'course.userInvitation.registrationCode.cancel',
+    id: 'course.userInvitation.InviteUsersRegistrationCode.cancel',
     defaultMessage: 'Cancel',
   },
   copy: {
-    id: 'course.userInvitation.registrationCode.copy',
+    id: 'course.userInvitation.InviteUsersRegistrationCode.copy',
     defaultMessage: 'Copy to clipboard',
   },
   copySuccess: {
-    id: 'course.userInvitation.registrationCode.copy.success',
+    id: 'course.userInvitation.InviteUsersRegistrationCode.copySuccess',
     defaultMessage: 'Copied registration code to clipboard!',
   },
 });

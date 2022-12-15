@@ -39,31 +39,31 @@ interface CommentTabProps extends WrappedComponentProps {
 
 const translations = defineMessages({
   fetchCommentsFailure: {
-    id: 'course.discussion.topics.index.fetch.failure',
+    id: 'course.discussion.topics.CommentIndex.fetchCommentsFailure',
     defaultMessage: 'Failed to retrieve comments.',
   },
   comments: {
-    id: 'course.discussion.topics.index.comments',
+    id: 'course.discussion.topics.CommentIndex.comments',
     defaultMessage: 'Comments',
   },
   myStudentsPending: {
-    id: 'course.discussion.topics.index.myStudentsPending',
+    id: 'course.discussion.topics.CommentIndex.myStudentsPending',
     defaultMessage: 'My Students Pending',
   },
   pending: {
-    id: 'course.discussion.topics.index.pending',
+    id: 'course.discussion.topics.CommentIndex.pending',
     defaultMessage: 'Pending',
   },
   myStudents: {
-    id: 'course.discussion.topics.index.myStudents',
+    id: 'course.discussion.topics.CommentIndex.myStudents',
     defaultMessage: 'My Students',
   },
   unread: {
-    id: 'course.discussion.topics.index.unread',
+    id: 'course.discussion.topics.CommentIndex.unread',
     defaultMessage: 'Unread',
   },
   all: {
-    id: 'course.discussion.topics.index.all',
+    id: 'course.discussion.topics.CommentIndex.all',
     defaultMessage: 'All',
   },
 });

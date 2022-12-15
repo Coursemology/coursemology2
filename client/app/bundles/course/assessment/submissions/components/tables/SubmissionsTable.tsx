@@ -33,43 +33,43 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   noSubmissionsMessage: {
-    id: 'course.assessments.submissions.noSubmissionsMessage',
+    id: 'course.assessment.submissions.SubmissionsTable.noSubmissionsMessage',
     defaultMessage: 'There are no submissions',
   },
   tableHeaderSn: {
-    id: 'course.assessments.submissions.tableHeaderSn',
+    id: 'course.assessment.submissions.SubmissionsTable.tableHeaderSn',
     defaultMessage: 'S/N',
   },
   tableHeaderName: {
-    id: 'course.assessments.submissions.tableHeaderName',
+    id: 'course.assessment.submissions.SubmissionsTable.tableHeaderName',
     defaultMessage: 'Name',
   },
   tableHeaderTitle: {
-    id: 'course.assessments.submissions.tableHeaderTitle',
+    id: 'course.assessment.submissions.SubmissionsTable.tableHeaderTitle',
     defaultMessage: 'Title',
   },
   tableHeaderSubmittedAt: {
-    id: 'course.assessments.submissions.tableHeaderSubmittedAt',
+    id: 'course.assessment.submissions.SubmissionsTable.tableHeaderSubmittedAt',
     defaultMessage: 'Submitted At',
   },
   tableHeaderStatus: {
-    id: 'course.assessments.submissions.tableHeaderStatus',
+    id: 'course.assessment.submissions.SubmissionsTable.tableHeaderStatus',
     defaultMessage: 'Status',
   },
   tableHeaderTutor: {
-    id: 'course.assessments.submissions.tableHeaderTutor',
+    id: 'course.assessment.submissions.SubmissionsTable.tableHeaderTutor',
     defaultMessage: 'Tutor',
   },
   tableHeaderTotalGrade: {
-    id: 'course.assessments.submissions.tableHeaderTotalGrade',
+    id: 'course.assessment.submissions.SubmissionsTable.tableHeaderTotalGrade',
     defaultMessage: 'Total Grade',
   },
   tableHeaderExp: {
-    id: 'course.assessments.submissions.tableHeaderExp',
+    id: 'course.assessment.submissions.SubmissionsTable.tableHeaderExp',
     defaultMessage: 'Exp Awarded',
   },
   gradeTooltip: {
-    id: 'course.assessments.submissions.gradeTooltip',
+    id: 'course.assessment.submissions.SubmissionsTable.gradeTooltip',
     defaultMessage:
       "These grades can't be seen by the student until they are published",
   },

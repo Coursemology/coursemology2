@@ -21,11 +21,11 @@ import MilestoneAdminTools from './MilestoneAdminTools';
 
 const translations = defineMessages({
   ungroupedItems: {
-    id: 'course.lessonPlan.LessonPlanGroup.ungroupedItems',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanGroup.ungroupedItems',
     defaultMessage: 'Ungrouped Items',
   },
   noItems: {
-    id: 'course.lessonPlan.LessonPlanGroup.noItems',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanGroup.noItems',
     defaultMessage: 'No items for this milestone.',
   },
 });

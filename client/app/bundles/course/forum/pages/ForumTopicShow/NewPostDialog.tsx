@@ -20,15 +20,15 @@ interface Props {
 
 const translations = defineMessages({
   header: {
-    id: 'course.forum.topic.post.create.header',
+    id: 'course.forum.ForumTopicShow.NewPostDialog.header',
     defaultMessage: 'Create a New Post',
   },
   creationSuccess: {
-    id: 'course.forum.topic.post.create.success',
+    id: 'course.forum.ForumTopicShow.NewPostDialog.creationSuccess',
     defaultMessage: 'The post has been created.',
   },
   creationFailure: {
-    id: 'course.forum.topic.post.create.fail',
+    id: 'course.forum.ForumTopicShow.NewPostDialog.creationFailure',
     defaultMessage: 'Failed to create the post - {error}',
   },
 });

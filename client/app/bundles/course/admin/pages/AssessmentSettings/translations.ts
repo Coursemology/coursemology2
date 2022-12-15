@@ -2,150 +2,150 @@ import { defineMessages } from 'react-intl';
 
 export default defineMessages({
   assessmentSettings: {
-    id: 'course.admin.assessment.assessmentSettings',
+    id: 'course.admin.AssessmentSettings.assessmentSettings',
     defaultMessage: 'Assessment settings',
   },
   containsNAssessments: {
-    id: 'course.admin.assessment.containsNAssessments',
+    id: 'course.admin.AssessmentSettings.containsNAssessments',
     defaultMessage: 'has {n, plural, one {# item} other {# items}}',
   },
   categoriesAndTabs: {
-    id: 'course.admin.assessment.categoriesAndTabs',
+    id: 'course.admin.AssessmentSettings.categoriesAndTabs',
     defaultMessage: 'Categories and tabs',
   },
   categoriesAndTabsSubtitle: {
-    id: 'course.admin.assessment.categoriesAndTabsSubtitle',
+    id: 'course.admin.AssessmentSettings.categoriesAndTabsSubtitle',
     defaultMessage:
       'Drag and drop the categories and tabs to rearrange or group them.',
   },
   addACategory: {
-    id: 'course.admin.assessment.addACategory',
+    id: 'course.admin.AssessmentSettings.addACategory',
     defaultMessage: 'Add a category',
   },
   newCategoryDefaultName: {
-    id: 'course.admin.assessment.newCategoryDefaultName',
+    id: 'course.admin.AssessmentSettings.newCategoryDefaultName',
     defaultMessage: 'New Category',
   },
   newTabDefaultName: {
-    id: 'course.admin.assessment.newTabDefaultName',
+    id: 'course.admin.AssessmentSettings.newTabDefaultName',
     defaultMessage: 'New Tab',
   },
   addATab: {
-    id: 'course.admin.assessment.addATab',
+    id: 'course.admin.AssessmentSettings.addATab',
     defaultMessage: 'Tab',
   },
   allowStudentsToView: {
-    id: 'course.admin.assessment.allowStudentsToView',
+    id: 'course.admin.AssessmentSettings.allowStudentsToView',
     defaultMessage: 'Allow students to view',
   },
   outputsOfPublicTestCases: {
-    id: 'course.admin.assessment.outputsOfPublicTestCases',
+    id: 'course.admin.AssessmentSettings.outputsOfPublicTestCases',
     defaultMessage: 'Outputs of Public test cases',
   },
   standardOutputsAndStandardErrors: {
-    id: 'course.admin.assessment.standardOutputsAndStandardErrors',
+    id: 'course.admin.AssessmentSettings.standardOutputsAndStandardErrors',
     defaultMessage: 'Standard outputs and Standard errors',
   },
   randomisation: {
-    id: 'course.admin.assessment.randomisation',
+    id: 'course.admin.AssessmentSettings.randomisation',
     defaultMessage: 'Randomisation options',
   },
   enableRandomisedAssessments: {
-    id: 'course.admin.assessment.enableRandomisedAssessments',
+    id: 'course.admin.AssessmentSettings.enableRandomisedAssessments',
     defaultMessage: 'Enable randomised assessments',
   },
   enableMcqChoicesRandomisations: {
-    id: 'course.admin.assessment.enableMcqChoicesRandomisations',
+    id: 'course.admin.AssessmentSettings.enableMcqChoicesRandomisations',
     defaultMessage: 'Enable MCQ choices randomisations',
   },
   deleteCategoryPromptAction: {
-    id: 'course.admin.assessment.deleteCategoryPromptAction',
+    id: 'course.admin.AssessmentSettings.deleteCategoryPromptAction',
     defaultMessage: 'Delete {title} category',
   },
   deleteCategoryPromptTitle: {
-    id: 'course.admin.assessment.deleteCategoryPromptTitle',
+    id: 'course.admin.AssessmentSettings.deleteCategoryPromptTitle',
     defaultMessage: 'Delete {title} category?',
   },
   deleteCategoryPromptMessage: {
-    id: 'course.admin.assessment.deleteCategoryPromptMessage',
+    id: 'course.admin.AssessmentSettings.deleteCategoryPromptMessage',
     defaultMessage:
       'Deleting this category will delete all its associated assessments and submissions. This action is irreversible.',
   },
   deleteTabPromptAction: {
-    id: 'course.admin.assessment.deleteTabPromptAction',
+    id: 'course.admin.AssessmentSettings.deleteTabPromptAction',
     defaultMessage: 'Delete {title} tab',
   },
   deleteTabPromptTitle: {
-    id: 'course.admin.assessment.deleteTabPromptTitle',
+    id: 'course.admin.AssessmentSettings.deleteTabPromptTitle',
     defaultMessage: 'Delete {title} tab?',
   },
   deleteTabPromptMessage: {
-    id: 'course.admin.assessment.deleteTabPromptMessage',
+    id: 'course.admin.AssessmentSettings.deleteTabPromptMessage',
     defaultMessage:
       'Deleting this tab will delete all its associated assessments and submissions. This action is irreversible.',
   },
   moveAssessmentsToTabThenDelete: {
-    id: 'course.admin.assessment.moveAssessmentsToTabThenDelete',
+    id: 'course.admin.AssessmentSettings.moveAssessmentsToTabThenDelete',
     defaultMessage: 'Move assessments to {tab} then delete',
   },
   moveAssessmentsThenDelete: {
-    id: 'course.admin.assessment.moveAssessmentsThenDelete',
+    id: 'course.admin.AssessmentSettings.moveAssessmentsThenDelete',
     defaultMessage: 'Move assessments then delete',
   },
   moveTabsToCategoryThenDelete: {
-    id: 'course.admin.assessment.moveTabsToCategoryThenDelete',
+    id: 'course.admin.AssessmentSettings.moveTabsToCategoryThenDelete',
     defaultMessage: 'Move tabs to {category} then delete',
   },
   moveTabsThenDelete: {
-    id: 'course.admin.assessment.moveTabsThenDelete',
+    id: 'course.admin.AssessmentSettings.moveTabsThenDelete',
     defaultMessage: 'Move tabs then delete',
   },
   toTab: {
-    id: 'course.admin.assessment.toTab',
+    id: 'course.admin.AssessmentSettings.toTab',
     defaultMessage: 'to {tab}',
   },
   thisCategoryContains: {
-    id: 'course.admin.assessment.thisCategoryContains',
+    id: 'course.admin.AssessmentSettings.thisCategoryContains',
     defaultMessage: 'This category contains:',
   },
   thisTabContains: {
-    id: 'course.admin.assessment.thisTabContains',
+    id: 'course.admin.AssessmentSettings.thisTabContains',
     defaultMessage: 'This tab contains:',
   },
   andNMoreItems: {
-    id: 'course.admin.assessment.andNMoreItems',
+    id: 'course.admin.AssessmentSettings.andNMoreItems',
     defaultMessage: 'and {n, plural, one {# more item} other {# more items}}.',
   },
   nAssessmentsMoved: {
-    id: 'course.admin.assessment.nAssessmentsMoved',
+    id: 'course.admin.AssessmentSettings.nAssessmentsMoved',
     defaultMessage: '{n} assessments were successfully moved to {tab}.',
   },
   nTabsMoved: {
-    id: 'course.admin.assessment.nTabsMoved',
+    id: 'course.admin.AssessmentSettings.nTabsMoved',
     defaultMessage: '{n} tabs were successfully moved to {category}.',
   },
   errorOccurredWhenMovingAssessments: {
-    id: 'course.admin.assessment.errorOccurredWhenMovingAssessments',
+    id: 'course.admin.AssessmentSettings.errorOccurredWhenMovingAssessments',
     defaultMessage: 'An error occurred while moving the assessments.',
   },
   errorOccurredWhenMovingTabs: {
-    id: 'course.admin.assessment.errorOccurredWhenMovingTabs',
+    id: 'course.admin.AssessmentSettings.errorOccurredWhenMovingTabs',
     defaultMessage: 'An error occurred while moving the tabs.',
   },
   errorOccurredWhenCreatingCategory: {
-    id: 'course.admin.assessment.errorOccurredWhenCreatingCategory',
+    id: 'course.admin.AssessmentSettings.errorOccurredWhenCreatingCategory',
     defaultMessage: 'An error occurred while creating a category.',
   },
   errorOccurredWhenCreatingTab: {
-    id: 'course.admin.assessment.errorOccurredWhenCreatingTab',
+    id: 'course.admin.AssessmentSettings.errorOccurredWhenCreatingTab',
     defaultMessage: 'An error occurred while creating a tab.',
   },
   errorOccurredWhenDeletingCategory: {
-    id: 'course.admin.assessment.errorOccurredWhenDeletingCategory',
+    id: 'course.admin.AssessmentSettings.errorOccurredWhenDeletingCategory',
     defaultMessage: 'An error occurred while deleting the category.',
   },
   errorOccurredWhenDeletingTab: {
-    id: 'course.admin.assessment.errorOccurredWhenDeletingTab',
+    id: 'course.admin.AssessmentSettings.errorOccurredWhenDeletingTab',
     defaultMessage: 'An error occurred while deleting the tab.',
   },
 });

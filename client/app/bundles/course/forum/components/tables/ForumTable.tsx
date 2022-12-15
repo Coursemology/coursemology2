@@ -19,31 +19,31 @@ interface Props {
 
 const translations = defineMessages({
   noForum: {
-    id: 'course.forum.components.tables.forumTable.noForum',
+    id: 'course.forum.ForumTable.noForum',
     defaultMessage: 'No Forum',
   },
   hasUnresolved: {
-    id: 'course.forum.components.tables.forumTable.hasUnresolved',
+    id: 'course.forum.ForumTable.hasUnresolved',
     defaultMessage: 'Has unresolved question(s)',
   },
   forum: {
-    id: 'course.forum.containers.tables.forumTable.forum',
+    id: 'course.forum.ForumTable.forum',
     defaultMessage: 'Forum',
   },
   topics: {
-    id: 'course.forum.containers.tables.forumTable.topics',
+    id: 'course.forum.ForumTable.topics',
     defaultMessage: 'Topics',
   },
   votes: {
-    id: 'course.forum.containers.tables.forumTable.votes',
+    id: 'course.forum.ForumTable.votes',
     defaultMessage: 'Votes',
   },
   posts: {
-    id: 'course.forum.containers.tables.forumTable.posts',
+    id: 'course.forum.ForumTable.posts',
     defaultMessage: 'Posts',
   },
   views: {
-    id: 'course.forum.containers.tables.forumTable.views',
+    id: 'course.forum.ForumTable.views',
     defaultMessage: 'Views',
   },
 });

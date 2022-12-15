@@ -36,52 +36,52 @@ const styles = {
 
 const translations = defineMessages({
   header: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.header',
+    id: 'course.userInvitations.InvitationResultDialog.header',
     defaultMessage: 'Invitation Summary',
   },
   close: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.close',
+    id: 'course.userInvitations.InvitationResultDialog.close',
     defaultMessage: 'Close',
   },
   body: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.body',
+    id: 'course.userInvitations.InvitationResultDialog.body',
     defaultMessage:
       '{newInvitationsCount, plural, =0 {No new users were} one {# new user has been} other {# new users have been}} invited to Coursemology. ' +
       '{newCourseUsersCount, plural, =0 {No user with Coursemology account has been} one {# new user with existing Coursemology account has been} other {# new users with existing Coursemology accounts have been}} added to this course.',
   },
   duplicateInfo: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.duplicateUsers.info',
+    id: 'course.userInvitations.InvitationResultDialog.duplicateInfo',
     defaultMessage:
       'Duplicate users were found in the invitation. Only the first instance of this user will be invited.',
   },
   duplicateUsers: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.duplicateUsers',
+    id: 'course.userInvitations.InvitationResultDialog.duplicateUsers',
     defaultMessage: 'Users with Duplicate Emails ({count})',
   },
   existingCourseUsersInfo: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.existingCourseUsers.info',
+    id: 'course.userInvitations.InvitationResultDialog.existingCourseUsersInfo',
     defaultMessage:
       'Existing course users with this email were found in the invitation. They were not invited.',
   },
   existingCourseUsers: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.existingCourseUsers',
+    id: 'course.userInvitations.InvitationResultDialog.existingCourseUsers',
     defaultMessage: 'Existing Course Users ({count})',
   },
   existingInvitationsInfo: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.existingInvitations.info',
+    id: 'course.userInvitations.InvitationResultDialog.existingInvitationsInfo',
     defaultMessage:
       'Existing invitations for these users with this email already exist. They were not invited.',
   },
   existingInvitations: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.existingInvitations',
+    id: 'course.userInvitations.InvitationResultDialog.existingInvitations',
     defaultMessage: 'Existing Invitations ({count})',
   },
   newCourseUsers: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.newCourseUsers',
+    id: 'course.userInvitations.InvitationResultDialog.newCourseUsers',
     defaultMessage: 'New Course Users ({count})',
   },
   newInvitations: {
-    id: 'course.userInvitations.components.misc.InvitationResultDialog.newInvitations',
+    id: 'course.userInvitations.InvitationResultDialog.newInvitations',
     defaultMessage: 'New Invitations ({count})',
   },
 });

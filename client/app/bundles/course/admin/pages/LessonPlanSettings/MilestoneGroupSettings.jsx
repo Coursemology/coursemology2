@@ -10,31 +10,31 @@ import { updateLessonPlanSettings } from './operations';
 
 const translations = defineMessages({
   header: {
-    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.header',
+    id: 'course.admin.LessonPlanSettings.MilestoneGroupSettings.header',
     defaultMessage: 'Milestone Groups Settings',
   },
   explanation: {
-    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.explanation',
+    id: 'course.admin.LessonPlanSettings.MilestoneGroupSettings.explanation',
     defaultMessage: 'When lesson plan page is loaded,',
   },
   expandAll: {
-    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.expandAll',
+    id: 'course.admin.LessonPlanSettings.MilestoneGroupSettings.expandAll',
     defaultMessage: 'Expand all milestone groups',
   },
   expandNone: {
-    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.expandNone',
+    id: 'course.admin.LessonPlanSettings.MilestoneGroupSettings.expandNone',
     defaultMessage: 'Collapse all milestone groups',
   },
   expandCurrent: {
-    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.expandCurrent',
+    id: 'course.admin.LessonPlanSettings.MilestoneGroupSettings.expandCurrent',
     defaultMessage: 'Expand just the current milestone group',
   },
   updateSuccess: {
-    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.updateSuccess',
+    id: 'course.admin.LessonPlanSettings.MilestoneGroupSettings.updateSuccess',
     defaultMessage: 'Updated milestone groups settings.',
   },
   updateFailure: {
-    id: 'course.admin.lessonPlanSettings.MilestoneGroupSettings.updateFailure',
+    id: 'course.admin.LessonPlanSettings.MilestoneGroupSettings.updateFailure',
     defaultMessage: 'Failed to update milestone groups settings.',
   },
 });

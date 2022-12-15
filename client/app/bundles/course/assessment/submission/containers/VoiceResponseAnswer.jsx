@@ -20,22 +20,22 @@ import {
 
 const translations = defineMessages({
   startRecording: {
-    id: 'course.assessment.submission.answer.startRecording',
+    id: 'course.assessment.submission.VoiceResponseAnswer.startRecording',
     defaultMessage: 'Start Recording',
   },
   stopRecording: {
-    id: 'course.assessment.submission.answer.stopRecording',
+    id: 'course.assessment.submission.VoiceResponseAnswer.stopRecording',
     defaultMessage: 'Stop Recording',
   },
   chooseVoiceFileExplain: {
-    id: 'course.assessment.submission.answer.chooseVoiceFileExplain',
+    id: 'course.assessment.submission.VoiceResponseAnswer.chooseVoiceFileExplain',
     defaultMessage:
       'Drag your audio file here, or click to select an audio file. \
                      Only wav and mp3 formats are supported. Alternatively, you may use the \
                      recorder below to record your response',
   },
   pleaseRecordYourVoice: {
-    id: 'course.assessment.submission.answer.pleaseRecordYourVoice',
+    id: 'course.assessment.submission.VoiceResponseAnswer.pleaseRecordYourVoice',
     defaultMessage: 'Please record your voice',
   },
 });

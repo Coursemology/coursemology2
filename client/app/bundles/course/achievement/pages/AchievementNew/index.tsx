@@ -20,15 +20,15 @@ interface Props {
 
 const translations = defineMessages({
   newAchievement: {
-    id: 'course.achievement.newAchievement',
+    id: 'course.achievement.AchievementNew.newAchievement',
     defaultMessage: 'New Achievement',
   },
   creationSuccess: {
-    id: 'course.achievement.create.success',
+    id: 'course.achievement.AchievementNew.creationSuccess',
     defaultMessage: 'Achievement was created.',
   },
   creationFailure: {
-    id: 'course.achievement.create.fail',
+    id: 'course.achievement.AchievementNew.creationFailure',
     defaultMessage: 'Failed to create achievement.',
   },
 });

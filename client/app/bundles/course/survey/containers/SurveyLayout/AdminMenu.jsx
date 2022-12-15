@@ -15,27 +15,27 @@ import { formatSurveyFormData } from '../../utils';
 
 const translations = defineMessages({
   editSurvey: {
-    id: 'course.surveys.SurveyLayout.AdminMenu.editSurvey',
+    id: 'course.survey.SurveyLayout.AdminMenu.editSurvey',
     defaultMessage: 'Edit Survey',
   },
   deleteSurvey: {
-    id: 'course.surveys.SurveyLayout.AdminMenu.deleteSurvey',
+    id: 'course.survey.SurveyLayout.AdminMenu.deleteSurvey',
     defaultMessage: 'Delete Survey',
   },
   updateSuccess: {
-    id: 'course.surveys.SurveyLayout.AdminMenu.updateSuccess',
+    id: 'course.survey.SurveyLayout.AdminMenu.updateSuccess',
     defaultMessage: 'Survey "{title}" updated.',
   },
   updateFailure: {
-    id: 'course.surveys.SurveyLayout.AdminMenu.updateFailure',
+    id: 'course.survey.SurveyLayout.AdminMenu.updateFailure',
     defaultMessage: 'Failed to update survey.',
   },
   deleteSuccess: {
-    id: 'course.surveys.SurveyLayout.AdminMenu.deleteSuccess',
+    id: 'course.survey.SurveyLayout.AdminMenu.deleteSuccess',
     defaultMessage: 'Survey "{title}" deleted.',
   },
   deleteFailure: {
-    id: 'course.surveys.SurveyLayout.AdminMenu.deleteFailure',
+    id: 'course.survey.SurveyLayout.AdminMenu.deleteFailure',
     defaultMessage: 'Failed to delete survey.',
   },
 });

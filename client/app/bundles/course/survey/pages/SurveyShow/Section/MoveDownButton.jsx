@@ -8,15 +8,15 @@ import { changeSectionOrder } from 'course/survey/actions/sections';
 
 const translations = defineMessages({
   moveSectionDown: {
-    id: 'course.surveys.MoveDownButton.moveSectionDown',
+    id: 'course.survey.MoveDownButton.moveSectionDown',
     defaultMessage: 'Move Section Down',
   },
   success: {
-    id: 'course.surveys.MoveDownButton.success',
+    id: 'course.survey.MoveDownButton.success',
     defaultMessage: 'Section successfully moved down.',
   },
   failure: {
-    id: 'course.surveys.MoveDownButton.failure',
+    id: 'course.survey.MoveDownButton.failure',
     defaultMessage: 'Failed to move section down.',
   },
 });

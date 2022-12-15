@@ -25,19 +25,19 @@ interface Props extends WrappedComponentProps {}
 
 const translations = defineMessages({
   fetchAnnouncementsFailure: {
-    id: 'course.announcement.fetchAnnouncementsFailure',
+    id: 'course.announcements.AnnouncementsIndex.fetchAnnouncementsFailure',
     defaultMessage: 'Failed to fetch announcements',
   },
   header: {
-    id: 'course.announcement.header',
+    id: 'course.announcements.AnnouncementsIndex.header',
     defaultMessage: 'Announcements',
   },
   noAnnouncements: {
-    id: 'course.announcement.noAnnouncements',
+    id: 'course.announcements.AnnouncementsIndex.noAnnouncements',
     defaultMessage: 'There are no announcements',
   },
   searchBarPlaceholder: {
-    id: 'course.announcement.searchBarPlaceholder',
+    id: 'course.announcements.AnnouncementsIndex.searchBarPlaceholder',
     defaultMessage: 'Search by announcement title',
   },
 });

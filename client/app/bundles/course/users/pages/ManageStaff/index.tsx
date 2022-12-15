@@ -24,11 +24,11 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   manageStaffTitle: {
-    id: 'course.users.manage.staff.title',
+    id: 'course.users.ManageStaff.manageStaffTitle',
     defaultMessage: 'Staff',
   },
   noStaff: {
-    id: 'course.users.manage.noStaff',
+    id: 'course.users.ManageStaff.noStaff',
     defaultMessage: 'No staff in course.',
   },
 });

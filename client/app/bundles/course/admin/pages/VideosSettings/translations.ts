@@ -2,44 +2,44 @@ import { defineMessages } from 'react-intl';
 
 export default defineMessages({
   videosSettings: {
-    id: 'course.admin.videos.videosSettings',
+    id: 'course.admin.VideosSettings.videosSettings',
     defaultMessage: 'Videos settings',
   },
   videosTabs: {
-    id: 'course.admin.videos.videosTabs',
+    id: 'course.admin.VideosSettings.videosTabs',
     defaultMessage: 'Tabs',
   },
   addATab: {
-    id: 'course.admin.videos.addATab',
+    id: 'course.admin.VideosSettings.addATab',
     defaultMessage: 'Add a tab',
   },
   newVideosTabDefaultTitle: {
-    id: 'course.admin.videos.newVideosTabDefaultTitle',
+    id: 'course.admin.VideosSettings.newVideosTabDefaultTitle',
     defaultMessage: 'New Videos Tab',
   },
   videosTabsSubtitle: {
-    id: 'course.admin.videos.videosTabsSubtitle',
+    id: 'course.admin.VideosSettings.videosTabsSubtitle',
     defaultMessage: 'Drag and drop the video tabs to rearrange.',
   },
   deleteTabPromptAction: {
-    id: 'course.admin.videos.deleteTabPromptAction',
+    id: 'course.admin.VideosSettings.deleteTabPromptAction',
     defaultMessage: 'Delete {title} tab',
   },
   deleteTabPromptTitle: {
-    id: 'course.admin.videos.deleteTabPromptTitle',
+    id: 'course.admin.VideosSettings.deleteTabPromptTitle',
     defaultMessage: 'Delete {title} tab?',
   },
   deleteTabPromptMessage: {
-    id: 'course.admin.videos.deleteTabPromptMessage',
+    id: 'course.admin.VideosSettings.deleteTabPromptMessage',
     defaultMessage:
       'Deleting this tab will delete all its associated videos and statistics. This action is irreversible.',
   },
   errorOccurredWhenCreatingTab: {
-    id: 'course.admin.videos.errorOccurredWhenCreatingTab',
+    id: 'course.admin.VideosSettings.errorOccurredWhenCreatingTab',
     defaultMessage: 'An error occurred while creating a tab.',
   },
   errorOccurredWhenDeletingTab: {
-    id: 'course.admin.videos.errorOccurredWhenDeletingTab',
+    id: 'course.admin.VideosSettings.errorOccurredWhenDeletingTab',
     defaultMessage: 'An error occurred while deleting the tab.',
   },
 });

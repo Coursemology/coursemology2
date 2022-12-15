@@ -22,46 +22,46 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.header',
+    id: 'system.admin.instance.instance.InvitationResultDialog.header',
     defaultMessage: 'Invitation Summary',
   },
   close: {
-    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.close',
+    id: 'system.admin.instance.instance.InvitationResultDialog.close',
     defaultMessage: 'Close',
   },
   duplicateInfo: {
-    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.duplicateUsers.info',
+    id: 'system.admin.instance.instance.InvitationResultDialog.duplicateInfo',
     defaultMessage:
       'Duplicate users were found in the invitation. Only the first instance of this user is invited.',
   },
   duplicateUsers: {
-    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.duplicateUsers',
+    id: 'system.admin.instance.instance.InvitationResultDialog.duplicateUsers',
     defaultMessage: 'Users with Duplicate Emails ({count})',
   },
   existingInstanceUsersInfo: {
-    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.existingInstanceUsers.info',
+    id: 'system.admin.instance.instance.InvitationResultDialog.existingInstanceUsersInfo',
     defaultMessage:
       'Existing instance users with this email were found in the invitation. They were not invited.',
   },
   existingInstanceUsers: {
-    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.existingInstanceUsers',
+    id: 'system.admin.instance.instance.InvitationResultDialog.existingInstanceUsers',
     defaultMessage: 'Existing Instance Users ({count})',
   },
   existingInvitationsInfo: {
-    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.existingInvitations.info',
+    id: 'system.admin.instance.instance.InvitationResultDialog.existingInvitationsInfo',
     defaultMessage:
       'Existing invitations for these users with this email already exist. They were not invited.',
   },
   existingInvitations: {
-    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.existingInvitations',
+    id: 'system.admin.instance.instance.InvitationResultDialog.existingInvitations',
     defaultMessage: 'Existing Invitations ({count})',
   },
   newInstanceUsers: {
-    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.newInstanceUsers',
+    id: 'system.admin.instance.instance.InvitationResultDialog.newInstanceUsers',
     defaultMessage: 'New Instance Users ({count})',
   },
   newInvitations: {
-    id: 'system.admin.instance.userInvitations.components.misc.InvitationResultDialog.newInvitations',
+    id: 'system.admin.instance.instance.InvitationResultDialog.newInvitations',
     defaultMessage: 'New Invitations ({count})',
   },
 });

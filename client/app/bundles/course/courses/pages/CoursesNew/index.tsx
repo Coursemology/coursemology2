@@ -17,15 +17,15 @@ interface Props {
 }
 const translations = defineMessages({
   newCourse: {
-    id: 'course.new',
+    id: 'course.courses.CoursesNew.new',
     defaultMessage: 'New Course',
   },
   courseCreationSuccess: {
-    id: 'course.create.success',
+    id: 'course.courses.CoursesNew.courseCreationSuccess',
     defaultMessage: 'Course was created.',
   },
   courseCreationFailure: {
-    id: 'course.create.fail',
+    id: 'course.courses.CoursesNew.courseCreationFailure',
     defaultMessage: 'Failed to create course.',
   },
 });

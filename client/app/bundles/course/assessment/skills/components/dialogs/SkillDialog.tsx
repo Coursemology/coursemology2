@@ -34,51 +34,51 @@ interface Props {
 
 const translations = defineMessages({
   newSkill: {
-    id: 'course.assessment.skills.components.SkillDialog.newSkill',
+    id: 'course.assessment.skills.SkillDialog.newSkill',
     defaultMessage: 'New Skill',
   },
   newSkillBranch: {
-    id: 'course.assessment.skills.components.SkillDialog.newSkill',
+    id: 'course.assessment.skills.SkillDialog.newSkillBranch',
     defaultMessage: 'New Skill Branch',
   },
   editSkill: {
-    id: 'course.assessment.skills.components.SkillDialog.newSkill',
+    id: 'course.assessment.skills.SkillDialog.editSkill',
     defaultMessage: 'Edit Skill',
   },
   editSkillBranch: {
-    id: 'course.assessment.skills.components.SkillDialog.newSkill',
+    id: 'course.assessment.skills.SkillDialog.editSkillBranch',
     defaultMessage: 'Edit Skill Branch',
   },
   createSkillSuccess: {
-    id: 'course.assessment.skills.components.SkillDialog.createSkillSuccess',
+    id: 'course.assessment.skills.SkillDialog.createSkillSuccess',
     defaultMessage: 'Skill was created.',
   },
   createSkillFailure: {
-    id: 'course.assessment.skills.components.SkillDialog.createSkillFailure',
+    id: 'course.assessment.skills.SkillDialog.createSkillFailure',
     defaultMessage: 'Failed to create skill.',
   },
   createSkillBranchSuccess: {
-    id: 'course.assessment.skills.components.SkillDialog.createSkillBranchSuccess',
+    id: 'course.assessment.skills.SkillDialog.createSkillBranchSuccess',
     defaultMessage: 'Skill branch was created.',
   },
   createSkillBranchFailure: {
-    id: 'course.assessment.skills.components.SkillDialog.createSkillBranchFailure',
+    id: 'course.assessment.skills.SkillDialog.createSkillBranchFailure',
     defaultMessage: 'Failed to create skill branch.',
   },
   updateSkillSuccess: {
-    id: 'course.assessment.skills.components.SkillDialog.updateSkillSuccess',
+    id: 'course.assessment.skills.SkillDialog.updateSkillSuccess',
     defaultMessage: 'Skill was updated.',
   },
   updateSkillFailure: {
-    id: 'course.assessment.skills.components.SkillDialog.updateSkillFailure',
+    id: 'course.assessment.skills.SkillDialog.updateSkillFailure',
     defaultMessage: 'Failed to update skill.',
   },
   updateSkillBranchSuccess: {
-    id: 'course.assessment.skills.components.SkillDialog.updateSkillBranchSuccess',
+    id: 'course.assessment.skills.SkillDialog.updateSkillBranchSuccess',
     defaultMessage: 'Skill branch was updated.',
   },
   updateSkillBranchFailure: {
-    id: 'course.assessment.skills.components.SkillDialog.updateSkillBranchFailure',
+    id: 'course.assessment.skills.SkillDialog.updateSkillBranchFailure',
     defaultMessage: 'Failed to update skill branch.',
   },
 });

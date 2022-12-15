@@ -30,24 +30,24 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   upgradeSuccess: {
-    id: 'course.user.components.misc.upgradeToStaff.success',
+    id: 'course.users.UpgradeToStaff.upgradeSuccess',
     defaultMessage:
       '{count, plural, =0 {No users were} one {# new user has} other {# new users have}} been upgraded to {role}',
   },
   upgradeFailure: {
-    id: 'course.user.components.misc.upgradeToStaff.fail',
+    id: 'course.users.UpgradeToStaff.upgradeFailure',
     defaultMessage: 'Failed to update user - {error}',
   },
   upgradeHeader: {
-    id: 'course.user.components.misc.upgradeToStaff.header',
+    id: 'course.users.UpgradeToStaff.upgradeHeader',
     defaultMessage: 'Upgrade Student',
   },
   nameLabel: {
-    id: 'course.user.components.misc.upgradeToStaff.label',
+    id: 'course.users.UpgradeToStaff.nameLabel',
     defaultMessage: 'Name',
   },
   upgradeButton: {
-    id: 'course.user.components.misc.upgradeToStaff.button',
+    id: 'course.users.UpgradeToStaff.upgradeButton',
     defaultMessage: 'Upgrade to staff',
   },
 });

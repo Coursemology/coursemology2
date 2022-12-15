@@ -22,15 +22,15 @@ interface Props {
 
 const translations = defineMessages({
   header: {
-    id: 'roleRequests.header',
+    id: 'system.admin.instance.instance.RejectWithMessageForm.header',
     defaultMessage: 'Role Request Rejection',
   },
   rejectSuccess: {
-    id: 'roleRequests.reject.success',
+    id: 'system.admin.instance.instance.RejectWithMessageForm.rejectSuccess',
     defaultMessage: 'The role request made by {name} has been rejected.',
   },
   rejectFailure: {
-    id: 'roleRequests.reject.fail',
+    id: 'system.admin.instance.instance.RejectWithMessageForm.rejectFailure',
     defaultMessage: 'Failed to reject role request - {error}',
   },
 });

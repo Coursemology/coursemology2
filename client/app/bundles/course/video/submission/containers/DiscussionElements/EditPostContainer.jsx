@@ -10,7 +10,7 @@ import Editor from './Editor';
 
 const translations = defineMessages({
   edit: {
-    id: 'course.video.DiscussionElements.EditPostContainer.edit',
+    id: 'course.video.submission.DiscussionElements.EditPostContainer.edit',
     defaultMessage: 'Edit',
   },
 });

@@ -33,7 +33,7 @@ const ErrorText = ({ errors }) => {
     <div style={{ color: red[500] }}>
       <FormattedMessage
         defaultMessage="Failed submitting this form. Please try again."
-        id="lib.component.error"
+        id="lib.components.core.ErrorText.error"
       />
     </div>
   );

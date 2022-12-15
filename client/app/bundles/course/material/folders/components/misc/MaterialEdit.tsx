@@ -25,15 +25,15 @@ interface Props {
 
 const translations = defineMessages({
   editMaterialTitle: {
-    id: 'course.materials.folders.editMaterialTitle',
+    id: 'course.material.folders.MaterialEdit.editMaterialTitle',
     defaultMessage: 'Edit Material',
   },
   materialEditSuccess: {
-    id: 'course.materials.folders.materialEditSuccess',
+    id: 'course.material.folders.MaterialEdit.materialEditSuccess',
     defaultMessage: 'File has been edited',
   },
   materialEditFailure: {
-    id: 'course.materials.folders.materialEditFailure',
+    id: 'course.material.folders.MaterialEdit.materialEditFailure',
     defaultMessage: 'File could not be edited',
   },
 });

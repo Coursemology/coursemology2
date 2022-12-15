@@ -16,48 +16,48 @@ import { categoryShape } from '../../propTypes';
 
 const translations = defineMessages({
   updateSuccess: {
-    id: 'course.group.show.categoryCard.update.success',
+    id: 'course.group.GroupShow.CategoryCard.updateSuccess',
     defaultMessage: '{categoryName} was successfully updated.',
   },
   updateFailure: {
-    id: 'course.group.show.categoryCard.update.fail',
+    id: 'course.group.GroupShow.CategoryCard.updateFailure',
     defaultMessage: 'Failed to update {categoryName}.',
   },
   deleteSuccess: {
-    id: 'course.group.show.categoryCard.delete.success',
+    id: 'course.group.GroupShow.CategoryCard.deleteSuccess',
     defaultMessage: '{categoryName} was successfully deleted.',
   },
   deleteFailure: {
-    id: 'course.group.show.categoryCard.delete.fail',
+    id: 'course.group.GroupShow.CategoryCard.deleteFailure',
     defaultMessage: 'Failed to delete {categoryName}.',
   },
   edit: {
-    id: 'course.group.show.categoryCard.edit',
+    id: 'course.group.GroupShow.CategoryCard.edit',
     defaultMessage: 'Edit',
   },
   manage: {
-    id: 'course.group.show.categoryCard.manage',
+    id: 'course.group.GroupShow.CategoryCard.manage',
     defaultMessage: 'Manage Groups',
   },
   delete: {
-    id: 'course.group.show.categoryCard.delete',
+    id: 'course.group.GroupShow.CategoryCard.delete',
     defaultMessage: 'Delete Category',
   },
   confirmDelete: {
-    id: 'course.group.show.categoryCard.confirmDelete',
+    id: 'course.group.GroupShow.CategoryCard.confirmDelete',
     defaultMessage: 'Are you sure you wish to delete {categoryName}?',
   },
   subtitle: {
-    id: 'course.group.show.categoryCard.subtitle',
+    id: 'course.group.GroupShow.CategoryCard.subtitle',
     defaultMessage:
       '{numGroups} {numGroups, plural, one {group} other {groups}}',
   },
   noDescription: {
-    id: 'course.group.show.categoryCard.noDescription',
+    id: 'course.group.GroupShow.CategoryCard.noDescription',
     defaultMessage: 'No description available.',
   },
   dialogTitle: {
-    id: 'course.group.show.categoryCard.dialogTitle',
+    id: 'course.group.GroupShow.CategoryCard.dialogTitle',
     defaultMessage: 'Edit Category',
   },
 });

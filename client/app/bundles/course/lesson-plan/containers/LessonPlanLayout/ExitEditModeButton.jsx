@@ -6,7 +6,7 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 
 const translations = defineMessages({
   exitEditMode: {
-    id: 'course.lessonPlan.ExitEditModeButton.exitEditMode',
+    id: 'course.lessonPlan.LessonPlanLayout.ExitEditModeButton.exitEditMode',
     defaultMessage: 'Exit Edit Mode',
   },
 });

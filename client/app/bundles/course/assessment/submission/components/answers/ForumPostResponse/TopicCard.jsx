@@ -23,15 +23,15 @@ import ForumPostOption from './ForumPostOption';
 
 const translations = defineMessages({
   topicCardTitleTypeNoneSelected: {
-    id: 'course.assessment.submission.answer.forumPostResponse.topicCardTitleTypeNoneSelected',
+    id: 'course.assessment.submission.answers.ForumPostResponse.TopicCard.topicCardTitleTypeNoneSelected',
     defaultMessage: 'Topic',
   },
   topicCardTitleTypeSelected: {
-    id: 'course.assessment.submission.answer.forumPostResponse.topicCardTitleTypeSelected',
+    id: 'course.assessment.submission.answers.ForumPostResponse.TopicCard.topicCardTitleTypeSelected',
     defaultMessage: 'Topic ({numSelected} selected)',
   },
   viewTopicInNewTab: {
-    id: 'course.assessment.submission.answer.forumPostResponse.viewTopicInNewTab',
+    id: 'course.assessment.submission.answers.ForumPostResponse.TopicCard.viewTopicInNewTab',
     defaultMessage: 'View Topic',
   },
 });

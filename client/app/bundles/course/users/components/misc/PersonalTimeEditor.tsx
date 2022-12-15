@@ -48,48 +48,48 @@ interface IFormInputs {
 
 const translations = defineMessages({
   buttonLabel: {
-    id: 'course.users.components.misc.PersonalTimeEditor.buttonLabel',
+    id: 'course.users.PersonalTimeEditor.buttonLabel',
     defaultMessage: 'Add personal time',
   },
   createSuccess: {
-    id: 'course.users.components.misc.PersonalTimeEditor.create.success',
+    id: 'course.users.PersonalTimeEditor.createSuccess',
     defaultMessage: 'Created new personal time for {title}!',
   },
   update: {
-    id: 'course.users.components.misc.PersonalTimeEditor.update',
+    id: 'course.users.PersonalTimeEditor.update',
     defaultMessage: 'Update personal time',
   },
   updateSuccess: {
-    id: 'course.users.components.misc.PersonalTimeEditor.update.success',
+    id: 'course.users.PersonalTimeEditor.updateSuccess',
     defaultMessage: 'Updated personal time for {title}!',
   },
   updateFailure: {
-    id: 'course.users.components.misc.PersonalTimeEditor.update.failure',
+    id: 'course.users.PersonalTimeEditor.updateFailure',
     defaultMessage: 'Unable to update personal time - {error}',
   },
   delete: {
-    id: 'course.users.components.misc.PersonalTimeEditor.delete',
+    id: 'course.users.PersonalTimeEditor.delete',
     defaultMessage: 'Delete personal time',
   },
   deleteConfirm: {
-    id: 'course.users.components.misc.PersonalTimeEditor.delete.confirm',
+    id: 'course.users.PersonalTimeEditor.deleteConfirm',
     defaultMessage:
       'Are you sure you want to delete personal time for {title}?',
   },
   deleteSuccess: {
-    id: 'course.users.components.misc.PersonalTimeEditor.delete.success',
+    id: 'course.users.PersonalTimeEditor.deleteSuccess',
     defaultMessage: 'Deleted personal time for {title}.',
   },
   deleteFailure: {
-    id: 'course.users.components.misc.PersonalTimeEditor.delete.failure',
+    id: 'course.users.PersonalTimeEditor.deleteFailure',
     defaultMessage: 'Failed to delete personal time - {error}',
   },
   startEndValidationError: {
-    id: 'course.users.components.misc.PersonalTimeEditor.error.startEndValidation',
+    id: 'course.users.PersonalTimeEditor.error.startEndValidation',
     defaultMessage: 'Must be after start time',
   },
   fixedDescription: {
-    id: 'course.users.personalTimes.table.fixed.description',
+    id: 'course.users.PersonalTimeEditor.fixedDescription',
     defaultMessage:
       "A fixed personal time means that the personal time will no longer be automatically modified. If a personal\
     time is left unfixed, it may be dynamically updated by the algorithm on the user's next submission.",

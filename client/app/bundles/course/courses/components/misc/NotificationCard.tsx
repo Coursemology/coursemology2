@@ -29,31 +29,31 @@ The 7 notifications
 
 const translations = defineMessages({
   gainAchievement: {
-    id: 'course.courses.show.notification.gainAchievement',
+    id: 'course.courses.NotificationCard.gainAchievement',
     defaultMessage: 'gained achievement',
   },
   attemptAssessment: {
-    id: 'course.courses.show.notification.attemptAssessment',
+    id: 'course.courses.NotificationCard.attemptAssessment',
     defaultMessage: 'attempted',
   },
   reachLevel: {
-    id: 'course.courses.show.notification.reachLevel',
+    id: 'course.courses.NotificationCard.reachLevel',
     defaultMessage: 'reached Level',
   },
   createTopic: {
-    id: 'course.courses.show.notification.createTopic',
+    id: 'course.courses.NotificationCard.createTopic',
     defaultMessage: 'created topic',
   },
   replyForumTopic: {
-    id: 'course.courses.show.notification.replyForumTopic',
+    id: 'course.courses.NotificationCard.replyForumTopic',
     defaultMessage: 'replied to',
   },
   voteForumTopic: {
-    id: 'course.courses.show.notification.voteForumTopic',
+    id: 'course.courses.NotificationCard.voteForumTopic',
     defaultMessage: 'voted on',
   },
   watchVideo: {
-    id: 'course.courses.show.notification.watchVideo',
+    id: 'course.courses.NotificationCard.watchVideo',
     defaultMessage: 'watched',
   },
 });

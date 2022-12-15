@@ -20,31 +20,31 @@ import VideosListing from './VideosListing';
 
 const translations = defineMessages({
   confirmationQuestion: {
-    id: 'course.duplication.DuplicateItemsConfirmation.confirmationQuestion',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.confirmationQuestion',
     defaultMessage: 'Duplicate items?',
   },
   destinationCourse: {
-    id: 'course.duplication.DuplicateItemsConfirmation.destinationCourse',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.destinationCourse',
     defaultMessage: 'Destination Course',
   },
   duplicate: {
-    id: 'course.duplication.DuplicateItemsConfirmation.duplicate',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.duplicate',
     defaultMessage: 'Duplicate',
   },
   pendingMessage: {
-    id: 'course.duplication.DuplicateItemsConfirmation.pendingMessage',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.pendingMessage',
     defaultMessage: 'Duplicating items...',
   },
   successMessage: {
-    id: 'course.duplication.DuplicateItemsConfirmation.successMessage',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.successMessage',
     defaultMessage: 'Duplication successful.',
   },
   failureMessage: {
-    id: 'course.duplication.DuplicateItemsConfirmation.failureMessage',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.failureMessage',
     defaultMessage: 'Duplication failed.',
   },
   itemUnpublished: {
-    id: 'course.duplication.DuplicateItemsConfirmation.itemUnpublished',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.itemUnpublished',
     defaultMessage:
       'Items are duplicated as unpublished when duplicating to an existing course.',
   },

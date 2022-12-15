@@ -17,11 +17,11 @@ const flatten = (arr) => arr.reduce((a, b) => a.concat(b), []);
 
 const translations = defineMessages({
   root: {
-    id: 'course.duplication.MaterialsListing.root',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.MaterialsListing.root',
     defaultMessage: 'Root Folder',
   },
   nameConflictWarning: {
-    id: 'course.duplication.MaterialsListing.nameConflictWarning',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.MaterialsListing.nameConflictWarning',
     defaultMessage:
       "Warning: Naming conflict exists. A serial number will be appended to the duplicated item's name.",
   },

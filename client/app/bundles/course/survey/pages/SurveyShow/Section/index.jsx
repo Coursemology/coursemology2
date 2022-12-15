@@ -38,7 +38,7 @@ const styles = {
 
 const translations = defineMessages({
   noQuestions: {
-    id: 'course.surveys.SectionCard.noQuestions',
+    id: 'course.survey.Section.noQuestions',
     defaultMessage:
       'This section has no questions. Empty sections will not be shown in the survey \
       response form.',

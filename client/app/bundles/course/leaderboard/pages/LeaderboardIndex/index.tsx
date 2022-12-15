@@ -32,23 +32,23 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   fetchLeaderboardFailure: {
-    id: 'course.leaderboards.index.fetch.failure',
+    id: 'course.leaderboard.LeaderboardIndex.fetchLeaderboardFailure',
     defaultMessage: 'Failed to retrieve Leaderboard.',
   },
   leaderboard: {
-    id: 'course.leaderboards.index.leaderboard',
+    id: 'course.leaderboard.LeaderboardIndex.leaderboard',
     defaultMessage: 'Leaderboard',
   },
   groupLeaderboard: {
-    id: 'course.leaderboards.index.groupLeaderboard',
+    id: 'course.leaderboard.LeaderboardIndex.groupLeaderboard',
     defaultMessage: 'Group Leaderboard',
   },
   experience: {
-    id: 'course.leaderboards.index.experience',
+    id: 'course.leaderboard.LeaderboardIndex.experience',
     defaultMessage: 'By Experience Points',
   },
   achievement: {
-    id: 'course.leaderboards.index.achievement',
+    id: 'course.leaderboard.LeaderboardIndex.achievement',
     defaultMessage: 'By Achievements',
   },
 });

@@ -22,15 +22,15 @@ interface Props {
 
 const translations = defineMessages({
   deletionSuccess: {
-    id: 'course.video.buttons.delete.success',
+    id: 'course.video.VideoManagementButtons.deletionSuccess',
     defaultMessage: '{title} has been successfully deleted.',
   },
   deletionFailure: {
-    id: 'course.video.buttons.delete.fail',
+    id: 'course.video.VideoManagementButtons.deletionFailure',
     defaultMessage: 'Failed to delete {title}.',
   },
   deletionConfirm: {
-    id: 'course.video.buttons.delete.confirm',
+    id: 'course.video.VideoManagementButtons.deletionConfirm',
     defaultMessage: 'Are you sure you wish to delete the video "{title}"?',
   },
 });

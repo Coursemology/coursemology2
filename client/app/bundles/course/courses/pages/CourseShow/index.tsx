@@ -11,7 +11,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
 import CourseAnnouncements from '../../components/misc/CourseAnnouncements';
-import CourseEnrollOptions from '../../components/misc/CourseEnrollOptions';
+import CourseEnrolOptions from '../../components/misc/CourseEnrolOptions';
 import CourseNotifications from '../../components/misc/CourseNotifications';
 import PendingTodosTable from '../../components/tables/PendingTodosTable';
 import { loadCourse } from '../../operations';
@@ -21,15 +21,15 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   fetchCourseFailure: {
-    id: 'course.courses.show.fetchCourseFailure',
+    id: 'course.courses.CourseShow.fetchCourseFailure',
     defaultMessage: 'Failed to fetch information of the course.',
   },
   descriptionHeader: {
-    id: 'course.courses.show.description',
+    id: 'course.courses.CourseShow.descriptionHeader',
     defaultMessage: 'Description',
   },
   instructorsHeader: {
-    id: 'course.courses.show.instructors',
+    id: 'course.courses.CourseShow.instructorsHeader',
     defaultMessage: 'Instructors',
   },
 });
@@ -71,7 +71,7 @@ const CourseShow: FC<Props> = (props) => {
             <Grid item lg={3} xs={1}>
               <div style={{ display: 'flex', justifyContent: 'right' }}>
                 {course.registrationInfo && (
-                  <CourseEnrollOptions
+                  <CourseEnrolOptions
                     registrationInfo={course.registrationInfo}
                   />
                 )}

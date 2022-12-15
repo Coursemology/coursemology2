@@ -34,15 +34,15 @@ interface Props extends WrappedComponentProps {}
 
 const translations = defineMessages({
   header: {
-    id: 'course.assessments.submissions.header',
+    id: 'course.assessment.submissions.SubmissionsIndex.header',
     defaultMessage: 'Submissions',
   },
   fetchSubmissionsFailure: {
-    id: 'course.assessments.submissions.fetchSubmissionsFailure',
+    id: 'course.assessment.submissions.SubmissionsIndex.fetchSubmissionsFailure',
     defaultMessage: 'Failed to fetch submissions',
   },
   filterGetFailure: {
-    id: 'course.assessments.submissions.filterGetFailure',
+    id: 'course.assessment.submissions.SubmissionsIndex.filterGetFailure',
     defaultMessage: 'Failed to filter',
   },
 });

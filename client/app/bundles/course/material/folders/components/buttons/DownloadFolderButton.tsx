@@ -19,15 +19,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   downloadTooltip: {
-    id: 'course.materials.folders.downloadTooltip',
+    id: 'course.material.folders.DownloadFolderButton.downloadTooltip',
     defaultMessage: 'Download Entire Folder',
   },
   downloadFolderErrorMessage: {
-    id: 'course.materials.folders.downloadFolderErrorMessage',
+    id: 'course.material.folders.DownloadFolderButton.downloadFolderErrorMessage',
     defaultMessage: 'Download has failed. Please try again later.',
   },
   downloading: {
-    id: 'course.materials.folders.downloading',
+    id: 'course.material.folders.DownloadFolderButton.downloading',
     defaultMessage: 'Downloading...',
   },
 });

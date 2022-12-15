@@ -29,15 +29,15 @@ const initialValues = {
 
 const translations = defineMessages({
   fileUpload: {
-    id: 'course.userInvitation.fileUpload',
+    id: 'course.userInvitations.InviteUsersfileUploadForm.fileUpload',
     defaultMessage: 'File Upload',
   },
   invite: {
-    id: 'course.userInvitation.fileUpload.invite',
+    id: 'course.userInvitations.InviteUsersfileUploadForm.invite',
     defaultMessage: 'Invite Users from File',
   },
   fileUploadField: {
-    id: 'course.userInvitation.fileUploadField',
+    id: 'course.userInvitations.InviteUsersfileUploadForm.fileUploadField',
     defaultMessage: 'File Upload (.csv)',
   },
 });

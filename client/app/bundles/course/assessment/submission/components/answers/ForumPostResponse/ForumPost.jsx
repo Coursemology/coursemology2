@@ -16,11 +16,11 @@ const MAX_POST_HEIGHT = 60;
 
 export const translations = defineMessages({
   showMore: {
-    id: 'course.forum.forumPost.showMore',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPost.showMore',
     defaultMessage: 'SHOW MORE',
   },
   showLess: {
-    id: 'course.forum.forumPost.showLess',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPost.showLess',
     defaultMessage: 'SHOW LESS',
   },
 });

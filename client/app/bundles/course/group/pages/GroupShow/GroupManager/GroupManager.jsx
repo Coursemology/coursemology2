@@ -19,75 +19,75 @@ import GroupUserManager from './GroupUserManager';
 
 const translations = defineMessages({
   createSingleSuccess: {
-    id: 'course.group.show.groupManager.createSingle.success',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.createSingleSuccess',
     defaultMessage: '{groupName} was successfully created.',
   },
   createSingleFailure: {
-    id: 'course.group.show.groupManager.createSingle.fail',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.createSingleFailure',
     defaultMessage: 'Failed to create {groupName}.',
   },
   createMultipleSuccess: {
-    id: 'course.group.show.groupManager.createMultiple.success',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.createMultipleSuccess',
     defaultMessage:
       '{numCreated} {numCreated, plural, one {group was} other {groups were}} successfully created.',
   },
   createMultiplePartialFailure: {
-    id: 'course.group.show.groupManager.createMultiple.partialFail',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.createMultiplePartialFailure',
     defaultMessage:
       'Failed to create {numFailed} {numFailed, plural, one {group} other {groups}}.',
   },
   createMultipleFailure: {
-    id: 'course.group.show.groupManager.createMultiple.fail',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.createMultipleFailure',
     defaultMessage: 'Failed to create {numFailed} groups.',
   },
   updateMembersSuccess: {
-    id: 'course.group.show.groupManager.updateMembers.success',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.updateMembersSuccess',
     defaultMessage: 'Groups have been successfully updated.',
   },
   updateMembersFailure: {
-    id: 'course.group.show.groupManager.updateMembers.failure',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.updateMembersFailure',
     defaultMessage: 'Something went wrong, please try again later!',
   },
   subtitle: {
-    id: 'course.group.show.groupManager.subtitle',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.subtitle',
     defaultMessage:
       '{numGroups} {numGroups, plural, one {group} other {groups}}',
   },
   dialogTitle: {
-    id: 'course.group.show.groupManager.dialogTitle',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.dialogTitle',
     defaultMessage: 'New Group(s)',
   },
   create: {
-    id: 'course.group.show.groupManager.create',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.create',
     defaultMessage: 'Create Group(s)',
   },
   noneCreated: {
-    id: 'course.group.show.groupManager.noneCreated',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.noneCreated',
     defaultMessage:
       'You have no groups created. Create one now to get started!',
   },
   noneSelected: {
-    id: 'course.group.show.groupManager.noneSelected',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.noneSelected',
     defaultMessage: 'Select one of the groups below to manage its members.',
   },
   title: {
-    id: 'course.group.show.groupManager.title',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.title',
     defaultMessage: 'Managing Groups for {categoryName}',
   },
   cancel: {
-    id: 'course.group.show.groupManager.cancel',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.cancel',
     defaultMessage: 'Cancel',
   },
   saveChanges: {
-    id: 'course.group.show.groupManager.saveChanges',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.saveChanges',
     defaultMessage: 'Save Changes',
   },
   confirmDiscard: {
-    id: 'course.group.show.groupManager.confirmDiscard',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.confirmDiscard',
     defaultMessage: 'Are you sure you wish to discard the changes made?',
   },
   confirmSave: {
-    id: 'course.group.show.groupManager.confirmSave',
+    id: 'course.group.GroupShow.GroupManager.GroupManager.confirmSave',
     defaultMessage:
       'Are you sure you wish to save all changes made to the groups under this category?',
   },

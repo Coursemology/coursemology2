@@ -43,35 +43,35 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   uncategorised: {
-    id: 'course.assessment.skills.components.SkillsTable.uncategorised',
+    id: 'course.assessment.skills.SkillsTable.uncategorised',
     defaultMessage: 'Uncategorised Skills',
   },
   branch: {
-    id: 'course.assessment.skills.components.SkillsTable.branch',
+    id: 'course.assessment.skills.SkillsTable.branch',
     defaultMessage: 'Skill Branches',
   },
   skills: {
-    id: 'course.assessment.skills.components.SkillsTable.skills',
+    id: 'course.assessment.skills.SkillsTable.skills',
     defaultMessage: 'Skills',
   },
   noSkill: {
-    id: 'course.assessment.skills.components.SkillsTable.noSkill',
+    id: 'course.assessment.skills.SkillsTable.noSkill',
     defaultMessage: 'Sorry, no skill found under this skill branch.',
   },
   noBranchSelected: {
-    id: 'course.assessment.skills.components.SkillsTable.noBranchSelected',
+    id: 'course.assessment.skills.SkillsTable.noBranchSelected',
     defaultMessage: 'No Skill Branch has been selected.',
   },
   noBranch: {
-    id: 'course.assessment.skills.components.SkillsTable.noBranch',
+    id: 'course.assessment.skills.SkillsTable.noBranch',
     defaultMessage: 'There are no skill branches.',
   },
   addSkill: {
-    id: 'course.assessment.skills.components.SkillsTable.addSkill',
+    id: 'course.assessment.skills.SkillsTable.addSkill',
     defaultMessage: 'Add Skill',
   },
   addSkillBranch: {
-    id: 'course.assessment.skills.components.SkillsTable.addSkillBranch',
+    id: 'course.assessment.skills.SkillsTable.addSkillBranch',
     defaultMessage: 'Add Skill Branch',
   },
 });

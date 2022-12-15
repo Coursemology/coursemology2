@@ -30,27 +30,27 @@ interface Props {
 
 const translations = defineMessages({
   name: {
-    id: 'course.materials.folders.folderForm.name',
+    id: 'course.material.folders.FolderForm.name',
     defaultMessage: 'Name',
   },
   description: {
-    id: 'course.materials.folders.folderForm.description',
+    id: 'course.material.folders.FolderForm.description',
     defaultMessage: 'Description',
   },
   canStudentUpload: {
-    id: 'course.materials.folders.folderForm.canStudentUpload',
+    id: 'course.material.folders.FolderForm.canStudentUpload',
     defaultMessage: 'Students are allowed to upload',
   },
   startAt: {
-    id: 'course.materials.folders.folderForm.startAt',
+    id: 'course.material.folders.FolderForm.startAt',
     defaultMessage: 'Start At',
   },
   endAt: {
-    id: 'course.materials.folders.folderForm.endAt',
+    id: 'course.material.folders.FolderForm.endAt',
     defaultMessage: 'End At',
   },
   earlyAccessMessage: {
-    id: 'course.materials.folders.folderForm.earlyAccessMessage',
+    id: 'course.material.folders.FolderForm.earlyAccessMessage',
     defaultMessage:
       'Students can access materials {numDays} day(s) before the start date',
   },

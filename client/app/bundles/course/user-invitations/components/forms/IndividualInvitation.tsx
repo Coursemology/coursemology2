@@ -51,15 +51,15 @@ const styles = {
 
 const translations = defineMessages({
   removeInvitation: {
-    id: 'course.userInvitations.IndividualInvitations.remove',
+    id: 'course.userInvitations.IndividualInvitations.removeInvitation',
     defaultMessage: 'Remove Invitation',
   },
   namePlaceholder: {
-    id: 'course.userInvitations.IndividualInvitations.name.placeholder',
+    id: 'course.userInvitations.IndividualInvitations.namePlaceholder',
     defaultMessage: 'Awesome User',
   },
   emailPlaceholder: {
-    id: 'course.userInvitations.IndividualInvitations.email.placeholder',
+    id: 'course.userInvitations.IndividualInvitations.emailPlaceholder',
     defaultMessage: 'user@example.com',
   },
 });

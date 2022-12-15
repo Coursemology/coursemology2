@@ -23,15 +23,15 @@ import TopicCard from './TopicCard';
 
 const translations = defineMessages({
   forumCardTitleTypeNoneSelected: {
-    id: 'course.assessment.submission.answer.forumPostResponse.forumCardTitleTypeNoneSelected',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ForumCard.forumCardTitleTypeNoneSelected',
     defaultMessage: 'Forum',
   },
   forumCardTitleTypeSelected: {
-    id: 'course.assessment.submission.answer.forumPostResponse.forumCardTitleTypeSelected',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ForumCard.forumCardTitleTypeSelected',
     defaultMessage: 'Forum ({numSelected} selected)',
   },
   viewForumInNewTab: {
-    id: 'course.assessment.submission.answer.forumPostResponse.viewForumInNewTab',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ForumCard.viewForumInNewTab',
     defaultMessage: 'View Forum',
   },
 });

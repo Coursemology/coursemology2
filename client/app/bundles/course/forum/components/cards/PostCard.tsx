@@ -40,23 +40,23 @@ interface Props {
 
 const translations = defineMessages({
   updateSuccess: {
-    id: 'course.forum.topic.post.update.success',
+    id: 'course.forum.PostCard.updateSuccess',
     defaultMessage: 'The post has been updated.',
   },
   updateFailure: {
-    id: 'course.forum.topic.post.update.fail',
+    id: 'course.forum.PostCard.updateFailure',
     defaultMessage: 'Failed to update the post - {error}',
   },
   replySuccess: {
-    id: 'course.forum.topic.post.reply.success',
+    id: 'course.forum.PostCard.replySuccess',
     defaultMessage: 'The reply post has been created.',
   },
   replyFailure: {
-    id: 'course.forum.topic.post.reply.fail',
+    id: 'course.forum.PostCard.replyFailure',
     defaultMessage: 'Failed to submit the post - {error}',
   },
   emptyPost: {
-    id: 'course.forum.topic.post.emptyPost',
+    id: 'course.forum.PostCard.emptyPost',
     defaultMessage: 'Post cannot be empty!',
   },
 });

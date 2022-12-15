@@ -9,15 +9,15 @@ import { deleteSurveySection } from 'course/survey/actions/sections';
 
 const translations = defineMessages({
   deleteSection: {
-    id: 'course.surveys.DeleteSectionButton.deleteSection',
+    id: 'course.survey.DeleteSectionButton.deleteSection',
     defaultMessage: 'Delete Section',
   },
   success: {
-    id: 'course.surveys.DeleteSectionButton.success',
+    id: 'course.survey.DeleteSectionButton.success',
     defaultMessage: 'Section deleted.',
   },
   failure: {
-    id: 'course.surveys.DeleteSectionButton.failure',
+    id: 'course.survey.DeleteSectionButton.failure',
     defaultMessage: 'Failed to delete section.',
   },
 });

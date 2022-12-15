@@ -19,25 +19,25 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.users.header',
+    id: 'system.admin.admin.UsersIndex.header',
     defaultMessage: 'Users',
   },
   title: {
-    id: 'system.admin.users.title',
+    id: 'system.admin.admin.UsersIndex.title',
     defaultMessage: 'Users',
   },
   fetchUsersFailure: {
-    id: 'system.admin.users.fetch.failure',
+    id: 'system.admin.admin.UsersIndex.fetchUsersFailure',
     defaultMessage: 'Failed to fetch users.',
   },
   totalUsers: {
-    id: 'system.admin.users.totalUsers',
+    id: 'system.admin.admin.UsersIndex.totalUsers',
     defaultMessage:
       'Total Users: {allCount} ({adminCount} Administrators' +
       ', {normalCount} Normal)',
   },
   activeUsers: {
-    id: 'system.admin.users.activeUsers',
+    id: 'system.admin.admin.UsersIndex.activeUsers',
     defaultMessage:
       'Active Users: {allCount} ({adminCount} Administrators' +
       ', {normalCount} Normal){br}' +

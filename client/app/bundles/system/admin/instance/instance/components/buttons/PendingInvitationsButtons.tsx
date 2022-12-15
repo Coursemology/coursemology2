@@ -17,32 +17,32 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   resendTooltip: {
-    id: 'system.admin.instance.userInvitations.resend',
+    id: 'system.admin.instance.instance.PendingInvitationsButtons.resendTooltip',
     defaultMessage: 'Resend Invitation',
   },
   resendSuccess: {
-    id: 'system.admin.instance.userInvitations.resend.success',
+    id: 'system.admin.instance.instance.PendingInvitationsButtons.resendSuccess',
     defaultMessage: 'Resent email invitation to {email}!',
   },
   resendFailure: {
-    id: 'system.admin.instance.userInvitations.resend.fail',
+    id: 'system.admin.instance.instance.PendingInvitationsButtons.resendFailure',
     defaultMessage: 'Failed to resend invitation.',
   },
   deletionTooltip: {
-    id: 'system.admin.instance.userInvitations.delete',
+    id: 'system.admin.instance.instance.PendingInvitationsButtons.deletionTooltip',
     defaultMessage: 'Delete Invitation',
   },
   deletionConfirm: {
-    id: 'system.admin.instance.userInvitations.delete.confirm',
+    id: 'system.admin.instance.instance.PendingInvitationsButtons.deletionConfirm',
     defaultMessage:
       'Are you sure you wish to delete invitation to {name} ({email})?',
   },
   deletionSuccess: {
-    id: 'system.admin.instance.userInvitations.delete.success',
+    id: 'system.admin.instance.instance.PendingInvitationsButtons.deletionSuccess',
     defaultMessage: 'Invitation for {name} was deleted.',
   },
   deletionFailure: {
-    id: 'system.admin.instance.userInvitations.delete.fail',
+    id: 'system.admin.instance.instance.PendingInvitationsButtons.deletionFailure',
     defaultMessage: 'Failed to delete user - {error}',
   },
 });

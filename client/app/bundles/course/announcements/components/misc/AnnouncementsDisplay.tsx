@@ -27,7 +27,7 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   searchBarPlaceholder: {
-    id: 'course.announcement.searchBarPlaceholder',
+    id: 'course.announcement.AnnouncementsDisplay.searchBarPlaceholder',
     defaultMessage: 'Search by title or content',
   },
 });

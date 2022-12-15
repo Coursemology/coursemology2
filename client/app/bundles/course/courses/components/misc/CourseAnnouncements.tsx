@@ -11,11 +11,11 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   announcementHeader: {
-    id: 'course.courses.show.announcements',
+    id: 'course.courses.CourseAnnouncements.announcementHeader',
     defaultMessage: 'Announcements',
   },
   noAnnouncements: {
-    id: 'course.courses.show.noAnnouncements',
+    id: 'course.courses.CourseAnnouncements.noAnnouncements',
     defaultMessage: 'There are currently no announcements',
   },
 });

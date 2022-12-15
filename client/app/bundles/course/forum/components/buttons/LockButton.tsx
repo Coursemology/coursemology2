@@ -13,27 +13,27 @@ import { updateForumTopicLocked } from '../../operations';
 
 const translations = defineMessages({
   locked: {
-    id: 'course.forum.components.buttons.lockedButton.locked',
+    id: 'course.forum.LockButton.locked',
     defaultMessage: 'Lock',
   },
   unlocked: {
-    id: 'course.forum.components.buttons.lockedButton.unlocked',
+    id: 'course.forum.LockButton.unlocked',
     defaultMessage: 'Unlock',
   },
   lockedSuccess: {
-    id: 'course.forum.components.buttons.lockedButton.lockedSuccess',
+    id: 'course.forum.LockButton.lockedSuccess',
     defaultMessage: 'The topic "{title}" has successfully been locked.',
   },
   lockedFailure: {
-    id: 'course.forum.components.buttons.lockedButton.lockedFailure',
+    id: 'course.forum.LockButton.lockedFailure',
     defaultMessage: 'Failed to locked the topic "{title}" - {error}',
   },
   unlockedSuccess: {
-    id: 'course.forum.components.buttons.lockedButton.unlockedSuccess',
+    id: 'course.forum.LockButton.unlockedSuccess',
     defaultMessage: 'The topic "{title}" has successfully been unlocked.',
   },
   unlockedFailure: {
-    id: 'course.forum.components.buttons.lockedButton.unlockedFailure',
+    id: 'course.forum.LockButton.unlockedFailure',
     defaultMessage: 'Failed to unlocked the topic "{title}" - {error}',
   },
 });
@@ -95,7 +95,7 @@ const LockButton: FC<Props> = ({ topic, disabled: disableButton }: Props) => {
           disabled={disabled}
           onClick={handleLock}
         >
-          {topic.isLocked ? <LockOpen /> : <Lock />}
+          {topic.isLocked ? <Lock /> : <LockOpen />}
         </IconButton>
       </span>
     </Tooltip>

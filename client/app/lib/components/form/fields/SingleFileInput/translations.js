@@ -2,11 +2,11 @@ import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
   dropzone: {
-    id: 'components.reduxForm.singleFileInput.dropzone',
+    id: 'lib.components.form.fields.SingleFileInput.dropzone',
     defaultMessage: 'Drag your file here, or click to select file',
   },
   removeFile: {
-    id: 'components.reduxForm.singleFileInput.removeFile',
+    id: 'lib.components.form.fields.SingleFileInput.removeFile',
     defaultMessage: 'Remove File',
   },
 });

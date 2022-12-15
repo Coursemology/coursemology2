@@ -19,7 +19,7 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   awardAchievement: {
-    id: 'course.achievement.awardAchievement',
+    id: 'course.achievement.AchievementAward.awardAchievement',
     defaultMessage: 'Award Achievement',
   },
 });

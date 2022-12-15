@@ -8,7 +8,7 @@ import Labels from './Labels';
 
 const translations = defineMessages({
   postMadeInResponseTo: {
-    id: 'course.assessment.submission.answer.forumPostResponse.postMadeInResponseTo',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ParentPost.postMadeInResponseTo',
     defaultMessage: 'Post made in response to:',
   },
 });

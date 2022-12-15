@@ -29,15 +29,15 @@ const styles = {
 
 const translations = defineMessages({
   studentsHeader: {
-    id: 'course.users.header',
+    id: 'course.users.UsersIndex.studentsHeader',
     defaultMessage: 'Students',
   },
   noStudents: {
-    id: 'course.users.index.noStudents',
+    id: 'course.users.UsersIndex.noStudents',
     defaultMessage: 'No students in course... yet!',
   },
   fetchUsersFailure: {
-    id: 'course.users.index.fetch.failure',
+    id: 'course.users.UsersIndex.fetchUsersFailure',
     defaultMessage: 'Failed to retrieve course users.',
   },
 });

@@ -11,7 +11,7 @@ import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 
 const translations = defineMessages({
   invalidDateTime: {
-    id: 'lib.components.form.DateTimePicker.invalidDateTime',
+    id: 'lib.components.form.fields.DateTimePickerField.invalidDateTime',
     defaultMessage: 'Invalid Date and/or Time',
   },
 });

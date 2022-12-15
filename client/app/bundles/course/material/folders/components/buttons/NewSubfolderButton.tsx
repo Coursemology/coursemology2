@@ -9,7 +9,7 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   newSubfolderTooltip: {
-    id: 'course.materials.folders.newSubfolderTooltip',
+    id: 'course.material.folders.NewSubfolderButton.newSubfolderTooltip',
     defaultMessage: 'New Subfolder',
   },
 });

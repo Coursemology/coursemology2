@@ -15,11 +15,11 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   searchBarPlaceholder: {
-    id: 'course.courses.componenets.misc.search.placeholder',
+    id: 'course.courses.CourseDisplay.searchBarPlaceholder',
     defaultMessage: 'Search by course title',
   },
   noCourse: {
-    id: 'course.courses.components.misc.noCourse',
+    id: 'course.courses.CourseDisplay.noCourse',
     defaultMessage: 'There is no course yet...',
   },
 });

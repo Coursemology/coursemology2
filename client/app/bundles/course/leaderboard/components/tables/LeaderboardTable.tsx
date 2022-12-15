@@ -33,23 +33,23 @@ interface Props {
 
 const translations = defineMessages({
   titlePoints: {
-    id: 'course.leaderboard.components.LeaderboardTable.titlePoints',
+    id: 'course.leaderboard.LeaderboardTable.titlePoints',
     defaultMessage: 'By Experience Points',
   },
   titleAchievements: {
-    id: 'course.leaderboard.components.LeaderboardTable.titleAcheivements',
+    id: 'course.leaderboard.LeaderboardTable.titleAchievements',
     defaultMessage: 'By Achievements',
   },
   average: {
-    id: 'course.leaderboard.components.LeaderboardTable.average',
+    id: 'course.leaderboard.LeaderboardTable.average',
     defaultMessage: 'Average',
   },
   experience: {
-    id: 'course.leaderboard.components.LeaderboardTable.experience',
+    id: 'course.leaderboard.LeaderboardTable.experience',
     defaultMessage: 'Experience',
   },
   achievements: {
-    id: 'course.leaderboard.components.LeaderboardTable.achievements',
+    id: 'course.leaderboard.LeaderboardTable.achievements',
     defaultMessage: 'Achievements',
   },
 });

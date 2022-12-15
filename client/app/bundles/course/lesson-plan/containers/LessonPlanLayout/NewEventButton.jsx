@@ -8,15 +8,15 @@ import { createEvent, showEventForm } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
   newEvent: {
-    id: 'course.lessonPlan.NewEventButton.newEvent',
+    id: 'course.lessonPlan.LessonPlanLayout.NewEventButton.newEvent',
     defaultMessage: 'New Event',
   },
   success: {
-    id: 'course.lessonPlan.NewEventButton.success',
+    id: 'course.lessonPlan.LessonPlanLayout.NewEventButton.success',
     defaultMessage: 'Event created.',
   },
   failure: {
-    id: 'course.lessonPlan.NewEventButton.failure',
+    id: 'course.lessonPlan.LessonPlanLayout.NewEventButton.failure',
     defaultMessage: 'Failed to create event.',
   },
 });

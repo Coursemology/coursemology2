@@ -24,15 +24,15 @@ interface Props {
 
 const translations = defineMessages({
   deletionSuccess: {
-    id: 'course.forum.components.buttons.forumTopicPostManagement.delete.success',
+    id: 'course.forum.ForumTopicPostManagementButtons.deletionSuccess',
     defaultMessage: 'The post has been deleted.',
   },
   deletionFailure: {
-    id: 'course.forum.components.buttons.forumTopicPostManagement.delete.fail',
+    id: 'course.forum.ForumTopicPostManagementButtons.deletionFailure',
     defaultMessage: 'Failed to delete topic - {error}',
   },
   deletionConfirm: {
-    id: 'course.forum.components.buttons.forumTopicPostManagement.delete.confirm',
+    id: 'course.forum.ForumTopicPostManagementButtons.deletionConfirm',
     defaultMessage: 'Are you sure you wish to delete this topic post?',
   },
 });

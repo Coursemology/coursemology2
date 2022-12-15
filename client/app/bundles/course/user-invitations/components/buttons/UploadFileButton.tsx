@@ -13,7 +13,7 @@ interface Props {
 
 const translations = defineMessages({
   uploadFile: {
-    id: 'course.userInvitation.uploadFile',
+    id: 'course.userInvitations.UploadFileButton.uploadFile',
     defaultMessage: 'Invite from file',
   },
 });

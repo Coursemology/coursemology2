@@ -17,15 +17,15 @@ interface Props {
 
 const translations = defineMessages({
   newForum: {
-    id: 'course.forum.newForum',
+    id: 'course.forum.ForumNew.newForum',
     defaultMessage: 'New Forum',
   },
   creationSuccess: {
-    id: 'course.forum.create.success',
+    id: 'course.forum.ForumNew.creationSuccess',
     defaultMessage: 'Forum {title} has been created.',
   },
   creationFailure: {
-    id: 'course.forum.create.fail',
+    id: 'course.forum.ForumNew.creationFailure',
     defaultMessage: 'Failed to create forum.',
   },
 });

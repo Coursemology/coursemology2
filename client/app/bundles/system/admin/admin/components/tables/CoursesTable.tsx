@@ -33,11 +33,11 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   searchText: {
-    id: 'system.admin.components.tables.CoursesTable.searchPlaceholder',
+    id: 'system.admin.admin.CoursesTable.searchText',
     defaultMessage: 'Search course title, description or owners.',
   },
   fetchFilteredCoursesFailure: {
-    id: 'system.admin.courses.fetchFiltered.failure',
+    id: 'system.admin.admin.CoursesTable.fetchFilteredCoursesFailure',
     defaultMessage: 'Failed to fetch courses.',
   },
 });

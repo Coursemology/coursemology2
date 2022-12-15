@@ -21,20 +21,24 @@ import {
 import VideoNew from '../VideoNew';
 
 const translations = defineMessages({
+  header: {
+    id: 'course.video.VideosIndex.header',
+    defaultMessage: 'Videos',
+  },
   newVideo: {
-    id: 'course.video.index.newVideo',
+    id: 'course.video.VideosIndex.newVideo',
     defaultMessage: 'New Video',
   },
   fetchVideosFailure: {
-    id: 'course.video.index.fetch.failure',
+    id: 'course.video.VideosIndex.fetchVideosFailure',
     defaultMessage: 'Failed to retrieve videos.',
   },
   toggleSuccess: {
-    id: 'course.video.toggle.success',
+    id: 'course.video.VideosIndex.toggleSuccess',
     defaultMessage: 'Video was successfully updated.',
   },
   toggleFailure: {
-    id: 'course.video.toggle.fail',
+    id: 'course.video.VideosIndex.toggleFailure',
     defaultMessage: 'Failed to update the video.',
   },
 });
@@ -98,13 +102,7 @@ const VideosIndex: FC = () => {
 
   return (
     <>
-      <PageHeader
-        title={t({
-          id: 'course.video.header',
-          defaultMessage: 'Videos',
-        })}
-        toolbars={headerToolbars}
-      />
+      <PageHeader title={t(translations.header)} toolbars={headerToolbars} />
       {!isLoading && isOpen && (
         <VideoNew
           currentTab={tabId}

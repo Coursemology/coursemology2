@@ -13,27 +13,27 @@ import QuestionCard from './QuestionCard';
 
 const translations = defineMessages({
   editQuestion: {
-    id: 'course.surveys.Question.editQuestion',
+    id: 'course.survey.SurveyShow.Question.editQuestion',
     defaultMessage: 'Edit Question',
   },
   updateSuccess: {
-    id: 'course.surveys.Question.updateSuccess',
+    id: 'course.survey.SurveyShow.Question.updateSuccess',
     defaultMessage: 'Question updated.',
   },
   updateFailure: {
-    id: 'course.surveys.Question.updateFailure',
+    id: 'course.survey.SurveyShow.Question.updateFailure',
     defaultMessage: 'Failed to update question.',
   },
   deleteQuestion: {
-    id: 'course.surveys.Question.deleteQuestion',
+    id: 'course.survey.SurveyShow.Question.deleteQuestion',
     defaultMessage: 'Delete Question',
   },
   deleteSuccess: {
-    id: 'course.surveys.Question.deleteSuccess',
+    id: 'course.survey.SurveyShow.Question.deleteSuccess',
     defaultMessage: 'Question deleted.',
   },
   deleteFailure: {
-    id: 'course.surveys.Question.deleteFailure',
+    id: 'course.survey.SurveyShow.Question.deleteFailure',
     defaultMessage: 'Failed to delete question.',
   },
 });

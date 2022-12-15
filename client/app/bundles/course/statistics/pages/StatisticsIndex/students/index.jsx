@@ -28,40 +28,40 @@ const options = {
 
 const translations = defineMessages({
   error: {
-    id: 'course.statistics.student.error',
+    id: 'course.statistics.StatisticsIndex.students.error',
     defaultMessage:
       'Something went wrong when fetching student statistics! Please refresh to try again.',
   },
   name: {
-    id: 'course.statistics.student.name',
+    id: 'course.statistics.StatisticsIndex.students.name',
     defaultMessage: 'Name',
   },
   studentType: {
-    id: 'course.statistics.student.studentType',
+    id: 'course.statistics.StatisticsIndex.students.studentsType',
     defaultMessage: 'Student Type',
   },
   groupManagers: {
-    id: 'course.statistics.student.groupManagers',
+    id: 'course.statistics.StatisticsIndex.students.groupManagers',
     defaultMessage: 'Tutors',
   },
   level: {
-    id: 'course.statistics.student.level',
+    id: 'course.statistics.StatisticsIndex.students.level',
     defaultMessage: 'Level',
   },
   experiencePoints: {
-    id: 'course.statistics.student.experiencePoints',
+    id: 'course.statistics.StatisticsIndex.students.experiencePoints',
     defaultMessage: 'Experience Points',
   },
   videoSubmissionCount: {
-    id: 'course.statistics.student.videoSubmissionCount',
+    id: 'course.statistics.StatisticsIndex.students.videoSubmissionCount',
     defaultMessage: 'Videos Watched (Total: {courseVideoCount})',
   },
   videoPercentWatched: {
-    id: 'course.statistics.student.videoPercentWatched',
+    id: 'course.statistics.StatisticsIndex.students.videoPercentWatched',
     defaultMessage: 'Average % Watched',
   },
   tableTitle: {
-    id: 'course.statistics.student.tableTitle',
+    id: 'course.statistics.StatisticsIndex.students.tableTitle',
     defaultMessage: 'Student Statistics',
   },
 });

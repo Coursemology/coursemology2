@@ -34,19 +34,19 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   filterAssessmentLabel: {
-    id: 'course.assessments.submissions.filterAssessmentLabel',
+    id: 'course.assessment.submissions.SubmissionFilter.filterAssessmentLabel',
     defaultMessage: 'Filter by ',
   },
   filterHeader: {
-    id: 'course.assessments.submissions.filterHeader',
+    id: 'course.assessment.submissions.SubmissionFilter.filterHeader',
     defaultMessage: 'Filter Submissions',
   },
   applyFilterButton: {
-    id: 'course.assessments.submissions.applyFilterButton',
+    id: 'course.assessment.submissions.SubmissionFilter.applyFilterButton',
     defaultMessage: 'Apply Filter',
   },
   clearFilterButton: {
-    id: 'course.assessments.submissions.clearFilterButton',
+    id: 'course.assessment.submissions.SubmissionFilter.clearFilterButton',
     defaultMessage: 'Clear Filter',
   },
 });

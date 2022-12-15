@@ -31,7 +31,7 @@ import FolderNew from '../FolderNew';
 
 const translations = defineMessages({
   defaultHeader: {
-    id: 'course.materials.folders.defaultHeader',
+    id: 'course.material.folders.FolderShow.defaultHeader',
     defaultMessage: 'Materials',
   },
 });

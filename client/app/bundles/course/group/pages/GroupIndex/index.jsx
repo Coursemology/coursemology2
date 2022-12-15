@@ -14,15 +14,15 @@ import GroupNew from '../GroupNew';
 
 const translations = defineMessages({
   groups: {
-    id: 'course.group.index.groups',
+    id: 'course.group.GroupIndex.groups',
     defaultMessage: 'Groups',
   },
   noCategory: {
-    id: 'course.group.index.noCategory',
+    id: 'course.group.GroupIndex.noCategory',
     defaultMessage: "You don't have a group category created! Create one now!",
   },
   fetchCategoriesFailure: {
-    id: 'course.group.index.fetch.failure',
+    id: 'course.group.GroupIndex.fetchCategoriesFailure',
     defaultMessage: 'Failed to retrieve group categories.',
   },
 });

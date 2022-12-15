@@ -19,15 +19,15 @@ interface Props {
 
 const translations = defineMessages({
   updateVideo: {
-    id: 'course.video.edit.updateVideo',
+    id: 'course.video.VideoEdit.updateVideo',
     defaultMessage: 'Update Video',
   },
   updateSuccess: {
-    id: 'course.video.edit.updateSuccess',
+    id: 'course.video.VideoEdit.updateSuccess',
     defaultMessage: '{title} has been successfully updated.',
   },
   updateFailure: {
-    id: 'course.video.edit.updateFailure',
+    id: 'course.video.VideoEdit.updateFailure',
     defaultMessage: 'Failed to update {title}.',
   },
 });

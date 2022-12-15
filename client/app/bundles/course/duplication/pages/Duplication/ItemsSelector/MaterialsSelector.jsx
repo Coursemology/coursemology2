@@ -16,7 +16,7 @@ const { FOLDER, MATERIAL } = duplicableItemTypes;
 
 const translations = defineMessages({
   noItems: {
-    id: 'course.duplication.MaterialsSelector.noItems',
+    id: 'course.duplication.Duplication.ItemsSelector.MaterialsSelector.noItems',
     defaultMessage: 'There are no materials to duplicate.',
   },
 });

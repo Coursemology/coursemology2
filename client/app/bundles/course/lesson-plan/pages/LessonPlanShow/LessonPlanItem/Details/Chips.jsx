@@ -12,7 +12,7 @@ import moment, { SHORT_DATE_TIME_FORMAT, SHORT_TIME_FORMAT } from 'lib/moment';
 
 const translations = defineMessages({
   notPublished: {
-    id: 'course.lessonPlan.LessonPlanItem.Details.Chip.notPublished',
+    id: 'course.lessonPlan.LessonPlanShow.LessonPlanItem.Details.Chip.notPublished',
     defaultMessage: 'Not Published',
   },
 });

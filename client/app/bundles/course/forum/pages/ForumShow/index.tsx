@@ -19,27 +19,27 @@ import ForumTopicNew from '../ForumTopicNew';
 
 const translations = defineMessages({
   header: {
-    id: 'course.forum.show.header',
+    id: 'course.form.FormShow.header',
     defaultMessage: 'Forum Topics',
   },
   newTopic: {
-    id: 'course.forum.show.newTopic',
+    id: 'course.form.FormShow.newTopic',
     defaultMessage: 'New Topic',
   },
   AllReadTooltip: {
-    id: 'course.forum.show.AllReadTooltip',
+    id: 'course.form.FormShow.AllReadTooltip',
     defaultMessage: 'Hooray! All topics in this forum have been read!',
   },
   markAllAsRead: {
-    id: 'course.forum.show.markAllAsRead',
+    id: 'course.form.FormShow.markAllAsRead',
     defaultMessage: 'Mark all as read',
   },
   markAllAsReadTooltip: {
-    id: 'course.forum.show.markAllAsReadTooltip',
+    id: 'course.form.FormShow.markAllAsReadTooltip',
     defaultMessage: 'Mark all topics in the current forum as read',
   },
   markAllAsReadSuccess: {
-    id: 'course.forum.show.markAllAsReadSuccess',
+    id: 'course.form.FormShow.markAllAsReadSuccess',
     defaultMessage: 'All topics in this forum have been marked as read.',
   },
   markAllAsReadFailed: {
@@ -48,11 +48,11 @@ const translations = defineMessages({
       'Failed to mark all topics in this forum as read. Please try again later.',
   },
   fetchTopicsFailure: {
-    id: 'course.forum.show.fetch.failure',
+    id: 'course.form.FormShow.fetchTopicsFailure',
     defaultMessage: 'Failed to retrieve forum topic data.',
   },
   autoSubscribe: {
-    id: 'course.forum.show.autoSubscribe',
+    id: 'course.form.FormShow.autoSubscribe',
     defaultMessage:
       'Users will be automatically subscribed to a topic in this forum when they create a post in the topic.',
   },

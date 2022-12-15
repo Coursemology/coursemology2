@@ -16,23 +16,23 @@ import {
 
 const translations = defineMessages({
   editMilestone: {
-    id: 'course.lessonPlan.MilestoneAdminTools.editMilestone',
+    id: 'course.lessonPlan.LessonPlanShow.MilestoneAdminTools.editMilestone',
     defaultMessage: 'Edit Milestone',
   },
   updateSuccess: {
-    id: 'course.lessonPlan.MilestoneAdminTools.updateSuccess',
+    id: 'course.lessonPlan.LessonPlanShow.MilestoneAdminTools.updateSuccess',
     defaultMessage: 'Milestone updated.',
   },
   updateFailure: {
-    id: 'course.lessonPlan.MilestoneAdminTools.updateFailure',
+    id: 'course.lessonPlan.LessonPlanShow.MilestoneAdminTools.updateFailure',
     defaultMessage: 'Failed to update milestone.',
   },
   deleteSuccess: {
-    id: 'course.lessonPlan.MilestoneAdminTools.deleteSuccess',
+    id: 'course.lessonPlan.LessonPlanShow.MilestoneAdminTools.deleteSuccess',
     defaultMessage: 'Milestone deleted.',
   },
   deleteFailure: {
-    id: 'course.lessonPlan.MilestoneAdminTools.deleteFailure',
+    id: 'course.lessonPlan.LessonPlanShow.MilestoneAdminTools.deleteFailure',
     defaultMessage: 'Failed to delete milestone.',
   },
 });

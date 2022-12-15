@@ -20,23 +20,23 @@ import StudentsStatistics from './students';
 
 const translations = defineMessages({
   statistics: {
-    id: 'course.statistics.header.statistics',
+    id: 'course.statistics.StatisticsIndex.header.statistics',
     defaultMessage: 'Statistics',
   },
   students: {
-    id: 'course.statistics.tabs.students',
+    id: 'course.statistics.StatisticsIndex.tabs.students',
     defaultMessage: 'Students',
   },
   staff: {
-    id: 'course.statistics.tabs.staff',
+    id: 'course.statistics.StatisticsIndex.tabs.staff',
     defaultMessage: 'Staff',
   },
   studentsFailure: {
-    id: 'course.statistics.failures.students',
+    id: 'course.statistics.StatisticsIndex.studentsFailure',
     defaultMessage: 'Failed to fetch student data!',
   },
   staffFailure: {
-    id: 'course.statistics.failures.staff',
+    id: 'course.statistics.StatisticsIndex.staffFailure',
     defaultMessage: 'Failed to fetch staff data!',
   },
 });

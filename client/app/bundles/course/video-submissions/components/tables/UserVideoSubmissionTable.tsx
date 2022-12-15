@@ -41,7 +41,7 @@ const UserVideoSubmissionsTable: FC<Props> = (props) => {
   const columns: TableColumns[] = [
     {
       name: 'title',
-      label: intl.formatMessage(tableTranslations.videoNAme),
+      label: intl.formatMessage(tableTranslations.videoName),
       options: {
         alignCenter: false,
         sort: false,

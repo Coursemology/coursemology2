@@ -10,11 +10,11 @@ interface BarchartProps {
 
 const translations = defineMessages({
   accepted: {
-    id: 'course.userInvitations.components.misc.InvitationsBarChart.accepted',
+    id: 'course.userInvitations.InvitationsBarChart.accepted',
     defaultMessage: 'Accepted Invitations',
   },
   pending: {
-    id: 'course.userInvitations.components.misc.InvitationsBarChart.pending',
+    id: 'course.userInvitations.InvitationsBarChart.pending',
     defaultMessage: 'Pending',
   },
 });

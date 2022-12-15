@@ -26,24 +26,24 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   deletionSuccess: {
-    id: 'course.users.components.buttons.PointManagementButtons.delete.success',
+    id: 'course.users.PointManagementButtons.deletionSuccess',
     defaultMessage: 'Experience points record was deleted.',
   },
   deletionFailure: {
-    id: 'course.users.components.buttons.PointManagementButtons.delete.fail',
+    id: 'course.users.PointManagementButtons.deletionFailure',
     defaultMessage: 'Failed to delete record - {error}',
   },
   deletionConfirm: {
-    id: 'course.users.components.buttons.PointManagementButtons.delete.confirm',
+    id: 'course.users.PointManagementButtons.deletionConfirm',
     defaultMessage:
       'Are you sure you wish to delete this record with {pointsAwarded} point(s) awarded?',
   },
   updateSuccess: {
-    id: 'course.users.components.buttons.PointManagementButtons.update.success',
+    id: 'course.users.PointManagementButtons.updateSuccess',
     defaultMessage: 'Experience points record was updated.',
   },
   updateFailure: {
-    id: 'course.users.components.buttons.PointManagementButtons.update.fail',
+    id: 'course.users.PointManagementButtons.updateFailure',
     defaultMessage: 'Failed to update record - {error}',
   },
 });

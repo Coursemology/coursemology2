@@ -22,42 +22,42 @@ const propTypes = {
 
 const translations = defineMessages({
   publicTestCases: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.publicTestCases',
+    id: 'course.assessment.question.programming.UploadedPackageTestCaseView.publicTestCases',
     defaultMessage: 'Public Test Cases',
     description: 'Title for public test cases panel.',
   },
   privateTestCases: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.privateTestCases',
+    id: 'course.assessment.question.programming.UploadedPackageTestCaseView.privateTestCases',
     defaultMessage: 'Private Test Cases',
     description: 'Title for private test cases panel.',
   },
   evaluationTestCases: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.evaluationTestCases',
+    id: 'course.assessment.question.programming.UploadedPackageTestCaseView.evaluationTestCases',
     defaultMessage: 'Evaluation Test Cases',
     description: 'Title for evaluation test cases panel.',
   },
   identifierHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.identifierHeader',
+    id: 'course.assessment.question.programming.UploadedPackageTestCaseView.identifierHeader',
     defaultMessage: 'Identifier',
     description: 'Header for identifier column of test cases panel.',
   },
   expressionHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.expressionHeader',
+    id: 'course.assessment.question.programming.UploadedPackageTestCaseView.expressionHeader',
     defaultMessage: 'Expression',
     description: 'Header for expression column of test cases panel.',
   },
   expectedHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.expectedHeader',
+    id: 'course.assessment.question.programming.UploadedPackageTestCaseView.expectedHeader',
     defaultMessage: 'Expected',
     description: 'Header for expected column of test cases panel.',
   },
   hintHeader: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.hintHeader',
+    id: 'course.assessment.question.programming.UploadedPackageTestCaseView.hintHeader',
     defaultMessage: 'Hint',
     description: 'Header for hint column of test cases panel.',
   },
   noTestsMessage: {
-    id: 'course.assessment.question.programming.onlineEditorPythonView.noTestsMessage',
+    id: 'course.assessment.question.programming.UploadedPackageTestCaseView.noTestsMessage',
     defaultMessage: 'No tests.',
     description: 'Message to be displayed when there are no test cases.',
   },

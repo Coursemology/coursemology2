@@ -26,29 +26,29 @@ const styles = {
 
 const translations = defineMessages({
   serial: {
-    id: 'course.surveys.TextResponseResults.serial',
+    id: 'course.survey.TextResponseResults.serial',
     defaultMessage: 'S/N',
   },
   respondent: {
-    id: 'course.surveys.TextResponseResults.respondent',
+    id: 'course.survey.TextResponseResults.respondent',
     defaultMessage: 'Respondent',
   },
   responses: {
-    id: 'course.surveys.TextResponseResults.responses',
+    id: 'course.survey.TextResponseResults.responses',
     defaultMessage: 'Responses',
   },
   showResponses: {
-    id: 'course.surveys.TextResponseResults.showResponses',
+    id: 'course.survey.TextResponseResults.showResponses',
     defaultMessage:
       'Show Responses ({quantity}/{total} responded{phantoms, plural, \
       =0 {} one {, {phantoms} Phantom} other {, {phantoms} Phantoms}})',
   },
   hideResponses: {
-    id: 'course.surveys.TextResponseResults.hideResponses',
+    id: 'course.survey.TextResponseResults.hideResponses',
     defaultMessage: 'Hide Responses',
   },
   phantomStudentName: {
-    id: 'course.surveys.TextResponseResults.phantomStudentName',
+    id: 'course.survey.TextResponseResults.phantomStudentName',
     defaultMessage: '{name} (Phantom)',
   },
 });

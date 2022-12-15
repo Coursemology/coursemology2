@@ -22,7 +22,7 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   studentsWithAchievement: {
-    id: 'course.achievement.show.studentsWithAchievement',
+    id: 'course.achievement.AchievementShow.studentsWithAchievement',
     defaultMessage: 'Students with this achievement',
   },
 });

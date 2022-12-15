@@ -20,28 +20,28 @@ import { postShape } from '../../propTypes';
 
 const translations = defineMessages({
   finalise: {
-    id: 'course.assessment.submission.CodaveriCommentCard.approve',
+    id: 'course.assessment.submission.comment.CodaveriCommentCard.finalise',
     defaultMessage: 'Finalise and Post Feedback',
   },
   rejectConfirmation: {
-    id: 'course.assessment.submission.CodaveriCommentCard.deleteConfirmation',
+    id: 'course.assessment.submission.comment.CodaveriCommentCard.rejectConfirmation',
     defaultMessage:
       'Are you sure you wish to reject and delete this feedback? You will not be able to retrieve this anymore.',
   },
   pleaseImprove: {
-    id: 'course.assessment.submission.CodaveriCommentCard.pleaseImprove',
+    id: 'course.assessment.submission.comment.CodaveriCommentCard.pleaseImprove',
     defaultMessage: 'Please help to improve the feedback below!',
   },
   pleaseRate: {
-    id: 'course.assessment.submission.CodaveriCommentCard.pleaseRate',
+    id: 'course.assessment.submission.comment.CodaveriCommentCard.pleaseRate',
     defaultMessage: 'Please rate to continue!',
   },
   reject: {
-    id: 'course.assessment.submission.CodaveriCommentCard.reject',
+    id: 'course.assessment.submission.comment.CodaveriCommentCard.reject',
     defaultMessage: 'Reject Feedback',
   },
   revert: {
-    id: 'course.assessment.submission.CodaveriCommentCard.revert',
+    id: 'course.assessment.submission.comment.CodaveriCommentCard.revert',
     defaultMessage: 'Revert Feedback',
   },
 });

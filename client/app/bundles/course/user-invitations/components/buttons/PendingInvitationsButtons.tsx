@@ -22,32 +22,32 @@ const styles = {
 
 const translations = defineMessages({
   resendTooltip: {
-    id: 'course.userInvitations.resend',
+    id: 'course.userInvitations.PendingInvitationsButton.resendTooltip',
     defaultMessage: 'Resend Invitation',
   },
   resendSuccess: {
-    id: 'course.userInvitations.resend.success',
+    id: 'course.userInvitations.PendingInvitationsButton.resendSuccess',
     defaultMessage: 'Resent email invitation to {email}!',
   },
   resendFailure: {
-    id: 'course.userInvitations.resend.fail',
+    id: 'course.userInvitations.PendingInvitationsButton.resendFailure',
     defaultMessage: 'Failed to resend invitation - {error}',
   },
   deletionTooltip: {
-    id: 'course.userInvitations.delete',
+    id: 'course.userInvitations.PendingInvitationsButton.deletionTooltip',
     defaultMessage: 'Delete Invitation',
   },
   deletionConfirm: {
-    id: 'course.userInvitations.delete.confirm',
+    id: 'course.userInvitations.PendingInvitationsButton.deletionConfirm',
     defaultMessage:
       'Are you sure you wish to delete invitation to {name} ({email})?',
   },
   deletionSuccess: {
-    id: 'course.userInvitations.delete.success',
+    id: 'course.userInvitations.PendingInvitationsButton.deletionSuccess',
     defaultMessage: 'Invitation for {name} was deleted.',
   },
   deletionFailure: {
-    id: 'course.userInvitations.delete.fail',
+    id: 'course.userInvitations.PendingInvitationsButton.deletionFailure',
     defaultMessage: 'Failed to delete user - {error}',
   },
 });

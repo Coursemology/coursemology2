@@ -11,11 +11,11 @@ import MultipleResponseOptionsField from './components/MultipleResponseOptionsFi
 
 const responseFormTranslations = defineMessages({
   selectAtLeast: {
-    id: 'course.surveys.ResponseForm.selectAtLeast',
+    id: 'course.survey.ResponseForm.ResponseAnswer.selectAtLeast',
     defaultMessage: 'Please select at least {count} option(s).',
   },
   selectAtMost: {
-    id: 'course.surveys.ResponseForm.selectAtMost',
+    id: 'course.survey.ResponseForm.ResponseAnswer.selectAtMost',
     defaultMessage: 'Please select at most {count} option(s).',
   },
 });

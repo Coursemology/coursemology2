@@ -14,15 +14,15 @@ import { postShape } from '../../propTypes';
 
 const translations = defineMessages({
   deleteConfirmation: {
-    id: 'course.assessment.submission.CommentCard.deleteConfirmation',
+    id: 'course.assessment.submission.comment.CommentCard.deleteConfirmation',
     defaultMessage: 'Are you sure you want to delete this comment?',
   },
   cancel: {
-    id: 'course.assessment.submission.CommentCard.cancel',
+    id: 'course.assessment.submission.comment.CommentCard.cancel',
     defaultMessage: 'Cancel',
   },
   save: {
-    id: 'course.assessment.submission.CommentCard.save',
+    id: 'course.assessment.submission.comment.CommentCard.save',
     defaultMessage: 'Save',
   },
 });

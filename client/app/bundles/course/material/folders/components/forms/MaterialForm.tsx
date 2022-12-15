@@ -27,15 +27,15 @@ interface Props {
 
 const translations = defineMessages({
   name: {
-    id: 'course.materials.folders.materialForm.name',
+    id: 'course.material.folders.MaterialForm.name',
     defaultMessage: 'Name',
   },
   description: {
-    id: 'course.materials.folders.materialForm.description',
+    id: 'course.material.folders.MaterialForm.description',
     defaultMessage: 'Description',
   },
   fileHelpMessage: {
-    id: 'course.materials.folders.materialForm.description',
+    id: 'course.material.folders.MaterialForm.fileHelpMessage',
     defaultMessage: '* Only upload a file if you want to update it',
   },
 });

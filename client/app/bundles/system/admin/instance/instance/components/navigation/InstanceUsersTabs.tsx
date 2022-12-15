@@ -9,15 +9,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   usersTab: {
-    id: 'system.admin.instance.components.navigation.InstanceUsersTabs.usersTab',
+    id: 'system.admin.instance.instance.InstanceUsersTabs.usersTab',
     defaultMessage: 'Users',
   },
   inviteTab: {
-    id: 'system.admin.instance.components.navigation.InstanceUsersTabs.inviteTab',
+    id: 'system.admin.instance.instance.InstanceUsersTabs.inviteTab',
     defaultMessage: 'Invite Users',
   },
   invitationsTab: {
-    id: 'system.admin.instance.components.navigation.InstanceUsersTabs.invitationsTab',
+    id: 'system.admin.instance.instance.InstanceUsersTabs.invitationsTab',
     defaultMessage: 'Invitations',
   },
 });

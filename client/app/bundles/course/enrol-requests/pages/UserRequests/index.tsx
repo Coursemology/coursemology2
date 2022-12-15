@@ -23,27 +23,27 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   manageUsersHeader: {
-    id: 'course.users.manage.header',
+    id: 'course.enrolRequests.UserRequests.manageUsersHeader',
     defaultMessage: 'Manage Users',
   },
   pending: {
-    id: 'course.users.enrolRequests.pending.title',
+    id: 'course.enrolRequests.UserRequests.pending',
     defaultMessage: 'Pending Enrolment Requests',
   },
   approved: {
-    id: 'course.users.enrolRequests.approved.title',
+    id: 'course.enrolRequests.UserRequests.approved',
     defaultMessage: 'Approved Enrolment Requests',
   },
   rejected: {
-    id: 'course.users.enrolRequests.rejected.title',
+    id: 'course.enrolRequests.UserRequests.rejected',
     defaultMessage: 'Rejected Enrolment Requests',
   },
   noEnrolRequests: {
-    id: 'course.users.enrolRequests.empty',
+    id: 'course.enrolRequests.UserRequests.noEnrolRequests',
     defaultMessage: 'There is no enrol request.',
   },
   fetchEnrolRequestsFailure: {
-    id: 'course.users.enrolRequests.fetch.failure',
+    id: 'course.enrolRequests.UserRequests.fetchEnrolRequestsFailure',
     defaultMessage: 'Failed to fetch enrol requests',
   },
 });

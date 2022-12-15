@@ -28,15 +28,15 @@ interface Props {
 
 const translations = defineMessages({
   deletionSuccess: {
-    id: 'course.forum.components.buttons.forumManagement.delete.success',
+    id: 'course.forum.ForumManagementButtons.deletionSuccess',
     defaultMessage: 'Forum {title} was deleted.',
   },
   deletionFailure: {
-    id: 'course.forum.components.buttons.forumManagement.delete.fail',
+    id: 'course.forum.ForumManagementButtons.deletionFailure',
     defaultMessage: 'Failed to delete forum - {error}',
   },
   deletionConfirm: {
-    id: 'course.forum.components.buttons.forumManagement.delete.confirm',
+    id: 'course.forum.ForumManagementButtons.deletionConfirm',
     defaultMessage: 'Are you sure you wish to delete this forum "{title}"?',
   },
 });

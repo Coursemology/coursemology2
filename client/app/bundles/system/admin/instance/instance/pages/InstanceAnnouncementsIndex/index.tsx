@@ -25,19 +25,19 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.instance.announcements.header',
+    id: 'system.admin.instance.instance.InstanceAnnouncementsIndex.header',
     defaultMessage: 'Instance Announcements',
   },
   fetchAnnouncementsFailure: {
-    id: 'system.admin.instance.announcements.fetch.failure',
+    id: 'system.admin.instance.instance.InstanceAnnouncementsIndex.fetchAnnouncementsFailure',
     defaultMessage: 'Unable to fetch announcements',
   },
   newAnnouncement: {
-    id: 'system.admin.instance.announcements.new',
+    id: 'system.admin.instance.instance.InstanceAnnouncementsIndex.newAnnouncement',
     defaultMessage: 'New Announcement',
   },
   noAnnouncements: {
-    id: 'system.admin.instance.announcements.noAnnouncement',
+    id: 'system.admin.instance.instance.InstanceAnnouncementsIndex.noAnnouncement',
     defaultMessage: 'There is no announcement',
   },
 });

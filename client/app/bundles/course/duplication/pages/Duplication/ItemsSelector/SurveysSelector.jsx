@@ -15,7 +15,7 @@ import { defaultComponentTitles } from 'course/translations.intl';
 
 const translations = defineMessages({
   noItems: {
-    id: 'course.duplication.SurveysSelector.noItems',
+    id: 'course.duplication.Duplication.ItemsSelector.SurveysSelector.noItems',
     defaultMessage: 'There are no surveys to duplicate.',
   },
 });

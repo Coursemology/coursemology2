@@ -26,15 +26,15 @@ interface Props {
 
 const translations = defineMessages({
   title: {
-    id: 'course.forum.topic.form.name',
+    id: 'course.forum.ForumTopicForm.title',
     defaultMessage: 'Title',
   },
   text: {
-    id: 'course.forum.topic.form.text',
+    id: 'course.forum.ForumTopicForm.text',
     defaultMessage: 'Text',
   },
   topicType: {
-    id: 'course.forum.topic.form.topicType',
+    id: 'course.forum.ForumTopicForm.topicType',
     defaultMessage: 'Topic Type',
   },
 });

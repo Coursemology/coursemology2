@@ -42,27 +42,27 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   searchText: {
-    id: 'system.admin.instance.components.tables.UsersTable.searchPlaceholder',
+    id: 'system.admin.instance.instance.UsersTable.searchPlaceholder',
     defaultMessage: 'Search user name or emails',
   },
   renameSuccess: {
-    id: 'system.admin.instance.user.rename.success',
+    id: 'system.admin.instance.instance.UsersTable.renameSuccess',
     defaultMessage: '{oldName} was renamed to {newName}.',
   },
   changeRoleSuccess: {
-    id: 'system.admin.instance.user.changeRole.success',
+    id: 'system.admin.instance.instance.UsersTable.changeRoleSuccess',
     defaultMessage: "Successfully changed {name}'s role to {role}.",
   },
   updateNameFailure: {
-    id: 'system.admin.instance.user.update.updateNameFailure',
+    id: 'system.admin.instance.instance.UsersTable.update.updateNameFailure',
     defaultMessage: "Failed to update user's name.",
   },
   updateRoleFailure: {
-    id: 'system.admin.instance.user.update.updateRoleFailure',
+    id: 'system.admin.instance.instance.UsersTable.update.updateRoleFailure',
     defaultMessage: "Failed to update user's role.",
   },
   fetchFilteredUsersFailure: {
-    id: 'system.admin.instance.users.fetchFiltered.failure',
+    id: 'system.admin.instance.instance.UsersTables.fetchFilteredUsersFailure',
     defaultMessage: 'Failed to fetch users.',
   },
 });

@@ -21,19 +21,19 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   name: {
-    id: 'course.experience-points.disbursement.DisbursementTable.name',
+    id: 'course.experiencePoints.disbursement.DisbursementTable.name',
     defaultMessage: 'Name',
   },
   pointsAwarded: {
-    id: 'course.experience-points.disbursement.DisbursementTable.pointsAwarded',
+    id: 'course.experiencePoints.disbursement.DisbursementTable.pointsAwarded',
     defaultMessage: 'Experience Points Awarded',
   },
   copy: {
-    id: 'course.experience-points.disbursement.DisbursementTable.copy',
+    id: 'course.experiencePoints.disbursement.DisbursementTable.copy',
     defaultMessage: 'Copy value for all students',
   },
   remove: {
-    id: 'course.experience-points.disbursement.DisbursementTable.remove',
+    id: 'course.experiencePoints.disbursement.DisbursementTable.remove',
     defaultMessage: 'Remove value for all students',
   },
 });
