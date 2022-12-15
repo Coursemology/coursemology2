@@ -13,6 +13,8 @@ class Course::ReferenceTimeline < ApplicationRecord
   validates :title, presence: true, unless: :default
   validates :weight, presence: true, numericality: { only_integer: true }
 
+  before_destroy :prevent_destroy_if_default, prepend: true
+
   default_scope { order(:weight) }
 
   def initialize_duplicate(duplicator, _other)
@@ -21,6 +23,13 @@ class Course::ReferenceTimeline < ApplicationRecord
   end
 
   private
+
+  def prevent_destroy_if_default
+    return true unless !course.destroying? && default?
+
+    errors.add(:default, :cannot_destroy)
+    throw(:abort)
+  end
 
   def set_weight
     return if weight.present?
