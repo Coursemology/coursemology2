@@ -44,16 +44,26 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
 
         duplicator.set_option(:destination_course, new_course)
 
-        # Delete the auto-generated default reference timeline in favor of duplicating existing one
-        new_course.default_reference_timeline.destroy!
+        # Destroy the new default reference timeline auto-created by `models/course.rb#set_defaults` to
+        # make room for the default reference timeline that will be duplicated below.
+        #
+        # This reference timeline has to be set to default = false before it can be destroyed because
+        # of the `models/course/reference_timeline.rb#prevent_destroy_if_default` invariant.
+        #
+        # Note that it is okay for a Course instance to have 0 default reference timeline, as seen in
+        # `models/course.rb#validate_only_one_default_reference_timeline`. This is to accommodate
+        # exactly this use case.
+        default_reference_timeline = new_course.default_reference_timeline
+        default_reference_timeline.default = false
+        default_reference_timeline.destroy!
 
         new_course.reload
 
         source_course.duplication_manifest.each do |item|
           duplicator.duplicate(item).save!
-
           new_course.reload
         end
+
         update_course_settings(duplicator, new_course, source_course)
         update_sidebar_settings(duplicator, new_course, source_course)
 
