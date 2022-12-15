@@ -1,3 +1,5 @@
 {
-  "course.lessonPlan.lessonPlanItem.location": "地点: {location}"
+  "course.lessonPlan.lessonPlanItem.location": {
+    "defaultMessage": "地点: {location}"
+  }
 }
