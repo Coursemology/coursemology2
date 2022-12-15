@@ -26,27 +26,27 @@ interface Props {
 
 const translations = defineMessages({
   title: {
-    id: 'course.announcement.form.title',
+    id: 'course.announcements.AnnouncementForm.title',
     defaultMessage: 'Title',
   },
   content: {
-    id: 'course.announcement.form.content',
+    id: 'course.announcements.AnnouncementForm.content',
     defaultMessage: 'Content',
   },
   sticky: {
-    id: 'course.announcement.form.sticky',
+    id: 'course.announcements.AnnouncementForm.sticky',
     defaultMessage: 'Sticky',
   },
   startAt: {
-    id: 'course.announcement.form.startAt',
+    id: 'course.announcements.AnnouncementForm.startAt',
     defaultMessage: 'Start At',
   },
   endAt: {
-    id: 'course.announcement.form.endAt',
+    id: 'course.announcements.AnnouncementForm.endAt',
     defaultMessage: 'End At',
   },
   endTimeError: {
-    id: 'course.announcement.form.endTimeError',
+    id: 'course.announcements.AnnouncementForm.endTimeError',
     defaultMessage: 'End time cannot be earlier than start time',
   },
 });

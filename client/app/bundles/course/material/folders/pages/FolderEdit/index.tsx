@@ -20,15 +20,15 @@ interface Props {
 
 const translations = defineMessages({
   editSubfolderTitle: {
-    id: 'course.materials.folders.editSubfolderTitle',
+    id: 'course.material.folders.FolderEdit.editSubfolderTitle',
     defaultMessage: 'Edit Folder',
   },
   folderEditSuccess: {
-    id: 'course.materials.folders.folderEditSuccess',
+    id: 'course.material.folders.FolderEdit.folderEditSuccess',
     defaultMessage: 'Folder has been edited',
   },
   folderEditFailure: {
-    id: 'course.materials.folders.folderEditFailure',
+    id: 'course.material.folders.FolderEdit.folderEditFailure',
     defaultMessage: 'Folder could not be edited',
   },
 });

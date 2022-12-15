@@ -17,19 +17,19 @@ import InstanceNew from '../InstanceNew';
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.instance.header',
+    id: 'system.admin.admin.InstancesIndex.header',
     defaultMessage: 'Instances',
   },
   title: {
-    id: 'system.admin.instance.title',
+    id: 'system.admin.admin.InstancesIndex.title',
     defaultMessage: 'Instances ({count})',
   },
   fetchInstancesFailure: {
-    id: 'system.admin.instance.fetchInstances.failure',
+    id: 'system.admin.admin.InstancesIndex.fetchInstancesFailure',
     defaultMessage: 'Failed to get instances',
   },
   newInstance: {
-    id: 'system.admin.instance.new',
+    id: 'system.admin.admin.InstancesIndex.newInstance',
     defaultMessage: 'New Instance',
   },
 });

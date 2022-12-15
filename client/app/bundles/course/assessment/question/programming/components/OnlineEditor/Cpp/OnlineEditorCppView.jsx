@@ -118,7 +118,7 @@ class OnlineEditorCppView extends Component {
               'expression in the {expected} column using {expect_star} assertions from the ' +
               '{googletest}. Floating point numbers are formatted with {tostring}.'
             }
-            id="course.assessment.question.programming.onlineEditorCppView.testCasesDescription"
+            id="course.assessment.question.programming.OnlineEditorCppView.testCasesDescription"
             values={{
               note: (
                 <b>

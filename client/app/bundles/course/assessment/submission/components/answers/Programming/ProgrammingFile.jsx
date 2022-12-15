@@ -14,11 +14,11 @@ import Editor from '../../Editor';
 
 const translations = defineMessages({
   sizeTooBig: {
-    id: 'course.assessment.submission.answer.programming.sizeTooBig',
+    id: 'course.assessment.submission.answers.Programming.ProgrammingFile.sizeTooBig',
     defaultMessage: 'The file is too big and cannot be displayed.',
   },
   downloadFile: {
-    id: 'course.assessment.submission.answer.programming.downloadFile',
+    id: 'course.assessment.submission.answers.Programming.ProgrammingFile.downloadFile',
     defaultMessage: 'Download File',
   },
 });

@@ -28,15 +28,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   fetchSubmissionsFailure: {
-    id: 'course.assessments.submissions.fetchSubmissionsFailure',
+    id: 'course.assessment.submissions.SubmissionTabs.fetchSubmissionsFailure',
     defaultMessage: 'Failed to fetch submissions',
   },
   allStudentsPending: {
-    id: 'course.assessments.submissions.allStudentsPending',
+    id: 'course.assessment.submissions.SubmissionTabs.allStudentsPending',
     defaultMessage: 'All Pending Submissions',
   },
   myStudentsPending: {
-    id: 'course.assessments.submissions.myStudentsPending',
+    id: 'course.assessment.submissions.SubmissionTabs.myStudentsPending',
     defaultMessage: 'My Students Pending',
   },
 });

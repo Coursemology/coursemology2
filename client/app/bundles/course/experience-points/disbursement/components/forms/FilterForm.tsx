@@ -31,27 +31,27 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   startTime: {
-    id: 'course.experience-points.disbursement.FilterForm.startTime',
+    id: 'course.experiencePoints.disbursement.FilterForm.startTime',
     defaultMessage: 'Start Date *',
   },
   endTime: {
-    id: 'course.experience-points.disbursement.FilterForm.endTime',
+    id: 'course.experiencePoints.disbursement.FilterForm.endTime',
     defaultMessage: 'End Date *',
   },
   weeklyCap: {
-    id: 'course.experience-points.disbursement.FilterForm.weeklyCap',
+    id: 'course.experiencePoints.disbursement.FilterForm.weeklyCap',
     defaultMessage: 'Weekly Cap',
   },
   submit: {
-    id: 'course.experience-points.disbursement.FilterForm.submit',
+    id: 'course.experiencePoints.disbursement.FilterForm.submit',
     defaultMessage: 'Search',
   },
   fetchFilterNone: {
-    id: 'course.experience-points.disbursement.DisbursementForm.fetchFilterNone',
+    id: 'course.experiencePoints.disbursement.DisbursementForm.fetchFilterNone',
     defaultMessage: 'No post made between these 2 dates.',
   },
   fetchFilterFailure: {
-    id: 'course.experience-points.disbursement.DisbursementForm.fetchFilterFailure',
+    id: 'course.experiencePoints.disbursement.DisbursementForm.fetchFilterFailure',
     defaultMessage: 'Failed to retrieve filtered forum users.',
   },
 });

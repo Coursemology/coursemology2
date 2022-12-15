@@ -20,15 +20,15 @@ interface Props {
 
 const translations = defineMessages({
   newVideo: {
-    id: 'course.video.new.newVideo',
+    id: 'course.video.VideoNew.newVideo',
     defaultMessage: 'New Video',
   },
   creationSuccess: {
-    id: 'course.video.new.success',
+    id: 'course.video.VideoNew.creationSuccess',
     defaultMessage: '{title} was created.',
   },
   creationFailure: {
-    id: 'course.video.new.fail',
+    id: 'course.video.VideoNew.creationFailure',
     defaultMessage: 'Failed to create {title}.',
   },
 });

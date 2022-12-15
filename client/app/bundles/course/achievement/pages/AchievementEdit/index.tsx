@@ -21,15 +21,15 @@ interface Props {
 
 const translations = defineMessages({
   editAchievement: {
-    id: 'course.achievement.edit.editAchievement',
+    id: 'course.achievement.AchievementEdit.editAchievement',
     defaultMessage: 'Edit Achievement',
   },
   updateSuccess: {
-    id: 'course.achievement.update.success',
+    id: 'course.achievement.AchievementEdit.updateSuccess',
     defaultMessage: 'Achievement was updated.',
   },
   updateFailure: {
-    id: 'course.achievement.update.fail',
+    id: 'course.achievement.AchievementEdit.updateFailure',
     defaultMessage: 'Failed to update achievement.',
   },
 });

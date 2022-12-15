@@ -8,15 +8,15 @@ import { createMilestone, showMilestoneForm } from 'course/lesson-plan/actions';
 
 const translations = defineMessages({
   newMilestone: {
-    id: 'course.lessonPlan.NewMilestoneButton.newMilestone',
+    id: 'course.lessonPlan.LessonPlanLayout.NewMilestoneButton.newMilestone',
     defaultMessage: 'New Milestone',
   },
   success: {
-    id: 'course.lessonPlan.NewMilestoneButton.success',
+    id: 'course.lessonPlan.LessonPlanLayout.NewMilestoneButton.success',
     defaultMessage: 'Milestone created.',
   },
   failure: {
-    id: 'course.lessonPlan.NewMilestoneButton.failure',
+    id: 'course.lessonPlan.LessonPlanLayout.NewMilestoneButton.failure',
     defaultMessage: 'Failed to create milestone.',
   },
 });

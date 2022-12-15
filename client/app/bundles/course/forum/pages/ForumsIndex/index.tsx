@@ -23,44 +23,44 @@ import ForumNew from '../ForumNew';
 
 const translations = defineMessages({
   header: {
-    id: 'course.forum.header',
+    id: 'course.forum.ForumsIndex.header',
     defaultMessage: 'Forums',
   },
   newForum: {
-    id: 'course.forum.index.newForum',
+    id: 'course.forum.ForumsIndex.newForum',
     defaultMessage: 'New Forum',
   },
   nextUnread: {
-    id: 'course.forum.index.nextUnread',
+    id: 'course.forum.ForumsIndex.nextUnread',
     defaultMessage: 'Next Unread',
   },
   nextUnreadTooltip: {
-    id: 'course.forum.index.nextUnreadTooltip',
+    id: 'course.forum.ForumsIndex.nextUnreadTooltip',
     defaultMessage: 'Jump to next unread topic',
   },
   AllReadTooltip: {
-    id: 'course.forum.index.AllReadTooltip',
+    id: 'course.forum.ForumsIndex.AllReadTooltip',
     defaultMessage: 'Hooray! All topics have been read!',
   },
   markAllAsRead: {
-    id: 'course.forum.index.markAllAsRead',
+    id: 'course.forum.ForumsIndex.markAllAsRead',
     defaultMessage: 'Mark all as read',
   },
   markAllAsReadTooltip: {
-    id: 'course.forum.index.markAllAsReadTooltip',
+    id: 'course.forum.ForumsIndex.markAllAsReadTooltip',
     defaultMessage: 'Mark all forum topics as read',
   },
   markAllAsReadSuccess: {
-    id: 'course.forum.index.markAllAsReadSuccess',
+    id: 'course.forum.ForumsIndex.markAllAsReadSuccess',
     defaultMessage: 'All topics have been marked as read.',
   },
   markAllAsReadFailed: {
-    id: 'course.forum.index.markAllAsReadFailed',
+    id: 'course.forum.ForumsIndex.markAllAsReadFailed',
     defaultMessage:
       'Failed to mark all topics as read. Please try again later.',
   },
   fetchForumsFailure: {
-    id: 'course.forum.index.fetch.failure',
+    id: 'course.forum.ForumsIndex.fetchForumsFailure',
     defaultMessage: 'Failed to retrieve forum data.',
   },
 });

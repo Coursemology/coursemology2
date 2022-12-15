@@ -19,30 +19,30 @@ import ForumCard from './ForumCard';
 
 const translations = defineMessages({
   maxPostsSelected: {
-    id: 'course.assessment.submission.answer.forumPostResponse.maxPostsSelected',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelectDialog.maxPostsSelected',
     defaultMessage:
       'You have already selected the max number of posts allowed.',
   },
   dialogTitle: {
-    id: 'course.assessment.submission.answer.forumPostResponse.dialogTitle',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelectDialog.dialogTitle',
     defaultMessage:
       'You have selected {numPosts}/{maxPosts} {maxPosts, plural, one {post} other {posts}}.',
   },
   dialogSubtitle: {
-    id: 'course.assessment.submission.answer.forumPostResponse.dialogSubtitle',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelectDialog.dialogSubtitle',
     defaultMessage: 'Click on the post to include it for submission.',
   },
   noPosts: {
-    id: 'course.assessment.submission.answer.forumPostResponse.noPosts',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelectDialog.noPosts',
     defaultMessage:
       'You currently do not have any posts. Create one on the forums now!',
   },
   cancelButton: {
-    id: 'course.assessment.submission.answer.forumPostResponse.cancelButton',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelectDialog.cancelButton',
     defaultMessage: 'Cancel',
   },
   selectButton: {
-    id: 'course.assessment.submission.answer.forumPostResponse.selectButton',
+    id: 'course.assessment.submission.answers.ForumPostResponse.ForumPostSelectDialog.selectButton',
     defaultMessage:
       'Select {numPosts} {numPosts, plural, one {Post} other {Posts}}',
   },

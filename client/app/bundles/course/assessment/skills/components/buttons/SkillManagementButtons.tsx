@@ -25,31 +25,31 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   deleteSkillBranchSuccess: {
-    id: 'course.assessment.skills.components.SkillManagementButtons.deleteBranchSuccess',
+    id: 'course.assessment.skills.SkillManagementButtons.deleteSkillBranchSuccess',
     defaultMessage: 'Skill branch was deleted.',
   },
   deleteSkillBranchFailure: {
-    id: 'course.assessment.skills.components.SkillManagementButtons.deleteBranchFailure',
+    id: 'course.assessment.skills.SkillManagementButtons.deleteSkillBranchFailure',
     defaultMessage: 'Failed to delete skill branch.',
   },
   deleteSkillSuccess: {
-    id: 'course.assessment.skills.components.SkillManagementButtons.deleteSkillSuccess',
+    id: 'course.assessment.skills.SkillManagementButtons.deleteSkillSuccess',
     defaultMessage: 'Skill was deleted.',
   },
   deleteSkillFailure: {
-    id: 'course.assessment.skills.components.SkillManagementButtons.deleteSkillFailure',
+    id: 'course.assessment.skills.SkillManagementButtons.deleteSkillFailure',
     defaultMessage: 'Failed to delete skill.',
   },
   deletionSkillConfirmation: {
-    id: 'course.assessment.skills.components.SkillManagementButtons.deleteSkillConfirmation',
+    id: 'course.assessment.skills.SkillManagementButtons.deletionSkillConfirmation',
     defaultMessage: 'Are you sure you wish to delete this skill?',
   },
   deletionSkillBranchConfirmation: {
-    id: 'course.assessment.skills.components.SkillManagementButtons.deleteBranchConfirmation',
+    id: 'course.assessment.skills.SkillManagementButtons.deletionSkillBranchConfirmation',
     defaultMessage: 'Are you sure you wish to delete this skill branch?',
   },
   deletionSkillBranchWithSkills: {
-    id: 'course.assessment.skills.components.SkillManagementButtons.deletionSkillBranchWithSkills',
+    id: 'course.assessment.skills.SkillManagementButtons.deletionSkillBranchWithSkills',
     defaultMessage:
       ' WARNING: There are skills in this skill branch which will also be deleted.',
   },

@@ -16,11 +16,11 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   fetchVideoSubmissionFailure: {
-    id: 'course.video.submission.edit.failure',
+    id: 'course.video.submission.VideoSubmissionEdit.fetchVideoSubmissionFailure',
     defaultMessage: 'Failed to retrieve video submission.',
   },
   watchingVideo: {
-    id: 'course.video.submission.edit.watchingVideo',
+    id: 'course.video.submission.VideoSubmissionEdit.watchingVideo',
     defaultMessage: 'Watching Video',
   },
 });

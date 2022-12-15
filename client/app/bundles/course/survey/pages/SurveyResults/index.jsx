@@ -19,19 +19,19 @@ import ResultsSection from './ResultsSection';
 
 const translations = defineMessages({
   includePhantoms: {
-    id: 'course.surveys.SurveyResults.includePhantoms',
+    id: 'course.survey.SurveyResults.includePhantoms',
     defaultMessage: 'Include Phantom Students',
   },
   responsesCount: {
-    id: 'course.surveys.SurveyResults.responsesCount',
+    id: 'course.survey.SurveyResults.responsesCount',
     defaultMessage: 'Number of Responses: {count}',
   },
   noSections: {
-    id: 'course.surveys.SurveyResults.noSections',
+    id: 'course.survey.SurveyResults.noSections',
     defaultMessage: 'This survey does not have any questions yet.',
   },
   noPhantoms: {
-    id: 'course.surveys.SurveyResults.noPhantoms',
+    id: 'course.survey.SurveyResults.noPhantoms',
     defaultMessage: 'No phantom student responses.',
   },
 });

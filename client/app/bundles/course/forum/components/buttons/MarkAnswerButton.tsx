@@ -15,11 +15,11 @@ interface Props extends IconButtonProps {
 
 const translations = defineMessages({
   markAsAnswer: {
-    id: 'course.forum.components.buttons.markAnswerButton.markAsAnswer',
+    id: 'course.forum.MarkAnswerButton.markAsAnswer',
     defaultMessage: 'Mark as Answer',
   },
   unmarkAsAnswer: {
-    id: 'course.forum.components.buttons.markAnswerButton.unmarkAsAnswer',
+    id: 'course.forum.MarkAnswerButton.unmarkAsAnswer',
     defaultMessage: 'Unmark as Answer',
   },
 });

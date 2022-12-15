@@ -26,27 +26,27 @@ interface Props {
 
 const translations = defineMessages({
   newRoleRequest: {
-    id: 'system.admin.instance.newRoleRequest',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestForm.newRoleRequest',
     defaultMessage: 'New Role Request',
   },
   editRoleRequest: {
-    id: 'system.admin.instance.editRoleRequest',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestForm.editRoleRequest',
     defaultMessage: 'Edit Role Request',
   },
   submit: {
-    id: 'system.admin.instance.submit',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestForm.submit',
     defaultMessage: 'Submit Request',
   },
   cancel: {
-    id: 'system.admin.instance.cancel',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestForm.cancel',
     defaultMessage: 'Cancel',
   },
   requestSuccess: {
-    id: 'system.admin.instance.requestSucccess',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestForm.requestSucccess',
     defaultMessage: 'Request submitted successfully!',
   },
   requestFailed: {
-    id: 'system.admin.instance.requestFailed',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestForm.requestFailed',
     defaultMessage: 'Failed to submit request.',
   },
 });

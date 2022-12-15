@@ -9,23 +9,23 @@ import moment from 'lib/moment';
 
 const translations = defineMessages({
   start: {
-    id: 'course.surveys.RespondButton.start',
+    id: 'course.survey.RespondButton.start',
     defaultMessage: 'Start',
   },
   continue: {
-    id: 'course.surveys.RespondButton.continue',
+    id: 'course.survey.RespondButton.continue',
     defaultMessage: 'Continue',
   },
   expired: {
-    id: 'course.surveys.RespondButton.expired',
+    id: 'course.survey.RespondButton.expired',
     defaultMessage: 'Expired',
   },
   view: {
-    id: 'course.surveys.RespondButton.view',
+    id: 'course.survey.RespondButton.view',
     defaultMessage: 'View',
   },
   notOpen: {
-    id: 'course.surveys.RespondButton.notOpen',
+    id: 'course.survey.RespondButton.notOpen',
     defaultMessage: 'Not Open',
   },
 });

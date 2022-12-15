@@ -16,39 +16,39 @@ import { getSummaryOfModifications } from '../../../utils/groups';
 
 const translations = defineMessages({
   serialNumber: {
-    id: 'course.group.show.changeSummary.serialNumber',
+    id: 'course.group.GroupShow.GroupManager.ChangeSummaryTable.serialNumber',
     defaultMessage: 'S/N',
   },
   name: {
-    id: 'course.group.show.changeSummary.name',
+    id: 'course.group.GroupShow.GroupManager.ChangeSummaryTable.name',
     defaultMessage: 'Name',
   },
   role: {
-    id: 'course.group.show.changeSummary.role',
+    id: 'course.group.GroupShow.GroupManager.ChangeSummaryTable.role',
     defaultMessage: 'Role',
   },
   change: {
-    id: 'course.group.show.changeSummary.change',
+    id: 'course.group.GroupShow.GroupManager.ChangeSummaryTable.change',
     defaultMessage: 'Change',
   },
   add: {
-    id: 'course.group.show.changeSummary.add',
+    id: 'course.group.GroupShow.GroupManager.ChangeSummaryTable.add',
     defaultMessage: 'Added to group',
   },
   switch: {
-    id: 'course.group.show.changeSummary.switch',
+    id: 'course.group.GroupShow.GroupManager.ChangeSummaryTable.switch',
     defaultMessage: 'Role switched from {oldRole} to {newRole}',
   },
   remove: {
-    id: 'course.group.show.changeSummary.remove',
+    id: 'course.group.GroupShow.GroupManager.ChangeSummaryTable.remove',
     defaultMessage: 'Removed from group',
   },
   title: {
-    id: 'course.group.show.changeSummary.title',
+    id: 'course.group.GroupShow.GroupManager.ChangeSummaryTable.title',
     defaultMessage: 'Summary of Changes',
   },
   subtitle: {
-    id: 'course.group.show.changeSummary.subtitle',
+    id: 'course.group.GroupShow.GroupManager.ChangeSummaryTable.subtitle',
     defaultMessage:
       '{numGroups} {numGroups, plural, one {group} other {groups}} modified',
   },

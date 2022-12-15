@@ -20,19 +20,19 @@ import withRouter from 'lib/components/navigation/withRouter';
 
 const translations = defineMessages({
   saveSuccess: {
-    id: 'course.surveys.ResponseEdit.saveSuccess',
+    id: 'course.survey.ResponseEdit.saveSuccess',
     defaultMessage: 'Your response has been saved.',
   },
   saveFailure: {
-    id: 'course.surveys.ResponseEdit.saveFailure',
+    id: 'course.survey.ResponseEdit.saveFailure',
     defaultMessage: 'Saving Failed.',
   },
   submitSuccess: {
-    id: 'course.surveys.ResponseEdit.submitSuccess',
+    id: 'course.survey.ResponseEdit.submitSuccess',
     defaultMessage: 'Your response has been submitted.',
   },
   submitFailure: {
-    id: 'course.surveys.ResponseEdit.submitFailure',
+    id: 'course.survey.ResponseEdit.submitFailure',
     defaultMessage: 'Submit Failed.',
   },
 });

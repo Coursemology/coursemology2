@@ -24,19 +24,19 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   manageEmailSubscription: {
-    id: 'course.users.show.manageEmailSubscription',
+    id: 'course.users.UserProfileCard.manageEmailSubscription',
     defaultMessage: 'Manage email subscriptions',
   },
   level: {
-    id: 'course.users.show.level',
+    id: 'course.users.UserProfileCard.level',
     defaultMessage: 'Level',
   },
   exp: {
-    id: 'course.users.show.exp',
+    id: 'course.users.UserProfileCard.exp',
     defaultMessage: 'EXP',
   },
   achievements: {
-    id: 'course.users.show.achievements',
+    id: 'course.users.UserProfileCard.achievements',
     defaultMessage: 'Achievements',
   },
 });

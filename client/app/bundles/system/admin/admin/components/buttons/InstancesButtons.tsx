@@ -16,19 +16,19 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   deletionSuccess: {
-    id: 'system.admin.instance.delete.success',
+    id: 'system.admin.admin.InstanceButtons.deletionSuccess',
     defaultMessage: '{name} was deleted.',
   },
   deletionFailure: {
-    id: 'system.admin.instance.delete.fail',
+    id: 'system.admin.admin.InstanceButtons.deletionFailure',
     defaultMessage: 'Failed to delete instance - {error}',
   },
   deletionConfirm: {
-    id: 'system.admin.instance.delete.confirm',
+    id: 'system.admin.admin.InstanceButtons.deletionConfirm',
     defaultMessage: 'Are you sure you wish to delete {name}?',
   },
   deleteInstance: {
-    id: 'system.admin.instance.delete.deleteInstance',
+    id: 'system.admin.admin.InstanceButtons.deleteInstance',
     defaultMessage: 'Delete Instance',
   },
 });

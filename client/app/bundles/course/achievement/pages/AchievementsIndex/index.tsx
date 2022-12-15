@@ -23,19 +23,19 @@ import AchievementNew from '../AchievementNew';
 
 const translations = defineMessages({
   newAchievement: {
-    id: 'course.achievement.new',
+    id: 'course.achievement.AchievementsIndex.newAchievement',
     defaultMessage: 'New Achievement',
   },
   fetchAchievementsFailure: {
-    id: 'course.achievement.index.fetch.failure',
+    id: 'course.achievement.AchievementsIndex.fetchAchievementsFailure',
     defaultMessage: 'Failed to retrieve achievements.',
   },
   toggleSuccess: {
-    id: 'course.achievement.toggle.success',
+    id: 'course.achievement.AchievementsIndex.toggleSuccess',
     defaultMessage: 'Achievement was updated.',
   },
   toggleFailure: {
-    id: 'course.achievement.toggle.fail',
+    id: 'course.achievement.AchievementsIndex.toggleFailure',
     defaultMessage: 'Failed to update achievement.',
   },
 });
@@ -93,7 +93,7 @@ const AchievementsIndex: FC = () => {
     <>
       <PageHeader
         title={t({
-          id: 'course.achievement.header',
+          id: 'course.achievement.AchievementsIndex.header',
           defaultMessage: 'Achievements',
         })}
         toolbars={headerToolbars}

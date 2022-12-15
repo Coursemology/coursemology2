@@ -17,11 +17,11 @@ interface Props {
 }
 const translations = defineMessages({
   creationSuccess: {
-    id: 'system.admin.instance.new.creationSuccess',
+    id: 'system.admin.admin.InstanceNew.creationSuccess',
     defaultMessage: 'New instance {name} ({host}) created!',
   },
   creationFailure: {
-    id: 'system.admin.instance.new.creationFailure',
+    id: 'system.admin.admin.InstanceNew.creationFailure',
     defaultMessage: 'Failed to create new instance.',
   },
 });

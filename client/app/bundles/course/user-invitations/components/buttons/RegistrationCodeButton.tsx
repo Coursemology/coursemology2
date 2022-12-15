@@ -8,7 +8,7 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   registrationCode: {
-    id: 'course.userInvitation.registrationCode',
+    id: 'course.userInvitations.RegistrationCodeButton.registrationCode',
     defaultMessage: 'Registration Code',
   },
 });

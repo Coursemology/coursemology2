@@ -17,7 +17,7 @@ const { VIDEO_TAB, VIDEO } = duplicableItemTypes;
 
 const translations = defineMessages({
   noItems: {
-    id: 'course.duplication.VideosSelector.noItems',
+    id: 'course.duplication.Duplication.ItemsSelector.VideosSelector.noItems',
     defaultMessage: 'There are no videos to duplicate.',
   },
 });

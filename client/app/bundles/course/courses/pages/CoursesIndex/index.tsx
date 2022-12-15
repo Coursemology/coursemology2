@@ -28,23 +28,23 @@ const styles = {
 
 const translations = defineMessages({
   header: {
-    id: 'course.header',
+    id: 'course.courses.CoursesIndex.header',
     defaultMessage: 'Courses',
   },
   newCourse: {
-    id: 'course.new',
+    id: 'course.courses.CoursesIndex.newCourse',
     defaultMessage: 'New Course',
   },
   fetchCoursesFailure: {
-    id: 'course.index.fetch.failure',
+    id: 'course.courses.CoursesIndex.fetchCoursesFailure',
     defaultMessage: 'Failed to retrieve courses.',
   },
   newRequest: {
-    id: 'request.new',
+    id: 'course.courses.CoursesIndex.newRequest',
     defaultMessage: 'Request to be an instructor',
   },
   editRequest: {
-    id: 'request.edit',
+    id: 'course.courses.CoursesIndex.editRequest',
     defaultMessage: 'Edit your request',
   },
 });

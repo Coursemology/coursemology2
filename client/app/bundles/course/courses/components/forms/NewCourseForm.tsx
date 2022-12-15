@@ -23,11 +23,11 @@ interface Props {
 
 const translations = defineMessages({
   title: {
-    id: 'course.form.title',
+    id: 'course.courses.NewCourseForm.title',
     defaultMessage: 'Give it an awesome name',
   },
   description: {
-    id: 'course.form.description',
+    id: 'course.courses.NewCourseForm.description',
     defaultMessage: 'Give it an awesome backstory!',
   },
 });

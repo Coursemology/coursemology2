@@ -9,47 +9,47 @@ const responseStatus = mirrorCreator([
 
 const translations = defineMessages({
   name: {
-    id: 'course.surveys.ResponseIndex.name',
+    id: 'course.survey.ResponseIndex.name',
     defaultMessage: 'Name',
   },
   responseStatus: {
-    id: 'course.surveys.ResponseIndex.responseStatus',
+    id: 'course.survey.ResponseIndex.responseStatus',
     defaultMessage: 'Response Status',
   },
   [responseStatus.NOT_STARTED]: {
-    id: 'course.surveys.ResponseIndex.notStarted',
+    id: 'course.survey.ResponseIndex.notStarted',
     defaultMessage: 'Not Started',
   },
   [responseStatus.SUBMITTED]: {
-    id: 'course.surveys.ResponseIndex.submitted',
+    id: 'course.survey.ResponseIndex.submitted',
     defaultMessage: 'Submitted',
   },
   [responseStatus.RESPONDING]: {
-    id: 'course.surveys.ResponseIndex.responding',
+    id: 'course.survey.ResponseIndex.responding',
     defaultMessage: 'Responding',
   },
   submittedAt: {
-    id: 'course.surveys.ResponseIndex.submittedAt',
+    id: 'course.survey.ResponseIndex.submittedAt',
     defaultMessage: 'Submitted At',
   },
   updatedAt: {
-    id: 'course.surveys.ResponseIndex.updatedAt',
+    id: 'course.survey.ResponseIndex.updatedAt',
     defaultMessage: 'Last Updated At',
   },
   phantoms: {
-    id: 'course.surveys.ResponseIndex.phantoms',
+    id: 'course.survey.ResponseIndex.phantoms',
     defaultMessage: 'Phantom Students',
   },
   stats: {
-    id: 'course.surveys.ResponseIndex.stats',
+    id: 'course.survey.ResponseIndex.stats',
     defaultMessage: 'Response Statistics',
   },
   includePhantoms: {
-    id: 'course.surveys.ResponseIndex.includePhantoms',
+    id: 'course.survey.ResponseIndex.includePhantoms',
     defaultMessage: 'Include Phantom Students',
   },
   unsubmit: {
-    id: 'course.surveys.ResponseIndex.unsubmit',
+    id: 'course.survey.ResponseIndex.unsubmit',
     defaultMessage: 'Unsubmit Survey',
   },
 });

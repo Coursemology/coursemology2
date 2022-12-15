@@ -15,23 +15,23 @@ import { memberShape } from '../../../propTypes';
 
 const translations = defineMessages({
   normal: {
-    id: 'course.group.show.groupUserManagerList.normal',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.normal',
     defaultMessage: 'Member',
   },
   manager: {
-    id: 'course.group.show.groupUserManagerList.manager',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.manager',
     defaultMessage: 'Manager',
   },
   noUsersFound: {
-    id: 'course.group.show.groupUserManagerList.noUsersFound',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.noUsersFound',
     defaultMessage: 'No users found',
   },
   students: {
-    id: 'course.group.show.groupUserManagerList.students',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.students',
     defaultMessage: 'Students',
   },
   staff: {
-    id: 'course.group.show.groupUserManagerList.staff',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.staff',
     defaultMessage: 'Staff',
   },
 });

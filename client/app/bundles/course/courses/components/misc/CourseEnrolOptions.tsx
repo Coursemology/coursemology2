@@ -22,28 +22,28 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   directEnrolSubmit: {
-    id: 'course.courses.show.directEnrolSubmit',
+    id: 'course.courses.CourseEnrolOptions.directEnrolSubmit',
     defaultMessage: 'Request to enrol',
   },
   directEnrolCancel: {
-    id: 'course.courses.show.directEnrolCancel',
+    id: 'course.courses.CourseEnrolOptions.directEnrolCancel',
     defaultMessage: 'Cancel request',
   },
   directEnrolSubmitSuccess: {
-    id: 'course.courses.show.directEnrolSubmitSuccess',
+    id: 'course.courses.CourseEnrolOptions.directEnrolSubmitSuccess',
     defaultMessage: 'Your enrol request has been submitted.',
   },
   directEnrolCancelSuccess: {
-    id: 'course.courses.show.directEnrolCancelSuccess',
+    id: 'course.courses.CourseEnrolOptions.directEnrolCancelSuccess',
     defaultMessage: 'Your enrol request has been cancelled.',
   },
   requestFailedMessage: {
-    id: 'course.courses.show.enrolRequestFailed',
+    id: 'course.courses.CourseEnrolOptions.requestFailedMessage',
     defaultMessage: 'An error occured, please try again later.',
   },
 });
 
-const CourseEnrollOptions: FC<Props> = (props) => {
+const CourseEnrolOptions: FC<Props> = (props) => {
   const { intl, registrationInfo } = props;
 
   const dispatch = useDispatch<AppDispatch>();
@@ -128,4 +128,4 @@ const CourseEnrollOptions: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(CourseEnrollOptions);
+export default injectIntl(CourseEnrolOptions);

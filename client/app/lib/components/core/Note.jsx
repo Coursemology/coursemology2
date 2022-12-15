@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 const translations = defineMessages({
   noteHeader: {
-    id: 'course.group.noteHeader',
+    id: 'lib.components.core.Note.noteHeader',
     defaultMessage: 'Note',
   },
 });

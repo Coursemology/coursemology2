@@ -26,15 +26,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   noInvitations: {
-    id: 'system.admin.instance.userInvitations.components.tables.UserInvitationsTable.noInvitations',
+    id: 'system.admin.instance.instance.UserInvitationsTable.noInvitations',
     defaultMessage: 'There are no {invitationType}',
   },
   pending: {
-    id: 'system.admin.instance.userInvitations.components.tables.UserInvitationsTable.invitationType.pending',
+    id: 'system.admin.instance.instance.UserInvitationsTable.pending',
     defaultMessage: 'pending',
   },
   accepted: {
-    id: 'system.admin.instance.userInvitations.components.tables.UserInvitationsTable.invitationType.accepted',
+    id: 'system.admin.instance.instance.UserInvitationsTable.accepted',
     defaultMessage: 'accepted',
   },
 });

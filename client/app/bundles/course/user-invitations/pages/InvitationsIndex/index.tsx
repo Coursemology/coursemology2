@@ -23,23 +23,23 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   manageUsersHeader: {
-    id: 'course.users.manage.header',
+    id: 'course.userInvitations.InvitationsIndex.manageUsersHeader',
     defaultMessage: 'Manage Users',
   },
   pending: {
-    id: 'course.users.userInvitations.pending.title',
+    id: 'course.userInvitations.InvitationsIndex.pending',
     defaultMessage: 'Pending Invitations',
   },
   accepted: {
-    id: 'course.users.userInvitations.accepted.title',
+    id: 'course.userInvitations.InvitationsIndex.accepted',
     defaultMessage: 'Accepted Invitations',
   },
   failure: {
-    id: 'course.users.userInvitations.fetch.failure',
+    id: 'course.userInvitations.InvitationsIndex.failure',
     defaultMessage: 'Failed to fetch all invitations',
   },
   invitationsInfo: {
-    id: 'course.users.userInvitations.index.invitationsInfo',
+    id: 'course.userInvitations.InvitationsIndex.invitationsInfo',
     defaultMessage: `The page lists all invitations which have been sent out to date.\nUsers can key in their invitation code into the course registration page to manually register into this course.`,
   },
 });

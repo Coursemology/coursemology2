@@ -25,31 +25,31 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   name: {
-    id: 'course.experience-points.disbursement.ForumDisbursementTable.name',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementTable.name',
     defaultMessage: 'Name',
   },
   level: {
-    id: 'course.experience-points.disbursement.ForumDisbursementTable.level',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementTable.level',
     defaultMessage: 'Level',
   },
   exp: {
-    id: 'course.experience-points.disbursement.ForumDisbursementTable.exp',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementTable.exp',
     defaultMessage: 'Experience Points',
   },
   postCount: {
-    id: 'course.experience-points.disbursement.ForumDisbursementTable.postCount',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementTable.postCount',
     defaultMessage: 'Post Count',
   },
   voteTally: {
-    id: 'course.experience-points.disbursement.ForumDisbursementTable.voteTally',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementTable.voteTally',
     defaultMessage: 'Vote Tally',
   },
   pointsAwarded: {
-    id: 'course.experience-points.disbursement.ForumDisbursementTable.pointsAwarded',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementTable.pointsAwarded',
     defaultMessage: 'Experience Points Awarded',
   },
   viewPosts: {
-    id: 'course.experience-points.disbursement.ForumDisbursementForm.viewPosts',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementForm.viewPosts',
     defaultMessage: 'View Forum Posts',
   },
 });

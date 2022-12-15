@@ -17,15 +17,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   ignoreSuccess: {
-    id: 'course.todo.ignore.success',
+    id: 'course.courses.TodoIgnoreButton.ignoreSuccess',
     defaultMessage: 'Pending task successfully ignored',
   },
   ignoreFailure: {
-    id: 'course.todo.ignore.failure',
+    id: 'course.courses.TodoIgnoreButton.ignoreFailure',
     defaultMessage: 'An error occured',
   },
   ignoreButtonText: {
-    id: 'course.todo.ignore.ignoreButtonText',
+    id: 'course.courses.TodoIgnoreButton.ignore.ignoreButtonText',
     defaultMessage: 'Ignore',
   },
 });

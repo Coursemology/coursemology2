@@ -9,15 +9,15 @@ import { resendAllInvitations } from '../../operations';
 
 const translations = defineMessages({
   buttonText: {
-    id: 'system.admin.instance.userInvitations.components.buttons.resendInvitations',
+    id: 'system.admin.instance.instance.ResendAllInvitationsButton.buttonText',
     defaultMessage: 'Resend All Invitations',
   },
   resendSuccess: {
-    id: 'system.admin.instance.userInvitations.components.buttons.resendInvitations.success',
+    id: 'system.admin.instance.instance.ResendAllInvitationsButton.resendSuccess',
     defaultMessage: 'Email invitations were successfully resent.',
   },
   resendFailure: {
-    id: 'system.admin.instance.userInvitations.components.buttons.resendInvitations.failure',
+    id: 'system.admin.instance.instance.ResendAllInvitationsButton.resendFailure',
     defaultMessage: 'Failed to resend email invitations.',
   },
 });

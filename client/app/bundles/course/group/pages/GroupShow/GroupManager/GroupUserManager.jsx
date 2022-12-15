@@ -21,48 +21,48 @@ import GroupUserManagerList from './GroupUserManagerList';
 
 const translations = defineMessages({
   updateSuccess: {
-    id: 'course.group.show.groupUserManager.update.success',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.updateSuccess',
     defaultMessage: '{groupName} was successfully updated.',
   },
   updateFailure: {
-    id: 'course.group.show.groupUserManager.update.fail',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.updateFailure',
     defaultMessage: 'Failed to update {groupName}.',
   },
   deleteSuccess: {
-    id: 'course.group.show.groupUserManager.delete.success',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.deleteSuccess',
     defaultMessage: '{groupName} was successfully deleted.',
   },
   deleteFailure: {
-    id: 'course.group.show.groupUserManager.delete.fail',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.deleteFailure',
     defaultMessage: 'Failed to delete {groupName}.',
   },
   edit: {
-    id: 'course.group.show.groupUserManager.edit',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.edit',
     defaultMessage: 'Edit Details',
   },
   delete: {
-    id: 'course.group.show.groupUserManager.delete',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.delete',
     defaultMessage: 'Delete Group',
   },
   subtitle: {
-    id: 'course.group.show.groupUserManager.subtitle',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.subtitle',
     defaultMessage:
       '{numMembers} {numMembers, plural, one {member} other {members}}',
   },
   noDescription: {
-    id: 'course.group.show.groupUserManager.noDescription',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.noDescription',
     defaultMessage: 'No description available.',
   },
   dialogTitle: {
-    id: 'course.group.show.groupUserManager.dialogTitle',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.dialogTitle',
     defaultMessage: 'Edit Group',
   },
   searchPlaceholder: {
-    id: 'course.group.show.groupUserManager.searchPlaceholder',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.searchPlaceholder',
     defaultMessage: 'Search by Name (separate by comma to search multiple)',
   },
   hideStudents: {
-    id: 'course.group.show.groupUserManager.hideStudents',
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.hideStudents',
     defaultMessage:
       'Hide students who are already in a group under this category',
   },

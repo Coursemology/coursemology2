@@ -9,7 +9,7 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.instance.components.header',
+    id: 'system.admin.instance.instance.InstanceComponentsIndex.header',
     defaultMessage: 'Components',
   },
 });

@@ -41,44 +41,44 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   manageUsersHeader: {
-    id: 'course.users.manage.header',
+    id: 'course.users.PersonalTimesShow.manageUsersHeader',
     defaultMessage: 'Manage Users',
   },
   recomputeSuccess: {
-    id: 'course.users.manage.personalTimes.recompute.success',
+    id: 'course.users.PersonalTimesShow.recomputeSuccess',
     defaultMessage: 'Successfully recomputed personal times for {name}',
   },
   fetchPersonalTimesFailure: {
-    id: 'course.users.manage.personalTimes.fetch.failue',
+    id: 'course.users.PersonalTimesShow.fetchPersonalTimesFailure',
     defaultMessage: 'Failed to fetch personal times',
   },
   courseUserHeader: {
-    id: 'course.users.manage.personalTimes.header',
+    id: 'course.users.PersonalTimesShow.courseUserHeader',
     defaultMessage: 'Course User',
   },
   algorithm: {
-    id: 'course.users.manage.personalTimes.algorithm',
+    id: 'course.users.PersonalTimesShow.algorithm',
     defaultMessage: 'Algorithm: {algorithm}',
   },
   recomputeLabel: {
-    id: 'course.users.manage.personalTimes.recompute',
+    id: 'course.users.PersonalTimesShow.recomputeLabel',
     defaultMessage: 'Recompute all times',
   },
   updateSuccess: {
-    id: 'course.users.manage.personalTimes.update.success',
+    id: 'course.users.PersonalTimesShow.updateSuccess',
     defaultMessage: "Successfully updated {name}/'s timeline to {timeline}",
   },
   updateFailure: {
-    id: 'course.users.manage.personalTimes.update.failure',
+    id: 'course.users.PersonalTimesShow.updateFailure',
     defaultMessage:
       "Failed to update {name}'s timeline to {timeline} - {error}",
   },
   learningRate: {
-    id: 'course.users.manage.personalTimes.learningRate.rate',
+    id: 'course.users.PersonalTimesShow.learningRate',
     defaultMessage: 'Learning rate: {rate}',
   },
   limits: {
-    id: 'course.users.manage.personalTimes.learningRate.limits',
+    id: 'course.users.PersonalTimesShow.limits',
     defaultMessage: 'Learning rate effective limits: [{min}, {max}]',
   },
 });

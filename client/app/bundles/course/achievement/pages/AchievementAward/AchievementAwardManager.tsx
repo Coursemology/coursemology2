@@ -63,41 +63,41 @@ const styles = {
 
 const translations = defineMessages({
   awardSuccess: {
-    id: 'course.achievement.achievementAward.success',
+    id: 'course.achievement.AchievementAward.AchievementAwardManager.awardSuccess',
     defaultMessage: 'Achievement was successfully awarded and/or revoked.',
   },
   awardFailure: {
-    id: 'course.achievement.achievementAward.fail',
+    id: 'course.achievement.AchievementAward.AchievementAwardManager.awardFailure',
     defaultMessage: 'Failed to award achievement.',
   },
   confirmationQuestion: {
-    id: 'course.achievement.achievementAward.confirmationQuestion',
+    id: 'course.achievement.AchievementAward.AchievementAwardManager.confirmationQuestion',
     defaultMessage: 'Are you sure you wish to make the following changes?',
   },
   note: {
-    id: 'course.achievement.achievementAward.note',
+    id: 'course.achievement.AchievementAward.AchievementAwardManager.note',
     defaultMessage:
       'If an Achievement has conditions associated with it, \
       Coursemology will automatically award achievements when the student meets those conditions. ',
   },
   noUser: {
-    id: 'course.achievement.achievementAward.noUser',
+    id: 'course.achievement.AchievementAward.AchievementAwardManager.noUser',
     defaultMessage: 'There is no available user to be awarded.',
   },
   obtainedAchievement: {
-    id: 'course.achievement.achievementAward.obtainedAchievement',
+    id: 'course.achievement.AchievementAward.AchievementAwardManager.obtainedAchievement',
     defaultMessage: 'Obtained Achievement',
   },
   saveChanges: {
-    id: 'course.achievement.achievementAward.saveChanges',
+    id: 'course.achievement.AchievementAward.AchievementAwardManager.saveChanges',
     defaultMessage: 'Save Changes',
   },
   resetChanges: {
-    id: 'course.achievement.achievementAward.discardChanges',
+    id: 'course.achievement.AchievementAward.AchievementAwardManager.resetChanges',
     defaultMessage: 'Reset Changes',
   },
   cancel: {
-    id: 'course.achievement.achievementAward.cancel',
+    id: 'course.achievement.AchievementAward.AchievementAwardManager.cancel',
     defaultMessage: 'Cancel',
   },
 });

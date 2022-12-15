@@ -25,11 +25,11 @@ const styles = {
 
 const optionsTranslations = defineMessages({
   addOption: {
-    id: 'course.surveys.QuestionForm.addOption',
+    id: 'course.survey.QuestionFormDialogue.QuestionFormOptions.addOption',
     defaultMessage: 'Add Option',
   },
   bulkUploadImages: {
-    id: 'course.surveys.QuestionForm.bulkUploadImages',
+    id: 'course.survey.QuestionFormDialogue.QuestionFormOptions.bulkUploadImages',
     defaultMessage: 'Bulk Upload Images',
   },
 });

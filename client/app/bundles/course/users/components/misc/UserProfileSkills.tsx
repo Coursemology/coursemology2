@@ -17,15 +17,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   topicMasteryHeader: {
-    id: 'course.users.show.topicMasteryHeader',
+    id: 'course.users.UserProfileSkills.topicMasteryHeader',
     defaultMessage: 'Skill Mastery',
   },
   gradeForSkill: {
-    id: 'course.users.show.gradeForSkill',
+    id: 'course.users.UserProfileSkills.gradeForSkill',
     defaultMessage: '{grade}/{totalGrade} points',
   },
   noSkillBranches: {
-    id: 'course.users.show.noSkillBranches',
+    id: 'course.users.UserProfileSkills.noSkillBranches',
     defaultMessage: 'No skill branches have been created... yet!',
   },
 });

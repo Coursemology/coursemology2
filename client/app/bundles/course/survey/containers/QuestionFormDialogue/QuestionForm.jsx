@@ -40,62 +40,62 @@ const styles = {
 
 const questionFormTranslations = defineMessages({
   required: {
-    id: 'course.surveys.QuestionForm.required',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.required',
     defaultMessage: 'Required',
   },
   requiredHint: {
-    id: 'course.surveys.QuestionForm.requiredHint',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.requiredHint',
     defaultMessage:
       'When selected, student must answer this question in order to complete the survey.',
   },
   gridView: {
-    id: 'course.surveys.QuestionForm.gridView',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.gridView',
     defaultMessage: 'Grid View',
   },
   gridViewHint: {
-    id: 'course.surveys.QuestionForm.gridViewHint',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.gridViewHint',
     defaultMessage:
       'When selected, question options will be display as grid instead of a list. \
       This option is meant for questions with images as options.',
   },
   lessThanFilledOptions: {
-    id: 'course.surveys.QuestionForm.lessThanFilledOptions',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.lessThanFilledOptions',
     defaultMessage: 'Should be less than the valid option count',
   },
   noMoreThanFilledOptions: {
-    id: 'course.surveys.QuestionForm.noMoreThanFilledOptions',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.noMoreThanFilledOptions',
     defaultMessage: 'Should not be more than the valid option count',
   },
   atLeastOne: {
-    id: 'course.surveys.QuestionForm.atLeastOne',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.atLeastOne',
     defaultMessage: 'Should be at least 1',
   },
   atLeastOneOptions: {
-    id: 'course.surveys.QuestionForm.atLeastOneOptions',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.atLeastOneOptions',
     defaultMessage: 'At least 1 option below is required',
   },
   atLeastZero: {
-    id: 'course.surveys.QuestionForm.atLeastZero',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.atLeastZero',
     defaultMessage: 'Should be at least 0',
   },
   notLessThanMin: {
-    id: 'course.surveys.QuestionForm.notLessThanMin',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.notLessThanMin',
     defaultMessage: 'Should not be less than minimum',
   },
   noRestriction: {
-    id: 'course.surveys.QuestionForm.noRestriction',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.noRestriction',
     defaultMessage: 'No Restriction',
   },
   optionCount: {
-    id: 'course.surveys.QuestionForm.optionCount',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.optionCount',
     defaultMessage: 'Valid Option Count',
   },
   optionsToKeep: {
-    id: 'course.surveys.QuestionForm.optionsToKeep',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.optionsToKeep',
     defaultMessage: 'Options To Keep',
   },
   optionsToDelete: {
-    id: 'course.surveys.QuestionForm.optionsToDelete',
+    id: 'course.survey.QuestionFormDialogue.QuestionForm.optionsToDelete',
     defaultMessage: 'Options To Delete',
   },
 });

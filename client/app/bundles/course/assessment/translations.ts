@@ -6,7 +6,7 @@ const translations = defineMessages({
     defaultMessage: 'Save',
   },
   updateSuccess: {
-    id: 'course.assessment.update.success',
+    id: 'course.assessment.updateSuccess',
     defaultMessage: 'Assessment was updated.',
   },
   updateFailure: {
@@ -18,11 +18,11 @@ const translations = defineMessages({
     defaultMessage: 'New Assessment',
   },
   creationSuccess: {
-    id: 'course.assessment.create.success',
+    id: 'course.assessment.creationSuccess',
     defaultMessage: 'Assessment was created.',
   },
   creationFailure: {
-    id: 'course.assessment.create.fail',
+    id: 'course.assessment.creationFailure',
     defaultMessage: 'Failed to create assessment.',
   },
   createAsDraft: {
@@ -362,7 +362,7 @@ const translations = defineMessages({
     defaultMessage: 'Your question has been duplicated.',
   },
   questionDuplicatedRefreshing: {
-    id: 'course.assessment.show.questionDuplicated',
+    id: 'course.assessment.show.questionDuplicatedRefreshing',
     defaultMessage:
       'Your question has been duplicated. We are refreshing to show you the latest changes.',
   },

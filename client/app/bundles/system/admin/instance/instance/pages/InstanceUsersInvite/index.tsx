@@ -12,25 +12,25 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.users.header',
+    id: 'system.admin.instance.instance.InstanceUsersInvite.header',
     defaultMessage: 'Invite Users',
   },
   title: {
-    id: 'system.admin.users.title',
+    id: 'system.admin.instance.instance.InstanceUsersInvite.title',
     defaultMessage: 'Users',
   },
   fetchUsersFailure: {
-    id: 'system.admin.users.fetch.failure',
+    id: 'system.admin.instance.instance.InstanceUsersInvite.fetchUsersFailure',
     defaultMessage: 'Failed to fetch users.',
   },
   totalUsers: {
-    id: 'system.admin.users.totalUsers',
+    id: 'system.admin.instance.instance.InstanceUsersInvite.totalUsers',
     defaultMessage:
       'Total Users: {allCount} ({adminCount} Administrators' +
       ', {instructorCount} Instructors, {normalCount} Normal)',
   },
   activeUsers: {
-    id: 'system.admin.users.activeUsers',
+    id: 'system.admin.instance.instance.InstanceUsersInvite.activeUsers',
     defaultMessage:
       'Active Users: {allCount} ({adminCount} Administrators' +
       ', {instructorCount} Instructors, {normalCount} Normal){br}' +

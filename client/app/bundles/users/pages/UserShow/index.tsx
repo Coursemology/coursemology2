@@ -21,15 +21,15 @@ interface Props extends WrappedComponentProps {}
 
 const translations = defineMessages({
   currentCourses: {
-    id: 'system.user.show.currentCourses',
+    id: 'users.UserShow.currentCourses',
     defaultMessage: 'Current Courses',
   },
   completedCourses: {
-    id: 'system.user.show.completedCourses',
+    id: 'users.UserShow.completedCourses',
     defaultMessage: 'Completed Courses',
   },
   otherInstances: {
-    id: 'system.user.show.otherInstances',
+    id: 'users.UserShow.otherInstances',
     defaultMessage: 'Other Instances',
   },
 });

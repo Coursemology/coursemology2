@@ -20,15 +20,15 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   manageUsersHeader: {
-    id: 'course.users.manage.header',
+    id: 'course.users.PersonalTimes.manageUsersHeader',
     defaultMessage: 'Manage Users',
   },
   fetchUsersFailure: {
-    id: 'course.users.manage.fetch.failue',
+    id: 'course.users.PersonalTimes.fetchUsersFailure',
     defaultMessage: 'Failed to fetch users',
   },
   courseUserHeader: {
-    id: 'course.users.personalTimes.header',
+    id: 'course.users.PersonalTimes.courseUserHeader',
     defaultMessage: 'Course User',
   },
 });

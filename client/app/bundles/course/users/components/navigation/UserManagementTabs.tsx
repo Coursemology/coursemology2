@@ -19,27 +19,27 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   studentsTitle: {
-    id: 'course.users.students.tab.title',
+    id: 'course.users.UserManagementTabs.studentsTitle',
     defaultMessage: 'Students',
   },
   staffTitle: {
-    id: 'course.users.staff.tab.title',
+    id: 'course.users.UserManagementTabs.staffTitle',
     defaultMessage: 'Staff',
   },
   enrolRequestsTitle: {
-    id: 'course.enrolRequests.tab.title',
+    id: 'course.users.UserManagementTabs.enrolRequestsTitle',
     defaultMessage: 'Enrol Requests',
   },
   inviteTitle: {
-    id: 'course.invite.tab.title',
+    id: 'course.users.UserManagementTabs.inviteTitle',
     defaultMessage: 'Invite Users',
   },
   userInvitationsTitle: {
-    id: 'course.userInvitations.tab.title',
+    id: 'course.users.UserManagementTabs.userInvitationsTitle',
     defaultMessage: 'Invitations',
   },
   personalTimesTitle: {
-    id: 'course.users.personalTimes.tab.title',
+    id: 'course.users.UserManagementTabs.personalTimesTitle',
     defaultMessage: 'Personalized Timelines',
   },
 });

@@ -15,11 +15,11 @@ const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
 
 const translations = defineMessages({
   defaultCategory: {
-    id: 'course.duplication.AssessmentsListing.defaultCategory',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.AssessmentsListing.defaultCategory',
     defaultMessage: 'Default Category',
   },
   defaultTab: {
-    id: 'course.duplication.AssessmentsListing.defaultTab',
+    id: 'course.duplication.Duplication.DuplicateItemsConfirmation.AssessmentsListing.defaultTab',
     defaultMessage: 'Default Tab',
   },
 });

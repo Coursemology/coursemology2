@@ -21,32 +21,32 @@ import Topics from './Topics';
 
 const translations = defineMessages({
   header: {
-    id: 'course.forum.topic.show.header',
+    id: 'course.forum.ForumTopicShow.header',
     defaultMessage: 'Forum Topic Posts',
   },
   fetchPostsFailure: {
-    id: 'course.forum.topic.show.fetch.failure',
+    id: 'course.forum.ForumTopicShow.fetchPostsFailure',
     defaultMessage: 'Failed to retrieve forum topic data.',
   },
   noPosts: {
-    id: 'course.forum.topic.show.noPosts',
+    id: 'course.forum.ForumTopicShow.noPosts',
     defaultMessage: 'No Post',
   },
   lockedNote: {
-    id: 'course.forum.topic.show.lockedNote',
+    id: 'course.forum.ForumTopicShow.lockedNote',
     defaultMessage:
       'You are unable to add new post as this topic has been locked by the teaching staff.',
   },
   topicResolved: {
-    id: 'course.forum.topic.show.topicResolved',
+    id: 'course.forum.ForumTopicShow.topicResolved',
     defaultMessage: 'This question topic has been resolved.',
   },
   topicUnresolved: {
-    id: 'course.forum.topic.show.topicUnresolved',
+    id: 'course.forum.ForumTopicShow.topicUnresolved',
     defaultMessage: 'This question topic is unresolved.',
   },
   topicUnresolvedNote: {
-    id: 'course.forum.topic.show.topicUnresolvedNote',
+    id: 'course.forum.ForumTopicShow.topicUnresolvedNote',
     defaultMessage:
       'Mark helpful post(s) as answer(s) to resolve this question.',
   },

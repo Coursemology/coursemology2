@@ -16,7 +16,7 @@ import { annotationShape, postShape } from '../propTypes';
 
 const translations = defineMessages({
   comment: {
-    id: 'course.assessment.submission.commentField.comment',
+    id: 'course.assessment.submission.Annotations.comment',
     defaultMessage: 'Add Comment',
   },
 });

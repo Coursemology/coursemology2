@@ -46,23 +46,23 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   noUsers: {
-    id: 'course.users.components.tables.ManageUsersTable.noUsers',
+    id: 'course.users.ManageUsersTable.ManageUsersTable.noUsers',
     defaultMessage: 'There are no users',
   },
   searchText: {
-    id: 'course.users.components.tables.ManageUsersTable.searchText',
+    id: 'course.users.ManageUsersTable.ManageUsersTable.searchText',
     defaultMessage: 'Search by name, email, role, etc.',
   },
   renameSuccess: {
-    id: 'course.users.rename.success',
+    id: 'course.users.ManageUsersTable.renameSuccess',
     defaultMessage: '{oldName} was renamed to {newName}',
   },
   renameFailure: {
-    id: 'course.users.rename.failure',
+    id: 'course.users.ManageUsersTable.renameFailure',
     defaultMessage: 'Failed to rename {oldName} to {newName}',
   },
   phantomSuccess: {
-    id: 'course.user.phantom.success',
+    id: 'course.users.ManageUsersTable.phantomSuccess',
     defaultMessage:
       '{name} {isPhantom, select, ' +
       'true {is now a phantom user} ' +
@@ -70,25 +70,25 @@ const translations = defineMessages({
       '}.',
   },
   changeRoleSuccess: {
-    id: 'course.user.changeRole.success',
+    id: 'course.users.ManageUsersTable.changeRoleSuccess',
     defaultMessage: "Successfully changed {name}'s role to {role}.",
   },
   changeRoleFailure: {
-    id: 'course.user.changeRole.failure',
+    id: 'course.users.ManageUsersTable.changeRoleFailure',
     defaultMessage: "Failed to change {name}'s role to {role}.",
   },
   changeTimelineSuccess: {
-    id: 'course.user.changeTimeline.success',
+    id: 'course.users.ManageUsersTable.changeTimelineSuccess',
     defaultMessage:
       "Successfully changed {name}'s timeline algorithm to {timeline}.",
   },
   changeTimelineFailure: {
-    id: 'course.user.changeTimeline.failure',
+    id: 'course.users.ManageUsersTable.changeTimelineFailure',
     defaultMessage:
       "Failed to change {name}'s timeline algorithm to {timeline}.",
   },
   updateFailure: {
-    id: 'course.user.update.fail',
+    id: 'course.users.ManageUsersTable.updateFailure',
     defaultMessage: 'Failed to update user - {error}',
   },
 });

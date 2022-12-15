@@ -11,15 +11,15 @@ import {
 
 const translations = defineMessages({
   newSection: {
-    id: 'course.surveys.NewSectionButton.newSection',
+    id: 'course.survey.NewSectionButton.newSection',
     defaultMessage: 'New Section',
   },
   success: {
-    id: 'course.surveys.NewSectionButton.success',
+    id: 'course.survey.NewSectionButton.success',
     defaultMessage: 'Section created.',
   },
   failure: {
-    id: 'course.surveys.NewSectionButton.failure',
+    id: 'course.survey.NewSectionButton.failure',
     defaultMessage: 'Failed to create question.',
   },
 });

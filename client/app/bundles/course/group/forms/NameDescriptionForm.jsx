@@ -13,15 +13,15 @@ import { formNames } from '../constants';
 
 const translations = defineMessages({
   name: {
-    id: 'course.group.nameDescriptionForm.name',
+    id: 'course.group.NameDescriptionForm.name',
     defaultMessage: 'Name',
   },
   description: {
-    id: 'course.group.nameDescriptionForm.description',
+    id: 'course.group.NameDescriptionForm.description',
     defaultMessage: 'Description (Optional)',
   },
   nameLength: {
-    id: 'course.group.nameDescriptionForm.nameLength',
+    id: 'course.group.NameDescriptionForm.nameLength',
     defaultMessage: 'The name is too long!',
   },
 });

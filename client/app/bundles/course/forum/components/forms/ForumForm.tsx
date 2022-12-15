@@ -25,15 +25,15 @@ interface Props {
 
 const translations = defineMessages({
   name: {
-    id: 'course.forum.form.name',
+    id: 'course.forum.ForumForm.name',
     defaultMessage: 'Name',
   },
   description: {
-    id: 'course.forum.form.description',
+    id: 'course.forum.ForumForm.description',
     defaultMessage: 'Description',
   },
   forumTopicsAutoSubscribe: {
-    id: 'course.forum.form.forumTopicsAutoSubscribe',
+    id: 'course.forum.ForumForm.forumTopicsAutoSubscribe',
     defaultMessage:
       'Enable auto-subscription to a forum topic when a user creates the topic, new posts or replies.',
   },

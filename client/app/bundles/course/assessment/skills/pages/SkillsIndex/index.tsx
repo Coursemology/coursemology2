@@ -27,11 +27,11 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   fetchSkillsFailure: {
-    id: 'course.assessment.skills.index.fetch.failure',
+    id: 'course.assessment.skills.SkillsIndex.fetchSkillsFailure',
     defaultMessage: 'Failed to retrieve Skills.',
   },
   skills: {
-    id: 'course.assessment.skills.index.skills',
+    id: 'course.assessment.skills.SkillsIndex.skills',
     defaultMessage: 'Skills',
   },
 });

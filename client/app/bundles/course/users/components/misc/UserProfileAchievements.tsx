@@ -25,11 +25,11 @@ const styles = {
 
 const translations = defineMessages({
   achivementsHeader: {
-    id: 'course.users.show.achievementsHeader',
+    id: 'course.users.UserProfileAchievements.achievementsHeader',
     defaultMessage: 'Achievements',
   },
   noAchievements: {
-    id: 'course.users.show.noAchievements',
+    id: 'course.users.UserProfileAchievements.noAchievements',
     defaultMessage: 'No achievements... yet!',
   },
 });

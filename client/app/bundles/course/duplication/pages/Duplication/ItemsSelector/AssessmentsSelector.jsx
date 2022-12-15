@@ -18,7 +18,7 @@ const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
 
 const translations = defineMessages({
   noItems: {
-    id: 'course.duplication.AssessmentsSelector.noItems',
+    id: 'course.duplication.Duplication.ItemsSelector.AssessmentsSelector.noItems',
     defaultMessage: 'There are no assessment items to duplicate.',
   },
 });

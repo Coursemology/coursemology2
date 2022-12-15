@@ -13,11 +13,11 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   uploadLabel: {
-    id: 'course.materials.folders.uploadForm.uploadLabel',
+    id: 'course.material.folders.MultipleFileInput.uploadLabel',
     defaultMessage: 'Drag and drop or click to upload files',
   },
   sameFileNameError: {
-    id: 'course.materials.folders.uploadForm.sameFileNameError',
+    id: 'course.material.folders.MultipleFileInput.sameFileNameError',
     defaultMessage:
       ' could not be uploaded as another file already has that name',
   },

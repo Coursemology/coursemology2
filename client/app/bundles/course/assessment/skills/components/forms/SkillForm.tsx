@@ -31,19 +31,19 @@ interface Props {
 
 const translations = defineMessages({
   branches: {
-    id: 'course.assessment.skills.components.SkillForm.branches',
+    id: 'course.assessment.skills.SkillForm.branches',
     defaultMessage: 'Skill Branch',
   },
   title: {
-    id: 'course.assessment.skills.components.SkillForm.title',
+    id: 'course.assessment.skills.SkillForm.title',
     defaultMessage: 'Title',
   },
   description: {
-    id: 'course.assessment.skills.components.SkillForm.description',
+    id: 'course.assessment.skills.SkillForm.description',
     defaultMessage: 'Description',
   },
   noneSelected: {
-    id: 'course.assessment.skills.components.SkillForm.noneSelected',
+    id: 'course.assessment.skills.SkillForm.noneSelected',
     defaultMessage: 'Uncategorised Skills',
   },
 });

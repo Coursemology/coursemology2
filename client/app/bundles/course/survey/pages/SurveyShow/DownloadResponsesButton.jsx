@@ -7,7 +7,7 @@ import { downloadSurvey } from 'course/survey/actions/surveys';
 
 const translations = defineMessages({
   download: {
-    id: 'course.surveys.ResponseIndex.DownloadResponse.download',
+    id: 'course.survey.ResponseIndex.DownloadResponsesButton.download',
     defaultMessage: 'Download Responses',
   },
 });

@@ -23,15 +23,15 @@ const styles = {
 
 const translations = defineMessages({
   deletionSuccess: {
-    id: 'course.user.delete.success',
+    id: 'course.users.UserManagementButtons.deletionSuccess',
     defaultMessage: 'User was deleted.',
   },
   deletionFailure: {
-    id: 'course.user.delete.fail',
+    id: 'course.users.UserManagementButtons.deletionFailure',
     defaultMessage: 'Failed to delete user.',
   },
   deletionConfirm: {
-    id: 'course.user.delete.confirm',
+    id: 'course.users.UserManagementButtons.deletionConfirm',
     defaultMessage: 'Are you sure you wish to delete {role} {name} ({email})?',
   },
 });

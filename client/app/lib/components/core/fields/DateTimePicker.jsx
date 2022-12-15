@@ -13,11 +13,11 @@ import moment from 'lib/moment';
 
 const translations = defineMessages({
   invalidDate: {
-    id: 'lib.components.form.DateTimePicker.invalidDate',
+    id: 'lib.components.core.fields.DateTimePicker.invalidDate',
     defaultMessage: 'Invalid date',
   },
   invalidTime: {
-    id: 'lib.components.form.DateTimePicker.invalidTime',
+    id: 'lib.components.core.fields.DateTimePicker.invalidTime',
     defaultMessage: 'Invalid time',
   },
 });

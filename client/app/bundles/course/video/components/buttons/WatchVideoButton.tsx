@@ -15,15 +15,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   watch: {
-    id: 'course.video.buttons.watch',
+    id: 'course.video.WatchVideoButton.watch',
     defaultMessage: 'Watch',
   },
   reWatch: {
-    id: 'course.video.buttons.reWatch',
+    id: 'course.video.WatchVideoButton.reWatch',
     defaultMessage: 'Rewatch',
   },
   attemptFailure: {
-    id: 'course.video.buttons.attemptFailure',
+    id: 'course.video.WatchVideoButton.attemptFailure',
     defaultMessage: 'Failed to create an attempt - {error}',
   },
 });

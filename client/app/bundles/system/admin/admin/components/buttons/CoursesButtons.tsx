@@ -17,15 +17,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   deletionSuccess: {
-    id: 'system.admin.course.delete.success',
+    id: 'system.admin.admin.CourseButtons.deletionSuccess',
     defaultMessage: '{title} was deleted.',
   },
   deletionConfirm: {
-    id: 'system.admin.course.delete.confirm',
+    id: 'system.admin.admin.CourseButtons.deletionConfirm',
     defaultMessage: 'Are you sure you wish to delete {title}?',
   },
   deletionFailure: {
-    id: 'system.admin.course.delete.failure',
+    id: 'system.admin.admin.CourseButtons.deletionFailure',
     defaultMessage: '{title} failed to be deleted - {error}',
   },
 });

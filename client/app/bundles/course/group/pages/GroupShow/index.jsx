@@ -21,15 +21,15 @@ import GroupTableCard from './GroupTableCard';
 
 const translations = defineMessages({
   fetchFailure: {
-    id: 'course.group.show.fetchFailure',
+    id: 'course.group.GroupShow.fetchFailure',
     defaultMessage: 'Failed to fetch group data! Please reload and try again.',
   },
   noCategory: {
-    id: 'course.group.show.noCategory',
+    id: 'course.group.GroupShow.noCategory',
     defaultMessage: "You don't have a group category created! Create one now!",
   },
   noGroups: {
-    id: 'course.group.show.noGroup',
+    id: 'course.group.GroupShow.noGroups',
     defaultMessage:
       "You don't have any groups under this category! Manage groups now to get started!",
   },

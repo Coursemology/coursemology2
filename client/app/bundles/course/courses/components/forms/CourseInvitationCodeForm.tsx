@@ -14,19 +14,19 @@ interface Props extends WrappedComponentProps {}
 
 const translations = defineMessages({
   placeholder: {
-    id: 'course.courses.show.invitation.placeholder',
+    id: 'course.courses.CourseInvitationCodeForm.placeholder',
     defaultMessage: 'Invitation code',
   },
   registerButton: {
-    id: 'course.courses.show.invitation.registerButton',
+    id: 'course.courses.CourseInvitationCodeForm.registerButton',
     defaultMessage: 'Register',
   },
   codeSubmitFailure: {
-    id: 'course.courses.show.invitation.codeSubmitFailure',
+    id: 'course.courses.CourseInvitationCodeForm.codeSubmitFailure',
     defaultMessage: 'Your code is incorrect',
   },
   emptyCodeFailure: {
-    id: 'course.courses.show.invitation.emptyCodeFailure',
+    id: 'course.courses.CourseInvitationCodeForm.emptyCodeFailure',
     defaultMessage: 'Please enter an invitation code',
   },
 });

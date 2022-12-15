@@ -37,19 +37,19 @@ interface Props {
 
 const translations = defineMessages({
   tableButtonDeleteTooltip: {
-    id: 'course.materials.folders.tableButtonDeleteTooltip',
+    id: 'course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip',
     defaultMessage: 'Delete',
   },
   deletionSuccess: {
-    id: 'course.materials.folders.deletionSuccess',
+    id: 'course.material.folders.WorkbinTableButtons.deletionSuccess',
     defaultMessage: ' has been deleted',
   },
   deletionFailure: {
-    id: 'course.materials.folders.folderDeletionFailure',
+    id: 'course.material.folders.WorkbinTableButtons.DeletionFailure',
     defaultMessage: ' could not be deleted',
   },
   deleteConfirmation: {
-    id: 'course.materials.folders.deleteConfirmation',
+    id: 'course.material.folders.WorkbinTableButtons.deleteConfirmation',
     defaultMessage: 'Are you sure you want to delete',
   },
 });

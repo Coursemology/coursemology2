@@ -2,137 +2,137 @@ import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
   surveys: {
-    id: 'course.surveys',
+    id: 'course.survey.surveys',
     defaultMessage: 'Surveys',
   },
   title: {
-    id: 'course.surveys.fields.title',
+    id: 'course.survey.fields.title',
     defaultMessage: 'Title',
   },
   description: {
-    id: 'course.surveys.fields.description',
+    id: 'course.survey.fields.description',
     defaultMessage: 'Description',
   },
   opensAt: {
-    id: 'course.surveys.fields.openAt',
+    id: 'course.survey.fields.openAt',
     defaultMessage: 'Opens at',
   },
   expiresAt: {
-    id: 'course.surveys.fields.expiresAt',
+    id: 'course.survey.fields.expiresAt',
     defaultMessage: 'Closes at',
   },
   bonusEndsAt: {
-    id: 'course.surveys.fields.bonusEndsAt',
+    id: 'course.survey.fields.bonusEndsAt',
     defaultMessage: 'Bonus ends at',
   },
   closingRemindedAt: {
-    id: 'course.surveys.fields.closingRemindedAt',
+    id: 'course.survey.fields.closingRemindedAt',
     defaultMessage: 'Last Reminder Sent At',
   },
   anonymous: {
-    id: 'course.surveys.fields.anonymous',
+    id: 'course.survey.fields.anonymous',
     defaultMessage: 'Anonymous responses',
   },
   allowResponseAfterEnd: {
-    id: 'course.surveys.fields.allowResponseAfterEnd',
+    id: 'course.survey.fields.allowResponseAfterEnd',
     defaultMessage: 'Allow responses after survey closes',
   },
   allowModifyAfterSubmit: {
-    id: 'course.surveys.fields.allowModifyAfterSubmit',
+    id: 'course.survey.fields.allowModifyAfterSubmit',
     defaultMessage: 'Allow response editing',
   },
   basePoints: {
-    id: 'course.surveys.fields.basePoints',
+    id: 'course.survey.fields.basePoints',
     defaultMessage: 'Base EXP',
   },
   bonusPoints: {
-    id: 'course.surveys.fields.bonusPoints',
+    id: 'course.survey.fields.bonusPoints',
     defaultMessage: 'Time Bonus EXP',
   },
   published: {
-    id: 'course.surveys.fields.published',
+    id: 'course.survey.fields.published',
     defaultMessage: 'Published',
   },
   questionText: {
-    id: 'course.surveys.questionText',
+    id: 'course.survey.questionText',
     defaultMessage: 'Question Text',
   },
   questions: {
-    id: 'course.surveys.questions',
+    id: 'course.survey.questions',
     defaultMessage: 'Questions',
   },
   questionType: {
-    id: 'course.surveys.questions.fields.questionType',
+    id: 'course.survey.questions.fields.questionType',
     defaultMessage: 'Question Type',
   },
   textResponse: {
-    id: 'course.surveys.questions.fields.questionTypes.textResponse',
+    id: 'course.survey.questions.fields.questionTypes.textResponse',
     defaultMessage: 'Text Response Question',
   },
   multipleChoice: {
-    id: 'course.surveys.questions.fields.questionTypes.multipleChoice',
+    id: 'course.survey.questions.fields.questionTypes.multipleChoice',
     defaultMessage: 'Multiple Choice Question',
   },
   multipleResponse: {
-    id: 'course.surveys.questions.fields.questionTypes.multipleResponse',
+    id: 'course.survey.questions.fields.questionTypes.multipleResponse',
     defaultMessage: 'Multiple Response Question',
   },
   maxOptions: {
-    id: 'course.surveys.questions.fields.maxOptions',
+    id: 'course.survey.questions.fields.maxOptions',
     defaultMessage: 'Maximum Allowed Responses',
   },
   minOptions: {
-    id: 'course.surveys.questions.fields.minOptions',
+    id: 'course.survey.questions.fields.minOptions',
     defaultMessage: 'Minimum Allowed Responses',
   },
   updateSuccess: {
-    id: 'course.surveys.updateSuccess',
+    id: 'course.survey.updateSuccess',
     defaultMessage: 'Survey "{title}" updated.',
   },
   updateFailure: {
-    id: 'course.surveys.updateFailure',
+    id: 'course.survey.updateFailure',
     defaultMessage: 'Failed to update survey.',
   },
   requestFailure: {
-    id: 'course.surveys.requestFailure',
+    id: 'course.survey.requestFailure',
     defaultMessage: 'An error occurred while processing your request.',
   },
   deleteSuccess: {
-    id: 'course.surveys.deleteSuccess',
+    id: 'course.survey.deleteSuccess',
     defaultMessage: 'Survey "{title}" deleted.',
   },
   deleteFailure: {
-    id: 'course.surveys.deleteFailure',
+    id: 'course.survey.deleteFailure',
     defaultMessage: 'Failed to delete survey.',
   },
   results: {
-    id: 'course.surveys.results',
+    id: 'course.survey.results',
     defaultMessage: 'Results',
   },
   responses: {
-    id: 'course.surveys.responses',
+    id: 'course.survey.responses',
     defaultMessage: 'Responses',
   },
   startEndValidationError: {
-    id: 'course.surveys.SurveyForm.startEndValidationError',
+    id: 'course.survey.SurveyForm.startEndValidationError',
     defaultMessage: 'Must be after opening time.',
   },
   bonusEndValidationError: {
-    id: 'course.surveys.SurveyForm.bonusEndValidationError',
+    id: 'course.survey.SurveyForm.bonusEndValidationError',
     defaultMessage: 'Must be between opening and closing time.',
   },
   allowModifyAfterSubmitHint: {
-    id: 'course.surveys.SurveyForm.allowModifyAfterSubmitHint',
+    id: 'course.survey.SurveyForm.allowModifyAfterSubmitHint',
     defaultMessage: 'Responses can be changed after being submitted.',
   },
   anonymousHint: {
-    id: 'course.surveys.SurveyForm.anonymousHint',
+    id: 'course.survey.SurveyForm.anonymousHint',
     defaultMessage:
       'If enabled, staff can see the survey results but not individual responses. \
       Cannot be changed once there are submissions.',
   },
   hasStudentResponse: {
-    id: 'course.surveys.SurveyForm.hasStudentResponse',
+    id: 'course.survey.SurveyForm.hasStudentResponse',
     defaultMessage:
       'At least one student has responded to this survey. You may not remove anonymity.',
   },

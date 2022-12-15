@@ -30,15 +30,15 @@ interface Props {
 
 const translations = defineMessages({
   deletionSuccess: {
-    id: 'course.forum.components.buttons.forumTopicManagement.delete.success',
+    id: 'course.forum.ForumTopicManagementButtons.deletionSuccess',
     defaultMessage: 'Topic {title} was deleted.',
   },
   deletionFailure: {
-    id: 'course.forum.components.buttons.forumTopicManagement.delete.fail',
+    id: 'course.forum.ForumTopicManagementButtons.deletionFailure',
     defaultMessage: 'Failed to delete topic - {error}',
   },
   deletionConfirm: {
-    id: 'course.forum.components.buttons.forumTopicManagement.delete.confirm',
+    id: 'course.forum.ForumTopicManagementButtons.deletionConfirm',
     defaultMessage: 'Are you sure you wish to delete this topic "{title}"?',
   },
 });

@@ -23,19 +23,19 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   fetchVideoFailure: {
-    id: 'course.video.show.failure',
+    id: 'course.video.VideoShow.fetchVideoFailure',
     defaultMessage: 'Failed to retrieve video.',
   },
   video: {
-    id: 'course.video.show.video',
+    id: 'course.video.VideoShow.video',
     defaultMessage: 'Video',
   },
   videoTitle: {
-    id: 'course.video.show.videoTitle',
+    id: 'course.video.VideoShow.videoTitle',
     defaultMessage: 'Video - {title}',
   },
   statistics: {
-    id: 'course.video.show.statistics',
+    id: 'course.video.VideoShow.statistics',
     defaultMessage: 'Statistics',
   },
 });

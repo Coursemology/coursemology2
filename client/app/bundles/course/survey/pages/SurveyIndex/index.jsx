@@ -16,7 +16,7 @@ import SurveysTable from './SurveysTable';
 
 const translations = defineMessages({
   noSurveys: {
-    id: 'course.surveys.SurveyIndex.noSurveys',
+    id: 'course.survey.SurveyIndex.noSurveys',
     defaultMessage: 'No surveys have been created.',
   },
 });

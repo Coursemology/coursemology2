@@ -8,19 +8,19 @@ import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 
 const translations = defineMessages({
   prompt: {
-    id: 'course.assessment.submission.commentField.prompt',
+    id: 'course.assessment.submission.comment.CommentField.prompt',
     defaultMessage: 'Enter your comment here',
   },
   comment: {
-    id: 'course.assessment.submission.commentField.comment',
+    id: 'course.assessment.submission.comment.CommentField.comment',
     defaultMessage: 'Comment',
   },
   commentDelayed: {
-    id: 'course.assessment.submission.commentField.commentDelayed',
+    id: 'course.assessment.submission.comment.CommentField.commentDelayed',
     defaultMessage: 'Delayed Comment',
   },
   commentDelayedDescription: {
-    id: 'course.assessment.submission.commentField.commentDelayedDescription',
+    id: 'course.assessment.submission.comment.CommentField.commentDelayedDescription',
     defaultMessage:
       'This comment will only be visible to students after the grades for this submission are published.',
   },

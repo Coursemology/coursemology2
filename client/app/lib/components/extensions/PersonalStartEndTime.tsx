@@ -19,12 +19,12 @@ interface Props {
 
 const translations = defineMessages({
   timeTooltip: {
-    id: 'lib.components.extensions.personalStartEndTime.timeTooltip',
+    id: 'lib.components.extensions.PersonalStartEndTime.timeTooltip',
     defaultMessage:
       'Personalized time is in effect. The original time is {time}.',
   },
   lockTooltip: {
-    id: 'lib.components.extensions.personalStartEndTime.lockTooltip',
+    id: 'lib.components.extensions.PersonalStartEndTime.lockTooltip',
     defaultMessage:
       'The timeline for this is fixed and will not be automatically modified.',
   },

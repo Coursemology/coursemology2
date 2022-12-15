@@ -32,40 +32,40 @@ interface Props {
 
 const translations = defineMessages({
   title: {
-    id: 'course.video.form.title',
+    id: 'course.video.VideoForm.title',
     defaultMessage: 'Title',
   },
   tab: {
-    id: 'course.video.form.tab',
+    id: 'course.video.VideoForm.tab',
     defaultMessage: 'Tab',
   },
   description: {
-    id: 'course.video.form.description',
+    id: 'course.video.VideoForm.description',
     defaultMessage: 'Description',
   },
   url: {
-    id: 'course.video.form.url',
+    id: 'course.video.VideoForm.url',
     defaultMessage: 'URL',
   },
   startAt: {
-    id: 'course.video.form.startAt',
+    id: 'course.video.VideoForm.startAt',
     defaultMessage: 'Start at',
   },
   published: {
-    id: 'course.video.form.published',
+    id: 'course.video.VideoForm.published',
     defaultMessage: 'Published',
   },
   hasPersonalTimes: {
-    id: 'course.video.form.hasPersonalTimes',
+    id: 'course.video.VideoForm.hasPersonalTimes',
     defaultMessage: 'Has personal times',
   },
   urlPlaceholder: {
-    id: 'course.video.form.urlPlaceholder',
+    id: 'course.video.VideoForm.urlPlaceholder',
     defaultMessage:
       'Please provide a valid youtube URL, eg. https://www.youtube.com/watch?v=dQw4w9WgXcQ',
   },
   urlChangeWarning: {
-    id: 'course.video.form.urlChangeWarning',
+    id: 'course.video.VideoForm.urlChangeWarning',
     defaultMessage:
       ' Warning: Changing url for this video would cause all its submissions and sessions data to be destroyed.',
   },

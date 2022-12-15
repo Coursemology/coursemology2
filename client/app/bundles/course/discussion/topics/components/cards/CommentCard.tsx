@@ -47,7 +47,7 @@ const translations = defineMessages({
     defaultMessage: 'Successfully updated comment.',
   },
   updateFailure: {
-    id: 'course.discussion.topics.CommentCard.updateSuccess',
+    id: 'course.discussion.topics.CommentCard.updateFailure',
     defaultMessage: 'Failed to update comment.',
   },
   deleteSuccess: {
@@ -55,7 +55,7 @@ const translations = defineMessages({
     defaultMessage: 'Successfully deleted comment.',
   },
   deleteFailure: {
-    id: 'course.discussion.topics.CommentCard.deleteSuccess',
+    id: 'course.discussion.topics.CommentCard.deleteFailure',
     defaultMessage: 'Failed to delete comment.',
   },
 });

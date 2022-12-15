@@ -23,19 +23,19 @@ interface Props {
 
 const translations = defineMessages({
   deletionSuccess: {
-    id: 'course.achievement.delete.success',
+    id: 'course.achievement.AchievementManagementButtons.deletionSuccess',
     defaultMessage: 'Achievement was deleted.',
   },
   deletionFailure: {
-    id: 'course.achievement.delete.fail',
+    id: 'course.achievement.AchievementManagementButtons.deletionFailure',
     defaultMessage: 'Failed to delete achievement.',
   },
   deletionConfirm: {
-    id: 'course.achievement.delete.confirm',
+    id: 'course.achievement.AchievementManagementButtons.deletionConfirm',
     defaultMessage: 'Are you sure you wish to delete this achievement?',
   },
   automaticAward: {
-    id: 'course.achievement.award.automatic',
+    id: 'course.achievement.AchievementManagementButtons.automaticAward',
     defaultMessage:
       'Automatically-awarded achievements cannot be manually awarded to students.',
   },

@@ -19,15 +19,15 @@ interface Props {
 
 const translations = defineMessages({
   newSubfolderTitle: {
-    id: 'course.materials.folders.newSubfolderTitle',
+    id: 'course.material.folders.FolderNew.newSubfolderTitle',
     defaultMessage: 'New Folder',
   },
   folderCreationSuccess: {
-    id: 'course.materials.folders.folderCreationSuccess',
+    id: 'course.material.folders.FolderNew.folderCreationSuccess',
     defaultMessage: 'New folder created',
   },
   folderCreationFailure: {
-    id: 'course.materials.folders.folderCreationFailure',
+    id: 'course.material.folders.FolderNew.folderCreationFailure',
     defaultMessage: 'Folder could not be created',
   },
 });

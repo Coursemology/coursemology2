@@ -25,7 +25,7 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   fixed: {
-    id: 'course.users.personalTimes.table.fixed',
+    id: 'course.users.PersonalTimesTable.fixed',
     defaultMessage: 'Fixed',
   },
 });

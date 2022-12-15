@@ -19,23 +19,23 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.courses.header',
+    id: 'system.admin.admin.CoursesIndex.header',
     defaultMessage: 'Courses',
   },
   title: {
-    id: 'system.admin.courses.title',
+    id: 'system.admin.admin.CoursesIndex.title',
     defaultMessage: 'Courses',
   },
   fetchCoursesFailure: {
-    id: 'system.admin.courses.fetch.failure',
+    id: 'system.admin.admin.CoursesIndex.fetchCoursesFailure',
     defaultMessage: 'Failed to fetch courses.',
   },
   totalCourses: {
-    id: 'system.admin.courses.totalCourses',
+    id: 'system.admin.admin.CoursesIndex.totalCourses',
     defaultMessage: `Total Courses: {count}`,
   },
   activeCourses: {
-    id: 'system.admin.courses.activeCourses',
+    id: 'system.admin.admin.CoursesIndex.activeCourses',
     defaultMessage: `Active Courses (in the past 7 days): {count}`,
   },
 });

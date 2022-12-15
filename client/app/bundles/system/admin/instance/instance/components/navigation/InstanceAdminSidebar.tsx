@@ -29,31 +29,31 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   announcements: {
-    id: 'system.admin.instance.components.navigation.sidebar.announcements',
+    id: 'sysstem.admin.instance.instance.InstanceAdminSidebar.announcements',
     defaultMessage: 'Announcements',
   },
   users: {
-    id: 'system.admin.instance.components.navigation.sidebar.users',
+    id: 'sysstem.admin.instance.instance.InstanceAdminSidebar.users',
     defaultMessage: 'Users',
   },
   courses: {
-    id: 'system.admin.instance.components.navigation.sidebar.courses',
+    id: 'sysstem.admin.instance.instance.InstanceAdminSidebar.courses',
     defaultMessage: 'Courses',
   },
   components: {
-    id: 'system.admin.instance.components.navigation.sidebar.components',
+    id: 'sysstem.admin.instance.instance.InstanceAdminSidebar.components',
     defaultMessage: 'Components',
   },
   roleRequests: {
-    id: 'system.admin.instance.components.navigation.sidebar.roleRequests',
+    id: 'sysstem.admin.instance.instance.InstanceAdminSidebar.roleRequests',
     defaultMessage: 'Role Requests',
   },
   collapseSidebar: {
-    id: 'system.admin.components.navigation.sidebar.collapse',
+    id: 'sysstem.admin.instance.instance.InstanceAdminSidebar.collapse',
     defaultMessage: 'Collapse Sidebar',
   },
   expandSidebar: {
-    id: 'system.admin.components.navigation.sidebar.expand',
+    id: 'sysstem.admin.instance.instance.InstanceAdminSidebar.expand',
     defaultMessage: 'Expand Sidebar',
   },
 });

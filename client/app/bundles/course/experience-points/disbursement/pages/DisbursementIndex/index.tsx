@@ -24,19 +24,19 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   fetchDisbursementFailure: {
-    id: 'course.experience-points.disbursement.index.fetch.failure',
+    id: 'course.experiencePoints.disbursement.DisbursementIndex.fetchDisbursementFailure',
     defaultMessage: 'Failed to retrieve data.',
   },
   disbursements: {
-    id: 'course.experience-points.disbursement.index.disbursement',
+    id: 'course.experiencePoints.disbursement.DisbursementIndex.disbursements',
     defaultMessage: 'Disburse Experience Points',
   },
   forumTab: {
-    id: 'course.experience-points.disbursement.index.forumTab',
+    id: 'course.experiencePoints.disbursement.DisbursementIndex.forumTab',
     defaultMessage: 'Forum Participation',
   },
   generalTab: {
-    id: 'course.experience-points.disbursement.index.generalTab',
+    id: 'course.experiencePoints.disbursement.DisbursementIndex.generalTab',
     defaultMessage: 'General Disbursement',
   },
 });

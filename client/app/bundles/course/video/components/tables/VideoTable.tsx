@@ -28,7 +28,7 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   noVideo: {
-    id: 'course.video.tables.VideoTable.noVideo',
+    id: 'course.video.VideoTable.noVideo',
     defaultMessage: 'No Video',
   },
 });

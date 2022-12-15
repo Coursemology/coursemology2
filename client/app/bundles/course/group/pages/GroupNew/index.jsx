@@ -13,15 +13,15 @@ import NameDescriptionForm from '../../forms/NameDescriptionForm';
 
 const translations = defineMessages({
   new: {
-    id: 'course.group.new.new',
+    id: 'course.group.GroupNew.new',
     defaultMessage: 'New Category',
   },
   success: {
-    id: 'course.group.new.createCategory.success',
+    id: 'course.group.GroupNew.createCategory.success',
     defaultMessage: 'Group category was created.',
   },
   failure: {
-    id: 'course.group.new.createCategory.fail',
+    id: 'course.group.GroupNew.createCategory.fail',
     defaultMessage: 'Failed to create group category.',
   },
 });

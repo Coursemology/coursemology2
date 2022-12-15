@@ -19,19 +19,19 @@ const styles = {
 
 const translations = defineMessages({
   startReorderAchievement: {
-    id: 'course.achievement.achievementReorder.startReorderAchievement',
+    id: 'course.achievement.AchievementReordering.startReorderAchievement',
     defaultMessage: 'Start Re-ordering Achievement',
   },
   endReorderAchievement: {
-    id: 'course.achievement.achievementReorder.endReorderAchievement',
+    id: 'course.achievement.AchievementReordering.endReorderAchievement',
     defaultMessage: 'End Re-ordering Achievement',
   },
   updateFailed: {
-    id: 'course.achievement.achievementReorder.updateFailed',
+    id: 'course.achievement.AchievementReordering.updateFailed',
     defaultMessage: 'Reorder Failed.',
   },
   updateSuccess: {
-    id: 'course.achievement.achievementReorder.updateSuccess',
+    id: 'course.achievement.AchievementReordering.updateSuccess',
     defaultMessage: 'Achievements successfully reordered',
   },
 });

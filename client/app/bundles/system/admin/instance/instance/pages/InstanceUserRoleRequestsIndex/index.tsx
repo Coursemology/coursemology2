@@ -16,23 +16,23 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.instance.roleRequests.header',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestsIndex.header',
     defaultMessage: 'Role Request',
   },
   pending: {
-    id: 'system.admin.instance.roleRequests.pending',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestsIndex.pending',
     defaultMessage: 'Pending Role Request',
   },
   approved: {
-    id: 'system.admin.instance.roleRequests.approved',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestsIndex.approved',
     defaultMessage: 'Approved Role Request',
   },
   rejected: {
-    id: 'system.admin.instance.roleRequests.rejected',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestsIndex.rejected',
     defaultMessage: 'Rejected Role Request',
   },
   fetchRoleRequestsFailure: {
-    id: 'system.admin.instance.roleRequests.fetch.failure',
+    id: 'system.admin.instance.instance.InstanceUserRoleRequestsIndex.fetchRoleRequestsFailure',
     defaultMessage: 'Failed to fetch role request',
   },
 });

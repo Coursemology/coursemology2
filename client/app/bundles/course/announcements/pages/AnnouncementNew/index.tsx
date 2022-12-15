@@ -19,15 +19,15 @@ interface Props {
 
 const translations = defineMessages({
   newAnnouncement: {
-    id: 'course.announcement.new.newAnnouncement',
+    id: 'course.announcements.AnnouncementNew.newAnnouncement',
     defaultMessage: 'New Announcement',
   },
   creationSuccess: {
-    id: 'course.announcement.new.creationSuccess',
+    id: 'course.announcements.AnnouncementNew.creationSuccess',
     defaultMessage: 'New announcement posted!',
   },
   creationFailure: {
-    id: 'course.announcement.new.creationFailure',
+    id: 'course.announcements.AnnouncementNew.creationFailure',
     defaultMessage: 'Failed to create the new announcement',
   },
 });

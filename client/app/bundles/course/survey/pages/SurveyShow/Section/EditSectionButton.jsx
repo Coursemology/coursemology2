@@ -12,15 +12,15 @@ import { sectionShape } from 'course/survey/propTypes';
 
 const translations = defineMessages({
   editSection: {
-    id: 'course.surveys.EditSectionButton.editSection',
+    id: 'course.survey.EditSectionButton.editSection',
     defaultMessage: 'Edit Section',
   },
   success: {
-    id: 'course.surveys.EditSectionButton.success',
+    id: 'course.survey.EditSectionButton.success',
     defaultMessage: 'Section updated.',
   },
   failure: {
-    id: 'course.surveys.EditSectionButton.failure',
+    id: 'course.survey.EditSectionButton.failure',
     defaultMessage: 'Failed to update question.',
   },
 });

@@ -17,27 +17,27 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   header: {
-    id: 'system.admin.users.header',
+    id: 'system.admin.instance.instance.InstanceUsersInvitations.header',
     defaultMessage: 'Invitations',
   },
   title: {
-    id: 'system.admin.users.title',
+    id: 'system.admin.instance.instance.InstanceUsersInvitations.title',
     defaultMessage: 'Users',
   },
   failure: {
-    id: 'system.admin.users.invitations.fetch.failure',
+    id: 'system.admin.instance.instance.InstanceUsersInvitations.fetch.failure',
     defaultMessage: 'Failed to fetch invitations.',
   },
   noInvitations: {
-    id: 'system.admin.users.invitations.noInvitations',
+    id: 'system.admin.instance.instance.InstanceUsersInvitations.noInvitations',
     defaultMessage: 'There are no instance user invitations sent yet.',
   },
   pending: {
-    id: 'system.admin.users.invitations.pending.title',
+    id: 'system.admin.instance.instance.InstanceUsersInvitations.pending',
     defaultMessage: 'Pending Invitations',
   },
   accepted: {
-    id: 'system.admin.users.invitations.accepted.title',
+    id: 'system.admin.instance.instance.InstanceUsersInvitations.accepted',
     defaultMessage: 'Accepted Invitations',
   },
 });

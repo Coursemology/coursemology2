@@ -18,15 +18,15 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   uploadMaterialsTitle: {
-    id: 'course.materials.folders.uploadMaterialsTitle',
+    id: 'course.material.folders.MaterialUpload.uploadMaterialsTitle',
     defaultMessage: 'Upload Files',
   },
   materialUploadSuccess: {
-    id: 'course.materials.folders.materialUploadSuccess',
+    id: 'course.material.folders.MaterialUpload.materialUploadSuccess',
     defaultMessage: 'Files have been uploaded',
   },
   materialUploadFailure: {
-    id: 'course.materials.folders.materialUploadFailure',
+    id: 'course.material.folders.MaterialUpload.materialUploadFailure',
     defaultMessage: 'Files upload failed',
   },
 });

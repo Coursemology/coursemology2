@@ -44,19 +44,19 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   noEnrolRequests: {
-    id: 'course.enrolRequests.components.tables.EnrolRequestsTable.noEnrolRequests',
+    id: 'course.enrolRequests.EnrolRequestsTable.noEnrolRequests',
     defaultMessage: 'There are no {enrolRequestsType}',
   },
   approved: {
-    id: 'course.enrolRequests.components.tables.EnrolRequestsTable.requestType.approved',
+    id: 'course.enrolRequests.EnrolRequestsTable.approved',
     defaultMessage: 'approved',
   },
   rejected: {
-    id: 'course.enrolRequests.components.tables.EnrolRequestsTable.requestType.rejected',
+    id: 'course.enrolRequests.EnrolRequestsTable.rejected',
     defaultMessage: 'rejected',
   },
   pending: {
-    id: 'course.enrolRequests.components.tables.EnrolRequestsTable.requestType.pending',
+    id: 'course.enrolRequests.EnrolRequestsTable.pending',
     defaultMessage: 'pending',
   },
 });

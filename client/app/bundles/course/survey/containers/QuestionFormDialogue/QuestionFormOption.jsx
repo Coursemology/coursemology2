@@ -12,11 +12,11 @@ import ImageField from './components/ImageField';
 
 const optionTranslations = defineMessages({
   optionPlaceholder: {
-    id: 'course.surveys.QuestionForm.optionPlaceholder',
+    id: 'course.survey.QuestionFormDialogue.QuestionFormOption.optionPlaceholder',
     defaultMessage: 'Option {index}',
   },
   noCaption: {
-    id: 'course.surveys.QuestionForm.noCaption',
+    id: 'course.survey.QuestionFormDialogue.QuestionFormOption.noCaption',
     defaultMessage: 'No Caption for Option {index}',
   },
 });

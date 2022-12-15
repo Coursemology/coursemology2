@@ -4,17 +4,17 @@ import PropTypes from 'prop-types';
 
 const translations = defineMessages({
   header: {
-    id: 'course.assessment.question.programming.buildLog.header',
+    id: 'course.assessment.question.programming.BuildLog.header',
     defaultMessage: 'Build Log',
     description: 'Header for build log.',
   },
   stdoutHeader: {
-    id: 'course.assessment.question.programming.buildLog.stdoutHeader',
+    id: 'course.assessment.question.programming.BuildLog.stdoutHeader',
     defaultMessage: 'Standard Output',
     description: 'Header for standard output.',
   },
   stderrHeader: {
-    id: 'course.assessment.question.programming.buildLog.stderrHeader',
+    id: 'course.assessment.question.programming.BuildLog.stderrHeader',
     defaultMessage: 'Standard Error',
     description: 'Header for standard error.',
   },

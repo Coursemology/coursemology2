@@ -24,15 +24,15 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   manageUsersHeader: {
-    id: 'course.users.manage.header',
+    id: 'course.userInvitations.InviteUsers.manageUsersHeader',
     defaultMessage: 'Manage Users',
   },
   inviteUsersHeader: {
-    id: 'course.users.userInvitations.header',
+    id: 'course.userInvitations.InviteUsers.inviteUsersHeader',
     defaultMessage: 'Invite Users',
   },
   loadFailure: {
-    id: 'course.users.userInvitations.fetch.failure',
+    id: 'course.userInvitations.InviteUsers.loadFailure',
     defaultMessage: 'Failed to load data',
   },
 });

@@ -13,11 +13,11 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   viewButton: {
-    id: 'course.assessments.submissions.viewButton',
+    id: 'course.assessment.submissions.SubmissionsTableButton.viewButton',
     defaultMessage: 'View',
   },
   gradeButton: {
-    id: 'course.assessments.submissions.gradeButton',
+    id: 'course.assessment.submissions.SubmissionsTableButton.gradeButton',
     defaultMessage: 'Grade',
   },
 });

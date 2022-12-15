@@ -20,15 +20,15 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   fetchComponentsFailure: {
-    id: 'system.admin.instance.components.fetch.success',
+    id: 'system.admin.instance.instance.InstanceComponentsForm.fetchComponentsFailure',
     defaultMessage: 'Failed to fetch component settings.',
   },
   updateComponentsFailed: {
-    id: 'system.admin.instance.components.update.failure',
+    id: 'system.admin.instance.instance.InstanceComponentsForm.updateComponentsFailed',
     defaultMessage: 'Instance component setting failed to be updated.',
   },
   updateComponentsSuccess: {
-    id: 'system.admin.instance.components.update.success',
+    id: 'system.admin.instance.instance.InstanceComponentsForm.updateComponentsSuccess',
     defaultMessage: 'Instance component setting was updated successfully.',
   },
 });

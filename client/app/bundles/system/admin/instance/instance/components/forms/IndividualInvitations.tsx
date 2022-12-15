@@ -26,11 +26,11 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   appendNewRow: {
-    id: 'system.admin.instance.userInvitations.IndividualInvitations.add',
+    id: 'system.admin.instance.instance.IndividualInvitations.appendNewRow',
     defaultMessage: 'Add Row',
   },
   invite: {
-    id: 'system.admin.instance.userInvitations.IndividualInvitations.remove',
+    id: 'system.admin.instance.instance.IndividualInvitations.invite',
     defaultMessage: 'Invite All Users',
   },
 });

@@ -23,27 +23,27 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   searchText: {
-    id: 'system.admin.components.tables.InstancesTable.searchPlaceholder',
+    id: 'system.admin.admin.InstancesTable.searchText',
     defaultMessage: 'Search instance name or host name',
   },
   renameSuccess: {
-    id: 'system.admin.components.tables.InstancesTable.rename.success',
+    id: 'system.admin.admin.InstancesTable.renameSuccess',
     defaultMessage: 'Renamed instance to {name}',
   },
   changeHostSuccess: {
-    id: 'system.admin.components.tables.InstancesTable.changeHost.success',
+    id: 'system.admin.admin.InstancesTable.changeHostSuccess',
     defaultMessage: 'Host changed from {oldHost} to {newHost}',
   },
   updateNameFailure: {
-    id: 'system.admin.components.tables.InstancesTable.updateNameFailure',
+    id: 'system.admin.admin.InstancesTable.updateNameFailure',
     defaultMessage: 'Failed to rename instance to {oldName}',
   },
   updateHostFailure: {
-    id: 'system.admin.components.tables.InstancesTable.updateRoleFailure',
+    id: 'system.admin.admin.InstancesTable.updateRoleFailure',
     defaultMessage: 'Failed to change host from {oldHost} to {newHost}',
   },
   fetchFilteredInstancesFailure: {
-    id: 'system.admin.admin.fetchFilteredInstances.failure',
+    id: 'system.admin.admin.InstancesTable.fetchFilteredInstancesFailure',
     defaultMessage: 'Failed to get instances',
   },
 });

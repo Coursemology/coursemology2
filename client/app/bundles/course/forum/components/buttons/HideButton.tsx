@@ -13,27 +13,27 @@ import { updateForumTopicHidden } from '../../operations';
 
 const translations = defineMessages({
   hide: {
-    id: 'course.forum.components.buttons.hideButton.hide',
+    id: 'course.forum.HideButton.hide',
     defaultMessage: 'Hide',
   },
   unhide: {
-    id: 'course.forum.components.buttons.hideButton.unhide',
+    id: 'course.forum.HideButton.unhide',
     defaultMessage: 'Unhide',
   },
   hideSuccess: {
-    id: 'course.forum.components.buttons.hideButton.hideSuccess',
+    id: 'course.forum.HideButton.hideSuccess',
     defaultMessage: 'The topic "{title}" has successfully been hidden.',
   },
   hideFailure: {
-    id: 'course.forum.components.buttons.hideButton.hideFailure',
+    id: 'course.forum.HideButton.hideFailure',
     defaultMessage: 'Failed to hide the topic "{title}" - {error}',
   },
   unhideSuccess: {
-    id: 'course.forum.components.buttons.hideButton.unhideSuccess',
+    id: 'course.forum.HideButton.unhideSuccess',
     defaultMessage: 'The topic "{title}" has successfully been unhidden.',
   },
   unhideFailure: {
-    id: 'course.forum.components.buttons.hideButton.unhideFailure',
+    id: 'course.forum.HideButton.unhideFailure',
     defaultMessage: 'Failed to unhide the topic "{title}" - {error}',
   },
 });
@@ -95,7 +95,7 @@ const HideButton: FC<Props> = ({ topic, disabled: disableButton }: Props) => {
           disabled={disabled}
           onClick={handleHide}
         >
-          {topic.isHidden ? <Visibility /> : <VisibilityOff />}
+          {topic.isHidden ? <VisibilityOff /> : <Visibility />}
         </IconButton>
       </span>
     </Tooltip>

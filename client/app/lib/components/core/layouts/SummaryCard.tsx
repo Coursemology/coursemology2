@@ -26,7 +26,7 @@ const styles = {
 
 const translations = defineMessages({
   title: {
-    id: 'lib.components.SummaryCard.title',
+    id: 'lib.components.core.layouts.SummaryCard.title',
     defaultMessage: 'Summary',
   },
 });

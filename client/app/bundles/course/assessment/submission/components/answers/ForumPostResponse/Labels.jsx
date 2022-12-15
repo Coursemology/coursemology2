@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 
 const translations = defineMessages({
   postEdited: {
-    id: 'course.assessment.submission.answer.forumPostResponse.postEdited',
+    id: 'course.assessment.submission.answers.ForumPostResponse.Labels.postEdited',
     defaultMessage:
       'Post has been edited in the forums. Showing post saved at point of submission.',
   },
   postDeleted: {
-    id: 'course.assessment.submission.answer.forumPostResponse.postDeleted',
+    id: 'course.assessment.submission.answers.ForumPostResponse.Labels.postDeleted',
     defaultMessage:
       'Post has been deleted from the forum topic. Showing post saved at point of submission.',
   },

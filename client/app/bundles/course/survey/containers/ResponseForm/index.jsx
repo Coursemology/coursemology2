@@ -20,7 +20,7 @@ const styles = {
 
 const responseFormTranslations = defineMessages({
   submitted: {
-    id: 'course.surveys.ResponseForm.submitted',
+    id: 'course.survey.ResponseForm.submitted',
     defaultMessage: 'Submitted',
   },
 });

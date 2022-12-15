@@ -30,7 +30,7 @@ import {
 
 const translations = defineMessages({
   fetchForumPostsFailure: {
-    id: 'course.experience-points.disbursement.ForumDisbursementForm.fetchForumPosts',
+    id: 'course.experiencePoints.disbursement.ForumDisbursementForm.fetchForumPostsFailure',
     defaultMessage: 'Failed to fetch forum posts.',
   },
 });

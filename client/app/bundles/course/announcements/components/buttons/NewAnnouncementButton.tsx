@@ -9,7 +9,7 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   newAnnouncementTooltip: {
-    id: 'course.announcement.newAnnouncementTooltip',
+    id: 'course.announcements.NewAnnouncementButton.newAnnouncementTooltip',
     defaultMessage: 'New Announcement',
   },
 });

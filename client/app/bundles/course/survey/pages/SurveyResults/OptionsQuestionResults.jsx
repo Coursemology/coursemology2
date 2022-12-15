@@ -87,47 +87,47 @@ const styles = {
 
 const translations = defineMessages({
   serial: {
-    id: 'course.surveys.OptionsQuestionResults.serial',
+    id: 'course.survey.OptionsQuestionResults.serial',
     defaultMessage: 'S/N',
   },
   respondents: {
-    id: 'course.surveys.OptionsQuestionResults.respondents',
+    id: 'course.survey.OptionsQuestionResults.respondents',
     defaultMessage: 'Respondents',
   },
   count: {
-    id: 'course.surveys.OptionsQuestionResults.count',
+    id: 'course.survey.OptionsQuestionResults.count',
     defaultMessage: 'Count',
   },
   percentage: {
-    id: 'course.surveys.OptionsQuestionResults.percentage',
+    id: 'course.survey.OptionsQuestionResults.percentage',
     defaultMessage: 'Percentage',
   },
   sortByPercentage: {
-    id: 'course.surveys.OptionsQuestionResults.sortByPercentage',
+    id: 'course.survey.OptionsQuestionResults.sortByPercentage',
     defaultMessage: 'Sort By Percentage',
   },
   sortByCount: {
-    id: 'course.surveys.OptionsQuestionResults.sortByCount',
+    id: 'course.survey.OptionsQuestionResults.sortByCount',
     defaultMessage: 'Sort By Count',
   },
   multipleChoiceOption: {
-    id: 'course.surveys.OptionsQuestionResults.multipleChoiceOption',
+    id: 'course.survey.OptionsQuestionResults.multipleChoiceOption',
     defaultMessage: 'Multiple Choice Option',
   },
   multipleResponseOption: {
-    id: 'course.surveys.OptionsQuestionResults.multipleResponseOption',
+    id: 'course.survey.OptionsQuestionResults.multipleResponseOption',
     defaultMessage: 'Multiple Response Option',
   },
   showOptions: {
-    id: 'course.surveys.OptionsQuestionResults.showOptions',
+    id: 'course.survey.OptionsQuestionResults.showOptions',
     defaultMessage: 'Show All {quantity} Options',
   },
   hideOptions: {
-    id: 'course.surveys.OptionsQuestionResults.hideOptions',
+    id: 'course.survey.OptionsQuestionResults.hideOptions',
     defaultMessage: 'Hide All {quantity} Options',
   },
   phantomStudentName: {
-    id: 'course.surveys.OptionsQuestionResults.phantomStudentName',
+    id: 'course.survey.OptionsQuestionResults.phantomStudentName',
     defaultMessage: '{name} (Phantom)',
   },
 });

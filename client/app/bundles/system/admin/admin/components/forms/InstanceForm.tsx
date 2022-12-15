@@ -20,15 +20,15 @@ interface Props {
 
 const translations = defineMessages({
   newInstance: {
-    id: 'system.admin.instance.new.newInstance',
+    id: 'system.admin.admin.InstanceForm.newInstance',
     defaultMessage: 'New Instance',
   },
   name: {
-    id: 'system.admin.instance.form.name',
+    id: 'system.admin.admin.InstanceForm.name',
     defaultMessage: 'Name',
   },
   host: {
-    id: 'system.admin.instance.form.host',
+    id: 'system.admin.admin.InstanceForm.host',
     defaultMessage: 'Host',
   },
 });

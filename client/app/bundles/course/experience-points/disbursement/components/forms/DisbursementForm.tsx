@@ -33,36 +33,36 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   reason: {
-    id: 'course.experience-points.disbursement.DisbursementForm.reason',
+    id: 'course.experiencePoints.disbursement.DisbursementForm.reason',
     defaultMessage: 'Reason For Disbursement',
   },
   filter: {
-    id: 'course.experience-points.disbursement.DisbursementForm.filter',
+    id: 'course.experiencePoints.disbursement.DisbursementForm.filter',
     defaultMessage: 'Filter by group',
   },
   fetchDisbursementFailure: {
-    id: 'course.experience-points.disbursement.DisbursementForm.fetch.failure',
+    id: 'course.experiencePoints.disbursement.DisbursementForm.fetchDisbursementFailure',
     defaultMessage: 'Failed to retrieve data.',
   },
   submit: {
-    id: 'course.experience-points.disbursement.DisbursementForm.submit',
+    id: 'course.experiencePoints.disbursement.DisbursementForm.submit',
     defaultMessage: 'Disburse Points',
   },
   createDisbursementSuccess: {
-    id: 'course.experience-points.disbursement.DisbursementForm.createDisbursementSuccess',
+    id: 'course.experiencePoints.disbursement.DisbursementForm.createDisbursementSuccess',
     defaultMessage:
       'Experience points disbursed to {recipientCount} recipients.',
   },
   createDisbursementFailure: {
-    id: 'course.experience-points.disbursement.DisbursementForm.createDisbursementFailure',
+    id: 'course.experiencePoints.disbursement.DisbursementForm.createDisbursementFailure',
     defaultMessage: 'Failed to award experience points.',
   },
   noDisbursement: {
-    id: 'course.experience-points.disbursement.DisbursementForm.noDisbursement',
+    id: 'course.experiencePoints.disbursement.DisbursementForm.noDisbursement',
     defaultMessage: 'No points are disbursed to users.',
   },
   notNumber: {
-    id: 'course.experience-points.disbursement.DisbursementForm.notNumber',
+    id: 'course.experiencePoints.disbursement.DisbursementForm.notNumber',
     defaultMessage: 'Not a Number.',
   },
 });

@@ -11,11 +11,11 @@ import formTranslations from 'lib/translations/form';
 
 const translations = defineMessages({
   newTitle: {
-    id: 'course.duplication.NewCourseForm.newTitle',
+    id: 'course.duplication.Duplication.DestinationCourseSelector.NewCourseForm.newTitle',
     defaultMessage: 'New Title',
   },
   newStartAt: {
-    id: 'course.duplication.NewCourseForm.newStartAt',
+    id: 'course.duplication.Duplication.DestinationCourseSelector.NewCourseForm.newStartAt',
     defaultMessage: 'New Start Date *',
   },
 });

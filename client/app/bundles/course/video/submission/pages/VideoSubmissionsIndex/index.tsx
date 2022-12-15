@@ -16,23 +16,23 @@ type Props = WrappedComponentProps;
 
 const translations = defineMessages({
   noVideoSubmission: {
-    id: 'course.video.submission.index.noVideoSubmission',
+    id: 'course.video.submission.VideoSubmissionsIndex.noVideoSubmission',
     defaultMessage: 'There is currently no video submission.',
   },
   fetchVideoSubmissionsFailure: {
-    id: 'course.video.submission.index.fetch.failure',
+    id: 'course.video.submission.VideoSubmissionsIndex.fetchVideoSubmissionsFailure',
     defaultMessage: 'Failed to retrieve video submissions.',
   },
   myStudents: {
-    id: 'course.video.submission.index.myStudents',
+    id: 'course.video.submission.VideoSubmissionsIndex.myStudents',
     defaultMessage: 'My Students',
   },
   normalStudents: {
-    id: 'course.video.submission.index.normalStudents',
+    id: 'course.video.submission.VideoSubmissionsIndex.normalStudents',
     defaultMessage: 'Normal Students',
   },
   phantomStudents: {
-    id: 'course.video.submission.index.phantomStudents',
+    id: 'course.video.submission.VideoSubmissionsIndex.phantomStudents',
     defaultMessage: 'Phantom Students',
   },
 });
@@ -66,7 +66,7 @@ const VideoSubmissionsIndex: FC<Props> = (props) => {
       <PageHeader
         returnLink={returnLink}
         title={`${intl.formatMessage({
-          id: 'course.video.submissions.header',
+          id: 'course.video.submissions.VideoSubmissionsIndex.header',
           defaultMessage: 'Video Submissions',
         })} ${data?.videoTitle ? `- ${data.videoTitle}` : ''}`}
       />

@@ -31,31 +31,31 @@ interface Props {
 
 const translations = defineMessages({
   title: {
-    id: 'course.achievement.form.title',
+    id: 'course.achievement.AchievementForm.title',
     defaultMessage: 'Title',
   },
   description: {
-    id: 'course.achievement.form.description',
+    id: 'course.achievement.AchievementForm.description',
     defaultMessage: 'Description',
   },
   published: {
-    id: 'course.achievement.form.published',
+    id: 'course.achievement.AchievementForm.published',
     defaultMessage: 'Published',
   },
   badge: {
-    id: 'course.achievement.form.badge',
+    id: 'course.achievement.AchievementForm.badge',
     defaultMessage: 'Badge',
   },
   update: {
-    id: 'course.achievement.form.update',
+    id: 'course.achievement.AchievementForm.update',
     defaultMessage: 'Update',
   },
   unlockConditions: {
-    id: 'course.achievement.form.unlockConditions',
+    id: 'course.achievement.AchievementForm.unlockConditions',
     defaultMessage: 'Unlock conditions',
   },
   unlockConditionsHint: {
-    id: 'course.achievement.form.unlockConditionsHint',
+    id: 'course.achievement.AchievementForm.unlockConditionsHint',
     defaultMessage:
       'This achievement will be unlocked if a student meets the following conditions.',
   },

@@ -27,7 +27,7 @@ interface Props extends WrappedComponentProps {
 
 const translations = defineMessages({
   fetchRecordsFailure: {
-    id: 'course.users.ExperiencePointsRecords.fetch.failure',
+    id: 'course.users.ExperiencePointsTable.fetchRecordsFailure',
     defaultMessage: 'Failed to fetch records',
   },
 });

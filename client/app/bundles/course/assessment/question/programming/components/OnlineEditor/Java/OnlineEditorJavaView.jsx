@@ -151,7 +151,7 @@ class OnlineEditorJavaView extends Component {
               'expression in the {expected} column using the {expectEquals} method as described ' +
               'in the append.'
             }
-            id="course.assessment.question.programming.onlineEditorJavaView.testCasesDescription"
+            id="course.assessment.question.programming.OnlineEditorJavaView.testCasesDescription"
             values={{
               note: (
                 <b>
@@ -179,7 +179,7 @@ class OnlineEditorJavaView extends Component {
               '{codeExampleExpression} and {codeExampleExpected} can then be input into {expression} and ' +
               '{expected} respectively.'
             }
-            id="course.assessment.question.programming.onlineEditorJavaView.testCasesCodeDescription"
+            id="course.assessment.question.programming.OnlineEditorJavaView.testCasesCodeDescription"
             values={{
               expression: (
                 <b>{intl.formatMessage(translations.expressionHeader)}</b>
@@ -550,7 +550,7 @@ class OnlineEditorJavaView extends Component {
                 'java functions. Note that you will need to upload either a submission or solution ' +
                 'file at the very least for the compiler to compile the files correctly.'
               }
-              id="course.assessment.question.programming.onlineEditorJavaView.fileSubmissionDescription"
+              id="course.assessment.question.programming.OnlineEditorJavaView.fileSubmissionDescription"
               values={{
                 file_submission: (
                   <b>
