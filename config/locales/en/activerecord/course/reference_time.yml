@@ -4,5 +4,7 @@ en:
       models:
         course/reference_time:
           attributes:
+            reference_timeline:
+              cannot_destroy_in_default_timeline: 'cannot delete times in default reference timeline'
             start_at:
               cannot_be_after_end_at: 'cannot be after end at'
