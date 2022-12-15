@@ -87,6 +87,61 @@ RSpec.describe Course::UsersController, type: :controller do
             expect(subject).to have_http_status(:bad_request)
           end
         end
+
+        context 'when assigning a reference timeline to a student' do
+          let(:student) { create(:course_student, course: course) }
+          let(:timeline) { create(:course_reference_timeline, course: course) }
+          let(:assigned_item) { create(:course_lesson_plan_item, course: course) }
+          let!(:time) { create(:course_reference_time, reference_timeline: timeline, lesson_plan_item: assigned_item) }
+
+          before do
+            # Unassigned items
+            create_list(:course_lesson_plan_item, 2, course: course)
+          end
+
+          subject do
+            patch :update, as: :json, params: {
+              course_id: course,
+              id: student,
+              course_user: { reference_timeline_id: timeline.id }
+            }
+          end
+
+          it 'is assigns the student to the reference timeline' do
+            expect { subject }.to change { timeline.reload.course_users.size }.by(1)
+
+            expect(student.reload.reference_timeline).to eq(timeline)
+            expect(timeline.course_users).to include(student)
+          end
+
+          it 'makes the student see reference times according to the assigned reference timeline' do
+            subject
+            student.reload
+
+            default_times_hash = course.default_reference_timeline.reference_times.to_h do |default_time|
+              [default_time.lesson_plan_item.id, default_time]
+            end
+
+            overridden_times_hash = timeline.reference_times.to_h do |overridden_time|
+              [overridden_time.lesson_plan_item.id, overridden_time]
+            end
+
+            course.lesson_plan_items.each do |item|
+              default_time = default_times_hash[item.id]
+              reference_time_for_student = item.reference_time_for(student)
+
+              if item.id == assigned_item.id
+                overridden_time = overridden_times_hash[item.id]
+                expect(reference_time_for_student).not_to eq(default_time)
+                expect(reference_time_for_student).to eq(overridden_time)
+              else
+                default_time = default_times_hash[item.id]
+                expect(overridden_times_hash).not_to include(item.id)
+                expect(reference_time_for_student).to eq(default_time)
+              end
+            end
+          end
+        end
       end
 
       context 'when the user is a student' do
