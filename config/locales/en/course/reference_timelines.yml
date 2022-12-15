@@ -1,0 +1,5 @@
+en:
+  course:
+    reference_timelines:
+      index:
+        default_title: 'Default Timeline'
