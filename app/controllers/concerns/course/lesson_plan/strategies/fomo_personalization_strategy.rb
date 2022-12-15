@@ -80,15 +80,27 @@ class Course::LessonPlan::Strategies::FomoPersonalizationStrategy <
       (!items_to_shift.nil? && !items_to_shift.include?(item.id))
   end
 
+  def item_is_straggling(personal_time, reference_time)
+    if reference_time.end_at.present? && personal_time.end_at.present?
+      reference_time.end_at < personal_time.end_at
+    elsif reference_time.end_at.present? && personal_time.end_at.nil?
+      true
+    end
+
+    false
+  end
+
   # Checks if the item is already open with a deadline shifted back by stragglers algorithm.
   # If the user was previously on the stragglers algorithm and just switched over, and has already open
-  # items, we want to keep those items as they are
+  # items, we want to keep those items as they are.
   #
   # @param [Course::PersonalTime] personal_time Personal time that we are checking.
   # @param [Course::ReferenceTime] reference_time Reference time that we are referring.
-  # @return [Boolean] Whether the item is already open with a deadline shifted back by stragglers a
+  # @return [Boolean] Whether the item is already open with a deadline shifted back by stragglers algorithm
   def item_is_open_and_straggling(personal_time, reference_time)
-    personal_time.end_at && personal_time.end_at > reference_time.end_at && personal_time.start_at < Time.zone.now
+    item_is_straggling = item_is_straggling(personal_time, reference_time)
+    item_is_open = personal_time.start_at < Time.zone.now
+    item_is_straggling && item_is_open
   end
 
   # Shifts the start_at of the personal_time forward based on the learning rate of the user and the most recent
