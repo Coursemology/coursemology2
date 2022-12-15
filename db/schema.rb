@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_12_093308) do
+ActiveRecord::Schema.define(version: 2023_01_15_054448) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -868,6 +868,8 @@ ActiveRecord::Schema.define(version: 2023_01_12_093308) do
     t.boolean "default", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "title"
+    t.integer "weight"
     t.index ["course_id"], name: "index_course_reference_timelines_on_course_id"
   end
 
