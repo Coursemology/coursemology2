@@ -6,3 +6,4 @@ en:
           attributes:
             default:
               taken: 'can only have one default reference timeline'
+              cannot_destroy: 'cannot delete default reference timeline'
