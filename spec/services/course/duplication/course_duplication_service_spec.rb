@@ -145,6 +145,34 @@ RSpec.describe Course::Duplication::CourseDuplicationService, type: :service do
         end
       end
 
+      context 'when there are multiple reference timelines' do
+        let(:old_default_timeline) { course.default_reference_timeline }
+        let(:empty_timeline) { create(:course_reference_timeline, course: course) }
+        let(:nonempty_timeline) { create(:course_reference_timeline, course: course) }
+        let(:time) do
+          create(
+            :course_reference_time,
+            reference_timeline: nonempty_timeline,
+            lesson_plan_item: course.lesson_plan_items.sample
+          )
+        end
+
+        it 'duplicates all the reference timelines' do
+          new_default_timeline = new_course.default_reference_timeline
+
+          expect(new_default_timeline).to be_similar_to_timeline(old_default_timeline, time_shift)
+
+          old_timelines = course.reference_timelines
+          new_timelines = new_course.reference_timelines
+          expect(new_timelines.size).to eq(course.reference_timelines.size)
+
+          new_timelines.each_with_index do |new_timeline, index|
+            old_timeline = old_timelines[index]
+            expect(new_timeline).to be_similar_to_timeline(old_timeline, time_shift)
+          end
+        end
+      end
+
       context 'when assessment has no children' do
         it 'duplicates assessment attributes' do
           new_assessment = new_course.assessments.first
