@@ -62,10 +62,10 @@ const CodaveriFeedbackStatus = (props) => {
 
   return (
     <Paper className="mb-8">
-      <div className={`${feedbackBgColor} inline-block p-8 font-bold`}>
+      <div className={`${feedbackBgColor} table-cell p-8 font-bold`}>
         {intl.formatMessage(translations.codaveriFeedbackStatus)}
       </div>
-      <div className="inline-block pl-5">{feedbackDescription}</div>
+      <div className="table-cell pl-5">{feedbackDescription}</div>
     </Paper>
   );
 };
