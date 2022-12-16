@@ -231,7 +231,7 @@ GEM
       warden (~> 1.2.3)
     devise-multi_email (3.0.1)
       devise
-    devise_masquerade (2.0.3)
+    devise_masquerade (2.1.0)
       devise (>= 4.7.0)
       globalid (>= 0.3.6)
       railties (>= 5.2.0)
