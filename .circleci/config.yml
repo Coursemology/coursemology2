@@ -55,8 +55,8 @@ commands:
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-            nvm install v16.19.0
-            nvm alias default 16.19.0
+            nvm install v18.12.1
+            nvm alias default 18.12.1
 
             echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
@@ -64,9 +64,9 @@ commands:
       # Restore cached Node dependencies
       - restore_cache:
           keys:
-            - v16.19.0-node-{{ checksum "client/yarn.lock" }}
+            - v18.12.1-node-{{ checksum "client/yarn.lock" }}
             # Fallback to using the latest cache if no exact match is found
-            - v16.19.0-node-
+            - v18.12.1-node-
 
       # Update Node dependencies
       - run: cd client && yarn install && cd -
@@ -75,16 +75,16 @@ commands:
       - save_cache:
           paths:
             - ./client/node_modules
-          key: v16.19.0-node-{{ checksum "client/yarn.lock" }}
+          key: v18.12.1-node-{{ checksum "client/yarn.lock" }}
 
   restore_node_cache:
     steps:
       - restore_cache:
           name: Restore Node cache
           keys:
-            - v16.19.0-node-{{ checksum "client/yarn.lock" }}
+            - v18.12.1-node-{{ checksum "client/yarn.lock" }}
             # Fallback to using the latest cache if no exact match is found
-            - v16.19.0-node-
+            - v18.12.1-node-
 
   build_and_cache_client:
     steps:
