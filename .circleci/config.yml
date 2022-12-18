@@ -118,7 +118,7 @@ jobs:
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: cimg/postgres:14.4
+      - image: cimg/postgres:14.5
         environment:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: coursemology_test
@@ -150,7 +150,7 @@ jobs:
             sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
       - setup_remote_docker:
-          version: 20.10.2
+          version: 20.10.18
           docker_layer_caching: true
 
       # Database setup
@@ -248,7 +248,7 @@ jobs:
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: cimg/postgres:14.4
+      - image: cimg/postgres:14.5
         environment:
           POSTGRES_USER: ubuntu
           POSTGRES_DB: coursemology_test
