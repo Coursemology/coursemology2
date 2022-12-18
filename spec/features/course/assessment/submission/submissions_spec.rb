@@ -68,6 +68,14 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         find('#staff-tab').click
         expect(page).to have_text(staff_submission.course_user.name)
         expect(page).to have_text(staff_submission.current_points_awarded)
+      end
+
+      scenario 'I can delete and unsubmit submissions of an assessment', js: true do
+        phantom_student
+        group_student
+        visit course_assessment_submissions_path(course, assessment)
+
+        find('#staff-tab').click
 
         # Course staff unsubmits own submission
         unsubmit_btn = "unsubmit-button-#{staff_submission.course_user.id}"
@@ -123,6 +131,8 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
 
         click_button('Force Submit Remaining')
         accept_confirm_dialog
+        wait_for_job
+
         expect(page).not_to have_text('Attempting')
         expect(page).not_to have_text('Not Started')
 
@@ -206,6 +216,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(find_button(delete_btn)).to be_present
         find_button(delete_btn).click
         accept_confirm_dialog
+        wait_for_job
 
         expect(page).to_not have_button(delete_btn)
 
