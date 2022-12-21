@@ -217,9 +217,6 @@ class Course::LessonPlan::Item < ApplicationRecord
     self.course = duplicator.options[:destination_course]
     self.default_reference_time = duplicator.duplicate(other.default_reference_time)
 
-    # TODO(#3092):
-    #   - For course duplication, we can copy all reference timelines
-    #   - For object duplication, we need to figure out which reference timelines
     other_reference_times = other.reference_times - [other.default_reference_time]
     self.reference_times = duplicator.duplicate(other_reference_times).unshift(default_reference_time)
 
@@ -259,7 +256,6 @@ class Course::LessonPlan::Item < ApplicationRecord
     self.default_reference_time.lesson_plan_item = self
   end
 
-  # TODO(#3092): Validate only one for each reference timeline
   def validate_only_one_default_reference_time
     num_defaults = reference_times.
                    includes(:reference_timeline).
