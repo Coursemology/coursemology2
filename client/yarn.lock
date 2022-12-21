@@ -4678,10 +4678,10 @@ express@^4.17.3:
     utils-merge "1.0.1"
     vary "~1.1.2"
 
-fabric@^5.2.4:
-  version "5.2.4"
-  resolved "https://registry.yarnpkg.com/fabric/-/fabric-5.2.4.tgz#c8c9d711313f0d211d5a94ebb1fe22259fe8c2b1"
-  integrity sha512-3+oLKvsbSJ76/nvPPrQVuUJDp0kOh8i867PpdrOPIHUyN+eLc+9nY3rmzMmDw6ndRm20f/uULv55G8sN01j9+Q==
+fabric@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/fabric/-/fabric-5.3.0.tgz#199297b6409e3a6279c16c1166da2b2a9e3e8b9b"
+  integrity sha512-AVayKuzWoXM5cTn7iD3yNWBlfEa8r1tHaOe2g8NsZrmWKAHjryTxT/j6f9ncRfOWOF0I1Ci1AId3y78cC+GExQ==
   optionalDependencies:
     canvas "^2.8.0"
     jsdom "^19.0.0"
