@@ -17,6 +17,7 @@ class Course::ReferenceTime < ApplicationRecord
 
   def initialize_duplicate(duplicator, other)
     self.reference_timeline = duplicator.duplicate(other.reference_timeline)
+    reference_timeline.reference_times << self
     self.start_at = duplicator.time_shift(other.start_at)
     self.bonus_end_at = duplicator.time_shift(other.bonus_end_at) if other.bonus_end_at
     self.end_at = duplicator.time_shift(other.end_at) if other.end_at
