@@ -16,6 +16,7 @@ const options = {
   downloadOptions: {
     filename: 'students_statistics',
   },
+  jumpToPage: true,
   print: false,
   rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
   rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
@@ -86,15 +87,9 @@ LinearProgressWithLabel.propTypes = {
   value: PropTypes.number,
 };
 
-const StudentsStatistics = ({
-  isCourseGamified,
-  showVideo,
-  courseVideoCount,
-  hasGroupManagers,
-  students,
-  isFetching,
-  isError,
-}) => {
+const StudentsStatistics = ({ metadata, students, isFetching, isError }) => {
+  const { isCourseGamified, showVideo, courseVideoCount, hasGroupManagers } =
+    metadata;
   const intl = useIntl();
 
   if (isFetching) {

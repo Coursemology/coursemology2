@@ -4,10 +4,12 @@ const initialState = {
   isFetching: false,
   isError: false,
   students: [],
-  isCourseGamified: false,
-  hasGroupManagers: false,
-  showVideo: false,
-  courseVideoCount: 0,
+  metadata: {
+    isCourseGamified: false,
+    hasGroupManagers: false,
+    showVideo: false,
+    courseVideoCount: 0,
+  },
 };
 
 export default function (state = initialState, action) {
@@ -22,10 +24,12 @@ export default function (state = initialState, action) {
         ...state,
         isFetching: false,
         students: action.students,
-        isCourseGamified: action.isCourseGamified,
-        showVideo: action.showVideo,
-        courseVideoCount: action.courseVideoCount,
-        hasGroupManagers: action.hasGroupManagers,
+        metadata: {
+          isCourseGamified: action.metadata.isCourseGamified,
+          showVideo: action.metadata.showVideo,
+          courseVideoCount: action.metadata.courseVideoCount,
+          hasGroupManagers: action.metadata.hasGroupManagers,
+        },
       };
     }
     case actionTypes.FETCH_STUDENTS_STATISTICS_FAILURE: {

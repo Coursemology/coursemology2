@@ -12,6 +12,7 @@ const options = {
   downloadOptions: {
     filename: 'staff_statistics',
   },
+  jumpToPage: true,
   print: false,
   rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
   rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],

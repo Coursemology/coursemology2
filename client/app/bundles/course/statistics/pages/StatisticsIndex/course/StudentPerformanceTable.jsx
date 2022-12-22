@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { memo, useMemo, useState } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import {
   Box,
   Card,
@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import { green, red } from '@mui/material/colors';
+import equal from 'fast-deep-equal';
 import PropTypes from 'prop-types';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
@@ -21,96 +22,97 @@ import { studentShape } from '../../../propTypes/course';
 
 const translations = defineMessages({
   title: {
-    id: 'course.statistics.course.studentPerformanceTable.title',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.title',
     defaultMessage: 'Student Performance',
   },
   includePhantom: {
-    id: 'course.statistics.course.studentPerformanceTable.phantom',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.phantom',
     defaultMessage: 'Include phantom users',
   },
   highlight: {
-    id: 'course.statistics.course.studentPerformanceTable.highlight',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.highlight',
     defaultMessage: 'Highlight top and bottom {percent}%',
   },
   tableTitle: {
-    id: 'course.statistics.course.studentPerformanceTable.tableTitle',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.tableTitle',
     defaultMessage: 'Students Sorted in {direction} {column}',
   },
   asc: {
-    id: 'course.statistics.course.studentPerformanceTable.ascending',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.ascending',
     defaultMessage: 'Ascending',
   },
   desc: {
-    id: 'course.statistics.course.studentPerformanceTable.descending',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.descending',
     defaultMessage: 'Descending',
   },
   name: {
-    id: 'course.statistics.course.studentPerformanceTable.name',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.name',
     defaultMessage: 'Name',
   },
   studentType: {
-    id: 'course.statistics.course.studentPerformanceTable.studentType',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType',
     defaultMessage: 'Student Type',
   },
   normal: {
-    id: 'course.statistics.course.studentPerformanceTable.studentType.normal',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType.normal',
     defaultMessage: 'Normal',
   },
   phantom: {
-    id: 'course.statistics.course.studentPerformanceTable.studentType.phantom',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType.phantom',
     defaultMessage: 'Phantom',
   },
   groupManagers: {
-    id: 'course.statistics.course.studentPerformanceTable.groupManagers',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.groupManagers',
     defaultMessage: 'Tutors',
   },
   level: {
-    id: 'course.statistics.course.studentPerformanceTable.level',
-    defaultMessage: 'Level',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.level',
+    defaultMessage: 'Level (Max: {maxLevel})',
   },
   experiencePoints: {
-    id: 'course.statistics.course.studentPerformanceTable.experiencePoints',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.experiencePoints',
     defaultMessage: 'Experience Points',
   },
   learningRate: {
-    id: 'course.statistics.course.studentPerformanceTable.learningRate',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.learningRate',
     defaultMessage: 'Learning Rate',
   },
   learningRateHint: {
-    id: 'course.statistics.course.studentPerformanceTable.learningRateHint',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.learningRateHint',
     defaultMessage:
       'A learning rate of 200% means that they can complete the course in half the time.',
   },
   numSubmissions: {
-    id: 'course.statistics.course.studentPerformanceTable.numSubmissions',
-    defaultMessage: 'No. of Submissions',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.numSubmissions',
+    defaultMessage: 'No. of Submissions (Total: {courseAssessmentCount})',
   },
   achievementCount: {
-    id: 'course.statistics.course.studentPerformanceTable.achievementCount',
-    defaultMessage: 'No. of Achievements',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount',
+    defaultMessage: 'No. of Achievements (Total: {courseAchievementCount})',
   },
   correctness: {
-    id: 'course.statistics.course.studentPerformanceTable.correctness',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctness',
     defaultMessage: 'Correctness',
   },
-  videoSubmissionCount: {
-    id: 'course.statistics.course.studentPerformanceTable.videoSubmissionCount',
-    defaultMessage: 'Video Watch Count',
+  correctnessHint: {
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctnessHint',
+    defaultMessage:
+      'Correctness is the average grade percentage of all graded assessments by a student.',
   },
   videoSubmissionCountHeader: {
-    id: 'course.statistics.course.studentPerformanceTable.videoSubmissionCountHeader',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoSubmissionCountHeader',
     defaultMessage: 'Videos Watched (Total: {courseVideoCount})',
   },
   videoPercentWatched: {
-    id: 'course.statistics.course.studentPerformanceTable.videoPercentWatched',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatched',
     defaultMessage: 'Video % Count',
   },
   videoPercentWatchedHeader: {
-    id: 'course.statistics.course.studentPerformanceTable.videoPercentWatchedHeader',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatchedHeader',
     defaultMessage: 'Average Video % Watched',
   },
   noData: {
-    id: 'course.statistics.course.studentPerformanceTable.noData',
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.noData',
     defaultMessage: 'No Data',
   },
 });
@@ -157,9 +159,12 @@ const StudentPerformanceTable = ({
   isCourseGamified,
   showVideo,
   courseVideoCount,
+  courseAchievementCount,
+  courseAssessmentCount,
+  maxLevel,
   hasGroupManagers,
-  intl,
 }) => {
+  const intl = useIntl();
   const [showPhantoms, setShowPhantoms] = useState(false);
   const [sortedColumn, setSortedColumn] = useState('experiencePoints');
   const [sortDirection, setSortDirection] = useState('desc');
@@ -186,6 +191,7 @@ const StudentPerformanceTable = ({
   const options = useMemo(
     () => ({
       filter: true,
+      jumpToPage: true,
       print: false,
       viewColumns: false,
       selectableRows: 'none',
@@ -325,7 +331,7 @@ const StudentPerformanceTable = ({
   if (isCourseGamified) {
     columns.push({
       name: 'level',
-      label: intl.formatMessage(translations.level),
+      label: intl.formatMessage(translations.level, { maxLevel }),
       options: {
         filter: true,
         sort: true,
@@ -364,7 +370,9 @@ const StudentPerformanceTable = ({
     });
     columns.push({
       name: 'achievementCount',
-      label: intl.formatMessage(translations.achievementCount),
+      label: intl.formatMessage(translations.achievementCount, {
+        courseAchievementCount,
+      }),
       options: {
         filter: false,
         sort: true,
@@ -376,7 +384,9 @@ const StudentPerformanceTable = ({
 
   columns.push({
     name: 'numSubmissions',
-    label: intl.formatMessage(translations.numSubmissions),
+    label: intl.formatMessage(translations.numSubmissions, {
+      courseAssessmentCount,
+    }),
     options: {
       filter: false,
       sort: true,
@@ -391,6 +401,7 @@ const StudentPerformanceTable = ({
       filter: false,
       sort: true,
       sortDescFirst: true,
+      hint: intl.formatMessage(translations.correctnessHint),
       customBodyRender: (value) =>
         value != null ? `${value}%` : intl.formatMessage(translations.noData),
       alignCenter: true,
@@ -513,8 +524,10 @@ StudentPerformanceTable.propTypes = {
   isCourseGamified: PropTypes.bool.isRequired,
   showVideo: PropTypes.bool.isRequired,
   courseVideoCount: PropTypes.number.isRequired,
+  courseAssessmentCount: PropTypes.number.isRequired,
+  courseAchievementCount: PropTypes.number.isRequired,
+  maxLevel: PropTypes.number.isRequired,
   hasGroupManagers: PropTypes.bool.isRequired,
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(StudentPerformanceTable);
+export default memo(StudentPerformanceTable, equal);

@@ -14,11 +14,13 @@ export const studentShape = PropTypes.shape({
 });
 
 export const studentsIndexShape = {
-  isCourseGamified: PropTypes.bool.isRequired,
-  showVideo: PropTypes.bool.isRequired,
-  courseVideoCount: PropTypes.number.isRequired,
-  hasGroupManagers: PropTypes.bool.isRequired,
   students: PropTypes.arrayOf(studentShape).isRequired,
+  metadata: PropTypes.shape({
+    isCourseGamified: PropTypes.bool.isRequired,
+    showVideo: PropTypes.bool.isRequired,
+    courseVideoCount: PropTypes.number.isRequired,
+    hasGroupManagers: PropTypes.bool.isRequired,
+  }),
   isFetching: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,
 };
