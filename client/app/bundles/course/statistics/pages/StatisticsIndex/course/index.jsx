@@ -10,17 +10,17 @@ import StudentProgressionChart from './StudentProgressionChart';
 
 const translations = defineMessages({
   error: {
-    id: 'course.statistics.course.error',
+    id: 'course.statistics.StatisticsIndex.course.error',
     defaultMessage:
       'Something went wrong when fetching course statistics! Please refresh to try again.',
   },
   progressionError: {
-    id: 'course.statistics.course.progressionError',
+    id: 'course.statistics.StatisticsIndex.course.progressionError',
     defaultMessage:
       'Something went wrong when fetching course progression statistics! Please refresh to try again.',
   },
   performanceError: {
-    id: 'course.statistics.course.performanceError',
+    id: 'course.statistics.StatisticsIndex.course.performanceError',
     defaultMessage:
       'Something went wrong when fetching course performance statistics! Please refresh to try again.',
   },
@@ -34,12 +34,18 @@ const CourseStatistics = ({
   assessments,
   submissions,
   students,
-  hasPersonalizedTimeline,
-  isCourseGamified,
-  showVideo,
-  courseVideoCount,
-  hasGroupManagers,
+  metadata,
 }) => {
+  const {
+    hasPersonalizedTimeline,
+    isCourseGamified,
+    showVideo,
+    courseVideoCount,
+    courseAssessmentCount,
+    courseAchievementCount,
+    maxLevel,
+    hasGroupManagers,
+  } = metadata;
   const intl = useIntl();
   if (isFetchingProgression && isFetchingPerformance) {
     return <LoadingIndicator />;
@@ -80,10 +86,13 @@ const CourseStatistics = ({
     }
     return (
       <StudentPerformanceTable
+        courseAchievementCount={courseAchievementCount}
+        courseAssessmentCount={courseAssessmentCount}
         courseVideoCount={courseVideoCount}
         hasGroupManagers={hasGroupManagers}
         hasPersonalizedTimeline={hasPersonalizedTimeline}
         isCourseGamified={isCourseGamified}
+        maxLevel={maxLevel}
         showVideo={showVideo}
         students={students}
       />

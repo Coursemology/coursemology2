@@ -8,11 +8,16 @@ const initialState = {
   assessments: [],
   submissions: [],
   students: [],
-  hasPersonalizedTimeline: false,
-  isCourseGamified: false,
-  showVideo: false,
-  courseVideoCount: 0,
-  hasGroupManagers: false,
+  metadata: {
+    hasPersonalizedTimeline: false,
+    isCourseGamified: false,
+    showVideo: false,
+    courseVideoCount: 0,
+    courseAssessmentCount: 0,
+    courseAchievementCount: 0,
+    maxLevel: 0,
+    hasGroupManagers: false,
+  },
   notification: {}, // Centralised notification shape across all the different reducers
 };
 
@@ -39,11 +44,16 @@ export default function (state = initialState, action) {
         ...state,
         isFetchingPerformance: false,
         students: action.students,
-        hasPersonalizedTimeline: action.hasPersonalizedTimeline,
-        isCourseGamified: action.isCourseGamified,
-        showVideo: action.showVideo,
-        courseVideoCount: action.courseVideoCount,
-        hasGroupManagers: action.hasGroupManagers,
+        metadata: {
+          hasPersonalizedTimeline: action.metadata.hasPersonalizedTimeline,
+          isCourseGamified: action.metadata.isCourseGamified,
+          showVideo: action.metadata.showVideo,
+          courseVideoCount: action.metadata.courseVideoCount,
+          courseAssessmentCount: action.metadata.courseAssessmentCount,
+          courseAchievementCount: action.metadata.courseAchievementCount,
+          maxLevel: action.metadata.maxLevel,
+          hasGroupManagers: action.metadata.hasGroupManagers,
+        },
       };
     }
     case actionTypes.FETCH_COURSE_PROGRESSION_STATISTICS_FAILURE: {

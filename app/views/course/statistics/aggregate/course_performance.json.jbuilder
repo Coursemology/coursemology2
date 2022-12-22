@@ -4,13 +4,21 @@ is_course_gamified = current_course.gamified?
 course_videos = current_course.videos
 course_video_count = course_videos.exists? ? course_videos.count : 0
 show_video = course_videos.exists? && can?(:analyze_videos, current_course)
+course_assessment_count = current_course.assessments.size
+course_achievement_count = current_course.achievements.size
+course_max_level = current_course.levels.size
 no_group_managers = @service.no_group_managers?
 
-json.hasPersonalizedTimeline has_personalized_timeline
-json.isCourseGamified is_course_gamified
-json.showVideo show_video
-json.courseVideoCount course_video_count
-json.hasGroupManagers !no_group_managers
+json.metadata do
+  json.hasPersonalizedTimeline has_personalized_timeline
+  json.isCourseGamified is_course_gamified
+  json.showVideo show_video
+  json.courseVideoCount course_video_count
+  json.courseAssessmentCount course_assessment_count
+  json.courseAchievementCount course_achievement_count
+  json.maxLevel course_max_level
+  json.hasGroupManagers !no_group_managers
+end
 
 json.students @students do |student|
   json.id student.id

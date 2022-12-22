@@ -6,10 +6,12 @@ can_analyze_videos = can?(:analyze_videos, current_course)
 is_course_gamified = current_course.gamified?
 no_group_managers = @service.no_group_managers?
 
-json.isCourseGamified is_course_gamified
-json.showVideo has_course_videos && can_analyze_videos
-json.courseVideoCount course_video_count
-json.hasGroupManagers !no_group_managers
+json.metadata do
+  json.isCourseGamified is_course_gamified
+  json.showVideo has_course_videos && can_analyze_videos
+  json.courseVideoCount course_video_count
+  json.hasGroupManagers !no_group_managers
+end
 
 json.students @all_students do |student|
   json.name student.name

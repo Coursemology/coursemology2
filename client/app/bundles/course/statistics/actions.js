@@ -19,10 +19,15 @@ export function fetchStudentsStatistics(failureMessage) {
         dispatch({
           type: actionTypes.FETCH_STUDENTS_STATISTICS_SUCCESS,
           students: response.data.students.map(processStudent),
-          isCourseGamified: response.data.isCourseGamified,
-          showVideo: response.data.showVideo,
-          courseVideoCount: parseInt(response.data.courseVideoCount, 10),
-          hasGroupManagers: response.data.hasGroupManagers,
+          metadata: {
+            isCourseGamified: response.data.metadata.isCourseGamified,
+            showVideo: response.data.metadata.showVideo,
+            courseVideoCount: parseInt(
+              response.data.metadata.courseVideoCount,
+              10,
+            ),
+            hasGroupManagers: response.data.metadata.hasGroupManagers,
+          },
         });
       })
       .catch(() => {
@@ -87,11 +92,26 @@ export function fetchCoursePerformanceStatistics(failureMessage) {
         dispatch({
           type: actionTypes.FETCH_COURSE_PERFORMANCE_STATISTICS_SUCCESS,
           students: response.data.students.map(processStudentPerformance),
-          hasPersonalizedTimeline: response.data.hasPersonalizedTimeline,
-          isCourseGamified: response.data.isCourseGamified,
-          showVideo: response.data.showVideo,
-          courseVideoCount: parseInt(response.data.courseVideoCount, 10),
-          hasGroupManagers: response.data.hasGroupManagers,
+          metadata: {
+            hasPersonalizedTimeline:
+              response.data.metadata.hasPersonalizedTimeline,
+            isCourseGamified: response.data.metadata.isCourseGamified,
+            showVideo: response.data.metadata.showVideo,
+            courseVideoCount: parseInt(
+              response.data.metadata.courseVideoCount,
+              10,
+            ),
+            courseAssessmentCount: parseInt(
+              response.data.metadata.courseAssessmentCount,
+              10,
+            ),
+            courseAchievementCount: parseInt(
+              response.data.metadata.courseAchievementCount,
+              10,
+            ),
+            maxLevel: parseInt(response.data.metadata.maxLevel, 10),
+            hasGroupManagers: response.data.metadata.hasGroupManagers,
+          },
         });
       })
       .catch(() => {
