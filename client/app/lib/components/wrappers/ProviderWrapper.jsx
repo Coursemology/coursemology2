@@ -65,6 +65,11 @@ const ProviderWrapper = ({ store, persistor, children }) => {
         defaultProps: { container: rootElement },
       },
       MuiPopover: {
+        // TODO: *Must* remove once SPA is ready
+        // Popover elements, e.g., Menu, MenuItem, attaches an `overflow: hidden` style to this `container` to
+        // prevent scrolling and having the Popover floating senselessly in the `container`. Usually, this `container`
+        // defaults to `body`. This time, we set it to `rootElement` which is NOT `body` nor the viewport. This causes
+        // the senseless floating issue while the page scrolls.
         defaultProps: { container: rootElement },
       },
       MuiPopper: {
