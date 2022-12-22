@@ -53,6 +53,7 @@ beforeEach(() => {
       enable_materials_action: true,
     },
     onSubmit: (): void => {},
+    disabled: false,
   };
 
   form = render(getComponent());

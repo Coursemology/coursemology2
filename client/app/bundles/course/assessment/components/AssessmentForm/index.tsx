@@ -109,7 +109,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
         render={({ field, fieldState }): JSX.Element => (
           <FormCheckboxField
             description={intl.formatMessage(t.sessionProtectionHint)}
-            disabled={disabled ?? autograded}
+            disabled={autograded || disabled}
             field={field}
             fieldState={fieldState}
             label={intl.formatMessage(t.sessionProtection)}
@@ -467,7 +467,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               description={intl.formatMessage(t.delayedGradePublicationHint)}
-              disabled={disabled ?? autograded}
+              disabled={autograded || disabled}
               disabledHint={
                 <InfoLabel
                   label={intl.formatMessage(t.unavailableInAutograded)}
@@ -490,7 +490,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           name="skippable"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
-              disabled={disabled ?? !autograded}
+              disabled={!autograded || disabled}
               disabledHint={
                 <InfoLabel label={intl.formatMessage(t.skippableManualHint)} />
               }
@@ -505,7 +505,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           name="allow_partial_submission"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
-              disabled={disabled ?? !autograded}
+              disabled={!autograded || disabled}
               disabledHint={
                 <InfoLabel
                   label={intl.formatMessage(t.unavailableInManuallyGraded)}
@@ -572,7 +572,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           name="tabbed_view"
           render={({ field, fieldState }): JSX.Element => (
             <FormSelectField
-              disabled={disabled ?? autograded}
+              disabled={autograded || disabled}
               field={field}
               fieldState={fieldState}
               label={intl.formatMessage(t.displayAssessmentAs)}
@@ -606,7 +606,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               description={intl.formatMessage(
                 t.blockStudentViewingAfterSubmittedHint,
               )}
-              disabled={disabled ?? autograded}
+              disabled={autograded || disabled}
               disabledHint={
                 <InfoLabel
                   label={intl.formatMessage(t.unavailableInAutograded)}
@@ -642,7 +642,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               description={intl.formatMessage(t.showMcqAnswerHint)}
-              disabled={disabled ?? !autograded}
+              disabled={!autograded || disabled}
               disabledHint={
                 <InfoLabel
                   label={intl.formatMessage(t.unavailableInManuallyGraded)}
@@ -660,7 +660,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           name="password_protected"
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
-              disabled={disabled ?? autograded}
+              disabled={autograded || disabled}
               disabledHint={
                 <InfoLabel
                   label={intl.formatMessage(t.unavailableInAutograded)}
