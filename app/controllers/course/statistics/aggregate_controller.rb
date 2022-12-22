@@ -30,7 +30,8 @@ class Course::Statistics::AggregateController < Course::Statistics::Controller
     @assessment_info_array ||= Course::Assessment.published.with_default_reference_time.
                                where.not(course_reference_times: { end_at: nil }).
                                where(course_id: current_course.id).
-                               pluck(:id, :title, :start_at, :end_at)
+                               pluck(:id, 'course_lesson_plan_items.title',
+                                     :start_at, :end_at)
   end
 
   def user_submission_array # rubocop:disable Metrics/AbcSize
