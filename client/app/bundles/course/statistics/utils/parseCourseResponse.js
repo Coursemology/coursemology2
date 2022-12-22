@@ -1,13 +1,14 @@
 export const processAssessment = (assessment) => ({
-  ...assessment,
   id: parseInt(assessment.id, 10),
+  title: assessment.title,
   startAt: new Date(assessment.startAt),
   endAt: assessment.endAt ? new Date(assessment.endAt) : assessment.endAt,
 });
 
 export const processSubmissions = (submission) => ({
-  ...submission,
   id: parseInt(submission.id, 10),
+  name: submission.name,
+  isPhantom: submission.isPhantom,
   submissions: submission.submissions.map((s) => ({
     assessmentId: parseInt(s.assessmentId, 10),
     submittedAt: new Date(s.submittedAt),
@@ -15,8 +16,11 @@ export const processSubmissions = (submission) => ({
 });
 
 export const processStudentPerformance = (student) => ({
-  ...student,
   id: parseInt(student.id, 10),
+  name: student.name,
+  nameLink: student.nameLink,
+  isPhantom: student.isPhantom,
+
   groupManagers:
     student.groupManagers
       ?.map((m) => ({
@@ -41,6 +45,8 @@ export const processStudentPerformance = (student) => ({
   achievementCount: parseInt(student.achievementCount ?? 0, 10),
   level: parseInt(student.level ?? 0, 10),
   experiencePoints: parseInt(student.experiencePoints ?? 0, 10),
+  experiencePointsLink: student.experiencePointsLink,
   videoSubmissionCount: parseInt(student.videoSubmissionCount ?? 0, 10),
   videoPercentWatched: parseFloat(student.videoPercentWatched ?? 0),
+  videoSubmissionLink: student.videoSubmissionLink,
 });
