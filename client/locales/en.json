@@ -4304,6 +4304,114 @@
   "course.material.folders.WorkbinTableButtons.tableButtonDeleteTooltip": {
     "defaultMessage": "Delete"
   },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.achievementCount": {
+    "defaultMessage": "No. of Achievements (Total: {courseAchievementCount})"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.ascending": {
+    "defaultMessage": "Ascending"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctness": {
+    "defaultMessage": "Correctness"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctnessHint": {
+    "defaultMessage": "Correctness is the average grade percentage of all graded assessments by a student."
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.descending": {
+    "defaultMessage": "Descending"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.experiencePoints": {
+    "defaultMessage": "Experience Points"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.groupManagers": {
+    "defaultMessage": "Tutors"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.highlight": {
+    "defaultMessage": "Highlight top and bottom {percent}%"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.learningRate": {
+    "defaultMessage": "Learning Rate"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.learningRateHint": {
+    "defaultMessage": "A learning rate of 200% means that they can complete the course in half the time."
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.level": {
+    "defaultMessage": "Level (Max: {maxLevel})"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.name": {
+    "defaultMessage": "Name"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.noData": {
+    "defaultMessage": "No Data"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.numSubmissions": {
+    "defaultMessage": "No. of Submissions (Total: {courseAssessmentCount})"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.phantom": {
+    "defaultMessage": "Include phantom users"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType": {
+    "defaultMessage": "Student Type"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType.normal": {
+    "defaultMessage": "Normal"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType.phantom": {
+    "defaultMessage": "Phantom"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.tableTitle": {
+    "defaultMessage": "Students Sorted in {direction} {column}"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.title": {
+    "defaultMessage": "Student Performance"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatched": {
+    "defaultMessage": "Video % Count"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatchedHeader": {
+    "defaultMessage": "Average Video % Watched"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoSubmissionCountHeader": {
+    "defaultMessage": "Videos Watched (Total: {courseVideoCount})"
+  },
+  "course.statistics.StatisticsIndex.course.StudentProgressionChart.deadlines": {
+    "defaultMessage": "Deadlines"
+  },
+  "course.statistics.StatisticsIndex.course.StudentProgressionChart.latestSubmission": {
+    "defaultMessage": "Latest Submission"
+  },
+  "course.statistics.StatisticsIndex.course.StudentProgressionChart.note": {
+    "defaultMessage": "Note: The chart above only shows assessments with deadlines. Students may also have personalized deadlines."
+  },
+  "course.statistics.StatisticsIndex.course.StudentProgressionChart.openingTimes": {
+    "defaultMessage": "Opening Times"
+  },
+  "course.statistics.StatisticsIndex.course.StudentProgressionChart.phantom": {
+    "defaultMessage": "Include phantom users"
+  },
+  "course.statistics.StatisticsIndex.course.StudentProgressionChart.showOpeningTimes": {
+    "defaultMessage": "Show opening times of assessments"
+  },
+  "course.statistics.StatisticsIndex.course.StudentProgressionChart.studentSubmissions": {
+    "defaultMessage": "{name}'s Submissions"
+  },
+  "course.statistics.StatisticsIndex.course.StudentProgressionChart.title": {
+    "defaultMessage": "Student Progression"
+  },
+  "course.statistics.StatisticsIndex.course.StudentProgressionChart.xAxisLabel": {
+    "defaultMessage": "Date"
+  },
+  "course.statistics.StatisticsIndex.course.StudentProgressionChart.yAxisLabel": {
+    "defaultMessage": "Assessment (Sorted by Deadline)"
+  },
+  "course.statistics.StatisticsIndex.course.error": {
+    "defaultMessage": "Something went wrong when fetching course statistics! Please refresh to try again."
+  },
+  "course.statistics.StatisticsIndex.course.performanceError": {
+    "defaultMessage": "Something went wrong when fetching course performance statistics! Please refresh to try again."
+  },
+  "course.statistics.StatisticsIndex.course.progressionError": {
+    "defaultMessage": "Something went wrong when fetching course progression statistics! Please refresh to try again."
+  },
   "course.statistics.StatisticsIndex.header.statistics": {
     "defaultMessage": "Statistics"
   },
@@ -4366,6 +4474,24 @@
   },
   "course.statistics.StatisticsIndex.tabs.students": {
     "defaultMessage": "Students"
+  },
+  "course.statistics.course.studentProgressionChart.clickToView": {
+    "defaultMessage": "Click to view {name}'s submissions"
+  },
+  "course.statistics.course.studentProgressionChart.endAt": {
+    "defaultMessage": "Deadline: {endAt}"
+  },
+  "course.statistics.course.studentProgressionChart.startAt": {
+    "defaultMessage": "Starts at: {startAt}"
+  },
+  "course.statistics.failures.coursePerformance": {
+    "defaultMessage": "Failed to fetch course performance data!"
+  },
+  "course.statistics.failures.courseProgression": {
+    "defaultMessage": "Failed to fetch course progression data!"
+  },
+  "course.statistics.tabs.course": {
+    "defaultMessage": "Course"
   },
   "course.survey.DeleteSectionButton.deleteSection": {
     "defaultMessage": "Delete Section"
@@ -4935,6 +5061,7 @@
     "defaultMessage": "Upload a .csv file with the following format:"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoPersonalTimeline": {
+    "defaultMessage": "Personal Timelines can be <code>[fixed, otot, stragglers, fomo]</code>, with course default: {defaultTimelineAlgorithm} if omitted."
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoPhantom": {
     "defaultMessage": "Phantom can be true/false with the following true values <code>['t', 'true', 'y', 'yes']</code> (case insenstitive), and defaults to false if omitted."
