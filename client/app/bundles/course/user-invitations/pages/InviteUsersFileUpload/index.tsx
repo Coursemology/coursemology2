@@ -39,8 +39,9 @@ const translations = defineMessages({
   },
   fileUploadInfoPhantom: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoPhantom',
-    defaultMessage: `Phantom can be true/false with the following true values <code>['t', 'true', 'y', 'yes']</code>\
-     (case insenstitive), and defaults to false if omitted.`,
+    defaultMessage:
+      "Phantom can be true/false with the following true values <code>['t', 'true', 'y', 'yes']</code>\
+     (case insenstitive), and defaults to false if omitted.",
     values: {
       code: (str: ReactNode[]): JSX.Element => <code>{str}</code>,
     },
@@ -48,8 +49,8 @@ const translations = defineMessages({
   fileUploadInfoPersonalTimeline: {
     id: 'course.userInvitations.InviteUsersFileUpload.fileUploadInfoPersonalTimeline',
     defaultMessage:
-      `Personal Timelines can be <code>[fixed, otot, stragglers, fomo]</code>, ` +
-      `with course default: {defaultTimelineAlgorithm} if omitted.`,
+      'Personal Timelines can be <code>[fixed, otot, stragglers, fomo]</code>,\
+      with course default: {defaultTimelineAlgorithm} if omitted.',
   },
   exampleHeader: {
     id: 'course.userInvitations.InviteUsersFileUpload.exampleHeader',
