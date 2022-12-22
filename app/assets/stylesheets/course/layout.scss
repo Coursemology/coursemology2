@@ -1,3 +1,6 @@
+$sidebar-width: 21rem;
+$sidebar-margin-side: 1.5rem;
+
 .course-layout {
   display: flex;
 
@@ -115,17 +118,30 @@
   }
 
   #full-sidebar {
-    margin-right: 1.5rem;
-    width: 21rem;
+    margin-right: $sidebar-margin-side;
+    width: $sidebar-width;
 
     @media (max-width: $screen-sm-min) {
-      margin-bottom: 1.5rem;
+      margin-bottom: $sidebar-margin-side;
       margin-right: 0;
       width: 100%;
     }
   }
 
+  // TODO: Revisit this once SPA and see if we can deal with just `width: 100%;`
+  // For some reasons in /courses/:id/assessments/:id/submissions/:id/edit page,
+  // `width: 100%` causes `.page-content` to take the width of `.course-layout`.
+  // This 'patch' calculates the true width of `.page-content` and ensure the
+  // content never bulges out of `.course-layout`. I am not proud of this patch.
   .page-content {
+    width: calc(100% - #{$sidebar-width} - #{$sidebar-margin-side});
+
+    @media (max-width: $screen-sm-min) {
+      width: 100%;
+    }
+  }
+
+  .collapse:not(.in) + .page-content {
     width: 100%;
   }
 }
