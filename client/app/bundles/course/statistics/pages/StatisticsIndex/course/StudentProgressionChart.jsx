@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState } from 'react';
-import { defineMessages, injectIntl } from 'react-intl';
+import { memo, useCallback, useMemo, useState } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import {
   Card,
   CardContent,
@@ -8,6 +8,7 @@ import {
   Switch,
   Typography,
 } from '@mui/material';
+import equal from 'fast-deep-equal';
 import PropTypes from 'prop-types';
 import {
   GREEN_CHART_BACKGROUND,
@@ -30,43 +31,43 @@ import {
 
 const translations = defineMessages({
   title: {
-    id: 'course.statistics.course.studentProgressionChart.title',
+    id: 'course.statistics.StatisticsIndex.course.StudentProgressionChart.title',
     defaultMessage: 'Student Progression',
   },
   latestSubmission: {
-    id: 'course.statistics.course.studentProgressionChart.latestSubmission',
+    id: 'course.statistics.StatisticsIndex.course.StudentProgressionChart.latestSubmission',
     defaultMessage: 'Latest Submission',
   },
   studentSubmissions: {
-    id: 'course.statistics.course.studentProgressionChart.studentSubmissions',
+    id: 'course.statistics.StatisticsIndex.course.StudentProgressionChart.studentSubmissions',
     defaultMessage: "{name}'s Submissions",
   },
   deadlines: {
-    id: 'course.statistics.course.studentProgressionChart.deadlines',
+    id: 'course.statistics.StatisticsIndex.course.StudentProgressionChart.deadlines',
     defaultMessage: 'Deadlines',
   },
   openingTimes: {
-    id: 'course.statistics.course.studentProgressionChart.openingTimes',
+    id: 'course.statistics.StatisticsIndex.course.StudentProgressionChart.openingTimes',
     defaultMessage: 'Opening Times',
   },
   showOpeningTimes: {
-    id: 'course.statistics.course.studentProgressionChart.showOpeningTimes',
+    id: 'course.statistics.StatisticsIndex.course.StudentProgressionChart.showOpeningTimes',
     defaultMessage: 'Show opening times of assessments',
   },
   phantom: {
-    id: 'course.statistics.course.studentProgressionChart.phantom',
+    id: 'course.statistics.StatisticsIndex.course.StudentProgressionChart.phantom',
     defaultMessage: 'Include phantom users',
   },
   yAxisLabel: {
-    id: 'course.statistics.course.studentProgressionChart.yAxisLabel',
+    id: 'course.statistics.StatisticsIndex.course.StudentProgressionChart.yAxisLabel',
     defaultMessage: 'Assessment (Sorted by Deadline)',
   },
   xAxisLabel: {
-    id: 'course.statistics.course.studentProgressionChart.xAxisLabel',
+    id: 'course.statistics.StatisticsIndex.course.StudentProgressionChart.xAxisLabel',
     defaultMessage: 'Date',
   },
   note: {
-    id: 'course.statistics.course.studentProgressionChart.note',
+    id: 'course.statistics.StatisticsIndex.course.StudentProgressionChart.note',
     defaultMessage:
       'Note: The chart above only shows assessments with deadlines. Students may also have personalized deadlines.',
   },
@@ -103,7 +104,8 @@ const chartGlobalOptions = (intl) => ({
   },
 });
 
-const StudentProgressionChart = ({ assessments, submissions, intl }) => {
+const StudentProgressionChart = ({ assessments, submissions }) => {
+  const intl = useIntl();
   const [selectedStudentIndex, setSelectedStudentIndex] = useState(null);
   const [showOpeningTimes, setShowOpeningTimes] = useState(true);
   const [showPhantoms, setShowPhantoms] = useState(false);
@@ -278,7 +280,6 @@ const StudentProgressionChart = ({ assessments, submissions, intl }) => {
 StudentProgressionChart.propTypes = {
   assessments: PropTypes.arrayOf(assessmentShape),
   submissions: PropTypes.arrayOf(submissionShape),
-  intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(StudentProgressionChart);
+export default memo(StudentProgressionChart, equal);
