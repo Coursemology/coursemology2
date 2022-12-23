@@ -65,6 +65,7 @@ RSpec.feature 'System: Administration: Courses', js: true do
         course_to_search = create(:course)
 
         visit admin_courses_path
+        sleep 0.5
         find_button('Search').click
         find('div[aria-label="Search"]').find('input').set(course_to_search.title)
 
