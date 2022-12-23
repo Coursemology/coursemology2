@@ -99,7 +99,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
-    "@babel/cli": "^7.19.3",
+    "@babel/cli": "^7.20.7",
     "@babel/core": "^7.20.7",
     "@babel/eslint-parser": "^7.19.1",
     "@babel/node": "^7.20.5",
