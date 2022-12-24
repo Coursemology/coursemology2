@@ -73,6 +73,8 @@ class Course < ApplicationRecord
   has_many :reference_timelines, class_name: Course::ReferenceTimeline.name, inverse_of: :course, dependent: :destroy
   has_one :default_reference_timeline, -> { where(default: true) },
           class_name: Course::ReferenceTimeline.name, inverse_of: :course
+  has_many :reference_times, through: :reference_timelines, class_name: Course::ReferenceTime.name
+
   validates :default_reference_timeline, presence: true
   validate :validate_only_one_default_reference_timeline
 
