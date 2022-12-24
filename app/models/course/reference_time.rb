@@ -9,6 +9,9 @@ class Course::ReferenceTime < ApplicationRecord
 
   validate :validate_start_at_cannot_be_after_end_at
 
+  # TODO(#3448): Consider creating personal times if new_record?
+  after_commit :update_personal_times, on: :update
+
   def initialize_duplicate(duplicator, other)
     self.reference_timeline = duplicator.duplicate(other.reference_timeline)
     self.start_at = duplicator.time_shift(other.start_at)
@@ -18,5 +21,11 @@ class Course::ReferenceTime < ApplicationRecord
 
   def validate_start_at_cannot_be_after_end_at
     errors.add(:start_at, :cannot_be_after_end_at) if end_at && start_at && start_at > end_at
+  end
+
+  def update_personal_times
+    return unless (previous_changes.keys & ['start_at', 'end_at']).any?
+
+    Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob.perform_later(lesson_plan_item)
   end
 end
