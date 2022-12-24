@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import { Emits } from 'react-emitter-factory';
 import { Controller } from 'react-hook-form';
 import { Button, Grid, RadioGroup, Typography } from '@mui/material';
-import { CourseInfo, TimeZones } from 'types/course/admin/course';
+import { CourseInfo, TimeOffset, TimeZones } from 'types/course/admin/course';
 
 import AvatarSelector from 'lib/components/core/AvatarSelector';
 import RadioButton from 'lib/components/core/buttons/RadioButton';
@@ -18,13 +18,14 @@ import Form, { FormEmitter } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import DeleteCoursePrompt from './DeleteCoursePrompt';
+import OffsetTimesPrompt from './OffsetTimesPrompt';
 import translations from './translations';
 import validationSchema from './validationSchema';
 
 interface CourseSettingsFormProps extends Emits<FormEmitter> {
   data: CourseInfo;
   timeZones: TimeZones;
-  onSubmit: (data: CourseInfo) => void;
+  onSubmit: (data: CourseInfo, timeOffset?: TimeOffset) => void;
   onDeleteCourse: () => void;
   onUploadCourseLogo: (image: File, onSuccess: () => void) => void;
   disabled: boolean;
@@ -32,9 +33,11 @@ interface CourseSettingsFormProps extends Emits<FormEmitter> {
 
 const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
   const { t } = useTranslation();
+  const [offsetTimesPrompt, setOffsetTimesPrompt] = useState(false);
   const [deletingCourse, setDeletingCourse] = useState(false);
   const [stagedLogo, setStagedLogo] = useState<File>();
 
+  const closeOffsetTimesPrompt = (): void => setOffsetTimesPrompt(false);
   const closeDeleteCoursePrompt = (): void => setDeletingCourse(false);
 
   const timeZonesOptions = useMemo(
@@ -46,14 +49,23 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
     [],
   );
 
-  const handleSubmit = (data: CourseInfo): void => {
+  const handleSubmit = (data: CourseInfo, timeOffset?: TimeOffset): void => {
     if (stagedLogo) {
       props.onUploadCourseLogo(stagedLogo, () => {
         setStagedLogo(undefined);
-        props.onSubmit(data);
+        props.onSubmit(data, timeOffset);
       });
     } else {
-      props.onSubmit(data);
+      props.onSubmit(data, timeOffset);
+    }
+    closeOffsetTimesPrompt();
+  };
+
+  const dataChangedAndHandleSubmit = (data: CourseInfo): void => {
+    if (data.startAt.getTime() !== new Date(props.data.startAt).getTime()) {
+      setOffsetTimesPrompt(true);
+    } else {
+      handleSubmit(data);
     }
   };
 
@@ -65,7 +77,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
       headsUp
       initialValues={props.data}
       onReset={(): void => setStagedLogo(undefined)}
-      onSubmit={handleSubmit}
+      onSubmit={dataChangedAndHandleSubmit}
       validates={validationSchema}
     >
       {(control, watch): JSX.Element => (
@@ -321,6 +333,17 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
             onClose={closeDeleteCoursePrompt}
             onConfirmDelete={props.onDeleteCourse}
             open={deletingCourse}
+          />
+
+          <OffsetTimesPrompt
+            disabled={props.disabled}
+            initialDateTime={new Date(props.data.startAt)}
+            onClose={closeOffsetTimesPrompt}
+            onSubmit={(timeOffset?: TimeOffset): void =>
+              handleSubmit(watch(), timeOffset)
+            }
+            open={offsetTimesPrompt}
+            updatedDateTime={new Date(watch('startAt'))}
           />
         </>
       )}
