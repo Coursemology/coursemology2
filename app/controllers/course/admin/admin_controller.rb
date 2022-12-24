@@ -51,9 +51,9 @@ class Course::Admin::AdminController < Course::Admin::Controller
     return if time_offset_params.keys.empty?
 
     reference_times = current_course.reference_times
-    time_offset_days = time_offset_params[:time_offset][:days]
-    time_offset_hours = time_offset_params[:time_offset][:hours]
-    time_offset_minutes = time_offset_params[:time_offset][:minutes]
+    time_offset_days = time_offset_params[:time_offset][:days].to_i
+    time_offset_hours = time_offset_params[:time_offset][:hours].to_i
+    time_offset_minutes = time_offset_params[:time_offset][:minutes].to_i
 
     Course::ReferenceTime::TimeOffsetService.shift_all_times(reference_times, time_offset_days, time_offset_hours,
                                                              time_offset_minutes)
