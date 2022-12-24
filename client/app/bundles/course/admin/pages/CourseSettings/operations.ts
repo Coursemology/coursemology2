@@ -2,6 +2,7 @@ import { AxiosError } from 'axios';
 import {
   CourseInfo,
   CourseInfoPostData,
+  TimeOffset,
   TimeZones,
 } from 'types/course/admin/course';
 
@@ -19,6 +20,7 @@ export const fetchTimeZones = async (): Promise<TimeZones> => {
 
 export const updateCourseSettings = async (
   data: CourseInfo,
+  timeOffset?: TimeOffset,
 ): Promise<CourseInfo> => {
   const adaptedData: CourseInfoPostData = {
     course: {
@@ -34,6 +36,7 @@ export const updateCourseSettings = async (
       default_timeline_algorithm: data.defaultTimelineAlgorithm,
       time_zone: data.timeZone,
       advance_start_at_duration_days: data.advanceStartAtDurationDays,
+      time_offset: timeOffset,
     },
   };
 

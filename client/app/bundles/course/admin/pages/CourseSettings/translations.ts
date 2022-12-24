@@ -159,6 +159,28 @@ export default defineMessages({
     defaultMessage:
       'Once you delete this course, you will NOT be able to access it anymore. All data associated with this course will be permanently deleted as well.',
   },
+  offsetTimesPromptText: {
+    id: 'course.admin.CourseSettings.offsetTimesPromptText',
+    defaultMessage:
+      'The start date of this course will be shifted {backwardOrForward} by\
+      {days} days, {hours} hours, and {mins} minutes. \
+      Would you like to shift the timing (start, end and bonus end dates) \
+      for all items (eg Assessment, Video, Survey and Lesson plan) \
+      in this course too?',
+  },
+  offsetTimesPromptPrimaryAction: {
+    id: 'course.admin.CourseSettingst.offsetTimesPromptPrimaryAction',
+    defaultMessage: 'Save changes & offset all items',
+  },
+  offsetTimesPromptSecondaryAction: {
+    id: 'course.admin.CourseSettingst.offsetTimesPromptSecondaryAction',
+    defaultMessage: 'Save changes only',
+  },
+  offsetTimesPromptTitle: {
+    id: 'course.admin.CourseSettingst.offsetTimesPromptTitle',
+    defaultMessage:
+      'Do you wish to shift the timing of all items in this course?',
+  },
   deleteThisCourse: {
     id: 'course.admin.CourseSettings.deleteThisCourse',
     defaultMessage: 'Delete this course',

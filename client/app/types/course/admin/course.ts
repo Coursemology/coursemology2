@@ -4,8 +4,8 @@ export interface CourseInfo {
   logo: string;
   published: boolean;
   enrollable: boolean;
-  startAt: string;
-  endAt: string;
+  startAt: Date;
+  endAt: Date;
   gamified: boolean;
   showPersonalizedTimelineFeatures: boolean;
   defaultTimelineAlgorithm: 'fixed' | 'fomo' | 'stragglers' | 'otot';
@@ -33,6 +33,7 @@ export interface CourseInfoPostData {
     default_timeline_algorithm?: CourseInfo['defaultTimelineAlgorithm'];
     time_zone?: CourseInfo['timeZone'];
     advance_start_at_duration_days?: CourseInfo['advanceStartAtDurationDays'];
+    time_offset?: TimeOffset;
   };
 }
 
@@ -44,3 +45,9 @@ export interface TimeZone {
 }
 
 export type TimeZones = TimeZone[];
+
+export interface TimeOffset {
+  days: number;
+  hours: number;
+  minutes: number;
+}
