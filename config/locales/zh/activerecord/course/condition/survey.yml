@@ -1,0 +1,18 @@
+zh:
+  activerecord:
+    attributes:
+      course/condition/survey/title:
+        # complete: 'Complete %{survey_title}'
+        complete: '已完成 %{survey_title}'
+    errors:
+      models:
+        course/condition/survey:
+          attributes:
+            survey:
+              # unique_dependency: 'cannot have duplicate conditions'
+              # references_self: 'cannot have itself as condition'
+              # cyclic_dependency: 'cannot have cyclic dependency'
+              unique_dependency: '不能包含重复的解锁条件'
+              references_self: '不能将它自己作为解锁条件'
+              cyclic_dependency: '不能包含循环的依赖'
+

@@ -1,0 +1,11 @@
+zh:
+  course:
+    assessment:
+      answer:
+        programming_auto_grading:
+          grade:
+            # evaluation_failed: >
+            #   Your code failed to evaluate correctly. There might be a syntax error, or perhaps
+            #   execution failed to complete within the allocated time and memory limits.
+            evaluation_failed: >
+              你的代码未能正确评估，可能是语法错误，也可能是在分配的时间和内存限制内未能完成执行。

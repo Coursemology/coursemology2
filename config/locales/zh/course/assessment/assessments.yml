@@ -1,0 +1,52 @@
+zh:
+  helpers:
+    buttons:
+      assessment:
+        # new: "New Assessment"
+        new: "新测验"
+  course:
+    assessment:
+      assessments:
+        # invalid_questions_order: "Invalid ordering for assessment questions"
+        invalid_questions_order: "测验问题的权重无效"
+        sidebar_title: :'course.assessment.assessments.index.header'
+        index:
+          # header: "Assessments"
+          header: "测验"
+        assessment:
+          # attempt: "Attempt"
+          attempt: "练习"
+        show:
+          # public_test: "Public"
+          # private_test: "Private"
+          # evaluation_test: "Evaluation"
+          public_test: "公开"
+          private_test: "私有"
+          evaluation_test: "评估"
+        new:
+          # header: "New Assessment"
+          header: "新测验"
+        edit:
+          # header: "Edit Assessment"
+          header: "编辑测验"
+        authenticate:
+          # header: "Input Password"
+          # message_not_started: "The assessment will be unlocked on %{start_at}."
+          # message_unlock: "The assessment is locked, please input the password."
+          # placeholder: "Password"
+          # continue: "Continue"
+          header: "输入密码"
+          message_not_started: "测验将于%{start_at}解锁"
+          message_unlock: "测验被锁定，请输入密码"
+          placeholder: "密码"
+          continue: "继续"
+        assessment_question_bundle_buttons:
+          # question_groups: "Groups"
+          # question_bundles: "Bundles"
+          # question_bundle_questions: "Bundle Questions"
+          # question_bundle_assignments: "Bundle Assignments"
+          question_groups: "组"
+          question_bundles: "绑定项"
+          question_bundle_questions: "绑定问题"
+          question_bundle_assignments: "绑定作业"
+

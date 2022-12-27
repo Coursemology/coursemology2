@@ -1,0 +1,20 @@
+zh:
+  activerecord:
+    errors:
+      models:
+        course/enrol_request:
+          # user_in_course: >
+          #   It seems like you are already enrolled in the course.
+          #   Please try refreshing the page?
+          user_in_course: >
+            你可能已经参加这个课程了，要刷新页面吗？
+          # existing_pending_request: >
+          #   It seems like you have already submitted an enrolment request.
+          existing_pending_request: >
+            你可能已经提交过加入课程申请了。
+          attributes:
+            base:
+              # deletion: >
+              #   Unable to cancel your enrolment request as it has been processed.
+              deletion: >
+                由于加入课程申请已被处理，无法撤回。

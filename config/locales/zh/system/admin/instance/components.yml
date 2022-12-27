@@ -1,0 +1,8 @@
+zh:
+  system:
+    admin:
+      instance:
+        components:
+          edit:
+            # header: 'Components'
+            header: '组件'

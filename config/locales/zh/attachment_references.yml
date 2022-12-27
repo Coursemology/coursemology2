@@ -1,0 +1,7 @@
+zh:
+  attachment_references:
+    render_html_response:
+      # success: 'Attachment has been deleted'
+      # failure: 'Failed to delete attachment: %{error}'
+      success: '附件已删除'
+      failure: '附件删除失败：%{error}'

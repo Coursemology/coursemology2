@@ -1,0 +1,8 @@
+zh:
+  system:
+    admin:
+      instance:
+        courses:
+          index:
+            # header: 'Courses'
+            header: '课程'

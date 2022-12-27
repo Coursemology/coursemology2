@@ -1,0 +1,10 @@
+zh:
+  jobs:
+    # completed:
+    #   completed: 'The job has completed.'
+    # errored:
+    #   errored: 'The job has encountered an error.'
+    completed:
+      completed: '任务已完成。'
+    errored:
+      errored: '任务出错。'

@@ -1,0 +1,14 @@
+zh:
+  instance:
+    mailer:
+      user_added_email:
+        # subject: 'Added to Instance %{instance}'
+        # message: >
+        #   You have been added to the instance %{instance} on %{coursemology}.
+
+        #   To view the instance, please log in with %{email}.
+        subject: '已加入实例%{instance}'
+        message: >
+          你已被加入%{coursemology}的实例%{instance}。
+
+          要查看该实例，请用以下方式登录%{email}.

@@ -1,0 +1,8 @@
+zh:
+  system:
+    admin:
+      instance:
+        users:
+          index:
+            # header: 'Users'
+            header: '用户'

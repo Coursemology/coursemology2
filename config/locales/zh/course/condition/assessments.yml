@@ -1,0 +1,10 @@
+zh:
+  course:
+    condition:
+      assessments:
+        new:
+          # header: 'New Assessment Condition'
+          header: '新测验条件'
+        edit:
+          # header: 'Edit Assessment Condition'
+          header: '编辑测验条件'

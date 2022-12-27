@@ -1,0 +1,10 @@
+zh:
+  course:
+    mailer:
+      survey_closing_reminder_email:
+        # subject: '%{course}: Reminder about %{survey}'
+        # message: >
+        #   Please be reminded that %{survey} will expire on %{time}.
+        subject: '%{course}: 相关提醒 %{survey}'
+        message: >
+          请注意%{survey}将于%{time}过期。

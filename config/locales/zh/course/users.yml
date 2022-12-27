@@ -1,0 +1,29 @@
+zh:
+  course:
+    users:
+      sidebar_title: :'course.users.index.header'
+      role:
+        # student: 'Student'
+        # teaching_assistant: 'Teaching Assistant'
+        # observer: 'Observer'
+        # manager: 'Manager'
+        # owner: 'Owner'
+        # phantom: 'Phantom'
+        student: '学生'
+        teaching_assistant: '助教'
+        observer: '监督者'
+        manager: '管理员'
+        owner: '拥有者'
+        phantom: '虚拟用户'
+      new:
+        # already_registered: 'You are already registered as a %{role}.'
+        already_registered: '你已注册为%{role}。'
+      students:
+        # header: 'Students'
+        header: '学生'
+      staff:
+        # header: 'Staff'
+        header: '员工'
+      index:
+        # header: 'Students'
+        header: '学生'

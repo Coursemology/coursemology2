@@ -1,0 +1,19 @@
+zh:
+  course:
+    assessment:
+      question:
+        voice_responses:
+          new:
+            # voice_response_header: 'Audio Response Question'
+            voice_response_header: '音频回答题'
+          create:
+            # success: 'The audio response question was created.'
+            success: '音频回答题已被创建'
+          update:
+            # success: 'The audio response question was updated.'
+            success: '音频回答题已被更新'
+          form:
+            # voice_response_button: 'Audio Response Question'
+            voice_response_button: '音频回答题'
+          # question_type: Audio Response
+          question_type: 音频回答题

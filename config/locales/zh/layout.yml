@@ -1,0 +1,99 @@
+zh:
+  layout:
+    coursemology: 'Coursemology'
+    navbar:
+      # toggle_navigation: 'Toggle Navigation'
+      # courses: 'Courses'
+      # all_courses: 'All Courses'
+      # help: 'Help'
+      # register: 'Register'
+      # sign_in: 'Sign In'
+      # sign_out: 'Sign Out'
+      # admin_panel: 'Administration Panel'
+      # instance_admin_panel: 'Instance Administration Panel'
+      # stop_masquerading: '(Stop Masquerading)'
+      toggle_navigation: '切换导航'
+      courses: '课程'
+      all_courses: '全部课程'
+      help: '帮助'
+      register: '注册'
+      sign_in: '登录'
+      sign_out: '登出'
+      admin_panel: '管理小组'
+      instance_admin_panel: '实例管理小组'
+      stop_masquerading: '(停止伪装)'
+  layouts:
+    course:
+      administration: :'system.admin.admin.index.header'
+    course_admin:
+      # title: 'Course Settings'
+      # course_settings:
+      #   title: 'General'
+      # announcement_settings:
+      #   title: :'course.announcements.index.header'
+      # component_settings:
+      #   title: :'course.admin.component_settings.index.header'
+      # sidebar_settings:
+      #   title: 'Sidebar'
+      # notifications:
+      #   title: 'Email'
+      # lesson_plan:
+      #   title: 'Lesson Plan'
+      # codaveri:
+      #   title: 'Codaveri Evaluation and Feedback'
+      title: '课程设置'
+      course_settings:
+        title: '通用'
+      announcement_settings:
+        title: :'course.announcements.index.header'
+      component_settings:
+        title: :'course.admin.component_settings.index.header'
+      sidebar_settings:
+        title: '侧边栏'
+      notifications:
+        title: '邮箱'
+      lesson_plan:
+        title: '课程计划'
+      codaveri:
+        title: 'Codaveri评估和反馈'
+    course_users:
+      # title: 'Manage Users'
+      title: '管理用户'
+    duplication:
+      # title: 'Duplicate Data'
+      title: '复制数据'
+    attachment_uploader:
+      # uploaded_files: 'Uploaded Files:'
+      # uploaded_file: 'Uploaded File:'
+      # new_files: 'Upload New Files'
+      uploaded_files: '已上传文件:'
+      uploaded_file: '已上传文件:'
+      new_files: '上传新文件'
+    materials_uploader:
+      # uploaded_by: 'Uploaded By: %{name}'
+      uploaded_by: '由：%{name}上传'
+    mailer:
+      # greeting: 'Hello, %{user}:'
+      greeting: '你好, %{user}:'
+    course_user_badge:
+      # achievements: '+ %{difference} More'
+      # level: 'Level %{level}'
+      # experience_points: '%{exp} EXP'
+      # next_level: '%{difference} EXP to Next Level'
+      # max_level: 'Congrats - Highest Level Attained!'
+      achievements: '+ %{difference}更多内容'
+      level: '等级%{level}'
+      experience_points: '%{exp}经验值'
+      next_level: '距离下一级%{difference}经验值'
+      max_level: '祝贺你--达到了最高的等级!'
+    code_formatter:
+      # size_too_big: 'The file is too big and cannot be displayed.'
+      size_too_big: '该文件太大，无法显示。'
+    learning_map:
+      # title: 'Learning Map'
+      title: '学习计划'
+    manage_email_subscription:
+      # tag: 'Click here'
+      # message: '%{manage_email_subscription_link} to unsubscribe from this email topic.'
+      tag: '点击此处'
+      message: '%{manage_email_subscription_link} 以取消对该电子邮件主题的订阅。'

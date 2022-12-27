@@ -1,0 +1,27 @@
+zh:
+  user:
+    registrations:
+      new:
+        # header: :'layout.navbar.register'
+        # already_registered_html: >
+        #   Already registered? If you have an existing Coursemology account, you can %{sign_in}.
+        # password_hint: '#{length} characters minimum'
+        # sign_up: :'user.registrations.new.header'
+        # used: >
+        #   The provided invitation code has been claimed by another account, please use that account to log in instead.
+        # used_with_email: >
+        #   The provided invitation code has been claimed by %{email}, please use that account to log in instead.
+        header: :'layout.navbar.register'
+        already_registered_html: >
+          已经注册过？ 如果你已经拥有一个Coursemology账号, 你可以直接%{sign_in}.
+        password_hint: '最小长度为#{length}'
+        sign_up: :'user.registrations.new.header'
+        used: >
+          所提供的邀请码已被另一个账户所使用，请使用该账户登录。
+        used_with_email: >
+          所提供的邀请码已被%{email}使用，
+          请使用该账户访问该课程。
+      edit:
+        header: '账户设置'
+      create:
+        verify_recaptcha_alert: There was an error with the reCAPTCHA below, please try again.

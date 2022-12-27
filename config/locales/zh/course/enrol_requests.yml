@@ -1,0 +1,6 @@
+zh:
+  course:
+    enrol_requests:
+      index:
+        # header: 'User Requests'
+        header: '用户需求'

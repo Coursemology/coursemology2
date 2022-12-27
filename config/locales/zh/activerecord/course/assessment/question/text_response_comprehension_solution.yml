@@ -1,0 +1,13 @@
+zh:
+  activerecord:
+    errors:
+      models:
+        course/assessment/question/text_response_comprehension_solution:
+          attributes:
+            solution_lemma:
+              # solution_lemma_empty: "couldn't generate any lemma form: please check your spelling"
+              solution_lemma_empty: "无法生成任何词条形式：请检查你的拼写。"
+            information:
+              # information_empty: "can't be blank for keyword solution"
+              information_empty: "关键字不能为空"
+

@@ -1,0 +1,32 @@
+zh:
+  course:
+    assessment:
+      answer:
+        text_response_comprehension_auto_grading:
+          explanations:
+            # point_html: '<u>Part (%{index})</u>'
+            # correct_point: 'You have answered this part correctly.'
+            # lifted_word_singular: 'You did not get any marks for this part because you lifted the following word: %{word_string}.'
+            # lifted_word_plural: 'You did not get any marks for this part because you lifted the following words: %{words_string}.'
+            # missing_keyword_singular: 'You did not paraphrase the following keyword: %{word_string}.'
+            # missing_keyword_plural: 'You did not paraphrase the following keywords: %{words_string}.'
+            # empty_information: '<i>(word was not entered by staff)</i>'
+            # correct_keyword: 'You have correctly used "%{answer}" to paraphrase the keyword "%{keyword}".'
+            # concatenate: ', '
+            # concatenate_last: ' and '
+            # line_break_html: '<br>'
+            # horizontal_break_html: '<hr>'
+            # grade: 'Grade: %{grade} / %{maximum_grade}'
+            point_html: '<u>第(%{index})部分</u>'
+            correct_point: '你正确完成了这部分的问题'
+            lifted_word_singular: '你在这部分没有得分，因为你使用了下面的字段: %{word_string}.'
+            lifted_word_plural: '你在这部分没有得分，因为你使用了下面的字段: %{words_string}.'
+            missing_keyword_singular: '你没有转述以下关键词: %{word_string}.'
+            missing_keyword_plural: '你没有转述以下关键词: %{words_string}.'
+            empty_information: '<i>(维护者没有输入文字)</i>'
+            correct_keyword: '你已正确使用 "%{answer}" 来转述 "%{keyword}".'
+            concatenate: ', '
+            concatenate_last: ' 与 '
+            line_break_html: '<br>'
+            horizontal_break_html: '<hr>'
+            grade: '评分: %{grade} / %{maximum_grade}'
