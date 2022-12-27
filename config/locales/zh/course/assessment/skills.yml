@@ -1,0 +1,9 @@
+zh:
+  course:
+    assessment:
+      skills:
+        # sidebar_title: 'Skills'
+        sidebar_title: '技能'
+        index:
+          # header: 'Skills'
+          header: '技能'

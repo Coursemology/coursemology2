@@ -1,0 +1,8 @@
+zh:
+  system:
+    admin:
+      instance:
+        admin:
+          index:
+            # header: 'Instance Administration'
+            header: '实例管理'

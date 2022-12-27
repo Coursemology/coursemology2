@@ -1,0 +1,66 @@
+zh:
+  instance_user_role_request_mailer:
+    new_role_request:
+      # subject: 'New role request!'
+      # empty: '(Not specified)'
+      # message_html: >
+      #   %{user} (%{email}) requests to become an %{role} in the %{instance} instance.
+
+      #   <strong>Organization</strong>
+
+      #   %{organization}
+
+
+      #   <strong>Designation</strong>
+
+      #   %{designation}
+
+
+      #   <strong>Reason</strong>
+
+      #   %{reason}
+
+
+      #   %{click_here} to review the request.
+      subject: '新的身份变更申请!'
+      empty: '（未指明）'
+      message_html: >
+        %{user} (%{email})申请在%{instance}中变更身份为%{role}。
+
+        <strong>组织</strong>
+
+        %{organization}
+
+
+        <strong>名称</strong>
+
+        %{designation}
+
+
+        <strong>理由</strong>
+
+        %{reason}
+
+
+        %{click_here}来查看该申请.
+
+    role_request_approved:
+      # subject: 'Your role request has been approved!'
+      # message: >
+      #   You have been approved to be an %{role} on Coursemology!
+
+      #   %{click_here} to create a new course and get started!
+      subject: '你的身份变更申请已通过！'
+      message: >
+        你已被确认为Coursemology中的%{role}!
+
+        %{click_here}来创建一门课程并开始授课吧!
+
+    role_request_rejected:
+      subject: '你的身份变更申请已被拒绝！'
+      message_empty: >
+        您成为Coursemology上的%{role}的请求已被拒绝!
+      message: >
+        您成为Coursemology上的%{role}的请求已被拒绝!
+        请查阅以下信息:
+        %{message}

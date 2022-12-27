@@ -1,0 +1,11 @@
+zh:
+  course:
+    admin:
+      component_settings:
+        index:
+          # header: 'Components'
+          header: '组件'
+        edit:
+          # header: 'Enable/Disable Components'
+          header: '使用/禁用组件'
+

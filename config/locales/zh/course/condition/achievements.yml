@@ -1,0 +1,11 @@
+zh:
+  course:
+    condition:
+      achievements:
+        new:
+          # header: 'New Achievement Condition'
+          header: '新成就解锁条件'
+        edit:
+          # header: 'Edit Achievement Condition'
+          header: '编辑成就解锁条件'
+          

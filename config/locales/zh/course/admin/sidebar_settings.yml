@@ -1,0 +1,7 @@
+zh:
+  course:
+    admin:
+      sidebar_settings:
+        edit:
+          # header: 'Sidebar Ordering'
+          header: '侧边栏顺序'

@@ -1,0 +1,121 @@
+# Additional translations at https://github.com/plataformatec/devise/wiki/I18n
+
+zh:
+  devise:
+    confirmations:
+      # new:
+      #   resend: 'Resend confirmation instructions'
+      # confirmed: 'Your email address has been successfully confirmed.'
+      # send_instructions: 'You will receive an email with instructions for how to confirm your email address in a few minutes. Please check your spam folder as well.'
+      # send_paranoid_instructions: 'If your email address exists in our database, you will receive an email with instructions for how to confirm your email address in a few minutes. Please check your spam folder as well.'
+      new:
+        resend: '重新发送确认指令'
+      confirmed: '您的电子邮件地址已被成功确认。'
+      send_instructions: '你将在几分钟内收到一封电子邮件，说明如何确认你的电子邮件地址，请同时检查你的垃圾邮件文件夹。'
+      send_paranoid_instructions: '如果您的电子邮件地址存在于我们的数据库中，您将在几分钟后收到一封电子邮件，说明如何确认您的电子邮件地址。请同时检查您的垃圾邮件文件夹。'
+    failure:
+      # already_authenticated: 'You are already signed in.'
+      # inactive: 'Your account is not activated yet.'
+      # invalid: 'Invalid %{authentication_keys} or password.'
+      # locked: 'Your account is locked.'
+      # last_attempt: 'You have one more attempt before your account is locked.'
+      # not_found_in_database: 'Invalid %{authentication_keys} or password.'
+      # timeout: 'Your session expired. Please sign in again to continue.'
+      # unauthenticated: 'You need to sign in or sign up before continuing.'
+      # unconfirmed: 'You have to confirm your email address before continuing.'
+      already_authenticated: '你已经登录了。'
+      inactive: '你的账户还没有激活。'
+      invalid: '无效的%{authentication_keys}或密码。'
+      locked: '你的账户被锁定。'
+      last_attempt: '在你的账户被锁定之前，你还有一次尝试的机会。'
+      not_found_in_database: '无效的%{authentication_keys}或密码'
+      timeout: '您的会话已过期。请再次登录以继续。'
+      unauthenticated: '你需要在继续之前登录或注册。'
+      unconfirmed: '在继续之前，你必须验证你的电子邮件地址。'
+    mailer:
+      # confirmation_instructions:
+      #   subject: 'Confirmation instructions'
+      # reset_password_instructions:
+      #   subject: 'Reset password instructions'
+      # unlock_instructions:
+      #   subject: 'Unlock instructions'
+      confirmation_instructions:
+        subject: '验证说明'
+      reset_password_instructions:
+        subject: '重置密码说明'
+      unlock_instructions:
+        subject: '解除锁定说明'
+    omniauth_callbacks:
+      # failure: 'Could not authenticate you from %{kind} because "%{reason}".'
+      # success: 'Successfully authenticated from %{kind} account.'
+      failure: '无法认证您的%{kind}身份，原因为"%{reason}"。'
+      success: '成功认证您的%{kind}账户身份。'
+    passwords:
+      new:
+        # title: "Forgot your password?"
+        # button: "Send me reset password instructions"
+        title: "忘记密码?"
+        button: "向我发送重置密码说明"
+      # no_token: "You can't access this page without coming from a password reset email. If you do come from a password reset email, please make sure you used the full URL provided."
+      # send_instructions: 'You will receive an email with instructions on how to reset your password in a few minutes. Please check your spam folder as well.'
+      # send_paranoid_instructions: 'If your email address exists in our database, you will receive a password recovery link at your email address in a few minutes.'
+      # updated: 'Your password has been changed successfully. You are now signed in.'
+      # updated_not_active: 'Your password has been changed successfully.'
+      no_token: "如果你不是来自于密码重置邮件，则不能访问这个页面。如果你确实来自密码重置邮件，请确保你使用了所提供的完整URL。"
+      send_instructions: '你将在几分钟内收到一封电子邮件，说明如何重置你的密码。请同时检查您的垃圾邮件文件夹。'
+      send_paranoid_instructions: '如果您的电子邮件地址存在于我们的数据库中，您将在几分钟后在您的电子邮件地址中收到一个找回密码链接。'
+      updated: '您的密码已被成功更改。您现在已经登录了。'
+      updated_not_active: '您的密码已被成功更改。'
+    registrations:
+      # destroyed: 'Bye! Your account has been successfully cancelled. We hope to see you again soon.'
+      # signed_up: 'Welcome! You have signed up successfully.'
+      # signed_up_but_inactive: 'You have signed up successfully. However, we could not sign you in because your account is not yet activated.'
+      # signed_up_but_locked: 'You have signed up successfully. However, we could not sign you in because your account is locked.'
+      # signed_up_but_unconfirmed: 'A message with a confirmation link has been sent to your email address. Please follow the link to activate your account. Please check your spam folder as well.'
+      # update_needs_confirmation: 'You updated your account successfully, but we need to verify your new email address. Please check your email and follow the confirm link to confirm your new email address.'
+      # updated: 'Your account has been updated successfully.'
+      # new:
+      #   sign_up: 'Sign up'
+      #   password_hint: '#{length} characters minimum'
+      destroyed: '再见! 您的账户已被成功注销。我们希望很快再见到你。'
+      signed_up: '欢迎你! 您已经注册成功。'
+      signed_up_but_inactive: '您已经成功注册。但是，您无法登录，因为您的账户尚未激活。'
+      signed_up_but_locked: '你已经成功注册。但是，您无法登录，因为你的账户被锁定。'
+      signed_up_but_unconfirmed: '一条带有验证链接的信息已经发到你的邮箱。请按照该链接激活您的账户。请同时检查您的垃圾邮件文件夹。'
+      update_needs_confirmation: '您成功更新了您的帐户，但我们需要验证您的新电子邮件地址。请检查您的电子邮件并按照确认链接验证您的新电子邮件地址。'
+      updated: '您的账户已被成功更新。'
+      new:
+        sign_up: '注册'
+        password_hint: '最小长度为#{length}'
+    sessions:
+      # signed_in: 'Signed in successfully.'
+      # signed_out: 'Signed out successfully.'
+      # already_signed_out: 'Signed out successfully.'
+      signed_in: '登录成功。'
+      signed_out: '登出成功。'
+      already_signed_out: '登出成功。'
+    unlocks:
+      # send_instructions: 'You will receive an email with instructions for how to unlock your account in a few minutes. Please check your spam folder as well.'
+      # send_paranoid_instructions: 'If your account exists, you will receive an email with instructions for how to unlock it in a few minutes. Please check your spam folder as well.'
+      # unlocked: 'Your account has been unlocked successfully. Please sign in to continue.'
+      send_instructions: '你将在几分钟内收到一封电子邮件，说明如何解锁你的账户。请同时检查您的垃圾邮件文件夹。'
+      send_paranoid_instructions: '如果你的账户存在，你将会在几分钟内收到一封电子邮件，说明如何解锁它。请同时检查你的垃圾邮件文件夹。'
+      unlocked: '您的账户已被成功解锁。请登录后继续。'
+  errors:
+    messages:
+      # already_confirmed: 'was already confirmed, please try signing in'
+      # confirmation_period_expired: 'needs to be confirmed within %{period}, please request a new one'
+      # expired: 'has expired, please request a new one'
+      # not_found: 'not found'
+      # not_locked: 'was not locked'
+      # not_saved:
+      #   one: '1 error prohibited this %{resource} from being saved:'
+      #   other: '%{count} errors prohibited this %{resource} from being saved:'
+      already_confirmed: '已被确认，请尝试登录'
+      confirmation_period_expired: '需要在%{period}内确认，请申请一个新的。'
+      expired: '已经过期，请申请一个新的'
+      not_found: '未找到'
+      not_locked: '未被锁定'
+      not_saved:
+        one: '一个错误导致%{resource}无法保存：'
+        other: '%{count}个错误导致%{resource}无法保存:'

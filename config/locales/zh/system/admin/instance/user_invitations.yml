@@ -1,0 +1,37 @@
+zh:
+  system:
+    admin:
+      instance:
+        user_invitations:
+          index:
+            # header: 'Invitations'
+            header: '邀请'
+          new:
+            # header: 'Invite Users'
+            header: '邀请用户'
+          create:
+            # success: >
+            #   Successfully invited users from the uploaded file:
+            #   %{new_invitations}, %{already_invited}, %{new_instance_users}, %{already_in_instance}.
+            success: >
+              成功从上传的文件中邀请用户:
+              %{new_invitations}, %{already_invited}, %{new_instance_users}, %{already_in_instance}.
+            summary:
+              # new_invitations:
+              #   one: '1 new invitation sent'
+              #   other: '%{count} new invitations sent'
+              # new_instance_users:
+              #   one: '1 user just added'
+              #   other: '%{count} users just added'
+              # already_in_instance: '%{count} already in the instance'
+              # already_invited: '%{count} already invited'
+              # duplicate_emails: '%{count} duplicate emails ignored.'
+              new_invitations:
+                one: '已发送一个新邀请'
+                other: '已发送%{count}个新邀请'
+              new_instance_users:
+                one: '已添加一个用户'
+                other: '已添加%{count}个用户'
+              already_in_instance: '%{count}已在实例中'
+              already_invited: '%{count}已邀请'
+              duplicate_emails: '%{count}重复的邮箱地址已被忽略。'

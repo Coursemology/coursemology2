@@ -1,0 +1,18 @@
+zh:
+  activerecord:
+    attributes:
+      models:
+        course/assessment/question/text_response:
+          # text_response: 'Text Response Question'
+          # file_upload: 'File Upload Question'
+          # comprehension: 'Comprehension Question'
+          text_response: '简答题'
+          file_upload: '上传答案文件题'
+          comprehension: '理解题'
+    errors:
+      models:
+        course/assessment/question/text_response:
+          attributes:
+            maximum_grade:
+              # invalid_grade: 'must be no less than the grade of any solution'
+              invalid_grade: '不能低于答案的最低分数'
