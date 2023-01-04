@@ -182,6 +182,23 @@ export interface ForumFormData {
   forumTopicsAutoSubscribe: boolean;
 }
 
+export interface ForumPostData {
+  forum: {
+    name: ForumFormData['name'];
+    description: ForumFormData['description'];
+    forum_topics_auto_subscribe: ForumFormData['forumTopicsAutoSubscribe'];
+  };
+}
+
+export interface ForumPatchData {
+  forum: {
+    id: ForumFormData['id'];
+    name: ForumFormData['name'];
+    description: ForumFormData['description'];
+    forum_topics_auto_subscribe: ForumFormData['forumTopicsAutoSubscribe'];
+  };
+}
+
 export interface ForumTopicFormData {
   id?: number;
   title: string;
@@ -189,14 +206,27 @@ export interface ForumTopicFormData {
   topicType: TopicType;
 }
 
+export interface ForumTopicPostData {
+  topic: {
+    title: ForumTopicFormData['title'];
+    topic_type: ForumTopicFormData['topicType'];
+    posts_attributes: { text: ForumTopicFormData['text'] }[];
+  };
+}
+
+export interface ForumTopicPatchData {
+  topic: {
+    id: ForumTopicFormData['id'];
+    title: ForumTopicFormData['title'];
+    topic_type: ForumTopicFormData['topicType'];
+    posts_attributes: { text: ForumTopicFormData['text'] }[];
+  };
+}
+
 export interface ForumTopicPostFormData {
   text: string;
   parentId: number | null;
 }
-
-// export interface VideoEditFormData extends VideoFormData {
-//   id: number;
-// }
 
 /**
  * Data types for forum search data sent to backend

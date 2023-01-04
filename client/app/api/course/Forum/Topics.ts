@@ -3,6 +3,8 @@ import { RecursiveArray } from 'types';
 import {
   ForumTopicData,
   ForumTopicListData,
+  ForumTopicPatchData,
+  ForumTopicPostData,
   ForumTopicPostListData,
 } from 'types/course/forums';
 
@@ -36,7 +38,7 @@ export default class TopicsAPI extends BaseCourseAPI {
    */
   create(
     forumId: string,
-    params: FormData,
+    params: ForumTopicPostData,
   ): Promise<
     AxiosResponse<{
       redirectUrl: string;
@@ -53,7 +55,7 @@ export default class TopicsAPI extends BaseCourseAPI {
    */
   update(
     urlSlug: string,
-    params: FormData,
+    params: ForumTopicPatchData,
   ): Promise<AxiosResponse<ForumTopicListData>> {
     return this.getClient().patch(`${urlSlug}`, params);
   }
