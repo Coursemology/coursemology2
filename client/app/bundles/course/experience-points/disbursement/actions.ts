@@ -2,8 +2,8 @@ import {
   DisbursementCourseGroupListData,
   DisbursementCourseUserListData,
   ForumDisbursementFilters,
+  ForumDisbursementPostData,
   ForumDisbursementUserData,
-  ForumPostData,
 } from 'types/course/disbursement';
 
 import {
@@ -46,7 +46,7 @@ export function removeForumDisbursementList(): RemoveForumDisbursementListAction
 }
 
 export function saveForumPostList(
-  posts: ForumPostData[],
+  posts: ForumDisbursementPostData[],
   userId: number,
 ): SaveForumPostListAction {
   return {
