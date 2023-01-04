@@ -26,51 +26,6 @@ import {
   updatePostAsAnswer,
 } from './reducers';
 
-/**
- * Prepares and maps object attributes to a FormData object for an post/patch request.
- */
-const formatForumAttributes = (data: ForumFormData): FormData => {
-  const payload = new FormData();
-
-  ['name', 'description', 'forumTopicsAutoSubscribe'].forEach((field) => {
-    if (data[field] !== undefined && data[field] !== null) {
-      switch (field) {
-        case 'forumTopicsAutoSubscribe':
-          payload.append(
-            'forum[forum_topics_auto_subscribe]',
-            data[field].toString(),
-          );
-          break;
-        default:
-          payload.append(`forum[${field}]`, data[field]);
-          break;
-      }
-    }
-  });
-  return payload;
-};
-
-const formatForumTopicAttributes = (data: ForumTopicFormData): FormData => {
-  const payload = new FormData();
-
-  ['title', 'text', 'topicType'].forEach((field) => {
-    if (data[field] !== undefined && data[field] !== null) {
-      switch (field) {
-        case 'text':
-          payload.append('topic[posts_attributes][0][text]', data[field]!);
-          break;
-        case 'topicType':
-          payload.append('topic[topic_type]', data[field]);
-          break;
-        default:
-          payload.append(`topic[${field}]`, data[field]);
-          break;
-      }
-    }
-  });
-  return payload;
-};
-
 // Forum
 
 export function fetchForums(): Operation<void> {
@@ -98,21 +53,34 @@ export function fetchForum(forumId: string): Operation<number> {
       });
 }
 
-export function createForum(formData: ForumFormData): Operation<void> {
-  const attributes = formatForumAttributes(formData);
+export function createForum(forumFormData: ForumFormData): Operation<void> {
+  const adaptedData = {
+    forum: {
+      name: forumFormData.name,
+      description: forumFormData.description,
+      forum_topics_auto_subscribe: forumFormData.forumTopicsAutoSubscribe,
+    },
+  };
   return async (dispatch) =>
-    CourseAPI.forum.forums.create(attributes).then((response) => {
+    CourseAPI.forum.forums.create(adaptedData).then((response) => {
       dispatch(saveForumListData(response.data));
     });
 }
 
 export function updateForum(
-  formData: ForumFormData,
+  forumFormData: ForumFormData,
   forumId: number,
 ): Operation<{ forumUrl: string }> {
-  const attributes = formatForumAttributes(formData);
+  const adaptedData = {
+    forum: {
+      id: forumFormData.id,
+      name: forumFormData.name,
+      description: forumFormData.description,
+      forum_topics_auto_subscribe: forumFormData.forumTopicsAutoSubscribe,
+    },
+  };
   return async (dispatch) =>
-    CourseAPI.forum.forums.update(forumId, attributes).then((response) => {
+    CourseAPI.forum.forums.update(forumId, adaptedData).then((response) => {
       dispatch(updateForumListData(response.data));
       return { forumUrl: response.data.forumUrl };
     });
@@ -172,23 +140,36 @@ export function fetchForumTopic(
 
 export function createForumTopic(
   forumId: string,
-  formData: ForumTopicFormData,
+  topicFormData: ForumTopicFormData,
 ): Operation<
   AxiosResponse<{
     redirectUrl: string;
   }>
 > {
-  const attributes = formatForumTopicAttributes(formData);
-  return async (_) => CourseAPI.forum.topics.create(forumId, attributes);
+  const adaptedData = {
+    topic: {
+      title: topicFormData.title,
+      topic_type: topicFormData.topicType,
+      posts_attributes: [{ text: topicFormData.text }],
+    },
+  };
+  return async (_) => CourseAPI.forum.topics.create(forumId, adaptedData);
 }
 
 export function updateForumTopic(
   topicUrl: string,
-  formData: ForumTopicFormData,
+  topicFormData: ForumTopicFormData,
 ): Operation<{ topicUrl: string }> {
-  const attributes = formatForumTopicAttributes(formData);
+  const adaptedData = {
+    topic: {
+      id: topicFormData.id,
+      title: topicFormData.title,
+      topic_type: topicFormData.topicType,
+      posts_attributes: [{ text: topicFormData.text }],
+    },
+  };
   return async (dispatch) =>
-    CourseAPI.forum.topics.update(topicUrl, attributes).then((response) => {
+    CourseAPI.forum.topics.update(topicUrl, adaptedData).then((response) => {
       dispatch(updateForumTopicListData(response.data));
       return { topicUrl: response.data.topicUrl };
     });

@@ -4,7 +4,9 @@ import {
   ForumData,
   ForumListData,
   ForumMetadata,
+  ForumPatchData,
   ForumPermissions,
+  ForumPostData,
   ForumSearchParams,
   ForumTopicListData,
 } from 'types/course/forums';
@@ -43,7 +45,7 @@ export default class ForumsAPI extends BaseCourseAPI {
   /**
    * Creates a new forum.
    */
-  create(params: FormData): Promise<AxiosResponse<ForumListData>> {
+  create(params: ForumPostData): Promise<AxiosResponse<ForumListData>> {
     return this.getClient().post(this._getUrlPrefix(), params);
   }
 
@@ -52,7 +54,7 @@ export default class ForumsAPI extends BaseCourseAPI {
    */
   update(
     forumId: number,
-    params: FormData,
+    params: ForumPatchData,
   ): Promise<AxiosResponse<ForumListData>> {
     return this.getClient().patch(`${this._getUrlPrefix()}/${forumId}`, params);
   }
