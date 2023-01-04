@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
 import NewAnnouncementButton from '../../components/buttons/NewAnnouncementButton';
@@ -86,7 +87,7 @@ const AnnouncementsIndex: FC<Props> = (props) => {
       ) : (
         <>
           {announcements.length === 0 ? (
-            <div>{intl.formatMessage(translations.noAnnouncements)}</div>
+            <Note message={intl.formatMessage(translations.noAnnouncements)} />
           ) : (
             <AnnouncementsDisplay
               announcementPermissions={announcementPermissions}

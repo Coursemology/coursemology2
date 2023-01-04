@@ -28,10 +28,6 @@ const translations = defineMessages({
     id: 'system.admin.instance.instance.InstanceUsersInvitations.fetch.failure',
     defaultMessage: 'Failed to fetch invitations.',
   },
-  noInvitations: {
-    id: 'system.admin.instance.instance.InstanceUsersInvitations.noInvitations',
-    defaultMessage: 'There are no instance user invitations sent yet.',
-  },
   pending: {
     id: 'system.admin.instance.instance.InstanceUsersInvitations.pending',
     defaultMessage: 'Pending Invitations',

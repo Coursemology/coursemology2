@@ -16,6 +16,7 @@ import { SubmissionMiniEntity } from 'types/course/assessment/submissions';
 
 import CustomTooltip from 'lib/components/core/CustomTooltip';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
 import { getAssessmentURL, getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { formatMiniDateTime } from 'lib/moment';
@@ -115,9 +116,7 @@ const SubmissionsTable: FC<Props> = (props) => {
 
   if (submissions.length === 0) {
     return (
-      <div style={{ marginTop: 10 }}>
-        {intl.formatMessage(translations.noSubmissionsMessage)}
-      </div>
+      <Note message={intl.formatMessage(translations.noSubmissionsMessage)} />
     );
   }
 

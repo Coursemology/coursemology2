@@ -24,6 +24,7 @@ import {
 } from 'types/course/assessment/skills/skills';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import Note from 'lib/components/core/Note';
 
 import { TableEnum } from '../../types';
 import SkillManagementButtons from '../buttons/SkillManagementButtons';
@@ -141,7 +142,7 @@ const SkillsTable: FC<Props> = (props: Props) => {
             );
           }
           if (tableData.length === 0) {
-            return <div>{intl.formatMessage(translations.noBranch)}</div>;
+            return <Note message={intl.formatMessage(translations.noBranch)} />;
           }
           title =
             tableData[dataIndex].title ??
