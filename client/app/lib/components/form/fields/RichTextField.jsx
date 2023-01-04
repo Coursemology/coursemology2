@@ -3,15 +3,19 @@ import PropTypes from 'prop-types';
 
 import CKEditorRichText from '../../core/fields/CKEditorRichText';
 
+import { formatErrorMessage } from './utils/mapError';
 import propsAreEqual from './utils/propsAreEqual';
 
 const FormRichTextField = (props) => {
   const { field, fieldState, disabled, label, ...custom } = props;
+  const error =
+    fieldState.error?.message && formatErrorMessage(fieldState.error?.message);
 
   return (
     <CKEditorRichText
       {...field}
       disabled={disabled}
+      error={error}
       label={label}
       {...custom}
     />
