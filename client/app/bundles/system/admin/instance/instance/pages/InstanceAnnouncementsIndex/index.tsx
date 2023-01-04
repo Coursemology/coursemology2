@@ -8,6 +8,7 @@ import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/A
 import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
 import AddButton from 'lib/components/core/buttons/AddButton';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
 import {
@@ -80,7 +81,7 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
   const renderBody: JSX.Element = (
     <>
       {announcements.length === 0 ? (
-        <div>{intl.formatMessage(translations.noAnnouncements)}</div>
+        <Note message={intl.formatMessage(translations.noAnnouncements)} />
       ) : (
         <AnnouncementsDisplay
           announcementPermissions={{ canCreate: announcementPermission }}
