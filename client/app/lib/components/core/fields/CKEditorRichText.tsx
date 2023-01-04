@@ -2,23 +2,24 @@
 import { forwardRef, useState } from 'react';
 import CustomEditor from '@ckeditor/ckeditor5-build-custom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import { InputLabel } from '@mui/material';
+import { FormHelperText, InputLabel } from '@mui/material';
 import { cyan } from '@mui/material/colors';
 
 import axios from 'lib/axios';
 
 interface Props {
-  label?: string;
-  value: string;
-  onChange: (text: string) => void;
-  disabled?: boolean;
-  field?: string | undefined;
-  required?: boolean | undefined;
-  name: string;
   inputId: string;
-  disableMargins?: boolean;
-  placeholder?: string;
+  name: string;
+  onChange: (text: string) => void;
+  value: string;
   autofocus?: boolean;
+  disabled?: boolean;
+  disableMargins?: boolean;
+  error?: string;
+  field?: string | undefined;
+  label?: string;
+  placeholder?: string;
+  required?: boolean | undefined;
 }
 
 const uploadAdapter = (loader) => {
@@ -53,6 +54,7 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
     value,
     onChange,
     disabled,
+    error,
     field,
     required,
     name,
@@ -81,6 +83,7 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
       {label && (
         <InputLabel
           disabled={disabled}
+          error={!!error}
           htmlFor={field}
           required={required}
           shrink
@@ -161,6 +164,7 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
           }}
         />
       </div>
+      {error && <FormHelperText error={!!error}>{error}</FormHelperText>}
     </div>
   );
 });
