@@ -458,6 +458,9 @@
   "course.admin.CourseSettings.invalidTimeFormat": {
     "defaultMessage": "Invalid Date and/or Time"
   },
+  "course.admin.CourseSettings.offsetTimesPromptText": {
+    "defaultMessage": "The start date of this course will be shifted {backwardOrForward} by {days} days, {hours} hours, and {mins} minutes. Would you like to shift the timing (start, end and bonus end dates) for all items (eg Assessment, Video, Survey and Lesson plan) in this course too?"
+  },
   "course.admin.CourseSettings.otot": {
     "defaultMessage": "OTOT (Own Time, Own Target)"
   },
@@ -517,6 +520,15 @@
   },
   "course.admin.CourseSettingst.errorOccurredWhenDeletingCourse": {
     "defaultMessage": "An error occurred while deleting this course."
+  },
+  "course.admin.CourseSettingst.offsetTimesPromptPrimaryAction": {
+    "defaultMessage": "Save changes & offset all items"
+  },
+  "course.admin.CourseSettingst.offsetTimesPromptSecondaryAction": {
+    "defaultMessage": "Save changes only"
+  },
+  "course.admin.CourseSettingst.offsetTimesPromptTitle": {
+    "defaultMessage": "Do you wish to shift the timing of all items in this course?"
   },
   "course.admin.CourseSettingst.pleaseTypeChallengeToConfirmDelete": {
     "defaultMessage": "Please type {challenge} to confirm deletion."

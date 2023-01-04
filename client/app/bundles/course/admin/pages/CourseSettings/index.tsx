@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { CourseInfo, TimeZones } from 'types/course/admin/course';
+import { CourseInfo, TimeOffset, TimeZones } from 'types/course/admin/course';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { FormEmitter } from 'lib/components/form/Form';
@@ -27,6 +27,7 @@ const CourseSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
+  const [reloadForm, setReloadForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const updateForm = (data?: CourseInfo): void => {
@@ -39,13 +40,14 @@ const CourseSettings = (): JSX.Element => {
     toast.success(message);
   };
 
-  const handleSubmit = (data: CourseInfo): void => {
+  const handleSubmit = (data: CourseInfo, timeOffset?: TimeOffset): void => {
     setSubmitting(true);
 
-    updateCourseSettings(data)
+    updateCourseSettings(data, timeOffset)
       .then((newData) => {
         reloadItems();
         updateFormAndToast(t(formTranslations.changesSaved), newData);
+        setReloadForm((value) => !value);
       })
       .catch(form?.receiveErrors)
       .finally(() => setSubmitting(false));
@@ -85,7 +87,11 @@ const CourseSettings = (): JSX.Element => {
   };
 
   return (
-    <Preload render={<LoadingIndicator />} while={fetchSettingsAndTimeZones}>
+    <Preload
+      render={<LoadingIndicator />}
+      syncsWith={[reloadForm]}
+      while={fetchSettingsAndTimeZones}
+    >
       {([settings, timeZones]): JSX.Element => (
         <CourseSettingsForm
           data={settings}

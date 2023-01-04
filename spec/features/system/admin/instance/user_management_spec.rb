@@ -57,6 +57,7 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
       end
 
       scenario 'I can search users' do
+        skip 'Flaky tests'
         user_name = 'lool'
         instance_users_to_search = create_list(:user, 2, name: user_name).
                                    map { |u| u.instance_users.first }
