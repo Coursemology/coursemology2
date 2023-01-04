@@ -33,6 +33,7 @@ class Course::Discussion::Post < ApplicationRecord
   validates :updater, presence: true
   validates :topic, presence: true
   validates :workflow_state, length: { maximum: 255 }, presence: true
+  validates :is_anonymous, inclusion: { in: [true, false] }
 
   belongs_to :topic, inverse_of: :posts, touch: true
   has_many :votes, inverse_of: :post, dependent: :destroy

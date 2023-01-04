@@ -20,7 +20,8 @@ class Course::Admin::ForumSettingsController < Course::Admin::Controller
   private
 
   def forum_settings_params
-    params.require(:settings_forums_component).permit(:title, :pagination, :mark_post_as_answer_setting)
+    params.require(:settings_forums_component).
+      permit(:title, :pagination, :mark_post_as_answer_setting, :allow_anonymous_post)
   end
 
   def component

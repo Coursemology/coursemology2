@@ -2,6 +2,7 @@ export interface ForumsSettingsData {
   title: string;
   pagination: number;
   markPostAsAnswerSetting: 'creator_only' | 'everyone';
+  allowAnonymousPost: boolean;
 }
 
 export interface ForumsSettingsPostData {
@@ -9,5 +10,6 @@ export interface ForumsSettingsPostData {
     title: ForumsSettingsData['title'];
     pagination: ForumsSettingsData['pagination'];
     mark_post_as_answer_setting: ForumsSettingsData['markPostAsAnswerSetting'];
+    allow_anonymous_post: ForumsSettingsData['allowAnonymousPost'];
   };
 }

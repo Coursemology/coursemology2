@@ -27,4 +27,12 @@ export default defineMessages({
     defaultMessage:
       'Everyone (including staff) can mark/unmark a post as the correct answer.',
   },
+  allowStudentsTo: {
+    id: 'course.admin.ForumsSettings.allowStudentsTo',
+    defaultMessage: 'Allow students to',
+  },
+  allowAnonymousPost: {
+    id: 'course.admin.ForumsSettings.allowAnonymousPost',
+    defaultMessage: 'Post anonymously',
+  },
 });

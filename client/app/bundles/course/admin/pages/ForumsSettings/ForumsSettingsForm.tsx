@@ -7,6 +7,7 @@ import { number, object, string } from 'yup';
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -80,6 +81,21 @@ const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
               />
             )}
           />
+
+          <Subsection spaced title={t(translations.allowStudentsTo)}>
+            <Controller
+              control={control}
+              name="allowAnonymousPost"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormCheckboxField
+                  disabled={props.disabled}
+                  field={field}
+                  fieldState={fieldState}
+                  label={t(translations.allowAnonymousPost)}
+                />
+              )}
+            />
+          </Subsection>
 
           <Subsection
             className="!mt-8"
