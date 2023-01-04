@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { ForumPostData } from 'types/course/disbursement';
+import { ForumDisbursementPostData } from 'types/course/disbursement';
 import {
   ForumData,
   ForumListData,
@@ -96,11 +96,9 @@ export default class ForumsAPI extends BaseCourseAPI {
   /**
    * Fetches forum post data with search params.
    */
-  search(params: ForumSearchParams): Promise<
-    AxiosResponse<{
-      userPosts: ForumPostData[];
-    }>
-  > {
+  search(
+    params: ForumSearchParams,
+  ): Promise<AxiosResponse<{ userPosts: ForumDisbursementPostData[] }>> {
     return this.getClient().get(`${this._getUrlPrefix()}/search`, params);
   }
 }

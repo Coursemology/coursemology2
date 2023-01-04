@@ -18,7 +18,7 @@ export interface ForumDisbursementUserData {
   points: number;
 }
 
-export interface ForumPostData {
+export interface ForumDisbursementPostData {
   id: number;
   title: string;
   topicSlug: string;
@@ -65,14 +65,14 @@ export interface ForumDisbursementUserEntity {
   points: ForumDisbursementUserData['points'];
 }
 
-export interface ForumPostEntity {
-  id: ForumPostData['id'];
-  title: ForumPostData['title'];
-  topicSlug: ForumPostData['topicSlug'];
-  forumSlug: ForumPostData['forumSlug'];
-  content: ForumPostData['content'];
-  voteTally: ForumPostData['voteTally'];
-  createdAt: ForumPostData['createdAt'];
+export interface ForumDisbursementPostEntity {
+  id: ForumDisbursementPostData['id'];
+  title: ForumDisbursementPostData['title'];
+  topicSlug: ForumDisbursementPostData['topicSlug'];
+  forumSlug: ForumDisbursementPostData['forumSlug'];
+  content: ForumDisbursementPostData['content'];
+  voteTally: ForumDisbursementPostData['voteTally'];
+  createdAt: ForumDisbursementPostData['createdAt'];
   userId: number;
 }
 

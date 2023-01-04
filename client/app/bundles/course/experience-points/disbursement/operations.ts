@@ -7,9 +7,9 @@ import {
   ForumDisbursementFilterParams,
   ForumDisbursementFilters,
   ForumDisbursementFormData,
+  ForumDisbursementPostData,
   ForumDisbursementUserData,
   ForumDisbursementUserEntity,
-  ForumPostData,
 } from 'types/course/disbursement';
 import { ForumSearchParams } from 'types/course/forums';
 import { Operation } from 'types/store';
@@ -179,7 +179,7 @@ export function fetchForumPost(
   filter: ForumDisbursementFilters,
 ): Operation<
   AxiosResponse<{
-    userPosts: ForumPostData[];
+    userPosts: ForumDisbursementPostData[];
   }>
 > {
   const searchAttributes: ForumSearchParams = formatSearchAttribute(

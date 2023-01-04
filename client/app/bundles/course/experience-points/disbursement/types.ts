@@ -4,10 +4,10 @@ import {
   DisbursementCourseUserListData,
   DisbursementCourseUserMiniEntity,
   ForumDisbursementFilters,
+  ForumDisbursementPostData,
+  ForumDisbursementPostEntity,
   ForumDisbursementUserData,
   ForumDisbursementUserEntity,
-  ForumPostData,
-  ForumPostEntity,
 } from 'types/course/disbursement';
 import { EntityStore } from 'types/store';
 
@@ -41,7 +41,7 @@ export interface RemoveForumDisbursementListAction {
 
 export interface SaveForumPostListAction {
   type: typeof SAVE_FORUM_POST_LIST;
-  posts: ForumPostData[];
+  posts: ForumDisbursementPostData[];
   userId: number;
 }
 
@@ -58,5 +58,5 @@ export interface DisbursementState {
   courseUsers: EntityStore<DisbursementCourseUserMiniEntity>;
   filters: ForumDisbursementFilters;
   forumUsers: EntityStore<ForumDisbursementUserEntity>;
-  forumPosts: EntityStore<ForumPostEntity>;
+  forumPosts: EntityStore<ForumDisbursementPostEntity>;
 }
