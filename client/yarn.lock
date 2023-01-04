@@ -6624,10 +6624,10 @@ ms@2.1.3, ms@^2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-mui-datatables@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/mui-datatables/-/mui-datatables-4.2.2.tgz#4eb12e15297ef2fbdd05bf6159a88188e7d1b226"
-  integrity sha512-2ZvLn9xApzGdJjQV0g01LaRNqTu9QDZ/oQhselLXvNCYPHSQSNevXnHOJbWVkQ2MFsmlqlrbiaLHaJ/lTQ4bCQ==
+mui-datatables@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/mui-datatables/-/mui-datatables-4.3.0.tgz#445d6da0960005e242d4f69693702a33daba05ae"
+  integrity sha512-LFliQwNnnxW03IO+V3q/ORxZsOHkzl53iGogLbjUJzme47hNEN106dM0ie8oMSc0heYJY0J07oZmKm7Xn3X7IQ==
   dependencies:
     "@babel/runtime-corejs3" "^7.12.1"
     "@emotion/cache" "^11.7.1"
