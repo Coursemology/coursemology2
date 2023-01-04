@@ -244,3 +244,16 @@ gem 'rails-html-sanitizer', '>= 1.0.4'
 gem 'sprockets', '< 4.0.0'
 gem 'mimemagic', '0.4.3'
 gem 'ffi', '>= 1.14.2'
+
+# net-smtp has been removed from the default gems in ruby 3.1.
+# As Action Mailbox depends on net/smtp temporarily add to your gemfile until the mail gem includes it as a dependancy.
+gem 'net-smtp'
+gem 'net-ftp'
+gem 'net-imap'
+gem 'net-pop'
+gem 'matrix'
+gem 'prime'
+gem 'debug'
+
+# Ruby 3.1 uses Psych 4.0.0 makes Psych.load refuse to load untrusted data. This is only fixed in rails 7.0.2.4
+gem 'psych', '< 4.0.0'
