@@ -19,6 +19,7 @@ export const updateForumsSettings = async (data: ForumsSettingsData): Data => {
       title: data.title,
       pagination: data.pagination,
       mark_post_as_answer_setting: data.markPostAsAnswerSetting,
+      allow_anonymous_post: data.allowAnonymousPost,
     },
   };
 
