@@ -270,7 +270,11 @@ const UsersTable: FC<Props> = (props) => {
               className="user_courses"
               variant="body2"
             >
-              <a href={`/users/${user.id}`} rel="noreferrer" target="_blank">
+              <a
+                href={`/users/${user.id}`}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
                 {user.courses}
               </a>
             </Typography>

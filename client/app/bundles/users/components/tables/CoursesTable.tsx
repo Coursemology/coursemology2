@@ -52,7 +52,7 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
                 <Typography className="course_title" variant="body2">
                   <a
                     href={`/courses/${course.id}`}
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     target="_blank"
                   >
                     {course.title}
@@ -62,7 +62,7 @@ const CoursesTable: FC<Props> = ({ title, courses, intl }: Props) => {
               <TableCell>
                 <a
                   href={`/users/${course.courseUserId}`}
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   target="_blank"
                 >
                   {course.courseUserName}

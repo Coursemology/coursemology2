@@ -175,7 +175,7 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
     const url = getWorkbinFileURL(getCourseId(), props.folderId, material.id);
 
     return (
-      <a href={url} rel="noreferrer" target="_blank">
+      <a href={url} rel="noopener noreferrer" target="_blank">
         {value}
       </a>
     );

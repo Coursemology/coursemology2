@@ -40,7 +40,7 @@ const InstancesTable: FC<Props> = ({ title, instances, intl }: Props) => {
                 <Typography className="instance_title" variant="body2">
                   <a
                     href={`//${instance.host}/users/${userId}`}
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     target="_blank"
                   >
                     {instance.name}
