@@ -79,7 +79,7 @@ const DisbursementTable: FC<Props> = (props: Props) => {
         customBodyRenderLite: (dataIndex): JSX.Element => (
           <a
             href={getCourseUserURL(getCourseId(), filteredUsers[dataIndex].id)}
-            rel="noreferrer"
+            rel="noopener noreferrer"
             target="_blank"
           >
             {filteredUsers[dataIndex].name}

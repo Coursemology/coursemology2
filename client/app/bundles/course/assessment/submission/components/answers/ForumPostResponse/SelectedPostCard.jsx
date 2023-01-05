@@ -61,7 +61,7 @@ export default class SelectedPostCard extends Component {
       renderedName = `${renderedName.slice(0, MAX_NAME_LENGTH)}...`;
     }
     return (
-      <a href={url} rel="noreferrer" target="_blank">
+      <a href={url} rel="noopener noreferrer" target="_blank">
         {renderedName} <i className="fa fa-external-link" />
       </a>
     );

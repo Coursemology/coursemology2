@@ -133,7 +133,11 @@ const Node = (props) => {
           <div style={styles.content}>
             <CardContent style={styles.contentText}>
               <div>
-                <a href={`${node.contentUrl}`} rel="noreferrer" target="_blank">
+                <a
+                  href={`${node.contentUrl}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   {node.title}
                 </a>
               </div>

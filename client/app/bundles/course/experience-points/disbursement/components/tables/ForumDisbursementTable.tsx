@@ -91,7 +91,7 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         customBodyRenderLite: (dataIndex): JSX.Element => (
           <a
             href={getCourseUserURL(getCourseId(), forumUsers[dataIndex].id)}
-            rel="noreferrer"
+            rel="noopener noreferrer"
             target="_blank"
           >
             {forumUsers[dataIndex].name}
