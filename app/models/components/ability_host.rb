@@ -2,65 +2,6 @@
 class AbilityHost
   include Componentize
 
-  # Helpers for defining abilities associated with a course user.
-  module CourseHelpers
-    protected
-
-    # Creates a hash which allows referencing a set of course users.
-    #
-    # @param [Array<Symbol>] roles The roles {CourseUser::Roles} which should be referenced by this
-    #   rule.
-    # @return [Hash] This hash is relative to a Course.
-    def course_user_hash(*roles)
-      course_users = { user_id: user.id }
-      course_users[:role] = roles unless roles.empty?
-
-      { course_users: course_users }
-    end
-
-    # @return [Hash] Hash relative to a component with a +has_many+ association with CourseUser.
-    def staff_hash
-      course_user_hash(*CourseUser::STAFF_ROLES.to_a)
-    end
-
-    # @return [Hash] Hash relative to a component with a +has_many+ association with CourseUser.
-    def teaching_staff_hash
-      course_user_hash(*CourseUser::TEACHING_STAFF_ROLES.to_a)
-    end
-
-    # @return [Hash] Hash relative to a component with a +has_many+ association with CourseUser.
-    def managers_hash
-      course_user_hash(*CourseUser::MANAGER_ROLES.to_a)
-    end
-
-    # @return [Hash] Hash is relative to a component with a +belongs_to+ association with a Course.
-    def course_course_user_hash(*roles)
-      { course: course_user_hash(*roles) }
-    end
-
-    alias_method :course_all_course_users_hash, :course_course_user_hash
-
-    # @return [Hash] Hash is relative to a component with a +belongs_to+ association with a Course.
-    def course_staff_hash
-      course_course_user_hash(*CourseUser::STAFF_ROLES.to_a)
-    end
-
-    # @return [Hash] Hash is relative to a component with a +belongs_to+ association with a Course.
-    def course_teaching_staff_hash
-      course_course_user_hash(*CourseUser::TEACHING_STAFF_ROLES.to_a)
-    end
-
-    # @return [Hash] Hash is relative to a component with a +belongs_to+ association with a Course.
-    def course_teaching_assistants_hash
-      course_course_user_hash(:teaching_assistant)
-    end
-
-    # @return [Hash] Hash is relative to a component with a +belongs_to+ association with a Course.
-    def course_managers_hash
-      course_course_user_hash(*CourseUser::MANAGER_ROLES.to_a)
-    end
-  end
-
   module InstanceHelpers
     protected
 
@@ -121,7 +62,6 @@ class AbilityHost
   # Open the Componentize Base Component.
   const_get(:Component).module_eval do
     include InstanceHelpers
-    include CourseHelpers
     include TimeBoundedHelpers
   end
 

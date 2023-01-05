@@ -197,6 +197,13 @@ class CourseUser < ApplicationRecord
     TEACHING_STAFF_ROLES.include?(CourseUser.roles[role.to_sym])
   end
 
+  # Test whether this course_user is an observer
+  #
+  # @return [Boolean] True if course_user is an observer
+  def observer?
+    role.to_sym == :observer
+  end
+
   # Test whether this course_user is a real student (i.e. not phantom and not staff)
   #
   # @return [Boolean]
