@@ -2,15 +2,6 @@ zh:
   course:
     user_registrations:
       create:
-        # invalid_code: "You have entered an invalid invitation code."
-        # code_taken: >
-        #   The provided invitation code has been claimed by another account,
-        #   please use that account the to access the course instead.
-        # code_taken_with_email: >
-        #   The provided invitation code has been claimed by %{email},
-        #   please use that account to access the course instead.
-        # requested: "You have submitted registration request to the course."
-        # registered: "You have been registered as a %{role}."
         invalid_code: "你输入了一个无效的邀请码。"
         code_taken: >
           所提供的邀请码已被另一个账户所使用，

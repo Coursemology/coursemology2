@@ -6,8 +6,6 @@ zh:
           index:
             header: :'course.announcements.index.header'
           new:
-            # header: 'Create Announcement'
             header: '创建公告'
           edit:
-            # header: 'Edit Announcement'
             header: '编辑公告'

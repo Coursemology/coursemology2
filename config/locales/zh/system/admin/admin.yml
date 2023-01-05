@@ -3,5 +3,4 @@ zh:
     admin:
       admin:
         index:
-          # header: 'Administration'
           header: '管理'

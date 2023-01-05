@@ -2,14 +2,10 @@ zh:
   course:
     user_invitations:
       errors:
-        # duplicate_user: '%{user} appears more than once in the submission.'
-        # invalid_email: '%{email} is invalid: %{message}.'
         duplicate_user: '%{user}在提交中出现了多次。'
         invalid_email: '%{email}无效：%{message}。'
       index:
-        # header: 'Invitations'
         header: '邀请'
       new:
-        # header: 'Invite Users'
         header: '邀请用户'
 

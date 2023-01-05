@@ -3,6 +3,5 @@ zh:
     levels:
       sidebar_title: :'course.levels.index.header'
       index:
-        # header: 'Levels'
         header: '等级'
 

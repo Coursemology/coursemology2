@@ -1,5 +1,4 @@
 zh:
   pages:
     '403':
-      # header: 'Access Denied'
       header: '拒绝访问'

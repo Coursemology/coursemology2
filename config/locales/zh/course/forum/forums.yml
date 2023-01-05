@@ -2,8 +2,6 @@ zh:
   course:
     forum:
       forums:
-        # sidebar_title: 'Forums'
         sidebar_title: '论坛'
         index:
-          # header: 'Forums'
           header: '论坛'

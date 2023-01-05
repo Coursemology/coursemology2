@@ -2,10 +2,6 @@ zh:
   activerecord:
     attributes:
       course/assessment/answer:
-        # submitted_at: 'Submitted At'
-        # grade: 'Grade'
-        # grader: 'Grader'
-        # graded_at: 'Graded At'
         submitted_at: '提交于'
         grade: '评分'
         grader: '评分人'
@@ -15,13 +11,9 @@ zh:
         course/assessment/answer:
           attributes:
             question:
-              # consistent_assessment: 'must belong to the same assessment'
               consistent_assessment: '必须隶属于同一测验'
             submission:
-              # attemptable_state: 'must be in the attempting state'
               attemptable_state: '必须处于练习状态'
             grade:
-              # consistent_grade: 'must be less than question maximum grade'
-              # non_negative_grade: 'cannot be negative'
               consistent_grade: '不能超过问题分数上限'
               non_negative_grade: '不能为负'

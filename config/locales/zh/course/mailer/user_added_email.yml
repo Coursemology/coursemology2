@@ -2,11 +2,7 @@ zh:
   course:
     mailer:
       user_added_email:
-        # subject: 'Added to Course %{course}'
-        # message: >
-        #   You have been added to the course %{course} on %{coursemology}.
 
-        #   To view the course, please log in with %{email}.
         subject: '添加至课程%{course}'
         message: >
           您已被加入%{coursemology}的课程%{course}。

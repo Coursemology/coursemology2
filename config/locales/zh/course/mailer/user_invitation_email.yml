@@ -2,19 +2,11 @@ zh:
   course:
     mailer:
       user_invitation_email:
-        # subject: 'Invitation to Register for %{course}'
-        # click_here: 'Click here'
-        # message: >
-        #   You are invited to register for %{course} on %{coursemology}.
 
 
-        #   You do not seem to have an account registered at this email address (%{email});
-
-        #   %{click_here} to create an account and accept the invitation.
 
 
-        #   If you have an existing Coursemology account registered under a different email,
-        #   visit %{course} and enrol with the following non-transferable registration code:
+
         subject: '邀请报名参加%{course}'
         click_here: '点击此处'
         message: >

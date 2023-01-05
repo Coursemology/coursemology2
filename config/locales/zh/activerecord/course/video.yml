@@ -5,7 +5,5 @@ zh:
         course/video:
           attributes:
             url:
-              # invalid_url: >
-              #   The URL you entered is not of the correct format, please try again.
               invalid_url: >
                 您输入的URL格式不正确，请重试。

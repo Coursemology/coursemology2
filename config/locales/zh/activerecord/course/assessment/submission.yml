@@ -2,15 +2,6 @@ zh:
   activerecord:
     attributes:
       course/assessment/submission:
-        # grade: 'Total Grade'
-        # status: 'Status'
-        # submitted_at: :'activerecord.attributes.course/assessment/answer.submitted_at'
-        # grader: :'activerecord.attributes.course/assessment/answer.grader'
-        # graded_at: :'activerecord.attributes.course/assessment/answer.graded_at'
-        # attempting: 'Attempting'
-        # submitted: 'Submitted'
-        # graded: 'Graded, unpublished'
-        # published: 'Graded'
         grade: '总分'
         status: '状态'
         submitted_at: :'activerecord.attributes.course/assessment/answer.submitted_at'
@@ -24,19 +15,11 @@ zh:
       models:
         course/assessment/submission:
           experience_points_record:
-            # inconsistent_user: 'creator must be the same as the course user record'
-            # absent_award_attributes: >
-            #   there is no award attributes for your submission, please try again
-            #   or contact the Coursemology team
             inconsistent_user: '创建者必须与课程使用者记录一致'
             absent_award_attributes: >
               您提交的材料没有奖励属性，请再试一次或联系开发团队
-          # submission_already_exists: 'Looks like you have already created a submission. Try again?'
-          # no_bundles_assigned: 'There are no question bundles assigned for you. Contact your instructor for assistance.'
-          # autograded_no_partial_answer: 'There are updated answers which have not been re-submitted yet. Please re-submit all answers before finalising your submission.'
           submission_already_exists: '您可能已经创建过一个提交了，要覆盖吗？'
           no_bundles_assigned: '当前没有问题分配给你，请联系你的老师寻求帮助。'
           autograded_no_partial_answer: '有一些更新的答案还没有重新提交。请在最后提交前重新提交所有答案。'
         course/assessment/category:
-          # deletion: 'the last category cannot be deleted'
           deletion: '最后一类无法删除'

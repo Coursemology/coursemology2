@@ -1,5 +1,4 @@
 zh:
   notifiers:
     course:
-      # phantom: "(Phantom)"
       phantom: "(影子用户)"

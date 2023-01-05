@@ -4,5 +4,4 @@ zh:
       instance:
         users:
           index:
-            # header: 'Users'
             header: '用户'

@@ -4,9 +4,7 @@ zh:
       assessments:
         tabs:
           index:
-            # header: 'Assessment Tabs'
             header: '测验标签'
           new:
-            # header: 'New Assessment Tab'
             header: '新测验标签'
 

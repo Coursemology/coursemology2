@@ -5,7 +5,5 @@ zh:
         course/video/submission:
           attributes:
             experience_points_record:
-              # inconsistent_user: 'creator must be the same as the course user record'
               inconsistent_user: '创建者必须与课程使用者记录一致'
-          # submission_already_exists: 'Looks like you have already created a submission. Try again?'
           submission_already_exists: '您可能已经创建过一个提交了，要覆盖吗？'

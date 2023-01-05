@@ -4,41 +4,24 @@ zh:
       question:
         programming:
           new:
-            # header: 'New Programming Question'
             header: '新编程题'
           create:
-            # success: 'The programming question was created.'
-            # failure: 'Could not create programming question.'
             success: '编程题已被创建'
             failure: '无法创建编程题'
           update:
-            # success: 'The programming question was updated.'
-            # failure: 'Could not update programming question.'
             success: '编程题已被更新'
             failure: '无法更新编程题'
           form:
             import_result:
-              # success: 'The package was successfully imported.'
-              # error: 'The package could not be imported: %{error}'
               success: '包已被正确引入'
               error: '包无法引入，错误：%{error}'
               errors:
-                # invalid_package: 'the package uploaded does not have a valid structure.'
-                # time_limit_exceeded: >-
-                #   the package exceeded the maximum time allowed by the question.
-                # evaluation_timeout: >-
-                #   no response was received from an evaluator within the required time.
-                # evaluation_error: 'an error occurred during evaluation, see logs.'
                 invalid_package: '上传的包包含无效结构。'
                 time_limit_exceeded: >-
                   该包超过了问题所允许的最长时间。
                 evaluation_timeout: >-
                   在规定时间内没有收到评分器的回应。
                 evaluation_error: '在评估过程中发生错误，请参见日志。'
-          # question_type: Programming
-          # question_type_codaveri: Programming (Codaveri)
-          # question_type_codaveri_deactivated: >-
-          #   Codaveri component is deactivated. Please report this issue to the course owner/TA.
           question_type: 编程题
           question_type_codaveri: 编程题(Codaveri)
           question_type_codaveri_deactivated: >-

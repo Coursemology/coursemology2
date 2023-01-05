@@ -2,12 +2,6 @@ zh:
   course:
     surveys:
       survey_download_service:
-        # created_at: "Create Timestamp"
-        # updated_at: "Last Update Timestamp"
-        # course_user_id: "Course User ID"
-        # name: "Name"
-        # role: "Role"
-        # unknown_question_type: "UNKNOWN QUESTION TYPE"
         created_at: "创建时间戳"
         updated_at: "上一次更新时间戳"
         course_user_id: "课程用户ID"

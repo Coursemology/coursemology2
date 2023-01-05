@@ -1,11 +1,5 @@
 zh:
   announcements:
-    # index:
-    #   header: 'All Announcements'
-    # announcement:
-    #   sticky: 'Sticky'
-    # global_announcement:
-    #   close: 'Close'
     index:
       header: '全部公告'
     announcement:

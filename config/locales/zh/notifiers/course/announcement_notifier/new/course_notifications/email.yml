@@ -5,10 +5,6 @@ zh:
         new:
           course_notifications:
             email:
-              # subject: '%{course} New Announcement: %{announcement}'
-              # message: >
-              #   <p>%{creator} posted a new %{announcement} from course: %{course}</p>
-              #   %{content}
               subject: '%{course}新公告：%{announcement}'
               message: >
                 <p>%{creator}在课程%{course}发布了新公告%{announcement}：</p>

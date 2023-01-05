@@ -2,13 +2,10 @@ zh:
   activerecord:
     attributes:
       course/video/tab/title:
-        # default: 'Default'
         default: '默认'
       course/video/tab:
-        # weight: 'Order'
         weight: '权重'
     errors:
       models:
         course/video/tab:
-          # deletion: 'The last tab cannot be deleted'
           deletion: '最后一项无法被删除'

@@ -1,13 +1,5 @@
 zh:
   common:
-    # not_started: "Not started"
-    # ended: "Ended"
-    # plain_text_link: "%{text} (%{url})"
-    # draft: "Draft"
-    # click_here: "Click here"
-    # truthy: "Yes"
-    # falsey: "No"
-    # percentage: "%{percentage}%"
     not_started: "尚未开始"
     ended: "已结束"
     plain_text_link: "%{text} (%{url})"
@@ -19,32 +11,18 @@ zh:
   helpers:
     submit:
       condition_level:
-        # create: "Create Level Condition"
-        # update: "Update Level Condition"
         create: "创建升级条件"
         update: "更新升级条件"
       condition_achievement:
-        # create: "Create Achievement Condition"
-        # update: "Update Achievement Condition"
         create: "创建成就获取条件"
         update: "更新成就获取条件"
       condition_assessment:
-        # create: "Create Assessment Condition"
-        # update: "Update Assessment Condition"
         create: "创建测验条件"
         update: "更新测验条件"
       condition_survey:
-        # create: "Create Survey Condition"
-        # update: "Update Survey Condition"
         create: "创建调研条件"
         update: "更新调研条件"
     buttons:
-      # new: "New %{model}"
-      # create: "Create %{model}"
-      # edit: "Edit %{model}"
-      # update: "Update %{model}"
-      # delete: "Delete %{model}"
-      # delete_confirm_message: "Are you sure?"
       new: "新%{model}"
       create: "创建%{model}"
       edit: "编辑%{model}"

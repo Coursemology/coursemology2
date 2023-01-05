@@ -5,6 +5,5 @@ zh:
         course/assessment/skill:
           attributes:
             course:
-              # consistent_course: 'must belong to the same course'
               consistent_course: '必须属于同一课程'
 

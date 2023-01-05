@@ -3,5 +3,4 @@ zh:
     admin:
       users:
         index:
-          # header: 'Users'
           header: '用户'

@@ -2,12 +2,6 @@ zh:
   system:
     admin:
       instances:
-        # index:
-        #   header: 'Instances'
-        # new:
-        #   header: 'New Instance'
-        # edit:
-        #   header: 'Edit Instance'
         index:
           header: '实例'
         new:

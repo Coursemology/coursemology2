@@ -4,7 +4,6 @@ zh:
       topics:
         sidebar_title: :'course.discussion.topics.index.header'
         index:
-          # header: 'Comments'
           header: '评论'
         pending:
           header: :'course.discussion.topics.index.header'

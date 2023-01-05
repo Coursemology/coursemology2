@@ -3,5 +3,4 @@ zh:
     admin:
       courses:
         index:
-          # header: 'Courses'
           header: '课程'

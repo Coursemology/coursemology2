@@ -2,12 +2,8 @@ zh:
   activerecord:
     attributes:
       course/course_user:
-        # name: 'Name'
         name: '用户名'
       course_user:
-        # level_number: 'Level'
-        # created_at: 'Enrolled At'
-        # reference_timeline: 'Reference timeline'
         level_number: '等级'
         created_at: '加入于'
         reference_timeline: '引用时间线'
@@ -16,5 +12,4 @@ zh:
         course_user:
           attributes:
             reference_timeline:
-              # belongs_to_course: 'must belong to course'
               belongs_to_course: '必须隶属于课程'

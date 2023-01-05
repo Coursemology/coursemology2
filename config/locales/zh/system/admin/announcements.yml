@@ -3,11 +3,8 @@ zh:
     admin:
       announcements:
         index:
-          # header: 'System Announcements'
           header: '系统公告'
         new:
-          # header: 'New System Announcement'
           header: '新的系统公告'
         edit:
-          # header: 'Edit System Announcement'
           header: '编辑系统公告'

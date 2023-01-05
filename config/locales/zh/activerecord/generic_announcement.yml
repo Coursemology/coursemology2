@@ -5,5 +5,4 @@ zh:
         generic_announcement:
           attributes:
             end_at:
-              # cannot_be_before_start_at: 'cannot be before start at'
               cannot_be_before_start_at: '不能早于起始时间'

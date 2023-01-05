@@ -7,8 +7,6 @@ zh:
     group:
       group_categories:
         index:
-          # header: 'Groups'
           header: '组'
         show:
-          # header: 'Groups'
           header: '组'

@@ -2,11 +2,7 @@ zh:
   course:
     mailer:
       survey_closing_summary_email:
-        # subject: '%{course}: Reminder about %{survey}'
-        # message: >
-        #   Emails were sent to the following students to remind them that %{survey} will expire on %{time}:
 
-        #   %{student_list}
         subject: '%{course}:相关提醒%{survey}'
         message: >
           我们向以下学生发送了电子邮件，提醒他们%{survey}将于%{time}过期:

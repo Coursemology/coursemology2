@@ -2,15 +2,8 @@ zh:
   course:
     mailer:
       assessment_closing_summary_email:
-        # subject: '%{course}: Reminder about %{assessment}'
-        # message: >
-        #   Emails were sent to the following students to remind them that %{assessment} is due on %{time}:
 
-        #   %{students}
-        # message_no_time: >
-        #   Emails were sent to the following students to remind them to attempt and submit the assessment - %{assessment}:
 
-        #   %{students}
         subject: '%{course}: 相关提醒 %{assessment}'
         message: >
           向以下学生发送了电子邮件，提醒他们%{assessment}将于%{time}截止:

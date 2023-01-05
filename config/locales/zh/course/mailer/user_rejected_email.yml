@@ -2,9 +2,6 @@ zh:
   course:
     mailer:
       user_rejected_email:
-        # subject: 'Course enrolment request rejected - %{course}'
-        # message: >
-        #   Your request to be enrolled in the course - %{course} on %{coursemology} has been rejected!
         subject: '课程注册请求被拒绝 - %{course}'
         message: >
           你在%{coursemology}上关于%{course}的课程申请已被拒绝!

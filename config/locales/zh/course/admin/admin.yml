@@ -3,8 +3,6 @@ zh:
     admin:
       admin:
         index:
-          # header: 'Settings'
           header: '设置'
           delete:
-            # header: 'Delete Course'
             header: '删除课程'

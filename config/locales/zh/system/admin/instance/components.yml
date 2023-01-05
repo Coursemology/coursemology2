@@ -4,5 +4,4 @@ zh:
       instance:
         components:
           edit:
-            # header: 'Components'
             header: '组件'

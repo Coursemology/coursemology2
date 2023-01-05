@@ -1,11 +1,8 @@
 zh:
   course:
     condition:
-      # header: 'Conditions'
       header: '解锁条件'
       type:
-        # header: 'Type'
         header: '类型'
       description:
-        # header: 'Description'
         header: '描述'

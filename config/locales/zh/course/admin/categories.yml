@@ -4,8 +4,6 @@ zh:
       assessments:
         categories:
           index:
-            # header: 'Categories'
             header: '类别'
           new:
-            # header: 'New Category'
             header: '新类别'

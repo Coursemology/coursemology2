@@ -6,14 +6,6 @@ zh:
           replied:
             user_notifications:
               email:
-                # subject: '%{course} New reply for forum topic: %{topic}'
-                # message: >
-                #   <p>%{post_author} replied,</p>
-                #   %{post}
-                #   <p>You can respond here: %{topic}</p><br>
-                # unsubscribe:
-                #   tag: 'Unsubscribe'
-                #   message: '%{unsubscribe_link} from email notifications for this forum topic.'
                 subject: '%{course} 对论坛主题%{topic}的新回复'
                 message: >
                   <p>%{post_author}回复了，</p>

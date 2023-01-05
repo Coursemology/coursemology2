@@ -1,6 +1,5 @@
 zh:
   time:
-    # day: 'day'
     day: '日期'
     formats:
       default: '%a, %Y %b %d %H:%M:%S'

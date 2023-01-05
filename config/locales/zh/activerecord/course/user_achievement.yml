@@ -5,5 +5,4 @@ zh:
         course/user_achievement:
           attributes:
             course_user:
-              # not_in_course: 'Selected user is not in specified course'
               not_in_course: '选中的用户不在指定课程中'

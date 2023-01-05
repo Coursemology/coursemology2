@@ -4,5 +4,4 @@ zh:
       instance:
         courses:
           index:
-            # header: 'Courses'
             header: '课程'

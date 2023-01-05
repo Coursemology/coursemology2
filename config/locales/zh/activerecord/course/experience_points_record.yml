@@ -2,5 +2,4 @@ zh:
   activerecord:
     attributes:
       course/experience_points_record:
-        # points_awarded: 'Experience Points Awarded'
         points_awarded: '经验值奖励已获取'

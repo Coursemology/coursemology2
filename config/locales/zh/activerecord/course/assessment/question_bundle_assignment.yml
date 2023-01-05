@@ -5,6 +5,5 @@ zh:
         course/assessment/question_bundle_assignment:
           attributes:
             submission:
-              # must_belong_to_assessment_and_user: 'must belong to assessment and user'
               must_belong_to_assessment_and_user: '必须属于某个测验和某个用户'
 

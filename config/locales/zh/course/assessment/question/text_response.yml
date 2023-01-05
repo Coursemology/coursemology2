@@ -4,34 +4,14 @@ zh:
       question:
         text_responses:
           new:
-            # text_response: 'New Text Response Question'
-            # file_upload: 'New File Upload Question'
-            # comprehension: 'New Comprehension Question'
             text_response: '新简答题'
             file_upload: '新文件上传题'
             comprehension: '新理解题'
           create:
-            # success: 'The %{name} was created.'
             success: '%{name}已被创建'
           update:
-            # success: 'The %{name} was updated.'
             success: '%{name}已被更新'
           form:
-            # allow_upload_file: 'Allow file upload in the answer'
-            # multiline_explanation_html: >
-            #   Adding solutions allows the question to be autograded. Students can only input plaintext.
-            #   <br/>
-            #   If exact_match is selected, solutions with multiple lines must match student answers exactly for the
-            #   answer to be graded as correct.
-            # solution_type: 'Type'
-            # solution: 'Solution'
-            # grade: 'Grade'
-            # explanation: 'Explanation'
-            # add_solution: 'Add Solution'
-            # file_upload: 'File Upload Question'
-            # text_response: 'Text Response Question'
-            # text_response_autograde: 'Note: If no solutions are provided, the autograder will always award the maximum grade.'
-            # file_upload_autograde: 'Note: File upload question is not auto-gradable. The autograder will always award the maximum grade.'
             allow_upload_file: '允许在答案中上传文件'
             multiline_explanation_html: >
               添加解决方案可以使问题自动评分，学生只能输入纯文本。
@@ -47,38 +27,20 @@ zh:
             text_response_autograde: '注意：如果没有提供答案，自动评分器将始终授予最高分数。'
             file_upload_autograde: '注意：文件上传题是不能自动评分的，自动评分器将始终授予最高分数。'
           solution_fields:
-            # explanation_hint: 'The explanation to show after the student submits his answer.'
-            # remove: 'Remove'
             explanation_hint: '学生提交答案后要显示的题解。'
             remove: '移除'
           form_comprehension:
-            # multiline_explanation_comprehension_html: >
-            #   Adding solutions allows the question to be autograded. Students can only input plaintext.
-            # add_group: 'Add Group'
-            # comprehension: 'Comprehension Question'
-            # text_response_autograde: 'Note: If no solutions are provided, the autograder will always award the maximum grade.'
             multiline_explanation_comprehension_html: >
               添加解决方案可以使问题自动评分，学生只能输入纯文本
             add_group: '添加组'
             comprehension: '理解题'
             text_response_autograde: '注意：如果没有提供答案，自动评分器将始终授予最高分数。'
           comprehension_group_fields:
-            # group: 'Group'
-            # remove_group: 'Remove Group'
-            # maximum_group_grade: 'Maximum Grade for this Group'
-            # add_point: 'Add Point'
             group: '组'
             remove_group: '移除组'
             maximum_group_grade: '该组的最高分'
             add_point: '添加要点'
           comprehension_point_fields:
-            # point: 'Point'
-            # remove_point: 'Remove Point'
-            # point_grade: 'Grade for this Point'
-            # add_solution: 'Add Solution'
-            # solution_type: 'Type'
-            # solution: 'Solution'
-            # information: 'Word from Text Passage'
             point: '要点'
             remove_point: '移除要点'
             point_grade: '该要点的得分'
@@ -87,11 +49,6 @@ zh:
             solution: '答案'
             information: '段落中的文本'
           comprehension_solution_fields:
-            # information_hint: 'The exact word from the text passage.'
-            # add_solution_word: 'Add Solution Word'
-            # remove: 'Remove'
-            # compre_keyword: 'Keyword'
-            # compre_lifted_word: 'Lifted Word'
             information_hint: '文字段落中的确切字句。'
             add_solution_word: '添加答案文本'
             remove: '移除'

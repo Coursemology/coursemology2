@@ -4,35 +4,16 @@ zh:
       submission:
         submissions:
           index:
-            # submissions: 'Submissions'
             submissions: '提交'
           create:
-            # failure: 'Could not create submission: %{error}'
             failure: '无法创建提交: %{error}'
           edit:
-            # attempt: :'course.assessment.assessments.assessment.attempt'
             attempt: :'course.assessment.assessments.assessment.attempt'
           blocked:
-            # message: 'Submissions for this assessment cannot be viewed once finalised.'
             message: '本测验的提交一旦完结不能再次查看。'
           download_statistics:
-            # no_submission_statistics: 'No submission fulfilled your requirements for downloading'
             no_submission_statistics: '没有提交满足您的下载要求'
           statistics_download_service:
-            # name: 'Name'
-            # phantom: 'Phantom User'
-            # status: 'Status'
-            # grade: 'Grade'
-            # max_grade: 'Maximum Grade'
-            # exp_points: 'Experience Points'
-            # start_date_time: 'Start Date/Time'
-            # submitted_date_time: 'Submitted Date/Time'
-            # time_taken: 'Time Taken'
-            # graded_date_time: 'Graded Date/Time'
-            # grading_time: 'Grading Time'
-            # grader: 'Grader(s)'
-            # publisher: 'Publisher'
-            # csv_empty: '-'
             name: '姓名'
             phantom: '虚拟用户'
             status: '状态'
@@ -48,18 +29,6 @@ zh:
             publisher: '发布人'
             csv_empty: '-'
           csv_download_service:
-            # note: 'N/A: The answer format cannot fit in a single cell.'
-            # name: 'Name'
-            # email: 'Email'
-            # role: 'Role'
-            # user_type: 'User Type'
-            # status: 'Status'
-            # question_title: 'Question Title'
-            # question_type: 'Question Type'
-            # normal: 'Normal'
-            # phantom: 'Phantom'
-            # unstarted: 'Unstarted'
-            # no_answer: 'No answer'
             note: 'N/A: 该答案的格式不能放在一个单元格中。'
             name: '姓名'
             email: 'Email'
