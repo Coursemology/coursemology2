@@ -197,23 +197,19 @@ module Course::Assessment::AssessmentAbility
         discussion_topic: { course_id: course.id }
   end
 
-  def assessment_course_staff_hash
-    { tab: { category: course_staff_hash } }
-  end
-
   # Teaching assistants have all assessment abilities except :publish_grades
   def disallow_teaching_staff_publish_assessment_submission_grades
-    cannot :publish_grades, Course::Assessment, assessment_course_staff_hash
+    cannot :publish_grades, Course::Assessment
   end
 
   # Teaching assistants have all assessment abilities except :force_submit_submission
   def disallow_teaching_staff_force_submit_assessment_submissions
-    cannot :force_submit_assessment_submission, Course::Assessment, assessment_course_staff_hash
+    cannot :force_submit_assessment_submission, Course::Assessment
   end
 
   # Teaching assistants can only delete his/her own submission
   def disallow_teaching_staff_delete_assessment_submissions
-    cannot :delete_all_submissions, Course::Assessment, assessment_course_staff_hash
+    cannot :delete_all_submissions, Course::Assessment
   end
 
   def define_manager_assessment_permissions

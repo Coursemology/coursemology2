@@ -3,11 +3,12 @@ module Course::DuplicationAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    if user
-      disallow_superusers_duplicate_via_frontend
-      allow_managers_duplicate_to_course
-      allow_managers_duplicate_from_course
-      allow_observers_duplicate_from_course
+    disallow_superusers_duplicate_via_frontend if user
+
+    if course_user
+      allow_managers_duplicate_to_course if course_user.manager_or_owner?
+      allow_managers_duplicate_from_course if course_user.manager_or_owner?
+      allow_observers_duplicate_from_course if course_user.observer?
     end
 
     super
@@ -23,14 +24,14 @@ module Course::DuplicationAbilityComponent
   end
 
   def allow_managers_duplicate_to_course
-    can :duplicate_to, Course, managers_hash
+    can :duplicate_to, Course
   end
 
   def allow_managers_duplicate_from_course
-    can :duplicate_from, Course, managers_hash
+    can :duplicate_from, Course
   end
 
   def allow_observers_duplicate_from_course
-    can :duplicate_from, Course, course_user_hash(:observer)
+    can :duplicate_from, Course
   end
 end

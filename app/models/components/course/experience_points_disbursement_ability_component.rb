@@ -3,7 +3,7 @@ module Course::ExperiencePointsDisbursementAbilityComponent
   include AbilityHost::Component
 
   def define_permissions
-    allow_staff_disburse_experience_points if user
+    allow_staff_disburse_experience_points if course_user&.teaching_staff?
 
     super
   end
@@ -11,7 +11,7 @@ module Course::ExperiencePointsDisbursementAbilityComponent
   private
 
   def allow_staff_disburse_experience_points
-    can :disburse, Course::ExperiencePoints::Disbursement, course_teaching_staff_hash
-    can :disburse, Course::ExperiencePoints::ForumDisbursement, course_teaching_staff_hash
+    can :disburse, Course::ExperiencePoints::Disbursement
+    can :disburse, Course::ExperiencePoints::ForumDisbursement
   end
 end

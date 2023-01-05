@@ -107,6 +107,6 @@ module Course::VideosAbilityComponent
   end
 
   def allow_course_managers_manage_video_tab
-    can :manage, Course::Video::Tab, course_managers_hash
+    can :manage, Course::Video::Tab
   end
 end
