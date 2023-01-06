@@ -15,7 +15,6 @@ import formTranslations from 'lib/translations/form';
 const propTypes = {
   title: PropTypes.string,
   hideForm: PropTypes.func,
-  submitForm: PropTypes.func,
   skipConfirmation: PropTypes.bool.isRequired,
   disabled: PropTypes.bool.isRequired,
   open: PropTypes.bool.isRequired,
@@ -56,8 +55,7 @@ class FormDialogue extends Component {
   };
 
   render() {
-    const { intl, title, disabled, form, open, submitForm, children } =
-      this.props;
+    const { intl, title, disabled, form, open, children } = this.props;
     const formActions = [
       <Button
         key="form-dialogue-cancel-button"
@@ -75,7 +73,8 @@ class FormDialogue extends Component {
         }}
         className="btn-submit"
         color="primary"
-        {...(form ? { form, type: 'submit' } : { onClick: submitForm })}
+        form={form}
+        type="submit"
         {...{ disabled }}
       >
         {intl.formatMessage(formTranslations.submit)}

@@ -15,8 +15,8 @@ import useTranslation from 'lib/hooks/useTranslation';
 import ForumTopicManagementButtons from '../../components/buttons/ForumTopicManagementButtons';
 import { fetchForumTopic } from '../../operations';
 import { getForumTopic } from '../../selectors';
+import ForumTopicPostNew from '../ForumTopicPostNew';
 
-import NewPostDialog from './NewPostDialog';
 import Topics from './Topics';
 
 const translations = defineMessages({
@@ -83,6 +83,7 @@ const ForumTopicShow: FC = () => {
     forumPageHeaderTitle = forumTopic.title;
     headerToolbars.push(
       <ForumTopicManagementButtons
+        key={forumTopic.id}
         navigateToIndexAfterDelete
         navigateToShowAfterUpdate
         topic={forumTopic}
@@ -118,7 +119,7 @@ const ForumTopicShow: FC = () => {
       <Box className="my-3 space-y-6">
         {topicNote && <Note message={topicNote} />}
         <Topics level={0} postIdsArray={forumTopic.postTreeIds} />
-        <NewPostDialog forumTopic={forumTopic} />
+        <ForumTopicPostNew forumTopic={forumTopic} />
       </Box>
     );
 

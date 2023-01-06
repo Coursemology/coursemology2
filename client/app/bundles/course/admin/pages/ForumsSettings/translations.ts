@@ -35,4 +35,9 @@ export default defineMessages({
     id: 'course.admin.ForumsSettings.allowAnonymousPost',
     defaultMessage: 'Post anonymously',
   },
+  allowAnonymousPostDescription: {
+    id: 'course.admin.ForumsSettings.allowAnonymousPostDescription',
+    defaultMessage:
+      'Post creator and course instructors are still able to view the identity of the original author.',
+  },
 });

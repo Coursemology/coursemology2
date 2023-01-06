@@ -11,7 +11,9 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
     before { login_as(user, scope: :user) }
 
     context 'As a Course Manager' do
-      let(:user) { create(:course_manager, course: course).user }
+      let(:course_user) { create(:course_manager, course: course) }
+      let(:user) { course_user.user }
+
       scenario 'I can see posts' do
         posts = create_list(:course_discussion_post, 2, topic: topic.acting_as)
         visit course_forum_topic_path(course, forum, topic)
@@ -25,14 +27,10 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
 
         find('button.new-post-button').click
 
-        # Create a post with empty content.
-        find('button.btn-submit').click
-        expect_toastify('Post cannot be empty!')
-
-        # Create a post with the default title.
         expect do
-          fill_in_react_ck 'textarea[name=postNewText]', 'test'
+          fill_in_react_ck 'textarea[name=text]', 'test'
           find('button.btn-submit').click
+          expect(page).not_to have_content('Anonymous post')
           expect_toastify('The post has been created.')
         end.to change { topic.reload.posts.count }.by(1)
 
@@ -100,6 +98,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
 
         # Reply a post with empty content.
         find('.reply-button').click
+
+        expect(page).not_to have_content('Anonymous post')
 
         # Disabled as flaky
         # expect_toastify('Post cannot be empty!')
@@ -182,10 +182,86 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           expect(page).to have_no_selector('div.bg-green-100')
         end
       end
+
+      scenario 'When anonymous post is not allowed and there are anonymous posts, I can see the authors' do
+        anonymous_posts = create_list(:course_discussion_post, 2, :anonymous_post, topic: topic.acting_as)
+        visit course_forum_topic_path(course, forum, topic)
+
+        anonymous_posts.each do |post|
+          within find("div.post_#{post.id}") do
+            expect(page).to have_text(post.creator.name)
+            expect(page).not_to have_text('Anonymous User')
+            expect(page).not_to have_button('Unmask User')
+          end
+        end
+      end
+
+      context 'When anonymous post is allowed' do
+        before do
+          context = OpenStruct.new(current_course: course, key: Course::ForumsComponent.key)
+          settings = Course::Settings::ForumsComponent.new(context)
+          settings.allow_anonymous_post = true
+          course.save
+        end
+
+        scenario 'I can unmask and see the authors of anonymous posts' do
+          anonymous_posts = create_list(:course_discussion_post, 2, :anonymous_post, topic: topic.acting_as)
+          visit course_forum_topic_path(course, forum, topic)
+
+          anonymous_posts.each do |post|
+            within find("div.post_#{post.id}") do
+              expect(page).not_to have_text(post.creator.name)
+              expect(page).to have_text('Anonymous User')
+              expect(page).to have_button('Unmask User')
+
+              click_button 'Unmask User'
+              expect(page).not_to have_text('Anonymous User')
+              expect(page).to have_text(post.creator.name)
+              expect(page).to have_button('Mask User')
+
+              click_button 'Mask User'
+              expect(page).to have_text('Anonymous User')
+              expect(page).not_to have_text(post.creator.name)
+            end
+          end
+        end
+
+        scenario 'I can create an anonymous post and unmask to view my own post author' do
+          visit course_forum_topic_path(course, forum, topic)
+
+          find('button.new-post-button').click
+
+          expect do
+            fill_in_react_ck 'textarea[name=text]', 'test'
+            find_field('isAnonymous', visible: false).set(true)
+            find('button.btn-submit').click
+            expect_toastify('The post has been created.')
+          end.to change { topic.reload.posts.count }.by(1)
+
+          expect(topic.reload.posts.last.text).to eq('<p>test</p>')
+          expect(topic.reload.posts.last.is_anonymous).to be_truthy
+
+          within find("div.post_#{topic.posts.last.id}") do
+            expect(page).to have_text('Anonymous User')
+            expect(page).not_to have_text(course_user.name)
+            expect(page).to have_button('Unmask User')
+
+            click_button 'Unmask User'
+            expect(page).not_to have_text('Anonymous User')
+            expect(page).to have_text(course_user.name)
+            expect(page).to have_button('Mask User')
+
+            click_button 'Mask User'
+            expect(page).to have_text('Anonymous User')
+            expect(page).not_to have_text(course_user.name)
+          end
+        end
+      end
     end
 
     context 'As a Course Student' do
-      let(:user) { create(:course_student, course: course).user }
+      let(:course_user) { create(:course_student, course: course) }
+      let(:user) { course_user.user }
 
       scenario 'I can see posts' do
         posts = create_list(:course_discussion_post, 2, topic: topic.acting_as)
@@ -201,7 +277,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         find('button.new-post-button').click
 
         expect do
-          fill_in_react_ck 'textarea[name=postNewText]', 'test'
+          fill_in_react_ck 'textarea[name=text]', 'test'
+          expect(page).not_to have_content('Anonymous post')
           find('button.btn-submit').click
           expect_toastify('The post has been created.')
         end.to change { topic.reload.posts.count }.by(1)
@@ -221,6 +298,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         visit course_forum_topic_path(course, forum, topic)
 
         find("button.post-reply-#{post.id}").click
+
+        expect(page).not_to have_content('Anonymous post')
 
         fill_in_react_ck "textarea[name=postReplyText_#{post.id}]", 'test'
         find('.reply-button').click
@@ -290,6 +369,72 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         expect_toastify('The reply post has been created.')
 
         expect(topic.unread?(reader)).to be_truthy
+      end
+
+      scenario 'When anonymous post is not allowed and there are anonymous posts, I can see the authors' do
+        anonymous_posts = create_list(:course_discussion_post, 2, :anonymous_post, topic: topic.acting_as)
+        visit course_forum_topic_path(course, forum, topic)
+
+        anonymous_posts.each do |post|
+          within find("div.post_#{post.id}") do
+            expect(page).to have_text(post.creator.name)
+            expect(page).not_to have_text('Anonymous User')
+            expect(page).not_to have_button('Unmask User')
+          end
+        end
+      end
+
+      context 'When anonymous post is allowed' do
+        before do
+          context = OpenStruct.new(current_course: course, key: Course::ForumsComponent.key)
+          settings = Course::Settings::ForumsComponent.new(context)
+          settings.allow_anonymous_post = true
+          course.save
+        end
+
+        scenario 'I cannot see the authors of anonymous posts' do
+          anonymous_posts = create_list(:course_discussion_post, 2, :anonymous_post, topic: topic.acting_as)
+          visit course_forum_topic_path(course, forum, topic)
+
+          anonymous_posts.each do |post|
+            within find("div.post_#{post.id}") do
+              expect(page).not_to have_text(post.creator.name)
+              expect(page).to have_text('Anonymous User')
+              expect(page).not_to have_button('Unmask User')
+            end
+          end
+        end
+
+        scenario 'I can create an anonymous post and unmask to view my own post author' do
+          visit course_forum_topic_path(course, forum, topic)
+
+          find('button.new-post-button').click
+
+          expect do
+            fill_in_react_ck 'textarea[name=text]', 'test'
+            find_field('isAnonymous', visible: false).set(true)
+            find('button.btn-submit').click
+            expect_toastify('The post has been created.')
+          end.to change { topic.reload.posts.count }.by(1)
+
+          expect(topic.reload.posts.last.text).to eq('<p>test</p>')
+          expect(topic.reload.posts.last.is_anonymous).to be_truthy
+
+          within find("div.post_#{topic.posts.last.id}") do
+            expect(page).to have_text('Anonymous User')
+            expect(page).not_to have_text(course_user.name)
+            expect(page).to have_button('Unmask User')
+
+            click_button 'Unmask User'
+            expect(page).not_to have_text('Anonymous User')
+            expect(page).to have_text(course_user.name)
+            expect(page).to have_button('Mask User')
+
+            click_button 'Mask User'
+            expect(page).to have_text('Anonymous User')
+            expect(page).not_to have_text(course_user.name)
+          end
+        end
       end
     end
   end

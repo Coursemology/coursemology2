@@ -2,3 +2,4 @@ en:
   notifiers:
     course:
       phantom: "(Phantom)"
+      anonymous_user: "An anonymous user"

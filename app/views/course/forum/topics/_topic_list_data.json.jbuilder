@@ -57,4 +57,5 @@ json.permissions do
   json.canSetLockedTopic can?(:set_locked, topic)
   json.canReplyTopic can?(:reply, topic)
   json.canToggleAnswer can?(:toggle_answer, topic)
+  json.isAnonymousEnabled current_course.settings(:course_forums_component).allow_anonymous_post
 end

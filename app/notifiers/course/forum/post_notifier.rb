@@ -12,7 +12,7 @@ class Course::Forum::PostNotifier < Notifier::Base
     return unless email_enabled.regular || email_enabled.phantom
 
     activity = create_activity(actor: user, object: post, event: :replied)
-    activity.notify(course, :feed) if course_user && !course_user.phantom?
+    activity.notify(course, :feed) if course_user && !course_user.phantom? && !post.is_anonymous
 
     post.topic.subscriptions.includes(:user).each do |subscription|
       course_user = course.course_users.find_by(user: subscription.user)

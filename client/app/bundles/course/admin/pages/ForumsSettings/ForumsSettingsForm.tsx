@@ -88,6 +88,7 @@ const ForumsSettingsForm = (props: ForumsSettingsFormProps): JSX.Element => {
               name="allowAnonymousPost"
               render={({ field, fieldState }): JSX.Element => (
                 <FormCheckboxField
+                  description={t(translations.allowAnonymousPostDescription)}
                   disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
