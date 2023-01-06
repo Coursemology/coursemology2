@@ -33,5 +33,9 @@ FactoryBot.define do
     trait :published do
       workflow_state { :published }
     end
+
+    trait :anonymous_post do
+      is_anonymous { true }
+    end
   end
 end

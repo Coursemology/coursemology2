@@ -1,6 +1,9 @@
 import { AxiosResponse } from 'axios';
 import { RecursiveArray } from 'types';
-import { ForumTopicPostListData } from 'types/course/forums';
+import {
+  ForumTopicPostListData,
+  ForumTopicPostPostData,
+} from 'types/course/forums';
 
 import BaseCourseAPI from '../Base';
 
@@ -15,8 +18,7 @@ export default class PostsAPI extends BaseCourseAPI {
   create(
     forumId: string,
     topicId: string,
-    postText: string,
-    parentId?: number,
+    discussionPost: ForumTopicPostPostData,
   ): Promise<
     AxiosResponse<{
       post: ForumTopicPostListData;
@@ -25,7 +27,7 @@ export default class PostsAPI extends BaseCourseAPI {
   > {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${forumId}/topics/${topicId}/posts`,
-      { discussion_post: { text: postText, parent_id: parentId } },
+      discussionPost,
     );
   }
 

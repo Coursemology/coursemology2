@@ -1,5 +1,9 @@
 import { AxiosResponse } from 'axios';
-import { ForumFormData, ForumTopicFormData } from 'types/course/forums';
+import {
+  ForumFormData,
+  ForumTopicFormData,
+  ForumTopicPostFormData,
+} from 'types/course/forums';
 import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
@@ -229,12 +233,18 @@ export function updateForumTopicLocked(
 export function createForumTopicPost(
   forumId: string,
   topicId: string,
-  postText: string,
-  parentId?: number,
+  postFormData: ForumTopicPostFormData,
 ): Operation<{ postId: number }> {
-  return async (dispatch) =>
-    CourseAPI.forum.posts
-      .create(forumId, topicId, postText, parentId)
+  return async (dispatch) => {
+    const adaptedData = {
+      discussion_post: {
+        text: postFormData.text,
+        is_anonymous: postFormData.isAnonymous,
+        parent_id: postFormData.parentId,
+      },
+    };
+    return CourseAPI.forum.posts
+      .create(forumId, topicId, adaptedData)
       .then((response) => {
         dispatch(saveForumTopicPostListData(response.data.post));
         dispatch(
@@ -245,6 +255,7 @@ export function createForumTopicPost(
         );
         return { postId: response.data.post.id };
       });
+  };
 }
 
 export function updateForumTopicPost(

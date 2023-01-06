@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Element, scroller } from 'react-scroll';
 import { toast } from 'react-toastify';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
   Avatar,
   Button,
@@ -12,11 +13,17 @@ import {
   CardContent,
   CardHeader,
   Divider,
+  IconButton,
   Link,
   Typography,
 } from '@mui/material';
+import {
+  ForumTopicPostEntity,
+  ForumTopicPostFormData,
+} from 'types/course/forums';
 import { AppDispatch, AppState } from 'types/store';
 
+import Checkbox from 'lib/components/core/buttons/Checkbox';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
@@ -36,6 +43,13 @@ import VotePostButton from '../buttons/VotePostButton';
 interface Props {
   postId: number;
   level: number;
+}
+
+interface PostCreatorReturnValues {
+  avatar: JSX.Element | null;
+  creatorName: string;
+  creatorUrl: string | null;
+  visibilityIcon: JSX.Element | null;
 }
 
 const translations = defineMessages({
@@ -59,6 +73,26 @@ const translations = defineMessages({
     id: 'course.forum.PostCard.emptyPost',
     defaultMessage: 'Post cannot be empty!',
   },
+  replyTo: {
+    id: 'course.forum.PostCard.replyTo',
+    defaultMessage: 'Reply to {user}',
+  },
+  postAnonymously: {
+    id: 'course.forum.PostCard.postAnonymously',
+    defaultMessage: 'Anonymous post',
+  },
+  anonymousUser: {
+    id: 'course.forum.PostCard.anonymousUser',
+    defaultMessage: 'Anonymous User',
+  },
+  maskUser: {
+    id: 'course.forum.PostCard.maskUser',
+    defaultMessage: 'Mask User',
+  },
+  unmaskUser: {
+    id: 'course.forum.PostCard.unmaskUser',
+    defaultMessage: 'Unmask User',
+  },
 });
 
 const postClassName = (isUnread: boolean, isSolution: boolean): string => {
@@ -67,12 +101,98 @@ const postClassName = (isUnread: boolean, isSolution: boolean): string => {
   return 'space-y-4';
 };
 
+const PostCreator = (post?: ForumTopicPostEntity): PostCreatorReturnValues => {
+  const { t } = useTranslation();
+  const [hideAvatar, setHideAvatar] = useState(true);
+
+  let postCreatorData: PostCreatorReturnValues = {
+    avatar: null,
+    creatorName: '',
+    creatorUrl: null,
+    visibilityIcon: null,
+  };
+
+  if (!post) return postCreatorData;
+
+  const {
+    isAnonymous,
+    creator,
+    permissions: { canViewAnonymous, isAnonymousEnabled },
+  } = post;
+  const canAccessAnonymous =
+    isAnonymousEnabled && canViewAnonymous && isAnonymous;
+
+  // Either a post is not anonymous or anonymous forum setting is disabled
+  if ((!isAnonymousEnabled || !isAnonymous) && creator) {
+    postCreatorData = {
+      avatar: (
+        <Avatar
+          alt={creator.name}
+          className="h-20 w-20"
+          component={Link}
+          href={creator.userUrl}
+          src={creator.imageUrl}
+        />
+      ),
+      creatorName: creator.name,
+      creatorUrl: creator.userUrl,
+      visibilityIcon: null,
+    };
+  } else if (canAccessAnonymous && creator && !hideAvatar) {
+    // If someone can see the real identity of the anonymous post
+    postCreatorData = {
+      avatar: (
+        <Avatar
+          alt={creator.name}
+          className="h-20 w-20"
+          component={Link}
+          href={creator.userUrl}
+          src={creator.imageUrl}
+        />
+      ),
+      creatorName: creator.name,
+      creatorUrl: creator.userUrl,
+      visibilityIcon: (
+        <IconButton
+          edge="end"
+          onClick={(): void => setHideAvatar(true)}
+          onMouseDown={(e): void => e.preventDefault()}
+          title={t(translations.maskUser)}
+        >
+          <VisibilityOff />
+        </IconButton>
+      ),
+    };
+  } else {
+    postCreatorData = {
+      avatar: <Avatar className="h-20 w-20">?</Avatar>,
+      creatorName: t(translations.anonymousUser),
+      creatorUrl: null,
+      visibilityIcon: canAccessAnonymous ? (
+        <IconButton
+          edge="end"
+          onClick={(): void => setHideAvatar(false)}
+          onMouseDown={(e): void => e.preventDefault()}
+          title={t(translations.unmaskUser)}
+        >
+          <Visibility />
+        </IconButton>
+      ) : null,
+    };
+  }
+
+  return postCreatorData;
+};
+
 const PostCard: FC<Props> = (props) => {
   const { postId, level } = props;
   const [isEditing, setIsEditing] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [editValue, setEditValue] = useState('');
-  const [replyValue, setReplyValue] = useState('');
+  const [replyValue, setReplyValue] = useState({
+    text: '',
+    isAnonymous: false,
+  });
   const { t } = useTranslation();
   const post = useSelector((state: AppState) =>
     getForumTopicPost(state, postId),
@@ -82,6 +202,8 @@ const PostCard: FC<Props> = (props) => {
   );
   const { forumId: forumIdSlug, topicId: topicIdSlug } = useParams();
   const dispatch = useDispatch<AppDispatch>();
+
+  const postCreator = PostCreator(post);
 
   useEffect(() => {
     if (isReplying) {
@@ -124,17 +246,25 @@ const PostCard: FC<Props> = (props) => {
   };
 
   const handleReply = (): void => {
-    if (replyValue.trim() === '') {
+    if (replyValue.text.trim() === '') {
       toast.error(t(translations.emptyPost));
       return;
     }
+    const forumPostFormData: ForumTopicPostFormData = {
+      text: replyValue.text,
+      isAnonymous: replyValue.isAnonymous,
+      parentId: postId,
+    };
     dispatch(
-      createForumTopicPost(forumIdSlug!, topicIdSlug!, replyValue, postId),
+      createForumTopicPost(forumIdSlug!, topicIdSlug!, forumPostFormData),
     )
       .then((response) => {
         toast.success(t(translations.replySuccess));
         setIsReplying(false);
-        setReplyValue('');
+        setReplyValue({
+          text: '',
+          isAnonymous: false,
+        });
         scroller.scrollTo(`postElement_${response.postId}`, {
           duration: 200,
           smooth: true,
@@ -209,19 +339,26 @@ const PostCard: FC<Props> = (props) => {
                 post={post}
               />
             }
-            avatar={
-              <Avatar
-                alt={post.creator.name}
-                className="h-20 w-20"
-                component={Link}
-                href={post.creator.userUrl}
-                src={post.creator.imageUrl}
-              />
-            }
+            avatar={postCreator.avatar}
             className="pb-0"
             subheader={formatLongDateTime(post.createdAt)}
             subheaderTypographyProps={{ variant: 'body1' }}
-            title={<a href={post.creator.userUrl}>{post.creator.name}</a>}
+            title={
+              <>
+                {postCreator.creatorUrl ? (
+                  <a
+                    href={postCreator.creatorUrl}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {postCreator.creatorName}
+                  </a>
+                ) : (
+                  postCreator.creatorName
+                )}
+                {postCreator.visibilityIcon}
+              </>
+            }
             titleTypographyProps={{ variant: 'body1' }}
           />
           <Divider />
@@ -282,10 +419,28 @@ const PostCard: FC<Props> = (props) => {
                   disableMargins
                   inputId={postId.toString()}
                   name={`postReplyText_${postId}`}
-                  onChange={(nextValue): void => setReplyValue(nextValue)}
-                  placeholder={`Reply to ${post.creator.name}`}
-                  value={replyValue}
+                  onChange={(nextValue): void =>
+                    setReplyValue((prevState) => ({
+                      ...prevState,
+                      text: nextValue,
+                    }))
+                  }
+                  placeholder={t(translations.replyTo, {
+                    user: postCreator.creatorName,
+                  })}
+                  value={replyValue.text}
                 />
+                {post.permissions.isAnonymousEnabled && (
+                  <Checkbox
+                    label={t(translations.postAnonymously)}
+                    onChange={(event): void =>
+                      setReplyValue((prevState) => ({
+                        ...prevState,
+                        isAnonymous: event.target.checked,
+                      }))
+                    }
+                  />
+                )}
               </CardContent>
               <CardActions className="pt-0">
                 <Button

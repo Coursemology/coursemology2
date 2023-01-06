@@ -6,9 +6,11 @@ module Course::DiscussionsAbilityComponent
     if course_user
       allow_course_users_show_topics
       allow_course_users_mark_topics_as_read
-      allow_course_teaching_staff_manage_discussion_topics
       allow_course_users_create_posts
       allow_course_users_reply_and_vote_posts
+      allow_course_users_view_own_anonymous_posts
+      allow_course_staff_view_anonymous_posts if course_user.staff?
+      allow_course_teaching_staff_manage_discussion_topics if course_user.teaching_staff?
       allow_course_teaching_staff_manage_posts if course_user.teaching_staff?
       allow_course_users_update_delete_own_post
     end
@@ -27,7 +29,7 @@ module Course::DiscussionsAbilityComponent
   end
 
   def allow_course_teaching_staff_manage_discussion_topics
-    can :manage, Course::Discussion::Topic, course_teaching_staff_hash
+    can :manage, Course::Discussion::Topic
   end
 
   def allow_course_users_create_posts
@@ -36,6 +38,14 @@ module Course::DiscussionsAbilityComponent
 
   def allow_course_users_reply_and_vote_posts
     can [:reply, :vote], Course::Discussion::Post, topic: { course_id: course.id }
+  end
+
+  def allow_course_users_view_own_anonymous_posts
+    can :view_anonymous, Course::Discussion::Post, creator_id: user.id
+  end
+
+  def allow_course_staff_view_anonymous_posts
+    can :view_anonymous, Course::Discussion::Post, topic: { course_id: course.id }
   end
 
   def allow_course_teaching_staff_manage_posts

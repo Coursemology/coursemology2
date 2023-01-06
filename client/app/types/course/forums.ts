@@ -25,10 +25,15 @@ export type ForumTopicListDataPermissions = Permissions<
   | 'canSetLockedTopic'
   | 'canReplyTopic'
   | 'canToggleAnswer'
+  | 'isAnonymousEnabled'
 >;
 
 export type ForumTopicPostListDataPermissions = Permissions<
-  'canEditPost' | 'canDeletePost' | 'canReplyPost'
+  | 'canEditPost'
+  | 'canDeletePost'
+  | 'canReplyPost'
+  | 'canViewAnonymous'
+  | 'isAnonymousEnabled'
 >;
 
 export enum TopicType {
@@ -95,7 +100,8 @@ export interface ForumTopicPostListData {
   hasUserVoted: boolean;
   userVoteFlag: boolean | null;
   voteTally: number;
-  creator: { id: number; userUrl: string; name: string; imageUrl: string };
+  isAnonymous: boolean;
+  creator?: { id: number; userUrl: string; name: string; imageUrl: string };
 
   permissions: ForumTopicPostListDataPermissions;
 }
@@ -166,7 +172,8 @@ export interface ForumTopicPostEntity {
   hasUserVoted: ForumTopicPostListData['hasUserVoted'];
   userVoteFlag: ForumTopicPostListData['userVoteFlag'];
   voteTally: ForumTopicPostListData['voteTally'];
-  creator: ForumTopicPostListData['creator'];
+  isAnonymous: ForumTopicPostListData['isAnonymous'];
+  creator?: ForumTopicPostListData['creator'];
 
   permissions: ForumTopicPostListData['permissions'];
 }
@@ -226,6 +233,15 @@ export interface ForumTopicPatchData {
 export interface ForumTopicPostFormData {
   text: string;
   parentId: number | null;
+  isAnonymous?: boolean;
+}
+
+export interface ForumTopicPostPostData {
+  discussion_post: {
+    text: ForumTopicPostFormData['text'];
+    parent_id: ForumTopicPostFormData['parentId'];
+    is_anonymous?: ForumTopicPostFormData['isAnonymous'];
+  };
 }
 
 /**

@@ -7,7 +7,7 @@
 
 - course_title = format_inline_text(course.title)
 - topic_title = format_inline_text(topic.title)
-- post_author = format_inline_text(post.author_name)
+- post_author = post.is_anonymous ? t('notifiers.course.anonymous_user') : format_inline_text(post.author_name)
 
 - message.subject = t('.subject', course: course_title, topic: topic_title)
 - message.subject += ' ' + t('notifiers.course.phantom') if course_user&.phantom?
