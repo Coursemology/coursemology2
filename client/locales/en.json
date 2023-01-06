@@ -533,6 +533,15 @@
   "course.admin.CourseSettingst.pleaseTypeChallengeToConfirmDelete": {
     "defaultMessage": "Please type {challenge} to confirm deletion."
   },
+  "course.admin.ForumsSettings.allowAnonymousPost": {
+    "defaultMessage": "Post anonymously"
+  },
+  "course.admin.ForumsSettings.allowAnonymousPostDescription": {
+    "defaultMessage": "Post creator and course instructors are still able to view the identity of the original author."
+  },
+  "course.admin.ForumsSettings.allowStudentsTo": {
+    "defaultMessage": "Allow students to"
+  },
   "course.admin.ForumsSettings.creatorOnly": {
     "defaultMessage": "Creator only"
   },
@@ -3560,6 +3569,9 @@
   "course.forum.ForumTopicNew.newTopic": {
     "defaultMessage": "New Topic"
   },
+  "course.forum.ForumTopicPostForm.postAnonymously": {
+    "defaultMessage": "Anonymous post"
+  },
   "course.forum.ForumTopicPostManagementButtons.deletionConfirm": {
     "defaultMessage": "Are you sure you wish to delete this topic post?"
   },
@@ -3569,13 +3581,13 @@
   "course.forum.ForumTopicPostManagementButtons.deletionSuccess": {
     "defaultMessage": "The post has been deleted."
   },
-  "course.forum.ForumTopicShow.NewPostDialog.creationFailure": {
+  "course.forum.ForumTopicPostNew.creationFailure": {
     "defaultMessage": "Failed to create the post - {error}"
   },
-  "course.forum.ForumTopicShow.NewPostDialog.creationSuccess": {
+  "course.forum.ForumTopicPostNew.creationSuccess": {
     "defaultMessage": "The post has been created."
   },
-  "course.forum.ForumTopicShow.NewPostDialog.header": {
+  "course.forum.ForumTopicPostNew.newPost": {
     "defaultMessage": "Create a New Post"
   },
   "course.forum.ForumTopicShow.fetchPostsFailure": {
@@ -3713,14 +3725,29 @@
   "course.forum.MarkAnswerButton.unmarkAsAnswer": {
     "defaultMessage": "Unmark as Answer"
   },
+  "course.forum.PostCard.anonymousUser": {
+    "defaultMessage": "Anonymous User"
+  },
   "course.forum.PostCard.emptyPost": {
     "defaultMessage": "Post cannot be empty!"
+  },
+  "course.forum.PostCard.maskUser": {
+    "defaultMessage": "Mask User"
+  },
+  "course.forum.PostCard.postAnonymously": {
+    "defaultMessage": "Anonymous post"
   },
   "course.forum.PostCard.replyFailure": {
     "defaultMessage": "Failed to submit the post - {error}"
   },
   "course.forum.PostCard.replySuccess": {
     "defaultMessage": "The reply post has been created."
+  },
+  "course.forum.PostCard.replyTo": {
+    "defaultMessage": "Reply to {user}"
+  },
+  "course.forum.PostCard.unmaskUser": {
+    "defaultMessage": "Unmask User"
   },
   "course.forum.PostCard.updateFailure": {
     "defaultMessage": "Failed to update the post - {error}"
@@ -6256,9 +6283,6 @@
   },
   "system.admin.instance.instance.InstanceUsersInvitations.header": {
     "defaultMessage": "Invitations"
-  },
-  "system.admin.instance.instance.InstanceUsersInvitations.noInvitations": {
-    "defaultMessage": "There are no instance user invitations sent yet."
   },
   "system.admin.instance.instance.InstanceUsersInvitations.pending": {
     "defaultMessage": "Pending Invitations"
