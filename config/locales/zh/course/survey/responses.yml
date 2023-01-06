@@ -1,0 +1,5 @@
+zh:
+  course:
+    survey:
+      responses:
+        no_course_user: '你必须是本课程的成员才能开始调研。'

@@ -1,0 +1,8 @@
+zh:
+  activemodel:
+    errors:
+      models:
+        course/experience_points/forum_disbursement:
+          attributes:
+            end_time:
+              invalid_period: '结束时间不能早于起始时间。'

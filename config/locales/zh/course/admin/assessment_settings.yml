@@ -1,0 +1,6 @@
+zh:
+  course:
+    admin:
+      assessment_settings:
+        edit:
+          header: '测验设置'

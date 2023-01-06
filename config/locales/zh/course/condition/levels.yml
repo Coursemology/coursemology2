@@ -1,0 +1,8 @@
+zh:
+  course:
+    condition:
+      levels:
+        new:
+          header: '新等级条件'
+        edit:
+          header: '编辑等级条件'

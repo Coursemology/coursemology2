@@ -1,0 +1,10 @@
+zh:
+  course:
+    admin:
+      assessments:
+        tabs:
+          index:
+            header: '测验标签'
+          new:
+            header: '新测验标签'
+

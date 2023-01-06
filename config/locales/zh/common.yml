@@ -1,0 +1,31 @@
+zh:
+  common:
+    not_started: "尚未开始"
+    ended: "已结束"
+    plain_text_link: "%{text} (%{url})"
+    draft: "草稿"
+    click_here: "点击此处"
+    truthy: "是"
+    falsey: "否"
+    percentage: "%{percentage}%"
+  helpers:
+    submit:
+      condition_level:
+        create: "创建升级条件"
+        update: "更新升级条件"
+      condition_achievement:
+        create: "创建成就获取条件"
+        update: "更新成就获取条件"
+      condition_assessment:
+        create: "创建测验条件"
+        update: "更新测验条件"
+      condition_survey:
+        create: "创建调研条件"
+        update: "更新调研条件"
+    buttons:
+      new: "新%{model}"
+      create: "创建%{model}"
+      edit: "编辑%{model}"
+      update: "更新%{model}"
+      delete: "删除%{model}"
+      delete_confirm_message: "确定吗？"

@@ -1,0 +1,14 @@
+zh:
+  course:
+    assessment:
+      question:
+        scribing:
+          new:
+            header: '划线题'
+          create:
+            success: '划线题已被创建'
+            failure: '无法创建划线题'
+          update:
+            failure: '无法更新划线题'
+          question_type: 划线题
+

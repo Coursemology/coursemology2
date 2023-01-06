@@ -1,0 +1,66 @@
+
+zh:
+  devise:
+    confirmations:
+      new:
+        resend: '重新发送确认指令'
+      confirmed: '您的电子邮件地址已被成功确认。'
+      send_instructions: '你将在几分钟内收到一封电子邮件，说明如何确认你的电子邮件地址，请同时检查你的垃圾邮件文件夹。'
+      send_paranoid_instructions: '如果您的电子邮件地址存在于我们的数据库中，您将在几分钟后收到一封电子邮件，说明如何确认您的电子邮件地址。请同时检查您的垃圾邮件文件夹。'
+    failure:
+      already_authenticated: '你已经登录了。'
+      inactive: '你的账户还没有激活。'
+      invalid: '无效的%{authentication_keys}或密码。'
+      locked: '你的账户被锁定。'
+      last_attempt: '在你的账户被锁定之前，你还有一次尝试的机会。'
+      not_found_in_database: '无效的%{authentication_keys}或密码'
+      timeout: '您的会话已过期。请再次登录以继续。'
+      unauthenticated: '你需要在继续之前登录或注册。'
+      unconfirmed: '在继续之前，你必须验证你的电子邮件地址。'
+    mailer:
+      confirmation_instructions:
+        subject: '验证说明'
+      reset_password_instructions:
+        subject: '重置密码说明'
+      unlock_instructions:
+        subject: '解除锁定说明'
+    omniauth_callbacks:
+      failure: '无法认证您的%{kind}身份，原因为"%{reason}"。'
+      success: '成功认证您的%{kind}账户身份。'
+    passwords:
+      new:
+        title: "忘记密码?"
+        button: "向我发送重置密码说明"
+      no_token: "如果你不是来自于密码重置邮件，则不能访问这个页面。如果你确实来自密码重置邮件，请确保你使用了所提供的完整URL。"
+      send_instructions: '你将在几分钟内收到一封电子邮件，说明如何重置你的密码。请同时检查您的垃圾邮件文件夹。'
+      send_paranoid_instructions: '如果您的电子邮件地址存在于我们的数据库中，您将在几分钟后在您的电子邮件地址中收到一个找回密码链接。'
+      updated: '您的密码已被成功更改。您现在已经登录了。'
+      updated_not_active: '您的密码已被成功更改。'
+    registrations:
+      destroyed: '再见! 您的账户已被成功注销。我们希望很快再见到你。'
+      signed_up: '欢迎你! 您已经注册成功。'
+      signed_up_but_inactive: '您已经成功注册。但是，您无法登录，因为您的账户尚未激活。'
+      signed_up_but_locked: '你已经成功注册。但是，您无法登录，因为你的账户被锁定。'
+      signed_up_but_unconfirmed: '一条带有验证链接的信息已经发到你的邮箱。请按照该链接激活您的账户。请同时检查您的垃圾邮件文件夹。'
+      update_needs_confirmation: '您成功更新了您的帐户，但我们需要验证您的新电子邮件地址。请检查您的电子邮件并按照确认链接验证您的新电子邮件地址。'
+      updated: '您的账户已被成功更新。'
+      new:
+        sign_up: '注册'
+    sessions:
+      signed_in: '登录成功。'
+      signed_out: '登出成功。'
+      already_signed_out: '登出成功。'
+    unlocks:
+      send_instructions: '你将在几分钟内收到一封电子邮件，说明如何解锁你的账户。请同时检查您的垃圾邮件文件夹。'
+      send_paranoid_instructions: '如果你的账户存在，你将会在几分钟内收到一封电子邮件，说明如何解锁它。请同时检查你的垃圾邮件文件夹。'
+      unlocked: '您的账户已被成功解锁。请登录后继续。'
+  errors:
+    messages:
+      already_confirmed: '已被确认，请尝试登录'
+      confirmation_period_expired: '需要在%{period}内确认，请申请一个新的。'
+      expired: '已经过期，请申请一个新的'
+      not_found: '未找到'
+      not_locked: '未被锁定'
+      not_saved:
+        one: '一个错误导致%{resource}无法保存：'
+        other: '%{count}个错误导致%{resource}无法保存:'

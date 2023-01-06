@@ -1,0 +1,54 @@
+zh:
+  course:
+    assessment:
+      question:
+        multiple_responses:
+          respond_to_switch_mcq_mrq_type_html:
+            switch_mcq_success: '问题%{number}已被转换为多解题'
+            switch_mrq_success: '问题%{number}已被转换为多选题'
+            switch_mcq_unsubmit_success: >
+              问题%{number}已被转换为多解题。
+              所有提交的评分报告都将被取消，所有对这个问题的答案都将被删除。
+            switch_mrq_unsubmit_success: >
+              问题%{number}已被转换为多选题。
+              所有提交的评分报告都将被取消，所有对这个问题的答案都将被删除。
+            failure: '未能成功转换多解题。'
+          new:
+            multiple_response_header: '新多解题'
+            multiple_choice_header: '新多选题'
+          create:
+            success: '多解题已被创建。'
+          update:
+            success: '多解题已被更新。'
+            failure: '多解题未被成功更新。'
+          form:
+            correct: '正确'
+            option: '选项'
+            explanation: '题解'
+            randomize_options: '随机化选项顺序（忽略这一点的选项将被移到底部）。'
+            ignore_randomization: '无视随机化'
+            skip_grading: '始终以“正确”评分，因为答案没有正确或错误概念'
+            add_option: '添加选项'
+            multiple_choice_button: '多选题(MCQ)'
+            multiple_response_button: '多解题 (MRQ)'
+            multiple_choice_option: '多选题(MCQ)选项'
+            multiple_response_option: '多解题(MRQ)选项'
+          option_fields:
+            explanation_hint: '学生提交答案后要显示的题解。'
+            remove: '移除'
+          switch_question_type_button:
+            switch_to_mcq: '转换至多选题(MCQ)'
+            switch_to_mrq: '转换至多解题(MRQ)'
+            no_answer: >
+              目前问题%{number}没有任何的答案和/或提交，而这种问题类型可以安全地转换。确定要继续吗？
+            confirm_switch_to_mcq: >
+              你确定要将问题%{number}转换成多选题吗?
+              已存在现有的答案和/或提交! 
+              改变问题类型可能会导致学生的回答不一致。为了防止这种情况，你可以取消所有已提交的材料，并删除这个问题的所有现有答案。或者，你可以保留答案并继续进行。
+            confirm_switch_to_mrq: >
+              你确定要将问题%{number}转换成多解题吗?
+              已存在现有的答案和/或提交! 
+              改变问题类型可能会导致学生的回答不一致。为了防止这种情况，你可以取消所有已提交的材料，并删除这个问题的所有现有答案。或者，你可以保留答案并继续进行。
+          question_type:
+            multiple_response: 多解题
+            multiple_choice: 多选题

@@ -1,0 +1,5 @@
+zh:
+  course:
+    experience_points_records:
+      index:
+        header: '用户%{name}：经验值历史记录'

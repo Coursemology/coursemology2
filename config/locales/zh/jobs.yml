@@ -1,0 +1,6 @@
+zh:
+  jobs:
+    completed:
+      completed: '任务已完成。'
+    errored:
+      errored: '任务出错。'
