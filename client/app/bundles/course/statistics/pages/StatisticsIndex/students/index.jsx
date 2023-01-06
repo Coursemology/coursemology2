@@ -123,7 +123,46 @@ const StudentsStatistics = ({ metadata, students, isFetching, isError }) => {
       label: intl.formatMessage(translations.groupManagers),
       options: {
         filter: true,
+        filterType: 'multiselect',
+        filterOptions: {
+          names: [
+            ...new Set(
+              students.flatMap((s) => s.groupManagers.map((m) => m.name)),
+            ),
+          ],
+          logic: (managers, filters) => {
+            if (filters) {
+              const filterSet = new Set(filters);
+              return !managers
+                .map((m) => m.name)
+                .some((name) => filterSet.has(name));
+            }
+            return false;
+          },
+          fullWidth: true,
+        },
+        customFilterListOptions: {
+          render: (name) => `Tutor: ${name}`,
+        },
         sort: true,
+        customBodyRenderLite: (dataIndex) => {
+          const groupManagers = students[dataIndex].groupManagers;
+          if (!groupManagers) {
+            return '';
+          }
+          return (
+            <>
+              {groupManagers.map((m, index) => (
+                <span key={m.id}>
+                  <Link href={m.nameLink} opensInNewTab>
+                    {m.name}
+                  </Link>
+                  {index < groupManagers.length - 1 && ', '}
+                </span>
+              ))}
+            </>
+          );
+        },
       },
     });
   }

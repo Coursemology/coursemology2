@@ -137,27 +137,27 @@ const StatisticsIndex = ({
             value={value}
           >
             <Tab
-              label={intl.formatMessage(translations.course)}
+              label={intl.formatMessage(translations.students)}
               {...a11yProps(0)}
             />
             <Tab
-              label={intl.formatMessage(translations.students)}
+              label={intl.formatMessage(translations.staff)}
               {...a11yProps(1)}
             />
             <Tab
-              label={intl.formatMessage(translations.staff)}
+              label={intl.formatMessage(translations.course)}
               {...a11yProps(2)}
             />
           </Tabs>
         </Box>
         <TabPanel index={0} value={value}>
-          <CourseStatistics {...courseStatistics} />
-        </TabPanel>
-        <TabPanel index={1} value={value}>
           <StudentsStatistics {...studentsStatistics} />
         </TabPanel>
-        <TabPanel index={2} value={value}>
+        <TabPanel index={1} value={value}>
           <StaffStatistics {...staffStatistics} />
+        </TabPanel>
+        <TabPanel index={2} value={value}>
+          <CourseStatistics {...courseStatistics} />
         </TabPanel>
       </Box>
       <NotificationBar notification={courseStatistics.notification} />

@@ -17,7 +17,15 @@ json.students @all_students do |student|
   json.name student.name
   json.nameLink course_user_path(current_course, student)
   json.studentType student.phantom? ? 'Phantom' : 'Normal'
-  json.groupManagers @service.group_managers_of(student).map(&:name).join(', ') unless no_group_managers
+
+  unless no_group_managers
+    json.groupManagers @service.group_managers_of(student) do |manager|
+      json.id manager.id
+      json.name manager.name
+      json.nameLink course_user_path(current_course, manager)
+    end
+  end
+
   if is_course_gamified
     json.level student.level_number
     json.experiencePoints student.experience_points
