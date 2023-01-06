@@ -1,0 +1,20 @@
+zh:
+  course:
+    lesson_plan:
+      items:
+        sidebar_title: :'course.lesson_plan.items.index.header'
+        index:
+          header: '课程计划'
+        ref: 'Ref: '
+        fixed_desc: >
+          这个项目的定制化时间线已被修复，它将不再被自动修改。
+  activerecord:
+    attributes:
+      course/lesson_plan/item:
+        reference_times: '引用时间'
+    errors:
+      models:
+        course/lesson_plan/item:
+          attributes:
+            reference_times:
+              must_have_at_most_one_default: '至少要有一个默认值'

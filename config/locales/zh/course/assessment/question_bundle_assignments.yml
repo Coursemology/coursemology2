@@ -1,0 +1,32 @@
+zh:
+  course:
+    assessment:
+      question_bundle_assignments:
+        index:
+          header: '问题绑定作业'
+          prepared_bundle_assignments: '已准备的绑定作业'
+          past_bundle_assignments: '过去的绑定作业'
+          validations: '验证'
+          rerandomize_all: '重新全部随机分配'
+          rerandomize_unassigned: '重新随机分配未分配的学生'
+          user: '用户'
+          submission_id: '提交ID'
+          unbundled: '未绑定'
+          unbundled_tooltip: >
+            这些很可能是被错误分配的绑定作业，不适合任何现有的问题组。
+        validations:
+          no_overlapping_questions:
+            desc: '问题绑定组不存在重叠的问题'
+            fail: '问题属于多个绑定组: %{questions}'
+          no_empty_groups:
+            desc: '问题组应至少包含一个绑定组'
+            fail: '该问题组没有绑定组: %{groups}'
+          one_bundle_assigned:
+            desc: '所有的学生在每个问题组都正好分配有一个绑定组。'
+            fail: '错误分配的学生: %{students}'
+            missing_bundle: '缺少绑定组'
+            unbundled: '未绑定'
+          no_repeat_bundles:
+            desc: '无法给学生分配以前练习过的绑定组'
+            fail: '有重复绑定组的学生: %{students}'
+            repeat_bundle: '学生以前练习过这个绑定组'
