@@ -82,6 +82,7 @@ module.exports = {
             __dirname,
             'node_modules/react-image-crop/dist/ReactCrop.css',
           ),
+          resolve(__dirname, 'app/lib/components/core/fields/CKEditor.css'),
         ],
       },
       {
