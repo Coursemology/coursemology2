@@ -43,9 +43,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
           page.find('#programming-question-form-submit').click
 
           expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
-          expect(current_path).to eq(course_assessment_path(course, assessment))
 
           question_created = assessment.questions.first.specific.reload
+
           expect(question_created.description).
             to include(question_attributes[:description])
           expect(question_created.staff_only_comments).
@@ -110,7 +110,10 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         page.find('#programming-question-form-submit').click
 
         expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
-        expect(page).to have_current_path(course_assessment_path(course, assessment))
+        question_created = assessment.questions.first.specific.reload
+
+        expect(page).to have_current_path(edit_course_assessment_question_programming_path(course, assessment,
+                                                                                           question_created))
         expect(question.reload.maximum_grade).to eq(maximum_grade)
       end
 
@@ -152,10 +155,10 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         wait_for_job
 
         expect(page).to have_no_xpath('//form//*[contains(@class, \'fa-spinner\')]')
-        expect(page).to \
-          have_no_current_path(new_course_assessment_question_programming_path(course, assessment))
 
         question_created = assessment.questions.first.specific
+        expect(page).to have_current_path(edit_course_assessment_question_programming_path(course, assessment,
+                                                                                           question_created))
         expect(question_created.memory_limit).to eq(question_attributes[:memory_limit])
         expect(question_created.time_limit).to eq(question_attributes[:time_limit])
         expect(question_created.attempt_limit).to eq(question_attributes[:attempt_limit])
