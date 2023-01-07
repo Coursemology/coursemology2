@@ -14,7 +14,8 @@ const config = {
   snapshotSerializers: ['<rootDir>/node_modules/enzyme-to-json/serializer'],
   moduleNameMapper: {
     '^react(.*)$': '<rootDir>/node_modules/react$1',
-    '.scss$': '<rootDir>/SassStub.js',
+    '.css$': '<rootDir>/StylesStub.js',
+    '.scss$': '<rootDir>/StylesStub.js',
     '^api(.*)$': '<rootDir>/app/api$1',
     '^lib(.*)$': '<rootDir>/app/lib$1',
     '^theme(.*)$': '<rootDir>/app/theme$1',
