@@ -88,7 +88,7 @@ function submitFormFailure(error) {
   };
 }
 
-function fetchImportResult(redirectAssessment, successMessage, failureMessage) {
+function fetchImportResult(redirectEditUrl, successMessage, failureMessage) {
   return (dispatch) => {
     axios
       .get('', {
@@ -105,7 +105,7 @@ function fetchImportResult(redirectAssessment, successMessage, failureMessage) {
           dispatch(setSubmissionMessage(failureMessage));
         } else {
           dispatch(setSubmissionMessage(successMessage));
-          window.location = redirectAssessment;
+          window.location = redirectEditUrl;
         }
       })
       .catch((error) => {
@@ -118,8 +118,7 @@ function fetchImportResult(redirectAssessment, successMessage, failureMessage) {
 
 function submitFormEvaluate(
   importJobUrl,
-  redirectEdit,
-  redirectAssessment,
+  redirectEditUrl,
   successMessage,
   failureMessage,
 ) {
@@ -140,36 +139,15 @@ function submitFormEvaluate(
             dispatch(
               submitFormEvaluate(
                 importJobUrl,
-                redirectEdit,
-                redirectAssessment,
+                redirectEditUrl,
                 successMessage,
                 failureMessage,
               ),
             );
           }, delay);
         } else {
-          if (redirectEdit) {
-            // Redirect to edit page without refreshing
-            window.history.pushState(null, null, redirectEdit.url);
-            document.title = redirectEdit.page_title;
-
-            $('.page-header > h1 > span:first').text(redirectEdit.page_header);
-            $('.breadcrumb .active').text(redirectEdit.page_header);
-
-            // Reload when the user tries to return the the new programming question page
-            window.onpopstate = function (event) {
-              if (event && event.state === null) {
-                window.location.reload();
-              }
-            };
-          }
-
           dispatch(
-            fetchImportResult(
-              redirectAssessment,
-              successMessage,
-              failureMessage,
-            ),
+            fetchImportResult(redirectEditUrl, successMessage, failureMessage),
           );
         }
       })
@@ -195,8 +173,7 @@ export function submitForm(url, method, data, failureMessage) {
       .then((response) => {
         const {
           import_job_url: importJobUrl,
-          redirect_edit: redirectEdit,
-          redirect_assessment: redirectAssessment,
+          redirect_edit_url: redirectEditUrl,
           message: successMessage,
         } = response.data;
 
@@ -205,15 +182,11 @@ export function submitForm(url, method, data, failureMessage) {
           dispatch(
             submitFormEvaluate(
               importJobUrl,
-              redirectEdit,
-              redirectAssessment,
+              redirectEditUrl,
               successMessage,
               failureMessage,
             ),
           );
-        } else if (redirectAssessment) {
-          // No need for package evaluation, redirect back to assessment page
-          window.location = redirectAssessment;
         } else {
           dispatch(submitFormSuccess(response.data));
           dispatch(submitFormLoading(false));

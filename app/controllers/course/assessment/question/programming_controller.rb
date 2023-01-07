@@ -20,7 +20,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     respond_to do |format|
       if @programming_question.save
         load_question_assessment
-        format.json { render_success_json t('.success'), true }
+        format.json { render_success_json t('.success') }
       else
         format.json { render_failure_json t('.failure') }
       end
@@ -48,7 +48,7 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
     respond_to do |format|
       if result
-        format.json { render_success_json t('.success'), false }
+        format.json { render_success_json t('.success') }
       else
         format.json { render_failure_json t('.failure') }
       end
@@ -75,8 +75,8 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     )
   end
 
-  def render_success_json(message, redirect_to_edit)
-    @response = { message: message, redirect_to_edit: redirect_to_edit }
+  def render_success_json(message)
+    @response = { message: message }
 
     render 'edit'
   end
