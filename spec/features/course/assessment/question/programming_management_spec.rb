@@ -94,7 +94,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         end
       end
 
-      scenario 'I can edit a question' do
+      scenario 'I can edit a question without updating the programming package' do
         question = create(:course_assessment_question_programming, assessment: assessment)
         visit course_assessment_path(course, assessment)
 
@@ -110,10 +110,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         page.find('#programming-question-form-submit').click
 
         expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
-        question_created = assessment.questions.first.specific.reload
-
-        expect(page).to have_current_path(edit_course_assessment_question_programming_path(course, assessment,
-                                                                                           question_created))
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(question.reload.maximum_grade).to eq(maximum_grade)
       end
 
