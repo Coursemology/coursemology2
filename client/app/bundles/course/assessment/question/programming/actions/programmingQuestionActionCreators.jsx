@@ -174,6 +174,7 @@ export function submitForm(url, method, data, failureMessage) {
         const {
           import_job_url: importJobUrl,
           redirect_edit_url: redirectEditUrl,
+          redirect_assessment_url: redirectAssessmentUrl,
           message: successMessage,
         } = response.data;
 
@@ -191,6 +192,7 @@ export function submitForm(url, method, data, failureMessage) {
           dispatch(submitFormSuccess(response.data));
           dispatch(submitFormLoading(false));
           dispatch(setSubmissionMessage(successMessage));
+          window.location = redirectAssessmentUrl;
         }
       })
       .catch((error) => {
