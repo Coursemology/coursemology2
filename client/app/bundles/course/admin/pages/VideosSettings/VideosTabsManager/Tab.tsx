@@ -124,8 +124,10 @@ const Tab = (props: TabProps): JSX.Element => {
         onClose={closeDeleteTabDialog}
         open={deleting}
         primaryColor="error"
-        primaryLabel={t(translations.deleteTabPromptAction, { tab: tab.title })}
-        title={t(translations.deleteTabPromptTitle, { tab: tab.title })}
+        primaryLabel={t(translations.deleteTabPromptAction, {
+          title: tab.title,
+        })}
+        title={t(translations.deleteTabPromptTitle, { title: tab.title })}
       >
         {t(translations.deleteTabPromptMessage)}
       </Prompt>
