@@ -265,7 +265,7 @@ module Extensions::Attachable::ActiveRecord::Base
       doc = Nokogiri::HTML.fragment(content)
       doc.css('img').each do |image|
         id = parse_attachment_reference_uuid_from_url(image['src'])
-        attachment = AttachmentReference.find(id)&.attachment if id
+        attachment = AttachmentReference.find_by_id(id)&.attachment if id
         image['src'] = attachment.url if attachment&.url
       end
       doc.to_html
