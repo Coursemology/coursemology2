@@ -533,6 +533,15 @@
   "course.admin.CourseSettingst.pleaseTypeChallengeToConfirmDelete": {
     "defaultMessage": "请键入 {challenge} 以确认删除。"
   },
+  "course.admin.ForumsSettings.allowAnonymousPost": {
+    "defaultMessage": "匿名发帖"
+  },
+  "course.admin.ForumsSettings.allowAnonymousPostDescription": {
+    "defaultMessage": "发帖人和课程讲师仍然可以查看原作者的身份。"
+  },
+  "course.admin.ForumsSettings.allowStudentsTo": {
+    "defaultMessage": "允许所有学生"
+  },
   "course.admin.ForumsSettings.creatorOnly": {
     "defaultMessage": "仅限创作者"
   },
@@ -3473,6 +3482,9 @@
   "course.forum.ForumTopicNew.newTopic": {
     "defaultMessage": "新话题"
   },
+  "course.forum.ForumTopicPostForm.postAnonymously": {
+    "defaultMessage": "匿名发帖"
+  },
   "course.forum.ForumTopicPostManagementButtons.deletionConfirm": {
     "defaultMessage": "你确定要删除此主题帖吗？"
   },
@@ -3483,12 +3495,12 @@
     "defaultMessage": "该帖子已被删除。"
   },
   "course.forum.ForumTopicPostNew.creationFailure": {
-    "defaultMessage": "无法创建帖子 - {error}"
+    "defaultMessage": "创建帖子失败 - {error}"
   },
   "course.forum.ForumTopicPostNew.creationSuccess": {
-    "defaultMessage": "帖子已创建。"
+    "defaultMessage": "帖子已经创建成功"
   },
-  "course.forum.ForumTopicPostNew.header": {
+  "course.forum.ForumTopicPostNew.newPost": {
     "defaultMessage": "创建新帖子"
   },
   "course.forum.ForumTopicShow.fetchPostsFailure": {
@@ -3626,14 +3638,29 @@
   "course.forum.MarkAnswerButton.unmarkAsAnswer": {
     "defaultMessage": "取消标记为答案"
   },
+  "course.forum.PostCard.anonymousUser": {
+    "defaultMessage": "匿名用户"
+  },
   "course.forum.PostCard.emptyPost": {
     "defaultMessage": "帖子不能为空！"
+  },
+  "course.forum.PostCard.maskUser": {
+    "defaultMessage": "屏蔽用户"
+  },
+  "course.forum.PostCard.postAnonymously": {
+    "defaultMessage": "匿名发帖"
   },
   "course.forum.PostCard.replyFailure": {
     "defaultMessage": "无法提交帖子 - {error}"
   },
   "course.forum.PostCard.replySuccess": {
     "defaultMessage": "回复帖子已创建。"
+  },
+  "course.forum.PostCard.replyTo": {
+    "defaultMessage": "回复 {user}"
+  },
+  "course.forum.PostCard.unmaskUser": {
+    "defaultMessage": "取消屏蔽用户"
   },
   "course.forum.PostCard.updateFailure": {
     "defaultMessage": "无法更新帖子 - {error}"

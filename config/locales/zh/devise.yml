@@ -46,6 +46,7 @@ zh:
       updated: '您的账户已被成功更新。'
       new:
         sign_up: '注册'
+        password_hint: '至少需要 #{length} 个字符'
     sessions:
       signed_in: '登录成功。'
       signed_out: '登出成功。'
