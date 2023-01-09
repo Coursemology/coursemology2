@@ -3482,13 +3482,13 @@
   "course.forum.ForumTopicPostManagementButtons.deletionSuccess": {
     "defaultMessage": "该帖子已被删除。"
   },
-  "course.forum.ForumTopicShow.NewPostDialog.creationFailure": {
+  "course.forum.ForumTopicPostNew.creationFailure": {
     "defaultMessage": "无法创建帖子 - {error}"
   },
-  "course.forum.ForumTopicShow.NewPostDialog.creationSuccess": {
+  "course.forum.ForumTopicPostNew.creationSuccess": {
     "defaultMessage": "帖子已创建。"
   },
-  "course.forum.ForumTopicShow.NewPostDialog.header": {
+  "course.forum.ForumTopicPostNew.header": {
     "defaultMessage": "创建新帖子"
   },
   "course.forum.ForumTopicShow.fetchPostsFailure": {
@@ -6169,9 +6169,6 @@
   },
   "system.admin.instance.instance.InstanceUsersInvitations.header": {
     "defaultMessage": "邀请函"
-  },
-  "system.admin.instance.instance.InstanceUsersInvitations.noInvitations": {
-    "defaultMessage": "尚未发送任何实例用户邀请。"
   },
   "system.admin.instance.instance.InstanceUsersInvitations.pending": {
     "defaultMessage": "待处理的邀请"
