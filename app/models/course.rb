@@ -240,14 +240,13 @@ class Course < ApplicationRecord
   end
 
   # Returns admin email id and settings for both phantom and regular users.
+  # If it doesnt exist for one reason or another
+  # (usually the settings are not populated after data migration), create one.
   #
   # @return [Course::Settings::Email]
   def email_enabled(component, setting, course_assessment_category_id = nil)
-    setting_emails.
-      where(component: component,
-            course_assessment_category_id: course_assessment_category_id,
-            setting: setting).
-      select(:id, :phantom, :regular).first
+    setting_emails.find_or_create_by(component: component, course_assessment_category_id: course_assessment_category_id,
+                                     setting: setting)
   end
 
   def email_settings_with_enabled_components
