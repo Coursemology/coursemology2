@@ -971,6 +971,12 @@
   "course.assessment.AssessmentForm.hasPersonalTimesHint": {
     "defaultMessage": "该项目的时间将根据学习率自动为用户调整。"
   },
+  "course.assessment.AssessmentForm.hasTodo": {
+    "defaultMessage": "有待办事项"
+  },
+  "course.assessment.AssessmentForm.hasTodoHint": {
+    "defaultMessage": "启用后，学生可以看到这此测验在他们的待办事项"
+  },
   "course.assessment.AssessmentForm.modeSwitchingHint": {
     "defaultMessage": "你不能再更改评分模式，因为已经有此测验的提交。"
   },
@@ -2666,12 +2672,6 @@
   "course.assessment.updateSuccess": {
     "defaultMessage": "测验已更新。"
   },
-  "course.assessments.index.affectsPersonalTimes": {
-    "defaultMessage": "影响个人时间"
-  },
-  "course.assessments.index.affectsPersonalTimesHint": {
-    "defaultMessage": "完成此测验可能会影响后续测验的时间安排。"
-  },
   "course.assessments.index.attempt": {
     "defaultMessage": "尝试"
   },
@@ -2699,11 +2699,8 @@
   "course.assessments.index.exp": {
     "defaultMessage": "经验值"
   },
-  "course.assessments.index.hasPersonalTimes": {
-    "defaultMessage": "有私人时间"
-  },
-  "course.assessments.index.hasPersonalTimesHint": {
-    "defaultMessage": "此测验的时间将根据学生的学习率自动调整。"
+  "course.assessments.index.hasTodo": {
+    "defaultMessage": "有待办事项"
   },
   "course.assessments.index.neededFor": {
     "defaultMessage": "需要的"
@@ -3431,6 +3428,9 @@
   "course.forum.ForumTable.hasUnresolved": {
     "defaultMessage": "有未解决的问题"
   },
+  "course.forum.ForumTable.isSubscribed": {
+    "defaultMessage": "已订阅"
+  },
   "course.forum.ForumTable.noForum": {
     "defaultMessage": "没有论坛"
   },
@@ -3529,6 +3529,9 @@
   },
   "course.forum.ForumTopicTable.hidden": {
     "defaultMessage": "该主题对学生是隐藏的。"
+  },
+  "course.forum.ForumTopicTable.isSubscribed": {
+    "defaultMessage": "已订阅?"
   },
   "course.forum.ForumTopicTable.lastPostedBy": {
     "defaultMessage": "最后发表者"
@@ -4703,6 +4706,9 @@
   "course.survey.Section.noQuestions": {
     "defaultMessage": "本章节没有问题。调查回复表中不会显示空白章节。"
   },
+  "course.survey.SurveyBadges.hasTodo": {
+    "defaultMessage": "有待办事项"
+  },
   "course.survey.SurveyForm.allowModifyAfterSubmitHint": {
     "defaultMessage": "提交后可以更改回复。"
   },
@@ -4714,6 +4720,12 @@
   },
   "course.survey.SurveyForm.hasStudentResponse": {
     "defaultMessage": "至少有一名学生回答了这项调查。你无法删除匿名。"
+  },
+  "course.survey.SurveyForm.hasTodo": {
+    "defaultMessage": "有待办事项"
+  },
+  "course.survey.SurveyForm.hasTodoHint": {
+    "defaultMessage": "启用后，学生可以看到这此调查在他们的待办事项"
   },
   "course.survey.SurveyForm.startEndValidationError": {
     "defaultMessage": "必须在开始时间之后。"
@@ -4832,14 +4844,14 @@
   "course.survey.fields.description": {
     "defaultMessage": "描述"
   },
-  "course.survey.fields.expiresAt": {
-    "defaultMessage": "关闭于"
-  },
-  "course.survey.fields.openAt": {
-    "defaultMessage": "开始于"
+  "course.survey.fields.endsAt": {
+    "defaultMessage": "结束于"
   },
   "course.survey.fields.published": {
     "defaultMessage": "发表"
+  },
+  "course.survey.fields.startsAt": {
+    "defaultMessage": "开始于"
   },
   "course.survey.fields.title": {
     "defaultMessage": "标题"
@@ -5312,6 +5324,9 @@
   "course.users.UsersIndex.studentsHeader": {
     "defaultMessage": "学生"
   },
+  "course.video.VideoBadges.hasTodo": {
+    "defaultMessage": "有待办事项"
+  },
   "course.video.VideoEdit.updateFailure": {
     "defaultMessage": "无法更新 {title}。"
   },
@@ -5326,6 +5341,15 @@
   },
   "course.video.VideoForm.hasPersonalTimes": {
     "defaultMessage": "有私人时间"
+  },
+  "course.video.VideoForm.hasPersonalTimesHint": {
+    "defaultMessage": "该项目的时间将根据学习率自动为用户调整。"
+  },
+  "course.video.VideoForm.hasTodo": {
+    "defaultMessage": "有待办事项"
+  },
+  "course.video.VideoForm.hasTodoHint": {
+    "defaultMessage": "启用后，学生可以看到这此视频在他们的待办事项"
   },
   "course.video.VideoForm.published": {
     "defaultMessage": "发表"
@@ -5537,11 +5561,17 @@
   "lib.components.extensions.PersonalStartEndTime.timeTooltip": {
     "defaultMessage": "个性化时间生效。原来的时间是{time}。"
   },
+  "lib.components.extensions.PersonalTimeBooleanIcons.affectsPersonalTimes": {
+    "defaultMessage": "影响个人时间"
+  },
   "lib.components.extensions.PersonalTimeBooleanIcons.affectsPersonalTimesHint": {
-    "defaultMessage": "影响个人时间。更新其他项目的个人时间时，将考虑学生提交此项目的时间。"
+    "defaultMessage": "更新其他项目的个人时间时，将考虑学生提交此项目的时间。"
+  },
+  "lib.components.extensions.PersonalTimeBooleanIcons.hasPersonalTimes": {
+    "defaultMessage": "有私人时间"
   },
   "lib.components.extensions.PersonalTimeBooleanIcons.hasPersonalTimesHint": {
-    "defaultMessage": "有私人时间。该项目的时间将根据学习率自动为用户调整。"
+    "defaultMessage": "该项目的时间将根据学习率自动为用户调整。"
   },
   "lib.components.extensions.conditions.achievement": {
     "defaultMessage": "成就"
@@ -5792,6 +5822,12 @@
   "lib.translations.table.column.experiencePointsAwarded": {
     "defaultMessage": "获得的经验值"
   },
+  "lib.translations.table.column.hasPersonalTimes": {
+    "defaultMessage": "有私人时间"
+  },
+  "lib.translations.table.column.hasTodo": {
+    "defaultMessage": "有待办事项"
+  },
   "lib.translations.table.column.host": {
     "defaultMessage": "主机名"
   },
@@ -5839,6 +5875,9 @@
   },
   "lib.translations.table.column.phantom": {
     "defaultMessage": "影子学生"
+  },
+  "lib.translations.table.column.published": {
+    "defaultMessage": "发表"
   },
   "lib.translations.table.column.reason": {
     "defaultMessage": "原因"

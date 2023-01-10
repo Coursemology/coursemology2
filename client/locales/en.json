@@ -3515,6 +3515,9 @@
   "course.forum.ForumTable.hasUnresolved": {
     "defaultMessage": "Has unresolved question(s)"
   },
+  "course.forum.ForumTable.isSubscribed": {
+    "defaultMessage": "Subscribed?"
+  },
   "course.forum.ForumTable.noForum": {
     "defaultMessage": "No Forum"
   },
@@ -3613,6 +3616,9 @@
   },
   "course.forum.ForumTopicTable.hidden": {
     "defaultMessage": "This topic is hidden for students."
+  },
+  "course.forum.ForumTopicTable.isSubscribed": {
+    "defaultMessage": "Subscribed?"
   },
   "course.forum.ForumTopicTable.lastPostedBy": {
     "defaultMessage": "Last Posted By"
@@ -4788,7 +4794,7 @@
     "defaultMessage": "This section has no questions. Empty sections will not be shown in the survey response form."
   },
   "course.survey.SurveyBadges.hasTodo": {
-    "defaultMessage": "has TODO"
+    "defaultMessage": "Has TODO"
   },
   "course.survey.SurveyForm.allowModifyAfterSubmitHint": {
     "defaultMessage": "Responses can be changed after being submitted."
@@ -5406,7 +5412,7 @@
     "defaultMessage": "Students"
   },
   "course.video.VideoBadges.hasTodo": {
-    "defaultMessage": "has TODO"
+    "defaultMessage": "Has TODO"
   },
   "course.video.VideoEdit.updateFailure": {
     "defaultMessage": "Failed to update {title}."
