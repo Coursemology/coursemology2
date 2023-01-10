@@ -44,7 +44,7 @@ const filter = (
       assessment.title.toLowerCase().includes(keyword.toLowerCase().trim()),
     );
 
-    if (filteredDestinations.length <= 0) return targets;
+    if (filteredDestinations.length === 0) return targets;
 
     targets.push({
       tab: tab.tab,
@@ -67,7 +67,7 @@ const TargetsList = (props: TargetsListProps): JSX.Element => {
   const { t } = useTranslation();
   const targets = useMemo(() => filter(keyword, question), [keyword, question]);
 
-  if (!targets || targets.length <= 0)
+  if (!targets || targets.length === 0)
     return (
       <div className="flex h-full flex-col items-center justify-center p-10 text-neutral-400">
         <div className="flex items-center justify-center rounded-full p-4 outline">

@@ -58,7 +58,7 @@ const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
 
   const selectImage: ChangeEventHandler<HTMLInputElement> = (e) => {
     e.preventDefault();
-    if (!e.target.files || e.target.files.length <= 0) return;
+    if (!e.target.files || e.target.files.length === 0) return;
 
     const file = e.target.files[0];
 

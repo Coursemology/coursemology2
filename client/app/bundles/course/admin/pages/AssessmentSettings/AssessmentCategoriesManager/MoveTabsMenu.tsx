@@ -17,7 +17,7 @@ const MoveTabsMenu = (props: MoveTabsMenuProps): JSX.Element | null => {
   const { categories, onSelectCategory } = props;
   const [button, setButton] = useState<HTMLButtonElement>();
 
-  if (!categories || categories.length <= 0) return null;
+  if (!categories || categories.length === 0) return null;
 
   if (categories.length === 1)
     return (
