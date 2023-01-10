@@ -14,14 +14,13 @@ import {
 import { VideoSubmissionData } from 'types/course/video/submissions';
 
 import CourseAPI from 'api/course';
+import DescriptionCard from 'lib/components/core/DescriptionCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { getVideoSubmissionsURL } from 'lib/helpers/url-builders';
 import { getCourseId, getVideoId } from 'lib/helpers/url-helpers';
 import { formatLongDateTime } from 'lib/moment';
-
-import DescriptionCard from '../../components/misc/DescriptionCard';
 
 import StatisticsWithStore from './StatisticsWithStore';
 
