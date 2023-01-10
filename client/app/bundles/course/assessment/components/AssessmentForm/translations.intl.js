@@ -114,6 +114,15 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.draftHint',
     defaultMessage: 'Only you and staff can see this assessment.',
   },
+  hasTodo: {
+    id: 'course.assessment.AssessmentForm.hasTodo',
+    defaultMessage: 'Has TODO',
+  },
+  hasTodoHint: {
+    id: 'course.assessment.AssessmentForm.hasTodoHint',
+    defaultMessage:
+      'When enabled, students will see this assessment in their TODO list.',
+  },
   gradingMode: {
     id: 'course.assessment.AssessmentForm.gradingMode',
     defaultMessage: 'Grading mode',

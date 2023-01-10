@@ -3,11 +3,21 @@ assessment = @assessment
 assessment_conditions = @assessment_conditions
 questions = @questions
 question_assessments = @question_assessments
+can_attempt = can?(:attempt, assessment)
+can_observe = can?(:observe, assessment)
+can_manage = can?(:manage, assessment)
+requirements = assessment.specific_conditions.map do |condition|
+  {
+    title: condition.title,
+    satisfied: current_course_user.present? ? condition.satisfied_by?(current_course_user) : nil
+  }.compact
+end
 
 json.id assessment.id
 json.title assessment.title
 json.description assessment.description unless @assessment.description.blank?
 json.autograded assessment.autograded?
+json.hasTodo assessment.has_todo if can_manage
 json.indexUrl course_assessments_path(current_course, category: assessment.tab.category_id, tab: assessment.tab)
 
 json.startAt do
@@ -63,10 +73,6 @@ json.partial! 'assessment_actions', assessment: assessment, submissions: submiss
 
 json.hasAttempts assessment.submissions.where(creator_id: current_user.id).exists?
 
-can_attempt = can?(:attempt, assessment)
-can_observe = can?(:observe, assessment)
-can_manage = can?(:manage, assessment)
-
 json.permissions do
   json.canAttempt can_attempt
   json.canManage can_manage
@@ -76,13 +82,6 @@ end
 unless can_attempt
   not_started_for_user = assessment_not_started(assessment.time_for(current_course_user))
   json.willStartAt assessment.time_for(current_course_user).start_at if not_started_for_user
-end
-
-requirements = assessment.specific_conditions.map do |condition|
-  {
-    title: condition.title,
-    satisfied: current_course_user.present? ? condition.satisfied_by?(current_course_user) : nil
-  }.compact
 end
 
 json.requirements(requirements.sort_by { |condition| condition[:satisfied] ? 1 : 0 })

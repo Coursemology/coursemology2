@@ -59,6 +59,13 @@ const AssessmentDetails = (props: AssessmentDetailsProps): JSX.Element => {
           </TableRow>
         )}
 
+        {assessment.hasTodo && (
+          <TableRow>
+            <TableCell variant="head">{t(translations.hasTodo)}</TableCell>
+            <TableCell>{assessment.hasTodo ? '✅' : '❌'}</TableCell>
+          </TableRow>
+        )}
+
         <TableRow>
           <TableCell variant="head">{t(translations.endsAt)}</TableCell>
           <TableCell>

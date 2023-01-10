@@ -23,6 +23,7 @@ const INITIAL_VALUES = {
   use_evaluation: false,
   tabbed_view: false,
   published: false,
+  has_todo: false,
   allow_partial_submission: false,
   block_student_viewing_after_submitted: false,
   delayed_grade_publication: false,

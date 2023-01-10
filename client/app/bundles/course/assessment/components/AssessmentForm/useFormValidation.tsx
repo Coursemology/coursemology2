@@ -43,6 +43,7 @@ const validationSchema = yup.object({
     .nullable(true)
     .transform((_, val) => (val === Number(val) ? val : null)),
   published: yup.bool(),
+  has_todo: yup.bool(),
   autograded: yup.bool(),
   block_student_viewing_after_submitted: yup.bool(),
   skippable: yup.bool(),

@@ -29,6 +29,7 @@ export interface AssessmentListData extends AssessmentActionsData {
   timeBonusExp?: number;
   bonusEndAt?: PersonalTimeData;
   endAt?: PersonalTimeData;
+  hasTodo?: boolean;
   isBonusEnded?: boolean;
   isEndTimePassed?: boolean;
   remainingConditionalsCount?: number;
@@ -133,6 +134,7 @@ export interface AssessmentData extends AssessmentActionsData {
   indexUrl: string;
 
   endAt?: PersonalTimeData;
+  hasTodo?: boolean;
   unlocks?: {
     description: string;
     title: string;

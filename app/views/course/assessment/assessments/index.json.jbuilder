@@ -31,6 +31,7 @@ json.assessments @assessments do |assessment|
   json.published assessment.published?
   json.autograded assessment.autograded?
   json.hasPersonalTimes current_course.show_personalized_timeline_features && assessment.has_personal_times?
+  json.hasTodo assessment.has_todo if can?(:manage, assessment)
   json.affectsPersonalTimes current_course.show_personalized_timeline_features && assessment.affects_personal_times?
   json.url course_assessment_path(current_course, assessment)
 

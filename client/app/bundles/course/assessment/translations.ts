@@ -61,6 +61,10 @@ const translations = defineMessages({
     id: 'course.assessments.index.bonusExp',
     defaultMessage: 'Bonus',
   },
+  hasTodo: {
+    id: 'course.assessments.index.hasTodo',
+    defaultMessage: 'Has TODO',
+  },
   neededFor: {
     id: 'course.assessments.index.neededFor',
     defaultMessage: 'Needed for',
