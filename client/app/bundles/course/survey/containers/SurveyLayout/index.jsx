@@ -51,7 +51,7 @@ const PageWithTitleBar = (props) => {
   }
 
   return (
-    <>
+    <main className="space-y-5">
       {survey && (
         <PageHeader
           returnLink={backLocations(courseId, surveyId, page)}
@@ -64,7 +64,7 @@ const PageWithTitleBar = (props) => {
         />
       )}
       {pageToRender}
-    </>
+    </main>
   );
 };
 

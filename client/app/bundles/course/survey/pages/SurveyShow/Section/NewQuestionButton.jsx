@@ -55,8 +55,8 @@ class NewQuestionButton extends Component {
           description: '',
           required: false,
           grid_view: false,
-          min_options: null,
-          max_options: null,
+          min_options: undefined,
+          max_options: undefined,
           options: [
             {
               weight: null,

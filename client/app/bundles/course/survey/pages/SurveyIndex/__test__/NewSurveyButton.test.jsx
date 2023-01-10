@@ -65,6 +65,7 @@ describe('<NewSurveyButton />', () => {
       anonymous: false,
       base_exp: 0,
       description: '',
+      has_todo: true,
       start_at: new Date('2016-12-31T16:00:00.000Z'),
       end_at: new Date('2017-01-07T15:59:00.000Z'),
       bonus_end_at: new Date('2017-01-07T15:59:00.000Z'),

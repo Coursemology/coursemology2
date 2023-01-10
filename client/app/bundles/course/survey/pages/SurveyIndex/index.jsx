@@ -1,13 +1,13 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { ListSubheader } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { fetchSurveys } from 'course/survey/actions/surveys';
 import { surveyShape } from 'course/survey/propTypes';
 import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import withRouter from 'lib/components/navigation/withRouter';
 
@@ -38,11 +38,9 @@ class SurveyIndex extends Component {
     if (isLoading) {
       return <LoadingIndicator />;
     }
-    if (surveys.length < 1) {
+    if (surveys.length === 0) {
       return (
-        <ListSubheader disableSticky>
-          <FormattedMessage {...translations.noSurveys} />
-        </ListSubheader>
+        <Note message={<FormattedMessage {...translations.noSurveys} />} />
       );
     }
     return <SurveysTable {...{ courseId }} />;

@@ -69,6 +69,7 @@ const NewSurveyButton = (props) => {
           bonus_end_at: null,
           base_exp: 0,
           time_bonus_exp: 0,
+          has_todo: true,
           allow_response_after_end: true,
           allow_modify_after_submit: false,
           anonymous: false,
