@@ -7,10 +7,10 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
-  Typography,
 } from '@mui/material';
 import { AssessmentData } from 'types/course/assessment/assessments';
 
+import DescriptionCard from 'lib/components/core/DescriptionCard';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -40,12 +40,7 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
       )}
 
       {assessment.description && (
-        <section className="rounded-lg bg-neutral-100 p-4">
-          <Typography
-            dangerouslySetInnerHTML={{ __html: assessment.description }}
-            variant="body2"
-          />
-        </section>
+        <DescriptionCard description={assessment.description} />
       )}
 
       <AssessmentDetails for={assessment} />

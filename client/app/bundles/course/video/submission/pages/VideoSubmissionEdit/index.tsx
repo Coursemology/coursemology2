@@ -5,10 +5,9 @@ import { toast } from 'react-toastify';
 import { VideoEditSubmissionData } from 'types/course/video/submissions';
 
 import CourseAPI from 'api/course';
+import DescriptionCard from 'lib/components/core/DescriptionCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
-
-import DescriptionCard from '../../components/misc/DescriptionCard';
 
 import SubmissionEditWithStore from './SubmissionEditWithStore';
 
