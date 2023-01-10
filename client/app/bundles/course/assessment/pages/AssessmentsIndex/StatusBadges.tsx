@@ -1,13 +1,8 @@
-import {
-  Block,
-  CheckCircle,
-  Key,
-  Schedule,
-  Shuffle,
-} from '@mui/icons-material';
-import { Chip, Tooltip, Typography } from '@mui/material';
+import { Block, CheckCircle, Key } from '@mui/icons-material';
+import { Chip, Tooltip } from '@mui/material';
 import { AssessmentListData } from 'types/course/assessment/assessments';
 
+import PersonalTimeBooleanIcons from 'lib/components/extensions/PersonalTimeBooleanIcon';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -46,43 +41,10 @@ const StatusBadges = (props: StatusBadgesProps): JSX.Element => {
         </Tooltip>
       )}
 
-      {assessment.hasPersonalTimes && (
-        <Tooltip
-          disableInteractive
-          title={
-            <section className="flex flex-col space-y-2">
-              <Typography variant="body2">
-                {t(translations.hasPersonalTimes)}
-              </Typography>
-
-              <Typography variant="caption">
-                {t(translations.hasPersonalTimesHint)}
-              </Typography>
-            </section>
-          }
-        >
-          <Schedule className="text-3xl text-neutral-500 hover?:text-neutral-600" />
-        </Tooltip>
-      )}
-
-      {assessment.affectsPersonalTimes && (
-        <Tooltip
-          disableInteractive
-          title={
-            <section className="flex flex-col space-y-2">
-              <Typography variant="body2">
-                {t(translations.affectsPersonalTimes)}
-              </Typography>
-
-              <Typography variant="caption">
-                {t(translations.affectsPersonalTimesHint)}
-              </Typography>
-            </section>
-          }
-        >
-          <Shuffle className="text-3xl text-neutral-500 hover?:text-neutral-600" />
-        </Tooltip>
-      )}
+      <PersonalTimeBooleanIcons
+        affectsPersonalTimes={assessment.affectsPersonalTimes}
+        hasPersonalTimes={assessment.hasPersonalTimes}
+      />
     </div>
   );
 };

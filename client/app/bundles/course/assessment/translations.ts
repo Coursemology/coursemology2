@@ -53,24 +53,6 @@ const translations = defineMessages({
     id: 'course.assessments.index.passwordProtected',
     defaultMessage: 'Password-protected',
   },
-  hasPersonalTimes: {
-    id: 'course.assessments.index.hasPersonalTimes',
-    defaultMessage: 'Has personal times',
-  },
-  hasPersonalTimesHint: {
-    id: 'course.assessments.index.hasPersonalTimesHint',
-    defaultMessage:
-      "Timings for this assessment will automatically be adjusted based on students' learning rate.",
-  },
-  affectsPersonalTimes: {
-    id: 'course.assessments.index.affectsPersonalTimes',
-    defaultMessage: 'Affects personal times',
-  },
-  affectsPersonalTimesHint: {
-    id: 'course.assessments.index.affectsPersonalTimesHint',
-    defaultMessage:
-      'Completion of this assessment may affect the timings for subsequent assessments.',
-  },
   exp: {
     id: 'course.assessments.index.exp',
     defaultMessage: 'EXP',
