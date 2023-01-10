@@ -304,13 +304,13 @@ const ResponseIndex = (props) => {
         <TableBody>
           <TableRow>
             <TableCell>
-              <FormattedMessage {...surveyTranslations.opensAt} />
+              <FormattedMessage {...surveyTranslations.startsAt} />
             </TableCell>
             <TableCell>{formatLongDateTime(survey.start_at)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>
-              <FormattedMessage {...surveyTranslations.expiresAt} />
+              <FormattedMessage {...surveyTranslations.endsAt} />
             </TableCell>
             <TableCell>{formatLongDateTime(survey.end_at)}</TableCell>
           </TableRow>

@@ -9,13 +9,9 @@ const styles = {
     position: 'relative',
   },
   imageUploader: {
-    cursor: 'pointer',
+    visibility: 'hidden',
     position: 'absolute',
-    top: 0,
-    bottom: 0,
-    right: 0,
-    left: 0,
-    opacity: 0,
+    width: 0,
   },
 };
 
@@ -26,7 +22,10 @@ const RenderImageField = (props) => {
   return (
     <div style={styles.imageUploaderDiv}>
       <label htmlFor={fieldId}>
-        <IconButton disabled={disabled} onClick={() => inputRef.click()}>
+        <IconButton
+          disabled={disabled}
+          onClick={() => inputRef.current.click()}
+        >
           <Photo htmlColor={disabled ? undefined : grey[700]} />
         </IconButton>
       </label>

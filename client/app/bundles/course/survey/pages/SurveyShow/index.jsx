@@ -133,5 +133,4 @@ const mapStateToProps = (state) => ({
   disabled: state.surveysFlags.disableSurveyShow,
 });
 
-export const ConnectedSurveyShow = connect(mapStateToProps)(SurveyShow);
-export default ConnectedSurveyShow;
+export default connect(mapStateToProps)(SurveyShow);

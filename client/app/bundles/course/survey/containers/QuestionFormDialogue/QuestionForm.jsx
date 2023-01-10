@@ -11,9 +11,9 @@ import * as yup from 'yup';
 import { questionTypes } from 'course/survey/constants';
 import translations from 'course/survey/translations';
 import ErrorText from 'lib/components/core/ErrorText';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import FormToggleField from 'lib/components/form/fields/ToggleField';
 import formTranslations from 'lib/translations/form';
 
 import QuestionFormDeletedOptions from './QuestionFormDeletedOptions';
@@ -23,18 +23,8 @@ const styles = {
   questionType: {
     width: '50%',
   },
-  numberOfResponsesDiv: {
-    display: 'flex',
-  },
   numberOfResponsesField: {
     style: { flex: 1 },
-  },
-  toggle: {
-    marginTop: 10,
-  },
-  hint: {
-    fontSize: 14,
-    marginBottom: 12,
   },
 };
 
@@ -309,27 +299,26 @@ const QuestionForm = (props) => {
     const numberOfFilledOptions = options ? countFilledOptions(options) : 0;
 
     return (
-      <div>
+      <>
         <Controller
           control={control}
           name="grid_view"
           render={({ field, fieldState }) => (
-            <FormToggleField
+            <FormCheckboxField
+              description={
+                <FormattedMessage {...questionFormTranslations.gridViewHint} />
+              }
               disabled={disabled}
               field={field}
               fieldState={fieldState}
               label={
                 <FormattedMessage {...questionFormTranslations.gridView} />
               }
-              style={styles.toggle}
             />
           )}
         />
-        <p style={styles.hint}>
-          <FormattedMessage {...questionFormTranslations.gridViewHint} />
-        </p>
 
-        <div style={styles.numberOfResponsesDiv}>
+        <div className="flex space-x-2">
           <TextField
             disabled
             fullWidth
@@ -337,7 +326,6 @@ const QuestionForm = (props) => {
               <FormattedMessage {...questionFormTranslations.optionCount} />
             }
             name="filled_options"
-            style={{ marginBottom: 12, marginTop: 14, marginRight: 16 }}
             value={numberOfFilledOptions}
             variant="standard"
           />
@@ -360,7 +348,6 @@ const QuestionForm = (props) => {
                     placeholder={intl.formatMessage(
                       questionFormTranslations.noRestriction,
                     )}
-                    renderIf={isMultipleResponse}
                     style={styles.numberOfResponsesField}
                     type="number"
                     variant="standard"
@@ -384,7 +371,6 @@ const QuestionForm = (props) => {
                     placeholder={intl.formatMessage(
                       questionFormTranslations.noRestriction,
                     )}
-                    renderIf={isMultipleResponse}
                     style={styles.numberOfResponsesField}
                     type="number"
                     variant="standard"
@@ -394,7 +380,7 @@ const QuestionForm = (props) => {
             </>
           )}
         </div>
-        <div>
+        <>
           {renderOptionsToDelete()}
           {errors.options && (
             <div style={{ color: red[500] }}>
@@ -412,13 +398,14 @@ const QuestionForm = (props) => {
             multipleChoice={isMultipleChoice}
             multipleResponse={isMultipleResponse}
           />
-        </div>
-      </div>
+        </>
+      </>
     );
   };
 
   return (
     <form
+      className="space-y-4"
       encType="multipart/form-data"
       id="survey-section-question-form"
       noValidate
@@ -464,18 +451,17 @@ const QuestionForm = (props) => {
         control={control}
         name="required"
         render={({ field, fieldState }) => (
-          <FormToggleField
+          <FormCheckboxField
+            description={
+              <FormattedMessage {...questionFormTranslations.requiredHint} />
+            }
             disabled={disabled}
             field={field}
             fieldState={fieldState}
             label={<FormattedMessage {...questionFormTranslations.required} />}
-            style={styles.toggle}
           />
         )}
       />
-      <p style={styles.hint}>
-        <FormattedMessage {...questionFormTranslations.requiredHint} />
-      </p>
       {!isTextResponse && renderSpecificFields()}
     </form>
   );

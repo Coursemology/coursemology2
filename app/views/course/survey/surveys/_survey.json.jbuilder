@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 json.(survey, :id, :title, :base_exp, :time_bonus_exp, :published,
-      :anonymous, :allow_response_after_end, :allow_modify_after_submit)
+      :anonymous, :allow_response_after_end, :allow_modify_after_submit, :has_todo)
 json.start_at survey.start_at&.iso8601
 json.end_at survey.end_at&.iso8601
 json.bonus_end_at survey.bonus_end_at&.iso8601
@@ -11,7 +11,7 @@ can_update = can?(:update, survey)
 json.canUpdate can_update
 json.canDelete can?(:destroy, survey)
 json.canCreateSection can?(:create, Course::Survey::Section.new(survey: survey))
-json.canViewResults can?(:manage, survey)
+json.canManage can?(:manage, survey)
 json.canRespond can?(:create, Course::Survey::Response.new(survey: survey))
 json.hasStudentResponse survey.has_student_response? if can_update
 

@@ -88,7 +88,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
   def survey_params
     fields = [
       :title, :description, :base_exp, :time_bonus_exp, :start_at, :bonus_end_at, :end_at,
-      :published, :allow_response_after_end, :allow_modify_after_submit
+      :published, :allow_response_after_end, :allow_modify_after_submit, :has_todo
     ]
     fields << :anonymous if action_name == 'create' || @survey.can_toggle_anonymity?
     params.require(:survey).permit(*fields)

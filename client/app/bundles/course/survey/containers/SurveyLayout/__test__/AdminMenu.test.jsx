@@ -72,6 +72,7 @@ describe('<AdminMenu />', () => {
       time_bonus_exp: 50,
       start_at: '2017-02-27T00:00:00.000+08:00',
       end_at: '2017-03-12T23:59:00.000+08:00',
+      has_todo: true,
       allow_response_after_end: true,
       allow_modify_after_submit: true,
       anonymous: true,

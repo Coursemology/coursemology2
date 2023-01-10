@@ -22,7 +22,7 @@ describe('Surveys', () => {
         {
           id: 1,
           base_exp: 20,
-          canViewResults: true,
+          canManage: true,
           title: 'First Survey',
           published: true,
           start_at: '2017-02-27T00:00:00.000+08:00',

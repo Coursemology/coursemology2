@@ -18,6 +18,8 @@ import { surveyShape } from 'course/survey/propTypes';
 import translations from 'course/survey/translations';
 import { formatShortDateTime } from 'lib/moment';
 
+import SurveyBadges from './SurveyBadges';
+
 const styles = {
   buttonsColumn: {
     display: 'flex',
@@ -84,10 +86,10 @@ const SurveysTable = (props) => {
             <FormattedMessage {...translations.bonusPoints} />
           </TableCell>
           <TableCell colSpan={5}>
-            <FormattedMessage {...translations.opensAt} />
+            <FormattedMessage {...translations.startsAt} />
           </TableCell>
           <TableCell colSpan={5}>
-            <FormattedMessage {...translations.expiresAt} />
+            <FormattedMessage {...translations.endsAt} />
           </TableCell>
           <TableCell colSpan={5}>
             <FormattedMessage {...translations.bonusEndsAt} />
@@ -104,9 +106,18 @@ const SurveysTable = (props) => {
         {surveys.map((survey) => (
           <TableRow key={survey.id}>
             <TableCell colSpan={6} style={styles.wrap}>
-              <Link to={`/courses/${courseId}/surveys/${survey.id}`}>
-                {survey.title}
-              </Link>
+              <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
+                <label className="m-0 font-normal" title={survey.title}>
+                  <Link // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
+                    key={survey.id}
+                    className="line-clamp-2 xl:line-clamp-1"
+                    to={`/courses/${courseId}/surveys/${survey.id}`}
+                  >
+                    {survey.title}
+                  </Link>
+                </label>
+                <SurveyBadges survey={survey} />
+              </div>
             </TableCell>
             <TableCell colSpan={3}>{survey.base_exp}</TableCell>
             <TableCell colSpan={3}>{survey.time_bonus_exp}</TableCell>
@@ -126,7 +137,7 @@ const SurveysTable = (props) => {
             ) : null}
             <TableCell colSpan={canCreate ? 14 : 4}>
               <div style={styles.buttonsColumn}>
-                {survey.canViewResults ? (
+                {survey.canManage && (
                   <Button
                     onClick={() =>
                       navigate(
@@ -138,8 +149,8 @@ const SurveysTable = (props) => {
                   >
                     <FormattedMessage {...translations.results} />
                   </Button>
-                ) : null}
-                {survey.canViewResults ? (
+                )}
+                {survey.canManage && (
                   <Button
                     onClick={() =>
                       navigate(
@@ -151,7 +162,7 @@ const SurveysTable = (props) => {
                   >
                     <FormattedMessage {...translations.responses} />
                   </Button>
-                ) : null}
+                )}
                 <RespondButton
                   canModify={!!survey.response && survey.response.canModify}
                   canRespond={survey.canRespond}

@@ -6,29 +6,13 @@ import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import FormToggleField from 'lib/components/form/fields/ToggleField';
 import formTranslations from 'lib/translations/form';
 
 import translations from '../../translations';
-
-const styles = {
-  columns: {
-    display: 'flex',
-  },
-  oneColumn: {
-    flex: 1,
-  },
-  toggle: {
-    marginTop: 16,
-  },
-  hint: {
-    fontSize: 14,
-    marginBottom: 12,
-  },
-};
 
 const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
@@ -67,6 +51,7 @@ const validationSchema = yup.object({
     .transform((_, val) => (val === Number(val) ? val : null)),
   allow_response_after_end: yup.bool(),
   allow_modify_after_submit: yup.bool(),
+  has_todo: yup.bool(),
   anonymous: yup.bool(),
 });
 
@@ -93,6 +78,7 @@ const SurveyForm = (props) => {
 
   return (
     <form
+      className="space-y-5"
       id="survey-form"
       noValidate
       onSubmit={handleSubmit((data) => onSubmit(data, setError))}
@@ -116,6 +102,7 @@ const SurveyForm = (props) => {
           />
         )}
       />
+
       <Controller
         control={control}
         name="description"
@@ -135,7 +122,8 @@ const SurveyForm = (props) => {
           />
         )}
       />
-      <div style={styles.columns}>
+
+      <div className="flex space-x-4">
         <Controller
           control={control}
           name="start_at"
@@ -144,11 +132,11 @@ const SurveyForm = (props) => {
               disabled={disabled}
               field={field}
               fieldState={fieldState}
-              label={intl.formatMessage(translations.opensAt)}
-              style={styles.oneColumn}
+              label={intl.formatMessage(translations.startsAt)}
             />
           )}
         />
+
         <Controller
           control={control}
           name="end_at"
@@ -157,11 +145,11 @@ const SurveyForm = (props) => {
               disabled={disabled}
               field={field}
               fieldState={fieldState}
-              label={intl.formatMessage(translations.expiresAt)}
-              style={styles.oneColumn}
+              label={intl.formatMessage(translations.endsAt)}
             />
           )}
         />
+
         <Controller
           control={control}
           name="bonus_end_at"
@@ -171,12 +159,12 @@ const SurveyForm = (props) => {
               field={field}
               fieldState={fieldState}
               label={intl.formatMessage(translations.bonusEndsAt)}
-              style={styles.oneColumn}
             />
           )}
         />
       </div>
-      <div style={styles.columns}>
+
+      <div className="flex space-x-4">
         <Controller
           control={control}
           name="base_exp"
@@ -191,12 +179,12 @@ const SurveyForm = (props) => {
               }}
               label={intl.formatMessage(translations.basePoints)}
               onWheel={(event) => event.currentTarget.blur()}
-              style={styles.flexChild}
               type="number"
               variant="standard"
             />
           )}
         />
+
         <Controller
           control={control}
           name="time_bonus_exp"
@@ -211,60 +199,73 @@ const SurveyForm = (props) => {
               }}
               label={intl.formatMessage(translations.bonusPoints)}
               onWheel={(event) => event.currentTarget.blur()}
-              style={styles.flexChild}
               type="number"
               variant="standard"
             />
           )}
         />
       </div>
+
+      <Controller
+        control={control}
+        name="has_todo"
+        render={({ field, fieldState }) => (
+          <FormCheckboxField
+            description={intl.formatMessage(translations.hasTodoHint)}
+            disabled={disabled}
+            field={field}
+            fieldState={fieldState}
+            label={intl.formatMessage(translations.hasTodo)}
+          />
+        )}
+      />
+
       <Controller
         control={control}
         name="allow_response_after_end"
         render={({ field, fieldState }) => (
-          <FormToggleField
+          <FormCheckboxField
             disabled={disabled}
             field={field}
             fieldState={fieldState}
             label={intl.formatMessage(translations.allowResponseAfterEnd)}
-            style={styles.toggle}
           />
         )}
       />
+
       <Controller
         control={control}
         name="allow_modify_after_submit"
         render={({ field, fieldState }) => (
-          <FormToggleField
+          <FormCheckboxField
+            description={intl.formatMessage(
+              translations.allowModifyAfterSubmitHint,
+            )}
             disabled={disabled}
             field={field}
             fieldState={fieldState}
             label={intl.formatMessage(translations.allowModifyAfterSubmit)}
-            style={styles.toggle}
           />
         )}
       />
-      <div style={styles.hint}>
-        {intl.formatMessage(translations.allowModifyAfterSubmitHint)}
-      </div>
+
       <Controller
         control={control}
         name="anonymous"
         render={({ field, fieldState }) => (
-          <FormToggleField
+          <FormCheckboxField
+            description={
+              disableAnonymousToggle
+                ? intl.formatMessage(translations.hasStudentResponse)
+                : intl.formatMessage(translations.anonymousHint)
+            }
             disabled={disabled || disableAnonymousToggle}
             field={field}
             fieldState={fieldState}
             label={intl.formatMessage(translations.anonymous)}
-            style={styles.toggle}
           />
         )}
       />
-      <div style={styles.hint}>
-        {disableAnonymousToggle
-          ? intl.formatMessage(translations.hasStudentResponse)
-          : intl.formatMessage(translations.anonymousHint)}
-      </div>
     </form>
   );
 };

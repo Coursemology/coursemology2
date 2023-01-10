@@ -34,6 +34,7 @@ export const surveyShape = PropTypes.shape({
   end_at: PropTypes.string,
   base_exp: PropTypes.number,
   published: PropTypes.bool,
+  has_todo: PropTypes.bool,
 });
 
 export const answerOptionShape = PropTypes.shape({

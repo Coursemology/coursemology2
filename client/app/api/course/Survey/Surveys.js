@@ -7,10 +7,12 @@ export default class SurveysAPI extends BaseSurveyAPI {
    *      - Survey attributes
    *   canCreateSection: bool,
    *      - true if user can create sections for this survey
-   *   canViewResults: bool,
-   *      - true if user can view results for this survey
+   *   canManage: bool,
+   *      - true if user can manage this survey
    *   canUpdate: bool, canDelete: bool,
    *      - true if user can update and delete this survey respectively
+   *    has_todo: bool,
+   *      - true if the survey should be included in the todo list
    *   allow_response_after_end: bool,
    *      - true if user can respond to a survey after it expires
    *   allow_modify_after_submit: bool,

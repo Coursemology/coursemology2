@@ -13,13 +13,13 @@ const translations = defineMessages({
     id: 'course.survey.fields.description',
     defaultMessage: 'Description',
   },
-  opensAt: {
-    id: 'course.survey.fields.openAt',
-    defaultMessage: 'Opens at',
+  startsAt: {
+    id: 'course.survey.fields.startsAt',
+    defaultMessage: 'Starts at',
   },
-  expiresAt: {
-    id: 'course.survey.fields.expiresAt',
-    defaultMessage: 'Closes at',
+  endsAt: {
+    id: 'course.survey.fields.endsAt',
+    defaultMessage: 'Ends at',
   },
   bonusEndsAt: {
     id: 'course.survey.fields.bonusEndsAt',
@@ -120,6 +120,15 @@ const translations = defineMessages({
   bonusEndValidationError: {
     id: 'course.survey.SurveyForm.bonusEndValidationError',
     defaultMessage: 'Must be between opening and closing time.',
+  },
+  hasTodo: {
+    id: 'course.survey.SurveyForm.hasTodo',
+    defaultMessage: 'Has TODO',
+  },
+  hasTodoHint: {
+    id: 'course.survey.SurveyForm.hasTodoHint',
+    defaultMessage:
+      'When enabled, students will see this survey in their TODO list.',
   },
   allowModifyAfterSubmitHint: {
     id: 'course.survey.SurveyForm.allowModifyAfterSubmitHint',
