@@ -11,44 +11,40 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
     #   and end date, with the option to: (i) Award course_users with EXP Points, and/or
     #   (ii) Appear as a todo item for each course_user once it is published
     #
-    # Todo acts as reminders for sutdents to act on. Todos are also automatically created
+    # Todo acts as reminders for students to act on. Todos are also automatically created
     #   when the lesson_plan_item transits from draft to non-draft, and destroyed in the
     #   reverse case (see Course::LessonPlan::ItemTodoConcern).
     #
+    # has_todo is now an instance variable (added as a column in the course_lesson_plan_items),
+    # instead of class variable.
+    #
     # To declare that an actable model has todos:
     #   - Define has_todo as true when calling acts_as_lesson_plan_item
+    #   - If an item's todo is customizable, add has_todo option to the frontend
     #   - Define hooks to update todo's workflow_state (see Course::LessonPlan::Todo)
     #   - For additional logic on whether a user can start an item, overwrite #can_user_start?
     #       in the actable model.
     #   - Implement two view partials for the actable model for display in the course landing page.
-    #     1) _todo_#{actable.class.name}_title.html.slim    -> Title and any links if required.
-    #     2) _todo_#{actable.class.name}_button.html.slim   -> Action button for todo.
+    #     app/views/course/lesson_plan/todos/_todo.json.jbuilder
     def acts_as_lesson_plan_item(has_todo: false)
       acts_as :lesson_plan_item, class_name: Course::LessonPlan::Item.name, autosave: true
 
-      class << self
-        attr_accessor :has_todo
+      after_initialize do
+        handle_todo_default(has_todo) if new_record?
       end
-      self.has_todo = has_todo ? true : false
 
       scope :active, (lambda do
         joins(lesson_plan_item: :default_reference_time).merge(Course::ReferenceTime.currently_active)
       end)
 
-      extend LessonPlanItemClassMethods
       include LessonPlanItemInstanceMethods
+      include LessonPlanItemPrivateMethods
     end
   end
 
   module ExperiencePointsInstanceMethods
     def manually_awarded?
       false
-    end
-  end
-
-  module LessonPlanItemClassMethods
-    def has_todo?
-      has_todo
     end
   end
 
@@ -63,6 +59,14 @@ module Extensions::ActsAsHelpers::ActiveRecord::Base
     # @return [Boolean]
     def include_in_consolidated_email?(_event)
       false
+    end
+  end
+
+  module LessonPlanItemPrivateMethods
+    private
+
+    def handle_todo_default(has_todo)
+      lesson_plan_item.has_todo ||= has_todo if lesson_plan_item.has_todo.nil?
     end
   end
 end

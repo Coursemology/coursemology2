@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_04_073345) do
+ActiveRecord::Schema.define(version: 2023_01_09_024146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -761,6 +761,7 @@ ActiveRecord::Schema.define(version: 2023_01_04_073345) do
     t.boolean "movable", default: false, null: false
     t.boolean "has_personal_times", default: false, null: false
     t.boolean "affects_personal_times", default: false, null: false
+    t.boolean "has_todo"
     t.index ["actable_type", "actable_id"], name: "index_course_lesson_plan_items_on_actable_type_and_actable_id", unique: true
     t.index ["course_id"], name: "fk__course_lesson_plan_items_course_id"
     t.index ["creator_id"], name: "fk__course_lesson_plan_items_creator_id"

@@ -32,6 +32,7 @@ class Course::LessonPlan::Todo < ApplicationRecord
   scope :published, -> { joins(:item).where('course_lesson_plan_items.published = ?', true) }
   scope :not_ignored, -> { where(ignore: false) }
   scope :not_completed, -> { where.not(workflow_state: :completed) }
+  scope :not_started, -> { where(workflow_state: :not_started) }
   scope :from_course, (lambda do |course|
     includes(:item).where('course_lesson_plan_items.course_id = ?', course.id).references(:item)
   end)
