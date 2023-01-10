@@ -22,6 +22,23 @@ class Course::Settings::Email < ApplicationRecord
                   post_replied: 8,
                   new_enrol_request: 9 }
 
+  DEFAULT_EMAIL_COURSE_SETTINGS = [{ announcements: :new_announcement },
+                                   { forums: :new_topic },
+                                   { forums: :post_replied },
+                                   { surveys: :opening_reminder },
+                                   { surveys: :closing_reminder },
+                                   { surveys: :closing_reminder_summary },
+                                   { videos: :opening_reminder },
+                                   { videos: :closing_reminder },
+                                   { users: :new_enrol_request }].freeze
+
+  DEFAULT_EMAIL_COURSE_ASSESSMENT_SETTINGS = [{ assessments: :opening_reminder },
+                                              { assessments: :closing_reminder },
+                                              { assessments: :closing_reminder_summary },
+                                              { assessments: :grades_released },
+                                              { assessments: :new_comment },
+                                              { assessments: :new_submission }].freeze
+
   # A set of email settings that students are able to manage.
   STUDENT_SETTING = Set[:opening_reminder, :closing_reminder, :grades_released, :new_comment,
                         :new_topic, :post_replied, ].map { |v| settings[v] }.freeze
@@ -62,17 +79,7 @@ class Course::Settings::Email < ApplicationRecord
   def self.after_course_initialize(course)
     return if course.persisted? || !course.setting_emails.empty?
 
-    default_email_settings = [{ announcements: :new_announcement },
-                              { forums: :new_topic },
-                              { forums: :post_replied },
-                              { surveys: :opening_reminder },
-                              { surveys: :closing_reminder },
-                              { surveys: :closing_reminder_summary },
-                              { videos: :opening_reminder },
-                              { videos: :closing_reminder },
-                              { users: :new_enrol_request }]
-
-    default_email_settings.each do |default_email_setting|
+    DEFAULT_EMAIL_COURSE_SETTINGS.each do |default_email_setting|
       component = default_email_setting.keys[0]
       setting = default_email_setting[component]
       course.setting_emails.build(component: component, setting: setting)
@@ -87,14 +94,7 @@ class Course::Settings::Email < ApplicationRecord
   end
 
   def self.build_assessment_email_settings(category)
-    default_email_settings = [{ assessments: :opening_reminder },
-                              { assessments: :closing_reminder },
-                              { assessments: :closing_reminder_summary },
-                              { assessments: :grades_released },
-                              { assessments: :new_comment },
-                              { assessments: :new_submission }]
-
-    default_email_settings.each do |default_email_setting|
+    DEFAULT_EMAIL_COURSE_ASSESSMENT_SETTINGS.each do |default_email_setting|
       component = default_email_setting.keys[0]
       setting = default_email_setting[component]
       category.setting_emails.build(course: category.course, component: component, setting: setting)
