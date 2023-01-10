@@ -58,7 +58,7 @@ export function fetchForum(forumId: string): Operation<number> {
 }
 
 export function createForum(forumFormData: ForumFormData): Operation<void> {
-  const adaptedData = {
+  const forumPostData = {
     forum: {
       name: forumFormData.name,
       description: forumFormData.description,
@@ -66,7 +66,7 @@ export function createForum(forumFormData: ForumFormData): Operation<void> {
     },
   };
   return async (dispatch) =>
-    CourseAPI.forum.forums.create(adaptedData).then((response) => {
+    CourseAPI.forum.forums.create(forumPostData).then((response) => {
       dispatch(saveForumListData(response.data));
     });
 }
@@ -75,7 +75,7 @@ export function updateForum(
   forumFormData: ForumFormData,
   forumId: number,
 ): Operation<{ forumUrl: string }> {
-  const adaptedData = {
+  const ForumPatchData = {
     forum: {
       id: forumFormData.id,
       name: forumFormData.name,
@@ -84,7 +84,7 @@ export function updateForum(
     },
   };
   return async (dispatch) =>
-    CourseAPI.forum.forums.update(forumId, adaptedData).then((response) => {
+    CourseAPI.forum.forums.update(forumId, ForumPatchData).then((response) => {
       dispatch(updateForumListData(response.data));
       return { forumUrl: response.data.forumUrl };
     });
@@ -150,21 +150,22 @@ export function createForumTopic(
     redirectUrl: string;
   }>
 > {
-  const adaptedData = {
+  const ForumTopicPostData = {
     topic: {
       title: topicFormData.title,
       topic_type: topicFormData.topicType,
       posts_attributes: [{ text: topicFormData.text }],
     },
   };
-  return async (_) => CourseAPI.forum.topics.create(forumId, adaptedData);
+  return async (_) =>
+    CourseAPI.forum.topics.create(forumId, ForumTopicPostData);
 }
 
 export function updateForumTopic(
   topicUrl: string,
   topicFormData: ForumTopicFormData,
 ): Operation<{ topicUrl: string }> {
-  const adaptedData = {
+  const ForumTopicPatchData = {
     topic: {
       id: topicFormData.id,
       title: topicFormData.title,
@@ -173,10 +174,12 @@ export function updateForumTopic(
     },
   };
   return async (dispatch) =>
-    CourseAPI.forum.topics.update(topicUrl, adaptedData).then((response) => {
-      dispatch(updateForumTopicListData(response.data));
-      return { topicUrl: response.data.topicUrl };
-    });
+    CourseAPI.forum.topics
+      .update(topicUrl, ForumTopicPatchData)
+      .then((response) => {
+        dispatch(updateForumTopicListData(response.data));
+        return { topicUrl: response.data.topicUrl };
+      });
 }
 
 export function deleteForumTopic(
@@ -236,7 +239,7 @@ export function createForumTopicPost(
   postFormData: ForumTopicPostFormData,
 ): Operation<{ postId: number }> {
   return async (dispatch) => {
-    const adaptedData = {
+    const ForumTopicPostPostData = {
       discussion_post: {
         text: postFormData.text,
         is_anonymous: postFormData.isAnonymous,
@@ -244,7 +247,7 @@ export function createForumTopicPost(
       },
     };
     return CourseAPI.forum.posts
-      .create(forumId, topicId, adaptedData)
+      .create(forumId, topicId, ForumTopicPostPostData)
       .then((response) => {
         dispatch(saveForumTopicPostListData(response.data.post));
         dispatch(

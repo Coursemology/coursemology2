@@ -46,6 +46,7 @@ const VideoEdit: FC<Props> = (props) => {
     startAt: new Date(video.startTimeInfo.referenceTime!),
     published: video.published,
     hasPersonalTimes: video.hasPersonalTimes,
+    hasTodo: video.hasTodo ?? true,
   };
 
   const onSubmit = (data: VideoFormData, setError): void => {

@@ -3,7 +3,10 @@ import {
   VideoData,
   VideoListData,
   VideoMetadata,
+  VideoPatchData,
+  VideoPatchPublishData,
   VideoPermissions,
+  VideoPostData,
   VideoTab,
 } from 'types/course/videos';
 
@@ -46,7 +49,7 @@ export default class VideosAPI extends BaseVideoAPI {
   /**
    * Creates a video.
    */
-  create(params: FormData): Promise<
+  create(params: VideoPostData): Promise<
     AxiosResponse<{
       videoTabs: VideoTab[];
       video: VideoData;
@@ -61,7 +64,7 @@ export default class VideosAPI extends BaseVideoAPI {
    */
   update(
     videoId: number,
-    params: FormData | object,
+    params: VideoPatchData | VideoPatchPublishData,
   ): Promise<
     AxiosResponse<{
       videoTabs: VideoTab[];

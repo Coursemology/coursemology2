@@ -70,6 +70,7 @@ const VideoNew: FC<Props> = (props) => {
     published: false,
     startAt: new Date(),
     hasPersonalTimes: false,
+    hasTodo: true,
   };
 
   return (

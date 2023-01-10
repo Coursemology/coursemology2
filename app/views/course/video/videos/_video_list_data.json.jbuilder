@@ -10,6 +10,7 @@ json.description format_ckeditor_rich_text(video.description)
 json.url video.url
 json.published video.published
 json.hasPersonalTimes current_course.show_personalized_timeline_features && video.has_personal_times?
+json.hasTodo video.has_todo if can_manage
 json.affectsPersonalTimes current_course.show_personalized_timeline_features && video_item.affects_personal_times?
 
 json.startTimeInfo do

@@ -87,7 +87,7 @@ const translations = defineMessages({
   },
   startAt: {
     id: 'lib.translations.table.column.startAt',
-    defaultMessage: 'Start At',
+    defaultMessage: 'Starts At',
   },
   bonusEndAt: {
     id: 'lib.translations.table.column.bonusEndAt',
@@ -96,6 +96,18 @@ const translations = defineMessages({
   endAt: {
     id: 'lib.translations.table.column.endAt',
     defaultMessage: 'End At',
+  },
+  hasTodo: {
+    id: 'lib.translations.table.column.hasTodo',
+    defaultMessage: 'Has TODO',
+  },
+  published: {
+    id: 'lib.translations.table.column.published',
+    defaultMessage: 'Published',
+  },
+  hasPersonalTimes: {
+    id: 'lib.translations.table.column.hasPersonalTimes',
+    defaultMessage: 'Has personal times',
   },
   instances: {
     id: 'lib.translations.table.column.instances',

@@ -7,11 +7,11 @@ import { AppState } from 'types/store';
 import * as yup from 'yup';
 
 import FormDialog from 'lib/components/form/dialog/FormDialog';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
-import FormToggleField from 'lib/components/form/fields/ToggleField';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
@@ -55,9 +55,23 @@ const translations = defineMessages({
     id: 'course.video.VideoForm.published',
     defaultMessage: 'Published',
   },
+  hasTodo: {
+    id: 'course.video.VideoForm.hasTodo',
+    defaultMessage: 'Has TODO',
+  },
+  hasTodoHint: {
+    id: 'course.video.VideoForm.hasTodoHint',
+    defaultMessage:
+      'When enabled, students will see this video in their TODO list.',
+  },
   hasPersonalTimes: {
     id: 'course.video.VideoForm.hasPersonalTimes',
     defaultMessage: 'Has personal times',
+  },
+  hasPersonalTimesHint: {
+    id: 'course.video.VideoForm.hasPersonalTimesHint',
+    defaultMessage:
+      'Timings for this item will be automatically adjusted for users based on learning rate.',
   },
   urlPlaceholder: {
     id: 'course.video.VideoForm.urlPlaceholder',
@@ -78,6 +92,7 @@ const validationSchema = yup.object({
   startAt: yup.date().nullable().typeError(formTranslations.invalidDate),
   published: yup.bool(),
   hasPersonalTimes: yup.bool(),
+  hasTodo: yup.bool(),
 });
 
 const VideoForm: FC<Props> = (props) => {
@@ -108,7 +123,7 @@ const VideoForm: FC<Props> = (props) => {
       validationSchema={validationSchema}
     >
       {(control, formState): JSX.Element => (
-        <>
+        <div className="space-y-5">
           <Controller
             control={control}
             name="title"
@@ -205,11 +220,25 @@ const VideoForm: FC<Props> = (props) => {
             control={control}
             name="published"
             render={({ field, fieldState }): JSX.Element => (
-              <FormToggleField
+              <FormCheckboxField
                 disabled={formState.isSubmitting}
                 field={field}
                 fieldState={fieldState}
                 label={t(translations.published)}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="hasTodo"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormCheckboxField
+                description={t(translations.hasTodoHint)}
+                disabled={formState.isSubmitting}
+                field={field}
+                fieldState={fieldState}
+                label={t(translations.hasTodo)}
               />
             )}
           />
@@ -220,7 +249,8 @@ const VideoForm: FC<Props> = (props) => {
               control={control}
               name="hasPersonalTimes"
               render={({ field, fieldState }): JSX.Element => (
-                <FormToggleField
+                <FormCheckboxField
+                  description={t(translations.hasPersonalTimesHint)}
                   disabled={formState.isSubmitting}
                   field={field}
                   fieldState={fieldState}
@@ -229,7 +259,7 @@ const VideoForm: FC<Props> = (props) => {
               )}
             />
           )}
-        </>
+        </div>
       )}
     </FormDialog>
   );
