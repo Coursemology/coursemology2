@@ -971,6 +971,12 @@
   "course.assessment.AssessmentForm.hasPersonalTimesHint": {
     "defaultMessage": "Timings for this item will be automatically adjusted for users based on learning rate."
   },
+  "course.assessment.AssessmentForm.hasTodo": {
+    "defaultMessage": "Has TODO"
+  },
+  "course.assessment.AssessmentForm.hasTodoHint": {
+    "defaultMessage": "When enabled, students will see this assessment in their TODO list."
+  },
   "course.assessment.AssessmentForm.modeSwitchingHint": {
     "defaultMessage": "You can no longer change the grading mode because there are already submissions for this assessment."
   },
@@ -2753,12 +2759,6 @@
   "course.assessment.updateSuccess": {
     "defaultMessage": "Assessment was updated."
   },
-  "course.assessments.index.affectsPersonalTimes": {
-    "defaultMessage": "Affects personal times"
-  },
-  "course.assessments.index.affectsPersonalTimesHint": {
-    "defaultMessage": "Completion of this assessment may affect the timings for subsequent assessments."
-  },
   "course.assessments.index.attempt": {
     "defaultMessage": "Attempt"
   },
@@ -2786,11 +2786,8 @@
   "course.assessments.index.exp": {
     "defaultMessage": "EXP"
   },
-  "course.assessments.index.hasPersonalTimes": {
-    "defaultMessage": "Has personal times"
-  },
-  "course.assessments.index.hasPersonalTimesHint": {
-    "defaultMessage": "Timings for this assessment will automatically be adjusted based on students' learning rate."
+  "course.assessments.index.hasTodo": {
+    "defaultMessage": "Has TODO"
   },
   "course.assessments.index.neededFor": {
     "defaultMessage": "Needed for"
@@ -4790,6 +4787,9 @@
   "course.survey.Section.noQuestions": {
     "defaultMessage": "This section has no questions. Empty sections will not be shown in the survey response form."
   },
+  "course.survey.SurveyBadges.hasTodo": {
+    "defaultMessage": "has TODO"
+  },
   "course.survey.SurveyForm.allowModifyAfterSubmitHint": {
     "defaultMessage": "Responses can be changed after being submitted."
   },
@@ -4801,6 +4801,12 @@
   },
   "course.survey.SurveyForm.hasStudentResponse": {
     "defaultMessage": "At least one student has responded to this survey. You may not remove anonymity."
+  },
+  "course.survey.SurveyForm.hasTodo": {
+    "defaultMessage": "Has TODO"
+  },
+  "course.survey.SurveyForm.hasTodoHint": {
+    "defaultMessage": "When enabled, students will see this survey in their TODO list."
   },
   "course.survey.SurveyForm.startEndValidationError": {
     "defaultMessage": "Must be after opening time."
@@ -4919,14 +4925,14 @@
   "course.survey.fields.description": {
     "defaultMessage": "Description"
   },
-  "course.survey.fields.expiresAt": {
-    "defaultMessage": "Closes at"
-  },
-  "course.survey.fields.openAt": {
-    "defaultMessage": "Opens at"
+  "course.survey.fields.endsAt": {
+    "defaultMessage": "Ends at"
   },
   "course.survey.fields.published": {
     "defaultMessage": "Published"
+  },
+  "course.survey.fields.startsAt": {
+    "defaultMessage": "Starts at"
   },
   "course.survey.fields.title": {
     "defaultMessage": "Title"
@@ -5399,6 +5405,9 @@
   "course.users.UsersIndex.studentsHeader": {
     "defaultMessage": "Students"
   },
+  "course.video.VideoBadges.hasTodo": {
+    "defaultMessage": "has TODO"
+  },
   "course.video.VideoEdit.updateFailure": {
     "defaultMessage": "Failed to update {title}."
   },
@@ -5413,6 +5422,15 @@
   },
   "course.video.VideoForm.hasPersonalTimes": {
     "defaultMessage": "Has personal times"
+  },
+  "course.video.VideoForm.hasPersonalTimesHint": {
+    "defaultMessage": "Timings for this item will be automatically adjusted for users based on learning rate."
+  },
+  "course.video.VideoForm.hasTodo": {
+    "defaultMessage": "Has TODO"
+  },
+  "course.video.VideoForm.hasTodoHint": {
+    "defaultMessage": "When enabled, students will see this video in their TODO list."
   },
   "course.video.VideoForm.published": {
     "defaultMessage": "Published"
@@ -5624,11 +5642,17 @@
   "lib.components.extensions.PersonalStartEndTime.timeTooltip": {
     "defaultMessage": "Personalized time is in effect. The original time is {time}."
   },
+  "lib.components.extensions.PersonalTimeBooleanIcons.affectsPersonalTimes": {
+    "defaultMessage": "Affects personal times"
+  },
   "lib.components.extensions.PersonalTimeBooleanIcons.affectsPersonalTimesHint": {
-    "defaultMessage": "Affects personal times. Student's submission time for this item will be taken into account when updating personal times for other items."
+    "defaultMessage": "Completion of this item may affect the timings for subsequent items."
+  },
+  "lib.components.extensions.PersonalTimeBooleanIcons.hasPersonalTimes": {
+    "defaultMessage": "Has personal times"
   },
   "lib.components.extensions.PersonalTimeBooleanIcons.hasPersonalTimesHint": {
-    "defaultMessage": "Has personal times. Timings for this item will be automatically adjusted for users based on learning rate."
+    "defaultMessage": "Timings for this item will automatically be adjusted based on students' learning rate."
   },
   "lib.components.extensions.conditions.achievement": {
     "defaultMessage": "Achievement"
@@ -5879,6 +5903,12 @@
   "lib.translations.table.column.experiencePointsAwarded": {
     "defaultMessage": "Experience Points Awarded"
   },
+  "lib.translations.table.column.hasPersonalTimes": {
+    "defaultMessage": "Has personal times"
+  },
+  "lib.translations.table.column.hasTodo": {
+    "defaultMessage": "Has TODO"
+  },
   "lib.translations.table.column.host": {
     "defaultMessage": "Host Name"
   },
@@ -5927,6 +5957,9 @@
   "lib.translations.table.column.phantom": {
     "defaultMessage": "Phantom"
   },
+  "lib.translations.table.column.published": {
+    "defaultMessage": "Published"
+  },
   "lib.translations.table.column.reason": {
     "defaultMessage": "Reason"
   },
@@ -5952,7 +5985,7 @@
     "defaultMessage": "Role"
   },
   "lib.translations.table.column.startAt": {
-    "defaultMessage": "Start At"
+    "defaultMessage": "Starts At"
   },
   "lib.translations.table.column.status": {
     "defaultMessage": "Status"
