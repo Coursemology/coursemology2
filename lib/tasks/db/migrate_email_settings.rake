@@ -2,36 +2,38 @@
 namespace :db do
   task migrate_email_settings: :environment do
     def create_default_email_settings(course)
-      default_email_settings = [{ announcements: :new_announcement },
-                                { forums: :new_topic },
-                                { forums: :post_replied },
-                                { surveys: :opening_reminder },
-                                { surveys: :closing_reminder },
-                                { surveys: :closing_reminder_summary },
-                                { videos: :opening_reminder },
-                                { videos: :closing_reminder },
-                                { users: :new_enrol_request }]
+      default_email_settings = Course::Settings::Email::DEFAULT_EMAIL_COURSE_SETTINGS
+      default_email_assessment_settings = Course::Settings::Email::DEFAULT_EMAIL_COURSE_ASSESSMENT_SETTINGS
+      new_email_settings = []
 
       default_email_settings.each do |default_email_setting|
         component = default_email_setting.keys[0]
         setting = default_email_setting[component]
-        course.setting_emails.create!(component: component, setting: setting)
+        new_email_settings << Course::Settings::Email.new(
+          course_id: course.id,
+          component: component,
+          setting: setting,
+          phantom: true,
+          regular: true
+        )
       end
 
       course.assessment_categories.find_each do |assessment_cat|
-        default_email_settings = [{ assessments: :opening_reminder },
-                                  { assessments: :closing_reminder },
-                                  { assessments: :closing_reminder_summary },
-                                  { assessments: :grades_released },
-                                  { assessments: :new_comment },
-                                  { assessments: :new_submission }]
-
-        default_email_settings.each do |default_email_setting|
+        default_email_assessment_settings.each do |default_email_setting|
           component = default_email_setting.keys[0]
           setting = default_email_setting[component]
-          assessment_cat.setting_emails.create!(course: assessment_cat.course, component: component, setting: setting)
+          new_email_settings << Course::Settings::Email.new(
+            course_id: assessment_cat.course_id,
+            course_assessment_category_id: assessment_cat.id,
+            component: component,
+            setting: setting,
+            phantom: true,
+            regular: true
+          )
         end
       end
+
+      Course::Settings::Email.import! new_email_settings, validate: false
     end
 
     ActsAsTenant.without_tenant do
