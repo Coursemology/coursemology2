@@ -19,8 +19,8 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         topics.each do |topic|
           within find("tr.topic_#{topic.id}") do
             expect(page).to have_link(topic.title, href: course_forum_topic_path(course, forum, topic))
+            expect(page).to have_selector(".topic-subscribe-#{topic.id}")
             find("button.topic-action-#{topic.id}").hover
-            expect(page).to have_selector("button.topic-subscribe-#{topic.id}")
             expect(page).to have_selector("button.topic-hide-#{topic.id}")
             expect(page).to have_selector("button.topic-lock-#{topic.id}")
             expect(page).to have_selector("button.topic-edit-#{topic.id}")
@@ -76,7 +76,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
 
         # Edit with valid information.
         visit course_forum_topic_path(course, forum, topic)
-        expect(page).to have_no_selector("button.topic-subscribe-#{topic.id}")
+        expect(page).to have_no_selector(".topic-subscribe-#{topic.id}")
         expect(page).to have_selector("button.topic-hide-#{topic.id}")
         expect(page).to have_selector("button.topic-lock-#{topic.id}")
         expect(page).to have_selector("button.topic-edit-#{topic.id}")
@@ -159,13 +159,11 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         topic = create(:forum_topic, forum: forum)
         visit course_forum_path(course, forum)
 
-        find("button.topic-action-#{topic.id}").hover
-        find("button.topic-subscribe-#{topic.id}").click
+        find(".topic-subscribe-#{topic.id}").click
         expect_toastify("You have successfully been subscribed to the forum topic #{topic.title}.")
         expect(topic.subscriptions.where(user: user).count).to eq(1)
 
-        find("button.topic-action-#{topic.id}").hover
-        find("button.topic-subscribe-#{topic.id}").click
+        find(".topic-subscribe-#{topic.id}").click
         expect_toastify("You have successfully been unsubscribed from the forum topic #{topic.title}.")
         expect(topic.subscriptions.where(user: user).empty?).to eq(true)
       end
@@ -221,7 +219,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         topics.each do |topic|
           within find("tr.topic_#{topic.id}") do
             expect(page).to have_link(topic.title, href: course_forum_topic_path(course, forum, topic))
-            expect(page).to have_selector("button.topic-subscribe-#{topic.id}")
+            expect(page).to have_selector(".topic-subscribe-#{topic.id}")
             expect(page).to have_no_selector("button.topic-hide-#{topic.id}")
             expect(page).to have_no_selector("button.topic-lock-#{topic.id}")
             expect(page).to have_no_selector("button.topic-edit-#{topic.id}")
@@ -278,7 +276,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
 
         # Edit with valid information.
         visit course_forum_topic_path(course, forum, topic)
-        expect(page).to have_no_selector("button.topic-subscribe-#{topic.id}")
+        expect(page).to have_no_selector(".topic-subscribe-#{topic.id}")
         expect(page).to have_no_selector("button.topic-hide-#{topic.id}")
         expect(page).to have_no_selector("button.topic-lock-#{topic.id}")
         expect(page).to have_selector("button.topic-edit-#{topic.id}")
@@ -310,11 +308,11 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         topic = create(:forum_topic, forum: forum)
         visit course_forum_path(course, forum)
 
-        find("button.topic-subscribe-#{topic.id}").click
+        find(".topic-subscribe-#{topic.id}").click
         expect_toastify("You have successfully been subscribed to the forum topic #{topic.title}.")
         expect(topic.subscriptions.where(user: user).count).to eq(1)
 
-        find("button.topic-subscribe-#{topic.id}").click
+        find(".topic-subscribe-#{topic.id}").click
         expect_toastify("You have successfully been unsubscribed from the forum topic #{topic.title}.")
         expect(topic.subscriptions.where(user: user).empty?).to eq(true)
       end

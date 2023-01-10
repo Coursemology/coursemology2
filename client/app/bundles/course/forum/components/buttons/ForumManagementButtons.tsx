@@ -24,6 +24,7 @@ interface Props {
   navigateToShowAfterUpdate?: boolean;
   disabled?: boolean;
   showOnHover?: boolean;
+  showSubscribeButton?: boolean;
 }
 
 const translations = defineMessages({
@@ -48,6 +49,7 @@ const ForumManagementButtons: FC<Props> = (props) => {
     navigateToShowAfterUpdate,
     disabled,
     showOnHover,
+    showSubscribeButton,
   } = props;
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
@@ -98,15 +100,17 @@ const ForumManagementButtons: FC<Props> = (props) => {
           : 'whitespace-nowrap'
       }
     >
-      <SubscribeButton
-        disabled={disableButton}
-        emailSubscription={forum.emailSubscription}
-        entityId={forum.id}
-        entityTitle={forum.name}
-        entityType="forum"
-        entityUrl={forum.forumUrl}
-      />
-
+      {showSubscribeButton && (
+        <SubscribeButton
+          disabled={disableButton}
+          emailSubscription={forum.emailSubscription}
+          entityId={forum.id}
+          entityTitle={forum.name}
+          entityType="forum"
+          entityUrl={forum.forumUrl}
+          type="button"
+        />
+      )}
       {forum.permissions.canEditForum && (
         <EditButton
           className={`forum-edit-${forum.id}`}

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { NotificationsActive, NotificationsOff } from '@mui/icons-material';
-import { IconButton, Tooltip } from '@mui/material';
+import { IconButton, Switch, Tooltip } from '@mui/material';
 import { EmailSubscriptionSetting } from 'types/course/forums';
 import { AppDispatch } from 'types/store';
 
@@ -98,6 +98,7 @@ interface Props {
   entityUrl: string;
   entityTitle: string;
   disabled?: boolean;
+  type?: 'button' | 'checkbox';
 }
 
 const SubscribeButton: FC<Props> = ({
@@ -107,6 +108,7 @@ const SubscribeButton: FC<Props> = ({
   entityUrl,
   entityTitle,
   disabled: disableButton,
+  type,
 }: Props) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -229,14 +231,24 @@ const SubscribeButton: FC<Props> = ({
   return (
     <Tooltip title={isSubscribed ? subscribedTooltip : unsubscribedTooltip}>
       <span>
-        <IconButton
-          className={`${entityType}-subscribe-${entityId}`}
-          color="inherit"
-          disabled={disabled}
-          onClick={handleUpdate}
-        >
-          {isSubscribed ? <NotificationsActive /> : <NotificationsOff />}
-        </IconButton>
+        {type === 'button' && (
+          <IconButton
+            className={`${entityType}-subscribe-${entityId}`}
+            color="inherit"
+            disabled={disabled}
+            onClick={handleUpdate}
+          >
+            {isSubscribed ? <NotificationsActive /> : <NotificationsOff />}
+          </IconButton>
+        )}
+        {type === 'checkbox' && (
+          <Switch
+            checked={isSubscribed}
+            className={`${entityType}-subscribe-${entityId}`}
+            disabled={disabled}
+            onChange={handleUpdate}
+          />
+        )}
       </span>
     </Tooltip>
   );

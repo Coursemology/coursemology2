@@ -14,7 +14,7 @@ interface Props {
 const translations = defineMessages({
   hasTodo: {
     id: 'course.video.VideoBadges.hasTodo',
-    defaultMessage: 'has TODO',
+    defaultMessage: 'Has TODO',
   },
 });
 

@@ -145,6 +145,7 @@ const ForumShow: FC = () => {
         forum={forum}
         navigateToIndexAfterDelete
         navigateToShowAfterUpdate
+        showSubscribeButton
       />,
     );
   }

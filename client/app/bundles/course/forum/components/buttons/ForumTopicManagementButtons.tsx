@@ -26,6 +26,7 @@ interface Props {
   navigateToShowAfterUpdate?: boolean;
   disabled?: boolean;
   showOnHover?: boolean;
+  showSubscribeButton?: boolean;
 }
 
 const translations = defineMessages({
@@ -50,6 +51,7 @@ const ForumTopicManagementButtons: FC<Props> = (props) => {
     navigateToShowAfterUpdate,
     disabled,
     showOnHover,
+    showSubscribeButton,
   } = props;
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
@@ -102,14 +104,17 @@ const ForumTopicManagementButtons: FC<Props> = (props) => {
           : 'whitespace-nowrap'
       }
     >
-      <SubscribeButton
-        disabled={disableButton}
-        emailSubscription={topic.emailSubscription}
-        entityId={topic.id}
-        entityTitle={topic.title}
-        entityType="topic"
-        entityUrl={topic.topicUrl}
-      />
+      {showSubscribeButton && (
+        <SubscribeButton
+          disabled={disableButton}
+          emailSubscription={topic.emailSubscription}
+          entityId={topic.id}
+          entityTitle={topic.title}
+          entityType="topic"
+          entityUrl={topic.topicUrl}
+          type="button"
+        />
+      )}
       {topic.permissions.canSetHiddenTopic && (
         <HideButton disabled={disableButton} topic={topic} />
       )}
