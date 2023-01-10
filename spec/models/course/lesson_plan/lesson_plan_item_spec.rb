@@ -68,9 +68,9 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
     end
 
     context 'when actable object is declared to have a todo' do
-      describe 'callbacks from Course::LessonPlan::TodoConcern' do
+      describe 'callbacks from Course::LessonPlan::ItemTodoConcern' do
         let(:course) { create(:course) }
-        let!(:students) { create_list(:course_student, 3, course: course) }
+        let!(:students) { create_list(:course_student, 5, course: course) }
         let(:actable) { create(:assessment, :with_mcq_question, course: course) }
         subject { create(:assessment, :published_with_mcq_question, course: course).acting_as }
 
@@ -78,6 +78,72 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
           todos_for_course =
             Course::LessonPlan::Todo.where(item_id: course.lesson_plan_items.select(:id))
           expect { subject }.to change(todos_for_course, :count).by(course.course_users.count)
+        end
+
+        it 'removes unstarted and unignored todos when has_todo is adjusted to be false' do
+          todos_for_course =
+            Course::LessonPlan::Todo.where(item_id: course.lesson_plan_items.select(:id))
+          assessment = subject
+          expect do
+            assessment.update(has_todo: false)
+          end.to change(todos_for_course, :count).by(-course.course_users.count)
+        end
+
+        context 'when there are todos that are not unstarted and unignored' do
+          let!(:assessment) { create(:assessment, :published_with_mcq_question, course: course) }
+          todo_workflow_state_traits = [:not_started, :in_progress, :completed]
+          todo_ignored_traits = [true, false]
+
+          todo_workflow_state_traits.each do |todo_workflow|
+            todo_ignored_traits.each do |todo_ignored|
+              # skipped as this todo trait combi is supposed to be removed
+              next if todo_workflow == :not_started && todo_ignored == false
+
+              it 'removes unstarted and unignored todos when has_todo is \
+                  adjusted to be false, but not the other todos' do
+                todo_with_trait = Course::LessonPlan::Todo.find_by(item_id: assessment.lesson_plan_item.id,
+                                                                   user_id: students.first.user_id)
+                todo_with_trait.update(workflow_state: todo_workflow, ignore: todo_ignored)
+
+                todos_for_assessment = Course::LessonPlan::Todo.where(item_id: assessment.lesson_plan_item.id)
+
+                expect do
+                  assessment.update(has_todo: false)
+                end.to change(todos_for_assessment, :count).by(-course.course_users.count + 1)
+
+                expect(todo_with_trait.reload).not_to be_nil
+
+                # when has_todo is re-enabled, only create todos for users without todos.
+                expect do
+                  assessment.update(has_todo: true)
+                end.to change(todos_for_assessment, :count).by(course.course_users.count - 1)
+              end
+            end
+          end
+        end
+      end
+    end
+
+    context 'when actable object is declared to not have a todo' do
+      describe 'callbacks from Course::LessonPlan::ItemTodoConcern' do
+        let(:course) { create(:course) }
+        let!(:students) { create_list(:course_student, 3, course: course) }
+        let(:actable) { create(:assessment, :with_mcq_question, :without_todo, course: course) }
+        subject { create(:assessment, :published_with_mcq_question, :without_todo, course: course).acting_as }
+
+        it 'does not create todos for created objects for course_users' do
+          todos_for_course =
+            Course::LessonPlan::Todo.where(item_id: course.lesson_plan_items.select(:id))
+          expect { subject }.to change(todos_for_course, :count).by(0)
+        end
+
+        it 'creates todos for course_users' do
+          todos_for_course =
+            Course::LessonPlan::Todo.where(item_id: course.lesson_plan_items.select(:id))
+          assessment = subject
+          expect do
+            assessment.update(has_todo: true)
+          end.to change(todos_for_course, :count).by(course.course_users.count)
         end
       end
     end

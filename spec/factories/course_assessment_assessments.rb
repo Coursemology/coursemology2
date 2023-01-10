@@ -38,6 +38,10 @@ FactoryBot.define do
       start_at { 1.day.from_now }
     end
 
+    trait :without_todo do
+      has_todo { false }
+    end
+
     trait :with_mcq_question do
       after(:build) do |assessment, evaluator|
         evaluator.question_count.downto(1).each do |i|

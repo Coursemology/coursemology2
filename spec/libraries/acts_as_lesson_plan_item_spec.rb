@@ -35,7 +35,7 @@ RSpec.describe 'Extension: Acts as Lesson Plan Item' do
     subject { self.class::DummyTodoClass }
 
     it 'sets the class to have_todo' do
-      expect(subject.has_todo?).to be_truthy
+      expect(subject.new.has_todo?).to be_truthy
     end
 
     it 'sets all instances to respond with true to #can_start? by default' do

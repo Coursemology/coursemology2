@@ -379,17 +379,28 @@ RSpec.describe CourseUser, type: :model do
     describe 'CourseUser::TodoConcern' do
       let(:user) { create(:user) }
       let(:new_course_user) { create(:course_user, course: course, user: user) }
-      let!(:assessment) { create(:assessment, course: course) }
 
       context 'when the course_user is created' do
+        let!(:assessment) { create(:assessment, course: course) }
         subject { new_course_user }
 
         it 'creates todos for the lesson_plan_item for course_user' do
           expect { subject }.to change(user.todos, :count).by(1)
         end
+
+        context 'but the assessment does not have todo' do
+          let!(:assessment) { create(:assessment, :without_todo, course: course) }
+
+          subject { new_course_user }
+
+          it 'does not create todos for the lesson_plan_item for course_user' do
+            expect { subject }.to change(user.todos, :count).by(0)
+          end
+        end
       end
 
       context 'when the course_user is destroyed' do
+        let!(:assessment) { create(:assessment, course: course) }
         let(:other_course) { create(:course) }
         let!(:other_assessment) { create(:assessment, course: other_course) }
         let(:new_course_user) { create(:course_user, course: course, user: user) }
