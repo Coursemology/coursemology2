@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { Card, CardContent, CardHeader } from '@mui/material';
 import { AppDispatch, AppState } from 'types/store';
 
+import DescriptionCard from 'lib/components/core/DescriptionCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { getVideosURL } from 'lib/helpers/url-builders';
@@ -15,8 +16,8 @@ import VideoManagementButtons from '../../components/buttons/VideoManagementButt
 import WatchVideoButton from '../../components/buttons/WatchVideoButton';
 import { loadVideo } from '../../operations';
 import { getVideo } from '../../selectors';
-import DescriptionCard from '../../submission/components/misc/DescriptionCard';
 
+import VideoDetails from './VideoDetails';
 import VideoPlayerWithStore from './VideoPlayerWithStore';
 
 type Props = WrappedComponentProps;
@@ -81,6 +82,7 @@ const VideoShow: FC<Props> = (props) => {
   const renderBody = video ? (
     <>
       {video.description && <DescriptionCard description={video.description} />}
+      <VideoDetails for={video} />
       {video.permissions.canManage && (
         <Card className="mt-6">
           <CardHeader title={intl.formatMessage(translations.statistics)} />
@@ -94,11 +96,13 @@ const VideoShow: FC<Props> = (props) => {
       )}
     </>
   ) : null;
+
   const returnLink = video?.tabId
     ? `${getVideosURL(getCourseId())}?tab=${video.tabId}`
     : getVideosURL(getCourseId());
+
   return (
-    <>
+    <main className="space-y-5">
       <PageHeader
         returnLink={returnLink}
         title={intl.formatMessage(translations.videoTitle, {
@@ -107,7 +111,7 @@ const VideoShow: FC<Props> = (props) => {
         toolbars={headerToolbars}
       />
       {isLoading ? <LoadingIndicator /> : renderBody}
-    </>
+    </main>
   );
 };
 

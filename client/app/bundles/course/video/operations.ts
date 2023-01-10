@@ -5,46 +5,6 @@ import CourseAPI from 'api/course';
 
 import { removeVideo, saveVideo, saveVideoList } from './reducers';
 
-/**
- * Prepares and maps object attributes to a FormData object for an post/patch request.
- * Expected FormData attributes shape:
- *   { video :
- *     { title, tab_id, description, url, start_at, published, has_personal_times }
- *   }
- */
-const formatAttributes = (data: VideoFormData): FormData => {
-  const payload = new FormData();
-
-  [
-    'title',
-    'tab',
-    'description',
-    'url',
-    'startAt',
-    'published',
-    'hasPersonalTimes',
-  ].forEach((field) => {
-    if (data[field] !== undefined && data[field] !== null) {
-      switch (field) {
-        case 'tab':
-          payload.append('video[tab_id]', `${data[field]}`);
-          break;
-        case 'startAt':
-          payload.append('video[start_at]', data[field].toString());
-          break;
-        case 'hasPersonalTimes':
-          payload.append('video[has_personal_times]', `${data[field]}`);
-          break;
-        default:
-          payload.append(`video[${field}]`, data[field]);
-          break;
-      }
-    }
-  });
-
-  return payload;
-};
-
 export function fetchVideos(currentTabId?: number): Operation<void> {
   return async (dispatch) =>
     CourseAPI.video.videos.index(currentTabId).then((response) => {
@@ -61,9 +21,20 @@ export function loadVideo(videoId: number): Operation<void> {
 }
 
 export function createVideo(data: VideoFormData): Operation<void> {
-  const attributes = formatAttributes(data);
+  const videoPostData = {
+    video: {
+      title: data.title,
+      tab_id: data.tab,
+      description: data.description,
+      url: data.url,
+      start_at: data.startAt,
+      published: data.published,
+      has_personal_times: data.hasPersonalTimes,
+      has_todo: data.hasTodo,
+    },
+  };
   return async (dispatch) =>
-    CourseAPI.video.videos.create(attributes).then((response) => {
+    CourseAPI.video.videos.create(videoPostData).then((response) => {
       dispatch(saveVideo(response.data));
     });
 }
@@ -72,9 +43,21 @@ export function updateVideo(
   videoId: number,
   data: VideoFormData,
 ): Operation<void> {
-  const attributes = formatAttributes(data);
+  const videoPatchData = {
+    video: {
+      id: data.id,
+      title: data.title,
+      tab_id: data.tab,
+      description: data.description,
+      url: data.url,
+      start_at: data.startAt,
+      published: data.published,
+      has_personal_times: data.hasPersonalTimes,
+      has_todo: data.hasTodo,
+    },
+  };
   return async (dispatch) =>
-    CourseAPI.video.videos.update(videoId, attributes).then((response) => {
+    CourseAPI.video.videos.update(videoId, videoPatchData).then((response) => {
       dispatch(saveVideo(response.data));
     });
 }
@@ -88,11 +71,15 @@ export function deleteVideo(videoId: number): Operation<void> {
 
 export function updatePublishedVideo(
   videoId: number,
-  data: boolean,
+  isPublished: boolean,
 ): Operation<void> {
-  const attributes = { video: { published: data } };
+  const videoPatchPublishData = {
+    video: { id: videoId, published: isPublished },
+  };
   return async (dispatch) =>
-    CourseAPI.video.videos.update(videoId, attributes).then((response) => {
-      dispatch(saveVideo(response.data));
-    });
+    CourseAPI.video.videos
+      .update(videoId, videoPatchPublishData)
+      .then((response) => {
+        dispatch(saveVideo(response.data));
+      });
 }

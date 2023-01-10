@@ -63,7 +63,9 @@ class Course::Video::VideosController < Course::Video::Controller
   private
 
   def video_params
-    params.require(:video).permit(:title, :tab_id, :description, :start_at, :url, :published, :has_personal_times)
+    params.require(:video).
+      permit(:title, :tab_id, :description, :start_at, :url, :published, :has_personal_times,
+             :has_todo)
   end
 
   def current_tab

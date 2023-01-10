@@ -42,6 +42,7 @@ export interface VideoListData extends Video {
     referenceTime?: string;
   };
   videoSubmissionId: number | null;
+  hasTodo?: boolean;
   videoChildrenExist?: boolean;
   watchCount?: number;
   percentWatched: number;
@@ -68,4 +69,39 @@ export interface VideoFormData {
   startAt: Date;
   published: boolean;
   hasPersonalTimes: boolean;
+  hasTodo: boolean;
+}
+
+export interface VideoPostData {
+  video: {
+    title: VideoFormData['title'];
+    tab_id: VideoFormData['tab'];
+    description: VideoFormData['description'];
+    url: VideoFormData['url'];
+    start_at: VideoFormData['startAt'];
+    published: VideoFormData['published'];
+    has_personal_times: VideoFormData['hasPersonalTimes'];
+    has_todo: VideoFormData['hasTodo'];
+  };
+}
+
+export interface VideoPatchData {
+  video: {
+    id: VideoFormData['id'];
+    title: VideoFormData['title'];
+    tab_id: VideoFormData['tab'];
+    description: VideoFormData['description'];
+    url: VideoFormData['url'];
+    start_at: VideoFormData['startAt'];
+    published: VideoFormData['published'];
+    has_personal_times: VideoFormData['hasPersonalTimes'];
+    has_todo: VideoFormData['hasTodo'];
+  };
+}
+
+export interface VideoPatchPublishData {
+  video: {
+    id: VideoFormData['id'];
+    published: VideoFormData['published'];
+  };
 }
