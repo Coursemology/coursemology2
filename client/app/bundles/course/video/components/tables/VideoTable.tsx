@@ -12,13 +12,13 @@ import DataTable from 'lib/components/core/layouts/DataTable';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import Note from 'lib/components/core/Note';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
-import PersonalTimeBooleanIcon from 'lib/components/extensions/PersonalTimeBooleanIcon';
 import { getVideoSubmissionsURL, getVideoURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 
 import { getVideoMetadata } from '../../selectors';
 import VideoManagementButtons from '../buttons/VideoManagementButtons';
 import WatchVideoButton from '../buttons/WatchVideoButton';
+import VideoBadges from '../misc/VideoBadges';
 
 interface Props extends WrappedComponentProps {
   videos: VideoListData[];
@@ -83,22 +83,17 @@ const VideoTable: FC<Props> = (props) => {
           const video = videos[dataIndex];
 
           return (
-            <div className="flex items-center">
-              {(videoMetadata.isCurrentCourseUser &&
-                !videoMetadata.isStudent) ||
-                (videoMetadata.timelineAlgorithm &&
-                  videoMetadata.timelineAlgorithm !== 'fixed' && (
-                    <PersonalTimeBooleanIcon
-                      affectsPersonalTimes={video.affectsPersonalTimes}
-                      hasPersonalTimes={video.hasPersonalTimes}
-                      showPersonalizedTimelineFeatures={
-                        videoMetadata.showPersonalizedTimelineFeatures
-                      }
-                    />
-                  ))}
-              <Link key={video.id} to={getVideoURL(getCourseId(), video.id)}>
-                {video.title}
-              </Link>
+            <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
+              <label className="m-0 font-normal" title={video.title}>
+                <Link // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
+                  key={video.id}
+                  className="line-clamp-2 xl:line-clamp-1"
+                  to={getVideoURL(getCourseId(), video.id)}
+                >
+                  {video.title}
+                </Link>
+              </label>
+              <VideoBadges for={video} metadata={videoMetadata} />
             </div>
           );
         },
