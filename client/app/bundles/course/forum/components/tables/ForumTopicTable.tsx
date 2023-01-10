@@ -12,6 +12,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
 import ForumTopicManagementButtons from '../buttons/ForumTopicManagementButtons';
+import SubscribeButton from '../buttons/SubscribeButton';
 
 interface Props {
   forum?: ForumEntity;
@@ -74,6 +75,10 @@ const translations = defineMessages({
   startedBy: {
     id: 'course.forum.ForumTopicTable.startedBy',
     defaultMessage: 'Started By',
+  },
+  isSubscribed: {
+    id: 'course.forum.ForumTopicTable.isSubscribed',
+    defaultMessage: 'Subscribed?',
   },
 });
 
@@ -247,6 +252,28 @@ const ForumTopicTable: FC<Props> = (props) => {
         filter: false,
         sort: true,
         hideInSmallScreen: true,
+      },
+    },
+    {
+      name: 'subscribed',
+      label: t(translations.isSubscribed),
+      options: {
+        filter: false,
+        sort: false,
+        alignCenter: true,
+        customBodyRenderLite: (dataIndex): JSX.Element => {
+          const forumTopic = forumTopics[dataIndex];
+          return (
+            <SubscribeButton
+              emailSubscription={forumTopic.emailSubscription}
+              entityId={forumTopic.id}
+              entityTitle={forumTopic.title}
+              entityType="topic"
+              entityUrl={forumTopic.topicUrl}
+              type="checkbox"
+            />
+          );
+        },
       },
     },
     {

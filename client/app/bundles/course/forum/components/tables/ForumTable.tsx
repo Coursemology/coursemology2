@@ -12,6 +12,7 @@ import CustomBadge from 'lib/components/extensions/CustomBadge';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ForumManagementButtons from '../buttons/ForumManagementButtons';
+import SubscribeButton from '../buttons/SubscribeButton';
 
 interface Props {
   forums: ForumEntity[];
@@ -45,6 +46,10 @@ const translations = defineMessages({
   views: {
     id: 'course.forum.ForumTable.views',
     defaultMessage: 'Views',
+  },
+  isSubscribed: {
+    id: 'course.forum.ForumTable.isSubscribed',
+    defaultMessage: 'Subscribed?',
   },
 });
 
@@ -139,6 +144,28 @@ const ForumTable: FC<Props> = (props) => {
         filter: false,
         sort: true,
         hideInSmallScreen: true,
+      },
+    },
+    {
+      name: 'subscribed',
+      label: t(translations.isSubscribed),
+      options: {
+        filter: false,
+        sort: false,
+        alignCenter: true,
+        customBodyRenderLite: (dataIndex): JSX.Element => {
+          const forum = forums[dataIndex];
+          return (
+            <SubscribeButton
+              emailSubscription={forum.emailSubscription}
+              entityId={forum.id}
+              entityTitle={forum.name}
+              entityType="forum"
+              entityUrl={forum.forumUrl}
+              type="checkbox"
+            />
+          );
+        },
       },
     },
     {

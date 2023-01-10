@@ -16,7 +16,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
         forums.each do |forum|
           within find("tr.forum_#{forum.id}") do
             expect(page).to have_link(forum.name, href: course_forum_path(course, forum))
-            expect(page).to have_selector("button.forum-subscribe-#{forum.id}", visible: false)
+            expect(page).to have_selector(".forum-subscribe-#{forum.id}", visible: false)
             expect(page).to have_selector("button.forum-edit-#{forum.id}", visible: false)
             expect(page).to have_selector("button.forum-delete-#{forum.id}", visible: false)
           end
@@ -55,7 +55,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
 
         # Edit with valid information.
         visit course_forum_path(course, forum)
-        expect(page).to have_no_selector("button.forum-subscribe-#{forum.id}")
+        expect(page).to have_no_selector(".forum-subscribe-#{forum.id}")
         expect(page).to have_selector("button.forum-edit-#{forum.id}")
         expect(page).to have_selector("button.forum-delete-#{forum.id}")
         find("button.forum-edit-#{forum.id}").click
@@ -139,12 +139,12 @@ RSpec.feature 'Course: Forum: Management', js: true do
         visit course_forums_path(course)
 
         find("button.forum-action-#{forum.id}").hover
-        find("button.forum-subscribe-#{forum.id}").click
+        find(".forum-subscribe-#{forum.id}").click
         expect_toastify("You have successfully been subscribed to #{forum.name}.")
         expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
 
         find("button.forum-action-#{forum.id}").hover
-        find("button.forum-subscribe-#{forum.id}").click
+        find(".forum-subscribe-#{forum.id}").click
         expect_toastify("You have successfully been unsubscribed from #{forum.name}.")
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
@@ -158,7 +158,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
         forums.each do |forum|
           within find("tr.forum_#{forum.id}") do
             expect(page).to have_link(forum.name, href: course_forum_path(course, forum))
-            expect(page).to have_selector("button.forum-subscribe-#{forum.id}")
+            expect(page).to have_selector(".forum-subscribe-#{forum.id}")
             expect(page).to have_no_selector("button.forum-edit-#{forum.id}")
             expect(page).to have_no_selector("button.forum-delete-#{forum.id}")
           end
@@ -170,11 +170,11 @@ RSpec.feature 'Course: Forum: Management', js: true do
 
         # Subscribe and unsubscribe at the course forums page
         visit course_forums_path(course)
-        find("button.forum-subscribe-#{forum.id}").click
+        find(".forum-subscribe-#{forum.id}").click
         expect_toastify("You have successfully been subscribed to #{forum.name}.")
         expect(Course::Forum::Subscription.where(user: user, forum: forum).count).to eq(1)
 
-        find("button.forum-subscribe-#{forum.id}").click
+        find(".forum-subscribe-#{forum.id}").click
         expect_toastify("You have successfully been unsubscribed from #{forum.name}.")
         expect(Course::Forum::Subscription.where(user: user, forum: forum).empty?).to eq(true)
       end
@@ -214,7 +214,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
         expect(topics.all? { |t| t.unread?(user) }).to be_truthy
 
         visit course_forum_path(course, forum)
-        expect(page).to have_no_selector("button.forum-subscribe-#{forum.id}")
+        expect(page).to have_no_selector(".forum-subscribe-#{forum.id}")
         expect(page).to have_no_selector("button.forum-edit-#{forum.id}")
         expect(page).to have_no_selector("button.forum-delete-#{forum.id}")
         find('button.mark-all-as-read-button').click

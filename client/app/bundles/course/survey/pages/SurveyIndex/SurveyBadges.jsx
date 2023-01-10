@@ -9,7 +9,7 @@ import { surveyShape } from '../../propTypes';
 const translations = defineMessages({
   hasTodo: {
     id: 'course.survey.SurveyBadges.hasTodo',
-    defaultMessage: 'has TODO',
+    defaultMessage: 'Has TODO',
   },
 });
 

@@ -86,6 +86,7 @@ const ForumTopicShow: FC = () => {
         key={forumTopic.id}
         navigateToIndexAfterDelete
         navigateToShowAfterUpdate
+        showSubscribeButton
         topic={forumTopic}
       />,
     );
