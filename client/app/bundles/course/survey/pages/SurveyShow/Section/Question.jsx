@@ -107,7 +107,7 @@ class Question extends Component {
   }
 
   render() {
-    const { question, expanded, index } = this.props;
+    const { question, dragging, expanded, index } = this.props;
 
     return (
       <Draggable draggableId={`question-${question.id}`} index={index}>
@@ -119,7 +119,7 @@ class Question extends Component {
             {...provided.dragHandleProps}
           >
             <QuestionCard
-              {...{ question, expanded }}
+              {...{ question, dragging, expanded }}
               adminFunctions={this.adminFunctions()}
             />
           </div>
@@ -131,6 +131,7 @@ class Question extends Component {
 
 Question.propTypes = {
   question: questionShape,
+  dragging: PropTypes.bool,
   expanded: PropTypes.bool.isRequired,
   index: PropTypes.number.isRequired,
 

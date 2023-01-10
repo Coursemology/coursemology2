@@ -13,6 +13,7 @@ import {
   TextField,
 } from '@mui/material';
 import PropTypes from 'prop-types';
+import { DragIndicator } from '@mui/icons-material';
 
 import OptionsListItem from 'course/survey/components/OptionsListItem';
 import { questionTypes } from 'course/survey/constants';
@@ -44,7 +45,7 @@ const styles = {
     paddingTop: 0,
   },
   panelSummaryText: {
-    flexDirection: 'column',
+    display: 'flex',
   },
   required: {
     fontStyle: 'italic',
@@ -169,24 +170,27 @@ class QuestionCard extends Component {
   }
 
   render() {
-    const { question, expanded } = this.props;
+    const { question, dragging, expanded } = this.props;
 
     return (
       <Accordion expanded={expanded}>
-        <AccordionSummary>
+        <AccordionSummary style={{padding: 0}}>
           <div style={styles.panelSummaryText}>
-            <p dangerouslySetInnerHTML={{ __html: question.description }} />
-            {question.required && (
-              <p style={styles.required}>
-                <FormattedMessage {...formTranslations.starRequired} />
-              </p>
-            )}
+            <DragIndicator className={dragging ? 'invisible' : 'visible'} color="disabled" fontSize="small"/>
+            <div style={{ flexDirection: 'column' }}>
+              <p dangerouslySetInnerHTML={{ __html: question.description }} />
+              {question.required && (
+                <p style={styles.required}>
+                  <FormattedMessage {...formTranslations.starRequired} />
+                </p>
+              )}
+              <CardContent style={styles.fields}>
+                {QuestionCard.renderSpecificFields(question)}
+              </CardContent>
+            </div>
           </div>
           {this.renderAdminMenu()}
         </AccordionSummary>
-        <CardContent style={styles.fields}>
-          {QuestionCard.renderSpecificFields(question)}
-        </CardContent>
       </Accordion>
     );
   }
@@ -194,6 +198,7 @@ class QuestionCard extends Component {
 
 QuestionCard.propTypes = {
   question: questionShape,
+  dragging: PropTypes.bool,
   adminFunctions: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
