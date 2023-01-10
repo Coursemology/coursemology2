@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Typography } from '@mui/material';
 import {
   AssessmentListData,
   AssessmentsListData,
 } from 'types/course/assessment/assessments';
 
+import Note from 'lib/components/core/Note';
 import { ColumnTemplate, VerticalTable } from 'lib/components/core/table';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -128,11 +128,13 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
     [display],
   );
 
-  if (assessments.length <= 0)
+  if (assessments.length === 0)
     return (
-      <Typography className="mt-8 text-center text-neutral-500">
-        {t(translations.noAssessments, { category: display.category.title })}
-      </Typography>
+      <Note
+        message={t(translations.noAssessments, {
+          category: display.category.title,
+        })}
+      />
     );
 
   return (
