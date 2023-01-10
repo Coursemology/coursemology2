@@ -19,7 +19,7 @@ const MoveAssessmentsMenu = (
   const { tabs, onSelectTab } = props;
   const [button, setButton] = useState<HTMLButtonElement>();
 
-  if (!tabs || tabs.length <= 0) return null;
+  if (!tabs || tabs.length === 0) return null;
 
   if (tabs.length === 1)
     return (

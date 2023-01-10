@@ -194,7 +194,7 @@ const FileManager = (props: FileManagerProps): JSX.Element => {
         Checkbox: RowStartComponent,
         TableToolbar: !disabled ? ToolbarComponent : DisabledMessages,
         TableToolbarSelect: !disabled ? ToolbarComponent : DisabledMessages,
-        ...(materials.length <= 0
+        ...(materials.length === 0
           ? {
               TableBody: () => null,
               TableHead: () => null,
