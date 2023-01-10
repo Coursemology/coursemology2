@@ -177,7 +177,6 @@ const GroupCreationForm = (props) => {
                   shrink: true,
                 }}
                 label={<FormattedMessage {...translations.name} />}
-                renderIf={isSingle}
                 required
                 style={styles.flexChild}
                 variant="standard"
@@ -200,7 +199,6 @@ const GroupCreationForm = (props) => {
                 maxRows={4}
                 minRows={2}
                 multiline
-                renderIf={isSingle}
                 style={styles.flexChild}
                 variant="standard"
               />
@@ -223,7 +221,6 @@ const GroupCreationForm = (props) => {
                   shrink: true,
                 }}
                 label={<FormattedMessage {...translations.prefix} />}
-                renderIf={!isSingle}
                 required
                 style={styles.flexChild}
                 variant="standard"
@@ -250,7 +247,6 @@ const GroupCreationForm = (props) => {
                 }}
                 label={<FormattedMessage {...translations.numToCreate} />}
                 onWheel={(event) => event.currentTarget.blur()}
-                renderIf={!isSingle}
                 style={styles.flexChild}
                 type="number"
                 variant="standard"
