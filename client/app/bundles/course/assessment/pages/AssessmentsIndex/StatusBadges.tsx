@@ -1,4 +1,9 @@
-import { Block, CheckCircle, Key } from '@mui/icons-material';
+import {
+  Block,
+  CheckCircle,
+  FormatListBulleted,
+  Key,
+} from '@mui/icons-material';
 import { Chip, Tooltip } from '@mui/material';
 import { AssessmentListData } from 'types/course/assessment/assessments';
 
@@ -32,6 +37,12 @@ const StatusBadges = (props: StatusBadgesProps): JSX.Element => {
       {assessment.autograded && (
         <Tooltip disableInteractive title={t(translations.autograded)}>
           <CheckCircle className="text-3xl text-neutral-500 hover?:text-neutral-600" />
+        </Tooltip>
+      )}
+
+      {assessment.hasTodo && (
+        <Tooltip disableInteractive title={t(translations.hasTodo)}>
+          <FormatListBulleted className="text-3xl text-neutral-500 hover?:text-neutral-600" />
         </Tooltip>
       )}
 

@@ -114,6 +114,7 @@ class NewAssessmentFormButton extends Component {
       base_exp: 0,
       time_bonus_exp: 0,
       published: false,
+      has_todo: true,
       autograded: false,
       block_student_viewing_after_submitted: false,
       skippable: false,

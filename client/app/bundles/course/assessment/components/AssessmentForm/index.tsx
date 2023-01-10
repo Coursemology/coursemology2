@@ -311,6 +311,20 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           </>
         )}
 
+        <Controller
+          control={control}
+          name="has_todo"
+          render={({ field, fieldState }): JSX.Element => (
+            <FormCheckboxField
+              description={intl.formatMessage(t.hasTodoHint)}
+              disabled={disabled}
+              field={field}
+              fieldState={fieldState}
+              label={intl.formatMessage(t.hasTodo)}
+            />
+          )}
+        />
+
         {editing && folderAttributes && (
           <>
             <Typography>{intl.formatMessage(t.files)}</Typography>
