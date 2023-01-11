@@ -20,21 +20,21 @@ import MoveUpButton from './MoveUpButton';
 import NewQuestionButton from './NewQuestionButton';
 import Question from './Question';
 
-const styles = {
-  card: {
-    marginBottom: 15,
-  },
-  expandIcon: {
-    float: 'right',
-  },
-  expandIconRotated: {
-    float: 'right',
-    transform: 'rotate(180deg)',
-  },
-  subtitle: {
-    paddingRight: 64,
-  },
-};
+// const styles = {
+//   card: {
+//     marginBottom: 15,
+//   },
+//   expandIcon: {
+//     float: 'right',
+//   },
+//   expandIconRotated: {
+//     float: 'right',
+//     transform: 'rotate(180deg)',
+//   },
+//   subtitle: {
+//     paddingRight: 64,
+//   },
+// };
 
 const translations = defineMessages({
   noQuestions: {
@@ -77,26 +77,26 @@ class Section extends Component {
   render() {
     const { section, index: sectionIndex } = this.props;
     return (
-      <Card style={styles.card}>
+      <Card className="mb-4">
         <CardHeader
           subheader={
             <div dangerouslySetInnerHTML={{ __html: section.description }} />
           }
-          subheaderTypographyProps={{ style: styles.subtitle }}
+          subheaderTypographyProps={{ className: 'pr-16' }}
           title={
             <>
               {section.title}
               {section.questions.length > 0 && (
                 <ExpandMoreIcon
+                  className={
+                    this.state.expanded
+                      ? 'float-right'
+                      : 'float-right rotate-180'
+                  }
                   onClick={() =>
                     this.setState((prevState) => ({
                       expanded: !prevState.expanded,
                     }))
-                  }
-                  style={
-                    this.state.expanded
-                      ? styles.expandIcon
-                      : styles.expandIconRotated
                   }
                 />
               )}
