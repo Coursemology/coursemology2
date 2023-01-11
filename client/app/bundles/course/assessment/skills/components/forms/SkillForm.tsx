@@ -23,7 +23,7 @@ interface Props {
   onSubmit: (
     data: SkillFormData,
     setError: UseFormSetError<SkillFormData>,
-  ) => void;
+  ) => Promise<void>;
   initialValues: SkillFormData;
   skillBranchOptions: SkillBranchOptions[];
   dialogType: DialogTypes;
@@ -66,26 +66,22 @@ const SkillForm: FC<Props> = (props) => {
   } = props;
   const { t } = useTranslation();
 
-  const handleSubmit = (data, setError): void => {
+  const handleSubmit = (data, setError): Promise<void> => {
     const skillBranchFormData = {
       title: data.title,
       description: data.description,
     };
     switch (dialogType) {
       case DialogTypes.NewSkill:
-        onSubmit(data, setError);
-        break;
+        return onSubmit(data, setError);
       case DialogTypes.NewSkillBranch:
-        onSubmit(skillBranchFormData, setError);
-        break;
+        return onSubmit(skillBranchFormData, setError);
       case DialogTypes.EditSkill:
-        onSubmit(data, setError);
-        break;
+        return onSubmit(data, setError);
       case DialogTypes.EditSkillBranch:
-        onSubmit(skillBranchFormData, setError);
-        break;
+        return onSubmit(skillBranchFormData, setError);
       default:
-        break;
+        return Promise.resolve();
     }
   };
 

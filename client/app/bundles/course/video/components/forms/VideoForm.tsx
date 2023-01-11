@@ -25,7 +25,7 @@ interface Props {
   onSubmit: (
     data: VideoFormData,
     setError: UseFormSetError<VideoFormData>,
-  ) => void;
+  ) => Promise<void>;
   initialValues: VideoFormData;
   childrenExists?: boolean;
 }

@@ -67,13 +67,13 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
     };
   }
 
-  const onSubmit = (data: UserRoleRequestForm, setError): void => {
+  const onSubmit = (data: UserRoleRequestForm, setError): Promise<void> => {
     const handleOperations = instanceUserRoleRequest?.id
       ? (): Promise<{ id: number }> =>
           updateRoleRequest(data, instanceUserRoleRequest.id)
       : (): Promise<{ id: number }> => createRoleRequest(data);
 
-    handleOperations()
+    return handleOperations()
       .then((response) => {
         toast.success(t(translations.requestSuccess));
         dispatch(saveInstanceRoleRequest({ ...response, ...data }));

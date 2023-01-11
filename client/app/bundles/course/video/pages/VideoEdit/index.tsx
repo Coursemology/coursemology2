@@ -49,7 +49,7 @@ const VideoEdit: FC<Props> = (props) => {
     hasTodo: video.hasTodo ?? true,
   };
 
-  const onSubmit = (data: VideoFormData, setError): void => {
+  const onSubmit = (data: VideoFormData, setError): Promise<void> =>
     dispatch(updateVideo(video.id, data))
       .then(() => {
         onClose();
@@ -66,8 +66,6 @@ const VideoEdit: FC<Props> = (props) => {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
-  };
-
   return (
     <VideoForm
       childrenExists={video.videoChildrenExist}

@@ -23,7 +23,7 @@ interface Props {
   onSubmit: (
     data: FolderFormData,
     setError: UseFormSetError<FolderFormData>,
-  ) => void;
+  ) => Promise<void>;
   title: string;
   initialValues: FolderFormData;
 }

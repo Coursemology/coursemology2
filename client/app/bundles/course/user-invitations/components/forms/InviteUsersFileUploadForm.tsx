@@ -14,7 +14,7 @@ interface Props {
   onSubmit: (
     data: InvitationFileEntity,
     setError: UseFormSetError<IFormInputs>,
-  ) => void;
+  ) => Promise<void>;
   onClose: () => void;
   formSubtitle: JSX.Element;
 }

@@ -15,7 +15,7 @@ interface Props {
   onSubmit: (
     data: InstanceFormData,
     setError: UseFormSetError<InstanceFormData>,
-  ) => void;
+  ) => Promise<void>;
 }
 
 const translations = defineMessages({

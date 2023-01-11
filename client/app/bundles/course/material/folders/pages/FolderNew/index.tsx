@@ -49,7 +49,7 @@ const FolderNew: FC<Props> = (props) => {
     return null;
   }
 
-  const onSubmit = (data: FolderFormData, setError): void => {
+  const onSubmit = (data: FolderFormData, setError): Promise<void> =>
     dispatch(createFolder(data, folderId))
       .then(() => {
         onClose();
@@ -62,8 +62,6 @@ const FolderNew: FC<Props> = (props) => {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
-  };
-
   return (
     <FolderForm
       editing={false}

@@ -45,7 +45,7 @@ const ForumTopicPostNew: FC<Props> = (props) => {
   const [open, setOpenDialog] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleSubmit = (data: ForumTopicPostFormData): void => {
+  const handleSubmit = (data: ForumTopicPostFormData): Promise<void> =>
     dispatch(createForumTopicPost(forumId!, topicId!, data))
       .then(() => {
         toast.success(t(translations.creationSuccess));
@@ -66,7 +66,6 @@ const ForumTopicPostNew: FC<Props> = (props) => {
           }),
         );
       });
-  };
 
   return (
     <>

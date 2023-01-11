@@ -20,7 +20,7 @@ interface Props {
   onSubmit: (
     data: MaterialFormData,
     setError: UseFormSetError<MaterialFormData>,
-  ) => void;
+  ) => Promise<void>;
   title: string;
   initialValues: MaterialFormData;
 }

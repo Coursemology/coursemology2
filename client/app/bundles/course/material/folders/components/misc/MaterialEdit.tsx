@@ -43,7 +43,7 @@ const MaterialEdit: FC<Props> = (props) => {
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
-  const handleSubmit = (data: MaterialFormData, setError): void => {
+  const handleSubmit = (data: MaterialFormData, setError): Promise<void> =>
     dispatch(updateMaterial(data, folderId, materialId))
       .then(() => {
         onClose();
@@ -55,8 +55,6 @@ const MaterialEdit: FC<Props> = (props) => {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
-  };
-
   if (!isOpen) {
     return null;
   }

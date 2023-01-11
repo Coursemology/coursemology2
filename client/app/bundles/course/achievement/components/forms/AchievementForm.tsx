@@ -24,7 +24,7 @@ interface Props {
   onSubmit: (
     data: AchievementFormData,
     setError: UseFormSetError<AchievementFormData>,
-  ) => void;
+  ) => Promise<void>;
   conditionAttributes?: ConditionsData;
   initialValues: AchievementFormData;
 }
