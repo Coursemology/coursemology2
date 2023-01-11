@@ -21,7 +21,7 @@ const translations = defineMessages({
   },
   markAllAsReadTooltip: {
     id: 'course.forum.MarkAllAsReadButton.markAllAsReadTooltip',
-    defaultMessage: 'Mark all forum topics as read',
+    defaultMessage: 'Mark all forum posts on the current page as read',
   },
 });
 
