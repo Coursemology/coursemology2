@@ -52,7 +52,7 @@ const ForumEdit: FC<Props> = (props) => {
     return null;
   }
 
-  const handleSubmit = (data: ForumFormData, setError): void => {
+  const handleSubmit = (data: ForumFormData, setError): Promise<void> =>
     dispatch(updateForum(data, forum.id))
       .then((response) => {
         if (navigateToShowAfterUpdate) {
@@ -68,8 +68,6 @@ const ForumEdit: FC<Props> = (props) => {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
-  };
-
   return (
     <ForumForm
       editing

@@ -14,7 +14,7 @@ interface Props {
   editing: boolean;
   title: string;
   onClose: () => void;
-  onSubmit: (data: ForumTopicPostFormData) => void;
+  onSubmit: (data: ForumTopicPostFormData) => Promise<void>;
   initialValues: ForumTopicPostFormData;
   isAnonymousEnabled: boolean;
 }

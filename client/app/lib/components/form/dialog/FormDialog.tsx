@@ -24,7 +24,7 @@ interface Props {
   editing: boolean;
   initialValues: Data;
   onClose: () => void;
-  onSubmit: (data, setError: UseFormSetError<Data>) => void;
+  onSubmit: (data, setError: UseFormSetError<Data>) => Promise<void>;
   title: string;
   formName: string;
   validationSchema?: AnyObjectSchema;
@@ -67,7 +67,11 @@ const FormDialog = (props: Props): JSX.Element => {
         className="top-10"
         disableEnforceFocus
         maxWidth="md"
-        onClose={handleCloseDialog}
+        onClose={(_event: object, reason: string): void => {
+          if (reason && reason === 'backdropClick' && formState.isSubmitting)
+            return;
+          handleCloseDialog();
+        }}
         open={open}
       >
         <DialogTitle>{title}</DialogTitle>

@@ -19,7 +19,7 @@ interface Props {
   onSubmit: (
     data: ForumFormData,
     setError: UseFormSetError<ForumFormData>,
-  ) => void;
+  ) => Promise<void>;
   initialValues: ForumFormData;
 }
 

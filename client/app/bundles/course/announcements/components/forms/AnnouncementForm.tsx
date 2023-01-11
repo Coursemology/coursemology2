@@ -20,7 +20,7 @@ interface Props {
   onSubmit: (
     data: AnnouncementFormData,
     setError: UseFormSetError<AnnouncementFormData>,
-  ) => void;
+  ) => Promise<void>;
   canSticky: boolean;
 }
 

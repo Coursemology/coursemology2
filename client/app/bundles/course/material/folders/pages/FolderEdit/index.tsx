@@ -39,7 +39,7 @@ const FolderEdit: FC<Props> = (props) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const onSubmit = (data: FolderFormData, setError): void => {
+  const onSubmit = (data: FolderFormData, setError): Promise<void> =>
     dispatch(updateFolder(data, folderId))
       .then(() => {
         onClose();
@@ -52,8 +52,6 @@ const FolderEdit: FC<Props> = (props) => {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
-  };
-
   if (!isOpen) {
     return null;
   }

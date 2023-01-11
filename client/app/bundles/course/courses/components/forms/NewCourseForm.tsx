@@ -17,7 +17,7 @@ interface Props {
   onSubmit: (
     data: NewCourseFormData,
     setError: UseFormSetError<NewCourseFormData>,
-  ) => void;
+  ) => Promise<void>;
   initialValues: NewCourseFormData;
 }
 

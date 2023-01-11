@@ -32,7 +32,7 @@ const InstanceNew: FC<Props> = (props) => {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const onSubmit = (data: InstanceFormData, setError): void => {
+  const onSubmit = (data: InstanceFormData, setError): Promise<void> =>
     dispatch(createInstance(data))
       .then(() => {
         onClose();
@@ -49,8 +49,6 @@ const InstanceNew: FC<Props> = (props) => {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
-  };
-
   return <InstanceForm onClose={onClose} onSubmit={onSubmit} open={open} />;
 };
 

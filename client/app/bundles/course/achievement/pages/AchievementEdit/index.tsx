@@ -1,7 +1,6 @@
 import { FC, useEffect } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AppDispatch, AppState } from 'types/store';
 
@@ -38,7 +37,6 @@ const AchievementEdit: FC<Props> = (props) => {
   const { achievementId, open, onClose } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
-  const navigate = useNavigate();
   const achievement = useSelector((state: AppState) =>
     getAchievementEntity(state, achievementId!),
   );
@@ -56,7 +54,7 @@ const AchievementEdit: FC<Props> = (props) => {
       .then(() => {
         toast.success(t(translations.updateSuccess));
         setTimeout(() => {
-          navigate(`/courses/${getCourseId()}/achievements`);
+          window.location.href = `/courses/${getCourseId()}/achievements`;
         }, 500);
       })
       .catch((error) => {
