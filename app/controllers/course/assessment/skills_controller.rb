@@ -13,18 +13,12 @@ class Course::Assessment::SkillsController < Course::ComponentController
     end
   end
 
-  def new
-  end
-
   def create
     if @skill.save
       render '_skill_list_data', locals: { skill: @skill }, status: :ok
     else
       render json: { errors: @skill.errors }, status: :bad_request
     end
-  end
-
-  def edit
   end
 
   def update

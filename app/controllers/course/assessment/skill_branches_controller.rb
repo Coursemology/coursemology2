@@ -5,18 +5,12 @@ class Course::Assessment::SkillBranchesController < Course::ComponentController
                                              through_association: :assessment_skill_branches
   add_breadcrumb :index, :course_assessments_skills_path
 
-  def new
-  end
-
   def create
     if @skill_branch.save
       render '_skill_branch_list_data', locals: { skill_branch: @skill_branch }, status: :ok
     else
       render json: { errors: @skill_branch.errors }, status: :bad_request
     end
-  end
-
-  def edit
   end
 
   def update
