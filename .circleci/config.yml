@@ -128,10 +128,10 @@ jobs:
     working_directory: ~/repo
 
     steps:
+      - checkout_with_submodules
+
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
-
-      - checkout_with_submodules
 
       - restore_ruby_cache
       - restore_node_cache
