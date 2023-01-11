@@ -14,6 +14,10 @@ import SubmissionEditWithStore from './SubmissionEditWithStore';
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
+  header: {
+    id: 'course.video.submission.VideoSubmissionEdit.header',
+    defaultMessage: 'Watching {title}',
+  },
   fetchVideoSubmissionFailure: {
     id: 'course.video.submission.VideoSubmissionEdit.fetchVideoSubmissionFailure',
     defaultMessage: 'Failed to retrieve video submission.',
@@ -69,7 +73,11 @@ const VideoSubmissionEdit: FC<Props> = (props) => {
   ) : null;
   return (
     <>
-      <PageHeader title={`Watching ${editVideoSubmission?.videoTitle}`} />
+      <PageHeader
+        title={intl.formatMessage(translations.header, {
+          title: editVideoSubmission?.videoTitle,
+        })}
+      />
       {isLoading ? <LoadingIndicator /> : renderBody}
     </>
   );
