@@ -31,9 +31,11 @@ const fetchAccountSettingsAndTimeZones = (): Promise<
 const AccountSettings = (): JSX.Element => {
   const { t } = useTranslation();
   const [form, setForm] = useState<FormEmitter>();
+  const [reloadForm, setReloadForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const handleUpdateAccountSettings = (
+    initialData: Partial<AccountSettingsData>,
     data: Partial<AccountSettingsData>,
   ): void => {
     setSubmitting(true);
@@ -42,6 +44,14 @@ const AccountSettings = (): JSX.Element => {
       .then((newData) => {
         form?.resetByMerging?.(newData);
         toast.success(t(formTranslations.changesSaved));
+        setReloadForm((value) => !value);
+
+        // Reload page when changing language is successful
+        if (initialData.locale !== newData.locale) {
+          setTimeout(() => {
+            document.location.reload();
+          }, 1000);
+        }
       })
       .catch(form?.receiveErrors)
       .finally(() => setSubmitting(false));
@@ -144,6 +154,7 @@ const AccountSettings = (): JSX.Element => {
   return (
     <Preload
       render={<LoadingIndicator />}
+      syncsWith={[reloadForm]}
       while={fetchAccountSettingsAndTimeZones}
     >
       {([settings, timeZones]): JSX.Element => (

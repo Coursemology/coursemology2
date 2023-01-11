@@ -11,6 +11,7 @@ import Section from 'lib/components/core/layouts/Section';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
+import { AVAILABLE_LOCALES } from 'lib/constants/sharedConstants';
 import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -25,7 +26,10 @@ interface AccountSettingsFormProps extends Emits<FormEmitter> {
   settings: AccountSettingsData;
   timeZones: TimeZones;
   disabled?: boolean;
-  onSubmit?: (data: Partial<AccountSettingsData>) => void;
+  onSubmit?: (
+    initialData: AccountSettingsData,
+    data: Partial<AccountSettingsData>,
+  ) => void;
   onUpdateProfilePicture?: (image: File, onSuccess: () => void) => void;
   onAddEmail?: (
     email: EmailData['email'],
@@ -58,6 +62,7 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
         {
           name: string().required(t(translations.nameRequired)),
           timezone: string().required(t(translations.timeZoneRequired)),
+          locale: string().required(t(translations.localeRequired)),
           currentPassword: string()
             .optional()
             .when('password', {
@@ -95,6 +100,15 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
     [requirePasswordConfirmation],
   );
 
+  const localeOptions = useMemo(
+    () =>
+      props.settings.availableLocales.map((locale) => ({
+        value: locale,
+        label: AVAILABLE_LOCALES[locale],
+      })),
+    [],
+  );
+
   const timeZonesOptions = useMemo(
     () =>
       props.timeZones.map((timeZone) => ({
@@ -114,10 +128,10 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
     if (stagedImage) {
       props.onUpdateProfilePicture?.(stagedImage, () => {
         setStagedImage(undefined);
-        props.onSubmit?.(data);
+        props.onSubmit?.(props.settings, data);
       });
     } else {
-      props.onSubmit?.(data);
+      props.onSubmit?.(props.settings, data);
     }
   };
 
@@ -166,6 +180,23 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
                   label={t(translations.timeZone)}
                   native
                   options={timeZonesOptions}
+                  required
+                  variant="filled"
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="locale"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormSelectField
+                  disabled={props.disabled}
+                  field={field}
+                  fieldState={fieldState}
+                  label={t(translations.locale)}
+                  native
+                  options={localeOptions}
                   required
                   variant="filled"
                 />

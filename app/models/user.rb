@@ -14,6 +14,8 @@ class User < ApplicationRecord
 
   enum role: { normal: 0, administrator: 1 }
 
+  AVAILABLE_LOCALES = I18n.available_locales.map(&:to_s)
+
   class << self
     # Finds the System user.
     #
@@ -47,6 +49,7 @@ class User < ApplicationRecord
   validates :time_zone, length: { maximum: 255 }, allow_nil: true
   validates :reset_password_token, length: { maximum: 255 }, allow_nil: true,
                                    uniqueness: { if: :reset_password_token_changed? }
+  validates :locale, inclusion: { in: AVAILABLE_LOCALES }, allow_nil: true
 
   has_many :emails, -> { order('primary' => :desc) }, class_name: User::Email.name,
                                                       inverse_of: :user, dependent: :destroy

@@ -13,6 +13,10 @@ export default defineMessages({
     id: 'user.timeZone',
     defaultMessage: 'Time zone',
   },
+  locale: {
+    id: 'user.locale',
+    defaultMessage: 'Language',
+  },
   profilePicture: {
     id: 'user.profilePicture',
     defaultMessage: 'Profile picture',
@@ -89,6 +93,10 @@ export default defineMessages({
   timeZoneRequired: {
     id: 'user.timeZoneRequired',
     defaultMessage: 'Please select at least one time zone.',
+  },
+  localeRequired: {
+    id: 'user.localeRequired',
+    defaultMessage: 'Please select at least one language.',
   },
   currentPasswordRequired: {
     id: 'user.currentPasswordRequired',

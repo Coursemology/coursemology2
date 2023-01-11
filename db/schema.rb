@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_09_024146) do
+ActiveRecord::Schema.define(version: 2023_01_11_111646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1351,6 +1351,7 @@ ActiveRecord::Schema.define(version: 2023_01_09_024146) do
     t.inet "last_sign_in_ip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "locale"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
