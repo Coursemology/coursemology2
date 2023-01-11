@@ -89,7 +89,9 @@ export default class ForumsAPI extends BaseCourseAPI {
   /**
    * Mark all topics as read in a forum.
    */
-  markAsRead(forumId: number): Promise<void> {
+  markAsRead(
+    forumId: number,
+  ): Promise<AxiosResponse<{ nextUnreadTopicUrl: string | null }>> {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${forumId}/mark_as_read`,
     );

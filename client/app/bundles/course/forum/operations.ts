@@ -119,8 +119,13 @@ export function markAllAsRead(): Operation<void> {
 
 export function markAsRead(forumId: number): Operation<void> {
   return async (dispatch) =>
-    CourseAPI.forum.forums.markAsRead(forumId).then(() => {
-      dispatch(markForumPostsAsRead({ forumId }));
+    CourseAPI.forum.forums.markAsRead(forumId).then((response) => {
+      dispatch(
+        markForumPostsAsRead({
+          forumId,
+          nextUnreadTopicUrl: response.data.nextUnreadTopicUrl,
+        }),
+      );
     });
 }
 

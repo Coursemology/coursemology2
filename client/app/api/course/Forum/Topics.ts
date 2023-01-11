@@ -25,6 +25,7 @@ export default class TopicsAPI extends BaseCourseAPI {
     AxiosResponse<{
       topic: ForumTopicData;
       postTreeIds: RecursiveArray<number>;
+      nextUnreadTopicUrl: string | null;
       posts: ForumTopicPostListData[];
     }>
   > {

@@ -9,5 +9,5 @@ json.permissions do
 end
 
 json.metadata do
-  json.nextUnreadPostUrl next_unread_topic_link
+  json.nextUnreadTopicUrl next_unread_topic_link
 end

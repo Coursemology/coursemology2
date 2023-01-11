@@ -13,6 +13,7 @@ import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ForumTopicManagementButtons from '../../components/buttons/ForumTopicManagementButtons';
+import NextUnreadButton from '../../components/buttons/NextUnreadButton';
 import { fetchForumTopic } from '../../operations';
 import { getForumTopic } from '../../selectors';
 import ForumTopicPostNew from '../ForumTopicPostNew';
@@ -74,13 +75,21 @@ const ForumTopicShow: FC = () => {
         .finally(() => setIsLoading(false))
         .catch(() => toast.error(t(translations.fetchPostsFailure)));
     }
-  }, [dispatch]);
+  }, [dispatch, forumId, topicId]);
 
   const headerToolbars: ReactElement[] = [];
   let forumPageHeaderTitle: ReactElement | string = t(translations.header);
 
   if (forumTopic) {
     forumPageHeaderTitle = forumTopic.title;
+
+    headerToolbars.push(
+      <NextUnreadButton
+        key="next-unread-button"
+        disabled={false}
+        nextUnreadTopicUrl={forumTopic.nextUnreadTopicUrl}
+      />,
+    );
     headerToolbars.push(
       <ForumTopicManagementButtons
         key={forumTopic.id}
