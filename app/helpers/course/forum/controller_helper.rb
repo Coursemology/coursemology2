@@ -1,10 +1,18 @@
 # frozen_string_literal: true
 module Course::Forum::ControllerHelper
-  def next_unread_topic_link
-    topic = Course::Forum::Topic.from_course(current_course).
-            accessible_by(current_ability).unread_by(current_user).first
+  # Returns next topic link
+  # When a forum is specified, it returns the next unread topic in the forum.
+  # If there is no unread topic in the forum, it returns next unread topic in another forum.
+  # when the forum is not specified, it returns the next unread topic of all forums.
+  def next_unread_topic_link(forum = nil)
+    all_unread_topics = Course::Forum::Topic.from_course(current_course).
+                        accessible_by(current_ability).unread_by(current_user)
 
-    course_forum_topic_path(current_course, topic.forum, topic) if topic
+    selected_next_topic = nil
+    selected_next_topic = all_unread_topics.select { |topic| topic.forum_id == forum.id }.first if forum
+    selected_next_topic ||= all_unread_topics.first
+
+    course_forum_topic_path(current_course, selected_next_topic.forum, selected_next_topic) if selected_next_topic
   end
 
   def email_setting_enabled(component, setting)

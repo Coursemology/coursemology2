@@ -1,10 +1,7 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { LoadingButton } from '@mui/lab';
-import { Button, Tooltip } from '@mui/material';
 import { AppDispatch, AppState } from 'types/store';
 
 import AddButton from 'lib/components/core/buttons/AddButton';
@@ -12,6 +9,8 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import MarkAllAsReadButton from '../../components/buttons/MarkAllAsReadButton';
+import NextUnreadButton from '../../components/buttons/NextUnreadButton';
 import ForumTable from '../../components/tables/ForumTable';
 import { fetchForums, markAllAsRead } from '../../operations';
 import {
@@ -29,26 +28,6 @@ const translations = defineMessages({
   newForum: {
     id: 'course.forum.ForumsIndex.newForum',
     defaultMessage: 'New Forum',
-  },
-  nextUnread: {
-    id: 'course.forum.ForumsIndex.nextUnread',
-    defaultMessage: 'Next Unread',
-  },
-  nextUnreadTooltip: {
-    id: 'course.forum.ForumsIndex.nextUnreadTooltip',
-    defaultMessage: 'Jump to next unread topic',
-  },
-  AllReadTooltip: {
-    id: 'course.forum.ForumsIndex.AllReadTooltip',
-    defaultMessage: 'Hooray! All topics have been read!',
-  },
-  markAllAsRead: {
-    id: 'course.forum.ForumsIndex.markAllAsRead',
-    defaultMessage: 'Mark all as read',
-  },
-  markAllAsReadTooltip: {
-    id: 'course.forum.ForumsIndex.markAllAsReadTooltip',
-    defaultMessage: 'Mark all forum topics as read',
   },
   markAllAsReadSuccess: {
     id: 'course.forum.ForumsIndex.markAllAsReadSuccess',
@@ -98,57 +77,19 @@ const ForumsIndex: FC = () => {
       .finally(() => setIsMarking(false));
   };
 
-  const headerToolbars: ReactElement[] = [];
-
-  if (forums.length > 0 && forumMetadata.nextUnreadPostUrl) {
-    headerToolbars.push(
-      <Tooltip
-        key="next-unread-tooltip"
-        title={
-          forumMetadata.nextUnreadPostUrl
-            ? t(translations.nextUnreadTooltip)
-            : t(translations.AllReadTooltip)
-        }
-      >
-        <span>
-          <Button
-            key="next-unread-button"
-            className="next-unread-button mr-2"
-            color="inherit"
-            component={Link}
-            disabled={!forumMetadata.nextUnreadPostUrl || isMarking}
-            to={forumMetadata.nextUnreadPostUrl ?? '#'}
-          >
-            {t(translations.nextUnread)}
-          </Button>
-        </span>
-      </Tooltip>,
-    );
-
-    headerToolbars.push(
-      <Tooltip
-        key="mark-all-as-read-tooltip"
-        title={
-          forumMetadata.nextUnreadPostUrl
-            ? t(translations.markAllAsReadTooltip)
-            : t(translations.AllReadTooltip)
-        }
-      >
-        <span>
-          <LoadingButton
-            key="mark-all-as-read-button"
-            className="mark-all-as-read-button"
-            color="inherit"
-            disabled={!forumMetadata.nextUnreadPostUrl}
-            loading={isMarking}
-            onClick={handleMarkAllAsRead}
-          >
-            {t(translations.markAllAsRead)}
-          </LoadingButton>
-        </span>
-      </Tooltip>,
-    );
-  }
+  const headerToolbars: ReactElement[] = [
+    <NextUnreadButton
+      key="next-unread-button"
+      disabled={isMarking}
+      nextUnreadTopicUrl={forumMetadata.nextUnreadTopicUrl}
+    />,
+    <MarkAllAsReadButton
+      key="mark-all-as-read-tooltip"
+      disabled={isMarking}
+      handleMarkAllAsRead={handleMarkAllAsRead}
+      nextUnreadTopicUrl={forumMetadata.nextUnreadTopicUrl}
+    />,
+  ];
 
   if (forumPermissions?.canCreateForum) {
     headerToolbars.push(

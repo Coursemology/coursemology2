@@ -103,7 +103,7 @@ class Course::Forum::ForumsController < Course::Forum::Controller
     topics = @forum.topics.accessible_by(current_ability).to_a
     Course::Forum::Topic.mark_as_read!(topics, for: current_user)
 
-    head :ok
+    render json: { nextUnreadTopicUrl: helpers.next_unread_topic_link }, status: :ok
   end
 
   private

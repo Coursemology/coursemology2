@@ -8,7 +8,7 @@ export interface EmailSubscriptionSetting {
 }
 
 export interface ForumMetadata {
-  nextUnreadPostUrl: string | null;
+  nextUnreadTopicUrl: string | null;
 }
 
 export type ForumPermissions = Permissions<'canCreateForum'>;
@@ -86,6 +86,8 @@ export interface ForumTopicListData {
 
   emailSubscription: EmailSubscriptionSetting;
   permissions: ForumTopicListDataPermissions;
+
+  nextUnreadTopicUrl: string | null;
 }
 
 export interface ForumTopicPostListData {
@@ -109,6 +111,7 @@ export interface ForumTopicPostListData {
 export interface ForumData extends ForumListData {
   availableTopicTypes: TopicType[];
   topicIds: number[];
+  nextUnreadTopicUrl: string | null;
   permissions: ForumListDataPermissions;
 }
 
@@ -134,6 +137,7 @@ export interface ForumEntity {
   permissions: ForumData['permissions'];
 
   availableTopicTypes?: ForumData['availableTopicTypes'];
+  nextUnreadTopicUrl: ForumData['nextUnreadTopicUrl'];
   topicIds: ForumTopicListData['id'][] | null;
 }
 
@@ -157,6 +161,7 @@ export interface ForumTopicEntity {
   emailSubscription: ForumTopicListData['emailSubscription'];
   permissions: ForumTopicListData['permissions'];
 
+  nextUnreadTopicUrl: ForumTopicListData['nextUnreadTopicUrl'];
   postTreeIds?: RecursiveArray<number>;
 }
 

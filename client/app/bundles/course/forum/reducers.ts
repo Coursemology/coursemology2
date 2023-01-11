@@ -27,7 +27,7 @@ const initialState: ForumsState = {
   topics: forumTopicAdapter.getInitialState(),
   posts: forumTopicPostAdapter.getInitialState(),
   metadata: {
-    nextUnreadPostUrl: null,
+    nextUnreadTopicUrl: null,
   },
   permissions: { canCreateForum: false },
 };
@@ -48,6 +48,7 @@ export const forumSlice = createSlice({
       const forumEntities = action.payload.forums.map((forum) => ({
         ...forum,
         topicIds: null,
+        nextUnreadTopicUrl: null,
       }));
       forumAdapter.removeAll(state.forums);
       forumAdapter.setAll(state.forums, forumEntities);
@@ -55,7 +56,11 @@ export const forumSlice = createSlice({
       state.permissions = action.payload.permissions;
     },
     saveForumListData: (state, action: PayloadAction<ForumListData>) => {
-      forumAdapter.addOne(state.forums, { ...action.payload, topicIds: null });
+      forumAdapter.addOne(state.forums, {
+        ...action.payload,
+        topicIds: null,
+        nextUnreadTopicUrl: null,
+      });
     },
     updateForumListData: (state, action: PayloadAction<ForumListData>) => {
       const updatedData = { id: action.payload.id, changes: action.payload };
@@ -88,7 +93,7 @@ export const forumSlice = createSlice({
         return { id, changes: { topicUnreadCount: 0 } };
       });
       forumAdapter.updateMany(state.forums, updatedData);
-      state.metadata.nextUnreadPostUrl = null;
+      state.metadata.nextUnreadTopicUrl = null;
     },
 
     // Forum Topic
@@ -97,6 +102,7 @@ export const forumSlice = createSlice({
       action: PayloadAction<ForumTopicListData>,
     ) => {
       const updatedData = { id: action.payload.id, changes: action.payload };
+      // @ts-ignore: ignore ts warning for infinite recursion
       forumTopicAdapter.updateOne(state.topics, updatedData);
     },
     saveForumTopicData: (
@@ -104,11 +110,13 @@ export const forumSlice = createSlice({
       action: PayloadAction<{
         topic: ForumTopicData;
         postTreeIds: RecursiveArray<number>;
+        nextUnreadTopicUrl: string | null;
         posts: ForumTopicPostListData[];
       }>,
     ) => {
       forumTopicAdapter.upsertOne(state.topics, {
         ...action.payload.topic,
+        nextUnreadTopicUrl: action.payload.nextUnreadTopicUrl,
         postTreeIds: action.payload.postTreeIds,
       });
       forumTopicPostAdapter.setAll(state.posts, action.payload.posts);
@@ -118,12 +126,26 @@ export const forumSlice = createSlice({
     },
     markForumPostsAsRead: (
       state,
-      action: PayloadAction<{ forumId: number }>,
+      action: PayloadAction<{
+        forumId: number;
+        nextUnreadTopicUrl: string | null;
+      }>,
     ) => {
       const topicIds = state.forums.entities[action.payload.forumId]?.topicIds;
       if (topicIds) {
         const updatedTopicEntities = topicIds.map((topicId) => {
-          return { id: topicId, changes: { isUnread: false } };
+          return {
+            id: topicId,
+            changes: {
+              isUnread: false,
+            },
+          };
+        });
+        // When topics in a forum are all marked as read, the next unread topic url
+        // needs to be updated to reflect the url of unread topic in another forum
+        forumAdapter.updateOne(state.forums, {
+          id: action.payload.forumId,
+          changes: { nextUnreadTopicUrl: action.payload.nextUnreadTopicUrl },
         });
         forumTopicAdapter.updateMany(state.topics, updatedTopicEntities);
       }

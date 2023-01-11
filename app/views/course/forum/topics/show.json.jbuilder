@@ -5,6 +5,7 @@ json.topic do
 end
 
 json.postTreeIds @posts.sorted_ids
+json.nextUnreadTopicUrl next_unread_topic_link(@topic.forum)
 
 json.posts @posts.flatten do |post|
   json.partial! 'course/forum/posts/post_list_data', post: post

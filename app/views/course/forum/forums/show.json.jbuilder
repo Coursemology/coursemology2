@@ -5,6 +5,7 @@ json.forum do
                                    isUnresolved: Course::Forum::Topic.filter_unresolved_forum(forum.id).present?
   json.availableTopicTypes topic_type_keys(Course::Forum::Topic.new(forum: @forum))
   json.topicIds @topics.pluck(:id)
+  json.nextUnreadTopicUrl next_unread_topic_link(forum)
   json.permissions do
     json.canCreateTopic can?(:create, Course::Forum::Topic.new(forum: @forum))
   end

@@ -3,7 +3,7 @@ import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Button, Icon, Tooltip } from '@mui/material';
+import { Icon, Tooltip } from '@mui/material';
 import { AppDispatch, AppState } from 'types/store';
 
 import AddButton from 'lib/components/core/buttons/AddButton';
@@ -12,6 +12,8 @@ import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ForumManagementButtons from '../../components/buttons/ForumManagementButtons';
+import MarkAllAsReadButton from '../../components/buttons/MarkAllAsReadButton';
+import NextUnreadButton from '../../components/buttons/NextUnreadButton';
 import ForumTopicTable from '../../components/tables/ForumTopicTable';
 import { fetchForum, markAsRead } from '../../operations';
 import { getForum, getForumTopics } from '../../selectors';
@@ -25,18 +27,6 @@ const translations = defineMessages({
   newTopic: {
     id: 'course.form.FormShow.newTopic',
     defaultMessage: 'New Topic',
-  },
-  AllReadTooltip: {
-    id: 'course.form.FormShow.AllReadTooltip',
-    defaultMessage: 'Hooray! All topics in this forum have been read!',
-  },
-  markAllAsRead: {
-    id: 'course.form.FormShow.markAllAsRead',
-    defaultMessage: 'Mark all as read',
-  },
-  markAllAsReadTooltip: {
-    id: 'course.form.FormShow.markAllAsReadTooltip',
-    defaultMessage: 'Mark all topics in the current forum as read',
   },
   markAllAsReadSuccess: {
     id: 'course.form.FormShow.markAllAsReadSuccess',
@@ -86,7 +76,7 @@ const ForumShow: FC = () => {
         .finally(() => setIsLoading(false))
         .catch(() => toast.error(t(translations.fetchTopicsFailure)));
     }
-  }, [dispatch]);
+  }, [dispatch, forumId]);
 
   const handleMarkAllAsRead = (id: number): void => {
     setIsMarking(true);
@@ -104,27 +94,21 @@ const ForumShow: FC = () => {
   const headerToolbars: ReactElement[] = [];
   let forumPageHeaderTitle: ReactElement | string = t(translations.header);
 
-  if (forum && forumTopics.length > 0 && unreadTopicExists) {
+  if (forum) {
     headerToolbars.push(
-      <Tooltip
-        title={
-          unreadTopicExists
-            ? t(translations.markAllAsReadTooltip)
-            : t(translations.AllReadTooltip)
-        }
-      >
-        <span>
-          <Button
-            key="mark-all-as-read-button"
-            className="mark-all-as-read-button"
-            color="inherit"
-            disabled={isMarking}
-            onClick={(): void => handleMarkAllAsRead(forum.id)}
-          >
-            {t(translations.markAllAsRead)}
-          </Button>
-        </span>
-      </Tooltip>,
+      <NextUnreadButton
+        key="next-unread-button"
+        disabled={isMarking}
+        nextUnreadTopicUrl={forum.nextUnreadTopicUrl}
+      />,
+    );
+    headerToolbars.push(
+      <MarkAllAsReadButton
+        key="mark-all-as-read-button"
+        disabled={isMarking || !unreadTopicExists}
+        handleMarkAllAsRead={(): void => handleMarkAllAsRead(forum.id)}
+        nextUnreadTopicUrl={unreadTopicExists ? forum.nextUnreadTopicUrl : null}
+      />,
     );
   }
 
