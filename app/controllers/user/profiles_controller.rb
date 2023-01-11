@@ -5,6 +5,7 @@ class User::ProfilesController < ApplicationController
 
   def update
     if current_user.update(profile_params)
+      set_locale
       render 'edit'
     else
       render json: { errors: current_user.errors }, status: :bad_request
@@ -18,6 +19,6 @@ class User::ProfilesController < ApplicationController
   private
 
   def profile_params
-    params.require(:user).permit(:name, :time_zone, :profile_photo)
+    params.require(:user).permit(:name, :time_zone, :profile_photo, :locale)
   end
 end

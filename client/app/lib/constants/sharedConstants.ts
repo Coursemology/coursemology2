@@ -3,7 +3,7 @@ import {
   InstanceUserRoles,
   RoleRequestRoles,
 } from 'types/system/instance/users';
-import type { UserRoles } from 'types/users';
+import type { Locale, UserRoles } from 'types/users';
 
 // Form options
 
@@ -58,6 +58,11 @@ export const ITEM_ACTABLE_TYPES = {
   },
 };
 
+export const AVAILABLE_LOCALES: { [key in Locale]: string } = {
+  en: 'English',
+  zh: '中文',
+};
+
 export default {
   TIMELINE_ALGORITHMS,
   USER_ROLES,
@@ -66,4 +71,5 @@ export default {
   COURSE_USER_ROLES,
   STAFF_ROLES,
   ITEM_ACTABLE_TYPES,
+  AVAILABLE_LOCALES,
 };

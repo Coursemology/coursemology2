@@ -40,18 +40,23 @@ export const fetchAccountSettings = async (): Promise<AccountSettingsData> => {
 export const updateProfile = async (
   data: Partial<ProfileData>,
 ): Promise<Partial<ProfileData> | undefined> => {
-  if (!data.name && !data.timezone) return undefined;
+  if (!data.name && !data.timezone && !data.locale) return undefined;
 
   const adaptedData: ProfilePostData = {
     user: {
       name: data.name,
       time_zone: data.timezone,
+      locale: data.locale,
     },
   };
 
   try {
     const response = await GlobalUsersAPI.users.updateProfile(adaptedData);
-    return { name: response.data.name, timezone: response.data.timezone };
+    return {
+      name: response.data.name,
+      timezone: response.data.timezone,
+      locale: response.data.locale,
+    };
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;

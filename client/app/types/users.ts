@@ -84,11 +84,15 @@ export interface AdminStats {
   instancesCount: number;
 }
 
+export type Locale = 'en' | 'zh';
+
 export interface ProfileData {
   id: string;
   name: string;
   timezone: string;
+  locale: string;
   imageUrl: string;
+  availableLocales: Locale[];
 }
 
 export interface EmailData {
@@ -114,6 +118,7 @@ export interface ProfilePostData {
   user: {
     name?: ProfileData['name'];
     time_zone?: ProfileData['timezone'];
+    locale?: ProfileData['locale'];
     profile_photo?: ProfileData['imageUrl'];
   };
 }
