@@ -106,7 +106,7 @@ class ConfirmationDialog extends Component {
     }
 
     const handleDialogClose = (_event, reason) => {
-      if (reason && reason !== 'backdropClick') {
+      if (reason !== 'backdropClick') {
         onCancel();
       }
     };

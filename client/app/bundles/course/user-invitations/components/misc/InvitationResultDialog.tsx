@@ -101,7 +101,7 @@ const InvitationResultDialog: FC<Props> = (props) => {
   }
 
   const handleDialogClose = (_event: object, reason: string): void => {
-    if (reason && reason !== 'backdropClick') {
+    if (reason !== 'backdropClick') {
       handleClose();
     }
   };
