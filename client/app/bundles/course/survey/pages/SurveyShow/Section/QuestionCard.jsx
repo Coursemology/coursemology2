@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { DragIndicator } from '@mui/icons-material';
 import MoreVert from '@mui/icons-material/MoreVert';
 import {
   Accordion,
@@ -13,44 +14,12 @@ import {
   TextField,
 } from '@mui/material';
 import PropTypes from 'prop-types';
-import { DragIndicator } from '@mui/icons-material';
 
 import OptionsListItem from 'course/survey/components/OptionsListItem';
 import { questionTypes } from 'course/survey/constants';
 import { questionShape } from 'course/survey/propTypes';
 import translations from 'course/survey/translations';
 import formTranslations from 'lib/translations/form';
-
-const styles = {
-  optionWidget: {
-    padding: 0,
-    width: 'auto',
-  },
-  grid: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  gridOptionWidget: {
-    marginTop: 5,
-    padding: 0,
-    width: 'auto',
-  },
-  adminMenu: {
-    position: 'absolute',
-    right: 8,
-    top: 0,
-  },
-  fields: {
-    marginTop: 0,
-    paddingTop: 0,
-  },
-  panelSummaryText: {
-    display: 'flex',
-  },
-  required: {
-    fontStyle: 'italic',
-  },
-};
 
 class QuestionCard extends Component {
   static renderOptionsFields(question) {
@@ -69,10 +38,10 @@ class QuestionCard extends Component {
 
   static renderOptionsGrid(question, Widget) {
     return (
-      <div style={styles.grid}>
+      <div className="flex flex-wrap">
         {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
-          const widget = <Widget disabled style={styles.gridOptionWidget} />;
+          const widget = <Widget className="mt-0 w-auto p-0" disabled />;
           return (
             <OptionsListItem
               key={option.id}
@@ -90,7 +59,7 @@ class QuestionCard extends Component {
       <>
         {question.options.map((option) => {
           const { option: optionText, image_url: imageUrl } = option;
-          const widget = <Widget disabled style={styles.optionWidget} />;
+          const widget = <Widget className="mt-0 w-auto p-0" disabled />;
           return (
             <OptionsListItem
               key={option.id}
@@ -148,7 +117,10 @@ class QuestionCard extends Component {
 
     return (
       <>
-        <IconButton onClick={this.handleClick} style={styles.adminMenu}>
+        <IconButton
+          className="absolute right-8 top-5"
+          onClick={this.handleClick}
+        >
           <MoreVert />
         </IconButton>
         <Menu
@@ -174,17 +146,21 @@ class QuestionCard extends Component {
 
     return (
       <Accordion expanded={expanded}>
-        <AccordionSummary style={{padding: 0}}>
-          <div style={styles.panelSummaryText}>
-            <DragIndicator className={dragging ? 'invisible' : 'visible'} color="disabled" fontSize="small"/>
-            <div style={{ flexDirection: 'column' }}>
+        <AccordionSummary className="p-0">
+          <div className="flex">
+            <DragIndicator
+              className={dragging ? 'invisible' : 'visible'}
+              color="disabled"
+              fontSize="small"
+            />
+            <div className="flex-col">
               <p dangerouslySetInnerHTML={{ __html: question.description }} />
               {question.required && (
-                <p style={styles.required}>
+                <p className="italic">
                   <FormattedMessage {...formTranslations.starRequired} />
                 </p>
               )}
-              <CardContent style={styles.fields}>
+              <CardContent className="mt-0 pt-0">
                 {QuestionCard.renderSpecificFields(question)}
               </CardContent>
             </div>
