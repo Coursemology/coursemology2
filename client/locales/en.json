@@ -6575,6 +6575,12 @@
   "user.errorSettingPrimaryEmail": {
     "defaultMessage": "An error occurred while setting {email} as the primary email."
   },
+  "user.locale": {
+    "defaultMessage": "Language"
+  },
+  "user.localeRequired": {
+    "defaultMessage": "Please select at least one language."
+  },
   "user.name": {
     "defaultMessage": "Name"
   },
