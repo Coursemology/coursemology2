@@ -6431,6 +6431,12 @@
   "user.errorSettingPrimaryEmail": {
     "defaultMessage": "将 {email} 设置为主邮箱地址时出错。"
   },
+  "user.locale": {
+    "defaultMessage": "语言"
+  },
+  "user.localeRequired": {
+    "defaultMessage": "请至少选择一个语言。"
+  },
   "user.name": {
     "defaultMessage": "名字"
   },
