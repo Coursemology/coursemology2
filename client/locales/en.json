@@ -3455,9 +3455,6 @@
   "course.experiencePoints.disbursement.ForumPostTable.voteTally": {
     "defaultMessage": "Vote Tally"
   },
-  "course.form.FormShow.AllReadTooltip": {
-    "defaultMessage": "Hooray! All topics in this forum have been read!"
-  },
   "course.form.FormShow.autoSubscribe": {
     "defaultMessage": "Users will be automatically subscribed to a topic in this forum when they create a post in the topic."
   },
@@ -3467,14 +3464,8 @@
   "course.form.FormShow.header": {
     "defaultMessage": "Forum Topics"
   },
-  "course.form.FormShow.markAllAsRead": {
-    "defaultMessage": "Mark all as read"
-  },
   "course.form.FormShow.markAllAsReadSuccess": {
     "defaultMessage": "All topics in this forum have been marked as read."
-  },
-  "course.form.FormShow.markAllAsReadTooltip": {
-    "defaultMessage": "Mark all topics in the current forum as read"
   },
   "course.form.FormShow.newTopic": {
     "defaultMessage": "New Topic"
@@ -3662,17 +3653,11 @@
   "course.forum.ForumTopicTable.votes": {
     "defaultMessage": "Votes"
   },
-  "course.forum.ForumsIndex.AllReadTooltip": {
-    "defaultMessage": "Hooray! All topics have been read!"
-  },
   "course.forum.ForumsIndex.fetchForumsFailure": {
     "defaultMessage": "Failed to retrieve forum data."
   },
   "course.forum.ForumsIndex.header": {
     "defaultMessage": "Forums"
-  },
-  "course.forum.ForumsIndex.markAllAsRead": {
-    "defaultMessage": "Mark all as read"
   },
   "course.forum.ForumsIndex.markAllAsReadFailed": {
     "defaultMessage": "Failed to mark all topics as read. Please try again later."
@@ -3680,17 +3665,8 @@
   "course.forum.ForumsIndex.markAllAsReadSuccess": {
     "defaultMessage": "All topics have been marked as read."
   },
-  "course.forum.ForumsIndex.markAllAsReadTooltip": {
-    "defaultMessage": "Mark all forum topics as read"
-  },
   "course.forum.ForumsIndex.newForum": {
     "defaultMessage": "New Forum"
-  },
-  "course.forum.ForumsIndex.nextUnread": {
-    "defaultMessage": "Next Unread"
-  },
-  "course.forum.ForumsIndex.nextUnreadTooltip": {
-    "defaultMessage": "Jump to next unread topic"
   },
   "course.forum.HideButton.hide": {
     "defaultMessage": "Hide"
@@ -3728,11 +3704,29 @@
   "course.forum.LockButton.unlockedSuccess": {
     "defaultMessage": "The topic \"{title}\" has successfully been unlocked."
   },
+  "course.forum.MarkAllAsReadButton.AllReadTooltip": {
+    "defaultMessage": "Hooray! All topics have been read!"
+  },
+  "course.forum.MarkAllAsReadButton.markAllAsRead": {
+    "defaultMessage": "Mark all as read"
+  },
+  "course.forum.MarkAllAsReadButton.markAllAsReadTooltip": {
+    "defaultMessage": "Mark all forum topics as read"
+  },
   "course.forum.MarkAnswerButton.markAsAnswer": {
     "defaultMessage": "Mark as Answer"
   },
   "course.forum.MarkAnswerButton.unmarkAsAnswer": {
     "defaultMessage": "Unmark as Answer"
+  },
+  "course.forum.NextUnreadButton.AllReadTooltip": {
+    "defaultMessage": "Hooray! All topics have been read!"
+  },
+  "course.forum.NextUnreadButton.nextUnread": {
+    "defaultMessage": "Next Unread"
+  },
+  "course.forum.NextUnreadButton.nextUnreadTooltip": {
+    "defaultMessage": "Jump to next unread topic"
   },
   "course.forum.PostCard.anonymousUser": {
     "defaultMessage": "Anonymous User"

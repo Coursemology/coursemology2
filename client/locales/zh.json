@@ -3362,9 +3362,6 @@
   "course.experiencePoints.disbursement.ForumPostTable.voteTally": {
     "defaultMessage": "投票理货"
   },
-  "course.form.FormShow.AllReadTooltip": {
-    "defaultMessage": "本论坛所有主题均已阅读！"
-  },
   "course.form.FormShow.autoSubscribe": {
     "defaultMessage": "当用户在主题中创建帖子时，将自动订阅该论坛中的主题。"
   },
@@ -3374,14 +3371,8 @@
   "course.form.FormShow.header": {
     "defaultMessage": "论坛主题"
   },
-  "course.form.FormShow.markAllAsRead": {
-    "defaultMessage": "标记为已读"
-  },
   "course.form.FormShow.markAllAsReadSuccess": {
     "defaultMessage": "此论坛中的所有主题均已标记为已读。"
-  },
-  "course.form.FormShow.markAllAsReadTooltip": {
-    "defaultMessage": "将当前论坛中的所有主题标记为已读"
   },
   "course.form.FormShow.newTopic": {
     "defaultMessage": "新话题"
@@ -3569,17 +3560,11 @@
   "course.forum.ForumTopicTable.votes": {
     "defaultMessage": "票数"
   },
-  "course.forum.ForumsIndex.AllReadTooltip": {
-    "defaultMessage": "所有主题均已阅！"
-  },
   "course.forum.ForumsIndex.fetchForumsFailure": {
     "defaultMessage": "无法检索论坛数据。"
   },
   "course.forum.ForumsIndex.header": {
     "defaultMessage": "论坛"
-  },
-  "course.forum.ForumsIndex.markAllAsRead": {
-    "defaultMessage": "标记为已读"
   },
   "course.forum.ForumsIndex.markAllAsReadFailed": {
     "defaultMessage": "无法将所有主题标记为已读。请稍后再试。"
@@ -3587,17 +3572,8 @@
   "course.forum.ForumsIndex.markAllAsReadSuccess": {
     "defaultMessage": "所有主题都已标记为已读。"
   },
-  "course.forum.ForumsIndex.markAllAsReadTooltip": {
-    "defaultMessage": "将所有论坛主题标记为已读"
-  },
   "course.forum.ForumsIndex.newForum": {
     "defaultMessage": "新论坛"
-  },
-  "course.forum.ForumsIndex.nextUnread": {
-    "defaultMessage": "下一条未读"
-  },
-  "course.forum.ForumsIndex.nextUnreadTooltip": {
-    "defaultMessage": "跳转到下一个未读主题"
   },
   "course.forum.HideButton.hide": {
     "defaultMessage": "隐藏"
@@ -3635,11 +3611,29 @@
   "course.forum.LockButton.unlockedSuccess": {
     "defaultMessage": "主题\"{title}\"已成功解锁。"
   },
+  "course.form.MarkAllAsReadButton.AllReadTooltip": {
+    "defaultMessage": "本论坛所有主题均已阅读！"
+  },
+  "course.form.MarkAllAsReadButton.markAllAsRead": {
+    "defaultMessage": "标记为已读"
+  },
+  "course.form.MarkAllAsReadButton.markAllAsReadTooltip": {
+    "defaultMessage": "将当前论坛中的所有主题标记为已读"
+  },
   "course.forum.MarkAnswerButton.markAsAnswer": {
     "defaultMessage": "标记为答案"
   },
   "course.forum.MarkAnswerButton.unmarkAsAnswer": {
     "defaultMessage": "取消标记为答案"
+  },
+  "course.forum.NextUnreadButton.AllReadTooltip": {
+    "defaultMessage": "所有主题均已阅！"
+  },
+  "course.forum.NextUnreadButton.nextUnread": {
+    "defaultMessage": "下一条未读"
+  },
+  "course.forum.NextUnreadButton.nextUnreadTooltip": {
+    "defaultMessage": "跳转到下一个未读主题"
   },
   "course.forum.PostCard.anonymousUser": {
     "defaultMessage": "匿名用户"
