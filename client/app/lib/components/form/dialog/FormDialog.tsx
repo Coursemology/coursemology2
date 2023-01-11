@@ -68,8 +68,7 @@ const FormDialog = (props: Props): JSX.Element => {
         disableEnforceFocus
         maxWidth="md"
         onClose={(_event: object, reason: string): void => {
-          if (reason && reason === 'backdropClick' && formState.isSubmitting)
-            return;
+          if (reason === 'backdropClick' && formState.isSubmitting) return;
           handleCloseDialog();
         }}
         open={open}
