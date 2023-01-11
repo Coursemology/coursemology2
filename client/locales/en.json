@@ -221,6 +221,9 @@
   "course.achievement.AchievementReordering.updateSuccess": {
     "defaultMessage": "Achievements successfully reordered"
   },
+  "course.achievement.AchievementShow.header": {
+    "defaultMessage": "Achievement - {title}"
+  },
   "course.achievement.AchievementShow.studentsWithAchievement": {
     "defaultMessage": "Students with this achievement"
   },
@@ -3410,6 +3413,9 @@
   "course.experiencePoints.disbursement.ForumDisbursementForm.fetchForumPostsFailure": {
     "defaultMessage": "Failed to fetch forum posts."
   },
+  "course.experiencePoints.disbursement.ForumDisbursementForm.postListDialogHeader": {
+    "defaultMessage": "Posts created between {startDate} and {endDate} by"
+  },
   "course.experiencePoints.disbursement.ForumDisbursementForm.reason": {
     "defaultMessage": "Reason For Disbursement"
   },
@@ -4379,6 +4385,9 @@
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.level": {
     "defaultMessage": "Level (Max: {maxLevel})"
   },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.levelFilter": {
+    "defaultMessage": "Level: {name}"
+  },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.name": {
     "defaultMessage": "Name"
   },
@@ -4405,6 +4414,9 @@
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.title": {
     "defaultMessage": "Student Performance"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.tutorFilter": {
+    "defaultMessage": "Tutor: {name}"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatched": {
     "defaultMessage": "Video % Count"
@@ -4501,6 +4513,9 @@
   },
   "course.statistics.StatisticsIndex.students.tableTitle": {
     "defaultMessage": "Student Statistics"
+  },
+  "course.statistics.StatisticsIndex.students.tutorFilter": {
+    "defaultMessage": "Tutor: {name}"
   },
   "course.statistics.StatisticsIndex.students.videoPercentWatched": {
     "defaultMessage": "Average % Watched"
@@ -5533,6 +5548,9 @@
   },
   "course.video.submission.VideoSubmissionEdit.fetchVideoSubmissionFailure": {
     "defaultMessage": "Failed to retrieve video submission."
+  },
+  "course.video.submission.VideoSubmissionEdit.header": {
+    "defaultMessage": "Watching {title}"
   },
   "course.video.submission.VideoSubmissionEdit.watchingVideo": {
     "defaultMessage": "Watching Video"

@@ -29,6 +29,10 @@ import {
 } from '../../selectors';
 
 const translations = defineMessages({
+  postListDialogHeader: {
+    id: 'course.experiencePoints.disbursement.ForumDisbursementForm.postListDialogHeader',
+    defaultMessage: 'Posts created between {startDate} and {endDate} by',
+  },
   fetchForumPostsFailure: {
     id: 'course.experiencePoints.disbursement.ForumDisbursementForm.fetchForumPostsFailure',
     defaultMessage: 'Failed to fetch forum posts.',
@@ -116,7 +120,10 @@ const ForumDisbursement: FC = () => {
               }}
             >
               <div>
-                {'Posts by '}
+                {intl.formatMessage(translations.postListDialogHeader, {
+                  startDate: formatLongDateTime(filters.startTime),
+                  endDate: formatLongDateTime(filters.endTime),
+                })}{' '}
                 <a
                   href={getCourseUserURL(
                     getCourseId(),
@@ -125,9 +132,6 @@ const ForumDisbursement: FC = () => {
                 >
                   {selectedForumPostUser.name}
                 </a>
-                {` made between ${formatLongDateTime(
-                  filters.startTime,
-                )} and ${formatLongDateTime(filters.endTime)}`}
               </div>
               <IconButton onClick={(): void => setSelectedForumPostUser(null)}>
                 <CloseIcon />

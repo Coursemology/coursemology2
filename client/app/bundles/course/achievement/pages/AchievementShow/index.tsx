@@ -21,6 +21,10 @@ import {
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
+  header: {
+    id: 'course.achievement.AchievementShow.header',
+    defaultMessage: 'Achievement - {title}',
+  },
   studentsWithAchievement: {
     id: 'course.achievement.AchievementShow.studentsWithAchievement',
     defaultMessage: 'Students with this achievement',
@@ -71,7 +75,9 @@ const AchievementShow: FC<Props> = (props) => {
     <>
       <PageHeader
         returnLink={`/courses/${courseId}/achievements/`}
-        title={`Achievement - ${achievementMiniEntity.title}`}
+        title={intl.formatMessage(translations.header, {
+          title: achievementMiniEntity.title,
+        })}
         toolbars={headerToolbars}
       />
       {isLoading ? (

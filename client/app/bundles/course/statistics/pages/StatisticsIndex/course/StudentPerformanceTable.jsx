@@ -115,6 +115,14 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.noData',
     defaultMessage: 'No Data',
   },
+  levelFilter: {
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.levelFilter',
+    defaultMessage: 'Level: {name}',
+  },
+  tutorFilter: {
+    id: 'course.statistics.StatisticsIndex.course.StudentPerformanceTable.tutorFilter',
+    defaultMessage: 'Tutor: {name}',
+  },
 });
 
 const styles = {
@@ -303,7 +311,8 @@ const StudentPerformanceTable = ({
           fullWidth: true,
         },
         customFilterListOptions: {
-          render: (name) => `Tutor: ${name}`,
+          render: (name) =>
+            intl.formatMessage(translations.tutorFilter, { name }),
         },
         sort: false,
         customBodyRenderLite: (dataIndex) => {
@@ -342,7 +351,8 @@ const StudentPerformanceTable = ({
           fullWidth: true,
         },
         customFilterListOptions: {
-          render: (name) => `Level: ${name}`,
+          render: (name) =>
+            intl.formatMessage(translations.levelFilter, { name }),
         },
       },
     });

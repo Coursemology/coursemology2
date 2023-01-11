@@ -65,6 +65,10 @@ const translations = defineMessages({
     id: 'course.statistics.StatisticsIndex.students.tableTitle',
     defaultMessage: 'Student Statistics',
   },
+  tutorFilter: {
+    id: 'course.statistics.StatisticsIndex.students.tutorFilter',
+    defaultMessage: 'Tutor: {name}',
+  },
 });
 
 const LinearProgressWithLabel = (props) => (
@@ -142,7 +146,8 @@ const StudentsStatistics = ({ metadata, students, isFetching, isError }) => {
           fullWidth: true,
         },
         customFilterListOptions: {
-          render: (name) => `Tutor: ${name}`,
+          render: (name) =>
+            intl.formatMessage(translations.tutorFilter, { name }),
         },
         sort: true,
         customBodyRenderLite: (dataIndex) => {
