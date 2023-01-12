@@ -98,14 +98,16 @@ const SurveyShow = ({
         </ListSubheader>
 
         <DragDropContext onDragEnd={reorderQuestion}>
-          {sections.map((section, index) => (
-            <Section
-              key={section.id}
-              first={index === 0}
-              last={index === lastIndex}
-              {...{ section, index, survey, disabled }}
-            />
-          ))}
+          <section className="space-y-4">
+            {sections.map((section, index) => (
+              <Section
+                key={section.id}
+                first={index === 0}
+                last={index === lastIndex}
+                {...{ section, index, survey, disabled }}
+              />
+            ))}
+          </section>
         </DragDropContext>
       </>
     );

@@ -4,14 +4,16 @@ import { DragIndicator } from '@mui/icons-material';
 import MoreVert from '@mui/icons-material/MoreVert';
 import {
   Accordion,
+  AccordionDetails,
   AccordionSummary,
-  CardContent,
   Checkbox,
+  Chip,
   IconButton,
   Menu,
   MenuItem,
   Radio,
   TextField,
+  Typography,
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -111,16 +113,13 @@ class QuestionCard extends Component {
   renderAdminMenu() {
     const { adminFunctions } = this.props;
 
-    if (!adminFunctions || adminFunctions.length < 1) {
+    if (!adminFunctions || adminFunctions.length === 0) {
       return null;
     }
 
     return (
-      <>
-        <IconButton
-          className="absolute right-8 top-5"
-          onClick={this.handleClick}
-        >
+      <div>
+        <IconButton onClick={this.handleClick}>
           <MoreVert />
         </IconButton>
         <Menu
@@ -137,7 +136,7 @@ class QuestionCard extends Component {
             </MenuItem>
           ))}
         </Menu>
-      </>
+      </div>
     );
   }
 
@@ -146,27 +145,44 @@ class QuestionCard extends Component {
 
     return (
       <Accordion expanded={expanded}>
-        <AccordionSummary className="p-0">
-          <div className="flex">
+        <AccordionSummary
+          className="p-0"
+          sx={{
+            '.Mui-expanded': {
+              marginBottom: '0px',
+            },
+          }}
+        >
+          <div className="flex grow">
             <DragIndicator
               className={dragging ? 'invisible' : 'visible'}
               color="disabled"
               fontSize="small"
             />
-            <div className="flex-col">
-              <p dangerouslySetInnerHTML={{ __html: question.description }} />
+            <div>
+              <Typography
+                className="whitespace-normal"
+                dangerouslySetInnerHTML={{
+                  __html: question.description,
+                }}
+              />
               {question.required && (
-                <p className="italic">
-                  <FormattedMessage {...formTranslations.starRequired} />
-                </p>
+                <Chip
+                  color="error"
+                  label={
+                    <FormattedMessage {...formTranslations.starRequired} />
+                  }
+                  size="small"
+                  variant="outlined"
+                />
               )}
-              <CardContent className="mt-0 pt-0">
-                {QuestionCard.renderSpecificFields(question)}
-              </CardContent>
             </div>
           </div>
           {this.renderAdminMenu()}
         </AccordionSummary>
+        <AccordionDetails>
+          {QuestionCard.renderSpecificFields(question)}
+        </AccordionDetails>
       </Accordion>
     );
   }
