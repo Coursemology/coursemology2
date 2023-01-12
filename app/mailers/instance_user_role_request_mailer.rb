@@ -11,7 +11,9 @@ class InstanceUserRoleRequestMailer < ApplicationMailer
     @recipient = recipient
     @request = request
 
-    mail(to: @recipient.email, subject: t('.subject'))
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email, subject: t('.subject'))
+    end
   end
 
   # Emails an admin, informing him of the role request.
@@ -27,7 +29,9 @@ class InstanceUserRoleRequestMailer < ApplicationMailer
       @instance = instance_user.instance
     end
 
-    mail(to: instance_user.user.email, subject: t('.subject'))
+    I18n.with_locale(instance_user.user.locale) do
+      mail(to: instance_user.user.email, subject: t('.subject'))
+    end
   end
 
   # Emails an admin, informing him of the role request.
@@ -42,6 +46,8 @@ class InstanceUserRoleRequestMailer < ApplicationMailer
       @message = message
     end
 
-    mail(to: instance_user.user.email, subject: t('.subject'))
+    I18n.with_locale(instance_user.user.locale) do
+      mail(to: instance_user.user.email, subject: t('.subject'))
+    end
   end
 end

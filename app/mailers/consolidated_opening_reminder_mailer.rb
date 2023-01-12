@@ -28,7 +28,9 @@ class ConsolidatedOpeningReminderMailer < ActivityMailer
       # Return if there are no items so a consolidated email with no items doesn't get sent.
       return if @items_hash.empty?
 
-      mail(to: recipient.email, template: view_path)
+      I18n.with_locale(recipient.locale) do
+        mail(to: recipient.email, template: view_path)
+      end
     end
   end
 end

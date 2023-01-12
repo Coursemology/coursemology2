@@ -11,7 +11,9 @@ class Course::Mailer < ApplicationMailer
     @invitation = invitation
     @recipient = invitation
 
-    mail(to: invitation.email, subject: t('.subject', course: @course.title))
+    I18n.with_locale(:en) do
+      mail(to: invitation.email, subject: t('.subject', course: @course.title))
+    end
   end
 
   # Sends a notification email to a user informing his registration in a course.
@@ -23,7 +25,9 @@ class Course::Mailer < ApplicationMailer
     end
     @recipient = user.user
 
-    mail(to: @recipient.email, subject: t('.subject', course: @course.title))
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email, subject: t('.subject', course: @course.title))
+    end
   end
 
   # Sends a notification email to a user informing his registration in a course.
@@ -35,7 +39,9 @@ class Course::Mailer < ApplicationMailer
     end
     @recipient = user
 
-    mail(to: @recipient.email, subject: t('.subject', course: @course.title))
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email, subject: t('.subject', course: @course.title))
+    end
   end
 
   # Sends a notification email to the course managers to approve a given EnrolRequest.
@@ -60,17 +66,13 @@ class Course::Mailer < ApplicationMailer
       managers = @course.managers.phantom.includes(:user)
     end
 
-    email_managers = []
     managers.find_each do |manager|
       next if manager.email_unsubscriptions.where(course_settings_email_id: email_enabled.id).exists?
 
-      email_managers.append(manager.user.email)
+      I18n.with_locale(manager.user.locale) do
+        mail(to: manager.user.email, subject: t('.subject', course: @course.title))
+      end
     end
-
-    return if email_managers.empty?
-
-    mail(to: email_managers,
-         subject: t('.subject', course: @course.title))
   end
 
   # Send a notification email to a user informing the completion of his course duplication.
@@ -85,7 +87,9 @@ class Course::Mailer < ApplicationMailer
     @original_course = original_course
     @new_course = new_course
     @recipient = user
-    mail(to: @recipient.email, subject: t('.subject', new_course: @new_course.title))
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email, subject: t('.subject', new_course: @new_course.title))
+    end
   end
 
   # Send a notification email to a user informing the failure of his course duplication.
@@ -98,7 +102,9 @@ class Course::Mailer < ApplicationMailer
 
     @original_course = original_course
     @recipient = user
-    mail(to: @recipient.email, subject: t('.subject', original_course: @original_course.title))
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email, subject: t('.subject', original_course: @original_course.title))
+    end
   end
 
   # Send a reminder of the assessment closing to a single user
@@ -112,8 +118,10 @@ class Course::Mailer < ApplicationMailer
       @course = assessment.course
     end
 
-    mail(to: @recipient.email,
-         subject: t('.subject', course: @course.title, assessment: @assessment.title))
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email,
+           subject: t('.subject', course: @course.title, assessment: @assessment.title))
+    end
   end
 
   # Send an email to all instructors with the names of users who haven't done
@@ -130,8 +138,10 @@ class Course::Mailer < ApplicationMailer
     @assessment = assessment
     @students = users
 
-    mail(to: @recipient.email,
-         subject: t('.subject', course: @course.title, assessment: @assessment.title))
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email,
+           subject: t('.subject', course: @course.title, assessment: @assessment.title))
+    end
   end
 
   # Send an email to the submission's creator when it has been graded.
@@ -145,8 +155,10 @@ class Course::Mailer < ApplicationMailer
     @assessment = submission.assessment
     @submission = submission
 
-    mail(to: @recipient.email,
-         subject: t('.subject', course: @course.title, assessment: @assessment.title))
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email,
+           subject: t('.subject', course: @course.title, assessment: @assessment.title))
+    end
   end
 
   # Send a reminder of the survey closing to a single user.
@@ -160,8 +172,10 @@ class Course::Mailer < ApplicationMailer
     @recipient = recipient
     @survey = survey
 
-    mail(to: @recipient.email,
-         subject: t('.subject', course: @course.title, survey: @survey.title))
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email,
+           subject: t('.subject', course: @course.title, survey: @survey.title))
+    end
   end
 
   # Send an email to a course instructor with the names of users who have not completed
@@ -178,7 +192,9 @@ class Course::Mailer < ApplicationMailer
     @survey = survey
     @student_list = student_list
 
-    mail(to: @recipient.email,
-         subject: t('.subject', course: @course.title, survey: @survey.title))
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email,
+           subject: t('.subject', course: @course.title, survey: @survey.title))
+    end
   end
 end
