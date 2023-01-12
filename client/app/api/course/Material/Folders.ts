@@ -5,6 +5,9 @@ import pollJob from 'lib/helpers/job-helpers';
 
 import BaseCourseAPI from '../Base';
 
+const MIN_DELAY_TIME = 500;
+const MAX_DELAY_TIME = 4000;
+
 export default class FoldersAPI extends BaseCourseAPI {
   _getUrlPrefix(): string {
     return `/courses/${this.getCourseId()}/materials/folders`;
@@ -102,6 +105,8 @@ export default class FoldersAPI extends BaseCourseAPI {
       .then((response) => {
         pollJob(
           response.data.redirect_url,
+          MIN_DELAY_TIME,
+          MAX_DELAY_TIME,
           (data) => {
             onSuccess();
             window.open(data.redirect_url);
