@@ -39,7 +39,7 @@ const NextUnreadButton: FC<Props> = ({ nextUnreadTopicUrl, disabled }) => {
     >
       <span>
         <Button
-          className="next-unread-button mr-2"
+          className="next-unread-button mr-2 text-center"
           color="inherit"
           component={Link}
           disabled={!nextUnreadTopicUrl || disabled}
