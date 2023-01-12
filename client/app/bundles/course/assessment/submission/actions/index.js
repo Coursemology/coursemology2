@@ -6,6 +6,9 @@ import translations from '../translations';
 
 const JOB_STAGGER_DELAY = 400;
 
+const MIN_DELAY_TIME = 500;
+const MAX_DELAY_TIME = 4000;
+
 export function setNotification(message, errors) {
   return {
     type: actionTypes.SET_NOTIFICATION,
@@ -90,6 +93,8 @@ export function fetchSubmission(id) {
             setTimeout(() => {
               pollJob(
                 answer.autograding.path,
+                MIN_DELAY_TIME,
+                MAX_DELAY_TIME,
                 () =>
                   dispatch(
                     getEvaluationResult(
@@ -126,6 +131,8 @@ export function autogradeSubmission(id) {
       .then((data) => {
         pollJob(
           data.redirect_url,
+          MIN_DELAY_TIME,
+          MAX_DELAY_TIME,
           () => {
             dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_SUCCESS });
             fetchSubmission(id)(dispatch);
@@ -224,6 +231,8 @@ export function reevaluateAnswer(submissionId, answerId, questionId) {
         } else if (data.redirect_url) {
           pollJob(
             data.redirect_url,
+            MIN_DELAY_TIME,
+            MAX_DELAY_TIME,
             () =>
               dispatch(getEvaluationResult(submissionId, answerId, questionId)),
             (errorData) => {
@@ -267,6 +276,8 @@ export function submitAnswer(submissionId, answerId, rawAnswer, setValue) {
         } else if (data.redirect_url) {
           pollJob(
             data.redirect_url,
+            MIN_DELAY_TIME,
+            MAX_DELAY_TIME,
             () =>
               dispatch(
                 getEvaluationResult(submissionId, answer.id, questionId),

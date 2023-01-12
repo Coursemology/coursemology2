@@ -8,6 +8,9 @@ import translations from '../translations';
 
 import { setNotification } from './index';
 
+const MIN_DELAY_TIME = 500;
+const MAX_DELAY_TIME = 4000;
+
 export function showSurveyForm(formParams) {
   return { type: actionTypes.SURVEY_FORM_SHOW, formParams };
 }
@@ -201,6 +204,8 @@ export function downloadSurvey() {
       .then((data) => {
         pollJob(
           data.redirect_url,
+          MIN_DELAY_TIME,
+          MAX_DELAY_TIME,
           handleSuccess,
           handleFailure,
         );
