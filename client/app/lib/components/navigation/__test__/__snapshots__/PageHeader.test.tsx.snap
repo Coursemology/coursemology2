@@ -4,18 +4,17 @@ exports[`<PageHeader /> when there is a return link matches the snapshot 1`] = `
 <body>
   <div>
     <div
-      style="flex-grow: 1;"
+      class="grow"
     >
       <header
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed -mx-6 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-1hc7nu0-MuiPaper-root-MuiAppBar-root"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed static z-0 -mx-6 mb-0 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-1hc7nu0-MuiPaper-root-MuiAppBar-root"
         data-testid="TitleBar"
-        style="z-index: 0; position: static; margin-bottom: 0px;"
       >
         <div
           class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-hyum1k-MuiToolbar-root"
         >
           <div
-            style="margin-left: -16px; margin-right: 8px;"
+            class="-ml-4 mr-2"
           >
             <button
               class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
@@ -41,10 +40,18 @@ exports[`<PageHeader /> when there is a return link matches the snapshot 1`] = `
             </button>
           </div>
           <h5
-            class="MuiTypography-root MuiTypography-h5 css-mlfmu-MuiTypography-root"
-            style="flex-grow: 1;"
+            class="MuiTypography-root MuiTypography-h5 grow css-mlfmu-MuiTypography-root"
           >
-            Test Title 2
+            <label
+              class="m-0 align-middle font-normal"
+              title="Test Title 2"
+            >
+              <div
+                class="line-clamp-2"
+              >
+                Test Title 2
+              </div>
+            </label>
           </h5>
         </div>
       </header>
@@ -57,24 +64,31 @@ exports[`<PageHeader /> when there is no return link matches the snapshot 1`] = 
 <body>
   <div>
     <div
-      style="flex-grow: 1;"
+      class="grow"
     >
       <header
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed -mx-6 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-1hc7nu0-MuiPaper-root-MuiAppBar-root"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed static z-0 -mx-6 mb-0 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-1hc7nu0-MuiPaper-root-MuiAppBar-root"
         data-testid="TitleBar"
-        style="z-index: 0; position: static; margin-bottom: 0px;"
       >
         <div
           class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-hyum1k-MuiToolbar-root"
         >
           <div
-            style="margin-left: -16px; margin-right: 8px;"
+            class="-ml-4 mr-2"
           />
           <h5
-            class="MuiTypography-root MuiTypography-h5 css-mlfmu-MuiTypography-root"
-            style="flex-grow: 1;"
+            class="MuiTypography-root MuiTypography-h5 grow css-mlfmu-MuiTypography-root"
           >
-            Test Title 1
+            <label
+              class="m-0 align-middle font-normal"
+              title="Test Title 1"
+            >
+              <div
+                class="line-clamp-2"
+              >
+                Test Title 1
+              </div>
+            </label>
           </h5>
         </div>
       </header>
