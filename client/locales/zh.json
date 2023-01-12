@@ -3611,14 +3611,14 @@
   "course.forum.LockButton.unlockedSuccess": {
     "defaultMessage": "主题\"{title}\"已成功解锁。"
   },
-  "course.form.MarkAllAsReadButton.AllReadTooltip": {
+  "course.forum.MarkAllAsReadButton.AllReadTooltip": {
     "defaultMessage": "本论坛所有主题均已阅读！"
   },
-  "course.form.MarkAllAsReadButton.markAllAsRead": {
+  "course.forum.MarkAllAsReadButton.markAllAsRead": {
     "defaultMessage": "标记为已读"
   },
-  "course.form.MarkAllAsReadButton.markAllAsReadTooltip": {
-    "defaultMessage": "将当前论坛中的所有主题标记为已读"
+  "course.forum.MarkAllAsReadButton.markAllAsReadTooltip": {
+    "defaultMessage": "将当前页面中的所有线程标记为已读"
   },
   "course.forum.MarkAnswerButton.markAsAnswer": {
     "defaultMessage": "标记为答案"
@@ -5659,6 +5659,9 @@
   },
   "lib.translations.form.buttons.delete": {
     "defaultMessage": "删除"
+  },
+  "lib.translations.form.buttons.edit": {
+    "defaultMessage": "编辑"
   },
   "lib.translations.form.buttons.discard": {
     "defaultMessage": "丢弃"

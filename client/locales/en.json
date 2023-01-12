@@ -3711,7 +3711,7 @@
     "defaultMessage": "Mark all as read"
   },
   "course.forum.MarkAllAsReadButton.markAllAsReadTooltip": {
-    "defaultMessage": "Mark all forum topics as read"
+    "defaultMessage": "Mark all forum posts on the current page as read"
   },
   "course.forum.MarkAnswerButton.markAsAnswer": {
     "defaultMessage": "Mark as Answer"
@@ -5773,6 +5773,9 @@
   },
   "lib.translations.form.buttons.done": {
     "defaultMessage": "Done"
+  },
+  "lib.translations.form.buttons.edit": {
+    "defaultMessage": "Edit"
   },
   "lib.translations.form.buttons.ok": {
     "defaultMessage": "OK"
