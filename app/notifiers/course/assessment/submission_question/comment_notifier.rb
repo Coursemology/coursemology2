@@ -13,6 +13,8 @@ class Course::Assessment::SubmissionQuestion::CommentNotifier < Notifier::Base
 
     post.topic.subscriptions.includes(:user).each do |subscription|
       course_user = category.course.course_users.find_by(user: subscription.user)
+      next unless course_user
+
       is_disabled_as_phantom = course_user.phantom? && !email_enabled.phantom
       is_disabled_as_regular = !course_user.phantom? && !email_enabled.regular
       is_disabled_delayed = course_user.student? && post.delayed?
