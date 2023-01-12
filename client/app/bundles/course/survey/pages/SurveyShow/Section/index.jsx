@@ -20,22 +20,6 @@ import MoveUpButton from './MoveUpButton';
 import NewQuestionButton from './NewQuestionButton';
 import Question from './Question';
 
-// const styles = {
-//   card: {
-//     marginBottom: 15,
-//   },
-//   expandIcon: {
-//     float: 'right',
-//   },
-//   expandIconRotated: {
-//     float: 'right',
-//     transform: 'rotate(180deg)',
-//   },
-//   subtitle: {
-//     paddingRight: 64,
-//   },
-// };
-
 const translations = defineMessages({
   noQuestions: {
     id: 'course.survey.Section.noQuestions',
@@ -55,21 +39,19 @@ class Section extends Component {
     const { section, first, last, disabled, index: sectionIndex } = this.props;
     return (
       <CardActions>
-        {section.canCreateQuestion ? (
+        {section.canCreateQuestion && (
           <NewQuestionButton sectionId={section.id} {...{ disabled }} />
-        ) : null}
-        {section.canUpdate ? (
-          <EditSectionButton {...{ section, disabled }} />
-        ) : null}
-        {section.canDelete ? (
+        )}
+        {section.canUpdate && <EditSectionButton {...{ section, disabled }} />}
+        {section.canDelete && (
           <DeleteSectionButton sectionId={section.id} {...{ disabled }} />
-        ) : null}
-        {section.canUpdate && !first ? (
+        )}
+        {section.canUpdate && !first && (
           <MoveUpButton {...{ sectionIndex, disabled }} />
-        ) : null}
-        {section.canUpdate && !last ? (
+        )}
+        {section.canUpdate && !last && (
           <MoveDownButton {...{ sectionIndex, disabled }} />
-        ) : null}
+        )}
       </CardActions>
     );
   }
@@ -77,22 +59,17 @@ class Section extends Component {
   render() {
     const { section, index: sectionIndex } = this.props;
     return (
-      <Card className="mb-4">
+      <Card>
         <CardHeader
           subheader={
             <div dangerouslySetInnerHTML={{ __html: section.description }} />
           }
-          subheaderTypographyProps={{ className: 'pr-16' }}
           title={
-            <>
+            <div className="flex justify-between">
               {section.title}
               {section.questions.length > 0 && (
                 <ExpandMoreIcon
-                  className={
-                    this.state.expanded
-                      ? 'float-right'
-                      : 'float-right rotate-180'
-                  }
+                  className={!this.state.expanded && 'rotate-180'}
                   onClick={() =>
                     this.setState((prevState) => ({
                       expanded: !prevState.expanded,
@@ -100,17 +77,17 @@ class Section extends Component {
                   }
                 />
               )}
-            </>
+            </div>
           }
         />
-        {section.questions.length > 1 ? this.renderActions() : null}
+        {section.questions.length > 1 && this.renderActions()}
 
         <CardContent>
-          {section.questions.length < 1 ? (
+          {section.questions.length === 0 && (
             <ListSubheader disableSticky>
               <FormattedMessage {...translations.noQuestions} />
             </ListSubheader>
-          ) : null}
+          )}
 
           <Droppable droppableId={`section-${sectionIndex}`}>
             {(provided) => (
