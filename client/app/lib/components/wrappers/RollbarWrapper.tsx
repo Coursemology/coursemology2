@@ -13,8 +13,27 @@ const RollBarWrapper: FC<Props> = (props) => {
       : {
           accessToken: process.env.ROLLBAR_POST_CLIENT_ITEM_KEY,
           environment: 'production',
-          captureUncaught: true,
+          captureUncaught: false,
           captureUnhandledRejections: true,
+          // checkIgnore(
+          //   _isUncaught: unknown,
+          //   _args: unknown,
+          //   payload: unknown,
+          // ): boolean {
+          //   // Code here to determine whether or not to send the payload
+          //   // to the Rollbar API
+          //   // return true to ignore the payload
+          //   return true
+          // },
+          ignoredMessages: [
+            'ResizeObserver loop limit exceeded',
+            'Request failed with status code.*',
+            'Uncaught CKEditorError.*',
+            "Cannot read properties of null (reading 'CodeMirror')",
+            'Uncaught TypeError: Cannot redefine property: googletag',
+            'Network Error',
+            'Request aborted',
+          ],
           payload: {
             client: {
               javascript: {
