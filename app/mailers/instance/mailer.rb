@@ -11,7 +11,9 @@ class Instance::Mailer < ApplicationMailer
     @invitation = invitation
     @recipient = invitation
 
-    mail(to: invitation.email, subject: t('.subject', instance: @instance.name, role: invitation.role))
+    I18n.with_locale(:en) do
+      mail(to: invitation.email, subject: t('.subject', instance: @instance.name, role: invitation.role))
+    end
   end
 
   def user_added_email(user)
@@ -20,6 +22,8 @@ class Instance::Mailer < ApplicationMailer
     end
     @recipient = user.user
 
-    mail(to: @recipient.email, subject: t('.subject', instance: @instance.name))
+    I18n.with_locale(@recipient.locale) do
+      mail(to: @recipient.email, subject: t('.subject', instance: @instance.name))
+    end
   end
 end
