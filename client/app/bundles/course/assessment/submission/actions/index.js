@@ -4,7 +4,6 @@ import pollJob from 'lib/helpers/job-helpers';
 import actionTypes from '../constants';
 import translations from '../translations';
 
-const JOB_POLL_DELAY = 500;
 const JOB_STAGGER_DELAY = 400;
 
 export function setNotification(message, errors) {
@@ -91,7 +90,6 @@ export function fetchSubmission(id) {
             setTimeout(() => {
               pollJob(
                 answer.autograding.path,
-                JOB_POLL_DELAY,
                 () =>
                   dispatch(
                     getEvaluationResult(
@@ -128,7 +126,6 @@ export function autogradeSubmission(id) {
       .then((data) => {
         pollJob(
           data.redirect_url,
-          JOB_POLL_DELAY,
           () => {
             dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_SUCCESS });
             fetchSubmission(id)(dispatch);
@@ -227,7 +224,6 @@ export function reevaluateAnswer(submissionId, answerId, questionId) {
         } else if (data.redirect_url) {
           pollJob(
             data.redirect_url,
-            JOB_POLL_DELAY,
             () =>
               dispatch(getEvaluationResult(submissionId, answerId, questionId)),
             (errorData) => {
@@ -271,7 +267,6 @@ export function submitAnswer(submissionId, answerId, rawAnswer, setValue) {
         } else if (data.redirect_url) {
           pollJob(
             data.redirect_url,
-            JOB_POLL_DELAY,
             () =>
               dispatch(
                 getEvaluationResult(submissionId, answer.id, questionId),

@@ -97,13 +97,11 @@ export default class FoldersAPI extends BaseCourseAPI {
     onSuccess: () => void,
     onFailure: () => void,
   ): Promise<void> {
-    const REQUEST_INTERVAL = 1000;
     return this.getClient()
       .get(`${this._getUrlPrefix()}/${currFolderId}/download`)
       .then((response) => {
         pollJob(
           response.data.redirect_url,
-          REQUEST_INTERVAL,
           (data) => {
             onSuccess();
             window.open(data.redirect_url);
