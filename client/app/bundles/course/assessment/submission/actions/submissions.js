@@ -6,6 +6,9 @@ import translations from '../translations';
 
 import { setNotification } from './index';
 
+const MIN_DELAY_TIME = 500;
+const MAX_DELAY_TIME = 4000;
+
 export function fetchSubmissions() {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SUBMISSIONS_REQUEST });
@@ -46,6 +49,8 @@ export function publishSubmissions(type) {
           dispatch(setNotification(translations.publishJobPending));
           pollJob(
             data.redirect_url,
+            MIN_DELAY_TIME,
+            MAX_DELAY_TIME,
             handleSuccess,
             handleFailure,
           );
@@ -80,6 +85,8 @@ export function forceSubmitSubmissions(type) {
         if (data.redirect_url) {
           pollJob(
             data.redirect_url,
+            MIN_DELAY_TIME,
+            MAX_DELAY_TIME,
             handleSuccess,
             handleFailure,
           );
@@ -149,6 +156,8 @@ export function downloadSubmissions(type, downloadFormat) {
         dispatch(setNotification(translations.downloadSubmissionsJobPending));
         pollJob(
           data.redirect_url,
+          MIN_DELAY_TIME,
+          MAX_DELAY_TIME,
           handleSuccess,
           handleFailure,
         );
@@ -185,6 +194,8 @@ export function downloadStatistics(type) {
         dispatch(setNotification(translations.downloadStatisticsJobPending));
         pollJob(
           data.redirect_url,
+          MIN_DELAY_TIME,
+          MAX_DELAY_TIME,
           handleSuccess,
           handleFailure,
         );
@@ -240,6 +251,8 @@ export function unsubmitAllSubmissions(type) {
         if (data.redirect_url) {
           pollJob(
             data.redirect_url,
+            MIN_DELAY_TIME,
+            MAX_DELAY_TIME,
             handleSuccess,
             handleFailure,
           );
@@ -296,6 +309,8 @@ export function deleteAllSubmissions(type) {
         if (data.redirect_url) {
           pollJob(
             data.redirect_url,
+            MIN_DELAY_TIME,
+            MAX_DELAY_TIME,
             handleSuccess,
             handleFailure,
           );
