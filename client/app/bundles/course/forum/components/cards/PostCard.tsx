@@ -188,6 +188,7 @@ const PostCard: FC<Props> = (props) => {
   const { postId, level } = props;
   const [isEditing, setIsEditing] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
+  const [isSubmittingReply, setIsSubmittingReply] = useState(false);
   const [editValue, setEditValue] = useState('');
   const [replyValue, setReplyValue] = useState({
     text: '',
@@ -246,7 +247,9 @@ const PostCard: FC<Props> = (props) => {
   };
 
   const handleReply = (): void => {
+    setIsSubmittingReply(true);
     if (replyValue.text.trim() === '') {
+      setIsSubmittingReply(false);
       toast.error(t(translations.emptyPost));
       return;
     }
@@ -261,6 +264,7 @@ const PostCard: FC<Props> = (props) => {
       .then((response) => {
         toast.success(t(translations.replySuccess));
         setIsReplying(false);
+        setIsSubmittingReply(false);
         setReplyValue({
           text: '',
           isAnonymous: false,
@@ -272,6 +276,7 @@ const PostCard: FC<Props> = (props) => {
         });
       })
       .catch((error) => {
+        setIsSubmittingReply(false);
         const errorMessage = error.response?.data?.errors
           ? error.response.data.errors
           : '';
@@ -446,6 +451,7 @@ const PostCard: FC<Props> = (props) => {
                 <Button
                   className="cancel-reply-button"
                   color="secondary"
+                  disabled={isSubmittingReply}
                   id={`post_${postId}`}
                   onClick={(): void => setIsReplying(false)}
                 >
@@ -454,6 +460,7 @@ const PostCard: FC<Props> = (props) => {
                 <Button
                   className="reply-button"
                   color="primary"
+                  disabled={isSubmittingReply}
                   id={`post_${post.id}`}
                   onClick={handleReply}
                 >
