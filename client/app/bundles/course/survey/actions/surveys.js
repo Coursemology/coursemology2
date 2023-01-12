@@ -8,8 +8,6 @@ import translations from '../translations';
 
 import { setNotification } from './index';
 
-const DOWNLOAD_JOB_POLL_INTERVAL = 2000;
-
 export function showSurveyForm(formParams) {
   return { type: actionTypes.SURVEY_FORM_SHOW, formParams };
 }
@@ -203,7 +201,6 @@ export function downloadSurvey() {
       .then((data) => {
         pollJob(
           data.redirect_url,
-          DOWNLOAD_JOB_POLL_INTERVAL,
           handleSuccess,
           handleFailure,
         );

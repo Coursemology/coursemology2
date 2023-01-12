@@ -6,13 +6,6 @@ import translations from '../translations';
 
 import { setNotification } from './index';
 
-const DOWNLOAD_JOB_POLL_INTERVAL = 2000;
-const PUBLISH_JOB_POLL_INTERVAL = 1000;
-const FORCE_SUBMIT_JOB_POLL_INTERVAL = 1000;
-const UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
-const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
-const DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL = 2000;
-
 export function fetchSubmissions() {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SUBMISSIONS_REQUEST });
@@ -53,7 +46,6 @@ export function publishSubmissions(type) {
           dispatch(setNotification(translations.publishJobPending));
           pollJob(
             data.redirect_url,
-            PUBLISH_JOB_POLL_INTERVAL,
             handleSuccess,
             handleFailure,
           );
@@ -88,7 +80,6 @@ export function forceSubmitSubmissions(type) {
         if (data.redirect_url) {
           pollJob(
             data.redirect_url,
-            FORCE_SUBMIT_JOB_POLL_INTERVAL,
             handleSuccess,
             handleFailure,
           );
@@ -158,7 +149,6 @@ export function downloadSubmissions(type, downloadFormat) {
         dispatch(setNotification(translations.downloadSubmissionsJobPending));
         pollJob(
           data.redirect_url,
-          DOWNLOAD_JOB_POLL_INTERVAL,
           handleSuccess,
           handleFailure,
         );
@@ -195,7 +185,6 @@ export function downloadStatistics(type) {
         dispatch(setNotification(translations.downloadStatisticsJobPending));
         pollJob(
           data.redirect_url,
-          DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL,
           handleSuccess,
           handleFailure,
         );
@@ -251,7 +240,6 @@ export function unsubmitAllSubmissions(type) {
         if (data.redirect_url) {
           pollJob(
             data.redirect_url,
-            UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL,
             handleSuccess,
             handleFailure,
           );
@@ -308,7 +296,6 @@ export function deleteAllSubmissions(type) {
         if (data.redirect_url) {
           pollJob(
             data.redirect_url,
-            DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL,
             handleSuccess,
             handleFailure,
           );
