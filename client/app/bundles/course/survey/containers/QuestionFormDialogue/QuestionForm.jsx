@@ -12,6 +12,7 @@ import { questionTypes } from 'course/survey/constants';
 import translations from 'course/survey/translations';
 import ErrorText from 'lib/components/core/ErrorText';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
+import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
@@ -431,7 +432,7 @@ const QuestionForm = (props) => {
         control={control}
         name="description"
         render={({ field, fieldState }) => (
-          <FormTextField
+          <FormRichTextField
             disabled={disabled}
             field={field}
             fieldState={fieldState}
