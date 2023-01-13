@@ -11,7 +11,7 @@ import { grey } from '@mui/material/colors';
 
 import GroupCard from '../../components/GroupCard';
 import { groupShape } from '../../propTypes';
-import { sortByGroupRole, sortByName } from '../../utils/sort';
+import { sortByGroupRole, sortByName, sortByPhantom } from '../../utils/sort';
 
 const translations = defineMessages({
   subtitle: {
@@ -56,7 +56,7 @@ const styles = {
 
 const GroupTableCard = ({ group }) => {
   const members = [...group.members];
-  members.sort(sortByName).sort(sortByGroupRole);
+  members.sort(sortByName).sort(sortByPhantom).sort(sortByGroupRole);
 
   return (
     <GroupCard
@@ -88,8 +88,8 @@ const GroupTableCard = ({ group }) => {
               <TableCell style={styles.rowHeight}>{index + 1}</TableCell>
               <TableCell style={styles.rowHeight}>
                 <div className='flex grow'>
-                  {m.isPhantom? <FaceRetouchingOffIcon style={{ fontSize: "20px" }}/> : ""}
-                  {m.name}
+                  {m.isPhantom? <FaceRetouchingOffIcon style={{ size: "15px", padding: 2 }}/> : ""}
+                  {m.groupRole === "manager" ? <b>{m.name}</b> : m.name}
                 </div>
               </TableCell>
               <TableCell style={styles.rowHeight}>
