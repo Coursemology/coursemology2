@@ -44,17 +44,13 @@ export default function (state = {}, action) {
     case actions.REEVALUATE_FAILURE:
     case actions.AUTOGRADE_FAILURE: {
       const { questionId, payload } = action;
-      const jobError = payload && payload.status === 'errored';
+      const jobError = payload?.status === 'errored';
       return {
         ...state,
         [questionId]: {
           ...state[questionId],
           isAutograding: false,
           jobError: !!jobError,
-          jobErrorMessage:
-            payload && payload.detailed_message
-              ? payload.detailed_message
-              : null,
         },
       };
     }
