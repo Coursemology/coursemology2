@@ -4,9 +4,6 @@
 #
 version: 2.1
 
-orbs:
-  browser-tools: circleci/browser-tools@1.2.3
-
 commands:
   checkout_with_submodules:
     steps:
@@ -130,9 +127,6 @@ jobs:
     steps:
       - checkout_with_submodules
 
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-
       - restore_ruby_cache
       - restore_node_cache
 
@@ -141,13 +135,14 @@ jobs:
       # Install ghostscript so `identify` in ImageMagick works with PDF files.
       # Remove pdf security policy for imagemagick (ubuntu 20.04)
       # https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion
-      - run:
-          name: install ghostscript and imagemagick
-          command: |
-            sudo apt update
-            sudo apt install imagemagick
-            sudo apt install ghostscript
-            sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
+      # Installations below are currently disabled as CircleCI would fail to install occasionally
+      # - run:
+      #     name: install ghostscript and imagemagick
+      #     command: |
+      #       sudo apt update
+      #       sudo apt install imagemagick
+      #       sudo apt install ghostscript
+      #       sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
       - setup_remote_docker:
           version: 20.10.18
