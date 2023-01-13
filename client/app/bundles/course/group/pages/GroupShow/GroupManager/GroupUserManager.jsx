@@ -136,6 +136,21 @@ const getAvailableUsers = (
   );
 };
 
+const getAvailableUserInOtherGroups = (
+  courseUsers,
+  groups,
+  group,
+  availableSearch,
+) => {
+  const otherGroups = groups.filter((x) => x !== group)
+  const allOtherGroupMemberIds = new Set(otherGroups.flatMap((g) => g.members.map((m) => m.id)));
+
+  return filterByName(
+    availableSearch,
+    courseUsers.filter((cu) => allOtherGroupMemberIds.has(cu.id)),
+  );
+};
+
 // Actually, the group can also be read from Redux. But for now, we'll get it from the parent.
 const GroupUserManager = ({
   dispatch,
@@ -162,6 +177,18 @@ const GroupUserManager = ({
       ),
     [courseUsers, groups, group, hideInGroup, availableSearch],
   );
+
+  const availableUsersInOtherGroups = useMemo(
+    () =>
+      getAvailableUserInOtherGroups(
+        courseUsers,
+        groups,
+        group,
+        availableSearch,
+      ),
+    [courseUsers, groups, group, availableSearch],
+  );
+
   const groupMembers = useMemo(
     () => filterByName(selectedSearch, group.members),
     [selectedSearch, group.members],
@@ -183,6 +210,9 @@ const GroupUserManager = ({
     () => groupMembers.filter((m) => m.role !== 'student'),
     [groupMembers],
   );
+
+  console.log(selectedStudents);
+  console.log(availableUsersInOtherGroups);
 
   const onFormSubmit = useCallback(
     (data, setError) =>
@@ -376,6 +406,7 @@ const GroupUserManager = ({
             />
             <GroupUserManagerList
               colourMap={colours}
+              memberOtherGroups={availableUsersInOtherGroups}
               onCheck={onCheck}
               staff={availableStaff}
               students={availableStudents}
@@ -396,6 +427,7 @@ const GroupUserManager = ({
             <GroupUserManagerList
               colourMap={colours}
               isChecked
+              memberOtherGroups={availableUsersInOtherGroups}
               onChangeDropdown={onChangeRole}
               onCheck={onUncheck}
               showDropdown

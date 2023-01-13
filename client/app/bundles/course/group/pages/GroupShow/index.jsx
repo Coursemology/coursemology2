@@ -101,12 +101,14 @@ const Category = ({
             }
           />
           {groups.map((group) => (
-            <GroupTableCard 
-              key={group.id} 
+            <GroupTableCard
+              key={group.id}
               canManageGroups={canManageGroups}
-              group={group} 
-              onManageGroups={() => 
-                dispatch({ type: actionTypes.MANAGE_GROUPS_START }).then(handleGroupSelect(group.id))
+              group={group}
+              onManageGroups={() =>
+                dispatch({ type: actionTypes.MANAGE_GROUPS_START }).then(
+                  handleGroupSelect(group.id),
+                )
               }
             />
           ))}
