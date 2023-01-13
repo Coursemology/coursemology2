@@ -163,6 +163,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
       # The normal case when the user checks his answer with the autograder.
       context 'when a programming answer is re-evaluated' do
+        render_views
         let(:answer) { submission.answers.third } # programming answer
         subject do
           post :reevaluate_answer, params: {
@@ -177,7 +178,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
           is_expected.to have_http_status(:ok)
           json_result = JSON.parse(response.body)
-          expect(json_result['redirect_url']).not_to be(nil)
+          expect(json_result['jobUrl']).not_to be(nil)
         end
       end
     end
@@ -316,13 +317,14 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when there is a graded submission' do
+          render_views
           it 'publishes the submission' do
             subject
             wait_for_job
 
             expect(graded_submission.reload.published?).to be(true)
             json_result = JSON.parse(response.body)
-            expect(json_result['redirect_url']).not_to be(nil)
+            expect(json_result['jobUrl']).not_to be(nil)
           end
         end
       end
@@ -342,6 +344,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when there are empty and attempting submissions' do
+          render_views
           let(:course_users) { 'students_w_phantom' }
 
           it 'publishes the submissions' do
@@ -355,11 +358,12 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
             expect(attempting_submission.reload.points_awarded).to eq(0)
 
             json_result = JSON.parse(response.body)
-            expect(json_result['redirect_url']).not_to be(nil)
+            expect(json_result['jobUrl']).not_to be(nil)
           end
         end
 
         context 'when the assessment has delayed grade publication setting' do
+          render_views
           let(:assessment_traits) { [:with_all_question_types, :delay_grade_publication] }
           let(:course_users) { 'students_w_phantom' }
 
@@ -375,11 +379,12 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
             expect(attempting_submission.reload.points_awarded).to eq(nil)
 
             json_result = JSON.parse(response.body)
-            expect(json_result['redirect_url']).not_to be(nil)
+            expect(json_result['jobUrl']).not_to be(nil)
           end
         end
 
         context 'when the assessment is autograded' do
+          render_views
           let(:assessment_traits) { [:with_mrq_question, :autograded] }
           let(:course_users) { 'students_w_phantom' }
 
@@ -394,7 +399,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
             expect(attempting_submission.reload.points_awarded).to eq(0)
 
             json_result = JSON.parse(response.body)
-            expect(json_result['redirect_url']).not_to be(nil)
+            expect(json_result['jobUrl']).not_to be(nil)
           end
         end
       end
@@ -415,13 +420,14 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when there is a submitted submission' do
+          render_views
           it 'unsubmits the submission' do
             subject
             wait_for_job
 
             expect(submitted_submission.reload.attempting?).to be(true)
             json_result = JSON.parse(response.body)
-            expect(json_result['redirect_url']).not_to be(nil)
+            expect(json_result['jobUrl']).not_to be(nil)
           end
         end
       end
@@ -443,6 +449,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when there are some submissions' do
+          render_views
           let(:course_users) { 'students' }
           it 'deletes all the submission' do
             subject
@@ -450,7 +457,7 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
 
             expect(assessment.submissions.empty?).to be(true)
             json_result = JSON.parse(response.body)
-            expect(json_result['redirect_url']).not_to be(nil)
+            expect(json_result['jobUrl']).not_to be(nil)
           end
         end
       end
@@ -472,12 +479,14 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when the download is requested in zip format' do
+          render_views
+
           it 'downloads the submissions in zip format' do
             subject
             wait_for_job
 
             json_result = JSON.parse(response.body)
-            job_guid = json_result['redirect_url'][(json_result['redirect_url'].rindex('/') + 1)..]
+            job_guid = json_result['jobUrl'][(json_result['jobUrl'].rindex('/') + 1)..]
             job = TrackableJob::Job.find(job_guid)
 
             expect(job_guid).not_to be(nil)
@@ -488,13 +497,15 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when the download is requested in csv format' do
+          render_views
           let!(:download_format) { 'csv' }
+
           it 'downloads the submission in csv format' do
             subject
             wait_for_job
 
             json_result = JSON.parse(response.body)
-            job_guid = json_result['redirect_url'][(json_result['redirect_url'].rindex('/') + 1)..]
+            job_guid = json_result['jobUrl'][(json_result['jobUrl'].rindex('/') + 1)..]
             job = TrackableJob::Job.find(job_guid)
 
             expect(job_guid).not_to be(nil)
@@ -521,12 +532,14 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         context 'when there are submissions' do
+          render_views
+
           it 'downloads the statistics' do
             subject
             wait_for_job
 
             json_result = JSON.parse(response.body)
-            expect(json_result['redirect_url']).not_to be(nil)
+            expect(json_result['jobUrl']).not_to be(nil)
           end
         end
       end

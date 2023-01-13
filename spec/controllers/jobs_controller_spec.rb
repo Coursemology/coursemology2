@@ -5,13 +5,13 @@ RSpec.describe JobsController do
   let(:job) { create(:trackable_job, *job_traits) }
   let(:job_traits) { nil }
   let(:format) { :html }
+  let(:redirect_path) { '/testing_path' }
   before do
     controller.instance_variable_set(:@job, job)
   end
 
   describe '#show' do
     def self.expect_to_redirect_to_job_redirect_to
-      let(:redirect_path) { '/' }
       let(:job_traits) do
         super_traits = *super()
         super_traits + [{ redirect_to: redirect_path }]
@@ -23,12 +23,40 @@ RSpec.describe JobsController do
 
     context 'when the job is in progress' do
       it { is_expected.to respond_with(:accepted) }
+
+      context 'when the requested format is json' do
+        render_views
+        let(:format) { :json }
+        let(:json_response) { JSON.parse(response.body) }
+
+        it 'responses with an errored job status' do
+          expect(response.status).to be(200)
+          expect(json_response['status']).to eq('submitted')
+          expect(json_response['jobUrl']).to eq(job_path(job))
+        end
+      end
     end
 
     context 'when the job has been completed' do
-      let(:job_traits) { :completed }
+      let(:job_traits) { [:completed] }
       context 'when the job has a redirect_to path' do
         expect_to_redirect_to_job_redirect_to
+      end
+
+      context 'when the requested format is json' do
+        render_views
+        let(:job_traits) do
+          super_traits = *super()
+          super_traits + [{ redirect_to: redirect_path }]
+        end
+        let(:format) { :json }
+        let(:json_response) { JSON.parse(response.body) }
+
+        it 'responses with an errored job status' do
+          expect(response.status).to be(200)
+          expect(json_response['status']).to eq('completed')
+          expect(json_response['redirectUrl']).to eq(redirect_path)
+        end
       end
     end
 
