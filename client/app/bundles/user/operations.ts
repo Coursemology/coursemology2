@@ -10,7 +10,7 @@ import {
   ProfilePostData,
 } from 'types/users';
 
-import GlobalUsersAPI from 'api/Users';
+import GlobalAPI from 'api';
 
 export type AccountSettingsData = ProfileData & EmailsData & PasswordData;
 
@@ -24,8 +24,8 @@ const PASSWORD_TEMPLATE: PasswordData = {
  * Fetches profile and emails data, then returns them and an empty password template.
  */
 export const fetchAccountSettings = async (): Promise<AccountSettingsData> => {
-  const profile = GlobalUsersAPI.users.fetchProfile();
-  const emails = GlobalUsersAPI.users.fetchEmails();
+  const profile = GlobalAPI.users.fetchProfile();
+  const emails = GlobalAPI.users.fetchEmails();
   const [profileResponse, emailsResponse] = await Promise.all([
     profile,
     emails,
@@ -51,7 +51,7 @@ export const updateProfile = async (
   };
 
   try {
-    const response = await GlobalUsersAPI.users.updateProfile(adaptedData);
+    const response = await GlobalAPI.users.updateProfile(adaptedData);
     return {
       name: response.data.name,
       timezone: response.data.timezone,
@@ -78,7 +78,7 @@ export const updatePassword = async (
   };
 
   try {
-    await GlobalUsersAPI.users.updatePassword(adaptedData);
+    await GlobalAPI.users.updatePassword(adaptedData);
     return PASSWORD_TEMPLATE;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
@@ -104,7 +104,7 @@ export const updateProfilePicture = async (
   file: File,
 ): Promise<Partial<ProfileData>> => {
   try {
-    const response = await GlobalUsersAPI.users.updateProfilePicture(file);
+    const response = await GlobalAPI.users.updateProfilePicture(file);
     return { imageUrl: response.data.imageUrl };
   } catch (error) {
     if (error instanceof AxiosError)
@@ -115,7 +115,7 @@ export const updateProfilePicture = async (
 };
 
 export const fetchTimeZones = async (): Promise<TimeZones> => {
-  const response = await GlobalUsersAPI.users.fetchTimeZones();
+  const response = await GlobalAPI.users.fetchTimeZones();
   return response.data;
 };
 
@@ -125,7 +125,7 @@ export const addEmail = async (
   const adaptedData: EmailPostData = { user_email: { email } };
 
   try {
-    const response = await GlobalUsersAPI.users.addEmail(adaptedData);
+    const response = await GlobalAPI.users.addEmail(adaptedData);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
@@ -135,7 +135,7 @@ export const addEmail = async (
 
 export const removeEmail = async (id: EmailData['id']): Promise<EmailsData> => {
   try {
-    const response = await GlobalUsersAPI.users.removeEmail(id);
+    const response = await GlobalAPI.users.removeEmail(id);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
@@ -147,7 +147,7 @@ export const setEmailAsPrimary = async (
   url: NonNullable<EmailData['setPrimaryUserEmailPath']>,
 ): Promise<EmailsData> => {
   try {
-    const response = await GlobalUsersAPI.users.setEmailAsPrimary(url);
+    const response = await GlobalAPI.users.setEmailAsPrimary(url);
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
@@ -159,7 +159,7 @@ export const resendConfirmationEmail = async (
   url: NonNullable<EmailData['confirmationEmailPath']>,
 ): Promise<void> => {
   try {
-    await GlobalUsersAPI.users.resendConfirmationEmail(url);
+    await GlobalAPI.users.resendConfirmationEmail(url);
   } catch (error) {
     if (error instanceof AxiosError) throw error.response?.data?.errors;
     throw error;
