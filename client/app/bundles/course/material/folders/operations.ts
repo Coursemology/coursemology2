@@ -3,9 +3,11 @@ import {
   MaterialFormData,
   MaterialUploadFormData,
 } from 'types/course/material/folders';
+import { JobCompleted } from 'types/jobs';
 import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
+import pollJob from 'lib/helpers/jobHelpers';
 
 import * as actions from './actions';
 import { SaveFolderAction } from './types';
@@ -199,9 +201,21 @@ export function updateMaterial(
 
 export function downloadFolder(
   currFolderId: number,
-  onSuccess: () => void,
-  onFailure: () => void,
+  handleSuccess: () => void,
+  handleFailure: () => void,
 ): Operation {
-  return async (_) =>
-    CourseAPI.folders.downloadFolder(currFolderId, onSuccess, onFailure);
+  return async () =>
+    CourseAPI.folders
+      .downloadFolder(currFolderId)
+      .then((response) => {
+        pollJob(
+          response.data.jobUrl,
+          (data: JobCompleted) => {
+            handleSuccess();
+            if (data.redirectUrl) window.location.href = data.redirectUrl;
+          },
+          handleFailure,
+        );
+      })
+      .catch(handleFailure);
 }

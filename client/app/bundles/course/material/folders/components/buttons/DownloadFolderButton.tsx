@@ -61,10 +61,10 @@ const DownloadFolderButton: FC<Props> = (props) => {
               currFolderId,
               () => setIsLoading(false),
               () => {
+                setIsLoading(false);
                 toast.error(
                   intl.formatMessage(translations.downloadFolderErrorMessage),
                 );
-                setIsLoading(false);
               },
             ),
           );
