@@ -150,8 +150,8 @@ export function saveDraft(submissionId, rawAnswers) {
       .update(submissionId, payload)
       .then((response) => response.data)
       .then((data) => {
-        if (data.redirect_url && data.format === 'html') {
-          window.location = data.redirect_url;
+        if (data.newSessionUrl) {
+          window.location = data.newSessionUrl;
         }
         dispatch({ type: actionTypes.SAVE_DRAFT_SUCCESS, payload: data });
         dispatch(setNotification(translations.updateSuccess));
@@ -175,8 +175,8 @@ export function finalise(submissionId, rawAnswers) {
       .update(submissionId, payload)
       .then((response) => response.data)
       .then((data) => {
-        if (data.redirect_url && data.format === 'html') {
-          window.location = data.redirect_url;
+        if (data.newSessionUrl) {
+          window.location = data.newSessionUrl;
         }
         dispatch({ type: actionTypes.FINALISE_SUCCESS, payload: data });
         dispatch(setNotification(translations.updateSuccess));
@@ -219,9 +219,9 @@ export function reevaluateAnswer(submissionId, answerId, questionId) {
       .reevaluateAnswer(submissionId, { answer_id: answerId })
       .then((response) => response.data)
       .then((data) => {
-        if (data.redirect_url && data.format === 'html') {
-          window.location = data.redirect_url;
-        } else if (data.redirect_url) {
+        if (data.newSessionUrl) {
+          window.location = data.newSessionUrl;
+        } else if (data.jobUrl) {
           pollJob(
             data.jobUrl,
             () =>
@@ -262,9 +262,9 @@ export function submitAnswer(submissionId, answerId, rawAnswer, setValue) {
       .submitAnswer(submissionId, payload)
       .then((response) => response.data)
       .then((data) => {
-        if (data.redirect_url && data.format === 'html') {
-          window.location = data.redirect_url;
-        } else if (data.redirect_url) {
+        if (data.newSessionUrl) {
+          window.location = data.newSessionUrl;
+        } else if (data.jobUrl) {
           pollJob(
             data.jobUrl,
             () =>

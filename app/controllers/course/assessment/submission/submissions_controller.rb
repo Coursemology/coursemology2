@@ -276,7 +276,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     respond_to do |format|
       format.html { redirect_to new_session_path }
-      format.json { render json: { redirect_url: new_session_path, format: 'html' } }
+      format.json { render json: { newSessionUrl: new_session_path } }
     end
   end
 
