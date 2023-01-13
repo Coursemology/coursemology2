@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import FaceRetouchingOffIcon from '@mui/icons-material/FaceRetouchingOff';
 import {
@@ -8,6 +9,7 @@ import {
   TableRow,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import PropTypes from 'prop-types';
 
 import GroupCard from '../../components/GroupCard';
 import { groupShape } from '../../propTypes';
@@ -36,6 +38,10 @@ const translations = defineMessages({
     defaultMessage:
       'This group has no members! Manage groups to assign members now!',
   },
+  manageOneGroup: {
+    id: 'course.group.GroupShow.CategoryCard.manageOne',
+    defaultMessage: 'Manage Group',
+  },
 });
 
 const roles = {
@@ -54,9 +60,27 @@ const styles = {
   },
 };
 
-const GroupTableCard = ({ group }) => {
+const GroupTableCard = ({ 
+  group,
+  onManageGroups,
+  canManageGroups,
+}) => {
   const members = [...group.members];
   members.sort(sortByName).sort(sortByPhantom).sort(sortByGroupRole);
+
+  const titleButton = useMemo(() =>  {
+    const result = [];
+    if (canManageGroups) {
+      result.push({
+        label: <FormattedMessage {...translations.manageOneGroup} />,
+        onClick: onManageGroups,
+      });
+    }
+    return result;
+  }, [
+    onManageGroups,
+    canManageGroups,
+  ]);
 
   return (
     <GroupCard
@@ -67,6 +91,7 @@ const GroupTableCard = ({ group }) => {
         />
       }
       title={group.name}
+      titleButtons={titleButton}
     >
       <Table>
         <TableHead>
@@ -110,6 +135,8 @@ const GroupTableCard = ({ group }) => {
 
 GroupTableCard.propTypes = {
   group: groupShape.isRequired,
+  onManageGroups: PropTypes.func.isRequired,
+  canManageGroups: PropTypes.bool.isRequired,
 };
 
 export default GroupTableCard;
