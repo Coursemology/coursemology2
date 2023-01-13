@@ -60,15 +60,11 @@ const styles = {
   },
 };
 
-const GroupTableCard = ({ 
-  group,
-  onManageGroups,
-  canManageGroups,
-}) => {
+const GroupTableCard = ({ group, onManageGroups, canManageGroups }) => {
   const members = [...group.members];
   members.sort(sortByName).sort(sortByPhantom).sort(sortByGroupRole);
 
-  const titleButton = useMemo(() =>  {
+  const titleButton = useMemo(() => {
     const result = [];
     if (canManageGroups) {
       result.push({
@@ -77,10 +73,7 @@ const GroupTableCard = ({
       });
     }
     return result;
-  }, [
-    onManageGroups,
-    canManageGroups,
-  ]);
+  }, [onManageGroups, canManageGroups]);
 
   return (
     <GroupCard
@@ -112,9 +105,15 @@ const GroupTableCard = ({
             <TableRow key={m.id} style={styles.rowHeight}>
               <TableCell style={styles.rowHeight}>{index + 1}</TableCell>
               <TableCell style={styles.rowHeight}>
-                <div className='flex grow'>
-                  {m.isPhantom? <FaceRetouchingOffIcon style={{ size: "15px", padding: 2 }}/> : ""}
-                  {m.groupRole === "manager" ? <b>{m.name}</b> : m.name}
+                <div className="flex grow">
+                  {m.isPhantom ? (
+                    <FaceRetouchingOffIcon
+                      style={{ size: '15px', padding: 2 }}
+                    />
+                  ) : (
+                    ''
+                  )}
+                  {m.groupRole === 'manager' ? <b>{m.name}</b> : m.name}
                 </div>
               </TableCell>
               <TableCell style={styles.rowHeight}>

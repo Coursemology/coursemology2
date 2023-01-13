@@ -84,6 +84,7 @@ const styles = {
 const GroupUserManagerListItem = ({
   user,
   colour,
+  existOtherGroup,
   onCheck,
   showDropdown,
   onChangeDropdown,
@@ -106,7 +107,7 @@ const GroupUserManagerListItem = ({
       />
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
-        {user.name}
+        {existOtherGroup ? `${user.name} (already member of other group)` : user.name}
       </ListItemText>
     </div>
 
@@ -134,6 +135,7 @@ const GroupUserManagerListItem = ({
 GroupUserManagerListItem.propTypes = {
   user: memberShape.isRequired,
   colour: PropTypes.object,
+  existOtherGroup: PropTypes.bool,
   onCheck: PropTypes.func.isRequired,
   showDropdown: PropTypes.bool,
   onChangeDropdown: PropTypes.func,
@@ -143,13 +145,14 @@ GroupUserManagerListItem.propTypes = {
 const GroupUserManagerList = ({
   students = [],
   staff = [],
+  memberOtherGroups = [],
   onCheck,
   colourMap,
   showDropdown = false,
   onChangeDropdown,
   isChecked = false,
 }) => {
-  const renderUsersListItems = (users, title) => (
+  const renderUsersListItems = (users, members, title) => (
     <>
       <ListSubheader style={styles.listSubheader}>
         <Checkbox
@@ -167,6 +170,7 @@ const GroupUserManagerList = ({
           <GroupUserManagerListItem
             key={user.id}
             colour={colour}
+            existOtherGroup={members.map((x) => x.id).includes(user.id)}
             isChecked={isChecked}
             onChangeDropdown={onChangeDropdown}
             onCheck={onCheck}
@@ -189,9 +193,9 @@ const GroupUserManagerList = ({
       ) : null}
 
       {students.length > 0 &&
-        renderUsersListItems(students, translations.students)}
+        renderUsersListItems(students, memberOtherGroups, translations.students)}
 
-      {staff.length > 0 && renderUsersListItems(staff, translations.staff)}
+      {staff.length > 0 && renderUsersListItems(staff, memberOtherGroups, translations.staff)}
     </List>
   );
 };
@@ -199,6 +203,7 @@ const GroupUserManagerList = ({
 GroupUserManagerList.propTypes = {
   students: PropTypes.arrayOf(memberShape),
   staff: PropTypes.arrayOf(memberShape),
+  memberOtherGroups: PropTypes.arrayOf(memberShape),
   onCheck: PropTypes.func.isRequired,
   colourMap: PropTypes.object.isRequired,
   showDropdown: PropTypes.bool,
