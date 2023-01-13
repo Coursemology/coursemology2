@@ -180,7 +180,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
     job = reattempt_and_grade_answer(answer)
     if job
-      render json: { redirect_url: job_path(job.job) }
+      render partial: 'jobs/submitted', locals: { job: job.job }
     else
       # Render the current_answer.
       render answer

@@ -17,7 +17,7 @@ class Course::ObjectDuplicationsController < Course::ComponentController
     job = Course::ObjectDuplicationJob.perform_later(
       current_course, authorized_destination_course, objects_to_duplicate, current_user: current_user
     ).job
-    render json: { redirect_url: job_path(job) }
+    format.json { render partial: 'jobs/submitted', locals: { job: job } }
   end
 
   # Duplication data for the current course
