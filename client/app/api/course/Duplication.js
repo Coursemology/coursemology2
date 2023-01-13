@@ -52,7 +52,7 @@ export default class DuplicationAPI extends BaseCourseAPI {
    *   destination_course_id: number,
    * }
    * @return {Promise}
-   * success response: { redirect_url: string }
+   * success response: { status: 'submitted', jobUrl: string }
    * error response: {}
    */
   duplicateItems(sourceCourseId, params) {
@@ -68,7 +68,7 @@ export default class DuplicationAPI extends BaseCourseAPI {
    *   duplication: { new_title: string, new_start_at: Date }
    * }
    * @return {Promise}
-   * success response: { redirect_url: string }
+   * success response: { status: 'submitted', jobUrl: string }
    * error response: {}
    */
   duplicateCourse(sourceCourseId, params) {
