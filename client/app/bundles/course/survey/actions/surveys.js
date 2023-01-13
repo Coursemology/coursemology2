@@ -1,5 +1,5 @@
 import CourseAPI from 'api/course';
-import pollJob from 'lib/helpers/job-helpers';
+import pollJob from 'lib/helpers/jobHelpers';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
 
@@ -7,9 +7,6 @@ import actionTypes from '../constants';
 import translations from '../translations';
 
 import { setNotification } from './index';
-
-const MIN_DELAY_TIME = 500;
-const MAX_DELAY_TIME = 4000;
 
 export function showSurveyForm(formParams) {
   return { type: actionTypes.SURVEY_FORM_SHOW, formParams };
@@ -189,7 +186,7 @@ export function downloadSurvey() {
     dispatch({ type: actionTypes.DOWNLOAD_SURVEY_REQUEST });
 
     const handleSuccess = (successData) => {
-      window.location.href = successData.redirect_url;
+      window.location.href = successData.redirectUrl;
       dispatch({ type: actionTypes.DOWNLOAD_SURVEY_SUCCESS });
     };
 
@@ -200,15 +197,8 @@ export function downloadSurvey() {
 
     return CourseAPI.survey.surveys
       .download()
-      .then((response) => response.data)
-      .then((data) => {
-        pollJob(
-          data.redirect_url,
-          MIN_DELAY_TIME,
-          MAX_DELAY_TIME,
-          handleSuccess,
-          handleFailure,
-        );
+      .then((response) => {
+        pollJob(response.data.jobUrl, handleSuccess, handleFailure);
       })
       .catch(handleFailure);
   };
