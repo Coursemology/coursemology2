@@ -5,3 +5,7 @@ export function sortByName(a, b) {
 export function sortByGroupRole(a, b) {
   return a.groupRole.localeCompare(b.groupRole);
 }
+
+export function sortByPhantom(a, b) {
+  return a.isPhantom - b.isPhantom;
+}
