@@ -9,7 +9,7 @@ class Course::DuplicationsController < Course::ComponentController
     # and selected_objects
     job = Course::DuplicationJob.perform_later(current_course, duplication_job_options).job
     respond_to do |format|
-      format.json { render json: { redirect_url: job_path(job) } }
+      format.json { render partial: 'jobs/submitted', locals: { job: job } }
     end
   end
 
