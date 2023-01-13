@@ -1,2 +1,3 @@
 # frozen_string_literal: true
-json.status 'submitted'
+json.status job.status
+json.jobUrl job_path(job)
