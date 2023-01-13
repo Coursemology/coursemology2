@@ -132,7 +132,7 @@ function submitFormEvaluate(
       .then((response) => {
         const status = response.data.status;
 
-        if (status === 'submitted' || status === 'accepted') {
+        if (status === 'submitted') {
           dispatch(submitFormStartEvaluating());
 
           setTimeout(() => {
