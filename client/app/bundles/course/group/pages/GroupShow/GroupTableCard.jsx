@@ -1,4 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
+import FaceRetouchingOffIcon from '@mui/icons-material/FaceRetouchingOff';
 import {
   Table,
   TableBody,
@@ -85,7 +86,12 @@ const GroupTableCard = ({ group }) => {
           {members.map((m, index) => (
             <TableRow key={m.id} style={styles.rowHeight}>
               <TableCell style={styles.rowHeight}>{index + 1}</TableCell>
-              <TableCell style={styles.rowHeight}>{m.name}</TableCell>
+              <TableCell style={styles.rowHeight}>
+                <div className='flex grow'>
+                  {m.isPhantom? <FaceRetouchingOffIcon style={{ fontSize: "20px" }}/> : ""}
+                  {m.name}
+                </div>
+              </TableCell>
               <TableCell style={styles.rowHeight}>
                 {roles[m.groupRole]}
               </TableCell>
