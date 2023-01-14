@@ -33,7 +33,7 @@ module Course::UsersControllerManagementConcern
     respond_to do |format|
       format.html
       format.json do
-        @course_users = @course_users.students.includes(user: :emails).order_alphabetically
+        @course_users = @course_users.students.includes(:groups, user: :emails).order_alphabetically
       end
     end
   end

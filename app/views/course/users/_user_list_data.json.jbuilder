@@ -13,3 +13,5 @@ json.timelineAlgorithm course_user.timeline_algorithm if should_show_timeline
 
 json.role course_user.role
 json.phantom course_user.phantom? if should_show_phantom
+
+json.groups course_user.groups.map(&:name)
