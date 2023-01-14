@@ -211,9 +211,6 @@ const GroupUserManager = ({
     [groupMembers],
   );
 
-  console.log(selectedStudents);
-  console.log(availableUsersInOtherGroups);
-
   const onFormSubmit = useCallback(
     (data, setError) =>
       dispatch(
