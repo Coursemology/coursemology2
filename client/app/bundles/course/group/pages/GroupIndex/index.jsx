@@ -54,11 +54,7 @@ const GroupIndex = (props) => {
       });
   }, []);
 
-  const headerToolbars = [];
-
-  if (groupCategories.permissions.canCreate) {
-    headerToolbars.push(<GroupNew />);
-  }
+  const headerToolbars = groupCategories.permissions.canCreate && <GroupNew />
 
   const renderTabs =
     groupCategories.groupCategories.length > 1 ? (

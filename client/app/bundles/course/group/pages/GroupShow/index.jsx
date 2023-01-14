@@ -105,11 +105,10 @@ const Category = ({
               key={group.id}
               canManageGroups={canManageGroups}
               group={group}
-              onManageGroups={() =>
-                dispatch({ type: actionTypes.MANAGE_GROUPS_START }).then(
-                  handleGroupSelect(group.id),
-                )
-              }
+              onManageGroups={() => {
+                dispatch({type: actionTypes.MANAGE_GROUPS_START})
+                handleGroupSelect(group.id)
+              }}
             />
           ))}
           {groups.length === 0 ? (
