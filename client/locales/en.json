@@ -2699,9 +2699,6 @@
   "course.assessment.submissions.SubmissionFilter.filterAssessmentLabel": {
     "defaultMessage": "Filter by"
   },
-  "course.assessment.submissions.SubmissionFilter.filterHeader": {
-    "defaultMessage": "Filter Submissions"
-  },
   "course.assessment.submissions.SubmissionTabs.allStudentsPending": {
     "defaultMessage": "All Pending Submissions"
   },

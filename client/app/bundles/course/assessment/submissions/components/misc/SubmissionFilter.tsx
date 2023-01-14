@@ -37,10 +37,6 @@ const translations = defineMessages({
     id: 'course.assessment.submissions.SubmissionFilter.filterAssessmentLabel',
     defaultMessage: 'Filter by ',
   },
-  filterHeader: {
-    id: 'course.assessment.submissions.SubmissionFilter.filterHeader',
-    defaultMessage: 'Filter Submissions',
-  },
   applyFilterButton: {
     id: 'course.assessment.submissions.SubmissionFilter.applyFilterButton',
     defaultMessage: 'Apply Filter',
@@ -68,9 +64,6 @@ const SubmissionFilter: FC<Props> = (props) => {
 
   return (
     <Stack className="submissions-filter" spacing={1}>
-      <h3 style={{ marginTop: 0, marginBottom: 0 }}>
-        {intl.formatMessage(translations.filterHeader)}
-      </h3>
       <Grid columns={{ xs: 1, md: 3 }} container>
         <Grid item paddingBottom={1} paddingRight={1} xs={1}>
           <Autocomplete
