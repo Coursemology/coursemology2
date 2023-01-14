@@ -8,7 +8,7 @@ json.imageUrl user_image(course_user.user)
 json.email course_user.user.email
 
 reference_timeline_id = course_user.reference_timeline_id
-json.referenceTimelineId reference_timeline_id if reference_timeline_id.present?
+json.referenceTimelineId reference_timeline_id || current_course.default_reference_timeline.id
 json.timelineAlgorithm course_user.timeline_algorithm if should_show_timeline
 
 json.role course_user.role
