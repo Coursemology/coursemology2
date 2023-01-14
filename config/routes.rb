@@ -350,6 +350,8 @@ Rails.application.routes.draw do
              on: :collection
         get 'manage_email_subscription' => 'user_email_subscriptions#edit'
         patch 'manage_email_subscription' => 'user_email_subscriptions#update'
+
+        patch 'assign_timeline', on: :collection
       end
       post 'register' => 'user_registrations#create'
       get 'students' => 'users#students', as: :users_students

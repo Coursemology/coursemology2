@@ -6,7 +6,7 @@ module Course::UsersControllerManagementConcern
 
   included do
     before_action :authorize_show!, only: [:students, :staff, :requests, :invitations]
-    before_action :authorize_edit!, only: [:update, :destroy, :upgrade_to_staff]
+    before_action :authorize_edit!, only: [:update, :destroy, :upgrade_to_staff, :assign_timeline]
   end
 
   def update
@@ -57,6 +57,29 @@ module Course::UsersControllerManagementConcern
     end
   end
 
+  def assign_timeline
+    course_user_ids = assign_timeline_params[:ids]
+    timeline_id = assign_timeline_params[:reference_timeline_id]
+
+    timeline = Course::ReferenceTimeline.find(timeline_id)
+
+    ActiveRecord::Base.transaction do
+      updated_course_users = []
+      @course_users.where(id: course_user_ids).find_each do |course_user|
+        course_user.reference_timeline = timeline
+        updated_course_users << course_user
+      end
+
+      raise unless updated_course_users.size == course_user_ids.size
+
+      CourseUser.import! updated_course_users, on_duplicate_key_update: [:reference_timeline_id]
+
+      head :ok
+    end
+  rescue StandardError
+    head :bad_request
+  end
+
   private
 
   def course_user_params
@@ -70,10 +93,14 @@ module Course::UsersControllerManagementConcern
     params.require(:user).permit(:id)
   end
 
+  def assign_timeline_params
+    params.require(:course_users).permit(:reference_timeline_id, ids: [])
+  end
+
   def load_resource
     course_users = current_course.course_users
     case params[:action]
-    when 'invitations'
+    when 'invitations', 'assign_timeline'
       @course_users ||= course_users
     when 'students', 'staff'
       @course_users ||= course_users.includes(:user)
