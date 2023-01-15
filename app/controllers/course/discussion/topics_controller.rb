@@ -81,7 +81,7 @@ class Course::Discussion::TopicsController < Course::ComponentController
                                         :creator] },
                          file: { answer: [:question,
                                           :submission] }]]).
-      order('course_discussion_topics.updated_at')
+      order('course_discussion_topics.updated_at DESC')
   end
 
   def my_students_topics
