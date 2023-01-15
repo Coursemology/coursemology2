@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ComponentProps, MouseEventHandler, ReactNode } from 'react';
 import {
   Button,
   Dialog,
@@ -23,7 +23,7 @@ interface BasePromptProps {
 type DefaultActionProps<Action extends string> = {
   [key in Action as `${key}Label`]?: string;
 } & {
-  [key in Action as `onClick${Capitalize<key>}`]?: () => void;
+  [key in Action as `onClick${Capitalize<key>}`]?: MouseEventHandler<HTMLButtonElement>;
 } & {
   [key in Action as `${key}Color`]?: ComponentProps<typeof Button>['color'];
 } & {
@@ -35,7 +35,7 @@ type DefaultActionProps<Action extends string> = {
 type OverriddenActionProps<Action extends string> = {
   [key in Action as `${key}Label`]?: never;
 } & {
-  [key in Action as `onClick${Capitalize<key>}`]?: () => never;
+  [key in Action as `onClick${Capitalize<key>}`]?: never;
 } & {
   [key in Action as `${key}Color`]?: never;
 } & {
