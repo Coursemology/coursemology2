@@ -40,12 +40,6 @@ class Course::LessonPlan::Todo < ApplicationRecord
     opened.published.not_ignored.from_course(course_user.course).not_completed.
       where('course_lesson_plan_todos.user_id = ?', course_user.user_id)
   end)
-  scope :ordered_by_date, (lambda do
-    includes(item: { reference_times: :reference_timeline }).
-      where(course_reference_timelines: { default: true }).
-      merge(Course::ReferenceTime.order(:start_at)).
-      references(reference_times: :reference_timeline)
-  end)
 
   class << self
     # Creates todos to the given course_users for the given lesson_plan_item(s).

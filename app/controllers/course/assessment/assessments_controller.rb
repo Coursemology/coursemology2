@@ -22,6 +22,7 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
                       to_h do |item|
           [item.actable_id, item]
         end
+
         @conditional_service = Course::Assessment::AchievementPreloadService.new(@assessments)
       end
     end
