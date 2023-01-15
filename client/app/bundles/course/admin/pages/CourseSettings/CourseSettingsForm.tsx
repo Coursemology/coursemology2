@@ -169,6 +169,7 @@ const CourseSettingsForm = (props: CourseSettingsFormProps): JSX.Element => {
                       field={field}
                       fieldState={fieldState}
                       label={t(translations.startsAt)}
+                      required
                       variant="filled"
                     />
                   )}

@@ -214,6 +214,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                   field={field}
                   fieldState={fieldState}
                   label={intl.formatMessage(t.startAt)}
+                  required
                   variant="filled"
                 />
               )}
