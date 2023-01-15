@@ -79,8 +79,8 @@ const ManageStaff: FC<Props> = (props) => {
             <ManageUsersTable
               csvDownloadOptions={{ filename: 'Staff List' }}
               manageStaff
-              renderRowActionComponent={(user): JSX.Element => (
-                <UserManagementButtons user={user} />
+              renderRowActionComponent={(user, disabled): JSX.Element => (
+                <UserManagementButtons disabled={disabled} user={user} />
               )}
               title={intl.formatMessage(translations.manageStaffTitle)}
               users={staff}

@@ -7,6 +7,7 @@ import {
 } from 'types/course/courseUsers';
 import { ExperiencePointsRecordListData } from 'types/course/experiencePointsRecords';
 import { PersonalTimeListData } from 'types/course/personalTimes';
+import { TimelineData } from 'types/course/referenceTimelines';
 
 import {
   DELETE_EXPERIENCE_POINTS_RECORD,
@@ -51,6 +52,7 @@ export function saveManageUserList(
   manageCourseUsersPermissions: ManageCourseUsersPermissions,
   manageCourseUsersData: ManageCourseUsersSharedData,
   userOptions: CourseUserBasicListData[] = [],
+  timelines?: Record<TimelineData['id'], string>,
 ): SaveManageUserListAction {
   return {
     type: SAVE_MANAGE_USER_LIST,
@@ -58,6 +60,7 @@ export function saveManageUserList(
     manageCourseUsersPermissions,
     manageCourseUsersData,
     userOptions,
+    timelines,
   };
 }
 

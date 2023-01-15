@@ -104,15 +104,15 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
     <Box className={className} sx={styles.displayFieldStyle}>
       <>
         {link ? <a href={link}>{controlledVal}</a> : controlledVal}
-        {!disabled && (
-          <IconButton
-            className="inline-edit-button"
-            onClick={(): void => setIsEditing(true)}
-            sx={styles.buttonStyle}
-          >
-            <Edit />
-          </IconButton>
-        )}
+
+        <IconButton
+          className="inline-edit-button"
+          disabled={disabled}
+          onClick={(): void => setIsEditing(true)}
+          sx={styles.buttonStyle}
+        >
+          <Edit />
+        </IconButton>
       </>
     </Box>
   );
@@ -156,10 +156,4 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
   return isEditing || alwaysEditable ? renderEditingField : renderDisplayField;
 };
 
-export default memo(InlineEditTextField, (prevProps, nextProps) => {
-  return (
-    equal(prevProps.value, nextProps.value) &&
-    equal(prevProps.link, nextProps.link) &&
-    equal(prevProps.renderIf, nextProps.renderIf)
-  );
-});
+export default memo(InlineEditTextField, equal);

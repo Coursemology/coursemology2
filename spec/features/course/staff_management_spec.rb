@@ -76,7 +76,7 @@ RSpec.feature 'Courses: Staff Management' do
         end
         page.all('li.MuiMenuItem-root')[3].click # option id "role-#{staff_to_change.id}-owner" can't be targeted...
 
-        expect_toastify("Successfully changed #{new_name}'s role to Owner.")
+        expect_toastify("Updated #{new_name}'s role to Owner.")
 
         expect(staff_to_change.reload).to be_owner
         expect(staff_to_change.name).to eq(new_name)
