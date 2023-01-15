@@ -1,13 +1,17 @@
-import { FC, memo, ReactElement } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  injectIntl,
-  WrappedComponentProps,
-} from 'react-intl';
+import { memo, ReactElement, useMemo, useState } from 'react';
+import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Checkbox, MenuItem, TextField, Typography } from '@mui/material';
+import { ExpandMore } from '@mui/icons-material';
+import {
+  Button,
+  Menu,
+  MenuItem,
+  Switch,
+  TextField,
+  Toolbar,
+  Typography,
+} from '@mui/material';
 import equal from 'fast-deep-equal';
 import {
   TableColumns,
@@ -20,7 +24,8 @@ import {
   CourseUserRowData,
 } from 'types/course/courseUsers';
 import { TimelineAlgorithm } from 'types/course/personalTimes';
-import { AppDispatch, AppState } from 'types/store';
+import { TimelineData } from 'types/course/referenceTimelines';
+import { AppDispatch } from 'types/store';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
@@ -31,17 +36,22 @@ import {
   TIMELINE_ALGORITHMS,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
-import { updateUser } from '../../operations';
+import { assignToTimeline, updateUser } from '../../operations';
 import { getManageCourseUserPermissions } from '../../selectors';
 
-interface Props extends WrappedComponentProps {
+interface ManageUsersTableProps {
   title: string;
   users: CourseUserMiniEntity[];
   manageStaff?: boolean;
-  renderRowActionComponent?: (user: CourseUserRowData) => ReactElement;
+  renderRowActionComponent?: (
+    user: CourseUserRowData,
+    disabled: boolean,
+  ) => ReactElement;
   csvDownloadOptions: TableDownloadOptions;
+  timelinesMap?: Record<number, string>;
 }
 
 const translations = defineMessages({
@@ -71,220 +81,359 @@ const translations = defineMessages({
   },
   changeRoleSuccess: {
     id: 'course.users.ManageUsersTable.changeRoleSuccess',
-    defaultMessage: "Successfully changed {name}'s role to {role}.",
+    defaultMessage: "Updated {name}'s role to {role}.",
   },
   changeRoleFailure: {
     id: 'course.users.ManageUsersTable.changeRoleFailure',
-    defaultMessage: "Failed to change {name}'s role to {role}.",
+    defaultMessage: "Failed to update {name}'s role to {role}.",
   },
   changeTimelineSuccess: {
     id: 'course.users.ManageUsersTable.changeTimelineSuccess',
-    defaultMessage:
-      "Successfully changed {name}'s timeline algorithm to {timeline}.",
+    defaultMessage: "Updated {name}'s reference timeline to {timeline}.",
   },
   changeTimelineFailure: {
     id: 'course.users.ManageUsersTable.changeTimelineFailure',
     defaultMessage:
-      "Failed to change {name}'s timeline algorithm to {timeline}.",
+      "Failed to update {name}'s reference timeline to {timeline}.",
+  },
+  bulkChangeTimelineSuccess: {
+    id: 'course.users.ManageUsersTable.bulkChangeTimelineSuccess',
+    defaultMessage:
+      "Updated {n, plural, =1 {# student''s} other {# students''}} reference timelines to {timeline}.",
+  },
+  bulkChangeTimelineFailure: {
+    id: 'course.users.ManageUsersTable.bulkChangeTimelineFailure',
+    defaultMessage:
+      "Failed to update {n, plural, =1 {# student''s} other {# students''}} reference timelines to {timeline}.",
+  },
+  changeAlgorithmSuccess: {
+    id: 'course.users.ManageUsersTable.changeAlgorithmSuccess',
+    defaultMessage: "Updated {name}'s timeline algorithm to {timeline}.",
+  },
+  changeAlgorithmFailure: {
+    id: 'course.users.ManageUsersTable.changeAlgorithmFailure',
+    defaultMessage:
+      "Failed to update {name}'s timeline algorithm to {timeline}.",
   },
   updateFailure: {
     id: 'course.users.ManageUsersTable.updateFailure',
     defaultMessage: 'Failed to update user - {error}',
   },
+  defaultTimeline: {
+    id: 'course.users.ManageUsersTable.defaultTimeline',
+    defaultMessage: 'Default',
+  },
+  group: {
+    id: 'course.users.ManageUsersTable.group',
+    defaultMessage: 'Group: {name}',
+  },
+  selectedNStudents: {
+    id: 'course.users.ManageUsersTable.selectedNStudents',
+    defaultMessage: 'Selected {n, plural, =1 {# student} other {# students}}',
+  },
+  assignToTimeline: {
+    id: 'course.users.ManageUsersTable.assignToTimeline',
+    defaultMessage: 'Assign to timeline',
+  },
 });
 
-const styles = {
-  checkbox: {
-    margin: '0px 12px 0px 0px',
-    padding: 0,
-  },
-};
+const algorithms = TIMELINE_ALGORITHMS.map((option) => (
+  <MenuItem key={option.value} id={option.value} value={option.value}>
+    {option.label}
+  </MenuItem>
+));
 
-const ManageUsersTable: FC<Props> = (props) => {
-  const {
-    title,
-    users,
-    manageStaff = false,
-    renderRowActionComponent = null,
-    intl,
-    csvDownloadOptions,
-  } = props;
-  const permissions = useSelector((state: AppState) =>
-    getManageCourseUserPermissions(state),
-  );
+const roles = Object.keys(COURSE_USER_ROLES).map((option) => (
+  <MenuItem key={option} id={option} value={option}>
+    {COURSE_USER_ROLES[option]}
+  </MenuItem>
+));
+
+interface TableToolbarSelectProps {
+  selectedRows: { data: { index: number; dataIndex: number }[] };
+}
+
+const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
+  const { users, manageStaff, timelinesMap, renderRowActionComponent } = props;
+
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
-  if (users && users.length === 0) {
-    return <Note message={<FormattedMessage {...translations.noUsers} />} />;
-  }
+  const permissions = useSelector(getManageCourseUserPermissions);
 
-  const handleNameUpdate = (rowData, newName: string): Promise<void> => {
-    const user = rebuildObjectFromRow(
-      columns, // eslint-disable-line @typescript-eslint/no-use-before-define
-      rowData,
-    ) as CourseUserMiniEntity;
-    const newUser = {
-      ...user,
-      name: newName,
-    };
-    return dispatch(updateUser(rowData[1], newUser))
+  const [submitting, setSubmitting] = useState(false);
+  const [filteringGroup, setFilteringGroup] = useState(false);
+
+  const timelines = useMemo(
+    () =>
+      timelinesMap &&
+      Object.entries(timelinesMap).map(([id, timelineTitle]) => (
+        <MenuItem key={id} value={id}>
+          {timelineTitle ?? t(translations.defaultTimeline)}
+        </MenuItem>
+      )),
+    [timelinesMap],
+  );
+
+  const handleAssignUsersToTimeline = (
+    ids: CourseUserMiniEntity['id'][],
+    timelineId: TimelineData['id'],
+    timelineTitle: TimelineData['title'],
+  ): void => {
+    setSubmitting(true);
+
+    dispatch(assignToTimeline(ids, timelineId))
       .then(() => {
         toast.success(
-          intl.formatMessage(translations.renameSuccess, {
-            oldName: user.name,
-            newName,
+          t(translations.bulkChangeTimelineSuccess, {
+            n: ids.length,
+            timeline: timelineTitle ?? t(translations.defaultTimeline),
+          }),
+        );
+      })
+      .catch(() => {
+        toast.error(
+          t(translations.bulkChangeTimelineFailure, {
+            n: ids.length,
+            timeline: timelineTitle ?? t(translations.defaultTimeline),
+          }),
+        );
+      })
+      .finally(() => setSubmitting(false));
+  };
+
+  const TableToolbarSelect = useMemo(() => {
+    const ManageUsersTableActionBar = ({
+      selectedRows,
+    }: TableToolbarSelectProps): JSX.Element => {
+      const rows = selectedRows.data;
+
+      const [timelinesMenu, setTimelinesMenu] = useState<HTMLButtonElement>();
+
+      return (
+        <Toolbar className="justify-between">
+          <Typography>
+            {t(translations.selectedNStudents, { n: rows.length })}
+          </Typography>
+
+          {timelinesMap && (
+            <>
+              <Button
+                disabled={submitting}
+                endIcon={<ExpandMore />}
+                onClick={(e): void => setTimelinesMenu(e.currentTarget)}
+                size="small"
+              >
+                {t(translations.assignToTimeline)}
+              </Button>
+
+              <Menu
+                anchorEl={timelinesMenu}
+                onClose={(): void => setTimelinesMenu(undefined)}
+                open={Boolean(timelinesMenu)}
+              >
+                {Object.entries(timelinesMap).map(([id, title]) => (
+                  <MenuItem
+                    key={id}
+                    onClick={(): void => {
+                      const timelineId = parseInt(id, 10);
+                      const ids = rows.map(
+                        ({ dataIndex }) => users[dataIndex].id,
+                      );
+
+                      handleAssignUsersToTimeline(ids, timelineId, title);
+                    }}
+                  >
+                    {title ?? t(translations.defaultTimeline)}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </>
+          )}
+        </Toolbar>
+      );
+    };
+
+    ManageUsersTableActionBar.displayName = 'ManageUsersTableActionBar';
+
+    return ManageUsersTableActionBar;
+  }, [timelinesMap]);
+
+  if (!users?.length) return <Note message={t(translations.noUsers)} />;
+
+  const handleNameUpdate = (
+    userId: CourseUserMiniEntity['id'],
+    userName: CourseUserMiniEntity['name'],
+    name: string,
+  ): Promise<void> => {
+    setSubmitting(true);
+
+    return dispatch(updateUser(userId, { name }))
+      .then(() => {
+        toast.success(
+          t(translations.renameSuccess, {
+            oldName: userName,
+            newName: name,
           }),
         );
       })
       .catch((error) => {
-        const errorMessage = error.response?.data?.errors
-          ? error.response.data.errors
-          : '';
         toast.error(
-          intl.formatMessage(translations.renameFailure, {
-            oldName: user.name,
-            newName,
-            error: errorMessage,
+          t(translations.renameFailure, {
+            oldName: userName,
+            newName: name,
+            error: error.response?.data?.errors ?? '',
           }),
         );
-        throw error;
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   const handlePhantomUpdate = (
     user: CourseUserMiniEntity,
-    newValue: boolean,
-  ): Promise<void> => {
-    const newUser = {
-      ...user,
-      phantom: newValue,
-    };
-    return dispatch(updateUser(user.id, newUser))
+    phantom: boolean,
+  ): void => {
+    setSubmitting(true);
+
+    dispatch(updateUser(user.id, { phantom }))
       .then(() => {
         toast.success(
-          intl.formatMessage(translations.phantomSuccess, {
+          t(translations.phantomSuccess, {
             name: user.name,
-            isPhantom: newValue,
+            isPhantom: phantom,
           }),
         );
       })
       .catch((error) => {
-        const errorMessage = error.response?.data?.errors
-          ? error.response.data.errors
-          : '';
         toast.error(
-          intl.formatMessage(translations.updateFailure, {
-            error: errorMessage,
+          t(translations.updateFailure, {
+            error: error.response?.data?.errors ?? '',
           }),
         );
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
   const handleRoleUpdate = (
-    rowData,
-    newRole: string,
-    updateValue,
-  ): Promise<void> => {
-    const user = rebuildObjectFromRow(
-      columns, // eslint-disable-line @typescript-eslint/no-use-before-define
-      rowData,
-    ) as CourseUserMiniEntity;
-    const newUser = {
-      ...user,
-      role: newRole as CourseUserRole,
-    };
-    return dispatch(updateUser(user.id, newUser))
+    userId: CourseUserMiniEntity['id'],
+    userName: CourseUserMiniEntity['name'],
+    role: CourseUserRole,
+    updateValue: (role: CourseUserRole) => void,
+  ): void => {
+    setSubmitting(true);
+
+    dispatch(updateUser(userId, { role }))
       .then(() => {
-        updateValue(newRole);
+        updateValue(role);
         toast.success(
-          intl.formatMessage(translations.changeRoleSuccess, {
-            name: user.name,
-            role: COURSE_USER_ROLES[newRole],
+          t(translations.changeRoleSuccess, {
+            name: userName,
+            role: COURSE_USER_ROLES[role],
           }),
         );
       })
       .catch((error) => {
-        const errorMessage = error.response?.data?.errors
-          ? error.response.data.errors
-          : '';
         toast.error(
-          intl.formatMessage(translations.changeRoleFailure, {
-            name: user.name,
-            role: COURSE_USER_ROLES[newRole],
-            error: errorMessage,
+          t(translations.changeRoleFailure, {
+            name: userName,
+            role: COURSE_USER_ROLES[role],
+            error: error.response?.data?.errors ?? '',
           }),
         );
-      });
+      })
+      .finally(() => setSubmitting(false));
   };
 
-  const handleTimelineUpdate = (
-    rowData,
-    newTimeline: string,
-    updateValue,
-  ): Promise<void> => {
-    const user = rebuildObjectFromRow(
-      columns, // eslint-disable-line @typescript-eslint/no-use-before-define
-      rowData,
-    ) as CourseUserMiniEntity;
-    const newUser = {
-      ...user,
-      timelineAlgorithm: newTimeline as TimelineAlgorithm,
-    };
-    return dispatch(updateUser(user.id, newUser))
+  const handleAlgorithmUpdate = (
+    userId: CourseUserMiniEntity['id'],
+    userName: CourseUserMiniEntity['name'],
+    timelineAlgorithm: TimelineAlgorithm,
+    updateValue: (algorithm: TimelineAlgorithm) => void,
+  ): void => {
+    setSubmitting(true);
+
+    dispatch(updateUser(userId, { timelineAlgorithm }))
       .then(() => {
-        updateValue(newTimeline);
+        updateValue(timelineAlgorithm);
         toast.success(
-          intl.formatMessage(translations.changeTimelineSuccess, {
-            name: user.name,
+          t(translations.changeAlgorithmSuccess, {
+            name: userName,
             timeline:
               TIMELINE_ALGORITHMS.find(
-                (timeline) => timeline.value === newTimeline,
+                (timeline) => timeline.value === timelineAlgorithm,
               )?.label ?? 'Unknown',
           }),
         );
       })
       .catch((error) => {
         toast.error(
-          intl.formatMessage(translations.changeTimelineFailure, {
-            name: user.name,
+          t(translations.changeAlgorithmFailure, {
+            name: userName,
             timeline:
               TIMELINE_ALGORITHMS.find(
-                (timeline) => timeline.value === newTimeline,
+                (timeline) => timeline.value === timelineAlgorithm,
               )?.label ?? 'Unknown',
             error: error.response.data.errors,
           }),
         );
-      });
+      })
+      .finally(() => setSubmitting(false));
+  };
+
+  const handleTimelineUpdate = (
+    userId: CourseUserMiniEntity['id'],
+    userName: CourseUserMiniEntity['name'],
+    referenceTimelineId: number,
+    timeline: string,
+    updateValue: (id: number) => void,
+  ): void => {
+    setSubmitting(true);
+
+    dispatch(updateUser(userId, { referenceTimelineId }))
+      .then(() => {
+        updateValue(referenceTimelineId);
+        toast.success(
+          t(translations.changeTimelineSuccess, { name: userName, timeline }),
+        );
+      })
+      .catch(() => {
+        toast.error(
+          t(translations.changeTimelineFailure, { name: userName, timeline }),
+        );
+      })
+      .finally(() => setSubmitting(false));
   };
 
   const options: TableOptions = {
     download: true,
-    downloadOptions: csvDownloadOptions,
-    filter: false,
+    downloadOptions: props.csvDownloadOptions,
+    onFilterChange: (_, filterList: string[]) =>
+      setFilteringGroup(Boolean(filterList[5].length)),
     pagination: true,
     print: false,
     rowsPerPage: DEFAULT_TABLE_ROWS_PER_PAGE,
     rowsPerPageOptions: [DEFAULT_TABLE_ROWS_PER_PAGE],
     search: true,
-    searchPlaceholder: intl.formatMessage(translations.searchText),
-    selectableRows: 'none',
-    setTableProps: (): object => {
-      return { size: 'small' };
-    },
-    setRowProps: (_row, dataIndex, _rowIndex): Record<string, unknown> => {
-      return {
-        key: `user_${users[dataIndex].id}`,
-        userid: `user_${users[dataIndex].id}`,
-        className: `course_user course_user_${users[dataIndex].id}`,
-      };
-    },
+    // TODO: Remove `!permissions.canManageReferenceTimelines` when adding another
+    // action to `ManageUsersTableActionBar`
+    selectableRows:
+      manageStaff || !permissions.canManageReferenceTimelines
+        ? 'none'
+        : 'multiple',
+    searchPlaceholder: t(translations.searchText),
+    setTableProps: () => ({ size: 'small' }),
+    setRowProps: (_, dataIndex): Record<string, unknown> => ({
+      key: users[dataIndex].id,
+      userid: users[dataIndex].id,
+      className: `course_user course_user_${users[dataIndex].id}`,
+    }),
     viewColumns: false,
   };
 
   const columns: TableColumns[] = [
     {
       name: 'id',
-      label: intl.formatMessage(tableTranslations.id),
+      label: '',
       options: {
         display: false,
         filter: false,
@@ -294,17 +443,21 @@ const ManageUsersTable: FC<Props> = (props) => {
     },
     {
       name: 'name',
-      label: intl.formatMessage(tableTranslations.name),
+      label: t(tableTranslations.name),
       options: {
         alignCenter: false,
+        filter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const userId = tableMeta.rowData[0];
+          const userId = tableMeta.rowData[1];
+          const userName = tableMeta.rowData[2];
+
           return (
             <InlineEditTextField
-              key={`name-${userId}`}
+              key={userId}
               className="course_user_name"
+              disabled={submitting}
               onUpdate={(newName): Promise<void> =>
-                handleNameUpdate(tableMeta.rowData, newName)
+                handleNameUpdate(userId, userName, newName)
               }
               updateValue={updateValue}
               value={value}
@@ -316,14 +469,16 @@ const ManageUsersTable: FC<Props> = (props) => {
     },
     {
       name: 'email',
-      label: intl.formatMessage(tableTranslations.email),
+      label: t(tableTranslations.email),
       options: {
         alignCenter: false,
+        filter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const user = users[dataIndex];
+
           return (
             <Typography
-              key={`email-${user.id}`}
+              key={user.id}
               className="course_user_email"
               variant="body2"
             >
@@ -335,43 +490,120 @@ const ManageUsersTable: FC<Props> = (props) => {
     },
     {
       name: 'phantom',
-      label: intl.formatMessage(tableTranslations.phantom),
+      label: t(tableTranslations.phantom),
       options: {
+        filter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const user = users[dataIndex];
+
           return (
-            <Checkbox
-              key={`phantom-${user.id}`}
+            <Switch
+              key={user.id}
               checked={user.phantom}
               className="course_user_phantom"
+              disabled={submitting}
               id={`phantom-${user.id}`}
-              onChange={(event): Promise<void> =>
+              onChange={(event): void =>
                 handlePhantomUpdate(user, event.target.checked)
               }
-              style={styles.checkbox}
             />
+          );
+        },
+      },
+    },
+    {
+      name: 'groups',
+      label: t(tableTranslations.groups),
+      options: {
+        display: filteringGroup,
+        filterType: 'multiselect',
+        filterOptions: {
+          fullWidth: true,
+          logic: (groups: string[], filters: string[]): boolean => {
+            if (!filters.length) return false;
+
+            const filterSet = new Set(filters);
+            return !groups.some((group) => filterSet.has(group));
+          },
+        },
+        customFilterListOptions: {
+          render: (name: string) => t(translations.group, { name }),
+        },
+        customBodyRenderLite: (dataIndex): JSX.Element => {
+          const user = users[dataIndex];
+
+          return (
+            <ul className="list-none p-0">
+              {user.groups?.map((group) => (
+                <Typography key={group} component="li" variant="body2">
+                  {group}
+                </Typography>
+              ))}
+            </ul>
           );
         },
       },
     },
   ];
 
+  if (permissions?.canManageReferenceTimelines && timelines && timelinesMap) {
+    columns.push({
+      name: 'referenceTimelineId',
+      label: t(tableTranslations.referenceTimeline),
+      options: {
+        alignCenter: false,
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
+          const userId = tableMeta.rowData[1];
+          const userName = tableMeta.rowData[2];
+
+          return (
+            <TextField
+              key={userId}
+              disabled={submitting}
+              onChange={(e): void => {
+                const timelineId = parseInt(e.target.value, 10);
+
+                handleTimelineUpdate(
+                  userId,
+                  userName,
+                  timelineId,
+                  timelinesMap[timelineId] || t(translations.defaultTimeline),
+                  updateValue,
+                );
+              }}
+              select
+              value={value}
+              variant="standard"
+            >
+              {timelines}
+            </TextField>
+          );
+        },
+      },
+    });
+  }
+
   if (permissions?.canManagePersonalTimes) {
     columns.push({
       name: 'timelineAlgorithm',
-      label: intl.formatMessage(tableTranslations.timelineAlgorithm),
+      label: t(tableTranslations.timelineAlgorithm),
       options: {
         alignCenter: false,
+        filter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const user = users[tableMeta.rowIndex];
+          const userId = tableMeta.rowData[1];
+          const userName = tableMeta.rowData[2];
+
           return (
             <TextField
-              key={`timeline-algorithm-${user.id}`}
-              id={`timeline-algorithm-${user.id}`}
-              onChange={(e): Promise<void> =>
-                handleTimelineUpdate(
-                  tableMeta.rowData,
-                  e.target.value,
+              key={userId}
+              disabled={submitting}
+              onChange={(e): void =>
+                handleAlgorithmUpdate(
+                  userId,
+                  userName,
+                  e.target.value as TimelineAlgorithm,
                   updateValue,
                 )
               }
@@ -379,15 +611,7 @@ const ManageUsersTable: FC<Props> = (props) => {
               value={value}
               variant="standard"
             >
-              {TIMELINE_ALGORITHMS.map((option) => (
-                <MenuItem
-                  key={`timeline-algorithm-option-${user.id}-${option.value}`}
-                  id={`timeline-algorithm-option-${user.id}-${option.value}`}
-                  value={option.value}
-                >
-                  {option.label}
-                </MenuItem>
-              ))}
+              {algorithms}
             </TextField>
           );
         },
@@ -398,32 +622,31 @@ const ManageUsersTable: FC<Props> = (props) => {
   if (manageStaff && permissions?.canManageCourseUsers) {
     columns.push({
       name: 'role',
-      label: intl.formatMessage(tableTranslations.role),
+      label: t(tableTranslations.role),
       options: {
         alignCenter: false,
         customBodyRender: (value, tableMeta, updateValue): JSX.Element => {
-          const user = users[tableMeta.rowIndex];
+          const userId = tableMeta.rowData[1];
+          const userName = tableMeta.rowData[2];
+
           return (
             <TextField
-              key={`role-${user.id}`}
+              key={userId}
               className="course_user_role"
-              id={`role-${user.id}`}
-              onChange={(e): Promise<void> =>
-                handleRoleUpdate(tableMeta.rowData, e.target.value, updateValue)
+              disabled={submitting}
+              onChange={(e): void =>
+                handleRoleUpdate(
+                  userId,
+                  userName,
+                  e.target.value as CourseUserRole,
+                  updateValue,
+                )
               }
               select
               value={value}
               variant="standard"
             >
-              {Object.keys(COURSE_USER_ROLES).map((option) => (
-                <MenuItem
-                  key={`role-${user.id}-${option}`}
-                  id={`role-${user.id}-${option}`}
-                  value={option}
-                >
-                  {COURSE_USER_ROLES[option]}
-                </MenuItem>
-              ))}
+              {roles}
             </TextField>
           );
         },
@@ -434,15 +657,15 @@ const ManageUsersTable: FC<Props> = (props) => {
   if (renderRowActionComponent) {
     columns.push({
       name: 'actions',
-      label: intl.formatMessage(tableTranslations.actions),
+      label: t(tableTranslations.actions),
       options: {
+        filter: false,
         empty: true,
         sort: false,
-        alignCenter: true,
-        customBodyRender: (_value, tableMeta): JSX.Element => {
+        customBodyRender: (_, tableMeta): JSX.Element => {
           const rowData = tableMeta.rowData as CourseUserRowData;
           const user = rebuildObjectFromRow(columns, rowData);
-          return renderRowActionComponent(user);
+          return renderRowActionComponent(user, submitting);
         },
         download: false,
       },
@@ -452,15 +675,16 @@ const ManageUsersTable: FC<Props> = (props) => {
   return (
     <DataTable
       columns={columns}
+      components={{ TableToolbarSelect }}
       data={users}
       includeRowNumber
       options={options}
-      title={title}
+      title={props.title}
       withMargin
     />
   );
 };
 
-export default memo(injectIntl(ManageUsersTable), (prevProps, nextProps) => {
-  return equal(prevProps.users, nextProps.users);
-});
+export default memo(ManageUsersTable, (prevProps, nextProps) =>
+  equal(prevProps.users, nextProps.users),
+);

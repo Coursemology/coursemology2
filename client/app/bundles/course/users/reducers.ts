@@ -30,6 +30,7 @@ const initialState: UsersState = {
   permissions: {
     canManageCourseUsers: false,
     canManageEnrolRequests: false,
+    canManageReferenceTimelines: false,
     canManagePersonalTimes: false,
     canRegisterWithCode: false,
   },
@@ -44,6 +45,7 @@ const initialState: UsersState = {
     courseUserName: '',
     rowCount: 0,
   },
+  timelines: {},
 };
 
 const reducer = produce((draft: UsersState, action: UsersActionType) => {
@@ -77,6 +79,7 @@ const reducer = produce((draft: UsersState, action: UsersActionType) => {
       }
       draft.permissions = action.manageCourseUsersPermissions;
       draft.manageCourseUsersData = action.manageCourseUsersData;
+      draft.timelines = action.timelines;
       break;
     }
     case DELETE_USER: {

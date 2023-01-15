@@ -24,6 +24,7 @@ const initialState: InvitationsState = {
   permissions: {
     canManageCourseUsers: false,
     canManageEnrolRequests: false,
+    canManageReferenceTimelines: false,
     canManagePersonalTimes: false,
     canRegisterWithCode: false,
   },

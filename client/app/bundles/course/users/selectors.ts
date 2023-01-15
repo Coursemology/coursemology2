@@ -48,6 +48,10 @@ export function getStudentOptionMiniEntities(state: AppState) {
   ).filter((entity) => entity.role === 'student');
 }
 
+export function getAssignableTimelines(state: AppState) {
+  return getLocalState(state).timelines;
+}
+
 export function getManageCourseUserPermissions(state: AppState) {
   return getLocalState(state).permissions;
 }
