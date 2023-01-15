@@ -21,9 +21,15 @@ interface PreloadProps<Data> {
   after?: number;
 }
 
+interface PreloadState<Data> {
+  preloaded: boolean;
+  data: Data;
+}
+
 const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
   const { t } = useTranslation();
-  const [data, setData] = useState<Data>();
+
+  const [state, setState] = useState<PreloadState<Data>>();
   const [loading, setLoading] = useState(true);
   const [failed, toggleFailed] = useToggle();
 
@@ -32,8 +38,8 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
 
     props
       .while()
-      .then((result) => {
-        if (!ignore) setData(result);
+      .then((data) => {
+        if (!ignore) setState({ preloaded: true, data });
       })
       .catch((error: AxiosError) => {
         toggleFailed();
@@ -68,7 +74,9 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
   const refreshable = (element: JSX.Element): JSX.Element =>
     loading ? props.render : element;
 
-  return data ? props.children(data, refreshable) : props.render;
+  if (!state?.preloaded) return props.render;
+
+  return props.children(state.data, refreshable);
 };
 
 export default Preload;
