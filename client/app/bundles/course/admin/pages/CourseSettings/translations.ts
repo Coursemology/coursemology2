@@ -53,7 +53,7 @@ export default defineMessages({
   },
   startsAt: {
     id: 'course.admin.CourseSettings.startsAt',
-    defaultMessage: 'Starts as',
+    defaultMessage: 'Starts at',
   },
   endsAt: {
     id: 'course.admin.CourseSettings.endsAt',

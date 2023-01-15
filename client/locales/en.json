@@ -486,7 +486,7 @@
     "defaultMessage": "Start time is required."
   },
   "course.admin.CourseSettings.startsAt": {
-    "defaultMessage": "Starts as"
+    "defaultMessage": "Starts at"
   },
   "course.admin.CourseSettings.stragglers": {
     "defaultMessage": "Stragglers"
@@ -1041,7 +1041,7 @@
     "defaultMessage": "Students can already move between questions in manually graded assessments."
   },
   "course.assessment.AssessmentForm.startAt": {
-    "defaultMessage": "Starts at *"
+    "defaultMessage": "Starts at"
   },
   "course.assessment.AssessmentForm.startEndValidationError": {
     "defaultMessage": "Must be after starting time"
