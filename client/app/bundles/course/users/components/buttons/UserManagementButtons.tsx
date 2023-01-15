@@ -13,6 +13,7 @@ import { deleteUser } from '../../operations';
 
 interface Props extends WrappedComponentProps {
   user: CourseUserRowData;
+  disabled?: boolean;
 }
 
 const styles = {
@@ -66,7 +67,7 @@ const UserManagementButtons: FC<Props> = (props) => {
           name: user.name,
           email: user.email,
         })}
-        disabled={isDeleting}
+        disabled={isDeleting || Boolean(props.disabled)}
         loading={isDeleting}
         onClick={onDelete}
         sx={styles.buttonStyle}
@@ -76,9 +77,4 @@ const UserManagementButtons: FC<Props> = (props) => {
   );
 };
 
-export default memo(
-  injectIntl(UserManagementButtons),
-  (prevProps, nextProps) => {
-    return equal(prevProps.user, nextProps.user);
-  },
-);
+export default memo(injectIntl(UserManagementButtons), equal);

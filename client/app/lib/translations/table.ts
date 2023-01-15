@@ -35,7 +35,7 @@ const translations = defineMessages({
   },
   timelineAlgorithm: {
     id: 'lib.translations.table.column.timelineAlgorithm',
-    defaultMessage: 'Timeline',
+    defaultMessage: 'Algorithm',
   },
   invitationSentAt: {
     id: 'lib.translations.table.column.invitationSentAt',
@@ -200,6 +200,10 @@ const translations = defineMessages({
   videoName: {
     id: 'lib.translations.table.column.videoName',
     defaultMessage: 'Video Name',
+  },
+  groups: {
+    id: 'lib.translations.table.column.groups',
+    defaultMessage: 'Group(s)',
   },
 });
 

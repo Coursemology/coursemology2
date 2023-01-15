@@ -15,6 +15,7 @@ import ManageUsersTable from '../../components/tables/ManageUsersTable';
 import { fetchStudents } from '../../operations';
 import {
   getAllStudentMiniEntities,
+  getAssignableTimelines,
   getManageCourseUserPermissions,
   getManageCourseUsersSharedData,
 } from '../../selectors';
@@ -35,15 +36,23 @@ const translations = defineMessages({
 const ManageStudents: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
+
   const students = useSelector((state: AppState) =>
     getAllStudentMiniEntities(state),
   );
+
   const permissions = useSelector((state: AppState) =>
     getManageCourseUserPermissions(state),
   );
+
   const sharedData = useSelector((state: AppState) =>
     getManageCourseUsersSharedData(state),
   );
+
+  const timelines = useSelector((state: AppState) =>
+    getAssignableTimelines(state),
+  );
+
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
@@ -78,9 +87,10 @@ const ManageStudents: FC<Props> = (props) => {
           {students.length > 0 ? (
             <ManageUsersTable
               csvDownloadOptions={{ filename: 'Student List' }}
-              renderRowActionComponent={(user): JSX.Element => (
-                <UserManagementButtons user={user} />
+              renderRowActionComponent={(user, disabled): JSX.Element => (
+                <UserManagementButtons disabled={disabled} user={user} />
               )}
+              timelinesMap={timelines}
               title={intl.formatMessage(translations.manageStudentsTitle)}
               users={students}
             />

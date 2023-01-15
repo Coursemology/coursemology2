@@ -14,6 +14,7 @@ import {
   PersonalTimeFormData,
   PersonalTimePostData,
 } from 'types/course/personalTimes';
+import { TimelineData } from 'types/course/referenceTimelines';
 import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
@@ -35,13 +36,14 @@ import {
  *   }
  */
 const formatUpdateUser = (
-  data: CourseUserEntity | CourseUserMiniEntity,
+  data: CourseUserEntity | Partial<CourseUserMiniEntity>,
 ): UpdateCourseUserPatchData => {
   return {
     course_user: {
       name: data.name,
       phantom: data.phantom,
       role: data.role,
+      reference_timeline_id: data.referenceTimelineId,
       timeline_algorithm: data.timelineAlgorithm,
     },
   };
@@ -104,6 +106,8 @@ export function fetchStudents(): Operation<void> {
           data.users,
           data.permissions,
           data.manageCourseUsersData,
+          [],
+          data.timelines,
         ),
       );
     });
@@ -133,7 +137,7 @@ export function loadUser(userId: number): Operation<SaveUserAction> {
 
 export function updateUser(
   userId: number,
-  data: CourseUserEntity | CourseUserMiniEntity,
+  data: CourseUserEntity | Partial<CourseUserMiniEntity>,
 ): Operation<void> {
   const attributes = formatUpdateUser(data);
   return async (dispatch) =>
@@ -146,6 +150,10 @@ export function updateUser(
         };
         dispatch(actions.updateUserOption(userOption));
       }
+
+      // TODO: Fix `actions.saveUser`'s params to support handling `CourseUserMiniEntity`.
+      // This should trigger a TypeScript type mismatch because `response.data` could be
+      // of type `CourseUserMiniEntity`, but `actions.saveUser` only accepts `CourseUserData`.
       dispatch(actions.saveUser(response.data));
     });
 }
@@ -161,6 +169,26 @@ export function upgradeToStaff(
         dispatch(actions.saveUser(user));
       });
     });
+}
+
+export function assignToTimeline(
+  ids: CourseUserBasicMiniEntity['id'][],
+  timelineId: TimelineData['id'],
+): Operation<void> {
+  return async (dispatch) => {
+    await CourseAPI.users.assignToTimeline(ids, timelineId);
+    ids.forEach((id) => {
+      // @ts-ignore: ignore type mismatch between this object and `CourseUserData`
+      // TODO: Fix `actions.saveUser`'s params to support handling `CourseUserMiniEntity`.
+      // The dispatch in `updateUser` above technically should also fire the same error.
+      // The only reason it does not is because the `response` is not typed, and thus
+      // its `response.data` is `any`, thus is assignable to `CourseUserData`.
+      //
+      // This line still technically works because `saveEntityToStore` thankfully
+      // intelligently merges the old and new entities.
+      dispatch(actions.saveUser({ id, referenceTimelineId: timelineId }));
+    });
+  };
 }
 
 export function deleteUser(userId: number): Operation<void> {

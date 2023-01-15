@@ -45,6 +45,7 @@ const processTheme = (theme, newHeight, grid, alignCenter, newPadding) =>
             ...theme.components.MuiTableCell?.styleOverrides.root,
             display: grid ? 'grid' : 'flex',
             alignContent: alignCenter ? 'center' : 'inherit',
+            width: '100%',
           },
         },
       },
