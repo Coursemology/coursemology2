@@ -1,4 +1,4 @@
-import { ComponentProps, KeyboardEventHandler } from 'react';
+import { ComponentProps } from 'react';
 import { Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
@@ -7,32 +7,12 @@ import TextField from 'lib/components/core/fields/TextField';
 type SwitchableTextFieldProps = ComponentProps<typeof TextField> & {
   editable: boolean;
   textProps?: ComponentProps<typeof Typography>;
-  onPressEnter?: () => void;
-  onPressEscape?: () => void;
 };
 
 const SwitchableTextField = (props: SwitchableTextFieldProps): JSX.Element => {
-  const {
-    editable,
-    textProps,
-    onPressEnter,
-    onPressEscape,
-    ...textFieldProps
-  } = props;
+  const { editable, textProps, ...textFieldProps } = props;
 
   const { typography } = useTheme();
-
-  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (e): void => {
-    if (onPressEnter && e.key === 'Enter') {
-      e.preventDefault();
-      onPressEnter();
-    }
-
-    if (onPressEscape && e.key === 'Escape') {
-      e.preventDefault();
-      onPressEscape();
-    }
-  };
 
   if (!editable)
     return (
@@ -50,7 +30,6 @@ const SwitchableTextField = (props: SwitchableTextFieldProps): JSX.Element => {
     <TextField
       autoFocus
       hiddenLabel
-      onKeyDown={handleKeyDown}
       size="small"
       value={props.value}
       variant="filled"
