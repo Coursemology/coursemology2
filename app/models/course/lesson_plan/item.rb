@@ -46,13 +46,11 @@ class Course::LessonPlan::Item < ApplicationRecord
   #   Orders the lesson plan items by the starting date.
   scope :ordered_by_date, (lambda do
     includes(reference_times: :reference_timeline).
-      where(course_reference_timelines: { default: true }).
       merge(Course::ReferenceTime.order(:start_at))
   end)
 
   scope :ordered_by_date_and_title, (lambda do
     includes(reference_times: :reference_timeline).
-      where(course_reference_timelines: { default: true }).
       merge(Course::ReferenceTime.order(:start_at)).
       order(:title)
   end)
