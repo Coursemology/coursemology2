@@ -1,0 +1,64 @@
+import { Typography } from '@mui/material';
+import moment from 'moment';
+import {
+  ItemWithTimeData,
+  TimelineData,
+} from 'types/course/referenceTimelines';
+
+import RowSpacer from '../../components/RowSpacer';
+import { getDaysFromSeconds } from '../../utils';
+
+import TimelineSidebarItem from './TimelineSidebarItem';
+
+interface ItemsSidebarProps {
+  for: ItemWithTimeData[];
+  within: TimelineData[];
+  className?: string;
+  onRequestFocus?: (index: number) => void;
+}
+
+const ItemsSidebar = (props: ItemsSidebarProps): JSX.Element => {
+  const { for: items, within: timelines } = props;
+
+  return (
+    <aside className={`h-fit shrink-0 ${props.className ?? ''}`}>
+      {items.map((item) => (
+        <section
+          key={item.id}
+          className="flex border-0 border-b border-solid border-neutral-200"
+        >
+          <div className="w-1/2 border-0 border-r border-solid border-neutral-200 py-2 pr-2">
+            <Typography className="line-clamp-2" variant="body2">
+              {item.title}
+            </Typography>
+          </div>
+
+          <div className="flex w-1/2 flex-col">
+            {timelines.map((timeline) => {
+              const assignedTime = item.times[timeline.id];
+
+              return (
+                <TimelineSidebarItem
+                  key={timeline.id}
+                  assigned={Boolean(assignedTime)}
+                  for={timeline}
+                  onClick={(): void => {
+                    const index = getDaysFromSeconds(
+                      moment(assignedTime.startAt).unix(),
+                    );
+
+                    props.onRequestFocus?.(index);
+                  }}
+                />
+              );
+            })}
+
+            <RowSpacer />
+          </div>
+        </section>
+      ))}
+    </aside>
+  );
+};
+
+export default ItemsSidebar;
