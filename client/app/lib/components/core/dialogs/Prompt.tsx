@@ -16,6 +16,7 @@ interface BasePromptProps {
   title?: string | ReactNode;
   children?: string | ReactNode;
   onClose?: () => void;
+  onClosed?: () => void;
   disabled?: boolean;
   contentClassName?: string;
 }
@@ -63,7 +64,12 @@ const Prompt = (props: PromptProps): JSX.Element => {
   };
 
   return (
-    <Dialog fullWidth onClose={handleClose} open={props.open ?? false}>
+    <Dialog
+      fullWidth
+      onClose={handleClose}
+      open={props.open ?? false}
+      TransitionProps={{ onExited: props.onClosed }}
+    >
       {props.title && <DialogTitle>{props.title}</DialogTitle>}
 
       {props.children && (
