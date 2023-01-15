@@ -13,6 +13,7 @@ type CheckboxProps = ComponentProps<typeof MuiCheckbox> & {
   disabledHint?: string | JSX.Element;
   error?: string;
   variant?: ComponentProps<typeof Typography>['variant'];
+  descriptionVariant?: ComponentProps<typeof Typography>['variant'];
   labelClassName?: string;
 };
 
@@ -23,6 +24,7 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
       label,
       dangerouslySetInnerHTML,
       description,
+      descriptionVariant,
       disabledHint,
       error,
       labelClassName,
@@ -36,6 +38,7 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
           className={`mb-0 ${props.readOnly ? 'cursor-auto' : ''} ${
             labelClassName ?? ''
           }`}
+          componentsProps={{ typography: { variant } }}
           control={createElement(component ?? MuiCheckbox, {
             ref,
             ...checkboxProps,
@@ -65,7 +68,7 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
           {description && (
             <Typography
               color={props.disabled ? 'text.disabled' : 'text.secondary'}
-              variant="body2"
+              variant={descriptionVariant ?? 'body2'}
             >
               {description}
             </Typography>
