@@ -39,6 +39,7 @@ const FormDateTimePickerField = (props) => {
     disabled,
     label,
     renderIf,
+    required,
     style,
     className,
     variant = 'standard',
@@ -82,6 +83,7 @@ const FormDateTimePickerField = (props) => {
                 InputLabelProps: { shrink: true },
               })}
               ref={field.ref}
+              required={required}
               variant={variant}
               {...(disableMargins ? null : { style: styles.dateTimeTextField })}
             />
@@ -109,6 +111,7 @@ FormDateTimePickerField.propTypes = {
   variant: PropTypes.string,
   disableMargins: PropTypes.bool,
   disableShrinkingLabel: PropTypes.bool,
+  required: PropTypes.bool,
 };
 
 export default injectIntl(FormDateTimePickerField);
