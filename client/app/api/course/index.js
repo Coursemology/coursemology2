@@ -20,6 +20,7 @@ import LevelAPI from './Level';
 import MaterialFoldersAPI from './MaterialFolders';
 import MaterialsAPI from './Materials';
 import PersonalTimesAPI from './PersonalTimes';
+import ReferenceTimelinesAPI from './ReferenceTimelines';
 import StatisticsAPI from './Statistics';
 import SurveyAPI from './Survey';
 import UserEmailSubscriptionsAPI from './UserEmailSubscriptions';
@@ -51,6 +52,7 @@ const CourseAPI = {
   materials: new MaterialsAPI(),
   materialFolders: new MaterialFoldersAPI(),
   personalTimes: new PersonalTimesAPI(),
+  referenceTimelines: new ReferenceTimelinesAPI(),
   statistics: StatisticsAPI,
   submissions: new SubmissionsAPI(),
   survey: SurveyAPI,
