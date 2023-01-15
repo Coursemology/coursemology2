@@ -89,9 +89,10 @@ const DayView = (): JSX.Element => {
           <aside
             ref={contentsRef}
             className="scrollbar-hidden ml-[1px] h-fit w-full overflow-x-scroll"
-            onScroll={(e): void =>
-              calendarRef.current?.scrollTo(e.currentTarget.scrollLeft)
-            }
+            onScroll={(e): void => {
+              if (e.currentTarget.scrollLeft)
+                calendarRef.current?.scrollTo(e.currentTarget.scrollLeft);
+            }}
           >
             <TimelinesStack for={filteredItems} within={visibleTimelines} />
           </aside>
