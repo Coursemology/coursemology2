@@ -313,4 +313,3 @@ workflows:
             - lint
             - jslint
             - jstest
-            - i18n
