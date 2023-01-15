@@ -3,16 +3,19 @@ import {
   ComponentProps,
   FocusEventHandler,
   forwardRef,
+  KeyboardEventHandler,
 } from 'react';
 import { TextField as MuiTextField } from '@mui/material';
 
 type TextFieldProps = ComponentProps<typeof MuiTextField> & {
   trims?: boolean;
+  onPressEnter?: () => void;
+  onPressEscape?: () => void;
 };
 
 const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
   (props, ref): JSX.Element => {
-    const { trims, ...textFieldProps } = props;
+    const { trims, onPressEnter, onPressEscape, ...textFieldProps } = props;
 
     const handleChange: ChangeEventHandler<HTMLInputElement> = (e): void => {
       if (trims) {
@@ -31,12 +34,25 @@ const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
       return props.onBlur?.(e);
     };
 
+    const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (e): void => {
+      if (onPressEnter && e.key === 'Enter') {
+        e.preventDefault();
+        onPressEnter();
+      }
+
+      if (onPressEscape && e.key === 'Escape') {
+        e.preventDefault();
+        onPressEscape();
+      }
+    };
+
     return (
       <MuiTextField
         {...textFieldProps}
         inputRef={ref}
         onBlur={handleBlur}
         onChange={handleChange}
+        onKeyDown={handleKeyDown}
       />
     );
   },
