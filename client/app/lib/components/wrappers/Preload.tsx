@@ -10,10 +10,12 @@ import messagesTranslations from 'lib/translations/messages';
 interface PreloadProps<Data> {
   while: () => Promise<Data>;
   render: JSX.Element;
-  children: (
-    data: Data,
-    refreshable: (element: JSX.Element) => JSX.Element,
-  ) => JSX.Element;
+  children:
+    | JSX.Element
+    | ((
+        data: Data,
+        refreshable: (element: JSX.Element) => JSX.Element,
+      ) => JSX.Element);
   onErrorDo?: (error: unknown) => void;
   silently?: boolean;
   onErrorToast?: string;
@@ -76,7 +78,10 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
 
   if (!state?.preloaded) return props.render;
 
-  return props.children(state.data, refreshable);
+  if (typeof props.children === 'function')
+    return props.children(state.data, refreshable);
+
+  return props.children;
 };
 
 export default Preload;
