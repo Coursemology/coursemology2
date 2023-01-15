@@ -55,6 +55,7 @@ interface FormProps extends Emits<FormEmitter> {
     formState: FormState<any>,
   ) => ReactNode;
   disabled?: boolean;
+  className?: string;
 
   /**
    * Dispatched when the form is reset. Return `true` to prevent the default form
@@ -138,7 +139,10 @@ const Form = (props: FormProps): JSX.Element => {
   };
 
   return (
-    <form className="pb-32" onSubmit={handleSubmit(processAndSubmit)}>
+    <form
+      className={`${props.headsUp ? 'pb-32' : ''} ${props.className ?? ''}`}
+      onSubmit={handleSubmit(processAndSubmit)}
+    >
       {props.children?.(control, watch, formState)}
 
       {props.headsUp && (
