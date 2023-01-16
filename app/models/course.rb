@@ -262,6 +262,11 @@ class Course < ApplicationRecord
     setting_emails.where(component: email_settings_enabled_components)
   end
 
+  def reference_timeline_for(course_user)
+    # TODO: [PR#5491] Return only `default_reference_timeline.id` if Multiple Reference Timelines component is disabled.
+    course_user&.reference_timeline_id || default_reference_timeline.id
+  end
+
   private
 
   # Set default values
