@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class Course < ApplicationRecord
-  include Course::LessonPlanConcern
   include Course::SearchConcern
   include Course::DuplicationConcern
   include Course::CourseComponentsConcern
