@@ -17,12 +17,6 @@ import MilestoneRow from './MilestoneRow';
 
 const { ITEM_TYPE, TITLE, START_AT, BONUS_END_AT, END_AT, PUBLISHED } = fields;
 
-const styles = {
-  page: {
-    marginTop: 30,
-  },
-};
-
 class LessonPlanEdit extends Component {
   // eslint-disable-next-line class-methods-use-this
   renderGroup = (group) => {
@@ -99,8 +93,8 @@ class LessonPlanEdit extends Component {
     return (
       <>
         {this.props.canManageLessonPlan && this.renderHeader()}
-        <div style={styles.page}>
-          <table>
+        <div className='mt-10'>
+          <table className='border-separate border-spacing-x-3'>
             {this.renderTableHeader()}
             <tbody>{groups.map(this.renderGroup)}</tbody>
           </table>
