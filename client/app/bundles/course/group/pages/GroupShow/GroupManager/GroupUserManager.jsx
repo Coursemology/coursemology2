@@ -140,15 +140,30 @@ const getAvailableUserInOtherGroups = (
   courseUsers,
   groups,
   group,
-  availableSearch,
+  // availableSearch,
 ) => {
   const otherGroups = groups.filter((x) => x !== group)
-  const allOtherGroupMemberIds = new Set(otherGroups.flatMap((g) => g.members.map((m) => m.id)));
+  // const allOtherGroupMemberIds = new Set(otherGroups.flatMap((g) => g.members.map((m) => m.id)));
+  const mapStudentToGroups = {}
 
-  return filterByName(
-    availableSearch,
-    courseUsers.filter((cu) => allOtherGroupMemberIds.has(cu.id)),
-  );
+  for (let i = 0; i < otherGroups.length; i++) {
+    const membersOfThisGroup = otherGroups[i].members.map((m) => m.id)
+    for (let j = 0; j < membersOfThisGroup.length; j++) {
+      if (membersOfThisGroup[j] in mapStudentToGroups) {
+        mapStudentToGroups[membersOfThisGroup[j]].push(` ${otherGroups[i].name}`);
+      } else {
+        mapStudentToGroups[membersOfThisGroup[j]] = [` ${otherGroups[i].name}`];
+      }
+    }
+  }
+
+  // console.log(mapStudentToGroups)
+  // console.log(filterByName(
+  //   availableSearch,
+  //   courseUsers.filter((cu) => allOtherGroupMemberIds.has(cu.id)),
+  // ))
+
+  return mapStudentToGroups;
 };
 
 // Actually, the group can also be read from Redux. But for now, we'll get it from the parent.
@@ -184,9 +199,9 @@ const GroupUserManager = ({
         courseUsers,
         groups,
         group,
-        availableSearch,
+        // availableSearch,
       ),
-    [courseUsers, groups, group, availableSearch],
+    [courseUsers, groups, group],
   );
 
   const groupMembers = useMemo(

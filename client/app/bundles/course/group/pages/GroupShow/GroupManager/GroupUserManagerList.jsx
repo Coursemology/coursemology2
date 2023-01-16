@@ -84,7 +84,7 @@ const styles = {
 const GroupUserManagerListItem = ({
   user,
   colour,
-  existOtherGroup,
+  otherGroups,
   onCheck,
   showDropdown,
   onChangeDropdown,
@@ -107,7 +107,7 @@ const GroupUserManagerListItem = ({
       />
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
-        {existOtherGroup ? `${user.name} (already member of other group)` : user.name}
+        {otherGroups ? `${user.name} (also members of${otherGroups})` : user.name}
       </ListItemText>
     </div>
 
@@ -135,7 +135,7 @@ const GroupUserManagerListItem = ({
 GroupUserManagerListItem.propTypes = {
   user: memberShape.isRequired,
   colour: PropTypes.object,
-  existOtherGroup: PropTypes.bool,
+  otherGroups: PropTypes.arrayOf(PropTypes.string),
   onCheck: PropTypes.func.isRequired,
   showDropdown: PropTypes.bool,
   onChangeDropdown: PropTypes.func,
@@ -145,7 +145,7 @@ GroupUserManagerListItem.propTypes = {
 const GroupUserManagerList = ({
   students = [],
   staff = [],
-  memberOtherGroups = [],
+  memberOtherGroups = {},
   onCheck,
   colourMap,
   showDropdown = false,
@@ -170,10 +170,10 @@ const GroupUserManagerList = ({
           <GroupUserManagerListItem
             key={user.id}
             colour={colour}
-            existOtherGroup={members.map((x) => x.id).includes(user.id)}
             isChecked={isChecked}
             onChangeDropdown={onChangeDropdown}
             onCheck={onCheck}
+            otherGroups={memberOtherGroups[user.id.toString()]}
             showDropdown={showDropdown}
             user={user}
           />
