@@ -51,7 +51,8 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
   def update
     if params[:response][:submit]
       authorize!(:submit, @response)
-      @response.submit
+      survey_bonus_end_time = @response.survey.time_for(current_course_user).bonus_end_at
+      @response.submit(survey_bonus_end_time)
     else
       authorize!(:modify, @response)
       @response.update_updated_at
@@ -97,8 +98,12 @@ class Course::Survey::ResponsesController < Course::Survey::Controller
   def render_response_json
     load_sections
     load_answers
-    render partial: 'response',
-           locals: { response: @response, answers: @answers, survey: @survey }
+    render partial: 'response', locals: {
+      response: @response,
+      answers: @answers,
+      survey: @survey,
+      survey_time: @survey.time_for(current_course_user)
+    }
   end
 
   def response_update_params

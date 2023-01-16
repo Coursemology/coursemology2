@@ -20,5 +20,6 @@ json.responses @course_students do |student|
   end
 end
 json.survey do
-  json.partial! 'course/survey/surveys/survey', survey: @survey
+  survey_time = @survey.time_for(current_course_user)
+  json.partial! 'course/survey/surveys/survey', survey: @survey, survey_time: survey_time
 end

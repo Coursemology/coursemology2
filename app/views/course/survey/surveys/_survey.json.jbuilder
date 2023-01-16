@@ -1,9 +1,10 @@
 # frozen_string_literal: true
-json.(survey, :id, :title, :base_exp, :time_bonus_exp, :published,
-      :anonymous, :allow_response_after_end, :allow_modify_after_submit, :has_todo)
-json.start_at survey.start_at&.iso8601
-json.end_at survey.end_at&.iso8601
-json.bonus_end_at survey.bonus_end_at&.iso8601
+json.call(survey, :id, :title, :base_exp, :time_bonus_exp, :published,
+          :anonymous, :allow_response_after_end, :allow_modify_after_submit, :has_todo)
+
+json.start_at survey_time.start_at&.iso8601
+json.end_at survey_time.end_at&.iso8601
+json.bonus_end_at survey_time.bonus_end_at&.iso8601
 json.closing_reminded_at survey.closing_reminded_at&.iso8601
 json.description format_ckeditor_rich_text(survey.description)
 
