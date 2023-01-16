@@ -1,3 +1,1 @@
-import TimePopup from './TimePopup';
-
-export default TimePopup;
+export { default } from './TimePopup';

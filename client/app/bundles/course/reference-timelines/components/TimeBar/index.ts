@@ -1,3 +1,1 @@
-import TimeBar from './TimeBar';
-
-export default TimeBar;
+export { default } from './TimeBar';
