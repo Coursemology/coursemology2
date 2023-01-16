@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 json.survey do
-  json.partial! 'course/survey/surveys/survey_with_questions', survey: survey
+  json.partial! 'course/survey/surveys/survey_with_questions', survey: survey, survey_time: survey_time
 end
 
 json.response do
@@ -12,7 +12,7 @@ json.response do
   json.answers answers do |answer|
     if answer
       json.present true
-      json.(answer, :id, :question_id, :text_response, :question_option_ids)
+      json.call(answer, :id, :question_id, :text_response, :question_option_ids)
     else
       json.present false
     end
