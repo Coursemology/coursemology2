@@ -135,7 +135,7 @@ class Course::LessonPlan::Item < ApplicationRecord
 
   def reference_time_for(course_user)
     default_reference_timeline_id = course.default_reference_timeline.id
-    reference_timeline_id = course_user&.reference_timeline_id || default_reference_timeline_id
+    reference_timeline_id = course.reference_timeline_for(course_user)
 
     # This reversion anticipates if course_user is on a non-default timeline which does not override the
     # default time for this lesson plan item.
