@@ -11,8 +11,8 @@ module Course::UsersControllerManagementConcern
 
   def update
     @course_user.assign_attributes(course_user_params)
-    # Recompute personal timeline if algorithm changed
-    update_personalized_timeline_for_user(@course_user) if @course_user.timeline_algorithm_changed?
+
+    update_personalized_timeline_for_user(@course_user) if should_update_personalized_timeline
 
     if @course_user.save
       update_user_success
@@ -81,6 +81,10 @@ module Course::UsersControllerManagementConcern
   end
 
   private
+
+  def should_update_personalized_timeline
+    @course_user.timeline_algorithm_changed? || @course_user.reference_timeline_id_changed?
+  end
 
   def course_user_params
     @course_user_params ||= params.require(:course_user).permit(
