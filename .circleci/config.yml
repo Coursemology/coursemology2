@@ -101,6 +101,15 @@ commands:
           keys:
             - v1-yarn-build-{{ .Revision }}
 
+  setup_db:
+    steps:
+      - run:
+          name: Setup DB
+          command: |
+            bundle exec rake db:setup
+          environment:
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+
 jobs:
   test:
     docker:
@@ -148,13 +157,7 @@ jobs:
           version: 20.10.18
           docker_layer_caching: true
 
-      # Database setup
-      - run:
-          name: Setup DB
-          command: |
-            bundle exec rake db:setup
-          environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+      - setup_db
 
       # Run tests!
       - run:
@@ -184,6 +187,36 @@ jobs:
     resource_class: large
 
   lint:
+    docker:
+      - image: cimg/ruby:3.0.5-browsers
+        environment:
+          PG_HOST: localhost
+          PG_USER: ubuntu
+          RAILS_ENV: test
+          BUNDLE_APP_CONFIG: ~/repo/.bundle
+
+      - image: cimg/postgres:14.5
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: coursemology_test
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_ruby_cache
+
+      - setup_db
+
+      - run:
+          name: Run FactoryBot lint
+          command: |
+            bundle exec rake factory_bot:lint
+          environment:
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+
+  jslint:
     docker:
       # specify the version you desire here
       - image: cimg/ruby:3.0.5-browsers
@@ -255,13 +288,7 @@ jobs:
 
       - restore_ruby_cache
 
-      # Database setup
-      - run:
-          name: Setup DB
-          command: |
-            bundle exec rake db:setup
-          environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+      - setup_db
 
       # Run i18n checks!
       - run:
@@ -269,7 +296,6 @@ jobs:
           command: |
             bundle exec i18n-tasks unused
             bundle exec i18n-tasks missing
-            bundle exec rake factory_bot:lint
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
     resource_class: large
@@ -279,10 +305,12 @@ workflows:
   build_and_test_and_lint:
     jobs:
       - lint
+      - jslint
       - jstest
       - i18n
       - test:
           requires:
             - lint
+            - jslint
             - jstest
             - i18n
