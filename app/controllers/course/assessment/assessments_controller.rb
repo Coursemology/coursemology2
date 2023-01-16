@@ -40,6 +40,15 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
         @question_assessments = @assessment.question_assessments.with_question_actables
         @assessment_conditions = @assessment.assessment_conditions.includes({ conditional: :actable })
         @questions = @assessment.questions.includes({ actable: :test_cases })
+
+        @assessment_time = @assessment.time_for(current_course_user)
+
+        @requirements = @assessment.specific_conditions.map do |condition|
+          {
+            title: condition.title,
+            satisfied: current_course_user.present? ? condition.satisfied_by?(current_course_user) : nil
+          }.compact
+        end
       end
     end
   end
