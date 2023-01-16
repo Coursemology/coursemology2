@@ -57,17 +57,11 @@ module Course::CourseAbilityComponent
 
   def define_owners_course_permissions
     allow_owners_managing_course
-    allow_owners_managing_reference_timelines
   end
 
   def allow_owners_managing_course
     can :manage, Course, id: course.id
     can :manage, CourseUser, course_id: course.id
-    can :manage, Course::EnrolRequest,  course_id: course.id
-  end
-
-  def allow_owners_managing_reference_timelines
-    can :manage, Course::ReferenceTimeline, course_id: course.id
-    can :manage, Course::ReferenceTime, reference_timeline: { course_id: course.id }
+    can :manage, Course::EnrolRequest, course_id: course.id
   end
 end
