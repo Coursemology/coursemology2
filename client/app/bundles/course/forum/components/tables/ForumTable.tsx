@@ -1,7 +1,9 @@
 import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { Icon, Typography } from '@mui/material';
+import Email from '@mui/icons-material/Email';
+import Help from '@mui/icons-material/Help';
+import { Tooltip, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumEntity } from 'types/course/forums';
@@ -51,6 +53,11 @@ const translations = defineMessages({
     id: 'course.forum.ForumTable.isSubscribed',
     defaultMessage: 'Subscribed?',
   },
+  autoSubscribe: {
+    id: 'course.forum.ForumTable.autoSubscribe',
+    defaultMessage:
+      'Users will be automatically subscribed to a topic in this forum when they create a post in the topic.',
+  },
 });
 
 const ForumTable: FC<Props> = (props) => {
@@ -90,22 +97,41 @@ const ForumTable: FC<Props> = (props) => {
 
           return (
             <>
-              <div>
-                <Link key={forum.id} className="font-bold" to={forum.forumUrl}>
-                  <Typography className="space-x-2" variant="h6">
-                    {forum.isUnresolved && (
-                      <Icon
-                        className="fa fa-question-circle text-3xl"
-                        title={t(translations.hasUnresolved)}
-                      />
-                    )}
-                    {forum.name}{' '}
-                    <CustomBadge
-                      badgeContent={forum.topicUnreadCount}
-                      color="info"
-                    />
-                  </Typography>
-                </Link>
+              {/* Abstract the following */}
+              <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
+                <CustomBadge badgeContent={forum.topicUnreadCount} color="info">
+                  <label
+                    className="m-0 flex flex-row font-normal"
+                    title={forum.name}
+                  >
+                    <Link
+                      key={forum.id}
+                      // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
+                      className="line-clamp-2 xl:line-clamp-1"
+                      to={forum.forumUrl}
+                    >
+                      {forum.name}
+                    </Link>
+                  </label>
+                </CustomBadge>
+                <div className="flex items-center space-x-2 max-xl:mt-2 xl:ml-2">
+                  {forum.isUnresolved && (
+                    <Tooltip
+                      disableInteractive
+                      title={t(translations.hasUnresolved)}
+                    >
+                      <Help className="text-3xl text-yellow-500 hover?:text-yellow-600" />
+                    </Tooltip>
+                  )}
+                  {forum.forumTopicsAutoSubscribe && (
+                    <Tooltip
+                      disableInteractive
+                      title={t(translations.autoSubscribe)}
+                    >
+                      <Email className="text-3xl text-neutral-500 hover?:text-neutral-600" />
+                    </Tooltip>
+                  )}
+                </div>
               </div>
               <Typography
                 className="whitespace-normal"

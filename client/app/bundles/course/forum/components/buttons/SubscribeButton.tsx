@@ -3,8 +3,7 @@ import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { NotificationsActive, NotificationsOff } from '@mui/icons-material';
-import { IconButton, Switch, Tooltip } from '@mui/material';
+import { Button, Switch, Tooltip } from '@mui/material';
 import { EmailSubscriptionSetting } from 'types/course/forums';
 import { AppDispatch } from 'types/store';
 
@@ -17,6 +16,14 @@ import {
 } from '../../operations';
 
 const commonTranslations = {
+  subscribe: {
+    id: 'course.forum.SubscribeButton.commonTranslations.subscribe',
+    defaultMessage: 'Subscribe',
+  },
+  unsubscribe: {
+    id: 'course.forum.SubscribeButton.commonTranslations.unsubscribe',
+    defaultMessage: 'Unsubscribe',
+  },
   manageMySubscriptions: {
     id: 'course.forum.SubscribeButton.commonTranslations.manageMySubscription',
     defaultMessage: 'Manage My Subscriptions',
@@ -97,6 +104,7 @@ interface Props {
   entityId: number;
   entityUrl: string;
   entityTitle: string;
+  className?: string;
   disabled?: boolean;
   type?: 'button' | 'checkbox';
 }
@@ -107,6 +115,7 @@ const SubscribeButton: FC<Props> = ({
   entityId,
   entityUrl,
   entityTitle,
+  className,
   disabled: disableButton,
   type,
 }: Props) => {
@@ -232,14 +241,17 @@ const SubscribeButton: FC<Props> = ({
     <Tooltip title={isSubscribed ? subscribedTooltip : unsubscribedTooltip}>
       <span>
         {type === 'button' && (
-          <IconButton
-            className={`${entityType}-subscribe-${entityId}`}
+          <Button
+            className={`${entityType}-subscribe-${entityId} ${className ?? ''}`}
             color="inherit"
             disabled={disabled}
             onClick={handleUpdate}
+            variant="outlined"
           >
-            {isSubscribed ? <NotificationsActive /> : <NotificationsOff />}
-          </IconButton>
+            {isSubscribed
+              ? t(commonTranslations.unsubscribe)
+              : t(commonTranslations.subscribe)}
+          </Button>
         )}
         {type === 'checkbox' && (
           <Switch

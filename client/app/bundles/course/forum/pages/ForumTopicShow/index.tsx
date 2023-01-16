@@ -93,9 +93,7 @@ const ForumTopicShow: FC = () => {
     headerToolbars.push(
       <ForumTopicManagementButtons
         key={forumTopic.id}
-        navigateToIndexAfterDelete
-        navigateToShowAfterUpdate
-        showSubscribeButton
+        pageType="TopicShow"
         topic={forumTopic}
       />,
     );

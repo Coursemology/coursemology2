@@ -1,7 +1,7 @@
 import { FC, SyntheticEvent } from 'react';
 import { defineMessages } from 'react-intl';
-import Check from '@mui/icons-material/Check';
-import Clear from '@mui/icons-material/Clear';
+import Star from '@mui/icons-material/Star';
+import StarBorder from '@mui/icons-material/StarBorder';
 import { IconButton, IconButtonProps } from '@mui/material';
 import { ForumTopicEntity, TopicType } from 'types/course/forums';
 
@@ -41,7 +41,7 @@ const MarkAnswerButton: FC<Props> = ({ topic, handleClick, isAnswer }) => {
         isAnswer ? t(translations.unmarkAsAnswer) : t(translations.markAsAnswer)
       }
     >
-      {isAnswer ? <Clear /> : <Check />}
+      {isAnswer ? <Star /> : <StarBorder />}
     </IconButton>
   );
 };

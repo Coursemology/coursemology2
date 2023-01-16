@@ -22,11 +22,9 @@ import SubscribeButton from './SubscribeButton';
 
 interface Props {
   topic: ForumTopicEntity;
-  navigateToIndexAfterDelete?: boolean;
-  navigateToShowAfterUpdate?: boolean;
   disabled?: boolean;
+  pageType: 'TopicShow' | 'TopicIndex';
   showOnHover?: boolean;
-  showSubscribeButton?: boolean;
 }
 
 const translations = defineMessages({
@@ -45,14 +43,7 @@ const translations = defineMessages({
 });
 
 const ForumTopicManagementButtons: FC<Props> = (props) => {
-  const {
-    topic,
-    navigateToIndexAfterDelete,
-    navigateToShowAfterUpdate,
-    disabled,
-    showOnHover,
-    showSubscribeButton,
-  } = props;
+  const { topic, pageType, disabled, showOnHover } = props;
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -75,7 +66,7 @@ const ForumTopicManagementButtons: FC<Props> = (props) => {
             title: topic.title,
           }),
         );
-        if (navigateToIndexAfterDelete) {
+        if (pageType === 'TopicShow') {
           navigate(`/courses/${getCourseId()}/forums/${forumId}`);
         } else {
           setIsDeleting(false);
@@ -100,12 +91,13 @@ const ForumTopicManagementButtons: FC<Props> = (props) => {
         showOnHover
           ? `${
               showButtons ? '' : 'invisible group-hover:visible'
-            } absolute right-0 top-0 flex h-full items-center border-0 pl-20 bg-fade-to-l-neutral-100`
-          : 'whitespace-nowrap'
+            } absolute right-0 top-0 flex h-full items-center space-x-2 border-0 pl-20  bg-fade-to-l-neutral-100`
+          : 'space-x-2 whitespace-nowrap'
       }
     >
-      {showSubscribeButton && (
+      {pageType === 'TopicShow' && (
         <SubscribeButton
+          className="max-lg:!hidden"
           disabled={disableButton}
           emailSubscription={topic.emailSubscription}
           entityId={topic.id}
@@ -116,10 +108,18 @@ const ForumTopicManagementButtons: FC<Props> = (props) => {
         />
       )}
       {topic.permissions.canSetHiddenTopic && (
-        <HideButton disabled={disableButton} topic={topic} />
+        <HideButton
+          className={pageType === 'TopicShow' ? 'max-lg:!hidden' : ''}
+          disabled={disableButton}
+          topic={topic}
+        />
       )}
       {topic.permissions.canSetLockedTopic && (
-        <LockButton disabled={disableButton} topic={topic} />
+        <LockButton
+          className={pageType === 'TopicShow' ? 'max-lg:!hidden' : ''}
+          disabled={disableButton}
+          topic={topic}
+        />
       )}
       {topic.permissions.canEditTopic && (
         <EditButton
@@ -144,7 +144,7 @@ const ForumTopicManagementButtons: FC<Props> = (props) => {
 
   return (
     <ClickAwayListener onClickAway={(): void => setShowButtons(false)}>
-      <div className="group">
+      <div className="group relative">
         {showOnHover && (
           <IconButton
             className={`topic-action-${topic.id}`}
@@ -157,7 +157,7 @@ const ForumTopicManagementButtons: FC<Props> = (props) => {
         {managementButtons}
         <ForumTopicEdit
           isOpen={isEditOpen}
-          navigateToShowAfterUpdate={navigateToShowAfterUpdate}
+          navigateToShowAfterUpdate={pageType === 'TopicShow'}
           onClose={(): void => {
             setIsEditOpen(false);
           }}

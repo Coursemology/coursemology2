@@ -42,7 +42,7 @@ const VotePostButton: FC<Props> = ({ post, handleClick }) => {
     <div className="flex items-center">
       <IconButton
         color="info"
-        onClick={(): void => handleClick(0)}
+        onClick={(): void => handleClick(post.userVoteFlag ? 0 : 1)}
         title="Upvote"
       >
         {post.userVoteFlag ? <ThumbUpAlt /> : <ThumbUpOffAlt />}
@@ -51,7 +51,7 @@ const VotePostButton: FC<Props> = ({ post, handleClick }) => {
 
       <IconButton
         color="info"
-        onClick={(): void => handleClick(0)}
+        onClick={(): void => handleClick(!post.userVoteFlag ? 0 : -1)}
         title="Downvote"
       >
         {post.userVoteFlag ? <ThumbDownOffAlt /> : <ThumbDownAlt />}

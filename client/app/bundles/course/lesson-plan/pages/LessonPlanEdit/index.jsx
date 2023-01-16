@@ -93,8 +93,8 @@ class LessonPlanEdit extends Component {
     return (
       <>
         {this.props.canManageLessonPlan && this.renderHeader()}
-        <div className='mt-8'>
-          <table className='border-separate border-spacing-x-4'>
+        <div className="mt-8">
+          <table className="border-separate border-spacing-x-4">
             {this.renderTableHeader()}
             <tbody>{groups.map(this.renderGroup)}</tbody>
           </table>

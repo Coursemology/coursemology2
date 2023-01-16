@@ -2,8 +2,7 @@ import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Lock, LockOpen } from '@mui/icons-material';
-import { IconButton, Tooltip } from '@mui/material';
+import { Button } from '@mui/material';
 import { ForumTopicEntity } from 'types/course/forums';
 import { AppDispatch } from 'types/store';
 
@@ -40,10 +39,15 @@ const translations = defineMessages({
 
 interface Props {
   topic: ForumTopicEntity;
+  className?: string;
   disabled?: boolean;
 }
 
-const LockButton: FC<Props> = ({ topic, disabled: disableButton }: Props) => {
+const LockButton: FC<Props> = ({
+  topic,
+  disabled: disableButton,
+  className,
+}: Props) => {
   const [isLocking, setIsLocking] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
@@ -85,20 +89,15 @@ const LockButton: FC<Props> = ({ topic, disabled: disableButton }: Props) => {
   };
 
   return (
-    <Tooltip
-      title={topic.isLocked ? t(translations.unlocked) : t(translations.locked)}
+    <Button
+      className={`topic-lock-${topic.id} ${className ?? ''}`}
+      color="inherit"
+      disabled={disabled}
+      onClick={handleLock}
+      variant="outlined"
     >
-      <span>
-        <IconButton
-          className={`topic-lock-${topic.id}`}
-          color="inherit"
-          disabled={disabled}
-          onClick={handleLock}
-        >
-          {topic.isLocked ? <Lock /> : <LockOpen />}
-        </IconButton>
-      </span>
-    </Tooltip>
+      {topic.isLocked ? t(translations.unlocked) : t(translations.locked)}
+    </Button>
   );
 };
 

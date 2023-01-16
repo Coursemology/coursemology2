@@ -7,6 +7,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 interface Props {
   nextUnreadTopicUrl?: string | null;
   handleMarkAllAsRead: () => void;
+  className?: string;
   disabled?: boolean;
 }
 
@@ -28,6 +29,7 @@ const translations = defineMessages({
 const MarkAllAsReadButton: FC<Props> = ({
   nextUnreadTopicUrl,
   handleMarkAllAsRead,
+  className,
   disabled,
 }) => {
   const { t } = useTranslation();
@@ -43,7 +45,7 @@ const MarkAllAsReadButton: FC<Props> = ({
       <span>
         <Button
           key="mark-all-as-read-button"
-          className="mark-all-as-read-button"
+          className={`mark-all-as-read-button ${className ?? ''}`}
           color="inherit"
           disabled={!nextUnreadTopicUrl || disabled}
           onClick={handleMarkAllAsRead}
