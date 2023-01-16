@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { Icon, Typography } from '@mui/material';
+import { Icon } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumEntity, ForumTopicEntity } from 'types/course/forums';
@@ -154,32 +154,37 @@ const ForumTopicTable: FC<Props> = (props) => {
           const topic = forumTopics[dataIndex];
           return (
             <>
-              <div>
-                <Link key={topic.id} to={topic.topicUrl}>
-                  <Typography
-                    className={
-                      topic.isUnread
-                        ? 'space-x-2 font-bold text-black'
-                        : 'space-x-2 text-gray-600'
-                    }
-                    variant="h6"
+              <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
+                <label
+                  className="m-0 flex flex-row font-normal"
+                  title={topic.title}
+                >
+                  <Link
+                    key={topic.id}
+                    // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
+                    className={`line-clamp-2 xl:line-clamp-1 ${
+                      topic.isUnread ? 'font-bold text-black' : 't4ext-gray-600'
+                    }`}
+                    to={topic.topicUrl}
                   >
-                    {topic.isHidden && (
-                      <Icon
-                        className="fa fa-eye-slash overflow-visible text-3xl"
-                        title={t(translations.hidden)}
-                      />
-                    )}
-                    {topic.isLocked && (
-                      <Icon
-                        className="fa fa-lock overflow-visible text-3xl"
-                        title={t(translations.locked)}
-                      />
-                    )}
-                    <TopicTypeIcon topic={topic} />
                     {topic.title}
-                  </Typography>
-                </Link>
+                  </Link>
+                </label>
+                <div className="flex items-center space-x-2 max-xl:mt-2 xl:ml-2">
+                  {topic.isHidden && (
+                    <Icon
+                      className="fa fa-eye-slash overflow-visible text-3xl"
+                      title={t(translations.hidden)}
+                    />
+                  )}
+                  {topic.isLocked && (
+                    <Icon
+                      className="fa fa-lock overflow-visible text-3xl"
+                      title={t(translations.locked)}
+                    />
+                  )}
+                  <TopicTypeIcon topic={topic} />
+                </div>
               </div>
               <div>
                 {t(translations.startedBy)}{' '}
@@ -287,6 +292,7 @@ const ForumTopicTable: FC<Props> = (props) => {
           const topic = forumTopics[dataIndex];
           return (
             <ForumTopicManagementButtons
+              pageType="TopicIndex"
               showOnHover={
                 topic.permissions.canSetHiddenTopic ||
                 topic.permissions.canSetLockedTopic

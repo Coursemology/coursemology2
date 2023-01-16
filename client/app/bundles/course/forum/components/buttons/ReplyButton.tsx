@@ -1,15 +1,19 @@
 import { SyntheticEvent } from 'react';
 import Reply from '@mui/icons-material/Reply';
-import { IconButton, IconButtonProps } from '@mui/material';
+import { IconButton, IconButtonProps, Tooltip } from '@mui/material';
 
 interface Props extends IconButtonProps {
   handleClick: (e: SyntheticEvent) => void;
 }
 
 const ReplyButton = ({ handleClick, ...props }: Props): JSX.Element => (
-  <IconButton color="info" onClick={handleClick} title="Reply" {...props}>
-    <Reply />
-  </IconButton>
+  <Tooltip title="Reply">
+    <span>
+      <IconButton color="info" onClick={handleClick} {...props}>
+        <Reply />
+      </IconButton>
+    </span>
+  </Tooltip>
 );
 
 export default ReplyButton;

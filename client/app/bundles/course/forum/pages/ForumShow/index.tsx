@@ -1,9 +1,8 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Icon, Tooltip } from '@mui/material';
 import { AppDispatch, AppState } from 'types/store';
 
 import AddButton from 'lib/components/core/buttons/AddButton';
@@ -21,15 +20,15 @@ import ForumTopicNew from '../ForumTopicNew';
 
 const translations = defineMessages({
   header: {
-    id: 'course.form.FormShow.header',
+    id: 'course.forum.FormShow.header',
     defaultMessage: 'Forum Topics',
   },
   newTopic: {
-    id: 'course.form.FormShow.newTopic',
+    id: 'course.forum.FormShow.newTopic',
     defaultMessage: 'New Topic',
   },
   markAllAsReadSuccess: {
-    id: 'course.form.FormShow.markAllAsReadSuccess',
+    id: 'course.forum.FormShow.markAllAsReadSuccess',
     defaultMessage: 'All topics in this forum have been marked as read.',
   },
   markAllAsReadFailed: {
@@ -38,13 +37,8 @@ const translations = defineMessages({
       'Failed to mark all topics in this forum as read. Please try again later.',
   },
   fetchTopicsFailure: {
-    id: 'course.form.FormShow.fetchTopicsFailure',
+    id: 'course.forum.FormShow.fetchTopicsFailure',
     defaultMessage: 'Failed to retrieve forum topic data.',
-  },
-  autoSubscribe: {
-    id: 'course.form.FormShow.autoSubscribe',
-    defaultMessage:
-      'Users will be automatically subscribed to a topic in this forum when they create a post in the topic.',
   },
 });
 
@@ -91,59 +85,39 @@ const ForumShow: FC = () => {
       .finally(() => setIsMarking(false));
   };
 
-  const headerToolbars: ReactElement[] = [];
-  let forumPageHeaderTitle: ReactElement | string = t(translations.header);
-
-  if (forum) {
-    headerToolbars.push(
+  const headerToolbars = forum && (
+    <>
       <NextUnreadButton
         key="next-unread-button"
         disabled={isMarking}
         nextUnreadTopicUrl={forum.nextUnreadTopicUrl}
-      />,
-    );
-    headerToolbars.push(
+      />
       <MarkAllAsReadButton
         key="mark-all-as-read-button"
+        className="max-lg:!hidden"
         disabled={isMarking || !unreadTopicExists}
         handleMarkAllAsRead={(): void => handleMarkAllAsRead(forum.id)}
         nextUnreadTopicUrl={unreadTopicExists ? forum.nextUnreadTopicUrl : null}
-      />,
-    );
-  }
-
-  if (forum) {
-    forumPageHeaderTitle = (
-      <div>
-        {forum.forumTopicsAutoSubscribe && (
-          <Tooltip title={t(translations.autoSubscribe)}>
-            <Icon className="fa fa-bell text-3xl" />
-          </Tooltip>
-        )}{' '}
-        {forum.name}
-      </div>
-    );
-    headerToolbars.push(
+      />
       <ForumManagementButtons
         disabled={isMarking}
         forum={forum}
         navigateToIndexAfterDelete
         navigateToShowAfterUpdate
         showSubscribeButton
-      />,
-    );
-  }
+      />
+      {forum.permissions.canCreateTopic && (
+        <AddButton
+          key="new-topic-button"
+          className="new-topic-button"
+          onClick={(): void => setIsOpen(true)}
+          tooltip={t(translations.newTopic)}
+        />
+      )}
+    </>
+  );
 
-  if (forum?.permissions.canCreateTopic) {
-    headerToolbars.push(
-      <AddButton
-        key="new-topic-button"
-        className="new-topic-button"
-        onClick={(): void => setIsOpen(true)}
-        tooltip={t(translations.newTopic)}
-      />,
-    );
-  }
+  const forumPageHeaderTitle = forum ? forum.name : t(translations.header);
 
   return (
     <>

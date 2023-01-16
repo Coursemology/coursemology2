@@ -306,20 +306,16 @@ const PostCard: FC<Props> = (props) => {
   };
 
   const handleVotePost = (voteNum: -1 | 0 | 1): void => {
-    dispatch(voteTopicPost(post?.postUrl!, voteNum))
-      .then(() => {
-        toast.success(t(translations.updateSuccess));
-      })
-      .catch((error) => {
-        const errorMessage = error.response?.data?.errors
-          ? error.response.data.errors
-          : '';
-        toast.error(
-          t(translations.updateFailure, {
-            error: errorMessage,
-          }),
-        );
-      });
+    dispatch(voteTopicPost(post?.postUrl!, voteNum)).catch((error) => {
+      const errorMessage = error.response?.data?.errors
+        ? error.response.data.errors
+        : '';
+      toast.error(
+        t(translations.updateFailure, {
+          error: errorMessage,
+        }),
+      );
+    });
   };
 
   if (!post) return null;

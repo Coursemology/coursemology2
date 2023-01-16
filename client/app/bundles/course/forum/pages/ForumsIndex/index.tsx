@@ -1,4 +1,4 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -77,30 +77,30 @@ const ForumsIndex: FC = () => {
       .finally(() => setIsMarking(false));
   };
 
-  const headerToolbars: ReactElement[] = [
-    <NextUnreadButton
-      key="next-unread-button"
-      disabled={isMarking}
-      nextUnreadTopicUrl={forumMetadata.nextUnreadTopicUrl}
-    />,
-    <MarkAllAsReadButton
-      key="mark-all-as-read-tooltip"
-      disabled={isMarking}
-      handleMarkAllAsRead={handleMarkAllAsRead}
-      nextUnreadTopicUrl={forumMetadata.nextUnreadTopicUrl}
-    />,
-  ];
-
-  if (forumPermissions?.canCreateForum) {
-    headerToolbars.push(
-      <AddButton
-        key="new-forum-button"
-        className="new-forum-button"
-        onClick={(): void => setIsForumNewDialogOpen(true)}
-        tooltip={t(translations.newForum)}
-      />,
-    );
-  }
+  const headerToolbars = (
+    <>
+      <NextUnreadButton
+        key="next-unread-button"
+        disabled={isMarking}
+        nextUnreadTopicUrl={forumMetadata.nextUnreadTopicUrl}
+      />
+      <MarkAllAsReadButton
+        key="mark-all-as-read-button"
+        className="max-lg:!hidden"
+        disabled={isMarking}
+        handleMarkAllAsRead={handleMarkAllAsRead}
+        nextUnreadTopicUrl={forumMetadata.nextUnreadTopicUrl}
+      />
+      {forumPermissions?.canCreateForum && (
+        <AddButton
+          key="new-forum-button"
+          className="new-forum-button"
+          onClick={(): void => setIsForumNewDialogOpen(true)}
+          tooltip={t(translations.newForum)}
+        />
+      )}
+    </>
+  );
 
   return (
     <>

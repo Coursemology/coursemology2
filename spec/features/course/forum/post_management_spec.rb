@@ -127,7 +127,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         within find("div.post_#{post.id}") do
           find('svg[data-testId="ThumbDownOffAltIcon"]').find(:xpath, '..').click
         end
-        expect_toastify('The post has been updated.')
+
+        sleep 0.5
         expect(post.reload.vote_tally).to eq(-1)
         expect(find('div.vote-tally').text).to eq('-1')
 
@@ -135,7 +136,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         within find("div.post_#{post.id}") do
           find('svg[data-testId="ThumbDownAltIcon"]').find(:xpath, '..').click
         end
-        expect_toastify('The post has been updated.')
+
+        sleep 0.5
         expect(post.reload.vote_tally).to eq(0)
         expect(find('div.vote-tally').text).to eq('0')
 
@@ -143,7 +145,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         within find("div.post_#{post.id}") do
           find('svg[data-testId="ThumbUpOffAltIcon"]').find(:xpath, '..').click
         end
-        expect_toastify('The post has been updated.')
+
+        sleep 0.5
         expect(post.reload.vote_tally).to eq(1)
         expect(find('div.vote-tally').text).to eq('1')
 
@@ -151,7 +154,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         within find("div.post_#{post.id}") do
           find('svg[data-testId="ThumbUpAltIcon"]').find(:xpath, '..').click
         end
-        expect_toastify('The post has been updated.')
+
+        sleep 0.5
         expect(post.reload.vote_tally).to eq(0)
         expect(find('div.vote-tally').text).to eq('0')
       end
@@ -159,10 +163,9 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
       scenario 'I can mark/unmark post as answer' do
         post = create(:course_discussion_post, topic: topic.acting_as)
         visit course_forum_topic_path(course, forum, topic)
-
         # Mark as answer
         within find("div.post_#{post.id}") do
-          find('svg[data-testId="CheckIcon"]').find(:xpath, '..').click
+          find('svg[data-testId="StarBorderIcon"]').find(:xpath, '..').click
         end
         expect_toastify('The post has been updated.')
         expect(post.reload).to be_answer
@@ -173,7 +176,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
 
         # Unmark as answer
         within find("div.post_#{post.id}") do
-          find('svg[data-testId="ClearIcon"]').find(:xpath, '..').click
+          find('svg[data-testId="StarIcon"]').find(:xpath, '..').click
         end
         expect_toastify('The post has been updated.')
         expect(post.reload).not_to be_answer
@@ -323,7 +326,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         within find("div.post_#{post.id}") do
           find('svg[data-testId="ThumbDownOffAltIcon"]').find(:xpath, '..').click
         end
-        expect_toastify('The post has been updated.')
+
+        sleep 0.5
         expect(post.reload.vote_tally).to eq(-1)
         expect(find('div.vote-tally').text).to eq('-1')
 
@@ -331,7 +335,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         within find("div.post_#{post.id}") do
           find('svg[data-testId="ThumbDownAltIcon"]').find(:xpath, '..').click
         end
-        expect_toastify('The post has been updated.')
+
+        sleep 0.5
         expect(post.reload.vote_tally).to eq(0)
         expect(find('div.vote-tally').text).to eq('0')
 
@@ -339,7 +344,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         within find("div.post_#{post.id}") do
           find('svg[data-testId="ThumbUpOffAltIcon"]').find(:xpath, '..').click
         end
-        expect_toastify('The post has been updated.')
+
+        sleep 0.5
         expect(post.reload.vote_tally).to eq(1)
         expect(find('div.vote-tally').text).to eq('1')
 
@@ -347,7 +353,8 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         within find("div.post_#{post.id}") do
           find('svg[data-testId="ThumbUpAltIcon"]').find(:xpath, '..').click
         end
-        expect_toastify('The post has been updated.')
+
+        sleep 0.5
         expect(post.reload.vote_tally).to eq(0)
         expect(find('div.vote-tally').text).to eq('0')
       end
