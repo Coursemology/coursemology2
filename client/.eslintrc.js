@@ -145,6 +145,7 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'object-curly-newline': ['error', { consistent: true }],
     'prefer-destructuring': 'off',
+    'no-restricted-exports': 'off',
   },
   globals: {
     window: true,
