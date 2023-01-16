@@ -251,7 +251,7 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - checkout_with_submodules
+      - checkout
 
       - restore_ruby_cache
 
