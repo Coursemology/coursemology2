@@ -1,3 +1,1 @@
-import DayView from './DayView';
-
-export default DayView;
+export { default } from './DayView';

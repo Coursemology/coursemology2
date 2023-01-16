@@ -1,3 +1,1 @@
-import DayCalendar from './DayCalendar';
-
-export default DayCalendar;
+export { default } from './DayCalendar';

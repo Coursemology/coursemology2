@@ -1,3 +1,1 @@
-import TimelinesOverview from './TimelinesOverview';
-
-export default TimelinesOverview;
+export { default } from './TimelinesOverview';
