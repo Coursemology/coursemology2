@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 assessment = @assessment
 assessment_conditions = @assessment_conditions
+assessment_time = @assessment_time
+requirements = @requirements
 questions = @questions
 question_assessments = @question_assessments
+
 can_attempt = can?(:attempt, assessment)
 can_observe = can?(:observe, assessment)
 can_manage = can?(:manage, assessment)
-requirements = assessment.specific_conditions.map do |condition|
-  {
-    title: condition.title,
-    satisfied: current_course_user.present? ? condition.satisfied_by?(current_course_user) : nil
-  }.compact
-end
 
 json.id assessment.id
 json.title assessment.title
@@ -29,7 +26,7 @@ json.startAt do
   }
 end
 
-if assessment.end_at.present?
+if assessment_time.end_at.present?
   json.endAt do
     json.partial! 'course/lesson_plan/items/personal_or_ref_time', locals: {
       item: assessment,
@@ -50,7 +47,7 @@ if current_course.gamified?
   json.baseExp assessment.base_exp if assessment.base_exp > 0
   json.timeBonusExp assessment.time_bonus_exp if assessment.time_bonus_exp > 0
 
-  if assessment.bonus_end_at.present?
+  if assessment_time.bonus_end_at.present?
     json.bonusEndAt do
       json.partial! 'course/lesson_plan/items/personal_or_ref_time', locals: {
         item: assessment,
