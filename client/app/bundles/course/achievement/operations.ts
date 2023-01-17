@@ -29,7 +29,7 @@ const formatAttributes = (data: AchievementFormData): FormData => {
   return payload;
 };
 
-export function fetchAchievements(): Operation<void> {
+export function fetchAchievements(): Operation {
   return async (dispatch) =>
     CourseAPI.achievements.index().then((response) => {
       const data = response.data;
@@ -51,9 +51,7 @@ export function loadAchievement(
       );
 }
 
-export function loadAchievementCourseUsers(
-  achievementId: number,
-): Operation<void> {
+export function loadAchievementCourseUsers(achievementId: number): Operation {
   return async (dispatch) =>
     CourseAPI.achievements
       .fetchAchievementCourseUsers(achievementId)
@@ -84,7 +82,7 @@ export function updateAchievement(
   return async () => CourseAPI.achievements.update(achievementId, attributes);
 }
 
-export function deleteAchievement(achievementId: number): Operation<void> {
+export function deleteAchievement(achievementId: number): Operation {
   return async (dispatch) =>
     CourseAPI.achievements.delete(achievementId).then(() => {
       dispatch(actions.deleteAchievement(achievementId));
@@ -94,7 +92,7 @@ export function deleteAchievement(achievementId: number): Operation<void> {
 export function awardAchievement(
   achievementId: number,
   data: number[],
-): Operation<void> {
+): Operation {
   const attributes = { achievement: { course_user_ids: data } };
   return async (dispatch) =>
     CourseAPI.achievements
@@ -107,7 +105,7 @@ export function awardAchievement(
 export function updatePublishedAchievement(
   achievementId: number,
   data: boolean,
-): Operation<void> {
+): Operation {
   const attributes = { achievement: { published: data } };
   return async (dispatch) =>
     CourseAPI.achievements

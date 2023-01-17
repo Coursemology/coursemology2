@@ -5,7 +5,7 @@ import GlobalUsersAPI from 'api/Users';
 import * as actions from './actions';
 
 // eslint-disable-next-line import/prefer-default-export
-export function fetchUser(userId: number): Operation<void> {
+export function fetchUser(userId: number): Operation {
   return async (dispatch) =>
     GlobalUsersAPI.users.fetch(userId).then((response) => {
       const data = response.data;

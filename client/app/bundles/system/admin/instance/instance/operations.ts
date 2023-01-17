@@ -140,7 +140,7 @@ export const fetchInstance = async (): Promise<InstanceBasicListData> => {
   return response.data.instance;
 };
 
-export function indexAnnouncements(): Operation<void> {
+export function indexAnnouncements(): Operation {
   return async (dispatch) =>
     SystemAPI.instance.indexAnnouncements().then((response) => {
       const data = response.data;
@@ -150,9 +150,7 @@ export function indexAnnouncements(): Operation<void> {
     });
 }
 
-export function createAnnouncement(
-  formData: AnnouncementFormData,
-): Operation<void> {
+export function createAnnouncement(formData: AnnouncementFormData): Operation {
   const attributes = formatAnnouncementAttributes(formData);
   return async (dispatch) =>
     SystemAPI.instance.createAnnouncement(attributes).then((response) => {
@@ -163,7 +161,7 @@ export function createAnnouncement(
 export function updateAnnouncement(
   announcementId: number,
   formData: AnnouncementFormData,
-): Operation<void> {
+): Operation {
   const attributes = formatAnnouncementAttributes(formData);
   return async (dispatch) =>
     SystemAPI.instance
@@ -173,14 +171,14 @@ export function updateAnnouncement(
       });
 }
 
-export function deleteAnnouncement(announcementId: number): Operation<void> {
+export function deleteAnnouncement(announcementId: number): Operation {
   return async (dispatch) =>
     SystemAPI.instance.deleteAnnouncement(announcementId).then(() => {
       dispatch(actions.deleteAnnouncement(announcementId));
     });
 }
 
-export function indexUsers(params?): Operation<void> {
+export function indexUsers(params?): Operation {
   return async (dispatch) =>
     SystemAPI.instance.indexUsers(params).then((response) => {
       const data = response.data;
@@ -191,7 +189,7 @@ export function indexUsers(params?): Operation<void> {
 export function updateUser(
   userId: number,
   userEntity: InstanceUserMiniEntity,
-): Operation<void> {
+): Operation {
   const attributes = formatUserAttributes(userEntity);
   return async (dispatch) =>
     SystemAPI.instance.updateUser(userId, attributes).then((response) => {
@@ -199,14 +197,14 @@ export function updateUser(
     });
 }
 
-export function deleteUser(userId: number): Operation<void> {
+export function deleteUser(userId: number): Operation {
   return async (dispatch) =>
     SystemAPI.instance.deleteUser(userId).then(() => {
       dispatch(actions.deleteUser(userId));
     });
 }
 
-export function indexCourses(params?): Operation<void> {
+export function indexCourses(params?): Operation {
   return async (dispatch) =>
     SystemAPI.instance.indexCourses(params).then((response) => {
       const data = response.data;
@@ -219,7 +217,7 @@ export function indexCourses(params?): Operation<void> {
     });
 }
 
-export function deleteCourse(courseId: number): Operation<void> {
+export function deleteCourse(courseId: number): Operation {
   return async (dispatch) =>
     SystemAPI.instance.deleteCourse(courseId).then(() => {
       dispatch(actions.deleteCourse(courseId));
@@ -243,7 +241,7 @@ export const updateComponents = async (
   return response.data.components;
 };
 
-export function fetchInvitations(): Operation<void> {
+export function fetchInvitations(): Operation {
   return async (dispatch) =>
     SystemAPI.instance.indexInvitations().then((response) => {
       const data = response.data;
@@ -251,7 +249,7 @@ export function fetchInvitations(): Operation<void> {
     });
 }
 
-export function deleteInvitation(invitationId: number): Operation<void> {
+export function deleteInvitation(invitationId: number): Operation {
   return async (dispatch) =>
     SystemAPI.instance.deleteInvitation(invitationId).then(() => {
       dispatch(actions.deleteInvitation(invitationId));
@@ -269,21 +267,21 @@ export function inviteUsers(
     });
 }
 
-export function resendAllInvitations(): Operation<void> {
+export function resendAllInvitations(): Operation {
   return async (dispatch) =>
     SystemAPI.instance.resendAllInvitations().then((response) => {
       dispatch(actions.saveInvitationList(response.data.invitations));
     });
 }
 
-export function resendInvitationEmail(invitationId: number): Operation<void> {
+export function resendInvitationEmail(invitationId: number): Operation {
   return async (dispatch) =>
     SystemAPI.instance.resendInvitationEmail(invitationId).then((response) => {
       dispatch(actions.saveInvitation(response.data));
     });
 }
 
-export function fetchRoleRequests(): Operation<void> {
+export function fetchRoleRequests(): Operation {
   return async (dispatch) =>
     SystemAPI.instance.indexRoleRequests().then((response) => {
       const data = response.data;
@@ -313,7 +311,7 @@ export const updateRoleRequest = async (
 
 export function approveRoleRequest(
   roleRequest: RoleRequestMiniEntity,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     SystemAPI.instance
       .approveRoleRequest(
@@ -329,7 +327,7 @@ export function approveRoleRequest(
 export function rejectRoleRequest(
   requestId: number,
   message?: string,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     SystemAPI.instance
       .rejectRoleRequest(requestId, message)
