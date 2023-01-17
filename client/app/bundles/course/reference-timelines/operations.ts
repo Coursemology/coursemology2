@@ -6,18 +6,19 @@ import {
   TimelinePostData,
   TimePostData,
 } from 'types/course/referenceTimelines';
+import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 
-import { actions, AppThunk } from './store';
+import { actions } from './store';
 
-export const fetchTimelines = (): AppThunk => async (dispatch) => {
+export const fetchTimelines = (): Operation => async (dispatch) => {
   const response = await CourseAPI.referenceTimelines.index();
   dispatch(actions.updateAll(response.data));
 };
 
 export const createTimeline =
-  (title: TimelineData['title']): AppThunk =>
+  (title: TimelineData['title']): Operation =>
   async (dispatch) => {
     const adaptedData: TimelinePostData = { reference_timeline: { title } };
 
@@ -34,7 +35,7 @@ export const deleteTimeline =
   (
     id: TimelineData['id'],
     alternativeTimelineId?: TimelineData['id'],
-  ): AppThunk =>
+  ): Operation =>
   async (dispatch) => {
     try {
       await CourseAPI.referenceTimelines.delete(id, alternativeTimelineId);
@@ -49,7 +50,7 @@ export const updateTimeline =
   (
     id: TimelineData['id'],
     changes: Partial<Pick<TimelineData, 'title' | 'weight'>>,
-  ): AppThunk =>
+  ): Operation =>
   async (dispatch) => {
     const adaptedData: TimelinePostData = {
       reference_timeline: { title: changes.title, weight: changes.weight },
@@ -80,7 +81,7 @@ export const createTime =
       bonusEndAt?: string;
       endAt?: string;
     },
-  ): AppThunk =>
+  ): Operation =>
   async (dispatch) => {
     const adaptedData: TimePostData = {
       reference_time: {
@@ -120,7 +121,7 @@ export const deleteTime =
     timelineId: TimelineData['id'],
     itemId: ItemWithTimeData['id'],
     timeId: TimeData['id'],
-  ): AppThunk =>
+  ): Operation =>
   async (dispatch) => {
     try {
       await CourseAPI.referenceTimelines.deleteTime(timelineId, timeId);
@@ -141,7 +142,7 @@ export const updateTime =
       bonusEndAt?: string | null;
       endAt?: string | null;
     },
-  ): AppThunk =>
+  ): Operation =>
   async (dispatch) => {
     const adaptedData: TimePostData = {
       reference_time: {
