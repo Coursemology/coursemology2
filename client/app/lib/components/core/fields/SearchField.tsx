@@ -8,6 +8,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 interface SearchFieldProps {
   onChangeKeyword?: (keyword: string) => void;
   placeholder?: string;
+  className?: string;
 }
 
 const SearchField = (props: SearchFieldProps): JSX.Element => {
@@ -26,6 +27,7 @@ const SearchField = (props: SearchFieldProps): JSX.Element => {
 
   return (
     <TextField
+      className={props.className}
       fullWidth
       hiddenLabel
       InputProps={{
