@@ -60,20 +60,20 @@ const styles = {
   },
 };
 
-const GroupTableCard = ({ group, onManageGroups, canManageGroups }) => {
+const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
   const members = [...group.members];
   members.sort(sortByName).sort(sortByPhantom).sort(sortByGroupRole);
 
   const titleButton = useMemo(() => {
     const result = [];
-    if (canManageGroups) {
+    if (canManageCategory) {
       result.push({
         label: <FormattedMessage {...translations.manageOneGroup} />,
         onClick: onManageGroups,
       });
     }
     return result;
-  }, [onManageGroups, canManageGroups]);
+  }, [onManageGroups, canManageCategory]);
 
   return (
     <GroupCard
@@ -135,7 +135,7 @@ const GroupTableCard = ({ group, onManageGroups, canManageGroups }) => {
 GroupTableCard.propTypes = {
   group: groupShape.isRequired,
   onManageGroups: PropTypes.func.isRequired,
-  canManageGroups: PropTypes.bool.isRequired,
+  canManageCategory: PropTypes.bool.isRequired,
 };
 
 export default GroupTableCard;

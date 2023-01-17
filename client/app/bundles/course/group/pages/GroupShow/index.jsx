@@ -103,7 +103,7 @@ const Category = ({
           {groups.map((group) => (
             <GroupTableCard
               key={group.id}
-              canManageGroups={canManageGroups}
+              canManageCategory={canManageCategory}
               group={group}
               onManageGroups={() => {
                 dispatch({type: actionTypes.MANAGE_GROUPS_START})

@@ -7,6 +7,7 @@ import { Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
+import { setNotification } from 'lib/actions';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 import { deleteGroup, updateGroup } from '../../../actions';
@@ -65,6 +66,11 @@ const translations = defineMessages({
     id: 'course.group.GroupShow.GroupManager.GroupUserManager.hideStudents',
     defaultMessage:
       'Hide students who are already in a group under this category',
+  },
+  cannotUpliftStudent: {
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.cannotUpliftStudent',
+    defaultMessage:
+      'Student cannot be uplifted into Manager',
   },
 });
 
@@ -323,6 +329,11 @@ const GroupUserManager = ({
   const onChangeRole = useCallback(
     (value, user) => {
       if (user.groupRole === value) return undefined;
+      if (user.role === "student" && value === "manager") {
+        dispatch({ type: actionTypes.UPDATE_GROUP_MEMBERS_FAILURE });
+        setNotification(intl.formatMessage(translations.cannotUpliftStudent))(dispatch);
+        return undefined;
+      }
       const newGroup = {
         ...group,
         members: [
