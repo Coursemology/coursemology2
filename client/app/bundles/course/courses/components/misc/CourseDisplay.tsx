@@ -3,7 +3,7 @@ import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Grid } from '@mui/material';
 import { CourseMiniEntity } from 'types/course/courses';
 
-import SearchBar from 'lib/components/core/fields/SearchBar';
+import SearchField from 'lib/components/core/fields/SearchField';
 import Pagination from 'lib/components/core/layouts/Pagination';
 import Note from 'lib/components/core/Note';
 
@@ -40,17 +40,15 @@ const CourseDisplay: FC<Props> = (props) => {
     return <Note message={intl.formatMessage(translations.noCourse)} />;
   }
 
-  const handleSearchBarChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-  ): void => {
-    if (event.target.value === '') {
+  const handleSearchBarChange = (rawKeyword: string): void => {
+    const keyword = rawKeyword.trim();
+
+    if (keyword === '') {
       setShavedCourses(courses);
     } else {
       setShavedCourses(
         courses.filter((course: CourseMiniEntity) =>
-          course.title
-            .toLowerCase()
-            .includes(event.target.value.trim().toLowerCase()),
+          course.title.toLowerCase().includes(keyword.toLowerCase()),
         ),
       );
     }
@@ -64,17 +62,15 @@ const CourseDisplay: FC<Props> = (props) => {
           style={{
             display: 'flex',
             justifyContent: 'left',
+            paddingTop: 16,
+            paddingBottom: 16,
           }}
           xs={1}
         >
-          <div style={{ paddingTop: 16, paddingBottom: 16 }}>
-            <SearchBar
-              onChange={handleSearchBarChange}
-              placeholder={intl.formatMessage(
-                translations.searchBarPlaceholder,
-              )}
-            />
-          </div>
+          <SearchField
+            onChangeKeyword={handleSearchBarChange}
+            placeholder={intl.formatMessage(translations.searchBarPlaceholder)}
+          />
         </Grid>
         <Grid item xs={1}>
           <Pagination
