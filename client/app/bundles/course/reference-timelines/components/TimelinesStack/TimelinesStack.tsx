@@ -4,7 +4,8 @@ import {
   TimelineData,
 } from 'types/course/referenceTimelines';
 
-import { useAppSelector } from '../../store';
+import { useAppSelector } from 'lib/hooks/store';
+
 import RowSpacer from '../RowSpacer';
 
 import AssignableTimeline from './AssignableTimeline';

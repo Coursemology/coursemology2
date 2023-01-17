@@ -3,9 +3,10 @@ import { Menu, MenuItem } from '@mui/material';
 import { TimelineData } from 'types/course/referenceTimelines';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
+import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { selectTimelines, useAppSelector } from '../store';
+import { selectTimelines } from '../store';
 import translations from '../translations';
 
 interface DeleteTimelinePromptProps {
