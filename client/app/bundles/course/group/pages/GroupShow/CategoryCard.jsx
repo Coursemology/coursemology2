@@ -133,7 +133,7 @@ const CategoryCard = ({
         onClick: handleEdit,
       });
     }
-    if (canManageGroups) {
+    if (canManageCategory) {
       result.push({
         label: <FormattedMessage {...translations.manage} />,
         onClick: onManageGroups,
