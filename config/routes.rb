@@ -444,7 +444,7 @@ Rails.application.routes.draw do
         post 'toggle_satisfiability_type' => 'learning_map#toggle_satisfiability_type'
       end
 
-      resources :reference_timelines, path: 'timelines', except: [:new, :edit] do
+      resources :reference_timelines, path: 'timelines', except: [:new, :edit, :show] do
         resources :reference_times, path: 'times', only: [:create, :update, :destroy]
       end
     end

@@ -4,28 +4,24 @@ class Course::ReferenceTimelinesController < Course::ComponentController
 
   def index
     @timelines = @reference_timelines.includes(:reference_times, :course_users)
+
+    # TODO: [PR#5491] Allow timelines management for items other than assessments
     @items = current_course.lesson_plan_items.
              where(actable_type: Course::Assessment.name).
              order(:title).
              includes(:reference_times)
   end
 
-  def show
-  end
-
   def create
     if @reference_timeline.save
-      render partial: 'reference_timeline', locals: {
-        reference_timeline: @reference_timeline,
-        render_times: reference_timeline_params[:reference_times_attributes].present?
-      }
+      render partial: 'reference_timeline', locals: { timeline: @reference_timeline }
     else
       render json: { errors: @reference_timeline.errors.full_messages.to_sentence }, status: :bad_request
     end
   end
 
   def update
-    if @reference_timeline.update(reference_timeline_update_params)
+    if @reference_timeline.update(reference_timeline_params)
       head :ok
     else
       render json: { errors: @reference_timeline.errors.full_messages.to_sentence }, status: :bad_request
@@ -54,12 +50,6 @@ class Course::ReferenceTimelinesController < Course::ComponentController
   private
 
   def reference_timeline_params
-    params.require(:reference_timeline).permit(:title, :weight, {
-      reference_times_attributes: Course::ReferenceTimesController.base_params
-    })
-  end
-
-  def reference_timeline_update_params
     params.require(:reference_timeline).permit(:title, :weight)
   end
 

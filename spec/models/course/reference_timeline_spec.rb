@@ -16,8 +16,6 @@ RSpec.describe Course::ReferenceTimeline, type: :model do
         dependent(:restrict_with_error)
     }
 
-    it { should accept_nested_attributes_for(:reference_times) }
-
     describe '#validations' do
       let(:title) { 'Test Timeline Title' }
 
