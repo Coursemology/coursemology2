@@ -42,7 +42,7 @@ const formatInvitations = (invitations: InvitationPostData[]): FormData => {
   return payload;
 };
 
-export function fetchInvitations(): Operation<void> {
+export function fetchInvitations(): Operation {
   return async (dispatch) =>
     CourseAPI.userInvitations.index().then((response) => {
       const data = response.data;
@@ -56,7 +56,7 @@ export function fetchInvitations(): Operation<void> {
     });
 }
 
-export function fetchPermissionsAndSharedData(): Operation<void> {
+export function fetchPermissionsAndSharedData(): Operation {
   return async (dispatch) =>
     CourseAPI.userInvitations.getPermissionsAndSharedData().then((response) => {
       dispatch(actions.savePermissions(response.data.permissions));
@@ -87,14 +87,14 @@ export function inviteUsersFromForm(
     });
 }
 
-export function resendAllInvitations(): Operation<void> {
+export function resendAllInvitations(): Operation {
   return async (dispatch) =>
     CourseAPI.userInvitations.resendAllInvitations().then((response) => {
       dispatch(actions.updateInvitationList(response.data.invitations));
     });
 }
 
-export function resendInvitationEmail(invitationId: number): Operation<void> {
+export function resendInvitationEmail(invitationId: number): Operation {
   return async (dispatch) =>
     CourseAPI.userInvitations
       .resendInvitationEmail(invitationId)
@@ -103,14 +103,14 @@ export function resendInvitationEmail(invitationId: number): Operation<void> {
       });
 }
 
-export function deleteInvitation(invitationId: number): Operation<void> {
+export function deleteInvitation(invitationId: number): Operation {
   return async (dispatch) =>
     CourseAPI.userInvitations.delete(invitationId).then(() => {
       dispatch(actions.deleteInvitation(invitationId));
     });
 }
 
-export function fetchRegistrationCode(): Operation<void> {
+export function fetchRegistrationCode(): Operation {
   return async (dispatch) =>
     CourseAPI.userInvitations.getCourseRegistrationKey().then((response) => {
       dispatch(
@@ -119,7 +119,7 @@ export function fetchRegistrationCode(): Operation<void> {
     });
 }
 
-export function toggleRegistrationCode(shouldEnable: boolean): Operation<void> {
+export function toggleRegistrationCode(shouldEnable: boolean): Operation {
   return async (dispatch) =>
     CourseAPI.userInvitations
       .toggleCourseRegistrationKey(shouldEnable)

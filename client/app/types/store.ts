@@ -43,7 +43,7 @@ export interface AppState {
   global: { user: GlobalUserState; announcements: GlobalAnnouncementState };
 }
 
-export type Operation<R> = ThunkAction<
+export type Operation<R = void> = ThunkAction<
   Promise<R>,
   AppState,
   Record<string, unknown>,

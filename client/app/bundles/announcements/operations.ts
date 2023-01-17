@@ -5,7 +5,7 @@ import GlobalAnnouncementsAPI from 'api/Announcements';
 
 import * as actions from './actions';
 
-export function indexAnnouncements(): Operation<void> {
+export function indexAnnouncements(): Operation {
   return async (dispatch) =>
     GlobalAnnouncementsAPI.announcements.index().then((response) => {
       const data = response.data;
