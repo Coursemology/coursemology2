@@ -79,7 +79,7 @@ export function loadFolder(folderId: number): Operation<SaveFolderAction> {
 export function createFolder(
   formData: FolderFormData,
   folderId: number,
-): Operation<void> {
+): Operation {
   const attributes = formatFolderAttributes(formData);
   attributes.append('material_folder[parent_id]', `${folderId}`);
   return async (dispatch) =>
@@ -101,7 +101,7 @@ export function createFolder(
 export function updateFolder(
   formData: FolderFormData,
   folderId: number,
-): Operation<void> {
+): Operation {
   const attributes = formatFolderAttributes(formData);
   return async (dispatch) =>
     CourseAPI.folders.updateFolder(folderId, attributes).then((response) => {
@@ -119,7 +119,7 @@ export function updateFolder(
     });
 }
 
-export function deleteFolder(folderId: number): Operation<void> {
+export function deleteFolder(folderId: number): Operation {
   return async (dispatch) =>
     CourseAPI.folders.deleteFolder(folderId).then(() => {
       dispatch(actions.deleteFolderList(folderId));
@@ -152,7 +152,7 @@ function formatMaterialUploadAttributes(
 export function uploadMaterials(
   formData: MaterialUploadFormData,
   currFolderId: number,
-): Operation<void> {
+): Operation {
   const attributes = formatMaterialUploadAttributes(formData);
   return async (dispatch) =>
     CourseAPI.folders
@@ -175,7 +175,7 @@ export function uploadMaterials(
 export function deleteMaterial(
   currFolderId: number,
   materialId: number,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.folders.deleteMaterial(currFolderId, materialId).then(() => {
       dispatch(actions.deleteMaterialList(materialId));
@@ -186,7 +186,7 @@ export function updateMaterial(
   formData: MaterialFormData,
   folderId: number,
   materialId: number,
-): Operation<void> {
+): Operation {
   const attributes = formatMaterialAttributes(formData);
   return async (dispatch) =>
     CourseAPI.folders
@@ -201,7 +201,7 @@ export function downloadFolder(
   currFolderId: number,
   onSuccess: () => void,
   onFailure: () => void,
-): Operation<void> {
+): Operation {
   return async (_) =>
     CourseAPI.folders.downloadFolder(currFolderId, onSuccess, onFailure);
 }

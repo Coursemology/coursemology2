@@ -13,7 +13,7 @@ import AnnouncementForm from '../../components/forms/AnnouncementForm';
 interface Props {
   open: boolean;
   onClose: () => void;
-  createOperation: (formData: AnnouncementFormData) => Operation<void>;
+  createOperation: (formData: AnnouncementFormData) => Operation;
   canSticky?: boolean;
 }
 

@@ -28,7 +28,7 @@ interface Props extends WrappedComponentProps {
   courseCounts: AdminStats | InstanceAdminStats;
   title: string;
   renderRowActionComponent: (course: CourseMiniEntity) => ReactElement;
-  indexOperation: (params?) => Operation<void>;
+  indexOperation: (params?) => Operation;
 }
 
 const translations = defineMessages({

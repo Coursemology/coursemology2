@@ -4,7 +4,7 @@ import CourseAPI from 'api/course';
 
 import * as actions from './actions';
 
-export function fetchSubmissions(): Operation<void> {
+export function fetchSubmissions(): Operation {
   return async (dispatch) =>
     CourseAPI.submissions.index().then((response) => {
       const data = response.data;
@@ -19,7 +19,7 @@ export function fetchSubmissions(): Operation<void> {
     });
 }
 
-export function fetchMyStudentsPendingSubmissions(): Operation<void> {
+export function fetchMyStudentsPendingSubmissions(): Operation {
   return async (dispatch) =>
     CourseAPI.submissions.pending(true).then((response) => {
       const data = response.data;
@@ -34,7 +34,7 @@ export function fetchMyStudentsPendingSubmissions(): Operation<void> {
     });
 }
 
-export function fetchAllStudentsPendingSubmissions(): Operation<void> {
+export function fetchAllStudentsPendingSubmissions(): Operation {
   return async (dispatch) =>
     CourseAPI.submissions.pending(false).then((response) => {
       const data = response.data;
@@ -49,7 +49,7 @@ export function fetchAllStudentsPendingSubmissions(): Operation<void> {
     });
 }
 
-export function fetchCategorySubmissions(categoryId: number): Operation<void> {
+export function fetchCategorySubmissions(categoryId: number): Operation {
   return async (dispatch) =>
     CourseAPI.submissions.category(categoryId).then((response) => {
       const data = response.data;
@@ -70,7 +70,7 @@ export function filterSubmissions(
   groupId: number | null,
   userId: number | null,
   pageNum: number | null,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.submissions
       .filter(categoryId, assessmentId, groupId, userId, pageNum)
@@ -90,7 +90,7 @@ export function filterSubmissions(
 export function filterPendingSubmissions(
   myStudents: boolean,
   pageNum: number | null,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.submissions
       .filterPending(myStudents, pageNum)

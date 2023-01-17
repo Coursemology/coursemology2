@@ -12,7 +12,7 @@ import DeleteCoursePrompt from 'bundles/course/admin/pages/CourseSettings/Delete
 
 interface Props extends WrappedComponentProps {
   course: CourseMiniEntity;
-  deleteOperation: (courseId: number) => Operation<void>;
+  deleteOperation: (courseId: number) => Operation;
 }
 
 const translations = defineMessages({

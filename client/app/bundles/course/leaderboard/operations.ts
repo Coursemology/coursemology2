@@ -5,7 +5,7 @@ import CourseAPI from 'api/course';
 
 import * as actions from './actions';
 
-const fetchLeaderboard = (): Operation<void> => {
+const fetchLeaderboard = (): Operation => {
   return async (dispatch) =>
     CourseAPI.leaderboard.index().then((response) => {
       const data: LeaderboardData = response.data;

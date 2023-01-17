@@ -78,7 +78,7 @@ const formatUpdateExperiencePointsRecord = (
   };
 };
 
-export function fetchUsers(asBasicData: boolean = false): Operation<void> {
+export function fetchUsers(asBasicData: boolean = false): Operation {
   return async (dispatch) =>
     CourseAPI.users.index(asBasicData).then((response) => {
       const data = response.data;
@@ -97,7 +97,7 @@ export function fetchUsers(asBasicData: boolean = false): Operation<void> {
     });
 }
 
-export function fetchStudents(): Operation<void> {
+export function fetchStudents(): Operation {
   return async (dispatch) =>
     CourseAPI.users.indexStudents().then((response) => {
       const data = response.data;
@@ -113,7 +113,7 @@ export function fetchStudents(): Operation<void> {
     });
 }
 
-export function fetchStaff(): Operation<void> {
+export function fetchStaff(): Operation {
   return async (dispatch) =>
     CourseAPI.users.indexStaff().then((response) => {
       const data = response.data;
@@ -138,7 +138,7 @@ export function loadUser(userId: number): Operation<SaveUserAction> {
 export function updateUser(
   userId: number,
   data: CourseUserEntity | Partial<CourseUserMiniEntity>,
-): Operation<void> {
+): Operation {
   const attributes = formatUpdateUser(data);
   return async (dispatch) =>
     CourseAPI.users.update(userId, attributes).then((response) => {
@@ -161,7 +161,7 @@ export function updateUser(
 export function upgradeToStaff(
   users: CourseUserBasicMiniEntity[],
   role: StaffRole,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.users.upgradeToStaff(users, role).then((response) => {
       response.data.users.forEach((user) => {
@@ -174,7 +174,7 @@ export function upgradeToStaff(
 export function assignToTimeline(
   ids: CourseUserBasicMiniEntity['id'][],
   timelineId: TimelineData['id'],
-): Operation<void> {
+): Operation {
   return async (dispatch) => {
     await CourseAPI.users.assignToTimeline(ids, timelineId);
     ids.forEach((id) => {
@@ -191,21 +191,21 @@ export function assignToTimeline(
   };
 }
 
-export function deleteUser(userId: number): Operation<void> {
+export function deleteUser(userId: number): Operation {
   return async (dispatch) =>
     CourseAPI.users.delete(userId).then(() => {
       dispatch(actions.deleteUser(userId));
     });
 }
 
-export function fetchPersonalTimes(userId: number): Operation<void> {
+export function fetchPersonalTimes(userId: number): Operation {
   return async (dispatch) =>
     CourseAPI.personalTimes.index(userId).then((response) => {
       dispatch(actions.savePersonalTimeList(response.data.personalTimes));
     });
 }
 
-export function recomputePersonalTimes(userId: number): Operation<void> {
+export function recomputePersonalTimes(userId: number): Operation {
   return async (dispatch) =>
     CourseAPI.personalTimes.recompute(userId).then((response) => {
       dispatch(actions.savePersonalTimeList(response.data.personalTimes));
@@ -237,7 +237,7 @@ export function deletePersonalTime(
 export function fetchExperiencePointsRecord(
   userId: number,
   pageNum: number = 1,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.experiencePointsRecord.index(userId, pageNum).then((response) => {
       const data = response.data;
