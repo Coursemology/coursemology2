@@ -2,6 +2,7 @@ import { ComponentRef, useMemo, useRef, useState } from 'react';
 import { Chip, Typography } from '@mui/material';
 import { TimelineData } from 'types/course/referenceTimelines';
 
+import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import DayCalendar from '../../components/DayCalendar';
@@ -9,7 +10,7 @@ import SearchField from '../../components/SearchField';
 import SubmitIndicator from '../../components/SubmitIndicator';
 import TimelinesOverview from '../../components/TimelinesOverview';
 import TimelinesStack from '../../components/TimelinesStack';
-import { selectItems, selectTimelines, useAppSelector } from '../../store';
+import { selectItems, selectTimelines } from '../../store';
 import translations from '../../translations';
 
 import ItemsSidebar from './ItemsSidebar';
