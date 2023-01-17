@@ -17,8 +17,6 @@ class Course::ReferenceTimeline < ApplicationRecord
 
   default_scope { order(:weight) }
 
-  accepts_nested_attributes_for :reference_times
-
   def initialize_duplicate(duplicator, _other)
     self.course = duplicator.options[:destination_course]
     self.reference_times = []

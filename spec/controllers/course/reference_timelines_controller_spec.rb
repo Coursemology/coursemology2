@@ -28,22 +28,6 @@ RSpec.describe Course::ReferenceTimelinesController, type: :controller do
       end
     end
 
-    describe '#show' do
-      subject { get :show, as: :json, params: { course_id: course, id: timeline } }
-
-      context 'when the user is a manager of the course' do
-        let(:user) { create(:course_manager, course: course).user }
-
-        it { is_expected.to render_template(:show) }
-      end
-
-      context 'when the user is a student' do
-        let(:user) { create(:course_student, course: course).user }
-
-        it { expect { subject }.to raise_error(CanCan::AccessDenied) }
-      end
-    end
-
     describe '#create' do
       subject do
         post :create, as: :json, params: {
@@ -63,51 +47,6 @@ RSpec.describe Course::ReferenceTimelinesController, type: :controller do
           new_timeline = assigns(:reference_timeline)
           expect(new_timeline.title).to eq(title)
           expect(new_timeline.weight).to eq(2)
-        end
-
-        context 'when an array of times are given' do
-          let(:item) { create(:course_lesson_plan_item, course: course) }
-          # Convert Ruby Time to string because of differences in micro/nano-second precision between
-          # database and in-memory time representations. See https://stackoverflow.com/a/20403290.
-          let(:start_time) { 1.day.from_now.to_s }
-          let(:bonus_end_time) { 2.days.from_now.to_s }
-          let(:end_time) { 3.days.from_now.to_s }
-
-          subject do
-            post :create, as: :json, params: {
-              course_id: course,
-              reference_timeline: {
-                title: title,
-                reference_times_attributes: [
-                  {
-                    lesson_plan_item_id: item.id,
-                    start_at: start_time,
-                    bonus_end_at: bonus_end_time,
-                    end_at: end_time
-                  }
-                ]
-              }
-            }
-          end
-
-          it 'creates the timeline, the given times, and their associations' do
-            expect { subject }.
-              to change { course.reference_timelines.size }.by(1).
-              and change { item.reference_times.size }.by(1)
-
-            is_expected.to have_http_status(:ok)
-            is_expected.to render_template(partial: '_reference_timeline')
-
-            new_timeline = assigns(:reference_timeline)
-            expect(new_timeline.title).to eq(title)
-            expect(new_timeline.reference_times.size).to eq(1)
-
-            new_time = new_timeline.reference_times.first
-            expect(new_time.lesson_plan_item.id).to eq(item.id)
-            expect(new_time.start_at).to eq(start_time)
-            expect(new_time.bonus_end_at).to eq(bonus_end_time)
-            expect(new_time.end_at).to eq(end_time)
-          end
         end
 
         context 'when cannot be saved' do

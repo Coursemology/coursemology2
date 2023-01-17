@@ -1,20 +1,8 @@
 # frozen_string_literal: true
-json.id reference_timeline.id
-json.title reference_timeline.title
-json.weight reference_timeline.weight
+json.id timeline.id
+json.title timeline.title || t('.default_title')
+json.timesCount timeline.reference_times.size
 
-if render_times
-  reference_times = reference_timeline.reference_times.includes(:lesson_plan_item)
-  json.times reference_times do |time|
-    json.id time.id
-    json.startAt time.start_at
-    json.bonusEndAt time.bonus_end_at if time.bonus_end_at.present?
-    json.endAt time.end_at if time.end_at.present?
-
-    item = time.lesson_plan_item
-    json.itemId item.id
-    json.actableId item.actable_id
-    json.type item.actable_type.constantize.model_name.human
-    json.title item.title
-  end
-end
+json.weight timeline.weight if timeline.weight.present?
+json.default true if timeline.default?
+json.assignees timeline.course_users.size unless timeline.default?
