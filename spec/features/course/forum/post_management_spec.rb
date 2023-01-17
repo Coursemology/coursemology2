@@ -165,7 +165,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         visit course_forum_topic_path(course, forum, topic)
         # Mark as answer
         within find("div.post_#{post.id}") do
-          find('svg[data-testId="StarBorderIcon"]').find(:xpath, '..').click
+          find('svg[data-testId="CheckCircleOutlineIcon"]').find(:xpath, '..').click
         end
         expect_toastify('The post has been updated.')
         expect(post.reload).to be_answer
@@ -176,7 +176,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
 
         # Unmark as answer
         within find("div.post_#{post.id}") do
-          find('svg[data-testId="StarIcon"]').find(:xpath, '..').click
+          find('svg[data-testId="CheckCircleIcon"]').find(:xpath, '..').click
         end
         expect_toastify('The post has been updated.')
         expect(post.reload).not_to be_answer
