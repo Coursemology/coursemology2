@@ -1,4 +1,4 @@
 export * from './hooks';
-export * from './store';
-export * from './timelinesSelectors';
-export { timelinesActions as actions } from './timelinesSlice';
+export { default as store } from './store';
+export * from './selectors';
+export { timelinesActions as actions } from './timelinesReducer';
