@@ -1,9 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { TimelinesData } from 'types/course/referenceTimelines';
+import { AppState } from 'types/store';
 
-import { RootState } from './store';
+import { TimelinesState } from '../types';
 
-const selectTimelinesStore = (state: RootState): TimelinesData =>
+const selectTimelinesStore = (state: AppState): TimelinesState =>
   state.timelines;
 
 export const selectTimelines = createSelector(

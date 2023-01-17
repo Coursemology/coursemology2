@@ -6,7 +6,9 @@ import {
   TimelinesData,
 } from 'types/course/referenceTimelines';
 
-const initialState: TimelinesData = {
+import { TimelinesState } from '../types';
+
+const initialState: TimelinesState = {
   timelines: [],
   items: [],
   gamified: false,
