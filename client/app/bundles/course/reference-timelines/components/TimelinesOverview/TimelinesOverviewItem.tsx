@@ -5,11 +5,11 @@ import { Divider, IconButton, Menu, MenuItem } from '@mui/material';
 import { TimelineData } from 'types/course/referenceTimelines';
 
 import Checkbox from 'lib/components/core/buttons/Checkbox';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { useLastSaved, useSetLastSaved } from '../../contexts';
 import { deleteTimeline } from '../../operations';
-import { useAppDispatch } from '../../store';
 import translations from '../../translations';
 import CreateRenameTimelinePrompt from '../CreateRenameTimelinePrompt';
 import DeleteTimelinePrompt from '../DeleteTimelinePrompt';

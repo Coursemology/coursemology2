@@ -6,11 +6,11 @@ import {
   TimelineData,
 } from 'types/course/referenceTimelines';
 
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { useSetLastSaved } from '../../contexts';
 import { createTime, deleteTime, updateTime } from '../../operations';
-import { useAppDispatch } from '../../store';
 import translations from '../../translations';
 import { DraftableTimeData } from '../../utils';
 import SeriouslyAnchoredPopup from '../SeriouslyAnchoredPopup';

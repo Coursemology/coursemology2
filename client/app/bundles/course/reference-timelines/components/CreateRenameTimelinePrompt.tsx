@@ -5,12 +5,12 @@ import { TimelineData } from 'types/course/referenceTimelines';
 
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
 import { useSetLastSaved } from '../contexts';
 import { createTimeline, updateTimeline } from '../operations';
-import { useAppDispatch } from '../store';
 import translations from '../translations';
 
 interface CreateRenameTimelinePromptProps {
