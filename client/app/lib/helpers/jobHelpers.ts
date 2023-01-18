@@ -3,37 +3,25 @@ import { JobCompleted, JobErrored } from 'types/jobs';
 
 import GlobalAPI from 'api';
 
-const MIN_POLLING_INTERVAL = 250;
-const MAX_POLLING_INTERVAL = 4000;
-
 const pollJob = (
   jobUrl: string,
   onSuccess: (data: JobCompleted) => void,
   onFailure: (error: JobErrored | AxiosError) => void,
-  minPollInterval = MIN_POLLING_INTERVAL,
-  maxPollInterval = MAX_POLLING_INTERVAL,
+  pollInterval: number,
 ): void => {
-  if (minPollInterval > maxPollInterval)
-    throw new Error('minDelay should be lower than maxDelay.');
-
-  let curTimeout = minPollInterval;
-  const maxTimeout = maxPollInterval;
-
-  let poller = setTimeout(function run() {
+  const poller = setInterval(() => {
     GlobalAPI.jobs
       .get(jobUrl)
       .then((response) => {
         switch (response.data.status) {
           case 'submitted':
-            if (curTimeout < maxTimeout) curTimeout *= 2;
-            poller = setTimeout(run, curTimeout);
             break;
           case 'completed':
-            clearTimeout(poller);
+            clearInterval(poller);
             onSuccess(response.data);
             break;
           case 'errored':
-            clearTimeout(poller);
+            clearInterval(poller);
             onFailure(response.data);
             break;
           default:
@@ -41,10 +29,10 @@ const pollJob = (
         }
       })
       .catch((error) => {
-        clearTimeout(poller);
+        clearInterval(poller);
         onFailure(error);
       });
-  }, curTimeout);
+  }, pollInterval);
 };
 
 export default pollJob;

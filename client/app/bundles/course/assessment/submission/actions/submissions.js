@@ -6,6 +6,13 @@ import translations from '../translations';
 
 import { setNotification } from './index';
 
+const DOWNLOAD_SUBMISSIONS_JOB_POLL_INTERVAL = 2000;
+const DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL = 2000;
+const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
+const FORCE_SUBMIT_JOB_POLL_INTERVAL = 1000;
+const PUBLISH_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
+const UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
+
 export function fetchSubmissions() {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SUBMISSIONS_REQUEST });
@@ -43,7 +50,12 @@ export function publishSubmissions(type) {
       .then((response) => {
         if (response.data.jobUrl) {
           dispatch(setNotification(translations.publishJobPending));
-          pollJob(response.data.jobUrl, handleSuccess, handleFailure);
+          pollJob(
+            response.data.jobUrl,
+            handleSuccess,
+            handleFailure,
+            PUBLISH_ALL_SUBMISSIONS_JOB_POLL_INTERVAL,
+          );
         } else {
           handleSuccess();
         }
@@ -72,7 +84,12 @@ export function forceSubmitSubmissions(type) {
       .then((response) => {
         dispatch(setNotification(translations.forceSubmitJobPending));
         if (response.data.jobUrl) {
-          pollJob(response.data.jobUrl, handleSuccess, handleFailure);
+          pollJob(
+            response.data.jobUrl,
+            handleSuccess,
+            handleFailure,
+            FORCE_SUBMIT_JOB_POLL_INTERVAL,
+          );
         } else {
           handleSuccess();
         }
@@ -136,7 +153,12 @@ export function downloadSubmissions(type, downloadFormat) {
       .downloadAll(type, downloadFormat)
       .then((response) => {
         dispatch(setNotification(translations.downloadSubmissionsJobPending));
-        pollJob(response.data.jobUrl, handleSuccess, handleFailure);
+        pollJob(
+          response.data.jobUrl,
+          handleSuccess,
+          handleFailure,
+          DOWNLOAD_SUBMISSIONS_JOB_POLL_INTERVAL,
+        );
       })
       .catch(handleFailure);
   };
@@ -165,7 +187,12 @@ export function downloadStatistics(type) {
       .downloadStatistics(type)
       .then((response) => {
         dispatch(setNotification(translations.downloadStatisticsJobPending));
-        pollJob(response.data.jobUrl, handleSuccess, handleFailure);
+        pollJob(
+          response.data.jobUrl,
+          handleSuccess,
+          handleFailure,
+          DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL,
+        );
       })
       .catch(handleFailure);
   };
@@ -215,7 +242,12 @@ export function unsubmitAllSubmissions(type) {
           setNotification(translations.unsubmitAllSubmissionsJobPending),
         );
         if (response.data.jobUrl) {
-          pollJob(response.data.jobUrl, handleSuccess, handleFailure);
+          pollJob(
+            response.data.jobUrl,
+            handleSuccess,
+            handleFailure,
+            UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL,
+          );
         } else {
           handleSuccess();
         }
@@ -266,7 +298,12 @@ export function deleteAllSubmissions(type) {
       .then((response) => {
         dispatch(setNotification(translations.deleteAllSubmissionsJobPending));
         if (response.data.jobUrl) {
-          pollJob(response.data.jobUrl, handleSuccess, handleFailure);
+          pollJob(
+            response.data.jobUrl,
+            handleSuccess,
+            handleFailure,
+            DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL,
+          );
         } else {
           handleSuccess();
         }
