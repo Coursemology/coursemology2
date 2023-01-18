@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios';
 import {
   AvailableAchievements,
   AvailableAssessments,
@@ -8,42 +7,42 @@ import {
   ConditionPostData,
 } from 'types/course/conditions';
 
-import BaseCourseAPI from './Base';
+import { APIResponse } from 'api/types';
 
-type Response<Data> = Promise<AxiosResponse<Data>>;
+import BaseCourseAPI from './Base';
 
 export default class ConditionsAPI extends BaseCourseAPI {
   create(
     url: ConditionAbility['url'],
     data: ConditionPostData,
-  ): Response<ConditionData[]> {
+  ): APIResponse<ConditionData[]> {
     return this.getClient().post(url, data);
   }
 
   update(
     url: ConditionData['url'],
     data: ConditionPostData,
-  ): Response<ConditionData[]> {
+  ): APIResponse<ConditionData[]> {
     return this.getClient().patch(url ?? '', data);
   }
 
-  delete(url: ConditionData['url']): Response<ConditionData[]> {
+  delete(url: ConditionData['url']): APIResponse<ConditionData[]> {
     return this.getClient().delete(url ?? '');
   }
 
   fetchAssessments(
     url: ConditionAbility['url'],
-  ): Response<AvailableAssessments> {
+  ): APIResponse<AvailableAssessments> {
     return this.getClient().get(url);
   }
 
   fetchAchievements(
     url: ConditionAbility['url'],
-  ): Response<AvailableAchievements> {
+  ): APIResponse<AvailableAchievements> {
     return this.getClient().get(url);
   }
 
-  fetchSurveys(url: ConditionAbility['url']): Response<AvailableSurveys> {
+  fetchSurveys(url: ConditionAbility['url']): APIResponse<AvailableSurveys> {
     return this.getClient().get(url);
   }
 }
