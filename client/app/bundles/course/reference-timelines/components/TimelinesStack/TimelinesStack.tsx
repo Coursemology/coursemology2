@@ -6,8 +6,6 @@ import {
 
 import { useAppSelector } from 'lib/hooks/store';
 
-import RowSpacer from '../RowSpacer';
-
 import AssignableTimeline from './AssignableTimeline';
 import AssignedTimeline from './AssignedTimeline';
 
@@ -60,8 +58,6 @@ const TimelinesStack = (props: TimeBarsProps): JSX.Element => {
                 />
               );
             })}
-
-            <RowSpacer />
           </Fragment>
         );
       })}

@@ -19,7 +19,7 @@ const TimelineSidebarItem = (props: TimelineSidebarItemProps): JSX.Element => {
 
   return (
     <div
-      className={`group box-content flex h-10 items-center justify-between border-0 border-b border-solid border-neutral-200 px-2 ${
+      className={`group box-content flex h-10 items-center justify-between border-0 border-b border-solid border-neutral-200 px-2 last:border-b-0 ${
         !assigned
           ? 'bg-neutral-100 text-neutral-400'
           : 'text-neutral-500 hover?:bg-neutral-50'
