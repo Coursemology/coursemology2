@@ -112,7 +112,6 @@ RSpec.describe Course::ReferenceTimesController, type: :controller do
           reference_timeline_id: timeline,
           id: time,
           reference_time: {
-            lesson_plan_item_id: unassigned_item.id,
             start_at: new_start_time,
             bonus_end_at: new_bonus_end_time,
             end_at: new_end_time
@@ -123,23 +122,16 @@ RSpec.describe Course::ReferenceTimesController, type: :controller do
       context 'when the user is a Course Manager' do
         let(:user) { create(:course_manager, course: course).user }
 
-        it 'changes the assigned lesson plan item and times' do
-          expect { subject }.
-            to change { assigned_item.reference_times.size }.by(-1).
-            and change { unassigned_item.reference_times.size }.by(1)
-
+        it 'changes the assigned times' do
           is_expected.to have_http_status(:ok)
 
           updated_time = assigns(:reference_time)
-          expect(updated_time.lesson_plan_item.id).to eq(unassigned_item.id)
           expect(updated_time.start_at).to eq(new_start_time)
           expect(updated_time.bonus_end_at).to eq(new_bonus_end_time)
           expect(updated_time.end_at).to eq(new_end_time)
         end
 
-        context 'when about to be reassigned to an assigned lesson plan item in the same timeline' do
-          before { create(:course_reference_time, reference_timeline: timeline, lesson_plan_item: unassigned_item) }
-
+        context 'when about to have its lesson plan item changed' do
           subject do
             patch :update, as: :json, params: {
               course_id: course,
@@ -149,9 +141,9 @@ RSpec.describe Course::ReferenceTimesController, type: :controller do
             }
           end
 
-          it 'fails and responds bad request with errors' do
-            is_expected.to have_http_status(:bad_request)
-            expect(JSON.parse(response.body)['errors']).not_to be_nil
+          it 'does not change the assigned lesson plan item' do
+            is_expected.to have_http_status(:ok)
+            expect(time.lesson_plan_item.id).to eq(assigned_item.id)
           end
         end
 
