@@ -19,6 +19,7 @@ import { courseUserShape, groupShape } from '../../../propTypes';
 import { sortByGroupRole, sortByName } from '../../../utils/sort';
 
 import GroupUserManagerList from './GroupUserManagerList';
+import NonGroupUserManagerList from './NonGroupUserManagerList';
 
 const translations = defineMessages({
   updateSuccess: {
@@ -146,10 +147,8 @@ const getAvailableUserInOtherGroups = (
   courseUsers,
   groups,
   group,
-  // availableSearch,
 ) => {
   const otherGroups = groups.filter((x) => x !== group)
-  // const allOtherGroupMemberIds = new Set(otherGroups.flatMap((g) => g.members.map((m) => m.id)));
   const mapStudentToGroups = {}
 
   for (let i = 0; i < otherGroups.length; i++) {
@@ -162,12 +161,6 @@ const getAvailableUserInOtherGroups = (
       }
     }
   }
-
-  // console.log(mapStudentToGroups)
-  // console.log(filterByName(
-  //   availableSearch,
-  //   courseUsers.filter((cu) => allOtherGroupMemberIds.has(cu.id)),
-  // ))
 
   return mapStudentToGroups;
 };
@@ -205,7 +198,6 @@ const GroupUserManager = ({
         courseUsers,
         groups,
         group,
-        // availableSearch,
       ),
     [courseUsers, groups, group],
   );
@@ -219,6 +211,7 @@ const GroupUserManager = ({
     () => availableUsers.filter((u) => u.role === 'student'),
     [availableUsers],
   );
+
   const availableStaff = useMemo(
     () => availableUsers.filter((u) => u.role !== 'student'),
     [availableUsers],
@@ -227,6 +220,7 @@ const GroupUserManager = ({
     () => groupMembers.filter((m) => m.role === 'student'),
     [groupMembers],
   );
+
   const selectedStaff = useMemo(
     () => groupMembers.filter((m) => m.role !== 'student'),
     [groupMembers],
@@ -427,7 +421,7 @@ const GroupUserManager = ({
               value={availableSearch}
               variant="standard"
             />
-            <GroupUserManagerList
+            <NonGroupUserManagerList
               colourMap={colours}
               memberOtherGroups={availableUsersInOtherGroups}
               onCheck={onCheck}
