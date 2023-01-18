@@ -20,12 +20,10 @@
   /* For Firefox 64+ and Firefox for Android 64+ */
   .scrollbar-hidden {
     scrollbar-width: none;
-    scrollbar-color: transparent;
   }
 
   /* For Blink- and WebKit-based browsers */
   .scrollbar-hidden::-webkit-scrollbar {
-    width: 0;
-    background: transparent;
+    display: none;
   }
 }

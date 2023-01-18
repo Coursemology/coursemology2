@@ -77,7 +77,7 @@ const DayView = (): JSX.Element => {
           />
         </section>
 
-        <section className="pointer-events-auto flex overflow-scroll overscroll-contain border-0 border-t border-solid border-neutral-200 pb-28">
+        <section className="scrollbar-hidden pointer-events-auto flex h-full overflow-y-scroll overscroll-contain border-0 border-t border-solid border-neutral-200">
           <ItemsSidebar
             className="w-[32rem]"
             for={filteredItems}
@@ -89,7 +89,7 @@ const DayView = (): JSX.Element => {
 
           <aside
             ref={contentsRef}
-            className="scrollbar-hidden ml-[1px] h-fit w-full overflow-x-scroll"
+            className="ml-[1px] h-fit min-h-full w-full overflow-x-scroll pb-28"
             onScroll={(e): void => {
               if (e.currentTarget.scrollLeft)
                 calendarRef.current?.scrollTo(e.currentTarget.scrollLeft);
