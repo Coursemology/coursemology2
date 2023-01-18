@@ -1,4 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
+import FaceRetouchingOffIcon from '@mui/icons-material/FaceRetouchingOff';
 import {
   Checkbox,
   List,
@@ -107,6 +108,7 @@ const GroupUserManagerListItem = ({
       />
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
+        {user.isPhantom ? <FaceRetouchingOffIcon style={{ fontSize: "2rem" }} /> : ""}
         {otherGroups ? `${user.name} (also members of${otherGroups})` : user.name}
       </ListItemText>
     </div>
