@@ -1,4 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
+import FaceRetouchingOffIcon from '@mui/icons-material/FaceRetouchingOff';
 import {
   Checkbox,
   List,
@@ -81,7 +82,7 @@ const styles = {
   },
 };
 
-const GroupUserManagerListItem = ({
+const NonGroupUserManagerListItem = ({
   user,
   colour,
   otherGroups,
@@ -107,7 +108,10 @@ const GroupUserManagerListItem = ({
       />
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
-        {otherGroups ? `${user.name} (also members of${otherGroups})` : user.name}
+        {user.isPhantom ? <FaceRetouchingOffIcon style={{ fontSize: "2rem" }} /> : ""}
+        {otherGroups ? 
+        `${user.name} (also members of${otherGroups})` 
+        : user.name}
       </ListItemText>
     </div>
 
@@ -132,7 +136,7 @@ const GroupUserManagerListItem = ({
   </ListItem>
 );
 
-GroupUserManagerListItem.propTypes = {
+NonGroupUserManagerListItem.propTypes = {
   user: nonMemberShape.isRequired,
   colour: PropTypes.object,
   otherGroups: PropTypes.arrayOf(PropTypes.string),
@@ -167,7 +171,7 @@ const NonGroupUserManagerList = ({
       {users.map((user) => {
         const colour = colourMap[user.id];
         return (
-          <GroupUserManagerListItem
+          <NonGroupUserManagerListItem
             key={user.id}
             colour={colour}
             isChecked={isChecked}
