@@ -12,7 +12,7 @@ const TableContainer = (
 ): JSX.Element => {
   return (
     <MuiTableContainer
-      className={`${props.stickyHeader ? 'overflow-x-clip' : ''} ${
+      className={`${props.stickyHeader ? 'overflow-x-visible' : ''} ${
         props.className ?? ''
       }`}
       component={MuiPaper}
