@@ -56,7 +56,10 @@ export default class FoldersAPI extends BaseCourseAPI {
   /**
    * Uploads materials (files)
    */
-  uploadMaterials(currFolderId: number, params: FormData): APIResponse {
+  uploadMaterials(
+    currFolderId: number,
+    params: FormData,
+  ): APIResponse<FolderData> {
     return this.getClient().put(
       `${this._getUrlPrefix()}/${currFolderId}/upload_materials`,
       params,
