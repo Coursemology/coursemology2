@@ -5,7 +5,6 @@ import {
   TimelineData,
 } from 'types/course/referenceTimelines';
 
-import RowSpacer from '../../components/RowSpacer';
 import { getDaysFromSeconds } from '../../utils';
 
 import TimelineSidebarItem from './TimelineSidebarItem';
@@ -27,8 +26,17 @@ const ItemsSidebar = (props: ItemsSidebarProps): JSX.Element => {
           key={item.id}
           className="flex border-0 border-b border-solid border-neutral-200"
         >
-          <div className="w-1/2 border-0 border-r border-solid border-neutral-200 py-2 pr-2">
-            <Typography className="line-clamp-2" variant="body2">
+          <div
+            className={`w-1/2 border-0 border-r border-solid border-neutral-200 ${
+              timelines.length <= 1 ? 'flex items-center' : 'py-2'
+            } pr-2`}
+          >
+            <Typography
+              className={
+                timelines.length <= 1 ? 'line-clamp-1' : 'line-clamp-2'
+              }
+              variant="body2"
+            >
               {item.title}
             </Typography>
           </div>
@@ -52,8 +60,6 @@ const ItemsSidebar = (props: ItemsSidebarProps): JSX.Element => {
                 />
               );
             })}
-
-            <RowSpacer />
           </div>
         </section>
       ))}
