@@ -30,7 +30,7 @@ const TimelinesOverview = (props: TimelinesOverviewProps): JSX.Element => {
 
   return (
     <div className="relative py-4">
-      <aside className="flex items-start space-x-4 overflow-x-scroll pr-56">
+      <aside className="scrollbar-hidden flex items-start space-x-4 overflow-x-scroll pr-56">
         {timelines.map((timeline) => (
           <TimelinesOverviewItem
             key={timeline.id}
