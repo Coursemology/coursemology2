@@ -11,7 +11,7 @@ class Course::ReferenceTimesController < Course::ReferenceTimelinesController
   end
 
   def update
-    if @reference_time.update(reference_time_params)
+    if @reference_time.update(update_params)
       head :ok
     else
       render json: { errors: @reference_time.errors.full_messages.to_sentence }, status: :bad_request
@@ -26,13 +26,13 @@ class Course::ReferenceTimesController < Course::ReferenceTimelinesController
     end
   end
 
-  def self.base_params
-    [:lesson_plan_item_id, :start_at, :bonus_end_at, :end_at]
-  end
-
   private
 
-  def reference_time_params
-    params.require(:reference_time).permit(*self.class.base_params)
+  def create_params
+    params.require(:reference_time).permit([:lesson_plan_item_id, :start_at, :bonus_end_at, :end_at])
+  end
+
+  def update_params
+    params.require(:reference_time).permit([:start_at, :bonus_end_at, :end_at])
   end
 end
