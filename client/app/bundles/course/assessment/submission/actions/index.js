@@ -4,6 +4,7 @@ import pollJob from 'lib/helpers/jobHelpers';
 import actionTypes from '../constants';
 import translations from '../translations';
 
+const JOB_POLL_DELAY = 500;
 const JOB_STAGGER_DELAY = 400;
 
 export function setNotification(message, errors) {
@@ -103,6 +104,7 @@ export function fetchSubmission(id) {
                     type: actionTypes.AUTOGRADE_FAILURE,
                     questionId: answer.questionId,
                   }),
+                JOB_POLL_DELAY,
               );
             }, JOB_STAGGER_DELAY * index);
           });
@@ -132,6 +134,7 @@ export function autogradeSubmission(id) {
             dispatch(setNotification(translations.autogradeSubmissionSuccess));
           },
           () => dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE }),
+          JOB_POLL_DELAY,
         );
       })
       .catch(() =>
@@ -234,6 +237,7 @@ export function reevaluateAnswer(submissionId, answerId, questionId) {
               });
               dispatch(setNotification(translations.requestFailure));
             },
+            JOB_POLL_DELAY,
           );
         } else {
           dispatch({
@@ -279,6 +283,7 @@ export function submitAnswer(submissionId, answerId, rawAnswer, setValue) {
               });
               dispatch(setNotification(translations.requestFailure));
             },
+            JOB_POLL_DELAY,
           );
         } else {
           dispatch({

@@ -4,6 +4,8 @@ import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 
+const DUPLICATE_JOB_POLL_INTERVAL = 2000;
+
 export function fetchObjectsList() {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_OBJECTS_LIST_REQUEST });
@@ -132,7 +134,12 @@ export function duplicateItems(
       .then((response) => response.data)
       .then((data) => {
         dispatch(setNotification(pendingMessage));
-        pollJob(data.jobUrl, handleSuccess, handleFailure);
+        pollJob(
+          data.jobUrl,
+          handleSuccess,
+          handleFailure,
+          DUPLICATE_JOB_POLL_INTERVAL,
+        );
       })
       .catch(handleFailure);
   };
@@ -170,7 +177,12 @@ export function duplicateCourse(
       .then((response) => response.data)
       .then((data) => {
         dispatch(setNotification(pendingMessage));
-        pollJob(data.jobUrl, handleJobSuccess, handleFailure);
+        pollJob(
+          data.jobUrl,
+          handleJobSuccess,
+          handleFailure,
+          DUPLICATE_JOB_POLL_INTERVAL,
+        );
       })
       .catch(handleFailure);
   };

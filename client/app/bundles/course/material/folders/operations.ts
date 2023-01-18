@@ -12,6 +12,8 @@ import pollJob from 'lib/helpers/jobHelpers';
 import * as actions from './actions';
 import { SaveFolderAction } from './types';
 
+const DOWNLOAD_FOLDER_JOB_POLL_INTERVAL = 2000;
+
 const formatFolderAttributes = (data: FolderFormData): FormData => {
   const payload = new FormData();
 
@@ -215,6 +217,7 @@ export function downloadFolder(
             if (data.redirectUrl) window.location.href = data.redirectUrl;
           },
           handleFailure,
+          DOWNLOAD_FOLDER_JOB_POLL_INTERVAL,
         );
       })
       .catch(handleFailure);
