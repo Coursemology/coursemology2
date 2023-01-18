@@ -3,7 +3,6 @@ import {
   MaterialFormData,
   MaterialUploadFormData,
 } from 'types/course/material/folders';
-import { JobCompleted } from 'types/jobs';
 import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
@@ -12,7 +11,7 @@ import pollJob from 'lib/helpers/jobHelpers';
 import * as actions from './actions';
 import { SaveFolderAction } from './types';
 
-const DOWNLOAD_FOLDER_JOB_POLL_INTERVAL = 2000;
+const DOWNLOAD_FOLDER_JOB_POLL_INTERVAL_MS = 2000;
 
 const formatFolderAttributes = (data: FolderFormData): FormData => {
   const payload = new FormData();
@@ -212,12 +211,12 @@ export function downloadFolder(
       .then((response) => {
         pollJob(
           response.data.jobUrl,
-          (data: JobCompleted) => {
+          (data) => {
             handleSuccess();
             if (data.redirectUrl) window.location.href = data.redirectUrl;
           },
           handleFailure,
-          DOWNLOAD_FOLDER_JOB_POLL_INTERVAL,
+          DOWNLOAD_FOLDER_JOB_POLL_INTERVAL_MS,
         );
       })
       .catch(handleFailure);

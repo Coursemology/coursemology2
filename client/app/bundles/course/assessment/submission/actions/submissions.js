@@ -6,12 +6,12 @@ import translations from '../translations';
 
 import { setNotification } from './index';
 
-const DOWNLOAD_SUBMISSIONS_JOB_POLL_INTERVAL = 2000;
-const DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL = 2000;
-const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
-const FORCE_SUBMIT_JOB_POLL_INTERVAL = 1000;
-const PUBLISH_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
-const UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
+const DOWNLOAD_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 2000;
+const DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL_MS = 2000;
+const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 1000;
+const FORCE_SUBMIT_JOB_POLL_INTERVAL_MS = 1000;
+const PUBLISH_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 1000;
+const UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 1000;
 
 export function fetchSubmissions() {
   return (dispatch) => {
@@ -54,7 +54,7 @@ export function publishSubmissions(type) {
             response.data.jobUrl,
             handleSuccess,
             handleFailure,
-            PUBLISH_ALL_SUBMISSIONS_JOB_POLL_INTERVAL,
+            PUBLISH_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS,
           );
         } else {
           handleSuccess();
@@ -88,7 +88,7 @@ export function forceSubmitSubmissions(type) {
             response.data.jobUrl,
             handleSuccess,
             handleFailure,
-            FORCE_SUBMIT_JOB_POLL_INTERVAL,
+            FORCE_SUBMIT_JOB_POLL_INTERVAL_MS,
           );
         } else {
           handleSuccess();
@@ -157,7 +157,7 @@ export function downloadSubmissions(type, downloadFormat) {
           response.data.jobUrl,
           handleSuccess,
           handleFailure,
-          DOWNLOAD_SUBMISSIONS_JOB_POLL_INTERVAL,
+          DOWNLOAD_SUBMISSIONS_JOB_POLL_INTERVAL_MS,
         );
       })
       .catch(handleFailure);
@@ -191,7 +191,7 @@ export function downloadStatistics(type) {
           response.data.jobUrl,
           handleSuccess,
           handleFailure,
-          DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL,
+          DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL_MS,
         );
       })
       .catch(handleFailure);
@@ -246,7 +246,7 @@ export function unsubmitAllSubmissions(type) {
             response.data.jobUrl,
             handleSuccess,
             handleFailure,
-            UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL,
+            UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS,
           );
         } else {
           handleSuccess();
@@ -302,7 +302,7 @@ export function deleteAllSubmissions(type) {
             response.data.jobUrl,
             handleSuccess,
             handleFailure,
-            DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL,
+            DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS,
           );
         } else {
           handleSuccess();
