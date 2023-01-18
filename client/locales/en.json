@@ -3452,19 +3452,16 @@
   "course.experiencePoints.disbursement.ForumPostTable.voteTally": {
     "defaultMessage": "Vote Tally"
   },
-  "course.form.FormShow.autoSubscribe": {
-    "defaultMessage": "Users will be automatically subscribed to a topic in this forum when they create a post in the topic."
-  },
-  "course.form.FormShow.fetchTopicsFailure": {
+  "course.forum.FormShow.fetchTopicsFailure": {
     "defaultMessage": "Failed to retrieve forum topic data."
   },
-  "course.form.FormShow.header": {
+  "course.forum.FormShow.header": {
     "defaultMessage": "Forum Topics"
   },
-  "course.form.FormShow.markAllAsReadSuccess": {
+  "course.forum.FormShow.markAllAsReadSuccess": {
     "defaultMessage": "All topics in this forum have been marked as read."
   },
-  "course.form.FormShow.newTopic": {
+  "course.forum.FormShow.newTopic": {
     "defaultMessage": "New Topic"
   },
   "course.forum.ForumEdit.editForum": {
@@ -3502,6 +3499,9 @@
   },
   "course.forum.ForumNew.newForum": {
     "defaultMessage": "New Forum"
+  },
+  "course.forum.ForumTable.autoSubscribe": {
+    "defaultMessage": "Users will be automatically subscribed to a topic in this forum when they create a post in the topic."
   },
   "course.forum.ForumTable.forum": {
     "defaultMessage": "Forum"
@@ -4991,6 +4991,162 @@
   "course.survey.updateSuccess": {
     "defaultMessage": "Survey \"{title}\" updated."
   },
+  "course.timelines.addTimeline": {
+    "defaultMessage": "Timeline"
+  },
+  "course.timelines.assignedInTimeline": {
+    "defaultMessage": "Assigned in timeline"
+  },
+  "course.timelines.assignedToItem": {
+    "defaultMessage": "Assigned to item"
+  },
+  "course.timelines.assigningInTimeline": {
+    "defaultMessage": "Assigning in timeline"
+  },
+  "course.timelines.assigningToItem": {
+    "defaultMessage": "Assigning to item"
+  },
+  "course.timelines.beta": {
+    "defaultMessage": "Beta"
+  },
+  "course.timelines.bonusEndTimeMustAfterStart": {
+    "defaultMessage": "Bonus end time must be after the start time."
+  },
+  "course.timelines.bonusEndsAt": {
+    "defaultMessage": "Bonus ends at"
+  },
+  "course.timelines.canChangeTitleLater": {
+    "defaultMessage": "You can change this title again later."
+  },
+  "course.timelines.clickToAssignTime": {
+    "defaultMessage": "Click to assign a time here"
+  },
+  "course.timelines.confirmCreateTimeline": {
+    "defaultMessage": "Create Timeline"
+  },
+  "course.timelines.confirmDeleteTimeline": {
+    "defaultMessage": "Delete timeline and its times"
+  },
+  "course.timelines.confirmRenameTimeline": {
+    "defaultMessage": "Rename Timeline"
+  },
+  "course.timelines.confirmRevertAndDeleteTimeline": {
+    "defaultMessage": "Revert and delete timeline and its times"
+  },
+  "course.timelines.defaultTimeline": {
+    "defaultMessage": "Default"
+  },
+  "course.timelines.deleteTime": {
+    "defaultMessage": "Delete time"
+  },
+  "course.timelines.deleteTimeline": {
+    "defaultMessage": "Delete"
+  },
+  "course.timelines.endTimeMustAfterStart": {
+    "defaultMessage": "End time must be after the start time."
+  },
+  "course.timelines.endsAt": {
+    "defaultMessage": "Ends at"
+  },
+  "course.timelines.error": {
+    "defaultMessage": "Oops!"
+  },
+  "course.timelines.errorCreatingTime": {
+    "defaultMessage": "An error occurred while creating this time."
+  },
+  "course.timelines.errorCreatingTimeline": {
+    "defaultMessage": "An error occurred while creating timeline: {newTitle}."
+  },
+  "course.timelines.errorDeletingTime": {
+    "defaultMessage": "An error occurred while deleting this time."
+  },
+  "course.timelines.errorDeletingTimeline": {
+    "defaultMessage": "An error occurred while deleting timeline: {title}."
+  },
+  "course.timelines.errorRenamingTimeline": {
+    "defaultMessage": "An error occurred while renaming timeline: {newTitle}."
+  },
+  "course.timelines.errorUpdatingTime": {
+    "defaultMessage": "An error occurred while updating this time."
+  },
+  "course.timelines.hintAssignedStudentsSeeCustomTimes": {
+    "defaultMessage": "For these items, students assigned to this timeline will see these overridden times."
+  },
+  "course.timelines.hintAssignedStudentsSeeDefaultTimes": {
+    "defaultMessage": "For items that are not overridden in this timeline, they will see the items' corresponding times in the Default Timeline."
+  },
+  "course.timelines.hintCanAddCustomTimes": {
+    "defaultMessage": "Once you create this timeline, you can add times in this timeline that override those in the Default Timeline for some items."
+  },
+  "course.timelines.hintChooseAlternativeTimeline": {
+    "defaultMessage": "Please choose a timeline to revert the students to."
+  },
+  "course.timelines.hintDeletingTimelineWillNotAffectSubmissions": {
+    "defaultMessage": "Rest assured, there will be no changes to students' submissions data, though this action cannot be undone."
+  },
+  "course.timelines.hintDeletingTimelineWillRemoveTimes": {
+    "defaultMessage": "Deleting this timeline will remove all its custom times."
+  },
+  "course.timelines.hintNoTimeAssigned": {
+    "defaultMessage": "No custom time assigned. Students assigned to this timeline will follow the time in the Default Timeline."
+  },
+  "course.timelines.lastSaved": {
+    "defaultMessage": "Last saved {at}"
+  },
+  "course.timelines.mustSpecifyStartTime": {
+    "defaultMessage": "You must specify a start time."
+  },
+  "course.timelines.mustValidDateTimeFormat": {
+    "defaultMessage": "Please provide a valid date and time format."
+  },
+  "course.timelines.mustValidTimelineTitle": {
+    "defaultMessage": "You must specify a valid title for a timeline."
+  },
+  "course.timelines.nAssigned": {
+    "defaultMessage": "{n} custom times"
+  },
+  "course.timelines.newTimeline": {
+    "defaultMessage": "New Timeline"
+  },
+  "course.timelines.renameTimeline": {
+    "defaultMessage": "Rename"
+  },
+  "course.timelines.renameTimelineTitle": {
+    "defaultMessage": "Rename {title}"
+  },
+  "course.timelines.saved": {
+    "defaultMessage": "Saved"
+  },
+  "course.timelines.saving": {
+    "defaultMessage": "Saving..."
+  },
+  "course.timelines.searchItems": {
+    "defaultMessage": "Search items"
+  },
+  "course.timelines.startsAt": {
+    "defaultMessage": "Starts at"
+  },
+  "course.timelines.sureDeletingTimeline": {
+    "defaultMessage": "Sure you're deleting {title}?"
+  },
+  "course.timelines.timelineDesigner": {
+    "defaultMessage": "Timeline Designer"
+  },
+  "course.timelines.timelineHasNStudents": {
+    "defaultMessage": "There are {n, plural, =1 {# student} other {# students}} assigned to this timeline."
+  },
+  "course.timelines.timelineHasNTimes": {
+    "defaultMessage": "This timeline assigns custom times in {n, plural, =1 {# item} other {# items}}."
+  },
+  "course.timelines.timelineTitle": {
+    "defaultMessage": "Timeline title"
+  },
+  "course.timelines.today": {
+    "defaultMessage": "Today"
+  },
+  "course.timelines.unchangedSince": {
+    "defaultMessage": "Unchanged since {time}"
+  },
   "course.userInvitation.InviteUsersRegistrationCode.cancel": {
     "defaultMessage": "Cancel"
   },
@@ -5222,17 +5378,38 @@
   "course.users.ManageUsersTable.ManageUsersTable.searchText": {
     "defaultMessage": "Search by name, email, role, etc."
   },
+  "course.users.ManageUsersTable.assignToTimeline": {
+    "defaultMessage": "Assign to timeline"
+  },
+  "course.users.ManageUsersTable.bulkChangeTimelineFailure": {
+    "defaultMessage": "Failed to update {n, plural, =1 {# student''s} other {# students''}} reference timelines to {timeline}."
+  },
+  "course.users.ManageUsersTable.bulkChangeTimelineSuccess": {
+    "defaultMessage": "Updated {n, plural, =1 {# student''s} other {# students''}} reference timelines to {timeline}."
+  },
+  "course.users.ManageUsersTable.changeAlgorithmFailure": {
+    "defaultMessage": "Failed to update {name}'s timeline algorithm to {timeline}."
+  },
+  "course.users.ManageUsersTable.changeAlgorithmSuccess": {
+    "defaultMessage": "Updated {name}'s timeline algorithm to {timeline}."
+  },
   "course.users.ManageUsersTable.changeRoleFailure": {
-    "defaultMessage": "Failed to change {name}'s role to {role}."
+    "defaultMessage": "Failed to update {name}'s role to {role}."
   },
   "course.users.ManageUsersTable.changeRoleSuccess": {
-    "defaultMessage": "Successfully changed {name}'s role to {role}."
+    "defaultMessage": "Updated {name}'s role to {role}."
   },
   "course.users.ManageUsersTable.changeTimelineFailure": {
-    "defaultMessage": "Failed to change {name}'s timeline algorithm to {timeline}."
+    "defaultMessage": "Failed to update {name}'s reference timeline to {timeline}."
   },
   "course.users.ManageUsersTable.changeTimelineSuccess": {
-    "defaultMessage": "Successfully changed {name}'s timeline algorithm to {timeline}."
+    "defaultMessage": "Updated {name}'s reference timeline to {timeline}."
+  },
+  "course.users.ManageUsersTable.defaultTimeline": {
+    "defaultMessage": "Default"
+  },
+  "course.users.ManageUsersTable.group": {
+    "defaultMessage": "Group: {name}"
   },
   "course.users.ManageUsersTable.phantomSuccess": {
     "defaultMessage": "{name} {isPhantom, select, true {is now a phantom user} other {is now a normal user} }."
@@ -5242,6 +5419,9 @@
   },
   "course.users.ManageUsersTable.renameSuccess": {
     "defaultMessage": "{oldName} was renamed to {newName}"
+  },
+  "course.users.ManageUsersTable.selectedNStudents": {
+    "defaultMessage": "Selected {n, plural, =1 {# student} other {# students}}"
   },
   "course.users.ManageUsersTable.updateFailure": {
     "defaultMessage": "Failed to update user - {error}"
@@ -5921,6 +6101,9 @@
   "lib.translations.table.column.experiencePointsAwarded": {
     "defaultMessage": "Experience Points Awarded"
   },
+  "lib.translations.table.column.groups": {
+    "defaultMessage": "Group(s)"
+  },
   "lib.translations.table.column.hasPersonalTimes": {
     "defaultMessage": "Has personal times"
   },
@@ -6009,7 +6192,7 @@
     "defaultMessage": "Status"
   },
   "lib.translations.table.column.timelineAlgorithm": {
-    "defaultMessage": "Timeline"
+    "defaultMessage": "Algorithm"
   },
   "lib.translations.table.column.updatedAt": {
     "defaultMessage": "Updated At"
