@@ -1,5 +1,4 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import FaceRetouchingOffIcon from '@mui/icons-material/FaceRetouchingOff';
 import {
   Checkbox,
   List,
@@ -10,6 +9,7 @@ import {
   Select,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import ghostIcon from 'assets/icons/ghost.svg?url';
 import PropTypes from 'prop-types';
 
 import { memberShape } from '../../../propTypes';
@@ -108,7 +108,7 @@ const GroupUserManagerListItem = ({
       />
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
-        {user.isPhantom ? <FaceRetouchingOffIcon style={{ fontSize: "2rem" }} /> : ""}
+        {user.isPhantom ? <img alt="phantom" className="wh-10" src={ghostIcon}/> : ""}
         {otherGroups ? `${user.name} (also members of${otherGroups})` : user.name}
       </ListItemText>
     </div>

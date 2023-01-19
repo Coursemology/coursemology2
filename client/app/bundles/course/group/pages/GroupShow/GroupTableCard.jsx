@@ -1,14 +1,14 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import FaceRetouchingOffIcon from '@mui/icons-material/FaceRetouchingOff';
-import {
+import { Checkbox, 
+  FormControlLabel,  
   Table,
   TableBody,
   TableCell,
   TableHead,
-  TableRow,
-} from '@mui/material';
+  TableRow } from '@mui/material';
 import { grey } from '@mui/material/colors';
+import ghostIcon from 'assets/icons/ghost.svg?url';
 import PropTypes from 'prop-types';
 
 import GroupCard from '../../components/GroupCard';
@@ -40,7 +40,12 @@ const translations = defineMessages({
   },
   manageOneGroup: {
     id: 'course.group.GroupShow.CategoryCard.manageOne',
-    defaultMessage: 'Manage Group',
+    defaultMessage: 'Edit Group',
+  },
+  hidePhantomStudents: {
+    id: 'course.group.GroupShow.GroupTableCard.hidePhantomStudents',
+    defaultMessage:
+      'Hide all phantom students',
   },
 });
 
@@ -61,7 +66,13 @@ const styles = {
 };
 
 const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
-  const members = [...group.members];
+  const [hidePhantomStudents, setHidePhantomStudents] = useState(false);
+
+  let members = [...group.members];
+  if (hidePhantomStudents) {
+    members = members.filter((m) => !m.isPhantom)
+  }
+
   members.sort(sortByName).sort(sortByPhantom).sort(sortByGroupRole);
 
   const titleButton = useMemo(() => {
@@ -107,9 +118,7 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
               <TableCell style={styles.rowHeight}>
                 <div className="flex grow">
                   {m.isPhantom ? (
-                    <FaceRetouchingOffIcon
-                      style={{ size: '15px', padding: 2 }}
-                    />
+                    <img alt="phantom" className="wh-10" src={ghostIcon}/>
                   ) : (
                     ''
                   )}
@@ -128,6 +137,16 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
           <FormattedMessage {...translations.noMembers} />
         </div>
       ) : null}
+      <FormControlLabel
+          control={
+            <Checkbox
+              checked={hidePhantomStudents}
+              onChange={(_, checked) => setHidePhantomStudents(checked)}
+            />
+          }
+          label={<FormattedMessage {...translations.hidePhantomStudents} />}
+          style={styles.checkbox}
+        />
     </GroupCard>
   );
 };
