@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { scroller } from 'react-scroll';
 import { toast } from 'react-toastify';
 import { Add } from '@mui/icons-material';
 import { Fab, Tooltip } from '@mui/material';
@@ -47,14 +48,14 @@ const ForumTopicPostNew: FC<Props> = (props) => {
 
   const handleSubmit = (data: ForumTopicPostFormData): Promise<void> =>
     dispatch(createForumTopicPost(forumId!, topicId!, data))
-      .then(() => {
+      .then((response) => {
         toast.success(t(translations.creationSuccess));
-        // Scroll to bottom after creating a new post.
-        window.scrollTo({
-          top: document.documentElement.scrollHeight,
-          behavior: 'smooth',
-        });
         setOpenDialog(false);
+        scroller.scrollTo(`post_${response.postId}`, {
+          duration: 200,
+          smooth: true,
+          offset: -400,
+        });
       })
       .catch((error) => {
         const errorMessage = error.response?.data?.errors
