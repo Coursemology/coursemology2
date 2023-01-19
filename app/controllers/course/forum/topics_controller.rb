@@ -65,7 +65,7 @@ class Course::Forum::TopicsController < Course::Forum::ComponentController
   end
 
   def topic_params
-    params.require(:topic).permit(:title, :topic_type, posts_attributes: [:text])
+    params.require(:topic).permit(:title, :topic_type, posts_attributes: [:text, :is_anonymous])
   end
 
   def load_topic

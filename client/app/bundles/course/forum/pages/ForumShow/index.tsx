@@ -125,6 +125,7 @@ const ForumShow: FC = () => {
       {!isLoading && isOpen && (
         <ForumTopicNew
           availableTopicTypes={forum?.availableTopicTypes}
+          isAnonymousEnabled={Boolean(forum?.permissions.isAnonymousEnabled)}
           onClose={(): void => setIsOpen(false)}
           open={isOpen}
         />
