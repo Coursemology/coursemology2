@@ -37,4 +37,12 @@ module Course::Forum::ControllerHelper
     topic_type_keys -= ['sticky'] unless can?(:set_sticky, topic)
     topic_type_keys
   end
+
+  def post_anonymous?(post)
+    allow_anonymous = current_course.settings(:course_forums_component).allow_anonymous_post
+    is_anonymous = post.is_anonymous && allow_anonymous
+    show_creator = (is_anonymous && can?(:view_anonymous, post)) || !is_anonymous
+
+    [is_anonymous, show_creator]
+  end
 end

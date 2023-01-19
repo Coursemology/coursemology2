@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+first_post = topic.posts.first
+last_post = topic.posts.last
 
 json.id topic.id
 json.forumId forum.id
@@ -9,30 +11,17 @@ json.isLocked topic.locked?
 json.isHidden topic.hidden?
 json.isResolved topic.resolved?
 json.topicType topic.topic_type
-json.creator do
-  creator = topic.creator
-  user = @course_users_hash&.fetch(creator.id, creator) || creator
-  json.id user.id
-  json.userUrl url_to_user_or_course_user(current_course, user)
-  json.name display_user(user)
-end
 
 json.voteCount topic.vote_count
 json.postCount topic.post_count
 json.viewCount topic.view_count
 
-last_post = topic.posts.last
-if last_post
-  json.latestPost do
-    json.creator do
-      creator = last_post.creator
-      user = @course_users_hash&.fetch(creator.id, creator) || creator
-      json.id user.id
-      json.userUrl url_to_user_or_course_user(current_course, user)
-      json.name display_user(user)
-    end
-    json.createdAt last_post.created_at
-  end
+json.firstPostCreator do
+  json.partial! 'course/forum/posts/post_creator_data', post: first_post
+end
+
+json.latestPostCreator do
+  json.partial! 'course/forum/posts/post_creator_data', post: last_post
 end
 
 json.emailSubscription do

@@ -56,6 +56,7 @@ const ForumTopicPostManagementButtons: FC<Props> = (props) => {
           navigate(`/courses/${getCourseId()}/forums/${forumId}`);
         } else {
           setIsDeleting(false);
+          window.location.reload();
         }
       })
       .catch((error) => {

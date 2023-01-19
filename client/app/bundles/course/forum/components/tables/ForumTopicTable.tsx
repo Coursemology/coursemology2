@@ -13,6 +13,7 @@ import { formatLongDateTime } from 'lib/moment';
 
 import ForumTopicManagementButtons from '../buttons/ForumTopicManagementButtons';
 import SubscribeButton from '../buttons/SubscribeButton';
+import PostCreatorObject from '../misc/PostCreatorObject';
 
 interface Props {
   forum?: ForumEntity;
@@ -152,6 +153,12 @@ const ForumTopicTable: FC<Props> = (props) => {
         alignCenter: false,
         customBodyRenderLite: (dataIndex): JSX.Element => {
           const topic = forumTopics[dataIndex];
+          const firstPostCreator = topic.firstPostCreator;
+          const postCreatorObject = PostCreatorObject({
+            creator: firstPostCreator.creator,
+            isAnonymous: firstPostCreator.isAnonymous,
+            canViewAnonymous: firstPostCreator.permissions.canViewAnonymous,
+          });
           return (
             <>
               <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
@@ -188,7 +195,18 @@ const ForumTopicTable: FC<Props> = (props) => {
               </div>
               <div>
                 {t(translations.startedBy)}{' '}
-                <a href={topic.creator.userUrl}>{topic.creator.name}</a>
+                {postCreatorObject.userUrl ? (
+                  <a
+                    href={postCreatorObject.userUrl}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {postCreatorObject.name}
+                  </a>
+                ) : (
+                  postCreatorObject.name
+                )}
+                {postCreatorObject.visibilityIcon}
               </div>
             </>
           );
@@ -196,7 +214,7 @@ const ForumTopicTable: FC<Props> = (props) => {
       },
     },
     {
-      name: 'latestPost',
+      name: 'latestPostCreator',
       label: t(translations.lastPostedBy),
       options: {
         filter: false,
@@ -209,8 +227,10 @@ const ForumTopicTable: FC<Props> = (props) => {
         }),
         sortCompare: (order: string) => {
           return (value1, value2) => {
-            const latestPost1 = value1.data as ForumTopicEntity['latestPost'];
-            const latestPost2 = value2.data as ForumTopicEntity['latestPost'];
+            const latestPost1 =
+              value1.data as ForumTopicEntity['latestPostCreator'];
+            const latestPost2 =
+              value2.data as ForumTopicEntity['latestPostCreator'];
             const date1 = new Date(latestPost1.createdAt);
             const date2 = new Date(latestPost2.createdAt);
             return (
@@ -219,13 +239,29 @@ const ForumTopicTable: FC<Props> = (props) => {
           };
         },
         customBodyRenderLite: (dataIndex): JSX.Element | null => {
-          const latestPost = forumTopics[dataIndex].latestPost;
-          if (!latestPost) return null;
+          const latestPostCreator = forumTopics[dataIndex].latestPostCreator;
+          if (!latestPostCreator) return null;
+          const postCreatorObject = PostCreatorObject({
+            creator: latestPostCreator.creator,
+            isAnonymous: latestPostCreator.isAnonymous,
+            canViewAnonymous: latestPostCreator.permissions.canViewAnonymous,
+          });
           return (
             <>
-              <a href={latestPost.creator.userUrl}>{latestPost.creator.name}</a>
+              {postCreatorObject.userUrl ? (
+                <a
+                  href={postCreatorObject.userUrl}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {postCreatorObject.name}
+                </a>
+              ) : (
+                postCreatorObject.name
+              )}
+              {postCreatorObject.visibilityIcon}
               <div className="whitespace-nowrap">
-                {formatLongDateTime(latestPost.createdAt)}
+                {formatLongDateTime(latestPostCreator.createdAt)}
               </div>
             </>
           );
