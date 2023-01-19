@@ -5,6 +5,7 @@ import { ForumTopicFormData, TopicType } from 'types/course/forums';
 import * as yup from 'yup';
 
 import FormDialog from 'lib/components/form/dialog/FormDialog';
+import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
@@ -22,6 +23,7 @@ interface Props {
   ) => Promise<void>;
   initialValues: ForumTopicFormData;
   availableTopicTypes?: TopicType[];
+  isAnonymousEnabled?: boolean;
 }
 
 const translations = defineMessages({
@@ -37,11 +39,16 @@ const translations = defineMessages({
     id: 'course.forum.ForumTopicForm.topicType',
     defaultMessage: 'Topic Type',
   },
+  postAnonymously: {
+    id: 'course.forum.ForumTopicForm.postAnonymously',
+    defaultMessage: 'Anonymous post',
+  },
 });
 
 const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
   text: yup.string(),
+  isAnonymous: yup.bool(),
 });
 
 const defaultTopicTypes = [
@@ -58,6 +65,7 @@ const ForumTopicForm: FC<Props> = (props) => {
     initialValues,
     onSubmit,
     availableTopicTypes,
+    isAnonymousEnabled,
   } = props;
   const { t } = useTranslation();
 
@@ -98,21 +106,37 @@ const ForumTopicForm: FC<Props> = (props) => {
           />
 
           {!editing && (
-            <Controller
-              control={control}
-              name="text"
-              render={({ field, fieldState }): JSX.Element => (
-                <FormRichTextField
-                  disabled={formState.isSubmitting}
-                  disableMargins
-                  field={field}
-                  fieldState={fieldState}
-                  fullWidth
-                  label={t(translations.text)}
-                  required
+            <>
+              <Controller
+                control={control}
+                name="text"
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormRichTextField
+                    disabled={formState.isSubmitting}
+                    disableMargins
+                    field={field}
+                    fieldState={fieldState}
+                    fullWidth
+                    label={t(translations.text)}
+                    required
+                  />
+                )}
+              />
+              {isAnonymousEnabled && !editing && (
+                <Controller
+                  control={control}
+                  name="isAnonymous"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <FormCheckboxField
+                      disabled={formState.isSubmitting}
+                      field={field}
+                      fieldState={fieldState}
+                      label={t(translations.postAnonymously)}
+                    />
+                  )}
                 />
               )}
-            />
+            </>
           )}
 
           <Controller

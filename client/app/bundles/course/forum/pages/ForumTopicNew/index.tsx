@@ -16,6 +16,7 @@ interface Props {
   open: boolean;
   onClose: () => void;
   availableTopicTypes?: TopicType[];
+  isAnonymousEnabled: boolean;
 }
 
 const translations = defineMessages({
@@ -40,7 +41,7 @@ const initialValues = {
 };
 
 const ForumTopicNew: FC<Props> = (props) => {
-  const { open, onClose, availableTopicTypes } = props;
+  const { open, onClose, availableTopicTypes, isAnonymousEnabled } = props;
   const { t } = useTranslation();
   const { forumId } = useParams();
   const navigate = useNavigate();
@@ -77,6 +78,7 @@ const ForumTopicNew: FC<Props> = (props) => {
       availableTopicTypes={availableTopicTypes}
       editing={false}
       initialValues={initialValues}
+      isAnonymousEnabled={isAnonymousEnabled}
       onClose={onClose}
       onSubmit={handleSubmit}
       open={open}

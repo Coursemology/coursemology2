@@ -159,7 +159,10 @@ export function createForumTopic(
     topic: {
       title: topicFormData.title,
       topic_type: topicFormData.topicType,
-      posts_attributes: [{ text: topicFormData.text }],
+      is_anonymous: topicFormData.isAnonymous,
+      posts_attributes: [
+        { text: topicFormData.text, is_anonymous: topicFormData.isAnonymous },
+      ],
     },
   };
   return async (_) =>
