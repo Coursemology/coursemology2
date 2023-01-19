@@ -34,6 +34,7 @@ module.exports = {
       alias: {
         map: [
           ['api', './app/api'],
+          ['assets', './app/assets'],
           ['lib', './app/lib'],
           ['theme', './app/theme'],
           ['types', './app/types'],
