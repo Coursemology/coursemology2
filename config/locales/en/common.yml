@@ -3,10 +3,7 @@ en:
     not_started: "Not started"
     ended: "Ended"
     plain_text_link: "%{text} (%{url})"
-    draft: "Draft"
     click_here: "Click here"
-    truthy: "Yes"
-    falsey: "No"
     percentage: "%{percentage}%"
   helpers:
     submit:
