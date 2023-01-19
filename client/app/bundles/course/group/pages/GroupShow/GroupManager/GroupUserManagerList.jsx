@@ -82,13 +82,43 @@ const styles = {
   },
 };
 
+const GroupUserManagerListItemChoice = ({
+  user, 
+  onChangeDropdown,
+}) => (
+    (user.role !== 'student') ? (
+      <div style={styles.listItemWithDropdown}>
+        <Select
+          onChange={(event) => onChangeDropdown(event.target.value, user)}
+          onClick={() => {}}
+          style={styles.listItemTextSize}
+          value={user.groupRole}
+          variant="standard"
+        >
+          <MenuItem style={styles.listItemTextSize} value="normal">
+            <FormattedMessage {...translations.normal} />
+          </MenuItem>
+          <MenuItem style={styles.listItemTextSize} value="manager">
+            <FormattedMessage {...translations.manager} />
+          </MenuItem>
+        </Select>
+      </div>
+    ) : 
+    <FormattedMessage {...translations.normal} />
+  );
+
+GroupUserManagerListItemChoice.propTypes = {
+  user: memberShape.isRequired,
+  onChangeDropdown: PropTypes.func,
+};
+
 const GroupUserManagerListItem = ({
   user,
   colour,
   otherGroups,
   onCheck,
-  showDropdown,
   onChangeDropdown,
+  showDropdown,
   isChecked,
 }) => (
   <ListItem
@@ -114,22 +144,10 @@ const GroupUserManagerListItem = ({
     </div>
 
     {showDropdown ? (
-      <div style={styles.listItemWithDropdown}>
-        <Select
-          onChange={(event) => onChangeDropdown(event.target.value, user)}
-          onClick={() => {}}
-          style={styles.listItemTextSize}
-          value={user.groupRole}
-          variant="standard"
-        >
-          <MenuItem style={styles.listItemTextSize} value="normal">
-            <FormattedMessage {...translations.normal} />
-          </MenuItem>
-          <MenuItem style={styles.listItemTextSize} value="manager">
-            <FormattedMessage {...translations.manager} />
-          </MenuItem>
-        </Select>
-      </div>
+    <GroupUserManagerListItemChoice 
+      onChangeDropdown={onChangeDropdown}
+      user={user}
+    />
     ) : null}
   </ListItem>
 );
@@ -139,8 +157,8 @@ GroupUserManagerListItem.propTypes = {
   colour: PropTypes.object,
   otherGroups: PropTypes.arrayOf(PropTypes.string),
   onCheck: PropTypes.func.isRequired,
-  showDropdown: PropTypes.bool,
   onChangeDropdown: PropTypes.func,
+  showDropdown: PropTypes.bool,
   isChecked: PropTypes.bool,
 };
 
