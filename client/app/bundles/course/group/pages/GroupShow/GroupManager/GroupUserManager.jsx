@@ -68,6 +68,11 @@ const translations = defineMessages({
     defaultMessage:
       'Hide students who are already in a group under this category',
   },
+  hidePhantomStudents: {
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.hidePhantomStudents',
+    defaultMessage:
+      'Hide all Phantom Students',
+  },
   cannotUpliftStudent: {
     id: 'course.group.GroupShow.GroupManager.GroupUserManager.cannotUpliftStudent',
     defaultMessage:
@@ -125,22 +130,43 @@ const getAvailableUsers = (
   groups,
   group,
   hideInGroup,
+  hidePhantomStudent,
   availableSearch,
 ) => {
+  let groupMemberIds = new Set()
+  // const altGroup = new Set(groups.flatMap((g) => g.members).filter((m) => !m.isPhantom));
   if (hideInGroup) {
-    const allGroupMemberIds = new Set(
-      groups.flatMap((g) => g.members.map((m) => m.id)),
-    );
-    return filterByName(
-      availableSearch,
-      courseUsers.filter((cu) => !allGroupMemberIds.has(cu.id)),
-    );
+    groupMemberIds = new Set(groups.flatMap((g) => g.members.map((m) => m.id)));
+  } else {
+    groupMemberIds = new Set(group.members.map((m) => m.id))
   }
-  const groupMemberIds = new Set(group.members.map((m) => m.id));
-  return filterByName(
-    availableSearch,
+
+  const filteredGroup = filterByName(availableSearch,
     courseUsers.filter((cu) => !groupMemberIds.has(cu.id)),
   );
+
+  if (hidePhantomStudent) {
+    return filteredGroup.filter((m) => !m.isPhantom);
+  } 
+  return filteredGroup
+};
+
+const getSelectedUsers = (
+  members,
+  selectedSearch,
+  hidePhantomStudent,
+) => {
+  let groupMembers = new Set()
+  if (hidePhantomStudent) {
+    groupMembers = new Set(members.filter((m) => !m.isPhantom))
+  } else {
+    groupMembers = new Set(members)
+  }
+
+  return filterByName(
+    selectedSearch,
+    [...groupMembers],
+  )
 };
 
 const getAvailableUserInOtherGroups = (
@@ -179,6 +205,7 @@ const GroupUserManager = ({
   const [availableSearch, setAvailableSearch] = useState('');
   const [selectedSearch, setSelectedSearch] = useState('');
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [hidePhantomStudent, setHidePhantomStudent] = useState(false);
 
   const availableUsers = useMemo(
     () =>
@@ -187,9 +214,10 @@ const GroupUserManager = ({
         groups,
         group,
         hideInGroup,
+        hidePhantomStudent,
         availableSearch,
       ),
-    [courseUsers, groups, group, hideInGroup, availableSearch],
+    [courseUsers, groups, group, hideInGroup, hidePhantomStudent, availableSearch],
   );
 
   const availableUsersInOtherGroups = useMemo(
@@ -203,8 +231,13 @@ const GroupUserManager = ({
   );
 
   const groupMembers = useMemo(
-    () => filterByName(selectedSearch, group.members),
-    [selectedSearch, group.members],
+    () => 
+      getSelectedUsers(
+        group.members,
+        selectedSearch,
+        hidePhantomStudent,
+      ),
+    [group.members, selectedSearch, hidePhantomStudent],
   );
 
   const availableStudents = useMemo(
@@ -461,6 +494,17 @@ const GroupUserManager = ({
             />
           }
           label={<FormattedMessage {...translations.hideStudents} />}
+          style={styles.checkbox}
+        />
+        <br />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={hidePhantomStudent}
+              onChange={(_, checked) => setHidePhantomStudent(checked)}
+            />
+          }
+          label={<FormattedMessage {...translations.hidePhantomStudents} />}
           style={styles.checkbox}
         />
       </GroupCard>
