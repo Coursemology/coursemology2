@@ -3,17 +3,6 @@
 module ApplicationFormattersHelper
   include ApplicationHTMLFormattersHelper
 
-  # Formats the given user-input string. The string is assumed not to contain HTML markup, and
-  # will be processed for simple formatting like newlines using the Rails +simple_format+ helper.
-  #
-  # This will treat the given text as a block element.
-  #
-  # @param [String] text The text to display.
-  # @return [String]
-  def format_block_text(text)
-    simple_format(html_escape(text), {}, sanitize: false)
-  end
-
   # Formats the given user-input string. The string is assumed not to contain HTML markup.
   #
   # @param [String] text The text to display.
@@ -138,15 +127,6 @@ module ApplicationFormattersHelper
     end
   end
 
-  # A helper for retrieving the title of a published item's status.
-  #
-  # @param [ActiveRecord::Base] item An ActiveRecord object which has a published field.
-  # @return [String] A translated string representing the status of the item.
-  # @return [nil] If the item is published.
-  def draft_message(item)
-    t('common.draft') unless item.published?
-  end
-
   # A helper for generating CSS classes, based on the unread status of the item.
   #
   # @param [ActiveRecord::Base] item An ActiveRecord object which acts as readable.
@@ -157,13 +137,5 @@ module ApplicationFormattersHelper
     else
       []
     end
-  end
-
-  # Changes boolean values (True/False) into readable forms (Yes/No).
-  #
-  # @param [Boolean|nil] bool
-  # @return [String] A readable form of true and false, Yes and No.
-  def format_boolean(bool)
-    bool ? t('common.truthy') : t('common.falsey')
   end
 end
