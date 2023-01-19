@@ -11,10 +11,17 @@ export interface ForumMetadata {
   nextUnreadTopicUrl: string | null;
 }
 
+export interface PostCreatorData {
+  isAnonymous: boolean;
+  creator?: { id: number; userUrl: string; name: string; imageUrl: string };
+  createdAt: string;
+  permissions: Permissions<'canViewAnonymous'>;
+}
+
 export type ForumPermissions = Permissions<'canCreateForum'>;
 
 export type ForumListDataPermissions = Permissions<
-  'canCreateTopic' | 'canEditForum' | 'canDeleteForum'
+  'canCreateTopic' | 'canEditForum' | 'canDeleteForum' | 'isAnonymousEnabled'
 >;
 
 export type ForumTopicListDataPermissions = Permissions<
@@ -74,15 +81,12 @@ export interface ForumTopicListData {
   isHidden: boolean;
   isResolved: boolean;
   topicType: TopicType;
-  creator: { id: number; userUrl: string; name: string };
   voteCount: number;
   postCount: number;
   viewCount: number;
 
-  latestPost: {
-    creator: { id: number; userUrl: string; name: string };
-    createdAt: string;
-  };
+  firstPostCreator: PostCreatorData;
+  latestPostCreator: PostCreatorData;
 
   emailSubscription: EmailSubscriptionSetting;
   permissions: ForumTopicListDataPermissions;
@@ -104,7 +108,6 @@ export interface ForumTopicPostListData {
   voteTally: number;
   isAnonymous: boolean;
   creator?: { id: number; userUrl: string; name: string; imageUrl: string };
-
   permissions: ForumTopicPostListDataPermissions;
 }
 
@@ -151,12 +154,12 @@ export interface ForumTopicEntity {
   isHidden: ForumTopicListData['isHidden'];
   isResolved: ForumTopicListData['isResolved'];
   topicType: ForumTopicListData['topicType'];
-  creator: ForumTopicListData['creator'];
   voteCount: ForumTopicListData['voteCount'];
   postCount: ForumTopicListData['postCount'];
   viewCount: ForumTopicListData['viewCount'];
 
-  latestPost: ForumTopicListData['latestPost'];
+  firstPostCreator: ForumTopicListData['firstPostCreator'];
+  latestPostCreator: ForumTopicListData['latestPostCreator'];
 
   emailSubscription: ForumTopicListData['emailSubscription'];
   permissions: ForumTopicListData['permissions'];
@@ -215,6 +218,7 @@ export interface ForumTopicFormData {
   id?: number;
   title: string;
   text?: string;
+  isAnonymous?: boolean;
   topicType: TopicType;
 }
 
@@ -222,7 +226,11 @@ export interface ForumTopicPostData {
   topic: {
     title: ForumTopicFormData['title'];
     topic_type: ForumTopicFormData['topicType'];
-    posts_attributes: { text: ForumTopicFormData['text'] }[];
+    is_anonymous: ForumTopicFormData['isAnonymous'];
+    posts_attributes: {
+      text: ForumTopicFormData['text'];
+      is_anonymous: ForumTopicFormData['isAnonymous'];
+    }[];
   };
 }
 

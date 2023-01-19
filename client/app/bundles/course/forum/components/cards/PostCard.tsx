@@ -4,23 +4,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Element, scroller } from 'react-scroll';
 import { toast } from 'react-toastify';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
-  Avatar,
   Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   Divider,
-  IconButton,
-  Link,
   Typography,
 } from '@mui/material';
-import {
-  ForumTopicPostEntity,
-  ForumTopicPostFormData,
-} from 'types/course/forums';
+import { ForumTopicPostFormData } from 'types/course/forums';
 import { AppDispatch, AppState } from 'types/store';
 
 import Checkbox from 'lib/components/core/buttons/Checkbox';
@@ -39,17 +32,11 @@ import { getForumTopic, getForumTopicPost } from '../../selectors';
 import ForumTopicPostManagementButtons from '../buttons/ForumTopicPostManagementButtons';
 import MarkAnswerButton from '../buttons/MarkAnswerButton';
 import VotePostButton from '../buttons/VotePostButton';
+import PostCreatorObject from '../misc/PostCreatorObject';
 
 interface Props {
   postId: number;
   level: number;
-}
-
-interface PostCreatorReturnValues {
-  avatar: JSX.Element | null;
-  creatorName: string;
-  creatorUrl: string | null;
-  visibilityIcon: JSX.Element | null;
 }
 
 const translations = defineMessages({
@@ -101,89 +88,6 @@ const postClassName = (isUnread: boolean, isSolution: boolean): string => {
   return 'space-y-4';
 };
 
-const PostCreator = (post?: ForumTopicPostEntity): PostCreatorReturnValues => {
-  const { t } = useTranslation();
-  const [hideAvatar, setHideAvatar] = useState(true);
-
-  let postCreatorData: PostCreatorReturnValues = {
-    avatar: null,
-    creatorName: '',
-    creatorUrl: null,
-    visibilityIcon: null,
-  };
-
-  if (!post) return postCreatorData;
-
-  const {
-    isAnonymous,
-    creator,
-    permissions: { canViewAnonymous, isAnonymousEnabled },
-  } = post;
-  const canAccessAnonymous =
-    isAnonymousEnabled && canViewAnonymous && isAnonymous;
-
-  // Either a post is not anonymous or anonymous forum setting is disabled
-  if ((!isAnonymousEnabled || !isAnonymous) && creator) {
-    postCreatorData = {
-      avatar: (
-        <Avatar
-          alt={creator.name}
-          className="h-20 w-20"
-          component={Link}
-          href={creator.userUrl}
-          src={creator.imageUrl}
-        />
-      ),
-      creatorName: creator.name,
-      creatorUrl: creator.userUrl,
-      visibilityIcon: null,
-    };
-  } else if (canAccessAnonymous && creator && !hideAvatar) {
-    // If someone can see the real identity of the anonymous post
-    postCreatorData = {
-      avatar: (
-        <Avatar
-          alt={creator.name}
-          className="h-20 w-20"
-          component={Link}
-          href={creator.userUrl}
-          src={creator.imageUrl}
-        />
-      ),
-      creatorName: creator.name,
-      creatorUrl: creator.userUrl,
-      visibilityIcon: (
-        <IconButton
-          edge="end"
-          onClick={(): void => setHideAvatar(true)}
-          onMouseDown={(e): void => e.preventDefault()}
-          title={t(translations.maskUser)}
-        >
-          <VisibilityOff />
-        </IconButton>
-      ),
-    };
-  } else {
-    postCreatorData = {
-      avatar: <Avatar className="h-20 w-20">?</Avatar>,
-      creatorName: t(translations.anonymousUser),
-      creatorUrl: null,
-      visibilityIcon: canAccessAnonymous ? (
-        <IconButton
-          edge="end"
-          onClick={(): void => setHideAvatar(false)}
-          onMouseDown={(e): void => e.preventDefault()}
-          title={t(translations.unmaskUser)}
-        >
-          <Visibility />
-        </IconButton>
-      ) : null,
-    };
-  }
-
-  return postCreatorData;
-};
-
 const PostCard: FC<Props> = (props) => {
   const { postId, level } = props;
   const [isEditing, setIsEditing] = useState(false);
@@ -204,7 +108,11 @@ const PostCard: FC<Props> = (props) => {
   const { forumId: forumIdSlug, topicId: topicIdSlug } = useParams();
   const dispatch = useDispatch<AppDispatch>();
 
-  const postCreator = PostCreator(post);
+  const postCreatorObject = PostCreatorObject({
+    creator: post?.creator,
+    isAnonymous: post?.isAnonymous,
+    canViewAnonymous: post?.permissions.canViewAnonymous,
+  });
 
   useEffect(() => {
     if (isReplying) {
@@ -340,24 +248,24 @@ const PostCard: FC<Props> = (props) => {
                 post={post}
               />
             }
-            avatar={postCreator.avatar}
+            avatar={postCreatorObject.avatar}
             className="pb-0"
             subheader={formatLongDateTime(post.createdAt)}
             subheaderTypographyProps={{ variant: 'body1' }}
             title={
               <>
-                {postCreator.creatorUrl ? (
+                {postCreatorObject.userUrl ? (
                   <a
-                    href={postCreator.creatorUrl}
+                    href={postCreatorObject.userUrl}
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    {postCreator.creatorName}
+                    {postCreatorObject.name}
                   </a>
                 ) : (
-                  postCreator.creatorName
+                  postCreatorObject.name
                 )}
-                {postCreator.visibilityIcon}
+                {postCreatorObject.visibilityIcon}
               </>
             }
             titleTypographyProps={{ variant: 'body1' }}
@@ -427,7 +335,7 @@ const PostCard: FC<Props> = (props) => {
                     }))
                   }
                   placeholder={t(translations.replyTo, {
-                    user: postCreator.creatorName,
+                    user: postCreatorObject.name,
                   })}
                   value={replyValue.text}
                 />
