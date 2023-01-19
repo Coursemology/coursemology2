@@ -217,10 +217,8 @@ class CourseUser < ApplicationRecord
   #
   # @return[Array<CourseUser>]
   def my_students
-    # CourseUser.joining { group_users.group }.merge(Course::GroupUser.normal).
-    #   where.has { group_users.group.id.in(my_groups) }
     CourseUser.joins(group_users: :group).merge(Course::GroupUser.normal).
-      where(Course::Group.arel_table[:id].in(group_users.manager.pluck(:group_id)))
+      where(Course::Group.arel_table[:id].in(group_users.manager.pluck(:group_id))).distinct
   end
 
   # Returns the managers of the groups I belong to in the course.
@@ -228,10 +226,8 @@ class CourseUser < ApplicationRecord
   # @return[Array<CourseUser>]
   def my_managers
     my_groups = group_users.pluck(:group_id)
-    # CourseUser.joining { group_users.group }.merge(Course::GroupUser.manager).
-    #   where.has { group_users.group.id.in(my_groups) }
     CourseUser.joins(group_users: :group).merge(Course::GroupUser.manager).
-      where(Course::Group.arel_table[:id].in(my_groups))
+      where(Course::Group.arel_table[:id].in(my_groups)).distinct
   end
 
   def latest_learning_rate_record
