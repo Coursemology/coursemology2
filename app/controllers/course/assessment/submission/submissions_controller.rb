@@ -83,7 +83,8 @@ class Course::Assessment::Submission::SubmissionsController < \
   def auto_grade
     authorize!(:grade, @submission)
     job = @submission.auto_grade!
-    render json: { redirect_url: job_path(job.job) }
+
+    render partial: 'jobs/submitted', locals: { job: job.job }
   end
 
   def reevaluate_answer
@@ -93,7 +94,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     return head :bad_request if @answer.nil?
 
     job = @answer.auto_grade!(redirect_to_path: nil, reduce_priority: true)
-    render json: { redirect_url: job_path(job.job) }
+    render partial: 'jobs/submitted', locals: { job: job.job }
   end
 
   # Reload the current answer or reset it, depending on parameters.
@@ -125,7 +126,7 @@ class Course::Assessment::Submission::SubmissionsController < \
       job = Course::Assessment::Submission::PublishingJob.
             perform_later(graded_submission_ids, @assessment, current_user).job
       respond_to do |format|
-        format.json { render json: { redirect_url: job_path(job) } }
+        format.json { render partial: 'jobs/submitted', locals: { job: job } }
       end
     end
   end
@@ -138,7 +139,7 @@ class Course::Assessment::Submission::SubmissionsController < \
       job = Course::Assessment::Submission::ForceSubmittingJob.
             perform_later(@assessment, course_user_ids.pluck(:user_id), user_ids_without_submission, current_user).job
       respond_to do |format|
-        format.json { render json: { redirect_url: job_path(job) } }
+        format.json { render partial: 'jobs/submitted', locals: { job: job } }
       end
     else
       head :ok
@@ -154,7 +155,7 @@ class Course::Assessment::Submission::SubmissionsController < \
       job = download_job
       respond_to do |format|
         format.html { redirect_to(job_path(job)) }
-        format.json { render json: { redirect_url: job_path(job) } }
+        format.json { render partial: 'jobs/submitted', locals: { job: job } }
       end
     end
   end
@@ -171,7 +172,7 @@ class Course::Assessment::Submission::SubmissionsController < \
           perform_later(current_course, current_user, submission_ids).job
     respond_to do |format|
       format.html { redirect_to(job_path(job)) }
-      format.json { render json: { redirect_url: job_path(job) } }
+      format.json { render partial: 'jobs/submitted', locals: { job: job } }
     end
   end
 
@@ -200,7 +201,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     job = Course::Assessment::Submission::UnsubmittingJob.
           perform_later(current_user, submission_ids, @assessment, nil).job
     respond_to do |format|
-      format.json { render json: { redirect_url: job_path(job) } }
+      format.json { render partial: 'jobs/submitted', locals: { job: job } }
     end
   end
 
@@ -234,7 +235,7 @@ class Course::Assessment::Submission::SubmissionsController < \
           perform_later(current_user, submission_ids, @assessment).job
     respond_to do |format|
       format.html { redirect_to(job_path(job)) }
-      format.json { render json: { redirect_url: job_path(job) } }
+      format.json { render partial: 'jobs/submitted', locals: { job: job } }
     end
   end
 
@@ -275,7 +276,7 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     respond_to do |format|
       format.html { redirect_to new_session_path }
-      format.json { render json: { redirect_url: new_session_path, format: 'html' } }
+      format.json { render json: { newSessionUrl: new_session_path } }
     end
   end
 

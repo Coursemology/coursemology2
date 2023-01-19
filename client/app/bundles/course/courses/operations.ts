@@ -22,7 +22,7 @@ const formatAttributes = (data: NewCourseFormData): FormData => {
   return payload;
 };
 
-export function fetchCourses(): Operation<void> {
+export function fetchCourses(): Operation {
   return async (dispatch) =>
     CourseAPI.courses.index().then((response) => {
       const data = response.data;
@@ -59,7 +59,7 @@ export function removeTodo(
   courseId: number,
   todoType: 'assessments' | 'videos' | 'surveys',
   todoId: number,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.courses.removeTodo(ignoreLink).then(() => {
       dispatch(actions.removeTodo(courseId, todoType, todoId));

@@ -1,11 +1,11 @@
 import CourseAPI from 'api/course';
-import pollJob from 'lib/helpers/job-helpers';
+import pollJob from 'lib/helpers/jobHelpers';
 
 import actionTypes from '../constants';
 import translations from '../translations';
 
-const JOB_POLL_DELAY = 500;
-const JOB_STAGGER_DELAY = 400;
+const JOB_POLL_DELAY_MS = 500;
+const JOB_STAGGER_DELAY_MS = 400;
 
 export function setNotification(message, errors) {
   return {
@@ -91,7 +91,6 @@ export function fetchSubmission(id) {
             setTimeout(() => {
               pollJob(
                 answer.autograding.path,
-                JOB_POLL_DELAY,
                 () =>
                   dispatch(
                     getEvaluationResult(
@@ -105,8 +104,9 @@ export function fetchSubmission(id) {
                     type: actionTypes.AUTOGRADE_FAILURE,
                     questionId: answer.questionId,
                   }),
+                JOB_POLL_DELAY_MS,
               );
-            }, JOB_STAGGER_DELAY * index);
+            }, JOB_STAGGER_DELAY_MS * index);
           });
 
         dispatch({
@@ -127,14 +127,14 @@ export function autogradeSubmission(id) {
       .then((response) => response.data)
       .then((data) => {
         pollJob(
-          data.redirect_url,
-          JOB_POLL_DELAY,
+          data.jobUrl,
           () => {
             dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_SUCCESS });
             fetchSubmission(id)(dispatch);
             dispatch(setNotification(translations.autogradeSubmissionSuccess));
           },
           () => dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE }),
+          JOB_POLL_DELAY_MS,
         );
       })
       .catch(() =>
@@ -153,8 +153,8 @@ export function saveDraft(submissionId, rawAnswers) {
       .update(submissionId, payload)
       .then((response) => response.data)
       .then((data) => {
-        if (data.redirect_url && data.format === 'html') {
-          window.location = data.redirect_url;
+        if (data.newSessionUrl) {
+          window.location = data.newSessionUrl;
         }
         dispatch({ type: actionTypes.SAVE_DRAFT_SUCCESS, payload: data });
         dispatch(setNotification(translations.updateSuccess));
@@ -178,8 +178,8 @@ export function finalise(submissionId, rawAnswers) {
       .update(submissionId, payload)
       .then((response) => response.data)
       .then((data) => {
-        if (data.redirect_url && data.format === 'html') {
-          window.location = data.redirect_url;
+        if (data.newSessionUrl) {
+          window.location = data.newSessionUrl;
         }
         dispatch({ type: actionTypes.FINALISE_SUCCESS, payload: data });
         dispatch(setNotification(translations.updateSuccess));
@@ -222,12 +222,11 @@ export function reevaluateAnswer(submissionId, answerId, questionId) {
       .reevaluateAnswer(submissionId, { answer_id: answerId })
       .then((response) => response.data)
       .then((data) => {
-        if (data.redirect_url && data.format === 'html') {
-          window.location = data.redirect_url;
-        } else if (data.redirect_url) {
+        if (data.newSessionUrl) {
+          window.location = data.newSessionUrl;
+        } else if (data.jobUrl) {
           pollJob(
-            data.redirect_url,
-            JOB_POLL_DELAY,
+            data.jobUrl,
             () =>
               dispatch(getEvaluationResult(submissionId, answerId, questionId)),
             (errorData) => {
@@ -238,6 +237,7 @@ export function reevaluateAnswer(submissionId, answerId, questionId) {
               });
               dispatch(setNotification(translations.requestFailure));
             },
+            JOB_POLL_DELAY_MS,
           );
         } else {
           dispatch({
@@ -266,12 +266,11 @@ export function submitAnswer(submissionId, answerId, rawAnswer, setValue) {
       .submitAnswer(submissionId, payload)
       .then((response) => response.data)
       .then((data) => {
-        if (data.redirect_url && data.format === 'html') {
-          window.location = data.redirect_url;
-        } else if (data.redirect_url) {
+        if (data.newSessionUrl) {
+          window.location = data.newSessionUrl;
+        } else if (data.jobUrl) {
           pollJob(
-            data.redirect_url,
-            JOB_POLL_DELAY,
+            data.jobUrl,
             () =>
               dispatch(
                 getEvaluationResult(submissionId, answer.id, questionId),
@@ -284,6 +283,7 @@ export function submitAnswer(submissionId, answerId, rawAnswer, setValue) {
               });
               dispatch(setNotification(translations.requestFailure));
             },
+            JOB_POLL_DELAY_MS,
           );
         } else {
           dispatch({

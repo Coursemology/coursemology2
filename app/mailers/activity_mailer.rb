@@ -25,7 +25,9 @@ class ActivityMailer < ApplicationMailer
       @layout = layout_path
       return unless @object # Object could be deleted already
 
-      mail(to: recipient.email, template: view_path)
+      I18n.with_locale(recipient.locale) do
+        mail(to: recipient.email, template: view_path)
+      end
     end
   end
 

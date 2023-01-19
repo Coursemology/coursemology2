@@ -6,13 +6,13 @@ module Course::UsersControllerManagementConcern
 
   included do
     before_action :authorize_show!, only: [:students, :staff, :requests, :invitations]
-    before_action :authorize_edit!, only: [:update, :destroy, :upgrade_to_staff]
+    before_action :authorize_edit!, only: [:update, :destroy, :upgrade_to_staff, :assign_timeline]
   end
 
   def update
     @course_user.assign_attributes(course_user_params)
-    # Recompute personal timeline if algorithm changed
-    update_personalized_timeline_for_user(@course_user) if @course_user.timeline_algorithm_changed?
+
+    update_personalized_timeline_for_user(@course_user) if should_update_personalized_timeline
 
     if @course_user.save
       update_user_success
@@ -33,7 +33,7 @@ module Course::UsersControllerManagementConcern
     respond_to do |format|
       format.html
       format.json do
-        @course_users = @course_users.students.includes(user: :emails).order_alphabetically
+        @course_users = @course_users.students.includes(:groups, user: :emails).order_alphabetically
       end
     end
   end
@@ -57,10 +57,39 @@ module Course::UsersControllerManagementConcern
     end
   end
 
+  def assign_timeline
+    course_user_ids = assign_timeline_params[:ids]
+    timeline_id = assign_timeline_params[:reference_timeline_id]
+
+    timeline = Course::ReferenceTimeline.find(timeline_id)
+
+    ActiveRecord::Base.transaction do
+      updated_course_users = []
+      @course_users.where(id: course_user_ids).find_each do |course_user|
+        course_user.reference_timeline = timeline
+        updated_course_users << course_user
+      end
+
+      raise unless updated_course_users.size == course_user_ids.size
+
+      CourseUser.import! updated_course_users, on_duplicate_key_update: [:reference_timeline_id]
+
+      head :ok
+    end
+  rescue StandardError
+    head :bad_request
+  end
+
   private
 
+  def should_update_personalized_timeline
+    @course_user.timeline_algorithm_changed? || @course_user.reference_timeline_id_changed?
+  end
+
   def course_user_params
-    @course_user_params ||= params.require(:course_user).permit(:user_id, :name, :timeline_algorithm, :role, :phantom)
+    @course_user_params ||= params.require(:course_user).permit(
+      :user_id, :name, :timeline_algorithm, :role, :phantom, :reference_timeline_id
+    )
   end
 
   def upgrade_to_staff_params
@@ -68,10 +97,14 @@ module Course::UsersControllerManagementConcern
     params.require(:user).permit(:id)
   end
 
+  def assign_timeline_params
+    params.require(:course_users).permit(:reference_timeline_id, ids: [])
+  end
+
   def load_resource
     course_users = current_course.course_users
     case params[:action]
-    when 'invitations'
+    when 'invitations', 'assign_timeline'
       @course_users ||= course_users
     when 'students', 'staff'
       @course_users ||= course_users.includes(:user)

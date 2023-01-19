@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect';
+import { createSelector } from '@reduxjs/toolkit';
 
 const destinationCourseIdSelector = (state) =>
   state.duplication.destinationCourseId;

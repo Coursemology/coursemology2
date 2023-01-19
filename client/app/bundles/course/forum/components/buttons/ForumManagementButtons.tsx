@@ -102,6 +102,7 @@ const ForumManagementButtons: FC<Props> = (props) => {
     >
       {showSubscribeButton && (
         <SubscribeButton
+          className="max-lg:!hidden"
           disabled={disableButton}
           emailSubscription={forum.emailSubscription}
           entityId={forum.id}
@@ -134,7 +135,7 @@ const ForumManagementButtons: FC<Props> = (props) => {
 
   return (
     <ClickAwayListener onClickAway={(): void => setShowButtons(false)}>
-      <div className="group">
+      <div className="group relative">
         {showOnHover && !showButtons && (
           <IconButton
             className={`forum-action-${forum.id}`}

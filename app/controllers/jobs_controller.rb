@@ -27,21 +27,21 @@ class JobsController < ApplicationController
   def show_completed_job
     respond_to do |format|
       format.html { redirect_to @job.redirect_to if @job.redirect_to.present? }
-      format.json {}
+      format.json
     end
   end
 
   def show_errored_job
     respond_to do |format|
       format.html { redirect_to(@job.redirect_to) if @job.redirect_to.present? }
-      format.json {}
+      format.json
     end
   end
 
   def show_submitted_job
     respond_to do |format|
       format.html { response.status = :accepted }
-      format.json { render json: { status: :accepted } }
+      format.json
     end
   end
 end

@@ -1,10 +1,10 @@
 import CourseAPI from 'api/course';
 import actionTypes from 'course/duplication/constants';
 import { setNotification } from 'lib/actions';
-import pollJob from 'lib/helpers/job-helpers';
+import pollJob from 'lib/helpers/jobHelpers';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 
-const DUPLICATE_JOB_POLL_INTERVAL = 2000;
+const DUPLICATE_JOB_POLL_INTERVAL_MS = 2000;
 
 export function fetchObjectsList() {
   return (dispatch) => {
@@ -118,7 +118,7 @@ export function duplicateItems(
 
     const handleSuccess = (successData) => {
       dispatch(setNotification(successMessage));
-      window.location.href = successData.redirect_url;
+      window.location.href = successData.redirectUrl;
       dispatch({ type: actionTypes.DUPLICATE_ITEMS_SUCCESS });
     };
 
@@ -135,10 +135,10 @@ export function duplicateItems(
       .then((data) => {
         dispatch(setNotification(pendingMessage));
         pollJob(
-          data.redirect_url,
-          DUPLICATE_JOB_POLL_INTERVAL,
+          data.jobUrl,
           handleSuccess,
           handleFailure,
+          DUPLICATE_JOB_POLL_INTERVAL_MS,
         );
       })
       .catch(handleFailure);
@@ -157,15 +157,15 @@ export function duplicateCourse(
   return (dispatch, getState) => {
     const sourceCourseId = getState().duplication.sourceCourse.id;
 
-    const handleSuccess = (successData) => {
+    const handleJobSuccess = (successData) => {
       dispatch(setNotification(successMessage));
-      window.location.href = successData.redirect_url;
+      window.location.href = successData.redirectUrl;
       dispatch({ type: actionTypes.DUPLICATE_COURSE_SUCCESS });
     };
 
     const handleFailure = (error) => {
       dispatch({ type: actionTypes.DUPLICATE_COURSE_FAILURE });
-      if (error.response && error.response.data) {
+      if (error?.response?.data?.errors) {
         setReactHookFormError(setError, error.response.data.errors);
       }
       dispatch(setNotification(failureMessage));
@@ -178,10 +178,10 @@ export function duplicateCourse(
       .then((data) => {
         dispatch(setNotification(pendingMessage));
         pollJob(
-          data.redirect_url,
-          DUPLICATE_JOB_POLL_INTERVAL,
-          handleSuccess,
+          data.jobUrl,
+          handleJobSuccess,
           handleFailure,
+          DUPLICATE_JOB_POLL_INTERVAL_MS,
         );
       })
       .catch(handleFailure);

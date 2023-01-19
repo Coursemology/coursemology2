@@ -4,7 +4,7 @@ FactoryBot.define do
                                aliases: [:video_event] do
     transient do
       course { build(:course, :with_video_component_enabled) }
-      video { build(:video, :published, course: course) }
+      video { create(:video, :published, course: course) }
       student { create(:course_student, course: course) }
       submission do
         build(:video_submission, video: video, creator: student.user, course_user: student)

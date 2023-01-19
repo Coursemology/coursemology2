@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useMemo, useState } from 'react';
+import { FC, memo, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import {
   defineMessages,
@@ -69,14 +69,12 @@ const validationSchema = yup.object({
 const ForumDisbursementForm: FC<Props> = (props) => {
   const { intl, filters, forumUsers, onPostClick } = props;
 
-  const initialValues: DisbursementFormData = useMemo(() => {
-    return forumUsers.reduce(
-      (accumulator, value) => {
-        return { ...accumulator, [`courseUser_${value.id}`]: value.points };
-      },
-      { reason: intl.formatMessage(translations.reasonFill) },
-    );
-  }, []);
+  const initialValues: DisbursementFormData = forumUsers.reduce(
+    (users, value) => {
+      return { ...users, [`courseUser_${value.id}`]: value.points };
+    },
+    { reason: intl.formatMessage(translations.reasonFill) },
+  );
 
   const dispatch = useDispatch<AppDispatch>();
   const methods = useForm({
@@ -86,23 +84,11 @@ const ForumDisbursementForm: FC<Props> = (props) => {
   const {
     control,
     handleSubmit,
-    reset,
     setError,
     formState: { errors },
   } = methods;
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    const obj = forumUsers.reduce(
-      (accumulator, value) => {
-        return { ...accumulator, [`courseUser_${value.id}`]: value.points };
-      },
-      { reason: intl.formatMessage(translations.reasonFill) },
-    );
-
-    reset(obj);
-  }, [forumUsers]);
 
   const onFormSubmit = (data: ForumDisbursementFormData): void => {
     setIsSubmitting(true);

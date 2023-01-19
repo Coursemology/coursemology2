@@ -29,7 +29,7 @@ const formatAttributes = (data: AnnouncementFormData): FormData => {
   return payload;
 };
 
-export function fetchAnnouncements(): Operation<void> {
+export function fetchAnnouncements(): Operation {
   return async (dispatch) =>
     CourseAPI.announcements.index().then((response) => {
       const data = response.data;
@@ -39,9 +39,7 @@ export function fetchAnnouncements(): Operation<void> {
     });
 }
 
-export function createAnnouncement(
-  formData: AnnouncementFormData,
-): Operation<void> {
+export function createAnnouncement(formData: AnnouncementFormData): Operation {
   const attributes = formatAttributes(formData);
   return async (dispatch) =>
     CourseAPI.announcements.create(attributes).then((response) => {
@@ -55,7 +53,7 @@ export function createAnnouncement(
 export function updateAnnouncement(
   announcementId: number,
   formData: AnnouncementFormData,
-): Operation<void> {
+): Operation {
   const attributes = formatAttributes(formData);
   return async (dispatch) =>
     CourseAPI.announcements
@@ -65,7 +63,7 @@ export function updateAnnouncement(
       });
 }
 
-export function deleteAnnouncement(accouncementId: number): Operation<void> {
+export function deleteAnnouncement(accouncementId: number): Operation {
   return async (dispatch) =>
     CourseAPI.announcements.delete(accouncementId).then(() => {
       dispatch(actions.deleteAnnouncement(accouncementId));

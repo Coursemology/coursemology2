@@ -18,6 +18,19 @@ export interface TableColumns {
     empty?: boolean;
     filter?: boolean;
     filterList?: string[];
+    filterType?:
+      | 'checkbox'
+      | 'dropdown'
+      | 'multiselect'
+      | 'textField'
+      | 'custom';
+    filterOptions?: {
+      fullWidth?: boolean;
+      logic?: (cellValue, filters) => boolean;
+    };
+    customFilterListOptions?: {
+      render?: (value: string) => string;
+    };
     hideInSmallScreen?: boolean;
     justifyCenter?: boolean;
     justifyLeft?: boolean;
@@ -51,6 +64,7 @@ export interface TableOptions {
   expandableRowsOnClick?: boolean;
   filter?: boolean;
   jumpToPage?: boolean;
+  onFilterChange?: (changedColumn: string, filterList) => void;
   onRowClick?: (
     rowData: string[],
     rowMeta: { dataIndex: number; rowIndex: number },

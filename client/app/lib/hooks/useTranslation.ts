@@ -5,7 +5,7 @@ export type Descriptor = MessageDescriptor;
 type TranslationHook = () => {
   t: (
     descriptor: Descriptor,
-    values?: Record<string, string | JSX.Element | number>,
+    values?: Record<string, string | JSX.Element | number | boolean>,
   ) => string;
 };
 

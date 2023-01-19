@@ -21,7 +21,7 @@ const formatAttributes = (
   };
 };
 
-export function fetchEnrolRequests(): Operation<void> {
+export function fetchEnrolRequests(): Operation {
   return async (dispatch) =>
     CourseAPI.enrolRequests.index().then((response) => {
       const data = response.data;
@@ -37,7 +37,7 @@ export function fetchEnrolRequests(): Operation<void> {
 
 export function approveEnrolRequest(
   enrolRequest: EnrolRequestMiniEntity,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.enrolRequests
       .approve(formatAttributes(enrolRequest), enrolRequest.id)
@@ -47,7 +47,7 @@ export function approveEnrolRequest(
       });
 }
 
-export function rejectEnrolRequest(requestId: number): Operation<void> {
+export function rejectEnrolRequest(requestId: number): Operation {
   return async (dispatch) =>
     CourseAPI.enrolRequests.reject(requestId).then((response) => {
       const enrolRequest = response.data;

@@ -5,7 +5,8 @@ zh:
         submitted:
           user_notifications:
             email:
-
-              subject: '%{course}新的可用测验'
+              subject: "%{course} 新提交于 : %{assessment}"
               message: >
-                新的可用测验 : %{assessment}
+                %{user} 有一个新的提交 
+
+                请审阅并评分 %{submission}.

@@ -46,13 +46,11 @@ class Course::LessonPlan::Item < ApplicationRecord
   #   Orders the lesson plan items by the starting date.
   scope :ordered_by_date, (lambda do
     includes(reference_times: :reference_timeline).
-      where(course_reference_timelines: { default: true }).
       merge(Course::ReferenceTime.order(:start_at))
   end)
 
   scope :ordered_by_date_and_title, (lambda do
     includes(reference_times: :reference_timeline).
-      where(course_reference_timelines: { default: true }).
       merge(Course::ReferenceTime.order(:start_at)).
       order(:title)
   end)
@@ -83,10 +81,14 @@ class Course::LessonPlan::Item < ApplicationRecord
     # Can't eager-load if we have no idea who we are eager-loading for
     return if course_user.nil? && course.nil?
 
-    reference_timeline_id = course_user&.reference_timeline_id ||
-                            course_user&.course&.default_reference_timeline&.id ||
-                            course.default_reference_timeline.id
-    eager_load(:reference_times).where(course_reference_times: { reference_timeline_id: reference_timeline_id })
+    default_reference_timeline_id = course_user&.course&.default_reference_timeline&.id ||
+                                    course.default_reference_timeline.id
+
+    reference_timeline_id = course_user&.reference_timeline_id || default_reference_timeline_id
+
+    eager_load(:reference_times).where(course_reference_times: {
+      reference_timeline_id: [reference_timeline_id, default_reference_timeline_id]
+    })
   end)
 
   # @!method self.with_actable_types
@@ -107,7 +109,6 @@ class Course::LessonPlan::Item < ApplicationRecord
   belongs_to :course, inverse_of: :lesson_plan_items
   has_many :todos, class_name: Course::LessonPlan::Todo.name, inverse_of: :item, dependent: :destroy
 
-  # TODO(#3092): Figure out what to do with monkey-patched start_at / bonus_start_at / end_at
   delegate :start_at, :start_at=, :start_at_changed?, :bonus_end_at, :bonus_end_at=, :bonus_end_at_changed?,
            :end_at, :end_at=, :end_at_changed?,
            to: :default_reference_time
@@ -115,7 +116,6 @@ class Course::LessonPlan::Item < ApplicationRecord
 
   # Returns a frozen CourseReferenceTime or CoursePersonalTime.
   # The calling function is responsible for eager-loading both associations if calling time_for on a lot of items.
-  # TODO(#3902): Lookup user's reference timeline before defaulting to default reference timeline
   def time_for(course_user)
     personal_time = personal_time_for(course_user)
     reference_time = reference_time_for(course_user)
@@ -134,13 +134,12 @@ class Course::LessonPlan::Item < ApplicationRecord
   end
 
   def reference_time_for(course_user)
-    # Do not make a separate call to DB if reference_times has already been preloaded
-    reference_timeline_id = course_user&.reference_timeline_id || course.default_reference_timeline.id
-    if reference_times.loaded?
-      reference_times.find { |x| x.reference_timeline_id == reference_timeline_id }
-    else
-      reference_times.find_by(course_reference_times: { reference_timeline_id: reference_timeline_id })
-    end
+    default_reference_timeline_id = course.default_reference_timeline.id
+    reference_timeline_id = course.reference_timeline_for(course_user)
+
+    # This reversion anticipates if course_user is on a non-default timeline which does not override the
+    # default time for this lesson plan item.
+    reference_time_in(reference_timeline_id) || reference_time_in(default_reference_timeline_id)
   end
 
   # Gets the existing personal time for course_user, or instantiates and returns a new one
@@ -218,9 +217,6 @@ class Course::LessonPlan::Item < ApplicationRecord
     self.course = duplicator.options[:destination_course]
     self.default_reference_time = duplicator.duplicate(other.default_reference_time)
 
-    # TODO(#3092):
-    #   - For course duplication, we can copy all reference timelines
-    #   - For object duplication, we need to figure out which reference timelines
     other_reference_times = other.reference_times - [other.default_reference_time]
     self.reference_times = duplicator.duplicate(other_reference_times).unshift(default_reference_time)
 
@@ -260,7 +256,6 @@ class Course::LessonPlan::Item < ApplicationRecord
     self.default_reference_time.lesson_plan_item = self
   end
 
-  # TODO(#3092): Validate only one for each reference timeline
   def validate_only_one_default_reference_time
     num_defaults = reference_times.
                    includes(:reference_timeline).
@@ -276,5 +271,14 @@ class Course::LessonPlan::Item < ApplicationRecord
     return unless time_bonus_exp && time_bonus_exp > 0 && bonus_end_at.blank?
 
     errors.add(:bonus_end_at, :required)
+  end
+
+  def reference_time_in(reference_timeline_id)
+    # Do not make a separate call to DB if reference_times has already been preloaded
+    if reference_times.loaded?
+      reference_times.find { |x| x.reference_timeline_id == reference_timeline_id }
+    else
+      reference_times.find_by(course_reference_times: { reference_timeline_id: reference_timeline_id })
+    end
   end
 end

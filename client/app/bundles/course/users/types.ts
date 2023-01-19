@@ -17,6 +17,7 @@ import {
   PersonalTimeListData,
   PersonalTimeMiniEntity,
 } from 'types/course/personalTimes';
+import { TimelineData } from 'types/course/referenceTimelines';
 import { EntityStore } from 'types/store';
 
 // Action Names
@@ -54,7 +55,9 @@ export interface SaveManageUserListAction {
   manageCourseUsersPermissions: ManageCourseUsersPermissions;
   manageCourseUsersData: ManageCourseUsersSharedData;
   userOptions: CourseUserBasicListData[];
+  timelines?: Record<TimelineData['id'], string>;
 }
+
 export interface DeleteUserAction {
   type: typeof DELETE_USER;
   userId: number;
@@ -126,4 +129,5 @@ export interface UsersState {
     ExperiencePointsRecordMiniEntity
   >;
   experiencePointsRecordsSettings: ExperiencePointsRecordSettings;
+  timelines?: Record<TimelineData['id'], string>;
 }

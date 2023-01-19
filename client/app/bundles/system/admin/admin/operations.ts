@@ -78,7 +78,7 @@ const formatInstanceAttributes = (
   return payload;
 };
 
-export function indexAnnouncements(): Operation<void> {
+export function indexAnnouncements(): Operation {
   return async (dispatch) =>
     SystemAPI.admin.indexAnnouncements().then((response) => {
       const data = response.data;
@@ -88,9 +88,7 @@ export function indexAnnouncements(): Operation<void> {
     });
 }
 
-export function createAnnouncement(
-  formData: AnnouncementFormData,
-): Operation<void> {
+export function createAnnouncement(formData: AnnouncementFormData): Operation {
   const attributes = formatAnnouncementAttributes(formData);
   return async (dispatch) =>
     SystemAPI.admin.createAnnouncement(attributes).then((response) => {
@@ -101,7 +99,7 @@ export function createAnnouncement(
 export function updateAnnouncement(
   announcementId: number,
   formData: AnnouncementFormData,
-): Operation<void> {
+): Operation {
   const attributes = formatAnnouncementAttributes(formData);
   return async (dispatch) =>
     SystemAPI.admin
@@ -111,14 +109,14 @@ export function updateAnnouncement(
       });
 }
 
-export function deleteAnnouncement(announcementId: number): Operation<void> {
+export function deleteAnnouncement(announcementId: number): Operation {
   return async (dispatch) =>
     SystemAPI.admin.deleteAnnouncement(announcementId).then(() => {
       dispatch(actions.deleteAnnouncement(announcementId));
     });
 }
 
-export function indexUsers(params?): Operation<void> {
+export function indexUsers(params?): Operation {
   return async (dispatch) =>
     SystemAPI.admin.indexUsers(params).then((response) => {
       const data = response.data;
@@ -129,7 +127,7 @@ export function indexUsers(params?): Operation<void> {
 export function updateUser(
   userId: number,
   userEntity: UserMiniEntity,
-): Operation<void> {
+): Operation {
   const attributes = formatUserAttributes(userEntity);
   return async (dispatch) =>
     SystemAPI.admin.updateUser(userId, attributes).then((response) => {
@@ -137,14 +135,14 @@ export function updateUser(
     });
 }
 
-export function deleteUser(userId: number): Operation<void> {
+export function deleteUser(userId: number): Operation {
   return async (dispatch) =>
     SystemAPI.admin.deleteUser(userId).then(() => {
       dispatch(actions.deleteUser(userId));
     });
 }
 
-export function indexCourses(params?): Operation<void> {
+export function indexCourses(params?): Operation {
   return async (dispatch) =>
     SystemAPI.admin.indexCourses(params).then((response) => {
       const data = response.data;
@@ -157,14 +155,14 @@ export function indexCourses(params?): Operation<void> {
     });
 }
 
-export function deleteCourse(courseId: number): Operation<void> {
+export function deleteCourse(courseId: number): Operation {
   return async (dispatch) =>
     SystemAPI.admin.deleteCourse(courseId).then(() => {
       dispatch(actions.deleteCourse(courseId));
     });
 }
 
-export function indexInstances(): Operation<void> {
+export function indexInstances(): Operation {
   return async (dispatch) =>
     SystemAPI.admin.indexInstances().then((response) => {
       const data = response.data;
@@ -174,7 +172,7 @@ export function indexInstances(): Operation<void> {
     });
 }
 
-export function createInstance(formData: InstanceFormData): Operation<void> {
+export function createInstance(formData: InstanceFormData): Operation {
   const attributes = formatInstanceAttributes(formData);
   return async (dispatch) =>
     SystemAPI.admin.createInstance(attributes).then((response) => {
@@ -188,7 +186,7 @@ export function createInstance(formData: InstanceFormData): Operation<void> {
 export function updateInstance(
   instanceId: number,
   instanceEntity: InstanceMiniEntity,
-): Operation<void> {
+): Operation {
   const attributes = formatInstanceAttributes(instanceEntity);
   return async (dispatch) =>
     SystemAPI.admin.updateInstance(instanceId, attributes).then((response) => {
@@ -196,7 +194,7 @@ export function updateInstance(
     });
 }
 
-export function deleteInstance(instanceId: number): Operation<void> {
+export function deleteInstance(instanceId: number): Operation {
   return async (dispatch) =>
     SystemAPI.admin.deleteInstance(instanceId).then(() => {
       dispatch(actions.deleteInstance(instanceId));

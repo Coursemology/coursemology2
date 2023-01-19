@@ -16,6 +16,7 @@ export type ManageCourseUsersPermissions = Permissions<
   | 'canManageCourseUsers'
   | 'canManageEnrolRequests'
   | 'canManagePersonalTimes'
+  | 'canManageReferenceTimelines'
   | 'canRegisterWithCode'
 >;
 
@@ -57,7 +58,9 @@ export interface CourseUserMiniEntity extends CourseUserBasicMiniEntity {
   phantom?: boolean;
   email: string;
   role: CourseUserRole;
+  referenceTimelineId?: number | null;
   timelineAlgorithm?: TimelineAlgorithm;
+  groups?: string[];
 }
 
 /**
@@ -100,9 +103,10 @@ export interface CourseUserFormData {
  */
 export interface UpdateCourseUserPatchData {
   course_user: {
-    name: string;
+    name?: string;
     phantom?: boolean;
     timeline_algorithm?: TimelineAlgorithm;
+    reference_timeline_id?: number | null;
     role?: CourseUserRole;
   };
 }

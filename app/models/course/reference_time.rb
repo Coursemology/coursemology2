@@ -7,19 +7,25 @@ class Course::ReferenceTime < ApplicationRecord
   validates :reference_timeline, presence: true, uniqueness: { scope: :lesson_plan_item }
   validates :lesson_plan_item, presence: true
 
-  validate :validate_start_at_cannot_be_after_end_at
+  validate :start_at_cannot_be_after_end_at
+  validate :lesson_plan_item_in_same_course
+
+  before_destroy :prevent_destroy_if_in_default_timeline, prepend: true
 
   # TODO(#3448): Consider creating personal times if new_record?
   after_commit :update_personal_times, on: :update
 
   def initialize_duplicate(duplicator, other)
     self.reference_timeline = duplicator.duplicate(other.reference_timeline)
+    reference_timeline.reference_times << self
     self.start_at = duplicator.time_shift(other.start_at)
     self.bonus_end_at = duplicator.time_shift(other.bonus_end_at) if other.bonus_end_at
     self.end_at = duplicator.time_shift(other.end_at) if other.end_at
   end
 
-  def validate_start_at_cannot_be_after_end_at
+  private
+
+  def start_at_cannot_be_after_end_at
     errors.add(:start_at, :cannot_be_after_end_at) if end_at && start_at && start_at > end_at
   end
 
@@ -27,5 +33,16 @@ class Course::ReferenceTime < ApplicationRecord
     return unless (previous_changes.keys & ['start_at', 'end_at']).any?
 
     Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob.perform_later(lesson_plan_item)
+  end
+
+  def lesson_plan_item_in_same_course
+    errors.add(:lesson_plan_item, :must_be_in_same_course) if reference_timeline.course_id != lesson_plan_item.course_id
+  end
+
+  def prevent_destroy_if_in_default_timeline
+    return true if lesson_plan_item.destroying? || reference_timeline.destroying? || !reference_timeline.default?
+
+    errors.add(:reference_timeline, :cannot_destroy_in_default_timeline)
+    throw(:abort)
   end
 end

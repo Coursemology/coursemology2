@@ -9,7 +9,7 @@ import {
 } from 'types/course/announcements';
 import { Operation } from 'types/store';
 
-import SearchBar from 'lib/components/core/fields/SearchBar';
+import SearchField from 'lib/components/core/fields/SearchField';
 import Pagination from 'lib/components/core/layouts/Pagination';
 
 import AnnouncementCard from './AnnouncementCard';
@@ -20,8 +20,8 @@ interface Props extends WrappedComponentProps {
   updateOperation?: (
     announcementId: number,
     formData: AnnouncementFormData,
-  ) => Operation<void>;
-  deleteOperation?: (announcementId: number) => Operation<void>;
+  ) => Operation;
+  deleteOperation?: (announcementId: number) => Operation;
   canSticky?: boolean;
 }
 
@@ -56,21 +56,17 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
     setShavedAnnouncements(announcements);
   }, [announcements]);
 
-  const handleSearchBarChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
-  ): void => {
-    if (event.target.value.trim() === '') {
+  const handleSearchBarChange = (rawKeyword: string): void => {
+    const keyword = rawKeyword.trim();
+
+    if (keyword === '') {
       setShavedAnnouncements(announcements);
     } else {
       setShavedAnnouncements(
         announcements.filter(
           (announcement: AnnouncementMiniEntity) =>
-            announcement.title
-              .toLowerCase()
-              .includes(event.target.value.trim().toLowerCase()) ||
-            announcement.content
-              .toLowerCase()
-              .includes(event.target.value.trim().toLowerCase()),
+            announcement.title.toLowerCase().includes(keyword.toLowerCase()) ||
+            announcement.content.toLowerCase().includes(keyword.toLowerCase()),
         ),
       );
     }
@@ -88,12 +84,12 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
           xs={1}
         >
           <div style={{ paddingTop: 7, paddingBottom: 5 }}>
-            <SearchBar
-              onChange={handleSearchBarChange}
+            <SearchField
+              className="w-[350px]"
+              onChangeKeyword={handleSearchBarChange}
               placeholder={intl.formatMessage(
                 translations.searchBarPlaceholder,
               )}
-              width={350}
             />
           </div>
         </Grid>

@@ -39,11 +39,13 @@ const FormDateTimePickerField = (props) => {
     disabled,
     label,
     renderIf,
+    required,
     style,
     className,
     variant = 'standard',
     disableMargins,
     disableShrinkingLabel,
+    suppressesFormatErrors,
     ...custom
   } = props;
 
@@ -69,12 +71,15 @@ const FormDateTimePickerField = (props) => {
             <TextField
               className={className}
               {...params}
-              error={!!fieldState.error || params.error}
+              error={
+                !!fieldState.error || (!suppressesFormatErrors && params.error)
+              }
               fullWidth
               helperText={
                 fieldState.error
                   ? formatErrorMessage(fieldState.error.message)
-                  : params.error &&
+                  : !suppressesFormatErrors &&
+                    params.error &&
                     formatErrorMessage(translations.invalidDateTime)
               }
               name={field.name}
@@ -82,6 +87,7 @@ const FormDateTimePickerField = (props) => {
                 InputLabelProps: { shrink: true },
               })}
               ref={field.ref}
+              required={required}
               variant={variant}
               {...(disableMargins ? null : { style: styles.dateTimeTextField })}
             />
@@ -109,6 +115,8 @@ FormDateTimePickerField.propTypes = {
   variant: PropTypes.string,
   disableMargins: PropTypes.bool,
   disableShrinkingLabel: PropTypes.bool,
+  required: PropTypes.bool,
+  suppressesFormatErrors: PropTypes.bool,
 };
 
 export default injectIntl(FormDateTimePickerField);

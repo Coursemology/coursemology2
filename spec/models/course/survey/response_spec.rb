@@ -33,7 +33,11 @@ RSpec.describe Course::Survey::Response do
     end
 
     describe '#submit' do
-      subject { response.tap(&:submit) }
+      subject do
+        response.tap do |response|
+          response.submit(response.survey.bonus_end_at)
+        end
+      end
 
       it 'sets the correct attributes' do
         expect(subject.submitted_at).not_to be_nil

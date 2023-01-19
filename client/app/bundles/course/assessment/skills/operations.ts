@@ -51,7 +51,7 @@ const formatSkillBranchAttributes = (data: SkillFormData): FormData => {
   return payload;
 };
 
-export function fetchSkillBranches(): Operation<void> {
+export function fetchSkillBranches(): Operation {
   return async (dispatch) =>
     CourseAPI.assessment.skills.index().then((response) => {
       const data = response.data;
@@ -109,14 +109,14 @@ export function updateSkillBranch(
       });
 }
 
-export function deleteSkill(skillId: number): Operation<void> {
+export function deleteSkill(skillId: number): Operation {
   return async (dispatch) =>
     CourseAPI.assessment.skills.delete(skillId).then(() => {
       dispatch(actions.deleteSkill(skillId));
     });
 }
 
-export function deleteSkillBranch(branchId: number): Operation<void> {
+export function deleteSkillBranch(branchId: number): Operation {
   return async (dispatch) =>
     CourseAPI.assessment.skills.deleteBranch(branchId).then(() => {
       dispatch(actions.deleteSkillBranch(branchId));

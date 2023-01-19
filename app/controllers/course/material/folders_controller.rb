@@ -69,7 +69,7 @@ class Course::Material::FoldersController < Course::Material::Controller
     zip_filename = @folder.root? ? root_folder_name : @folder.name
     job = Course::Material::ZipDownloadJob.perform_later(@folder, @materials, zip_filename).job
     respond_to do |format|
-      format.json { render json: { redirect_url: job_path(job) } }
+      format.json { render partial: 'jobs/submitted', locals: { job: job } }
     end
   end
 

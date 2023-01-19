@@ -84,14 +84,14 @@ export function fetchCommentData(
       });
 }
 
-export function updatePending(topicId: number): Operation<void> {
+export function updatePending(topicId: number): Operation {
   return async (dispatch) =>
     CourseAPI.comments.togglePending(topicId).then(() => {
       dispatch(actions.savePending(topicId));
     });
 }
 
-export function updateRead(topicId: number): Operation<void> {
+export function updateRead(topicId: number): Operation {
   return async (dispatch) =>
     CourseAPI.comments.markAsRead(topicId).then(() => {
       dispatch(actions.saveRead(topicId));
@@ -114,7 +114,7 @@ export function createPost(
 export function updatePost(
   post: CommentPostMiniEntity,
   text: string,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.comments
       .update(
@@ -131,7 +131,7 @@ export function updatePostCodaveri(
   post: CommentPostMiniEntity,
   text: string,
   rating: number,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.comments
       .update(
@@ -144,7 +144,7 @@ export function updatePostCodaveri(
       });
 }
 
-export function deletePost(post: CommentPostMiniEntity): Operation<void> {
+export function deletePost(post: CommentPostMiniEntity): Operation {
   return async (dispatch) =>
     CourseAPI.comments
       .delete(post.topicId.toString(), post.id.toString())

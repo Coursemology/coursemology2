@@ -1,17 +1,17 @@
 import CourseAPI from 'api/course';
-import pollJob from 'lib/helpers/job-helpers';
+import pollJob from 'lib/helpers/jobHelpers';
 
 import actionTypes from '../constants';
 import translations from '../translations';
 
 import { setNotification } from './index';
 
-const DOWNLOAD_JOB_POLL_INTERVAL = 2000;
-const PUBLISH_JOB_POLL_INTERVAL = 1000;
-const FORCE_SUBMIT_JOB_POLL_INTERVAL = 1000;
-const UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
-const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL = 1000;
-const DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL = 2000;
+const DOWNLOAD_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 2000;
+const DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL_MS = 2000;
+const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 1000;
+const FORCE_SUBMIT_JOB_POLL_INTERVAL_MS = 1000;
+const PUBLISH_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 1000;
+const UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 1000;
 
 export function fetchSubmissions() {
   return (dispatch) => {
@@ -47,15 +47,14 @@ export function publishSubmissions(type) {
 
     return CourseAPI.assessment.submissions
       .publishAll(type)
-      .then((response) => response.data)
-      .then((data) => {
-        if (data.redirect_url) {
+      .then((response) => {
+        if (response.data.jobUrl) {
           dispatch(setNotification(translations.publishJobPending));
           pollJob(
-            data.redirect_url,
-            PUBLISH_JOB_POLL_INTERVAL,
+            response.data.jobUrl,
             handleSuccess,
             handleFailure,
+            PUBLISH_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS,
           );
         } else {
           handleSuccess();
@@ -82,15 +81,14 @@ export function forceSubmitSubmissions(type) {
 
     return CourseAPI.assessment.submissions
       .forceSubmitAll(type)
-      .then((response) => response.data)
-      .then((data) => {
+      .then((response) => {
         dispatch(setNotification(translations.forceSubmitJobPending));
-        if (data.redirect_url) {
+        if (response.data.jobUrl) {
           pollJob(
-            data.redirect_url,
-            FORCE_SUBMIT_JOB_POLL_INTERVAL,
+            response.data.jobUrl,
             handleSuccess,
             handleFailure,
+            FORCE_SUBMIT_JOB_POLL_INTERVAL_MS,
           );
         } else {
           handleSuccess();
@@ -141,7 +139,7 @@ export function downloadSubmissions(type, downloadFormat) {
     dispatch({ type: actions.request });
 
     const handleSuccess = (successData) => {
-      window.location.href = successData.redirect_url;
+      window.location.href = successData.redirectUrl;
       dispatch({ type: actions.success });
       dispatch(setNotification(translations.downloadRequestSuccess));
     };
@@ -153,14 +151,13 @@ export function downloadSubmissions(type, downloadFormat) {
 
     return CourseAPI.assessment.submissions
       .downloadAll(type, downloadFormat)
-      .then((response) => response.data)
-      .then((data) => {
+      .then((response) => {
         dispatch(setNotification(translations.downloadSubmissionsJobPending));
         pollJob(
-          data.redirect_url,
-          DOWNLOAD_JOB_POLL_INTERVAL,
+          response.data.jobUrl,
           handleSuccess,
           handleFailure,
+          DOWNLOAD_SUBMISSIONS_JOB_POLL_INTERVAL_MS,
         );
       })
       .catch(handleFailure);
@@ -172,17 +169,15 @@ export function downloadStatistics(type) {
     dispatch({ type: actionTypes.DOWNLOAD_STATISTICS_REQUEST });
 
     const handleSuccess = (successData) => {
-      window.location.href = successData.redirect_url;
+      window.location.href = successData.redirectUrl;
       dispatch({ type: actionTypes.DOWNLOAD_STATISTICS_SUCCESS });
       dispatch(setNotification(translations.downloadRequestSuccess));
     };
 
-    const handleFailure = (data) => {
+    const handleFailure = (error) => {
       const message =
-        (data &&
-          data.response &&
-          data.response.data &&
-          data.response.data.error) ||
+        error?.response?.data?.error ||
+        error?.message ||
         translations.requestFailure;
       dispatch({ type: actionTypes.DOWNLOAD_STATISTICS_FAILURE });
       dispatch(setNotification(message));
@@ -190,14 +185,13 @@ export function downloadStatistics(type) {
 
     return CourseAPI.assessment.submissions
       .downloadStatistics(type)
-      .then((response) => response.data)
-      .then((data) => {
+      .then((response) => {
         dispatch(setNotification(translations.downloadStatisticsJobPending));
         pollJob(
-          data.redirect_url,
-          DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL,
+          response.data.jobUrl,
           handleSuccess,
           handleFailure,
+          DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL_MS,
         );
       })
       .catch(handleFailure);
@@ -243,17 +237,16 @@ export function unsubmitAllSubmissions(type) {
 
     return CourseAPI.assessment.submissions
       .unsubmitAll(type)
-      .then((response) => response.data)
-      .then((data) => {
+      .then((response) => {
         dispatch(
           setNotification(translations.unsubmitAllSubmissionsJobPending),
         );
-        if (data.redirect_url) {
+        if (response.data.jobUrl) {
           pollJob(
-            data.redirect_url,
-            UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL,
+            response.data.jobUrl,
             handleSuccess,
             handleFailure,
+            UNSUBMIT_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS,
           );
         } else {
           handleSuccess();
@@ -302,15 +295,14 @@ export function deleteAllSubmissions(type) {
 
     return CourseAPI.assessment.submissions
       .deleteAll(type)
-      .then((response) => response.data)
-      .then((data) => {
+      .then((response) => {
         dispatch(setNotification(translations.deleteAllSubmissionsJobPending));
-        if (data.redirect_url) {
+        if (response.data.jobUrl) {
           pollJob(
-            data.redirect_url,
-            DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL,
+            response.data.jobUrl,
             handleSuccess,
             handleFailure,
+            DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS,
           );
         } else {
           handleSuccess();

@@ -10,10 +10,12 @@ import messagesTranslations from 'lib/translations/messages';
 interface PreloadProps<Data> {
   while: () => Promise<Data>;
   render: JSX.Element;
-  children: (
-    data: Data,
-    refreshable: (element: JSX.Element) => JSX.Element,
-  ) => JSX.Element;
+  children:
+    | JSX.Element
+    | ((
+        data: Data,
+        refreshable: (element: JSX.Element) => JSX.Element,
+      ) => JSX.Element);
   onErrorDo?: (error: unknown) => void;
   silently?: boolean;
   onErrorToast?: string;
@@ -21,9 +23,15 @@ interface PreloadProps<Data> {
   after?: number;
 }
 
+interface PreloadState<Data> {
+  preloaded: boolean;
+  data: Data;
+}
+
 const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
   const { t } = useTranslation();
-  const [data, setData] = useState<Data>();
+
+  const [state, setState] = useState<PreloadState<Data>>();
   const [loading, setLoading] = useState(true);
   const [failed, toggleFailed] = useToggle();
 
@@ -32,8 +40,8 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
 
     props
       .while()
-      .then((result) => {
-        if (!ignore) setData(result);
+      .then((data) => {
+        if (!ignore) setState({ preloaded: true, data });
       })
       .catch((error: AxiosError) => {
         toggleFailed();
@@ -68,7 +76,12 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
   const refreshable = (element: JSX.Element): JSX.Element =>
     loading ? props.render : element;
 
-  return data ? props.children(data, refreshable) : props.render;
+  if (!state?.preloaded) return props.render;
+
+  if (typeof props.children === 'function')
+    return props.children(state.data, refreshable);
+
+  return props.children;
 };
 
 export default Preload;

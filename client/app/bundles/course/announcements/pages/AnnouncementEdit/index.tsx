@@ -24,7 +24,7 @@ interface Props {
   updateOperation: (
     announcementId: number,
     formData: AnnouncementFormData,
-  ) => Operation<void>;
+  ) => Operation;
   canSticky: boolean;
 }
 

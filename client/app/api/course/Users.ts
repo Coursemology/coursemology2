@@ -9,6 +9,7 @@ import {
   StaffRole,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
+import { TimelineData } from 'types/course/referenceTimelines';
 
 import BaseCourseAPI from './Base';
 
@@ -44,6 +45,7 @@ export default class UsersAPI extends BaseCourseAPI {
       users: CourseUserListData[];
       permissions: ManageCourseUsersPermissions;
       manageCourseUsersData: ManageCourseUsersSharedData;
+      timelines?: Record<TimelineData['id'], string>;
     }>
   > {
     return this.getClient().get(`${this._baseUrlPrefix}/students`);
@@ -130,6 +132,18 @@ export default class UsersAPI extends BaseCourseAPI {
 
     return this.getClient().patch(
       `${this._baseUrlPrefix}/upgrade_to_staff`,
+      params,
+    );
+  }
+
+  assignToTimeline(
+    ids: CourseUserBasicMiniEntity['id'][],
+    timelineId: TimelineData['id'],
+  ): Promise<AxiosResponse> {
+    const params = { course_users: { ids, reference_timeline_id: timelineId } };
+
+    return this.getClient().patch(
+      `${this._baseUrlPrefix}/users/assign_timeline`,
       params,
     );
   }

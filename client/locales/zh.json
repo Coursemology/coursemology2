@@ -2609,9 +2609,6 @@
   "course.assessment.submissions.SubmissionFilter.filterAssessmentLabel": {
     "defaultMessage": "过滤"
   },
-  "course.assessment.submissions.SubmissionFilter.filterHeader": {
-    "defaultMessage": "过滤提交"
-  },
   "course.assessment.submissions.SubmissionTabs.allStudentsPending": {
     "defaultMessage": "所有待处理的提交"
   },

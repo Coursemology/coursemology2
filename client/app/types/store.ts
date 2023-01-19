@@ -13,6 +13,7 @@ import { DisbursementState } from 'bundles/course/experience-points/disbursement
 import { ForumsState } from 'bundles/course/forum/types';
 import { LeaderboardState } from 'bundles/course/leaderboard/types';
 import { FoldersState } from 'bundles/course/material/folders/types';
+import { TimelinesState } from 'bundles/course/reference-timelines/types';
 import { InvitationsState } from 'bundles/course/user-invitations/types';
 import { UsersState } from 'bundles/course/users/types';
 import { VideosState } from 'bundles/course/video/types';
@@ -41,9 +42,10 @@ export interface AppState {
   comments: CommentState;
   videos: VideosState;
   global: { user: GlobalUserState; announcements: GlobalAnnouncementState };
+  timelines: TimelinesState;
 }
 
-export type Operation<R> = ThunkAction<
+export type Operation<R = void> = ThunkAction<
   Promise<R>,
   AppState,
   Record<string, unknown>,

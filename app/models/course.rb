@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 class Course < ApplicationRecord
-  include Course::LessonPlanConcern
   include Course::SearchConcern
   include Course::DuplicationConcern
   include Course::CourseComponentsConcern
@@ -261,6 +260,11 @@ class Course < ApplicationRecord
                                         select { |component| components_enum.key?(component.to_s) }.
                                         map { |component| components_enum[component.to_s] }
     setting_emails.where(component: email_settings_enabled_components)
+  end
+
+  def reference_timeline_for(course_user)
+    # TODO: [PR#5491] Return only `default_reference_timeline.id` if Multiple Reference Timelines component is disabled.
+    course_user&.reference_timeline_id || default_reference_timeline.id
   end
 
   private

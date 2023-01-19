@@ -350,6 +350,8 @@ Rails.application.routes.draw do
              on: :collection
         get 'manage_email_subscription' => 'user_email_subscriptions#edit'
         patch 'manage_email_subscription' => 'user_email_subscriptions#update'
+
+        patch 'assign_timeline', on: :collection
       end
       post 'register' => 'user_registrations#create'
       get 'students' => 'users#students', as: :users_students
@@ -440,6 +442,10 @@ Rails.application.routes.draw do
         post 'add_parent_node' => 'learning_map#add_parent_node'
         post 'remove_parent_node' => 'learning_map#remove_parent_node'
         post 'toggle_satisfiability_type' => 'learning_map#toggle_satisfiability_type'
+      end
+
+      resources :reference_timelines, path: 'timelines', except: [:new, :edit, :show] do
+        resources :reference_times, path: 'times', only: [:create, :update, :destroy]
       end
     end
   end

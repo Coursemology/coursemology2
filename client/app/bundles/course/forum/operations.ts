@@ -32,7 +32,7 @@ import {
 
 // Forum
 
-export function fetchForums(): Operation<void> {
+export function fetchForums(): Operation {
   return async (dispatch) =>
     CourseAPI.forum.forums
       .index()
@@ -57,7 +57,7 @@ export function fetchForum(forumId: string): Operation<number> {
       });
 }
 
-export function createForum(forumFormData: ForumFormData): Operation<void> {
+export function createForum(forumFormData: ForumFormData): Operation {
   const forumPostData = {
     forum: {
       name: forumFormData.name,
@@ -90,7 +90,7 @@ export function updateForum(
     });
 }
 
-export function deleteForum(forumId: number): Operation<void> {
+export function deleteForum(forumId: number): Operation {
   return async (dispatch) =>
     CourseAPI.forum.forums.delete(forumId).then(() => {
       dispatch(removeForum({ forumId }));
@@ -101,7 +101,7 @@ export function updateForumSubscription(
   forumId: number,
   entityUrl: string,
   isCurrentlySubscribed: boolean,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.forum.forums
       .updateSubscription(entityUrl, isCurrentlySubscribed)
@@ -110,14 +110,14 @@ export function updateForumSubscription(
       });
 }
 
-export function markAllAsRead(): Operation<void> {
+export function markAllAsRead(): Operation {
   return async (dispatch) =>
     CourseAPI.forum.forums.markAllAsRead().then(() => {
       dispatch(markAllPostsAsRead());
     });
 }
 
-export function markAsRead(forumId: number): Operation<void> {
+export function markAsRead(forumId: number): Operation {
   return async (dispatch) =>
     CourseAPI.forum.forums.markAsRead(forumId).then((response) => {
       dispatch(
@@ -187,10 +187,7 @@ export function updateForumTopic(
       });
 }
 
-export function deleteForumTopic(
-  topicUrl: string,
-  topicId: number,
-): Operation<void> {
+export function deleteForumTopic(topicUrl: string, topicId: number): Operation {
   return async (dispatch) =>
     CourseAPI.forum.topics.delete(topicUrl).then(() => {
       dispatch(removeForumTopic({ topicId }));
@@ -201,7 +198,7 @@ export function updateForumTopicSubscription(
   topicId: number,
   topicUrl: string,
   isCurrentlySubscribed: boolean,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.forum.topics
       .updateSubscription(topicUrl, isCurrentlySubscribed)
@@ -214,7 +211,7 @@ export function updateForumTopicHidden(
   topicId: number,
   topicUrl: string,
   isCurrentlyHidden: boolean,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.forum.topics
       .updateHidden(topicUrl, isCurrentlyHidden)
@@ -227,7 +224,7 @@ export function updateForumTopicLocked(
   topicId: number,
   topicUrl: string,
   isCurrentlyLocked: boolean,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.forum.topics
       .updateLocked(topicUrl, isCurrentlyLocked)
@@ -269,7 +266,7 @@ export function createForumTopicPost(
 export function updateForumTopicPost(
   postUrl: string,
   postText: string,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.forum.posts.update(postUrl, postText).then((response) => {
       dispatch(updateForumTopicPostListData(response.data));
@@ -298,17 +295,14 @@ export function toggleForumTopicPostAnswer(
   postUrl: string,
   topicId: number,
   postId: number,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.forum.posts.toggleAnswer(postUrl).then(() => {
       dispatch(updatePostAsAnswer({ topicId, postId }));
     });
 }
 
-export function voteTopicPost(
-  postUrl: string,
-  vote: -1 | 0 | 1,
-): Operation<void> {
+export function voteTopicPost(postUrl: string, vote: -1 | 0 | 1): Operation {
   return async (dispatch) =>
     CourseAPI.forum.posts.vote(postUrl, vote).then((response) => {
       dispatch(updateForumTopicPostListData(response.data));

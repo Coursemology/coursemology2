@@ -5,7 +5,7 @@ import CourseAPI from 'api/course';
 
 import { removeVideo, saveVideo, saveVideoList } from './reducers';
 
-export function fetchVideos(currentTabId?: number): Operation<void> {
+export function fetchVideos(currentTabId?: number): Operation {
   return async (dispatch) =>
     CourseAPI.video.videos.index(currentTabId).then((response) => {
       const data = response.data;
@@ -13,14 +13,14 @@ export function fetchVideos(currentTabId?: number): Operation<void> {
     });
 }
 
-export function loadVideo(videoId: number): Operation<void> {
+export function loadVideo(videoId: number): Operation {
   return async (dispatch) =>
     CourseAPI.video.videos.fetch(videoId).then((response) => {
       dispatch(saveVideo(response.data));
     });
 }
 
-export function createVideo(data: VideoFormData): Operation<void> {
+export function createVideo(data: VideoFormData): Operation {
   const videoPostData = {
     video: {
       title: data.title,
@@ -39,10 +39,7 @@ export function createVideo(data: VideoFormData): Operation<void> {
     });
 }
 
-export function updateVideo(
-  videoId: number,
-  data: VideoFormData,
-): Operation<void> {
+export function updateVideo(videoId: number, data: VideoFormData): Operation {
   const videoPatchData = {
     video: {
       id: data.id,
@@ -62,7 +59,7 @@ export function updateVideo(
     });
 }
 
-export function deleteVideo(videoId: number): Operation<void> {
+export function deleteVideo(videoId: number): Operation {
   return async (dispatch) =>
     CourseAPI.video.videos.delete(videoId).then(() => {
       dispatch(removeVideo({ videoId }));
@@ -72,7 +69,7 @@ export function deleteVideo(videoId: number): Operation<void> {
 export function updatePublishedVideo(
   videoId: number,
   isPublished: boolean,
-): Operation<void> {
+): Operation {
   const videoPatchPublishData = {
     video: { id: videoId, published: isPublished },
   };

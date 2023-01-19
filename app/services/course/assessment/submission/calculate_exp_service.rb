@@ -19,8 +19,10 @@ class Course::Assessment::Submission::CalculateExpService
     # @param [Course::Assessment::Submission] submission The submission of which the exp needs to be calculated.
     def calculate_exp(submission)
       assessment = submission.assessment
-      end_at = assessment.end_at
-      bonus_end_at = assessment.bonus_end_at
+      assessment_time = assessment.time_for(submission.course_user)
+
+      end_at = assessment_time.end_at
+      bonus_end_at = assessment_time.bonus_end_at
       total_exp = assessment.base_exp
 
       return 0 if end_at && submission.submitted_at > end_at
@@ -29,7 +31,7 @@ class Course::Assessment::Submission::CalculateExpService
 
       maximum_grade = submission.questions.sum(:maximum_grade).to_f
 
-      maximum_grade == 0 ? total_exp : submission.grade.to_f / maximum_grade * total_exp
+      (maximum_grade == 0) ? total_exp : (submission.grade.to_f / maximum_grade * total_exp)
     end
   end
 end

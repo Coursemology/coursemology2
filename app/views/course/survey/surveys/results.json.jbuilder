@@ -29,5 +29,6 @@ json.sections @sections do |section|
   end
 end
 json.survey do
-  json.partial! 'survey', survey: @survey
+  survey_time = @survey.time_for(current_course_user)
+  json.partial! 'survey', survey: @survey, survey_time: survey_time
 end

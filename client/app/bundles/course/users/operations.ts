@@ -14,6 +14,7 @@ import {
   PersonalTimeFormData,
   PersonalTimePostData,
 } from 'types/course/personalTimes';
+import { TimelineData } from 'types/course/referenceTimelines';
 import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
@@ -35,13 +36,14 @@ import {
  *   }
  */
 const formatUpdateUser = (
-  data: CourseUserEntity | CourseUserMiniEntity,
+  data: CourseUserEntity | Partial<CourseUserMiniEntity>,
 ): UpdateCourseUserPatchData => {
   return {
     course_user: {
       name: data.name,
       phantom: data.phantom,
       role: data.role,
+      reference_timeline_id: data.referenceTimelineId,
       timeline_algorithm: data.timelineAlgorithm,
     },
   };
@@ -76,7 +78,7 @@ const formatUpdateExperiencePointsRecord = (
   };
 };
 
-export function fetchUsers(asBasicData: boolean = false): Operation<void> {
+export function fetchUsers(asBasicData: boolean = false): Operation {
   return async (dispatch) =>
     CourseAPI.users.index(asBasicData).then((response) => {
       const data = response.data;
@@ -95,7 +97,7 @@ export function fetchUsers(asBasicData: boolean = false): Operation<void> {
     });
 }
 
-export function fetchStudents(): Operation<void> {
+export function fetchStudents(): Operation {
   return async (dispatch) =>
     CourseAPI.users.indexStudents().then((response) => {
       const data = response.data;
@@ -104,12 +106,14 @@ export function fetchStudents(): Operation<void> {
           data.users,
           data.permissions,
           data.manageCourseUsersData,
+          [],
+          data.timelines,
         ),
       );
     });
 }
 
-export function fetchStaff(): Operation<void> {
+export function fetchStaff(): Operation {
   return async (dispatch) =>
     CourseAPI.users.indexStaff().then((response) => {
       const data = response.data;
@@ -133,8 +137,8 @@ export function loadUser(userId: number): Operation<SaveUserAction> {
 
 export function updateUser(
   userId: number,
-  data: CourseUserEntity | CourseUserMiniEntity,
-): Operation<void> {
+  data: CourseUserEntity | Partial<CourseUserMiniEntity>,
+): Operation {
   const attributes = formatUpdateUser(data);
   return async (dispatch) =>
     CourseAPI.users.update(userId, attributes).then((response) => {
@@ -146,6 +150,10 @@ export function updateUser(
         };
         dispatch(actions.updateUserOption(userOption));
       }
+
+      // TODO: Fix `actions.saveUser`'s params to support handling `CourseUserMiniEntity`.
+      // This should trigger a TypeScript type mismatch because `response.data` could be
+      // of type `CourseUserMiniEntity`, but `actions.saveUser` only accepts `CourseUserData`.
       dispatch(actions.saveUser(response.data));
     });
 }
@@ -153,7 +161,7 @@ export function updateUser(
 export function upgradeToStaff(
   users: CourseUserBasicMiniEntity[],
   role: StaffRole,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.users.upgradeToStaff(users, role).then((response) => {
       response.data.users.forEach((user) => {
@@ -163,21 +171,41 @@ export function upgradeToStaff(
     });
 }
 
-export function deleteUser(userId: number): Operation<void> {
+export function assignToTimeline(
+  ids: CourseUserBasicMiniEntity['id'][],
+  timelineId: TimelineData['id'],
+): Operation {
+  return async (dispatch) => {
+    await CourseAPI.users.assignToTimeline(ids, timelineId);
+    ids.forEach((id) => {
+      // @ts-ignore: ignore type mismatch between this object and `CourseUserData`
+      // TODO: Fix `actions.saveUser`'s params to support handling `CourseUserMiniEntity`.
+      // The dispatch in `updateUser` above technically should also fire the same error.
+      // The only reason it does not is because the `response` is not typed, and thus
+      // its `response.data` is `any`, thus is assignable to `CourseUserData`.
+      //
+      // This line still technically works because `saveEntityToStore` thankfully
+      // intelligently merges the old and new entities.
+      dispatch(actions.saveUser({ id, referenceTimelineId: timelineId }));
+    });
+  };
+}
+
+export function deleteUser(userId: number): Operation {
   return async (dispatch) =>
     CourseAPI.users.delete(userId).then(() => {
       dispatch(actions.deleteUser(userId));
     });
 }
 
-export function fetchPersonalTimes(userId: number): Operation<void> {
+export function fetchPersonalTimes(userId: number): Operation {
   return async (dispatch) =>
     CourseAPI.personalTimes.index(userId).then((response) => {
       dispatch(actions.savePersonalTimeList(response.data.personalTimes));
     });
 }
 
-export function recomputePersonalTimes(userId: number): Operation<void> {
+export function recomputePersonalTimes(userId: number): Operation {
   return async (dispatch) =>
     CourseAPI.personalTimes.recompute(userId).then((response) => {
       dispatch(actions.savePersonalTimeList(response.data.personalTimes));
@@ -209,7 +237,7 @@ export function deletePersonalTime(
 export function fetchExperiencePointsRecord(
   userId: number,
   pageNum: number = 1,
-): Operation<void> {
+): Operation {
   return async (dispatch) =>
     CourseAPI.experiencePointsRecord.index(userId, pageNum).then((response) => {
       const data = response.data;

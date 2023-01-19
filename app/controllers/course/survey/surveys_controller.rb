@@ -16,7 +16,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def create
     if @survey.save
-      render partial: 'survey', locals: { survey: @survey }
+      render partial: 'survey', locals: { survey: @survey, survey_time: @survey.time_for(current_course_user) }
     else
       render json: { errors: @survey.errors }, status: :bad_request
     end
@@ -65,7 +65,7 @@ class Course::Survey::SurveysController < Course::Survey::Controller
           perform_later(@survey).job
     respond_to do |format|
       format.html { redirect_to(job_path(job)) }
-      format.json { render json: { redirect_url: job_path(job) } }
+      format.json { render partial: 'jobs/submitted', locals: { job: job } }
     end
   end
 
@@ -73,7 +73,10 @@ class Course::Survey::SurveysController < Course::Survey::Controller
 
   def render_survey_with_questions_json
     load_sections
-    render partial: 'survey_with_questions', locals: { survey: @survey }
+    render partial: 'survey_with_questions', locals: {
+      survey: @survey,
+      survey_time: @survey.time_for(current_course_user)
+    }
   end
 
   def preload_questions_results

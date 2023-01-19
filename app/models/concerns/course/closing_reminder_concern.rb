@@ -4,7 +4,7 @@
 #   - When the lesson_plan_item is about to close
 #
 # When including this concern, the model is to implement the following for the reminders:
-#   - #{Model-Name}::CloseReminderJob
+#   - #{Model-Name}::ClosingReminderJob
 #
 # Note that to prevent duplicate jobs, a random number of milliseconds is added to the date fields
 # for each change to uniquely identify the most current set of jobs.

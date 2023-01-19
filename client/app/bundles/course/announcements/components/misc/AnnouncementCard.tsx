@@ -26,8 +26,8 @@ interface Props extends WrappedComponentProps {
   updateOperation?: (
     announcementId: number,
     formData: AnnouncementFormData,
-  ) => Operation<void>;
-  deleteOperation?: (announcementId: number) => Operation<void>;
+  ) => Operation;
+  deleteOperation?: (announcementId: number) => Operation;
   canSticky?: boolean;
 }
 

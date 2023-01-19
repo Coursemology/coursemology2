@@ -16,4 +16,14 @@
   .key {
     @apply rounded-xl border border-solid py-0.5 px-2;
   }
+
+  /* For Firefox 64+ and Firefox for Android 64+ */
+  .scrollbar-hidden {
+    scrollbar-width: none;
+  }
+
+  /* For Blink- and WebKit-based browsers */
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
 }

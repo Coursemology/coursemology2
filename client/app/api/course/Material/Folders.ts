@@ -1,7 +1,7 @@
-import { AxiosResponse } from 'axios';
-import { FolderData } from 'types/course/material/folders';
+import { FolderData, MaterialListData } from 'types/course/material/folders';
+import { JobSubmitted } from 'types/jobs';
 
-import pollJob from 'lib/helpers/job-helpers';
+import { APIResponse } from 'api/types';
 
 import BaseCourseAPI from '../Base';
 
@@ -13,17 +13,14 @@ export default class FoldersAPI extends BaseCourseAPI {
   /**
    * Fetches a folder, along with all its subfolders and materials.
    */
-  fetch(folderId: number): Promise<AxiosResponse<FolderData>> {
+  fetch(folderId: number): APIResponse<FolderData> {
     return this.getClient().get(`${this._getUrlPrefix()}/${folderId}`);
   }
 
   /**
    * Creates a new folder
    */
-  createFolder(
-    folderId: number,
-    params: FormData,
-  ): Promise<AxiosResponse<FolderData>> {
+  createFolder(folderId: number, params: FormData): APIResponse<FolderData> {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${folderId}/create/subfolder`,
       params,
@@ -33,10 +30,7 @@ export default class FoldersAPI extends BaseCourseAPI {
   /**
    * Updates a new folder
    */
-  updateFolder(
-    folderId: number,
-    params: FormData,
-  ): Promise<AxiosResponse<FolderData>> {
+  updateFolder(folderId: number, params: FormData): APIResponse<FolderData> {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${folderId}`,
       params,
@@ -46,17 +40,14 @@ export default class FoldersAPI extends BaseCourseAPI {
   /**
    * Deletes a folder
    */
-  deleteFolder(folderId: number): Promise<AxiosResponse> {
+  deleteFolder(folderId: number): APIResponse {
     return this.getClient().delete(`${this._getUrlPrefix()}/${folderId}`);
   }
 
   /**
    * Deletes a material (file)
    */
-  deleteMaterial(
-    currFolderId: number,
-    materialId: number,
-  ): Promise<AxiosResponse> {
+  deleteMaterial(currFolderId: number, materialId: number): APIResponse {
     return this.getClient().delete(
       `${this._getUrlPrefix()}/${currFolderId}/files/${materialId}`,
     );
@@ -68,7 +59,7 @@ export default class FoldersAPI extends BaseCourseAPI {
   uploadMaterials(
     currFolderId: number,
     params: FormData,
-  ): Promise<AxiosResponse> {
+  ): APIResponse<FolderData> {
     return this.getClient().put(
       `${this._getUrlPrefix()}/${currFolderId}/upload_materials`,
       params,
@@ -82,7 +73,7 @@ export default class FoldersAPI extends BaseCourseAPI {
     folderId: number,
     materialId: number,
     params: FormData,
-  ): Promise<AxiosResponse> {
+  ): APIResponse<MaterialListData> {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${folderId}/files/${materialId}`,
       params,
@@ -92,24 +83,9 @@ export default class FoldersAPI extends BaseCourseAPI {
   /**
    * Downloads an entire folder and its contents
    */
-  downloadFolder(
-    currFolderId: number,
-    onSuccess: () => void,
-    onFailure: () => void,
-  ): Promise<void> {
-    const REQUEST_INTERVAL = 1000;
-    return this.getClient()
-      .get(`${this._getUrlPrefix()}/${currFolderId}/download`)
-      .then((response) => {
-        pollJob(
-          response.data.redirect_url,
-          REQUEST_INTERVAL,
-          (data) => {
-            onSuccess();
-            window.open(data.redirect_url);
-          },
-          onFailure,
-        );
-      });
+  downloadFolder(currFolderId: number): APIResponse<JobSubmitted> {
+    return this.getClient().get(
+      `${this._getUrlPrefix()}/${currFolderId}/download`,
+    );
   }
 }

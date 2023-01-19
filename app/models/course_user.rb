@@ -245,7 +245,6 @@ class CourseUser < ApplicationRecord
     self.role ||= :student
   end
 
-  # TODO(#3092): Validation is correct but everyone's reference timeline should be nil
   def validate_reference_timeline_belongs_to_course
     return if reference_timeline.nil?
     return if reference_timeline.course == course

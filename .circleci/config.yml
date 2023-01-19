@@ -4,9 +4,6 @@
 #
 version: 2.1
 
-orbs:
-  browser-tools: circleci/browser-tools@1.2.3
-
 commands:
   checkout_with_submodules:
     steps:
@@ -27,9 +24,9 @@ commands:
       # Restore cached Ruby dependencies
       - restore_cache:
           keys:
-            - v3.0.4-ruby-{{ checksum "Gemfile.lock" }}
+            - v3.0.5-ruby-{{ checksum "Gemfile.lock" }}
             # Fallback to using the latest cache if no exact match is found
-            - v3.0.4-ruby-
+            - v3.0.5-ruby-
 
       # Update Ruby dependencies
       - run:
@@ -42,7 +39,7 @@ commands:
           paths:
             - ./vendor/bundle
             - ./.bundle
-          key: v3.0.4-ruby-{{ checksum "Gemfile.lock" }}
+          key: v3.0.5-ruby-{{ checksum "Gemfile.lock" }}
 
   build_and_restore_node_cache:
     steps:
@@ -104,11 +101,20 @@ commands:
           keys:
             - v1-yarn-build-{{ .Revision }}
 
+  setup_db:
+    steps:
+      - run:
+          name: Setup DB
+          command: |
+            bundle exec rake db:setup
+          environment:
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+
 jobs:
   test:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:3.0.4-browsers
+      - image: cimg/ruby:3.0.5-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -130,9 +136,6 @@ jobs:
     steps:
       - checkout_with_submodules
 
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
-
       - restore_ruby_cache
       - restore_node_cache
 
@@ -141,25 +144,20 @@ jobs:
       # Install ghostscript so `identify` in ImageMagick works with PDF files.
       # Remove pdf security policy for imagemagick (ubuntu 20.04)
       # https://stackoverflow.com/questions/52998331/imagemagick-security-policy-pdf-blocking-conversion
-      - run:
-          name: install ghostscript and imagemagick
-          command: |
-            sudo apt update
-            sudo apt install imagemagick
-            sudo apt install ghostscript
-            sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
+      # Installations below are currently disabled as CircleCI would fail to install occasionally
+      # - run:
+      #     name: install ghostscript and imagemagick
+      #     command: |
+      #       sudo apt update
+      #       sudo apt install imagemagick
+      #       sudo apt install ghostscript
+      #       sudo sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
 
       - setup_remote_docker:
           version: 20.10.18
           docker_layer_caching: true
 
-      # Database setup
-      - run:
-          name: Setup DB
-          command: |
-            bundle exec rake db:setup
-          environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+      - setup_db
 
       # Run tests!
       - run:
@@ -190,8 +188,38 @@ jobs:
 
   lint:
     docker:
+      - image: cimg/ruby:3.0.5-browsers
+        environment:
+          PG_HOST: localhost
+          PG_USER: ubuntu
+          RAILS_ENV: test
+          BUNDLE_APP_CONFIG: ~/repo/.bundle
+
+      - image: cimg/postgres:14.5
+        environment:
+          POSTGRES_USER: ubuntu
+          POSTGRES_DB: coursemology_test
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_ruby_cache
+
+      - setup_db
+
+      - run:
+          name: Run FactoryBot lint
+          command: |
+            bundle exec rake factory_bot:lint
+          environment:
+            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+
+  jslint:
+    docker:
       # specify the version you desire here
-      - image: cimg/ruby:3.0.4-browsers
+      - image: cimg/ruby:3.0.5-browsers
         environment:
           RAILS_ENV: test
 
@@ -214,7 +242,7 @@ jobs:
   jstest:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:3.0.4-browsers
+      - image: cimg/ruby:3.0.5-browsers
         environment:
           RAILS_ENV: test
 
@@ -238,7 +266,7 @@ jobs:
   i18n:
     docker:
       # specify the version you desire here
-      - image: cimg/ruby:3.0.4-browsers
+      - image: cimg/ruby:3.0.5-browsers
         environment:
           PG_HOST: localhost
           PG_USER: ubuntu
@@ -256,17 +284,11 @@ jobs:
     working_directory: ~/repo
 
     steps:
-      - checkout_with_submodules
+      - checkout
 
       - restore_ruby_cache
 
-      # Database setup
-      - run:
-          name: Setup DB
-          command: |
-            bundle exec rake db:setup
-          environment:
-            DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
+      - setup_db
 
       # Run i18n checks!
       - run:
@@ -274,7 +296,6 @@ jobs:
           command: |
             bundle exec i18n-tasks unused
             bundle exec i18n-tasks missing
-            bundle exec rake factory_bot:lint
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
     resource_class: large
@@ -284,10 +305,11 @@ workflows:
   build_and_test_and_lint:
     jobs:
       - lint
+      - jslint
       - jstest
       - i18n
       - test:
           requires:
             - lint
+            - jslint
             - jstest
-            - i18n

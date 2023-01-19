@@ -92,11 +92,13 @@ const ForumDisbursement: FC = () => {
         </Paper>
       </Grid>
       <Grid item xs>
-        <ForumDisbursementForm
-          filters={filters}
-          forumUsers={forumUsers}
-          onPostClick={onPostClick}
-        />
+        {Boolean(forumUsers.length) && (
+          <ForumDisbursementForm
+            filters={filters}
+            forumUsers={forumUsers}
+            onPostClick={onPostClick}
+          />
+        )}
         {selectedForumPostUser && (
           <Dialog
             fullWidth

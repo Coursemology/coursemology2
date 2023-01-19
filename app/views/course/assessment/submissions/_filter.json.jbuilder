@@ -1,21 +1,22 @@
 # frozen_string_literal: true
-
 json.filter do
-  if can_manage
-    json.assessments @category.assessments.ordered_by_date_and_title.published do |a|
-      json.id a.id
-      json.title a.title
-    end
+  return unless can_manage
 
-    json.groups current_course.groups.ordered_by_name do |g|
-      json.id g.id
-      json.name g.name
-    end
+  published_assessments = @category.assessments.ordered_by_date_and_title.published
+  json.assessments published_assessments do |assessment|
+    json.id assessment.id
+    json.title assessment.title
+  end
 
-    json.users current_course.course_users.order_alphabetically.student do |u|
-      json.id u.user_id
-      json.name u.name
-    end
+  groups = current_course.groups.ordered_by_name
+  json.groups groups do |group|
+    json.id group.id
+    json.name group.name
+  end
 
+  students = current_course.course_users.order_alphabetically.student
+  json.users students do |student|
+    json.id student.user_id
+    json.name student.name
   end
 end

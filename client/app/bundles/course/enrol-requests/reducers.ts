@@ -17,6 +17,7 @@ const initialState: EnrolRequestsState = {
   permissions: {
     canManageCourseUsers: false,
     canManageEnrolRequests: false,
+    canManageReferenceTimelines: false,
     canManagePersonalTimes: false,
     canRegisterWithCode: false,
   },
