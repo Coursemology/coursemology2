@@ -9,8 +9,9 @@ import {
   Select,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import ghostIcon from 'assets/icons/ghost.svg?url';
 import PropTypes from 'prop-types';
+
+import GhostIcon from 'lib/components/icons/GhostIcon';
 
 import { nonMemberShape } from '../../../propTypes';
 
@@ -109,8 +110,8 @@ const NonGroupUserManagerListItem = ({
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
         {user.name}
-        {user.isPhantom ? <img alt="phantom" className="wh-10" src={ghostIcon}/> : ""}
-        {otherGroups ? ` (also a member of${otherGroups})` : ""}
+        {user.isPhantom ? <GhostIcon /> : ''}
+        {otherGroups ? ` (also a member of${otherGroups})` : ''}
       </ListItemText>
     </div>
 
@@ -196,9 +197,14 @@ const NonGroupUserManagerList = ({
       ) : null}
 
       {students.length > 0 &&
-        renderUsersListItems(students, memberOtherGroups, translations.students)}
+        renderUsersListItems(
+          students,
+          memberOtherGroups,
+          translations.students,
+        )}
 
-      {staff.length > 0 && renderUsersListItems(staff, memberOtherGroups, translations.staff)}
+      {staff.length > 0 &&
+        renderUsersListItems(staff, memberOtherGroups, translations.staff)}
     </List>
   );
 };
