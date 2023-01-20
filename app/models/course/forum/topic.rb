@@ -62,15 +62,21 @@ class Course::Forum::Topic < ApplicationRecord
     order(latest_post_at: :desc)
   end)
 
-  # @!method self.with_latest_post
-  #   Augments all returned records with the latest post.
-  scope :with_latest_post, (lambda do
+  # @!method self.with_earliest_and_latest_post
+  #   Augments all returned records with the earliest and latest post.
+  scope :with_earliest_and_latest_post, (lambda do
     topic_ids = distinct(false).pluck('course_discussion_topics.id')
-    ids = Course::Discussion::Post.unscope(:order).
+    min_ids = Course::Discussion::Post.unscope(:order).
+          select('min(id)').
+          group('course_discussion_posts.topic_id').
+          where(topic_id: topic_ids)
+
+    max_ids = Course::Discussion::Post.unscope(:order).
           select('max(id)').
           group('course_discussion_posts.topic_id').
           where(topic_id: topic_ids)
-    last_posts = Course::Discussion::Post.with_creator.where(id: ids)
+
+    last_posts = Course::Discussion::Post.with_creator.where('id in (?) or id in (?)', min_ids, max_ids)
 
     all.tap do |result|
       preloader = ActiveRecord::Associations::Preloader::ManualPreloader.new
