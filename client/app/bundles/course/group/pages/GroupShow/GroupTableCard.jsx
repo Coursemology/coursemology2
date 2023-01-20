@@ -1,17 +1,20 @@
 import { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { Checkbox, 
+import {
+  Checkbox,
   Chip,
-  FormControlLabel,  
+  FormControlLabel,
   Table,
   TableBody,
   TableCell,
   TableHead,
-  TableRow } from '@mui/material';
+  TableRow,
+} from '@mui/material';
 import { grey } from '@mui/material/colors';
-import ghostIcon from 'assets/icons/ghost.svg?url';
 import PropTypes from 'prop-types';
 import palette from 'theme/palette';
+
+import GhostIcon from 'lib/components/icons/GhostIcon';
 
 import GroupCard from '../../components/GroupCard';
 import { groupShape } from '../../propTypes';
@@ -46,8 +49,7 @@ const translations = defineMessages({
   },
   hidePhantomStudents: {
     id: 'course.group.GroupShow.GroupTableCard.hidePhantomStudents',
-    defaultMessage:
-      'Hide all phantom students',
+    defaultMessage: 'Hide all phantom students',
   },
 });
 
@@ -84,7 +86,7 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
 
   let members = [...group.members];
   if (hidePhantomStudents) {
-    members = members.filter((m) => !m.isPhantom)
+    members = members.filter((m) => !m.isPhantom);
   }
 
   members.sort(sortByName).sort(sortByPhantom).sort(sortByGroupRole);
@@ -132,11 +134,7 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
               <TableCell style={styles.rowHeight}>
                 <div className="flex grow">
                   {m.name}
-                  {m.isPhantom ? (
-                    <img alt="phantom" className="wh-10" src={ghostIcon}/>
-                  ) : (
-                    ''
-                  )}
+                  {m.isPhantom ? <GhostIcon /> : ''}
                 </div>
               </TableCell>
               <TableCell style={styles.rowHeight}>
@@ -161,15 +159,15 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
         </div>
       ) : null}
       <FormControlLabel
-          control={
-            <Checkbox
-              checked={hidePhantomStudents}
-              onChange={(_, checked) => setHidePhantomStudents(checked)}
-            />
-          }
-          label={<FormattedMessage {...translations.hidePhantomStudents} />}
-          style={styles.checkbox}
-        />
+        control={
+          <Checkbox
+            checked={hidePhantomStudents}
+            onChange={(_, checked) => setHidePhantomStudents(checked)}
+          />
+        }
+        label={<FormattedMessage {...translations.hidePhantomStudents} />}
+        style={styles.checkbox}
+      />
     </GroupCard>
   );
 };
