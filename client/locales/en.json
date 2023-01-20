@@ -432,7 +432,7 @@
     "defaultMessage": "Enable personalised timelines"
   },
   "course.admin.CourseSettings.endMustAfterStartTime": {
-    "defaultMessage": "End time must be after starting time."
+    "defaultMessage": "End time must be before starting time."
   },
   "course.admin.CourseSettings.endsAt": {
     "defaultMessage": "Ends at"
@@ -3536,6 +3536,9 @@
   "course.forum.ForumTopicEdit.updateSuccess": {
     "defaultMessage": "Topic {title} has been updated."
   },
+  "course.forum.ForumTopicForm.postAnonymously": {
+    "defaultMessage": "Anonymous post"
+  },
   "course.forum.ForumTopicForm.text": {
     "defaultMessage": "Text"
   },
@@ -3754,6 +3757,18 @@
   },
   "course.forum.PostCard.updateSuccess": {
     "defaultMessage": "The post has been updated."
+  },
+  "course.forum.PostCreatorObject.anonymousUser": {
+    "defaultMessage": "Anonymous User"
+  },
+  "course.forum.PostCreatorObject.maskUser": {
+    "defaultMessage": "Mask User"
+  },
+  "course.forum.PostCreatorObject.postAnonymously": {
+    "defaultMessage": "Anonymous post"
+  },
+  "course.forum.PostCreatorObject.unmaskUser": {
+    "defaultMessage": "Unmask User"
   },
   "course.forum.SubscribeButton.forumTopicTranslations.adminSettingSubscribed": {
     "defaultMessage": "Subscription of forum topics is disabled by the course admin."

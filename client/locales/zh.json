@@ -432,7 +432,7 @@
     "defaultMessage": "启用个性化时间表"
   },
   "course.admin.CourseSettings.endMustAfterStartTime": {
-    "defaultMessage": "结束时间必须晚于开始时间。"
+    "defaultMessage": "结束时间必须早于开始时间。"
   },
   "course.admin.CourseSettings.endsAt": {
     "defaultMessage": "结束于"
@@ -3449,6 +3449,9 @@
   "course.forum.ForumTopicEdit.updateSuccess": {
     "defaultMessage": "主题 {title} 已更新。"
   },
+  "course.forum.ForumTopicForm.postAnonymously": {
+    "defaultMessage": "匿名发帖"
+  },
   "course.forum.ForumTopicForm.text": {
     "defaultMessage": "文本"
   },
@@ -3667,6 +3670,18 @@
   },
   "course.forum.PostCard.updateSuccess": {
     "defaultMessage": "该帖子已更新。"
+  },
+  "course.forum.PostCreatorObject.anonymousUser": {
+    "defaultMessage": "匿名用户"
+  },
+  "course.forum.PostCreatorObject.maskUser": {
+    "defaultMessage": "标记用户"
+  },
+  "course.forum.PostCreatorObject.postAnonymously": {
+    "defaultMessage": "匿名发帖"
+  },
+  "course.forum.PostCreatorObject.unmaskUser": {
+    "defaultMessage": "取消屏蔽用户"
   },
   "course.forum.SubscribeButton.forumTopicTranslations.adminSettingSubscribed": {
     "defaultMessage": "课程管理员禁用了论坛主题的订阅。"
