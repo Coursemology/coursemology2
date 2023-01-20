@@ -39,3 +39,5 @@ zh:
       name: '学习路线'
     codaveri:
       name: 'Codaveri 评估和反馈'
+    multiple_reference_timelines:
+      name: '多重参考时间线'
