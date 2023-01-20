@@ -34,10 +34,12 @@ RSpec.describe Course::Forum::ForumsController, type: :controller do
       let!(:first_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
       let!(:second_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
 
-      it 'preloads the latest post for each topics of the forum' do
+      it 'preloads the latest and earliest posts for each topics of the forum' do
         get :show, params: { course_id: course, id: forum, format: :json }
-        expect(controller.instance_variable_get(:@topics).first.posts.first).
+        expect(controller.instance_variable_get(:@topics).first.posts.last).
           to eq(second_topic_post)
+        expect(controller.instance_variable_get(:@topics).first.posts.first).
+          to eq(topic.posts.first)
       end
     end
 

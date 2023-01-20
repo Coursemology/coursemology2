@@ -128,13 +128,23 @@ RSpec.describe Course::Forum::Topic, type: :model do
       end
     end
 
-    describe '.with_latest_post' do
+    describe '.with_earliest_and_latest_post' do
       let(:topic) { create(:forum_topic, forum: forum) }
-      let!(:first_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
+      let!(:first_topic_post) { topic.posts.first }
       let!(:second_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
+      let!(:third_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
+      let!(:fourth_topic_post) { create(:course_discussion_post, topic: topic.acting_as) }
+
+      it 'preloads only two posts' do
+        expect(forum.topics.with_earliest_and_latest_post.first.posts.size).to eq(2)
+      end
 
       it 'preloads the latest post' do
-        expect(forum.topics.with_latest_post.first.posts.first).to eq(second_topic_post)
+        expect(forum.topics.with_earliest_and_latest_post.first.posts.last).to eq(fourth_topic_post)
+      end
+
+      it 'preloads the earliest post' do
+        expect(forum.topics.with_earliest_and_latest_post.first.posts.first).to eq(first_topic_post)
       end
     end
 
