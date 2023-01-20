@@ -432,7 +432,7 @@
     "defaultMessage": "Enable personalised timelines"
   },
   "course.admin.CourseSettings.endMustAfterStartTime": {
-    "defaultMessage": "End time must be before starting time."
+    "defaultMessage": "End time must be after starting time."
   },
   "course.admin.CourseSettings.endsAt": {
     "defaultMessage": "Ends at"
