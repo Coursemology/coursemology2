@@ -1,6 +1,7 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Checkbox,
+  Chip,
   List,
   ListItem,
   ListItemText,
@@ -11,6 +12,7 @@ import {
 import { grey } from '@mui/material/colors';
 import ghostIcon from 'assets/icons/ghost.svg?url';
 import PropTypes from 'prop-types';
+import palette from 'theme/palette';
 
 import { memberShape } from '../../../propTypes';
 
@@ -36,6 +38,23 @@ const translations = defineMessages({
     defaultMessage: 'Staff',
   },
 });
+
+const groupRoleTranslation = {
+  normal: 'Member',
+  manager: 'Manager',
+  unknown: 'Unknown',
+};
+
+const translateStatus = (oldStatus) => {
+  switch (oldStatus) {
+    case 'normal':
+      return groupRoleTranslation.normal;
+    case 'manager':
+      return groupRoleTranslation.manager;
+    default:
+      return groupRoleTranslation.unknown;
+  }
+};
 
 const styles = {
   list: {
@@ -104,7 +123,14 @@ const GroupUserManagerListItemChoice = ({
         </Select>
       </div>
     ) : 
-    <FormattedMessage {...translations.normal} />
+    <Chip
+      label={translateStatus(user.groupRole)}
+      style={{
+        width: 100,
+        backgroundColor: palette.groupRole[user.groupRole],
+        marginRight: 5,
+      }}
+    />
   );
 
 GroupUserManagerListItemChoice.propTypes = {
@@ -138,8 +164,9 @@ const GroupUserManagerListItem = ({
       />
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
+        {user.name}
         {user.isPhantom ? <img alt="phantom" className="wh-10" src={ghostIcon}/> : ""}
-        {otherGroups ? `${user.name} (also members of${otherGroups})` : user.name}
+        {otherGroups ? ` (also a member of${otherGroups})` : ""}
       </ListItemText>
     </div>
 

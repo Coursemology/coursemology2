@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { Checkbox, 
+  Chip,
   FormControlLabel,  
   Table,
   TableBody,
@@ -10,6 +11,7 @@ import { Checkbox,
 import { grey } from '@mui/material/colors';
 import ghostIcon from 'assets/icons/ghost.svg?url';
 import PropTypes from 'prop-types';
+import palette from 'theme/palette';
 
 import GroupCard from '../../components/GroupCard';
 import { groupShape } from '../../propTypes';
@@ -49,9 +51,21 @@ const translations = defineMessages({
   },
 });
 
-const roles = {
+const groupRoleTranslation = {
   normal: 'Member',
   manager: 'Manager',
+  unknown: 'Unknown',
+};
+
+const translateStatus = (oldStatus) => {
+  switch (oldStatus) {
+    case 'normal':
+      return groupRoleTranslation.normal;
+    case 'manager':
+      return groupRoleTranslation.manager;
+    default:
+      return groupRoleTranslation.unknown;
+  }
 };
 
 const styles = {
@@ -117,16 +131,25 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
               <TableCell style={styles.rowHeight}>{index + 1}</TableCell>
               <TableCell style={styles.rowHeight}>
                 <div className="flex grow">
+                  {m.name}
                   {m.isPhantom ? (
                     <img alt="phantom" className="wh-10" src={ghostIcon}/>
                   ) : (
                     ''
                   )}
-                  {m.groupRole === 'manager' ? <b>{m.name}</b> : m.name}
                 </div>
               </TableCell>
               <TableCell style={styles.rowHeight}>
-                {roles[m.groupRole]}
+                <Chip
+                  label={translateStatus(m.groupRole)}
+                  style={{
+                    width: 100,
+                    height: 23,
+                    backgroundColor: palette.groupRole[m.groupRole],
+                    marginTop: 0,
+                    marginBottom: 0,
+                  }}
+                />
               </TableCell>
             </TableRow>
           ))}

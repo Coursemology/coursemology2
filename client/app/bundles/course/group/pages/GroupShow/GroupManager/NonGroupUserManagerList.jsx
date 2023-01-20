@@ -108,10 +108,9 @@ const NonGroupUserManagerListItem = ({
       />
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
+        {user.name}
         {user.isPhantom ? <img alt="phantom" className="wh-10" src={ghostIcon}/> : ""}
-        {otherGroups ? 
-        `${user.name} (also members of${otherGroups})` 
-        : user.name}
+        {otherGroups ? ` (also a member of${otherGroups})` : ""}
       </ListItemText>
     </div>
 
