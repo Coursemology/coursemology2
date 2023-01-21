@@ -32,14 +32,6 @@ const translations = defineMessages({
     id: 'system.admin.instance.instance.UsersButton.deleteTooltip',
     defaultMessage: 'Delete User',
   },
-  masqueradeTooltip: {
-    id: 'system.admin.instance.instance.UsersButton.masqueradeTooltip',
-    defaultMessage: 'Masquerade',
-  },
-  masqueradeDisabledTooltip: {
-    id: 'system.admin.instance.instance.UsersButton.masqueradeDisabledTooltip',
-    defaultMessage: 'User not confirmed',
-  },
 });
 
 const UserManagementButtons: FC<Props> = (props) => {
