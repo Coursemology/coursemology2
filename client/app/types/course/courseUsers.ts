@@ -71,7 +71,6 @@ export interface CourseUserData extends CourseUserListData {
   exp: number;
   achievements?: AchievementListData[];
   experiencePointsRecordsUrl?: string;
-  manageEmailSubscriptionUrl?: string;
   skillBranches?: UserSkillBranchListData[];
   learningRate?: number;
   learningRateEffectiveMin?: number;
@@ -83,7 +82,6 @@ export interface CourseUserEntity extends CourseUserMiniEntity {
   exp: number;
   achievements?: AchievementMiniEntity[];
   experiencePointsRecordsUrl?: string;
-  manageEmailSubscriptionUrl?: string;
   skillBranches?: UserSkillBranchMiniEntity[];
   learningRate?: number;
   learningRateEffectiveMin?: number;

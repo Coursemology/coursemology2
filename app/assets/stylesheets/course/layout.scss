@@ -90,14 +90,24 @@ $sidebar-margin-side: 1.5rem;
     margin: 0.5em;
 
     #user-sidebar {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    #user-link-sidebar {
       @include text-overflow;
       font-size: 18px;
       font-weight: bold;
       flex: 1;
     }
 
+    #manage-email-subscription-link-sidebar {
+      font-size: 12px;
+    }
+
     .image,
-    #user-sidebar {
+    #user-link-sidebar {
       display: table-cell;
       vertical-align: middle;
     }
