@@ -33,14 +33,6 @@ const translations = defineMessages({
     id: 'system.admin.admin.UsersButton.deleteTooltip',
     defaultMessage: 'Delete User',
   },
-  masqueradeTooltip: {
-    id: 'system.admin.admin.UsersButton.masqueradeTooltip',
-    defaultMessage: 'Masquerade',
-  },
-  masqueradeDisabledTooltip: {
-    id: 'system.admin.admin.UsersButton.masqueradeDisabledTooltip',
-    defaultMessage: 'User not confirmed',
-  },
 });
 
 const UserManagementButtons: FC<Props> = (props) => {
@@ -68,10 +60,6 @@ const UserManagementButtons: FC<Props> = (props) => {
       });
   };
 
-  const handleMasquerade = (userToMasquerade: UserMiniEntity): void => {
-    window.location.href = `${userToMasquerade.masqueradePath}`;
-  };
-
   return (
     <div key={`buttons-${user.id}`} className="whitespace-nowrap">
       <DeleteButton
@@ -87,14 +75,9 @@ const UserManagementButtons: FC<Props> = (props) => {
         tooltip={intl.formatMessage(translations.deleteTooltip)}
       />
       <MasqueradeButton
+        canMasquerade={Boolean(user.canMasquerade)}
         className={`user-masquerade-${user.id} ml-4 p-0`}
-        disabled={!user.canMasquerade}
-        onClick={(): void => handleMasquerade(user)}
-        tooltip={
-          user.canMasquerade
-            ? intl.formatMessage(translations.masqueradeTooltip)
-            : intl.formatMessage(translations.masqueradeDisabledTooltip)
-        }
+        href={user.masqueradePath}
       />
     </div>
   );
