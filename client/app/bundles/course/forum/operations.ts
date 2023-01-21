@@ -300,8 +300,14 @@ export function toggleForumTopicPostAnswer(
   postId: number,
 ): Operation {
   return async (dispatch) =>
-    CourseAPI.forum.posts.toggleAnswer(postUrl).then(() => {
-      dispatch(updatePostAsAnswer({ topicId, postId }));
+    CourseAPI.forum.posts.toggleAnswer(postUrl).then((response) => {
+      dispatch(
+        updatePostAsAnswer({
+          topicId,
+          postId,
+          isTopicResolved: response.data.isTopicResolved,
+        }),
+      );
     });
 }
 
