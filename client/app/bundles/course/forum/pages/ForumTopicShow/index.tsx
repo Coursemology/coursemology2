@@ -125,7 +125,12 @@ const ForumTopicShow: FC = () => {
       <Note message={t(translations.noPosts)} />
     ) : (
       <Box className="my-3 space-y-6">
-        {topicNote && <Note message={topicNote} />}
+        {topicNote && (
+          <Note
+            color={forumTopic.isResolved ? 'success' : undefined}
+            message={topicNote}
+          />
+        )}
         <TopicPostTrees level={0} postIdsArray={forumTopic.postTreeIds} />
         <ForumTopicPostNew forumTopic={forumTopic} />
       </Box>
