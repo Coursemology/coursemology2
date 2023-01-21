@@ -4,8 +4,8 @@ import actionTypes from '../constants';
 
 import { setNotification } from './index';
 
-export async function fetchUserEmailSubscriptions() {
-  const response = await CourseAPI.userEmailSubscriptions.fetch();
+export async function fetchUserEmailSubscriptions(params) {
+  const response = await CourseAPI.userEmailSubscriptions.fetch(params);
 
   return response.data;
 }
