@@ -8,7 +8,7 @@ interface Props {
   level: number;
 }
 
-const Topics: FC<Props> = (props) => {
+const TopicPostTrees: FC<Props> = (props) => {
   const { level, postIdsArray } = props;
 
   if (!postIdsArray || postIdsArray?.length === 0) return null;
@@ -25,10 +25,17 @@ const Topics: FC<Props> = (props) => {
             />
           );
         }
+
+        if (arrayContent.length === 0) return null;
+
+        const topicPostTreesKey =
+          typeof arrayContent[0] === 'number'
+            ? `post_tree_node_${arrayContent[0]}_level_${level}`
+            : `post_tree_node_children_level_${level}`;
+
         return (
-          <Topics
-            // The first member of the nested array will always be number
-            key={`topic_${postIdsArray[0][0] as number}`}
+          <TopicPostTrees
+            key={topicPostTreesKey}
             level={level + 1}
             postIdsArray={arrayContent}
           />
@@ -38,4 +45,4 @@ const Topics: FC<Props> = (props) => {
   );
 };
 
-export default Topics;
+export default TopicPostTrees;
