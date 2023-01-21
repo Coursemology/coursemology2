@@ -1,0 +1,123 @@
+import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { defineMessages } from 'react-intl';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
+import { Button } from '@mui/material';
+import { ForumTopicPostEntity } from 'types/course/forums';
+import { AppDispatch } from 'types/store';
+
+import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
+import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
+
+import { updateForumTopicPost } from '../../operations';
+
+interface Props {
+  post: ForumTopicPostEntity;
+  editValue: string;
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
+}
+
+const translations = defineMessages({
+  emptyPost: {
+    id: 'course.forum.ForumTopicPostEditActionButtons.emptyPost',
+    defaultMessage: 'Post cannot be empty!',
+  },
+  updateSuccess: {
+    id: 'course.forum.ForumTopicPostEditActionButtons.updateSuccess',
+    defaultMessage: 'The post has been updated.',
+  },
+  updateFailure: {
+    id: 'course.forum.ForumTopicPostEditActionButtons.updateFailure',
+    defaultMessage: 'Failed to update the post - {error}',
+  },
+  discardEditPostPromptTitle: {
+    id: 'course.forum.ForumTopicPostEditActionButtons.discardEditPostPromptTitle',
+    defaultMessage: 'Discard unsaved changes?',
+  },
+  discardEditPostPromptMessage: {
+    id: 'course.forum.ForumTopicPostEditActionButtons.discardEditPostPromptMessage',
+    defaultMessage:
+      'You have edited this post and there are unsaved changes. Do you wish to proceed?',
+  },
+  discardEditPostPromptAction: {
+    id: 'course.forum.ForumTopicPostEditActionButtons.discardEditPostPromptAction',
+    defaultMessage: 'Discard',
+  },
+});
+
+const ForumTopicPostEditActionButtons: FC<Props> = (props) => {
+  const { post, editValue, setIsEditing } = props;
+  const [discardEditPrompt, setDiscardEditPrompt] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
+
+  const handleUpdate = (): void => {
+    dispatch(updateForumTopicPost(post.postUrl, editValue))
+      .then(() => {
+        toast.success(t(translations.updateSuccess));
+        setIsEditing(false);
+      })
+      .catch((error) => {
+        const errorMessage = error.response?.data?.errors ?? '';
+        toast.error(
+          t(translations.updateFailure, {
+            error: errorMessage,
+          }),
+        );
+      });
+  };
+
+  const handleSaveUpdate = (): void => {
+    if (editValue.trim() === '') {
+      toast.error(t(translations.emptyPost));
+      return;
+    }
+    if (editValue === post.text) {
+      setIsEditing(false);
+    } else {
+      handleUpdate();
+    }
+  };
+
+  return (
+    <>
+      <Button
+        color="secondary"
+        id={`post_${post.id}`}
+        onClick={(): void => {
+          if (editValue === post.text) setIsEditing(false);
+          else setDiscardEditPrompt(true);
+        }}
+      >
+        {t(formTranslations.cancel)}
+      </Button>
+
+      <Button
+        className="save-button"
+        color="primary"
+        disabled={editValue === post.text}
+        id={`post_${post.id}`}
+        onClick={handleSaveUpdate}
+      >
+        {t(formTranslations.save)}
+      </Button>
+
+      <Prompt
+        onClickPrimary={(): void => {
+          setIsEditing(false);
+          setDiscardEditPrompt(false);
+        }}
+        onClose={(): void => setDiscardEditPrompt(false)}
+        open={discardEditPrompt}
+        primaryColor="error"
+        primaryLabel={t(translations.discardEditPostPromptAction)}
+        title={t(translations.discardEditPostPromptTitle)}
+      >
+        <PromptText>{t(translations.discardEditPostPromptMessage)}</PromptText>
+      </Prompt>
+    </>
+  );
+};
+
+export default ForumTopicPostEditActionButtons;

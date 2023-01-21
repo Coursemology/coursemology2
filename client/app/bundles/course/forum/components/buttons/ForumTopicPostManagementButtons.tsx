@@ -19,6 +19,7 @@ interface Props {
   post: ForumTopicPostEntity;
   handleEdit: () => void;
   handleReply: () => void;
+  isEditing: boolean;
   disabled?: boolean;
 }
 
@@ -38,7 +39,7 @@ const translations = defineMessages({
 });
 
 const ForumTopicPostManagementButtons: FC<Props> = (props) => {
-  const { post, handleEdit, handleReply, disabled } = props;
+  const { post, handleEdit, handleReply, isEditing, disabled } = props;
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -56,7 +57,6 @@ const ForumTopicPostManagementButtons: FC<Props> = (props) => {
           navigate(`/courses/${getCourseId()}/forums/${forumId}`);
         } else {
           setIsDeleting(false);
-          window.location.reload();
         }
       })
       .catch((error) => {
@@ -77,16 +77,19 @@ const ForumTopicPostManagementButtons: FC<Props> = (props) => {
       {post.parentId === null && post.permissions.canReplyPost && (
         <ReplyButton
           className={`post-reply-${post.id}`}
+          disabled={disableButton}
           handleClick={handleReply}
         />
       )}
+
       {post.permissions.canEditPost && (
         <EditButton
           className={`post-edit-${post.id}`}
-          disabled={disableButton}
+          disabled={disableButton || isEditing}
           onClick={handleEdit}
         />
       )}
+
       {post.permissions.canDeletePost && (
         <DeleteButton
           className={`post-delete-${post.id}`}
