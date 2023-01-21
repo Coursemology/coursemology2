@@ -59,7 +59,9 @@ export default class PostsAPI extends BaseCourseAPI {
   /**
    * Mark/unmark a post as an answer.
    */
-  toggleAnswer(urlSlug: string): Promise<AxiosResponse> {
+  toggleAnswer(
+    urlSlug: string,
+  ): Promise<AxiosResponse<{ isTopicResolved: boolean }>> {
     return this.getClient().put(`${urlSlug}/toggle_answer`);
   }
 
