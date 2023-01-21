@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 json.partial! 'user_list_data', course_user: course_user, should_show_timeline: should_show_timeline
 
-if can?(:manage, Course::UserEmailUnsubscription.new(course_user: course_user))
-  json.manageEmailSubscriptionUrl course_user_manage_email_subscription_path(current_course, @course_user)
-end
-
 is_student_and_gamified = current_course.gamified? && course_user.student?
 can_read_progress = can?(:read, Course::ExperiencePointsRecord.new(course_user: course_user))
 
