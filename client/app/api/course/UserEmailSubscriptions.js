@@ -6,9 +6,10 @@ export default class UserEmailSubscriptionsAPI extends BaseCourseAPI {
    *
    * @return {Promise}
    */
-  fetch() {
+  fetch(params) {
     return this.getClient().get(
       `${this._getUrlPrefix()}/manage_email_subscription`,
+      { params },
     );
   }
 

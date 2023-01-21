@@ -182,7 +182,10 @@ class UserEmailSubscriptions extends Component {
         </h2>
         {this.renderEmailSettingsTable()}
         {!this.props.userEmailSubscriptionsPageFilter.show_all_settings && (
-          <a onClick={this.handleFetchAllUserEmailSubscriptions}>
+          <a
+            className="cursor-pointer"
+            onClick={this.handleFetchAllUserEmailSubscriptions}
+          >
             <FormattedMessage
               {...translations.viewAllEmailSubscriptionSettings}
             />
