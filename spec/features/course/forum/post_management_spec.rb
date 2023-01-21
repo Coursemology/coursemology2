@@ -94,12 +94,9 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         find("button.post-reply-#{post.id}").click
 
         # Reply a post with empty content.
-        find('.reply-button').click
+        expect(find('.reply-button')).to be_disabled
 
         expect(page).not_to have_content('Anonymous post')
-
-        # Disabled as flaky
-        # expect_toastify('Post cannot be empty!')
 
         # Reply a post with the default title.
         fill_in_react_ck "textarea[name=postReplyText_#{post.id}]", 'test'
@@ -162,25 +159,19 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         visit course_forum_topic_path(course, forum, topic)
         # Mark as answer
         within find("div.post_#{post.id}") do
-          find('svg[data-testId="CheckCircleOutlineIcon"]').find(:xpath, '..').click
+          find('span', text: 'Mark as answer').find(:xpath, '../..').click
+          expect(page).to have_selector('span', text: 'Unmark as answer')
         end
-        expect_toastify('The post has been updated.')
         expect(post.reload).to be_answer
         expect(topic.reload).to be_resolved
-        within find("div.post_#{post.id}") do
-          expect(page).to have_selector('div.bg-green-100')
-        end
 
         # Unmark as answer
         within find("div.post_#{post.id}") do
-          find('svg[data-testId="CheckCircleIcon"]').find(:xpath, '..').click
+          find('span', text: 'Unmark as answer').find(:xpath, '../..').click
+          expect(page).to have_selector('span', text: 'Mark as answer')
         end
-        expect_toastify('The post has been updated.')
         expect(post.reload).not_to be_answer
         expect(topic.reload).not_to be_resolved
-        within find("div.post_#{post.id}") do
-          expect(page).to have_no_selector('div.bg-green-100')
-        end
       end
 
       scenario 'When anonymous post is not allowed and there are anonymous posts, I can see the authors' do

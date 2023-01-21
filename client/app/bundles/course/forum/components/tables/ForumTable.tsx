@@ -99,21 +99,23 @@ const ForumTable: FC<Props> = (props) => {
             <>
               {/* Abstract the following */}
               <div className="flex flex-col items-start justify-between xl:flex-row xl:items-center">
-                <CustomBadge badgeContent={forum.topicUnreadCount} color="info">
-                  <label
-                    className="m-0 flex flex-row font-normal"
-                    title={forum.name}
+                <label
+                  className="m-0 flex flex-row space-x-4 font-normal"
+                  title={forum.name}
+                >
+                  <Link
+                    key={forum.id}
+                    // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
+                    className="line-clamp-2 xl:line-clamp-1"
+                    to={forum.forumUrl}
                   >
-                    <Link
-                      key={forum.id}
-                      // TODO: Change to lg:line-clamp-1 once the current sidebar is gone
-                      className="line-clamp-2 xl:line-clamp-1"
-                      to={forum.forumUrl}
-                    >
-                      {forum.name}
-                    </Link>
-                  </label>
-                </CustomBadge>
+                    {forum.name}
+                  </Link>
+                  <CustomBadge
+                    badgeContent={forum.topicUnreadCount}
+                    color="info"
+                  />
+                </label>
                 <div className="flex items-center space-x-2 max-xl:mt-2 xl:ml-2">
                   {forum.isUnresolved && (
                     <Tooltip
