@@ -21,7 +21,7 @@ import DataTable from 'lib/components/core/layouts/DataTable';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import {
   DEFAULT_TABLE_ROWS_PER_PAGE,
-  FIELD_DEBOUNCE_DELAY,
+  FIELD_DEBOUNCE_DELAY_MS,
   USER_ROLES,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
@@ -175,7 +175,7 @@ const UsersTable: FC<Props> = (props) => {
 
   const options: TableOptions = {
     count: tableState.count,
-    customSearchRender: debounceSearchRender(FIELD_DEBOUNCE_DELAY),
+    customSearchRender: debounceSearchRender(FIELD_DEBOUNCE_DELAY_MS),
     download: false,
     filter: false,
     jumpToPage: true,
