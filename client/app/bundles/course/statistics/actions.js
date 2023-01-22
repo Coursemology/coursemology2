@@ -27,6 +27,7 @@ export function fetchStudentsStatistics(failureMessage) {
               10,
             ),
             hasGroupManagers: response.data.metadata.hasGroupManagers,
+            hasMyStudents: response.data.metadata.hasMyStudents,
           },
         });
       })

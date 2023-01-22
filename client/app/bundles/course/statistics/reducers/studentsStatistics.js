@@ -9,6 +9,7 @@ const initialState = {
     hasGroupManagers: false,
     showVideo: false,
     courseVideoCount: 0,
+    hasMyStudents: false,
   },
 };
 
@@ -29,6 +30,7 @@ export default function (state = initialState, action) {
           showVideo: action.metadata.showVideo,
           courseVideoCount: action.metadata.courseVideoCount,
           hasGroupManagers: action.metadata.hasGroupManagers,
+          hasMyStudents: action.metadata.hasMyStudents,
         },
       };
     }
