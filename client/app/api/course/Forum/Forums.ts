@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios';
 import { ForumDisbursementPostData } from 'types/course/disbursement';
 import {
   ForumData,
@@ -11,6 +10,8 @@ import {
   ForumTopicListData,
 } from 'types/course/forums';
 
+import { APIResponse } from 'api/types';
+
 import BaseCourseAPI from '../Base';
 
 export default class ForumsAPI extends BaseCourseAPI {
@@ -21,13 +22,11 @@ export default class ForumsAPI extends BaseCourseAPI {
   /**
    * Fetches an array of forums.
    */
-  index(): Promise<
-    AxiosResponse<{
-      forums: ForumListData[];
-      metadata: ForumMetadata;
-      permissions: ForumPermissions;
-    }>
-  > {
+  index(): APIResponse<{
+    forums: ForumListData[];
+    metadata: ForumMetadata;
+    permissions: ForumPermissions;
+  }> {
     return this.getClient().get(this._getUrlPrefix());
   }
 
@@ -36,43 +35,35 @@ export default class ForumsAPI extends BaseCourseAPI {
    */
   fetch(
     forumId: string,
-  ): Promise<
-    AxiosResponse<{ forum: ForumData; topics: ForumTopicListData[] }>
-  > {
+  ): APIResponse<{ forum: ForumData; topics: ForumTopicListData[] }> {
     return this.getClient().get(`${this._getUrlPrefix()}/${forumId}`);
   }
 
   /**
    * Creates a new forum.
    */
-  create(params: ForumPostData): Promise<AxiosResponse<ForumListData>> {
+  create(params: ForumPostData): APIResponse<ForumListData> {
     return this.getClient().post(this._getUrlPrefix(), params);
   }
 
   /**
    * Updates an existing forum.
    */
-  update(
-    forumId: number,
-    params: ForumPatchData,
-  ): Promise<AxiosResponse<ForumListData>> {
+  update(forumId: number, params: ForumPatchData): APIResponse<ForumListData> {
     return this.getClient().patch(`${this._getUrlPrefix()}/${forumId}`, params);
   }
 
   /**
    * Deletes an existing forum.
    */
-  delete(forumId: number): Promise<AxiosResponse> {
+  delete(forumId: number): APIResponse {
     return this.getClient().delete(`${this._getUrlPrefix()}/${forumId}`);
   }
 
   /**
    * Update the subscription of a forum.
    */
-  updateSubscription(
-    url: string,
-    isCurrentlySubscribed: boolean,
-  ): Promise<AxiosResponse> {
+  updateSubscription(url: string, isCurrentlySubscribed: boolean): APIResponse {
     if (isCurrentlySubscribed) {
       return this.getClient().delete(`${url}/unsubscribe`);
     }
@@ -82,7 +73,7 @@ export default class ForumsAPI extends BaseCourseAPI {
   /**
    * Mark all topics as read in a forum.
    */
-  markAllAsRead(): Promise<void> {
+  markAllAsRead(): APIResponse {
     return this.getClient().patch(`${this._getUrlPrefix()}/mark_all_as_read`);
   }
 
@@ -91,7 +82,7 @@ export default class ForumsAPI extends BaseCourseAPI {
    */
   markAsRead(
     forumId: number,
-  ): Promise<AxiosResponse<{ nextUnreadTopicUrl: string | null }>> {
+  ): APIResponse<{ nextUnreadTopicUrl: string | null }> {
     return this.getClient().patch(
       `${this._getUrlPrefix()}/${forumId}/mark_as_read`,
     );
@@ -102,7 +93,7 @@ export default class ForumsAPI extends BaseCourseAPI {
    */
   search(
     params: ForumSearchParams,
-  ): Promise<AxiosResponse<{ userPosts: ForumDisbursementPostData[] }>> {
+  ): APIResponse<{ userPosts: ForumDisbursementPostData[] }> {
     return this.getClient().get(`${this._getUrlPrefix()}/search`, params);
   }
 }

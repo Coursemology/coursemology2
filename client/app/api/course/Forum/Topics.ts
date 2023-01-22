@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios';
 import { RecursiveArray } from 'types';
 import {
   ForumTopicData,
@@ -7,6 +6,8 @@ import {
   ForumTopicPostData,
   ForumTopicPostListData,
 } from 'types/course/forums';
+
+import { APIResponse } from 'api/types';
 
 import BaseCourseAPI from '../Base';
 
@@ -21,14 +22,12 @@ export default class TopicsAPI extends BaseCourseAPI {
   fetch(
     forumId: string,
     topicId: string,
-  ): Promise<
-    AxiosResponse<{
-      topic: ForumTopicData;
-      postTreeIds: RecursiveArray<number>;
-      nextUnreadTopicUrl: string | null;
-      posts: ForumTopicPostListData[];
-    }>
-  > {
+  ): APIResponse<{
+    topic: ForumTopicData;
+    postTreeIds: RecursiveArray<number>;
+    nextUnreadTopicUrl: string | null;
+    posts: ForumTopicPostListData[];
+  }> {
     return this.getClient().get(
       `${this._getUrlPrefix()}/${forumId}/topics/${topicId}`,
     );
@@ -40,11 +39,7 @@ export default class TopicsAPI extends BaseCourseAPI {
   create(
     forumId: string,
     params: ForumTopicPostData,
-  ): Promise<
-    AxiosResponse<{
-      redirectUrl: string;
-    }>
-  > {
+  ): APIResponse<{ redirectUrl: string }> {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${forumId}/topics`,
       params,
@@ -57,14 +52,14 @@ export default class TopicsAPI extends BaseCourseAPI {
   update(
     urlSlug: string,
     params: ForumTopicPatchData,
-  ): Promise<AxiosResponse<ForumTopicListData>> {
+  ): APIResponse<ForumTopicListData> {
     return this.getClient().patch(`${urlSlug}`, params);
   }
 
   /**
    * Deletes an existing topic.
    */
-  delete(urlSlug: string): Promise<AxiosResponse> {
+  delete(urlSlug: string): APIResponse {
     return this.getClient().delete(urlSlug);
   }
 
@@ -74,7 +69,7 @@ export default class TopicsAPI extends BaseCourseAPI {
   updateSubscription(
     urlSlug: string,
     isCurrentlySubscribed: boolean,
-  ): Promise<AxiosResponse> {
+  ): APIResponse {
     if (isCurrentlySubscribed) {
       return this.getClient().delete(`${urlSlug}/subscribe`, {
         params: {
@@ -90,10 +85,7 @@ export default class TopicsAPI extends BaseCourseAPI {
   /**
    * Update the hidden status of a topic.
    */
-  updateHidden(
-    urlSlug: string,
-    isCurrentlyHidden: boolean,
-  ): Promise<AxiosResponse> {
+  updateHidden(urlSlug: string, isCurrentlyHidden: boolean): APIResponse {
     return this.getClient().patch(`${urlSlug}/hidden`, {
       hidden: !isCurrentlyHidden,
     });
@@ -102,10 +94,7 @@ export default class TopicsAPI extends BaseCourseAPI {
   /**
    * Update the locked status of a topic.
    */
-  updateLocked(
-    urlSlug: string,
-    isCurrentlyLocked: boolean,
-  ): Promise<AxiosResponse> {
+  updateLocked(urlSlug: string, isCurrentlyLocked: boolean): APIResponse {
     return this.getClient().patch(`${urlSlug}/locked`, {
       locked: !isCurrentlyLocked,
     });
