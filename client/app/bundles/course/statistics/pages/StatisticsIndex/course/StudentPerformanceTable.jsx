@@ -6,7 +6,6 @@ import {
   CardContent,
   FormControlLabel,
   FormGroup,
-  LinearProgress,
   Slider,
   Switch,
   Typography,
@@ -16,6 +15,7 @@ import equal from 'fast-deep-equal';
 import PropTypes from 'prop-types';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import Link from 'lib/components/core/Link';
 
 import { studentShape } from '../../../propTypes/course';
@@ -139,26 +139,6 @@ const styles = {
     marginRight: '2rem',
     whiteSpace: 'pre',
   },
-};
-
-const LinearProgressWithLabel = (props) => (
-  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-    <Box sx={{ width: '100%', mr: 1 }}>
-      <LinearProgress variant="determinate" {...props} />
-    </Box>
-    <Box sx={{ minWidth: 35 }}>
-      <Typography color="text.secondary" variant="body2">{`${Math.round(
-        props.value ?? 0,
-      )}%`}</Typography>
-    </Box>
-  </Box>
-);
-
-LinearProgressWithLabel.propTypes = {
-  /**
-   * Value between 0 and 100.
-   */
-  value: PropTypes.number,
 };
 
 const StudentPerformanceTable = ({
