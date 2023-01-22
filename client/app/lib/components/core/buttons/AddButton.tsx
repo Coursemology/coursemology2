@@ -7,16 +7,17 @@ interface AddButtonProps extends IconButtonProps {
 }
 
 const AddButton = (props: AddButtonProps): JSX.Element => {
+  const { tooltip, ...otherProps } = props;
   const button = (
-    <IconButton color="inherit" {...props}>
+    <IconButton color="inherit" {...otherProps}>
       <AddBoxOutlined />
     </IconButton>
   );
 
-  if (!props.tooltip) return button;
+  if (!tooltip) return button;
 
   return (
-    <Tooltip title={props.tooltip}>
+    <Tooltip title={tooltip}>
       <span>{button}</span>
     </Tooltip>
   );
