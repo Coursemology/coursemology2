@@ -1,4 +1,3 @@
-import { AxiosResponse } from 'axios';
 import {
   ForumFormData,
   ForumTopicFormData,
@@ -150,11 +149,7 @@ export function fetchForumTopic(
 export function createForumTopic(
   forumId: string,
   topicFormData: ForumTopicFormData,
-): Operation<
-  AxiosResponse<{
-    redirectUrl: string;
-  }>
-> {
+): Operation<{ redirectUrl: string }> {
   const ForumTopicPostData = {
     topic: {
       title: topicFormData.title,
@@ -165,8 +160,10 @@ export function createForumTopic(
       ],
     },
   };
-  return async (_) =>
-    CourseAPI.forum.topics.create(forumId, ForumTopicPostData);
+  return async () =>
+    CourseAPI.forum.topics
+      .create(forumId, ForumTopicPostData)
+      .then((response) => response.data);
 }
 
 export function updateForumTopic(

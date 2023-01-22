@@ -1,9 +1,10 @@
-import { AxiosResponse } from 'axios';
 import { RecursiveArray } from 'types';
 import {
   ForumTopicPostListData,
   ForumTopicPostPostData,
 } from 'types/course/forums';
+
+import { APIResponse } from 'api/types';
 
 import BaseCourseAPI from '../Base';
 
@@ -19,12 +20,10 @@ export default class PostsAPI extends BaseCourseAPI {
     forumId: string,
     topicId: string,
     discussionPost: ForumTopicPostPostData,
-  ): Promise<
-    AxiosResponse<{
-      post: ForumTopicPostListData;
-      postTreeIds: RecursiveArray<number>;
-    }>
-  > {
+  ): APIResponse<{
+    post: ForumTopicPostListData;
+    postTreeIds: RecursiveArray<number>;
+  }> {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${forumId}/topics/${topicId}/posts`,
       discussionPost,
@@ -37,7 +36,7 @@ export default class PostsAPI extends BaseCourseAPI {
   update(
     urlSlug: string,
     postText: string,
-  ): Promise<AxiosResponse<ForumTopicPostListData>> {
+  ): APIResponse<ForumTopicPostListData> {
     return this.getClient().patch(`${urlSlug}`, {
       discussion_post: { text: postText },
     });
@@ -46,32 +45,25 @@ export default class PostsAPI extends BaseCourseAPI {
   /**
    * Deletes an existing post.
    */
-  delete(urlSlug: string): Promise<
-    AxiosResponse<{
-      isTopicDeleted?: boolean;
-      topicId: number;
-      postTreeIds: RecursiveArray<number>;
-    }>
-  > {
+  delete(urlSlug: string): APIResponse<{
+    isTopicDeleted?: boolean;
+    topicId: number;
+    postTreeIds: RecursiveArray<number>;
+  }> {
     return this.getClient().delete(urlSlug);
   }
 
   /**
    * Mark/unmark a post as an answer.
    */
-  toggleAnswer(
-    urlSlug: string,
-  ): Promise<AxiosResponse<{ isTopicResolved: boolean }>> {
+  toggleAnswer(urlSlug: string): APIResponse<{ isTopicResolved: boolean }> {
     return this.getClient().put(`${urlSlug}/toggle_answer`);
   }
 
   /**
    * Upvote/downvote an existing post.
    */
-  vote(
-    urlSlug: string,
-    vote: -1 | 0 | 1,
-  ): Promise<AxiosResponse<ForumTopicPostListData>> {
+  vote(urlSlug: string, vote: -1 | 0 | 1): APIResponse<ForumTopicPostListData> {
     return this.getClient().put(`${urlSlug}/vote`, {
       vote,
     });
