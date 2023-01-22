@@ -46,6 +46,7 @@ const processTheme = (theme, newHeight, grid, alignCenter, newPadding) =>
             display: grid ? 'grid' : 'flex',
             alignContent: alignCenter ? 'center' : 'inherit',
             width: '100%',
+            height: '100%',
           },
         },
       },
