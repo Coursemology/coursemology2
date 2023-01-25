@@ -43,7 +43,6 @@ const translations = defineMessages({
 const groupRoleTranslation = {
   normal: 'Member',
   manager: 'Manager',
-  unknown: 'Unknown',
 };
 
 const translateStatus = (oldStatus) => {
@@ -86,6 +85,8 @@ const styles = {
     marginBottom: 5,
   },
   listItemTextSize: {
+    display: 'flex',
+    alignItems: 'center',
     fontSize: 13,
   },
   listItemLabel: {
@@ -103,7 +104,16 @@ const styles = {
 };
 
 const GroupUserManagerListItemChoice = ({ user, onChangeDropdown }) =>
-  user.role !== 'student' ? (
+  user.role === 'student' ? (
+    <Chip
+      label={translateStatus(user.groupRole)}
+      style={{
+        width: 100,
+        backgroundColor: palette.groupRole[user.groupRole],
+        marginRight: 5,
+      }}
+    />
+  ) : (
     <div style={styles.listItemWithDropdown}>
       <Select
         onChange={(event) => onChangeDropdown(event.target.value, user)}
@@ -120,15 +130,6 @@ const GroupUserManagerListItemChoice = ({ user, onChangeDropdown }) =>
         </MenuItem>
       </Select>
     </div>
-  ) : (
-    <Chip
-      label={translateStatus(user.groupRole)}
-      style={{
-        width: 100,
-        backgroundColor: palette.groupRole[user.groupRole],
-        marginRight: 5,
-      }}
-    />
   );
 
 GroupUserManagerListItemChoice.propTypes = {
@@ -163,8 +164,8 @@ const GroupUserManagerListItem = ({
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
         {user.name}
-        {user.isPhantom ? <GhostIcon /> : ''}
-        {otherGroups ? ` (also a member of${otherGroups})` : ''}
+        {user.isPhantom && <GhostIcon />}
+        {otherGroups && ` (also a member of${otherGroups})` }
       </ListItemText>
     </div>
 
@@ -197,7 +198,7 @@ const GroupUserManagerList = ({
   onChangeDropdown,
   isChecked = false,
 }) => {
-  const renderUsersListItems = (users, members, title) => (
+  const renderUsersListItems = (users, title) => (
     <>
       <ListSubheader style={styles.listSubheader}>
         <Checkbox
@@ -240,12 +241,11 @@ const GroupUserManagerList = ({
       {students.length > 0 &&
         renderUsersListItems(
           students,
-          memberOtherGroups,
           translations.students,
         )}
 
       {staff.length > 0 &&
-        renderUsersListItems(staff, memberOtherGroups, translations.staff)}
+        renderUsersListItems(staff, translations.staff)}
     </List>
   );
 };

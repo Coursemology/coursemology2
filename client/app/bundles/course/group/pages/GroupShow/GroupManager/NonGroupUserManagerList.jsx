@@ -17,23 +17,23 @@ import { nonMemberShape } from '../../../propTypes';
 
 const translations = defineMessages({
   normal: {
-    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.normal',
+    id: 'course.group.GroupShow.GroupManager.NonGroupUserManagerList.normal',
     defaultMessage: 'Member',
   },
   manager: {
-    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.manager',
+    id: 'course.group.GroupShow.GroupManager.NonGroupUserManagerList.manager',
     defaultMessage: 'Manager',
   },
   noUsersFound: {
-    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.noUsersFound',
+    id: 'course.group.GroupShow.GroupManager.NonGroupUserManagerList.noUsersFound',
     defaultMessage: 'No users found',
   },
   students: {
-    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.students',
+    id: 'course.group.GroupShow.GroupManager.NonGroupUserManagerList.students',
     defaultMessage: 'Students',
   },
   staff: {
-    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.staff',
+    id: 'course.group.GroupShow.GroupManager.NonGroupUserManagerList.staff',
     defaultMessage: 'Staff',
   },
 });
@@ -67,6 +67,8 @@ const styles = {
     marginBottom: 5,
   },
   listItemTextSize: {
+    display: 'flex',
+    alignItems: 'center',
     fontSize: 13,
   },
   listItemLabel: {
@@ -110,8 +112,8 @@ const NonGroupUserManagerListItem = ({
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
         {user.name}
-        {user.isPhantom ? <GhostIcon /> : ''}
-        {otherGroups ? ` (also a member of${otherGroups})` : ''}
+        {user.isPhantom && <GhostIcon /> }
+        {otherGroups && ` (also a member of${otherGroups})`}
       </ListItemText>
     </div>
 
@@ -156,7 +158,7 @@ const NonGroupUserManagerList = ({
   onChangeDropdown,
   isChecked = false,
 }) => {
-  const renderUsersListItems = (users, members, title) => (
+  const renderUsersListItems = (users, title) => (
     <>
       <ListSubheader style={styles.listSubheader}>
         <Checkbox
@@ -199,12 +201,11 @@ const NonGroupUserManagerList = ({
       {students.length > 0 &&
         renderUsersListItems(
           students,
-          memberOtherGroups,
           translations.students,
         )}
 
       {staff.length > 0 &&
-        renderUsersListItems(staff, memberOtherGroups, translations.staff)}
+        renderUsersListItems(staff, translations.staff)}
     </List>
   );
 };

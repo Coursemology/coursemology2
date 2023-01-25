@@ -44,7 +44,7 @@ const translations = defineMessages({
       'This group has no members! Manage groups to assign members now!',
   },
   manageOneGroup: {
-    id: 'course.group.GroupShow.CategoryCard.manageOne',
+    id: 'course.group.GroupShow.CategoryCard.manageOneGroup',
     defaultMessage: 'Edit Group',
   },
   hidePhantomStudents: {
@@ -113,6 +113,16 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
       title={group.name}
       titleButtons={titleButton}
     >
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={hidePhantomStudents}
+            onChange={(_, checked) => setHidePhantomStudents(checked)}
+          />
+        }
+        label={<FormattedMessage {...translations.hidePhantomStudents} />}
+        style={styles.checkbox}
+      />
       <Table>
         <TableHead>
           <TableRow style={styles.rowHeight}>
@@ -134,7 +144,7 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
               <TableCell style={styles.rowHeight}>
                 <div className="flex grow">
                   {m.name}
-                  {m.isPhantom ? <GhostIcon /> : ''}
+                  {m.isPhantom && <GhostIcon />}
                 </div>
               </TableCell>
               <TableCell style={styles.rowHeight}>
@@ -158,16 +168,6 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
           <FormattedMessage {...translations.noMembers} />
         </div>
       ) : null}
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={hidePhantomStudents}
-            onChange={(_, checked) => setHidePhantomStudents(checked)}
-          />
-        }
-        label={<FormattedMessage {...translations.hidePhantomStudents} />}
-        style={styles.checkbox}
-      />
     </GroupCard>
   );
 };

@@ -69,7 +69,6 @@ const CategoryCard = ({
   onManageGroups,
   dispatch,
   canManageCategory,
-  canManageGroups,
 }) => {
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
@@ -153,7 +152,6 @@ const CategoryCard = ({
     onManageGroups,
     setIsConfirmingDelete,
     canManageCategory,
-    canManageGroups,
   ]);
   const [isDirty, setIsDirty] = useState(false);
 
@@ -214,7 +212,6 @@ CategoryCard.propTypes = {
   numGroups: PropTypes.number.isRequired,
   onManageGroups: PropTypes.func.isRequired,
   canManageCategory: PropTypes.bool.isRequired,
-  canManageGroups: PropTypes.bool.isRequired,
   intl: PropTypes.object,
 };
 
