@@ -37,6 +37,10 @@ const translations = defineMessages({
     id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.staff',
     defaultMessage: 'Staff',
   },
+  otherGroupMembers: {
+    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.otherGroupMembers',
+    defaultMessage: '(also a group member of {groups})',
+  },
 });
 
 const styles = {
@@ -148,8 +152,13 @@ const GroupUserManagerListItem = ({
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
         {user.name}
-        {user.isPhantom && <GhostIcon />}
-        {otherGroups && ` (also a member of${otherGroups})` }
+        {user.isPhantom ? <GhostIcon /> : "\u00a0"}
+        {otherGroups && 
+          <FormattedMessage 
+            {...translations.otherGroupMembers}
+            values={{groups: otherGroups.join(", ")}}
+          />
+        }
       </ListItemText>
     </div>
     
