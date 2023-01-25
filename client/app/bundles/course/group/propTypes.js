@@ -25,20 +25,7 @@ export const memberShape = PropTypes.shape({
     'observer',
   ]).isRequired,
   isPhantom: PropTypes.bool.isRequired,
-  groupRole: PropTypes.oneOf(['manager', 'normal']).isRequired,
-});
-
-export const nonMemberShape = PropTypes.shape({
-  id: PropTypes.number.isRequired, // same as course user ID
-  name: PropTypes.string.isRequired,
-  role: PropTypes.oneOf([
-    'owner',
-    'manager',
-    'student',
-    'teaching_assistant',
-    'observer',
-  ]).isRequired,
-  isPhantom: PropTypes.bool.isRequired,
+  groupRole: PropTypes.oneOf(['manager', 'normal']),
 });
 
 export const groupShape = PropTypes.shape({
