@@ -2,7 +2,6 @@ import { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Checkbox,
-  Chip,
   FormControlLabel,
   Table,
   TableBody,
@@ -12,11 +11,11 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
-import palette from 'theme/palette';
 
 import GhostIcon from 'lib/components/icons/GhostIcon';
 
 import GroupCard from '../../components/GroupCard';
+import GroupRoleChip from '../../components/GroupRoleChip';
 import { groupShape } from '../../propTypes';
 import { sortByGroupRole, sortByName, sortByPhantom } from '../../utils/sort';
 
@@ -53,23 +52,6 @@ const translations = defineMessages({
   },
 });
 
-const groupRoleTranslation = {
-  normal: 'Member',
-  manager: 'Manager',
-  unknown: 'Unknown',
-};
-
-const translateStatus = (oldStatus) => {
-  switch (oldStatus) {
-    case 'normal':
-      return groupRoleTranslation.normal;
-    case 'manager':
-      return groupRoleTranslation.manager;
-    default:
-      return groupRoleTranslation.unknown;
-  }
-};
-
 const styles = {
   empty: {
     paddingTop: '2rem',
@@ -81,8 +63,8 @@ const styles = {
   },
 };
 
-const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
-  const [hidePhantomStudents, setHidePhantomStudents] = useState(false);
+const GroupTableCard = ({ group, onManageGroup, canManageCategory }) => {
+  const [hidePhantomStudents, setHidePhantomStudents] = useState(true);
 
   let members = [...group.members];
   if (hidePhantomStudents) {
@@ -96,11 +78,11 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
     if (canManageCategory) {
       result.push({
         label: <FormattedMessage {...translations.manageOneGroup} />,
-        onClick: onManageGroups,
+        onClick: onManageGroup,
       });
     }
     return result;
-  }, [onManageGroups, canManageCategory]);
+  }, [onManageGroup, canManageCategory]);
 
   return (
     <GroupCard
@@ -142,21 +124,14 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
             <TableRow key={m.id} style={styles.rowHeight}>
               <TableCell style={styles.rowHeight}>{index + 1}</TableCell>
               <TableCell style={styles.rowHeight}>
-                <div className="flex grow">
+                <div className="flex items-center grow">
                   {m.name}
                   {m.isPhantom && <GhostIcon />}
                 </div>
               </TableCell>
               <TableCell style={styles.rowHeight}>
-                <Chip
-                  label={translateStatus(m.groupRole)}
-                  style={{
-                    width: 100,
-                    height: 23,
-                    backgroundColor: palette.groupRole[m.groupRole],
-                    marginTop: 0,
-                    marginBottom: 0,
-                  }}
+                <GroupRoleChip 
+                  user={m}
                 />
               </TableCell>
             </TableRow>
@@ -174,7 +149,7 @@ const GroupTableCard = ({ group, onManageGroups, canManageCategory }) => {
 
 GroupTableCard.propTypes = {
   group: groupShape.isRequired,
-  onManageGroups: PropTypes.func.isRequired,
+  onManageGroup: PropTypes.func.isRequired,
   canManageCategory: PropTypes.bool.isRequired,
 };
 

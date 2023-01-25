@@ -18,7 +18,6 @@ import { courseUserShape, groupShape } from '../../../propTypes';
 import { sortByGroupRole, sortByName } from '../../../utils/sort';
 
 import GroupUserManagerList from './GroupUserManagerList';
-import NonGroupUserManagerList from './NonGroupUserManagerList';
 
 const translations = defineMessages({
   updateSuccess: {
@@ -197,7 +196,7 @@ const GroupUserManager = ({
   const [availableSearch, setAvailableSearch] = useState('');
   const [selectedSearch, setSelectedSearch] = useState('');
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
-  const [hidePhantomStudent, setHidePhantomStudent] = useState(false);
+  const [hidePhantomStudent, setHidePhantomStudent] = useState(true);
 
   const availableUsers = useMemo(
     () =>
@@ -468,8 +467,9 @@ const GroupUserManager = ({
               value={availableSearch}
               variant="standard"
             />
-            <NonGroupUserManagerList
+            <GroupUserManagerList
               colourMap={colours}
+              isOutsideGroup
               memberOtherGroups={availableUsersInOtherGroups}
               onCheck={onCheck}
               staff={availableStaff}

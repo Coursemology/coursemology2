@@ -1,7 +1,6 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Checkbox,
-  Chip,
   List,
   ListItem,
   ListItemText,
@@ -11,8 +10,8 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
-import palette from 'theme/palette';
 
+import GroupRoleChip from 'course/group/components/GroupRoleChip';
 import GhostIcon from 'lib/components/icons/GhostIcon';
 
 import { memberShape } from '../../../propTypes';
@@ -39,22 +38,6 @@ const translations = defineMessages({
     defaultMessage: 'Staff',
   },
 });
-
-const groupRoleTranslation = {
-  normal: 'Member',
-  manager: 'Manager',
-};
-
-const translateStatus = (oldStatus) => {
-  switch (oldStatus) {
-    case 'normal':
-      return groupRoleTranslation.normal;
-    case 'manager':
-      return groupRoleTranslation.manager;
-    default:
-      return groupRoleTranslation.unknown;
-  }
-};
 
 const styles = {
   list: {
@@ -103,36 +86,36 @@ const styles = {
   },
 };
 
-const GroupUserManagerListItemChoice = ({ user, onChangeDropdown }) =>
-  user.role === 'student' ? (
-    <Chip
-      label={translateStatus(user.groupRole)}
-      style={{
-        width: 100,
-        backgroundColor: palette.groupRole[user.groupRole],
-        marginRight: 5,
-      }}
-    />
-  ) : (
-    <div style={styles.listItemWithDropdown}>
-      <Select
-        onChange={(event) => onChangeDropdown(event.target.value, user)}
-        onClick={() => {}}
-        style={styles.listItemTextSize}
-        value={user.groupRole}
-        variant="standard"
-      >
-        <MenuItem style={styles.listItemTextSize} value="normal">
-          <FormattedMessage {...translations.normal} />
-        </MenuItem>
-        <MenuItem style={styles.listItemTextSize} value="manager">
-          <FormattedMessage {...translations.manager} />
-        </MenuItem>
-      </Select>
-    </div>
-  );
+const GroupUserManagerListItemChoice = ({ isOutsideGroup, user, onChangeDropdown }) => {
+  if (isOutsideGroup || !user.groupRole) return undefined;
+  return (
+    user.role === 'student' ? (
+      <GroupRoleChip 
+        user={user} 
+      />
+    ) : (
+      <div style={styles.listItemWithDropdown}>
+        <Select
+          onChange={(event) => onChangeDropdown(event.target.value, user)}
+          onClick={() => {}}
+          style={styles.listItemTextSize}
+          value={user.groupRole}
+          variant="standard"
+        >
+          <MenuItem style={styles.listItemTextSize} value="normal">
+            <FormattedMessage {...translations.normal} />
+          </MenuItem>
+          <MenuItem style={styles.listItemTextSize} value="manager">
+            <FormattedMessage {...translations.manager} />
+          </MenuItem>
+        </Select>
+      </div>
+    )
+  )
+}
 
 GroupUserManagerListItemChoice.propTypes = {
+  isOutsideGroup: PropTypes.bool,
   user: memberShape.isRequired,
   onChangeDropdown: PropTypes.func,
 };
@@ -145,6 +128,7 @@ const GroupUserManagerListItem = ({
   onChangeDropdown,
   showDropdown,
   isChecked,
+  isOutsideGroup,
 }) => (
   <ListItem
     button
@@ -168,9 +152,10 @@ const GroupUserManagerListItem = ({
         {otherGroups && ` (also a member of${otherGroups})` }
       </ListItemText>
     </div>
-
+    
     {showDropdown ? (
       <GroupUserManagerListItemChoice
+        isOutsideGroup={isOutsideGroup}
         onChangeDropdown={onChangeDropdown}
         user={user}
       />
@@ -186,6 +171,7 @@ GroupUserManagerListItem.propTypes = {
   onChangeDropdown: PropTypes.func,
   showDropdown: PropTypes.bool,
   isChecked: PropTypes.bool,
+  isOutsideGroup: PropTypes.bool,
 };
 
 const GroupUserManagerList = ({
@@ -197,6 +183,7 @@ const GroupUserManagerList = ({
   showDropdown = false,
   onChangeDropdown,
   isChecked = false,
+  isOutsideGroup = false,
 }) => {
   const renderUsersListItems = (users, title) => (
     <>
@@ -217,6 +204,7 @@ const GroupUserManagerList = ({
             key={user.id}
             colour={colour}
             isChecked={isChecked}
+            isOutsideGroup={isOutsideGroup}
             onChangeDropdown={onChangeDropdown}
             onCheck={onCheck}
             otherGroups={memberOtherGroups[user.id.toString()]}
@@ -259,6 +247,7 @@ GroupUserManagerList.propTypes = {
   showDropdown: PropTypes.bool,
   onChangeDropdown: PropTypes.func,
   isChecked: PropTypes.bool,
+  isOutsideGroup: PropTypes.bool,
 };
 
 export default GroupUserManagerList;
