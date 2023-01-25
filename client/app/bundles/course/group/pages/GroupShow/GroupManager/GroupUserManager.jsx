@@ -7,7 +7,6 @@ import { Checkbox, FormControlLabel, TextField } from '@mui/material';
 import { blue, green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
-import { setNotification } from 'lib/actions';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 import { deleteGroup, updateGroup } from '../../../actions';
@@ -133,13 +132,9 @@ const getAvailableUsers = (
   hidePhantomStudent,
   availableSearch,
 ) => {
-  let groupMemberIds = new Set()
-  // const altGroup = new Set(groups.flatMap((g) => g.members).filter((m) => !m.isPhantom));
-  if (hideInGroup) {
-    groupMemberIds = new Set(groups.flatMap((g) => g.members.map((m) => m.id)));
-  } else {
-    groupMemberIds = new Set(group.members.map((m) => m.id))
-  }
+  const groupMemberIds = hideInGroup ? 
+    new Set(groups.flatMap((g) => g.members.map((m) => m.id))) :
+    new Set(group.members.map((m) => m.id))
 
   const filteredGroup = filterByName(availableSearch,
     courseUsers.filter((cu) => !groupMemberIds.has(cu.id)),
@@ -156,12 +151,9 @@ const getSelectedUsers = (
   selectedSearch,
   hidePhantomStudent,
 ) => {
-  let groupMembers = new Set()
-  if (hidePhantomStudent) {
-    groupMembers = new Set(members.filter((m) => !m.isPhantom))
-  } else {
-    groupMembers = new Set(members)
-  }
+  const groupMembers = hidePhantomStudent ?
+    new Set(members.filter((m) => !m.isPhantom)):
+    new Set(members)
 
   return filterByName(
     selectedSearch,
@@ -356,11 +348,6 @@ const GroupUserManager = ({
   const onChangeRole = useCallback(
     (value, user) => {
       if (user.groupRole === value) return undefined;
-      if (user.role === "student" && value === "manager") {
-        dispatch({ type: actionTypes.UPDATE_GROUP_MEMBERS_FAILURE });
-        setNotification(intl.formatMessage(translations.cannotUpliftStudent))(dispatch);
-        return undefined;
-      }
       const newGroup = {
         ...group,
         members: [
@@ -425,6 +412,33 @@ const GroupUserManager = ({
     selectedStaff,
     originalMemberMap,
   ]);
+
+  const CheckBoxHideGroup = () => (
+    <FormControlLabel 
+      control={
+        <Checkbox
+          checked={hideInGroup}
+          onChange={(_, checked) => setHideInGroup(checked)}
+        />
+      }
+      label={<FormattedMessage {...translations.hideStudents} />}
+      style={styles.checkbox}
+    />
+  )
+
+  const CheckBoxHidePhantomStudent = () => (
+    <FormControlLabel 
+      control={
+        <Checkbox
+          checked={hidePhantomStudent}
+          onChange={(_, checked) => setHidePhantomStudent(checked)}
+        />
+      }
+      label={<FormattedMessage {...translations.hidePhantomStudents} />}
+      style={styles.checkbox}
+    />
+  )
+
   const [isDirty, setIsDirty] = useState(false);
 
   return (
@@ -486,27 +500,10 @@ const GroupUserManager = ({
             />
           </div>
         </div>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={hideInGroup}
-              onChange={(_, checked) => setHideInGroup(checked)}
-            />
-          }
-          label={<FormattedMessage {...translations.hideStudents} />}
-          style={styles.checkbox}
-        />
-        <br />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={hidePhantomStudent}
-              onChange={(_, checked) => setHidePhantomStudent(checked)}
-            />
-          }
-          label={<FormattedMessage {...translations.hidePhantomStudents} />}
-          style={styles.checkbox}
-        />
+        <div className='flex flex-col space-y-0.5'>
+          <CheckBoxHideGroup />
+          <CheckBoxHidePhantomStudent />
+        </div>
       </GroupCard>
 
       <GroupFormDialog

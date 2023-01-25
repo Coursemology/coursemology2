@@ -83,7 +83,6 @@ const palette = {
   groupRole: {
     [groupRole.Normal]: colors.green[100],
     [groupRole.Manager]: colors.red[100],
-    [groupRole.Unknown]: colors.grey[100],
   },
 
   submissionIcon: {
