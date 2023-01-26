@@ -55,7 +55,7 @@ const propTypes = {
 };
 
 const DEFAULT_TIME_LIMIT = 10;
-const HARD_TIME_LIMIT = 30;
+const HARD_TIME_LIMIT = 300;
 
 function validation(data, pathOfKeysToData, intl) {
   const errors = [];

@@ -1484,7 +1484,7 @@
     "description": "Label for the time limit input field."
   },
   "course.assessment.question.programming.ProgrammingQuestionForm.timeLimitRangeValidationError": {
-    "defaultMessage": "Time limit must be within 1 to 30."
+    "defaultMessage": "Time limit must be within 1 to 300."
   },
   "course.assessment.question.programming.ProgrammingQuestionForm.titleFieldLabel": {
     "defaultMessage": "Title",

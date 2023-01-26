@@ -161,7 +161,7 @@ export default defineMessages({
   },
   timeLimitRangeValidationError: {
     id: 'course.assessment.question.programming.ProgrammingQuestionForm.timeLimitRangeValidationError',
-    defaultMessage: 'Time limit must be within 1 to 30.',
+    defaultMessage: 'Time limit must be within 1 to 300.',
   },
   submitConfirmation: {
     id: 'course.assessment.question.programming.ProgrammingQuestionForm.submitConfirmation',
