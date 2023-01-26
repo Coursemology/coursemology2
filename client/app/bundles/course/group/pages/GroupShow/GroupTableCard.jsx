@@ -124,15 +124,13 @@ const GroupTableCard = ({ group, onManageGroup, canManageCategory }) => {
             <TableRow key={m.id} style={styles.rowHeight}>
               <TableCell style={styles.rowHeight}>{index + 1}</TableCell>
               <TableCell style={styles.rowHeight}>
-                <div className="flex items-center grow">
+                <div className="flex grow items-center">
                   {m.name}
                   {m.isPhantom && <GhostIcon />}
                 </div>
               </TableCell>
               <TableCell style={styles.rowHeight}>
-                <GroupRoleChip 
-                  user={m}
-                />
+                <GroupRoleChip user={m} />
               </TableCell>
             </TableRow>
           ))}

@@ -147,12 +147,7 @@ const CategoryCard = ({
       });
     }
     return result;
-  }, [
-    handleEdit,
-    onManageGroups,
-    setIsConfirmingDelete,
-    canManageCategory,
-  ]);
+  }, [handleEdit, onManageGroups, setIsConfirmingDelete, canManageCategory]);
   const [isDirty, setIsDirty] = useState(false);
 
   return (
