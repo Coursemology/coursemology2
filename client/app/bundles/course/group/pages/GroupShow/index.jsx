@@ -96,9 +96,10 @@ const Category = ({
             canManageGroups={canManageGroups}
             category={groupCategory}
             numGroups={groups.length}
-            onManageGroups={() =>
-              dispatch({ type: actionTypes.MANAGE_GROUPS_START })
-            }
+            onManageGroups={() => {
+              dispatch({ type: actionTypes.MANAGE_GROUPS_START });
+              window.scrollTo(0, 0);
+            }}
           />
           {groups.map((group) => (
             <GroupTableCard
@@ -106,8 +107,8 @@ const Category = ({
               canManageCategory={canManageCategory}
               group={group}
               onManageGroup={() => {
-                dispatch({type: actionTypes.MANAGE_GROUPS_START})
-                handleGroupSelect(group.id)
+                dispatch({ type: actionTypes.MANAGE_GROUPS_START });
+                handleGroupSelect(group.id);
               }}
             />
           ))}

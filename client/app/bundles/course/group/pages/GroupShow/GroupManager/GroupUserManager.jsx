@@ -68,13 +68,11 @@ const translations = defineMessages({
   },
   hidePhantomStudents: {
     id: 'course.group.GroupShow.GroupManager.GroupUserManager.hidePhantomStudents',
-    defaultMessage:
-      'Hide all Phantom Students',
+    defaultMessage: 'Hide all Phantom Students',
   },
   cannotUpliftStudent: {
     id: 'course.group.GroupShow.GroupManager.GroupUserManager.cannotUpliftStudent',
-    defaultMessage:
-      'Student cannot be uplifted into Manager',
+    defaultMessage: 'Student cannot be uplifted into Manager',
   },
 });
 
@@ -131,48 +129,40 @@ const getAvailableUsers = (
   hidePhantomStudent,
   availableSearch,
 ) => {
-  const groupMemberIds = hideInGroup ? 
-    new Set(groups.flatMap((g) => g.members.map((m) => m.id))) :
-    new Set(group.members.map((m) => m.id))
+  const groupMemberIds = hideInGroup
+    ? new Set(groups.flatMap((g) => g.members.map((m) => m.id)))
+    : new Set(group.members.map((m) => m.id));
 
-  const filteredGroup = filterByName(availableSearch,
+  const filteredGroup = filterByName(
+    availableSearch,
     courseUsers.filter((cu) => !groupMemberIds.has(cu.id)),
   );
 
   if (hidePhantomStudent) {
     return filteredGroup.filter((m) => !m.isPhantom);
-  } 
-  return filteredGroup
+  }
+  return filteredGroup;
 };
 
-const getSelectedUsers = (
-  members,
-  selectedSearch,
-  hidePhantomStudent,
-) => {
-  const groupMembers = hidePhantomStudent ?
-    new Set(members.filter((m) => !m.isPhantom)):
-    new Set(members)
+const getSelectedUsers = (members, selectedSearch, hidePhantomStudent) => {
+  const groupMembers = hidePhantomStudent
+    ? new Set(members.filter((m) => !m.isPhantom))
+    : new Set(members);
 
-  return filterByName(
-    selectedSearch,
-    [...groupMembers],
-  )
+  return filterByName(selectedSearch, [...groupMembers]);
 };
 
-const getAvailableUserInOtherGroups = (
-  courseUsers,
-  groups,
-  group,
-) => {
-  const otherGroups = groups.filter((x) => x !== group)
-  const mapStudentToGroups = {}
+const getAvailableUserInOtherGroups = (courseUsers, groups, group) => {
+  const otherGroups = groups.filter((x) => x !== group);
+  const mapStudentToGroups = {};
 
   for (let i = 0; i < otherGroups.length; i++) {
-    const membersOfThisGroup = otherGroups[i].members.map((m) => m.id)
+    const membersOfThisGroup = otherGroups[i].members.map((m) => m.id);
     for (let j = 0; j < membersOfThisGroup.length; j++) {
       if (membersOfThisGroup[j] in mapStudentToGroups) {
-        mapStudentToGroups[membersOfThisGroup[j]].push(` ${otherGroups[i].name}`);
+        mapStudentToGroups[membersOfThisGroup[j]].push(
+          ` ${otherGroups[i].name}`,
+        );
       } else {
         mapStudentToGroups[membersOfThisGroup[j]] = [` ${otherGroups[i].name}`];
       }
@@ -208,26 +198,23 @@ const GroupUserManager = ({
         hidePhantomStudent,
         availableSearch,
       ),
-    [courseUsers, groups, group, hideInGroup, hidePhantomStudent, availableSearch],
+    [
+      courseUsers,
+      groups,
+      group,
+      hideInGroup,
+      hidePhantomStudent,
+      availableSearch,
+    ],
   );
 
   const availableUsersInOtherGroups = useMemo(
-    () =>
-      getAvailableUserInOtherGroups(
-        courseUsers,
-        groups,
-        group,
-      ),
+    () => getAvailableUserInOtherGroups(courseUsers, groups, group),
     [courseUsers, groups, group],
   );
 
   const groupMembers = useMemo(
-    () => 
-      getSelectedUsers(
-        group.members,
-        selectedSearch,
-        hidePhantomStudent,
-      ),
+    () => getSelectedUsers(group.members, selectedSearch, hidePhantomStudent),
     [group.members, selectedSearch, hidePhantomStudent],
   );
 
@@ -413,7 +400,7 @@ const GroupUserManager = ({
   ]);
 
   const CheckBoxHideGroup = () => (
-    <FormControlLabel 
+    <FormControlLabel
       control={
         <Checkbox
           checked={hideInGroup}
@@ -423,10 +410,10 @@ const GroupUserManager = ({
       label={<FormattedMessage {...translations.hideStudents} />}
       style={styles.checkbox}
     />
-  )
+  );
 
   const CheckBoxHidePhantomStudent = () => (
-    <FormControlLabel 
+    <FormControlLabel
       control={
         <Checkbox
           checked={hidePhantomStudent}
@@ -436,7 +423,7 @@ const GroupUserManager = ({
       label={<FormattedMessage {...translations.hidePhantomStudents} />}
       style={styles.checkbox}
     />
-  )
+  );
 
   const [isDirty, setIsDirty] = useState(false);
 
@@ -500,7 +487,7 @@ const GroupUserManager = ({
             />
           </div>
         </div>
-        <div className='flex flex-col space-y-0.5'>
+        <div className="flex flex-col space-y-0.5">
           <CheckBoxHideGroup />
           <CheckBoxHidePhantomStudent />
         </div>

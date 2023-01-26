@@ -90,33 +90,33 @@ const styles = {
   },
 };
 
-const GroupUserManagerListItemChoice = ({ isOutsideGroup, user, onChangeDropdown }) => {
+const GroupUserManagerListItemChoice = ({
+  isOutsideGroup,
+  user,
+  onChangeDropdown,
+}) => {
   if (isOutsideGroup || !user.groupRole) return undefined;
-  return (
-    user.role === 'student' ? (
-      <GroupRoleChip 
-        user={user} 
-      />
-    ) : (
-      <div style={styles.listItemWithDropdown}>
-        <Select
-          onChange={(event) => onChangeDropdown(event.target.value, user)}
-          onClick={() => {}}
-          style={styles.listItemTextSize}
-          value={user.groupRole}
-          variant="standard"
-        >
-          <MenuItem style={styles.listItemTextSize} value="normal">
-            <FormattedMessage {...translations.normal} />
-          </MenuItem>
-          <MenuItem style={styles.listItemTextSize} value="manager">
-            <FormattedMessage {...translations.manager} />
-          </MenuItem>
-        </Select>
-      </div>
-    )
-  )
-}
+  return user.role === 'student' ? (
+    <GroupRoleChip user={user} />
+  ) : (
+    <div style={styles.listItemWithDropdown}>
+      <Select
+        onChange={(event) => onChangeDropdown(event.target.value, user)}
+        onClick={() => {}}
+        style={styles.listItemTextSize}
+        value={user.groupRole}
+        variant="standard"
+      >
+        <MenuItem style={styles.listItemTextSize} value="normal">
+          <FormattedMessage {...translations.normal} />
+        </MenuItem>
+        <MenuItem style={styles.listItemTextSize} value="manager">
+          <FormattedMessage {...translations.manager} />
+        </MenuItem>
+      </Select>
+    </div>
+  );
+};
 
 GroupUserManagerListItemChoice.propTypes = {
   isOutsideGroup: PropTypes.bool,
@@ -152,16 +152,16 @@ const GroupUserManagerListItem = ({
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
         {user.name}
-        {user.isPhantom ? <GhostIcon /> : "\u00a0"}
-        {otherGroups && 
-          <FormattedMessage 
+        {user.isPhantom ? <GhostIcon /> : '\u00a0'}
+        {otherGroups && (
+          <FormattedMessage
             {...translations.otherGroupMembers}
-            values={{groups: otherGroups.join(", ")}}
+            values={{ groups: otherGroups.join(', ') }}
           />
-        }
+        )}
       </ListItemText>
     </div>
-    
+
     {showDropdown ? (
       <GroupUserManagerListItemChoice
         isOutsideGroup={isOutsideGroup}
@@ -236,13 +236,9 @@ const GroupUserManagerList = ({
       ) : null}
 
       {students.length > 0 &&
-        renderUsersListItems(
-          students,
-          translations.students,
-        )}
+        renderUsersListItems(students, translations.students)}
 
-      {staff.length > 0 &&
-        renderUsersListItems(staff, translations.staff)}
+      {staff.length > 0 && renderUsersListItems(staff, translations.staff)}
     </List>
   );
 };
