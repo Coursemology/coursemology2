@@ -104,7 +104,6 @@ const CodaveriCommentCard = (props) => {
       creator: { name, avatar },
       createdAt,
       canUpdate,
-      formattedText,
       id,
       text,
       codaveriFeedback,
@@ -235,7 +234,7 @@ const CodaveriCommentCard = (props) => {
 
     return (
       <>
-        <div dangerouslySetInnerHTML={{ __html: formattedText }} />
+        <div dangerouslySetInnerHTML={{ __html: text }} />
         {renderRating()}
       </>
     );
