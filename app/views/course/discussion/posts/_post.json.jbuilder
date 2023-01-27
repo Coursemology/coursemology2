@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 codaveri_feedback = post.codaveri_feedback
 
-json.(post, :id, :title, :text)
+json.(post, :id, :title)
 json.text format_ckeditor_rich_text(post.text)
 json.creator do
   creator = post.creator
