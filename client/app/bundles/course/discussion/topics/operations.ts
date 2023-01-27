@@ -14,10 +14,10 @@ import CourseAPI from 'api/course';
 
 import * as actions from './actions';
 
-const formatPostAttributes = (formattedText: string): Object => {
+const formatPostAttributes = (text: string): Object => {
   return {
     discussion_post: {
-      text: formattedText,
+      text,
     },
   };
 };

@@ -60,7 +60,6 @@ export interface CommentPostListData {
   creator: CourseUserBasicListData;
   createdAt: Date;
   title: string;
-  formattedText: string;
   text: string;
   canUpdate: boolean;
   canDestroy: boolean;
@@ -104,7 +103,6 @@ export interface CommentPostMiniEntity {
   creator: CourseUserBasicListData;
   createdAt: Date;
   title: string;
-  formattedText: string;
   text: string;
   canUpdate: boolean;
   canDestroy: boolean;

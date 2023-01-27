@@ -2,7 +2,7 @@
 codaveri_feedback = post.codaveri_feedback
 
 json.(post, :id, :title, :text)
-json.formattedText format_ckeditor_rich_text(simple_format(post.text))
+json.text format_ckeditor_rich_text(post.text)
 json.creator do
   creator = post.creator
   user = @course_users_hash&.fetch(creator.id, creator) || creator
