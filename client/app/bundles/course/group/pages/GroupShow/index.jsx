@@ -98,7 +98,6 @@ const Category = ({
             numGroups={groups.length}
             onManageGroups={() => {
               dispatch({ type: actionTypes.MANAGE_GROUPS_START });
-              window.scrollTo(0, 0);
             }}
           />
           {groups.map((group) => (

@@ -1,6 +1,7 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { Element, scroller } from 'react-scroll';
 import CompareArrows from '@mui/icons-material/CompareArrows';
 import Delete from '@mui/icons-material/Delete';
 import { Checkbox, FormControlLabel, TextField } from '@mui/material';
@@ -161,10 +162,10 @@ const getAvailableUserInOtherGroups = (courseUsers, groups, group) => {
     for (let j = 0; j < membersOfThisGroup.length; j++) {
       if (membersOfThisGroup[j] in mapStudentToGroups) {
         mapStudentToGroups[membersOfThisGroup[j]].push(
-          ` ${otherGroups[i].name}`,
+          `${otherGroups[i].name}`,
         );
       } else {
-        mapStudentToGroups[membersOfThisGroup[j]] = [` ${otherGroups[i].name}`];
+        mapStudentToGroups[membersOfThisGroup[j]] = [`${otherGroups[i].name}`];
       }
     }
   }
@@ -187,6 +188,12 @@ const GroupUserManager = ({
   const [selectedSearch, setSelectedSearch] = useState('');
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
   const [hidePhantomStudent, setHidePhantomStudent] = useState(true);
+
+  useEffect(() => {
+    scroller.scrollTo(`groupElement_${group.id}`, {
+      offset: -70,
+    });
+  }, [group.id]);
 
   const availableUsers = useMemo(
     () =>
@@ -428,7 +435,7 @@ const GroupUserManager = ({
   const [isDirty, setIsDirty] = useState(false);
 
   return (
-    <>
+    <Element name={`groupElement_${group.id}`}>
       <GroupCard
         subtitle={
           <FormattedMessage
@@ -520,7 +527,7 @@ const GroupUserManager = ({
         }}
         open={isConfirmingDelete}
       />
-    </>
+    </Element>
   );
 };
 
