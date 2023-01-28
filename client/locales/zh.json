@@ -221,6 +221,9 @@
   "course.achievement.AchievementReordering.updateSuccess": {
     "defaultMessage": "成就重排序成功"
   },
+  "course.achievement.AchievementShow.header": {
+    "defaultMessage": "成就 - {title}"
+  },
   "course.achievement.AchievementShow.studentsWithAchievement": {
     "defaultMessage": "有此成就的学生"
   },
@@ -252,7 +255,7 @@
     "defaultMessage": "允许学生查看"
   },
   "course.admin.AssessmentSettings.andNMoreItems": {
-    "defaultMessage": "和 {n, plural, one {# more item} other {# more items}}。"
+    "defaultMessage": "和另外 {n} 个项目。"
   },
   "course.admin.AssessmentSettings.assessmentSettings": {
     "defaultMessage": "测验设置"
@@ -264,7 +267,7 @@
     "defaultMessage": "拖放类别和标签以重新排列或将它们分组。"
   },
   "course.admin.AssessmentSettings.containsNAssessments": {
-    "defaultMessage": "有 {n, plural, one {# item} other {# items}}"
+    "defaultMessage": "有 {n} 个项目 "
   },
   "course.admin.AssessmentSettings.deleteCategoryPromptAction": {
     "defaultMessage": "删除 {title} 类别"
@@ -537,10 +540,10 @@
     "defaultMessage": "匿名发帖"
   },
   "course.admin.ForumsSettings.allowAnonymousPostDescription": {
-    "defaultMessage": "发帖人和课程讲师仍然可以查看原作者的身份。"
+    "defaultMessage": "发帖者和课程教师仍然可以查看原作者的身份。"
   },
   "course.admin.ForumsSettings.allowStudentsTo": {
-    "defaultMessage": "允许所有学生"
+    "defaultMessage": "允许学生"
   },
   "course.admin.ForumsSettings.creatorOnly": {
     "defaultMessage": "仅限创作者"
@@ -975,7 +978,7 @@
     "defaultMessage": "有待办事项"
   },
   "course.assessment.AssessmentForm.hasTodoHint": {
-    "defaultMessage": "启用后，学生可以看到这此测验在他们的待办事项"
+    "defaultMessage": "启用后，学生会在他们的待办列表中看见这些测验"
   },
   "course.assessment.AssessmentForm.modeSwitchingHint": {
     "defaultMessage": "你不能再更改评分模式，因为已经有此测验的提交。"
@@ -1416,7 +1419,7 @@
     "defaultMessage": "时间限制 (s)"
   },
   "course.assessment.question.programming.ProgrammingQuestionForm.timeLimitRangeValidationError": {
-    "defaultMessage": "时间限制必须在 1 到 30 之间。"
+    "defaultMessage": "时间限制必须在 1 到 300 之间。"
   },
   "course.assessment.question.programming.ProgrammingQuestionForm.titleFieldLabel": {
     "defaultMessage": "标题"
@@ -2655,7 +2658,7 @@
     "defaultMessage": "总成绩"
   },
   "course.assessment.submissions.SubmissionsTable.tableHeaderTutor": {
-    "defaultMessage": "导师"
+    "defaultMessage": "讲师"
   },
   "course.assessment.submissions.SubmissionsTableButton.gradeButton": {
     "defaultMessage": "评分"
@@ -3320,8 +3323,11 @@
   "course.experiencePoints.disbursement.ForumDisbursementForm.fetchForumPostsFailure": {
     "defaultMessage": "无法获取论坛帖子。"
   },
+  "course.experiencePoints.disbursement.ForumDisbursementForm.postListDialogHeader": {
+    "defaultMessage": "从 {startDate} 到 {endDate} 创建的帖子，由"
+  },
   "course.experiencePoints.disbursement.ForumDisbursementForm.reason": {
-    "defaultMessage": "付款原因"
+    "defaultMessage": "支付原因"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.reasonFill": {
     "defaultMessage": "论坛参与"
@@ -3359,19 +3365,16 @@
   "course.experiencePoints.disbursement.ForumPostTable.voteTally": {
     "defaultMessage": "投票理货"
   },
-  "course.form.FormShow.autoSubscribe": {
-    "defaultMessage": "当用户在主题中创建帖子时，将自动订阅该论坛中的主题。"
-  },
-  "course.form.FormShow.fetchTopicsFailure": {
+  "course.forum.FormShow.fetchTopicsFailure": {
     "defaultMessage": "无法检索论坛主题数据。"
   },
-  "course.form.FormShow.header": {
+  "course.forum.FormShow.header": {
     "defaultMessage": "论坛主题"
   },
-  "course.form.FormShow.markAllAsReadSuccess": {
+  "course.forum.FormShow.markAllAsReadSuccess": {
     "defaultMessage": "此论坛中的所有主题均已标记为已读。"
   },
-  "course.form.FormShow.newTopic": {
+  "course.forum.FormShow.newTopic": {
     "defaultMessage": "新话题"
   },
   "course.forum.ForumEdit.editForum": {
@@ -3410,6 +3413,9 @@
   "course.forum.ForumNew.newForum": {
     "defaultMessage": "新论坛"
   },
+  "course.forum.ForumTable.autoSubscribe": {
+    "defaultMessage": "当用户在主题下发帖时，会自动订阅论坛中的此主题"
+  },
   "course.forum.ForumTable.forum": {
     "defaultMessage": "论坛"
   },
@@ -3417,7 +3423,7 @@
     "defaultMessage": "有未解决的问题"
   },
   "course.forum.ForumTable.isSubscribed": {
-    "defaultMessage": "已订阅"
+    "defaultMessage": "已订阅？"
   },
   "course.forum.ForumTable.noForum": {
     "defaultMessage": "没有论坛"
@@ -3442,6 +3448,9 @@
   },
   "course.forum.ForumTopicEdit.updateSuccess": {
     "defaultMessage": "主题 {title} 已更新。"
+  },
+  "course.forum.ForumTopicForm.postAnonymously": {
+    "defaultMessage": "匿名发帖"
   },
   "course.forum.ForumTopicForm.text": {
     "defaultMessage": "文本"
@@ -3483,10 +3492,10 @@
     "defaultMessage": "该帖子已被删除。"
   },
   "course.forum.ForumTopicPostNew.creationFailure": {
-    "defaultMessage": "创建帖子失败 - {error}"
+    "defaultMessage": "无法创建帖子 - {error}"
   },
   "course.forum.ForumTopicPostNew.creationSuccess": {
-    "defaultMessage": "帖子已经创建成功"
+    "defaultMessage": "帖子已创建。"
   },
   "course.forum.ForumTopicPostNew.newPost": {
     "defaultMessage": "创建新帖子"
@@ -3519,7 +3528,7 @@
     "defaultMessage": "该主题对学生是隐藏的。"
   },
   "course.forum.ForumTopicTable.isSubscribed": {
-    "defaultMessage": "已订阅?"
+    "defaultMessage": "已订阅？"
   },
   "course.forum.ForumTopicTable.lastPostedBy": {
     "defaultMessage": "最后发表者"
@@ -3609,13 +3618,13 @@
     "defaultMessage": "主题\"{title}\"已成功解锁。"
   },
   "course.forum.MarkAllAsReadButton.AllReadTooltip": {
-    "defaultMessage": "本论坛所有主题均已阅读！"
+    "defaultMessage": "所有主题均已读"
   },
   "course.forum.MarkAllAsReadButton.markAllAsRead": {
     "defaultMessage": "标记为已读"
   },
   "course.forum.MarkAllAsReadButton.markAllAsReadTooltip": {
-    "defaultMessage": "将当前页面中的所有线程标记为已读"
+    "defaultMessage": "标记当前页面所有帖子为已读"
   },
   "course.forum.MarkAnswerButton.markAsAnswer": {
     "defaultMessage": "标记为答案"
@@ -3624,7 +3633,7 @@
     "defaultMessage": "取消标记为答案"
   },
   "course.forum.NextUnreadButton.AllReadTooltip": {
-    "defaultMessage": "所有主题均已阅！"
+    "defaultMessage": "所有主题均已读"
   },
   "course.forum.NextUnreadButton.nextUnread": {
     "defaultMessage": "下一条未读"
@@ -3639,7 +3648,7 @@
     "defaultMessage": "帖子不能为空！"
   },
   "course.forum.PostCard.maskUser": {
-    "defaultMessage": "屏蔽用户"
+    "defaultMessage": "标记用户"
   },
   "course.forum.PostCard.postAnonymously": {
     "defaultMessage": "匿名发帖"
@@ -3661,6 +3670,18 @@
   },
   "course.forum.PostCard.updateSuccess": {
     "defaultMessage": "该帖子已更新。"
+  },
+  "course.forum.PostCreatorObject.anonymousUser": {
+    "defaultMessage": "匿名用户"
+  },
+  "course.forum.PostCreatorObject.maskUser": {
+    "defaultMessage": "标记用户"
+  },
+  "course.forum.PostCreatorObject.postAnonymously": {
+    "defaultMessage": "匿名发帖"
+  },
+  "course.forum.PostCreatorObject.unmaskUser": {
+    "defaultMessage": "取消屏蔽用户"
   },
   "course.forum.SubscribeButton.forumTopicTranslations.adminSettingSubscribed": {
     "defaultMessage": "课程管理员禁用了论坛主题的订阅。"
@@ -4269,7 +4290,7 @@
     "defaultMessage": "经验值"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.groupManagers": {
-    "defaultMessage": "助教"
+    "defaultMessage": "讲师"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.highlight": {
     "defaultMessage": "高亮显示前和后 {percent}%"
@@ -4282,6 +4303,9 @@
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.level": {
     "defaultMessage": "等级 (最高: {maxLevel})"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.levelFilter": {
+    "defaultMessage": "等级: {name}"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.name": {
     "defaultMessage": "姓名"
@@ -4309,6 +4333,9 @@
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.title": {
     "defaultMessage": "学生表现"
+  },
+  "course.statistics.StatisticsIndex.course.StudentPerformanceTable.tutorFilter": {
+    "defaultMessage": "讲师：{name}"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.videoPercentWatched": {
     "defaultMessage": "视频 % 数量"
@@ -4392,7 +4419,7 @@
     "defaultMessage": "经验值"
   },
   "course.statistics.StatisticsIndex.students.groupManagers": {
-    "defaultMessage": "导师"
+    "defaultMessage": "讲师"
   },
   "course.statistics.StatisticsIndex.students.level": {
     "defaultMessage": "等级"
@@ -4405,6 +4432,9 @@
   },
   "course.statistics.StatisticsIndex.students.tableTitle": {
     "defaultMessage": "学生统计"
+  },
+  "course.statistics.StatisticsIndex.students.tutorFilter": {
+    "defaultMessage": "讲师：{name}"
   },
   "course.statistics.StatisticsIndex.students.videoPercentWatched": {
     "defaultMessage": "平均 % 已观看"
@@ -4716,7 +4746,7 @@
     "defaultMessage": "有待办事项"
   },
   "course.survey.SurveyForm.hasTodoHint": {
-    "defaultMessage": "启用后，学生可以看到这此调查在他们的待办事项"
+    "defaultMessage": "启用后，学生会在他们的待办列表中看见这个调查"
   },
   "course.survey.SurveyForm.startEndValidationError": {
     "defaultMessage": "必须在开始时间之后。"
@@ -4888,6 +4918,162 @@
   },
   "course.survey.updateSuccess": {
     "defaultMessage": "调查\"{title}\"已更新。"
+  },
+  "course.timelines.addTimeline": {
+    "defaultMessage": "时间线"
+  },
+  "course.timelines.assignedInTimeline": {
+    "defaultMessage": "已在时间线中分配"
+  },
+  "course.timelines.assignedToItem": {
+    "defaultMessage": "已分配到项目"
+  },
+  "course.timelines.assigningInTimeline": {
+    "defaultMessage": "正在时间线中分配"
+  },
+  "course.timelines.assigningToItem": {
+    "defaultMessage": "正在分配到项目"
+  },
+  "course.timelines.beta": {
+    "defaultMessage": "Beta"
+  },
+  "course.timelines.bonusEndTimeMustAfterStart": {
+    "defaultMessage": "额外奖励结束时间必须在开始时间之后。"
+  },
+  "course.timelines.bonusEndsAt": {
+    "defaultMessage": "额外奖励结束于"
+  },
+  "course.timelines.canChangeTitleLater": {
+    "defaultMessage": "你之后可以再次修改此标题"
+  },
+  "course.timelines.clickToAssignTime": {
+    "defaultMessage": "点击在此分配一个时间"
+  },
+  "course.timelines.confirmCreateTimeline": {
+    "defaultMessage": "创建时间线"
+  },
+  "course.timelines.confirmDeleteTimeline": {
+    "defaultMessage": "删除时间线和其上时间"
+  },
+  "course.timelines.confirmRenameTimeline": {
+    "defaultMessage": "重命名时间线"
+  },
+  "course.timelines.confirmRevertAndDeleteTimeline": {
+    "defaultMessage": "还原并删除时间线和其上时间"
+  },
+  "course.timelines.defaultTimeline": {
+    "defaultMessage": "默认"
+  },
+  "course.timelines.deleteTime": {
+    "defaultMessage": "删除时间"
+  },
+  "course.timelines.deleteTimeline": {
+    "defaultMessage": "删除"
+  },
+  "course.timelines.endTimeMustAfterStart": {
+    "defaultMessage": "结束时间必须晚于开始时间。"
+  },
+  "course.timelines.endsAt": {
+    "defaultMessage": "结束于"
+  },
+  "course.timelines.error": {
+    "defaultMessage": "错误！"
+  },
+  "course.timelines.errorCreatingTime": {
+    "defaultMessage": "在创建此时间时发生错误"
+  },
+  "course.timelines.errorCreatingTimeline": {
+    "defaultMessage": "在创建此时间时发生错误：{newTitle}"
+  },
+  "course.timelines.errorDeletingTime": {
+    "defaultMessage": "在删除此时间时发生错误"
+  },
+  "course.timelines.errorDeletingTimeline": {
+    "defaultMessage": "在删除此时间时发生错误：{title}"
+  },
+  "course.timelines.errorRenamingTimeline": {
+    "defaultMessage": "在重命名此时间时发生错误：{newTitle}"
+  },
+  "course.timelines.errorUpdatingTime": {
+    "defaultMessage": "在更新此时间时发生错误"
+  },
+  "course.timelines.hintAssignedStudentsSeeCustomTimes": {
+    "defaultMessage": "对于这些项目，分配到此时间线的学生将看到这些被覆盖的时间。"
+  },
+  "course.timelines.hintAssignedStudentsSeeDefaultTimes": {
+    "defaultMessage": "对于此时间轴中未被覆盖的项目，他们将在默认时间轴中看到这些项目的对应时间。"
+  },
+  "course.timelines.hintCanAddCustomTimes": {
+    "defaultMessage": "创建此时间线后，你可以在其中为项目添加时间，这会覆盖它们在默认时间线中的时间。"
+  },
+  "course.timelines.hintChooseAlternativeTimeline": {
+    "defaultMessage": "请选择一个时间线，将学生还原到"
+  },
+  "course.timelines.hintDeletingTimelineWillNotAffectSubmissions": {
+    "defaultMessage": "请放心，虽然操作无法撤消，但不会改变学生的提交数据。"
+  },
+  "course.timelines.hintDeletingTimelineWillRemoveTimes": {
+    "defaultMessage": "删除此时间线将删除其所有自定义时间。"
+  },
+  "course.timelines.hintNoTimeAssigned": {
+    "defaultMessage": "未分配自定义时间。分配到此时间线的学生将使用默认时间线。"
+  },
+  "course.timelines.lastSaved": {
+    "defaultMessage": "最后保存 {at}"
+  },
+  "course.timelines.mustSpecifyStartTime": {
+    "defaultMessage": "必须指定一个开始时间"
+  },
+  "course.timelines.mustValidDateTimeFormat": {
+    "defaultMessage": "请提供有效的日期和时间格式。"
+  },
+  "course.timelines.mustValidTimelineTitle": {
+    "defaultMessage": "必须为时间线指定一个有效标题"
+  },
+  "course.timelines.nAssigned": {
+    "defaultMessage": "{n} 自定义时间"
+  },
+  "course.timelines.newTimeline": {
+    "defaultMessage": "新时间线"
+  },
+  "course.timelines.renameTimeline": {
+    "defaultMessage": "重命名"
+  },
+  "course.timelines.renameTimelineTitle": {
+    "defaultMessage": "重命名 {title}"
+  },
+  "course.timelines.saved": {
+    "defaultMessage": "已保存"
+  },
+  "course.timelines.saving": {
+    "defaultMessage": "正在保存……"
+  },
+  "course.timelines.searchItems": {
+    "defaultMessage": "搜索项目"
+  },
+  "course.timelines.startsAt": {
+    "defaultMessage": "开始于"
+  },
+  "course.timelines.sureDeletingTimeline": {
+    "defaultMessage": "你确认删除 {title} 吗？"
+  },
+  "course.timelines.timelineDesigner": {
+    "defaultMessage": "时间线设计工具"
+  },
+  "course.timelines.timelineHasNStudents": {
+    "defaultMessage": "有 {n} 被分配到该时间线。"
+  },
+  "course.timelines.timelineHasNTimes": {
+    "defaultMessage": "此时间线在 {n} 个项目中分配了自定义时间。"
+  },
+  "course.timelines.timelineTitle": {
+    "defaultMessage": "时间线标题"
+  },
+  "course.timelines.today": {
+    "defaultMessage": "今天"
+  },
+  "course.timelines.unchangedSince": {
+    "defaultMessage": "自 {time} 以来没有变化"
   },
   "course.userInvitation.InviteUsersRegistrationCode.cancel": {
     "defaultMessage": "取消"
@@ -5120,6 +5306,21 @@
   "course.users.ManageUsersTable.ManageUsersTable.searchText": {
     "defaultMessage": "按姓名、电子邮件、角色等搜索。"
   },
+  "course.users.ManageUsersTable.assignToTimeline": {
+    "defaultMessage": "分配到时间线"
+  },
+  "course.users.ManageUsersTable.bulkChangeTimelineFailure": {
+    "defaultMessage": "未能将 {n} 名学生的参考时间线更新为 {timeline}。"
+  },
+  "course.users.ManageUsersTable.bulkChangeTimelineSuccess": {
+    "defaultMessage": "更新了 {n} 个学生的参考时间线为{timeline}。"
+  },
+  "course.users.ManageUsersTable.changeAlgorithmFailure": {
+    "defaultMessage": "未能将 {name} 的时间线算法更新到{timeline}。"
+  },
+  "course.users.ManageUsersTable.changeAlgorithmSuccess": {
+    "defaultMessage": "将 {name} 的时间线算法更新到 {timeline}"
+  },
   "course.users.ManageUsersTable.changeRoleFailure": {
     "defaultMessage": "无法将 {name} 的角色更改为 {role}。"
   },
@@ -5132,6 +5333,12 @@
   "course.users.ManageUsersTable.changeTimelineSuccess": {
     "defaultMessage": "已成功将 {name} 的时间线算法更改为 {timeline}。"
   },
+  "course.users.ManageUsersTable.defaultTimeline": {
+    "defaultMessage": "默认"
+  },
+  "course.users.ManageUsersTable.group": {
+    "defaultMessage": "组：{name}"
+  },
   "course.users.ManageUsersTable.phantomSuccess": {
     "defaultMessage": "{name} {isPhantom, select, true {现在是影子用户} other {现在是普通用户} }。"
   },
@@ -5140,6 +5347,9 @@
   },
   "course.users.ManageUsersTable.renameSuccess": {
     "defaultMessage": "{oldName} 已重命名为 {newName}"
+  },
+  "course.users.ManageUsersTable.selectedNStudents": {
+    "defaultMessage": "Selected {n} 个学生"
   },
   "course.users.ManageUsersTable.updateFailure": {
     "defaultMessage": "无法更新用户 - {error}"
@@ -5334,13 +5544,13 @@
     "defaultMessage": "有私人时间"
   },
   "course.video.VideoForm.hasPersonalTimesHint": {
-    "defaultMessage": "该项目的时间将根据学习率自动为用户调整。"
+    "defaultMessage": "这个项目的时间将基于学习率，为用户自动调整。"
   },
   "course.video.VideoForm.hasTodo": {
     "defaultMessage": "有待办事项"
   },
   "course.video.VideoForm.hasTodoHint": {
-    "defaultMessage": "启用后，学生可以看到这此视频在他们的待办事项"
+    "defaultMessage": "启用后，学生会在他们的待办列表中看见这个视频"
   },
   "course.video.VideoForm.published": {
     "defaultMessage": "发表"
@@ -5437,6 +5647,9 @@
   },
   "course.video.submission.VideoSubmissionEdit.fetchVideoSubmissionFailure": {
     "defaultMessage": "检索视频提交失败。"
+  },
+  "course.video.submission.VideoSubmissionEdit.header": {
+    "defaultMessage": "正在观看 {title}"
   },
   "course.video.submission.VideoSubmissionEdit.watchingVideo": {
     "defaultMessage": "正在观看视频"
@@ -5553,16 +5766,16 @@
     "defaultMessage": "个性化时间生效。原来的时间是{time}。"
   },
   "lib.components.extensions.PersonalTimeBooleanIcons.affectsPersonalTimes": {
-    "defaultMessage": "影响个人时间"
+    "defaultMessage": "影响独立进度"
   },
   "lib.components.extensions.PersonalTimeBooleanIcons.affectsPersonalTimesHint": {
-    "defaultMessage": "更新其他项目的个人时间时，将考虑学生提交此项目的时间。"
+    "defaultMessage": "影响独立进度。更新其他项目的独立进度时，将考虑学生提交此项目的时间。"
   },
   "lib.components.extensions.PersonalTimeBooleanIcons.hasPersonalTimes": {
-    "defaultMessage": "有私人时间"
+    "defaultMessage": "有独立进度"
   },
   "lib.components.extensions.PersonalTimeBooleanIcons.hasPersonalTimesHint": {
-    "defaultMessage": "该项目的时间将根据学习率自动为用户调整。"
+    "defaultMessage": "有独立进度。该项目的时间将根据学习率自动为用户调整。"
   },
   "lib.components.extensions.conditions.achievement": {
     "defaultMessage": "成就"
@@ -5657,9 +5870,6 @@
   "lib.translations.form.buttons.delete": {
     "defaultMessage": "删除"
   },
-  "lib.translations.form.buttons.edit": {
-    "defaultMessage": "编辑"
-  },
   "lib.translations.form.buttons.discard": {
     "defaultMessage": "丢弃"
   },
@@ -5668,6 +5878,9 @@
   },
   "lib.translations.form.buttons.done": {
     "defaultMessage": "已完成"
+  },
+  "lib.translations.form.buttons.edit": {
+    "defaultMessage": "编辑"
   },
   "lib.translations.form.buttons.ok": {
     "defaultMessage": "好的"
@@ -5816,8 +6029,11 @@
   "lib.translations.table.column.experiencePointsAwarded": {
     "defaultMessage": "获得的经验值"
   },
+  "lib.translations.table.column.groups": {
+    "defaultMessage": "组"
+  },
   "lib.translations.table.column.hasPersonalTimes": {
-    "defaultMessage": "有私人时间"
+    "defaultMessage": "有独立进度"
   },
   "lib.translations.table.column.hasTodo": {
     "defaultMessage": "有待办事项"
@@ -5871,7 +6087,7 @@
     "defaultMessage": "影子学生"
   },
   "lib.translations.table.column.published": {
-    "defaultMessage": "发表"
+    "defaultMessage": "已发布"
   },
   "lib.translations.table.column.reason": {
     "defaultMessage": "原因"
@@ -6468,7 +6684,7 @@
     "defaultMessage": "语言"
   },
   "user.localeRequired": {
-    "defaultMessage": "请至少选择一个语言。"
+    "defaultMessage": "请选择至少一种语言"
   },
   "user.name": {
     "defaultMessage": "名字"

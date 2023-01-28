@@ -28,6 +28,7 @@ const translations = defineMessages({
 
 const validationSchema = yup.object({
   text: yup.string(),
+  isAnonymous: yup.bool(),
 });
 
 const ForumTopicPostForm: FC<Props> = (props) => {

@@ -6,7 +6,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   self.table_name = table_name.singularize
 
   # Maximum CPU time a programming question can allow before the evaluation gets killed.
-  CPU_TIMEOUT = 30.seconds
+  CPU_TIMEOUT = 300.seconds
 
   # Maximum memory (in MB) the programming question can allow.
   # Do NOT change this to num.megabytes as the ProgramingEvaluationService expects it in MB.

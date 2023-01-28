@@ -110,10 +110,10 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
       let(:container) { service_instance.send(:create_container, image) }
 
       it 'prefixes the image with coursemology/evaluator-image' do
-        # 30 seconds is the default time limit when unspecified.
+        # 300 seconds is the default time limit when unspecified.
         expect(CoursemologyDockerContainer).to \
           receive(:create).with("coursemology/evaluator-image-#{image}",
-                                hash_including(argv: ['-c30']))
+                                hash_including(argv: ['-c300']))
 
         container
       end

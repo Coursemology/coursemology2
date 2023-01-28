@@ -8,6 +8,7 @@ json.forum do
   json.nextUnreadTopicUrl next_unread_topic_link(forum)
   json.permissions do
     json.canCreateTopic can?(:create, Course::Forum::Topic.new(forum: @forum))
+    json.isAnonymousEnabled current_course.settings(:course_forums_component).allow_anonymous_post
   end
 end
 

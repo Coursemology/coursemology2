@@ -36,9 +36,6 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
 
         expect(topic.reload.posts.last.text).to eq('<p>test</p>')
         expect(topic.reload.subscriptions.where(user: user).count).to eq(1)
-        within find("div.post_#{topic.posts.last.id}") do
-          expect(page).to have_selector('div.bg-red-100')
-        end
       end
 
       scenario 'I can update my own post' do
@@ -289,7 +286,6 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         expect(topic.reload.posts.last.text).to eq('<p>test</p>')
         expect(topic.reload.subscriptions.where(user: user).count).to eq(1)
         within find("div.post_#{topic.posts.last.id}") do
-          expect(page).to have_selector('div.bg-red-100')
           expect(page).to have_no_selector('svg[data-testId="CheckIcon"]')
         end
       end

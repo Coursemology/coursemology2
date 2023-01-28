@@ -7,12 +7,6 @@ RSpec.describe ApplicationFormattersHelper do
       subject.include(ERB::Util)
     end
 
-    describe '#format_block_text' do
-      it 'processes newlines' do
-        expect(helper.format_block_text("hello\n\nthere")).to have_tag('p', text: 'there')
-      end
-    end
-
     describe '#format_inline_text' do
       it 'does not add a block element' do
         expect(helper.format_inline_text('')).to be_empty
@@ -189,14 +183,6 @@ RSpec.describe ApplicationFormattersHelper do
         expect(helper.sanitize('<script/>')).to be_empty
       end
     end
-
-    describe '#format_block_text' do
-      it 'escapes HTML' do
-        expect(helper.format_block_text('<')).to have_tag('p') do
-          with_text('<')
-        end
-      end
-    end
   end
 
   describe 'user display helper' do
@@ -327,19 +313,6 @@ RSpec.describe ApplicationFormattersHelper do
         result.define_singleton_method(:published?) { published }
       end
     end
-
-    describe '#draft_message' do
-      subject { helper.draft_message(stub) }
-      context 'when the object is not published' do
-        let(:published) { false }
-        it { is_expected.to eq(I18n.t('common.draft')) }
-      end
-
-      context 'when the object is published' do
-        let(:published) { true }
-        it { is_expected.to be_nil }
-      end
-    end
   end
 
   describe 'unread helper' do
@@ -366,22 +339,6 @@ RSpec.describe ApplicationFormattersHelper do
         it 'returns an empty array' do
           expect(subject).to eq([])
         end
-      end
-    end
-  end
-
-  describe 'format_boolean' do
-    context 'when boolean is truthy' do
-      it 'returns the truthy value' do
-        expect(helper.format_boolean(true)).to eq(I18n.t('common.truthy'))
-        expect(helper.format_boolean(1)).to eq(I18n.t('common.truthy'))
-      end
-    end
-
-    context 'when boolean is falsey' do
-      it 'returns the falsey value' do
-        expect(helper.format_boolean(false)).to eq(I18n.t('common.falsey'))
-        expect(helper.format_boolean(nil)).to eq(I18n.t('common.falsey'))
       end
     end
   end

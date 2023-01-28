@@ -1,33 +1,5 @@
 # frozen_string_literal: true
 module ApplicationWidgetsHelper
-  # Create a +new+ button.
-  #
-  # @return [String] The HTML for the button.
-  # @overload new_button(path, html_options = nil, &block)
-  #   Creates a +new+ button, pointing to the given path and HTML options. This would yield a
-  #   button with an icon, unless a block is provided.
-  #   @param [String] path The path to link to.
-  #   @param [Hash] html_options The HTML options for the button.
-  #   @param [Proc] block The block to use for displaying the link.
-  # @overload new_button(resource, html_options = nil, &block)
-  #   Creates a +new+ button, pointing to the given resource. The URL is resolved using +url_for+.
-  #   This would yield a button with an icon, unless a block is provided.
-  #   @param [Array|Object] path The resource to link to.
-  #   @param [Hash] html_options The HTML options for the button.
-  #   @param [Proc] block The block to use for displaying the link.
-  # @overload new_button(body, path, html_options = nil)
-  #   Creates a +new+ button, pointing to the given path and HTML options. This would create a
-  #   button with the given body.
-  # @overload new_button(body, resource, html_options = nil)
-  #   Creates a +new+ button, pointing to the given resource. The URL is resolved using +url_for+.
-  #   This would create a button with the given body.
-  def new_button(name, options = nil, html_options = nil, &block)
-    name, options, html_options = [nil, name, options] unless html_options
-    options = [:new] + Array(options) unless options.is_a?(String)
-    block ||= proc { fa_icon 'file' }
-    resource_button(:new, 'btn-primary', name || block, options, html_options&.dup)
-  end
-
   # Create a +edit+ button.
   #
   # @return [String] The HTML for the button.
