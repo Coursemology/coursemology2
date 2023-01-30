@@ -159,16 +159,16 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         visit course_forum_topic_path(course, forum, topic)
         # Mark as answer
         within find("div.post_#{post.id}") do
-          find('span', text: 'Mark as answer').find(:xpath, '../..').click
-          expect(page).to have_selector('span', text: 'Unmark as answer')
+          click_button 'Mark as answer'
+          expect(page).to have_text('Unmark as answer')
         end
         expect(post.reload).to be_answer
         expect(topic.reload).to be_resolved
 
         # Unmark as answer
         within find("div.post_#{post.id}") do
-          find('span', text: 'Unmark as answer').find(:xpath, '../..').click
-          expect(page).to have_selector('span', text: 'Mark as answer')
+          click_button 'Unmark as answer'
+          expect(page).to have_text('Mark as answer')
         end
         expect(post.reload).not_to be_answer
         expect(topic.reload).not_to be_resolved
