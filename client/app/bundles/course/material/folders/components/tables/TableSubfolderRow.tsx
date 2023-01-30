@@ -1,5 +1,5 @@
 import { FC, memo } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { Link } from 'react-router-dom';
 import {
   Block as BlockIcon,
@@ -11,6 +11,7 @@ import equal from 'fast-deep-equal';
 import { FolderMiniEntity } from 'types/course/material/folders';
 
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
 import { formatFullDateTime } from 'lib/moment';
 
 import WorkbinTableButtons from '../buttons/WorkbinTableButtons';
@@ -44,7 +45,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
     canEditSubfolders,
     isConcrete,
   } = props;
-  const intl = useIntl();
+  const { t } = useTranslation();
 
   return (
     <TableRow id={`subfolder-${subfolder.id}`}>
@@ -69,9 +70,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
                 <Tooltip
                   arrow
                   placement="top"
-                  title={intl.formatMessage(
-                    translations.subfolderBlockedTooltip,
-                  )}
+                  title={t(translations.subfolderBlockedTooltip)}
                 >
                   <BlockIcon color="error" fontSize="small" />
                 </Tooltip>
@@ -115,11 +114,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
         >
           <Stack alignItems="center" direction="row" spacing={0.5}>
             {subfolder.permissions.showSdlWarning && (
-              <Tooltip
-                title={intl.formatMessage(
-                  translations.visibleBecauseSdlTooltip,
-                )}
-              >
+              <Tooltip title={t(translations.visibleBecauseSdlTooltip)}>
                 <VisibilityIcon color="info" fontSize="small" />
               </Tooltip>
             )}

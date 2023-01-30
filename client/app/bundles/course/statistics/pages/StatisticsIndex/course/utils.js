@@ -90,19 +90,19 @@ export const computeLimits = (assessments, submissions) => {
 export const titleRenderer = (items) =>
   `${items[0].raw.title} (${items.length})`;
 
-export const labelRenderer = (intl) => (item) => {
+export const labelRenderer = (t) => (item) => {
   if (item.raw.name) {
     return `${item.raw.name}: ${item.label}`;
   }
   if (item.raw.isStartAt) {
-    return intl.formatMessage(translations.startAt, { startAt: item.label });
+    return t(translations.startAt, { startAt: item.label });
   }
-  return intl.formatMessage(translations.endAt, { endAt: item.label });
+  return t(translations.endAt, { endAt: item.label });
 };
 
-export const footerRenderer = (intl) => (items) => {
+export const footerRenderer = (t) => (items) => {
   if (items.length === 1 && items[0].raw.name) {
-    return intl.formatMessage(translations.clickToView, {
+    return t(translations.clickToView, {
       name: items[0].raw.name,
     });
   }
