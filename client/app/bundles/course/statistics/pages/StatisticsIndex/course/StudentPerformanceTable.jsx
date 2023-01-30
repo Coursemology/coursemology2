@@ -1,7 +1,6 @@
 import { memo, useMemo, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import {
-  Box,
   Card,
   CardContent,
   FormControlLabel,
@@ -445,11 +444,7 @@ const StudentPerformanceTable = ({
         filter: false,
         sort: true,
         sortDescFirst: true,
-        customBodyRender: (value) => (
-          <Box sx={{ width: '100%' }}>
-            <LinearProgressWithLabel value={value} />
-          </Box>
-        ),
+        customBodyRender: (value) => <LinearProgressWithLabel value={value} />,
       },
     });
   }
