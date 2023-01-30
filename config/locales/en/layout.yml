@@ -15,6 +15,7 @@ en:
   layouts:
     course:
       administration: :'system.admin.admin.index.header'
+      manage_subscriptions: 'Manage subscriptions '
     course_admin:
       title: 'Course Settings'
       course_settings:

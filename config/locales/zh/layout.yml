@@ -15,6 +15,7 @@ zh:
   layouts:
     course:
       administration: :'system.admin.admin.index.header'
+      manage_subscriptions: '管理订阅 '
     course_admin:
       title: '课程设置'
       course_settings:
