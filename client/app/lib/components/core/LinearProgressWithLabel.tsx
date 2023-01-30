@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, LinearProgress, Typography } from '@mui/material';
+import { LinearProgress, Typography } from '@mui/material';
 
 interface Props {
   /**
@@ -10,16 +10,16 @@ interface Props {
 
 const LinearProgressWithLabel: FC<Props> = (props: Props) => {
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <Box sx={{ width: '100%', mr: 1 }}>
+    <div className="flex items-center space-x-2">
+      <div className="w-full">
         <LinearProgress value={props.value ?? 0} variant="determinate" />
-      </Box>
-      <Box sx={{ minWidth: 35 }}>
+      </div>
+      <div className="min-w-[4rem]">
         <Typography color="text.secondary" variant="body2">{`${Math.round(
           props.value ?? 0,
         )}%`}</Typography>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 

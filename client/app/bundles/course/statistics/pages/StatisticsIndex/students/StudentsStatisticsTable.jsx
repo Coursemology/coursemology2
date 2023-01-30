@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { FormControlLabel, Switch } from '@mui/material';
-import Box from '@mui/material/Box';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
@@ -233,11 +232,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
         filter: false,
         sort: true,
         alignCenter: true,
-        customBodyRender: (value) => (
-          <Box sx={{ width: '100%' }}>
-            <LinearProgressWithLabel value={value} />
-          </Box>
-        ),
+        customBodyRender: (value) => <LinearProgressWithLabel value={value} />,
       },
     });
   }
