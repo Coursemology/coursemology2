@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { FormControlLabel, Switch } from '@mui/material';
 import Box from '@mui/material/Box';
 
@@ -7,6 +7,7 @@ import DataTable from 'lib/components/core/layouts/DataTable';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import Link from 'lib/components/core/Link';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { studentsStatisticsTableShape } from '../../../propTypes/students';
 
@@ -69,7 +70,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
     return students;
   }, [showMyStudentsOnly, students]);
 
-  const intl = useIntl();
+  const { t } = useTranslation();
 
   const options = useMemo(
     () => ({
@@ -80,7 +81,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
               checked={showMyStudentsOnly}
               className="mb-0"
               control={<Switch />}
-              label={intl.formatMessage(translations.showMyStudentsOnly)}
+              label={t(translations.showMyStudentsOnly)}
               onChange={(_, checked) => setShowMyStudentsOnly(checked)}
             />
           );
@@ -105,7 +106,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
   const columns = [
     {
       name: 'name',
-      label: intl.formatMessage(translations.name),
+      label: t(translations.name),
       options: {
         filter: false,
         sort: true,
@@ -113,7 +114,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
     },
     {
       name: 'studentType',
-      label: intl.formatMessage(translations.studentType),
+      label: t(translations.studentType),
       options: {
         filter: false,
         sort: true,
@@ -124,7 +125,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
   if (hasGroupManagers) {
     columns.push({
       name: 'groupManagers',
-      label: intl.formatMessage(translations.groupManagers),
+      label: t(translations.groupManagers),
       options: {
         filter: true,
         filterType: 'multiselect',
@@ -148,8 +149,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
           fullWidth: true,
         },
         customFilterListOptions: {
-          render: (name) =>
-            intl.formatMessage(translations.tutorFilter, { name }),
+          render: (name) => t(translations.tutorFilter, { name }),
         },
         sort: true,
         customBodyRenderLite: (dataIndex) => {
@@ -176,7 +176,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
   if (isCourseGamified) {
     columns.push({
       name: 'level',
-      label: intl.formatMessage(translations.level),
+      label: t(translations.level),
       options: {
         filter: true,
         sort: true,
@@ -184,7 +184,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
     });
     columns.push({
       name: 'experiencePoints',
-      label: intl.formatMessage(translations.experiencePoints),
+      label: t(translations.experiencePoints),
       options: {
         filter: false,
         sort: true,
@@ -207,7 +207,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
   if (showVideo) {
     columns.push({
       name: 'videoSubmissionCount',
-      label: intl.formatMessage(translations.videoSubmissionCount, {
+      label: t(translations.videoSubmissionCount, {
         courseVideoCount,
       }),
       options: {
@@ -228,7 +228,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
     });
     columns.push({
       name: 'videoPercentWatched',
-      label: intl.formatMessage(translations.videoPercentWatched),
+      label: t(translations.videoPercentWatched),
       options: {
         filter: false,
         sort: true,
@@ -249,7 +249,7 @@ const StudentsStatisticsTable = ({ metadata, students }) => {
       height="30px"
       includeRowNumber
       options={options}
-      title={intl.formatMessage(translations.tableTitle)}
+      title={t(translations.tableTitle)}
     />
   );
 };

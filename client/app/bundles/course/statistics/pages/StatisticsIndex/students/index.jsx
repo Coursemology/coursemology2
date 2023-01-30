@@ -1,8 +1,9 @@
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
 import ErrorCard from 'lib/components/core/ErrorCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { studentsIndexShape } from '../../../propTypes/students';
 
@@ -21,16 +22,16 @@ const translations = defineMessages({
 });
 
 const StudentsStatistics = ({ metadata, students, isFetching, isError }) => {
-  const intl = useIntl();
+  const { t } = useTranslation();
 
   if (isFetching) {
     return <LoadingIndicator />;
   }
   if (isError) {
-    return <ErrorCard message={intl.formatMessage(translations.error)} />;
+    return <ErrorCard message={t(translations.error)} />;
   }
   if (students.length === 0) {
-    return <Note message={intl.formatMessage(translations.error)} />;
+    return <Note message={t(translations.error)} />;
   }
 
   return <StudentsStatisticsTable metadata={metadata} students={students} />;

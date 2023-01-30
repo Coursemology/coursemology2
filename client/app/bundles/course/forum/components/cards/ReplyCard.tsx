@@ -57,7 +57,7 @@ const ReplyCard: FC<Props> = (props) => {
     postId,
     isReplying,
     isAnonymousEnabled,
-    repliesTo,
+    repliesTo: user,
     setIsReplying,
     replyValue,
     setReplyValue,
@@ -136,9 +136,7 @@ const ReplyCard: FC<Props> = (props) => {
                 text: nextValue,
               }))
             }
-            placeholder={t(translations.replyTo, {
-              user: repliesTo,
-            })}
+            placeholder={t(translations.replyTo, { user })}
             value={replyValue.text}
           />
           {isAnonymousEnabled && (

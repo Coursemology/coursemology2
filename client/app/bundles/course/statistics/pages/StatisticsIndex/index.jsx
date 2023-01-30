@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { connect } from 'react-redux';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 
 import NotificationBar from 'lib/components/core/NotificationBar';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import {
   fetchCoursePerformanceStatistics,
@@ -92,12 +93,12 @@ const StatisticsIndex = ({
   staffStatistics,
 }) => {
   const [value, setValue] = useState(0);
-  const intl = useIntl();
+  const { t } = useTranslation();
 
   useEffect(() => {
     dispatch(
       fetchCourseProgressionStatistics(
-        intl.formatMessage(translations.courseProgressionFailure),
+        t(translations.courseProgressionFailure),
       ),
     );
   }, [dispatch]);
@@ -105,21 +106,17 @@ const StatisticsIndex = ({
   useEffect(() => {
     dispatch(
       fetchCoursePerformanceStatistics(
-        intl.formatMessage(translations.coursePerformanceFailure),
+        t(translations.coursePerformanceFailure),
       ),
     );
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(
-      fetchStudentsStatistics(intl.formatMessage(translations.studentsFailure)),
-    );
+    dispatch(fetchStudentsStatistics(t(translations.studentsFailure)));
   }, [dispatch]);
 
   useEffect(() => {
-    dispatch(
-      fetchStaffStatistics(intl.formatMessage(translations.staffFailure)),
-    );
+    dispatch(fetchStaffStatistics(t(translations.staffFailure)));
   }, [dispatch]);
 
   const handleChange = (_event, newValue) => {
@@ -128,7 +125,7 @@ const StatisticsIndex = ({
 
   return (
     <>
-      <PageHeader title={intl.formatMessage(translations.statistics)} />
+      <PageHeader title={t(translations.statistics)} />
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs
@@ -136,18 +133,9 @@ const StatisticsIndex = ({
             onChange={handleChange}
             value={value}
           >
-            <Tab
-              label={intl.formatMessage(translations.students)}
-              {...a11yProps(0)}
-            />
-            <Tab
-              label={intl.formatMessage(translations.staff)}
-              {...a11yProps(1)}
-            />
-            <Tab
-              label={intl.formatMessage(translations.course)}
-              {...a11yProps(2)}
-            />
+            <Tab label={t(translations.students)} {...a11yProps(0)} />
+            <Tab label={t(translations.staff)} {...a11yProps(1)} />
+            <Tab label={t(translations.course)} {...a11yProps(2)} />
           </Tabs>
         </Box>
         <TabPanel index={0} value={value}>

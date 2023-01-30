@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import CloseIcon from '@mui/icons-material/Close';
@@ -16,6 +16,7 @@ import { AppDispatch, AppState } from 'types/store';
 
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
 import FilterForm from '../../components/forms/FilterForm';
@@ -41,7 +42,7 @@ const translations = defineMessages({
 
 const ForumDisbursement: FC = () => {
   const retrievedPostUserIds = new Set();
-  const intl = useIntl();
+  const { t } = useTranslation();
   const [selectedForumPostUser, setSelectedForumPostUser] =
     useState<ForumDisbursementUserEntity | null>();
 
@@ -64,7 +65,7 @@ const ForumDisbursement: FC = () => {
           retrievedPostUserIds.add(user.id);
         })
         .catch(() => {
-          toast.error(intl.formatMessage(translations.fetchForumPostsFailure));
+          toast.error(t(translations.fetchForumPostsFailure));
         });
     }
   };
@@ -122,7 +123,7 @@ const ForumDisbursement: FC = () => {
               }}
             >
               <div>
-                {intl.formatMessage(translations.postListDialogHeader, {
+                {t(translations.postListDialogHeader, {
                   startDate: formatLongDateTime(filters.startTime),
                   endDate: formatLongDateTime(filters.endTime),
                 })}{' '}
