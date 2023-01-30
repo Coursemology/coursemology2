@@ -17,6 +17,7 @@ import {
   updateUserEmailSubscriptions,
 } from 'course/actions/user-email-subscriptions';
 import { setNotification } from 'lib/actions';
+import Link from 'lib/components/core/Link';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 
 import translations, {
@@ -182,14 +183,14 @@ class UserEmailSubscriptions extends Component {
         </h2>
         {this.renderEmailSettingsTable()}
         {!this.props.userEmailSubscriptionsPageFilter.show_all_settings && (
-          <a
+          <Link
             className="cursor-pointer"
             onClick={this.handleFetchAllUserEmailSubscriptions}
           >
             <FormattedMessage
               {...translations.viewAllEmailSubscriptionSettings}
             />
-          </a>
+          </Link>
         )}
         <NotificationPopup />
       </>
