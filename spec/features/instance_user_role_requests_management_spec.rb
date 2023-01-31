@@ -22,7 +22,7 @@ RSpec.feature 'Instance::UserRoleRequests' do
 
         expect do
           find('button.btn-submit').click
-          sleep 0.2
+          wait_for_page
         end.to change(ActionMailer::Base.deliveries, :count)
 
         request_created = instance.user_role_requests.last
@@ -41,7 +41,7 @@ RSpec.feature 'Instance::UserRoleRequests' do
         new_reason = 'New Reason'
         fill_in 'Reason', with: new_reason
         find('button.btn-submit').click
-        sleep 0.2
+        wait_for_page
         expect(request.reload.reason).to eq(new_reason)
       end
     end

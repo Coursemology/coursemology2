@@ -34,7 +34,7 @@ RSpec.feature 'User: Profile', js: true do
 
         click_button 'Done'
         click_button 'Save changes'
-        sleep 0.5
+        wait_for_page
 
         expect_toastify('Your changes have been saved.')
         expect(user.reload.profile_photo.url).to be_present

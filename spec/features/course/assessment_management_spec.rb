@@ -45,6 +45,7 @@ RSpec.feature 'Course: Assessments: Management', js: true do
         visit course_assessment_path(course, assessment)
 
         expect do
+          wait_for_page
           click_button 'Delete Assessment'
           Capybara.enable_aria_label = false
           click_button 'Delete Assessment'

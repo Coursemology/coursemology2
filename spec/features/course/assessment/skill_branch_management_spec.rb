@@ -50,7 +50,7 @@ RSpec.describe 'Course: Skill Branches' do
         find(content_tag_selector(skill_branch)).click
 
         expect do
-          sleep 0.5 # Wait for skill drawer to expand fully
+          wait_for_page
           find("button.skill-branch-delete-#{skill_branch.id}").click
           accept_prompt
         end.to change { course.assessment_skill_branches.count }.by(-1)

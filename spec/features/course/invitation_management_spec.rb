@@ -114,7 +114,7 @@ RSpec.feature 'Courses: Invitations', js: true do
 
         # Resend user_invitation for entire course
         click_button('Resend All Invitations')
-        sleep 0.2
+        wait_for_page
         expect(current_path).to eq(course_user_invitations_path(course))
         expect(invitation_to_delete.reload.sent_at).not_to eq(old_time)
 

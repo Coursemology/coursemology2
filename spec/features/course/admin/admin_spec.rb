@@ -49,7 +49,7 @@ RSpec.feature 'Course: Administration: Administration', js: true do
 
         click_button 'Done'
         click_button 'Save changes'
-        sleep 0.5
+        wait_for_page
         expect_toastify('The new course logo was successfully uploaded.')
 
         visit current_path

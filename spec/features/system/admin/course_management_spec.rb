@@ -66,11 +66,11 @@ RSpec.feature 'System: Administration: Courses', js: true do
         course_to_search = create(:course)
 
         visit admin_courses_path
-        sleep 0.5
+        wait_for_page
         find_button('Search').click
         find('div[aria-label="Search"]').find('input').set(course_to_search.title)
 
-        sleep 0.5 # timeout for search debouncing
+        wait_for_field_debouncing # timeout for search debouncing
 
         expect(page).to have_selector('p.course_title', text: course_to_search.title)
         expect(all('.course').count).to eq(1)

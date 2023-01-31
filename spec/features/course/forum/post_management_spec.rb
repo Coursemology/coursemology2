@@ -122,7 +122,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           find('svg[data-testId="ThumbDownOffAltIcon"]').find(:xpath, '..').click
         end
 
-        sleep 0.5
+        wait_for_page
         expect(post.reload.vote_tally).to eq(-1)
         expect(find('div.vote-tally').text).to eq('-1')
 
@@ -131,7 +131,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           find('svg[data-testId="ThumbDownAltIcon"]').find(:xpath, '..').click
         end
 
-        sleep 0.5
+        wait_for_page
         expect(post.reload.vote_tally).to eq(0)
         expect(find('div.vote-tally').text).to eq('0')
 
@@ -140,7 +140,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           find('svg[data-testId="ThumbUpOffAltIcon"]').find(:xpath, '..').click
         end
 
-        sleep 0.5
+        wait_for_page
         expect(post.reload.vote_tally).to eq(1)
         expect(find('div.vote-tally').text).to eq('1')
 
@@ -149,7 +149,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           find('svg[data-testId="ThumbUpAltIcon"]').find(:xpath, '..').click
         end
 
-        sleep 0.5
+        wait_for_page
         expect(post.reload.vote_tally).to eq(0)
         expect(find('div.vote-tally').text).to eq('0')
       end
@@ -314,7 +314,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           find('svg[data-testId="ThumbDownOffAltIcon"]').find(:xpath, '..').click
         end
 
-        sleep 0.5
+        wait_for_page
         expect(post.reload.vote_tally).to eq(-1)
         expect(find('div.vote-tally').text).to eq('-1')
 
@@ -323,7 +323,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           find('svg[data-testId="ThumbDownAltIcon"]').find(:xpath, '..').click
         end
 
-        sleep 0.5
+        wait_for_page
         expect(post.reload.vote_tally).to eq(0)
         expect(find('div.vote-tally').text).to eq('0')
 
@@ -332,7 +332,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           find('svg[data-testId="ThumbUpOffAltIcon"]').find(:xpath, '..').click
         end
 
-        sleep 0.5
+        wait_for_page
         expect(post.reload.vote_tally).to eq(1)
         expect(find('div.vote-tally').text).to eq('1')
 
@@ -341,7 +341,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
           find('svg[data-testId="ThumbUpAltIcon"]').find(:xpath, '..').click
         end
 
-        sleep 0.5
+        wait_for_page
         expect(post.reload.vote_tally).to eq(0)
         expect(find('div.vote-tally').text).to eq('0')
       end

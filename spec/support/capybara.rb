@@ -82,7 +82,7 @@ module Capybara::TestGroupHelpers
     # Since capybara's `find` has a default timeout until the element is found, this helps
     # to ensure certain changes are made before continuing with the tests.
     def expect_toastify(message)
-      sleep 0.5 # To ensure toast is open
+      wait_for_page # To ensure toast is open
       found = false
       find_all('div.Toastify__toast').each do |toast|
         within toast do
@@ -92,7 +92,7 @@ module Capybara::TestGroupHelpers
           break if found
         end
       end
-      sleep 0.5 # To ensure toast is closed
+      wait_for_page # To ensure toast is closed
       expect(found).to be_truthy
     end
 

@@ -57,7 +57,7 @@ RSpec.describe 'Course: Skills' do
         visit course_assessments_skills_path(course)
         find('.skill_branch#skill_branch_-1').click
         find(content_tag_selector(skill)).click
-        sleep 0.2
+        wait_for_page
         expect do
           find("button.skill-delete-#{skill.id}").click
           accept_confirm_dialog

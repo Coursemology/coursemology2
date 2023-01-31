@@ -118,7 +118,7 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
 
         expect do
           click_button 'Upload'
-          sleep 0.3 # wait for upload to complete
+          wait_for_page
         end.to change { parent_folder.materials.count }.by(2)
       end
 
@@ -181,7 +181,7 @@ RSpec.feature 'Course: Material: Folders: Management', js: true do
 
         expect do
           click_button 'Upload'
-          sleep 0.3 # wait for upload to complete
+          wait_for_page
         end.to change { folder.materials.count }.by(2)
 
         expect(page).to have_selector("#material-edit-button-#{folder.materials.last.id}")
