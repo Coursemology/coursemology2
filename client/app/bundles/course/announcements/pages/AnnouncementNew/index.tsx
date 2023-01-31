@@ -59,8 +59,6 @@ const AnnouncementNew: FC<Props> = (props) => {
       ...data,
       startAt: data.whenToPublish === 'now' ? new Date() : data.startAt,
     };
-    console.log(updatedData.startAt);
-    console.log(new Date(new Date().setSeconds(0, 0)));
     return dispatch(createOperation(updatedData))
       .then(() => {
         onClose();
