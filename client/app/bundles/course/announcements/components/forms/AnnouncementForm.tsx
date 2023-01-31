@@ -72,7 +72,10 @@ const validationSchema = yup.object({
     .date()
     .nullable()
     .typeError(formTranslations.invalidDate)
-    .min(new Date(new Date().setSeconds(0, 0))),
+    .min(
+      new Date(new Date().setSeconds(0, 0)),
+      formTranslations.startDateValidationError,
+    ),
   endAt: yup.date().nullable().typeError(formTranslations.invalidDate),
 });
 
@@ -145,7 +148,6 @@ const AnnouncementForm: FC<Props> = (props) => {
               )}
             />
           )}
-          <div style={{ marginBottom: 12 }} />
 
           {!editing && (
             <Controller
@@ -153,7 +155,7 @@ const AnnouncementForm: FC<Props> = (props) => {
               name="whenToPublish"
               render={({ field }): JSX.Element => (
                 <RadioGroup {...field}>
-                  <div className="mb-2 grid grid-cols-2">
+                  <div className="mb-2 flex space-x-5">
                     <div>
                       <IconRadio
                         label={intl.formatMessage(translations.publishNow)}
@@ -161,7 +163,7 @@ const AnnouncementForm: FC<Props> = (props) => {
                       />
                     </div>
 
-                    <div className="flex space-x-2">
+                    <div className="flex space-x-3">
                       <IconRadio
                         label={intl.formatMessage(
                           translations.publishAtSetDate,
@@ -193,7 +195,7 @@ const AnnouncementForm: FC<Props> = (props) => {
             />
           )}
 
-          <div className="flex w-1/2 flex-col space-y-1">
+          <div className="flex w-1/3 flex-col space-y-1">
             <FormattedMessage {...translations.endAt} />
             <Controller
               control={control}
@@ -217,5 +219,3 @@ const AnnouncementForm: FC<Props> = (props) => {
 };
 
 export default AnnouncementForm;
-
-// 4. Read docs + component
