@@ -2,7 +2,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Checkbox,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   ListSubheader,
   MenuItem,
@@ -39,7 +39,7 @@ const translations = defineMessages({
   },
   otherGroupMembers: {
     id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.otherGroupMembers',
-    defaultMessage: '(also a group member of {groups})',
+    defaultMessage: '(existing member of the group(s): {groups})',
   },
 });
 
@@ -91,11 +91,11 @@ const styles = {
 };
 
 const GroupUserManagerListItemChoice = ({
-  isOutsideGroup,
+  isListUserOfNonGroupMember,
   user,
   onChangeDropdown,
 }) => {
-  if (isOutsideGroup || !user.groupRole) return undefined;
+  if (isListUserOfNonGroupMember || !user.groupRole) return null;
   return user.role === 'student' ? (
     <GroupRoleChip user={user} />
   ) : (
@@ -119,7 +119,7 @@ const GroupUserManagerListItemChoice = ({
 };
 
 GroupUserManagerListItemChoice.propTypes = {
-  isOutsideGroup: PropTypes.bool,
+  isListUserOfNonGroupMember: PropTypes.bool,
   user: memberShape.isRequired,
   onChangeDropdown: PropTypes.func,
 };
@@ -132,10 +132,9 @@ const GroupUserManagerListItem = ({
   onChangeDropdown,
   showDropdown,
   isChecked,
-  isOutsideGroup,
+  isListUserOfNonGroupMember,
 }) => (
-  <ListItem
-    button
+  <ListItemButton
     disablePadding
     style={
       colour
@@ -152,8 +151,9 @@ const GroupUserManagerListItem = ({
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
         {user.name}
-        {user.isPhantom ? <GhostIcon /> : '\u00a0'}
-        {otherGroups && (
+        {user.isPhantom && <GhostIcon />}
+        &nbsp;
+        {otherGroups?.size > 0 && (
           <FormattedMessage
             {...translations.otherGroupMembers}
             values={{ groups: otherGroups.join(', ') }}
@@ -162,14 +162,14 @@ const GroupUserManagerListItem = ({
       </ListItemText>
     </div>
 
-    {showDropdown ? (
+    {showDropdown && (
       <GroupUserManagerListItemChoice
-        isOutsideGroup={isOutsideGroup}
+        isListUserOfNonGroupMember={isListUserOfNonGroupMember}
         onChangeDropdown={onChangeDropdown}
         user={user}
       />
-    ) : null}
-  </ListItem>
+    )}
+  </ListItemButton>
 );
 
 GroupUserManagerListItem.propTypes = {
@@ -180,7 +180,7 @@ GroupUserManagerListItem.propTypes = {
   onChangeDropdown: PropTypes.func,
   showDropdown: PropTypes.bool,
   isChecked: PropTypes.bool,
-  isOutsideGroup: PropTypes.bool,
+  isListUserOfNonGroupMember: PropTypes.bool,
 };
 
 const GroupUserManagerList = ({
@@ -192,7 +192,7 @@ const GroupUserManagerList = ({
   showDropdown = false,
   onChangeDropdown,
   isChecked = false,
-  isOutsideGroup = false,
+  isListUserOfNonGroupMember = false,
 }) => {
   const renderUsersListItems = (users, title) => (
     <>
@@ -213,7 +213,7 @@ const GroupUserManagerList = ({
             key={user.id}
             colour={colour}
             isChecked={isChecked}
-            isOutsideGroup={isOutsideGroup}
+            isListUserOfNonGroupMember={isListUserOfNonGroupMember}
             onChangeDropdown={onChangeDropdown}
             onCheck={onCheck}
             otherGroups={memberOtherGroups[user.id.toString()]}
@@ -227,13 +227,13 @@ const GroupUserManagerList = ({
 
   return (
     <List style={styles.list}>
-      {students.length === 0 && staff.length === 0 ? (
-        <ListItem button style={{ color: grey[400] }}>
+      {students.length === 0 && staff.length === 0 && (
+        <ListItemButton style={{ color: grey[400] }}>
           <ListItemText>
             <FormattedMessage {...translations.noUsersFound} />
           </ListItemText>
-        </ListItem>
-      ) : null}
+        </ListItemButton>
+      )}
 
       {students.length > 0 &&
         renderUsersListItems(students, translations.students)}
@@ -252,7 +252,7 @@ GroupUserManagerList.propTypes = {
   showDropdown: PropTypes.bool,
   onChangeDropdown: PropTypes.func,
   isChecked: PropTypes.bool,
-  isOutsideGroup: PropTypes.bool,
+  isListUserOfNonGroupMember: PropTypes.bool,
 };
 
 export default GroupUserManagerList;
