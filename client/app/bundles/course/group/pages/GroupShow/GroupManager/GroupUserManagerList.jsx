@@ -90,13 +90,8 @@ const styles = {
   },
 };
 
-const GroupUserManagerListItemChoice = ({
-  isListUserOfNonGroupMember,
-  user,
-  onChangeDropdown,
-}) => {
-  if (isListUserOfNonGroupMember || !user.groupRole) return null;
-  return user.role === 'student' ? (
+const GroupUserManagerListItemChoice = ({ user, onChangeDropdown }) =>
+  user.role === 'student' ? (
     <GroupRoleChip user={user} />
   ) : (
     <div style={styles.listItemWithDropdown}>
@@ -116,10 +111,8 @@ const GroupUserManagerListItemChoice = ({
       </Select>
     </div>
   );
-};
 
 GroupUserManagerListItemChoice.propTypes = {
-  isListUserOfNonGroupMember: PropTypes.bool,
   user: memberShape.isRequired,
   onChangeDropdown: PropTypes.func,
 };
@@ -132,10 +125,9 @@ const GroupUserManagerListItem = ({
   onChangeDropdown,
   showDropdown,
   isChecked,
-  isListUserOfNonGroupMember,
 }) => (
   <ListItemButton
-    disablePadding
+    dense
     style={
       colour
         ? { ...styles.listItem, backgroundColor: colour.light }
@@ -153,7 +145,7 @@ const GroupUserManagerListItem = ({
         {user.name}
         {user.isPhantom && <GhostIcon />}
         &nbsp;
-        {otherGroups?.size > 0 && (
+        {otherGroups?.length > 0 && (
           <FormattedMessage
             {...translations.otherGroupMembers}
             values={{ groups: otherGroups.join(', ') }}
@@ -164,7 +156,6 @@ const GroupUserManagerListItem = ({
 
     {showDropdown && (
       <GroupUserManagerListItemChoice
-        isListUserOfNonGroupMember={isListUserOfNonGroupMember}
         onChangeDropdown={onChangeDropdown}
         user={user}
       />
@@ -180,7 +171,6 @@ GroupUserManagerListItem.propTypes = {
   onChangeDropdown: PropTypes.func,
   showDropdown: PropTypes.bool,
   isChecked: PropTypes.bool,
-  isListUserOfNonGroupMember: PropTypes.bool,
 };
 
 const GroupUserManagerList = ({
@@ -192,7 +182,6 @@ const GroupUserManagerList = ({
   showDropdown = false,
   onChangeDropdown,
   isChecked = false,
-  isListUserOfNonGroupMember = false,
 }) => {
   const renderUsersListItems = (users, title) => (
     <>
@@ -213,7 +202,6 @@ const GroupUserManagerList = ({
             key={user.id}
             colour={colour}
             isChecked={isChecked}
-            isListUserOfNonGroupMember={isListUserOfNonGroupMember}
             onChangeDropdown={onChangeDropdown}
             onCheck={onCheck}
             otherGroups={memberOtherGroups[user.id.toString()]}
@@ -246,13 +234,12 @@ const GroupUserManagerList = ({
 GroupUserManagerList.propTypes = {
   students: PropTypes.arrayOf(memberShape),
   staff: PropTypes.arrayOf(memberShape),
-  memberOtherGroups: PropTypes.arrayOf(memberShape),
+  memberOtherGroups: PropTypes.object,
   onCheck: PropTypes.func.isRequired,
   colourMap: PropTypes.object.isRequired,
   showDropdown: PropTypes.bool,
   onChangeDropdown: PropTypes.func,
   isChecked: PropTypes.bool,
-  isListUserOfNonGroupMember: PropTypes.bool,
 };
 
 export default GroupUserManagerList;

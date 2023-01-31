@@ -454,7 +454,6 @@ const GroupUserManager = ({
             />
             <GroupUserManagerList
               colourMap={colours}
-              isListUserOfNonGroupMember
               memberOtherGroups={availableUsersInOtherGroups}
               onCheck={onCheck}
               staff={availableStaff}
