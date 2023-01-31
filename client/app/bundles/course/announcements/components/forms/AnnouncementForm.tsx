@@ -1,9 +1,13 @@
 import { FC } from 'react';
 import { Controller, UseFormSetError } from 'react-hook-form';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+// import AccessTimeIcon from '@mui/icons-material/AccessTime';
+// import SendIcon from '@mui/icons-material/Send';
+import { RadioGroup } from '@mui/material';
 import { AnnouncementFormData } from 'types/course/announcements';
 import * as yup from 'yup';
 
+import IconRadio from 'lib/components/core/buttons/IconRadio';
 import FormDialog from 'lib/components/form/dialog/FormDialog';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
@@ -49,19 +53,34 @@ const translations = defineMessages({
     id: 'course.announcements.AnnouncementForm.endTimeError',
     defaultMessage: 'End time cannot be earlier than start time',
   },
+  publishNow: {
+    id: 'course.announcements.AnnouncementForm.publishNow',
+    defaultMessage: 'Publish Now',
+  },
+  publishAtSetDate: {
+    id: 'course.announcements.AnnouncementForm.publishAtSetDate',
+    defaultMessage: 'Publish At:',
+  },
 });
 
 const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
   content: yup.string().nullable(),
   sticky: yup.bool(),
-  startAt: yup.date().nullable().typeError(formTranslations.invalidDate),
+  whenToPublish: yup.string().oneOf(['now', 'later']),
+  startAt: yup
+    .date()
+    .nullable()
+    .typeError(formTranslations.invalidDate)
+    .min(new Date(new Date().setSeconds(0, 0))),
   endAt: yup.date().nullable().typeError(formTranslations.invalidDate),
 });
 
 const AnnouncementForm: FC<Props> = (props) => {
   const { open, editing, title, onClose, initialValues, onSubmit, canSticky } =
     props;
+
+  const intl = useIntl();
 
   return (
     <FormDialog
@@ -74,7 +93,7 @@ const AnnouncementForm: FC<Props> = (props) => {
       title={title}
       validationSchema={validationSchema}
     >
-      {(control, formState): JSX.Element => (
+      {(control, formState, watch): JSX.Element => (
         <>
           <Controller
             control={control}
@@ -128,31 +147,66 @@ const AnnouncementForm: FC<Props> = (props) => {
           )}
           <div style={{ marginBottom: 12 }} />
 
-          <div style={{ display: 'flex' }}>
+          {!editing && (
             <Controller
               control={control}
-              name="startAt"
-              render={({ field, fieldState }): JSX.Element => (
-                <FormDateTimePickerField
-                  disabled={formState.isSubmitting}
-                  field={field}
-                  fieldState={fieldState}
-                  label={<FormattedMessage {...translations.startAt} />}
-                  style={{ flex: 1 }}
-                />
+              name="whenToPublish"
+              render={({ field }): JSX.Element => (
+                <RadioGroup {...field}>
+                  <div className="mb-2 grid grid-cols-2">
+                    <div>
+                      <IconRadio
+                        label={intl.formatMessage(translations.publishNow)}
+                        value="now"
+                      />
+                    </div>
+
+                    <div className="flex space-x-2">
+                      <IconRadio
+                        label={intl.formatMessage(
+                          translations.publishAtSetDate,
+                        )}
+                        value="later"
+                      />
+                      <Controller
+                        control={control}
+                        name="startAt"
+                        render={({
+                          field: innerField,
+                          fieldState,
+                        }): JSX.Element => (
+                          <FormDateTimePickerField
+                            disabled={
+                              formState.isSubmitting ||
+                              watch('whenToPublish') === 'now'
+                            }
+                            field={innerField}
+                            fieldState={fieldState}
+                            style={{ flex: 1, alignItems: 'center' }}
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+                </RadioGroup>
               )}
             />
+          )}
+
+          <div className="flex w-1/2 flex-col space-y-1">
+            <FormattedMessage {...translations.endAt} />
             <Controller
               control={control}
               name="endAt"
               render={({ field, fieldState }): JSX.Element => (
-                <FormDateTimePickerField
-                  disabled={formState.isSubmitting}
-                  field={field}
-                  fieldState={fieldState}
-                  label={<FormattedMessage {...translations.endAt} />}
-                  style={{ flex: 1 }}
-                />
+                <div>
+                  <FormDateTimePickerField
+                    disabled={formState.isSubmitting}
+                    field={field}
+                    fieldState={fieldState}
+                    style={{ flex: 1 }}
+                  />
+                </div>
               )}
             />
           </div>
@@ -163,3 +217,5 @@ const AnnouncementForm: FC<Props> = (props) => {
 };
 
 export default AnnouncementForm;
+
+// 4. Read docs + component

@@ -47,4 +47,5 @@ export interface AnnouncementFormData {
   sticky: boolean;
   startAt: Date;
   endAt: Date;
+  whenToPublish?: 'now' | 'later';
 }
