@@ -1,4 +1,5 @@
 import { useEffect, useMemo } from 'react';
+import useEmitterFactory from 'react-emitter-factory';
 import { Controller, useForm } from 'react-hook-form';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
@@ -119,12 +120,19 @@ const GroupCreationForm = (props) => {
     setError,
     setValue,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isDirty },
   } = useForm({
     defaultValues: initialValues,
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
   });
+  useEmitterFactory(
+    props,
+    {
+      isDirty,
+    },
+    [isDirty],
+  );
 
   const name = watch('name');
   const numToCreate = Number.parseInt(watch('num_to_create'), 10);
