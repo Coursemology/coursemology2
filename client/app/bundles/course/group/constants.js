@@ -12,7 +12,6 @@ export const dialogTypes = mirrorCreator([
 export const groupRole = {
   Normal: 'normal',
   Manager: 'manager',
-  Unknown: 'unknown',
 };
 
 const actionTypes = mirrorCreator([
