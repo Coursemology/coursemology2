@@ -43,7 +43,7 @@ const translations = defineMessages({
       'This group has no members! Manage groups to assign members now!',
   },
   manageOneGroup: {
-    id: 'course.group.GroupShow.CategoryCard.manageOneGroup',
+    id: 'course.group.GroupShow.GroupTableCard.manageOneGroup',
     defaultMessage: 'Edit Group',
   },
   hidePhantomStudents: {
@@ -66,23 +66,26 @@ const styles = {
 const GroupTableCard = ({ group, onManageGroup, canManageCategory }) => {
   const [hidePhantomStudents, setHidePhantomStudents] = useState(true);
 
-  let members = [...group.members];
-  if (hidePhantomStudents) {
-    members = members.filter((m) => !m.isPhantom);
-  }
+  const allMembers = [...group.members];
+  allMembers.sort(sortByName).sort(sortByPhantom).sort(sortByGroupRole);
+  const membersWithoutPhantom = allMembers.filter((m) => !m.isPhantom);
+  const hasPhantomMembers = allMembers.length !== membersWithoutPhantom.length;
+  const members = hidePhantomStudents ? membersWithoutPhantom : allMembers;
 
-  members.sort(sortByName).sort(sortByPhantom).sort(sortByGroupRole);
+  const titleButton = useMemo(
+    () => [
+      ...(canManageCategory
+        ? [
+            {
+              label: <FormattedMessage {...translations.manageOneGroup} />,
+              onClick: onManageGroup,
+            },
+          ]
+        : []),
+    ],
 
-  const titleButton = useMemo(() => {
-    const result = [];
-    if (canManageCategory) {
-      result.push({
-        label: <FormattedMessage {...translations.manageOneGroup} />,
-        onClick: onManageGroup,
-      });
-    }
-    return result;
-  }, [onManageGroup, canManageCategory]);
+    [onManageGroup, canManageCategory],
+  );
 
   return (
     <GroupCard
@@ -95,16 +98,18 @@ const GroupTableCard = ({ group, onManageGroup, canManageCategory }) => {
       title={group.name}
       titleButtons={titleButton}
     >
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={hidePhantomStudents}
-            onChange={(_, checked) => setHidePhantomStudents(checked)}
-          />
-        }
-        label={<FormattedMessage {...translations.hidePhantomStudents} />}
-        style={styles.checkbox}
-      />
+      {hasPhantomMembers && (
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={hidePhantomStudents}
+              onChange={(_, checked) => setHidePhantomStudents(checked)}
+            />
+          }
+          label={<FormattedMessage {...translations.hidePhantomStudents} />}
+          style={styles.checkbox}
+        />
+      )}
       <Table>
         <TableHead>
           <TableRow style={styles.rowHeight}>
