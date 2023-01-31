@@ -32,10 +32,11 @@ const translations = defineMessages({
   },
 });
 
-const initialValues = {
+const initialValues: AnnouncementFormData = {
   title: '',
   content: '',
   sticky: false,
+  whenToPublish: 'now',
   // Dates need to be initialized for endtime to change automatically when start time changes
   startAt: new Date(),
   endAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // + one week
@@ -54,8 +55,14 @@ const AnnouncementNew: FC<Props> = (props) => {
     data: AnnouncementFormData,
     setError,
   ): Promise<void> => {
-    return dispatch(createOperation(data))
-      .then((_) => {
+    const updatedData = {
+      ...data,
+      startAt: data.whenToPublish === 'now' ? new Date() : data.startAt,
+    };
+    console.log(updatedData.startAt);
+    console.log(new Date(new Date().setSeconds(0, 0)));
+    return dispatch(createOperation(updatedData))
+      .then(() => {
         onClose();
         toast.success(t(translations.creationSuccess));
       })

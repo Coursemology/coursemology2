@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { ReactNode, useState } from 'react';
-import { Control, FormState, useForm, UseFormSetError } from 'react-hook-form';
+import {
+  Control,
+  FormState,
+  useForm,
+  UseFormSetError,
+  UseFormWatch,
+} from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
@@ -28,7 +34,11 @@ interface Props {
   title: string;
   formName: string;
   validationSchema?: AnyObjectSchema;
-  children?: (control: Control, formState: FormState<any>) => ReactNode;
+  children?: (
+    control: Control,
+    formState: FormState<any>,
+    watch: UseFormWatch<any>,
+  ) => ReactNode;
   primaryActionText?: string;
 }
 
@@ -48,7 +58,7 @@ const FormDialog = (props: Props): JSX.Element => {
 
   const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
   const { t } = useTranslation();
-  const { control, handleSubmit, setError, formState } = useForm({
+  const { control, handleSubmit, setError, formState, watch } = useForm({
     defaultValues: initialValues,
     resolver: validationSchema && yupResolver(validationSchema),
   });
@@ -82,7 +92,7 @@ const FormDialog = (props: Props): JSX.Element => {
             onSubmit={handleSubmit((data) => onSubmit(data, setError))}
           >
             <ErrorText errors={formState.errors} />
-            {children?.(control, formState)}
+            {children?.(control, formState, watch)}
           </form>
         </DialogContent>
         <DialogActions>
