@@ -37,7 +37,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
         expect do
           find('button.general-btn-submit').click
-          sleep 0.5
+          wait_for_page
         end.to change(Course::ExperiencePointsRecord, :count).by(1)
 
         expect(group1_student.experience_points).to eq(59)
@@ -66,7 +66,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
         expect do
           find('button.general-btn-submit').click
-          sleep 0.5
+          wait_for_page
         end.to change(Course::ExperiencePointsRecord, :count).by(course_students.length)
 
         course_students.each do |course_student|
@@ -93,7 +93,7 @@ RSpec.feature 'Course: Experience Points: Disbursement' do
 
         expect do
           find('button.general-btn-submit').click
-          sleep 0.5
+          wait_for_page
         end.to change(Course::ExperiencePointsRecord, :count).by(2)
 
         expect(student_to_award_points.experience_points).to eq(100)

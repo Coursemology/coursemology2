@@ -149,7 +149,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
 
         find('#students-tab').click
         find('#submission-dropdown-icon').click
-        sleep 2
+        wait_for_page
         expect(page).to have_css('.unsubmit-submissions-enabled')
 
         find('.unsubmit-submissions-enabled').click
@@ -166,7 +166,7 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
 
         find('#students-tab').click
         find('#submission-dropdown-icon').click
-        sleep 2
+        wait_for_page
         expect(page).to have_css('.delete-submissions-enabled')
 
         find('.delete-submissions-enabled').click
@@ -234,13 +234,13 @@ RSpec.describe 'Course: Assessment: Submissions: Submissions' do
         expect(find_button(delete_btn)).to be_present
 
         find('#submission-dropdown-icon').click
-        sleep 2
+        wait_for_page
         expect(page).to have_css('.delete-submissions-enabled')
 
         find('.delete-submissions-enabled').click
         accept_confirm_dialog
         wait_for_job
-        sleep 1
+        wait_for_page
         expect(page).to_not have_button(delete_btn)
 
         expect(randomized_assessment.submissions).to be_empty

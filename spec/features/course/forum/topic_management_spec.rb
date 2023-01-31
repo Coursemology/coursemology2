@@ -51,7 +51,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select-announcement').click
 
         find('button.btn-submit').click
-        sleep 0.2
+        wait_for_page
 
         expect(forum.topics.last.topic_type).to eq('announcement')
         expect(forum.topics.last.posts.first.text).to eq('<p>test</p>')
@@ -66,7 +66,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-sticky').click
         find('button.btn-submit').click
-        sleep 0.2
+        wait_for_page
 
         expect(forum.topics.last.topic_type).to eq('sticky')
       end
@@ -250,7 +250,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select-normal').click
 
         find('button.btn-submit').click
-        sleep 0.2
+        wait_for_page
 
         expect(forum.topics.last.topic_type).to eq('normal')
         expect(forum.topics.last.posts.first.text).to eq('<p>test</p>')
@@ -265,7 +265,7 @@ RSpec.feature 'Course: Forum: Topic: Management', js: true do
         find('#select').click
         find('#select-question').click
         find('button.btn-submit').click
-        sleep 0.2
+        wait_for_page
 
         expect(forum.topics.last.topic_type).to eq('question')
       end

@@ -42,7 +42,7 @@ RSpec.feature 'System: Administration: Users', js: true do
 
         user_to_change = users.sample
         new_name = 'updated user name'
-        sleep 0.2
+        wait_for_page
         # change name
         within find("tr.system_user_#{user_to_change.id}") do
           find('button.inline-edit-button', visible: false).click
@@ -51,7 +51,7 @@ RSpec.feature 'System: Administration: Users', js: true do
         end
         # Disabled due to flaky test
         # expect_toastify("#{user_to_change.name} was renamed to #{new_name}.")
-        sleep 0.2
+        wait_for_page
         # change role
         within find("tr.system_user_#{user_to_change.id}") do
           find('div.user_role').click
@@ -59,7 +59,7 @@ RSpec.feature 'System: Administration: Users', js: true do
         find("#role-#{user_to_change.id}-administrator").select_option
         # Disabled due to flaky test
         # expect_toastify("Successfully changed #{new_name}'s role to Administrator.")
-        sleep 0.2
+        wait_for_page
         expect(user_to_change.reload).to be_administrator
         expect(user_to_change.name).to eq(new_name)
       end
@@ -80,11 +80,11 @@ RSpec.feature 'System: Administration: Users', js: true do
         visit admin_users_path
 
         # Search by username
-        sleep 0.5
+        wait_for_page
         find_button('Search').click
         find('div[aria-label="Search"]').find('input').set(user_name)
 
-        sleep 0.5 # timeout for search debouncing
+        wait_for_field_debouncing # timeout for search debouncing
         users_to_search.each do |user|
           expect(page).to have_selector('div.user_name', text: user.name)
         end
@@ -93,7 +93,7 @@ RSpec.feature 'System: Administration: Users', js: true do
         # Search by email
         random_user = users_to_search.sample
         find('div[aria-label="Search"]').find('input').set(random_user.email)
-        sleep 0.5 # timeout for search debouncing
+        wait_for_field_debouncing # timeout for search debouncing
 
         expect(page).to have_selector('div.user_name', text: random_user.name)
         expect(all('.system_user').count).to eq(1)

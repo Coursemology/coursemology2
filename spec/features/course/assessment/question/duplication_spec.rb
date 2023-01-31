@@ -30,6 +30,8 @@ RSpec.describe 'Course: Assessments: Questions: Duplication Spec', js: true do
           click_button 'Duplicate'
         end
 
+        wait_for_job
+
         expect do
           find('li', text: destination_assessment.title).click
           expect_toastify('Your question has been duplicated.')

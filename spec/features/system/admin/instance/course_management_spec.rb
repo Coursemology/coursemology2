@@ -45,7 +45,7 @@ RSpec.feature 'System: Administration: Instance: Courses', js: true do
         expect(page).to have_button('Delete course', disabled: true)
         fill_in 'confirmDeleteField', with: 'coursemology'
         click_button('Delete course')
-        sleep 0.2
+        wait_for_page
         expect_toastify("#{course_to_delete.title} was deleted.")
       end
 
@@ -57,7 +57,7 @@ RSpec.feature 'System: Administration: Instance: Courses', js: true do
         find_button('Search').click
         find('div[aria-label="Search"]').find('input').set(course_to_search.title)
 
-        sleep 0.5 # timeout for search debouncing
+        wait_for_field_debouncing # timeout for search debouncing
 
         expect(page).to have_selector('p.course_title', text: course_to_search.title)
         expect(all('.course').count).to eq(1)

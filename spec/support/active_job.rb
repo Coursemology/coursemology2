@@ -62,6 +62,14 @@ module TrackableJob::SpecHelpers
     end
   end
 
+  def wait_for_page
+    sleep 0.5
+  end
+
+  def wait_for_field_debouncing
+    sleep 0.5
+  end
+
   def visit_current_path
     tries ||= 10
     visit current_path

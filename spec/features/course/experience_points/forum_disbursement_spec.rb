@@ -45,7 +45,7 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
         within find('.forum-participation-search-panel') do
           find('button.filter-btn-submit').click
         end
-        sleep 0.5
+        wait_for_page
 
         # The first student gets 400 (2 * weekly_cap) for the 2-week span since his
         # participation score is higher than the rest due to the additional upvote.
@@ -63,7 +63,7 @@ RSpec.feature 'Course: Experience Points: Forum Disbursement' do
 
         expect do
           find('button.forum-btn-submit').click
-          sleep 0.5
+          wait_for_page
         end.to change(Course::ExperiencePointsRecord, :count).by(3)
       end
     end

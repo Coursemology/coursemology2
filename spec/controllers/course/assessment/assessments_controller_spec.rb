@@ -78,7 +78,6 @@ RSpec.describe Course::Assessment::AssessmentsController do
         end
       end
 
-      # Flaky test
       it 'updates the start_at and end_at' do
         student
 
