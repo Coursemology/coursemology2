@@ -48,11 +48,13 @@ const Category = ({
 }) => {
   const { groupCategoryId } = useParams();
   const handleGroupSelect = useCallback(
-    (groupId) =>
+    (groupId) => {
+      dispatch({ type: actionTypes.MANAGE_GROUPS_START });
       dispatch({
         type: actionTypes.SET_SELECTED_GROUP_ID,
         selectedGroupId: groupId,
-      }),
+      });
+    },
     [dispatch],
   );
 
@@ -96,19 +98,16 @@ const Category = ({
             canManageGroups={canManageGroups}
             category={groupCategory}
             numGroups={groups.length}
-            onManageGroups={() => {
-              dispatch({ type: actionTypes.MANAGE_GROUPS_START });
-            }}
+            onManageGroups={() =>
+              dispatch({ type: actionTypes.MANAGE_GROUPS_START })
+            }
           />
           {groups.map((group) => (
             <GroupTableCard
               key={group.id}
               canManageCategory={canManageCategory}
               group={group}
-              onManageGroup={() => {
-                dispatch({ type: actionTypes.MANAGE_GROUPS_START });
-                handleGroupSelect(group.id);
-              }}
+              onManageGroup={() => handleGroupSelect(group.id)}
             />
           ))}
           {groups.length === 0 ? (
