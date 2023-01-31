@@ -1,27 +1,23 @@
+import { defineMessages, FormattedMessage } from 'react-intl';
 import { Chip } from '@mui/material';
 import palette from 'theme/palette';
 
 import { memberShape } from '../propTypes';
 
-const groupRoleTranslation = {
-  normal: 'Member',
-  manager: 'Manager',
-};
-
-const translateStatus = (oldStatus) => {
-  switch (oldStatus) {
-    case 'normal':
-      return groupRoleTranslation.normal;
-    case 'manager':
-      return groupRoleTranslation.manager;
-    default:
-      return groupRoleTranslation.unknown;
-  }
-};
+const translations = defineMessages({
+  manager: {
+    id: 'course.group.GroupShow.GroupRoleChip.manager',
+    defaultMessage: 'Manager',
+  },
+  normal: {
+    id: 'course.group.GroupRoleChip.normal',
+    defaultMessage: 'Member',
+  },
+});
 
 const GroupRoleChip = ({ user }) => (
   <Chip
-    label={translateStatus(user.groupRole)}
+    label={<FormattedMessage {...translations[user.groupRole]} />}
     style={{
       width: 100,
       height: 25,
