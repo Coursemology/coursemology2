@@ -71,10 +71,6 @@ const translations = defineMessages({
     id: 'course.group.GroupShow.GroupManager.GroupUserManager.hidePhantomStudents',
     defaultMessage: 'Hide all Phantom Students',
   },
-  cannotUpliftStudent: {
-    id: 'course.group.GroupShow.GroupManager.GroupUserManager.cannotUpliftStudent',
-    defaultMessage: 'Student cannot be uplifted into Manager',
-  },
 });
 
 const styles = {
@@ -103,9 +99,6 @@ const styles = {
     justifyContent: 'center',
     padding: 3,
     height: 500,
-  },
-  checkbox: {
-    marginTop: '1rem',
   },
 };
 
@@ -161,11 +154,9 @@ const getAvailableUserInOtherGroups = (courseUsers, groups, group) => {
     const membersOfThisGroup = otherGroups[i].members.map((m) => m.id);
     for (let j = 0; j < membersOfThisGroup.length; j++) {
       if (membersOfThisGroup[j] in mapStudentToGroups) {
-        mapStudentToGroups[membersOfThisGroup[j]].push(
-          `${otherGroups[i].name}`,
-        );
+        mapStudentToGroups[membersOfThisGroup[j]].push(otherGroups[i].name);
       } else {
-        mapStudentToGroups[membersOfThisGroup[j]] = [`${otherGroups[i].name}`];
+        mapStudentToGroups[membersOfThisGroup[j]] = [otherGroups[i].name];
       }
     }
   }
@@ -408,6 +399,7 @@ const GroupUserManager = ({
 
   const CheckBoxHideGroup = () => (
     <FormControlLabel
+      className="mb-0"
       control={
         <Checkbox
           checked={hideInGroup}
@@ -415,12 +407,12 @@ const GroupUserManager = ({
         />
       }
       label={<FormattedMessage {...translations.hideStudents} />}
-      style={styles.checkbox}
     />
   );
 
   const CheckBoxHidePhantomStudent = () => (
     <FormControlLabel
+      className="mb-0"
       control={
         <Checkbox
           checked={hidePhantomStudent}
@@ -428,7 +420,6 @@ const GroupUserManager = ({
         />
       }
       label={<FormattedMessage {...translations.hidePhantomStudents} />}
-      style={styles.checkbox}
     />
   );
 
@@ -463,7 +454,7 @@ const GroupUserManager = ({
             />
             <GroupUserManagerList
               colourMap={colours}
-              isOutsideGroup
+              isListUserOfNonGroupMember
               memberOtherGroups={availableUsersInOtherGroups}
               onCheck={onCheck}
               staff={availableStaff}
@@ -494,7 +485,7 @@ const GroupUserManager = ({
             />
           </div>
         </div>
-        <div className="flex flex-col space-y-0.5">
+        <div className="flex flex-col">
           <CheckBoxHideGroup />
           <CheckBoxHidePhantomStudent />
         </div>
