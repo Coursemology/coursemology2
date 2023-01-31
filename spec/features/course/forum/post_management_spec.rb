@@ -157,6 +157,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
       scenario 'I can mark/unmark post as answer' do
         post = create(:course_discussion_post, topic: topic.acting_as)
         visit course_forum_topic_path(course, forum, topic)
+        wait_for_page
         # Mark as answer
         within find("div.post_#{post.id}") do
           click_button 'Mark as answer'
@@ -164,7 +165,7 @@ RSpec.feature 'Course: Forum: Post: Management', js: true do
         end
         expect(post.reload).to be_answer
         expect(topic.reload).to be_resolved
-
+        wait_for_page
         # Unmark as answer
         within find("div.post_#{post.id}") do
           click_button 'Unmark as answer'
