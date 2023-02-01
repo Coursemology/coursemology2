@@ -164,11 +164,9 @@ const AnnouncementForm: FC<Props> = (props) => {
               value={whenToPublish}
             >
               <div className="mb-2 flex space-x-5">
-                <div>
-                  <IconRadio label={t(translations.publishNow)} value="now" />
-                </div>
+                <IconRadio label={t(translations.publishNow)} value="now" />
 
-                <div className="flex space-x-3">
+                <div className="flex items-center space-x-3">
                   <IconRadio
                     label={t(translations.publishAtSetDate)}
                     value="later"
@@ -176,17 +174,13 @@ const AnnouncementForm: FC<Props> = (props) => {
                   <Controller
                     control={control}
                     name="startAt"
-                    render={({
-                      field: innerField,
-                      fieldState,
-                    }): JSX.Element => (
+                    render={({ field, fieldState }): JSX.Element => (
                       <FormDateTimePickerField
                         disabled={
                           formState.isSubmitting || whenToPublish === 'now'
                         }
-                        field={innerField}
+                        field={field}
                         fieldState={fieldState}
-                        style={{ flex: 1, alignItems: 'center' }}
                       />
                     )}
                   />
@@ -197,19 +191,18 @@ const AnnouncementForm: FC<Props> = (props) => {
 
           <div className="flex w-full space-x-10 space-y-1">
             {editing && (
-              <div className="flex w-1/3 flex-col">
+              <div className="flex w-1/3 flex-col items-center">
                 {t(translations.startAt)}
                 <Controller
                   control={control}
                   name="startAt"
-                  render={({ field: innerField, fieldState }): JSX.Element => (
+                  render={({ field, fieldState }): JSX.Element => (
                     <FormDateTimePickerField
                       disabled={
                         formState.isSubmitting || whenToPublish === 'later'
                       }
-                      field={innerField}
+                      field={field}
                       fieldState={fieldState}
-                      style={{ flex: 1, alignItems: 'center' }}
                     />
                   )}
                 />
@@ -221,14 +214,11 @@ const AnnouncementForm: FC<Props> = (props) => {
                 control={control}
                 name="endAt"
                 render={({ field, fieldState }): JSX.Element => (
-                  <div>
-                    <FormDateTimePickerField
-                      disabled={formState.isSubmitting}
-                      field={field}
-                      fieldState={fieldState}
-                      style={{ flex: 1 }}
-                    />
-                  </div>
+                  <FormDateTimePickerField
+                    disabled={formState.isSubmitting}
+                    field={field}
+                    fieldState={fieldState}
+                  />
                 )}
               />
             </div>
