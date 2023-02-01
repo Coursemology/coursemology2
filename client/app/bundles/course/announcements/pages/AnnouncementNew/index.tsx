@@ -8,7 +8,9 @@ import { AppDispatch, Operation } from 'types/store';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import AnnouncementForm from '../../components/forms/AnnouncementForm';
+import AnnouncementForm, {
+  PublishMode,
+} from '../../components/forms/AnnouncementForm';
 
 interface Props {
   open: boolean;
@@ -36,7 +38,6 @@ const initialValues: AnnouncementFormData = {
   title: '',
   content: '',
   sticky: false,
-  whenToPublish: 'now',
   // Dates need to be initialized for endtime to change automatically when start time changes
   startAt: new Date(),
   endAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // + one week
@@ -54,10 +55,11 @@ const AnnouncementNew: FC<Props> = (props) => {
   const handleSubmit = (
     data: AnnouncementFormData,
     setError,
+    whenToPublish: PublishMode,
   ): Promise<void> => {
     const updatedData = {
       ...data,
-      startAt: data.whenToPublish === 'now' ? new Date() : data.startAt,
+      startAt: whenToPublish === 'now' ? new Date() : data.startAt,
     };
     return dispatch(createOperation(updatedData))
       .then(() => {
