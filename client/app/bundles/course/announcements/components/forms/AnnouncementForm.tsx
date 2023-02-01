@@ -67,16 +67,21 @@ const validationSchema = yup.object({
   title: yup.string().required(formTranslations.required),
   content: yup.string().nullable(),
   sticky: yup.bool(),
-  whenToPublish: yup.string().oneOf(['now', 'later']),
-  startAt: yup
+  whenToPublish: yup.string().oneOf(['now', 'later']).nullable(),
+  startAt: yup.date().nullable().typeError(formTranslations.invalidDate),
+  endAt: yup
     .date()
     .nullable()
     .typeError(formTranslations.invalidDate)
-    .min(
-      new Date(new Date().setSeconds(0, 0)),
-      formTranslations.startDateValidationError,
-    ),
-  endAt: yup.date().nullable().typeError(formTranslations.invalidDate),
+    .when('whenToPublish', {
+      is: 'now',
+      then: yup
+        .date()
+        .min(yup.ref('startAt'), formTranslations.earlierThanCurrentTimeError),
+      otherwise: yup
+        .date()
+        .min(yup.ref('startAt'), formTranslations.earlierThanStartTimeError),
+    }),
 });
 
 const AnnouncementForm: FC<Props> = (props) => {
@@ -96,124 +101,151 @@ const AnnouncementForm: FC<Props> = (props) => {
       title={title}
       validationSchema={validationSchema}
     >
-      {(control, formState, watch): JSX.Element => (
-        <>
-          <Controller
-            control={control}
-            name="title"
-            render={({ field, fieldState }): JSX.Element => (
-              <FormTextField
-                disabled={formState.isSubmitting}
-                field={field}
-                fieldState={fieldState}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                label={<FormattedMessage {...translations.title} />}
-                required
-                variant="standard"
-              />
-            )}
-          />
-
-          <Controller
-            control={control}
-            name="content"
-            render={({ field, fieldState }): JSX.Element => (
-              <FormRichTextField
-                disabled={formState.isSubmitting}
-                field={field}
-                fieldState={fieldState}
-                fullWidth
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                label={<FormattedMessage {...translations.content} />}
-                variant="standard"
-              />
-            )}
-          />
-          {canSticky && (
+      {(control, formState, watch): JSX.Element => {
+        return (
+          <>
             <Controller
               control={control}
-              name="sticky"
+              name="title"
               render={({ field, fieldState }): JSX.Element => (
-                <FormToggleField
+                <FormTextField
                   disabled={formState.isSubmitting}
                   field={field}
                   fieldState={fieldState}
-                  label={<FormattedMessage {...translations.sticky} />}
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  label={<FormattedMessage {...translations.title} />}
+                  required
+                  variant="standard"
                 />
               )}
             />
-          )}
 
-          {!editing && (
             <Controller
               control={control}
-              name="whenToPublish"
-              render={({ field }): JSX.Element => (
-                <RadioGroup {...field}>
-                  <div className="mb-2 flex space-x-5">
-                    <div>
-                      <IconRadio
-                        label={intl.formatMessage(translations.publishNow)}
-                        value="now"
-                      />
-                    </div>
-
-                    <div className="flex space-x-3">
-                      <IconRadio
-                        label={intl.formatMessage(
-                          translations.publishAtSetDate,
-                        )}
-                        value="later"
-                      />
-                      <Controller
-                        control={control}
-                        name="startAt"
-                        render={({
-                          field: innerField,
-                          fieldState,
-                        }): JSX.Element => (
-                          <FormDateTimePickerField
-                            disabled={
-                              formState.isSubmitting ||
-                              watch('whenToPublish') === 'now'
-                            }
-                            field={innerField}
-                            fieldState={fieldState}
-                            style={{ flex: 1, alignItems: 'center' }}
-                          />
-                        )}
-                      />
-                    </div>
-                  </div>
-                </RadioGroup>
+              name="content"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormRichTextField
+                  disabled={formState.isSubmitting}
+                  field={field}
+                  fieldState={fieldState}
+                  fullWidth
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  label={<FormattedMessage {...translations.content} />}
+                  variant="standard"
+                />
               )}
             />
-          )}
-
-          <div className="flex w-1/3 flex-col space-y-1">
-            <FormattedMessage {...translations.endAt} />
-            <Controller
-              control={control}
-              name="endAt"
-              render={({ field, fieldState }): JSX.Element => (
-                <div>
-                  <FormDateTimePickerField
+            {canSticky && (
+              <Controller
+                control={control}
+                name="sticky"
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormToggleField
                     disabled={formState.isSubmitting}
                     field={field}
                     fieldState={fieldState}
-                    style={{ flex: 1 }}
+                    label={<FormattedMessage {...translations.sticky} />}
+                  />
+                )}
+              />
+            )}
+
+            {!editing && (
+              <Controller
+                control={control}
+                name="whenToPublish"
+                render={({ field }): JSX.Element => (
+                  <RadioGroup {...field}>
+                    <div className="mb-2 flex space-x-5">
+                      <div>
+                        <IconRadio
+                          label={intl.formatMessage(translations.publishNow)}
+                          value="now"
+                        />
+                      </div>
+
+                      <div className="flex space-x-3">
+                        <IconRadio
+                          label={intl.formatMessage(
+                            translations.publishAtSetDate,
+                          )}
+                          value="later"
+                        />
+                        <Controller
+                          control={control}
+                          name="startAt"
+                          render={({
+                            field: innerField,
+                            fieldState,
+                          }): JSX.Element => (
+                            <FormDateTimePickerField
+                              disabled={
+                                formState.isSubmitting ||
+                                watch('whenToPublish') === 'now'
+                              }
+                              field={innerField}
+                              fieldState={fieldState}
+                              style={{ flex: 1, alignItems: 'center' }}
+                            />
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </RadioGroup>
+                )}
+              />
+            )}
+
+            <div className="flex w-full space-x-10 space-y-1">
+              {editing && (
+                <div className="flex w-1/3 flex-col">
+                  <FormattedMessage {...translations.startAt} />
+                  <Controller
+                    control={control}
+                    name="startAt"
+                    render={({
+                      field: innerField,
+                      fieldState,
+                    }): JSX.Element => (
+                      <FormDateTimePickerField
+                        disabled={
+                          formState.isSubmitting ||
+                          watch('whenToPublish') === 'now'
+                        }
+                        field={innerField}
+                        fieldState={fieldState}
+                        style={{ flex: 1, alignItems: 'center' }}
+                      />
+                    )}
                   />
                 </div>
               )}
-            />
-          </div>
-        </>
-      )}
+              <div className="flex w-1/3 flex-col">
+                <FormattedMessage {...translations.endAt} />
+                <Controller
+                  control={control}
+                  name="endAt"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <div>
+                      <FormDateTimePickerField
+                        disabled={formState.isSubmitting}
+                        field={field}
+                        fieldState={fieldState}
+                        style={{ flex: 1 }}
+                      />
+                    </div>
+                  )}
+                />
+              </div>
+            </div>
+          </>
+        );
+      }}
     </FormDialog>
   );
 };
