@@ -46,7 +46,7 @@
     "@tailwindcss/line-clamp": "^0.4.2",
     "ace-builds": "^1.15.0",
     "axios": "^1.2.2",
-    "babel-plugin-formatjs": "^10.3.35",
+    "babel-plugin-formatjs": "^10.3.36",
     "chart.js": "^3.8.2",
     "chartjs-adapter-moment": "^1.0.1",
     "chartjs-plugin-zoom": "^2.0.0",
