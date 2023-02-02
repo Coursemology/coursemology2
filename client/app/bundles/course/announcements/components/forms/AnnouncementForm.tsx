@@ -14,7 +14,7 @@ import FormToggleField from 'lib/components/form/fields/ToggleField';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
-export type PublishMode = 'now' | 'later';
+export type PublishTime = 'now' | 'later';
 
 interface Props {
   open: boolean;
@@ -25,7 +25,7 @@ interface Props {
   onSubmit: (
     data: AnnouncementFormData,
     setError: UseFormSetError<AnnouncementFormData>,
-    whenToPublish: PublishMode,
+    whenToPublish: PublishTime,
   ) => Promise<void>;
   canSticky: boolean;
 }
@@ -65,7 +65,7 @@ const translations = defineMessages({
   },
 });
 
-const validationSchema = (whenToPublish: PublishMode): yup.AnyObjectSchema =>
+const validationSchema = (whenToPublish: PublishTime): yup.AnyObjectSchema =>
   yup.object({
     title: yup.string().required(formTranslations.required),
     content: yup.string().nullable(),
@@ -87,7 +87,7 @@ const AnnouncementForm: FC<Props> = (props) => {
   const { open, editing, title, onClose, initialValues, onSubmit, canSticky } =
     props;
   const { t } = useTranslation();
-  const [whenToPublish, setWhenToPublish] = useState<PublishMode>('now');
+  const [whenToPublish, setWhenToPublish] = useState<PublishTime>('now');
 
   return (
     <FormDialog
@@ -141,6 +141,7 @@ const AnnouncementForm: FC<Props> = (props) => {
               />
             )}
           />
+
           {canSticky && (
             <Controller
               control={control}
@@ -158,16 +159,21 @@ const AnnouncementForm: FC<Props> = (props) => {
 
           {!editing && (
             <RadioGroup
-              onChange={(_, mode): void =>
-                setWhenToPublish(mode as PublishMode)
+              onChange={(_, value): void =>
+                setWhenToPublish(value as PublishTime)
               }
               value={whenToPublish}
             >
-              <div className="mb-2 flex space-x-5">
-                <IconRadio label={t(translations.publishNow)} value="now" />
+              <div className="flex space-x-3 max-sm:flex-col max-sm:space-x-0">
+                <IconRadio
+                  iconClassName="py-0"
+                  label={t(translations.publishNow)}
+                  value="now"
+                />
 
                 <div className="flex items-center space-x-3">
                   <IconRadio
+                    iconClassName="py-0"
                     label={t(translations.publishAtSetDate)}
                     value="later"
                   />
@@ -189,10 +195,9 @@ const AnnouncementForm: FC<Props> = (props) => {
             </RadioGroup>
           )}
 
-          <div className="flex w-full space-x-10 space-y-1">
+          <div className="flex w-full max-sm:flex-col max-sm:space-y-5">
             {editing && (
-              <div className="flex w-1/3 flex-col items-center">
-                {t(translations.startAt)}
+              <div className="w-1/3 max-sm:w-1/2">
                 <Controller
                   control={control}
                   name="startAt"
@@ -203,13 +208,13 @@ const AnnouncementForm: FC<Props> = (props) => {
                       }
                       field={field}
                       fieldState={fieldState}
+                      label={t(translations.startAt)}
                     />
                   )}
                 />
               </div>
             )}
-            <div className="flex w-1/3 flex-col">
-              {t(translations.endAt)}
+            <div className="w-1/3 max-sm:w-1/2">
               <Controller
                 control={control}
                 name="endAt"
@@ -218,6 +223,7 @@ const AnnouncementForm: FC<Props> = (props) => {
                     disabled={formState.isSubmitting}
                     field={field}
                     fieldState={fieldState}
+                    label={t(translations.endAt)}
                   />
                 )}
               />

@@ -9,7 +9,7 @@ import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import AnnouncementForm, {
-  PublishMode,
+  PublishTime,
 } from '../../components/forms/AnnouncementForm';
 
 interface Props {
@@ -55,7 +55,7 @@ const AnnouncementNew: FC<Props> = (props) => {
   const handleSubmit = (
     data: AnnouncementFormData,
     setError,
-    whenToPublish: PublishMode,
+    whenToPublish: PublishTime,
   ): Promise<void> => {
     const updatedData = {
       ...data,

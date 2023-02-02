@@ -6,6 +6,7 @@ interface IconRadioProps {
   label?: string;
   description?: string;
   icon?: typeof SvgIcon;
+  iconClassName?: string;
   disabled?: boolean;
 }
 
@@ -15,7 +16,11 @@ const IconRadio = (props: IconRadioProps): JSX.Element => (
       props.description ? 'items-start' : 'items-center'
     }`}
   >
-    <Radio className="pl-0" disabled={props.disabled} value={props.value} />
+    <Radio
+      className={`pl-0 ${props.iconClassName ?? ''}`}
+      disabled={props.disabled}
+      value={props.value}
+    />
 
     {props.icon &&
       createElement(props.icon, {
