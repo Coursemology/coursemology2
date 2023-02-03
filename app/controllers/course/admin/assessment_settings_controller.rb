@@ -71,7 +71,7 @@ class Course::Admin::AssessmentSettingsController < Course::Admin::Controller
       # Randomized Assessment is temporarily hidden (PR#5406)
       # :allow_randomization,
       :allow_mrq_options_randomization,
-      :programming_time_limit,
+      :programming_timeout_limit,
       assessment_categories_attributes: [
         :id,
         :title,
