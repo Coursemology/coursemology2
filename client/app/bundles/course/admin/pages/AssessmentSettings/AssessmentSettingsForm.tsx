@@ -116,19 +116,19 @@ const AssessmentsSettingsForm = (
 
           <Section
             sticksToNavbar
-            subtitle={t(translations.programmingTimeLimitSubtitle)}
-            title={t(translations.programmingTimeLimit)}
+            subtitle={t(translations.programmingTimeoutLimitSubtitle)}
+            title={t(translations.programmingTimeoutLimit)}
           >
             <Controller
               control={control}
-              name="programmingTimeLimit"
+              name="programmingTimeoutLimit"
               render={({ field, fieldState }): JSX.Element => (
                 <FormTextField
                   disabled={props.disabled}
                   field={field}
                   fieldState={fieldState}
                   fullWidth
-                  label={t(translations.programmingTimeLimitLabel)}
+                  label={t(translations.programmingTimeoutLimitLabel)}
                   type="number"
                   variant="filled"
                 />
