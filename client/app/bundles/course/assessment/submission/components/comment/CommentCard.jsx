@@ -129,7 +129,7 @@ export default class CommentCard extends Component {
     const { editMode } = this.state;
     const {
       editValue,
-      post: { formattedText, id },
+      post: { text, id },
     } = this.props;
 
     if (editMode) {
@@ -156,7 +156,7 @@ export default class CommentCard extends Component {
       );
     }
 
-    return <div dangerouslySetInnerHTML={{ __html: formattedText }} />;
+    return <div dangerouslySetInnerHTML={{ __html: text }} />;
   }
 
   render() {

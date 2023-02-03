@@ -381,7 +381,7 @@ export function updatePostOnServer(postId) {
             editedContent: null,
             editMode: false,
             status: postRequestingStatuses.LOADED,
-            content: data.formattedText,
+            content: data.text,
             rawContent: data.text,
           }),
         );

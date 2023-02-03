@@ -14,8 +14,6 @@ export default class CommentsAPI extends BaseCourseAPI {
    * post = {
    *   id: number, title: string, text: string, createdAt: datetime,
    *      - Post attributes
-   *   formattedText: string,
-   *      - same as text attribute but formatted for html
    *   creator = {
    *     name: string, avatar: string
    *       - user attributes for creator, avatar is an url
