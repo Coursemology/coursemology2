@@ -3,6 +3,7 @@ export interface AssessmentSettingsData {
   showStdoutAndStderr: boolean;
   allowRandomization: boolean;
   allowMrqOptionsRandomization: boolean;
+  programmingTimeLimit: number;
   categories: AssessmentCategory[];
   canCreateCategories: boolean;
 }
@@ -60,6 +61,7 @@ export interface AssessmentSettingsPostData {
     show_stdout_and_stderr?: AssessmentSettingsData['showStdoutAndStderr'];
     allow_randomization?: AssessmentSettingsData['allowRandomization'];
     allow_mrq_options_randomization?: AssessmentSettingsData['allowMrqOptionsRandomization'];
+    programming_time_limit: AssessmentSettingsData['programmingTimeLimit'];
     assessment_categories_attributes?: {
       id: AssessmentCategory['id'];
       title: AssessmentCategory['title'];
