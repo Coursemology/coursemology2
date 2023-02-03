@@ -42,6 +42,19 @@ export default defineMessages({
     id: 'course.admin.AssessmentSettings.outputsOfPublicTestCases',
     defaultMessage: 'Outputs of Public test cases',
   },
+  programmingTimeLimit: {
+    id: 'course.admin.AssessmentSettings.programmingTimeLimit',
+    defaultMessage: 'Programming Time Limit',
+  },
+  programmingTimeLimitSubtitle: {
+    id: 'course.admin.AssessmentSettings.programmingTimeLimitSubtitle',
+    defaultMessage:
+      'The time limit set for programming questions within this course',
+  },
+  programmingTimeLimitLabel: {
+    id: 'course.admin.AssessmentSettings.programmingTimeLimitLabel',
+    defaultMessage: 'Set Programming Time Limit',
+  },
   standardOutputsAndStandardErrors: {
     id: 'course.admin.AssessmentSettings.standardOutputsAndStandardErrors',
     defaultMessage: 'Standard outputs and Standard errors',

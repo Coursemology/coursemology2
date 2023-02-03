@@ -5,6 +5,7 @@ import { AssessmentSettingsData } from 'types/course/admin/assessments';
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
+import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -108,6 +109,28 @@ const AssessmentsSettingsForm = (
                   categories={field.value}
                   disabled={props.disabled}
                   onUpdate={field.onChange}
+                />
+              )}
+            />
+          </Section>
+
+          <Section
+            sticksToNavbar
+            subtitle={t(translations.programmingTimeLimitSubtitle)}
+            title={t(translations.programmingTimeLimit)}
+          >
+            <Controller
+              control={control}
+              name="programmingTimeLimit"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormTextField
+                  disabled={props.disabled}
+                  field={field}
+                  fieldState={fieldState}
+                  fullWidth
+                  label={t(translations.programmingTimeLimitLabel)}
+                  type="number"
+                  variant="filled"
                 />
               )}
             />
