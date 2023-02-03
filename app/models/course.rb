@@ -6,6 +6,8 @@ class Course < ApplicationRecord
   include TimeZoneConcern
   include Generic::CollectionConcern
 
+  DEFAULT_CPU_TIMEOUT = 30
+
   acts_as_tenant :instance, inverse_of: :courses
   has_settings_on :settings
   mount_uploader :logo, ImageUploader
@@ -227,7 +229,7 @@ class Course < ApplicationRecord
   end
 
   def programming_timeout_limit
-    settings(:course_assessments_component).programming_timeout_limit || 300
+    settings(:course_assessments_component).programming_timeout_limit || DEFAULT_CPU_TIMEOUT
   end
 
   def programming_timeout_limit=(time)

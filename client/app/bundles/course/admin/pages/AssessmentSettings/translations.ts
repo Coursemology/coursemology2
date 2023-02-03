@@ -46,15 +46,6 @@ export default defineMessages({
     id: 'course.admin.AssessmentSettings.programmingTimeoutLimit',
     defaultMessage: 'Programming Timeout Limit',
   },
-  programmingTimeoutLimitSubtitle: {
-    id: 'course.admin.AssessmentSettings.programmingTimeoutLimitSubtitle',
-    defaultMessage:
-      'The maximum time limit set for programming questions within this course',
-  },
-  programmingTimeoutLimitLabel: {
-    id: 'course.admin.AssessmentSettings.programmingTimeoutLimitLabel',
-    defaultMessage: 'Set Programming Timeout Limit',
-  },
   standardOutputsAndStandardErrors: {
     id: 'course.admin.AssessmentSettings.standardOutputsAndStandardErrors',
     defaultMessage: 'Standard outputs and Standard errors',
