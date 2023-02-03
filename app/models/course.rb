@@ -26,6 +26,7 @@ class Course < ApplicationRecord
   validates :updater, presence: true
   validates :instance, presence: true
   validates :conditional_satisfiability_evaluation_time, presence: true
+  validates :programming_time_limit, numericality: { greater_than_or_equal_to: 0 }
 
   enum default_timeline_algorithm: CourseUser.timeline_algorithms
 
@@ -223,6 +224,14 @@ class Course < ApplicationRecord
   def allow_mrq_options_randomization=(option)
     option = ActiveRecord::Type::Boolean.new.cast(option)
     settings(:course_assessments_component).allow_mrq_options_randomization = option
+  end
+
+  def programming_time_limit
+    settings(:course_assessments_component).programming_time_limit || 300
+  end
+
+  def programming_time_limit=(time)
+    settings(:course_assessments_component).programming_time_limit = time
   end
 
   def codaveri_itsp_enabled?

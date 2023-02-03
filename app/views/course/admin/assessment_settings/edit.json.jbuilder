@@ -5,6 +5,7 @@ json.showPublicTestCasesOutput current_course.show_public_test_cases_output
 json.showStdoutAndStderr current_course.show_stdout_and_stderr
 json.allowRandomization current_course.allow_randomization
 json.allowMrqOptionsRandomization current_course.allow_mrq_options_randomization
+json.programmingTimeLimit current_course.programming_time_limit
 
 json.canCreateCategories can?(:create, Course::Assessment::Category.new(course: current_course))
 
