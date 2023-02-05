@@ -7,7 +7,7 @@ import { cyan } from '@mui/material/colors';
 
 import axios from 'lib/axios';
 
-import './CKEditor.css';
+import './CKEditor.scss';
 
 interface Props {
   inputId: string;

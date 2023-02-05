@@ -1,5 +1,6 @@
 /* Below are needed to ensure ckeditor popup (eg link)
 is rendered properly in MUI dialog */
+@import 'z-index';
 
 .ck-body-wrapper {
   position: absolute;

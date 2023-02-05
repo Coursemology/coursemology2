@@ -82,8 +82,7 @@ module.exports = {
           resolve(
             __dirname,
             'node_modules/react-image-crop/dist/ReactCrop.css',
-          ),
-          resolve(__dirname, 'app/lib/components/core/fields/CKEditor.css'),
+          )
         ],
       },
       {
@@ -111,6 +110,31 @@ module.exports = {
             },
           },
           'sass-loader',
+        ],
+        exclude: [
+          /node_modules/,
+          resolve(__dirname, 'app/lib/styles'),
+          resolve(__dirname, 'app/lib/components/core/layouts/layout.scss'),
+          resolve(__dirname, 'app/lib/components/core/fields/CKEditor.scss'),
+        ],
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          'style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                includePaths: [join(__dirname, '..', 'app/assets/stylesheets')]
+              },
+            },
+          },
+        ],
+        include: [
+          resolve(__dirname, 'app/lib/components/core/layouts/layout.scss'),
+          resolve(__dirname, 'app/lib/components/core/fields/CKEditor.scss'),
         ],
         exclude: [/node_modules/, resolve(__dirname, 'app/lib/styles')],
       },
