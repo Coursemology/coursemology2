@@ -124,7 +124,7 @@ $sidebar-margin-side: 1.5rem;
   #show-sidebar {
     border: 0;
     position: absolute;
-    z-index: 999;
+    z-index: map-get($z-index, 'show-sidebar');
   }
 
   #full-sidebar {

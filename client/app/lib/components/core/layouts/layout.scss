@@ -2,13 +2,13 @@ body {
   padding-top: 60px;
 
   & > nav {
-    z-index: 1201 !important;
+    z-index: map-get($z-index, 'body-nav');
   }
 }
 
 .sidebarContainer {
   & > div {
-    z-index: 1;
+    z-index: map-get($z-index, 'sidebar-container-div');
 
     @media (min-width: 600px) {
       flex-basis: 33.33333%;
@@ -29,7 +29,7 @@ body {
 
 footer {
   background-color: #ffffff;
-  z-index: 2;
+  z-index: map-get($z-index, 'footer');
 }
 
 img {

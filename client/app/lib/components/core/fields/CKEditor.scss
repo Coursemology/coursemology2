@@ -3,5 +3,5 @@ is rendered properly in MUI dialog */
 
 .ck-body-wrapper {
   position: absolute;
-  z-index: 1500;
+  z-index: map-get($z-index, 'ck-body-wrapper');
 }
