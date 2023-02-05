@@ -2,18 +2,18 @@
 
 // elements are stored in ascending order
 $elements: (
-    'sidebar-container',
-    'footer',
-    'show-sidebar',
-    'body-nav',
-    'ck-body-wrapper'
+  'sidebar-container',
+  'footer',
+  'show-sidebar',
+  'body-nav',
+  'ck-body-wrapper'
 );
 
 // z-index values can be accessed with map-get($z-index, {element})
 $z-index: ();
 $current-z-index: 0;
 @each $element in $elements {
-    $current-z-index: $current-z-index + 1;
-    $z-index-entry: (#{$element}: $current-index);
-    $z-index: map-merge($z-index, $z-index-entry);
+  $current-z-index: $current-z-index + 1;
+  $z-index-entry: (#{$element}: $current-index);
+  $z-index: map-merge($z-index, $z-index-entry);
 }
