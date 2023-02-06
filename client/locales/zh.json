@@ -3267,16 +3267,16 @@
     "defaultMessage": "按组筛选"
   },
   "course.experiencePoints.disbursement.DisbursementForm.noDisbursement": {
-    "defaultMessage": "不会向用户支付任何积分。"
+    "defaultMessage": "不会向用户发放任何积分。"
   },
   "course.experiencePoints.disbursement.DisbursementForm.notNumber": {
     "defaultMessage": "不是数字。"
   },
   "course.experiencePoints.disbursement.DisbursementForm.reason": {
-    "defaultMessage": "支付原因"
+    "defaultMessage": "发放原因"
   },
   "course.experiencePoints.disbursement.DisbursementForm.submit": {
-    "defaultMessage": "支付点数"
+    "defaultMessage": "发放点数"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.disbursements": {
     "defaultMessage": "经验值发放"
@@ -3288,7 +3288,7 @@
     "defaultMessage": "论坛参与"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.generalTab": {
-    "defaultMessage": "一般支出"
+    "defaultMessage": "普通发放"
   },
   "course.experiencePoints.disbursement.DisbursementTable.copy": {
     "defaultMessage": "为所有学生复制值"
@@ -3327,13 +3327,13 @@
     "defaultMessage": "从 {startDate} 到 {endDate} 创建的帖子，由"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.reason": {
-    "defaultMessage": "付款原因"
+    "defaultMessage": "发放原因"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.reasonFill": {
     "defaultMessage": "论坛参与"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.submit": {
-    "defaultMessage": "支付点数"
+    "defaultMessage": "发放点数"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.viewPosts": {
     "defaultMessage": "查看论坛帖子"

@@ -4443,7 +4443,7 @@
       "en": "Filter by group"
     },
     "course.experiencePoints.disbursement.DisbursementForm.noDisbursement": {
-      "defaultMessage": "不会向用户支付任何积分。",
+      "defaultMessage": "不会向用户发放任何积分。",
       "en": "No points are disbursed to users."
     },
     "course.experiencePoints.disbursement.DisbursementForm.notNumber": {
@@ -4451,11 +4451,11 @@
       "en": "Not a Number."
     },
     "course.experiencePoints.disbursement.DisbursementForm.reason": {
-      "defaultMessage": "支付原因",
+      "defaultMessage": "发放原因",
       "en": "Reason For Disbursement"
     },
     "course.experiencePoints.disbursement.DisbursementForm.submit": {
-      "defaultMessage": "支付点数",
+      "defaultMessage": "发放点数",
       "en": "Disburse Points"
     },
     "course.experiencePoints.disbursement.DisbursementIndex.disbursements": {
@@ -4471,7 +4471,7 @@
       "en": "Forum Participation"
     },
     "course.experiencePoints.disbursement.DisbursementIndex.generalTab": {
-      "defaultMessage": "一般支出",
+      "defaultMessage": "普通发放",
       "en": "General Disbursement"
     },
     "course.experiencePoints.disbursement.DisbursementTable.copy": {
@@ -4523,7 +4523,7 @@
       "en": "Posts created between {startDate} and {endDate} by"
     },
     "course.experiencePoints.disbursement.ForumDisbursementForm.reason": {
-      "defaultMessage": "付款原因",
+      "defaultMessage": "发放原因",
       "en": "Reason For Disbursement"
     },
     "course.experiencePoints.disbursement.ForumDisbursementForm.reasonFill": {
@@ -4531,7 +4531,7 @@
       "en": "Forum Participation"
     },
     "course.experiencePoints.disbursement.ForumDisbursementForm.submit": {
-      "defaultMessage": "支付点数",
+      "defaultMessage": "发放点数",
       "en": "Disburse Points"
     },
     "course.experiencePoints.disbursement.ForumDisbursementForm.viewPosts": {
