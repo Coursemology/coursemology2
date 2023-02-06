@@ -4,6 +4,10 @@ const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const Dotenv = require('dotenv-webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
+const styleLoader = 'style-loader';
+const cssLoader = 'css-loader';
+const sassLoader = 'sass-loader';
+
 module.exports = {
   entry: {
     coursemology: [
@@ -76,32 +80,32 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: [styleLoader, cssLoader],
         include: [
           resolve(__dirname, 'node_modules/rc-slider/assets'),
           resolve(
             __dirname,
             'node_modules/react-image-crop/dist/ReactCrop.css',
-          )
+          ),
         ],
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader'],
+        use: [styleLoader, cssLoader, 'postcss-loader'],
         include: [resolve(__dirname, 'app/theme/index.css')],
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
+        use: [styleLoader, cssLoader, sassLoader],
         include: [resolve(__dirname, 'app/lib/styles')],
         exclude: /node_modules/,
       },
       {
         test: /\.scss$/,
         use: [
-          'style-loader',
+          styleLoader,
           {
-            loader: 'css-loader',
+            loader: cssLoader,
             options: {
               importLoaders: 1,
               modules: {
@@ -109,7 +113,7 @@ module.exports = {
               },
             },
           },
-          'sass-loader',
+          sassLoader,
         ],
         exclude: [
           /node_modules/,
@@ -121,13 +125,13 @@ module.exports = {
       {
         test: /\.scss$/,
         use: [
-          'style-loader',
-          'css-loader',
+          styleLoader,
+          cssLoader,
           {
-            loader: 'sass-loader',
+            loader: sassLoader,
             options: {
               sassOptions: {
-                includePaths: [join(__dirname, '..', 'app/assets/stylesheets')]
+                includePaths: [join(__dirname, '..', 'app/assets/stylesheets')],
               },
             },
           },
