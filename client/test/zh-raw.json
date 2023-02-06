@@ -4459,7 +4459,7 @@
       "en": "Disburse Points"
     },
     "course.experiencePoints.disbursement.DisbursementIndex.disbursements": {
-      "defaultMessage": "发放经验值",
+      "defaultMessage": "经验值发放",
       "en": "Disburse Experience Points"
     },
     "course.experiencePoints.disbursement.DisbursementIndex.fetchDisbursementFailure": {
