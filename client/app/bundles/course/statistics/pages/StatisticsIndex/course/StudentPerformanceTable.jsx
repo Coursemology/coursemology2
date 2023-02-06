@@ -1,12 +1,10 @@
 import { memo, useMemo, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import {
-  Box,
   Card,
   CardContent,
   FormControlLabel,
   FormGroup,
-  LinearProgress,
   Slider,
   Switch,
   Typography,
@@ -16,7 +14,9 @@ import equal from 'fast-deep-equal';
 import PropTypes from 'prop-types';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
+import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
 import Link from 'lib/components/core/Link';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { studentShape } from '../../../propTypes/course';
 
@@ -141,26 +141,6 @@ const styles = {
   },
 };
 
-const LinearProgressWithLabel = (props) => (
-  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-    <Box sx={{ width: '100%', mr: 1 }}>
-      <LinearProgress variant="determinate" {...props} />
-    </Box>
-    <Box sx={{ minWidth: 35 }}>
-      <Typography color="text.secondary" variant="body2">{`${Math.round(
-        props.value ?? 0,
-      )}%`}</Typography>
-    </Box>
-  </Box>
-);
-
-LinearProgressWithLabel.propTypes = {
-  /**
-   * Value between 0 and 100.
-   */
-  value: PropTypes.number,
-};
-
 const StudentPerformanceTable = ({
   students,
   hasPersonalizedTimeline,
@@ -172,7 +152,7 @@ const StudentPerformanceTable = ({
   maxLevel,
   hasGroupManagers,
 }) => {
-  const intl = useIntl();
+  const { t } = useTranslation();
   const [showPhantoms, setShowPhantoms] = useState(false);
   const [sortedColumn, setSortedColumn] = useState('experiencePoints');
   const [sortDirection, setSortDirection] = useState('desc');
@@ -189,11 +169,11 @@ const StudentPerformanceTable = ({
 
   const title = useMemo(
     () =>
-      intl.formatMessage(translations.tableTitle, {
-        direction: intl.formatMessage(translations[sortDirection]),
-        column: intl.formatMessage(translations[sortedColumn]),
+      t(translations.tableTitle, {
+        direction: t(translations[sortDirection]),
+        column: t(translations[sortedColumn]),
       }),
-    [intl, sortDirection, sortedColumn],
+    [t, sortDirection, sortedColumn],
   );
 
   const options = useMemo(
@@ -258,7 +238,7 @@ const StudentPerformanceTable = ({
   const columns = [
     {
       name: 'name',
-      label: intl.formatMessage(translations.name),
+      label: t(translations.name),
       options: {
         filter: false,
         sort: true,
@@ -274,14 +254,14 @@ const StudentPerformanceTable = ({
     },
     {
       name: 'isPhantom',
-      label: intl.formatMessage(translations.studentType),
+      label: t(translations.studentType),
       options: {
         filter: false,
         sort: false,
         customBodyRenderLite: (dataIndex) =>
           displayedStudents[dataIndex].isPhantom
-            ? intl.formatMessage(translations.phantom)
-            : intl.formatMessage(translations.normal),
+            ? t(translations.phantom)
+            : t(translations.normal),
       },
     },
   ];
@@ -289,7 +269,7 @@ const StudentPerformanceTable = ({
   if (hasGroupManagers) {
     columns.push({
       name: 'groupManagers',
-      label: intl.formatMessage(translations.groupManagers),
+      label: t(translations.groupManagers),
       options: {
         filter: true,
         filterType: 'multiselect',
@@ -311,8 +291,7 @@ const StudentPerformanceTable = ({
           fullWidth: true,
         },
         customFilterListOptions: {
-          render: (name) =>
-            intl.formatMessage(translations.tutorFilter, { name }),
+          render: (name) => t(translations.tutorFilter, { name }),
         },
         sort: false,
         customBodyRenderLite: (dataIndex) => {
@@ -340,7 +319,7 @@ const StudentPerformanceTable = ({
   if (isCourseGamified) {
     columns.push({
       name: 'level',
-      label: intl.formatMessage(translations.level, { maxLevel }),
+      label: t(translations.level, { maxLevel }),
       options: {
         filter: true,
         sort: true,
@@ -351,14 +330,13 @@ const StudentPerformanceTable = ({
           fullWidth: true,
         },
         customFilterListOptions: {
-          render: (name) =>
-            intl.formatMessage(translations.levelFilter, { name }),
+          render: (name) => t(translations.levelFilter, { name }),
         },
       },
     });
     columns.push({
       name: 'experiencePoints',
-      label: intl.formatMessage(translations.experiencePoints),
+      label: t(translations.experiencePoints),
       options: {
         filter: false,
         sort: true,
@@ -380,7 +358,7 @@ const StudentPerformanceTable = ({
     });
     columns.push({
       name: 'achievementCount',
-      label: intl.formatMessage(translations.achievementCount, {
+      label: t(translations.achievementCount, {
         courseAchievementCount,
       }),
       options: {
@@ -394,7 +372,7 @@ const StudentPerformanceTable = ({
 
   columns.push({
     name: 'numSubmissions',
-    label: intl.formatMessage(translations.numSubmissions, {
+    label: t(translations.numSubmissions, {
       courseAssessmentCount,
     }),
     options: {
@@ -406,14 +384,14 @@ const StudentPerformanceTable = ({
   });
   columns.push({
     name: 'correctness',
-    label: intl.formatMessage(translations.correctness),
+    label: t(translations.correctness),
     options: {
       filter: false,
       sort: true,
       sortDescFirst: true,
-      hint: intl.formatMessage(translations.correctnessHint),
+      hint: t(translations.correctnessHint),
       customBodyRender: (value) =>
-        value != null ? `${value}%` : intl.formatMessage(translations.noData),
+        value != null ? `${value}%` : t(translations.noData),
       alignCenter: true,
     },
   });
@@ -421,14 +399,14 @@ const StudentPerformanceTable = ({
   if (hasPersonalizedTimeline) {
     columns.push({
       name: 'learningRate',
-      label: intl.formatMessage(translations.learningRate),
+      label: t(translations.learningRate),
       options: {
         filter: false,
         sort: true,
         sortDescFirst: true,
-        hint: intl.formatMessage(translations.learningRateHint),
+        hint: t(translations.learningRateHint),
         customBodyRender: (value) =>
-          value != null ? `${value}%` : intl.formatMessage(translations.noData),
+          value != null ? `${value}%` : t(translations.noData),
         alignCenter: true,
       },
     });
@@ -437,7 +415,7 @@ const StudentPerformanceTable = ({
   if (showVideo) {
     columns.push({
       name: 'videoSubmissionCount',
-      label: intl.formatMessage(translations.videoSubmissionCountHeader, {
+      label: t(translations.videoSubmissionCountHeader, {
         courseVideoCount,
       }),
       options: {
@@ -461,16 +439,12 @@ const StudentPerformanceTable = ({
     });
     columns.push({
       name: 'videoPercentWatched',
-      label: intl.formatMessage(translations.videoPercentWatchedHeader),
+      label: t(translations.videoPercentWatchedHeader),
       options: {
         filter: false,
         sort: true,
         sortDescFirst: true,
-        customBodyRender: (value) => (
-          <Box sx={{ width: '100%' }}>
-            <LinearProgressWithLabel value={value} />
-          </Box>
-        ),
+        customBodyRender: (value) => <LinearProgressWithLabel value={value} />,
       },
     });
   }
@@ -485,7 +459,7 @@ const StudentPerformanceTable = ({
           marginBottom="1rem"
           variant="h6"
         >
-          {intl.formatMessage(translations.title)}
+          {t(translations.title)}
         </Typography>
         <FormGroup row>
           <FormControlLabel
@@ -496,11 +470,11 @@ const StudentPerformanceTable = ({
                 onChange={(event) => setShowPhantoms(event.target.checked)}
               />
             }
-            label={intl.formatMessage(translations.includePhantom)}
+            label={t(translations.includePhantom)}
           />
           <div style={styles.sliderRoot}>
             <span style={styles.sliderDescription}>
-              {intl.formatMessage(translations.highlight, {
+              {t(translations.highlight, {
                 percent: highlightPercentage,
               })}
             </span>

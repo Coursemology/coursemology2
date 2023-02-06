@@ -202,7 +202,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
 
         visit course_forums_path(course)
         find('button.mark-all-as-read-button').click
-        sleep 0.2
+        wait_for_page
 
         expect(current_path).to eq(course_forums_path(course))
         expect(topics.all? { |t| t.unread?(user) }).to be_falsy
@@ -218,7 +218,7 @@ RSpec.feature 'Course: Forum: Management', js: true do
         expect(page).to have_no_selector("button.forum-edit-#{forum.id}")
         expect(page).to have_no_selector("button.forum-delete-#{forum.id}")
         find('button.mark-all-as-read-button').click
-        sleep 0.2
+        wait_for_page
 
         expect(current_path).to eq(course_forum_path(course, forum))
         expect(topics.all? { |t| t.unread?(user) }).to be_falsy

@@ -14,7 +14,13 @@
         - if current_course_user.present? && can?(:read, current_course)
           div.col-xs-12.user
             = display_user_image(current_user)
-            span#user-sidebar = link_to_user(current_course_user || current_user)
+            span#user-sidebar
+              span#user-link-sidebar = link_to_user(current_course_user || current_user)
+              - if current_course_user && can?(:manage, Course::UserEmailUnsubscription.new(course_user: current_course_user))
+                span#manage-email-subscription-link-sidebar
+                  = link_to course_user_manage_email_subscription_path(current_course, current_course_user) do
+                    = t('.manage_subscriptions')
+                    = fa_icon 'envelope'.freeze
             button.btn.btn-default.navbar-toggle.collapsed.pull-right type="button" data-toggle="collapse" data-target="#course-navigation-sidebar" aria-expanded="false" aria-controls="navbar"
               span.glyphicon.glyphicon-menu-hamburger
           - if current_course_user.student? && current_course.gamified?

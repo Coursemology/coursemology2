@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
 import ErrorCard from 'lib/components/core/ErrorCard';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { staffIndexShape } from '../../../propTypes/staff';
 
@@ -56,12 +57,12 @@ const translations = defineMessages({
 });
 
 const StaffStatistics = ({ staff, isFetching, isError }) => {
-  const intl = useIntl();
+  const { t } = useTranslation();
   const columns = useMemo(
     () => [
       {
         name: 'name',
-        label: intl.formatMessage(translations.name),
+        label: t(translations.name),
         options: {
           filter: false,
           sort: true,
@@ -69,7 +70,7 @@ const StaffStatistics = ({ staff, isFetching, isError }) => {
       },
       {
         name: 'numGraded',
-        label: intl.formatMessage(translations.numGraded),
+        label: t(translations.numGraded),
         options: {
           filter: false,
           sort: true,
@@ -78,7 +79,7 @@ const StaffStatistics = ({ staff, isFetching, isError }) => {
       },
       {
         name: 'numStudents',
-        label: intl.formatMessage(translations.numStudents),
+        label: t(translations.numStudents),
         options: {
           filter: false,
           sort: true,
@@ -87,7 +88,7 @@ const StaffStatistics = ({ staff, isFetching, isError }) => {
       },
       {
         name: 'averageMarkingTime',
-        label: intl.formatMessage(translations.averageMarkingTime),
+        label: t(translations.averageMarkingTime),
         options: {
           filter: false,
           sort: true,
@@ -95,21 +96,21 @@ const StaffStatistics = ({ staff, isFetching, isError }) => {
       },
       {
         name: 'stddev',
-        label: intl.formatMessage(translations.stddev),
+        label: t(translations.stddev),
         options: {
           filter: false,
           sort: true,
         },
       },
     ],
-    [intl],
+    [t],
   );
 
   if (isFetching) {
     return <LoadingIndicator />;
   }
   if (isError) {
-    return <ErrorCard message={intl.formatMessage(translations.error)} />;
+    return <ErrorCard message={t(translations.error)} />;
   }
 
   return (
@@ -119,7 +120,7 @@ const StaffStatistics = ({ staff, isFetching, isError }) => {
       height="30px"
       includeRowNumber
       options={options}
-      title={intl.formatMessage(translations.tableTitle)}
+      title={t(translations.tableTitle)}
     />
   );
 };

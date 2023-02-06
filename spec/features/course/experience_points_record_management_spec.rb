@@ -55,7 +55,7 @@ RSpec.feature 'Courses: Experience Points Records: Management', js: true do
           find("button.record-save-#{manual_record.id}").click
         end
 
-        sleep 0.2
+        wait_for_page
 
         expect(manual_record.reload.reason).to eq(updated_reason)
         expect(manual_record.points_awarded).to eq(updated_points)

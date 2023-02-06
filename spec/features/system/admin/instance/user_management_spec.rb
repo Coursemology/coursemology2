@@ -67,7 +67,7 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
         click_button 'Search'
         find('div[aria-label="Search"]').find('input').set(user_name)
 
-        sleep 0.5 # timeout for search debouncing
+        wait_for_field_debouncing # timeout for search debouncing
 
         instance_users_to_search.each do |instance_user|
           expect(page).to have_text(instance_user.user.name)
@@ -77,7 +77,7 @@ RSpec.feature 'System: Administration: Instance: Users', js: true do
         # Search by email
         random_instance_user = InstanceUser.order('RANDOM()').first
         find('div[aria-label="Search"]').find('input').set(random_instance_user.user.email)
-        sleep 0.5 # timeout for search debouncing
+        wait_for_field_debouncing # timeout for search debouncing
 
         expect(page).to have_text(random_instance_user.user.name)
         expect(all('.instance_user').count).to eq(1)

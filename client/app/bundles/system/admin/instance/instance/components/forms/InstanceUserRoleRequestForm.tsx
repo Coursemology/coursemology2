@@ -76,7 +76,7 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
     return handleOperations()
       .then((response) => {
         toast.success(t(translations.requestSuccess));
-        dispatch(saveInstanceRoleRequest({ ...response, ...data }));
+        dispatch(saveInstanceRoleRequest({ ...data, ...response }));
         onClose();
       })
       .catch((error) => {

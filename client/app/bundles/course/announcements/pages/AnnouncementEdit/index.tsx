@@ -29,9 +29,9 @@ interface Props {
 }
 
 const translations = defineMessages({
-  updateAnnouncement: {
-    id: 'course.announcements.AnnouncementEdit.updateAnnouncement',
-    defaultMessage: 'Update Announcement',
+  editAnnouncement: {
+    id: 'course.announcements.AnnouncementEdit.editAnnouncement',
+    defaultMessage: 'Edit Announcement',
   },
   updateSuccess: {
     id: 'course.announcements.AnnouncementEdit.updateSuccess',
@@ -85,7 +85,7 @@ const AnnouncementEdit: FC<Props> = (props) => {
       onClose={onClose}
       onSubmit={handleSubmit}
       open={open}
-      title={t(translations.updateAnnouncement)}
+      title={t(translations.editAnnouncement)}
     />
   );
 };

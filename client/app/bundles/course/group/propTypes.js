@@ -16,7 +16,6 @@ export const courseUserShape = PropTypes.shape({
 
 export const memberShape = PropTypes.shape({
   id: PropTypes.number.isRequired, // same as course user ID
-  groupUserId: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
   role: PropTypes.oneOf([
     'owner',
@@ -26,7 +25,7 @@ export const memberShape = PropTypes.shape({
     'observer',
   ]).isRequired,
   isPhantom: PropTypes.bool.isRequired,
-  groupRole: PropTypes.oneOf(['manager', 'normal']).isRequired,
+  groupRole: PropTypes.oneOf(['manager', 'normal']),
 });
 
 export const groupShape = PropTypes.shape({

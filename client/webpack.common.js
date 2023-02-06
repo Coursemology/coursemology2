@@ -20,6 +20,7 @@ module.exports = {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     alias: {
       api: resolve('./app/api'),
+      assets: resolve('./app/assets'),
       lib: resolve('./app/lib'),
       theme: resolve('./app/theme'),
       types: resolve('./app/types'),

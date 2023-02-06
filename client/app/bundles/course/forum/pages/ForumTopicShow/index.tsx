@@ -18,7 +18,7 @@ import { fetchForumTopic } from '../../operations';
 import { getForumTopic } from '../../selectors';
 import ForumTopicPostNew from '../ForumTopicPostNew';
 
-import Topics from './Topics';
+import TopicPostTrees from './TopicPostTrees';
 
 const translations = defineMessages({
   header: {
@@ -125,8 +125,13 @@ const ForumTopicShow: FC = () => {
       <Note message={t(translations.noPosts)} />
     ) : (
       <Box className="my-3 space-y-6">
-        {topicNote && <Note message={topicNote} />}
-        <Topics level={0} postIdsArray={forumTopic.postTreeIds} />
+        {topicNote && (
+          <Note
+            color={forumTopic.isResolved ? 'success' : undefined}
+            message={topicNote}
+          />
+        )}
+        <TopicPostTrees level={0} postIdsArray={forumTopic.postTreeIds} />
         <ForumTopicPostNew forumTopic={forumTopic} />
       </Box>
     );

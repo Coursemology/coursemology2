@@ -1,4 +1,6 @@
 import { FC } from 'react';
+import { defineMessages } from 'react-intl';
+import { toast } from 'react-toastify';
 import {
   ThumbDownAlt,
   ThumbDownOffAlt,
@@ -8,20 +10,45 @@ import {
 import { IconButton, IconButtonProps } from '@mui/material';
 import { ForumTopicPostEntity } from 'types/course/forums';
 
+import { useAppDispatch } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
+
+import { voteTopicPost } from '../../operations';
+
 interface Props extends IconButtonProps {
   post: ForumTopicPostEntity;
-  handleClick: (voteNumber: -1 | 0 | 1) => void;
 }
 
-const VotePostButton: FC<Props> = ({ post, handleClick }) => {
+const translations = defineMessages({
+  updateFailure: {
+    id: 'course.forum.VotePostButton.updateFailure',
+    defaultMessage: 'Failed to update the vote number - {error}',
+  },
+});
+
+const VotePostButton: FC<Props> = ({ post }) => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+
   if (!post) return null;
+
+  const handleVotePost = (voteNum: -1 | 0 | 1): void => {
+    dispatch(voteTopicPost(post.postUrl, voteNum)).catch((error) => {
+      const errorMessage = error.response?.data?.errors ?? '';
+      toast.error(
+        t(translations.updateFailure, {
+          error: errorMessage,
+        }),
+      );
+    });
+  };
 
   if (!post.hasUserVoted) {
     return (
       <div className="flex items-center">
         <IconButton
           color="info"
-          onClick={(): void => handleClick(1)}
+          onClick={(): void => handleVotePost(1)}
           title="Upvote"
         >
           <ThumbUpOffAlt />
@@ -29,7 +56,7 @@ const VotePostButton: FC<Props> = ({ post, handleClick }) => {
         <div className="vote-tally font-bold">{post.voteTally}</div>
         <IconButton
           color="info"
-          onClick={(): void => handleClick(-1)}
+          onClick={(): void => handleVotePost(-1)}
           title="Downvote"
         >
           <ThumbDownOffAlt />
@@ -42,7 +69,7 @@ const VotePostButton: FC<Props> = ({ post, handleClick }) => {
     <div className="flex items-center">
       <IconButton
         color="info"
-        onClick={(): void => handleClick(post.userVoteFlag ? 0 : 1)}
+        onClick={(): void => handleVotePost(post.userVoteFlag ? 0 : 1)}
         title="Upvote"
       >
         {post.userVoteFlag ? <ThumbUpAlt /> : <ThumbUpOffAlt />}
@@ -51,7 +78,7 @@ const VotePostButton: FC<Props> = ({ post, handleClick }) => {
 
       <IconButton
         color="info"
-        onClick={(): void => handleClick(!post.userVoteFlag ? 0 : -1)}
+        onClick={(): void => handleVotePost(!post.userVoteFlag ? 0 : -1)}
         title="Downvote"
       >
         {post.userVoteFlag ? <ThumbDownOffAlt /> : <ThumbDownAlt />}

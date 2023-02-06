@@ -22,6 +22,8 @@ class Course::Discussion::Post < ApplicationRecord
 
   after_initialize :set_topic, if: :new_record?
   after_commit :mark_topic_as_read
+  after_save :mark_self_as_read
+  after_update :mark_self_as_read
   before_destroy :reparent_children, unless: :destroyed_by_association
   before_destroy :unparent_children, if: :destroyed_by_association
   before_save :sanitize_text
@@ -158,6 +160,11 @@ class Course::Discussion::Post < ApplicationRecord
 
   def mark_topic_as_read
     topic.mark_as_read! for: creator
+    topic.actable.mark_as_read! for: creator
+  end
+
+  def mark_self_as_read
+    mark_as_read! for: creator
   end
 
   def sanitize_text

@@ -1,16 +1,8 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { scroller } from 'react-scroll';
-import {
-  Avatar,
-  Box,
-  Card,
-  CardContent,
-  Grid,
-  Link,
-  Typography,
-} from '@mui/material';
+import { Avatar, Card, CardContent, Grid, Typography } from '@mui/material';
 import { CourseUserEntity } from 'types/course/courseUsers';
 
 import { COURSE_USER_ROLES } from 'lib/constants/sharedConstants';
@@ -23,10 +15,6 @@ interface Props extends WrappedComponentProps {
 }
 
 const translations = defineMessages({
-  manageEmailSubscription: {
-    id: 'course.users.UserProfileCard.manageEmailSubscription',
-    defaultMessage: 'Manage email subscriptions',
-  },
   level: {
     id: 'course.users.UserProfileCard.level',
     defaultMessage: 'Level',
@@ -51,20 +39,6 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
     });
   };
 
-  const renderManageEmail = (): JSX.Element => {
-    if (user.manageEmailSubscriptionUrl) {
-      return (
-        <Box>
-          <Typography component="span">{user.email} &mdash; </Typography>
-          <Link href={user.manageEmailSubscriptionUrl} underline="hover">
-            {intl.formatMessage(translations.manageEmailSubscription)}
-          </Link>
-        </Box>
-      );
-    }
-    return <Typography component="span">{user.email}</Typography>;
-  };
-
   const renderUserStats = (): JSX.Element | null => {
     return (
       <Grid
@@ -74,23 +48,23 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
         item
         justifyContent={{ xs: 'center', sm: 'start' }}
       >
-        {user.level !== undefined && (
+        {user.level >= 0 && (
           <UserProfileCardStats
             className="user-level-stat"
             title={intl.formatMessage(translations.level)}
             value={user.level}
           />
         )}
-        {user.exp !== undefined && (
-          <RouterLink to={user.experiencePointsRecordsUrl ?? ''}>
+        {user.exp >= 0 && (
+          <Link to={user.experiencePointsRecordsUrl ?? ''}>
             <UserProfileCardStats
               className="user-exp-stat"
               title={intl.formatMessage(translations.exp)}
               value={user.exp}
             />
-          </RouterLink>
+          </Link>
         )}
-        {user.achievements !== undefined && (
+        {user.achievements && (
           <a
             href="#user-profile-achievements"
             onClick={(e): void => handleScrollToAchievements(e)}
@@ -135,7 +109,6 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
             <Typography>
               <strong>{COURSE_USER_ROLES[user.role]}</strong>
             </Typography>
-            {renderManageEmail()}
             {renderUserStats()}
           </Grid>
         </Grid>

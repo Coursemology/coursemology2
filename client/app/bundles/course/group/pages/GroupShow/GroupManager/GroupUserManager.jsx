@@ -1,6 +1,7 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { Element, scroller } from 'react-scroll';
 import CompareArrows from '@mui/icons-material/CompareArrows';
 import Delete from '@mui/icons-material/Delete';
 import { Checkbox, FormControlLabel, TextField } from '@mui/material';
@@ -66,6 +67,10 @@ const translations = defineMessages({
     defaultMessage:
       'Hide students who are already in a group under this category',
   },
+  hidePhantomStudents: {
+    id: 'course.group.GroupShow.GroupManager.GroupUserManager.hidePhantomStudents',
+    defaultMessage: 'Hide all Phantom Students',
+  },
 });
 
 const styles = {
@@ -95,9 +100,6 @@ const styles = {
     padding: 3,
     height: 500,
   },
-  checkbox: {
-    marginTop: '1rem',
-  },
 };
 
 const filterByName = (search, users) => {
@@ -118,22 +120,48 @@ const getAvailableUsers = (
   groups,
   group,
   hideInGroup,
+  hidePhantomStudent,
   availableSearch,
 ) => {
-  if (hideInGroup) {
-    const allGroupMemberIds = new Set(
-      groups.flatMap((g) => g.members.map((m) => m.id)),
-    );
-    return filterByName(
-      availableSearch,
-      courseUsers.filter((cu) => !allGroupMemberIds.has(cu.id)),
-    );
-  }
-  const groupMemberIds = new Set(group.members.map((m) => m.id));
-  return filterByName(
+  const groupMemberIds = hideInGroup
+    ? new Set(groups.flatMap((g) => g.members.map((m) => m.id)))
+    : new Set(group.members.map((m) => m.id));
+
+  const filteredGroup = filterByName(
     availableSearch,
     courseUsers.filter((cu) => !groupMemberIds.has(cu.id)),
   );
+
+  if (hidePhantomStudent) {
+    return filteredGroup.filter((m) => !m.isPhantom);
+  }
+  return filteredGroup;
+};
+
+const getSelectedUsers = (members, selectedSearch, hidePhantomStudent) => {
+  const groupMembers = hidePhantomStudent
+    ? new Set(members.filter((m) => !m.isPhantom))
+    : new Set(members);
+
+  return filterByName(selectedSearch, [...groupMembers]);
+};
+
+const getAvailableUserInOtherGroups = (courseUsers, groups, group) => {
+  const otherGroups = groups.filter((x) => x !== group);
+  const mapStudentToGroups = {};
+
+  for (let i = 0; i < otherGroups.length; i++) {
+    const membersOfThisGroup = otherGroups[i].members.map((m) => m.id);
+    for (let j = 0; j < membersOfThisGroup.length; j++) {
+      if (membersOfThisGroup[j] in mapStudentToGroups) {
+        mapStudentToGroups[membersOfThisGroup[j]].push(otherGroups[i].name);
+      } else {
+        mapStudentToGroups[membersOfThisGroup[j]] = [otherGroups[i].name];
+      }
+    }
+  }
+
+  return mapStudentToGroups;
 };
 
 // Actually, the group can also be read from Redux. But for now, we'll get it from the parent.
@@ -150,6 +178,13 @@ const GroupUserManager = ({
   const [availableSearch, setAvailableSearch] = useState('');
   const [selectedSearch, setSelectedSearch] = useState('');
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
+  const [hidePhantomStudent, setHidePhantomStudent] = useState(true);
+
+  useEffect(() => {
+    scroller.scrollTo(`groupElement_${group.id}`, {
+      offset: -70,
+    });
+  }, [group.id]);
 
   const availableUsers = useMemo(
     () =>
@@ -158,19 +193,34 @@ const GroupUserManager = ({
         groups,
         group,
         hideInGroup,
+        hidePhantomStudent,
         availableSearch,
       ),
-    [courseUsers, groups, group, hideInGroup, availableSearch],
+    [
+      courseUsers,
+      groups,
+      group,
+      hideInGroup,
+      hidePhantomStudent,
+      availableSearch,
+    ],
   );
+
+  const availableUsersInOtherGroups = useMemo(
+    () => getAvailableUserInOtherGroups(courseUsers, groups, group),
+    [courseUsers, groups, group],
+  );
+
   const groupMembers = useMemo(
-    () => filterByName(selectedSearch, group.members),
-    [selectedSearch, group.members],
+    () => getSelectedUsers(group.members, selectedSearch, hidePhantomStudent),
+    [group.members, selectedSearch, hidePhantomStudent],
   );
 
   const availableStudents = useMemo(
     () => availableUsers.filter((u) => u.role === 'student'),
     [availableUsers],
   );
+
   const availableStaff = useMemo(
     () => availableUsers.filter((u) => u.role !== 'student'),
     [availableUsers],
@@ -179,6 +229,7 @@ const GroupUserManager = ({
     () => groupMembers.filter((m) => m.role === 'student'),
     [groupMembers],
   );
+
   const selectedStaff = useMemo(
     () => groupMembers.filter((m) => m.role !== 'student'),
     [groupMembers],
@@ -345,10 +396,37 @@ const GroupUserManager = ({
     selectedStaff,
     originalMemberMap,
   ]);
+
+  const CheckBoxHideGroup = () => (
+    <FormControlLabel
+      className="mb-0"
+      control={
+        <Checkbox
+          checked={hideInGroup}
+          onChange={(_, checked) => setHideInGroup(checked)}
+        />
+      }
+      label={<FormattedMessage {...translations.hideStudents} />}
+    />
+  );
+
+  const CheckBoxHidePhantomStudent = () => (
+    <FormControlLabel
+      className="mb-0"
+      control={
+        <Checkbox
+          checked={hidePhantomStudent}
+          onChange={(_, checked) => setHidePhantomStudent(checked)}
+        />
+      }
+      label={<FormattedMessage {...translations.hidePhantomStudents} />}
+    />
+  );
+
   const [isDirty, setIsDirty] = useState(false);
 
   return (
-    <>
+    <Element name={`groupElement_${group.id}`}>
       <GroupCard
         subtitle={
           <FormattedMessage
@@ -376,6 +454,7 @@ const GroupUserManager = ({
             />
             <GroupUserManagerList
               colourMap={colours}
+              memberOtherGroups={availableUsersInOtherGroups}
               onCheck={onCheck}
               staff={availableStaff}
               students={availableStudents}
@@ -396,6 +475,7 @@ const GroupUserManager = ({
             <GroupUserManagerList
               colourMap={colours}
               isChecked
+              memberOtherGroups={availableUsersInOtherGroups}
               onChangeDropdown={onChangeRole}
               onCheck={onUncheck}
               showDropdown
@@ -404,16 +484,10 @@ const GroupUserManager = ({
             />
           </div>
         </div>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={hideInGroup}
-              onChange={(_, checked) => setHideInGroup(checked)}
-            />
-          }
-          label={<FormattedMessage {...translations.hideStudents} />}
-          style={styles.checkbox}
-        />
+        <div className="flex flex-col">
+          <CheckBoxHideGroup />
+          <CheckBoxHidePhantomStudent />
+        </div>
       </GroupCard>
 
       <GroupFormDialog
@@ -443,7 +517,7 @@ const GroupUserManager = ({
         }}
         open={isConfirmingDelete}
       />
-    </>
+    </Element>
   );
 };
 

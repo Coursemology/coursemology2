@@ -36,7 +36,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers', js
           expect(current_path).to eq(
             edit_course_assessment_submission_path(course, assessment, submission)
           )
-          sleep 0.1
+          wait_for_page
           expect(page).to have_selector('span', text: 'Submission updated successfully.')
           expect(submission.current_answers.first.specific.reload.options).to include(option)
         end

@@ -17,7 +17,7 @@ import { AdminStats, UserBasicMiniEntity } from 'types/users';
 import DataTable from 'lib/components/core/layouts/DataTable';
 import {
   DEFAULT_TABLE_ROWS_PER_PAGE,
-  FIELD_DEBOUNCE_DELAY,
+  FIELD_DEBOUNCE_DELAY_MS,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
 import tableTranslations from 'lib/translations/table';
@@ -123,7 +123,7 @@ const CoursesTable: FC<Props> = (props) => {
 
   const options: TableOptions = {
     count: tableState.count,
-    customSearchRender: debounceSearchRender(FIELD_DEBOUNCE_DELAY),
+    customSearchRender: debounceSearchRender(FIELD_DEBOUNCE_DELAY_MS),
     download: false,
     filter: false,
     jumpToPage: true,

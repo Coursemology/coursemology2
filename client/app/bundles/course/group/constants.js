@@ -9,6 +9,11 @@ export const dialogTypes = mirrorCreator([
   'UPDATE_GROUP',
 ]);
 
+export const groupRole = {
+  Normal: 'normal',
+  Manager: 'manager',
+};
+
 const actionTypes = mirrorCreator([
   // For showing a group category
   'FETCH_GROUPS_REQUEST',

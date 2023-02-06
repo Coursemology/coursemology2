@@ -1,7 +1,8 @@
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 
 import ErrorCard from 'lib/components/core/ErrorCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { courseIndexShape } from '../../../propTypes/course';
 
@@ -46,12 +47,12 @@ const CourseStatistics = ({
     maxLevel,
     hasGroupManagers,
   } = metadata;
-  const intl = useIntl();
+  const { t } = useTranslation();
   if (isFetchingProgression && isFetchingPerformance) {
     return <LoadingIndicator />;
   }
   if (isErrorProgression && isErrorPerformance) {
-    return <ErrorCard message={intl.formatMessage(translations.error)} />;
+    return <ErrorCard message={t(translations.error)} />;
   }
 
   const renderProgression = () => {
@@ -59,11 +60,7 @@ const CourseStatistics = ({
       return <LoadingIndicator />;
     }
     if (isErrorProgression) {
-      return (
-        <ErrorCard
-          message={intl.formatMessage(translations.progressionError)}
-        />
-      );
+      return <ErrorCard message={t(translations.progressionError)} />;
     }
     return (
       <StudentProgressionChart
@@ -78,11 +75,7 @@ const CourseStatistics = ({
       return <LoadingIndicator />;
     }
     if (isErrorPerformance) {
-      return (
-        <ErrorCard
-          message={intl.formatMessage(translations.performanceError)}
-        />
-      );
+      return <ErrorCard message={t(translations.performanceError)} />;
     }
     return (
       <StudentPerformanceTable

@@ -134,6 +134,14 @@ const formTranslations = defineMessages({
     id: 'lib.translations.form.validation.startEndDateValidationError',
     defaultMessage: 'Must be after Start Date',
   },
+  earlierThanStartTimeError: {
+    id: 'lib.translations.form.validation.earlierThanStartTimeError',
+    defaultMessage: 'Cannot be earlier than the start date',
+  },
+  earlierThanCurrentTimeError: {
+    id: 'lib.translations.form.validation.earlierThanCurrentTimeError',
+    defaultMessage: 'Cannot be earlier than the current time',
+  },
   characters: {
     id: 'lib.translations.form.validation.characters',
     defaultMessage: 'Must be less than 255 characters',

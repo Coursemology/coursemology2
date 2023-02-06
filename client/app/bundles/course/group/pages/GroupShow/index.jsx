@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -47,6 +47,16 @@ const Category = ({
   canManageGroups,
 }) => {
   const { groupCategoryId } = useParams();
+  const handleGroupSelect = useCallback(
+    (groupId) => {
+      dispatch({ type: actionTypes.MANAGE_GROUPS_START });
+      dispatch({
+        type: actionTypes.SET_SELECTED_GROUP_ID,
+        selectedGroupId: groupId,
+      });
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     if (groupCategoryId) {
@@ -93,7 +103,12 @@ const Category = ({
             }
           />
           {groups.map((group) => (
-            <GroupTableCard key={group.id} group={group} />
+            <GroupTableCard
+              key={group.id}
+              canManageCategory={canManageCategory}
+              group={group}
+              onManageGroup={() => handleGroupSelect(group.id)}
+            />
           ))}
           {groups.length === 0 ? (
             <Note message={<FormattedMessage {...translations.noGroups} />} />

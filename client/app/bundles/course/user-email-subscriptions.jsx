@@ -10,7 +10,11 @@ $(async () => {
   const mountNode = document.getElementById('user-email-subscriptions');
 
   if (mountNode) {
-    const data = await fetchUserEmailSubscriptions();
+    // When unsubscribe link is clicked from an email, it passes some params
+    // for unsubscription. Below, we extract the params and pass it
+    // to the backend through the API call to trigger the unsubscription action.
+    const queryParams = new URLSearchParams(window.location.search);
+    const data = await fetchUserEmailSubscriptions(queryParams);
     const initialData = {
       course: {
         userEmailSubscriptions: {

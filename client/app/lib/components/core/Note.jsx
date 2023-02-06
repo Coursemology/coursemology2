@@ -9,14 +9,19 @@ const translations = defineMessages({
   },
 });
 
-const Note = ({ message }) => (
+const colorMap = {
+  success: { bg: 'bg-green-200', text: 'text-green-600' },
+  info: { bg: 'bg-orange-200', text: 'text-orange-600' },
+};
+
+const Note = ({ message, color = 'info' }) => (
   <Card className="my-5">
     <CardHeader
-      className="bg-orange-200 p-5"
+      className={`${colorMap[color].bg} p-5`}
       title={<FormattedMessage {...translations.noteHeader} />}
       titleTypographyProps={{
         variant: 'body2',
-        className: 'font-bold text-orange-600',
+        className: `font-bold ${colorMap[color].text}`,
       }}
     />
     <CardContent className="p-5">
@@ -27,6 +32,7 @@ const Note = ({ message }) => (
 
 Note.propTypes = {
   message: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  color: PropTypes.string,
 };
 
 export default Note;

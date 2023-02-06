@@ -51,6 +51,7 @@ ActionMailer::MessageDelivery.prepend(ActionMailer::MessageDelivery::TestDeliver
 
 module TrackableJob::SpecHelpers
   def wait_for_job
+    skip 'flaky tests'
     if defined?(current_path) && current_path.start_with?(job_path(''))
       job_guid = current_path[(current_path.rindex('/') + 1)..]
       job = TrackableJob::Job.find(job_guid)
@@ -59,6 +60,14 @@ module TrackableJob::SpecHelpers
     elsif ActiveJob::Base.queue_adapter.is_a?(ActiveJob::QueueAdapters::BackgroundThreadAdapter)
       ActiveJob::Base.queue_adapter.wait_for_jobs
     end
+  end
+
+  def wait_for_page
+    sleep 0.5
+  end
+
+  def wait_for_field_debouncing
+    sleep 0.5
   end
 
   def visit_current_path

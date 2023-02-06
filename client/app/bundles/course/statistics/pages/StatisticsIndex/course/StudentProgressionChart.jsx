@@ -1,5 +1,5 @@
 import { memo, useCallback, useMemo, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages } from 'react-intl';
 import {
   Card,
   CardContent,
@@ -18,6 +18,7 @@ import {
 } from 'theme/colors';
 
 import GeneralChart from 'lib/components/core/charts/GeneralChart';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import { assessmentShape, submissionShape } from '../../../propTypes/course';
 
@@ -73,7 +74,7 @@ const translations = defineMessages({
   },
 });
 
-const chartGlobalOptions = (intl) => ({
+const chartGlobalOptions = (t) => ({
   scales: {
     x: {
       type: 'time',
@@ -82,14 +83,14 @@ const chartGlobalOptions = (intl) => ({
       },
       title: {
         display: true,
-        text: intl.formatMessage(translations.xAxisLabel),
+        text: t(translations.xAxisLabel),
       },
     },
     y: {
       beginAtZero: true,
       title: {
         display: true,
-        text: intl.formatMessage(translations.yAxisLabel),
+        text: t(translations.yAxisLabel),
       },
     },
   },
@@ -97,15 +98,15 @@ const chartGlobalOptions = (intl) => ({
     tooltip: {
       callbacks: {
         title: titleRenderer,
-        label: labelRenderer(intl),
-        footer: footerRenderer(intl),
+        label: labelRenderer(t),
+        footer: footerRenderer(t),
       },
     },
   },
 });
 
 const StudentProgressionChart = ({ assessments, submissions }) => {
-  const intl = useIntl();
+  const { t } = useTranslation();
   const [selectedStudentIndex, setSelectedStudentIndex] = useState(null);
   const [showOpeningTimes, setShowOpeningTimes] = useState(true);
   const [showPhantoms, setShowPhantoms] = useState(false);
@@ -138,7 +139,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
         // All students
         {
           type: 'scatter',
-          label: intl.formatMessage(translations.latestSubmission),
+          label: t(translations.latestSubmission),
           data: studentData.map((s) => {
             const latestPoint = s.submissions[s.submissions.length - 1];
             return {
@@ -156,7 +157,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
           ? [
               {
                 type: 'line',
-                label: intl.formatMessage(translations.studentSubmissions, {
+                label: t(translations.studentSubmissions, {
                   name: studentData[selectedStudentIndex].name,
                 }),
                 data: studentData[selectedStudentIndex].submissions.map(
@@ -177,7 +178,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
         // Deadlines
         {
           type: 'line',
-          label: intl.formatMessage(translations.deadlines),
+          label: t(translations.deadlines),
           data: assessments.map((a, index) => ({
             x: a.endAt,
             y: index,
@@ -194,7 +195,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
           ? [
               {
                 type: 'line',
-                label: intl.formatMessage(translations.openingTimes),
+                label: t(translations.openingTimes),
                 data: assessments.map((a, index) => ({
                   x: a.startAt,
                   y: index,
@@ -213,15 +214,15 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
           : []),
       ],
     }),
-    [assessments, studentData, selectedStudentIndex, showOpeningTimes, intl],
+    [assessments, studentData, selectedStudentIndex, showOpeningTimes, t],
   );
 
   const options = useMemo(
     () => ({
-      ...chartGlobalOptions(intl),
+      ...chartGlobalOptions(t),
       onClick,
     }),
-    [onClick, intl],
+    [onClick, t],
   );
 
   return (
@@ -234,7 +235,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
           marginBottom="1rem"
           variant="h6"
         >
-          {intl.formatMessage(translations.title)}
+          {t(translations.title)}
         </Typography>
         <div>
           <FormGroup row>
@@ -248,7 +249,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
                   }
                 />
               }
-              label={intl.formatMessage(translations.showOpeningTimes)}
+              label={t(translations.showOpeningTimes)}
             />
             <FormControlLabel
               control={
@@ -258,7 +259,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
                   onChange={(event) => setShowPhantoms(event.target.checked)}
                 />
               }
-              label={intl.formatMessage(translations.phantom)}
+              label={t(translations.phantom)}
             />
           </FormGroup>
         </div>
@@ -270,7 +271,7 @@ const StudentProgressionChart = ({ assessments, submissions }) => {
           withZoom={studentData.length > 0}
         />
         <Typography fontSize="1.4rem" textAlign="center" variant="subtitle1">
-          {intl.formatMessage(translations.note)}
+          {t(translations.note)}
         </Typography>
       </CardContent>
     </Card>

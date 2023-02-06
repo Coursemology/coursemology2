@@ -8,7 +8,9 @@ import { AppDispatch, Operation } from 'types/store';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import AnnouncementForm from '../../components/forms/AnnouncementForm';
+import AnnouncementForm, {
+  PublishTime,
+} from '../../components/forms/AnnouncementForm';
 
 interface Props {
   open: boolean;
@@ -32,7 +34,7 @@ const translations = defineMessages({
   },
 });
 
-const initialValues = {
+const initialValues: AnnouncementFormData = {
   title: '',
   content: '',
   sticky: false,
@@ -53,9 +55,14 @@ const AnnouncementNew: FC<Props> = (props) => {
   const handleSubmit = (
     data: AnnouncementFormData,
     setError,
+    whenToPublish: PublishTime,
   ): Promise<void> => {
-    return dispatch(createOperation(data))
-      .then((_) => {
+    const updatedData = {
+      ...data,
+      startAt: whenToPublish === 'now' ? new Date() : data.startAt,
+    };
+    return dispatch(createOperation(updatedData))
+      .then(() => {
         onClose();
         toast.success(t(translations.creationSuccess));
       })

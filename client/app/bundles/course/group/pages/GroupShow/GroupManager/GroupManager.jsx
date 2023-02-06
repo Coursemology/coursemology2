@@ -166,6 +166,7 @@ const GroupManager = ({
 }) => {
   const [isConfirmingCancel, setIsConfirmingCancel] = useState(false);
   const [isConfirmingSave, setIsConfirmingSave] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
 
   const onCreateFormSubmit = useCallback(
     (data, setError) => {
@@ -317,8 +318,12 @@ const GroupManager = ({
       <GroupFormDialog
         dialogTitle={intl.formatMessage(translations.dialogTitle)}
         expectedDialogTypes={[dialogTypes.CREATE_GROUP]}
+        skipConfirmation={!isDirty}
       >
         <GroupCreationForm
+          emitsVia={(nameDescriptionForm) =>
+            setIsDirty(nameDescriptionForm.isDirty)
+          }
           existingGroups={groups}
           initialValues={{
             name: '',

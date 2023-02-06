@@ -152,8 +152,10 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
         allow(subject).to receive(:ungraded_answers).and_return([answer])
         allow(answer).to receive(:grade_inline?).and_return(false)
 
-        expect { subject.grade(submission) }.to \
-          raise_error(Course::Assessment::Submission::AutoGradingService::SubJobError, '0')
+        expect do
+          subject.grade(submission)
+          wait_for_job
+        end.to raise_error(Course::Assessment::Submission::AutoGradingService::SubJobError, '0')
       end
     end
   end

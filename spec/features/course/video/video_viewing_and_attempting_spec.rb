@@ -31,7 +31,7 @@ RSpec.describe 'Course: Videos: Viewing', js: true do
         within find("tr.video_#{published_video.id}") do
           expect(page).to have_button('Watch', disabled: false)
           find_button('Watch').click
-          sleep 0.2 # Wait for submission to be created
+          wait_for_page
           submission = Course::Video::Submission.where(video: published_video, creator: user).first
 
           expect(current_path).

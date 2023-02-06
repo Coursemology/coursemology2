@@ -69,7 +69,6 @@ const CategoryCard = ({
   onManageGroups,
   dispatch,
   canManageCategory,
-  canManageGroups,
 }) => {
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
@@ -133,7 +132,7 @@ const CategoryCard = ({
         onClick: handleEdit,
       });
     }
-    if (canManageGroups) {
+    if (canManageCategory) {
       result.push({
         label: <FormattedMessage {...translations.manage} />,
         onClick: onManageGroups,
@@ -148,13 +147,7 @@ const CategoryCard = ({
       });
     }
     return result;
-  }, [
-    handleEdit,
-    onManageGroups,
-    setIsConfirmingDelete,
-    canManageCategory,
-    canManageGroups,
-  ]);
+  }, [handleEdit, onManageGroups, setIsConfirmingDelete, canManageCategory]);
   const [isDirty, setIsDirty] = useState(false);
 
   return (
@@ -214,7 +207,6 @@ CategoryCard.propTypes = {
   numGroups: PropTypes.number.isRequired,
   onManageGroups: PropTypes.func.isRequired,
   canManageCategory: PropTypes.bool.isRequired,
-  canManageGroups: PropTypes.bool.isRequired,
   intl: PropTypes.object,
 };
 

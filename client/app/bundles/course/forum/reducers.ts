@@ -217,12 +217,16 @@ export const forumSlice = createSlice({
     },
     updatePostAsAnswer: (
       state,
-      action: PayloadAction<{ topicId: number; postId: number }>,
+      action: PayloadAction<{
+        topicId: number;
+        postId: number;
+        isTopicResolved: boolean;
+      }>,
     ) => {
       const topic = state.topics.entities[action.payload.topicId];
       const post = state.posts.entities[action.payload.postId];
       if (topic) {
-        topic.isResolved = !topic.isResolved;
+        topic.isResolved = action.payload.isTopicResolved;
         forumTopicAdapter.upsertOne(state.topics, topic);
       }
       if (post) {

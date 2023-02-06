@@ -60,11 +60,7 @@ const ForumTopicNew: FC<Props> = (props) => {
           }),
         );
 
-        setTimeout(() => {
-          if (response.data.redirectUrl) {
-            navigate(response.data.redirectUrl);
-          }
-        }, 200);
+        setTimeout(() => navigate(response.redirectUrl), 200);
       })
       .catch((error) => {
         toast.error(t(translations.creationFailure));

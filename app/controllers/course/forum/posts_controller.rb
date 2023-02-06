@@ -12,7 +12,6 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
     result = @post.class.transaction do
       raise ActiveRecord::Rollback unless @post.save && create_topic_subscription && update_topic_pending_status
       raise ActiveRecord::Rollback unless @topic.update_column(:latest_post_at, @post.created_at)
-      @post.mark_as_read! for: current_user
 
       true
     end
@@ -27,7 +26,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def update
     if @post.update(post_params)
-      render partial: 'post_list_data', locals: { forum: @forum, topic: @topic, post: @post }, status: :ok
+      render partial: 'post_list_data', locals: { forum: @forum, topic: @topic, post: @post }
     else
       render json: { errors: @post.errors.full_messages.to_sentence }, status: :bad_request
     end
@@ -35,14 +34,14 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def vote
     @post.cast_vote!(current_user, post_vote_param)
-    render partial: 'post_list_data', locals: { forum: @forum, topic: @topic, post: @post }, status: :ok
+    render partial: 'post_list_data', locals: { forum: @forum, topic: @topic, post: @post }
   end
 
   # Mark/unmark the post as the correct answer
   def toggle_answer
     authorize!(:toggle_answer, @topic)
     if @post.toggle_answer
-      head :ok
+      render json: { isTopicResolved: @topic.reload.resolved? }
     else
       render json: { errors: @post.errors.full_messages.to_sentence }, status: :bad_request
     end
@@ -50,7 +49,7 @@ class Course::Forum::PostsController < Course::Forum::ComponentController
 
   def destroy
     if @topic.posts.count == 1 && @topic.destroy
-      render json: { isTopicDeleted: true }, status: :ok
+      render json: { isTopicDeleted: true }
     elsif @post.destroy
       @topic.update_column(:latest_post_at, @topic.posts.last&.created_at || @topic.created_at)
       render json: { topicId: @topic.id, postTreeIds: @topic.posts.ordered_topologically.sorted_ids }

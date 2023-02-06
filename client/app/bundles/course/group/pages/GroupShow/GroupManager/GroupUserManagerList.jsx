@@ -2,7 +2,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import {
   Checkbox,
   List,
-  ListItem,
+  ListItemButton,
   ListItemText,
   ListSubheader,
   MenuItem,
@@ -10,6 +10,9 @@ import {
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
+
+import GroupRoleChip from 'course/group/components/GroupRoleChip';
+import GhostIcon from 'lib/components/icons/GhostIcon';
 
 import { memberShape } from '../../../propTypes';
 
@@ -33,6 +36,10 @@ const translations = defineMessages({
   staff: {
     id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.staff',
     defaultMessage: 'Staff',
+  },
+  otherGroupMembers: {
+    id: 'course.group.GroupShow.GroupManager.GroupUserManagerList.otherGroupMembers',
+    defaultMessage: '(existing member of the group(s): {groups})',
   },
 });
 
@@ -65,6 +72,8 @@ const styles = {
     marginBottom: 5,
   },
   listItemTextSize: {
+    display: 'flex',
+    alignItems: 'center',
     fontSize: 13,
   },
   listItemLabel: {
@@ -81,17 +90,44 @@ const styles = {
   },
 };
 
+const GroupUserManagerListItemChoice = ({ user, onChangeDropdown }) =>
+  user.role === 'student' ? (
+    <GroupRoleChip user={user} />
+  ) : (
+    <div style={styles.listItemWithDropdown}>
+      <Select
+        onChange={(event) => onChangeDropdown(event.target.value, user)}
+        onClick={() => {}}
+        style={styles.listItemTextSize}
+        value={user.groupRole}
+        variant="standard"
+      >
+        <MenuItem style={styles.listItemTextSize} value="normal">
+          <FormattedMessage {...translations.normal} />
+        </MenuItem>
+        <MenuItem style={styles.listItemTextSize} value="manager">
+          <FormattedMessage {...translations.manager} />
+        </MenuItem>
+      </Select>
+    </div>
+  );
+
+GroupUserManagerListItemChoice.propTypes = {
+  user: memberShape.isRequired,
+  onChangeDropdown: PropTypes.func,
+};
+
 const GroupUserManagerListItem = ({
   user,
   colour,
+  otherGroups,
   onCheck,
-  showDropdown,
   onChangeDropdown,
+  showDropdown,
   isChecked,
 }) => (
-  <ListItem
-    button
-    disablePadding
+  <ListItemButton
+    dense
     style={
       colour
         ? { ...styles.listItem, backgroundColor: colour.light }
@@ -107,42 +143,40 @@ const GroupUserManagerListItem = ({
 
       <ListItemText primaryTypographyProps={{ style: styles.listItemTextSize }}>
         {user.name}
+        {user.isPhantom && <GhostIcon />}
+        &nbsp;
+        {otherGroups?.length > 0 && (
+          <FormattedMessage
+            {...translations.otherGroupMembers}
+            values={{ groups: otherGroups.join(', ') }}
+          />
+        )}
       </ListItemText>
     </div>
 
-    {showDropdown ? (
-      <div style={styles.listItemWithDropdown}>
-        <Select
-          onChange={(event) => onChangeDropdown(event.target.value, user)}
-          onClick={() => {}}
-          style={styles.listItemTextSize}
-          value={user.groupRole}
-          variant="standard"
-        >
-          <MenuItem style={styles.listItemTextSize} value="normal">
-            <FormattedMessage {...translations.normal} />
-          </MenuItem>
-          <MenuItem style={styles.listItemTextSize} value="manager">
-            <FormattedMessage {...translations.manager} />
-          </MenuItem>
-        </Select>
-      </div>
-    ) : null}
-  </ListItem>
+    {showDropdown && (
+      <GroupUserManagerListItemChoice
+        onChangeDropdown={onChangeDropdown}
+        user={user}
+      />
+    )}
+  </ListItemButton>
 );
 
 GroupUserManagerListItem.propTypes = {
   user: memberShape.isRequired,
   colour: PropTypes.object,
+  otherGroups: PropTypes.arrayOf(PropTypes.string),
   onCheck: PropTypes.func.isRequired,
-  showDropdown: PropTypes.bool,
   onChangeDropdown: PropTypes.func,
+  showDropdown: PropTypes.bool,
   isChecked: PropTypes.bool,
 };
 
 const GroupUserManagerList = ({
   students = [],
   staff = [],
+  memberOtherGroups = {},
   onCheck,
   colourMap,
   showDropdown = false,
@@ -170,6 +204,7 @@ const GroupUserManagerList = ({
             isChecked={isChecked}
             onChangeDropdown={onChangeDropdown}
             onCheck={onCheck}
+            otherGroups={memberOtherGroups[user.id.toString()]}
             showDropdown={showDropdown}
             user={user}
           />
@@ -180,13 +215,13 @@ const GroupUserManagerList = ({
 
   return (
     <List style={styles.list}>
-      {students.length === 0 && staff.length === 0 ? (
-        <ListItem button style={{ color: grey[400] }}>
+      {students.length === 0 && staff.length === 0 && (
+        <ListItemButton style={{ color: grey[400] }}>
           <ListItemText>
             <FormattedMessage {...translations.noUsersFound} />
           </ListItemText>
-        </ListItem>
-      ) : null}
+        </ListItemButton>
+      )}
 
       {students.length > 0 &&
         renderUsersListItems(students, translations.students)}
@@ -199,6 +234,7 @@ const GroupUserManagerList = ({
 GroupUserManagerList.propTypes = {
   students: PropTypes.arrayOf(memberShape),
   staff: PropTypes.arrayOf(memberShape),
+  memberOtherGroups: PropTypes.object,
   onCheck: PropTypes.func.isRequired,
   colourMap: PropTypes.object.isRequired,
   showDropdown: PropTypes.bool,

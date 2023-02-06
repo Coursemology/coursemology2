@@ -31,7 +31,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
         )
-        sleep 0.1
+        wait_for_page
         expect(page).to have_selector('span', text: 'Submission updated successfully.')
         expect(submission.current_answers.first.specific.reload.answer_text).to include('Testing Save Draft')
       end
@@ -87,7 +87,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         find('div.topic-card').click
         expect(page).to have_text(forum_post.text)
         find('div.forum-post-option').click
-        sleep 1 # Wait for color to transition
+        wait_for_page
         expect(find('div.forum-post').style('background-color')['background-color']).to eq('rgba(232, 245, 233, 1)')
         expect(page).to have_text('You have selected 1/1 post.')
         expect(page).to have_text('Forum (1 selected)')
@@ -110,7 +110,7 @@ RSpec.describe 'Course: Assessments: Submissions: Forum Post Response Answers', 
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, assessment, submission)
         )
-        sleep 0.1
+        wait_for_page
         expect(page).to have_selector('span', text: 'Submission updated successfully.')
         expect(submission.current_answers.first.specific.reload.post_packs.count).to eq(1)
         expect(submission.current_answers.first.specific.reload.post_packs[0].post_id).to eq(forum_post.id)
