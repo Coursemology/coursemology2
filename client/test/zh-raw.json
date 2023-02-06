@@ -144,7 +144,7 @@
       "en": "New Submission"
     },
     "course.UserEmailSubscriptions.subscriptionTitles.new_topic": {
-      "defaultMessage": "新话题",
+      "defaultMessage": "新主题",
       "en": "New Topic"
     },
     "course.UserEmailSubscriptions.subscriptionTitles.opening_reminder": {
@@ -164,7 +164,7 @@
       "en": "Failed to update email subscription for \"{topic}\"."
     },
     "course.UserEmailSubscriptions.updateSuccess": {
-      "defaultMessage": "\"{topic}\"的电子邮件订阅已被{action}。",
+      "defaultMessage": "\"{topic}\"的电子邮件订阅已被{action, select, enabled {启用} disabled {禁用} other {{action}}}。",
       "en": "Email subscription for \"{topic}\" has been {action}."
     },
     "course.UserEmailSubscriptions.viewAllEmailSubscriptionSettings": {
@@ -648,7 +648,7 @@
       "en": "Start time is required."
     },
     "course.admin.CourseSettings.startsAt": {
-      "defaultMessage": "开始为",
+      "defaultMessage": "开始于",
       "en": "Starts as"
     },
     "course.admin.CourseSettings.stragglers": {
@@ -856,7 +856,7 @@
       "en": "None of the enabled components have email settings."
     },
     "course.admin.NotificationSettings.phantom": {
-      "defaultMessage": "影子用户",
+      "defaultMessage": "旁听用户",
       "en": "Phantom"
     },
     "course.admin.NotificationSettings.regular": {
@@ -980,7 +980,7 @@
       "en": "New Submission"
     },
     "course.admin.NotificationSettings.settingTitles.new_topic": {
-      "defaultMessage": "新话题",
+      "defaultMessage": "新主题",
       "en": "New Topic"
     },
     "course.admin.NotificationSettings.settingTitles.opening_reminder": {
@@ -1232,7 +1232,7 @@
       "en": "Enable delayed grade publication"
     },
     "course.assessment.AssessmentForm.delayedGradePublicationHint": {
-      "defaultMessage": "当延迟发布成绩时，成绩不会立即显示给学生。要发布所有评分，你可以单击提交页面中的“发布成绩”按钮。",
+      "defaultMessage": "当延迟发布成绩时，成绩不会立即显示给学生。要发布所有评分，你可以点击提交页面中的“发布成绩”按钮。",
       "en": "When delayed grade publication is on, gradings will not be immediately shown to students. To publish all gradings, you may click Publish Grades in the Submissions page."
     },
     "course.assessment.AssessmentForm.description": {
@@ -1292,7 +1292,7 @@
       "en": "Grading mode"
     },
     "course.assessment.AssessmentForm.hasPersonalTimes": {
-      "defaultMessage": "有私人时间",
+      "defaultMessage": "自适应学习进度",
       "en": "Has personal times"
     },
     "course.assessment.AssessmentForm.hasPersonalTimesHint": {
@@ -1300,11 +1300,11 @@
       "en": "Timings for this item will be automatically adjusted for users based on learning rate."
     },
     "course.assessment.AssessmentForm.hasTodo": {
-      "defaultMessage": "有待办事项",
+      "defaultMessage": "显示待办事项",
       "en": "Has TODO"
     },
     "course.assessment.AssessmentForm.hasTodoHint": {
-      "defaultMessage": "启用后，学生会在他们的待办列表中看见这些测验",
+      "defaultMessage": "启用后，学生将会在他们的待办事项中看到此测验",
       "en": "When enabled, students will see this assessment in their TODO list."
     },
     "course.assessment.AssessmentForm.modeSwitchingHint": {
@@ -1364,7 +1364,7 @@
       "en": "Show MCQ submit result"
     },
     "course.assessment.AssessmentForm.showMcqAnswerHint": {
-      "defaultMessage": "启用后，学生可以尝试提交多选题答案并获得反馈，直到他们做对为止。",
+      "defaultMessage": "启用后，学生可以尝试提交多选题答案并获得反馈，直到他们正确为止。",
       "en": "When enabled, students can try to submit MCQ answers and get feedback until they get it right."
     },
     "course.assessment.AssessmentForm.showMcqMrqSolution": {
@@ -1630,7 +1630,7 @@
       "en": "CODE EDITOR"
     },
     "course.assessment.question.programming.OnlineEditorJavaView.testCasesCodeDescription": {
-      "defaultMessage": "{editor}：单击{code} 将切换代码编辑器，供你将代码写入每个测试用例。这允许你为每个测试初始化​​变量和调用函数。例如：{codeExample}{codeExampleExpression} 和 {codeExampleExpected} 可以分别输入到 {expression} 和 {expected} 中。",
+      "defaultMessage": "{editor}：点击{code} 将切换代码编辑器，供你将代码写入每个测试用例。这允许你为每个测试初始化​​变量和调用函数。例如：{codeExample}{codeExampleExpression} 和 {codeExampleExpected} 可以分别输入到 {expression} 和 {expected} 中。",
       "en": "{editor}: Clicking {code} will toggle a code editor for you to write code into each test case. This allows you to initialize variables and call functions for each test. For example: {codeExample}{codeExampleExpression} and {codeExampleExpected} can then be input into {expression} and {expected} respectively."
     },
     "course.assessment.question.programming.OnlineEditorJavaView.testCasesDescription": {
@@ -1779,7 +1779,7 @@
       "en": "None"
     },
     "course.assessment.question.programming.OnlineEditorView.testCaseDescriptionNote": {
-      "defaultMessage": "笔记",
+      "defaultMessage": "提示",
       "description": "Value of the note key that is passed into the test case description.",
       "en": "NOTE"
     },
@@ -2679,7 +2679,7 @@
       "en": "Download Answers (CSV)"
     },
     "course.assessment.submission.SubmissionsIndex.downloadStatistics": {
-      "defaultMessage": "下载统计数据",
+      "defaultMessage": "下载数据",
       "en": "Download Statistics"
     },
     "course.assessment.submission.SubmissionsIndex.downloadZipAnswers": {
@@ -2703,7 +2703,7 @@
       "en": "Grader(s)"
     },
     "course.assessment.submission.SubmissionsIndex.includePhantoms": {
-      "defaultMessage": "包括影子学生",
+      "defaultMessage": "包括旁听学生",
       "en": "Include phantom users"
     },
     "course.assessment.submission.SubmissionsIndex.myStudents": {
@@ -2711,7 +2711,7 @@
       "en": "My Students"
     },
     "course.assessment.submission.SubmissionsIndex.phantom": {
-      "defaultMessage": "影子用户",
+      "defaultMessage": "旁听用户",
       "en": "Phantom User"
     },
     "course.assessment.submission.SubmissionsIndex.publishGrades": {
@@ -2719,7 +2719,7 @@
       "en": "Publish Grades"
     },
     "course.assessment.submission.SubmissionsIndex.publishNotice": {
-      "defaultMessage": "学生看不到等级和经验值。单击此页面顶部的按钮发布所有成绩。",
+      "defaultMessage": "学生看不到等级和经验值。点击此页面顶部的按钮发布所有成绩。",
       "en": "The grade and experience points are not visible to the student. Publish all grades by clicking the button at the top of this page."
     },
     "course.assessment.submission.SubmissionsIndex.remind": {
@@ -2823,7 +2823,7 @@
       "en": "Uploaded Files:"
     },
     "course.assessment.submission.VoiceResponseAnswer.chooseVoiceFileExplain": {
-      "defaultMessage": "将你的音频文件拖到此处，或单击以选择。仅支持 wav 和 mp3 格式。或者，你可以使用下面的录音机来记录你的回复",
+      "defaultMessage": "将你的音频文件拖到此处，或点击以选择。仅支持 wav 和 mp3 格式。或者，你可以使用下面的录音机来记录你的回复",
       "en": "Drag your audio file here, or click to select an audio file. Only wav and mp3 formats are supported. Alternatively, you may use the recorder below to record your response"
     },
     "course.assessment.submission.VoiceResponseAnswer.pleaseRecordYourVoice": {
@@ -3039,7 +3039,7 @@
       "en": "Cancel"
     },
     "course.assessment.submission.answers.ForumPostResponse.ForumPostSelectDialog.dialogSubtitle": {
-      "defaultMessage": "单击该帖子来选择以供提交。",
+      "defaultMessage": "点击该帖子来选择以供提交。",
       "en": "Click on the post to include it for submission."
     },
     "course.assessment.submission.answers.ForumPostResponse.ForumPostSelectDialog.dialogTitle": {
@@ -3079,7 +3079,7 @@
       "en": "Post made under a topic that was subsequently deleted."
     },
     "course.assessment.submission.answers.ForumPostResponse.TopicCard.topicCardTitleTypeNoneSelected": {
-      "defaultMessage": "话题",
+      "defaultMessage": "主题",
       "en": "Topic"
     },
     "course.assessment.submission.answers.ForumPostResponse.TopicCard.topicCardTitleTypeSelected": {
@@ -3295,7 +3295,7 @@
       "en": "Grader"
     },
     "course.assessment.submission.group": {
-      "defaultMessage": "团体",
+      "defaultMessage": "分组",
       "en": "Group"
     },
     "course.assessment.submission.importFilesFailure": {
@@ -3415,7 +3415,7 @@
       "en": "Reset Answer"
     },
     "course.assessment.submission.resetConfirmation": {
-      "defaultMessage": "你确定要重置你的答案吗？这个动作是不可逆的，你将失去你当前为这个问题所做的所有工作。",
+      "defaultMessage": "你确定要重置你的答案吗？这个操作是不可逆的，你将失去你当前为这个问题所做的所有工作。",
       "en": "Are you sure you want to reset your answer? This action is irreversible and you will lose all your current work for this question."
     },
     "course.assessment.submission.runCode": {
@@ -3459,7 +3459,7 @@
       "en": "Solutions (Maximum Grade for this Question: {maximumGrade})"
     },
     "course.assessment.submission.statistics": {
-      "defaultMessage": "统计数据",
+      "defaultMessage": "数据",
       "en": "Statistics"
     },
     "course.assessment.submission.status": {
@@ -3559,19 +3559,19 @@
       "en": "Wrong!"
     },
     "course.assessment.submissions.SubmissionFilter.applyFilterButton": {
-      "defaultMessage": "应用过滤器",
+      "defaultMessage": "应用筛选",
       "en": "Apply Filter"
     },
     "course.assessment.submissions.SubmissionFilter.clearFilterButton": {
-      "defaultMessage": "重置过滤器",
+      "defaultMessage": "重置筛选",
       "en": "Clear Filter"
     },
     "course.assessment.submissions.SubmissionFilter.filterAssessmentLabel": {
-      "defaultMessage": "过滤",
+      "defaultMessage": "筛选",
       "en": "Filter by"
     },
     "course.assessment.submissions.SubmissionTabs.allStudentsPending": {
-      "defaultMessage": "所有待处理的提交",
+      "defaultMessage": "待批改（所有学生）",
       "en": "All Pending Submissions"
     },
     "course.assessment.submissions.SubmissionTabs.fetchSubmissionsFailure": {
@@ -3579,7 +3579,7 @@
       "en": "Failed to fetch submissions"
     },
     "course.assessment.submissions.SubmissionTabs.myStudentsPending": {
-      "defaultMessage": "我的学生待定",
+      "defaultMessage": "待批改（我的学生）",
       "en": "My Students Pending"
     },
     "course.assessment.submissions.SubmissionsIndex.fetchSubmissionsFailure": {
@@ -3587,7 +3587,7 @@
       "en": "Failed to fetch submissions"
     },
     "course.assessment.submissions.SubmissionsIndex.filterGetFailure": {
-      "defaultMessage": "过滤失败",
+      "defaultMessage": "筛选失败",
       "en": "Failed to filter"
     },
     "course.assessment.submissions.SubmissionsIndex.header": {
@@ -3687,7 +3687,7 @@
       "en": "EXP"
     },
     "course.assessments.index.hasTodo": {
-      "defaultMessage": "有待办事项",
+      "defaultMessage": "显示待办事项",
       "en": "Has TODO"
     },
     "course.assessments.index.neededFor": {
@@ -3771,7 +3771,7 @@
       "en": "Forums"
     },
     "course.componentTitles.course_levels_component": {
-      "defaultMessage": "关卡",
+      "defaultMessage": "等级",
       "en": "Levels"
     },
     "course.componentTitles.course_materials_component": {
@@ -4079,7 +4079,7 @@
       "en": "All"
     },
     "course.discussion.topics.CommentIndex.comments": {
-      "defaultMessage": "注释",
+      "defaultMessage": "评论",
       "en": "Comments"
     },
     "course.discussion.topics.CommentIndex.fetchCommentsFailure": {
@@ -4091,11 +4091,11 @@
       "en": "My Students"
     },
     "course.discussion.topics.CommentIndex.myStudentsPending": {
-      "defaultMessage": "我的学生待定",
+      "defaultMessage": "待回复（我的学生）",
       "en": "My Students Pending"
     },
     "course.discussion.topics.CommentIndex.pending": {
-      "defaultMessage": "待办的",
+      "defaultMessage": "待回复",
       "en": "Pending"
     },
     "course.discussion.topics.CommentIndex.unread": {
@@ -4131,7 +4131,7 @@
       "en": "Failed to retrieve topics."
     },
     "course.discussion.topics.TopicList.noTopic": {
-      "defaultMessage": "恭喜！当前没有待定/现有评论！",
+      "defaultMessage": "当前没有待处理或已存在的评论！",
       "en": "Congrats! There is currently no pending/existing comments!"
     },
     "course.duplication.BulkSelectors.deselectAll": {
@@ -4359,7 +4359,7 @@
       "en": "There are no {enrolRequestsType}"
     },
     "course.enrolRequests.EnrolRequestsTable.pending": {
-      "defaultMessage": "待办的",
+      "defaultMessage": "待处理",
       "en": "pending"
     },
     "course.enrolRequests.EnrolRequestsTable.rejected": {
@@ -4459,7 +4459,7 @@
       "en": "Disburse Points"
     },
     "course.experiencePoints.disbursement.DisbursementIndex.disbursements": {
-      "defaultMessage": "支付经验值",
+      "defaultMessage": "发放经验值",
       "en": "Disburse Experience Points"
     },
     "course.experiencePoints.disbursement.DisbursementIndex.fetchDisbursementFailure": {
@@ -4587,7 +4587,7 @@
       "en": "All topics in this forum have been marked as read."
     },
     "course.forum.FormShow.newTopic": {
-      "defaultMessage": "新话题",
+      "defaultMessage": "新主题",
       "en": "New Topic"
     },
     "course.forum.ForumEdit.editForum": {
@@ -4635,7 +4635,7 @@
       "en": "Forum {title} has been created."
     },
     "course.forum.ForumNew.newForum": {
-      "defaultMessage": "新论坛",
+      "defaultMessage": "新建分论坛",
       "en": "New Forum"
     },
     "course.forum.ForumTable.autoSubscribe": {
@@ -4655,7 +4655,7 @@
       "en": "Subscribed?"
     },
     "course.forum.ForumTable.noForum": {
-      "defaultMessage": "没有论坛",
+      "defaultMessage": "暂无分论坛",
       "en": "No Forum"
     },
     "course.forum.ForumTable.posts": {
@@ -4663,7 +4663,7 @@
       "en": "Posts"
     },
     "course.forum.ForumTable.topics": {
-      "defaultMessage": "话题",
+      "defaultMessage": "主题",
       "en": "Topics"
     },
     "course.forum.ForumTable.views": {
@@ -4723,7 +4723,7 @@
       "en": "Topic {title} has been created."
     },
     "course.forum.ForumTopicNew.newTopic": {
-      "defaultMessage": "新话题",
+      "defaultMessage": "新主题",
       "en": "New Topic"
     },
     "course.forum.ForumTopicPostForm.postAnonymously": {
@@ -4827,7 +4827,7 @@
       "en": "Sticky"
     },
     "course.forum.ForumTopicTable.topics": {
-      "defaultMessage": "话题",
+      "defaultMessage": "主题",
       "en": "Topics"
     },
     "course.forum.ForumTopicTable.unresolved": {
@@ -4859,7 +4859,7 @@
       "en": "All topics have been marked as read."
     },
     "course.forum.ForumsIndex.newForum": {
-      "defaultMessage": "新论坛",
+      "defaultMessage": "新建分论坛",
       "en": "New Forum"
     },
     "course.forum.HideButton.hide": {
@@ -5091,7 +5091,7 @@
       "en": "Failed to retrieve group categories."
     },
     "course.group.GroupIndex.groups": {
-      "defaultMessage": "团体",
+      "defaultMessage": "分组",
       "en": "Groups"
     },
     "course.group.GroupIndex.noCategory": {
@@ -5107,7 +5107,7 @@
       "en": "Group category was created."
     },
     "course.group.GroupNew.new": {
-      "defaultMessage": "新类别",
+      "defaultMessage": "新建分组",
       "en": "New Category"
     },
     "course.group.GroupShow.CategoryCard.confirmDelete": {
@@ -5379,7 +5379,7 @@
       "en": "Failed to retrieve Leaderboard."
     },
     "course.leaderboard.LeaderboardIndex.groupLeaderboard": {
-      "defaultMessage": "团体排行榜",
+      "defaultMessage": "分组排行榜",
       "en": "Group Leaderboard"
     },
     "course.leaderboard.LeaderboardIndex.leaderboard": {
@@ -5615,23 +5615,23 @@
       "en": "Title"
     },
     "course.level.Level.addNewLevel": {
-      "defaultMessage": "添加新级别",
+      "defaultMessage": "添加新等级",
       "en": "Add New Level"
     },
     "course.level.Level.levelHeader": {
-      "defaultMessage": "关卡",
+      "defaultMessage": "等级",
       "en": "Levels"
     },
     "course.level.Level.saveFailure": {
-      "defaultMessage": "关卡保存失败，请重试。",
+      "defaultMessage": "等级保存失败，请重试。",
       "en": "Level saving failed, please try again."
     },
     "course.level.Level.saveLevels": {
-      "defaultMessage": "保存关卡",
+      "defaultMessage": "保存",
       "en": "Save Levels"
     },
     "course.level.Level.saveSuccess": {
-      "defaultMessage": "关卡保存",
+      "defaultMessage": "等级已保存",
       "en": "Levels Saved"
     },
     "course.level.Level.thresholdHeader": {
@@ -5795,7 +5795,7 @@
       "en": "Correctness"
     },
     "course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctnessHint": {
-      "defaultMessage": "正确率是该学生所有已测验测验的平均成绩百分比。",
+      "defaultMessage": "该学生所有已批改测验的平均成绩（百分比）",
       "en": "Correctness is the average grade percentage of all graded assessments by a student."
     },
     "course.statistics.StatisticsIndex.course.StudentPerformanceTable.descending": {
@@ -5843,7 +5843,7 @@
       "en": "No. of Submissions (Total: {courseAssessmentCount})"
     },
     "course.statistics.StatisticsIndex.course.StudentPerformanceTable.phantom": {
-      "defaultMessage": "包括影子学生",
+      "defaultMessage": "包括旁听学生",
       "en": "Include phantom users"
     },
     "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType": {
@@ -5855,11 +5855,11 @@
       "en": "Normal"
     },
     "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType.phantom": {
-      "defaultMessage": "影子学生",
+      "defaultMessage": "旁听学生",
       "en": "Phantom"
     },
     "course.statistics.StatisticsIndex.course.StudentPerformanceTable.tableTitle": {
-      "defaultMessage": "学神以 {direction} {column} 排序",
+      "defaultMessage": "学生以 {direction} {column} 排序",
       "en": "Students Sorted in {direction} {column}"
     },
     "course.statistics.StatisticsIndex.course.StudentPerformanceTable.title": {
@@ -5899,7 +5899,7 @@
       "en": "Opening Times"
     },
     "course.statistics.StatisticsIndex.course.StudentProgressionChart.phantom": {
-      "defaultMessage": "包括影子学生",
+      "defaultMessage": "包括旁听学生",
       "en": "Include phantom users"
     },
     "course.statistics.StatisticsIndex.course.StudentProgressionChart.showOpeningTimes": {
@@ -5935,7 +5935,7 @@
       "en": "Something went wrong when fetching course progression statistics! Please refresh to try again."
     },
     "course.statistics.StatisticsIndex.header.statistics": {
-      "defaultMessage": "统计数据",
+      "defaultMessage": "数据",
       "en": "Statistics"
     },
     "course.statistics.StatisticsIndex.staff.averageMarkingTime": {
@@ -5971,7 +5971,7 @@
       "en": "Failed to fetch staff data!"
     },
     "course.statistics.StatisticsIndex.students.error": {
-      "defaultMessage": "获取学生统计数据时出了点问题！请刷新重试。",
+      "defaultMessage": "获取学生数据时出了点问题！请刷新重试。",
       "en": "Something went wrong when fetching student statistics! Please refresh to try again."
     },
     "course.statistics.StatisticsIndex.students.experiencePoints": {
@@ -6155,7 +6155,7 @@
       "en": "Percentage"
     },
     "course.survey.OptionsQuestionResults.phantomStudentName": {
-      "defaultMessage": "{name}（影子用户）",
+      "defaultMessage": "{name}（旁听用户）",
       "en": "{name} (Phantom)"
     },
     "course.survey.OptionsQuestionResults.respondents": {
@@ -6315,11 +6315,11 @@
       "en": "Download Responses"
     },
     "course.survey.ResponseIndex.RemindButton.confirmation": {
-      "defaultMessage": "向所有未完成调查的学生（不包括影子学生）发送电子邮件？",
+      "defaultMessage": "向所有未完成调查的学生（不包括旁听学生）发送电子邮件？",
       "en": "Send emails to all students (excluding phantoms) who have not completed the survey?"
     },
     "course.survey.ResponseIndex.RemindButton.confirmationAll": {
-      "defaultMessage": "向所有未完成调查的学生（包括影子学生）发送电子邮件？",
+      "defaultMessage": "向所有未完成调查的学生（包括旁听学生）发送电子邮件？",
       "en": "Send emails to all students (including phantoms) who have not completed the survey?"
     },
     "course.survey.ResponseIndex.RemindButton.explanation": {
@@ -6339,7 +6339,7 @@
       "en": "Reminder emails have been dispatched."
     },
     "course.survey.ResponseIndex.includePhantoms": {
-      "defaultMessage": "包括影子学生",
+      "defaultMessage": "包括旁听学生",
       "en": "Include Phantom Students"
     },
     "course.survey.ResponseIndex.name": {
@@ -6351,7 +6351,7 @@
       "en": "Not Started"
     },
     "course.survey.ResponseIndex.phantoms": {
-      "defaultMessage": "影子学生",
+      "defaultMessage": "旁听学生",
       "en": "Phantom Students"
     },
     "course.survey.ResponseIndex.responding": {
@@ -6391,7 +6391,7 @@
       "en": "This section has no questions. Empty sections will not be shown in the survey response form."
     },
     "course.survey.SurveyBadges.hasTodo": {
-      "defaultMessage": "有待办事项",
+      "defaultMessage": "显示待办事项",
       "en": "Has TODO"
     },
     "course.survey.SurveyForm.allowModifyAfterSubmitHint": {
@@ -6411,7 +6411,7 @@
       "en": "At least one student has responded to this survey. You may not remove anonymity."
     },
     "course.survey.SurveyForm.hasTodo": {
-      "defaultMessage": "有待办事项",
+      "defaultMessage": "显示待办事项",
       "en": "Has TODO"
     },
     "course.survey.SurveyForm.hasTodoHint": {
@@ -6451,11 +6451,11 @@
       "en": "Survey \"{title}\" updated."
     },
     "course.survey.SurveyResults.includePhantoms": {
-      "defaultMessage": "包括影子学生",
+      "defaultMessage": "包括旁听学生",
       "en": "Include Phantom Students"
     },
     "course.survey.SurveyResults.noPhantoms": {
-      "defaultMessage": "没有影子学生的反应。",
+      "defaultMessage": "没有旁听学生的反应。",
       "en": "No phantom student responses."
     },
     "course.survey.SurveyResults.noSections": {
@@ -6499,7 +6499,7 @@
       "en": "Hide Responses"
     },
     "course.survey.TextResponseResults.phantomStudentName": {
-      "defaultMessage": "{名字}（影子用户）",
+      "defaultMessage": "{名字}（旁听用户）",
       "en": "{name} (Phantom)"
     },
     "course.survey.TextResponseResults.respondent": {
@@ -6967,7 +6967,7 @@
       "en": "Accepted Invitations"
     },
     "course.userInvitations.InvitationsBarChart.pending": {
-      "defaultMessage": "待办的",
+      "defaultMessage": "待处理",
       "en": "Pending"
     },
     "course.userInvitations.InvitationsIndex.accepted": {
@@ -7027,7 +7027,7 @@
       "en": "Personal Timelines can be <code>[fixed, otot, stragglers, fomo]</code>, with course default: {defaultTimelineAlgorithm} if omitted."
     },
     "course.userInvitations.InviteUsersFileUpload.fileUploadInfoPhantom": {
-      "defaultMessage": "影子用户可以是 true/false，具有以下值 <code>['t', 'true', 'y', 'yes']</code>（不区分大小写），若省略则默认为 false。",
+      "defaultMessage": "旁听用户可以是 true/false，具有以下值 <code>['t', 'true', 'y', 'yes']</code>（不区分大小写），若省略则默认为 false。",
       "en": "Phantom can be true/false with the following true values <code>['t', 'true', 'y', 'yes']</code> (case insenstitive), and defaults to false if omitted."
     },
     "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRole": {
@@ -7107,7 +7107,7 @@
       "en": "There are no {invitationType}"
     },
     "course.userInvitations.UserInvitationsTable.pending": {
-      "defaultMessage": "待办的",
+      "defaultMessage": "待处理",
       "en": "pending"
     },
     "course.userNotification.AchievementGainedPopup.unlocked": {
@@ -7151,7 +7151,7 @@
       "en": "Students"
     },
     "course.users.ManageStudents.noStudents": {
-      "defaultMessage": "目前课程中还没有学生...",
+      "defaultMessage": "暂无学生",
       "en": "No students in course... yet!"
     },
     "course.users.ManageUsersTable.ManageUsersTable.noUsers": {
@@ -7207,7 +7207,7 @@
       "en": "Group: {name}"
     },
     "course.users.ManageUsersTable.phantomSuccess": {
-      "defaultMessage": "{name} {isPhantom, select, true {现在是影子用户} other {现在是普通用户} }。",
+      "defaultMessage": "{name} {isPhantom, select, true {现在是旁听用户} other {现在是普通用户} }。",
       "en": "{name} {isPhantom, select, true {is now a phantom user} other {is now a normal user} }."
     },
     "course.users.ManageUsersTable.renameFailure": {
@@ -7447,7 +7447,7 @@
       "en": "Failed to retrieve course users."
     },
     "course.users.UsersIndex.noStudents": {
-      "defaultMessage": "课程中还没有学生...！",
+      "defaultMessage": "暂无学生",
       "en": "No students in course... yet!"
     },
     "course.users.UsersIndex.studentsHeader": {
@@ -7455,7 +7455,7 @@
       "en": "Students"
     },
     "course.video.VideoBadges.hasTodo": {
-      "defaultMessage": "有待办事项",
+      "defaultMessage": "显示待办事项",
       "en": "Has TODO"
     },
     "course.video.VideoEdit.updateFailure": {
@@ -7475,7 +7475,7 @@
       "en": "Description"
     },
     "course.video.VideoForm.hasPersonalTimes": {
-      "defaultMessage": "有私人时间",
+      "defaultMessage": "自适应学习进度",
       "en": "Has personal times"
     },
     "course.video.VideoForm.hasPersonalTimesHint": {
@@ -7483,7 +7483,7 @@
       "en": "Timings for this item will be automatically adjusted for users based on learning rate."
     },
     "course.video.VideoForm.hasTodo": {
-      "defaultMessage": "有待办事项",
+      "defaultMessage": "显示待办事项",
       "en": "Has TODO"
     },
     "course.video.VideoForm.hasTodoHint": {
@@ -7547,7 +7547,7 @@
       "en": "Failed to retrieve video."
     },
     "course.video.VideoShow.statistics": {
-      "defaultMessage": "统计数据",
+      "defaultMessage": "数据",
       "en": "Statistics"
     },
     "course.video.VideoShow.video": {
@@ -7631,7 +7631,7 @@
       "en": "Failed to retrieve video submission."
     },
     "course.video.submission.VideoSubmissionShow.noSession": {
-      "defaultMessage": "没有可用于此提交的观看统计数据。",
+      "defaultMessage": "没有可用于此提交的观看数据。",
       "en": "No watch statistics available for this submission."
     },
     "course.video.submission.VideoSubmissionShow.sessionStatistics": {
@@ -7663,7 +7663,7 @@
       "en": "Normal Students"
     },
     "course.video.submission.VideoSubmissionsIndex.phantomStudents": {
-      "defaultMessage": "影子学生",
+      "defaultMessage": "旁听学生",
       "en": "Phantom Students"
     },
     "course.video.submission.barGraphScalingLabel": {
@@ -7679,7 +7679,7 @@
       "en": "Real Time"
     },
     "course.video.submission.eventTypeLabel": {
-      "defaultMessage": "动作：{type}",
+      "defaultMessage": "操作：{type}",
       "en": "Action: {type}"
     },
     "course.video.submission.eventVideoTime": {
@@ -7751,7 +7751,7 @@
       "en": "Show Less"
     },
     "lib.components.core.Note.noteHeader": {
-      "defaultMessage": "笔记",
+      "defaultMessage": "提示",
       "en": "Note"
     },
     "lib.components.core.fields.DateTimePicker.invalidDate": {
@@ -7787,7 +7787,7 @@
       "en": "Has personal times"
     },
     "lib.components.extensions.PersonalTimeBooleanIcons.hasPersonalTimesHint": {
-      "defaultMessage": "有私人时间。该项目的时间将根据学习率自动为用户调整。",
+      "defaultMessage": "自适应学习进度。该项目的时间将根据学习率自动为用户调整。",
       "en": "Has personal times. Timings for this item will be automatically adjusted for users based on learning rate."
     },
     "lib.components.extensions.conditions.achievement": {
@@ -7867,7 +7867,7 @@
       "en": "scoring at least"
     },
     "lib.components.extensions.conditions.specifyLevel": {
-      "defaultMessage": "指定最低级别",
+      "defaultMessage": "指定最低等级",
       "en": "Specify a minimum level"
     },
     "lib.components.extensions.conditions.survey": {
@@ -7887,7 +7887,7 @@
       "en": "Invalid Date and/or Time"
     },
     "lib.components.form.fields.SingleFileInput.dropzone": {
-      "defaultMessage": "将你的文件拖到此处，或单击以选择文件",
+      "defaultMessage": "将文件拖到此处或上传文件",
       "en": "Drag your file here, or click to select file"
     },
     "lib.components.form.fields.SingleFileInput.removeFile": {
@@ -7915,7 +7915,7 @@
       "en": "Delete"
     },
     "lib.translations.form.buttons.discard": {
-      "defaultMessage": "丢弃",
+      "defaultMessage": "放弃",
       "en": "Discard"
     },
     "lib.translations.form.buttons.dismiss": {
@@ -8067,7 +8067,7 @@
       "en": "Achievements"
     },
     "lib.translations.table.column.actions": {
-      "defaultMessage": "动作",
+      "defaultMessage": "操作",
       "en": "Actions"
     },
     "lib.translations.table.column.activeTotalCourses": {
@@ -8135,7 +8135,7 @@
       "en": "Has personal times"
     },
     "lib.translations.table.column.hasTodo": {
-      "defaultMessage": "有待办事项",
+      "defaultMessage": "显示待办事项",
       "en": "Has TODO"
     },
     "lib.translations.table.column.host": {
@@ -8199,7 +8199,7 @@
       "en": "Personalized Timeline"
     },
     "lib.translations.table.column.phantom": {
-      "defaultMessage": "影子学生",
+      "defaultMessage": "旁听学生",
       "en": "Phantom"
     },
     "lib.translations.table.column.published": {
@@ -8643,7 +8643,7 @@
       "en": "There is no {enrolRequestsType}"
     },
     "system.admin.instance.instance.InstanceUserRoleRequestsTable.pending": {
-      "defaultMessage": "待办的",
+      "defaultMessage": "待处理",
       "en": "pending"
     },
     "system.admin.instance.instance.InstanceUserRoleRequestsTable.rejected": {
@@ -8855,7 +8855,7 @@
       "en": "There are no {invitationType}"
     },
     "system.admin.instance.instance.UserInvitationsTable.pending": {
-      "defaultMessage": "待办的",
+      "defaultMessage": "待处理",
       "en": "pending"
     },
     "system.admin.instance.instance.UsersButton.deleteTooltip": {
