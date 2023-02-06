@@ -10,7 +10,6 @@
 
 // z-index values from libraries
 $navbar-static-top: 1000;
-$mui-app-bar: 1100;
 $mui-tooltip-popper: 1500;
 
 $base: 0;
@@ -20,6 +19,6 @@ $z-index: (
   'sidebar-container': above($base),
   'footer': above(above($base)),
   'show-sidebar': below($navbar-static-top),
-  'body-nav': above($mui-app-bar),
+  'body-nav': below($mui-tooltip-popper),
   'ck-body-wrapper': $mui-tooltip-popper,
 );

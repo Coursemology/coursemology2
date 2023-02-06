@@ -10,7 +10,7 @@ body {
 
 .sidebarContainer {
   & > div {
-    z-index: map-get($z-index, 'sidebar-container-div');
+    z-index: map-get($z-index, 'sidebar-container');
 
     @media (min-width: 600px) {
       flex-basis: 33.33333%;
