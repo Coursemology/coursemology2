@@ -19,6 +19,6 @@ $z-index: (
   'sidebar-container': above($base),
   'footer': above(above($base)),
   'show-sidebar': below($navbar-static-top),
-  'body-nav': below($mui-tooltip-popper),
+  'body-nav': 1201,
   'ck-body-wrapper': $mui-tooltip-popper,
 );
