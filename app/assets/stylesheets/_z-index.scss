@@ -1,19 +1,25 @@
 @use 'sass:map';
 
-// elements are stored in ascending order
-$elements: (
-  'sidebar-container',
-  'footer',
-  'show-sidebar',
-  'body-nav',
-  'ck-body-wrapper'
-);
+@function above($element) {
+  @return $element + 1;
+}
+
+@function below($element) {
+  @return $element - 1;
+}
+
+// z-index values from libraries
+$navbar-static-top: 1000;
+$mui-app-bar: 1100;
+$mui-tooltip-popper: 1500;
+
+$base: 0;
 
 // z-index values can be accessed with map-get($z-index, {element})
-$z-index: ();
-$current-z-index: 0;
-@each $element in $elements {
-  $current-z-index: $current-z-index + 1;
-  $z-index-entry: (#{$element}: $current-z-index);
-  $z-index: map-merge($z-index, $z-index-entry);
-}
+$z-index: (
+  'sidebar-container': above($base),
+  'footer': above(above($base)),
+  'show-sidebar': below($navbar-static-top),
+  'body-nav': above($mui-app-bar),
+  'ck-body-wrapper': $mui-tooltip-popper,
+);
