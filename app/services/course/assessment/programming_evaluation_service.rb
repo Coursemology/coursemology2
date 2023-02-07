@@ -3,7 +3,7 @@
 class Course::Assessment::ProgrammingEvaluationService
   # The default timeout for the job to finish.
   DEFAULT_TIMEOUT = 5.minutes
-  CPU_TIMEOUT = Course::Assessment::Question::Programming::CPU_TIMEOUT
+  CPU_TIMEOUT = 300.seconds
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
 
   # The ratio to multiply the memory limits from our evaluation to the container by.

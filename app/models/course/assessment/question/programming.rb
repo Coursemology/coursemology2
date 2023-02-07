@@ -6,8 +6,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   self.table_name = table_name.singularize
 
   # Maximum CPU time a programming question can allow before the evaluation gets killed.
-  # CPU_TIMEOUT = Course.programming_timeout_limit.seconds
-  CPU_TIMEOUT = 300.seconds
+  # CPU_TIMEOUT = 300.seconds
 
   # Maximum memory (in MB) the programming question can allow.
   # Do NOT change this to num.megabytes as the ProgramingEvaluationService expects it in MB.
@@ -17,13 +16,13 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   include DuplicationStateTrackingConcern
   acts_as :question, class_name: Course::Assessment::Question.name
+  attr_accessor :course
 
   before_save :process_package, unless: :skip_process_package?
   before_validation :assign_template_attributes
   before_validation :assign_test_case_attributes
 
   validates :memory_limit, numericality: { greater_than: 0, less_than: 2_147_483_648 }, allow_nil: true
-  validates :time_limit, numericality: { greater_than: 0, less_than_or_equal_to: CPU_TIMEOUT }, allow_nil: true
   validates :attempt_limit, numericality: { only_integer: true,
                                             greater_than: 0, less_than: 2_147_483_648 }, allow_nil: true
   validates :package_type, presence: true
@@ -31,6 +30,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   validates :import_job_id, uniqueness: { allow_nil: true, if: :import_job_id_changed? }
   validates :language, presence: true
 
+  validate -> { validate_time_limit(course) }
   validate :validate_codaveri_question
 
   belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil, optional: true
@@ -72,6 +72,10 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   def to_partial_path
     'course/assessment/question/programming/programming'
   end
+
+  # def get_programming_timeout_limit(course)
+  #   self.programming_timeout_limit = course.programming_timeout_limit
+  # end
 
   # This specifies the attachment which was imported.
   #
@@ -209,6 +213,12 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   def skip_process_package?
     duplicating?
+  end
+
+  def validate_time_limit(course)
+    return true if time_limit <= course.programming_timeout_limit
+
+    errors.add(:base, 'Time limit is higher than allowed')
   end
 
   def validate_codaveri_question # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
