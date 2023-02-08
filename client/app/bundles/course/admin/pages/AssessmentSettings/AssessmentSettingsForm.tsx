@@ -1,6 +1,7 @@
 import { Emits } from 'react-emitter-factory';
 import { Controller } from 'react-hook-form';
 import { AssessmentSettingsData } from 'types/course/admin/assessments';
+import * as yup from 'yup';
 
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
@@ -22,6 +23,13 @@ const AssessmentsSettingsForm = (
   props: AssessmentsSettingsFormProps,
 ): JSX.Element => {
   const { t } = useTranslation();
+  const validationSchema = yup.object({
+    programmingTimeoutLimit: yup
+      .number()
+      .nullable()
+      .typeError(t(translations.numberRequired))
+      .min(0, t(translations.positiveNumberRequired)),
+  });
 
   return (
     <Form
@@ -30,6 +38,7 @@ const AssessmentsSettingsForm = (
       headsUp
       initialValues={props.data}
       onSubmit={props.onSubmit}
+      validates={validationSchema}
     >
       {(control): JSX.Element => (
         <>

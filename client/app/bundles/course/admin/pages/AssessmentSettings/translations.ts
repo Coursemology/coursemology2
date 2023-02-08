@@ -104,6 +104,14 @@ export default defineMessages({
     id: 'course.admin.AssessmentSettings.moveTabsThenDelete',
     defaultMessage: 'Move tabs then delete',
   },
+  numberRequired: {
+    id: 'course.admin.AssessmentSettings.numberRequired',
+    defaultMessage: 'must input a number here',
+  },
+  positiveNumberRequired: {
+    id: 'course.admin.AssessmentSettings.positiveNumberRequired',
+    defaultMessage: 'must input a positive number here',
+  },
   toTab: {
     id: 'course.admin.AssessmentSettings.toTab',
     defaultMessage: 'to {tab}',

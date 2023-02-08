@@ -5,9 +5,6 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   # The table name for this model is singular.
   self.table_name = table_name.singularize
 
-  # Maximum CPU time a programming question can allow before the evaluation gets killed.
-  # CPU_TIMEOUT = 300.seconds
-
   # Maximum memory (in MB) the programming question can allow.
   # Do NOT change this to num.megabytes as the ProgramingEvaluationService expects it in MB.
   # Currently set to nil as Java evaluations do not work with a `ulimit` below 3 GB.
@@ -40,13 +37,17 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
                             dependent: :destroy, foreign_key: :question_id, inverse_of: :question
   has_many :test_cases, class_name: Course::Assessment::Question::ProgrammingTestCase.name,
                         dependent: :destroy, foreign_key: :question_id, inverse_of: :question
-
+  
   def auto_gradable?
     !test_cases.empty?
   end
 
   def edit_online?
     package_type == 'online_editor'
+  end
+
+  def max_timeout_limit(course)
+    course.programming_timeout_limit
   end
 
   def auto_grader
@@ -72,10 +73,6 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   def to_partial_path
     'course/assessment/question/programming/programming'
   end
-
-  # def get_programming_timeout_limit(course)
-  #   self.programming_timeout_limit = course.programming_timeout_limit
-  # end
 
   # This specifies the attachment which was imported.
   #
@@ -216,7 +213,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   end
 
   def validate_time_limit(course)
-    return true if time_limit <= course.programming_timeout_limit
+    return if time_limit <= max_timeout_limit(course)
 
     errors.add(:base, 'Time limit is higher than allowed')
   end
