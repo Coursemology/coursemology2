@@ -42,13 +42,17 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
                             dependent: :destroy, foreign_key: :question_id, inverse_of: :question
   has_many :test_cases, class_name: Course::Assessment::Question::ProgrammingTestCase.name,
                         dependent: :destroy, foreign_key: :question_id, inverse_of: :question
-
+  
   def auto_gradable?
     !test_cases.empty?
   end
 
   def edit_online?
     package_type == 'online_editor'
+  end
+
+  def max_timeout_limit(course)
+    course.programming_timeout_limit
   end
 
   def auto_grader
