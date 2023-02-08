@@ -6,6 +6,11 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
                               class: Course::Assessment::Question::Programming,
                               through: :assessment, parent: false, except: [:new, :create]
   before_action :load_question_assessment, only: [:edit, :update]
+  before_action :set_course_for_question
+
+  def set_course_for_question
+    @programming_question.course = current_course
+  end
 
   def new
     @template = 'course/assessment/question/programming/new.json.jbuilder'
@@ -13,7 +18,6 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   def create
     @template = 'course/assessment/question/programming/new.json.jbuilder'
-    @programming_question.course = current_course
     @programming_question.package_type =
       programming_question_params.key?(:file) ? :zip_upload : :online_editor
     process_package
@@ -35,7 +39,6 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   end
 
   def update
-    @programming_question.course = current_course
     result = @programming_question.class.transaction do
       @question_assessment.skill_ids = programming_question_params[:question_assessment].
                                        try(:[], :skill_ids)

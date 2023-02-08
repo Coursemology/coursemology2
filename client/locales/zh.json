@@ -1422,7 +1422,7 @@
     "defaultMessage": "时间限制 (s)"
   },
   "course.assessment.question.programming.ProgrammingQuestionForm.timeLimitRangeValidationError": {
-    "defaultMessage": "时间限制必须在 1 到 30 之间。"
+    "defaultMessage": "时间限制必须在 1 到 {hard_time_limit} 之间。"
   },
   "course.assessment.question.programming.ProgrammingQuestionForm.titleFieldLabel": {
     "defaultMessage": "标题"
