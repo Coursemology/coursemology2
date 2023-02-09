@@ -84,8 +84,13 @@ class Course::Assessment::ProgrammingEvaluationService
     # @return [Result] The result of evaluating the template.
     #
     # @raise [Timeout::Error] When the operation times out.
+<<<<<<< HEAD
     def execute(language, memory_limit, time_limit, max_time_limit, package, timeout = nil)
       new(language, memory_limit, time_limit, max_time_limit, package, timeout).execute
+=======
+    def execute(course, language, memory_limit, time_limit, package, timeout = nil)
+      new(course, language, memory_limit, time_limit, package, timeout).execute
+>>>>>>> db6f59050 (feat(assessment_settings): setup time limit for evaluation services code)
     end
   end
 
