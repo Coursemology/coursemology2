@@ -3,7 +3,6 @@
 class Course::Assessment::ProgrammingCodaveriEvaluationService
   # The default timeout for the job to finish.
   DEFAULT_TIMEOUT = 5.minutes
-  CPU_TIMEOUT = 300.seconds
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
 
   # Represents a result of evaluating an answer.
@@ -91,12 +90,16 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
 
   private
 
+  def programming_timeout_limit(question)
+    question.course.programming_timeout_limit
+  end
+
   def initialize(course_title, question, answer, timeout)
     @question = question
     @answer = answer
     @language = question.language
     @memory_limit = question.memory_limit || MEMORY_LIMIT
-    @time_limit = question.time_limit || CPU_TIMEOUT
+    @time_limit = question.time_limit ? [question.time_limit, programming_timeout_limit(question)].min : programming_timeout_limit(question)
     @timeout = timeout || DEFAULT_TIMEOUT
 
     @answer_object = { api_version: 'latest',
