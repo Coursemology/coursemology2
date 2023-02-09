@@ -121,7 +121,12 @@ const ForumShow: FC = () => {
 
   return (
     <>
-      <PageHeader title={forumPageHeaderTitle} toolbars={headerToolbars} />
+      <PageHeader
+        returnLink={forum?.rootForumUrl}
+        title={forumPageHeaderTitle}
+        toolbars={headerToolbars}
+      />
+
       {!isLoading && isOpen && (
         <ForumTopicNew
           availableTopicTypes={forum?.availableTopicTypes}
@@ -130,6 +135,7 @@ const ForumShow: FC = () => {
           open={isOpen}
         />
       )}
+
       {isLoading ? (
         <LoadingIndicator />
       ) : (

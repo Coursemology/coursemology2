@@ -3,6 +3,7 @@
 json.id forum.id
 json.name forum.name
 json.description format_ckeditor_rich_text(forum.description)
+json.rootForumUrl course_forums_path(current_course)
 json.forumUrl course_forum_path(current_course, forum)
 json.forumTopicsAutoSubscribe forum.forum_topics_auto_subscribe
 json.topicUnreadCount forum.topic_unread_count

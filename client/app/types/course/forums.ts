@@ -62,6 +62,7 @@ export interface ForumListData {
   description: string;
   topicUnreadCount: number;
   forumTopicsAutoSubscribe: boolean;
+  rootForumUrl: string;
   forumUrl: string;
   isUnresolved: boolean;
   topicCount: number;
@@ -140,6 +141,7 @@ export interface ForumEntity {
   permissions: ForumData['permissions'];
 
   availableTopicTypes?: ForumData['availableTopicTypes'];
+  rootForumUrl: ForumData['rootForumUrl'];
   nextUnreadTopicUrl: ForumData['nextUnreadTopicUrl'];
   topicIds: ForumTopicListData['id'][] | null;
 }
