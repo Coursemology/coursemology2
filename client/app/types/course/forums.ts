@@ -93,6 +93,7 @@ export interface ForumTopicListData {
   permissions: ForumTopicListDataPermissions;
 
   nextUnreadTopicUrl: string | null;
+  forumUrl: string;
 }
 
 export interface ForumTopicPostListData {
@@ -166,6 +167,7 @@ export interface ForumTopicEntity {
   emailSubscription: ForumTopicListData['emailSubscription'];
   permissions: ForumTopicListData['permissions'];
 
+  forumUrl: ForumTopicListData['forumUrl'];
   nextUnreadTopicUrl: ForumTopicListData['nextUnreadTopicUrl'];
   postTreeIds?: RecursiveArray<number>;
 }

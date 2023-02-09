@@ -5,6 +5,7 @@ last_post = topic.posts.last
 json.id topic.id
 json.forumId forum.id
 json.title topic.title
+json.forumUrl course_forum_path(current_course, forum)
 json.topicUrl course_forum_topic_path(current_course, forum, topic)
 json.isUnread topic.unread?(current_user)
 json.isLocked topic.locked?
