@@ -43,7 +43,6 @@ class Course::Assessment::Question::ProgrammingImportService
   # @param [Course::Assessment::ProgrammingPackage] package The package to import.
   def import_from_package(package)
     raise InvalidDataError unless package.valid?
-
     # Must extract template files before replacing them with the solution files.
     template_files = package.submission_files
     package.replace_submission_with_solution
@@ -51,7 +50,6 @@ class Course::Assessment::Question::ProgrammingImportService
     evaluation_result = evaluate_package(package)
 
     raise evaluation_result if evaluation_result.error?
-
     save!(template_files, evaluation_result)
   end
 
@@ -61,7 +59,7 @@ class Course::Assessment::Question::ProgrammingImportService
   # @return [Course::Assessment::ProgrammingEvaluationService::Result]
   def evaluate_package(package)
     Course::Assessment::ProgrammingEvaluationService.
-      execute(@question.language, @question.memory_limit, @question.time_limit, package.path)
+      execute(@question.course, @question.language, @question.memory_limit, @question.time_limit, package.path)
   end
 
   # Saves the templates and tests to the question.
