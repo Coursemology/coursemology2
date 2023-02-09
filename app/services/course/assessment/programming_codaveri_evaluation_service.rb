@@ -90,8 +90,8 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
 
   private
 
-  def programming_timeout_limit(question)
-    question.course.programming_timeout_limit
+  def programming_timeout_limit(course)
+    course.programming_timeout_limit
   end
 
   def initialize(course_title, question, answer, timeout)
@@ -99,7 +99,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     @answer = answer
     @language = question.language
     @memory_limit = question.memory_limit || MEMORY_LIMIT
-    @time_limit = question.time_limit ? [question.time_limit, programming_timeout_limit(question)].min : programming_timeout_limit(question)
+    @time_limit = question.time_limit ? [question.time_limit, programming_timeout_limit(course)].min : programming_timeout_limit(course)
     @timeout = timeout || DEFAULT_TIMEOUT
 
     @answer_object = { api_version: 'latest',

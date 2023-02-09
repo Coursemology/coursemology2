@@ -9,8 +9,8 @@ class Course::Assessment::Question::ProgrammingImportService
     # @param [Course::Assessment::Question::Programming] question The programming question for
     #   import.
     # @param [Attachment] attachment The attachment containing the package to import.
-    def import(question, attachment)
-      new(question, attachment).import
+    def import(question, attachment, course)
+      new(question, attachment, course).import
     end
   end
 
@@ -33,9 +33,10 @@ class Course::Assessment::Question::ProgrammingImportService
   #
   # @param [Course::Assessment::Question::Programming] question The programming question for import.
   # @param [Attachment] attachment The attachment containing the tests and files.
-  def initialize(question, attachment)
+  def initialize(question, attachment, course)
     @question = question
     @attachment = attachment
+    @course = course
   end
 
   # Imports the templates and tests from the given package.
@@ -59,7 +60,7 @@ class Course::Assessment::Question::ProgrammingImportService
   # @return [Course::Assessment::ProgrammingEvaluationService::Result]
   def evaluate_package(package)
     Course::Assessment::ProgrammingEvaluationService.
-      execute(@question.course, @question.language, @question.memory_limit, @question.time_limit, package.path)
+      execute(@course, @question.language, @question.memory_limit, @question.time_limit, package.path)
   end
 
   # Saves the templates and tests to the question.

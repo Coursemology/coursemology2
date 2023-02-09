@@ -104,27 +104,29 @@ const AssessmentsSettingsForm = (
               />
             </Subsection>
 
-            <Subsection
-              className="!mt-8"
-              spaced
-              title={t(translations.programmingTimeoutLimit)}
-            >
-              <Controller
-                control={control}
-                name="programmingTimeoutLimit"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormTextField
-                    disabled={props.disabled}
-                    field={field}
-                    fieldState={fieldState}
-                    fullWidth
-                    label={t(translations.programmingTimeoutLimit)}
-                    type="number"
-                    variant="filled"
-                  />
-                )}
-              />
-            </Subsection>
+            {props.data.programmingTimeoutLimit && (
+              <Subsection
+                className="!mt-8"
+                spaced
+                title={t(translations.programmingTimeoutLimit)}
+              >
+                <Controller
+                  control={control}
+                  name="programmingTimeoutLimit"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <FormTextField
+                      disabled={props.disabled}
+                      field={field}
+                      fieldState={fieldState}
+                      fullWidth
+                      label={t(translations.programmingTimeoutLimit)}
+                      type="number"
+                      variant="filled"
+                    />
+                  )}
+                />
+              </Subsection>
+            )}
           </Section>
 
           <Section

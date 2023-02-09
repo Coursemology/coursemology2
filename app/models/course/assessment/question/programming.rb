@@ -27,7 +27,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   validates :import_job_id, uniqueness: { allow_nil: true, if: :import_job_id_changed? }
   validates :language, presence: true
 
-  validate -> { validate_time_limit(course) }
+  # validate -> { validate_time_limit(course) }
   validate :validate_codaveri_question
 
   belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil, optional: true
@@ -212,11 +212,11 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     duplicating?
   end
 
-  def validate_time_limit(course)
-    return if time_limit <= max_timeout_limit(course)
+  # def validate_time_limit(course)
+  #   return if time_limit <= max_timeout_limit(course)
 
-    errors.add(:base, 'Time limit is higher than allowed')
-  end
+  #   errors.add(:base, 'Time limit is higher than allowed')
+  # end
 
   def validate_codaveri_question # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     return if !is_codaveri || duplicating?
