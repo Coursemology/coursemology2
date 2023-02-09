@@ -74,8 +74,13 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     # @return [Course::Assessment::ProgrammingCodaveriEvaluationService::Result]
     #
     # @raise [Timeout::Error] When the operation times out.
+<<<<<<< HEAD
     def execute(course_title, question, answer, timeout = nil)
       new(course_title, question, answer, timeout).execute
+=======
+    def execute(question, answer, course, timeout = nil)
+      new(question, answer, course, timeout).execute
+>>>>>>> b309137ff (feat(assessment_settings): setting permissions for programming timeout limit)
     end
   end
 

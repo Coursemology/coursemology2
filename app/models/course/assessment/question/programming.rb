@@ -32,7 +32,11 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   validates :import_job_id, uniqueness: { allow_nil: true, if: :import_job_id_changed? }
   validates :language, presence: true
 
+<<<<<<< HEAD
   validate -> { validate_time_limit }
+=======
+  # validate -> { validate_time_limit(course) }
+>>>>>>> b309137ff (feat(assessment_settings): setting permissions for programming timeout limit)
   validate :validate_codaveri_question
 
   belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil, optional: true
