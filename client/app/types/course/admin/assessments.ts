@@ -3,9 +3,9 @@ export interface AssessmentSettingsData {
   showStdoutAndStderr: boolean;
   allowRandomization: boolean;
   allowMrqOptionsRandomization: boolean;
-  programmingTimeoutLimit: number;
   categories: AssessmentCategory[];
   canCreateCategories: boolean;
+  programmingTimeoutLimit?: number;
 }
 
 export interface AssessmentCategory {

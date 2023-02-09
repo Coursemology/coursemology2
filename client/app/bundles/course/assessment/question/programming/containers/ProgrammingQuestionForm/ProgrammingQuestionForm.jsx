@@ -61,7 +61,7 @@ function validation(data, pathOfKeysToData, intl) {
   const questionErrors = {};
   let hasError = false;
 
-  const HARD_TIME_LIMIT = data.get('max_timeout_limit')
+  const HARD_TIME_LIMIT = data.get('max_timeout_limit');
 
   // Check maximum grade
   const maximumGrade = data.get('maximum_grade');
@@ -89,7 +89,8 @@ function validation(data, pathOfKeysToData, intl) {
   const timeLimit = data.get('time_limit');
   if (timeLimit && (timeLimit > HARD_TIME_LIMIT || timeLimit <= 0)) {
     questionErrors.time_limit = intl.formatMessage(
-      translations.timeLimitRangeValidationError, {
+      translations.timeLimitRangeValidationError,
+      {
         hard_time_limit: HARD_TIME_LIMIT,
       },
     );

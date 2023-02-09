@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 categories = current_course.assessment_categories.includes(:tabs)
 
-json.showPublicTestCasesOutput current_course.show_public_test_cases_output
-json.showStdoutAndStderr current_course.show_stdout_and_stderr
-json.allowRandomization current_course.allow_randomization
-json.allowMrqOptionsRandomization current_course.allow_mrq_options_randomization
-json.programmingTimeoutLimit current_course.programming_timeout_limit
+json.showPublicTestCasesOutput current_course.show_public_test_cases_output || false
+json.showStdoutAndStderr current_course.show_stdout_and_stderr || false
+json.allowRandomization current_course.allow_randomization || false
+json.allowMrqOptionsRandomization current_course.allow_mrq_options_randomization || false
+json.programmingTimeoutLimit current_course.programming_timeout_limit if can?(:manage, :all)
 
 json.canCreateCategories can?(:create, Course::Assessment::Category.new(course: current_course))
 

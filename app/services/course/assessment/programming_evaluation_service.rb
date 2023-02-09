@@ -104,7 +104,6 @@ class Course::Assessment::ProgrammingEvaluationService
   end
 
   def initialize(course, language, memory_limit, time_limit, package, timeout)
-    byebug
     @language = language
     @memory_limit = memory_limit || MEMORY_LIMIT
     @time_limit = time_limit ? [time_limit, programming_timeout_limit(course)].min : programming_timeout_limit(course)
