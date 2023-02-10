@@ -78,12 +78,23 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     subject { Course::Assessment::ProgrammingEvaluationService }
-    let(:course) { create(:course) }
+    let(:settings1) { ActiveSupport::HashWithIndifferentAccess.new(programming_timeout_limit: 170) }
+    let(:settings2) { ActiveSupport::HashWithIndifferentAccess.new(course_assessments_component: settings1) }
+    let(:course) { create(:course, settings: settings2) }
+    let(:question) do
+      create(
+        :course_assessment_question_programming,
+        language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
+        memory_limit: 64
+      )
+    end
 
     it 'returns the result of evaluating' do
-      result = subject.execute(Coursemology::Polyglot::Language::Python::Python3Point10.instance, 64,
-                               5.seconds, File.join(Rails.root, 'spec', 'fixtures', 'course',
-                                                    'programming_question_template.zip'))
+      result = subject.execute(
+        course, question, 5.seconds,
+        File.join(Rails.root, 'spec', 'fixtures',
+                  'course', 'programming_question_template.zip')
+      )
       expect(result).to be_a(Course::Assessment::ProgrammingEvaluationService::Result)
     end
 
@@ -91,35 +102,45 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
       it 'raises a Timeout::Error' do
         expect do
           # Pass in a non-zero timeout as Ruby's Timeout treats 0 as infinite.
-          subject.execute(Coursemology::Polyglot::Language::Python::Python3Point10.instance,
-                          64, 5.seconds, File.join(Rails.root, 'spec', 'fixtures', 'course',
-                                                   'programming_question_template.zip'), 0.1.seconds)
+          subject.execute(course, question, 5.seconds,
+                          File.join(Rails.root, 'spec', 'fixtures', 'course',
+                                    'programming_question_template.zip'), 0.1.seconds)
         end.to raise_error(Timeout::Error)
       end
     end
 
     describe '#create_container' do
-      let(:memory_limit) { nil }
+      let(:question) do
+        create(
+          :course_assessment_question_programming,
+          language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
+          memory_limit: nil
+        )
+      end
       let(:time_limit) { nil }
       let(:service_instance) do
-        subject.new(Coursemology::Polyglot::Language::Python::Python3Point10.instance,
-                    memory_limit, time_limit, Rails.root.join('spec', 'fixtures', 'course',
-                                                              'programming_question_template.zip'), nil)
+        subject.new(course, question, time_limit, Rails.root.join('spec', 'fixtures', 'course',
+                                                                  'programming_question_template.zip'), nil)
       end
       let(:image) { 'python:3.10' }
       let(:container) { service_instance.send(:create_container, image) }
 
       it 'prefixes the image with coursemology/evaluator-image' do
-        # 300 seconds is the default time limit when unspecified.
         expect(CoursemologyDockerContainer).to \
           receive(:create).with("coursemology/evaluator-image-#{image}",
-                                hash_including(argv: ['-c300']))
+                                hash_including(argv: ['-c170']))
 
         container
       end
 
       context 'when resource limits are specified' do
-        let(:memory_limit) { 16 }
+        let(:question) do
+          create(
+            :course_assessment_question_programming,
+            language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
+            memory_limit: 16
+          )
+        end
         let(:time_limit) { 5 }
 
         it 'specifies them when creating the container' do

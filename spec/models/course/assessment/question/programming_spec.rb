@@ -23,13 +23,16 @@ RSpec.describe Course::Assessment::Question::Programming do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe 'validations' do
-      subject { build(:course_assessment_question_programming) }
+      let(:settings1) { ActiveSupport::HashWithIndifferentAccess.new(programming_timeout_limit: 170) }
+      let(:settings2) { ActiveSupport::HashWithIndifferentAccess.new(course_assessments_component: settings1) }
+      let(:course) { create(:course, settings: settings2) }
+      subject { build(:course_assessment_question_programming, course: course) }
 
       it { is_expected.to validate_numericality_of(:time_limit).allow_nil }
       it { is_expected.to validate_numericality_of(:memory_limit).allow_nil }
       it 'validates time_limit' do
         expect(subject).to validate_numericality_of(:time_limit).is_greater_than(0).
-          is_less_than_or_equal_to(300)
+          is_less_than_or_equal_to(170)
       end
     end
 
