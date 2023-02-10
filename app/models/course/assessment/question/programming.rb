@@ -23,7 +23,6 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   before_validation :assign_test_case_attributes
 
   validates :memory_limit, numericality: { greater_than: 0, less_than: 2_147_483_648 }, allow_nil: true
-  validates :time_limit, numericality: { greater_than: 0 }, allow_nil: true
   validates :attempt_limit, numericality: { only_integer: true,
                                             greater_than: 0, less_than: 2_147_483_648 }, allow_nil: true
   validates :package_type, presence: true
@@ -218,11 +217,11 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   # time limit validation during duplication is skipped, and time limit is allowed to be nil
   def validate_time_limit(course)
-    return if duplicating? || !time_limit || time_limit > 0
-    return if time_limit <= max_timeout_limit(course)
+    return if duplicating? || time_limit.nil?
+    return if time_limit.is_a?(Integer) && time_limit > 0 && time_limit <= max_timeout_limit(course)
 
-    timeout_limit = max_timeout_limit(course)
-    errors.add(:base, "Time limit needs to be at most #{timeout_limit}")
+    errors.add(:base, "Time limit needs to be at most #{max_timeout_limit(course)}")
+    nil
   end
 
   def validate_codaveri_question # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
