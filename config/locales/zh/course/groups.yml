@@ -7,6 +7,6 @@ zh:
     group:
       group_categories:
         index:
-          header: '组'
+          header: '分组'
         show:
-          header: '组'
+          header: '分组'

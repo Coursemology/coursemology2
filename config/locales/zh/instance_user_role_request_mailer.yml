@@ -1,16 +1,6 @@
 zh:
   instance_user_role_request_mailer:
     new_role_request:
-
-
-
-
-
-
-
-
-
-
       subject: '新的身份变更申请!'
       empty: '（未指明）'
       message_html: >

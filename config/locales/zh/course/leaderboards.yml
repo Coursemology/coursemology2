@@ -4,4 +4,4 @@ zh:
       sidebar_title: :'course.leaderboards.index.header'
       title: :'course.leaderboards.index.header'
       index:
-        header: '排名'
+        header: '排行榜'

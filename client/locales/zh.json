@@ -108,7 +108,7 @@
     "defaultMessage": "新提交"
   },
   "course.UserEmailSubscriptions.subscriptionTitles.new_topic": {
-    "defaultMessage": "新话题"
+    "defaultMessage": "新主题"
   },
   "course.UserEmailSubscriptions.subscriptionTitles.opening_reminder": {
     "defaultMessage": "开启提醒"
@@ -123,7 +123,7 @@
     "defaultMessage": "无法更新\"{topic}\"的电子邮件订阅。"
   },
   "course.UserEmailSubscriptions.updateSuccess": {
-    "defaultMessage": "\"{topic}\"的电子邮件订阅已被{action}。"
+    "defaultMessage": "\"{topic}\"的电子邮件订阅已被{action, select, enabled {启用} disabled {禁用} other {{action}}}。"
   },
   "course.UserEmailSubscriptions.viewAllEmailSubscriptionSettings": {
     "defaultMessage": "查看和管理你所有其他的电子邮件订阅。"
@@ -230,6 +230,9 @@
   "course.achievement.AchievementTable.noAchievement": {
     "defaultMessage": "暂无成就"
   },
+  "course.achievement.AchievementsIndex.header": {
+    "defaultMessage": "成就"
+  },
   "course.achievement.AchievementsIndex.fetchAchievementsFailure": {
     "defaultMessage": "无法检索成就。"
   },
@@ -255,7 +258,7 @@
     "defaultMessage": "允许学生查看"
   },
   "course.admin.AssessmentSettings.andNMoreItems": {
-    "defaultMessage": "和另外 {n} 个项目。"
+    "defaultMessage": "和 {n, plural, one {# more item} other {# more items}}。"
   },
   "course.admin.AssessmentSettings.assessmentSettings": {
     "defaultMessage": "测验设置"
@@ -267,7 +270,7 @@
     "defaultMessage": "拖放类别和标签以重新排列或将它们分组。"
   },
   "course.admin.AssessmentSettings.containsNAssessments": {
-    "defaultMessage": "有 {n} 个项目 "
+    "defaultMessage": "有 {n, plural, one {# item} other {# items}}"
   },
   "course.admin.AssessmentSettings.deleteCategoryPromptAction": {
     "defaultMessage": "删除 {title} 类别"
@@ -486,7 +489,7 @@
     "defaultMessage": "开始时间是必需的。"
   },
   "course.admin.CourseSettings.startsAt": {
-    "defaultMessage": "开始为"
+    "defaultMessage": "开始于"
   },
   "course.admin.CourseSettings.stragglers": {
     "defaultMessage": "Stragglers（照顾落后生）"
@@ -642,7 +645,7 @@
     "defaultMessage": "所有启用的组件都没有电子邮件设置。"
   },
   "course.admin.NotificationSettings.phantom": {
-    "defaultMessage": "影子用户"
+    "defaultMessage": "旁听用户"
   },
   "course.admin.NotificationSettings.regular": {
     "defaultMessage": "普通用户"
@@ -735,7 +738,7 @@
     "defaultMessage": "新提交"
   },
   "course.admin.NotificationSettings.settingTitles.new_topic": {
-    "defaultMessage": "新话题"
+    "defaultMessage": "新主题"
   },
   "course.admin.NotificationSettings.settingTitles.opening_reminder": {
     "defaultMessage": "打开提醒"
@@ -924,7 +927,7 @@
     "defaultMessage": "启用延迟成绩发布"
   },
   "course.assessment.AssessmentForm.delayedGradePublicationHint": {
-    "defaultMessage": "当延迟发布成绩时，成绩不会立即显示给学生。要发布所有评分，你可以单击提交页面中的“发布成绩”按钮。"
+    "defaultMessage": "当延迟发布成绩时，成绩不会立即显示给学生。要发布所有评分，你可以点击提交页面中的“发布成绩”按钮。"
   },
   "course.assessment.AssessmentForm.description": {
     "defaultMessage": "描述"
@@ -969,16 +972,16 @@
     "defaultMessage": "评分模式"
   },
   "course.assessment.AssessmentForm.hasPersonalTimes": {
-    "defaultMessage": "有私人时间"
+    "defaultMessage": "自适应学习进度"
   },
   "course.assessment.AssessmentForm.hasPersonalTimesHint": {
     "defaultMessage": "该项目的时间将根据学习率自动为用户调整。"
   },
   "course.assessment.AssessmentForm.hasTodo": {
-    "defaultMessage": "有待办事项"
+    "defaultMessage": "显示待办事项"
   },
   "course.assessment.AssessmentForm.hasTodoHint": {
-    "defaultMessage": "启用后，学生会在他们的待办列表中看见这些测验"
+    "defaultMessage": "启用后，学生将会在他们的待办事项中看到此测验"
   },
   "course.assessment.AssessmentForm.modeSwitchingHint": {
     "defaultMessage": "你不能再更改评分模式，因为已经有此测验的提交。"
@@ -1023,7 +1026,7 @@
     "defaultMessage": "显示多选题提交结果"
   },
   "course.assessment.AssessmentForm.showMcqAnswerHint": {
-    "defaultMessage": "启用后，学生可以尝试提交多选题答案并获得反馈，直到他们做对为止。"
+    "defaultMessage": "启用后，学生可以尝试提交多选题答案并获得反馈，直到他们正确为止。"
   },
   "course.assessment.AssessmentForm.showMcqMrqSolution": {
     "defaultMessage": "显示 单选题/多选题 解决方案"
@@ -1209,7 +1212,7 @@
     "defaultMessage": "代码编辑器"
   },
   "course.assessment.question.programming.OnlineEditorJavaView.testCasesCodeDescription": {
-    "defaultMessage": "{editor}：单击{code} 将切换代码编辑器，供你将代码写入每个测试用例。这允许你为每个测试初始化​​变量和调用函数。例如：{codeExample}{codeExampleExpression} 和 {codeExampleExpected} 可以分别输入到 {expression} 和 {expected} 中。"
+    "defaultMessage": "{editor}：点击{code} 将切换代码编辑器，供你将代码写入每个测试用例。这允许你为每个测试初始化​​变量和调用函数。例如：{codeExample}{codeExampleExpression} 和 {codeExampleExpected} 可以分别输入到 {expression} 和 {expected} 中。"
   },
   "course.assessment.question.programming.OnlineEditorJavaView.testCasesDescription": {
     "defaultMessage": "{note}：{expression} 列中的表达式将使用 {expectEquals} 方法与 {expected} 列中的表达式进行比较，如附件中所述。"
@@ -1302,7 +1305,7 @@
     "defaultMessage": "None"
   },
   "course.assessment.question.programming.OnlineEditorView.testCaseDescriptionNote": {
-    "defaultMessage": "笔记"
+    "defaultMessage": "提示"
   },
   "course.assessment.question.programming.OnlineEditorView.testCaseDescriptionPrint": {
     "defaultMessage": "打印()"
@@ -1419,7 +1422,7 @@
     "defaultMessage": "时间限制 (s)"
   },
   "course.assessment.question.programming.ProgrammingQuestionForm.timeLimitRangeValidationError": {
-    "defaultMessage": "时间限制必须在 1 到 300 之间。"
+    "defaultMessage": "时间限制必须在 1 到 30 之间。"
   },
   "course.assessment.question.programming.ProgrammingQuestionForm.titleFieldLabel": {
     "defaultMessage": "标题"
@@ -1944,7 +1947,7 @@
     "defaultMessage": "下载答案 (CSV)"
   },
   "course.assessment.submission.SubmissionsIndex.downloadStatistics": {
-    "defaultMessage": "下载统计数据"
+    "defaultMessage": "下载数据"
   },
   "course.assessment.submission.SubmissionsIndex.downloadZipAnswers": {
     "defaultMessage": "下载答案（文件）"
@@ -1962,19 +1965,19 @@
     "defaultMessage": "评分员"
   },
   "course.assessment.submission.SubmissionsIndex.includePhantoms": {
-    "defaultMessage": "包括影子学生"
+    "defaultMessage": "包括旁听学生"
   },
   "course.assessment.submission.SubmissionsIndex.myStudents": {
     "defaultMessage": "我的学生"
   },
   "course.assessment.submission.SubmissionsIndex.phantom": {
-    "defaultMessage": "影子用户"
+    "defaultMessage": "旁听用户"
   },
   "course.assessment.submission.SubmissionsIndex.publishGrades": {
     "defaultMessage": "发布成绩"
   },
   "course.assessment.submission.SubmissionsIndex.publishNotice": {
-    "defaultMessage": "学生看不到等级和经验值。单击此页面顶部的按钮发布所有成绩。"
+    "defaultMessage": "学生看不到等级和经验值。点击此页面顶部的按钮发布所有成绩。"
   },
   "course.assessment.submission.SubmissionsIndex.remind": {
     "defaultMessage": "发送提醒邮件"
@@ -2052,7 +2055,7 @@
     "defaultMessage": "上传的文件："
   },
   "course.assessment.submission.VoiceResponseAnswer.chooseVoiceFileExplain": {
-    "defaultMessage": "将你的音频文件拖到此处，或单击以选择。仅支持 wav 和 mp3 格式。或者，你可以使用下面的录音机来记录你的回复"
+    "defaultMessage": "将你的音频文件拖到此处，或点击以选择。仅支持 wav 和 mp3 格式。或者，你可以使用下面的录音机来记录你的回复"
   },
   "course.assessment.submission.VoiceResponseAnswer.pleaseRecordYourVoice": {
     "defaultMessage": "请录下你的声音"
@@ -2214,7 +2217,7 @@
     "defaultMessage": "取消"
   },
   "course.assessment.submission.answers.ForumPostResponse.ForumPostSelectDialog.dialogSubtitle": {
-    "defaultMessage": "单击该帖子来选择以供提交。"
+    "defaultMessage": "点击该帖子来选择以供提交。"
   },
   "course.assessment.submission.answers.ForumPostResponse.ForumPostSelectDialog.dialogTitle": {
     "defaultMessage": "你选择了 {numPosts}/{maxPosts} {maxPosts, plural, one {post} other {posts}}。"
@@ -2244,7 +2247,7 @@
     "defaultMessage": "相关主题已删除"
   },
   "course.assessment.submission.answers.ForumPostResponse.TopicCard.topicCardTitleTypeNoneSelected": {
-    "defaultMessage": "话题"
+    "defaultMessage": "主题"
   },
   "course.assessment.submission.answers.ForumPostResponse.TopicCard.topicCardTitleTypeSelected": {
     "defaultMessage": "主题（已选择 {numSelected} 个）"
@@ -2406,7 +2409,7 @@
     "defaultMessage": "评分员"
   },
   "course.assessment.submission.group": {
-    "defaultMessage": "团体"
+    "defaultMessage": "分组"
   },
   "course.assessment.submission.importFilesFailure": {
     "defaultMessage": "文件上传失败：{errors}"
@@ -2496,7 +2499,7 @@
     "defaultMessage": "重置答案"
   },
   "course.assessment.submission.resetConfirmation": {
-    "defaultMessage": "你确定要重置你的答案吗？这个动作是不可逆的，你将失去你当前为这个问题所做的所有工作。"
+    "defaultMessage": "你确定要重置你的答案吗？这个操作是不可逆的，你将失去你当前为这个问题所做的所有工作。"
   },
   "course.assessment.submission.runCode": {
     "defaultMessage": "运行代码"
@@ -2529,7 +2532,7 @@
     "defaultMessage": "解决方案（此问题的最高等级：{maximumGrade}）"
   },
   "course.assessment.submission.statistics": {
-    "defaultMessage": "统计数据"
+    "defaultMessage": "数据"
   },
   "course.assessment.submission.status": {
     "defaultMessage": "提交状态"
@@ -2604,28 +2607,28 @@
     "defaultMessage": "错误！"
   },
   "course.assessment.submissions.SubmissionFilter.applyFilterButton": {
-    "defaultMessage": "应用过滤器"
+    "defaultMessage": "应用筛选"
   },
   "course.assessment.submissions.SubmissionFilter.clearFilterButton": {
-    "defaultMessage": "重置过滤器"
+    "defaultMessage": "重置筛选"
   },
   "course.assessment.submissions.SubmissionFilter.filterAssessmentLabel": {
-    "defaultMessage": "过滤"
+    "defaultMessage": "筛选"
   },
   "course.assessment.submissions.SubmissionTabs.allStudentsPending": {
-    "defaultMessage": "所有待处理的提交"
+    "defaultMessage": "待批改（所有学生）"
   },
   "course.assessment.submissions.SubmissionTabs.fetchSubmissionsFailure": {
     "defaultMessage": "获取提交失败"
   },
   "course.assessment.submissions.SubmissionTabs.myStudentsPending": {
-    "defaultMessage": "我的学生待定"
+    "defaultMessage": "待批改（我的学生）"
   },
   "course.assessment.submissions.SubmissionsIndex.fetchSubmissionsFailure": {
     "defaultMessage": "获取提交失败"
   },
   "course.assessment.submissions.SubmissionsIndex.filterGetFailure": {
-    "defaultMessage": "过滤失败"
+    "defaultMessage": "筛选失败"
   },
   "course.assessment.submissions.SubmissionsIndex.header": {
     "defaultMessage": "提交"
@@ -2658,7 +2661,7 @@
     "defaultMessage": "总成绩"
   },
   "course.assessment.submissions.SubmissionsTable.tableHeaderTutor": {
-    "defaultMessage": "讲师"
+    "defaultMessage": "导师"
   },
   "course.assessment.submissions.SubmissionsTableButton.gradeButton": {
     "defaultMessage": "评分"
@@ -2700,7 +2703,7 @@
     "defaultMessage": "经验值"
   },
   "course.assessments.index.hasTodo": {
-    "defaultMessage": "有待办事项"
+    "defaultMessage": "显示待办事项"
   },
   "course.assessments.index.neededFor": {
     "defaultMessage": "需要的"
@@ -2763,7 +2766,7 @@
     "defaultMessage": "论坛"
   },
   "course.componentTitles.course_levels_component": {
-    "defaultMessage": "关卡"
+    "defaultMessage": "等级"
   },
   "course.componentTitles.course_materials_component": {
     "defaultMessage": "材料"
@@ -2994,7 +2997,7 @@
     "defaultMessage": "全部"
   },
   "course.discussion.topics.CommentIndex.comments": {
-    "defaultMessage": "注释"
+    "defaultMessage": "评论"
   },
   "course.discussion.topics.CommentIndex.fetchCommentsFailure": {
     "defaultMessage": "无法检索评论。"
@@ -3003,10 +3006,10 @@
     "defaultMessage": "我的学生"
   },
   "course.discussion.topics.CommentIndex.myStudentsPending": {
-    "defaultMessage": "我的学生待定"
+    "defaultMessage": "待回复（我的学生）"
   },
   "course.discussion.topics.CommentIndex.pending": {
-    "defaultMessage": "待办的"
+    "defaultMessage": "待回复"
   },
   "course.discussion.topics.CommentIndex.unread": {
     "defaultMessage": "未读"
@@ -3033,7 +3036,7 @@
     "defaultMessage": "检索主题失败。"
   },
   "course.discussion.topics.TopicList.noTopic": {
-    "defaultMessage": "恭喜！当前没有待定/现有评论！"
+    "defaultMessage": "当前没有待处理或已存在的评论！"
   },
   "course.duplication.BulkSelectors.deselectAll": {
     "defaultMessage": "取消全选"
@@ -3204,7 +3207,7 @@
     "defaultMessage": "没有 {enrolRequestsType}"
   },
   "course.enrolRequests.EnrolRequestsTable.pending": {
-    "defaultMessage": "待办的"
+    "defaultMessage": "待处理"
   },
   "course.enrolRequests.EnrolRequestsTable.rejected": {
     "defaultMessage": "拒绝了"
@@ -3267,19 +3270,19 @@
     "defaultMessage": "按组筛选"
   },
   "course.experiencePoints.disbursement.DisbursementForm.noDisbursement": {
-    "defaultMessage": "不会向用户支付任何积分。"
+    "defaultMessage": "不会向用户发放任何积分。"
   },
   "course.experiencePoints.disbursement.DisbursementForm.notNumber": {
     "defaultMessage": "不是数字。"
   },
   "course.experiencePoints.disbursement.DisbursementForm.reason": {
-    "defaultMessage": "支付原因"
+    "defaultMessage": "发放原因"
   },
   "course.experiencePoints.disbursement.DisbursementForm.submit": {
-    "defaultMessage": "支付点数"
+    "defaultMessage": "发放点数"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.disbursements": {
-    "defaultMessage": "支付经验值"
+    "defaultMessage": "经验值发放"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.fetchDisbursementFailure": {
     "defaultMessage": "无法检索数据。"
@@ -3288,7 +3291,7 @@
     "defaultMessage": "论坛参与"
   },
   "course.experiencePoints.disbursement.DisbursementIndex.generalTab": {
-    "defaultMessage": "一般支出"
+    "defaultMessage": "普通发放"
   },
   "course.experiencePoints.disbursement.DisbursementTable.copy": {
     "defaultMessage": "为所有学生复制值"
@@ -3327,13 +3330,13 @@
     "defaultMessage": "从 {startDate} 到 {endDate} 创建的帖子，由"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.reason": {
-    "defaultMessage": "支付原因"
+    "defaultMessage": "发放原因"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.reasonFill": {
     "defaultMessage": "论坛参与"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.submit": {
-    "defaultMessage": "支付点数"
+    "defaultMessage": "发放点数"
   },
   "course.experiencePoints.disbursement.ForumDisbursementForm.viewPosts": {
     "defaultMessage": "查看论坛帖子"
@@ -3375,7 +3378,7 @@
     "defaultMessage": "此论坛中的所有主题均已标记为已读。"
   },
   "course.forum.FormShow.newTopic": {
-    "defaultMessage": "新话题"
+    "defaultMessage": "新主题"
   },
   "course.forum.ForumEdit.editForum": {
     "defaultMessage": "编辑论坛"
@@ -3411,7 +3414,7 @@
     "defaultMessage": "论坛 {title} 已创建。"
   },
   "course.forum.ForumNew.newForum": {
-    "defaultMessage": "新论坛"
+    "defaultMessage": "新建分论坛"
   },
   "course.forum.ForumTable.autoSubscribe": {
     "defaultMessage": "当用户在主题下发帖时，会自动订阅论坛中的此主题"
@@ -3426,13 +3429,13 @@
     "defaultMessage": "已订阅？"
   },
   "course.forum.ForumTable.noForum": {
-    "defaultMessage": "没有论坛"
+    "defaultMessage": "暂无分论坛"
   },
   "course.forum.ForumTable.posts": {
     "defaultMessage": "帖子"
   },
   "course.forum.ForumTable.topics": {
-    "defaultMessage": "话题"
+    "defaultMessage": "主题"
   },
   "course.forum.ForumTable.views": {
     "defaultMessage": "阅读量"
@@ -3477,7 +3480,7 @@
     "defaultMessage": "主题 {title} 已创建。"
   },
   "course.forum.ForumTopicNew.newTopic": {
-    "defaultMessage": "新话题"
+    "defaultMessage": "新主题"
   },
   "course.forum.ForumTopicPostForm.postAnonymously": {
     "defaultMessage": "匿名发帖"
@@ -3555,7 +3558,7 @@
     "defaultMessage": "置顶"
   },
   "course.forum.ForumTopicTable.topics": {
-    "defaultMessage": "话题"
+    "defaultMessage": "主题"
   },
   "course.forum.ForumTopicTable.unresolved": {
     "defaultMessage": "问题（未解决）"
@@ -3579,7 +3582,7 @@
     "defaultMessage": "所有主题都已标记为已读。"
   },
   "course.forum.ForumsIndex.newForum": {
-    "defaultMessage": "新论坛"
+    "defaultMessage": "新建分论坛"
   },
   "course.forum.HideButton.hide": {
     "defaultMessage": "隐藏"
@@ -3753,7 +3756,7 @@
     "defaultMessage": "无法检索组类别。"
   },
   "course.group.GroupIndex.groups": {
-    "defaultMessage": "团体"
+    "defaultMessage": "分组"
   },
   "course.group.GroupIndex.noCategory": {
     "defaultMessage": "你还没有创建组类别！立即创建一个！"
@@ -3765,7 +3768,7 @@
     "defaultMessage": "组类别已创建。"
   },
   "course.group.GroupNew.new": {
-    "defaultMessage": "新类别"
+    "defaultMessage": "新建分组"
   },
   "course.group.GroupShow.CategoryCard.confirmDelete": {
     "defaultMessage": "你确定要删除 {categoryName} 吗？"
@@ -3969,7 +3972,7 @@
     "defaultMessage": "无法检索排行榜。"
   },
   "course.leaderboard.LeaderboardIndex.groupLeaderboard": {
-    "defaultMessage": "团体排行榜"
+    "defaultMessage": "分组排行榜"
   },
   "course.leaderboard.LeaderboardIndex.leaderboard": {
     "defaultMessage": "排行榜"
@@ -4146,19 +4149,19 @@
     "defaultMessage": "标题"
   },
   "course.level.Level.addNewLevel": {
-    "defaultMessage": "添加新级别"
+    "defaultMessage": "添加新等级"
   },
   "course.level.Level.levelHeader": {
-    "defaultMessage": "关卡"
+    "defaultMessage": "等级"
   },
   "course.level.Level.saveFailure": {
-    "defaultMessage": "关卡保存失败，请重试。"
+    "defaultMessage": "等级保存失败，请重试。"
   },
   "course.level.Level.saveLevels": {
-    "defaultMessage": "保存关卡"
+    "defaultMessage": "保存"
   },
   "course.level.Level.saveSuccess": {
-    "defaultMessage": "关卡保存"
+    "defaultMessage": "等级已保存"
   },
   "course.level.Level.thresholdHeader": {
     "defaultMessage": "阈值"
@@ -4281,7 +4284,7 @@
     "defaultMessage": "正确率"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.correctnessHint": {
-    "defaultMessage": "正确率是该学生所有已测验测验的平均成绩百分比。"
+    "defaultMessage": "该学生所有已批改测验的平均成绩（百分比）"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.descending": {
     "defaultMessage": "降序"
@@ -4290,7 +4293,7 @@
     "defaultMessage": "经验值"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.groupManagers": {
-    "defaultMessage": "讲师"
+    "defaultMessage": "助教"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.highlight": {
     "defaultMessage": "高亮显示前和后 {percent}%"
@@ -4317,7 +4320,7 @@
     "defaultMessage": "提交的数量 (总计: {courseAssessmentCount})"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.phantom": {
-    "defaultMessage": "包括影子学生"
+    "defaultMessage": "包括旁听学生"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType": {
     "defaultMessage": "学生类型"
@@ -4326,10 +4329,10 @@
     "defaultMessage": "普通学生"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.studentType.phantom": {
-    "defaultMessage": "影子学生"
+    "defaultMessage": "旁听学生"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.tableTitle": {
-    "defaultMessage": "学神以 {direction} {column} 排序"
+    "defaultMessage": "学生以 {direction} {column} 排序"
   },
   "course.statistics.StatisticsIndex.course.StudentPerformanceTable.title": {
     "defaultMessage": "学生表现"
@@ -4359,7 +4362,7 @@
     "defaultMessage": "开放时间"
   },
   "course.statistics.StatisticsIndex.course.StudentProgressionChart.phantom": {
-    "defaultMessage": "包括影子学生"
+    "defaultMessage": "包括旁听学生"
   },
   "course.statistics.StatisticsIndex.course.StudentProgressionChart.showOpeningTimes": {
     "defaultMessage": "显示测验的开放时间"
@@ -4386,7 +4389,7 @@
     "defaultMessage": "获取课程进度统计时出了点问题！ 请刷新重试。"
   },
   "course.statistics.StatisticsIndex.header.statistics": {
-    "defaultMessage": "统计数据"
+    "defaultMessage": "数据"
   },
   "course.statistics.StatisticsIndex.staff.averageMarkingTime": {
     "defaultMessage": "平均时间/测验"
@@ -4413,13 +4416,13 @@
     "defaultMessage": "获取员工数据失败！"
   },
   "course.statistics.StatisticsIndex.students.error": {
-    "defaultMessage": "获取学生统计数据时出了点问题！请刷新重试。"
+    "defaultMessage": "获取学生数据时出了点问题！请刷新重试。"
   },
   "course.statistics.StatisticsIndex.students.experiencePoints": {
     "defaultMessage": "经验值"
   },
   "course.statistics.StatisticsIndex.students.groupManagers": {
-    "defaultMessage": "讲师"
+    "defaultMessage": "导师"
   },
   "course.statistics.StatisticsIndex.students.level": {
     "defaultMessage": "等级"
@@ -4551,7 +4554,7 @@
     "defaultMessage": "百分比"
   },
   "course.survey.OptionsQuestionResults.phantomStudentName": {
-    "defaultMessage": "{name}（影子用户）"
+    "defaultMessage": "{name}（旁听用户）"
   },
   "course.survey.OptionsQuestionResults.respondents": {
     "defaultMessage": "回复者"
@@ -4671,10 +4674,10 @@
     "defaultMessage": "下载回复"
   },
   "course.survey.ResponseIndex.RemindButton.confirmation": {
-    "defaultMessage": "向所有未完成调查的学生（不包括影子学生）发送电子邮件？"
+    "defaultMessage": "向所有未完成调查的学生（不包括旁听学生）发送电子邮件？"
   },
   "course.survey.ResponseIndex.RemindButton.confirmationAll": {
-    "defaultMessage": "向所有未完成调查的学生（包括影子学生）发送电子邮件？"
+    "defaultMessage": "向所有未完成调查的学生（包括旁听学生）发送电子邮件？"
   },
   "course.survey.ResponseIndex.RemindButton.explanation": {
     "defaultMessage": "调查到期前一天，提醒的电子邮件将自动发送给尚未完成调查的学生。"
@@ -4689,7 +4692,7 @@
     "defaultMessage": "提醒邮件已发送。"
   },
   "course.survey.ResponseIndex.includePhantoms": {
-    "defaultMessage": "包括影子学生"
+    "defaultMessage": "包括旁听学生"
   },
   "course.survey.ResponseIndex.name": {
     "defaultMessage": "姓名"
@@ -4698,7 +4701,7 @@
     "defaultMessage": "没有开始"
   },
   "course.survey.ResponseIndex.phantoms": {
-    "defaultMessage": "影子学生"
+    "defaultMessage": "旁听学生"
   },
   "course.survey.ResponseIndex.responding": {
     "defaultMessage": "正在回复"
@@ -4728,7 +4731,7 @@
     "defaultMessage": "本章节没有问题。调查回复表中不会显示空白章节。"
   },
   "course.survey.SurveyBadges.hasTodo": {
-    "defaultMessage": "有待办事项"
+    "defaultMessage": "显示待办事项"
   },
   "course.survey.SurveyForm.allowModifyAfterSubmitHint": {
     "defaultMessage": "提交后可以更改回复。"
@@ -4743,7 +4746,7 @@
     "defaultMessage": "至少有一名学生回答了这项调查。你无法删除匿名。"
   },
   "course.survey.SurveyForm.hasTodo": {
-    "defaultMessage": "有待办事项"
+    "defaultMessage": "显示待办事项"
   },
   "course.survey.SurveyForm.hasTodoHint": {
     "defaultMessage": "启用后，学生会在他们的待办列表中看见这个调查"
@@ -4773,10 +4776,10 @@
     "defaultMessage": "调查\"{title}\"已更新。"
   },
   "course.survey.SurveyResults.includePhantoms": {
-    "defaultMessage": "包括影子学生"
+    "defaultMessage": "包括旁听学生"
   },
   "course.survey.SurveyResults.noPhantoms": {
-    "defaultMessage": "没有影子学生的反应。"
+    "defaultMessage": "没有旁听学生的反应。"
   },
   "course.survey.SurveyResults.noSections": {
     "defaultMessage": "此调查还没有任何问题。"
@@ -4809,7 +4812,7 @@
     "defaultMessage": "隐藏回复"
   },
   "course.survey.TextResponseResults.phantomStudentName": {
-    "defaultMessage": "{名字}（影子用户）"
+    "defaultMessage": "{名字}（旁听用户）"
   },
   "course.survey.TextResponseResults.respondent": {
     "defaultMessage": "回复者"
@@ -5160,7 +5163,7 @@
     "defaultMessage": "已接受邀请"
   },
   "course.userInvitations.InvitationsBarChart.pending": {
-    "defaultMessage": "待办的"
+    "defaultMessage": "待处理"
   },
   "course.userInvitations.InvitationsIndex.accepted": {
     "defaultMessage": "已接受邀请"
@@ -5205,7 +5208,7 @@
     "defaultMessage": "个人时间线可以是<code>[fixed, otot, stragglers, fomo]</code>，若省略则默认为 {defaultTimelineAlgorithm}。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoPhantom": {
-    "defaultMessage": "影子用户可以是 true/false，具有以下值 <code>['t', 'true', 'y', 'yes']</code>（不区分大小写），若省略则默认为 false。"
+    "defaultMessage": "旁听用户可以是 true/false，具有以下值 <code>['t', 'true', 'y', 'yes']</code>（不区分大小写），若省略则默认为 false。"
   },
   "course.userInvitations.InviteUsersFileUpload.fileUploadInfoRole": {
     "defaultMessage": "角色可以是<code>[student, observer, teaching_assistant, manager, owner]</code>，如果省略则默认为学生。用户只能被助教邀请为学生。"
@@ -5265,7 +5268,7 @@
     "defaultMessage": "没有{invitationType}"
   },
   "course.userInvitations.UserInvitationsTable.pending": {
-    "defaultMessage": "待办的"
+    "defaultMessage": "待处理"
   },
   "course.userNotification.AchievementGainedPopup.unlocked": {
     "defaultMessage": "成就解锁！"
@@ -5298,7 +5301,7 @@
     "defaultMessage": "学生"
   },
   "course.users.ManageStudents.noStudents": {
-    "defaultMessage": "目前课程中还没有学生..."
+    "defaultMessage": "暂无学生"
   },
   "course.users.ManageUsersTable.ManageUsersTable.noUsers": {
     "defaultMessage": "没有用户"
@@ -5340,7 +5343,7 @@
     "defaultMessage": "组：{name}"
   },
   "course.users.ManageUsersTable.phantomSuccess": {
-    "defaultMessage": "{name} {isPhantom, select, true {现在是影子用户} other {现在是普通用户} }。"
+    "defaultMessage": "{name} {isPhantom, select, true {现在是旁听用户} other {现在是普通用户} }。"
   },
   "course.users.ManageUsersTable.renameFailure": {
     "defaultMessage": "无法将 {oldName} 重命名为 {newName}"
@@ -5520,13 +5523,13 @@
     "defaultMessage": "无法检索课程用户。"
   },
   "course.users.UsersIndex.noStudents": {
-    "defaultMessage": "课程中还没有学生...！"
+    "defaultMessage": "暂无学生"
   },
   "course.users.UsersIndex.studentsHeader": {
     "defaultMessage": "学生"
   },
   "course.video.VideoBadges.hasTodo": {
-    "defaultMessage": "有待办事项"
+    "defaultMessage": "显示待办事项"
   },
   "course.video.VideoEdit.updateFailure": {
     "defaultMessage": "无法更新 {title}。"
@@ -5541,13 +5544,13 @@
     "defaultMessage": "描述"
   },
   "course.video.VideoForm.hasPersonalTimes": {
-    "defaultMessage": "有私人时间"
+    "defaultMessage": "自适应学习进度"
   },
   "course.video.VideoForm.hasPersonalTimesHint": {
     "defaultMessage": "这个项目的时间将基于学习率，为用户自动调整。"
   },
   "course.video.VideoForm.hasTodo": {
-    "defaultMessage": "有待办事项"
+    "defaultMessage": "显示待办事项"
   },
   "course.video.VideoForm.hasTodoHint": {
     "defaultMessage": "启用后，学生会在他们的待办列表中看见这个视频"
@@ -5595,7 +5598,7 @@
     "defaultMessage": "无法检索视频。"
   },
   "course.video.VideoShow.statistics": {
-    "defaultMessage": "统计数据"
+    "defaultMessage": "数据"
   },
   "course.video.VideoShow.video": {
     "defaultMessage": "视频"
@@ -5625,7 +5628,7 @@
     "defaultMessage": "无法创建尝试 - {error}"
   },
   "course.video.WatchVideoButton.reWatch": {
-    "defaultMessage": "在看一遍"
+    "defaultMessage": "重看"
   },
   "course.video.WatchVideoButton.watch": {
     "defaultMessage": "观看"
@@ -5658,7 +5661,7 @@
     "defaultMessage": "检索视频提交失败。"
   },
   "course.video.submission.VideoSubmissionShow.noSession": {
-    "defaultMessage": "没有可用于此提交的观看统计数据。"
+    "defaultMessage": "没有可用于此提交的观看数据。"
   },
   "course.video.submission.VideoSubmissionShow.sessionStatistics": {
     "defaultMessage": "会话统计"
@@ -5682,7 +5685,7 @@
     "defaultMessage": "普通学生"
   },
   "course.video.submission.VideoSubmissionsIndex.phantomStudents": {
-    "defaultMessage": "影子学生"
+    "defaultMessage": "旁听学生"
   },
   "course.video.submission.barGraphScalingLabel": {
     "defaultMessage": "展开图表"
@@ -5694,7 +5697,7 @@
     "defaultMessage": "即时的"
   },
   "course.video.submission.eventTypeLabel": {
-    "defaultMessage": "动作：{type}"
+    "defaultMessage": "操作：{type}"
   },
   "course.video.submission.eventVideoTime": {
     "defaultMessage": "视频时间：{videoTime}"
@@ -5748,7 +5751,7 @@
     "defaultMessage": "显示较少"
   },
   "lib.components.core.Note.noteHeader": {
-    "defaultMessage": "笔记"
+    "defaultMessage": "提示"
   },
   "lib.components.core.fields.DateTimePicker.invalidDate": {
     "defaultMessage": "无效日期"
@@ -5769,13 +5772,13 @@
     "defaultMessage": "影响独立进度"
   },
   "lib.components.extensions.PersonalTimeBooleanIcons.affectsPersonalTimesHint": {
-    "defaultMessage": "影响独立进度。更新其他项目的独立进度时，将考虑学生提交此项目的时间。"
+    "defaultMessage": "影响个人时间。更新其他项目的个人时间时，将考虑学生提交此项目的时间。"
   },
   "lib.components.extensions.PersonalTimeBooleanIcons.hasPersonalTimes": {
     "defaultMessage": "有独立进度"
   },
   "lib.components.extensions.PersonalTimeBooleanIcons.hasPersonalTimesHint": {
-    "defaultMessage": "有独立进度。该项目的时间将根据学习率自动为用户调整。"
+    "defaultMessage": "自适应学习进度。该项目的时间将根据学习率自动为用户调整。"
   },
   "lib.components.extensions.conditions.achievement": {
     "defaultMessage": "成就"
@@ -5835,7 +5838,7 @@
     "defaultMessage": "至少得分"
   },
   "lib.components.extensions.conditions.specifyLevel": {
-    "defaultMessage": "指定最低级别"
+    "defaultMessage": "指定最低等级"
   },
   "lib.components.extensions.conditions.survey": {
     "defaultMessage": "民意调查"
@@ -5850,7 +5853,7 @@
     "defaultMessage": "无效的日期和/或时间"
   },
   "lib.components.form.fields.SingleFileInput.dropzone": {
-    "defaultMessage": "将你的文件拖到此处，或单击以选择文件"
+    "defaultMessage": "将文件拖到此处或上传文件"
   },
   "lib.components.form.fields.SingleFileInput.removeFile": {
     "defaultMessage": "删除文件"
@@ -5871,7 +5874,7 @@
     "defaultMessage": "删除"
   },
   "lib.translations.form.buttons.discard": {
-    "defaultMessage": "丢弃"
+    "defaultMessage": "放弃"
   },
   "lib.translations.form.buttons.dismiss": {
     "defaultMessage": "忽略"
@@ -5985,7 +5988,7 @@
     "defaultMessage": "成就"
   },
   "lib.translations.table.column.actions": {
-    "defaultMessage": "动作"
+    "defaultMessage": "操作"
   },
   "lib.translations.table.column.activeTotalCourses": {
     "defaultMessage": "活动/总课程"
@@ -6036,7 +6039,7 @@
     "defaultMessage": "有独立进度"
   },
   "lib.translations.table.column.hasTodo": {
-    "defaultMessage": "有待办事项"
+    "defaultMessage": "显示待办事项"
   },
   "lib.translations.table.column.host": {
     "defaultMessage": "主机名"
@@ -6084,7 +6087,7 @@
     "defaultMessage": "个性化时间表"
   },
   "lib.translations.table.column.phantom": {
-    "defaultMessage": "影子学生"
+    "defaultMessage": "旁听学生"
   },
   "lib.translations.table.column.published": {
     "defaultMessage": "已发布"
@@ -6417,7 +6420,7 @@
     "defaultMessage": "没有 {enrolRequestsType}"
   },
   "system.admin.instance.instance.InstanceUserRoleRequestsTable.pending": {
-    "defaultMessage": "待办的"
+    "defaultMessage": "待处理"
   },
   "system.admin.instance.instance.InstanceUserRoleRequestsTable.rejected": {
     "defaultMessage": "拒绝了"
@@ -6576,7 +6579,7 @@
     "defaultMessage": "没有{invitationType}"
   },
   "system.admin.instance.instance.UserInvitationsTable.pending": {
-    "defaultMessage": "待办的"
+    "defaultMessage": "待处理"
   },
   "system.admin.instance.instance.UsersButton.deleteTooltip": {
     "defaultMessage": "删除用户"
