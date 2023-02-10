@@ -5,6 +5,9 @@ class Course::Assessment::ProgrammingEvaluationService
   DEFAULT_TIMEOUT = 5.minutes
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
 
+  # Default programming timeout limit, only will be used if course is undefined
+  DEFAULT_CPU_TIMEOUT = 30
+
   # The ratio to multiply the memory limits from our evaluation to the container by.
   MEMORY_LIMIT_RATIO = 1.megabyte / 1.kilobyte
 
@@ -83,8 +86,8 @@ class Course::Assessment::ProgrammingEvaluationService
     # @return [Result] The result of evaluating the template.
     #
     # @raise [Timeout::Error] When the operation times out.
-    def execute(course, language, memory_limit, time_limit, package, timeout = nil)
-      new(course, language, memory_limit, time_limit, package, timeout).execute
+    def execute(course, question, time_limit, package, timeout = nil)
+      new(course, question, time_limit, package, timeout).execute
     end
   end
 
@@ -99,14 +102,14 @@ class Course::Assessment::ProgrammingEvaluationService
 
   private
 
-  def programming_timeout_limit(course)
-    course.programming_timeout_limit
+  def prog_timeout_lim(course)
+    course ? course.programming_timeout_limit : DEFAULT_CPU_TIMEOUT
   end
 
-  def initialize(course, language, memory_limit, time_limit, package, timeout)
-    @language = language
-    @memory_limit = memory_limit || MEMORY_LIMIT
-    @time_limit = time_limit ? [time_limit, programming_timeout_limit(course)].min : programming_timeout_limit(course)
+  def initialize(course, question, time_limit, package, timeout)
+    @language = question.language
+    @memory_limit = question.memory_limit || MEMORY_LIMIT
+    @time_limit = time_limit ? [time_limit, prog_timeout_lim(course)].min : prog_timeout_lim(course)
     @package = package
     @timeout = timeout || DEFAULT_TIMEOUT
   end
