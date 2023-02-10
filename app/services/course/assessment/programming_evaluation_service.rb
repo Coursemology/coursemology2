@@ -5,6 +5,9 @@ class Course::Assessment::ProgrammingEvaluationService
   DEFAULT_TIMEOUT = 5.minutes
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
 
+  # Default programming timeout limit, only will be used if course is undefined
+  DEFAULT_CPU_TIMEOUT = 30
+
   # The ratio to multiply the memory limits from our evaluation to the container by.
   MEMORY_LIMIT_RATIO = 1.megabyte / 1.kilobyte
 
@@ -84,13 +87,8 @@ class Course::Assessment::ProgrammingEvaluationService
     # @return [Result] The result of evaluating the template.
     #
     # @raise [Timeout::Error] When the operation times out.
-<<<<<<< HEAD
     def execute(language, memory_limit, time_limit, max_time_limit, package, timeout = nil)
       new(language, memory_limit, time_limit, max_time_limit, package, timeout).execute
-=======
-    def execute(course, language, memory_limit, time_limit, package, timeout = nil)
-      new(course, language, memory_limit, time_limit, package, timeout).execute
->>>>>>> db6f59050 (feat(assessment_settings): setup time limit for evaluation services code)
     end
   end
 

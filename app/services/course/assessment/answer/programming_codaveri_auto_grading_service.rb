@@ -34,13 +34,8 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService < \
   #   graded.
   # @param [Course::Assessment::Answer::Programming] answer The answer specified by the student.
   # @return [Course::Assessment::ProgrammingCodaveriEvaluationService::Result]
-<<<<<<< HEAD
   def evaluate_package(course_title, question, answer)
     Course::Assessment::ProgrammingCodaveriEvaluationService.execute(course_title, question, answer)
-=======
-  def evaluate_package(question, answer, course)
-    Course::Assessment::ProgrammingCodaveriEvaluationService.execute(question, answer, course)
->>>>>>> b309137ff (feat(assessment_settings): setting permissions for programming timeout limit)
   end
 
   # Builds the result of the auto grading from the codevari evaluation result.
