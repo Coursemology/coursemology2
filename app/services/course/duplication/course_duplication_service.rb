@@ -119,7 +119,9 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
     new_category_settings = {}
     old_course.assessment_categories.each do |old_category|
       new_category = duplicator.duplicate(old_category)
-      new_category_settings[new_category.id.to_s] = old_category_settings[old_category.id.to_s]
+      old_category_settings.each do |key, value|
+        new_category_settings[key] = value
+      end
     end
     new_course.settings.public_send("#{component_key}=", new_category_settings)
     new_course.save!
