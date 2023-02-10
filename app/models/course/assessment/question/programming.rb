@@ -5,6 +5,9 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   # The table name for this model is singular.
   self.table_name = table_name.singularize
 
+  # Default programming timeout limit, only will be used if course is undefined
+  DEFAULT_CPU_TIMEOUT = 30
+
   # Maximum memory (in MB) the programming question can allow.
   # Do NOT change this to num.megabytes as the ProgramingEvaluationService expects it in MB.
   # Currently set to nil as Java evaluations do not work with a `ulimit` below 3 GB.
@@ -20,6 +23,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   before_validation :assign_test_case_attributes
 
   validates :memory_limit, numericality: { greater_than: 0, less_than: 2_147_483_648 }, allow_nil: true
+  validates :time_limit, numericality: { greater_than: 0 }, allow_nil: true
   validates :attempt_limit, numericality: { only_integer: true,
                                             greater_than: 0, less_than: 2_147_483_648 }, allow_nil: true
   validates :package_type, presence: true
@@ -37,7 +41,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
                             dependent: :destroy, foreign_key: :question_id, inverse_of: :question
   has_many :test_cases, class_name: Course::Assessment::Question::ProgrammingTestCase.name,
                         dependent: :destroy, foreign_key: :question_id, inverse_of: :question
-  
+
   def auto_gradable?
     !test_cases.empty?
   end
@@ -47,7 +51,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   end
 
   def max_timeout_limit(course)
-    course.programming_timeout_limit
+    course ? course.programming_timeout_limit : DEFAULT_CPU_TIMEOUT
   end
 
   def auto_grader
@@ -212,12 +216,12 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     duplicating?
   end
 
-  # time limit validation during duplication is skipped because it is possible for course assessment settings to be 
-  # set to less than the time limit of the programming question's time limit, which will cause duplication to fail
+  # time limit validation during duplication is skipped, and time limit is allowed to be nil
   def validate_time_limit(course)
-    return if duplicating? || time_limit <= max_timeout_limit(course)
-    timeout_limit = max_timeout_limit(course)
+    return if duplicating? || !time_limit || time_limit > 0
+    return if time_limit <= max_timeout_limit(course)
 
+    timeout_limit = max_timeout_limit(course)
     errors.add(:base, "Time limit needs to be at most #{timeout_limit}")
   end
 
