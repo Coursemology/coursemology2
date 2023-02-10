@@ -830,8 +830,8 @@
   "course.announcements.AnnouncementCard.timeSeparator": {
     "defaultMessage": "by"
   },
-  "course.announcements.AnnouncementEdit.updateAnnouncement": {
-    "defaultMessage": "Update Announcement"
+  "course.announcements.AnnouncementEdit.editAnnouncement": {
+    "defaultMessage": "Edit Announcement"
   },
   "course.announcements.AnnouncementEdit.updateFailure": {
     "defaultMessage": "Failed to update the announcement"
@@ -847,6 +847,12 @@
   },
   "course.announcements.AnnouncementForm.endTimeError": {
     "defaultMessage": "End time cannot be earlier than start time"
+  },
+  "course.announcements.AnnouncementForm.publishAtSetDate": {
+    "defaultMessage": "Publish At:"
+  },
+  "course.announcements.AnnouncementForm.publishNow": {
+    "defaultMessage": "Publish Now"
   },
   "course.announcements.AnnouncementForm.startAt": {
     "defaultMessage": "Start At"
@@ -3566,6 +3572,24 @@
   "course.forum.ForumTopicNew.newTopic": {
     "defaultMessage": "New Topic"
   },
+  "course.forum.ForumTopicPostEditActionButtons.discardEditPostPromptAction": {
+    "defaultMessage": "Discard"
+  },
+  "course.forum.ForumTopicPostEditActionButtons.discardEditPostPromptMessage": {
+    "defaultMessage": "You have edited this post and there are unsaved changes. Do you wish to proceed?"
+  },
+  "course.forum.ForumTopicPostEditActionButtons.discardEditPostPromptTitle": {
+    "defaultMessage": "Discard unsaved changes?"
+  },
+  "course.forum.ForumTopicPostEditActionButtons.emptyPost": {
+    "defaultMessage": "Post cannot be empty!"
+  },
+  "course.forum.ForumTopicPostEditActionButtons.updateFailure": {
+    "defaultMessage": "Failed to update the post - {error}"
+  },
+  "course.forum.ForumTopicPostEditActionButtons.updateSuccess": {
+    "defaultMessage": "The post has been updated."
+  },
   "course.forum.ForumTopicPostForm.postAnonymously": {
     "defaultMessage": "Anonymous post"
   },
@@ -3714,10 +3738,16 @@
     "defaultMessage": "Mark all forum posts on the current page as read"
   },
   "course.forum.MarkAnswerButton.markAsAnswer": {
-    "defaultMessage": "Mark as Answer"
+    "defaultMessage": "Mark as answer"
+  },
+  "course.forum.MarkAnswerButton.markedAsAnswer": {
+    "defaultMessage": "Marked as answer"
   },
   "course.forum.MarkAnswerButton.unmarkAsAnswer": {
-    "defaultMessage": "Unmark as Answer"
+    "defaultMessage": "Unmark as answer"
+  },
+  "course.forum.MarkAnswerButton.updateFailure": {
+    "defaultMessage": "Failed to update the post - {error}"
   },
   "course.forum.NextUnreadButton.AllReadTooltip": {
     "defaultMessage": "Hooray! All topics have been read!"
@@ -3727,36 +3757,6 @@
   },
   "course.forum.NextUnreadButton.nextUnreadTooltip": {
     "defaultMessage": "Jump to next unread topic"
-  },
-  "course.forum.PostCard.anonymousUser": {
-    "defaultMessage": "Anonymous User"
-  },
-  "course.forum.PostCard.emptyPost": {
-    "defaultMessage": "Post cannot be empty!"
-  },
-  "course.forum.PostCard.maskUser": {
-    "defaultMessage": "Mask User"
-  },
-  "course.forum.PostCard.postAnonymously": {
-    "defaultMessage": "Anonymous post"
-  },
-  "course.forum.PostCard.replyFailure": {
-    "defaultMessage": "Failed to submit the post - {error}"
-  },
-  "course.forum.PostCard.replySuccess": {
-    "defaultMessage": "The reply post has been created."
-  },
-  "course.forum.PostCard.replyTo": {
-    "defaultMessage": "Reply to {user}"
-  },
-  "course.forum.PostCard.unmaskUser": {
-    "defaultMessage": "Unmask User"
-  },
-  "course.forum.PostCard.updateFailure": {
-    "defaultMessage": "Failed to update the post - {error}"
-  },
-  "course.forum.PostCard.updateSuccess": {
-    "defaultMessage": "The post has been updated."
   },
   "course.forum.PostCreatorObject.anonymousUser": {
     "defaultMessage": "Anonymous User"
@@ -3769,6 +3769,21 @@
   },
   "course.forum.PostCreatorObject.unmaskUser": {
     "defaultMessage": "Unmask User"
+  },
+  "course.forum.ReplyCard.emptyPost": {
+    "defaultMessage": "Post cannot be empty!"
+  },
+  "course.forum.ReplyCard.postAnonymously": {
+    "defaultMessage": "Anonymous post"
+  },
+  "course.forum.ReplyCard.replyFailure": {
+    "defaultMessage": "Failed to submit the post - {error}"
+  },
+  "course.forum.ReplyCard.replySuccess": {
+    "defaultMessage": "The reply post has been created."
+  },
+  "course.forum.ReplyCard.replyTo": {
+    "defaultMessage": "Reply to {user}"
   },
   "course.forum.SubscribeButton.forumTopicTranslations.adminSettingSubscribed": {
     "defaultMessage": "Subscription of forum topics is disabled by the course admin."
@@ -3805,6 +3820,9 @@
   },
   "course.forum.SubscribeButton.forumTranslations.userSettingSubscribed": {
     "defaultMessage": "You have unsubscribed from \"New Topic\" for forums in this course. Please go to {manageMySubscriptionLink} to enable it."
+  },
+  "course.forum.VotePostButton.updateFailure": {
+    "defaultMessage": "Failed to update the vote number - {error}"
   },
   "course.forum.forum.markAllAsReadFailed": {
     "defaultMessage": "Failed to mark all topics in this forum as read. Please try again later."
@@ -3853,6 +3871,9 @@
   },
   "course.group.GroupNew.new": {
     "defaultMessage": "New Category"
+  },
+  "course.group.GroupRoleChip.normal": {
+    "defaultMessage": "Member"
   },
   "course.group.GroupShow.CategoryCard.confirmDelete": {
     "defaultMessage": "Are you sure you wish to delete {categoryName}?"
@@ -3980,6 +4001,9 @@
   "course.group.GroupShow.GroupManager.GroupUserManager.edit": {
     "defaultMessage": "Edit Details"
   },
+  "course.group.GroupShow.GroupManager.GroupUserManager.hidePhantomStudents": {
+    "defaultMessage": "Hide all Phantom Students"
+  },
   "course.group.GroupShow.GroupManager.GroupUserManager.hideStudents": {
     "defaultMessage": "Hide students who are already in a group under this category"
   },
@@ -4007,11 +4031,23 @@
   "course.group.GroupShow.GroupManager.GroupUserManagerList.normal": {
     "defaultMessage": "Member"
   },
+  "course.group.GroupShow.GroupManager.GroupUserManagerList.otherGroupMembers": {
+    "defaultMessage": "(existing member of the group(s): {groups})"
+  },
   "course.group.GroupShow.GroupManager.GroupUserManagerList.staff": {
     "defaultMessage": "Staff"
   },
   "course.group.GroupShow.GroupManager.GroupUserManagerList.students": {
     "defaultMessage": "Students"
+  },
+  "course.group.GroupShow.GroupRoleChip.manager": {
+    "defaultMessage": "Manager"
+  },
+  "course.group.GroupShow.GroupTableCard.hidePhantomStudents": {
+    "defaultMessage": "Hide all phantom students"
+  },
+  "course.group.GroupShow.GroupTableCard.manageOneGroup": {
+    "defaultMessage": "Edit Group"
   },
   "course.group.GroupShow.GroupTableCard.name": {
     "defaultMessage": "Name"
@@ -4513,6 +4549,12 @@
   },
   "course.statistics.StatisticsIndex.students.name": {
     "defaultMessage": "Name"
+  },
+  "course.statistics.StatisticsIndex.students.noStudents": {
+    "defaultMessage": "There is no student in this course, yet..."
+  },
+  "course.statistics.StatisticsIndex.students.showMyStudentsOnly": {
+    "defaultMessage": "Show My Students Only"
   },
   "course.statistics.StatisticsIndex.students.studentsType": {
     "defaultMessage": "Student Type"
@@ -5591,9 +5633,6 @@
   "course.users.UserProfileCard.level": {
     "defaultMessage": "Level"
   },
-  "course.users.UserProfileCard.manageEmailSubscription": {
-    "defaultMessage": "Manage email subscriptions"
-  },
   "course.users.UserProfileSkills.gradeForSkill": {
     "defaultMessage": "{grade}/{totalGrade} points"
   },
@@ -5837,6 +5876,12 @@
   "lib.components.core.Note.noteHeader": {
     "defaultMessage": "Note"
   },
+  "lib.components.core.buttons.MasqueradeButton.masqueradeDisabledTooltip": {
+    "defaultMessage": "User not confirmed"
+  },
+  "lib.components.core.buttons.MasqueradeButton.masqueradeTooltip": {
+    "defaultMessage": "Masquerade"
+  },
   "lib.components.core.fields.DateTimePicker.invalidDate": {
     "defaultMessage": "Invalid date"
   },
@@ -6028,6 +6073,12 @@
   },
   "lib.translations.form.validation.characters": {
     "defaultMessage": "Must be less than 255 characters"
+  },
+  "lib.translations.form.validation.earlierThanCurrentTimeError": {
+    "defaultMessage": "Cannot be earlier than the current time"
+  },
+  "lib.translations.form.validation.earlierThanStartTimeError": {
+    "defaultMessage": "Cannot be earlier than the start date"
   },
   "lib.translations.form.validation.email": {
     "defaultMessage": "Enter a valid email"
@@ -6374,12 +6425,6 @@
   "system.admin.admin.UsersButton.deletionSuccess": {
     "defaultMessage": "User was deleted."
   },
-  "system.admin.admin.UsersButton.masqueradeDisabledTooltip": {
-    "defaultMessage": "User not confirmed"
-  },
-  "system.admin.admin.UsersButton.masqueradeTooltip": {
-    "defaultMessage": "Masquerade"
-  },
   "system.admin.admin.UsersIndex.activeUsers": {
     "defaultMessage": "Active Users: {allCount} ({adminCount} Administrators, {normalCount} Normal){br}(active in the past 7 days)"
   },
@@ -6676,12 +6721,6 @@
   },
   "system.admin.instance.instance.UsersButton.deletionSuccess": {
     "defaultMessage": "User was deleted."
-  },
-  "system.admin.instance.instance.UsersButton.masqueradeDisabledTooltip": {
-    "defaultMessage": "User not confirmed"
-  },
-  "system.admin.instance.instance.UsersButton.masqueradeTooltip": {
-    "defaultMessage": "Masquerade"
   },
   "system.admin.instance.instance.UsersTable.changeRoleSuccess": {
     "defaultMessage": "Successfully changed {name}'s role to {role}."
