@@ -26,13 +26,76 @@ RSpec.describe Course::Assessment::Question::Programming do
       let(:settings1) { ActiveSupport::HashWithIndifferentAccess.new(programming_timeout_limit: 170) }
       let(:settings2) { ActiveSupport::HashWithIndifferentAccess.new(course_assessments_component: settings1) }
       let(:course) { create(:course, settings: settings2) }
-      subject { build(:course_assessment_question_programming, course: course) }
 
-      it { is_expected.to validate_numericality_of(:time_limit).allow_nil }
-      it { is_expected.to validate_numericality_of(:memory_limit).allow_nil }
-      it 'validates time_limit' do
-        expect(subject).to validate_numericality_of(:time_limit).is_greater_than(0).
-          is_less_than_or_equal_to(170)
+      let(:object1) do
+        Course::Assessment::Question::Programming.new(
+          time_limit: 171,
+          maximum_grade: 100,
+          language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
+          course: course
+        )
+      end
+      it 'validates time limit to be less than programming timeout limit of the course' do
+        expect(object1).to_not be_valid
+      end
+
+      let(:object2) do
+        Course::Assessment::Question::Programming.new(
+          time_limit: 'abcd',
+          maximum_grade: 100,
+          language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
+          course: course
+        )
+      end
+      it 'validates time limit to be an integer' do
+        expect(object2).to_not be_valid
+      end
+
+      let(:object3) do
+        Course::Assessment::Question::Programming.new(
+          time_limit: 0,
+          maximum_grade: 100,
+          language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
+          course: course
+        )
+      end
+      it 'validates time limit to be an integer more than 0' do
+        expect(object3).to_not be_valid
+      end
+
+      let(:object4) do
+        Course::Assessment::Question::Programming.new(
+          time_limit: 170,
+          maximum_grade: 100,
+          language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
+          course: course
+        )
+      end
+      it 'validates time limit to be within stipulated range (check upper bound)' do
+        expect(object4).to be_valid
+      end
+
+      let(:object5) do
+        Course::Assessment::Question::Programming.new(
+          time_limit: 1,
+          maximum_grade: 100,
+          language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
+          course: course
+        )
+      end
+      it 'validates time limit to be within stipulated range (check lower bound)' do
+        expect(object5).to be_valid
+      end
+
+      let(:object6) do
+        Course::Assessment::Question::Programming.new(
+          maximum_grade: 100,
+          language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
+          course: course
+        )
+      end
+      it 'validates time limit when it is nil' do
+        expect(object6).to be_valid
       end
     end
 
