@@ -9,6 +9,12 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
 
   private
 
+  DEFAULT_CPU_TIMEOUT = 30
+
+  def max_programming_timeout_limit(course)
+    course ? course.programming_timeout_limit : DEFAULT_CPU_TIMEOUT
+  end
+
   # Grades the given answer.
   #
   # @param [Course::Assessment::Answer::Programming] answer The answer specified by the student.
@@ -23,6 +29,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
       package.remove_solution_files
       package.save
 
+      question.course = answer.submission.assessment.course
       evaluation_result = evaluate_package(question, package)
       build_result(question, evaluation_result,
                    graded_test_case_types: assessment.graded_test_case_types)
@@ -45,8 +52,14 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # @param [Course::Assessment::ProgrammingPackage] package The package to import.
   # @return [Course::Assessment::ProgrammingEvaluationService::Result]
   def evaluate_package(question, package)
+    question_attr = {
+      'language' => question.language,
+      'memory_limit' => question.memory_limit,
+      'time_limit' => question.time_limit,
+      'max_timeout_limit' => max_programming_timeout_limit(question.course)
+    }
     Course::Assessment::ProgrammingEvaluationService.
-      execute(question.language, question.memory_limit, question.time_limit, package.path)
+      execute(question_attr, package.path)
   end
 
   # Builds the result of the auto grading from the evaluation result.

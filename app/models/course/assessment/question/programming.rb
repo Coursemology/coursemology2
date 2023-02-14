@@ -217,14 +217,10 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   # time limit validation during duplication is skipped, and time limit is allowed to be nil
   def validate_time_limit(course)
-    return if duplicating? || time_limit.nil?
-    return if time_limit > 0 && time_limit <= max_timeout_limit(course)
+    time_limit_within_max_interval = time_limit && time_limit > 0 && time_limit <= max_timeout_limit(course)
+    return if duplicating? || time_limit.nil? || time_limit_within_max_interval
 
-    if time_limit < 0 || time_limit == 0
-      errors.add(:base, 'Time limit needs to be a positive integer')
-    elsif time_limit > max_timeout_limit(course)
-      errors.add(:base, "Time limit needs to be at most #{max_timeout_limit(course)}")
-    end
+    errors.add(:base, "Time limit #{time_limit} need to be a positive integer at most #{max_timeout_limit(course)}")
 
     nil
   end
