@@ -1,28 +1,30 @@
-import { useState, useTransition } from 'react';
+import { ComponentProps, useState, useTransition } from 'react';
 import { Clear, Search } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
 
 import TextField from 'lib/components/core/fields/TextField';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 
-interface SearchFieldProps {
+type SearchFieldProps = ComponentProps<typeof TextField> & {
   onChangeKeyword?: (keyword: string) => void;
   placeholder?: string;
   className?: string;
-}
+};
 
 const SearchField = (props: SearchFieldProps): JSX.Element => {
+  const { onChangeKeyword, ...textFieldProps } = props;
+
   const [keyword, setKeyword] = useState('');
   const [isPending, startTransition] = useTransition();
 
   const changeKeyword = (newKeyword: string): void => {
     setKeyword(newKeyword);
-    startTransition(() => props.onChangeKeyword?.(newKeyword));
+    startTransition(() => onChangeKeyword?.(newKeyword));
   };
 
   const clearKeyword = (): void => {
     setKeyword('');
-    props.onChangeKeyword?.('');
+    onChangeKeyword?.('');
   };
 
   return (
@@ -54,6 +56,7 @@ const SearchField = (props: SearchFieldProps): JSX.Element => {
       trims
       value={keyword}
       variant="filled"
+      {...textFieldProps}
     />
   );
 };
