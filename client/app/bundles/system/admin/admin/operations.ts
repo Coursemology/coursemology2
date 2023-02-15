@@ -65,7 +65,7 @@ const formatUserAttributes = (data: UserMiniEntity): FormData => {
  *   }
  */
 const formatInstanceAttributes = (
-  data: InstanceFormData | InstanceMiniEntity,
+  data: InstanceFormData | InstanceMiniEntity | Partial<InstanceMiniEntity>,
 ): FormData => {
   const payload = new FormData();
 
@@ -185,7 +185,7 @@ export function createInstance(formData: InstanceFormData): Operation {
 
 export function updateInstance(
   instanceId: number,
-  instanceEntity: InstanceMiniEntity,
+  instanceEntity: InstanceMiniEntity | Partial<InstanceMiniEntity>,
 ): Operation {
   const attributes = formatInstanceAttributes(instanceEntity);
   return async (dispatch) =>
