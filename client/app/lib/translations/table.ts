@@ -129,13 +129,21 @@ const translations = defineMessages({
     id: 'lib.translations.table.column.host',
     defaultMessage: 'Host Name',
   },
-  activeTotalUsers: {
-    id: 'lib.translations.table.column.activeTotalUsers',
-    defaultMessage: 'Active/Total Users',
+  activeUsers: {
+    id: 'lib.translations.table.column.activeUsers',
+    defaultMessage: 'Active Users',
   },
-  activeTotalCourses: {
-    id: 'lib.translations.table.column.activeTotalCourses',
-    defaultMessage: 'Active/Total Courses',
+  totalUsers: {
+    id: 'lib.translations.table.column.totalUsers',
+    defaultMessage: 'Total Users',
+  },
+  activeCourses: {
+    id: 'lib.translations.table.column.activeCourses',
+    defaultMessage: 'Active Courses',
+  },
+  totalCourses: {
+    id: 'lib.translations.table.column.totalCourses',
+    defaultMessage: 'Total Courses',
   },
   updater: {
     id: 'lib.translations.table.column.updater',

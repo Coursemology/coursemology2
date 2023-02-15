@@ -13,9 +13,10 @@ import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import tableTranslations from 'lib/translations/table';
 
 import { updateInstance } from '../../operations';
-import { getAdminCounts, getAllInstanceMiniEntities } from '../../selectors';
+import { getAdminCounts } from '../../selectors';
 
 interface Props extends WrappedComponentProps {
+  instances: InstanceMiniEntity[];
   title: string;
   renderRowActionComponent: (instance: InstanceMiniEntity) => ReactElement;
 }
@@ -48,9 +49,8 @@ const translations = defineMessages({
 });
 
 const InstancesTable: FC<Props> = (props) => {
-  const { renderRowActionComponent, title, intl } = props;
+  const { renderRowActionComponent, title, instances, intl } = props;
   const dispatch = useAppDispatch();
-  const instances = useAppSelector(getAllInstanceMiniEntities);
   const counts = useAppSelector(getAdminCounts);
 
   const handleNameUpdate = (rowData, newName: string): Promise<void> => {
@@ -202,8 +202,8 @@ const InstancesTable: FC<Props> = (props) => {
       },
     },
     {
-      name: 'activeTotalUsers',
-      label: intl.formatMessage(tableTranslations.activeTotalUsers),
+      name: 'activeUsers',
+      label: intl.formatMessage(tableTranslations.activeUsers),
       options: {
         alignCenter: false,
         sort: false,
@@ -213,13 +213,32 @@ const InstancesTable: FC<Props> = (props) => {
           return (
             <Typography
               key={`instance-${instance.id}`}
-              className="instance_activeTotalUsers"
+              className="instance_activeUsers"
               variant="body2"
             >
               <a href={`//${instance.host}/admin/users?active=true`}>
                 {instance.activeUserCount}
               </a>
-              {' / '}
+            </Typography>
+          );
+        },
+      },
+    },
+    {
+      name: 'totalUsers',
+      label: intl.formatMessage(tableTranslations.totalUsers),
+      options: {
+        alignCenter: false,
+        sort: false,
+        search: false,
+        customBodyRenderLite: (dataIndex): JSX.Element => {
+          const instance = instances[dataIndex];
+          return (
+            <Typography
+              key={`instance-${instance.id}`}
+              className="instance_totalUsers"
+              variant="body2"
+            >
               <a href={`//${instance.host}/admin/users`}>
                 {instance.userCount}
               </a>
@@ -229,8 +248,8 @@ const InstancesTable: FC<Props> = (props) => {
       },
     },
     {
-      name: 'activeTotalCourses',
-      label: intl.formatMessage(tableTranslations.activeTotalCourses),
+      name: 'activeCourses',
+      label: intl.formatMessage(tableTranslations.activeCourses),
       options: {
         alignCenter: false,
         sort: false,
@@ -240,15 +259,34 @@ const InstancesTable: FC<Props> = (props) => {
           return (
             <Typography
               key={`instance-${instance.id}`}
-              className="instance_activeTotalCourses"
+              className="instance_activeCourses"
               variant="body2"
             >
               <a href={`//${instance.host}/admin/courses?active=true`}>
                 {instance.activeCourseCount}
               </a>
-              {' / '}
+            </Typography>
+          );
+        },
+      },
+    },
+    {
+      name: 'totalCourses',
+      label: intl.formatMessage(tableTranslations.totalCourses),
+      options: {
+        alignCenter: false,
+        sort: false,
+        search: false,
+        customBodyRenderLite: (dataIndex): JSX.Element => {
+          const instance = instances[dataIndex];
+          return (
+            <Typography
+              key={`instance-${instance.id}`}
+              className="instance_totalCourses"
+              variant="body2"
+            >
               <a href={`//${instance.host}/admin/courses`}>
-                {instance.courseCount}
+                {instance.activeCourseCount}
               </a>
             </Typography>
           );
