@@ -11,11 +11,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import InstancesButtons from '../../components/buttons/InstancesButtons';
 import InstancesTable from '../../components/tables/InstancesTable';
 import { indexInstances } from '../../operations';
-import {
-  getAdminCounts,
-  getAllInstanceMiniEntities,
-  getPermissions,
-} from '../../selectors';
+import { getAllInstanceMiniEntities, getPermissions } from '../../selectors';
 import InstanceNew from '../InstanceNew';
 
 const translations = defineMessages({
@@ -41,14 +37,13 @@ const InstancesIndex: FC = () => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const counts = useAppSelector(getAdminCounts);
-  const permissions = useAppSelector(getPermissions);
-  const dispatch = useAppDispatch();
-  const headerToolbars: ReactElement[] = [];
 
-  const instances = useSelector((state: AppState) =>
-    getAllInstanceMiniEntities(state),
-  );
+  const dispatch = useAppDispatch();
+
+  const permissions = useAppSelector(getPermissions);
+  const instances = useAppSelector(getAllInstanceMiniEntities);
+
+  const headerToolbars: ReactElement[] = [];
 
   useEffect(() => {
     dispatch(indexInstances())
@@ -77,9 +72,6 @@ const InstancesIndex: FC = () => {
         renderRowActionComponent={(instance): JSX.Element => (
           <InstancesButtons instance={instance} />
         )}
-        title={t(translations.title, {
-          count: counts.instancesCount,
-        })}
       />
       {isOpen && (
         <InstanceNew onClose={(): void => setIsOpen(false)} open={isOpen} />

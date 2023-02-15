@@ -240,7 +240,7 @@ const CoursesTable: FC<Props> = (props) => {
     },
     {
       name: 'totalUsers',
-      label: intl.formatMessage(tableTranslations.totalCourses),
+      label: intl.formatMessage(tableTranslations.totalUsers),
       options: {
         alignCenter: false,
         search: false,
