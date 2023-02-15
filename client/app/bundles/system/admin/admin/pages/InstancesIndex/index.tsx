@@ -11,7 +11,11 @@ import useTranslation from 'lib/hooks/useTranslation';
 import InstancesButtons from '../../components/buttons/InstancesButtons';
 import InstancesTable from '../../components/tables/InstancesTable';
 import { indexInstances } from '../../operations';
-import { getAdminCounts, getPermissions } from '../../selectors';
+import {
+  getAdminCounts,
+  getAllInstanceMiniEntities,
+  getPermissions,
+} from '../../selectors';
 import InstanceNew from '../InstanceNew';
 
 const translations = defineMessages({
@@ -42,6 +46,10 @@ const InstancesIndex: FC = () => {
   const dispatch = useAppDispatch();
   const headerToolbars: ReactElement[] = [];
 
+  const instances = useSelector((state: AppState) =>
+    getAllInstanceMiniEntities(state),
+  );
+
   useEffect(() => {
     dispatch(indexInstances())
       .catch(() => toast.error(t(translations.fetchInstancesFailure)))
@@ -65,6 +73,7 @@ const InstancesIndex: FC = () => {
   const renderBody: JSX.Element = (
     <>
       <InstancesTable
+        instances={instances}
         renderRowActionComponent={(instance): JSX.Element => (
           <InstancesButtons instance={instance} />
         )}

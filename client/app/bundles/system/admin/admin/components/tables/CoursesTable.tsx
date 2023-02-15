@@ -214,8 +214,8 @@ const CoursesTable: FC<Props> = (props) => {
       },
     },
     {
-      name: 'activeTotalUsers',
-      label: intl.formatMessage(tableTranslations.activeTotalUsers),
+      name: 'activeUsers',
+      label: intl.formatMessage(tableTranslations.activeUsers),
       options: {
         alignCenter: false,
         search: false,
@@ -225,13 +225,38 @@ const CoursesTable: FC<Props> = (props) => {
           return (
             <Typography
               key={`activeTotalUsers-${course.id}`}
-              className="course_active_total_users"
+              className="course_active_users"
+              variant="body2"
+            >
+              <a
+                href={`//${course.instance.host}/courses/${course.id}/students?active=true`}
+              >
+                {course.activeUserCount}
+              </a>
+            </Typography>
+          );
+        },
+      },
+    },
+    {
+      name: 'totalUsers',
+      label: intl.formatMessage(tableTranslations.totalCourses),
+      options: {
+        alignCenter: false,
+        search: false,
+        sort: false,
+        customBodyRenderLite: (dataIndex): JSX.Element => {
+          const course = courses[dataIndex];
+          return (
+            <Typography
+              key={`activeTotalUsers-${course.id}`}
+              className="course_total_users"
               variant="body2"
             >
               <a
                 href={`//${course.instance.host}/courses/${course.id}/students`}
               >
-                {course.activeUserCount} / {course.userCount}
+                {course.userCount}
               </a>
             </Typography>
           );
