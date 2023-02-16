@@ -62,6 +62,7 @@ export interface ForumListData {
   description: string;
   topicUnreadCount: number;
   forumTopicsAutoSubscribe: boolean;
+  rootForumUrl: string;
   forumUrl: string;
   isUnresolved: boolean;
   topicCount: number;
@@ -92,6 +93,7 @@ export interface ForumTopicListData {
   permissions: ForumTopicListDataPermissions;
 
   nextUnreadTopicUrl: string | null;
+  forumUrl: string;
 }
 
 export interface ForumTopicPostListData {
@@ -140,6 +142,7 @@ export interface ForumEntity {
   permissions: ForumData['permissions'];
 
   availableTopicTypes?: ForumData['availableTopicTypes'];
+  rootForumUrl: ForumData['rootForumUrl'];
   nextUnreadTopicUrl: ForumData['nextUnreadTopicUrl'];
   topicIds: ForumTopicListData['id'][] | null;
 }
@@ -164,6 +167,7 @@ export interface ForumTopicEntity {
   emailSubscription: ForumTopicListData['emailSubscription'];
   permissions: ForumTopicListData['permissions'];
 
+  forumUrl: ForumTopicListData['forumUrl'];
   nextUnreadTopicUrl: ForumTopicListData['nextUnreadTopicUrl'];
   postTreeIds?: RecursiveArray<number>;
 }

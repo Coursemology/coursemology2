@@ -138,7 +138,12 @@ const ForumTopicShow: FC = () => {
 
   return (
     <>
-      <PageHeader title={forumPageHeaderTitle} toolbars={headerToolbars} />
+      <PageHeader
+        returnLink={forumTopic?.forumUrl}
+        title={forumPageHeaderTitle}
+        toolbars={headerToolbars}
+      />
+
       {isLoading ? <LoadingIndicator /> : renderBody}
     </>
   );
