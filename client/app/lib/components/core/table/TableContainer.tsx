@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ComponentRef, forwardRef, ReactNode } from 'react';
 import {
   Paper as MuiPaper,
   Table as MuiTable,
@@ -7,11 +7,13 @@ import {
 
 import { TableContainerProps } from './template';
 
-const TableContainer = (
-  props: TableContainerProps & { children: ReactNode },
-): JSX.Element => {
-  return (
+const TableContainer = forwardRef<
+  ComponentRef<typeof MuiTableContainer>,
+  TableContainerProps & { children: ReactNode }
+>(
+  (props, ref): JSX.Element => (
     <MuiTableContainer
+      ref={ref}
       className={`${props.stickyHeader ? 'overflow-x-visible' : ''} ${
         props.className ?? ''
       }`}
@@ -27,7 +29,9 @@ const TableContainer = (
         {props.children}
       </MuiTable>
     </MuiTableContainer>
-  );
-};
+  ),
+);
+
+TableContainer.displayName = 'TableContainer';
 
 export default TableContainer;
