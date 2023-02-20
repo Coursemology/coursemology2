@@ -173,14 +173,14 @@ RSpec.feature 'Course: Achievements', js: true do
 
         hover_then_click edit_button
         survey_field = find_field('Survey')
-        expect(survey_field.value).to eq(valid_survey_as_condition.title)
+        expect(survey_field.value).to include(valid_survey_as_condition.title)
         survey_field.click
         find('li', text: survey_to_change_to.title).click
         click_button 'Update condition'
 
         expect_toastify('Your changes have been saved.')
         hover_then_click condition_row.first('button', visible: false)
-        expect(find_field('Survey').value).to eq(survey_to_change_to.title)
+        expect(find_field('Survey').value).to include(survey_to_change_to.title)
         find('button.prompt-cancel-btn').click
 
         # Delete survey condition

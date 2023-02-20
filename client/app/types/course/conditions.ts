@@ -45,7 +45,10 @@ export interface AvailableAssessments {
   >;
 }
 
-export type AvailableSurveys = Record<string, string>;
+export interface AvailableSurveys {
+  ids: SurveyConditionData['id'][];
+  surveys: Record<SurveyConditionData['id'], { title: string; url: string }>;
+}
 
 export type AvailableAchievements = Record<
   string,

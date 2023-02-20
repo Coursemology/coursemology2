@@ -1,11 +1,12 @@
-import { useMemo } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Autocomplete } from '@mui/material';
-import { SurveyConditionData } from 'types/course/conditions';
+import { Launch } from '@mui/icons-material';
+import { Autocomplete, Box, Typography } from '@mui/material';
+import { AvailableSurveys, SurveyConditionData } from 'types/course/conditions';
 
 import CourseAPI from 'api/course';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
+import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -14,28 +15,14 @@ import { formatErrorMessage } from '../../../form/fields/utils/mapError';
 import { AnyConditionProps } from '../AnyCondition';
 import translations from '../translations';
 
-// TODO: Change string to Survey['title'] once Survey is typed
-type SurveyOptions = Record<SurveyConditionData['id'], string>;
-
 const SurveyConditionForm = (
-  props: AnyConditionProps<SurveyConditionData> & { surveys: SurveyOptions },
+  props: AnyConditionProps<SurveyConditionData> & { surveys: AvailableSurveys },
 ): JSX.Element => {
-  const { surveys } = props;
+  const { ids, surveys } = props.surveys;
   const { t } = useTranslation();
 
-  const autocompleteOptions = useMemo(() => {
-    const keys = Object.keys(surveys);
-    return keys.sort((a, b) => {
-      const surveyA = surveys[parseInt(a, 10)];
-      const surveyB = surveys[parseInt(b, 10)];
-      return surveyA.localeCompare(surveyB);
-    });
-  }, [surveys]);
-
   const { control, handleSubmit, setError, formState } = useForm({
-    defaultValues: props.condition ?? {
-      surveyId: parseInt(autocompleteOptions[0], 10),
-    },
+    defaultValues: props.condition ?? { surveyId: ids[0] },
   });
 
   const updateSurvey = (data: SurveyConditionData): void => {
@@ -67,9 +54,9 @@ const SurveyConditionForm = (
             {...field}
             disableClearable
             fullWidth
-            getOptionLabel={(id): string => surveys[id] ?? ''}
-            onChange={(_, value): void => field.onChange(parseInt(value, 10))}
-            options={autocompleteOptions}
+            getOptionLabel={(id): string => surveys[id].title}
+            onChange={(_, value): void => field.onChange(value)}
+            options={ids}
             renderInput={(inputProps): JSX.Element => (
               <TextField
                 {...inputProps}
@@ -79,7 +66,29 @@ const SurveyConditionForm = (
                 variant="filled"
               />
             )}
-            value={field.value?.toString()}
+            renderOption={(optionProps, id): JSX.Element => (
+              <Box
+                component="li"
+                {...optionProps}
+                key={id}
+                className={`${optionProps.className} justify-between space-x-4`}
+              >
+                <Typography>{surveys[id].title}</Typography>
+
+                <Link
+                  className="flex items-center space-x-2"
+                  href={surveys[id].url}
+                  opensInNewTab
+                >
+                  <Typography variant="caption">
+                    {t(translations.details)}
+                  </Typography>
+
+                  <Launch fontSize="small" />
+                </Link>
+              </Box>
+            )}
+            value={field.value}
           />
         )}
       />
@@ -94,7 +103,7 @@ const SurveyCondition = (
   if (!url)
     throw new Error(`SurveyCondition received ${url} condition endpoint`);
 
-  const fetchSurveys = async (): Promise<SurveyOptions> => {
+  const fetchSurveys = async (): Promise<AvailableSurveys> => {
     const response = await CourseAPI.conditions.fetchSurveys(url);
     return response.data;
   };
