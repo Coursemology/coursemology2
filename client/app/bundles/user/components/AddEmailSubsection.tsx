@@ -7,7 +7,6 @@ import { EmailData } from 'types/users';
 import TextField from 'lib/components/core/fields/TextField';
 import Subsection from 'lib/components/core/layouts/Subsection';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
-import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../translations';
@@ -29,7 +28,7 @@ const AddEmailSubsection = (props: AddEmailSubsectionProps): JSX.Element => {
   const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
-  const [expanded, toggleExpanded] = useToggle();
+  const [expanded, setExpanded] = useState(false);
   const emailInputRef = useRef<HTMLInputElement>(null);
 
   const resetField = (): void => {
@@ -38,7 +37,7 @@ const AddEmailSubsection = (props: AddEmailSubsectionProps): JSX.Element => {
   };
 
   const expandAndFocusField = (): void => {
-    toggleExpanded();
+    setExpanded((wasExpanded) => !wasExpanded);
     emailInputRef.current?.focus();
   };
 

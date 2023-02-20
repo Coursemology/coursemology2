@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Button, Collapse, Radio } from '@mui/material';
 import { McqData, QuestionData } from 'types/course/assessment/assessments';
 
 import Checkbox from 'lib/components/core/buttons/Checkbox';
-import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -21,8 +21,8 @@ const isMcq = (question: QuestionData): question is McqData =>
 const McqWidget = (props: McqWidgetProps): JSX.Element | null => {
   const { for: question } = props;
   const { t } = useTranslation();
-  const [expanded, toggleExpanded] = useToggle();
-  const [converting, toggleConverting] = useToggle();
+  const [expanded, setExpanded] = useState(false);
+  const [converting, setConverting] = useState(false);
 
   if (!isMcq(question)) return null;
 
@@ -31,14 +31,14 @@ const McqWidget = (props: McqWidgetProps): JSX.Element | null => {
       <div className="flex justify-between space-x-4">
         <Button
           endIcon={expanded ? <ExpandLess /> : <ExpandMore />}
-          onClick={toggleExpanded}
+          onClick={(): void => setExpanded((wasExpanded) => !wasExpanded)}
           size="small"
           variant="outlined"
         >
           {expanded ? t(translations.hideOptions) : t(translations.showOptions)}
         </Button>
 
-        <Button onClick={toggleConverting} size="small" variant="outlined">
+        <Button onClick={(): void => setConverting(true)} size="small" variant="outlined">
           {question.mcqMrqType === 'mcq'
             ? t(translations.changeToMrqFull)
             : t(translations.changeToMcqFull)}
@@ -62,7 +62,7 @@ const McqWidget = (props: McqWidgetProps): JSX.Element | null => {
 
       <ConvertMcqMrqPrompt
         for={question}
-        onClose={toggleConverting}
+        onClose={(): void => setConverting(false)}
         onConvertComplete={props.onChange}
         open={converting}
       />

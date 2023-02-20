@@ -1,9 +1,9 @@
+import { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { ContentCopy, Create, DragIndicator } from '@mui/icons-material';
 import { Chip, IconButton, Tooltip, Typography } from '@mui/material';
 import { QuestionData } from 'types/course/assessment/assessments';
 
-import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -25,7 +25,7 @@ interface QuestionProps {
 const Question = (props: QuestionProps): JSX.Element => {
   const { of: question, index, dragging, draggedTo, disabled } = props;
   const { t } = useTranslation();
-  const [duplicating, toggleDuplicating] = useToggle();
+  const [duplicating, setDuplicating] = useState(false);
 
   return (
     <>
@@ -116,7 +116,7 @@ const Question = (props: QuestionProps): JSX.Element => {
                   <IconButton
                     aria-label={t(translations.duplicateToAssessment)}
                     disabled={disabled || dragging}
-                    onClick={toggleDuplicating}
+                    onClick={(): void => setDuplicating(true)}
                   >
                     <ContentCopy />
                   </IconButton>
@@ -160,7 +160,7 @@ const Question = (props: QuestionProps): JSX.Element => {
 
       <DuplicationPrompt
         for={question}
-        onClose={toggleDuplicating}
+        onClose={(): void => setDuplicating(false)}
         open={duplicating}
       />
     </>

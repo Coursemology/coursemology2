@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 
 import ErrorCard from 'lib/components/core/ErrorCard';
-import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
 
@@ -33,7 +32,7 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
 
   const [state, setState] = useState<PreloadState<Data>>();
   const [loading, setLoading] = useState(true);
-  const [failed, toggleFailed] = useToggle();
+  const [failed, setFailed] = useState(false);
 
   const fetch = (ignore: boolean): void => {
     setLoading(true);
@@ -44,7 +43,7 @@ const Preload = <Data,>(props: PreloadProps<Data>): JSX.Element => {
         if (!ignore) setState({ preloaded: true, data });
       })
       .catch((error: AxiosError) => {
-        toggleFailed();
+        setFailed(true);
         props.onErrorDo?.(error.response?.data);
         if (!props.silently)
           toast.error(
