@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 require 'rails_helper'
 
-RSpec.describe Course::Assessment::Question::MultipleResponsesController do
+RSpec.describe Course::Assessment::Question::MultipleResponsesController, type: :controller do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     let(:multiple_response) { nil }
@@ -35,32 +35,10 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
 
       context 'when saving fails' do
         let(:multiple_response) { immutable_mrq }
+
         it do
-          is_expected.to render_template('new')
-        end
-      end
-    end
-
-    describe '#edit' do
-      let!(:multiple_response) do
-        mrq = create(:course_assessment_question_multiple_response, assessment: assessment)
-        mrq.question.update_column(:description, "<script>alert('boo');</script>")
-        mrq
-      end
-
-      subject do
-        get :edit,
-            params: {
-              course_id: course,
-              assessment_id: assessment,
-              id: multiple_response
-            }
-      end
-
-      context 'when edit page is loaded' do
-        it 'sanitizes the description text' do
-          subject
-          expect(assigns(:multiple_response_question).description).not_to include('script')
+          is_expected.to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)['errors']).not_to be_nil
         end
       end
     end
@@ -78,10 +56,6 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
         }
       end
 
-      it do
-        is_expected.to render_template('edit')
-      end
-
       context 'when changing existing MRQ to MCQ question type' do
         let!(:multiple_response) do
           create(:course_assessment_question_multiple_response, assessment: assessment)
@@ -91,7 +65,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
             attributes_for(:course_assessment_question_multiple_response).
             slice(:description, :maximum_grade)
           question_multiple_response_attributes[:question_assessment] = { skill_ids: [''] }
-          patch :update, params: {
+          patch :update, as: :json, params: {
             course_id: course, assessment_id: assessment, id: multiple_response,
             question_multiple_response: question_multiple_response_attributes,
             multiple_choice: 'true'
@@ -99,7 +73,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
         end
 
         it do
-          is_expected.to render_template('edit')
+          subject
           expect(multiple_response.grading_scheme).to eq('any_correct')
         end
       end
@@ -121,7 +95,6 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
         end
 
         it do
-          is_expected.to render_template('edit')
           expect(multiple_response.grading_scheme).to eq('all_correct')
         end
       end
@@ -135,17 +108,16 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
             attributes_for(:course_assessment_question_multiple_response).
             slice(:description, :maximum_grade)
           question_multiple_response_attributes[:question_assessment] = { skill_ids: [''] }
-          patch :update, params: {
+          patch :update, as: :json, params: {
             course_id: course, assessment_id: assessment, id: multiple_response,
             question_multiple_response: question_multiple_response_attributes,
-            multiple_choice: 'true',
-            redirect_to_assessment_show: 'true'
+            multiple_choice: 'true'
           }
         end
 
         it do
-          is_expected.to redirect_to(course_assessment_path(course, assessment))
-          expect(multiple_response.grading_scheme).to eq('any_correct')
+          subject
+          expect(multiple_response.reload.grading_scheme).to eq('any_correct')
         end
       end
 
@@ -161,13 +133,11 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
           patch :update, params: {
             course_id: course, assessment_id: assessment, id: multiple_response,
             question_multiple_response: question_multiple_response_attributes,
-            multiple_choice: 'false',
-            redirect_to_assessment_show: 'true'
+            multiple_choice: 'false'
           }
         end
 
         it do
-          is_expected.to redirect_to(course_assessment_path(course, assessment))
           expect(multiple_response.grading_scheme).to eq('all_correct')
         end
       end
@@ -196,7 +166,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController do
                 },
               question_assessment: { skill_ids: [''] }
             }
-          patch :update, params: {
+          patch :update, as: :json, params: {
             course_id: course, assessment_id: assessment, id: multiple_response,
             question_multiple_response: question_multiple_response_attributes
           }
