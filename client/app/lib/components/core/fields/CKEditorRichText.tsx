@@ -10,10 +10,10 @@ import axios from 'lib/axios';
 import './CKEditor.css';
 
 interface Props {
-  inputId: string;
   name: string;
   onChange: (text: string) => void;
   value: string;
+  inputId?: string;
   autofocus?: boolean;
   disabled?: boolean;
   disableMargins?: boolean;
