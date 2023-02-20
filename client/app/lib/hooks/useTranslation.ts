@@ -9,6 +9,11 @@ type InterpolatedValue =
   | boolean
   | ((chunks: string) => JSX.Element);
 
+type MessageTranslator = (
+  descriptor: Descriptor,
+  values?: Record<string, InterpolatedValue>,
+) => string;
+
 interface TranslationHook {
   t: MessageTranslator;
 }
@@ -18,5 +23,7 @@ const useTranslation = (): TranslationHook => {
 
   return { t: intl.formatMessage };
 };
+
+export type Translated<T> = (translator: MessageTranslator) => T;
 
 export default useTranslation;
