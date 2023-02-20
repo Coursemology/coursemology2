@@ -35,7 +35,7 @@
     "@ckeditor/ckeditor5-build-custom": "github:ekowidianto/CKEditor5-build-coursemology#v1",
     "@ckeditor/ckeditor5-react": "^5.0.6",
     "@emotion/react": "^11.10.5",
-    "@emotion/styled": "^11.10.5",
+    "@emotion/styled": "^11.10.6",
     "@hookform/resolvers": "^2.9.11",
     "@mui/icons-material": "^5.11.0",
     "@mui/lab": "^5.0.0-alpha.118",
