@@ -33,7 +33,6 @@ class System::Admin::Instance::CoursesController < System::Admin::Instance::Cont
 
     @courses = @courses.ordered_by_title
     @courses_count = @courses.count.is_a?(Hash) ? @courses.count.count : @courses.count
-    @courses = @courses.paginated(new_page_params)
 
     @owner_preload_service = Course::CourseOwnerPreloadService.new(@courses.map(&:id))
   end

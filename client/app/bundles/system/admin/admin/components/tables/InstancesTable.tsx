@@ -123,9 +123,11 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       data={instances}
       getRowClassName={(instance): string => `instance_${instance.id}`}
       getRowId={(instance): string => instance.id.toString()}
-      initialPagination={DEFAULT_TABLE_ROWS_PER_PAGE}
-      rowsPerPage={[DEFAULT_TABLE_ROWS_PER_PAGE]}
-      showAllRows
+      pagination={{
+        initialPagination: DEFAULT_TABLE_ROWS_PER_PAGE,
+        rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
+        showAllRows: true,
+      }}
     />
   );
 };
