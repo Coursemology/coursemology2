@@ -14,6 +14,9 @@ export const isCustomCell = (cell: CellData): cell is CustomCellData =>
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type AnyRowData = Record<string, any> | any[];
 
+/**
+ * @deprecated Use `lib/components/table` instead.
+ */
 export interface ColumnTemplate<RowData extends AnyRowData> {
   header?: CellData;
   content: (row: RowData) => CellData;
