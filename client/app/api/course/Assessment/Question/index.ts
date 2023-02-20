@@ -1,8 +1,8 @@
-import ProgrammingQuestionAPI from './Programming';
+import McqMrqAPI from './McqMrq';
 import ScribingQuestionAPI from './Scribing';
 
 const QuestionAPI = {
-  programming: new ProgrammingQuestionAPI(),
+  mcqMrq: new McqMrqAPI(),
   scribing: new ScribingQuestionAPI(),
 };
 

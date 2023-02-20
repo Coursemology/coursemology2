@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { QuestionData } from 'types/course/assessment/assessments';
+import { QuestionData } from 'types/course/assessment/questions';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';

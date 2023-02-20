@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
-import { Button, Collapse, Radio } from '@mui/material';
-import { McqData, QuestionData } from 'types/course/assessment/assessments';
+import { Button, Collapse, Radio, Typography } from '@mui/material';
+import { McqMrqListData } from 'types/course/assessment/multiple-responses';
+import { QuestionData } from 'types/course/assessment/questions';
 
 import Checkbox from 'lib/components/core/buttons/Checkbox';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -15,8 +16,8 @@ interface McqWidgetProps {
   onChange: (question: QuestionData) => void;
 }
 
-const isMcq = (question: QuestionData): question is McqData =>
-  (question as McqData)?.options !== undefined;
+const isMcq = (question: QuestionData): question is McqMrqListData =>
+  (question as McqMrqListData)?.options !== undefined;
 
 const McqWidget = (props: McqWidgetProps): JSX.Element | null => {
   const { for: question } = props;

@@ -1,3 +1,5 @@
+import type { QuestionData } from './questions';
+
 export interface PersonalTimeData {
   isFixed: boolean;
   effectiveTime: string | null;
@@ -76,43 +78,6 @@ export type QuestionType =
 interface NewQuestionBuilderData {
   type: QuestionType;
   url: string;
-}
-
-export interface QuestionData {
-  id: number;
-  number: number;
-  defaultTitle: string;
-  title: string;
-  unautogradable: boolean;
-  type: string;
-
-  description?: string;
-  editUrl?: string;
-  deleteUrl?: string;
-  duplicationUrls?: {
-    tab: string;
-    destinations: {
-      title: string;
-      duplicationUrl: string;
-    }[];
-  }[];
-}
-
-export interface McqData extends QuestionData {
-  mcqMrqType: 'mcq' | 'mrq';
-  convertUrl: string;
-  hasAnswers: boolean;
-  options: {
-    id: number;
-    option: string;
-    correct?: boolean;
-  }[];
-
-  unsubmitAndConvertUrl?: string;
-}
-
-export interface QuestionDuplicationResult {
-  destinationUrl: string;
 }
 
 export interface AssessmentData extends AssessmentActionsData {

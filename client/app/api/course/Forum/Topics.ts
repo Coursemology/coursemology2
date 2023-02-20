@@ -7,7 +7,7 @@ import {
   ForumTopicPostListData,
 } from 'types/course/forums';
 
-import { APIResponse } from 'api/types';
+import { APIResponse, JustRedirect } from 'api/types';
 
 import BaseCourseAPI from '../Base';
 
@@ -39,7 +39,7 @@ export default class TopicsAPI extends BaseCourseAPI {
   create(
     forumId: string,
     params: ForumTopicPostData,
-  ): APIResponse<{ redirectUrl: string }> {
+  ): APIResponse<JustRedirect> {
     return this.getClient().post(
       `${this._getUrlPrefix()}/${forumId}/topics`,
       params,

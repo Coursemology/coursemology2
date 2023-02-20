@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { ContentCopy, Create, DragIndicator } from '@mui/icons-material';
 import { Chip, IconButton, Tooltip, Typography } from '@mui/material';
-import { QuestionData } from 'types/course/assessment/assessments';
+import { QuestionData } from 'types/course/assessment/questions';
 
 import useTranslation from 'lib/hooks/useTranslation';
 

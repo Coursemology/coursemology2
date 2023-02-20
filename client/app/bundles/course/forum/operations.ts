@@ -6,6 +6,7 @@ import {
 import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
+import { JustRedirect } from 'api/types';
 
 import {
   changeForumTopicHidden,
@@ -149,7 +150,7 @@ export function fetchForumTopic(
 export function createForumTopic(
   forumId: string,
   topicFormData: ForumTopicFormData,
-): Operation<{ redirectUrl: string }> {
+): Operation<JustRedirect> {
   const ForumTopicPostData = {
     topic: {
       title: topicFormData.title,
