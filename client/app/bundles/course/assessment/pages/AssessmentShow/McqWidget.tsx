@@ -7,9 +7,8 @@ import { QuestionData } from 'types/course/assessment/questions';
 import Checkbox from 'lib/components/core/buttons/Checkbox';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import ConvertMcqMrqButton from '../../components/ConvertMcqMrqButton';
 import translations from '../../translations';
-
-import ConvertMcqMrqPrompt from './prompts/ConvertMcqMrqPrompt';
 
 interface McqWidgetProps {
   for: QuestionData;
@@ -23,7 +22,6 @@ const McqWidget = (props: McqWidgetProps): JSX.Element | null => {
   const { for: question } = props;
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
-  const [converting, setConverting] = useState(false);
 
   if (!isMcq(question)) return null;
 
@@ -47,11 +45,13 @@ const McqWidget = (props: McqWidgetProps): JSX.Element | null => {
           </Typography>
         )}
 
-        <Button onClick={(): void => setConverting(true)} size="small" variant="outlined">
-          {question.mcqMrqType === 'mcq'
-            ? t(translations.changeToMrqFull)
-            : t(translations.changeToMcqFull)}
-        </Button>
+        <ConvertMcqMrqButton
+          for={{
+            ...question,
+            title: question.title ? question.title : question.defaultTitle,
+          }}
+          onConvertComplete={props.onChange}
+        />
       </div>
 
       <Collapse in={expanded}>
@@ -68,13 +68,6 @@ const McqWidget = (props: McqWidgetProps): JSX.Element | null => {
           />
         ))}
       </Collapse>
-
-      <ConvertMcqMrqPrompt
-        for={question}
-        onClose={(): void => setConverting(false)}
-        onConvertComplete={props.onChange}
-        open={converting}
-      />
     </section>
   );
 };
