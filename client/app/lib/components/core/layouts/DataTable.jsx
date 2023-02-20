@@ -145,4 +145,7 @@ const DataTable = (props) => {
 
 DataTable.propTypes = MUIDataTable.propTypes;
 
+/**
+ * @deprecated `Use `lib/components/table` instead.
+ */
 export default DataTable;
