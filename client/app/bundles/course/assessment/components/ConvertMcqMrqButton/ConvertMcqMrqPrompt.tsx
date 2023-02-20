@@ -2,18 +2,28 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { East } from '@mui/icons-material';
 import { Alert, Chip, Typography } from '@mui/material';
-import { McqData } from 'types/course/assessment/assessments';
+import { McqMrqListData } from 'types/course/assessment/multiple-responses';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { convertMcqMrq } from '../../../actions';
-import translations from '../../../translations';
+import { convertMcqMrq } from '../../actions';
+import translations from '../../translations';
+
+export interface ConvertMcqMrqData {
+  mcqMrqType: McqMrqListData['mcqMrqType'];
+  convertUrl: McqMrqListData['convertUrl'];
+  hasAnswers?: McqMrqListData['hasAnswers'];
+  unsubmitAndConvertUrl?: McqMrqListData['unsubmitAndConvertUrl'];
+  type: McqMrqListData['type'];
+  title?: McqMrqListData['title'];
+  id?: McqMrqListData['id'];
+}
 
 interface ConvertMcqMrqPromptProps {
-  for: McqData;
+  for: ConvertMcqMrqData;
   onClose: () => void;
-  onConvertComplete: (data: McqData) => void;
+  onConvertComplete: (data: McqMrqListData) => void;
   open: boolean;
 }
 
@@ -25,9 +35,9 @@ const ConvertMcqMrqPrompt = (props: ConvertMcqMrqPromptProps): JSX.Element => {
   const convert = (unsubmit: boolean, convertUrl?: string) => () => {
     if (!convertUrl)
       throw new Error(
-        `Encountered convert URL for MCQ/MRQ with ID ${
-          question.id
-        } is ${convertUrl?.toString()}.`,
+        `Encountered convert URL for MCQ/MRQ ${
+          question.id ? `with ID ${question.id} is` : ''
+        } ${convertUrl?.toString()}.`,
       );
 
     setConverting(true);
@@ -48,7 +58,7 @@ const ConvertMcqMrqPrompt = (props: ConvertMcqMrqPromptProps): JSX.Element => {
           },
         },
       })
-      .then((data: Partial<McqData>) => {
+      .then((data: McqMrqListData) => {
         props.onConvertComplete({ ...question, ...data });
         props.onClose();
       })
@@ -78,15 +88,17 @@ const ConvertMcqMrqPrompt = (props: ConvertMcqMrqPromptProps): JSX.Element => {
             title: t(translations.sureChangingQuestionType),
           })}
     >
-      <PromptText>
-        {question.mcqMrqType === 'mcq'
-          ? t(translations.changingThisToMrq)
-          : t(translations.changingThisToMcq)}
-      </PromptText>
+      {question.title && (
+        <>
+          <PromptText>
+            {question.mcqMrqType === 'mcq'
+              ? t(translations.changingThisToMrq)
+              : t(translations.changingThisToMcq)}
+          </PromptText>
 
-      <PromptText className="italic">
-        {question.title ? question.title : question.defaultTitle}
-      </PromptText>
+          <PromptText className="italic">{question.title}</PromptText>
+        </>
+      )}
 
       <div className="flex space-x-4">
         <Chip
