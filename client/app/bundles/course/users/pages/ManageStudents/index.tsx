@@ -22,10 +22,6 @@ import {
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
-  manageStudentsTitle: {
-    id: 'course.users.ManageStudents.manageStudentsTitle',
-    defaultMessage: 'Students',
-  },
   noStudents: {
     id: 'course.users.ManageStudents.noStudents',
     defaultMessage: 'No students in course... yet!',
@@ -74,12 +70,12 @@ const ManageStudents: FC<Props> = (props) => {
           />
           {students.length > 0 ? (
             <ManageUsersTable
-              csvDownloadOptions={{ filename: 'Student List' }}
+              className="mt-8"
+              csvDownloadFilename="Student List"
               renderRowActionComponent={(user, disabled): JSX.Element => (
                 <UserManagementButtons disabled={disabled} user={user} />
               )}
               timelinesMap={timelines}
-              title={intl.formatMessage(translations.manageStudentsTitle)}
               users={students}
             />
           ) : (
