@@ -12,7 +12,6 @@ export type FolderPermissions = Permissions<
   | 'canCreateSubfolder'
   | 'canUpload'
   | 'canEdit'
-  | 'canEditSubfolders'
 >;
 
 export type SubfolderPermissions = Permissions<
