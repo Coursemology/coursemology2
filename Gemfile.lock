@@ -224,7 +224,7 @@ GEM
     consistency_fail (0.3.7)
     crass (1.0.6)
     date (3.3.3)
-    devise (4.8.1)
+    devise (4.9.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
@@ -492,9 +492,9 @@ GEM
     regexp_parser (2.6.1)
     request_store (1.5.1)
       rack (>= 1.4)
-    responders (3.0.1)
-      actionpack (>= 5.0)
-      railties (>= 5.0)
+    responders (3.1.0)
+      actionpack (>= 5.2)
+      railties (>= 5.2)
     rexml (3.2.5)
     rinku (2.0.6)
     rollbar (3.4.0)
@@ -690,7 +690,7 @@ DEPENDENCIES
   codecov
   consistency_fail
   coursemology-polyglot!
-  devise (= 4.8.1)
+  devise (= 4.9.0)
   devise-multi_email
   devise_masquerade
   docker-api
