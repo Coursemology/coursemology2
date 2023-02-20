@@ -2,14 +2,18 @@ import { MessageDescriptor, useIntl } from 'react-intl';
 
 export type Descriptor = MessageDescriptor;
 
-type TranslationHook = () => {
-  t: (
-    descriptor: Descriptor,
-    values?: Record<string, string | JSX.Element | number | boolean>,
-  ) => string;
-};
+type InterpolatedValue =
+  | string
+  | JSX.Element
+  | number
+  | boolean
+  | ((chunks: string) => JSX.Element);
 
-const useTranslation: TranslationHook = () => {
+interface TranslationHook {
+  t: MessageTranslator;
+}
+
+const useTranslation = (): TranslationHook => {
   const intl = useIntl();
 
   return { t: intl.formatMessage };
