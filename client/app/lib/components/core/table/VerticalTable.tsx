@@ -11,6 +11,9 @@ import Row from './Row';
 import TableContainer from './TableContainer';
 import { AnyTable } from './template';
 
+/**
+ * @deprecated Use `lib/components/table` instead.
+ */
 const VerticalTable: AnyTable = (props) => {
   const { children: columns, data, rowKey, rowClassName } = props;
 
