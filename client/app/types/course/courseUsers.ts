@@ -119,14 +119,6 @@ export interface ManageCourseUsersSharedData {
   defaultTimelineAlgorithm: TimelineAlgorithm;
 }
 
-/**
- * Row data from ManageUsersTable Datatable
- */
-export interface CourseUserRowData extends CourseUserEntity {
-  'S/N'?: number;
-  actions?: undefined;
-}
-
 export interface LearningRateRecordsData {
   learningRateRecords: {
     id: number;
