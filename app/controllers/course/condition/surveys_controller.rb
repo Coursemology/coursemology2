@@ -29,8 +29,8 @@ class Course::Condition::SurveysController < Course::ConditionsController
   def render_available_surveys
     surveys = current_course.surveys
     existing_conditions = @conditional.specific_conditions - [@survey_condition]
-    available_surveys = surveys - existing_conditions.map(&:dependent_object)
-    render json: available_surveys.to_h { |survey| [survey.id, survey.title] }
+    @available_surveys = (surveys - existing_conditions.map(&:dependent_object)).sort_by(&:title)
+    render 'available_surveys'
   end
 
   def try_to_perform(operation_succeeded)
