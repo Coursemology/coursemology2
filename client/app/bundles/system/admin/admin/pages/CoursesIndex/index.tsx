@@ -107,14 +107,10 @@ const CoursesIndex: FC<Props> = (props) => {
         <LoadingIndicator />
       ) : (
         <CoursesTable
-          courseCounts={courseCounts}
           courses={courses}
-          filter={filter}
-          indexOperation={indexCourses}
           renderRowActionComponent={(course): JSX.Element => (
             <CoursesButtons course={course} deleteOperation={deleteCourse} />
           )}
-          title={intl.formatMessage(translations.title)}
         />
       )}
     </>
