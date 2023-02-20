@@ -28,15 +28,23 @@ const McqWidget = (props: McqWidgetProps): JSX.Element | null => {
 
   return (
     <section className="space-y-4">
-      <div className="flex justify-between space-x-4">
-        <Button
-          endIcon={expanded ? <ExpandLess /> : <ExpandMore />}
-          onClick={(): void => setExpanded((wasExpanded) => !wasExpanded)}
-          size="small"
-          variant="outlined"
-        >
-          {expanded ? t(translations.hideOptions) : t(translations.showOptions)}
-        </Button>
+      <div className="flex items-center justify-between space-x-4">
+        {question.options.length ? (
+          <Button
+            endIcon={expanded ? <ExpandLess /> : <ExpandMore />}
+            onClick={(): void => setExpanded((wasExpanded) => !wasExpanded)}
+            size="small"
+            variant="outlined"
+          >
+            {expanded
+              ? t(translations.hideOptions)
+              : t(translations.showOptions)}
+          </Button>
+        ) : (
+          <Typography className="italic text-neutral-500" variant="body2">
+            {t(translations.noOptions)}
+          </Typography>
+        )}
 
         <Button onClick={(): void => setConverting(true)} size="small" variant="outlined">
           {question.mcqMrqType === 'mcq'
