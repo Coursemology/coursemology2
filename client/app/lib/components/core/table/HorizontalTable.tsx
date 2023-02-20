@@ -8,6 +8,9 @@ import Cell from './Cell';
 import TableContainer from './TableContainer';
 import { AnyTable } from './template';
 
+/**
+ * @deprecated Use `lib/components/table` instead.
+ */
 const HorizontalTable: AnyTable = (props) => {
   const { children: columns, data, rowKey } = props;
 
