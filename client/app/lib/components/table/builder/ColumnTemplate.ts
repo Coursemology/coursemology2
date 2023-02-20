@@ -1,0 +1,31 @@
+import { ReactNode } from 'react';
+
+export type Data = object;
+
+interface FilteringProps<D> {
+  beforeFilter?: (value: string) => unknown;
+  shouldInclude?: (datum: D, filterValue) => boolean;
+  getLabel?: (value) => string;
+  getValue?: (datum: D) => string[];
+}
+
+interface SortingProps<D> {
+  sort?: (datumA: D, datumB: D) => number;
+}
+
+interface ColumnTemplate<D extends Data> {
+  title: string;
+  cell: (datum: D) => ReactNode;
+  of?: keyof D;
+  id?: string;
+  unless?: boolean;
+  sortable?: boolean;
+  filterable?: boolean;
+  searchable?: boolean;
+  csvDownloadable?: boolean;
+  filterProps?: FilteringProps<D>;
+  csvValue?: (value) => string;
+  sortProps?: SortingProps<D>;
+}
+
+export default ColumnTemplate;
