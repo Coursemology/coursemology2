@@ -15,7 +15,7 @@ import {
 import {
   QuestionData,
   QuestionDuplicationResult,
-} from 'types/course/assessment/assessments';
+} from 'types/course/assessment/questions';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
