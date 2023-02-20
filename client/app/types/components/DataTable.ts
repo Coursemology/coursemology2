@@ -1,5 +1,8 @@
 import { CSSProperties } from 'react';
 
+/**
+ * @deprecated `Use `lib/components/table` instead.
+ */
 export interface TableColumns {
   name: string;
   label: string | JSX.Element;
@@ -47,6 +50,9 @@ export interface TableColumns {
   };
 }
 
+/**
+ * @deprecated `DataTable` is deprecated.
+ */
 export interface TableOptions {
   count?: number;
   customFooter?: () => JSX.Element | string;
@@ -96,6 +102,9 @@ export interface TableOptions {
   ) => void;
 }
 
+/**
+ * @deprecated `DataTable` is deprecated.
+ */
 export interface TableState {
   page?: number;
   count?: number;
@@ -104,11 +113,17 @@ export interface TableState {
   sortOrder?: Object;
 }
 
+/**
+ * @deprecated `DataTable` is deprecated.
+ */
 export interface TableRowMeta {
   rowIndex: number;
   dataIndex: number;
 }
 
+/**
+ * @deprecated `DataTable` is deprecated.
+ */
 export interface TableDownloadOptions {
   filename: string;
   separator?: string;
