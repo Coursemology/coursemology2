@@ -32,13 +32,16 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
       ...checkboxProps
     } = props;
 
+    const textVariant =
+      variant ?? (props.size === 'small' ? 'body2' : undefined);
+
     return (
       <div>
         <FormControlLabel
           className={`mb-0 ${props.readOnly ? 'cursor-auto' : ''} ${
             labelClassName ?? ''
           }`}
-          componentsProps={{ typography: { variant } }}
+          componentsProps={{ typography: { variant: textVariant } }}
           control={createElement(component ?? MuiCheckbox, {
             ref,
             ...checkboxProps,
@@ -56,7 +59,7 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
             dangerouslySetInnerHTML ? (
               <Typography
                 dangerouslySetInnerHTML={dangerouslySetInnerHTML}
-                variant={variant}
+                variant={textVariant}
               />
             ) : (
               label
