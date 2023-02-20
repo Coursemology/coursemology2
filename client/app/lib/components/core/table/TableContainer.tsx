@@ -9,7 +9,7 @@ import { TableContainerProps } from './template';
 
 const TableContainer = forwardRef<
   ComponentRef<typeof MuiTableContainer>,
-  TableContainerProps & { children: ReactNode }
+  TableContainerProps & { children: ReactNode; toolbar?: ReactNode }
 >(
   (props, ref): JSX.Element => (
     <MuiTableContainer
@@ -22,6 +22,8 @@ const TableContainer = forwardRef<
       square={props.variant === 'bare'}
       variant={props.variant === 'bare' ? 'elevation' : props.variant}
     >
+      {props.toolbar}
+
       <MuiTable
         className="border-separate"
         size={props.dense ? 'small' : 'medium'}
