@@ -190,76 +190,74 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         find_link(nil, href: edit_path).click
 
         maximum_grade = 999.9
-        fill_in 'maximum_grade', with: maximum_grade
-        click_button I18n.t('helpers.buttons.update')
+        fill_in 'maximumGrade', with: maximum_grade
+        click_button 'Save changes'
 
+        sleep 0.2
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.maximum_grade).to eq(maximum_grade)
 
         visit edit_path
-        options.each_with_index do |option, i|
-          click_link I18n.t('course.assessment.question.multiple_responses.form.add_option')
-          within all('.edit_question_multiple_response ' \
-                     'tr.question_multiple_response_option')[i] do
-            # A custom css selector, :last is added here because +fill_in_rails_summernote+ doesn't
-            # acknowledge the scope defined by capabara.
-            # This works only if +click_link+ is executed before each option.
-            fill_in_rails_summernote '.question_multiple_response_options_option:last',
-                                     option[:option]
-            fill_in_rails_summernote '.question_multiple_response_options_explanation:last',
-                                     option[:explanation]
+        options.each do |option|
+          click_button 'Add a new response'
+
+          within find_all('section', text: 'response').last do
+            fill_in 'Response', with: option[:option]
+            fill_in_react_ck 'textarea[name=explanation]', option[:explanation]
+
+            correct_checkbox = first('input[type=checkbox]', visible: false)
             if option[:correct]
-              check first('input[type="checkbox"]')[:name]
+              correct_checkbox.check
             else
-              uncheck first('input[type="checkbox"]')[:name]
+              correct_checkbox.uncheck
             end
           end
         end
-        find(:button, I18n.t('helpers.buttons.update')).click
 
-        expect(page).to have_selector('div.alert.alert-success')
+        click_button 'Save changes'
+
+        sleep 0.2
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.options.count).to eq(options.count)
 
         # Switching in edit page
         # Switch MRQ to MCQ
         visit edit_path
-        click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
-        click_button 'Continue'
-        expect(page).to have_text(
-          I18n.t('course.assessment.question.multiple_responses.form.multiple_choice_option')
-        )
+        click_button 'Convert to Multiple Choice (MCQ)'
+        click_button 'Convert to MCQ'
+
+        sleep 0.2
 
         # Switch MCQ to MRQ
-        click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mrq')
-        click_button 'Continue'
-        expect(page).to have_text(
-          I18n.t('course.assessment.question.multiple_responses.form.multiple_response_option')
-        )
+        click_button 'Convert to Multiple Response (MRQ)'
+        click_button 'Convert to MRQ'
+
+        sleep 0.2
 
         # Switching in assessment show page
         visit course_assessment_path(course, assessment)
 
         # Switch MRQ to MCQ
-        click_button 'Change to Multiple Choice (MCQ)'
-        click_button 'Change to MCQ'
+        click_button 'Convert to Multiple Choice (MCQ)'
+        click_button 'Convert to MCQ'
         expect_toastify('Question type successfully changed.')
         expect(page).to have_text(
           I18n.t('course.assessment.question.multiple_responses.question_type.multiple_choice')
         )
-        expect(page).to have_button('Change to Multiple Response (MRQ)')
+        expect(page).to have_button('Convert to Multiple Response (MRQ)')
 
         # Delete all MCQ options
         visit edit_path
-        all('tr.question_multiple_response_option').each do |element|
-          within element do
-            click_link I18n.t('course.assessment.question.multiple_responses.option_fields.remove')
+        find_all('section').each do |choice_section|
+          within choice_section do
+            find_button('Delete choice').click
           end
         end
-        click_button I18n.t('helpers.buttons.update')
 
+        click_button 'Save changes'
+
+        sleep 0.2
         expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(page).to have_selector('div.alert.alert-success')
         expect(mrq.reload.options.count).to eq(0)
       end
 
