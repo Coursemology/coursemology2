@@ -487,6 +487,10 @@ const translations = defineMessages({
     id: 'course.assessment.show.notAutogradable',
     defaultMessage: 'Not autogradable',
   },
+  noOptions: {
+    id: 'course.assessment.show.noOptions',
+    defaultMessage: 'This question has no options.',
+  },
 });
 
 export default translations;
