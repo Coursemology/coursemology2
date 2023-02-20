@@ -1,0 +1,226 @@
+import { ReactElement, useMemo, useState } from 'react';
+import { MenuItem, Typography } from '@mui/material';
+import {
+  CourseUserMiniEntity,
+  CourseUserRoles,
+} from 'types/course/courseUsers';
+
+import Note from 'lib/components/core/Note';
+import Table, { ColumnTemplate } from 'lib/components/table';
+import {
+  COURSE_USER_ROLES,
+  DEFAULT_TABLE_ROWS_PER_PAGE,
+} from 'lib/constants/sharedConstants';
+import { useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
+import tableTranslations from 'lib/translations/table';
+
+import { getManageCourseUserPermissions } from '../../../selectors';
+
+import ActiveTableToolbar from './ActiveTableToolbar';
+import AlgorithmMenu from './AlgorithmMenu';
+import PhantomSwitch from './PhantomSwitch';
+import RoleMenu from './RoleMenu';
+import TimelineMenu from './TimelineMenu';
+import translations from './translations';
+import UserNameField from './UserNameField';
+
+interface ManageUsersTableProps {
+  users: CourseUserMiniEntity[];
+  manageStaff?: boolean;
+  renderRowActionComponent?: (
+    user: CourseUserMiniEntity,
+    disabled: boolean,
+  ) => ReactElement;
+  csvDownloadFilename: string;
+  timelinesMap?: Record<number, string>;
+  className?: string;
+}
+
+const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
+  const { users, manageStaff, timelinesMap, renderRowActionComponent } = props;
+
+  const { t } = useTranslation();
+
+  const permissions = useAppSelector(getManageCourseUserPermissions);
+
+  const [submitting, setSubmitting] = useState(false);
+
+  const timelines = useMemo(
+    () =>
+      timelinesMap &&
+      Object.entries(timelinesMap).map(([id, timelineTitle]) => (
+        <MenuItem key={id} value={id}>
+          {timelineTitle ?? t(translations.defaultTimeline)}
+        </MenuItem>
+      )),
+    [timelinesMap],
+  );
+
+  if (!users?.length) return <Note message={t(translations.noUsers)} />;
+
+  const columns: ColumnTemplate<CourseUserMiniEntity>[] = [
+    {
+      of: 'name',
+      title: t(tableTranslations.name),
+      sortable: true,
+      searchable: true,
+      cell: (user) => (
+        <UserNameField
+          for={user}
+          setSubmitting={setSubmitting}
+          submitting={submitting}
+        />
+      ),
+      csvDownloadable: true,
+    },
+    {
+      of: 'email',
+      sortable: true,
+      searchable: true,
+      title: t(tableTranslations.email),
+      cell: (user) => user.email,
+      csvDownloadable: true,
+    },
+    {
+      of: 'phantom',
+      sortable: true,
+      title: t(tableTranslations.phantom),
+      cell: (user) => (
+        <PhantomSwitch
+          for={user}
+          setSubmitting={setSubmitting}
+          submitting={submitting}
+        />
+      ),
+      csvDownloadable: true,
+    },
+    {
+      of: 'groups',
+      sortable: true,
+      title: t(tableTranslations.groups),
+      filterable: true,
+      filterProps: {
+        getValue: (user) => user.groups ?? [],
+        shouldInclude: (user, filterValue?: string[]): boolean => {
+          if (!user.groups) return false;
+          if (!filterValue?.length) return true;
+
+          const filterSet = new Set(filterValue);
+          return user.groups.some((group) => filterSet.has(group));
+        },
+      },
+      cell: (user) => (
+        <ul className="m-0 list-none p-0">
+          {user.groups?.map((group) => (
+            <Typography key={group} component="li" variant="body2">
+              {group}
+            </Typography>
+          ))}
+        </ul>
+      ),
+      unless: manageStaff,
+      csvDownloadable: true,
+      csvValue: (value?: number[]) => value?.join('; ') ?? '',
+    },
+    {
+      of: 'referenceTimelineId',
+      sortable: true,
+      title: t(tableTranslations.referenceTimeline),
+      filterable: true,
+      filterProps: {
+        beforeFilter: (value: string) => parseInt(value, 10),
+        shouldInclude: (user, filterValue?: number | null) =>
+          user.referenceTimelineId === filterValue,
+        getLabel: (value?: number | null) =>
+          (timelinesMap && value && timelinesMap[value]) ||
+          t(translations.defaultTimeline),
+      },
+      cell: (user) => (
+        <TimelineMenu
+          for={user}
+          setSubmitting={setSubmitting}
+          submitting={submitting}
+          timelines={timelines!}
+          timelinesMap={timelinesMap!}
+        />
+      ),
+      unless:
+        !permissions?.canManageReferenceTimelines ||
+        !timelines ||
+        !timelinesMap,
+      csvDownloadable: true,
+      csvValue: (value?: number): string => {
+        let title = t(translations.defaultTimeline);
+        if (timelinesMap && value) title = timelinesMap[value] || title;
+        return title;
+      },
+    },
+    {
+      of: 'timelineAlgorithm',
+      sortable: true,
+      title: t(tableTranslations.timelineAlgorithm),
+      cell: (user) => (
+        <AlgorithmMenu
+          for={user}
+          setSubmitting={setSubmitting}
+          submitting={submitting}
+        />
+      ),
+      unless: !permissions?.canManagePersonalTimes,
+      csvDownloadable: true,
+    },
+    {
+      of: 'role',
+      sortable: true,
+      title: t(tableTranslations.role),
+      cell: (user) => (
+        <RoleMenu
+          for={user}
+          setSubmitting={setSubmitting}
+          submitting={submitting}
+        />
+      ),
+      unless: !manageStaff || !permissions?.canManageCourseUsers,
+      csvDownloadable: true,
+      csvValue: (value: CourseUserRoles) => COURSE_USER_ROLES[value],
+    },
+    {
+      id: 'actions',
+      title: t(tableTranslations.actions),
+      cell: (user) => renderRowActionComponent?.(user, submitting),
+      unless: !renderRowActionComponent,
+    },
+  ];
+
+  return (
+    <Table
+      className={props.className}
+      columns={columns}
+      csvDownload={{ filename: props.csvDownloadFilename }}
+      data={users}
+      getRowClassName={(user): string => `course_user course_user_${user.id}`}
+      getRowId={(user): string => user.id.toString()}
+      indexing={{ indices: true, rowSelectable: true }}
+      pagination={{
+        initialPagination: DEFAULT_TABLE_ROWS_PER_PAGE,
+        rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
+        showAllRows: true,
+      }}
+      search={{ searchPlaceholder: t(translations.searchText) }}
+      toolbar={{
+        show: true,
+        activeToolbar: (selectedUsers): JSX.Element => (
+          <ActiveTableToolbar
+            disabled={submitting}
+            selectedRows={selectedUsers}
+            setSubmitting={setSubmitting}
+            timelinesMap={timelinesMap}
+          />
+        ),
+      }}
+    />
+  );
+};
+
+export default ManageUsersTable;

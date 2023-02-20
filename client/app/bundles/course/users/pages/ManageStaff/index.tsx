@@ -22,10 +22,6 @@ import {
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
-  manageStaffTitle: {
-    id: 'course.users.ManageStaff.manageStaffTitle',
-    defaultMessage: 'Staff',
-  },
   noStaff: {
     id: 'course.users.ManageStaff.noStaff',
     defaultMessage: 'No staff in course.',
@@ -70,12 +66,11 @@ const ManageStaff: FC<Props> = (props) => {
           <UpgradeToStaff />
           {staff.length > 0 ? (
             <ManageUsersTable
-              csvDownloadOptions={{ filename: 'Staff List' }}
+              csvDownloadFilename="Staff List"
               manageStaff
               renderRowActionComponent={(user, disabled): JSX.Element => (
                 <UserManagementButtons disabled={disabled} user={user} />
               )}
-              title={intl.formatMessage(translations.manageStaffTitle)}
               users={staff}
             />
           ) : (
