@@ -9,21 +9,24 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
   before_action :load_question_assessment, only: [:edit, :update]
 
   def new
-    @multiple_response_question.grading_scheme = :any_correct if params[:multiple_choice] == 'true'
-    @multiple_response_question.options.build(weight: 1) if @multiple_response_question.options.empty?
+    respond_to do |format|
+      format.html
+
+      format.json do
+        @multiple_response_question.grading_scheme = :any_correct if params[:multiple_choice] == 'true'
+      end
+    end
   end
 
   def create
     if @multiple_response_question.save
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success')
+      render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
     else
-      render 'new'
+      render json: { errors: @multiple_response_question.errors }, status: :bad_request
     end
   end
 
   def edit
-    @multiple_response_question.description = helpers.format_ckeditor_rich_text(@multiple_response_question.description)
   end
 
   def update
@@ -32,16 +35,12 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
       return
     end
 
-    @question_assessment.skill_ids = multiple_response_question_params[:question_assessment][:skill_ids]
+    update_skill_ids_if_params_present
 
-    if @multiple_response_question.update(multiple_response_question_params.
-                                          except(:question_assessment, :multiple_choice))
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success')
+    if update_multiple_response_question
+      render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
     else
-      error = @multiple_response_question.errors.full_messages.to_sentence
-      flash.now[:danger] = t('.failure', error: error)
-      render 'edit'
+      render json: { errors: @multiple_response_question.errors }, status: :bad_request
     end
   end
 
@@ -56,48 +55,32 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
 
   private
 
-  # TODO: Remove once backend is fully API only
-  # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-  def respond_to_switch_mcq_mrq_type_html(is_mcq, unsubmit)
-    @message_success_switch = if params[:multiple_choice] == 'true' && params[:unsubmit] == 'false'
-                                t('.switch_mrq_success', number: @question_number)
-                              elsif params[:multiple_choice] == 'true'
-                                t('.switch_mrq_unsubmit_success', number: @question_number)
-                              elsif params[:multiple_choice] == 'false' && params[:unsubmit] == 'false'
-                                t('.switch_mcq_success', number: @question_number)
-                              else
-                                t('.switch_mcq_unsubmit_success', number: @question_number)
-                              end
-
-    @message_failure_switch = t('.failure')
-    switch_mcq_mrq_type(is_mcq, unsubmit)
-
-    return render 'edit' unless params.key?(:redirect_to_assessment_show) &&
-                                params[:redirect_to_assessment_show] == 'true'
-
-    redirect_to course_assessment_path(current_course, @assessment), success: @message_success_switch
-  end
-  # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-
   def respond_to_switch_mcq_mrq_type
     is_mcq = params[:multiple_choice] == 'true'
     unsubmit = params[:unsubmit] != 'false'
 
-    respond_to do |format|
-      format.html { respond_to_switch_mcq_mrq_type_html(is_mcq, unsubmit) }
-
-      format.json do
-        if switch_mcq_mrq_type(is_mcq, unsubmit)
-          render partial: 'multiple_response_details', locals: {
-            assessment: @assessment,
-            question: @multiple_response_question,
-            new_question: false
-          }
-        else
-          render json: { errors: @multiple_response_question.errors.full_messsages.to_sentence }, status: :bad_request
-        end
-      end
+    if switch_mcq_mrq_type(is_mcq, unsubmit)
+      render partial: 'multiple_response_details', locals: {
+        assessment: @assessment,
+        question: @multiple_response_question,
+        new_question: false,
+        full_options: false
+      }
+    else
+      render json: { errors: @multiple_response_question.errors.full_messsages.to_sentence }, status: :bad_request
     end
+  end
+
+  def update_skill_ids_if_params_present
+    question_assessment_params = multiple_response_question_params[:question_assessment]
+    skill_ids_params = question_assessment_params[:skill_ids] unless question_assessment_params.nil?
+    @question_assessment.skill_ids = skill_ids_params unless skill_ids_params.nil?
+  end
+
+  def update_multiple_response_question
+    @multiple_response_question.update(
+      multiple_response_question_params.except(:question_assessment, :multiple_choice)
+    )
   end
 
   def multiple_response_question_params
