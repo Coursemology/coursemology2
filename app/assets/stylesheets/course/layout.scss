@@ -87,12 +87,14 @@ $sidebar-margin-side: 1.5rem;
   .user {
     align-items: center;
     display: flex;
-    margin: 0.5em;
+    padding: 1rem $sidebar-margin-side;
 
     #user-sidebar {
       display: flex;
       flex-direction: column;
       flex-grow: 1;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     #user-link-sidebar {
@@ -104,6 +106,10 @@ $sidebar-margin-side: 1.5rem;
 
     #manage-email-subscription-link-sidebar {
       font-size: 12px;
+    }
+
+    .image img {
+      max-width: inherit;
     }
 
     .image,
