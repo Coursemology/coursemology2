@@ -84,7 +84,9 @@ const ConvertMcqMrqPrompt = (props: ConvertMcqMrqPromptProps): JSX.Element => {
           : t(translations.changingThisToMcq)}
       </PromptText>
 
-      <PromptText className="italic">{question.title}</PromptText>
+      <PromptText className="italic">
+        {question.title ? question.title : question.defaultTitle}
+      </PromptText>
 
       <div className="flex space-x-4">
         <Chip
