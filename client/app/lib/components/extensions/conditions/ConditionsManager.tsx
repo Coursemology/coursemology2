@@ -28,7 +28,6 @@ import {
 } from 'types/course/conditions';
 
 import Subsection from 'lib/components/core/layouts/Subsection';
-import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
@@ -56,7 +55,7 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
   const [conditions, setConditions] = useState(props.conditionsData.conditions);
   const [conditionToCreate, setConditionToCreate] =
     useState<ConditionAbility>();
-  const [adding, toggleAdding] = useToggle(false);
+  const [adding, setAdding] = useState(false);
   const addConditionButton = useRef<HTMLButtonElement>(null);
 
   const conditionsByType = useMemo(
@@ -137,7 +136,7 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
         <Button
           ref={addConditionButton}
           disabled={adding}
-          onClick={toggleAdding}
+          onClick={(): void => setAdding(true)}
           size="small"
           startIcon={<Add />}
           variant="outlined"
@@ -181,7 +180,7 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
 
       <Menu
         anchorEl={addConditionButton.current}
-        onClose={toggleAdding}
+        onClose={(): void => setAdding(false)}
         open={adding}
       >
         {props.conditionsData.enabledConditions.map((ability) => (
@@ -189,7 +188,7 @@ const ConditionsManager = (props: ConditionsManagerProps): JSX.Element => {
             key={ability.type}
             onClick={(): void => {
               setConditionToCreate(ability);
-              toggleAdding();
+              setAdding(false);
             }}
           >
             {ability.type}

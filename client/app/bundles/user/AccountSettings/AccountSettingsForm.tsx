@@ -12,7 +12,6 @@ import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import { AVAILABLE_LOCALES } from 'lib/constants/sharedConstants';
-import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import AddEmailSubsection, {
@@ -50,8 +49,8 @@ interface AccountSettingsFormProps extends Emits<FormEmitter> {
 const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
   const { t } = useTranslation();
   const [stagedImage, setStagedImage] = useState<File>();
-  const [requirePasswordConfirmation, toggleRequirePasswordConfirmation] =
-    useToggle(true);
+  const [requirePasswordConfirmation, setRequirePasswordConfirmation] =
+    useState(true);
 
   const [addEmailSubsection, setAddEmailSubsection] =
     useState<AddEmailSubsectionEmitter>();
@@ -284,7 +283,7 @@ const AccountSettingsForm = (props: AccountSettingsFormProps): JSX.Element => {
                   fullWidth
                   inputProps={{ autoComplete: 'new-password' }}
                   label={t(translations.newPassword)}
-                  onChangePasswordVisibility={toggleRequirePasswordConfirmation}
+                  onChangePasswordVisibility={setRequirePasswordConfirmation}
                   showPasswordVisibilityHint
                   type="password"
                   variant="filled"

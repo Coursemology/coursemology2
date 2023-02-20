@@ -1,10 +1,9 @@
-import { createElement } from 'react';
+import { createElement, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Create, Delete } from '@mui/icons-material';
 import { IconButton, TableCell, TableRow, Typography } from '@mui/material';
 import { ConditionData, ConditionsData } from 'types/course/conditions';
 
-import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import specify from './specifiers';
@@ -32,14 +31,14 @@ const ConditionRow = <AnyConditionData extends ConditionData>(
   props: ConditionProps<AnyConditionData>,
 ): JSX.Element => {
   const { t } = useTranslation();
-  const [editing, toggleEditing] = useToggle(false);
+  const [editing, setEditing] = useState(false);
   const { component } = specify(props.condition.type);
 
   const updateCondition = (
     data: ConditionData,
     onError?: (errors) => void,
   ): void => {
-    props.onUpdate(data, toggleEditing, onError);
+    props.onUpdate(data, (): void => setEditing(false), onError);
   };
 
   const deleteCondition = (): void => {
@@ -68,10 +67,10 @@ const ConditionRow = <AnyConditionData extends ConditionData>(
               open: editing,
               otherConditions: props.otherConditions,
               onUpdate: updateCondition,
-              onClose: toggleEditing,
+              onClose: (): void => setEditing(false),
             })
           ) : (
-            <IconButton onClick={toggleEditing}>
+            <IconButton onClick={(): void => setEditing(true)}>
               <Create />
             </IconButton>
           )}

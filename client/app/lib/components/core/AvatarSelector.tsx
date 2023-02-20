@@ -6,7 +6,6 @@ import { Avatar, Button } from '@mui/material';
 import translations from 'bundles/user/translations';
 import ImageCropDialog from 'lib/components/core/dialogs/ImageCropDialog';
 import Subsection from 'lib/components/core/layouts/Subsection';
-import useToggle from 'lib/hooks/useToggle';
 import useTranslation from 'lib/hooks/useTranslation';
 import messagesTranslations from 'lib/translations/messages';
 
@@ -38,7 +37,7 @@ interface AvatarSelectorProps {
 const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
   const { t } = useTranslation();
   const [selectedImage, setSelectedImage] = useState<File>();
-  const [cropping, toggleCropping] = useToggle();
+  const [cropping, setCropping] = useState(false);
 
   const raiseInvalidImageError = (): void => {
     setSelectedImage(undefined);
@@ -66,7 +65,7 @@ const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
       props.onSelectImage?.(file);
     } else if (IMAGE_MIMES_SET.has(file.type)) {
       setSelectedImage(file);
-      toggleCropping();
+      setCropping(true);
     } else {
       raiseInvalidImageError();
     }
@@ -112,7 +111,7 @@ const AvatarSelector = (props: AvatarSelectorProps): JSX.Element => {
         <ImageCropDialog
           aspect={1}
           circular={props.circular}
-          onClose={toggleCropping}
+          onClose={(): void => setCropping(false)}
           onConfirmImage={stageImage}
           onLoadError={raiseInvalidImageError}
           open={cropping}
