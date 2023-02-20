@@ -6,9 +6,16 @@ json.partial! 'course/assessment/question/multiple_responses/switch_question_typ
 }
 
 json.type question.question_type
+json.gradingScheme question.grading_scheme
 
 json.options question.options do |option|
   json.id option.id
   json.option option.option
-  json.correct option.correct if option.correct
+  json.correct option.correct
+
+  if full_options
+    json.explanation option.explanation
+    json.weight option.weight
+    json.ignoreRandomization option.ignore_randomization
+  end
 end

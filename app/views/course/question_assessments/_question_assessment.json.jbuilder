@@ -31,6 +31,7 @@ if question.actable.is_a? Course::Assessment::Question::MultipleResponse
   json.partial! 'course/assessment/question/multiple_responses/multiple_response_details', locals: {
     assessment: assessment,
     question: question.specific,
-    new_question: false
+    new_question: false,
+    full_options: false
   }
 end
