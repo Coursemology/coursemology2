@@ -96,4 +96,8 @@ export default defineMessages({
     id: 'lib.components.extensions.conditions.errorOccurredWhenUpdatingCondition',
     defaultMessage: 'An error occurred while updating this condition.',
   },
+  details: {
+    id: 'lib.components.extensions.conditions.details',
+    defaultMessage: 'Details',
+  },
 });

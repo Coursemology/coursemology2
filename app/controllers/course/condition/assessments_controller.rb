@@ -29,8 +29,8 @@ class Course::Condition::AssessmentsController < Course::ConditionsController
   def render_available_assessments
     assessments = current_course.assessments.ordered_by_date_and_title
     existing_conditions = @conditional.specific_conditions - [@assessment_condition]
-    available_assessments = assessments - existing_conditions.map(&:dependent_object)
-    render json: available_assessments.to_h { |assessment| [assessment.id, assessment.title] }
+    @available_assessments = (assessments - existing_conditions.map(&:dependent_object)).sort_by(&:title)
+    render 'available_assessments'
   end
 
   def try_to_perform(operation_succeeded)
