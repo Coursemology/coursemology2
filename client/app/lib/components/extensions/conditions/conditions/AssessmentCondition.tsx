@@ -1,14 +1,19 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { Alert, Autocomplete, Typography } from '@mui/material';
+import { Launch } from '@mui/icons-material';
+import { Alert, Autocomplete, Box, Typography } from '@mui/material';
 import produce from 'immer';
 import { isNumber } from 'lodash';
-import { AssessmentConditionData } from 'types/course/conditions';
+import {
+  AssessmentConditionData,
+  AvailableAssessments,
+} from 'types/course/conditions';
 
 import CourseAPI from 'api/course';
 import Checkbox from 'lib/components/core/buttons/Checkbox';
 import Prompt from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
+import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
@@ -18,9 +23,6 @@ import useTranslation from 'lib/hooks/useTranslation';
 import { AnyConditionProps } from '../AnyCondition';
 import translations from '../translations';
 
-// TODO: Change string to Assessment['title'] once Assessment is typed
-type AssessmentOptions = Record<AssessmentConditionData['id'], string>;
-
 const ERRORS = {
   assessment: 'assessmentId',
   minimum_grade_percentage: 'minimumGradePercentage',
@@ -28,20 +30,11 @@ const ERRORS = {
 
 const AssessmentConditionForm = (
   props: AnyConditionProps<AssessmentConditionData> & {
-    assessments: AssessmentOptions;
+    assessments: AvailableAssessments;
   },
 ): JSX.Element => {
-  const { assessments } = props;
+  const { ids, assessments } = props.assessments;
   const { t } = useTranslation();
-
-  const autocompleteOptions = useMemo(() => {
-    const keys = Object.keys(assessments);
-    return keys.sort((a, b) => {
-      const assessmentA = assessments[parseInt(a, 10)];
-      const assessmentB = assessments[parseInt(b, 10)];
-      return assessmentA.localeCompare(assessmentB);
-    });
-  }, [assessments]);
 
   const [hasPassingGrade, setHasPassingGrade] = useState(
     isNumber(props.condition?.minimumGradePercentage),
@@ -49,7 +42,7 @@ const AssessmentConditionForm = (
 
   const { control, handleSubmit, setError, setFocus, formState } = useForm({
     defaultValues: props.condition ?? {
-      assessmentId: parseInt(autocompleteOptions[0], 10),
+      assessmentId: ids[0],
       minimumGradePercentage: 50,
     },
   });
@@ -112,9 +105,9 @@ const AssessmentConditionForm = (
               {...field}
               disableClearable
               fullWidth
-              getOptionLabel={(id): string => assessments[id] ?? ''}
-              onChange={(_, value): void => field.onChange(parseInt(value, 10))}
-              options={autocompleteOptions}
+              getOptionLabel={(id): string => assessments[id].title}
+              onChange={(_, value): void => field.onChange(value)}
+              options={ids}
               renderInput={(inputProps): JSX.Element => (
                 <TextField
                   {...inputProps}
@@ -124,7 +117,29 @@ const AssessmentConditionForm = (
                   variant="filled"
                 />
               )}
-              value={field.value?.toString()}
+              renderOption={(optionProps, id): JSX.Element => (
+                <Box
+                  component="li"
+                  {...optionProps}
+                  key={id}
+                  className={`${optionProps.className} justify-between space-x-4`}
+                >
+                  <Typography>{assessments[id].title}</Typography>
+
+                  <Link
+                    className="flex items-center space-x-2"
+                    href={assessments[id].url}
+                    opensInNewTab
+                  >
+                    <Typography variant="caption">
+                      {t(translations.details)}
+                    </Typography>
+
+                    <Launch fontSize="small" />
+                  </Link>
+                </Box>
+              )}
+              value={field.value}
             />
           )}
         />
@@ -180,7 +195,7 @@ const AssessmentCondition = (
   if (!url)
     throw new Error(`AssessmentCondition received ${url} condition endpoint`);
 
-  const fetchAssessments = async (): Promise<AssessmentOptions> => {
+  const fetchAssessments = async (): Promise<AvailableAssessments> => {
     const response = await CourseAPI.conditions.fetchAssessments(url);
     return response.data;
   };
