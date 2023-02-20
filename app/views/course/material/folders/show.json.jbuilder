@@ -64,5 +64,4 @@ json.permissions do
   json.canCreateSubfolder can?(:new_subfolder, @folder)
   json.canUpload can?(:upload, @folder)
   json.canEdit can?(:edit, @folder)
-  json.canEditSubfolders can?(:edit, @subfolders)
 end

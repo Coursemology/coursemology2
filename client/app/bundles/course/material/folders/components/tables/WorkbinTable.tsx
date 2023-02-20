@@ -25,7 +25,6 @@ interface Props extends WrappedComponentProps {
   currFolderId: number;
   subfolders: FolderMiniEntity[];
   materials: MaterialMiniEntity[];
-  canEditSubfolders: boolean;
   isCurrentCourseStudent: boolean;
   isConcrete: boolean;
 }
@@ -35,7 +34,6 @@ const WorkbinTable: FC<Props> = (props) => {
     currFolderId,
     subfolders,
     materials,
-    canEditSubfolders,
     isCurrentCourseStudent,
     isConcrete,
   } = props;
@@ -137,7 +135,7 @@ const WorkbinTable: FC<Props> = (props) => {
           <TableCell style={{ padding: 2 }}>
             {columnHeaderWithSort('Last Modified')}
           </TableCell>
-          {canEditSubfolders && (
+          {!isCurrentCourseStudent && (
             <TableCell style={{ padding: 2 }}>
               {columnHeaderWithSort('Start At')}
             </TableCell>
@@ -150,7 +148,6 @@ const WorkbinTable: FC<Props> = (props) => {
           return (
             <TableSubfolderRow
               key={`subfolder-${subfolder.id}`}
-              canEditSubfolders={canEditSubfolders}
               currFolderId={currFolderId}
               isConcrete={isConcrete}
               isCurrentCourseStudent={isCurrentCourseStudent}
@@ -162,9 +159,9 @@ const WorkbinTable: FC<Props> = (props) => {
           return (
             <TableMaterialRow
               key={`material-${material.id}`}
-              canEditSubfolders={canEditSubfolders}
               currFolderId={currFolderId}
               isConcrete={isConcrete}
+              isCurrentCourseStudent={isCurrentCourseStudent}
               material={material}
             />
           );

@@ -12,12 +12,12 @@ import WorkbinTableButtons from '../buttons/WorkbinTableButtons';
 interface Props {
   currFolderId: number;
   material: MaterialMiniEntity;
-  canEditSubfolders: boolean;
+  isCurrentCourseStudent: boolean;
   isConcrete: boolean;
 }
 
 const TableMaterialRow: FC<Props> = (props) => {
-  const { currFolderId, material, canEditSubfolders, isConcrete } = props;
+  const { currFolderId, material, isCurrentCourseStudent, isConcrete } = props;
 
   return (
     <TableRow id={`material-${material.id}`}>
@@ -66,7 +66,7 @@ const TableMaterialRow: FC<Props> = (props) => {
           <a href={material.updater.userUrl ?? '#'}>{material.updater.name}</a>
         </Stack>
       </TableCell>
-      {canEditSubfolders && (
+      {!isCurrentCourseStudent && (
         <TableCell
           style={{
             padding: 2,

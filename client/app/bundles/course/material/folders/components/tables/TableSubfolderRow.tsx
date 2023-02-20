@@ -20,7 +20,6 @@ interface Props {
   currFolderId: number;
   subfolder: FolderMiniEntity;
   isCurrentCourseStudent: boolean;
-  canEditSubfolders: boolean;
   isConcrete: boolean;
 }
 
@@ -38,13 +37,7 @@ const translations = defineMessages({
 });
 
 const TableSubfolderRow: FC<Props> = (props) => {
-  const {
-    currFolderId,
-    subfolder,
-    isCurrentCourseStudent,
-    canEditSubfolders,
-    isConcrete,
-  } = props;
+  const { currFolderId, subfolder, isCurrentCourseStudent, isConcrete } = props;
   const { t } = useTranslation();
 
   return (
@@ -103,7 +96,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
       >
         {formatFullDateTime(subfolder.updatedAt)}
       </TableCell>
-      {subfolder.permissions.canEdit ? (
+      {!isCurrentCourseStudent && (
         <TableCell
           style={{
             padding: 2,
@@ -121,21 +114,6 @@ const TableSubfolderRow: FC<Props> = (props) => {
             <div>{formatFullDateTime(subfolder.startAt)}</div>
           </Stack>
         </TableCell>
-      ) : (
-        canEditSubfolders && (
-          <TableCell
-            style={{
-              padding: 2,
-              width: '240px',
-              maxWidth: '240px',
-              minWidth: '60px',
-            }}
-          >
-            <Stack alignItems="center" direction="row" spacing={0.5}>
-              <div>-</div>
-            </Stack>
-          </TableCell>
-        )
       )}
       <TableCell
         style={{
