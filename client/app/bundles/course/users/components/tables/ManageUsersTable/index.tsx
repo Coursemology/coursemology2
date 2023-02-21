@@ -173,7 +173,6 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       getRowId={(user): string => user.id.toString()}
       indexing={{ indices: true, rowSelectable: true }}
       pagination={{
-        initialPagination: DEFAULT_TABLE_ROWS_PER_PAGE,
         rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
         showAllRows: true,
       }}
