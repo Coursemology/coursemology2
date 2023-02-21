@@ -18,7 +18,7 @@ interface TableTemplate<D extends Data> {
   className?: string;
   pagination?: PaginationTemplate;
   csvDownload?: CsvDownloadTemplate;
-  search?: SearchTemplate;
+  search?: SearchTemplate<D>;
   indexing?: IndexingTemplate;
   filter?: FilterTemplate;
   toolbar?: ToolbarTemplate<D>;

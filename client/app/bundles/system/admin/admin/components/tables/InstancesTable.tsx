@@ -122,9 +122,9 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       columns={columns}
       data={instances}
       getRowClassName={(instance): string => `instance_${instance.id}`}
+      getRowEqualityData={(instance): InstanceMiniEntity => instance}
       getRowId={(instance): string => instance.id.toString()}
       pagination={{
-        initialPagination: DEFAULT_TABLE_ROWS_PER_PAGE,
         rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
         showAllRows: true,
       }}

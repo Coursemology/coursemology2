@@ -19,7 +19,7 @@ interface CoursesTableProps {
 const translations = defineMessages({
   searchText: {
     id: 'system.admin.admin.CoursesTable.searchText',
-    defaultMessage: 'Search courses by its title or owner.',
+    defaultMessage: 'Search courses by its title or owner',
   },
   fetchFilteredCoursesFailure: {
     id: 'system.admin.admin.CoursesTable.fetchFilteredCoursesFailure',
@@ -130,6 +130,7 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
           </Typography>
         </a>
       ),
+      searchProps: { getValue: (course) => course.instance.name },
     },
     {
       of: 'owners',
@@ -141,6 +142,10 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
           {course.owners.map((owner) => renderOwnerLink(owner))}
         </ul>
       ),
+      searchProps: {
+        getValue: (course) =>
+          course.owners.map((owner) => owner.name).join(';'),
+      },
     },
     {
       id: 'actions',
@@ -156,9 +161,9 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
       columns={columns}
       data={courses}
       getRowClassName={(course): string => `instance_${course.id}`}
+      getRowEqualityData={(course): CourseMiniEntity => course}
       getRowId={(course): string => course.id.toString()}
       pagination={{
-        initialPagination: DEFAULT_TABLE_ROWS_PER_PAGE,
         rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
         showAllRows: true,
       }}

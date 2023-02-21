@@ -176,7 +176,26 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
         rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
         showAllRows: true,
       }}
-      search={{ searchPlaceholder: t(translations.searchText) }}
+      search={{
+        searchPlaceholder: t(translations.searchText),
+        searchProps: {
+          shouldInclude: (user, filterValue?: string): boolean => {
+            if (!user.name && !user.email) return false;
+            if (!filterValue?.length) return true;
+
+            return (
+              user.name
+                .toLowerCase()
+                .trim()
+                .includes(filterValue.toLowerCase().trim()) ||
+              user.email
+                .toLowerCase()
+                .trim()
+                .includes(filterValue.toLowerCase().trim())
+            );
+          },
+        },
+      }}
       toolbar={{
         show: true,
         activeToolbar: (selectedUsers): JSX.Element => (
