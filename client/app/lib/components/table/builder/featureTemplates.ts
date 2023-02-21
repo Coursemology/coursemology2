@@ -8,13 +8,18 @@ export interface PaginationTemplate {
   showAllRowsLabel?: string;
 }
 
+interface SearchProps<D> {
+  shouldInclude?: (datum: D, filterValue) => boolean;
+}
+
 export interface CsvDownloadTemplate {
   filename?: string;
   downloadButtonLabel?: string;
 }
 
-export interface SearchTemplate {
+export interface SearchTemplate<D extends Data> {
   searchPlaceholder?: string;
+  searchProps?: SearchProps<D>;
 }
 
 export interface IndexingTemplate {

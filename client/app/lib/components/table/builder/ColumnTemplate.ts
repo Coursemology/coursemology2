@@ -9,6 +9,10 @@ interface FilteringProps<D> {
   getValue?: (datum: D) => string[];
 }
 
+interface SearchingProps<D> {
+  getValue?: (datum: D) => string;
+}
+
 interface SortingProps<D> {
   sort?: (datumA: D, datumB: D) => number;
 }
@@ -26,6 +30,7 @@ interface ColumnTemplate<D extends Data> {
   filterProps?: FilteringProps<D>;
   csvValue?: (value) => string;
   sortProps?: SortingProps<D>;
+  searchProps?: SearchingProps<D>;
 }
 
 export default ColumnTemplate;
