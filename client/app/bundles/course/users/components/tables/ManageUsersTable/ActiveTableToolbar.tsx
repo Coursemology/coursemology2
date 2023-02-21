@@ -8,9 +8,7 @@ import translations from './translations';
 
 interface ActiveTableToolbarProps {
   selectedRows: CourseUserMiniEntity[];
-  setSubmitting: (status: boolean) => void;
   timelinesMap?: Record<number, string>;
-  disabled?: boolean;
 }
 
 const ActiveTableToolbar = (props: ActiveTableToolbarProps): JSX.Element => {
@@ -24,11 +22,9 @@ const ActiveTableToolbar = (props: ActiveTableToolbarProps): JSX.Element => {
 
       {props.timelinesMap && (
         <BulkAssignTimelineButton
-          disabled={props.disabled}
           getSelectedIds={(): number[] =>
             props.selectedRows.map((user) => user.id)
           }
-          setSubmitting={props.setSubmitting}
           timelinesMap={props.timelinesMap}
         />
       )}

@@ -12,20 +12,16 @@ import translations from './translations';
 
 interface PhantomSwitchProps {
   for: CourseUserMiniEntity;
-  submitting: boolean;
-  setSubmitting: (status: boolean) => void;
 }
 
 const PhantomSwitch = (props: PhantomSwitchProps): JSX.Element => {
-  const { for: user, submitting, setSubmitting } = props;
+  const { for: user } = props;
 
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
 
   const handlePhantomUpdate = (phantom: boolean): void => {
-    setSubmitting(true);
-
     dispatch(updateUser(user.id, { phantom }))
       .then(() => {
         toast.success(
@@ -41,8 +37,7 @@ const PhantomSwitch = (props: PhantomSwitchProps): JSX.Element => {
             error: error.response?.data?.errors ?? '',
           }),
         );
-      })
-      .finally(() => setSubmitting(false));
+      });
   };
 
   return (
@@ -50,16 +45,12 @@ const PhantomSwitch = (props: PhantomSwitchProps): JSX.Element => {
       key={user.id}
       checked={user.phantom}
       className="course_user_phantom"
-      disabled={submitting}
       id={`phantom-${user.id}`}
       onChange={(e): void => handlePhantomUpdate(e.target.checked)}
     />
   );
 };
 
-export default memo(
-  PhantomSwitch,
-  (prevProps, nextProps) =>
-    equal(prevProps.for.phantom, nextProps.for.phantom) &&
-    prevProps.submitting === nextProps.submitting,
+export default memo(PhantomSwitch, (prevProps, nextProps) =>
+  equal(prevProps.for.phantom, nextProps.for.phantom),
 );

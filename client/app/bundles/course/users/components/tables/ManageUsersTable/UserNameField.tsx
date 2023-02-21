@@ -12,20 +12,16 @@ import translations from './translations';
 
 interface UserNameFieldProps {
   for: CourseUserMiniEntity;
-  submitting: boolean;
-  setSubmitting: (status: boolean) => void;
 }
 
 const UserNameField = (props: UserNameFieldProps): JSX.Element => {
-  const { for: user, submitting, setSubmitting } = props;
+  const { for: user } = props;
 
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
 
   const handleNameUpdate = (name: string): Promise<void> => {
-    setSubmitting(true);
-
     return dispatch(updateUser(user.id, { name }))
       .then(() => {
         toast.success(
@@ -43,15 +39,13 @@ const UserNameField = (props: UserNameFieldProps): JSX.Element => {
             error: error.response?.data?.errors ?? '',
           }),
         );
-      })
-      .finally(() => setSubmitting(false));
+      });
   };
 
   return (
     <InlineEditTextField
       key={user.id}
       className="course_user_name"
-      disabled={submitting}
       onUpdate={(newName): Promise<void> => handleNameUpdate(newName)}
       updateValue={(): void => {}}
       value={user.name}
@@ -60,9 +54,6 @@ const UserNameField = (props: UserNameFieldProps): JSX.Element => {
   );
 };
 
-export default memo(
-  UserNameField,
-  (prevProps, nextProps) =>
-    equal(prevProps.for.name, nextProps.for.name) &&
-    prevProps.submitting === nextProps.submitting,
+export default memo(UserNameField, (prevProps, nextProps) =>
+  equal(prevProps.for.name, nextProps.for.name),
 );

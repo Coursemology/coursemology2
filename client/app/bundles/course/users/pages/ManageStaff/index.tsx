@@ -68,8 +68,8 @@ const ManageStaff: FC<Props> = (props) => {
             <ManageUsersTable
               csvDownloadFilename="Staff List"
               manageStaff
-              renderRowActionComponent={(user, disabled): JSX.Element => (
-                <UserManagementButtons disabled={disabled} user={user} />
+              renderRowActionComponent={(user): JSX.Element => (
+                <UserManagementButtons user={user} />
               )}
               users={staff}
             />
