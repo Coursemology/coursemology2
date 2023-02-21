@@ -13,9 +13,7 @@ import translations from './translations';
 
 interface BulkAssignTimelineButtonProps {
   getSelectedIds: () => number[];
-  setSubmitting: (status: boolean) => void;
   timelinesMap: Record<number, string>;
-  disabled?: boolean;
 }
 
 const BulkAssignTimelineButton = (
@@ -32,8 +30,6 @@ const BulkAssignTimelineButton = (
     timelineId: TimelineData['id'],
     timelineTitle: TimelineData['title'],
   ): void => {
-    props.setSubmitting(true);
-
     dispatch(assignToTimeline(ids, timelineId))
       .then(() => {
         toast.success(
@@ -50,14 +46,12 @@ const BulkAssignTimelineButton = (
             timeline: timelineTitle ?? t(translations.defaultTimeline),
           }),
         );
-      })
-      .finally(() => props.setSubmitting(false));
+      });
   };
 
   return (
     <>
       <Button
-        disabled={props.disabled}
         endIcon={<ExpandMore />}
         onClick={(e): void => setTimelinesMenu(e.currentTarget)}
         size="small"

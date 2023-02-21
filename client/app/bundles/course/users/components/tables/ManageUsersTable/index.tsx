@@ -1,4 +1,4 @@
-import { ReactElement, useMemo, useState } from 'react';
+import { ReactElement, useMemo } from 'react';
 import { MenuItem, Typography } from '@mui/material';
 import {
   CourseUserMiniEntity,
@@ -28,10 +28,7 @@ import UserNameField from './UserNameField';
 interface ManageUsersTableProps {
   users: CourseUserMiniEntity[];
   manageStaff?: boolean;
-  renderRowActionComponent?: (
-    user: CourseUserMiniEntity,
-    disabled: boolean,
-  ) => ReactElement;
+  renderRowActionComponent?: (user: CourseUserMiniEntity) => ReactElement;
   csvDownloadFilename: string;
   timelinesMap?: Record<number, string>;
   className?: string;
@@ -43,8 +40,6 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
   const { t } = useTranslation();
 
   const permissions = useAppSelector(getManageCourseUserPermissions);
-
-  const [submitting, setSubmitting] = useState(false);
 
   const timelines = useMemo(
     () =>
@@ -65,13 +60,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       title: t(tableTranslations.name),
       sortable: true,
       searchable: true,
-      cell: (user) => (
-        <UserNameField
-          for={user}
-          setSubmitting={setSubmitting}
-          submitting={submitting}
-        />
-      ),
+      cell: (user) => <UserNameField for={user} />,
       csvDownloadable: true,
     },
     {
@@ -86,13 +75,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       of: 'phantom',
       sortable: true,
       title: t(tableTranslations.phantom),
-      cell: (user) => (
-        <PhantomSwitch
-          for={user}
-          setSubmitting={setSubmitting}
-          submitting={submitting}
-        />
-      ),
+      cell: (user) => <PhantomSwitch for={user} />,
       csvDownloadable: true,
     },
     {
@@ -139,8 +122,6 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       cell: (user) => (
         <TimelineMenu
           for={user}
-          setSubmitting={setSubmitting}
-          submitting={submitting}
           timelines={timelines!}
           timelinesMap={timelinesMap!}
         />
@@ -160,13 +141,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       of: 'timelineAlgorithm',
       sortable: true,
       title: t(tableTranslations.timelineAlgorithm),
-      cell: (user) => (
-        <AlgorithmMenu
-          for={user}
-          setSubmitting={setSubmitting}
-          submitting={submitting}
-        />
-      ),
+      cell: (user) => <AlgorithmMenu for={user} />,
       unless: !permissions?.canManagePersonalTimes,
       csvDownloadable: true,
     },
@@ -174,13 +149,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       of: 'role',
       sortable: true,
       title: t(tableTranslations.role),
-      cell: (user) => (
-        <RoleMenu
-          for={user}
-          setSubmitting={setSubmitting}
-          submitting={submitting}
-        />
-      ),
+      cell: (user) => <RoleMenu for={user} />,
       unless: !manageStaff || !permissions?.canManageCourseUsers,
       csvDownloadable: true,
       csvValue: (value: CourseUserRoles) => COURSE_USER_ROLES[value],
@@ -188,7 +157,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
     {
       id: 'actions',
       title: t(tableTranslations.actions),
-      cell: (user) => renderRowActionComponent?.(user, submitting),
+      cell: (user) => renderRowActionComponent?.(user),
       unless: !renderRowActionComponent,
     },
   ];
@@ -212,9 +181,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
         show: true,
         activeToolbar: (selectedUsers): JSX.Element => (
           <ActiveTableToolbar
-            disabled={submitting}
             selectedRows={selectedUsers}
-            setSubmitting={setSubmitting}
             timelinesMap={timelinesMap}
           />
         ),

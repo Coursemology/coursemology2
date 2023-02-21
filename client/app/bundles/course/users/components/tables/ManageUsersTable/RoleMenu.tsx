@@ -16,8 +16,6 @@ import translations from './translations';
 
 interface RoleMenuProps {
   for: CourseUserMiniEntity;
-  submitting: boolean;
-  setSubmitting: (status: boolean) => void;
 }
 
 const roles = Object.keys(COURSE_USER_ROLES).map((option) => (
@@ -27,15 +25,13 @@ const roles = Object.keys(COURSE_USER_ROLES).map((option) => (
 ));
 
 const RoleMenu = (props: RoleMenuProps): JSX.Element => {
-  const { for: user, submitting, setSubmitting } = props;
+  const { for: user } = props;
 
   const dispatch = useAppDispatch();
 
   const { t } = useTranslation();
 
   const handleRoleUpdate = (role: CourseUserRoles): void => {
-    setSubmitting(true);
-
     dispatch(updateUser(user.id, { role }))
       .then(() => {
         toast.success(
@@ -53,15 +49,13 @@ const RoleMenu = (props: RoleMenuProps): JSX.Element => {
             error: error.response?.data?.errors ?? '',
           }),
         );
-      })
-      .finally(() => setSubmitting(false));
+      });
   };
 
   return (
     <TextField
       key={user.id}
       className="course_user_role"
-      disabled={submitting}
       InputProps={{ disableUnderline: true }}
       onChange={(e): void =>
         handleRoleUpdate(e.target.value as CourseUserRoles)
@@ -75,9 +69,6 @@ const RoleMenu = (props: RoleMenuProps): JSX.Element => {
   );
 };
 
-export default memo(
-  RoleMenu,
-  (prevProps, nextProps) =>
-    equal(prevProps.for.role, nextProps.for.role) &&
-    prevProps.submitting === nextProps.submitting,
+export default memo(RoleMenu, (prevProps, nextProps) =>
+  equal(prevProps.for.role, nextProps.for.role),
 );
