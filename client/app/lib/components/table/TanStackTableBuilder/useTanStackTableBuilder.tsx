@@ -120,6 +120,9 @@ const useTanStackTableBuilder = <D extends object>(
       forEachRow: (row) => ({
         id: row.id,
         className: props.getRowClassName?.(row.original),
+        getEqualityData:
+          props.getRowEqualityData &&
+          ((): unknown => props.getRowEqualityData?.(row.original)),
       }),
     },
     pagination: props.pagination && {
