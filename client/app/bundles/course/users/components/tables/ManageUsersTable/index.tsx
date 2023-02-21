@@ -169,6 +169,7 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       csvDownload={{ filename: props.csvDownloadFilename }}
       data={users}
       getRowClassName={(user): string => `course_user course_user_${user.id}`}
+      getRowEqualityData={(user): CourseUserMiniEntity => user}
       getRowId={(user): string => user.id.toString()}
       indexing={{ indices: true, rowSelectable: true }}
       pagination={{
