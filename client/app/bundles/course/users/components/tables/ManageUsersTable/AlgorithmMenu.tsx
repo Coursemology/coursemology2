@@ -14,8 +14,6 @@ import translations from './translations';
 
 interface AlgorithmMenuProps {
   for: CourseUserMiniEntity;
-  submitting: boolean;
-  setSubmitting: (status: boolean) => void;
 }
 
 const algorithms = TIMELINE_ALGORITHMS.map((option) => (
@@ -25,7 +23,7 @@ const algorithms = TIMELINE_ALGORITHMS.map((option) => (
 ));
 
 const AlgorithmMenu = (props: AlgorithmMenuProps): JSX.Element => {
-  const { for: user, submitting, setSubmitting } = props;
+  const { for: user } = props;
 
   const dispatch = useAppDispatch();
 
@@ -34,8 +32,6 @@ const AlgorithmMenu = (props: AlgorithmMenuProps): JSX.Element => {
   const handleAlgorithmUpdate = (
     timelineAlgorithm: TimelineAlgorithm,
   ): void => {
-    setSubmitting(true);
-
     dispatch(updateUser(user.id, { timelineAlgorithm }))
       .then(() => {
         toast.success(
@@ -59,14 +55,12 @@ const AlgorithmMenu = (props: AlgorithmMenuProps): JSX.Element => {
             error: error.response.data.errors,
           }),
         );
-      })
-      .finally(() => setSubmitting(false));
+      });
   };
 
   return (
     <TextField
       key={user.id}
-      disabled={submitting}
       InputProps={{ disableUnderline: true }}
       onChange={(e): void =>
         handleAlgorithmUpdate(e.target.value as TimelineAlgorithm)
@@ -80,9 +74,6 @@ const AlgorithmMenu = (props: AlgorithmMenuProps): JSX.Element => {
   );
 };
 
-export default memo(
-  AlgorithmMenu,
-  (prevProps, nextProps) =>
-    equal(prevProps.for.timelineAlgorithm, nextProps.for.timelineAlgorithm) &&
-    prevProps.submitting === nextProps.submitting,
+export default memo(AlgorithmMenu, (prevProps, nextProps) =>
+  equal(prevProps.for.timelineAlgorithm, nextProps.for.timelineAlgorithm),
 );

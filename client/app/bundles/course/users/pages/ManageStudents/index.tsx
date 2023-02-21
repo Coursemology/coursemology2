@@ -72,8 +72,8 @@ const ManageStudents: FC<Props> = (props) => {
             <ManageUsersTable
               className="mt-8"
               csvDownloadFilename="Student List"
-              renderRowActionComponent={(user, disabled): JSX.Element => (
-                <UserManagementButtons disabled={disabled} user={user} />
+              renderRowActionComponent={(user): JSX.Element => (
+                <UserManagementButtons user={user} />
               )}
               timelinesMap={timelines}
               users={students}

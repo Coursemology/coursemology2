@@ -12,20 +12,12 @@ import translations from './translations';
 
 interface TimelineMenuProps {
   for: CourseUserMiniEntity;
-  submitting: boolean;
-  setSubmitting: (status: boolean) => void;
   timelines: JSX.Element[];
   timelinesMap: Record<number, string>;
 }
 
 const TimelineMenu = (props: TimelineMenuProps): JSX.Element => {
-  const {
-    for: user,
-    submitting,
-    setSubmitting,
-    timelines,
-    timelinesMap,
-  } = props;
+  const { for: user, timelines, timelinesMap } = props;
 
   const dispatch = useAppDispatch();
 
@@ -35,8 +27,6 @@ const TimelineMenu = (props: TimelineMenuProps): JSX.Element => {
     referenceTimelineId: number,
     timeline: string,
   ): void => {
-    setSubmitting(true);
-
     dispatch(updateUser(user.id, { referenceTimelineId }))
       .then(() => {
         toast.success(
@@ -47,14 +37,12 @@ const TimelineMenu = (props: TimelineMenuProps): JSX.Element => {
         toast.error(
           t(translations.changeTimelineFailure, { name: user.name, timeline }),
         );
-      })
-      .finally(() => setSubmitting(false));
+      });
   };
 
   return (
     <TextField
       key={user.id}
-      disabled={submitting}
       InputProps={{ disableUnderline: true }}
       onChange={(e): void => {
         const timelineId = parseInt(e.target.value, 10);
@@ -73,9 +61,6 @@ const TimelineMenu = (props: TimelineMenuProps): JSX.Element => {
   );
 };
 
-export default memo(
-  TimelineMenu,
-  (prevProps, nextProps) =>
-    equal(prevProps.for.timelineAlgorithm, nextProps.for.timelineAlgorithm) &&
-    prevProps.submitting === nextProps.submitting,
+export default memo(TimelineMenu, (prevProps, nextProps) =>
+  equal(prevProps.for.timelineAlgorithm, nextProps.for.timelineAlgorithm),
 );
