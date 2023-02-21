@@ -1,7 +1,8 @@
 import { Data } from './ColumnTemplate';
 
 export interface PaginationTemplate {
-  initialPagination?: number;
+  initialPageSize?: number;
+  initialPageIndex?: number;
   rowsPerPage?: number[];
   showAllRows?: boolean;
   showAllRowsLabel?: string;

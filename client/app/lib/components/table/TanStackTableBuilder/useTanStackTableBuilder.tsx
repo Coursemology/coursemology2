@@ -54,7 +54,13 @@ const useTanStackTableBuilder = <D extends object>(
     onColumnFiltersChange: setColumnFilters,
     state: { rowSelection, columnFilters, globalFilter: searchKeyword },
     initialState: {
-      pagination: { pageSize: props.pagination?.initialPagination },
+      pagination: {
+        pageSize:
+          props.pagination?.initialPageSize ??
+          props.pagination?.rowsPerPage?.[0] ??
+          10,
+        pageIndex: props.pagination?.initialPageIndex ?? 0,
+      },
       sorting: props.sort?.initially && [
         {
           id: props.sort.initially.by,
