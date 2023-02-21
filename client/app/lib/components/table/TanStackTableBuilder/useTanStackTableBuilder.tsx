@@ -52,6 +52,7 @@ const useTanStackTableBuilder = <D extends object>(
     getFacetedUniqueValues: getFacetedUniqueValues(),
     onRowSelectionChange: setRowSelection,
     onColumnFiltersChange: setColumnFilters,
+    autoResetPageIndex: false,
     state: { rowSelection, columnFilters, globalFilter: searchKeyword },
     initialState: {
       pagination: {
