@@ -9,27 +9,22 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
 
   private
 
-  DEFAULT_CPU_TIMEOUT = 30
-
-  def max_programming_timeout_limit(course)
-    course ? course.programming_timeout_limit : DEFAULT_CPU_TIMEOUT
-  end
-
   # Grades the given answer.
   #
   # @param [Course::Assessment::Answer::Programming] answer The answer specified by the student.
   # @return [Array<(Boolean, Integer, Course::Assessment::Answer::ProgrammingAutoGrading)>] The
   #   correct status, grade and the programming auto grading record.
   def evaluate_answer(answer)
+    course = answer.submission.assessment.course
     question = answer.question.actable
     assessment = answer.submission.assessment
+    question.max_time_limit = course.programming_max_time_limit
     question.attachment.open(binmode: true) do |temporary_file|
       package = Course::Assessment::ProgrammingPackage.new(temporary_file)
       package.submission_files = build_submission_files(answer)
       package.remove_solution_files
       package.save
 
-      question.course = answer.submission.assessment.course
       evaluation_result = evaluate_package(question, package)
       build_result(question, evaluation_result,
                    graded_test_case_types: assessment.graded_test_case_types)
@@ -52,14 +47,8 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
   # @param [Course::Assessment::ProgrammingPackage] package The package to import.
   # @return [Course::Assessment::ProgrammingEvaluationService::Result]
   def evaluate_package(question, package)
-    question_attr = {
-      'language' => question.language,
-      'memory_limit' => question.memory_limit,
-      'time_limit' => question.time_limit,
-      'max_timeout_limit' => max_programming_timeout_limit(question.course)
-    }
     Course::Assessment::ProgrammingEvaluationService.
-      execute(question_attr, package.path)
+      execute(question.language, question.memory_limit, question.time_limit, question.max_time_limit, package.path)
   end
 
   # Builds the result of the auto grading from the evaluation result.

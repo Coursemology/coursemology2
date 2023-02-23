@@ -42,9 +42,9 @@ export default defineMessages({
     id: 'course.admin.AssessmentSettings.outputsOfPublicTestCases',
     defaultMessage: 'Outputs of Public test cases',
   },
-  programmingTimeoutLimit: {
-    id: 'course.admin.AssessmentSettings.programmingTimeoutLimit',
-    defaultMessage: 'Programming Timeout Limit',
+  maxProgrammingTimeLimit: {
+    id: 'course.admin.AssessmentSettings.maxProgrammingTimeLimit',
+    defaultMessage: 'Maximum programming time limit',
   },
   standardOutputsAndStandardErrors: {
     id: 'course.admin.AssessmentSettings.standardOutputsAndStandardErrors',
@@ -104,13 +104,13 @@ export default defineMessages({
     id: 'course.admin.AssessmentSettings.moveTabsThenDelete',
     defaultMessage: 'Move tabs then delete',
   },
-  numberRequired: {
-    id: 'course.admin.AssessmentSettings.numberRequired',
-    defaultMessage: 'must input a number here',
+  maxTimeLimitRequired: {
+    id: 'course.admin.AssessmentSettings.maxTimeLimitRequired',
+    defaultMessage: 'Maximum programming time limit is required',
   },
-  positiveNumberRequired: {
-    id: 'course.admin.AssessmentSettings.positiveNumberRequired',
-    defaultMessage: 'must input a positive number here',
+  positiveMaxTimeLimitRequired: {
+    id: 'course.admin.AssessmentSettings.positiveMaxTimeLimitRequired',
+    defaultMessage: 'Maximum programming time limit must be a positive integer',
   },
   toTab: {
     id: 'course.admin.AssessmentSettings.toTab',

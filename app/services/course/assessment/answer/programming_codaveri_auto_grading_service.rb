@@ -20,6 +20,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService < \
   #   correct status, grade and the programming auto grading record.
   def evaluate_answer(answer)
     question = answer.question.actable
+    question.max_time_limit = answer.submission.assessment.course.programming_max_time_limit
     assessment = answer.submission.assessment
     evaluation_result = evaluate_package(assessment.course.title, question, answer)
     build_result(question, evaluation_result,

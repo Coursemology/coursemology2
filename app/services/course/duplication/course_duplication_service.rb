@@ -64,7 +64,7 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
           new_course.reload
         end
 
-        update_course_settings(duplicator, new_course, source_course)
+        update_course_settings(new_course, source_course)
         update_sidebar_settings(duplicator, new_course, source_course)
 
         # As per carrierwave v2.1.0, carrierwave image mounter that retains uploaded file as a cache
@@ -111,17 +111,14 @@ class Course::Duplication::CourseDuplicationService < Course::Duplication::BaseS
 
   # Updates category_ids in the duplicated course settings. This is to be run after the course has
   # been saved and category_ids are available.
-  def update_course_settings(duplicator, new_course, old_course)
+  def update_course_settings(new_course, old_course)
     component_key = Course::AssessmentsComponent.key
     old_category_settings = old_course.settings.public_send(component_key)
     return true if old_category_settings.nil?
 
     new_category_settings = {}
-    old_course.assessment_categories.each do |old_category|
-      new_category = duplicator.duplicate(old_category)
-      old_category_settings.each do |key, value|
-        new_category_settings[key] = value
-      end
+    old_category_settings.each do |key, value|
+      new_category_settings[key] = value
     end
     new_course.settings.public_send("#{component_key}=", new_category_settings)
     new_course.save!

@@ -69,15 +69,12 @@ class Course::Assessment::ProgrammingEvaluationService
   class << self
     # Executes the provided package.
     #
-    # @param [ActiveSupport::Hash] question_hash The hash that contains the following information
-    # -> @param [Coursemology::Polyglot::Language] language The language runtime to use to run this
+    # @param [Coursemology::Polyglot::Language] language The language runtime to use to run this
     #   package.
-    # -> @param [Integer] memory_limit The memory limit for the evaluation, in MiB.
-    # -> @param [Integer|ActiveSupport::Duration] time_limit The time limit for the evaluation, in
+    # @param [Integer] memory_limit The memory limit for the evaluation, in MiB.
+    # @param [Integer|ActiveSupport::Duration] time_limit The time limit for the evaluation, in
     #   seconds.
-    # -> @param [Integer|ActiveSupport::Duration] max_timeout_limit The maximum time limit for the
-    #    evaluation, in seconds
-    #
+    # @param [Integer|ActiveSupport::Duration] max_time_limit Max time limit.
     # @param [String] package The path to the package. The package is assumed to be a valid package;
     #   no parsing is done on the package.
     # @param [nil|Integer] timeout The duration to elapse before timing out. When the operation
@@ -87,8 +84,8 @@ class Course::Assessment::ProgrammingEvaluationService
     # @return [Result] The result of evaluating the template.
     #
     # @raise [Timeout::Error] When the operation times out.
-    def execute(question_attr, package, timeout = nil)
-      new(question_attr, package, timeout).execute
+    def execute(language, memory_limit, time_limit, max_time_limit, package, timeout = nil)
+      new(language, memory_limit, time_limit, max_time_limit, package, timeout).execute
     end
   end
 
@@ -103,14 +100,10 @@ class Course::Assessment::ProgrammingEvaluationService
 
   private
 
-  def initialize(question_attr, package, timeout)
-    @language = question_attr['language']
-    @memory_limit = question_attr['memory_limit'] || MEMORY_LIMIT
-    @time_limit = if question_attr['time_limit']
-                    [question_attr['time_limit'], question_attr['max_timeout_limit']].min
-                  else
-                    question_attr['max_timeout_limit']
-                  end
+  def initialize(language, memory_limit, time_limit, max_time_limit, package, timeout)
+    @language = language
+    @memory_limit = memory_limit || MEMORY_LIMIT
+    @time_limit = time_limit ? [time_limit, max_time_limit].min : max_time_limit
     @package = package
     @timeout = timeout || DEFAULT_TIMEOUT
   end

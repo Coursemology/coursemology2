@@ -5,9 +5,6 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   DEFAULT_TIMEOUT = 5.minutes
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
 
-  # Default programming timeout limit, only will be used if course is undefined
-  DEFAULT_CPU_TIMEOUT = 30
-
   # Represents a result of evaluating an answer.
   Result = Struct.new(:stdout, :stderr, :evaluation_results, :exit_code, :evaluation_id) do
     # Checks if the evaluation errored.
@@ -93,17 +90,12 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
 
   private
 
-  def prog_timeout_lim(course)
-    course ? course.programming_timeout_limit : DEFAULT_CPU_TIMEOUT
-  end
-
   def initialize(course_title, question, answer, timeout)
     @question = question
     @answer = answer
-    @course = question.course
     @language = question.language
     @memory_limit = question.memory_limit || MEMORY_LIMIT
-    @time_limit = question.time_limit ? [question.time_limit, prog_timeout_lim(@course)].min : prog_timeout_lim(@course)
+    @time_limit = question.time_limit ? [question.time_limit, question.max_time_limit].min : question.max_time_limit
     @timeout = timeout || DEFAULT_TIMEOUT
 
     @answer_object = { api_version: 'latest',
