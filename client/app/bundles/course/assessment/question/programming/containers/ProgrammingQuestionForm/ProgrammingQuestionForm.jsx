@@ -61,7 +61,7 @@ function validation(data, pathOfKeysToData, intl) {
   const questionErrors = {};
   let hasError = false;
 
-  const HARD_TIME_LIMIT = data.get('max_timeout_limit');
+  const HARD_TIME_LIMIT = data.get('max_time_limit');
 
   // Check maximum grade
   const maximumGrade = data.get('maximum_grade');

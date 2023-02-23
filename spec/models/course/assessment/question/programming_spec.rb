@@ -23,88 +23,66 @@ RSpec.describe Course::Assessment::Question::Programming do
   let(:instance) { Instance.default }
   with_tenant(:instance) do
     describe 'validations' do
-      let(:settings1) { ActiveSupport::HashWithIndifferentAccess.new(programming_timeout_limit: 170) }
-      let(:settings2) { ActiveSupport::HashWithIndifferentAccess.new(course_assessments_component: settings1) }
-      let(:course) { create(:course, settings: settings2) }
+      let(:programming_max_time_limit_setting) do
+        ActiveSupport::HashWithIndifferentAccess.new(programming_max_time_limit: 170)
+      end
+      let(:assessments_component_setting) do
+        ActiveSupport::HashWithIndifferentAccess.new(course_assessments_component: programming_max_time_limit_setting)
+      end
+      let(:course) { create(:course, settings: assessments_component_setting) }
+      let(:time_limit) { nil }
+      let(:question_programming) { build(:course_assessment_question_programming, time_limit: time_limit) }
 
-      context 'when the time limit is set to be higher than the programming timeout limit set in course settings' do
-        let(:object1) do
-          Course::Assessment::Question::Programming.new(
-            time_limit: 171,
-            maximum_grade: 100,
-            language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
-            course: course
-          )
+      context 'when the time limit is set to be higher than the max programming time limit in course settings' do
+        let(:time_limit) { 171 }
+        before do
+          question_programming.max_time_limit = course.programming_max_time_limit
         end
+
         it 'is expected to be valid' do
-          expect(object1).to_not be_valid
+          expect(question_programming).to_not be_valid
         end
       end
 
       context 'when the time limit is not set to be an integer' do
-        let(:object2) do
-          Course::Assessment::Question::Programming.new(
-            time_limit: 'abcd',
-            maximum_grade: 100,
-            language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
-            course: course
-          )
+        let(:time_limit) { 'abcd' }
+        before do
+          question_programming.max_time_limit = course.programming_max_time_limit
         end
+
         it 'is expected to be invalid' do
-          expect(object2).to_not be_valid
+          question_programming.max_time_limit = course.programming_max_time_limit
+          expect(question_programming).to_not be_valid
         end
       end
 
-      context 'when the time limit is set to be zero' do
-        let(:object3) do
-          Course::Assessment::Question::Programming.new(
-            time_limit: 0,
-            maximum_grade: 100,
-            language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
-            course: course
-          )
-        end
+      context 'when the time limit is set to zero' do
+        let(:time_limit) { 0 }
+
         it 'is expected to be invalid' do
-          expect(object3).to_not be_valid
+          expect(question_programming).to_not be_valid
         end
       end
 
-      context 'when the time limit is set to be within the stipulated range (between 0 and upper bound)' do
-        let(:object4) do
-          Course::Assessment::Question::Programming.new(
-            time_limit: 170,
-            maximum_grade: 100,
-            language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
-            course: course
-          )
+      context 'when the time limit is set to be within the stipulated range (between 0 and an upper bound)' do
+        let(:time_limit) { 170 }
+        before do
+          question_programming.max_time_limit = course.programming_max_time_limit
         end
+
         it 'is expected to be valid (upper bound checked)' do
-          expect(object4).to be_valid
+          expect(question_programming).to be_valid
         end
 
-        let(:object5) do
-          Course::Assessment::Question::Programming.new(
-            time_limit: 1,
-            maximum_grade: 100,
-            language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
-            course: course
-          )
-        end
         it 'is expected to be valid (lower bound checked)' do
-          expect(object5).to be_valid
+          question_programming.time_limit = 1
+          expect(question_programming).to be_valid
         end
       end
 
-      context 'when the time limit is not set on the question' do
-        let(:object6) do
-          Course::Assessment::Question::Programming.new(
-            maximum_grade: 100,
-            language: Coursemology::Polyglot::Language::Python::Python3Point10.instance,
-            course: course
-          )
-        end
+      context 'when the time limit is not set for the question' do
         it 'is expected to be valid' do
-          expect(object6).to be_valid
+          expect(question_programming).to be_valid
         end
       end
     end

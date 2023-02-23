@@ -38,13 +38,12 @@ class Course::Assessment::Question::ProgrammingImportService
     @attachment = attachment
   end
 
-  DEFAULT_CPU_TIMEOUT = 30
-
   # Imports the templates and tests from the given package.
   #
   # @param [Course::Assessment::ProgrammingPackage] package The package to import.
   def import_from_package(package)
     raise InvalidDataError unless package.valid?
+
     # Must extract template files before replacing them with the solution files.
     template_files = package.submission_files
     package.replace_submission_with_solution
@@ -52,11 +51,8 @@ class Course::Assessment::Question::ProgrammingImportService
     evaluation_result = evaluate_package(package)
 
     raise evaluation_result if evaluation_result.error?
-    save!(template_files, evaluation_result)
-  end
 
-  def max_programming_timeout_limit(course)
-    course ? course.programming_timeout_limit : DEFAULT_CPU_TIMEOUT
+    save!(template_files, evaluation_result)
   end
 
   # Evaluates the package to obtain the set of tests.
@@ -64,14 +60,8 @@ class Course::Assessment::Question::ProgrammingImportService
   # @param [Course::Assessment::ProgrammingPackage] package The package to import.
   # @return [Course::Assessment::ProgrammingEvaluationService::Result]
   def evaluate_package(package)
-    question_attr = {
-      'language' => @question.language,
-      'memory_limit' => @question.memory_limit,
-      'time_limit' => @question.time_limit,
-      'max_timeout_limit' => max_programming_timeout_limit(@question.course)
-    }
     Course::Assessment::ProgrammingEvaluationService.
-      execute(question_attr, package.path)
+      execute(@question.language, @question.memory_limit, @question.time_limit, @question.max_time_limit, package.path)
   end
 
   # Saves the templates and tests to the question.

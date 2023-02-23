@@ -6,8 +6,6 @@ class Course < ApplicationRecord
   include TimeZoneConcern
   include Generic::CollectionConcern
 
-  DEFAULT_CPU_TIMEOUT = 30
-
   acts_as_tenant :instance, inverse_of: :courses
   has_settings_on :settings
   mount_uploader :logo, ImageUploader
@@ -28,7 +26,6 @@ class Course < ApplicationRecord
   validates :updater, presence: true
   validates :instance, presence: true
   validates :conditional_satisfiability_evaluation_time, presence: true
-  validates :programming_timeout_limit, numericality: { greater_than_or_equal_to: 0 }
 
   enum default_timeline_algorithm: CourseUser.timeline_algorithms
 
@@ -228,12 +225,13 @@ class Course < ApplicationRecord
     settings(:course_assessments_component).allow_mrq_options_randomization = option
   end
 
-  def programming_timeout_limit
-    settings(:course_assessments_component).programming_timeout_limit || DEFAULT_CPU_TIMEOUT
+  # Setting to allow customization of max CPU time limit for programming question
+  def programming_max_time_limit
+    settings(:course_assessments_component).programming_max_time_limit || 30.seconds
   end
 
-  def programming_timeout_limit=(time)
-    settings(:course_assessments_component).programming_timeout_limit = time
+  def programming_max_time_limit=(time)
+    settings(:course_assessments_component).programming_max_time_limit = time
   end
 
   def codaveri_itsp_enabled?

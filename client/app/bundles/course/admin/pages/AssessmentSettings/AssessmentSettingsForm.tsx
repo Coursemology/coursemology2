@@ -24,11 +24,11 @@ const AssessmentsSettingsForm = (
 ): JSX.Element => {
   const { t } = useTranslation();
   const validationSchema = yup.object({
-    programmingTimeoutLimit: yup
+    maxProgrammingTimeLimit: yup
       .number()
       .nullable()
-      .typeError(t(translations.numberRequired))
-      .min(0, t(translations.positiveNumberRequired)),
+      .typeError(t(translations.maxTimeLimitRequired))
+      .min(1, t(translations.positiveMaxTimeLimitRequired)),
   });
 
   return (
@@ -104,22 +104,22 @@ const AssessmentsSettingsForm = (
               />
             </Subsection>
 
-            {props.data.programmingTimeoutLimit && (
+            {props.data.maxProgrammingTimeLimit && (
               <Subsection
                 className="!mt-8"
                 spaced
-                title={t(translations.programmingTimeoutLimit)}
+                title={t(translations.maxProgrammingTimeLimit)}
               >
                 <Controller
                   control={control}
-                  name="programmingTimeoutLimit"
+                  name="maxProgrammingTimeLimit"
                   render={({ field, fieldState }): JSX.Element => (
                     <FormTextField
                       disabled={props.disabled}
                       field={field}
                       fieldState={fieldState}
                       fullWidth
-                      label={t(translations.programmingTimeoutLimit)}
+                      label={t(translations.maxProgrammingTimeLimit)}
                       type="number"
                       variant="filled"
                     />

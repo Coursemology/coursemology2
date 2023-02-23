@@ -5,7 +5,7 @@ export interface AssessmentSettingsData {
   allowMrqOptionsRandomization: boolean;
   categories: AssessmentCategory[];
   canCreateCategories: boolean;
-  programmingTimeoutLimit?: number;
+  maxProgrammingTimeLimit?: number;
 }
 
 export interface AssessmentCategory {
@@ -61,7 +61,7 @@ export interface AssessmentSettingsPostData {
     show_stdout_and_stderr?: AssessmentSettingsData['showStdoutAndStderr'];
     allow_randomization?: AssessmentSettingsData['allowRandomization'];
     allow_mrq_options_randomization?: AssessmentSettingsData['allowMrqOptionsRandomization'];
-    programming_timeout_limit: AssessmentSettingsData['programmingTimeoutLimit'];
+    programming_max_time_limit: AssessmentSettingsData['maxProgrammingTimeLimit'];
     assessment_categories_attributes?: {
       id: AssessmentCategory['id'];
       title: AssessmentCategory['title'];

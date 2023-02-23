@@ -2,7 +2,7 @@
 json.question do
   json.(@programming_question, :id, :title, :staff_only_comments, :maximum_grade,
         :language_id, :memory_limit, :time_limit)
-  json.max_timeout_limit @programming_question.max_timeout_limit(current_course)
+  json.max_time_limit @programming_question.max_time_limit
   json.description format_ckeditor_rich_text(@programming_question.description)
   json.languages Coursemology::Polyglot::Language.all.order(:name) do |lang|
     json.(lang, :id, :name)

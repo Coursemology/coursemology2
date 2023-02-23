@@ -5,8 +5,8 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   # The table name for this model is singular.
   self.table_name = table_name.singularize
 
-  # Default programming timeout limit, only will be used if course is undefined
-  DEFAULT_CPU_TIMEOUT = 30
+  # Maximum CPU time a programming question can allow before the evaluation gets killed.
+  DEFAULT_CPU_TIMEOUT = 30.seconds
 
   # Maximum memory (in MB) the programming question can allow.
   # Do NOT change this to num.megabytes as the ProgramingEvaluationService expects it in MB.
@@ -15,9 +15,11 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   MEMORY_LIMIT = nil
 
   include DuplicationStateTrackingConcern
-  acts_as :question, class_name: Course::Assessment::Question.name
-  attr_accessor :course
+  attr_accessor :max_time_limit
 
+  acts_as :question, class_name: Course::Assessment::Question.name
+
+  after_initialize :set_defaults
   before_save :process_package, unless: :skip_process_package?
   before_validation :assign_template_attributes
   before_validation :assign_test_case_attributes
@@ -30,7 +32,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   validates :import_job_id, uniqueness: { allow_nil: true, if: :import_job_id_changed? }
   validates :language, presence: true
 
-  validate -> { validate_time_limit(course) }
+  validate -> { validate_time_limit }
   validate :validate_codaveri_question
 
   belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil, optional: true
@@ -47,10 +49,6 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   def edit_online?
     package_type == 'online_editor'
-  end
-
-  def max_timeout_limit(course)
-    course ? course.programming_timeout_limit : DEFAULT_CPU_TIMEOUT
   end
 
   def auto_grader
@@ -158,6 +156,10 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   private
 
+  def set_defaults
+    self.max_time_limit = DEFAULT_CPU_TIMEOUT
+  end
+
   # Create new package or re-evaluate the old package.
   def process_package # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if attachment_changed?
@@ -171,7 +173,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   def evaluate_package
     execute_after_commit do
       import_job =
-        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment, course)
+        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment)
       update_column(:import_job_id, import_job.job_id)
     end
   end
@@ -187,7 +189,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     execute_after_commit do
       new_attachment.save!
       import_job =
-        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, new_attachment, course)
+        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, new_attachment)
       update_column(:import_job_id, import_job.job_id)
     end
   end
@@ -216,11 +218,12 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   end
 
   # time limit validation during duplication is skipped, and time limit is allowed to be nil
-  def validate_time_limit(course)
-    time_limit_within_max_interval = time_limit && time_limit > 0 && time_limit <= max_timeout_limit(course)
-    return if duplicating? || time_limit.nil? || time_limit_within_max_interval
+  def validate_time_limit
+    return if duplicating? ||
+              time_limit.nil? ||
+              (time_limit > 0 && time_limit <= max_time_limit)
 
-    errors.add(:base, "Time limit #{time_limit} need to be a positive integer at most #{max_timeout_limit(course)}")
+    errors.add(:base, "Time limit needs to be a positive integer less than or equal to #{max_time_limit} seconds")
 
     nil
   end
@@ -238,8 +241,6 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
                  'Codaveri component is deactivated.'\
                  'Activate it in the course setting or switch this question into a non-codaveri type.')
     end
-
-    nil
   end
 
   def codaveri_language_whitelist

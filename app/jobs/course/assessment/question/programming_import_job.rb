@@ -10,8 +10,7 @@ class Course::Assessment::Question::ProgrammingImportJob < ApplicationJob
   # @param [Course::Assessment::Question::Programming] question The programming question to
   #   import the package to.
   # @param [Attachment] attachment The attachment containing the package.
-  def perform_tracked(question, attachment, course = nil)
-    question.course = course if course
+  def perform_tracked(question, attachment)
     ActsAsTenant.without_tenant { perform_import(question, attachment) }
   end
 
