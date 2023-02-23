@@ -66,7 +66,7 @@ RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
     end
 
     it 'returns the result of evaluating' do
-      result = subject.execute(question, answer.actable)
+      result = subject.execute(course.title, question, answer.actable)
       expect(result).to be_a(Course::Assessment::ProgrammingCodaveriEvaluationService::Result)
     end
 
@@ -74,14 +74,14 @@ RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
       it 'raises a Timeout::Error' do
         expect do
           # Pass in a non-zero timeout as Ruby's Timeout treats 0 as infinite.
-          subject.execute(question, answer.actable, 0.0000000000001.seconds)
+          subject.execute(course.title, question, answer.actable, 0.0000000000001.seconds)
         end.to raise_error(Timeout::Error)
       end
     end
 
     describe '#construct_grading_object' do
       let(:service_instance) do
-        subject.new(question, answer.actable, 1)
+        subject.new(course.title, question, answer.actable, 1)
       end
       it 'constructs API payload correctly' do
         test_payload_object = service_instance.send(:construct_grading_object)
@@ -95,6 +95,7 @@ RSpec.describe Course::Assessment::ProgrammingCodaveriEvaluationService do
         expect(test_payload_object[:language_version]).to eq(actual_payload_object[:language_version])
         expect(test_payload_object[:files]).to eq(actual_payload_object[:files])
         expect(test_payload_object[:problem_id]).to eq(actual_payload_object[:problem_id])
+        expect(test_payload_object[:course_name]).to eq(course.title)
       end
     end
   end
