@@ -21,19 +21,20 @@ class Course::Assessment::Answer::ProgrammingCodaveriAutoGradingService < \
   def evaluate_answer(answer)
     question = answer.question.actable
     assessment = answer.submission.assessment
-    evaluation_result = evaluate_package(question, answer)
+    evaluation_result = evaluate_package(assessment.course.title, question, answer)
     build_result(question, evaluation_result,
                  graded_test_case_types: assessment.graded_test_case_types)
   end
 
   # Evaluates the package to obtain the set of tests.
   #
+  # @param [string] course_title Title of the course.
   # @param [Course::Assessment::Question::Programming] question The programming question being
   #   graded.
   # @param [Course::Assessment::Answer::Programming] answer The answer specified by the student.
   # @return [Course::Assessment::ProgrammingCodaveriEvaluationService::Result]
-  def evaluate_package(question, answer)
-    Course::Assessment::ProgrammingCodaveriEvaluationService.execute(question, answer)
+  def evaluate_package(course_title, question, answer)
+    Course::Assessment::ProgrammingCodaveriEvaluationService.execute(course_title, question, answer)
   end
 
   # Builds the result of the auto grading from the codevari evaluation result.

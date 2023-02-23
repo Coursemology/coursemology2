@@ -77,6 +77,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingCodaveriFeedbackService do
           expect(test_payload_object[:language_version]).to eq(actual_payload_object[:language_version])
           expect(test_payload_object[:files_student]).to eq(actual_payload_object[:files_student])
           expect(test_payload_object[:problem_id]).to eq(actual_payload_object[:problem_id])
+          expect(test_payload_object[:course_name]).to eq(course.title)
         end
       end
 

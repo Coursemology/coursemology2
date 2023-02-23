@@ -68,14 +68,15 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   class << self
     # Executes the provided answer.
     #
+    # @param [string] course_title Title of the course.
     # @param [Course::Assessment::Question::Programming] question The programming question being
     #   graded.
     # @param [Course::Assessment::Answer::Programming] answer The answer specified by the student.
     # @return [Course::Assessment::ProgrammingCodaveriEvaluationService::Result]
     #
     # @raise [Timeout::Error] When the operation times out.
-    def execute(question, answer, timeout = nil)
-      new(question, answer, timeout).execute
+    def execute(course_title, question, answer, timeout = nil)
+      new(course_title, question, answer, timeout).execute
     end
   end
 
@@ -90,7 +91,7 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
 
   private
 
-  def initialize(question, answer, timeout)
+  def initialize(course_title, question, answer, timeout)
     @question = question
     @answer = answer
     @language = question.language
@@ -101,7 +102,8 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     @answer_object = { api_version: 'latest',
                        language_version: { language: '', version: '' },
                        files: [],
-                       problem_id: '' }
+                       problem_id: '',
+                       course_name: course_title }
 
     @codaveri_evaluation_results = nil
   end

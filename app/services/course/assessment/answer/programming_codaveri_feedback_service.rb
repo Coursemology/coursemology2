@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
   def initialize(assessment, question, answer)
+    @course = assessment.course
     @assessment = assessment
     @question = question
     @answer = answer
@@ -10,7 +11,8 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
                        user_id: answer.submission.creator_id.to_s,
                        language_version: { language: '', version: '' },
                        files_student: [],
-                       problem_id: '' }
+                       problem_id: '',
+                       course_name: @course.title }
   end
 
   def run_codaveri_feedback_service
@@ -35,7 +37,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
     @answer_object[:language_version][:language] = @question.polyglot_language_name
     @answer_object[:language_version][:version] = @question.polyglot_language_version
 
-    @answer_object[:is_only_itsp] = true if @assessment.course.codaveri_itsp_enabled?
+    @answer_object[:is_only_itsp] = true if @course.codaveri_itsp_enabled?
 
     @answer_files.each do |file|
       file_template = default_codaveri_student_file_template
