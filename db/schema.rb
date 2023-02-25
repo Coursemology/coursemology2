@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_15_054448) do
+ActiveRecord::Schema.define(version: 2023_02_24_075953) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -1180,14 +1180,13 @@ ActiveRecord::Schema.define(version: 2023_01_15_054448) do
     t.index ["updater_id"], name: "fk__courses_updater_id"
   end
 
-  create_table "duplication_traceable_assessments", force: :cascade do |t|
-    t.bigint "assessment_id", null: false
-    t.index ["assessment_id"], name: "fk__duplication_traceable_assessments_assessment_id"
-  end
-
   create_table "duplication_traceable_courses", force: :cascade do |t|
     t.bigint "course_id", null: false
     t.index ["course_id"], name: "fk__duplication_traceable_courses_course_id"
+  end
+
+  create_table "duplication_traceable_lesson_plan_items", force: :cascade do |t|
+    t.integer "lesson_plan_item_id"
   end
 
   create_table "duplication_traceables", force: :cascade do |t|
@@ -1557,8 +1556,8 @@ ActiveRecord::Schema.define(version: 2023_01_15_054448) do
   add_foreign_key "courses", "instances", name: "fk_courses_instance_id"
   add_foreign_key "courses", "users", column: "creator_id", name: "fk_courses_creator_id"
   add_foreign_key "courses", "users", column: "updater_id", name: "fk_courses_updater_id"
-  add_foreign_key "duplication_traceable_assessments", "course_assessments", column: "assessment_id"
   add_foreign_key "duplication_traceable_courses", "courses"
+  add_foreign_key "duplication_traceable_lesson_plan_items", "course_lesson_plan_items", column: "lesson_plan_item_id"
   add_foreign_key "duplication_traceables", "users", column: "creator_id"
   add_foreign_key "duplication_traceables", "users", column: "updater_id"
   add_foreign_key "generic_announcements", "instances", name: "fk_generic_announcements_instance_id"
