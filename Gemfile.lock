@@ -360,7 +360,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    lograge-sql (2.0.0)
+    lograge-sql (2.1.0)
       activerecord (>= 5, < 7.1)
       lograge (~> 0.11)
     lol_dba (2.4.0)
