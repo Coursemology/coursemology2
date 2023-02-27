@@ -64,7 +64,7 @@
     "mirror-creator": "1.1.0",
     "mkdirp": "^1.0.4",
     "moment": "^2.29.4",
-    "moment-timezone": "^0.5.40",
+    "moment-timezone": "^0.5.41",
     "mui-datatables": "^4.3.0",
     "prop-types": "^15.8.0",
     "rc-slider": "^9.7.5",
