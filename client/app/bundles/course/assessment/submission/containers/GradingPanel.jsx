@@ -139,7 +139,7 @@ class VisibleGradingPanel extends Component {
     const questionGrading = this.props.grading.questions[question.id];
     const questionGrade =
       questionGrading && questionGrading.grade !== null
-        ? questionGrading.grade
+        ? parseFloat(questionGrading.grade) || ''
         : '';
     const grader = questionGrading && questionGrading.grader;
 
