@@ -41,7 +41,7 @@ class VisibleGradingPanel extends Component {
   static calculateTotalGrade(grades) {
     return Object.values(grades)
       .filter((grade) => grade !== null)
-      .reduce((acc, b) => acc + b.grade, 0);
+      .reduce((acc, b) => acc + (parseFloat(b.grade) || 0), 0);
   }
 
   static renderCourseUserLink(courseUser) {
