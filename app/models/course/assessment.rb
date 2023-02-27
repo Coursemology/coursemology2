@@ -68,8 +68,6 @@ class Course::Assessment < ApplicationRecord
                                        through: :question_bundles
   has_many :question_bundle_assignments, class_name: Course::Assessment::QuestionBundleAssignment.name,
                                          inverse_of: :assessment, dependent: :destroy
-  has_one :duplication_traceable, class_name: DuplicationTraceable::Assessment.name,
-                                  inverse_of: :assessment, dependent: :destroy
 
   validate :tab_in_same_course
   validate :selected_test_type_for_grading
@@ -129,8 +127,6 @@ class Course::Assessment < ApplicationRecord
   scope :with_default_reference_time, (lambda do
     joins(lesson_plan_item: :default_reference_time)
   end)
-
-  delegate :source, :source=, to: :duplication_traceable, allow_nil: true
 
   def self.use_relative_model_naming?
     true

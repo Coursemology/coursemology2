@@ -2,6 +2,7 @@ class RenameAndChangeAssessmentIdIntoLessonPlanItemsId < ActiveRecord::Migration
   def up
     add_column :duplication_traceable_assessments, :lesson_plan_item_id, :integer
 
+    # try writing in ActiveRecord instead of SQL
     # assign proper lesson plan items id to each of the assessment id
     exec_query(<<-SQL)
       UPDATE duplication_traceable_assessments AS dta
@@ -16,7 +17,6 @@ class RenameAndChangeAssessmentIdIntoLessonPlanItemsId < ActiveRecord::Migration
           ON dta1.assessment_id = clpi1.actable_id
         ) 
       ) AS clpi
-      WHERE dta.id = clpi.id 
     SQL
 
     # remove the column assessment_id since it's no longer needed at this point
@@ -43,7 +43,6 @@ class RenameAndChangeAssessmentIdIntoLessonPlanItemsId < ActiveRecord::Migration
           ON dtl1.lesson_plan_item_id = clpi1.id
         )
       ) AS clpi
-      WHERE dtl.id = clpi.id
     SQL
     remove_column :duplication_traceable_lesson_plan_items, :lesson_plan_item_id
     rename_table :duplication_traceable_lesson_plan_items, :duplication_traceable_assessments
