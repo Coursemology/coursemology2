@@ -7,25 +7,55 @@ import PropTypes from 'prop-types';
 import actionTypes from '../constants';
 import { questionGradeShape, questionShape } from '../propTypes';
 
+const GRADE_STEP = 1;
+
 const styles = {
   container: {
     marginTop: 20,
   },
 };
 
+/**
+ * Checks if the given value is a valid decimal of the form `0.00`.
+ *
+ * @param {string} value the string to be checked
+ * @returns `true` if `value` is a valid decimal
+ */
+const isValidDecimal = (value) => /^\d*(\.\d?)?$/.test(value);
+
 class VisibleQuestionGrade extends Component {
-  handleGradingField(value) {
+  processValue(value, drafting) {
     const { id, question, updateGrade, bonusAwarded } = this.props;
+
+    if (value.trim() === '') {
+      updateGrade(id, null, bonusAwarded);
+      return;
+    }
+
+    if (drafting && !isValidDecimal(value)) return;
+
     const maxGrade = question.maximumGrade;
     const parsedValue = parseFloat(value);
 
-    if (Number.isNaN(parsedValue) || parsedValue < 0) {
-      updateGrade(id, 0, bonusAwarded);
-    } else if (parsedValue > maxGrade) {
+    if (!drafting && (Number.isNaN(parsedValue) || parsedValue < 0)) {
+      updateGrade(id, null, bonusAwarded);
+      return;
+    }
+
+    if (parsedValue >= maxGrade) {
       updateGrade(id, maxGrade, bonusAwarded);
     } else {
-      updateGrade(id, parseFloat(parsedValue.toFixed(1)), bonusAwarded);
+      updateGrade(id, drafting ? value : parsedValue, bonusAwarded);
     }
+  }
+
+  stepGrade(delta) {
+    const { id, question, grading, updateGrade, bonusAwarded } = this.props;
+
+    const maxGrade = question.maximumGrade;
+    const parsedValue = parseFloat(grading.grade) || 0;
+    const newGrade = Math.max(Math.min(parsedValue + delta, maxGrade), 0);
+    updateGrade(id, newGrade, bonusAwarded);
   }
 
   renderQuestionGrade() {
@@ -45,17 +75,21 @@ class VisibleQuestionGrade extends Component {
     return (
       <div style={{ display: 'inline-block', paddingLeft: 10 }}>
         <input
-          ref={(ref) => {
-            this.inputRef = ref;
-          }}
           className="grade"
-          max={maxGrade}
-          min={0}
-          onChange={(e) => this.handleGradingField(e.target.value)}
-          onWheel={() => this.inputRef.blur()}
-          step={1}
+          onBlur={(e) => this.processValue(e.target.value)}
+          onChange={(e) => this.processValue(e.target.value, true)}
+          onKeyDown={(e) => {
+            if (e.key === 'ArrowUp') {
+              e.preventDefault();
+              this.stepGrade(GRADE_STEP);
+            }
+
+            if (e.key === 'ArrowDown') {
+              e.preventDefault();
+              this.stepGrade(-GRADE_STEP);
+            }
+          }}
           style={{ width: 100 }}
-          type="number"
           value={initialGrade === null ? '' : initialGrade}
         />
         {` / ${maxGrade}`}
