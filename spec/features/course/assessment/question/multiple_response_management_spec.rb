@@ -13,104 +13,63 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
       let(:user) { create(:course_manager, course: course).user }
 
       scenario 'I can switch MCQ to MRQ, and back to MCQ, for a new question' do
-        skip 'Flaky tests'
         visit course_assessment_path(course, assessment)
-        wait_for_page
         click_on 'New Question'
         new_mcq_page = window_opened_by { click_link 'Multiple Choice (MCQ)' }
 
         within_window new_mcq_page do
-          wait_for_page
-          expect(page).to have_text(
-            I18n.t('course.assessment.question.multiple_responses.new.multiple_choice_header')
-          )
+          click_on 'Convert to Multiple Response (MRQ)'
+          expect(page).to have_text('Responses')
 
-          # Switch MCQ to MRQ
-          click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mrq')
-          expect(page).to have_text(
-            I18n.t('course.assessment.question.multiple_responses.new.multiple_response_header')
-          )
-
-          # Switch MRQ to MCQ
-          click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
-          expect(page).to have_text(
-            I18n.t('course.assessment.question.multiple_responses.new.multiple_choice_header')
-          )
+          click_on 'Convert to Multiple Choice (MCQ)'
+          expect(page).to have_text('Choices')
         end
       end
 
-      scenario 'I can switch MRQ to MCQ, and back to MRQ, type for a new question' do
-        skip 'Flaky tests'
+      scenario 'I can switch MRQ to MCQ, and back to MRQ, for a new question' do
         visit course_assessment_path(course, assessment)
-        wait_for_page
         click_on 'New Question'
         new_mrq_page = window_opened_by { click_link 'Multiple Response (MRQ)' }
 
         within_window new_mrq_page do
-          wait_for_page
-          expect(page).to have_text(
-            I18n.t('course.assessment.question.multiple_responses.new.multiple_response_header')
-          )
+          click_on 'Convert to Multiple Choice (MCQ)'
+          expect(page).to have_text('Choices')
 
-          # Switch MRQ to MCQ
-          click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mcq')
-          expect(page).to have_text(
-            I18n.t('course.assessment.question.multiple_responses.new.multiple_choice_header')
-          )
-
-          # Switch MCQ to MRQ
-          click_button I18n.t('course.assessment.question.multiple_responses.switch_question_type_button.switch_to_mrq')
-          expect(page).to have_text(
-            I18n.t('course.assessment.question.multiple_responses.new.multiple_response_header')
-          )
+          click_on 'Convert to Multiple Response (MRQ)'
+          expect(page).to have_text('Responses')
         end
       end
 
       scenario 'I can create a new multiple response question' do
-        skip 'Flaky tests'
         skill = create(:course_assessment_skill, course: course)
         visit course_assessment_path(course, assessment)
-        wait_for_page
         click_on 'New Question'
         new_mrq_page = window_opened_by { click_link 'Multiple Response (MRQ)' }
 
         within_window new_mrq_page do
-          expect(current_path).to eq(
-            new_course_assessment_question_multiple_response_path(course, assessment)
-          )
-          wait_for_page
-          expect(page).to have_text(
-            I18n.t('course.assessment.question.multiple_responses.new.multiple_response_header')
-          )
-
           question_attributes = attributes_for(:course_assessment_question_multiple_response)
           fill_in 'title', with: question_attributes[:title]
-          fill_in_rails_summernote('.question_multiple_response_description', question_attributes[:description])
-          fill_in_rails_summernote('.question_multiple_response_staff_only_comments',
-                                   question_attributes[:staff_only_comments])
-          fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+          fill_in_react_ck 'textarea[name=description]', question_attributes[:description]
+          fill_in_react_ck 'textarea[name=staffOnlyComments]', question_attributes[:staff_only_comments]
+          fill_in 'maximumGrade', with: question_attributes[:maximum_grade]
 
-          show_skills = "$('select[name=\"question_multiple_response[question_assessment][skill_ids][]\"]').show()"
-          page.execute_script show_skills
-          within find_field('question_multiple_response[question_assessment][skill_ids][]') do
-            select skill.title
+          find_field('Skills').click
+          find('li', text: skill.title).click
+
+          click_on 'Add a new response'
+
+          within find_all('section', text: 'response').last do
+            correct_option_attributes = attributes_for(:course_assessment_question_multiple_response_option, :correct)
+            fill_in 'Response', with: correct_option_attributes[:option]
+            fill_in_react_ck 'textarea[name=explanation]', correct_option_attributes[:explanation]
+            correct_checkbox = first('input[type=checkbox]', visible: false)
+            correct_checkbox.check
           end
 
-          # Add an option
-          correct_option_attributes =
-            attributes_for(:course_assessment_question_multiple_response_option, :correct)
-          within find('#new_question_multiple_response_option') do
-            fill_in_rails_summernote '.question_multiple_response_options_option',
-                                     correct_option_attributes[:option]
-            fill_in_rails_summernote '.question_multiple_response_options_explanation',
-                                     correct_option_attributes[:explanation]
-            check first('input[type="checkbox"]')[:name]
-          end
-          click_button I18n.t('helpers.buttons.create')
+          click_button 'Save changes'
+          sleep 0.2
 
           question_created = assessment.questions.first.specific
-          expect(page).
-            to have_selector('div', text: I18n.t('course.assessment.question.multiple_responses.create.success'))
           expect(question_created).not_to be_multiple_choice
           expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
           expect(question_created.options).to be_present
@@ -118,60 +77,41 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
       end
 
       scenario 'I can create a new multiple choice question' do
-        skip 'Flaky tests'
         visit course_assessment_path(course, assessment)
-        wait_for_page
         click_on 'New Question'
         new_mcq_page = window_opened_by { click_link 'Multiple Choice (MCQ)' }
 
         within_window new_mcq_page do
-          expect(current_path).to eq(
-            new_course_assessment_question_multiple_response_path(course, assessment)
-          )
-          wait_for_page
-          expect(page).to have_text(
-            I18n.t('course.assessment.question.multiple_responses.new.multiple_choice_header')
-          )
           question_attributes = attributes_for(:course_assessment_question_multiple_response)
           fill_in 'title', with: question_attributes[:title]
-          fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+          fill_in 'maximumGrade', with: question_attributes[:maximum_grade]
 
-          # Fill in the option and explanation first or form can't be submitted when js is on.
-          correct_option_attributes =
-            attributes_for(:course_assessment_question_multiple_response_option, :correct)
-          within find('#new_question_multiple_response_option') do
-            fill_in_rails_summernote '.question_multiple_response_options_option',
-                                     correct_option_attributes[:option]
-            fill_in_rails_summernote '.question_multiple_response_options_explanation',
-                                     correct_option_attributes[:explanation]
+          click_on 'Add a new choice'
+
+          choice_section = find_all('section', text: 'choice').last
+
+          within choice_section do
+            correct_option_attributes = attributes_for(:course_assessment_question_multiple_response_option, :correct)
+            fill_in 'Choice', with: correct_option_attributes[:option]
+            fill_in_react_ck 'textarea[name=explanation]', correct_option_attributes[:explanation]
+            correct_checkbox = first('input[type=checkbox]', visible: false)
+            correct_checkbox.uncheck
           end
 
-          click_button I18n.t('helpers.buttons.create')
+          click_button 'Save changes'
+          sleep 0.2
 
-          # Cannot create multiple choice question without a correct option
-          expect(current_path).to eq(
-            course_assessment_question_multiple_responses_path(course, assessment)
-          )
-          expect(page).to have_text(
-            I18n.t('activerecord.errors.models.course/assessment/question/' \
-                   'multiple_response.attributes.options.no_correct_option')
-          )
+          expect(page).to have_text('You must specify at least one correct choice.')
 
-          # Create a correct option
-          within find('#new_question_multiple_response_option') do
-            fill_in_rails_summernote '.question_multiple_response_options_option',
-                                     correct_option_attributes[:option]
-            fill_in_rails_summernote '.question_multiple_response_options_explanation',
-                                     correct_option_attributes[:explanation]
-            check first('input[type="checkbox"]')[:name]
+          within choice_section do
+            correct_checkbox = first('input[type=checkbox]', visible: false)
+            correct_checkbox.check
           end
 
-          click_button I18n.t('helpers.buttons.create')
+          click_button 'Save changes'
+          sleep 0.2
 
-          expect(current_path).to eq(course_assessment_path(course, assessment))
           question_created = assessment.questions.first.specific
-          expect(page).
-            to have_selector('div', text: I18n.t('course.assessment.question.multiple_responses.create.success'))
           expect(question_created).to be_multiple_choice
           expect(question_created.options).to be_present
         end
@@ -215,8 +155,8 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         end
 
         click_button 'Save changes'
-
         sleep 0.2
+
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.options.count).to eq(options.count)
 
