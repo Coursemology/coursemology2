@@ -30,6 +30,6 @@ export default class UserEmailSubscriptionsAPI extends BaseCourseAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.courseId}/users/${this.getCourseUserId()}`;
+    return `/courses/${this.courseId}/users/${this.courseUserId}`;
   }
 }
