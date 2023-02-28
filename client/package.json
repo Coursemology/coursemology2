@@ -80,7 +80,7 @@
     "react-hook-form": "^7.43.1",
     "react-hot-keys": "^2.7.2",
     "react-image-crop": "^10.0.9",
-    "react-intl": "^6.2.7",
+    "react-intl": "^6.2.10",
     "react-player": "^2.11.0",
     "react-redux": "^8.0.4",
     "react-resizable": "^3.0.4",
