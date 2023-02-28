@@ -47,12 +47,12 @@ const McqMrqForm = <T extends 'new' | 'edit'>(
 
   const optionsRef = useRef<OptionsManagerRef>(null);
 
-  const prepareOptions = async (): Promise<
-    McqMrqData<T>['options'] | undefined
-  > => {
+  const prepareOptions = async (
+    skipGrading: boolean,
+  ): Promise<McqMrqData<T>['options'] | undefined> => {
     optionsRef.current?.resetErrors();
     const options = optionsRef.current?.getOptions() ?? [];
-    const errors = await validateOptions(options, data.mcqMrqType);
+    const errors = await validateOptions(options, data.mcqMrqType, skipGrading);
 
     if (errors) {
       optionsRef.current?.setErrors(errors);
@@ -65,7 +65,7 @@ const McqMrqForm = <T extends 'new' | 'edit'>(
   const handleSubmit = async (
     question: McqMrqData['question'],
   ): Promise<void> => {
-    const options = await prepareOptions();
+    const options = await prepareOptions(question.skipGrading);
     if (!options) return;
 
     const newData: McqMrqData = {
