@@ -7,7 +7,7 @@ import {
 import BaseCourseAPI from './Base';
 
 export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
-  _baseUrlPrefix: string = `/courses/${this.getCourseId()}`;
+  #baseUrlPrefix: string = `/courses/${this.getCourseId()}`;
 
   /**
    * Fetches all experience points records from a user
@@ -23,7 +23,9 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
     }>
   > {
     return this.getClient().get(
-      `${this._baseUrlPrefix}/users/${userId}/experience_points_records?filter[page_num]=${pageNum}`,
+      `${
+        this.#baseUrlPrefix
+      }/users/${userId}/experience_points_records?filter[page_num]=${pageNum}`,
     );
   }
 
@@ -35,7 +37,7 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
     recordId: number,
   ): Promise<AxiosResponse<ExperiencePointsRecordListData>> {
     const url = `${
-      this._baseUrlPrefix
+      this.#baseUrlPrefix
     }/users/${this.getCourseUserId()}/experience_points_records/${recordId}`;
     return this.getClient().patch(url, params);
   }
@@ -45,7 +47,7 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
    */
   delete(recordId: number): Promise<AxiosResponse<void>> {
     const url = `${
-      this._baseUrlPrefix
+      this.#baseUrlPrefix
     }/users/${this.getCourseUserId()}/experience_points_records/${recordId}`;
     return this.getClient().delete(url);
   }

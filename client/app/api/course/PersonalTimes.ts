@@ -4,7 +4,7 @@ import { PersonalTimeListData } from 'types/course/personalTimes';
 import BaseCourseAPI from './Base';
 
 export default class PersonalTimesAPI extends BaseCourseAPI {
-  _baseUrlPrefix: string = `/courses/${this.getCourseId()}`;
+  #baseUrlPrefix: string = `/courses/${this.getCourseId()}`;
 
   /**
    * Fetches personal time data from specified user
@@ -15,7 +15,7 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
     }>
   > {
     return this.getClient().get(
-      `${this._baseUrlPrefix}/users/${userId}/personal_times`,
+      `${this.#baseUrlPrefix}/users/${userId}/personal_times`,
     );
   }
 
@@ -28,7 +28,7 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
       personalTimes: PersonalTimeListData[];
     }>
   > {
-    const url = `${this._baseUrlPrefix}/users/${userId}/personal_times`;
+    const url = `${this.#baseUrlPrefix}/users/${userId}/personal_times`;
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -47,7 +47,7 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
     data: FormData,
     userId: number,
   ): Promise<AxiosResponse<PersonalTimeListData>> {
-    const url = `${this._baseUrlPrefix}/users/${userId}/personal_times`;
+    const url = `${this.#baseUrlPrefix}/users/${userId}/personal_times`;
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -65,7 +65,9 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
    * @returns new personal time data
    */
   delete(personalTimeId: number, userId: number): Promise<AxiosResponse<void>> {
-    const url = `${this._baseUrlPrefix}/users/${userId}/personal_times/${personalTimeId}`;
+    const url = `${
+      this.#baseUrlPrefix
+    }/users/${userId}/personal_times/${personalTimeId}`;
     return this.getClient().delete(url);
   }
 }
