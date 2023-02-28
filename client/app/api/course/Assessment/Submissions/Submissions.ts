@@ -9,7 +9,7 @@ import BaseCourseAPI from 'api/course/Base';
 
 export default class SubmissionsAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/assessments/submissions`;
+    return `/courses/${this.courseId}/assessments/submissions`;
   }
 
   /**

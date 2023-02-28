@@ -16,7 +16,7 @@ import BaseCourseAPI from '../Base';
 
 export default class ForumsAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/forums`;
+    return `/courses/${this.courseId}/forums`;
   }
 
   /**

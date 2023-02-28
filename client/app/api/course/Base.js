@@ -8,7 +8,7 @@ import BaseAPI from '../Base';
 /** Course level Api helpers should be defined here */
 export default class BaseCourseAPI extends BaseAPI {
   // eslint-disable-next-line class-methods-use-this
-  getCourseId() {
+  get courseId() {
     // TODO: Read the id from redux state or server context
     return getCourseIdFromUrl();
   }

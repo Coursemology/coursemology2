@@ -14,7 +14,7 @@ import BaseVideoAPI from './Base';
 
 export default class VideosAPI extends BaseVideoAPI {
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/videos`;
+    return `/courses/${this.courseId}/videos`;
   }
 
   /**

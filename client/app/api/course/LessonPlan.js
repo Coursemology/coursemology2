@@ -125,6 +125,6 @@ export default class LessonPlanAPI extends BaseCourseAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/lesson_plan`;
+    return `/courses/${this.courseId}/lesson_plan`;
   }
 }

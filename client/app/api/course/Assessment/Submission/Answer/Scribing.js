@@ -1,9 +1,3 @@
-import {
-  getAssessmentId,
-  getCourseId,
-  getSubmissionId,
-} from 'lib/helpers/url-helpers';
-
 import BaseAssessmentAPI from '../../Base';
 
 export default class ScribingsAPI extends BaseAssessmentAPI {
@@ -17,8 +11,7 @@ export default class ScribingsAPI extends BaseAssessmentAPI {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   get #urlPrefix() {
-    return `/courses/${getCourseId()}/assessments/${getAssessmentId()}/submissions/${getSubmissionId()}/answers`;
+    return `/courses/${this.courseId}/assessments/${this.assessmentId}/submissions/${this.submissionId}/answers`;
   }
 }

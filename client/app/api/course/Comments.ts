@@ -26,7 +26,7 @@ export default class CommentsAPI extends BaseCourseAPI {
    */
 
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/comments`;
+    return `/courses/${this.courseId}/comments`;
   }
 
   /**

@@ -10,7 +10,7 @@ import BaseCourseAPI from './Base';
 
 export default class AchievementsAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/achievements`;
+    return `/courses/${this.courseId}/achievements`;
   }
 
   /**

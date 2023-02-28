@@ -127,7 +127,7 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/assessments/${this.getAssessmentId()}/submissions`;
+    return `/courses/${this.courseId}/assessments/${this.assessmentId}/submissions`;
   }
 
   static appendFormData(formData, data, name) {

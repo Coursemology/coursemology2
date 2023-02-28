@@ -76,6 +76,6 @@ export default class DuplicationAPI extends BaseCourseAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/object_duplication`;
+    return `/courses/${this.courseId}/object_duplication`;
   }
 }

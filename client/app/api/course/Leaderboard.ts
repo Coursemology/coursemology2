@@ -5,7 +5,7 @@ import BaseCourseAPI from './Base';
 
 export default class LeaderboardsAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/leaderboard`;
+    return `/courses/${this.courseId}/leaderboard`;
   }
 
   /**

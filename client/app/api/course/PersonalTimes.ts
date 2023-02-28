@@ -4,7 +4,7 @@ import { PersonalTimeListData } from 'types/course/personalTimes';
 import BaseCourseAPI from './Base';
 
 export default class PersonalTimesAPI extends BaseCourseAPI {
-  #baseUrlPrefix: string = `/courses/${this.getCourseId()}`;
+  #baseUrlPrefix: string = `/courses/${this.courseId}`;
 
   /**
    * Fetches personal time data from specified user

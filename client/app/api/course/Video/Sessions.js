@@ -54,6 +54,8 @@ export default class SessionsAPI extends BaseVideoAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/videos/${this.getVideoId()}/submissions/${this.getVideoSubmissionId()}/sessions`;
+    return `/courses/${
+      this.courseId
+    }/videos/${this.getVideoId()}/submissions/${this.getVideoSubmissionId()}/sessions`;
   }
 }

@@ -7,7 +7,7 @@ import {
 import BaseCourseAPI from './Base';
 
 export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
-  #baseUrlPrefix: string = `/courses/${this.getCourseId()}`;
+  #baseUrlPrefix: string = `/courses/${this.courseId}`;
 
   /**
    * Fetches all experience points records from a user

@@ -89,6 +89,6 @@ export default class LearningMapAPI extends BaseCourseAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/learning_map`;
+    return `/courses/${this.courseId}/learning_map`;
   }
 }
