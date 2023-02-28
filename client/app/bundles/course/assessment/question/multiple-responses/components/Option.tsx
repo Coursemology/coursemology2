@@ -3,7 +3,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import { Delete, DragIndicator, Undo } from '@mui/icons-material';
 import { IconButton, Tooltip, Typography } from '@mui/material';
 import produce from 'immer';
-import { OptionEntity } from 'types/course/assessment/multiple-responses';
+import { OptionEntity } from 'types/course/assessment/question/multiple-responses';
 
 import Checkbox from 'lib/components/core/buttons/Checkbox';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';

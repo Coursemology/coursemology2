@@ -2,7 +2,7 @@ import { isNumber } from 'lodash';
 import {
   McqMrqFormData,
   OptionData,
-} from 'types/course/assessment/multiple-responses';
+} from 'types/course/assessment/question/multiple-responses';
 import {
   AnySchema,
   array,

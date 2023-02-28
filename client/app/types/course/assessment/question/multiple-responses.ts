@@ -1,4 +1,4 @@
-import { AvailableSkills, QuestionData, QuestionFormData } from './questions';
+import { AvailableSkills, QuestionData, QuestionFormData } from '../questions';
 
 interface OptionListData {
   id: number | string;
