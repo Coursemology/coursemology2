@@ -94,13 +94,21 @@ class Duplicator
           @duplicated_objects[key] = duplicate
           duplicate.initialize_duplicate(self, key)
 
-          # Set duplication source, if it's being tracked for this class.
+          # Set duplication source, if it's being tracked for this class or has its actable class being tracked
           if duplicate.class.method_defined?(:duplication_traceable)
             traceable = duplicate.class.reflect_on_association(:duplication_traceable).options[:class_name].constantize
             duplicate.duplication_traceable = traceable.initialize_with_dest(duplicate,
                                                                              source_id: source_object.id,
                                                                              creator: @options[:current_user],
                                                                              updater: @options[:current_user])
+          elsif duplicate.respond_to?(:acting_as) && duplicate.acting_as.class.method_defined?(:duplication_traceable)
+            dup_parent = duplicate.acting_as
+            traceable = dup_parent.class.reflect_on_association(:duplication_traceable).options[:class_name].constantize
+            dup_parent.duplication_traceable = traceable.initialize_with_dest(dup_parent,
+                                                                              source_id: source_object.acting_as.id,
+                                                                              creator: @options[:current_user],
+                                                                              updater: @options[:current_user])
+            byebug
           end
         end
       end
