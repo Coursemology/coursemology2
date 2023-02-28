@@ -52,12 +52,15 @@ const responsesSchema = array().of(optionSchema);
 
 const AT_LEAST_ONE_CORRECT_CHOICE_ERROR_NAME = 'at-least-one-correct-choice';
 
-const choicesSchema = responsesSchema.test(
-  AT_LEAST_ONE_CORRECT_CHOICE_ERROR_NAME,
-  translations.mustSpecifyAtLeastOneCorrectChoice,
-  (options?: { correct: OptionData['correct'] | undefined }[]) =>
-    options?.some((option) => option.correct) ?? false,
-);
+const choicesSchema = responsesSchema.when('$skipGrading', {
+  is: false,
+  then: responsesSchema.test(
+    AT_LEAST_ONE_CORRECT_CHOICE_ERROR_NAME,
+    translations.mustSpecifyAtLeastOneCorrectChoice,
+    (options?: { correct: OptionData['correct'] | undefined }[]) =>
+      options?.some((option) => option.correct) ?? false,
+  ),
+});
 
 const optionsSchema: Record<McqMrqFormData['mcqMrqType'], AnySchema> = {
   mcq: choicesSchema,
@@ -95,11 +98,12 @@ const getIndexAndKeyPath = <T extends string>(path: string): [number, T] => {
 export const validateOptions = async (
   options: OptionData[],
   type: McqMrqFormData['mcqMrqType'],
+  skipGrading: boolean,
 ): Promise<OptionsErrors | undefined> => {
   try {
     await optionsSchema[type].validate(options, {
       abortEarly: false,
-      context: { type },
+      context: { type, skipGrading },
     });
 
     return undefined;
