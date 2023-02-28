@@ -11,11 +11,11 @@ import BaseCourseAPI from './Base';
 
 export default class DisbursementAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/users/disburse_experience_points`;
+    return `/courses/${this.courseId}/users/disburse_experience_points`;
   }
 
   get #forumDisbursementUrlPrefix(): string {
-    return `/courses/${this.getCourseId()}/users/forum_disbursement`;
+    return `/courses/${this.courseId}/users/forum_disbursement`;
   }
 
   /**

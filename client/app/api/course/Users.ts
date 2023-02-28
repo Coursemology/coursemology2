@@ -14,7 +14,7 @@ import { TimelineData } from 'types/course/referenceTimelines';
 import BaseCourseAPI from './Base';
 
 export default class UsersAPI extends BaseCourseAPI {
-  #baseUrlPrefix: string = `/courses/${this.getCourseId()}`;
+  #baseUrlPrefix: string = `/courses/${this.courseId}`;
 
   /**
    * Fetches a list of users in a course.

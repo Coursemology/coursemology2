@@ -12,6 +12,6 @@ export default class UserNotificationsAPI extends BaseCourseAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/user_notifications`;
+    return `/courses/${this.courseId}/user_notifications`;
   }
 }

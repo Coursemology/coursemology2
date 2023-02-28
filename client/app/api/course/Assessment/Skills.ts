@@ -9,11 +9,11 @@ import BaseCourseAPI from './Base';
 
 export default class SkillsAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/assessments/skills`;
+    return `/courses/${this.courseId}/assessments/skills`;
   }
 
   get #branchUrlPrefix(): string {
-    return `/courses/${this.getCourseId()}/assessments/skill_branches`;
+    return `/courses/${this.courseId}/assessments/skill_branches`;
   }
 
   /**

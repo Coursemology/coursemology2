@@ -31,6 +31,6 @@ export default class SubmissionQuestionsAPI extends BaseAssessmentAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/assessments/${this.getAssessmentId()}/submission_questions`;
+    return `/courses/${this.courseId}/assessments/${this.assessmentId}/submission_questions`;
   }
 }

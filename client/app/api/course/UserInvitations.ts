@@ -12,7 +12,7 @@ import SubmissionsAPI from './Assessment/Submissions';
 import BaseCourseAPI from './Base';
 
 export default class UserInvitationsAPI extends BaseCourseAPI {
-  #baseUrlPrefix: string = `/courses/${this.getCourseId()}`;
+  #baseUrlPrefix: string = `/courses/${this.courseId}`;
 
   /**
    * Fetches data from user invitations index

@@ -12,6 +12,6 @@ export default class CategoriesAPI extends BaseCourseAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/categories`;
+    return `/courses/${this.courseId}/categories`;
   }
 }

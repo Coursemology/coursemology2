@@ -130,6 +130,6 @@ export default class ResponsesAPI extends BaseSurveyAPI {
 
   #getUrlPrefix(surveyId) {
     const id = surveyId || this.getSurveyId();
-    return `/courses/${this.getCourseId()}/surveys/${id}/responses`;
+    return `/courses/${this.courseId}/surveys/${id}/responses`;
   }
 }

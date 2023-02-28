@@ -82,6 +82,6 @@ export default class TopicsAPI extends BaseVideoAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/videos/${this.getVideoId()}/topics`;
+    return `/courses/${this.courseId}/videos/${this.getVideoId()}/topics`;
   }
 }

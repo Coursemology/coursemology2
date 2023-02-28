@@ -7,7 +7,7 @@ import BaseCourseAPI from '../Base';
 
 export default class FoldersAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/materials/folders`;
+    return `/courses/${this.courseId}/materials/folders`;
   }
 
   /**

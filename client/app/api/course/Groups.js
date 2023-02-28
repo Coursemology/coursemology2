@@ -156,6 +156,6 @@ export default class GroupsAPI extends BaseCourseAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/groups`;
+    return `/courses/${this.courseId}/groups`;
   }
 }

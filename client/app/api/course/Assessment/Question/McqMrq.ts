@@ -9,7 +9,7 @@ import BaseAPI from '../Base';
 
 export default class McqMrqAPI extends BaseAPI {
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/assessments/${this.getAssessmentId()}/question/multiple_responses`;
+    return `/courses/${this.courseId}/assessments/${this.assessmentId}/question/multiple_responses`;
   }
 
   fetchNewMrq(): APIResponse<McqMrqFormData<'new'>> {

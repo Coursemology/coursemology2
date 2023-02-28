@@ -11,7 +11,7 @@ import {
 import BaseCourseAPI from './Base';
 
 export default class UserInvitationsAPI extends BaseCourseAPI {
-  #baseUrlPrefix: string = `/courses/${this.getCourseId()}/enrol_requests`;
+  #baseUrlPrefix: string = `/courses/${this.courseId}/enrol_requests`;
 
   /**
    * Fetches data from enrol requests index

@@ -17,6 +17,6 @@ export default class MaterialsAPI extends BaseCourseAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/materials/folders`;
+    return `/courses/${this.courseId}/materials/folders`;
   }
 }

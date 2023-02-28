@@ -10,7 +10,7 @@ import BaseVideoAPI from './Base';
 export default class SubmissionsAPI extends BaseVideoAPI {
   #getUrlPrefix(videoId?: number): string {
     const id = videoId ?? this.getVideoId();
-    return `/courses/${this.getCourseId()}/videos/${id}/submissions`;
+    return `/courses/${this.courseId}/videos/${id}/submissions`;
   }
 
   /**

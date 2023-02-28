@@ -26,6 +26,6 @@ export default class PostsAPI extends BaseCourseAPI {
   }
 
   #getUrl(topicId, postId) {
-    return `/courses/${this.getCourseId()}/comments/${topicId}/posts/${postId}`;
+    return `/courses/${this.courseId}/comments/${topicId}/posts/${postId}`;
   }
 }

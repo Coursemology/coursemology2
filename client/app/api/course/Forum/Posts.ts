@@ -10,7 +10,7 @@ import BaseCourseAPI from '../Base';
 
 export default class PostsAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/forums/`;
+    return `/courses/${this.courseId}/forums/`;
   }
 
   /**

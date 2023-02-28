@@ -174,6 +174,6 @@ export default class SurveysAPI extends BaseSurveyAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/surveys`;
+    return `/courses/${this.courseId}/surveys`;
   }
 }

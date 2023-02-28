@@ -1,20 +1,17 @@
-import {
-  getAssessmentId as getAssessmentIdFromUrl,
-  getSubmissionId as getSubmissionIdFromUrl,
-} from 'lib/helpers/url-helpers';
+import { getAssessmentId, getSubmissionId } from 'lib/helpers/url-helpers';
 
 import BaseCourseAPI from '../Base';
 
 /** Submission level Api helpers should be defined here */
 export default class BaseAssessmentAPI extends BaseCourseAPI {
   // eslint-disable-next-line class-methods-use-this
-  getAssessmentId() {
+  get assessmentId() {
     // TODO: Read the id from redux state or server context
-    return getAssessmentIdFromUrl();
+    return getAssessmentId();
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getSubmissionId() {
-    return getSubmissionIdFromUrl();
+  get submissionId() {
+    return getSubmissionId();
   }
 }

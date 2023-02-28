@@ -14,7 +14,7 @@ export default class LevelAPI extends BaseCourseAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/levels`;
+    return `/courses/${this.courseId}/levels`;
   }
 
   save(levelFields) {

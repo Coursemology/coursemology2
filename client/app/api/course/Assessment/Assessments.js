@@ -132,6 +132,6 @@ export default class AssessmentsAPI extends BaseCourseAPI {
   }
 
   get #urlPrefix() {
-    return `/courses/${this.getCourseId()}/assessments`;
+    return `/courses/${this.courseId}/assessments`;
   }
 }

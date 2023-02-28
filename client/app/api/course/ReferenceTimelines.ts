@@ -12,7 +12,7 @@ import BaseCourseAPI from './Base';
 
 export default class ReferenceTimelinesAPI extends BaseCourseAPI {
   #getUrlPrefix(id?: TimelineData['id']): string {
-    return `/courses/${this.getCourseId()}/timelines${id ? `/${id}` : ''}`;
+    return `/courses/${this.courseId}/timelines${id ? `/${id}` : ''}`;
   }
 
   index(): APIResponse<TimelinesData> {

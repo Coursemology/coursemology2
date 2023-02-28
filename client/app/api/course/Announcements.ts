@@ -9,7 +9,7 @@ import BaseCourseAPI from './Base';
 
 export default class AnnouncementsAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
-    return `/courses/${this.getCourseId()}/announcements`;
+    return `/courses/${this.courseId}/announcements`;
   }
 
   /**
