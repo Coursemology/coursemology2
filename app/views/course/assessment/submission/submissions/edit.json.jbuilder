@@ -20,7 +20,7 @@ json.assessment do
   json.passwordProtected @assessment.session_password_protected?
   json.gamified @assessment.course.gamified?
   json.files @assessment.folder.materials do |material|
-    json.url url_for([@assessment.course, @assessment.folder, material])
+    json.url url_to_material(@assessment.course, @assessment.folder, material)
     json.name format_inline_text(material.name)
   end
 end

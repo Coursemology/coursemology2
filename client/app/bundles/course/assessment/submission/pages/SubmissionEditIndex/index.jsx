@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import NotificationBar, {
   notificationShape,
@@ -215,9 +216,9 @@ class VisibleSubmissionEditIndex extends Component {
     const renderFile = (file, index) => (
       <div key={index}>
         <InsertDriveFile style={{ verticalAlign: 'middle' }} />
-        <a href={file.url}>
-          <span>{file.name}</span>
-        </a>
+        <Link href={file.url} opensInNewTab>
+          {file.name}
+        </Link>
       </div>
     );
 

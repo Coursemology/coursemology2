@@ -2,6 +2,8 @@ import Description from '@mui/icons-material/Description';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
+import Link from 'lib/components/core/Link';
+
 const styles = {
   material: {
     position: 'relative',
@@ -24,7 +26,9 @@ const Material = (props) => {
   return (
     <div style={styles.material}>
       <Description htmlColor={grey[700]} style={styles.icon} />
-      <a href={url}>{name}</a>
+      <Link href={url} opensInNewTab>
+        {name}
+      </Link>
     </div>
   );
 };
