@@ -77,18 +77,8 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
     # @return [Course::Assessment::ProgrammingCodaveriEvaluationService::Result]
     #
     # @raise [Timeout::Error] When the operation times out.
-<<<<<<< HEAD
-<<<<<<< HEAD
     def execute(course_title, question, answer, timeout = nil)
       new(course_title, question, answer, timeout).execute
-=======
-    def execute(question, answer, course, timeout = nil)
-      new(question, answer, course, timeout).execute
->>>>>>> b309137ff (feat(assessment_settings): setting permissions for programming timeout limit)
-=======
-    def execute(question, answer, timeout = nil)
-      new(question, answer, timeout).execute
->>>>>>> 9cd9c4429 (style: fix hound issue regarding code styling in backend side)
     end
   end
 
@@ -103,25 +93,12 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
 
   private
 
-<<<<<<< HEAD
   def initialize(course_title, question, answer, timeout)
-=======
-  def prog_timeout_lim(course)
-    course ? course.programming_timeout_limit : DEFAULT_CPU_TIMEOUT
-  end
-
-  def initialize(question, answer, timeout)
->>>>>>> 9cd9c4429 (style: fix hound issue regarding code styling in backend side)
     @question = question
     @answer = answer
-    @course = question.course
     @language = question.language
     @memory_limit = question.memory_limit || MEMORY_LIMIT
-<<<<<<< HEAD
     @time_limit = question.time_limit ? [question.time_limit, question.max_time_limit].min : question.max_time_limit
-=======
-    @time_limit = question.time_limit ? [question.time_limit, prog_timeout_lim(@course)].min : prog_timeout_lim(@course)
->>>>>>> 9cd9c4429 (style: fix hound issue regarding code styling in backend side)
     @timeout = timeout || DEFAULT_TIMEOUT
 
     @answer_object = { api_version: 'latest',

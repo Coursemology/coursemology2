@@ -5,13 +5,8 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   # The table name for this model is singular.
   self.table_name = table_name.singularize
 
-<<<<<<< HEAD
   # Maximum CPU time a programming question can allow before the evaluation gets killed.
   DEFAULT_CPU_TIMEOUT = 30.seconds
-=======
-  # Default programming timeout limit, only will be used if course is undefined
-  DEFAULT_CPU_TIMEOUT = 30
->>>>>>> 9cd9c4429 (style: fix hound issue regarding code styling in backend side)
 
   # Maximum memory (in MB) the programming question can allow.
   # Do NOT change this to num.megabytes as the ProgramingEvaluationService expects it in MB.
@@ -38,11 +33,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   validates :import_job_id, uniqueness: { allow_nil: true, if: :import_job_id_changed? }
   validates :language, presence: true
 
-<<<<<<< HEAD
   validate -> { validate_time_limit }
-=======
-  # validate -> { validate_time_limit(course) }
->>>>>>> b309137ff (feat(assessment_settings): setting permissions for programming timeout limit)
   validate :validate_codaveri_question
 
   belongs_to :import_job, class_name: TrackableJob::Job.name, inverse_of: nil, optional: true
@@ -187,7 +178,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   def evaluate_package
     execute_after_commit do
       import_job =
-        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment, course)
+        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment)
       update_column(:import_job_id, import_job.job_id)
     end
   end
@@ -203,7 +194,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     execute_after_commit do
       new_attachment.save!
       import_job =
-        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, new_attachment, course)
+        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, new_attachment)
       update_column(:import_job_id, import_job.job_id)
     end
   end

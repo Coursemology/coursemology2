@@ -108,7 +108,6 @@ class Duplicator
                                                                               source_id: source_object.acting_as.id,
                                                                               creator: @options[:current_user],
                                                                               updater: @options[:current_user])
-            byebug
           end
         end
       end

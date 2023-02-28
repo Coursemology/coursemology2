@@ -8,6 +8,10 @@ RSpec.describe Course::LessonPlan::Item, type: :model do
       without_validating_presence
   end
   it { is_expected.to have_many(:todos).inverse_of(:item).dependent(:destroy) }
+  it { is_expected.to have_one(:duplication_traceable).dependent(:destroy) }
+
+  it { should delegate_method(:source).to(:duplication_traceable).allow_nil }
+  it { should delegate_method(:source=).to(:duplication_traceable).with_arguments(nil).allow_nil }
 
   let!(:instance) { Instance.default }
   with_tenant(:instance) do
