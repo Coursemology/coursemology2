@@ -20,7 +20,7 @@ export default class DuplicationAPI extends BaseCourseAPI {
    * See course/duplication/propTypes.js for custom propTypes.
    */
   fetch() {
-    return this.getClient().get(`${this.#urlPrefix}/new`);
+    return this.client.get(`${this.#urlPrefix}/new`);
   }
 
   /**
@@ -40,7 +40,7 @@ export default class DuplicationAPI extends BaseCourseAPI {
    * See course/duplication/propTypes.js for custom propTypes.
    */
   data(courseId) {
-    return this.getClient().get(`/courses/${courseId}/object_duplication/data`);
+    return this.client.get(`/courses/${courseId}/object_duplication/data`);
   }
 
   /**
@@ -57,7 +57,7 @@ export default class DuplicationAPI extends BaseCourseAPI {
    */
   duplicateItems(sourceCourseId, params) {
     const url = `/courses/${sourceCourseId}/object_duplication`;
-    return this.getClient().post(url, params);
+    return this.client.post(url, params);
   }
 
   /**
@@ -72,10 +72,7 @@ export default class DuplicationAPI extends BaseCourseAPI {
    * error response: {}
    */
   duplicateCourse(sourceCourseId, params) {
-    return this.getClient().post(
-      `/courses/${sourceCourseId}/duplication`,
-      params,
-    );
+    return this.client.post(`/courses/${sourceCourseId}/duplication`, params);
   }
 
   get #urlPrefix() {

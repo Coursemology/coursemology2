@@ -8,7 +8,7 @@ import storeCreator from 'course/survey/store';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
 // Mock axios
-const client = CourseAPI.survey.surveys.getClient();
+const client = CourseAPI.survey.surveys.client;
 const mock = new MockAdapter(client);
 
 beforeEach(() => {

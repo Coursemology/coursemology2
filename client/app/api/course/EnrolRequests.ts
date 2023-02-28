@@ -23,7 +23,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       manageCourseUsersData: ManageCourseUsersSharedData;
     }>
   > {
-    return this.getClient().get(this.#baseUrlPrefix);
+    return this.client.get(this.#baseUrlPrefix);
   }
 
   /**
@@ -35,7 +35,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
     enrolRequest: ApproveEnrolRequestPatchData,
     requestId: number,
   ): Promise<AxiosResponse<EnrolRequestListData>> {
-    return this.getClient().patch(
+    return this.client.patch(
       `${this.#baseUrlPrefix}/${requestId}/approve`,
       enrolRequest,
     );
@@ -47,6 +47,6 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    * error response: { errors: [] } - An array of errors will be returned upon error.
    */
   reject(requestId: number): Promise<AxiosResponse<EnrolRequestListData>> {
-    return this.getClient().patch(`${this.#baseUrlPrefix}/${requestId}/reject`);
+    return this.client.patch(`${this.#baseUrlPrefix}/${requestId}/reject`);
   }
 }

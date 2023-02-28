@@ -8,7 +8,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @returns An `AssessmentsListData` object
    */
   index(categoryId, tabId) {
-    return this.getClient().get(this.#urlPrefix, {
+    return this.client.get(this.#urlPrefix, {
       params: { category: categoryId, tab: tabId },
     });
   }
@@ -19,7 +19,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @returns An `AssessmentData` object
    */
   fetch(assessmentId) {
-    return this.getClient().get(`${this.#urlPrefix}/${assessmentId}`);
+    return this.client.get(`${this.#urlPrefix}/${assessmentId}`);
   }
 
   /**
@@ -28,13 +28,11 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @returns An `AssessmentUnlockRequirements` object
    */
   fetchUnlockRequirements(assessmentId) {
-    return this.getClient().get(
-      `${this.#urlPrefix}/${assessmentId}/requirements`,
-    );
+    return this.client.get(`${this.#urlPrefix}/${assessmentId}/requirements`);
   }
 
   fetchEditData(assessmentId) {
-    return this.getClient().get(`${this.#urlPrefix}/${assessmentId}/edit`);
+    return this.client.get(`${this.#urlPrefix}/${assessmentId}/edit`);
   }
 
   /**
@@ -50,7 +48,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   create(params) {
-    return this.getClient().post(this.#urlPrefix, params);
+    return this.client.post(this.#urlPrefix, params);
   }
 
   /**
@@ -63,7 +61,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   update(assessmentId, params) {
-    return this.getClient().patch(`${this.#urlPrefix}/${assessmentId}`, params);
+    return this.client.patch(`${this.#urlPrefix}/${assessmentId}`, params);
   }
 
   /**
@@ -71,7 +69,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @param {string} deleteUrl
    */
   delete(deleteUrl) {
-    return this.getClient().delete(deleteUrl);
+    return this.client.delete(deleteUrl);
   }
 
   /**
@@ -81,7 +79,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * success response: array of skills
    */
   fetchSkills() {
-    return this.getClient().get(`${this.#urlPrefix}/skills/options`);
+    return this.client.get(`${this.#urlPrefix}/skills/options`);
   }
 
   /**
@@ -92,7 +90,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * error response: {}
    */
   remind(assessmentId, courseUsers) {
-    return this.getClient().post(`${this.#urlPrefix}/${assessmentId}/remind`, {
+    return this.client.post(`${this.#urlPrefix}/${assessmentId}/remind`, {
       course_users: courseUsers,
     });
   }
@@ -102,7 +100,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @param {string} questionUrl
    */
   deleteQuestion(questionUrl) {
-    return this.getClient().delete(questionUrl);
+    return this.client.delete(questionUrl);
   }
 
   /**
@@ -111,7 +109,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @param {number[]} questionIds Question IDs in the new ordering
    */
   reorderQuestions(assessmentId, questionIds) {
-    return this.getClient().post(
+    return this.client.post(
       `${this.#urlPrefix}/${assessmentId}/reorder`,
       questionIds,
     );
@@ -122,7 +120,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @param {string} duplicationUrl
    */
   duplicateQuestion(duplicationUrl) {
-    return this.getClient().post(duplicationUrl);
+    return this.client.post(duplicationUrl);
   }
 
   /**
@@ -130,7 +128,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @param {string} convertUrl
    */
   convertMcqMrq(convertUrl) {
-    return this.getClient().patch(convertUrl);
+    return this.client.patch(convertUrl);
   }
 
   get #urlPrefix() {

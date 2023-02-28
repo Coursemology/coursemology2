@@ -25,7 +25,7 @@ export default class SectionsAPI extends BaseSurveyAPI {
    * error response: { errors: [{ attribute: string }] }
    */
   create(sectionFields) {
-    return this.getClient().post(this.#urlPrefix, sectionFields);
+    return this.client.post(this.#urlPrefix, sectionFields);
   }
 
   /**
@@ -39,10 +39,7 @@ export default class SectionsAPI extends BaseSurveyAPI {
    * error response: { errors: [{ attribute: string }] }
    */
   update(sectionId, sectionFields) {
-    return this.getClient().patch(
-      `${this.#urlPrefix}/${sectionId}`,
-      sectionFields,
-    );
+    return this.client.patch(`${this.#urlPrefix}/${sectionId}`, sectionFields);
   }
 
   /**
@@ -54,7 +51,7 @@ export default class SectionsAPI extends BaseSurveyAPI {
    * error response: {}
    */
   delete(sectionId) {
-    return this.getClient().delete(`${this.#urlPrefix}/${sectionId}`);
+    return this.client.delete(`${this.#urlPrefix}/${sectionId}`);
   }
 
   get #urlPrefix() {

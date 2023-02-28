@@ -17,7 +17,7 @@ const itemSettings = [
   },
 ];
 
-const client = CourseAPI.admin.lessonPlan.getClient();
+const client = CourseAPI.admin.lessonPlan.client;
 const mock = new MockAdapter(client);
 
 describe('<LessonPlanSettings />', () => {

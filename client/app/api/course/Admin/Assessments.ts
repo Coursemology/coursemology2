@@ -24,45 +24,42 @@ export default class AssessmentsAdminAPI extends BaseAdminAPI {
   }
 
   index(): Response {
-    return this.getClient().get(this.urlPrefix);
+    return this.client.get(this.urlPrefix);
   }
 
   update(data: AssessmentSettingsPostData): Response {
-    return this.getClient().patch(this.urlPrefix, data);
+    return this.client.patch(this.urlPrefix, data);
   }
 
   createCategory(data: AssessmentCategoryPostData): Response {
-    return this.getClient().post(`${this.urlPrefix}/categories`, data);
+    return this.client.post(`${this.urlPrefix}/categories`, data);
   }
 
   createTabInCategory(
     id: AssessmentCategory['id'],
     data: AssessmentTabPostData,
   ): Response {
-    return this.getClient().post(
-      `${this.urlPrefix}/categories/${id}/tabs`,
-      data,
-    );
+    return this.client.post(`${this.urlPrefix}/categories/${id}/tabs`, data);
   }
 
   deleteCategory(id: AssessmentCategory['id']): Response {
-    return this.getClient().delete(`${this.urlPrefix}/categories/${id}`);
+    return this.client.delete(`${this.urlPrefix}/categories/${id}`);
   }
 
   deleteTabInCategory(
     id: AssessmentCategory['id'],
     tabId: AssessmentTab['id'],
   ): Response {
-    return this.getClient().delete(
+    return this.client.delete(
       `${this.urlPrefix}/categories/${id}/tabs/${tabId}`,
     );
   }
 
   moveAssessments(data: MoveAssessmentsPostData): MovedAssessmentsResponse {
-    return this.getClient().post(`${super.urlPrefix}/move_assessments`, data);
+    return this.client.post(`${super.urlPrefix}/move_assessments`, data);
   }
 
   moveTabs(data: MoveTabsPostData): MovedTabsResponse {
-    return this.getClient().post(`${super.urlPrefix}/move_tabs`, data);
+    return this.client.post(`${super.urlPrefix}/move_tabs`, data);
   }
 }

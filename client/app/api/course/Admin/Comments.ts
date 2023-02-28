@@ -12,12 +12,12 @@ export default class CommentsAdminAPI extends BaseAdminAPI {
   }
 
   index(): Promise<AxiosResponse<CommentsSettingsData>> {
-    return this.getClient().get(this.urlPrefix);
+    return this.client.get(this.urlPrefix);
   }
 
   update(
     data: CommentsSettingsPostData,
   ): Promise<AxiosResponse<CommentsSettingsData>> {
-    return this.getClient().patch(this.urlPrefix, data);
+    return this.client.patch(this.urlPrefix, data);
   }
 }

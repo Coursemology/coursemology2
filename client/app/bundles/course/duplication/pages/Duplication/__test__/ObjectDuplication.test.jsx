@@ -7,7 +7,7 @@ import storeCreator from 'course/duplication/store';
 
 import ObjectDuplication from '../index';
 
-const client = CourseAPI.duplication.getClient();
+const client = CourseAPI.duplication.client;
 const mock = new MockAdapter(client);
 
 const responseData = {

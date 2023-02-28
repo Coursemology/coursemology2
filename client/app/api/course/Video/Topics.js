@@ -50,7 +50,7 @@ export default class TopicsAPI extends BaseVideoAPI {
    * }
    */
   create(fields) {
-    return this.getClient().post(this.#urlPrefix, fields);
+    return this.client.post(this.#urlPrefix, fields);
   }
 
   /**
@@ -65,7 +65,7 @@ export default class TopicsAPI extends BaseVideoAPI {
    * }
    */
   show(topicId) {
-    return this.getClient().get(`${this.#urlPrefix}/${topicId}`);
+    return this.client.get(`${this.#urlPrefix}/${topicId}`);
   }
 
   /**
@@ -78,7 +78,7 @@ export default class TopicsAPI extends BaseVideoAPI {
    * }
    */
   index() {
-    return this.getClient().get(this.#urlPrefix);
+    return this.client.get(this.#urlPrefix);
   }
 
   get #urlPrefix() {

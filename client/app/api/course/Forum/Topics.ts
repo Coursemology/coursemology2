@@ -28,9 +28,7 @@ export default class TopicsAPI extends BaseCourseAPI {
     nextUnreadTopicUrl: string | null;
     posts: ForumTopicPostListData[];
   }> {
-    return this.getClient().get(
-      `${this.#urlPrefix}/${forumId}/topics/${topicId}`,
-    );
+    return this.client.get(`${this.#urlPrefix}/${forumId}/topics/${topicId}`);
   }
 
   /**
@@ -40,10 +38,7 @@ export default class TopicsAPI extends BaseCourseAPI {
     forumId: string,
     params: ForumTopicPostData,
   ): APIResponse<JustRedirect> {
-    return this.getClient().post(
-      `${this.#urlPrefix}/${forumId}/topics`,
-      params,
-    );
+    return this.client.post(`${this.#urlPrefix}/${forumId}/topics`, params);
   }
 
   /**
@@ -53,14 +48,14 @@ export default class TopicsAPI extends BaseCourseAPI {
     urlSlug: string,
     params: ForumTopicPatchData,
   ): APIResponse<ForumTopicListData> {
-    return this.getClient().patch(`${urlSlug}`, params);
+    return this.client.patch(`${urlSlug}`, params);
   }
 
   /**
    * Deletes an existing topic.
    */
   delete(urlSlug: string): APIResponse {
-    return this.getClient().delete(urlSlug);
+    return this.client.delete(urlSlug);
   }
 
   /**
@@ -71,13 +66,13 @@ export default class TopicsAPI extends BaseCourseAPI {
     isCurrentlySubscribed: boolean,
   ): APIResponse {
     if (isCurrentlySubscribed) {
-      return this.getClient().delete(`${urlSlug}/subscribe`, {
+      return this.client.delete(`${urlSlug}/subscribe`, {
         params: {
           subscribe: false,
         },
       });
     }
-    return this.getClient().post(`${urlSlug}/subscribe`, {
+    return this.client.post(`${urlSlug}/subscribe`, {
       subscribe: true,
     });
   }
@@ -86,7 +81,7 @@ export default class TopicsAPI extends BaseCourseAPI {
    * Update the hidden status of a topic.
    */
   updateHidden(urlSlug: string, isCurrentlyHidden: boolean): APIResponse {
-    return this.getClient().patch(`${urlSlug}/hidden`, {
+    return this.client.patch(`${urlSlug}/hidden`, {
       hidden: !isCurrentlyHidden,
     });
   }
@@ -95,7 +90,7 @@ export default class TopicsAPI extends BaseCourseAPI {
    * Update the locked status of a topic.
    */
   updateLocked(urlSlug: string, isCurrentlyLocked: boolean): APIResponse {
-    return this.getClient().patch(`${urlSlug}/locked`, {
+    return this.client.patch(`${urlSlug}/locked`, {
       locked: !isCurrentlyLocked,
     });
   }

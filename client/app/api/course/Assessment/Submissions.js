@@ -2,69 +2,67 @@ import BaseAssessmentAPI from './Base';
 
 export default class SubmissionsAPI extends BaseAssessmentAPI {
   index() {
-    return this.getClient().get(this.#urlPrefix);
+    return this.client.get(this.#urlPrefix);
   }
 
   downloadAll(courseUsers, downloadFormat) {
-    return this.getClient().get(`${this.#urlPrefix}/download_all`, {
+    return this.client.get(`${this.#urlPrefix}/download_all`, {
       params: { course_users: courseUsers, download_format: downloadFormat },
     });
   }
 
   downloadStatistics(courseUsers) {
-    return this.getClient().get(`${this.#urlPrefix}/download_statistics`, {
+    return this.client.get(`${this.#urlPrefix}/download_statistics`, {
       params: { course_users: courseUsers },
     });
   }
 
   publishAll(courseUsers) {
-    return this.getClient().patch(`${this.#urlPrefix}/publish_all`, {
+    return this.client.patch(`${this.#urlPrefix}/publish_all`, {
       course_users: courseUsers,
     });
   }
 
   forceSubmitAll(courseUsers) {
-    return this.getClient().patch(`${this.#urlPrefix}/force_submit_all`, {
+    return this.client.patch(`${this.#urlPrefix}/force_submit_all`, {
       course_users: courseUsers,
     });
   }
 
   unsubmit(submissionId) {
-    return this.getClient().patch(
-      `${this.#urlPrefix}/${submissionId}/unsubmit`,
-    );
+    return this.client.patch(`${this.#urlPrefix}/${submissionId}/unsubmit`);
   }
 
   unsubmitSubmission(submissionId) {
-    return this.getClient().patch(`${this.#urlPrefix}/unsubmit`, {
+    return this.client.patch(`${this.#urlPrefix}/unsubmit`, {
       submission_id: submissionId,
     });
   }
 
   unsubmitAll(courseUsers) {
-    return this.getClient().patch(`${this.#urlPrefix}/unsubmit_all`, {
+    return this.client.patch(`${this.#urlPrefix}/unsubmit_all`, {
       course_users: courseUsers,
     });
   }
 
   delete(submissionId) {
-    return this.getClient().patch(`${this.#urlPrefix}/${submissionId}/delete`);
+    return this.client.patch(`${this.#urlPrefix}/${submissionId}/delete`);
   }
 
   deleteSubmission(submissionId) {
-    return this.getClient().patch(`${this.#urlPrefix}/delete`, {
+    return this.client.patch(`${this.#urlPrefix}/delete`, {
       submission_id: submissionId,
     });
   }
 
   deleteAll(courseUsers) {
-    return this.getClient().patch(`${this.#urlPrefix}/delete_all`, {
+    return this.client.patch(`${this.#urlPrefix}/delete_all`, {
       course_users: courseUsers,
     });
   }
 
   edit(submissionId) {
-    return this.getClient().get(`${this.#urlPrefix}/${submissionId}/edit`);
+    return this.client.get(`${this.#urlPrefix}/${submissionId}/edit`);
   }
 
   update(submissionId, submissionFields) {
@@ -78,7 +76,7 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     const formData = new FormData();
     SubmissionsAPI.appendFormData(formData, submissionFields);
 
-    return this.getClient().patch(
+    return this.client.patch(
       `${this.#urlPrefix}/${submissionId}`,
       formData,
       config,
@@ -86,7 +84,7 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   reloadAnswer(submissionId, params) {
-    return this.getClient().post(
+    return this.client.post(
       `${this.#urlPrefix}/${submissionId}/reload_answer`,
       params,
     );
@@ -103,7 +101,7 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     const formData = new FormData();
     SubmissionsAPI.appendFormData(formData, answerFields);
 
-    return this.getClient().patch(
+    return this.client.patch(
       `${this.#urlPrefix}/${submissionId}/submit_answer`,
       formData,
       config,
@@ -111,13 +109,11 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
   }
 
   autoGrade(submissionId) {
-    return this.getClient().post(
-      `${this.#urlPrefix}/${submissionId}/auto_grade`,
-    );
+    return this.client.post(`${this.#urlPrefix}/${submissionId}/auto_grade`);
   }
 
   reevaluateAnswer(submissionId, params) {
-    return this.getClient().post(
+    return this.client.post(
       `${this.#urlPrefix}/${submissionId}/reevaluate_answer`,
       params,
     );
@@ -127,7 +123,7 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     const url = `${
       this.#urlPrefix
     }/${submissionId}/answers/${answerId}/programming/files/${fileId}/annotations`;
-    return this.getClient().post(url, params);
+    return this.client.post(url, params);
   }
 
   get #urlPrefix() {

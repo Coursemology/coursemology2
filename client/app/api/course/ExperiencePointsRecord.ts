@@ -22,7 +22,7 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
       experiencePointRecords: ExperiencePointsRecordListData[];
     }>
   > {
-    return this.getClient().get(
+    return this.client.get(
       `${
         this.#baseUrlPrefix
       }/users/${userId}/experience_points_records?filter[page_num]=${pageNum}`,
@@ -39,7 +39,7 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
     const url = `${
       this.#baseUrlPrefix
     }/users/${this.getCourseUserId()}/experience_points_records/${recordId}`;
-    return this.getClient().patch(url, params);
+    return this.client.patch(url, params);
   }
 
   /**
@@ -49,6 +49,6 @@ export default class ExperiencePointsRecordAPI extends BaseCourseAPI {
     const url = `${
       this.#baseUrlPrefix
     }/users/${this.getCourseUserId()}/experience_points_records/${recordId}`;
-    return this.getClient().delete(url);
+    return this.client.delete(url);
   }
 }

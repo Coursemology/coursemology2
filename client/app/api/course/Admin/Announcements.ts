@@ -12,12 +12,12 @@ export default class AnnouncementsAdminAPI extends BaseAdminAPI {
   }
 
   index(): Promise<AxiosResponse<AnnouncementsSettingsData>> {
-    return this.getClient().get(this.urlPrefix);
+    return this.client.get(this.urlPrefix);
   }
 
   update(
     data: AnnouncementsSettingsPostData,
   ): Promise<AxiosResponse<AnnouncementsSettingsData>> {
-    return this.getClient().patch(this.urlPrefix, data);
+    return this.client.patch(this.urlPrefix, data);
   }
 }

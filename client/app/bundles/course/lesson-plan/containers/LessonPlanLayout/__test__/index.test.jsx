@@ -7,7 +7,7 @@ import LessonPlanLayout from 'course/lesson-plan/containers/LessonPlanLayout';
 import storeCreator from 'course/lesson-plan/store';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
-const client = CourseAPI.lessonPlan.getClient();
+const client = CourseAPI.lessonPlan.client;
 const mock = new MockAdapter(client);
 
 beforeEach(() => {

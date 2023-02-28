@@ -10,7 +10,7 @@ import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import { updateScribingAnswer } from '../../../actions/scribing';
 import actionTypes from '../../../constants';
 
-const client = CourseAPI.assessment.answer.scribing.getClient();
+const client = CourseAPI.assessment.answer.scribing.client;
 const mock = new MockAdapter(client);
 
 const assessmentId = 1;

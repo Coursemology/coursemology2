@@ -14,7 +14,7 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
       personalTimes: PersonalTimeListData[];
     }>
   > {
-    return this.getClient().get(
+    return this.client.get(
       `${this.#baseUrlPrefix}/users/${userId}/personal_times`,
     );
   }
@@ -36,7 +36,7 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
     };
     const payload = new FormData();
     payload.append('course_user[user_id]', userId.toString());
-    return this.getClient().postForm(`${url}/recompute`, payload, config);
+    return this.client.postForm(`${url}/recompute`, payload, config);
   }
 
   /**
@@ -57,7 +57,7 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
         user_id: userId,
       },
     };
-    return this.getClient().post(url, data, config);
+    return this.client.post(url, data, config);
   }
 
   /**
@@ -68,6 +68,6 @@ export default class PersonalTimesAPI extends BaseCourseAPI {
     const url = `${
       this.#baseUrlPrefix
     }/users/${userId}/personal_times/${personalTimeId}`;
-    return this.getClient().delete(url);
+    return this.client.delete(url);
   }
 }

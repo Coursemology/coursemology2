@@ -25,7 +25,7 @@ export default class SkillsAPI extends BaseCourseAPI {
       permissions: SkillPermissions;
     }>
   > {
-    return this.getClient().get(this.#urlPrefix);
+    return this.client.get(this.#urlPrefix);
   }
 
   /**
@@ -40,7 +40,7 @@ export default class SkillsAPI extends BaseCourseAPI {
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   create(params: FormData): Promise<AxiosResponse<SkillListData>> {
-    return this.getClient().post(this.#urlPrefix, params);
+    return this.client.post(this.#urlPrefix, params);
   }
 
   /**
@@ -55,7 +55,7 @@ export default class SkillsAPI extends BaseCourseAPI {
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   createBranch(params: FormData): Promise<AxiosResponse<SkillBranchListData>> {
-    return this.getClient().post(this.#branchUrlPrefix, params);
+    return this.client.post(this.#branchUrlPrefix, params);
   }
 
   /**
@@ -71,7 +71,7 @@ export default class SkillsAPI extends BaseCourseAPI {
     skillId: number,
     params: FormData | object,
   ): Promise<AxiosResponse<SkillListData>> {
-    return this.getClient().patch(`${this.#urlPrefix}/${skillId}`, params);
+    return this.client.patch(`${this.#urlPrefix}/${skillId}`, params);
   }
 
   /**
@@ -87,10 +87,7 @@ export default class SkillsAPI extends BaseCourseAPI {
     branchId: number,
     params: FormData | object,
   ): Promise<AxiosResponse<SkillBranchListData>> {
-    return this.getClient().patch(
-      `${this.#branchUrlPrefix}/${branchId}`,
-      params,
-    );
+    return this.client.patch(`${this.#branchUrlPrefix}/${branchId}`, params);
   }
 
   /**
@@ -102,7 +99,7 @@ export default class SkillsAPI extends BaseCourseAPI {
    * error response: {}
    */
   delete(skillId: number): Promise<AxiosResponse> {
-    return this.getClient().delete(`${this.#urlPrefix}/${skillId}`);
+    return this.client.delete(`${this.#urlPrefix}/${skillId}`);
   }
 
   /**
@@ -114,6 +111,6 @@ export default class SkillsAPI extends BaseCourseAPI {
    * error response: {}
    */
   deleteBranch(branchId: number): Promise<AxiosResponse> {
-    return this.getClient().delete(`${this.#branchUrlPrefix}/${branchId}`);
+    return this.client.delete(`${this.#branchUrlPrefix}/${branchId}`);
   }
 }

@@ -13,24 +13,24 @@ export default class McqMrqAPI extends BaseAPI {
   }
 
   fetchNewMrq(): APIResponse<McqMrqFormData<'new'>> {
-    return this.getClient().get(`${this.#urlPrefix}/new`);
+    return this.client.get(`${this.#urlPrefix}/new`);
   }
 
   fetchNewMcq(): APIResponse<McqMrqFormData<'new'>> {
-    return this.getClient().get(`${this.#urlPrefix}/new`, {
+    return this.client.get(`${this.#urlPrefix}/new`, {
       params: { multiple_choice: true },
     });
   }
 
   fetchEdit(id: number): APIResponse<McqMrqFormData<'edit'>> {
-    return this.getClient().get(`${this.#urlPrefix}/${id}/edit`);
+    return this.client.get(`${this.#urlPrefix}/${id}/edit`);
   }
 
   create(data: McqMrqPostData): APIResponse<JustRedirect> {
-    return this.getClient().post(`${this.#urlPrefix}`, data);
+    return this.client.post(`${this.#urlPrefix}`, data);
   }
 
   update(id: number, data: McqMrqPostData): APIResponse<JustRedirect> {
-    return this.getClient().patch(`${this.#urlPrefix}/${id}`, data);
+    return this.client.patch(`${this.#urlPrefix}/${id}`, data);
   }
 }

@@ -2,11 +2,11 @@ import BaseCourseAPI from './Base';
 
 export default class UserNotificationsAPI extends BaseCourseAPI {
   fetch() {
-    return this.getClient().get(`${this.#urlPrefix}/fetch`);
+    return this.client.get(`${this.#urlPrefix}/fetch`);
   }
 
   markAsRead(userNotificationId) {
-    return this.getClient().post(
+    return this.client.post(
       `${this.#urlPrefix}/${userNotificationId}/mark_as_read`,
     );
   }

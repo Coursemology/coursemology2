@@ -21,7 +21,7 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
       permissions: AnnouncementPermissions;
     }>
   > {
-    return this.getClient().get(this.#urlPrefix);
+    return this.client.get(this.#urlPrefix);
   }
 
   /**
@@ -33,7 +33,7 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
       permissions: AnnouncementPermissions;
     }>
   > {
-    return this.getClient().post(this.#urlPrefix, params);
+    return this.client.post(this.#urlPrefix, params);
   }
 
   /**
@@ -43,10 +43,7 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
     announcementId: number,
     params: FormData | object,
   ): Promise<AxiosResponse<AnnouncementData>> {
-    return this.getClient().patch(
-      `${this.#urlPrefix}/${announcementId}`,
-      params,
-    );
+    return this.client.patch(`${this.#urlPrefix}/${announcementId}`, params);
   }
 
   /**
@@ -58,6 +55,6 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
    * error response: {}
    */
   delete(announcementId: number): Promise<AxiosResponse> {
-    return this.getClient().delete(`${this.#urlPrefix}/${announcementId}`);
+    return this.client.delete(`${this.#urlPrefix}/${announcementId}`);
   }
 }

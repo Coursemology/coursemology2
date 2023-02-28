@@ -12,12 +12,12 @@ export default class LeaderboardAdminAPI extends BaseAdminAPI {
   }
 
   index(): Promise<AxiosResponse<LeaderboardSettingsData>> {
-    return this.getClient().get(this.urlPrefix);
+    return this.client.get(this.urlPrefix);
   }
 
   update(
     data: LeaderboardSettingsPostData,
   ): Promise<AxiosResponse<LeaderboardSettingsData>> {
-    return this.getClient().patch(this.urlPrefix, data);
+    return this.client.patch(this.urlPrefix, data);
   }
 }

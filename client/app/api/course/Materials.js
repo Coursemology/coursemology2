@@ -11,7 +11,7 @@ export default class MaterialsAPI extends BaseCourseAPI {
    * error response: { message:string }
    */
   destroy(folderId, materialId) {
-    return this.getClient().delete(
+    return this.client.delete(
       `${this.#urlPrefix}/${folderId}/files/${materialId}`,
     );
   }

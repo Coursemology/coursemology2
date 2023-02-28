@@ -17,7 +17,7 @@ const emailSettings = [
   },
 ];
 
-const client = CourseAPI.admin.notifications.getClient();
+const client = CourseAPI.admin.notifications.client;
 const mock = new MockAdapter(client);
 
 describe('<NotificationSettings />', () => {

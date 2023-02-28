@@ -45,7 +45,7 @@ export default class ResponsesAPI extends BaseSurveyAPI {
    * error response: {}
    */
   fetch(responseId) {
-    return this.getClient().get(`${this.#getUrlPrefix()}/${responseId}`);
+    return this.client.get(`${this.#getUrlPrefix()}/${responseId}`);
   }
 
   /**
@@ -57,7 +57,7 @@ export default class ResponsesAPI extends BaseSurveyAPI {
    * error response: {}
    */
   edit(responseId) {
-    return this.getClient().get(`${this.#getUrlPrefix()}/${responseId}/edit`);
+    return this.client.get(`${this.#getUrlPrefix()}/${responseId}/edit`);
   }
 
   /**
@@ -75,7 +75,7 @@ export default class ResponsesAPI extends BaseSurveyAPI {
    * error response: {}
    */
   index() {
-    return this.getClient().get(this.#getUrlPrefix());
+    return this.client.get(this.#getUrlPrefix());
   }
 
   /**
@@ -90,7 +90,7 @@ export default class ResponsesAPI extends BaseSurveyAPI {
    *   { error: string } if there is some other error
    */
   create(surveyId) {
-    return this.getClient().post(this.#getUrlPrefix(surveyId));
+    return this.client.post(this.#getUrlPrefix(surveyId));
   }
 
   /**
@@ -110,7 +110,7 @@ export default class ResponsesAPI extends BaseSurveyAPI {
    * error response: { errors: [{ attribute: string }] }
    */
   update(responseId, responseFields) {
-    return this.getClient().patch(
+    return this.client.patch(
       `${this.#getUrlPrefix()}/${responseId}`,
       responseFields,
     );
@@ -125,9 +125,7 @@ export default class ResponsesAPI extends BaseSurveyAPI {
    * error response: {}
    */
   unsubmit(responseId) {
-    return this.getClient().post(
-      `${this.#getUrlPrefix()}/${responseId}/unsubmit`,
-    );
+    return this.client.post(`${this.#getUrlPrefix()}/${responseId}/unsubmit`);
   }
 
   #getUrlPrefix(surveyId) {

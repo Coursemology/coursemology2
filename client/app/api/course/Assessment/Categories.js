@@ -8,7 +8,7 @@ export default class CategoriesAPI extends BaseCourseAPI {
    * success response: array of categories
    */
   fetchCategories() {
-    return this.getClient().get(`${this.#urlPrefix}`);
+    return this.client.get(`${this.#urlPrefix}`);
   }
 
   get #urlPrefix() {

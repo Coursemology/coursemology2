@@ -30,7 +30,7 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
     const url = `${
       this.#urlPrefix
     }/${answerId}/programming/create_programming_files`;
-    return this.getClient().post(url, formData, config);
+    return this.client.post(url, formData, config);
   }
 
   /**
@@ -46,7 +46,7 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   deleteProgrammingFile(answerId, payload) {
-    return this.getClient().post(
+    return this.client.post(
       `${this.#urlPrefix}/${answerId}/programming/destroy_programming_file`,
       payload,
     );

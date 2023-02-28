@@ -12,12 +12,12 @@ export default class ComponentsAdminAPI extends BaseAdminAPI {
   }
 
   index(): Promise<AxiosResponse<CourseComponents>> {
-    return this.getClient().get(this.urlPrefix);
+    return this.client.get(this.urlPrefix);
   }
 
   update(
     data: CourseComponentsPostData,
   ): Promise<AxiosResponse<CourseComponents>> {
-    return this.getClient().patch(this.urlPrefix, data);
+    return this.client.patch(this.urlPrefix, data);
   }
 }

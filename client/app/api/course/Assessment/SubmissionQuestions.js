@@ -9,7 +9,7 @@ export default class SubmissionQuestionsAPI extends BaseAssessmentAPI {
    * success response: comment_with_sanitized_html
    */
   createComment(submissionQuestionId, params) {
-    return this.getClient().post(
+    return this.client.post(
       `${this.#urlPrefix}/${submissionQuestionId}/comments`,
       params,
     );
@@ -24,7 +24,7 @@ export default class SubmissionQuestionsAPI extends BaseAssessmentAPI {
    */
   getPastAnswers(submissionQuestionId, answersToLoad = 10) {
     const params = { answers_to_load: answersToLoad };
-    return this.getClient().get(
+    return this.client.get(
       `${this.#urlPrefix}/${submissionQuestionId}/past_answers`,
       { params },
     );

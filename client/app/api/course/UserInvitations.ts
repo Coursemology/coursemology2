@@ -24,7 +24,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       manageCourseUsersData: ManageCourseUsersSharedData;
     }>
   > {
-    return this.getClient().get(`${this.#baseUrlPrefix}/user_invitations`);
+    return this.client.get(`${this.#baseUrlPrefix}/user_invitations`);
   }
 
   /**
@@ -58,7 +58,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       formData = data as FormData;
     }
 
-    return this.getClient().post(
+    return this.client.post(
       `${this.#baseUrlPrefix}/users/invite`,
       formData,
       config,
@@ -73,7 +73,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       courseRegistrationKey: string;
     }>
   > {
-    return this.getClient().get(`${this.#baseUrlPrefix}/users/invite`);
+    return this.client.get(`${this.#baseUrlPrefix}/users/invite`);
   }
 
   /**
@@ -85,7 +85,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       manageCourseUsersData: ManageCourseUsersSharedData;
     }>
   > {
-    return this.getClient().get(
+    return this.client.get(
       `${this.#baseUrlPrefix}/user_invitations?without_invitations=true`,
     );
   }
@@ -102,7 +102,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
     if (shouldEnable) {
       params = { course: { registration_key: 'checked' } };
     }
-    return this.getClient().post(
+    return this.client.post(
       `${this.#baseUrlPrefix}/users/toggle_registration`,
       params,
     );
@@ -116,7 +116,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
       templatePath: string;
     }>
   > {
-    return this.getClient().get(`${this.#baseUrlPrefix}/users/invite`);
+    return this.client.get(`${this.#baseUrlPrefix}/users/invite`);
   }
 
   /**
@@ -128,9 +128,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
   resendAllInvitations(): Promise<
     AxiosResponse<{ invitations: InvitationListData[] }>
   > {
-    return this.getClient().post(
-      `${this.#baseUrlPrefix}/users/resend_invitations`,
-    );
+    return this.client.post(`${this.#baseUrlPrefix}/users/resend_invitations`);
   }
 
   /**
@@ -143,7 +141,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
   resendInvitationEmail(
     invitationId: number,
   ): Promise<AxiosResponse<InvitationListData>> {
-    return this.getClient().post(
+    return this.client.post(
       `${
         this.#baseUrlPrefix
       }/user_invitations/${invitationId}/resend_invitation`,
@@ -158,7 +156,7 @@ export default class UserInvitationsAPI extends BaseCourseAPI {
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   delete(invitationId: number): Promise<AxiosResponse> {
-    return this.getClient().delete(
+    return this.client.delete(
       `${this.#baseUrlPrefix}/user_invitations/${invitationId}`,
     );
   }

@@ -39,7 +39,7 @@ export default class CommentsAPI extends BaseCourseAPI {
       tabs: CommentTabInfo;
     }>
   > {
-    return this.getClient().get(this.#urlPrefix);
+    return this.client.get(this.#urlPrefix);
   }
 
   /**
@@ -54,7 +54,7 @@ export default class CommentsAPI extends BaseCourseAPI {
       topicList: CommentTopicData[];
     }>
   > {
-    return this.getClient().get(
+    return this.client.get(
       `${this.#urlPrefix}/${tabValue}?page_num=${pageNum}`,
     );
   }
@@ -63,16 +63,14 @@ export default class CommentsAPI extends BaseCourseAPI {
    * Updates comment topic to be isPending.
    */
   togglePending(topicId: number): Promise<AxiosResponse<void>> {
-    return this.getClient().patch(
-      `${this.#urlPrefix}/${topicId}/toggle_pending`,
-    );
+    return this.client.patch(`${this.#urlPrefix}/${topicId}/toggle_pending`);
   }
 
   /**
    * Updates comment topic to be marked as read.
    */
   markAsRead(topicId: number): Promise<AxiosResponse<void>> {
-    return this.getClient().patch(`${this.#urlPrefix}/${topicId}/mark_as_read`);
+    return this.client.patch(`${this.#urlPrefix}/${topicId}/mark_as_read`);
   }
 
   /**
@@ -88,10 +86,7 @@ export default class CommentsAPI extends BaseCourseAPI {
     topicId: string,
     params: object,
   ): Promise<AxiosResponse<CommentPostListData>> {
-    return this.getClient().post(
-      `${this.#urlPrefix}/${topicId}/posts/`,
-      params,
-    );
+    return this.client.post(`${this.#urlPrefix}/${topicId}/posts/`, params);
   }
 
   /**
@@ -109,7 +104,7 @@ export default class CommentsAPI extends BaseCourseAPI {
     postId: string,
     params: object,
   ): Promise<AxiosResponse<CommentPostListData>> {
-    return this.getClient().patch(
+    return this.client.patch(
       `${this.#urlPrefix}/${topicId}/posts/${postId}`,
       params,
     );
@@ -124,8 +119,6 @@ export default class CommentsAPI extends BaseCourseAPI {
    * success response: {}
    */
   delete(topicId: string, postId: string): Promise<AxiosResponse<void>> {
-    return this.getClient().delete(
-      `${this.#urlPrefix}/${topicId}/posts/${postId}`,
-    );
+    return this.client.delete(`${this.#urlPrefix}/${topicId}/posts/${postId}`);
   }
 }

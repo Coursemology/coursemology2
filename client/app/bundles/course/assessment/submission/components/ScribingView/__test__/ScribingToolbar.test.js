@@ -18,7 +18,7 @@ import actionTypes, {
   scribingToolThickness,
 } from '../../../constants';
 
-const client = CourseAPI.assessment.answer.scribing.getClient();
+const client = CourseAPI.assessment.answer.scribing.client;
 const mock = new MockAdapter(client);
 
 const assessmentId = 1;
