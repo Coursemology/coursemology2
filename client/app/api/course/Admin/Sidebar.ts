@@ -7,15 +7,15 @@ import type {
 import BaseAdminAPI from './Base';
 
 export default class SidebarAPI extends BaseAdminAPI {
-  override _getUrlPrefix(): string {
-    return `${super._getUrlPrefix()}/sidebar`;
+  override get urlPrefix(): string {
+    return `${super.urlPrefix}/sidebar`;
   }
 
   index(): Promise<AxiosResponse<SidebarItems>> {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.urlPrefix);
   }
 
   update(data: SidebarItemsPostData): Promise<AxiosResponse<SidebarItems>> {
-    return this.getClient().patch(this._getUrlPrefix(), data);
+    return this.getClient().patch(this.urlPrefix, data);
   }
 }

@@ -7,17 +7,17 @@ import type {
 import BaseAdminAPI from './Base';
 
 export default class CommentsAdminAPI extends BaseAdminAPI {
-  override _getUrlPrefix(): string {
-    return `${super._getUrlPrefix()}/comments`;
+  override get urlPrefix(): string {
+    return `${super.urlPrefix}/comments`;
   }
 
   index(): Promise<AxiosResponse<CommentsSettingsData>> {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.urlPrefix);
   }
 
   update(
     data: CommentsSettingsPostData,
   ): Promise<AxiosResponse<CommentsSettingsData>> {
-    return this.getClient().patch(this._getUrlPrefix(), data);
+    return this.getClient().patch(this.urlPrefix, data);
   }
 }

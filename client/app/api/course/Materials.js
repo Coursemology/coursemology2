@@ -12,11 +12,11 @@ export default class MaterialsAPI extends BaseCourseAPI {
    */
   destroy(folderId, materialId) {
     return this.getClient().delete(
-      `${this._getUrlPrefix()}/${folderId}/files/${materialId}`,
+      `${this.#urlPrefix}/${folderId}/files/${materialId}`,
     );
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/materials/folders`;
   }
 }

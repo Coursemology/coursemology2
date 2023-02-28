@@ -12,7 +12,7 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
    * - Their average video watch percentage
    */
   fetchAllStudentStatistics() {
-    return this.getClient().get(`${this._getUrlPrefix()}/students`);
+    return this.getClient().get(`${this.#urlPrefix}/students`);
   }
 
   /**
@@ -23,7 +23,7 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
    * - The standard deviation
    */
   fetchAllStaffStatistics() {
-    return this.getClient().get(`${this._getUrlPrefix()}/staff`);
+    return this.getClient().get(`${this.#urlPrefix}/staff`);
   }
 
   /**
@@ -31,17 +31,17 @@ export default class CourseStatisticsAPI extends BaseCourseAPI {
    * submission data.
    */
   fetchCourseProgressionStatistics() {
-    return this.getClient().get(`${this._getUrlPrefix()}/course/progression`);
+    return this.getClient().get(`${this.#urlPrefix}/course/progression`);
   }
 
   /**
    * Fetches course performance statistics, which comprises of various performance metrics.
    */
   fetchCoursePerformanceStatistics() {
-    return this.getClient().get(`${this._getUrlPrefix()}/course/performance`);
+    return this.getClient().get(`${this.#urlPrefix}/course/performance`);
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/statistics/course`;
   }
 }

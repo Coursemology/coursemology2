@@ -23,7 +23,7 @@ export default class SessionsAPI extends BaseVideoAPI {
    * }
    */
   create() {
-    return this.getClient().post(this._getUrlPrefix());
+    return this.getClient().post(this.#urlPrefix);
   }
 
   /**
@@ -45,7 +45,7 @@ export default class SessionsAPI extends BaseVideoAPI {
     isOldSession = false,
     closeSession = false,
   ) {
-    return this.getClient().patch(`${this._getUrlPrefix()}/${id}`, {
+    return this.getClient().patch(`${this.#urlPrefix}/${id}`, {
       session: { last_video_time: lastVideoTime, events },
       is_old_session: isOldSession,
       video_duration: duration,
@@ -53,7 +53,7 @@ export default class SessionsAPI extends BaseVideoAPI {
     });
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/videos/${this.getVideoId()}/submissions/${this.getVideoSubmissionId()}/sessions`;
   }
 }

@@ -12,13 +12,13 @@ export default class ScribingsAPI extends BaseAssessmentAPI {
    */
   update(answerId, data) {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${answerId}/scribing/scribbles`,
+      `${this.#urlPrefix}/${answerId}/scribing/scribbles`,
       data,
     );
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${getCourseId()}/assessments/${getAssessmentId()}/submissions/${getSubmissionId()}/answers`;
   }
 }

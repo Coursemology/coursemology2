@@ -27,7 +27,7 @@ export default class LessonPlanAPI extends BaseCourseAPI {
    * }
    */
   fetch() {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.#urlPrefix);
   }
 
   /**
@@ -41,7 +41,7 @@ export default class LessonPlanAPI extends BaseCourseAPI {
    * error response: { errors: [{ attribute: string }] }
    */
   createMilestone(payload) {
-    return this.getClient().post(`${this._getUrlPrefix()}/milestones`, payload);
+    return this.getClient().post(`${this.#urlPrefix}/milestones`, payload);
   }
 
   /**
@@ -56,7 +56,7 @@ export default class LessonPlanAPI extends BaseCourseAPI {
    */
   updateMilestone(id, payload) {
     return this.getClient().patch(
-      `${this._getUrlPrefix()}/milestones/${id}`,
+      `${this.#urlPrefix}/milestones/${id}`,
       payload,
     );
   }
@@ -70,7 +70,7 @@ export default class LessonPlanAPI extends BaseCourseAPI {
    * error response: {}
    */
   deleteMilestone(id) {
-    return this.getClient().delete(`${this._getUrlPrefix()}/milestones/${id}`);
+    return this.getClient().delete(`${this.#urlPrefix}/milestones/${id}`);
   }
 
   /**
@@ -84,7 +84,7 @@ export default class LessonPlanAPI extends BaseCourseAPI {
    * error response: { errors: [{ attribute: string }] }
    */
   createEvent(payload) {
-    return this.getClient().post(`${this._getUrlPrefix()}/events`, payload);
+    return this.getClient().post(`${this.#urlPrefix}/events`, payload);
   }
 
   /**
@@ -98,10 +98,7 @@ export default class LessonPlanAPI extends BaseCourseAPI {
    * error response: { errors: [{ attribute: string }] }
    */
   updateEvent(id, payload) {
-    return this.getClient().patch(
-      `${this._getUrlPrefix()}/events/${id}`,
-      payload,
-    );
+    return this.getClient().patch(`${this.#urlPrefix}/events/${id}`, payload);
   }
 
   /**
@@ -113,7 +110,7 @@ export default class LessonPlanAPI extends BaseCourseAPI {
    * error response: {}
    */
   deleteEvent(id) {
-    return this.getClient().delete(`${this._getUrlPrefix()}/events/${id}`);
+    return this.getClient().delete(`${this.#urlPrefix}/events/${id}`);
   }
 
   /**
@@ -127,13 +124,10 @@ export default class LessonPlanAPI extends BaseCourseAPI {
    * error response: {}
    */
   updateItem(id, payload) {
-    return this.getClient().patch(
-      `${this._getUrlPrefix()}/items/${id}`,
-      payload,
-    );
+    return this.getClient().patch(`${this.#urlPrefix}/items/${id}`, payload);
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/lesson_plan`;
   }
 }

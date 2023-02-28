@@ -7,17 +7,17 @@ import {
 import BaseAdminAPI from './Base';
 
 export default class LeaderboardAdminAPI extends BaseAdminAPI {
-  override _getUrlPrefix(): string {
-    return `${super._getUrlPrefix()}/leaderboard`;
+  override get urlPrefix(): string {
+    return `${super.urlPrefix}/leaderboard`;
   }
 
   index(): Promise<AxiosResponse<LeaderboardSettingsData>> {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.urlPrefix);
   }
 
   update(
     data: LeaderboardSettingsPostData,
   ): Promise<AxiosResponse<LeaderboardSettingsData>> {
-    return this.getClient().patch(this._getUrlPrefix(), data);
+    return this.getClient().patch(this.urlPrefix, data);
   }
 }

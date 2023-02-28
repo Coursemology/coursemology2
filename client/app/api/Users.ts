@@ -16,7 +16,7 @@ import { APIResponse } from './types';
 
 export default class UsersAPI extends BaseAPI {
   // eslint-disable-next-line class-methods-use-this
-  _getUrlPrefix(): string {
+  get #urlPrefix(): string {
     return '/users';
   }
 
@@ -29,7 +29,7 @@ export default class UsersAPI extends BaseAPI {
     completedCourses: UserCourseListData[];
     instances: InstanceBasicListData[];
   }> {
-    return this.getClient().get(`${this._getUrlPrefix()}/${userId}`);
+    return this.getClient().get(`${this.#urlPrefix}/${userId}`);
   }
 
   fetchProfile(): APIResponse<ProfileData> {
@@ -59,7 +59,7 @@ export default class UsersAPI extends BaseAPI {
   }
 
   updatePassword(data: PasswordPostData): APIResponse {
-    return this.getClient().patch(this._getUrlPrefix(), data);
+    return this.getClient().patch(this.#urlPrefix, data);
   }
 
   fetchTimeZones(): APIResponse<TimeZones> {

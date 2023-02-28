@@ -20,7 +20,7 @@ export default class DuplicationAPI extends BaseCourseAPI {
    * See course/duplication/propTypes.js for custom propTypes.
    */
   fetch() {
-    return this.getClient().get(`${this._getUrlPrefix()}/new`);
+    return this.getClient().get(`${this.#urlPrefix}/new`);
   }
 
   /**
@@ -78,7 +78,7 @@ export default class DuplicationAPI extends BaseCourseAPI {
     );
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/object_duplication`;
   }
 }

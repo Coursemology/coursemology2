@@ -10,11 +10,11 @@ import {
 import BaseCourseAPI from './Base';
 
 export default class DisbursementAPI extends BaseCourseAPI {
-  _getUrlPrefix(): string {
+  get #urlPrefix(): string {
     return `/courses/${this.getCourseId()}/users/disburse_experience_points`;
   }
 
-  _getForumDisbursementUrlPrefix(): string {
+  get #forumDisbursementUrlPrefix(): string {
     return `/courses/${this.getCourseId()}/users/forum_disbursement`;
   }
 
@@ -27,7 +27,7 @@ export default class DisbursementAPI extends BaseCourseAPI {
       courseUsers: DisbursementCourseUserListData[];
     }>
   > {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.#urlPrefix);
   }
 
   /**
@@ -39,7 +39,7 @@ export default class DisbursementAPI extends BaseCourseAPI {
       forumUsers: ForumDisbursementUserData[];
     }>
   > {
-    return this.getClient().get(this._getForumDisbursementUrlPrefix(), params);
+    return this.getClient().get(this.#forumDisbursementUrlPrefix, params);
   }
 
   /**
@@ -62,7 +62,7 @@ export default class DisbursementAPI extends BaseCourseAPI {
       count: number;
     }>
   > {
-    return this.getClient().post(this._getUrlPrefix(), params);
+    return this.getClient().post(this.#urlPrefix, params);
   }
 
   /**
@@ -85,6 +85,6 @@ export default class DisbursementAPI extends BaseCourseAPI {
       count: number;
     }>
   > {
-    return this.getClient().post(this._getForumDisbursementUrlPrefix(), params);
+    return this.getClient().post(this.#forumDisbursementUrlPrefix, params);
   }
 }

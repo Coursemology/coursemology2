@@ -7,17 +7,17 @@ import type {
 import BaseAdminAPI from './Base';
 
 export default class AnnouncementsAdminAPI extends BaseAdminAPI {
-  override _getUrlPrefix(): string {
-    return `${super._getUrlPrefix()}/announcements`;
+  override get urlPrefix(): string {
+    return `${super.urlPrefix}/announcements`;
   }
 
   index(): Promise<AxiosResponse<AnnouncementsSettingsData>> {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.urlPrefix);
   }
 
   update(
     data: AnnouncementsSettingsPostData,
   ): Promise<AxiosResponse<AnnouncementsSettingsData>> {
-    return this.getClient().patch(this._getUrlPrefix(), data);
+    return this.getClient().patch(this.urlPrefix, data);
   }
 }

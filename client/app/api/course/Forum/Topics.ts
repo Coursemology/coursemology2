@@ -12,7 +12,7 @@ import { APIResponse, JustRedirect } from 'api/types';
 import BaseCourseAPI from '../Base';
 
 export default class TopicsAPI extends BaseCourseAPI {
-  _getUrlPrefix(): string {
+  get #urlPrefix(): string {
     return `/courses/${this.getCourseId()}/forums/`;
   }
 
@@ -29,7 +29,7 @@ export default class TopicsAPI extends BaseCourseAPI {
     posts: ForumTopicPostListData[];
   }> {
     return this.getClient().get(
-      `${this._getUrlPrefix()}/${forumId}/topics/${topicId}`,
+      `${this.#urlPrefix}/${forumId}/topics/${topicId}`,
     );
   }
 
@@ -41,7 +41,7 @@ export default class TopicsAPI extends BaseCourseAPI {
     params: ForumTopicPostData,
   ): APIResponse<JustRedirect> {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${forumId}/topics`,
+      `${this.#urlPrefix}/${forumId}/topics`,
       params,
     );
   }
