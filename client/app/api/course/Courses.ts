@@ -9,7 +9,7 @@ import { RoleRequestBasicListData } from 'types/system/instance/roleRequests';
 import BaseCourseAPI from './Base';
 
 export default class CoursesAPI extends BaseCourseAPI {
-  _baseUrlPrefix: string = '/courses';
+  #baseUrlPrefix: string = '/courses';
 
   /**
    * Fetches all of the courses
@@ -21,7 +21,7 @@ export default class CoursesAPI extends BaseCourseAPI {
       permissions: CoursePermissions;
     }>
   > {
-    return this.getClient().get(this._baseUrlPrefix);
+    return this.getClient().get(this.#baseUrlPrefix);
   }
 
   /**
@@ -32,7 +32,7 @@ export default class CoursesAPI extends BaseCourseAPI {
       course: CourseData;
     }>
   > {
-    return this.getClient().get(`${this._baseUrlPrefix}/${courseId}`);
+    return this.getClient().get(`${this.#baseUrlPrefix}/${courseId}`);
   }
 
   /**
@@ -53,7 +53,7 @@ export default class CoursesAPI extends BaseCourseAPI {
       title: string;
     }>
   > {
-    return this.getClient().post(this._baseUrlPrefix, params);
+    return this.getClient().post(this.#baseUrlPrefix, params);
   }
 
   /**
