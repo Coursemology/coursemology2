@@ -13,7 +13,7 @@ import {
 import BaseVideoAPI from './Base';
 
 export default class VideosAPI extends BaseVideoAPI {
-  _getUrlPrefix(): string {
+  get #urlPrefix(): string {
     return `/courses/${this.getCourseId()}/videos`;
   }
 
@@ -28,7 +28,7 @@ export default class VideosAPI extends BaseVideoAPI {
       permissions: VideoPermissions;
     }>
   > {
-    return this.getClient().get(this._getUrlPrefix(), {
+    return this.getClient().get(this.#urlPrefix, {
       params: { tab: currentTabId },
     });
   }
@@ -43,7 +43,7 @@ export default class VideosAPI extends BaseVideoAPI {
       showPersonalizedTimelineFeatures: boolean;
     }>
   > {
-    return this.getClient().get(`${this._getUrlPrefix()}/${videoId}`);
+    return this.getClient().get(`${this.#urlPrefix}/${videoId}`);
   }
 
   /**
@@ -56,7 +56,7 @@ export default class VideosAPI extends BaseVideoAPI {
       showPersonalizedTimelineFeatures: boolean;
     }>
   > {
-    return this.getClient().post(this._getUrlPrefix(), params);
+    return this.getClient().post(this.#urlPrefix, params);
   }
 
   /**
@@ -72,7 +72,7 @@ export default class VideosAPI extends BaseVideoAPI {
       showPersonalizedTimelineFeatures: boolean;
     }>
   > {
-    return this.getClient().patch(`${this._getUrlPrefix()}/${videoId}`, params);
+    return this.getClient().patch(`${this.#urlPrefix}/${videoId}`, params);
   }
 
   /**
@@ -84,6 +84,6 @@ export default class VideosAPI extends BaseVideoAPI {
    * error response: {}
    */
   delete(videoId: number): Promise<AxiosResponse> {
-    return this.getClient().delete(`${this._getUrlPrefix()}/${videoId}`);
+    return this.getClient().delete(`${this.#urlPrefix}/${videoId}`);
   }
 }

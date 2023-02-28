@@ -40,7 +40,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
    * success response: survey_with_questions
    */
   fetch(surveyId) {
-    return this.getClient().get(`${this._getUrlPrefix()}/${surveyId}`);
+    return this.getClient().get(`${this.#urlPrefix}/${surveyId}`);
   }
 
   /**
@@ -55,7 +55,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
    * }
    */
   index() {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.#urlPrefix);
   }
 
   /**
@@ -67,7 +67,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
    * error response: { errors: [{ attribute: string }] }
    */
   create(surveyFields) {
-    return this.getClient().post(this._getUrlPrefix(), surveyFields);
+    return this.getClient().post(this.#urlPrefix, surveyFields);
   }
 
   /**
@@ -81,7 +81,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
    */
   update(surveyId, surveyFields) {
     return this.getClient().patch(
-      `${this._getUrlPrefix()}/${surveyId}`,
+      `${this.#urlPrefix}/${surveyId}`,
       surveyFields,
     );
   }
@@ -95,7 +95,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
    * error response: {}
    */
   delete(surveyId) {
-    return this.getClient().delete(`${this._getUrlPrefix()}/${surveyId}`);
+    return this.getClient().delete(`${this.#urlPrefix}/${surveyId}`);
   }
 
   /**
@@ -124,7 +124,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
    * error response: {}
    */
   results(surveyId) {
-    return this.getClient().get(`${this._getUrlPrefix()}/${surveyId}/results`);
+    return this.getClient().get(`${this.#urlPrefix}/${surveyId}/results`);
   }
 
   /**
@@ -136,7 +136,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
    */
   remind(includePhantom) {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${this.getSurveyId()}/remind`,
+      `${this.#urlPrefix}/${this.getSurveyId()}/remind`,
       {
         include_phantom: includePhantom,
       },
@@ -155,7 +155,7 @@ export default class SurveysAPI extends BaseSurveyAPI {
    */
   reorderQuestions(ordering) {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${this.getSurveyId()}/reorder_questions`,
+      `${this.#urlPrefix}/${this.getSurveyId()}/reorder_questions`,
       ordering,
     );
   }
@@ -170,18 +170,18 @@ export default class SurveysAPI extends BaseSurveyAPI {
    */
   reorderSections(ordering) {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${this.getSurveyId()}/reorder_sections`,
+      `${this.#urlPrefix}/${this.getSurveyId()}/reorder_sections`,
       ordering,
     );
   }
 
   download() {
     return this.getClient().get(
-      `${this._getUrlPrefix()}/${this.getSurveyId()}/download`,
+      `${this.#urlPrefix}/${this.getSurveyId()}/download`,
     );
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/surveys`;
   }
 }

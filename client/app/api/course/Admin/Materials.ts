@@ -7,17 +7,17 @@ import type {
 import BaseAdminAPI from './Base';
 
 export default class MaterialsAdminAPI extends BaseAdminAPI {
-  override _getUrlPrefix(): string {
-    return `${super._getUrlPrefix()}/materials`;
+  override get urlPrefix(): string {
+    return `${super.urlPrefix}/materials`;
   }
 
   index(): Promise<AxiosResponse<MaterialsSettingsData>> {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.urlPrefix);
   }
 
   update(
     data: MaterialsSettingsPostData,
   ): Promise<AxiosResponse<MaterialsSettingsData>> {
-    return this.getClient().patch(this._getUrlPrefix(), data);
+    return this.getClient().patch(this.urlPrefix, data);
   }
 }

@@ -24,7 +24,7 @@ export default class QuestionsAPI extends BaseSurveyAPI {
    * error response: { errors: [{ attribute: string }] }
    */
   create(questionFields) {
-    return this.getClient().post(this._getUrlPrefix(), questionFields);
+    return this.getClient().post(this.#urlPrefix, questionFields);
   }
 
   /**
@@ -39,7 +39,7 @@ export default class QuestionsAPI extends BaseSurveyAPI {
    */
   update(questionId, questionFields) {
     return this.getClient().patch(
-      `${this._getUrlPrefix()}/${questionId}`,
+      `${this.#urlPrefix}/${questionId}`,
       questionFields,
     );
   }
@@ -53,10 +53,10 @@ export default class QuestionsAPI extends BaseSurveyAPI {
    * error response: {}
    */
   delete(questionId) {
-    return this.getClient().delete(`${this._getUrlPrefix()}/${questionId}`);
+    return this.getClient().delete(`${this.#urlPrefix}/${questionId}`);
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/surveys/${this.getSurveyId()}/questions`;
   }
 }

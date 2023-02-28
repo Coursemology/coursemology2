@@ -32,7 +32,7 @@ export default class ScribingQuestionAPI extends BaseAPI {
    */
   fetch() {
     return this.getClient().get(
-      `${ScribingQuestionAPI._getUrlPrefix()}/${getScribingId()}`,
+      `${ScribingQuestionAPI.#urlPrefix}/${getScribingId()}`,
     );
   }
 
@@ -70,7 +70,7 @@ export default class ScribingQuestionAPI extends BaseAPI {
     );
 
     return this.getClient().post(
-      ScribingQuestionAPI._getUrlPrefix(),
+      ScribingQuestionAPI.#urlPrefix,
       formData,
       config,
     );
@@ -98,7 +98,7 @@ export default class ScribingQuestionAPI extends BaseAPI {
     );
 
     return this.getClient().patch(
-      `${ScribingQuestionAPI._getUrlPrefix()}/${scribingId}`,
+      `${ScribingQuestionAPI.#urlPrefix}/${scribingId}`,
       formData,
       config,
     );
@@ -114,11 +114,11 @@ export default class ScribingQuestionAPI extends BaseAPI {
    */
   delete(scribingId) {
     return this.getClient().delete(
-      `${ScribingQuestionAPI._getUrlPrefix()}/${scribingId}`,
+      `${ScribingQuestionAPI.#urlPrefix}/${scribingId}`,
     );
   }
 
-  static _getUrlPrefix() {
+  static get #urlPrefix() {
     return `/courses/${getCourseId()}/assessments/${getAssessmentId()}/question/scribing`;
   }
 }

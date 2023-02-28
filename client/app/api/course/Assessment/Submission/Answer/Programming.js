@@ -27,7 +27,9 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
     const formData = new FormData();
     ProgrammingAPI.appendFormData(formData, submissionFields);
 
-    const url = `${this._getUrlPrefix()}/${answerId}/programming/create_programming_files`;
+    const url = `${
+      this.#urlPrefix
+    }/${answerId}/programming/create_programming_files`;
     return this.getClient().post(url, formData, config);
   }
 
@@ -45,12 +47,12 @@ export default class ProgrammingAPI extends BaseAssessmentAPI {
    */
   deleteProgrammingFile(answerId, payload) {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${answerId}/programming/destroy_programming_file`,
+      `${this.#urlPrefix}/${answerId}/programming/destroy_programming_file`,
       payload,
     );
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/assessments/${this.getAssessmentId()}\
 /submissions/${this.getSubmissionId()}/answers`;
   }

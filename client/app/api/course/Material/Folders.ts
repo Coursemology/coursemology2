@@ -6,7 +6,7 @@ import { APIResponse } from 'api/types';
 import BaseCourseAPI from '../Base';
 
 export default class FoldersAPI extends BaseCourseAPI {
-  _getUrlPrefix(): string {
+  get #urlPrefix(): string {
     return `/courses/${this.getCourseId()}/materials/folders`;
   }
 
@@ -14,7 +14,7 @@ export default class FoldersAPI extends BaseCourseAPI {
    * Fetches a folder, along with all its subfolders and materials.
    */
   fetch(folderId: number): APIResponse<FolderData> {
-    return this.getClient().get(`${this._getUrlPrefix()}/${folderId}`);
+    return this.getClient().get(`${this.#urlPrefix}/${folderId}`);
   }
 
   /**
@@ -22,7 +22,7 @@ export default class FoldersAPI extends BaseCourseAPI {
    */
   createFolder(folderId: number, params: FormData): APIResponse<FolderData> {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${folderId}/create/subfolder`,
+      `${this.#urlPrefix}/${folderId}/create/subfolder`,
       params,
     );
   }
@@ -31,17 +31,14 @@ export default class FoldersAPI extends BaseCourseAPI {
    * Updates a new folder
    */
   updateFolder(folderId: number, params: FormData): APIResponse<FolderData> {
-    return this.getClient().patch(
-      `${this._getUrlPrefix()}/${folderId}`,
-      params,
-    );
+    return this.getClient().patch(`${this.#urlPrefix}/${folderId}`, params);
   }
 
   /**
    * Deletes a folder
    */
   deleteFolder(folderId: number): APIResponse {
-    return this.getClient().delete(`${this._getUrlPrefix()}/${folderId}`);
+    return this.getClient().delete(`${this.#urlPrefix}/${folderId}`);
   }
 
   /**
@@ -49,7 +46,7 @@ export default class FoldersAPI extends BaseCourseAPI {
    */
   deleteMaterial(currFolderId: number, materialId: number): APIResponse {
     return this.getClient().delete(
-      `${this._getUrlPrefix()}/${currFolderId}/files/${materialId}`,
+      `${this.#urlPrefix}/${currFolderId}/files/${materialId}`,
     );
   }
 
@@ -61,7 +58,7 @@ export default class FoldersAPI extends BaseCourseAPI {
     params: FormData,
   ): APIResponse<FolderData> {
     return this.getClient().put(
-      `${this._getUrlPrefix()}/${currFolderId}/upload_materials`,
+      `${this.#urlPrefix}/${currFolderId}/upload_materials`,
       params,
     );
   }
@@ -75,7 +72,7 @@ export default class FoldersAPI extends BaseCourseAPI {
     params: FormData,
   ): APIResponse<MaterialListData> {
     return this.getClient().patch(
-      `${this._getUrlPrefix()}/${folderId}/files/${materialId}`,
+      `${this.#urlPrefix}/${folderId}/files/${materialId}`,
       params,
     );
   }
@@ -84,8 +81,6 @@ export default class FoldersAPI extends BaseCourseAPI {
    * Downloads an entire folder and its contents
    */
   downloadFolder(currFolderId: number): APIResponse<JobSubmitted> {
-    return this.getClient().get(
-      `${this._getUrlPrefix()}/${currFolderId}/download`,
-    );
+    return this.getClient().get(`${this.#urlPrefix}/${currFolderId}/download`);
   }
 }

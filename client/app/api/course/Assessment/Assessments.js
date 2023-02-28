@@ -8,7 +8,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @returns An `AssessmentsListData` object
    */
   index(categoryId, tabId) {
-    return this.getClient().get(this._getUrlPrefix(), {
+    return this.getClient().get(this.#urlPrefix, {
       params: { category: categoryId, tab: tabId },
     });
   }
@@ -19,7 +19,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @returns An `AssessmentData` object
    */
   fetch(assessmentId) {
-    return this.getClient().get(`${this._getUrlPrefix()}/${assessmentId}`);
+    return this.getClient().get(`${this.#urlPrefix}/${assessmentId}`);
   }
 
   /**
@@ -29,12 +29,12 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    */
   fetchUnlockRequirements(assessmentId) {
     return this.getClient().get(
-      `${this._getUrlPrefix()}/${assessmentId}/requirements`,
+      `${this.#urlPrefix}/${assessmentId}/requirements`,
     );
   }
 
   fetchEditData(assessmentId) {
-    return this.getClient().get(`${this._getUrlPrefix()}/${assessmentId}/edit`);
+    return this.getClient().get(`${this.#urlPrefix}/${assessmentId}/edit`);
   }
 
   /**
@@ -50,7 +50,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   create(params) {
-    return this.getClient().post(this._getUrlPrefix(), params);
+    return this.getClient().post(this.#urlPrefix, params);
   }
 
   /**
@@ -63,10 +63,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * error response: { errors: [] } - An array of errors will be returned upon validation error.
    */
   update(assessmentId, params) {
-    return this.getClient().patch(
-      `${this._getUrlPrefix()}/${assessmentId}`,
-      params,
-    );
+    return this.getClient().patch(`${this.#urlPrefix}/${assessmentId}`, params);
   }
 
   /**
@@ -84,7 +81,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * success response: array of skills
    */
   fetchSkills() {
-    return this.getClient().get(`${this._getUrlPrefix()}/skills/options`);
+    return this.getClient().get(`${this.#urlPrefix}/skills/options`);
   }
 
   /**
@@ -95,12 +92,9 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * error response: {}
    */
   remind(assessmentId, courseUsers) {
-    return this.getClient().post(
-      `${this._getUrlPrefix()}/${assessmentId}/remind`,
-      {
-        course_users: courseUsers,
-      },
-    );
+    return this.getClient().post(`${this.#urlPrefix}/${assessmentId}/remind`, {
+      course_users: courseUsers,
+    });
   }
 
   /**
@@ -118,7 +112,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    */
   reorderQuestions(assessmentId, questionIds) {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${assessmentId}/reorder`,
+      `${this.#urlPrefix}/${assessmentId}/reorder`,
       questionIds,
     );
   }
@@ -139,7 +133,7 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     return this.getClient().patch(convertUrl);
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/assessments`;
   }
 }

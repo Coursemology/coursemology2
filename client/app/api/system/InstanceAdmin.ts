@@ -16,7 +16,7 @@ import { InstanceBasicListData } from 'types/system/instances';
 import BaseSystemAPI from '../Base';
 
 export default class InstanceAdminAPI extends BaseSystemAPI {
-  static _getUrlPrefix(): string {
+  static get #urlPrefix(): string {
     return `/admin/instance`;
   }
 
@@ -28,7 +28,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
       instance: InstanceBasicListData;
     }>
   > {
-    return this.getClient().get(`${InstanceAdminAPI._getUrlPrefix()}`);
+    return this.getClient().get(`${InstanceAdminAPI.#urlPrefix}`);
   }
 
   /**
@@ -40,9 +40,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
       permissions: AnnouncementPermissions;
     }>
   > {
-    return this.getClient().get(
-      `${InstanceAdminAPI._getUrlPrefix()}/announcements`,
-    );
+    return this.getClient().get(`${InstanceAdminAPI.#urlPrefix}/announcements`);
   }
 
   /**
@@ -50,7 +48,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
    */
   createAnnouncement(params: FormData): Promise<AxiosResponse> {
     return this.getClient().post(
-      `${InstanceAdminAPI._getUrlPrefix()}/announcements`,
+      `${InstanceAdminAPI.#urlPrefix}/announcements`,
       params,
     );
   }
@@ -63,7 +61,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
     params: FormData,
   ): Promise<AxiosResponse> {
     return this.getClient().patch(
-      `${InstanceAdminAPI._getUrlPrefix()}/announcements/${announcementId}`,
+      `${InstanceAdminAPI.#urlPrefix}/announcements/${announcementId}`,
       params,
     );
   }
@@ -73,7 +71,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
    */
   deleteAnnouncement(announcementId: number): Promise<AxiosResponse> {
     return this.getClient().delete(
-      `${InstanceAdminAPI._getUrlPrefix()}/announcements/${announcementId}`,
+      `${InstanceAdminAPI.#urlPrefix}/announcements/${announcementId}`,
     );
   }
 
@@ -92,7 +90,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
       counts: InstanceAdminStats;
     }>
   > {
-    return this.getClient().get(`${InstanceAdminAPI._getUrlPrefix()}/users/`, {
+    return this.getClient().get(`${InstanceAdminAPI.#urlPrefix}/users/`, {
       params,
     });
   }
@@ -102,7 +100,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
    */
   updateUser(userId: number, params: FormData): Promise<AxiosResponse> {
     return this.getClient().patch(
-      `${InstanceAdminAPI._getUrlPrefix()}/users/${userId}`,
+      `${InstanceAdminAPI.#urlPrefix}/users/${userId}`,
       params,
     );
   }
@@ -112,7 +110,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
    */
   deleteUser(userId: number): Promise<AxiosResponse> {
     return this.getClient().delete(
-      `${InstanceAdminAPI._getUrlPrefix()}/users/${userId}`,
+      `${InstanceAdminAPI.#urlPrefix}/users/${userId}`,
     );
   }
 
@@ -125,7 +123,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
     }>
   > {
     return this.getClient().get(
-      `${InstanceAdminAPI._getUrlPrefix()}/user_invitations`,
+      `${InstanceAdminAPI.#urlPrefix}/user_invitations`,
     );
   }
 
@@ -138,7 +136,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
    */
   deleteInvitation(invitationId: number): Promise<AxiosResponse> {
     return this.getClient().delete(
-      `${InstanceAdminAPI._getUrlPrefix()}/user_invitations/${invitationId}`,
+      `${InstanceAdminAPI.#urlPrefix}/user_invitations/${invitationId}`,
     );
   }
 
@@ -158,7 +156,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
     const formData = data as FormData;
 
     return this.getClient().post(
-      `${InstanceAdminAPI._getUrlPrefix()}/users/invite`,
+      `${InstanceAdminAPI.#urlPrefix}/users/invite`,
       formData,
     );
   }
@@ -174,7 +172,9 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
     invitationId: number,
   ): Promise<AxiosResponse<InvitationListData>> {
     return this.getClient().post(
-      `${InstanceAdminAPI._getUrlPrefix()}/user_invitations/${invitationId}/resend_invitation`,
+      `${
+        InstanceAdminAPI.#urlPrefix
+      }/user_invitations/${invitationId}/resend_invitation`,
     );
   }
 
@@ -188,7 +188,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
     AxiosResponse<{ invitations: InvitationListData[] }>
   > {
     return this.getClient().post(
-      `${InstanceAdminAPI._getUrlPrefix()}/users/resend_invitations`,
+      `${InstanceAdminAPI.#urlPrefix}/users/resend_invitations`,
     );
   }
 
@@ -208,7 +208,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
       coursesCount: number;
     }>
   > {
-    return this.getClient().get(`${InstanceAdminAPI._getUrlPrefix()}/courses`, {
+    return this.getClient().get(`${InstanceAdminAPI.#urlPrefix}/courses`, {
       params,
     });
   }
@@ -218,7 +218,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
    */
   deleteCourse(id: number): Promise<AxiosResponse> {
     return this.getClient().delete(
-      `${InstanceAdminAPI._getUrlPrefix()}/courses/${id}`,
+      `${InstanceAdminAPI.#urlPrefix}/courses/${id}`,
     );
   }
 
@@ -230,9 +230,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
       components: ComponentData[];
     }>
   > {
-    return this.getClient().get(
-      `${InstanceAdminAPI._getUrlPrefix()}/components`,
-    );
+    return this.getClient().get(`${InstanceAdminAPI.#urlPrefix}/components`);
   }
 
   /**
@@ -244,7 +242,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
     }>
   > {
     return this.getClient().patch(
-      `${InstanceAdminAPI._getUrlPrefix()}/components`,
+      `${InstanceAdminAPI.#urlPrefix}/components`,
       params,
     );
   }

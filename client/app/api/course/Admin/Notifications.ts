@@ -4,12 +4,12 @@ import type { NotificationSettings } from 'types/course/admin/notifications';
 import BaseAdminAPI from './Base';
 
 export default class NotificationsSettingsAPI extends BaseAdminAPI {
-  override _getUrlPrefix(): string {
-    return `${super._getUrlPrefix()}/notifications`;
+  override get urlPrefix(): string {
+    return `${super.urlPrefix}/notifications`;
   }
 
   index(): Promise<AxiosResponse<NotificationSettings>> {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.urlPrefix);
   }
 
   /**
@@ -23,6 +23,6 @@ export default class NotificationsSettingsAPI extends BaseAdminAPI {
    * error response: {}
    */
   update(params): Promise<AxiosResponse<NotificationSettings>> {
-    return this.getClient().patch(this._getUrlPrefix(), params);
+    return this.getClient().patch(this.urlPrefix, params);
   }
 }

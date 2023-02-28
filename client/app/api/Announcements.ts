@@ -5,7 +5,7 @@ import { APIResponse } from './types';
 
 export default class AnnouncementsAPI extends BaseAPI {
   // eslint-disable-next-line class-methods-use-this
-  _getUrlPrefix(): string {
+  get #urlPrefix(): string {
     return `/announcements`;
   }
 
@@ -15,6 +15,6 @@ export default class AnnouncementsAPI extends BaseAPI {
   index(): APIResponse<{
     announcements: AnnouncementListData[];
   }> {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.#urlPrefix);
   }
 }

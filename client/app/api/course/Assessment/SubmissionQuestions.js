@@ -10,7 +10,7 @@ export default class SubmissionQuestionsAPI extends BaseAssessmentAPI {
    */
   createComment(submissionQuestionId, params) {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${submissionQuestionId}/comments`,
+      `${this.#urlPrefix}/${submissionQuestionId}/comments`,
       params,
     );
   }
@@ -25,12 +25,12 @@ export default class SubmissionQuestionsAPI extends BaseAssessmentAPI {
   getPastAnswers(submissionQuestionId, answersToLoad = 10) {
     const params = { answers_to_load: answersToLoad };
     return this.getClient().get(
-      `${this._getUrlPrefix()}/${submissionQuestionId}/past_answers`,
+      `${this.#urlPrefix}/${submissionQuestionId}/past_answers`,
       { params },
     );
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/assessments/${this.getAssessmentId()}/submission_questions`;
   }
 }

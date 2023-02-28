@@ -4,12 +4,12 @@ import type { LessonPlanSettings } from 'types/course/admin/lessonPlan';
 import BaseAdminAPI from './Base';
 
 export default class LessonPlanSettingsAPI extends BaseAdminAPI {
-  override _getUrlPrefix(): string {
-    return `${super._getUrlPrefix()}/lesson_plan`;
+  override get urlPrefix(): string {
+    return `${super.urlPrefix}/lesson_plan`;
   }
 
   index(): Promise<AxiosResponse<LessonPlanSettings>> {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.urlPrefix);
   }
 
   /**
@@ -24,6 +24,6 @@ export default class LessonPlanSettingsAPI extends BaseAdminAPI {
    * error response: {}
    */
   update(params): Promise<AxiosResponse<LessonPlanSettings>> {
-    return this.getClient().patch(this._getUrlPrefix(), params);
+    return this.getClient().patch(this.urlPrefix, params);
   }
 }

@@ -8,7 +8,7 @@ import {
 import BaseCourseAPI from './Base';
 
 export default class AnnouncementsAPI extends BaseCourseAPI {
-  _getUrlPrefix(): string {
+  get #urlPrefix(): string {
     return `/courses/${this.getCourseId()}/announcements`;
   }
 
@@ -21,7 +21,7 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
       permissions: AnnouncementPermissions;
     }>
   > {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.#urlPrefix);
   }
 
   /**
@@ -33,7 +33,7 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
       permissions: AnnouncementPermissions;
     }>
   > {
-    return this.getClient().post(this._getUrlPrefix(), params);
+    return this.getClient().post(this.#urlPrefix, params);
   }
 
   /**
@@ -44,7 +44,7 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
     params: FormData | object,
   ): Promise<AxiosResponse<AnnouncementData>> {
     return this.getClient().patch(
-      `${this._getUrlPrefix()}/${announcementId}`,
+      `${this.#urlPrefix}/${announcementId}`,
       params,
     );
   }
@@ -58,6 +58,6 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
    * error response: {}
    */
   delete(announcementId: number): Promise<AxiosResponse> {
-    return this.getClient().delete(`${this._getUrlPrefix()}/${announcementId}`);
+    return this.getClient().delete(`${this.#urlPrefix}/${announcementId}`);
   }
 }

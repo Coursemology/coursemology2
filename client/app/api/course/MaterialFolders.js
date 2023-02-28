@@ -18,12 +18,12 @@ export default class MaterialFoldersAPI extends BaseCourseAPI {
     }
 
     return this.getClient().put(
-      `${this._getUrlPrefix()}/${folderId}/upload_materials`,
+      `${this.#urlPrefix}/${folderId}/upload_materials`,
       formData,
     );
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/materials/folders`;
   }
 }

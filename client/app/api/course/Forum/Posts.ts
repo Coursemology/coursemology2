@@ -9,7 +9,7 @@ import { APIResponse } from 'api/types';
 import BaseCourseAPI from '../Base';
 
 export default class PostsAPI extends BaseCourseAPI {
-  _getUrlPrefix(): string {
+  get #urlPrefix(): string {
     return `/courses/${this.getCourseId()}/forums/`;
   }
 
@@ -25,7 +25,7 @@ export default class PostsAPI extends BaseCourseAPI {
     postTreeIds: RecursiveArray<number>;
   }> {
     return this.getClient().post(
-      `${this._getUrlPrefix()}/${forumId}/topics/${topicId}/posts`,
+      `${this.#urlPrefix}/${forumId}/topics/${topicId}/posts`,
       discussionPost,
     );
   }

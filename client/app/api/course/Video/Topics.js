@@ -50,7 +50,7 @@ export default class TopicsAPI extends BaseVideoAPI {
    * }
    */
   create(fields) {
-    return this.getClient().post(this._getUrlPrefix(), fields);
+    return this.getClient().post(this.#urlPrefix, fields);
   }
 
   /**
@@ -65,7 +65,7 @@ export default class TopicsAPI extends BaseVideoAPI {
    * }
    */
   show(topicId) {
-    return this.getClient().get(`${this._getUrlPrefix()}/${topicId}`);
+    return this.getClient().get(`${this.#urlPrefix}/${topicId}`);
   }
 
   /**
@@ -78,10 +78,10 @@ export default class TopicsAPI extends BaseVideoAPI {
    * }
    */
   index() {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.#urlPrefix);
   }
 
-  _getUrlPrefix() {
+  get #urlPrefix() {
     return `/courses/${this.getCourseId()}/videos/${this.getVideoId()}/topics`;
   }
 }

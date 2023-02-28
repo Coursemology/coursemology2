@@ -9,7 +9,7 @@ import {
 import BaseCourseAPI from './Base';
 
 export default class AchievementsAPI extends BaseCourseAPI {
-  _getUrlPrefix(): string {
+  get #urlPrefix(): string {
     return `/courses/${this.getCourseId()}/achievements`;
   }
 
@@ -22,7 +22,7 @@ export default class AchievementsAPI extends BaseCourseAPI {
       permissions: AchievementPermissions;
     }>
   > {
-    return this.getClient().get(this._getUrlPrefix());
+    return this.getClient().get(this.#urlPrefix);
   }
 
   /**
@@ -33,7 +33,7 @@ export default class AchievementsAPI extends BaseCourseAPI {
       achievement: AchievementData;
     }>
   > {
-    return this.getClient().get(`${this._getUrlPrefix()}/${achievementId}`);
+    return this.getClient().get(`${this.#urlPrefix}/${achievementId}`);
   }
 
   /**
@@ -48,7 +48,7 @@ export default class AchievementsAPI extends BaseCourseAPI {
     }>
   > {
     return this.getClient().get(
-      `${this._getUrlPrefix()}/${achievementId}/achievement_course_users`,
+      `${this.#urlPrefix}/${achievementId}/achievement_course_users`,
     );
   }
 
@@ -68,7 +68,7 @@ export default class AchievementsAPI extends BaseCourseAPI {
       id: number;
     }>
   > {
-    return this.getClient().post(this._getUrlPrefix(), params);
+    return this.getClient().post(this.#urlPrefix, params);
   }
 
   /**
@@ -85,7 +85,7 @@ export default class AchievementsAPI extends BaseCourseAPI {
     params: FormData | object,
   ): Promise<AxiosResponse> {
     return this.getClient().patch(
-      `${this._getUrlPrefix()}/${achievementId}`,
+      `${this.#urlPrefix}/${achievementId}`,
       params,
     );
   }
@@ -99,6 +99,6 @@ export default class AchievementsAPI extends BaseCourseAPI {
    * error response: {}
    */
   delete(achievementId: number): Promise<AxiosResponse> {
-    return this.getClient().delete(`${this._getUrlPrefix()}/${achievementId}`);
+    return this.getClient().delete(`${this.#urlPrefix}/${achievementId}`);
   }
 }

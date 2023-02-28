@@ -18,7 +18,7 @@ interface FilterParams {
 }
 
 export default class AdminAPI extends BaseSystemAPI {
-  static _getUrlPrefix(): string {
+  static get #urlPrefix(): string {
     return `/admin`;
   }
 
@@ -31,7 +31,7 @@ export default class AdminAPI extends BaseSystemAPI {
       permissions: AnnouncementPermissions;
     }>
   > {
-    return this.getClient().get(`${AdminAPI._getUrlPrefix()}/announcements`);
+    return this.getClient().get(`${AdminAPI.#urlPrefix}/announcements`);
   }
 
   /**
@@ -39,7 +39,7 @@ export default class AdminAPI extends BaseSystemAPI {
    */
   createAnnouncement(params: FormData): Promise<AxiosResponse> {
     return this.getClient().post(
-      `${AdminAPI._getUrlPrefix()}/announcements`,
+      `${AdminAPI.#urlPrefix}/announcements`,
       params,
     );
   }
@@ -52,7 +52,7 @@ export default class AdminAPI extends BaseSystemAPI {
     params: FormData,
   ): Promise<AxiosResponse> {
     return this.getClient().patch(
-      `${AdminAPI._getUrlPrefix()}/announcements/${announcementId}`,
+      `${AdminAPI.#urlPrefix}/announcements/${announcementId}`,
       params,
     );
   }
@@ -62,7 +62,7 @@ export default class AdminAPI extends BaseSystemAPI {
    */
   deleteAnnouncement(announcementId: number): Promise<AxiosResponse> {
     return this.getClient().delete(
-      `${AdminAPI._getUrlPrefix()}/announcements/${announcementId}`,
+      `${AdminAPI.#urlPrefix}/announcements/${announcementId}`,
     );
   }
 
@@ -75,7 +75,7 @@ export default class AdminAPI extends BaseSystemAPI {
       counts: AdminStats;
     }>
   > {
-    return this.getClient().get(`${AdminAPI._getUrlPrefix()}/users/`, {
+    return this.getClient().get(`${AdminAPI.#urlPrefix}/users/`, {
       params,
     });
   }
@@ -85,7 +85,7 @@ export default class AdminAPI extends BaseSystemAPI {
    */
   updateUser(userId: number, params: FormData): Promise<AxiosResponse> {
     return this.getClient().patch(
-      `${AdminAPI._getUrlPrefix()}/users/${userId}`,
+      `${AdminAPI.#urlPrefix}/users/${userId}`,
       params,
     );
   }
@@ -94,9 +94,7 @@ export default class AdminAPI extends BaseSystemAPI {
    * Deletes a system user.
    */
   deleteUser(userId: number): Promise<AxiosResponse> {
-    return this.getClient().delete(
-      `${AdminAPI._getUrlPrefix()}/users/${userId}`,
-    );
+    return this.getClient().delete(`${AdminAPI.#urlPrefix}/users/${userId}`);
   }
 
   /**
@@ -109,17 +107,14 @@ export default class AdminAPI extends BaseSystemAPI {
       counts: number;
     }>
   > {
-    return this.getClient().get(`${AdminAPI._getUrlPrefix()}/instances`);
+    return this.getClient().get(`${AdminAPI.#urlPrefix}/instances`);
   }
 
   /**
    * Creates an instance.
    */
   createInstance(params: FormData): Promise<AxiosResponse> {
-    return this.getClient().post(
-      `${AdminAPI._getUrlPrefix()}/instances`,
-      params,
-    );
+    return this.getClient().post(`${AdminAPI.#urlPrefix}/instances`, params);
   }
 
   /**
@@ -127,7 +122,7 @@ export default class AdminAPI extends BaseSystemAPI {
    */
   updateInstance(instanceId: number, params: FormData): Promise<AxiosResponse> {
     return this.getClient().patch(
-      `${AdminAPI._getUrlPrefix()}/instances/${instanceId}`,
+      `${AdminAPI.#urlPrefix}/instances/${instanceId}`,
       params,
     );
   }
@@ -137,7 +132,7 @@ export default class AdminAPI extends BaseSystemAPI {
    */
   deleteInstance(instanceId: number): Promise<AxiosResponse> {
     return this.getClient().delete(
-      `${AdminAPI._getUrlPrefix()}/instances/${instanceId}`,
+      `${AdminAPI.#urlPrefix}/instances/${instanceId}`,
     );
   }
 
@@ -152,7 +147,7 @@ export default class AdminAPI extends BaseSystemAPI {
       coursesCount: number;
     }>
   > {
-    return this.getClient().get(`${AdminAPI._getUrlPrefix()}/courses`, {
+    return this.getClient().get(`${AdminAPI.#urlPrefix}/courses`, {
       params,
     });
   }
@@ -161,6 +156,6 @@ export default class AdminAPI extends BaseSystemAPI {
    * Deletes a course
    */
   deleteCourse(id: number): Promise<AxiosResponse> {
-    return this.getClient().delete(`${AdminAPI._getUrlPrefix()}/courses/${id}`);
+    return this.getClient().delete(`${AdminAPI.#urlPrefix}/courses/${id}`);
   }
 }
