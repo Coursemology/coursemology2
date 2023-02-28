@@ -33,7 +33,7 @@ json.materials @folder.materials.includes(:updater) do |material|
   json.id material.id
   json.name material.name
   json.description format_ckeditor_rich_text(material.description)
-  json.materialUrl url_for([current_course, @folder, material])
+  json.materialUrl url_to_material(current_course, @folder, material)
   json.updatedAt material.updated_at
 
   updater = material.updater
