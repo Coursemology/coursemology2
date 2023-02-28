@@ -5,9 +5,7 @@ import BaseCourseAPI from './Base';
 
 export default class VideoSubmissionsAPI extends BaseCourseAPI {
   get #urlPrefix(): string {
-    return `/courses/${
-      this.courseId
-    }/users/${this.getCourseUserId()}/video_submissions`;
+    return `/courses/${this.courseId}/users/${this.courseUserId}/video_submissions`;
   }
 
   /**

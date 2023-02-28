@@ -14,7 +14,7 @@ export default class BaseCourseAPI extends BaseAPI {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  getCourseUserId() {
+  get courseUserId() {
     return getCourseUserIdFromUrl();
   }
 }
