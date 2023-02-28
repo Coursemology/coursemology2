@@ -4,7 +4,7 @@ import { Alert, Typography } from '@mui/material';
 import {
   McqMrqData,
   McqMrqFormData,
-} from 'types/course/assessment/multiple-responses';
+} from 'types/course/assessment/question/multiple-responses';
 
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';

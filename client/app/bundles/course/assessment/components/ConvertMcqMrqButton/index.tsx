@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@mui/material';
-import { McqMrqListData } from 'types/course/assessment/multiple-responses';
+import { McqMrqListData } from 'types/course/assessment/question/multiple-responses';
 
 import useTranslation from 'lib/hooks/useTranslation';
 

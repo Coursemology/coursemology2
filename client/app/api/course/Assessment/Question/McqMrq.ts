@@ -1,7 +1,7 @@
 import {
   McqMrqFormData,
   McqMrqPostData,
-} from 'types/course/assessment/multiple-responses';
+} from 'types/course/assessment/question/multiple-responses';
 
 import { APIResponse, JustRedirect } from 'api/types';
 

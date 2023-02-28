@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { East } from '@mui/icons-material';
 import { Alert, Chip, Typography } from '@mui/material';
-import { McqMrqListData } from 'types/course/assessment/multiple-responses';
+import { McqMrqListData } from 'types/course/assessment/question/multiple-responses';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import useTranslation from 'lib/hooks/useTranslation';

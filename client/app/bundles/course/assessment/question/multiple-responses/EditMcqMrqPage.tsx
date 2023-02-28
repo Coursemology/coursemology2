@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import {
   McqMrqData,
   McqMrqFormData,
-} from 'types/course/assessment/multiple-responses';
+} from 'types/course/assessment/question/multiple-responses';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';

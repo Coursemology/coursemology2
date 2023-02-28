@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ExpandLess, ExpandMore } from '@mui/icons-material';
 import { Button, Collapse, Radio, Typography } from '@mui/material';
-import { McqMrqListData } from 'types/course/assessment/multiple-responses';
+import { McqMrqListData } from 'types/course/assessment/question/multiple-responses';
 import { QuestionData } from 'types/course/assessment/questions';
 
 import Checkbox from 'lib/components/core/buttons/Checkbox';
