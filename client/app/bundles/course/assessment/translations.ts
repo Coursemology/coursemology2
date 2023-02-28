@@ -236,11 +236,11 @@ const translations = defineMessages({
   },
   changeToMrq: {
     id: 'course.assessment.show.changeToMrq',
-    defaultMessage: 'Change to MRQ',
+    defaultMessage: 'Convert to MRQ',
   },
   changeToMcq: {
     id: 'course.assessment.show.changeToMcq',
-    defaultMessage: 'Change to MCQ',
+    defaultMessage: 'Convert to MCQ',
   },
   sureChangingQuestionType: {
     id: 'course.assessment.show.sureChangingQuestionType',
@@ -382,11 +382,11 @@ const translations = defineMessages({
   },
   changeToMrqFull: {
     id: 'course.assessment.show.changeToMrqFull',
-    defaultMessage: 'Change to Multiple Response (MRQ)',
+    defaultMessage: 'Convert to Multiple Response (MRQ)',
   },
   changeToMcqFull: {
     id: 'course.assessment.show.changeToMcqFull',
-    defaultMessage: 'Change to Multiple Choice (MCQ)',
+    defaultMessage: 'Convert to Multiple Choice (MCQ)',
   },
   multipleChoice: {
     id: 'course.assessment.show.multipleChoice',
@@ -490,6 +490,206 @@ const translations = defineMessages({
   noOptions: {
     id: 'course.assessment.show.noOptions',
     defaultMessage: 'This question has no options.',
+  },
+  description: {
+    id: 'course.assessment.question.multipleResponses.description',
+    defaultMessage: 'Description',
+  },
+  staffOnlyComments: {
+    id: 'course.assessment.question.multipleResponses.staffOnlyComments',
+    defaultMessage: 'Staff-only comments',
+  },
+  staffOnlyCommentsHint: {
+    id: 'course.assessment.question.multipleResponses.staffOnlyCommentsHint',
+    defaultMessage:
+      'Useful for internal notes or documentations. Students will never see this.',
+  },
+  maximumGrade: {
+    id: 'course.assessment.question.multipleResponses.maximumGrade',
+    defaultMessage: 'Maximum grade',
+  },
+  alwaysGradeAsCorrect: {
+    id: 'course.assessment.question.multipleResponses.alwaysGradeAsCorrect',
+    defaultMessage: 'Always grade as correct',
+  },
+  alwaysGradeAsCorrectHint: {
+    id: 'course.assessment.question.multipleResponses.alwaysGradeAsCorrectHint',
+    defaultMessage:
+      'If enabled, this question will always be graded as correct, regardless of the submitted responses. Makes sense if there are no "wrong" responses in this question.',
+  },
+  questionDetails: {
+    id: 'course.assessment.question.multipleResponses.questionDetails',
+    defaultMessage: 'Question details',
+  },
+  grading: {
+    id: 'course.assessment.question.multipleResponses.grading',
+    defaultMessage: 'Grading',
+  },
+  skills: {
+    id: 'course.assessment.question.multipleResponses.skills',
+    defaultMessage: 'Skills',
+  },
+  skillsHint: {
+    id: 'course.assessment.question.multipleResponses.skillsHint',
+    defaultMessage:
+      "Completing this question will boost these stats in the students' skills.",
+  },
+  noSkillsCanCreateSkills: {
+    id: 'course.assessment.question.multipleResponses.noSkillsCanCreateSkills',
+    defaultMessage:
+      'There are no skills in this course yet. You can create new skills at the <url>Skills</url> page.',
+  },
+  canConfigureSkills: {
+    id: 'course.assessment.question.multipleResponses.canConfigureSkills',
+    defaultMessage:
+      'You can configure existing and create new skills at the <url>Skills</url> page.',
+  },
+  responses: {
+    id: 'course.assessment.question.multipleResponses.responses',
+    defaultMessage: 'Responses',
+  },
+  responsesHint: {
+    id: 'course.assessment.question.multipleResponses.responsesHint',
+    defaultMessage:
+      'Explanations are displayed after a student submits their responses for this question.',
+  },
+  randomizeResponses: {
+    id: 'course.assessment.question.multipleResponses.randomizeResponses',
+    defaultMessage: 'Randomize responses',
+  },
+  randomizeResponsesHint: {
+    id: 'course.assessment.question.multipleResponses.randomizeResponsesHint',
+    defaultMessage:
+      "If enabled, responses will always be randomized across attempts. Responses that ignore randomisation will always go to the end of the responses' list.",
+  },
+  response: {
+    id: 'course.assessment.question.multipleResponses.response',
+    defaultMessage: 'Response',
+  },
+  explanation: {
+    id: 'course.assessment.question.multipleResponses.explanation',
+    defaultMessage: 'Explanation',
+  },
+  markAsCorrectResponse: {
+    id: 'course.assessment.question.multipleResponses.markAsCorrectResponse',
+    defaultMessage: 'Mark as a correct response',
+  },
+  deleteResponse: {
+    id: 'course.assessment.question.multipleResponses.deleteResponse',
+    defaultMessage: 'Delete response',
+  },
+  responseWillBeDeleted: {
+    id: 'course.assessment.question.multipleResponses.responseWillBeDeleted',
+    defaultMessage: 'This response will be deleted once you save your changes.',
+  },
+  newResponseCannotUndo: {
+    id: 'course.assessment.question.multipleResponses.newResponseCannotUndo',
+    defaultMessage:
+      'This is a new response. It will immediately disappear if you delete before saving it.',
+  },
+  undoDeleteResponse: {
+    id: 'course.assessment.question.multipleResponses.undoDeleteResponse',
+    defaultMessage: 'Undo delete response',
+  },
+  addResponse: {
+    id: 'course.assessment.question.multipleResponses.addResponse',
+    defaultMessage: 'Add a new response',
+  },
+  ignoresRandomization: {
+    id: 'course.assessment.question.multipleResponses.ignoresRandomization',
+    defaultMessage: 'Ignores randomization',
+  },
+  choice: {
+    id: 'course.assessment.question.multipleResponses.choice',
+    defaultMessage: 'Choice',
+  },
+  choices: {
+    id: 'course.assessment.question.multipleResponses.choices',
+    defaultMessage: 'Choices',
+  },
+  choicesHint: {
+    id: 'course.assessment.question.multipleResponses.choicesHint',
+    defaultMessage:
+      'Explanations are displayed after a student submits their choice for this question.',
+  },
+  markAsCorrectChoice: {
+    id: 'course.assessment.question.multipleResponses.markAsCorrectChoice',
+    defaultMessage: 'Mark as a correct choice',
+  },
+  deleteChoice: {
+    id: 'course.assessment.question.multipleResponses.deleteChoice',
+    defaultMessage: 'Delete choice',
+  },
+  choiceWillBeDeleted: {
+    id: 'course.assessment.question.multipleResponses.choiceWillBeDeleted',
+    defaultMessage: 'This choice will be deleted once you save your changes.',
+  },
+  newChoiceCannotUndo: {
+    id: 'course.assessment.question.multipleResponses.newChoiceCannotUndo',
+    defaultMessage:
+      'This is a new choice. It will immediately disappear if you delete before saving it.',
+  },
+  undoDeleteChoice: {
+    id: 'course.assessment.question.multipleResponses.undoDeleteChoice',
+    defaultMessage: 'Undo delete choice',
+  },
+  addChoice: {
+    id: 'course.assessment.question.multipleResponses.addChoice',
+    defaultMessage: 'Add a new choice',
+  },
+  randomizeChoices: {
+    id: 'course.assessment.question.multipleResponses.randomizeChoices',
+    defaultMessage: 'Randomize choices',
+  },
+  randomizeChoicesHint: {
+    id: 'course.assessment.question.multipleResponses.randomizeChoicesHint',
+    defaultMessage:
+      'If enabled, choices will always be randomized across attempts. Choices that ignore randomisation will always go to the end of the choices list.',
+  },
+  alwaysGradeAsCorrectChoiceHint: {
+    id: 'course.assessment.question.multipleResponses.alwaysGradeAsCorrectChoiceHint',
+    defaultMessage:
+      'If enabled, this question will always be graded as correct, regardless of the submitted choice. Makes sense if there are no "wrong" choices in this question.',
+  },
+  convertToMcqHint: {
+    id: 'course.assessment.question.multipleResponses.convertToMcqHint',
+    defaultMessage:
+      'If this question is converted to a Multiple Choice Question (MCQ), students can only submit one out of the many <s>responses</s> choices above. Note that you may define multiple correct choices.',
+  },
+  convertToMrqHint: {
+    id: 'course.assessment.question.multipleResponses.convertToMrqHint',
+    defaultMessage:
+      'If this question is converted to a Multiple Response Question (MRQ), students can submit multiple <s>choices</s> responses defined above.',
+  },
+  mustSpecifyMaximumGrade: {
+    id: 'course.assessment.question.multipleResponses.mustSpecifyMaximumGrade',
+    defaultMessage:
+      'You must specify a valid, non-negative maximum grade to award.',
+  },
+  mustSpecifyPositiveMaximumGrade: {
+    id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaximumGrade',
+    defaultMessage: 'Maximum grade has to be non-negative.',
+  },
+  mustSpecifyResponse: {
+    id: 'course.assessment.question.multipleResponses.mustSpecifyResponse',
+    defaultMessage: 'You must specify a valid response title.',
+  },
+  mustSpecifyChoice: {
+    id: 'course.assessment.question.multipleResponses.mustSpecifyChoice',
+    defaultMessage: 'You must specify a valid choice title.',
+  },
+  mustSpecifyAtLeastOneCorrectChoice: {
+    id: 'course.assessment.question.multipleResponses.mustSpecifyAtLeastOneCorrectChoice',
+    defaultMessage: 'You must specify at least one correct choice.',
+  },
+  questionCreated: {
+    id: 'course.assessment.question.multipleResponses.questionCreated',
+    defaultMessage: 'Question was successfully created.',
+  },
+  saveChangesFirstBeforeConvertingMcqMrq: {
+    id: 'course.assessment.question.multipleResponses.saveChangesFirstBeforeConvertingMcqMrq',
+    defaultMessage:
+      'Please save your changes before attempting to convert this question.',
   },
 });
 
