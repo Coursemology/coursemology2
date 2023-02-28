@@ -27,7 +27,7 @@ export default class DisbursementAPI extends BaseCourseAPI {
       courseUsers: DisbursementCourseUserListData[];
     }>
   > {
-    return this.getClient().get(this.#urlPrefix);
+    return this.client.get(this.#urlPrefix);
   }
 
   /**
@@ -39,7 +39,7 @@ export default class DisbursementAPI extends BaseCourseAPI {
       forumUsers: ForumDisbursementUserData[];
     }>
   > {
-    return this.getClient().get(this.#forumDisbursementUrlPrefix, params);
+    return this.client.get(this.#forumDisbursementUrlPrefix, params);
   }
 
   /**
@@ -62,7 +62,7 @@ export default class DisbursementAPI extends BaseCourseAPI {
       count: number;
     }>
   > {
-    return this.getClient().post(this.#urlPrefix, params);
+    return this.client.post(this.#urlPrefix, params);
   }
 
   /**
@@ -85,6 +85,6 @@ export default class DisbursementAPI extends BaseCourseAPI {
       count: number;
     }>
   > {
-    return this.getClient().post(this.#forumDisbursementUrlPrefix, params);
+    return this.client.post(this.#forumDisbursementUrlPrefix, params);
   }
 }

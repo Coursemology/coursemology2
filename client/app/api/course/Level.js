@@ -10,7 +10,7 @@ export default class LevelAPI extends BaseCourseAPI {
    * }
    */
   fetch() {
-    return this.getClient().get(`${this.#urlPrefix}`);
+    return this.client.get(`${this.#urlPrefix}`);
   }
 
   get #urlPrefix() {
@@ -18,6 +18,6 @@ export default class LevelAPI extends BaseCourseAPI {
   }
 
   save(levelFields) {
-    return this.getClient().post(this.#urlPrefix, { levels: levelFields });
+    return this.client.post(this.#urlPrefix, { levels: levelFields });
   }
 }

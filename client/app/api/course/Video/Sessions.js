@@ -23,7 +23,7 @@ export default class SessionsAPI extends BaseVideoAPI {
    * }
    */
   create() {
-    return this.getClient().post(this.#urlPrefix);
+    return this.client.post(this.#urlPrefix);
   }
 
   /**
@@ -45,7 +45,7 @@ export default class SessionsAPI extends BaseVideoAPI {
     isOldSession = false,
     closeSession = false,
   ) {
-    return this.getClient().patch(`${this.#urlPrefix}/${id}`, {
+    return this.client.patch(`${this.#urlPrefix}/${id}`, {
       session: { last_video_time: lastVideoTime, events },
       is_old_session: isOldSession,
       video_duration: duration,

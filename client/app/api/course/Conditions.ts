@@ -16,33 +16,33 @@ export default class ConditionsAPI extends BaseCourseAPI {
     url: ConditionAbility['url'],
     data: ConditionPostData,
   ): APIResponse<ConditionData[]> {
-    return this.getClient().post(url, data);
+    return this.client.post(url, data);
   }
 
   update(
     url: ConditionData['url'],
     data: ConditionPostData,
   ): APIResponse<ConditionData[]> {
-    return this.getClient().patch(url ?? '', data);
+    return this.client.patch(url ?? '', data);
   }
 
   delete(url: ConditionData['url']): APIResponse<ConditionData[]> {
-    return this.getClient().delete(url ?? '');
+    return this.client.delete(url ?? '');
   }
 
   fetchAssessments(
     url: ConditionAbility['url'],
   ): APIResponse<AvailableAssessments> {
-    return this.getClient().get(url);
+    return this.client.get(url);
   }
 
   fetchAchievements(
     url: ConditionAbility['url'],
   ): APIResponse<AvailableAchievements> {
-    return this.getClient().get(url);
+    return this.client.get(url);
   }
 
   fetchSurveys(url: ConditionAbility['url']): APIResponse<AvailableSurveys> {
-    return this.getClient().get(url);
+    return this.client.get(url);
   }
 }

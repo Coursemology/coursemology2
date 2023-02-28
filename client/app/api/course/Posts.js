@@ -11,7 +11,7 @@ export default class PostsAPI extends BaseCourseAPI {
    * @return {Promise}
    */
   update(topicId, postId, fields) {
-    return this.getClient().patch(this.#getUrl(topicId, postId), fields);
+    return this.client.patch(this.#getUrl(topicId, postId), fields);
   }
 
   /**
@@ -22,7 +22,7 @@ export default class PostsAPI extends BaseCourseAPI {
    * @return {Promise}
    */
   delete(topicId, postId) {
-    return this.getClient().delete(this.#getUrl(topicId, postId));
+    return this.client.delete(this.#getUrl(topicId, postId));
   }
 
   #getUrl(topicId, postId) {

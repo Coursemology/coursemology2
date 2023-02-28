@@ -9,7 +9,7 @@ export default class LessonPlanSettingsAPI extends BaseAdminAPI {
   }
 
   index(): Promise<AxiosResponse<LessonPlanSettings>> {
-    return this.getClient().get(this.urlPrefix);
+    return this.client.get(this.urlPrefix);
   }
 
   /**
@@ -24,6 +24,6 @@ export default class LessonPlanSettingsAPI extends BaseAdminAPI {
    * error response: {}
    */
   update(params): Promise<AxiosResponse<LessonPlanSettings>> {
-    return this.getClient().patch(this.urlPrefix, params);
+    return this.client.patch(this.urlPrefix, params);
   }
 }

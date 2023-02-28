@@ -8,7 +8,7 @@ import storeCreator from 'course/survey/store';
 
 import SurveyResults from '../index';
 
-const client = CourseAPI.survey.surveys.getClient();
+const client = CourseAPI.survey.surveys.client;
 const mock = new MockAdapter(client);
 
 const resultsData = {

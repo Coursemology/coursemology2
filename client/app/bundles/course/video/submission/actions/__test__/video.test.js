@@ -9,7 +9,7 @@ import { changePlayerState, endSession, sendEvents } from '../video';
 
 const videoId = '1';
 
-const client = CourseAPI.video.sessions.getClient();
+const client = CourseAPI.video.sessions.client;
 const mock = new MockAdapter(client, { delayResponse: 0 });
 
 const oldSessionsFixtures = makeImmutableMap({

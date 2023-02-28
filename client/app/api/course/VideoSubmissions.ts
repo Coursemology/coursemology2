@@ -16,6 +16,6 @@ export default class VideoSubmissionsAPI extends BaseCourseAPI {
       videoSubmissions: VideoSubmissionListData[];
     }>
   > {
-    return this.getClient().get(this.#urlPrefix);
+    return this.client.get(this.#urlPrefix);
   }
 }

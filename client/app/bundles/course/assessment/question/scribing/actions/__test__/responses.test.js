@@ -11,7 +11,7 @@ import {
 } from '../scribingQuestionActionCreators';
 
 // Mock axios
-const client = CourseAPI.assessment.question.scribing.getClient();
+const client = CourseAPI.assessment.question.scribing.client;
 const mock = new MockAdapter(client);
 
 beforeEach(() => {

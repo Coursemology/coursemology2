@@ -35,7 +35,7 @@ const NEW_MATERIAL = {
   deleting: false,
 };
 
-const client = CourseAPI.materialFolders.getClient();
+const client = CourseAPI.materialFolders.client;
 const mock = new MockAdapter(client);
 
 let fileManager: RenderResult;

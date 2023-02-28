@@ -21,7 +21,7 @@ export default class CoursesAPI extends BaseCourseAPI {
       permissions: CoursePermissions;
     }>
   > {
-    return this.getClient().get(this.#baseUrlPrefix);
+    return this.client.get(this.#baseUrlPrefix);
   }
 
   /**
@@ -32,7 +32,7 @@ export default class CoursesAPI extends BaseCourseAPI {
       course: CourseData;
     }>
   > {
-    return this.getClient().get(`${this.#baseUrlPrefix}/${courseId}`);
+    return this.client.get(`${this.#baseUrlPrefix}/${courseId}`);
   }
 
   /**
@@ -53,14 +53,14 @@ export default class CoursesAPI extends BaseCourseAPI {
       title: string;
     }>
   > {
-    return this.getClient().post(this.#baseUrlPrefix, params);
+    return this.client.post(this.#baseUrlPrefix, params);
   }
 
   /**
    * Removes a todo
    */
   removeTodo(ignoreLink: string): Promise<void> {
-    return this.getClient().post(ignoreLink);
+    return this.client.post(ignoreLink);
   }
 
   /**
@@ -70,7 +70,7 @@ export default class CoursesAPI extends BaseCourseAPI {
     registrationLink: string,
     myData: FormData,
   ): Promise<AxiosResponse<void>> {
-    return this.getClient().postForm(registrationLink, myData);
+    return this.client.postForm(registrationLink, myData);
   }
 
   /**
@@ -78,13 +78,13 @@ export default class CoursesAPI extends BaseCourseAPI {
    */
 
   submitEnrolRequest(link: string): Promise<AxiosResponse<{ id: number }>> {
-    return this.getClient().postForm(link);
+    return this.client.postForm(link);
   }
 
   /**
    * Cancels a pending enrol request
    */
   cancelEnrolRequest(link: string): Promise<AxiosResponse<void>> {
-    return this.getClient().delete(link);
+    return this.client.delete(link);
   }
 }

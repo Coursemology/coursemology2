@@ -12,12 +12,12 @@ export default class CodaveriAdminAPI extends BaseAdminAPI {
   }
 
   index(): Promise<AxiosResponse<CodaveriSettingsData>> {
-    return this.getClient().get(this.urlPrefix);
+    return this.client.get(this.urlPrefix);
   }
 
   update(
     data: CodaveriSettingsPostData,
   ): Promise<AxiosResponse<CodaveriSettingsData>> {
-    return this.getClient().patch(this.urlPrefix, data);
+    return this.client.patch(this.urlPrefix, data);
   }
 }

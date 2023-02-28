@@ -31,7 +31,7 @@ export default class ScribingQuestionAPI extends BaseAPI {
    * success response: scribing_question
    */
   fetch() {
-    return this.getClient().get(
+    return this.client.get(
       `${ScribingQuestionAPI.#urlPrefix}/${getScribingId()}`,
     );
   }
@@ -69,11 +69,7 @@ export default class ScribingQuestionAPI extends BaseAPI {
       scribingFields.question_scribing,
     );
 
-    return this.getClient().post(
-      ScribingQuestionAPI.#urlPrefix,
-      formData,
-      config,
-    );
+    return this.client.post(ScribingQuestionAPI.#urlPrefix, formData, config);
   }
 
   /**
@@ -97,7 +93,7 @@ export default class ScribingQuestionAPI extends BaseAPI {
       scribingFields.question_scribing,
     );
 
-    return this.getClient().patch(
+    return this.client.patch(
       `${ScribingQuestionAPI.#urlPrefix}/${scribingId}`,
       formData,
       config,
@@ -113,7 +109,7 @@ export default class ScribingQuestionAPI extends BaseAPI {
    * error response: {}
    */
   delete(scribingId) {
-    return this.getClient().delete(
+    return this.client.delete(
       `${ScribingQuestionAPI.#urlPrefix}/${scribingId}`,
     );
   }

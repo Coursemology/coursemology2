@@ -22,7 +22,7 @@ export default class SubmissionsAPI extends BaseCourseAPI {
       permissions: SubmissionPermissions;
     }>
   > {
-    return this.getClient().get(this.#urlPrefix);
+    return this.client.get(this.#urlPrefix);
   }
 
   pending(isMyStudents: boolean): Promise<
@@ -32,7 +32,7 @@ export default class SubmissionsAPI extends BaseCourseAPI {
       permissions: SubmissionPermissions;
     }>
   > {
-    return this.getClient().get(`${this.#urlPrefix}/pending`, {
+    return this.client.get(`${this.#urlPrefix}/pending`, {
       params: { my_students: isMyStudents },
     });
   }
@@ -44,7 +44,7 @@ export default class SubmissionsAPI extends BaseCourseAPI {
       permissions: SubmissionPermissions;
     }>
   > {
-    return this.getClient().get(this.#urlPrefix, {
+    return this.client.get(this.#urlPrefix, {
       params: { category: categoryId },
     });
   }
@@ -65,7 +65,7 @@ export default class SubmissionsAPI extends BaseCourseAPI {
       permissions: SubmissionPermissions;
     }>
   > {
-    return this.getClient().get(this.#urlPrefix, {
+    return this.client.get(this.#urlPrefix, {
       params: {
         'filter[category_id]': categoryId,
         'filter[assessment_id]': assessmentId,
@@ -89,7 +89,7 @@ export default class SubmissionsAPI extends BaseCourseAPI {
       permissions: SubmissionPermissions;
     }>
   > {
-    return this.getClient().get(
+    return this.client.get(
       `${this.#urlPrefix}/pending?my_students=${myStudents}`,
       {
         params: {

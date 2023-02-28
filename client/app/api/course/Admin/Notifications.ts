@@ -9,7 +9,7 @@ export default class NotificationsSettingsAPI extends BaseAdminAPI {
   }
 
   index(): Promise<AxiosResponse<NotificationSettings>> {
-    return this.getClient().get(this.urlPrefix);
+    return this.client.get(this.urlPrefix);
   }
 
   /**
@@ -23,6 +23,6 @@ export default class NotificationsSettingsAPI extends BaseAdminAPI {
    * error response: {}
    */
   update(params): Promise<AxiosResponse<NotificationSettings>> {
-    return this.getClient().patch(this.urlPrefix, params);
+    return this.client.patch(this.urlPrefix, params);
   }
 }

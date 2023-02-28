@@ -12,12 +12,12 @@ export default class ForumsAdminAPI extends BaseAdminAPI {
   }
 
   index(): Promise<AxiosResponse<ForumsSettingsData>> {
-    return this.getClient().get(this.urlPrefix);
+    return this.client.get(this.urlPrefix);
   }
 
   update(
     data: ForumsSettingsPostData,
   ): Promise<AxiosResponse<ForumsSettingsData>> {
-    return this.getClient().patch(this.urlPrefix, data);
+    return this.client.patch(this.urlPrefix, data);
   }
 }

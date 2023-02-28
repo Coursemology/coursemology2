@@ -15,6 +15,6 @@ export default class AnnouncementsAPI extends BaseAPI {
   index(): APIResponse<{
     announcements: AnnouncementListData[];
   }> {
-    return this.getClient().get(this.#urlPrefix);
+    return this.client.get(this.#urlPrefix);
   }
 }

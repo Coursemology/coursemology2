@@ -6,7 +6,7 @@ import storeCreator from 'course/lesson-plan/store';
 
 import ItemRow from '../ItemRow';
 
-const client = CourseAPI.lessonPlan.getClient();
+const client = CourseAPI.lessonPlan.client;
 const mock = new MockAdapter(client);
 
 beforeEach(() => {

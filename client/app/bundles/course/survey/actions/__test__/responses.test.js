@@ -6,7 +6,7 @@ import history from 'lib/history';
 
 import { createResponse } from '../responses';
 
-const client = CourseAPI.survey.responses.getClient();
+const client = CourseAPI.survey.responses.client;
 const mock = new MockAdapter(client);
 const mockNavigate = jest.fn();
 

@@ -29,52 +29,52 @@ export default class UsersAPI extends BaseAPI {
     completedCourses: UserCourseListData[];
     instances: InstanceBasicListData[];
   }> {
-    return this.getClient().get(`${this.#urlPrefix}/${userId}`);
+    return this.client.get(`${this.#urlPrefix}/${userId}`);
   }
 
   fetchProfile(): APIResponse<ProfileData> {
-    return this.getClient().get('/user/profile/edit');
+    return this.client.get('/user/profile/edit');
   }
 
   fetchEmails(): APIResponse<EmailsData> {
-    return this.getClient().get('/user/emails');
+    return this.client.get('/user/emails');
   }
 
   updateProfile(data: ProfilePostData): APIResponse<ProfileData> {
-    return this.getClient().patch('/user/profile', data);
+    return this.client.patch('/user/profile', data);
   }
 
   updateProfilePicture(image: File): APIResponse<ProfileData> {
     const formData = new FormData();
     formData.append('user[profile_photo]', image);
-    return this.getClient().patch('/user/profile', formData);
+    return this.client.patch('/user/profile', formData);
   }
 
   addEmail(data: EmailPostData): APIResponse<EmailsData> {
-    return this.getClient().post('/user/emails', data);
+    return this.client.post('/user/emails', data);
   }
 
   removeEmail(emailId: EmailData['id']): APIResponse<EmailsData> {
-    return this.getClient().delete(`/user/emails/${emailId}`);
+    return this.client.delete(`/user/emails/${emailId}`);
   }
 
   updatePassword(data: PasswordPostData): APIResponse {
-    return this.getClient().patch(this.#urlPrefix, data);
+    return this.client.patch(this.#urlPrefix, data);
   }
 
   fetchTimeZones(): APIResponse<TimeZones> {
-    return this.getClient().get('/user/profile/time_zones');
+    return this.client.get('/user/profile/time_zones');
   }
 
   setEmailAsPrimary(
     url: NonNullable<EmailData['setPrimaryUserEmailPath']>,
   ): APIResponse<EmailsData> {
-    return this.getClient().post(url);
+    return this.client.post(url);
   }
 
   resendConfirmationEmail(
     url: NonNullable<EmailData['confirmationEmailPath']>,
   ): APIResponse {
-    return this.getClient().post(url);
+    return this.client.post(url);
   }
 }

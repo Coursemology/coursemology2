@@ -12,7 +12,7 @@ import { updateScribingQuestion } from '../actions/scribingQuestionActionCreator
 import { initialStates } from '../reducers';
 
 // Mock axios
-const client = CourseAPI.assessment.question.scribing.getClient();
+const client = CourseAPI.assessment.question.scribing.client;
 const mock = new MockAdapter(client);
 const store = storeCreator({ initialStates });
 
@@ -50,7 +50,7 @@ describe('Scribing question', () => {
     );
 
     // Mock assessment axios
-    const assessmentsClient = CourseAPI.assessment.assessments.getClient();
+    const assessmentsClient = CourseAPI.assessment.assessments.client;
     const assessmentsMock = new MockAdapter(assessmentsClient);
 
     assessmentsMock
