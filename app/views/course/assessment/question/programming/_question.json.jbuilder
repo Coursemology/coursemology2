@@ -24,6 +24,7 @@ json.question do
   json.attempt_limit @programming_question.attempt_limit
   json.is_codaveri @programming_question.is_codaveri
   json.codaveri_enabled current_course.component_enabled?(Course::CodaveriComponent)
+  json.codaveri_is_solution_required current_course.settings(:course_codaveri_component).is_solution_required
   json.existing_submissions_count @assessment.submissions.count
 
   if @programming_question.attachment.present? && @programming_question.attachment.persisted?

@@ -613,7 +613,13 @@ class ProgrammingQuestionForm extends Component {
             data: this.props.data.get('test_ui'),
             isLoading: this.props.data.get('is_loading'),
             autograded: this.props.data.getIn(['question', 'autograded']),
-            isCodaveri: this.props.data.getIn(['question', 'is_codaveri']),
+            isSolutionRequired:
+              this.props.data.getIn(['question', 'autograded']) &&
+              this.props.data.getIn(['question', 'is_codaveri']) &&
+              this.props.data.getIn([
+                'question',
+                'codaveri_is_solution_required',
+              ]),
             autogradedAssessment: this.props.data.getIn([
               'question',
               'autograded_assessment',
@@ -654,10 +660,6 @@ class ProgrammingQuestionForm extends Component {
     const isCodaveri = question.get('is_codaveri');
     const hasAutoGradings = question.get('has_auto_gradings');
     const disableSubmit = false;
-    // const disableSubmit =
-    // autograded
-    // isCodaveri &&
-    // question.get('existing_submissions_count') !== 0;
     let autogradedLabel = (
       <b>{this.props.intl.formatMessage(translations.autograded)}</b>
     );

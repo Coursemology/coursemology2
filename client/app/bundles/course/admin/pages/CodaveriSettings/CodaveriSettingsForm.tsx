@@ -23,9 +23,12 @@ const CodaveriSettingsForm = (
   const { t } = useTranslation();
   const [codaveriSetting, setCodaveriSetting] = useState(props.data);
 
-  const toggleITSP = (enabled: boolean): void => {
+  const toggleSetting = (
+    setting: keyof CodaveriSettingsData,
+    enabled: boolean,
+  ): void => {
     const newEnabledComponents = produce(codaveriSetting, (draft) => {
-      draft.isOnlyITSP = enabled;
+      draft[setting] = enabled;
     });
 
     props.onSubmit(newEnabledComponents, (newData) => {
@@ -35,6 +38,7 @@ const CodaveriSettingsForm = (
 
   return (
     <Section
+      contentClassName="flex flex-col space-y-3"
       sticksToNavbar
       subtitle={t(translations.codaverSettingsSubtitle)}
       title={t(translations.codaveriSettings)}
@@ -45,7 +49,18 @@ const CodaveriSettingsForm = (
         control={<Switch />}
         disabled={props.disabled}
         label={t(translations.enableIsOnlyITSP)}
-        onChange={(_, checked): void => toggleITSP(checked)}
+        onChange={(_, checked): void => toggleSetting('isOnlyITSP', checked)}
+      />
+
+      <FormControlLabel
+        checked={codaveriSetting.isSolutionRequired}
+        className="mb-0"
+        control={<Switch />}
+        disabled={props.disabled}
+        label={t(translations.isSolutionRequired)}
+        onChange={(_, checked): void =>
+          toggleSetting('isSolutionRequired', checked)
+        }
       />
     </Section>
   );
