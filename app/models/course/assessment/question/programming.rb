@@ -15,7 +15,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   MEMORY_LIMIT = nil
 
   include DuplicationStateTrackingConcern
-  attr_accessor :max_time_limit
+  attr_accessor :max_time_limit, :skip_process_package
 
   acts_as :question, class_name: Course::Assessment::Question.name
 
@@ -158,16 +158,23 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   def set_defaults
     self.max_time_limit = DEFAULT_CPU_TIMEOUT
+    self.skip_process_package = false
   end
 
   # Create new package or re-evaluate the old package.
   def process_package # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if attachment_changed?
       attachment ? process_new_package : remove_old_package
-    elsif time_limit_changed? || memory_limit_changed? || language_id_changed? || (is_codaveri_changed? && is_codaveri)
+    elsif should_evaluate_package
       # For non-autograded questions, the attachment is not present
       evaluate_package if attachment
     end
+  end
+
+  def should_evaluate_package
+    time_limit_changed? || memory_limit_changed? ||
+      language_id_changed? || (is_codaveri_changed? && is_codaveri) ||
+      import_job&.status == 'errored'
   end
 
   def evaluate_package
@@ -214,7 +221,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   end
 
   def skip_process_package?
-    duplicating?
+    duplicating? || skip_process_package
   end
 
   # time limit validation during duplication is skipped, and time limit is allowed to be nil

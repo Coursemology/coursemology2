@@ -74,6 +74,7 @@ class Course::Assessment::Question::ProgrammingImportService
     @question.template_files = build_template_file_records(template_files)
     @question.test_cases = build_combined_test_case_records(evaluation_result.test_reports)
 
+    @question.skip_process_package = true # Skip package re-processing
     @question.save!
   end
 
