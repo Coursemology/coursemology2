@@ -46,17 +46,6 @@ export function validation(data, pathOfKeysToData, intl) {
         error: intl.formatMessage(translations.noTestCaseErrorAlert),
       });
     }
-    // Check if autograded and codaveri, solution template is required
-    if (
-      data.getIn(['question', 'is_codaveri']) &&
-      data.getIn(['question', 'codaveri_is_solution_required']) &&
-      testData.get('solution').trim() === ''
-    ) {
-      errors.push({
-        path: pathOfKeysToData.concat(['error_solution']),
-        error: intl.formatMessage(translations.noSolutionTemplateError),
-      });
-    }
   }
 
   return errors;

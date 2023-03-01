@@ -1323,9 +1323,6 @@
     "defaultMessage": "Public Test Cases",
     "description": "Title for public test cases panel."
   },
-  "course.assessment.question.programming.OnlineEditorView.requiredsolutionSubtitle": {
-    "defaultMessage": "(Required, hidden, stores solution used as reference code by Codaveri in correcting students' codes)"
-  },
   "course.assessment.question.programming.OnlineEditorView.showTestCaseCodeEditorButton": {
     "defaultMessage": "Code",
     "description": "Button for showing the test case inline code editor."

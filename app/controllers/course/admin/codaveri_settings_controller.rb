@@ -20,7 +20,7 @@ class Course::Admin::CodaveriSettingsController < Course::Admin::Controller
   private
 
   def codaveri_settings_params
-    params.require(:settings_codaveri_component).permit(:is_only_itsp, :is_solution_required)
+    params.require(:settings_codaveri_component).permit(:is_only_itsp)
   end
 
   def component

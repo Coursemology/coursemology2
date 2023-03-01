@@ -1283,9 +1283,6 @@
   "course.assessment.question.programming.OnlineEditorView.publicTestCases": {
     "defaultMessage": "公共测试用例"
   },
-  "course.assessment.question.programming.OnlineEditorView.requiredsolutionSubtitle": {
-    "defaultMessage": "(必填, 隐藏, 保存下来作为Codaveri在批改时的参考代码)"
-  },
   "course.assessment.question.programming.OnlineEditorView.showTestCaseCodeEditorButton": {
     "defaultMessage": "代码"
   },
