@@ -49,6 +49,7 @@ export function validation(data, pathOfKeysToData, intl) {
     // Check if autograded and codaveri, solution template is required
     if (
       data.getIn(['question', 'is_codaveri']) &&
+      data.getIn(['question', 'codaveri_is_solution_required']) &&
       testData.get('solution').trim() === ''
     ) {
       errors.push({

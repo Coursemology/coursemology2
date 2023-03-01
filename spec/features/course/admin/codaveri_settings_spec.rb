@@ -27,7 +27,7 @@ RSpec.feature 'Course: Administration: Codaveri', js: true do
         expect_toastify('Your changes have been saved.')
 
         expect(option).not_to be_checked
-        expect(course.reload.codaveri_itsp_enabled?).to eq(nil)
+        expect(course.reload.codaveri_itsp_enabled?).to eq(false)
       end
     end
   end

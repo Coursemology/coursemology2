@@ -15,6 +15,10 @@ export default defineMessages({
     id: 'course.admin.CodaveriSettings.enableIsOnlyITSP',
     defaultMessage: 'Enable ITSP',
   },
+  isSolutionRequired: {
+    id: 'course.admin.CodaveriSettings.isSolutionRequired',
+    defaultMessage: 'Require a solution when creating a Codaveri question',
+  },
   errorOccurredWhenUpdating: {
     id: 'course.admin.CodaveriSettings.error',
     defaultMessage: 'An error occurred while updating the codaveri setting.',

@@ -47,7 +47,7 @@ const propTypes = {
   }),
   isLoading: PropTypes.bool.isRequired,
   autograded: PropTypes.bool.isRequired,
-  isCodaveri: PropTypes.bool.isRequired,
+  isSolutionRequired: PropTypes.bool.isRequired,
   intl: PropTypes.object.isRequired,
 };
 
@@ -63,11 +63,10 @@ class OnlineEditorPythonView extends Component {
   }
 
   renderAutogradedFields() {
-    const { intl, data, autograded, isCodaveri } = this.props;
+    const { intl, data, isSolutionRequired } = this.props;
     const testCases = data.get('test_cases');
     const testCaseError = data.getIn(['test_cases', 'error']);
     const solutionError = data.get('error_solution');
-    const autogradedAndIsCodaveri = autograded && isCodaveri;
     const errorTextElement = testCaseError && (
       <Fade in={!!testCaseError}>
         <div
@@ -88,7 +87,7 @@ class OnlineEditorPythonView extends Component {
         <div style={{ marginBottom: '1em' }}>
           {this.renderEditorCard(
             intl.formatMessage(translations.solutionTitle),
-            autogradedAndIsCodaveri
+            isSolutionRequired
               ? intl.formatMessage(translations.requiredSolutionSubtitle)
               : intl.formatMessage(translations.solutionSubtitle),
             'solution',

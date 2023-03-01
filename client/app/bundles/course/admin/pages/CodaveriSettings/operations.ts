@@ -19,6 +19,7 @@ export const updateCodaveriSettings = async (
   const adaptedData: CodaveriSettingsPostData = {
     settings_codaveri_component: {
       is_only_itsp: data.isOnlyITSP,
+      is_solution_required: data.isSolutionRequired,
     },
   };
 
