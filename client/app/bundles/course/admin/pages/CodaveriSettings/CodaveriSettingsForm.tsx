@@ -51,17 +51,6 @@ const CodaveriSettingsForm = (
         label={t(translations.enableIsOnlyITSP)}
         onChange={(_, checked): void => toggleSetting('isOnlyITSP', checked)}
       />
-
-      <FormControlLabel
-        checked={codaveriSetting.isSolutionRequired}
-        className="mb-0"
-        control={<Switch />}
-        disabled={props.disabled}
-        label={t(translations.isSolutionRequired)}
-        onChange={(_, checked): void =>
-          toggleSetting('isSolutionRequired', checked)
-        }
-      />
     </Section>
   );
 };

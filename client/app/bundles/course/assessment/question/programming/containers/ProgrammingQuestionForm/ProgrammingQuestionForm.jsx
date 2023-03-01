@@ -613,13 +613,6 @@ class ProgrammingQuestionForm extends Component {
             data: this.props.data.get('test_ui'),
             isLoading: this.props.data.get('is_loading'),
             autograded: this.props.data.getIn(['question', 'autograded']),
-            isSolutionRequired:
-              this.props.data.getIn(['question', 'autograded']) &&
-              this.props.data.getIn(['question', 'is_codaveri']) &&
-              this.props.data.getIn([
-                'question',
-                'codaveri_is_solution_required',
-              ]),
             autogradedAssessment: this.props.data.getIn([
               'question',
               'autograded_assessment',

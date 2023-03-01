@@ -31,11 +31,6 @@ export default defineMessages({
     defaultMessage: '(optional, hidden, stores solution for future reference)',
     description: 'Subtitle for solution template code block.',
   },
-  requiredSolutionSubtitle: {
-    id: 'course.assessment.question.programming.OnlineEditorView.requiredsolutionSubtitle',
-    defaultMessage:
-      "(Required, hidden, stores solution used as reference code by Codaveri in correcting students' codes)",
-  },
   submissionTitle: {
     id: 'course.assessment.question.programming.OnlineEditorView.submissionTitle',
     defaultMessage: 'Submission Template',
