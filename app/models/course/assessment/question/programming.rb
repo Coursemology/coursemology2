@@ -25,7 +25,6 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   before_validation :assign_test_case_attributes
 
   validates :memory_limit, numericality: { greater_than: 0, less_than: 2_147_483_648 }, allow_nil: true
-  validates :time_limit, numericality: { greater_than: 0 }, allow_nil: true
   validates :attempt_limit, numericality: { only_integer: true,
                                             greater_than: 0, less_than: 2_147_483_648 }, allow_nil: true
   validates :package_type, presence: true
@@ -50,10 +49,6 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
 
   def edit_online?
     package_type == 'online_editor'
-  end
-
-  def max_timeout_limit(course)
-    course ? course.programming_timeout_limit : DEFAULT_CPU_TIMEOUT
   end
 
   def auto_grader

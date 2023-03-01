@@ -5,9 +5,6 @@ class Course::Assessment::ProgrammingEvaluationService
   DEFAULT_TIMEOUT = 5.minutes
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
 
-  # Default programming timeout limit, only will be used if course is undefined
-  DEFAULT_CPU_TIMEOUT = 30
-
   # The ratio to multiply the memory limits from our evaluation to the container by.
   MEMORY_LIMIT_RATIO = 1.megabyte / 1.kilobyte
 

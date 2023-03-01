@@ -5,9 +5,6 @@ class Course::Assessment::ProgrammingCodaveriEvaluationService
   DEFAULT_TIMEOUT = 5.minutes
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
 
-  # Default programming timeout limit, only will be used if course is undefined
-  DEFAULT_CPU_TIMEOUT = 30
-
   # Represents a result of evaluating an answer.
   Result = Struct.new(:stdout, :stderr, :evaluation_results, :exit_code, :evaluation_id) do
     # Checks if the evaluation errored.
