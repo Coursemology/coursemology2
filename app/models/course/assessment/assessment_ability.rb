@@ -186,7 +186,7 @@ module Course::Assessment::AssessmentAbility
   end
 
   def allow_teaching_staff_grade_assessment_submissions
-    can [:update, :reload_answer, :grade, :reevaluate_answer],
+    can [:update, :reload_answer, :grade, :reevaluate_answer, :generate_codaveri_feedback],
         Course::Assessment::Submission, assessment: assessment_course_hash
     can :grade, Course::Assessment::Answer,
         submission: { assessment: assessment_course_hash }
