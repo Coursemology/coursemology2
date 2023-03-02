@@ -73,6 +73,7 @@ const SubmissionEditForm = (props) => {
   const {
     attempting,
     canUpdate,
+    codaveriFeedbackStatus,
     explanations,
     delayedGradePublication,
     graded,
@@ -81,10 +82,12 @@ const SubmissionEditForm = (props) => {
     handleAutogradeSubmission,
     handleMark,
     handlePublish,
+    isCodaveriEnabled,
     onReset,
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
+    onGenerateCodaveriFeedback,
     onReevaluateAnswer,
     handleSaveGrade,
     handleToggleViewHistoryMode,
@@ -279,16 +282,33 @@ const SubmissionEditForm = (props) => {
 
     if (!attempting && graderView) {
       return (
-        <Button
-          color="secondary"
-          disabled={isAutograding || isSaving}
-          id="re-evaluate-code"
-          onClick={() => onReevaluateAnswer(answerId, question.id)}
-          style={styles.formButton}
-          variant="contained"
-        >
-          {intl.formatMessage(translations.reevaluate)}
-        </Button>
+        <>
+          {isCodaveriEnabled && question.isCodaveri && (
+            <Button
+              color="secondary"
+              disabled={
+                codaveriFeedbackStatus?.answers[answerId]?.jobStatus ===
+                  'submitted' || isSaving
+              }
+              id="re-evaluate-code"
+              onClick={() => onGenerateCodaveriFeedback(answerId, question.id)}
+              style={styles.formButton}
+              variant="contained"
+            >
+              {intl.formatMessage(translations.generateCodaveriFeedback)}
+            </Button>
+          )}
+          <Button
+            color="secondary"
+            disabled={isAutograding || isSaving}
+            id="re-evaluate-code"
+            onClick={() => onReevaluateAnswer(answerId, question.id)}
+            style={styles.formButton}
+            variant="contained"
+          >
+            {intl.formatMessage(translations.reevaluate)}
+          </Button>
+        </>
       );
     }
 
@@ -693,14 +713,15 @@ SubmissionEditForm.propTypes = {
   tabbedView: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
   step: PropTypes.number,
-
   showMcqMrqSolution: PropTypes.bool.isRequired,
+  isCodaveriEnabled: PropTypes.bool.isRequired,
 
   attempting: PropTypes.bool.isRequired,
   submitted: PropTypes.bool.isRequired,
   graded: PropTypes.bool.isRequired,
   published: PropTypes.bool.isRequired,
 
+  codaveriFeedbackStatus: PropTypes.object,
   explanations: PropTypes.objectOf(explanationShape),
   grading: PropTypes.objectOf(questionGradeShape),
   questionIds: PropTypes.arrayOf(PropTypes.number),
@@ -717,6 +738,7 @@ SubmissionEditForm.propTypes = {
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,
   onReevaluateAnswer: PropTypes.func,
+  onGenerateCodaveriFeedback: PropTypes.func,
   handleUnsubmit: PropTypes.func,
   handleSaveGrade: PropTypes.func,
   handleMark: PropTypes.func,

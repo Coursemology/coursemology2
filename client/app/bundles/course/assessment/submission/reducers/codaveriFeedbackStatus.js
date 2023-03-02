@@ -1,3 +1,5 @@
+import produce from 'immer';
+
 import actions from '../constants';
 
 const initialState = {
@@ -8,18 +10,27 @@ export default function (state = initialState, action) {
   switch (action.type) {
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.FINALISE_SUCCESS: {
-      return {
-        ...state,
-        answers: {
-          ...action.payload.answers.reduce(
-            (obj, answer) => ({
-              ...obj,
-              [answer.fields.id]: answer.codaveriFeedback,
-            }),
-            {},
-          ),
-        },
-      };
+      return produce(state, (draft) => {
+        draft.answers = action.payload.answers.reduce(
+          (reducerObject, answer) => {
+            reducerObject[answer.fields.id] = answer.codaveriFeedback;
+            return reducerObject;
+          },
+          {},
+        );
+      });
+    }
+    case actions.CODE_FEEDBACK_REQUEST: {
+      const { answerId } = action;
+      return produce(state, (draft) => {
+        draft.answers[answerId].jobStatus = 'submitted';
+      });
+    }
+    case actions.CODE_FEEDBACK_FAILURE: {
+      const { answerId } = action;
+      return produce(state, (draft) => {
+        draft.answers[answerId].jobStatus = 'errored';
+      });
     }
     default:
       return state;

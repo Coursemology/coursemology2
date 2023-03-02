@@ -119,6 +119,13 @@ export default class SubmissionsAPI extends BaseAssessmentAPI {
     );
   }
 
+  generateCodaveriFeedback(submissionId, params) {
+    return this.client.post(
+      `${this.#urlPrefix}/${submissionId}/generate_codaveri_feedback`,
+      params,
+    );
+  }
+
   createProgrammingAnnotation(submissionId, answerId, fileId, params) {
     const url = `${
       this.#urlPrefix
