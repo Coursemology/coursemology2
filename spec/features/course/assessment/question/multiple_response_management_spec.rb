@@ -67,7 +67,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
           end
 
           click_button 'Save changes'
-          sleep 0.2
+          wait_for_page
 
           question_created = assessment.questions.first.specific
           expect(question_created).not_to be_multiple_choice
@@ -99,7 +99,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
           end
 
           click_button 'Save changes'
-          sleep 0.2
+          wait_for_page
 
           expect(page).to have_text('You must specify at least one correct choice.')
 
@@ -109,7 +109,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
           end
 
           click_button 'Save changes'
-          sleep 0.2
+          wait_for_page
 
           question_created = assessment.questions.first.specific
           expect(question_created).to be_multiple_choice
@@ -133,7 +133,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         fill_in 'maximumGrade', with: maximum_grade
         click_button 'Save changes'
 
-        sleep 0.2
+        wait_for_page
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.maximum_grade).to eq(maximum_grade)
 
@@ -155,7 +155,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         end
 
         click_button 'Save changes'
-        sleep 0.2
+        wait_for_page
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.options.count).to eq(options.count)
@@ -166,13 +166,13 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
         click_button 'Convert to Multiple Choice (MCQ)'
         click_button 'Convert to MCQ'
 
-        sleep 0.2
+        wait_for_page
 
         # Switch MCQ to MRQ
         click_button 'Convert to Multiple Response (MRQ)'
         click_button 'Convert to MRQ'
 
-        sleep 0.2
+        wait_for_page
 
         # Switching in assessment show page
         visit course_assessment_path(course, assessment)
@@ -196,7 +196,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
 
         click_button 'Save changes'
 
-        sleep 0.2
+        wait_for_page
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(mrq.reload.options.count).to eq(0)
       end
