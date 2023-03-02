@@ -26,6 +26,7 @@ import {
   exitStudentView,
   fetchSubmission,
   finalise,
+  generateCodaveriFeedback,
   mark,
   publish,
   reevaluateAnswer,
@@ -198,6 +199,16 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(reevaluateAnswer(params.submissionId, answerId, questionId));
   };
 
+  onGenerateCodaveriFeedback = (answerId, questionId) => {
+    const {
+      dispatch,
+      match: { params },
+    } = this.props;
+    dispatch(
+      generateCodaveriFeedback(params.submissionId, answerId, questionId),
+    );
+  };
+
   allConsideredCorrect() {
     const { explanations, questions } = this.props;
     if (Object.keys(explanations).length !== Object.keys(questions).length) {
@@ -259,7 +270,9 @@ class VisibleSubmissionEditIndex extends Component {
         allowPartialSubmission,
         showMcqAnswer,
         showMcqMrqSolution,
+        isCodaveriEnabled,
       },
+      codaveriFeedbackStatus,
       submission: { graderView, canUpdate, maxStep, workflowState },
       explanations,
       grading,
@@ -332,6 +345,7 @@ class VisibleSubmissionEditIndex extends Component {
       <SubmissionEditForm
         attempting={workflowState === workflowStates.Attempting}
         canUpdate={canUpdate}
+        codaveriFeedbackStatus={codaveriFeedbackStatus}
         delayedGradePublication={delayedGradePublication}
         explanations={explanations}
         graded={workflowState === workflowStates.Graded}
@@ -347,9 +361,11 @@ class VisibleSubmissionEditIndex extends Component {
         historyQuestions={historyQuestions}
         initialValues={answers.initial}
         isAutograding={isAutograding}
+        isCodaveriEnabled={isCodaveriEnabled}
         isSaving={isSaving}
         maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
         newSubmission={newSubmission}
+        onGenerateCodaveriFeedback={this.onGenerateCodaveriFeedback}
         onReevaluateAnswer={this.onReevaluateAnswer}
         onReset={this.onReset}
         onSaveDraft={this.onSaveDraft}
@@ -433,6 +449,7 @@ VisibleSubmissionEditIndex.propTypes = {
   }),
   answers: PropTypes.object,
   assessment: assessmentShape,
+  codaveriFeedbackStatus: PropTypes.object,
   exp: PropTypes.number,
   explanations: PropTypes.objectOf(explanationShape),
   grading: gradingShape.isRequired,
@@ -455,6 +472,7 @@ function mapStateToProps(state) {
     exp: state.grading.exp,
     explanations: state.explanations,
     answers: state.answers,
+    codaveriFeedbackStatus: state.codaveriFeedbackStatus,
     grading: state.grading.questions,
     notification: state.notification,
     posts: state.posts,

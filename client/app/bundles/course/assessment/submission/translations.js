@@ -82,6 +82,10 @@ const translations = defineMessages({
     id: 'course.assessment.submission.reevaluate',
     defaultMessage: 'Re-evaluate Answer',
   },
+  generateCodaveriFeedback: {
+    id: 'course.assessment.submission.generateCodaveriFeedback',
+    defaultMessage: 'Generate Codaveri Feedback',
+  },
   reset: {
     id: 'course.assessment.submission.reset',
     defaultMessage: 'Reset Answer',
@@ -474,6 +478,10 @@ const translations = defineMessages({
   showCommentsPanel: {
     id: 'course.assessment.submission.readOnlyEditor.showCommentsPanel',
     defaultMessage: 'Show comments panel',
+  },
+  generateFeedbackFailure: {
+    id: 'course.assessment.submission.generateFeedbackFailure',
+    defaultMessage: 'Failed to generate code feedback. Please try again later.',
   },
 });
 

@@ -254,6 +254,51 @@ export function reevaluateAnswer(submissionId, answerId, questionId) {
   };
 }
 
+const pollCodaveriAnswerForFeedback =
+  (jobUrl, submissionId, questionId, answerId) => (dispatch) => {
+    pollJob(
+      jobUrl,
+      () => {
+        dispatch({ type: actionTypes.CODE_FEEDBACK_SUCCESS, questionId });
+        fetchSubmission(submissionId)(dispatch);
+      },
+      () => {
+        dispatch({
+          type: actionTypes.CODE_FEEDBACK_FAILURE,
+          questionId,
+          answerId,
+        });
+        dispatch(setNotification(translations.generateFeedbackFailure));
+      },
+      JOB_POLL_DELAY_MS,
+    );
+  };
+
+export function generateCodaveriFeedback(submissionId, answerId, questionId) {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.CODE_FEEDBACK_REQUEST, questionId, answerId });
+
+    return CourseAPI.assessment.submissions
+      .generateCodaveriFeedback(submissionId, { answer_id: answerId })
+      .then((response) => {
+        pollCodaveriAnswerForFeedback(
+          response.data.jobUrl,
+          submissionId,
+          questionId,
+          answerId,
+        )(dispatch);
+      })
+      .catch(() => {
+        dispatch({
+          type: actionTypes.CODE_FEEDBACK_FAILURE,
+          questionId,
+          answerId,
+        });
+        dispatch(setNotification(translations.requestFailure));
+      });
+  };
+}
+
 export function submitAnswer(submissionId, answerId, rawAnswer, setValue) {
   const answer = formatAnswer(rawAnswer);
   const payload = { answer };
