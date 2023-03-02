@@ -14,17 +14,8 @@ programming_answers = submission.answers.where(question: submission.questions).
   answer.actable_type == Course::Assessment::Answer::Programming.name
 end.map(&:specific)
 
-json.annotations programming_answers.flat_map(&:files) do |file|
-  json.fileId file.id
-  json.topics(file.annotations.reject { |a| a.discussion_topic.post_ids.empty? }) do |annotation|
-    topic = annotation.discussion_topic
-    if can_grade || !topic.posts.only_published_posts.empty?
-      json.id topic.id
-      json.postIds can_grade ? topic.post_ids : topic.posts.only_published_posts.ids
-      json.line annotation.line
-    end
-  end
-end
+json.partial! 'course/assessment/answer/programming/annotations',
+              programming_files: programming_answers.flat_map(&:files), can_grade: can_grade
 
 posts = submission_questions.map(&:discussion_topic).flat_map(&:posts)
 posts += programming_answers.flat_map(&:files).flat_map(&:annotations).map(&:discussion_topic).flat_map(&:posts)
