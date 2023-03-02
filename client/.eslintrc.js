@@ -147,6 +147,13 @@ module.exports = {
     'object-curly-newline': ['error', { consistent: true }],
     'prefer-destructuring': 'off',
     'no-restricted-exports': 'off',
+    'no-param-reassign': [
+      'error',
+      {
+        props: true,
+        ignorePropertyModificationsFor: ['draft', 'reducerObject'],
+      },
+    ],
   },
   globals: {
     window: true,
