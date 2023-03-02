@@ -55,8 +55,6 @@ class Course::Assessment::Question::ProgrammingCodaveriService
   #
   # @param [Course::Assessment::ProgrammingPackage] package The programming package attached to the question.
   def construct_problem_object(package)
-    @problem_object[:problem_id] = @question.codaveri_id if @question.codaveri_id
-
     @problem_object[:language_version][:language] = @question.polyglot_language_name
     @problem_object[:language_version][:version] = @question.polyglot_language_version
 
