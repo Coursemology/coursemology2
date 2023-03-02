@@ -13,7 +13,7 @@ const translations = defineMessages({
   },
   loadingFeedbackGeneration: {
     id: 'course.assessment.submission.CodaveriFeedbackStatus.loadingFeedbackGeneration',
-    defaultMessage: 'Generating Feedback. Please wait.',
+    defaultMessage: 'Generating Feedback. Please wait...',
   },
   successfulFeedbackGeneration: {
     id: 'course.assessment.submission.CodaveriFeedbackStatus.successfulFeedbackGeneration',
@@ -21,9 +21,24 @@ const translations = defineMessages({
   },
   failedFeedbackGeneration: {
     id: 'course.assessment.submission.CodaveriFeedbackStatus.failedFeedbackGeneration',
-    defaultMessage: 'Failed to generate Feedback. Error: {error}',
+    defaultMessage: 'Failed to generate feedback. Please try again later.',
   },
 });
+
+const codaveriJobDisplay = {
+  submitted: {
+    feedbackBgColor: 'bg-orange-100',
+    feedbackDescription: translations.loadingFeedbackGeneration,
+  },
+  completed: {
+    feedbackBgColor: 'bg-green-100',
+    feedbackDescription: translations.successfulFeedbackGeneration,
+  },
+  errored: {
+    feedbackBgColor: 'bg-red-100',
+    feedbackDescription: translations.failedFeedbackGeneration,
+  },
+};
 
 const CodaveriFeedbackStatus = (props) => {
   const { submissionState, graderView, codaveriFeedbackStatus, intl } = props;
@@ -34,38 +49,17 @@ const CodaveriFeedbackStatus = (props) => {
   )
     return null;
 
-  let feedbackBgColor = 'bg-gray-100';
-  let feedbackDescription = '';
-  switch (codaveriFeedbackStatus.jobStatus) {
-    case 'submitted':
-      feedbackBgColor = 'bg-orange-100';
-      feedbackDescription = intl.formatMessage(
-        translations.loadingFeedbackGeneration,
-      );
-      break;
-    case 'completed':
-      feedbackBgColor = 'bg-green-100';
-      feedbackDescription = intl.formatMessage(
-        translations.successfulFeedbackGeneration,
-      );
-      break;
-    case 'errored':
-      feedbackBgColor = 'bg-red-100';
-      feedbackDescription = intl.formatMessage(
-        translations.failedFeedbackGeneration,
-        { error: codaveriFeedbackStatus.errorMessage },
-      );
-      break;
-    default:
-      break;
-  }
+  const { feedbackBgColor, feedbackDescription } =
+    codaveriJobDisplay[codaveriFeedbackStatus.jobStatus];
 
   return (
     <Paper className="mb-8">
       <div className={`${feedbackBgColor} table-cell p-8 font-bold`}>
         {intl.formatMessage(translations.codaveriFeedbackStatus)}
       </div>
-      <div className="table-cell pl-5">{feedbackDescription}</div>
+      <div className="table-cell pl-5">
+        {intl.formatMessage(feedbackDescription)}
+      </div>
     </Paper>
   );
 };
