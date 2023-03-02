@@ -88,13 +88,26 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def reevaluate_answer
-    authorize!(:grade, @submission)
     @answer = @submission.answers.find_by(id: reload_answer_params[:answer_id])
 
     return head :bad_request if @answer.nil?
 
     job = @answer.auto_grade!(redirect_to_path: nil, reduce_priority: true)
     render partial: 'jobs/submitted', locals: { job: job.job }
+  end
+
+  def generate_codaveri_feedback
+    @answer = @submission.answers.find_by(id: reload_answer_params[:answer_id])
+
+    return head :bad_request if @answer.nil?
+
+    job = if @answer.specific.codaveri_feedback_job&.status == 'submitted'
+            @answer.specific.codaveri_feedback_job
+          else
+            @answer.specific.retrieve_codaveri_code_feedback.job
+          end
+
+    render partial: 'jobs/submitted', locals: { job: job }
   end
 
   # Reload the current answer or reset it, depending on parameters.

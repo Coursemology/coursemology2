@@ -99,6 +99,7 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
 
     feedback_job = Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob.perform_later(assessment, question, self)
     update_column(:codaveri_feedback_job_id, feedback_job.job_id)
+    feedback_job
   end
 
   def compare_answer(other_answer)

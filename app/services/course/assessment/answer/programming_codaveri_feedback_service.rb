@@ -29,7 +29,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
   # @param [Course::Assessment::Answer] answer The answer to be graded.
   # @return [Course::Assessment::Answer] The graded answer. Note that this answer is not persisted
   #   yet.
-  def construct_feedback_object
+  def construct_feedback_object # rubocop:disable Metrics/AbcSize
     return unless @question.codaveri_id
 
     @answer_object[:problem_id] = @question.codaveri_id
@@ -97,7 +97,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
     end
   end
 
-  def save_annotation(file, feedback_line) # rubocop:disable Metrics/AbcSize
+  def save_annotation(file, feedback_line)
     feedback_id = feedback_line['feedback_id']
     # linenum is added by 1 as an empty line is added to the code content at the client side.
     linenum = feedback_line['linenum'].to_i + 1
@@ -106,7 +106,7 @@ class Course::Assessment::Answer::ProgrammingCodaveriFeedbackService
     annotation = file.annotations.find_or_initialize_by(line: linenum)
 
     # Remove old codaveri posts in the same annotation
-    annotation.posts.where(creator_id: 0).destroy_all
+    # annotation.posts.where(creator_id: 0).destroy_all
 
     new_post = annotation.posts.build(title: @assessment.title, text: feedback, creator: User.system,
                                       updater: User.system, workflow_state: :draft)

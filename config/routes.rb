@@ -219,6 +219,7 @@ Rails.application.routes.draw do
               post :auto_grade, on: :member
               post :reload_answer, on: :member
               post :reevaluate_answer, on: :member
+              post :generate_codaveri_feedback, on: :member
               patch :submit_answer, on: :member
               get :download_all, on: :collection
               get :download_statistics, on: :collection
