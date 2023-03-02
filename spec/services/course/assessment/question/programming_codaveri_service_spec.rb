@@ -21,6 +21,11 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveriService do
       end
       Course::Assessment::Question::ProgrammingImportService.import(question, attachment)
     end
+    after do
+      Course::Assessment::ProgrammingEvaluationService.class_eval do
+        prepend Course::Assessment::StubbedProgrammingEvaluationService
+      end
+    end
     subject { Course::Assessment::Question::ProgrammingCodaveriService.new(question, attachment) }
 
     describe '.create_or_update_question' do
