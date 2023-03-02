@@ -65,6 +65,12 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
         end
       end
 
+      after do
+        Course::Assessment::ProgrammingEvaluationService.class_eval do
+          prepend Course::Assessment::StubbedProgrammingEvaluationService
+        end
+      end
+
       it 'creates codaveri question' do
         subject.perform_now(question, attachment)
 
