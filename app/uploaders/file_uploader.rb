@@ -19,10 +19,10 @@ class FileUploader < CarrierWave::Uploader::Base
   #
   # @param [String] filename The file name of the downloaded file.
   # @return [String] The url with options.
-  def url(filename: nil, is_inline: false)
-    response_content_disposition = url_inline?(is_inline, filename) ? 'inline;' : 'attachment;'
+  def url(filename: nil)
+    response_content_disposition = url_inline?(filename) ? 'inline;' : 'attachment;'
     query_option = { 'response-content-disposition' => response_content_disposition }
-    query_option['response-content-disposition'] += " filename=\"#{CGI.escape('filename')}\"" if filename
+    query_option['response-content-disposition'] += " filename=\"#{CGI.escape(filename)}\"" if filename
     super(query: query_option)
   end
 
@@ -67,10 +67,10 @@ class FileUploader < CarrierWave::Uploader::Base
     name.scan(/.{2}/).first(3).join('/')
   end
 
-  def url_inline?(is_inline, filename)
+  def url_inline?(filename)
     return false unless filename
 
-    is_inline && inline_whitelisted_for(filename)
+    inline_whitelisted_for(filename)
   end
 
   def inline_whitelisted_for(filename)

@@ -88,8 +88,8 @@ module Course::ControllerHelper
     end
   end
 
-  def url_to_material(course, folder, material, is_inline: true)
-    course_material_folder_material_path(course, folder, material, is_inline: is_inline)
+  def url_to_material(course, folder, material)
+    course_material_folder_material_path(course, folder, material)
   end
 
   private
