@@ -254,17 +254,17 @@ export function reevaluateAnswer(submissionId, answerId, questionId) {
   };
 }
 
-const pollCodaveriAnswerForFeedback =
+const pollFeedbackJob =
   (jobUrl, submissionId, questionId, answerId) => (dispatch) => {
     pollJob(
       jobUrl,
       () => {
-        dispatch({ type: actionTypes.CODE_FEEDBACK_SUCCESS, questionId });
+        dispatch({ type: actionTypes.FEEDBACK_SUCCESS, questionId });
         fetchSubmission(submissionId)(dispatch);
       },
       () => {
         dispatch({
-          type: actionTypes.CODE_FEEDBACK_FAILURE,
+          type: actionTypes.EEDBACK_FAILURE,
           questionId,
           answerId,
         });
@@ -274,14 +274,14 @@ const pollCodaveriAnswerForFeedback =
     );
   };
 
-export function generateCodaveriFeedback(submissionId, answerId, questionId) {
+export function generateFeedback(submissionId, answerId, questionId) {
   return (dispatch) => {
-    dispatch({ type: actionTypes.CODE_FEEDBACK_REQUEST, questionId, answerId });
+    dispatch({ type: actionTypes.FEEDBACK_REQUEST, questionId, answerId });
 
     return CourseAPI.assessment.submissions
-      .generateCodaveriFeedback(submissionId, { answer_id: answerId })
+      .generateFeedback(submissionId, { answer_id: answerId })
       .then((response) => {
-        pollCodaveriAnswerForFeedback(
+        pollFeedbackJob(
           response.data.jobUrl,
           submissionId,
           questionId,
@@ -290,7 +290,7 @@ export function generateCodaveriFeedback(submissionId, answerId, questionId) {
       })
       .catch(() => {
         dispatch({
-          type: actionTypes.CODE_FEEDBACK_FAILURE,
+          type: actionTypes.FEEDBACK_FAILURE,
           questionId,
           answerId,
         });

@@ -26,7 +26,7 @@ import {
   exitStudentView,
   fetchSubmission,
   finalise,
-  generateCodaveriFeedback,
+  generateFeedback,
   mark,
   publish,
   reevaluateAnswer,
@@ -199,14 +199,12 @@ class VisibleSubmissionEditIndex extends Component {
     dispatch(reevaluateAnswer(params.submissionId, answerId, questionId));
   };
 
-  onGenerateCodaveriFeedback = (answerId, questionId) => {
+  onGenerateFeedback = (answerId, questionId) => {
     const {
       dispatch,
       match: { params },
     } = this.props;
-    dispatch(
-      generateCodaveriFeedback(params.submissionId, answerId, questionId),
-    );
+    dispatch(generateFeedback(params.submissionId, answerId, questionId));
   };
 
   allConsideredCorrect() {
@@ -365,7 +363,7 @@ class VisibleSubmissionEditIndex extends Component {
         isSaving={isSaving}
         maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
         newSubmission={newSubmission}
-        onGenerateCodaveriFeedback={this.onGenerateCodaveriFeedback}
+        onGenerateFeedback={this.onGenerateFeedback}
         onReevaluateAnswer={this.onReevaluateAnswer}
         onReset={this.onReset}
         onSaveDraft={this.onSaveDraft}

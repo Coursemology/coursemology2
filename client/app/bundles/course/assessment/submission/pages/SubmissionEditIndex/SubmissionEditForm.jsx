@@ -87,7 +87,7 @@ const SubmissionEditForm = (props) => {
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
-    onGenerateCodaveriFeedback,
+    onGenerateFeedback,
     onReevaluateAnswer,
     handleSaveGrade,
     handleToggleViewHistoryMode,
@@ -291,7 +291,7 @@ const SubmissionEditForm = (props) => {
                   'submitted' || isSaving
               }
               id="re-evaluate-code"
-              onClick={() => onGenerateCodaveriFeedback(answerId, question.id)}
+              onClick={() => onGenerateFeedback(answerId, question.id)}
               style={styles.formButton}
               variant="contained"
             >
@@ -738,7 +738,7 @@ SubmissionEditForm.propTypes = {
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,
   onReevaluateAnswer: PropTypes.func,
-  onGenerateCodaveriFeedback: PropTypes.func,
+  onGenerateFeedback: PropTypes.func,
   handleUnsubmit: PropTypes.func,
   handleSaveGrade: PropTypes.func,
   handleMark: PropTypes.func,

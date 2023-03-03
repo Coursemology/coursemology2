@@ -88,6 +88,10 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
     save
   end
 
+  def generate_feedback
+    codaveri_feedback_job&.status == 'submitted' ? codaveri_feedback_job : retrieve_codaveri_code_feedback.job
+  end
+
   def retrieve_codaveri_code_feedback
     question = self.question.actable
     assessment = submission.assessment

@@ -115,6 +115,16 @@ class Course::Assessment::Answer < ApplicationRecord
     self.grade = params[:grade].to_f if params[:grade]
   end
 
+  # Generates a feedback for an answer
+  #
+  # @return [TrackableJob::Job] The job for creating the feedback
+  # @raise [NotImplementedError] answer#generate_feedback was not implemented.
+  def generate_feedback
+    raise NotImplementedError unless actable.self_respond_to?(:generate_feedback)
+
+    actable.generate_feedback
+  end
+
   protected
 
   def finalise
