@@ -481,7 +481,7 @@ const translations = defineMessages({
   },
   generateFeedbackFailure: {
     id: 'course.assessment.submission.generateFeedbackFailure',
-    defaultMessage: 'Failed to generate code feedback. Please try again later.',
+    defaultMessage: 'Failed to generate feedback. Please try again later.',
   },
 });
 

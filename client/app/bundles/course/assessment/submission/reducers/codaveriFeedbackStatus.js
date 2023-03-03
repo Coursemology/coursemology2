@@ -20,16 +20,22 @@ export default function (state = initialState, action) {
         );
       });
     }
-    case actions.CODE_FEEDBACK_REQUEST: {
+    case actions.FEEDBACK_REQUEST: {
       const { answerId } = action;
       return produce(state, (draft) => {
-        draft.answers[answerId].jobStatus = 'submitted';
+        draft.answers[answerId] = {
+          ...draft.answers[answerId],
+          jobStatus: 'submitted',
+        };
       });
     }
-    case actions.CODE_FEEDBACK_FAILURE: {
+    case actions.FEEDBACK_FAILURE: {
       const { answerId } = action;
       return produce(state, (draft) => {
-        draft.answers[answerId].jobStatus = 'errored';
+        draft.answers[answerId] = {
+          ...draft.answers[answerId],
+          jobStatus: 'errored',
+        };
       });
     }
     default:
