@@ -121,6 +121,7 @@ export interface AssessmentData extends AssessmentActionsData {
     url?: string;
   }[];
 
+  allowRecordDraftAnswer?: boolean;
   showMcqMrqSolution?: boolean;
   gradedTestCases?: string;
   skippable?: boolean;

@@ -184,6 +184,10 @@ const translations = defineMessages({
     id: 'course.assessment.show.baseExp',
     defaultMessage: 'Base EXP',
   },
+  allowRecordDraftAnswer: {
+    id: 'course.assessment.show.allowRecordDraftAnswer',
+    defaultMessage: 'Allow versioning of draft programming answer',
+  },
   showMcqMrqSolution: {
     id: 'course.assessment.show.showMcqMrqSolution',
     defaultMessage: 'Show MCQ/MRQ solutions',

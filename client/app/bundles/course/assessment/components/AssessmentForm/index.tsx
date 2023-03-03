@@ -26,7 +26,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import FileManager from '../FileManager';
 
 import { fetchTabs } from './actions';
-import translations from './translations.intl';
+import translations from './translations';
 import { AssessmentFormProps, connector } from './types';
 import useFormValidation from './useFormValidation';
 
@@ -498,6 +498,18 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
         sticksToNavbar={editing}
         title={t(translations.answersAndTestCases)}
       >
+        <Controller
+          control={control}
+          name="allow_record_draft_answer"
+          render={({ field, fieldState }): JSX.Element => (
+            <FormCheckboxField
+              disabled={disabled}
+              field={field}
+              fieldState={fieldState}
+              label={t(translations.allowRecordDraftAnswer)}
+            />
+          )}
+        />
         <Controller
           control={control}
           name="skippable"
