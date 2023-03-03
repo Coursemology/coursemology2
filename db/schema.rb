@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_06_063949) do
+ActiveRecord::Schema.define(version: 2023_04_10_121228) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -471,6 +471,7 @@ ActiveRecord::Schema.define(version: 2023_04_06_063949) do
     t.boolean "block_student_viewing_after_submitted", default: false
     t.integer "satisfiability_type", default: 0
     t.bigint "monitor_id"
+    t.boolean "allow_record_draft_answer", default: false
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
     t.index ["monitor_id"], name: "index_course_assessments_on_monitor_id"
     t.index ["tab_id"], name: "fk__course_assessments_tab_id"
