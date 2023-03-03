@@ -188,7 +188,8 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     base_params = [:title, :description, :base_exp, :time_bonus_exp, :start_at, :end_at, :tab_id,
                    :bonus_end_at, :published, :autograded, :show_mcq_mrq_solution, :show_private,
                    :show_evaluation, :use_public, :use_private, :use_evaluation, :has_personal_times,
-                   :affects_personal_times, :block_student_viewing_after_submitted, :has_todo]
+                   :affects_personal_times, :block_student_viewing_after_submitted, :has_todo,
+                   :allow_record_draft_answer]
     base_params += if autograded?
                      [:skippable, :allow_partial_submission, :show_mcq_answer]
                    else
