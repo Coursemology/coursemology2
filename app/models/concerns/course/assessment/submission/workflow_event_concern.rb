@@ -17,9 +17,9 @@ module Course::Assessment::Submission::WorkflowEventConcern
     save!
 
     finalise_current_answers
-    answers.reload
 
-    assign_zero_experience_points if assessment.questions.empty?
+    answers.reload
+    assign_zero_experience_points
 
     # Trigger timeline recomputation
     # NB: We are not recomputing on unsubmission because unsubmit is not done by the student
@@ -52,13 +52,8 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.awarder = User.stamper || User.system
     self.awarded_at = Time.zone.now
 
-    publish_delayed_posts unless assessment.autograded?
-
-    return unless send_email && persisted? && !assessment.autograded? &&
-                  submission_graded_email_enabled? &&
-                  submission_graded_email_subscribed?
-
-    execute_after_commit { Course::Mailer.submission_graded_email(self).deliver_later }
+    publish_delayed_posts
+    send_email_after_publishing(send_email)
   end
 
   # Handles the unsubmission of a submitted submission.
@@ -95,10 +90,104 @@ module Course::Assessment::Submission::WorkflowEventConcern
 
     current_answers.select(&:attempting?).each(&:finalise!)
 
-    assign_zero_experience_points if assessment.questions.empty?
+    assign_zero_experience_points
   end
 
   private
+
+  # finalise event (from attempting) - Assign 0 points as there are no questions.
+  def assign_zero_experience_points
+    return unless assessment.questions.empty?
+
+    self.points_awarded = 0
+    self.awarded_at = Time.zone.now
+    self.awarder = User.stamper || User.system
+  end
+
+  # When a submission is finalised, we will compare the current answer and the latest non-current answers.
+  # If they are the same, remove the current answer and mark the latest non-current answer as the current answer
+  # to avoid re-grading.
+  # Otherwise, regenerate the current answer to ensure chronological order of all answers and grade it.
+  # For more details, please refer to the PDF page 2 and below here:
+  # https://github.com/Coursemology/coursemology2/files/7606393/Submission.Past.Answers.Issues.pdf
+  def finalise_current_answers
+    questions.each do |question|
+      qn_current_answers, qn_non_current_answers = get_answers_to_question(question)
+      # There could be a race condition creating multiple current_answers
+      # for a given question in load_or_create_answers and only the first one is used.
+      qn_current_answer = qn_current_answers.first
+
+      next if qn_current_answer.nil?
+
+      process_answers_for_question(question, qn_current_answer, qn_non_current_answers)
+    end
+
+    # After finalising the current answers, destroy all attempting current answers
+    # upon submission finalisation.
+    # There could be a race condition creating multiple current_answers
+    # for a given question in load_or_create_answers and only the first one is used.
+    delete_attempting_current_answers
+  end
+
+  def get_answers_to_question(question)
+    qn_answers = answers.select { |answer| answer.question_id == question.id }.sort_by(&:created_at)
+    qn_current_answers = qn_answers.select(&:current_answer).select(&:attempting?)
+    qn_non_current_answers = qn_answers.reject(&:current_answer).reject(&:attempting?)
+    [qn_current_answers, qn_non_current_answers]
+  end
+
+  def process_answers_for_question(question, qn_current_answer, qn_non_current_answers)
+    if qn_non_current_answers.empty? # When there is no past answer (only 1 attempt per question)
+      finalise_curr_ans_without_past_answers(qn_current_answer)
+    else
+      finalise_curr_ans_with_past_answers(question, qn_non_current_answers, qn_current_answer)
+    end
+  end
+
+  def finalise_curr_ans_without_past_answers(qn_current_answer)
+    qn_current_answer.finalise!
+    qn_current_answer.save!
+  end
+
+  def finalise_curr_ans_with_past_answers(question, qn_non_current_answers, qn_current_answer)
+    last_non_current_answer = qn_non_current_answers.last
+    is_same_answer = qn_current_answer.specific.compare_answer(last_non_current_answer.specific)
+
+    return if check_autograded_no_partial_answer(is_same_answer)
+
+    if is_same_answer
+      # If the latest non-current answer and the current answer are the same,
+      # mark the latest non-current answer as the current answer.
+      last_non_current_answer.current_answer = true
+      # Validations for answer are disabled here in case the answer was previously unsubmitted
+      # (see note in recreate_current_answers)
+      last_non_current_answer.save(validate: false)
+    else
+      # Otherwise, we duplicate the current answer to a new one, mark it as the current answer, and finalise it.
+      new_answer = question.attempt(qn_current_answer.submission, qn_current_answer)
+      new_answer.current_answer = true
+      new_answer.finalise!
+      new_answer.save!
+    end
+  end
+
+  def check_autograded_no_partial_answer(is_same_answer)
+    return unless assessment.autograded && !assessment.allow_partial_submission && !is_same_answer
+
+    self.has_unsubmitted_or_draft_answer = true
+  end
+
+  def delete_attempting_current_answers
+    answers.current_answers.with_attempting_state.each(&:destroy!)
+  end
+
+  def send_email_after_publishing(send_email)
+    return unless send_email && persisted? && !assessment.autograded? &&
+                  submission_graded_email_enabled? &&
+                  submission_graded_email_subscribed?
+
+    execute_after_commit { Course::Mailer.submission_graded_email(self).deliver_later }
+  end
 
   def submission_graded_email_enabled?
     is_enabled_as_phantom = course_user.phantom? && email_enabled.phantom
@@ -112,13 +201,6 @@ module Course::Assessment::Submission::WorkflowEventConcern
 
   def email_enabled
     assessment.course.email_enabled(:assessments, :grades_released, assessment.tab.category.id)
-  end
-
-  # finalise event (from attempting) - Assign 0 points as there are no questions.
-  def assign_zero_experience_points
-    self.points_awarded = 0
-    self.awarded_at = Time.zone.now
-    self.awarder = User.stamper || User.system
   end
 
   # Defined outside of the workflow transition as points_awarded and draft_points_awarded are
@@ -138,12 +220,28 @@ module Course::Assessment::Submission::WorkflowEventConcern
     end
   end
 
-  # @param [Boolean] only_programming Whether unsubmission should be done ONLY for
-  #   current programming aswers
-  def unsubmit_current_answers(only_programming: false)
-    answers_to_unsubmit = only_programming ? current_programming_answers : current_answers
-    answers_to_unsubmit.each do |answer|
-      answer.unsubmit! unless answer.attempting?
+  def publish_delayed_posts
+    return if assessment.autograded?
+
+    # Publish delayed comments for each question of a submission
+    submission_question_topics = submission_questions.flat_map(&:discussion_topic)
+    update_delayed_topics_and_posts(submission_question_topics)
+
+    # Publish delayed annotations for each programming question of a submission
+    programming_answers = answers.where('actable_type = ?', Course::Assessment::Answer::Programming)
+    annotation_topics = programming_answers.flat_map(&:specific).
+                        flat_map(&:files).flat_map(&:annotations).map(&:discussion_topic)
+    update_delayed_topics_and_posts(annotation_topics)
+  end
+
+  # Update read mark for topic and delayed for posts
+  def update_delayed_topics_and_posts(topics)
+    topics.each do |topic|
+      delayed_posts = topic.posts.only_delayed_posts
+      next if delayed_posts.empty?
+
+      topic.read_marks.where('reader_id = ?', creator.id)&.destroy_all # Remove 'mark as read' (if any)
+      delayed_posts.update_all(workflow_state: 'published')
     end
   end
 
@@ -156,7 +254,6 @@ module Course::Assessment::Submission::WorkflowEventConcern
 
       current_answer.current_answer = false
       new_answer.current_answer = true
-      # current_answer.save!
       # Validations are disabled as we are only updating the current_answer flag and nothing else.
       # There are other answer validations, one example is validate_grade which will make
       # check if the grade of the answer exceeds the maximum grade. In case the maximum grade is reduced
@@ -166,87 +263,12 @@ module Course::Assessment::Submission::WorkflowEventConcern
     end
   end
 
-  # When a submission is finalised, we will compare the current answer and the latest non-current answers.
-  # If they are the same, remove the current answer and mark the latest non-current answer as the current answer
-  # to avoid re-grading.
-  # Otherwise, regenerate the current answer to ensure chronological order of all answers and grade it.
-  # For more details, please refer to the PDF page 2 and below here:
-  # https://github.com/Coursemology/coursemology2/files/7606393/Submission.Past.Answers.Issues.pdf
-  def finalise_current_answers
-    questions.each do |question|
-      all_answers = answers.where(question: question)
-      current_answer = all_answers.current_answers.select(&:attempting?).first
-      next if current_answer.nil?
-
-      # For the case when there is no past answer (only 1 attempt per question),
-      # current answer is finalized.
-      if all_answers.non_current_answers.reject(&:attempting?).empty?
-        current_answer.finalise!
-        current_answer.save!
-        # It is mentioned that there could be a race condition creating multiple current_answers
-        # for a given question in load_or_create_answers. Since we always take the first current_answer,
-        # destroy the rest upon submission finalisation.
-        all_answers.current_answers.select(&:attempting?).each(&:destroy!)
-      else
-        last_non_current_answer = all_answers.reject(&:current_answer?).reject(&:attempting?).last
-
-        is_same_answer = current_answer.specific.compare_answer(last_non_current_answer.specific)
-
-        if assessment.autograded && !assessment.allow_partial_submission && !is_same_answer
-          self.has_unsubmitted_or_draft_answer = true
-        end
-
-        if is_same_answer
-          # If the latest non-current answer and the current answer are the same, keep the latest non-current answer
-          # and remove current answer
-          all_answers.current_answers.select(&:attempting?).each(&:destroy!)
-          last_non_current_answer.current_answer = true
-          # Validations for answer are disabled here in case the answer was previously unsubmitted
-          # (see note in recreate_current_answer)
-          last_non_current_answer.save(validate: false)
-        else
-          # Otherwise, we duplicate the current answer to a new one, and finalise it.
-          # We then remove the previous current answer and mark the copied answer as the current answer.
-          new_answer = question.attempt(current_answer.submission, current_answer)
-          new_answer.finalise!
-          new_answer.save!
-
-          all_answers.current_answers.select(&:attempting?).each(&:destroy!)
-          new_answer.update!(current_answer: true)
-        end
-      end
+  # @param [Boolean] only_programming Whether unsubmission should be done ONLY for
+  #   current programming aswers
+  def unsubmit_current_answers(only_programming: false)
+    answers_to_unsubmit = only_programming ? current_programming_answers : current_answers
+    answers_to_unsubmit.each do |answer|
+      answer.unsubmit! unless answer.attempting?
     end
-  end
-
-  def publish_delayed_posts
-    # Publish delayed comments for each question of a submission
-    submission_questions.each do |submission_question|
-      update_topic_and_posts(submission_question)
-    end
-
-    # Publish delayed annotations for each programming question of a submission
-    programming_answers = answers.where('actable_type = ?', Course::Assessment::Answer::Programming)
-
-    programming_answers.each do |programming_answer|
-      programming_files = programming_answer.specific.files
-      programming_files.each do |programming_file|
-        annotations = programming_file.annotations
-        annotations.each do |annotation|
-          update_topic_and_posts(annotation)
-        end
-      end
-    end
-  end
-
-  # Update read mark for topic and delayed for posts
-  def update_topic_and_posts(topic_actable)
-    topic = topic_actable.discussion_topic
-    delayed_posts = topic.posts.only_delayed_posts
-    unless delayed_posts.empty?
-      # Remove 'mark as read' (if any)
-      topic.read_marks.where('reader_id = ?', creator.id)&.destroy_all
-      delayed_posts.update_all(workflow_state: 'published')
-    end
-    true
   end
 end
