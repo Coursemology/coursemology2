@@ -264,7 +264,7 @@ const pollFeedbackJob =
       },
       () => {
         dispatch({
-          type: actionTypes.EEDBACK_FAILURE,
+          type: actionTypes.FEEDBACK_FAILURE,
           questionId,
           answerId,
         });
