@@ -9,10 +9,9 @@ class Course::Assessment::Question::VoiceResponsesController < Course::Assessmen
 
   def create
     if @voice_response_question.save
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success')
+      render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
     else
-      render 'new'
+      render json: { errors: @voice_response_question.errors }, status: :bad_request
     end
   end
 
@@ -20,17 +19,16 @@ class Course::Assessment::Question::VoiceResponsesController < Course::Assessmen
   end
 
   def update
-    @question_assessment.skill_ids = voice_response_question_params[:question_assessment][:skill_ids]
-    if @voice_response_question.update(voice_response_question_params.except(:question_assessment))
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success')
+    update_skill_ids_if_params_present
+
+    if update_voice_response_question
+      render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
     else
-      render 'edit'
+      render json: { errors: @voice_response_question.errors }, status: :bad_request
     end
   end
 
   def edit
-    @voice_response_question.description = helpers.format_ckeditor_rich_text(@voice_response_question.description)
   end
 
   def destroy
@@ -43,6 +41,16 @@ class Course::Assessment::Question::VoiceResponsesController < Course::Assessmen
   end
 
   private
+
+  def update_skill_ids_if_params_present
+    question_assessment_params = voice_response_question_params[:question_assessment]
+    skill_ids_params = question_assessment_params[:skill_ids] unless question_assessment_params[:skill_ids].nil?
+    @question_assessment.skill_ids = skill_ids_params unless skill_ids_params.nil?
+  end
+
+  def update_voice_response_question
+    @voice_response_question.update(voice_response_question_params.except(:question_assessment))
+  end
 
   def voice_response_question_params
     params.require(:question_voice_response).permit(
