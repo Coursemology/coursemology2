@@ -1,7 +1,7 @@
 import { AvailableSkills, QuestionFormData } from '../questions';
 
 type OptionalIfNew<T extends 'new' | 'edit'> = T extends 'new'
-  ? 'undefined'
+  ? undefined
   : never;
 
 export interface VoiceData<T extends 'new' | 'edit' = 'edit'> {
@@ -17,7 +17,7 @@ export interface VoiceFormData<T extends 'new' | 'edit' = 'edit'>
 type VoiceFormDataQuestion = VoiceFormData['question'];
 
 export interface VoicePostData {
-  question_voice: {
+  question_voice_response: {
     title?: VoiceFormDataQuestion['title'];
     description?: VoiceFormDataQuestion['description'];
     staff_only_comments?: VoiceFormDataQuestion['staffOnlyComments'];
