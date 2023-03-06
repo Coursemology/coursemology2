@@ -5,10 +5,4 @@ en:
         voice_responses:
           new:
             voice_response_header: 'Audio Response Question'
-          create:
-            success: 'The audio response question was created.'
-          update:
-            success: 'The audio response question was updated.'
-          form:
-            voice_response_button: 'Audio Response Question'
           question_type: Audio Response
