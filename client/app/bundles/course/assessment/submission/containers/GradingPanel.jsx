@@ -137,10 +137,9 @@ class VisibleGradingPanel extends Component {
 
   renderGradeRow(question, showGrader) {
     const questionGrading = this.props.grading.questions[question.id];
-    const questionGrade =
-      questionGrading && questionGrading.grade !== null
-        ? parseFloat(questionGrading.grade) || ''
-        : '';
+    const parsedGrade = parseFloat(questionGrading?.grade);
+    const questionGrade = Number.isNaN(parsedGrade) ? '' : parsedGrade;
+
     const grader = questionGrading && questionGrading.grader;
 
     const courseId = getCourseId();
