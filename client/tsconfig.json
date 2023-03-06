@@ -27,10 +27,8 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
-    "target": "es6",
+    "target": "es6"
   },
-  "include": [
-    "./app/**/*"
-  ],
+  "include": ["./app/**/*"],
   "exclude": ["node_modules", "build", "dist"]
 }
