@@ -75,6 +75,7 @@ export interface CourseUserData extends CourseUserListData {
   learningRate?: number;
   learningRateEffectiveMin?: number;
   learningRateEffectiveMax?: number;
+  canReadStatistics: boolean;
 }
 
 export interface CourseUserEntity extends CourseUserMiniEntity {
@@ -86,6 +87,7 @@ export interface CourseUserEntity extends CourseUserMiniEntity {
   learningRate?: number;
   learningRateEffectiveMin?: number;
   learningRateEffectiveMax?: number;
+  canReadStatistics: boolean;
 }
 
 export interface CourseUserFormData {
@@ -127,4 +129,22 @@ export interface ManageCourseUsersSharedData {
 export interface CourseUserRowData extends CourseUserEntity {
   'S/N'?: number;
   actions?: undefined;
+}
+
+export interface LearningRateRecordsData {
+  learningRateRecords: {
+    id: number;
+    learningRate: number;
+    createdAt: string;
+  }[];
+}
+
+export interface LearningRateRecordEntity {
+  id: number;
+  learningRatePercentage: number;
+  createdAt: Date;
+}
+
+export interface LearningRateRecordsEntity {
+  learningRateRecords: LearningRateRecordEntity[];
 }

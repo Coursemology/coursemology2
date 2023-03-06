@@ -12,6 +12,7 @@ import UserProfileCard from '../../components/misc/UserProfileCard';
 import UserProfileSkills from '../../components/misc/UserProfileSkills';
 import { loadUser } from '../../operations';
 import { getUserEntity } from '../../selectors';
+import UserStatistics from '../UserStatistics';
 
 type Props = WrappedComponentProps;
 
@@ -47,6 +48,7 @@ const UserShow: FC<Props> = () => {
       {user.achievements && (
         <UserProfileAchievements achievements={user.achievements} />
       )}
+      {user.canReadStatistics && <UserStatistics userRole={user.role} />}
       {user.skillBranches && (
         <UserProfileSkills skillBranches={user.skillBranches} />
       )}

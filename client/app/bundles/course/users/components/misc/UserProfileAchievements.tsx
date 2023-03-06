@@ -37,7 +37,7 @@ const translations = defineMessages({
 const UserProfileAchievements: FC<Props> = ({ achievements, intl }: Props) => {
   return (
     <>
-      <Typography component="h2" id="user-profile-achievements" variant="h4">
+      <Typography id="user-profile-achievements" variant="h4">
         {intl.formatMessage(translations.achivementsHeader)}
       </Typography>
       {achievements.length > 0 ? (
