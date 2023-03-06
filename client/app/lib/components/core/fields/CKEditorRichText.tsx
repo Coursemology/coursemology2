@@ -78,7 +78,7 @@ const CKEditorRichText = forwardRef((props: Props, ref) => {
         position: 'relative',
         backgroundColor: 'transparent',
         fontFamily: 'Roboto, sans-serif',
-        paddingTop: label ? '1em' : 0,
+        paddingTop: !disableMargins && label ? '1em' : 0,
         paddingBottom: !disableMargins ? '1em' : 0,
       }}
     >
