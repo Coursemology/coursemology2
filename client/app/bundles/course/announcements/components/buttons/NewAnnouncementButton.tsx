@@ -1,10 +1,10 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 
 import AddButton from 'lib/components/core/buttons/AddButton';
 
 interface Props extends WrappedComponentProps {
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const translations = defineMessages({

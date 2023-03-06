@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { Dispatch, FC, SetStateAction } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LoadingButton } from '@mui/lab';
 import { Button } from '@mui/material';
@@ -12,7 +12,7 @@ interface Props {
   onSubmit: () => void;
   isSubmitting: boolean;
   uploadedFiles: File[];
-  setUploadedFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  setUploadedFiles: Dispatch<SetStateAction<File[]>>;
 }
 
 const MaterialUploadForm: FC<Props> = (props) => {

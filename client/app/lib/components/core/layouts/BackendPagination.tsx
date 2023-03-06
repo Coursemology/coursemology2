@@ -13,10 +13,7 @@ const BackendPagination: FC<Props> = (props) => {
   const { rowCount, rowsPerPage, pageNum, handlePageChange } = props;
 
   const count = Math.ceil(rowCount / rowsPerPage);
-  const handleChange: (
-    _e: React.ChangeEvent<unknown>,
-    pageNum: number,
-  ) => void = (_e, newPageNumber) => {
+  const handleChange: (_, pageNum: number) => void = (_, newPageNumber) => {
     // Prevent multiple calls when spam clicking
     if (newPageNumber !== pageNum) {
       handlePageChange(newPageNumber);

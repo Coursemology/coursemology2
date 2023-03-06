@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
@@ -7,7 +7,7 @@ import { Chip } from '@mui/material';
 
 interface Props extends WrappedComponentProps {
   uploadedFiles: File[];
-  setUploadedFiles: React.Dispatch<React.SetStateAction<File[]>>;
+  setUploadedFiles: Dispatch<SetStateAction<File[]>>;
   disabled: boolean;
 }
 

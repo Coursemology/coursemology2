@@ -231,9 +231,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
               return (
                 <TextField
                   id={`role-${roleRequest.id}`}
-                  onChange={(e): React.ChangeEvent =>
-                    updateValue(e.target.value)
-                  }
+                  onChange={(e): void => updateValue(e.target.value)}
                   select
                   value={value || 'normal'}
                   variant="standard"

@@ -188,7 +188,7 @@ const DisbursementForm: FC<Props> = (props) => {
         }
         onChange={onChangeFilter}
         options={courseGroups}
-        renderInput={(params): React.ReactNode => {
+        renderInput={(params): JSX.Element => {
           return (
             <TextField
               {...params}
