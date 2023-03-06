@@ -43,7 +43,7 @@ export const fileShape = PropTypes.shape({
 });
 
 export const questionGradeShape = PropTypes.shape({
-  grade: PropTypes.number,
+  grade: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   grader: PropTypes.shape({
     name: PropTypes.string,
     id: PropTypes.number,
