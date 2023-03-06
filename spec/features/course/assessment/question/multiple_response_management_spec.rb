@@ -60,7 +60,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
 
           within find_all('section', text: 'response').last do
             correct_option_attributes = attributes_for(:course_assessment_question_multiple_response_option, :correct)
-            fill_in 'Response', with: correct_option_attributes[:option]
+            fill_in_react_ck 'textarea[name=option]', correct_option_attributes[:option]
             fill_in_react_ck 'textarea[name=explanation]', correct_option_attributes[:explanation]
             correct_checkbox = first('input[type=checkbox]', visible: false)
             correct_checkbox.check
@@ -92,7 +92,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
 
           within choice_section do
             correct_option_attributes = attributes_for(:course_assessment_question_multiple_response_option, :correct)
-            fill_in 'Choice', with: correct_option_attributes[:option]
+            fill_in_react_ck 'textarea[name=option]', correct_option_attributes[:option]
             fill_in_react_ck 'textarea[name=explanation]', correct_option_attributes[:explanation]
             correct_checkbox = first('input[type=checkbox]', visible: false)
             correct_checkbox.uncheck
@@ -142,7 +142,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
           click_button 'Add a new response'
 
           within find_all('section', text: 'response').last do
-            fill_in 'Response', with: option[:option]
+            fill_in_react_ck 'textarea[name=option]', option[:option]
             fill_in_react_ck 'textarea[name=explanation]', option[:explanation]
 
             correct_checkbox = first('input[type=checkbox]', visible: false)

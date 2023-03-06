@@ -7,7 +7,6 @@ import { OptionEntity } from 'types/course/assessment/question/multiple-response
 
 import Checkbox from 'lib/components/core/buttons/Checkbox';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
-import TextField from 'lib/components/core/fields/TextField';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -123,20 +122,17 @@ const Option = forwardRef<OptionRef, OptionProps>((props, ref): JSX.Element => {
             {!disabled && <DragIndicator color="disabled" fontSize="small" />}
           </div>
 
-          <div className="flex w-[calc(100%_-_84px)] flex-col space-y-4 py-4">
-            <TextField
-              autoFocus={option.draft}
-              className={toBeDeleted ? 'line-through' : ''}
+          <div className="mt-1 flex w-[calc(100%_-_84px)] flex-col space-y-4 py-4">
+            <CKEditorRichText
+              autofocus={option.draft}
               disabled={toBeDeleted || isDragging || disabled}
-              error={Boolean(error?.option)}
-              fullWidth
-              helperText={error?.option && formatErrorMessage(error.option)}
-              hiddenLabel
-              onChange={(e): void => update('option', e.target.value)}
+              disableMargins
+              error={error?.option && formatErrorMessage(error.option)}
+              label={texts.option}
+              name="option"
+              onChange={(value): void => update('option', value)}
               placeholder={texts.option}
-              size="small"
               value={option.option}
-              variant="filled"
             />
 
             {toBeDeleted ? (
@@ -149,6 +145,7 @@ const Option = forwardRef<OptionRef, OptionProps>((props, ref): JSX.Element => {
                   disabled={toBeDeleted || isDragging || disabled}
                   disableMargins
                   inputId={`option-${option.id}-explanation`}
+                  label={t(translations.explanation)}
                   name="explanation"
                   onChange={(explanation): void =>
                     update('explanation', explanation)
