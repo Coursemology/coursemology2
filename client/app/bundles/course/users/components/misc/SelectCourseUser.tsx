@@ -32,10 +32,7 @@ const SelectCourseUser: FC<Props> = (props) => {
   );
   const navigate = useNavigate();
 
-  const handleChange = (
-    _e: React.SyntheticEvent,
-    value: CourseUserBasicMiniEntity | null,
-  ): void => {
+  const handleChange = (_, value: CourseUserBasicMiniEntity | null): void => {
     if (value) {
       setUser(value);
       const url = `${getCourseURL(getCourseId())}/users/${

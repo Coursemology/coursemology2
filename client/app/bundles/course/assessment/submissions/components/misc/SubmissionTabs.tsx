@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -20,10 +20,10 @@ interface Props extends WrappedComponentProps {
   isTeachingStaff: boolean;
   tabs: SubmissionsTabData;
   tabValue: number;
-  setTabValue: React.Dispatch<React.SetStateAction<number>>;
-  setIsTabChanging: React.Dispatch<React.SetStateAction<boolean>>;
-  setTableIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  setPageNum: React.Dispatch<React.SetStateAction<number>>;
+  setTabValue: Dispatch<SetStateAction<number>>;
+  setIsTabChanging: Dispatch<SetStateAction<boolean>>;
+  setTableIsLoading: Dispatch<SetStateAction<boolean>>;
+  setPageNum: Dispatch<SetStateAction<number>>;
 }
 
 const translations = defineMessages({
@@ -54,10 +54,7 @@ const SubmissionTabs: FC<Props> = (props) => {
     setPageNum,
   } = props;
 
-  const handleTabChange = (
-    _event: React.SyntheticEvent,
-    newValue: number,
-  ): void => {
+  const handleTabChange = (_, newValue: number): void => {
     setTabValue(newValue);
     setPageNum(1);
   };

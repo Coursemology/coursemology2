@@ -1,4 +1,4 @@
-import { FC, memo, useEffect } from 'react';
+import { Dispatch, FC, memo, SetStateAction, useEffect } from 'react';
 import { Pagination as PaginationMUI } from '@mui/material';
 import equal from 'fast-deep-equal';
 
@@ -9,9 +9,9 @@ interface Props {
   itemsPerPage: number;
   // Typing is also any, following from items: any[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setSlicedItems: React.Dispatch<React.SetStateAction<any[]>>;
+  setSlicedItems: Dispatch<SetStateAction<any[]>>;
   page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  setPage: Dispatch<SetStateAction<number>>;
   padding?: number;
 }
 
@@ -48,10 +48,7 @@ const Pagination: FC<Props> = (props) => {
     }
   }, [page, items]);
 
-  const handleChange: (
-    _e: React.ChangeEvent<unknown>,
-    pageNum: number,
-  ) => void = (_e, pageNum) => {
+  const handleChange: (_, pageNum: number) => void = (_, pageNum) => {
     setPage(pageNum);
   };
 

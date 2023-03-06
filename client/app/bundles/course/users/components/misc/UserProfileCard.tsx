@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, MouseEvent } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { scroller } from 'react-scroll';
@@ -30,7 +30,7 @@ const translations = defineMessages({
 });
 
 const UserProfileCard: FC<Props> = ({ user, intl }) => {
-  const handleScrollToAchievements = (e: React.MouseEvent): void => {
+  const handleScrollToAchievements = (e: MouseEvent): void => {
     e.preventDefault();
     scroller.scrollTo('user-profile-achievements', {
       smooth: true,

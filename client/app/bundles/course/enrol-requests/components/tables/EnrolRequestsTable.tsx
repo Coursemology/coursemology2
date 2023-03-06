@@ -213,7 +213,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
           return (
             <TextField
               id={`role-${enrolRequest.id}`}
-              onChange={(e): React.ChangeEvent => updateValue(e.target.value)}
+              onChange={(e): void => updateValue(e.target.value)}
               select
               value={value || 'student'}
               variant="standard"
@@ -242,7 +242,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
               key={`checkbox_${enrolRequest.id}`}
               checked={value || false}
               id={`checkbox_${enrolRequest.id}`}
-              onChange={(e): React.ChangeEvent => updateValue(e.target.checked)}
+              onChange={(e): void => updateValue(e.target.checked)}
               style={styles.checkbox}
             />
           );
@@ -265,9 +265,7 @@ const EnrolRequestsTable: FC<Props> = (props) => {
                 return (
                   <TextField
                     id={`timeline-algorithm-${enrolRequest.id}`}
-                    onChange={(e): React.ChangeEvent =>
-                      updateValue(e.target.value)
-                    }
+                    onChange={(e): void => updateValue(e.target.value)}
                     select
                     value={value || defaultTimelineAlgorithm}
                     variant="standard"

@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useState } from 'react';
+import { CSSProperties, FC, memo, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import {
   Button,
@@ -196,7 +196,7 @@ const PendingTodosTable: FC<Props> = (props) => {
     );
   };
 
-  const getBackgroundColor = (todo: TodoData): React.CSSProperties => {
+  const getBackgroundColor = (todo: TodoData): CSSProperties => {
     let backgroundColor = '#ffffff';
     if (
       todo.endTimeInfo.effectiveTime &&
