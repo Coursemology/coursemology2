@@ -83,7 +83,7 @@ class Course::LearningMapController < Course::ComponentController
   end
 
   def prepare_response_data
-    @conditionals = Course::Condition.preload(:conditions).conditionals_for(current_course)
+    @conditionals = Course::Condition.conditionals_for(current_course)
     @nodes = map_conditionals_to_nodes
     @can_modify = current_course_user&.teaching_staff?
   end
@@ -105,8 +105,7 @@ class Course::LearningMapController < Course::ComponentController
 
       conditional.conditions.each do |condition|
         if condition.actable_type == Course::Condition::Level.name
-          level_condition = Course::Condition::Level.find(condition.actable_id)
-          node_ids_to_unlock_level[node_id] = level_condition.minimum_level
+          node_ids_to_unlock_level[node_id] = condition.actable.minimum_level
           next
         end
 
@@ -127,11 +126,11 @@ class Course::LearningMapController < Course::ComponentController
   end
 
   def map_condition_to_parent(condition)
-    type = condition.actable_type.demodulize
-    typed_condition = Object.const_get("Course::Condition::#{type}").preload(:actable).find(condition.actable_id)
-    id = "#{type.downcase}-#{typed_condition.send("#{type.downcase}_id")}"
+    condition_type = condition.actable_type.demodulize
+    condition_actable = condition.actable
+    id = "#{condition_type.downcase}-#{condition_actable.send("#{condition_type.downcase}_id")}"
 
-    { id: id, is_satisfied: typed_condition.satisfied_by?(current_course_user) }
+    { id: id, is_satisfied: condition_actable.satisfied_by?(current_course_user) }
   end
 
   def generate_nodes_from_conditionals(all_node_relations) # rubocop:disable Metrics/AbcSize
@@ -156,6 +155,7 @@ class Course::LearningMapController < Course::ComponentController
         content_url: url_for([current_course, conditional]), parents: node_ids_to_parents[id],
         unlock_rate: unlock_rate, unlock_level: node_ids_to_unlock_level[id]
       }).symbolize_keys
+      raise ArgumentError
     end
   end
 

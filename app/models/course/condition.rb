@@ -37,7 +37,7 @@ class Course::Condition < ApplicationRecord
           ActiveRecord::Base::ConditionalInstanceMethods
         )
 
-        conditional_name.constantize.where(course_id: course)
+        conditional_name.constantize.where(course_id: course).preload(:conditions)
       end.flatten.compact
     end
 
