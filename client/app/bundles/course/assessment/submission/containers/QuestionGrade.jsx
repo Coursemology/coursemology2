@@ -90,7 +90,7 @@ class VisibleQuestionGrade extends Component {
             }
           }}
           style={{ width: 100 }}
-          value={initialGrade === null ? '' : initialGrade}
+          value={initialGrade ?? ''}
         />
         {` / ${maxGrade}`}
       </div>
