@@ -12,3 +12,4 @@ json.partial! 'form', locals: {
 json.question do
   json.partial! 'course/assessment/question/form', question: question
   json.skillIds question_assessment.skill_ids
+end
