@@ -3,6 +3,7 @@ import {
   CourseUserBasicMiniEntity,
   CourseUserEntity,
   CourseUserMiniEntity,
+  LearningRateRecordsEntity,
   StaffRole,
   UpdateCourseUserPatchData,
 } from 'types/course/courseUsers';
@@ -273,3 +274,15 @@ export function deleteExperiencePointsRecord(
       .delete(recordId)
       .then(() => dispatch(actions.deleteExperiencePointsRecord(recordId)));
 }
+
+export const fetchCourseUserLearningRateData =
+  async (): Promise<LearningRateRecordsEntity> => {
+    const response = await CourseAPI.statistics.user.fetchLearningRateRecords();
+    return {
+      learningRateRecords: response.data.learningRateRecords.map((record) => ({
+        id: record.id,
+        learningRatePercentage: Math.round(1000 / record.learningRate) / 100,
+        createdAt: new Date(record.createdAt),
+      })),
+    };
+  };

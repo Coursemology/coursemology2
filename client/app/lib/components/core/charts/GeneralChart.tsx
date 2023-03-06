@@ -3,6 +3,7 @@ import {
   BarElement,
   CategoryScale,
   Chart as ChartJS,
+  ChartOptions,
   Filler,
   Legend,
   LinearScale,
@@ -33,8 +34,10 @@ ChartJS.register(
   zoomPlugin,
 );
 
+export type GeneralChartOptions = ChartOptions;
+
 interface Props extends ChartProps {
-  withZoom: boolean;
+  withZoom?: boolean;
   limits?: LimitOptions;
 }
 

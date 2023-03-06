@@ -41,7 +41,7 @@ const UserProfileSkills: FC<Props> = ({ skillBranches, intl }: Props) => {
 
   return (
     <>
-      <Typography component="h2" variant="h4">
+      <Typography variant="h4">
         {intl.formatMessage(translations.topicMasteryHeader)}
       </Typography>
       <Table>
