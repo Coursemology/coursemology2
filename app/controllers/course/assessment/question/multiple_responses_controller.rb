@@ -71,12 +71,6 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
     end
   end
 
-  def update_skill_ids_if_params_present
-    question_assessment_params = multiple_response_question_params[:question_assessment]
-    skill_ids_params = question_assessment_params[:skill_ids] unless question_assessment_params.nil?
-    @question_assessment.skill_ids = skill_ids_params unless skill_ids_params.nil?
-  end
-
   def update_multiple_response_question
     @multiple_response_question.update(
       multiple_response_question_params.except(:question_assessment, :multiple_choice)

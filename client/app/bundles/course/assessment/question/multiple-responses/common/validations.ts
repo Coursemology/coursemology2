@@ -15,17 +15,9 @@ import {
 } from 'yup';
 
 import translations from '../../../translations';
+import basicQuestionSchema from '../../components/CommonValidation';
 
-export const questionSchema = object({
-  title: string().nullable(),
-  description: string().nullable(),
-  staffOnlyComments: string().nullable(),
-  maximumGrade: number()
-    .required()
-    .min(0, translations.mustSpecifyPositiveMaximumGrade)
-    .typeError(translations.mustSpecifyMaximumGrade),
-  skipGrading: bool(),
-  skillIds: array().of(number()),
+export const questionSchema = basicQuestionSchema.shape({
   randomizeOptions: bool(),
 });
 

@@ -1,11 +1,11 @@
 import McqMrqAPI from './McqMrq';
 import ScribingQuestionAPI from './Scribing';
-import VoiceAPI from './Voice';
+import VoiceResponseAPI from './VoiceResponse';
 
 const QuestionAPI = {
   mcqMrq: new McqMrqAPI(),
   scribing: new ScribingQuestionAPI(),
-  voice: new VoiceAPI(),
+  voice: new VoiceResponseAPI(),
 };
 
 Object.freeze(QuestionAPI);

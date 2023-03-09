@@ -25,6 +25,12 @@ class Course::Assessment::Question::Controller < Course::Assessment::ComponentCo
     @assessment.question_assessments.find_by!(question: question.acting_as)
   end
 
+  def update_skill_ids_if_params_present
+    question_assessment_params = voice_response_question_params[:question_assessment]
+    skill_ids_params = question_assessment_params[:skill_ids] unless question_assessment_params[:skill_ids].nil?
+    @question_assessment.skill_ids = skill_ids_params unless skill_ids_params.nil?
+  end
+
   protected
 
   def authorize_assessment

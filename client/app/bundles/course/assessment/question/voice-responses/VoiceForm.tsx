@@ -7,8 +7,7 @@ import {
 import Form, { FormEmitter } from 'lib/components/form/Form';
 
 import CommonFieldsInQuestionForm from '../components/CommonFieldsInQuestionForm';
-
-import questionSchema from './validation';
+import basicQuestionSchema from '../components/CommonValidation';
 
 export interface VoiceFormProps<T extends 'new' | 'edit'> {
   with: VoiceFormData<T>;
@@ -45,7 +44,7 @@ const VoiceForm = <T extends 'new' | 'edit'>(
       headsUp
       initialValues={data.question}
       onSubmit={handleSubmit}
-      validates={questionSchema}
+      validates={basicQuestionSchema}
     >
       {(control): JSX.Element => (
         <CommonFieldsInQuestionForm

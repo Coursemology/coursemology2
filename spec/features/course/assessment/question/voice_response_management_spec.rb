@@ -47,12 +47,22 @@ RSpec.describe 'Course: Assessments: Questions: Voice Response Management', js: 
         edit_path = edit_course_assessment_question_voice_response_path(course, assessment, voice)
         find_link(nil, href: edit_path).click
 
+        title = 'Trial Voice Response Question'
+        description = 'Test of Creating Voice Response Question'
+        staff_only_comments = 'No comments from staff'
         maximum_grade = 999.9
+        fill_in 'title', with: title
+        fill_in_react_ck 'textarea[name=description]', description
+        fill_in_react_ck 'textarea[name=staffOnlyComments]', staff_only_comments
         fill_in 'maximumGrade', with: maximum_grade
-        click_button 'Save changes'
 
+        click_button 'Save changes'
         sleep 0.2
+
         expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(voice.reload.title).to eq(title)
+        expect(voice.reload.description).to include(description)
+        expect(voice.reload.staff_only_comments).to include(staff_only_comments)
         expect(voice.reload.maximum_grade).to eq(maximum_grade)
       end
 

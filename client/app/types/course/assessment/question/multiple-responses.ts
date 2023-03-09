@@ -1,5 +1,7 @@
 import { AvailableSkills, QuestionData, QuestionFormData } from '../questions';
 
+import { OptionalIfNew } from './question';
+
 interface OptionListData {
   id: number | string;
   option: string;
@@ -29,10 +31,6 @@ export type McqMrqListData = QuestionData &
   McqMrqSwitchData & {
     options: OptionListData[];
   };
-
-type OptionalIfNew<T extends 'new' | 'edit'> = T extends 'new'
-  ? undefined
-  : never;
 
 export interface McqMrqData<T extends 'new' | 'edit' = 'edit'> {
   gradingScheme: 'any_correct' | 'all_correct';

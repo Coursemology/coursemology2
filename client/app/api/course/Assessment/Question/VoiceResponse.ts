@@ -7,7 +7,7 @@ import { APIResponse, JustRedirect } from 'api/types';
 
 import BaseAPI from '../Base';
 
-export default class VoiceAPI extends BaseAPI {
+export default class VoiceResponseAPI extends BaseAPI {
   get #urlPrefix(): string {
     return `/courses/${this.courseId}/assessments/${this.assessmentId}/question/voice_responses`;
   }
@@ -16,7 +16,7 @@ export default class VoiceAPI extends BaseAPI {
     return this.client.get(`${this.#urlPrefix}/new`);
   }
 
-  fetchEdit(id: number): APIResponse<VoiceFormData<'edit'>> {
+  fetchEditVoice(id: number): APIResponse<VoiceFormData<'edit'>> {
     return this.client.get(`${this.#urlPrefix}/${id}/edit`);
   }
 

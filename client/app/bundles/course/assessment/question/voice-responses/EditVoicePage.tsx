@@ -10,7 +10,7 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
-import { fetchEditVoiceQuestion, updateVoiceQuestion } from './operations';
+import { fetchEditVoiceResponse, updateVoiceQuestion } from './operations';
 import VoiceForm from './VoiceForm';
 
 const EditVoicePage = (): JSX.Element => {
@@ -21,7 +21,7 @@ const EditVoicePage = (): JSX.Element => {
   if (!id) throw new Error(`EditVoiceForm was loaded with ID: ${id}.`);
 
   const fetchData = (): Promise<VoiceFormData<'edit'>> =>
-    fetchEditVoiceQuestion(id);
+    fetchEditVoiceResponse(id);
 
   const handleSubmit = (data: VoiceData): Promise<void> =>
     updateVoiceQuestion(id, data).then(({ redirectUrl }) => {

@@ -8,17 +8,17 @@ import {
 import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';
 
-export const fetchNewVoiceQuestion = async (): Promise<
+export const fetchNewVoiceResponse = async (): Promise<
   VoiceFormData<'new'>
 > => {
   const response = await CourseAPI.assessment.question.voice.fetchNewVoice();
   return response.data;
 };
 
-export const fetchEditVoiceQuestion = async (
+export const fetchEditVoiceResponse = async (
   id: number,
 ): Promise<VoiceFormData<'edit'>> => {
-  const response = await CourseAPI.assessment.question.voice.fetchEdit(id);
+  const response = await CourseAPI.assessment.question.voice.fetchEditVoice(id);
   return response.data;
 };
 
