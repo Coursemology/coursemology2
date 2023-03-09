@@ -54,7 +54,7 @@ class Course::Assessment::Question::VoiceResponsesController < Course::Assessmen
 
   def voice_response_question_params
     params.require(:question_voice_response).permit(
-      :file, :title, :description,
+      :title, :description,
       :staff_only_comments, :maximum_grade,
       question_assessment: { skill_ids: [] }
     )
