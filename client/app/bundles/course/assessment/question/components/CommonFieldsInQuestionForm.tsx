@@ -13,7 +13,7 @@ import translations from '../../translations';
 import SkillsAutocomplete from './SkillsAutocomplete';
 
 interface CommonFieldsProps {
-  disabled?: boolean;
+  disabled: boolean;
   control?: Control<FieldValues, unknown>;
   availableSkills?: Record<
     number,

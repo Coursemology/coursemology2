@@ -9,23 +9,18 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
+import newCommonTemplate from '../components/CommonBlankTemplate';
 
-import { createVoiceQuestion, fetchNewVoiceQuestion } from './operations';
+import { createVoiceQuestion, fetchNewVoiceResponse } from './operations';
 import VoiceForm from './VoiceForm';
 
-const NEW_VOICE_TEMPLATE: VoiceData['question'] = {
-  title: '',
-  description: '',
-  staffOnlyComments: '',
-  maximumGrade: '',
-  skillIds: [],
-};
+const NEW_VOICE_TEMPLATE: VoiceData['question'] = newCommonTemplate;
 
 const NewVoicePage = (): JSX.Element => {
   const { t } = useTranslation();
 
   const fetchData = (): Promise<VoiceFormData<'new'>> =>
-    fetchNewVoiceQuestion();
+    fetchNewVoiceResponse();
 
   const handleSubmit = (data: VoiceData): Promise<void> =>
     createVoiceQuestion(data).then(({ redirectUrl }) => {

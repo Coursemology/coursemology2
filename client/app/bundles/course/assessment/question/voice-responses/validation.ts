@@ -1,16 +1,5 @@
-import { array, number, object, string } from 'yup';
+import basicQuestionSchema from '../components/CommonValidation';
 
-import translations from '../../translations';
-
-const questionSchema = object({
-  title: string().nullable(),
-  description: string().nullable(),
-  staffOnlyComments: string().nullable(),
-  maximumGrade: number()
-    .required()
-    .min(0, translations.mustSpecifyPositiveMaximumGrade)
-    .typeError(translations.mustSpecifyMaximumGrade),
-  skillIds: array().of(number()),
-});
+const questionSchema = basicQuestionSchema;
 
 export default questionSchema;

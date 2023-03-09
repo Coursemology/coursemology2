@@ -3,9 +3,6 @@ question = @voice_response_question
 question_assessment = @question_assessment
 
 json.partial! 'form', locals: {
-  question: question,
-  question_assessment: question_assessment,
-  new_question: false,
   course: current_course
 }
 
