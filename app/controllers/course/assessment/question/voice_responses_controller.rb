@@ -19,7 +19,7 @@ class Course::Assessment::Question::VoiceResponsesController < Course::Assessmen
   end
 
   def update
-    update_skill_ids_if_params_present
+    update_skill_ids_if_params_present(voice_response_question_params[:question_assessment])
 
     if update_voice_response_question
       render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
