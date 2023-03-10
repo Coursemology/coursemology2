@@ -62,6 +62,7 @@ module TrackableJob::SpecHelpers
     end
   end
 
+  # Wait for page/react lifecycle to finish loading/end
   def wait_for_page
     sleep 0.5
   end
