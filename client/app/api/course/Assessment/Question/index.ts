@@ -1,8 +1,10 @@
+import ForumPostResponseAPI from './ForumPostResponse';
 import McqMrqAPI from './McqMrq';
 import ScribingQuestionAPI from './Scribing';
 import VoiceResponseAPI from './VoiceResponse';
 
 const QuestionAPI = {
+  ForumPostResponse: new ForumPostResponseAPI(),
   mcqMrq: new McqMrqAPI(),
   scribing: new ScribingQuestionAPI(),
   voiceResponse: new VoiceResponseAPI(),
