@@ -174,7 +174,7 @@ RSpec.describe Course::Assessment::Question::MultipleResponsesController, type: 
 
         it 'updates a valid weight' do
           subject
-          saved_weight = multiple_response.reload.options.first.weight
+          saved_weight = multiple_response.reload.options.unscope(:order).first.weight
           expect(saved_weight).to eq(weight)
         end
       end

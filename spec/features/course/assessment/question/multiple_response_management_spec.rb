@@ -139,7 +139,7 @@ RSpec.describe 'Course: Assessments: Questions: Multiple Response Management', j
 
         visit edit_path
         options.each do |option|
-          click_button 'Add a new choice'
+          click_button 'Add a new response'
 
           within find_all('section', text: 'response').last do
             fill_in_react_ck 'textarea[name=option]', option[:option]
