@@ -29,7 +29,7 @@ RSpec.describe 'Course: Assessments: Questions: Voice Response Management', js: 
           find('li', text: skill.title).click
 
           click_button 'Save changes'
-          sleep 0.2
+          wait_for_page
 
           question_created = assessment.questions.first.specific
           expect(question_created.title).to eq(question_attributes[:title])
@@ -57,7 +57,7 @@ RSpec.describe 'Course: Assessments: Questions: Voice Response Management', js: 
         fill_in 'maximumGrade', with: maximum_grade
 
         click_button 'Save changes'
-        sleep 0.2
+        wait_for_page
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(voice.reload.title).to eq(title)
