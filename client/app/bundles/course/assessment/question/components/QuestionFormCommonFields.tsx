@@ -1,5 +1,7 @@
 import { Control, Controller, FieldValues } from 'react-hook-form';
 import { Alert } from '@mui/material';
+import { QuestionFormData } from 'types/course/assessment/questions';
+import { array, bool, number, object, string } from 'yup';
 
 import Section from 'lib/components/core/layouts/Section';
 import Subsection from 'lib/components/core/layouts/Subsection';
@@ -11,6 +13,26 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../translations';
 
 import SkillsAutocomplete from './SkillsAutocomplete';
+
+export const qnFormCommonFieldsInitialValues: QuestionFormData = {
+  title: '',
+  description: '',
+  staffOnlyComments: '',
+  maximumGrade: '',
+  skillIds: [],
+};
+
+export const qnFormCommonFieldsValidation = object({
+  title: string().nullable(),
+  description: string().nullable(),
+  staffOnlyComments: string().nullable(),
+  maximumGrade: number()
+    .required()
+    .min(0, translations.mustSpecifyPositiveMaximumGrade)
+    .typeError(translations.mustSpecifyMaximumGrade),
+  skipGrading: bool(),
+  skillIds: array().of(number()),
+});
 
 interface CommonFieldsProps {
   disabled: boolean;
@@ -26,7 +48,7 @@ interface CommonFieldsProps {
   skillsUrl?: string;
 }
 
-const CommonFieldsInQuestionForm = (props: CommonFieldsProps): JSX.Element => {
+const QuestionFormCommonFields = (props: CommonFieldsProps): JSX.Element => {
   const { disabled: submitting, control, availableSkills, skillsUrl } = props;
 
   const { t } = useTranslation();
@@ -137,4 +159,4 @@ const CommonFieldsInQuestionForm = (props: CommonFieldsProps): JSX.Element => {
   );
 };
 
-export default CommonFieldsInQuestionForm;
+export default QuestionFormCommonFields;

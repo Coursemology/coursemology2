@@ -15,9 +15,9 @@ import {
 } from 'yup';
 
 import translations from '../../../translations';
-import basicQuestionSchema from '../../components/CommonValidation';
+import { qnFormCommonFieldsValidation } from '../../components/QuestionFormCommonFields';
 
-export const questionSchema = basicQuestionSchema.shape({
+export const questionSchema = qnFormCommonFieldsValidation.shape({
   randomizeOptions: bool(),
 });
 

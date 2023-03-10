@@ -1,5 +1,5 @@
-import basicQuestionSchema from '../components/CommonValidation';
+import { qnFormCommonFieldsValidation } from '../components/QuestionFormCommonFields';
 
-const questionSchema = basicQuestionSchema;
+const questionSchema = qnFormCommonFieldsValidation;
 
 export default questionSchema;

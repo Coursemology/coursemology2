@@ -1,6 +1,9 @@
-import { AvailableSkills, QuestionData, QuestionFormData } from '../questions';
-
-import { OptionalIfNew } from './question';
+import {
+  AvailableSkills,
+  OptionalIfNew,
+  QuestionData,
+  QuestionFormData,
+} from '../questions';
 
 interface OptionListData {
   id: number | string;

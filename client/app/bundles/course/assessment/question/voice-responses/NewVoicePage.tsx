@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import {
-  VoiceData,
-  VoiceFormData,
+  VoiceResponseData,
+  VoiceResponseFormData,
 } from 'types/course/assessment/question/voice-responses';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -9,20 +9,21 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
-import newCommonTemplate from '../components/CommonBlankTemplate';
+import { qnFormCommonFieldsInitialValues } from '../components/QuestionFormCommonFields';
 
 import { createVoiceQuestion, fetchNewVoiceResponse } from './operations';
 import VoiceForm from './VoiceForm';
 
-const NEW_VOICE_TEMPLATE: VoiceData['question'] = newCommonTemplate;
+const NEW_VOICE_TEMPLATE: VoiceResponseData['question'] =
+  qnFormCommonFieldsInitialValues;
 
 const NewVoicePage = (): JSX.Element => {
   const { t } = useTranslation();
 
-  const fetchData = (): Promise<VoiceFormData<'new'>> =>
+  const fetchData = (): Promise<VoiceResponseFormData<'new'>> =>
     fetchNewVoiceResponse();
 
-  const handleSubmit = (data: VoiceData): Promise<void> =>
+  const handleSubmit = (data: VoiceResponseData): Promise<void> =>
     createVoiceQuestion(data).then(({ redirectUrl }) => {
       toast.success(t(translations.questionCreated));
       window.location.href = redirectUrl;

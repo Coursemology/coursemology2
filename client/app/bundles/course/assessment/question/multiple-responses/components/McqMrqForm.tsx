@@ -13,7 +13,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import ConvertMcqMrqButton from '../../../components/ConvertMcqMrqButton';
 import translations from '../../../translations';
-import CommonFieldsInQuestionForm from '../../components/CommonFieldsInQuestionForm';
+import CommonFieldsInQuestionForm from '../../components/QuestionFormCommonFields';
 import { McqMrqAdapter } from '../common/translationAdapter';
 import { questionSchema, validateOptions } from '../common/validations';
 
