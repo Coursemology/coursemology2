@@ -19,7 +19,11 @@ export default class PastProgrammingAnswer extends Component {
             question,
           }}
         />
-        <TestCaseView answerId={answer.id} viewHistory />
+        <TestCaseView
+          answerId={answer.id}
+          isDraftAnswer={answer.isDraftAnswer}
+          viewHistory
+        />
       </div>
     );
   }
@@ -41,7 +45,11 @@ export default class PastProgrammingAnswer extends Component {
           content={content}
           fileId={file.id}
         />
-        <TestCaseView answerId={answer.id} viewHistory />
+        <TestCaseView
+          answerId={answer.id}
+          isDraftAnswer={answer.isDraftAnswer}
+          viewHistory
+        />
       </div>
     );
   }

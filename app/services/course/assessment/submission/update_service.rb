@@ -65,6 +65,10 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     params.require(:submission).permit(*workflow_state_params, points_awarded_param)
   end
 
+  def update_submission_additional_params
+    params.require(:submission).permit(:is_save_draft)
+  end
+
   def update_answers_params
     params.require(:submission).permit(answers: [:id] + update_answer_params)
   end
@@ -151,6 +155,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
             logger.error("Failed to update answer #{answer.errors.inspect}")
             raise ActiveRecord::Rollback
           end
+          attempt_draft_answer(answer)
         end
       end
 
@@ -161,6 +166,18 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
 
       true
     end
+  end
+
+  def attempt_draft_answer(answer)
+    reattempt_answer(answer, finalise: false) if should_attempt_draft_answer(answer)
+  end
+
+  def should_attempt_draft_answer(answer)
+    is_save_draft = update_submission_additional_params[:is_save_draft].to_s.downcase == 'true'
+    is_programming = answer.actable_type == Course::Assessment::Answer::Programming.name
+    assessment_save_draft_answer = @assessment.allow_record_draft_answer
+
+    is_save_draft && is_programming && assessment_save_draft_answer
   end
 
   def update_answer(answer, answer_params)
@@ -202,6 +219,13 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     end
   end
 
+  def reattempt_answer(answer, finalise: true)
+    new_answer = answer.question.attempt(answer.submission, answer)
+    new_answer.finalise! if finalise
+    new_answer.save!
+    new_answer
+  end
+
   def reattempt_and_grade_answer(answer)
     # The transaction is to make sure that the new attempt, auto grading and job are present when
     # the current answer is submitted.
@@ -212,9 +236,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
     answer.class.transaction do
       last_answer = answer.submission.answers.select { |ans| ans.question_id == answer.question_id }.last
       last_answer.destroy! if last_answer&.auto_grading&.job&.errored?
-      new_answer = answer.question.attempt(answer.submission, answer)
-      new_answer.finalise!
-      new_answer.save!
+      new_answer = reattempt_answer(answer, finalise: true)
       new_answer.auto_grade!(redirect_to_path: nil, reduce_priority: false)
     end
   end

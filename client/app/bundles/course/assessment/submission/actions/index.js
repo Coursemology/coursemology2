@@ -148,7 +148,7 @@ export function autogradeSubmission(id) {
 
 export function saveDraft(submissionId, rawAnswers) {
   const answers = formatAnswers(rawAnswers);
-  const payload = { submission: { answers } };
+  const payload = { submission: { answers, is_save_draft: true } };
   return (dispatch) => {
     dispatch({ type: actionTypes.SAVE_DRAFT_REQUEST });
 
