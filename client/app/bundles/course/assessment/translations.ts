@@ -670,6 +670,15 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaximumGrade',
     defaultMessage: 'Maximum grade has to be non-negative.',
   },
+  mustSpecifyMaximumPosts: {
+    id: 'course.assessment.question.forumPostResponses.mustSpecifyMaximumPosts',
+    defaultMessage:
+      'You must specify a valid, positive maximum posts to be allowed.',
+  },
+  mustSpecifyPositiveMaximumPosts: {
+    id: 'course.assessment.question.forumPostResponses.mustSpecifyPositiveMaximumPosts',
+    defaultMessage: 'Maximum posts has to be positive.',
+  },
   mustSpecifyResponse: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyResponse',
     defaultMessage: 'You must specify a valid response title.',
