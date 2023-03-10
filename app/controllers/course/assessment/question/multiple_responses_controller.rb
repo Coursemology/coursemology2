@@ -35,7 +35,7 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
       return
     end
 
-    update_skill_ids_if_params_present
+    update_skill_ids_if_params_present(multiple_response_question_params[:question_assessment])
 
     if update_multiple_response_question
       render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
