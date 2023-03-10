@@ -126,6 +126,10 @@ class Course::Assessment::Answer < ApplicationRecord
     actable.generate_feedback
   end
 
+  def draft_answer?
+    attempting? && !current_answer?
+  end
+
   protected
 
   def finalise

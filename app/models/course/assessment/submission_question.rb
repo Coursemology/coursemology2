@@ -45,8 +45,12 @@ class Course::Assessment::SubmissionQuestion < ApplicationRecord
 
   # Loads the past answers of a specific question
   def past_answers(answers_to_load)
-    answers.unscope(:order).order(created_at: :desc).
-      where('workflow_state != ?', 'attempting').first(answers_to_load)
+    answers.
+      unscope(:order).
+      order(created_at: :desc).
+      where('workflow_state != ? '\
+            'OR (workflow_state = ? AND current_answer IS false)', 'attempting', 'attempting').
+      first(answers_to_load)
   end
 
   private

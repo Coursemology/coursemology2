@@ -102,6 +102,7 @@ json.explanation do
   end
 end
 
+json.isDraftAnswer answer.draft_answer?
 json.attemptsLeft answer.attempting_times_left if question.attempt_limit
 
 if answer.codaveri_feedback_job_id && question.is_codaveri
