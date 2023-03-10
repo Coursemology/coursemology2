@@ -11,7 +11,7 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
-import newCommonTemplate from '../components/CommonBlankTemplate';
+import { qnFormCommonFieldsInitialValues } from '../components/QuestionFormCommonFields';
 
 import AdaptedForm from './components/AdaptedForm';
 import { AdaptedFormProps } from './components/McqMrqForm';
@@ -28,7 +28,7 @@ const newMcqMrqAdapters: Record<McqMrqFormData['mcqMrqType'], Adapter> = {
 };
 
 const NEW_MCQ_MRQ_TEMPLATE: McqMrqData['question'] = {
-  ...newCommonTemplate,
+  ...qnFormCommonFieldsInitialValues,
   skipGrading: false,
   randomizeOptions: false,
 };

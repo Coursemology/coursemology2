@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import {
-  VoiceData,
-  VoiceFormData,
+  VoiceResponseData,
+  VoiceResponseFormData,
 } from 'types/course/assessment/question/voice-responses';
 
 import Form, { FormEmitter } from 'lib/components/form/Form';
 
-import CommonFieldsInQuestionForm from '../components/CommonFieldsInQuestionForm';
-import basicQuestionSchema from '../components/CommonValidation';
+import CommonFieldsInQuestionForm from '../components/QuestionFormCommonFields';
+
+import questionSchema from './validation';
 
 export interface VoiceFormProps<T extends 'new' | 'edit'> {
-  with: VoiceFormData<T>;
-  onSubmit: (data: VoiceData) => Promise<void>;
+  with: VoiceResponseFormData<T>;
+  onSubmit: (data: VoiceResponseData) => Promise<void>;
 }
 
 const VoiceForm = <T extends 'new' | 'edit'>(
@@ -23,9 +24,9 @@ const VoiceForm = <T extends 'new' | 'edit'>(
   const [form, setForm] = useState<FormEmitter>();
 
   const handleSubmit = async (
-    question: VoiceData['question'],
+    question: VoiceResponseData['question'],
   ): Promise<void> => {
-    const newData: VoiceData = {
+    const newData: VoiceResponseData = {
       question,
     };
 
@@ -44,7 +45,7 @@ const VoiceForm = <T extends 'new' | 'edit'>(
       headsUp
       initialValues={data.question}
       onSubmit={handleSubmit}
-      validates={basicQuestionSchema}
+      validates={questionSchema}
     >
       {(control): JSX.Element => (
         <CommonFieldsInQuestionForm

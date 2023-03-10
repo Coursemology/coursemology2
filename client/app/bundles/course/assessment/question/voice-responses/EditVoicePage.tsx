@@ -1,8 +1,8 @@
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
-  VoiceData,
-  VoiceFormData,
+  VoiceResponseData,
+  VoiceResponseFormData,
 } from 'types/course/assessment/question/voice-responses';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -20,10 +20,10 @@ const EditVoicePage = (): JSX.Element => {
   const id = parseInt(params?.questionId ?? '', 10) || undefined;
   if (!id) throw new Error(`EditVoiceForm was loaded with ID: ${id}.`);
 
-  const fetchData = (): Promise<VoiceFormData<'edit'>> =>
+  const fetchData = (): Promise<VoiceResponseFormData<'edit'>> =>
     fetchEditVoiceResponse(id);
 
-  const handleSubmit = (data: VoiceData): Promise<void> =>
+  const handleSubmit = (data: VoiceResponseData): Promise<void> =>
     updateVoiceQuestion(id, data).then(({ redirectUrl }) => {
       toast.success(t(formTranslations.changesSaved));
       window.location.href = redirectUrl;

@@ -5,7 +5,7 @@ import VoiceResponseAPI from './VoiceResponse';
 const QuestionAPI = {
   mcqMrq: new McqMrqAPI(),
   scribing: new ScribingQuestionAPI(),
-  voice: new VoiceResponseAPI(),
+  voiceResponse: new VoiceResponseAPI(),
 };
 
 Object.freeze(QuestionAPI);

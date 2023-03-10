@@ -1,23 +1,23 @@
-import { AvailableSkills, QuestionFormData } from '../questions';
+import { AvailableSkills, OptionalIfNew, QuestionFormData } from '../questions';
 
-import { OptionalIfNew } from './question';
-
-export interface VoiceData<T extends 'new' | 'edit' = 'edit'> {
+export interface VoiceResponseData<T extends 'new' | 'edit' = 'edit'> {
   question: QuestionFormData | OptionalIfNew<T>;
 }
 
-export interface VoiceFormData<T extends 'new' | 'edit' = 'edit'>
-  extends VoiceData<T>,
+export interface VoiceResponseFormData<T extends 'new' | 'edit' = 'edit'>
+  extends VoiceResponseData<T>,
     AvailableSkills {}
 
-type VoiceFormDataQuestion = VoiceFormData['question'];
+type VoiceResponseFormDataQuestion = VoiceResponseFormData['question'];
 
-export interface VoicePostData {
+export interface VoiceResponsePostData {
   question_voice_response: {
-    title?: VoiceFormDataQuestion['title'];
-    description?: VoiceFormDataQuestion['description'];
-    staff_only_comments?: VoiceFormDataQuestion['staffOnlyComments'];
-    maximum_grade?: VoiceFormDataQuestion['maximumGrade'];
-    question_assessment?: { skill_ids: VoiceFormDataQuestion['skillIds'] };
+    title?: VoiceResponseFormDataQuestion['title'];
+    description?: VoiceResponseFormDataQuestion['description'];
+    staff_only_comments?: VoiceResponseFormDataQuestion['staffOnlyComments'];
+    maximum_grade?: VoiceResponseFormDataQuestion['maximumGrade'];
+    question_assessment?: {
+      skill_ids: VoiceResponseFormDataQuestion['skillIds'];
+    };
   };
 }

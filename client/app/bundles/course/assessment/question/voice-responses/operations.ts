@@ -1,28 +1,32 @@
 import { AxiosError } from 'axios';
 import {
-  VoiceData,
-  VoiceFormData,
-  VoicePostData,
+  VoiceResponseData,
+  VoiceResponseFormData,
+  VoiceResponsePostData,
 } from 'types/course/assessment/question/voice-responses';
 
 import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';
 
 export const fetchNewVoiceResponse = async (): Promise<
-  VoiceFormData<'new'>
+  VoiceResponseFormData<'new'>
 > => {
-  const response = await CourseAPI.assessment.question.voice.fetchNewVoice();
+  const response =
+    await CourseAPI.assessment.question.voiceResponse.fetchNewVoiceResponse();
   return response.data;
 };
 
 export const fetchEditVoiceResponse = async (
   id: number,
-): Promise<VoiceFormData<'edit'>> => {
-  const response = await CourseAPI.assessment.question.voice.fetchEditVoice(id);
+): Promise<VoiceResponseFormData<'edit'>> => {
+  const response =
+    await CourseAPI.assessment.question.voiceResponse.fetchEditVoiceResponse(
+      id,
+    );
   return response.data;
 };
 
-const adaptPostData = (data: VoiceData): VoicePostData => ({
+const adaptPostData = (data: VoiceResponseData): VoiceResponsePostData => ({
   question_voice_response: {
     title: data.question.title,
     description: data.question.description,
@@ -33,12 +37,12 @@ const adaptPostData = (data: VoiceData): VoicePostData => ({
 });
 
 export const createVoiceQuestion = async (
-  data: VoiceData,
+  data: VoiceResponseData,
 ): Promise<JustRedirect> => {
   const adaptedData = adaptPostData(data);
 
   try {
-    const response = await CourseAPI.assessment.question.voice.create(
+    const response = await CourseAPI.assessment.question.voiceResponse.create(
       adaptedData,
     );
     return response.data;
@@ -50,12 +54,12 @@ export const createVoiceQuestion = async (
 
 export const updateVoiceQuestion = async (
   id: number,
-  data: VoiceData,
+  data: VoiceResponseData,
 ): Promise<JustRedirect> => {
   const adaptedData = adaptPostData(data);
 
   try {
-    const response = await CourseAPI.assessment.question.voice.update(
+    const response = await CourseAPI.assessment.question.voiceResponse.update(
       id,
       adaptedData,
     );
