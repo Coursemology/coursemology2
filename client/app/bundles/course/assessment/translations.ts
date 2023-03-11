@@ -691,6 +691,19 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.mustSpecifyAtLeastOneCorrectChoice',
     defaultMessage: 'You must specify at least one correct choice.',
   },
+  forumPosts: {
+    id: 'course.assessment.question.forumPostResponses.forumPosts',
+    defaultMessage: 'Forum Posts',
+  },
+  maxPosts: {
+    id: 'course.assessment.question.forumPostResponses.maxPosts',
+    defaultMessage: 'Maximum number of forum posts a student could select',
+  },
+  enableTextResponse: {
+    id: 'course.assessment.question.forumPostResponses.enableTextResponse',
+    defaultMessage:
+      'Include a text field for students to provide further inputs',
+  },
   questionCreated: {
     id: 'course.assessment.question.multipleResponses.questionCreated',
     defaultMessage: 'Question was successfully created.',

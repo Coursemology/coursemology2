@@ -2,7 +2,7 @@ import { AvailableSkills, OptionalIfNew, QuestionFormData } from '../questions';
 
 export interface ForumPostResponseData<T extends 'new' | 'edit' = 'edit'> {
   question:
-    | (QuestionFormData & { hasTextResponse: boolean; maxPosts: number })
+    | (QuestionFormData & { hasTextResponse: boolean; maxPosts: string | null })
     | OptionalIfNew<T>;
 }
 
