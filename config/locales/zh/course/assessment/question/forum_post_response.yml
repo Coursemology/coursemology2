@@ -5,12 +5,4 @@ zh:
         forum_post_responses:
           new:
             header: '新论坛帖子回复问题'
-          create:
-            success: '论坛帖子的回复问题被创建。'
-          update:
-            success: '论坛帖子的回复问题已经更新。'
-          form:
-            max_posts: '一个学生可以选择的最大论坛帖子数量'
-            has_text_response: '引入一个文本段，供学生提供进一步的输入。'
-            forum_post_response_button: '论坛帖子回复问题'
           question_type: 论坛帖子回复问题
