@@ -62,7 +62,11 @@ const ForumPostResponseForm = <T extends 'new' | 'edit'>(
             skillsUrl={data.skillsUrl}
           />
 
-          <Section sticksToNavbar title={t(translations.forumPosts)}>
+          <Section
+            sticksToNavbar
+            subtitle={t(translations.forumPostsRequirements)}
+            title={t(translations.forumPosts)}
+          >
             <Controller
               control={control}
               name="maxPosts"
@@ -73,6 +77,7 @@ const ForumPostResponseForm = <T extends 'new' | 'edit'>(
                   fieldState={fieldState}
                   fullWidth
                   label={t(translations.maxPosts)}
+                  required
                   variant="filled"
                 />
               )}
@@ -83,7 +88,6 @@ const ForumPostResponseForm = <T extends 'new' | 'edit'>(
               name="hasTextResponse"
               render={({ field, fieldState }): JSX.Element => (
                 <FormCheckboxField
-                  description={t(translations.enableTextResponse)}
                   disabled={submitting}
                   field={field}
                   fieldState={fieldState}
