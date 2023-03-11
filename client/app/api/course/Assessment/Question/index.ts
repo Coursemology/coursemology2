@@ -4,7 +4,7 @@ import ScribingQuestionAPI from './Scribing';
 import VoiceResponseAPI from './VoiceResponse';
 
 const QuestionAPI = {
-  ForumPostResponse: new ForumPostResponseAPI(),
+  forumPostResponse: new ForumPostResponseAPI(),
   mcqMrq: new McqMrqAPI(),
   scribing: new ScribingQuestionAPI(),
   voiceResponse: new VoiceResponseAPI(),
