@@ -28,22 +28,18 @@ RSpec.describe 'Course: Assessments: Questions: Forum Post Response Management',
                                    question_attributes[:description]
           fill_in_rails_summernote '.question_forum_post_response_staff_only_comments',
                                    question_attributes[:staff_only_comments]
-          fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+          fill_in 'maximumGrade', with: question_attributes[:maximum_grade]
+          fill_in 'maxPosts', with: question_attributes[:max_posts]
 
-          select question_attributes[:max_posts], from: 'question_forum_post_response_max_posts', visible: false
+          check 'hasTextResponse'
 
-          check 'question_forum_post_response_has_text_response'
+          find_field('Skills').click
+          find('li', text: skill.title).click
 
-          show_skills = "$('select[name=\"question_forum_post_response[question_assessment][skill_ids][]\"]').show()"
-          page.execute_script show_skills
-          within find_field('skills') do
-            select skill.title
-          end
-          click_button I18n.t('helpers.buttons.create')
+          click_button 'Save changes'
+          wait_for_page
 
           question_created = assessment.questions.first.specific
-          expect(page).to have_selector('div',
-                                        text: I18n.t('course.assessment.question.forum_post_responses.create.success'))
           expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
           expect(question_created.title).to eq(question_attributes[:title])
           expect(question_created.description).to include(question_attributes[:description])
@@ -55,32 +51,43 @@ RSpec.describe 'Course: Assessments: Questions: Forum Post Response Management',
       end
 
       scenario 'I can edit a forum post response question' do
-        question = create(:course_assessment_question_forum_post_response, assessment: assessment)
+        forum_post = create(:course_assessment_question_forum_post_response, assessment: assessment)
         visit course_assessment_path(course, assessment)
-        edit_path = edit_course_assessment_question_forum_post_response_path(course, assessment, question)
+        edit_path = edit_course_assessment_question_forum_post_response_path(course, assessment, forum_post)
         find_link(nil, href: edit_path).click
 
+        title = 'Trial Forum Post Response Question'
+        description = 'Test of Creating Forum Post Response Question'
+        staff_only_comments = 'No comments from staff'
         maximum_grade = 999.9
-        fill_in 'maximum_grade', with: maximum_grade
-        click_button I18n.t('helpers.buttons.update')
+        max_posts = 7
 
-        message = I18n.t('course.assessment.question.forum_post_responses.update.success')
-        expect(page).to have_selector('div.alert', text: message)
+        fill_in 'title', with: title
+        fill_in_react_ck 'textarea[name=description]', description
+        fill_in_react_ck 'textarea[name=staffOnlyComments]', staff_only_comments
+        fill_in 'maximumGrade', with: maximum_grade
+        fill_in 'maxPosts', with: max_posts
+
+        check 'hasTextResponse'
+
+        click_button 'Save changes'
+        wait_for_page
+
         expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(question.reload.maximum_grade).to eq(maximum_grade)
+        expect(forum_post.reload.title).to eq(title)
+        expect(forum_post.reload.description).to include(description)
+        expect(forum_post.reload.staff_only_comments).to include(staff_only_comments)
+        expect(forum_post.reload.maximum_grade).to eq(maximum_grade)
+        expect(forum_post.reload.max_posts).to eq(max_posts)
+        expect(forum_post.has_text_response).to eq(true)
 
         visit edit_path
+        uncheck 'hasTextResponse'
 
-        select '5', from: 'question_forum_post_response_max_posts', visible: false
+        click_button 'Save changes'
+        wait_for_page
 
-        uncheck 'question_forum_post_response_has_text_response'
-
-        click_button I18n.t('helpers.buttons.update')
-
-        expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(page).to have_selector('div.alert.alert-success')
-        expect(question.reload.max_posts).to eq(5)
-        expect(question.has_text_response).to eq(false)
+        expect(forum_post.has_text_response).to eq(false)
       end
 
       scenario 'I can delete a forum post response question' do
@@ -91,7 +98,6 @@ RSpec.describe 'Course: Assessments: Questions: Forum Post Response Management',
         click_button 'Delete question'
 
         expect_toastify('Question successfully deleted.')
-        expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).not_to have_content(question.title)
       end
     end
