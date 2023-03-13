@@ -1,6 +1,2 @@
 - add_breadcrumb format_inline_text(@question_assessment.display_title)
-= page_header format_inline_text(@question_assessment.display_title)
-- if @text_response_question.comprehension_question?
-  = render partial: 'form_comprehension'
-- else
-  = render partial: 'form'
+div#text-response

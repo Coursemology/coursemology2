@@ -20,10 +20,9 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
 
   def create
     if @text_response_question.save
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success', name: question_type)
+      render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
     else
-      render 'new'
+      render json: { errors: @text_response_question.errors }, status: :bad_request
     end
   end
 
@@ -37,12 +36,12 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   end
 
   def update
-    @question_assessment.skill_ids = text_response_question_params[:question_assessment][:skill_ids]
-    if @text_response_question.update(text_response_question_params.except(:question_assessment))
-      redirect_to course_assessment_path(current_course, @assessment),
-                  success: t('.success', name: question_type)
+    update_skill_ids_if_params_present(text_response_question_params[:question_assessment])
+
+    if update_text_response_question
+      render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
     else
-      render 'edit'
+      render json: { errors: @text_response_question.errors }, status: :bad_request
     end
   end
 
@@ -56,6 +55,12 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
   end
 
   private
+
+  def update_text_response_question
+    @text_response_question.update(
+      text_response_question_params.except(:question_assessment)
+    )
+  end
 
   def text_response_question_params
     permitted_params = [
