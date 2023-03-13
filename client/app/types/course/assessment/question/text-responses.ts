@@ -25,7 +25,6 @@ export interface TextResponseData<T extends 'new' | 'edit' = 'edit'> {
   question:
     | (QuestionFormData & {
         allowAttachment: boolean;
-        hideText: boolean;
       })
     | OptionalIfNew<T>;
 }
@@ -43,7 +42,6 @@ export interface TextResponsePostData {
     staff_only_comments?: TextResponseFormDataQuestion['staffOnlyComments'];
     maximum_grade?: TextResponseFormDataQuestion['maximumGrade'];
     allow_attachment?: TextResponseFormDataQuestion['allowAttachment'];
-    hide_text?: TextResponseFormDataQuestion['hideText'];
     question_assessment?: {
       skill_ids: TextResponseFormDataQuestion['skillIds'];
     };
@@ -54,6 +52,6 @@ export interface TextResponsePostData {
       grade?: SolutionEntity['grade'];
       explanation?: SolutionEntity['explanation'];
       _destroy?: SolutionEntity['toBeDeleted'];
-    };
+    }[];
   };
 }
