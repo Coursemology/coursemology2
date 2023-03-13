@@ -5,7 +5,7 @@ import {
   QuestionFormData,
 } from '../questions';
 
-interface SolutionData {
+export interface SolutionData {
   id: number | string;
   solution: string;
   solutionType: string;
