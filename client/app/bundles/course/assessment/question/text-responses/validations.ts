@@ -7,7 +7,6 @@ import { qnFormCommonFieldsValidation } from '../components/QuestionFormCommonFi
 
 export const questionSchema = qnFormCommonFieldsValidation.shape({
   allowAttachment: bool(),
-  hideText: bool(),
 });
 
 const solutionSchema = object({

@@ -1,9 +1,4 @@
-import {
-  AvailableSkills,
-  OptionalIfNew,
-  QuestionData,
-  QuestionFormData,
-} from '../questions';
+import { AvailableSkills, OptionalIfNew, QuestionFormData } from '../questions';
 
 export interface SolutionData {
   id: number | string;
@@ -18,13 +13,12 @@ interface SolutionEntity extends SolutionData {
   draft?: boolean;
 }
 
-export type TextResponseListData = QuestionData & { solutions: SolutionData[] };
-
 export interface TextResponseData<T extends 'new' | 'edit' = 'edit'> {
-  solutions: SolutionEntity[] | null | OptionalIfNew<T>;
+  solutions?: SolutionEntity[] | null | OptionalIfNew<T>;
+  questionType: 'file_upload' | 'text_response';
   question:
     | (QuestionFormData & {
-        allowAttachment: boolean;
+        allowAttachment?: boolean;
       })
     | OptionalIfNew<T>;
 }
