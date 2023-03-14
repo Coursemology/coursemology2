@@ -3,7 +3,7 @@ question = @text_response_question
 question_assessment = @question_assessment
 
 json.partial! 'form', locals: {
-  course: current_course
+  course: current_course,
   question: question
 }
 
