@@ -1,3 +1,5 @@
+import { ElementType } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import {
   TextResponseData,
@@ -11,17 +13,36 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../translations';
 import { qnFormCommonFieldsInitialValues } from '../components/QuestionFormCommonFields';
 
-import { create, fetchNewTextResponse } from './operations';
-import TextResponseForm from './TextResponseForm';
+import { create, fetchNewFileUpload, fetchNewTextResponse } from './operations';
+import TextResponseForm, { TextResponseFormProps } from './TextResponseForm';
 
 const NEW_TEXT_RESPONSE_TEMPLATE: TextResponseData['question'] =
   qnFormCommonFieldsInitialValues;
 
+type Fetcher = () => Promise<TextResponseFormData<'new'>>;
+type Form = ElementType<TextResponseFormProps<'new'>>;
+
+type Adapter = [Fetcher, Form];
+
+const newTextResponseAdapter: Record<
+  TextResponseFormData['questionType'],
+  Adapter
+> = {
+  file_upload: [fetchNewFileUpload, TextResponseForm],
+  text_response: [fetchNewTextResponse, TextResponseForm],
+};
+
 const NewTextResponsePage = (): JSX.Element => {
   const { t } = useTranslation();
 
-  const fetchData = (): Promise<TextResponseFormData<'new'>> =>
-    fetchNewTextResponse();
+  const [params] = useSearchParams();
+  const isFileUpload = params.get('file_upload') === 'true';
+
+  const type: TextResponseFormData['questionType'] = isFileUpload
+    ? 'file_upload'
+    : 'text_response';
+
+  const [fetchData, FormComponent] = newTextResponseAdapter[type];
 
   const handleSubmit = (data: TextResponseData): Promise<void> =>
     create(data).then(({ redirectUrl }) => {
@@ -33,7 +54,7 @@ const NewTextResponsePage = (): JSX.Element => {
     <Preload render={<LoadingIndicator />} while={fetchData}>
       {(data): JSX.Element => {
         data.question = NEW_TEXT_RESPONSE_TEMPLATE;
-        return <TextResponseForm onSubmit={handleSubmit} with={data} />;
+        return <FormComponent onSubmit={handleSubmit} with={data} />;
       }}
     </Preload>
   );

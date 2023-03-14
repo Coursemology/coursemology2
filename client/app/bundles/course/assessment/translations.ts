@@ -548,6 +548,10 @@ const translations = defineMessages({
     defaultMessage:
       'You can configure existing and create new skills at the <url>Skills</url> page.',
   },
+  allowFileUpload: {
+    id: 'course.assessment.question.textResponses.allowFileUpload',
+    defaultMessage: 'Allow file upload in the answer',
+  },
   responses: {
     id: 'course.assessment.question.multipleResponses.responses',
     defaultMessage: 'Responses',
@@ -556,6 +560,15 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.responsesHint',
     defaultMessage:
       'Explanations are displayed after a student submits their responses for this question.',
+  },
+  solutions: {
+    id: 'course.assessment.question.textResponses.solutions',
+    defaultMessage: 'Solutions',
+  },
+  solutionsHint: {
+    id: 'course.assessment.question.textResponses.solutionsHint',
+    defaultMessage:
+      'Adding solutions allows the question to be autograded. Students can only input plaintext.',
   },
   randomizeResponses: {
     id: 'course.assessment.question.multipleResponses.randomizeResponses',
@@ -586,22 +599,51 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.responseWillBeDeleted',
     defaultMessage: 'This response will be deleted once you save your changes.',
   },
+  solutionWillBeDeleted: {
+    id: 'course.assessment.question.textResponses.solutionWillBeDeleted',
+    defaultMessage: 'This solution will be deleted once you save your changes.',
+  },
   newResponseCannotUndo: {
     id: 'course.assessment.question.multipleResponses.newResponseCannotUndo',
     defaultMessage:
       'This is a new response. It will immediately disappear if you delete before saving it.',
   },
+  newSolutionCannotUndo: {
+    id: 'course.assessment.question.textResponses.newSolutionCannotUndo',
+    defaultMessage:
+      'This is a new solution. It will immediately disappear if you delete before saving it.',
+  },
   undoDeleteResponse: {
     id: 'course.assessment.question.multipleResponses.undoDeleteResponse',
     defaultMessage: 'Undo delete response',
+  },
+  undoDeleteSolution: {
+    id: 'course.assessment.question.textResponses.undoDeleteSolution',
+    defaultMessage: 'Undo delete solution',
   },
   addResponse: {
     id: 'course.assessment.question.multipleResponses.addResponse',
     defaultMessage: 'Add a new response',
   },
+  addSolution: {
+    id: 'course.assessment.question.textResponses.addSolution',
+    defaultMessage: 'Add a new solution',
+  },
   ignoresRandomization: {
     id: 'course.assessment.question.multipleResponses.ignoresRandomization',
     defaultMessage: 'Ignores randomization',
+  },
+  solution: {
+    id: 'course.assessment.question.textResponses.solution',
+    defaultMessage: 'Solution',
+  },
+  solutionType: {
+    id: 'course.assessment.question.textResponses.solutionType',
+    defaultMessage: 'Type of Solution',
+  },
+  grade: {
+    id: 'course.assessment.question.textResponses.grade',
+    defaultMessage: 'Grade',
   },
   choice: {
     id: 'course.assessment.question.multipleResponses.choice',
@@ -623,6 +665,10 @@ const translations = defineMessages({
   deleteChoice: {
     id: 'course.assessment.question.multipleResponses.deleteChoice',
     defaultMessage: 'Delete choice',
+  },
+  deleteSolution: {
+    id: 'course.assessment.question.textResponses.deleteSolution',
+    defaultMessage: 'Delete solution',
   },
   choiceWillBeDeleted: {
     id: 'course.assessment.question.multipleResponses.choiceWillBeDeleted',
