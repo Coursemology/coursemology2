@@ -9,13 +9,7 @@ class Course::Assessment::Question::MultipleResponsesController < Course::Assess
   before_action :load_question_assessment, only: [:edit, :update]
 
   def new
-    respond_to do |format|
-      format.html
-
-      format.json do
-        @multiple_response_question.grading_scheme = :any_correct if params[:multiple_choice] == 'true'
-      end
-    end
+    @multiple_response_question.grading_scheme = :any_correct if params[:multiple_choice] == 'true'
   end
 
   def create

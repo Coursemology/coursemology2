@@ -8,7 +8,7 @@ export interface SolutionData {
   explanation: string;
 }
 
-interface SolutionEntity extends SolutionData {
+export interface SolutionEntity extends SolutionData {
   toBeDeleted?: boolean;
   draft?: boolean;
 }
