@@ -16,7 +16,7 @@ const solutionSchema = object({
     otherwise: string().required(translations.mustSpecifySolution),
   }),
   solutionType: string().required(),
-  grade: number().required(),
+  grade: number().required().min(1, translations.mustSpecifyPositiveGrade),
   explanation: string().nullable(),
   toBeDeleted: bool(),
 });
