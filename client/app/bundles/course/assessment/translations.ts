@@ -741,6 +741,10 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.mustSpecifySolution',
     defaultMessage: 'You must specify a valid solution title.',
   },
+  mustSpecifyPositiveGrade: {
+    id: 'course.assessment.question.textResponses.mustSpecifyPositiveGrade',
+    defaultMessage: 'You must enter the positive integer for grade.',
+  },
   mustSpecifyAtLeastOneCorrectChoice: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyAtLeastOneCorrectChoice',
     defaultMessage: 'You must specify at least one correct choice.',

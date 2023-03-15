@@ -32,11 +32,12 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
 
   const solutionsRef = useRef<SolutionsManagerRef>(null);
 
-  const prepareSolutions = async (): Promise<
-    TextResponseData<T>['solutions'] | undefined
-  > => {
+  const prepareSolutions = async (
+    questionType: 'file_upload' | 'text_response',
+  ): Promise<TextResponseData<T>['solutions'] | undefined> => {
     solutionsRef.current?.resetErrors();
     const solutions = solutionsRef.current?.getSolutions() ?? [];
+    if (questionType === 'file_upload') return solutions;
     const errors = await validateSolutions(solutions);
 
     if (errors) {
@@ -52,7 +53,9 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
   const handleSubmit = async (
     question: TextResponseData['question'],
   ): Promise<void> => {
-    const solutions = await prepareSolutions();
+    const solutions = await prepareSolutions(data.questionType);
+    if (!solutions) return;
+
     const newData: TextResponseData = {
       questionType: data.questionType,
       question,
