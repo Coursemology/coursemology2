@@ -58,7 +58,7 @@ class Course::Assessment::Question::TextResponsesController < Course::Assessment
 
   def update_text_response_question
     @text_response_question.update(
-      text_response_question_params.except(:question_assessment)
+      text_response_question_params.except(:question_assessment, :file_upload)
     )
   end
 

@@ -44,11 +44,14 @@ const NewTextResponsePage = (): JSX.Element => {
 
   const [fetchData, FormComponent] = newTextResponseAdapter[type];
 
-  const handleSubmit = (data: TextResponseData): Promise<void> =>
-    create(data).then(({ redirectUrl }) => {
-      toast.success(t(translations.questionCreated));
-      window.location.href = redirectUrl;
-    });
+  const handleSubmit = async (data: TextResponseData): Promise<void> => {
+    if (type === 'file_upload') {
+      data.question.hideText = true;
+    }
+    const { redirectUrl } = await create(data);
+    toast.success(t(translations.questionCreated));
+    window.location.href = redirectUrl;
+  };
 
   return (
     <Preload render={<LoadingIndicator />} while={fetchData}>
