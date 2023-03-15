@@ -7,8 +7,10 @@ json.partial! 'form', locals: {
 }
 
 json.question do
-  json.partial! 'course/assessment/question/form', question: question
+  json.partial! 'course/assessment/question/form', locals: {
+    question: question,
+    question_assessment: question_assessment
+  }
   json.hasTextResponse question.has_text_response
   json.maxPosts question.max_posts
-  json.skillIds question_assessment.skill_ids
 end

@@ -19,7 +19,7 @@ import {
 
 const NEW_FORUM_POST_TEMPLATE: ForumPostResponseData['question'] = {
   ...qnFormCommonFieldsInitialValues,
-  maxPosts: '',
+  maxPosts: '1',
   hasTextResponse: false,
 };
 

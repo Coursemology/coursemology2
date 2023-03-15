@@ -12,8 +12,10 @@ json.partial! 'form', locals: {
 }
 
 json.question do
-  json.partial! 'course/assessment/question/form', question: question
+  json.partial! 'course/assessment/question/form', locals: {
+    question: question,
+    question_assessment: question_assessment
+  }
   json.skipGrading question.skip_grading
-  json.skillIds question_assessment.skill_ids
   json.randomizeOptions question.randomize_options if allow_randomization
 end
