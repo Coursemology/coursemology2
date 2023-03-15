@@ -24,14 +24,13 @@ RSpec.describe 'Course: Assessments: Questions: Forum Post Response Management',
           )
           question_attributes = attributes_for(:course_assessment_question_forum_post_response)
           fill_in 'title', with: question_attributes[:title]
-          fill_in_rails_summernote '.question_forum_post_response_description',
-                                   question_attributes[:description]
-          fill_in_rails_summernote '.question_forum_post_response_staff_only_comments',
-                                   question_attributes[:staff_only_comments]
+          fill_in_react_ck 'textarea[name=description]', question_attributes[:description]
+          fill_in_react_ck 'textarea[name=staffOnlyComments]', question_attributes[:staff_only_comments]
           fill_in 'maximumGrade', with: question_attributes[:maximum_grade]
           fill_in 'maxPosts', with: question_attributes[:max_posts]
 
-          check 'hasTextResponse'
+          correct_checkbox = first('input[type=checkbox]', visible: false)
+          correct_checkbox.check
 
           find_field('Skills').click
           find('li', text: skill.title).click
@@ -68,7 +67,8 @@ RSpec.describe 'Course: Assessments: Questions: Forum Post Response Management',
         fill_in 'maximumGrade', with: maximum_grade
         fill_in 'maxPosts', with: max_posts
 
-        check 'hasTextResponse'
+        correct_checkbox = first('input[type=checkbox]', visible: false)
+        correct_checkbox.check
 
         click_button 'Save changes'
         wait_for_page
@@ -79,15 +79,16 @@ RSpec.describe 'Course: Assessments: Questions: Forum Post Response Management',
         expect(forum_post.reload.staff_only_comments).to include(staff_only_comments)
         expect(forum_post.reload.maximum_grade).to eq(maximum_grade)
         expect(forum_post.reload.max_posts).to eq(max_posts)
-        expect(forum_post.has_text_response).to eq(true)
+        expect(forum_post.reload.has_text_response).to eq(true)
 
         visit edit_path
-        uncheck 'hasTextResponse'
+        correct_checkbox = first('input[type=checkbox]', visible: false)
+        correct_checkbox.uncheck
 
         click_button 'Save changes'
         wait_for_page
 
-        expect(forum_post.has_text_response).to eq(false)
+        expect(forum_post.reload.has_text_response).to eq(false)
       end
 
       scenario 'I can delete a forum post response question' do

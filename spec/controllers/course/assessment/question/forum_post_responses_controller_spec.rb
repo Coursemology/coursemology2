@@ -43,6 +43,30 @@ RSpec.describe Course::Assessment::Question::ForumPostResponsesController, type:
       end
     end
 
+    describe '#edit' do
+      let!(:forum_post_response) do
+        forum_post_response = create(:course_assessment_question_forum_post_response, assessment: assessment)
+        forum_post_response.question.update_column(:description, "<script>alert('boo');</script>")
+        forum_post_response
+      end
+
+      subject do
+        get :edit,
+            params: {
+              course_id: course,
+              assessment_id: assessment,
+              id: forum_post_response
+            }
+      end
+
+      context 'when edit page is loaded' do
+        it 'sanitizes the description text' do
+          subject
+          expect(assigns(:forum_post_response_question).description).not_to include('script')
+        end
+      end
+    end
+
     describe '#update' do
       let(:forum_post_response) { immutable_forum_post_response_question }
       subject do

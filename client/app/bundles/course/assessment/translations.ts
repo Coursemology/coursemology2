@@ -693,12 +693,12 @@ const translations = defineMessages({
   },
   forumPosts: {
     id: 'course.assessment.question.forumPostResponses.forumPosts',
-    defaultMessage: 'Forum Posts',
+    defaultMessage: 'Additional Settings',
   },
   forumPostsRequirements: {
     id: 'course.assessment.question.forumPostResponses.forumPostsRequirements',
     defaultMessage:
-      'Defining the requirements related with forum posts for this question',
+      'Additional forum posts question settings for this question',
   },
   maxPosts: {
     id: 'course.assessment.question.forumPostResponses.maxPosts',
