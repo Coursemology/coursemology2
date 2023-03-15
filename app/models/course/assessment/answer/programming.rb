@@ -89,16 +89,14 @@ class Course::Assessment::Answer::Programming < ApplicationRecord
   end
 
   def generate_feedback
-    codaveri_feedback_job&.status == 'submitted' ? codaveri_feedback_job : retrieve_codaveri_code_feedback.job
+    codaveri_feedback_job&.status == 'submitted' ? codaveri_feedback_job : retrieve_codaveri_code_feedback&.job
   end
 
   def retrieve_codaveri_code_feedback
     question = self.question.actable
     assessment = submission.assessment
 
-    should_retrieve_feedback = question.is_codaveri && submission.submitted? &&
-                               !assessment.autograded? && current_answer?
-
+    should_retrieve_feedback = question.is_codaveri && !submission.attempting? && current_answer?
     return unless should_retrieve_feedback
 
     feedback_job = Course::Assessment::Answer::ProgrammingCodaveriFeedbackJob.perform_later(assessment, question, self)

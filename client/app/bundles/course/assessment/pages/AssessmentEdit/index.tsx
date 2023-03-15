@@ -29,7 +29,6 @@ const AssessmentEdit = (): JSX.Element => {
           <AssessmentEditPage
             // @ts-ignore: component is still written in JSX
             conditionAttributes={data.conditionsData}
-            containsCodaveri={data.contains_codaveri}
             folderAttributes={data.folder_attributes}
             gamified={data.gamified}
             initialValues={{

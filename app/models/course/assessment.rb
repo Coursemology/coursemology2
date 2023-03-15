@@ -174,11 +174,6 @@ class Course::Assessment < ApplicationRecord
     submissions.count == 0 || autograded?
   end
 
-  # To check if there is any codaveri question type in this assessment
-  def contains_programming_codaveri?
-    programming_questions.pluck(:is_codaveri).include?(true)
-  end
-
   # @override ConditionalInstanceMethods#permitted_for!
   def permitted_for!(_course_user)
   end

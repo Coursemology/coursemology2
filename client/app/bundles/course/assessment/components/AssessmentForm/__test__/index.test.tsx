@@ -40,7 +40,6 @@ beforeEach(() => {
     initialValues,
     gamified: false,
     modeSwitching: true,
-    containsCodaveri: false,
     showPersonalizedTimelineFeatures: false,
     randomizationAllowed: false,
     conditionAttributes: {
@@ -165,17 +164,6 @@ describe('<AssessmentForm />', () => {
     expect(form.getByDisplayValue('manual')).toBeEnabled();
 
     props.modeSwitching = false;
-    form.rerender(getComponent());
-
-    expect(form.getByDisplayValue('autograded')).toBeDisabled();
-    expect(form.getByDisplayValue('manual')).toBeDisabled();
-  });
-
-  it('prevents grading mode switching when there are codaveri questions', () => {
-    expect(form.getByDisplayValue('autograded')).toBeEnabled();
-    expect(form.getByDisplayValue('manual')).toBeEnabled();
-
-    props.containsCodaveri = true;
     form.rerender(getComponent());
 
     expect(form.getByDisplayValue('autograded')).toBeDisabled();
