@@ -55,7 +55,6 @@ class AssessmentEditPage extends Component {
     const {
       intl,
       conditionAttributes,
-      containsCodaveri,
       disabled,
       folderAttributes,
       gamified,
@@ -84,7 +83,6 @@ class AssessmentEditPage extends Component {
 
         <AssessmentForm
           conditionAttributes={conditionAttributes}
-          containsCodaveri={containsCodaveri}
           disabled={disabled}
           editing
           folderAttributes={folderAttributes}
@@ -115,8 +113,6 @@ AssessmentEditPage.propTypes = {
   randomizationAllowed: PropTypes.bool,
   // If allowed to switch between autograded and manually graded mode.
   modeSwitching: PropTypes.bool,
-  // If an assessment contains question of programming codaveri type
-  containsCodaveri: PropTypes.bool,
   // An array of materials of current assessment.
   folderAttributes: PropTypes.shape({}),
   conditionAttributes: achievementTypesConditionAttributes,

@@ -56,6 +56,4 @@ export interface AssessmentFormProps
    * If `true`, Autograded and Manual grading modes can be changed
    */
   modeSwitching?: boolean;
-
-  containsCodaveri?: boolean;
 }

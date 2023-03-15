@@ -31,7 +31,6 @@ import useFormValidation from './useFormValidation';
 const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const {
     conditionAttributes,
-    containsCodaveri,
     disabled,
     dispatch,
     editing,
@@ -403,10 +402,6 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           <InfoLabel label={intl.formatMessage(t.modeSwitchingDisabled)} />
         )}
 
-        {containsCodaveri && (
-          <InfoLabel label={intl.formatMessage(t.containsCodaveriQuestion)} />
-        )}
-
         <Controller
           control={control}
           name="autograded"
@@ -421,14 +416,14 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             >
               <IconRadio
                 description={intl.formatMessage(t.autogradedHint)}
-                disabled={!!containsCodaveri || !!disabled || !modeSwitching}
+                disabled={!!disabled || !modeSwitching}
                 icon={AutogradedIcon}
                 label="Autograded"
                 value="autograded"
               />
 
               <IconRadio
-                disabled={!!containsCodaveri || !!disabled || !modeSwitching}
+                disabled={!!disabled || !modeSwitching}
                 icon={ManualIcon}
                 label="Manual"
                 value="manual"

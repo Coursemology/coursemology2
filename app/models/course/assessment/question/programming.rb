@@ -238,9 +238,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   def validate_codaveri_question # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     return if !is_codaveri || duplicating?
 
-    if question_assessments&.first&.assessment&.autograded?
-      errors.add(:base, 'Assessment type must not be autograded.')
-    elsif !codaveri_language_whitelist.include?(language.type.constantize)
+    if !codaveri_language_whitelist.include?(language.type.constantize)
       errors.add(:base, 'Language type must be Python 3 and above.')
     elsif !question_assessments.empty? &&
           !question_assessments.first.assessment.course.component_enabled?(Course::CodaveriComponent)

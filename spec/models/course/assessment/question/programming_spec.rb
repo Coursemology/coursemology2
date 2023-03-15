@@ -289,14 +289,6 @@ RSpec.describe Course::Assessment::Question::Programming do
       let(:assessment) { create(:assessment, :published_with_programming_question) }
       let(:language) { Coursemology::Polyglot::Language::Python::Python3Point10.instance }
 
-      context 'when the assessment is autograded' do
-        let(:assessment) { create(:assessment, :published_with_programming_question, :autograded) }
-        it 'returns correct validation' do
-          expect(subject).to_not be_valid
-          expect(subject.errors.messages[:base]).to include('Assessment type must not be autograded.')
-        end
-      end
-
       context 'when the language chosen is not whitelisted' do
         let(:language) { Coursemology::Polyglot::Language::Python::Python2Point7.instance }
         it 'returns correct validation' do

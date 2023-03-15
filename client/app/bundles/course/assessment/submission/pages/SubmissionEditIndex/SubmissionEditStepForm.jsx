@@ -77,12 +77,15 @@ const SubmissionEditStepForm = (props) => {
     allConsideredCorrect,
     allowPartialSubmission,
     attempting,
+    codaveriFeedbackStatus,
     explanations,
     graderView,
+    isCodaveriEnabled,
     onReset,
     onSaveDraft,
     onSubmit,
     onSubmitAnswer,
+    onGenerateFeedback,
     onReevaluateAnswer,
     handleSaveGrade,
     handleToggleViewHistoryMode,
@@ -169,13 +172,16 @@ const SubmissionEditStepForm = (props) => {
 
   const renderAutogradingErrorPanel = (id) => {
     const { jobError } = questionsFlags[id] || {};
-    const { type } = questions[id];
+    const { isCodaveri, type } = questions[id];
 
     if (type === questionTypes.Programming && jobError) {
       return (
         <Paper
           style={{ padding: 10, backgroundColor: red[100], marginBottom: 20 }}
         >
+          {isCodaveri
+            ? intl.formatMessage(translations.codaveriAutogradeFailure)
+            : intl.formatMessage(translations.autogradeFailure)}
           {intl.formatMessage(translations.autogradeFailure)}
         </Paper>
       );
@@ -291,21 +297,38 @@ const SubmissionEditStepForm = (props) => {
     const question = questions[id];
     const { answerId } = question;
     const { isAutograding } = questionsFlags[id] || {};
-    if (question.type !== 'Programming') {
+    if (question.type !== questionTypes.Programming) {
       return null;
     }
 
     return (
-      <Button
-        color="secondary"
-        disabled={isAutograding || isSaving}
-        id="re-evaluate-code"
-        onClick={() => onReevaluateAnswer(answerId, question.id)}
-        style={styles.formButton}
-        variant="contained"
-      >
-        {intl.formatMessage(translations.reevaluate)}
-      </Button>
+      <>
+        {isCodaveriEnabled && question.isCodaveri && (
+          <Button
+            color="secondary"
+            disabled={
+              codaveriFeedbackStatus?.answers[answerId]?.jobStatus ===
+                'submitted' || isSaving
+            }
+            id="re-evaluate-code"
+            onClick={() => onGenerateFeedback(answerId, question.id)}
+            style={styles.formButton}
+            variant="contained"
+          >
+            {intl.formatMessage(translations.generateCodaveriFeedback)}
+          </Button>
+        )}
+        <Button
+          color="secondary"
+          disabled={isAutograding || isSaving}
+          id="re-evaluate-code"
+          onClick={() => onReevaluateAnswer(answerId, question.id)}
+          style={styles.formButton}
+          variant="contained"
+        >
+          {intl.formatMessage(translations.reevaluate)}
+        </Button>
+      </>
     );
   };
 
@@ -603,11 +626,14 @@ SubmissionEditStepForm.propTypes = {
   attempting: PropTypes.bool.isRequired,
   published: PropTypes.bool.isRequired,
 
+  codaveriFeedbackStatus: PropTypes.object,
   explanations: PropTypes.objectOf(explanationShape),
   allConsideredCorrect: PropTypes.bool.isRequired,
   allowPartialSubmission: PropTypes.bool.isRequired,
   showMcqAnswer: PropTypes.bool.isRequired,
   showMcqMrqSolution: PropTypes.bool.isRequired,
+  isCodaveriEnabled: PropTypes.bool.isRequired,
+
   questionIds: PropTypes.arrayOf(PropTypes.number),
   questions: PropTypes.objectOf(questionShape),
   historyQuestions: PropTypes.objectOf(historyQuestionShape),
@@ -620,6 +646,7 @@ SubmissionEditStepForm.propTypes = {
   onSubmit: PropTypes.func,
   onSubmitAnswer: PropTypes.func,
   onReevaluateAnswer: PropTypes.func,
+  onGenerateFeedback: PropTypes.func,
   handleUnsubmit: PropTypes.func,
   handleSaveGrade: PropTypes.func,
   handleToggleViewHistoryMode: PropTypes.func,

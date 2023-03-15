@@ -311,6 +311,7 @@ class VisibleSubmissionEditIndex extends Component {
           allConsideredCorrect={this.allConsideredCorrect()}
           allowPartialSubmission={allowPartialSubmission}
           attempting={workflowState === workflowStates.Attempting}
+          codaveriFeedbackStatus={codaveriFeedbackStatus}
           explanations={explanations}
           graderView={graderView}
           handleSaveGrade={() => this.handleSaveGrade()}
@@ -318,8 +319,10 @@ class VisibleSubmissionEditIndex extends Component {
           handleUnsubmit={() => this.handleUnsubmit()}
           historyQuestions={historyQuestions}
           initialValues={answers.initial}
+          isCodaveriEnabled={isCodaveriEnabled}
           isSaving={isSaving}
           maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
+          onGenerateFeedback={this.onGenerateFeedback}
           onReevaluateAnswer={this.onReevaluateAnswer}
           onReset={this.onReset}
           onSaveDraft={this.onSaveDraft}

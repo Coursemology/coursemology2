@@ -638,9 +638,7 @@ class ProgrammingQuestionForm extends Component {
       'question',
       'autograded_assessment',
     ]);
-    const showIsCodaveri =
-      !this.props.data.getIn(['question', 'autograded_assessment']) &&
-      question.get('autograded');
+    const showIsCodaveri = question.get('autograded');
     const enableCodaveri =
       this.props.data.getIn(['question', 'codaveri_enabled']) ||
       question.get('is_codaveri');

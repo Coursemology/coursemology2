@@ -139,14 +139,6 @@ const translations = defineMessages({
       'You can no longer change the grading mode because there are already submissions \
       for this assessment.',
   },
-  containsCodaveriQuestion: {
-    id: 'course.assessment.AssessmentForm.containsCodaveriQuestion',
-    defaultMessage:
-      "Switch to autograded mode is not allowed as there's \
-      codaveri programming question type in this assessment. \
-      This question type is only supported \
-      in manually-graded assessment.",
-  },
   calculateGradeWith: {
     id: 'course.assessment.AssessmentForm.calculateGradeWith',
     defaultMessage: 'Calculate grade and EXP with',
