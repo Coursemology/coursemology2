@@ -1133,10 +1133,10 @@
   version "0.0.1"
   resolved "https://codeload.github.com/ekowidianto/CKEditor5-build-coursemology/tar.gz/c22c7a20899efb9dc9bd3e2a29fbca9848372ce4"
 
-"@ckeditor/ckeditor5-react@^5.0.6":
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-react/-/ckeditor5-react-5.0.6.tgz#bc48babb9b1cdfed96ac62a0045491950c2ee23f"
-  integrity sha512-clfJWCsjYmpLLEaE3094icBOgHY8c+kreHRrZKyhhWeQl7w/FYCln/x/AACwzU0oPrvtRCJRBuZC3C5sC02GPA==
+"@ckeditor/ckeditor5-react@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@ckeditor/ckeditor5-react/-/ckeditor5-react-5.1.0.tgz#af747cd6e3e7c4fcdbffcd1f750005ca5b7fbc41"
+  integrity sha512-7+okLprneCOD/zXceiONstUjRQtMSnsYiW7C2uODgXpglYDANw9QbAoyA4+M0ZC2Sjxok56YPy46F7uXB+a6mA==
   dependencies:
     prop-types "^15.7.2"
 
