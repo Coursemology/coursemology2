@@ -637,6 +637,11 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.solutionType',
     defaultMessage: 'Type of Solution',
   },
+  solutionTypeExplanation: {
+    id: 'course.assessment.question.textResponses.solutionTypeExplanation',
+    defaultMessage:
+      'If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct.',
+  },
   grade: {
     id: 'course.assessment.question.textResponses.grade',
     defaultMessage: 'Grade',
