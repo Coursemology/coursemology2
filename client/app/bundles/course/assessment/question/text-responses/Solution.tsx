@@ -12,8 +12,8 @@ import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
+import useDirty from '../common/useDirty';
 
-import useDirty from './useDirty';
 import { SolutionErrors } from './validations';
 
 interface SolutionProps {

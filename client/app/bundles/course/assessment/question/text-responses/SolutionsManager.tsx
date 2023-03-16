@@ -16,9 +16,9 @@ import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
+import useDirty from '../common/useDirty';
 
 import Solution, { SolutionRef } from './Solution';
-import useDirty from './useDirty';
 import { SolutionsErrors } from './validations';
 
 interface SolutionsManagerProps {
@@ -103,16 +103,17 @@ const SolutionsManager = forwardRef<SolutionsManagerRef, SolutionsManagerProps>(
       props.onDirtyChange(isDirty || isOrderDirty(solutions));
     }, [isDirty, solutions]);
 
-    const update = (updater: (draft: SolutionEntity[]) => void): void =>
+    const updateSolution = (updater: (draft: SolutionEntity[]) => void): void =>
       setSolutions(produce(updater));
-    const reorder = (result: DropResult): void => {
+
+    const reorderSolution = (result: DropResult): void => {
       if (!result.destination) return;
 
       const sourceIndex = result.source.index;
       const destinationIndex = result.destination.index;
       if (sourceIndex === destinationIndex) return;
 
-      update((draft) => {
+      updateSolution((draft) => {
         const [moved] = draft.splice(sourceIndex, 1);
         draft.splice(destinationIndex, 0, moved);
       });
@@ -122,7 +123,7 @@ const SolutionsManager = forwardRef<SolutionsManagerRef, SolutionsManagerProps>(
       const count = solutions.length;
       const id = `new-solution-${count}`;
 
-      update((draft) => {
+      updateSolution((draft) => {
         draft.push({
           id,
           solution: '',
@@ -138,7 +139,7 @@ const SolutionsManager = forwardRef<SolutionsManagerRef, SolutionsManagerProps>(
 
     const deleteDraftHandler =
       (index: number, id: SolutionEntity['id']) => () => {
-        update((draft) => {
+        updateSolution((draft) => {
           draft.splice(index, 1);
         });
 
@@ -154,7 +155,7 @@ const SolutionsManager = forwardRef<SolutionsManagerRef, SolutionsManagerProps>(
         )}
 
         {Boolean(solutions?.length) && (
-          <DragDropContext onDragEnd={reorder}>
+          <DragDropContext onDragEnd={reorderSolution}>
             <Droppable droppableId="options">
               {(droppable): JSX.Element => (
                 <Paper
