@@ -89,7 +89,7 @@ const CoursesIndex: FC = () => {
         {t(translations.newCourse)}
       </Button>,
     );
-  } else if (!isLoading) {
+  } else if (!isLoading && coursesPermissions?.isCurrentUser) {
     headerToolbars.push(
       <Button
         key="role-request-button"

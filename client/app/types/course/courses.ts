@@ -5,7 +5,7 @@ import { AnnouncementListData, AnnouncementMiniEntity } from './announcements';
 import { CourseUserListData } from './courseUsers';
 import { NotificationData } from './notifications';
 
-export type CoursePermissions = Permissions<'canCreate'>;
+export type CoursePermissions = Permissions<'canCreate' | 'isCurrentUser'>;
 
 export type CourseDataPermissions = Permissions<
   'isCurrentCourseUser' | 'canManage'
