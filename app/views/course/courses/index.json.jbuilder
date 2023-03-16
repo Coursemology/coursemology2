@@ -18,4 +18,5 @@ end
 
 json.permissions do
   json.canCreate can?(:create, Course.new)
+  json.isCurrentUser current_user.present?
 end

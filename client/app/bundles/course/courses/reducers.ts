@@ -18,7 +18,7 @@ import {
 
 const initialState: CoursesState = {
   courses: createEntityStore(),
-  permissions: { canCreate: false },
+  permissions: { canCreate: false, isCurrentUser: false },
   instanceUserRoleRequest: undefined,
 };
 
