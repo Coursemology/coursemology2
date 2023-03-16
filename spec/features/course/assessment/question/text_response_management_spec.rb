@@ -12,7 +12,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
     context 'As a Course Manager' do
       let(:user) { create(:course_manager, course: course).user }
 
-      scenario 'I can create a new text response question' do
+      scenario 'I can create a new file upload question' do
         skill = create(:course_assessment_skill, course: course)
         visit course_assessment_path(course, assessment)
         click_on 'New Question'
@@ -24,32 +24,31 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
           )
           question_attributes = attributes_for(:course_assessment_question_text_response)
           fill_in 'title', with: question_attributes[:title]
-          fill_in_rails_summernote '.question_text_response_description', question_attributes[:description]
-          fill_in_rails_summernote '.question_text_response_staff_only_comments',
-                                   question_attributes[:staff_only_comments]
-          fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
+          fill_in_react_ck 'textarea[name=description]', question_attributes[:description]
+          fill_in_react_ck 'textarea[name=staffOnlyComments]', question_attributes[:staff_only_comments]
+          fill_in 'maximumGrade', with: question_attributes[:maximum_grade]
 
-          allow_attachment = "document.getElementById('question_text_response_allow_attachment').value = true"
-          page.execute_script allow_attachment
+          find_field('Skills').click
+          find('li', text: skill.title).click
 
-          show_skills = "$('select[name=\"question_text_response[question_assessment][skill_ids][]\"]').show()"
-          page.execute_script show_skills
-          within find_field('skills') do
-            select skill.title
-          end
-          click_button I18n.t('helpers.buttons.create')
+          click_button 'Save changes'
+          wait_for_page
 
           question_created = assessment.questions.first.specific
-          expect(page).to have_selector('div', text: I18n.t('course.assessment.question.text_responses.create.success'))
           expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
+          expect(question_created.title).to eq(question_attributes[:title])
+          expect(question_created.description).to include(question_attributes[:description])
+          expect(question_created.staff_only_comments).to include(question_attributes[:staff_only_comments])
+          expect(question_created.maximum_grade).to eq(question_attributes[:maximum_grade])
           expect(question_created.allow_attachment).to be_truthy
+          expect(question_created.hide_text).to be_truthy
         end
       end
 
-      scenario 'I can create a new file upload question' do
+      scenario 'I can create a new text response question' do
         visit course_assessment_path(course, assessment)
         click_on 'New Question'
-        new_page = window_opened_by { click_link 'File Upload' }
+        new_page = window_opened_by { click_link 'Text Response' }
 
         within_window new_page do
           file_upload_path = new_course_assessment_question_text_response_path(course, assessment)
@@ -57,16 +56,26 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
 
           question_attributes = attributes_for(:course_assessment_question_text_response)
           fill_in 'title', with: question_attributes[:title]
-          fill_in_rails_summernote '.question_text_response_description', question_attributes[:description]
-          fill_in_rails_summernote '.question_text_response_staff_only_comments',
-                                   question_attributes[:staff_only_comments]
-          fill_in 'maximum_grade', with: question_attributes[:maximum_grade]
-          click_button I18n.t('helpers.buttons.create')
+          fill_in_react_ck 'textarea[name=description]', question_attributes[:description]
+          fill_in_react_ck 'textarea[name=staffOnlyComments]', question_attributes[:staff_only_comments]
+          fill_in 'maximumGrade', with: question_attributes[:maximum_grade]
+
+          allow_attachment_checkbox = first('input[type=checkbox]', visible: false)
+          allow_attachment_checkbox.check
+
+          find_field('Skills').click
+          find('li', text: skill.title).click
+
+          click_button 'Save changes'
+          wait_for_page
 
           question_created = assessment.questions.first.specific
-          expect(page).to have_selector('div', text: I18n.t('course.assessment.question.text_responses.create.success'))
-          expect(question_created.hide_text).to be_truthy
+          expect(question_created.title).to eq(question_attributes[:title])
+          expect(question_created.description).to include(question_attributes[:description])
+          expect(question_created.staff_only_comments).to include(question_attributes[:staff_only_comments])
+          expect(question_created.maximum_grade).to eq(question_attributes[:maximum_grade])
           expect(question_created.allow_attachment).to be_truthy
+          expect(question_created.hide_text).not_to be_truthy
         end
       end
 
@@ -82,32 +91,40 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
         edit_path = edit_course_assessment_question_text_response_path(course, assessment, question)
         find_link(nil, href: edit_path).click
 
+        title = 'Trial Text Response Question'
+        description = 'Test of Creating Text Response Question'
+        staff_only_comments = 'No comments from staff'
         maximum_grade = 999.9
-        fill_in 'maximum_grade', with: maximum_grade
-        click_button I18n.t('helpers.buttons.update')
 
-        message = I18n.t('course.assessment.question.text_responses.update.success')
-        expect(page).to have_selector('div.alert', text: message)
+        fill_in 'title', with: title
+        fill_in_react_ck 'textarea[name=description]', description
+        fill_in_react_ck 'textarea[name=staffOnlyComments]', staff_only_comments
+        fill_in 'maximumGrade', with: maximum_grade
+
+        click_button 'Save changes'
+        wait_for_page
+
         expect(current_path).to eq(course_assessment_path(course, assessment))
+        expect(question.reload.title).to eq(title)
+        expect(question.reload.description).to include(description)
+        expect(question.reload.staff_only_comments).to include(staff_only_comments)
         expect(question.reload.maximum_grade).to eq(maximum_grade)
+        expect(question.reload.allow_attachment).not_to be_truthy
 
         visit edit_path
 
-        solutions.each_with_index do |solution, i|
-          link = I18n.t('course.assessment.question.text_responses.form.add_solution')
-          find('a.add_fields', text: link).click
-          within all('.edit_question_text_response '\
-                     'tr.question_text_response_solution')[i] do
-            # A custom css selector, :last is added here because +fill_in_rails_summernote+ doesn't
-            # acknowledge the scope defined by capabara.
-            # This works only if +click_link+ is executed before each option.
-            fill_in_rails_summernote '.question_text_response_solutions_explanation:last',
-                                     solution[:explanation]
-            find('textarea.text-response-solution').set solution[:solution]
+        allow_attachment_checkbox = first('input[type=checkbox]', visible: false)
+        allow_attachment_checkbox.uncheck
 
-            solution_type = find('select.text-response-solution-type', visible: :all)
-            # Twitter Bootstrap hides <select> element and creates a div.
-            # The usual #select method is broken as it does not seem to work with hidden elements.
+        solutions.each do |solution|
+          click_button 'Add a new solution'
+
+          within find_all('section', text: 'solution').last do
+            fill_in_react_ck 'textarea[name=solution]', solution[:solution]
+            fill_in_react_ck 'textarea[name=explanation]', solution[:explanation]
+            fill_in 'Grade', solution[:grade]
+            solution_type = first('select[name=solution_type]', visible: false)
+
             if solution[:exact_match]
               solution_type.find('option[value="exact_match"]', visible: :all).select_option
             else
@@ -115,9 +132,12 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
             end
           end
         end
-        click_button I18n.t('helpers.buttons.update')
+
+        click_button 'Save changes'
+        wait_for_page
+
         expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(page).to have_selector('div.alert.alert-success')
+        expect(question.reload.allow_attachment).not_to be_truthy
         expect(question.reload.solutions.count).to eq(solutions.count)
         # Ensure that explanation has been saved by randomly checking on an explanation
         expect(question.reload.solutions.map(&:explanation).join).
@@ -125,14 +145,15 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
 
         # Delete all solutions from question
         visit edit_path
-        all('tr.question_text_response_solution').each do |element|
-          within element do
-            click_link I18n.t('course.assessment.question.text_responses.solution_fields.remove')
+        find_all('section').each do |solution_section|
+          within solution_section do
+            find_button('Delete solution').click
           end
         end
-        click_button I18n.t('helpers.buttons.update')
 
-        expect(page).to have_selector('div.alert.alert-success')
+        click_button 'Save changes'
+        wait_for_page
+
         expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(question.reload.solutions.count).to eq(0)
       end
@@ -141,12 +162,12 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
         skip 'Flaky tests'
         question = create(:course_assessment_question_text_response, assessment: assessment)
         visit course_assessment_path(course, assessment)
+        wait_for_page
 
         within find('section', text: question.title) { click_button 'Delete' }
         click_button 'Delete question'
 
         expect_toastify('Question successfully deleted.')
-        expect(current_path).to eq(course_assessment_path(course, assessment))
         expect(page).not_to have_content(question.title)
       end
     end

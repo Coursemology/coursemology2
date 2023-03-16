@@ -130,6 +130,9 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
                     {formatErrorMessage(error.solutionType)}
                   </FormHelperText>
                 )}
+                <FormHelperText>
+                  {t(translations.solutionTypeExplanation)}
+                </FormHelperText>
               </div>
 
               <div className="flex flex-col space-y-2">

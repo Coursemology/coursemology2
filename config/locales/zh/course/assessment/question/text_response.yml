@@ -7,25 +7,6 @@ zh:
             text_response: '新简答题'
             file_upload: '新文件上传题'
             comprehension: '新理解题'
-          create:
-            success: '%{name}已被创建'
-          update:
-            success: '%{name}已被更新'
-          form:
-            allow_upload_file: '允许在答案中上传文件'
-            multiline_explanation_html: >
-              添加解决方案可以使问题自动评分，学生只能输入纯文本。
-              <br/>
-              如果选择了exact_match，有多行的答案必须与学生的答案完全一致，才能被评为正确。
-            solution_type: '类型'
-            solution: '答案'
-            grade: '评分'
-            explanation: '题解'
-            add_solution: '添加答案'
-            file_upload: '文件上传题'
-            text_response: '简答题'
-            text_response_autograde: '注意：如果没有提供答案，自动评分器将始终授予最高分数。'
-            file_upload_autograde: '注意：文件上传题是不能自动评分的，自动评分器将始终授予最高分数。'
           solution_fields:
             explanation_hint: '学生提交答案后要显示的题解。'
             remove: '移除'

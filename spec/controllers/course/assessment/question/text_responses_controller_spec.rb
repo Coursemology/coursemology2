@@ -17,18 +17,9 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
 
     before do
       sign_in(user)
-    end
+      return unless text_response
 
-    describe '#new' do
-      subject do
-        get :new, params: { course_id: course, assessment_id: assessment }
-      end
-
-      it 'intialises the question' do
-        subject
-
-        expect(controller.instance_variable_get(:@text_response_question)).to be_present
-      end
+      controller.instance_variable_set(:@text_response_question, text_response)
     end
 
     describe '#create' do
@@ -42,20 +33,11 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
         }
       end
 
-      it 'intialises the question' do
-        subject
-
-        expect(controller.instance_variable_get(:@text_response_question)).to be_present
-      end
-
       context 'when saving fails' do
-        before do
-          controller.instance_variable_set(:@text_response_question, text_response)
-        end
-
         let(:text_response) { immutable_text_response_question }
         it do
-          is_expected.to render_template('new')
+          is_expected.to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)['errors']).not_to be_nil
         end
       end
     end
@@ -108,7 +90,10 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
           controller.instance_variable_set(:@text_response_question, text_response)
         end
 
-        it { is_expected.to render_template('edit') }
+        it do
+          is_expected.to have_http_status(:bad_request)
+          expect(JSON.parse(response.body)['errors']).not_to be_nil
+        end
       end
     end
 
@@ -116,7 +101,13 @@ RSpec.describe Course::Assessment::Question::TextResponsesController do
       let(:text_response) { immutable_text_response_question }
       subject { post :destroy, params: { course_id: course, assessment_id: assessment, id: text_response } }
 
-      it { is_expected.to have_http_status(:ok) }
+      context 'when destroy fails' do
+        it 'responds bad response with an error message' do
+          expect(subject).to have_http_status(:bad_request)
+          json_response = JSON.parse(response.body, { symbolize_names: true })
+          expect(json_response[:errors]).to include(text_response.errors.full_messages.to_sentence)
+        end
+      end
     end
   end
 end
