@@ -8,6 +8,8 @@ json.partial! 'form', locals: {
 }
 
 json.question do
-  json.partial! 'course/assessment/question/form', question: question
-  json.skillIds question_assessment.skill_ids
+  json.partial! 'course/assessment/question/form', locals: {
+    question: question,
+    question_assessment: question_assessment
+  }
 end

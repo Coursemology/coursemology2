@@ -1,13 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { DragIndicator, Undo } from '@mui/icons-material';
-import {
-  IconButton,
-  MenuItem,
-  Select,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { IconButton, Select, Tooltip, Typography } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
 import produce from 'immer';
 import { SolutionEntity } from 'types/course/assessment/question/text-responses';
@@ -77,6 +71,15 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
       mark(field, originalSolution[field] !== value);
     };
 
+    const handleDelete = (): void => {
+      if (!solution.draft) {
+        update('toBeDeleted', true);
+        setToBeDeleted(true);
+      } else {
+        props.onDeleteDraft();
+      }
+    };
+
     const undoDelete = (): void => {
       if (solution.draft) return;
 
@@ -115,15 +118,17 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
                     error?.solutionType &&
                     formatErrorMessage(error.solutionType)
                   }
+                  id="solution-type"
                   name="solutionType"
+                  native
                   onChange={(type): void =>
                     update('solutionType', type.target.value)
                   }
                   value={solution.solutionType}
                   variant="outlined"
                 >
-                  <MenuItem value="exact_match">Exact Match</MenuItem>
-                  <MenuItem value="keyword">Keyword</MenuItem>
+                  <option value="exact_match">Exact Match</option>
+                  <option value="keyword">Keyword</option>
                 </Select>
                 {error?.solutionType && (
                   <FormHelperText error={!!error?.solutionType}>
@@ -214,7 +219,7 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
                   <IconButton
                     color="error"
                     disabled={isDragging || disabled}
-                    onClick={undoDelete}
+                    onClick={handleDelete}
                   >
                     <Undo />
                   </IconButton>
