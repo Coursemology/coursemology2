@@ -14,8 +14,8 @@ import { OptionEntity } from 'types/course/assessment/question/multiple-response
 
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 
+import useDirty from '../../common/useDirty';
 import { McqMrqAdapter } from '../common/translationAdapter';
-import useDirty from '../common/useDirty';
 import { OptionsErrors } from '../common/validations';
 
 import Option, { OptionRef } from './Option';
@@ -95,17 +95,17 @@ const OptionsManager = forwardRef<OptionsManagerRef, OptionsManagerProps>(
       props.onDirtyChange(isDirty || isOrderDirty(options));
     }, [isDirty, options]);
 
-    const update = (updater: (draft: OptionEntity[]) => void): void =>
+    const updateOption = (updater: (draft: OptionEntity[]) => void): void =>
       setOptions(produce(updater));
 
-    const reorder = (result: DropResult): void => {
+    const reorderOption = (result: DropResult): void => {
       if (!result.destination) return;
 
       const sourceIndex = result.source.index;
       const destinationIndex = result.destination.index;
       if (sourceIndex === destinationIndex) return;
 
-      update((draft) => {
+      updateOption((draft) => {
         const [moved] = draft.splice(sourceIndex, 1);
         draft.splice(destinationIndex, 0, moved);
       });
@@ -115,7 +115,7 @@ const OptionsManager = forwardRef<OptionsManagerRef, OptionsManagerProps>(
       const count = options.length;
       const id = `new-option-${count}`;
 
-      update((draft) => {
+      updateOption((draft) => {
         draft.push({
           id,
           option: '',
@@ -132,7 +132,7 @@ const OptionsManager = forwardRef<OptionsManagerRef, OptionsManagerProps>(
 
     const deleteDraftHandler =
       (index: number, id: OptionEntity['id']) => () => {
-        update((draft) => {
+        updateOption((draft) => {
           draft.splice(index, 1);
         });
 
@@ -148,7 +148,7 @@ const OptionsManager = forwardRef<OptionsManagerRef, OptionsManagerProps>(
         )}
 
         {Boolean(options?.length) && (
-          <DragDropContext onDragEnd={reorder}>
+          <DragDropContext onDragEnd={reorderOption}>
             <Droppable droppableId="options">
               {(droppable): JSX.Element => (
                 <Paper

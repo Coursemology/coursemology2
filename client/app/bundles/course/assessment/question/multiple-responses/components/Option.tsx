@@ -11,8 +11,8 @@ import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
+import useDirty from '../../common/useDirty';
 import { McqMrqAdapter } from '../common/translationAdapter';
-import useDirty from '../common/useDirty';
 import { OptionErrors } from '../common/validations';
 
 interface OptionProps {
