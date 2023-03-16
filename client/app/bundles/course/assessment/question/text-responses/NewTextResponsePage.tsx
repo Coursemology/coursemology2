@@ -46,6 +46,7 @@ const NewTextResponsePage = (): JSX.Element => {
 
   const handleSubmit = async (data: TextResponseData): Promise<void> => {
     if (type === 'file_upload') {
+      data.question.allowAttachment = true;
       data.question.hideText = true;
     }
     const { redirectUrl } = await create(data);

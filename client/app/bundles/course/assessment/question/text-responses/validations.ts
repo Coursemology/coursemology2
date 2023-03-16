@@ -10,12 +10,12 @@ export const questionSchema = qnFormCommonFieldsValidation.shape({
 });
 
 const solutionSchema = object({
+  solutionType: string().required(translations.mustSpecifySolutionType),
   solution: string().when('toBeDeleted', {
     is: true,
     then: string().notRequired(),
     otherwise: string().required(translations.mustSpecifySolution),
   }),
-  solutionType: string().required(),
   grade: number().required().min(1, translations.mustSpecifyPositiveGrade),
   explanation: string().nullable(),
   toBeDeleted: bool(),

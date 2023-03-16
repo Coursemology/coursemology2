@@ -102,70 +102,91 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
           >
             <div
               {...draggable.dragHandleProps}
-              className="min-w-[44px] space-y-4 py-4 pl-4"
+              className="min-w-[44px] space-y-5 py-5 pl-4"
             >
               {!disabled && <DragIndicator color="disabled" fontSize="small" />}
             </div>
             <div className="mt-0 flex w-[calc(100%_-_84px)] flex-col space-y-4 py-4">
-              <FormHelperText>{t(translations.solutionType)}</FormHelperText>
-              <Select
-                disabled={toBeDeleted || isDragging || disabled}
-                error={
-                  error?.solution && formatErrorMessage(error.solutionType)
-                }
-                name="solutionType"
-                onChange={(type): void =>
-                  update('solutionType', type.target.value)
-                }
-                value={solution.solutionType}
-                variant="outlined"
-              >
-                <MenuItem value="exact_match">Exact Match</MenuItem>
-                <MenuItem value="keyword">Keyword</MenuItem>
-              </Select>
+              <div className="flex flex-col space-y-2">
+                <FormHelperText>{t(translations.solutionType)}</FormHelperText>
+                <Select
+                  disabled={toBeDeleted || isDragging || disabled}
+                  error={
+                    error?.solutionType &&
+                    formatErrorMessage(error.solutionType)
+                  }
+                  name="solutionType"
+                  onChange={(type): void =>
+                    update('solutionType', type.target.value)
+                  }
+                  value={solution.solutionType}
+                  variant="outlined"
+                >
+                  <MenuItem value="exact_match">Exact Match</MenuItem>
+                  <MenuItem value="keyword">Keyword</MenuItem>
+                </Select>
+                {error?.solutionType && (
+                  <FormHelperText error={!!error?.solutionType}>
+                    {formatErrorMessage(error.solutionType)}
+                  </FormHelperText>
+                )}
+              </div>
 
-              <FormHelperText>{t(translations.solution)}</FormHelperText>
-              <CKEditorRichText
-                autofocus={solution.draft}
-                disabled={toBeDeleted || isDragging || disabled}
-                disableMargins
-                error={error?.solution && formatErrorMessage(error.solution)}
-                name="solution"
-                onChange={(value): void => update('solution', value)}
-                placeholder={t(translations.solution)}
-                value={solution.solution}
-              />
-
-              <FormHelperText>{t(translations.grade)}</FormHelperText>
-              <NumberTextField
-                disabled={toBeDeleted || isDragging || disabled}
-                error={error?.solution && formatErrorMessage(error.grade)}
-                name="grade"
-                onChange={(_, grade): void => {
-                  const value = grade === '' ? 0 : grade;
-                  update('grade', value);
-                }}
-                value={solution.grade}
-              />
-
-              <FormHelperText>{t(translations.explanation)}</FormHelperText>
-              {toBeDeleted ? (
-                <Typography className="italic text-neutral-500" variant="body2">
-                  {t(translations.solutionWillBeDeleted)}
-                </Typography>
-              ) : (
+              <div className="flex flex-col space-y-2">
+                <FormHelperText>{t(translations.solution)}</FormHelperText>
                 <CKEditorRichText
+                  autofocus={solution.draft}
                   disabled={toBeDeleted || isDragging || disabled}
                   disableMargins
-                  inputId={`solution-${solution.id}-explanation`}
-                  name="explanation"
-                  onChange={(explanation): void =>
-                    update('explanation', explanation)
-                  }
-                  placeholder={t(translations.explanation)}
-                  value={solution.explanation ?? ''}
+                  error={error?.solution && formatErrorMessage(error.solution)}
+                  name="solution"
+                  onChange={(value): void => update('solution', value)}
+                  placeholder={t(translations.solution)}
+                  value={solution.solution}
                 />
-              )}
+              </div>
+
+              <div className="flex flex-col space-y-2">
+                <FormHelperText>{t(translations.grade)}</FormHelperText>
+                <NumberTextField
+                  disabled={toBeDeleted || isDragging || disabled}
+                  name="grade"
+                  onChange={(_, grade): void => {
+                    const value = grade === '' ? 0 : grade;
+                    update('grade', value);
+                  }}
+                  value={solution.grade}
+                />
+                {error?.grade && (
+                  <FormHelperText error={!!error?.grade}>
+                    {formatErrorMessage(error.grade)}
+                  </FormHelperText>
+                )}
+              </div>
+
+              <div className="flex flex-col space-y-2">
+                <FormHelperText>{t(translations.explanation)}</FormHelperText>
+                {toBeDeleted ? (
+                  <Typography
+                    className="italic text-neutral-500"
+                    variant="body2"
+                  >
+                    {t(translations.solutionWillBeDeleted)}
+                  </Typography>
+                ) : (
+                  <CKEditorRichText
+                    disabled={toBeDeleted || isDragging || disabled}
+                    disableMargins
+                    inputId={`solution-${solution.id}-explanation`}
+                    name="explanation"
+                    onChange={(explanation): void =>
+                      update('explanation', explanation)
+                    }
+                    placeholder={t(translations.explanation)}
+                    value={solution.explanation ?? ''}
+                  />
+                )}
+              </div>
 
               {solution.draft && (
                 <Typography className="italic text-neutral-500" variant="body2">
