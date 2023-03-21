@@ -34,6 +34,16 @@ class Course::Assessment::Question::TextResponse < ApplicationRecord
     is_comprehension
   end
 
+  def question_type_sym
+    if file_upload_question?
+      :file_upload
+    elsif comprehension_question?
+      :comprehension
+    else
+      :text_response
+    end
+  end
+
   def question_type
     if file_upload_question?
       I18n.t('activerecord.attributes.models.course/assessment/question/text_response.file_upload')
