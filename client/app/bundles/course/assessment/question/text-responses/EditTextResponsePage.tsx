@@ -10,8 +10,8 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
+import TextResponseForm from './components/TextResponseForm';
 import { fetchEdit, update } from './operations';
-import TextResponseForm from './TextResponseForm';
 
 const EditTextResponsePage = (): JSX.Element => {
   const { t } = useTranslation();

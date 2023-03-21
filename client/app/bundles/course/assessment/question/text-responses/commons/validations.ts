@@ -1,9 +1,9 @@
 import { SolutionData } from 'types/course/assessment/question/text-responses';
 import { array, bool, number, object, string, ValidationError } from 'yup';
 
-import translations from '../../translations';
-import getIndexAndKeyPath from '../common/validationTools';
-import { qnFormCommonFieldsValidation } from '../components/QuestionFormCommonFields';
+import translations from '../../../translations';
+import getIndexAndKeyPath from '../../commons/utils';
+import { qnFormCommonFieldsValidation } from '../../components/QuestionFormCommonFields';
 
 export const questionSchema = qnFormCommonFieldsValidation.shape({
   allowAttachment: bool(),

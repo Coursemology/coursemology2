@@ -10,11 +10,11 @@ import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from '../../translations';
-import CommonFieldsInQuestionForm from '../components/QuestionFormCommonFields';
+import translations from '../../../translations';
+import CommonFieldsInQuestionForm from '../../components/QuestionFormCommonFields';
+import { questionSchema, validateSolutions } from '../commons/validations';
 
 import SolutionsManager, { SolutionsManagerRef } from './SolutionsManager';
-import { questionSchema, validateSolutions } from './validations';
 
 export interface TextResponseFormProps<T extends 'new' | 'edit'> {
   with: TextResponseFormData<T>;

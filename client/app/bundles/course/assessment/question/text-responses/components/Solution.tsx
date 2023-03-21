@@ -11,10 +11,9 @@ import NumberTextField from 'lib/components/core/fields/NumberTextField';
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from '../../translations';
-import useDirty from '../common/useDirty';
-
-import { SolutionErrors } from './validations';
+import translations from '../../../translations';
+import useDirty from '../../commons/useDirty';
+import { SolutionErrors } from '../commons/validations';
 
 interface SolutionProps {
   for: SolutionEntity;

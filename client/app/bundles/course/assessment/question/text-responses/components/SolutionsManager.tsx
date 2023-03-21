@@ -15,11 +15,11 @@ import { SolutionEntity } from 'types/course/assessment/question/text-responses'
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from '../../translations';
-import useDirty from '../common/useDirty';
+import translations from '../../../translations';
+import useDirty from '../../commons/useDirty';
+import { SolutionsErrors } from '../commons/validations';
 
 import Solution, { SolutionRef } from './Solution';
-import { SolutionsErrors } from './validations';
 
 interface SolutionsManagerProps {
   for: SolutionEntity[];
