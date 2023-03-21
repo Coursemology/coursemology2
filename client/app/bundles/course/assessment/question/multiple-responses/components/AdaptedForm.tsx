@@ -6,7 +6,7 @@ import {
   mcqAdapter,
   McqMrqAdapter,
   mrqAdapter,
-} from '../common/translationAdapter';
+} from '../commons/translationAdapter';
 
 import McqMrqForm, { AdaptedFormProps } from './McqMrqForm';
 

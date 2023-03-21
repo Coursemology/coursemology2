@@ -14,9 +14,9 @@ import { OptionEntity } from 'types/course/assessment/question/multiple-response
 
 import { formatErrorMessage } from 'lib/components/form/fields/utils/mapError';
 
-import useDirty from '../../common/useDirty';
-import { McqMrqAdapter } from '../common/translationAdapter';
-import { OptionsErrors } from '../common/validations';
+import useDirty from '../../commons/useDirty';
+import { McqMrqAdapter } from '../commons/translationAdapter';
+import { OptionsErrors } from '../commons/validations';
 
 import Option, { OptionRef } from './Option';
 
