@@ -13,8 +13,10 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../translations';
 import { qnFormCommonFieldsInitialValues } from '../components/QuestionFormCommonFields';
 
+import TextResponseForm, {
+  TextResponseFormProps,
+} from './components/TextResponseForm';
 import { create, fetchNewFileUpload, fetchNewTextResponse } from './operations';
-import TextResponseForm, { TextResponseFormProps } from './TextResponseForm';
 
 const NEW_TEXT_RESPONSE_TEMPLATE: TextResponseData['question'] =
   qnFormCommonFieldsInitialValues;
