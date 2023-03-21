@@ -61,7 +61,7 @@ export interface McqMrqPostData {
     title?: McqMrqFormDataQuestion['title'];
     description?: McqMrqFormDataQuestion['description'];
     staff_only_comments?: McqMrqFormDataQuestion['staffOnlyComments'];
-    maximum_grade?: McqMrqFormDataQuestion['maximumGrade'];
+    maximum_grade: McqMrqFormDataQuestion['maximumGrade'];
     randomize_options?: McqMrqFormDataQuestion['randomizeOptions'];
     skip_grading?: McqMrqFormDataQuestion['skipGrading'];
     question_assessment?: { skill_ids: McqMrqFormDataQuestion['skillIds'] };
