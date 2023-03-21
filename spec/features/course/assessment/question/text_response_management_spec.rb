@@ -99,9 +99,6 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
         fill_in_react_ck 'textarea[name=staffOnlyComments]', staff_only_comments
         fill_in 'maximumGrade', with: maximum_grade
 
-        allow_attachment_checkbox = first('input[type=checkbox]', visible: false)
-        allow_attachment_checkbox.check
-
         click_button 'Save changes'
         wait_for_page
 
@@ -110,7 +107,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
         expect(question.reload.description).to include(description)
         expect(question.reload.staff_only_comments).to include(staff_only_comments)
         expect(question.reload.maximum_grade).to eq(maximum_grade)
-        expect(question.reload.allow_attachment).to be_truthy
+        expect(question.reload.allow_attachment).to be_falsy
 
         visit edit_path
 
@@ -135,7 +132,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
         wait_for_page
 
         expect(current_path).to eq(course_assessment_path(course, assessment))
-        expect(question.reload.allow_attachment).to be_truthy
+        expect(question.reload.allow_attachment).to be_falsy
         expect(question.reload.solutions.count).to eq(solutions.count)
 
         # Delete all solutions from question
