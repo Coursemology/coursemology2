@@ -10,8 +10,8 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
+import VoiceForm from './components/VoiceForm';
 import { fetchEditVoiceResponse, updateVoiceQuestion } from './operations';
-import VoiceForm from './VoiceForm';
 
 const EditVoicePage = (): JSX.Element => {
   const { t } = useTranslation();

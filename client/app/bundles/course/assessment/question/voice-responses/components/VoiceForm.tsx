@@ -6,9 +6,8 @@ import {
 
 import Form, { FormEmitter } from 'lib/components/form/Form';
 
-import CommonFieldsInQuestionForm from '../components/QuestionFormCommonFields';
-
-import questionSchema from './validation';
+import CommonFieldsInQuestionForm from '../../components/QuestionFormCommonFields';
+import questionSchema from '../commons/validation';
 
 export interface VoiceFormProps<T extends 'new' | 'edit'> {
   with: VoiceResponseFormData<T>;
