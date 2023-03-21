@@ -44,7 +44,7 @@
     "@reduxjs/toolkit": "^1.9.3",
     "@rollbar/react": "^0.11.1",
     "@tailwindcss/line-clamp": "^0.4.2",
-    "ace-builds": "^1.15.2",
+    "ace-builds": "^1.16.0",
     "axios": "^1.3.4",
     "babel-plugin-formatjs": "^10.4.0",
     "chart.js": "^3.8.2",
