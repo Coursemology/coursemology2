@@ -17,7 +17,7 @@ export interface ForumPostResponsePostData {
     title?: ForumPostResponseFormDataQuestion['title'];
     description?: ForumPostResponseFormDataQuestion['description'];
     staff_only_comments?: ForumPostResponseFormDataQuestion['staffOnlyComments'];
-    maximum_grade?: ForumPostResponseFormDataQuestion['maximumGrade'];
+    maximum_grade: ForumPostResponseFormDataQuestion['maximumGrade'];
     has_text_response?: ForumPostResponseFormDataQuestion['hasTextResponse'];
     max_posts?: ForumPostResponseFormDataQuestion['maxPosts'];
     question_assessment?: {

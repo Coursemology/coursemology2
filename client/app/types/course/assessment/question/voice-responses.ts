@@ -15,7 +15,7 @@ export interface VoiceResponsePostData {
     title?: VoiceResponseFormDataQuestion['title'];
     description?: VoiceResponseFormDataQuestion['description'];
     staff_only_comments?: VoiceResponseFormDataQuestion['staffOnlyComments'];
-    maximum_grade?: VoiceResponseFormDataQuestion['maximumGrade'];
+    maximum_grade: VoiceResponseFormDataQuestion['maximumGrade'];
     question_assessment?: {
       skill_ids: VoiceResponseFormDataQuestion['skillIds'];
     };
