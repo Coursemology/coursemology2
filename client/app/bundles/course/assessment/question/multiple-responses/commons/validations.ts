@@ -14,7 +14,7 @@ import {
 } from 'yup';
 
 import translations from '../../../translations';
-import getIndexAndKeyPath from '../../common/validationTools';
+import getIndexAndKeyPath from '../../commons/utils';
 import { qnFormCommonFieldsValidation } from '../../components/QuestionFormCommonFields';
 
 export const questionSchema = qnFormCommonFieldsValidation.shape({

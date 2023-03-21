@@ -14,8 +14,8 @@ import useTranslation from 'lib/hooks/useTranslation';
 import ConvertMcqMrqButton from '../../../components/ConvertMcqMrqButton';
 import translations from '../../../translations';
 import CommonFieldsInQuestionForm from '../../components/QuestionFormCommonFields';
-import { McqMrqAdapter } from '../common/translationAdapter';
-import { questionSchema, validateOptions } from '../common/validations';
+import { McqMrqAdapter } from '../commons/translationAdapter';
+import { questionSchema, validateOptions } from '../commons/validations';
 
 import OptionsManager, { OptionsManagerRef } from './OptionsManager';
 
