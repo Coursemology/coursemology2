@@ -1,7 +1,7 @@
 import { bool, number } from 'yup';
 
-import translations from '../../translations';
-import { qnFormCommonFieldsValidation } from '../components/QuestionFormCommonFields';
+import translations from '../../../translations';
+import { qnFormCommonFieldsValidation } from '../../components/QuestionFormCommonFields';
 
 const questionSchema = qnFormCommonFieldsValidation.shape({
   maxPosts: number()

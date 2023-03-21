@@ -10,7 +10,7 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
-import ForumPostResponseForm from './ForumPostResponseForm';
+import ForumPostResponseForm from './components/ForumPostResponseForm';
 import {
   fetchEditForumPostResponse,
   updateForumPostResponse,

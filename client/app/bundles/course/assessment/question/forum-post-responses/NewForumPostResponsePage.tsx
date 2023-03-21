@@ -11,7 +11,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../translations';
 import { qnFormCommonFieldsInitialValues } from '../components/QuestionFormCommonFields';
 
-import ForumPostResponseForm from './ForumPostResponseForm';
+import ForumPostResponseForm from './components/ForumPostResponseForm';
 import {
   createForumPostResponse,
   fetchNewForumPostResponse,

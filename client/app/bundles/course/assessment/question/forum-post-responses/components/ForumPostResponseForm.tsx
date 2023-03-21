@@ -11,10 +11,9 @@ import FormTextField from 'lib/components/form/fields/TextField';
 import Form, { FormEmitter } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import translations from '../../translations';
-import CommonFieldsInQuestionForm from '../components/QuestionFormCommonFields';
-
-import questionSchema from './validations';
+import translations from '../../../translations';
+import CommonFieldsInQuestionForm from '../../components/QuestionFormCommonFields';
+import questionSchema from '../commons/validations';
 
 export interface ForumPostResponseFormProps<T extends 'new' | 'edit'> {
   with: ForumPostResponseFormData<T>;

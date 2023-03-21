@@ -11,8 +11,8 @@ import useTranslation from 'lib/hooks/useTranslation';
 import translations from '../../translations';
 import { qnFormCommonFieldsInitialValues } from '../components/QuestionFormCommonFields';
 
+import VoiceForm from './components/VoiceForm';
 import { createVoiceQuestion, fetchNewVoiceResponse } from './operations';
-import VoiceForm from './VoiceForm';
 
 const NEW_VOICE_TEMPLATE: VoiceResponseData['question'] =
   qnFormCommonFieldsInitialValues;
