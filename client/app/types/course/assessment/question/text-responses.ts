@@ -18,8 +18,8 @@ export interface TextResponseData<T extends 'new' | 'edit' = 'edit'> {
   questionType: 'file_upload' | 'text_response';
   question:
     | (QuestionFormData & {
-        allowAttachment?: boolean;
-        hideText?: boolean;
+        allowAttachment: boolean;
+        hideText: boolean;
       })
     | OptionalIfNew<T>;
 }
@@ -35,9 +35,9 @@ export interface TextResponsePostData {
     title?: TextResponseFormDataQuestion['title'];
     description?: TextResponseFormDataQuestion['description'];
     staff_only_comments?: TextResponseFormDataQuestion['staffOnlyComments'];
-    maximum_grade?: TextResponseFormDataQuestion['maximumGrade'];
-    allow_attachment?: TextResponseFormDataQuestion['allowAttachment'];
-    hide_text?: TextResponseFormDataQuestion['hideText'];
+    maximum_grade: TextResponseFormDataQuestion['maximumGrade'];
+    allow_attachment: TextResponseFormDataQuestion['allowAttachment'];
+    hide_text: TextResponseFormDataQuestion['hideText'];
     question_assessment?: {
       skill_ids: TextResponseFormDataQuestion['skillIds'];
     };
