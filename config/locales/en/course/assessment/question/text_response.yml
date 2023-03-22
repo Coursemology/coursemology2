@@ -7,9 +7,6 @@ en:
             text_response: 'New Text Response Question'
             file_upload: 'New File Upload Question'
             comprehension: 'New Comprehension Question'
-          solution_fields:
-            explanation_hint: 'The explanation to show after the student submits his answer.'
-            remove: 'Remove'
           form_comprehension:
             multiline_explanation_comprehension_html: >
               Adding solutions allows the question to be autograded. Students can only input plaintext.

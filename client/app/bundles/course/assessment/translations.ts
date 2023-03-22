@@ -548,10 +548,6 @@ const translations = defineMessages({
     defaultMessage:
       'You can configure existing and create new skills at the <url>Skills</url> page.',
   },
-  allowFileUpload: {
-    id: 'course.assessment.question.textResponses.allowFileUpload',
-    defaultMessage: 'Allow file upload in the answer',
-  },
   responses: {
     id: 'course.assessment.question.multipleResponses.responses',
     defaultMessage: 'Responses',
@@ -560,15 +556,6 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.responsesHint',
     defaultMessage:
       'Explanations are displayed after a student submits their responses for this question.',
-  },
-  solutions: {
-    id: 'course.assessment.question.textResponses.solutions',
-    defaultMessage: 'Solutions',
-  },
-  solutionsHint: {
-    id: 'course.assessment.question.textResponses.solutionsHint',
-    defaultMessage:
-      'Adding solutions allows the question to be autograded. Students can only input plaintext.',
   },
   randomizeResponses: {
     id: 'course.assessment.question.multipleResponses.randomizeResponses',
@@ -599,56 +586,22 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.responseWillBeDeleted',
     defaultMessage: 'This response will be deleted once you save your changes.',
   },
-  solutionWillBeDeleted: {
-    id: 'course.assessment.question.textResponses.solutionWillBeDeleted',
-    defaultMessage: 'This solution will be deleted once you save your changes.',
-  },
   newResponseCannotUndo: {
     id: 'course.assessment.question.multipleResponses.newResponseCannotUndo',
     defaultMessage:
       'This is a new response. It will immediately disappear if you delete before saving it.',
   },
-  newSolutionCannotUndo: {
-    id: 'course.assessment.question.textResponses.newSolutionCannotUndo',
-    defaultMessage:
-      'This is a new solution. It will immediately disappear if you delete before saving it.',
-  },
   undoDeleteResponse: {
     id: 'course.assessment.question.multipleResponses.undoDeleteResponse',
     defaultMessage: 'Undo delete response',
-  },
-  undoDeleteSolution: {
-    id: 'course.assessment.question.textResponses.undoDeleteSolution',
-    defaultMessage: 'Undo delete solution',
   },
   addResponse: {
     id: 'course.assessment.question.multipleResponses.addResponse',
     defaultMessage: 'Add a new response',
   },
-  addSolution: {
-    id: 'course.assessment.question.textResponses.addSolution',
-    defaultMessage: 'Add a new solution',
-  },
   ignoresRandomization: {
     id: 'course.assessment.question.multipleResponses.ignoresRandomization',
     defaultMessage: 'Ignores randomization',
-  },
-  solution: {
-    id: 'course.assessment.question.textResponses.solution',
-    defaultMessage: 'Solution',
-  },
-  solutionType: {
-    id: 'course.assessment.question.textResponses.solutionType',
-    defaultMessage: 'Type of Solution',
-  },
-  solutionTypeExplanation: {
-    id: 'course.assessment.question.textResponses.solutionTypeExplanation',
-    defaultMessage:
-      'If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct.',
-  },
-  grade: {
-    id: 'course.assessment.question.textResponses.grade',
-    defaultMessage: 'Grade',
   },
   choice: {
     id: 'course.assessment.question.multipleResponses.choice',
@@ -670,10 +623,6 @@ const translations = defineMessages({
   deleteChoice: {
     id: 'course.assessment.question.multipleResponses.deleteChoice',
     defaultMessage: 'Delete choice',
-  },
-  deleteSolution: {
-    id: 'course.assessment.question.textResponses.deleteSolution',
-    defaultMessage: 'Delete solution',
   },
   choiceWillBeDeleted: {
     id: 'course.assessment.question.multipleResponses.choiceWillBeDeleted',
@@ -725,15 +674,6 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaximumGrade',
     defaultMessage: 'Maximum grade has to be non-negative.',
   },
-  mustSpecifyMaximumPosts: {
-    id: 'course.assessment.question.forumPostResponses.mustSpecifyMaximumPosts',
-    defaultMessage:
-      'You must specify a valid, positive maximum posts to be allowed.',
-  },
-  mustSpecifyPositiveMaximumPosts: {
-    id: 'course.assessment.question.forumPostResponses.mustSpecifyPositiveMaximumPosts',
-    defaultMessage: 'Maximum posts has to be positive.',
-  },
   mustSpecifyResponse: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyResponse',
     defaultMessage: 'You must specify a valid response title.',
@@ -742,22 +682,27 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.mustSpecifyChoice',
     defaultMessage: 'You must specify a valid choice title.',
   },
-  mustSpecifySolution: {
-    id: 'course.assessment.question.textResponses.mustSpecifySolution',
-    defaultMessage: 'You must specify a valid solution title.',
-  },
-  mustSpecifySolutionType: {
-    id: 'course.assessment.question.textResponses.mustSpecifySolutionType',
-    defaultMessage:
-      'You must choose either exact match or keyword as solution type.',
-  },
-  mustSpecifyPositiveGrade: {
-    id: 'course.assessment.question.textResponses.mustSpecifyPositiveGrade',
-    defaultMessage: 'You must enter the positive integer for grade.',
-  },
   mustSpecifyAtLeastOneCorrectChoice: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyAtLeastOneCorrectChoice',
     defaultMessage: 'You must specify at least one correct choice.',
+  },
+  questionCreated: {
+    id: 'course.assessment.question.multipleResponses.questionCreated',
+    defaultMessage: 'Question was successfully created.',
+  },
+  saveChangesFirstBeforeConvertingMcqMrq: {
+    id: 'course.assessment.question.multipleResponses.saveChangesFirstBeforeConvertingMcqMrq',
+    defaultMessage:
+      'Please save your changes before attempting to convert this question.',
+  },
+  mustSpecifyMaximumPosts: {
+    id: 'course.assessment.question.forumPostResponses.mustSpecifyMaximumPosts',
+    defaultMessage:
+      'You must specify a valid, positive maximum posts to be allowed.',
+  },
+  mustSpecifyPositiveMaximumPosts: {
+    id: 'course.assessment.question.forumPostResponses.mustSpecifyPositiveMaximumPosts',
+    defaultMessage: 'Maximum posts has to be positive.',
   },
   forumPosts: {
     id: 'course.assessment.question.forumPostResponses.forumPosts',
@@ -777,14 +722,84 @@ const translations = defineMessages({
     defaultMessage:
       'Include a text field for students to provide further inputs',
   },
-  questionCreated: {
-    id: 'course.assessment.question.multipleResponses.questionCreated',
-    defaultMessage: 'Question was successfully created.',
+  allowFileUpload: {
+    id: 'course.assessment.question.textResponses.allowFileUpload',
+    defaultMessage: 'Allow file upload in the answer',
   },
-  saveChangesFirstBeforeConvertingMcqMrq: {
-    id: 'course.assessment.question.multipleResponses.saveChangesFirstBeforeConvertingMcqMrq',
+  allowFileUploadHint: {
+    id: 'course.assessment.question.textResponses.allowFileUploadHint',
     defaultMessage:
-      'Please save your changes before attempting to convert this question.',
+      'Ticking this checkbox will allow students to upload file in the answer',
+  },
+  solutions: {
+    id: 'course.assessment.question.textResponses.solutions',
+    defaultMessage: 'Solutions',
+  },
+  solutionsHint: {
+    id: 'course.assessment.question.textResponses.solutionsHint',
+    defaultMessage:
+      'Adding solutions allows the question to be autograded. Students can only input plain text.',
+  },
+  solutionWillBeDeleted: {
+    id: 'course.assessment.question.textResponses.solutionWillBeDeleted',
+    defaultMessage: 'This solution will be deleted once you save your changes.',
+  },
+  newSolutionCannotUndo: {
+    id: 'course.assessment.question.textResponses.newSolutionCannotUndo',
+    defaultMessage:
+      'This is a new solution. It will immediately disappear if you delete before saving it.',
+  },
+  undoDeleteSolution: {
+    id: 'course.assessment.question.textResponses.undoDeleteSolution',
+    defaultMessage: 'Undo delete solution',
+  },
+  addSolution: {
+    id: 'course.assessment.question.textResponses.addSolution',
+    defaultMessage: 'Add a new solution',
+  },
+  solution: {
+    id: 'course.assessment.question.textResponses.solution',
+    defaultMessage: 'Solution',
+  },
+  solutionType: {
+    id: 'course.assessment.question.textResponses.solutionType',
+    defaultMessage: 'Type of Solution',
+  },
+  solutionTypeExplanation: {
+    id: 'course.assessment.question.textResponses.solutionTypeExplanation',
+    defaultMessage:
+      'If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct.',
+  },
+  grade: {
+    id: 'course.assessment.question.textResponses.grade',
+    defaultMessage: 'Grade',
+  },
+  deleteSolution: {
+    id: 'course.assessment.question.textResponses.deleteSolution',
+    defaultMessage: 'Delete solution',
+  },
+  mustSpecifyGrade: {
+    id: 'course.assessment.question.textResponses.mustSpecifyGrade',
+    defaultMessage: 'You must specify a valid number for grade.',
+  },
+  mustSpecifySolution: {
+    id: 'course.assessment.question.textResponses.mustSpecifySolution',
+    defaultMessage: 'You must specify a valid solution title.',
+  },
+  textResponseNote: {
+    id: 'course.assessment.question.textResponses.textResponseNote',
+    defaultMessage:
+      'Note: If no solutions are provided, the autograder will always award the maximum grade.',
+  },
+  fileUploadNote: {
+    id: 'course.assessment.question.textResponses.fileUploadNote',
+    defaultMessage:
+      'Note: File upload question is not auto-gradable. The autograder will always award the maximum grade.',
+  },
+  mustSpecifySolutionType: {
+    id: 'course.assessment.question.textResponses.mustSpecifySolutionType',
+    defaultMessage:
+      'You must choose either exact match or keyword as solution type.',
   },
 });
 

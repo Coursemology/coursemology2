@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { Controller } from 'react-hook-form';
+import { Alert } from '@mui/material';
 import {
   TextResponseData,
   TextResponseFormData,
@@ -36,8 +37,9 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
     questionType: 'file_upload' | 'text_response',
   ): Promise<TextResponseData<T>['solutions'] | undefined> => {
     solutionsRef.current?.resetErrors();
+    if (questionType === 'file_upload') return [];
+
     const solutions = solutionsRef.current?.getSolutions() ?? [];
-    if (questionType === 'file_upload') return solutions;
     const errors = await validateSolutions(solutions);
 
     if (errors) {
@@ -58,6 +60,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
 
     const newData: TextResponseData = {
       questionType: data.questionType,
+      assessmentAutoGraded: data.assessmentAutoGraded,
       question,
       solutions,
     };
@@ -86,33 +89,50 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
             disabled={submitting}
             skillsUrl={data.skillsUrl}
           />
+          {data.assessmentAutoGraded && data.questionType === 'file_upload' && (
+            <div className="mx-32">
+              <Alert severity="info">{t(translations.fileUploadNote)}</Alert>
+            </div>
+          )}
 
           {data.questionType === 'text_response' && (
-            <Section
-              sticksToNavbar
-              subtitle={t(translations.solutionsHint)}
-              title={t(translations.solutions)}
-            >
-              <Controller
-                control={control}
-                name="allowAttachment"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormCheckboxField
-                    disabled={submitting}
-                    field={field}
-                    fieldState={fieldState}
-                    label={t(translations.allowFileUpload)}
-                  />
+            <>
+              <Section
+                sticksToNavbar
+                subtitle={t(translations.allowFileUploadHint)}
+                title={t(translations.fileUpload)}
+              >
+                <Controller
+                  control={control}
+                  name="allowAttachment"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <FormCheckboxField
+                      disabled={submitting}
+                      field={field}
+                      fieldState={fieldState}
+                      label={t(translations.allowFileUpload)}
+                    />
+                  )}
+                />
+              </Section>
+              <Section
+                sticksToNavbar
+                subtitle={t(translations.solutionsHint)}
+                title={t(translations.solutions)}
+              >
+                <SolutionsManager
+                  ref={solutionsRef}
+                  disabled={submitting}
+                  for={data.solutions ?? []}
+                  onDirtyChange={setIsSolutionsDirty}
+                />
+                {data.assessmentAutoGraded && (
+                  <Alert severity="info">
+                    {t(translations.textResponseNote)}
+                  </Alert>
                 )}
-              />
-
-              <SolutionsManager
-                ref={solutionsRef}
-                disabled={submitting}
-                for={data.solutions ?? []}
-                onDirtyChange={setIsSolutionsDirty}
-              />
-            </Section>
+              </Section>
+            </>
           )}
         </>
       )}
