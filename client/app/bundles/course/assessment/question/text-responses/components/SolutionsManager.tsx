@@ -6,7 +6,6 @@ import {
   useRef,
   useState,
 } from 'react';
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { Add } from '@mui/icons-material';
 import { Button, Paper, Typography } from '@mui/material';
 import produce from 'immer';
@@ -106,19 +105,6 @@ const SolutionsManager = forwardRef<SolutionsManagerRef, SolutionsManagerProps>(
     const updateSolution = (updater: (draft: SolutionEntity[]) => void): void =>
       setSolutions(produce(updater));
 
-    const reorderSolution = (result: DropResult): void => {
-      if (!result.destination) return;
-
-      const sourceIndex = result.source.index;
-      const destinationIndex = result.destination.index;
-      if (sourceIndex === destinationIndex) return;
-
-      updateSolution((draft) => {
-        const [moved] = draft.splice(sourceIndex, 1);
-        draft.splice(destinationIndex, 0, moved);
-      });
-    };
-
     const addNewSolution = (): void => {
       const count = solutions.length;
       const id = `new-solution-${count}`;
@@ -127,8 +113,8 @@ const SolutionsManager = forwardRef<SolutionsManagerRef, SolutionsManagerProps>(
         draft.push({
           id,
           solution: '',
-          solutionType: '',
-          grade: 0,
+          solutionType: 'exact_match',
+          grade: '',
           explanation: '',
           draft: true,
         });
@@ -155,34 +141,21 @@ const SolutionsManager = forwardRef<SolutionsManagerRef, SolutionsManagerProps>(
         )}
 
         {Boolean(solutions?.length) && (
-          <DragDropContext onDragEnd={reorderSolution}>
-            <Droppable droppableId="options">
-              {(droppable): JSX.Element => (
-                <Paper
-                  ref={droppable.innerRef}
-                  variant="outlined"
-                  {...droppable.droppableProps}
-                >
-                  {solutions.map((solution, index) => (
-                    <Solution
-                      key={solution.id}
-                      ref={(solutionRef): void => {
-                        if (solutionRef)
-                          solutionRefs.current[solution.id] = solutionRef;
-                      }}
-                      disabled={disabled}
-                      for={solution}
-                      index={index}
-                      onDeleteDraft={deleteDraftHandler(index, solution.id)}
-                      onDirtyChange={marker(solution.id)}
-                    />
-                  ))}
-
-                  {droppable.placeholder}
-                </Paper>
-              )}
-            </Droppable>
-          </DragDropContext>
+          <Paper variant="outlined">
+            {solutions.map((solution, index) => (
+              <Solution
+                key={solution.id}
+                ref={(solutionRef): void => {
+                  if (solutionRef)
+                    solutionRefs.current[solution.id] = solutionRef;
+                }}
+                disabled={disabled}
+                for={solution}
+                onDeleteDraft={deleteDraftHandler(index, solution.id)}
+                onDirtyChange={marker(solution.id)}
+              />
+            ))}
+          </Paper>
         )}
 
         <Button

@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 question = @text_response_question
 question_assessment = @question_assessment
+assessment = @assessment
 
 json.partial! 'form', locals: {
   course: current_course,
-  question: question
+  question: question,
+  assessment: assessment
 }
 
 json.question do

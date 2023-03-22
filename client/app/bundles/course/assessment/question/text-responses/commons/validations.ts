@@ -16,7 +16,13 @@ const solutionSchema = object({
     then: string().notRequired(),
     otherwise: string().required(translations.mustSpecifySolution),
   }),
-  grade: number().required().min(1, translations.mustSpecifyPositiveGrade),
+  grade: number().when('toBeDeleted', {
+    is: true,
+    then: number().notRequired(),
+    otherwise: number()
+      .typeError(translations.mustSpecifyGrade)
+      .required(translations.mustSpecifyGrade),
+  }),
   explanation: string().nullable(),
   toBeDeleted: bool(),
 });

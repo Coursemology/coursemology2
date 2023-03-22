@@ -3,8 +3,8 @@ import { AvailableSkills, OptionalIfNew, QuestionFormData } from '../questions';
 export interface SolutionData {
   id: number | string;
   solution: string;
-  solutionType: string;
-  grade: number;
+  solutionType: 'exact_match' | 'keyword';
+  grade: number | string;
   explanation: string;
 }
 
@@ -16,6 +16,7 @@ export interface SolutionEntity extends SolutionData {
 export interface TextResponseData<T extends 'new' | 'edit' = 'edit'> {
   solutions?: SolutionEntity[] | null | OptionalIfNew<T>;
   questionType: 'file_upload' | 'text_response';
+  assessmentAutoGraded: boolean;
   question:
     | (QuestionFormData & {
         allowAttachment: boolean;

@@ -115,7 +115,7 @@ RSpec.describe 'Course: Assessments: Questions: Text Response Management', js: t
           click_button 'Add a new solution'
 
           within find_all('section', text: 'solution').last do
-            fill_in_react_ck 'textarea[name=solution]', solution[:solution]
+            fill_in 'solution', with: solution[:solution]
             fill_in_react_ck 'textarea[name=explanation]', solution[:explanation]
             fill_in 'grade', with: solution[:grade]
 

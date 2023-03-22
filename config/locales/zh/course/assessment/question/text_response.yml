@@ -7,9 +7,6 @@ zh:
             text_response: '新简答题'
             file_upload: '新文件上传题'
             comprehension: '新理解题'
-          solution_fields:
-            explanation_hint: '学生提交答案后要显示的题解。'
-            remove: '移除'
           form_comprehension:
             multiline_explanation_comprehension_html: >
               添加解决方案可以使问题自动评分，学生只能输入纯文本
