@@ -726,11 +726,6 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.allowFileUpload',
     defaultMessage: 'Allow file upload in the answer',
   },
-  allowFileUploadHint: {
-    id: 'course.assessment.question.textResponses.allowFileUploadHint',
-    defaultMessage:
-      'Ticking this checkbox will allow students to upload file in the answer',
-  },
   solutions: {
     id: 'course.assessment.question.textResponses.solutions',
     defaultMessage: 'Solutions',
@@ -738,7 +733,7 @@ const translations = defineMessages({
   solutionsHint: {
     id: 'course.assessment.question.textResponses.solutionsHint',
     defaultMessage:
-      'Adding solutions allows the question to be autograded. Students can only input plain text.',
+      'Adding solutions allows the answer to be autograded. Students can only input plain text.',
   },
   solutionWillBeDeleted: {
     id: 'course.assessment.question.textResponses.solutionWillBeDeleted',

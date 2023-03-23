@@ -16,7 +16,7 @@ export interface SolutionEntity extends SolutionData {
 export interface TextResponseData<T extends 'new' | 'edit' = 'edit'> {
   solutions?: SolutionEntity[] | null | OptionalIfNew<T>;
   questionType: 'file_upload' | 'text_response';
-  assessmentAutoGraded: boolean;
+  isAssessmentAutograded: boolean;
   question:
     | (QuestionFormData & {
         allowAttachment: boolean;

@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { Add } from '@mui/icons-material';
-import { Button, Paper, Typography } from '@mui/material';
+import { Alert, Button, Paper, Typography } from '@mui/material';
 import produce from 'immer';
 import { SolutionEntity } from 'types/course/assessment/question/text-responses';
 
@@ -23,6 +23,7 @@ import Solution, { SolutionRef } from './Solution';
 interface SolutionsManagerProps {
   for: SolutionEntity[];
   onDirtyChange: (isDirty: boolean) => void;
+  isAssessmentAutograded: boolean;
   disabled?: boolean;
 }
 
@@ -35,7 +36,7 @@ export interface SolutionsManagerRef {
 
 const SolutionsManager = forwardRef<SolutionsManagerRef, SolutionsManagerProps>(
   (props, ref): JSX.Element => {
-    const { disabled, for: originalSolutions } = props;
+    const { disabled, for: originalSolutions, isAssessmentAutograded } = props;
     const [solutions, setSolutions] = useState(originalSolutions);
 
     const solutionRefs = useRef<Record<SolutionEntity['id'], SolutionRef>>({});
@@ -134,6 +135,9 @@ const SolutionsManager = forwardRef<SolutionsManagerRef, SolutionsManagerProps>(
 
     return (
       <>
+        {isAssessmentAutograded && (
+          <Alert severity="info">{t(translations.textResponseNote)}</Alert>
+        )}
         {error && (
           <Typography color="error" variant="body2">
             {formatErrorMessage(error)}
