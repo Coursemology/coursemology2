@@ -60,7 +60,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
 
     const newData: TextResponseData = {
       questionType: data.questionType,
-      assessmentAutoGraded: data.assessmentAutoGraded,
+      isAssessmentAutograded: data.isAssessmentAutograded,
       question,
       solutions,
     };
@@ -89,19 +89,14 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
             disabled={submitting}
             skillsUrl={data.skillsUrl}
           />
-          {data.assessmentAutoGraded && data.questionType === 'file_upload' && (
-            <div className="mx-32">
+          {data.isAssessmentAutograded &&
+            data.questionType === 'file_upload' && (
               <Alert severity="info">{t(translations.fileUploadNote)}</Alert>
-            </div>
-          )}
+            )}
 
           {data.questionType === 'text_response' && (
             <>
-              <Section
-                sticksToNavbar
-                subtitle={t(translations.allowFileUploadHint)}
-                title={t(translations.fileUpload)}
-              >
+              <Section sticksToNavbar title={t(translations.fileUpload)}>
                 <Controller
                   control={control}
                   name="allowAttachment"
@@ -124,13 +119,9 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
                   ref={solutionsRef}
                   disabled={submitting}
                   for={data.solutions ?? []}
+                  isAssessmentAutograded={data.isAssessmentAutograded}
                   onDirtyChange={setIsSolutionsDirty}
                 />
-                {data.assessmentAutoGraded && (
-                  <Alert severity="info">
-                    {t(translations.textResponseNote)}
-                  </Alert>
-                )}
               </Section>
             </>
           )}
