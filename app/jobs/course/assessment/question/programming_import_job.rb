@@ -10,7 +10,8 @@ class Course::Assessment::Question::ProgrammingImportJob < ApplicationJob
   # @param [Course::Assessment::Question::Programming] question The programming question to
   #   import the package to.
   # @param [Attachment] attachment The attachment containing the package.
-  def perform_tracked(question, attachment)
+  def perform_tracked(question, attachment, max_time_limit)
+    question.max_time_limit = max_time_limit
     ActsAsTenant.without_tenant { perform_import(question, attachment) }
   end
 

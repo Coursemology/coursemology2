@@ -4,6 +4,7 @@ require 'rails_helper'
 RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
   let(:instance_traits) { nil }
   let!(:instance) { create(:instance, *instance_traits) }
+  let(:time_limit) { 30.seconds }
 
   with_tenant(:instance) do
     subject { Course::Assessment::Question::ProgrammingImportJob }
@@ -18,24 +19,22 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
     end
 
     it 'can be queued' do
-      expect { subject.perform_later(question, attachment) }.to \
+      expect { subject.perform_later(question, attachment, time_limit) }.to \
         have_enqueued_job(subject).exactly(:once)
     end
 
     it 'imports the templates' do
-      subject.perform_now(question, attachment)
+      subject.perform_now(question, attachment, time_limit)
       expect(question.template_files).not_to be_empty
     end
 
     it 'imports the test cases' do
-      subject.perform_now(question, attachment)
+      subject.perform_now(question, attachment, time_limit)
       expect(question.test_cases).not_to be_empty
     end
 
     it 'does not create codaveri question' do
-      subject.perform_now(question, attachment)
-
-      wait_for_job
+      subject.perform_now(question, attachment, time_limit)
 
       expect(question.codaveri_id).to eq(nil)
       expect(question.codaveri_status).to eq(nil)
@@ -72,9 +71,7 @@ RSpec.describe Course::Assessment::Question::ProgrammingImportJob do
       end
 
       it 'creates codaveri question' do
-        subject.perform_now(question, attachment)
-
-        wait_for_job
+        subject.perform_now(question, attachment, time_limit)
 
         expect(question.codaveri_id).to eq('6311a0548c57aae93d260927')
         expect(question.codaveri_status).to eq(200)

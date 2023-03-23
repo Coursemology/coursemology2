@@ -180,7 +180,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   def evaluate_package
     execute_after_commit do
       import_job =
-        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment)
+        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, attachment, max_time_limit)
       update_column(:import_job_id, import_job.job_id)
     end
   end
@@ -196,7 +196,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
     execute_after_commit do
       new_attachment.save!
       import_job =
-        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, new_attachment)
+        Course::Assessment::Question::ProgrammingImportJob.perform_later(self, new_attachment, max_time_limit)
       update_column(:import_job_id, import_job.job_id)
     end
   end
