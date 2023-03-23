@@ -34,6 +34,12 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
       let(:answer_traits) { [{ file_count: 1 }] }
       let!(:grading) { create(:course_assessment_answer_auto_grading, answer: answer) }
 
+      before do
+        Course::Assessment::ProgrammingEvaluationService.class_eval do
+          prepend Course::Assessment::StubbedProgrammingEvaluationService
+        end
+      end
+
       context 'with a test report' do
         before do
           allow(Course::Assessment::ProgrammingEvaluationService).to \

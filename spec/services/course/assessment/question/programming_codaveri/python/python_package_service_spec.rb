@@ -19,13 +19,23 @@ RSpec.describe Course::Assessment::Question::ProgrammingCodaveri::Python::Python
     subject { Course::Assessment::Question::ProgrammingCodaveri::Python::PythonPackageService.new(question, package) }
 
     before do
+      Course::Assessment::StubbedProgrammingEvaluationService.class_eval do
+        prepend Course::Assessment::StubbedProgrammingEvaluationServiceForCodaveriTest
+      end
       Course::Assessment::Question::ProgrammingImportService.import(question, attachment)
+    end
+
+    after do
+      Course::Assessment::ProgrammingEvaluationService.class_eval do
+        prepend Course::Assessment::StubbedProgrammingEvaluationService
+      end
     end
 
     describe '.preload_question_test_cases' do
       it 'preloads all the tests cases of the question' do
         test_cases = subject.send(:preload_question_test_cases)
-        expect(test_cases.keys).to match_array(['test_public_1', 'test_private_2', 'test_evaluation_3'])
+        expect(test_cases.keys).to match_array(['test_private_01', 'test_private_02', 'test_public_01',
+                                                'test_public_02', 'test_public_03', 'test_public_04', 'test_public_05'])
       end
     end
 
