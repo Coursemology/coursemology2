@@ -91,36 +91,57 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
         } ${solution.draft ? 'bg-lime-50' : ''}`}
       >
         <div className="mx-8 mt-0 flex w-[calc(100%_-_84px)] flex-col space-y-4 py-4">
-          <div className="flex flex-col space-y-2">
-            <FormHelperText>{t(translations.solutionType)}</FormHelperText>
-            <Select
-              disabled={toBeDeleted || disabled}
-              error={
-                error?.solutionType && formatErrorMessage(error.solutionType)
-              }
-              id="solution-type"
-              name="solutionType"
-              native
-              onChange={(type): void =>
-                update(
-                  'solutionType',
-                  type.target.value as 'exact_match' | 'keyword',
-                )
-              }
-              value={solution.solutionType}
-              variant="outlined"
-            >
-              <option value="exact_match">Exact Match</option>
-              <option value="keyword">Keyword</option>
-            </Select>
-            {error?.solutionType && (
-              <FormHelperText error={!!error?.solutionType}>
-                {formatErrorMessage(error.solutionType)}
+          <div className="flex flex-row space-x-4">
+            <div className="flex w-2/4 flex-col space-y-2">
+              <FormHelperText>{t(translations.solutionType)}</FormHelperText>
+              <Select
+                disabled={toBeDeleted || disabled}
+                error={
+                  error?.solutionType && formatErrorMessage(error.solutionType)
+                }
+                id="solution-type"
+                name="solutionType"
+                native
+                onChange={(type): void =>
+                  update(
+                    'solutionType',
+                    type.target.value as 'exact_match' | 'keyword',
+                  )
+                }
+                value={solution.solutionType}
+                variant="outlined"
+              >
+                <option value="exact_match">
+                  {t(translations.exactMatch)}
+                </option>
+                <option value="keyword">{t(translations.keyword)}</option>
+              </Select>
+              {error?.solutionType && (
+                <FormHelperText error={!!error?.solutionType}>
+                  {formatErrorMessage(error.solutionType)}
+                </FormHelperText>
+              )}
+              <FormHelperText>
+                {t(translations.solutionTypeExplanation)}
               </FormHelperText>
-            )}
-            <FormHelperText>
-              {t(translations.solutionTypeExplanation)}
-            </FormHelperText>
+            </div>
+
+            <div className="flex w-2/4 flex-col space-y-2">
+              <FormHelperText>{t(translations.grade)}</FormHelperText>
+              <TextField
+                disabled={toBeDeleted || disabled}
+                error={error?.grade && formatErrorMessage(error.grade)}
+                name="grade"
+                onChange={(e): void => update('grade', e.target.value)}
+                placeholder={t(translations.zeroGrade)}
+                value={solution.grade}
+              />
+              {error?.grade && (
+                <FormHelperText error={!!error?.grade}>
+                  {formatErrorMessage(error.grade)}
+                </FormHelperText>
+              )}
+            </div>
           </div>
 
           <div className="flex flex-col space-y-2">
@@ -128,30 +149,14 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
             <TextField
               disabled={toBeDeleted || disabled}
               error={error?.solution && formatErrorMessage(error.solution)}
+              multiline
               name="solution"
               onChange={(e): void => update('solution', e.target.value)}
-              placeholder={t(translations.solution)}
               value={solution.solution}
             />
             {error?.solution && (
               <FormHelperText error={!!error?.solution}>
                 {formatErrorMessage(error.solution)}
-              </FormHelperText>
-            )}
-          </div>
-
-          <div className="flex flex-col space-y-2">
-            <FormHelperText>{t(translations.grade)}</FormHelperText>
-            <TextField
-              disabled={toBeDeleted || disabled}
-              error={error?.grade && formatErrorMessage(error.grade)}
-              name="grade"
-              onChange={(e): void => update('grade', e.target.value)}
-              value={solution.grade}
-            />
-            {error?.grade && (
-              <FormHelperText error={!!error?.grade}>
-                {formatErrorMessage(error.grade)}
               </FormHelperText>
             )}
           </div>
@@ -171,7 +176,7 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
                 onChange={(explanation): void =>
                   update('explanation', explanation)
                 }
-                placeholder={t(translations.explanation)}
+                placeholder={t(translations.explanationDescription)}
                 value={solution.explanation ?? ''}
               />
             )}

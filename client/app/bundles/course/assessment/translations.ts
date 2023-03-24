@@ -570,6 +570,11 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.explanation',
     defaultMessage: 'Explanation',
   },
+  explanationDescription: {
+    id: 'course.assessment.question.multipleResponses.explanationDescription',
+    defaultMessage:
+      'The explanation to show after the student submits his answer.',
+  },
   markAsCorrectResponse: {
     id: 'course.assessment.question.multipleResponses.markAsCorrectResponse',
     defaultMessage: 'Mark as a correct response',
@@ -752,6 +757,10 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.solution',
     defaultMessage: 'Solution',
   },
+  zeroGrade: {
+    id: 'course.assessment.question.textResponses.zeroGrade',
+    defaultMessage: '0.0',
+  },
   solutionType: {
     id: 'course.assessment.question.textResponses.solutionType',
     defaultMessage: 'Type of Solution',
@@ -760,6 +769,14 @@ const translations = defineMessages({
     id: 'course.assessment.question.textResponses.solutionTypeExplanation',
     defaultMessage:
       'If Exact Match is selected, solutions with multiple lines must match student answers exactly for the answer to be graded as correct.',
+  },
+  exactMatch: {
+    id: 'course.assessment.question.textResponses.exactMatch',
+    defaultMessage: 'Exact Match',
+  },
+  keyword: {
+    id: 'course.assessment.question.textResponses.keyword',
+    defaultMessage: 'Keyword',
   },
   grade: {
     id: 'course.assessment.question.textResponses.grade',
