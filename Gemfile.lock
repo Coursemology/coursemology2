@@ -31,13 +31,6 @@ GIT
       rouge (>= 2.0.0, < 4)
 
 GIT
-  remote: https://github.com/ekowidianto/momentjs-rails.git
-  revision: d014d178ae33a057a33866d7d45c677b8864dd6a
-  specs:
-    momentjs-rails (2.29.3)
-      railties (>= 3.1)
-
-GIT
   remote: https://github.com/makqien/rwordnet
   revision: 54a85eed974002cb2cfb858cbcaed8e1069b5cb8
   specs:
@@ -69,13 +62,6 @@ GIT
   specs:
     themes_on_rails (0.4.0)
       rails (>= 3.2)
-
-GIT
-  remote: https://github.com/zhuhanming/summernote-rails
-  revision: 6dcff6c2a0e56492dbbcaf0a91ccc5898e6be922
-  specs:
-    summernote-rails (0.8.20.1)
-      railties (>= 3.1)
 
 GEM
   remote: https://rubygems.org/
@@ -180,9 +166,6 @@ GEM
       sassc (>= 2.0.0)
     bootstrap-sass-extras (0.1.0)
       rails (>= 3.1.0)
-    bootstrap-select-rails (1.13.8)
-    bootstrap3-datetimepicker-rails (4.17.47)
-      momentjs-rails (>= 2.8.1)
     bootstrap_tokenfield_rails (0.12.1)
     builder (3.2.4)
     bullet (7.0.7)
@@ -675,8 +658,6 @@ DEPENDENCIES
   aws-sdk-s3
   bootstrap-sass
   bootstrap-sass-extras (>= 0.1.0)
-  bootstrap-select-rails
-  bootstrap3-datetimepicker-rails
   bootstrap_tokenfield_rails
   bullet (>= 4.14.9)
   byebug
@@ -722,7 +703,6 @@ DEPENDENCIES
   loofah (>= 2.2.1)
   mimemagic (= 0.4.3)
   mini_magick
-  momentjs-rails!
   nokogiri (>= 1.8.1)
   parallel_tests
   pg
@@ -761,7 +741,6 @@ DEPENDENCIES
   spring
   sprockets (< 4.0.0)
   stackprof
-  summernote-rails!
   themes_on_rails (>= 0.3.1)!
   traceroute
   twitter-typeahead-rails

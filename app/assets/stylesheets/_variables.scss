@@ -7,16 +7,8 @@
 $grey: #808080 !default;
 $red: #ff0000 !default;
 $white: #ffffff !default;
-$grey-light: #cccccc !default;
 
 //## Variables for colors used in Coursemology.
-$unread-highlight: #f8e3e3 !default;
-$course-assessment-not-started-bg: $gray-lighter !default;
-$course-discussion-post-border: 1px solid $panel-default-border !default;
-$course-discussion-post-border-color: $panel-default-border !default;
-$course-discussion-post-border-radius: $border-radius-base !default;
-$course-discussion-post-shadow-color: $gray-lighter !default;
-$course-forum-unread-highlight: $unread-highlight !default;
 
 //== Fonts
 //
@@ -34,16 +26,10 @@ $picture-medium: 100px !default;
 $picture-large: 140px !default;
 
 //## Variables for icons or logos used in Coursemology.
-$course-assessment-achievement-badge: $picture-thumb !default;
 $course-user-badge-achievement-badge: $picture-thumb !default;
 
-$course-admin-form-logo: $picture-small !default;
 $course-layout-sidebar-logo: $picture-medium !default;
 
 $user-profile-picture: $picture-large !default;
 
 //== Others
-
-// Shadows
-$course-assessment-question-card-shadow: rgba(0, 0, 0, 0.12) !default;
-$course-assessment-question-card-hover-shadow: rgba(0, 0, 0, 0.25) !default;

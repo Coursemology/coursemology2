@@ -14,14 +14,10 @@
 //= require jquery_ujs
 //= require i18n/translations
 //= require js-routes
-//= require moment
 //= require bootstrap-sprockets
-//= require bootstrap-datetimepicker
-//= require bootstrap-select
 //= require twitter/typeahead
 //= require bootstrap-tokenfield
 //= require simple_form-bootstrap
-//= require summernote
 //= require layout
 //= require cocoon
 //= require_tree .
