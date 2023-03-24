@@ -121,9 +121,6 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
                   {formatErrorMessage(error.solutionType)}
                 </FormHelperText>
               )}
-              <FormHelperText>
-                {t(translations.solutionTypeExplanation)}
-              </FormHelperText>
             </div>
 
             <div className="flex w-2/4 flex-col space-y-2">
@@ -144,44 +141,46 @@ const Solution = forwardRef<SolutionRef, SolutionProps>(
             </div>
           </div>
 
-          <div className="flex flex-col space-y-2">
-            <FormHelperText>{t(translations.solution)}</FormHelperText>
-            <TextField
-              disabled={toBeDeleted || disabled}
-              error={error?.solution && formatErrorMessage(error.solution)}
-              multiline
-              name="solution"
-              onChange={(e): void => update('solution', e.target.value)}
-              value={solution.solution}
-            />
-            {error?.solution && (
-              <FormHelperText error={!!error?.solution}>
-                {formatErrorMessage(error.solution)}
-              </FormHelperText>
-            )}
-          </div>
-
-          <div className="flex flex-col space-y-2">
-            <FormHelperText>{t(translations.explanation)}</FormHelperText>
-            {toBeDeleted ? (
-              <Typography className="italic text-neutral-500" variant="body2">
-                {t(translations.solutionWillBeDeleted)}
-              </Typography>
-            ) : (
-              <CKEditorRichText
+          <div className="flex flex-row space-x-4">
+            <div className="flex w-2/4 flex-col space-y-2">
+              <FormHelperText>{t(translations.solution)}</FormHelperText>
+              <TextField
                 disabled={toBeDeleted || disabled}
-                disableMargins
-                inputId={`solution-${solution.id}-explanation`}
-                name="explanation"
-                onChange={(explanation): void =>
-                  update('explanation', explanation)
-                }
-                placeholder={t(translations.explanationDescription)}
-                value={solution.explanation ?? ''}
+                error={error?.solution && formatErrorMessage(error.solution)}
+                multiline
+                name="solution"
+                onChange={(e): void => update('solution', e.target.value)}
+                rows={2}
+                value={solution.solution}
               />
-            )}
-          </div>
+              {error?.solution && (
+                <FormHelperText error={!!error?.solution}>
+                  {formatErrorMessage(error.solution)}
+                </FormHelperText>
+              )}
+            </div>
 
+            <div className="flex w-2/4 flex-col space-y-2">
+              <FormHelperText>{t(translations.explanation)}</FormHelperText>
+              {toBeDeleted ? (
+                <Typography className="italic text-neutral-500" variant="body2">
+                  {t(translations.solutionWillBeDeleted)}
+                </Typography>
+              ) : (
+                <CKEditorRichText
+                  disabled={toBeDeleted || disabled}
+                  disableMargins
+                  inputId={`solution-${solution.id}-explanation`}
+                  name="explanation"
+                  onChange={(explanation): void =>
+                    update('explanation', explanation)
+                  }
+                  placeholder={t(translations.explanationDescription)}
+                  value={solution.explanation ?? ''}
+                />
+              )}
+            </div>
+          </div>
           {solution.draft && (
             <Typography className="italic text-neutral-500" variant="body2">
               {t(translations.newSolutionCannotUndo)}

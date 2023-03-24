@@ -138,6 +138,7 @@ const SolutionsManager = forwardRef<SolutionsManagerRef, SolutionsManagerProps>(
         {isAssessmentAutograded && (
           <Alert severity="info">{t(translations.textResponseNote)}</Alert>
         )}
+        <Alert severity="info">{t(translations.solutionTypeExplanation)}</Alert>
         {error && (
           <Typography color="error" variant="body2">
             {formatErrorMessage(error)}
