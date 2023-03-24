@@ -101,6 +101,10 @@ const translations = defineMessages({
     id: 'course.assessments.index.editAssessment',
     defaultMessage: 'Edit Assessment',
   },
+  assessmentStatistics: {
+    id: 'course.assessments.index.assessmentStatistics',
+    defaultMessage: 'Assessment Statistics',
+  },
   submissions: {
     id: 'course.assessments.index.submissions',
     defaultMessage: 'Submissions',

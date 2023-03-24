@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Create, Inventory } from '@mui/icons-material';
+import { Assessment, Create, Inventory } from '@mui/icons-material';
 import { Button, IconButton, Tooltip } from '@mui/material';
 import {
   AssessmentData,
@@ -77,6 +77,22 @@ const AssessmentShowHeader = (
               className="text-white"
             >
               <Create />
+            </IconButton>
+          </Link>
+        </Tooltip>
+      )}
+
+      {assessment.statisticsUrl && (
+        <Tooltip
+          disableInteractive
+          title={t(translations.assessmentStatistics)}
+        >
+          <Link to={assessment.statisticsUrl}>
+            <IconButton
+              aria-label={t(translations.assessmentStatistics)}
+              className="text-white"
+            >
+              <Assessment />
             </IconButton>
           </Link>
         </Tooltip>
