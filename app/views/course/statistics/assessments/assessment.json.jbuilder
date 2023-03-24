@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 json.assessment do
   json.id @assessment.id
+  json.title @assessment.title
   json.startAt @assessment.start_at&.iso8601
   json.endAt @assessment.end_at&.iso8601
   json.maximumGrade @assessment.maximum_grade
+  json.url course_assessment_path(current_course, @assessment)
 end
 
 json.submissions @submission_records do |record|

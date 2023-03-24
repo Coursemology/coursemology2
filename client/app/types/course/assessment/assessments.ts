@@ -9,6 +9,7 @@ export interface PersonalTimeData {
 interface AssessmentActionsData {
   status: 'locked' | 'attempting' | 'submitted' | 'open' | 'unavailable';
   actionButtonUrl: string | null;
+  statisticsUrl?: string;
   submissionsUrl?: string;
   editUrl?: string;
   deleteUrl?: string;

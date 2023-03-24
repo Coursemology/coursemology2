@@ -2,9 +2,11 @@ import { CourseUserRoles } from '../courseUsers';
 
 interface Assessment {
   id: number | string;
+  title: string;
   startAt: string | null;
   endAt: string | null;
   maximumGrade: number;
+  url: string;
 }
 
 interface Submission {

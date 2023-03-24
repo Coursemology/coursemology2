@@ -9,6 +9,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/core/NotificationBar';
+import PageHeader from 'lib/components/navigation/PageHeader';
 
 import {
   fetchAncestors,
@@ -26,6 +27,10 @@ import AncestorSelect from './AncestorSelect';
 import StatisticsPanel from './StatisticsPanel';
 
 const translations = defineMessages({
+  header: {
+    id: 'course.assessment.statistics.header',
+    defaultMessage: 'Statistics for {title}',
+  },
   fetchFailure: {
     id: 'course.assessment.statistics.fail',
     defaultMessage: 'Failed to fetch statistics.',
@@ -55,6 +60,7 @@ const AssessmentStatisticsPage = ({
   isFetchingAncestorStatistics,
   isErrorAncestorStatistics,
   dispatch,
+  assessment,
   submissions,
   allStudents,
   ancestors,
@@ -162,12 +168,18 @@ const AssessmentStatisticsPage = ({
   };
 
   return (
-    <>
+    <main className="space-y-5">
+      <PageHeader
+        returnLink={assessment?.url}
+        title={intl.formatMessage(translations.header, {
+          title: assessment?.title,
+        })}
+      />
       <StatisticsPanel allStudents={allStudents} submissions={submissions} />
       {renderAncestorSelect()}
       <div style={styles.ancestorStatistics}>{renderAncestorStatistics()}</div>
       <NotificationBar notification={notification} />
-    </>
+    </main>
   );
 };
 
@@ -182,6 +194,7 @@ AssessmentStatisticsPage.propTypes = {
   isFetchingAncestorStatistics: PropTypes.bool.isRequired,
   isErrorAncestorStatistics: PropTypes.bool.isRequired,
 
+  assessment: assessmentShape.isRequired,
   submissions: PropTypes.arrayOf(submissionRecordsShape).isRequired,
   allStudents: PropTypes.arrayOf(courseUserShape).isRequired,
   ancestors: PropTypes.arrayOf(ancestorShape).isRequired,

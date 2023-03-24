@@ -1,9 +1,12 @@
 import PropTypes from 'prop-types';
 
 export const assessmentShape = PropTypes.shape({
+  id: PropTypes.number,
+  title: PropTypes.string,
   startAt: PropTypes.object.isRequired,
   endAt: PropTypes.object,
   maximumGrade: PropTypes.number,
+  url: PropTypes.string,
 });
 
 export const ancestorShape = PropTypes.shape({
