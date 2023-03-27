@@ -8142,10 +8142,10 @@ react-xarrows@^2.0.2:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
-react-zoom-pan-pinch@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/react-zoom-pan-pinch/-/react-zoom-pan-pinch-2.3.1.tgz#7a32bfde1c95486f8bf69eb230a2c173571769a9"
-  integrity sha512-41E4Ui3OJoNZRA7iq39mG279QOiS/IokZdZMlljChzcC51LNtxeoa/n8x8gJFtiSNFDOYWroEQeJ2yZSjNKoLQ==
+react-zoom-pan-pinch@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.yarnpkg.com/react-zoom-pan-pinch/-/react-zoom-pan-pinch-3.0.6.tgz#c664beb4b335962c270b11d1c0ec95b2187505b0"
+  integrity sha512-0Blz0XyWDKEYKHg8tBznOOdCWZOTtXFdSpaAdr3dqbeA7BBZn2xd0fEqNlzk2pXAvV1dmEso2vNLCpqCZh2NPQ==
 
 react@^17.0.0:
   version "17.0.2"
