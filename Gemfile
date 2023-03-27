@@ -46,9 +46,6 @@ gem 'webpacker', '<= 5.4.4'
 # Internationalisation for JavaScript.
 gem 'i18n-js', '<= 3.10.0'
 
-# Routes from JavaScript
-gem 'js-routes'
-
 # Use jQuery as the JavaScript library
 gem 'jquery-rails'
 # Our Coursemology will be themed using Bootstrap

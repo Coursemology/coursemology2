@@ -13,7 +13,6 @@
 //
 //= require jquery_ujs
 //= require i18n/translations
-//= require js-routes
 //= require bootstrap-sprockets
 //= require twitter/typeahead
 //= require bootstrap-tokenfield
