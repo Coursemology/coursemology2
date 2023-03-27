@@ -82,9 +82,9 @@ class Course::LessonPlan::Strategies::FomoPersonalizationStrategy <
 
   def item_is_straggling(personal_time, reference_time)
     if reference_time.end_at.present? && personal_time.end_at.present?
-      reference_time.end_at < personal_time.end_at
+      return reference_time.end_at < personal_time.end_at
     elsif reference_time.end_at.present? && personal_time.end_at.nil?
-      true
+      return true
     end
 
     false
