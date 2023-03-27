@@ -281,7 +281,7 @@ export const fetchCourseUserLearningRateData =
     return {
       learningRateRecords: response.data.learningRateRecords.map((record) => ({
         id: record.id,
-        learningRatePercentage: Math.round(1000 / record.learningRate) / 100,
+        learningRatePercentage: Math.round(10000 / record.learningRate) / 100,
         createdAt: new Date(record.createdAt),
       })),
     };
