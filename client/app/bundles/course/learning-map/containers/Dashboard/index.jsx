@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import ReactTooltip from 'react-tooltip';
-import { Card, CardContent, CircularProgress, Icon } from '@mui/material';
+import { Cancel, Delete, ToggleOn } from '@mui/icons-material';
+import { Card, CardContent, CircularProgress, IconButton } from '@mui/material';
 import { green, orange, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -139,13 +140,14 @@ const Dashboard = (props) => {
 
     return (
       <>
-        <Icon
-          className="fa fa-trash"
+        <IconButton
           data-for={tooltipId}
           data-tip
           onClick={() => setDeleteArrowConfirmation(true)}
           style={{ ...styles.icon, color: 'red' }}
-        />
+        >
+          <Delete />
+        </IconButton>
         <ReactTooltip id={tooltipId}>
           <FormattedMessage {...translations.deleteCondition} />
         </ReactTooltip>
@@ -160,13 +162,14 @@ const Dashboard = (props) => {
 
     return (
       <>
-        <Icon
-          className="fa fa-toggle-on"
+        <IconButton
           data-for={tooltipId}
           data-tip
           onClick={() => toggleNodeSatisfiabilityType()}
           style={styles.icon}
-        />
+        >
+          <ToggleOn />
+        </IconButton>
         <ReactTooltip id={tooltipId}>
           <FormattedMessage
             {...translations.toggleSatisfiabilityType}
@@ -206,11 +209,9 @@ const Dashboard = (props) => {
           {text}
           {getActionElements()}
           {(!isEmptyResponse || selectedElement.type) && (
-            <Icon
-              className="fa fa-window-close"
-              onClick={() => reset()}
-              style={{ ...styles.icon }}
-            />
+            <IconButton onClick={() => reset()} style={{ ...styles.icon }}>
+              <Cancel />
+            </IconButton>
           )}
           {isLoading && (
             <CircularProgress size={30} style={styles.circularProgress} />

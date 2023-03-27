@@ -1,7 +1,16 @@
 import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
 import { Link } from 'react-router-dom';
+import {
+  Campaign,
+  CheckCircle,
+  Help,
+  Lock,
+  StickyNote2,
+  VisibilityOff,
+} from '@mui/icons-material';
 import { Icon } from '@mui/material';
+import { green, yellow } from '@mui/material/colors';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumEntity, ForumTopicEntity } from 'types/course/forums';
@@ -86,32 +95,37 @@ const translations = defineMessages({
 const TopicTypeIcon: FC<{ topic: ForumTopicEntity }> = (props) => {
   const { topic } = props;
   const { t } = useTranslation();
-  let className = '';
-  let tooltip = '';
+  const primary = green[500];
+  const secondary = yellow[700];
+  let icon = <Icon />;
   switch (topic.topicType) {
     case 'question':
       if (topic.isResolved) {
-        className =
-          'fa fa-check-circle text-3xl overflow-visible  text-green-700 top-0';
-        tooltip = t(translations.resolved);
+        icon = (
+          <CheckCircle
+            htmlColor={primary}
+            titleAccess={t(translations.resolved)}
+          />
+        );
       } else {
-        className =
-          'fa fa-question-circle overflow-visible  text-3xl text-yellow-700';
-        tooltip = t(translations.unresolved);
+        icon = (
+          <Help
+            htmlColor={secondary}
+            titleAccess={t(translations.unresolved)}
+          />
+        );
       }
       break;
     case 'sticky':
-      className = 'fa fa-thumb-tack overflow-visible  text-3xl';
-      tooltip = t(translations.sticky);
+      icon = <StickyNote2 titleAccess={t(translations.sticky)} />;
       break;
     case 'announcement':
-      className = 'fa fa-bullhorn overflow-visible  text-3xl';
-      tooltip = t(translations.announcement);
+      icon = <Campaign titleAccess={t(translations.announcement)} />;
       break;
     default:
       return null;
   }
-  return <Icon className={className} title={tooltip} />;
+  return icon;
 };
 
 const ForumTopicTable: FC<Props> = (props) => {
@@ -179,16 +193,10 @@ const ForumTopicTable: FC<Props> = (props) => {
                 </label>
                 <div className="flex items-center space-x-2 max-xl:mt-2 xl:ml-2">
                   {topic.isHidden && (
-                    <Icon
-                      className="fa fa-eye-slash overflow-visible text-3xl"
-                      title={t(translations.hidden)}
-                    />
+                    <VisibilityOff titleAccess={t(translations.hidden)} />
                   )}
                   {topic.isLocked && (
-                    <Icon
-                      className="fa fa-lock overflow-visible text-3xl"
-                      title={t(translations.locked)}
-                    />
+                    <Lock titleAccess={t(translations.locked)} />
                   )}
                   <TopicTypeIcon topic={topic} />
                 </div>

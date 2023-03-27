@@ -1,4 +1,5 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Cached, Delete } from '@mui/icons-material';
 import { orange, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -30,6 +31,7 @@ const styles = {
   },
   iconWidth: {
     width: 20,
+    marginRight: 2,
   },
 };
 
@@ -42,11 +44,7 @@ const Labels = ({ post }) => {
           but we are checking here just to be sure.  */}
       {isPostUpdated && !isPostDeleted && (
         <div style={{ ...styles.label, ...styles.labelEdited }}>
-          <i
-            aria-hidden="true"
-            className="fa fa-refresh"
-            style={styles.iconWidth}
-          />
+          <Cached style={styles.iconWidth} />
           <div>
             <FormattedMessage {...translations.postEdited} />
           </div>
@@ -54,11 +52,7 @@ const Labels = ({ post }) => {
       )}
       {isPostDeleted && (
         <div style={{ ...styles.label, ...styles.labelDeleted }}>
-          <i
-            aria-hidden="true"
-            className="fa fa-trash"
-            style={styles.iconWidth}
-          />
+          <Delete style={styles.iconWidth} />
           <div>
             <FormattedMessage {...translations.postDeleted} />
           </div>

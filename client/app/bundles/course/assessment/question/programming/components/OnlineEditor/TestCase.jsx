@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { injectIntl } from 'react-intl';
+import { Delete } from '@mui/icons-material';
 import { Button, TableCell, TableRow, TextField } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { Map } from 'immutable';
@@ -122,7 +123,7 @@ class TestCase extends Component {
             }}
             variant="contained"
           >
-            <i className="fa fa-trash" />
+            <Delete fontSize="small" />
           </Button>
         </TableCell>
         <TableCell className={styles.testCell}>

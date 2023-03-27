@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 import PropTypes from 'prop-types';
 
 import stripHtmlTags from 'lib/helpers/htmlFormatHelpers';
@@ -6,12 +7,13 @@ import stripHtmlTags from 'lib/helpers/htmlFormatHelpers';
 import { annotationShape } from '../propTypes';
 
 const styles = {
-  chevron: {
-    fontSize: 10,
+  expand: {
     marginRight: 5,
     transform: 'rotate(-90deg)',
   },
   postPreview: {
+    alignItems: 'center',
+    display: 'flex',
     paddingLeft: 5,
     width: '100%',
   },
@@ -21,7 +23,7 @@ const VisiblePostPreview = (props) => {
   const { style, creator, text } = props;
   return (
     <div style={{ ...styles.postPreview, ...style }}>
-      <span className="fa fa-chevron-down" style={styles.chevron} />
+      <ExpandMore fontSize="inherit" style={styles.expand} />
       {`${creator}: ${stripHtmlTags(text)}`}
     </div>
   );

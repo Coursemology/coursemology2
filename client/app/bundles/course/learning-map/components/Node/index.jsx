@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { Card, CardContent, Icon } from '@mui/material';
+import {
+  EmojiEvents,
+  Flight,
+  Folder,
+  Lock,
+  Piechart,
+  Videocam,
+} from '@mui/icons-material';
+import { Card, CardContent, IconButton } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
@@ -52,7 +60,8 @@ const styles = {
   },
   icon: {
     fontSize: 12,
-    padding: '0px',
+    padding: '1px',
+    marginTop: '0.25em',
   },
   lockIcon: {
     marginLeft: 4,
@@ -80,12 +89,12 @@ const styles = {
 };
 
 const icons = {
-  achievement: 'fa fa-trophy',
-  assessment: 'fa fa-plane',
-  lock: 'fa fa-lock',
-  material: 'fa fa-folder',
-  survey: 'fa fa-pie-chart',
-  video: 'fa fa-video-camera',
+  achievement: <EmojiEvents />,
+  assessment: <Flight />,
+  lock: <Lock />,
+  material: <Folder />,
+  survey: <Piechart />,
+  video: <Videocam />,
 };
 
 const Node = (props) => {
@@ -119,15 +128,13 @@ const Node = (props) => {
                 />
               </div>
             )}
-            <Icon
-              className={icons[node.courseMaterialType]}
-              style={styles.icon}
-            />
+            <IconButton style={styles.icon}>
+              {icons[node.courseMaterialType]}
+            </IconButton>
             {!canModify && !node.unlocked && (
-              <Icon
-                className={icons.lock}
-                style={{ ...styles.icon, ...styles.lockIcon }}
-              />
+              <IconButton style={{ ...styles.icon, ...styles.lockIcon }}>
+                {icons.lock}
+              </IconButton>
             )}
           </CardContent>
           <div style={styles.content}>

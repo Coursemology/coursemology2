@@ -1,5 +1,9 @@
 import { injectIntl } from 'react-intl';
-import { Button, Icon } from '@mui/material';
+import {
+  CropSquareRounded,
+  RadioButtonUncheckedRounded,
+} from '@mui/icons-material';
+import { Button, IconButton } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -22,14 +26,15 @@ const ShapeField = (props) => {
         color={currentShape === scribingShapes.RECT ? 'primary' : 'info'}
         onClick={() => setSelectedShape(scribingShapes.RECT)}
       >
-        <Icon
-          className="fa fa-square-o"
+        <IconButton
           style={
             currentShape === scribingShapes.RECT
               ? { color: blue[500] }
               : { color: 'rgba(0, 0, 0, 0.4)' }
           }
-        />
+        >
+          <CropSquareRounded />
+        </IconButton>
         {intl.formatMessage(translations.rectangle)}
       </Button>
 
@@ -38,14 +43,15 @@ const ShapeField = (props) => {
         color={currentShape === scribingShapes.ELLIPSE ? 'primary' : 'info'}
         onClick={() => setSelectedShape(scribingShapes.ELLIPSE)}
       >
-        <Icon
-          className="fa fa-circle-o"
+        <IconButton
           style={
             currentShape === scribingShapes.ELLIPSE
               ? { color: blue[500] }
               : { color: 'rgba(0, 0, 0, 0.4)' }
           }
-        />
+        >
+          <RadioButtonUncheckedRounded />
+        </IconButton>
         {intl.formatMessage(translations.ellipse)}
       </Button>
     </>

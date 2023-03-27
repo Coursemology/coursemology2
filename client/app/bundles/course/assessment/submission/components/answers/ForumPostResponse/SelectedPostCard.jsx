@@ -1,5 +1,11 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import {
+  ChevronRight,
+  Delete,
+  ExpandMore,
+  OpenInNew,
+} from '@mui/icons-material';
 import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -62,7 +68,7 @@ export default class SelectedPostCard extends Component {
     }
     return (
       <a href={url} rel="noopener noreferrer" target="_blank">
-        {renderedName} <i className="fa fa-external-link" />
+        {renderedName} <OpenInNew fontSize="inherit" />
       </a>
     );
   }
@@ -87,12 +93,11 @@ export default class SelectedPostCard extends Component {
 
     return (
       <div style={styles.labelLeft}>
-        <i
-          className={
-            this.state.isExpanded ? 'fa fa-angle-down' : 'fa fa-angle-right'
-          }
-          style={{ width: 20 }}
-        />
+        {this.state.isExpanded ? (
+          <ExpandMore style={{ width: 20 }} />
+        ) : (
+          <ChevronRight style={{ width: 20 }} />
+        )}
         {topic.isDeleted ? (
           <span>
             <FormattedMessage {...translations.topicDeleted} />
@@ -129,7 +134,7 @@ export default class SelectedPostCard extends Component {
         style={styles.trashButton}
         type="button"
       >
-        <i className="fa fa-trash" />
+        <Delete />
       </button>
     );
   }

@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import Add from '@mui/icons-material/Add';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion,
@@ -362,7 +363,7 @@ class OnlineEditorCppView extends Component {
                       this.props.isLoading || numAllTestCases >= MAX_TEST_CASES
                     }
                     onClick={this.testCaseCreateHandler(type)}
-                    startIcon={<i className="fa fa-plus" />}
+                    startIcon={<Add />}
                   >
                     {this.props.intl.formatMessage(
                       translations.addNewTestButton,

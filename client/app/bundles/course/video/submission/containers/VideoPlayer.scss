@@ -4,6 +4,7 @@ $button-width: 30px;
   cursor: pointer;
   flex-shrink: 0;
   text-align: center;
+  padding-top: 0%;
   width: $width;
 }
 
@@ -51,14 +52,14 @@ $button-width: 30px;
 
 .volumeSlider {
   @include player-button(2 * $button-width);
-  margin: 0.5em 0.5em 0;
+  margin: 0.25em 0.25em 0;
   order: 3;
 }
 
 .timestamp {
   flex-grow: 10;
   font-size: 0.9em;
-  margin-left: 1em;
+  margin: 0.5em 0.5em 0.75em;
   order: 4;
 }
 
