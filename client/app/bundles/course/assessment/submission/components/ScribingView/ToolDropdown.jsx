@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import { Icon, Tooltip } from '@mui/material';
+import { ExpandMore } from '@mui/icons-material';
+import { IconButton, Tooltip } from '@mui/material';
 import { blue } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -21,17 +22,18 @@ const propTypes = {
 const style = {
   tool: {
     position: 'relative',
-    display: 'inline-block',
-    paddingRight: '24px',
+    display: 'flex',
+    paddingRight: '5px',
     outline: 'none',
   },
   innerTool: {
+    alignItems: 'center',
     display: 'inline-block',
     outline: 'none',
   },
   chevron: {
     color: 'rgba(0, 0, 0, 0.4)',
-    fontSize: '12px',
+    fontSize: '16px',
     padding: '10px 0px 10px 0px',
   },
   disabled: {
@@ -69,13 +71,17 @@ export default class ToolDropdown extends Component {
 
     const colorBarStyle = disabled
       ? {
-          width: '23px',
-          height: '8px',
+          width: '30px',
+          height: '5px',
+          marginLeft: '5px',
+          marginBottom: '3px',
           background: '#c0c0c0',
         }
       : {
-          width: '23px',
-          height: '8px',
+          width: '30px',
+          height: '5px',
+          marginLeft: '5px',
+          marginBottom: '3px',
           backgroundColor,
           border: borderColor ? `${borderColor} 2px solid` : undefined,
         };
@@ -93,7 +99,7 @@ export default class ToolDropdown extends Component {
     return iconComponent ? (
       iconComponent()
     ) : (
-      <Icon className={iconClassname} style={iconStyle} />
+      <IconButton style={iconStyle}>{iconClassname}</IconButton>
     );
   }
 
@@ -119,15 +125,16 @@ export default class ToolDropdown extends Component {
             {this.renderColorBar()}
           </div>
           <div style={style.innerTool}>
-            <Icon
-              className="fa fa-chevron-down"
+            <IconButton
               onClick={!disabled ? onClickChevron : undefined}
               style={
                 disabled
                   ? { ...style.chevron, ...style.disabled }
                   : style.chevron
               }
-            />
+            >
+              <ExpandMore fontSize="medium" />
+            </IconButton>
           </div>
         </div>
       </Tooltip>

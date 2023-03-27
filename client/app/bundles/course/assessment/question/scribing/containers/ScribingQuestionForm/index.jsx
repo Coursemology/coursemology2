@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import FormMultiSelectField from 'lib/components/form/fields/MultiSelectField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSingleFileInput, {
@@ -218,11 +219,7 @@ const ScribingQuestionForm = (props) => {
         className={styles.submitButton}
         color="primary"
         disabled={disabled}
-        endIcon={
-          data.isSubmitting ? (
-            <i className="fa fa-spinner fa-lg fa-spin" />
-          ) : null
-        }
+        endIcon={data.isSubmitting ? <LoadingIndicator bare size={20} /> : null}
         style={{ marginBottom: '1em' }}
         type="submit"
         variant="contained"

@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { Add } from '@mui/icons-material';
 import {
   Button,
   Table,
@@ -186,7 +187,7 @@ class Level extends Component {
               disabled={isSaving}
               id="add-level"
               onClick={this.handleCreateLevel()}
-              startIcon={<i className="fa fa-plus" />}
+              startIcon={<Add fontSize="small" />}
             >
               <FormattedMessage {...translations.addNewLevel} />
             </Button>

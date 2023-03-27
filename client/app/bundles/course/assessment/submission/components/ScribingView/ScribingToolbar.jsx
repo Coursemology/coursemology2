@@ -1,6 +1,20 @@
 import { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Grid, Icon, Tooltip } from '@mui/material';
+import {
+  CreateOutlined,
+  CropSquareRounded,
+  Delete,
+  FontDownloadOutlined,
+  HorizontalRule,
+  NorthWest,
+  OpenWithOutlined,
+  RadioButtonUncheckedRounded,
+  Redo,
+  Undo,
+  ZoomIn,
+  ZoomOut,
+} from '@mui/icons-material';
+import { Grid, IconButton, Tooltip } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -50,7 +64,7 @@ const propTypes = {
 
 const styles = {
   toolbar: {
-    marginBottom: '1em',
+    marginBottom: '0.5em',
   },
   disabledToolbar: {
     cursor: 'not-allowed',
@@ -60,16 +74,8 @@ const styles = {
     boxShadow: 'none',
     marginBottom: '1em',
   },
-  customLine: {
-    display: 'inline-block',
-    position: 'inherit',
-    width: '25px',
-    height: '24px',
-    marginLeft: '-2px',
-    transform: 'scale(1.0, 0.2) rotate(90deg) skewX(76deg)',
-  },
   tool: {
-    paddingRight: '48px',
+    paddingLeft: '8px',
   },
   disabled: {
     cursor: 'not-allowed',
@@ -274,13 +280,6 @@ class ScribingToolbar extends Component {
 
   render() {
     const { scribing } = this.props;
-    const lineToolStyle = {
-      ...styles.customLine,
-      background:
-        this.props.scribing.selectedTool === scribingTools.LINE
-          ? blue[500]
-          : 'rgba(0, 0, 0, 0.4)',
-    };
     const toolBarStyle = !scribing.isCanvasLoaded
       ? styles.disabledToolbar
       : styles.toolBar;
@@ -288,7 +287,11 @@ class ScribingToolbar extends Component {
     const isEditRect =
       scribing.activeObject && scribing.activeObject.type === 'rect';
     const shapeIcon =
-      isNewRect || isEditRect ? 'fa fa-square-o' : 'fa fa-circle-o';
+      isNewRect || isEditRect ? (
+        <CropSquareRounded />
+      ) : (
+        <RadioButtonUncheckedRounded />
+      );
 
     const typePopoverProps = {
       open: this.state.popovers[scribingPopoverTypes.TYPE],
@@ -378,7 +381,7 @@ class ScribingToolbar extends Component {
                 scribing.activeObject.type !== 'i-text') ||
               false
             }
-            iconClassname="fa fa-font"
+            iconClassname={<FontDownloadOutlined />}
             onClickChevron={this.onClickTypingChevron}
             onClickIcon={this.onClickTypingIcon}
             tooltip={<FormattedMessage {...translations.text} />}
@@ -438,7 +441,7 @@ class ScribingToolbar extends Component {
                 scribing.activeObject.type !== 'path') ||
               false
             }
-            iconClassname="fa fa-pencil"
+            iconClassname={<CreateOutlined />}
             onClick={this.onClickDrawingMode}
             onClickChevron={(event) =>
               this.onClickPopover(event, scribingPopoverTypes.DRAW)
@@ -502,15 +505,7 @@ class ScribingToolbar extends Component {
                 scribing.activeObject.type !== 'line') ||
               false
             }
-            iconComponent={() => (
-              <div
-                style={
-                  scribing.activeObject && scribing.activeObject.type !== 'line'
-                    ? { ...lineToolStyle, background: '#c0c0c0' }
-                    : lineToolStyle
-                }
-              />
-            )}
+            iconClassname={<HorizontalRule />}
             onClick={this.onClickLineMode}
             onClickChevron={(event) =>
               this.onClickPopover(event, scribingPopoverTypes.LINE)
@@ -727,8 +722,7 @@ class ScribingToolbar extends Component {
             placement="top"
             title={<FormattedMessage {...translations.select} />}
           >
-            <Icon
-              className="fa fa-mouse-pointer"
+            <IconButton
               color={
                 this.props.scribing.selectedTool === scribingTools.SELECT
                   ? 'primary'
@@ -736,28 +730,30 @@ class ScribingToolbar extends Component {
               }
               onClick={this.onClickSelectionMode}
               style={styles.tool}
-            />
+            >
+              <NorthWest />
+            </IconButton>
           </Tooltip>
           <Tooltip
             placement="top"
             title={<FormattedMessage {...translations.undo} />}
           >
-            <Icon
-              className="fa fa-undo"
+            <IconButton
               onClick={this.onClickUndo}
               style={
                 this.props.scribing.currentStateIndex < 1
                   ? { ...styles.disabled, ...styles.tool }
                   : styles.tool
               }
-            />
+            >
+              <Undo />
+            </IconButton>
           </Tooltip>
           <Tooltip
             placement="top"
             title={<FormattedMessage {...translations.redo} />}
           >
-            <Icon
-              className="fa fa-repeat"
+            <IconButton
               onClick={this.onClickRedo}
               style={
                 this.props.scribing.currentStateIndex >=
@@ -765,7 +761,9 @@ class ScribingToolbar extends Component {
                   ? { ...styles.disabled, ...styles.tool }
                   : styles.tool
               }
-            />
+            >
+              <Redo />
+            </IconButton>
           </Tooltip>
         </Grid>
         <Grid item style={{ display: 'flex', justifyContent: 'center' }} xs={2}>
@@ -773,35 +771,32 @@ class ScribingToolbar extends Component {
             placement="top"
             title={<FormattedMessage {...translations.move} />}
           >
-            <Icon
-              className="fa fa-arrows"
+            <IconButton
               onClick={this.onClickMoveMode}
               style={
                 this.props.scribing.selectedTool === scribingTools.MOVE
                   ? { color: blue[500], ...styles.tool }
                   : styles.tool
               }
-            />
+            >
+              <OpenWithOutlined />
+            </IconButton>
           </Tooltip>
           <Tooltip
             placement="top"
             title={<FormattedMessage {...translations.zoomIn} />}
           >
-            <Icon
-              className="fa fa-search-plus"
-              onClick={this.onClickZoomIn}
-              style={styles.tool}
-            />
+            <IconButton onClick={this.onClickZoomIn} style={styles.tool}>
+              <ZoomIn />
+            </IconButton>
           </Tooltip>
           <Tooltip
             placement="top"
             title={<FormattedMessage {...translations.zoomOut} />}
           >
-            <Icon
-              className="fa fa-search-minus"
-              onClick={this.onClickZoomOut}
-              style={styles.tool}
-            />
+            <IconButton onClick={this.onClickZoomOut} style={styles.tool}>
+              <ZoomOut />
+            </IconButton>
           </Tooltip>
         </Grid>
         <Grid item xs={1}>
@@ -809,11 +804,9 @@ class ScribingToolbar extends Component {
             placement="top"
             title={<FormattedMessage {...translations.delete} />}
           >
-            <Icon
-              className="fa fa-trash-o"
-              onClick={this.onClickDelete}
-              style={styles.tool}
-            />
+            <IconButton onClick={this.onClickDelete} style={styles.tool}>
+              <Delete />
+            </IconButton>
           </Tooltip>
         </Grid>
         <Grid item xs={1}>

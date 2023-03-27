@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { AttachFile } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
@@ -171,13 +172,7 @@ export default class ForumPostSelect extends Component {
               color="primary"
               disabled={this.state.hasErrorFetchingPosts || maxPosts === 0}
               onClick={() => this.setState({ isDialogVisible: true })}
-              startIcon={
-                <i
-                  aria-hidden="true"
-                  className="fa fa-paperclip"
-                  style={styles.clipIcon}
-                />
-              }
+              startIcon={<AttachFile />}
               style={{ marginBottom: 16 }}
               variant="contained"
             >

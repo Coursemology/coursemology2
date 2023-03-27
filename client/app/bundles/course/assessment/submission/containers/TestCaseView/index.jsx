@@ -5,6 +5,7 @@ import ReactTooltip from 'react-tooltip';
 import Check from '@mui/icons-material/Check';
 import Clear from '@mui/icons-material/Clear';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Warning from '@mui/icons-material/Warning';
 import {
   Accordion,
   AccordionDetails,
@@ -139,7 +140,7 @@ export class VisibleTestCaseView extends Component {
           data-offset="{'left' : -8}"
           data-tip
         >
-          <i className="fa fa-exclamation-triangle" />
+          <Warning />
         </a>
         <ReactTooltip effect="solid" id="staff-only-output-stream">
           <FormattedMessage {...translations.staffOnlyOutputStream} />
@@ -156,7 +157,7 @@ export class VisibleTestCaseView extends Component {
           data-offset="{'left' : -8}"
           data-tip
         >
-          <i className="fa fa-exclamation-triangle" />
+          <Warning />
         </a>
         <ReactTooltip effect="solid" id="staff-only-test-cases">
           <FormattedMessage {...translations.staffOnlyTestCases} />

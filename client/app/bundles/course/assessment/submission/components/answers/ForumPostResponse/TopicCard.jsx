@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { OpenInNew } from '@mui/icons-material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Accordion,
@@ -7,7 +8,6 @@ import {
   AccordionSummary,
   Button,
   Divider,
-  Icon,
 } from '@mui/material';
 import { indigo } from '@mui/material/colors';
 import PropTypes from 'prop-types';
@@ -49,7 +49,7 @@ const styles = {
     padding: 16,
   },
   icon: {
-    marginLeft: 12,
+    marginLeft: 4,
   },
   nonLastPostOption: {
     marginBottom: 16,
@@ -109,14 +109,12 @@ export default class TopicCard extends Component {
         <Divider />
         <AccordionActions style={styles.AccordionActions}>
           <Button
-            endIcon={
-              <Icon className="fa fa-external-link" style={styles.icon} />
-            }
             href={getForumTopicURL(courseId, forumId, topicPostPack.topic.ic)}
             target="_blank"
             variant="contained"
           >
             <FormattedMessage {...translations.viewTopicInNewTab} />
+            <OpenInNew style={styles.icon} />
           </Button>
         </AccordionActions>
         <Divider />

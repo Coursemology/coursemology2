@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { Flight, Videocam } from '@mui/icons-material';
 import {
-  Icon,
   Link,
   Paper,
   Table,
@@ -41,8 +41,24 @@ const translations = defineMessages({
 });
 
 const icons = {
-  assessment: 'fa fa-plane',
-  video: 'fa fa-video-camera',
+  assessment: (
+    <Flight
+      style={{
+        fontSize: 12,
+        marginRight: '4px',
+        verticalAlign: 'inherit',
+      }}
+    />
+  ),
+  video: (
+    <Videocam
+      style={{
+        fontSize: 12,
+        marginRight: '4px',
+        verticalAlign: 'inherit',
+      }}
+    />
+  ),
 };
 
 const getLink = (item: PersonalTimeMiniEntity): JSX.Element => {
@@ -70,16 +86,7 @@ const getIcon = (item: PersonalTimeMiniEntity): JSX.Element => {
     materialType = 'assessment';
   }
 
-  return (
-    <Icon
-      className={icons[materialType]}
-      style={{
-        fontSize: 12,
-        marginRight: '4px',
-        verticalAlign: 'inherit',
-      }}
-    />
-  );
+  return icons[materialType];
 };
 
 const PersonalTimesTable: FC<Props> = (props) => {

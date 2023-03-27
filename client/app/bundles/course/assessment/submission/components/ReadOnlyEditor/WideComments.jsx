@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import { ExpandMore } from '@mui/icons-material';
 import { Button, Paper } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -58,7 +59,7 @@ export default class WideComments extends Component {
             style={styles.minimiseButton}
             variant="outlined"
           >
-            <span className="fa fa-chevron-down" />
+            <ExpandMore />
           </Button>
           <Annotations
             annotation={annotation}

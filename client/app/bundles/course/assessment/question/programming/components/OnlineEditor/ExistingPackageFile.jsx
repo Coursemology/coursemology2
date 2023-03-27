@@ -1,4 +1,5 @@
 import { injectIntl } from 'react-intl';
+import { Delete, Undo } from '@mui/icons-material';
 import { Button, TableCell, TableRow } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
@@ -24,7 +25,7 @@ const ExistingPackageFile = (props) => {
     isLoading,
     isLast,
   } = props;
-  const buttonClass = toDelete ? 'fa fa-undo' : 'fa fa-trash';
+  const buttonClass = toDelete ? <Undo /> : <Delete />;
   const buttonColor = toDelete ? 'white' : grey[300];
   const rowStyle = toDelete
     ? { textDecoration: 'line-through', backgroundColor: grey[100] }
@@ -50,7 +51,7 @@ const ExistingPackageFile = (props) => {
           }}
           variant="contained"
         >
-          <i className={buttonClass} />
+          {buttonClass}
         </Button>
         <input
           checked={toDelete}

@@ -5,11 +5,12 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { Add } from '@mui/icons-material';
+import { Add, ChevronRight } from '@mui/icons-material';
 import {
   Box,
   Button,
   CardContent,
+  IconButton,
   Slide,
   TableCell,
   TableFooter,
@@ -198,12 +199,13 @@ const SkillsTable: FC<Props> = (props: Props) => {
         customBodyRenderLite: (dataIndex): JSX.Element | string => {
           if (tableType === TableEnum.SkillBranches) {
             return (
-              <span
-                className="fa fa-chevron-right"
+              <IconButton
                 id={`skill_branch_${
                   tableData[dataIndex] ? tableData[dataIndex].id : ''
                 }`}
-              />
+              >
+                <ChevronRight />
+              </IconButton>
             );
           }
           return ' ';

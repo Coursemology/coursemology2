@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { injectIntl } from 'react-intl';
+import { Delete } from '@mui/icons-material';
 import { Button, TableCell, TableRow } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
@@ -41,7 +42,7 @@ class NewPackageFile extends Component {
           }}
           variant="contained"
         >
-          <i className="fa fa-trash" />
+          <Delete fontSize="small" />
         </Button>
       );
       addFileButtonStyle.display = 'none';

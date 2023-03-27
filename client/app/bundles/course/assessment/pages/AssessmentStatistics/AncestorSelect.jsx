@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { injectIntl } from 'react-intl';
+import ArrowBack from '@mui/icons-material/ArrowBack';
 import { Card, CardContent, Chip, Typography } from '@mui/material';
 import { green } from '@mui/material/colors';
 import PropTypes from 'prop-types';
@@ -129,7 +130,7 @@ const AncestorSelect = ({
               </CardContent>
             </Card>
             {index !== ancestors.length - 1 ? (
-              <i aria-hidden="true" className="fa fa-arrow-left" />
+              <ArrowBack data-testid="ArrowBack" htmlColor="black" />
             ) : null}
           </Fragment>
         ))}

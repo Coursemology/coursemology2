@@ -29,6 +29,7 @@ import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 
 import BuildLog from '../../components/BuildLog';
 import OnlineEditor, {
@@ -1026,7 +1027,7 @@ class ProgrammingQuestionForm extends Component {
               disabled={this.props.data.get('is_loading') || disableSubmit}
               endIcon={
                 this.props.data.get('is_loading') ? (
-                  <i className="fa fa-spinner fa-lg fa-spin" />
+                  <LoadingIndicator bare size={20} />
                 ) : null
               }
               id="programming-question-form-submit"
