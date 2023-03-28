@@ -23,11 +23,11 @@ const styles = {
 const translations = defineMessages({
   startReorderAchievement: {
     id: 'course.achievement.AchievementReordering.startReorderAchievement',
-    defaultMessage: 'Start Re-ordering Achievement',
+    defaultMessage: 'Start Re-ordering',
   },
   endReorderAchievement: {
     id: 'course.achievement.AchievementReordering.endReorderAchievement',
-    defaultMessage: 'End Re-ordering Achievement',
+    defaultMessage: 'End Re-ordering',
   },
   updateFailed: {
     id: 'course.achievement.AchievementReordering.updateFailed',
