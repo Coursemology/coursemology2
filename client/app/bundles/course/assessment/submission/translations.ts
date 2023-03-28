@@ -491,6 +491,11 @@ const translations = defineMessages({
     id: 'course.assessment.submission.generateFeedbackFailure',
     defaultMessage: 'Failed to generate feedback. Please try again later.',
   },
+  submissionBlocked: {
+    id: 'course.assessment.submission.submissionBlocked',
+    defaultMessage:
+      'Submission for this assessment cannot be viewed once finalised.',
+  },
 });
 
 export const scribingTranslations = defineMessages({

@@ -55,6 +55,7 @@ import {
 } from '../../propTypes';
 import translations from '../../translations';
 
+import BlockedSubmission from './BlockedSubmission';
 import SubmissionEditForm from './SubmissionEditForm';
 import SubmissionEditStepForm from './SubmissionEditStepForm';
 import SubmissionEmptyForm from './SubmissionEmptyForm';
@@ -421,11 +422,10 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   render() {
-    const { isLoading, notification } = this.props;
+    const { isSubmissionBlocked, isLoading, notification } = this.props;
 
-    if (isLoading) {
-      return <LoadingIndicator />;
-    }
+    if (isLoading) return <LoadingIndicator />;
+    if (isSubmissionBlocked) return <BlockedSubmission />;
     return (
       <>
         {this.renderAssessment()}
@@ -463,6 +463,7 @@ VisibleSubmissionEditIndex.propTypes = {
   isAutograding: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
+  isSubmissionBlocked: PropTypes.bool,
   setSessionId: PropTypes.func,
 };
 
@@ -485,6 +486,7 @@ function mapStateToProps(state) {
     topics: state.topics,
     isLoading: state.submissionFlags.isLoading,
     isSaving: state.submissionFlags.isSaving,
+    isSubmissionBlocked: state.submissionFlags.isSubmissionBlocked,
   };
 }
 
