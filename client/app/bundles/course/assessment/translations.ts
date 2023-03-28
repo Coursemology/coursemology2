@@ -928,6 +928,18 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.missingPresenceHint',
     defaultMessage: "Next heartbeat hasn't been received in time.",
   },
+  attemptingAssessment: {
+    id: 'course.assessment.submission.attemptingAssessment',
+    defaultMessage: 'Creating a new submission...',
+  },
+  createSubmissionSuccessful: {
+    id: 'course.assessment.submission.createSubmissionSuccessful',
+    defaultMessage: 'Submission created! Redirecting now...',
+  },
+  createSubmissionFailed: {
+    id: 'course.assessment.submission.createSubmissionFailed',
+    defaultMessage: 'Submission attempt failed! {error}',
+  },
 });
 
 export default translations;

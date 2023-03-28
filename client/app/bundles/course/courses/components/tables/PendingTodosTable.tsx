@@ -104,6 +104,7 @@ const PendingTodosTable: FC<Props> = (props) => {
     let accessButtonText = '';
     let accessButtonLink = '';
     let submissionUrl;
+    // TODO: Refactor below by changing switch to dictionary
     switch (todoType) {
       case 'surveys':
         accessButtonText = intl.formatMessage(translations.accessButtonRespond);

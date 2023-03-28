@@ -24,20 +24,15 @@ const TodoAccessButton: FC<Props> = (props) => {
     <Button
       color="primary"
       onClick={(): void => {
+        // TODO: Refactor below to remove if else check
         if (isVideo) {
-          axios
-            .get(accessButtonLink)
-            .then((response) => {
-              window.location.href = `${submissionUrl}/${response.data.submissionId}/edit`;
-            })
-            .catch((_e) => {});
+          axios.get(accessButtonLink).then((response) => {
+            window.location.href = `${submissionUrl}/${response.data.submissionId}/edit`;
+          });
         } else if (isNewAttempt) {
-          axios
-            .get(accessButtonLink)
-            .then((response) => {
-              window.location.href = `${submissionUrl}/${response.data.submission.id}/edit`;
-            })
-            .catch((_e) => {});
+          axios.get(accessButtonLink).then((response) => {
+            window.location.href = response.data.redirectUrl;
+          });
         } else {
           window.location.href = accessButtonLink;
         }
