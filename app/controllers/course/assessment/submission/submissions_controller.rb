@@ -71,11 +71,11 @@ class Course::Assessment::Submission::SubmissionsController < \
 
     return if @submission.attempting?
 
-    render 'blocked' if @submission.submission_view_blocked?(current_course_user)
-
     respond_to do |format|
       format.html
       format.json do
+        return render json: { isSubmissionBlocked: true } if @submission.submission_view_blocked?(current_course_user)
+
         calculated_fields = [:graded_at, :grade]
         @submission = @submission.calculated(*calculated_fields)
       end

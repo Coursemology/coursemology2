@@ -12,13 +12,22 @@ const initialState = {
   isStatisticsDownloading: false,
   isUnsubmitting: false,
   isDeleting: false,
+  isSubmissionBlocked: false,
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
+    case actions.FETCH_SUBMISSIONS_REQUEST:
+      return { ...state, isLoading: true };
     case actions.FETCH_SUBMISSION_SUCCESS:
     case actions.FETCH_SUBMISSION_FAILURE:
       return { ...state, isLoading: false };
+    case actions.SUBMISSION_BLOCKED:
+      return {
+        ...state,
+        isLoading: false,
+        isSubmissionBlocked: true,
+      };
     case actions.FETCH_SUBMISSIONS_SUCCESS:
     case actions.FETCH_SUBMISSIONS_FAILURE:
       return {
