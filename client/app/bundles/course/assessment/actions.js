@@ -53,6 +53,20 @@ export const deleteAssessment = async (deleteUrl) => {
   }
 };
 
+export const attemptAssessment = async (assessmentId) => {
+  try {
+    const response = await CourseAPI.assessment.assessments.attempt(
+      assessmentId,
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError)
+      throw new Error(error.response?.data?.error);
+
+    throw error;
+  }
+};
+
 export const reorderQuestions = async (assessmentId, questionIds) => {
   // TODO: Conform POST data to `QuestionOrderPostData` once written in TypeScript
   const response = await CourseAPI.assessment.assessments.reorderQuestions(

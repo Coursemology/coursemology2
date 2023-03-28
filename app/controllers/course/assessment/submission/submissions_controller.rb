@@ -46,10 +46,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize! :access, @assessment
 
     existing_submission = @assessment.submissions.find_by(creator: current_user)
-    if existing_submission
-      @submission = existing_submission
-      return redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission)
-    end
+    create_success_response(existing_submission) if existing_submission
 
     ActiveRecord::Base.transaction do
       @submission.session_id = authentication_service.generate_authentication_token
@@ -59,25 +56,24 @@ class Course::Assessment::Submission::SubmissionsController < \
       authentication_service.save_token_to_session(@submission.session_id)
       log_service.log_submission_access(request) if @assessment.session_password_protected?
       monitoring_service&.create_new_session_if_not_exist! if should_monitor?
-      redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission, new_submission: true)
+
+      create_success_response(@submission)
     end
+
   rescue StandardError
     error_message = @submission.errors.full_messages.to_sentence
-    redirect_to course_assessments_path(current_course), danger: t('.failure', error: error_message)
+    render json: { error: error_message }, status: :bad_request
   end
 
   def edit
     @monitoring_session_id = monitoring_service&.session&.id if should_monitor?
-
-    return if @submission.attempting?
 
     respond_to do |format|
       format.html
       format.json do
         return render json: { isSubmissionBlocked: true } if @submission.submission_view_blocked?(current_course_user)
 
-        calculated_fields = [:graded_at, :grade]
-        @submission = @submission.calculated(*calculated_fields)
+        @submission = @submission.calculated(:graded_at, :grade) unless @submission.attempting?
       end
     end
   end
@@ -254,6 +250,11 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def create_params
     { course_user: current_course_user }
+  end
+
+  def create_success_response(submission)
+    redirect_url = edit_course_assessment_submission_path(current_course, @assessment, submission)
+    render json: { redirectUrl: redirect_url }
   end
 
   def authorize_assessment!

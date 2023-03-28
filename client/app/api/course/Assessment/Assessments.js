@@ -79,6 +79,18 @@ export default class AssessmentsAPI extends BaseCourseAPI {
   }
 
   /**
+   * Create an assessment attempt.
+   *
+   * @param {number} assessmentId
+   * @return {Promise}
+   * success response: { redirectUrl: string }
+   * error response: { error: string }
+   */
+  attempt(assessmentId) {
+    return this.client.get(`${this.#urlPrefix}/${assessmentId}/attempt`);
+  }
+
+  /**
    * Fetches assessment skills options
    *
    * @return {Promise}
