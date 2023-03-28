@@ -118,14 +118,14 @@ const AssessmentShowHeader = (
 
       {assessment.submissionsUrl && (
         <Tooltip disableInteractive title={t(translations.submissions)}>
-          <IconButton
-            aria-label={t(translations.submissions)}
-            className="text-white"
-            // TODO: Change to react-router Link once SPA
-            href={assessment.submissionsUrl}
-          >
-            <Inventory />
-          </IconButton>
+          <Link to={assessment.submissionsUrl}>
+            <IconButton
+              aria-label={t(translations.submissions)}
+              className="text-white"
+            >
+              <Inventory />
+            </IconButton>
+          </Link>
         </Tooltip>
       )}
 

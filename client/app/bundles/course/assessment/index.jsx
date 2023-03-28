@@ -8,6 +8,7 @@ import AssessmentMonitoring from './pages/AssessmentMonitoring';
 import AssessmentShow from './pages/AssessmentShow';
 import AssessmentsIndex from './pages/AssessmentsIndex';
 import AssessmentStatisticsPage from './pages/AssessmentStatistics';
+import SubmissionWithStore from './submission/SubmissionWithStore';
 import storeCreator from './store';
 
 $(() => {
@@ -43,6 +44,7 @@ $(() => {
             path="/courses/:courseId/assessments/:assessmentId/statistics"
           />
         </Routes>
+        <SubmissionWithStore />
       </BrowserRouter>
     </ProviderWrapper>,
   );
