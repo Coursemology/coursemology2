@@ -21,7 +21,7 @@ import submissions from './submissions';
 import testCases from './testCases';
 import topics from './topics';
 
-export default combineReducers({
+const submissionReducer = combineReducers({
   annotations,
   answers,
   attachments,
@@ -43,3 +43,12 @@ export default combineReducers({
   testCases,
   history,
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === 'PURGE_SUBMISSION_STORE') {
+    return submissionReducer(undefined, action);
+  }
+  return submissionReducer(state, action);
+};
+
+export default rootReducer;

@@ -30,6 +30,7 @@ import {
   generateFeedback,
   mark,
   publish,
+  purgeSubmissionStore,
   reevaluateAnswer,
   resetAnswer,
   saveDraft,
@@ -64,21 +65,23 @@ class VisibleSubmissionEditIndex extends Component {
   constructor(props) {
     super(props);
 
-    const newSubmission =
-      !!getUrlParameter('new_submission') &&
-      getUrlParameter('new_submission') === 'true';
     const stepString = getUrlParameter('step');
     const step =
       Number.isNaN(stepString) || stepString === ''
         ? null
         : parseInt(stepString, 10) - 1;
 
-    this.state = { newSubmission, step };
+    this.state = { step };
   }
 
   componentDidMount() {
     const { dispatch, match, setSessionId } = this.props;
     dispatch(fetchSubmission(match.params.submissionId, setSessionId));
+  }
+
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch(purgeSubmissionStore());
   }
 
   handleAutogradeSubmission() {
@@ -252,7 +255,7 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   renderContent() {
-    const { newSubmission, step } = this.state;
+    const { step } = this.state;
     const {
       answers,
       assessment: {
@@ -364,7 +367,6 @@ class VisibleSubmissionEditIndex extends Component {
         isCodaveriEnabled={isCodaveriEnabled}
         isSaving={isSaving}
         maxStep={maxStep === undefined ? questionIds.length - 1 : maxStep}
-        newSubmission={newSubmission}
         onGenerateFeedback={this.onGenerateFeedback}
         onReevaluateAnswer={this.onReevaluateAnswer}
         onReset={this.onReset}

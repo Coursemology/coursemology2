@@ -98,7 +98,6 @@ const SubmissionEditForm = (props) => {
     intl,
     isAutograding,
     isSaving,
-    newSubmission,
     passwordProtected,
     published,
     questionIds,
@@ -114,9 +113,7 @@ const SubmissionEditForm = (props) => {
 
   let initialStep = Math.min(maxInitialStep, Math.max(0, step || 0));
 
-  const [examNotice, setExamNotice] = useState(
-    newSubmission && passwordProtected,
-  );
+  const [examNotice, setExamNotice] = useState(passwordProtected);
   const [submitConfirmation, setSubmitConfirmation] = useState(false);
   const [unsubmitConfirmation, setUnsubmitConfirmation] = useState(false);
   const [resetConfirmation, setResetConfirmation] = useState(false);
@@ -708,7 +705,6 @@ SubmissionEditForm.propTypes = {
   graderView: PropTypes.bool.isRequired,
   canUpdate: PropTypes.bool.isRequired,
   delayedGradePublication: PropTypes.bool.isRequired,
-  newSubmission: PropTypes.bool.isRequired,
   passwordProtected: PropTypes.bool.isRequired,
   tabbedView: PropTypes.bool.isRequired,
   maxStep: PropTypes.number.isRequired,
