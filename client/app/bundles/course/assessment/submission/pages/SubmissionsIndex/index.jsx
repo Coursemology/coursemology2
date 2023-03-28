@@ -27,6 +27,7 @@ import NotificationBar, {
 } from 'lib/components/core/NotificationBar';
 import withRouter from 'lib/components/navigation/withRouter';
 
+import { purgeSubmissionStore } from '../../actions';
 import {
   deleteAllSubmissions,
   downloadStatistics,
@@ -90,6 +91,11 @@ class VisibleSubmissionsIndex extends Component {
 
       this.setState({ tab: 'students-tab' });
     }
+  }
+
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch(purgeSubmissionStore());
   }
 
   renderForceSubmitConfirmation(shownSubmissions, handleForceSubmitParams) {

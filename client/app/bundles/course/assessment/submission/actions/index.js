@@ -666,3 +666,9 @@ export function toggleViewHistoryMode(
     }
   };
 }
+
+export function purgeSubmissionStore() {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.PURGE_SUBMISSION_STORE });
+  };
+}
