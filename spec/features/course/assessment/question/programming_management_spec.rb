@@ -151,7 +151,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         page.find('#programming-question-form-submit').click
         wait_for_job
 
-        # expect(page).to have_no_xpath('//form//*[contains(@class, \'fa-spinner\')]')
+        expect(page).to have_no_xpath('//form//*[contains(@class, \'fa-spinner\')]')
 
         question_created = assessment.questions.first.specific
         expect(page).to have_current_path(edit_course_assessment_question_programming_path(course, assessment,
