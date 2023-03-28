@@ -170,7 +170,7 @@
     "redux-logger": "^3.0.6",
     "sass-loader": "^13.2.0",
     "style-loader": "^3.3.1",
-    "tailwindcss": "^3.2.7",
+    "tailwindcss": "^3.3.0",
     "ts-jest": "^29.0.5",
     "typescript": "^5.0.2",
     "webpack": "^5.76.0",
