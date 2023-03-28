@@ -1,20 +1,15 @@
 import { memo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Warning } from '@mui/icons-material';
 import Delete from '@mui/icons-material/Delete';
 import History from '@mui/icons-material/History';
 import RemoveCircle from '@mui/icons-material/RemoveCircle';
-import {
-  Chip,
-  Icon,
-  IconButton,
-  Link,
-  TableCell,
-  TableRow,
-} from '@mui/material';
+import { Chip, IconButton, Link, TableCell, TableRow } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import GhostIcon from 'lib/components/icons/GhostIcon';
 import {
   getCourseUserURL,
   getEditSubmissionURL,
@@ -39,7 +34,7 @@ const styles = {
     alignItems: 'center',
   },
   phantomIcon: {
-    fontSize: '14px',
+    fontSize: '30px',
     marginRight: '2px',
   },
   chip: {
@@ -67,23 +62,20 @@ const formatGrade = (grade) => (grade !== null ? grade.toFixed(1) : null);
 const renderPhantomUserIcon = (submission) => {
   if (submission.courseUser.phantom) {
     return (
-      <Icon
-        className="fa fa-user-secret fa-xs"
-        data-for="phantom-user"
-        data-tip
-        style={styles.phantomIcon}
-      />
+      <IconButton data-for="phantom-user" data-tip style={styles.phantomIcon}>
+        <GhostIcon />
+      </IconButton>
     );
   }
   return null;
 };
 
 const renderUnpublishedWarning = (submission) => {
-  if (submission.workflowState !== workflowStates.Graded) return null;
+  if (submission.workflowState === workflowStates.Graded) return null;
   return (
     <span style={{ display: 'inline-block', paddingLeft: 5 }}>
       <div data-for="unpublished-grades" data-offset="{'left' : -8}" data-tip>
-        <i className="fa fa-exclamation-triangle" />
+        <Warning fontSize="inherit" />
       </div>
     </span>
   );

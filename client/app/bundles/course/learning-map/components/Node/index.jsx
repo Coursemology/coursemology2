@@ -6,7 +6,7 @@ import {
   Flight,
   Folder,
   Lock,
-  Piechart,
+  PieChart,
   Videocam,
 } from '@mui/icons-material';
 import { Card, CardContent, IconButton } from '@mui/material';
@@ -93,7 +93,7 @@ const icons = {
   assessment: <Flight />,
   lock: <Lock />,
   material: <Folder />,
-  survey: <Piechart />,
+  survey: <PieChart />,
   video: <Videocam />,
 };
 

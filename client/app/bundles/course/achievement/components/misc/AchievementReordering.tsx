@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
@@ -7,7 +7,10 @@ import axios from 'lib/axios';
 
 require('jquery-ui/ui/widgets/sortable');
 
-type Props = WrappedComponentProps;
+interface Props extends WrappedComponentProps {
+  handleReordering: (state: boolean) => void;
+  isReordering: boolean;
+}
 
 const styles = {
   AchievementReorderingButton: {
@@ -56,8 +59,7 @@ function submitReordering(ordering: string): Promise<void> {
 }
 
 const AchievementReordering: FC<Props> = (props: Props) => {
-  const { intl } = props;
-  const [isReordering, setIsReordering] = useState(false);
+  const { intl, handleReordering, isReordering } = props;
 
   return (
     <Button
@@ -67,8 +69,7 @@ const AchievementReordering: FC<Props> = (props: Props) => {
       onClick={(): void => {
         if (isReordering) {
           $('tbody').first().sortable({ disabled: true });
-          setIsReordering(false);
-          $('.fa-reorder').addClass('hidden');
+          handleReordering(false);
         } else {
           $('tbody')
             .first()
@@ -79,8 +80,7 @@ const AchievementReordering: FC<Props> = (props: Props) => {
               },
               disabled: false,
             });
-          $('.fa-reorder').removeClass('hidden');
-          setIsReordering(true);
+          handleReordering(true);
         }
       }}
       style={styles.AchievementReorderingButton}

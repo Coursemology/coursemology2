@@ -44,6 +44,7 @@ const AchievementsIndex: FC = () => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [isReordering, setIsReordering] = useState(false);
   const achievements = useSelector((state: AppState) =>
     getAllAchievementMiniEntities(state),
   );
@@ -62,7 +63,13 @@ const AchievementsIndex: FC = () => {
 
   if (achievementPermissions?.canReorder) {
     headerToolbars.push(
-      <AchievementReordering key="achievementReorderingButton" />,
+      <AchievementReordering
+        key="achievementReorderingButton"
+        handleReordering={(state: boolean): void => {
+          setIsReordering(state);
+        }}
+        isReordering={isReordering}
+      />,
     );
   }
 
@@ -108,6 +115,7 @@ const AchievementsIndex: FC = () => {
           />
           <AchievementTable
             achievements={achievements}
+            isReordering={isReordering}
             onTogglePublished={onTogglePublished}
             permissions={achievementPermissions}
           />
