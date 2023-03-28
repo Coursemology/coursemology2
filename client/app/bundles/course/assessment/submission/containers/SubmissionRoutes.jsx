@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import SubmissionEditIndex from '../pages/SubmissionEditIndex';
 import SubmissionsIndex from '../pages/SubmissionsIndex';
 
-const SubmissionsLayout = () => {
+const SubmissionRoutes = () => {
   const submissionsIndex =
     '/courses/:courseId/assessments/:assessmentId/submissions';
   const submissionEdit =
@@ -17,4 +17,4 @@ const SubmissionsLayout = () => {
   );
 };
 
-export default SubmissionsLayout;
+export default SubmissionRoutes;

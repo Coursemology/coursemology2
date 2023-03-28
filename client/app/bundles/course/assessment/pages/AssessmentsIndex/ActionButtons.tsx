@@ -67,12 +67,11 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
 
       {assessment.submissionsUrl && (
         <Tooltip disableInteractive title={t(translations.submissions)}>
-          <IconButton
-            // TODO: Change to react-router Link once SPA
-            href={assessment.submissionsUrl}
-          >
-            <Inventory />
-          </IconButton>
+          <Link to={assessment.submissionsUrl}>
+            <IconButton>
+              <Inventory />
+            </IconButton>
+          </Link>
         </Tooltip>
       )}
 
