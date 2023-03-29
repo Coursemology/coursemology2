@@ -32,14 +32,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def show
-    unless can_access_assessment?
-      render 'authenticate'
-      return
-    end
-
     respond_to do |format|
       format.html
       format.json do
+        return render 'authenticate' unless can_access_assessment?
+
         @question_assessments = @assessment.question_assessments.with_question_actables
         @assessment_conditions = @assessment.assessment_conditions.includes({ conditional: :actable })
         @questions = @assessment.questions.includes({ actable: :test_cases })
@@ -125,12 +122,11 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   end
 
   def authenticate
-    if assessment_not_started(@assessment.time_for(current_course_user))
-      render json: { success: false }
-    elsif authentication_service.authenticate(params.require(:assessment).permit(:password)[:password])
-      render json: { success: true }
+    if assessment_not_started(@assessment.time_for(current_course_user)) ||
+       authentication_service.authenticate(params.require(:assessment).permit(:password)[:password])
+      render json: { redirectUrl: course_assessment_path(current_course, @assessment) }
     else
-      render json: { success: false }
+      render json: { errors: @assessment.errors }, status: :bad_request
     end
   end
 

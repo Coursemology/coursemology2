@@ -132,6 +132,13 @@ export interface AssessmentData extends AssessmentActionsData {
   newQuestionUrls?: NewQuestionBuilderData[];
 }
 
+export interface UnauthenticatedAssessmentData {
+  id: number;
+  isAuthenticated: boolean;
+  isStartTimeBegin: boolean;
+  startAt: string;
+}
+
 export interface AssessmentDeleteResult {
   redirect: string;
 }
@@ -141,3 +148,7 @@ export interface QuestionOrderPostData {
 }
 
 export type AssessmentUnlockRequirements = string[];
+
+export interface AssessmentAuthenticationFormData {
+  password: string;
+}

@@ -149,6 +149,20 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     return this.client.patch(convertUrl);
   }
 
+  /**
+   * Authenticate a user to access an assessment
+   * @param {string|number} assessmentId
+   * @param {object} params params in the format { password: string }
+   * @return {Promise}
+   * success response: {redirectUrl}
+   */
+  authenticate(assessmentId, params) {
+    return this.client.post(
+      `${this.#urlPrefix}/${assessmentId}/authenticate`,
+      params,
+    );
+  }
+
   get #urlPrefix() {
     return `/courses/${this.courseId}/assessments`;
   }

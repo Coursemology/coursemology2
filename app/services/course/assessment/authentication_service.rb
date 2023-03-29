@@ -22,6 +22,7 @@ class Course::Assessment::AuthenticationService
       set_session_token!
       true
     else
+      @assessment.errors.add(:password, I18n.t('helpers.password.wrong_password'))
       false
     end
   end

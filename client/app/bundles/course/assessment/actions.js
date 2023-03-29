@@ -53,6 +53,21 @@ export const deleteAssessment = async (deleteUrl) => {
   }
 };
 
+export const authenticateAssessment = async (assessmentId, data) => {
+  const adaptedData = { assessment: { password: data.password } };
+
+  try {
+    const response = await CourseAPI.assessment.assessments.authenticate(
+      assessmentId,
+      adaptedData,
+    );
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
+    throw error;
+  }
+};
+
 export const attemptAssessment = async (assessmentId) => {
   try {
     const response = await CourseAPI.assessment.assessments.attempt(
