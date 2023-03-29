@@ -940,6 +940,15 @@ const translations = defineMessages({
     id: 'course.assessment.submission.createSubmissionFailed',
     defaultMessage: 'Submission attempt failed! {error}',
   },
+  password: {
+    id: 'course.assessment.session.password',
+    defaultMessage: 'password',
+  },
+  lockedAssessment: {
+    id: 'course.assessment.session.createSubmissionFailed',
+    defaultMessage:
+      'The assessment is locked, please approach any course staff for assistance.',
+  },
 });
 
 export default translations;

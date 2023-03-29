@@ -11,7 +11,7 @@ class Course::Assessment::SessionsController < Course::Assessment::Controller
     if authentication_service.authenticate(create_params[:password])
       redirect_or_create_submission
     else
-      render json: { success: false }
+      render json: { errors: @assessment.errors }, status: :bad_request
     end
   end
 
@@ -36,11 +36,10 @@ class Course::Assessment::SessionsController < Course::Assessment::Controller
     if @submission
       log_service.log_submission_access(request)
       url = edit_course_assessment_submission_path(current_course, @assessment, @submission)
-      render json: { success: true, submission_url: url }
     else
-      url = course_assessment_submissions_path(current_course, @assessment)
-      render json: { success: true, create_submission_url: url }
+      url = course_assessment_path(current_course, @assessment)
     end
+    render json: { redirectUrl: url }
   end
 
   def create_params

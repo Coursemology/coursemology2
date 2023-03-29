@@ -4,6 +4,3 @@ zh:
       sessions:
         new:
           header: '输入密码'
-          message: '测验已被锁定，请向课程工作人员寻求帮助。'
-          placeholder: '密码'
-          continue: '继续'

@@ -1,28 +1,30 @@
 en:
   common:
-    not_started: "Not started"
-    ended: "Ended"
-    plain_text_link: "%{text} (%{url})"
-    click_here: "Click here"
-    percentage: "%{percentage}%"
+    not_started: 'Not started'
+    ended: 'Ended'
+    plain_text_link: '%{text} (%{url})'
+    click_here: 'Click here'
+    percentage: '%{percentage}%'
   helpers:
     submit:
       condition_level:
-        create: "Create Level Condition"
-        update: "Update Level Condition"
+        create: 'Create Level Condition'
+        update: 'Update Level Condition'
       condition_achievement:
-        create: "Create Achievement Condition"
-        update: "Update Achievement Condition"
+        create: 'Create Achievement Condition'
+        update: 'Update Achievement Condition'
       condition_assessment:
-        create: "Create Assessment Condition"
-        update: "Update Assessment Condition"
+        create: 'Create Assessment Condition'
+        update: 'Update Assessment Condition'
       condition_survey:
-        create: "Create Survey Condition"
-        update: "Update Survey Condition"
+        create: 'Create Survey Condition'
+        update: 'Update Survey Condition'
     buttons:
-      new: "New %{model}"
-      create: "Create %{model}"
-      edit: "Edit %{model}"
-      update: "Update %{model}"
-      delete: "Delete %{model}"
-      delete_confirm_message: "Are you sure?"
+      new: 'New %{model}'
+      create: 'Create %{model}'
+      edit: 'Edit %{model}'
+      update: 'Update %{model}'
+      delete: 'Delete %{model}'
+      delete_confirm_message: 'Are you sure?'
+    password:
+      wrong_password: 'Wrong password'
