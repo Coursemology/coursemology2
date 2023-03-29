@@ -287,7 +287,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     log_service.log_submission_access(request)
 
     respond_to do |format|
-      format.html { redirect_to new_session_path }
+      format.html { render 'edit' }
       format.json { render json: { newSessionUrl: new_session_path } }
     end
   end

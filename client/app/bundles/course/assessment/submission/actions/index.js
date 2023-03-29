@@ -87,39 +87,41 @@ export function fetchSubmission(id, onGetMonitoringSessionId) {
       .then((data) => {
         if (data.isSubmissionBlocked) {
           dispatch({ type: actionTypes.SUBMISSION_BLOCKED });
-        } else {
-          data.answers
-            .filter((a) => a.autograding && a.autograding.path)
-            .forEach((answer, index) => {
-              setTimeout(() => {
-                pollJob(
-                  answer.autograding.path,
-                  () =>
-                    dispatch(
-                      getEvaluationResult(
-                        id,
-                        answer.fields.id,
-                        answer.questionId,
-                      ),
-                    ),
-                  () =>
-                    dispatch({
-                      type: actionTypes.AUTOGRADE_FAILURE,
-                      questionId: answer.questionId,
-                    }),
-                  JOB_POLL_DELAY_MS,
-                );
-              }, JOB_STAGGER_DELAY_MS * index);
-            });
-
-          if (data.monitoringSessionId !== undefined)
-            onGetMonitoringSessionId?.(data.monitoringSessionId);
-
-          dispatch({
-            type: actionTypes.FETCH_SUBMISSION_SUCCESS,
-            payload: data,
-          });
+          return;
         }
+        if (data.newSessionUrl) {
+          window.location = data.newSessionUrl;
+          return;
+        }
+        data.answers
+          .filter((a) => a.autograding && a.autograding.path)
+          .forEach((answer, index) => {
+            setTimeout(() => {
+              pollJob(
+                answer.autograding.path,
+                () =>
+                  dispatch(
+                    getEvaluationResult(
+                      id,
+                      answer.fields.id,
+                      answer.questionId,
+                    ),
+                  ),
+                () =>
+                  dispatch({
+                    type: actionTypes.AUTOGRADE_FAILURE,
+                    questionId: answer.questionId,
+                  }),
+                JOB_POLL_DELAY_MS,
+              );
+            }, JOB_STAGGER_DELAY_MS * index);
+          });
+        if (data.monitoringSessionId !== undefined)
+          onGetMonitoringSessionId?.(data.monitoringSessionId);
+        dispatch({
+          type: actionTypes.FETCH_SUBMISSION_SUCCESS,
+          payload: data,
+        });
       })
       .catch(() => dispatch({ type: actionTypes.FETCH_SUBMISSION_FAILURE }));
   };
