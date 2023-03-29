@@ -20,15 +20,8 @@ zh:
           header: "新测验"
         edit:
           header: "编辑测验"
-        authenticate:
-          header: "输入密码"
-          message_not_started: "测验将于%{start_at}解锁"
-          message_unlock: "测验被锁定，请输入密码"
-          placeholder: "密码"
-          continue: "继续"
         assessment_question_bundle_buttons:
           question_groups: "组"
           question_bundles: "绑定项"
           question_bundle_questions: "绑定问题"
           question_bundle_assignments: "绑定作业"
-

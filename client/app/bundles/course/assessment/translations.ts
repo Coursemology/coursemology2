@@ -944,10 +944,20 @@ const translations = defineMessages({
     id: 'course.assessment.session.password',
     defaultMessage: 'password',
   },
-  lockedAssessment: {
-    id: 'course.assessment.session.createSubmissionFailed',
+  lockedSessionAssessment: {
+    id: 'course.assessment.session.lockedSessionAssessment',
     defaultMessage:
       'The assessment is locked, please approach any course staff for assistance.',
+  },
+  lockedAssessment: {
+    id: 'course.assessment.session.lockedAssessment',
+    defaultMessage:
+      'The assessment is locked, please input the password to continue.',
+  },
+  assessmentNotStarted: {
+    id: 'course.assessment.session.assessmentNotStarted',
+    defaultMessage:
+      'The assessment has not started yet. Please come back after {startDate}.',
   },
 });
 
