@@ -10,7 +10,6 @@ import {
   Box,
   Button,
   CardContent,
-  IconButton,
   Slide,
   TableCell,
   TableFooter,
@@ -199,13 +198,12 @@ const SkillsTable: FC<Props> = (props: Props) => {
         customBodyRenderLite: (dataIndex): JSX.Element | string => {
           if (tableType === TableEnum.SkillBranches) {
             return (
-              <IconButton
+              <ChevronRight
+                className="p-0"
                 id={`skill_branch_${
                   tableData[dataIndex] ? tableData[dataIndex].id : ''
                 }`}
-              >
-                <ChevronRight />
-              </IconButton>
+              />
             );
           }
           return ' ';

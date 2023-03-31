@@ -6,6 +6,7 @@ import {
   ExpandMore,
   OpenInNew,
 } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
 import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
@@ -94,9 +95,9 @@ export default class SelectedPostCard extends Component {
     return (
       <div style={styles.labelLeft}>
         {this.state.isExpanded ? (
-          <ExpandMore style={{ width: 20 }} />
+          <ExpandMore fontSize="small" />
         ) : (
-          <ChevronRight style={{ width: 20 }} />
+          <ChevronRight fontSize="small" />
         )}
         {topic.isDeleted ? (
           <span>
@@ -128,14 +129,14 @@ export default class SelectedPostCard extends Component {
       return null;
     }
     return (
-      <button
+      <IconButton
         className="pull-right"
-        onClick={() => this.props.onRemovePostPack()}
+        onClick={this.props.onRemovePostPack}
         style={styles.trashButton}
         type="button"
       >
         <Delete />
-      </button>
+      </IconButton>
     );
   }
 

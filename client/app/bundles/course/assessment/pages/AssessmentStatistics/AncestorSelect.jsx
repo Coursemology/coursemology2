@@ -129,9 +129,7 @@ const AncestorSelect = ({
                 ) : null}
               </CardContent>
             </Card>
-            {index !== ancestors.length - 1 ? (
-              <ArrowBack data-testid="ArrowBack" htmlColor="black" />
-            ) : null}
+            {index !== ancestors.length - 1 && <ArrowBack />}
           </Fragment>
         ))}
       </div>

@@ -1,6 +1,5 @@
 import { FormattedMessage } from 'react-intl';
 import { LockOpen } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import translations from '../../translations.intl';
@@ -39,9 +38,7 @@ const UnlockRateDisplay = (props) => {
 
   return (
     <div>
-      <IconButton style={styles.icon}>
-        <LockOpen />
-      </IconButton>
+      <LockOpen style={styles.icon} />
       <div style={{ ...styles.unlockRateBar, width }}>
         <div style={{ ...styles.filledPortion, width: unlockRate * width }} />
         <div

@@ -3,8 +3,7 @@ import {
   CropSquareRounded,
   RadioButtonUncheckedRounded,
 } from '@mui/icons-material';
-import { Button, IconButton } from '@mui/material';
-import { blue } from '@mui/material/colors';
+import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { scribingShapes } from '../../../constants';
@@ -22,36 +21,18 @@ const ShapeField = (props) => {
   return (
     <>
       <Button
-        className="forum-post-expand-button"
         color={currentShape === scribingShapes.RECT ? 'primary' : 'info'}
         onClick={() => setSelectedShape(scribingShapes.RECT)}
+        startIcon={<CropSquareRounded />}
       >
-        <IconButton
-          style={
-            currentShape === scribingShapes.RECT
-              ? { color: blue[500] }
-              : { color: 'rgba(0, 0, 0, 0.4)' }
-          }
-        >
-          <CropSquareRounded />
-        </IconButton>
         {intl.formatMessage(translations.rectangle)}
       </Button>
 
       <Button
-        className="forum-post-expand-button"
         color={currentShape === scribingShapes.ELLIPSE ? 'primary' : 'info'}
         onClick={() => setSelectedShape(scribingShapes.ELLIPSE)}
+        startIcon={<RadioButtonUncheckedRounded />}
       >
-        <IconButton
-          style={
-            currentShape === scribingShapes.ELLIPSE
-              ? { color: blue[500] }
-              : { color: 'rgba(0, 0, 0, 0.4)' }
-          }
-        >
-          <RadioButtonUncheckedRounded />
-        </IconButton>
         {intl.formatMessage(translations.ellipse)}
       </Button>
     </>
