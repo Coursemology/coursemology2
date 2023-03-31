@@ -15,26 +15,25 @@ const propTypes = {
   onClickChevron: PropTypes.func,
   colorBarBorder: PropTypes.string,
   colorBarBackground: PropTypes.string,
-  iconClassname: PropTypes.string,
-  iconComponent: PropTypes.func,
+  iconComponent: PropTypes.object,
 };
 
 const style = {
   tool: {
     position: 'relative',
     display: 'flex',
-    paddingRight: '5px',
+    alignItems: 'center',
     outline: 'none',
   },
   innerTool: {
-    alignItems: 'center',
+    textAlign: 'center',
     display: 'inline-block',
     outline: 'none',
   },
   chevron: {
     color: 'rgba(0, 0, 0, 0.4)',
     fontSize: '16px',
-    padding: '10px 0px 10px 0px',
+    padding: '0px',
   },
   disabled: {
     cursor: 'not-allowed',
@@ -73,15 +72,11 @@ export default class ToolDropdown extends Component {
       ? {
           width: '30px',
           height: '5px',
-          marginLeft: '5px',
-          marginBottom: '3px',
           background: '#c0c0c0',
         }
       : {
           width: '30px',
           height: '5px',
-          marginLeft: '5px',
-          marginBottom: '3px',
           backgroundColor,
           border: borderColor ? `${borderColor} 2px solid` : undefined,
         };
@@ -90,17 +85,16 @@ export default class ToolDropdown extends Component {
   }
 
   renderIcon() {
-    const { disabled, iconClassname, currentTool, toolType, iconComponent } =
-      this.props;
+    const {
+      disabled,
+      currentTool,
+      toolType,
+      iconComponent: IconComponent,
+    } = this.props;
     const iconStyle = disabled
       ? style.disabled
       : { color: currentTool === toolType ? blue[500] : 'rgba(0, 0, 0, 0.4)' };
-
-    return iconComponent ? (
-      iconComponent()
-    ) : (
-      <IconButton style={iconStyle}>{iconClassname}</IconButton>
-    );
+    return <IconComponent style={iconStyle} />;
   }
 
   render() {
