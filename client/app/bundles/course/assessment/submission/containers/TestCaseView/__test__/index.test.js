@@ -56,7 +56,7 @@ const privateTestCases = '#privateTestCases';
 const evaluationTestCases = '#evaluationTestCases';
 const standardOutput = '#standardOutput';
 const standardError = '#standardError';
-const warningIcon = 'i.fa-exclamation-triangle';
+const warningIcon = 'warning-icon';
 
 describe('TestCaseView', () => {
   describe('when viewing as staff', () => {
@@ -82,17 +82,17 @@ describe('TestCaseView', () => {
       );
 
       expect(
-        testCaseView.find(privateTestCases).find(warningIcon).exists(),
-      ).toBe(true);
+        testCaseView.find(privateTestCases).getByTestId(warningIcon),
+      ).toBeVisible();
       expect(
-        testCaseView.find(evaluationTestCases).find(warningIcon).exists(),
-      ).toBe(true);
-      expect(testCaseView.find(standardOutput).find(warningIcon).exists()).toBe(
-        true,
-      );
-      expect(testCaseView.find(standardError).find(warningIcon).exists()).toBe(
-        true,
-      );
+        testCaseView.find(evaluationTestCases).getByTestId(warningIcon),
+      ).toBeVisible();
+      expect(
+        testCaseView.find(standardOutput).getByTestId(warningIcon),
+      ).toBeVisible();
+      expect(
+        testCaseView.find(standardError).getByTestId(warningIcon),
+      ).toBeVisible();
     });
 
     describe('when showEvaluation & showPrivate are true', () => {
@@ -109,11 +109,11 @@ describe('TestCaseView', () => {
         );
 
         expect(
-          testCaseView.find(privateTestCases).find(warningIcon).exists(),
-        ).toBe(true);
+          testCaseView.find(privateTestCases).getByTestId(warningIcon),
+        ).toBeVisible();
         expect(
-          testCaseView.find(evaluationTestCases).find(warningIcon).exists(),
-        ).toBe(true);
+          testCaseView.find(evaluationTestCases).getByTestId(warningIcon),
+        ).toBeVisible();
       });
 
       it('does not render staff-only warnings when assessment is published', () => {
@@ -128,11 +128,11 @@ describe('TestCaseView', () => {
         );
 
         expect(
-          testCaseView.find(privateTestCases).find(warningIcon).exists(),
-        ).toBe(false);
+          testCaseView.find(privateTestCases).getByTestId(warningIcon),
+        ).not.toBeVisible();
         expect(
-          testCaseView.find(evaluationTestCases).find(warningIcon).exists(),
-        ).toBe(false);
+          testCaseView.find(evaluationTestCases).getByTestId(warningIcon),
+        ).not.toBeVisible();
       });
     });
 
@@ -148,11 +148,11 @@ describe('TestCaseView', () => {
         );
 
         expect(
-          testCaseView.find(standardOutput).find(warningIcon).exists(),
-        ).toBe(false);
+          testCaseView.find(standardOutput).getByTestId(warningIcon),
+        ).not.toBeVisible();
         expect(
-          testCaseView.find(standardError).find(warningIcon).exists(),
-        ).toBe(false);
+          testCaseView.find(standardError).getByTestId(warningIcon),
+        ).not.toBeVisible();
       });
     });
   });
@@ -170,7 +170,7 @@ describe('TestCaseView', () => {
         </ProviderWrapper>,
       );
 
-      expect(testCaseView.find(warningIcon).exists()).toBe(false);
+      expect(testCaseView.getByTestId(warningIcon)).not.toBeVisible();
     });
 
     it('shows standard streams when the flag is enabled', () => {

@@ -140,7 +140,7 @@ export class VisibleTestCaseView extends Component {
           data-offset="{'left' : -8}"
           data-tip
         >
-          <Warning />
+          <Warning data-testid="warning-icon"/>
         </a>
         <ReactTooltip effect="solid" id="staff-only-output-stream">
           <FormattedMessage {...translations.staffOnlyOutputStream} />
@@ -157,7 +157,7 @@ export class VisibleTestCaseView extends Component {
           data-offset="{'left' : -8}"
           data-tip
         >
-          <Warning />
+          <Warning data-testid="warning-icon"/>
         </a>
         <ReactTooltip effect="solid" id="staff-only-test-cases">
           <FormattedMessage {...translations.staffOnlyTestCases} />
