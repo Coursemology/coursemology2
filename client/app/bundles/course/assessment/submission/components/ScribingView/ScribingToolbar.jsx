@@ -287,11 +287,7 @@ class ScribingToolbar extends Component {
     const isEditRect =
       scribing.activeObject && scribing.activeObject.type === 'rect';
     const shapeIcon =
-      isNewRect || isEditRect ? (
-        <CropSquareRounded />
-      ) : (
-        <RadioButtonUncheckedRounded />
-      );
+      isNewRect || isEditRect ? CropSquareRounded : RadioButtonUncheckedRounded;
 
     const typePopoverProps = {
       open: this.state.popovers[scribingPopoverTypes.TYPE],
@@ -381,7 +377,7 @@ class ScribingToolbar extends Component {
                 scribing.activeObject.type !== 'i-text') ||
               false
             }
-            iconClassname={<FontDownloadOutlined />}
+            iconComponent={FontDownloadOutlined}
             onClickChevron={this.onClickTypingChevron}
             onClickIcon={this.onClickTypingIcon}
             tooltip={<FormattedMessage {...translations.text} />}
@@ -441,7 +437,7 @@ class ScribingToolbar extends Component {
                 scribing.activeObject.type !== 'path') ||
               false
             }
-            iconClassname={<CreateOutlined />}
+            iconComponent={CreateOutlined}
             onClick={this.onClickDrawingMode}
             onClickChevron={(event) =>
               this.onClickPopover(event, scribingPopoverTypes.DRAW)
@@ -505,7 +501,7 @@ class ScribingToolbar extends Component {
                 scribing.activeObject.type !== 'line') ||
               false
             }
-            iconClassname={<HorizontalRule />}
+            iconComponent={HorizontalRule}
             onClick={this.onClickLineMode}
             onClickChevron={(event) =>
               this.onClickPopover(event, scribingPopoverTypes.LINE)
@@ -594,7 +590,7 @@ class ScribingToolbar extends Component {
                 scribing.activeObject.type !== 'ellipse') ||
               false
             }
-            iconClassname={shapeIcon}
+            iconComponent={shapeIcon}
             onClick={this.onClickShapeMode}
             onClickChevron={(event) =>
               this.onClickPopover(event, scribingPopoverTypes.SHAPE)
