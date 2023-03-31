@@ -133,6 +133,7 @@ export const defaultPastAnswersDisplayed = 3;
 
 const actionTypes = mirrorCreator([
   'PURGE_SUBMISSION_STORE',
+  'PURGE_LOGS_STORE',
   'FETCH_SUBMISSION_REQUEST',
   'FETCH_SUBMISSION_SUCCESS',
   'FETCH_SUBMISSION_FAILURE',
@@ -207,6 +208,11 @@ const actionTypes = mirrorCreator([
   'UPDATE_MULTIPLIER',
   'ENTER_STUDENT_VIEW',
   'EXIT_STUDENT_VIEW',
+
+  // Logs related action types
+  'FETCH_LOGS_REQUEST',
+  'FETCH_LOGS_SUCCESS',
+  'FETCH_LOGS_FAILURE',
 
   'FETCH_SUBMISSIONS_REQUEST',
   'FETCH_SUBMISSIONS_SUCCESS',
