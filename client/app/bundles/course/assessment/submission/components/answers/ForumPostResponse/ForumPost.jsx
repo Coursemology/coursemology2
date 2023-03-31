@@ -81,7 +81,6 @@ export default class ForumPost extends Component {
             <Button
               className="forum-post-expand-button"
               color="primary"
-              id="add-level"
               onClick={(event) => {
                 event.persist();
                 this.setState((oldState) => ({

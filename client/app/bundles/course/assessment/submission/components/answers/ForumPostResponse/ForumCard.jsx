@@ -48,9 +48,6 @@ const styles = {
   container: {
     padding: 16,
   },
-  icon: {
-    marginLeft: 4,
-  },
   nonLastTopicCard: {
     marginBottom: 16,
   },
@@ -118,6 +115,7 @@ export default class ForumCard extends Component {
         <Divider />
         <AccordionActions style={styles.AccordionActions}>
           <Button
+            endIcon={<OpenInNew />}
             href={getForumURL(
               forumTopicPostPack.course.id,
               forumTopicPostPack.forum.id,
@@ -126,7 +124,6 @@ export default class ForumCard extends Component {
             variant="contained"
           >
             <FormattedMessage {...translations.viewForumInNewTab} />
-            <OpenInNew style={styles.icon} />
           </Button>
         </AccordionActions>
         <Divider />

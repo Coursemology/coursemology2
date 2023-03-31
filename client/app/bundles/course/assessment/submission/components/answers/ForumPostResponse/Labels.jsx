@@ -45,17 +45,13 @@ const Labels = ({ post }) => {
       {isPostUpdated && !isPostDeleted && (
         <div style={{ ...styles.label, ...styles.labelEdited }}>
           <Cached style={styles.iconWidth} />
-          <div>
-            <FormattedMessage {...translations.postEdited} />
-          </div>
+          <FormattedMessage {...translations.postEdited} />
         </div>
       )}
       {isPostDeleted && (
         <div style={{ ...styles.label, ...styles.labelDeleted }}>
           <Delete style={styles.iconWidth} />
-          <div>
-            <FormattedMessage {...translations.postDeleted} />
-          </div>
+          <FormattedMessage {...translations.postDeleted} />
         </div>
       )}
     </>

@@ -10,7 +10,6 @@ import {
   VisibilityOff,
 } from '@mui/icons-material';
 import { Icon } from '@mui/material';
-import { green, yellow } from '@mui/material/colors';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { ForumEntity, ForumTopicEntity } from 'types/course/forums';
@@ -95,32 +94,36 @@ const translations = defineMessages({
 const TopicTypeIcon: FC<{ topic: ForumTopicEntity }> = (props) => {
   const { topic } = props;
   const { t } = useTranslation();
-  const primary = green[500];
-  const secondary = yellow[700];
   let icon = <Icon />;
   switch (topic.topicType) {
     case 'question':
       if (topic.isResolved) {
         icon = (
           <CheckCircle
-            htmlColor={primary}
+            className="text-green-700"
+            fontSize="small"
             titleAccess={t(translations.resolved)}
           />
         );
       } else {
         icon = (
           <Help
-            htmlColor={secondary}
+            className="text-yellow-700"
+            fontSize="small"
             titleAccess={t(translations.unresolved)}
           />
         );
       }
       break;
     case 'sticky':
-      icon = <StickyNote2 titleAccess={t(translations.sticky)} />;
+      icon = (
+        <StickyNote2 fontSize="small" titleAccess={t(translations.sticky)} />
+      );
       break;
     case 'announcement':
-      icon = <Campaign titleAccess={t(translations.announcement)} />;
+      icon = (
+        <Campaign fontSize="small" titleAccess={t(translations.announcement)} />
+      );
       break;
     default:
       return null;
@@ -193,10 +196,16 @@ const ForumTopicTable: FC<Props> = (props) => {
                 </label>
                 <div className="flex items-center space-x-2 max-xl:mt-2 xl:ml-2">
                   {topic.isHidden && (
-                    <VisibilityOff titleAccess={t(translations.hidden)} />
+                    <VisibilityOff
+                      fontSize="small"
+                      titleAccess={t(translations.hidden)}
+                    />
                   )}
                   {topic.isLocked && (
-                    <Lock titleAccess={t(translations.locked)} />
+                    <Lock
+                      fontSize="small"
+                      titleAccess={t(translations.locked)}
+                    />
                   )}
                   <TopicTypeIcon topic={topic} />
                 </div>

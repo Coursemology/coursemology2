@@ -25,7 +25,7 @@ const ExistingPackageFile = (props) => {
     isLoading,
     isLast,
   } = props;
-  const buttonClass = toDelete ? <Undo /> : <Delete />;
+  const buttonIcon = toDelete ? <Undo /> : <Delete />;
   const buttonColor = toDelete ? 'white' : grey[300];
   const rowStyle = toDelete
     ? { textDecoration: 'line-through', backgroundColor: grey[100] }
@@ -51,7 +51,7 @@ const ExistingPackageFile = (props) => {
           }}
           variant="contained"
         >
-          {buttonClass}
+          {buttonIcon}
         </Button>
         <input
           checked={toDelete}

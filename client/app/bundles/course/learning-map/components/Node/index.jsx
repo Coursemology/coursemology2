@@ -1,17 +1,12 @@
 import { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import {
-  EmojiEvents,
-  Flight,
-  Folder,
-  Lock,
-  PieChart,
-  Videocam,
-} from '@mui/icons-material';
-import { Card, CardContent, IconButton } from '@mui/material';
+import { Lock } from '@mui/icons-material';
+import { Card, CardContent } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
+
+import { COURSE_COMPONENT_ICONS } from 'lib/constants/sharedConstants';
 
 import { nodeShape } from '../../propTypes';
 import translations from '../../translations.intl';
@@ -58,15 +53,6 @@ const styles = {
     padding: 0,
     position: 'absolute',
   },
-  icon: {
-    fontSize: 12,
-    padding: '1px',
-    marginTop: '0.25em',
-  },
-  lockIcon: {
-    marginLeft: 4,
-    opacity: 1.0,
-  },
   node: {
     border: '1px solid black',
     padding: 4,
@@ -88,15 +74,6 @@ const styles = {
   },
 };
 
-const icons = {
-  achievement: <EmojiEvents />,
-  assessment: <Flight />,
-  lock: <Lock />,
-  material: <Folder />,
-  survey: <PieChart />,
-  video: <Videocam />,
-};
-
 const Node = (props) => {
   const { canModify, getNodeConnectionPointId, node } = props;
 
@@ -107,6 +84,8 @@ const Node = (props) => {
     event.stopPropagation();
     setIsNodeMenuDisplayed(true);
   };
+
+  const IconComponent = COURSE_COMPONENT_ICONS[node.courseMaterialType];
 
   return (
     <div style={{ ...styles.wrapper, zIndex }}>
@@ -128,14 +107,8 @@ const Node = (props) => {
                 />
               </div>
             )}
-            <IconButton style={styles.icon}>
-              {icons[node.courseMaterialType]}
-            </IconButton>
-            {!canModify && !node.unlocked && (
-              <IconButton style={{ ...styles.icon, ...styles.lockIcon }}>
-                {icons.lock}
-              </IconButton>
-            )}
+            <IconComponent style={styles.icon} />
+            {!canModify && !node.unlocked && <Lock />}
           </CardContent>
           <div style={styles.content}>
             <CardContent style={styles.contentText}>

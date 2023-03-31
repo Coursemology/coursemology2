@@ -1,13 +1,7 @@
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Cancel } from '@mui/icons-material';
-import {
-  IconButton,
-  ListItemText,
-  ListSubheader,
-  MenuItem,
-  MenuList,
-} from '@mui/material';
+import { ListItemText, ListSubheader, MenuItem, MenuList } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
@@ -66,9 +60,7 @@ const NodeMenu = (props) => {
       <MenuList style={styles.wrapper}>
         <ListSubheader inset={false} style={styles.header}>
           <FormattedMessage {...translations.addCondition} />
-          <IconButton onClick={() => onCloseMenu()} style={styles.closeIcon}>
-            <Cancel />
-          </IconButton>
+          <Cancel onClick={onCloseMenu} style={styles.closeIcon} />
         </ListSubheader>
         {nodes.map((node) => (
           <MenuItem

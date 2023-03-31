@@ -52,9 +52,6 @@ const styles = {
     fontSize: 14,
     marginBottom: 12,
   },
-  clipIcon: {
-    color: 'white',
-  },
 };
 
 export default class ForumPostSelect extends Component {
@@ -172,7 +169,7 @@ export default class ForumPostSelect extends Component {
               color="primary"
               disabled={this.state.hasErrorFetchingPosts || maxPosts === 0}
               onClick={() => this.setState({ isDialogVisible: true })}
-              startIcon={<AttachFile />}
+              startIcon={<AttachFile aria-hidden="true" />}
               style={{ marginBottom: 16 }}
               variant="contained"
             >

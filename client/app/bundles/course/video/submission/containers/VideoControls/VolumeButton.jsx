@@ -14,12 +14,12 @@ const propTypes = {
 };
 
 const VolumeButton = (props) => {
-  let classButton = <VolumeUp fontSize="inherit" />;
+  let buttonIcon = <VolumeUp />;
 
   if (props.volume === 0) {
-    classButton = <VolumeMute fontSize="inherit" />;
+    buttonIcon = <VolumeMute />;
   } else if (props.volume < 0.5) {
-    classButton = <VolumeDown fontSize="inherit" />;
+    buttonIcon = <VolumeDown />;
   }
 
   return (
@@ -27,7 +27,7 @@ const VolumeButton = (props) => {
       className={styles.volumeButton}
       onClick={() => props.onClick(props.volume)}
     >
-      {classButton}
+      {buttonIcon}
     </span>
   );
 };

@@ -109,7 +109,7 @@ export default class TopicCard extends Component {
         <Divider />
         <AccordionActions style={styles.AccordionActions}>
           <Button
-            href={getForumTopicURL(courseId, forumId, topicPostPack.topic.ic)}
+            href={getForumTopicURL(courseId, forumId, topicPostPack.topic.id)}
             target="_blank"
             variant="contained"
           >

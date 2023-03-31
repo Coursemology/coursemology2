@@ -14,21 +14,14 @@ const propTypes = {
   onClick: PropTypes.func,
 };
 
-const PlayButton = (props) => {
-  const playIconClass = props.playing ? (
-    <Pause fontSize="inherit" />
-  ) : (
-    <PlayArrow fontSize="inherit" />
-  );
-  return (
-    <span
-      className={styles.playButton}
-      onClick={() => props.onClick(props.playing)}
-    >
-      {playIconClass}
-    </span>
-  );
-};
+const PlayButton = (props) => (
+  <span
+    className={styles.playButton}
+    onClick={() => props.onClick(props.playing)}
+  >
+    {props.playing ? <Pause /> : <PlayArrow />}
+  </span>
+);
 
 PlayButton.propTypes = propTypes;
 

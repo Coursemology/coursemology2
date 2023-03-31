@@ -88,8 +88,7 @@ const AchievementTable: FC<Props> = (props) => {
       options: {
         filter: false,
         sort: false,
-        customBodyRenderLite: (_dataIndex) =>
-          isReordering ? <DragIndicator /> : null,
+        customBodyRenderLite: (_) => (isReordering ? <DragIndicator /> : null),
       },
     },
     {

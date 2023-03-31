@@ -12,12 +12,8 @@ export default class AddCommentIcon extends Component {
     return (
       <div onClick={onClick}>
         <AddBox
+          className={`${hovered ? 'visible' : 'hidden'} flex items-center`}
           fontSize="small"
-          style={{
-            visibility: hovered ? 'visible' : 'hidden',
-            alignItems: 'center',
-            display: 'flex',
-          }}
         />
       </div>
     );

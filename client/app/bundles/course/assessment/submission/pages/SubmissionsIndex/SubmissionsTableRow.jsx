@@ -33,10 +33,6 @@ const styles = {
     flexWrap: 'nowrap',
     alignItems: 'center',
   },
-  phantomIcon: {
-    fontSize: '30px',
-    marginRight: '2px',
-  },
   chip: {
     width: 100,
   },
@@ -61,11 +57,7 @@ const formatGrade = (grade) => (grade !== null ? grade.toFixed(1) : null);
 
 const renderPhantomUserIcon = (submission) => {
   if (submission.courseUser.phantom) {
-    return (
-      <IconButton data-for="phantom-user" data-tip style={styles.phantomIcon}>
-        <GhostIcon />
-      </IconButton>
-    );
+    return <GhostIcon data-for="phantom-user" data-tip fontSize="small" />;
   }
   return null;
 };
@@ -298,13 +290,15 @@ const SubmissionsTableRow = (props) => {
     return (
       <TableRow key={submission.courseUser.id} className="submission-row">
         <TableCell style={styles.tableCell}>
-          {renderPhantomUserIcon(submission)}
-          <a
-            href={getCourseUserURL(courseId, submission.courseUser.id)}
-            style={styles.nameWrapper}
-          >
-            {submission.courseUser.name}
-          </a>
+          <span className="flex items-center">
+            {renderPhantomUserIcon(submission)}
+            <a
+              href={getCourseUserURL(courseId, submission.courseUser.id)}
+              style={styles.nameWrapper}
+            >
+              {submission.courseUser.name}
+            </a>
+          </span>
         </TableCell>
         <TableCell style={tableCenterCellStyle}>
           {renderSubmissionWorkflowState()}

@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Flight, Videocam } from '@mui/icons-material';
 import {
   Link,
   Paper,
@@ -12,6 +11,7 @@ import {
 } from '@mui/material';
 import { PersonalTimeMiniEntity } from 'types/course/personalTimes';
 
+import { COURSE_COMPONENT_ICONS } from 'lib/constants/sharedConstants';
 import { getAssessmentURL, getVideoURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import tableTranslations from 'lib/translations/table';
@@ -40,27 +40,6 @@ const translations = defineMessages({
   },
 });
 
-const icons = {
-  assessment: (
-    <Flight
-      style={{
-        fontSize: 12,
-        marginRight: '4px',
-        verticalAlign: 'inherit',
-      }}
-    />
-  ),
-  video: (
-    <Videocam
-      style={{
-        fontSize: 12,
-        marginRight: '4px',
-        verticalAlign: 'inherit',
-      }}
-    />
-  ),
-};
-
 const getLink = (item: PersonalTimeMiniEntity): JSX.Element => {
   let url = '';
   const courseId = getCourseId();
@@ -85,8 +64,9 @@ const getIcon = (item: PersonalTimeMiniEntity): JSX.Element => {
   } else if (item.type === ITEM_ACTABLE_TYPES.assessment.name) {
     materialType = 'assessment';
   }
+  const IconComponent = COURSE_COMPONENT_ICONS[materialType];
 
-  return icons[materialType];
+  return <IconComponent fontSize="small" />;
 };
 
 const PersonalTimesTable: FC<Props> = (props) => {
@@ -95,7 +75,7 @@ const PersonalTimesTable: FC<Props> = (props) => {
   const renderRow = (item: PersonalTimeMiniEntity): JSX.Element => {
     return (
       <TableRow key={item.id} hover>
-        <TableCell>
+        <TableCell className="flex items-center space-x-1">
           {getIcon(item)}
           {getLink(item)}
         </TableCell>
