@@ -13,7 +13,6 @@
     "lodash",
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-proposal-class-properties",
-    "@babel/plugin-syntax-jsx",
     [
       "formatjs",
       {
