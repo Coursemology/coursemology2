@@ -229,7 +229,7 @@ class VisibleGradingPanel extends Component {
     return (
       <div className="flex flex-row items-center">
         {intl.formatMessage(translations[workflowState])}
-        {workflowState !== workflowStates.Graded ? (
+        {workflowState === workflowStates.Graded ? (
           <span style={{ display: 'inline-block', marginLeft: 5 }}>
             <a
               data-for="unpublished-grades"

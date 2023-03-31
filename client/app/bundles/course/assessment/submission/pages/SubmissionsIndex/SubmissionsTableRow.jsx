@@ -63,7 +63,7 @@ const renderPhantomUserIcon = (submission) => {
 };
 
 const renderUnpublishedWarning = (submission) => {
-  if (submission.workflowState === workflowStates.Graded) return null;
+  if (submission.workflowState !== workflowStates.Graded) return null;
   return (
     <span style={{ display: 'inline-block', paddingLeft: 5 }}>
       <div data-for="unpublished-grades" data-offset="{'left' : -8}" data-tip>
