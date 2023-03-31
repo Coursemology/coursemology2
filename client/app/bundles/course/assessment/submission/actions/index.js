@@ -674,3 +674,9 @@ export function purgeSubmissionStore() {
     dispatch({ type: actionTypes.PURGE_SUBMISSION_STORE });
   };
 }
+
+export function purgeLogsStore() {
+  return (dispatch) => {
+    dispatch({ type: actionTypes.PURGE_LOGS_STORE });
+  };
+}
