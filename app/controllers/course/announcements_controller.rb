@@ -7,7 +7,7 @@ class Course::AnnouncementsController < Course::ComponentController
     respond_to do |format|
       format.html
       format.json do
-        @announcements = @announcements.includes(:creator).sorted_by_sticky.sorted_by_date
+        @announcements = @announcements.includes(:creator)
         @announcements = @announcements.with_read_marks_for(current_user)
         mark_announcements_as_read
         render 'index'

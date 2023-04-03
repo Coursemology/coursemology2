@@ -55,7 +55,7 @@ RSpec.feature 'System: Administration: Announcements' do
 
       scenario 'I can see all announcements' do
         create_list(:system_announcement, 2)
-        announcements = System::Announcement.sorted_by_date.first(2)
+        announcements = System::Announcement.first(2)
         visit admin_announcements_path
         expect(page).to have_selector('#new-announcement-button')
 
@@ -68,7 +68,7 @@ RSpec.feature 'System: Administration: Announcements' do
 
       scenario 'I can delete announcements' do
         create(:system_announcement)
-        announcement = System::Announcement.sorted_by_date.first
+        announcement = System::Announcement.first
         visit admin_announcements_path
 
         find("#announcement-delete-button-#{announcement.id}").click
