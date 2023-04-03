@@ -4,6 +4,7 @@ import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { GlobalAnnouncementState } from 'bundles/announcements/types';
 import { AchievementsState } from 'bundles/course/achievement/types';
 import { AnnouncementsState } from 'bundles/course/announcements/types';
+import { MonitoringState } from 'bundles/course/assessment/pages/AssessmentMonitoring/types';
 import { SkillState } from 'bundles/course/assessment/skills/types';
 import { SubmissionsState } from 'bundles/course/assessment/submissions/types';
 import { CoursesState } from 'bundles/course/courses/types';
@@ -43,6 +44,7 @@ export interface AppState {
   videos: VideosState;
   global: { user: GlobalUserState; announcements: GlobalAnnouncementState };
   timelines: TimelinesState;
+  monitoring: MonitoringState;
 }
 
 export type Operation<R = void> = ThunkAction<

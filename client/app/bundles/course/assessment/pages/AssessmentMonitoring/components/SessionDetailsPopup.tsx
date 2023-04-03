@@ -1,0 +1,209 @@
+import Draggable from 'react-draggable';
+import { Cancel, CheckCircle, Close } from '@mui/icons-material';
+import { Chip, IconButton, Popover, Typography } from '@mui/material';
+import { HeartbeatDetail } from 'types/channels/liveMonitoring';
+
+import { VerticalTable } from 'lib/components/core/table';
+import useTranslation from 'lib/hooks/useTranslation';
+import { formatPreciseDateTime, formatPreciseTime } from 'lib/moment';
+
+import translations from '../../../translations';
+
+interface SessionDetailsPopupProps {
+  for: string;
+  showing: HeartbeatDetail[];
+  open: boolean;
+  onClose: () => void;
+  generatedAt?: string;
+  anchorsOn?: HTMLElement;
+  hasSEBHash?: boolean;
+}
+
+interface BlankableProps {
+  of?: string;
+  className?: string;
+}
+
+interface ValidableProps extends BlankableProps {
+  valid?: boolean;
+}
+
+const Blankable = ({ of: value, className }: BlankableProps): JSX.Element => {
+  const { t } = useTranslation();
+
+  return value !== undefined ? (
+    <Typography className={className} variant="body2">
+      {value}
+    </Typography>
+  ) : (
+    <Typography
+      className={`italic ${className ?? ''}`}
+      color="text.disabled"
+      variant="body2"
+    >
+      {t(translations.blankField)}
+    </Typography>
+  );
+};
+
+const Validable = ({ valid, ...props }: ValidableProps): JSX.Element => (
+  <div className="flex items-center space-x-2">
+    {valid ? <CheckCircle color="success" /> : <Cancel color="error" />}
+    <Blankable {...props} />
+  </div>
+);
+
+const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
+  const {
+    anchorsOn: anchorElement,
+    for: name,
+    showing: heartbeats,
+    generatedAt: time,
+  } = props;
+
+  const lastHeartbeat = heartbeats[0];
+
+  const { t } = useTranslation();
+
+  return (
+    <Draggable handle=".handle">
+      <Popover
+        anchorEl={anchorElement}
+        classes={{
+          paper:
+            'px-4 pb-4 @container w-[36rem] shadow-xl border border-solid border-neutral-200 space-y-4 resize',
+        }}
+        elevation={0}
+        onClose={props.onClose}
+        open={props.open}
+        transformOrigin={{ vertical: 'center', horizontal: 'center' }}
+      >
+        <header className="handle sticky top-0 -mx-4 mb-4 cursor-move border-0 border-b border-solid border-neutral-200 bg-white p-4">
+          <IconButton
+            className="float-right ml-5"
+            edge="end"
+            onClick={props.onClose}
+            size="small"
+          >
+            <Close />
+          </IconButton>
+
+          <Typography>{name}</Typography>
+
+          <Typography color="text.secondary" variant="caption">
+            {t(translations.summaryCorrectAsAt, {
+              time: formatPreciseDateTime(time),
+            })}
+          </Typography>
+        </header>
+
+        <Typography
+          className="ml-2 !-mb-1"
+          color="text.secondary"
+          variant="body2"
+        >
+          {t(translations.lastHeartbeat)}
+        </Typography>
+
+        <section className="space-y-4 rounded-lg bg-neutral-100 p-4">
+          <section>
+            <Typography color="text.secondary" variant="caption">
+              {t(translations.generatedAt)}
+            </Typography>
+
+            <Typography variant="body2">
+              {formatPreciseDateTime(lastHeartbeat?.generatedAt)}
+            </Typography>
+          </section>
+
+          {props.hasSEBHash && (
+            <section>
+              <Typography color="text.secondary" variant="caption">
+                {t(translations.sebHash)}
+              </Typography>
+
+              <Validable
+                className="break-all"
+                of={lastHeartbeat?.sebHash}
+                valid={lastHeartbeat?.isValidSEBHash}
+              />
+            </section>
+          )}
+
+          <section>
+            <Typography color="text.secondary" variant="caption">
+              {t(translations.userAgent)}
+            </Typography>
+
+            <Blankable of={lastHeartbeat?.userAgent} />
+          </section>
+        </section>
+
+        <Typography
+          className="!-mb-1 ml-2 !mt-7"
+          color="text.secondary"
+          variant="body2"
+        >
+          {t(translations.detailsOfNHeartbeats, {
+            n: heartbeats.length,
+          })}
+        </Typography>
+
+        <VerticalTable
+          data={heartbeats}
+          dense
+          headerClassName="whitespace-nowrap"
+          rowKey={(heartbeat): string => heartbeat.generatedAt?.toString()}
+          variant="outlined"
+        >
+          {[
+            {
+              header: t(translations.generatedAt),
+              content: ({ generatedAt }) => formatPreciseTime(generatedAt),
+              className: '@lg:sticky @lg:left-0 @lg:bg-neutral-100 z-10',
+            },
+            {
+              header: t(translations.sebHash),
+              content: ({ sebHash, isValidSEBHash }) =>
+                props.hasSEBHash ? (
+                  <Validable of={sebHash} valid={isValidSEBHash} />
+                ) : (
+                  <Blankable of={sebHash} />
+                ),
+            },
+            {
+              header: t(translations.type),
+              content: ({ stale }) =>
+                stale ? (
+                  <Chip
+                    color="info"
+                    label={t(translations.stale)}
+                    size="small"
+                    variant="outlined"
+                  />
+                ) : (
+                  <Chip
+                    color="success"
+                    label={t(translations.live)}
+                    size="small"
+                    variant="outlined"
+                  />
+                ),
+            },
+            {
+              header: t(translations.ipAddress),
+              content: ({ ipAddress }) => <Blankable of={ipAddress} />,
+            },
+            {
+              header: t(translations.userAgent),
+              content: ({ userAgent }) => <Blankable of={userAgent} />,
+              className: 'whitespace-nowrap',
+            },
+          ]}
+        </VerticalTable>
+      </Popover>
+    </Draggable>
+  );
+};
+
+export default SessionDetailsPopup;
