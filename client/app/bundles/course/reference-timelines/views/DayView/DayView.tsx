@@ -1,7 +1,8 @@
 import { ComponentRef, useMemo, useRef, useState } from 'react';
-import { Chip, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { TimelineData } from 'types/course/referenceTimelines';
 
+import BetaChip from 'lib/components/core/BetaChip';
 import SearchField from 'lib/components/core/fields/SearchField';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -63,12 +64,7 @@ const DayView = (): JSX.Element => {
               {t(translations.timelineDesigner)}
             </Typography>
 
-            <Chip
-              color="success"
-              label={t(translations.beta)}
-              size="small"
-              variant="outlined"
-            />
+            <BetaChip />
           </div>
 
           <SearchField

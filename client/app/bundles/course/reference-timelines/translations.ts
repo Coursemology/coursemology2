@@ -103,10 +103,6 @@ export default defineMessages({
     id: 'course.timelines.searchItems',
     defaultMessage: 'Search items',
   },
-  beta: {
-    id: 'course.timelines.beta',
-    defaultMessage: 'Beta',
-  },
   saving: {
     id: 'course.timelines.saving',
     defaultMessage: 'Saving...',
