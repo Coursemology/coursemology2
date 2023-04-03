@@ -7,9 +7,11 @@ json.display do
   json.isGamified current_course.gamified?
   json.allowRandomization current_course.allow_randomization
   json.isAchievementsEnabled achievements_enabled
+  json.isMonitoringEnabled @monitoring_component_enabled
   json.bonusAttributes show_bonus_attributes?
   json.endTimes show_end_at?
   json.canCreateAssessments can?(:create, Course::Assessment.new(tab: @tab))
+  json.canManageMonitor @can_manage_monitor && @monitoring_component_enabled
 
   json.category do
     json.id @category.id
@@ -27,7 +29,7 @@ json.assessments @assessments do |assessment|
   json.id assessment.id
   json.title assessment.title
 
-  json.passwordProtected !assessment.view_password.nil?
+  json.passwordProtected assessment.view_password_protected?
   json.published assessment.published?
   json.autograded assessment.autograded?
   json.hasPersonalTimes current_course.show_personalized_timeline_features && assessment.has_personal_times?

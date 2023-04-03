@@ -63,11 +63,14 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     # Randomized Assessment is temporarily hidden (PR#5406)
     # @assessment.update_randomization(randomization_params)
 
-    if @assessment.save
-      render json: { id: @assessment.id }, status: :ok
-    else
-      render json: { errors: @assessment.errors }, status: :bad_request
+    ActiveRecord::Base.transaction do
+      monitoring_service&.upsert!(monitoring_params) if @assessment.view_password_protected? && can_manage_monitor?
+      @assessment.save!
+
+      render json: { id: @assessment.id }
     end
+  rescue StandardError
+    render json: { errors: @assessment.errors }, status: :bad_request
   end
 
   def edit
@@ -182,6 +185,10 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
 
   def autograded_params
     params.require(:assessment).permit(:autograded)
+  end
+
+  def monitoring_params
+    params.require(:assessment).permit(monitoring: Course::Assessment::MonitoringService.params)[:monitoring]
   end
 
   # Randomized Assessment is temporarily hidden (PR#5406)
