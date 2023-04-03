@@ -14,6 +14,8 @@ json.attributes do
   # Randomized Assessment is temporarily hidden (PR#5406)
   # Pass as boolean since there is only one enum value
   # json.randomization @assessment.randomization.present?
+
+  json.partial! 'monitoring_details' if @monitor.present?
 end
 
 json.tab_attributes do
@@ -26,6 +28,10 @@ json.mode_switching @assessment.allow_mode_switching?
 json.gamified current_course.gamified?
 json.show_personalized_timeline_features current_course.show_personalized_timeline_features?
 json.randomization_allowed current_course.allow_randomization
+
+json.monitoring_component_enabled @monitoring_component_enabled
+json.can_manage_monitor @can_manage_monitor && @monitoring_component_enabled
+json.monitoring_url monitoring_course_assessment_path(current_course, @assessment)
 
 json.folder_attributes do
   json.folder_id @assessment.folder.id
