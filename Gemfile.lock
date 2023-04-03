@@ -207,7 +207,7 @@ GEM
     consistency_fail (0.3.7)
     crass (1.0.6)
     date (3.3.3)
-    devise (4.8.1)
+    devise (4.9.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
@@ -405,7 +405,7 @@ GEM
       rack
     rack-proxy (0.7.6)
       rack
-    rack-test (2.0.2)
+    rack-test (2.1.0)
       rack (>= 1.3)
     rails (6.0.6.1)
       actioncable (= 6.0.6.1)
@@ -670,7 +670,7 @@ DEPENDENCIES
   codecov
   consistency_fail
   coursemology-polyglot!
-  devise (= 4.8.1)
+  devise (= 4.9.2)
   devise-multi_email
   devise_masquerade
   docker-api
