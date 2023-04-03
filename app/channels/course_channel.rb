@@ -7,7 +7,9 @@
 # - `current_tenant`
 # - `current_course`
 # - `current_course_user`
+# - `current_component_host`
 class CourseChannel < ApplicationCable::Channel
   include ApplicationCableMultitenancyConcern
   include ApplicationCableCourseConcern
+  include ApplicationCableComponentConcern
 end
