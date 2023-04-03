@@ -8,7 +8,7 @@ class System::Admin::Instance::AnnouncementsController < System::Admin::Instance
     respond_to do |format|
       format.html { render 'system/admin/instance/admin/index' }
       format.json do
-        @announcements = @announcements.includes(:creator).sorted_by_date
+        @announcements = @announcements.includes(:creator)
       end
     end
   end

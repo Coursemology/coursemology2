@@ -12,8 +12,7 @@ class Course::CoursesController < Course::Controller
       format.html { render layout: 'course' }
       format.json do
         @currently_active_announcements = current_course.announcements.
-                                          currently_active.includes(:creator).
-                                          sorted_by_sticky.sorted_by_date
+                                          currently_active.includes(:creator)
         @activity_feeds = recent_activity_feeds.limit(20).preload(activity: [{ object: { topic: { actable: :forum } } },
                                                                              :actor])
         load_activity_course_users
