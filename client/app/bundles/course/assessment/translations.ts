@@ -813,6 +813,90 @@ const translations = defineMessages({
     defaultMessage:
       'You must choose either exact match or keyword as solution type.',
   },
+  recentActivities: {
+    id: 'course.assessment.monitoring.recentActivities',
+    defaultMessage: 'Recent activities',
+  },
+  recentActivitiesHint: {
+    id: 'course.assessment.monitoring.recentActivitiesHint',
+    defaultMessage: 'These logs will disappear if you close this tab!',
+  },
+  connected: {
+    id: 'course.assessment.monitoring.connected',
+    defaultMessage: 'Connected',
+  },
+  disconnected: {
+    id: 'course.assessment.monitoring.disconnected',
+    defaultMessage: 'Disconnected',
+  },
+  filterByGroup: {
+    id: 'course.assessment.monitoring.filterByGroup',
+    defaultMessage: 'Filter by Group',
+  },
+  pulsegrid: {
+    id: 'course.assessment.monitoring.pulsegrid',
+    defaultMessage: 'PulseGrid',
+  },
+  summaryCorrectAsAt: {
+    id: 'course.assessment.monitoring.summaryCorrectAsAt',
+    defaultMessage: 'Summary correct as at {time}',
+  },
+  lastHeartbeat: {
+    id: 'course.assessment.monitoring.lastHeartbeat',
+    defaultMessage: 'Last heartbeat',
+  },
+  generatedAt: {
+    id: 'course.assessment.monitoring.generatedAt',
+    defaultMessage: 'Generated at',
+  },
+  sebHash: {
+    id: 'course.assessment.monitoring.sebHash',
+    defaultMessage: 'SEB Config Key',
+  },
+  userAgent: {
+    id: 'course.assessment.monitoring.userAgent',
+    defaultMessage: 'User Agent',
+  },
+  type: {
+    id: 'course.assessment.monitoring.type',
+    defaultMessage: 'Type',
+  },
+  stale: {
+    id: 'course.assessment.monitoring.stale',
+    defaultMessage: 'Stale',
+  },
+  live: {
+    id: 'course.assessment.monitoring.live',
+    defaultMessage: 'Live',
+  },
+  ipAddress: {
+    id: 'course.assessment.monitoring.ipAddress',
+    defaultMessage: 'IP Address',
+  },
+  detailsOfNHeartbeats: {
+    id: 'course.assessment.monitoring.detailsOfNHeartbeats',
+    defaultMessage: 'Details of the last {n} heartbeats',
+  },
+  connectedToLiveMonitoringChannel: {
+    id: 'course.assessment.monitoring.connectedToLiveMonitoringChannel',
+    defaultMessage: 'Connected to the live monitoring channel',
+  },
+  disconnectedFromLiveMonitoringChannel: {
+    id: 'course.assessment.monitoring.disconnectedFromLiveMonitoringChannel',
+    defaultMessage: 'Disconnected from the live monitoring channel',
+  },
+  userHeartbeatNotReceivedInTime: {
+    id: 'course.assessment.monitoring.userHeartbeatNotReceivedInTime',
+    defaultMessage: "{name}'s heartbeat wasn't received in time.",
+  },
+  userHeartbeatContinuedStreaming: {
+    id: 'course.assessment.monitoring.userHeartbeatContinuedStreaming',
+    defaultMessage: "{name}'s heartbeat just continued streaming.",
+  },
+  blankField: {
+    id: 'course.assessment.monitoring.blankField',
+    defaultMessage: '(blank)',
+  },
 });
 
 export default translations;

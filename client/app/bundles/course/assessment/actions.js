@@ -243,3 +243,8 @@ export function fetchAncestorStatistics(ancestorId, failureMessage) {
       });
   };
 }
+
+export const fetchMonitoringData = async () => {
+  const response = await CourseAPI.assessment.assessments.fetchMonitoringData();
+  return response.data;
+};

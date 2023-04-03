@@ -35,6 +35,12 @@ export default class AssessmentsAPI extends BaseCourseAPI {
     return this.client.get(`${this.#urlPrefix}/${assessmentId}/edit`);
   }
 
+  fetchMonitoringData() {
+    return this.client.get(
+      `${this.#urlPrefix}/${this.assessmentId}/monitoring`,
+    );
+  }
+
   /**
    * Create an assessment.
    *

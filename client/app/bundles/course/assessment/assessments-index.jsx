@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
 import AssessmentEdit from './pages/AssessmentEdit';
+import AssessmentMonitoring from './pages/AssessmentMonitoring';
 import AssessmentShow from './pages/AssessmentShow';
 import AssessmentsIndex from './pages/AssessmentsIndex';
 import AssessmentStatisticsPage from './pages/AssessmentStatistics';
@@ -31,6 +32,12 @@ $(() => {
             element={<AssessmentEdit />}
             path="/courses/:courseId/assessments/:assessmentId/edit"
           />
+
+          <Route
+            element={<AssessmentMonitoring />}
+            path="/courses/:courseId/assessments/:assessmentId/monitoring"
+          />
+
           <Route
             element={<AssessmentStatisticsPage />}
             path="/courses/:courseId/assessments/:assessmentId/statistics"

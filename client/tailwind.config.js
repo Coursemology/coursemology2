@@ -1,5 +1,6 @@
 const plugin = require('tailwindcss/plugin');
 const lineClamp = require('@tailwindcss/line-clamp');
+const containerQueries = require('@tailwindcss/container-queries');
 const {
   default: flattenColorPalette,
 } = require('tailwindcss/lib/util/flattenColorPalette');
@@ -22,6 +23,7 @@ module.exports = {
       },
       animation: {
         shake: 'shake 0.82s cubic-bezier(.36,.07,.19,.97) both',
+        flash: 'flash 1s ease-in-out',
       },
       keyframes: {
         shake: {
@@ -29,6 +31,10 @@ module.exports = {
           '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
           '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
           '40%, 60%': { transform: 'translate3d(4px, 0, 0)' },
+        },
+        flash: {
+          '0%': { backgroundColor: `var(${SLOTTED_COLOR_VAR}-1)` },
+          '100%': { backgroundColor: 'transparent' },
         },
       },
       colors: {
@@ -63,6 +69,7 @@ module.exports = {
       );
     }),
     lineClamp,
+    containerQueries,
     plugin(({ matchUtilities, theme }) => {
       matchUtilities(
         {
