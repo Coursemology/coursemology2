@@ -77,7 +77,7 @@ function getEvaluationResult(submissionId, answerId, questionId) {
   };
 }
 
-export function fetchSubmission(id) {
+export function fetchSubmission(id, onGetMonitoringSessionId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.FETCH_SUBMISSION_REQUEST });
 
@@ -108,6 +108,9 @@ export function fetchSubmission(id) {
               );
             }, JOB_STAGGER_DELAY_MS * index);
           });
+
+        if (data.monitoringSessionId !== undefined)
+          onGetMonitoringSessionId?.(data.monitoringSessionId);
 
         dispatch({
           type: actionTypes.FETCH_SUBMISSION_SUCCESS,

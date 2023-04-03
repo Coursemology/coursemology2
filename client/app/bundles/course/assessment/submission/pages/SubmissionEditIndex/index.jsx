@@ -11,6 +11,7 @@ import {
   Switch,
 } from '@mui/material';
 import PropTypes from 'prop-types';
+import withHeartbeatWorker from 'workers/withHeartbeatWorker';
 
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -75,11 +76,8 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   componentDidMount() {
-    const {
-      dispatch,
-      match: { params },
-    } = this.props;
-    dispatch(fetchSubmission(params.submissionId));
+    const { dispatch, match, setSessionId } = this.props;
+    dispatch(fetchSubmission(match.params.submissionId, setSessionId));
   }
 
   handleAutogradeSubmission() {
@@ -465,6 +463,7 @@ VisibleSubmissionEditIndex.propTypes = {
   isAutograding: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
+  setSessionId: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -490,6 +489,7 @@ function mapStateToProps(state) {
 }
 
 const SubmissionEditIndex = withRouter(
-  connect(mapStateToProps)(VisibleSubmissionEditIndex),
+  withHeartbeatWorker(connect(mapStateToProps)(VisibleSubmissionEditIndex)),
 );
+
 export default SubmissionEditIndex;
