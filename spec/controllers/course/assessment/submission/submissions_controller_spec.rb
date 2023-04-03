@@ -67,7 +67,8 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
       end
 
-      context 'when a submission of a randomized assesment creation fails' do
+      # Randomized Assessment is temporarily hidden (PR#5406)
+      xcontext 'when a submission of a randomized assesment creation fails' do
         subject do
           post :create, params: { course_id: course, assessment_id: randomized_assessment }
         end
