@@ -9,7 +9,9 @@ import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
 import NewAnnouncementButton from '../../components/buttons/NewAnnouncementButton';
-import AnnouncementsDisplay from '../../components/misc/AnnouncementsDisplay';
+import AnnouncementsDisplay, {
+  sortAnnouncements,
+} from '../../components/misc/AnnouncementsDisplay';
 import {
   createAnnouncement,
   deleteAnnouncement,
@@ -91,7 +93,7 @@ const AnnouncementsIndex: FC<Props> = (props) => {
           ) : (
             <AnnouncementsDisplay
               announcementPermissions={announcementPermissions}
-              announcements={announcements}
+              announcements={sortAnnouncements(announcements)}
               deleteOperation={deleteAnnouncement}
               updateOperation={updateAnnouncement}
             />

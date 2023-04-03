@@ -32,6 +32,17 @@ const translations = defineMessages({
   },
 });
 
+export const sortAnnouncements = (
+  announcements: AnnouncementMiniEntity[],
+): AnnouncementMiniEntity[] => {
+  const sortedAnnouncements = [...announcements];
+  sortedAnnouncements
+    .sort((a, b) => Date.parse(b.startTime) - Date.parse(a.startTime))
+    .sort((a, b) => +b.isSticky - +a.isSticky)
+    .sort((a, b) => +b.isCurrentlyActive - +a.isCurrentlyActive);
+  return sortedAnnouncements;
+};
+
 const AnnouncementsDisplay: FC<Props> = (props) => {
   const {
     intl,
