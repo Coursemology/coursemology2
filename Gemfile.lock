@@ -207,7 +207,7 @@ GEM
     consistency_fail (0.3.7)
     crass (1.0.6)
     date (3.3.3)
-    devise (4.8.1)
+    devise (4.9.2)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
@@ -668,7 +668,7 @@ DEPENDENCIES
   codecov
   consistency_fail
   coursemology-polyglot!
-  devise (= 4.8.1)
+  devise (= 4.9.2)
   devise-multi_email
   devise_masquerade
   docker-api
