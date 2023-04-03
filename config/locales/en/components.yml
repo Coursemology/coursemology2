@@ -41,3 +41,5 @@ en:
       name: 'Codaveri Evaluation and Feedback'
     multiple_reference_timelines:
       name: 'Multiple Reference Timelines'
+    monitoring:
+      name: 'Monitoring'
