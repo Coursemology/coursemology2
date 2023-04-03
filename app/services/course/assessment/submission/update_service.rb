@@ -141,7 +141,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def update_submission # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity, Metrics/MethodLength
-    @submission.class.transaction do
+    updated = @submission.class.transaction do
       unless unsubmit? || unmark?
         update_answers_params[:answers]&.each do |answer_params|
           next if answer_params[:id].blank?
@@ -153,18 +153,26 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
           end
         end
       end
+
       unless @submission.update(update_submission_params)
         logger.error("Failed to update submission #{@submission.errors.inspect}")
         raise ActiveRecord::Rollback
       end
+
       true
     end
+
+    @monitoring_service&.stop! if finalise? && updated
   end
 
   def update_answer(answer, answer_params)
     specific_answer = answer.specific
     specific_answer.assign_params(answer_params)
     answer.save
+  end
+
+  def finalise?
+    update_submission_params[:finalise] == 'true'
   end
 
   def unsubmit?
