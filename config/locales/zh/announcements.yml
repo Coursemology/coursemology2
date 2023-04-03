@@ -2,7 +2,5 @@ zh:
   announcements:
     index:
       header: '全部公告'
-    announcement:
-      sticky: '便签'
     global_announcement:
       close: '关闭'
