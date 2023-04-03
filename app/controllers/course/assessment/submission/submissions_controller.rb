@@ -298,6 +298,29 @@ class Course::Assessment::Submission::SubmissionsController < \
       Course::Assessment::SessionLogService.new(@assessment, session, @submission)
   end
 
+  def monitoring_component_enabled?
+    current_component_host[:course_monitoring_component].present?
+  end
+
+  def should_monitor?
+    return false unless monitoring_component_enabled?
+    return false unless current_user.id == @submission.creator_id
+    return false unless current_course_user.student?
+    return false unless can?(:create, Course::Monitoring::Session.new(creator_id: current_user.id))
+
+    true
+  end
+
+  def can_update_monitoring_session?
+    can?(:update, Course::Monitoring::Session.new)
+  end
+
+  def monitoring_service
+    return nil unless should_monitor? || can_update_monitoring_session?
+
+    @monitoring_service ||= Course::Assessment::Submission::MonitoringService.for(@submission, @assessment)
+  end
+
   def not_downloadable
     @assessment.submissions.confirmed.empty? ||
       (params[:download_format] == 'zip' && !@assessment.files_downloadable?) ||
