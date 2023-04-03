@@ -1,6 +1,5 @@
 import { Emits } from 'react-emitter-factory';
 import { FieldValues, UseFormSetError } from 'react-hook-form';
-import { WrappedComponentProps } from 'react-intl';
 import { connect, ConnectedProps } from 'react-redux';
 import { ConditionsData } from 'types/course/conditions';
 
@@ -29,8 +28,7 @@ export interface AssessmentFormEmitter {
 export const connector = connect((state) => ({ tabs: state.editPage.tabs }));
 
 export interface AssessmentFormProps
-  extends WrappedComponentProps,
-    ConnectedProps<typeof connector>,
+  extends ConnectedProps<typeof connector>,
     Emits<AssessmentFormEmitter> {
   tabs: Tab[];
   onSubmit: (data: FieldValues, setError: UseFormSetError<FieldValues>) => void;
