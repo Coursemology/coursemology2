@@ -56,6 +56,8 @@ en:
       title: 'Learning Map'
     multiple_reference_timelines:
       timeline_designer: 'Timeline Designer'
+    monitoring:
+      pulsegrid: 'PulseGrid'
     manage_email_subscription:
       tag: 'Unsubscribe'
       message: '%{manage_email_subscription_link} from this email topic.'
