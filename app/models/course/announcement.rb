@@ -19,10 +19,6 @@ class Course::Announcement < ApplicationRecord
 
   belongs_to :course, inverse_of: :announcements
 
-  def to_partial_path
-    'course/announcements/announcement'
-  end
-
   def sanitize_text
     self.content = ApplicationController.helpers.format_ckeditor_rich_text(content)
   end

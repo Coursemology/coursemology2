@@ -27,7 +27,7 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def update
     if @announcement.update(announcement_params)
-      render partial: 'course/announcements/announcement_list_data',
+      render partial: 'announcements/announcement_list_data',
              locals: { announcement: @announcement },
              status: :ok
     else

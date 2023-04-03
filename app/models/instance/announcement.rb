@@ -8,8 +8,4 @@ class Instance::Announcement < GenericAnnouncement
   validates :end_at, presence: true
   validates :creator, presence: true
   validates :updater, presence: true
-
-  def to_partial_path
-    'system/admin/instance/announcements/announcement'
-  end
 end

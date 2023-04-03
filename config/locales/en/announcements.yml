@@ -2,7 +2,5 @@ en:
   announcements:
     index:
       header: 'All Announcements'
-    announcement:
-      sticky: 'Sticky'
     global_announcement:
       close: 'Close'
