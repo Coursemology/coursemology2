@@ -11,8 +11,9 @@ json.attributes do
   json.end_at @assessment.end_at&.iso8601
   json.bonus_end_at @assessment.bonus_end_at&.iso8601
 
+  # Randomized Assessment is temporarily hidden (PR#5406)
   # Pass as boolean since there is only one enum value
-  json.randomization @assessment.randomization.present?
+  # json.randomization @assessment.randomization.present?
 end
 
 json.tab_attributes do
