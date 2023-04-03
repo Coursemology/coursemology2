@@ -16,7 +16,7 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
-  describe ApplicationMultitenancyConcern do
+  describe ApplicationControllerMultitenancyConcern do
     # These variables override the hostname in the selected tenant object before with_tenant gets
     # to execute. This effectively changes the host requested in the mock request.
     let(:instance_host) { instance.host }
