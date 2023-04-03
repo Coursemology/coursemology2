@@ -56,7 +56,10 @@ const privateTestCases = '#privateTestCases';
 const evaluationTestCases = '#evaluationTestCases';
 const standardOutput = '#standardOutput';
 const standardError = '#standardError';
-const warningIcon = 'warning-icon';
+const privateWarningIcon = '#warning-icon-private-test-cases';
+const evaluationWarningIcon = '#warning-icon-evaluation-test-cases';
+const standardErrorWarningIcon = '#warning-icon-standard-error';
+const standardOutputWarningIcon = '#warning-icon-standard-output';
 
 describe('TestCaseView', () => {
   describe('when viewing as staff', () => {
@@ -81,18 +84,10 @@ describe('TestCaseView', () => {
         </ProviderWrapper>,
       );
 
-      expect(
-        testCaseView.find(privateTestCases).getByTestId(warningIcon),
-      ).toBeVisible();
-      expect(
-        testCaseView.find(evaluationTestCases).getByTestId(warningIcon),
-      ).toBeVisible();
-      expect(
-        testCaseView.find(standardOutput).getByTestId(warningIcon),
-      ).toBeVisible();
-      expect(
-        testCaseView.find(standardError).getByTestId(warningIcon),
-      ).toBeVisible();
+      expect(testCaseView.find(privateWarningIcon).exists()).toBe(true);
+      expect(testCaseView.find(evaluationWarningIcon).exists()).toBe(true);
+      expect(testCaseView.find(standardOutputWarningIcon).exists()).toBe(true);
+      expect(testCaseView.find(standardErrorWarningIcon).exists()).toBe(true);
     });
 
     describe('when showEvaluation & showPrivate are true', () => {
@@ -108,12 +103,8 @@ describe('TestCaseView', () => {
           </ProviderWrapper>,
         );
 
-        expect(
-          testCaseView.find(privateTestCases).getByTestId(warningIcon),
-        ).toBeVisible();
-        expect(
-          testCaseView.find(evaluationTestCases).getByTestId(warningIcon),
-        ).toBeVisible();
+        expect(testCaseView.find(privateWarningIcon).exists()).toBe(true);
+        expect(testCaseView.find(evaluationWarningIcon).exists()).toBe(true);
       });
 
       it('does not render staff-only warnings when assessment is published', () => {
@@ -127,12 +118,8 @@ describe('TestCaseView', () => {
           </ProviderWrapper>,
         );
 
-        expect(
-          testCaseView.find(privateTestCases).getByTestId(warningIcon),
-        ).not.toBeVisible();
-        expect(
-          testCaseView.find(evaluationTestCases).getByTestId(warningIcon),
-        ).not.toBeVisible();
+        expect(testCaseView.find(privateWarningIcon).exists()).toBe(false);
+        expect(testCaseView.find(evaluationWarningIcon).exists()).toBe(false);
       });
     });
 
@@ -147,12 +134,12 @@ describe('TestCaseView', () => {
           </ProviderWrapper>,
         );
 
-        expect(
-          testCaseView.find(standardOutput).getByTestId(warningIcon),
-        ).not.toBeVisible();
-        expect(
-          testCaseView.find(standardError).getByTestId(warningIcon),
-        ).not.toBeVisible();
+        expect(testCaseView.find(standardOutputWarningIcon).exists()).toBe(
+          false,
+        );
+        expect(testCaseView.find(standardErrorWarningIcon).exists()).toBe(
+          false,
+        );
       });
     });
   });
@@ -170,7 +157,10 @@ describe('TestCaseView', () => {
         </ProviderWrapper>,
       );
 
-      expect(testCaseView.getByTestId(warningIcon)).not.toBeVisible();
+      expect(testCaseView.find(privateWarningIcon).exists()).toBe(false);
+      expect(testCaseView.find(evaluationWarningIcon).exists()).toBe(false);
+      expect(testCaseView.find(standardOutputWarningIcon).exists()).toBe(false);
+      expect(testCaseView.find(standardErrorWarningIcon).exists()).toBe(false);
     });
 
     it('shows standard streams when the flag is enabled', () => {
