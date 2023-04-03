@@ -31,6 +31,8 @@ class Course::Assessment < ApplicationRecord
 
   belongs_to :tab, inverse_of: :assessments
 
+  belongs_to :monitor, class_name: Course::Monitoring::Monitor.name, optional: true
+
   # `submissions` association must be put before `questions`, so that all answers will be deleted
   # first when deleting the course. Otherwise due to the foreign key `question_id` in answers table,
   # questions cannot be deleted.

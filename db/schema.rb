@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_04_030133) do
+ActiveRecord::Schema.define(version: 2023_04_06_063949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -470,7 +470,9 @@ ActiveRecord::Schema.define(version: 2023_04_04_030133) do
     t.boolean "show_mcq_mrq_solution", default: true
     t.boolean "block_student_viewing_after_submitted", default: false
     t.integer "satisfiability_type", default: 0
+    t.bigint "monitor_id"
     t.index ["creator_id"], name: "fk__course_assessments_creator_id"
+    t.index ["monitor_id"], name: "index_course_assessments_on_monitor_id"
     t.index ["tab_id"], name: "fk__course_assessments_tab_id"
     t.index ["updater_id"], name: "fk__course_assessments_updater_id"
   end
@@ -832,6 +834,39 @@ ActiveRecord::Schema.define(version: 2023_04_04_030133) do
     t.index ["creator_id"], name: "fk__course_materials_creator_id"
     t.index ["folder_id"], name: "fk__course_materials_folder_id"
     t.index ["updater_id"], name: "fk__course_materials_updater_id"
+  end
+
+  create_table "course_monitoring_heartbeats", force: :cascade do |t|
+    t.bigint "session_id", null: false
+    t.string "user_agent", null: false
+    t.string "seb_hash"
+    t.string "ip_address"
+    t.datetime "generated_at", null: false
+    t.boolean "stale", default: false, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["generated_at"], name: "index_course_monitoring_heartbeats_on_generated_at"
+    t.index ["session_id"], name: "index_course_monitoring_heartbeats_on_session_id"
+  end
+
+  create_table "course_monitoring_monitors", force: :cascade do |t|
+    t.boolean "enabled", default: false, null: false
+    t.string "seb_hash"
+    t.integer "min_interval_ms", null: false
+    t.integer "max_interval_ms", null: false
+    t.integer "offset_ms", default: 0, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "course_monitoring_sessions", force: :cascade do |t|
+    t.bigint "monitor_id", null: false
+    t.integer "status", default: 0, null: false
+    t.bigint "creator_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["creator_id"], name: "fk__course_monitoring_sessions_creator_id"
+    t.index ["monitor_id"], name: "index_course_monitoring_sessions_on_monitor_id"
   end
 
   create_table "course_notifications", id: :serial, force: :cascade do |t|
@@ -1425,6 +1460,7 @@ ActiveRecord::Schema.define(version: 2023_04_04_030133) do
   add_foreign_key "course_assessment_tabs", "users", column: "creator_id", name: "fk_course_assessment_tabs_creator_id"
   add_foreign_key "course_assessment_tabs", "users", column: "updater_id", name: "fk_course_assessment_tabs_updater_id"
   add_foreign_key "course_assessments", "course_assessment_tabs", column: "tab_id", name: "fk_course_assessments_tab_id"
+  add_foreign_key "course_assessments", "course_monitoring_monitors", column: "monitor_id"
   add_foreign_key "course_assessments", "users", column: "creator_id", name: "fk_course_assessments_creator_id"
   add_foreign_key "course_assessments", "users", column: "updater_id", name: "fk_course_assessments_updater_id"
   add_foreign_key "course_condition_achievements", "course_achievements", column: "achievement_id", name: "fk_course_condition_achievements_achievement_id"
@@ -1493,6 +1529,9 @@ ActiveRecord::Schema.define(version: 2023_04_04_030133) do
   add_foreign_key "course_materials", "course_material_folders", column: "folder_id", name: "fk_course_materials_folder_id"
   add_foreign_key "course_materials", "users", column: "creator_id", name: "fk_course_materials_creator_id"
   add_foreign_key "course_materials", "users", column: "updater_id", name: "fk_course_materials_updater_id"
+  add_foreign_key "course_monitoring_heartbeats", "course_monitoring_sessions", column: "session_id"
+  add_foreign_key "course_monitoring_sessions", "course_monitoring_monitors", column: "monitor_id"
+  add_foreign_key "course_monitoring_sessions", "users", column: "creator_id"
   add_foreign_key "course_notifications", "activities", name: "fk_course_notifications_activity_id"
   add_foreign_key "course_notifications", "courses", name: "fk_course_notifications_course_id"
   add_foreign_key "course_personal_times", "course_lesson_plan_items", column: "lesson_plan_item_id"

@@ -1,0 +1,8 @@
+en:
+  activerecord:
+    errors:
+      models:
+        course/monitoring/monitor:
+          attributes:
+            max_interval_ms:
+              greater_than_min_interval: "must be greater than min interval"
