@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import { responseShape } from 'course/survey/propTypes';
 import ErrorText from 'lib/components/core/ErrorText';
-import { usePrompt } from 'lib/hooks/router/usePrompt';
+import usePrompt from 'lib/hooks/router/usePrompt';
 import formTranslations from 'lib/translations/form';
 
 import ResponseSection from './ResponseSection';

@@ -21,7 +21,7 @@ import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
-import { usePrompt } from 'lib/hooks/router/usePrompt';
+import usePrompt from 'lib/hooks/router/usePrompt';
 
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import { formNames, questionTypes } from '../../constants';

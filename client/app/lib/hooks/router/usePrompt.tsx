@@ -7,10 +7,7 @@ import { History, Transition } from 'history';
 
 type ExtendNavigator = Navigator & Pick<History, 'block'>;
 
-export const useBlocker = (
-  blocker: (tx: Transition) => void,
-  when = true,
-): void => {
+const useBlocker = (blocker: (tx: Transition) => void, when = true): void => {
   const { navigator } = useContext(NavigationContext);
 
   useEffect(() => {
@@ -32,7 +29,7 @@ export const useBlocker = (
   }, [navigator, blocker, when]);
 };
 
-export const usePrompt = (when = true): void => {
+const usePrompt = (when = true): void => {
   const blocker = useCallback((tx: Transition) => {
     // eslint-disable-next-line no-alert
     if (window.confirm()) tx.retry();
