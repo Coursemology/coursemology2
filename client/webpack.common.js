@@ -28,6 +28,7 @@ module.exports = {
       bundles: resolve('./app/bundles'),
       course: resolve('./app/bundles/course'),
       testUtils: resolve('./app/__test__/utils'),
+      workers: resolve('./app/workers'),
     },
   },
   optimization: {
