@@ -1,0 +1,5 @@
+// TODO: Remove once sidebar is fixed to fill viewport until bottom of viewport.
+// 126px is the height of the topbar + breadcrumb + margins in between.
+.dangerously-fit-height-to-viewport {
+  height: calc(100vh - 126px);
+}
