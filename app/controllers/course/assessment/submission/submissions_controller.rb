@@ -218,16 +218,16 @@ class Course::Assessment::Submission::SubmissionsController < \
     @submission = @assessment.submissions.find(params[:submission_id])
     authorize!(:delete_submission, @submission)
 
-    success = @submission.transaction do
+    ActiveRecord::Base.transaction do
       reset_question_bundle_assignments if @assessment.randomization == 'prepared'
-      @submission.destroy
-    end
-    if success
+      monitoring_service&.stop!
+      @submission.destroy!
+
       head :ok
-    else
-      logger.error("Failed to delete submission: #{submission.errors.inspect}")
-      render json: { errors: submission.errors }, status: :bad_request
     end
+  rescue StandardError
+    logger.error("Failed to delete submission: #{@submission.errors.inspect}")
+    render json: { errors: @submission.errors }, status: :bad_request
   end
 
   def reset_question_bundle_assignments
