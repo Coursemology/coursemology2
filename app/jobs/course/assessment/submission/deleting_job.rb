@@ -24,9 +24,14 @@ class Course::Assessment::Submission::DeletingJob < ApplicationJob
     User.with_stamper(deleter) do
       Course::Assessment::Submission.transaction do
         reset_question_bundle_assignments(assessment, submissions) if assessment.randomization == 'prepared'
+
+        creator_ids = []
         submissions.each do |submission|
           submission.destroy!
+          creator_ids << submission.creator_id
         end
+
+        Course::Assessment::Submission::MonitoringService.destroy_all_by(assessment, creator_ids)
       end
     end
   end
