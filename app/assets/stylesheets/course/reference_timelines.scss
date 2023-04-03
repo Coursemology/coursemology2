@@ -1,6 +1,0 @@
-// TODO: Remove once sidebar is fixed, and set Timeline Designer height
-// to fill viewport until bottom of viewport.
-// 126px is the height of the topbar + breadcrumb + margins in between.
-#course-timeline-designer {
-  height: calc(100vh - 126px);
-}
