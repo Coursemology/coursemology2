@@ -41,10 +41,7 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def create # rubocop:disable Metrics/AbcSize
-    if cannot?(:access, @assessment)
-      head :forbidden
-      return
-    end
+    authorize! :access, @assessment
 
     existing_submission = @assessment.submissions.find_by(creator: current_user)
     if existing_submission
@@ -52,18 +49,19 @@ class Course::Assessment::Submission::SubmissionsController < \
       return redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission)
     end
 
-    @submission.session_id = authentication_service.generate_authentication_token
-    success = @assessment.create_new_submission(@submission, current_user)
+    ActiveRecord::Base.transaction do
+      @submission.session_id = authentication_service.generate_authentication_token
+      success = @assessment.create_new_submission(@submission, current_user)
+      raise ActiveRecord::Rollback unless success
 
-    if success
       authentication_service.save_token_to_session(@submission.session_id)
       log_service.log_submission_access(request) if @assessment.session_password_protected?
-      redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission,
-                                                         new_submission: true)
-    else
-      redirect_to course_assessments_path(current_course),
-                  danger: t('.failure', error: @submission.errors.full_messages.to_sentence)
+      monitoring_service&.create_new_session_if_not_exist! if should_monitor?
+      redirect_to edit_course_assessment_submission_path(current_course, @assessment, @submission, new_submission: true)
     end
+  rescue StandardError
+    error_message = @submission.errors.full_messages.to_sentence
+    redirect_to course_assessments_path(current_course), danger: t('.failure', error: error_message)
   end
 
   def edit
