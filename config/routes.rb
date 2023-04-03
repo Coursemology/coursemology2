@@ -200,6 +200,7 @@ Rails.application.routes.draw do
           post 'remind', on: :member
           get :requirements, on: :member
           get :statistics, on: :member
+          get :monitoring, on: :member
 
           resources :questions, only: [] do
             post 'duplicate/:destination_assessment_id', on: :member, action: 'duplicate', as: :duplicate

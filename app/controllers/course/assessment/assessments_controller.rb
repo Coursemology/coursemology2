@@ -156,6 +156,17 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     authorize!(:read_statistics, current_course)
   end
 
+  def monitoring
+    if monitor.nil?
+      render file: 'public/404', layout: false, status: :not_found
+      return
+    end
+
+    authorize! :read, @monitor
+
+    @monitor_id = monitor.id
+  end
+
   protected
 
   def load_assessment_options
