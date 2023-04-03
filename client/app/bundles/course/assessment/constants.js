@@ -27,4 +27,12 @@ const actionTypes = mirrorCreator([
   'FETCH_ANCESTOR_STATISTICS_FAILURE',
 ]);
 
+export const DEFAULT_MONITORING_OPTIONS = {
+  enabled: false,
+  seb_hash: '',
+  min_interval_ms: 20000,
+  max_interval_ms: 30000,
+  offset_ms: 3000,
+};
+
 export default actionTypes;

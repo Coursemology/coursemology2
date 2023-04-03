@@ -1,19 +1,20 @@
 import { useEffect } from 'react';
 import useEmitterFactory from 'react-emitter-factory';
 import { Controller } from 'react-hook-form';
-import { injectIntl } from 'react-intl';
 import {
   Block as DraftIcon,
   CheckCircle as AutogradedIcon,
   Create as ManualIcon,
   Public as PublishedIcon,
 } from '@mui/icons-material';
-import { Grid, RadioGroup, Typography } from '@mui/material';
+import { Grid, InputAdornment, RadioGroup, Typography } from '@mui/material';
 
+import BetaChip from 'lib/components/core/BetaChip';
 import IconRadio from 'lib/components/core/buttons/IconRadio';
 import ErrorText from 'lib/components/core/ErrorText';
 import InfoLabel from 'lib/components/core/InfoLabel';
 import Section from 'lib/components/core/layouts/Section';
+import Link from 'lib/components/core/Link';
 import ConditionsManager from 'lib/components/extensions/conditions/ConditionsManager';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
@@ -40,10 +41,13 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
     initialValues,
     modeSwitching,
     onSubmit,
+    pulsegridUrl,
     // Randomized Assessment is temporarily hidden (PR#5406)
     // randomizationAllowed,
     showPersonalizedTimelineFeatures,
+    canManageMonitor,
     tabs,
+    monitoringEnabled,
   } = props;
 
   const {
@@ -59,6 +63,8 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const autograded = watch('autograded');
   const passwordProtected = watch('password_protected');
   const sessionProtected = watch('session_protected');
+
+  const monitoring = watch('monitoring.enabled');
 
   // Load all tabs if data is loaded, otherwise fall back to current assessment tab.
   const loadedTabs = tabs ?? watch('tabs');
@@ -669,11 +675,183 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               field={field}
               fieldState={fieldState}
               label={t(translations.passwordProtection)}
+              labelClassName="mt-10"
             />
           )}
         />
 
         {!autograded && passwordProtected && renderPasswordFields()}
+
+        {passwordProtected && monitoringEnabled && (
+          <Controller
+            control={control}
+            name="monitoring.enabled"
+            render={({ field, fieldState }): JSX.Element => (
+              <FormCheckboxField
+                description={t(translations.examMonitoringHint, {
+                  pulsegrid: (chunk) => (
+                    <Link href={pulsegridUrl} opensInNewTab>
+                      {chunk}
+                    </Link>
+                  ),
+                })}
+                disabled={!canManageMonitor || disabled}
+                disabledHint={
+                  <InfoLabel
+                    label={t(translations.onlyManagersOwnersCanEdit)}
+                  />
+                }
+                field={field}
+                fieldState={fieldState}
+                label={
+                  <span className="flex items-center space-x-2">
+                    <span>{t(translations.examMonitoring)}</span>
+                    <BetaChip />
+                  </span>
+                }
+                labelClassName="mt-10"
+              />
+            )}
+          />
+        )}
+
+        {passwordProtected && monitoring && (
+          <>
+            <Controller
+              control={control}
+              name="monitoring.seb_hash"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormTextField
+                  disabled={!canManageMonitor || disabled}
+                  field={field}
+                  fieldState={fieldState}
+                  fullWidth
+                  label={t(translations.sebHash)}
+                  variant="filled"
+                />
+              )}
+            />
+
+            <Typography
+              className="!mt-0"
+              color="text.secondary"
+              variant="body2"
+            >
+              {t(translations.sebHashHint, {
+                seb: (chunk) => (
+                  <Link href="https://safeexambrowser.org/" opensInNewTab>
+                    {chunk}
+                  </Link>
+                ),
+                pulsegrid: (chunk) => (
+                  <Link href={pulsegridUrl} opensInNewTab>
+                    {chunk}
+                  </Link>
+                ),
+              })}
+            </Typography>
+
+            <Grid container direction="row" spacing={2}>
+              <Grid item xs>
+                <Grid container direction="row" spacing={2}>
+                  <Grid item xs>
+                    <Controller
+                      control={control}
+                      name="monitoring.min_interval_ms"
+                      render={({ field, fieldState }): JSX.Element => (
+                        <FormTextField
+                          disabled={!canManageMonitor || disabled}
+                          field={field}
+                          fieldState={fieldState}
+                          fullWidth
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                {t(translations.ms)}
+                              </InputAdornment>
+                            ),
+                          }}
+                          label={t(translations.minInterval)}
+                          required
+                          type="number"
+                          variant="filled"
+                        />
+                      )}
+                    />
+                  </Grid>
+
+                  <Grid item xs>
+                    <Controller
+                      control={control}
+                      name="monitoring.max_interval_ms"
+                      render={({ field, fieldState }): JSX.Element => (
+                        <FormTextField
+                          disabled={!canManageMonitor || disabled}
+                          field={field}
+                          fieldState={fieldState}
+                          fullWidth
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                {t(translations.ms)}
+                              </InputAdornment>
+                            ),
+                          }}
+                          label={t(translations.maxInterval)}
+                          required
+                          type="number"
+                          variant="filled"
+                        />
+                      )}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Typography
+                  className="!mt-0"
+                  color="text.secondary"
+                  variant="body2"
+                >
+                  {t(translations.intervalHint)}
+                </Typography>
+              </Grid>
+
+              <Grid item xs>
+                <Controller
+                  control={control}
+                  name="monitoring.offset_ms"
+                  render={({ field, fieldState }): JSX.Element => (
+                    <FormTextField
+                      disabled={!canManageMonitor || disabled}
+                      field={field}
+                      fieldState={fieldState}
+                      fullWidth
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            {t(translations.ms)}
+                          </InputAdornment>
+                        ),
+                      }}
+                      label={t(translations.offset)}
+                      required
+                      type="number"
+                      variant="filled"
+                    />
+                  )}
+                />
+
+                <Typography
+                  className="!mt-0"
+                  color="text.secondary"
+                  variant="body2"
+                >
+                  {t(translations.offsetHint)}
+                </Typography>
+              </Grid>
+            </Grid>
+          </>
+        )}
       </Section>
 
       {showPersonalizedTimelineFeatures && (

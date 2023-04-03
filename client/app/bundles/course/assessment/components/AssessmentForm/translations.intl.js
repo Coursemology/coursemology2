@@ -180,7 +180,7 @@ const translations = defineMessages({
   delayedGradePublicationHint: {
     id: 'course.assessment.AssessmentForm.delayedGradePublicationHint',
     defaultMessage:
-      'When delayed grade publication is on, gradings will not be immediately shown to students. \
+      'If enabled, gradings will not be immediately shown to students. \
       To publish all gradings, you may click Publish Grades in the Submissions page.',
   },
   showMcqMrqSolution: {
@@ -202,7 +202,7 @@ const translations = defineMessages({
   sessionProtectionHint: {
     id: 'course.assessment.AssessmentForm.sessionProtectionHint',
     defaultMessage:
-      'When session protection is on, students can only access their attempt once. \
+      'If enabled, students can only access their attempt once. \
       Further access will require the session unlock password.',
   },
   viewPasswordHint: {
@@ -291,6 +291,68 @@ const translations = defineMessages({
   files: {
     id: 'course.assessment.AssessmentForm.files',
     defaultMessage: 'Files',
+  },
+  examMonitoring: {
+    id: 'course.assessment.AssessmentForm.examMonitoring',
+    defaultMessage: 'Enable exam monitoring',
+  },
+  examMonitoringHint: {
+    id: 'course.assessment.AssessmentForm.examMonitoringHint',
+    defaultMessage:
+      "If enabled, students' sessions will be monitored in real time from the moment they attempt the exam, until they " +
+      'finalise it or the first 24 hours since their attempt, whichever is earlier. Instructors can monitor these ' +
+      'sessions in <pulsegrid>PulseGrid</pulsegrid>.',
+  },
+  sebHash: {
+    id: 'course.assessment.AssessmentForm.sebHash',
+    defaultMessage: 'SEB Config Key (optional)',
+  },
+  sebHashHint: {
+    id: 'course.assessment.AssessmentForm.sebHashHint',
+    defaultMessage:
+      'If you are deploying this exam in <seb>Safe Exam Browser (SEB)</seb>, Coursemology will automatically flag ' +
+      'connections with this config key in <pulsegrid>PulseGrid</pulsegrid>, if provided. Otherwise, connections will ' +
+      'be flagged only by heartbeat intervals.',
+  },
+  minInterval: {
+    id: 'course.assessment.AssessmentForm.minInterval',
+    defaultMessage: 'Min interval',
+  },
+  maxInterval: {
+    id: 'course.assessment.AssessmentForm.maxInterval',
+    defaultMessage: 'Max interval',
+  },
+  intervalHint: {
+    id: 'course.assessment.AssessmentForm.intervalHint',
+    defaultMessage:
+      "Controls how frequent heartbeats are sent from the students' browsers. Intervals are randomised between these " +
+      'two ranges.',
+  },
+  offset: {
+    id: 'course.assessment.AssessmentForm.offset',
+    defaultMessage: 'Inter-heartbeat offset',
+  },
+  offsetHint: {
+    id: 'course.assessment.AssessmentForm.offsetHint',
+    defaultMessage:
+      'Controls how long PulseGrid should wait after the frequency interval before flagging a session as late.',
+  },
+  ms: {
+    id: 'course.assessment.AssessmentForm.ms',
+    defaultMessage: 'ms',
+  },
+  hasToBePositiveIntegerMaxOneDay: {
+    id: 'course.assessment.AssessmentForm.hasToBePositiveInteger',
+    defaultMessage: 'Has to be a positive integer less than 86,400,000 ms',
+  },
+  hasToBeMoreThanMinInterval: {
+    id: 'course.assessment.AssessmentForm.hasToBeMoreThanMinInterval',
+    defaultMessage: 'Has to be greater than the minimum value.',
+  },
+  onlyManagersOwnersCanEdit: {
+    id: 'course.assessment.AssessmentForm.onlyManagersOwnersCanEdit',
+    defaultMessage:
+      'Only Managers and Owners of this course can modify these options.',
   },
 });
 

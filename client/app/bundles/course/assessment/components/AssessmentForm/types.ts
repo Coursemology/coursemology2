@@ -39,6 +39,9 @@ export interface AssessmentFormProps
   randomizationAllowed?: boolean;
   folderAttributes?: FolderAttributes;
   conditionAttributes?: ConditionsData;
+  pulsegridUrl?: string;
+  canManageMonitor?: boolean;
+  monitoringEnabled?: boolean;
 
   /**
    * If `true`, this component is displayed on Edit Assessment page

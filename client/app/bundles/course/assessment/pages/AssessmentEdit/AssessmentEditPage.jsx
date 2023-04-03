@@ -60,9 +60,12 @@ class AssessmentEditPage extends Component {
       gamified,
       initialValues,
       modeSwitching,
+      canManageMonitor,
       notification,
+      pulsegridUrl,
       randomizationAllowed,
       showPersonalizedTimelineFeatures,
+      monitoringEnabled,
     } = this.props;
 
     // TODO: Add a source router props that can be used to determine where
@@ -82,6 +85,7 @@ class AssessmentEditPage extends Component {
         </PageHeader>
 
         <AssessmentForm
+          canManageMonitor={canManageMonitor}
           conditionAttributes={conditionAttributes}
           disabled={disabled}
           editing
@@ -89,7 +93,9 @@ class AssessmentEditPage extends Component {
           gamified={gamified}
           initialValues={initialValues}
           modeSwitching={modeSwitching}
+          monitoringEnabled={monitoringEnabled}
           onSubmit={this.onFormSubmit}
+          pulsegridUrl={pulsegridUrl}
           randomizationAllowed={randomizationAllowed}
           showPersonalizedTimelineFeatures={showPersonalizedTimelineFeatures}
         />
@@ -120,6 +126,9 @@ AssessmentEditPage.propTypes = {
   initialValues: PropTypes.shape({}),
   // Whether to disable the inner form.
   disabled: PropTypes.bool,
+  pulsegridUrl: PropTypes.string,
+  canManageMonitor: PropTypes.bool,
+  monitoringEnabled: PropTypes.bool,
   notification: notificationShape,
 };
 
