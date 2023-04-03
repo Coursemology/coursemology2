@@ -2,6 +2,9 @@
 class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   include Course::Assessment::AssessmentsHelper
   before_action :load_question_duplication_data, only: [:show, :reorder]
+  before_action :load_monitor, only: [:edit, :show]
+  before_action :check_can_manage_monitor, only: [:index, :edit]
+  before_action :check_monitoring_component_enabled, only: [:index, :edit]
 
   COURSE_USERS = { my_students: 'my_students',
                    my_students_w_phantom: 'my_students_w_phantom',
@@ -314,4 +317,24 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
   def authentication_service
     @authentication_service ||= Course::Assessment::AuthenticationService.new(@assessment, session)
   end
+
+  def monitoring_component_enabled?
+    @monitoring_component_enabled ||= current_component_host[:course_monitoring_component].present?
+  end
+
+  def can_manage_monitor?
+    @can_manage_monitor ||= can?(:manage, Course::Monitoring::Monitor.new) && monitoring_component_enabled?
+  end
+
+  def monitoring_service
+    @monitoring_service ||= Course::Assessment::MonitoringService.new(@assessment) if monitoring_component_enabled?
+  end
+
+  def monitor
+    @monitor ||= monitoring_service&.monitor
+  end
+
+  alias_method :load_monitor, :monitor
+  alias_method :check_can_manage_monitor, :can_manage_monitor?
+  alias_method :check_monitoring_component_enabled, :monitoring_component_enabled?
 end
