@@ -2,7 +2,7 @@
 # Sets up a programming evaluation, queues it for execution by evaluators, then returns the results.
 class Course::Assessment::ProgrammingEvaluationService
   # The default timeout for the job to finish.
-  DEFAULT_TIMEOUT = 5.minutes
+  DEFAULT_TIMEOUT = 300.seconds
   MEMORY_LIMIT = Course::Assessment::Question::Programming::MEMORY_LIMIT
 
   # The ratio to multiply the memory limits from our evaluation to the container by.
@@ -105,7 +105,7 @@ class Course::Assessment::ProgrammingEvaluationService
     @memory_limit = memory_limit || MEMORY_LIMIT
     @time_limit = time_limit ? [time_limit, max_time_limit].min : max_time_limit
     @package = package
-    @timeout = timeout || DEFAULT_TIMEOUT
+    @timeout = timeout || [DEFAULT_TIMEOUT.to_i, @time_limit.to_i].max
   end
 
   def create_container(image)
