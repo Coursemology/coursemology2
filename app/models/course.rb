@@ -111,6 +111,7 @@ class Course < ApplicationRecord
     joins(:course_users).merge(CourseUser.active_in_past_7_days).merge(CourseUser.student).distinct
   end)
 
+  delegate :students, to: :course_users
   delegate :staff, to: :course_users
   delegate :instructors, to: :course_users
   delegate :managers, to: :course_users
