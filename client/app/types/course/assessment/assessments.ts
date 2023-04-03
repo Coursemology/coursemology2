@@ -49,10 +49,12 @@ export interface AssessmentsListData {
     isGamified: boolean;
     allowRandomization: boolean;
     isAchievementsEnabled: boolean;
+    isMonitoringEnabled: boolean;
     bonusAttributes: boolean;
     endTimes: boolean;
     canCreateAssessments: boolean;
     tabId: number;
+    canManageMonitor: boolean;
     category: {
       id: number;
       title: string;

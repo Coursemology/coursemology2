@@ -35,6 +35,7 @@ const INITIAL_VALUES = {
   show_mcq_answer: false,
   show_mcq_mrq_solution: false,
   skippable: false,
+  monitoring: { enabled: false },
 };
 
 const NEW_VALUES = {

@@ -3,6 +3,7 @@ import Preload from 'lib/components/wrappers/Preload';
 import { getAssessmentId } from 'lib/helpers/url-helpers';
 
 import { fetchAssessmentEditData } from '../../actions';
+import { DEFAULT_MONITORING_OPTIONS } from '../../constants';
 import { categoryAndTabTitle } from '../../utils';
 
 import AssessmentEditPage from './AssessmentEditPage';
@@ -28,6 +29,7 @@ const AssessmentEdit = (): JSX.Element => {
         return (
           <AssessmentEditPage
             // @ts-ignore: component is still written in JSX
+            canManageMonitor={data.can_manage_monitor}
             conditionAttributes={data.conditionsData}
             folderAttributes={data.folder_attributes}
             gamified={data.gamified}
@@ -38,8 +40,15 @@ const AssessmentEdit = (): JSX.Element => {
                 data.attributes.view_password ||
                 data.attributes.session_password
               ),
+              monitoring:
+                data.attributes.monitoring ||
+                (data.can_manage_monitor
+                  ? DEFAULT_MONITORING_OPTIONS
+                  : undefined),
             }}
             modeSwitching={data.mode_switching}
+            monitoringEnabled={data.monitoring_component_enabled}
+            pulsegridUrl={data.monitoring_url}
             randomizationAllowed={data.randomization_allowed}
             showPersonalizedTimelineFeatures={
               data.show_personalized_timeline_features

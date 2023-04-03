@@ -88,6 +88,38 @@ const validationSchema = yup.object({
   randomization: yup.bool(),
   has_personal_times: yup.bool(),
   affects_personal_times: yup.bool(),
+  monitoring: yup.object({
+    enabled: yup.bool(),
+    seb_hash: yup.string().nullable(),
+    min_interval_ms: yup.number().when('enabled', {
+      is: true,
+      then: yup
+        .number()
+        .positive(t.hasToBePositiveIntegerMaxOneDay)
+        .max(84_000_000, t.hasToBePositiveIntegerMaxOneDay)
+        .typeError(t.hasToBePositiveIntegerMaxOneDay)
+        .required(ft.required),
+    }),
+    max_interval_ms: yup.number().when('enabled', {
+      is: true,
+      then: yup
+        .number()
+        .positive(t.hasToBePositiveIntegerMaxOneDay)
+        .max(84_000_000, t.hasToBePositiveIntegerMaxOneDay)
+        .typeError(t.hasToBePositiveIntegerMaxOneDay)
+        .moreThan(yup.ref('min_interval_ms'), t.hasToBeMoreThanMinInterval)
+        .required(ft.required),
+    }),
+    offset_ms: yup.number().when('enabled', {
+      is: true,
+      then: yup
+        .number()
+        .positive(t.hasToBePositiveIntegerMaxOneDay)
+        .max(84_000_000, t.hasToBePositiveIntegerMaxOneDay)
+        .typeError(ft.required)
+        .required(ft.required),
+    }),
+  }),
 });
 
 const useFormValidation = (initialValues): UseFormReturn => {
@@ -106,6 +138,16 @@ const useFormValidation = (initialValues): UseFormReturn => {
       const postProcessor = (rawData): SubmitHandler<FieldValues> => {
         if (!rawData.session_protected) rawData.session_password = null;
         delete rawData.session_protected;
+
+        if (!rawData.password_protected && rawData.monitoring !== undefined)
+          rawData.monitoring.enabled = false;
+
+        if (rawData.monitoring?.enabled === false) {
+          delete rawData.monitoring.min_interval_ms;
+          delete rawData.monitoring.max_interval_ms;
+          delete rawData.monitoring.offset_ms;
+        }
+
         return onValid(rawData);
       };
 

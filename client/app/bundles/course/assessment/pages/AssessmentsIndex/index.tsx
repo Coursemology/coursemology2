@@ -41,8 +41,10 @@ const AssessmentsIndex = (): JSX.Element => {
                     <NewAssessmentFormButton
                       key={data.display.tabId}
                       // @ts-ignore: component is still written in JSX
+                      canManageMonitor={data.display.canManageMonitor}
                       categoryId={data.display.category.id}
                       gamified={data.display.isGamified}
+                      monitoringEnabled={data.display.isMonitoringEnabled}
                       randomizationAllowed={data.display.allowRandomization}
                       tabId={data.display.tabId}
                     />,

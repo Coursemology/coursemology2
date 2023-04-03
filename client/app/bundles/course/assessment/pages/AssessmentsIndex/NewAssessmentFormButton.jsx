@@ -19,7 +19,7 @@ import formTranslations from 'lib/translations/form';
 
 import * as actions from '../../actions';
 import AssessmentForm from '../../components/AssessmentForm';
-import actionTypes from '../../constants';
+import actionTypes, { DEFAULT_MONITORING_OPTIONS } from '../../constants';
 import translations from '../../translations';
 
 class NewAssessmentFormButton extends Component {
@@ -78,6 +78,8 @@ class NewAssessmentFormButton extends Component {
       notification,
       visible,
       randomizationAllowed,
+      canManageMonitor,
+      monitoringEnabled,
     } = this.props;
 
     const formActions = [
@@ -134,6 +136,7 @@ class NewAssessmentFormButton extends Component {
       randomization: false,
       has_personal_times: false,
       affects_personal_times: false,
+      monitoring: canManageMonitor ? DEFAULT_MONITORING_OPTIONS : undefined,
     };
 
     return (
@@ -161,11 +164,13 @@ class NewAssessmentFormButton extends Component {
           </DialogTitle>
           <DialogContent>
             <AssessmentForm
+              canManageMonitor={canManageMonitor}
               disabled={disabled}
               emitsVia={(assessmentForm) => this.setState({ assessmentForm })}
               gamified={gamified}
               initialValues={initialValues}
               modeSwitching
+              monitoringEnabled={monitoringEnabled}
               onSubmit={this.onFormSubmit}
               randomizationAllowed={randomizationAllowed}
             />
@@ -197,6 +202,8 @@ NewAssessmentFormButton.propTypes = {
   tabId: PropTypes.number.isRequired,
   gamified: PropTypes.bool,
   randomizationAllowed: PropTypes.bool,
+  canManageMonitor: PropTypes.bool,
+  monitoringEnabled: PropTypes.bool,
 
   notification: notificationShape,
   dispatch: PropTypes.func.isRequired,
