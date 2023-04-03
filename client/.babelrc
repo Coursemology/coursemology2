@@ -1,12 +1,7 @@
 {
   "presets": [
     "@babel/preset-env",
-    [
-      "@babel/preset-react",
-      {
-        "runtime": "automatic"
-      }
-    ],
+    ["@babel/preset-react", { "runtime": "automatic" }],
     "@babel/preset-typescript"
   ],
   "plugins": [
@@ -42,13 +37,11 @@
   "env": {
     "production": {
       "plugins": [
-        [
-          "react-remove-properties",
-          {
-            "properties": ["data-testid"]
-          }
-        ]
+        ["react-remove-properties", { "properties": ["data-testid"] }]
       ]
+    },
+    "test": {
+      "plugins": ["babel-plugin-transform-import-meta"]
     }
   }
 }
