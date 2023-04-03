@@ -8,7 +8,7 @@ import {
 
 type CheckboxProps = ComponentProps<typeof MuiCheckbox> & {
   component?: ElementType;
-  label?: string;
+  label?: string | JSX.Element;
   description?: string;
   disabledHint?: string | JSX.Element;
   error?: string;
