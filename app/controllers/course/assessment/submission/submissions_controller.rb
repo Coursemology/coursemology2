@@ -65,12 +65,14 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def edit
+    @monitoring_session_id = monitoring_service&.session&.id if should_monitor?
+
     return if @submission.attempting?
 
     render 'blocked' if @submission.submission_view_blocked?(current_course_user)
 
     respond_to do |format|
-      format.html {} # rubocop:disable Lint/EmptyBlock
+      format.html
       format.json do
         calculated_fields = [:graded_at, :grade]
         @submission = @submission.calculated(*calculated_fields)

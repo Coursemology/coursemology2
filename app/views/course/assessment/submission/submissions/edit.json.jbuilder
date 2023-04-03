@@ -36,3 +36,5 @@ json.partial! 'questions', assessment: @assessment, submission: @submission, can
 json.partial! 'answers', submission: @submission, answers: answers
 json.partial! 'topics', submission: @submission, submission_questions: submission_questions, can_grade: can_grade
 json.partial! 'history', submission: @submission
+
+json.monitoringSessionId @monitoring_session_id if @monitoring_session_id.present?
