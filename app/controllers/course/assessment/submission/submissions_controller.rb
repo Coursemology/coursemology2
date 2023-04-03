@@ -186,18 +186,19 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def unsubmit
     authorize!(:update, @assessment)
-    submission = @assessment.submissions.find(params[:submission_id])
-    success = submission.transaction do
-      submission.update!('unmark' => 'true') if submission.graded?
-      submission.update!('unsubmit' => 'true')
+    @submission = @assessment.submissions.find(params[:submission_id])
+    success = @submission.transaction do
+      @submission.update!('unmark' => 'true') if @submission.graded?
+      @submission.update!('unsubmit' => 'true')
+      monitoring_service&.continue_listening!
 
       true
     end
     if success
       head :ok
     else
-      logger.error("Failed to unsubmit submission: #{submission.errors.inspect}")
-      render json: { errors: submission.errors }, status: :bad_request
+      logger.error("Failed to unsubmit submission: #{@submission.errors.inspect}")
+      render json: { errors: @submission.errors }, status: :bad_request
     end
   end
 
