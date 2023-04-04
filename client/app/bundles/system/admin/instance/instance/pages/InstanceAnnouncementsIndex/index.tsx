@@ -4,9 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AppDispatch, AppState } from 'types/store';
 
-import AnnouncementsDisplay, {
-  sortAnnouncements,
-} from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
+import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
 import AddButton from 'lib/components/core/buttons/AddButton';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
@@ -47,7 +45,7 @@ const translations = defineMessages({
 
 const InstanceAnnouncementsIndex: FC<Props> = (props) => {
   const { intl } = props;
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const headerToolbars: ReactElement[] = [];
   const announcements = useSelector((state: AppState) =>
@@ -87,7 +85,7 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
       ) : (
         <AnnouncementsDisplay
           announcementPermissions={{ canCreate: announcementPermission }}
-          announcements={sortAnnouncements(announcements)}
+          announcements={announcements}
           canSticky={false}
           deleteOperation={deleteAnnouncement}
           updateOperation={updateAnnouncement}

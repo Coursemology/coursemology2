@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useState } from 'react';
+import { FC, memo } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Grid, Stack } from '@mui/material';
 import equal from 'fast-deep-equal';
@@ -6,11 +6,13 @@ import {
   AnnouncementFormData,
   AnnouncementMiniEntity,
   AnnouncementPermissions,
+  ExtendedAnnouncementMiniEntity,
 } from 'types/course/announcements';
 import { Operation } from 'types/store';
 
 import SearchField from 'lib/components/core/fields/SearchField';
 import Pagination from 'lib/components/core/layouts/Pagination';
+import { useEntities } from 'lib/hooks/entity';
 
 import AnnouncementCard from './AnnouncementCard';
 
@@ -32,17 +34,6 @@ const translations = defineMessages({
   },
 });
 
-export const sortAnnouncements = (
-  announcements: AnnouncementMiniEntity[],
-): AnnouncementMiniEntity[] => {
-  const sortedAnnouncements = [...announcements];
-  sortedAnnouncements
-    .sort((a, b) => Date.parse(b.startTime) - Date.parse(a.startTime))
-    .sort((a, b) => +b.isSticky - +a.isSticky)
-    .sort((a, b) => +b.isCurrentlyActive - +a.isCurrentlyActive);
-  return sortedAnnouncements;
-};
-
 const AnnouncementsDisplay: FC<Props> = (props) => {
   const {
     intl,
@@ -53,35 +44,34 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
     canSticky = true,
   } = props;
 
-  // For pagination
   const ITEMS_PER_PAGE = 12;
-  const [slicedAnnouncements, setslicedAnnouncements] = useState(
-    announcements.slice(0, ITEMS_PER_PAGE),
+  const sortProps = [
+    { name: 'startTime', elemType: 'date', order: 'asc' },
+    { name: 'isSticky', elemType: 'boolean', order: 'asc' },
+    { name: 'isCurrentlyActive', elemType: 'boolean', order: 'asc' },
+  ];
+  const searchProps = ['title', 'content'];
+
+  const emptyArray = [] as ExtendedAnnouncementMiniEntity[];
+  let displayedAnnouncement = emptyArray;
+  if (announcements.length > 0) {
+    displayedAnnouncement = announcements as ExtendedAnnouncementMiniEntity[];
+  }
+
+  const {
+    paginatedEntities: processedAnnouncements,
+    slicedEntities: slicedAnnouncements,
+    handleSearchBarChange,
+    page,
+    itemsPerPage,
+    setSlicedEntities: setslicedAnnouncements,
+    setPage,
+  } = useEntities<ExtendedAnnouncementMiniEntity>(
+    displayedAnnouncement,
+    ITEMS_PER_PAGE,
+    sortProps,
+    searchProps,
   );
-  const [page, setPage] = useState(1);
-
-  // For search bar
-  const [shavedAnnouncements, setShavedAnnouncements] = useState(announcements);
-
-  useEffect(() => {
-    setShavedAnnouncements(announcements);
-  }, [announcements]);
-
-  const handleSearchBarChange = (rawKeyword: string): void => {
-    const keyword = rawKeyword.trim();
-
-    if (keyword === '') {
-      setShavedAnnouncements(announcements);
-    } else {
-      setShavedAnnouncements(
-        announcements.filter(
-          (announcement: AnnouncementMiniEntity) =>
-            announcement.title.toLowerCase().includes(keyword.toLowerCase()) ||
-            announcement.content.toLowerCase().includes(keyword.toLowerCase()),
-        ),
-      );
-    }
-  };
 
   return (
     <>
@@ -106,8 +96,8 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
         </Grid>
         <Grid item xs={1}>
           <Pagination
-            items={shavedAnnouncements}
-            itemsPerPage={ITEMS_PER_PAGE}
+            items={processedAnnouncements}
+            itemsPerPage={itemsPerPage}
             padding={12}
             page={page}
             setPage={setPage}
@@ -134,7 +124,7 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
 
       {slicedAnnouncements.length > 6 && (
         <Pagination
-          items={shavedAnnouncements}
+          items={processedAnnouncements}
           itemsPerPage={ITEMS_PER_PAGE}
           padding={12}
           page={page}

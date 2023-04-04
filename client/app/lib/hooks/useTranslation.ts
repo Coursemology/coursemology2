@@ -9,7 +9,7 @@ type InterpolatedValue =
   | boolean
   | ((chunks: string) => JSX.Element);
 
-type MessageTranslator = (
+export type MessageTranslator = (
   descriptor: Descriptor,
   values?: Record<string, InterpolatedValue>,
 ) => string;
