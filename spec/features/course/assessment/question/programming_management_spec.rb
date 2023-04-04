@@ -41,8 +41,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
           page.execute_script("$('select[name=\"question_programming[language_id]\"]').show()")
           select question_attributes[:language].name, from: 'question_programming[language_id]'
           page.find('#programming-question-form-submit').click
+          wait_for_job
 
-          expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
+          expect(page).to_not have_xpath('//form//*[contains(@data-testid, \'CircularProgress\')]')
 
           question_created = assessment.questions.first.specific.reload
 
@@ -79,7 +80,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         page.find('#programming-question-form-submit').click
         wait_for_job
 
-        expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
+        expect(page).to_not have_xpath('//form//*[contains(@data-testid, \'CircularProgress\')]')
         expect(page).to have_current_path(course_assessment_path(course, assessment))
         visit edit_course_assessment_question_programming_path(course, assessment, question)
 
@@ -108,8 +109,9 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         fill_in 'question_programming[maximum_grade]', with: ''
         fill_in 'question_programming[maximum_grade]', with: maximum_grade
         page.find('#programming-question-form-submit').click
+        wait_for_job
 
-        expect(page).to_not have_xpath('//form//*[contains(@class, \'fa-spinner\')]')
+        expect(page).to_not have_xpath('//form//*[contains(@data-testid, \'CircularProgress\')]')
         expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(question.reload.maximum_grade).to eq(maximum_grade)
       end
@@ -151,7 +153,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         page.find('#programming-question-form-submit').click
         wait_for_job
 
-        expect(page).to have_no_xpath('//form//*[contains(@class, \'fa-spinner\')]')
+        expect(page).to_not have_xpath('//form//*[contains(@data-testid, \'CircularProgress\')]')
 
         question_created = assessment.questions.first.specific
         expect(page).to have_current_path(edit_course_assessment_question_programming_path(course, assessment,

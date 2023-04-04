@@ -6,7 +6,6 @@ import {
   Delete,
   FontDownloadOutlined,
   HorizontalRule,
-  NorthWest,
   OpenWithOutlined,
   RadioButtonUncheckedRounded,
   Redo,
@@ -17,6 +16,8 @@ import {
 import { Grid, IconButton, Tooltip } from '@mui/material';
 import { blue, grey } from '@mui/material/colors';
 import PropTypes from 'prop-types';
+
+import PointerIcon from 'lib/components/icons/PointerIcon';
 
 import {
   scribingPopoverTypes,
@@ -64,6 +65,7 @@ const propTypes = {
 
 const styles = {
   toolbar: {
+    marginRight: '0.5em',
     marginBottom: '0.5em',
   },
   disabledToolbar: {
@@ -76,6 +78,7 @@ const styles = {
   },
   tool: {
     paddingLeft: '8px',
+    paddingBottom: '8px',
   },
   disabled: {
     cursor: 'not-allowed',
@@ -719,15 +722,15 @@ class ScribingToolbar extends Component {
             title={<FormattedMessage {...translations.select} />}
           >
             <IconButton
+              className="pl-8 pt-8 pb-6"
               color={
                 this.props.scribing.selectedTool === scribingTools.SELECT
                   ? 'primary'
                   : undefined
               }
               onClick={this.onClickSelectionMode}
-              style={styles.tool}
             >
-              <NorthWest />
+              <PointerIcon />
             </IconButton>
           </Tooltip>
           <Tooltip

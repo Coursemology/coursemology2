@@ -54,6 +54,7 @@ const styles = {
   },
   toolbar: {
     marginBottom: '1em',
+    marginRight: '1em',
   },
   custom_line: {
     display: 'inline-block',
