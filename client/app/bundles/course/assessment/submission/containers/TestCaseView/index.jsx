@@ -122,7 +122,9 @@ export class VisibleTestCaseView extends Component {
           <>
             <FormattedMessage {...translations[outputStreamType]} />
             {showStaffOnlyWarning &&
-              VisibleTestCaseView.renderStaffOnlyOutputStreamWarning(outputStreamType)}
+              VisibleTestCaseView.renderStaffOnlyOutputStreamWarning(
+                outputStreamType,
+              )}
           </>
         </AccordionSummary>
         <AccordionDetails>
@@ -134,13 +136,9 @@ export class VisibleTestCaseView extends Component {
 
   static renderConditionalOutputStreamIcon(outputStreamType) {
     if (outputStreamType === 'standardOutput') {
-      return (
-        <Warning id="warning-icon-standard-output" />
-      )
+      return <Warning id="warning-icon-standard-output" />;
     }
-    return (
-      <Warning id="warning-icon-standard-error" />
-    )
+    return <Warning id="warning-icon-standard-error" />;
   }
 
   static renderStaffOnlyOutputStreamWarning(outputStreamType) {
@@ -151,7 +149,9 @@ export class VisibleTestCaseView extends Component {
           data-offset="{'left' : -8}"
           data-tip
         >
-          {VisibleTestCaseView.renderConditionalOutputStreamIcon(outputStreamType)}
+          {VisibleTestCaseView.renderConditionalOutputStreamIcon(
+            outputStreamType,
+          )}
         </a>
         <ReactTooltip effect="solid" id="staff-only-output-stream">
           <FormattedMessage {...translations.staffOnlyOutputStream} />
@@ -168,7 +168,9 @@ export class VisibleTestCaseView extends Component {
           data-offset="{'left' : -8}"
           data-tip
         >
-          {VisibleTestCaseView.renderConditionalTestCaseWarningIcon(testCaseType)}
+          {VisibleTestCaseView.renderConditionalTestCaseWarningIcon(
+            testCaseType,
+          )}
         </a>
         <ReactTooltip effect="solid" id="staff-only-test-cases">
           <FormattedMessage {...translations.staffOnlyTestCases} />
@@ -179,19 +181,20 @@ export class VisibleTestCaseView extends Component {
 
   static renderConditionalTestCaseWarningIcon(testCaseType) {
     if (testCaseType === 'publicTestCases') {
-      return <Warning id="warning-icon-public-test-cases" />
+      return <Warning id="warning-icon-public-test-cases" />;
     }
     if (testCaseType === 'privateTestCases') {
-      return <Warning id="warning-icon-private-test-cases" />
-    } 
-    return <Warning id="warning-icon-evaluation-test-cases" />
+      return <Warning id="warning-icon-private-test-cases" />;
+    }
+    return <Warning id="warning-icon-evaluation-test-cases" />;
   }
 
   static renderTitle(testCaseType, warn) {
     return (
       <>
         <FormattedMessage {...translations[testCaseType]} />
-        {warn && VisibleTestCaseView.renderStaffOnlyTestCasesWarning(testCaseType)}
+        {warn &&
+          VisibleTestCaseView.renderStaffOnlyTestCasesWarning(testCaseType)}
       </>
     );
   }

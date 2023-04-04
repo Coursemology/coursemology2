@@ -60,7 +60,7 @@ class ProgrammingFile extends Component {
     if (file.highlighted_content === null) {
       return (
         <Paper style={{ backgroundColor: yellow[100], padding: 10 }}>
-          <Warning data-testid="warning-icon" style={styles.warningIcon}/>
+          <Warning data-testid="warning-icon" style={styles.warningIcon} />
           <span>
             <FormattedMessage {...translations.sizeTooBig} />
             &nbsp;

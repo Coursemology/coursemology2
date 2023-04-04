@@ -7,7 +7,7 @@ RSpec.describe 'Jobs: status query' do
 
     scenario 'I can query the status of a job' do
       visit job_path(job.id)
-      expect(page).to have_selector('.fa-spinner.fa-spin')
+      expect(page).to_not have_selector('.fa-spinner.fa-spin')
       expect(page).to have_selector(:xpath, '/html/head/meta[@http-equiv="refresh"][@content="5"]',
                                     visible: false)
 
