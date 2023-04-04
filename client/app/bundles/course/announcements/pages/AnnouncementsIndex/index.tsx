@@ -9,9 +9,7 @@ import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
 import NewAnnouncementButton from '../../components/buttons/NewAnnouncementButton';
-import AnnouncementsDisplay, {
-  sortAnnouncements,
-} from '../../components/misc/AnnouncementsDisplay';
+import AnnouncementsDisplay from '../../components/misc/AnnouncementsDisplay';
 import {
   createAnnouncement,
   deleteAnnouncement,
@@ -59,14 +57,14 @@ const AnnouncementsIndex: FC<Props> = (props) => {
   const announcementPermissions = useSelector((state: AppState) =>
     getAnnouncementPermissions(state),
   );
-
   const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
     dispatch(fetchAnnouncements())
-      .finally(() => setIsLoading(false))
       .catch(() =>
         toast.error(intl.formatMessage(translations.fetchAnnouncementsFailure)),
-      );
+      )
+      .finally(() => setIsLoading(false));
   }, [dispatch]);
 
   return (
@@ -93,7 +91,7 @@ const AnnouncementsIndex: FC<Props> = (props) => {
           ) : (
             <AnnouncementsDisplay
               announcementPermissions={announcementPermissions}
-              announcements={sortAnnouncements(announcements)}
+              announcements={announcements}
               deleteOperation={deleteAnnouncement}
               updateOperation={updateAnnouncement}
             />

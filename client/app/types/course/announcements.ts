@@ -39,6 +39,15 @@ export interface AnnouncementMiniEntity {
   permissions: AnnouncementListDataPermissions;
 }
 
+export interface ExtendedAnnouncementMiniEntity extends AnnouncementMiniEntity {
+  [key: string]:
+    | number
+    | string
+    | boolean
+    | AnnouncementListDataPermissions
+    | CourseUserBasicMiniEntity;
+}
+
 export interface AnnouncementEntity extends AnnouncementMiniEntity {}
 export interface AnnouncementFormData {
   id?: number;
