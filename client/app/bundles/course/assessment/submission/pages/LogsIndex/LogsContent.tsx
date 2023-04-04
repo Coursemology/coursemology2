@@ -34,13 +34,9 @@ const LogsContent: FC<Props> = (props) => {
       if (validAttempt) {
         backgroundColor = '#ffffff';
       } else {
-        backgroundColor = red[300];
+        backgroundColor = red[100];
       }
       return { style: { background: backgroundColor } };
-    },
-    sortOrder: {
-      name: 'timestamp',
-      direction: 'desc',
     },
     viewColumns: false,
   };

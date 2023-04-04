@@ -1,6 +1,6 @@
 export interface LogsData {
   validAttempt: boolean;
-  timestamp: string;
+  timestamp: Date;
   ipAddress: string;
   userAgent: string;
   userSessionId: string;
