@@ -41,6 +41,8 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
 
     context 'As a Course Student' do
       let(:user) { student }
+      let(:created_started_cond_submission) { assessment_with_condition.submissions.last }
+      let(:created_submission) { assessment.submissions.last }
 
       scenario 'I cannot see draft assessments which are empty' do
         empty_assessment
@@ -66,10 +68,10 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
         within find('tr', text: assessment_with_condition.title) do
           click_link 'Attempt'
         end
+        wait_for_page
 
-        created_submission = assessment_with_condition.submissions.last
         expect(current_path).to eq(edit_course_assessment_submission_path(
-                                     course, assessment_with_condition, created_submission
+                                     course, assessment_with_condition, created_started_cond_submission
                                    ))
       end
 
@@ -80,8 +82,8 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
         within find('tr', text: assessment.title) do
           click_link 'Attempt'
         end
+        wait_for_page
 
-        created_submission = assessment.submissions.last
         expect(current_path).
           to eq(edit_course_assessment_submission_path(course, assessment, created_submission))
       end
@@ -165,6 +167,8 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
 
     context 'As a Course Staff' do
       let(:user) { create(:course_teaching_assistant, course: course).user }
+      let(:created_started_cond_submission) { assessment_with_condition.submissions.last }
+      let(:created_non_started_submission) { not_started_assessment.submissions.last }
 
       scenario 'I can attempt unsatisfied submission' do
         assessment_with_condition
@@ -173,10 +177,10 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
         within find('tr', text: assessment_with_condition.title) do
           hover_then_click find_link('Attempt', visible: false)
         end
+        wait_for_page
 
-        created_submission = assessment_with_condition.submissions.last
         expect(current_path).to eq(edit_course_assessment_submission_path(
-                                     course, assessment_with_condition, created_submission
+                                     course, assessment_with_condition, created_started_cond_submission
                                    ))
       end
 
@@ -187,10 +191,11 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
         within find('tr', text: not_started_assessment.title) do
           hover_then_click find_link('Attempt', visible: false)
         end
+        wait_for_page
 
         created_submission = not_started_assessment.submissions.last
         expect(current_path).to eq(
-          edit_course_assessment_submission_path(course, not_started_assessment, created_submission)
+          edit_course_assessment_submission_path(course, not_started_assessment, created_non_started_submission)
         )
       end
 

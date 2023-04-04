@@ -6,6 +6,8 @@ import { LogsData } from 'types/course/assessment/submission/logs';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
+import useTranslation from 'lib/hooks/useTranslation';
+import { formatMiniDateTime } from 'lib/moment';
 
 import translations from './translations';
 
@@ -15,10 +17,16 @@ interface Props {
 
 const LogsContent: FC<Props> = (props) => {
   const { with: data } = props;
+  const { t } = useTranslation();
 
   if (data && data.length === 0) {
     return <Note message={<FormattedMessage {...translations.noLogs} />} />;
   }
+
+  const formattedDateData = data.map((e) => {
+    e.timestamp = formatMiniDateTime(e.timestamp);
+    return e;
+  });
 
   const options: TableOptions = {
     download: false,
@@ -28,10 +36,10 @@ const LogsContent: FC<Props> = (props) => {
     search: false,
     selectableRows: 'none',
     setRowProps: (_row, dataIndex, _rowIndex) => {
-      const validAttempt = data[dataIndex].validAttempt;
+      const isValidAttempt = data[dataIndex].isValidAttempt;
       let backgroundColor: unknown = null;
 
-      if (validAttempt) {
+      if (isValidAttempt) {
         backgroundColor = '#ffffff';
       } else {
         backgroundColor = red[100];
@@ -44,7 +52,7 @@ const LogsContent: FC<Props> = (props) => {
   const columns: TableColumns[] = [
     {
       name: 'timestamp',
-      label: 'Timestamp',
+      label: t(translations.timestamp),
       options: {
         filter: false,
         sort: false,
@@ -52,7 +60,7 @@ const LogsContent: FC<Props> = (props) => {
     },
     {
       name: 'ipAddress',
-      label: 'IP Address',
+      label: t(translations.ipAddress),
       options: {
         filter: false,
         sort: false,
@@ -60,7 +68,7 @@ const LogsContent: FC<Props> = (props) => {
     },
     {
       name: 'userAgent',
-      label: 'User Agent',
+      label: t(translations.userAgent),
       options: {
         filter: false,
         sort: false,
@@ -68,7 +76,7 @@ const LogsContent: FC<Props> = (props) => {
     },
     {
       name: 'userSessionId',
-      label: 'User Session ID',
+      label: t(translations.userSessionId),
       options: {
         filter: false,
         sort: false,
@@ -76,7 +84,7 @@ const LogsContent: FC<Props> = (props) => {
     },
     {
       name: 'submissionSessionId',
-      label: 'Submission Session ID',
+      label: t(translations.submissionSessionId),
       options: {
         filter: false,
         sort: false,
@@ -85,7 +93,12 @@ const LogsContent: FC<Props> = (props) => {
   ];
 
   return (
-    <DataTable columns={columns} data={data} options={options} withMargin />
+    <DataTable
+      columns={columns}
+      data={formattedDateData}
+      options={options}
+      withMargin
+    />
   );
 };
 

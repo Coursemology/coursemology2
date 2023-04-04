@@ -15,6 +15,30 @@ export default defineMessages({
   },
   noLogs: {
     id: 'course.assessment.submission.logs.noLogs',
-    defaultMessage: 'Currently no available logs here',
+    defaultMessage: 'There is no available log',
+  },
+  timestamp: {
+    id: 'course.assessment.submission.logs.timestamp',
+    defaultMessage: 'Timestamp',
+  },
+  ipAddress: {
+    id: 'course.assessment.submission.logs.ipAddress',
+    defaultMessage: 'IP Address',
+  },
+  userAgent: {
+    id: 'course.assessment.submission.logs.userAgent',
+    defaultMessage: 'User Agent',
+  },
+  userSessionId: {
+    id: 'course.assessment.submission.logs.userSessionId',
+    defaultMessage: 'User Session Token',
+  },
+  submissionSessionId: {
+    id: 'course.assessment.submission.logs.submissionSessionId',
+    defaultMessage: 'Submission Session Token',
+  },
+  accessLogs: {
+    id: 'course.assessment.submission.logs.accessLogs',
+    defaultMessage: 'Access Logs',
   },
 });

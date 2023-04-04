@@ -262,7 +262,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
               password: not_started_assessment.view_password
             }
           }
-          expect(json['success']).to be_falsy
+          expect(json['redirectUrl']).to eq(course_assessment_path(course, not_started_assessment))
         end
       end
 
@@ -276,7 +276,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
               password: started_assessment.view_password
             }
           }
-          expect(json['success']).to be_truthy
+          expect(json['redirectUrl']).to eq(course_assessment_path(course, started_assessment))
         end
 
         it 'does not unlock with wrong password' do
@@ -288,7 +288,7 @@ RSpec.describe Course::Assessment::AssessmentsController do
               password: 'WRONG_PASSWORD'
             }
           }
-          expect(json['success']).to be_falsy
+          expect(json['errors']).not_to be_nil
         end
       end
     end
