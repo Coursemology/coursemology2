@@ -4,12 +4,5 @@ zh:
       submission:
         logs:
           index:
-            assessment_title: '测验标题'
             header: '登录记录'
-            ip_address: 'IP地址'
-            student_name: '学生名'
-            submission_session_id: '提交会话Token'
-            status: '提交状态'
-            timestamp: '时间戳'
-            user_agent: '用户代理'
-            user_session_id: '用户会话Token'
+            submissions: '提交'
