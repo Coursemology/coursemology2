@@ -23,6 +23,8 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
 
     context 'As a Course Student' do
       let(:user) { student }
+      let(:protected_submission) { protected_assessment.submissions.last }
+      let(:last_submission) { assessment.submissions.last }
 
       scenario 'My access to the password-protected assessment is logged' do
         protected_assessment
@@ -31,14 +33,14 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
         within find('tr', text: protected_assessment.title) do
           click_link 'Attempt'
         end
+        wait_for_page
 
-        submission = protected_assessment.submissions.last
-        expect(submission.logs.count).to equal(1)
-        expect(submission.logs.last.valid_attempt?).to be(true)
+        expect(protected_submission.logs.count).to equal(1)
+        expect(protected_submission.logs.last.valid_attempt?).to be(true)
 
         expect do
-          visit edit_course_assessment_submission_path(course, protected_assessment, submission)
-        end.not_to(change { submission.logs.count })
+          visit edit_course_assessment_submission_path(course, protected_assessment, protected_submission)
+        end.not_to(change { protected_submission.logs.count })
 
         # Logout and login again and visit the same submission
         logout
@@ -46,16 +48,17 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
         wait_for_page
 
         expect do
-          visit edit_course_assessment_submission_path(course, protected_assessment, submission)
-        end.to change { submission.logs.count }.by(1)
-        expect(submission.logs.last.valid_attempt?).to be(false)
+          visit edit_course_assessment_submission_path(course, protected_assessment, protected_submission)
+        end.to change { protected_submission.logs.count }.by(1)
+        expect(protected_submission.logs.last.valid_attempt?).to be(false)
 
         expect do
-          fill_in 'session_password', with: protected_assessment.session_password
-          click_button I18n.t('course.assessment.sessions.new.continue')
-          wait_for_page
-        end.to change { submission.logs.count }.by(1)
-        expect(submission.logs.last.valid_attempt?).to be(true)
+          fill_in 'password', with: protected_assessment.session_password
+          click_button('Submit')
+        end.to change { protected_submission.logs.count }.by(1)
+        wait_for_page
+
+        expect(protected_submission.logs.last.valid_attempt?).to be(true)
       end
 
       scenario 'My access to the unprotected assessment is not logged' do
@@ -65,13 +68,13 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
         within find('tr', text: assessment.title) do
           click_link 'Attempt'
         end
+        wait_for_page
 
-        submission = assessment.submissions.last
-        expect(submission.logs.count).to equal(0)
+        expect(last_submission.logs.count).to equal(0)
 
         expect do
-          visit edit_course_assessment_submission_path(course, assessment, submission)
-        end.not_to(change { submission.logs.count })
+          visit edit_course_assessment_submission_path(course, assessment, last_submission)
+        end.not_to(change { last_submission.logs.count })
       end
     end
 
@@ -85,8 +88,9 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
 
         visit course_assessment_submission_logs_path(course, protected_assessment, submission)
 
+        expect(page).to have_selector('div#submission-log')
         expect(page).
-          to have_selector('h1', text: I18n.t('course.assessment.submission.logs.index.header'))
+          to have_content(I18n.t('course.assessment.submission.logs.index.header'))
       end
     end
   end

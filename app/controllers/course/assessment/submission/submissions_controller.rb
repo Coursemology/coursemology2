@@ -46,7 +46,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     authorize! :access, @assessment
 
     existing_submission = @assessment.submissions.find_by(creator: current_user)
-    create_success_response(existing_submission) if existing_submission
+    create_success_response(existing_submission) and return if existing_submission
 
     ActiveRecord::Base.transaction do
       @submission.session_id = authentication_service.generate_authentication_token

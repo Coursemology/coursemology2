@@ -6,29 +6,6 @@ const optionShape = PropTypes.shape({
   correct: PropTypes.bool,
 });
 
-const logShape = PropTypes.shape({
-  validAttempt: PropTypes.bool,
-  timestamp: PropTypes.string.isRequired,
-  ipAddress: PropTypes.string.isRequired,
-  userAgent: PropTypes.string.isRequired,
-  userSessionId: PropTypes.string.isRequired,
-  submissionSessionId: PropTypes.string.isRequired,
-});
-
-const logInfo = PropTypes.shape({
-  assessmentTitle: PropTypes.string.isRequired,
-  assessmentUrl: PropTypes.string.isRequired,
-  studentName: PropTypes.string.isRequired,
-  studentUrl: PropTypes.string.isRequired,
-  submissionStatus: PropTypes.string.isRequired,
-  editUrl: PropTypes.string.isRequired,
-});
-
-export const logsInfoShape = PropTypes.shape({
-  info: logInfo,
-  logs: PropTypes.arrayOf(logShape),
-});
-
 export const testCaseShape = PropTypes.shape({
   identifier: PropTypes.string.isRequired,
   expression: PropTypes.string.isRequired,

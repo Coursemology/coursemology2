@@ -55,7 +55,7 @@ RSpec.describe 'Course: Assessments: Viewing', js: true do
 
         expect(page).to have_link(
           'Attempt',
-          href: course_assessment_attempt_path(course, assessment)
+          href: course_assessment_path(course, assessment)
         )
       end
     end

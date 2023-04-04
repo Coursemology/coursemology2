@@ -1,6 +1,6 @@
 export interface LogsData {
-  validAttempt: boolean;
-  timestamp: Date;
+  isValidAttempt: boolean;
+  timestamp: string;
   ipAddress: string;
   userAgent: string;
   userSessionId: string;
@@ -16,11 +16,7 @@ export interface LogsMainInfo {
   editUrl: string;
 }
 
-interface LogInfo {
+export interface LogInfo {
   info: LogsMainInfo;
   logs: LogsData[];
-}
-
-export interface LogsInfo {
-  log: LogInfo;
 }
