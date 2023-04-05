@@ -21,6 +21,18 @@ RSpec.describe Course::Assessment::Answer::AutoGradingJob do
         have_enqueued_job(subject).exactly(:once).on_queue('highest')
     end
 
+    context 'When a question is set as lower priority' do
+      before do
+        question.update!(is_low_priority: true)
+        answer.reload
+      end
+
+      it 'can be queued with delayed_ queue' do
+        expect { subject.perform_later(answer) }.to \
+          have_enqueued_job(subject).exactly(:once).on_queue('delayed_highest')
+      end
+    end
+
     context 'when the assessment is non-autograded' do
       it 'evaluates answers and does not update the exp' do
         initial_points = submission.points_awarded

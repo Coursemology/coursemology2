@@ -196,4 +196,8 @@ export default defineMessages({
       "Codaveri provides code evaluation and automated code feedback services for students' codes. \
       This feature is currently disabled. To use it, please enable this component in the course/instance setting.",
   },
+  lowestGradingPriority: {
+    id: 'course.assessment.question.programming.ProgrammingQuestionForm.lowestGradingPriority',
+    defaultMessage: 'Lowest Grading Priority',
+  },
 });

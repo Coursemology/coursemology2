@@ -24,6 +24,7 @@ export const initialState = fromJS({
     skills: [],
     memory_limit: null,
     time_limit: null,
+    is_low_priority: false,
     autograded: false,
     display_autograded_toggle: false,
     autograded_assessment: false,

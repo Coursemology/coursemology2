@@ -17,7 +17,18 @@ RSpec.describe Course::Assessment::Submission::AutoGradingJob do
 
     it 'can be queued' do
       expect { subject.perform_later(submission) }.to \
-        have_enqueued_job(subject).exactly(:once)
+        have_enqueued_job(subject).exactly(:once).on_queue('default')
+    end
+
+    context 'When a question is not of highest grading priority' do
+      before do
+        question.update!(is_low_priority: true)
+      end
+
+      it 'can be queued with delayed_ queue' do
+        expect { subject.perform_later(submission) }.to \
+          have_enqueued_job(subject).exactly(:once).on_queue('delayed_default')
+      end
     end
 
     with_active_job_queue_adapter(:background_thread) do

@@ -21,6 +21,18 @@ RSpec.describe Course::Assessment::Answer::ReducePriorityAutoGradingJob do
         have_enqueued_job(subject).exactly(:once).on_queue('medium_high')
     end
 
+    context 'When a question is not of highest grading priority' do
+      before do
+        question.update!(is_low_priority: true)
+        answer.reload
+      end
+
+      it 'can be queued with delayed_ queue' do
+        expect { subject.perform_later(answer) }.to \
+          have_enqueued_job(subject).exactly(:once).on_queue('delayed_medium_high')
+      end
+    end
+
     context 'when the initial wrong answer is re-evaluated' do
       before do
         submission.update!(awarder: User.system)
