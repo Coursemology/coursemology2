@@ -1,7 +1,12 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Assessment, Create, Inventory } from '@mui/icons-material';
+import {
+  Assessment,
+  Create,
+  Inventory,
+  MonitorHeart,
+} from '@mui/icons-material';
 import { Button, IconButton, Tooltip } from '@mui/material';
 import {
   AssessmentData,
@@ -77,6 +82,19 @@ const AssessmentShowHeader = (
               className="text-white"
             >
               <Create />
+            </IconButton>
+          </Link>
+        </Tooltip>
+      )}
+
+      {assessment.monitoringUrl && (
+        <Tooltip disableInteractive title={t(translations.pulsegrid)}>
+          <Link to={assessment.monitoringUrl}>
+            <IconButton
+              aria-label={t(translations.pulsegrid)}
+              className="text-white"
+            >
+              <MonitorHeart />
             </IconButton>
           </Link>
         </Tooltip>
