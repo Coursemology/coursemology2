@@ -13,7 +13,19 @@ class Course::Assessment::Answer::ReducePriorityAutoGradingJob < ApplicationJob
   # Answers are regraded when their question is updated. This causes a large spike in the number
   # of answer auto grading jobs. To prevent active users from getting timely feedback on their
   # answers, queue these regrading jobs at a lower priority than answer grading jobs.
-  queue_as :medium_high
+  #
+  # NOTE: See Course::Assessment::Answer::AutoGradingJob for comments regarding usage of
+  # is_low_priority flag and :delayed_* queue_as below.
+  queue_as do
+    answer = arguments.first
+    question = answer.question
+
+    if question.is_low_priority
+      :delayed_medium_high
+    else
+      :medium_high
+    end
+  end
 
   protected
 

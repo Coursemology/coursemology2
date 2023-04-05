@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_15_054448) do
+ActiveRecord::Schema.define(version: 2023_04_04_030133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -356,6 +356,7 @@ ActiveRecord::Schema.define(version: 2023_01_15_054448) do
     t.integer "updater_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_low_priority", default: false
     t.index ["actable_type", "actable_id"], name: "index_course_assessment_questions_actable", unique: true
     t.index ["creator_id"], name: "fk__course_assessment_questions_creator_id"
     t.index ["updater_id"], name: "fk__course_assessment_questions_updater_id"

@@ -14,6 +14,7 @@ class Course::Assessment::Question < ApplicationRecord
                                          if: -> { actable_id? && actable_type_changed? } }
   validates :actable_id, uniqueness: { scope: [:actable_type],
                                        if: -> { actable_type? && actable_id_changed? } }
+  validates :is_low_priority, inclusion: { in: [true, false] }
 
   has_many :question_assessments, class_name: Course::QuestionAssessment.name, inverse_of: :question,
                                   dependent: :destroy

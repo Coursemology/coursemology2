@@ -8,7 +8,28 @@ class Course::Assessment::Answer::AutoGradingJob < ApplicationJob
   # jobs might never get to run, and then the submission auto grading jobs will never return.
   #
   # Lowering this *will* eventually cause a deadlock.
-  queue_as :highest
+  #
+  # NOTE for is_low_priority flag and :delayed_* queue_as below.
+  # For a very specific use case (and as a temporary solution) is_low_priority flag is added to programming question.
+  # in order to push grading problem with heavy computation (i.e. 5-10 minutes autograding) to lower priority.
+  # This is done to allow all jobs to be run in the main workers,
+  # while spinning up other workers that exclude :delayed_* queue
+  # to allow other jobs to go through without getting blocked by
+  # these delayed_ jobs that would take a very long time to run.
+  # Similarly the delayed_ queue is also added for Course::Assessment::Answer::ReducePriorityAutoGradingJob and
+  # Course::Assessment::Submission::AutoGradingJob to ensure consistency,
+  # and to address job dependencies between submission
+  # abd answer autograding.
+  queue_as do
+    answer = arguments.first
+    question = answer.question
+
+    if question.is_low_priority
+      :delayed_highest
+    else
+      :highest
+    end
+  end
 
   protected
 

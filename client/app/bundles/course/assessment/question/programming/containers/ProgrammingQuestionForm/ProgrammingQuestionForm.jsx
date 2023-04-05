@@ -561,6 +561,38 @@ class ProgrammingQuestionForm extends Component {
     );
   }
 
+  renderSwitchField(label, field, value, disabled) {
+    return (
+      <>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={value}
+              color="primary"
+              id={ProgrammingQuestionForm.getInputId(field)}
+              name={ProgrammingQuestionForm.getInputName(field)}
+              onChange={(e) => {
+                this.handleChange(field, e.target.checked);
+              }}
+            />
+          }
+          disabled={this.props.data.get('is_loading') || disabled}
+          label={label}
+        />
+        {/** For some reason, FormData(this.form) is unable to retrieve the data from <Switch />
+         * component above. As such, hidden input field is used to store the form data.
+         */}
+        <input
+          id={ProgrammingQuestionForm.getInputId(field)}
+          name={ProgrammingQuestionForm.getInputName(field)}
+          readOnly={this.props.data.get('is_loading') || disabled}
+          type="hidden"
+          value={value}
+        />
+      </>
+    );
+  }
+
   renderSwitcher(showEditOnline, canSwitch) {
     if (!canSwitch) {
       return null;
@@ -788,104 +820,70 @@ class ProgrammingQuestionForm extends Component {
               </div>
             </Stack>
 
-            <div className={styles.autogradeToggle}>
+            <div>
               {this.props.data.getIn([
                 'question',
                 'display_autograded_toggle',
-              ]) ? (
-                <>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={autograded}
-                        color="primary"
-                        onChange={(e) => {
-                          if (hasAutoGradings) return;
-                          this.handleChange('autograded', e.target.checked);
-                        }}
-                      />
-                    }
-                    disabled={
-                      this.props.data.get('is_loading') || hasAutoGradings
-                    }
-                    label={autogradedLabel}
-                    name={ProgrammingQuestionForm.getInputName('autograded')}
-                  />
-                  <input
-                    id={ProgrammingQuestionForm.getInputId('autograded')}
-                    name={ProgrammingQuestionForm.getInputName('autograded')}
-                    readOnly={
-                      this.props.data.get('is_loading') || hasAutoGradings
-                    }
-                    style={{ display: 'none' }}
-                    type="hidden"
-                    value={autograded}
-                  />
-                </>
-              ) : null}
+              ]) &&
+                this.renderSwitchField(
+                  autogradedLabel,
+                  'autograded',
+                  autograded,
+                  hasAutoGradings,
+                )}
+
               {showIsCodaveri && (
-                <>
-                  <RadioGroup
-                    disabled={this.props.data.get('is_loading')}
-                    name={ProgrammingQuestionForm.getInputName('is_codaveri')}
-                    onChange={(e_, mode) => {
-                      this.handleChange('is_codaveri', mode === 'true');
-                    }}
-                    value={isCodaveri}
-                  >
-                    <div>
-                      {this.props.intl.formatMessage(
-                        translations.chooseEvaluator,
-                      )}
-                    </div>
-                    <FormControlLabel
-                      key={0}
-                      control={<Radio style={{ padding: 0, marginLeft: 10 }} />}
-                      label={
-                        <b>
-                          {this.props.intl.formatMessage(
-                            translations.defaultEvaluator,
-                          )}
-                        </b>
-                      }
-                      value={false}
-                    />
-                    <FormControlLabel
-                      key={1}
-                      control={<Radio style={{ padding: 0, marginLeft: 10 }} />}
-                      disabled={!enableCodaveri}
-                      label={
-                        <Tooltip
-                          title={this.props.intl.formatMessage(
-                            enableCodaveri
-                              ? translations.codaveriTooltip
-                              : translations.disableCodaveriTooltip,
-                          )}
-                        >
-                          <div
-                            style={{ alignItems: 'center', display: 'flex' }}
-                          >
-                            <b>
-                              {this.props.intl.formatMessage(
-                                translations.codaveriEvaluator,
-                              )}
-                            </b>
-                            <HelpOutline fontSize="small" />
-                          </div>
-                        </Tooltip>
-                      }
-                      value
-                    />
-                  </RadioGroup>
-                  <input
-                    id={ProgrammingQuestionForm.getInputId('is_codaveri')}
-                    name={ProgrammingQuestionForm.getInputName('is_codaveri')}
-                    readOnly={this.props.data.get('is_loading')}
-                    style={{ display: 'none' }}
-                    type="hidden"
-                    value={isCodaveri}
+                <RadioGroup
+                  disabled={this.props.data.get('is_loading')}
+                  id={ProgrammingQuestionForm.getInputId('is_codaveri')}
+                  name={ProgrammingQuestionForm.getInputName('is_codaveri')}
+                  onChange={(e_, mode) => {
+                    this.handleChange('is_codaveri', mode === 'true');
+                  }}
+                  value={isCodaveri}
+                >
+                  <div>
+                    {this.props.intl.formatMessage(
+                      translations.chooseEvaluator,
+                    )}
+                  </div>
+                  <FormControlLabel
+                    key={0}
+                    control={<Radio style={{ padding: 0, marginLeft: 10 }} />}
+                    label={
+                      <b>
+                        {this.props.intl.formatMessage(
+                          translations.defaultEvaluator,
+                        )}
+                      </b>
+                    }
+                    value={false}
                   />
-                </>
+                  <FormControlLabel
+                    key={1}
+                    control={<Radio style={{ padding: 0, marginLeft: 10 }} />}
+                    disabled={!enableCodaveri}
+                    label={
+                      <Tooltip
+                        title={this.props.intl.formatMessage(
+                          enableCodaveri
+                            ? translations.codaveriTooltip
+                            : translations.disableCodaveriTooltip,
+                        )}
+                      >
+                        <div style={{ alignItems: 'center', display: 'flex' }}>
+                          <b>
+                            {this.props.intl.formatMessage(
+                              translations.codaveriEvaluator,
+                            )}
+                          </b>
+                          <HelpOutline fontSize="small" />
+                        </div>
+                      </Tooltip>
+                    }
+                    value
+                  />
+                </RadioGroup>
               )}
             </div>
             <Grid
@@ -961,6 +959,19 @@ class ProgrammingQuestionForm extends Component {
                     )}
                   </div>
                 ) : null}
+              </Grid>
+              <Grid item xs={1}>
+                {autograded &&
+                  this.renderSwitchField(
+                    <b>
+                      {this.props.intl.formatMessage(
+                        translations.lowestGradingPriority,
+                      )}
+                    </b>,
+                    'is_low_priority',
+                    question.get('is_low_priority'),
+                    false,
+                  )}
               </Grid>
             </Grid>
           </Stack>
