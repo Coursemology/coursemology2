@@ -14,7 +14,7 @@
 # during subscriptions or actions, depending on the callbacks used in each included modules.
 # These features are broken up into concerns so that future channels can opt in to only the
 # capabilities they need.
-class CourseChannel < ApplicationCable::Channel
+class Course::Channel < ApplicationCable::Channel
   include ApplicationCableCourseConcern
   include ApplicationCableComponentConcern
   include ApplicationCableAbilityConcern

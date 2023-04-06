@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class HeartbeatChannel < CourseChannel
+class Course::Monitoring::HeartbeatChannel < Course::Channel
   def subscribed
     session_id = params[:session_id]
     @session = Course::Monitoring::Session.find(session_id)
@@ -79,7 +79,7 @@ class HeartbeatChannel < CourseChannel
     seb_hash = heartbeat.seb_hash
     is_valid_seb_hash = @monitor.valid_seb_hash?(seb_hash)
 
-    LiveMonitoringChannel.pulse_to @monitor, @session, {
+    Course::Monitoring::LiveMonitoringChannel.pulse_to @monitor, @session, {
       sessionId: @session.id,
       status: @session.status,
       lastHeartbeatAt: heartbeat.generated_at,
@@ -89,15 +89,15 @@ class HeartbeatChannel < CourseChannel
   end
 
   def broadcast_terminate_to_live_monitoring
-    LiveMonitoringChannel.terminate @monitor, @session
+    Course::Monitoring::LiveMonitoringChannel.terminate @monitor, @session
   end
 
   def broadcast_terminate
-    HeartbeatChannel.broadcast_to @session, { action: :terminate }
+    Course::Monitoring::HeartbeatChannel.broadcast_to @session, { action: :terminate }
   end
 
   def broadcast_flushed(first_timestamp, last_timestamp)
-    HeartbeatChannel.broadcast_to @session, {
+    Course::Monitoring::HeartbeatChannel.broadcast_to @session, {
       action: :flushed,
       from: first_timestamp,
       to: last_timestamp
@@ -107,7 +107,7 @@ class HeartbeatChannel < CourseChannel
   def broadcast_next(received_timestamp)
     next_timeout = rand(@monitor.min_interval_ms..@monitor.max_interval_ms)
 
-    HeartbeatChannel.broadcast_to @session, {
+    Course::Monitoring::HeartbeatChannel.broadcast_to @session, {
       action: :next,
       nextTimeout: next_timeout,
       received: received_timestamp

@@ -5,7 +5,8 @@ import {
   WatchData,
 } from 'types/channels/liveMonitoring';
 
-const LIVE_MONITORING_CHANNEL_NAME = 'LiveMonitoringChannel' as const;
+const LIVE_MONITORING_CHANNEL_NAME =
+  'Course::Monitoring::LiveMonitoringChannel' as const;
 
 export interface LiveMonitoringChannel {
   getRecentHeartbeats: (sessionId: number) => void;

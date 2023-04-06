@@ -19,7 +19,7 @@ export interface HeartbeatChannel {
   unsubscribe: () => void;
 }
 
-const HEARTBEAT_CHANNEL_NAME = 'HeartbeatChannel' as const;
+const HEARTBEAT_CHANNEL_NAME = 'Course::Monitoring::HeartbeatChannel' as const;
 
 const flushThenPulseOn = async (
   channel: Subscription,
