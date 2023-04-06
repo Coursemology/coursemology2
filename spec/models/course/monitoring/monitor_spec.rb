@@ -8,16 +8,21 @@ RSpec.describe Course::Monitoring::Monitor, type: :model do
 
     it { should have_one(:assessment).inverse_of(:monitor) }
     it { should have_many(:sessions).inverse_of(:monitor) }
-    it { should validate_numericality_of(:min_interval_ms).only_integer.is_greater_than(0) }
     it { should validate_numericality_of(:max_interval_ms).only_integer.is_greater_than(0) }
     it { should validate_numericality_of(:offset_ms).only_integer.is_greater_than(0) }
+
+    it do
+      should validate_numericality_of(:min_interval_ms).
+        only_integer.
+        is_greater_than_or_equal_to(Course::Monitoring::Monitor::DEFAULT_MIN_INTERVAL_MS)
+    end
 
     describe '#validations' do
       subject { create(:course_monitoring_monitor) }
 
       context 'when max_interval_ms is greater than min_interval_ms' do
         it 'is valid' do
-          subject.assign_attributes(min_interval_ms: 2, max_interval_ms: 3)
+          subject.assign_attributes(min_interval_ms: 4000, max_interval_ms: 5000)
           expect(subject).to be_valid
           expect(subject.errors[:max_interval_ms]).not_to be_present
         end
@@ -25,7 +30,7 @@ RSpec.describe Course::Monitoring::Monitor, type: :model do
 
       context 'when max_interval_ms is less than min_interval_ms' do
         it 'is not valid' do
-          subject.assign_attributes(min_interval_ms: 3, max_interval_ms: 2)
+          subject.assign_attributes(min_interval_ms: 5000, max_interval_ms: 4000)
           expect(subject).not_to be_valid
           expect(subject.errors[:max_interval_ms]).to be_present
         end

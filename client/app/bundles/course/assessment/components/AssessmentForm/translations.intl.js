@@ -349,6 +349,10 @@ const translations = defineMessages({
     id: 'course.assessment.AssessmentForm.hasToBeMoreThanMinInterval',
     defaultMessage: 'Has to be greater than the minimum value.',
   },
+  hasToBeMoreThanValueMs: {
+    id: 'course.assessment.AssessmentForm.hasToBeMoreThanValueMs',
+    defaultMessage: 'Has to be at least 3000 ms.',
+  },
   onlyManagersOwnersCanEdit: {
     id: 'course.assessment.AssessmentForm.onlyManagersOwnersCanEdit',
     defaultMessage:

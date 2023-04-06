@@ -98,7 +98,8 @@ const validationSchema = yup.object({
         .positive(t.hasToBePositiveIntegerMaxOneDay)
         .max(84_000_000, t.hasToBePositiveIntegerMaxOneDay)
         .typeError(t.hasToBePositiveIntegerMaxOneDay)
-        .required(ft.required),
+        .required(ft.required)
+        .min(3000, t.hasToBeMoreThanValueMs),
     }),
     max_interval_ms: yup.number().when('enabled', {
       is: true,
@@ -122,13 +123,18 @@ const validationSchema = yup.object({
   }),
 });
 
-const useFormValidation = (initialValues): UseFormReturn => {
+const useFormValidation = (
+  initialValues,
+  defaultMonitoringMinIntervalMs?: number,
+): UseFormReturn => {
   const form = useForm({
     defaultValues: {
       ...initialValues,
       session_protected: Boolean(initialValues?.session_password),
     },
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema, {
+      context: { defaultMonitoringMinIntervalMs },
+    }),
   });
 
   return {
