@@ -15,7 +15,7 @@ const config = {
   moduleNameMapper: {
     '^react(.*)$': '<rootDir>/node_modules/react$1',
     '.(css|scss)$': '<rootDir>/fileMock.js',
-    '.svg$': '<rootDir>/fileMock.js',
+    '.svg$': '<rootDir>/svgMock.js',
     '^api(.*)$': '<rootDir>/app/api$1',
     '^lib(.*)$': '<rootDir>/app/lib$1',
     '^theme(.*)$': '<rootDir>/app/theme$1',
