@@ -11,11 +11,11 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
   end
 
   class << self
-    def pulse_to(monitor, session, snapshot)
+    def broadcast_pulse_to(monitor, session, snapshot)
       broadcast_from monitor, :pulse, { userId: session.creator_id, snapshot: snapshot }
     end
 
-    def terminate(monitor, session)
+    def broadcast_terminate(monitor, session)
       broadcast_from monitor, :terminate, session.creator_id
     end
 

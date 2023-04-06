@@ -41,6 +41,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
       monitoring.refresh(userId, snapshot);
     },
     viewed: monitoring.supplySelected,
+    terminate: monitoring.terminate,
   });
 
   return (
