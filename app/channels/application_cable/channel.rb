@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class ApplicationCable::Channel < ActionCable::Channel::Base
+  include ApplicationCableMultitenancyConcern
+
   protected
 
   def request

@@ -4,7 +4,6 @@
 # must receive `course_id` as a parameter in the subscription request message.
 #
 # By default, it will expose, in chronological order:
-# - `current_tenant`
 # - `current_course`
 # - `current_course_user`
 # - `current_component_host`
@@ -16,7 +15,6 @@
 # These features are broken up into concerns so that future channels can opt in to only the
 # capabilities they need.
 class CourseChannel < ApplicationCable::Channel
-  include ApplicationCableMultitenancyConcern
   include ApplicationCableCourseConcern
   include ApplicationCableComponentConcern
   include ApplicationCableAbilityConcern
