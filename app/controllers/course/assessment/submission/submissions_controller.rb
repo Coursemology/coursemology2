@@ -14,6 +14,8 @@ class Course::Assessment::Submission::SubmissionsController < \
   # edited or updated.
   before_action :load_or_create_submission_questions, only: [:edit, :update]
 
+  after_action :stop_monitoring_session_if_submitted, only: [:update]
+
   delegate_to_service(:update)
   delegate_to_service(:submit_answer)
   delegate_to_service(:load_or_create_answers)
@@ -320,6 +322,10 @@ class Course::Assessment::Submission::SubmissionsController < \
     return nil unless should_monitor? || can_update_monitoring_session?
 
     @monitoring_service ||= Course::Assessment::Submission::MonitoringService.for(@submission, @assessment)
+  end
+
+  def stop_monitoring_session_if_submitted
+    monitoring_service&.stop! if @submission.submitted?
   end
 
   def not_downloadable

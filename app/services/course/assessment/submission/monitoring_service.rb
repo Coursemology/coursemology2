@@ -37,11 +37,16 @@ class Course::Assessment::Submission::MonitoringService
   alias_method :create_new_session_if_not_exist!, :session
 
   def continue_listening!
-    session.update!(status: :listening)
+    session.update!(status: :listening) if session.persisted?
   end
 
   def stop!
+    return unless session.persisted?
+
     session.update!(status: :stopped)
+
+    Course::Monitoring::HeartbeatChannel.broadcast_terminate session
+    Course::Monitoring::LiveMonitoringChannel.broadcast_terminate @monitor, session
   end
 
   def listening?

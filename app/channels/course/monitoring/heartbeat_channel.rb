@@ -58,6 +58,12 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
     broadcast_flushed heartbeats_data.first['timestamp'], heartbeats_data.last['timestamp'] if flushed
   end
 
+  class << self
+    def broadcast_terminate(session)
+      broadcast_to session, { action: :terminate }
+    end
+  end
+
   private
 
   def listening?
@@ -79,7 +85,7 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
     seb_hash = heartbeat.seb_hash
     is_valid_seb_hash = @monitor.valid_seb_hash?(seb_hash)
 
-    Course::Monitoring::LiveMonitoringChannel.pulse_to @monitor, @session, {
+    Course::Monitoring::LiveMonitoringChannel.broadcast_pulse_to @monitor, @session, {
       sessionId: @session.id,
       status: @session.status,
       lastHeartbeatAt: heartbeat.generated_at,
@@ -89,11 +95,11 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
   end
 
   def broadcast_terminate_to_live_monitoring
-    Course::Monitoring::LiveMonitoringChannel.terminate @monitor, @session
+    Course::Monitoring::LiveMonitoringChannel.broadcast_terminate @monitor, @session
   end
 
   def broadcast_terminate
-    Course::Monitoring::HeartbeatChannel.broadcast_to @session, { action: :terminate }
+    Course::Monitoring::HeartbeatChannel.broadcast_terminate @session
   end
 
   def broadcast_flushed(first_timestamp, last_timestamp)
