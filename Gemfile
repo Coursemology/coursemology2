@@ -161,6 +161,10 @@ group :production, :test do
   gem 'puma'
 end
 
+group :production, :development do
+  gem 'redis-rails'
+end
+
 group :production do
   # Use fog-aws as CarrierWave's storage provider
   gem 'fog-aws', '3.8.0'
@@ -169,7 +173,6 @@ group :production do
   gem 'sidekiq'
   gem 'sidekiq-cron'
   gem 'sinatra', require: nil
-  gem 'redis-rails'
   gem 'rollbar', '>= 1.5.3'
 
   # better log format
