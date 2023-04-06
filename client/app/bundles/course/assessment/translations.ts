@@ -897,6 +897,11 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.blankField',
     defaultMessage: '(blank)',
   },
+  cannotConnectToLiveMonitoringChannel: {
+    id: 'course.assessment.monitoring.cannotConnectToLiveMonitoringChannel',
+    defaultMessage:
+      'Oops, an error occurred when connecting to the live monitoring channel.',
+  },
 });
 
 export default translations;
