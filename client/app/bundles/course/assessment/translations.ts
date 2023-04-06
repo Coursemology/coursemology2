@@ -902,6 +902,28 @@ const translations = defineMessages({
     defaultMessage:
       'Oops, an error occurred when connecting to the live monitoring channel.',
   },
+  noActiveSessions: {
+    id: 'course.assessment.monitoring.noActiveSessions',
+    defaultMessage: 'No active sessions.',
+  },
+  alivePresenceHint: {
+    id: 'course.assessment.monitoring.alivePresenceHint',
+    defaultMessage: 'Last heartbeat was received in time.',
+  },
+  alivePresenceHintSEBHashMatches: {
+    id: 'course.assessment.monitoring.alivePresenceHintSEBHashMatches',
+    defaultMessage:
+      'Last heartbeat was received in time and the SEB Config Key matches.',
+  },
+  latePresenceHint: {
+    id: 'course.assessment.monitoring.latePresenceHint',
+    defaultMessage:
+      "Next heartbeat hasn't been received in time, but still within the configured inter-heartbeats interval.",
+  },
+  missingPresenceHint: {
+    id: 'course.assessment.monitoring.missingPresenceHint',
+    defaultMessage: "Next heartbeat hasn't been received in time.",
+  },
 });
 
 export default translations;

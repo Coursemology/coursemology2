@@ -4,6 +4,7 @@ import { WatchGroup } from 'types/channels/liveMonitoring';
 import { MonitoringRequestData } from 'types/course/assessment/monitoring';
 
 import BetaChip from 'lib/components/core/BetaChip';
+import ErrorCard from 'lib/components/core/ErrorCard';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -11,10 +12,10 @@ import translations from '../../translations';
 import ActivityCenter from './components/ActivityCenter';
 import ConnectionStatus from './components/ConnectionStatus';
 import FilterAutocomplete from './components/FilterAutocomplete';
+import SessionBlobLegend from './components/SessionBlobLegend';
 import SessionsGrid from './components/SessionsGrid';
 import useLiveMonitoringChannel from './hooks/useLiveMonitoringChannel';
 import useMonitoring from './hooks/useMonitoring';
-import ErrorCard from 'lib/components/core/ErrorCard';
 
 interface PulseGridProps {
   with: MonitoringRequestData;
@@ -26,6 +27,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
   const { t } = useTranslation();
   const [userIds, setUserIds] = useState<number[]>([]);
   const [groups, setGroups] = useState<WatchGroup[]>([]);
+  const [hasSEBHash, setHasSEBHash] = useState(false);
   const monitoring = useMonitoring();
 
   const [rejected, setRejected] = useState(false);
@@ -34,6 +36,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
     watch: (data) => {
       setUserIds(data.userIds);
       setGroups(data.groups);
+      setHasSEBHash(data.monitor.hasSEBHash);
       monitoring.initialize(data.monitor, data.snapshots);
       monitoring.notifyConnectedAt(Date.now());
     },
@@ -64,6 +67,8 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
         </div>
 
         <FilterAutocomplete filters={groups} />
+
+        <SessionBlobLegend hasSEBHash={hasSEBHash} />
 
         <SessionsGrid
           for={userIds}
