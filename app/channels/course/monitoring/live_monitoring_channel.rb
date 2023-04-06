@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class LiveMonitoringChannel < CourseChannel
+class Course::Monitoring::LiveMonitoringChannel < Course::Channel
   DEFAULT_VIEW_HEARTBEATS_LIMIT = 10
 
   def subscribed
@@ -91,7 +91,7 @@ class LiveMonitoringChannel < CourseChannel
   end
 
   def broadcast(action, payload)
-    LiveMonitoringChannel.broadcast_from @monitor, action, payload
+    Course::Monitoring::LiveMonitoringChannel.broadcast_from @monitor, action, payload
   end
 
   def broadcast_watch(users, snapshots, groups)
