@@ -2,8 +2,8 @@
 FactoryBot.define do
   factory :course_monitoring_monitor, class: Course::Monitoring::Monitor.name do
     enabled { true }
-    min_interval_ms { 3000 }
-    max_interval_ms { 4000 }
+    min_interval_ms { Course::Monitoring::Monitor::DEFAULT_MIN_INTERVAL_MS }
+    max_interval_ms { Course::Monitoring::Monitor::DEFAULT_MIN_INTERVAL_MS * 2 }
     offset_ms { 2000 }
 
     trait :disabled do
