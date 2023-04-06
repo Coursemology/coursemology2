@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Course::Monitoring::HeartbeatChannel < Course::Channel
+  ACTIONS = { next: :next, terminate: :terminate, flushed: :flushed }.freeze
+
   def subscribed
     session_id = params[:session_id]
     @session = Course::Monitoring::Session.find(session_id)
@@ -33,7 +35,7 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
 
     return unless heartbeat.save
 
-    broadcast_next timestamp
+    broadcast_next timestamp, rand(@monitor.min_interval_ms..@monitor.max_interval_ms)
     broadcast_pulse_to_live_monitoring heartbeat
   end
 
@@ -60,7 +62,7 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
 
   class << self
     def broadcast_terminate(session)
-      broadcast_to session, { action: :terminate }
+      broadcast_to session, { action: ACTIONS[:terminate] }
     end
   end
 
@@ -104,17 +106,15 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
 
   def broadcast_flushed(first_timestamp, last_timestamp)
     Course::Monitoring::HeartbeatChannel.broadcast_to @session, {
-      action: :flushed,
+      action: ACTIONS[:flushed],
       from: first_timestamp,
       to: last_timestamp
     }
   end
 
-  def broadcast_next(received_timestamp)
-    next_timeout = rand(@monitor.min_interval_ms..@monitor.max_interval_ms)
-
+  def broadcast_next(received_timestamp, next_timeout)
     Course::Monitoring::HeartbeatChannel.broadcast_to @session, {
-      action: :next,
+      action: ACTIONS[:next],
       nextTimeout: next_timeout,
       received: received_timestamp
     }

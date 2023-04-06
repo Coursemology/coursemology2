@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Course::Monitoring::LiveMonitoringChannel < Course::Channel
   DEFAULT_VIEW_HEARTBEATS_LIMIT = 10
+  ACTIONS = { pulse: :pulse, terminate: :terminate, viewed: :viewed, watch: :watch }.freeze
 
   def subscribed
     monitor_id = params[:monitor_id]
@@ -20,7 +21,7 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
     end
 
     def broadcast_from(monitor, action, payload)
-      broadcast_to monitor, { action: action, payload: payload }.compact
+      broadcast_to monitor, { action: ACTIONS[action], payload: payload }.compact
     end
   end
 
