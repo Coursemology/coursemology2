@@ -38,23 +38,20 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
 
   def view(data)
     session_id, limit = data['session_id'], data['limit'] || DEFAULT_VIEW_HEARTBEATS_LIMIT
+    return unless (session = @monitor.sessions.find(session_id))
 
-    if (session = @monitor.sessions.find(session_id))
-      recent_heartbeats = session.heartbeats.last(limit).map do |heartbeat|
-        {
-          stale: heartbeat.stale,
-          userAgent: heartbeat.user_agent,
-          ipAddress: heartbeat.ip_address,
-          generatedAt: heartbeat.generated_at,
-          isValidSEBHash: @monitor.valid_seb_hash?(heartbeat.seb_hash),
-          sebHash: heartbeat.seb_hash
-        }.compact
-      end
-
-      broadcast_viewed recent_heartbeats.reverse
-    else
-      broadcast_session_not_found
+    recent_heartbeats = session.heartbeats.last(limit).map do |heartbeat|
+      {
+        stale: heartbeat.stale,
+        userAgent: heartbeat.user_agent,
+        ipAddress: heartbeat.ip_address,
+        generatedAt: heartbeat.generated_at,
+        isValidSEBHash: @monitor.valid_seb_hash?(heartbeat.seb_hash),
+        sebHash: heartbeat.seb_hash
+      }.compact
     end
+
+    broadcast_viewed recent_heartbeats.reverse
   end
 
   private
@@ -109,10 +106,6 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
 
   def broadcast_viewed(recent_heartbeats)
     broadcast :viewed, recent_heartbeats
-  end
-
-  def broadcast_session_not_found
-    broadcast :session_not_found
   end
 
   def component
