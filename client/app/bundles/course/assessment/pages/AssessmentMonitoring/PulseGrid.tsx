@@ -14,6 +14,7 @@ import FilterAutocomplete from './components/FilterAutocomplete';
 import SessionsGrid from './components/SessionsGrid';
 import useLiveMonitoringChannel from './hooks/useLiveMonitoringChannel';
 import useMonitoring from './hooks/useMonitoring';
+import ErrorCard from 'lib/components/core/ErrorCard';
 
 interface PulseGridProps {
   with: MonitoringRequestData;
@@ -26,6 +27,8 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
   const [userIds, setUserIds] = useState<number[]>([]);
   const [groups, setGroups] = useState<WatchGroup[]>([]);
   const monitoring = useMonitoring();
+
+  const [rejected, setRejected] = useState(false);
 
   const channel = useLiveMonitoringChannel(courseId, monitorId, {
     watch: (data) => {
@@ -42,7 +45,15 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
     },
     viewed: monitoring.supplySelected,
     terminate: monitoring.terminate,
+    rejected: () => setRejected(true),
   });
+
+  if (rejected)
+    return (
+      <ErrorCard
+        message={t(translations.cannotConnectToLiveMonitoringChannel)}
+      />
+    );
 
   return (
     <main className="flex h-full space-x-4">

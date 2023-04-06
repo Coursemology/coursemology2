@@ -19,6 +19,7 @@ export interface LiveMonitoringChannelCallbacks {
   terminate?: (userId: number) => void;
   viewed?: (heartbeats: HeartbeatDetail[]) => void;
   disconnected?: () => void;
+  rejected?: () => void;
 }
 
 const subscribe = (
@@ -39,9 +40,6 @@ const subscribe = (
       connected: () => {
         channel.perform('watch');
       },
-      disconnected: () => {
-        receivers.disconnected?.();
-      },
       received: (data: { action; payload }) => {
         const action = data?.action;
         const receiver = action && receivers[action];
@@ -49,6 +47,8 @@ const subscribe = (
 
         receiver(data.payload);
       },
+      disconnected: receivers.disconnected,
+      rejected: receivers.rejected,
     },
   );
 
