@@ -92,18 +92,32 @@ export function autogradeSubmission(id) {
 
     return CourseAPI.assessment.submissions
       .autoGrade(id)
-      .then((response) => response.data)
-      .then((data) => {
-        pollJob(
-          data.jobUrl,
-          () => {
-            dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_SUCCESS });
-            fetchSubmission(id)(dispatch);
-            dispatch(setNotification(translations.autogradeSubmissionSuccess));
-          },
-          () => dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE }),
-          JOB_POLL_DELAY_MS,
-        );
+      .then((response) => {
+        dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_SUCCESS });
+        fetchSubmission(id)(dispatch);
+
+        response.data.answerAutogradingJob
+          .filter((a) => a.job?.jobUrl)
+          .forEach((answer) => {
+            dispatch({
+              type: actionTypes.REEVALUATE_REQUEST,
+              questionId: answer.questionId,
+            });
+            pollJob(
+              answer.job.jobUrl,
+              () =>
+                dispatch(getEvaluationResult(id, answer.id, answer.questionId)),
+              (errorData) => {
+                dispatch({
+                  type: actionTypes.REEVALUATE_FAILURE,
+                  questionId: answer.questionId,
+                  payload: errorData,
+                });
+                dispatch(setNotification(translations.requestFailure));
+              },
+              JOB_POLL_DELAY_MS,
+            );
+          });
       })
       .catch(() =>
         dispatch({ type: actionTypes.AUTOGRADE_SUBMISSION_FAILURE }),

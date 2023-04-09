@@ -71,9 +71,11 @@ class Course::Assessment::Submission::SubmissionsController < \
 
   def auto_grade
     authorize!(:grade, @submission)
-    job = @submission.auto_grade!
-
-    render partial: 'jobs/submitted', locals: { job: job.job }
+    current_answers = @submission.current_answers
+    @current_answers_jobs = current_answers.map do |ans|
+      job = ans.auto_grade!(redirect_to_path: nil, reduce_priority: true)
+      job ? [ans, job] : nil
+    end.compact.to_h
   end
 
   def reevaluate_answer
