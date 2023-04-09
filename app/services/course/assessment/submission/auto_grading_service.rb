@@ -12,44 +12,36 @@ class Course::Assessment::Submission::AutoGradingService
   class SubJobError < StandardError
   end
 
-  MAX_TRIES = 5
-
   # Grades into the given submission.
   #
   # @param [Course::Assessment::Submission] submission The object to store grading
   #   results in.
-  # @param [Boolean] only_ungraded Whether grading should be done ONLY for
-  #   ungraded_answers, or for all answers regardless of workflow state
   # @return [Boolean] True if the grading could be saved.
-  def grade(submission, only_ungraded: false)
-    grade_answers(submission, only_ungraded: only_ungraded)
+  def grade(submission)
+    grade_answers(submission)
     submission.reload
 
     # To address race condition where a submission is unsubmitted when answers are being graded
     unsubmit_answers(submission) if submission.assessment.autograded? && submission.attempting?
     assign_exp_and_publish_grade(submission) if submission.assessment.autograded? && submission.submitted?
     submission.save!
+  rescue SubjobNotCompletedError
+    # When the answers evaluation are not completed, queue the submission autograding job again
+    # and end the current job to free up a thread in the worker's machine.
+    Course::Assessment::Submission::AutoGradingJob.perform_later(submission)
   end
 
   private
 
   # Grades the answers in the provided submission.
-  #
-  # Retries are implemented in the case where a race condition occurs, ie. when a new
-  # attempting answer is created after the submission is finalised, but before the
-  # autograding job is run for the submission.
-  def grade_answers(submission, only_ungraded: false)
-    tries, jobs_by_qn = 0, {}
-    # Force re-grade all current answers (even when they've been graded before).
-    answers_to_grade = only_ungraded ? ungraded_answers(submission) : submission.current_answers
-    while answers_to_grade.any? && tries <= MAX_TRIES
+  def grade_answers(submission)
+    jobs_by_qn = {}
+    answers_to_grade = ungraded_answers(submission)
+    if answers_to_grade.any?
       new_jobs = build_answer_grading_jobs(answers_to_grade)
-
       jobs_by_qn.merge!(new_jobs)
-      answers_to_grade = ungraded_answers(submission)
-      tries += 1
     end
-    aggregate_failures(jobs_by_qn.map { |_, job| job.job.reload })
+    aggregate_failures(jobs_by_qn.map { |_, job| job.reload })
   end
 
   def build_answer_grading_jobs(answers_to_grade)
@@ -66,7 +58,7 @@ class Course::Assessment::Submission::AutoGradingService
   def grade_answer(answer)
     raise ArgumentError if answer.changed?
 
-    answer.auto_grade!(reduce_priority: true)
+    answer.auto_grade!(reduce_priority: true, prevent_regrade: true)
     # Catch errors if answer is in attempting state, caused by a race condition where
     # a new attempting answer is created while the submission is finalised, but before the
     # autograding job is executed.
@@ -80,12 +72,12 @@ class Course::Assessment::Submission::AutoGradingService
   #
   # @param [Array<Course::Assessment::Answer::AutoGradingJob>] jobs The jobs to wait.
   def wait_for_jobs(jobs)
-    jobs.each(&:wait)
+    raise SubjobNotCompletedError if jobs.any? { |job| job.status == 'submitted' }
   end
 
   # Aggregates the failures in the given jobs and fails this job if there were any failures.
   #
-  # @param [Array<TrackableJob::Job>] jobs The jobs to aggregate failrues for.
+  # @param [Array<TrackableJob::Job>] jobs The jobs to aggregate failures for.
   # @raise [StandardError]
   def aggregate_failures(jobs)
     failed_jobs = jobs.select(&:errored?)
