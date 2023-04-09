@@ -84,7 +84,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     return head :bad_request if @answer.nil?
 
     job = @answer.auto_grade!(redirect_to_path: nil, reduce_priority: true)
-    render partial: 'jobs/submitted', locals: { job: job.job }
+    render partial: 'jobs/submitted', locals: { job: job }
   end
 
   def generate_feedback
@@ -280,7 +280,7 @@ class Course::Assessment::Submission::SubmissionsController < \
       old_job = a.auto_grading.job
       job = a.auto_grade!(redirect_to_path: old_job.redirect_to, reduce_priority: true)
 
-      logger.debug(message: 'Restart Answer Grading', answer_id: a.id, job_id: job.job.id,
+      logger.debug(message: 'Restart Answer Grading', answer_id: a.id, job_id: job.id,
                    old_job_id: old_job.id)
     end
   end
