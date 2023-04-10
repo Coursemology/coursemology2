@@ -169,10 +169,10 @@ jobs:
               circleci tests split --split-by=timings)"
 
             bundle exec rspec \
-              --format progress \
+              --format documentation \
               --format RspecJunitFormatter \
               --out /tmp/test-results/rspec.xml \
-              --format progress \
+              --format documentation \
               $TEST_FILES
           environment:
             DATABASE_URL: "postgres://ubuntu@localhost:5432/coursemology_test"
