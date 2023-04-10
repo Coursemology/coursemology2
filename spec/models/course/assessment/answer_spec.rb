@@ -225,7 +225,7 @@ RSpec.describe Course::Assessment::Answer do
         before { allow(subject).to receive(:grade_inline?).and_return(false) }
 
         it 'returns an ActiveJob' do
-          expect(subject.auto_grade!).to be_a(ActiveJob::Base)
+          expect(subject.auto_grade!).to be_a(TrackableJob::Job)
         end
 
         with_active_job_queue_adapter(:test) do
