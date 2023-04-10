@@ -90,7 +90,7 @@
     "react-resizable": "^3.0.4",
     "react-router-dom": "^6.3.0",
     "react-scroll": "^1.8.9",
-    "react-toastify": "^9.1.1",
+    "react-toastify": "^9.1.2",
     "react-tooltip": "^4.5.1",
     "react-virtualized-auto-sizer": "^1.0.7",
     "react-window": "^1.8.8",
