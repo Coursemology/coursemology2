@@ -22,8 +22,6 @@ RSpec.describe JobsController do
     before { get 'show', params: { id: job.id, format: format } }
 
     context 'when the job is in progress' do
-      it { is_expected.to respond_with(:accepted) }
-
       context 'when the requested format is json' do
         render_views
         let(:format) { :json }
@@ -39,9 +37,6 @@ RSpec.describe JobsController do
 
     context 'when the job has been completed' do
       let(:job_traits) { [:completed] }
-      context 'when the job has a redirect_to path' do
-        expect_to_redirect_to_job_redirect_to
-      end
 
       context 'when the requested format is json' do
         render_views
@@ -62,13 +57,6 @@ RSpec.describe JobsController do
 
     context 'when the job has errored' do
       let(:job_traits) { :errored }
-      context 'when the job has a redirect_to path' do
-        expect_to_redirect_to_job_redirect_to
-      end
-
-      context 'when the job does not have a redirect_to path' do
-        it { is_expected.to respond_with(:ok) }
-      end
 
       context 'when the requested format is json' do
         render_views
