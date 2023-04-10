@@ -167,7 +167,7 @@ end
 
 group :production do
   # Use fog-aws as CarrierWave's storage provider
-  gem 'fog-aws', '3.8.0'
+  gem 'fog-aws', '3.18.0'
   gem 'flamegraph'
   gem 'stackprof'
   gem 'sidekiq'
