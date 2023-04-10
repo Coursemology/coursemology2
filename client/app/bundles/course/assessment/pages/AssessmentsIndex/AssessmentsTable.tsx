@@ -78,7 +78,7 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
             className={
               assessment.isStartTimeBegin
                 ? 'text-neutral-400'
-                : 'font-bold group-hover?:animate-pulse'
+                : 'group-hover?:animate-pulse font-bold'
             }
             hideInfo={assessment.status === 'submitted'}
             timeInfo={assessment.startAt}

@@ -98,7 +98,7 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
         </header>
 
         <Typography
-          className="ml-2 !-mb-1"
+          className="!-mb-1 ml-2"
           color="text.secondary"
           variant="body2"
         >
@@ -140,7 +140,7 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
         </section>
 
         <Typography
-          className="!-mb-1 ml-2 !mt-7"
+          className="!-mb-1 !mt-7 ml-2"
           color="text.secondary"
           variant="body2"
         >

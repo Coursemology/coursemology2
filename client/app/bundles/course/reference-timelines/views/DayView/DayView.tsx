@@ -57,7 +57,7 @@ const DayView = (): JSX.Element => {
 
       <SubmitIndicator className="absolute right-36 top-0 h-12" />
 
-      <div className="pointer-events-none absolute top-0 left-0 flex h-full w-full flex-col">
+      <div className="pointer-events-none absolute left-0 top-0 flex h-full w-full flex-col">
         <section className="pointer-events-auto flex h-36 w-[32rem] shrink-0 flex-col justify-between pb-3 pr-3">
           <div className="flex items-center space-x-4">
             <Typography variant="h6">
@@ -96,7 +96,7 @@ const DayView = (): JSX.Element => {
         </section>
       </div>
 
-      <summary className="absolute left-0 bottom-0 z-40 w-full border-0 border-t border-solid border-neutral-200 bg-white">
+      <summary className="absolute bottom-0 left-0 z-40 w-full border-0 border-t border-solid border-neutral-200 bg-white">
         <TimelinesOverview
           for={timelines}
           hiding={hiddenTimelineIds}
