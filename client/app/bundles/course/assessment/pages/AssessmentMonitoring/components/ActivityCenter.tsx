@@ -34,7 +34,7 @@ const ActivityCenter = (props: ActivityCenterProps): JSX.Element => {
     activities.push(
       <div
         key={index}
-        className={`flex animate-flash space-x-3 border border-b border-b-neutral-200 px-5 py-3 hover:bg-neutral-100 ${
+        className={`animate-flash flex space-x-3 border border-b border-b-neutral-200 px-5 py-3 hover:bg-neutral-100 ${
           activity.type === 'missing' ? 'slot-1-red-200' : ''
         } ${activity.type === 'alive' ? 'slot-1-green-200' : ''}`}
         onMouseEnter={
