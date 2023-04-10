@@ -1,0 +1,8 @@
+zh:
+  activerecord:
+    errors:
+      models:
+        course/monitoring/monitor:
+          attributes:
+            max_interval_ms:
+              greater_than_min_interval: '必须大于最小间隔'
