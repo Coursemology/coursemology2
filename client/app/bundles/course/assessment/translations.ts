@@ -942,7 +942,7 @@ const translations = defineMessages({
   },
   password: {
     id: 'course.assessment.session.password',
-    defaultMessage: 'password',
+    defaultMessage: 'Password',
   },
   lockedSessionAssessment: {
     id: 'course.assessment.session.lockedSessionAssessment',
