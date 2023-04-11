@@ -1,14 +1,13 @@
-const plugin = require('tailwindcss/plugin');
-const lineClamp = require('@tailwindcss/line-clamp');
-const containerQueries = require('@tailwindcss/container-queries');
-const {
-  default: flattenColorPalette,
-} = require('tailwindcss/lib/util/flattenColorPalette');
+/* eslint-disable import/no-extraneous-dependencies */
+import containerQueries from '@tailwindcss/container-queries';
+import lineClamp from '@tailwindcss/line-clamp';
+import type { Config } from 'tailwindcss';
+import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette';
+import plugin from 'tailwindcss/plugin';
 
 const SLOTTED_COLOR_VAR = '--tw-slotted-color';
 
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: ['./app/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
@@ -99,4 +98,4 @@ module.exports = {
     }),
   ],
   important: '#root',
-};
+} satisfies Config;
