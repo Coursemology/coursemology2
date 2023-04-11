@@ -193,7 +193,6 @@ RSpec.describe 'Course: Assessments: Attempt', js: true do
         end
         wait_for_page
 
-        created_submission = not_started_assessment.submissions.last
         expect(current_path).to eq(
           edit_course_assessment_submission_path(course, not_started_assessment, created_non_started_submission)
         )
