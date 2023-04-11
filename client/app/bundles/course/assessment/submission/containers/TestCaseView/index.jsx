@@ -199,6 +199,10 @@ export class VisibleTestCaseView extends Component {
     } = this.props;
     const { showPublicTestCasesOutput } = this.props;
 
+    const nameRegex = /\/?(\w+)$/;
+    const idMatch = testCase.identifier.match(nameRegex);
+    const truncatedIdentifier = idMatch ? idMatch[1] : '';
+
     let testCaseResult = 'unattempted';
     let testCaseIcon;
     if (testCase.passed !== undefined) {
@@ -217,7 +221,7 @@ export class VisibleTestCaseView extends Component {
         key={testCase.identifier}
         style={styles.testCaseRow[testCaseResult]}
       >
-        {canReadTests && tableRowColumnFor(testCase.identifier)}
+        {canReadTests && tableRowColumnFor(truncatedIdentifier)}
         {tableRowColumnFor(
           <ExpandableText style={outputStyle} text={testCase.expression} />,
         )}
