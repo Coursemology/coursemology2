@@ -169,10 +169,10 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
   end
 
   def attempt_draft_answer(answer)
-    reattempt_answer(answer, finalise: false) if should_attempt_draft_answer(answer)
+    reattempt_answer(answer, finalise: false) if should_attempt_draft_answer?(answer)
   end
 
-  def should_attempt_draft_answer(answer)
+  def should_attempt_draft_answer?(answer)
     is_save_draft = update_submission_additional_params[:is_save_draft].to_s.downcase == 'true'
     is_programming = answer.actable_type == Course::Assessment::Answer::Programming.name
     assessment_save_draft_answer = @assessment.allow_record_draft_answer
