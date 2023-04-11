@@ -44,10 +44,6 @@ $(() => {
             element={<AssessmentStatisticsPage />}
             path="/courses/:courseId/assessments/:assessmentId/statistics"
           />
-          {/* <Route
-            element={<AssessmentAuthenticate />}
-            path="/courses/:courseId/assessments/:assessmentId/authenticate"
-          /> */}
           <Route
             element={<AssessmentSessionNew />}
             path="/courses/:courseId/assessments/:assessmentId/sessions/new"
