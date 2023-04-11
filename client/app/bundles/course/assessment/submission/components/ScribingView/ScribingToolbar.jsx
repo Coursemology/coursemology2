@@ -722,7 +722,7 @@ class ScribingToolbar extends Component {
             title={<FormattedMessage {...translations.select} />}
           >
             <IconButton
-              className="pl-8 pt-8 pb-6"
+              className="pb-6 pl-8 pt-8"
               color={
                 this.props.scribing.selectedTool === scribingTools.SELECT
                   ? 'primary'

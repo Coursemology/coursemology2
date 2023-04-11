@@ -122,7 +122,7 @@ const ForumTable: FC<Props> = (props) => {
                       disableInteractive
                       title={t(translations.hasUnresolved)}
                     >
-                      <Help className="text-3xl text-yellow-500 hover?:text-yellow-600" />
+                      <Help className="hover?:text-yellow-600 text-3xl text-yellow-500" />
                     </Tooltip>
                   )}
                   {forum.forumTopicsAutoSubscribe && (
@@ -130,7 +130,7 @@ const ForumTable: FC<Props> = (props) => {
                       disableInteractive
                       title={t(translations.autoSubscribe)}
                     >
-                      <Email className="text-3xl text-neutral-500 hover?:text-neutral-600" />
+                      <Email className="hover?:text-neutral-600 text-3xl text-neutral-500" />
                     </Tooltip>
                   )}
                 </div>

@@ -12,7 +12,7 @@ const propTypes = {
 const VideoTimestamp = (props) => (
   <span className={styles.timestamp}>
     <span>{formatTimestamp(props.progress)}</span>
-    <span className="mr-2 ml-2">/</span>
+    <span className="ml-2 mr-2">/</span>
     <span className="text-gray-400">{formatTimestamp(props.duration)}</span>
   </span>
 );

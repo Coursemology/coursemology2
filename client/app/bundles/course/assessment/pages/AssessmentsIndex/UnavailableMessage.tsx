@@ -21,7 +21,7 @@ const ShakyLock = ({ title }: { title: string | ReactNode }): JSX.Element => (
   <div className="flex min-w-[8.5rem] justify-center">
     <Tooltip arrow placement="left" title={title}>
       <Lock
-        className="text-neutral-500 hover?:animate-shake hover?:text-neutral-600"
+        className="hover?:animate-shake hover?:text-neutral-600 text-neutral-500"
         fontSize="small"
       />
     </Tooltip>

@@ -43,7 +43,7 @@ const Toolbar = (props: ToolbarProps): JSX.Element => {
         <Button size="small" startIcon={<AddIcon />} variant="outlined">
           {intl.formatMessage(t.addFiles)}
           <input
-            className="absolute top-0 bottom-0 right-0 left-0 cursor-pointer opacity-0"
+            className="absolute bottom-0 left-0 right-0 top-0 cursor-pointer opacity-0"
             data-testid="FileInput"
             multiple
             onChange={handleFileInputChange}

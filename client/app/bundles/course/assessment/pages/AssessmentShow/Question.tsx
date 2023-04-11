@@ -38,18 +38,18 @@ const Question = (props: QuestionProps): JSX.Element => {
           <section
             ref={provided.innerRef}
             {...provided.draggableProps}
-            className={`group flex-col items-start border-0 border-b border-solid border-neutral-200 pb-6 slot-1-white last:border-b-0 hover?:bg-slot-1 ${
+            className={`slot-1-white hover?:bg-slot-1 group flex-col items-start border-0 border-b border-solid border-neutral-200 pb-6 last:border-b-0 ${
               dragged ? 'rounded-lg border-b-0 bg-white drop-shadow-md' : ''
             } ${!dragging ? 'hover?:slot-1-neutral-100' : ''}`}
           >
             <section
-              className={`top-20 flex w-full items-start bg-slot-1 px-6 py-6 ${
+              className={`bg-slot-1 top-20 flex w-full items-start px-6 py-6 ${
                 !dragging ? 'sticky z-10' : ''
               }`}
               {...provided.dragHandleProps}
             >
               <div
-                className={`absolute top-5 -left-5 flex items-center justify-center rounded-full transition wh-10 ${
+                className={`wh-10 absolute -left-5 top-5 flex items-center justify-center rounded-full transition ${
                   !dragged && dragging ? 'scale-0' : ''
                 } ${dragged ? 'scale-200 bg-yellow-500' : 'bg-blue-500'} ${
                   disabled ? 'animate-pulse !bg-neutral-400' : ''
@@ -62,7 +62,7 @@ const Question = (props: QuestionProps): JSX.Element => {
 
               {dragged && (
                 <Typography
-                  className="absolute -top-12 rounded-xl bg-neutral-500 px-3 py-1 pointer-coarse:hidden"
+                  className="pointer-coarse:hidden absolute -top-12 rounded-xl bg-neutral-500 px-3 py-1"
                   color="white"
                   variant="caption"
                 >

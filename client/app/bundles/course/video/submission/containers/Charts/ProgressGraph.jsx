@@ -227,7 +227,7 @@ class ProgressGraph extends Component {
     });
 
     return (
-      <div className="mt-5 mb-5">
+      <div className="mb-5 mt-5">
         <FormControl variant="standard">
           <InputLabel>
             {this.props.intl.formatMessage(translations.selectSession)}

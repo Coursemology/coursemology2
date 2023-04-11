@@ -138,7 +138,7 @@ const TimeBar = (props: TimeBarProps): JSX.Element => {
       >
         {!props.disabled && (
           <div
-            className="handle absolute top-0 left-0 h-full w-full"
+            className="handle absolute left-0 top-0 h-full w-full"
             role="button"
             tabIndex={0}
           />
