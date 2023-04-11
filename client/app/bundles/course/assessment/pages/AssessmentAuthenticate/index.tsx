@@ -25,7 +25,7 @@ interface AssessmentAuthenticateProps {
   for: UnauthenticatedAssessmentData;
 }
 
-const initialValues = { password: '' };
+const initialValues: AssessmentAuthenticationFormData = { password: '' };
 
 const validationSchema = object({
   password: string().required(formTranslations.required),
@@ -42,7 +42,7 @@ const AssessmentAuthenticate = (
   const {
     control,
     handleSubmit,
-    formState: { isDirty },
+    formState: { errors, isDirty },
     setError,
     setFocus,
   } = useForm({
@@ -83,15 +83,16 @@ const AssessmentAuthenticate = (
             encType="multipart/form-data"
             id="assessment-authenticate-form"
             noValidate
-            onSubmit={handleSubmit((data) => {
-              onFormSubmit(data);
-            })}
+            onSubmit={handleSubmit(onFormSubmit)}
           >
             <Controller
               control={control}
               name="password"
               render={({ field, fieldState }): JSX.Element => (
                 <FormTextField
+                  className={
+                    Object.keys(errors).length > 0 ? 'animate-shake' : ''
+                  }
                   disabled={submitting}
                   field={field}
                   fieldState={fieldState}
@@ -104,10 +105,10 @@ const AssessmentAuthenticate = (
             />
             <Button
               key="assessment-authenticate-form-submit-button"
+              className="mt-4"
               color="primary"
               disabled={!isDirty || submitting}
               form="assessment-authenticate-form"
-              style={{ marginBottom: '10px', marginTop: '10px' }}
               type="submit"
               variant="outlined"
             >

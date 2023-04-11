@@ -15,7 +15,7 @@ import formTranslations from 'lib/translations/form';
 import translations from '../../../translations';
 import { createAssessmentSession } from '../../operations';
 
-const initialValues = {
+const initialValues: SessionFormData = {
   password: '',
   submissionId: '',
 };
@@ -34,7 +34,7 @@ const AssessmentSessionNew = (): JSX.Element => {
   const {
     control,
     handleSubmit,
-    formState: { isDirty },
+    formState: { errors, isDirty },
     setError,
     setFocus,
   } = useForm({
@@ -64,15 +64,14 @@ const AssessmentSessionNew = (): JSX.Element => {
         encType="multipart/form-data"
         id="assessment-session-form"
         noValidate
-        onSubmit={handleSubmit((data) => {
-          onFormSubmit(data);
-        })}
+        onSubmit={handleSubmit(onFormSubmit)}
       >
         <Controller
           control={control}
           name="password"
           render={({ field, fieldState }): JSX.Element => (
             <FormTextField
+              className={Object.keys(errors).length > 0 ? 'animate-shake' : ''}
               disabled={submitting}
               field={field}
               fieldState={fieldState}
@@ -85,10 +84,10 @@ const AssessmentSessionNew = (): JSX.Element => {
         />
         <Button
           key="assessment-session-form-submit-button"
+          className="mt-4"
           color="primary"
           disabled={!isDirty || submitting}
           form="assessment-session-form"
-          style={{ marginBottom: '10px', marginTop: '10px' }}
           type="submit"
           variant="outlined"
         >
