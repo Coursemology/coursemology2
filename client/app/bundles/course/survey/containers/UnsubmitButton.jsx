@@ -58,7 +58,7 @@ class UnsubmitButton extends Component {
     return (
       <>
         {isIcon ? (
-          <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
+          <span className="unsubmit-button" data-tooltip-id="unsubmit-button">
             <IconButton
               disabled={disabled}
               id={`unsubmit-button-${responseId}`}

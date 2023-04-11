@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { Cancel, Delete, ToggleOn } from '@mui/icons-material';
 import { Card, CardContent, CircularProgress, IconButton } from '@mui/material';
 import { green, orange, red } from '@mui/material/colors';
@@ -141,16 +141,16 @@ const Dashboard = (props) => {
     return (
       <>
         <IconButton
-          data-for={tooltipId}
-          data-tip
+          data-tooltip-id={tooltipId}
           onClick={() => setDeleteArrowConfirmation(true)}
           style={{ ...styles.icon, color: 'red' }}
         >
           <Delete />
         </IconButton>
-        <ReactTooltip id={tooltipId}>
+
+        <Tooltip id={tooltipId}>
           <FormattedMessage {...translations.deleteCondition} />
-        </ReactTooltip>
+        </Tooltip>
       </>
     );
   };
@@ -163,14 +163,14 @@ const Dashboard = (props) => {
     return (
       <>
         <IconButton
-          data-for={tooltipId}
-          data-tip
+          data-tooltip-id={tooltipId}
           onClick={() => toggleNodeSatisfiabilityType()}
           style={styles.icon}
         >
           <ToggleOn />
         </IconButton>
-        <ReactTooltip id={tooltipId}>
+
+        <Tooltip id={tooltipId}>
           <FormattedMessage
             {...translations.toggleSatisfiabilityType}
             values={{
@@ -180,7 +180,7 @@ const Dashboard = (props) => {
                   : '"all conditions"',
             }}
           />
-        </ReactTooltip>
+        </Tooltip>
       </>
     );
   };

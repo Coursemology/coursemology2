@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import Delete from '@mui/icons-material/Delete';
 import GetApp from '@mui/icons-material/GetApp'; // TODO MUI - Change to download once icons lib is updated
 import MoreVert from '@mui/icons-material/MoreVert';
@@ -52,10 +52,6 @@ export default class SubmissionsTable extends Component {
       deleteAllConfirmation: false,
       anchorEl: null,
     };
-  }
-
-  componentDidUpdate() {
-    ReactTooltip.rebuild();
   }
 
   handleClickMenu = (event) => {
@@ -281,9 +277,9 @@ export default class SubmissionsTable extends Component {
       submissionsTranslations.deleteSubmission,
     ];
     return tooltipIds.map((tooltipId, index) => (
-      <ReactTooltip key={tooltipId} effect="solid" id={tooltipId}>
+      <Tooltip key={tooltipId} id={tooltipId}>
         <FormattedMessage {...formattedMessages[index]} />
-      </ReactTooltip>
+      </Tooltip>
     ));
   };
 

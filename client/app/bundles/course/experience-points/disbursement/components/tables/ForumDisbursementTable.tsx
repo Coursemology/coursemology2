@@ -5,7 +5,7 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { Link } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
@@ -158,15 +158,15 @@ const ForumDisbursementTable: FC<Props> = (props: Props) => {
         customBodyRenderLite: (dataIndex): JSX.Element => (
           <>
             {dataIndex === 0 && (
-              <ReactTooltip id="view-posts">
+              <Tooltip id="view-posts">
                 <FormattedMessage {...translations.viewPosts} />
-              </ReactTooltip>
+              </Tooltip>
             )}
+
             <Link
               className={`view-posts-${forumUsers[dataIndex].id}`}
               component="button"
-              data-for="view-posts"
-              data-tip
+              data-tooltip-id="view-posts"
               form=""
               onClick={(): void => {
                 onPostClick(forumUsers[dataIndex]);

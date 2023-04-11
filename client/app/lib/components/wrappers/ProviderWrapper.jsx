@@ -21,6 +21,7 @@ import tailwindUserConfig from '../../../../tailwind.config';
 
 import ErrorBoundary from './ErrorBoundary';
 import RollBarWrapper from './RollbarWrapper';
+import 'react-tooltip/dist/react-tooltip.css';
 
 injectStyle();
 

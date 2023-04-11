@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import Warning from '@mui/icons-material/Warning';
 import {
   Card,
@@ -231,16 +231,13 @@ class VisibleGradingPanel extends Component {
         {intl.formatMessage(translations[workflowState])}
         {workflowState === workflowStates.Graded ? (
           <span style={{ display: 'inline-block', marginLeft: 5 }}>
-            <a
-              data-for="unpublished-grades"
-              data-offset="{'left' : -8}"
-              data-tip
-            >
+            <a data-tooltip-id="unpublished-grades" data-tooltip-offset={8}>
               <Warning fontSize="small" />
             </a>
-            <ReactTooltip effect="solid" id="unpublished-grades">
+
+            <Tooltip id="unpublished-grades">
               <FormattedMessage {...translations.unpublishedGrades} />
-            </ReactTooltip>
+            </Tooltip>
           </span>
         ) : null}
       </div>

@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { Card, CardContent, ListSubheader } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -64,9 +64,9 @@ class DuplicateItemsConfirmation extends Component {
         <MaterialsListing />
         <VideosListing />
 
-        <ReactTooltip id="itemUnpublished">
+        <Tooltip id="itemUnpublished">
           <FormattedMessage {...translations.itemUnpublished} />
-        </ReactTooltip>
+        </Tooltip>
       </>
     );
   }

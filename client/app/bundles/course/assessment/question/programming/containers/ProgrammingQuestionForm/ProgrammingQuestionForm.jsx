@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import { Component } from 'react';
 import { injectIntl } from 'react-intl';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { HelpOutline } from '@mui/icons-material';
 import {
   Autocomplete,
@@ -1016,11 +1016,7 @@ class ProgrammingQuestionForm extends Component {
           <ReactTooltip id="disabled-submit-tooltip">
             {this.props.intl.formatMessage(translations.submitButtonTooltip)}
           </ReactTooltip>
-          <div
-            data-for="disabled-submit-tooltip"
-            data-tip
-            data-tip-disable={!disableSubmit}
-          >
+          <div data-tooltip-id="disabled-submit-tooltip">
             <Button
               className={styles.submitButton}
               color="primary"

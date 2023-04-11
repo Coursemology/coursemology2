@@ -1,4 +1,4 @@
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import PropTypes from 'prop-types';
 
 const styles = {
@@ -28,14 +28,12 @@ const BarChart = (props) => (
       return (
         <div
           key={segment.color}
-          data-for={segment.color}
-          data-tip
+          data-tooltip-id={segment.color}
           style={segmentStyle}
         >
           {segment.count > 0 ? segment.count : null}
-          <ReactTooltip effect="solid" id={segment.color}>
-            {segment.label}
-          </ReactTooltip>
+
+          <Tooltip id={segment.color}>{segment.label}</Tooltip>
         </div>
       );
     })}
