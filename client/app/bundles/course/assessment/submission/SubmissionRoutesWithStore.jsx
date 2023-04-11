@@ -2,7 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 
 import { StoreProviderWrapper } from 'lib/components/wrappers/ProviderWrapper';
 
-import LogsIndex from './pages/LogsIndex/LogsIndex';
+import LogsIndex from './pages/LogsIndex';
 import SubmissionEditIndex from './pages/SubmissionEditIndex';
 import SubmissionsIndex from './pages/SubmissionsIndex';
 import store from './store';
