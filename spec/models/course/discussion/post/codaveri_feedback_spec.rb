@@ -19,15 +19,9 @@ RSpec.describe Course::Discussion::Post::CodaveriFeedback do
       codaveri_feedback.send(:send_rating_to_codaveri)
     end
 
-    describe '.send_rating_to_codaveri succeeds' do
-      before do
-        Course::Discussion::Post::CodaveriFeedback.class_eval do
-          prepend Course::Discussion::Post::StubbedCodaveriFeedback
-        end
-      end
-
+    describe '.send_rating_to_codaveri' do
       it 'sends rating to codaveri' do
-        expect(subject).to eq('Rating successfully sent!')
+        expect(subject).to be_a(ActiveJob::Base)
       end
 
       context 'when the status of the feedback is pending_review' do
@@ -44,18 +38,6 @@ RSpec.describe Course::Discussion::Post::CodaveriFeedback do
         it 'does not rating to codaveri' do
           expect(subject).to eq(false)
         end
-      end
-    end
-
-    describe '.send_rating_to_codaveri fails' do
-      before do
-        Course::Discussion::Post::CodaveriFeedback.class_eval do
-          prepend Course::Discussion::Post::StubbedCodaveriFeedbackFailed
-        end
-      end
-
-      it 'does not send rating to codaveri' do
-        expect(subject).to eq(false)
       end
     end
   end
