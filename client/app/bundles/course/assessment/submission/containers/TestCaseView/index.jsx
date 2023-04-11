@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import Check from '@mui/icons-material/Check';
 import Clear from '@mui/icons-material/Clear';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -144,18 +144,15 @@ export class VisibleTestCaseView extends Component {
   static renderStaffOnlyOutputStreamWarning(outputStreamType) {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>
-        <a
-          data-for="staff-only-output-stream"
-          data-offset="{'left' : -8}"
-          data-tip
-        >
+        <a data-tooltip-id="staff-only-output-stream" data-tooltip-offset={8}>
           {VisibleTestCaseView.renderConditionalOutputStreamIcon(
             outputStreamType,
           )}
         </a>
-        <ReactTooltip effect="solid" id="staff-only-output-stream">
+
+        <Tooltip id="staff-only-output-stream">
           <FormattedMessage {...translations.staffOnlyOutputStream} />
-        </ReactTooltip>
+        </Tooltip>
       </span>
     );
   }
@@ -163,18 +160,15 @@ export class VisibleTestCaseView extends Component {
   static renderStaffOnlyTestCasesWarning(testCaseType) {
     return (
       <span style={{ display: 'inline-block', marginLeft: 5 }}>
-        <a
-          data-for="staff-only-test-cases"
-          data-offset="{'left' : -8}"
-          data-tip
-        >
+        <a data-tooltip-id="staff-only-test-cases" data-tooltip-offset={8}>
           {VisibleTestCaseView.renderConditionalTestCaseWarningIcon(
             testCaseType,
           )}
         </a>
-        <ReactTooltip effect="solid" id="staff-only-test-cases">
+
+        <Tooltip id="staff-only-test-cases">
           <FormattedMessage {...translations.staffOnlyTestCases} />
-        </ReactTooltip>
+        </Tooltip>
       </span>
     );
   }

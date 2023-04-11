@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import {
   Card,
   CardContent,
@@ -291,9 +291,10 @@ const ResponseIndex = (props) => {
         {renderStats(realResponsesStatuses, phantomResponsesStatuses)}
         {renderTable(realResponsesWithStatuses)}
         {renderPhantomTable(phantomResponsesWithStatuses)}
-        <ReactTooltip effect="solid" id="unsubmit-button">
+
+        <Tooltip id="unsubmit-button">
           <FormattedMessage {...translations.unsubmit} />
-        </ReactTooltip>
+        </Tooltip>
       </div>
     );
   };

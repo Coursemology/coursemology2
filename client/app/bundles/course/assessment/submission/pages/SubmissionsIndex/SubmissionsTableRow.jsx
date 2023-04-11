@@ -57,7 +57,7 @@ const formatGrade = (grade) => (grade !== null ? grade.toFixed(1) : null);
 
 const renderPhantomUserIcon = (submission) => {
   if (submission.courseUser.phantom) {
-    return <GhostIcon data-for="phantom-user" data-tip fontSize="small" />;
+    return <GhostIcon data-tooltip-id="phantom-user" fontSize="small" />;
   }
   return null;
 };
@@ -66,7 +66,7 @@ const renderUnpublishedWarning = (submission) => {
   if (submission.workflowState !== workflowStates.Graded) return null;
   return (
     <span style={{ display: 'inline-block', paddingLeft: 5 }}>
-      <div data-for="unpublished-grades" data-offset="{'left' : -8}" data-tip>
+      <div data-tooltip-id="unpublished-grades" data-tooltip-offset={8}>
         <Warning fontSize="inherit" />
       </div>
     </span>
@@ -121,7 +121,7 @@ const SubmissionsTableRow = (props) => {
       return null;
 
     return (
-      <span className="delete-button" data-for="delete-button" data-tip>
+      <span className="delete-button" data-tooltip-id="delete-button">
         <IconButton
           disabled={disabled}
           id={`delete-button-${submission.courseUser.id}`}
@@ -173,7 +173,7 @@ const SubmissionsTableRow = (props) => {
       return null;
 
     return (
-      <span className="submission-access-logs" data-for="access-logs" data-tip>
+      <span className="submission-access-logs" data-tooltip-id="access-logs">
         <a href={getSubmissionLogsURL(courseId, assessmentId, submission.id)}>
           <IconButton size="large" style={styles.button}>
             <History
@@ -237,7 +237,7 @@ const SubmissionsTableRow = (props) => {
     if (!assessment.canUnsubmitSubmission) return null;
 
     return (
-      <span className="unsubmit-button" data-for="unsubmit-button" data-tip>
+      <span className="unsubmit-button" data-tooltip-id="unsubmit-button">
         <IconButton
           disabled={disabled}
           id={`unsubmit-button-${submission.courseUser.id}`}

@@ -1,6 +1,6 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import ReactTooltip from 'react-tooltip';
+import { Tooltip } from 'react-tooltip';
 import { Button, CircularProgress } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -76,7 +76,7 @@ export default class CommentField extends Component {
           <FormattedMessage {...translations.comment} />
         </Button>
         {renderDelayedCommentButton && (
-          <span data-for={`delayed-comment-button-${inputId}`} data-tip>
+          <span data-tooltip-id={`delayed-comment-button-${inputId}`}>
             <Button
               color="warning"
               disabled={disableCommentButton}
@@ -91,9 +91,10 @@ export default class CommentField extends Component {
             >
               <FormattedMessage {...translations.commentDelayed} />
             </Button>
-            <ReactTooltip id={`delayed-comment-button-${inputId}`}>
+
+            <Tooltip id={`delayed-comment-button-${inputId}`}>
               <FormattedMessage {...translations.commentDelayedDescription} />
-            </ReactTooltip>
+            </Tooltip>
           </span>
         )}
       </>
