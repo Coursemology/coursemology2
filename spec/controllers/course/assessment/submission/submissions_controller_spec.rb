@@ -62,7 +62,8 @@ RSpec.describe Course::Assessment::Submission::SubmissionsController do
         end
 
         it do
-          expect(JSON.parse(response.body)['redirectUrl']).
+          redirect_url = JSON.parse(subject.body)['redirectUrl']
+          expect(redirect_url).
             to eq(edit_course_assessment_submission_path(course, assessment, submission))
         end
       end
