@@ -134,7 +134,7 @@ export interface AssessmentData extends AssessmentActionsData {
 
 export interface UnauthenticatedAssessmentData {
   id: number;
-  isAuthenticated: boolean;
+  isAuthenticated: false;
   isStartTimeBegin: boolean;
   startAt: string;
 }

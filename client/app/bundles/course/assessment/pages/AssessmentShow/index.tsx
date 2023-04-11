@@ -12,19 +12,24 @@ import AssessmentAuthenticate from '../AssessmentAuthenticate';
 
 import AssessmentShowPage from './AssessmentShowPage';
 
+const isUnauthenticatedData = (
+  data: unknown,
+): data is UnauthenticatedAssessmentData =>
+  (data as UnauthenticatedAssessmentData)?.isAuthenticated !== undefined;
+
 const AssessmentShow = (): JSX.Element => {
   const params = useParams();
   const id = parseInt(params?.assessmentId ?? '', 10) || undefined;
   if (!id) throw new Error(`AssessmentShow was loaded with ID: ${id}.`);
 
-  const fetchAssessmentWithId = async (): Promise<
+  const fetchAssessmentWithId = (): Promise<
     AssessmentData | UnauthenticatedAssessmentData
-  > => (await fetchAssessment(id)) as AssessmentData;
+  > => fetchAssessment(id);
 
   return (
     <Preload render={<LoadingIndicator />} while={fetchAssessmentWithId}>
       {(data): JSX.Element => {
-        if ('isAuthenticated' in data)
+        if (isUnauthenticatedData(data))
           return <AssessmentAuthenticate for={data} />;
         return <AssessmentShowPage for={data} />;
       }}
