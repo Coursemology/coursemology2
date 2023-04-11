@@ -59,7 +59,6 @@ class Course::Assessment::Submission::SubmissionsController < \
 
       create_success_response(@submission)
     end
-
   rescue StandardError
     error_message = @submission.errors.full_messages.to_sentence
     render json: { error: error_message }, status: :bad_request
