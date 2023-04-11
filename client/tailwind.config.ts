@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import containerQueries from '@tailwindcss/container-queries';
-import lineClamp from '@tailwindcss/line-clamp';
 import type { Config } from 'tailwindcss';
 import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette';
 import plugin from 'tailwindcss/plugin';
@@ -67,7 +66,6 @@ export default {
         '@media (hover: hover) { :merge(.group):hover & }',
       );
     }),
-    lineClamp,
     containerQueries,
     plugin(({ matchUtilities, theme }) => {
       matchUtilities(
