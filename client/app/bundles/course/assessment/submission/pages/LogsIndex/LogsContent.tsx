@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { red } from '@mui/material/colors';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { LogsData } from 'types/course/assessment/submission/logs';
 
@@ -37,14 +36,7 @@ const LogsContent: FC<Props> = (props) => {
     selectableRows: 'none',
     setRowProps: (_row, dataIndex, _rowIndex) => {
       const isValidAttempt = data[dataIndex].isValidAttempt;
-      let backgroundColor: unknown = null;
-
-      if (isValidAttempt) {
-        backgroundColor = '#ffffff';
-      } else {
-        backgroundColor = red[100];
-      }
-      return { style: { background: backgroundColor } };
+      return { className: isValidAttempt ? '' : 'bg-red-100' };
     },
     viewColumns: false,
   };

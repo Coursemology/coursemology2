@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Link as ReactLink } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { TableBody, TableCell, TableRow } from '@mui/material';
 import { LogsMainInfo } from 'types/course/assessment/submission/logs';
 
@@ -21,25 +21,31 @@ const LogsHead: FC<Props> = (props) => {
     <TableContainer dense variant="outlined">
       <TableBody>
         <TableRow>
-          <TableCell>{t(translations.assessmentTitle)}</TableCell>
+          <TableCell variant="head">
+            {t(translations.assessmentTitle)}
+          </TableCell>
           <TableCell>
-            <ReactLink to={info.assessmentUrl}>
+            <RouterLink to={info.assessmentUrl}>
               {info.assessmentTitle}
-            </ReactLink>
+            </RouterLink>
           </TableCell>
         </TableRow>
 
         <TableRow>
-          <TableCell>{t(translations.studentName)}</TableCell>
+          <TableCell variant="head">{t(translations.studentName)}</TableCell>
           <TableCell>
             <Link href={info.studentUrl}>{info.studentName}</Link>
           </TableCell>
         </TableRow>
 
         <TableRow>
-          <TableCell>{t(translations.submissionStatus)}</TableCell>
+          <TableCell variant="head">
+            {t(translations.submissionWorkflowState)}
+          </TableCell>
           <TableCell>
-            <ReactLink to={info.editUrl}>{info.submissionStatus}</ReactLink>
+            <RouterLink to={info.editUrl}>
+              {info.submissionWorkflowState}
+            </RouterLink>
           </TableCell>
         </TableRow>
       </TableBody>
