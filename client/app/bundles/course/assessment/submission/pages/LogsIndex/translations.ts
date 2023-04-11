@@ -9,8 +9,8 @@ export default defineMessages({
     id: 'course.assessment.submission.logs.studentName',
     defaultMessage: 'Student Name',
   },
-  submissionStatus: {
-    id: 'course.assessment.submission.logs.submissionStatus',
+  submissionWorkflowState: {
+    id: 'course.assessment.submission.logs.submissionWorkflowState',
     defaultMessage: 'Submission Status',
   },
   noLogs: {

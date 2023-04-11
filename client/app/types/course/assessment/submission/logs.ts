@@ -1,3 +1,5 @@
+import { WorkflowState } from './submission';
+
 export interface LogsData {
   isValidAttempt: boolean;
   timestamp: string;
@@ -12,7 +14,7 @@ export interface LogsMainInfo {
   assessmentUrl: string;
   studentName: string;
   studentUrl: string;
-  submissionStatus: string;
+  submissionWorkflowState: WorkflowState;
   editUrl: string;
 }
 
