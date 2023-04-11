@@ -35,13 +35,12 @@ class Course::Assessment::AssessmentsController < Course::Assessment::Controller
     respond_to do |format|
       format.html
       format.json do
+        @assessment_time = @assessment.time_for(current_course_user)
         return render 'authenticate' unless can_access_assessment?
 
         @question_assessments = @assessment.question_assessments.with_question_actables
         @assessment_conditions = @assessment.assessment_conditions.includes({ conditional: :actable })
         @questions = @assessment.questions.includes({ actable: :test_cases })
-
-        @assessment_time = @assessment.time_for(current_course_user)
 
         @requirements = @assessment.specific_conditions.map do |condition|
           {
