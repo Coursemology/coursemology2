@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const globSync = require('glob').sync;
-const mkdirpSync = require('mkdirp').sync;
+const { sync: mkdirpSync } = require('mkdirp').mkdirp;
 
 const OUTPUT_DIR = './build/locales/';
 
