@@ -121,7 +121,7 @@
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/enzyme": "^3.10.12",
-    "@types/jest": "^29.4.0",
+    "@types/jest": "^29.5.0",
     "@types/jquery": "^3.5.16",
     "@types/rails__actioncable": "^6.1.6",
     "@types/react": "^18.0.28",
