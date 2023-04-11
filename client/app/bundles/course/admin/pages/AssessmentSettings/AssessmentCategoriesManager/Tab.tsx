@@ -151,7 +151,7 @@ const Tab = (props: TabProps): JSX.Element => {
 
             {tab.canDeleteTab && !stationary && (
               <IconButton
-                className="hoverable:invisible group-hover?:visible ml-4 hoverable:ml-0"
+                className="hoverable:invisible group-hover?:visible hoverable:ml-0 ml-4"
                 color="error"
                 disabled={isDragging || disabled}
                 onClick={handleClickDelete}

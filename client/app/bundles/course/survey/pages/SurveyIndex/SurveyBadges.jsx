@@ -21,7 +21,7 @@ const SurveyBadges = (props) => {
     <div className="flex items-center space-x-2 max-xl:mt-2 xl:ml-2">
       {survey.has_todo && (
         <Tooltip disableInteractive title={t(translations.hasTodo)}>
-          <FormatListBulleted className="text-3xl text-neutral-500 hover?:text-neutral-600" />
+          <FormatListBulleted className="hover?:text-neutral-600 text-3xl text-neutral-500" />
         </Tooltip>
       )}
     </div>

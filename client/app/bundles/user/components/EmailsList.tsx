@@ -155,7 +155,7 @@ const EmailsList = (props: EmailCardProps): JSX.Element => {
 
   return (
     <>
-      <div className="-mx-4 -mt-2 mb-4 flex flex-row flex-wrap hoverable:hidden">
+      <div className="hoverable:hidden -mx-4 -mt-2 mb-4 flex flex-row flex-wrap">
         <div className="mx-4 my-2 flex items-center space-x-2 text-neutral-400">
           <AccountCircle />
 

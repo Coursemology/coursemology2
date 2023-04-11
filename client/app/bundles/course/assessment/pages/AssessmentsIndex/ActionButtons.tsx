@@ -50,7 +50,7 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
       {student ? (
         actionButton
       ) : (
-        <div className="hoverable:invisible group-hover?:visible flex h-full items-center transition-position no-hover:mr-4 hoverable:absolute hoverable:right-0 hoverable:pl-8 hoverable:opacity-0 hoverable:bg-fade-to-l-slot-2 group-hover?:right-full group-hover?:opacity-100">
+        <div className="hoverable:invisible group-hover?:visible transition-position no-hover:mr-4 hoverable:absolute hoverable:right-0 hoverable:pl-8 hoverable:opacity-0 hoverable:bg-fade-to-l-slot-2 group-hover?:right-full group-hover?:opacity-100 flex h-full items-center">
           {actionButton}
         </div>
       )}

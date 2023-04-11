@@ -36,19 +36,19 @@ const StatusBadges = (props: StatusBadgesProps): JSX.Element => {
 
       {assessment.autograded && (
         <Tooltip disableInteractive title={t(translations.autograded)}>
-          <CheckCircle className="text-3xl text-neutral-500 hover?:text-neutral-600" />
+          <CheckCircle className="hover?:text-neutral-600 text-3xl text-neutral-500" />
         </Tooltip>
       )}
 
       {assessment.hasTodo && (
         <Tooltip disableInteractive title={t(translations.hasTodo)}>
-          <FormatListBulleted className="text-3xl text-neutral-500 hover?:text-neutral-600" />
+          <FormatListBulleted className="hover?:text-neutral-600 text-3xl text-neutral-500" />
         </Tooltip>
       )}
 
       {assessment.passwordProtected && (
         <Tooltip disableInteractive title={t(translations.passwordProtected)}>
-          <Key className="text-3xl text-neutral-500 hover?:text-neutral-600" />
+          <Key className="hover?:text-neutral-600 text-3xl text-neutral-500" />
         </Tooltip>
       )}
 

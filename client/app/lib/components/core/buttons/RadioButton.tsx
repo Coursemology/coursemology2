@@ -16,7 +16,7 @@ const RadioButton = (props: RadioButtonProps): JSX.Element => {
     <div className="w-full">
       <FormControlLabel
         className={props.className}
-        control={<Radio className="py-0 px-4" />}
+        control={<Radio className="px-4 py-0" />}
         disabled={props.disabled}
         label={props.label}
         value={props.value}

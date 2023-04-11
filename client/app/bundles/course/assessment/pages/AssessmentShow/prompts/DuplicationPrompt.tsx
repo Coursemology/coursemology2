@@ -196,7 +196,7 @@ const DuplicationPrompt = (props: DuplicationPromptProps): JSX.Element => {
     >
       <PromptText>{t(translations.duplicatingThisQuestion)}</PromptText>
 
-      <PromptText className="pb-7 italic line-clamp-2">
+      <PromptText className="line-clamp-2 pb-7 italic">
         {question.title}
       </PromptText>
 

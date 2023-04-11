@@ -50,7 +50,7 @@ const LeaderboardSettingsForm = (
           />
 
           <Typography
-            className="!mt-2 !mb-4"
+            className="!mb-4 !mt-2"
             color="text.secondary"
             variant="body2"
           >

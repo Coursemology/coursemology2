@@ -22,7 +22,7 @@ const DayColumn = (props: DayProps): JSX.Element => {
       style={props.style}
     >
       <div
-        className={`sticky top-0 z-20 flex h-20 shrink-0 flex-col justify-end bg-slot-1 slot-1-white ${
+        className={`bg-slot-1 slot-1-white sticky top-0 z-20 flex h-20 shrink-0 flex-col justify-end ${
           isWeekend(day) ? 'slot-1-neutral-50' : ''
         } ${isToday(day) ? 'slot-1-red-50' : ''}`}
       >
