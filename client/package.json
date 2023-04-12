@@ -70,7 +70,7 @@
     "moment-timezone": "^0.5.43",
     "mui-datatables": "^4.3.0",
     "prop-types": "^15.8.0",
-    "rc-slider": "^9.7.5",
+    "rc-slider": "^10.1.1",
     "react": "^18.2.0",
     "react-ace": "^10.1.0",
     "react-beautiful-dnd": "^13.1.1",
