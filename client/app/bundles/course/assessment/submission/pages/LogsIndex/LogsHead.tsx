@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
-import { TableBody, TableCell, TableRow } from '@mui/material';
+import { Chip, TableBody, TableCell, TableRow } from '@mui/material';
+import palette from 'theme/palette';
 import { LogsMainInfo } from 'types/course/assessment/submission/logs';
 
 import Link from 'lib/components/core/Link';
@@ -12,6 +13,29 @@ import translations from './translations';
 interface Props {
   with: LogsMainInfo;
 }
+
+const statusTranslations = {
+  attempting: 'Attempting',
+  submitted: 'Submitted',
+  graded: 'Graded, unpublished',
+  published: 'Graded',
+  unknown: 'Unknown status, please contact administrator',
+};
+
+const translateStatus: (var1: string) => string = (oldStatus) => {
+  switch (oldStatus) {
+    case 'attempting':
+      return statusTranslations.attempting;
+    case 'submitted':
+      return statusTranslations.submitted;
+    case 'graded':
+      return statusTranslations.graded;
+    case 'published':
+      return statusTranslations.published;
+    default:
+      return statusTranslations.unknown;
+  }
+};
 
 const LogsHead: FC<Props> = (props) => {
   const { t } = useTranslation();
@@ -44,7 +68,14 @@ const LogsHead: FC<Props> = (props) => {
           </TableCell>
           <TableCell>
             <RouterLink to={info.editUrl}>
-              {info.submissionWorkflowState}
+              <Chip
+                label={translateStatus(info.submissionWorkflowState)}
+                style={{
+                  width: 100,
+                  backgroundColor:
+                    palette.submissionStatus[info.submissionWorkflowState],
+                }}
+              />
             </RouterLink>
           </TableCell>
         </TableRow>
