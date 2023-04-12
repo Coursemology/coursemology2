@@ -172,7 +172,7 @@ const SubmissionEditForm = (props) => {
   };
 
   const renderExamDialog = () => (
-    <Dialog maxWidth="lg" open={examNotice}>
+    <Dialog maxWidth="lg" open={attempting && examNotice}>
       <DialogTitle>
         {intl.formatMessage(translations.examDialogTitle)}
       </DialogTitle>
