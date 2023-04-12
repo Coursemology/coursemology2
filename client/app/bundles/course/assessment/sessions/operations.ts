@@ -1,6 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 import { AxiosError } from 'axios';
-import { SessionFormData } from 'types/course/assessment/sessions';
+import {
+  SessionFormData,
+  SessionFormPostData,
+} from 'types/course/assessment/sessions';
 
 import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';
@@ -8,7 +11,7 @@ import { JustRedirect } from 'api/types';
 export const createAssessmentSession = async (
   data: SessionFormData,
 ): Promise<JustRedirect> => {
-  const adaptedData = {
+  const adaptedData: SessionFormPostData = {
     password: data.password,
     submission_id: data.submissionId,
   };
