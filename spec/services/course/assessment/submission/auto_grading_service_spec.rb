@@ -44,8 +44,11 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
                                                                     submission: submission).answer
         end
         it 'evaluates the answer' do
-          expect(subject.grade(submission)).to eq(true)
-
+          expect(subject.grade(submission)).to be_a(Course::Assessment::Submission::AutoGradingJob)
+          # A submission autograding requeues itself as another job,
+          # once its answer autograding jobs are queued.
+          # Wait for submission to finish autograding
+          sleep 1
           gradable_answers = submission.current_answers.reject { |answer| answer.question.auto_gradable? }
           expect(gradable_answers).not_to be_empty
           expect(gradable_answers.map(&:reload).all?(&:evaluated?)).to be(true)
@@ -135,6 +138,7 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
         create(:course_assessment_answer_multiple_response, :submitted,
                question: question.acting_as, submission: submission).answer
       end
+      let(:errored_job) { create(:trackable_job, :errored) }
 
       before do
         def subject.aggregate_failures(jobs)
@@ -150,11 +154,10 @@ RSpec.describe Course::Assessment::Submission::AutoGradingService do
       it 'fails with a SubJobError' do
         answer
         allow(subject).to receive(:ungraded_answers).and_return([answer])
-        allow(answer).to receive(:grade_inline?).and_return(false)
+        allow(answer).to receive(:auto_grade!).and_return(errored_job)
 
         expect do
           subject.grade(submission)
-          wait_for_job
         end.to raise_error(Course::Assessment::Submission::AutoGradingService::SubJobError, '0')
       end
     end
