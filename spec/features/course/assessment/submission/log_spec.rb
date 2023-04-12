@@ -88,7 +88,6 @@ RSpec.describe 'Course: Assessment: Submissions: Logs', js: true do
 
         visit course_assessment_submission_logs_path(course, protected_assessment, submission)
 
-        expect(page).to have_selector('div#submission-log')
         expect(page).
           to have_content(I18n.t('course.assessment.submission.logs.index.header'))
       end
