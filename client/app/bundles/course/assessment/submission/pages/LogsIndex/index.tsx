@@ -17,7 +17,7 @@ const LogsIndex = (): JSX.Element => {
   return (
     <Preload render={<LoadingIndicator />} while={fetchLogs}>
       {(data): JSX.Element => (
-        <>
+        <div className="space-y-5">
           <PageHeader
             returnLink={getAssessmentSubmissionURL(
               getCourseId(),
@@ -25,11 +25,11 @@ const LogsIndex = (): JSX.Element => {
             )}
             title={t(translations.accessLogs)}
           />
-          <div id="submission-log">
+          <div>
             <LogsHead with={data.info} />
             <LogsContent with={data.logs} />
           </div>
-        </>
+        </div>
       )}
     </Preload>
   );
