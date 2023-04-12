@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { MouseEventHandler, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Create, Inventory, QuestionMark } from '@mui/icons-material';
@@ -34,7 +34,9 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
   const actionButtonUrl =
     assessment.status === 'open' ? '#' : assessment.actionButtonUrl;
 
-  const handleActionButton = (e): void => {
+  const handleActionButton: MouseEventHandler<HTMLButtonElement> = (
+    e,
+  ): void => {
     if (assessment.status !== 'open') return;
     setAttempting(true);
     e.preventDefault();
