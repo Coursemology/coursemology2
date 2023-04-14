@@ -88,7 +88,7 @@ function submitFormFailure(error) {
   };
 }
 
-function fetchImportResult(redirectEditUrl, successMessage, failureMessage) {
+function fetchImportResult(successMessage, failureMessage) {
   return (dispatch) => {
     axios
       .get('', {
@@ -105,7 +105,7 @@ function fetchImportResult(redirectEditUrl, successMessage, failureMessage) {
           dispatch(setSubmissionMessage(failureMessage));
         } else {
           dispatch(setSubmissionMessage(successMessage));
-          window.location = redirectEditUrl;
+          window.location.reload();
         }
       })
       .catch((error) => {
@@ -118,7 +118,7 @@ function fetchImportResult(redirectEditUrl, successMessage, failureMessage) {
 
 function submitFormEvaluate(
   importJobUrl,
-  redirectEditUrl,
+  redirectEdit,
   successMessage,
   failureMessage,
 ) {
@@ -139,16 +139,27 @@ function submitFormEvaluate(
             dispatch(
               submitFormEvaluate(
                 importJobUrl,
-                redirectEditUrl,
+                redirectEdit,
                 successMessage,
                 failureMessage,
               ),
             );
           }, delay);
         } else {
-          dispatch(
-            fetchImportResult(redirectEditUrl, successMessage, failureMessage),
-          );
+          if (redirectEdit) {
+            // Redirect to edit page without refreshing
+            window.history.pushState(null, null, redirectEdit.url);
+            document.title = redirectEdit.page_title;
+
+            $('.page-header > h1 > span:first').text(redirectEdit.page_header);
+            $('.breadcrumb .active').text(redirectEdit.page_header);
+
+            // Reload when the user tries to return the the new programming question page
+            window.onpopstate = function (event) {
+              if (event && event.state === null) window.location.reload();
+            };
+          }
+          dispatch(fetchImportResult(successMessage, failureMessage));
         }
       })
       .catch((error) => {
@@ -173,7 +184,7 @@ export function submitForm(url, method, data, failureMessage) {
       .then((response) => {
         const {
           import_job_url: importJobUrl,
-          redirect_edit_url: redirectEditUrl,
+          redirect_edit: redirectEdit,
           redirect_assessment_url: redirectAssessmentUrl,
           message: successMessage,
         } = response.data;
@@ -183,7 +194,7 @@ export function submitForm(url, method, data, failureMessage) {
           dispatch(
             submitFormEvaluate(
               importJobUrl,
-              redirectEditUrl,
+              redirectEdit,
               successMessage,
               failureMessage,
             ),
