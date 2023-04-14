@@ -1,7 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 import { Component } from 'react';
 import { injectIntl } from 'react-intl';
-import { Tooltip as ReactTooltip } from 'react-tooltip';
 import { HelpOutline } from '@mui/icons-material';
 import {
   Autocomplete,
@@ -683,7 +682,6 @@ class ProgrammingQuestionForm extends Component {
     const autograded = question.get('autograded');
     const isCodaveri = question.get('is_codaveri');
     const hasAutoGradings = question.get('has_auto_gradings');
-    const disableSubmit = false;
     let autogradedLabel = (
       <b>{this.props.intl.formatMessage(translations.autograded)}</b>
     );
@@ -1013,14 +1011,11 @@ class ProgrammingQuestionForm extends Component {
             }}
             open={this.props.data.get('show_submission_message')}
           />
-          <ReactTooltip id="disabled-submit-tooltip">
-            {this.props.intl.formatMessage(translations.submitButtonTooltip)}
-          </ReactTooltip>
-          <div data-tooltip-id="disabled-submit-tooltip">
+          <div>
             <Button
               className={styles.submitButton}
               color="primary"
-              disabled={this.props.data.get('is_loading') || disableSubmit}
+              disabled={this.props.data.get('is_loading')}
               endIcon={
                 this.props.data.get('is_loading') ? (
                   <LoadingIndicator bare size={20} />

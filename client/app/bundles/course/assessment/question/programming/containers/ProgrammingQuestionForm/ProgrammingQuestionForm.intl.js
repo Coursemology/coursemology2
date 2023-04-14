@@ -118,11 +118,6 @@ export default defineMessages({
     defaultMessage: 'Submit',
     description: 'Button for submitting the form.',
   },
-  submitButtonTooltip: {
-    id: 'course.assessment.question.programming.ProgrammingQuestionForm.submitButtonTooltip',
-    defaultMessage:
-      'Unable to update Codaveri question type as there are existing submissions',
-  },
   submitFailureMessage: {
     id: 'course.assessment.question.programming.ProgrammingQuestionForm.submitFailureMessage',
     defaultMessage: 'An error occurred, please try again.',
