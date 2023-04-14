@@ -200,7 +200,7 @@ export class VisibleTestCaseView extends Component {
     const { showPublicTestCasesOutput } = this.props;
 
     const nameRegex = /\/?(\w+)$/;
-    const idMatch = testCase.identifier.match(nameRegex);
+    const idMatch = testCase.identifier?.match(nameRegex);
     const truncatedIdentifier = idMatch ? idMatch[1] : '';
 
     let testCaseResult = 'unattempted';
