@@ -47,7 +47,7 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
         userAgent: heartbeat.user_agent,
         ipAddress: heartbeat.ip_address,
         generatedAt: heartbeat.generated_at,
-        isValidSEBHash: @monitor.valid_seb_hash?(heartbeat.seb_hash),
+        isValidSEBHash: @monitor.valid_seb_hash?(heartbeat.user_agent),
         sebHash: heartbeat.seb_hash
       }.compact
     end
@@ -61,7 +61,7 @@ class Course::Monitoring::LiveMonitoringChannel < Course::Channel
     @monitor.sessions.includes(:heartbeats, :creator).to_h do |session|
       last_heartbeat = session.heartbeats.last
       seb_hash = last_heartbeat&.seb_hash
-      is_valid_seb_hash = @monitor.valid_seb_hash?(seb_hash)
+      is_valid_seb_hash = @monitor.valid_seb_hash?(last_heartbeat&.user_agent)
 
       snapshot = {
         sessionId: session.id,

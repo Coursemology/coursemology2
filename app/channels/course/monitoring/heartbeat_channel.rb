@@ -85,7 +85,7 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
 
   def broadcast_pulse_to_live_monitoring(heartbeat)
     seb_hash = heartbeat.seb_hash
-    is_valid_seb_hash = @monitor.valid_seb_hash?(seb_hash)
+    is_valid_seb_hash = @monitor.valid_seb_hash?(heartbeat.user_agent)
 
     Course::Monitoring::LiveMonitoringChannel.broadcast_pulse_to @monitor, @session, {
       sessionId: @session.id,
