@@ -83,7 +83,6 @@ RSpec.describe 'Course: Assessment: Submissions: Exam', js: true do
         submission.save!
 
         visit current_path
-        click_button('OK')
 
         # Grade the submission with empty answer grade
         expect(page).to have_button('Submit for Publishing', disabled: true)
