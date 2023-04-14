@@ -37,16 +37,8 @@ GIT
     rwordnet (2.0.0)
 
 GIT
-  remote: https://github.com/raymondtangsc/rails_utils.git
-  revision: 5c8c0caacf08985ae14c5d007529a09d5f284da0
-  branch: full-sanitize-flash
-  specs:
-    rails_utils (4.0.0)
-      rails (>= 3.2)
-
-GIT
-  remote: https://github.com/raymondtangsc/simple_form-bootstrap
-  revision: aa17b3362bf32b73a2cd8aa708d656b7e26ad275
+  remote: https://github.com/purfectliterature/simple_form-bootstrap
+  revision: 2c61978f8d40f8053deb3f748dafbdd5c9de5864
   specs:
     simple_form-bootstrap (1.6.0)
       actionpack (>= 4.1)
@@ -54,6 +46,14 @@ GIT
       bootstrap-sass (~> 3)
       railties (>= 4.1)
       simple_form (>= 3.1.0)
+
+GIT
+  remote: https://github.com/raymondtangsc/rails_utils.git
+  revision: 5c8c0caacf08985ae14c5d007529a09d5f284da0
+  branch: full-sanitize-flash
+  specs:
+    rails_utils (4.0.0)
+      rails (>= 3.2)
 
 GIT
   remote: https://github.com/raymondtangsc/themes_on_rails

@@ -205,7 +205,7 @@ gem 'themes_on_rails', '>= 0.3.1', git: 'https://github.com/raymondtangsc/themes
 
 # Forms made easy for Rails
 gem 'simple_form'
-gem 'simple_form-bootstrap', git: 'https://github.com/raymondtangsc/simple_form-bootstrap'
+gem 'simple_form-bootstrap', git: 'https://github.com/purfectliterature/simple_form-bootstrap'
 # Dynamic nested forms
 gem 'cocoon'
 gem 'bootstrap_tokenfield_rails'
