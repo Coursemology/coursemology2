@@ -57,7 +57,7 @@ const AssessmentSessionNew = (): JSX.Element => {
       });
   };
   return (
-    <div className="absolute top-1/4 left-1/2 max-w-md text-center">
+    <div className="absolute left-1/2 top-1/4 max-w-md text-center">
       <Lock className="text-9xl" />
       <Typography>{t(translations.lockedSessionAssessment)}</Typography>
       <form
