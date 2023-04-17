@@ -20,7 +20,9 @@ const FilterAutocomplete = (props: FilterAutocompleteProps): JSX.Element => {
       ChipProps={{ size: 'small' }}
       className={props.className}
       fullWidth
-      getOptionLabel={(filter): string => filter.name}
+      getOptionLabel={(filter): string =>
+        `${filter.name} (${filter.userIds.length})`
+      }
       groupBy={(filter): string => filter.category}
       multiple
       onChange={(_, filters): void => {
