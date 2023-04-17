@@ -29,8 +29,7 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
       session: @session,
       user_agent: user_agent,
       ip_address: ip_address,
-      generated_at: time_from(timestamp),
-      seb_hash: data['seb_hash']
+      generated_at: time_from(timestamp)
     )
 
     return unless heartbeat.save
@@ -49,7 +48,6 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
         user_agent: user_agent,
         ip_address: ip_address,
         generated_at: time_from(heartbeat_data['timestamp']),
-        seb_hash: heartbeat_data['seb_hash'],
         stale: true,
         created_at: Time.zone.now,
         updated_at: Time.zone.now
@@ -84,15 +82,13 @@ class Course::Monitoring::HeartbeatChannel < Course::Channel
   end
 
   def broadcast_pulse_to_live_monitoring(heartbeat)
-    seb_hash = heartbeat.seb_hash
-    is_valid_seb_hash = @monitor.valid_seb_hash?(seb_hash)
+    is_valid_secret = @monitor.valid_secret?(heartbeat.user_agent)
 
     Course::Monitoring::LiveMonitoringChannel.broadcast_pulse_to @monitor, @session, {
       sessionId: @session.id,
       status: @session.status,
       lastHeartbeatAt: heartbeat.generated_at,
-      isValidSEBHash: is_valid_seb_hash,
-      sebHash: (seb_hash unless is_valid_seb_hash)
+      isValid: is_valid_secret
     }.compact
   end
 

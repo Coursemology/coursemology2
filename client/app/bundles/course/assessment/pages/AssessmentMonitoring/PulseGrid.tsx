@@ -27,7 +27,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
   const { t } = useTranslation();
   const [userIds, setUserIds] = useState<number[]>([]);
   const [groups, setGroups] = useState<WatchGroup[]>([]);
-  const [hasSEBHash, setHasSEBHash] = useState(false);
+  const [hasSecret, setHasSecret] = useState(false);
   const monitoring = useMonitoring();
 
   const [rejected, setRejected] = useState(false);
@@ -36,7 +36,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
     watch: (data) => {
       setUserIds(data.userIds);
       setGroups(data.groups);
-      setHasSEBHash(data.monitor.hasSEBHash);
+      setHasSecret(data.monitor.hasSecret);
       monitoring.initialize(data.monitor, data.snapshots);
       monitoring.notifyConnectedAt(Date.now());
     },
@@ -68,7 +68,7 @@ const PulseGrid = (props: PulseGridProps): JSX.Element => {
 
         <FilterAutocomplete filters={groups} />
 
-        <SessionBlobLegend hasSEBHash={hasSEBHash} />
+        <SessionBlobLegend hasSecret={hasSecret} />
 
         <SessionsGrid
           for={userIds}

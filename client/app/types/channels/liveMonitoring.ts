@@ -1,24 +1,22 @@
 export interface MonitoringMonitorData {
   maxIntervalMs: number;
   offsetMs: number;
-  hasSEBHash: boolean;
+  hasSecret: boolean;
 }
 
 export interface HeartbeatDetail {
-  isValidSEBHash: boolean;
+  isValid: boolean;
   stale: boolean;
   userAgent: string;
   ipAddress: string;
   generatedAt: string;
-  sebHash?: string;
 }
 
 export interface SnapshotData {
   sessionId: number;
   status: 'expired' | 'listening' | 'stopped';
   lastHeartbeatAt: string;
-  isValidSEBHash: boolean;
-  sebHash?: string;
+  isValid: boolean;
   userName?: string;
   stale?: boolean;
 }

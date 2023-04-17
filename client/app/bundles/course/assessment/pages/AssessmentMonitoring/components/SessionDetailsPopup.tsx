@@ -16,7 +16,7 @@ interface SessionDetailsPopupProps {
   onClose: () => void;
   generatedAt?: string;
   anchorsOn?: HTMLElement;
-  hasSEBHash?: boolean;
+  hasSecret?: boolean;
 }
 
 interface BlankableProps {
@@ -47,9 +47,9 @@ const Blankable = ({ of: value, className }: BlankableProps): JSX.Element => {
 };
 
 const Validable = ({ valid, ...props }: ValidableProps): JSX.Element => (
-  <div className="flex items-center space-x-2">
+  <div className="flex space-x-2">
     {valid ? <CheckCircle color="success" /> : <Cancel color="error" />}
-    <Blankable {...props} />
+    <Blankable {...props} className="mt-0.5" />
   </div>
 );
 
@@ -116,26 +116,19 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
             </Typography>
           </section>
 
-          {props.hasSEBHash && (
-            <section>
-              <Typography color="text.secondary" variant="caption">
-                {t(translations.sebHash)}
-              </Typography>
-
-              <Validable
-                className="break-all"
-                of={lastHeartbeat?.sebHash}
-                valid={lastHeartbeat?.isValidSEBHash}
-              />
-            </section>
-          )}
-
           <section>
             <Typography color="text.secondary" variant="caption">
               {t(translations.userAgent)}
             </Typography>
 
-            <Blankable of={lastHeartbeat?.userAgent} />
+            {props.hasSecret ? (
+              <Validable
+                of={lastHeartbeat?.userAgent}
+                valid={lastHeartbeat?.isValid}
+              />
+            ) : (
+              <Blankable of={lastHeartbeat?.userAgent} />
+            )}
           </section>
         </section>
 
@@ -163,15 +156,6 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
               className: '@lg:sticky @lg:left-0 @lg:bg-neutral-100 z-10',
             },
             {
-              header: t(translations.sebHash),
-              content: ({ sebHash, isValidSEBHash }) =>
-                props.hasSEBHash ? (
-                  <Validable of={sebHash} valid={isValidSEBHash} />
-                ) : (
-                  <Blankable of={sebHash} />
-                ),
-            },
-            {
               header: t(translations.type),
               content: ({ stale }) =>
                 stale ? (
@@ -191,13 +175,21 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
                 ),
             },
             {
-              header: t(translations.ipAddress),
-              content: ({ ipAddress }) => <Blankable of={ipAddress} />,
+              header: t(translations.userAgent),
+              content: ({ userAgent }) =>
+                props.hasSecret ? (
+                  <Validable
+                    of={lastHeartbeat?.userAgent}
+                    valid={lastHeartbeat?.isValid}
+                  />
+                ) : (
+                  <Blankable of={userAgent} />
+                ),
+              className: 'whitespace-nowrap',
             },
             {
-              header: t(translations.userAgent),
-              content: ({ userAgent }) => <Blankable of={userAgent} />,
-              className: 'whitespace-nowrap',
+              header: t(translations.ipAddress),
+              content: ({ ipAddress }) => <Blankable of={ipAddress} />,
             },
           ]}
         </VerticalTable>

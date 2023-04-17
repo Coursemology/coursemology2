@@ -37,24 +37,32 @@ RSpec.describe Course::Monitoring::Monitor, type: :model do
       end
     end
 
-    describe '#valid_seb_hash?' do
-      context 'when seb_hash is not set' do
-        subject { create(:course_monitoring_monitor, seb_hash: nil) }
+    describe '#valid_secret?' do
+      context 'when secret is not set' do
+        subject { create(:course_monitoring_monitor, secret: nil) }
 
         it 'always returns true' do
-          expect(subject.valid_seb_hash?('anything')).to be_truthy
+          expect(subject.valid_secret?('anything')).to be_truthy
         end
       end
 
-      context 'when seb_hash is set' do
-        subject { create(:course_monitoring_monitor, seb_hash: 'something') }
+      context 'when secret is set' do
+        subject { create(:course_monitoring_monitor, secret: 'something') }
 
-        it 'returns true if the given hash matches' do
-          expect(subject.valid_seb_hash?('something')).to be_truthy
+        it 'returns true if the given substring matches' do
+          expect(subject.valid_secret?('something')).to be(true)
         end
 
-        it 'returns false if the given hash does not match' do
-          expect(subject.valid_seb_hash?('anything')).to be_falsey
+        it 'returns true if the given substring includes' do
+          expect(subject.valid_secret?('something weird')).to be(true)
+        end
+
+        it 'returns false if the given substring does not include' do
+          expect(subject.valid_secret?('anything')).to be(false)
+        end
+
+        it 'returns false if the given substring is nil' do
+          expect(subject.valid_secret?(nil)).to be(false)
         end
       end
     end

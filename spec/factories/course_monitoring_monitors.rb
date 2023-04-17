@@ -10,8 +10,8 @@ FactoryBot.define do
       enabled { false }
     end
 
-    trait :with_seb_hash do
-      sequence(:seb_hash) { |n| "seb_hash_#{n}" }
+    trait :with_secret do
+      sequence(:secret) { |n| "secret_#{n}" }
     end
   end
 end

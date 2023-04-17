@@ -28,7 +28,7 @@ export const PRESENCE_COLORS: Record<Presence, string> = {
 const ActiveSession = (props: ActiveSessionProps): JSX.Element => {
   const { of: snapshot, for: userId } = props;
 
-  const { hasSEBHash } = useAppSelector(select('monitor'));
+  const { hasSecret } = useAppSelector(select('monitor'));
 
   const monitoring = useMonitoring();
 
@@ -58,7 +58,7 @@ const ActiveSession = (props: ActiveSessionProps): JSX.Element => {
         anchorsOn={popupData?.[0]}
         for={snapshot.userName ?? ''}
         generatedAt={popupData?.[1]}
-        hasSEBHash={hasSEBHash}
+        hasSecret={hasSecret}
         onClose={(): void => {
           setPopupData((data) => [undefined, data?.[1]]);
           monitoring.deselect();

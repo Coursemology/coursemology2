@@ -1,5 +1,4 @@
 import { ComponentType, useEffect, useRef, useState } from 'react';
-import { getSEBConfigKey } from 'utilities/safeExamBrowser';
 
 import { getCourseId } from 'lib/helpers/url-helpers';
 import usePrompt from 'lib/hooks/router/usePrompt';
@@ -50,10 +49,7 @@ const withHeartbeatWorker = <P extends WrappedComponentProps>(
       if (!courseId)
         throw new Error(`Encountered illegal course ID: ${courseId}`);
 
-      port.postMessage({
-        type: 'start',
-        payload: { sessionId, courseId, sebConfigKey: getSEBConfigKey() },
-      });
+      port.postMessage({ type: 'start', payload: { sessionId, courseId } });
 
       const terminateWorker = (): void => {
         terminatePort();

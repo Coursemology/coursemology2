@@ -11,9 +11,5 @@ FactoryBot.define do
     trait :stale do
       is_stale { true }
     end
-
-    trait :with_seb_hash do
-      seb_hash { '81aad4ab9dfd447cc479e6a4a7c9a544e2cafc7f3adeb68b2a21efad68eca4dc' }
-    end
   end
 end

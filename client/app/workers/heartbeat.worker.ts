@@ -6,7 +6,6 @@ import setUpDatabase, { MonitoringDBActions } from './monitoringDatabase';
 interface StartPayload {
   sessionId: number;
   courseId: number;
-  sebConfigKey?: string;
 }
 
 interface HeartbeatWorkerListener {
@@ -32,7 +31,7 @@ const terminateWorker = async (): Promise<void> => {
 
 const listenersThrough = (port: MessagePort): HeartbeatWorkerListener => ({
   start: async (payload): Promise<void> => {
-    const { sessionId, courseId, sebConfigKey } = payload;
+    const { sessionId, courseId } = payload;
     storage ??= await setUpDatabase();
 
     channel ??= subscribe(getWebSocketURL(), sessionId, courseId, {
@@ -45,7 +44,6 @@ const listenersThrough = (port: MessagePort): HeartbeatWorkerListener => ({
       getFlushData: storage?.getHeartbeats,
       onFlushed: storage?.removeHeartbeats,
       onTerminate: terminateWorker,
-      sebConfigKey,
     });
   },
 
