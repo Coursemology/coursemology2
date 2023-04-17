@@ -23,9 +23,13 @@ const FilterAutocomplete = (props: FilterAutocompleteProps): JSX.Element => {
       getOptionLabel={(filter): string => filter.name}
       groupBy={(filter): string => filter.category}
       multiple
-      onChange={(_, filters): void =>
-        monitoring.filter(filters.map(({ userIds }) => userIds).flat())
-      }
+      onChange={(_, filters): void => {
+        if (filters.length) {
+          monitoring.filter(filters.map(({ userIds }) => userIds).flat());
+        } else {
+          monitoring.filter(undefined);
+        }
+      }}
       options={props.filters}
       renderInput={(params): JSX.Element => (
         <TextField
