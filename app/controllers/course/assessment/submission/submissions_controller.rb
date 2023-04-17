@@ -310,6 +310,7 @@ class Course::Assessment::Submission::SubmissionsController < \
     return false unless current_user.id == @submission.creator_id
     return false unless current_course_user.student?
     return false unless can?(:create, Course::Monitoring::Session.new(creator_id: current_user.id))
+    return false unless @assessment&.monitor&.enabled?
 
     true
   end
