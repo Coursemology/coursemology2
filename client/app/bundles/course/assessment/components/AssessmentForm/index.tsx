@@ -731,14 +731,14 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           <>
             <Controller
               control={control}
-              name="monitoring.seb_hash"
+              name="monitoring.secret"
               render={({ field, fieldState }): JSX.Element => (
                 <FormTextField
                   disabled={!canManageMonitor || disabled}
                   field={field}
                   fieldState={fieldState}
                   fullWidth
-                  label={t(translations.sebHash)}
+                  label={t(translations.secret)}
                   variant="filled"
                 />
               )}
@@ -749,12 +749,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
               color="text.secondary"
               variant="body2"
             >
-              {t(translations.sebHashHint, {
-                seb: (chunk) => (
-                  <Link href="https://safeexambrowser.org/" opensInNewTab>
-                    {chunk}
-                  </Link>
-                ),
+              {t(translations.secretHint, {
                 pulsegrid: (chunk) => (
                   <Link href={pulsegridUrl} opensInNewTab>
                     {chunk}

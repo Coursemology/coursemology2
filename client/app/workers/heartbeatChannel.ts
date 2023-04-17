@@ -12,7 +12,6 @@ interface HeartbeatChannelCallbacks {
   getFlushData?: () => Promise<HeartbeatPostData[]>;
   onFlushed?: (from: number, to: number) => void;
   onTerminate?: () => void;
-  sebConfigKey?: string;
 }
 
 export interface HeartbeatChannel {
@@ -28,10 +27,7 @@ const flushThenPulseOn = async (
   const flushData = await callbacks.getFlushData?.();
   if (flushData?.length) channel.perform('flush', { heartbeats: flushData });
 
-  const heartbeat: HeartbeatPostData = {
-    timestamp: Date.now(),
-    seb_hash: callbacks.sebConfigKey,
-  };
+  const heartbeat: HeartbeatPostData = { timestamp: Date.now() };
 
   callbacks.onPulse?.(heartbeat);
   channel.perform('pulse', heartbeat);

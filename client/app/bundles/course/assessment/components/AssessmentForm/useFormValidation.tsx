@@ -91,7 +91,7 @@ const validationSchema = yup.object({
   affects_personal_times: yup.bool(),
   monitoring: yup.object({
     enabled: yup.bool(),
-    seb_hash: yup.string().nullable(),
+    secret: yup.string().nullable(),
     min_interval_ms: yup.number().when('enabled', {
       is: true,
       then: yup

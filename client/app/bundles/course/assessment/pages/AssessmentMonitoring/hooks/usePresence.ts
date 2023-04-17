@@ -36,7 +36,7 @@ const usePresence = (snapshot: Snapshot, callbacks: Callbacks): Presence => {
   );
 
   useEffect(() => {
-    const currentPresence = snapshot.isValidSEBHash
+    const currentPresence = snapshot.isValid
       ? getPresenceFromNow(snapshot.lastHeartbeatAt, maxIntervalMs, offsetMs)
       : 'missing';
 

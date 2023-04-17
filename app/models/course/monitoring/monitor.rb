@@ -12,8 +12,8 @@ class Course::Monitoring::Monitor < ApplicationRecord
 
   validate :max_interval_greater_than_min
 
-  def valid_seb_hash?(seb_hash_to_validate)
-    seb_hash? ? seb_hash_to_validate == seb_hash : true
+  def valid_secret?(string)
+    secret? ? (string&.include?(secret) || false) : true
   end
 
   private

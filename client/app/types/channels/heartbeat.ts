@@ -1,6 +1,5 @@
 export interface HeartbeatPostData {
   timestamp: number;
-  seb_hash?: string;
 }
 
 export interface NextActionData {

@@ -307,16 +307,15 @@ const translations = defineMessages({
       'finalise it or the first 24 hours since their attempt, whichever is earlier. Instructors can monitor these ' +
       'sessions in <pulsegrid>PulseGrid</pulsegrid>.',
   },
-  sebHash: {
-    id: 'course.assessment.AssessmentForm.sebHash',
-    defaultMessage: 'SEB Config Key (optional)',
+  secret: {
+    id: 'course.assessment.AssessmentForm.secret',
+    defaultMessage: 'Secret UA Substring (SUS)',
   },
-  sebHashHint: {
-    id: 'course.assessment.AssessmentForm.sebHashHint',
+  secretHint: {
+    id: 'course.assessment.AssessmentForm.secretHint',
     defaultMessage:
-      'If you are deploying this exam in <seb>Safe Exam Browser (SEB)</seb>, Coursemology will automatically flag ' +
-      'connections with this config key in <pulsegrid>PulseGrid</pulsegrid>, if provided. Otherwise, connections will ' +
-      'be flagged only by heartbeat intervals.',
+      'If provided, Coursemology can automatically flag a connection as valid in <pulsegrid>PulseGrid</pulsegrid> if the ' +
+      "examinee's User Agent (UA) contains this secret. Otherwise, connections will be flagged only by heartbeat intervals.",
   },
   minInterval: {
     id: 'course.assessment.AssessmentForm.minInterval',

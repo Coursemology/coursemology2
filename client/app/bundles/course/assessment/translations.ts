@@ -853,10 +853,6 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.generatedAt',
     defaultMessage: 'Generated at',
   },
-  sebHash: {
-    id: 'course.assessment.monitoring.sebHash',
-    defaultMessage: 'SEB Config Key',
-  },
   userAgent: {
     id: 'course.assessment.monitoring.userAgent',
     defaultMessage: 'User Agent',
@@ -914,10 +910,9 @@ const translations = defineMessages({
     id: 'course.assessment.monitoring.alivePresenceHint',
     defaultMessage: 'Last heartbeat was received in time.',
   },
-  alivePresenceHintSEBHashMatches: {
-    id: 'course.assessment.monitoring.alivePresenceHintSEBHashMatches',
-    defaultMessage:
-      'Last heartbeat was received in time and the SEB Config Key matches.',
+  alivePresenceHintSUSMatches: {
+    id: 'course.assessment.monitoring.alivePresenceHintSUSMatches',
+    defaultMessage: 'Last heartbeat was received in time and the SUS matches.',
   },
   latePresenceHint: {
     id: 'course.assessment.monitoring.latePresenceHint',

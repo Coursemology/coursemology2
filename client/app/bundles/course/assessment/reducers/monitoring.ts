@@ -12,7 +12,7 @@ const initialState: MonitoringState = {
   snapshots: {},
   history: [],
   connected: false,
-  monitor: { maxIntervalMs: 0, offsetMs: 0, hasSEBHash: false },
+  monitor: { maxIntervalMs: 0, offsetMs: 0, hasSecret: false },
 };
 
 export const monitoringSlice = createSlice({

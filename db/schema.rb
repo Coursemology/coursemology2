@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_10_121228) do
+ActiveRecord::Schema.define(version: 2023_04_17_051641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -840,7 +840,6 @@ ActiveRecord::Schema.define(version: 2023_04_10_121228) do
   create_table "course_monitoring_heartbeats", force: :cascade do |t|
     t.bigint "session_id", null: false
     t.string "user_agent", null: false
-    t.string "seb_hash"
     t.string "ip_address"
     t.datetime "generated_at", null: false
     t.boolean "stale", default: false, null: false
@@ -852,7 +851,7 @@ ActiveRecord::Schema.define(version: 2023_04_10_121228) do
 
   create_table "course_monitoring_monitors", force: :cascade do |t|
     t.boolean "enabled", default: false, null: false
-    t.string "seb_hash"
+    t.string "secret"
     t.integer "min_interval_ms", null: false
     t.integer "max_interval_ms", null: false
     t.integer "offset_ms", default: 0, null: false

@@ -29,7 +29,7 @@ const actionTypes = mirrorCreator([
 
 export const DEFAULT_MONITORING_OPTIONS = {
   enabled: false,
-  seb_hash: '',
+  secret: '',
   min_interval_ms: 20000,
   max_interval_ms: 30000,
   offset_ms: 3000,
