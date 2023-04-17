@@ -69,11 +69,11 @@ export const monitoringSlice = createSlice({
 
       state.snapshots[selectedUserId].recentHeartbeats = action.payload;
     },
-    filter: (state, action: PayloadAction<number[]>) => {
-      const userIds = new Set(action.payload);
+    filter: (state, action: PayloadAction<number[] | undefined>) => {
+      const userIds = action.payload && new Set(action.payload);
 
       Object.entries(state.snapshots).forEach(([userId, snapshot]) => {
-        if (userIds.size === 0) {
+        if (!userIds) {
           snapshot.hidden = false;
         } else {
           snapshot.hidden = !userIds.has(parseInt(userId, 10));

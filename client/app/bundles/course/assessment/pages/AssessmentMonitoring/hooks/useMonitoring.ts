@@ -22,7 +22,7 @@ interface UseMonitoringHook {
   supplySelected: (heartbeats: HeartbeatDetail[]) => void;
   select: (userId: number) => void;
   deselect: () => void;
-  filter: (userIds: number[]) => void;
+  filter: (userIds?: number[]) => void;
 }
 
 const useMonitoring = (): UseMonitoringHook => {
