@@ -5,7 +5,7 @@ import { getCourseId } from 'lib/helpers/url-helpers';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
 interface WrappedComponentProps {
-  setSessionId: (sessionId: number) => void;
+  setSessionId?: (sessionId: number) => void;
 }
 
 interface WorkerPort {
@@ -32,6 +32,8 @@ const setUpWorker = (): WorkerPort => {
 const withHeartbeatWorker = <P extends WrappedComponentProps>(
   Component: ComponentType<P>,
 ): ComponentType<P> => {
+  if (!globalThis.SharedWorker) return Component;
+
   const WrappedComponent = (props: P): JSX.Element => {
     const portRef = useRef<MessagePort>();
     const [sessionId, setSessionId] = useState<number>();
