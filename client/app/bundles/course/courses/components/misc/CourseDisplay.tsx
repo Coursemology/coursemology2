@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 import { CourseMiniEntity } from 'types/course/courses';
 
 import SearchField from 'lib/components/core/fields/SearchField';
-import Pagination from 'lib/components/core/layouts/Pagination';
+import Pagination from 'lib/components/core/layouts/DeprecatedPagination';
 import Note from 'lib/components/core/Note';
 
 import CourseInfoBox from './CourseInfoBox';
