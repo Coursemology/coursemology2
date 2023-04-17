@@ -6,13 +6,12 @@ import {
   AnnouncementFormData,
   AnnouncementMiniEntity,
   AnnouncementPermissions,
-  ExtendedAnnouncementMiniEntity,
 } from 'types/course/announcements';
 import { Operation } from 'types/store';
 
 import SearchField from 'lib/components/core/fields/SearchField';
 import Pagination from 'lib/components/core/layouts/Pagination';
-import { useEntities } from 'lib/hooks/entity';
+import useItems from 'lib/hooks/items/useItems';
 
 import AnnouncementCard from './AnnouncementCard';
 
@@ -34,6 +33,21 @@ const translations = defineMessages({
   },
 });
 
+const itemsPerPage = 12;
+
+const searchKeys: (keyof AnnouncementMiniEntity)[] = ['title', 'content'];
+
+export const sortFunc = (
+  announcements: AnnouncementMiniEntity[],
+): AnnouncementMiniEntity[] => {
+  const sortedAnnouncements = [...announcements];
+  sortedAnnouncements
+    .sort((a, b) => Date.parse(b.startTime) - Date.parse(a.startTime))
+    .sort((a, b) => Number(b.isSticky) - Number(a.isSticky))
+    .sort((a, b) => Number(b.isCurrentlyActive) - Number(a.isCurrentlyActive));
+  return sortedAnnouncements;
+};
+
 const AnnouncementsDisplay: FC<Props> = (props) => {
   const {
     intl,
@@ -44,72 +58,37 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
     canSticky = true,
   } = props;
 
-  const ITEMS_PER_PAGE = 12;
-  const sortProps = [
-    { name: 'startTime', elemType: 'date', order: 'asc' },
-    { name: 'isSticky', elemType: 'boolean', order: 'asc' },
-    { name: 'isCurrentlyActive', elemType: 'boolean', order: 'asc' },
-  ];
-  const searchProps = ['title', 'content'];
-
-  const emptyArray = [] as ExtendedAnnouncementMiniEntity[];
-  let displayedAnnouncement = emptyArray;
-  if (announcements.length > 0) {
-    displayedAnnouncement = announcements as ExtendedAnnouncementMiniEntity[];
-  }
-
   const {
-    paginatedEntities: processedAnnouncements,
-    slicedEntities: slicedAnnouncements,
-    handleSearchBarChange,
-    page,
-    itemsPerPage,
-    setSlicedEntities: setslicedAnnouncements,
-    setPage,
-  } = useEntities<ExtendedAnnouncementMiniEntity>(
-    displayedAnnouncement,
-    ITEMS_PER_PAGE,
-    sortProps,
-    searchProps,
-  );
+    processedItems: processedAnnouncements,
+    handleSearch,
+    currentPage,
+    totalPages,
+    handlePageChange,
+  } = useItems(announcements, searchKeys, sortFunc, itemsPerPage);
 
   return (
     <>
-      <Grid columns={{ xs: 1, lg: 3 }} container style={{ padding: 0 }}>
-        <Grid
-          item
-          style={{
-            display: 'flex',
-            justifyContent: 'left',
-          }}
-          xs={1}
-        >
-          <div style={{ paddingTop: 7, paddingBottom: 5 }}>
-            <SearchField
-              className="w-[350px]"
-              onChangeKeyword={handleSearchBarChange}
-              placeholder={intl.formatMessage(
-                translations.searchBarPlaceholder,
-              )}
-            />
-          </div>
+      <Grid className="flex items-center" columns={{ xs: 1, lg: 3 }} container>
+        <Grid className="lg:justify-left flex " item xs={1}>
+          <SearchField
+            className="my-4 w-full"
+            onChangeKeyword={handleSearch}
+            placeholder={intl.formatMessage(translations.searchBarPlaceholder)}
+          />
         </Grid>
         <Grid item xs={1}>
           <Pagination
-            items={processedAnnouncements}
-            itemsPerPage={itemsPerPage}
-            padding={12}
-            page={page}
-            setPage={setPage}
-            setSlicedItems={setslicedAnnouncements}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
+            totalPages={totalPages}
           />
         </Grid>
         <Grid item xs={1} />
       </Grid>
 
       <div id="course-announcements">
-        <Stack spacing={1} sx={{ paddingBottom: 1 }}>
-          {slicedAnnouncements.map((announcement) => (
+        <Stack spacing={1}>
+          {processedAnnouncements.map((announcement) => (
             <AnnouncementCard
               key={announcement.id}
               announcement={announcement}
@@ -122,14 +101,11 @@ const AnnouncementsDisplay: FC<Props> = (props) => {
         </Stack>
       </div>
 
-      {slicedAnnouncements.length > 6 && (
+      {processedAnnouncements.length > 6 && (
         <Pagination
-          items={processedAnnouncements}
-          itemsPerPage={ITEMS_PER_PAGE}
-          padding={12}
-          page={page}
-          setPage={setPage}
-          setSlicedItems={setslicedAnnouncements}
+          currentPage={currentPage}
+          handlePageChange={handlePageChange}
+          totalPages={totalPages}
         />
       )}
     </>

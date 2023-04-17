@@ -12,7 +12,7 @@ const Pagination: FC<PaginationProps> = (props) => {
 
   return (
     <MUIPagination
-      className="my-4"
+      className="my-4 flex justify-center"
       color="primary"
       count={totalPages}
       onChange={(_, pageNumber): void => handlePageChange(pageNumber)}

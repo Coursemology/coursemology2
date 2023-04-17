@@ -20,7 +20,6 @@ import { formatFullDateTime } from 'lib/moment';
 import AnnouncementEdit from '../../pages/AnnouncementEdit';
 
 interface Props extends WrappedComponentProps {
-  key: number;
   announcement: AnnouncementMiniEntity;
   showEditOptions?: boolean;
   updateOperation?: (
@@ -61,7 +60,6 @@ const translations = defineMessages({
 const AnnouncementCard: FC<Props> = (props) => {
   const {
     intl,
-    key,
     announcement,
     showEditOptions,
     updateOperation,
@@ -123,7 +121,7 @@ const AnnouncementCard: FC<Props> = (props) => {
   return (
     <>
       <div
-        key={key}
+        key={announcement.id}
         className="announcement"
         id={`announcement-${announcement.id}`}
         style={{
