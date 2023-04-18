@@ -10,6 +10,7 @@ module.exports = merge(common, {
   output: {
     filename: '[name].js',
     pathinfo: false,
+    publicPath: `//localhost:${DEV_SERVER_PORT}/webpack/`,
 
     /**
      * If the host name of the app (e.g., `localhost:5000`) is different from
@@ -21,7 +22,7 @@ module.exports = merge(common, {
      * but may not work if the app is hosted on multiple different domains,
      * e.g., on both `localhost` and ngrok.
      */
-    publicPath: `//${DEFAULT_LOCALHOST_HOST}/webpack/`,
+    workerPublicPath: `//${DEFAULT_LOCALHOST_HOST}/webpack/`,
   },
   devtool: 'eval-cheap-module-source-map',
   devServer: {
