@@ -1076,9 +1076,10 @@
   resolved "https://registry.yarnpkg.com/@bcoe/v8-coverage/-/v8-coverage-0.2.3.tgz#75a2e8b51cb758a7553d6804a5932d7aace75c39"
   integrity sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==
 
-"@ckeditor/ckeditor5-build-custom@github:ekowidianto/CKEditor5-build-coursemology#v0.2.0":
-  version "0.2.0"
-  resolved "https://codeload.github.com/ekowidianto/CKEditor5-build-coursemology/tar.gz/3a287e286c1011201aef35a36a9760c58fe99e68"
+"@ckeditor/ckeditor5-build-custom@github:ekowidianto/CKEditor5-build-coursemology#v1":
+  version "0.0.1"
+  uid c22c7a20899efb9dc9bd3e2a29fbca9848372ce4
+  resolved "https://codeload.github.com/ekowidianto/CKEditor5-build-coursemology/tar.gz/c22c7a20899efb9dc9bd3e2a29fbca9848372ce4"
 
 "@ckeditor/ckeditor5-react@^5.1.0":
   version "5.1.0"

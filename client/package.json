@@ -32,7 +32,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@babel/runtime": "^7.21.0",
-    "@ckeditor/ckeditor5-build-custom": "github:ekowidianto/CKEditor5-build-coursemology#v0.2.0",
+    "@ckeditor/ckeditor5-build-custom": "github:ekowidianto/CKEditor5-build-coursemology#v1",
     "@ckeditor/ckeditor5-react": "^5.1.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
