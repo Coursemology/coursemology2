@@ -38,7 +38,7 @@ GIT
 
 GIT
   remote: https://github.com/purfectliterature/simple_form-bootstrap
-  revision: 2c61978f8d40f8053deb3f748dafbdd5c9de5864
+  revision: a7b5759e3a569a65d0e2b575c9ae38a7d5c9e5fc
   specs:
     simple_form-bootstrap (1.6.0)
       actionpack (>= 4.1)
