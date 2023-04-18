@@ -26,9 +26,6 @@ const reducer = produce(
         const announcementList = action.announcementList;
         const entityList = announcementList.map((data) => ({ ...data }));
 
-        // Need to refresh the entire store for creating new announcement for ordering to be correct
-        draft.announcements = createEntityStore();
-
         saveListToStore(draft.announcements, entityList);
         draft.permissions = action.announcementPermissions;
         break;
