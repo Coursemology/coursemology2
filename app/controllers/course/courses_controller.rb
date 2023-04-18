@@ -4,7 +4,7 @@ class Course::CoursesController < Course::Controller
   skip_authorize_resource :course, only: [:show, :index]
 
   def index
-    @courses = Course.publicly_accessible.ordered_by_start_at
+    @courses = Course.publicly_accessible
   end
 
   def show
