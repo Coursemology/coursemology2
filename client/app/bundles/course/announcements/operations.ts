@@ -43,10 +43,7 @@ export function createAnnouncement(formData: AnnouncementFormData): Operation {
   const attributes = formatAttributes(formData);
   return async (dispatch) =>
     CourseAPI.announcements.create(attributes).then((response) => {
-      const data = response.data;
-      dispatch(
-        actions.saveAnnouncementList(data.announcements, data.permissions),
-      );
+      dispatch(actions.saveAnnouncement(response.data));
     });
 }
 

@@ -10,16 +10,14 @@ class Course::AnnouncementsController < Course::ComponentController
         @announcements = @announcements.includes(:creator)
         @announcements = @announcements.with_read_marks_for(current_user)
         mark_announcements_as_read
-        render 'index'
       end
     end
   end
 
   def create
     if @announcement.save
-      # Return all announcements for re-rendering ordering purposes
-      @announcements = Course::Announcement.where(course_id: current_course.id)
-      index
+      render partial: 'announcements/announcement_list_data',
+             locals: { announcement: @announcement }
     else
       render json: { errors: @announcement.errors }, status: :bad_request
     end
