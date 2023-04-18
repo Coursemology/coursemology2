@@ -16,6 +16,7 @@ export interface CourseListData {
   title: string;
   description: string;
   logoUrl: string;
+  startAt: string;
 }
 
 export interface CourseData extends CourseListData {
@@ -43,6 +44,7 @@ export interface CourseMiniEntity {
   title: string;
   description: string;
   logoUrl: string;
+  startAt: string;
 }
 
 export interface CourseEntity extends CourseMiniEntity {

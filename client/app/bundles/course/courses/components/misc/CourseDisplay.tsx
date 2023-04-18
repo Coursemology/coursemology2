@@ -27,6 +27,11 @@ const translations = defineMessages({
 
 const itemsPerPage = 24;
 const searchKeys: (keyof CourseMiniEntity)[] = ['title'];
+export const sortFunc = (courses: CourseMiniEntity[]): CourseMiniEntity[] => {
+  const sortedCourses = [...courses];
+  sortedCourses.sort((a, b) => Date.parse(b.startAt) - Date.parse(a.startAt));
+  return sortedCourses;
+};
 
 const CourseDisplay: FC<Props> = (props) => {
   const { intl, courses } = props;
@@ -37,12 +42,7 @@ const CourseDisplay: FC<Props> = (props) => {
     currentPage,
     totalPages,
     handlePageChange,
-  } = useItems(
-    courses,
-    searchKeys,
-    (items: CourseMiniEntity[]) => items,
-    itemsPerPage,
-  );
+  } = useItems(courses, searchKeys, sortFunc, itemsPerPage);
 
   if (courses.length === 0) {
     return <Note message={intl.formatMessage(translations.noCourse)} />;
@@ -50,17 +50,8 @@ const CourseDisplay: FC<Props> = (props) => {
 
   return (
     <>
-      <Grid columns={{ xs: 1, lg: 3 }} container style={{ padding: 0 }}>
-        <Grid
-          item
-          style={{
-            display: 'flex',
-            justifyContent: 'left',
-            paddingTop: 16,
-            paddingBottom: 16,
-          }}
-          xs={1}
-        >
+      <Grid className="flex items-center" columns={{ xs: 1, lg: 3 }} container>
+        <Grid className="lg:justify-left flex " item xs={1}>
           <SearchField
             onChangeKeyword={handleSearch}
             placeholder={intl.formatMessage(translations.searchBarPlaceholder)}
