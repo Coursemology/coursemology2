@@ -1,11 +1,12 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Grid } from '@mui/material';
 import { CourseMiniEntity } from 'types/course/courses';
 
 import SearchField from 'lib/components/core/fields/SearchField';
-import Pagination from 'lib/components/core/layouts/DeprecatedPagination';
+import Pagination from 'lib/components/core/layouts/Pagination';
 import Note from 'lib/components/core/Note';
+import useItems from 'lib/hooks/items/useItems';
 
 import CourseInfoBox from './CourseInfoBox';
 
@@ -24,35 +25,28 @@ const translations = defineMessages({
   },
 });
 
+const itemsPerPage = 24;
+const searchKeys: (keyof CourseMiniEntity)[] = ['title'];
+
 const CourseDisplay: FC<Props> = (props) => {
   const { intl, courses } = props;
 
-  // Ideally 24. Divisble by 2, 3 and 4. Also makes the pagination less awkward
-  const ITEMS_PER_PAGE = 24;
-  const [slicedCourses, setSlicedCorses] = useState(
-    courses.slice(0, ITEMS_PER_PAGE), // To not render all course logos if there are multiple pages
+  const {
+    processedItems: processedCourses,
+    handleSearch,
+    currentPage,
+    totalPages,
+    handlePageChange,
+  } = useItems(
+    courses,
+    searchKeys,
+    (items: CourseMiniEntity[]) => items,
+    itemsPerPage,
   );
-  const [page, setPage] = useState(1);
-
-  const [shavedCourses, setShavedCourses] = useState(courses);
 
   if (courses.length === 0) {
     return <Note message={intl.formatMessage(translations.noCourse)} />;
   }
-
-  const handleSearchBarChange = (rawKeyword: string): void => {
-    const keyword = rawKeyword.trim();
-
-    if (keyword === '') {
-      setShavedCourses(courses);
-    } else {
-      setShavedCourses(
-        courses.filter((course: CourseMiniEntity) =>
-          course.title.toLowerCase().includes(keyword.toLowerCase()),
-        ),
-      );
-    }
-  };
 
   return (
     <>
@@ -68,17 +62,15 @@ const CourseDisplay: FC<Props> = (props) => {
           xs={1}
         >
           <SearchField
-            onChangeKeyword={handleSearchBarChange}
+            onChangeKeyword={handleSearch}
             placeholder={intl.formatMessage(translations.searchBarPlaceholder)}
           />
         </Grid>
         <Grid item xs={1}>
           <Pagination
-            items={shavedCourses}
-            itemsPerPage={ITEMS_PER_PAGE}
-            page={page}
-            setPage={setPage}
-            setSlicedItems={setSlicedCorses}
+            currentPage={currentPage}
+            handlePageChange={handlePageChange}
+            totalPages={totalPages}
           />
         </Grid>
         <Grid item xs={1} />
@@ -91,17 +83,15 @@ const CourseDisplay: FC<Props> = (props) => {
         p={1}
         style={{ padding: 0 }}
       >
-        {slicedCourses.map((course: CourseMiniEntity) => (
+        {processedCourses.map((course: CourseMiniEntity) => (
           <CourseInfoBox key={course.id} course={course} />
         ))}
       </Grid>
-      {slicedCourses.length > 12 && (
+      {processedCourses.length > 12 && (
         <Pagination
-          items={shavedCourses}
-          itemsPerPage={ITEMS_PER_PAGE}
-          page={page}
-          setPage={setPage}
-          setSlicedItems={setSlicedCorses}
+          currentPage={currentPage}
+          handlePageChange={handlePageChange}
+          totalPages={totalPages}
         />
       )}
     </>
