@@ -23,6 +23,7 @@ import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import ErrorText from 'lib/components/core/ErrorText';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
 import SubmissionAnswer from '../../components/SubmissionAnswer';
@@ -351,6 +352,9 @@ const SubmissionEditForm = (props) => {
               isResetting ||
               isSaving ||
               (!graderView && attemptsLeft === 0)
+            }
+            endIcon={
+              isAutogradingQuestion && <LoadingIndicator bare size={20} />
             }
             id="run-code"
             onClick={() =>
