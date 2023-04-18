@@ -327,7 +327,6 @@ export class VisibleTestCaseView extends Component {
       return null;
     }
 
-    const attempting = submissionState === workflowStates.Attempting;
     const published = submissionState === workflowStates.Published;
     const showOutputStreams = graderView || showStdoutAndStderr;
     const showPrivateTestToStudents = published && showPrivate;
@@ -339,7 +338,7 @@ export class VisibleTestCaseView extends Component {
 
     return (
       <div style={styles.testCasesContainer}>
-        {!attempting && isAutograding && (
+        {isAutograding && (
           <Paper
             style={{
               padding: 10,
