@@ -38,7 +38,7 @@
     "@emotion/styled": "^11.10.6",
     "@hookform/resolvers": "^2.9.11",
     "@mui/icons-material": "^5.11.11",
-    "@mui/lab": "^5.0.0-alpha.123",
+    "@mui/lab": "^5.0.0-alpha.127",
     "@mui/material": "^5.12.1",
     "@mui/x-date-pickers": "^5.0.19",
     "@rails/actioncable": "^7.0.4-3",
