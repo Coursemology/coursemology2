@@ -11,9 +11,12 @@ export default function (state = {}, action) {
           [answer.questionId]: {
             isResetting: false,
             isAutograding:
-              !!answer.autograding && answer.autograding.status === 'submitted',
+              Boolean(answer.autograding) &&
+              answer.autograding.status === 'submitted',
             jobError:
-              !!answer.autograding && answer.autograding.status === 'errored',
+              Boolean(answer.autograding) &&
+              answer.autograding.status === 'errored',
+            jobErrorMessage: answer?.autograding?.errorMessage,
           },
         }),
         {},
@@ -50,7 +53,8 @@ export default function (state = {}, action) {
         [questionId]: {
           ...state[questionId],
           isAutograding: false,
-          jobError: !!jobError,
+          jobError: Boolean(jobError),
+          jobErrorMessage: payload?.errorMessage,
         },
       };
     }

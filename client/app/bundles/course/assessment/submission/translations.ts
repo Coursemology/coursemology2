@@ -298,18 +298,12 @@ const translations = defineMessages({
     id: 'course.assessment.submission.uploadFiles',
     defaultMessage: 'Upload Files',
   },
-  autogradeFailure: {
-    id: 'course.assessment.submission.autogradeFailure',
-    defaultMessage:
-      '(T_T) Sorry, the autograder is having mood swings and quit on us. \
-                    Try submitting your code again in a couple of minutes.',
-  },
   codaveriAutogradeFailure: {
     id: 'course.assessment.submission.codaveriAutogradeFailure',
     defaultMessage:
-      '(T_T) Sorry, the codaveri autograder is having mood swings and quit on us. \
-                    Try submitting your code again in a couple of minutes \
-                    or check the error message in the network response.',
+      'There is an error while evaluating your code in Codaveri. \
+        Try submitting your code again in a couple of minutes \
+        or check the error message in the network response.',
   },
   autogradeSubmissionSuccess: {
     id: 'course.assessment.submission.autogradeSubmissionSuccess',
