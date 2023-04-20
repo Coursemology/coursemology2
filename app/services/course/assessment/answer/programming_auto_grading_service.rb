@@ -107,7 +107,7 @@ class Course::Assessment::Answer::ProgrammingAutoGradingService < \
 
   def count_passed_test_cases(auto_grading, test_case_types)
     auto_grading.test_results.
-      select { |r| test_case_types.include?(r.test_case.test_case_type) && r.passed? }.count
+      select { |r| test_case_types.include?(r.test_case&.test_case_type) && r.passed? }.count
   end
 
   # Checks presence of test report and builds the test case records.
