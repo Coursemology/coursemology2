@@ -3,7 +3,7 @@ require 'rails_helper'
 
 RSpec.describe Course::Assessment::ProgrammingEvaluationService do
   describe Course::Assessment::ProgrammingEvaluationService::Result do
-    self::TIME_LIMIT_EXCEEDED_EXIT_CODE = 137
+    self::TIME_OR_MEMORY_LIMIT_EXCEEDED_EXIT_CODE = 137
     let(:exit_code) { 0 }
     let(:test_reports) { { report: '' } }
     subject do
@@ -35,14 +35,27 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
       end
     end
 
-    describe '#time_limit_exceeded?' do
+    describe '#error_class' do
       context 'when the process exits normally' do
-        it { is_expected.not_to be_time_limit_exceeded }
+        it 'returns nil' do
+          expect(subject.error_class).to be_nil
+        end
       end
 
-      context 'when the process exits with a SIGKILL' do
-        let(:exit_code) { self.class::TIME_LIMIT_EXCEEDED_EXIT_CODE }
-        it { is_expected.to be_time_limit_exceeded }
+      context 'when the exit is due to time or docker memory limit error' do
+        let(:exit_code) { self.class::TIME_OR_MEMORY_LIMIT_EXCEEDED_EXIT_CODE }
+        it 'returns TimeLimitExceededError' do
+          expect(subject.error_class.name).to \
+            eq('Course::Assessment::ProgrammingEvaluationService::TimeOrMemoryLimitExceededError')
+        end
+      end
+
+      context 'when the exit is due to other error' do
+        let(:exit_code) { 2 }
+        it 'returns Error' do
+          expect(subject.error_class.name).to \
+            eq('Course::Assessment::ProgrammingEvaluationService::Error')
+        end
       end
     end
 
@@ -54,13 +67,12 @@ RSpec.describe Course::Assessment::ProgrammingEvaluationService do
         end
       end
 
-      context 'when the time limit is exceeded' do
-        let(:exit_code) { self.class::TIME_LIMIT_EXCEEDED_EXIT_CODE }
+      context 'when the time or docker memory limit is exceeded' do
+        let(:exit_code) { self.class::TIME_OR_MEMORY_LIMIT_EXCEEDED_EXIT_CODE }
         let(:test_reports) { {} }
-        it 'returns TimeLimitExceededError' do
-          expect(subject).to be_time_limit_exceeded
+        it 'returns TimeOrMemoryLimitExceededError' do
           expect(subject.exception).to \
-            be_a(Course::Assessment::ProgrammingEvaluationService::TimeLimitExceededError)
+            be_a(Course::Assessment::ProgrammingEvaluationService::TimeOrMemoryLimitExceededError)
         end
       end
 
