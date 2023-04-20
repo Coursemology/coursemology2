@@ -20,24 +20,27 @@ class Course::Assessment::ProgrammingEvaluationService
       test_reports.values.all?(&:nil?) && exit_code != 0
     end
 
-    # Checks if the evaluation exceeded its time limit.
-    #
-    # This uses a Bash behaviour where the exit code of a process is 128 + signal number, if the
-    # process was terminated because of the signal.
-    #
-    # The time limit is enforced using SIGKILL.
-    #
-    # @return [Boolean]
-    def time_limit_exceeded?
-      exit_code == 128 + Signal.list['KILL']
+    def error_class
+      case exit_code
+      when 0
+        nil
+      when 128 + Signal.list['KILL']
+        # This uses a Bash behaviour where the exit code of a process is 128 + signal number, if the
+        # process was terminated because of the signal.
+        #
+        # The time or docker memory limit is enforced using SIGKILL.
+        TimeOrMemoryLimitExceededError
+      else
+        Error
+      end
     end
 
     # Obtains the exception suitable for this result.
     def exception
-      return nil unless error?
+      exception_class = error_class
+      return unless exception_class
 
-      exception_class = time_limit_exceeded? ? TimeLimitExceededError : Error
-      exception_class.new(exception_class.name, stdout, stderr)
+      exception_class.new(nil, stdout, stderr)
     end
   end
 
@@ -45,7 +48,8 @@ class Course::Assessment::ProgrammingEvaluationService
   class Error < StandardError
     attr_reader :stdout, :stderr
 
-    def initialize(message = self.class.name, stdout = nil, stderr = nil)
+    def initialize(message, stdout = nil, stderr = nil)
+      message ||= I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax')
       super(message)
       @stdout = stdout
       @stderr = stderr
@@ -63,8 +67,27 @@ class Course::Assessment::ProgrammingEvaluationService
     end
   end
 
-  # Represents a Time Limit Exceeded error while evaluating the package.
+  # Represents a Time or Docker Memory Limit Exceeded error while evaluating the package.
+  class TimeOrMemoryLimitExceededError < Error
+    def initialize(message, stdout = nil, stderr = nil)
+      message ||= I18n.t('course.assessment.answer.programming_auto_grading.grade.evaluation_failed_time_or_memory')
+      super(message, stdout, stderr)
+    end
+  end
+
   class TimeLimitExceededError < Error
+    def initialize(message, stdout = nil, stderr = nil)
+      message ||= I18n.t('course.assessment.answer.programming_auto_grading.grade.time_limit_error')
+      super(message, stdout, stderr)
+    end
+  end
+
+  # Represents a Time Limit Exceeded error while evaluating the package.
+  class MemoryLimitExceededError < Error
+    def initialize(message, stdout = nil, stderr = nil)
+      message ||= I18n.t('course.assessment.answer.programming_auto_grading.grade.memory_limit_error')
+      super(message, stdout, stderr)
+    end
   end
 
   class << self

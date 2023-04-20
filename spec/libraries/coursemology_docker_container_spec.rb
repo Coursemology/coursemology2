@@ -26,7 +26,9 @@ RSpec.describe CoursemologyDockerContainer do
     end
 
     it 'returns the exit code of the container' do
-      expect(subject.wait).to eq(subject.exit_code)
+      container_exit_code = subject.wait
+      _, stderr = subject
+      expect(container_exit_code).to eq(subject.exit_code(stderr))
     end
   end
 
@@ -34,13 +36,14 @@ RSpec.describe CoursemologyDockerContainer do
     context 'when the container has been waited upon' do
       it 'returns the exit code of the container' do
         subject.wait
-        expect(subject.exit_code).not_to be_nil
+        _, stderr = subject
+        expect(subject.exit_code(stderr)).not_to be_nil
       end
     end
 
     context 'when the container is still running' do
       it 'returns nil' do
-        expect(subject.exit_code).to be_nil
+        expect(subject.exit_code(nil)).to be_nil
       end
     end
   end

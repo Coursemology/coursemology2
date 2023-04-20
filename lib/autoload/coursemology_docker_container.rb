@@ -91,7 +91,15 @@ class CoursemologyDockerContainer < Docker::Container
   #
   # @return [Integer] The exit code of the container, if +wait+ was called before.
   # @return [nil] If the container is still running, or +wait+ was not called.
-  def exit_code
+  # TODO: Find a more proper way for Docker to return the correct error code
+  def exit_code(stderr = nil)
+    # Docker returns ExitCode 2 even when OOMKilled is true
+    # return 139 if info.fetch('State', {})['OOMKilled']
+
+    # Docker returns ExitCode 2 even when the process is killed when
+    # cpu time limit is breached
+    return 137 if stderr&.include? 'Error 137'
+
     info.fetch('State', {})['ExitCode']
   end
 
@@ -124,7 +132,7 @@ class CoursemologyDockerContainer < Docker::Container
   def evaluation_result
     _, stdout, stderr = container_streams
 
-    [stdout, stderr, extract_test_reports, exit_code]
+    [stdout, stderr, extract_test_reports, exit_code(stderr)]
   end
 
   private

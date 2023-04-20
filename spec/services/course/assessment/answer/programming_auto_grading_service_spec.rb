@@ -204,7 +204,7 @@ RSpec.describe Course::Assessment::Answer::ProgrammingAutoGradingService do
             subject
             answer.auto_grading.specific.test_results.each do |test_result|
               expect(test_result.messages['error']).
-                to eq 'course.assessment.answer.programming_auto_grading.grade.evaluation_failed'
+                to eq 'course.assessment.answer.programming_auto_grading.grade.evaluation_failed_syntax'
             end
           end
 
