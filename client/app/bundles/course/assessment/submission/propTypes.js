@@ -159,6 +159,7 @@ export const annotationShape = PropTypes.shape({
 
 export const questionFlagsShape = PropTypes.shape({
   jobError: PropTypes.bool.isRequired,
+  jobErrorMessage: PropTypes.string,
   isAutograding: PropTypes.bool.isRequired,
   isResetting: PropTypes.bool.isRequired,
 });

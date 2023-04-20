@@ -172,7 +172,7 @@ const SubmissionEditStepForm = (props) => {
   };
 
   const renderAutogradingErrorPanel = (id) => {
-    const { jobError } = questionsFlags[id] || {};
+    const { jobError, jobErrorMessage } = questionsFlags[id] || {};
     const { isCodaveri, type } = questions[id];
 
     if (type === questionTypes.Programming && jobError) {
@@ -182,8 +182,7 @@ const SubmissionEditStepForm = (props) => {
         >
           {isCodaveri
             ? intl.formatMessage(translations.codaveriAutogradeFailure)
-            : intl.formatMessage(translations.autogradeFailure)}
-          {intl.formatMessage(translations.autogradeFailure)}
+            : jobErrorMessage}
         </Paper>
       );
     }

@@ -31,7 +31,7 @@ end
 if attempt.submitted? && (job = attempt&.auto_grading&.job)
   json.autograding do
     json.path job_path(job) if job.submitted?
-    json.status job.status
+    json.partial! "jobs/#{job.status}", job: job
   end
 end
 

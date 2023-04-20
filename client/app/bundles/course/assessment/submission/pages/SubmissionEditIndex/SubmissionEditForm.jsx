@@ -270,6 +270,7 @@ const SubmissionEditForm = (props) => {
     const { answerId, attemptsLeft, attemptLimit, autogradable } = question;
     const {
       jobError,
+      jobErrorMessage,
       isAutograding: isAutogradingQuestion,
       isResetting,
     } = questionsFlags[id] || {};
@@ -330,7 +331,7 @@ const SubmissionEditForm = (props) => {
           >
             {question.isCodaveri
               ? intl.formatMessage(translations.codaveriAutogradeFailure)
-              : intl.formatMessage(translations.autogradeFailure)}
+              : jobErrorMessage}
           </Paper>
         )}
         <Button

@@ -13,3 +13,20 @@ en:
               Time Limit Exceeded (TLE) Error
             memory_limit_error: >
               Memory Limit Exceeded (MLE) Error
+          job:
+            failure:
+              time_limit_breached: >
+                The evaluator has been killed while it is still running.
+                This could be caused by the time limit set for this question exceeds
+                the allowable evaluator time limit in coursemology.
+                Please contact your course instructor to check this and if the problem persists,
+                please contact coursemology admin.
+              container_unreachable: >
+                There is an error creating a docker for the evaluator.
+                This could be due to high server workload. Please try again in a few minutes.
+                If the problem persists, please contact your course instructor or coursemology admin.
+              generic_error: >
+                Encountered an error. The server may be busy now and
+                you may want to try again in a few minutes. If the same issue persists,
+                please contact coursemology admin, provide the URL of this page and
+                quote the following error: "%{error}"
