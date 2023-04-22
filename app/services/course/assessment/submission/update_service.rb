@@ -155,7 +155,7 @@ class Course::Assessment::Submission::UpdateService < SimpleDelegator
             logger.error("Failed to update answer #{answer.errors.inspect}")
             raise ActiveRecord::Rollback
           end
-          attempt_draft_answer(answer)
+          attempt_draft_answer(answer) if answer
         end
       end
 
