@@ -16,9 +16,10 @@ module Course::Assessment::Submission::WorkflowEventConcern
     self.submitted_at = Time.zone.now
     save!
 
+    answers.reload # Reload answers after saving
     finalise_current_answers
 
-    answers.reload
+    answers.reload # Reload answers after finalising
     assign_zero_experience_points
 
     # Trigger timeline recomputation
