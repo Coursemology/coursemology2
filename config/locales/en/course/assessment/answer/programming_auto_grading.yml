@@ -5,8 +5,8 @@ en:
         programming_auto_grading:
           grade:
             evaluation_failed_syntax: >
-              Your code failed to evaluate correctly. There might be a syntax error, please
-              check your code again.
+              Your code failed to evaluate correctly. There might be a syntax error
+              or unsupported libraries are used, please check your code again.
             evaluation_failed_time_or_memory: >
               Your code failed to complete within the allocated time or memory limits.
             time_limit_error: >
