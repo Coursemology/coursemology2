@@ -289,7 +289,7 @@ const SubmissionEditForm = (props) => {
                 codaveriFeedbackStatus?.answers[answerId]?.jobStatus ===
                   'submitted' || isSaving
               }
-              id="re-evaluate-code"
+              id="retrieve-code-feedback"
               onClick={() => onGenerateFeedback(answerId, question.id)}
               style={styles.formButton}
               variant="contained"
@@ -299,7 +299,10 @@ const SubmissionEditForm = (props) => {
           )}
           <Button
             color="secondary"
-            disabled={isAutograding || isSaving}
+            disabled={isAutogradingQuestion || isSaving}
+            endIcon={
+              isAutogradingQuestion && <LoadingIndicator bare size={20} />
+            }
             id="re-evaluate-code"
             onClick={() => onReevaluateAnswer(answerId, question.id)}
             style={styles.formButton}
