@@ -28,7 +28,9 @@ json.fields do
   end
 end
 
-if attempt.submitted? && (job = attempt&.auto_grading&.job)
+job = attempt&.auto_grading&.job
+
+if job
   json.autograding do
     json.path job_path(job) if job.submitted?
     json.partial! "jobs/#{job.status}", job: job
