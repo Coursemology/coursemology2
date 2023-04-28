@@ -9,15 +9,22 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "jsx": "react-jsx",
-    "lib": ["dom", "dom.iterable", "esnext", "esnext.intl", "es2017.intl", "es2018.intl"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "esnext.intl",
+      "es2017.intl",
+      "es2018.intl"
+    ],
     "module": "esnext",
     "moduleResolution": "node",
     "noErrorTruncation": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitAny": false,
     "noImplicitOverride": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "outDir": "dist",
     "paths": {
       "test-utils": ["utilities/test-utils"]
