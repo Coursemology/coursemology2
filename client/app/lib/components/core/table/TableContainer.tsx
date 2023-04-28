@@ -16,9 +16,14 @@ const TableContainer = (
         props.className ?? ''
       }`}
       component={MuiPaper}
-      variant={props.variant}
+      elevation={props.variant === 'bare' ? 0 : undefined}
+      square={props.variant === 'bare'}
+      variant={props.variant === 'bare' ? 'elevation' : props.variant}
     >
-      <MuiTable size={props.dense ? 'small' : 'medium'}>
+      <MuiTable
+        className="border-separate"
+        size={props.dense ? 'small' : 'medium'}
+      >
         {props.children}
       </MuiTable>
     </MuiTableContainer>
