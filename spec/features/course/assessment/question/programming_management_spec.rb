@@ -19,79 +19,82 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         new_page = window_opened_by { click_link 'Programming' }
 
         within_window new_page do
-          expect(current_path).to eq(
-            new_course_assessment_question_programming_path(course, assessment)
-          )
-          visit new_course_assessment_question_programming_path(course, assessment)
-          expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
-          question_attributes = attributes_for(:course_assessment_question_programming)
-          fill_in 'question_programming[title]', with: question_attributes[:title]
+          expect(current_path).to eq(new_course_assessment_question_programming_path(course, assessment))
 
-          fill_in_react_ck 'textarea#question_programming_description',
-                           question_attributes[:description]
-          fill_in_react_ck 'textarea#question_programming_staff_only_comments',
-                           question_attributes[:staff_only_comments]
-          fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
+          attributes = attributes_for(:course_assessment_question_programming)
+          template = "print('Hello World')"
 
-          page.execute_script("$('select[name=\"question_programming[question_assessment][skill_ids][]\"]').show()")
-          within find_field('question_programming[question_assessment][skill_ids][]') do
-            select skill.title
-          end
+          fill_in 'Title', with: attributes[:title]
+          fill_in 'Maximum grade', with: attributes[:maximum_grade]
 
-          page.execute_script("$('select[name=\"question_programming[language_id]\"]').show()")
-          select question_attributes[:language].name, from: 'question_programming[language_id]'
-          page.find('#programming-question-form-submit').click
-          wait_for_job
+          fill_in_react_ck 'textarea[name="question.description"]', attributes[:description]
+          fill_in_react_ck 'textarea[name="question.staffOnlyComments"]', attributes[:staff_only_comments]
 
-          expect(page).to_not have_xpath('//form//*[contains(@data-testid, \'CircularProgress\')]')
+          find_field('Skills').click
+          find('li', text: skill.title).click
 
-          question_created = assessment.questions.first.specific.reload
+          find_all('div', text: 'Language').last.click
+          find('li', text: attributes[:language].name).click
 
-          expect(question_created.description).
-            to include(question_attributes[:description])
-          expect(question_created.staff_only_comments).
-            to include(question_attributes[:staff_only_comments])
-          expect(question_created.question_assessments.first.skills).to contain_exactly(skill)
+          find('div', id: 'testUi.metadata.submission').click
+          send_keys template
+
+          click_button 'Save changes'
+          wait_for_page
+
+          expect(page).to have_current_path(course_assessment_path(course, assessment))
+
+          new_question = assessment.questions.first.specific.reload
+          expect(new_question.title).to eq(attributes[:title])
+          expect(new_question.maximum_grade).to eq(attributes[:maximum_grade])
+          expect(new_question.description).to include(attributes[:description])
+          expect(new_question.staff_only_comments).to include(attributes[:staff_only_comments])
+          expect(new_question.question_assessments.first.skills).to contain_exactly(skill)
+          expect(new_question.language).to eq(attributes[:language])
+          expect(new_question.template_files.first.content).to eq(template)
         end
       end
 
-      # Disabled as page.find('#programming-question-form-submit') somehow can't detect the button
-      xscenario 'I can upload a template package' do
+      scenario 'I can upload a template package' do
         question = create(:course_assessment_question_programming,
                           assessment: assessment, template_file_count: 0, package_type: :zip_upload)
+
+        empty_package = File.join(fixture_path, 'course/empty_programming_question_template.zip')
+        valid_package = File.join(fixture_path, 'course/programming_question_template.zip')
+
         visit edit_course_assessment_question_programming_path(course, assessment, question)
-        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
+        find('span', text: 'Evaluate and test code').click
 
-        # since #question_programming_file is not visible, we can't find and click on it
-        find('button', text: 'CHOOSE NEW PACKAGE').first(:xpath, './/..').click
+        attach_file(empty_package) do
+          click_button 'Upload a new package'
+        end
 
-        attach_file 'question_programming[file]',
-                    File.join(fixture_path,
-                              'course/empty_programming_question_template.zip'),
-                    visible: false
-        page.find('#programming-question-form-submit').click
-        wait_for_job
-        expect(page).to have_selector('div.alert.alert-danger')
+        click_button 'Save changes'
+        wait_for_page
 
-        find('button', text: 'CHOOSE NEW PACKAGE').first(:xpath, './/..').click
-        attach_file 'question_programming[file]',
-                    File.join(fixture_path, 'course/programming_question_template.zip'),
-                    visible: false
-        page.find('#programming-question-form-submit').click
-        wait_for_job
+        expect(page).to have_text('error')
+        expect_toastify "package wasn't successfully imported"
 
-        expect(page).to_not have_xpath('//form//*[contains(@data-testid, \'CircularProgress\')]')
+        attach_file(valid_package) do
+          click_button 'Upload a new package'
+        end
+
+        click_button 'Save changes'
+        wait_for_page
+
         expect(page).to have_current_path(course_assessment_path(course, assessment))
-        visit edit_course_assessment_question_programming_path(course, assessment, question)
 
-        expect(page).to have_selector('div.alert.alert-success')
+        visit edit_course_assessment_question_programming_path(course, assessment, question)
+        expect(page).to have_text('success')
 
         question.template_files.reload.each do |template|
-          expect(page).to have_selector('.template-tab', text: template.filename)
+          expect(page).to have_text(template.filename)
         end
 
         question.test_cases.reload.each do |test_case|
-          expect(page).to have_content_tag_for(test_case)
+          expect(page).to have_text(test_case[:expression])
+          expect(page).to have_text(test_case[:expected])
+          expect(page).to have_text(test_case[:hint])
         end
       end
 
@@ -101,17 +104,13 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
 
         edit_path = edit_course_assessment_question_programming_path(course, assessment, question)
         find_link(nil, href: edit_path).click
-        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
 
         maximum_grade = 999.9
-        # For some reasons we have to clear the old field first then can fill in the value, otherwise
-        # the new value will append to the new value instead of replacing it.
-        fill_in 'question_programming[maximum_grade]', with: ''
-        fill_in 'question_programming[maximum_grade]', with: maximum_grade
-        page.find('#programming-question-form-submit').click
-        wait_for_job
 
-        expect(page).to_not have_xpath('//form//*[contains(@data-testid, \'CircularProgress\')]')
+        fill_in 'Maximum grade', with: maximum_grade
+        click_button 'Save changes'
+        wait_for_page
+
         expect(page).to have_current_path(course_assessment_path(course, assessment))
         expect(question.reload.maximum_grade).to eq(maximum_grade)
       end
@@ -130,40 +129,34 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
       scenario 'I can create a new question and upload the template package' do
         visit new_course_assessment_question_programming_path(course, assessment)
 
-        expect(page).to have_xpath('//form[@id=\'programming-question-form\']')
+        attributes = attributes_for(:course_assessment_question_programming)
+        fill_in 'Maximum grade', with: attributes[:maximum_grade]
 
-        question_attributes = attributes_for(:course_assessment_question_programming)
-        fill_in 'question_programming[maximum_grade]', with: question_attributes[:maximum_grade]
-        page.execute_script("$('select[name=\"question_programming[language_id]\"]').show()")
-        select question_attributes[:language].name, from: 'question_programming[language_id]'
-        page.check('question_programming[autograded]', visible: false)
-        fill_in 'question_programming[memory_limit]', with: question_attributes[:memory_limit]
-        # For some reasons we have to clear the old field first then can fill in the value, otherwise
-        # the new value will append to the new value instead of replacing it.
-        fill_in 'question_programming[time_limit]', with: ''
-        fill_in 'question_programming[time_limit]', with: question_attributes[:time_limit]
-        fill_in 'question_programming[attempt_limit]', with: question_attributes[:attempt_limit]
+        find_all('div', text: 'Language').last.click
+        find('li', text: attributes[:language].name).click
 
-        page.find('#upload-package-tab').click
-        find('button', text: 'CHOOSE NEW PACKAGE').first(:xpath, './/..').click
+        find('span', text: 'Evaluate and test code').click
 
-        attach_file 'question_programming[file]',
-                    File.join(file_fixture_path, 'course/programming_question_template.zip'),
-                    visible: false
-        page.find('#programming-question-form-submit').click
-        wait_for_job
+        fill_in 'Memory limit', with: attributes[:memory_limit]
+        fill_in 'Time limit', with: attributes[:time_limit]
+        fill_in 'Attempt limit', with: attributes[:attempt_limit]
 
-        expect(page).to_not have_xpath('//form//*[contains(@data-testid, \'CircularProgress\')]')
+        find('span', text: 'offline and upload').click
 
-        question_created = assessment.questions.first.specific
-        expect(page).to have_current_path(edit_course_assessment_question_programming_path(course, assessment,
-                                                                                           question_created))
-        expect(question_created.memory_limit).to eq(question_attributes[:memory_limit])
-        expect(question_created.time_limit).to eq(question_attributes[:time_limit])
-        expect(question_created.attempt_limit).to eq(question_attributes[:attempt_limit])
+        attach_file(File.join(file_fixture_path, 'course/programming_question_template.zip')) do
+          click_button 'Upload a new package'
+        end
+
+        click_button 'Save changes'
+        wait_for_page
+
+        new_question = assessment.questions.first.specific
+        expect(new_question.memory_limit).to eq(attributes[:memory_limit])
+        expect(new_question.time_limit).to eq(attributes[:time_limit])
+        expect(new_question.attempt_limit).to eq(attributes[:attempt_limit])
       end
 
-      describe 'When updating a question' do
+      describe 'updating a question' do
         let(:assessment) { create(:assessment, :autograded, course: course) }
         let!(:question) do
           create(:course_assessment_question_programming, :auto_gradable, template_package: true,
@@ -171,30 +164,43 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         end
         let(:student_user) { create(:course_student, course: course).user }
         let(:submission) { create(:submission, :published, assessment: assessment, creator: student_user) }
+
         it 'shows confirmation dialog to update all exp when there is a submission' do
           submission
           visit edit_course_assessment_question_programming_path(course, assessment, question)
-          page.find('#programming-question-form-submit').click
+
+          fill_in 'Title', with: "#{question.title} updated"
+          click_button 'Save changes'
+
           expect(page).to have_selector('button.confirm-btn')
         end
 
         it 'does not show the confirmation dialog when the course is not gamified' do
           course.update!(gamified: false)
           visit edit_course_assessment_question_programming_path(course, assessment, question)
-          page.find('#programming-question-form-submit').click
+
+          fill_in 'Title', with: "#{question.title} updated"
+          click_button 'Save changes'
+
           expect(page).not_to have_selector('button.confirm-btn')
         end
 
         it 'does not show the confirmation dialog when there is no submission' do
           visit edit_course_assessment_question_programming_path(course, assessment, question)
-          page.find('#programming-question-form-submit').click
+
+          fill_in 'Title', with: "#{question.title} updated"
+          click_button 'Save changes'
+
           expect(page).not_to have_selector('button.confirm-btn')
         end
 
         it 'does not show the confirmation dialog when the assessment is non-autograded' do
           assessment.update!(autograded: false)
           visit edit_course_assessment_question_programming_path(course, assessment, question)
-          page.find('#programming-question-form-submit').click
+
+          fill_in 'Title', with: "#{question.title} updated"
+          click_button 'Save changes'
+
           expect(page).not_to have_selector('button.confirm-btn')
         end
       end
