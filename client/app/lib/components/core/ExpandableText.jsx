@@ -20,6 +20,9 @@ const propTypes = {
   style: PropTypes.object,
 };
 
+/**
+ * @deprecated Use `Expandable` instead.
+ */
 class ExpandableText extends Component {
   constructor(props) {
     super(props);
