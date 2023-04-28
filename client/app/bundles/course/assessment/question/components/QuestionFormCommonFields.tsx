@@ -110,6 +110,7 @@ const QuestionFormCommonFields = (props: CommonFieldsProps): JSX.Element => {
           render={({ field, fieldState }): JSX.Element => (
             <FormTextField
               disabled={submitting}
+              disableMargins
               field={field}
               fieldState={fieldState}
               fullWidth
