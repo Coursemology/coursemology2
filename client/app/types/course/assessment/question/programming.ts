@@ -112,7 +112,7 @@ export interface BuildLogData {
 }
 
 export interface PackageImportResultData {
-  importResult?: string;
+  importResultMessage?: string;
   status?: 'success' | 'error';
   buildLog?: BuildLogData;
 }

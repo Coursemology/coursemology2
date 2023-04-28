@@ -1,0 +1,76 @@
+import { ReactNode } from 'react';
+import { Add } from '@mui/icons-material';
+import {
+  IconButton,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip,
+} from '@mui/material';
+
+import { TableContainer } from 'lib/components/core/table';
+import useTranslation from 'lib/hooks/useTranslation';
+
+import translations from '../../../../translations';
+
+import Accordion from './Accordion';
+
+export interface TestCasesTableProps {
+  title: string;
+  onClickAdd?: () => void;
+  disabled?: boolean;
+  subtitle?: string;
+}
+
+const TestCasesTable = (
+  props: TestCasesTableProps & { children: ReactNode },
+): JSX.Element => {
+  const { t } = useTranslation();
+
+  return (
+    <Accordion
+      defaultExpanded
+      disabled={props.disabled}
+      subtitle={props.subtitle}
+      title={props.title}
+    >
+      <TableContainer dense stickyHeader variant="bare">
+        <TableHead className="sticky top-[5rem] z-10 bg-white">
+          <TableRow>
+            <TableCell className="border-b border-solid border-b-neutral-200 py-0 pl-4 pr-0">
+              {t(translations.expression)}
+            </TableCell>
+
+            <TableCell className="border-b border-solid border-b-neutral-200 px-2 py-0">
+              {t(translations.expected)}
+            </TableCell>
+
+            <TableCell className="border-b border-solid border-b-neutral-200 px-0 py-0">
+              {t(translations.hint)}
+            </TableCell>
+
+            {props.onClickAdd && (
+              <TableCell className="border-b border-solid border-b-neutral-200 py-0 pl-0">
+                <Tooltip disableInteractive title={t(translations.addTestCase)}>
+                  <IconButton
+                    color="primary"
+                    disabled={props.disabled}
+                    edge="end"
+                    onClick={props.onClickAdd}
+                  >
+                    <Add />
+                  </IconButton>
+                </Tooltip>
+              </TableCell>
+            )}
+          </TableRow>
+        </TableHead>
+
+        <TableBody>{props.children}</TableBody>
+      </TableContainer>
+    </Accordion>
+  );
+};
+
+export default TestCasesTable;

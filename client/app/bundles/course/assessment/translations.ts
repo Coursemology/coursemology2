@@ -954,6 +954,416 @@ const translations = defineMessages({
     defaultMessage:
       'The assessment has not started yet. Please come back after {startDate}.',
   },
+  canEnableCodaveriInComponents: {
+    id: 'course.assessment.question.programming.canEnableCodaveriInComponents',
+    defaultMessage:
+      'You can enable this feature in <url>Components in Course Settings</url>.',
+  },
+  buildLog: {
+    id: 'course.assessment.question.programming.buildLog',
+    defaultMessage: 'Package build log',
+  },
+  buildLogHint: {
+    id: 'course.assessment.question.programming.buildLogHint',
+    defaultMessage:
+      'These will disappear once the evaluation package is successfully imported.',
+  },
+  standardError: {
+    id: 'course.assessment.question.programming.standardError',
+    defaultMessage: 'Standard error',
+  },
+  standardOutput: {
+    id: 'course.assessment.question.programming.standardOutput',
+    defaultMessage: 'Standard output',
+  },
+  prependHint: {
+    id: 'course.assessment.question.programming.prependHint',
+    defaultMessage:
+      'Inserted before the submitted code. Useful for defining given helper functions, variables, or packages.',
+  },
+  prepend: {
+    id: 'course.assessment.question.programming.prepend',
+    defaultMessage: 'Prepend',
+  },
+  appendHint: {
+    id: 'course.assessment.question.programming.appendHint',
+    defaultMessage:
+      'Inserted after the submitted code. Useful for defining complex test cases or overriding functions or variables in the submitted code.',
+  },
+  append: {
+    id: 'course.assessment.question.programming.append',
+    defaultMessage: 'Append',
+  },
+  templateHint: {
+    id: 'course.assessment.question.programming.templateHint',
+    defaultMessage: 'What appears in the editor when a new attempt is made.',
+  },
+  template: {
+    id: 'course.assessment.question.programming.template',
+    defaultMessage: 'Template',
+  },
+  solutionHint: {
+    id: 'course.assessment.question.programming.solutionHint',
+    defaultMessage: 'Always hidden. Stored here for reference only.',
+  },
+  templates: {
+    id: 'course.assessment.question.programming.templates',
+    defaultMessage: 'Templates',
+  },
+  codeInserts: {
+    id: 'course.assessment.question.programming.codeInserts',
+    defaultMessage: 'Code inserts',
+  },
+  codeInsertsHint: {
+    id: 'course.assessment.question.programming.codeInsertsHint',
+    defaultMessage:
+      'These are inserted around submitted codes internally before evaluation. They are never exposed to anyone.',
+  },
+  dataFiles: {
+    id: 'course.assessment.question.programming.dataFiles',
+    defaultMessage: 'Data files',
+  },
+  testCases: {
+    id: 'course.assessment.question.programming.testCases',
+    defaultMessage: 'Test cases',
+  },
+  hideExplanation: {
+    id: 'course.assessment.question.programming.hideExplanation',
+    defaultMessage: 'Hide this explanation',
+  },
+  showTestCasesExplanation: {
+    id: 'course.assessment.question.programming.showTestCasesExplanation',
+    defaultMessage: 'How are these test cases run and compared?',
+  },
+  publicTestCases: {
+    id: 'course.assessment.question.programming.publicTestCases',
+    defaultMessage: 'Public test cases',
+  },
+  privateTestCases: {
+    id: 'course.assessment.question.programming.privateTestCases',
+    defaultMessage: 'Private test cases',
+  },
+  privateTestCasesHint: {
+    id: 'course.assessment.question.programming.privateTestCasesHint',
+    defaultMessage: 'Students cannot see these, but can know if any one fails.',
+  },
+  evaluationTestCases: {
+    id: 'course.assessment.question.programming.evaluationTestCases',
+    defaultMessage: 'Evaluation test cases',
+  },
+  evaluationTestCasesHint: {
+    id: 'course.assessment.question.programming.evaluationTestCasesHint',
+    defaultMessage:
+      'Students cannot see these and will not know if any one fails.',
+  },
+  cppTestCasesHint: {
+    id: 'course.assessment.question.programming.cppTestCasesHint',
+    defaultMessage:
+      'Expressions will be evaluated in the context of the submitted code. Their return values will then ' +
+      'be compared against the Expected expectations using the <code>EXPECT_*</code> assertions from the ' +
+      '<gtf>Google Test Framework</gtf>. Floating point numbers are formatted with <sts>std::to_string</sts>.',
+  },
+  addFiles: {
+    id: 'course.assessment.question.programming.addFiles',
+    defaultMessage: 'Add files',
+  },
+  oneDuplicateFileNotAdded: {
+    id: 'course.assessment.question.programming.oneDuplicateFileNotAdded',
+    defaultMessage:
+      '{name} was not added because other files with the same name were selected or already added. ' +
+      'Remove the existing file(s) or rename the new file to add it.',
+  },
+  someDuplicateFilesNotAdded: {
+    id: 'course.assessment.question.programming.someDuplicateFilesNotAdded',
+    defaultMessage:
+      'These files were not added because other files with the same name were selected or already added.',
+  },
+  fileName: {
+    id: 'course.assessment.question.programming.fileName',
+    defaultMessage: 'File name',
+  },
+  fileSize: {
+    id: 'course.assessment.question.programming.fileSize',
+    defaultMessage: 'Size',
+  },
+  evaluator: {
+    id: 'course.assessment.question.programming.evaluator',
+    defaultMessage: 'Evaluator',
+  },
+  evaluatorHint: {
+    id: 'course.assessment.question.programming.evaluatorHint',
+    defaultMessage:
+      'You cannot change this once there are submissions for this assessment.',
+  },
+  defaultEvaluator: {
+    id: 'course.assessment.question.programming.defaultEvaluator',
+    defaultMessage: 'Default',
+  },
+  defaultEvaluatorHint: {
+    id: 'course.assessment.question.programming.defaultEvaluatorHint',
+    defaultMessage:
+      'No fuss; just run the code according to the evaluation package below and report the test results.',
+  },
+  codaveriEvaluator: {
+    id: 'course.assessment.question.programming.codaveriEvaluator',
+    defaultMessage: 'Codaveri',
+  },
+  codaveriEvaluatorHint: {
+    id: 'course.assessment.question.programming.codaveriEvaluatorHint',
+    defaultMessage:
+      'On top of the default evaluation, this evaluator will provide automated code feedback powered by Codaveri when the submission is finalised. They will appear as draft comments for the instructors to review, edit, and publish.',
+  },
+  evaluationLimits: {
+    id: 'course.assessment.question.programming.evaluationLimits',
+    defaultMessage: 'Evaluation limits',
+  },
+  memoryLimit: {
+    id: 'course.assessment.question.programming.memoryLimit',
+    defaultMessage: 'Memory limit',
+  },
+  timeLimit: {
+    id: 'course.assessment.question.programming.timeLimit',
+    defaultMessage: 'Time limit',
+  },
+  attemptLimit: {
+    id: 'course.assessment.question.programming.attemptLimit',
+    defaultMessage: 'Attempt limit',
+  },
+  s: {
+    id: 'course.assessment.question.programming.s',
+    defaultMessage: 's',
+  },
+  mb: {
+    id: 'course.assessment.question.programming.mb',
+    defaultMessage: 'MB',
+  },
+  lowestGradingPriority: {
+    id: 'course.assessment.question.programming.lowestGradingPriority',
+    defaultMessage: 'Lowest grading priority',
+  },
+  lowestGradingPriorityHint: {
+    id: 'course.assessment.question.programming.lowestGradingPriorityHint',
+    defaultMessage:
+      "If enabled, this question's evaluation will always use the evaluator of the lowest priority. If unsure, just leave this unchecked.",
+  },
+  seeBuildLog: {
+    id: 'course.assessment.question.programming.seeBuildLog',
+    defaultMessage: 'See the build log',
+  },
+  packagePending: {
+    id: 'course.assessment.question.programming.packagePending',
+    defaultMessage: 'Package is still being imported. Come back again later?',
+  },
+  templateMode: {
+    id: 'course.assessment.question.programming.templateMode',
+    defaultMessage: 'Template mode',
+  },
+  templateModeHint: {
+    id: 'course.assessment.question.programming.templateModeHint',
+    defaultMessage: 'You cannot change this mode once there are submissions.',
+  },
+  codeSubmission: {
+    id: 'course.assessment.question.programming.codeSubmission',
+    defaultMessage: 'Code submission',
+  },
+  codeSubmissionHint: {
+    id: 'course.assessment.question.programming.codeSubmissionHint',
+    defaultMessage:
+      'Set the submission template below. Students can edit and submit their code in the editor to be compiled and tested.',
+  },
+  fileSubmission: {
+    id: 'course.assessment.question.programming.fileSubmission',
+    defaultMessage: 'File submission',
+  },
+  fileSubmissionHint: {
+    id: 'course.assessment.question.programming.fileSubmissionHint',
+    defaultMessage:
+      'Upload Java files as submission templates. Students can edit online or upload their Java files to be compiled and tested.',
+  },
+  javaTestCasesHint: {
+    id: 'course.assessment.question.programming.javaTestCasesHint',
+    defaultMessage:
+      'Expressions will be evaluated in the context of the submitted code. Their return values will be compared against ' +
+      'the Expected expectations using the <code>expectEquals(expression, expected)</code> void. Its simplified definition ' +
+      'is as follows, where <code>Object</code> has been overloaded for all Java primitives.',
+  },
+  javaTestCasesHint2: {
+    id: 'course.assessment.question.programming.javaTestCasesHint2',
+    defaultMessage:
+      '<code>printValue(Object val)</code> will be called on all Expressions and Expected expectations by default. Its ' +
+      'simplified definition is as follows, where <code>Object</code> has been overloaded for all Java primitives.',
+  },
+  javaTestCasesHint3: {
+    id: 'course.assessment.question.programming.javaTestCasesHint3',
+    defaultMessage:
+      'If you wish to override these behaviours, you may redefine these methods in <append>Append</append> above.',
+  },
+  pythonTestCasesHint: {
+    id: 'course.assessment.question.programming.pythonTestCasesHint',
+    defaultMessage:
+      'Expressions will be evaluated in the context of the submitted code. Their return values will then be compared ' +
+      'against the Expected expectations using the equality operator (<code>==</code>). Notably, <code>print()</code> ' +
+      'returns <code>None</code>, so <code>print</code>ed outputs should not be confused with actual return values.',
+  },
+  inlineCode: {
+    id: 'course.assessment.question.programming.inlineCode',
+    defaultMessage: 'Inline code',
+  },
+  language: {
+    id: 'course.assessment.question.programming.language',
+    defaultMessage: 'Language',
+  },
+  evaluateAndTestCode: {
+    id: 'course.assessment.question.programming.evaluateAndTestCode',
+    defaultMessage: 'Evaluate and test code',
+  },
+  evaluateAndTestCodeHint: {
+    id: 'course.assessment.question.programming.evaluateAndTestCodeHint',
+    defaultMessage:
+      'If enabled, Coursemology can run, evaluate, and test submission codes when submitted. You can configure the ' +
+      'evaluation package (parameters, data files, and test cases) below.',
+  },
+  cannotDisableHasSubmissions: {
+    id: 'course.assessment.question.programming.cannotDisableHasSubmissions',
+    defaultMessage:
+      'You cannot disable this option once there are submissions.',
+  },
+  packageCreationMode: {
+    id: 'course.assessment.question.programming.packageCreationMode',
+    defaultMessage: 'Package creation mode',
+  },
+  packageCreationModeHint: {
+    id: 'course.assessment.question.programming.packageCreationModeHint',
+    defaultMessage:
+      'You cannot change this mode once this question is successfully created. Choose wisely!',
+  },
+  editOnline: {
+    id: 'course.assessment.question.programming.editOnline',
+    defaultMessage: 'Create/edit online',
+  },
+  editOnlineHint: {
+    id: 'course.assessment.question.programming.editOnlineHint',
+    defaultMessage:
+      'Do everything right here in this page. Useful for quick edits (especially exams) or collaborating with other ' +
+      'instructors.',
+  },
+  uploadPackage: {
+    id: 'course.assessment.question.programming.uploadPackage',
+    defaultMessage: 'Manually create/edit offline and upload',
+  },
+  uploadPackageHint: {
+    id: 'course.assessment.question.programming.uploadPackageHint',
+    defaultMessage:
+      "Pack the package as a ZIP file, then upload it here. Useful for complex test cases or if you host your course's " +
+      'evaluation packages in some version control system (e.g., Git, Mercurial, etc.).',
+  },
+  packageInfoOnline: {
+    id: 'course.assessment.question.programming.packageInfoOnline',
+    defaultMessage: 'Generated evaluation package',
+  },
+  packageInfoOnlineHint: {
+    id: 'course.assessment.question.programming.packageInfoOnlineHint',
+    defaultMessage:
+      'This package is generated from this online editor. You may download it for future reference.',
+  },
+  packageInfoUpload: {
+    id: 'course.assessment.question.programming.packageInfoUpload',
+    defaultMessage: 'Latest uploaded package',
+  },
+  packageInfoUploadHint: {
+    id: 'course.assessment.question.programming.packageInfoUploadHint',
+    defaultMessage: 'Previews extracted from this package is shown below.',
+  },
+  lastUpdated: {
+    id: 'course.assessment.question.programming.lastUpdated',
+    defaultMessage: 'Last updated by {by} on {on}.',
+  },
+  uploadNewPackage: {
+    id: 'course.assessment.question.programming.uploadNewPackage',
+    defaultMessage: 'Upload a new package',
+  },
+  uploadNewPackageHint: {
+    id: 'course.assessment.question.programming.uploadNewPackageHint',
+    defaultMessage:
+      'All existing submissions will be evaluated against this new package once it is successfully imported.',
+  },
+  packageIsZipOnly: {
+    id: 'course.assessment.question.programming.packageIsZipOnly',
+    defaultMessage: 'Evaluation packages are in ZIPs only.',
+  },
+  questionSavedRedirecting: {
+    id: 'course.assessment.question.programming.questionSavedRedirecting',
+    defaultMessage: 'Question saved. Redirecting...',
+  },
+  evaluatingSubmissions: {
+    id: 'course.assessment.question.programming.evaluatingSubmissions',
+    defaultMessage:
+      'Hold tight, evaluating all submissions with the new package...',
+  },
+  questionSavedButPackageError: {
+    id: 'course.assessment.question.programming.questionSavedButPackageError',
+    defaultMessage:
+      "Your changes was saved, but the package wasn't successfully imported.",
+  },
+  errorWhenSavingQuestion: {
+    id: 'course.assessment.question.programming.errorWhenSavingQuestion',
+    defaultMessage: 'An error occurred when saving your changes.',
+  },
+  languageAndEvaluation: {
+    id: 'course.assessment.question.programming.languageAndEvaluation',
+    defaultMessage: 'Language and evaluation',
+  },
+  noTestCases: {
+    id: 'course.assessment.question.programming.noTestCases',
+    defaultMessage: 'No test cases.',
+  },
+  addTestCaseToBegin: {
+    id: 'course.assessment.question.programming.addTestCaseToBegin',
+    defaultMessage: 'Add a test case to get started. ↗',
+  },
+  expression: {
+    id: 'course.assessment.question.programming.expression',
+    defaultMessage: 'Expression',
+  },
+  expected: {
+    id: 'course.assessment.question.programming.expected',
+    defaultMessage: 'Expected',
+  },
+  hint: {
+    id: 'course.assessment.question.programming.hint',
+    defaultMessage: 'Hint',
+  },
+  addTestCase: {
+    id: 'course.assessment.question.programming.addTestCase',
+    defaultMessage: 'Add a test case',
+  },
+  atLeastOneTestCaseRequired: {
+    id: 'course.assessment.question.programming.atLeastOneTestCaseRequired',
+    defaultMessage: 'At least one test case is required.',
+  },
+  hasToBeValidNumber: {
+    id: 'course.assessment.question.programming.hasToBeValidNumber',
+    defaultMessage: 'Has to be a valid positive number.',
+  },
+  hasToBeAtLeastOne: {
+    id: 'course.assessment.question.programming.hasToBeAtLeastOne',
+    defaultMessage: 'Has to be a valid positive number at least 1.',
+  },
+  cannotBeMoreThanMaxLimit: {
+    id: 'course.assessment.question.programming.cannotBeMoreThanMaxLimit',
+    defaultMessage: 'Cannot be more than {max} s.',
+  },
+  savingChanges: {
+    id: 'course.assessment.question.programming.savingChanges',
+    defaultMessage: 'Saving your changes...',
+  },
+  submitConfirmation: {
+    id: 'course.assessment.question.programming.submitConfirmation',
+    defaultMessage:
+      'There are existing submissions for this autograded submission. Updating this question will regrade all ' +
+      'submitted answers to this question and only system-issued EXP for the submissions will be re-calculated. ' +
+      'Note that manually-issued EXP will not be updated. Are you sure you wish to continue?',
+  },
 });
 
 export default translations;
