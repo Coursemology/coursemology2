@@ -1,6 +1,9 @@
 import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 import { Alert } from '@mui/material';
-import { QuestionFormData } from 'types/course/assessment/questions';
+import {
+  AvailableSkills,
+  QuestionFormData,
+} from 'types/course/assessment/questions';
 import { array, bool, number, object, string } from 'yup';
 
 import Section from 'lib/components/core/layouts/Section';
@@ -34,19 +37,11 @@ export const qnFormCommonFieldsValidation = object({
   skillIds: array().of(number()),
 });
 
-interface CommonFieldsProps<T extends FieldValues> {
+interface CommonFieldsProps<T extends FieldValues>
+  extends Partial<AvailableSkills> {
   disabled: boolean;
   control?: Control<T>;
   name?: FieldPath<T>;
-  availableSkills?: Record<
-    number,
-    {
-      id: number;
-      title: string;
-      description: string;
-    }
-  > | null;
-  skillsUrl?: string;
 }
 
 const QuestionFormCommonFields = <T extends FieldValues>(
