@@ -8,10 +8,11 @@ interface SubsectionProps {
   className?: string;
   contentClassName?: string;
   spaced?: boolean;
+  id?: string;
 }
 
 const Subsection = (props: SubsectionProps): JSX.Element => (
-  <div className={props.className ?? ''}>
+  <div className={props.className ?? ''} id={props.id}>
     <div className="mb-4">
       {props.title && (
         <Typography color="text.primary">{props.title}</Typography>
