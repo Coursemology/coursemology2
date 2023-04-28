@@ -306,13 +306,11 @@ class Course::Assessment::Submission::SubmissionsController < \
   end
 
   def should_monitor?
-    return false unless monitoring_component_enabled?
-    return false unless current_user.id == @submission.creator_id
-    return false unless current_course_user.student?
-    return false unless can?(:create, Course::Monitoring::Session.new(creator_id: current_user.id))
-    return false unless @assessment&.monitor&.enabled?
-
-    true
+    monitoring_component_enabled? &&
+      current_user.id == @submission.creator_id &&
+      current_course_user.student? &&
+      can?(:create, Course::Monitoring::Session.new(creator_id: current_user.id)) &&
+      @assessment&.monitor&.enabled?
   end
 
   def can_update_monitoring_session?
