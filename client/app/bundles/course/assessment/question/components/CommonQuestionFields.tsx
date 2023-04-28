@@ -17,7 +17,7 @@ import translations from '../../translations';
 
 import SkillsAutocomplete from './SkillsAutocomplete';
 
-export const qnFormCommonFieldsInitialValues: QuestionFormData = {
+export const commonQuestionFieldsInitialValues: QuestionFormData = {
   title: '',
   description: '',
   staffOnlyComments: '',
@@ -25,7 +25,7 @@ export const qnFormCommonFieldsInitialValues: QuestionFormData = {
   skillIds: [],
 };
 
-export const qnFormCommonFieldsValidation = object({
+export const commonQuestionFieldsValidation = object({
   title: string().nullable(),
   description: string().nullable(),
   staffOnlyComments: string().nullable(),
@@ -37,15 +37,15 @@ export const qnFormCommonFieldsValidation = object({
   skillIds: array().of(number()),
 });
 
-interface CommonFieldsProps<T extends FieldValues>
+interface CommonQuestionFieldsProps<T extends FieldValues>
   extends Partial<AvailableSkills> {
-  disabled: boolean;
+  disabled?: boolean;
   control?: Control<T>;
   name?: FieldPath<T>;
 }
 
-const QuestionFormCommonFields = <T extends FieldValues>(
-  props: CommonFieldsProps<T>
+const CommonQuestionFields = <T extends FieldValues>(
+  props: CommonQuestionFieldsProps<T>,
 ): JSX.Element => {
   const { disabled: submitting, control, availableSkills, skillsUrl } = props;
 
@@ -161,4 +161,4 @@ const QuestionFormCommonFields = <T extends FieldValues>(
   );
 };
 
-export default QuestionFormCommonFields;
+export default CommonQuestionFields;

@@ -13,7 +13,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import ConvertMcqMrqButton from '../../../components/ConvertMcqMrqButton';
 import translations from '../../../translations';
-import CommonFieldsInQuestionForm from '../../components/QuestionFormCommonFields';
+import CommonQuestionFields from '../../components/CommonQuestionFields';
 import { McqMrqAdapter } from '../commons/translationAdapter';
 import { questionSchema, validateOptions } from '../commons/validations';
 
@@ -93,7 +93,7 @@ const McqMrqForm = <T extends 'new' | 'edit'>(
     >
       {(control, watch, { isDirty: isQuestionDirty }): JSX.Element => (
         <>
-          <CommonFieldsInQuestionForm
+          <CommonQuestionFields
             availableSkills={availableSkills}
             control={control}
             disabled={submitting}

@@ -3,9 +3,9 @@ import { array, bool, number, object, string, ValidationError } from 'yup';
 
 import translations from '../../../translations';
 import getIndexAndKeyPath from '../../commons/utils';
-import { qnFormCommonFieldsValidation } from '../../components/QuestionFormCommonFields';
+import { commonQuestionFieldsValidation } from '../../components/CommonQuestionFields';
 
-export const questionSchema = qnFormCommonFieldsValidation.shape({
+export const questionSchema = commonQuestionFieldsValidation.shape({
   allowAttachment: bool(),
 });
 
