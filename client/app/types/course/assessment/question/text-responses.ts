@@ -25,9 +25,8 @@ export interface TextResponseData<T extends 'new' | 'edit' = 'edit'> {
     | OptionalIfNew<T>;
 }
 
-export interface TextResponseFormData<T extends 'new' | 'edit' = 'edit'>
-  extends TextResponseData<T>,
-    AvailableSkills {}
+export type TextResponseFormData<T extends 'new' | 'edit' = 'edit'> =
+  TextResponseData<T> & AvailableSkills;
 
 type TextResponseFormDataQuestion = TextResponseFormData['question'];
 

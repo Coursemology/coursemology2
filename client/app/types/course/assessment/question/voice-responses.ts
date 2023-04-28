@@ -4,9 +4,8 @@ export interface VoiceResponseData<T extends 'new' | 'edit' = 'edit'> {
   question: QuestionFormData | OptionalIfNew<T>;
 }
 
-export interface VoiceResponseFormData<T extends 'new' | 'edit' = 'edit'>
-  extends VoiceResponseData<T>,
-    AvailableSkills {}
+export type VoiceResponseFormData<T extends 'new' | 'edit' = 'edit'> =
+  VoiceResponseData<T> & AvailableSkills;
 
 type VoiceResponseFormDataQuestion = VoiceResponseFormData['question'];
 

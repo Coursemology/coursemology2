@@ -6,9 +6,8 @@ export interface ForumPostResponseData<T extends 'new' | 'edit' = 'edit'> {
     | OptionalIfNew<T>;
 }
 
-export interface ForumPostResponseFormData<T extends 'new' | 'edit' = 'edit'>
-  extends ForumPostResponseData<T>,
-    AvailableSkills {}
+export type ForumPostResponseFormData<T extends 'new' | 'edit' = 'edit'> =
+  ForumPostResponseData<T> & AvailableSkills;
 
 type ForumPostResponseFormDataQuestion = ForumPostResponseData['question'];
 
