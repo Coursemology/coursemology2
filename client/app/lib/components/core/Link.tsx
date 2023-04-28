@@ -17,6 +17,7 @@ const Link = (props: LinkProps): JSX.Element => {
 
   return (
     <MuiLink
+      className="cursor-pointer"
       color="links"
       variant="body2"
       {...linkProps}
