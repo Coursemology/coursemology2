@@ -5,12 +5,6 @@ zh:
         programming:
           new:
             header: '新编程题'
-          create:
-            success: '编程题已被创建'
-            failure: '无法创建编程题'
-          update:
-            success: '编程题已被更新'
-            failure: '无法更新编程题'
           form:
             import_result:
               success: '包已被正确引入'

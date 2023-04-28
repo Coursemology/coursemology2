@@ -5,12 +5,6 @@ en:
         programming:
           new:
             header: 'New Programming Question'
-          create:
-            success: 'The programming question was created.'
-            failure: 'Could not create programming question.'
-          update:
-            success: 'The programming question was updated.'
-            failure: 'Could not update programming question.'
           form:
             import_result:
               success: 'The package was successfully imported.'
