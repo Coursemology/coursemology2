@@ -16,31 +16,6 @@ RSpec.describe Course::Assessment::Question::ProgrammingHelper do
       end
     end
 
-    describe '#import_result_alert' do
-      subject { helper.import_result_alert }
-      context 'when the question does not have an import job' do
-        it { is_expected.to be_nil }
-      end
-
-      context 'when the import job completed' do
-        let(:import_job) { build(:trackable_job, :completed) }
-        it 'shows the status message' do
-          expect(subject).to have_tag('div.alert-success',
-                                      text: I18n.t('course.assessment.question.programming.form.'\
-                                                   'import_result.success'))
-        end
-      end
-
-      context 'when the import job errored' do
-        let(:import_job) { build(:trackable_job, :errored, error: build_error(StandardError)) }
-        it 'shows the status message' do
-          expect(subject).to have_tag('div.alert-danger',
-                                      text: I18n.t('course.assessment.question.programming.form.'\
-                                                   'import_result.error'))
-        end
-      end
-    end
-
     describe '#import_error_message' do
       subject { helper.send(:import_error_message, build_error(error_class, message)) }
       let(:error_class) { StandardError }
