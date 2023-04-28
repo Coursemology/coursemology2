@@ -16,7 +16,7 @@ import { fetchCommentsSettings, updateCommentsSettings } from './operations';
 const CommentsSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter>();
+  const [form, setForm] = useState<FormEmitter<CommentsSettingsData>>();
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (data: CommentsSettingsData): void => {

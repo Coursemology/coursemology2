@@ -13,7 +13,8 @@ import commonTranslations from '../../translations';
 
 import translations from './translations';
 
-interface CommentsSettingsFormProps extends Emits<FormEmitter> {
+interface CommentsSettingsFormProps
+  extends Emits<FormEmitter<CommentsSettingsData>> {
   data: CommentsSettingsData;
   onSubmit: (data: CommentsSettingsData) => void;
   disabled?: boolean;

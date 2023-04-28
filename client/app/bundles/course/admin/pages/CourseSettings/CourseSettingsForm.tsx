@@ -22,7 +22,7 @@ import OffsetTimesPrompt from './OffsetTimesPrompt';
 import translations from './translations';
 import validationSchema from './validationSchema';
 
-interface CourseSettingsFormProps extends Emits<FormEmitter> {
+interface CourseSettingsFormProps extends Emits<FormEmitter<CourseInfo>> {
   data: CourseInfo;
   timeZones: TimeZones;
   onSubmit: (data: CourseInfo, timeOffset?: TimeOffset) => void;

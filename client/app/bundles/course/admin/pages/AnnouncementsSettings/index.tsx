@@ -19,7 +19,7 @@ import {
 const AnnouncementsSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter>();
+  const [form, setForm] = useState<FormEmitter<AnnouncementsSettingsData>>();
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (data: AnnouncementsSettingsData): void => {

@@ -23,7 +23,7 @@ import VideosSettingsForm from './VideosSettingsForm';
 const VideosSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter>();
+  const [form, setForm] = useState<FormEmitter<VideosSettingsData>>();
   const [submitting, setSubmitting] = useState(false);
 
   const updateFormAndToast = (

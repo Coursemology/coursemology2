@@ -26,7 +26,7 @@ const fetchSettingsAndTimeZones = (): Promise<[CourseInfo, TimeZones]> =>
 const CourseSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter>();
+  const [form, setForm] = useState<FormEmitter<CourseInfo>>();
   const [reloadForm, setReloadForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
