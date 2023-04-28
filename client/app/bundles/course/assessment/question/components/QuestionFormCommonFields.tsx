@@ -133,6 +133,7 @@ const QuestionFormCommonFields = (props: CommonFieldsProps): JSX.Element => {
             render={({ field, fieldState: { error } }): JSX.Element => (
               <SkillsAutocomplete
                 availableSkills={availableSkills}
+                disabled={props.disabled}
                 error={error}
                 field={field}
               />
