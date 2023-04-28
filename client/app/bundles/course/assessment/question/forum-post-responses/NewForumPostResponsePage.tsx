@@ -9,7 +9,7 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
-import { qnFormCommonFieldsInitialValues } from '../components/QuestionFormCommonFields';
+import { commonQuestionFieldsInitialValues } from '../components/CommonQuestionFields';
 
 import ForumPostResponseForm from './components/ForumPostResponseForm';
 import {
@@ -18,7 +18,7 @@ import {
 } from './operation';
 
 const NEW_FORUM_POST_TEMPLATE: ForumPostResponseData['question'] = {
-  ...qnFormCommonFieldsInitialValues,
+  ...commonQuestionFieldsInitialValues,
   maxPosts: '1',
   hasTextResponse: false,
 };

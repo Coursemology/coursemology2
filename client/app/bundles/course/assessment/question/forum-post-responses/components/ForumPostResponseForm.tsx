@@ -12,7 +12,7 @@ import Form, { FormEmitter } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
-import CommonFieldsInQuestionForm from '../../components/QuestionFormCommonFields';
+import CommonQuestionFields from '../../components/CommonQuestionFields';
 import questionSchema from '../commons/validations';
 
 export interface ForumPostResponseFormProps<T extends 'new' | 'edit'> {
@@ -54,7 +54,7 @@ const ForumPostResponseForm = <T extends 'new' | 'edit'>(
     >
       {(control): JSX.Element => (
         <>
-          <CommonFieldsInQuestionForm
+          <CommonQuestionFields
             availableSkills={data.availableSkills}
             control={control}
             disabled={submitting}

@@ -12,7 +12,7 @@ import Form, { FormEmitter } from 'lib/components/form/Form';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../translations';
-import CommonFieldsInQuestionForm from '../../components/QuestionFormCommonFields';
+import CommonQuestionFields from '../../components/CommonQuestionFields';
 import { questionSchema, validateSolutions } from '../commons/validations';
 
 import SolutionsManager, { SolutionsManagerRef } from './SolutionsManager';
@@ -83,7 +83,7 @@ const TextResponseForm = <T extends 'new' | 'edit'>(
     >
       {(control): JSX.Element => (
         <>
-          <CommonFieldsInQuestionForm
+          <CommonQuestionFields
             availableSkills={data.availableSkills}
             control={control}
             disabled={submitting}

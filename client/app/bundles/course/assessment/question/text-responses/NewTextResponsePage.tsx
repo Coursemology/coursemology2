@@ -11,7 +11,7 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
-import { qnFormCommonFieldsInitialValues } from '../components/QuestionFormCommonFields';
+import { commonQuestionFieldsInitialValues } from '../components/CommonQuestionFields';
 
 import TextResponseForm, {
   TextResponseFormProps,
@@ -19,13 +19,13 @@ import TextResponseForm, {
 import { create, fetchNewFileUpload, fetchNewTextResponse } from './operations';
 
 const NEW_TEXT_RESPONSE_VALUE = {
-  ...qnFormCommonFieldsInitialValues,
+  ...commonQuestionFieldsInitialValues,
   hideText: false,
   allowAttachment: false,
 };
 
 const NEW_FILE_UPLOAD_RESPONSE_VALUE = {
-  ...qnFormCommonFieldsInitialValues,
+  ...commonQuestionFieldsInitialValues,
   hideText: true,
   allowAttachment: true,
 };

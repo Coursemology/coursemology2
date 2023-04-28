@@ -1,9 +1,9 @@
 import { bool, number } from 'yup';
 
 import translations from '../../../translations';
-import { qnFormCommonFieldsValidation } from '../../components/QuestionFormCommonFields';
+import { commonQuestionFieldsValidation } from '../../components/CommonQuestionFields';
 
-const questionSchema = qnFormCommonFieldsValidation.shape({
+const questionSchema = commonQuestionFieldsValidation.shape({
   maxPosts: number()
     .required()
     .min(0, translations.mustSpecifyPositiveMaximumPosts)

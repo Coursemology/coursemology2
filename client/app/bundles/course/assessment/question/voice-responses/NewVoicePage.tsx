@@ -9,13 +9,13 @@ import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
-import { qnFormCommonFieldsInitialValues } from '../components/QuestionFormCommonFields';
+import { commonQuestionFieldsInitialValues } from '../components/CommonQuestionFields';
 
 import VoiceForm from './components/VoiceForm';
 import { createVoiceQuestion, fetchNewVoiceResponse } from './operations';
 
 const NEW_VOICE_TEMPLATE: VoiceResponseData['question'] =
-  qnFormCommonFieldsInitialValues;
+  commonQuestionFieldsInitialValues;
 
 const NewVoicePage = (): JSX.Element => {
   const { t } = useTranslation();
