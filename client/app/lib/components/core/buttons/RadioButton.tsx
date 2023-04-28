@@ -1,12 +1,15 @@
 import { ReactNode } from 'react';
 import { FormControlLabel, Radio, Typography } from '@mui/material';
 
+import InfoLabel from '../InfoLabel';
+
 interface RadioButtonProps {
   value: string;
   label: ReactNode;
   className?: string;
   description?: string;
   disabled?: boolean;
+  disabledHint?: ReactNode;
 }
 
 /**
@@ -23,15 +26,20 @@ const RadioButton = (props: RadioButtonProps): JSX.Element => {
         value={props.value}
       />
 
-      {props.description && (
-        <Typography
-          className="ml-[34px]"
-          color={props.disabled ? 'text.disabled' : 'text.secondary'}
-          variant="body2"
-        >
-          {props.description}
-        </Typography>
-      )}
+      <div className="ml-[34px] space-y-2">
+        {props.description && (
+          <Typography
+            color={props.disabled ? 'text.disabled' : 'text.secondary'}
+            variant="body2"
+          >
+            {props.description}
+          </Typography>
+        )}
+
+        {props.disabled && props.disabledHint && (
+          <InfoLabel label={props.disabledHint} />
+        )}
+      </div>
     </div>
   );
 };
