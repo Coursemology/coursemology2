@@ -22,7 +22,7 @@ export interface ColumnTemplate<RowData extends AnyRowData> {
   className?: string;
 }
 
-type Variants = 'outlined' | 'elevation';
+type Variants = 'outlined' | 'elevation' | 'bare';
 
 export interface TableContainerProps {
   className?: string;
