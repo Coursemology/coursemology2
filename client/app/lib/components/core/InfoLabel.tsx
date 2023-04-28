@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import {
   InfoOutlined as InfoIcon,
   WarningAmber as WarningIcon,
@@ -5,7 +6,7 @@ import {
 import { Box, Typography } from '@mui/material';
 
 interface InfoLabelProps {
-  label?: string;
+  label?: ReactNode;
   warning?: boolean;
   marginTop?: number;
 }
