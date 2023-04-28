@@ -1,4 +1,4 @@
-import { Control, Controller, FieldValues } from 'react-hook-form';
+import { Control, Controller, FieldPath, FieldValues } from 'react-hook-form';
 import { Alert } from '@mui/material';
 import { QuestionFormData } from 'types/course/assessment/questions';
 import { array, bool, number, object, string } from 'yup';
@@ -34,9 +34,10 @@ export const qnFormCommonFieldsValidation = object({
   skillIds: array().of(number()),
 });
 
-interface CommonFieldsProps {
+interface CommonFieldsProps<T extends FieldValues> {
   disabled: boolean;
-  control?: Control<FieldValues, unknown>;
+  control?: Control<T>;
+  name?: FieldPath<T>;
   availableSkills?: Record<
     number,
     {
@@ -48,17 +49,21 @@ interface CommonFieldsProps {
   skillsUrl?: string;
 }
 
-const QuestionFormCommonFields = (props: CommonFieldsProps): JSX.Element => {
+const QuestionFormCommonFields = <T extends FieldValues>(
+  props: CommonFieldsProps<T>
+): JSX.Element => {
   const { disabled: submitting, control, availableSkills, skillsUrl } = props;
 
   const { t } = useTranslation();
+
+  const prefix = props.name ? `${props.name}.` : '';
 
   return (
     <>
       <Section sticksToNavbar title={t(translations.questionDetails)}>
         <Controller
           control={control}
-          name="title"
+          name={`${prefix}title` as FieldPath<T>}
           render={({ field, fieldState }): JSX.Element => (
             <FormTextField
               disabled={submitting}
@@ -74,7 +79,7 @@ const QuestionFormCommonFields = (props: CommonFieldsProps): JSX.Element => {
         <Subsection title={t(translations.description)}>
           <Controller
             control={control}
-            name="description"
+            name={`${prefix}description` as FieldPath<T>}
             render={({ field, fieldState }): JSX.Element => (
               <FormRichTextField
                 disabled={submitting}
@@ -91,7 +96,7 @@ const QuestionFormCommonFields = (props: CommonFieldsProps): JSX.Element => {
         >
           <Controller
             control={control}
-            name="staffOnlyComments"
+            name={`${prefix}staffOnlyComments` as FieldPath<T>}
             render={({ field, fieldState }): JSX.Element => (
               <FormRichTextField
                 disabled={submitting}
@@ -106,7 +111,7 @@ const QuestionFormCommonFields = (props: CommonFieldsProps): JSX.Element => {
       <Section sticksToNavbar title={t(translations.grading)}>
         <Controller
           control={control}
-          name="maximumGrade"
+          name={`${prefix}maximumGrade` as FieldPath<T>}
           render={({ field, fieldState }): JSX.Element => (
             <FormTextField
               disabled={submitting}
@@ -130,7 +135,7 @@ const QuestionFormCommonFields = (props: CommonFieldsProps): JSX.Element => {
         {availableSkills && (
           <Controller
             control={control}
-            name="skillIds"
+            name={`${prefix}skillIds` as FieldPath<T>}
             render={({ field, fieldState: { error } }): JSX.Element => (
               <SkillsAutocomplete
                 availableSkills={availableSkills}
