@@ -129,12 +129,6 @@ export interface ProgrammingFormData extends AvailableSkills {
 
   importResult?: PackageImportResultData;
 
-  codaveriResult?: {
-    id: number;
-    status: 'success' | 'error';
-    message: string;
-  };
-
   testUi?: {
     mode: LanguageMode;
     metadata: PolyglotMetadata;
