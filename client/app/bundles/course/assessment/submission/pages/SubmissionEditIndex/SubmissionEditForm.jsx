@@ -265,15 +265,30 @@ const SubmissionEditForm = (props) => {
     );
   };
 
+  const renderAutogradingErrorPanel = (id) => {
+    const { jobError, jobErrorMessage } = questionsFlags[id] || {};
+    const { isCodaveri, type } = questions[id];
+
+    if (type === questionTypes.Programming && jobError) {
+      return (
+        <Paper
+          style={{ padding: 10, backgroundColor: red[100], marginBottom: 20 }}
+        >
+          {isCodaveri
+            ? intl.formatMessage(translations.codaveriAutogradeFailure)
+            : jobErrorMessage}
+        </Paper>
+      );
+    }
+
+    return null;
+  };
+
   const renderProgrammingQuestionActions = (id) => {
     const question = questions[id];
     const { answerId, attemptsLeft, attemptLimit, autogradable } = question;
-    const {
-      jobError,
-      jobErrorMessage,
-      isAutograding: isAutogradingQuestion,
-      isResetting,
-    } = questionsFlags[id] || {};
+    const { isAutograding: isAutogradingQuestion, isResetting } =
+      questionsFlags[id] || {};
 
     if (question.type !== questionTypes.Programming) {
       return null;
@@ -324,19 +339,6 @@ const SubmissionEditForm = (props) => {
 
     return (
       <>
-        {jobError && (
-          <Paper
-            style={{
-              padding: 10,
-              backgroundColor: red[100],
-              marginBottom: 20,
-            }}
-          >
-            {question.isCodaveri
-              ? intl.formatMessage(translations.codaveriAutogradeFailure)
-              : jobErrorMessage}
-          </Paper>
-        )}
         <Button
           disabled={isAutogradingQuestion || isResetting || isSaving}
           onClick={() => {
@@ -433,6 +435,7 @@ const SubmissionEditForm = (props) => {
             {question.type === questionTypes.Programming && !viewHistory
               ? renderExplanationPanel(id)
               : null}
+            {viewHistory ? null : renderAutogradingErrorPanel(id)}
             {viewHistory ? null : renderProgrammingQuestionActions(id)}
             {viewHistory ? null : renderQuestionGrading(id)}
             <Suspense
@@ -593,6 +596,7 @@ const SubmissionEditForm = (props) => {
         {question.type === questionTypes.Programming && !viewHistory
           ? renderExplanationPanel(questionId)
           : null}
+        {viewHistory ? null : renderAutogradingErrorPanel(questionId)}
         {viewHistory ? null : renderProgrammingQuestionActions(questionId)}
         {viewHistory ? null : renderQuestionGrading(questionId)}
         <Suspense
