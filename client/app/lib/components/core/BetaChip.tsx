@@ -1,9 +1,9 @@
-import { Chip } from '@mui/material';
+import { Chip, ChipProps } from '@mui/material';
 
 import useTranslation from 'lib/hooks/useTranslation';
 import translations from 'lib/translations';
 
-const BetaChip = (): JSX.Element => {
+const BetaChip = (props: ChipProps): JSX.Element => {
   const { t } = useTranslation();
 
   return (
@@ -12,6 +12,7 @@ const BetaChip = (): JSX.Element => {
       label={t(translations.beta)}
       size="small"
       variant="outlined"
+      {...props}
     />
   );
 };
