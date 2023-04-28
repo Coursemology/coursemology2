@@ -102,6 +102,11 @@ interface FormProps<
    * prop is only available if `validates` is provided a validation schema.
    */
   transformsBy?: V extends AnyObjectSchema ? Transformer<D> : never;
+
+  /**
+   * A context object to supply for the validation schema in `validates`.
+   */
+  validatesWith?: V extends AnyObjectSchema ? Record<string, unknown> : never;
 }
 
 /**
@@ -132,6 +137,7 @@ const Form = <
   const {
     transformsBy: transformer,
     validates: schema,
+    validatesWith: validationContext,
   } = props;
 
   const { t } = useTranslation();
@@ -141,6 +147,7 @@ const Form = <
   const methods = useForm({
     defaultValues: props.initialValues as DeepPartial<D>,
     resolver: schema && transformableResolver(yupResolver(schema), transformer),
+    context: schema && validationContext,
   });
 
   const { control, formState, reset, watch, handleSubmit, setValue, setError } =
