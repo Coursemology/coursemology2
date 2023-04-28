@@ -13,7 +13,8 @@ import useTranslation from 'lib/hooks/useTranslation';
 import AssessmentCategoriesManager from './AssessmentCategoriesManager';
 import translations from './translations';
 
-interface AssessmentsSettingsFormProps extends Emits<FormEmitter> {
+interface AssessmentsSettingsFormProps
+  extends Emits<FormEmitter<AssessmentSettingsData>> {
   data: AssessmentSettingsData;
   onSubmit?: (data: AssessmentSettingsData) => void;
   disabled?: boolean;

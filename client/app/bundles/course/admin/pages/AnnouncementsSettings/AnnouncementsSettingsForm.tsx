@@ -12,7 +12,8 @@ import commonTranslations from '../../translations';
 
 import translations from './translations';
 
-interface AnnouncementsSettingsFormProps extends Emits<FormEmitter> {
+interface AnnouncementsSettingsFormProps
+  extends Emits<FormEmitter<AnnouncementsSettingsData>> {
   data: AnnouncementsSettingsData;
   onSubmit: (data: AnnouncementsSettingsData) => void;
   disabled?: boolean;

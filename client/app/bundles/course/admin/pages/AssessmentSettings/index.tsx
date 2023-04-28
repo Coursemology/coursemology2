@@ -35,7 +35,7 @@ const LoadedAssessmentSettings = (
   props: LoadedAssessmentSettingsProps,
 ): JSX.Element | null => {
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter>();
+  const [form, setForm] = useState<FormEmitter<AssessmentSettingsData>>();
   const [settings, setSettings] = useState(props.data);
   const [submitting, setSubmitting] = useState(false);
 

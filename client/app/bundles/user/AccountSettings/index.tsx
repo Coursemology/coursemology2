@@ -30,7 +30,7 @@ const fetchAccountSettingsAndTimeZones = (): Promise<
 
 const AccountSettings = (): JSX.Element => {
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter>();
+  const [form, setForm] = useState<FormEmitter<AccountSettingsData>>();
   const [reloadForm, setReloadForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 

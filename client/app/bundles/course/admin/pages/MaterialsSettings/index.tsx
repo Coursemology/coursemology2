@@ -16,7 +16,7 @@ import { fetchMaterialsSettings, updateMaterialsSettings } from './operations';
 const MaterialsSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter>();
+  const [form, setForm] = useState<FormEmitter<MaterialsSettingsData>>();
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (data: MaterialsSettingsData): void => {

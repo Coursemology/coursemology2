@@ -13,7 +13,8 @@ import commonTranslations from '../../translations';
 
 import translations from './translations';
 
-interface LeaderboardSettingsFormProps extends Emits<FormEmitter> {
+interface LeaderboardSettingsFormProps
+  extends Emits<FormEmitter<LeaderboardSettingsData>> {
   data: LeaderboardSettingsData;
   onSubmit: (data: LeaderboardSettingsData) => void;
   disabled?: boolean;

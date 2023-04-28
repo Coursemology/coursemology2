@@ -48,7 +48,7 @@ const ForumPostResponseForm = <T extends 'new' | 'edit'>(
       disabled={submitting}
       emitsVia={setForm}
       headsUp
-      initialValues={data.question}
+      initialValues={data.question!}
       onSubmit={handleSubmit}
       validates={questionSchema}
     >

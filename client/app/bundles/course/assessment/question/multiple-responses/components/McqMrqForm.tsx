@@ -86,7 +86,7 @@ const McqMrqForm = <T extends 'new' | 'edit'>(
       disabled={submitting}
       emitsVia={setForm}
       headsUp
-      initialValues={data.question}
+      initialValues={data.question!}
       onReset={optionsRef.current?.reset}
       onSubmit={handleSubmit}
       validates={questionSchema}

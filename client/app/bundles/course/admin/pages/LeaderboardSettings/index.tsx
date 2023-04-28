@@ -19,7 +19,7 @@ import {
 const LeaderboardSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter>();
+  const [form, setForm] = useState<FormEmitter<LeaderboardSettingsData>>();
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (data: LeaderboardSettingsData): void => {

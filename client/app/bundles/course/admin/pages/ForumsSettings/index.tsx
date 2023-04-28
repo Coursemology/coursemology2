@@ -16,7 +16,7 @@ import { fetchForumsSettings, updateForumsSettings } from './operations';
 const ForumsSettings = (): JSX.Element => {
   const reloadItems = useItemsReloader();
   const { t } = useTranslation();
-  const [form, setForm] = useState<FormEmitter>();
+  const [form, setForm] = useState<FormEmitter<ForumsSettingsData>>();
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = (data: ForumsSettingsData): void => {

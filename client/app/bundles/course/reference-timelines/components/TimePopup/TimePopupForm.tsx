@@ -49,9 +49,9 @@ const TimePopupForm = (props: TimePopupFormProps): JSX.Element => {
       className="space-y-4"
       disabled={status === 'loading'}
       initialValues={{
-        startAt: time?.startAt ?? null,
-        bonusEndAt: time?.bonusEndAt ?? null,
-        endAt: time?.endAt ?? null,
+        startAt: (time?.startAt ?? null) as moment.Moment,
+        bonusEndAt: (time?.bonusEndAt ?? null) as moment.Moment,
+        endAt: (time?.endAt ?? null) as moment.Moment,
       }}
       onSubmit={props.onSubmit}
       validates={validationSchema}

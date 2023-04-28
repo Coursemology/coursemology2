@@ -21,7 +21,8 @@ import EmailsList from '../components/EmailsList';
 import { AccountSettingsData } from '../operations';
 import translations from '../translations';
 
-interface AccountSettingsFormProps extends Emits<FormEmitter> {
+interface AccountSettingsFormProps
+  extends Emits<FormEmitter<AccountSettingsData>> {
   settings: AccountSettingsData;
   timeZones: TimeZones;
   disabled?: boolean;

@@ -12,7 +12,8 @@ import commonTranslations from '../../translations';
 
 import translations from './translations';
 
-interface MaterialsSettingsFormProps extends Emits<FormEmitter> {
+interface MaterialsSettingsFormProps
+  extends Emits<FormEmitter<MaterialsSettingsData>> {
   data: MaterialsSettingsData;
   onSubmit: (data: MaterialsSettingsData) => void;
   disabled?: boolean;

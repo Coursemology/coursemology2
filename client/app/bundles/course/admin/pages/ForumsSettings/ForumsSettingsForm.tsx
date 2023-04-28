@@ -16,7 +16,8 @@ import commonTranslations from '../../translations';
 
 import translations from './translations';
 
-interface ForumsSettingsFormProps extends Emits<FormEmitter> {
+interface ForumsSettingsFormProps
+  extends Emits<FormEmitter<ForumsSettingsData>> {
   data: ForumsSettingsData;
   onSubmit: (data: ForumsSettingsData) => void;
   disabled?: boolean;

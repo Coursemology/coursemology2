@@ -13,7 +13,8 @@ import commonTranslations from '../../translations';
 import translations from './translations';
 import VideosTabsManager from './VideosTabsManager';
 
-interface VideosSettingsFormProps extends Emits<FormEmitter> {
+interface VideosSettingsFormProps
+  extends Emits<FormEmitter<VideosSettingsData>> {
   data: VideosSettingsData;
   onSubmit: (data: VideosSettingsData) => void;
   onCreateTab: (title: VideosTab['title'], weight: VideosTab['weight']) => void;
