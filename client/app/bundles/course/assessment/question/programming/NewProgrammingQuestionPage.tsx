@@ -1,0 +1,62 @@
+import { useState } from 'react';
+import produce from 'immer';
+import {
+  ProgrammingFormData,
+  ProgrammingPostStatusData,
+} from 'types/course/assessment/question/programming';
+
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import Preload from 'lib/components/wrappers/Preload';
+
+import buildFormData from './commons/builder';
+import { create, fetchEdit, fetchNew, update } from './operations';
+import ProgrammingForm from './ProgrammingForm';
+
+const NewProgrammingQuestionPage = (): JSX.Element => {
+  const [id, setId] = useState<number>();
+
+  const createOrUpdate = (
+    rawData: ProgrammingFormData,
+  ): Promise<ProgrammingPostStatusData> => {
+    const formData = buildFormData(rawData);
+    return id ? update(id, formData) : create(formData);
+  };
+
+  const mergeNewImportResult = async (
+    response: ProgrammingPostStatusData,
+    rawData: ProgrammingFormData,
+  ): Promise<ProgrammingFormData> => {
+    const newId = id ?? response.id;
+
+    if (!newId)
+      throw new Error(`NewProgrammingQuestionPage received ID: ${newId}.`);
+
+    setId(newId);
+
+    const newData = await fetchEdit(newId);
+    return produce(rawData, (draft) => {
+      delete draft.question.package;
+      draft.importResult = newData.importResult;
+
+      if (newData.question.package?.path) {
+        draft.question.package = newData.question.package;
+      } else {
+        delete draft.question.package;
+      }
+    });
+  };
+
+  return (
+    <Preload render={<LoadingIndicator />} while={fetchNew}>
+      {(data): JSX.Element => (
+        <ProgrammingForm
+          onSubmit={createOrUpdate}
+          revalidate={mergeNewImportResult}
+          with={data}
+        />
+      )}
+    </Preload>
+  );
+};
+
+export default NewProgrammingQuestionPage;
