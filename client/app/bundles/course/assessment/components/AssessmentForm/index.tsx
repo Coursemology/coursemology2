@@ -718,7 +718,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                 label={
                   <span className="flex items-center space-x-2">
                     <span>{t(translations.examMonitoring)}</span>
-                    <BetaChip />
+                    <BetaChip disabled={!canManageMonitor || disabled} />
                   </span>
                 }
                 labelClassName="mt-10"
