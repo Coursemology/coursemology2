@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode, useState } from 'react';
 import useEmitterFactory, { Emits } from 'react-emitter-factory';
-import { Control, FormState, useForm, UseFormWatch } from 'react-hook-form';
+import {
+  Control,
+  FormProvider,
+  FormState,
+  useForm,
+  UseFormWatch,
+} from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Slide, Typography } from '@mui/material';
@@ -56,6 +62,7 @@ interface FormProps extends Emits<FormEmitter> {
   ) => ReactNode;
   disabled?: boolean;
   className?: string;
+  contextual?: boolean;
 
   /**
    * Dispatched when the form is reset. Return `true` to prevent the default form
@@ -74,11 +81,14 @@ interface FormProps extends Emits<FormEmitter> {
 const Form = (props: FormProps): JSX.Element => {
   const { t } = useTranslation();
   const [initialValues, setInitialValues] = useState(props.initialValues);
+
+  const methods = useForm({
+    defaultValues: props.initialValues,
+    resolver: props.validates && yupResolver(props.validates),
+  });
+
   const { control, formState, reset, watch, handleSubmit, setValue, setError } =
-    useForm({
-      defaultValues: props.initialValues,
-      resolver: props.validates && yupResolver(props.validates),
-    });
+    methods;
 
   const resetForm = (): void => {
     if (!props.onReset?.()) reset();
@@ -138,7 +148,7 @@ const Form = (props: FormProps): JSX.Element => {
     props.onSubmit(submittedData);
   };
 
-  return (
+  const form = (
     <form
       className={`${props.headsUp ? 'pb-32' : ''} ${props.className ?? ''}`}
       onSubmit={handleSubmit(processAndSubmit)}
@@ -178,6 +188,10 @@ const Form = (props: FormProps): JSX.Element => {
       )}
     </form>
   );
+
+  if (props.contextual) return <FormProvider {...methods}>{form}</FormProvider>;
+
+  return form;
 };
 
 export default Form;
