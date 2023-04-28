@@ -9,6 +9,7 @@ import {
 } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 import { PersistGate } from 'redux-persist/lib/integration/react';
+import { lime, red } from 'tailwindcss/colors';
 import resolveConfig from 'tailwindcss/resolveConfig';
 import { grey } from 'theme/colors';
 import palette from 'theme/palette';
@@ -62,6 +63,12 @@ const ProviderWrapper = ({ store, persistor, children }) => {
       },
     },
     components: {
+      MuiAlert: {
+        styleOverrides: {
+          standardError: { backgroundColor: red[100] },
+          standardSuccess: { backgroundColor: lime[50] },
+        },
+      },
       MuiDialog: {
         defaultProps: { container: rootElement },
       },
