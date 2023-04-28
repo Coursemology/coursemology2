@@ -483,9 +483,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             <FormCheckboxField
               description={t(translations.delayedGradePublicationHint)}
               disabled={autograded || disabled}
-              disabledHint={
-                <InfoLabel label={t(translations.unavailableInAutograded)} />
-              }
+              disabledHint={t(translations.unavailableInAutograded)}
               field={field}
               fieldState={fieldState}
               label={t(translations.delayedGradePublication)}
@@ -516,9 +514,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               disabled={!autograded || disabled}
-              disabledHint={
-                <InfoLabel label={t(translations.skippableManualHint)} />
-              }
+              disabledHint={t(translations.skippableManualHint)}
               field={field}
               fieldState={fieldState}
               label={t(translations.skippable)}
@@ -531,11 +527,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               disabled={!autograded || disabled}
-              disabledHint={
-                <InfoLabel
-                  label={t(translations.unavailableInManuallyGraded)}
-                />
-              }
+              disabledHint={t(translations.unavailableInManuallyGraded)}
               field={field}
               fieldState={fieldState}
               label={t(translations.allowPartialSubmission)}
@@ -629,9 +621,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                 translations.blockStudentViewingAfterSubmittedHint,
               )}
               disabled={autograded || disabled}
-              disabledHint={
-                <InfoLabel label={t(translations.unavailableInAutograded)} />
-              }
+              disabledHint={t(translations.unavailableInAutograded)}
               field={field}
               fieldState={fieldState}
               label={t(translations.blockStudentViewingAfterSubmitted)}
@@ -663,11 +653,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
             <FormCheckboxField
               description={t(translations.showMcqAnswerHint)}
               disabled={!autograded || disabled}
-              disabledHint={
-                <InfoLabel
-                  label={t(translations.unavailableInManuallyGraded)}
-                />
-              }
+              disabledHint={t(translations.unavailableInManuallyGraded)}
               field={field}
               fieldState={fieldState}
               label={t(translations.showMcqAnswer)}
@@ -681,9 +667,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
           render={({ field, fieldState }): JSX.Element => (
             <FormCheckboxField
               disabled={autograded || disabled}
-              disabledHint={
-                <InfoLabel label={t(translations.unavailableInAutograded)} />
-              }
+              disabledHint={t(translations.unavailableInAutograded)}
               field={field}
               fieldState={fieldState}
               label={t(translations.passwordProtection)}
@@ -708,11 +692,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                   ),
                 })}
                 disabled={!canManageMonitor || disabled}
-                disabledHint={
-                  <InfoLabel
-                    label={t(translations.onlyManagersOwnersCanEdit)}
-                  />
-                }
+                disabledHint={t(translations.onlyManagersOwnersCanEdit)}
                 field={field}
                 fieldState={fieldState}
                 label={

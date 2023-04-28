@@ -6,6 +6,8 @@ import {
   Typography,
 } from '@mui/material';
 
+import InfoLabel from '../InfoLabel';
+
 type CheckboxProps = ComponentProps<typeof MuiCheckbox> & {
   component?: ElementType;
   label?: string | JSX.Element;
@@ -77,7 +79,7 @@ const Checkbox = forwardRef<HTMLButtonElement, CheckboxProps>(
             </Typography>
           )}
 
-          {props.disabled && disabledHint}
+          {props.disabled && disabledHint && <InfoLabel label={disabledHint} />}
 
           {error && (
             <FormHelperText error={Boolean(error)}>{error}</FormHelperText>
