@@ -29,7 +29,6 @@ const FormSelectField = (props) => {
     renderIf,
     noneSelected,
     sx,
-    onChangeCustom,
     margin,
     shrink,
     displayEmpty,
@@ -57,6 +56,7 @@ const FormSelectField = (props) => {
       disabled={disabled}
       error={isError}
       fullWidth
+      required={props.required}
       sx={{ margin: margin ?? styles.selectFieldStyle.margin }}
       variant={variant}
     >
@@ -65,11 +65,6 @@ const FormSelectField = (props) => {
         id="select"
         {...field}
         native={native}
-        onChange={(event) =>
-          onChangeCustom
-            ? onChangeCustom(event.target.value)
-            : field.onChange(event)
-        }
         {...custom}
         className={className}
         displayEmpty={displayEmpty}
@@ -116,7 +111,6 @@ FormSelectField.propTypes = {
   sx: PropTypes.object,
   renderIf: PropTypes.bool,
   noneSelected: PropTypes.string,
-  onChangeCustom: PropTypes.func,
   margin: PropTypes.string,
   shrink: PropTypes.bool,
   displayEmpty: PropTypes.bool,
