@@ -14,4 +14,3 @@ import_job = @programming_question.import_job
 json.partial! 'import_result', import_job: import_job if import_job
 
 json.partial! 'test_ui' if @meta.present?
-json.partial! 'codaveri_result' if @programming_question.is_codaveri
