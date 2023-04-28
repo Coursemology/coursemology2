@@ -61,6 +61,8 @@ export interface FormEmitter<D extends Data = any> {
   mutate?: (data: Partial<D>) => void;
 }
 
+type Transformer<D> = (data: D) => D | Partial<D>;
+
 interface FormProps<
   D extends Data = any,
   M extends boolean = false,
@@ -94,7 +96,31 @@ interface FormProps<
    * performed.
    */
   submitsDirtyFieldsOnly?: M;
+
+  /**
+   * Transforms the raw data before validating and eventually submitting it. This
+   * prop is only available if `validates` is provided a validation schema.
+   */
+  transformsBy?: V extends AnyObjectSchema ? Transformer<D> : never;
 }
+
+/**
+ * Technically, `transformer(data)` can return `Partial<D>`, but `Resolver<D>`'s type
+ * is very complex, so we suppress the type error here by asserting it as `D`.
+ */
+const transformedResolver =
+  <D extends Data>(
+    transformer: Transformer<D>,
+    resolver: Resolver<D>,
+  ): Resolver<D> =>
+  (data, ...resolverArgs) =>
+    resolver(transformer(data) as D, ...resolverArgs);
+
+const transformableResolver = <D extends Data>(
+  resolver: Resolver<D>,
+  transformer?: Transformer<D>,
+): Resolver<D> =>
+  transformer ? transformedResolver(transformer, resolver) : resolver;
 
 const Form = <
   D extends Data = any,
@@ -103,12 +129,18 @@ const Form = <
 >(
   props: FormProps<D, M, V>,
 ): JSX.Element => {
+  const {
+    transformsBy: transformer,
+    validates: schema,
+  } = props;
+
   const { t } = useTranslation();
 
   const [initialValues, setInitialValues] = useState(props.initialValues);
 
   const methods = useForm({
     defaultValues: props.initialValues as DeepPartial<D>,
+    resolver: schema && transformableResolver(yupResolver(schema), transformer),
   });
 
   const { control, formState, reset, watch, handleSubmit, setValue, setError } =
