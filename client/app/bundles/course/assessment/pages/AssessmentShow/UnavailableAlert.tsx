@@ -47,11 +47,7 @@ const UnavailableAlert = (props: UnavailableAlertProps): JSX.Element => {
     );
 
   return (
-    <Alert
-      classes={{ icon: 'text-red-500' }}
-      className="bg-red-100"
-      severity="error"
-    >
+    <Alert severity="error">
       {t(translations.cannotAttemptBecauseNotAUser)}
     </Alert>
   );
