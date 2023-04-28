@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-if @meta
-  json.test_ui do
-    json.mode @meta[:editor_mode]
-    json.set! @meta[:editor_mode], @meta[:data]
+json.testUi do
+  mode = @meta[:editor_mode]
+  json.mode mode
+  json.metadata do
+    json.partial! "course/assessment/question/programming/metadata/#{mode}", data: @meta[:data].deep_symbolize_keys
   end
-else
-  json.set! :test_ui, {}
 end

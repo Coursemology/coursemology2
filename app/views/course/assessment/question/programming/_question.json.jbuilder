@@ -1,41 +1,42 @@
 # frozen_string_literal: true
 json.question do
-  json.(@programming_question, :id, :title, :staff_only_comments, :maximum_grade,
-        :language_id, :memory_limit, :time_limit, :is_low_priority)
-  json.max_time_limit @programming_question.max_time_limit
-  json.description format_ckeditor_rich_text(@programming_question.description)
-  json.languages Coursemology::Polyglot::Language.all.order(:name) do |lang|
-    json.(lang, :id, :name)
-    json.editor_mode lang.ace_mode
-  end
-  json.skill_ids @question_assessment.skills.order_by_title.as_json(only: [:id, :title])
-  json.skills current_course.assessment_skills.order_by_title do |skill|
-    json.(skill, :id, :title)
-  end
+  json.partial! 'course/assessment/question/form',
+                question: @programming_question,
+                question_assessment: @question_assessment
+
+  json.skillIds @question_assessment.skills.order_by_title.as_json(only: [:id, :title])
+
+  json.languageId @programming_question.language_id
+  json.memoryLimit @programming_question.memory_limit
+  json.timeLimit @programming_question.time_limit
+  json.maxTimeLimit @programming_question.max_time_limit
+  json.attemptLimit @programming_question.attempt_limit
+  json.isLowPriority @programming_question.is_low_priority
+  json.autograded @programming_question.persisted? ? @programming_question.attachment.present? : @assessment.autograded?
+  json.editOnline can_edit_online?
 
   has_submissions = @programming_question.answers.without_attempting_state.count > 0
-  json.autograded @programming_question.persisted? ? @programming_question.attachment.present? : @assessment.autograded?
-  json.has_auto_gradings @programming_question.auto_gradable? && has_submissions
-  json.has_submissions has_submissions
-  json.display_autograded_toggle display_autograded_toggle?
-  json.course_gamified current_course.gamified?
-  json.autograded_assessment @assessment.autograded?
-  json.published_assessment @assessment.published?
-  json.attempt_limit @programming_question.attempt_limit
-  json.is_codaveri @programming_question.is_codaveri
-  json.codaveri_enabled current_course.component_enabled?(Course::CodaveriComponent)
-  json.existing_submissions_count @assessment.submissions.count
+  json.hasAutoGradings @programming_question.auto_gradable? && has_submissions
+  json.hasSubmissions has_submissions
+
+  autograded_assessment = @assessment.autograded?
+  json.shouldWarnOnSubmit current_course.gamified? && autograded_assessment && has_submissions
+
+  json.isCodaveri @programming_question.is_codaveri
+
+  codaveri_enabled = current_course.component_enabled?(Course::CodaveriComponent)
+  json.codaveriEnabled codaveri_enabled
+  json.componentsSettingsUrl course_admin_components_path(current_course) unless codaveri_enabled
 
   if @programming_question.attachment.present? && @programming_question.attachment.persisted?
     json.package do
-      json.name @programming_question.attachment.name
-      json.path attachment_reference_path(@programming_question.attachment)
-      json.updater_name @programming_question.attachment.updater.name
+      package = @programming_question.attachment
+      json.name package.name
+      json.path attachment_reference_path(package)
+      json.updaterName package.updater.name
+      json.updatedAt package.updated_at
     end
-  else
-    json.package nil
   end
 
-  json.can_switch_package_type can_switch_package_type?
-  json.edit_online can_edit_online?
+  json.canSwitchPackageType can_switch_package_type?
 end

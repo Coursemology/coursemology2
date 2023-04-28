@@ -4,15 +4,14 @@ module Course::Assessment::Question::ProgrammingHelper
   #
   # @return [String] If there is an import job for the question.
   # @return [nil] If there is no import job for the question.
-  def import_result_alert(json: false)
+  def import_result_message
     import_job = @programming_question.import_job
-
-    return json ? {} : nil unless import_job
+    return nil unless import_job
 
     if import_job.completed?
-      successful_import_alert(json: json)
+      successful_import_message
     elsif import_job.errored?
-      errored_import_alert(json: json)
+      errored_import_message
     end
   end
 
@@ -32,35 +31,14 @@ module Course::Assessment::Question::ProgrammingHelper
         Course::Assessment::ProgrammingEvaluationService::Error.name
   end
 
-  # Determines if the programming question errors should be displayed.
-  #
-  # @return [Boolean]
-  def display_validation_errors?
-    @programming_question.errors.present?
-  end
-
-  # Displays the validation errors alert for programming question.
-  #
-  # @return [String] If there are validation errors for the question.
-  # @return [nil] If there are no validation errors for the question.
-  def validation_errors_alert
+  def validation_errors
     return nil if @programming_question.errors.empty?
 
-    content_tag(:div, class: ['alert', 'alert-danger']) do
-      messages = @programming_question.errors.full_messages.map do |message|
-        content_tag(:div, message)
-      end
-
-      safe_join messages
-    end
+    @programming_question.errors.full_messages.to_sentence
   end
 
   def check_import_job?
     @programming_question.import_job && @programming_question.import_job.status != 'completed'
-  end
-
-  def display_autograded_toggle?
-    @programming_question.edit_online? || can_switch_package_type?
   end
 
   def can_switch_package_type?
@@ -75,31 +53,13 @@ module Course::Assessment::Question::ProgrammingHelper
 
   private
 
-  def successful_import_alert(json: false)
-    klass = ['alert', 'alert-success']
-    message = t('course.assessment.question.programming.form.import_result.success')
-
-    if json
-      { class: klass.join(' '), message: message }
-    else
-      content_tag(:div, class: klass) do
-        message
-      end
-    end
+  def successful_import_message
+    t('course.assessment.question.programming.form.import_result.success')
   end
 
-  def errored_import_alert(json: false)
-    klass = ['alert', 'alert-danger']
-    message = t('course.assessment.question.programming.form.import_result.error',
-                error: import_error_message(@programming_question.import_job.error))
-
-    if json
-      { class: klass.join(' '), message: message }
-    else
-      content_tag(:div, class: klass) do
-        message
-      end
-    end
+  def errored_import_message
+    t('course.assessment.question.programming.form.import_result.error',
+      error: import_error_message(@programming_question.import_job.error))
   end
 
   # Translates an error object serialised in the +TrackableJobs+ table to a user-readable message.

@@ -9,29 +9,33 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
   before_action :set_attributes_for_programming_question
 
   def new
-    @template = 'course/assessment/question/programming/new.json.jbuilder'
+    respond_to do |format|
+      format.html
+      format.json { format_test_cases }
+    end
   end
 
   def create
-    @template = 'course/assessment/question/programming/new.json.jbuilder'
-    @programming_question.package_type =
-      programming_question_params.key?(:file) ? :zip_upload : :online_editor
+    @programming_question.package_type = programming_question_params.key?(:file) ? :zip_upload : :online_editor
     process_package
 
-    respond_to do |format|
-      if @programming_question.save
-        load_question_assessment
-        format.json { render_success_json t('.success'), true }
-      else
-        format.json { render_failure_json t('.failure') }
-      end
+    if @programming_question.save
+      load_question_assessment
+      render_success_json true
+    else
+      render_failure_json
     end
   end
 
   def edit
-    @programming_question.description = helpers.format_ckeditor_rich_text(@programming_question.description)
-    @template = 'course/assessment/question/programming/edit.json.jbuilder'
-    @meta = programming_package_service.extract_meta if @programming_question.edit_online?
+    respond_to do |format|
+      format.html
+
+      format.json do
+        @meta = programming_package_service.extract_meta if @programming_question.edit_online?
+        format_test_cases
+      end
+    end
   end
 
   def update
@@ -47,12 +51,10 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
       true
     end
 
-    respond_to do |format|
-      if result
-        format.json { render_success_json t('.success'), false }
-      else
-        format.json { render_failure_json t('.failure') }
-      end
+    if result
+      render_success_json false
+    else
+      render_failure_json
     end
   end
 
@@ -67,6 +69,18 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
 
   private
 
+  def format_test_cases
+    @public_test_cases = []
+    @private_test_cases = []
+    @evaluation_test_cases = []
+
+    @programming_question.test_cases.each do |test_case|
+      @public_test_cases << test_case if test_case.public_test?
+      @private_test_cases << test_case if test_case.private_test?
+      @evaluation_test_cases << test_case if test_case.evaluation_test?
+    end
+  end
+
   def set_attributes_for_programming_question
     @programming_question.max_time_limit = current_course.programming_max_time_limit
   end
@@ -80,15 +94,12 @@ class Course::Assessment::Question::ProgrammingController < Course::Assessment::
     )
   end
 
-  def render_success_json(message, redirect_to_edit)
-    @response = { message: message, redirect_to_edit: redirect_to_edit }
-
-    render 'edit'
+  def render_success_json(redirect_to_edit)
+    render partial: 'response', locals: { redirect_to_edit: redirect_to_edit }
   end
 
-  def render_failure_json(message)
-    render json: { message: message, errors: @programming_question.errors.full_messages },
-           status: :bad_request
+  def render_failure_json
+    render json: { errors: @programming_question.errors.full_messages.to_sentence }, status: :bad_request
   end
 
   def process_package
