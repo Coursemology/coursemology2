@@ -179,7 +179,9 @@ const Form = <
       className={`${props.headsUp ? 'pb-32' : ''} ${props.className ?? ''}`}
       onSubmit={handleSubmit(processAndSubmit)}
     >
-      {props.children?.(control, watch, formState)}
+      {typeof props.children === 'function'
+        ? props.children(control, watch, formState)
+        : props.children}
 
       {props.headsUp && (
         <Slide
