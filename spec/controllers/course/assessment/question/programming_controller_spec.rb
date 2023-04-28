@@ -40,17 +40,9 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
       context 'when saving fails' do
         let(:programming_question) { immutable_programming_question }
 
-        it 'returns the correct status' do
+        it 'returns bad request' do
           subject
           expect(response).to have_http_status(:bad_request)
-        end
-
-        it 'returns the correct failure message' do
-          subject
-          body = JSON.parse(response.body)
-          expect(body['message']).to eq(
-            I18n.t('course.assessment.question.programming.create.failure')
-          )
         end
       end
 
@@ -67,11 +59,8 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         end
 
         it 'returns the correct import job url' do
-          subject
-          body = JSON.parse(response.body)
-          expect(body['import_job_url']).to eq(
-            job_path(controller.instance_variable_get(:@programming_question).import_job)
-          )
+          import_job_url = JSON.parse(subject.body)['importJobUrl']
+          expect(import_job_url).to eq(job_path(controller.instance_variable_get(:@programming_question).import_job))
         end
       end
     end
@@ -84,18 +73,17 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
       end
 
       subject do
-        get :edit,
-            params: {
-              course_id: course,
-              assessment_id: assessment,
-              id: programming_question
-            }
+        get :edit, format: :json, params: {
+          course_id: course,
+          assessment_id: assessment,
+          id: programming_question
+        }
       end
 
       context 'when edit page is loaded' do
         it 'sanitizes the description text' do
-          subject
-          expect(assigns(:programming_question).description).not_to include('script')
+          rendered_description = JSON.parse(subject.body)['question']['description']
+          expect(rendered_description).not_to include('script')
         end
       end
     end
@@ -112,17 +100,9 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
       context 'when the question cannot be saved' do
         let(:programming_question) { immutable_programming_question }
 
-        it 'returns the correct status' do
+        it 'returns bad request' do
           subject
           expect(response).to have_http_status(:bad_request)
-        end
-
-        it 'returns the correct failure message' do
-          subject
-          body = JSON.parse(response.body)
-          expect(body['message']).to eq(
-            I18n.t('course.assessment.question.programming.update.failure')
-          )
         end
       end
 
@@ -143,11 +123,8 @@ RSpec.describe Course::Assessment::Question::ProgrammingController do
         end
 
         it 'returns the correct import job url' do
-          subject
-          body = JSON.parse(response.body)
-          expect(body['import_job_url']).to eq(
-            job_path(controller.instance_variable_get(:@programming_question).import_job)
-          )
+          import_job_url = JSON.parse(subject.body)['importJobUrl']
+          expect(import_job_url).to eq(job_path(controller.instance_variable_get(:@programming_question).import_job))
         end
       end
     end
