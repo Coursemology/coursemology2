@@ -1,8 +1,9 @@
+import { ReactNode } from 'react';
 import { FormControlLabel, Radio, Typography } from '@mui/material';
 
 interface RadioButtonProps {
   value: string;
-  label: string;
+  label: ReactNode;
   className?: string;
   description?: string;
   disabled?: boolean;
