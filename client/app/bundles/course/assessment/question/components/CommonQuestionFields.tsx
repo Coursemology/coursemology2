@@ -32,6 +32,7 @@ export const commonQuestionFieldsValidation = object({
   maximumGrade: number()
     .required()
     .min(0, translations.mustSpecifyPositiveMaximumGrade)
+    .max(1000, translations.cannotBeMoreThanMaxMaximumGrade)
     .typeError(translations.mustSpecifyMaximumGrade),
   skipGrading: bool(),
   skillIds: array().of(number()),

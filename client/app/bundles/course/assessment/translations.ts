@@ -683,6 +683,10 @@ const translations = defineMessages({
     id: 'course.assessment.question.multipleResponses.mustSpecifyPositiveMaximumGrade',
     defaultMessage: 'Maximum grade has to be non-negative.',
   },
+  cannotBeMoreThanMaxMaximumGrade: {
+    id: 'course.assessment.question.multipleResponses.cannotBeMoreThanMaxMaximumGrade',
+    defaultMessage: 'Cannot be more than 1000.',
+  },
   mustSpecifyResponse: {
     id: 'course.assessment.question.multipleResponses.mustSpecifyResponse',
     defaultMessage: 'You must specify a valid response title.',
