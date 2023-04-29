@@ -26,6 +26,7 @@ import { watchEvaluation } from './operations';
 
 interface ProgrammingFormProps {
   with: ProgrammingFormData;
+  dirty?: boolean;
   onSubmit?: (data: ProgrammingFormData) => Promise<ProgrammingPostStatusData>;
   revalidate?: (
     response: ProgrammingPostStatusData,
@@ -113,6 +114,7 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
     <ProgrammingFormDataProvider from={data}>
       <Form
         contextual
+        dirty={props.dirty}
         disabled={submitting}
         emitsVia={setForm}
         headsUp
