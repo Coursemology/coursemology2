@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useLayoutEffect, useRef } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Typography } from '@mui/material';
 import { ProgrammingFormData } from 'types/course/assessment/question/programming';
@@ -58,6 +58,19 @@ const DataFiles = (props: ContainerProps): JSX.Element => {
   );
 };
 
+const AutoFocusOnLoad = (props: ContainerProps): JSX.Element => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const positionX = ref.current?.offsetTop;
+    if (!positionX) return;
+
+    window.scrollTo({ top: positionX, behavior: 'smooth' });
+  }, []);
+
+  return <div ref={ref}>{props.children}</div>;
+};
+
 const TestCases = (props: TestCasesProps): JSX.Element => {
   const { t } = useTranslation();
 
@@ -78,9 +91,11 @@ const TestCases = (props: TestCasesProps): JSX.Element => {
       )}
 
       {testCasesError && (
-        <Typography color="error" variant="body2">
-          {testCasesError}
-        </Typography>
+        <AutoFocusOnLoad>
+          <Typography color="error" variant="body2">
+            {testCasesError}
+          </Typography>
+        </AutoFocusOnLoad>
       )}
 
       {props.children}
