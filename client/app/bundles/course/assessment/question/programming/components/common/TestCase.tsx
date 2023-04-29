@@ -31,6 +31,7 @@ const TestCase = (props: TestCaseProps): JSX.Element => (
         name={`${props.name}.expression`}
         render={({ field, fieldState: { error } }): JSX.Element => (
           <ExpressionField
+            ref={field.ref}
             disabled={props.disabled}
             error={error?.message}
             onChange={field.onChange}
@@ -46,6 +47,7 @@ const TestCase = (props: TestCaseProps): JSX.Element => (
         name={`${props.name}.expected`}
         render={({ field, fieldState: { error } }): JSX.Element => (
           <ExpressionField
+            ref={field.ref}
             disabled={props.disabled}
             error={error?.message}
             onChange={field.onChange}
@@ -61,6 +63,7 @@ const TestCase = (props: TestCaseProps): JSX.Element => (
         name={`${props.name}.hint`}
         render={({ field, fieldState: { error } }): JSX.Element => (
           <ExpressionField
+            ref={field.ref}
             disabled={props.disabled}
             error={error?.message}
             onChange={field.onChange}
