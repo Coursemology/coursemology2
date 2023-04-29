@@ -39,9 +39,9 @@ export interface AvailableSkills {
 }
 
 export interface QuestionFormData {
-  title: string | null;
+  title: string;
   description: string;
   staffOnlyComments: string;
-  maximumGrade: string | null;
+  maximumGrade: string;
   skillIds: number[];
 }
