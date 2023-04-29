@@ -102,7 +102,7 @@ const schema: Translated<AnyObjectSchema> = (t) =>
       isCodaveri: boolean(),
       editOnline: boolean(),
     }),
-    testUi: mixed().when('question.editOnline', {
+    testUi: mixed().when(['question.autograded', 'question.editOnline'], {
       is: true,
       then: object({
         metadata: mixed().when(

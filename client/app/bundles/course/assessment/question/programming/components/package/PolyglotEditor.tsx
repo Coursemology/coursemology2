@@ -13,6 +13,7 @@ import ControlledEditor from '../common/ControlledEditor';
 
 import CppPackageEditor from './CppPackageEditor';
 import JavaPackageEditor from './JavaPackageEditor';
+import PackageDetails from './PackageDetails';
 import PythonPackageEditor from './PythonPackageEditor';
 
 const EDITORS: Partial<Record<LanguageMode, ElementType>> = {
@@ -40,6 +41,7 @@ const PolyglotEditor = (props: PolyglotEditorProps): JSX.Element => {
 
   const language = props.getModeFromId(watch('question.languageId'));
   const autograded = watch('question.autograded');
+  const editOnline = watch('question.editOnline');
 
   if (!autograded)
     return (
@@ -50,6 +52,8 @@ const PolyglotEditor = (props: PolyglotEditorProps): JSX.Element => {
         />
       </Section>
     );
+
+  if (!editOnline) return <PackageDetails disabled={props.disabled} />;
 
   const EditorComponent = EDITORS[language];
 

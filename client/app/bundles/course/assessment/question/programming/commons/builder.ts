@@ -99,6 +99,7 @@ const basicBuilder = <M extends BasicMetadata>(
 ): void => {
   appendTemplatesInto(data, metadata);
   appendInsertsInto(data, metadata);
+  appendFilesInto(data, 'data', metadata.dataFiles);
   appendTestCasesInto(data, metadata);
 };
 
@@ -157,18 +158,16 @@ const buildFormData = (draft: ProgrammingFormData): FormData => {
   appendInto(data, 'attempt_limit', draft.question.attemptLimit);
   appendInto(data, 'is_low_priority', draft.question.isLowPriority);
 
-  if (draft.question.autograded) {
-    if (draft.question.editOnline) {
-      appendFilesInto(data, 'data', draft.testUi?.metadata.dataFiles);
-    } else {
-      const newPackage = getNewPackageIn(draft);
-      if (newPackage) appendInto(data, 'file', newPackage);
-    }
-
+  if (draft.question.autograded && draft.question.editOnline)
     POLYGLOT_BUILDER[draft.testUi?.mode ?? '']?.(data, draft.testUi?.metadata);
-  } else {
-    appendInto(data, 'submission', draft.testUi?.metadata.submission);
+
+  if (draft.question.autograded && !draft.question.editOnline) {
+    const newPackage = getNewPackageIn(draft);
+    if (newPackage) appendInto(data, 'file', newPackage);
   }
+
+  if (!draft.question.autograded)
+    appendInto(data, 'submission', draft.testUi?.metadata.submission);
 
   return data;
 };

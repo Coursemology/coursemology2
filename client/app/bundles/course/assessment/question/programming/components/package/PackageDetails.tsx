@@ -1,5 +1,3 @@
-import { PackageDetailsData } from 'types/course/assessment/question/programming';
-
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../../translations';
@@ -11,17 +9,16 @@ import TestCases from '../common/TestCases';
 import PackageEditor from './PackageEditor';
 
 interface PackageDetailsProps {
-  of: PackageDetailsData;
   disabled?: boolean;
 }
 
 const PackageDetails = (props: PackageDetailsProps): JSX.Element | null => {
-  const { templates, testCases } = props.of;
-
   const { t } = useTranslation();
 
-  const { question } = useProgrammingFormDataContext();
+  const { question, packageUi } = useProgrammingFormDataContext();
   if (!question.package) return null;
+
+  const { templates, testCases } = packageUi;
 
   return (
     <>
