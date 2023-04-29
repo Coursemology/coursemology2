@@ -73,10 +73,10 @@ export type PolyglotMetadata =
 
 interface ProgrammingQuestionData extends QuestionFormData {
   languageId: LanguageData['id'];
-  memoryLimit: number | null;
-  timeLimit: number | null;
-  maxTimeLimit: number | null;
-  attemptLimit: number | null;
+  memoryLimit: number;
+  timeLimit: number;
+  maxTimeLimit: number;
+  attemptLimit: number;
   isLowPriority: boolean;
   autograded: boolean;
   editOnline: boolean;

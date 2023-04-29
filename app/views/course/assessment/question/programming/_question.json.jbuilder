@@ -6,11 +6,11 @@ json.question do
 
   json.skillIds @question_assessment.skills.order_by_title.as_json(only: [:id, :title])
 
-  json.languageId @programming_question.language_id
-  json.memoryLimit @programming_question.memory_limit
-  json.timeLimit @programming_question.time_limit
-  json.maxTimeLimit @programming_question.max_time_limit
-  json.attemptLimit @programming_question.attempt_limit
+  json.languageId @programming_question.language_id || ''
+  json.memoryLimit @programming_question.memory_limit || ''
+  json.timeLimit @programming_question.time_limit || ''
+  json.maxTimeLimit @programming_question.max_time_limit || ''
+  json.attemptLimit @programming_question.attempt_limit || ''
   json.isLowPriority @programming_question.is_low_priority
   json.autograded @programming_question.persisted? ? @programming_question.attachment.present? : @assessment.autograded?
   json.editOnline can_edit_online?
