@@ -15,7 +15,6 @@ import { useProgrammingFormDataContext } from '../../hooks/ProgrammingFormDataCo
 import ImportResult from '../common/ImportResult';
 import PackageInfo from '../common/PackageInfo';
 import PackageUploader from '../common/PackageUploader';
-import PackageDetails from '../package/PackageDetails';
 import PolyglotEditor from '../package/PolyglotEditor';
 
 export const PACKAGE_SECTION_ID = 'package-fields' as const;
@@ -30,7 +29,7 @@ const PackageFields = (props: PackageFieldsProps): JSX.Element => {
 
   const { control, watch } = useFormContext<ProgrammingFormData>();
 
-  const { question, packageUi, importResult } = useProgrammingFormDataContext();
+  const { question, importResult } = useProgrammingFormDataContext();
 
   const autograded = watch('question.autograded');
   const editOnline = watch('question.editOnline');
@@ -108,14 +107,10 @@ const PackageFields = (props: PackageFieldsProps): JSX.Element => {
         </Section>
       )}
 
-      {editOnline ? (
-        <PolyglotEditor
-          disabled={props.disabled}
-          getModeFromId={props.getModeFromId}
-        />
-      ) : (
-        <PackageDetails disabled={props.disabled} of={packageUi} />
-      )}
+      <PolyglotEditor
+        disabled={props.disabled}
+        getModeFromId={props.getModeFromId}
+      />
     </>
   );
 };

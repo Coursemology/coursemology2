@@ -103,10 +103,6 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
       draft.testUi.mode = getModeFromId(draft.question.languageId);
     }
 
-    if (!draft.question.autograded) {
-      draft.question.editOnline = false;
-    }
-
     return draft;
   };
 
