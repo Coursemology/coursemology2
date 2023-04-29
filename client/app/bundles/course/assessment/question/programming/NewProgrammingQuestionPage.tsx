@@ -14,12 +14,19 @@ import ProgrammingForm from './ProgrammingForm';
 
 const NewProgrammingQuestionPage = (): JSX.Element => {
   const [id, setId] = useState<number>();
+  const [persisted, setPersisted] = useState(false);
 
   const createOrUpdate = (
     rawData: ProgrammingFormData,
   ): Promise<ProgrammingPostStatusData> => {
     const formData = buildFormData(rawData);
-    return id ? update(id, formData) : create(formData);
+
+    if (id) {
+      setPersisted(true);
+      return update(id, formData);
+    }
+
+    return create(formData);
   };
 
   const mergeNewImportResult = async (
@@ -50,6 +57,7 @@ const NewProgrammingQuestionPage = (): JSX.Element => {
     <Preload render={<LoadingIndicator />} while={fetchNew}>
       {(data): JSX.Element => (
         <ProgrammingForm
+          dirty={!persisted}
           onSubmit={createOrUpdate}
           revalidate={mergeNewImportResult}
           with={data}
