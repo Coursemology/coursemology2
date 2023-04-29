@@ -14,7 +14,11 @@ const ExpressionField = (props: ExpressionFieldProps): JSX.Element => {
   return (
     <div className="flex h-full flex-col">
       <TextField
-        className="-mx-2 h-full rounded-lg bg-neutral-100 focus-within:bg-neutral-200/70 focus-within:ring-2 hover:bg-neutral-200/70"
+        className={`-mx-2 h-full rounded-lg ${
+          props.disabled
+            ? 'bg-neutral-200'
+            : 'bg-neutral-100 focus-within:bg-neutral-200/70 focus-within:ring-2 hover:bg-neutral-200/70'
+        }`}
         disabled={props.disabled}
         fullWidth
         hiddenLabel
