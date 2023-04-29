@@ -1,3 +1,4 @@
+import { forwardRef } from 'react';
 import { Typography } from '@mui/material';
 
 import TextField from 'lib/components/core/fields/TextField';
@@ -10,10 +11,11 @@ interface ExpressionFieldProps {
   disabled?: boolean;
 }
 
-const ExpressionField = (props: ExpressionFieldProps): JSX.Element => {
-  return (
+const ExpressionField = forwardRef<HTMLDivElement, ExpressionFieldProps>(
+  (props, ref): JSX.Element => (
     <div className="flex h-full flex-col">
       <TextField
+        ref={ref}
         className={`-mx-2 h-full rounded-lg ${
           props.disabled
             ? 'bg-neutral-200'
@@ -42,7 +44,9 @@ const ExpressionField = (props: ExpressionFieldProps): JSX.Element => {
         </Typography>
       )}
     </div>
-  );
-};
+  ),
+);
+
+ExpressionField.displayName = 'ExpressionField';
 
 export default ExpressionField;
