@@ -101,6 +101,11 @@ const schema: Translated<AnyObjectSchema> = (t) =>
         .typeError(t(translations.hasToBeAtLeastOne)),
       isCodaveri: boolean(),
       editOnline: boolean(),
+      package: mixed().when(['autograded', 'editOnline'], {
+        is: (autograded: boolean, editOnline: boolean) =>
+          autograded && !editOnline,
+        then: (s) => s.required(t(translations.mustUploadPackage)),
+      }),
     }),
     testUi: mixed().when(['question.autograded', 'question.editOnline'], {
       is: true,

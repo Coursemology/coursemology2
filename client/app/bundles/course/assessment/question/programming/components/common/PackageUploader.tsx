@@ -1,7 +1,7 @@
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, forwardRef } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Inventory, Upload } from '@mui/icons-material';
-import { Alert, Button } from '@mui/material';
+import { Alert, Button, Typography } from '@mui/material';
 import { ProgrammingFormData } from 'types/course/assessment/question/programming';
 
 import InfoLabel from 'lib/components/core/InfoLabel';
@@ -34,36 +34,48 @@ interface UploadButtonProps {
   disabled?: boolean;
 }
 
-const UploadButton = (props: UploadButtonProps): JSX.Element => {
-  const { t } = useTranslation();
+const UploadButton = forwardRef<HTMLInputElement, UploadButtonProps>(
+  (props, ref): JSX.Element => {
+    const { t } = useTranslation();
 
-  const handleFileInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    if (props.disabled) return;
+    const handleFileInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+      if (props.disabled) return;
 
-    e.preventDefault();
+      e.preventDefault();
 
-    const files = e.target.files;
-    if (!files?.length) return;
+      const files = e.target.files;
+      if (!files?.length) return;
 
-    props.onUpload(files[0]);
+      const file = files[0];
+      if (!file.name.endsWith('.zip')) return;
 
-    e.target.value = '';
-  };
+      props.onUpload(files[0]);
 
-  return (
-    <Button disabled={props.disabled} startIcon={<Upload />} variant="outlined">
-      {t(translations.uploadNewPackage)}
+      e.target.value = '';
+    };
 
-      <input
-        accept="application/zip"
-        className="absolute bottom-0 left-0 right-0 top-0 cursor-pointer opacity-0"
+    return (
+      <Button
         disabled={props.disabled}
-        onChange={handleFileInputChange}
-        type="file"
-      />
-    </Button>
-  );
-};
+        startIcon={<Upload />}
+        variant="outlined"
+      >
+        {t(translations.uploadNewPackage)}
+
+        <input
+          ref={ref}
+          accept="application/zip"
+          className="absolute bottom-0 left-0 right-0 top-0 cursor-pointer opacity-0"
+          disabled={props.disabled}
+          onChange={handleFileInputChange}
+          type="file"
+        />
+      </Button>
+    );
+  },
+);
+
+UploadButton.displayName = 'UploadButton';
 
 const PackageUploader = (props: PackageUploaderProps): JSX.Element => {
   const { control } = useFormContext<ProgrammingFormData>();
@@ -80,12 +92,22 @@ const PackageUploader = (props: PackageUploaderProps): JSX.Element => {
       <Controller
         control={control}
         name="question.package"
-        render={({ field: { onChange, value } }): JSX.Element => (
+        render={({
+          field: { onChange, value, ref },
+          fieldState: { error },
+        }): JSX.Element => (
           <>
             <UploadButton
+              ref={ref}
               disabled={props.disabled}
               onUpload={(file): void => onChange(attach(unwrap(value), file))}
             />
+
+            {error && (
+              <Typography color="error" variant="body2">
+                {error.message}
+              </Typography>
+            )}
 
             {isAttached(value) ? (
               <Alert

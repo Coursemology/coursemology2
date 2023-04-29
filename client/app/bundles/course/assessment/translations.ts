@@ -1368,6 +1368,10 @@ const translations = defineMessages({
       'submitted answers to this question and only system-issued EXP for the submissions will be re-calculated. ' +
       'Note that manually-issued EXP will not be updated. Are you sure you wish to continue?',
   },
+  mustUploadPackage: {
+    id: 'course.assessment.question.programming.mustUploadPackage',
+    defaultMessage: 'Please specify a valid evaluation package ZIP file.',
+  },
 });
 
 export default translations;
