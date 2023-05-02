@@ -1,26 +1,66 @@
-import { enableMapSet } from 'immer';
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import { produce } from 'immer';
+import {
+  SubmissionListData,
+  SubmissionPermissions,
+  SubmissionsMetaData,
+} from 'types/course/assessment/submissions';
+import { createEntityStore, saveListToStore } from 'utilities/store';
 
-import submissionsReducer from './reducers';
+import {
+  SAVE_SUBMISSION_LIST,
+  SaveSubmissionListAction,
+  SubmissionsActionType,
+  SubmissionsState,
+} from 'bundles/course/assessment/submissions/types';
 
-const defaultReducers = {};
+const initialState: SubmissionsState = {
+  submissions: createEntityStore(),
+  metaData: {
+    isGamified: false,
+    submissionCount: 0,
+    tabs: { categories: [] },
+    filter: { assessments: [], groups: [], users: [] },
+  },
+  permissions: { canManage: false, isTeachingStaff: false },
+};
 
-const rootReducer = combineReducers({
-  submissions: submissionsReducer,
-});
+const reducer = produce(
+  (draft: SubmissionsState, action: SubmissionsActionType) => {
+    switch (action.type) {
+      case SAVE_SUBMISSION_LIST: {
+        const submissionList = action.submissionList;
+        const entityList = submissionList.map((data) => ({ ...data }));
 
-enableMapSet();
+        if (action.overwrite) {
+          draft.submissions = createEntityStore();
+        }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function configureStore(): any {
-  const storeCreator =
-    // @ts-ignore: ignore ts warning for process
-    process.env.NODE_ENV === 'development'
-      ? compose(
-          /* eslint-disable-next-line global-require, import/no-extraneous-dependencies */ // @ts-ignore: ignore ts warning for require
-          applyMiddleware(thunkMiddleware, require('redux-logger').logger),
-        )(createStore)
-      : compose(applyMiddleware(thunkMiddleware))(createStore);
-  return storeCreator(rootReducer, defaultReducers);
-}
+        saveListToStore(draft.submissions, entityList);
+        draft.metaData = action.metaData;
+        draft.permissions = action.submissionPermissions;
+        break;
+      }
+
+      default:
+        break;
+    }
+  },
+  initialState,
+);
+
+export const actions = {
+  saveSubmissionList: (
+    submissionList: SubmissionListData[],
+    metaData: SubmissionsMetaData,
+    submissionPermissions: SubmissionPermissions,
+    overwrite: boolean,
+  ): SaveSubmissionListAction => ({
+    type: SAVE_SUBMISSION_LIST,
+    submissionList,
+    metaData,
+    submissionPermissions,
+    overwrite,
+  }),
+};
+
+export default reducer;

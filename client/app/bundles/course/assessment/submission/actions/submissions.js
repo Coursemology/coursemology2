@@ -1,4 +1,5 @@
 import CourseAPI from 'api/course';
+import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 
 import actionTypes from '../constants';
