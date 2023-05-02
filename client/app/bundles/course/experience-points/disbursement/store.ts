@@ -82,36 +82,37 @@ const reducer = produce(
   initialState,
 );
 
-export const saveDisbursementList = (
-  courseGroups: DisbursementCourseGroupListData[],
-  courseUsers: DisbursementCourseUserListData[],
-): SaveDisbursementListAction => ({
-  type: SAVE_DISBURSEMENT_LIST,
-  courseGroups,
-  courseUsers,
-});
+export const actions = {
+  saveDisbursementList: (
+    courseGroups: DisbursementCourseGroupListData[],
+    courseUsers: DisbursementCourseUserListData[],
+  ): SaveDisbursementListAction => ({
+    type: SAVE_DISBURSEMENT_LIST,
+    courseGroups,
+    courseUsers,
+  }),
 
-export const saveForumDisbursementList = (
-  filters: ForumDisbursementFilters,
-  forumUsers: ForumDisbursementUserData[],
-): SaveForumDisbursementListAction => ({
-  type: SAVE_FORUM_DISBURSEMENT_LIST,
-  filters,
-  forumUsers,
-});
+  saveForumDisbursementList: (
+    filters: ForumDisbursementFilters,
+    forumUsers: ForumDisbursementUserData[],
+  ): SaveForumDisbursementListAction => ({
+    type: SAVE_FORUM_DISBURSEMENT_LIST,
+    filters,
+    forumUsers,
+  }),
 
-export const removeForumDisbursementList =
-  (): RemoveForumDisbursementListAction => ({
+  removeForumDisbursementList: (): RemoveForumDisbursementListAction => ({
     type: REMOVE_FORUM_DISBURSEMENT_LIST,
-  });
+  }),
 
-export const saveForumPostList = (
-  posts: ForumDisbursementPostData[],
-  userId: number,
-): SaveForumPostListAction => ({
-  type: SAVE_FORUM_POST_LIST,
-  posts,
-  userId,
-});
+  saveForumPostList: (
+    posts: ForumDisbursementPostData[],
+    userId: number,
+  ): SaveForumPostListAction => ({
+    type: SAVE_FORUM_POST_LIST,
+    posts,
+    userId,
+  }),
+};
 
 export default reducer;

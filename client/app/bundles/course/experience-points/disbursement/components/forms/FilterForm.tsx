@@ -16,7 +16,6 @@ import { ForumDisbursementFilters } from 'types/course/disbursement';
 import { AppDispatch } from 'types/store';
 import * as yup from 'yup';
 
-import { removeForumDisbursementList } from 'bundles/course/experience-points/disbursement/store';
 import ErrorText from 'lib/components/core/ErrorText';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormTextField from 'lib/components/form/fields/TextField';
@@ -24,6 +23,7 @@ import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import formTranslations from 'lib/translations/form';
 
 import { fetchFilteredForumDisbursements } from '../../operations';
+import { actions } from '../../store';
 
 interface Props extends WrappedComponentProps {
   initialValues: ForumDisbursementFilters;
@@ -91,7 +91,7 @@ const FilterForm: FC<Props> = (props) => {
 
   const onFormSubmit = (data: ForumDisbursementFilters): void => {
     setIsSearching(true);
-    dispatch(removeForumDisbursementList());
+    dispatch(actions.removeForumDisbursementList());
     dispatch(fetchFilteredForumDisbursements(data))
       .then((response) => {
         setIsSearching(false);
