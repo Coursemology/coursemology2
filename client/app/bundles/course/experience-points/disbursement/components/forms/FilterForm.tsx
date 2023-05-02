@@ -16,13 +16,13 @@ import { ForumDisbursementFilters } from 'types/course/disbursement';
 import { AppDispatch } from 'types/store';
 import * as yup from 'yup';
 
+import { removeForumDisbursementList } from 'bundles/course/experience-points/disbursement/store';
 import ErrorText from 'lib/components/core/ErrorText';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import formTranslations from 'lib/translations/form';
 
-import { removeForumDisbursementList } from '../../actions';
 import { fetchFilteredForumDisbursements } from '../../operations';
 
 interface Props extends WrappedComponentProps {
