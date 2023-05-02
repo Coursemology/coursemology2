@@ -22,7 +22,7 @@ const TimelineSidebarItem = (props: TimelineSidebarItemProps): JSX.Element => {
       className={`group box-content flex h-10 items-center justify-between border-0 border-b border-solid border-neutral-200 px-2 last:border-b-0 ${
         !assigned
           ? 'bg-neutral-100 text-neutral-400'
-          : 'hover?:bg-neutral-50 text-neutral-500'
+          : 'text-neutral-500 hover?:bg-neutral-50'
       }`}
       {...(assigned && {
         role: 'button',

@@ -120,7 +120,7 @@ const AssessmentShowPage = (props: AssessmentShowPageProps): JSX.Element => {
                   opensInNewTab
                   underline="none"
                 >
-                  <ListItem className="hover?:bg-neutral-100 group">
+                  <ListItem className="group hover?:bg-neutral-100">
                     <ListItemText
                       classes={{ primary: 'group-hover?:underline' }}
                       primary={condition.title}

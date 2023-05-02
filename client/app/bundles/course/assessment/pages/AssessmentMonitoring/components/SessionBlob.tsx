@@ -13,7 +13,7 @@ const SessionBlob = (props: SessionBlobProps): JSX.Element => {
   const blob = (
     <div
       {...divProps}
-      className={`wh-8 m-1 shrink-0 rounded hover:ring-2 hover:ring-offset-1 ${
+      className={`m-1 shrink-0 rounded wh-8 hover:ring-2 hover:ring-offset-1 ${
         snapshot?.selected ? 'ring-2 ring-offset-1' : ''
       } ${snapshot?.hidden ? 'hidden' : ''} ${props.className ?? ''}`}
     />

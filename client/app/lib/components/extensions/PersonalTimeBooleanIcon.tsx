@@ -52,7 +52,7 @@ const PersonalTimeBooleanIcons: FC<Props> = (props) => {
             </section>
           }
         >
-          <Schedule className="hover?:text-neutral-600 text-3xl text-neutral-500" />
+          <Schedule className="text-3xl text-neutral-500 hover?:text-neutral-600" />
         </Tooltip>
       )}
 
@@ -71,7 +71,7 @@ const PersonalTimeBooleanIcons: FC<Props> = (props) => {
             </section>
           }
         >
-          <Shuffle className="hover?:text-neutral-600 text-3xl text-neutral-500" />
+          <Shuffle className="text-3xl text-neutral-500 hover?:text-neutral-600" />
         </Tooltip>
       )}
     </>
