@@ -1898,10 +1898,10 @@
   resolved "https://registry.yarnpkg.com/@sgratzl/boxplots/-/boxplots-1.3.0.tgz#c9063d98e33a15f880cf4bd3531be71497e2a94e"
   integrity sha512-2BRWv+WOH58pwzSgP50buoXgxQic+4auz3BF0wiIUXS8D3QGkdBNgsNdQO1754Tm/0uEwly0R3WaCiGnoYWcmA==
 
-"@sgratzl/chartjs-chart-boxplot@^3.7.1":
-  version "3.7.1"
-  resolved "https://registry.yarnpkg.com/@sgratzl/chartjs-chart-boxplot/-/chartjs-chart-boxplot-3.7.1.tgz#cbe5c31cc2bc1b3c37c6fa3bca8b7781ebcc62d4"
-  integrity sha512-DYyOedq9CVFcDQZbRekyZAu/Bg0SUgaa19hsl4ikU85Di2DPdaiC/tFIkwHS6YB4L1GMWNvY+TDUODMYRFjhxA==
+"@sgratzl/chartjs-chart-boxplot@^3.8.0":
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/@sgratzl/chartjs-chart-boxplot/-/chartjs-chart-boxplot-3.8.0.tgz#18d2a7dd47cfe74a1fa62da24daa1d4e3f0abaa9"
+  integrity sha512-tH+WaakyzqNRYkKrjAGzRUSy57sDHe/aZISEQnCIYf7EUtm6BK5fNIxK3S01EKYhQJ3gogVdbCe6xbbqWXTiWw==
   dependencies:
     "@sgratzl/boxplots" "^1.3.0"
 
