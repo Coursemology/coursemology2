@@ -29,9 +29,6 @@ module.exports = {
       course: resolve('./app/bundles/course'),
       testUtils: resolve('./app/__test__/utils'),
       workers: resolve('./app/workers'),
-
-      // TODO: Remove this once we have a single root component
-      App: resolve('./app/App'),
     },
   },
   optimization: {

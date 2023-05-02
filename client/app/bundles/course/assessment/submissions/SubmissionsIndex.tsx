@@ -1,26 +1,26 @@
-import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { defineMessages } from 'react-intl';
 import { toast } from 'react-toastify';
 import {
   SubmissionAssessmentFilterData,
   SubmissionGroupFilterData,
   SubmissionUserFilterData,
 } from 'types/course/assessment/submissions';
-import { AppDispatch, AppState } from 'types/store';
 
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
-import SubmissionFilter from '../../components/misc/SubmissionFilter';
-import SubmissionTabs from '../../components/misc/SubmissionTabs';
-import SubmissionsTable from '../../components/tables/SubmissionsTable';
+import SubmissionFilter from './components/misc/SubmissionFilter';
+import SubmissionTabs from './components/misc/SubmissionTabs';
+import SubmissionsTable from './components/tables/SubmissionsTable';
 import {
   fetchSubmissions,
   filterPendingSubmissions,
   filterSubmissions,
-} from '../../operations';
+} from './operations';
 import {
   getAllSubmissionMiniEntities,
   getFilter,
@@ -28,9 +28,7 @@ import {
   getSubmissionCount,
   getSubmissionPermissions,
   getTabs,
-} from '../../selectors';
-
-interface Props extends WrappedComponentProps {}
+} from './selectors';
 
 const translations = defineMessages({
   header: {
@@ -47,27 +45,21 @@ const translations = defineMessages({
   },
 });
 
-const SubmissionsIndex: FC<Props> = (props) => {
-  const { intl } = props;
+const SubmissionsIndex = (): JSX.Element => {
+  const { t } = useTranslation();
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const ROWS_PER_PAGE = 25;
   const [pageNum, setPageNum] = useState(1);
 
   // Selectors
-  const isGamified = useSelector((state: AppState) => getIsGamified(state));
-  const submissionCount = useSelector((state: AppState) =>
-    getSubmissionCount(state),
-  );
-  const submissions = useSelector((state: AppState) =>
-    getAllSubmissionMiniEntities(state),
-  );
-  const tabs = useSelector((state: AppState) => getTabs(state));
-  const filter = useSelector((state: AppState) => getFilter(state));
-  const submissionPermissions = useSelector((state: AppState) =>
-    getSubmissionPermissions(state),
-  );
+  const isGamified = useAppSelector(getIsGamified);
+  const submissionCount = useAppSelector(getSubmissionCount);
+  const submissions = useAppSelector(getAllSubmissionMiniEntities);
+  const tabs = useAppSelector(getTabs);
+  const filter = useAppSelector(getFilter);
+  const submissionPermissions = useAppSelector(getSubmissionPermissions);
 
   // For tab logic and control
   const [tabValue, setTabValue] = useState(2);
@@ -111,7 +103,7 @@ const SubmissionsIndex: FC<Props> = (props) => {
         setTableIsLoading(false);
       })
       .catch(() => {
-        toast.error(intl.formatMessage(translations.filterGetFailure));
+        toast.error(t(translations.filterGetFailure));
       });
   };
 
@@ -124,7 +116,7 @@ const SubmissionsIndex: FC<Props> = (props) => {
           setTableIsLoading(false);
         })
         .catch(() => {
-          toast.error(intl.formatMessage(translations.filterGetFailure));
+          toast.error(t(translations.filterGetFailure));
         });
     } else {
       handleFilter(newPageNumber);
@@ -137,14 +129,12 @@ const SubmissionsIndex: FC<Props> = (props) => {
       .finally(() => {
         setPageIsLoading(false);
       })
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchSubmissionsFailure)),
-      );
+      .catch(() => toast.error(t(translations.fetchSubmissionsFailure)));
   }, [dispatch]);
 
   return (
     <>
-      <PageHeader title={intl.formatMessage(translations.header)} />
+      <PageHeader title={t(translations.header)} />
       {pageIsLoading ? (
         <LoadingIndicator />
       ) : (
@@ -205,4 +195,4 @@ const SubmissionsIndex: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(SubmissionsIndex);
+export default SubmissionsIndex;
