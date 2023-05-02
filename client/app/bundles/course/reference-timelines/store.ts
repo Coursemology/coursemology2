@@ -6,7 +6,7 @@ import {
   TimelinesData,
 } from 'types/course/referenceTimelines';
 
-import { TimelinesState } from '../types';
+import { TimelinesState } from './types';
 
 const initialState: TimelinesState = {
   timelines: [],
@@ -129,6 +129,6 @@ export const timelinesSlice = createSlice({
   },
 });
 
-export const timelinesActions = timelinesSlice.actions;
+export const actions = timelinesSlice.actions;
 
 export default timelinesSlice.reducer;

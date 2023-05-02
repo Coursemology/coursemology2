@@ -6,7 +6,7 @@ import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { selectTimelines } from '../store';
+import { selectTimelines } from '../selectors';
 import translations from '../translations';
 
 interface DeleteTimelinePromptProps {
