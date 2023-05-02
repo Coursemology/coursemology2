@@ -10,7 +10,7 @@ import NewMcqMrqPage from './multiple-responses/NewMcqMrqPage';
 enableMapSet();
 
 $(() => {
-  const mountNode = document.getElementById('multiple-responses');
+  const mountNode = document.getElementById('app-root');
   if (!mountNode) return;
 
   const root = createRoot(mountNode);

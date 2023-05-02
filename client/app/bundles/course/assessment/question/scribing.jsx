@@ -6,7 +6,7 @@ import ScribingQuestion from './scribing/ScribingQuestion';
 import storeCreator from './scribing/store';
 
 $(() => {
-  const mountNode = document.getElementById('scribing-question');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const store = storeCreator({ scribingQuestion: {} });

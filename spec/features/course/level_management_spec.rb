@@ -43,7 +43,7 @@ RSpec.feature 'Course: Levels' do
         find('#add-level').click
         find('#save-levels').click
         # Causes the test to wait for the server response.
-        expect(page.find('#course-level')).to have_selector('span', text: 'Levels Saved')
+        expect(page).to have_selector('span', text: 'Levels Saved')
 
         # 4 visible levels and the default 0 level.
         expect(course.reload.levels.count).to eq 5
@@ -53,7 +53,7 @@ RSpec.feature 'Course: Levels' do
         visit course_levels_path(course)
         find('#delete_2').click
         find('#save-levels').click
-        expect(page.find('#course-level')).to have_selector('span', text: 'Levels Saved')
+        expect(page).to have_selector('span', text: 'Levels Saved')
 
         # Level 2 with threshold 200 has been deleted.
         expect(course.reload.levels.map(&:experience_points_threshold)).not_to include(200)

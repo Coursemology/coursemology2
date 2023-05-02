@@ -7,7 +7,7 @@ import FolderShow from './pages/FolderShow';
 import configureStore from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-material-component');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const store = configureStore();

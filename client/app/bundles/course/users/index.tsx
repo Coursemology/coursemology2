@@ -17,7 +17,7 @@ import UsersIndex from './pages/UsersIndex';
 import configureStore from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-users-component');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const store = configureStore();

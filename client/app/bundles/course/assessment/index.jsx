@@ -13,7 +13,7 @@ import SubmissionRoutesWithStore from './submission/SubmissionRoutesWithStore';
 import storeCreator from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-assessments');
+  const mountNode = document.getElementById('app-root');
   if (!mountNode) return;
 
   const store = storeCreator({ assessments: {} });

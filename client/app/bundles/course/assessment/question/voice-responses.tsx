@@ -10,7 +10,7 @@ import NewVoicePage from './voice-responses/NewVoicePage';
 enableMapSet();
 
 $(() => {
-  const mountNode = document.getElementById('voice-responses');
+  const mountNode = document.getElementById('app-root');
   if (!mountNode) return;
 
   const root = createRoot(mountNode);

@@ -6,7 +6,7 @@ import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import AccountSettings from './AccountSettings';
 
 $(() => {
-  const mountNode = document.getElementById('user-admin-component');
+  const mountNode = document.getElementById('app-root');
   if (!mountNode) return;
 
   const root = createRoot(mountNode);

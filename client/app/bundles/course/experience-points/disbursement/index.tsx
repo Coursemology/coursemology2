@@ -7,7 +7,7 @@ import DisbursementIndex from './pages/DisbursementIndex';
 import configureStore from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-disbursement-component');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const store = configureStore();

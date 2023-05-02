@@ -10,7 +10,7 @@ import NewForumPostResponsePage from './forum-post-responses/NewForumPostRespons
 enableMapSet();
 
 $(() => {
-  const mountNode = document.getElementById('forum-post-responses');
+  const mountNode = document.getElementById('app-root');
   if (!mountNode) return;
 
   const root = createRoot(mountNode);

@@ -7,7 +7,7 @@ import UserShow from './pages/UserShow';
 import configureStore from './store';
 
 $(() => {
-  const mountNode = document.getElementById('global-users-component');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const store = configureStore();

@@ -7,7 +7,7 @@ import LearningMap from './containers/LearningMap';
 import storeCreator from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-learning-map');
+  const mountNode = document.getElementById('app-root');
   const store = storeCreator({ learningMap: {} });
 
   if (mountNode) {

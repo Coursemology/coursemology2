@@ -8,7 +8,7 @@ import GroupShow from './pages/GroupShow';
 import storeCreator from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-group-component');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const store = storeCreator();

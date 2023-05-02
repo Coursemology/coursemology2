@@ -7,7 +7,7 @@ import StatisticsIndex from './pages/StatisticsIndex';
 import storeCreator from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-statistics-component');
+  const mountNode = document.getElementById('app-root');
   if (mountNode) {
     const root = createRoot(mountNode);
     const store = storeCreator();
