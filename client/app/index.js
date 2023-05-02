@@ -17,7 +17,7 @@ function loadCurrentModule() {
     require(`../app/bundles/${modulePath}`);
   } catch (e) {
     if (e.message.includes(modulePath)) {
-      // Current module does not exist
+      throw new Error(`Cannot find expected module path: ${modulePath}`);
     } else {
       throw e;
     }
