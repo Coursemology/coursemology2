@@ -55,7 +55,7 @@ const DurationBar = (props: DurationBarProps): JSX.Element => {
         !end ? 'rounded-l-lg rounded-r-3xl' : 'rounded-lg'
       } ${
         props.shadow
-          ? 'hover?:bg-neutral-100/80 border-2 border-dashed border-neutral-400 bg-neutral-100'
+          ? 'border-2 border-dashed border-neutral-400 bg-neutral-100 hover?:bg-neutral-100/80'
           : ''
       } ${!props.disabled ? 'hover?:bg-sky-200/80' : ''} ${
         props.selected ? 'z-40 shadow-lg' : ''
@@ -101,7 +101,7 @@ const DurationBar = (props: DurationBarProps): JSX.Element => {
         <HorizontallyResizable
           className={`relative h-full bg-sky-400 ${
             !end ? 'rounded-l-lg rounded-r-3xl' : 'rounded-lg'
-          } ${props.shadow ? 'hover?:bg-neutral-300/80 bg-neutral-300' : ''} ${
+          } ${props.shadow ? 'bg-neutral-300 hover?:bg-neutral-300/80' : ''} ${
             !props.disabled ? 'hover?:bg-sky-400/80' : ''
           }`}
           disabled={props.disabled}

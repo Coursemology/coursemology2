@@ -24,7 +24,7 @@ const StackableBadge = (props: StackableBadgeProps): JSX.Element => (
   <Tooltip disableInteractive title={props.title}>
     <Avatar
       alt={props.title}
-      className={`outline-slot-1 wh-11 hoverable:group-hover/badges:ml-1 hoverable:group-hover/badges:shadow-lg hoverable:group-hover/badges:!outline-none group-hover?:outline-slot-2 outline outline-2 transition-all ${
+      className={`outline outline-2 outline-slot-1 transition-all wh-11 hoverable:group-hover/badges:ml-1 hoverable:group-hover/badges:shadow-lg hoverable:group-hover/badges:!outline-none group-hover?:outline-slot-2 ${
         props.className ?? ''
       }`}
       src={props.src}
@@ -39,7 +39,7 @@ const StackedBadges = (props: StackedBadgesProps): JSX.Element => {
 
   return (
     <div className="group/badges relative min-w-[5rem]">
-      <div className="hoverable:group-hover/badges:space-x-0 absolute flex h-full items-center -space-x-4">
+      <div className="absolute flex h-full items-center -space-x-4 hoverable:group-hover/badges:space-x-0">
         {props.badges?.map((badge) => (
           <Link
             key={badge.url}

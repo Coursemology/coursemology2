@@ -55,7 +55,7 @@ const TimelinesOverview = (props: TimelinesOverviewProps): JSX.Element => {
         ))}
       </aside>
 
-      <aside className="bg-fade-to-l-white absolute right-0 top-0 flex h-full items-center pl-20">
+      <aside className="absolute right-0 top-0 flex h-full items-center pl-20 bg-fade-to-l-white">
         <Button
           onClick={(): void => setCreating(true)}
           size="small"

@@ -96,7 +96,7 @@ const ForumManagementButtons: FC<Props> = (props) => {
         showOnHover
           ? `${
               showButtons ? '' : 'invisible group-hover:visible'
-            } bg-fade-to-l-neutral-100 absolute right-0 top-0 flex h-full items-center border-0 pl-20`
+            } absolute right-0 top-0 flex h-full items-center border-0 pl-20 bg-fade-to-l-neutral-100`
           : 'whitespace-nowrap'
       }
     >
