@@ -1,8 +1,7 @@
 import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
-
-import * as actions from './actions';
+import { actions } from 'bundles/course/assessment/submissions/store';
 
 export function fetchSubmissions(): Operation {
   return async (dispatch) =>

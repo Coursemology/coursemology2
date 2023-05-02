@@ -24,6 +24,7 @@ import { GlobalUserState } from 'bundles/users/types';
 
 /**
  * Describes the overall shape of the application's Redux store state.
+ * @deprecated Use `RootState` instead.
  */
 export interface AppState {
   admin: AdminState;
@@ -54,6 +55,9 @@ export type Operation<R = void> = ThunkAction<
   AnyAction
 >;
 
+/**
+ * @deprecated Use `store/AppDispatch` instead.
+ */
 export type AppDispatch = ThunkDispatch<
   AppState,
   Record<string, unknown>,
