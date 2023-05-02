@@ -1,10 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { enableMapSet } from 'immer';
+import App from 'App';
 
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-
-import { store } from './store';
 import TimelineDesigner from './TimelineDesigner';
 
 $(() => {
@@ -13,11 +10,8 @@ $(() => {
 
   const root = createRoot(mountNode);
 
-  // TODO: Move this to React root once SPA
-  enableMapSet();
-
   root.render(
-    <ProviderWrapper store={store}>
+    <App>
       <BrowserRouter>
         <Routes>
           <Route
@@ -26,6 +20,6 @@ $(() => {
           />
         </Routes>
       </BrowserRouter>
-    </ProviderWrapper>,
+    </App>,
   );
 });

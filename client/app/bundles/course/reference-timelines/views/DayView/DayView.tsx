@@ -11,7 +11,7 @@ import DayCalendar from '../../components/DayCalendar';
 import SubmitIndicator from '../../components/SubmitIndicator';
 import TimelinesOverview from '../../components/TimelinesOverview';
 import TimelinesStack from '../../components/TimelinesStack';
-import { selectItems, selectTimelines } from '../../store';
+import { selectItems, selectTimelines } from '../../selectors';
 import translations from '../../translations';
 
 import ItemsSidebar from './ItemsSidebar';

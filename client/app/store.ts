@@ -3,12 +3,14 @@ import { enableMapSet } from 'immer';
 
 import submissionsReducer from './bundles/course/assessment/submissions/store';
 import disbursementReducer from './bundles/course/experience-points/disbursement/store';
+import timelinesReducer from './bundles/course/reference-timelines/store';
 
 enableMapSet();
 
 const rootReducer = combineReducers({
   disbursement: disbursementReducer,
   submissions: submissionsReducer,
+  timelines: timelinesReducer,
 });
 
 export const store = configureStore({
