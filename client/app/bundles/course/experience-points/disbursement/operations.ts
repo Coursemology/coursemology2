@@ -15,8 +15,11 @@ import { ForumSearchParams } from 'types/course/forums';
 import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
-
-import * as actions from './actions';
+import {
+  saveDisbursementList,
+  saveForumDisbursementList,
+  saveForumPostList,
+} from 'bundles/course/experience-points/disbursement/store';
 
 /**
  * Prepares and maps object attributes to a FormData object for an post/patch request.
@@ -128,9 +131,7 @@ export function fetchDisbursements(): Operation<
   return async (dispatch) =>
     CourseAPI.disbursement.index().then((response) => {
       const data = response.data;
-      dispatch(
-        actions.saveDisbursementList(data.courseGroups, data.courseUsers),
-      );
+      dispatch(saveDisbursementList(data.courseGroups, data.courseUsers));
       return response;
     });
 }
@@ -144,9 +145,7 @@ export function fetchForumDisbursements(): Operation<
   return async (dispatch) =>
     CourseAPI.disbursement.forumDisbursementIndex().then((response) => {
       const data = response.data;
-      dispatch(
-        actions.saveForumDisbursementList(data.filters, data.forumUsers),
-      );
+      dispatch(saveForumDisbursementList(data.filters, data.forumUsers));
       return response;
     });
 }
@@ -167,9 +166,7 @@ export function fetchFilteredForumDisbursements(
       .forumDisbursementIndex(filterAttributes)
       .then((response) => {
         const data = response.data;
-        dispatch(
-          actions.saveForumDisbursementList(data.filters, data.forumUsers),
-        );
+        dispatch(saveForumDisbursementList(data.filters, data.forumUsers));
         return response;
       });
 }
@@ -189,7 +186,7 @@ export function fetchForumPost(
   return async (dispatch) =>
     CourseAPI.forum.forums.search(searchAttributes).then((response) => {
       const data = response.data;
-      dispatch(actions.saveForumPostList(data.userPosts, user.id));
+      dispatch(saveForumPostList(data.userPosts, user.id));
       return response;
     });
 }

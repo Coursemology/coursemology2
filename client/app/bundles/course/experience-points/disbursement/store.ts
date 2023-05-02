@@ -1,26 +1,117 @@
-import { enableMapSet } from 'immer';
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import { produce } from 'immer';
+import {
+  DisbursementCourseGroupListData,
+  DisbursementCourseUserListData,
+  ForumDisbursementFilters,
+  ForumDisbursementPostData,
+  ForumDisbursementUserData,
+} from 'types/course/disbursement';
+import {
+  createEntityStore,
+  removeAllFromStore,
+  saveListToStore,
+} from 'utilities/store';
 
-import DisbursementReducer from './reducers';
+import {
+  DisbursementActionType,
+  DisbursementState,
+  REMOVE_FORUM_DISBURSEMENT_LIST,
+  RemoveForumDisbursementListAction,
+  SAVE_DISBURSEMENT_LIST,
+  SAVE_FORUM_DISBURSEMENT_LIST,
+  SAVE_FORUM_POST_LIST,
+  SaveDisbursementListAction,
+  SaveForumDisbursementListAction,
+  SaveForumPostListAction,
+} from 'bundles/course/experience-points/disbursement/types';
 
-const defaultReducers = {};
+const initialState: DisbursementState = {
+  courseGroups: createEntityStore(),
+  courseUsers: createEntityStore(),
+  filters: {} as ForumDisbursementFilters,
+  forumUsers: createEntityStore(),
+  forumPosts: createEntityStore(),
+};
 
-const rootReducer = combineReducers({
-  disbursement: DisbursementReducer,
+const reducer = produce(
+  (draft: DisbursementState, action: DisbursementActionType) => {
+    switch (action.type) {
+      case SAVE_DISBURSEMENT_LIST: {
+        const courseGroups = action.courseGroups.map((data) => ({
+          ...data,
+        }));
+        const courseUsers = action.courseUsers.map((data) => ({
+          ...data,
+        }));
+
+        saveListToStore(draft.courseGroups, courseGroups);
+        saveListToStore(draft.courseUsers, courseUsers);
+        break;
+      }
+      case SAVE_FORUM_DISBURSEMENT_LIST: {
+        const filters = { ...action.filters };
+        const forumUsersData = action.forumUsers;
+        const forumUserEntity = forumUsersData.map((data) => ({
+          ...data,
+        }));
+
+        removeAllFromStore(draft.forumUsers);
+        removeAllFromStore(draft.forumPosts);
+        saveListToStore(draft.forumUsers, forumUserEntity);
+        draft.filters = filters;
+        break;
+      }
+      case REMOVE_FORUM_DISBURSEMENT_LIST: {
+        removeAllFromStore(draft.forumUsers);
+        removeAllFromStore(draft.forumPosts);
+        break;
+      }
+      case SAVE_FORUM_POST_LIST: {
+        const forumPostEntity = action.posts.map((data) => ({
+          ...data,
+          userId: action.userId,
+        }));
+        saveListToStore(draft.forumPosts, forumPostEntity);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  },
+  initialState,
+);
+
+export const saveDisbursementList = (
+  courseGroups: DisbursementCourseGroupListData[],
+  courseUsers: DisbursementCourseUserListData[],
+): SaveDisbursementListAction => ({
+  type: SAVE_DISBURSEMENT_LIST,
+  courseGroups,
+  courseUsers,
 });
 
-enableMapSet();
+export const saveForumDisbursementList = (
+  filters: ForumDisbursementFilters,
+  forumUsers: ForumDisbursementUserData[],
+): SaveForumDisbursementListAction => ({
+  type: SAVE_FORUM_DISBURSEMENT_LIST,
+  filters,
+  forumUsers,
+});
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function configureStore(): any {
-  const storeCreator =
-    // @ts-ignore: ignore ts warning for process
-    process.env.NODE_ENV === 'development'
-      ? compose(
-          /* eslint-disable-next-line global-require, import/no-extraneous-dependencies */ // @ts-ignore: ignore ts warning for require
-          applyMiddleware(thunkMiddleware, require('redux-logger').logger),
-        )(createStore)
-      : compose(applyMiddleware(thunkMiddleware))(createStore);
-  return storeCreator(rootReducer, defaultReducers);
-}
+export const removeForumDisbursementList =
+  (): RemoveForumDisbursementListAction => ({
+    type: REMOVE_FORUM_DISBURSEMENT_LIST,
+  });
+
+export const saveForumPostList = (
+  posts: ForumDisbursementPostData[],
+  userId: number,
+): SaveForumPostListAction => ({
+  type: SAVE_FORUM_POST_LIST,
+  posts,
+  userId,
+});
+
+export default reducer;
