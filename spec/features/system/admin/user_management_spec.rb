@@ -24,7 +24,7 @@ RSpec.feature 'System: Administration: Users', js: true do
 
       scenario 'I can filter users by role and view only administrators' do
         visit admin_users_path
-        find(:xpath, '//*[@id="system-admin-component"]/div[1]/div[4]/div[2]/div[2]/p[1]/button[1]').click
+        find(:xpath, '//*[@id="app-root"]/div[1]/div[4]/div[2]/div[2]/p[1]/button[1]').click
         User.human_users.normal.ordered_by_name.limit(3).each do |user|
           expect(page).to have_no_selector('div.user_name', exact_text: user.name)
           expect(page).to have_no_selector('p.user_email', exact_text: user.email)

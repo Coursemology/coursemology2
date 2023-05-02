@@ -7,7 +7,7 @@ import SurveysLayout from './containers/SurveysLayout';
 import storeCreator from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-survey-component');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const store = storeCreator({ surveys: {} });

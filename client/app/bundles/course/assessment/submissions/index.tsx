@@ -7,7 +7,7 @@ import SubmissionsIndex from './pages/SubmissionsIndex/index';
 import configureStore from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-submissions-component');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const store = configureStore();

@@ -7,7 +7,7 @@ import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import storeCreator from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-duplication');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const store = storeCreator({ duplication: {} });

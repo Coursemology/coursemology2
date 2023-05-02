@@ -7,7 +7,7 @@ import GlobalAnnouncementIndex from './pages/GlobalAnnouncementIndex';
 import configureStore from './store';
 
 $(() => {
-  const mountNode = document.getElementById('global-announcements-component');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const store = configureStore();

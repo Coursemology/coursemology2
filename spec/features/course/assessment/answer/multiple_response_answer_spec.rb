@@ -28,7 +28,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers', js
           option = assessment.questions.first.actable.options.first
           # Click correct answer
           page.
-            find(:xpath, '//*[@id="course-assessments"]
+            find(:xpath, '//*[@id="app-root"]
                           /div[2]/form/div/label[1]/span[1]/input', visible: false).
             click
 
@@ -79,7 +79,7 @@ RSpec.describe 'Course: Assessments: Submissions: Multiple Response Answers', js
         visit edit_course_assessment_submission_path(course, assessment, submission)
 
         element = page.
-                  find(:xpath, '//*[@id="course-assessments"]/div[3]
+                  find(:xpath, '//*[@id="app-root"]/div[3]
                                 /form/div/label[1]/span[2]/b/div', visible: false)
         expect(element.style('background-color')['background-color']).to eq('rgba(232, 245, 233, 1)')
       end

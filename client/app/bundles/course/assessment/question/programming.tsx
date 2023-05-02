@@ -7,7 +7,7 @@ import EditProgrammingQuestionPage from './programming/EditProgrammingQuestionPa
 import NewProgrammingQuestionPage from './programming/NewProgrammingQuestionPage';
 
 $(() => {
-  const mountNode = document.getElementById('programming-question');
+  const mountNode = document.getElementById('app-root');
   if (!mountNode) return;
 
   const root = createRoot(mountNode);

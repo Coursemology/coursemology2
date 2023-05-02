@@ -39,7 +39,7 @@ RSpec.feature 'System: Administration: Courses', js: true do
 
         visit admin_courses_path
 
-        find(:xpath, '//*[@id="system-admin-component"]/div[1]/div[4]/div[2]/div[2]/p[2]/button').click
+        find(:xpath, '//*[@id="app-root"]/div[1]/div[4]/div[2]/div[2]/p[2]/button').click
         expect(page).to have_selector('p.course_title', text: active_course.title)
         expect(page).to have_link(nil, href: "//#{active_course.instance.host}/courses/#{active_course.id}")
 

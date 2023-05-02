@@ -7,7 +7,7 @@ import { fetchUserEmailSubscriptions } from './actions/user-email-subscriptions'
 import storeCreator from './store';
 
 $(async () => {
-  const mountNode = document.getElementById('user-email-subscriptions');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     // When unsubscribe link is clicked from an email, it passes some params

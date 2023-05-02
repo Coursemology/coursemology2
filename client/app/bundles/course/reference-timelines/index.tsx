@@ -8,7 +8,7 @@ import { store } from './store';
 import TimelineDesigner from './TimelineDesigner';
 
 $(() => {
-  const mountNode = document.getElementById('course-timeline-designer');
+  const mountNode = document.getElementById('app-root');
   if (!mountNode) return;
 
   const root = createRoot(mountNode);

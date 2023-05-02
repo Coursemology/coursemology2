@@ -8,7 +8,7 @@ import NotificationPopup from 'lib/containers/NotificationPopup';
 import storeCreator from './store';
 
 $(() => {
-  const mountNode = document.getElementById('course-level');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const store = storeCreator({});

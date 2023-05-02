@@ -61,7 +61,7 @@ RSpec.feature 'Course: Duplication' do
           find("[role='option']", text: course.title).click
 
           find('.items-selector-menu span span', text: 'Assessments').click
-          find(:xpath, '//*[@id="course-duplication"]
+          find(:xpath, '//*[@id="app-root"]
                         /div[1]/div[2]/div[6]/div/div[2]/div[2]/label/span[1]', visible: false).click
           click_on 'Duplicate Items'
           click_on 'Duplicate'

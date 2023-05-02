@@ -35,7 +35,7 @@ const pages = [
 ];
 
 $(() => {
-  const mountNode = document.getElementById('course-admin');
+  const mountNode = document.getElementById('app-root');
   if (!mountNode) return;
 
   const root = createRoot(mountNode);

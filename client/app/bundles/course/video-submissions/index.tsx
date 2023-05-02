@@ -6,7 +6,7 @@ import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 import UserVideoSubmissionsIndex from './pages/UserVideoSubmissionsIndex';
 
 $(() => {
-  const mountNode = document.getElementById('video-submissions-component');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const root = createRoot(mountNode);

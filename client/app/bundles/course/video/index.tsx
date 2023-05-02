@@ -11,7 +11,7 @@ import VideoSubmissionsIndex from './submission/pages/VideoSubmissionsIndex';
 import { store } from './store';
 
 $(() => {
-  const mountNode = document.getElementById('videos-component');
+  const mountNode = document.getElementById('app-root');
 
   if (mountNode) {
     const root = createRoot(mountNode);

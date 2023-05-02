@@ -10,7 +10,7 @@ import NewTextResponsePage from './text-responses/NewTextResponsePage';
 enableMapSet();
 
 $(() => {
-  const mountNode = document.getElementById('text-responses');
+  const mountNode = document.getElementById('app-root');
   if (!mountNode) return;
 
   const root = createRoot(mountNode);

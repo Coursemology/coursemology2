@@ -29,8 +29,10 @@ RSpec.describe 'Course: Assessment: Submissions: Exam', js: true do
         within find('tr', text: assessment.title) do
           click_link 'Attempt'
         end
+
         # The user should be redirect to submission edit page
-        expect(page).to have_selector('div#course-assessments')
+        wait_for_page
+        expect(current_path).to eq(edit_course_assessment_submission_path(course, assessment, last_submission))
 
         # Logout and login again and visit the same submission
         logout
@@ -46,7 +48,8 @@ RSpec.describe 'Course: Assessment: Submissions: Exam', js: true do
         fill_in 'password', with: assessment.session_password
         click_button('Submit')
 
-        expect(page).to have_selector('div#course-assessments')
+        wait_for_page
+        expect(current_path).to eq(edit_course_assessment_submission_path(course, assessment, last_submission))
       end
 
       scenario 'I can edit and save my submission' do
