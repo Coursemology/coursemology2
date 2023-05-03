@@ -5,7 +5,6 @@ import { ProgrammingFormData } from 'types/course/assessment/question/programmin
 import RadioButton from 'lib/components/core/buttons/RadioButton';
 import ExperimentalChip from 'lib/components/core/ExperimentalChip';
 import Subsection from 'lib/components/core/layouts/Subsection';
-import Link from 'lib/components/core/Link';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import useTranslation from 'lib/hooks/useTranslation';
@@ -29,7 +28,6 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
 
   const hasSubmissions = question.hasSubmissions;
   const codaveriDisabled = !question.codaveriEnabled || hasSubmissions;
-  const componentsSettingsUrl = question.componentsSettingsUrl;
 
   return (
     <>
@@ -66,13 +64,7 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
                 disabled={codaveriDisabled || props.disabled}
                 disabledHint={
                   codaveriDisabled &&
-                  t(translations.canEnableCodaveriInComponents, {
-                    url: (chunk) => (
-                      <Link href={componentsSettingsUrl} opensInNewTab>
-                        {chunk}
-                      </Link>
-                    ),
-                  })
+                  t(translations.canEnableCodaveriInComponents)
                 }
                 label={
                   <span className="flex items-center space-x-2">

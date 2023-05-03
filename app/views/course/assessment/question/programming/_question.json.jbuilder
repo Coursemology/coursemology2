@@ -23,10 +23,7 @@ json.question do
   json.shouldWarnOnSubmit current_course.gamified? && autograded_assessment && has_submissions
 
   json.isCodaveri @programming_question.is_codaveri
-
-  codaveri_enabled = current_course.component_enabled?(Course::CodaveriComponent)
-  json.codaveriEnabled codaveri_enabled
-  json.componentsSettingsUrl course_admin_components_path(current_course) unless codaveri_enabled
+  json.codaveriEnabled current_course.component_enabled?(Course::CodaveriComponent)
 
   if @programming_question.attachment.present? && @programming_question.attachment.persisted?
     json.package do
