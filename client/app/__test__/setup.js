@@ -65,3 +65,6 @@ jest.mock('lib/components/form/fields/RichTextField', () => {
   const TextField = jest.requireActual('lib/components/form/fields/TextField');
   return TextField;
 });
+
+// define all mocks/polyfills
+import './mocks/requestAnimationFrame';
