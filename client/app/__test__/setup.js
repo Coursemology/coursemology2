@@ -68,3 +68,4 @@ jest.mock('lib/components/form/fields/RichTextField', () => {
 
 // define all mocks/polyfills
 import './mocks/requestAnimationFrame';
+import './mocks/ResizeObserver';
