@@ -89,7 +89,6 @@ interface ProgrammingQuestionData extends QuestionFormData {
   shouldWarnOnSubmit: boolean;
 
   package?: PackageInfoData;
-  componentsSettingsUrl?: string;
 }
 
 interface PackageTestCase {

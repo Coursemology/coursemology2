@@ -961,7 +961,7 @@ const translations = defineMessages({
   canEnableCodaveriInComponents: {
     id: 'course.assessment.question.programming.canEnableCodaveriInComponents',
     defaultMessage:
-      'You can enable this feature in <url>Components in Course Settings</url>.',
+      'Contact the course manager or owner to enable this feature in Components in the Course Settings.',
   },
   buildLog: {
     id: 'course.assessment.question.programming.buildLog',
