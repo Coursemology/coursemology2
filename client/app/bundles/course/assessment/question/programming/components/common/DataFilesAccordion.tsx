@@ -1,6 +1,7 @@
 import { ComponentProps } from 'react';
 
-import Accordion from './Accordion';
+import Accordion from 'lib/components/core/layouts/Accordion';
+
 import DataFilesManager from './DataFilesManager';
 
 interface DataFilesAccordionProps

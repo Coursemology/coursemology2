@@ -9,12 +9,11 @@ import {
   Tooltip,
 } from '@mui/material';
 
+import Accordion from 'lib/components/core/layouts/Accordion';
 import { TableContainer } from 'lib/components/core/table';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../../translations';
-
-import Accordion from './Accordion';
 
 export interface TestCasesTableProps {
   title: string;
