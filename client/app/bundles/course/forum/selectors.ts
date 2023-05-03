@@ -7,18 +7,17 @@ import {
   forumAdapter,
   forumTopicAdapter,
   forumTopicPostAdapter,
-} from './reducers';
-import { RootState } from './store';
+} from './store';
 
-const forumSelectors = forumAdapter.getSelectors<RootState>(
+const forumSelectors = forumAdapter.getSelectors<AppState>(
   (state) => state.forums.forums,
 );
 
-const forumTopicSelectors = forumTopicAdapter.getSelectors<RootState>(
+const forumTopicSelectors = forumTopicAdapter.getSelectors<AppState>(
   (state) => state.forums.topics,
 );
 
-const forumTopicPostSelectors = forumTopicPostAdapter.getSelectors<RootState>(
+const forumTopicPostSelectors = forumTopicPostAdapter.getSelectors<AppState>(
   (state) => state.forums.posts,
 );
 
