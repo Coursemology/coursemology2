@@ -11,7 +11,7 @@ import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
 
-import schema from './commons/validation';
+import schema, { isPackageFieldsDirty } from './commons/validation';
 import BuildLog from './components/sections/BuildLog';
 import EvaluatorFields from './components/sections/EvaluatorFields';
 import LanguageFields from './components/sections/LanguageFields';
@@ -116,7 +116,10 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
         headsUp
         initialValues={data}
         onSubmit={(rawData): void => {
-          if (data.question.shouldWarnOnSubmit) {
+          if (
+            data.question.hasSubmissions &&
+            isPackageFieldsDirty(data, rawData)
+          ) {
             setPending(() => () => submitForm(rawData));
           } else {
             submitForm(rawData);

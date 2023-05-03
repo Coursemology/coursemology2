@@ -86,7 +86,6 @@ interface ProgrammingQuestionData extends QuestionFormData {
   hasAutoGradings: boolean;
   hasSubmissions: boolean;
   canSwitchPackageType: boolean;
-  shouldWarnOnSubmit: boolean;
 
   package?: PackageInfoData;
 }

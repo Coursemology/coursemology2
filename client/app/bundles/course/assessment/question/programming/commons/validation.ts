@@ -1,4 +1,8 @@
-import { LanguageMode } from 'types/course/assessment/question/programming';
+import equal from 'fast-deep-equal';
+import {
+  LanguageMode,
+  ProgrammingFormData,
+} from 'types/course/assessment/question/programming';
 import {
   AnyObjectSchema,
   array,
@@ -117,5 +121,20 @@ const schema: Translated<AnyObjectSchema> = (t) =>
       }),
     }),
   });
+
+export const isPackageFieldsDirty = (
+  before: ProgrammingFormData,
+  after: ProgrammingFormData,
+): boolean =>
+  +before.question.languageId !== +after.question.languageId ||
+  +before.question.memoryLimit !== +after.question.memoryLimit ||
+  +before.question.timeLimit !== +after.question.timeLimit ||
+  +before.question.attemptLimit !== +after.question.attemptLimit ||
+  before.question.autograded !== after.question.autograded ||
+  before.question.editOnline !== after.question.editOnline ||
+  before.question.isCodaveri !== after.question.isCodaveri ||
+  before.question.isCodaveri !== after.question.isCodaveri ||
+  !equal(before.question.package, after.question.package) ||
+  !equal(before.testUi?.metadata, after.testUi?.metadata);
 
 export default schema;
