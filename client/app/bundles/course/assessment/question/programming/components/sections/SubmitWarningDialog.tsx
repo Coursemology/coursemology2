@@ -1,5 +1,6 @@
-import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import Prompt from 'lib/components/core/dialogs/Prompt';
 import useTranslation from 'lib/hooks/useTranslation';
+import formTranslations from 'lib/translations/form';
 
 import translations from '../../../../translations';
 
@@ -13,15 +14,17 @@ const SubmitWarningDialog = (props: SubmitWarningDialogProps): JSX.Element => {
   const { t } = useTranslation();
 
   return (
-    <ConfirmationDialog
-      message={t(translations.submitConfirmation)}
-      onCancel={props.onClose}
-      onConfirm={(): void => {
+    <Prompt
+      onClickPrimary={(): void => {
         props.onConfirm();
         props.onClose();
       }}
+      onClose={props.onClose}
       open={props.open}
-    />
+      primaryLabel={t(formTranslations.continue)}
+    >
+      {t(translations.submitConfirmation)}
+    </Prompt>
   );
 };
 
