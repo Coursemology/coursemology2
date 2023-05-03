@@ -19,9 +19,6 @@ json.question do
   json.hasAutoGradings @programming_question.auto_gradable? && has_submissions
   json.hasSubmissions has_submissions
 
-  autograded_assessment = @assessment.autograded?
-  json.shouldWarnOnSubmit current_course.gamified? && autograded_assessment && has_submissions
-
   json.isCodaveri @programming_question.is_codaveri
   json.codaveriEnabled current_course.component_enabled?(Course::CodaveriComponent)
 

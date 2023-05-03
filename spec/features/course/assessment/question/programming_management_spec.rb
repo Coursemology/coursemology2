@@ -165,14 +165,14 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         let(:student_user) { create(:course_student, course: course).user }
         let(:submission) { create(:submission, :published, assessment: assessment, creator: student_user) }
 
-        it 'shows confirmation dialog to update all exp when there is a submission' do
+        it 'warns when updating memory limit and there is a submission' do
           submission
           visit edit_course_assessment_question_programming_path(course, assessment, question)
 
-          fill_in 'Title', with: "#{question.title} updated"
+          fill_in 'Memory limit', with: question.memory_limit + 10
           click_button 'Save changes'
 
-          expect(page).to have_selector('button.confirm-btn')
+          expect(page).to have_css('button', text: 'CONTINUE')
         end
 
         it 'does not show the confirmation dialog when the course is not gamified' do
@@ -182,7 +182,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
           fill_in 'Title', with: "#{question.title} updated"
           click_button 'Save changes'
 
-          expect(page).not_to have_selector('button.confirm-btn')
+          expect(page).not_to have_css('button', text: 'CONTINUE')
         end
 
         it 'does not show the confirmation dialog when there is no submission' do
@@ -191,7 +191,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
           fill_in 'Title', with: "#{question.title} updated"
           click_button 'Save changes'
 
-          expect(page).not_to have_selector('button.confirm-btn')
+          expect(page).not_to have_css('button', text: 'CONTINUE')
         end
 
         it 'does not show the confirmation dialog when the assessment is non-autograded' do
@@ -201,7 +201,7 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
           fill_in 'Title', with: "#{question.title} updated"
           click_button 'Save changes'
 
-          expect(page).not_to have_selector('button.confirm-btn')
+          expect(page).not_to have_css('button', text: 'CONTINUE')
         end
       end
     end
