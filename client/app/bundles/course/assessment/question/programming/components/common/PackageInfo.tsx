@@ -1,12 +1,11 @@
 import { Typography } from '@mui/material';
 import { PackageInfoData } from 'types/course/assessment/question/programming';
 
+import DownloadButton from 'lib/components/core/buttons/DownloadButton';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
 import translations from '../../../../translations';
-
-import DownloadButton from './DownloadButton';
 
 interface PackageInfoProps {
   of: PackageInfoData;

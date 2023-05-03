@@ -15,7 +15,7 @@ const DownloadButton = (props: DownloadButtonProps): JSX.Element => (
     className={props.disabled ? 'pointer-events-none opacity-60' : undefined}
   >
     <Paper
-      className="hover?:bg-neutral-100 w-fit active:!bg-neutral-200"
+      className="w-fit active:!bg-neutral-200 hover?:bg-neutral-100"
       variant="outlined"
     >
       <Link
