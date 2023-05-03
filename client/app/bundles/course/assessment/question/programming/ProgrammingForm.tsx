@@ -6,6 +6,7 @@ import {
 
 import Section from 'lib/components/core/layouts/Section';
 import Form, { FormEmitter } from 'lib/components/form/Form';
+import loadingToast from 'lib/hooks/loadingToast';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -19,7 +20,6 @@ import PackageFields, {
 } from './components/sections/PackageFields';
 import QuestionFields from './components/sections/QuestionFields';
 import SubmitWarningDialog from './components/sections/SubmitWarningDialog';
-import loadingToast from './hooks/loadingToast';
 import { ProgrammingFormDataProvider } from './hooks/ProgrammingFormDataContext';
 import useLanguageMode from './hooks/useLanguageMode';
 import { watchEvaluation } from './operations';
