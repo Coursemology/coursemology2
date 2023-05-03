@@ -86,7 +86,7 @@ export const reorderQuestions = async (assessmentId, questionIds) => {
   // TODO: Conform POST data to `QuestionOrderPostData` once written in TypeScript
   const response = await CourseAPI.assessment.assessments.reorderQuestions(
     assessmentId,
-    { question_order: questionIds },
+    questionIds,
   );
   return response.data;
 };
