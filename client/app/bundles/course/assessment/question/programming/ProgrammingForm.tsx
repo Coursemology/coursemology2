@@ -81,7 +81,7 @@ const ProgrammingForm = (props: ProgrammingFormProps): JSX.Element => {
           const newData = await props.revalidate?.(response, rawData);
           if (newData) {
             setData(newData);
-            form?.resetTo?.(newData);
+            form?.resetTo?.(newData, true);
           }
 
           toast.error(t(translations.questionSavedButPackageError));
