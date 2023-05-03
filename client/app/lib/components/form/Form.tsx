@@ -28,7 +28,7 @@ type Data = FieldValues;
 
 export interface FormEmitter<D extends Data = any> {
   reset?: () => void;
-  resetTo?: (data: D) => void;
+  resetTo?: (data: D, keepDirty?: boolean) => void;
 
   /**
    * Resets the `Form` by merging its `initialValues` with the given `data`.
@@ -157,8 +157,8 @@ const Form = <
     if (!props.onReset?.()) reset();
   };
 
-  const resetTo = (data: D): void => {
-    reset(data);
+  const resetTo = (data: D, keepDirty?: boolean): void => {
+    reset(data, { keepDirty });
     setInitialValues(data);
   };
 
