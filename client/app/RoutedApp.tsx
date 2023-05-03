@@ -18,6 +18,9 @@ import CourseShow from 'bundles/course/courses/pages/CourseShow';
 import CoursesIndex from 'bundles/course/courses/pages/CoursesIndex';
 import CommentIndex from 'bundles/course/discussion/topics/pages/CommentIndex';
 import DisbursementIndex from 'bundles/course/experience-points/disbursement/pages/DisbursementIndex';
+import ForumShow from 'bundles/course/forum/pages/ForumShow';
+import ForumsIndex from 'bundles/course/forum/pages/ForumsIndex';
+import ForumTopicShow from 'bundles/course/forum/pages/ForumTopicShow';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
 import AccountSettings from 'bundles/user/AccountSettings';
 
@@ -114,6 +117,16 @@ const RoutedApp = (): JSX.Element => {
           <Route
             element={<CommentIndex />}
             path="/courses/:courseId/comments"
+          />
+
+          <Route element={<ForumsIndex />} path="courses/:courseId/forums" />
+          <Route
+            element={<ForumShow />}
+            path="courses/:courseId/forums/:forumId"
+          />
+          <Route
+            element={<ForumTopicShow />}
+            path="courses/:courseId/forums/:forumId/topics/:topicId"
           />
         </Routes>
       </BrowserRouter>

@@ -10,6 +10,7 @@ import { AppDispatch, AppState } from 'types/store';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import ScrollToTop from 'lib/components/navigation/ScrollToTop';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ForumTopicManagementButtons from '../../components/buttons/ForumTopicManagementButtons';
@@ -138,6 +139,7 @@ const ForumTopicShow: FC = () => {
 
   return (
     <>
+      <ScrollToTop />
       <PageHeader
         returnLink={forumTopic?.forumUrl}
         title={forumPageHeaderTitle}

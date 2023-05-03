@@ -28,7 +28,7 @@ import {
   updateForumTopicPostIds,
   updateForumTopicPostListData,
   updatePostAsAnswer,
-} from './reducers';
+} from './store';
 
 // Forum
 
