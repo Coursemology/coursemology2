@@ -1,8 +1,8 @@
+import Accordion from 'lib/components/core/layouts/Accordion';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../../../translations';
 import { useProgrammingFormDataContext } from '../../hooks/ProgrammingFormDataContext';
-import Accordion from '../common/Accordion';
 import StaticTestCase from '../common/StaticTestCase';
 import TestCases from '../common/TestCases';
 

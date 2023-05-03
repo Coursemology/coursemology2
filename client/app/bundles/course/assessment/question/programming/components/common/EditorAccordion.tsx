@@ -1,6 +1,7 @@
 import { ComponentProps } from 'react';
 
-import Accordion from './Accordion';
+import Accordion from 'lib/components/core/layouts/Accordion';
+
 import Editor from './Editor';
 
 interface EditorAccordionProps extends ComponentProps<typeof Editor> {
