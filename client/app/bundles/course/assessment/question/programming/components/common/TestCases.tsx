@@ -11,8 +11,8 @@ import TestCase, { TestCaseFieldPath, TestCaseProps } from './TestCase';
 import TestCasesTable, { TestCasesTableProps } from './TestCasesTable';
 
 interface TestCasesProps extends TestCasesTableProps {
-  byIdentifier: (index: number) => string;
   name: FieldArrayPath<ProgrammingFormData>;
+  byIdentifier?: (index: number) => string;
   as?: ElementType<TestCaseProps>;
   static?: boolean;
 }
@@ -40,7 +40,7 @@ const TestCases = (props: TestCasesProps): JSX.Element => {
           key={field.id}
           control={control}
           disabled={props.disabled}
-          id={byIdentifier(index)}
+          id={byIdentifier?.(index)}
           name={`${name}.${index}` as TestCaseFieldPath}
           onDelete={!props.static ? (): void => remove(index) : undefined}
         />

@@ -16,9 +16,9 @@ export type TestCaseFieldPath = FieldPathByValue<
 >;
 
 export interface TestCaseProps {
-  id: string;
   control: Control<ProgrammingFormData>;
   name: TestCaseFieldPath;
+  id?: string;
   onDelete?: () => void;
   disabled?: boolean;
 }

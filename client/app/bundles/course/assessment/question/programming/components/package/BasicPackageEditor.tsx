@@ -51,14 +51,12 @@ const BasicPackageEditor = (props: BasicPackageEditorProps): JSX.Element => {
 
       <PackageEditor.TestCases hint={props.hint}>
         <TestCases
-          byIdentifier={(index: number): string => `test_public_${index}`}
           disabled={props.disabled}
           name="testUi.metadata.testCases.public"
           title={t(translations.publicTestCases)}
         />
 
         <TestCases
-          byIdentifier={(index: number): string => `test_private_${index}`}
           disabled={props.disabled}
           name="testUi.metadata.testCases.private"
           subtitle={t(translations.privateTestCasesHint)}
@@ -66,7 +64,6 @@ const BasicPackageEditor = (props: BasicPackageEditorProps): JSX.Element => {
         />
 
         <TestCases
-          byIdentifier={(index: number): string => `test_evaluation_${index}`}
           disabled={props.disabled}
           name="testUi.metadata.testCases.evaluation"
           subtitle={t(translations.evaluationTestCasesHint)}
