@@ -16,11 +16,12 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material';
 import { green, red, yellow } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
-import ExpandableText from 'lib/components/core/ExpandableText';
+import Expandable from 'lib/components/core/Expandable';
 
 import { workflowStates } from '../../constants';
 import { testCaseShape } from '../../propTypes';
@@ -214,34 +215,38 @@ export class VisibleTestCaseView extends Component {
       <TableCell style={styles.testCaseCell}>{field}</TableCell>
     );
 
-    const outputStyle = { whiteSpace: 'pre-wrap', fontFamily: 'monospace' };
-
     return (
       <TableRow
         key={testCase.identifier}
         style={styles.testCaseRow[testCaseResult]}
       >
         {canReadTests && tableRowColumnFor(truncatedIdentifier)}
+
         {tableRowColumnFor(
-          <ExpandableText style={outputStyle} text={testCase.expression} />,
+          <Expandable over={40}>
+            <Typography className="h-full break-all font-mono text-[1.3rem]">
+              {testCase.expression}
+            </Typography>
+          </Expandable>,
         )}
+
         {tableRowColumnFor(
-          (
-            <ExpandableText
-              style={outputStyle}
-              text={testCase.expected || ''}
-            />
-          ) || '',
+          <Expandable over={40}>
+            <Typography className="h-full break-all font-mono text-[1.3rem]">
+              {testCase.expected || ''}
+            </Typography>
+          </Expandable>,
         )}
+
         {(canReadTests || showPublicTestCasesOutput) &&
           tableRowColumnFor(
-            (
-              <ExpandableText
-                style={outputStyle}
-                text={testCase.output || ''}
-              />
-            ) || '',
+            <Expandable over={40}>
+              <Typography className="h-full break-all font-mono text-[1.3rem]">
+                {testCase.output || ''}
+              </Typography>
+            </Expandable>,
           )}
+
         {tableRowColumnFor(testCaseIcon)}
       </TableRow>
     );
