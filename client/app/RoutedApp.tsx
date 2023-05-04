@@ -14,6 +14,8 @@ import EditVoicePage from 'bundles/course/assessment/question/voice-responses/Ed
 import NewVoicePage from 'bundles/course/assessment/question/voice-responses/NewVoicePage';
 import SkillsIndex from 'bundles/course/assessment/skills/pages/SkillsIndex';
 import SubmissionsIndex from 'bundles/course/assessment/submissions/SubmissionsIndex';
+import CourseShow from 'bundles/course/courses/pages/CourseShow';
+import CoursesIndex from 'bundles/course/courses/pages/CoursesIndex';
 import DisbursementIndex from 'bundles/course/experience-points/disbursement/pages/DisbursementIndex';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
 import AccountSettings from 'bundles/user/AccountSettings';
@@ -103,6 +105,10 @@ const RoutedApp = (): JSX.Element => {
             element={<SkillsIndex />}
             path="/courses/:courseId/assessments/skills"
           />
+
+          <Route element={<CoursesIndex />} path="/courses" />
+
+          <Route element={<CourseShow />} path="/courses/:courseId" />
         </Routes>
       </BrowserRouter>
     </App>
