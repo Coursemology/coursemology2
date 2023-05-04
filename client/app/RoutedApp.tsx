@@ -16,6 +16,7 @@ import SkillsIndex from 'bundles/course/assessment/skills/pages/SkillsIndex';
 import SubmissionsIndex from 'bundles/course/assessment/submissions/SubmissionsIndex';
 import CourseShow from 'bundles/course/courses/pages/CourseShow';
 import CoursesIndex from 'bundles/course/courses/pages/CoursesIndex';
+import CommentIndex from 'bundles/course/discussion/topics/pages/CommentIndex';
 import DisbursementIndex from 'bundles/course/experience-points/disbursement/pages/DisbursementIndex';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
 import AccountSettings from 'bundles/user/AccountSettings';
@@ -109,6 +110,11 @@ const RoutedApp = (): JSX.Element => {
           <Route element={<CoursesIndex />} path="/courses" />
 
           <Route element={<CourseShow />} path="/courses/:courseId" />
+
+          <Route
+            element={<CommentIndex />}
+            path="/courses/:courseId/comments"
+          />
         </Routes>
       </BrowserRouter>
     </App>
