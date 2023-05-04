@@ -15,6 +15,7 @@ import learningMapReducer from './bundles/course/learning-map/store';
 import foldersReducer from './bundles/course/material/folders/store';
 import timelinesReducer from './bundles/course/reference-timelines/store';
 import videosReducer from './bundles/course/video/store';
+import globalUserReducer from './bundles/users/store';
 
 enableMapSet();
 
@@ -22,7 +23,10 @@ const rootReducer = combineReducers({
   disbursement: disbursementReducer,
   submissions: submissionsReducer,
   timelines: timelinesReducer,
-  global: combineReducers({ announcements: globalAnnouncementReducer }),
+  global: combineReducers({
+    user: globalUserReducer,
+    announcements: globalAnnouncementReducer,
+  }),
   achievements: achievementsReducer,
   announcements: announcementsReducer,
   skills: skillsReducer,
