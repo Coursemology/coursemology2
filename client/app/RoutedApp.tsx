@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import GlobalAnnouncementIndex from 'bundles/announcements/GlobalAnnouncementIndex';
 import AchievementShow from 'bundles/course/achievement/pages/AchievementShow';
 import AchievementsIndex from 'bundles/course/achievement/pages/AchievementsIndex';
+import AnnouncementsIndex from 'bundles/course/announcements/pages/AnnouncementsIndex';
 import EditForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/EditForumPostResponsePage';
 import NewForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/NewForumPostResponsePage';
 import EditMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/EditMcqMrqPage';
@@ -11,6 +12,7 @@ import EditTextResponsePage from 'bundles/course/assessment/question/text-respon
 import NewTextResponsePage from 'bundles/course/assessment/question/text-responses/NewTextResponsePage';
 import EditVoicePage from 'bundles/course/assessment/question/voice-responses/EditVoicePage';
 import NewVoicePage from 'bundles/course/assessment/question/voice-responses/NewVoicePage';
+import SkillsIndex from 'bundles/course/assessment/skills/pages/SkillsIndex';
 import SubmissionsIndex from 'bundles/course/assessment/submissions/SubmissionsIndex';
 import DisbursementIndex from 'bundles/course/experience-points/disbursement/pages/DisbursementIndex';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
@@ -90,6 +92,16 @@ const RoutedApp = (): JSX.Element => {
           <Route
             element={<AchievementShow />}
             path="/courses/:courseId/achievements/:achievementId"
+          />
+
+          <Route
+            element={<AnnouncementsIndex />}
+            path="courses/:courseId/announcements"
+          />
+
+          <Route
+            element={<SkillsIndex />}
+            path="/courses/:courseId/assessments/skills"
           />
         </Routes>
       </BrowserRouter>
