@@ -12,6 +12,7 @@ import disbursementReducer from './bundles/course/experience-points/disbursement
 import forumsReducer from './bundles/course/forum/store';
 import leaderboardReducer from './bundles/course/leaderboard/store';
 import learningMapReducer from './bundles/course/learning-map/store';
+import foldersReducer from './bundles/course/material/folders/store';
 import timelinesReducer from './bundles/course/reference-timelines/store';
 
 enableMapSet();
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   forums: forumsReducer,
   leaderboard: leaderboardReducer,
   learningMap: learningMapReducer,
+  folders: foldersReducer,
 });
 
 export const store = configureStore({
