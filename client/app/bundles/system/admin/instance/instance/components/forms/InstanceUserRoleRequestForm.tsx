@@ -9,7 +9,7 @@ import {
   UserRoleRequestForm,
 } from 'types/system/instance/roleRequests';
 
-import { saveInstanceRoleRequest } from 'bundles/course/courses/actions';
+import { actions } from 'bundles/course/courses/store';
 import FormDialog from 'lib/components/form/dialog/FormDialog';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
@@ -76,7 +76,7 @@ const InstanceUserRoleRequestForm: FC<Props> = (props) => {
     return handleOperations()
       .then((response) => {
         toast.success(t(translations.requestSuccess));
-        dispatch(saveInstanceRoleRequest({ ...data, ...response }));
+        dispatch(actions.saveInstanceRoleRequest({ ...data, ...response }));
         onClose();
       })
       .catch((error) => {
