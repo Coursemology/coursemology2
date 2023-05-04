@@ -21,6 +21,7 @@ import DisbursementIndex from 'bundles/course/experience-points/disbursement/pag
 import ForumShow from 'bundles/course/forum/pages/ForumShow';
 import ForumsIndex from 'bundles/course/forum/pages/ForumsIndex';
 import ForumTopicShow from 'bundles/course/forum/pages/ForumTopicShow';
+import LeaderboardIndex from 'bundles/course/leaderboard/pages/LeaderboardIndex';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
 import AccountSettings from 'bundles/user/AccountSettings';
 
@@ -120,13 +121,20 @@ const RoutedApp = (): JSX.Element => {
           />
 
           <Route element={<ForumsIndex />} path="courses/:courseId/forums" />
+
           <Route
             element={<ForumShow />}
             path="courses/:courseId/forums/:forumId"
           />
+
           <Route
             element={<ForumTopicShow />}
             path="courses/:courseId/forums/:forumId/topics/:topicId"
+          />
+
+          <Route
+            element={<LeaderboardIndex />}
+            path="/courses/:courseId/leaderboard/"
           />
         </Routes>
       </BrowserRouter>
