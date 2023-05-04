@@ -8,7 +8,7 @@ import { Operation } from 'types/store';
 import CourseAPI from 'api/course';
 import pollJob from 'lib/helpers/jobHelpers';
 
-import * as actions from './actions';
+import { actions } from './store';
 import { SaveFolderAction } from './types';
 
 const DOWNLOAD_FOLDER_JOB_POLL_INTERVAL_MS = 2000;
