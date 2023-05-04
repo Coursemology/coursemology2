@@ -14,6 +14,7 @@ import leaderboardReducer from './bundles/course/leaderboard/store';
 import learningMapReducer from './bundles/course/learning-map/store';
 import foldersReducer from './bundles/course/material/folders/store';
 import timelinesReducer from './bundles/course/reference-timelines/store';
+import videosReducer from './bundles/course/video/store';
 
 enableMapSet();
 
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   leaderboard: leaderboardReducer,
   learningMap: learningMapReducer,
   folders: foldersReducer,
+  videos: videosReducer,
 });
 
 export const store = configureStore({
