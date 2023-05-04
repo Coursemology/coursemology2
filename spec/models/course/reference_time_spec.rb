@@ -86,5 +86,38 @@ RSpec.describe Course::ReferenceTime, type: :model do
         end
       end
     end
+
+    describe '#reset_closing_reminders on assessment' do
+      let(:assessment) { create(:assessment, end_at: 2.days.from_now) }
+
+      with_active_job_queue_adapter(:test) do
+        context 'when end_at is changed' do
+          it 'creates a closing reminder job' do
+            reference_time = assessment.reference_times.first
+            reference_time.end_at = 3.days.from_now
+
+            expect { reference_time.save }.to have_enqueued_job(Course::Assessment::ClosingReminderJob)
+          end
+        end
+
+        context 'when start_at is changed' do
+          it 'does not create a closing reminder job' do
+            reference_time = assessment.reference_times.first
+            reference_time.start_at = 2.hours.from_now
+
+            expect { reference_time.save }.not_to have_enqueued_job(Course::Assessment::ClosingReminderJob)
+          end
+        end
+
+        context 'when bonus_end_at is changed' do
+          it 'does not create a closing reminder job' do
+            reference_time = assessment.reference_times.first
+            reference_time.bonus_end_at = 2.hours.from_now
+
+            expect { reference_time.save }.not_to have_enqueued_job(Course::Assessment::ClosingReminderJob)
+          end
+        end
+      end
+    end
   end
 end

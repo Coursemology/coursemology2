@@ -12,6 +12,8 @@ class Course::ReferenceTime < ApplicationRecord
 
   before_destroy :prevent_destroy_if_in_default_timeline, prepend: true
 
+  after_save :reset_closing_reminders, if: :saved_change_to_end_at?
+
   # TODO(#3448): Consider creating personal times if new_record?
   after_commit :update_personal_times, on: :update
 
@@ -33,6 +35,17 @@ class Course::ReferenceTime < ApplicationRecord
     return unless (previous_changes.keys & ['start_at', 'end_at']).any?
 
     Course::LessonPlan::CoursewidePersonalizedTimelineUpdateJob.perform_later(lesson_plan_item)
+  end
+
+  def reset_closing_reminders
+    actable = lesson_plan_item.actable
+
+    # This check prevents `create_closing_reminders_at` from creating another `*ClosingReminderJob` if
+    # `end_at` was changed from the `actable` (that includes `Course::ClosingReminderConcern`).
+    actable_end_at_already_updated = actable&.end_at == end_at
+    return unless !actable_end_at_already_updated && actable.respond_to?(:create_closing_reminders_at)
+
+    actable.create_closing_reminders_at(end_at)
   end
 
   def lesson_plan_item_in_same_course
