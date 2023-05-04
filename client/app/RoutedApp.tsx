@@ -31,6 +31,7 @@ import VideoSubmissionEdit from 'bundles/course/video/submission/pages/VideoSubm
 import VideoSubmissionShow from 'bundles/course/video/submission/pages/VideoSubmissionShow';
 import VideoSubmissionsIndex from 'bundles/course/video/submission/pages/VideoSubmissionsIndex';
 import AccountSettings from 'bundles/user/AccountSettings';
+import UserShow from 'bundles/users/pages/UserShow';
 
 import App from './App';
 
@@ -171,6 +172,8 @@ const RoutedApp = (): JSX.Element => {
             element={<VideoSubmissionEdit />}
             path="courses/:courseId/videos/:videoId/submissions/:submissionId/edit"
           />
+
+          <Route element={<UserShow />} path="/users/:userId" />
         </Routes>
       </BrowserRouter>
     </App>

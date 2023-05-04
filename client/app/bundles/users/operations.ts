@@ -2,7 +2,7 @@ import { Operation } from 'types/store';
 
 import GlobalAPI from 'api';
 
-import * as actions from './actions';
+import { actions } from './store';
 
 // eslint-disable-next-line import/prefer-default-export
 export function fetchUser(userId: number): Operation {

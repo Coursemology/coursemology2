@@ -1,26 +1,84 @@
-import { enableMapSet } from 'immer';
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import produce from 'immer';
+import { InstanceBasicListData } from 'types/system/instances';
+import { UserBasicListData, UserCourseListData } from 'types/users';
+import { createEntityStore, saveListToStore } from 'utilities/store';
 
-import globalUserReducer from './reducer';
+import {
+  GlobalActionType,
+  GlobalUserState,
+  SAVE_COURSE_LIST,
+  SAVE_INSTANCE_LIST,
+  SAVE_USER,
+  SaveCourseListAction,
+  SaveInstanceListAction,
+  SaveUserAction,
+} from './types';
 
-const defaultReducers = {};
+const initialState: GlobalUserState = {
+  user: {
+    id: 0,
+    name: '',
+    imageUrl: '',
+  },
+  currentCourses: createEntityStore(),
+  completedCourses: createEntityStore(),
+  instances: createEntityStore(),
+};
 
-const rootReducer = combineReducers({
-  global: combineReducers({ user: globalUserReducer }),
-});
+const reducer = produce((draft: GlobalUserState, action: GlobalActionType) => {
+  switch (action.type) {
+    case SAVE_USER: {
+      const userData = action.user;
+      const userEntity = { ...userData };
+      draft.user = userEntity;
+      break;
+    }
+    case SAVE_COURSE_LIST: {
+      if (action.courses) {
+        const coursesList = action.courses;
+        const entityList = coursesList.map((data) => ({
+          ...data,
+        }));
+        if (action.courseType === 'current') {
+          saveListToStore(draft.currentCourses, entityList);
+        } else {
+          saveListToStore(draft.completedCourses, entityList);
+        }
+      }
+      break;
+    }
+    case SAVE_INSTANCE_LIST: {
+      if (action.instances) {
+        const instancesList = action.instances;
+        const entityList = instancesList.map((data) => ({
+          ...data,
+        }));
+        saveListToStore(draft.instances, entityList);
+      }
+      break;
+    }
+    default:
+      break;
+  }
+}, initialState);
 
-enableMapSet();
+export const actions = {
+  saveUser: (user: UserBasicListData): SaveUserAction => {
+    return { type: SAVE_USER, user };
+  },
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function configureStore(): any {
-  const storeCreator =
-    // @ts-ignore: ignore ts warning for process
-    process.env.NODE_ENV === 'development'
-      ? compose(
-          /* eslint-disable-next-line global-require, import/no-extraneous-dependencies */ // @ts-ignore: ignore ts warning for require
-          applyMiddleware(thunkMiddleware, require('redux-logger').logger),
-        )(createStore)
-      : compose(applyMiddleware(thunkMiddleware))(createStore);
-  return storeCreator(rootReducer, defaultReducers);
-}
+  saveCourses: (
+    courses: UserCourseListData[],
+    courseType: 'current' | 'completed',
+  ): SaveCourseListAction => {
+    return { type: SAVE_COURSE_LIST, courses, courseType };
+  },
+
+  saveInstances: (
+    instances: InstanceBasicListData[],
+  ): SaveInstanceListAction => {
+    return { type: SAVE_INSTANCE_LIST, instances };
+  },
+};
+
+export default reducer;
