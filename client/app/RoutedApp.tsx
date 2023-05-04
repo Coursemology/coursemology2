@@ -25,6 +25,11 @@ import LeaderboardIndex from 'bundles/course/leaderboard/pages/LeaderboardIndex'
 import LearningMap from 'bundles/course/learning-map/containers/LearningMap';
 import FolderShow from 'bundles/course/material/folders/pages/FolderShow';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
+import VideoShow from 'bundles/course/video/pages/VideoShow';
+import VideosIndex from 'bundles/course/video/pages/VideosIndex';
+import VideoSubmissionEdit from 'bundles/course/video/submission/pages/VideoSubmissionEdit';
+import VideoSubmissionShow from 'bundles/course/video/submission/pages/VideoSubmissionShow';
+import VideoSubmissionsIndex from 'bundles/course/video/submission/pages/VideoSubmissionsIndex';
 import AccountSettings from 'bundles/user/AccountSettings';
 
 import App from './App';
@@ -147,6 +152,24 @@ const RoutedApp = (): JSX.Element => {
           <Route
             element={<FolderShow />}
             path="/courses/:courseId/materials/folders/:folderId"
+          />
+
+          <Route element={<VideosIndex />} path="courses/:courseId/videos" />
+          <Route
+            element={<VideoShow />}
+            path="courses/:courseId/videos/:videoId"
+          />
+          <Route
+            element={<VideoSubmissionsIndex />}
+            path="courses/:courseId/videos/:videoId/submissions"
+          />
+          <Route
+            element={<VideoSubmissionShow />}
+            path="courses/:courseId/videos/:videoId/submissions/:submissionId"
+          />
+          <Route
+            element={<VideoSubmissionEdit />}
+            path="courses/:courseId/videos/:videoId/submissions/:submissionId/edit"
           />
         </Routes>
       </BrowserRouter>

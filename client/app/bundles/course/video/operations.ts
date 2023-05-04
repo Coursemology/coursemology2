@@ -3,20 +3,20 @@ import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 
-import { removeVideo, saveVideo, saveVideoList } from './reducers';
+import { actions } from './store';
 
 export function fetchVideos(currentTabId?: number): Operation {
   return async (dispatch) =>
     CourseAPI.video.videos.index(currentTabId).then((response) => {
       const data = response.data;
-      dispatch(saveVideoList(data));
+      dispatch(actions.saveVideoList(data));
     });
 }
 
 export function loadVideo(videoId: number): Operation {
   return async (dispatch) =>
     CourseAPI.video.videos.fetch(videoId).then((response) => {
-      dispatch(saveVideo(response.data));
+      dispatch(actions.saveVideo(response.data));
     });
 }
 
@@ -35,7 +35,7 @@ export function createVideo(data: VideoFormData): Operation {
   };
   return async (dispatch) =>
     CourseAPI.video.videos.create(videoPostData).then((response) => {
-      dispatch(saveVideo(response.data));
+      dispatch(actions.saveVideo(response.data));
     });
 }
 
@@ -55,14 +55,14 @@ export function updateVideo(videoId: number, data: VideoFormData): Operation {
   };
   return async (dispatch) =>
     CourseAPI.video.videos.update(videoId, videoPatchData).then((response) => {
-      dispatch(saveVideo(response.data));
+      dispatch(actions.saveVideo(response.data));
     });
 }
 
 export function deleteVideo(videoId: number): Operation {
   return async (dispatch) =>
     CourseAPI.video.videos.delete(videoId).then(() => {
-      dispatch(removeVideo({ videoId }));
+      dispatch(actions.removeVideo({ videoId }));
     });
 }
 
@@ -77,6 +77,6 @@ export function updatePublishedVideo(
     CourseAPI.video.videos
       .update(videoId, videoPatchPublishData)
       .then((response) => {
-        dispatch(saveVideo(response.data));
+        dispatch(actions.saveVideo(response.data));
       });
 }
