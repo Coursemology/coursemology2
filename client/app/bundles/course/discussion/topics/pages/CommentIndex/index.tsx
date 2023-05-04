@@ -21,7 +21,6 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import CustomBadge from 'lib/components/extensions/CustomBadge';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
-import { changeTabValue } from '../../actions';
 import TopicList from '../../components/lists/TopicList';
 import { fetchTabData } from '../../operations';
 import {
@@ -30,6 +29,7 @@ import {
   getTabInfo,
   getTabValue,
 } from '../../selectors';
+import { actions } from '../../store';
 
 type Props = WrappedComponentProps;
 
@@ -149,7 +149,7 @@ const CommentTabs: FC<CommentTabProps> = (props) => {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
           onChange={(_, value): void => {
-            dispatch(changeTabValue(value));
+            dispatch(actions.changeTabValue(value));
           }}
           scrollButtons="auto"
           sx={tabsStyle}
