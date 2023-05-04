@@ -172,7 +172,7 @@ class Course::Assessment::Question::Programming < ApplicationRecord # rubocop:di
   end
 
   def should_evaluate_package
-    # time_limit_changed? || memory_limit_changed? ||
+    time_limit_changed? || memory_limit_changed? ||
     language_id_changed? || (is_codaveri_changed? && is_codaveri) ||
       import_job&.status == 'errored'
   end
