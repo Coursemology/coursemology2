@@ -12,7 +12,15 @@ module Course::ClosingReminderConcern
   extend ActiveSupport::Concern
 
   included do
-    before_save :setup_closing_reminders, if: :end_at_changed?
+    before_save :reset_closing_reminders, if: :end_at_changed?
+  end
+
+  def create_closing_reminders_at(new_end_at)
+    return if new_end_at <= Time.zone.now
+
+    # Send notification one day before the closing date
+    closing_reminder_job_class.set(wait_until: new_end_at - 1.day).
+      perform_later(self, closing_reminder_token)
   end
 
   private
@@ -25,16 +33,12 @@ module Course::ClosingReminderConcern
     "#{class_name}::ClosingReminderJob".constantize
   end
 
-  def setup_closing_reminders
+  def reset_closing_reminders
     # Use current time as token to prevent duplicate notification.
     self.closing_reminder_token = Time.zone.now.to_f.round(5)
 
     execute_after_commit do
-      # Send notification one day before the closing date
-      if end_at && end_at > Time.zone.now
-        closing_reminder_job_class.set(wait_until: end_at - 1.day).
-          perform_later(self, closing_reminder_token)
-      end
+      create_closing_reminders_at(end_at) if end_at
     end
   end
 end
