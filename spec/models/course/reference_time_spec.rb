@@ -93,10 +93,15 @@ RSpec.describe Course::ReferenceTime, type: :model do
       with_active_job_queue_adapter(:test) do
         context 'when end_at is changed' do
           it 'creates a closing reminder job' do
+            old_closing_reminder_token = assessment.closing_reminder_token
+
             reference_time = assessment.reference_times.first
             reference_time.end_at = 3.days.from_now
 
-            expect { reference_time.save }.to have_enqueued_job(Course::Assessment::ClosingReminderJob)
+            expect { reference_time.save }.to(
+              have_enqueued_job(Course::Assessment::ClosingReminderJob).
+              with { |_, token| expect(token).not_to eq(old_closing_reminder_token) }
+            )
           end
         end
 
