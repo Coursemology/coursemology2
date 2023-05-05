@@ -1,26 +1,90 @@
-import { enableMapSet } from 'immer';
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import { produce } from 'immer';
+import {
+  ManageCourseUsersPermissions,
+  ManageCourseUsersSharedData,
+} from 'types/course/courseUsers';
+import { EnrolRequestListData } from 'types/course/enrolRequests';
+import {
+  createEntityStore,
+  saveEntityToStore,
+  saveListToStore,
+} from 'utilities/store';
 
-import enrolRequestsReducer from './reducers';
+import {
+  EnrolRequestsActionType,
+  EnrolRequestsState,
+  SAVE_ENROL_REQUEST_LIST,
+  SaveEnrolRequestListAction,
+  UPDATE_ENROL_REQUEST,
+  UpdateEnrolRequestAction,
+} from './types';
 
-const defaultReducers = {};
+const initialState: EnrolRequestsState = {
+  enrolRequests: createEntityStore(),
+  permissions: {
+    canManageCourseUsers: false,
+    canManageEnrolRequests: false,
+    canManageReferenceTimelines: false,
+    canManagePersonalTimes: false,
+    canRegisterWithCode: false,
+  },
+  manageCourseUsersData: {
+    requestsCount: 0,
+    invitationsCount: 0,
+    defaultTimelineAlgorithm: 'fixed',
+  },
+};
 
-const rootReducer = combineReducers({
-  enrolRequests: enrolRequestsReducer,
-});
+const reducer = produce(
+  (draft: EnrolRequestsState, action: EnrolRequestsActionType) => {
+    switch (action.type) {
+      case SAVE_ENROL_REQUEST_LIST: {
+        const enrolRequestsList = action.enrolRequestList;
+        const entityList = enrolRequestsList.map((data) => ({
+          ...data,
+        }));
+        saveListToStore(draft.enrolRequests, entityList);
+        draft.permissions = action.manageCourseUsersPermissions;
+        draft.manageCourseUsersData = action.manageCourseUsersData;
+        break;
+      }
+      case UPDATE_ENROL_REQUEST: {
+        const enrolRequest = action.enrolRequest;
+        const enrolRequestMiniEntity = { ...enrolRequest };
+        saveEntityToStore(draft.enrolRequests, enrolRequestMiniEntity);
+        draft.manageCourseUsersData.requestsCount -= 1;
+        break;
+      }
+      default: {
+        break;
+      }
+    }
+  },
+  initialState,
+);
 
-enableMapSet();
+export const actions = {
+  saveEnrolRequestList: (
+    enrolRequestList: EnrolRequestListData[],
+    manageCourseUsersPermissions: ManageCourseUsersPermissions,
+    manageCourseUsersData: ManageCourseUsersSharedData,
+  ): SaveEnrolRequestListAction => {
+    return {
+      type: SAVE_ENROL_REQUEST_LIST,
+      enrolRequestList,
+      manageCourseUsersPermissions,
+      manageCourseUsersData,
+    };
+  },
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function configureStore(): any {
-  const storeCreator =
-    // @ts-ignore: ignore ts warning for process
-    process.env.NODE_ENV === 'development'
-      ? compose(
-          /* eslint-disable-next-line global-require, import/no-extraneous-dependencies */ // @ts-ignore: ignore ts warning for require
-          applyMiddleware(thunkMiddleware, require('redux-logger').logger),
-        )(createStore)
-      : compose(applyMiddleware(thunkMiddleware))(createStore);
-  return storeCreator(rootReducer, defaultReducers);
-}
+  updateEnrolRequest: (
+    enrolRequest: EnrolRequestListData,
+  ): UpdateEnrolRequestAction => {
+    return {
+      type: UPDATE_ENROL_REQUEST,
+      enrolRequest,
+    };
+  },
+};
+
+export default reducer;

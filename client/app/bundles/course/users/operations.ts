@@ -20,7 +20,7 @@ import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 
-import * as actions from './actions';
+import { actions } from './store';
 import {
   DeleteExperiencePointsRecordAction,
   DeletePersonalTimeAction,

@@ -17,6 +17,7 @@ import SubmissionsIndex from 'bundles/course/assessment/submissions/SubmissionsI
 import CourseShow from 'bundles/course/courses/pages/CourseShow';
 import CoursesIndex from 'bundles/course/courses/pages/CoursesIndex';
 import CommentIndex from 'bundles/course/discussion/topics/pages/CommentIndex';
+import UserRequests from 'bundles/course/enrol-requests/pages/UserRequests';
 import DisbursementIndex from 'bundles/course/experience-points/disbursement/pages/DisbursementIndex';
 import ForumShow from 'bundles/course/forum/pages/ForumShow';
 import ForumsIndex from 'bundles/course/forum/pages/ForumsIndex';
@@ -29,6 +30,15 @@ import LevelsIndex from 'bundles/course/level/pages/LevelsIndex';
 import FolderShow from 'bundles/course/material/folders/pages/FolderShow';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
 import StatisticsIndex from 'bundles/course/statistics/pages/StatisticsIndex';
+import InvitationsIndex from 'bundles/course/user-invitations/pages/InvitationsIndex';
+import InviteUsers from 'bundles/course/user-invitations/pages/InviteUsers';
+import ExperiencePointsRecords from 'bundles/course/users/pages/ExperiencePointsRecords';
+import ManageStaff from 'bundles/course/users/pages/ManageStaff';
+import ManageStudents from 'bundles/course/users/pages/ManageStudents';
+import PersonalTimes from 'bundles/course/users/pages/PersonalTimes';
+import PersonalTimesShow from 'bundles/course/users/pages/PersonalTimesShow';
+import CourseUserShow from 'bundles/course/users/pages/UserShow';
+import UsersIndex from 'bundles/course/users/pages/UsersIndex';
 import VideoShow from 'bundles/course/video/pages/VideoShow';
 import VideosIndex from 'bundles/course/video/pages/VideosIndex';
 import VideoSubmissionEdit from 'bundles/course/video/submission/pages/VideoSubmissionEdit';
@@ -189,6 +199,43 @@ const RoutedApp = (): JSX.Element => {
           <Route
             element={<StatisticsIndex />}
             path="/courses/:courseId/statistics"
+          />
+
+          <Route element={<UsersIndex />} path="/courses/:courseId/users" />
+
+          <Route
+            element={<CourseUserShow />}
+            path="/courses/:courseId/users/:userId"
+          />
+
+          <Route
+            element={<ManageStudents />}
+            path="/courses/:courseId/students"
+          />
+          <Route
+            element={<UserRequests />}
+            path="/courses/:courseId/enrol_requests"
+          />
+          <Route
+            element={<InviteUsers />}
+            path="/courses/:courseId/users/invite/"
+          />
+          <Route
+            element={<InvitationsIndex />}
+            path="/courses/:courseId/user_invitations"
+          />
+          <Route element={<ManageStaff />} path="/courses/:courseId/staff" />
+          <Route
+            element={<PersonalTimes />}
+            path="/courses/:courseId/users/personal_times"
+          />
+          <Route
+            element={<PersonalTimesShow />}
+            path="/courses/:courseId/users/:userId/personal_times"
+          />
+          <Route
+            element={<ExperiencePointsRecords />}
+            path="/courses/:courseId/users/:userId/experience_points_records"
           />
         </Routes>
       </BrowserRouter>
