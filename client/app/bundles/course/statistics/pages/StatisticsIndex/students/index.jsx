@@ -31,7 +31,7 @@ const StudentsStatistics = ({ metadata, students, isFetching, isError }) => {
     return <ErrorCard message={t(translations.error)} />;
   }
   if (students.length === 0) {
-    return <Note message={t(translations.error)} />;
+    return <Note message={t(translations.noStudents)} />;
   }
 
   return <StudentsStatisticsTable metadata={metadata} students={students} />;
