@@ -29,8 +29,6 @@ class Course::Assessment::Question::ProgrammingImportJob < ApplicationJob
       Course::Assessment::Question::ProgrammingCodaveriService.create_or_update_question(question, attachment)
     end
     # Re-run the tests since the test results are deleted with the old package.
-    should_rerun_evaluation = ActiveModel::Type::Boolean.new.cast(ENV['RERUN_AUTOGRADING'])
-    should_rerun_evaluation = true if should_rerun_evaluation.nil?
-    Course::Assessment::Question::AnswersEvaluationJob.perform_later(question) if should_rerun_evaluation
+    Course::Assessment::Question::AnswersEvaluationJob.perform_later(question)
   end
 end
