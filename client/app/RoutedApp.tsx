@@ -3,6 +3,20 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import GlobalAnnouncementIndex from 'bundles/announcements/GlobalAnnouncementIndex';
 import AchievementShow from 'bundles/course/achievement/pages/AchievementShow';
 import AchievementsIndex from 'bundles/course/achievement/pages/AchievementsIndex';
+import SettingsNavigation from 'bundles/course/admin/components/SettingsNavigation';
+import AnnouncementSettings from 'bundles/course/admin/pages/AnnouncementsSettings';
+import AssessmentSettings from 'bundles/course/admin/pages/AssessmentSettings';
+import CodaveriSettings from 'bundles/course/admin/pages/CodaveriSettings';
+import CommentsSettings from 'bundles/course/admin/pages/CommentsSettings';
+import ComponentSettings from 'bundles/course/admin/pages/ComponentSettings';
+import CourseSettings from 'bundles/course/admin/pages/CourseSettings';
+import ForumsSettings from 'bundles/course/admin/pages/ForumsSettings';
+import LeaderboardSettings from 'bundles/course/admin/pages/LeaderboardSettings';
+import LessonPlanSettings from 'bundles/course/admin/pages/LessonPlanSettings';
+import MaterialsSettings from 'bundles/course/admin/pages/MaterialsSettings';
+import NotificationSettings from 'bundles/course/admin/pages/NotificationSettings';
+import SidebarSettings from 'bundles/course/admin/pages/SidebarSettings';
+import VideosSettings from 'bundles/course/admin/pages/VideosSettings';
 import AnnouncementsIndex from 'bundles/course/announcements/pages/AnnouncementsIndex';
 import EditForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/EditForumPostResponsePage';
 import NewForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/NewForumPostResponsePage';
@@ -49,6 +63,21 @@ import UserShow from 'bundles/users/pages/UserShow';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 
 import App from './App';
+
+const pages = [
+  { path: 'components', element: <ComponentSettings /> },
+  { path: 'sidebar', element: <SidebarSettings /> },
+  { path: 'notifications', element: <NotificationSettings /> },
+  { path: 'announcements', element: <AnnouncementSettings /> },
+  { path: 'assessments', element: <AssessmentSettings /> },
+  { path: 'materials', element: <MaterialsSettings /> },
+  { path: 'forums', element: <ForumsSettings /> },
+  { path: 'leaderboard', element: <LeaderboardSettings /> },
+  { path: 'comments', element: <CommentsSettings /> },
+  { path: 'videos', element: <VideosSettings /> },
+  { path: 'lesson_plan', element: <LessonPlanSettings /> },
+  { path: 'codaveri', element: <CodaveriSettings /> },
+];
 
 const RoutedApp = (): JSX.Element => {
   return (
@@ -237,6 +266,16 @@ const RoutedApp = (): JSX.Element => {
             element={<ExperiencePointsRecords />}
             path="/courses/:courseId/users/:userId/experience_points_records"
           />
+          <Route
+            element={<SettingsNavigation />}
+            path="/courses/:course_id/admin"
+          >
+            <Route element={<CourseSettings />} index />
+
+            {pages.map(({ path, element }) => (
+              <Route key={path} element={element} path={path} />
+            ))}
+          </Route>
         </Routes>
       </BrowserRouter>
 

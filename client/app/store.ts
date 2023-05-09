@@ -5,6 +5,8 @@ import notificationPopupReducer from 'lib/reducers/notificationPopup';
 
 import globalAnnouncementReducer from './bundles/announcements/store';
 import achievementsReducer from './bundles/course/achievement/store';
+import lessonPlanSettingsReducer from './bundles/course/admin/reducers/lessonPlanSettings';
+import notificationSettingsReducer from './bundles/course/admin/reducers/notificationSettings';
 import announcementsReducer from './bundles/course/announcements/store';
 import skillsReducer from './bundles/course/assessment/skills/store';
 import submissionsReducer from './bundles/course/assessment/submissions/store';
@@ -52,6 +54,8 @@ const rootReducer = combineReducers({
   users: usersReducer,
   invitations: invitationsReducer,
   enrolRequests: enrolRequestsReducer,
+  lessonPlanSettings: lessonPlanSettingsReducer,
+  notificationSettings: notificationSettingsReducer,
 });
 
 export const store = configureStore({
