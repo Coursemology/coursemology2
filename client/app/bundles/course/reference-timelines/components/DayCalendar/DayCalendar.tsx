@@ -77,7 +77,7 @@ const DayCalendar = forwardRef<DayCalendarRef, DayCalendarProps>(
           {({ height, width }): JSX.Element => (
             <List
               ref={calendarRef}
-              height={height}
+              height={height ?? 0}
               initialScrollOffset={
                 getDaysFromSeconds(moment().unix()) * DAY_WIDTH_PIXELS
               }
@@ -95,7 +95,7 @@ const DayCalendar = forwardRef<DayCalendarRef, DayCalendarProps>(
                 props.onScroll?.(scrollOffset)
               }
               overscanCount={5}
-              width={width}
+              width={width ?? 0}
             >
               {DayColumn}
             </List>
