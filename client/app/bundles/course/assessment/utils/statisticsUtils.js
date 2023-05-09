@@ -70,7 +70,7 @@ export const getStandardDeviation = (numbers) => {
   const mean = numbers.reduce((a, b) => a + b, 0) / numbers.length;
   return roundToTwoDecimalPoints(
     Math.sqrt(
-      numbers.map((x) => (x - mean) ** 2).reduce((a, b) => a + b) /
+      numbers.map((x) => (x - mean) ** 2).reduce((a, b) => a + b, 0) /
         numbers.length,
     ),
   );
