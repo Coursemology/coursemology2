@@ -91,7 +91,7 @@
     "react-scroll": "^1.8.9",
     "react-toastify": "^9.1.2",
     "react-tooltip": "^5.11.2",
-    "react-virtualized-auto-sizer": "^1.0.7",
+    "react-virtualized-auto-sizer": "^1.0.15",
     "react-window": "^1.8.9",
     "react-xarrows": "^2.0.2",
     "react-zoom-pan-pinch": "^2.3.1",
