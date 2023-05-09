@@ -3,6 +3,6 @@ module UserMasqueradeConcern
   extend ActiveSupport::Concern
 
   def can_masquerade?
-    primary_email_record.confirmed?
+    primary_email_record&.confirmed?
   end
 end
