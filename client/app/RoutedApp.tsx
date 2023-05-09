@@ -22,6 +22,8 @@ import EditForumPostResponsePage from 'bundles/course/assessment/question/forum-
 import NewForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/NewForumPostResponsePage';
 import EditMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/EditMcqMrqPage';
 import NewMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/NewMcqMrqPage';
+import EditProgrammingQuestionPage from 'bundles/course/assessment/question/programming/EditProgrammingQuestionPage';
+import NewProgrammingQuestionPage from 'bundles/course/assessment/question/programming/NewProgrammingQuestionPage';
 import ScribingQuestion from 'bundles/course/assessment/question/scribing/ScribingQuestion';
 import EditTextResponsePage from 'bundles/course/assessment/question/text-responses/EditTextResponsePage';
 import NewTextResponsePage from 'bundles/course/assessment/question/text-responses/NewTextResponsePage';
@@ -298,6 +300,16 @@ const RoutedApp = (): JSX.Element => {
           <Route
             element={<ScribingQuestion />}
             path="/courses/:courseId/assessments/:assessmentId/question/scribing/:questionId/edit"
+          />
+
+          <Route
+            element={<NewProgrammingQuestionPage />}
+            path="/courses/:courseId/assessments/:assessmentId/question/programming/new"
+          />
+
+          <Route
+            element={<EditProgrammingQuestionPage />}
+            path="/courses/:courseId/assessments/:assessmentId/question/programming/:questionId/edit"
           />
         </Routes>
       </BrowserRouter>
