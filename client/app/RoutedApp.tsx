@@ -59,6 +59,7 @@ import VideosIndex from 'bundles/course/video/pages/VideosIndex';
 import VideoSubmissionEdit from 'bundles/course/video/submission/pages/VideoSubmissionEdit';
 import VideoSubmissionShow from 'bundles/course/video/submission/pages/VideoSubmissionShow';
 import VideoSubmissionsIndex from 'bundles/course/video/submission/pages/VideoSubmissionsIndex';
+import UserVideoSubmissionsIndex from 'bundles/course/video-submissions/pages/UserVideoSubmissionsIndex';
 import AccountSettings from 'bundles/user/AccountSettings';
 import UserShow from 'bundles/users/pages/UserShow';
 import NotificationPopup from 'lib/containers/NotificationPopup';
@@ -281,6 +282,11 @@ const RoutedApp = (): JSX.Element => {
           <Route
             element={<Duplication />}
             path="/courses/:courseId/duplication"
+          />
+
+          <Route
+            element={<UserVideoSubmissionsIndex />}
+            path="/courses/:courseId/users/:userId/video_submissions"
           />
         </Routes>
       </BrowserRouter>
