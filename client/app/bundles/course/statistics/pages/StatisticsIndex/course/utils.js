@@ -70,8 +70,8 @@ export const computeLimits = (assessments, submissions) => {
     return {};
   }
   const endAts = assessments.map((a) => a.endAt);
-  const minEndAt = endAts.reduce((a, b) => (a < b ? a : b));
-  const maxEndAt = endAts.reduce((a, b) => (a > b ? a : b));
+  const minEndAt = new Date(Math.min(...endAts));
+  const maxEndAt = new Date(Math.max(...endAts));
 
   if (submissions == null || submissions.length === 0) {
     return { min: minEndAt, max: maxEndAt };
@@ -79,8 +79,11 @@ export const computeLimits = (assessments, submissions) => {
   const submittedAts = submissions
     .flatMap((s) => s.submissions)
     .map((s) => s.submittedAt);
-  const minSubmittedAt = submittedAts.reduce((a, b) => (a < b ? a : b));
-  const maxSubmittedAt = submittedAts.reduce((a, b) => (a > b ? a : b));
+  if (submittedAts.length === 0) {
+    return { min: minEndAt, max: maxEndAt };
+  }
+  const minSubmittedAt = new Date(Math.min(...submittedAts));
+  const maxSubmittedAt = new Date(Math.max(...submittedAts));
   return {
     min: minEndAt < minSubmittedAt ? minEndAt : minSubmittedAt,
     max: maxEndAt > maxSubmittedAt ? maxEndAt : maxSubmittedAt,
