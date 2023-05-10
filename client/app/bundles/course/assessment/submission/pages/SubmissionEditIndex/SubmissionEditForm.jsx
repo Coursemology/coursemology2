@@ -12,7 +12,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Paper,
   Step,
   StepButton,
   Stepper,
@@ -26,6 +25,7 @@ import ErrorText from 'lib/components/core/ErrorText';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import usePrompt from 'lib/hooks/router/usePrompt';
 
+import EvaluatorErrorPanel from '../../components/EvaluatorErrorPanel';
 import SubmissionAnswer from '../../components/SubmissionAnswer';
 import { formNames, questionTypes } from '../../constants';
 import GradingPanel from '../../containers/GradingPanel';
@@ -271,13 +271,11 @@ const SubmissionEditForm = (props) => {
 
     if (type === questionTypes.Programming && jobError) {
       return (
-        <Paper
-          style={{ padding: 10, backgroundColor: red[100], marginBottom: 20 }}
-        >
+        <EvaluatorErrorPanel className="mb-8">
           {isCodaveri
             ? intl.formatMessage(translations.codaveriAutogradeFailure)
             : jobErrorMessage}
-        </Paper>
+        </EvaluatorErrorPanel>
       );
     }
 
