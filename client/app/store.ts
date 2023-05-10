@@ -29,6 +29,7 @@ import statisticsReducer from './bundles/course/statistics/store';
 import invitationsReducer from './bundles/course/user-invitations/store';
 import usersReducer from './bundles/course/users/store';
 import videosReducer from './bundles/course/video/store';
+import adminReducer from './bundles/system/admin/admin/store';
 import globalUserReducer from './bundles/users/store';
 
 enableMapSet();
@@ -64,6 +65,7 @@ const rootReducer = combineReducers({
   scribingQuestion: scribingQuestionReducer,
   lessonPlan: lessonPlanReducer,
   deleteConfirmation: deleteConfirmationReducer,
+  admin: adminReducer,
 });
 
 export const store = configureStore({

@@ -66,6 +66,12 @@ import VideoSubmissionEdit from 'bundles/course/video/submission/pages/VideoSubm
 import VideoSubmissionShow from 'bundles/course/video/submission/pages/VideoSubmissionShow';
 import VideoSubmissionsIndex from 'bundles/course/video/submission/pages/VideoSubmissionsIndex';
 import UserVideoSubmissionsIndex from 'bundles/course/video-submissions/pages/UserVideoSubmissionsIndex';
+import AdminIndex from 'bundles/system/admin/admin/pages/AdminIndex';
+import AdminNavigator from 'bundles/system/admin/admin/pages/AdminNavigator';
+import AnnouncementIndex from 'bundles/system/admin/admin/pages/AnnouncementsIndex';
+import CourseIndex from 'bundles/system/admin/admin/pages/CoursesIndex';
+import InstancesIndex from 'bundles/system/admin/admin/pages/InstancesIndex';
+import UserIndex from 'bundles/system/admin/admin/pages/UsersIndex';
 import AccountSettings from 'bundles/user/AccountSettings';
 import UserShow from 'bundles/users/pages/UserShow';
 import NotificationPopup from 'lib/containers/NotificationPopup';
@@ -92,6 +98,14 @@ const RoutedApp = (): JSX.Element => {
     <App>
       <BrowserRouter>
         <Routes>
+          <Route element={<AdminNavigator />} path="/admin">
+            <Route element={<AdminIndex />} index />
+            <Route element={<AnnouncementIndex />} path="announcements" />
+            <Route element={<UserIndex />} path="users" />
+            <Route element={<InstancesIndex />} path="instances" />
+            <Route element={<CourseIndex />} path="courses" />
+          </Route>
+
           <Route
             element={<SubmissionsIndex />}
             path="/courses/:courseId/assessments/submissions"
