@@ -1,17 +1,26 @@
 import { ComponentProps } from 'react';
+import { ArrowOutward } from '@mui/icons-material';
 import { Link as MuiLink, Typography } from '@mui/material';
 
 interface LinkProps extends ComponentProps<typeof MuiLink> {
   opensInNewTab?: boolean;
+  external?: boolean;
 }
 
 const Link = (props: LinkProps): JSX.Element => {
   const { opensInNewTab, ...linkProps } = props;
 
+  const children = (
+    <>
+      {props.children}
+      {props.external && <ArrowOutward fontSize="inherit" />}
+    </>
+  );
+
   if (!props.href && !props.onClick)
     return (
       <Typography component="span" variant={props.variant ?? 'body2'}>
-        {props.children}
+        {children}
       </Typography>
     );
 
@@ -25,7 +34,9 @@ const Link = (props: LinkProps): JSX.Element => {
         target: '_blank',
         rel: 'noopener noreferrer',
       })}
-    />
+    >
+      {children}
+    </MuiLink>
   );
 };
 
