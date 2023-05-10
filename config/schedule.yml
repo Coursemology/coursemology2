@@ -9,3 +9,9 @@ video_statistic_update_job:
   cron: '30 21 * * *'
   class: 'VideoStatisticUpdateJob'
   queue: 'default'
+
+# Run the UserEmailDatabaseCleanupJob every month
+user_email_database_cleanup_job:
+  cron: '0 0 1 * *'
+  class: 'UserEmailDatabaseCleanupJob'
+  queue: 'default'
