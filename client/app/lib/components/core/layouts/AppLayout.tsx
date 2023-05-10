@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 import Grid from '@mui/material/Grid';
 
 import Breadcrumbs from 'lib/components/navigation/Breadcrumbs';
@@ -6,7 +7,6 @@ import Breadcrumbs from 'lib/components/navigation/Breadcrumbs';
 import './layout.scss';
 
 interface AppLayoutProps {
-  routes: JSX.Element;
   renderSidebar: (
     isExpanded: boolean,
     setIsExpanded: (forceExpand?: boolean) => void,
@@ -14,7 +14,7 @@ interface AppLayoutProps {
 }
 
 const AppLayout = (props: AppLayoutProps): JSX.Element => {
-  const { routes, renderSidebar } = props;
+  const { renderSidebar } = props;
   const [isExpanded, setIsExpanded] = useState(true);
 
   const handleExpand = (forceExpand): void => {
@@ -63,7 +63,7 @@ const AppLayout = (props: AppLayoutProps): JSX.Element => {
         sm={isExpanded ? 8 : 10}
         xs={12}
       >
-        {routes}
+        <Outlet />
       </Grid>
     </Grid>
   );
