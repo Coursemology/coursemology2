@@ -15,7 +15,7 @@ import { InstanceBasicListData } from 'types/system/instances';
 
 import SystemAPI from 'api/system';
 
-import * as actions from './actions';
+import { actions } from './store';
 
 /**
  * Prepares and maps announcement object attributes to a FormData object for an post/patch request.

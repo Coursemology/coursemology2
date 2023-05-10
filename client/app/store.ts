@@ -30,6 +30,7 @@ import invitationsReducer from './bundles/course/user-invitations/store';
 import usersReducer from './bundles/course/users/store';
 import videosReducer from './bundles/course/video/store';
 import adminReducer from './bundles/system/admin/admin/store';
+import instanceAdminReducer from './bundles/system/admin/instance/instance/store';
 import globalUserReducer from './bundles/users/store';
 
 enableMapSet();
@@ -66,6 +67,7 @@ const rootReducer = combineReducers({
   lessonPlan: lessonPlanReducer,
   deleteConfirmation: deleteConfirmationReducer,
   admin: adminReducer,
+  instanceAdmin: instanceAdminReducer,
 });
 
 export const store = configureStore({

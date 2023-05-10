@@ -72,6 +72,15 @@ import AnnouncementIndex from 'bundles/system/admin/admin/pages/AnnouncementsInd
 import CourseIndex from 'bundles/system/admin/admin/pages/CoursesIndex';
 import InstancesIndex from 'bundles/system/admin/admin/pages/InstancesIndex';
 import UserIndex from 'bundles/system/admin/admin/pages/UsersIndex';
+import InstanceAdminIndex from 'bundles/system/admin/instance/instance/pages/InstanceAdminIndex';
+import InstanceAdminNavigator from 'bundles/system/admin/instance/instance/pages/InstanceAdminNavigator';
+import InstanceAnnouncementsIndex from 'bundles/system/admin/instance/instance/pages/InstanceAnnouncementsIndex';
+import InstanceComponentsIndex from 'bundles/system/admin/instance/instance/pages/InstanceComponentsIndex';
+import InstanceCoursesIndex from 'bundles/system/admin/instance/instance/pages/InstanceCoursesIndex';
+import InstanceUserRoleRequestsIndex from 'bundles/system/admin/instance/instance/pages/InstanceUserRoleRequestsIndex';
+import InstanceUsersIndex from 'bundles/system/admin/instance/instance/pages/InstanceUsersIndex';
+import InstanceUsersInvitations from 'bundles/system/admin/instance/instance/pages/InstanceUsersInvitations';
+import InstanceUsersInvite from 'bundles/system/admin/instance/instance/pages/InstanceUsersInvite';
 import AccountSettings from 'bundles/user/AccountSettings';
 import UserShow from 'bundles/users/pages/UserShow';
 import NotificationPopup from 'lib/containers/NotificationPopup';
@@ -105,6 +114,28 @@ const RoutedApp = (): JSX.Element => {
             <Route element={<InstancesIndex />} path="instances" />
             <Route element={<CourseIndex />} path="courses" />
           </Route>
+
+          {/* `admin/instance` cannot be nested in `admin/*` because it has a different container element */}
+          <Route element={<InstanceAdminNavigator />} path="admin/instance">
+            <Route element={<InstanceAdminIndex />} index />
+            <Route
+              element={<InstanceAnnouncementsIndex />}
+              path="announcements"
+            />
+            <Route element={<InstanceComponentsIndex />} path="components" />
+            <Route element={<InstanceCoursesIndex />} path="courses" />
+            <Route element={<InstanceUsersIndex />} path="users" />
+            <Route element={<InstanceUsersInvite />} path="users/invite" />
+            <Route
+              element={<InstanceUsersInvitations />}
+              path="user_invitations"
+            />
+          </Route>
+
+          <Route
+            element={<InstanceUserRoleRequestsIndex />}
+            path="role_requests"
+          />
 
           <Route
             element={<SubmissionsIndex />}
