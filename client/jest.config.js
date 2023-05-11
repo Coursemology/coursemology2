@@ -20,6 +20,7 @@ const config = {
     '^testUtils(.*)$': '<rootDir>/app/__test__/utils$1',
     '^bundles(.*)$': '<rootDir>/app/bundles$1',
     '^course(.*)$': '<rootDir>/app/bundles/course$1',
+    '^store(.*)$': '<rootDir>/app/store$1',
   },
   coveragePathIgnorePatterns: ['/node_modules/', '/__test__/'],
 };
