@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { DragDropContext } from 'react-beautiful-dnd';
 import { defineMessages } from 'react-intl';
 import { connect } from 'react-redux';
+import { DragDropContext } from '@hello-pangea/dnd';
 import { ListSubheader } from '@mui/material';
 import PropTypes from 'prop-types';
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from '@hello-pangea/dnd';
 import { Create, Delete, DragIndicator } from '@mui/icons-material';
 import { Card, IconButton, Typography } from '@mui/material';
 import { AssessmentTab } from 'types/course/admin/assessments';

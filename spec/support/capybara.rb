@@ -98,7 +98,7 @@ module Capybara::TestGroupHelpers
 
     # Finds a react-beautiful-dnd draggable element
     def find_rbd_with_draggable_id(draggable_id)
-      find("div[data-rbd-draggable-id='#{draggable_id}']")
+      find("div[data-rfd-draggable-id='#{draggable_id}']")
     end
 
     # Finds a react-beautiful-dnd draggable drag handle element
@@ -107,7 +107,7 @@ module Capybara::TestGroupHelpers
     # For example, an assessment category is a draggable, but only the header in which the
     # category title is contained is the drag handle.
     def find_rbd_with_drag_handle_id(drag_handle_id)
-      find("div[data-rbd-drag-handle-draggable-id='#{drag_handle_id}']")
+      find("div[data-rfd-drag-handle-draggable-id='#{drag_handle_id}']")
     end
 
     # Finds a react-beautiful-dnd draggable survey question

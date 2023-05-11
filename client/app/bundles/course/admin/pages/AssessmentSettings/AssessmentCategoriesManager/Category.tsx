@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { Draggable, Droppable } from '@hello-pangea/dnd';
 import { Add, Create, Delete, DragIndicator } from '@mui/icons-material';
 import { Button, Card, IconButton, Typography } from '@mui/material';
 import {

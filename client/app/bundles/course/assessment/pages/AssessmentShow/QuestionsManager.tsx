@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
 import { toast } from 'react-toastify';
+import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
 import { Paper } from '@mui/material';
 import produce from 'immer';
 import { AssessmentData } from 'types/course/assessment/assessments';
