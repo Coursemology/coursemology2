@@ -79,6 +79,7 @@ interface ProgrammingQuestionData extends QuestionFormData {
   attemptLimit: number;
   isLowPriority: boolean;
   autograded: boolean;
+  autogradedAssessment: boolean;
   editOnline: boolean;
   isCodaveri: boolean;
   codaveriEnabled: boolean;

@@ -155,8 +155,10 @@ const buildFormData = (draft: ProgrammingFormData): FormData => {
   appendInto(data, 'is_codaveri', draft.question.isCodaveri);
   appendInto(data, 'memory_limit', draft.question.memoryLimit);
   appendInto(data, 'time_limit', draft.question.timeLimit);
-  appendInto(data, 'attempt_limit', draft.question.attemptLimit);
   appendInto(data, 'is_low_priority', draft.question.isLowPriority);
+
+  if (!draft.question.autogradedAssessment)
+    appendInto(data, 'attempt_limit', draft.question.attemptLimit);
 
   if (draft.question.autograded && draft.question.editOnline)
     POLYGLOT_BUILDER[draft.testUi?.mode ?? '']?.(data, draft.testUi?.metadata);
