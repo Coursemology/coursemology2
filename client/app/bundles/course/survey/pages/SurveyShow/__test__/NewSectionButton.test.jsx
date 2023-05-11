@@ -1,37 +1,37 @@
-import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
+import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 import SectionFormDialogue from 'course/survey/containers/SectionFormDialogue';
-import storeCreator from 'course/survey/store';
 
 import NewSectionButton from '../NewSectionButton';
 
+const section = { title: 'Funky section title', description: 'description' };
+
 describe('<NewSectionButton />', () => {
-  it('injects handlers that allow survey sections to be created', async () => {
+  it('opens a form dialog that submits the new survey form data', async () => {
     const spyCreate = jest.spyOn(CourseAPI.survey.sections, 'create');
-    const contextOptions = buildContextOptions(storeCreator({}));
-    const newSectionButton = mount(<NewSectionButton />, contextOptions);
-    const sectionFormDialogue = mount(<SectionFormDialogue />, contextOptions);
+    const page = render(
+      <>
+        <NewSectionButton />
+        <SectionFormDialogue />
+      </>,
+    );
 
-    // Click 'new section' button
-    newSectionButton.find('button').simulate('click');
-    sectionFormDialogue.update();
-    expect(
-      sectionFormDialogue.find('SectionFormDialogue').first().props().visible,
-    ).toBe(true);
+    const newSectionButton = page.getByRole('button');
+    fireEvent.click(newSectionButton);
 
-    // Fill section form with title
-    const section = { title: 'Funky section title', description: '' };
-    const sectionForm = sectionFormDialogue.find('form');
-    const titleInput = sectionForm.find('input[name="title"]');
-    titleInput.simulate('change', { target: { value: section.title } });
-    await sleep(0.01);
+    const titleField = page.getByLabelText('Title', { exact: false });
+    fireEvent.change(titleField, { target: { value: section.title } });
 
-    // Submit section form
-    await act(async () => {
-      sectionForm.simulate('submit');
+    const descriptionField = page.getByLabelText('Description');
+    fireEvent.change(descriptionField, {
+      target: { value: section.description },
     });
-    expect(spyCreate).toHaveBeenCalledWith({ section });
+
+    fireEvent.click(page.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => {
+      expect(spyCreate).toHaveBeenCalledWith({ section });
+    });
   });
 });

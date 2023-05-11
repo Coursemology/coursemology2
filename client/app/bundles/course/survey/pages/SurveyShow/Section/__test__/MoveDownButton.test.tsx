@@ -4,7 +4,7 @@ import { fireEvent, render, waitFor } from 'test-utils';
 import CourseAPI from 'api/course';
 import { loadSurveys } from 'course/survey/actions/surveys';
 
-import MoveUpButton from '../MoveUpButton';
+import MoveDownButton from '../MoveDownButton';
 
 const surveys = [
   {
@@ -13,21 +13,21 @@ const surveys = [
   },
 ];
 
-describe('<MoveUpButton />', () => {
-  it('injects handlers that allow survey section to be moved before the previous section', async () => {
+describe('<MoveDownButton />', () => {
+  it('injects handlers that allow survey section to be moved after the following section', async () => {
     const url = `/courses/${global.courseId}/surveys/${surveys[0].id}`;
     window.history.pushState({}, '', url);
     dispatch(loadSurveys(surveys));
 
     const spyMove = jest.spyOn(CourseAPI.survey.surveys, 'reorderSections');
 
-    const page = render(<MoveUpButton sectionIndex={3} />);
-    const moveUpButton = page.getByRole('button');
+    const page = render(<MoveDownButton sectionIndex={3} />);
+    const moveDownButton = page.getByRole('button');
 
-    fireEvent.click(moveUpButton);
+    fireEvent.click(moveDownButton);
 
     await waitFor(() =>
-      expect(spyMove).toHaveBeenCalledWith({ ordering: [3, 1, 5, 4, 9] }),
+      expect(spyMove).toHaveBeenCalledWith({ ordering: [3, 1, 4, 9, 5] }),
     );
   });
 });
