@@ -33,6 +33,7 @@ const PackageFields = (props: PackageFieldsProps): JSX.Element => {
 
   const autograded = watch('question.autograded');
   const editOnline = watch('question.editOnline');
+  const languageId = watch('question.languageId');
 
   const canSwitchPackageType = question.canSwitchPackageType;
   const packageInfo = question.package;
@@ -107,10 +108,12 @@ const PackageFields = (props: PackageFieldsProps): JSX.Element => {
         </Section>
       )}
 
-      <PolyglotEditor
-        disabled={props.disabled}
-        getModeFromId={props.getModeFromId}
-      />
+      {languageId && (
+        <PolyglotEditor
+          disabled={props.disabled}
+          getModeFromId={props.getModeFromId}
+        />
+      )}
     </>
   );
 };
