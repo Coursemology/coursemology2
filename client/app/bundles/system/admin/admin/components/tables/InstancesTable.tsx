@@ -263,9 +263,9 @@ const InstancesTable: FC<Props> = (props) => {
         sort: false,
         alignCenter: true,
         customBodyRender: (_value, tableMeta): JSX.Element => {
-          const rowData = tableMeta.rowData as InstanceMiniEntity;
+          const rowData = tableMeta.rowData;
           const instance = rebuildObjectFromRow(columns, rowData);
-          return renderRowActionComponent(instance);
+          return renderRowActionComponent(instance as InstanceMiniEntity);
         },
       },
     },

@@ -1,5 +1,16 @@
 import { TableColumns } from 'types/components/DataTable';
 
+const hasRowNumberColumn = (
+  columns: TableColumns[],
+  rowData: unknown[],
+): boolean => {
+  if (!columns.length || !rowData.length) return false;
+
+  const rowDataOffsetByOne = rowData.length - columns.length === 1;
+  const firstCellIsUndefined = rowData[0] === undefined;
+  return rowDataOffsetByOne && firstCellIsUndefined;
+};
+
 /**
  * Rebuilds an object from columns and data from a single row of MUI DataTable
  *
@@ -13,11 +24,21 @@ import { TableColumns } from 'types/components/DataTable';
  *
  * adapted from https://github.com/gregnb/mui-datatables/issues/297#issuecomment-907881154
  */
-export default function rebuildObjectFromRow<T>(
+export default function rebuildObjectFromRow(
   columns: TableColumns[],
-  rowData: T,
-): T {
+  rowData: unknown[],
+): unknown {
+  const hasRowNumber = hasRowNumberColumn(columns, rowData);
+
+  if (!hasRowNumber && columns.length !== rowData.length)
+    throw new Error(
+      'columns and rowData must have the same length to rebuild object',
+    );
+
   return Object.fromEntries(
-    columns.map((col, colIndex) => [col.name, rowData[colIndex]]),
-  ) as T;
+    columns.map((col, colIndex) => {
+      const rowIndex = hasRowNumber ? colIndex + 1 : colIndex;
+      return [col.name, rowData[rowIndex]];
+    }),
+  );
 }

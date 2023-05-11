@@ -662,9 +662,12 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
         empty: true,
         sort: false,
         customBodyRender: (_, tableMeta): JSX.Element => {
-          const rowData = tableMeta.rowData as CourseUserRowData;
+          const rowData = tableMeta.rowData;
           const user = rebuildObjectFromRow(columns, rowData);
-          return renderRowActionComponent(user, submitting);
+          return renderRowActionComponent(
+            user as CourseUserRowData,
+            submitting,
+          );
         },
         download: false,
       },
