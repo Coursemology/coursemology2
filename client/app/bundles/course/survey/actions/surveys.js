@@ -57,6 +57,16 @@ export function loadSurvey(survey) {
   };
 }
 
+export function loadSurveys(surveys, canCreate) {
+  return (dispatch) => {
+    dispatch({
+      type: actionTypes.LOAD_SURVEYS_SUCCESS,
+      surveys,
+      canCreate,
+    });
+  };
+}
+
 export function fetchSurvey(surveyId) {
   return (dispatch) => {
     dispatch({ type: actionTypes.LOAD_SURVEY_REQUEST, surveyId });
@@ -78,11 +88,7 @@ export function fetchSurveys() {
     return CourseAPI.survey.surveys
       .index()
       .then((response) => {
-        dispatch({
-          type: actionTypes.LOAD_SURVEYS_SUCCESS,
-          surveys: response.data.surveys,
-          canCreate: response.data.canCreate,
-        });
+        loadSurveys(response.data.surveys, response.data.canCreate)(dispatch);
       })
       .catch(() => {
         dispatch({ type: actionTypes.LOAD_SURVEYS_FAILURE });
