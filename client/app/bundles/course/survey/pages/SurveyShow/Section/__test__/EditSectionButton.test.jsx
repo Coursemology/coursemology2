@@ -1,9 +1,7 @@
-import { act } from 'react-dom/test-utils';
-import { mount } from 'enzyme';
+import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 import SectionFormDialogue from 'course/survey/containers/SectionFormDialogue';
-import storeCreator from 'course/survey/store';
 
 import EditSectionButton from '../EditSectionButton';
 
@@ -12,38 +10,37 @@ const section = {
   title: 'Section to be edited',
 };
 
+const newDescription = 'Added later';
+
+const expectedPayload = {
+  section: { title: section.title, description: newDescription },
+};
+
 describe('<EditSectionButton />', () => {
   it('injects handlers that allow survey sections to be edited', async () => {
     const surveyId = 1;
+    const url = `/courses/${courseId}/surveys/${surveyId}`;
+    window.history.pushState({}, '', url);
+
     const spyUpdate = jest.spyOn(CourseAPI.survey.sections, 'update');
 
-    window.history.pushState(
-      {},
-      '',
-      `/courses/${courseId}/surveys/${surveyId}`,
+    const page = render(
+      <>
+        <EditSectionButton section={section} />
+        <SectionFormDialogue />
+      </>,
     );
-    const contextOptions = buildContextOptions(storeCreator({}));
-    const sectionFormDialogue = mount(<SectionFormDialogue />, contextOptions);
-    const editSectionButton = mount(
-      <EditSectionButton section={section} />,
-      contextOptions,
-    );
-    editSectionButton.find('button').simulate('click');
-    sectionFormDialogue.update();
 
-    const newDescription = 'Added later';
-    const sectionForm = sectionFormDialogue.find('form');
-    const descriptionInput = sectionForm.find('textarea[name="description"]');
-    descriptionInput.simulate('change', { target: { value: newDescription } });
-    await sleep(0.01);
+    fireEvent.click(page.getByRole('button'));
 
-    await act(async () => {
-      sectionForm.simulate('submit');
+    fireEvent.change(page.getByLabelText('Description'), {
+      target: { value: newDescription },
     });
 
-    const expectedPayload = {
-      section: { title: section.title, description: newDescription },
-    };
-    expect(spyUpdate).toHaveBeenCalledWith(section.id, expectedPayload);
+    fireEvent.click(page.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() => {
+      expect(spyUpdate).toHaveBeenCalledWith(section.id, expectedPayload);
+    });
   });
 });
