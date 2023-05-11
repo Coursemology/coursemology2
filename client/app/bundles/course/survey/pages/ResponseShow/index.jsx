@@ -24,6 +24,8 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import withRouter from 'lib/components/navigation/withRouter';
 import { formatLongDateTime } from 'lib/moment';
 
+import withSurveyLayout from '../../containers/SurveyLayout';
+
 const translations = defineMessages({
   notSubmitted: {
     id: 'course.survey.ResponseShow.notSubmitted',
@@ -179,5 +181,6 @@ ResponseShow.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export const UnconnectedResponseShow = ResponseShow;
-export default withRouter(connect((state) => state.responseForm)(ResponseShow));
+export default withSurveyLayout(
+  withRouter(connect(({ surveys }) => surveys.responseForm)(ResponseShow)),
+);

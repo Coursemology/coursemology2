@@ -1,15 +1,15 @@
 /* eslint-disable camelcase */
 import { useState } from 'react';
 import { defineMessages, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import MoreVert from '@mui/icons-material/MoreVert';
 import { IconButton, Menu, MenuItem } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { showDeleteConfirmation } from 'course/survey/actions';
 import * as surveyActions from 'course/survey/actions/surveys';
 import { surveyShape } from 'course/survey/propTypes';
+import { showDeleteConfirmation } from 'lib/actions';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { formatSurveyFormData } from '../../utils';
 
@@ -42,8 +42,10 @@ const translations = defineMessages({
 
 const AdminMenu = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const { dispatch, intl, survey, surveyId } = props;
+  const { intl, survey, surveyId } = props;
   const navigate = useNavigate();
+
+  const dispatch = useAppDispatch();
 
   if (!survey.canUpdate && !survey.canDelete) {
     return null;
@@ -159,7 +161,6 @@ AdminMenu.propTypes = {
   surveyId: PropTypes.string.isRequired,
 
   intl: PropTypes.object,
-  dispatch: PropTypes.func.isRequired,
 };
 
-export default connect()(injectIntl(AdminMenu));
+export default injectIntl(AdminMenu);

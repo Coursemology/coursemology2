@@ -101,6 +101,6 @@ UnsubmitButton.propTypes = {
   color: PropTypes.string,
 };
 
-export default connect((state) => ({
-  disabled: state.surveysFlags.isUnsubmittingResponse,
+export default connect(({ surveys }) => ({
+  disabled: surveys.surveysFlags.isUnsubmittingResponse,
 }))(UnsubmitButton);

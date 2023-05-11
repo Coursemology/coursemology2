@@ -11,6 +11,8 @@ import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import withRouter from 'lib/components/navigation/withRouter';
 
+import Dialogs from '../../components/Dialogs';
+
 import NewSurveyButton from './NewSurveyButton';
 import SurveysTable from './SurveysTable';
 
@@ -52,8 +54,12 @@ class SurveyIndex extends Component {
         <PageHeader
           title={<FormattedMessage {...surveyTranslations.surveys} />}
         />
+
         {this.renderBody()}
+
         <NewSurveyButton />
+
+        <Dialogs />
       </>
     );
   }
@@ -71,9 +77,9 @@ SurveyIndex.propTypes = {
   }),
 };
 
-const mapStateToProps = (state) => ({
-  surveys: state.surveys,
-  isLoading: state.surveysFlags.isLoadingSurveys,
+const mapStateToProps = ({ surveys }) => ({
+  surveys: surveys.surveys,
+  isLoading: surveys.surveysFlags.isLoadingSurveys,
 });
 
 export default withRouter(connect(mapStateToProps)(SurveyIndex));

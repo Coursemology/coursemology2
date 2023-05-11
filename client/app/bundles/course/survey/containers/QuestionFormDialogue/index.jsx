@@ -8,11 +8,8 @@ import FormDialogue from 'lib/components/form/FormDialogue';
 
 import QuestionForm from './QuestionForm';
 
-function mapStateToProps({ questionForm, ...state }) {
-  return {
-    ...questionForm,
-    ...state,
-  };
+function mapStateToProps({ surveys: { questionForm } }) {
+  return { ...questionForm };
 }
 
 const propTypes = {

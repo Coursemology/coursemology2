@@ -9,11 +9,8 @@ import FormDialogue from 'lib/components/form/FormDialogue';
 
 import SectionForm from './SectionForm';
 
-function mapStateToProps({ sectionForm, state }) {
-  return {
-    ...sectionForm,
-    ...state,
-  };
+function mapStateToProps({ surveys: { sectionForm } }) {
+  return { ...sectionForm };
 }
 
 const SectionFormDialogue = ({

@@ -1,10 +1,9 @@
 import CourseAPI from 'api/course';
+import { setNotification } from 'lib/actions';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getSurveyId } from 'lib/helpers/url-helpers';
 
 import actionTypes from '../constants';
-
-import { setNotification } from './index';
 
 export function showQuestionForm(formParams) {
   return { type: actionTypes.QUESTION_FORM_SHOW, formParams };
@@ -77,10 +76,9 @@ export function finalizeOrder(successMessage, failureMessage, onError) {
     const {
       surveysFlags: { isQuestionMoved },
       surveys,
-    } = getState();
-    if (!isQuestionMoved) {
-      return;
-    }
+    } = getState().surveys;
+
+    if (!isQuestionMoved) return;
 
     const surveyId = getSurveyId();
     const survey = surveys.find((item) => String(item.id) === surveyId);

@@ -52,7 +52,7 @@ const SurveysTable = (props) => {
       <Switch
         checked={survey.published}
         color="primary"
-        onChange={(event, value) =>
+        onChange={(_, value) =>
           dispatch(
             updateSurvey(
               survey.id,
@@ -193,4 +193,4 @@ SurveysTable.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect((state) => state)(SurveysTable);
+export default connect(({ surveys }) => surveys)(SurveysTable);

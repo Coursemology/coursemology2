@@ -15,6 +15,8 @@ import { sectionShape, surveyShape } from 'course/survey/propTypes';
 import surveyTranslations from 'course/survey/translations';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 
+import withSurveyLayout from '../../containers/SurveyLayout';
+
 import ResultsSection from './ResultsSection';
 
 const translations = defineMessages({
@@ -145,5 +147,6 @@ SurveyResults.propTypes = {
   sections: PropTypes.arrayOf(sectionShape),
 };
 
-const mapStateToProps = (state) => state.results;
-export default connect(mapStateToProps)(SurveyResults);
+export default withSurveyLayout(
+  connect(({ surveys }) => surveys.results)(SurveyResults),
+);

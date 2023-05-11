@@ -28,6 +28,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import moment, { formatLongDateTime } from 'lib/moment';
 
 import { workflowStates } from '../../constants';
+import withSurveyLayout from '../../containers/SurveyLayout';
 import UnsubmitButton from '../../containers/UnsubmitButton';
 
 import RemindButton from './RemindButton';
@@ -343,4 +344,6 @@ ResponseIndex.propTypes = {
   isLoading: PropTypes.bool.isRequired,
 };
 
-export default connect((rootState) => rootState.responses)(ResponseIndex);
+export default withSurveyLayout(
+  connect(({ surveys }) => surveys.responses)(ResponseIndex),
+);

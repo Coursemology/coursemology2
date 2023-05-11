@@ -51,6 +51,12 @@ import LevelsIndex from 'bundles/course/level/pages/LevelsIndex';
 import FolderShow from 'bundles/course/material/folders/pages/FolderShow';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
 import StatisticsIndex from 'bundles/course/statistics/pages/StatisticsIndex';
+import ResponseEdit from 'bundles/course/survey/pages/ResponseEdit';
+import ResponseIndex from 'bundles/course/survey/pages/ResponseIndex';
+import ResponseShow from 'bundles/course/survey/pages/ResponseShow';
+import SurveyIndex from 'bundles/course/survey/pages/SurveyIndex';
+import SurveyResults from 'bundles/course/survey/pages/SurveyResults';
+import SurveyShow from 'bundles/course/survey/pages/SurveyShow';
 import InvitationsIndex from 'bundles/course/user-invitations/pages/InvitationsIndex';
 import InviteUsers from 'bundles/course/user-invitations/pages/InviteUsers';
 import ExperiencePointsRecords from 'bundles/course/users/pages/ExperiencePointsRecords';
@@ -358,6 +364,24 @@ const RoutedApp = (): JSX.Element => {
             element={<ScribingQuestion />}
             path="/courses/:courseId/assessments/:assessmentId/question/scribing/:questionId/edit"
           />
+
+          <Route path="/courses/:courseId/surveys">
+            <Route element={<SurveyIndex />} index />
+
+            <Route path=":surveyId">
+              <Route element={<SurveyShow />} index />
+              <Route element={<SurveyResults />} path="results" />
+
+              <Route path="responses">
+                <Route element={<ResponseIndex />} index />
+
+                <Route path=":responseId">
+                  <Route element={<ResponseShow />} index />
+                  <Route element={<ResponseEdit />} path="edit" />
+                </Route>
+              </Route>
+            </Route>
+          </Route>
 
           <Route
             element={<NewProgrammingQuestionPage />}
