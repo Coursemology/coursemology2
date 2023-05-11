@@ -104,7 +104,7 @@ const processColumns = (includeRowNumber, columns) => {
       options: {
         sort: false,
         filter: false,
-        customBodyRenderLite: (_dataIndex, rowIndex) => rowIndex + 1,
+        customBodyRenderLite: (dataIndex) => dataIndex + 1,
         download: false,
       },
     });
