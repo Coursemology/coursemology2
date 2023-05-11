@@ -79,6 +79,10 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
         find_all('div', text: 'Language').last.click
         find('li', text: attributes[:language].name).click
 
+        find('span', text: 'Evaluate and test code').click
+        expect(page).to have_text('submissions will always receive the maximum grade')
+        find('span', text: 'Evaluate and test code').click
+
         find('div', id: 'testUi.metadata.submission').click
         send_keys template
 
