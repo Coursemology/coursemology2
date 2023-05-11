@@ -12,7 +12,10 @@ json.question do
   json.maxTimeLimit @programming_question.max_time_limit || ''
   json.attemptLimit @programming_question.attempt_limit || ''
   json.isLowPriority @programming_question.is_low_priority
-  json.autograded @programming_question.persisted? ? @programming_question.attachment.present? : @assessment.autograded?
+
+  autograded_assessment = @assessment.autograded?
+  json.autogradedAssessment autograded_assessment
+  json.autograded @programming_question.persisted? ? @programming_question.attachment.present? : autograded_assessment
   json.editOnline can_edit_online?
 
   has_submissions = @programming_question.answers.without_attempting_state.count > 0

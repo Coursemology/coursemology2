@@ -26,6 +26,7 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
   const autograded = watch('question.autograded');
   if (!autograded) return null;
 
+  const autogradedAssessment = question.autogradedAssessment;
   const hasSubmissions = question.hasSubmissions;
   const codaveriDisabled = !question.codaveriEnabled || hasSubmissions;
 
@@ -138,23 +139,25 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
             />
           </Grid>
 
-          <Grid item xs>
-            <Controller
-              control={control}
-              name="question.attemptLimit"
-              render={({ field, fieldState }): JSX.Element => (
-                <FormTextField
-                  disabled={props.disabled}
-                  disableMargins
-                  field={field}
-                  fieldState={fieldState}
-                  fullWidth
-                  label={t(translations.attemptLimit)}
-                  variant="filled"
-                />
-              )}
-            />
-          </Grid>
+          {!autogradedAssessment && (
+            <Grid item xs>
+              <Controller
+                control={control}
+                name="question.attemptLimit"
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormTextField
+                    disabled={props.disabled}
+                    disableMargins
+                    field={field}
+                    fieldState={fieldState}
+                    fullWidth
+                    label={t(translations.attemptLimit)}
+                    variant="filled"
+                  />
+                )}
+              />
+            </Grid>
+          )}
         </Grid>
 
         <Controller
