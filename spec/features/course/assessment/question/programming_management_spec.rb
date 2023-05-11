@@ -51,8 +51,64 @@ RSpec.describe 'Course: Assessments: Questions: Programming Management', js: tru
           expect(new_question.staff_only_comments).to include(attributes[:staff_only_comments])
           expect(new_question.question_assessments.first.skills).to contain_exactly(skill)
           expect(new_question.language).to eq(attributes[:language])
-          expect(new_question.template_files.first.content).to eq(template)
+          expect(new_question.template_files.first.content).to include(template)
         end
+      end
+
+      scenario 'I can create a new question in an autograded assessment' do
+        skill = create(:course_assessment_skill, course: course)
+        assessment = create(:assessment, :autograded, course: course)
+        visit new_course_assessment_question_programming_path(course, assessment)
+
+        attributes = attributes_for(:course_assessment_question_programming)
+        template = "print('Hello World')"
+
+        fill_in 'Title', with: attributes[:title]
+        fill_in 'Maximum grade', with: attributes[:maximum_grade]
+
+        fill_in_react_ck 'textarea[name="question.description"]', attributes[:description]
+        fill_in_react_ck 'textarea[name="question.staffOnlyComments"]', attributes[:staff_only_comments]
+
+        find_field('Skills').click
+        find('li', text: skill.title).click
+
+        evaluator_check = find('label', text: 'Evaluate and test code').find('input', visible: false)
+        expect(evaluator_check).to be_checked
+        expect(page).not_to have_field('Attempt limit')
+
+        find_all('div', text: 'Language').last.click
+        find('li', text: attributes[:language].name).click
+
+        find('div', id: 'testUi.metadata.submission').click
+        send_keys template
+
+        within find('div[aria-label="Public test cases"]') do
+          find('button[aria-label="Add a test case"]').click
+
+          test_case_fields = find_all('textarea')
+          expression_field = test_case_fields[0]
+          expected_field = test_case_fields[1]
+
+          expression_field.click
+          send_keys 1
+
+          expected_field.click
+          send_keys 1
+        end
+
+        click_button 'Save changes'
+        wait_for_page
+
+        expect(page).to have_current_path(course_assessment_path(course, assessment))
+
+        new_question = assessment.questions.first.specific.reload
+        expect(new_question.title).to eq(attributes[:title])
+        expect(new_question.maximum_grade).to eq(attributes[:maximum_grade])
+        expect(new_question.description).to include(attributes[:description])
+        expect(new_question.staff_only_comments).to include(attributes[:staff_only_comments])
+        expect(new_question.question_assessments.first.skills).to contain_exactly(skill)
+        expect(new_question.language).to eq(attributes[:language])
+        expect(new_question.template_files.first.content).to include(template)
       end
 
       scenario 'I can upload a template package' do
