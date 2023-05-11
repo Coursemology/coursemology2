@@ -1,10 +1,10 @@
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { createResponse } from 'course/survey/actions/responses';
+import { useAppDispatch } from 'lib/hooks/store';
 import moment from 'lib/moment';
 
 const translations = defineMessages({
@@ -40,8 +40,9 @@ const RespondButton = ({
   startAt,
   endAt,
   submittedAt,
-  dispatch,
 }) => {
+  const dispatch = useAppDispatch();
+
   const isStarted = !!responseId;
   const responsePath = `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}`;
   const navigate = useNavigate();
@@ -95,8 +96,6 @@ RespondButton.propTypes = {
     PropTypes.string,
     PropTypes.instanceOf(Date),
   ]),
-
-  dispatch: PropTypes.func.isRequired,
 };
 
 RespondButton.defaultProps = {
@@ -106,4 +105,4 @@ RespondButton.defaultProps = {
   canSubmit: false,
 };
 
-export default connect()(RespondButton);
+export default RespondButton;

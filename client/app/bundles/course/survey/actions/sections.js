@@ -1,10 +1,9 @@
 import CourseAPI from 'api/course';
+import { setNotification } from 'lib/actions';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getSurveyId } from 'lib/helpers/url-helpers';
 
 import actionTypes from '../constants';
-
-import { setNotification } from './index';
 
 export function showSectionForm(formParams) {
   return { type: actionTypes.SECTION_FORM_SHOW, formParams };
@@ -109,7 +108,7 @@ export function changeSectionOrder(
   failureMessage,
 ) {
   return (dispatch, getState) => {
-    const { surveys } = getState();
+    const { surveys } = getState().surveys;
     const surveyId = getSurveyId();
     const survey = surveys.find((item) => String(item.id) === surveyId);
     const ordering = survey.sections.map((section) => section.id);

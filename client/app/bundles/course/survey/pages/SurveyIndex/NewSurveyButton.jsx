@@ -83,6 +83,6 @@ const NewSurveyButton = (props) => {
 
 NewSurveyButton.propTypes = propTypes;
 
-export default connect((state) => state.surveysFlags)(
+export default connect(({ surveys }) => surveys.surveysFlags)(
   injectIntl(NewSurveyButton),
 );

@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { showDeleteConfirmation } from 'course/survey/actions';
 import { deleteSurveySection } from 'course/survey/actions/sections';
+import { showDeleteConfirmation } from 'lib/actions';
 
 const translations = defineMessages({
   deleteSection: {
