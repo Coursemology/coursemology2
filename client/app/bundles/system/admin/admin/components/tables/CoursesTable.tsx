@@ -286,9 +286,9 @@ const CoursesTable: FC<Props> = (props) => {
         sort: false,
         alignCenter: true,
         customBodyRender: (_value, tableMeta): JSX.Element => {
-          const rowData = tableMeta.rowData as CourseMiniEntity;
+          const rowData = tableMeta.rowData;
           const course = rebuildObjectFromRow(columns, rowData);
-          return renderRowActionComponent(course);
+          return renderRowActionComponent(course as CourseMiniEntity);
         },
       },
     },

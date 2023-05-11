@@ -61,19 +61,7 @@ const processTheme = (theme, newHeight, grid, alignCenter, newPadding) =>
 const processColumns = (includeRowNumber, columns) => {
   if (!columns.length) return columns;
 
-  if (includeRowNumber) {
-    columns.unshift({
-      name: 'S/N',
-      options: {
-        sort: false,
-        filter: false,
-        customBodyRenderLite: (_dataIndex, rowIndex) => rowIndex + 1,
-        download: false,
-      },
-    });
-  }
-
-  return columns.map((column) => {
+  const processed = columns.map((column) => {
     if (!column.options?.alignCenter && !column.options?.hideInSmallScreen)
       return column;
 
@@ -109,6 +97,19 @@ const processColumns = (includeRowNumber, columns) => {
       };
     });
   });
+
+  if (includeRowNumber)
+    processed.unshift({
+      name: 'S/N',
+      options: {
+        sort: false,
+        filter: false,
+        customBodyRenderLite: (_dataIndex, rowIndex) => rowIndex + 1,
+        download: false,
+      },
+    });
+
+  return processed;
 };
 
 /**

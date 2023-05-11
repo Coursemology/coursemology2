@@ -204,7 +204,7 @@ const UserInvitationsTable: FC<Props> = (props) => {
         customBodyRender: (_value, tableMeta): JSX.Element => {
           const rowData = tableMeta.rowData;
           const invitation = rebuildObjectFromRow(columns, rowData);
-          return renderRowActionComponent(invitation);
+          return renderRowActionComponent(invitation as InvitationRowData);
         },
       },
     });

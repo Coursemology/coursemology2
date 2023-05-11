@@ -274,9 +274,11 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
                   sort: false,
                   alignCenter: true,
                   customBodyRender: (_value, tableMeta): JSX.Element => {
-                    const rowData = tableMeta.rowData as RoleRequestRowData;
+                    const rowData = tableMeta.rowData;
                     const enrolRequest = rebuildObjectFromRow(columns, rowData);
-                    return renderRowActionComponent(enrolRequest);
+                    return renderRowActionComponent(
+                      enrolRequest as RoleRequestRowData,
+                    );
                   },
                 },
               },

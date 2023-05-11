@@ -323,9 +323,9 @@ const UsersTable: FC<Props> = (props) => {
         sort: false,
         alignCenter: true,
         customBodyRender: (_value, tableMeta): JSX.Element => {
-          const rowData = tableMeta.rowData as InstanceUserMiniEntity;
+          const rowData = tableMeta.rowData;
           const user = rebuildObjectFromRow(columns, rowData);
-          return renderRowActionComponent(user);
+          return renderRowActionComponent(user as InstanceUserMiniEntity);
         },
       },
     },

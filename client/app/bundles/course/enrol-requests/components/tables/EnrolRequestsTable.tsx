@@ -290,9 +290,9 @@ const EnrolRequestsTable: FC<Props> = (props) => {
               sort: false,
               alignCenter: true,
               customBodyRender: (_value, tableMeta): JSX.Element => {
-                const rowData = tableMeta.rowData as EnrolRequestRowData;
-                const enrolRequest = rebuildObjectFromRow(columns, rowData);
-                return renderRowActionComponent(enrolRequest);
+                const rowData = tableMeta.rowData;
+                const request = rebuildObjectFromRow(columns, rowData);
+                return renderRowActionComponent(request as EnrolRequestRowData);
               },
             },
           },
