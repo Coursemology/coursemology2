@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from '@hello-pangea/dnd';
 import { ContentCopy, Create, DragIndicator } from '@mui/icons-material';
 import { Chip, IconButton, Tooltip, Typography } from '@mui/material';
 import { QuestionData } from 'types/course/assessment/questions';

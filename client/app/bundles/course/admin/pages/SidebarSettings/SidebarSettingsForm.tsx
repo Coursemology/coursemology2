@@ -4,7 +4,7 @@ import {
   Draggable,
   Droppable,
   DropResult,
-} from 'react-beautiful-dnd';
+} from '@hello-pangea/dnd';
 import { DragIndicator } from '@mui/icons-material';
 import {
   Paper,

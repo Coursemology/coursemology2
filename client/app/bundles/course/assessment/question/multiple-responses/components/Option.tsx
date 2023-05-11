@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from '@hello-pangea/dnd';
 import { Delete, DragIndicator, Undo } from '@mui/icons-material';
 import { IconButton, Tooltip, Typography } from '@mui/material';
 import produce from 'immer';

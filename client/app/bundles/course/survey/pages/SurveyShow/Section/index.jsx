@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import { Droppable } from 'react-beautiful-dnd';
 import { defineMessages, FormattedMessage } from 'react-intl';
+import { Droppable } from '@hello-pangea/dnd';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
   Card,

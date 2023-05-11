@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { DragDropContext, Droppable, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, DropResult } from '@hello-pangea/dnd';
 import { Add } from '@mui/icons-material';
 import { Button, Paper, Typography } from '@mui/material';
 import produce from 'immer';

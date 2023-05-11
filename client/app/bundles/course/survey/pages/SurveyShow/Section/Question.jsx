@@ -1,7 +1,7 @@
 import { Component } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
 import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
+import { Draggable } from '@hello-pangea/dnd';
 import PropTypes from 'prop-types';
 
 import * as questionActions from 'course/survey/actions/questions';
