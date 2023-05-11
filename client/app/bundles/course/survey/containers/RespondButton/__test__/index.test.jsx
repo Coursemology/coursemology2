@@ -1,19 +1,11 @@
 import MockAdapter from 'axios-mock-adapter';
-import { mount } from 'enzyme';
+import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import storeCreator from 'course/survey/store';
 
 import RespondButton from '../index';
 
-const client = CourseAPI.survey.responses.client;
-const mock = new MockAdapter(client);
-const mockUsedNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUsedNavigate,
-}));
+const mock = new MockAdapter(CourseAPI.survey.responses.client);
 
 beforeEach(() => {
   mock.reset();
@@ -27,19 +19,19 @@ describe('<RespondButton />', () => {
     mock.onPost(responsesUrl).reply(200, {});
     const spyCreate = jest.spyOn(CourseAPI.survey.responses, 'create');
 
-    const respondButton = mount(
+    const page = render(
       <RespondButton
         canModify
         canRespond
         canSubmit
         {...{ courseId, surveyId }}
       />,
-      buildContextOptions(storeCreator({})),
     );
 
-    respondButton.find('button').simulate('click');
+    fireEvent.click(page.getByRole('button'));
 
-    await sleep(1);
-    expect(spyCreate).toHaveBeenCalledWith(surveyId);
+    await waitFor(() => {
+      expect(spyCreate).toHaveBeenCalledWith(surveyId);
+    });
   });
 });

@@ -1,7 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
+import { dispatch } from 'store';
 
 import CourseAPI from 'api/course';
-import storeCreator from 'course/survey/store';
 import history from 'lib/history';
 
 import { createResponse } from '../responses';
@@ -17,10 +17,9 @@ beforeEach(() => {
 
 const surveyId = '2';
 const responseId = '5';
-const responsesUrl = `/courses/${courseId}/surveys/${surveyId}/responses`;
+const responsesUrl = `/courses/${global.courseId}/surveys/${surveyId}/responses`;
 
 describe('createResponse', () => {
-  const store = storeCreator({ surveys: {} });
   const spyCreate = jest.spyOn(CourseAPI.survey.responses, 'create');
 
   it('redirects to edit page if response is already created and user can modify or submit it', async () => {
@@ -30,8 +29,7 @@ describe('createResponse', () => {
       canSubmit: true,
     });
 
-    store.dispatch(createResponse(surveyId, mockNavigate));
-    await sleep(1);
+    await dispatch(createResponse(surveyId, mockNavigate));
     expect(spyCreate).toHaveBeenCalledWith(surveyId);
   });
 
@@ -42,8 +40,7 @@ describe('createResponse', () => {
       canSubmit: false,
     });
 
-    store.dispatch(createResponse(surveyId, mockNavigate));
-    await sleep(1);
+    await dispatch(createResponse(surveyId, mockNavigate));
     expect(spyCreate).toHaveBeenCalledWith(surveyId);
   });
 });

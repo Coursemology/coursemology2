@@ -1,20 +1,10 @@
-import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-dom/test-utils';
-import { mount } from 'enzyme';
+import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 import SurveyFormDialogue from 'course/survey/containers/SurveyFormDialogue';
-import storeCreator from 'course/survey/store';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 
 import AdminMenu from '../AdminMenu';
-
-const mockUsedNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUsedNavigate,
-}));
 
 describe('<AdminMenu />', () => {
   it('does not render button if user cannot edit or update', () => {
@@ -24,16 +14,15 @@ describe('<AdminMenu />', () => {
       canDelete: false,
       canUpdate: false,
     };
-    const adminMenu = mount(
+
+    const page = render(
       <AdminMenu survey={survey} surveyId={survey.id.toString()} />,
-      buildContextOptions(storeCreator({})),
     );
 
-    expect(adminMenu).toMatchSnapshot();
+    expect(page.queryByRole('button')).not.toBeInTheDocument();
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('allows surveys to be deleted', () => {
+  it('allows surveys to be deleted', async () => {
     const spyDelete = jest.spyOn(CourseAPI.survey.surveys, 'delete');
     const survey = {
       id: 2,
@@ -41,30 +30,23 @@ describe('<AdminMenu />', () => {
       canDelete: true,
     };
 
-    const contextOptions = buildContextOptions(storeCreator({}));
-    const deleteConfirmation = mount(<DeleteConfirmation />, contextOptions);
-    const adminMenu = mount(
-      <AdminMenu survey={survey} surveyId={survey.id.toString()} />,
-      contextOptions,
+    const page = render(
+      <>
+        <DeleteConfirmation />
+        <AdminMenu survey={survey} surveyId={survey.id.toString()} />
+      </>,
     );
 
-    const iconButton = adminMenu.find('button').first();
-    iconButton.simulate('click');
+    fireEvent.click(page.getByRole('button'));
+    fireEvent.click(page.getByText('Delete Survey'));
+    fireEvent.click(page.getByRole('button', { name: 'Delete' }));
 
-    const deleteButton = adminMenu.find('ForwardRef(ButtonBase)').last();
-    deleteButton.simulate('click');
-
-    const confirmDeleteButton = deleteConfirmation
-      .find('ConfirmationDialog')
-      .first()
-      .instance().confirmButton;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
-
-    expect(spyDelete).toHaveBeenCalledWith(survey.id.toString());
+    await waitFor(() => {
+      expect(spyDelete).toHaveBeenCalledWith(survey.id.toString());
+    });
   });
 
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('allows surveys to be edited', () => {
+  it('allows surveys to be edited', async () => {
     const spyUpdate = jest.spyOn(CourseAPI.survey.surveys, 'update');
     const surveyFormData = {
       title: 'Survey To Edit',
@@ -77,6 +59,7 @@ describe('<AdminMenu />', () => {
       allow_modify_after_submit: true,
       anonymous: true,
     };
+
     const survey = {
       ...surveyFormData,
       id: 2,
@@ -84,31 +67,23 @@ describe('<AdminMenu />', () => {
       canUpdate: true,
     };
 
-    const contextOptions = buildContextOptions(storeCreator({}));
-    const surveyFormDialogue = mount(<SurveyFormDialogue />, contextOptions);
-    const adminMenu = mount(
-      <AdminMenu survey={survey} surveyId={survey.id.toString()} />,
-      contextOptions,
+    const page = render(
+      <>
+        <AdminMenu survey={survey} surveyId={survey.id.toString()} />
+        <SurveyFormDialogue />
+      </>,
     );
 
-    const iconButton = adminMenu.find('button').first();
-    iconButton.simulate('click');
+    fireEvent.click(page.getByRole('button'));
+    fireEvent.click(page.getByText('Edit Survey'));
 
-    const updateButton = adminMenu.find('ForwardRef(ButtonBase)').last();
-    updateButton.simulate('click');
-
-    surveyFormDialogue.update();
-
-    const sectionForm = surveyFormDialogue.find('form');
     const description = 'To update description';
-    const descriptionInput = sectionForm.find('textarea[name="description"]');
-    descriptionInput.simulate('change', { target: { value: description } });
 
-    const submitButton = surveyFormDialogue
-      .find('FormDialogue')
-      .first()
-      .instance().submitButton;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
+    fireEvent.change(page.getByLabelText('Description', { exact: false }), {
+      target: { value: description },
+    });
+
+    fireEvent.click(page.getByRole('button', { name: 'Submit' }));
 
     const expectedPayload = {
       survey: {
@@ -116,12 +91,14 @@ describe('<AdminMenu />', () => {
         description,
         start_at: new Date(survey.start_at),
         end_at: new Date(survey.end_at),
-        bonus_end_at: new Date(survey.end_at),
       },
     };
-    expect(spyUpdate).toHaveBeenCalledWith(
-      survey.id.toString(),
-      expectedPayload,
-    );
+
+    await waitFor(() => {
+      expect(spyUpdate).toHaveBeenCalledWith(
+        survey.id.toString(),
+        expectedPayload,
+      );
+    });
   });
 });
