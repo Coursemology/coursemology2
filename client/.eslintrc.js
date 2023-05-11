@@ -43,6 +43,7 @@ module.exports = {
           ['testUtils', './app/__test__/utils'],
           ['mocks', './app/__test__/mocks'],
           ['workers', './app/workers'],
+          ['store', './app/store'],
         ],
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
       },
