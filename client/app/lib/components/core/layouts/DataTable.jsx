@@ -1,4 +1,5 @@
 import { createTheme, ThemeProvider, useTheme } from '@mui/material/styles';
+import produce from 'immer';
 import MUIDataTable from 'mui-datatables';
 
 import styles from 'lib/components/core/layouts/layout.scss';
@@ -58,7 +59,7 @@ const processTheme = (theme, newHeight, grid, alignCenter, newPadding) =>
   });
 
 const processColumns = (includeRowNumber, columns) => {
-  if (!columns) return columns;
+  if (!columns.length) return columns;
 
   if (includeRowNumber) {
     columns.unshift({
@@ -72,44 +73,41 @@ const processColumns = (includeRowNumber, columns) => {
     });
   }
 
-  return columns.map((c) => {
-    if (c.options?.alignCenter || c.options?.hideInSmallScreen) {
-      return {
-        ...c,
-        options: {
-          ...c.options,
-          setCellHeaderProps: () => {
-            let align = null;
-            let className = '';
-            if (c.options?.alignCenter) {
-              className += `${styles.centeredTableHead}`;
-              align = 'center';
-            }
-            if (c.options?.hideInSmallScreen) {
-              className += ' !hidden sm:!table-cell';
-            }
-            return {
-              ...(align && { align }),
-              className,
-            };
-          },
-          setCellProps: () => {
-            let align = null;
-            let className = '';
-            if (c.options?.alignCenter) {
-              align = 'center';
-            }
-            if (c.options?.hideInSmallScreen)
-              className += ' !hidden sm:!table-cell';
-            return {
-              ...(align && { align }),
-              className,
-            };
-          },
-        },
+  return columns.map((column) => {
+    if (!column.options?.alignCenter && !column.options?.hideInSmallScreen)
+      return column;
+
+    return produce(column, (draft) => {
+      draft.options.setCellHeaderProps = () => {
+        let align = null;
+        let className = '';
+        if (column.options?.alignCenter) {
+          className += `${styles.centeredTableHead}`;
+          align = 'center';
+        }
+        if (column.options?.hideInSmallScreen) {
+          className += ' !hidden sm:!table-cell';
+        }
+        return {
+          ...(align && { align }),
+          className,
+        };
       };
-    }
-    return c;
+
+      draft.options.setCellProps = () => {
+        let align = null;
+        let className = '';
+        if (column.options?.alignCenter) {
+          align = 'center';
+        }
+        if (column.options?.hideInSmallScreen)
+          className += ' !hidden sm:!table-cell';
+        return {
+          ...(align && { align }),
+          className,
+        };
+      };
+    });
   });
 };
 
