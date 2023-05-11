@@ -16,6 +16,7 @@ json.question do
   autograded_assessment = @assessment.autograded?
   json.autogradedAssessment autograded_assessment
   json.autograded @programming_question.persisted? ? @programming_question.attachment.present? : autograded_assessment
+
   json.editOnline can_edit_online?
 
   has_submissions = @programming_question.answers.without_attempting_state.count > 0
