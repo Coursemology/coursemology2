@@ -1,5 +1,6 @@
 import { ChangeEventHandler } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { Alert } from '@mui/material';
 import {
   LanguageMode,
   ProgrammingFormData,
@@ -28,6 +29,8 @@ const LanguageFields = (props: LanguageFieldsProps): JSX.Element => {
   const { question } = useProgrammingFormDataContext();
 
   const currentLanguage = props.getModeFromId(watch('question.languageId'));
+  const autogradedAssessment = question.autogradedAssessment;
+  const autograded = watch('question.autograded');
 
   return (
     <>
@@ -84,6 +87,12 @@ const LanguageFields = (props: LanguageFieldsProps): JSX.Element => {
           />
         )}
       />
+
+      {autogradedAssessment && !autograded && (
+        <Alert severity="warning">
+          {t(translations.autogradedAssessmentButNoEvaluationWarning)}
+        </Alert>
+      )}
     </>
   );
 };
