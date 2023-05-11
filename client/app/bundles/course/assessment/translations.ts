@@ -1372,6 +1372,13 @@ const translations = defineMessages({
     id: 'course.assessment.question.programming.mustUploadPackage',
     defaultMessage: 'Please specify a valid evaluation package ZIP file.',
   },
+  autogradedAssessmentButNoEvaluationWarning: {
+    id: 'course.assessment.question.programming.autogradedAssessmentButNoEvaluationWarning',
+    defaultMessage:
+      "This assessment is autograded. If code evaluation and testing is disabled, this question's " +
+      'submissions will always receive the maximum grade above since there are nothing for the autograder to test ' +
+      'and grade.',
+  },
 });
 
 export default translations;
