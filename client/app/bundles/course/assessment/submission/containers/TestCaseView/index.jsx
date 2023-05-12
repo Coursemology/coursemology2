@@ -419,25 +419,25 @@ VisibleTestCaseView.propTypes = {
   isDraftAnswer: PropTypes.bool,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps({ assessments: { submission } }, ownProps) {
   const { questionId, answerId, viewHistory, isDraftAnswer } = ownProps;
   let testCases;
   let isAutograding;
   if (viewHistory) {
-    testCases = state.history.testCases[answerId];
+    testCases = submission.history.testCases[answerId];
     isAutograding = false;
   } else {
-    testCases = state.testCases[questionId];
-    isAutograding = state.questionsFlags[questionId].isAutograding;
+    testCases = submission.testCases[questionId];
+    isAutograding = submission.questionsFlags[questionId].isAutograding;
   }
 
   return {
-    submissionState: state.submission.workflowState,
-    graderView: state.submission.graderView,
-    showPublicTestCasesOutput: state.submission.showPublicTestCasesOutput,
-    showStdoutAndStderr: state.submission.showStdoutAndStderr,
-    showPrivate: state.assessment.showPrivate,
-    showEvaluation: state.assessment.showEvaluation,
+    submissionState: submission.submission.workflowState,
+    graderView: submission.submission.graderView,
+    showPublicTestCasesOutput: submission.submission.showPublicTestCasesOutput,
+    showStdoutAndStderr: submission.submission.showStdoutAndStderr,
+    showPrivate: submission.assessment.showPrivate,
+    showEvaluation: submission.assessment.showEvaluation,
     collapsible: viewHistory,
     isAutograding,
     testCases,

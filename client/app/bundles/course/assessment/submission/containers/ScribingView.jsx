@@ -5,11 +5,11 @@ import ScribingViewComponent from '../components/ScribingView';
 
 const ScribingViewContainer = (props) => <ScribingViewComponent {...props} />;
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps({ assessments: { submission } }, ownProps) {
   const { answerId } = ownProps;
   return {
-    scribing: state.scribing[answerId],
-    submission: state.submission,
+    scribing: submission.scribing[answerId],
+    submission: submission.submission,
   };
 }
 

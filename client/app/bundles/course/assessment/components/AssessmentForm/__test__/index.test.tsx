@@ -1,9 +1,6 @@
 import { ComponentProps } from 'react';
-import { fireEvent, render, RenderResult } from 'utilities/test-utils';
+import { fireEvent, render, RenderResult } from 'test-utils';
 
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-
-import storeCreator from '../../../store';
 import AssessmentForm from '..';
 
 const INITIAL_VALUES = {
@@ -21,19 +18,13 @@ const INITIAL_VALUES = {
   published: false,
 };
 
-let store;
 let initialValues;
 let props: ComponentProps<typeof AssessmentForm>;
 let form: RenderResult;
 
-const getComponent = (): JSX.Element => (
-  <ProviderWrapper store={store}>
-    <AssessmentForm {...props} />
-  </ProviderWrapper>
-);
+const getComponent = (): JSX.Element => <AssessmentForm {...props} />;
 
 beforeEach(() => {
-  store = storeCreator({ assessments: {} });
   initialValues = INITIAL_VALUES;
 
   props = {

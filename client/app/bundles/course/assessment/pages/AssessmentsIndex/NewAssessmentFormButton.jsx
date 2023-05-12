@@ -214,6 +214,6 @@ NewAssessmentFormButton.propTypes = {
   intl: PropTypes.object,
 };
 
-export default connect((state) => ({
-  ...state.formDialog,
+export default connect(({ assessments }) => ({
+  ...assessments.formDialog,
 }))(injectIntl(NewAssessmentFormButton));

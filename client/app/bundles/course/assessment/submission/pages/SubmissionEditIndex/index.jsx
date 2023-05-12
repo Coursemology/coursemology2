@@ -469,26 +469,26 @@ VisibleSubmissionEditIndex.propTypes = {
   setSessionId: PropTypes.func,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps({ assessments: { submission } }) {
   return {
-    assessment: state.assessment,
-    exp: state.grading.exp,
-    explanations: state.explanations,
-    answers: state.answers,
-    codaveriFeedbackStatus: state.codaveriFeedbackStatus,
-    grading: state.grading.questions,
-    notification: state.notification,
-    posts: state.posts,
-    submission: state.submission,
-    questions: state.questions,
-    historyAnswers: state.history.answers,
-    historyQuestions: state.history.questions,
-    questionsFlags: state.questionsFlags,
-    isAutograding: state.submissionFlags.isAutograding,
-    topics: state.topics,
-    isLoading: state.submissionFlags.isLoading,
-    isSaving: state.submissionFlags.isSaving,
-    isSubmissionBlocked: state.submissionFlags.isSubmissionBlocked,
+    assessment: submission.assessment,
+    exp: submission.grading.exp,
+    explanations: submission.explanations,
+    answers: submission.answers,
+    codaveriFeedbackStatus: submission.codaveriFeedbackStatus,
+    grading: submission.grading.questions,
+    notification: submission.notification,
+    posts: submission.posts,
+    submission: submission.submission,
+    questions: submission.questions,
+    historyAnswers: submission.history.answers,
+    historyQuestions: submission.history.questions,
+    questionsFlags: submission.questionsFlags,
+    isAutograding: submission.submissionFlags.isAutograding,
+    topics: submission.topics,
+    isLoading: submission.submissionFlags.isLoading,
+    isSaving: submission.submissionFlags.isSaving,
+    isSubmissionBlocked: submission.submissionFlags.isSubmissionBlocked,
   };
 }
 

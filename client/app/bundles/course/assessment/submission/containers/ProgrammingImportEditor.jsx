@@ -254,7 +254,7 @@ VisibleProgrammingImportEditor.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   const { questionId, answerId, question, readOnly, viewHistory } = ownProps;
-  const { submission, dispatch, submissionFlags, history } = state;
+  const { submission, submissionFlags, history } = state.assessments.submission;
 
   const submissionId = submission.id;
   let historyAnswers;
@@ -264,7 +264,6 @@ function mapStateToProps(state, ownProps) {
   const isSaving = submissionFlags.isSaving;
 
   return {
-    dispatch,
     submissionId,
     questionId,
     answerId,

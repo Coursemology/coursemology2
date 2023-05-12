@@ -18,6 +18,11 @@ import NotificationSettings from 'bundles/course/admin/pages/NotificationSetting
 import SidebarSettings from 'bundles/course/admin/pages/SidebarSettings';
 import VideosSettings from 'bundles/course/admin/pages/VideosSettings';
 import AnnouncementsIndex from 'bundles/course/announcements/pages/AnnouncementsIndex';
+import AssessmentEdit from 'bundles/course/assessment/pages/AssessmentEdit';
+import AssessmentMonitoring from 'bundles/course/assessment/pages/AssessmentMonitoring';
+import AssessmentShow from 'bundles/course/assessment/pages/AssessmentShow';
+import AssessmentsIndex from 'bundles/course/assessment/pages/AssessmentsIndex';
+import AssessmentStatisticsPage from 'bundles/course/assessment/pages/AssessmentStatistics';
 import EditForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/EditForumPostResponsePage';
 import NewForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/NewForumPostResponsePage';
 import EditMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/EditMcqMrqPage';
@@ -29,7 +34,11 @@ import EditTextResponsePage from 'bundles/course/assessment/question/text-respon
 import NewTextResponsePage from 'bundles/course/assessment/question/text-responses/NewTextResponsePage';
 import EditVoicePage from 'bundles/course/assessment/question/voice-responses/EditVoicePage';
 import NewVoicePage from 'bundles/course/assessment/question/voice-responses/NewVoicePage';
+import AssessmentSessionNew from 'bundles/course/assessment/sessions/pages/AssessmentSessionNew';
 import SkillsIndex from 'bundles/course/assessment/skills/pages/SkillsIndex';
+import LogsIndex from 'bundles/course/assessment/submission/pages/LogsIndex';
+import SubmissionEditIndex from 'bundles/course/assessment/submission/pages/SubmissionEditIndex';
+import AssessmentSubmissionsIndex from 'bundles/course/assessment/submission/pages/SubmissionsIndex';
 import SubmissionsIndex from 'bundles/course/assessment/submissions/SubmissionsIndex';
 import CourseShow from 'bundles/course/courses/pages/CourseShow';
 import CoursesIndex from 'bundles/course/courses/pages/CoursesIndex';
@@ -407,6 +416,30 @@ const RoutedApp = (): JSX.Element => {
             element={<UserEmailSubscriptions />}
             path="courses/:courseId/users/:userId/manage_email_subscription"
           />
+
+          <Route path="courses/:courseId/assessments">
+            <Route element={<AssessmentsIndex />} index />
+
+            <Route path=":assessmentId">
+              <Route element={<AssessmentShow />} index />
+              <Route element={<AssessmentEdit />} path="edit" />
+
+              <Route element={<AssessmentMonitoring />} path="monitoring" />
+              <Route element={<AssessmentSessionNew />} path="sessions/new" />
+
+              {/* @ts-ignore `connect` throws error when cannot find `store` as direct parent */}
+              <Route element={<AssessmentStatisticsPage />} path="statistics" />
+
+              <Route path="submissions">
+                <Route element={<AssessmentSubmissionsIndex />} index />
+
+                <Route path=":submissionId">
+                  <Route element={<SubmissionEditIndex />} path="edit" />
+                  <Route element={<LogsIndex />} path="logs" />
+                </Route>
+              </Route>
+            </Route>
+          </Route>
         </Routes>
       </BrowserRouter>
 

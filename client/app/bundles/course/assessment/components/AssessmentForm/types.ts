@@ -25,7 +25,9 @@ export interface AssessmentFormEmitter {
 }
 
 // @ts-ignore until Assessment store is fully typed
-export const connector = connect((state) => ({ tabs: state.editPage.tabs }));
+export const connector = connect(({ assessments }) => ({
+  tabs: assessments.editPage.tabs,
+}));
 
 export interface AssessmentFormProps
   extends ConnectedProps<typeof connector>,

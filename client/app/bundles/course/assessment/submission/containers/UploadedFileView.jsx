@@ -127,7 +127,7 @@ VisibleUploadedFileView.propTypes = {
 
 function mapStateToProps(state, ownProps) {
   const { questionId } = ownProps;
-  const { submission } = state;
+  const { submission } = state.assessments.submission;
 
   const canDestroyAttachments =
     submission.workflowState === workflowStates.Attempting &&
@@ -135,7 +135,7 @@ function mapStateToProps(state, ownProps) {
 
   return {
     canDestroyAttachments,
-    attachments: state.attachments[questionId],
+    attachments: state.assessments.submission.attachments[questionId],
   };
 }
 

@@ -542,20 +542,20 @@ VisibleSubmissionsIndex.propTypes = {
   isReminding: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps(state) {
+function mapStateToProps({ assessments: { submission } }) {
   return {
-    assessment: state.assessment,
-    notification: state.notification,
-    submissions: state.submissions,
-    isLoading: state.submissionFlags.isLoading,
-    isDownloadingFiles: state.submissionFlags.isDownloadingFiles,
-    isDownloadingCsv: state.submissionFlags.isDownloadingCsv,
-    isStatisticsDownloading: state.submissionFlags.isStatisticsDownloading,
-    isPublishing: state.submissionFlags.isPublishing,
-    isForceSubmitting: state.submissionFlags.isForceSubmitting,
-    isUnsubmitting: state.submissionFlags.isUnsubmitting,
-    isDeleting: state.submissionFlags.isDeleting,
-    isReminding: state.submissionFlags.isReminding,
+    assessment: submission.assessment,
+    notification: submission.notification,
+    submissions: submission.submissions,
+    isLoading: submission.submissionFlags.isLoading,
+    isDownloadingFiles: submission.submissionFlags.isDownloadingFiles,
+    isDownloadingCsv: submission.submissionFlags.isDownloadingCsv,
+    isStatisticsDownloading: submission.submissionFlags.isStatisticsDownloading,
+    isPublishing: submission.submissionFlags.isPublishing,
+    isForceSubmitting: submission.submissionFlags.isForceSubmitting,
+    isUnsubmitting: submission.submissionFlags.isUnsubmitting,
+    isDeleting: submission.submissionFlags.isDeleting,
+    isReminding: submission.submissionFlags.isReminding,
   };
 }
 

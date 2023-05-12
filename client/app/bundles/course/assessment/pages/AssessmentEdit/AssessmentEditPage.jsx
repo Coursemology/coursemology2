@@ -132,6 +132,6 @@ AssessmentEditPage.propTypes = {
   notification: notificationShape,
 };
 
-export default connect((state) => state.editPage)(
+export default connect(({ assessments }) => assessments.editPage)(
   injectIntl(AssessmentEditPage),
 );

@@ -242,7 +242,6 @@ const actionTypes = mirrorCreator([
   'DELETE_ALL_SUBMISSIONS_SUCCESS',
   'DELETE_ALL_SUBMISSIONS_FAILURE',
 
-  'SET_NOTIFICATION',
   // Scribing answer action types
   'SET_CANVAS_LOADED',
   'FETCH_SCRIBING_QUESTION_REQUEST',

@@ -31,11 +31,11 @@ ReadOnlyEditorContainer.propTypes = {
   fileId: PropTypes.number.isRequired,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps({ assessments: { submission } }, ownProps) {
   const { fileId } = ownProps;
 
   return {
-    annotations: state.annotations[fileId].topics,
+    annotations: submission.annotations[fileId].topics,
   };
 }
 
