@@ -2,7 +2,7 @@ import { FormattedMessage } from 'react-intl';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import translations from '../../translations.intl';
+import translations from '../../translations';
 
 const styles = {
   actionButton: {

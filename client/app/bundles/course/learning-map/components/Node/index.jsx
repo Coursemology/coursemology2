@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { COURSE_COMPONENT_ICONS } from 'lib/constants/sharedConstants';
 
 import { nodeShape } from '../../propTypes';
-import translations from '../../translations.intl';
+import translations from '../../translations';
 import ConnectionPoint from '../ConnectionPoint';
 import NodeMenu from '../NodeMenu';
 import UnlockRateDisplay from '../UnlockRateDisplay';

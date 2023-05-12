@@ -5,10 +5,10 @@ import { ListItemText, ListSubheader, MenuItem, MenuList } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
-import { addParentNode } from 'course/learning-map/actions';
+import { addParentNode } from 'course/learning-map/operations';
 
 import { nodeShape, relatedNodeShape } from '../../propTypes';
-import translations from '../../translations.intl';
+import translations from '../../translations';
 
 // Remove padding from top of MenuList
 const theme = createTheme({

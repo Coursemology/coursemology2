@@ -1,14 +1,16 @@
+import { Operation } from 'types/store';
+
 import CourseAPI from 'api/course';
 
 import { actionTypes } from './constants';
 
-function getErrorMessage(error) {
+function getErrorMessage(error): string {
   const errors = error.response.data.errors;
   return errors.length > 0 ? errors[0] : '';
 }
 
-export function fetchNodes() {
-  return (dispatch) => {
+export function fetchNodes(): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.LOADING });
 
     return CourseAPI.learningMap
@@ -26,8 +28,8 @@ export function fetchNodes() {
   };
 }
 
-export function addParentNode(parentNodeId, nodeId) {
-  return (dispatch) => {
+export function addParentNode(parentNodeId, nodeId): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.LOADING });
 
     return CourseAPI.learningMap
@@ -50,8 +52,8 @@ export function addParentNode(parentNodeId, nodeId) {
   };
 }
 
-export function removeParentNode(parentNodeId, nodeId) {
-  return (dispatch) => {
+export function removeParentNode(parentNodeId, nodeId): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.LOADING });
 
     return CourseAPI.learningMap
@@ -74,8 +76,8 @@ export function removeParentNode(parentNodeId, nodeId) {
   };
 }
 
-export function selectArrow(arrowId) {
-  return (dispatch) => {
+export function selectArrow(arrowId): Operation {
+  return async (dispatch) => {
     dispatch({
       type: actionTypes.SELECT_ARROW,
       selectedArrowId: arrowId,
@@ -83,8 +85,8 @@ export function selectArrow(arrowId) {
   };
 }
 
-export function selectGate(gateId) {
-  return (dispatch) => {
+export function selectGate(gateId): Operation {
+  return async (dispatch) => {
     dispatch({
       type: actionTypes.SELECT_GATE,
       selectedGateId: gateId,
@@ -92,14 +94,14 @@ export function selectGate(gateId) {
   };
 }
 
-export function resetSelection() {
-  return (dispatch) => {
+export function resetSelection(): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.RESET_SELECTION });
   };
 }
 
-export function toggleSatisfiabilityType(nodeId) {
-  return (dispatch) => {
+export function toggleSatisfiabilityType(nodeId): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.LOADING });
 
     return CourseAPI.learningMap
