@@ -27,6 +27,8 @@
     "noUnusedParameters": false,
     "outDir": "dist",
     "paths": {
+      "lib/*": ["lib/*"],
+      "course/*": ["bundles/course/*"],
       "test-utils": ["utilities/test-utils"]
     },
     "pretty": true,
