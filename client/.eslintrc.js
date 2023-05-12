@@ -41,6 +41,7 @@ module.exports = {
           ['utilities', './app/utilities'],
           ['course', './app/bundles/course'],
           ['testUtils', './app/__test__/utils'],
+          ['test-utils', './app/utilities/test-utils'],
           ['mocks', './app/__test__/mocks'],
           ['workers', './app/workers'],
           ['store', './app/store'],

@@ -13,6 +13,7 @@ const config = {
     '\\.(css|scss)$': '<rootDir>/app/__test__/mocks/fileMock.js',
     '.svg$': '<rootDir>/app/__test__/mocks/svgMock.js',
     '^mocks(.*)$': '<rootDir>/app/__test__/mocks$1',
+    '^test-utils(.*)$': '<rootDir>/app/utilities/test-utils$1',
     '^react(.*)$': '<rootDir>/node_modules/react$1',
     '^api(.*)$': '<rootDir>/app/api$1',
     '^lib(.*)$': '<rootDir>/app/lib$1',
