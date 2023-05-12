@@ -7,24 +7,24 @@ exports[`<PageHeader /> when there is a return link matches the snapshot 1`] = `
       class="grow"
     >
       <header
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed static z-0 -mx-6 mb-0 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-1hc7nu0-MuiPaper-root-MuiAppBar-root"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed static z-0 -mx-6 mb-0 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-2naa7r-MuiPaper-root-MuiAppBar-root"
         data-testid="TitleBar"
       >
         <div
-          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-hyum1k-MuiToolbar-root"
+          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-129s0w6-MuiToolbar-root"
         >
           <div
             class="-ml-4 mr-2"
           >
             <button
-              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-78trlr-MuiButtonBase-root-MuiIconButton-root"
+              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-aem3qp-MuiButtonBase-root-MuiIconButton-root"
               data-testid="ArrowBackIconButton"
               tabindex="0"
               type="button"
             >
               <svg
                 aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-hgpioi-MuiSvgIcon-root"
                 color="white"
                 data-testid="ArrowBack"
                 focusable="false"
@@ -40,7 +40,7 @@ exports[`<PageHeader /> when there is a return link matches the snapshot 1`] = `
             </button>
           </div>
           <h5
-            class="MuiTypography-root MuiTypography-h5 grow css-mlfmu-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-h5 grow css-7sb4ws-MuiTypography-root"
           >
             <label
               class="m-0 align-middle font-normal"
@@ -56,6 +56,9 @@ exports[`<PageHeader /> when there is a return link matches the snapshot 1`] = `
         </div>
       </header>
     </div>
+    <div
+      class="Toastify"
+    />
   </div>
 </body>
 `;
@@ -67,17 +70,17 @@ exports[`<PageHeader /> when there is no return link matches the snapshot 1`] = 
       class="grow"
     >
       <header
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed static z-0 -mx-6 mb-0 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-1hc7nu0-MuiPaper-root-MuiAppBar-root"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed static z-0 -mx-6 mb-0 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-2naa7r-MuiPaper-root-MuiAppBar-root"
         data-testid="TitleBar"
       >
         <div
-          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-hyum1k-MuiToolbar-root"
+          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-129s0w6-MuiToolbar-root"
         >
           <div
             class="-ml-4 mr-2"
           />
           <h5
-            class="MuiTypography-root MuiTypography-h5 grow css-mlfmu-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-h5 grow css-7sb4ws-MuiTypography-root"
           >
             <label
               class="m-0 align-middle font-normal"
@@ -93,6 +96,9 @@ exports[`<PageHeader /> when there is no return link matches the snapshot 1`] = 
         </div>
       </header>
     </div>
+    <div
+      class="Toastify"
+    />
   </div>
 </body>
 `;
