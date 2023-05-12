@@ -129,7 +129,7 @@ GEM
     acts_as_tenant (0.6.1)
       rails (>= 5.2)
       request_store (>= 1.0.5)
-    addressable (2.8.3)
+    addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
     after_commit_action (1.1.0)
       activerecord (>= 3.0.0)
@@ -175,7 +175,7 @@ GEM
     calculated_attributes (0.5.0)
       activerecord (>= 3.2.20)
     cancancan (3.5.0)
-    capybara (3.39.0)
+    capybara (3.39.1)
       addressable
       matrix
       mini_mime (>= 0.1.3)
