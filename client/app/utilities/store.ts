@@ -10,7 +10,7 @@ interface WithId {
  */
 export function createEntityStore<M, E extends M = M>(): EntityStore<M, E> {
   return {
-    ids: new Set(),
+    ids: [],
     byId: {},
   };
 }
@@ -23,7 +23,10 @@ export function removeFromStore<M extends WithId, E extends M = M>(
   store: EntityStore<M, E>,
   id: number,
 ): void {
-  store.ids.delete(id);
+  const index = store.ids.indexOf(id);
+  if (index !== -1) {
+    store.ids.splice(index, 1);
+  }
   delete store.byId[id];
 }
 
@@ -34,7 +37,7 @@ export function removeFromStore<M extends WithId, E extends M = M>(
 export function removeAllFromStore<M extends WithId, E extends M = M>(
   store: EntityStore<M, E>,
 ): void {
-  store.ids.clear();
+  store.ids = [];
   store.byId = {};
 }
 
@@ -56,7 +59,10 @@ export function saveEntityToStore<M extends WithId, E extends M = M>(
       (entity as Object)[key] === undefined && delete (entity as Object)[key],
   );
 
-  store.ids.add(entity.id);
+  const index = store.ids.indexOf(entity.id);
+  if (index === -1) {
+    store.ids.push(entity.id);
+  }
   store.byId[entity.id] = {
     ...existing,
     ...entity,
@@ -116,7 +122,7 @@ export function selectEntityNoUpdate<M, E extends M = M>(
  */
 export function selectMiniEntities<M, E extends M = M>(
   store: EntityStore<M, E>,
-  ids: Set<SelectionKey>,
+  ids: Array<SelectionKey>,
 ): M[] {
   const result: M[] = [];
   ids.forEach((id) => {
@@ -134,7 +140,7 @@ export function selectMiniEntities<M, E extends M = M>(
  */
 export function selectEntities<M, E extends M = M>(
   store: EntityStore<M, E>,
-  ids: Set<SelectionKey>,
+  ids: Array<SelectionKey>,
 ): E[] {
   const result: E[] = [];
   ids.forEach((id) => {
