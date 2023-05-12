@@ -11,7 +11,7 @@ import {
   removeParentNode,
   resetSelection,
   toggleSatisfiabilityType,
-} from 'course/learning-map/actions';
+} from 'course/learning-map/operations';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 import { elementTypes, satisfiabilityTypes } from '../../constants';
@@ -20,7 +20,7 @@ import {
   responseShape,
   selectedElementShape,
 } from '../../propTypes';
-import translations from '../../translations.intl';
+import translations from '../../translations';
 
 const styles = {
   content: {

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import Xarrow from 'react-xarrows';
 import PropTypes from 'prop-types';
 
-import { selectArrow } from 'course/learning-map/actions';
+import { selectArrow } from 'course/learning-map/operations';
 
 import { elementTypes } from '../../constants';
 import {

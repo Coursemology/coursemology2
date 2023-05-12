@@ -1,14 +1,23 @@
-import { actionTypes, elementTypes } from '../constants';
+import produce from 'immer';
 
-const initialState = {
+import { actionTypes, elementTypes } from './constants';
+import { LearningMapState } from './types';
+
+const initialState: LearningMapState = {
   canModify: false,
   isLoading: false,
   nodes: [],
-  response: {},
-  selectedElement: {},
+  response: {
+    didSucceed: false,
+    message: '',
+  },
+  selectedElement: {
+    id: '',
+    type: elementTypes.NODE,
+  },
 };
 
-export default function (state = initialState, action) {
+const reducer = produce((state, action) => {
   switch (action.type) {
     case actionTypes.FETCH_LEARNING_MAP_SUCCESS:
       return {
@@ -149,4 +158,6 @@ export default function (state = initialState, action) {
     default:
       return state;
   }
-}
+}, initialState);
+
+export default reducer;

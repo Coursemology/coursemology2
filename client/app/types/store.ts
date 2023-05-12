@@ -13,6 +13,7 @@ import { EnrolRequestsState } from 'bundles/course/enrol-requests/types';
 import { DisbursementState } from 'bundles/course/experience-points/disbursement/types';
 import { ForumsState } from 'bundles/course/forum/types';
 import { LeaderboardState } from 'bundles/course/leaderboard/types';
+import { LearningMapState } from 'bundles/course/learning-map/types';
 import { FoldersState } from 'bundles/course/material/folders/types';
 import { TimelinesState } from 'bundles/course/reference-timelines/types';
 import { InvitationsState } from 'bundles/course/user-invitations/types';
@@ -36,6 +37,7 @@ export interface AppState {
   forums: ForumsState;
   users: UsersState;
   leaderboard: LeaderboardState;
+  learningMap: LearningMapState;
   skills: SkillState;
   submissions: SubmissionsState;
   invitations: InvitationsState;

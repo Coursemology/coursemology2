@@ -3,11 +3,11 @@ import { connect } from 'react-redux';
 import { green, red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
-import { selectGate } from 'course/learning-map/actions';
+import { selectGate } from 'course/learning-map/operations';
 
 import { elementTypes, satisfiabilityTypes } from '../../constants';
 import { nodeShape, selectedElementShape } from '../../propTypes';
-import translations from '../../translations.intl';
+import translations from '../../translations';
 import ConnectionPoint from '../ConnectionPoint';
 
 const styles = {

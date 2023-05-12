@@ -22,6 +22,7 @@ import ForumShow from 'bundles/course/forum/pages/ForumShow';
 import ForumsIndex from 'bundles/course/forum/pages/ForumsIndex';
 import ForumTopicShow from 'bundles/course/forum/pages/ForumTopicShow';
 import LeaderboardIndex from 'bundles/course/leaderboard/pages/LeaderboardIndex';
+import LearningMap from 'bundles/course/learning-map/containers/LearningMap';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
 import AccountSettings from 'bundles/user/AccountSettings';
 
@@ -135,6 +136,11 @@ const RoutedApp = (): JSX.Element => {
           <Route
             element={<LeaderboardIndex />}
             path="/courses/:courseId/leaderboard/"
+          />
+
+          <Route
+            element={<LearningMap />}
+            path="/courses/:courseId/learning_map"
           />
         </Routes>
       </BrowserRouter>

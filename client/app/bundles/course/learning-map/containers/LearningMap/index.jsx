@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { fetchNodes } from 'course/learning-map/actions';
+import { fetchNodes } from 'course/learning-map/operations';
 
 import Canvas from '../Canvas';
 import Dashboard from '../Dashboard';
