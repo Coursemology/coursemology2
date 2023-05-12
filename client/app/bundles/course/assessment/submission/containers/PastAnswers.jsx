@@ -153,12 +153,12 @@ PastAnswers.propTypes = {
   graderView: PropTypes.bool,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps({ assessments: { submission } }, ownProps) {
   const { question } = ownProps;
-  const selectedAnswerIds = state.history.questions[question.id].selected;
-  const answerIds = state.history.questions[question.id].answerIds;
-  const answers = state.history.answers;
-  const graderView = state.submission.graderView;
+  const selectedAnswerIds = submission.history.questions[question.id].selected;
+  const answerIds = submission.history.questions[question.id].answerIds;
+  const answers = submission.history.answers;
+  const graderView = submission.submission.graderView;
 
   return {
     selectedAnswerIds,

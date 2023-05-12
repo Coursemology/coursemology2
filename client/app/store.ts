@@ -11,6 +11,7 @@ import notificationSettingsReducer from './bundles/course/admin/reducers/notific
 import announcementsReducer from './bundles/course/announcements/store';
 import scribingQuestionReducer from './bundles/course/assessment/question/scribing/store';
 import skillsReducer from './bundles/course/assessment/skills/store';
+import assessmentsReducer from './bundles/course/assessment/store';
 import submissionsReducer from './bundles/course/assessment/submissions/store';
 import coursesReducer from './bundles/course/courses/store';
 import commentsReducer from './bundles/course/discussion/topics/store';
@@ -72,6 +73,7 @@ const rootReducer = combineReducers({
   instanceAdmin: instanceAdminReducer,
   surveys: surveysReducer,
   userEmailSubscriptions: userEmailSubscriptionsReducer,
+  assessments: assessmentsReducer,
 });
 
 export const store = configureStore({

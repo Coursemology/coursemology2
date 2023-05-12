@@ -5,8 +5,6 @@ import pollJob from 'lib/helpers/jobHelpers';
 import actionTypes from '../constants';
 import translations from '../translations';
 
-import { setNotification } from './index';
-
 const DOWNLOAD_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 2000;
 const DOWNLOAD_STATISTICS_JOB_POLL_INTERVAL_MS = 2000;
 const DELETE_ALL_SUBMISSIONS_JOB_POLL_INTERVAL_MS = 1000;

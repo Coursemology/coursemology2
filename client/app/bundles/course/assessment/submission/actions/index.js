@@ -1,4 +1,5 @@
 import CourseAPI from 'api/course';
+import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 
 import actionTypes from '../constants';
@@ -6,14 +7,6 @@ import translations from '../translations';
 
 const JOB_POLL_DELAY_MS = 500;
 const JOB_STAGGER_DELAY_MS = 400;
-
-export function setNotification(message, errors) {
-  return {
-    type: actionTypes.SET_NOTIFICATION,
-    message,
-    errors,
-  };
-}
 
 /**
  * Prepares and maps answer value in the react-hook-form into server side format.

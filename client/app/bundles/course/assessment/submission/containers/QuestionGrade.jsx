@@ -132,14 +132,14 @@ VisibleQuestionGrade.propTypes = {
   bonusAwarded: PropTypes.number,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps({ assessments: { submission } }, ownProps) {
   const { id } = ownProps;
-  const { submittedAt, bonusEndAt, bonusPoints } = state.submission;
+  const { submittedAt, bonusEndAt, bonusPoints } = submission.submission;
   const bonusAwarded =
     new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
   return {
-    question: state.questions[id],
-    grading: state.grading.questions[id],
+    question: submission.questions[id],
+    grading: submission.grading.questions[id],
     bonusAwarded,
   };
 }

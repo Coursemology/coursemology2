@@ -346,16 +346,16 @@ VisibleGradingPanel.propTypes = {
   bonusAwarded: PropTypes.number,
 };
 
-function mapStateToProps(state) {
-  const { submittedAt, bonusEndAt, bonusPoints } = state.submission;
+function mapStateToProps({ assessments: { submission } }) {
+  const { submittedAt, bonusEndAt, bonusPoints } = submission.submission;
   const bonusAwarded =
     new Date(submittedAt) < new Date(bonusEndAt) ? bonusPoints : 0;
   return {
-    gamified: state.assessment.gamified,
-    grading: state.grading,
-    questionIds: state.assessment.questionIds,
-    questions: state.questions,
-    submission: state.submission,
+    gamified: submission.assessment.gamified,
+    grading: submission.grading,
+    questionIds: submission.assessment.questionIds,
+    questions: submission.questions,
+    submission: submission.submission,
     bonusAwarded,
   };
 }

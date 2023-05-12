@@ -84,17 +84,19 @@ VisibleComments.propTypes = {
   deleteComment: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps({ assessments: { submission } }, ownProps) {
   const { topic } = ownProps;
   const renderDelayedCommentButton =
-    state.submission.graderView &&
-    !state.assessment.autograded &&
-    (state.submission.workflowState === workflowStates.Submitted ||
-      state.submission.workflowState === workflowStates.Graded);
+    submission.submission.graderView &&
+    !submission.assessment.autograded &&
+    (submission.submission.workflowState === workflowStates.Submitted ||
+      submission.submission.workflowState === workflowStates.Graded);
   return {
-    commentForms: state.commentForms,
-    posts: state.topics[topic.id].postIds.map((postId) => state.posts[postId]),
-    graderView: state.submission.graderView,
+    commentForms: submission.commentForms,
+    posts: submission.topics[topic.id].postIds.map(
+      (postId) => submission.posts[postId],
+    ),
+    graderView: submission.submission.graderView,
     renderDelayedCommentButton,
   };
 }

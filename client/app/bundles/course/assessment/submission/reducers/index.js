@@ -9,7 +9,6 @@ import commentForms from './commentForms';
 import explanations from './explanations';
 import grading from './grading';
 import history from './history';
-import notification from './notification';
 import posts from './posts';
 import questions from './questions';
 import questionsFlags from './questionsFlags';
@@ -29,7 +28,6 @@ const submissionReducer = combineReducers({
   codaveriFeedbackStatus,
   commentForms,
   explanations,
-  notification,
   posts,
   questions,
   questionsFlags,

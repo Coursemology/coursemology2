@@ -1,13 +1,13 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { RootState } from 'store';
 import { Snapshot } from 'types/channels/liveMonitoring';
-import { AppState } from 'types/store';
 
 import { MonitoringState } from './types';
 
-const selectMonitoringStore = (state: AppState): MonitoringState =>
-  state.monitoring;
+const selectMonitoringStore = (state: RootState): MonitoringState =>
+  state.assessments.monitoring;
 
-type Selector<T> = (state: AppState) => T;
+type Selector<T> = (state: RootState) => T;
 type UniversalSelectorFrom<S> = <K extends keyof S>(key: K) => Selector<S[K]>;
 
 export const select: UniversalSelectorFrom<MonitoringState> = (key) =>

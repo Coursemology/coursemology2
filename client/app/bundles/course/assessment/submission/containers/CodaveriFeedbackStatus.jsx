@@ -71,13 +71,13 @@ CodaveriFeedbackStatus.propTypes = {
   intl: PropTypes.object,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps({ assessments: { submission } }, ownProps) {
   const { answerId, intl } = ownProps;
 
   return {
-    submissionState: state.submission.workflowState,
-    graderView: state.submission.graderView,
-    codaveriFeedbackStatus: state.codaveriFeedbackStatus.answers[answerId],
+    submissionState: submission.submission.workflowState,
+    graderView: submission.submission.graderView,
+    codaveriFeedbackStatus: submission.codaveriFeedbackStatus.answers[answerId],
     ...intl,
   };
 }

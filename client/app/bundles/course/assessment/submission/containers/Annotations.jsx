@@ -150,25 +150,25 @@ VisibleAnnotations.propTypes = {
   updateCodaveriFeedback: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps({ assessments: { submission } }, ownProps) {
   const { annotation } = ownProps;
   const renderDelayedCommentButton =
-    state.submission.graderView &&
-    !state.assessment.autograded &&
-    (state.submission.workflowState === workflowStates.Submitted ||
-      state.submission.workflowState === workflowStates.Graded);
+    submission.submission.graderView &&
+    !submission.assessment.autograded &&
+    (submission.submission.workflowState === workflowStates.Submitted ||
+      submission.submission.workflowState === workflowStates.Graded);
   if (!annotation) {
     return {
-      commentForms: state.commentForms,
+      commentForms: submission.commentForms,
       posts: [],
-      graderView: state.submission.graderView,
+      graderView: submission.submission.graderView,
       renderDelayedCommentButton,
     };
   }
   return {
-    commentForms: state.commentForms,
-    posts: annotation.postIds.map((postId) => state.posts[postId]),
-    graderView: state.submission.graderView,
+    commentForms: submission.commentForms,
+    posts: annotation.postIds.map((postId) => submission.posts[postId]),
+    graderView: submission.submission.graderView,
     renderDelayedCommentButton,
   };
 }

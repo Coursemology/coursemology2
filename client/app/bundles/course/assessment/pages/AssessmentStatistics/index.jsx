@@ -204,6 +204,6 @@ AssessmentStatisticsPage.propTypes = {
   ancestorAllStudents: PropTypes.arrayOf(courseUserShape),
 };
 
-export default connect((state) => state.statisticsPage)(
+export default connect(({ assessments }) => assessments.statisticsPage)(
   injectIntl(AssessmentStatisticsPage),
 );

@@ -40,12 +40,12 @@ VisiblePostPreview.defaultProps = {
   style: {},
 };
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps({ assessments: { submission } }, ownProps) {
   const { annotation } = ownProps;
   if (annotation.postIds.length > 0) {
     return {
-      creator: state.posts[annotation.postIds[0]].creator.name,
-      text: state.posts[annotation.postIds[0]].text,
+      creator: submission.posts[annotation.postIds[0]].creator.name,
+      text: submission.posts[annotation.postIds[0]].text,
     };
   }
   return {

@@ -1,11 +1,8 @@
-import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { fireEvent, render, RenderResult, waitFor } from 'utilities/test-utils';
 
 import CourseAPI from 'api/course';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
-import storeCreator from '../../../store';
 import AssessmentEdit from '../AssessmentEditPage';
 
 const INITIAL_VALUES = {
@@ -46,22 +43,16 @@ const NEW_VALUES = {
   use_public: false,
 };
 
-let store;
 let initialValues;
 let form: RenderResult;
 let updateApi: jest.SpyInstance;
 
 const getComponent = (): JSX.Element => (
-  <ProviderWrapper store={store}>
-    <BrowserRouter>
-      {/* @ts-ignore until AssessmentEdit/index.jsx is fully typed */}
-      <AssessmentEdit initialValues={initialValues} modeSwitching />
-    </BrowserRouter>
-  </ProviderWrapper>
+  /* @ts-ignore until AssessmentEdit/index.jsx is fully typed */
+  <AssessmentEdit initialValues={initialValues} modeSwitching />
 );
 
 beforeEach(() => {
-  store = storeCreator({ assessments: {} });
   initialValues = INITIAL_VALUES;
   updateApi = jest.spyOn(CourseAPI.assessment.assessments, 'update');
 

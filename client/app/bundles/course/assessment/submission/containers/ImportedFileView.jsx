@@ -123,7 +123,7 @@ function mapStateToProps(state, ownProps) {
     files,
     viewHistory,
   } = ownProps;
-  const { submission } = state;
+  const { submission } = state.assessments.submission;
   const canDestroyFiles =
     submission.workflowState === workflowStates.Attempting &&
     submission.isCreator &&

@@ -265,10 +265,10 @@ const VoiceResponseAnswerWithFormContext = (props) => {
   return <VoiceResponseAnswer control={control} {...props} />;
 };
 
-function mapStateToProps(state) {
+function mapStateToProps({ assessments: { submission } }) {
   return {
-    recording: state.recorder.recording,
-    recordingComponentId: state.recorder.recordingComponentId,
+    recording: submission.recorder.recording,
+    recordingComponentId: submission.recorder.recordingComponentId,
   };
 }
 
