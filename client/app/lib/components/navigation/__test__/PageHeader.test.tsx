@@ -1,11 +1,6 @@
-import { render, RenderResult } from 'utilities/test-utils';
+import { render, RenderResult } from 'test-utils';
 
 import PageHeader from '../PageHeader';
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: (): void => jest.fn() as unknown as void,
-}));
 
 let documentBody: RenderResult;
 
