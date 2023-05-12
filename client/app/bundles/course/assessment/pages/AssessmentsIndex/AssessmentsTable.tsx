@@ -131,9 +131,13 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
   if (assessments.length === 0)
     return (
       <Note
-        message={t(translations.noAssessments, {
-          category: display.category.title,
-        })}
+        message={
+          display.canCreateAssessments
+            ? t(translations.createAssessmentToPopulate, {
+                category: display.category.title,
+              })
+            : t(translations.noAssessments)
+        }
       />
     );
 
