@@ -5,8 +5,8 @@ import CourseAPI from 'api/course';
 import { actionTypes } from './constants';
 
 function getErrorMessage(error): string {
-  const errors = error.response.data.errors;
-  return errors.length > 0 ? errors[0] : '';
+  const errors = error?.response?.data?.errors;
+  return errors?.length ? errors[0] : '';
 }
 
 export function fetchNodes(): Operation {
