@@ -36,6 +36,3 @@
 
     div.page-content class=page_class
       = yield
-
-    - if current_course_user && UserNotification.next_unread_popup_for(current_course_user).present?
-      #popup-notifier

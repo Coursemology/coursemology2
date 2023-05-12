@@ -6,7 +6,6 @@ function loadModules() {
   }
   // Initializers
   require('lib/initializers/ace-editor');
-  require('lib/initializers/popup-notifier');
   // Require web font last so that it doesn't block the load of current module.
   require('lib/initializers/webfont');
 }
