@@ -1,6 +1,8 @@
-import { render, RenderResult } from 'utilities/test-utils';
+import { render, RenderResult } from 'test-utils';
 
-import LoadingIndicator from '../LoadingIndicator';
+import LoadingIndicator, {
+  LOADING_INDICATOR_TEST_ID,
+} from '../LoadingIndicator';
 
 let documentBody: RenderResult;
 
@@ -10,7 +12,7 @@ describe('<LoadingIndicator />', () => {
   });
 
   it('shows the loading indicator', () => {
-    expect(documentBody.getByTestId('CircularProgress')).toBeVisible();
+    expect(documentBody.getByTestId(LOADING_INDICATOR_TEST_ID)).toBeVisible();
   });
 
   it('matches the snapshot', () => {
