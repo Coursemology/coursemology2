@@ -33,6 +33,6 @@ export type EntitySelection<T> = (T & EntityMetadata) | null;
  * functions found in `utils/store.ts`.
  */
 export interface EntityStore<M, E extends M = M> {
-  ids: Set<SelectionKey>;
+  ids: Array<SelectionKey>;
   byId: { [key: number]: (M & Partial<E> & EntityMetadata) | undefined };
 }
