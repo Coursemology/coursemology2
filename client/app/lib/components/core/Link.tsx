@@ -8,12 +8,12 @@ interface LinkProps extends ComponentProps<typeof MuiLink> {
 }
 
 const Link = (props: LinkProps): JSX.Element => {
-  const { opensInNewTab, ...linkProps } = props;
+  const { opensInNewTab, external, ...linkProps } = props;
 
   const children = (
     <>
       {props.children}
-      {props.external && <ArrowOutward fontSize="inherit" />}
+      {external && <ArrowOutward fontSize="inherit" />}
     </>
   );
 
