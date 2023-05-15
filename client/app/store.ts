@@ -1,6 +1,8 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { enableMapSet } from 'immer';
 
+import notificationPopupReducer from 'lib/reducers/notificationPopup';
+
 import globalAnnouncementReducer from './bundles/announcements/store';
 import achievementsReducer from './bundles/course/achievement/store';
 import announcementsReducer from './bundles/course/announcements/store';
@@ -37,6 +39,7 @@ const rootReducer = combineReducers({
   learningMap: learningMapReducer,
   folders: foldersReducer,
   videos: videosReducer,
+  notificationPopup: notificationPopupReducer,
 });
 
 export const store = configureStore({

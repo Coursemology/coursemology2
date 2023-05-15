@@ -1,10 +1,11 @@
 import actionTypes from 'lib/constants';
 
-export function setNotification(message) {
+export function setNotification(message, errors) {
   return (dispatch) =>
     dispatch({
       type: actionTypes.SET_NOTIFICATION,
       message,
+      errors,
     });
 }
 

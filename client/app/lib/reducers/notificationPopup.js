@@ -7,7 +7,7 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case actionTypes.SET_NOTIFICATION: {
-      return { message: action.message };
+      return { message: action.message, errors: action.errors };
     }
     default:
       return state;

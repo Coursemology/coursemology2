@@ -32,6 +32,7 @@ import VideoSubmissionShow from 'bundles/course/video/submission/pages/VideoSubm
 import VideoSubmissionsIndex from 'bundles/course/video/submission/pages/VideoSubmissionsIndex';
 import AccountSettings from 'bundles/user/AccountSettings';
 import UserShow from 'bundles/users/pages/UserShow';
+import NotificationPopup from 'lib/containers/NotificationPopup';
 
 import App from './App';
 
@@ -176,6 +177,8 @@ const RoutedApp = (): JSX.Element => {
           <Route element={<UserShow />} path="/users/:userId" />
         </Routes>
       </BrowserRouter>
+
+      <NotificationPopup />
     </App>
   );
 };
