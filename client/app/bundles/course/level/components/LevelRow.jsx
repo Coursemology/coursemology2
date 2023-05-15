@@ -69,6 +69,8 @@ class LevelRow extends Component {
         }
         name={`level_${levelNumber}`}
         onBlur={() => {
+          if (experiencePointsThreshold === '') return;
+
           sortLevels();
         }}
         onChange={(event) => {
