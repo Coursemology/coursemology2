@@ -6,6 +6,8 @@ import EditMcqMrqPage from 'bundles/course/assessment/question/multiple-response
 import NewMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/NewMcqMrqPage';
 import EditTextResponsePage from 'bundles/course/assessment/question/text-responses/EditTextResponsePage';
 import NewTextResponsePage from 'bundles/course/assessment/question/text-responses/NewTextResponsePage';
+import EditVoicePage from 'bundles/course/assessment/question/voice-responses/EditVoicePage';
+import NewVoicePage from 'bundles/course/assessment/question/voice-responses/NewVoicePage';
 import SubmissionsIndex from 'bundles/course/assessment/submissions/SubmissionsIndex';
 import DisbursementIndex from 'bundles/course/experience-points/disbursement/pages/DisbursementIndex';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
@@ -63,6 +65,16 @@ const RoutedApp = (): JSX.Element => {
           <Route
             element={<EditTextResponsePage />}
             path="/courses/:courseId/assessments/:assessmentId/question/text_responses/:questionId/edit"
+          />
+
+          <Route
+            element={<NewVoicePage />}
+            path="courses/:courseId/assessments/:assessmentId/question/voice_responses/new"
+          />
+
+          <Route
+            element={<EditVoicePage />}
+            path="/courses/:courseId/assessments/:assessmentId/question/voice_responses/:questionId/edit"
           />
         </Routes>
       </BrowserRouter>
