@@ -14,6 +14,7 @@ import disbursementReducer from './bundles/course/experience-points/disbursement
 import forumsReducer from './bundles/course/forum/store';
 import leaderboardReducer from './bundles/course/leaderboard/store';
 import learningMapReducer from './bundles/course/learning-map/store';
+import levelsReducer from './bundles/course/level/store';
 import foldersReducer from './bundles/course/material/folders/store';
 import timelinesReducer from './bundles/course/reference-timelines/store';
 import videosReducer from './bundles/course/video/store';
@@ -39,6 +40,7 @@ const rootReducer = combineReducers({
   learningMap: learningMapReducer,
   folders: foldersReducer,
   videos: videosReducer,
+  levels: levelsReducer,
   notificationPopup: notificationPopupReducer,
 });
 

@@ -1,9 +1,12 @@
+import { Operation } from 'types/store';
+
 import CourseAPI from 'api/course';
-import actionTypes from 'course/level/constants';
 import { setNotification } from 'lib/actions';
 
-export function fetchLevels() {
-  return (dispatch) => {
+import actionTypes from './constants';
+
+export function fetchLevels(): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.LOAD_LEVELS_REQUEST });
     return CourseAPI.level
       .fetch()
@@ -19,8 +22,8 @@ export function fetchLevels() {
   };
 }
 
-export function updateExpThreshold(levelNumber, newValue) {
-  return (dispatch) => {
+export function updateExpThreshold(levelNumber, newValue): Operation {
+  return async (dispatch) => {
     dispatch({
       type: actionTypes.UPDATE_EXP_THRESHOLD,
       payload: { levelNumber, newValue },
@@ -28,25 +31,25 @@ export function updateExpThreshold(levelNumber, newValue) {
   };
 }
 
-export function sortLevels() {
-  return (dispatch) => {
+export function sortLevels(): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.SORT_LEVELS });
   };
 }
 
-export function addLevel() {
-  return (dispatch) => {
+export function addLevel(): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.ADD_LEVEL });
   };
 }
 
-export function deleteLevel(levelNumber) {
-  return (dispatch) => {
+export function deleteLevel(levelNumber): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.DELETE_LEVEL, payload: { levelNumber } });
   };
 }
 
-export function saveLevels(levels, successMessage, failureMessage) {
+export function saveLevels(levels, successMessage, failureMessage): Operation {
   return (dispatch) => {
     dispatch({ type: actionTypes.SAVE_LEVELS });
     return CourseAPI.level

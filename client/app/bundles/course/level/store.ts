@@ -1,17 +1,18 @@
-import actionTypes from 'course/level/constants';
+import produce from 'immer';
+import { LevelsState } from 'types/course/levels';
 
-const initialState = {
+import actionTypes from './constants';
+
+const initialState: LevelsState = {
   canManage: false,
   levels: [],
   isLoading: false,
   isSaving: false,
 };
 
-function isNumeric(n) {
-  return Number.isFinite(parseInt(n, 10));
-}
+const isNumeric = (n: string): boolean => Number.isFinite(parseInt(n, 10));
 
-export default function (state = initialState, action) {
+const reducer = produce((state, action) => {
   const { type } = action;
 
   switch (type) {
@@ -48,7 +49,7 @@ export default function (state = initialState, action) {
       const copiedLevels = levels.slice();
 
       // Must specify a sort function or will get lexicographical sort.
-      const sortedLevels = copiedLevels.sort((a, b) => a - b);
+      const sortedLevels = copiedLevels.sort((a, b) => +a - +b);
 
       return { ...state, levels: sortedLevels };
     }
@@ -56,8 +57,12 @@ export default function (state = initialState, action) {
       const { levels } = state;
       const copiedLevels = levels.slice();
 
+      const previousLevel = levels[levels.length - 1];
+
       // Add a new level with twice the exp of the previous level.
-      copiedLevels.push(levels[levels.length - 1] * 2);
+      if (typeof previousLevel === 'number') {
+        copiedLevels.push(previousLevel * 2);
+      }
 
       return { ...state, levels: copiedLevels };
     }
@@ -82,4 +87,6 @@ export default function (state = initialState, action) {
     default:
       return state;
   }
-}
+}, initialState);
+
+export default reducer;
