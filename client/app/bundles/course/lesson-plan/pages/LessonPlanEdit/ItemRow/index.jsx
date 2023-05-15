@@ -3,8 +3,8 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { updateItem } from 'course/lesson-plan/actions';
-import { fields } from 'course/lesson-plan/constants';
+import { fields } from '../../../constants';
+import { updateItem } from '../../../operations';
 
 import DateCell from './DateCell';
 import PublishedCell from './PublishedCell';
@@ -107,7 +107,7 @@ ItemRow.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect((state) => ({
-  visibility: state.lessonPlan.visibilityByType,
-  columnsVisible: state.flags.editPageColumnsVisible,
+export default connect(({ lessonPlan }) => ({
+  visibility: lessonPlan.lessonPlan.visibilityByType,
+  columnsVisible: lessonPlan.flags.editPageColumnsVisible,
 }))(ItemRow);

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 
-import * as actionCreators from 'course/lesson-plan/actions';
 import FormDialogue from 'lib/components/form/FormDialogue';
+
+import { actions } from '../../store';
 
 import EventForm from './EventForm';
 
@@ -18,7 +18,6 @@ const EventFormDialog = ({
   items,
 }) => {
   const [isDirty, setIsDirty] = useState(false);
-  const { hideEventForm } = bindActionCreators(actionCreators, dispatch);
 
   const { eventTypes, eventLocations } = items.reduce(
     (values, item) => {
@@ -38,7 +37,7 @@ const EventFormDialog = ({
     <FormDialogue
       disabled={disabled}
       form="event-form"
-      hideForm={hideEventForm}
+      hideForm={() => dispatch(actions.hideEventForm())}
       open={visible}
       skipConfirmation={!isDirty}
       title={formTitle}
@@ -87,7 +86,7 @@ EventFormDialog.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect(({ eventForm, ...state }) => ({
-  ...eventForm,
-  items: state.lessonPlan.items,
+export default connect(({ lessonPlan }) => ({
+  ...lessonPlan.eventForm,
+  items: lessonPlan.lessonPlan.items,
 }))(EventFormDialog);

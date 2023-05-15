@@ -6,7 +6,7 @@ import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp';
 import { Button, MenuItem, MenuList, Popover } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { setItemTypeVisibility } from 'course/lesson-plan/actions';
+import { actions } from '../../store';
 
 const translations = defineMessages({
   filter: {
@@ -72,7 +72,9 @@ class LessonPlanFilter extends Component {
                 <MenuItem
                   key={itemType}
                   onClick={() =>
-                    dispatch(setItemTypeVisibility(itemType, !isVisible))
+                    dispatch(
+                      actions.setItemTypeVisibility(itemType, !isVisible),
+                    )
                   }
                   style={{ display: 'flex', justifyContent: 'space-between' }}
                 >
@@ -93,6 +95,6 @@ LessonPlanFilter.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect((state) => ({
-  visibility: state.lessonPlan.visibilityByType,
+export default connect(({ lessonPlan }) => ({
+  visibility: lessonPlan.lessonPlan.visibilityByType,
 }))(LessonPlanFilter);

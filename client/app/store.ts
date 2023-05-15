@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { enableMapSet } from 'immer';
 
+import deleteConfirmationReducer from 'lib/reducers/deleteConfirmation';
 import notificationPopupReducer from 'lib/reducers/notificationPopup';
 
 import globalAnnouncementReducer from './bundles/announcements/store';
@@ -20,6 +21,7 @@ import forumsReducer from './bundles/course/forum/store';
 import groupsReducer from './bundles/course/group/store';
 import leaderboardReducer from './bundles/course/leaderboard/store';
 import learningMapReducer from './bundles/course/learning-map/store';
+import lessonPlanReducer from './bundles/course/lesson-plan/store';
 import levelsReducer from './bundles/course/level/store';
 import foldersReducer from './bundles/course/material/folders/store';
 import timelinesReducer from './bundles/course/reference-timelines/store';
@@ -60,6 +62,8 @@ const rootReducer = combineReducers({
   notificationSettings: notificationSettingsReducer,
   duplication: duplicationsReducer,
   scribingQuestion: scribingQuestionReducer,
+  lessonPlan: lessonPlanReducer,
+  deleteConfirmation: deleteConfirmationReducer,
 });
 
 export const store = configureStore({

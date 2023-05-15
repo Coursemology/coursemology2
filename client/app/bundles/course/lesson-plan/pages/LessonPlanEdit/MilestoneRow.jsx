@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 import { Element } from 'react-scroll';
 import PropTypes from 'prop-types';
 
-import { updateMilestone } from 'course/lesson-plan/actions';
-import { fields } from 'course/lesson-plan/constants';
 import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
 import moment from 'lib/moment';
+
+import { fields } from '../../constants';
+import { updateMilestone } from '../../operations';
 
 const translations = defineMessages({
   updateSuccess: {
@@ -83,6 +84,6 @@ MilestoneRow.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect((state) => ({
-  columnsVisible: state.flags.editPageColumnsVisible,
+export default connect(({ lessonPlan }) => ({
+  columnsVisible: lessonPlan.flags.editPageColumnsVisible,
 }))(MilestoneRow);
