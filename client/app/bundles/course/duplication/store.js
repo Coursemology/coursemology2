@@ -1,3 +1,5 @@
+import produce from 'immer';
+
 import actionTypes, { duplicationModes } from 'course/duplication/constants';
 import { getEmptySelectedItems, nestFolders } from 'course/duplication/utils';
 
@@ -31,7 +33,7 @@ const initialState = {
   isDuplicationSuccess: false,
 };
 
-const reducer = (state = initialState, action) => {
+const reducer = produce((state, action) => {
   const { type } = action;
 
   switch (type) {
@@ -85,9 +87,9 @@ const reducer = (state = initialState, action) => {
       };
     }
     case actionTypes.SET_ITEM_SELECTED_BOOLEAN: {
-      const selectedItems = { ...state.selectedItems };
-      selectedItems[action.itemType][action.id] = action.value;
-      return { ...state, selectedItems };
+      return produce(state, (draft) => {
+        draft.selectedItems[action.itemType][action.id] = action.value;
+      });
     }
     case actionTypes.SET_DUPLICATION_MODE: {
       return { ...state, duplicationMode: action.duplicationMode };
@@ -118,7 +120,7 @@ const reducer = (state = initialState, action) => {
     default:
       return state;
   }
-};
+}, initialState);
 
 export const actions = {
   setItemSelectedBoolean: (itemType, id, value) => ({
