@@ -18,6 +18,7 @@ import learningMapReducer from './bundles/course/learning-map/store';
 import levelsReducer from './bundles/course/level/store';
 import foldersReducer from './bundles/course/material/folders/store';
 import timelinesReducer from './bundles/course/reference-timelines/store';
+import statisticsReducer from './bundles/course/statistics/store';
 import videosReducer from './bundles/course/video/store';
 import globalUserReducer from './bundles/users/store';
 
@@ -44,6 +45,7 @@ const rootReducer = combineReducers({
   videos: videosReducer,
   levels: levelsReducer,
   notificationPopup: notificationPopupReducer,
+  statistics: statisticsReducer,
 });
 
 export const store = configureStore({

@@ -1,3 +1,5 @@
+import { Operation } from 'store';
+
 import CourseAPI from 'api/course';
 
 import {
@@ -9,8 +11,9 @@ import { processStaff } from './utils/parseStaffResponse';
 import { processStudent } from './utils/parseStudentsResponse';
 import actionTypes from './constants';
 
-export function fetchStudentsStatistics(failureMessage) {
-  return (dispatch) => {
+export const fetchStudentsStatistics =
+  (failureMessage: string): Operation =>
+  async (dispatch) => {
     dispatch({ type: actionTypes.FETCH_STUDENTS_STATISTICS_REQUEST });
 
     return CourseAPI.statistics.course
@@ -38,10 +41,10 @@ export function fetchStudentsStatistics(failureMessage) {
         });
       });
   };
-}
 
-export function fetchStaffStatistics(failureMessage) {
-  return (dispatch) => {
+export const fetchStaffStatistics =
+  (failureMessage: string): Operation =>
+  async (dispatch) => {
     dispatch({ type: actionTypes.FETCH_STAFF_STATISTICS_REQUEST });
 
     return CourseAPI.statistics.course
@@ -59,10 +62,10 @@ export function fetchStaffStatistics(failureMessage) {
         });
       });
   };
-}
 
-export function fetchCourseProgressionStatistics(failureMessage) {
-  return (dispatch) => {
+export const fetchCourseProgressionStatistics =
+  (failureMessage: string): Operation =>
+  async (dispatch) => {
     dispatch({ type: actionTypes.FETCH_COURSE_PROGRESSION_STATISTICS_REQUEST });
 
     return CourseAPI.statistics.course
@@ -81,10 +84,10 @@ export function fetchCourseProgressionStatistics(failureMessage) {
         });
       });
   };
-}
 
-export function fetchCoursePerformanceStatistics(failureMessage) {
-  return (dispatch) => {
+export const fetchCoursePerformanceStatistics =
+  (failureMessage: string): Operation =>
+  async (dispatch) => {
     dispatch({ type: actionTypes.FETCH_COURSE_PERFORMANCE_STATISTICS_REQUEST });
 
     return CourseAPI.statistics.course
@@ -122,4 +125,3 @@ export function fetchCoursePerformanceStatistics(failureMessage) {
         });
       });
   };
-}

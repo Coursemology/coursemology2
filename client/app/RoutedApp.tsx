@@ -28,6 +28,7 @@ import LearningMap from 'bundles/course/learning-map/containers/LearningMap';
 import LevelsIndex from 'bundles/course/level/pages/LevelsIndex';
 import FolderShow from 'bundles/course/material/folders/pages/FolderShow';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
+import StatisticsIndex from 'bundles/course/statistics/pages/StatisticsIndex';
 import VideoShow from 'bundles/course/video/pages/VideoShow';
 import VideosIndex from 'bundles/course/video/pages/VideosIndex';
 import VideoSubmissionEdit from 'bundles/course/video/submission/pages/VideoSubmissionEdit';
@@ -184,6 +185,11 @@ const RoutedApp = (): JSX.Element => {
           <Route element={<GroupIndex />} path="courses/:courseId/groups">
             <Route element={<GroupShow />} path=":groupCategoryId" />
           </Route>
+
+          <Route
+            element={<StatisticsIndex />}
+            path="/courses/:courseId/statistics"
+          />
         </Routes>
       </BrowserRouter>
 

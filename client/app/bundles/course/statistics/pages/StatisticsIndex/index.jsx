@@ -15,7 +15,7 @@ import {
   fetchCourseProgressionStatistics,
   fetchStaffStatistics,
   fetchStudentsStatistics,
-} from '../../actions';
+} from '../../operations';
 import { courseIndexShape } from '../../propTypes/course';
 import { staffIndexShape } from '../../propTypes/staff';
 import { studentsIndexShape } from '../../propTypes/students';
@@ -160,8 +160,8 @@ StatisticsIndex.propTypes = {
   staffStatistics: PropTypes.shape(staffIndexShape),
 };
 
-export default connect((state) => ({
-  courseStatistics: state.courseStatistics,
-  studentsStatistics: state.studentsStatistics,
-  staffStatistics: state.staffStatistics,
+export default connect(({ statistics }) => ({
+  courseStatistics: statistics.courseStatistics,
+  studentsStatistics: statistics.studentsStatistics,
+  staffStatistics: statistics.staffStatistics,
 }))(StatisticsIndex);
