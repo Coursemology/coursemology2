@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
+import GlobalAnnouncementIndex from 'bundles/announcements/GlobalAnnouncementIndex';
 import EditForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/EditForumPostResponsePage';
 import NewForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/NewForumPostResponsePage';
 import EditMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/EditMcqMrqPage';
@@ -76,6 +77,8 @@ const RoutedApp = (): JSX.Element => {
             element={<EditVoicePage />}
             path="/courses/:courseId/assessments/:assessmentId/question/voice_responses/:questionId/edit"
           />
+
+          <Route element={<GlobalAnnouncementIndex />} path="/announcements" />
         </Routes>
       </BrowserRouter>
     </App>
