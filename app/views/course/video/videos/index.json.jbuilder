@@ -1,14 +1,11 @@
 # frozen_string_literal: true
-
-can_analyze = can?(:analyze, @videos)
-
 json.videoTabs @video_tabs do |video_tab|
   json.id video_tab.id
   json.title video_tab.title
 end
 
 json.videos @videos do |video|
-  json.partial! 'video_list_data', video: video, can_analyze: can_analyze, submission: video.submissions.first&.id
+  json.partial! 'video_list_data', video: video, can_analyze: @can_analyze, submission: video.submissions.first&.id
 end
 
 json.metadata do
@@ -21,6 +18,6 @@ json.metadata do
 end
 
 json.permissions do
-  json.canAnalyze can_analyze
-  json.canManage can?(:manage, Course::Video.new(course: current_course))
+  json.canAnalyze @can_analyze
+  json.canManage @can_manage
 end
