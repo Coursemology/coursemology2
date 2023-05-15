@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
 
-import * as actionCreators from 'course/lesson-plan/actions';
 import FormDialogue from 'lib/components/form/FormDialogue';
+
+import { actions } from '../../store';
 
 import MilestoneForm from './MilestoneForm';
 
@@ -17,13 +17,12 @@ const MilestoneFormDialog = ({
   dispatch,
 }) => {
   const [isDirty, setIsDirty] = useState(false);
-  const { hideMilestoneForm } = bindActionCreators(actionCreators, dispatch);
 
   return (
     <FormDialogue
       disabled={disabled}
       form="milestone-form"
-      hideForm={hideMilestoneForm}
+      hideForm={() => dispatch(actions.hideMilestoneForm())}
       open={visible}
       skipConfirmation={!isDirty}
       title={formTitle}
@@ -57,6 +56,6 @@ MilestoneFormDialog.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect(({ milestoneForm }) => ({
-  ...milestoneForm,
+export default connect(({ lessonPlan }) => ({
+  ...lessonPlan.milestoneForm,
 }))(MilestoneFormDialog);

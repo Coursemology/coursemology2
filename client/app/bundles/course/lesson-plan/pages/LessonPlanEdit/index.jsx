@@ -4,13 +4,15 @@ import { connect } from 'react-redux';
 import { Card, CardContent } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { fields } from 'course/lesson-plan/constants';
-import ColumnVisibilityDropdown from 'course/lesson-plan/containers/ColumnVisibilityDropdown';
-import ExitEditModeButton from 'course/lesson-plan/containers/LessonPlanLayout/ExitEditModeButton';
-import NewEventButton from 'course/lesson-plan/containers/LessonPlanLayout/NewEventButton';
-import NewMilestoneButton from 'course/lesson-plan/containers/LessonPlanLayout/NewMilestoneButton';
-import translations from 'course/lesson-plan/translations';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import { lessonPlanTypesGroups } from 'lib/types';
+
+import { fields } from '../../constants';
+import ColumnVisibilityDropdown from '../../containers/ColumnVisibilityDropdown';
+import ExitEditModeButton from '../../containers/LessonPlanLayout/ExitEditModeButton';
+import NewEventButton from '../../containers/LessonPlanLayout/NewEventButton';
+import NewMilestoneButton from '../../containers/LessonPlanLayout/NewMilestoneButton';
+import translations from '../../translations';
 
 import ItemRow from './ItemRow';
 import MilestoneRow from './MilestoneRow';
@@ -92,7 +94,10 @@ class LessonPlanEdit extends Component {
 
     return (
       <>
+        <PageHeader title={<FormattedMessage {...translations.lessonPlan} />} />
+
         {this.props.canManageLessonPlan && this.renderHeader()}
+
         <div className="mt-8">
           <table className="border-separate border-spacing-x-4">
             {this.renderTableHeader()}
@@ -110,8 +115,8 @@ LessonPlanEdit.propTypes = {
   canManageLessonPlan: PropTypes.bool.isRequired,
 };
 
-export default connect((state) => ({
-  groups: state.lessonPlan.groups,
-  columnsVisible: state.flags.editPageColumnsVisible,
-  canManageLessonPlan: state.flags.canManageLessonPlan,
+export default connect(({ lessonPlan }) => ({
+  groups: lessonPlan.lessonPlan.groups,
+  columnsVisible: lessonPlan.flags.editPageColumnsVisible,
+  canManageLessonPlan: lessonPlan.flags.canManageLessonPlan,
 }))(LessonPlanEdit);

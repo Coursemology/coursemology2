@@ -44,6 +44,9 @@ import GroupIndex from 'bundles/course/group/pages/GroupIndex';
 import GroupShow from 'bundles/course/group/pages/GroupShow';
 import LeaderboardIndex from 'bundles/course/leaderboard/pages/LeaderboardIndex';
 import LearningMap from 'bundles/course/learning-map/containers/LearningMap';
+import LessonPlanLayout from 'bundles/course/lesson-plan/containers/LessonPlanLayout';
+import LessonPlanEdit from 'bundles/course/lesson-plan/pages/LessonPlanEdit';
+import LessonPlanShow from 'bundles/course/lesson-plan/pages/LessonPlanShow';
 import LevelsIndex from 'bundles/course/level/pages/LevelsIndex';
 import FolderShow from 'bundles/course/material/folders/pages/FolderShow';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
@@ -311,6 +314,15 @@ const RoutedApp = (): JSX.Element => {
             element={<EditProgrammingQuestionPage />}
             path="/courses/:courseId/assessments/:assessmentId/question/programming/:questionId/edit"
           />
+
+          <Route
+            // @ts-ignore
+            element={<LessonPlanLayout />}
+            path="/courses/:courseId/lesson_plan"
+          >
+            <Route element={<LessonPlanShow />} index />
+            <Route element={<LessonPlanEdit />} path="edit" />
+          </Route>
         </Routes>
       </BrowserRouter>
 

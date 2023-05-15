@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { createMilestone, showMilestoneForm } from 'course/lesson-plan/actions';
+import { createMilestone } from '../../operations';
+import { actions } from '../../store';
 
 const translations = defineMessages({
   newMilestone: {
@@ -40,7 +41,7 @@ class NewMilestoneButton extends Component {
   showForm = () => {
     const { dispatch, intl } = this.props;
     return dispatch(
-      showMilestoneForm({
+      actions.showMilestoneForm({
         onSubmit: this.createMilestoneHandler,
         formTitle: intl.formatMessage(translations.newMilestone),
         initialValues: { title: '', description: '', start_at: null },
@@ -73,6 +74,6 @@ NewMilestoneButton.propTypes = {
   intl: PropTypes.object.isRequired,
 };
 
-export default connect((state) => ({
-  canManageLessonPlan: state.flags.canManageLessonPlan,
+export default connect(({ lessonPlan }) => ({
+  canManageLessonPlan: lessonPlan.flags.canManageLessonPlan,
 }))(injectIntl(NewMilestoneButton));

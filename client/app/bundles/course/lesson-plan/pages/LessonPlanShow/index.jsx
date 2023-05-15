@@ -1,14 +1,18 @@
 import { Component } from 'react';
+import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
 import { Card, CardContent } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import EnterEditModeButton from 'course/lesson-plan/containers/LessonPlanLayout/EnterEditModeButton';
-import NewEventButton from 'course/lesson-plan/containers/LessonPlanLayout/NewEventButton';
-import NewMilestoneButton from 'course/lesson-plan/containers/LessonPlanLayout/NewMilestoneButton';
+import PageHeader from 'lib/components/navigation/PageHeader';
 import moment from 'lib/moment';
 import { lessonPlanTypesGroups } from 'lib/types';
+
+import EnterEditModeButton from '../../containers/LessonPlanLayout/EnterEditModeButton';
+import NewEventButton from '../../containers/LessonPlanLayout/NewEventButton';
+import NewMilestoneButton from '../../containers/LessonPlanLayout/NewMilestoneButton';
+import translations from '../../translations';
 
 import LessonPlanGroup from './LessonPlanGroup';
 
@@ -91,6 +95,8 @@ class LessonPlanShow extends Component {
   render() {
     return (
       <>
+        <PageHeader title={<FormattedMessage {...translations.lessonPlan} />} />
+
         {this.props.canManageLessonPlan && this.renderHeader()}
         {this.props.groups.map((group) => this.renderGroup(group))}
       </>
@@ -105,10 +111,9 @@ LessonPlanShow.propTypes = {
   canManageLessonPlan: PropTypes.bool.isRequired,
 };
 
-export const UnconnectedLessonPlanShow = LessonPlanShow;
-export default connect((state) => ({
-  groups: state.lessonPlan.groups,
-  visibility: state.lessonPlan.visibilityByType,
-  milestonesExpanded: state.flags.milestonesExpanded,
-  canManageLessonPlan: state.flags.canManageLessonPlan,
+export default connect(({ lessonPlan }) => ({
+  groups: lessonPlan.lessonPlan.groups,
+  visibility: lessonPlan.lessonPlan.visibilityByType,
+  milestonesExpanded: lessonPlan.flags.milestonesExpanded,
+  canManageLessonPlan: lessonPlan.flags.canManageLessonPlan,
 }))(LessonPlanShow);

@@ -102,6 +102,6 @@ LessonPlanNav.propTypes = {
   ).isRequired,
 };
 
-export default connect((state) => ({
-  groups: state.lessonPlan.groups,
+export default connect(({ lessonPlan }) => ({
+  groups: lessonPlan.lessonPlan.groups,
 }))(LessonPlanNav);

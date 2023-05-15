@@ -5,13 +5,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import PropTypes from 'prop-types';
 import * as yup from 'yup';
 
-import { fields } from 'course/lesson-plan/constants';
-import translations from 'course/lesson-plan/translations';
 import ErrorText from 'lib/components/core/ErrorText';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import formTranslations from 'lib/translations/form';
+
+import { fields } from '../../constants';
+import translations from '../../translations';
 
 const { TITLE, DESCRIPTION, START_AT } = fields;
 

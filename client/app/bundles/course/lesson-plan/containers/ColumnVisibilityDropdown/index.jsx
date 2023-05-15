@@ -6,9 +6,9 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import { Button, MenuItem, MenuList, Popover } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { setColumnVisibility } from 'course/lesson-plan/actions';
-import { fields } from 'course/lesson-plan/constants';
-import fieldTranslations from 'course/lesson-plan/translations';
+import { fields } from '../../constants';
+import { actions } from '../../store';
+import fieldTranslations from '../../translations';
 
 const { ITEM_TYPE, START_AT, BONUS_END_AT, END_AT, PUBLISHED } = fields;
 
@@ -79,7 +79,7 @@ class ColumnVisibilityDropdown extends Component {
                   <MenuItem
                     key={field}
                     onClick={() =>
-                      dispatch(setColumnVisibility(field, !isVisible))
+                      dispatch(actions.setColumnVisibility(field, !isVisible))
                     }
                     style={{ display: 'flex', justifyContent: 'space-between' }}
                   >
@@ -101,6 +101,6 @@ ColumnVisibilityDropdown.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect((state) => ({
-  columnsVisible: state.flags.editPageColumnsVisible,
+export default connect(({ lessonPlan }) => ({
+  columnsVisible: lessonPlan.flags.editPageColumnsVisible,
 }))(ColumnVisibilityDropdown);

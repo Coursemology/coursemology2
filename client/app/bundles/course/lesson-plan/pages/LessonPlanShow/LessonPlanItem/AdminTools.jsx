@@ -7,12 +7,10 @@ import Edit from '@mui/icons-material/Edit';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import {
-  deleteEvent,
-  showDeleteConfirmation,
-  showEventForm,
-  updateEvent,
-} from 'course/lesson-plan/actions';
+import { showDeleteConfirmation } from 'lib/actions';
+
+import { deleteEvent, updateEvent } from '../../../operations';
+import { actions } from '../../../store';
 
 const translations = defineMessages({
   editEvent: {
@@ -79,7 +77,7 @@ class AdminTools extends PureComponent {
     } = item;
 
     return dispatch(
-      showEventForm({
+      actions.showEventForm({
         onSubmit: this.updateEventHandler,
         formTitle: intl.formatMessage(translations.editEvent),
         initialValues: {
@@ -158,6 +156,6 @@ AdminTools.propTypes = {
   intl: PropTypes.object.isRequired,
 };
 
-export default connect((state) => ({
-  canManageLessonPlan: state.flags.canManageLessonPlan,
+export default connect(({ lessonPlan }) => ({
+  canManageLessonPlan: lessonPlan.flags.canManageLessonPlan,
 }))(injectIntl(AdminTools));

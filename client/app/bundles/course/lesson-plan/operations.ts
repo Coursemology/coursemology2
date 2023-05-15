@@ -1,32 +1,14 @@
+import { Operation } from 'types/store';
+
 import CourseAPI from 'api/course';
-import actionTypes from 'course/lesson-plan/constants';
-import {
-  resetDeleteConfirmation,
-  setNotification,
-  showDeleteConfirmation,
-} from 'lib/actions';
+import { setNotification } from 'lib/actions';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 
-export { resetDeleteConfirmation, setNotification, showDeleteConfirmation };
+import actionTypes from './constants';
+import { actions } from './store';
 
-export function setItemTypeVisibility(itemType, isVisible) {
-  return {
-    type: actionTypes.SET_ITEM_TYPE_VISIBILITY,
-    itemType,
-    isVisible,
-  };
-}
-
-export function setColumnVisibility(field, isVisible) {
-  return {
-    type: actionTypes.SET_COLUMN_VISIBILITY,
-    field,
-    isVisible,
-  };
-}
-
-export function fetchLessonPlan() {
-  return (dispatch) => {
+export function fetchLessonPlan(): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.LOAD_LESSON_PLAN_REQUEST });
     return CourseAPI.lessonPlan
       .fetch()
@@ -45,29 +27,13 @@ export function fetchLessonPlan() {
   };
 }
 
-export function showMilestoneForm(formParams) {
-  return { type: actionTypes.MILESTONE_FORM_SHOW, formParams };
-}
-
-export function hideMilestoneForm() {
-  return { type: actionTypes.MILESTONE_FORM_HIDE };
-}
-
-export function showEventForm(formParams) {
-  return { type: actionTypes.EVENT_FORM_SHOW, formParams };
-}
-
-export function hideEventForm() {
-  return { type: actionTypes.EVENT_FORM_HIDE };
-}
-
 export function createMilestone(
   values,
   successMessage,
   failureMessage,
   setError,
-) {
-  return (dispatch) => {
+): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.MILESTONE_CREATE_REQUEST });
     return CourseAPI.lessonPlan
       .createMilestone({ lesson_plan_milestone: values })
@@ -76,13 +42,13 @@ export function createMilestone(
           type: actionTypes.MILESTONE_CREATE_SUCCESS,
           milestone: response.data,
         });
-        dispatch(hideMilestoneForm());
+        dispatch(actions.hideMilestoneForm());
         setNotification(successMessage)(dispatch);
       })
       .catch((error) => {
         dispatch({ type: actionTypes.MILESTONE_CREATE_FAILURE });
         setNotification(failureMessage)(dispatch);
-        if (error.response && error.response.data) {
+        if (error?.response?.data?.errors) {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
@@ -95,8 +61,8 @@ export function updateMilestone(
   successMessage,
   failureMessage,
   setError,
-) {
-  return (dispatch) => {
+): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.MILESTONE_UPDATE_REQUEST });
     return CourseAPI.lessonPlan
       .updateMilestone(id, { lesson_plan_milestone: values })
@@ -106,21 +72,21 @@ export function updateMilestone(
           milestoneId: id,
           milestone: response.data,
         });
-        dispatch(hideMilestoneForm());
+        dispatch(actions.hideMilestoneForm());
         setNotification(successMessage)(dispatch);
       })
       .catch((error) => {
         dispatch({ type: actionTypes.MILESTONE_UPDATE_FAILURE });
         setNotification(failureMessage)(dispatch);
-        if (error.response && error.response.data && setError) {
+        if (error?.response?.data?.errors && setError) {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };
 }
 
-export function deleteMilestone(id, successMessage, failureMessage) {
-  return (dispatch) => {
+export function deleteMilestone(id, successMessage, failureMessage): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.MILESTONE_DELETE_REQUEST });
     return CourseAPI.lessonPlan
       .deleteMilestone(id)
@@ -138,8 +104,13 @@ export function deleteMilestone(id, successMessage, failureMessage) {
   };
 }
 
-export function updateItem(id, values, successMessage, failureMessage) {
-  return (dispatch) => {
+export function updateItem(
+  id,
+  values,
+  successMessage,
+  failureMessage,
+): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.ITEM_UPDATE_REQUEST });
     return CourseAPI.lessonPlan
       .updateItem(id, { item: values })
@@ -157,8 +128,13 @@ export function updateItem(id, values, successMessage, failureMessage) {
   };
 }
 
-export function createEvent(values, successMessage, failureMessage, setError) {
-  return (dispatch) => {
+export function createEvent(
+  values,
+  successMessage,
+  failureMessage,
+  setError,
+): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.EVENT_CREATE_REQUEST });
     return CourseAPI.lessonPlan
       .createEvent({ lesson_plan_event: values })
@@ -167,13 +143,13 @@ export function createEvent(values, successMessage, failureMessage, setError) {
           type: actionTypes.EVENT_CREATE_SUCCESS,
           event: response.data,
         });
-        dispatch(hideEventForm());
+        dispatch(actions.hideEventForm());
         setNotification(successMessage)(dispatch);
       })
       .catch((error) => {
         dispatch({ type: actionTypes.EVENT_CREATE_FAILURE });
         setNotification(failureMessage)(dispatch);
-        if (error.response && error.response.data) {
+        if (error?.response?.data?.errors) {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
@@ -186,8 +162,8 @@ export function updateEvent(
   successMessage,
   failureMessage,
   setError,
-) {
-  return (dispatch) => {
+): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.EVENT_UPDATE_REQUEST });
     return CourseAPI.lessonPlan
       .updateEvent(eventId, { lesson_plan_event: values })
@@ -197,21 +173,26 @@ export function updateEvent(
           eventId,
           event: response.data,
         });
-        dispatch(hideEventForm());
+        dispatch(actions.hideEventForm());
         setNotification(successMessage)(dispatch);
       })
       .catch((error) => {
         dispatch({ type: actionTypes.EVENT_UPDATE_FAILURE });
         setNotification(failureMessage)(dispatch);
-        if (error.response && error.response.data) {
+        if (error?.response?.data?.errors) {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };
 }
 
-export function deleteEvent(itemId, eventId, successMessage, failureMessage) {
-  return (dispatch) => {
+export function deleteEvent(
+  itemId,
+  eventId,
+  successMessage,
+  failureMessage,
+): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.EVENT_DELETE_REQUEST });
     return CourseAPI.lessonPlan
       .deleteEvent(eventId)

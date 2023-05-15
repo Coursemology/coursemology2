@@ -1,6 +1,6 @@
 import { defineMessages } from 'react-intl';
 
-import { fields } from 'course/lesson-plan/constants';
+import { fields } from './constants';
 
 const {
   ITEM_TYPE,
@@ -50,6 +50,14 @@ const translations = defineMessages({
   [PUBLISHED]: {
     id: 'course.lessonPlan.published',
     defaultMessage: 'Published',
+  },
+  lessonPlan: {
+    id: 'course.lessonPlan.LessonPlanLayout.lessonPlan',
+    defaultMessage: 'Lesson Plan',
+  },
+  empty: {
+    id: 'course.lessonPlan.LessonPlanLayout.empty',
+    defaultMessage: 'The lesson plan is empty.',
   },
 });
 

@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { createEvent, showEventForm } from 'course/lesson-plan/actions';
+import { createEvent } from '../../operations';
+import { actions } from '../../store';
 
 const translations = defineMessages({
   newEvent: {
@@ -32,7 +33,7 @@ class NewEventButton extends Component {
   showForm = () => {
     const { dispatch, intl } = this.props;
     return dispatch(
-      showEventForm({
+      actions.showEventForm({
         onSubmit: this.createEventHandler,
         formTitle: intl.formatMessage(translations.newEvent),
         initialValues: {
@@ -68,6 +69,6 @@ NewEventButton.propTypes = {
   intl: PropTypes.object.isRequired,
 };
 
-export default connect((state) => ({
-  canManageLessonPlan: state.flags.canManageLessonPlan,
+export default connect(({ lessonPlan }) => ({
+  canManageLessonPlan: lessonPlan.flags.canManageLessonPlan,
 }))(injectIntl(NewEventButton));
