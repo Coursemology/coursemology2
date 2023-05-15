@@ -185,7 +185,7 @@ const InstanceAdminSidebar: FC<Props> = (props) => {
               expanded={isExpanded}
               icon={<AssignmentInd />}
               primary={intl.formatMessage(translations.roleRequests)}
-              to="/role_requests"
+              to="/admin/instance/role_requests"
             />
           </List>
         </Grid>

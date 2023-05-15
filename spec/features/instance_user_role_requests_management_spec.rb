@@ -76,7 +76,7 @@ RSpec.feature 'Instance::UserRoleRequests' do
         sample_request.reload
 
         expect(sample_request.workflow_state).to eq('rejected')
-        expect(current_path).to eq(instance_user_role_requests_path)
+        expect(current_path).to eq(admin_instance_admin_path + instance_user_role_requests_path)
         expect(page).to_not have_selector("tr.pending_role_request_#{sample_request.id}")
         expect(page).to have_selector("tr.rejected_role_request_#{sample_request.id}")
       end

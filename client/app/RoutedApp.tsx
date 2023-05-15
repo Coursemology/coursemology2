@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import GlobalAnnouncementIndex from 'bundles/announcements/GlobalAnnouncementIndex';
 import AchievementShow from 'bundles/course/achievement/pages/AchievementShow';
@@ -130,11 +130,20 @@ const RoutedApp = (): JSX.Element => {
               element={<InstanceUsersInvitations />}
               path="user_invitations"
             />
+
+            <Route
+              element={<InstanceUserRoleRequestsIndex />}
+              path="role_requests"
+            />
           </Route>
 
+          {/* `/role_requests` will be routed without `InstanceAdminNavigator` and its sidebar.
+          Here, we redirect `/role_requests` to `/admin/instance/role_requests`. But until
+          we are loading the page without Rails' router, fresh loads to `/role_requests` will
+          go to 404. Once we are 100% SPA, this is a non-issue. */}
           <Route
-            element={<InstanceUserRoleRequestsIndex />}
-            path="role_requests"
+            element={<Navigate to="/admin/instance/role_requests" />}
+            path="/role_requests"
           />
 
           <Route
