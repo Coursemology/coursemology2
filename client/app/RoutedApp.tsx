@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SubmissionsIndex from 'bundles/course/assessment/submissions/SubmissionsIndex';
 import DisbursementIndex from 'bundles/course/experience-points/disbursement/pages/DisbursementIndex';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
+import AccountSettings from 'bundles/user/AccountSettings';
 
 import App from './App';
 
@@ -25,6 +26,8 @@ const RoutedApp = (): JSX.Element => {
             element={<DisbursementIndex />}
             path="/courses/:courseId/users/disburse_experience_points"
           />
+
+          <Route element={<AccountSettings />} path="/user/profile/edit" />
         </Routes>
       </BrowserRouter>
     </App>
