@@ -4,6 +4,8 @@ import EditForumPostResponsePage from 'bundles/course/assessment/question/forum-
 import NewForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/NewForumPostResponsePage';
 import EditMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/EditMcqMrqPage';
 import NewMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/NewMcqMrqPage';
+import EditTextResponsePage from 'bundles/course/assessment/question/text-responses/EditTextResponsePage';
+import NewTextResponsePage from 'bundles/course/assessment/question/text-responses/NewTextResponsePage';
 import SubmissionsIndex from 'bundles/course/assessment/submissions/SubmissionsIndex';
 import DisbursementIndex from 'bundles/course/experience-points/disbursement/pages/DisbursementIndex';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
@@ -51,6 +53,16 @@ const RoutedApp = (): JSX.Element => {
           <Route
             element={<EditMcqMrqPage />}
             path="/courses/:courseId/assessments/:assessmentId/question/multiple_responses/:questionId/edit"
+          />
+
+          <Route
+            element={<NewTextResponsePage />}
+            path="courses/:courseId/assessments/:assessmentId/question/text_responses/new"
+          />
+
+          <Route
+            element={<EditTextResponsePage />}
+            path="/courses/:courseId/assessments/:assessmentId/question/text_responses/:questionId/edit"
           />
         </Routes>
       </BrowserRouter>
