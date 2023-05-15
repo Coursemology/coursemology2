@@ -1,6 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import GlobalAnnouncementIndex from 'bundles/announcements/GlobalAnnouncementIndex';
+import AchievementShow from 'bundles/course/achievement/pages/AchievementShow';
+import AchievementsIndex from 'bundles/course/achievement/pages/AchievementsIndex';
 import EditForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/EditForumPostResponsePage';
 import NewForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/NewForumPostResponsePage';
 import EditMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/EditMcqMrqPage';
@@ -79,6 +81,16 @@ const RoutedApp = (): JSX.Element => {
           />
 
           <Route element={<GlobalAnnouncementIndex />} path="/announcements" />
+
+          <Route
+            element={<AchievementsIndex />}
+            path="/courses/:courseId/achievements/"
+          />
+
+          <Route
+            element={<AchievementShow />}
+            path="/courses/:courseId/achievements/:achievementId"
+          />
         </Routes>
       </BrowserRouter>
     </App>
