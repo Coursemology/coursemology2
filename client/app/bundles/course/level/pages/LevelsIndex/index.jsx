@@ -13,6 +13,11 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import { defaultComponentTitles } from 'course/translations.intl';
+import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import PageHeader from 'lib/components/navigation/PageHeader';
+
+import LevelRow from '../../components/LevelRow';
 import {
   addLevel,
   deleteLevel,
@@ -20,11 +25,7 @@ import {
   saveLevels,
   sortLevels,
   updateExpThreshold,
-} from 'course/level/actions';
-import LevelRow from 'course/level/components/LevelRow';
-import { defaultComponentTitles } from 'course/translations.intl';
-import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
+} from '../../operations';
 
 const translations = defineMessages({
   levelHeader: {
@@ -86,7 +87,7 @@ const styles = {
   },
 };
 
-class Level extends Component {
+class LevelsIndex extends Component {
   static renderTableHeader() {
     return (
       <TableHead>
@@ -167,7 +168,7 @@ class Level extends Component {
     return (
       <div style={styles.body}>
         <Table className="levels-list table">
-          {Level.renderTableHeader()}
+          {LevelsIndex.renderTableHeader()}
           <TableBody>{rows}</TableBody>
           {canManage && this.renderTableFooter()}
         </Table>
@@ -230,7 +231,7 @@ class Level extends Component {
   }
 }
 
-Level.propTypes = {
+LevelsIndex.propTypes = {
   canManage: PropTypes.bool.isRequired,
   isLoading: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
@@ -239,9 +240,9 @@ Level.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect(({ levelEdit }) => ({
-  canManage: levelEdit.canManage,
-  isLoading: levelEdit.isLoading,
-  isSaving: levelEdit.isSaving,
-  levels: levelEdit.levels,
-}))(Level);
+export default connect(({ levels }) => ({
+  canManage: levels.canManage,
+  isLoading: levels.isLoading,
+  isSaving: levels.isSaving,
+  levels: levels.levels,
+}))(LevelsIndex);
