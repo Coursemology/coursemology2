@@ -8,13 +8,17 @@ class Course::Video::VideosController < Course::Video::Controller
     respond_to do |format|
       format.html
       format.json do
-        preload_student_submission_count if can?(:analyze, @videos)
+        @can_analyze = can_for_videos_in_current_course? :analyze
+        @can_manage = can_for_videos_in_current_course? :manage
+
+        preload_student_submission_count if @can_analyze
         preload_video_item
         @videos = @videos.
                   from_tab(current_tab).
                   ordered_by_date_and_title.
                   includes(:statistic).
                   with_submissions_by(current_user)
+
         @course_students = current_course.course_users.students
       end
     end
@@ -61,6 +65,10 @@ class Course::Video::VideosController < Course::Video::Controller
   end
 
   private
+
+  def can_for_videos_in_current_course?(ability)
+    can? ability, Course::Video.new(course_id: current_course.id)
+  end
 
   def video_params
     params.require(:video).
