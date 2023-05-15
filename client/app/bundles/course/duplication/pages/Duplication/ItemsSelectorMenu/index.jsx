@@ -11,12 +11,12 @@ import {
 import { cyan } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
-import { setItemSelectorPanel } from 'course/duplication/actions';
 import {
   duplicableItemTypes,
   itemSelectorPanels as panels,
 } from 'course/duplication/constants';
 import { courseShape } from 'course/duplication/propTypes';
+import { actions } from 'course/duplication/store';
 import { defaultComponentTitles } from 'course/translations.intl';
 
 import DuplicateButton from '../DuplicateButton';
@@ -52,11 +52,14 @@ class ItemsSelectorMenu extends Component {
       return null;
     }
     if (enabledComponents.length === 1) {
-      dispatch(setItemSelectorPanel(panelKey));
+      dispatch(actions.setItemSelectorPanel(panelKey));
     }
 
     return (
-      <ListItem button onClick={() => dispatch(setItemSelectorPanel(panelKey))}>
+      <ListItem
+        button
+        onClick={() => dispatch(actions.setItemSelectorPanel(panelKey))}
+      >
         <ListItemAvatar>
           <Avatar
             style={{

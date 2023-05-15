@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import { ListSubheader } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { setItemSelectedBoolean } from 'course/duplication/actions';
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
 import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { folderShape } from 'course/duplication/propTypes';
+import { actions } from 'course/duplication/store';
 import { defaultComponentTitles } from 'course/translations.intl';
 
 const { FOLDER, MATERIAL } = duplicableItemTypes;
@@ -23,12 +23,16 @@ const translations = defineMessages({
 
 class MaterialsSelector extends Component {
   folderSetAll = (folder) => (value) => {
-    this.props.dispatch(setItemSelectedBoolean(FOLDER, folder.id, value));
+    this.props.dispatch(
+      actions.setItemSelectedBoolean(FOLDER, folder.id, value),
+    );
     folder.subfolders.forEach((subfolder) =>
       this.folderSetAll(subfolder)(value),
     );
     folder.materials.forEach((material) => {
-      this.props.dispatch(setItemSelectedBoolean(MATERIAL, material.id, value));
+      this.props.dispatch(
+        actions.setItemSelectedBoolean(MATERIAL, material.id, value),
+      );
     });
   };
 
@@ -48,7 +52,7 @@ class MaterialsSelector extends Component {
             </span>
           }
           onChange={(e, value) =>
-            dispatch(setItemSelectedBoolean(FOLDER, id, value))
+            dispatch(actions.setItemSelectedBoolean(FOLDER, id, value))
           }
           {...{ checked, indentLevel }}
         >
@@ -80,7 +84,7 @@ class MaterialsSelector extends Component {
           </span>
         }
         onChange={(e, value) =>
-          dispatch(setItemSelectedBoolean(MATERIAL, material.id, value))
+          dispatch(actions.setItemSelectedBoolean(MATERIAL, material.id, value))
         }
         {...{ checked, indentLevel }}
       />

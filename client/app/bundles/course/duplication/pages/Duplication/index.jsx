@@ -10,17 +10,17 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
+import { duplicationModes } from 'course/duplication/constants';
 import {
   changeSourceCourse,
   fetchObjectsList,
-  setDuplicationMode,
-} from 'course/duplication/actions';
-import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
-import { duplicationModes } from 'course/duplication/constants';
+} from 'course/duplication/operations';
 import {
   courseListingShape,
   sourceCourseShape,
 } from 'course/duplication/propTypes';
+import { actions } from 'course/duplication/store';
 import DateTimePicker from 'lib/components/core/fields/DateTimePicker';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
@@ -219,7 +219,7 @@ class Duplication extends Component {
     return (
       <RadioGroup
         name="duplicationMode"
-        onChange={(_, mode) => dispatch(setDuplicationMode(mode))}
+        onChange={(_, mode) => dispatch(actions.setDuplicationMode(mode))}
         style={styles.radioButtonGroup}
         value={duplicationMode}
       >
@@ -260,7 +260,7 @@ class Duplication extends Component {
       modesAllowed.length === 1 &&
       duplicationModes[modesAllowed[0]];
     if (isSingleValidMode) {
-      dispatch(setDuplicationMode(modesAllowed[0]));
+      dispatch(actions.setDuplicationMode(modesAllowed[0]));
       return header;
     }
 

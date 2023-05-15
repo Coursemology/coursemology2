@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { ListSubheader } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { setItemSelectedBoolean } from 'course/duplication/actions';
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
 import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { videoTabShape } from 'course/duplication/propTypes';
+import { actions } from 'course/duplication/store';
 import { defaultComponentTitles } from 'course/translations.intl';
 
 const { VIDEO_TAB, VIDEO } = duplicableItemTypes;
@@ -25,9 +25,9 @@ const translations = defineMessages({
 class VideosSelector extends Component {
   setAllInTab = (tab) => (value) => {
     const { dispatch } = this.props;
-    dispatch(setItemSelectedBoolean(VIDEO_TAB, tab.id, value));
+    dispatch(actions.setItemSelectedBoolean(VIDEO_TAB, tab.id, value));
     tab.videos.forEach((video) => {
-      dispatch(setItemSelectedBoolean(VIDEO, video.id, value));
+      dispatch(actions.setItemSelectedBoolean(VIDEO, video.id, value));
     });
   };
 
@@ -77,7 +77,7 @@ class VideosSelector extends Component {
             </span>
           }
           onChange={(e, value) =>
-            dispatch(setItemSelectedBoolean(VIDEO_TAB, id, value))
+            dispatch(actions.setItemSelectedBoolean(VIDEO_TAB, id, value))
           }
         >
           <BulkSelectors callback={this.setAllInTab(tab)} />
@@ -104,7 +104,7 @@ class VideosSelector extends Component {
           </span>
         }
         onChange={(e, value) =>
-          dispatch(setItemSelectedBoolean(VIDEO, video.id, value))
+          dispatch(actions.setItemSelectedBoolean(VIDEO, video.id, value))
         }
       />
     );

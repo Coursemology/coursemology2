@@ -3,13 +3,11 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import {
-  duplicateCourse,
-  setDestinationCourseId,
-} from 'course/duplication/actions';
 import CourseDropdownMenu from 'course/duplication/components/CourseDropdownMenu';
 import { duplicationModes } from 'course/duplication/constants';
+import { duplicateCourse } from 'course/duplication/operations';
 import { courseShape, sourceCourseShape } from 'course/duplication/propTypes';
+import { actions } from 'course/duplication/store';
 import moment, { SHORT_DATE_TIME_FORMAT } from 'lib/moment';
 
 import NewCourseForm from './NewCourseForm';
@@ -58,9 +56,9 @@ class DestinationCourseSelector extends Component {
         currentHost={currentHost}
         dropDownMenuProps={{ className: 'destination-course-dropdown' }}
         onChange={(event) =>
-          dispatch(setDestinationCourseId(event.target.value))
+          dispatch(actions.setDestinationCourseId(event.target.value))
         }
-        onHome={() => dispatch(setDestinationCourseId(currentCourseId))}
+        onHome={() => dispatch(actions.setDestinationCourseId(currentCourseId))}
         prompt={intl.formatMessage(translations.selectDestinationCoursePrompt)}
         selectedCourseId={destinationCourseId}
       />

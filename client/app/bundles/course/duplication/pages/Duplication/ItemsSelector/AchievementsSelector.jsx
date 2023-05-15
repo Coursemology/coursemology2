@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { ListSubheader } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { setItemSelectedBoolean } from 'course/duplication/actions';
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
 import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { achievementShape } from 'course/duplication/propTypes';
+import { actions } from 'course/duplication/store';
 import { defaultComponentTitles } from 'course/translations.intl';
 import Thumbnail from 'lib/components/core/Thumbnail';
 
@@ -40,7 +40,7 @@ class AchievementsSelector extends Component {
 
     achievements.forEach((achievement) => {
       dispatch(
-        setItemSelectedBoolean(
+        actions.setItemSelectedBoolean(
           duplicableItemTypes.ACHIEVEMENT,
           achievement.id,
           value,
@@ -96,7 +96,7 @@ class AchievementsSelector extends Component {
         label={label}
         onChange={(e, value) =>
           dispatch(
-            setItemSelectedBoolean(
+            actions.setItemSelectedBoolean(
               duplicableItemTypes.ACHIEVEMENT,
               achievement.id,
               value,

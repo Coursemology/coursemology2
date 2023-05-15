@@ -12,6 +12,7 @@ import skillsReducer from './bundles/course/assessment/skills/store';
 import submissionsReducer from './bundles/course/assessment/submissions/store';
 import coursesReducer from './bundles/course/courses/store';
 import commentsReducer from './bundles/course/discussion/topics/store';
+import duplicationsReducer from './bundles/course/duplication/store';
 import enrolRequestsReducer from './bundles/course/enrol-requests/store';
 import disbursementReducer from './bundles/course/experience-points/disbursement/store';
 import forumsReducer from './bundles/course/forum/store';
@@ -56,6 +57,7 @@ const rootReducer = combineReducers({
   enrolRequests: enrolRequestsReducer,
   lessonPlanSettings: lessonPlanSettingsReducer,
   notificationSettings: notificationSettingsReducer,
+  duplication: duplicationsReducer,
 });
 
 export const store = configureStore({

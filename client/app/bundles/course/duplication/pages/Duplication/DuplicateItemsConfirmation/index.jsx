@@ -5,11 +5,9 @@ import { Tooltip } from 'react-tooltip';
 import { Card, CardContent, ListSubheader } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import {
-  duplicateItems,
-  hideDuplicateItemsConfirmation,
-} from 'course/duplication/actions';
+import { duplicateItems } from 'course/duplication/operations';
 import { courseShape } from 'course/duplication/propTypes';
+import { actions } from 'course/duplication/store';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 
 import AchievementsListing from './AchievementsListing';
@@ -123,7 +121,7 @@ class DuplicateItemsConfirmation extends Component {
         disableCancelButton={isDuplicating}
         disableConfirmButton={isDuplicating}
         message={this.renderListing()}
-        onCancel={() => dispatch(hideDuplicateItemsConfirmation())}
+        onCancel={() => dispatch(actions.hideDuplicateItemsConfirmation())}
         onConfirm={() =>
           dispatch(
             duplicateItems(
