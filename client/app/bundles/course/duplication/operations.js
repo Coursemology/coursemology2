@@ -4,6 +4,9 @@ import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 
+import { actions } from './store';
+import { getItemsPayload } from './utils';
+
 const DUPLICATE_JOB_POLL_INTERVAL_MS = 2000;
 
 export function fetchObjectsList() {
@@ -45,60 +48,6 @@ export function changeSourceCourse(courseId) {
   };
 }
 
-export function setItemSelectedBoolean(itemType, id, value) {
-  return {
-    type: actionTypes.SET_ITEM_SELECTED_BOOLEAN,
-    itemType,
-    id,
-    value,
-  };
-}
-
-export function showDuplicateItemsConfirmation() {
-  return { type: actionTypes.SHOW_DUPLICATE_ITEMS_CONFIRMATION };
-}
-
-export function hideDuplicateItemsConfirmation() {
-  return { type: actionTypes.HIDE_DUPLICATE_ITEMS_CONFIRMATION };
-}
-
-export function setDestinationCourseId(destinationCourseId) {
-  return { type: actionTypes.SET_DESTINATION_COURSE_ID, destinationCourseId };
-}
-
-export function setDuplicationMode(duplicationMode) {
-  return { type: actionTypes.SET_DUPLICATION_MODE, duplicationMode };
-}
-
-export function setItemSelectorPanel(panel) {
-  return { type: actionTypes.SET_ITEM_SELECTOR_PANEL, panel };
-}
-
-/**
- * Prepares the payload containing ids and types of items selected for duplication.
- *
- * @param {object} selectedItemsHash Maps types to hashes that indicate which items have been selected, e.g.
- *    { TAB: { 3: true, 4: false }, SURVEY: { 9: true }, CATEGORY: { 10: false } }
- * @return {object} Maps types to arrays with ids of items that have been selected, e.g.
- *    { TAB: [3], SURVEY: [9] }
- */
-function itemsPayload(selectedItemsHash) {
-  return Object.keys(selectedItemsHash).reduce((hash, key) => {
-    const idsHash = selectedItemsHash[key];
-    const idsArray = Object.keys(idsHash).reduce((selectedIds, id) => {
-      if (idsHash[id]) {
-        selectedIds.push(id);
-      }
-      return selectedIds;
-    }, []);
-    if (idsArray.length > 0) {
-      // eslint-disable-next-line no-param-reassign
-      hash[key] = idsArray;
-    }
-    return hash;
-  }, {});
-}
-
 export function duplicateItems(
   destinationCourseId,
   selectedItems,
@@ -109,7 +58,7 @@ export function duplicateItems(
   const payload = {
     object_duplication: {
       destination_course_id: destinationCourseId,
-      items: itemsPayload(selectedItems),
+      items: getItemsPayload(selectedItems),
     },
   };
 
@@ -124,7 +73,7 @@ export function duplicateItems(
 
     const handleFailure = () => {
       dispatch({ type: actionTypes.DUPLICATE_ITEMS_FAILURE });
-      dispatch(hideDuplicateItemsConfirmation());
+      dispatch(actions.hideDuplicateItemsConfirmation());
       setNotification(failureMessage)(dispatch);
     };
 

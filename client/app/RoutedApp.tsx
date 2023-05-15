@@ -31,6 +31,7 @@ import SubmissionsIndex from 'bundles/course/assessment/submissions/SubmissionsI
 import CourseShow from 'bundles/course/courses/pages/CourseShow';
 import CoursesIndex from 'bundles/course/courses/pages/CoursesIndex';
 import CommentIndex from 'bundles/course/discussion/topics/pages/CommentIndex';
+import Duplication from 'bundles/course/duplication/pages/Duplication';
 import UserRequests from 'bundles/course/enrol-requests/pages/UserRequests';
 import DisbursementIndex from 'bundles/course/experience-points/disbursement/pages/DisbursementIndex';
 import ForumShow from 'bundles/course/forum/pages/ForumShow';
@@ -276,6 +277,11 @@ const RoutedApp = (): JSX.Element => {
               <Route key={path} element={element} path={path} />
             ))}
           </Route>
+
+          <Route
+            element={<Duplication />}
+            path="/courses/:courseId/duplication"
+          />
         </Routes>
       </BrowserRouter>
 

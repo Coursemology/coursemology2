@@ -4,13 +4,13 @@ import { connect } from 'react-redux';
 import { ListSubheader } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { setItemSelectedBoolean } from 'course/duplication/actions';
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
 import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
 import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { surveyShape } from 'course/duplication/propTypes';
+import { actions } from 'course/duplication/store';
 import { defaultComponentTitles } from 'course/translations.intl';
 
 const translations = defineMessages({
@@ -26,7 +26,11 @@ class SurveysSelector extends Component {
 
     surveys.forEach((survey) => {
       dispatch(
-        setItemSelectedBoolean(duplicableItemTypes.SURVEY, survey.id, value),
+        actions.setItemSelectedBoolean(
+          duplicableItemTypes.SURVEY,
+          survey.id,
+          value,
+        ),
       );
     });
   };
@@ -73,7 +77,7 @@ class SurveysSelector extends Component {
         label={label}
         onChange={(e, value) =>
           dispatch(
-            setItemSelectedBoolean(
+            actions.setItemSelectedBoolean(
               duplicableItemTypes.SURVEY,
               survey.id,
               value,

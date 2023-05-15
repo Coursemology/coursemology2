@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { ListSubheader } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { setItemSelectedBoolean } from 'course/duplication/actions';
 import BulkSelectors from 'course/duplication/components/BulkSelectors';
 import IndentedCheckbox from 'course/duplication/components/IndentedCheckbox';
 import TypeBadge from 'course/duplication/components/TypeBadge';
@@ -12,6 +11,7 @@ import UnpublishedIcon from 'course/duplication/components/UnpublishedIcon';
 import { duplicableItemTypes } from 'course/duplication/constants';
 import { categoryShape } from 'course/duplication/propTypes';
 import destinationCourseSelector from 'course/duplication/selectors/destinationCourse';
+import { actions } from 'course/duplication/store';
 import { defaultComponentTitles } from 'course/translations.intl';
 
 const { TAB, ASSESSMENT, CATEGORY } = duplicableItemTypes;
@@ -27,7 +27,7 @@ class AssessmentsSelector extends Component {
   categorySetAll = (category) => (value) => {
     const { dispatch, categoryDisabled } = this.props;
     if (!categoryDisabled) {
-      dispatch(setItemSelectedBoolean(CATEGORY, category.id, value));
+      dispatch(actions.setItemSelectedBoolean(CATEGORY, category.id, value));
     }
     category.tabs.forEach((tab) => this.tabSetAll(tab)(value));
   };
@@ -35,10 +35,12 @@ class AssessmentsSelector extends Component {
   tabSetAll = (tab) => (value) => {
     const { dispatch, tabDisabled } = this.props;
     if (!tabDisabled) {
-      dispatch(setItemSelectedBoolean(TAB, tab.id, value));
+      dispatch(actions.setItemSelectedBoolean(TAB, tab.id, value));
     }
     tab.assessments.forEach((assessment) => {
-      dispatch(setItemSelectedBoolean(ASSESSMENT, assessment.id, value));
+      dispatch(
+        actions.setItemSelectedBoolean(ASSESSMENT, assessment.id, value),
+      );
     });
   };
 
@@ -61,7 +63,7 @@ class AssessmentsSelector extends Component {
         indentLevel={2}
         label={label}
         onChange={(e, value) =>
-          dispatch(setItemSelectedBoolean(ASSESSMENT, id, value))
+          dispatch(actions.setItemSelectedBoolean(ASSESSMENT, id, value))
         }
       />
     );
@@ -84,7 +86,7 @@ class AssessmentsSelector extends Component {
             </span>
           }
           onChange={(e, value) =>
-            dispatch(setItemSelectedBoolean(CATEGORY, id, value))
+            dispatch(actions.setItemSelectedBoolean(CATEGORY, id, value))
           }
         >
           <BulkSelectors callback={this.categorySetAll(category)} />
@@ -112,7 +114,7 @@ class AssessmentsSelector extends Component {
             </span>
           }
           onChange={(e, value) =>
-            dispatch(setItemSelectedBoolean(TAB, id, value))
+            dispatch(actions.setItemSelectedBoolean(TAB, id, value))
           }
         >
           <BulkSelectors callback={this.tabSetAll(tab)} />

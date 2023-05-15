@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import { showDuplicateItemsConfirmation } from 'course/duplication/actions';
+import { actions } from 'course/duplication/store';
 
 import DuplicateItemsConfirmation from './DuplicateItemsConfirmation';
 
@@ -46,7 +46,7 @@ const DuplicateButton = (props) => {
       <Button
         color="secondary"
         disabled={!isCourseSelected || !isItemSelected || isChangingCourse}
-        onClick={() => dispatch(showDuplicateItemsConfirmation())}
+        onClick={() => dispatch(actions.showDuplicateItemsConfirmation())}
         style={styles.button}
         variant="contained"
       >
