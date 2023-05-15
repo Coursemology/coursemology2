@@ -1,8 +1,8 @@
 import CourseAPI from 'api/course';
 import actionTypes from 'course/duplication/constants';
-import { setNotification } from 'lib/actions';
 import pollJob from 'lib/helpers/jobHelpers';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import loadingToast from 'lib/hooks/loadingToast';
 
 import { actions } from './store';
 import { getItemsPayload } from './utils';
@@ -65,8 +65,10 @@ export function duplicateItems(
   return (dispatch, getState) => {
     const sourceCourseId = getState().duplication.sourceCourse.id;
 
+    const toast = loadingToast(pendingMessage);
+
     const handleSuccess = (successData) => {
-      dispatch(setNotification(successMessage));
+      toast.success(successMessage);
       window.location.href = successData.redirectUrl;
       dispatch({ type: actionTypes.DUPLICATE_ITEMS_SUCCESS });
     };
@@ -74,7 +76,7 @@ export function duplicateItems(
     const handleFailure = () => {
       dispatch({ type: actionTypes.DUPLICATE_ITEMS_FAILURE });
       dispatch(actions.hideDuplicateItemsConfirmation());
-      setNotification(failureMessage)(dispatch);
+      toast.error(failureMessage);
     };
 
     dispatch({ type: actionTypes.DUPLICATE_ITEMS_REQUEST });
@@ -82,7 +84,6 @@ export function duplicateItems(
       .duplicateItems(sourceCourseId, payload)
       .then((response) => response.data)
       .then((data) => {
-        dispatch(setNotification(pendingMessage));
         pollJob(
           data.jobUrl,
           handleSuccess,
@@ -106,8 +107,10 @@ export function duplicateCourse(
   return (dispatch, getState) => {
     const sourceCourseId = getState().duplication.sourceCourse.id;
 
+    const toast = loadingToast(pendingMessage);
+
     const handleJobSuccess = (successData) => {
-      dispatch(setNotification(successMessage));
+      toast.success(successMessage);
       window.location.href = successData.redirectUrl;
       dispatch({ type: actionTypes.DUPLICATE_COURSE_SUCCESS });
     };
@@ -117,7 +120,7 @@ export function duplicateCourse(
       if (error?.response?.data?.errors) {
         setReactHookFormError(setError, error.response.data.errors);
       }
-      dispatch(setNotification(failureMessage));
+      toast.error(failureMessage);
     };
 
     dispatch({ type: actionTypes.DUPLICATE_COURSE_REQUEST });
@@ -125,7 +128,6 @@ export function duplicateCourse(
       .duplicateCourse(sourceCourseId, payload)
       .then((response) => response.data)
       .then((data) => {
-        dispatch(setNotification(pendingMessage));
         pollJob(
           data.jobUrl,
           handleJobSuccess,
