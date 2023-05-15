@@ -2,6 +2,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import EditForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/EditForumPostResponsePage';
 import NewForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/NewForumPostResponsePage';
+import EditMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/EditMcqMrqPage';
+import NewMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/NewMcqMrqPage';
 import SubmissionsIndex from 'bundles/course/assessment/submissions/SubmissionsIndex';
 import DisbursementIndex from 'bundles/course/experience-points/disbursement/pages/DisbursementIndex';
 import TimelineDesigner from 'bundles/course/reference-timelines/TimelineDesigner';
@@ -39,6 +41,16 @@ const RoutedApp = (): JSX.Element => {
           <Route
             element={<EditForumPostResponsePage />}
             path="/courses/:courseId/assessments/:assessmentId/question/forum_post_responses/:questionId/edit"
+          />
+
+          <Route
+            element={<NewMcqMrqPage />}
+            path="/courses/:courseId/assessments/:assessmentId/question/multiple_responses/new"
+          />
+
+          <Route
+            element={<EditMcqMrqPage />}
+            path="/courses/:courseId/assessments/:assessmentId/question/multiple_responses/:questionId/edit"
           />
         </Routes>
       </BrowserRouter>
