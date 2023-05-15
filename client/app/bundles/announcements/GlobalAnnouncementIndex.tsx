@@ -8,8 +8,8 @@ import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/A
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
-import { indexAnnouncements } from '../../operations';
-import { getAllAnnouncementMiniEntities } from '../../selectors';
+import { indexAnnouncements } from './operations';
+import { getAllAnnouncementMiniEntities } from './selectors';
 
 type Props = WrappedComponentProps;
 

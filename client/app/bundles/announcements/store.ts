@@ -1,26 +1,46 @@
-import { enableMapSet } from 'immer';
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import produce from 'immer';
+import { AnnouncementListData } from 'types/course/announcements';
+import {
+  createEntityStore,
+  removeAllFromStore,
+  saveListToStore,
+} from 'utilities/store';
 
-import globalAnnouncementReducer from './reducers';
+import {
+  GlobalActionType,
+  GlobalAnnouncementState,
+  SAVE_ANNOUNCEMENT_LIST,
+  SaveAnnouncementListAction,
+} from './types';
 
-const defaultReducers = {};
+const initialState: GlobalAnnouncementState = {
+  announcements: createEntityStore(),
+};
 
-const rootReducer = combineReducers({
-  global: combineReducers({ announcements: globalAnnouncementReducer }),
-});
+const reducer = produce(
+  (draft: GlobalAnnouncementState, action: GlobalActionType) => {
+    switch (action.type) {
+      case SAVE_ANNOUNCEMENT_LIST: {
+        const announcementList = action.announcements;
+        const entityList = announcementList.map((data) => ({ ...data }));
+        removeAllFromStore(draft.announcements);
+        saveListToStore(draft.announcements, entityList);
+        break;
+      }
+      default:
+        break;
+    }
+  },
+  initialState,
+);
 
-enableMapSet();
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default function configureStore(): any {
-  const storeCreator =
-    // @ts-ignore: ignore ts warning for process
-    process.env.NODE_ENV === 'development'
-      ? compose(
-          /* eslint-disable-next-line global-require, import/no-extraneous-dependencies */ // @ts-ignore: ignore ts warning for require
-          applyMiddleware(thunkMiddleware, require('redux-logger').logger),
-        )(createStore)
-      : compose(applyMiddleware(thunkMiddleware))(createStore);
-  return storeCreator(rootReducer, defaultReducers);
+export function saveAnnouncementsList(
+  announcements: AnnouncementListData[],
+): SaveAnnouncementListAction {
+  return {
+    type: SAVE_ANNOUNCEMENT_LIST,
+    announcements,
+  };
 }
+
+export default reducer;
