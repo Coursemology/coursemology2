@@ -100,3 +100,9 @@ export type Operation<R = void> = ThunkAction<
   Record<string, unknown>,
   AnyAction
 >;
+
+export const dispatch = store.dispatch as AppDispatch;
+
+export const setUpStoreWithState = (
+  preloadedState: Partial<AppState>,
+): typeof store => configureStore({ reducer: rootReducer, preloadedState });
