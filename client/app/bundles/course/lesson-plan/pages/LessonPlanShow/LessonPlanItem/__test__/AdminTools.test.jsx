@@ -1,65 +1,50 @@
-import ReactDOM from 'react-dom';
-import ReactTestUtils, { act } from 'react-dom/test-utils';
-import { mount, shallow } from 'enzyme';
+import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
-import storeCreator from 'course/lesson-plan/store';
 import DeleteConfirmation from 'lib/containers/DeleteConfirmation';
 
 import AdminTools from '../AdminTools';
 
-const buildShallowWrapper = (item) => {
-  const store = storeCreator({ flags: { canManageLessonPlan: true } });
-  return shallow(
-    <AdminTools item={item} store={store} />,
-    buildContextOptions(),
-  )
-    .children()
-    .dive()
-    .dive()
-    .dive();
+const state = {
+  lessonPlan: { flags: { canManageLessonPlan: true } },
 };
+
+const renderElement = (item) => render(<AdminTools item={item} />, { state });
 
 describe('<AdminTools />', () => {
   it('does not show admin menu for lesson plan events', () => {
-    const wrapper = buildShallowWrapper({ title: 'Event', eventId: 7 });
-    expect(wrapper.find('ForwardRef(Button)')).toHaveLength(2);
+    const page = renderElement({ title: 'Event', eventId: 7 });
+    expect(page.getAllByRole('button')).toHaveLength(2);
   });
 
   it('does not show admin menu for non-event lesson plan items', () => {
-    const wrapper = buildShallowWrapper({ title: 'eventId absent' });
-    expect(wrapper.find('ForwardRef(Button)')).toHaveLength(0);
+    const wrapper = renderElement({ title: 'eventId absent' });
+    expect(wrapper.queryAllByRole('button')).toHaveLength(0);
   });
 
-  it('allows event to be deleted', () => {
+  it('allows event to be deleted', async () => {
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'deleteEvent');
-    const store = storeCreator({ flags: { canManageLessonPlan: true } });
-    const contextOptions = buildContextOptions(store);
-    const deleteConfirmation = mount(<DeleteConfirmation />, contextOptions);
     const eventId = 55;
-    const wrapper = mount(<AdminTools item={{ eventId }} />, contextOptions);
 
-    const deleteButton = wrapper
-      .find('ForwardRef(Button)')
-      .last()
-      .find('button');
-    deleteButton.simulate('click');
+    const page = render(
+      <>
+        <DeleteConfirmation />
+        <AdminTools item={{ eventId }} />
+      </>,
+      { state },
+    );
 
-    const confirmDeleteButton = deleteConfirmation
-      .find('ConfirmationDialog')
-      .first()
-      .instance().confirmButton;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(confirmDeleteButton));
+    fireEvent.click(page.getAllByRole('button')[1]);
+    fireEvent.click(page.getByRole('button', { name: 'Delete' }));
 
-    expect(spy).toHaveBeenCalledWith(eventId);
+    await waitFor(() => expect(spy).toHaveBeenCalledWith(eventId));
   });
 
   it('allows event to be edited', async () => {
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateEvent');
-    const store = storeCreator({ flags: { canManageLessonPlan: true } });
-    const contextOptions = buildContextOptions(store);
     const eventId = 55;
+
     const eventData = {
       title: 'Original title',
       start_at: new Date('2017-01-04T02:03:00.000+08:00'),
@@ -67,44 +52,41 @@ describe('<AdminTools />', () => {
       published: false,
       event_type: 'Recitation',
     };
-    const eventFormDialog = mount(<EventFormDialog />, contextOptions);
-    const wrapper = mount(
-      <AdminTools
-        item={{
-          eventId,
-          title: eventData.title,
-          start_at: eventData.start_at,
-          end_at: eventData.end_at,
-          published: eventData.published,
-          lesson_plan_item_type: [eventData.event_type],
-        }}
-      />,
-      contextOptions,
+
+    const page = render(
+      <>
+        <EventFormDialog />
+
+        <AdminTools
+          item={{
+            eventId,
+            title: eventData.title,
+            start_at: eventData.start_at,
+            end_at: eventData.end_at,
+            published: eventData.published,
+            lesson_plan_item_type: [eventData.event_type],
+          }}
+        />
+      </>,
+      { state },
     );
 
-    const editButton = wrapper
-      .find('ForwardRef(Button)')
-      .first()
-      .find('button');
-    editButton.simulate('click');
-    eventFormDialog.update();
+    fireEvent.click(page.getAllByRole('button')[0]);
 
-    const eventForm = eventFormDialog.find('form');
     const description = 'Add nice description';
-    const descriptionInput = eventForm.find('textarea[name="description"]');
-    descriptionInput.simulate('change', { target: { value: description } });
-    await sleep(0.01);
-
-    await act(async () => {
-      eventForm.simulate('submit');
+    fireEvent.change(page.getByLabelText('Description'), {
+      target: { value: description },
     });
 
-    const expectedPayload = {
-      lesson_plan_event: {
-        ...eventData,
-        description,
-      },
-    };
-    expect(spy).toHaveBeenCalledWith(eventId, expectedPayload);
+    fireEvent.click(page.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() =>
+      expect(spy).toHaveBeenCalledWith(eventId, {
+        lesson_plan_event: {
+          ...eventData,
+          description,
+        },
+      }),
+    );
   });
 });
