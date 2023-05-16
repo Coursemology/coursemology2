@@ -16,7 +16,7 @@ import translations from '../../translations';
 
 import LessonPlanGroup from './LessonPlanGroup';
 
-class LessonPlanShow extends Component {
+export class LessonPlanShow extends Component {
   /**
    * Searches for the last milestone that has just passed.
    * The current group contains that milestone and the items that come after that milestone,

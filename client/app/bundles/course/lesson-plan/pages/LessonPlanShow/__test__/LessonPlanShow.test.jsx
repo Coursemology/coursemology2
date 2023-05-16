@@ -1,6 +1,6 @@
-import { render } from 'utilities/test-utils';
+import { render } from 'test-utils';
 
-import { UnconnectedLessonPlanShow as LessonPlanShow } from '../index';
+import { LessonPlanShow } from '../index';
 
 const data = {
   groups: [
