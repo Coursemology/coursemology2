@@ -1,4 +1,4 @@
-import store from 'course/assessment/submission/store';
+import { dispatch, store } from 'store';
 
 import actionTypes from '../../constants';
 import { updateScribingAnswerInLocal } from '../scribing';
@@ -54,16 +54,21 @@ const mockSubmission = {
 
 describe('updateScribingAnswerInLocal', () => {
   it('updates the local scribing answer', async () => {
-    store.dispatch({
+    dispatch({
       type: actionTypes.FETCH_SUBMISSION_SUCCESS,
       payload: mockSubmission,
     });
+
     expect(
-      store.getState().scribing[answerId].answer.scribbles[0].content,
+      store.getState().assessments.submission.scribing[answerId].answer
+        .scribbles[0].content,
     ).toBe('oldScribble');
-    store.dispatch(updateScribingAnswerInLocal(answerId, scribblesInJSON));
+
+    dispatch(updateScribingAnswerInLocal(answerId, scribblesInJSON));
+
     expect(
-      store.getState().scribing[answerId].answer.scribbles[0].content,
+      store.getState().assessments.submission.scribing[answerId].answer
+        .scribbles[0].content,
     ).toBe('newScribble');
   });
 });

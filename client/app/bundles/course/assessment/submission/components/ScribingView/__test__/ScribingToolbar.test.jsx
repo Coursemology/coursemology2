@@ -1,17 +1,13 @@
-import { MemoryRouter } from 'react-router-dom';
 import MockAdapter from 'axios-mock-adapter';
-import { mount } from 'enzyme';
+import { dispatch } from 'store';
+import { act, fireEvent, render } from 'test-utils';
 
 import CourseAPI from 'api/course';
 import ScribingToolbar from 'course/assessment/submission/components/ScribingView/ScribingToolbar';
 import ScribingView from 'course/assessment/submission/containers/ScribingView';
-import store from 'course/assessment/submission/store';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
-import shallowUntil from 'testUtils/shallowUntil';
 
 import { setColoringToolColor } from '../../../actions/scribing';
 import actionTypes, {
-  scribingPopoverTypes,
   scribingToolColor,
   scribingToolLineStyle,
   scribingTools,
@@ -150,7 +146,8 @@ jest.mock(
 
 beforeEach(() => {
   mock.reset();
-  store.dispatch({
+
+  dispatch({
     type: actionTypes.FETCH_SUBMISSION_SUCCESS,
     payload: mockSubmission,
   });
@@ -158,77 +155,48 @@ beforeEach(() => {
 
 describe('ScribingToolbar', () => {
   it('renders tool popovers', async () => {
-    const scribingToolbar = shallowUntil(
-      <ScribingToolbar {...props} />,
-      buildContextOptions(),
-      'ScribingToolbar',
-    );
-
-    scribingToolbar.setState({
-      popovers: {
-        [scribingPopoverTypes.TYPE]: true,
-      },
-    });
-    scribingToolbar.update();
-    expect(scribingToolbar.find('injectIntl(TypePopover)').prop('open')).toBe(
-      true,
-    );
+    const page = render(<ScribingToolbar {...props} />);
+    expect(page.getAllByRole('button')).toHaveLength(20);
   });
 
   it('renders color pickers', async () => {
-    const scribingToolbar = shallowUntil(
-      <ScribingToolbar {...props} />,
-      buildContextOptions(),
-      'ScribingToolbar',
-    );
+    const page = render(<ScribingToolbar {...props} />);
 
-    scribingToolbar.setState({
-      colorDropdowns: {
-        [scribingToolColor.TYPE]: true,
-      },
-    });
-    scribingToolbar.update();
-    expect(
-      scribingToolbar
-        .find('injectIntl(TypePopover)')
-        .prop('colorPickerPopoverOpen'),
-    ).toBe(true);
+    const buttons = page.getAllByRole('button');
+    fireEvent.click(buttons[2]);
+    expect(page.getByText('Text')).toBeVisible();
 
-    scribingToolbar.setState({
-      colorDropdowns: {
-        [scribingToolColor.TYPE]: false,
-      },
-    });
-    scribingToolbar.update();
-    expect(
-      scribingToolbar
-        .find('injectIntl(TypePopover)')
-        .prop('colorPickerPopoverOpen'),
-    ).toBe(false);
+    const colorPicker = page.getByLabelText('Color Picker');
+    expect(colorPicker).toBeVisible();
+    fireEvent.click(colorPicker);
+
+    expect(page.getByLabelText('hex')).toBeVisible();
+    expect(page.getByLabelText('r')).toBeVisible();
+    expect(page.getByLabelText('g')).toBeVisible();
+    expect(page.getByLabelText('b')).toBeVisible();
+    expect(page.getByLabelText('a')).toBeVisible();
   });
 
   it('sets the color from the color picker', async () => {
-    const editPage = mount(
-      <ProviderWrapper store={store}>
-        <MemoryRouter
-          initialEntries={[
-            `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
-          ]}
-        >
-          <ScribingView answerId={answerId} />
-        </MemoryRouter>
-      </ProviderWrapper>,
-    );
+    const url = `/courses/${global.courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
+    const page = render(<ScribingView answerId={answerId} />, { at: [url] });
 
     const coloringTool = scribingToolColor.TYPE;
     const color = 'rgba(231,12,12,1)';
-    store.dispatch(setColoringToolColor(answerId, coloringTool, color));
-    editPage.update();
-    expect(editPage.find('TypePopover').prop('colorPickerColor')).toEqual(
-      color,
+
+    await act(() =>
+      dispatch(setColoringToolColor(answerId, coloringTool, color)),
     );
-    expect(
-      editPage.find('ToolDropdown').first().prop('colorBarBackground'),
-    ).toEqual(color);
+
+    const buttons = page.getAllByRole('button');
+    fireEvent.click(buttons[2]);
+
+    const colorPicker = page.getByLabelText('Color Picker');
+    fireEvent.click(colorPicker);
+
+    expect(page.getByLabelText('r')).toHaveValue('231');
+    expect(page.getByLabelText('g')).toHaveValue('12');
+    expect(page.getByLabelText('b')).toHaveValue('12');
+    expect(page.getByLabelText('a')).toHaveValue('100');
   });
 });
