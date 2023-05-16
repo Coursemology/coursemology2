@@ -1,11 +1,5 @@
 import MockAdapter from 'axios-mock-adapter';
-import {
-  act,
-  fireEvent,
-  render,
-  RenderResult,
-  waitFor,
-} from 'utilities/test-utils';
+import { act, fireEvent, render, RenderResult, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 
@@ -16,14 +10,14 @@ const FOLDER_ID = 1;
 const MATERIALS = [
   {
     id: 1,
-    name: `Material 1`,
-    updated_at: `2017-01-01T01:00:00.0000000Z`,
+    name: 'Material 1',
+    updated_at: '2017-01-01T01:00:00.0000000Z',
     deleting: false,
   },
   {
     id: 2,
-    name: `Material 2`,
-    updated_at: `2017-01-01T02:00:00.0000000Z`,
+    name: 'Material 2',
+    updated_at: '2017-01-01T02:00:00.0000000Z',
     deleting: false,
   },
 ];
