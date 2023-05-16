@@ -38,7 +38,7 @@ const translations = defineMessages({
   },
 });
 
-class SurveyResults extends Component {
+export class SurveyResults extends Component {
   constructor(props) {
     super(props);
     this.state = { includePhantoms: true };
