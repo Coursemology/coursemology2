@@ -1,9 +1,8 @@
-import { MemoryRouter } from 'react-router-dom';
 import MockAdapter from 'axios-mock-adapter';
-import { mount } from 'enzyme';
+import { store } from 'store';
+import { render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import storeCreator from 'course/duplication/store';
 
 import ObjectDuplication from '../index';
 
@@ -30,27 +29,20 @@ beforeEach(() => {
 
 describe('<ObjectDuplication />', () => {
   it('fetches and receives sorted data', async () => {
-    const store = storeCreator({});
     const spy = jest.spyOn(CourseAPI.duplication, 'fetch');
-    const url = `/courses/${courseId}/object_duplication/new`;
+    const url = `/courses/${global.courseId}/object_duplication/new`;
     mock.onGet(url).reply(200, responseData);
 
-    mount(
-      <MemoryRouter>
-        <ObjectDuplication />
-      </MemoryRouter>,
-      buildContextOptions(store),
-    );
-    await sleep(1);
-    expect(spy).toHaveBeenCalled();
+    render(<ObjectDuplication />);
 
-    const sortedData = store.getState().duplication;
-    const courseTitles = sortedData.destinationCourses.map(
-      (course) => course.title,
-    );
-    const rootFolder = sortedData.materialsComponent[0];
+    await waitFor(() => expect(spy).toHaveBeenCalled());
+
+    const data = store.getState().duplication;
+    const courseTitles = data.destinationCourses.map((course) => course.title);
+    const rootFolder = data.materialsComponent[0];
+
     expect(courseTitles).toEqual(['Course A', 'Course B', 'Course C']);
-    expect(sortedData.materialsComponent).toHaveLength(1);
+    expect(data.materialsComponent).toHaveLength(1);
     expect(rootFolder.name).toBe('Root');
     expect(rootFolder.subfolders[0].name).toBe('L1');
     expect(rootFolder.subfolders[0].subfolders[0].name).toBe('L2');
