@@ -1,15 +1,11 @@
-import { connect } from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
 import MockAdapter from 'axios-mock-adapter';
-import { mount } from 'enzyme';
+import { render, waitFor, within } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import storeCreator from 'course/survey/store';
 
 import ResponseIndex from '../index';
 
-const client = CourseAPI.survey.responses.client;
-const mock = new MockAdapter(client);
+const mock = new MockAdapter(CourseAPI.survey.responses.client);
 
 const responsesData = {
   responses: [
@@ -59,43 +55,48 @@ const responsesData = {
   survey: {
     id: 2,
     title: 'Test Responses Page',
+    start_at: '2017-03-01T09:10:01.180+08:00',
     end_at: '2017-03-02T09:10:01.180+08:00',
   },
 };
+
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useParams: () => ({
+    surveyId: responsesData.survey.id.toString(),
+    courseId: global.courseId.toString(),
+  }),
+}));
 
 beforeEach(() => {
   mock.reset();
 });
 
-const InjectedResponseIndex = connect((state) => ({
-  survey: state.surveys[0] || {},
-}))(ResponseIndex);
-
 describe('<ResponseIndex />', () => {
   it('allows responses to be saved', async () => {
     const surveyId = responsesData.survey.id;
-    const responseUrl = `/courses/${courseId}/surveys/${surveyId}/responses`;
-    mock.onGet(responseUrl).reply(200, responsesData);
-    const spyIndex = jest.spyOn(CourseAPI.survey.responses, 'index');
+    const url = `/courses/${global.courseId}/surveys/${surveyId}/responses`;
+    mock.onGet(url).reply(200, responsesData);
+    const spy = jest.spyOn(CourseAPI.survey.responses, 'index');
 
-    // Mount response index page and wait for data to load
-    window.history.pushState({}, '', responseUrl);
-    const responseIndex = mount(
-      <MemoryRouter>
-        <InjectedResponseIndex />
-      </MemoryRouter>,
-      buildContextOptions(storeCreator({})),
-    );
-    await sleep(1);
+    window.history.pushState({}, '', url);
+    const page = render(<ResponseIndex />);
 
-    expect(spyIndex).toHaveBeenCalled();
-    responseIndex.update();
-    const tableBodies = responseIndex.find('ForwardRef(TableBody)');
-    const phantomStudentRows = tableBodies.at(2).find('ForwardRef(TableRow)');
-    const realStudentRows = tableBodies.at(1).find('ForwardRef(TableRow)');
-    const getStatus = (row) => row.find('td').at(1).text();
-    expect(getStatus(phantomStudentRows.first())).toBe('Submitted');
-    expect(getStatus(realStudentRows.first())).toBe('Not Started');
-    expect(getStatus(realStudentRows.last())).toBe('Responding');
+    await waitFor(() => expect(spy).toHaveBeenCalled());
+
+    responsesData.responses.forEach((response) => {
+      expect(page.getByText(response.course_user.name)).toBeVisible();
+    });
+
+    const tables = page.getAllByRole('table');
+    const normalStudentsTable = within(tables[1]);
+    const phantomStudentsTable = within(tables[2]);
+
+    const studentB = normalStudentsTable.getByText('Student B').closest('tr');
+    const studentC = normalStudentsTable.getByText('Student C').closest('tr');
+
+    expect(within(studentB).getByText('Not Started')).toBeVisible();
+    expect(within(studentC).getByText('Responding')).toBeVisible();
+    expect(phantomStudentsTable.getAllByText('Submitted')).toHaveLength(2);
   });
 });
