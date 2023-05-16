@@ -1,44 +1,44 @@
-import { MemoryRouter } from 'react-router-dom';
-import { mount, shallow } from 'enzyme';
+import { render } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import storeCreator from 'course/survey/store';
+import { LOADING_INDICATOR_TEST_ID } from 'lib/components/core/LoadingIndicator';
 
-import ResponseShow, { UnconnectedResponseShow } from '../index';
+import WrappedResponseShow, { ResponseShow } from '../index';
+
+const getResponseUrl = (surveyId, responseId) =>
+  `/courses/${global.courseId}/surveys/${surveyId}/responses/${responseId}/edit`;
 
 describe('<ResponseShow />', () => {
   it('allows responses to be saved', async () => {
-    const surveyId = '1';
-    const responseId = '1';
+    const surveyId = 1;
+    const responseId = 1;
     const spyFetch = jest.spyOn(CourseAPI.survey.responses, 'fetch');
-    const responseUrl = `/courses/${courseId}/surveys/${surveyId}/responses/${responseId}/edit`;
+    const responseUrl = getResponseUrl(surveyId, responseId);
 
-    mount(
-      <MemoryRouter initialEntries={[responseUrl]}>
-        <ResponseShow
-          {...{
-            survey: {},
-            courseId,
-            surveyId,
-            match: { params: { responseId } },
-          }}
-        />
-      </MemoryRouter>,
-      buildContextOptions(storeCreator({})),
+    render(
+      <WrappedResponseShow
+        courseId={global.courseId}
+        match={{ params: { responseId } }}
+        survey={{}}
+        surveyId={surveyId}
+      />,
+      [responseUrl],
     );
-    await sleep(1);
+
     expect(spyFetch).toHaveBeenCalled();
   });
 
-  it('shows form and admin buttons if user has permissions and page is loaded', () => {
+  it('shows form and admin buttons if user has permissions and page is loaded', async () => {
     const surveyId = 2;
     const responseId = 2;
-    const survey = {
-      id: surveyId,
-      title: 'Survey',
-      description: 'Description',
-    };
-    const responseFormData = {
+    const responseUrl = getResponseUrl(surveyId, responseId);
+
+    const data = {
+      survey: {
+        id: surveyId,
+        title: 'Survey',
+        description: 'Description',
+      },
       response: {
         id: responseId,
         creator_name: 'Staff',
@@ -53,28 +53,33 @@ describe('<ResponseShow />', () => {
         isLoading: false,
       },
     };
-    const urlParams = {
-      courseId,
+
+    const params = {
+      courseId: global.courseId,
       surveyId: surveyId.toString(),
       match: { params: { responseId: responseId.toString() } },
     };
-    const responseShow = shallow(
-      <UnconnectedResponseShow
-        dispatch={() => {}}
-        survey={survey}
-        {...responseFormData}
-        {...urlParams}
-        store={storeCreator({})}
-      />,
-      buildContextOptions(),
+
+    const page = render(
+      <ResponseShow dispatch={jest.fn()} {...data} {...params} />,
+      [responseUrl],
     );
-    expect(responseShow).toMatchSnapshot();
+
+    expect(page.getByText(data.response.creator_name)).toBeVisible();
+    expect(page.getByText(data.survey.description)).toBeVisible();
+    expect(page.getByRole('button', { name: 'View' })).toBeVisible();
+    expect(page.getByRole('button', { name: 'Unsubmit' })).toBeVisible();
   });
 
-  it('shows only title and loading indicator when loading', () => {
+  it('shows only description and loading indicator when loading', () => {
     const surveyId = 2;
     const responseId = 2;
-    const responseFormData = {
+
+    const data = {
+      survey: {
+        id: surveyId,
+        description: 'Description',
+      },
       response: {
         id: responseId,
         creator_name: 'Student',
@@ -87,21 +92,18 @@ describe('<ResponseShow />', () => {
         isLoading: true,
       },
     };
-    const urlParams = {
-      courseId,
+
+    const params = {
+      courseId: global.courseId,
       surveyId: surveyId.toString(),
       match: { params: { responseId: responseId.toString() } },
     };
-    const responseShow = shallow(
-      <UnconnectedResponseShow
-        dispatch={() => {}}
-        survey={{}}
-        {...responseFormData}
-        {...urlParams}
-        store={storeCreator({})}
-      />,
-      buildContextOptions(),
+
+    const page = render(
+      <ResponseShow dispatch={jest.fn()} {...data} {...params} />,
     );
-    expect(responseShow).toMatchSnapshot();
+
+    expect(page.getByText(data.survey.description)).toBeVisible();
+    expect(page.getByTestId(LOADING_INDICATOR_TEST_ID)).toBeVisible();
   });
 });

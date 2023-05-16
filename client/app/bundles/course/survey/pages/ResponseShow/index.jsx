@@ -40,7 +40,7 @@ const styles = {
   },
 };
 
-class ResponseShow extends Component {
+export class ResponseShow extends Component {
   componentDidMount() {
     const {
       dispatch,
