@@ -1059,7 +1059,11 @@ export default class ScribingCanvas extends Component {
     return (
       <div id={`canvas-container-${answerId}`} style={styles.canvas_div}>
         {!isCanvasLoaded ? <LoadingIndicator /> : null}
-        <canvas id={`canvas-${answerId}`} style={styles.canvas} />
+        <canvas
+          data-testid={`canvas-${answerId}`}
+          id={`canvas-${answerId}`}
+          style={styles.canvas}
+        />
       </div>
     );
   }

@@ -1,9 +1,7 @@
-import { MemoryRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
+import { dispatch } from 'store';
+import { render } from 'test-utils';
 
 import ScribingView from 'course/assessment/submission/containers/ScribingView';
-import store from 'course/assessment/submission/store';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
 
 import { setCanvasLoaded } from '../../../actions/scribing';
 import actionTypes from '../../../constants';
@@ -52,33 +50,26 @@ const mockSubmission = {
   ],
 };
 
-// stub import function
 jest.mock(
   'course/assessment/submission/loaders/ScribingViewLoader',
-  () => () => Promise.resolve(),
+  () => (): Promise<void> => Promise.resolve(),
 );
 
 describe('ScribingView', () => {
-  it('renders canvas', async () => {
-    store.dispatch({
+  it('renders canvas', () => {
+    dispatch({
       type: actionTypes.FETCH_SUBMISSION_SUCCESS,
       payload: mockSubmission,
     });
+
     const loaded = true;
     const canvas = {};
-    store.dispatch(setCanvasLoaded(answerId, loaded, canvas));
+    const url = `/courses/${global.courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
 
-    const editPage = mount(
-      <ProviderWrapper store={store}>
-        <MemoryRouter
-          initialEntries={[
-            `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
-          ]}
-        >
-          <ScribingView answerId={answerId} />
-        </MemoryRouter>
-      </ProviderWrapper>,
-    );
-    expect(editPage.find('canvas')).toHaveLength(1);
+    dispatch(setCanvasLoaded(answerId, loaded, canvas));
+
+    const page = render(<ScribingView answerId={answerId} />, { at: [url] });
+
+    expect(page.getByTestId(`canvas-${answerId}`)).toBeVisible();
   });
 });
