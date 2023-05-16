@@ -122,6 +122,12 @@ const reducer = produce((state, action) => {
   }
 }, initialState);
 
+export const loadObjectsList = (data) => (dispatch) =>
+  dispatch({
+    type: actionTypes.LOAD_OBJECTS_LIST_SUCCESS,
+    duplicationData: data,
+  });
+
 export const actions = {
   setItemSelectedBoolean: (itemType, id, value) => ({
     type: actionTypes.SET_ITEM_SELECTED_BOOLEAN,
