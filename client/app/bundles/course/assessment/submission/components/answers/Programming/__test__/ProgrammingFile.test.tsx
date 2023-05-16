@@ -1,7 +1,5 @@
-import { MemoryRouter } from 'react-router-dom';
-import { mount } from 'enzyme';
-
-import store from 'course/assessment/submission/store';
+import { dispatch } from 'store';
+import { render } from 'test-utils';
 
 import actionTypes from '../../../../constants';
 import ProgrammingFile from '../ProgrammingFile';
@@ -34,7 +32,7 @@ const mockSubmission = {
 
 describe('<ProgrammingFile />', () => {
   it('renders download link for files with null content', async () => {
-    store.dispatch({
+    dispatch({
       type: actionTypes.FETCH_SUBMISSION_SUCCESS,
       payload: mockSubmission,
     });
@@ -52,22 +50,17 @@ describe('<ProgrammingFile />', () => {
       language: 'python',
     };
 
-    const programmingFile = mount(
-      <MemoryRouter
-        initialEntries={[
-          `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
-        ]}
-      >
-        <ProgrammingFile {...programmingFileProps} />
-      </MemoryRouter>,
-      buildContextOptions(store),
-    );
+    const url = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
+    const page = render(<ProgrammingFile {...programmingFileProps} />, {
+      at: [url],
+    });
 
-    expect(programmingFile.find('a')).toHaveLength(1);
+    expect(page.getByText('file is too big', { exact: false })).toBeVisible();
+    expect(page.getByRole('link')).toBeVisible();
   });
 
   it('does not render download link for files with empty content', async () => {
-    store.dispatch({
+    dispatch({
       type: actionTypes.FETCH_SUBMISSION_SUCCESS,
       payload: mockSubmission,
     });
@@ -85,17 +78,11 @@ describe('<ProgrammingFile />', () => {
       language: 'python',
     };
 
-    const programmingFile = mount(
-      <MemoryRouter
-        initialEntries={[
-          `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`,
-        ]}
-      >
-        <ProgrammingFile {...programmingFileProps} />
-      </MemoryRouter>,
-      buildContextOptions(store),
-    );
+    const url = `/courses/${courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
+    const page = render(<ProgrammingFile {...programmingFileProps} />, {
+      at: [url],
+    });
 
-    expect(programmingFile.find('a')).toHaveLength(0);
+    expect(page.queryByRole('link')).not.toBeInTheDocument();
   });
 });
