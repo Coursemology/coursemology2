@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { fireEvent, render, RenderResult, waitFor } from 'utilities/test-utils';
+import { fireEvent, render, RenderResult, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 
