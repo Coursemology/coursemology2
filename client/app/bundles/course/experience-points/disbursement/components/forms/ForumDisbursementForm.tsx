@@ -6,7 +6,6 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Grid } from '@mui/material';
@@ -17,12 +16,12 @@ import {
   ForumDisbursementFormData,
   ForumDisbursementUserEntity,
 } from 'types/course/disbursement';
-import { AppDispatch } from 'types/store';
 import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch } from 'lib/hooks/store';
 import formTranslations from 'lib/translations/form';
 
 import { createForumDisbursement } from '../../operations';
@@ -76,7 +75,7 @@ const ForumDisbursementForm: FC<Props> = (props) => {
     { reason: intl.formatMessage(translations.reasonFill) },
   );
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const methods = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(validationSchema),

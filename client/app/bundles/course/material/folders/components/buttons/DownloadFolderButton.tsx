@@ -1,15 +1,14 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import {
   Download as DownloadIcon,
   Downloading as DownloadingIcon,
 } from '@mui/icons-material';
 import { IconButton, Tooltip } from '@mui/material';
-import { AppDispatch } from 'types/store';
 
 import CustomTooltip from 'lib/components/core/CustomTooltip';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { downloadFolder } from '../../operations';
 
@@ -37,7 +36,7 @@ const DownloadFolderButton: FC<Props> = (props) => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   if (isLoading) {
     return (

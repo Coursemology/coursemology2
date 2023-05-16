@@ -1,14 +1,13 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Link, Typography } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import SummaryCard from 'lib/components/core/layouts/SummaryCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import UsersButtons from '../../components/buttons/UsersButtons';
 import UsersTable from '../../components/tables/UsersTable';
@@ -64,9 +63,9 @@ const UsersIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState({ active: false, role: '' });
-  const userCounts = useSelector((state: AppState) => getAdminCounts(state));
-  const users = useSelector((state: AppState) => getAllUserMiniEntities(state));
-  const dispatch = useDispatch<AppDispatch>();
+  const userCounts = useAppSelector(getAdminCounts);
+  const users = useAppSelector(getAllUserMiniEntities);
+  const dispatch = useAppDispatch();
   const { activeUsers: activeCounts, totalUsers: totalCounts } = userCounts;
 
   const totalUser = useMemo(

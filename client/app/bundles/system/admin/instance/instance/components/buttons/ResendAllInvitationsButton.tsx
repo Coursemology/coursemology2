@@ -1,9 +1,9 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
-import { AppDispatch } from 'types/store';
+
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { resendAllInvitations } from '../../operations';
 
@@ -26,7 +26,7 @@ type Props = WrappedComponentProps;
 
 const ResendAllInvitationsButton: FC<Props> = (props) => {
   const { intl } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleResend = (): Promise<void> => {

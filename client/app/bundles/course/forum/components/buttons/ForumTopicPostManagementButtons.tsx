@@ -1,14 +1,13 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ForumTopicPostEntity } from 'types/course/forums';
-import { AppDispatch } from 'types/store';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteForumTopicPost } from '../../operations';
@@ -40,7 +39,7 @@ const translations = defineMessages({
 
 const ForumTopicPostManagementButtons: FC<Props> = (props) => {
   const { post, handleEdit, handleReply, isEditing, disabled } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { forumId } = useParams();

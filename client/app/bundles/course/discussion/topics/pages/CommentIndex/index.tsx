@@ -5,7 +5,6 @@ import {
   IntlShape,
   WrappedComponentProps,
 } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Box, Tab, Tabs } from '@mui/material';
 import { tabsStyle } from 'theme/mui-style';
@@ -15,11 +14,11 @@ import {
   CommentTabInfo,
   CommentTabTypes,
 } from 'types/course/comments';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import CustomBadge from 'lib/components/extensions/CustomBadge';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import TopicList from '../../components/lists/TopicList';
 import { fetchTabData } from '../../operations';
@@ -133,12 +132,12 @@ const tabTranslation = (
 
 const CommentTabs: FC<CommentTabProps> = (props) => {
   const { tabValue, intl } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [tabTypesToRender, setTabTypesToRender] = useState(
     [] as CommentTabData[],
   );
-  const permissions = useSelector((state: AppState) => getPermissions(state));
-  const tabs = useSelector((state: AppState) => getTabInfo(state));
+  const permissions = useAppSelector(getPermissions);
+  const tabs = useAppSelector(getTabInfo);
 
   useEffect(() => {
     setTabTypesToRender(getTabTypesToRender(permissions, tabs));
@@ -184,10 +183,10 @@ const CommentTabs: FC<CommentTabProps> = (props) => {
 
 const CommentIndex: FC<Props> = (props) => {
   const { intl } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const settings = useSelector((state: AppState) => getSettings(state));
-  const tabValue = useSelector((state: AppState) => getTabValue(state));
+  const settings = useAppSelector(getSettings);
+  const tabValue = useAppSelector(getTabValue);
 
   const [isLoading, setIsLoading] = useState(true);
 

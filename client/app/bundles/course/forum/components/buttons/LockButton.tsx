@@ -1,11 +1,10 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 import { ForumTopicEntity } from 'types/course/forums';
-import { AppDispatch } from 'types/store';
 
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { updateForumTopicLocked } from '../../operations';
@@ -49,7 +48,7 @@ const LockButton: FC<Props> = ({
   className,
 }: Props) => {
   const [isLocking, setIsLocking] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const disabled = isLocking || disableButton;
 

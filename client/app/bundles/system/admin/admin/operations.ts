@@ -1,5 +1,5 @@
+import { Operation } from 'store';
 import { AnnouncementFormData } from 'types/course/announcements';
-import { Operation } from 'types/store';
 import { InstanceFormData, InstanceMiniEntity } from 'types/system/instances';
 import { UserMiniEntity } from 'types/users';
 

@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Element } from 'react-scroll';
 import {
   Card,
@@ -9,9 +8,9 @@ import {
   Divider,
   Typography,
 } from '@mui/material';
-import { AppState } from 'types/store';
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import { useAppSelector } from 'lib/hooks/store';
 import { formatLongDateTime } from 'lib/moment';
 
 import { getForumTopic, getForumTopicPost } from '../../selectors';
@@ -38,12 +37,8 @@ const PostCard: FC<Props> = (props) => {
     isAnonymous: false,
   });
 
-  const post = useSelector((state: AppState) =>
-    getForumTopicPost(state, postId),
-  );
-  const topic = useSelector((state: AppState) =>
-    getForumTopic(state, post?.topicId),
-  );
+  const post = useAppSelector((state) => getForumTopicPost(state, postId));
+  const topic = useAppSelector((state) => getForumTopic(state, post?.topicId));
 
   const postCreatorObject = PostCreatorObject({
     creator: post?.creator,

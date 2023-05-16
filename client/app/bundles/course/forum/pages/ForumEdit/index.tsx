@@ -1,12 +1,11 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ForumEntity, ForumFormData } from 'types/course/forums';
-import { AppDispatch } from 'types/store';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ForumForm from '../../components/forms/ForumForm';
@@ -46,7 +45,7 @@ const ForumEdit: FC<Props> = (props) => {
     forumTopicsAutoSubscribe: forum.forumTopicsAutoSubscribe,
   };
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   if (!isOpen) {
     return null;

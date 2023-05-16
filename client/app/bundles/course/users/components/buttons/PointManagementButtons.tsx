@@ -1,15 +1,14 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import {
   ExperiencePointsRecordPermissions,
   ExperiencePointsRowData,
 } from 'types/course/experiencePointsRecords';
-import { AppDispatch } from 'types/store';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import SaveButton from 'lib/components/core/buttons/SaveButton';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import {
   deleteExperiencePointsRecord,
@@ -51,7 +50,7 @@ const translations = defineMessages({
 const PointManagementButtons: FC<Props> = (props) => {
   const { intl, permissions, data, isDirty, isManuallyAwarded, handleSave } =
     props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 

@@ -1,14 +1,13 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { scroller } from 'react-scroll';
 import { toast } from 'react-toastify';
 import { Add } from '@mui/icons-material';
 import { Fab, Tooltip } from '@mui/material';
 import { ForumTopicEntity, ForumTopicPostFormData } from 'types/course/forums';
-import { AppDispatch } from 'types/store';
 
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import ForumTopicPostForm from '../../components/forms/ForumTopicPostForm';
@@ -44,7 +43,7 @@ const ForumTopicPostNew: FC<Props> = (props) => {
   const { t } = useTranslation();
   const { forumId, topicId } = useParams();
   const [open, setOpenDialog] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (data: ForumTopicPostFormData): Promise<void> =>
     dispatch(createForumTopicPost(forumId!, topicId!, data))

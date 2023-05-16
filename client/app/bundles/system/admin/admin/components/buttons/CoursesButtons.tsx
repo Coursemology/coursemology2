@@ -1,14 +1,14 @@
 import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Delete } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import equal from 'fast-deep-equal';
-import { AppDispatch, Operation } from 'types/store';
+import { Operation } from 'store';
 import { CourseMiniEntity } from 'types/system/courses';
 
 import DeleteCoursePrompt from 'bundles/course/admin/pages/CourseSettings/DeleteCoursePrompt';
+import { useAppDispatch } from 'lib/hooks/store';
 
 interface Props extends WrappedComponentProps {
   course: CourseMiniEntity;
@@ -32,7 +32,7 @@ const translations = defineMessages({
 
 const CoursesButtons: FC<Props> = (props) => {
   const { intl, course, deleteOperation } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [openPrompt, setOpenPrompt] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 

@@ -1,14 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Grid } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import CourseAnnouncements from '../../components/misc/CourseAnnouncements';
 import CourseEnrolOptions from '../../components/misc/CourseEnrolOptions';
@@ -37,11 +36,9 @@ const translations = defineMessages({
 const CourseShow: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { courseId } = useParams();
-  const course = useSelector((state: AppState) =>
-    getCourseEntity(state, +courseId!),
-  );
+  const course = useAppSelector((state) => getCourseEntity(state, +courseId!));
 
   useEffect(() => {
     if (courseId) {

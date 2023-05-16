@@ -1,4 +1,4 @@
-import { Operation } from 'types/store';
+import { Operation } from 'store';
 
 import GlobalAPI from 'api';
 

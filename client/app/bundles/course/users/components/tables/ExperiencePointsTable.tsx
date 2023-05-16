@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import {
   Paper,
@@ -10,10 +9,10 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import { getCourseUserId } from 'lib/helpers/url-helpers';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import tableTranslations from 'lib/translations/table';
 
 import { fetchExperiencePointsRecord } from '../../operations';
@@ -35,10 +34,10 @@ const translations = defineMessages({
 const ExperiencePointsTable: FC<Props> = (props) => {
   const { intl, page } = props;
   const [isLoading, setIsLoading] = useState(true);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const experiencePointsRecords = useSelector((state: AppState) =>
-    getAllExperiencePointsRecordsEntities(state),
+  const experiencePointsRecords = useAppSelector(
+    getAllExperiencePointsRecordsEntities,
   );
 
   useEffect(() => {

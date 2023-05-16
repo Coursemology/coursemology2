@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import CloseIcon from '@mui/icons-material/Close';
 import {
@@ -12,10 +11,10 @@ import {
   Paper,
 } from '@mui/material';
 import { ForumDisbursementUserEntity } from 'types/course/disbursement';
-import { AppDispatch, AppState } from 'types/store';
 
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatLongDateTime } from 'lib/moment';
 
@@ -46,14 +45,12 @@ const ForumDisbursement: FC = () => {
   const [selectedForumPostUser, setSelectedForumPostUser] =
     useState<ForumDisbursementUserEntity | null>();
 
-  const filters = useSelector((state: AppState) => getFilters(state));
-  const forumUsers = useSelector((state: AppState) =>
-    getAllForumDisbursementUserEntities(state),
-  );
-  const forumPosts = useSelector((state: AppState) =>
+  const filters = useAppSelector(getFilters);
+  const forumUsers = useAppSelector(getAllForumDisbursementUserEntities);
+  const forumPosts = useAppSelector((state) =>
     getAllForumPostEntitiesForUser(state, selectedForumPostUser?.id),
   );
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const onPostClick = (user: ForumDisbursementUserEntity): void => {
     if (retrievedPostUserIds.has(user.id)) {

@@ -5,16 +5,15 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Group } from '@mui/icons-material';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import { Grid, Tab, Tabs } from '@mui/material';
 import palette from 'theme/palette';
-import { AppDispatch } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { fetchDisbursements, fetchForumDisbursements } from '../../operations';
 import ForumDisbursement from '../ForumDisbursement';
@@ -43,7 +42,7 @@ const translations = defineMessages({
 
 const DisbursementIndex: FC<Props> = (props) => {
   const { intl } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(true);
   const [tabValue, setTabValue] = useState('forum-disbursement-tab');
 

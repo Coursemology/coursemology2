@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
@@ -14,11 +13,11 @@ import {
 } from '@mui/material';
 import { CourseUserEntity } from 'types/course/courseUsers';
 import { TimelineAlgorithm } from 'types/course/personalTimes';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { TIMELINE_ALGORITHMS } from 'lib/constants/sharedConstants';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import SelectCourseUser from '../../components/misc/SelectCourseUser';
 import UserManagementTabs from '../../components/navigation/UserManagementTabs';
@@ -88,20 +87,12 @@ const PersonalTimesShow: FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isRecomputing, setIsRecomputing] = useState(false);
   const { userId } = useParams();
-  const currentUser = useSelector((state: AppState) =>
-    getUserEntity(state, +userId!),
-  );
-  const personalTimes = useSelector((state: AppState) =>
-    getAllPersonalTimesEntities(state),
-  );
-  const permissions = useSelector((state: AppState) =>
-    getManageCourseUserPermissions(state),
-  );
-  const sharedData = useSelector((state: AppState) =>
-    getManageCourseUsersSharedData(state),
-  );
+  const currentUser = useAppSelector((state) => getUserEntity(state, +userId!));
+  const personalTimes = useAppSelector(getAllPersonalTimesEntities);
+  const permissions = useAppSelector(getManageCourseUserPermissions);
+  const sharedData = useAppSelector(getManageCourseUsersSharedData);
   const [timeline, setTimeline] = useState('fixed');
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setIsLoading(true);

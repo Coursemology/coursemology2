@@ -1,11 +1,10 @@
 import { FC, memo } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { AppDispatch, AppState } from 'types/store';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import VideoForm from '../../components/forms/VideoForm';
@@ -37,8 +36,8 @@ const VideoNew: FC<Props> = (props) => {
   const { open, onClose, currentTab } = props;
   const { t } = useTranslation();
   const [, setSearchParams] = useSearchParams();
-  const videoTabs = useSelector((state: AppState) => getVideoTabs(state));
-  const dispatch = useDispatch<AppDispatch>();
+  const videoTabs = useAppSelector(getVideoTabs);
+  const dispatch = useAppDispatch();
   const onSubmit = (data, setError): Promise<void> =>
     dispatch(createVideo(data))
       .then(() => {

@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { Operation } from 'store';
 import {
   DisbursementCourseGroupListData,
   DisbursementCourseUserListData,
@@ -12,7 +13,6 @@ import {
   ForumDisbursementUserEntity,
 } from 'types/course/disbursement';
 import { ForumSearchParams } from 'types/course/forums';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 

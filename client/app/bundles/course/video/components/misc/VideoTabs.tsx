@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import { useSelector } from 'react-redux';
 import { URLSearchParamsInit } from 'react-router-dom';
 import { Box, Tab, Tabs } from '@mui/material';
-import { AppState } from 'types/store';
+
+import { useAppSelector } from 'lib/hooks/store';
 
 import { getVideoTabs } from '../../selectors';
 
@@ -22,7 +22,7 @@ interface Props {
 
 const VideoTabs: FC<Props> = (props) => {
   const { currentTab, setCurrentTab } = props;
-  const videoTabs = useSelector((state: AppState) => getVideoTabs(state));
+  const videoTabs = useAppSelector(getVideoTabs);
   if (videoTabs.length <= 1) return null;
   return (
     <Box className="max-w-full">

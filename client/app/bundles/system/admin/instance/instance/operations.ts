@@ -1,5 +1,5 @@
+import { Operation } from 'store';
 import { AnnouncementFormData } from 'types/course/announcements';
-import { Operation } from 'types/store';
 import { ComponentData } from 'types/system/instance/components';
 import {
   InvitationPostData,
@@ -54,7 +54,7 @@ const formatAnnouncementAttributes = (data: AnnouncementFormData): FormData => {
  */
 const formatUserAttributes = (data: InstanceUserMiniEntity): FormData => {
   const payload = new FormData();
-  payload.append(`instance_user[role]`, data.role);
+  payload.append('instance_user[role]', data.role);
   return payload;
 };
 
@@ -105,7 +105,7 @@ const formatComponentAttributes = (
       (component.key !== updatedComponentKey && component.enabled)
     ) {
       payload.append(
-        `settings_components[enabled_component_ids][]`,
+        'settings_components[enabled_component_ids][]',
         component.key,
       );
     }

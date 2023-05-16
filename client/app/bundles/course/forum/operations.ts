@@ -1,9 +1,9 @@
+import { Operation } from 'store';
 import {
   ForumFormData,
   ForumTopicFormData,
   ForumTopicPostFormData,
 } from 'types/course/forums';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';

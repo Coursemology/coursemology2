@@ -5,7 +5,6 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { Checkbox, MenuItem, TextField, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
@@ -13,7 +12,6 @@ import {
   EnrolRequestMiniEntity,
   EnrolRequestRowData,
 } from 'types/course/enrolRequests';
-import { AppState } from 'types/store';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
@@ -24,6 +22,7 @@ import {
   TIMELINE_ALGORITHMS,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import { useAppSelector } from 'lib/hooks/store';
 import tableTranslations from 'lib/translations/table';
 
 import {
@@ -78,12 +77,8 @@ const EnrolRequestsTable: FC<Props> = (props) => {
     renderRowActionComponent = null,
     intl,
   } = props;
-  const permissions = useSelector((state: AppState) =>
-    getManageCourseUserPermissions(state),
-  );
-  const sharedData = useSelector((state: AppState) =>
-    getManageCourseUsersSharedData(state),
-  );
+  const permissions = useAppSelector(getManageCourseUserPermissions);
+  const sharedData = useAppSelector(getManageCourseUsersSharedData);
   const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
   let columns: TableColumns[] = [];
 

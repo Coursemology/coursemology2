@@ -1,10 +1,9 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import { loadAchievementCourseUsers } from '../../operations';
 import { getAchievementEntity } from '../../selectors';
@@ -31,10 +30,10 @@ const AchievementAward: FC<Props> = (props) => {
   const [isDirty, setIsDirty] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const achievement = useSelector((state: AppState) =>
+  const achievement = useAppSelector((state) =>
     getAchievementEntity(state, achievementId),
   );
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (achievementId && open) {

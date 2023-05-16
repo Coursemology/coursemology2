@@ -1,13 +1,12 @@
 import { Dispatch, FC, SetStateAction, useEffect } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Box, Tab, Tabs } from '@mui/material';
 import { tabsStyle } from 'theme/mui-style';
 import { SubmissionsTabData } from 'types/course/assessment/submissions';
-import { AppDispatch } from 'types/store';
 
 import CustomBadge from 'lib/components/extensions/CustomBadge';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import {
   fetchAllStudentsPendingSubmissions,
@@ -59,7 +58,7 @@ const SubmissionTabs: FC<Props> = (props) => {
     setPageNum(1);
   };
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (isTeachingStaff && tabs.myStudentsPendingCount !== 0) {

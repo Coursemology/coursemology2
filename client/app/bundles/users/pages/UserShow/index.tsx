@@ -1,11 +1,10 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Avatar, Grid, Typography } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import CoursesTable from '../../components/tables/CoursesTable';
 import InstancesTable from '../../components/tables/InstancesTable';
@@ -46,18 +45,12 @@ const UserShow: FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const { userId } = useParams();
-  const user = useSelector((state: AppState) => getUserEntity(state));
-  const currentCourses = useSelector((state: AppState) =>
-    getAllCurrentCourseMiniEntities(state),
-  );
-  const completedCourses = useSelector((state: AppState) =>
-    getAllCompletedCourseMiniEntities(state),
-  );
-  const instances = useSelector((state: AppState) =>
-    getAllInstanceMiniEntities(state),
-  );
+  const user = useAppSelector(getUserEntity);
+  const currentCourses = useAppSelector(getAllCurrentCourseMiniEntities);
+  const completedCourses = useAppSelector(getAllCompletedCourseMiniEntities);
+  const instances = useAppSelector(getAllInstanceMiniEntities);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (userId) {

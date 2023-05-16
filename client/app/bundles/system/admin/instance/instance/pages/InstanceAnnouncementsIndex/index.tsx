@@ -1,8 +1,6 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch, AppState } from 'types/store';
 
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
@@ -10,6 +8,7 @@ import AddButton from 'lib/components/core/buttons/AddButton';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import {
   createAnnouncement,
@@ -48,13 +47,9 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const headerToolbars: ReactElement[] = [];
-  const announcements = useSelector((state: AppState) =>
-    getAllAnnouncementMiniEntities(state),
-  );
-  const announcementPermission = useSelector((state: AppState) =>
-    getAnnouncementPermission(state),
-  );
-  const dispatch = useDispatch<AppDispatch>();
+  const announcements = useAppSelector(getAllAnnouncementMiniEntities);
+  const announcementPermission = useAppSelector(getAnnouncementPermission);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(indexAnnouncements())

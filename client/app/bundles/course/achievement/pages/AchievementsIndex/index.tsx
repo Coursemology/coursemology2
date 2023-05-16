@@ -1,12 +1,11 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch, AppState } from 'types/store';
 
 import AddButton from 'lib/components/core/buttons/AddButton';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import AchievementReordering from '../../components/misc/AchievementReordering';
@@ -45,13 +44,9 @@ const AchievementsIndex: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
   const [isReordering, setIsReordering] = useState(false);
-  const achievements = useSelector((state: AppState) =>
-    getAllAchievementMiniEntities(state),
-  );
-  const achievementPermissions = useSelector((state: AppState) =>
-    getAchievementPermissions(state),
-  );
-  const dispatch = useDispatch<AppDispatch>();
+  const achievements = useAppSelector(getAllAchievementMiniEntities);
+  const achievementPermissions = useAppSelector(getAchievementPermissions);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchAchievements())

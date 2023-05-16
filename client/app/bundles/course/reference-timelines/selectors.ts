@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { AppState } from 'types/store';
+import { AppState } from 'store';
 
 import { TimelinesState } from './types';
 

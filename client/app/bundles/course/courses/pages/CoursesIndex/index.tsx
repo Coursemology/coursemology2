@@ -1,12 +1,11 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import InstanceUserRoleRequestForm from '../../../../system/admin/instance/instance/components/forms/InstanceUserRoleRequestForm';
@@ -54,19 +53,15 @@ const CoursesIndex: FC = () => {
   const [isNewCourseDialogOpen, setIsNewCourseDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isRoleRequestDialogOpen, setRoleRequestDialogOpen] = useState(false);
-  const courses = useSelector((state: AppState) =>
-    getAllCourseMiniEntities(state),
+  const courses = useAppSelector(getAllCourseMiniEntities);
+
+  const coursesPermissions = useAppSelector(getCoursePermissions);
+
+  const instanceUserRoleRequest = useAppSelector(
+    getCourseInstanceUserRoleRequest,
   );
 
-  const coursesPermissions = useSelector((state: AppState) =>
-    getCoursePermissions(state),
-  );
-
-  const instanceUserRoleRequest = useSelector((state: AppState) =>
-    getCourseInstanceUserRoleRequest(state),
-  );
-
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchCourses())

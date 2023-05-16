@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { AppState } from 'types/store';
+import { AppState } from 'store';
 import { selectEntities, selectMiniEntities } from 'utilities/store';
 
 function getLocalState(state: AppState) {

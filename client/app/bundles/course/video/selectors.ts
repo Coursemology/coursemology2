@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { AppState } from 'store';
 import { VideoData } from 'types/course/videos';
-import { AppState } from 'types/store';
 
 function getLocalState(state: AppState) {
   return state.videos;

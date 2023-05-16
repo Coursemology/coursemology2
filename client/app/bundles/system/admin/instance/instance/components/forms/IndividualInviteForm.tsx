@@ -1,10 +1,8 @@
 import { FC, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { AppDispatch } from 'types/store';
 import {
   IndividualInvites,
   InvitationResult,
@@ -13,6 +11,7 @@ import {
 import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
+import { useAppDispatch } from 'lib/hooks/store';
 import formTranslations from 'lib/translations/form';
 import messagesTranslations from 'lib/translations/messages';
 
@@ -45,7 +44,7 @@ const validationSchema = yup.object({
 const IndividualInviteForm: FC<Props> = (props) => {
   const { openResultDialog, intl } = props;
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const emptyInvitation = {
     name: '',
     email: '',

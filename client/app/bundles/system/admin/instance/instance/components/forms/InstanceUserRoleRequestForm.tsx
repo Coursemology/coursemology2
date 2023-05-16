@@ -1,9 +1,7 @@
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch } from 'types/store';
 import {
   RoleRequestBasicListData,
   UserRoleRequestForm,
@@ -13,6 +11,7 @@ import { actions } from 'bundles/course/courses/store';
 import FormDialog from 'lib/components/form/dialog/FormDialog';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
@@ -54,7 +53,7 @@ const translations = defineMessages({
 const InstanceUserRoleRequestForm: FC<Props> = (props) => {
   const { open, onClose, instanceUserRoleRequest } = props;
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   let initialValues = { ...instanceUserRoleRequest };
   if (!instanceUserRoleRequest) {

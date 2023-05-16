@@ -1,14 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Link, Typography } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import SummaryCard from 'lib/components/core/layouts/SummaryCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import CoursesButtons from '../../components/buttons/CoursesButtons';
 import CoursesTable from '../../components/tables/CoursesTable';
@@ -32,11 +31,11 @@ const translations = defineMessages({
   },
   totalCourses: {
     id: 'system.admin.admin.CoursesIndex.totalCourses',
-    defaultMessage: `Total Courses: {count}`,
+    defaultMessage: 'Total Courses: {count}',
   },
   activeCourses: {
     id: 'system.admin.admin.CoursesIndex.activeCourses',
-    defaultMessage: `Active Courses (in the past 7 days): {count}`,
+    defaultMessage: 'Active Courses (in the past 7 days): {count}',
   },
 });
 
@@ -44,11 +43,9 @@ const CoursesIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(false);
   const [filter, setFilter] = useState({ active: false });
-  const courseCounts = useSelector((state: AppState) => getAdminCounts(state));
-  const courses = useSelector((state: AppState) =>
-    getAllCourseMiniEntities(state),
-  );
-  const dispatch = useDispatch<AppDispatch>();
+  const courseCounts = useAppSelector(getAdminCounts);
+  const courses = useAppSelector(getAllCourseMiniEntities);
+  const dispatch = useAppDispatch();
   const totalCount =
     filter.active && courseCounts.totalCourses !== 0 ? (
       <Link

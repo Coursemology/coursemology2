@@ -1,16 +1,15 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { MoreHoriz } from '@mui/icons-material';
 import { ClickAwayListener, IconButton } from '@mui/material';
 import { ForumEntity } from 'types/course/forums';
-import { AppDispatch } from 'types/store';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteForum } from '../../operations';
@@ -51,7 +50,7 @@ const ForumManagementButtons: FC<Props> = (props) => {
     showOnHover,
     showSubscribeButton,
   } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [showButtons, setShowButtons] = useState(false);

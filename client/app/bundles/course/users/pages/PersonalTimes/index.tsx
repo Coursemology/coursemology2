@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Paper, Typography } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import SelectCourseUser from '../../components/misc/SelectCourseUser';
 import UserManagementTabs from '../../components/navigation/UserManagementTabs';
@@ -36,13 +35,9 @@ const translations = defineMessages({
 const PersonalTimes: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
-  const permissions = useSelector((state: AppState) =>
-    getManageCourseUserPermissions(state),
-  );
-  const sharedData = useSelector((state: AppState) =>
-    getManageCourseUsersSharedData(state),
-  );
-  const dispatch = useDispatch<AppDispatch>();
+  const permissions = useAppSelector(getManageCourseUserPermissions);
+  const sharedData = useAppSelector(getManageCourseUsersSharedData);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchUsers(true))

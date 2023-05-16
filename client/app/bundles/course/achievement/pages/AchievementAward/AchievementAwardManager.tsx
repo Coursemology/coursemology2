@@ -5,7 +5,6 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, Checkbox, Grid, Tooltip } from '@mui/material';
@@ -16,7 +15,6 @@ import {
   AchievementCourseUserEntity,
   AchievementEntity,
 } from 'types/course/achievements';
-import { AppDispatch } from 'types/store';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import DataTable from 'lib/components/core/layouts/DataTable';
@@ -25,6 +23,7 @@ import Note from 'lib/components/core/Note';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { getAchievementURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch } from 'lib/hooks/store';
 import { formatShortDateTime } from 'lib/moment';
 
 import { awardAchievement } from '../../operations';
@@ -119,7 +118,7 @@ const AchievementAwardManager: FC<Props> = (props) => {
     new Set(obtainedUserIds),
   );
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const isPristine = equal(Array.from(selectedUserIds), obtainedUserIds);

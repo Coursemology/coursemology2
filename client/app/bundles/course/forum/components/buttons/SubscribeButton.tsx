@@ -1,13 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, Switch, Tooltip } from '@mui/material';
 import { EmailSubscriptionSetting } from 'types/course/forums';
-import { AppDispatch } from 'types/store';
 
 import Link from 'lib/components/core/Link';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import {
@@ -120,7 +119,7 @@ const SubscribeButton: FC<Props> = ({
   type,
 }: Props) => {
   const [isUpdating, setIsUpdating] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const translations =
     entityType === 'forum' ? forumTranslations : forumTopicTranslations;

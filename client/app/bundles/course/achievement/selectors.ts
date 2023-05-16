@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
+import { AppState } from 'store';
 import { AchievementPermissions } from 'types/course/achievements';
-import { AppState, SelectionKey } from 'types/store';
+import { SelectionKey } from 'types/store';
 import {
   selectEntity,
   selectMiniEntities,

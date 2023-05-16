@@ -1,6 +1,5 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
 import {
@@ -14,7 +13,8 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
+
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import {
   fetchRegistrationCode,
@@ -89,11 +89,9 @@ const InviteUsersRegistrationCode: FC<Props> = (props) => {
   const { open, handleClose, intl } = props;
   const [isLoading, setIsLoading] = useState(false);
 
-  const registrationCode = useSelector((state: AppState) =>
-    getCourseRegistrationKey(state),
-  );
+  const registrationCode = useAppSelector(getCourseRegistrationKey);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (open) {

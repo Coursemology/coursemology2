@@ -1,6 +1,5 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import {
   SkillBranchMiniEntity,
@@ -8,9 +7,9 @@ import {
   SkillFormData,
   SkillMiniEntity,
 } from 'types/course/assessment/skills/skills';
-import { AppDispatch } from 'types/store';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import {
@@ -99,7 +98,7 @@ const SkillDialog: FC<Props> = (props) => {
     setNewSelected,
   } = props;
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   if (!open) {
     return null;

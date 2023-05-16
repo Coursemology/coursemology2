@@ -1,12 +1,11 @@
 import { Dispatch, FC, SetStateAction, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 import { ForumTopicPostEntity } from 'types/course/forums';
-import { AppDispatch } from 'types/store';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
@@ -49,7 +48,7 @@ const translations = defineMessages({
 const ForumTopicPostEditActionButtons: FC<Props> = (props) => {
   const { post, editValue, setIsEditing } = props;
   const [discardEditPrompt, setDiscardEditPrompt] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const handleUpdate = (): void => {

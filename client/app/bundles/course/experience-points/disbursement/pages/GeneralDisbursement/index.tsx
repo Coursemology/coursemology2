@@ -1,15 +1,14 @@
 import { FC } from 'react';
-import { useSelector } from 'react-redux';
 import { Grid } from '@mui/material';
-import { AppState } from 'types/store';
+
+import { useAppSelector } from 'lib/hooks/store';
 
 import DisbursementForm from '../../components/forms/DisbursementForm';
 import { getAllFilteredUserMiniEntities } from '../../selectors';
 
 const GeneralDisbursement: FC = () => {
-  const courseUsers = useSelector((state: AppState) =>
-    getAllFilteredUserMiniEntities(state),
-  );
+  const courseUsers = useAppSelector(getAllFilteredUserMiniEntities);
+
   return (
     <Grid item xs>
       <DisbursementForm courseUsers={courseUsers} />

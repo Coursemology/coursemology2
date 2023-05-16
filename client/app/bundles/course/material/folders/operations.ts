@@ -1,9 +1,9 @@
+import { Operation } from 'store';
 import {
   FolderFormData,
   MaterialFormData,
   MaterialUploadFormData,
 } from 'types/course/material/folders';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 import pollJob from 'lib/helpers/jobHelpers';

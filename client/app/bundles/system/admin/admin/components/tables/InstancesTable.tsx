@@ -1,16 +1,15 @@
 import { FC, ReactElement } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Typography } from '@mui/material';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
-import { AppDispatch, AppState } from 'types/store';
 import { InstanceMiniEntity } from 'types/system/instances';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import InlineEditTextField from 'lib/components/form/fields/DataTableInlineEditable/TextField';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import tableTranslations from 'lib/translations/table';
 
 import { updateInstance } from '../../operations';
@@ -50,11 +49,9 @@ const translations = defineMessages({
 
 const InstancesTable: FC<Props> = (props) => {
   const { renderRowActionComponent, title, intl } = props;
-  const dispatch = useDispatch<AppDispatch>();
-  const instances = useSelector((state: AppState) =>
-    getAllInstanceMiniEntities(state),
-  );
-  const counts = useSelector((state: AppState) => getAdminCounts(state));
+  const dispatch = useAppDispatch();
+  const instances = useAppSelector(getAllInstanceMiniEntities);
+  const counts = useAppSelector(getAdminCounts);
 
   const handleNameUpdate = (rowData, newName: string): Promise<void> => {
     const instance = rebuildObjectFromRow(

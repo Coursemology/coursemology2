@@ -12,10 +12,10 @@ const translations = defineMessages({
   emailBody: {
     id: 'course.assessment.submission.EvaluatorErrorPanel.emailBody',
     defaultMessage:
-      `Dear Coursemology Admin,{nl}{nl}` +
-      `I encountered the following error when submitting my programming question code:{nl}{nl}` +
-      `{message}{nl}{nl}` +
-      `The page URL is: {url}`,
+      'Dear Coursemology Admin,{nl}{nl}' +
+      'I encountered the following error when submitting my programming question code:{nl}{nl}' +
+      '{message}{nl}{nl}' +
+      'The page URL is: {url}',
   },
 });
 

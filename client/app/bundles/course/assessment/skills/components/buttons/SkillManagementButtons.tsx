@@ -1,15 +1,14 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import {
   SkillBranchMiniEntity,
   SkillMiniEntity,
 } from 'types/course/assessment/skills/skills';
-import { AppDispatch } from 'types/store';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { deleteSkill, deleteSkillBranch } from '../../operations';
 
@@ -66,7 +65,7 @@ const SkillManagementButtons: FC<Props> = (props) => {
     editClick,
     branchHasSkills,
   } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [isDeleting, setIsDeleting] = useState(false);
 
   if (!canUpdate && !canDestroy) {

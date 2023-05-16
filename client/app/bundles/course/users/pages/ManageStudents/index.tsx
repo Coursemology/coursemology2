@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import manageUsersTranslations from 'lib/translations/course/users/index';
 
 import UserManagementButtons from '../../components/buttons/UserManagementButtons';
@@ -37,23 +36,12 @@ const ManageStudents: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
 
-  const students = useSelector((state: AppState) =>
-    getAllStudentMiniEntities(state),
-  );
+  const students = useAppSelector(getAllStudentMiniEntities);
+  const permissions = useAppSelector(getManageCourseUserPermissions);
+  const sharedData = useAppSelector(getManageCourseUsersSharedData);
+  const timelines = useAppSelector(getAssignableTimelines);
 
-  const permissions = useSelector((state: AppState) =>
-    getManageCourseUserPermissions(state),
-  );
-
-  const sharedData = useSelector((state: AppState) =>
-    getManageCourseUsersSharedData(state),
-  );
-
-  const timelines = useSelector((state: AppState) =>
-    getAssignableTimelines(state),
-  );
-
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchStudents())

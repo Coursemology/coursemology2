@@ -1,9 +1,7 @@
 import { FC } from 'react';
 import { Controller, UseFormSetError } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { VideoFormData } from 'types/course/videos';
-import { AppState } from 'types/store';
 import * as yup from 'yup';
 
 import FormDialog from 'lib/components/form/dialog/FormDialog';
@@ -12,6 +10,7 @@ import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerFi
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
+import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
@@ -106,10 +105,8 @@ const VideoForm: FC<Props> = (props) => {
     childrenExists,
   } = props;
   const { t } = useTranslation();
-  const videoTabs = useSelector((state: AppState) => getVideoTabs(state));
-  const videoMetadata = useSelector((state: AppState) =>
-    getVideoMetadata(state),
-  );
+  const videoTabs = useAppSelector(getVideoTabs);
+  const videoMetadata = useAppSelector(getVideoMetadata);
 
   return (
     <FormDialog

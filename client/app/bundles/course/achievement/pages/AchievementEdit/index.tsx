@@ -1,11 +1,10 @@
 import { FC, useEffect } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch, AppState } from 'types/store';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import AchievementForm from '../../components/forms/AchievementForm';
@@ -36,8 +35,8 @@ const translations = defineMessages({
 const AchievementEdit: FC<Props> = (props) => {
   const { achievementId, open, onClose } = props;
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
-  const achievement = useSelector((state: AppState) =>
+  const dispatch = useAppDispatch();
+  const achievement = useAppSelector((state) =>
     getAchievementEntity(state, achievementId!),
   );
 

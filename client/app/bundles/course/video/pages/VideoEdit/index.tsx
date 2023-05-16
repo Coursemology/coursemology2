@@ -1,11 +1,10 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { VideoFormData, VideoListData } from 'types/course/videos';
-import { AppDispatch } from 'types/store';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import VideoForm from '../../components/forms/VideoForm';
@@ -35,7 +34,7 @@ const translations = defineMessages({
 const VideoEdit: FC<Props> = (props) => {
   const { open, onClose, video } = props;
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const initialValues = {
     id: video.id,

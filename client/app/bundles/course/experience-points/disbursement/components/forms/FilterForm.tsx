@@ -6,20 +6,19 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import { Grid } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { ForumDisbursementFilters } from 'types/course/disbursement';
-import { AppDispatch } from 'types/store';
 import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch } from 'lib/hooks/store';
 import formTranslations from 'lib/translations/form';
 
 import { fetchFilteredForumDisbursements } from '../../operations';
@@ -77,7 +76,7 @@ const validationSchema = yup.object({
 const FilterForm: FC<Props> = (props) => {
   const { intl, initialValues } = props;
   const [isSearching, setIsSearching] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const {
     control,

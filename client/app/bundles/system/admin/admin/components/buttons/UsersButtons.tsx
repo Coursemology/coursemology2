@@ -1,14 +1,13 @@
 import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
-import { AppDispatch } from 'types/store';
 import { UserMiniEntity } from 'types/users';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import MasqueradeButton from 'lib/components/core/buttons/MasqueradeButton';
 import { USER_ROLES } from 'lib/constants/sharedConstants';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { deleteUser } from '../../operations';
 
@@ -37,7 +36,7 @@ const translations = defineMessages({
 
 const UserManagementButtons: FC<Props> = (props) => {
   const { intl, user } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const onDelete = (): Promise<void> => {

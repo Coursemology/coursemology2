@@ -1,4 +1,10 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import {
+  AnyAction,
+  combineReducers,
+  configureStore,
+  ThunkAction,
+  ThunkDispatch,
+} from '@reduxjs/toolkit';
 import { enableMapSet } from 'immer';
 
 import deleteConfirmationReducer from 'lib/reducers/deleteConfirmation';
@@ -80,6 +86,17 @@ export const store = configureStore({
   reducer: rootReducer,
 });
 
-// TODO: Replace `AppState` and `AppDispatch` from `types/store` with these.
-export type RootState = ReturnType<typeof rootReducer>;
-export type AppDispatch = typeof store.dispatch;
+export type AppState = ReturnType<typeof rootReducer>;
+
+export type AppDispatch = ThunkDispatch<
+  AppState,
+  Record<string, unknown>,
+  AnyAction
+>;
+
+export type Operation<R = void> = ThunkAction<
+  Promise<R>,
+  AppState,
+  Record<string, unknown>,
+  AnyAction
+>;

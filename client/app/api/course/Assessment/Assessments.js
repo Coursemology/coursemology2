@@ -127,10 +127,9 @@ export default class AssessmentsAPI extends BaseCourseAPI {
    * @param {number[]} questionIds Question IDs in the new ordering
    */
   reorderQuestions(assessmentId, questionIds) {
-    return this.client.post(
-      `${this.#urlPrefix}/${assessmentId}/reorder`,
-      { question_order: questionIds },
-    );
+    return this.client.post(`${this.#urlPrefix}/${assessmentId}/reorder`, {
+      question_order: questionIds,
+    });
   }
 
   /**
