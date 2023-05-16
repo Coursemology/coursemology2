@@ -1,127 +1,95 @@
 import MockAdapter from 'axios-mock-adapter';
-import { mount } from 'enzyme';
+import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import storeCreator from 'course/lesson-plan/store';
 
 import ItemRow from '../ItemRow';
 
-const client = CourseAPI.lessonPlan.client;
-const mock = new MockAdapter(client);
+const mock = new MockAdapter(CourseAPI.lessonPlan.client);
 
-beforeEach(() => {
-  mock.reset();
-  // add window.matchMedia
-  // this is necessary for the date picker to be rendered in desktop mode.
-  // if this is not provided, the mobile mode is rendered, which might lead to unexpected behavior
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: (query) => ({
-      media: query,
-      // this is the media query that @material-ui/pickers uses to determine if a device is a desktop device
-      matches: query === '(pointer: fine)',
-      onchange: () => {},
-      addEventListener: () => {},
-      removeEventListener: () => {},
-      addListener: () => {},
-      removeListener: () => {},
-      dispatchEvent: () => false,
-    }),
-  });
-});
-
-afterEach(() => {
-  delete window.matchMedia;
-});
+const startAt = '01-01-2017';
+const endAt = '02-02-2017';
 
 const itemData = {
   id: 9,
   published: false,
   itemTypeKey: 'Other',
   title: 'Other Event',
-  start_at: '2017-01-04T02:03:00.000+08:00',
+  start_at: new Date(startAt),
   bonus_end_at: '2017-01-06T02:03:00.000+08:00',
-  end_at: '2017-01-08T02:03:00.000+08:00',
+  end_at: new Date(endAt),
+};
+
+const state = {
+  lessonPlan: {
+    lessonPlan: {
+      visibilityByType: { [itemData.itemTypeKey]: true },
+      items: [itemData],
+    },
+  },
 };
 
 describe('<ItemRow />', () => {
-  it('shifts end dates when start date is shifted', () => {
-    mock
-      .onPatch(`/courses/${courseId}/lesson_plan/items/${itemData.id}`)
-      .reply(200);
-    const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateItem');
-    const store = storeCreator({
-      lessonPlan: {
-        visibilityByType: { [itemData.itemTypeKey]: true },
-        items: [itemData],
-      },
-    });
+  it('shifts end dates when start date is shifted', async () => {
+    const newStartAt = '02-02-2017';
 
-    const table = mount(
-      <table>
-        <tbody>
-          <ItemRow
-            bonusEndAt={itemData.bonus_end_at}
-            endAt={itemData.end_at}
-            id={itemData.id}
-            published={itemData.published}
-            startAt={itemData.start_at}
-            title={itemData.title}
-            type={itemData.itemTypeKey}
-          />
-        </tbody>
-      </table>,
-      buildContextOptions(store),
+    const url = `/courses/${global.courseId}/lesson_plan/items/${itemData.id}`;
+    mock.onPatch(url).reply(200);
+
+    const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateItem');
+
+    const page = render(
+      <ItemRow
+        bonusEndAt={itemData.bonus_end_at}
+        endAt={itemData.end_at}
+        id={itemData.id}
+        published={itemData.published}
+        startAt={itemData.start_at}
+        title={itemData.title}
+        type={itemData.itemTypeKey}
+      />,
+      { state },
     );
 
-    const startAtDateInput = table.find('input[name="start_at"]').first();
-    const newStartAt = '01-02-2017';
-    startAtDateInput.simulate('change', { target: { value: newStartAt } });
-    startAtDateInput.simulate('blur');
+    const input = page.getByDisplayValue(startAt);
 
-    expect(spy).toHaveBeenCalledWith(itemData.id, {
-      item: {
-        start_at: '2017-01-31T18:03:00.000Z',
-        bonus_end_at: '2017-02-02T18:03:00.000Z',
-        end_at: '2017-02-04T18:03:00.000Z',
-      },
-    });
+    fireEvent.change(input, { target: { value: newStartAt } });
+    fireEvent.blur(input);
+
+    await waitFor(() =>
+      expect(spy).toHaveBeenCalledWith(itemData.id, {
+        item: {
+          start_at: '2017-02-01T16:00:00.000Z',
+          bonus_end_at: '2017-02-06T18:03:00.000Z',
+          end_at: '2017-03-05T16:00:00.000Z',
+        },
+      }),
+    );
   });
 
   it('clears end date', () => {
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'updateItem');
-    const store = storeCreator({
-      lessonPlan: {
-        visibilityByType: { [itemData.itemTypeKey]: true },
-        items: [itemData],
-      },
-    });
 
-    const table = mount(
-      <table>
-        <tbody>
-          <ItemRow
-            bonusEndAt={itemData.bonus_end_at}
-            endAt={itemData.end_at}
-            id={itemData.id}
-            published={itemData.published}
-            startAt={itemData.start_at}
-            title={itemData.title}
-            type={itemData.itemTypeKey}
-          />
-        </tbody>
-      </table>,
-      buildContextOptions(store),
+    const page = render(
+      <ItemRow
+        bonusEndAt={itemData.bonus_end_at}
+        endAt={itemData.end_at}
+        id={itemData.id}
+        published={itemData.published}
+        startAt={itemData.start_at}
+        title={itemData.title}
+        type={itemData.itemTypeKey}
+      />,
+      { state },
     );
 
-    const endAtDateInput = table.find('input[name="end_at"]').first();
-    endAtDateInput.simulate('change', { target: { value: '' } });
-    endAtDateInput.simulate('blur');
+    const input = page.getByDisplayValue(endAt);
+
+    fireEvent.change(input, { target: { value: '' } });
+    fireEvent.blur(input);
 
     expect(spy).toHaveBeenCalledWith(itemData.id, {
-      item: {
-        end_at: null,
-      },
+      item: { end_at: null },
     });
   });
 });
