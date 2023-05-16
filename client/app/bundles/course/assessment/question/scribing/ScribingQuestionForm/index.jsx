@@ -35,10 +35,8 @@ const validationSchema = yup.object({
     .required(formTranslations.required),
   attachment: yup
     .object()
-    .test(
-      'attachmentExists',
-      formTranslations.required,
-      (attachment) => attachment && attachment.file,
+    .test('attachmentExists', formTranslations.required, (attachment) =>
+      'file' in attachment ? Boolean(attachment.file) : true,
     ),
 });
 
@@ -135,11 +133,7 @@ const ScribingQuestionForm = (props) => {
             field={field}
             fieldState={fieldState}
             fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
             label={t(translations.descriptionFieldLabel)}
-            variant="standard"
           />
         )}
       />
@@ -152,11 +146,7 @@ const ScribingQuestionForm = (props) => {
             field={field}
             fieldState={fieldState}
             fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
             label={t(translations.staffOnlyCommentsFieldLabel)}
-            variant="standard"
           />
         )}
       />
