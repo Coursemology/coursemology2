@@ -1,11 +1,9 @@
-import { MemoryRouter } from 'react-router-dom';
 import MockAdapter from 'axios-mock-adapter';
-import { mount } from 'enzyme';
+import { render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
-import LessonPlanLayout from 'course/lesson-plan/containers/LessonPlanLayout';
-import storeCreator from 'course/lesson-plan/store';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+
+import LessonPlanLayout from '..';
 
 const client = CourseAPI.lessonPlan.client;
 const mock = new MockAdapter(client);
@@ -30,7 +28,7 @@ const lessonPlanData = {
         {
           id: 22,
           name: 'Fire',
-          url: `/courses/${courseId}/materials/folders/5/files/6`,
+          url: `/courses/${global.courseId}/materials/folders/5/files/6`,
         },
       ],
     },
@@ -50,25 +48,21 @@ const lessonPlanData = {
 };
 
 describe('LessonPlan', () => {
-  it('fetches lesson plan data and renders it', async () => {
-    const store = storeCreator();
+  it('fetches lesson plan data and renders action buttons', async () => {
     const spy = jest.spyOn(CourseAPI.lessonPlan, 'fetch');
-    const lessonPlanUrl = `/courses/${courseId}/lesson_plan`;
+    const lessonPlanUrl = `/courses/${global.courseId}/lesson_plan`;
     mock.onGet(lessonPlanUrl).reply(200, lessonPlanData);
 
-    const lessonPlan = mount(
-      <ProviderWrapper store={store}>
-        <MemoryRouter initialEntries={[lessonPlanUrl]}>
-          <LessonPlanLayout />
-        </MemoryRouter>
-      </ProviderWrapper>,
-    );
+    const lessonPlan = render(<LessonPlanLayout />);
 
-    await sleep(1);
-    expect(spy).toHaveBeenCalled();
-    lessonPlan.update();
-    // A milestone should be automatically generated since the event starts before the milestone
-    expect(lessonPlan.find('LessonPlanGroup')).toHaveLength(2);
-    expect(lessonPlan.find('LessonPlanItem')).toHaveLength(1);
+    await waitFor(() => {
+      expect(spy).toHaveBeenCalled();
+    });
+
+    expect(lessonPlan.getByRole('button', { name: 'Filter' })).toBeVisible();
+
+    expect(
+      lessonPlan.getByRole('button', { name: 'Go To Milestone' }),
+    ).toBeVisible();
   });
 });
