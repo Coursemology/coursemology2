@@ -1,7 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -9,10 +8,10 @@ import {
   InvitationResult,
   InvitationsPostData,
 } from 'types/course/userInvitations';
-import { AppDispatch, AppState } from 'types/store';
 import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import formTranslations from 'lib/translations/form';
 import messagesTranslations from 'lib/translations/messages';
 
@@ -49,13 +48,9 @@ const validationSchema = yup.object({
 const IndividualInviteForm: FC<Props> = (props) => {
   const { openResultDialog, intl } = props;
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-  const sharedData = useSelector((state: AppState) =>
-    getManageCourseUsersSharedData(state),
-  );
-  const permissions = useSelector((state: AppState) =>
-    getManageCourseUserPermissions(state),
-  );
+  const dispatch = useAppDispatch();
+  const sharedData = useAppSelector(getManageCourseUsersSharedData);
+  const permissions = useAppSelector(getManageCourseUserPermissions);
   const defaultTimelineAlgorithm = sharedData.defaultTimelineAlgorithm;
   const emptyInvitation = {
     name: '',

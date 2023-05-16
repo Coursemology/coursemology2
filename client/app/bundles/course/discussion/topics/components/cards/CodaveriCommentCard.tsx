@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { ArrowBack, Check, Clear, Reply } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
@@ -15,9 +14,9 @@ import {
 } from '@mui/material';
 import { grey, orange } from '@mui/material/colors';
 import { CommentPostMiniEntity } from 'types/course/comments';
-import { AppDispatch } from 'types/store';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import { useAppDispatch } from 'lib/hooks/store';
 import { formatLongDateTime } from 'lib/moment';
 
 import { deletePost, updatePostCodaveri } from '../../operations';
@@ -72,7 +71,7 @@ const translations = defineMessages({
 
 const CodaveriCommentCard: FC<Props> = (props) => {
   const { intl, post } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [editMode, setEditMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isRejecting, setIsRejecting] = useState(false);

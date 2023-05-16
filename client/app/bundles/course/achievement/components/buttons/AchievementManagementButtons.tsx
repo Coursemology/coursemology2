@@ -1,14 +1,13 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { AchievementMiniEntity } from 'types/course/achievements';
-import { AppDispatch } from 'types/store';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteAchievement } from '../../operations';
@@ -44,7 +43,7 @@ const translations = defineMessages({
 const AchievementManagementButtons: FC<Props> = (props) => {
   const { achievement, navigateToIndex } = props;
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);

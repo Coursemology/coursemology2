@@ -1,5 +1,5 @@
+import { Operation } from 'store';
 import { LeaderboardData } from 'types/course/leaderboard';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 

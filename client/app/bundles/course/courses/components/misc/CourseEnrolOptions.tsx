@@ -1,12 +1,11 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
-import { AppDispatch } from 'types/store';
 
 import { getEnrolRequestURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { cancelEnrolRequest, submitEnrolRequest } from '../../operations';
 import CourseInvitationCodeForm from '../forms/CourseInvitationCodeForm';
@@ -46,7 +45,7 @@ const translations = defineMessages({
 const CourseEnrolOptions: FC<Props> = (props) => {
   const { intl, registrationInfo } = props;
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (): Promise<void> => {
     const courseId = getCourseId()!;

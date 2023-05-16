@@ -1,13 +1,12 @@
 import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
 import { InvitationRowData } from 'types/course/userInvitations';
-import { AppDispatch } from 'types/store';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EmailButton from 'lib/components/core/buttons/EmailButton';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { deleteInvitation, resendInvitationEmail } from '../../operations';
 
@@ -54,7 +53,7 @@ const translations = defineMessages({
 
 const PendingInvitationsButtons: FC<Props> = (props) => {
   const { intl, invitation } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [isResending, setIsResending] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 

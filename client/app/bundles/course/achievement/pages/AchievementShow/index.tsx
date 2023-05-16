@@ -1,15 +1,14 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Grid, Tooltip, Typography } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import AchievementManagementButtons from '../../components/buttons/AchievementManagementButtons';
 import { loadAchievement } from '../../operations';
@@ -35,12 +34,12 @@ const AchievementShow: FC<Props> = (props) => {
   const { intl } = props;
   const courseId = getCourseId();
   const [isLoading, setIsLoading] = useState(true);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { achievementId } = useParams();
-  const achievementMiniEntity = useSelector((state: AppState) =>
+  const achievementMiniEntity = useAppSelector((state) =>
     getAchievementMiniEntity(state, +achievementId!),
   );
-  const achievement = useSelector((state: AppState) =>
+  const achievement = useAppSelector((state) =>
     getAchievementEntity(state, +achievementId!),
   );
 

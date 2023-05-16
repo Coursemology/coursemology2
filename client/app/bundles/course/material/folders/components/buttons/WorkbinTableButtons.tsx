@@ -1,12 +1,11 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Stack } from '@mui/material';
-import { AppDispatch } from 'types/store';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteFolder, deleteMaterial } from '../../operations';
@@ -70,7 +69,7 @@ const WorkbinTableButtons: FC<Props> = (props) => {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const onEdit = (): void => {
     setIsEditOpen(true);

@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import { Operation } from 'types/store';
+import { Operation } from 'store';
 
 import GlobalAPI from 'api';
 

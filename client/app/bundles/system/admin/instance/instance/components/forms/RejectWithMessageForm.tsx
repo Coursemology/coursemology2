@@ -1,14 +1,13 @@
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { TextField } from '@mui/material';
-import { AppDispatch } from 'types/store';
 import { RoleRequestRowData } from 'types/system/instance/roleRequests';
 
 import FormDialog from 'lib/components/form/dialog/FormDialog';
 import FormTextField from 'lib/components/form/fields/TextField';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
@@ -42,7 +41,7 @@ const initialValues = {
 const RejectWithMessageForm: FC<Props> = (props) => {
   const { open, onClose, roleRequest } = props;
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const onSubmit = (data): Promise<void> => {
     return dispatch(rejectRoleRequest(roleRequest.id, data.rejectionMessage))

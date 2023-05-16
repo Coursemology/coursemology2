@@ -5,17 +5,16 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { AutoFixHigh, EmojiEvents, Group, Person } from '@mui/icons-material';
 import { Grid, Tab, Tabs } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import palette from 'theme/palette';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import LeaderboardTable from '../../components/tables/LeaderboardTable';
 import fetchLeaderboard from '../../operations';
@@ -55,26 +54,18 @@ const translations = defineMessages({
 
 const LeaderboardIndex: FC<Props> = (props) => {
   const { intl } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const theme = useTheme();
   const tabView = useMediaQuery(theme.breakpoints.down('lg'));
   const [isLoading, setIsLoading] = useState(true);
   const [tabValue, setTabValue] = useState('leaderboard-tab');
   const [innerTabValue, setInnerTabValue] = useState('points-tab');
-  const settings = useSelector((state: AppState) =>
-    getLeaderboardSettings(state),
-  );
-  const leaderboardPoints = useSelector((state: AppState) =>
-    getLeaderboardPoints(state),
-  );
-  const leaderboardAchievements = useSelector((state: AppState) =>
-    getLeaderboardAchievements(state),
-  );
-  const groupLeaderboardPoints = useSelector((state: AppState) =>
-    getGroupLeaderboardPoints(state),
-  );
-  const groupLeaderboardAchievements = useSelector((state: AppState) =>
-    getGroupLeaderboardAchievements(state),
+  const settings = useAppSelector(getLeaderboardSettings);
+  const leaderboardPoints = useAppSelector(getLeaderboardPoints);
+  const leaderboardAchievements = useAppSelector(getLeaderboardAchievements);
+  const groupLeaderboardPoints = useAppSelector(getGroupLeaderboardPoints);
+  const groupLeaderboardAchievements = useAppSelector(
+    getGroupLeaderboardAchievements,
   );
 
   useEffect(() => {

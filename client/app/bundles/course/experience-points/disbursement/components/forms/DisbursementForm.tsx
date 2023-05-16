@@ -6,7 +6,6 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Autocomplete, Button, Grid, TextField } from '@mui/material';
@@ -15,12 +14,12 @@ import {
   DisbursementCourseUserMiniEntity,
   DisbursementFormData,
 } from 'types/course/disbursement';
-import { AppDispatch, AppState } from 'types/store';
 import * as yup from 'yup';
 
 import ErrorText from 'lib/components/core/ErrorText';
 import FormTextField from 'lib/components/form/fields/TextField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import formTranslations from 'lib/translations/form';
 
 import { createDisbursement } from '../../operations';
@@ -74,9 +73,7 @@ const validationSchema = yup.object({
 const DisbursementForm: FC<Props> = (props) => {
   const { intl, courseUsers } = props;
 
-  const courseGroups = useSelector((state: AppState) =>
-    getAllCourseGroupMiniEntities(state),
-  );
+  const courseGroups = useAppSelector(getAllCourseGroupMiniEntities);
 
   const [filteredGroup, setFilteredGroup] =
     useState<DisbursementCourseGroupMiniEntity | null>(null);
@@ -91,7 +88,7 @@ const DisbursementForm: FC<Props> = (props) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const initialValues: DisbursementFormData = useMemo(() => {
     return courseUsers.reduce(

@@ -1,4 +1,5 @@
 import { AxiosError } from 'axios';
+import { Operation } from 'store';
 import {
   ItemWithTimeData,
   TimeData,
@@ -6,7 +7,6 @@ import {
   TimelinePostData,
   TimePostData,
 } from 'types/course/referenceTimelines';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 

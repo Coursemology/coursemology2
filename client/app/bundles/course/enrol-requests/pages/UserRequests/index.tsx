@@ -1,13 +1,12 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import UserManagementTabs from '../../../users/components/navigation/UserManagementTabs';
 import PendingEnrolRequestsButtons from '../../components/buttons/PendingEnrolRequestsButtons';
@@ -51,15 +50,9 @@ const translations = defineMessages({
 const UserRequests: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
-  const enrolRequests = useSelector((state: AppState) =>
-    getAllEnrolRequestEntities(state),
-  );
-  const permissions = useSelector((state: AppState) =>
-    getManageCourseUserPermissions(state),
-  );
-  const sharedData = useSelector((state: AppState) =>
-    getManageCourseUsersSharedData(state),
-  );
+  const enrolRequests = useAppSelector(getAllEnrolRequestEntities);
+  const permissions = useAppSelector(getManageCourseUserPermissions);
+  const sharedData = useAppSelector(getManageCourseUsersSharedData);
   const pendingEnrolRequests = enrolRequests.filter(
     (enrolRequest) => enrolRequest.status === 'pending',
   );
@@ -70,7 +63,7 @@ const UserRequests: FC<Props> = (props) => {
     (enrolRequest) => enrolRequest.status === 'rejected',
   );
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setIsLoading(true);

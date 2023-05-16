@@ -1,5 +1,5 @@
+import { Operation } from 'store';
 import { VideoFormData } from 'types/course/videos';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 

@@ -1,15 +1,14 @@
 import { FC, memo, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
-import { AppDispatch } from 'types/store';
 import { RoleRequestRowData } from 'types/system/instance/roleRequests';
 
 import AcceptButton from 'lib/components/core/buttons/AcceptButton';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EmailButton from 'lib/components/core/buttons/EmailButton';
 import { ROLE_REQUEST_ROLES } from 'lib/constants/sharedConstants';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { approveRoleRequest, rejectRoleRequest } from '../../operations';
@@ -58,7 +57,7 @@ const translations = defineMessages({
 const PendingRoleRequestsButtons: FC<Props> = (props) => {
   const { roleRequest } = props;
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [isApproving, setIsApproving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isRejectDialogOpen, setIsRejectDialogOpen] = useState(false);

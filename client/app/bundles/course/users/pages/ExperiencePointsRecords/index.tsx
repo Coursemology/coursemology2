@@ -1,12 +1,11 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useSelector } from 'react-redux';
-import { AppState } from 'types/store';
 
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId, getCourseUserId } from 'lib/helpers/url-helpers';
+import { useAppSelector } from 'lib/hooks/store';
 
 import ExperiencePointsTable from '../../components/tables/ExperiencePointsTable';
 import { getExperiencePointsRecordsSettings } from '../../selectors';
@@ -28,8 +27,8 @@ const ExperiencePointsRecords: FC<Props> = (props) => {
   const { intl } = props;
   const ROWS_PER_PAGE = 25;
   const [pageNum, setPageNum] = useState(1);
-  const experiencePointsRecordSettings = useSelector((state: AppState) =>
-    getExperiencePointsRecordsSettings(state),
+  const experiencePointsRecordSettings = useAppSelector(
+    getExperiencePointsRecordsSettings,
   );
 
   const handlePageChange = (num: number): void => {

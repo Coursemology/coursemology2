@@ -1,15 +1,14 @@
 import { FC, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { VideoListData } from 'types/course/videos';
-import { AppDispatch } from 'types/store';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import EditButton from 'lib/components/core/buttons/EditButton';
 import { getVideosURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { deleteVideo } from '../../operations';
@@ -38,7 +37,7 @@ const translations = defineMessages({
 const VideoManagementButtons: FC<Props> = (props) => {
   const { video, navigateToIndex } = props;
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);

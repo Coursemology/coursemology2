@@ -1,3 +1,4 @@
+import { Operation } from 'store';
 import {
   CourseUserBasicListData,
   CourseUserBasicMiniEntity,
@@ -16,7 +17,6 @@ import {
   PersonalTimePostData,
 } from 'types/course/personalTimes';
 import { TimelineData } from 'types/course/referenceTimelines';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 

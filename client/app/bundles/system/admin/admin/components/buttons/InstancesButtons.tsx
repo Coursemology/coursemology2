@@ -1,12 +1,11 @@
 import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import equal from 'fast-deep-equal';
-import { AppDispatch } from 'types/store';
 import { InstanceMiniEntity } from 'types/system/instances';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { deleteInstance } from '../../operations';
 
@@ -35,7 +34,7 @@ const translations = defineMessages({
 
 const InstancesButtons: FC<Props> = (props) => {
   const { intl, instance } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [isDeleting, setIsDeleting] = useState(false);
 
   const onDelete = (): Promise<void> => {

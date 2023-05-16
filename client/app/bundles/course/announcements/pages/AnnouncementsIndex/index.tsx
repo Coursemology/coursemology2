@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import NewAnnouncementButton from '../../components/buttons/NewAnnouncementButton';
 import AnnouncementsDisplay from '../../components/misc/AnnouncementsDisplay';
@@ -51,13 +50,9 @@ const AnnouncementsIndex: FC<Props> = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const announcements = useSelector((state: AppState) =>
-    getAllAnnouncementMiniEntities(state),
-  );
-  const announcementPermissions = useSelector((state: AppState) =>
-    getAnnouncementPermissions(state),
-  );
-  const dispatch = useDispatch<AppDispatch>();
+  const announcements = useAppSelector(getAllAnnouncementMiniEntities);
+  const announcementPermissions = useAppSelector(getAnnouncementPermissions);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchAnnouncements())

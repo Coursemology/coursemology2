@@ -1,6 +1,5 @@
 import { FC, ReactElement, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import {
   CircularProgress,
@@ -14,7 +13,6 @@ import {
   TableOptions,
   TableState,
 } from 'types/components/DataTable';
-import { AppDispatch } from 'types/store';
 import {
   InstanceAdminStats,
   InstanceUserMiniEntity,
@@ -28,6 +26,7 @@ import {
   INSTANCE_USER_ROLES,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import { useAppDispatch } from 'lib/hooks/store';
 import tableTranslations from 'lib/translations/table';
 
 import { indexUsers, updateUser } from '../../operations';
@@ -71,7 +70,7 @@ const UsersTable: FC<Props> = (props) => {
   const { title, renderRowActionComponent, intl, users, userCounts, filter } =
     props;
   const [isLoading, setIsLoading] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const [tableState, setTableState] = useState<TableState>({
     count: userCounts.usersCount,

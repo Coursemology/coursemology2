@@ -1,6 +1,5 @@
 import { memo, ReactElement, useMemo, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { ExpandMore } from '@mui/icons-material';
 import {
@@ -25,7 +24,6 @@ import {
 } from 'types/course/courseUsers';
 import { TimelineAlgorithm } from 'types/course/personalTimes';
 import { TimelineData } from 'types/course/referenceTimelines';
-import { AppDispatch } from 'types/store';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import Note from 'lib/components/core/Note';
@@ -36,6 +34,7 @@ import {
   TIMELINE_ALGORITHMS,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
@@ -157,9 +156,9 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
   const { users, manageStaff, timelinesMap, renderRowActionComponent } = props;
 
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
-  const permissions = useSelector(getManageCourseUserPermissions);
+  const permissions = useAppSelector(getManageCourseUserPermissions);
 
   const [submitting, setSubmitting] = useState(false);
   const [filteringGroup, setFilteringGroup] = useState(false);

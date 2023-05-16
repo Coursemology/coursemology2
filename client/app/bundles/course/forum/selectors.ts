@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { EntityId } from '@reduxjs/toolkit';
+import { AppState } from 'store';
 import { ForumTopicEntity } from 'types/course/forums';
-import { AppState } from 'types/store';
 
 import {
   forumAdapter,

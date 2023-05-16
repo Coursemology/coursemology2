@@ -1,10 +1,10 @@
+import { Operation } from 'store';
 import {
   InvitationFileEntity,
   InvitationPostData,
   InvitationResult,
   InvitationsPostData,
 } from 'types/course/userInvitations';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 

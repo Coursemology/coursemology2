@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { Operation } from 'store';
 import {
   CommentPermissions,
   CommentPostListData,
@@ -8,7 +9,6 @@ import {
   CommentTabTypes,
   CommentTopicData,
 } from 'types/course/comments';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 

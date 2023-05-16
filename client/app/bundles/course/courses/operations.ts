@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
+import { Operation } from 'store';
 import { NewCourseFormData } from 'types/course/courses';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 

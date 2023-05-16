@@ -1,6 +1,5 @@
 import { FC, lazy, Suspense, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   CheckCircleOutline,
   PendingOutlined,
@@ -8,10 +7,10 @@ import {
 } from '@mui/icons-material';
 import { Card, CardContent, CardHeader, Link } from '@mui/material';
 import { CommentStatusTypes, CommentTopicEntity } from 'types/course/comments';
-import { AppDispatch, AppState } from 'types/store';
 
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import { updatePending, updateRead } from '../../operations';
 import { getAllCommentPostMiniEntities } from '../../selectors';
@@ -59,10 +58,10 @@ const translations = defineMessages({
 
 const TopicCard: FC<Props> = (props) => {
   const { intl, topic } = props;
-  const dispatch = useDispatch<AppDispatch>();
-  const postListData = useSelector((state: AppState) =>
-    getAllCommentPostMiniEntities(state),
-  ).filter((post) => post.topicId === topic.id);
+  const dispatch = useAppDispatch();
+  const postListData = useAppSelector(getAllCommentPostMiniEntities).filter(
+    (post) => post.topicId === topic.id,
+  );
   const [status, setStatus] = useState(CommentStatusTypes.loading);
 
   useEffect(() => {
@@ -237,7 +236,7 @@ const TopicCard: FC<Props> = (props) => {
             </div>
           );
         })}
-        {/* Dont need to render the comment field when the last post (which is 
+        {/* Dont need to render the comment field when the last post (which is
           the intended post to be shown) is of codaveri feedback type */}
         {!postListData[postListData.length - 1]?.codaveriFeedback && (
           <Suspense

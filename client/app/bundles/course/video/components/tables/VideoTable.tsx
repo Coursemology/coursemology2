@@ -1,12 +1,10 @@
 import { FC, memo } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Switch } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { TableColumns, TableOptions } from 'types/components/DataTable';
 import { VideoListData, VideoPermissions } from 'types/course/videos';
-import { AppState } from 'types/store';
 
 import DataTable from 'lib/components/core/layouts/DataTable';
 import LinearProgressWithLabel from 'lib/components/core/LinearProgressWithLabel';
@@ -14,6 +12,7 @@ import Note from 'lib/components/core/Note';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import { getVideoSubmissionsURL, getVideoURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppSelector } from 'lib/hooks/store';
 
 import { getVideoMetadata } from '../../selectors';
 import VideoManagementButtons from '../buttons/VideoManagementButtons';
@@ -35,9 +34,7 @@ const translations = defineMessages({
 
 const VideoTable: FC<Props> = (props) => {
   const { videos, permissions, onTogglePublished, intl } = props;
-  const videoMetadata = useSelector((state: AppState) =>
-    getVideoMetadata(state),
-  );
+  const videoMetadata = useAppSelector(getVideoMetadata);
 
   if (videos && videos.length === 0) {
     return <Note message={intl.formatMessage(translations.noVideo)} />;

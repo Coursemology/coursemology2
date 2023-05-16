@@ -1,12 +1,11 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch, AppState } from 'types/store';
 
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import { indexAnnouncements } from './operations';
 import { getAllAnnouncementMiniEntities } from './selectors';
@@ -27,10 +26,8 @@ const translations = defineMessages({
 const GlobalAnnouncementsIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
-  const announcements = useSelector((state: AppState) =>
-    getAllAnnouncementMiniEntities(state),
-  );
-  const dispatch = useDispatch<AppDispatch>();
+  const announcements = useAppSelector(getAllAnnouncementMiniEntities);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(indexAnnouncements())

@@ -1,11 +1,10 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
-import { AppDispatch } from 'types/store';
 
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { removeTodo } from '../../operations';
 
@@ -32,7 +31,7 @@ const translations = defineMessages({
 
 const TodoIgnoreButton: FC<Props> = (props) => {
   const { intl, ignoreLink, todoType, todoId } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const onIgnore = (): Promise<void> => {
     const courseId = getCourseId()!;

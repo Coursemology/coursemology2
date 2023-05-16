@@ -2,12 +2,12 @@ import { FC, memo } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Grid, Stack } from '@mui/material';
 import equal from 'fast-deep-equal';
+import { Operation } from 'store';
 import {
   AnnouncementFormData,
   AnnouncementMiniEntity,
   AnnouncementPermissions,
 } from 'types/course/announcements';
-import { Operation } from 'types/store';
 
 import SearchField from 'lib/components/core/fields/SearchField';
 import Pagination from 'lib/components/core/layouts/Pagination';

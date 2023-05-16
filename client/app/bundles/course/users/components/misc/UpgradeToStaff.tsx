@@ -1,6 +1,5 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
@@ -19,9 +18,9 @@ import {
   CourseUserBasicMiniEntity,
   StaffRoles,
 } from 'types/course/courseUsers';
-import { AppDispatch, AppState } from 'types/store';
 
 import { STAFF_ROLES } from 'lib/constants/sharedConstants';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import { upgradeToStaff } from '../../operations';
 import { getStudentOptionMiniEntities } from '../../selectors';
@@ -58,9 +57,7 @@ const translations = defineMessages({
 const UpgradeToStaff: FC<Props> = (props) => {
   const { intl } = props;
 
-  const students = useSelector((state: AppState) =>
-    getStudentOptionMiniEntities(state),
-  );
+  const students = useAppSelector(getStudentOptionMiniEntities);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedStudents, setSelectedStudents] = useState<
     CourseUserBasicMiniEntity[]
@@ -68,7 +65,7 @@ const UpgradeToStaff: FC<Props> = (props) => {
   const [role, setRole] = useState<StaffRoles>(
     Object.keys(STAFF_ROLES)[0] as StaffRoles, // object.keys returns string[]; we know it is a StaffRoles
   );
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const onSubmit = (): Promise<void> => {
     setIsLoading(true);

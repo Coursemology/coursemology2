@@ -256,7 +256,7 @@ export default class InstanceAdminAPI extends BaseSystemAPI {
    * Creates a role request.
    */
   createRoleRequest(params: FormData): Promise<AxiosResponse<{ id: number }>> {
-    return this.client.post(`/role_requests`, params);
+    return this.client.post('/role_requests', params);
   }
 
   /**

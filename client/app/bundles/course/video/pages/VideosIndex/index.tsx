@@ -1,13 +1,12 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import VideoTabs from '../../components/misc/VideoTabs';
@@ -47,9 +46,7 @@ const VideosIndex: FC = () => {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
-  const videoMetadata = useSelector((state: AppState) =>
-    getVideoMetadata(state),
-  );
+  const videoMetadata = useAppSelector(getVideoMetadata);
 
   // Set the tab first.
   const [searchParams, setSearchParams] = useSearchParams();
@@ -60,13 +57,11 @@ const VideosIndex: FC = () => {
 
   // When a video is edited and moved to another tab, we need to filter the updated videos
   // in the redux store.
-  const videos = useSelector((state: AppState) => getAllVideos(state)).filter(
+  const videos = useAppSelector((state) => getAllVideos(state)).filter(
     (video) => video.tabId === tabId,
   );
-  const videoPermissions = useSelector((state: AppState) =>
-    getVideoPermissions(state),
-  );
-  const dispatch = useDispatch<AppDispatch>();
+  const videoPermissions = useAppSelector(getVideoPermissions);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     setIsLoading(true);

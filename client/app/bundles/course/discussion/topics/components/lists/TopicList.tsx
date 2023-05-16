@@ -1,14 +1,13 @@
 import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Grid } from '@mui/material';
 import { CommentSettings, CommentTopicEntity } from 'types/course/comments';
-import { AppDispatch, AppState } from 'types/store';
 
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import { fetchCommentData } from '../../operations';
@@ -71,17 +70,15 @@ const TopicList: FC<TopicListProps> = (props) => {
 
 const TopicListWithPagination: FC<Props> = (props) => {
   const { settings, tabValue } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const [pageNum, setPageNum] = useState(1);
   const [listIsLoading, setListIsLoading] = useState(false);
   const [pageIsLoading, setPageIsLoading] = useState(true);
 
-  const topicCount = useSelector((state: AppState) => getTopicCount(state));
-  const topicList = useSelector((state: AppState) =>
-    getAllCommentTopicEntities(state),
-  );
+  const topicCount = useAppSelector(getTopicCount);
+  const topicList = useAppSelector(getAllCommentTopicEntities);
 
   useEffect(() => {
     dispatch(fetchCommentData(tabValue, pageNum))

@@ -1,5 +1,5 @@
+import { Operation } from 'store';
 import { AnnouncementFormData } from 'types/course/announcements';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 

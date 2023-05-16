@@ -1,10 +1,10 @@
 import { AxiosResponse } from 'axios';
+import { Operation } from 'store';
 import {
   SkillBranchListData,
   SkillFormData,
   SkillListData,
 } from 'types/course/assessment/skills/skills';
-import { Operation } from 'types/store';
 
 import CourseAPI from 'api/course';
 

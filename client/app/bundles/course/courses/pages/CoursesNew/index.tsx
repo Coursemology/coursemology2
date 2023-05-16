@@ -1,11 +1,10 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { NewCourseFormData } from 'types/course/courses';
-import { AppDispatch } from 'types/store';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import NewCourseForm from '../../components/forms/NewCourseForm';
@@ -39,7 +38,7 @@ const CoursesNew: FC<Props> = (props) => {
   const { open, onClose } = props;
   const { t } = useTranslation();
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const onSubmit = (data: NewCourseFormData, setError): Promise<void> =>
     dispatch(createCourse(data))

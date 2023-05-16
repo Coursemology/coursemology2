@@ -1,13 +1,12 @@
 import { FC, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Autocomplete, Box, TextField } from '@mui/material';
 import { CourseUserBasicMiniEntity } from 'types/course/courseUsers';
-import { AppState } from 'types/store';
 
 import { getCourseURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppSelector } from 'lib/hooks/store';
 
 import { getAllUserOptionMiniEntities } from '../../selectors';
 
@@ -24,9 +23,7 @@ const translations = defineMessages({
 
 const SelectCourseUser: FC<Props> = (props) => {
   const { initialUser = null, intl } = props;
-  const users = useSelector((state: AppState) =>
-    getAllUserOptionMiniEntities(state),
-  );
+  const users = useAppSelector(getAllUserOptionMiniEntities);
   const [user, setUser] = useState<CourseUserBasicMiniEntity | null>(
     initialUser,
   );

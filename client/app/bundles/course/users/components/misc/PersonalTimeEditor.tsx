@@ -6,7 +6,6 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,7 +15,6 @@ import LockOutlined from '@mui/icons-material/LockOutlined';
 import { LoadingButton } from '@mui/lab';
 import { Grid, TableCell, Tooltip } from '@mui/material';
 import { PersonalTimeMiniEntity } from 'types/course/personalTimes';
-import { AppDispatch } from 'types/store';
 import * as yup from 'yup';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
@@ -24,6 +22,7 @@ import SaveButton from 'lib/components/core/buttons/SaveButton';
 import FormCheckboxField from 'lib/components/form/fields/CheckboxField';
 import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerField';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch } from 'lib/hooks/store';
 import formTranslations from 'lib/translations/form';
 import tableTranslations from 'lib/translations/table';
 
@@ -128,7 +127,7 @@ const PersonalTimeEditor: FC<Props> = (props) => {
   const [isCreating, setIsCreating] = useState(!item.new);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const handleCreate = (): void => {
     setIsCreating(true);

@@ -1,16 +1,15 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { Breadcrumbs, Paper } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { AppDispatch, AppState } from 'types/store';
 
 import EditButton from 'lib/components/core/buttons/EditButton';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { getWorkbinFolderURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import DownloadFolderButton from '../../components/buttons/DownloadFolderButton';
@@ -39,7 +38,7 @@ const translations = defineMessages({
 const FolderShow: FC = () => {
   const { folderId } = useParams();
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   // For new folder form dialog
   const [isNewFolderOpen, setIsNewFolderOpen] = useState(false);
@@ -48,17 +47,11 @@ const FolderShow: FC = () => {
   // For material upload form dialog
   const [isMaterialUploadOpen, setIsMaterialUploadOpen] = useState(false);
 
-  const subfolders = useSelector((state: AppState) =>
-    getFolderSubfolders(state),
-  );
-  const materials = useSelector((state: AppState) => getFolderMaterials(state));
-  const currFolderInfo = useSelector((state: AppState) =>
-    getCurrFolderInfo(state),
-  );
-  const breadcrumbs = useSelector((state: AppState) => getBreadcrumbs(state));
-  const permissions = useSelector((state: AppState) =>
-    getFolderPermissions(state),
-  );
+  const subfolders = useAppSelector(getFolderSubfolders);
+  const materials = useAppSelector(getFolderMaterials);
+  const currFolderInfo = useAppSelector(getCurrFolderInfo);
+  const breadcrumbs = useAppSelector(getBreadcrumbs);
+  const permissions = useAppSelector(getFolderPermissions);
 
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {

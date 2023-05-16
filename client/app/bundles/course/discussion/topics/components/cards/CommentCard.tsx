@@ -5,7 +5,6 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
@@ -13,10 +12,10 @@ import { LoadingButton } from '@mui/lab';
 import { Avatar, Button, CardHeader, Link } from '@mui/material';
 import { grey, orange, red } from '@mui/material/colors';
 import { CommentPostMiniEntity } from 'types/course/comments';
-import { AppDispatch } from 'types/store';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import { useAppDispatch } from 'lib/hooks/store';
 import { formatLongDateTime } from 'lib/moment';
 
 import { deletePost, updatePost } from '../../operations';
@@ -62,7 +61,7 @@ const translations = defineMessages({
 
 const CommentCard: FC<Props> = (props) => {
   const { intl, post } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [editMode, setEditMode] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);

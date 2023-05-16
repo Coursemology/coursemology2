@@ -1,15 +1,14 @@
 import { FC, ReactElement, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { CircularProgress, Typography } from '@mui/material';
 import { debounceSearchRender } from 'mui-datatables';
+import { Operation } from 'store';
 import {
   TableColumns,
   TableOptions,
   TableState,
 } from 'types/components/DataTable';
-import { AppDispatch, Operation } from 'types/store';
 import { CourseMiniEntity } from 'types/system/courses';
 import { InstanceAdminStats } from 'types/system/instance/users';
 import { AdminStats, UserBasicMiniEntity } from 'types/users';
@@ -20,6 +19,7 @@ import {
   FIELD_DEBOUNCE_DELAY_MS,
 } from 'lib/constants/sharedConstants';
 import rebuildObjectFromRow from 'lib/helpers/mui-datatables-helpers';
+import { useAppDispatch } from 'lib/hooks/store';
 import tableTranslations from 'lib/translations/table';
 
 interface Props extends WrappedComponentProps {
@@ -52,7 +52,7 @@ const CoursesTable: FC<Props> = (props) => {
     intl,
     indexOperation,
   } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
   const [tableState, setTableState] = useState<TableState>({

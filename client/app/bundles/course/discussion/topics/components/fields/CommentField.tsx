@@ -5,13 +5,12 @@ import {
   injectIntl,
   WrappedComponentProps,
 } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { LoadingButton } from '@mui/lab';
 import { CommentTopicEntity } from 'types/course/comments';
-import { AppDispatch } from 'types/store';
 
 import CKEditorRichText from 'lib/components/core/fields/CKEditorRichText';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { createPost } from '../../operations';
 
@@ -37,7 +36,7 @@ const translations = defineMessages({
 
 const CommentField: FC<Props> = (props: Props) => {
   const { intl, topic, updateStatus } = props;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [value, setValue] = useState('');
   const [disableCommentButton, setDisableCommentButton] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);

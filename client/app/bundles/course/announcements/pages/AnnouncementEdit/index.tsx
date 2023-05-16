@@ -1,11 +1,11 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { Operation } from 'store';
 import { AnnouncementFormData } from 'types/course/announcements';
-import { AppDispatch, Operation } from 'types/store';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import AnnouncementForm from '../../components/forms/AnnouncementForm';
@@ -53,7 +53,7 @@ const AnnouncementEdit: FC<Props> = (props) => {
     canSticky,
   } = props;
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   if (!open) {
     return null;

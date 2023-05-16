@@ -1,11 +1,10 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { FolderFormData } from 'types/course/material/folders';
-import { AppDispatch } from 'types/store';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import FolderForm from '../../components/forms/FolderForm';
@@ -43,7 +42,7 @@ const initialValues = {
 const FolderNew: FC<Props> = (props) => {
   const { folderId, isOpen, onClose } = props;
   const { t } = useTranslation();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   if (!isOpen) {
     return null;

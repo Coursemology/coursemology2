@@ -1,11 +1,10 @@
 import { FC } from 'react';
 import { defineMessages } from 'react-intl';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch } from 'types/store';
 import { InstanceFormData } from 'types/system/instances';
 
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import InstanceForm from '../../components/forms/InstanceForm';
@@ -30,7 +29,7 @@ const InstanceNew: FC<Props> = (props) => {
   const { open, onClose } = props;
   const { t } = useTranslation();
 
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
 
   const onSubmit = (data: InstanceFormData, setError): Promise<void> =>
     dispatch(createInstance(data))

@@ -1,16 +1,15 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Card, CardContent, CardHeader } from '@mui/material';
-import { AppDispatch, AppState } from 'types/store';
 
 import DescriptionCard from 'lib/components/core/DescriptionCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { getVideosURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import VideoManagementButtons from '../../components/buttons/VideoManagementButtons';
 import WatchVideoButton from '../../components/buttons/WatchVideoButton';
@@ -45,8 +44,8 @@ const VideoShow: FC<Props> = (props) => {
   const { intl } = props;
   const { videoId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
-  const dispatch = useDispatch<AppDispatch>();
-  const video = useSelector((state: AppState) => getVideo(state, +videoId!));
+  const dispatch = useAppDispatch();
+  const video = useAppSelector((state) => getVideo(state, +videoId!));
 
   useEffect(() => {
     if (videoId) {

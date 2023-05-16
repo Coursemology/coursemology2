@@ -1,11 +1,10 @@
 import { FC, useEffect, useMemo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { AppDispatch, AppState } from 'types/store';
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
+import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import PendingRoleRequestsButtons from '../../components/buttons/PendingRoleRequestsButtons';
 import InstanceUserRoleRequestsTable from '../../components/tables/InstanceUserRoleRequestsTable';
@@ -40,10 +39,8 @@ const translations = defineMessages({
 const InstanceUserRoleRequestsIndex: FC<Props> = (props) => {
   const { intl } = props;
   const [isLoading, setIsLoading] = useState(true);
-  const roleRequests = useSelector((state: AppState) =>
-    getAllRoleRequestsMiniEntities(state),
-  );
-  const dispatch = useDispatch<AppDispatch>();
+  const roleRequests = useAppSelector(getAllRoleRequestsMiniEntities);
+  const dispatch = useAppDispatch();
   const pendingRoleRequests = useMemo(
     () =>
       roleRequests.filter((roleRequest) => roleRequest.status === 'pending'),

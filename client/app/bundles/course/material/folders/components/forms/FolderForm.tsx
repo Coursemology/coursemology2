@@ -1,9 +1,7 @@
 import { FC } from 'react';
 import { Controller, UseFormSetError } from 'react-hook-form';
 import { defineMessages } from 'react-intl';
-import { useSelector } from 'react-redux';
 import { FolderFormData } from 'types/course/material/folders';
-import { AppState } from 'types/store';
 import * as yup from 'yup';
 
 import FormDialog from 'lib/components/form/dialog/FormDialog';
@@ -11,6 +9,7 @@ import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerFi
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormTextField from 'lib/components/form/fields/TextField';
 import FormToggleField from 'lib/components/form/fields/ToggleField';
+import { useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
@@ -71,9 +70,7 @@ const validationSchema = yup.object({
 const FolderForm: FC<Props> = (props) => {
   const { open, editing, onClose, initialValues, onSubmit, title } = props;
   const { t } = useTranslation();
-  const advanceStartAt = useSelector((state: AppState) =>
-    getAdvanceStartAt(state),
-  );
+  const advanceStartAt = useAppSelector(getAdvanceStartAt);
 
   return (
     <FormDialog
