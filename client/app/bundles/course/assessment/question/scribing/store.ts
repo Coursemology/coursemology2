@@ -1,22 +1,26 @@
-import actionTypes from '../constants';
+import produce from 'immer';
 
-export const initialState = {
+import actionTypes from './constants';
+import { ScribingQuestionState } from './types';
+
+const initialState: ScribingQuestionState = {
   question: {
     id: null,
     title: '',
     description: '',
     staff_only_comments: '',
-    maximum_grade: 0,
+    maximum_grade: '',
     weight: 0,
     skill_ids: [],
     skills: [],
-    attachment_reference: {},
+    attachment_reference: null,
+    published_assessment: false,
   },
   isLoading: false,
   isSubmitting: false,
 };
 
-export default function scribingQuestionReducer(state = initialState, action) {
+const reducer = produce((state, action) => {
   const { type } = action;
 
   switch (type) {
@@ -47,7 +51,6 @@ export default function scribingQuestionReducer(state = initialState, action) {
     }
     case actionTypes.FETCH_SCRIBING_QUESTION_SUCCESS: {
       const { question } = action.data;
-      // Returned value from server is in string, requires int
       question.maximum_grade = parseInt(question.maximum_grade, 10);
       return {
         ...state,
@@ -70,4 +73,6 @@ export default function scribingQuestionReducer(state = initialState, action) {
       return state;
     }
   }
-}
+}, initialState);
+
+export default reducer;

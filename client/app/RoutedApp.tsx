@@ -22,6 +22,7 @@ import EditForumPostResponsePage from 'bundles/course/assessment/question/forum-
 import NewForumPostResponsePage from 'bundles/course/assessment/question/forum-post-responses/NewForumPostResponsePage';
 import EditMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/EditMcqMrqPage';
 import NewMcqMrqPage from 'bundles/course/assessment/question/multiple-responses/NewMcqMrqPage';
+import ScribingQuestion from 'bundles/course/assessment/question/scribing/ScribingQuestion';
 import EditTextResponsePage from 'bundles/course/assessment/question/text-responses/EditTextResponsePage';
 import NewTextResponsePage from 'bundles/course/assessment/question/text-responses/NewTextResponsePage';
 import EditVoicePage from 'bundles/course/assessment/question/voice-responses/EditVoicePage';
@@ -287,6 +288,16 @@ const RoutedApp = (): JSX.Element => {
           <Route
             element={<UserVideoSubmissionsIndex />}
             path="/courses/:courseId/users/:userId/video_submissions"
+          />
+
+          <Route
+            element={<ScribingQuestion />}
+            path="/courses/:courseId/assessments/:assessmentId/question/scribing/new"
+          />
+
+          <Route
+            element={<ScribingQuestion />}
+            path="/courses/:courseId/assessments/:assessmentId/question/scribing/:questionId/edit"
           />
         </Routes>
       </BrowserRouter>
