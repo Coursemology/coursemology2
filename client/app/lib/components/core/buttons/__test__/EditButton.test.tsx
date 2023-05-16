@@ -1,4 +1,4 @@
-import { render, RenderResult } from 'utilities/test-utils';
+import { render, RenderResult } from 'test-utils';
 
 import EditButton from '../EditButton';
 

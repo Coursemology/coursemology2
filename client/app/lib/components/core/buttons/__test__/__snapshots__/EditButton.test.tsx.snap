@@ -9,14 +9,14 @@ exports[`<EditButton /> matches the snapshot 1`] = `
       data-mui-internal-clone-element="true"
     >
       <button
-        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeMedium css-zylse7-MuiButtonBase-root-MuiIconButton-root"
+        class="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorInherit MuiIconButton-sizeMedium css-15u00r0-MuiButtonBase-root-MuiIconButton-root"
         data-testid="EditIconButton"
         tabindex="0"
         type="button"
       >
         <svg
           aria-hidden="true"
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-hgpioi-MuiSvgIcon-root"
           data-testid="EditIcon"
           focusable="false"
           viewBox="0 0 24 24"
@@ -30,6 +30,9 @@ exports[`<EditButton /> matches the snapshot 1`] = `
         />
       </button>
     </span>
+    <div
+      class="Toastify"
+    />
   </div>
 </body>
 `;
