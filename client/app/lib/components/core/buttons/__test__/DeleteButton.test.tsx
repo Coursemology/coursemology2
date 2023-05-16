@@ -1,4 +1,4 @@
-import { fireEvent, render, RenderResult, screen } from 'utilities/test-utils';
+import { fireEvent, render, RenderResult, screen } from 'test-utils';
 
 import DeleteButton from '../DeleteButton';
 
