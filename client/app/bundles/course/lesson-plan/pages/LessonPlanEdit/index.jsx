@@ -19,7 +19,7 @@ import MilestoneRow from './MilestoneRow';
 
 const { ITEM_TYPE, TITLE, START_AT, BONUS_END_AT, END_AT, PUBLISHED } = fields;
 
-class LessonPlanEdit extends Component {
+export class LessonPlanEdit extends Component {
   // eslint-disable-next-line class-methods-use-this
   renderGroup = (group) => {
     const { id, milestone, items } = group;

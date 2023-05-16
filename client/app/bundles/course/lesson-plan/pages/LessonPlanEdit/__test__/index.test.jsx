@@ -1,51 +1,60 @@
-import { mount } from 'enzyme';
+import { render, waitFor } from 'test-utils';
 
-import storeCreator from 'course/lesson-plan/store';
+import { LessonPlanEdit } from '../index';
 
-import LessonPlanEdit from '../index';
-
-const groupData = {
-  id: 'milestone-group-6',
-  milestone: {
-    id: 6,
-    title: 'Week 1',
-    start_at: '2017-01-01T02:03:00.000+08:00',
-  },
-  items: [
-    {
-      id: 9,
-      published: false,
-      itemTypeKey: 'Other',
-      title: 'Other Event',
-      start_at: '2017-01-04T02:03:00.000+08:00',
-      bonus_end_at: '2017-01-06T02:03:00.000+08:00',
-      end_at: '2017-01-08T02:03:00.000+08:00',
+const groups = [
+  {
+    id: 'milestone-group-6',
+    milestone: {
+      id: 6,
+      title: 'Week 1',
+      start_at: '2017-01-01T02:03:00.000+08:00',
     },
-  ],
+    items: [
+      {
+        id: 9,
+        published: false,
+        title: 'Other Event',
+        start_at: '2017-01-04T02:03:00.000+08:00',
+        bonus_end_at: '2017-01-06T02:03:00.000+08:00',
+        end_at: '2017-01-08T02:03:00.000+08:00',
+        itemTypeKey: 'Event',
+      },
+    ],
+  },
+];
+
+const columnsVisible = {
+  ITEM_TYPE: true,
+  START_AT: true,
+  BONUS_END_AT: false,
+  END_AT: true,
+  PUBLISHED: true,
 };
 
-const mockUsedNavigate = jest.fn();
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockUsedNavigate,
-}));
+const state = {
+  lessonPlan: {
+    lessonPlan: {
+      visibilityByType: { Event: true },
+      columnsVisible,
+    },
+  },
+};
 
 describe('<LessonPlanEdit />', () => {
-  it('renders item and milestone rows', () => {
-    const store = storeCreator({
-      lessonPlan: {
-        groups: [groupData],
-        visibilityByType: { [groupData.items[0].itemTypeKey]: true },
-      },
-    });
-
-    const lessonPlanEdit = mount(
-      <LessonPlanEdit />,
-      buildContextOptions(store),
+  it('renders item and milestone rows', async () => {
+    const page = render(
+      <LessonPlanEdit
+        canManageLessonPlan
+        columnsVisible={columnsVisible}
+        groups={groups}
+      />,
+      { state },
     );
 
-    expect(lessonPlanEdit.find('ItemRow')).toHaveLength(1);
-    expect(lessonPlanEdit.find('MilestoneRow')).toHaveLength(1);
+    await waitFor(() => {
+      expect(page.getByText(groups[0].items[0].title)).toBeVisible();
+      expect(page.getByText(groups[0].milestone.title)).toBeVisible();
+    });
   });
 });
