@@ -1,18 +1,12 @@
-import { FC, ReactNode } from 'react';
-import { IntlProvider } from 'react-intl';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { render, RenderOptions, RenderResult } from '@testing-library/react';
+import { render, RenderResult } from '@testing-library/react';
 
-const AllTheProviders: FC<{ children: ReactNode }> = ({ children }) => (
-  <IntlProvider locale="en" timeZone="Asia/Singapore">
-    {children}
-  </IntlProvider>
-);
+import TestApp, { CustomRenderOptions } from './TestApp';
 
 const customRender = (
   ui: JSX.Element,
-  options?: Omit<RenderOptions, 'wrapper'>,
-): RenderResult => render(ui, { wrapper: AllTheProviders, ...options });
+  options?: CustomRenderOptions,
+): RenderResult => render(<TestApp {...options}>{ui}</TestApp>);
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 export * from '@testing-library/react';
