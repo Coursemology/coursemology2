@@ -1,10 +1,15 @@
-import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
 import { createIntl, createIntlCache, IntlProvider } from 'react-intl';
+import { Provider } from 'react-redux';
 import { createTheme } from '@mui/material/styles';
-import Enzyme from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import Enzyme from 'enzyme';
+import PropTypes from 'prop-types';
+
 import '@testing-library/jest-dom';
+// define all mocks/polyfills
+import './mocks/requestAnimationFrame';
+import './mocks/ResizeObserver';
+import './mocks/matchMedia';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -21,13 +26,11 @@ const muiTheme = createTheme();
 
 const buildContextOptions = (store) => {
   // eslint-disable-next-line react/prop-types
-  function WrapWithProviders({ children }) {
-    return (
-      <IntlProvider {...intl}>
-        <Provider store={store}>{children}</Provider>
-      </IntlProvider>
-    );
-  }
+  const WrapWithProviders = ({ children }) => (
+    <IntlProvider {...intl}>
+      <Provider store={store}>{children}</Provider>
+    </IntlProvider>
+  );
   return {
     context: { muiTheme },
     childContextTypes: {
@@ -61,11 +64,11 @@ function sleep(time) {
 global.sleep = sleep;
 
 // summernote does not work well with jsdom in tests, stub it to normal text field.
-jest.mock('lib/components/form/fields/RichTextField', () => {
-  const TextField = jest.requireActual('lib/components/form/fields/TextField');
-  return TextField;
-});
+jest.mock('lib/components/form/fields/RichTextField', () =>
+  jest.requireActual('lib/components/form/fields/TextField'),
+);
 
-// define all mocks/polyfills
-import './mocks/requestAnimationFrame';
-import './mocks/ResizeObserver';
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: jest.fn(),
+}));
