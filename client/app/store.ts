@@ -8,6 +8,7 @@ import achievementsReducer from './bundles/course/achievement/store';
 import lessonPlanSettingsReducer from './bundles/course/admin/reducers/lessonPlanSettings';
 import notificationSettingsReducer from './bundles/course/admin/reducers/notificationSettings';
 import announcementsReducer from './bundles/course/announcements/store';
+import scribingQuestionReducer from './bundles/course/assessment/question/scribing/store';
 import skillsReducer from './bundles/course/assessment/skills/store';
 import submissionsReducer from './bundles/course/assessment/submissions/store';
 import coursesReducer from './bundles/course/courses/store';
@@ -58,6 +59,7 @@ const rootReducer = combineReducers({
   lessonPlanSettings: lessonPlanSettingsReducer,
   notificationSettings: notificationSettingsReducer,
   duplication: duplicationsReducer,
+  scribingQuestion: scribingQuestionReducer,
 });
 
 export const store = configureStore({

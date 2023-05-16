@@ -1,5 +1,4 @@
 import { Controller, useForm } from 'react-hook-form';
-import { FormattedMessage } from 'react-intl';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
@@ -13,11 +12,14 @@ import FormSingleFileInput, {
   ImagePreview,
 } from 'lib/components/form/fields/SingleFileInput';
 import FormTextField from 'lib/components/form/fields/TextField';
+import { useAppDispatch } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 import formTranslations from 'lib/translations/form';
 
-import { dataShape } from '../../propTypes';
+import { createScribingQuestion, updateScribingQuestion } from '../operations';
+import { dataShape } from '../propTypes';
 
-import translations from './ScribingQuestionForm.intl';
+import translations from './translations';
 import styles from './ScribingQuestionForm.scss';
 
 const validationSchema = yup.object({
@@ -41,13 +43,9 @@ const validationSchema = yup.object({
 });
 
 const ScribingQuestionForm = (props) => {
-  const {
-    actions: { createScribingQuestion, updateScribingQuestion },
-    data,
-    initialValues,
-    intl,
-    scribingId,
-  } = props;
+  const { data, initialValues, scribingId } = props;
+
+  const { t } = useTranslation();
 
   const {
     control,
@@ -59,30 +57,40 @@ const ScribingQuestionForm = (props) => {
     resolver: yupResolver(validationSchema),
   });
 
+  const dispatch = useAppDispatch();
+
   const question = data.question;
   const skillsOptions = question.skills;
   const onSubmit = scribingId
     ? (newData) =>
-        updateScribingQuestion(
-          scribingId,
-          newData,
-          intl.formatMessage(translations.resolveErrorsMessage),
-          setError,
+        dispatch(
+          updateScribingQuestion(
+            scribingId,
+            newData,
+            t(translations.resolveErrorsMessage),
+            setError,
+          ),
         )
     : (newData) =>
-        createScribingQuestion(
-          newData,
-          intl.formatMessage(translations.resolveErrorsMessage),
-          setError,
+        dispatch(
+          createScribingQuestion(
+            newData,
+            t(translations.resolveErrorsMessage),
+            setError,
+          ),
         );
+
   const submitButtonText = () =>
     data.isSubmitting
-      ? intl.formatMessage(translations.submittingMessage)
-      : intl.formatMessage(translations.submitButton);
+      ? t(translations.submittingMessage)
+      : t(translations.submitButton);
 
   const renderExistingAttachment = () => (
     <div className={styles.row}>
-      <label htmlFor="question_scribing_attachment">File uploaded:</label>
+      <label htmlFor="question_scribing_attachment">
+        {t(translations.fileUploaded)}
+      </label>
+
       <img
         alt={data.question.attachment_reference.name}
         className={styles.uploadedImage}
@@ -113,7 +121,7 @@ const ScribingQuestionForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            label={<FormattedMessage {...translations.titleFieldLabel} />}
+            label={t(translations.titleFieldLabel)}
             variant="standard"
           />
         )}
@@ -130,7 +138,7 @@ const ScribingQuestionForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            label={<FormattedMessage {...translations.descriptionFieldLabel} />}
+            label={t(translations.descriptionFieldLabel)}
             variant="standard"
           />
         )}
@@ -147,9 +155,7 @@ const ScribingQuestionForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            label={
-              <FormattedMessage {...translations.staffOnlyCommentsFieldLabel} />
-            }
+            label={t(translations.staffOnlyCommentsFieldLabel)}
             variant="standard"
           />
         )}
@@ -162,7 +168,7 @@ const ScribingQuestionForm = (props) => {
             disabled={disabled}
             field={field}
             fieldState={fieldState}
-            label={<FormattedMessage {...translations.skillsFieldLabel} />}
+            label={t(translations.skillsFieldLabel)}
             options={skillsOptions}
           />
         )}
@@ -179,9 +185,7 @@ const ScribingQuestionForm = (props) => {
             InputLabelProps={{
               shrink: true,
             }}
-            label={
-              <FormattedMessage {...translations.maximumGradeFieldLabel} />
-            }
+            label={t(translations.maximumGradeFieldLabel)}
             onWheel={(event) => event.currentTarget.blur()}
             required
             type="number"
@@ -203,14 +207,14 @@ const ScribingQuestionForm = (props) => {
                 disabled={disabled}
                 field={field}
                 fieldState={fieldState}
-                label={<FormattedMessage {...translations.chooseFileButton} />}
+                label={t(translations.chooseFileButton)}
                 previewComponent={ImagePreview}
                 required
               />
             )}
           />
           <div className={styles.warningText}>
-            <FormattedMessage {...translations.scribingQuestionWarning} />
+            {t(translations.scribingQuestionWarning)}
           </div>
         </>
       )}
@@ -231,15 +235,8 @@ const ScribingQuestionForm = (props) => {
 };
 
 ScribingQuestionForm.propTypes = {
-  actions: PropTypes.shape({
-    createScribingQuestion: PropTypes.func.isRequired,
-    fetchSkills: PropTypes.func.isRequired,
-    fetchScribingQuestion: PropTypes.func.isRequired,
-    updateScribingQuestion: PropTypes.func.isRequired,
-  }),
   data: dataShape.isRequired,
   initialValues: PropTypes.object,
-  intl: PropTypes.object.isRequired,
   scribingId: PropTypes.string,
 };
 

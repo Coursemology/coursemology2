@@ -4,11 +4,9 @@ import CourseAPI from 'api/course';
 import storeCreator from 'course/survey/store';
 import history from 'lib/history';
 
-import { initialStates } from '../../reducers';
-import {
-  createScribingQuestion,
-  updateScribingQuestion,
-} from '../scribingQuestionActionCreators';
+import { actions } from '../store';
+
+import { initialStates } from './reducers';
 
 // Mock axios
 const client = CourseAPI.assessment.question.scribing.client;
@@ -54,7 +52,7 @@ describe('createScribingQuestion', () => {
     mock
       .onPost(createResponseUrl)
       .reply(200, { message: 'The scribing question was created.' });
-    store.dispatch(createScribingQuestion(mockFields));
+    store.dispatch(actions.createScribingQuestion(mockFields));
     await sleep(1);
     expect(spyCreate).toHaveBeenCalledWith(processedMockFields);
     expect(history.push).toHaveBeenCalledWith(redirectUrl);
@@ -75,7 +73,7 @@ describe('updateScribingQuestion', () => {
     mock
       .onPatch(updateResponseUrl)
       .reply(200, { message: 'The scribing question was created.' });
-    store.dispatch(updateScribingQuestion(scribingId, mockFields));
+    store.dispatch(actions.updateScribingQuestion(scribingId, mockFields));
     await sleep(1);
     expect(spyUpdate).toHaveBeenCalledWith(scribingId, processedMockFields);
     expect(history.push).toHaveBeenCalledWith(redirectUrl);

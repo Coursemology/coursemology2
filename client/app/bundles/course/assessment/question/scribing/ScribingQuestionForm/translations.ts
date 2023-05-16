@@ -87,4 +87,8 @@ export default defineMessages({
     id: 'course.assessment.question.scribing.ScribingQuestionForm.fileAttachmentRequired',
     defaultMessage: 'File attachment required.',
   },
+  fileUploaded: {
+    id: 'course.assessment.question.scribing.ScribingQuestionForm.fileUploaded',
+    defaultMessage: 'File uploaded:',
+  },
 });

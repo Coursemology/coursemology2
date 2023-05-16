@@ -9,12 +9,7 @@ export const attachmentReferenceShape = PropTypes.shape({
   name: PropTypes.string,
   path: PropTypes.string,
   updater_name: PropTypes.string,
-});
-
-export const errorShape = PropTypes.shape({
-  title: PropTypes.string,
-  skills_id: PropTypes.string,
-  maximum_grade: PropTypes.number,
+  image_url: PropTypes.string,
 });
 
 export const questionShape = PropTypes.shape({
@@ -22,18 +17,16 @@ export const questionShape = PropTypes.shape({
   title: PropTypes.string,
   description: PropTypes.string,
   staff_only_comments: PropTypes.string,
-  maximum_grade: PropTypes.number,
+  maximum_grade: PropTypes.string,
   weight: PropTypes.number,
   skill_ids: PropTypes.arrayOf(PropTypes.number),
   skills: PropTypes.arrayOf(skillShape),
   attachment_reference: attachmentReferenceShape,
-  error: errorShape,
   published_assessment: PropTypes.bool,
 });
 
 export const dataShape = PropTypes.shape({
   question: questionShape,
-  is_loading: PropTypes.bool,
-  is_submitting: PropTypes.bool,
-  save_errors: PropTypes.arrayOf(PropTypes.string),
+  isLoading: PropTypes.bool,
+  isSubmitting: PropTypes.bool,
 });
