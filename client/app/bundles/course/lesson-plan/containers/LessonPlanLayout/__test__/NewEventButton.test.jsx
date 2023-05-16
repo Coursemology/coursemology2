@@ -1,61 +1,61 @@
-import ReactDOM from 'react-dom';
-import ReactTestUtils from 'react-dom/test-utils';
-import { mount } from 'enzyme';
+import { fireEvent, render, waitFor } from 'test-utils';
 
 import CourseAPI from 'api/course';
 import EventFormDialog from 'course/lesson-plan/containers/EventFormDialog';
-import storeCreator from 'course/lesson-plan/store';
 
 import NewEventButton from '../NewEventButton';
 
+const state = {
+  lessonPlan: { flags: { canManageLessonPlan: true } },
+};
+
+const startAt = '01-01-2017 12:12';
+
+const eventData = {
+  title: 'Ambitious event title',
+  event_type: 'In-person Meetup',
+  start_at: new Date(startAt),
+  description: '',
+  end_at: null,
+  location: '',
+  published: false,
+};
+
 describe('<NewEventButton />', () => {
-  // eslint-disable-next-line jest/no-disabled-tests
-  it.skip('allows event to be created via EventFormDialog', () => {
+  it('allows event to be created via EventFormDialog', async () => {
     const spyCreate = jest.spyOn(CourseAPI.lessonPlan, 'createEvent');
-    const store = storeCreator({ flags: { canManageLessonPlan: true } });
-    const contextOptions = buildContextOptions(store);
 
-    const eventFormDialog = mount(<EventFormDialog />, contextOptions);
-    const newEventButton = mount(<NewEventButton />, contextOptions);
+    const page = render(
+      <>
+        <EventFormDialog />
+        <NewEventButton />
+      </>,
+      { state },
+    );
 
-    // Click 'new event' button
-    newEventButton.find('button').simulate('click');
-    expect(
-      eventFormDialog.update().find('EventFormDialog').first().props().visible,
-    ).toBe(true);
+    fireEvent.click(page.getByRole('button', { name: 'New Event' }));
 
-    // Fill event form
-    const eventData = {
-      title: 'Ambitious event title',
-      event_type: 'In-person Meetup',
-      start_at: new Date('2016-12-31T16:00:00.000Z'),
-    };
-    const startAt = '01-01-2017';
-    const eventForm = eventFormDialog.find('form');
-    const titleInput = eventForm.find('input[name="title"]');
-    titleInput.simulate('change', { target: { value: eventData.title } });
-    const eventTypeInput = eventForm.find('input[name="event_type"]');
-    eventTypeInput.simulate('change', {
+    fireEvent.change(page.getByLabelText('Title', { exact: false }), {
+      target: { value: eventData.title },
+    });
+
+    fireEvent.change(page.getByLabelText('Start at', { exact: false }), {
+      target: { value: startAt },
+    });
+
+    fireEvent.change(page.getByLabelText('Event Type'), {
       target: { value: eventData.event_type },
     });
-    eventTypeInput.simulate('blur');
-    const startAtDateInput = eventForm.find('input[name="start_at"]').first();
-    startAtDateInput.simulate('change', { target: { value: startAt } });
-    startAtDateInput.simulate('blur');
 
-    // Submit event form
-    const submitButton = eventFormDialog
-      .find('FormDialogue')
-      .first()
-      .instance().submitButton;
-    ReactTestUtils.Simulate.click(ReactDOM.findDOMNode(submitButton));
-    expect(spyCreate).toHaveBeenCalledWith({ lesson_plan_event: eventData });
+    fireEvent.click(page.getByRole('button', { name: 'Submit' }));
+
+    await waitFor(() =>
+      expect(spyCreate).toHaveBeenCalledWith({ lesson_plan_event: eventData }),
+    );
   });
 
   it('is hidden when canManageLessonPlan is false', () => {
-    const store = storeCreator({ flags: { canManageLessonPlan: false } });
-    const contextOptions = buildContextOptions(store);
-    const newEventButton = mount(<NewEventButton />, contextOptions);
-    expect(newEventButton).toMatchSnapshot();
+    const page = render(<NewEventButton />);
+    expect(page.queryByRole('button')).not.toBeInTheDocument();
   });
 });
