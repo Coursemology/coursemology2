@@ -5,6 +5,7 @@ import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import Enzyme from 'enzyme';
 import PropTypes from 'prop-types';
 
+import 'jest-canvas-mock';
 import '@testing-library/jest-dom';
 // define all mocks/polyfills
 import './mocks/requestAnimationFrame';
