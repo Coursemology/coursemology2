@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 
 import './initializers';
 
-import RoutedApp from './RoutedApp';
+import App from './App';
 import 'theme/index.css';
 
 $(() => {
@@ -14,7 +14,7 @@ $(() => {
 
   root.render(
     <StrictMode>
-      <RoutedApp />
+      <App />
     </StrictMode>,
   );
 });

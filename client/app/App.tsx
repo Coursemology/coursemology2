@@ -1,16 +1,19 @@
-import { ReactNode } from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+import NotificationPopup from 'lib/containers/NotificationPopup';
 
+import RoutedApp from './RoutedApp';
 import { store } from './store';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-interface TEMPORARY_AppProps {
-  children: NonNullable<ReactNode>;
-}
+const App = (): JSX.Element => (
+  <ProviderWrapper store={store}>
+    <BrowserRouter>
+      <RoutedApp />
+    </BrowserRouter>
 
-const App = (props: TEMPORARY_AppProps): JSX.Element => (
-  <ProviderWrapper store={store}>{props.children}</ProviderWrapper>
+    <NotificationPopup />
+  </ProviderWrapper>
 );
 
 export default App;
