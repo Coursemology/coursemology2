@@ -18,17 +18,16 @@ const INITIAL_VALUES = {
   published: false,
 };
 
-let initialValues;
 let props: ComponentProps<typeof AssessmentForm>;
 let form: RenderResult;
 
-const getComponent = (): JSX.Element => <AssessmentForm {...props} />;
+const renderForm = (): void => {
+  form = render(<AssessmentForm {...props} />);
+};
 
 beforeEach(() => {
-  initialValues = INITIAL_VALUES;
-
   props = {
-    initialValues,
+    initialValues: INITIAL_VALUES,
     gamified: false,
     modeSwitching: true,
     showPersonalizedTimelineFeatures: false,
@@ -45,12 +44,12 @@ beforeEach(() => {
     onSubmit: (): void => {},
     disabled: false,
   };
-
-  form = render(getComponent());
 });
 
 describe('<AssessmentForm />', () => {
   it('renders assessment details sections options', () => {
+    renderForm();
+
     expect(form.getByText('Assessment details')).toBeVisible();
     expect(form.getByLabelText('Starts at *')).toBeVisible();
     expect(form.getByLabelText('Ends at')).toBeVisible();
@@ -60,6 +59,8 @@ describe('<AssessmentForm />', () => {
   });
 
   it('renders grading section options', () => {
+    renderForm();
+
     expect(form.getByText('Grading')).toBeVisible();
     expect(form.getByText('Grading mode')).toBeVisible();
 
@@ -79,6 +80,8 @@ describe('<AssessmentForm />', () => {
   });
 
   it('renders answers and test cases section options', () => {
+    renderForm();
+
     expect(form.getByText('Answers and test cases')).toBeVisible();
     expect(form.getByLabelText('Allow to skip steps')).not.toBeChecked();
     expect(
@@ -90,11 +93,15 @@ describe('<AssessmentForm />', () => {
   });
 
   it('renders organization section options', () => {
+    renderForm();
+
     expect(form.getByText('Organization')).toBeVisible();
     expect(form.getByText('Single Page')).toBeVisible();
   });
 
   it('renders exams and access control section options', () => {
+    renderForm();
+
     expect(form.getByText('Exams and access control')).toBeVisible();
     expect(
       form.getByLabelText('Block students from viewing finalized submissions'),
@@ -103,14 +110,18 @@ describe('<AssessmentForm />', () => {
     expect(form.getByLabelText('Enable password protection')).not.toBeChecked();
   });
 
-  it('renders gamified options when course is gamified', () => {
+  it('does not render gamified options when course is not gamified', () => {
+    renderForm();
+
     expect(form.queryByText('Gamification')).not.toBeInTheDocument();
     expect(form.queryByLabelText('Bonus ends at')).not.toBeInTheDocument();
     expect(form.queryByLabelText('Base EXP')).not.toBeInTheDocument();
     expect(form.queryByLabelText('Time Bonus EXP')).not.toBeInTheDocument();
+  });
 
+  it('renders gamified options when course is gamified', () => {
     props.gamified = true;
-    form.rerender(getComponent());
+    renderForm();
 
     expect(form.getByText('Gamification')).toBeVisible();
     expect(form.getByLabelText('Bonus ends at')).toBeVisible();
@@ -122,7 +133,7 @@ describe('<AssessmentForm />', () => {
     );
   });
 
-  it('renders editing options when rendered in edit assessment page', () => {
+  it('does not render editing options when rendered in new assessment page', () => {
     expect(form.queryByText('Visibility')).not.toBeInTheDocument();
     expect(form.queryByText('Published')).not.toBeInTheDocument();
     expect(form.queryByText('Draft')).not.toBeInTheDocument();
@@ -130,9 +141,11 @@ describe('<AssessmentForm />', () => {
     expect(form.queryByText('Add Files')).not.toBeInTheDocument();
     expect(form.queryByText('Unlock conditions')).not.toBeInTheDocument();
     expect(form.queryByText('Add a condition')).not.toBeInTheDocument();
+  });
 
+  it('renders editing options when rendered in edit assessment page', () => {
     props.editing = true;
-    form.rerender(getComponent());
+    renderForm();
 
     expect(form.getByText('Visibility')).toBeVisible();
     expect(form.getByText('Published')).toBeVisible();
@@ -145,23 +158,23 @@ describe('<AssessmentForm />', () => {
     expect(form.queryByText('Add a condition')).not.toBeInTheDocument();
 
     props.gamified = true;
-    form.rerender(getComponent());
+    renderForm();
+
     expect(form.getByText('Unlock conditions')).toBeVisible();
     expect(form.getByText('Add a condition')).toBeVisible();
   });
 
   it('prevents grading mode switching when there are submissions', () => {
-    expect(form.getByDisplayValue('autograded')).toBeEnabled();
-    expect(form.getByDisplayValue('manual')).toBeEnabled();
-
     props.modeSwitching = false;
-    form.rerender(getComponent());
+    renderForm();
 
     expect(form.getByDisplayValue('autograded')).toBeDisabled();
     expect(form.getByDisplayValue('manual')).toBeDisabled();
   });
 
   it('disables unavailable options in autograded mode', () => {
+    renderForm();
+
     expect(form.getByLabelText('Allow to skip steps')).toBeDisabled();
     expect(
       form.getByLabelText('Allow submission with incorrect answers'),
@@ -187,6 +200,8 @@ describe('<AssessmentForm />', () => {
   });
 
   it('handles password protection options', () => {
+    renderForm();
+
     expect(
       form.queryByLabelText('Assessment password *'),
     ).not.toBeInTheDocument();
@@ -220,13 +235,15 @@ describe('<AssessmentForm />', () => {
   });
 
   it('renders personalised timelines options when enabled', () => {
+    renderForm();
+
     expect(form.queryByLabelText('Has personal times')).not.toBeInTheDocument();
     expect(
       form.queryByLabelText('Affects personal times'),
     ).not.toBeInTheDocument();
 
     props.showPersonalizedTimelineFeatures = true;
-    form.rerender(getComponent());
+    renderForm();
 
     expect(form.getByLabelText('Has personal times')).toBeEnabled();
     expect(form.getByLabelText('Affects personal times')).toBeEnabled();
@@ -234,12 +251,14 @@ describe('<AssessmentForm />', () => {
 
   // Randomized Assessment is temporarily hidden (PR#5406)
   // it('renders randomization options when enabled', () => {
+  //   renderForm();
+  //
   //   expect(
   //     form.queryByLabelText('Enable Randomization'),
   //   ).not.toBeInTheDocument();
 
   //   props.randomizationAllowed = true;
-  //   form.rerender(getComponent());
+  //   renderForm();
 
   //   expect(form.getByLabelText('Enable Randomization')).toBeEnabled();
   // });
