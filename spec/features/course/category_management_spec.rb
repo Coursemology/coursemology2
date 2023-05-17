@@ -94,9 +94,11 @@ RSpec.feature 'Course: Category: Management', js: true do
 
         visit course_admin_assessments_path(course)
         tab_element = find_rbd_tab(tab.id)
-        default_category_element = find_rbd_category(default_category.id)
+        default_category_element = find_rbd_tab(default_category.tabs.first.id)
 
+        page.scroll_to default_category_element
         drag_rbd(tab_element, default_category_element)
+
         click_button 'Save changes'
 
         expect_toastify('Your changes have been saved.')
