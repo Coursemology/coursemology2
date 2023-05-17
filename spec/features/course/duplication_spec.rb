@@ -61,12 +61,10 @@ RSpec.feature 'Course: Duplication' do
           find("[role='option']", text: course.title).click
 
           find('.items-selector-menu span span', text: 'Assessments').click
-          find(:xpath, '//*[@id="app-root"]
-                        /div[1]/div[2]/div[6]/div/div[2]/div[2]/label/span[1]', visible: false).click
+          find('label', text: assessment_title).click
           click_on 'Duplicate Items'
           click_on 'Duplicate'
 
-          # expect(page).not_to have_css('.source-course-dropdown')
           wait_for_job
           expect(course.assessments.where(title: assessment_title).count).to be(1)
         end
