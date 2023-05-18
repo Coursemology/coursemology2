@@ -13,13 +13,12 @@ import {
   AssessmentDeleteResult,
 } from 'types/course/assessment/assessments';
 
-import { JustRedirect } from 'api/types';
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { attemptAssessment, deleteAssessment } from '../../actions';
+import { attemptAssessment, deleteAssessment } from '../../operations';
 import translations from '../../translations';
 import { ACTION_LABELS } from '../AssessmentsIndex/ActionButtons';
 
@@ -55,7 +54,7 @@ const AssessmentShowHeader = (
           },
         },
       })
-      .then((data: JustRedirect) => navigate(data.redirectUrl))
+      .then((data) => navigate(data.redirectUrl))
       .catch(() => setAttempting(false));
   };
 

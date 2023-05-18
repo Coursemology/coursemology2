@@ -6,7 +6,7 @@ import DeleteButton from 'lib/components/core/buttons/DeleteButton';
 import { PromptText } from 'lib/components/core/dialogs/Prompt';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { deleteQuestion } from '../../../actions';
+import { deleteQuestion } from '../../../operations';
 import translations from '../../../translations';
 
 interface DeleteQuestionButtonPromptProps {
@@ -23,6 +23,8 @@ const DeleteQuestionButtonPrompt = (
   const [deleting, setDeleting] = useState(false);
 
   const handleDelete = (): Promise<void> => {
+    if (!question.deleteUrl) return Promise.reject();
+
     setDeleting(true);
 
     return toast
@@ -31,7 +33,6 @@ const DeleteQuestionButtonPrompt = (
         success: t(translations.questionDeleted),
         error: {
           render: ({ data }) => {
-            // TODO: Remove when actions.js is written in TypeScript
             const error = (data as Error)?.message;
             return error || t(translations.errorDeletingQuestion);
           },

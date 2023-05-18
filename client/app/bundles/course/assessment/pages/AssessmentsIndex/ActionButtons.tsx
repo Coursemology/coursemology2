@@ -8,7 +8,7 @@ import { AssessmentListData } from 'types/course/assessment/assessments';
 import { JustRedirect } from 'api/types';
 import useTranslation, { Descriptor } from 'lib/hooks/useTranslation';
 
-import { attemptAssessment } from '../../actions';
+import { attemptAssessment } from '../../operations';
 import translations from '../../translations';
 
 import UnavailableMessage from './UnavailableMessage';

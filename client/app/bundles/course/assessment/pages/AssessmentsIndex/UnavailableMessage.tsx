@@ -10,7 +10,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { fetchAssessmentUnlockRequirements } from '../../actions';
+import { fetchAssessmentUnlockRequirements } from '../../operations';
 import translations from '../../translations';
 
 interface UnavailableMessageProps {
@@ -51,10 +51,8 @@ const UnavailableMessage = (
               render={
                 <LoadingIndicator bare className="text-white" size={15} />
               }
-              while={async (): Promise<AssessmentUnlockRequirements> =>
-                (await fetchAssessmentUnlockRequirements(
-                  assessment.id,
-                )) as AssessmentUnlockRequirements
+              while={(): Promise<AssessmentUnlockRequirements> =>
+                fetchAssessmentUnlockRequirements(assessment.id)
               }
             >
               {(data): JSX.Element => (

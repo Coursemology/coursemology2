@@ -15,7 +15,7 @@ import {
   fetchAncestors,
   fetchAncestorStatistics,
   fetchStatistics,
-} from '../../actions';
+} from '../../operations';
 import {
   ancestorShape,
   assessmentShape,

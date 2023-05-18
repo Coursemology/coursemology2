@@ -11,13 +11,13 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
+import { createAssessment } from 'course/assessment/operations';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import NotificationBar, {
   notificationShape,
 } from 'lib/components/core/NotificationBar';
 import formTranslations from 'lib/translations/form';
 
-import * as actions from '../../actions';
 import AssessmentForm from '../../components/AssessmentForm';
 import actionTypes, { DEFAULT_MONITORING_OPTIONS } from '../../constants';
 import translations from '../../translations';
@@ -40,7 +40,7 @@ class NewAssessmentFormButton extends Component {
     };
 
     return dispatch(
-      actions.createAssessment(
+      createAssessment(
         categoryId,
         tabId,
         { assessment: attributes },
