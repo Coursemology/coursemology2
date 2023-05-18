@@ -89,6 +89,7 @@ import InstanceUsersInvitations from 'bundles/system/admin/instance/instance/pag
 import InstanceUsersInvite from 'bundles/system/admin/instance/instance/pages/InstanceUsersInvite';
 import AccountSettings from 'bundles/user/AccountSettings';
 import UserShow from 'bundles/users/pages/UserShow';
+import UserEmailSubscriptions from 'course/user-email-subscriptions/UserEmailSubscriptions';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 
 import App from './App';
@@ -401,6 +402,11 @@ const RoutedApp = (): JSX.Element => {
             <Route element={<LessonPlanShow />} index />
             <Route element={<LessonPlanEdit />} path="edit" />
           </Route>
+
+          <Route
+            element={<UserEmailSubscriptions />}
+            path="courses/:courseId/users/:userId/manage_email_subscription"
+          />
         </Routes>
       </BrowserRouter>
 

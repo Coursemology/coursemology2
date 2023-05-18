@@ -27,6 +27,7 @@ import foldersReducer from './bundles/course/material/folders/store';
 import timelinesReducer from './bundles/course/reference-timelines/store';
 import statisticsReducer from './bundles/course/statistics/store';
 import surveysReducer from './bundles/course/survey/store';
+import userEmailSubscriptionsReducer from './bundles/course/user-email-subscriptions/store';
 import invitationsReducer from './bundles/course/user-invitations/store';
 import usersReducer from './bundles/course/users/store';
 import videosReducer from './bundles/course/video/store';
@@ -70,6 +71,7 @@ const rootReducer = combineReducers({
   admin: adminReducer,
   instanceAdmin: instanceAdminReducer,
   surveys: surveysReducer,
+  userEmailSubscriptions: userEmailSubscriptionsReducer,
 });
 
 export const store = configureStore({
