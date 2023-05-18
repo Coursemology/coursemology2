@@ -1,7 +1,7 @@
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
-import { fetchMonitoringData } from '../../actions';
+import { fetchMonitoringData } from '../../operations';
 
 import PulseGrid from './PulseGrid';
 

@@ -11,8 +11,8 @@ import NotificationBar, {
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { achievementTypesConditionAttributes } from 'lib/types';
 
-import * as actions from '../../actions';
 import AssessmentForm from '../../components/AssessmentForm';
+import { updateAssessment } from '../../operations';
 import translations from '../../translations';
 
 class AssessmentEditPage extends Component {
@@ -40,7 +40,7 @@ class AssessmentEditPage extends Component {
     const { dispatch, intl } = this.props;
 
     return dispatch(
-      actions.updateAssessment(
+      updateAssessment(
         data.id,
         { assessment: atrributes },
         intl.formatMessage(translations.updateSuccess),

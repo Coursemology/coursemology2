@@ -2,8 +2,8 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 import { getAssessmentId } from 'lib/helpers/url-helpers';
 
-import { fetchAssessmentEditData } from '../../actions';
 import { DEFAULT_MONITORING_OPTIONS } from '../../constants';
+import { fetchAssessmentEditData } from '../../operations';
 import { categoryAndTabTitle } from '../../utils';
 
 import AssessmentEditPage from './AssessmentEditPage';

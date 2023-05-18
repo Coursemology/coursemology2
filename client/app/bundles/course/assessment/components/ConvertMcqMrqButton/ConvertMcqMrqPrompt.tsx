@@ -7,7 +7,7 @@ import { McqMrqListData } from 'types/course/assessment/question/multiple-respon
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { convertMcqMrq } from '../../actions';
+import { convertMcqMrq } from '../../operations';
 import translations from '../../translations';
 
 export interface ConvertMcqMrqData {
@@ -52,13 +52,12 @@ const ConvertMcqMrqPrompt = (props: ConvertMcqMrqPromptProps): JSX.Element => {
           : t(translations.questionTypeChanged),
         error: {
           render: ({ data }) => {
-            // TODO: Remove when actions.js is written in TypeScript
             const error = (data as Error)?.message;
             return error || t(translations.errorChangingQuestionType);
           },
         },
       })
-      .then((data: McqMrqListData) => {
+      .then((data) => {
         props.onConvertComplete({ ...question, ...data });
         props.onClose();
       })

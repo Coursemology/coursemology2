@@ -1,4 +1,6 @@
 /* eslint-disable import/prefer-default-export */
+import { Operation } from 'store';
+
 import CourseAPI from 'api/course';
 
 import actionTypes from '../../constants';
@@ -15,8 +17,8 @@ import { mapCategoriesData } from '../../utils';
  *    { tab_id: 7, title: 'Trainings > Practice' }
  *  ]
  */
-export function fetchTabs(failureMessage) {
-  return (dispatch) => {
+export function fetchTabs(failureMessage: string): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.FETCH_TABS_REQUEST });
     return CourseAPI.assessment.categories
       .fetchCategories()

@@ -1,6 +1,20 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { AxiosError } from 'axios';
+import { Operation } from 'store';
+import {
+  AssessmentData,
+  AssessmentDeleteResult,
+  AssessmentsListData,
+  AssessmentUnlockRequirements,
+  QuestionOrderPostData,
+  UnauthenticatedAssessmentData,
+} from 'types/course/assessment/assessments';
+import { MonitoringRequestData } from 'types/course/assessment/monitoring';
+import { McqMrqListData } from 'types/course/assessment/question/multiple-responses';
+import { QuestionDuplicationResult } from 'types/course/assessment/questions';
 
 import CourseAPI from 'api/course';
+import { JustRedirect } from 'api/types';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
 
@@ -12,7 +26,10 @@ import {
 } from './utils/statisticsUtils';
 import actionTypes from './constants';
 
-export const fetchAssessments = async (categoryId, tabId) => {
+export const fetchAssessments = async (
+  categoryId?: number,
+  tabId?: number,
+): Promise<AssessmentsListData> => {
   const response = await CourseAPI.assessment.assessments.index(
     categoryId,
     tabId,
@@ -21,18 +38,24 @@ export const fetchAssessments = async (categoryId, tabId) => {
   return response.data;
 };
 
-export const fetchAssessment = async (id) => {
+export const fetchAssessment = async (
+  id: number,
+): Promise<AssessmentData | UnauthenticatedAssessmentData> => {
   const response = await CourseAPI.assessment.assessments.fetch(id);
   return response.data;
 };
 
-export const fetchAssessmentUnlockRequirements = async (id) => {
+export const fetchAssessmentUnlockRequirements = async (
+  id: number,
+): Promise<AssessmentUnlockRequirements> => {
   const response =
     await CourseAPI.assessment.assessments.fetchUnlockRequirements(id);
   return response.data;
 };
 
-export const fetchAssessmentEditData = async (assessmentId) => {
+export const fetchAssessmentEditData = async (
+  assessmentId: string | null,
+): Promise<any> => {
   const response = await CourseAPI.assessment.assessments.fetchEditData(
     assessmentId,
   );
@@ -40,10 +63,11 @@ export const fetchAssessmentEditData = async (assessmentId) => {
   return response.data;
 };
 
-export const deleteAssessment = async (deleteUrl) => {
+export const deleteAssessment = async (
+  deleteUrl: string,
+): Promise<AssessmentDeleteResult> => {
   try {
     const response = await CourseAPI.assessment.assessments.delete(deleteUrl);
-    // TODO: Conform response data to `AssessmentDeleteResult` once written in TypeScript
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError)
@@ -53,7 +77,10 @@ export const deleteAssessment = async (deleteUrl) => {
   }
 };
 
-export const authenticateAssessment = async (assessmentId, data) => {
+export const authenticateAssessment = async (
+  assessmentId: number,
+  data,
+): Promise<unknown> => {
   const adaptedData = { assessment: { password: data.password } };
 
   try {
@@ -68,7 +95,9 @@ export const authenticateAssessment = async (assessmentId, data) => {
   }
 };
 
-export const attemptAssessment = async (assessmentId) => {
+export const attemptAssessment = async (
+  assessmentId: number,
+): Promise<JustRedirect> => {
   try {
     const response = await CourseAPI.assessment.assessments.attempt(
       assessmentId,
@@ -82,8 +111,10 @@ export const attemptAssessment = async (assessmentId) => {
   }
 };
 
-export const reorderQuestions = async (assessmentId, questionIds) => {
-  // TODO: Conform POST data to `QuestionOrderPostData` once written in TypeScript
+export const reorderQuestions = async (
+  assessmentId: number,
+  questionIds: number[],
+): Promise<QuestionOrderPostData> => {
   const response = await CourseAPI.assessment.assessments.reorderQuestions(
     assessmentId,
     questionIds,
@@ -91,12 +122,13 @@ export const reorderQuestions = async (assessmentId, questionIds) => {
   return response.data;
 };
 
-export const duplicateQuestion = async (duplicationUrl) => {
+export const duplicateQuestion = async (
+  duplicationUrl: string,
+): Promise<QuestionDuplicationResult> => {
   try {
     const response = await CourseAPI.assessment.assessments.duplicateQuestion(
       duplicationUrl,
     );
-    // TODO: Conform response data to `QuestionDuplicationResult` once written in TypeScript
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError)
@@ -106,7 +138,7 @@ export const duplicateQuestion = async (duplicationUrl) => {
   }
 };
 
-export const deleteQuestion = async (questionUrl) => {
+export const deleteQuestion = async (questionUrl: string): Promise<void> => {
   try {
     await CourseAPI.assessment.assessments.deleteQuestion(questionUrl);
   } catch (error) {
@@ -117,7 +149,9 @@ export const deleteQuestion = async (questionUrl) => {
   }
 };
 
-export const convertMcqMrq = async (convertUrl) => {
+export const convertMcqMrq = async (
+  convertUrl: string,
+): Promise<McqMrqListData> => {
   try {
     const response = await CourseAPI.assessment.assessments.convertMcqMrq(
       convertUrl,
@@ -132,16 +166,16 @@ export const convertMcqMrq = async (convertUrl) => {
 };
 
 export const createAssessment = (
-  categoryId,
-  tabId,
+  categoryId: number,
+  tabId: number,
   data,
-  successMessage,
-  failureMessage,
+  successMessage: string,
+  failureMessage: string,
   setError,
-  onSuccess,
-) => {
+  onSuccess: (url: string) => void,
+): Operation => {
   const attributes = { ...data, category: categoryId, tab: tabId };
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.CREATE_ASSESSMENT_REQUEST });
 
     return CourseAPI.assessment.assessments
@@ -152,7 +186,7 @@ export const createAssessment = (
           message: successMessage,
         });
         setTimeout(() => {
-          if (response.data && response.data.id)
+          if (response?.data?.id)
             onSuccess(
               `/courses/${getCourseId()}/assessments/${response.data.id}`,
             );
@@ -164,7 +198,7 @@ export const createAssessment = (
           message: failureMessage,
         });
 
-        if (error.response && error.response.data) {
+        if (error?.response?.data?.errors) {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
@@ -172,15 +206,15 @@ export const createAssessment = (
 };
 
 export const updateAssessment = (
-  assessmentId,
+  assessmentId: number,
   data,
-  successMessage,
-  failureMessage,
+  successMessage: string,
+  failureMessage: string,
   setError,
-  onSuccess,
-) => {
+  onSuccess: (url: string) => void,
+): Operation => {
   const attributes = data;
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.UPDATE_ASSESSMENT_REQUEST });
 
     return CourseAPI.assessment.assessments
@@ -202,15 +236,18 @@ export const updateAssessment = (
           message: failureMessage,
         });
 
-        if (error.response && error.response.data) {
+        if (error?.response?.data?.errors) {
           setReactHookFormError(setError, error.response.data.errors);
         }
       });
   };
 };
 
-export function fetchStatistics(assessmentId, failureMessage) {
-  return (dispatch) => {
+export function fetchStatistics(
+  assessmentId: number,
+  failureMessage: string,
+): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.FETCH_STATISTICS_REQUEST });
     return CourseAPI.statistics.assessment
       .fetchStatistics(assessmentId)
@@ -231,8 +268,11 @@ export function fetchStatistics(assessmentId, failureMessage) {
   };
 }
 
-export function fetchAncestors(assessmentId, failureMessage) {
-  return (dispatch) => {
+export function fetchAncestors(
+  assessmentId: number,
+  failureMessage: string,
+): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.FETCH_ANCESTORS_REQUEST });
     return CourseAPI.statistics.assessment
       .fetchAncestors(assessmentId)
@@ -251,8 +291,11 @@ export function fetchAncestors(assessmentId, failureMessage) {
   };
 }
 
-export function fetchAncestorStatistics(ancestorId, failureMessage) {
-  return (dispatch) => {
+export function fetchAncestorStatistics(
+  ancestorId: number,
+  failureMessage: string,
+): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.FETCH_ANCESTOR_STATISTICS_REQUEST });
     return CourseAPI.statistics.assessment
       .fetchStatistics(ancestorId)
@@ -273,7 +316,7 @@ export function fetchAncestorStatistics(ancestorId, failureMessage) {
   };
 }
 
-export const fetchMonitoringData = async () => {
+export const fetchMonitoringData = async (): Promise<MonitoringRequestData> => {
   const response = await CourseAPI.assessment.assessments.fetchMonitoringData();
   return response.data;
 };

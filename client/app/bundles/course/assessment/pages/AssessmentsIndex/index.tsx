@@ -7,7 +7,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import Preload from 'lib/components/wrappers/Preload';
 
-import { fetchAssessments } from '../../actions';
+import { fetchAssessments } from '../../operations';
 
 import AssessmentsTable from './AssessmentsTable';
 import NewAssessmentFormButton from './NewAssessmentFormButton';
@@ -17,12 +17,12 @@ const AssessmentsIndex = (): JSX.Element => {
   const [currentTab, setCurrentTab] =
     useState<AssessmentsListData['display']['tabId']>();
 
-  const fetchAssessmentsInTab = async (): Promise<AssessmentsListData> => {
+  const fetchAssessmentsInTab = (): Promise<AssessmentsListData> => {
     const categoryId = parseInt(params.get('category') ?? '', 10) || undefined;
     const tabId =
       currentTab ?? (parseInt(params.get('tab') ?? '', 10) || undefined);
 
-    return (await fetchAssessments(categoryId, tabId)) as AssessmentsListData;
+    return fetchAssessments(categoryId, tabId);
   };
 
   return (

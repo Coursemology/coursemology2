@@ -21,11 +21,12 @@ import FormDateTimePickerField from 'lib/components/form/fields/DateTimePickerFi
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 import FormSelectField from 'lib/components/form/fields/SelectField';
 import FormTextField from 'lib/components/form/fields/TextField';
+import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import FileManager from '../FileManager';
 
-import { fetchTabs } from './actions';
+import { fetchTabs } from './operations';
 import translations from './translations';
 import { AssessmentFormProps, connector } from './types';
 import useFormValidation from './useFormValidation';
@@ -34,7 +35,6 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   const {
     conditionAttributes,
     disabled,
-    dispatch,
     editing,
     gamified,
     folderAttributes,
@@ -60,6 +60,8 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
 
   const { t } = useTranslation();
 
+  const dispatch = useAppDispatch();
+
   const autograded = watch('autograded');
   const passwordProtected = watch('password_protected');
   const sessionProtected = watch('session_protected');
@@ -72,11 +74,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
   useEffect(() => {
     if (!editing) return;
 
-    const failureMessage = t(translations.fetchTabFailure);
-
-    // @ts-ignore until Assessment store and a custom dispatch for thunk is fully typed
-    // https://redux.js.org/tutorials/typescript-quick-start#define-typed-hooks
-    dispatch(fetchTabs(failureMessage));
+    dispatch(fetchTabs(t(translations.fetchTabFailure)));
   }, [dispatch]);
 
   useEmitterFactory(

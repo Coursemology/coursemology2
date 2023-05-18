@@ -12,17 +12,14 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import {
-  QuestionData,
-  QuestionDuplicationResult,
-} from 'types/course/assessment/questions';
+import { QuestionData } from 'types/course/assessment/questions';
 
 import Prompt, { PromptText } from 'lib/components/core/dialogs/Prompt';
 import TextField from 'lib/components/core/fields/TextField';
 import Link from 'lib/components/core/Link';
 import useTranslation from 'lib/hooks/useTranslation';
 
-import { duplicateQuestion } from '../../../actions';
+import { duplicateQuestion } from '../../../operations';
 import translations from '../../../translations';
 
 interface DuplicationPromptProps {
@@ -137,9 +134,7 @@ const DuplicationPrompt = (props: DuplicationPromptProps): JSX.Element => {
       .promise(duplicateQuestion(duplicationUrl), {
         pending: t(translations.duplicatingQuestion),
         success: {
-          render: ({ data }) => {
-            // TODO: Remove when actions.js is written in TypeScript
-            const result = data as QuestionDuplicationResult;
+          render: ({ data: result }) => {
             const destinationUrl = result?.destinationUrl;
 
             if (destinationUrl === pathname) {
@@ -165,7 +160,6 @@ const DuplicationPrompt = (props: DuplicationPromptProps): JSX.Element => {
         },
         error: {
           render: ({ data }) => {
-            // TODO: Remove when actions.js is written in TypeScript
             const error = (data as Error)?.message;
             return error || t(translations.errorDuplicatingQuestion);
           },
