@@ -40,4 +40,6 @@ export interface AssessmentAncestor {
   courseTitle: string;
 }
 
-export type AssessmentAncestors = AssessmentAncestor[];
+export interface AssessmentAncestors {
+  assessments: AssessmentAncestor[];
+}
