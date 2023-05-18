@@ -12,19 +12,18 @@ import {
 } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import {
-  fetchUserEmailSubscriptionsAndStore,
-  updateUserEmailSubscriptions,
-} from 'course/actions/user-email-subscriptions';
 import { setNotification } from 'lib/actions';
 import Link from 'lib/components/core/Link';
-import NotificationPopup from 'lib/containers/NotificationPopup';
 
+import {
+  fetchUserEmailSubscriptions,
+  updateUserEmailSubscriptions,
+} from './operations';
 import translations, {
   subscriptionComponents,
   subscriptionDescriptions,
   subscriptionTitles,
-} from './translations.intl';
+} from './translations';
 
 const styles = {
   wrapText: {
@@ -33,10 +32,10 @@ const styles = {
   },
 };
 
-class UserEmailSubscriptions extends Component {
+class UserEmailSubscriptionsTable extends Component {
   handleFetchAllUserEmailSubscriptions = () => {
     const { dispatch } = this.props;
-    dispatch(fetchUserEmailSubscriptionsAndStore());
+    dispatch(fetchUserEmailSubscriptions());
   };
 
   handleUserEmailSubscriptionsUpdate = (setting) => {
@@ -192,13 +191,12 @@ class UserEmailSubscriptions extends Component {
             />
           </Link>
         )}
-        <NotificationPopup />
       </>
     );
   }
 }
 
-UserEmailSubscriptions.propTypes = {
+UserEmailSubscriptionsTable.propTypes = {
   userEmailSubscriptions: PropTypes.arrayOf(
     PropTypes.shape({
       component: PropTypes.string,
@@ -213,7 +211,7 @@ UserEmailSubscriptions.propTypes = {
   intl: PropTypes.object.isRequired,
 };
 
-export default connect((state) => ({
-  userEmailSubscriptions: state.userEmailSubscriptions.settings,
-  userEmailSubscriptionsPageFilter: state.userEmailSubscriptions.pageFilter,
-}))(injectIntl(UserEmailSubscriptions));
+export default connect(({ userEmailSubscriptions }) => ({
+  userEmailSubscriptions: userEmailSubscriptions.settings,
+  userEmailSubscriptionsPageFilter: userEmailSubscriptions.pageFilter,
+}))(injectIntl(UserEmailSubscriptionsTable));

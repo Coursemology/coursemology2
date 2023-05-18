@@ -21,6 +21,11 @@ const translations = defineMessages({
     id: 'course.UserEmailSubscriptions.emailSubscriptions',
     defaultMessage: 'Email Subscriptions',
   },
+  fetchFailure: {
+    id: 'course.UserEmailSubscriptions.fetchFailure',
+    defaultMessage:
+      'Failed to fetch your email subscriptions. You may refresh and try again later.',
+  },
   updateSuccess: {
     id: 'course.UserEmailSubscriptions.updateSuccess',
     defaultMessage: 'Email subscription for "{topic}" has been {action}.',

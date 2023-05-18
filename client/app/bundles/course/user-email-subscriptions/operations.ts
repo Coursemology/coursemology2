@@ -1,30 +1,37 @@
+import { Operation } from 'store';
+
 import CourseAPI from 'api/course';
+import { setNotification } from 'lib/actions';
 
-import actionTypes from '../constants';
+import actionTypes from './constants';
 
-import { setNotification } from './index';
-
-export async function fetchUserEmailSubscriptions(params) {
-  const response = await CourseAPI.userEmailSubscriptions.fetch(params);
-
-  return response.data;
+function loadUserEmailSubscriptions(data): Operation {
+  return async (dispatch) => {
+    dispatch({
+      type: actionTypes.LOAD_USER_EMAIL_SUBSCRIPTION_SUCCESS,
+      allEmailSubscriptions: {
+        settings: data.settings,
+        pageFilter: data.subscription_page_filter,
+      },
+    });
+  };
 }
 
-export function fetchUserEmailSubscriptionsAndStore() {
-  return (dispatch) => {
+export function fetchUserEmailSubscriptions(
+  params?,
+  onSuccess?,
+  onError?,
+): Operation {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.LOAD_USER_EMAIL_SUBSCRIPTION_REQUEST });
     return CourseAPI.userEmailSubscriptions
-      .fetch()
+      .fetch(params)
       .then((response) => {
-        dispatch({
-          type: actionTypes.LOAD_USER_EMAIL_SUBSCRIPTION_SUCCESS,
-          allEmailSubscriptions: {
-            settings: response.data.settings,
-            pageFilter: response.data.subscription_page_filter,
-          },
-        });
+        onSuccess?.();
+        dispatch(loadUserEmailSubscriptions(response.data));
       })
       .catch(() => {
+        onError?.();
         dispatch({ type: actionTypes.LOAD_USER_EMAIL_SUBSCRIPTION_FAILURE });
       });
   };
@@ -35,9 +42,9 @@ export function updateUserEmailSubscriptions(
   pageFilter,
   successMessage,
   failureMessage,
-) {
+): Operation {
   const payload = { user_email_subscriptions: value, ...pageFilter };
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch({ type: actionTypes.USER_EMAIL_SUBSCRIPTION_UPDATE_REQUEST });
     return CourseAPI.userEmailSubscriptions
       .update(payload)
