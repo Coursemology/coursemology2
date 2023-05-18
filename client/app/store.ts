@@ -45,41 +45,50 @@ import globalUserReducer from './bundles/users/store';
 enableMapSet();
 
 const rootReducer = combineReducers({
+  // The following reducers are of within a course.
+  // Warning: navigating between courses MAY cause stale data
+  // from the previous course if the store is not refreshed.
+  // TODO: nest it into a course reducer
+  achievements: achievementsReducer,
+  announcements: announcementsReducer,
+  assessments: assessmentsReducer,
+  comments: commentsReducer,
+  courses: coursesReducer,
   disbursement: disbursementReducer,
+  duplication: duplicationsReducer,
+  enrolRequests: enrolRequestsReducer,
+  folders: foldersReducer,
+  forums: forumsReducer,
+  groups: groupsReducer,
+  invitations: invitationsReducer,
+  leaderboard: leaderboardReducer,
+  learningMap: learningMapReducer,
+  lessonPlan: lessonPlanReducer,
+  lessonPlanSettings: lessonPlanSettingsReducer,
+  levels: levelsReducer,
+  notificationSettings: notificationSettingsReducer,
+  scribingQuestion: scribingQuestionReducer,
+  skills: skillsReducer,
+  statistics: statisticsReducer,
   submissions: submissionsReducer,
+  surveys: surveysReducer,
   timelines: timelinesReducer,
+  users: usersReducer,
+  userEmailSubscriptions: userEmailSubscriptionsReducer,
+  videos: videosReducer,
+
+  // The following reducers are of outside of a course.
+  admin: adminReducer,
+  instanceAdmin: instanceAdminReducer,
   global: combineReducers({
     user: globalUserReducer,
     announcements: globalAnnouncementReducer,
   }),
-  achievements: achievementsReducer,
-  announcements: announcementsReducer,
-  skills: skillsReducer,
-  courses: coursesReducer,
-  comments: commentsReducer,
-  forums: forumsReducer,
-  groups: groupsReducer,
-  leaderboard: leaderboardReducer,
-  learningMap: learningMapReducer,
-  folders: foldersReducer,
-  videos: videosReducer,
-  levels: levelsReducer,
-  notificationPopup: notificationPopupReducer,
-  statistics: statisticsReducer,
-  users: usersReducer,
-  invitations: invitationsReducer,
-  enrolRequests: enrolRequestsReducer,
-  lessonPlanSettings: lessonPlanSettingsReducer,
-  notificationSettings: notificationSettingsReducer,
-  duplication: duplicationsReducer,
-  scribingQuestion: scribingQuestionReducer,
-  lessonPlan: lessonPlanReducer,
+
+  // The following reducers are for UI related rendering.
+  // TODO: remove these (avoid using redux to render UI components)
   deleteConfirmation: deleteConfirmationReducer,
-  admin: adminReducer,
-  instanceAdmin: instanceAdminReducer,
-  surveys: surveysReducer,
-  userEmailSubscriptions: userEmailSubscriptionsReducer,
-  assessments: assessmentsReducer,
+  notificationPopup: notificationPopupReducer,
 });
 
 export const store = configureStore({
