@@ -8134,10 +8134,10 @@ react-hot-keys@^2.7.2:
     hotkeys-js "^3.8.1"
     prop-types "^15.7.2"
 
-react-image-crop@^10.0.9:
-  version "10.0.9"
-  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-10.0.9.tgz#94c65833d4e8ed16fe645227ff26915bba177359"
-  integrity sha512-fqn6a811cx/sE7jtu8txL4lBTwgZYuEVNvy7UPKMNMWeRcZa6v0ja11+Gd9nZQiBfaxDal3PBcKhGBLQ956UNg==
+react-image-crop@^10.0.11:
+  version "10.0.11"
+  resolved "https://registry.yarnpkg.com/react-image-crop/-/react-image-crop-10.0.11.tgz#196f06b263a628421b70cffcd3ed759a3add3b01"
+  integrity sha512-uwhlDYZttn5jKTWfvV5WZrhSMxfdCklW5mHF5DZw9tlea/3bwpws07EZczo6pSbjh9/dHfdrHPSzaOAeLgB6sw==
   dependencies:
     clsx "^1.2.1"
 
