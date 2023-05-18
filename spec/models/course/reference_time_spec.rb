@@ -102,6 +102,8 @@ RSpec.describe Course::ReferenceTime, type: :model do
               have_enqueued_job(Course::Assessment::ClosingReminderJob).
               with { |_, token| expect(token).not_to eq(old_closing_reminder_token) }
             )
+
+            expect(assessment.reload.closing_reminder_token).not_to eq(old_closing_reminder_token)
           end
         end
 
