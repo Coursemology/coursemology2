@@ -1,15 +1,18 @@
 # frozen_string_literal: true
 class Course::AnnouncementsController < Course::ComponentController
+  include Course::UsersHelper
+
   load_and_authorize_resource :announcement, through: :course, class: Course::Announcement.name
   before_action :add_announcement_breadcrumb
+
+  after_action :mark_announcements_as_read, only: [:index]
 
   def index
     respond_to do |format|
       format.html
       format.json do
-        @announcements = @announcements.includes(:creator)
-        @announcements = @announcements.with_read_marks_for(current_user)
-        mark_announcements_as_read
+        @course_users_hash = preload_course_users_hash(current_course)
+        @announcements = @announcements.includes(:creator).with_read_marks_for(current_user)
       end
     end
   end

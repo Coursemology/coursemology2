@@ -6,13 +6,12 @@ json.content format_ckeditor_rich_text(announcement.content)
 json.startTime announcement.start_at
 json.endTime announcement.end_at
 
-course_user = announcement.creator.course_users.find_by(course: current_course) unless @course.nil?
-user = course_user || announcement.creator
+user_or_course_user = local_assigns[:course_user] || announcement.creator
 
 json.creator do
-  json.id user.id
-  json.name user.name
-  json.userUrl url_to_user_or_course_user(@course, user)
+  json.id user_or_course_user.id
+  json.name user_or_course_user.name
+  json.userUrl url_to_user_or_course_user(@course, user_or_course_user)
 end
 
 json.isUnread announcement.unread?(current_user)
