@@ -1,4 +1,4 @@
-import { shallow } from 'enzyme';
+import { render } from 'test-utils';
 
 import ErrorText from '../ErrorText';
 
@@ -7,7 +7,7 @@ describe('<ErrorText />', () => {
     const errors = 'An error.';
 
     it('displays it', () => {
-      expect(shallow(<ErrorText errors={errors} />)).toMatchSnapshot();
+      expect(render(<ErrorText errors={errors} />)).toMatchSnapshot();
     });
   });
 
@@ -15,7 +15,7 @@ describe('<ErrorText />', () => {
     const errors = ['An error.', 'Another error.'];
 
     it('displays each error', () => {
-      expect(shallow(<ErrorText errors={errors} />)).toMatchSnapshot();
+      expect(render(<ErrorText errors={errors} />)).toMatchSnapshot();
     });
   });
 });
