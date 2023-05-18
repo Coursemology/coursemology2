@@ -66,6 +66,7 @@ import ResponseShow from 'bundles/course/survey/pages/ResponseShow';
 import SurveyIndex from 'bundles/course/survey/pages/SurveyIndex';
 import SurveyResults from 'bundles/course/survey/pages/SurveyResults';
 import SurveyShow from 'bundles/course/survey/pages/SurveyShow';
+import UserEmailSubscriptions from 'bundles/course/user-email-subscriptions/UserEmailSubscriptions';
 import InvitationsIndex from 'bundles/course/user-invitations/pages/InvitationsIndex';
 import InviteUsers from 'bundles/course/user-invitations/pages/InviteUsers';
 import ExperiencePointsRecords from 'bundles/course/users/pages/ExperiencePointsRecords';
@@ -98,7 +99,6 @@ import InstanceUsersInvitations from 'bundles/system/admin/instance/instance/pag
 import InstanceUsersInvite from 'bundles/system/admin/instance/instance/pages/InstanceUsersInvite';
 import AccountSettings from 'bundles/user/AccountSettings';
 import UserShow from 'bundles/users/pages/UserShow';
-import UserEmailSubscriptions from 'course/user-email-subscriptions/UserEmailSubscriptions';
 
 const RoutedApp = (): JSX.Element => (
   <Routes>
@@ -107,116 +107,13 @@ const RoutedApp = (): JSX.Element => (
 
       <Route path=":courseId">
         <Route element={<CourseShow />} index />
-        <Route element={<TimelineDesigner />} path="timelines" />
+
+        <Route path="achievements">
+          <Route element={<AchievementsIndex />} index />
+          <Route element={<AchievementShow />} path=":achievementId" />
+        </Route>
+
         <Route element={<AnnouncementsIndex />} path="announcements" />
-        <Route element={<CommentIndex />} path="comments" />
-        <Route element={<LeaderboardIndex />} path="leaderboard" />
-        <Route element={<LearningMap />} path="learning_map" />
-        <Route element={<FolderShow />} path="materials/folders/:folderId" />
-        <Route element={<LevelsIndex />} path="levels" />
-        <Route element={<StatisticsIndex />} path="statistics" />
-        <Route element={<Duplication />} path="duplication" />
-
-        {/* @ts-ignore `connect` throws error when cannot find `store` as direct parent */}
-        <Route element={<LessonPlanLayout />} path="lesson_plan">
-          <Route element={<LessonPlanShow />} index />
-          <Route element={<LessonPlanEdit />} path="edit" />
-        </Route>
-
-        <Route element={<UserRequests />} path="enrol_requests" />
-        <Route element={<InvitationsIndex />} path="user_invitations" />
-        <Route element={<ManageStudents />} path="students" />
-        <Route element={<ManageStaff />} path="staff" />
-
-        <Route path="users">
-          <Route element={<UsersIndex />} index />
-          <Route element={<PersonalTimes />} path="personal_times" />
-          <Route element={<InviteUsers />} path="invite" />
-
-          <Route path=":userId">
-            <Route element={<CourseUserShow />} index />
-            <Route element={<PersonalTimesShow />} path="personal_times" />
-
-            <Route
-              element={<UserVideoSubmissionsIndex />}
-              path="video_submissions"
-            />
-
-            <Route
-              element={<ExperiencePointsRecords />}
-              path="experience_points_records"
-            />
-
-            <Route
-              element={<UserEmailSubscriptions />}
-              path="manage_email_subscription"
-            />
-          </Route>
-        </Route>
-
-        <Route element={<SettingsNavigation />} path="admin">
-          <Route element={<CourseSettings />} index />
-          <Route element={<ComponentSettings />} path="components" />
-          <Route element={<SidebarSettings />} path="sidebar" />
-          <Route element={<NotificationSettings />} path="notifications" />
-          <Route element={<AnnouncementSettings />} path="announcements" />
-          <Route element={<AssessmentSettings />} path="assessments" />
-          <Route element={<MaterialsSettings />} path="materials" />
-          <Route element={<ForumsSettings />} path="forums" />
-          <Route element={<LeaderboardSettings />} path="leaderboard" />
-          <Route element={<CommentsSettings />} path="comments" />
-          <Route element={<VideosSettings />} path="videos" />
-          <Route element={<LessonPlanSettings />} path="lesson_plan" />
-          <Route element={<CodaveriSettings />} path="codaveri" />
-        </Route>
-
-        <Route path="surveys">
-          <Route element={<SurveyIndex />} index />
-
-          <Route path=":surveyId">
-            <Route element={<SurveyShow />} index />
-            <Route element={<SurveyResults />} path="results" />
-
-            <Route path="responses">
-              <Route element={<ResponseIndex />} index />
-
-              <Route path=":responseId">
-                <Route element={<ResponseShow />} index />
-                <Route element={<ResponseEdit />} path="edit" />
-              </Route>
-            </Route>
-          </Route>
-        </Route>
-
-        <Route element={<GroupIndex />} path="groups">
-          <Route element={<GroupShow />} path=":groupCategoryId" />
-        </Route>
-
-        <Route path="videos">
-          <Route element={<VideosIndex />} index />
-
-          <Route path=":videoId">
-            <Route element={<VideoShow />} index />
-
-            <Route path="submissions">
-              <Route element={<VideoSubmissionsIndex />} index />
-
-              <Route path=":submissionId">
-                <Route element={<VideoSubmissionShow />} index />
-                <Route element={<VideoSubmissionEdit />} path="edit" />
-              </Route>
-            </Route>
-          </Route>
-        </Route>
-
-        <Route path="forums">
-          <Route element={<ForumsIndex />} index />
-
-          <Route path=":forumId">
-            <Route element={<ForumShow />} index />
-            <Route element={<ForumTopicShow />} path="topics/:topicId" />
-          </Route>
-        </Route>
 
         <Route path="assessments">
           <Route element={<AssessmentsIndex />} index />
@@ -251,24 +148,9 @@ const RoutedApp = (): JSX.Element => (
                 />
               </Route>
 
-              <Route path="text_responses">
-                <Route element={<NewTextResponse />} path="new" />
-                <Route element={<EditTextResponse />} path=":questionId/edit" />
-              </Route>
-
-              <Route path="voice_responses">
-                <Route element={<NewVoicePage />} path="new" />
-                <Route element={<EditVoicePage />} path=":questionId/edit" />
-              </Route>
-
               <Route path="multiple_responses">
                 <Route element={<NewMcqMrqPage />} path="new" />
                 <Route element={<EditMcqMrqPage />} path=":questionId/edit" />
-              </Route>
-
-              <Route path="scribing">
-                <Route element={<ScribingQuestion />} path="new" />
-                <Route element={<ScribingQuestion />} path=":questionId/edit" />
               </Route>
 
               <Route path="programming">
@@ -279,20 +161,138 @@ const RoutedApp = (): JSX.Element => (
                   path=":questionId/edit"
                 />
               </Route>
+
+              <Route path="scribing">
+                <Route element={<ScribingQuestion />} path="new" />
+                <Route element={<ScribingQuestion />} path=":questionId/edit" />
+              </Route>
+
+              <Route path="text_responses">
+                <Route element={<NewTextResponse />} path="new" />
+                <Route element={<EditTextResponse />} path=":questionId/edit" />
+              </Route>
+
+              <Route path="voice_responses">
+                <Route element={<NewVoicePage />} path="new" />
+                <Route element={<EditVoicePage />} path=":questionId/edit" />
+              </Route>
             </Route>
           </Route>
         </Route>
 
-        <Route path="achievements">
-          <Route element={<AchievementsIndex />} index />
-          <Route element={<AchievementShow />} path=":achievementId" />
+        <Route element={<CommentIndex />} path="comments" />
+        <Route element={<Duplication />} path="duplication" />
+        <Route element={<UserRequests />} path="enrol_requests" />
+
+        <Route path="forums">
+          <Route element={<ForumsIndex />} index />
+
+          <Route path=":forumId">
+            <Route element={<ForumShow />} index />
+            <Route element={<ForumTopicShow />} path="topics/:topicId" />
+          </Route>
         </Route>
 
+        <Route element={<GroupIndex />} path="groups">
+          <Route element={<GroupShow />} path=":groupCategoryId" />
+        </Route>
+
+        {/* @ts-ignore `connect` throws error when cannot find `store` as direct parent */}
+        <Route element={<LessonPlanLayout />} path="lesson_plan">
+          <Route element={<LessonPlanShow />} index />
+          <Route element={<LessonPlanEdit />} path="edit" />
+        </Route>
+
+        <Route element={<LeaderboardIndex />} path="leaderboard" />
+        <Route element={<LearningMap />} path="learning_map" />
+        <Route element={<LevelsIndex />} path="levels" />
+        <Route element={<FolderShow />} path="materials/folders/:folderId" />
+        <Route element={<StatisticsIndex />} path="statistics" />
+        <Route element={<TimelineDesigner />} path="timelines" />
+
         <Route path="users">
+          <Route element={<UsersIndex />} index />
+          <Route element={<PersonalTimes />} path="personal_times" />
+          <Route element={<InviteUsers />} path="invite" />
+
           <Route
             element={<DisbursementIndex />}
             path="disburse_experience_points"
           />
+
+          <Route path=":userId">
+            <Route element={<CourseUserShow />} index />
+            <Route element={<PersonalTimesShow />} path="personal_times" />
+
+            <Route
+              element={<UserVideoSubmissionsIndex />}
+              path="video_submissions"
+            />
+
+            <Route
+              element={<ExperiencePointsRecords />}
+              path="experience_points_records"
+            />
+
+            <Route
+              element={<UserEmailSubscriptions />}
+              path="manage_email_subscription"
+            />
+          </Route>
+        </Route>
+        <Route element={<InvitationsIndex />} path="user_invitations" />
+        <Route element={<ManageStudents />} path="students" />
+        <Route element={<ManageStaff />} path="staff" />
+
+        <Route path="videos">
+          <Route element={<VideosIndex />} index />
+
+          <Route path=":videoId">
+            <Route element={<VideoShow />} index />
+
+            <Route path="submissions">
+              <Route element={<VideoSubmissionsIndex />} index />
+
+              <Route path=":submissionId">
+                <Route element={<VideoSubmissionShow />} index />
+                <Route element={<VideoSubmissionEdit />} path="edit" />
+              </Route>
+            </Route>
+          </Route>
+        </Route>
+
+        <Route path="surveys">
+          <Route element={<SurveyIndex />} index />
+
+          <Route path=":surveyId">
+            <Route element={<SurveyShow />} index />
+            <Route element={<SurveyResults />} path="results" />
+
+            <Route path="responses">
+              <Route element={<ResponseIndex />} index />
+
+              <Route path=":responseId">
+                <Route element={<ResponseShow />} index />
+                <Route element={<ResponseEdit />} path="edit" />
+              </Route>
+            </Route>
+          </Route>
+        </Route>
+
+        <Route element={<SettingsNavigation />} path="admin">
+          <Route element={<CourseSettings />} index />
+          <Route element={<ComponentSettings />} path="components" />
+          <Route element={<SidebarSettings />} path="sidebar" />
+          <Route element={<NotificationSettings />} path="notifications" />
+          <Route element={<AnnouncementSettings />} path="announcements" />
+          <Route element={<AssessmentSettings />} path="assessments" />
+          <Route element={<MaterialsSettings />} path="materials" />
+          <Route element={<ForumsSettings />} path="forums" />
+          <Route element={<LeaderboardSettings />} path="leaderboard" />
+          <Route element={<CommentsSettings />} path="comments" />
+          <Route element={<VideosSettings />} path="videos" />
+          <Route element={<LessonPlanSettings />} path="lesson_plan" />
+          <Route element={<CodaveriSettings />} path="codaveri" />
         </Route>
       </Route>
     </Route>
