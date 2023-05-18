@@ -16,10 +16,12 @@ module Course::ClosingReminderConcern
   end
 
   def create_closing_reminders_at(new_end_at)
-    return if new_end_at <= Time.zone.now
-
     # Use current time as token to prevent duplicate notification.
+    # Always regenerate the closing reminder token, regardless of whether a new
+    # `Course::ClosingReminderJob` is created, to invalidate all previous jobs.
     self.closing_reminder_token = Time.zone.now.to_f.round(5)
+
+    return if new_end_at <= Time.zone.now
 
     # Send notification one day before the closing date
     closing_reminder_job_class.set(wait_until: new_end_at - 1.day).
