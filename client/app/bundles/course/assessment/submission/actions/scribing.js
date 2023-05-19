@@ -2,11 +2,11 @@ import CourseAPI from 'api/course';
 
 import actions, { canvasActionTypes } from '../constants';
 
-export function setCanvasLoaded(answerId, loaded, canvas) {
+export function setCanvasLoaded(answerId, loaded) {
   return (dispatch) =>
     dispatch({
       type: actions.SET_CANVAS_LOADED,
-      payload: { answerId, loaded, canvas },
+      payload: { answerId, loaded },
     });
 }
 

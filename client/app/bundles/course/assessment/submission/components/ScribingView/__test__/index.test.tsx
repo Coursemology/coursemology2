@@ -63,10 +63,9 @@ describe('ScribingView', () => {
     });
 
     const loaded = true;
-    const canvas = {};
     const url = `/courses/${global.courseId}/assessments/${assessmentId}/submissions/${submissionId}/edit`;
 
-    dispatch(setCanvasLoaded(answerId, loaded, canvas));
+    dispatch(setCanvasLoaded(answerId, loaded));
 
     const page = render(<ScribingView answerId={answerId} />, { at: [url] });
 
