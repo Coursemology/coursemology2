@@ -1,5 +1,5 @@
 import produce from 'immer';
-import { AnnouncementListData } from 'types/course/announcements';
+import { AnnouncementData } from 'types/course/announcements';
 import {
   createEntityStore,
   removeAllFromStore,
@@ -35,7 +35,7 @@ const reducer = produce(
 );
 
 export function saveAnnouncementsList(
-  announcements: AnnouncementListData[],
+  announcements: AnnouncementData[],
 ): SaveAnnouncementListAction {
   return {
     type: SAVE_ANNOUNCEMENT_LIST,

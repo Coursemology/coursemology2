@@ -19,7 +19,7 @@ if can?(:manage, current_course) || current_course.user?(current_user)
   # Announcements
   if @currently_active_announcements && !@currently_active_announcements.empty?
     json.currentlyActiveAnnouncements @currently_active_announcements do |announcement|
-      json.partial! 'announcements/announcement_list_data', announcement: announcement
+      json.partial! 'announcements/announcement_data', announcement: announcement
     end
   else
     json.currentlyActiveAnnouncements nil

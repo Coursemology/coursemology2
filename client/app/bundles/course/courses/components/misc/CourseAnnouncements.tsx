@@ -1,12 +1,12 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { Stack } from '@mui/material';
-import { AnnouncementMiniEntity } from 'types/course/announcements';
+import { AnnouncementEntity } from 'types/course/announcements';
 
 import AnnouncementCard from '../../../announcements/components/misc/AnnouncementCard';
 
 interface Props extends WrappedComponentProps {
-  announcements: AnnouncementMiniEntity[];
+  announcements: AnnouncementEntity[];
 }
 
 const translations = defineMessages({

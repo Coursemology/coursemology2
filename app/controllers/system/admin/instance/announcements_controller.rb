@@ -15,7 +15,7 @@ class System::Admin::Instance::AnnouncementsController < System::Admin::Instance
 
   def create
     if @announcement.save
-      render partial: 'announcements/announcement_list_data',
+      render partial: 'announcements/announcement_data',
              locals: { announcement: @announcement },
              status: :ok
     else
@@ -25,7 +25,7 @@ class System::Admin::Instance::AnnouncementsController < System::Admin::Instance
 
   def update
     if @announcement.update(announcement_params)
-      render partial: 'announcements/announcement_list_data',
+      render partial: 'announcements/announcement_data',
              locals: { announcement: @announcement.reload },
              status: :ok
     else

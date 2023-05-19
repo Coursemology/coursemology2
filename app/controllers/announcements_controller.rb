@@ -20,4 +20,8 @@ class AnnouncementsController < ApplicationController
     @announcement.mark_as_read! for: current_user
     head :ok
   end
+
+  def unread
+    @unread_announcements = unread_global_announcements.sort { |a, b| b.start_at <=> a.start_at }
+  end
 end

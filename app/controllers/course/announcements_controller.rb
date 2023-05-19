@@ -19,7 +19,7 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def create
     if @announcement.save
-      render partial: 'announcements/announcement_list_data',
+      render partial: 'announcements/announcement_data',
              locals: { announcement: @announcement }
     else
       render json: { errors: @announcement.errors }, status: :bad_request
@@ -28,7 +28,7 @@ class Course::AnnouncementsController < Course::ComponentController
 
   def update
     if @announcement.update(announcement_params)
-      render partial: 'announcements/announcement_list_data',
+      render partial: 'announcements/announcement_data',
              locals: { announcement: @announcement },
              status: :ok
     else
