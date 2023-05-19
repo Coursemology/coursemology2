@@ -96,6 +96,7 @@ const Gate = (props) => {
       }}
     >
       {node.parents
+        .slice()
         .sort((parent1, parent2) => parent1.id.localeCompare(parent2.id))
         .map((parent) => {
           const inputId = getGateInputId(false, parent.id, node.id);

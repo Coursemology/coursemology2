@@ -48,6 +48,7 @@ const Levels = (props) => {
       {levels.map((level, index) => (
         <div key={`level-${index + 1}`} style={styles.level}>
           {level
+            .slice()
             .sort((node1, node2) => node1.id.localeCompare(node2.id))
             .map((node) => (
               <div key={node.id} style={styles.nodeWithGate}>
