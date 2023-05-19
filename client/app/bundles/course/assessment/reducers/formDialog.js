@@ -27,15 +27,10 @@ export default function (state = initialState, action) {
         ...state,
         visible: false,
         disabled: false,
-        notification: { message: action.message },
       };
     }
     case actionTypes.CREATE_ASSESSMENT_FAILURE: {
-      return {
-        ...state,
-        disabled: false,
-        notification: { message: action.message },
-      };
+      return { ...state, disabled: false };
     }
     default:
       return state;

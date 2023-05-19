@@ -2,6 +2,7 @@
 import { Operation } from 'store';
 
 import CourseAPI from 'api/course';
+import { setNotification } from 'lib/actions';
 
 import actionTypes from '../../constants';
 import { mapCategoriesData } from '../../utils';
@@ -29,10 +30,8 @@ export function fetchTabs(failureMessage: string): Operation {
         });
       })
       .catch(() => {
-        dispatch({
-          type: actionTypes.FETCH_TABS_FAILURE,
-          message: failureMessage,
-        });
+        dispatch({ type: actionTypes.FETCH_TABS_FAILURE });
+        dispatch(setNotification(failureMessage));
       });
   };
 }

@@ -6,9 +6,6 @@ import PropTypes from 'prop-types';
 
 import ErrorCard from 'lib/components/core/ErrorCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import NotificationBar, {
-  notificationShape,
-} from 'lib/components/core/NotificationBar';
 import PageHeader from 'lib/components/navigation/PageHeader';
 
 import {
@@ -64,7 +61,6 @@ const AssessmentStatisticsPage = ({
   submissions,
   allStudents,
   ancestors,
-  notification,
   ancestorAssessment,
   ancestorSubmissions,
   ancestorAllStudents,
@@ -178,7 +174,6 @@ const AssessmentStatisticsPage = ({
       <StatisticsPanel allStudents={allStudents} submissions={submissions} />
       {renderAncestorSelect()}
       <div style={styles.ancestorStatistics}>{renderAncestorStatistics()}</div>
-      <NotificationBar notification={notification} />
     </main>
   );
 };
@@ -186,7 +181,6 @@ const AssessmentStatisticsPage = ({
 AssessmentStatisticsPage.propTypes = {
   dispatch: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired,
-  notification: notificationShape,
   isFetching: PropTypes.bool.isRequired,
   isError: PropTypes.bool.isRequired,
   isFetchingAncestors: PropTypes.bool.isRequired,

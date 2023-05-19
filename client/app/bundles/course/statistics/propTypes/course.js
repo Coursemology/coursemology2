@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types';
 
-import { notificationShape } from 'lib/components/core/NotificationBar';
-
 export const assessmentShape = PropTypes.shape({
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
@@ -57,6 +55,4 @@ export const courseIndexShape = {
   isErrorProgression: PropTypes.bool.isRequired,
   isFetchingPerformance: PropTypes.bool.isRequired,
   isErrorPerformance: PropTypes.bool.isRequired,
-
-  notification: notificationShape, // Centralised across course, students and staff
 };

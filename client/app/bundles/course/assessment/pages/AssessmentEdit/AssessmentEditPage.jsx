@@ -5,9 +5,6 @@ import { Navigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import NotificationBar, {
-  notificationShape,
-} from 'lib/components/core/NotificationBar';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import { achievementTypesConditionAttributes } from 'lib/types';
 
@@ -61,7 +58,6 @@ class AssessmentEditPage extends Component {
       initialValues,
       modeSwitching,
       canManageMonitor,
-      notification,
       pulsegridUrl,
       randomizationAllowed,
       showPersonalizedTimelineFeatures,
@@ -100,8 +96,6 @@ class AssessmentEditPage extends Component {
           showPersonalizedTimelineFeatures={showPersonalizedTimelineFeatures}
         />
 
-        <NotificationBar notification={notification} />
-
         {this.state.redirectUrl && <Navigate to={this.state.redirectUrl} />}
       </main>
     );
@@ -129,7 +123,6 @@ AssessmentEditPage.propTypes = {
   pulsegridUrl: PropTypes.string,
   canManageMonitor: PropTypes.bool,
   monitoringEnabled: PropTypes.bool,
-  notification: notificationShape,
 };
 
 export default connect(({ assessments }) => assessments.editPage)(

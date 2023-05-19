@@ -7,9 +7,6 @@ import PropTypes from 'prop-types';
 import ErrorCard from 'lib/components/core/ErrorCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
-import NotificationBar, {
-  notificationShape,
-} from 'lib/components/core/NotificationBar';
 
 import { fetchCourseUsers, fetchGroupData } from '../../actions';
 import actionTypes from '../../constants';
@@ -42,7 +39,6 @@ const Category = ({
   isFetching,
   isManagingGroups,
   hasFetchError,
-  notification,
   canManageCategory,
   canManageGroups,
 }) => {
@@ -115,7 +111,6 @@ const Category = ({
           ) : null}
         </>
       )}
-      <NotificationBar notification={notification} />
     </div>
   );
 };
@@ -129,16 +124,14 @@ Category.propTypes = {
   groupCategory: categoryShape,
   groups: PropTypes.arrayOf(groupShape).isRequired,
   dispatch: PropTypes.func.isRequired,
-  notification: notificationShape,
 };
 
-export default connect(({ groups, notificationPopup }) => ({
+export default connect(({ groups }) => ({
   isFetching: groups.groupsFetch.isFetching,
   hasFetchError: groups.groupsFetch.hasFetchError,
   groupCategory: groups.groupsFetch.groupCategory,
   groups: groups.groupsFetch.groups,
   canManageCategory: groups.groupsFetch.canManageCategory,
   canManageGroups: groups.groupsFetch.canManageGroups,
-  notification: notificationPopup,
   isManagingGroups: groups.groupsManage.isManagingGroups,
 }))(Category);
