@@ -7,10 +7,7 @@ const initialState: LearningMapState = {
   canModify: false,
   isLoading: false,
   nodes: [],
-  response: {
-    didSucceed: false,
-    message: '',
-  },
+  response: {},
   selectedElement: {
     id: '',
     type: elementTypes.NODE,
