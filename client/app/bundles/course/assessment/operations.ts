@@ -15,6 +15,7 @@ import { QuestionDuplicationResult } from 'types/course/assessment/questions';
 
 import CourseAPI from 'api/course';
 import { JustRedirect } from 'api/types';
+import { setNotification } from 'lib/actions';
 import { setReactHookFormError } from 'lib/helpers/react-hook-form-helper';
 import { getCourseId } from 'lib/helpers/url-helpers';
 
@@ -181,10 +182,9 @@ export const createAssessment = (
     return CourseAPI.assessment.assessments
       .create(attributes)
       .then((response) => {
-        dispatch({
-          type: actionTypes.CREATE_ASSESSMENT_SUCCESS,
-          message: successMessage,
-        });
+        dispatch({ type: actionTypes.CREATE_ASSESSMENT_SUCCESS });
+        dispatch(setNotification(successMessage));
+
         setTimeout(() => {
           if (response?.data?.id)
             onSuccess(
@@ -193,10 +193,8 @@ export const createAssessment = (
         }, 200);
       })
       .catch((error) => {
-        dispatch({
-          type: actionTypes.CREATE_ASSESSMENT_FAILURE,
-          message: failureMessage,
-        });
+        dispatch({ type: actionTypes.CREATE_ASSESSMENT_FAILURE });
+        dispatch(setNotification(failureMessage));
 
         if (error?.response?.data?.errors) {
           setReactHookFormError(setError, error.response.data.errors);
@@ -220,10 +218,9 @@ export const updateAssessment = (
     return CourseAPI.assessment.assessments
       .update(assessmentId, attributes)
       .then(() => {
-        dispatch({
-          type: actionTypes.UPDATE_ASSESSMENT_SUCCESS,
-          message: successMessage,
-        });
+        dispatch({ type: actionTypes.UPDATE_ASSESSMENT_SUCCESS });
+        dispatch(setNotification(successMessage));
+
         setTimeout(
           () =>
             onSuccess(`/courses/${getCourseId()}/assessments/${assessmentId}`),
@@ -231,10 +228,8 @@ export const updateAssessment = (
         );
       })
       .catch((error) => {
-        dispatch({
-          type: actionTypes.UPDATE_ASSESSMENT_FAILURE,
-          message: failureMessage,
-        });
+        dispatch({ type: actionTypes.UPDATE_ASSESSMENT_FAILURE });
+        dispatch(setNotification(failureMessage));
 
         if (error?.response?.data?.errors) {
           setReactHookFormError(setError, error.response.data.errors);
@@ -260,10 +255,8 @@ export function fetchStatistics(
         });
       })
       .catch(() => {
-        dispatch({
-          type: actionTypes.FETCH_STATISTICS_FAILURE,
-          message: failureMessage,
-        });
+        dispatch({ type: actionTypes.FETCH_STATISTICS_FAILURE });
+        dispatch(setNotification(failureMessage));
       });
   };
 }
@@ -283,10 +276,8 @@ export function fetchAncestors(
         });
       })
       .catch(() => {
-        dispatch({
-          type: actionTypes.FETCH_ANCESTORS_FAILURE,
-          message: failureMessage,
-        });
+        dispatch({ type: actionTypes.FETCH_ANCESTORS_FAILURE });
+        dispatch(setNotification(failureMessage));
       });
   };
 }
@@ -308,10 +299,8 @@ export function fetchAncestorStatistics(
         });
       })
       .catch(() => {
-        dispatch({
-          type: actionTypes.FETCH_ANCESTOR_STATISTICS_FAILURE,
-          message: failureMessage,
-        });
+        dispatch({ type: actionTypes.FETCH_ANCESTOR_STATISTICS_FAILURE });
+        dispatch(setNotification(failureMessage));
       });
   };
 }

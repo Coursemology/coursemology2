@@ -22,9 +22,6 @@ import palette from 'theme/palette';
 import BarChart from 'lib/components/core/BarChart';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import NotificationBar, {
-  notificationShape,
-} from 'lib/components/core/NotificationBar';
 import withRouter from 'lib/components/navigation/withRouter';
 
 import { purgeSubmissionStore } from '../../actions';
@@ -414,7 +411,7 @@ class VisibleSubmissionsIndex extends Component {
   }
 
   render() {
-    const { isLoading, notification, submissions } = this.props;
+    const { isLoading, submissions } = this.props;
     const {
       includePhantoms,
       tab,
@@ -506,7 +503,6 @@ class VisibleSubmissionsIndex extends Component {
           )}
         {remindConfirmation &&
           this.renderReminderConfirmation(shownSubmissions, handleActionParams)}
-        <NotificationBar notification={notification} />
       </>
     );
   }
@@ -530,7 +526,6 @@ VisibleSubmissionsIndex.propTypes = {
       workflowState: PropTypes.string,
     }),
   ),
-  notification: notificationShape,
   isLoading: PropTypes.bool.isRequired,
   isDownloadingFiles: PropTypes.bool.isRequired,
   isDownloadingCsv: PropTypes.bool.isRequired,
@@ -545,7 +540,6 @@ VisibleSubmissionsIndex.propTypes = {
 function mapStateToProps({ assessments: { submission } }) {
   return {
     assessment: submission.assessment,
-    notification: submission.notification,
     submissions: submission.submissions,
     isLoading: submission.submissionFlags.isLoading,
     isDownloadingFiles: submission.submissionFlags.isDownloadingFiles,

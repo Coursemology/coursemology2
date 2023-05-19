@@ -18,7 +18,6 @@ const initialState = {
     maxLevel: 0,
     hasGroupManagers: false,
   },
-  notification: {}, // Centralised notification shape across all the different reducers
 };
 
 export default function (state = initialState, action) {
@@ -61,7 +60,6 @@ export default function (state = initialState, action) {
         ...state,
         isFetchingProgression: false,
         isErrorProgression: true,
-        notification: { message: action.message },
       };
     }
     case actionTypes.FETCH_COURSE_PERFORMANCE_STATISTICS_FAILURE: {
@@ -69,16 +67,12 @@ export default function (state = initialState, action) {
         ...state,
         isFetchingPerformance: false,
         isErrorPerformance: true,
-        notification: { message: action.message },
       };
     }
     // Catch all other failure cases from other reducers
     case actionTypes.FETCH_STAFF_STATISTICS_FAILURE:
     case actionTypes.FETCH_STUDENTS_STATISTICS_FAILURE: {
-      return {
-        ...state,
-        notification: { message: action.message },
-      };
+      return { ...state };
     }
     default:
       return state;

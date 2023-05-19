@@ -14,7 +14,6 @@ const initialState = {
   ancestorAssessment: null,
   ancestorSubmissions: [],
   ancestorAllStudents: [],
-  notification: {},
 };
 
 export default function (state = initialState, action) {
@@ -39,7 +38,6 @@ export default function (state = initialState, action) {
         ...state,
         isFetching: false,
         isError: true,
-        notification: { message: action.message },
       };
     }
     case actionTypes.FETCH_ANCESTORS_REQUEST: {
@@ -60,7 +58,6 @@ export default function (state = initialState, action) {
         ...state,
         isFetchingAncestors: false,
         isErrorAncestors: true,
-        notification: { message: action.message },
       };
     }
     case actionTypes.FETCH_ANCESTOR_STATISTICS_REQUEST: {
@@ -83,7 +80,6 @@ export default function (state = initialState, action) {
         ...state,
         isFetchingAncestorStatistics: false,
         isErrorAncestorStatistics: true,
-        notification: { message: action.message },
       };
     }
     default:

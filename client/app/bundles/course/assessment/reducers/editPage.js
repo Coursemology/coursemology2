@@ -11,18 +11,14 @@ export default function (state = initialState, action) {
       return { ...state, tabs: action.tabs };
     }
     case actionTypes.FETCH_TABS_FAILURE: {
-      return { ...state, notification: { message: action.message } };
+      return { ...state };
     }
     case actionTypes.UPDATE_ASSESSMENT_REQUEST: {
       return { ...state, disabled: true };
     }
     case actionTypes.UPDATE_ASSESSMENT_SUCCESS:
     case actionTypes.UPDATE_ASSESSMENT_FAILURE: {
-      return {
-        ...state,
-        disabled: false,
-        notification: { message: action.message },
-      };
+      return { ...state, disabled: false };
     }
     default:
       return state;

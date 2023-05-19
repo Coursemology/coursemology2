@@ -13,9 +13,6 @@ import PropTypes from 'prop-types';
 
 import { createAssessment } from 'course/assessment/operations';
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
-import NotificationBar, {
-  notificationShape,
-} from 'lib/components/core/NotificationBar';
 import formTranslations from 'lib/translations/form';
 
 import AssessmentForm from '../../components/AssessmentForm';
@@ -75,7 +72,6 @@ class NewAssessmentFormButton extends Component {
       dispatch,
       gamified,
       intl,
-      notification,
       visible,
       randomizationAllowed,
       canManageMonitor,
@@ -190,8 +186,6 @@ class NewAssessmentFormButton extends Component {
           open={confirmationDialogOpen}
         />
 
-        <NotificationBar notification={notification} />
-
         {this.state.redirectUrl && <Navigate to={this.state.redirectUrl} />}
       </>
     );
@@ -206,7 +200,6 @@ NewAssessmentFormButton.propTypes = {
   canManageMonitor: PropTypes.bool,
   monitoringEnabled: PropTypes.bool,
 
-  notification: notificationShape,
   dispatch: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
   confirmationDialogOpen: PropTypes.bool.isRequired,

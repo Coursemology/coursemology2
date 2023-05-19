@@ -15,9 +15,6 @@ import withHeartbeatWorker from 'workers/withHeartbeatWorker';
 
 import Link from 'lib/components/core/Link';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import NotificationBar, {
-  notificationShape,
-} from 'lib/components/core/NotificationBar';
 import withRouter from 'lib/components/navigation/withRouter';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 
@@ -424,7 +421,7 @@ class VisibleSubmissionEditIndex extends Component {
   }
 
   render() {
-    const { isSubmissionBlocked, isLoading, notification } = this.props;
+    const { isSubmissionBlocked, isLoading } = this.props;
 
     if (isLoading) return <LoadingIndicator />;
     if (isSubmissionBlocked) return <BlockedSubmission />;
@@ -433,7 +430,6 @@ class VisibleSubmissionEditIndex extends Component {
         {this.renderAssessment()}
         {this.renderProgress()}
         {this.renderContent()}
-        <NotificationBar notification={notification} />
       </>
     );
   }
@@ -454,7 +450,6 @@ VisibleSubmissionEditIndex.propTypes = {
   exp: PropTypes.number,
   explanations: PropTypes.objectOf(explanationShape),
   grading: gradingShape.isRequired,
-  notification: notificationShape,
   posts: PropTypes.objectOf(postShape),
   questions: PropTypes.objectOf(questionShape),
   historyAnswers: PropTypes.objectOf(answerShape),
@@ -477,7 +472,6 @@ function mapStateToProps({ assessments: { submission } }) {
     answers: submission.answers,
     codaveriFeedbackStatus: submission.codaveriFeedbackStatus,
     grading: submission.grading.questions,
-    notification: submission.notification,
     posts: submission.posts,
     submission: submission.submission,
     questions: submission.questions,

@@ -1,6 +1,7 @@
 import { Operation } from 'store';
 
 import CourseAPI from 'api/course';
+import { setNotification } from 'lib/actions';
 
 import {
   processAssessment,
@@ -35,10 +36,8 @@ export const fetchStudentsStatistics =
         });
       })
       .catch(() => {
-        dispatch({
-          type: actionTypes.FETCH_STUDENTS_STATISTICS_FAILURE,
-          message: failureMessage,
-        });
+        dispatch({ type: actionTypes.FETCH_STUDENTS_STATISTICS_FAILURE });
+        dispatch(setNotification(failureMessage));
       });
   };
 
@@ -56,10 +55,8 @@ export const fetchStaffStatistics =
         });
       })
       .catch(() => {
-        dispatch({
-          type: actionTypes.FETCH_STAFF_STATISTICS_FAILURE,
-          message: failureMessage,
-        });
+        dispatch({ type: actionTypes.FETCH_STAFF_STATISTICS_FAILURE });
+        dispatch(setNotification(failureMessage));
       });
   };
 
@@ -80,8 +77,9 @@ export const fetchCourseProgressionStatistics =
       .catch(() => {
         dispatch({
           type: actionTypes.FETCH_COURSE_PROGRESSION_STATISTICS_FAILURE,
-          message: failureMessage,
         });
+
+        dispatch(setNotification(failureMessage));
       });
   };
 
@@ -121,7 +119,8 @@ export const fetchCoursePerformanceStatistics =
       .catch(() => {
         dispatch({
           type: actionTypes.FETCH_COURSE_PERFORMANCE_STATISTICS_FAILURE,
-          message: failureMessage,
         });
+
+        dispatch(setNotification(failureMessage));
       });
   };

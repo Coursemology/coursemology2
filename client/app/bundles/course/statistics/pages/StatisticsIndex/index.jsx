@@ -6,7 +6,6 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import PropTypes from 'prop-types';
 
-import NotificationBar from 'lib/components/core/NotificationBar';
 import PageHeader from 'lib/components/navigation/PageHeader';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -148,7 +147,6 @@ const StatisticsIndex = ({
           <CourseStatistics {...courseStatistics} />
         </TabPanel>
       </Box>
-      <NotificationBar notification={courseStatistics.notification} />
     </>
   );
 };

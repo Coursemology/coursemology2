@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 
 import { questionShape } from 'course/assessment/submission/propTypes';
 import Error from 'lib/components/core/ErrorCard';
-import NotificationBar from 'lib/components/core/NotificationBar';
 import FormRichTextField from 'lib/components/form/fields/RichTextField';
 
 import ForumPostSelect from './ForumPostSelect';
 
 const ForumPostResponse = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
-  const [notificationMessage, setNotificationMessage] = useState('');
   const { question, readOnly, answerId } = props;
   const { control } = useFormContext();
   const renderTextField = () =>
@@ -51,9 +50,7 @@ const ForumPostResponse = (props) => {
           <ForumPostSelect
             answerId={answerId}
             field={field}
-            handleNotificationMessage={(message) =>
-              setNotificationMessage(message)
-            }
+            handleNotificationMessage={toast.info}
             onErrorMessage={(message) => setErrorMessage(message)}
             question={question}
             readOnly={readOnly}
@@ -62,12 +59,6 @@ const ForumPostResponse = (props) => {
       />
       {question.hasTextResponse && renderTextField()}
       {errorMessage && <Error message={errorMessage} />}
-      <NotificationBar
-        autoHideDuration={4000}
-        notification={{ message: notificationMessage }}
-        onClose={() => setNotificationMessage('')}
-        open={notificationMessage !== ''}
-      />
     </>
   );
 };
