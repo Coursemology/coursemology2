@@ -193,7 +193,7 @@ ChangeSummaryTable.propTypes = {
   modifiedGroups: PropTypes.arrayOf(groupShape),
 };
 
-export default connect((state) => ({
-  groups: state.groupsFetch.groups,
-  modifiedGroups: state.groupsManage.modifiedGroups,
+export default connect(({ groups }) => ({
+  groups: groups.groupsFetch.groups,
+  modifiedGroups: groups.groupsManage.modifiedGroups,
 }))(ChangeSummaryTable);

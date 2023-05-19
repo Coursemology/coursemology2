@@ -292,6 +292,8 @@ GroupCreationForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 
-export default connect((state) => ({
-  ...state.groupsDialog,
+export default connect(({ groups }) => ({
+  isShown: groups.groupsDialog.isShown,
+  dialogType: groups.groupsDialog.dialogType,
+  isDisabled: groups.groupsDialog.isDisabled,
 }))(GroupCreationForm);

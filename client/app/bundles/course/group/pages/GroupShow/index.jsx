@@ -132,13 +132,13 @@ Category.propTypes = {
   notification: notificationShape,
 };
 
-export default connect((state) => ({
-  isFetching: state.groupsFetch.isFetching,
-  hasFetchError: state.groupsFetch.hasFetchError,
-  groupCategory: state.groupsFetch.groupCategory,
-  groups: state.groupsFetch.groups,
-  canManageCategory: state.groupsFetch.canManageCategory,
-  canManageGroups: state.groupsFetch.canManageGroups,
-  notification: state.notificationPopup,
-  isManagingGroups: state.groupsManage.isManagingGroups,
+export default connect(({ groups, notificationPopup }) => ({
+  isFetching: groups.groupsFetch.isFetching,
+  hasFetchError: groups.groupsFetch.hasFetchError,
+  groupCategory: groups.groupsFetch.groupCategory,
+  groups: groups.groupsFetch.groups,
+  canManageCategory: groups.groupsFetch.canManageCategory,
+  canManageGroups: groups.groupsFetch.canManageGroups,
+  notification: notificationPopup,
+  isManagingGroups: groups.groupsManage.isManagingGroups,
 }))(Category);

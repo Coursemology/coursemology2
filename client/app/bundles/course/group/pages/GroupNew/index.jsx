@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import NotificationPopup from 'lib/containers/NotificationPopup';
-
 import { createCategory } from '../../actions';
 import actionTypes, { dialogTypes } from '../../constants';
 import GroupFormDialog from '../../forms/GroupFormDialog';
@@ -81,7 +79,6 @@ const PopupDialog = ({ dispatch, intl, isManagingGroups }) => {
           onSubmit={onFormSubmit}
         />
       </GroupFormDialog>
-      <NotificationPopup />
     </>
   );
 };
@@ -92,6 +89,6 @@ PopupDialog.propTypes = {
   intl: PropTypes.object,
 };
 
-export default connect((state) => ({
-  isManagingGroups: state.groupsManage.isManagingGroups,
+export default connect(({ groups }) => ({
+  isManagingGroups: groups.groupsManage.isManagingGroups,
 }))(injectIntl(PopupDialog));

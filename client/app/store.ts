@@ -12,6 +12,7 @@ import coursesReducer from './bundles/course/courses/store';
 import commentsReducer from './bundles/course/discussion/topics/store';
 import disbursementReducer from './bundles/course/experience-points/disbursement/store';
 import forumsReducer from './bundles/course/forum/store';
+import groupsReducer from './bundles/course/group/store';
 import leaderboardReducer from './bundles/course/leaderboard/store';
 import learningMapReducer from './bundles/course/learning-map/store';
 import levelsReducer from './bundles/course/level/store';
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   courses: coursesReducer,
   comments: commentsReducer,
   forums: forumsReducer,
+  groups: groupsReducer,
   leaderboard: leaderboardReducer,
   learningMap: learningMapReducer,
   folders: foldersReducer,
