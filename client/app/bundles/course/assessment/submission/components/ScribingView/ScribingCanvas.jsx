@@ -923,7 +923,9 @@ export default class ScribingCanvas extends Component {
           scribbleGroup.selectable = false;
 
           const showLayer = (isShown) => {
-            scribbleGroup._objects.forEach((obj) => obj.setVisible(isShown));
+            scribbleGroup._objects.forEach((obj) => {
+              obj.setVisible?.(isShown);
+            });
             this.canvas.renderAll();
           };
           // Populate layers list
