@@ -1,5 +1,6 @@
+import { toast } from 'react-toastify';
+
 import CourseAPI from 'api/course';
-import { setNotification } from 'lib/actions';
 import {
   discussionActionTypes,
   postRequestingStatuses,
@@ -239,11 +240,7 @@ function refreshTopic(topicId) {
           dispatch(removeTopic(topicId));
         }
       })
-      .catch(() => {
-        dispatch(
-          setNotification('Failed to refresh comments, try again later.'),
-        );
-      });
+      .catch(() => toast.error('Failed to refresh comments, try again later.'));
   };
 }
 
@@ -261,11 +258,9 @@ export function refreshDiscussion() {
       .then(({ data }) => {
         const { topics, posts } = data;
         dispatch(refreshAll(topics || {}, posts || {}));
-        dispatch(setNotification('Discussion refreshed.'));
+        toast.success('Discussion refreshed.');
       })
-      .catch(() => {
-        dispatch(setNotification('Error refreshing, please try again later.'));
-      });
+      .catch(() => toast.error('Error refreshing, please try again later.'));
   };
 }
 
@@ -287,12 +282,9 @@ export function submitNewReplyToServer(topicId) {
     const discussionTopicId =
       state.discussion.topics.get(topicId).discussionTopicId;
 
-    if (text === '') {
-      dispatch(setNotification('Comment cannot be blank!'));
-      return;
-    }
+    if (text === '') return toast.warn('Comment cannot be blank!');
 
-    CourseAPI.comments
+    return CourseAPI.comments
       .create(discussionTopicId, { discussion_post: { text } })
       .then(() => {
         dispatch(refreshTopic(topicId));
@@ -302,7 +294,8 @@ export function submitNewReplyToServer(topicId) {
         dispatch(
           updateReply(topicId, { status: postRequestingStatuses.ERROR }),
         );
-        dispatch(setNotification('Error replying, please try again later.'));
+
+        toast.error('Error replying, please try again later.');
       });
   };
 }
@@ -321,12 +314,9 @@ export function submitNewPostToServer() {
     const text = state.discussion.newTopicPost.content;
     const timestamp = Math.round(state.video.playerProgress);
 
-    if (text === '') {
-      dispatch(setNotification('Comment cannot be blank!'));
-      return;
-    }
+    if (text === '') return toast.warn('Comment cannot be blank!');
 
-    CourseAPI.video.topics
+    return CourseAPI.video.topics
       .create({ timestamp, discussion_post: { text } })
       .then(({ data }) => {
         const { topicId, topic, postId, post } = data;
@@ -337,13 +327,12 @@ export function submitNewPostToServer() {
         dispatch(
           updateNewPost({ content: '', status: postRequestingStatuses.LOADED }),
         );
-        dispatch(setNotification('Comment Added'));
+
+        toast.success('Comment Added');
       })
       .catch(() => {
         dispatch(updateNewPost({ status: postRequestingStatuses.ERROR }));
-        dispatch(
-          setNotification('Error adding new comment, please try again later.'),
-        );
+        toast.error('Error adding new comment, please try again later.');
       });
   };
 }
@@ -362,17 +351,13 @@ export function updatePostOnServer(postId) {
     const text = post.editedContent;
     const discussionTopicId = post.discussionTopicId;
 
-    if (text === null) {
-      dispatch(updatePost(postId, { editMode: false }));
-      return;
-    }
-    if (text === '') {
-      dispatch(setNotification('Comment cannot be blank!'));
-      return;
-    }
+    if (text === null) return dispatch(updatePost(postId, { editMode: false }));
+
+    if (text === '') return toast.warn('Comment cannot be blank!');
 
     dispatch(updatePost(postId, { status: postRequestingStatuses.LOADING }));
-    CourseAPI.comments
+
+    return CourseAPI.comments
       .update(discussionTopicId, postId, { discussion_post: { text } })
       .then(({ data }) => {
         dispatch(
@@ -384,13 +369,12 @@ export function updatePostOnServer(postId) {
             rawContent: data.text,
           }),
         );
-        dispatch(setNotification('Comment edited'));
+
+        toast.success('Comment edited');
       })
       .catch(() => {
         dispatch(updatePost(postId, { status: postRequestingStatuses.ERROR }));
-        dispatch(
-          setNotification('Failed to edit comment, please try again later.'),
-        );
+        toast.error('Failed to edit comment, please try again later.');
       });
   };
 }
@@ -417,13 +401,11 @@ export function deletePostFromServer(postId) {
       .then(() => {
         dispatch(refreshTopic(topicId));
         dispatch(removePost(postId));
-        dispatch(setNotification('Comment has been deleted.'));
+        toast.success('Comment has been deleted.');
       })
       .catch(() => {
         dispatch(updatePost(postId, { status: postRequestingStatuses.ERROR }));
-        dispatch(
-          setNotification('Failed to delete comment, please try again later.'),
-        );
+        toast.error('Failed to delete comment, please try again later.');
       });
   };
 }

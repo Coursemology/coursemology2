@@ -23,7 +23,7 @@ import video, {
  *
  * The rest are simply JS objects to make manipulation code terse elsewhere.
  * @param props The props parsed from JSON
- * @returns {{video: *, discussion: *, notification: *}} The initial store state
+ * @returns {{video: *, discussion: *, oldSessions: *}} The initial store state
  */
 export function createInitialState(props) {
   return {
