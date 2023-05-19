@@ -4,8 +4,8 @@ import { Grid, Stack } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { Operation } from 'store';
 import {
+  AnnouncementEntity,
   AnnouncementFormData,
-  AnnouncementMiniEntity,
   AnnouncementPermissions,
 } from 'types/course/announcements';
 
@@ -16,7 +16,7 @@ import useItems from 'lib/hooks/items/useItems';
 import AnnouncementCard from './AnnouncementCard';
 
 interface Props extends WrappedComponentProps {
-  announcements: AnnouncementMiniEntity[];
+  announcements: AnnouncementEntity[];
   announcementPermissions: AnnouncementPermissions;
   updateOperation?: (
     announcementId: number,
@@ -35,11 +35,11 @@ const translations = defineMessages({
 
 const itemsPerPage = 12;
 
-const searchKeys: (keyof AnnouncementMiniEntity)[] = ['title', 'content'];
+const searchKeys: (keyof AnnouncementEntity)[] = ['title', 'content'];
 
 export const sortFunc = (
-  announcements: AnnouncementMiniEntity[],
-): AnnouncementMiniEntity[] => {
+  announcements: AnnouncementEntity[],
+): AnnouncementEntity[] => {
   const sortedAnnouncements = [...announcements];
   sortedAnnouncements
     .sort((a, b) => Date.parse(b.startTime) - Date.parse(a.startTime))

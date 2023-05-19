@@ -1,7 +1,6 @@
 import {
   AnnouncementData,
-  AnnouncementListData,
-  AnnouncementMiniEntity,
+  AnnouncementEntity,
   AnnouncementPermissions,
 } from 'types/course/announcements';
 import { EntityStore } from 'types/store';
@@ -43,7 +42,7 @@ export const DELETE_INVITATION = 'system/instance/DELETE_INVITATION';
 // Action Types
 export interface SaveAnnouncementListAction {
   type: typeof SAVE_ANNOUNCEMENT_LIST;
-  announcementList: AnnouncementListData[];
+  announcementList: AnnouncementData[];
   announcementPermissions: AnnouncementPermissions;
 }
 
@@ -124,7 +123,7 @@ export type InstanceAdminActionType =
 
 // State Types
 export interface InstanceAdminState {
-  announcements: EntityStore<AnnouncementMiniEntity>;
+  announcements: EntityStore<AnnouncementEntity>;
   courses: EntityStore<CourseMiniEntity>;
   roleRequests: EntityStore<RoleRequestMiniEntity>;
   users: EntityStore<InstanceUserMiniEntity>;

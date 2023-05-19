@@ -1,4 +1,7 @@
-import { AnnouncementListData } from 'types/course/announcements';
+import {
+  AnnouncementData,
+  AnnouncementListData,
+} from 'types/course/announcements';
 
 import BaseAPI from './Base';
 import { APIResponse } from './types';
@@ -13,7 +16,7 @@ export default class AnnouncementsAPI extends BaseAPI {
    * Fetches all the announcements (admin and instance announcements)
    */
   index(): APIResponse<{
-    announcements: AnnouncementListData[];
+    announcements: AnnouncementData[];
   }> {
     return this.client.get(this.#urlPrefix);
   }

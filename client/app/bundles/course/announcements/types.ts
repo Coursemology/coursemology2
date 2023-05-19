@@ -1,7 +1,6 @@
 import {
   AnnouncementData,
-  AnnouncementListData,
-  AnnouncementMiniEntity,
+  AnnouncementEntity,
   AnnouncementPermissions,
 } from 'types/course/announcements';
 import { EntityStore } from 'types/store';
@@ -15,7 +14,7 @@ export const DELETE_ANNOUNCEMENT = 'course/announcement/DELETE_ANNOUNCEMENT';
 // Action Types
 export interface SaveAnnouncementListAction {
   type: typeof SAVE_ANNOUNCEMENT_LIST;
-  announcementList: AnnouncementListData[];
+  announcementList: AnnouncementData[];
   announcementPermissions: AnnouncementPermissions;
 }
 
@@ -35,6 +34,6 @@ export type AnnouncementsActionType =
 
 // State Types
 export interface AnnouncementsState {
-  announcements: EntityStore<AnnouncementMiniEntity>;
+  announcements: EntityStore<AnnouncementEntity>;
   permissions: AnnouncementPermissions;
 }

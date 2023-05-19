@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import {
-  AnnouncementListData,
+  AnnouncementData,
   AnnouncementPermissions,
 } from 'types/course/announcements';
 import { CourseListData } from 'types/system/courses';
@@ -27,7 +27,7 @@ export default class AdminAPI extends BaseSystemAPI {
    */
   indexAnnouncements(): Promise<
     AxiosResponse<{
-      announcements: AnnouncementListData[];
+      announcements: AnnouncementData[];
       permissions: AnnouncementPermissions;
     }>
   > {

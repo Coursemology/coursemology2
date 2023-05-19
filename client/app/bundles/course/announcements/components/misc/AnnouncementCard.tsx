@@ -7,8 +7,8 @@ import { grey } from '@mui/material/colors';
 import equal from 'fast-deep-equal';
 import { Operation } from 'store';
 import {
+  AnnouncementEntity,
   AnnouncementFormData,
-  AnnouncementMiniEntity,
 } from 'types/course/announcements';
 
 import DeleteButton from 'lib/components/core/buttons/DeleteButton';
@@ -20,7 +20,7 @@ import { formatFullDateTime } from 'lib/moment';
 import AnnouncementEdit from '../../pages/AnnouncementEdit';
 
 interface Props extends WrappedComponentProps {
-  announcement: AnnouncementMiniEntity;
+  announcement: AnnouncementEntity;
   showEditOptions?: boolean;
   updateOperation?: (
     announcementId: number,

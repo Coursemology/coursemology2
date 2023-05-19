@@ -1,9 +1,9 @@
-import { AxiosResponse } from 'axios';
 import {
   AnnouncementData,
-  AnnouncementListData,
-  AnnouncementPermissions,
+  FetchAnnouncementsData,
 } from 'types/course/announcements';
+
+import { APIResponse } from 'api/types';
 
 import BaseCourseAPI from './Base';
 
@@ -15,19 +15,14 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
   /**
    * Fetches all the announcements
    */
-  index(): Promise<
-    AxiosResponse<{
-      announcements: AnnouncementListData[];
-      permissions: AnnouncementPermissions;
-    }>
-  > {
+  index(): APIResponse<FetchAnnouncementsData> {
     return this.client.get(this.#urlPrefix);
   }
 
   /**
    * Creates a new announcement
    */
-  create(params: FormData): Promise<AxiosResponse<AnnouncementData>> {
+  create(params: FormData): APIResponse<AnnouncementData> {
     return this.client.post(this.#urlPrefix, params);
   }
 
@@ -37,7 +32,7 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
   update(
     announcementId: number,
     params: FormData | object,
-  ): Promise<AxiosResponse<AnnouncementData>> {
+  ): APIResponse<AnnouncementData> {
     return this.client.patch(`${this.#urlPrefix}/${announcementId}`, params);
   }
 
@@ -49,7 +44,7 @@ export default class AnnouncementsAPI extends BaseCourseAPI {
    * success response: {}
    * error response: {}
    */
-  delete(announcementId: number): Promise<AxiosResponse> {
+  delete(announcementId: number): APIResponse {
     return this.client.delete(`${this.#urlPrefix}/${announcementId}`);
   }
 }

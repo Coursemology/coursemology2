@@ -1,7 +1,6 @@
 import { produce } from 'immer';
 import {
   AnnouncementData,
-  AnnouncementListData,
   AnnouncementPermissions,
 } from 'types/course/announcements';
 import { CourseListData, CourseStats } from 'types/system/courses';
@@ -194,7 +193,7 @@ const reducer = produce(
 
 export const actions = {
   saveAnnouncementList: (
-    announcementList: AnnouncementListData[],
+    announcementList: AnnouncementData[],
     announcementPermissions: AnnouncementPermissions,
   ): SaveAnnouncementListAction => {
     return {
