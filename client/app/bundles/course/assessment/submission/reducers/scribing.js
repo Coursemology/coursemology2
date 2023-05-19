@@ -84,12 +84,11 @@ export default produce((state, action) => {
       };
     }
     case actions.SET_CANVAS_LOADED: {
-      const { answerId, loaded, canvas } = action.payload;
+      const { answerId, loaded } = action.payload;
       return {
         ...state,
         [answerId]: {
           ...state[answerId],
-          canvas,
           isCanvasLoaded: loaded,
         },
       };

@@ -898,7 +898,7 @@ export default class ScribingCanvas extends Component {
       this.canvas.on('text:editing:exited', this.onTextChanged);
 
       this.scaleCanvas();
-      this.props.setCanvasLoaded(this.props.answerId, true, this.canvas);
+      this.props.setCanvasLoaded(this.props.answerId, true);
     };
   }
 
