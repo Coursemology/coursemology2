@@ -375,8 +375,8 @@ GroupManager.propTypes = {
   intl: PropTypes.object,
 };
 
-export default connect((state) => ({
-  selectedGroupId: state.groupsManage.selectedGroupId,
-  modifiedGroups: state.groupsManage.modifiedGroups,
-  isUpdating: state.groupsManage.isUpdating,
+export default connect(({ groups }) => ({
+  selectedGroupId: groups.groupsManage.selectedGroupId,
+  modifiedGroups: groups.groupsManage.modifiedGroups,
+  isUpdating: groups.groupsManage.isUpdating,
 }))(injectIntl(GroupManager));

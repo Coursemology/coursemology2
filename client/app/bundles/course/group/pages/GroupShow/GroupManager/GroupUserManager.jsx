@@ -532,9 +532,9 @@ GroupUserManager.propTypes = {
   intl: PropTypes.object,
 };
 
-export default connect((state) => ({
-  courseUsers: state.groupsManage.courseUsers,
-  originalGroup: state.groupsFetch.groups.find(
-    (g) => g.id === state.groupsManage.selectedGroupId,
+export default connect(({ groups }) => ({
+  courseUsers: groups.groupsManage.courseUsers,
+  originalGroup: groups.groupsFetch.groups.find(
+    (g) => g.id === groups.groupsManage.selectedGroupId,
   ),
 }))(injectIntl(GroupUserManager));

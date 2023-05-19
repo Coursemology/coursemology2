@@ -1,11 +1,11 @@
 import { useCallback, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import { connect } from 'react-redux';
 import Delete from '@mui/icons-material/Delete';
 import { red } from '@mui/material/colors';
 import PropTypes from 'prop-types';
 
 import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
+import { useAppDispatch } from 'lib/hooks/store';
 
 import { deleteCategory, updateCategory } from '../../actions';
 import GroupCard from '../../components/GroupCard';
@@ -67,9 +67,10 @@ const CategoryCard = ({
   numGroups,
   intl,
   onManageGroups,
-  dispatch,
   canManageCategory,
 }) => {
+  const dispatch = useAppDispatch();
+
   const [isConfirmingDelete, setIsConfirmingDelete] = useState(false);
 
   const onFormSubmit = useCallback(
@@ -203,11 +204,10 @@ const CategoryCard = ({
 
 CategoryCard.propTypes = {
   category: categoryShape.isRequired,
-  dispatch: PropTypes.func.isRequired,
   numGroups: PropTypes.number.isRequired,
   onManageGroups: PropTypes.func.isRequired,
   canManageCategory: PropTypes.bool.isRequired,
   intl: PropTypes.object,
 };
 
-export default connect()(injectIntl(CategoryCard));
+export default injectIntl(CategoryCard);

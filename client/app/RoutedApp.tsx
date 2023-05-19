@@ -21,6 +21,8 @@ import DisbursementIndex from 'bundles/course/experience-points/disbursement/pag
 import ForumShow from 'bundles/course/forum/pages/ForumShow';
 import ForumsIndex from 'bundles/course/forum/pages/ForumsIndex';
 import ForumTopicShow from 'bundles/course/forum/pages/ForumTopicShow';
+import GroupIndex from 'bundles/course/group/pages/GroupIndex';
+import GroupShow from 'bundles/course/group/pages/GroupShow';
 import LeaderboardIndex from 'bundles/course/leaderboard/pages/LeaderboardIndex';
 import LearningMap from 'bundles/course/learning-map/containers/LearningMap';
 import LevelsIndex from 'bundles/course/level/pages/LevelsIndex';
@@ -178,6 +180,10 @@ const RoutedApp = (): JSX.Element => {
           <Route element={<UserShow />} path="/users/:userId" />
 
           <Route element={<LevelsIndex />} path="/courses/:courseId/levels" />
+
+          <Route element={<GroupIndex />} path="courses/:courseId/groups">
+            <Route element={<GroupShow />} path=":groupCategoryId" />
+          </Route>
         </Routes>
       </BrowserRouter>
 
