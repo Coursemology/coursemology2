@@ -82,17 +82,6 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(js|jsx|ts|tsx)$/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            cacheCompression: false,
-            cacheDirectory: true,
-          },
-        },
-        exclude: /node_modules/,
-      },
-      {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
         include: [

@@ -12,4 +12,13 @@ module.exports = merge(common, {
   optimization: {
     usedExports: true,
   },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx|ts|tsx)$/,
+        use: ['babel-loader'],
+        exclude: /node_modules/,
+      },
+    ],
+  },
 });
