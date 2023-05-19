@@ -18,13 +18,13 @@ interface Node {
 export interface LearningMapState {
   canModify: boolean;
   isLoading: boolean;
-  response: {
-    didSucceed: boolean;
-    message: string;
-  };
   nodes: Node[];
   selectedElement: {
     id: string;
     type: string;
+  };
+  response: {
+    didSucceed?: boolean;
+    message?: string;
   };
 }
