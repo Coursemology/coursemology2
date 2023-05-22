@@ -44,15 +44,11 @@ export default defineMessages({
   },
   maxProgrammingTimeLimit: {
     id: 'course.admin.AssessmentSettings.maxProgrammingTimeLimit',
-    defaultMessage: 'Maximum programming time limit',
+    defaultMessage: 'Maximum evaluation time limit',
   },
   standardOutputsAndStandardErrors: {
     id: 'course.admin.AssessmentSettings.standardOutputsAndStandardErrors',
     defaultMessage: 'Standard outputs and Standard errors',
-  },
-  randomisation: {
-    id: 'course.admin.AssessmentSettings.randomisation',
-    defaultMessage: 'Randomisation options',
   },
   enableRandomisedAssessments: {
     id: 'course.admin.AssessmentSettings.enableRandomisedAssessments',
@@ -60,7 +56,7 @@ export default defineMessages({
   },
   enableMcqChoicesRandomisations: {
     id: 'course.admin.AssessmentSettings.enableMcqChoicesRandomisations',
-    defaultMessage: 'Enable MCQ choices randomisations',
+    defaultMessage: 'Randomise MCQ choices',
   },
   deleteCategoryPromptAction: {
     id: 'course.admin.AssessmentSettings.deleteCategoryPromptAction',
