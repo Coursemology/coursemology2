@@ -106,11 +106,7 @@ const AssessmentsSettingsForm = (
             </Subsection>
 
             {props.data.maxProgrammingTimeLimit && (
-              <Subsection
-                className="!mt-8"
-                spaced
-                title={t(translations.maxProgrammingTimeLimit)}
-              >
+              <div>
                 <Controller
                   control={control}
                   name="maxProgrammingTimeLimit"
@@ -120,13 +116,24 @@ const AssessmentsSettingsForm = (
                       field={field}
                       fieldState={fieldState}
                       fullWidth
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            {t(translations.s)}
+                          </InputAdornment>
+                        ),
+                      }}
                       label={t(translations.maxProgrammingTimeLimit)}
                       type="number"
                       variant="filled"
                     />
                   )}
                 />
-              </Subsection>
+
+                <Typography color="text.secondary" variant="body2">
+                  {t(translations.maxProgrammingTimeLimitHint)}
+                </Typography>
+              </div>
             )}
           </Section>
 
