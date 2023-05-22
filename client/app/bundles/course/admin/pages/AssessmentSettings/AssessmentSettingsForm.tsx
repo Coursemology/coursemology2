@@ -1,5 +1,6 @@
 import { Emits } from 'react-emitter-factory';
 import { Controller } from 'react-hook-form';
+import { InputAdornment, Typography } from '@mui/material';
 import { AssessmentSettingsData } from 'types/course/admin/assessments';
 import * as yup from 'yup';
 
@@ -44,6 +45,38 @@ const AssessmentsSettingsForm = (
       {(control): JSX.Element => (
         <>
           <Section sticksToNavbar title={t(translations.assessmentSettings)}>
+            {/* Randomized Assessment is temporarily hidden (PR#5406) */}
+            {/* <Controller
+                control={control}
+                name="allowRandomization"
+                render={({ field, fieldState }): JSX.Element => (
+                  <FormCheckboxField
+                    disabled={props.disabled}
+                    field={field}
+                    fieldState={fieldState}
+                    label={t(translations.enableRandomisedAssessments)}
+                  />
+                )}
+              /> */}
+
+            <Controller
+              control={control}
+              name="allowMrqOptionsRandomization"
+              render={({ field, fieldState }): JSX.Element => (
+                <FormCheckboxField
+                  disabled={props.disabled}
+                  field={field}
+                  fieldState={fieldState}
+                  label={t(translations.enableMcqChoicesRandomisations)}
+                />
+              )}
+            />
+          </Section>
+
+          <Section
+            sticksToNavbar
+            title={t(translations.programmingQuestionSettings)}
+          >
             <Subsection spaced title={t(translations.allowStudentsToView)}>
               <Controller
                 control={control}
@@ -67,39 +100,6 @@ const AssessmentsSettingsForm = (
                     field={field}
                     fieldState={fieldState}
                     label={t(translations.standardOutputsAndStandardErrors)}
-                  />
-                )}
-              />
-            </Subsection>
-
-            <Subsection
-              className="!mt-8"
-              spaced
-              title={t(translations.randomisation)}
-            >
-              {/* Randomized Assessment is temporarily hidden (PR#5406) */}
-              {/* <Controller
-                control={control}
-                name="allowRandomization"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormCheckboxField
-                    disabled={props.disabled}
-                    field={field}
-                    fieldState={fieldState}
-                    label={t(translations.enableRandomisedAssessments)}
-                  />
-                )}
-              /> */}
-
-              <Controller
-                control={control}
-                name="allowMrqOptionsRandomization"
-                render={({ field, fieldState }): JSX.Element => (
-                  <FormCheckboxField
-                    disabled={props.disabled}
-                    field={field}
-                    fieldState={fieldState}
-                    label={t(translations.enableMcqChoicesRandomisations)}
                   />
                 )}
               />
