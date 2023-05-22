@@ -156,4 +156,18 @@ export default defineMessages({
     id: 'course.admin.AssessmentSettings.errorOccurredWhenDeletingTab',
     defaultMessage: 'An error occurred while deleting the tab.',
   },
+  s: {
+    id: 'course.admin.AssessmentSettings.s',
+    defaultMessage: 's',
+  },
+  programmingQuestionSettings: {
+    id: 'course.admin.AssessmentSettings.programmingQuestionSettings',
+    defaultMessage: 'Programming Question settings',
+  },
+  maxProgrammingTimeLimitHint: {
+    id: 'course.admin.AssessmentSettings.maxProgrammingTimeLimitHint',
+    defaultMessage:
+      'This will be the upper bound for the time limits of all programming questions in this course. ' +
+      'If there are programming questions with time limits greater than this, this time limit will take precedence.',
+  },
 });
