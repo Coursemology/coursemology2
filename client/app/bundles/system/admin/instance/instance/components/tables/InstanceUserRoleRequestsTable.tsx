@@ -185,7 +185,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
               const roleRequest = roleRequests[dataIndex];
               return (
                 <Typography key={`createdAt-${roleRequest.id}`} variant="body2">
-                  {formatLongDateTime(roleRequest.confirmedAt)}
+                  {formatLongDateTime(roleRequest.createdAt)}
                 </Typography>
               );
             },
@@ -258,7 +258,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
               const roleRequest = roleRequests[dataIndex];
               return (
                 <Typography key={`createdAt-${roleRequest.id}`} variant="body2">
-                  {formatLongDateTime(roleRequest.confirmedAt)}
+                  {formatLongDateTime(roleRequest.createdAt)}
                 </Typography>
               );
             },
@@ -298,7 +298,7 @@ const InstanceUserRoleRequestsTable: FC<Props> = (props) => {
               const roleRequest = roleRequests[dataIndex];
               return (
                 <Typography key={`createdAt-${roleRequest.id}`} variant="body2">
-                  {formatLongDateTime(roleRequest.confirmedAt)}
+                  {formatLongDateTime(roleRequest.createdAt)}
                 </Typography>
               );
             },
