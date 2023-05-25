@@ -21,11 +21,13 @@ module Course::ClosingReminderConcern
     # `Course::ClosingReminderJob` is created, to invalidate all previous jobs.
     self.closing_reminder_token = Time.zone.now.to_f.round(5)
 
-    return if new_end_at <= Time.zone.now
+    return unless new_end_at && (new_end_at > Time.zone.now)
 
-    # Send notification one day before the closing date
-    closing_reminder_job_class.set(wait_until: new_end_at - 1.day).
-      perform_later(self, closing_reminder_token)
+    execute_after_commit do
+      # Send notification one day before the closing date
+      closing_reminder_job_class.set(wait_until: new_end_at - 1.day).
+        perform_later(self, closing_reminder_token)
+    end
   end
 
   private
@@ -39,8 +41,6 @@ module Course::ClosingReminderConcern
   end
 
   def reset_closing_reminders
-    execute_after_commit do
-      create_closing_reminders_at(end_at) if end_at
-    end
+    create_closing_reminders_at(end_at)
   end
 end

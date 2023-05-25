@@ -91,7 +91,7 @@ RSpec.describe Course::ReferenceTime, type: :model do
       let(:assessment) { create(:assessment, end_at: 2.days.from_now) }
 
       with_active_job_queue_adapter(:test) do
-        context 'when end_at is changed' do
+        context 'when end_at is changed to the future' do
           it 'creates a closing reminder job' do
             old_closing_reminder_token = assessment.closing_reminder_token
 
@@ -100,8 +100,35 @@ RSpec.describe Course::ReferenceTime, type: :model do
 
             expect { reference_time.save }.to(
               have_enqueued_job(Course::Assessment::ClosingReminderJob).
+              exactly(:once).
               with { |_, token| expect(token).not_to eq(old_closing_reminder_token) }
             )
+
+            expect(assessment.reload.closing_reminder_token).not_to eq(old_closing_reminder_token)
+          end
+        end
+
+        context 'when end_at is changed to the past' do
+          it 'does not create a closing reminder job, but updates the token' do
+            old_closing_reminder_token = assessment.closing_reminder_token
+
+            reference_time = assessment.reference_times.first
+            reference_time.end_at = 20.hours.ago
+
+            expect { reference_time.save }.not_to have_enqueued_job(Course::Assessment::ClosingReminderJob)
+
+            expect(assessment.reload.closing_reminder_token).not_to eq(old_closing_reminder_token)
+          end
+        end
+
+        context 'when end_at is changed to nil' do
+          it 'does not create a closing reminder job, but updates the token' do
+            old_closing_reminder_token = assessment.closing_reminder_token
+
+            reference_time = assessment.reference_times.first
+            reference_time.end_at = nil
+
+            expect { reference_time.save }.not_to have_enqueued_job(Course::Assessment::ClosingReminderJob)
 
             expect(assessment.reload.closing_reminder_token).not_to eq(old_closing_reminder_token)
           end
