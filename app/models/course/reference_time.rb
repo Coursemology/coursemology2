@@ -12,7 +12,7 @@ class Course::ReferenceTime < ApplicationRecord
 
   before_destroy :prevent_destroy_if_in_default_timeline, prepend: true
 
-  after_save :reset_closing_reminders, if: :saved_change_to_end_at?
+  before_save :reset_closing_reminders, if: :end_at_changed?
 
   # TODO(#3448): Consider creating personal times if new_record?
   after_commit :update_personal_times, on: :update
@@ -46,6 +46,7 @@ class Course::ReferenceTime < ApplicationRecord
     return unless !actable_end_at_already_updated && actable.respond_to?(:create_closing_reminders_at)
 
     actable.create_closing_reminders_at(end_at)
+    actable.save!
   end
 
   def lesson_plan_item_in_same_course
