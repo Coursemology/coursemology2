@@ -99,13 +99,14 @@ import InstanceUsersInvitations from 'bundles/system/admin/instance/instance/pag
 import InstanceUsersInvite from 'bundles/system/admin/instance/instance/pages/InstanceUsersInvite';
 import AccountSettings from 'bundles/user/AccountSettings';
 import UserShow from 'bundles/users/pages/UserShow';
+import PopupNotifierOutlet from 'course/user-notification/PopupNotifierOutlet';
 
 const RoutedApp = (): JSX.Element => (
   <Routes>
     <Route path="courses">
       <Route element={<CoursesIndex />} index />
 
-      <Route path=":courseId">
+      <Route element={<PopupNotifierOutlet />} path=":courseId">
         <Route element={<CourseShow />} index />
 
         <Route path="achievements">
