@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { Operation } from 'store';
 
 import CourseAPI from 'api/course';

@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 export const tabsStyle = {
   // to show tab indicator on firefox
   '& .MuiTabs-indicator': {

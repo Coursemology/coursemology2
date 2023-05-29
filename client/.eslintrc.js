@@ -110,7 +110,7 @@ module.exports = {
       },
     ],
     'import/no-extraneous-dependencies': ['warn', { devDependencies: true }],
-    'import/prefer-default-export': 'warn',
+    'import/prefer-default-export': 'off',
     'jsx-a11y/anchor-is-valid': 'off',
     'jsx-a11y/click-events-have-key-events': 'off',
     'jsx-a11y/label-has-for': 'off',
