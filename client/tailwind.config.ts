@@ -4,6 +4,8 @@ import type { Config } from 'tailwindcss';
 import flattenColorPalette from 'tailwindcss/lib/util/flattenColorPalette';
 import plugin from 'tailwindcss/plugin';
 
+import palette from './app/theme/palette';
+
 const SLOTTED_COLOR_VAR = '--tw-slotted-color';
 
 export default {
@@ -34,6 +36,9 @@ export default {
           '0%': { backgroundColor: `var(${SLOTTED_COLOR_VAR}-1)` },
           '100%': { backgroundColor: 'transparent' },
         },
+      },
+      colors: {
+        primary: palette.primary.main,
       },
     },
   },
