@@ -17,7 +17,7 @@ class Course::Discussion::TopicsComponent < SimpleDelegator
     [
       {
         key: :discussion_topics,
-        icon: 'comments',
+        icon: :comments,
         title: settings.title || t('course.discussion.topics.sidebar_title'),
         weight: 5,
         path: course_topics_path(current_course),

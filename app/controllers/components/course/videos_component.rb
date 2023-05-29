@@ -24,7 +24,7 @@ class Course::VideosComponent < SimpleDelegator
     [
       {
         key: :videos,
-        icon: 'video-camera',
+        icon: :video,
         title: settings.title || t('course.video.videos.sidebar_title'),
         weight: 12,
         path: course_videos_path(current_course, tab: current_course.default_video_tab),

@@ -16,7 +16,7 @@ class Course::MultipleReferenceTimelinesComponent < SimpleDelegator
     [
       {
         key: :reference_timelines,
-        icon: 'random',
+        icon: :timelines,
         type: :admin,
         weight: 8,
         title: t('layouts.multiple_reference_timelines.timeline_designer'),

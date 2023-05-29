@@ -16,7 +16,7 @@ class Course::LevelsComponent < SimpleDelegator
     [
       {
         key: :levels,
-        icon: 'star-half-o',
+        icon: :levels,
         title: I18n.t('course.levels.sidebar_title'),
         type: :admin,
         weight: 6,

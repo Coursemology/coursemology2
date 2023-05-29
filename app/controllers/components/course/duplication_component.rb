@@ -12,7 +12,7 @@ class Course::DuplicationComponent < SimpleDelegator
     [
       {
         key: :duplication,
-        icon: 'clone',
+        icon: :duplication,
         title: t('layouts.duplication.title'),
         type: :admin,
         weight: 5,

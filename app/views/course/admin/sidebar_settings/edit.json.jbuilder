@@ -5,5 +5,5 @@ json.array! sorted_sidebar_items do |item|
   json.id item.id
   json.title item.title
   json.weight item.weight
-  json.iconClassName "fa fa-#{item.icon}"
+  json.icon item.icon
 end
