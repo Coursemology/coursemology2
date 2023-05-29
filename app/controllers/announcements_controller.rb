@@ -9,7 +9,8 @@ class AnnouncementsController < ApplicationController
     respond_to do |format|
       format.html
       format.json do
-        @announcements = global_announcements.includes(:creator)
+        announcements = requesting_unread? ? unread_global_announcements : global_announcements
+        @announcements = announcements.includes(:creator)
       end
     end
   end
@@ -21,7 +22,15 @@ class AnnouncementsController < ApplicationController
     head :ok
   end
 
-  def unread
-    @unread_announcements = unread_global_announcements.sort { |a, b| b.start_at <=> a.start_at }
+  protected
+
+  def publicly_accessible?
+    requesting_unread?
+  end
+
+  private
+
+  def requesting_unread?
+    params[:unread] == 'true'
   end
 end

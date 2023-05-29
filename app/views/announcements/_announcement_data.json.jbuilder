@@ -11,7 +11,7 @@ json.creator do
   json.userUrl url_to_user_or_course_user(@course, user_or_course_user)
 end
 
-json.isUnread announcement.unread?(current_user)
+json.isUnread !user_signed_in? || announcement.unread?(current_user)
 json.isSticky announcement.sticky?
 json.isCurrentlyActive announcement.currently_active?
 
