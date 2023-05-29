@@ -6,7 +6,7 @@ import { Card, CardContent } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PropTypes from 'prop-types';
 
-import { COURSE_COMPONENT_ICONS } from 'lib/constants/sharedConstants';
+import { defensivelyGetIcon } from 'lib/constants/icons';
 
 import { nodeShape } from '../../propTypes';
 import translations from '../../translations';
@@ -85,7 +85,7 @@ const Node = (props) => {
     setIsNodeMenuDisplayed(true);
   };
 
-  const IconComponent = COURSE_COMPONENT_ICONS[node.courseMaterialType];
+  const Icon = defensivelyGetIcon(node.courseMaterialType);
 
   return (
     <div style={{ ...styles.wrapper, zIndex }}>
@@ -107,7 +107,7 @@ const Node = (props) => {
                 />
               </div>
             )}
-            <IconComponent style={styles.icon} />
+            <Icon style={styles.icon} />
             {!canModify && !node.unlocked && <Lock />}
           </CardContent>
           <div style={styles.content}>

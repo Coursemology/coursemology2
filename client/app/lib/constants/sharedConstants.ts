@@ -1,10 +1,3 @@
-import {
-  EmojiEvents,
-  Flight,
-  Folder,
-  PieChart,
-  Videocam,
-} from '@mui/icons-material';
 import type { CourseUserRoles, StaffRoles } from 'types/course/courseUsers';
 import {
   InstanceUserRoles,
@@ -57,14 +50,6 @@ export const STAFF_ROLES: Record<StaffRoles, string> = staffRoles;
 export const AVAILABLE_LOCALES: { [key in Locale]: string } = {
   en: 'English',
   zh: '中文',
-};
-
-export const COURSE_COMPONENT_ICONS = {
-  achievement: EmojiEvents,
-  assessment: Flight,
-  material: Folder,
-  survey: PieChart,
-  video: Videocam,
 };
 
 export default {
