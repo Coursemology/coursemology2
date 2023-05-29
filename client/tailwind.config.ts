@@ -65,7 +65,10 @@ export default {
       matchUtilities(
         {
           'bg-fade-to-l': (value) => ({
-            background: `linear-gradient(90deg, transparent 0%, ${value} 20%)`,
+            background: `linear-gradient(90deg, transparent 0%, ${value} 25%)`,
+          }),
+          'bg-fade-to-r': (value) => ({
+            background: `linear-gradient(-90deg, transparent 0%, ${value} 25%)`,
           }),
         },
         { values: flattenColorPalette(theme('colors')), type: 'color' },
