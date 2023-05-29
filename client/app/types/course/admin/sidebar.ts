@@ -1,8 +1,10 @@
+import { CourseComponentIconName } from 'lib/constants/icons';
+
 export interface SidebarItem {
   id: string;
   title: string;
   weight: number;
-  iconClassName: string;
+  icon: CourseComponentIconName;
 }
 
 export type SidebarItems = SidebarItem[];

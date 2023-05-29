@@ -19,6 +19,7 @@ import produce from 'immer';
 import { SidebarItem, SidebarItems } from 'types/course/admin/sidebar';
 
 import Section from 'lib/components/core/layouts/Section';
+import { defensivelyGetIcon } from 'lib/constants/icons';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from './translations';
@@ -54,7 +55,7 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
       id: item.id,
       title: item.title,
       weight: index + 1,
-      iconClassName: item.iconClassName,
+      icon: item.icon,
     }));
 
     props.onSubmit(newSidebarItems, setSettings, () =>
@@ -100,6 +101,8 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
           transform,
         };
 
+        const Icon = defensivelyGetIcon(item.icon, 'outlined');
+
         return (
           <TableRow
             ref={provided.innerRef}
@@ -119,12 +122,8 @@ const SidebarSettingsForm = (props: SidebarSettingsFormProps): JSX.Element => {
               />
             </TableCell>
 
-            <TableCell className="w-0 border-none">
-              <div
-                className={`${item.iconClassName} w-0 ${
-                  props.disabled && 'text-neutral-400'
-                }`}
-              />
+            <TableCell className="w-0 border-none p-0">
+              <Icon />
             </TableCell>
 
             <TableCell className="border-none">

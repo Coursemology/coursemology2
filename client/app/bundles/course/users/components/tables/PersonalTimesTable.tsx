@@ -11,7 +11,10 @@ import {
 } from '@mui/material';
 import { PersonalTimeMiniEntity } from 'types/course/personalTimes';
 
-import { COURSE_COMPONENT_ICONS } from 'lib/constants/sharedConstants';
+import {
+  CourseComponentIconName,
+  defensivelyGetIcon,
+} from 'lib/constants/icons';
 import { getAssessmentURL, getVideoURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import tableTranslations from 'lib/translations/table';
@@ -64,9 +67,10 @@ const getIcon = (item: PersonalTimeMiniEntity): JSX.Element => {
   } else if (item.type === ITEM_ACTABLE_TYPES.assessment.name) {
     materialType = 'assessment';
   }
-  const IconComponent = COURSE_COMPONENT_ICONS[materialType];
 
-  return <IconComponent fontSize="small" />;
+  const Icon = defensivelyGetIcon(materialType as CourseComponentIconName);
+
+  return <Icon fontSize="small" />;
 };
 
 const PersonalTimesTable: FC<Props> = (props) => {
