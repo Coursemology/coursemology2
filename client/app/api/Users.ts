@@ -77,4 +77,8 @@ export default class UsersAPI extends BaseAPI {
   ): APIResponse {
     return this.client.post(url);
   }
+
+  signOut(url: string): APIResponse {
+    return this.client.delete(url);
+  }
 }

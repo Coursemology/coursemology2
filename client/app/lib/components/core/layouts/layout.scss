@@ -1,37 +1,3 @@
-body {
-  padding-top: 60px;
-
-  & > nav {
-    z-index: 1201 !important;
-  }
-}
-
-.sidebarContainer {
-  & > div {
-    z-index: 1;
-
-    @media (min-width: 600px) {
-      flex-basis: 33.33333%;
-      max-width: 33.33333%;
-    }
-
-    @media (min-width: 900px) {
-      flex-basis: 25%;
-      max-width: 25%;
-    }
-
-    @media (min-width: 1200px) {
-      flex-basis: 16.66667%;
-      max-width: 16.66667%;
-    }
-  }
-}
-
-footer {
-  background-color: #ffffff;
-  z-index: 2;
-}
-
 img {
   max-width: 100%;
 }
