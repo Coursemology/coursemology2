@@ -1,4 +1,10 @@
-import { ComponentProps, useState, useTransition } from 'react';
+import {
+  ComponentProps,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from 'react';
 import { Clear, Search } from '@mui/icons-material';
 import { IconButton, InputAdornment } from '@mui/material';
 
@@ -9,10 +15,11 @@ type SearchFieldProps = ComponentProps<typeof TextField> & {
   onChangeKeyword?: (keyword: string) => void;
   placeholder?: string;
   className?: string;
+  noIcon?: boolean;
 };
 
 const SearchField = (props: SearchFieldProps): JSX.Element => {
-  const { onChangeKeyword, ...textFieldProps } = props;
+  const { onChangeKeyword, noIcon, ...otherProps } = props;
 
   const [keyword, setKeyword] = useState('');
   const [isPending, startTransition] = useTransition();
@@ -40,7 +47,7 @@ const SearchField = (props: SearchFieldProps): JSX.Element => {
       fullWidth
       hiddenLabel
       InputProps={{
-        startAdornment: (
+        startAdornment: !noIcon && (
           <InputAdornment position="start">
             <Search color={keyword ? 'primary' : undefined} />
           </InputAdornment>
@@ -57,13 +64,12 @@ const SearchField = (props: SearchFieldProps): JSX.Element => {
           </InputAdornment>
         ),
       }}
-      onChange={(e): void => changeKeyword(e.target.value)}
-      placeholder={props.placeholder}
       size="small"
       trims
-      value={keyword}
       variant="filled"
-      {...textFieldProps}
+      {...otherProps}
+      onChange={(e): void => changeKeyword(e.target.value)}
+      value={keyword}
     />
   );
 };
