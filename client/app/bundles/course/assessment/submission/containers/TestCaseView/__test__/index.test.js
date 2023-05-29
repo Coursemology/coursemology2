@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 
 import { VisibleTestCaseView } from 'course/assessment/submission/containers/TestCaseView';
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+import Providers from 'lib/components/wrappers/Providers';
 
 import { workflowStates } from '../../../constants';
 
@@ -65,9 +65,9 @@ describe('TestCaseView', () => {
   describe('when viewing as staff', () => {
     it('renders all test cases and standard streams', () => {
       const testCaseView = mount(
-        <ProviderWrapper>
+        <Providers>
           <VisibleTestCaseView {...defaultStaffViewProps} />
-        </ProviderWrapper>,
+        </Providers>,
       );
 
       expect(testCaseView.find(publicTestCases).exists()).toBe(true);
@@ -79,9 +79,9 @@ describe('TestCaseView', () => {
 
     it('renders staff-only warnings', () => {
       const testCaseView = mount(
-        <ProviderWrapper>
+        <Providers>
           <VisibleTestCaseView {...defaultStaffViewProps} />
-        </ProviderWrapper>,
+        </Providers>,
       );
 
       expect(testCaseView.find(privateWarningIcon).exists()).toBe(true);
@@ -93,14 +93,14 @@ describe('TestCaseView', () => {
     describe('when showEvaluation & showPrivate are true', () => {
       it('renders staff-only warnings when assessment is not yet published', () => {
         const testCaseView = mount(
-          <ProviderWrapper>
+          <Providers>
             <VisibleTestCaseView
               {...defaultStaffViewProps}
               showEvaluation
               showPrivate
               submissionState={workflowStates.Attempting}
             />
-          </ProviderWrapper>,
+          </Providers>,
         );
 
         expect(testCaseView.find(privateWarningIcon).exists()).toBe(true);
@@ -109,13 +109,13 @@ describe('TestCaseView', () => {
 
       it('does not render staff-only warnings when assessment is published', () => {
         const testCaseView = mount(
-          <ProviderWrapper>
+          <Providers>
             <VisibleTestCaseView
               {...defaultStaffViewProps}
               showEvaluation
               showPrivate
             />
-          </ProviderWrapper>,
+          </Providers>,
         );
 
         expect(testCaseView.find(privateWarningIcon).exists()).toBe(false);
@@ -126,12 +126,12 @@ describe('TestCaseView', () => {
     describe('when students can see standard streams', () => {
       it('does not render staff-only warnings', () => {
         const testCaseView = mount(
-          <ProviderWrapper>
+          <Providers>
             <VisibleTestCaseView
               {...defaultStaffViewProps}
               showStdoutAndStderr
             />
-          </ProviderWrapper>,
+          </Providers>,
         );
 
         expect(testCaseView.find(standardOutputWarningIcon).exists()).toBe(
@@ -147,14 +147,14 @@ describe('TestCaseView', () => {
   describe('when viewing as student', () => {
     it('does not show any staff-only warnings', () => {
       const testCaseView = mount(
-        <ProviderWrapper>
+        <Providers>
           <VisibleTestCaseView
             {...defaultTestCaseViewProps}
             showEvaluation
             showPrivate
             showStdoutAndStderr
           />
-        </ProviderWrapper>,
+        </Providers>,
       );
 
       expect(testCaseView.find(privateWarningIcon).exists()).toBe(false);
@@ -165,12 +165,12 @@ describe('TestCaseView', () => {
 
     it('shows standard streams when the flag is enabled', () => {
       const testCaseView = mount(
-        <ProviderWrapper>
+        <Providers>
           <VisibleTestCaseView
             {...defaultTestCaseViewProps}
             showStdoutAndStderr
           />
-        </ProviderWrapper>,
+        </Providers>,
       );
 
       expect(testCaseView.find(standardOutput).exists()).toBe(true);
@@ -180,13 +180,13 @@ describe('TestCaseView', () => {
     describe('when showEvaluation & showPrivate flags are enabled', () => {
       it('shows private and evaluation tests after assessment is published', () => {
         const testCaseView = mount(
-          <ProviderWrapper>
+          <Providers>
             <VisibleTestCaseView
               {...defaultTestCaseViewProps}
               showEvaluation
               showPrivate
             />
-          </ProviderWrapper>,
+          </Providers>,
         );
 
         expect(testCaseView.find(privateTestCases).exists()).toBe(true);
@@ -195,14 +195,14 @@ describe('TestCaseView', () => {
 
       it('does not show private and evaluation tests before assessment is published', () => {
         const testCaseView = mount(
-          <ProviderWrapper>
+          <Providers>
             <VisibleTestCaseView
               {...defaultTestCaseViewProps}
               showEvaluation
               showPrivate
               submissionState={workflowStates.Attempting}
             />
-          </ProviderWrapper>,
+          </Providers>,
         );
 
         expect(testCaseView.find(privateTestCases).exists()).toBe(false);

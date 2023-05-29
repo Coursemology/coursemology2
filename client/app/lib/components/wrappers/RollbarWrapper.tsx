@@ -1,11 +1,10 @@
-import { FC } from 'react';
 import { Provider } from '@rollbar/react';
 
-interface Props {
+interface RollbarProviderProps {
   children: JSX.Element;
 }
 
-const RollBarWrapper: FC<Props> = (props) => {
+const RollbarProvider = (props: RollbarProviderProps): JSX.Element => {
   // TODO: To report user id as well after we move to SPA.
   const rollbarConfig =
     process.env.NODE_ENV === 'development'
@@ -46,4 +45,4 @@ const RollBarWrapper: FC<Props> = (props) => {
   return <Provider config={rollbarConfig}>{props.children}</Provider>;
 };
 
-export default RollBarWrapper;
+export default RollbarProvider;
