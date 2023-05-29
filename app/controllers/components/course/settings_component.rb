@@ -22,7 +22,8 @@ class Course::SettingsComponent < SimpleDelegator
 
     [
       {
-        icon: 'gear',
+        key: :admin,
+        icon: :settings,
         title: t('layouts.course_admin.title'),
         type: :admin,
         weight: 9,

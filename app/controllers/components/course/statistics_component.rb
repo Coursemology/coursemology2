@@ -12,7 +12,7 @@ class Course::StatisticsComponent < SimpleDelegator
     [
       {
         key: :statistics,
-        icon: 'bar-chart',
+        icon: :statistics,
         title: t('course.statistics.header'),
         type: :admin,
         weight: 2,

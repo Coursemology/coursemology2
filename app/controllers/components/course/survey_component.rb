@@ -14,7 +14,7 @@ class Course::SurveyComponent < SimpleDelegator
     [
       {
         key: :surveys,
-        icon: 'pie-chart',
+        icon: :survey,
         title: I18n.t('course.surveys.sidebar_title'),
         weight: 11,
         path: course_surveys_path(current_course)

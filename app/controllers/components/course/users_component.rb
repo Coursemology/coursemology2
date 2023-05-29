@@ -20,7 +20,7 @@ class Course::UsersComponent < SimpleDelegator
     [
       {
         key: :users,
-        icon: 'group',
+        icon: :users,
         title: t('course.users.sidebar_title'),
         weight: 7,
         path: course_users_path(current_course)
@@ -39,7 +39,8 @@ class Course::UsersComponent < SimpleDelegator
 
     [
       {
-        icon: 'user-plus',
+        key: :manage_users,
+        icon: :manageUsers,
         title: t('layouts.course_users.title'),
         type: :admin,
         weight: 1,

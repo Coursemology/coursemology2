@@ -16,7 +16,7 @@ class Course::ForumsComponent < SimpleDelegator
     [
       {
         key: :forums,
-        icon: 'list-ul',
+        icon: :forum,
         title: settings.title || t('course.forum.forums.sidebar_title'),
         weight: 10,
         path: course_forums_path(current_course),

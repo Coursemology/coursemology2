@@ -16,7 +16,7 @@ class Course::AnnouncementsComponent < SimpleDelegator
     [
       {
         key: :announcements,
-        icon: 'bullhorn',
+        icon: :announcement,
         title: settings.title || t('course.announcements.sidebar_title'),
         weight: 1,
         path: course_announcements_path(current_course),

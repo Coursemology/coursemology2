@@ -14,7 +14,7 @@ class Course::LearningMapComponent < SimpleDelegator
     [
       {
         key: :learning_map,
-        icon: 'map',
+        icon: :map,
         title: t('layouts.learning_map.title'),
         weight: 5,
         path: course_learning_map_path(current_course)
