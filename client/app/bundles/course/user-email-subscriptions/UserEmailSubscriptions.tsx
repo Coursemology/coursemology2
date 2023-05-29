@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 
 import ErrorCard from 'lib/components/core/ErrorCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
+import { DataHandle } from 'lib/hooks/router/dynamicNest';
 import { useAppDispatch } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -43,4 +44,14 @@ const UserEmailSubscriptions = (): JSX.Element => {
   return <UserEmailSubscriptionsTable />;
 };
 
-export default UserEmailSubscriptions;
+const handle: DataHandle = (match) => ({
+  getData: () => ({
+    activePath: null,
+    content: {
+      title: translations.emailSubscriptions,
+      url: match.pathname,
+    },
+  }),
+});
+
+export default Object.assign(UserEmailSubscriptions, { handle });

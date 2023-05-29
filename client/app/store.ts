@@ -2,6 +2,7 @@ import {
   AnyAction,
   combineReducers,
   configureStore,
+  Reducer,
   ThunkAction,
   ThunkDispatch,
 } from '@reduxjs/toolkit';
@@ -91,8 +92,15 @@ const rootReducer = combineReducers({
   notificationPopup: notificationPopupReducer,
 });
 
+const RESET_STORE_ACTION_TYPE = 'RESET_STORE_BOOM';
+
+const purgeableRootReducer: Reducer = (state, action) => {
+  if (action.type === RESET_STORE_ACTION_TYPE) state = undefined;
+  return rootReducer(state, action);
+};
+
 export const store = configureStore({
-  reducer: rootReducer,
+  reducer: purgeableRootReducer,
 });
 
 export type AppState = ReturnType<typeof rootReducer>;
@@ -111,6 +119,13 @@ export type Operation<R = void> = ThunkAction<
 >;
 
 export const dispatch = store.dispatch as AppDispatch;
+
+/**
+ * Resets the entire app's Redux store to `undefined`.
+ */
+export const resetStore = (): void => {
+  dispatch({ type: RESET_STORE_ACTION_TYPE });
+};
 
 export const setUpStoreWithState = (
   preloadedState: Partial<AppState>,

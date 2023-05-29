@@ -5,7 +5,6 @@ import {
   Chip,
   Link,
   Stack,
-  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -15,6 +14,8 @@ import palette from 'theme/palette';
 import { SubmissionMiniEntity } from 'types/course/assessment/submissions';
 
 import CustomTooltip from 'lib/components/core/CustomTooltip';
+import Page from 'lib/components/core/layouts/Page';
+import TableContainer from 'lib/components/core/layouts/TableContainer';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import { getAssessmentURL, getCourseUserURL } from 'lib/helpers/url-builders';
@@ -63,11 +64,11 @@ const translations = defineMessages({
   },
   tableHeaderTotalGrade: {
     id: 'course.assessment.submissions.SubmissionsTable.tableHeaderTotalGrade',
-    defaultMessage: 'Total Grade',
+    defaultMessage: 'Grade',
   },
   tableHeaderExp: {
     id: 'course.assessment.submissions.SubmissionsTable.tableHeaderExp',
-    defaultMessage: 'Exp Awarded',
+    defaultMessage: 'EXP',
   },
   gradeTooltip: {
     id: 'course.assessment.submissions.SubmissionsTable.gradeTooltip',
@@ -114,14 +115,15 @@ const SubmissionsTable: FC<Props> = (props) => {
     return <LoadingIndicator />;
   }
 
-  if (submissions.length === 0) {
+  if (submissions.length === 0)
     return (
-      <Note message={intl.formatMessage(translations.noSubmissionsMessage)} />
+      <Page.PaddedSection>
+        <Note message={intl.formatMessage(translations.noSubmissionsMessage)} />
+      </Page.PaddedSection>
     );
-  }
 
   return (
-    <Table sx={{ marginBottom: 2 }}>
+    <TableContainer dense variant="bare">
       <TableHead>
         <TableRow>
           <TableCell align="center">
@@ -264,7 +266,7 @@ const SubmissionsTable: FC<Props> = (props) => {
           </TableRow>
         ))}
       </TableBody>
-    </Table>
+    </TableContainer>
   );
 };
 

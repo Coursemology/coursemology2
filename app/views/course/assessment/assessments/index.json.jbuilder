@@ -23,6 +23,8 @@ json.display do
   end
 
   json.tabId @tab.id
+  json.tabTitle "#{@category.title}: #{@tab.title}"
+  json.tabUrl course_assessments_path(course_id: current_course, category: @category, tab: @tab)
 end
 
 json.assessments @assessments do |assessment|

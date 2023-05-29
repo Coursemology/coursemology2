@@ -2,6 +2,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
 import { fetchMonitoringData } from '../../operations';
+import translations from '../../translations';
 
 import PulseGrid from './PulseGrid';
 
@@ -13,4 +14,6 @@ const AssessmentMonitoring = (): JSX.Element => {
   );
 };
 
-export default AssessmentMonitoring;
+const handle = translations.pulsegrid;
+
+export default Object.assign(AssessmentMonitoring, { handle });

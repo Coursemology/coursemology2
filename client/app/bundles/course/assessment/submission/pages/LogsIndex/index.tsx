@@ -35,4 +35,6 @@ const LogsIndex = (): JSX.Element => {
   );
 };
 
-export default LogsIndex;
+const handle = translations.accessLogs;
+
+export default Object.assign(LogsIndex, { handle });

@@ -8,8 +8,8 @@ import {
 } from 'types/course/assessment/submissions';
 
 import BackendPagination from 'lib/components/core/layouts/BackendPagination';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -133,8 +133,7 @@ const SubmissionsIndex = (): JSX.Element => {
   }, [dispatch]);
 
   return (
-    <>
-      <PageHeader title={t(translations.header)} />
+    <Page title={t(translations.header)} unpadded>
       {pageIsLoading ? (
         <LoadingIndicator />
       ) : (
@@ -150,18 +149,21 @@ const SubmissionsIndex = (): JSX.Element => {
             tabValue={tabValue}
           />
 
-          <SubmissionFilter
-            key={`submission-filter-${tabValue}`}
-            categoryNum={tabValue - 2}
-            filter={filter}
-            handleFilterOnClick={handleFilter}
-            selectedFilter={selectedFilter}
-            setPageNum={setPageNum}
-            setSelectedFilter={setSelectedFilter}
-            setTableIsLoading={setTableIsLoading}
-            showDetailFilter={submissionPermissions.canManage && tabValue > 1}
-            tabCategories={tabs.categories}
-          />
+          {submissionPermissions.canManage && tabValue > 1 && (
+            <Page.PaddedSection>
+              <SubmissionFilter
+                key={`submission-filter-${tabValue}`}
+                categoryNum={tabValue - 2}
+                filter={filter}
+                handleFilterOnClick={handleFilter}
+                selectedFilter={selectedFilter}
+                setPageNum={setPageNum}
+                setSelectedFilter={setSelectedFilter}
+                setTableIsLoading={setTableIsLoading}
+                tabCategories={tabs.categories}
+              />
+            </Page.PaddedSection>
+          )}
 
           {!isTabChanging && (
             <BackendPagination
@@ -191,8 +193,10 @@ const SubmissionsIndex = (): JSX.Element => {
           )}
         </>
       )}
-    </>
+    </Page>
   );
 };
 
-export default SubmissionsIndex;
+const handle = translations.header;
+
+export default Object.assign(SubmissionsIndex, { handle });

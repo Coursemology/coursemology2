@@ -6,7 +6,6 @@ import {
 } from '@mui/icons-material';
 import {
   Button,
-  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -17,6 +16,8 @@ import {
   FolderMiniEntity,
   MaterialMiniEntity,
 } from 'types/course/material/folders';
+
+import TableContainer from 'lib/components/core/layouts/TableContainer';
 
 import TableMaterialRow from './TableMaterialRow';
 import TableSubfolderRow from './TableSubfolderRow';
@@ -126,19 +127,13 @@ const WorkbinTable: FC<Props> = (props) => {
   };
 
   return (
-    <Table sx={{ marginBottom: 2 }}>
+    <TableContainer dense variant="bare">
       <TableHead>
         <TableRow>
-          <TableCell style={{ padding: 2 }}>
-            {columnHeaderWithSort('Name')}
-          </TableCell>
-          <TableCell style={{ padding: 2 }}>
-            {columnHeaderWithSort('Last Modified')}
-          </TableCell>
+          <TableCell>{columnHeaderWithSort('Name')}</TableCell>
+          <TableCell>{columnHeaderWithSort('Last Modified')}</TableCell>
           {!isCurrentCourseStudent && (
-            <TableCell style={{ padding: 2 }}>
-              {columnHeaderWithSort('Start At')}
-            </TableCell>
+            <TableCell>{columnHeaderWithSort('Start At')}</TableCell>
           )}
           <TableCell />
         </TableRow>
@@ -167,7 +162,7 @@ const WorkbinTable: FC<Props> = (props) => {
           );
         })}
       </TableBody>
-    </Table>
+    </TableContainer>
   );
 };
 

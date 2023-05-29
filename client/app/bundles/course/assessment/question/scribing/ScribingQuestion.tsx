@@ -5,6 +5,8 @@ import { getScribingId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
+import assessmentsTranslations from '../../translations';
+
 import translations from './ScribingQuestionForm/translations';
 import { fetchScribingQuestion, fetchSkills } from './operations';
 import ScribingQuestionForm from './ScribingQuestionForm';
@@ -38,4 +40,6 @@ const ScribingQuestion = (): JSX.Element => {
   );
 };
 
-export default ScribingQuestion;
+const handle = assessmentsTranslations.newScribing;
+
+export default Object.assign(ScribingQuestion, { handle });

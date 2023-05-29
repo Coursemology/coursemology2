@@ -29,7 +29,6 @@ export interface SaveFolderAction {
 
   subfolders: FolderListData[];
   materials: MaterialListData[];
-  breadcrumbs: { id: number; name: string }[];
   advanceStartAt: number;
   permissions: FolderPermissions;
 }
@@ -67,7 +66,6 @@ export interface FoldersState {
 
   subfolders: EntityStore<FolderMiniEntity>;
   materials: EntityStore<MaterialMiniEntity>;
-  breadcrumbs: { id: number; name: string }[];
   advanceStartAt: number;
   permissions: FolderPermissions;
 }

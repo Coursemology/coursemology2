@@ -1,10 +1,9 @@
 import { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import { Card, CardContent } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import PageHeader from 'lib/components/navigation/PageHeader';
+import Page from 'lib/components/core/layouts/Page';
 import { lessonPlanTypesGroups } from 'lib/types';
 
 import { fields } from '../../constants';
@@ -55,18 +54,6 @@ export class LessonPlanEdit extends Component {
     return rows;
   };
 
-  // eslint-disable-next-line class-methods-use-this
-  renderHeader = () => (
-    <Card>
-      <CardContent>
-        <ExitEditModeButton />
-        <NewMilestoneButton />
-        <NewEventButton />
-        <ColumnVisibilityDropdown />
-      </CardContent>
-    </Card>
-  );
-
   renderTableHeader() {
     const { columnsVisible } = this.props;
 
@@ -93,18 +80,26 @@ export class LessonPlanEdit extends Component {
     const { groups } = this.props;
 
     return (
-      <>
-        <PageHeader title={<FormattedMessage {...translations.lessonPlan} />} />
-
-        {this.props.canManageLessonPlan && this.renderHeader()}
-
+      <Page
+        actions={
+          this.props.canManageLessonPlan && (
+            <>
+              <ExitEditModeButton />
+              <NewMilestoneButton />
+              <NewEventButton />
+              <ColumnVisibilityDropdown />
+            </>
+          )
+        }
+        title={<FormattedMessage {...translations.lessonPlan} />}
+      >
         <div className="mt-8">
           <table className="border-separate border-spacing-x-4">
             {this.renderTableHeader()}
             <tbody>{groups.map(this.renderGroup)}</tbody>
           </table>
         </div>
-      </>
+      </Page>
     );
   }
 }

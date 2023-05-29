@@ -52,6 +52,10 @@ const translations = defineMessages({
     id: 'course.survey.ResponseIndex.unsubmit',
     defaultMessage: 'Unsubmit Survey',
   },
+  responses: {
+    id: 'course.survey.ResponseIndex.responses',
+    defaultMessage: 'Responses',
+  },
 });
 
 export default translations;

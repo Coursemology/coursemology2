@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { fetchNodes } from 'course/learning-map/operations';
+import translations from 'course/learning-map/translations';
 
 import Canvas from '../Canvas';
 import Dashboard from '../Dashboard';
@@ -38,4 +39,6 @@ LearningMap.propTypes = {
   isLoading: PropTypes.bool.isRequired,
 };
 
-export default connect(mapStateToProps)(LearningMap);
+const handle = translations.defaultDashboardMessage;
+
+export default Object.assign(connect(mapStateToProps)(LearningMap), { handle });

@@ -102,4 +102,6 @@ GroupIndex.propTypes = {
   intl: PropTypes.object.isRequired,
 };
 
-export default injectIntl(GroupIndex);
+const handle = translations.groups;
+
+export default Object.assign(injectIntl(GroupIndex), { handle });

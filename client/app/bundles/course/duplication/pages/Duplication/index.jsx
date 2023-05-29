@@ -300,15 +300,20 @@ Duplication.propTypes = {
   intl: PropTypes.object,
 };
 
-export default connect(({ duplication }) => ({
-  isLoading: duplication.isLoading,
-  isChangingCourse: duplication.isChangingCourse,
-  isCourseSelected: !!duplication.destinationCourseId,
-  duplicationMode: duplication.duplicationMode,
-  modesAllowed: duplication.sourceCourse.duplicationModesAllowed,
-  enabledComponents: duplication.sourceCourse.enabledComponents,
-  currentHost: duplication.currentHost,
-  currentCourseId: duplication.currentCourseId,
-  sourceCourse: duplication.sourceCourse,
-  sourceCourses: duplication.sourceCourses,
-}))(injectIntl(Duplication));
+const handle = translations.duplicateData;
+
+export default Object.assign(
+  connect(({ duplication }) => ({
+    isLoading: duplication.isLoading,
+    isChangingCourse: duplication.isChangingCourse,
+    isCourseSelected: !!duplication.destinationCourseId,
+    duplicationMode: duplication.duplicationMode,
+    modesAllowed: duplication.sourceCourse.duplicationModesAllowed,
+    enabledComponents: duplication.sourceCourse.enabledComponents,
+    currentHost: duplication.currentHost,
+    currentCourseId: duplication.currentCourseId,
+    sourceCourse: duplication.sourceCourse,
+    sourceCourses: duplication.sourceCourses,
+  }))(injectIntl(Duplication)),
+  { handle },
+);

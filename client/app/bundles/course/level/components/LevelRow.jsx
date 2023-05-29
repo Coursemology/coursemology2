@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 import Delete from '@mui/icons-material/Delete';
-import { Button, TableCell, TableRow, TextField } from '@mui/material';
+import { IconButton, TableCell, TableRow, TextField } from '@mui/material';
 import PropTypes from 'prop-types';
 
 const translations = defineMessages({
@@ -34,17 +34,17 @@ class LevelRow extends Component {
     const { deleteLevel, disabled, levelNumber } = this.props;
 
     return (
-      <Button
-        color="secondary"
+      <IconButton
+        className="-my-2"
+        color="error"
         disabled={disabled}
         id={`delete_${levelNumber}`}
         name={`delete_${levelNumber}`}
         onClick={deleteLevel(levelNumber)}
-        style={{ minWidth: '40px', width: '40px' }}
         variant="contained"
       >
         <Delete />
-      </Button>
+      </IconButton>
     );
   }
 

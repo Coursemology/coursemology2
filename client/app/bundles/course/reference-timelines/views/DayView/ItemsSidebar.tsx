@@ -29,7 +29,7 @@ const ItemsSidebar = (props: ItemsSidebarProps): JSX.Element => {
           <div
             className={`w-1/2 border-0 border-r border-solid border-neutral-200 ${
               timelines.length <= 1 ? 'flex items-center' : 'py-2'
-            } pr-2`}
+            } pl-5 pr-2`}
           >
             <Typography
               className={

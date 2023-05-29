@@ -4,6 +4,7 @@ import { getAssessmentId } from 'lib/helpers/url-helpers';
 
 import { DEFAULT_MONITORING_OPTIONS } from '../../constants';
 import { fetchAssessmentEditData } from '../../operations';
+import translations from '../../translations';
 import { categoryAndTabTitle } from '../../utils';
 
 import AssessmentEditPage from './AssessmentEditPage';
@@ -60,4 +61,6 @@ const AssessmentEdit = (): JSX.Element => {
   );
 };
 
-export default AssessmentEdit;
+const handle = translations.edit;
+
+export default Object.assign(AssessmentEdit, { handle });

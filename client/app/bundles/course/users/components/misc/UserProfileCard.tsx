@@ -97,7 +97,11 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
             sm="auto"
             xs={12}
           >
-            <Avatar className={styles.courseUserImage} src={user.imageUrl} />
+            <Avatar
+              alt={user.name}
+              className={styles.courseUserImage}
+              src={user.imageUrl}
+            />
           </Grid>
           <Grid
             alignItems={{ xs: 'center', sm: 'start' }}

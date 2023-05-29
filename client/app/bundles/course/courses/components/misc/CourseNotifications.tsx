@@ -1,7 +1,6 @@
 import { FC, memo } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Stack } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { Paper, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { NotificationData } from 'types/course/notifications';
 
@@ -14,7 +13,7 @@ interface Props extends WrappedComponentProps {
 const translations = defineMessages({
   latestActivityHeader: {
     id: 'course.courses.CourseNotifications.latestActivity',
-    defaultMessage: 'Latest Activity',
+    defaultMessage: 'Latest Activities',
   },
 });
 
@@ -26,30 +25,22 @@ const CourseNotifications: FC<Props> = (props) => {
   }
 
   return (
-    <>
-      <h2>{intl.formatMessage(translations.latestActivityHeader)}</h2>
-      <div
-        style={{
-          borderStyle: 'solid',
-          borderWidth: 0.2,
-          borderColor: grey[300],
-          borderRadius: 10,
-          padding: 10,
-          marginBottom: 20,
-        }}
-      >
-        <Stack>
-          {notifications.map((notification, index) => (
-            <NotificationCard
-              // OK to use index since activity cannot be directly modified by anyone
-              // eslint-disable-next-line react/no-array-index-key
-              key={`${index}_${notification.actableId}`}
-              notification={notification}
-            />
-          ))}
-        </Stack>
-      </div>
-    </>
+    <section className="space-y-2">
+      <Typography variant="h6">
+        {intl.formatMessage(translations.latestActivityHeader)}
+      </Typography>
+
+      <Paper className="p-3" variant="outlined">
+        {notifications.map((notification, index) => (
+          <NotificationCard
+            // OK to use index since activity cannot be directly modified by anyone
+            // eslint-disable-next-line react/no-array-index-key
+            key={`${index}_${notification.actableId}`}
+            notification={notification}
+          />
+        ))}
+      </Paper>
+    </section>
   );
 };
 

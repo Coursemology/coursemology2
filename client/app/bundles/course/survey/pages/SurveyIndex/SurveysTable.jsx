@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   Button,
   Switch,
-  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -16,6 +15,7 @@ import { updateSurvey } from 'course/survey/actions/surveys';
 import RespondButton from 'course/survey/containers/RespondButton';
 import { surveyShape } from 'course/survey/propTypes';
 import translations from 'course/survey/translations';
+import TableContainer from 'lib/components/core/layouts/TableContainer';
 import { formatShortDateTime } from 'lib/moment';
 
 import SurveyBadges from './SurveyBadges';
@@ -73,7 +73,7 @@ const SurveysTable = (props) => {
   };
 
   return (
-    <Table>
+    <TableContainer dense variant="bare">
       <TableHead>
         <TableRow>
           <TableCell colSpan={6}>
@@ -179,7 +179,7 @@ const SurveysTable = (props) => {
           </TableRow>
         ))}
       </TableBody>
-    </Table>
+    </TableContainer>
   );
 };
 

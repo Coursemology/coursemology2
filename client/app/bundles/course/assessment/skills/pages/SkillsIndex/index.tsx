@@ -189,4 +189,6 @@ const SkillsIndex: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(SkillsIndex);
+const handle = translations.skills;
+
+export default Object.assign(injectIntl(SkillsIndex), { handle });

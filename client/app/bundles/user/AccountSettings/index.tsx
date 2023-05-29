@@ -175,4 +175,6 @@ const AccountSettings = (): JSX.Element => {
   );
 };
 
-export default AccountSettings;
+const handle = translations.accountSettings;
+
+export default Object.assign(AccountSettings, { handle });

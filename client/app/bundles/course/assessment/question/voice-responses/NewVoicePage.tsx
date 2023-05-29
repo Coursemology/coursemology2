@@ -39,4 +39,6 @@ const NewVoicePage = (): JSX.Element => {
   );
 };
 
-export default NewVoicePage;
+const handle = translations.newAudioResponse;
+
+export default Object.assign(NewVoicePage, { handle });

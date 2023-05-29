@@ -1,10 +1,11 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
+import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -50,7 +51,9 @@ const translations = defineMessages({
 
 const CoursesIndex: FC = () => {
   const { t } = useTranslation();
-  const [isNewCourseDialogOpen, setIsNewCourseDialogOpen] = useState(false);
+
+  const [params] = useSearchParams();
+
   const [isLoading, setIsLoading] = useState(true);
   const [isRoleRequestDialogOpen, setRoleRequestDialogOpen] = useState(false);
   const courses = useAppSelector(getAllCourseMiniEntities);
@@ -62,6 +65,13 @@ const CoursesIndex: FC = () => {
   );
 
   const dispatch = useAppDispatch();
+
+  const shouldOpenNewCourseDialog =
+    Boolean(params.get('new')) && coursesPermissions?.canCreate;
+
+  const [isNewCourseDialogOpen, setIsNewCourseDialogOpen] = useState(
+    shouldOpenNewCourseDialog,
+  );
 
   useEffect(() => {
     dispatch(fetchCourses())
@@ -102,8 +112,7 @@ const CoursesIndex: FC = () => {
   }
 
   return (
-    <>
-      <PageHeader title={t(translations.header)} toolbars={headerToolbars} />
+    <Page actions={headerToolbars} title={t(translations.header)}>
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -124,8 +133,10 @@ const CoursesIndex: FC = () => {
           )}
         </>
       )}
-    </>
+    </Page>
   );
 };
 
-export default CoursesIndex;
+const handle = translations.header;
+
+export default Object.assign(CoursesIndex, { handle });

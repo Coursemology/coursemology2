@@ -4,9 +4,8 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import AddButton from 'lib/components/core/buttons/AddButton';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
-import ScrollToTop from 'lib/components/navigation/ScrollToTop';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -118,14 +117,12 @@ const ForumShow: FC = () => {
   const forumPageHeaderTitle = forum ? forum.name : t(translations.header);
 
   return (
-    <>
-      <ScrollToTop />
-      <PageHeader
-        returnLink={forum?.rootForumUrl}
-        title={forumPageHeaderTitle}
-        toolbars={headerToolbars}
-      />
-
+    <Page
+      actions={headerToolbars}
+      backTo={forum?.rootForumUrl}
+      title={forumPageHeaderTitle}
+      unpadded
+    >
       {!isLoading && isOpen && (
         <ForumTopicNew
           availableTopicTypes={forum?.availableTopicTypes}
@@ -140,7 +137,7 @@ const ForumShow: FC = () => {
       ) : (
         <ForumTopicTable forum={forum} forumTopics={forumTopics} />
       )}
-    </>
+    </Page>
   );
 };
 

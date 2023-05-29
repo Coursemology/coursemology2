@@ -57,6 +57,8 @@ export interface AssessmentsListData {
     endTimes: boolean;
     canCreateAssessments: boolean;
     tabId: number;
+    tabTitle: string;
+    tabUrl: string;
     canManageMonitor: boolean;
     category: {
       id: number;
@@ -89,6 +91,8 @@ interface NewQuestionBuilderData {
 export interface AssessmentData extends AssessmentActionsData {
   id: number;
   title: string;
+  tabTitle: string;
+  tabUrl: string;
   description: string;
   autograded: boolean;
   startAt: PersonalTimeData;
@@ -136,6 +140,9 @@ export interface AssessmentData extends AssessmentActionsData {
 
 export interface UnauthenticatedAssessmentData {
   id: number;
+  title: string;
+  tabTitle: string;
+  tabUrl: string;
   isAuthenticated: false;
   isStartTimeBegin: boolean;
   startAt: string;
@@ -154,3 +161,7 @@ export type AssessmentUnlockRequirements = string[];
 export interface AssessmentAuthenticationFormData {
   password: string;
 }
+
+export const isAuthenticatedAssessmentData = (
+  data: AssessmentData | UnauthenticatedAssessmentData,
+): data is AssessmentData => (data as AssessmentData).permissions !== undefined;

@@ -24,6 +24,10 @@ import AncestorSelect from './AncestorSelect';
 import StatisticsPanel from './StatisticsPanel';
 
 const translations = defineMessages({
+  statistics: {
+    id: 'course.assessment.statistics.statistics',
+    defaultMessage: 'Statistics',
+  },
   header: {
     id: 'course.assessment.statistics.header',
     defaultMessage: 'Statistics for {title}',
@@ -198,6 +202,11 @@ AssessmentStatisticsPage.propTypes = {
   ancestorAllStudents: PropTypes.arrayOf(courseUserShape),
 };
 
-export default connect(({ assessments }) => assessments.statisticsPage)(
-  injectIntl(AssessmentStatisticsPage),
+const handle = translations.statistics;
+
+export default Object.assign(
+  connect(({ assessments }) => assessments.statisticsPage)(
+    injectIntl(AssessmentStatisticsPage),
+  ),
+  { handle },
 );

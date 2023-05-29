@@ -12,8 +12,8 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import palette from 'theme/palette';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import LeaderboardTable from '../../components/tables/LeaderboardTable';
@@ -80,14 +80,14 @@ const LeaderboardIndex: FC<Props> = (props) => {
   const isGroupHidden = groupLeaderboardPoints.length === 0;
 
   return (
-    <>
-      <PageHeader
-        title={
-          settings.groupleaderboardTitle
-            ? settings.groupleaderboardTitle
-            : intl.formatMessage(translations.leaderboard)
-        }
-      />
+    <Page
+      title={
+        settings.groupleaderboardTitle
+          ? settings.groupleaderboardTitle
+          : intl.formatMessage(translations.leaderboard)
+      }
+      unpadded
+    >
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -218,8 +218,10 @@ const LeaderboardIndex: FC<Props> = (props) => {
           </Grid>
         </>
       )}
-    </>
+    </Page>
   );
 };
 
-export default injectIntl(LeaderboardIndex);
+const handle = translations.leaderboard;
+
+export default Object.assign(injectIntl(LeaderboardIndex), { handle });

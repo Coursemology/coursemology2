@@ -189,4 +189,8 @@ export default defineMessages({
     id: 'user.emailMustConfirm',
     defaultMessage: 'You must confirm this email before you can use it.',
   },
+  accountSettings: {
+    id: 'user.accountSettings',
+    defaultMessage: 'Account Settings',
+  },
 });

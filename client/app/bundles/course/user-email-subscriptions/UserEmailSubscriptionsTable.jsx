@@ -13,6 +13,7 @@ import {
 import PropTypes from 'prop-types';
 
 import { setNotification } from 'lib/actions';
+import Page from 'lib/components/core/layouts/Page';
 import Link from 'lib/components/core/Link';
 
 import {
@@ -176,10 +177,10 @@ class UserEmailSubscriptionsTable extends Component {
   render() {
     this.unsubscribeViaEmailSuccessful();
     return (
-      <>
-        <h2>
-          <FormattedMessage {...translations.emailSubscriptions} />
-        </h2>
+      <Page
+        title={<FormattedMessage {...translations.emailSubscriptions} />}
+        unpadded
+      >
         {this.renderEmailSettingsTable()}
         {!this.props.userEmailSubscriptionsPageFilter.show_all_settings && (
           <Link
@@ -191,7 +192,7 @@ class UserEmailSubscriptionsTable extends Component {
             />
           </Link>
         )}
-      </>
+      </Page>
     );
   }
 }

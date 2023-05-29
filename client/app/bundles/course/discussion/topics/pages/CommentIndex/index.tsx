@@ -15,9 +15,9 @@ import {
   CommentTabTypes,
 } from 'types/course/comments';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import CustomBadge from 'lib/components/extensions/CustomBadge';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import TopicList from '../../components/lists/TopicList';
@@ -199,24 +199,29 @@ const CommentIndex: FC<Props> = (props) => {
   }, [dispatch]);
 
   return (
-    <>
-      <PageHeader
-        title={
-          settings.title
-            ? settings.title
-            : intl.formatMessage(translations.comments)
-        }
-      />
+    <Page
+      title={
+        settings.title
+          ? settings.title
+          : intl.formatMessage(translations.comments)
+      }
+      unpadded
+    >
       {isLoading ? (
         <LoadingIndicator />
       ) : (
         <>
           <CommentTabs intl={intl} tabValue={tabValue} />
-          <TopicList key={tabValue} settings={settings} tabValue={tabValue} />
+
+          <Page.PaddedSection>
+            <TopicList key={tabValue} settings={settings} tabValue={tabValue} />
+          </Page.PaddedSection>
         </>
       )}
-    </>
+    </Page>
   );
 };
 
-export default injectIntl(CommentIndex);
+const handle = translations.comments;
+
+export default Object.assign(injectIntl(CommentIndex), { handle });

@@ -9,7 +9,6 @@ import {
 } from 'types/course/assessment/submissions';
 
 interface Props extends WrappedComponentProps {
-  showDetailFilter: boolean;
   filter: SubmissionFilterData;
 
   tabCategories: { id: number; title: string }[];
@@ -50,7 +49,6 @@ const translations = defineMessages({
 const SubmissionFilter: FC<Props> = (props) => {
   const {
     intl,
-    showDetailFilter,
     filter,
     tabCategories,
     categoryNum,
@@ -59,8 +57,6 @@ const SubmissionFilter: FC<Props> = (props) => {
     handleFilterOnClick,
   } = props;
   const disableButton = Object.values(selectedFilter).every((x) => x === null);
-
-  if (!showDetailFilter) return null;
 
   return (
     <Stack className="submissions-filter" spacing={1}>

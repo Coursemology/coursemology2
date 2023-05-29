@@ -42,7 +42,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
 
   return (
     <TableRow id={`subfolder-${subfolder.id}`}>
-      <TableCell style={{ padding: 2, minWidth: '200px' }}>
+      <TableCell style={{ minWidth: '200px' }}>
         <Stack spacing={1}>
           <Stack alignItems="center" direction="row" spacing={0.5}>
             <FolderIcon htmlColor="grey" />
@@ -88,7 +88,6 @@ const TableSubfolderRow: FC<Props> = (props) => {
       </TableCell>
       <TableCell
         style={{
-          padding: 2,
           width: '240px',
           maxWidth: '240px',
           minWidth: '60px',
@@ -99,7 +98,6 @@ const TableSubfolderRow: FC<Props> = (props) => {
       {!isCurrentCourseStudent && (
         <TableCell
           style={{
-            padding: 2,
             width: '240px',
             maxWidth: '240px',
             minWidth: '60px',
@@ -117,10 +115,7 @@ const TableSubfolderRow: FC<Props> = (props) => {
       )}
       <TableCell
         style={{
-          padding: 2,
           width: '60px',
-          maxWidth: '60px',
-          minWidth: '30px',
         }}
       >
         <WorkbinTableButtons

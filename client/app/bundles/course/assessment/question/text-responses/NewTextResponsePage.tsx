@@ -8,6 +8,7 @@ import {
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
+import { DataHandle } from 'lib/hooks/router/dynamicNest';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -52,15 +53,16 @@ const newTextResponseAdapter: Record<
   ],
 };
 
+const getQuestionType = (
+  params: URLSearchParams,
+): TextResponseFormData['questionType'] =>
+  params.get('file_upload') === 'true' ? 'file_upload' : 'text_response';
+
 const NewTextResponsePage = (): JSX.Element => {
   const { t } = useTranslation();
 
   const [params] = useSearchParams();
-  const isFileUpload = params.get('file_upload') === 'true';
-
-  const type: TextResponseFormData['questionType'] = isFileUpload
-    ? 'file_upload'
-    : 'text_response';
+  const type = getQuestionType(params);
 
   const [fetchData, FormComponent, initialFormValue] =
     newTextResponseAdapter[type];
@@ -81,4 +83,12 @@ const NewTextResponsePage = (): JSX.Element => {
   );
 };
 
-export default NewTextResponsePage;
+const handle: DataHandle = (_, location) => {
+  const searchParams = new URLSearchParams(location.search);
+
+  return getQuestionType(searchParams) === 'file_upload'
+    ? translations.newFileUpload
+    : translations.newTextResponse;
+};
+
+export default Object.assign(NewTextResponsePage, { handle });

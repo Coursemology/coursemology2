@@ -35,6 +35,10 @@ const translations = defineMessages({
     id: 'course.video.submission.VideoSubmissionsIndex.phantomStudents',
     defaultMessage: 'Phantom Students',
   },
+  submissions: {
+    id: 'course.video.submission.VideoSubmissionsIndex.submissions',
+    defaultMessage: 'Submissions',
+  },
 });
 
 const VideoSubmissionsIndex: FC<Props> = (props) => {
@@ -106,4 +110,6 @@ const VideoSubmissionsIndex: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(VideoSubmissionsIndex);
+const handle = translations.submissions;
+
+export default Object.assign(injectIntl(VideoSubmissionsIndex), { handle });

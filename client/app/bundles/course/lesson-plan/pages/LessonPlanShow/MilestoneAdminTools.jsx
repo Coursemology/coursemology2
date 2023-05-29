@@ -4,7 +4,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
 import Delete from '@mui/icons-material/Delete';
 import Edit from '@mui/icons-material/Edit';
-import { Button } from '@mui/material';
+import { IconButton } from '@mui/material';
 import PropTypes from 'prop-types';
 
 import { showDeleteConfirmation } from 'lib/actions';
@@ -34,17 +34,6 @@ const translations = defineMessages({
     defaultMessage: 'Failed to delete milestone.',
   },
 });
-
-const styles = {
-  edit: {
-    minWidth: 40,
-  },
-  delete: {
-    minWidth: 40,
-    marginLeft: 10,
-    marginRight: 20,
-  },
-};
 
 class MilestoneAdminTools extends PureComponent {
   deleteMilestoneHandler = () => {
@@ -98,21 +87,13 @@ class MilestoneAdminTools extends PureComponent {
 
     return (
       <span>
-        <Button
-          onClick={this.showEditMilestoneDialog}
-          style={styles.edit}
-          variant="outlined"
-        >
+        <IconButton onClick={this.showEditMilestoneDialog}>
           <Edit />
-        </Button>
-        <Button
-          color="secondary"
-          onClick={this.deleteMilestoneHandler}
-          style={styles.delete}
-          variant="outlined"
-        >
+        </IconButton>
+
+        <IconButton color="error" onClick={this.deleteMilestoneHandler}>
           <Delete />
-        </Button>
+        </IconButton>
       </span>
     );
   }

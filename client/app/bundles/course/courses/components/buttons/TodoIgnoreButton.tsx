@@ -52,7 +52,6 @@ const TodoIgnoreButton: FC<Props> = (props) => {
         onIgnore();
       }}
       style={{ width: 80 }}
-      variant="outlined"
     >
       {intl.formatMessage(translations.ignoreButtonText)}
     </Button>

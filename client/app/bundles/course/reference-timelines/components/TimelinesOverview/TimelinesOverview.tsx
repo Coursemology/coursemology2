@@ -29,7 +29,7 @@ const TimelinesOverview = (props: TimelinesOverviewProps): JSX.Element => {
   const [creating, setCreating] = useState(false);
 
   return (
-    <div className="relative py-4">
+    <div className="relative min-h-[6rem] px-5 py-4">
       <aside className="scrollbar-hidden flex items-start space-x-4 overflow-x-scroll pr-56">
         {timelines.map((timeline) => (
           <TimelinesOverviewItem
@@ -55,7 +55,7 @@ const TimelinesOverview = (props: TimelinesOverviewProps): JSX.Element => {
         ))}
       </aside>
 
-      <aside className="absolute right-0 top-0 flex h-full items-center pl-20 bg-fade-to-l-white">
+      <aside className="absolute right-0 top-0 flex h-full items-center pl-20 pr-5 bg-fade-to-l-white">
         <Button
           onClick={(): void => setCreating(true)}
           size="small"
