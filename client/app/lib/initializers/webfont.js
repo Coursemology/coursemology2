@@ -6,7 +6,7 @@ import WebFont from 'webfontloader';
 
 WebFont.load({
   google: {
-    families: ['Roboto:400,700,i4', 'Varela Round'],
+    families: ['Inter:400,500,600,700,i4', 'Varela Round'],
   },
   timeout: 1500,
 });
