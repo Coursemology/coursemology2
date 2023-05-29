@@ -1,10 +1,10 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
+import { Button } from '@mui/material';
 
 import AnnouncementsDisplay from 'bundles/course/announcements/components/misc/AnnouncementsDisplay';
 import AnnouncementNew from 'bundles/course/announcements/pages/AnnouncementNew';
-import AddButton from 'lib/components/core/buttons/AddButton';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
 import PageHeader from 'lib/components/navigation/PageHeader';
@@ -61,15 +61,14 @@ const InstanceAnnouncementsIndex: FC<Props> = (props) => {
 
   if (announcementPermission) {
     headerToolbars.push(
-      <AddButton
+      <Button
         key="new-announcement-button"
-        className="text-white"
         id="new-announcement-button"
-        onClick={(): void => {
-          setIsOpen(true);
-        }}
-        tooltip={intl.formatMessage(translations.newAnnouncement)}
-      />,
+        onClick={(): void => setIsOpen(true)}
+        variant="outlined"
+      >
+        {intl.formatMessage(translations.newAnnouncement)}
+      </Button>,
     );
   }
 

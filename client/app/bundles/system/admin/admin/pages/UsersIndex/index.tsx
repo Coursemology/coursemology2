@@ -5,7 +5,6 @@ import { Link, Typography } from '@mui/material';
 
 import SummaryCard from 'lib/components/core/layouts/SummaryCard';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
@@ -165,8 +164,8 @@ const UsersIndex: FC<Props> = (props) => {
 
   return (
     <>
-      <PageHeader title={intl.formatMessage(translations.header)} />
-      <SummaryCard renderContent={renderSummaryContent} />
+      <SummaryCard className="mx-6 mt-6" renderContent={renderSummaryContent} />
+
       {isLoading ? (
         <LoadingIndicator />
       ) : (
