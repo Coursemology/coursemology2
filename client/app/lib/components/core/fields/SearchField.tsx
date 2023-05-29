@@ -16,6 +16,7 @@ const SearchField = (props: SearchFieldProps): JSX.Element => {
 
   const [keyword, setKeyword] = useState('');
   const [isPending, startTransition] = useTransition();
+  const ref = useRef<HTMLInputElement>(null);
 
   const changeKeyword = (newKeyword: string): void => {
     setKeyword(newKeyword);
@@ -27,9 +28,15 @@ const SearchField = (props: SearchFieldProps): JSX.Element => {
     onChangeKeyword?.('');
   };
 
+  useEffect(() => {
+    if (!props.autoFocus) return;
+
+    ref.current?.focus();
+  }, []);
+
   return (
     <TextField
-      className={props.className}
+      ref={ref}
       fullWidth
       hiddenLabel
       InputProps={{
