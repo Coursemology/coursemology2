@@ -3,59 +3,47 @@
 exports[`<PageHeader /> when there is a return link matches the snapshot 1`] = `
 <body>
   <div>
-    <div
-      class="grow"
+    <header
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorTransparent MuiAppBar-positionStatic border-only-b-neutral-200 css-1na8te8-MuiPaper-root-MuiAppBar-root"
     >
-      <header
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed static z-0 -mx-6 mb-0 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-2naa7r-MuiPaper-root-MuiAppBar-root"
-        data-testid="TitleBar"
+      <div
+        class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular flex items-center justify-between px-8 py-4 css-129s0w6-MuiToolbar-root"
       >
         <div
-          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-129s0w6-MuiToolbar-root"
+          class="flex min-h-[4rem] w-full items-center"
         >
-          <div
-            class="-ml-4 mr-2"
+          <button
+            class="MuiButtonBase-root MuiIconButton-root MuiIconButton-edgeStart MuiIconButton-sizeMedium css-14cf8m5-MuiButtonBase-root-MuiIconButton-root"
+            data-testid="ArrowBackIconButton"
+            tabindex="0"
+            type="button"
           >
-            <button
-              class="MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-aem3qp-MuiButtonBase-root-MuiIconButton-root"
-              data-testid="ArrowBackIconButton"
-              tabindex="0"
-              type="button"
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-hgpioi-MuiSvgIcon-root"
+              data-testid="ArrowBack"
+              focusable="false"
+              viewBox="0 0 24 24"
             >
-              <svg
-                aria-hidden="true"
-                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-hgpioi-MuiSvgIcon-root"
-                color="white"
-                data-testid="ArrowBack"
-                focusable="false"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
-                />
-              </svg>
-              <span
-                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              <path
+                d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"
               />
-            </button>
-          </div>
+            </svg>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
           <h5
-            class="MuiTypography-root MuiTypography-h5 grow css-7sb4ws-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-h5 line-clamp-2 css-1h0fw4b-MuiTypography-root"
           >
-            <label
-              class="m-0 align-middle font-normal"
-              title="Test Title 2"
-            >
-              <div
-                class="line-clamp-2"
-              >
-                Test Title 2
-              </div>
-            </label>
+            Test Title 2
           </h5>
         </div>
-      </header>
-    </div>
+        <div
+          class="flex shrink-0 items-center"
+        />
+      </div>
+    </header>
     <div
       class="Toastify"
     />
@@ -66,36 +54,26 @@ exports[`<PageHeader /> when there is a return link matches the snapshot 1`] = `
 exports[`<PageHeader /> when there is no return link matches the snapshot 1`] = `
 <body>
   <div>
-    <div
-      class="grow"
+    <header
+      class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorTransparent MuiAppBar-positionStatic border-only-b-neutral-200 css-1na8te8-MuiPaper-root-MuiAppBar-root"
     >
-      <header
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation0 MuiAppBar-root MuiAppBar-colorPrimary MuiAppBar-positionFixed static z-0 -mx-6 mb-0 w-screen sm:mx-0 sm:w-full sm:rounded-md mui-fixed css-2naa7r-MuiPaper-root-MuiAppBar-root"
-        data-testid="TitleBar"
+      <div
+        class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular flex items-center justify-between px-8 py-4 css-129s0w6-MuiToolbar-root"
       >
         <div
-          class="MuiToolbar-root MuiToolbar-gutters MuiToolbar-regular css-129s0w6-MuiToolbar-root"
+          class="flex min-h-[4rem] w-full items-center"
         >
-          <div
-            class="-ml-4 mr-2"
-          />
           <h5
-            class="MuiTypography-root MuiTypography-h5 grow css-7sb4ws-MuiTypography-root"
+            class="MuiTypography-root MuiTypography-h5 line-clamp-2 css-1h0fw4b-MuiTypography-root"
           >
-            <label
-              class="m-0 align-middle font-normal"
-              title="Test Title 1"
-            >
-              <div
-                class="line-clamp-2"
-              >
-                Test Title 1
-              </div>
-            </label>
+            Test Title 1
           </h5>
         </div>
-      </header>
-    </div>
+        <div
+          class="flex shrink-0 items-center"
+        />
+      </div>
+    </header>
     <div
       class="Toastify"
     />
