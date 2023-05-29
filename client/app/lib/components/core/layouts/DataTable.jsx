@@ -10,6 +10,7 @@ const options = {
   filterType: 'dropdown',
   responsive: 'standard',
   fixedSelectColumn: false,
+  elevation: 0,
 };
 
 const processTheme = (theme, newHeight, grid, alignCenter, newPadding) =>
@@ -135,7 +136,6 @@ const DataTable = (props) => {
         <MUIDataTable
           {...props}
           columns={processColumns(props.includeRowNumber, props.columns)}
-          elevation={1}
           options={{ ...options, ...(props.options ?? {}) }}
         />
       </div>
