@@ -2,8 +2,7 @@ import { FC, memo, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { toast } from 'react-toastify';
 import { DateRange, PushPin } from '@mui/icons-material';
-import { Link } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { Link, Paper, Typography } from '@mui/material';
 import equal from 'fast-deep-equal';
 import { Operation } from 'store';
 import {
@@ -116,21 +115,16 @@ const AnnouncementCard: FC<Props> = (props) => {
     );
   };
 
-  const backgroundColor = announcement.isUnread ? '#ffe8e8' : '#ffffff';
-
   return (
     <>
-      <div
+      <Paper
         key={announcement.id}
-        className="announcement"
+        className="announcement p-4"
         id={`announcement-${announcement.id}`}
         style={{
-          borderStyle: 'solid',
-          borderWidth: 0.2,
-          borderColor: grey[300],
-          padding: 10,
-          backgroundColor,
+          backgroundColor: announcement.isUnread ? '#ffe8e8' : '#ffffff',
         }}
+        variant="outlined"
       >
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex' }}>
@@ -148,7 +142,7 @@ const AnnouncementCard: FC<Props> = (props) => {
                 <DateRange fontSize="small" style={{ marginTop: 3 }} />
               </CustomTooltip>
             )}
-            <h3
+            <Typography
               style={{
                 marginTop: 0,
                 marginBottom: 0,
@@ -159,9 +153,10 @@ const AnnouncementCard: FC<Props> = (props) => {
                 fontWeight: 'bold',
                 overflowWrap: 'anywhere',
               }}
+              variant="h5"
             >
               {announcement.title}
-            </h3>
+            </Typography>
           </div>
           {showEditOptions && updateOperation && deleteOperation && (
             <div style={{ display: 'flex' }}>
@@ -186,15 +181,20 @@ const AnnouncementCard: FC<Props> = (props) => {
           )}
         </div>
 
-        <em className="timestamp">
+        <Typography
+          className="timestamp"
+          color="text.secondary"
+          variant="body2"
+        >
           {formatFullDateTime(announcement.startTime)}{' '}
           {intl.formatMessage(translations.timeSeparator)} {renderUserLink()}
-        </em>
-        <div
+        </Typography>
+        <Typography
           dangerouslySetInnerHTML={{ __html: announcement.content }}
           style={{ marginTop: 15, overflowWrap: 'anywhere' }}
+          variant="body2"
         />
-      </div>
+      </Paper>
       {showEditOptions && updateOperation && (
         <AnnouncementEdit
           announcementId={announcement.id}

@@ -35,7 +35,6 @@ const initialState: FoldersState = {
   },
   subfolders: createEntityStore(),
   materials: createEntityStore(),
-  breadcrumbs: [],
   advanceStartAt: 0,
   permissions: {
     isCurrentCourseStudent: false,
@@ -66,7 +65,6 @@ const reducer = produce((draft: FoldersState, action: FoldersActionType) => {
       saveListToStore(draft.materials, materialsEntityList);
 
       draft.advanceStartAt = action.advanceStartAt;
-      draft.breadcrumbs = action.breadcrumbs;
       draft.permissions = action.permissions;
       break;
     }
@@ -114,7 +112,6 @@ export const actions = {
     },
     subfolders: FolderListData[],
     materials: MaterialListData[],
-    breadcrumbs: { id: number; name: string }[],
     advanceStartAt: number,
     permissions: FolderPermissions,
   ): SaveFolderAction => {
@@ -123,7 +120,6 @@ export const actions = {
       currFolderInfo,
       subfolders,
       materials,
-      breadcrumbs,
       advanceStartAt,
       permissions,
     };

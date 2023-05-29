@@ -13,12 +13,16 @@ import { getExperiencePointsRecordsSettings } from '../../selectors';
 type Props = WrappedComponentProps;
 
 const translations = defineMessages({
-  experiencePointsRecordsHeader: {
-    id: 'course.users.ExperiencePointsRecords.header',
-    defaultMessage: 'Experience Points History - ',
+  experiencePointsHistory: {
+    id: 'course.users.ExperiencePointsRecords.experiencePointsHistory',
+    defaultMessage: 'Experience Points History',
+  },
+  experiencePointsHistoryHeader: {
+    id: 'course.users.ExperiencePointsRecords.experiencePointsHistoryHeader',
+    defaultMessage: 'Experience Points History: {for}',
   },
   fetchUsersFailure: {
-    id: 'course.users.ExperiencePointsRecords.fetch.failue',
+    id: 'course.users.ExperiencePointsRecords.fetchUsersFailure',
     defaultMessage: 'Failed to fetch records',
   },
 });
@@ -54,4 +58,6 @@ const ExperiencePointsRecords: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(ExperiencePointsRecords);
+const handle = translations.experiencePointsHistory;
+
+export default Object.assign(ExperiencePointsRecords, { handle });

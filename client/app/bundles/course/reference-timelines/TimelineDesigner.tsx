@@ -5,6 +5,7 @@ import { useAppDispatch } from 'lib/hooks/store';
 import DayView from './views/DayView';
 import { LastSavedProvider } from './contexts';
 import { fetchTimelines } from './operations';
+import translations from './translations';
 
 const TimelineDesigner = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -21,4 +22,6 @@ const TimelineDesigner = (): JSX.Element => {
   );
 };
 
-export default TimelineDesigner;
+const handle = translations.timelineDesigner;
+
+export default Object.assign(TimelineDesigner, { handle });

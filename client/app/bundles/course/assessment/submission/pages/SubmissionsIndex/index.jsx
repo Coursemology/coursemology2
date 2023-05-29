@@ -24,6 +24,7 @@ import ConfirmationDialog from 'lib/components/core/dialogs/ConfirmationDialog';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import withRouter from 'lib/components/navigation/withRouter';
 
+import assessmentsTranslations from '../../../translations';
 import { purgeSubmissionStore } from '../../actions';
 import {
   deleteAllSubmissions,
@@ -553,5 +554,7 @@ function mapStateToProps({ assessments: { submission } }) {
   };
 }
 
+const handle = assessmentsTranslations.submissions;
+
 const SubmissionsIndex = connect(mapStateToProps)(VisibleSubmissionsIndex);
-export default withRouter(SubmissionsIndex);
+export default Object.assign(withRouter(SubmissionsIndex), { handle });

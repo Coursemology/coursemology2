@@ -45,4 +45,6 @@ const NewForumPostResponsePage = (): JSX.Element => {
   );
 };
 
-export default NewForumPostResponsePage;
+const handle = translations.newForumPostResponse;
+
+export default Object.assign(NewForumPostResponsePage, { handle });

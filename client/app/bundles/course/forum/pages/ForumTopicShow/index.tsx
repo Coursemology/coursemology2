@@ -5,10 +5,9 @@ import { toast } from 'react-toastify';
 import { Box } from '@mui/material';
 import { TopicType } from 'types/course/forums';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
-import PageHeader from 'lib/components/navigation/PageHeader';
-import ScrollToTop from 'lib/components/navigation/ScrollToTop';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -137,16 +136,13 @@ const ForumTopicShow: FC = () => {
     );
 
   return (
-    <>
-      <ScrollToTop />
-      <PageHeader
-        returnLink={forumTopic?.forumUrl}
-        title={forumPageHeaderTitle}
-        toolbars={headerToolbars}
-      />
-
+    <Page
+      actions={headerToolbars}
+      backTo={forumTopic?.forumUrl}
+      title={forumPageHeaderTitle}
+    >
       {isLoading ? <LoadingIndicator /> : renderBody}
-    </>
+    </Page>
   );
 };
 

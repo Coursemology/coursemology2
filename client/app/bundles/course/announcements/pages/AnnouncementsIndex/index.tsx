@@ -1,11 +1,12 @@
-import { FC, useEffect, useState } from 'react';
-import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
+import { useEffect, useState } from 'react';
+import { defineMessages } from 'react-intl';
 import { toast } from 'react-toastify';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
+import useTranslation from 'lib/hooks/useTranslation';
 
 import NewAnnouncementButton from '../../components/buttons/NewAnnouncementButton';
 import AnnouncementsDisplay from '../../components/misc/AnnouncementsDisplay';
@@ -20,8 +21,6 @@ import {
   getAnnouncementPermissions,
 } from '../../selectors';
 import AnnouncementNew from '../AnnouncementNew';
-
-interface Props extends WrappedComponentProps {}
 
 const translations = defineMessages({
   fetchAnnouncementsFailure: {
@@ -42,8 +41,8 @@ const translations = defineMessages({
   },
 });
 
-const AnnouncementsIndex: FC<Props> = (props) => {
-  const { intl } = props;
+const AnnouncementsIndex = (): JSX.Element => {
+  const { t } = useTranslation();
 
   // For new announcements form dialog
   const [isOpen, setIsOpen] = useState(false);
@@ -56,33 +55,28 @@ const AnnouncementsIndex: FC<Props> = (props) => {
 
   useEffect(() => {
     dispatch(fetchAnnouncements())
-      .catch(() =>
-        toast.error(intl.formatMessage(translations.fetchAnnouncementsFailure)),
-      )
+      .catch(() => toast.error(t(translations.fetchAnnouncementsFailure)))
       .finally(() => setIsLoading(false));
   }, [dispatch]);
 
   return (
-    <>
-      <PageHeader
-        title={intl.formatMessage(translations.header)}
-        toolbars={
-          announcementPermissions.canCreate
-            ? [
-                <NewAnnouncementButton
-                  key="new-announcement-button"
-                  setIsOpen={setIsOpen}
-                />,
-              ]
-            : undefined
-        }
-      />
+    <Page
+      actions={
+        announcementPermissions.canCreate && (
+          <NewAnnouncementButton
+            key="new-announcement-button"
+            setIsOpen={setIsOpen}
+          />
+        )
+      }
+      title={t(translations.header)}
+    >
       {isLoading ? (
         <LoadingIndicator />
       ) : (
         <>
           {announcements.length === 0 ? (
-            <Note message={intl.formatMessage(translations.noAnnouncements)} />
+            <Note message={t(translations.noAnnouncements)} />
           ) : (
             <AnnouncementsDisplay
               announcementPermissions={announcementPermissions}
@@ -98,8 +92,10 @@ const AnnouncementsIndex: FC<Props> = (props) => {
           />
         </>
       )}
-    </>
+    </Page>
   );
 };
 
-export default injectIntl(AnnouncementsIndex);
+const handle = translations.header;
+
+export default Object.assign(AnnouncementsIndex, { handle });

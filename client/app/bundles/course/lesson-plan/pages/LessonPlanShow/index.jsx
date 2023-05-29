@@ -2,10 +2,9 @@ import { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { scroller } from 'react-scroll';
-import { Card, CardContent } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import PageHeader from 'lib/components/navigation/PageHeader';
+import Page from 'lib/components/core/layouts/Page';
 import moment from 'lib/moment';
 import { lessonPlanTypesGroups } from 'lib/types';
 
@@ -81,25 +80,22 @@ export class LessonPlanShow extends Component {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  renderHeader = () => (
-    <Card>
-      <CardContent>
-        <EnterEditModeButton />
-        <NewMilestoneButton />
-        <NewEventButton />
-      </CardContent>
-    </Card>
-  );
-
   render() {
     return (
-      <>
-        <PageHeader title={<FormattedMessage {...translations.lessonPlan} />} />
-
-        {this.props.canManageLessonPlan && this.renderHeader()}
+      <Page
+        actions={
+          this.props.canManageLessonPlan && (
+            <>
+              <EnterEditModeButton />
+              <NewMilestoneButton />
+              <NewEventButton />
+            </>
+          )
+        }
+        title={<FormattedMessage {...translations.lessonPlan} />}
+      >
         {this.props.groups.map((group) => this.renderGroup(group))}
-      </>
+      </Page>
     );
   }
 }

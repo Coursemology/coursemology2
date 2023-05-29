@@ -8,6 +8,8 @@ import {
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
 
+import translations from '../../translations';
+
 import buildFormData from './commons/builder';
 import { create, fetchEdit, fetchNew, update } from './operations';
 import ProgrammingForm from './ProgrammingForm';
@@ -67,4 +69,6 @@ const NewProgrammingQuestionPage = (): JSX.Element => {
   );
 };
 
-export default NewProgrammingQuestionPage;
+const handle = translations.newProgramming;
+
+export default Object.assign(NewProgrammingQuestionPage, { handle });

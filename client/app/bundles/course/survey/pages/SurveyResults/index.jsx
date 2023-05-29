@@ -20,6 +20,10 @@ import withSurveyLayout from '../../containers/SurveyLayout';
 import ResultsSection from './ResultsSection';
 
 const translations = defineMessages({
+  results: {
+    id: 'course.survey.SurveyResults.results',
+    defaultMessage: 'Results',
+  },
   includePhantoms: {
     id: 'course.survey.SurveyResults.includePhantoms',
     defaultMessage: 'Include Phantom Students',
@@ -147,6 +151,9 @@ SurveyResults.propTypes = {
   sections: PropTypes.arrayOf(sectionShape),
 };
 
-export default withSurveyLayout(
-  connect(({ surveys }) => surveys.results)(SurveyResults),
+const handle = translations.results;
+
+export default Object.assign(
+  withSurveyLayout(connect(({ surveys }) => surveys.results)(SurveyResults)),
+  { handle },
 );

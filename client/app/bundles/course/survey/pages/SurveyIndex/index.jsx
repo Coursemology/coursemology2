@@ -6,9 +6,9 @@ import PropTypes from 'prop-types';
 import { fetchSurveys } from 'course/survey/actions/surveys';
 import { surveyShape } from 'course/survey/propTypes';
 import surveyTranslations from 'course/survey/translations';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Note from 'lib/components/core/Note';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import withRouter from 'lib/components/navigation/withRouter';
 
 import Dialogs from '../../components/Dialogs';
@@ -50,17 +50,16 @@ class SurveyIndex extends Component {
 
   render() {
     return (
-      <>
-        <PageHeader
-          title={<FormattedMessage {...surveyTranslations.surveys} />}
-        />
-
+      <Page
+        title={<FormattedMessage {...surveyTranslations.surveys} />}
+        unpadded
+      >
         {this.renderBody()}
 
         <NewSurveyButton />
 
         <Dialogs />
-      </>
+      </Page>
     );
   }
 }
@@ -82,4 +81,9 @@ const mapStateToProps = ({ surveys }) => ({
   isLoading: surveys.surveysFlags.isLoadingSurveys,
 });
 
-export default withRouter(connect(mapStateToProps)(SurveyIndex));
+const handle = surveyTranslations.surveys;
+
+export default Object.assign(
+  withRouter(connect(mapStateToProps)(SurveyIndex)),
+  { handle },
+);

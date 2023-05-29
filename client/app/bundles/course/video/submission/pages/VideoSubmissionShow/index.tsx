@@ -69,6 +69,10 @@ const translations = defineMessages({
     id: 'course.video.submission.VideoSubmissionShow.noSession',
     defaultMessage: 'No watch statistics available for this submission.',
   },
+  watch: {
+    id: 'course.video.submission.VideoSubmissionShow.watch',
+    defaultMessage: 'Watch',
+  },
 });
 
 const VideoSubmissionShow: FC<Props> = (props) => {
@@ -144,4 +148,6 @@ const VideoSubmissionShow: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(VideoSubmissionShow);
+const handle = translations.watch;
+
+export default Object.assign(injectIntl(VideoSubmissionShow), { handle });

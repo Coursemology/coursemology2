@@ -12,6 +12,8 @@ can_manage = can?(:manage, assessment)
 
 json.id assessment.id
 json.title assessment.title
+json.tabTitle "#{@category.title}: #{@tab.title}"
+json.tabUrl course_assessments_path(course_id: current_course, category: @category, tab: @tab)
 json.description assessment.description unless @assessment.description.blank?
 json.autograded assessment.autograded?
 json.hasTodo assessment.has_todo if can_manage

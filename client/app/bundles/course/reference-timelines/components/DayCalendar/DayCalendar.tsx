@@ -54,7 +54,7 @@ const DayCalendar = forwardRef<DayCalendarRef, DayCalendarProps>(
 
     return (
       <div className={`h-full w-full ${props.className ?? ''}`}>
-        <nav className="flex h-16 items-start justify-between px-4">
+        <nav className="flex h-16 items-start justify-between px-5">
           <div className="flex items-center justify-center rounded-xl border border-solid border-neutral-200 px-3">
             <Typography variant="subtitle1">{monthDisplay}</Typography>
           </div>

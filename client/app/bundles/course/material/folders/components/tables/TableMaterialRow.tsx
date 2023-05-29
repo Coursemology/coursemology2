@@ -21,7 +21,7 @@ const TableMaterialRow: FC<Props> = (props) => {
 
   return (
     <TableRow id={`material-${material.id}`}>
-      <TableCell style={{ padding: 2, minWidth: '200px' }}>
+      <TableCell style={{ minWidth: '200px' }}>
         <Stack spacing={1}>
           <Stack alignItems="center" direction="row" spacing={0.5}>
             <DescriptionIcon htmlColor="grey" />
@@ -55,7 +55,6 @@ const TableMaterialRow: FC<Props> = (props) => {
       </TableCell>
       <TableCell
         style={{
-          padding: 2,
           width: '240px',
           maxWidth: '240px',
           minWidth: '60px',
@@ -69,7 +68,6 @@ const TableMaterialRow: FC<Props> = (props) => {
       {!isCurrentCourseStudent && (
         <TableCell
           style={{
-            padding: 2,
             width: '240px',
             maxWidth: '240px',
             minWidth: '60px',
@@ -78,14 +76,7 @@ const TableMaterialRow: FC<Props> = (props) => {
           -
         </TableCell>
       )}
-      <TableCell
-        style={{
-          padding: 2,
-          width: '60px',
-          maxWidth: '60px',
-          minWidth: '30px',
-        }}
-      >
+      <TableCell style={{ width: '60px' }}>
         <WorkbinTableButtons
           canDelete={material.permissions.canDelete}
           canEdit={material.permissions.canEdit}

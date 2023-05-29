@@ -3,9 +3,8 @@ import { defineMessages } from 'react-intl';
 import { toast } from 'react-toastify';
 
 import AddButton from 'lib/components/core/buttons/AddButton';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
-import ScrollToTop from 'lib/components/navigation/ScrollToTop';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -99,18 +98,19 @@ const ForumsIndex: FC = () => {
   );
 
   return (
-    <>
-      <ScrollToTop />
-      <PageHeader title={t(translations.header)} toolbars={headerToolbars} />
+    <Page actions={headerToolbars} title={t(translations.header)} unpadded>
       {!isLoading && isForumNewDialogOpen && (
         <ForumNew
           onClose={(): void => setIsForumNewDialogOpen(false)}
           open={isForumNewDialogOpen}
         />
       )}
+
       {isLoading ? <LoadingIndicator /> : <ForumTable forums={forums} />}
-    </>
+    </Page>
   );
 };
 
-export default ForumsIndex;
+const handle = translations.header;
+
+export default Object.assign(ForumsIndex, { handle });

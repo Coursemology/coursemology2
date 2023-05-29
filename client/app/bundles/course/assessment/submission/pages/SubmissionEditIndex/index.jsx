@@ -18,6 +18,7 @@ import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import withRouter from 'lib/components/navigation/withRouter';
 import { getUrlParameter } from 'lib/helpers/url-helpers';
 
+import assessmentsTranslations from '../../../translations';
 import {
   autogradeSubmission,
   enterStudentView,
@@ -486,8 +487,10 @@ function mapStateToProps({ assessments: { submission } }) {
   };
 }
 
+const handle = assessmentsTranslations.attempt;
+
 const SubmissionEditIndex = withRouter(
   withHeartbeatWorker(connect(mapStateToProps)(VisibleSubmissionEditIndex)),
 );
 
-export default SubmissionEditIndex;
+export default Object.assign(SubmissionEditIndex, { handle });

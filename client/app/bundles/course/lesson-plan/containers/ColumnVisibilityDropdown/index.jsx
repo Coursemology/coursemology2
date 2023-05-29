@@ -15,7 +15,7 @@ const { ITEM_TYPE, START_AT, BONUS_END_AT, END_AT, PUBLISHED } = fields;
 const translations = defineMessages({
   label: {
     id: 'course.lessonPlan.ColumnVisibilityDropdown.label',
-    defaultMessage: 'Toggle Column Visibility',
+    defaultMessage: 'Columns',
   },
 });
 

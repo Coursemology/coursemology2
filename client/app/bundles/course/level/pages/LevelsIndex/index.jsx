@@ -240,9 +240,14 @@ LevelsIndex.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect(({ levels }) => ({
-  canManage: levels.canManage,
-  isLoading: levels.isLoading,
-  isSaving: levels.isSaving,
-  levels: levels.levels,
-}))(LevelsIndex);
+const handle = translations.levelHeader;
+
+export default Object.assign(
+  connect(({ levels }) => ({
+    canManage: levels.canManage,
+    isLoading: levels.isLoading,
+    isSaving: levels.isSaving,
+    levels: levels.levels,
+  }))(LevelsIndex),
+  { handle },
+);

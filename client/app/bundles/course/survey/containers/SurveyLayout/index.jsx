@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-import PageHeader from 'lib/components/navigation/PageHeader';
+import Page from 'lib/components/core/layouts/Page';
 
 import Dialogs from '../../components/Dialogs';
 import { surveyShape } from '../../propTypes';
@@ -31,24 +31,20 @@ const withSurveyLayout = (Component) => {
 
     const page = Component.displayName;
 
-    return (
-      <main className="space-y-5">
-        {survey && (
-          <PageHeader
-            returnLink={backLocations(courseId, surveyId, page)}
-            title={survey.title}
-            toolbars={
-              surveyId && [
-                <AdminMenu key="admin-menu" {...{ survey, surveyId }} />,
-              ]
-            }
-          />
-        )}
+    if (!survey) return null;
 
+    return (
+      <Page
+        actions={
+          surveyId && <AdminMenu key="admin-menu" {...{ survey, surveyId }} />
+        }
+        backTo={backLocations(courseId, surveyId, page)}
+        title={survey.title}
+      >
         <Component courseId={courseId} survey={survey} surveyId={surveyId} />
 
         <Dialogs />
-      </main>
+      </Page>
     );
   };
 

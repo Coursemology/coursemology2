@@ -1,6 +1,10 @@
 import { defineMessages } from 'react-intl';
 
 const translations = defineMessages({
+  submissionsHeader: {
+    id: 'course.assessment.submission.submissionsHeader',
+    defaultMessage: 'Submissions: {assessment}',
+  },
   studentView: {
     id: 'course.assessment.submission.studentView',
     defaultMessage: 'Student View',

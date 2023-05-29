@@ -8,6 +8,7 @@ import {
 
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
 import Preload from 'lib/components/wrappers/Preload';
+import { DataHandle } from 'lib/hooks/router/dynamicNest';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
@@ -33,13 +34,15 @@ const NEW_MCQ_MRQ_TEMPLATE: McqMrqData['question'] = {
   randomizeOptions: false,
 };
 
+const getMcqMrqType = (params: URLSearchParams): McqMrqFormData['mcqMrqType'] =>
+  params.get('multiple_choice') === 'true' ? 'mcq' : 'mrq';
+
 const NewMcqMrqPage = (): JSX.Element => {
   const { t } = useTranslation();
 
   const [params] = useSearchParams();
-  const isMcq = params.get('multiple_choice') === 'true';
+  const type = getMcqMrqType(params);
 
-  const type: McqMrqFormData['mcqMrqType'] = isMcq ? 'mcq' : 'mrq';
   const [fetchData, FormComponent] = newMcqMrqAdapters[type];
 
   const handleSubmit = (data: McqMrqData): Promise<void> =>
@@ -58,4 +61,12 @@ const NewMcqMrqPage = (): JSX.Element => {
   );
 };
 
-export default NewMcqMrqPage;
+const handle: DataHandle = (_, location) => {
+  const searchParams = new URLSearchParams(location.search);
+
+  return getMcqMrqType(searchParams) === 'mcq'
+    ? translations.newMultipleChoice
+    : translations.newMultipleResponse;
+};
+
+export default Object.assign(NewMcqMrqPage, { handle });

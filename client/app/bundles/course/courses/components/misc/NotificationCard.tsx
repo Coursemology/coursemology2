@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Avatar } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Avatar, Typography } from '@mui/material';
 import { NotificationData } from 'types/course/notifications';
 
 import {
@@ -109,28 +110,30 @@ const NotificationCard: FC<Props> = (props) => {
   }
 
   return (
-    <div
-      id={`notification-${notification.id}`}
-      style={{ padding: 5, display: 'flex' }}
-    >
+    <div className="flex space-x-5 p-2" id={`notification-${notification.id}`}>
       <Avatar
-        src={notification.userInfo.imageUrl}
-        sx={{ marginRight: '10px' }}
+        alt={notification.userInfo.name}
+        src={notification.userInfo.imageUrl ?? '#'}
       />
+
       <div>
-        <div>
-          <a href={notification.userInfo.userUrl}>
+        <Typography variant="body2">
+          <Link to={notification.userInfo.userUrl}>
             {notification.userInfo.name}
-          </a>
+          </Link>
+
           {` ${concatMessage} `}
+
           {notification.actableName && (
-            <a href={actableLink}>{notification.actableName}</a>
+            <Link to={actableLink}>{notification.actableName}</Link>
           )}
+
           {notification.levelNumber && `${notification.levelNumber}`}
-        </div>
-        <i style={{ fontWeight: 'lighter' }}>
+        </Typography>
+
+        <Typography color="text.secondary" variant="caption">
           {formatFullDateTime(notification.createdAt)}
-        </i>
+        </Typography>
       </div>
     </div>
   );

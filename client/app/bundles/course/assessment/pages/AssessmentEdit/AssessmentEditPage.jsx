@@ -5,7 +5,7 @@ import { Navigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
-import PageHeader from 'lib/components/navigation/PageHeader';
+import Page from 'lib/components/core/layouts/Page';
 import { achievementTypesConditionAttributes } from 'lib/types';
 
 import AssessmentForm from '../../components/AssessmentForm';
@@ -67,8 +67,8 @@ class AssessmentEditPage extends Component {
     // TODO: Add a source router props that can be used to determine where
     // did the user come from, and initialise a Back button that goes there.
     return (
-      <main className="space-y-5">
-        <PageHeader title={intl.formatMessage(translations.editAssessment)}>
+      <Page
+        actions={
           <Button
             className="bg-white"
             disabled={disabled}
@@ -78,8 +78,10 @@ class AssessmentEditPage extends Component {
           >
             <FormattedMessage {...translations.updateAssessment} />
           </Button>
-        </PageHeader>
-
+        }
+        className="space-y-5"
+        title={intl.formatMessage(translations.editAssessment)}
+      >
         <AssessmentForm
           canManageMonitor={canManageMonitor}
           conditionAttributes={conditionAttributes}
@@ -97,7 +99,7 @@ class AssessmentEditPage extends Component {
         />
 
         {this.state.redirectUrl && <Navigate to={this.state.redirectUrl} />}
-      </main>
+      </Page>
     );
   }
 }

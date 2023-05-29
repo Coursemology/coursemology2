@@ -2,11 +2,11 @@ import { FC, useEffect, useState } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Grid } from '@mui/material';
+import { Typography } from '@mui/material';
 
 import AvatarWithLabel from 'lib/components/core/AvatarWithLabel';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 
 import CourseAnnouncements from '../../components/misc/CourseAnnouncements';
@@ -59,54 +59,59 @@ const CourseShow: FC<Props> = (props) => {
   }
 
   return (
-    <>
-      <PageHeader title={course.title} />
-
+    <Page className="space-y-5">
       {!course.permissions.isCurrentCourseUser && (
         <>
-          <Grid columns={{ xs: 1, lg: 4 }} container direction="row-reverse">
-            <Grid item lg={3} xs={1}>
-              <div style={{ display: 'flex', justifyContent: 'right' }}>
-                {course.registrationInfo && (
-                  <CourseEnrolOptions
-                    registrationInfo={course.registrationInfo}
-                  />
-                )}
-              </div>
-            </Grid>
-            <Grid item lg={1} xs={1}>
-              <h2 style={{ marginRight: 20, marginTop: 5 }}>
-                {intl.formatMessage(translations.descriptionHeader)}
-              </h2>
-            </Grid>
-          </Grid>
-          <div
-            dangerouslySetInnerHTML={{ __html: course.description }}
-            id="course-description"
-          />
-          <h2>{intl.formatMessage(translations.instructorsHeader)}</h2>
-          <Grid container spacing={1}>
-            {course.instructors?.map((instructor) => (
-              <Grid key={instructor.id} item lg={1} sm={2} xs={3}>
-                <div id={`instructor-${instructor.id}`}>
+          <div style={{ display: 'flex', justifyContent: 'right' }}>
+            {course.registrationInfo && (
+              <CourseEnrolOptions registrationInfo={course.registrationInfo} />
+            )}
+          </div>
+
+          <section className="space-y-2">
+            <Typography variant="h6">
+              {intl.formatMessage(translations.descriptionHeader)}
+            </Typography>
+
+            <Typography
+              dangerouslySetInnerHTML={{ __html: course.description }}
+              id="course-description"
+              variant="body2"
+            />
+          </section>
+
+          <section className="space-y-2">
+            <Typography variant="h6">
+              {intl.formatMessage(translations.instructorsHeader)}
+            </Typography>
+
+            <div className="-m-4 flex flex-wrap">
+              {course.instructors?.map((instructor) => (
+                <div
+                  key={instructor.id}
+                  className="m-4 w-32 space-y-4"
+                  id={`instructor-${instructor.id}`}
+                >
                   <AvatarWithLabel
                     imageUrl={instructor.imageUrl!}
                     label={instructor.name}
                     size="sm"
                   />
                 </div>
-              </Grid>
-            ))}
-          </Grid>
+              ))}
+            </div>
+          </section>
         </>
       )}
 
       {(course.permissions.isCurrentCourseUser ||
         course.permissions.canManage) && (
         <>
-          <CourseAnnouncements
-            announcements={course.currentlyActiveAnnouncements}
-          />
+          {Boolean(course.currentlyActiveAnnouncements?.length) && (
+            <CourseAnnouncements
+              announcements={course.currentlyActiveAnnouncements}
+            />
+          )}
 
           {course.assessmentTodos && (
             <PendingTodosTable
@@ -126,7 +131,7 @@ const CourseShow: FC<Props> = (props) => {
           <CourseNotifications notifications={course.notifications} />
         </>
       )}
-    </>
+    </Page>
   );
 };
 

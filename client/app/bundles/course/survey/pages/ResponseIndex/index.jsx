@@ -344,6 +344,9 @@ ResponseIndex.propTypes = {
   isLoading: PropTypes.bool.isRequired,
 };
 
-export default withSurveyLayout(
-  connect(({ surveys }) => surveys.responses)(ResponseIndex),
+const handle = translations.responses;
+
+export default Object.assign(
+  withSurveyLayout(connect(({ surveys }) => surveys.responses)(ResponseIndex)),
+  { handle },
 );

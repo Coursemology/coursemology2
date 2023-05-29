@@ -46,7 +46,7 @@ const DayView = (): JSX.Element => {
   }, [filterKeyword, items]);
 
   return (
-    <main className="relative flex h-full overflow-hidden">
+    <main className="relative flex h-[calc(100vh_-_4rem)] overflow-hidden">
       <DayCalendar
         ref={calendarRef}
         className="ml-[32rem] border-0 border-l border-solid border-neutral-200"
@@ -58,7 +58,7 @@ const DayView = (): JSX.Element => {
       <SubmitIndicator className="absolute right-36 top-0 h-12" />
 
       <div className="pointer-events-none absolute left-0 top-0 flex h-full w-full flex-col">
-        <section className="pointer-events-auto flex h-36 w-[32rem] shrink-0 flex-col justify-between pb-3 pr-3">
+        <section className="pointer-events-auto flex h-36 w-[32rem] shrink-0 flex-col justify-between px-5 pb-5">
           <div className="flex items-center space-x-4">
             <Typography variant="h6">
               {t(translations.timelineDesigner)}

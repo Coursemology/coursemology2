@@ -73,7 +73,12 @@ LessonPlanLayout.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-export default connect(({ lessonPlan }) => ({
-  isLoading: lessonPlan.lessonPlan.isLoading,
-  groups: lessonPlan.lessonPlan.groups,
-}))(LessonPlanLayout);
+const handle = translations.lessonPlan;
+
+export default Object.assign(
+  connect(({ lessonPlan }) => ({
+    isLoading: lessonPlan.lessonPlan.isLoading,
+    groups: lessonPlan.lessonPlan.groups,
+  }))(LessonPlanLayout),
+  { handle },
+);

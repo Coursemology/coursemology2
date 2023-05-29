@@ -131,4 +131,6 @@ const UserRequests: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(UserRequests);
+const handle = translations.manageUsersHeader;
+
+export default Object.assign(injectIntl(UserRequests), { handle });

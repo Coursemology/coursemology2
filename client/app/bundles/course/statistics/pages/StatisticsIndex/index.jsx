@@ -158,8 +158,13 @@ StatisticsIndex.propTypes = {
   staffStatistics: PropTypes.shape(staffIndexShape),
 };
 
-export default connect(({ statistics }) => ({
-  courseStatistics: statistics.courseStatistics,
-  studentsStatistics: statistics.studentsStatistics,
-  staffStatistics: statistics.staffStatistics,
-}))(StatisticsIndex);
+const handle = translations.statistics;
+
+export default Object.assign(
+  connect(({ statistics }) => ({
+    courseStatistics: statistics.courseStatistics,
+    studentsStatistics: statistics.studentsStatistics,
+    staffStatistics: statistics.staffStatistics,
+  }))(StatisticsIndex),
+  { handle },
+);

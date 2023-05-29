@@ -436,6 +436,38 @@ const translations = defineMessages({
     id: 'course.assessment.show.forumPostResponse',
     defaultMessage: 'Forum Post Response',
   },
+  newMultipleChoice: {
+    id: 'course.assessment.show.newMultipleChoice',
+    defaultMessage: 'New Multiple Choice Question (MCQ)',
+  },
+  newMultipleResponse: {
+    id: 'course.assessment.show.newMultipleResponse',
+    defaultMessage: 'New Multiple Response Question (MRQ)',
+  },
+  newTextResponse: {
+    id: 'course.assessment.show.newTextResponse',
+    defaultMessage: 'New Text Response Question',
+  },
+  newAudioResponse: {
+    id: 'course.assessment.show.newAudioResponse',
+    defaultMessage: 'New Audio Response Question',
+  },
+  newFileUpload: {
+    id: 'course.assessment.show.newFileUpload',
+    defaultMessage: 'New File Upload Question',
+  },
+  newProgramming: {
+    id: 'course.assessment.show.newProgramming',
+    defaultMessage: 'New Programming Question',
+  },
+  newScribing: {
+    id: 'course.assessment.show.newScribing',
+    defaultMessage: 'New Scribing Question',
+  },
+  newForumPostResponse: {
+    id: 'course.assessment.show.newForumPostResponse',
+    defaultMessage: 'New Forum Post Response Question',
+  },
   newQuestion: {
     id: 'course.assessment.show.newQuestion',
     defaultMessage: 'New Question',

@@ -4,8 +4,8 @@ import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button } from '@mui/material';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -96,8 +96,7 @@ const VideosIndex: FC = () => {
       });
 
   return (
-    <>
-      <PageHeader title={t(translations.header)} toolbars={headerToolbars} />
+    <Page actions={headerToolbars} title={t(translations.header)} unpadded>
       {!isLoading && isOpen && (
         <VideoNew
           currentTab={tabId}
@@ -105,7 +104,9 @@ const VideosIndex: FC = () => {
           open={isOpen}
         />
       )}
+
       <VideoTabs currentTab={tabId} setCurrentTab={setSearchParams} />
+
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -115,7 +116,7 @@ const VideosIndex: FC = () => {
           videos={videos}
         />
       )}
-    </>
+    </Page>
   );
 };
 

@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Avatar, Grid, Typography } from '@mui/material';
 
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { getCourseUserURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -63,8 +63,7 @@ const UsersIndex: FC<Props> = (props) => {
   };
 
   return (
-    <>
-      <PageHeader title={intl.formatMessage(translations.studentsHeader)} />
+    <Page title={intl.formatMessage(translations.studentsHeader)}>
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -106,8 +105,10 @@ const UsersIndex: FC<Props> = (props) => {
             : renderEmptyState()}
         </Grid>
       )}
-    </>
+    </Page>
   );
 };
 
-export default injectIntl(UsersIndex);
+const handle = translations.studentsHeader;
+
+export default Object.assign(injectIntl(UsersIndex), { handle });

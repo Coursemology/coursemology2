@@ -117,4 +117,6 @@ const DisbursementIndex: FC<Props> = (props) => {
   );
 };
 
-export default injectIntl(DisbursementIndex);
+const handle = translations.disbursements;
+
+export default Object.assign(injectIntl(DisbursementIndex), { handle });

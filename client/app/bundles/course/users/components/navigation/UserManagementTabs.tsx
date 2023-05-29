@@ -17,7 +17,15 @@ interface Props extends WrappedComponentProps {
   sharedData: ManageCourseUsersSharedData;
 }
 
-const translations = defineMessages({
+export const translations = defineMessages({
+  manageStudents: {
+    id: 'course.users.UserManagementTabs.manageStudents',
+    defaultMessage: 'Manage Students',
+  },
+  manageStaff: {
+    id: 'course.users.UserManagementTabs.manageStaff',
+    defaultMessage: 'Manage Staff',
+  },
   studentsTitle: {
     id: 'course.users.UserManagementTabs.studentsTitle',
     defaultMessage: 'Students',

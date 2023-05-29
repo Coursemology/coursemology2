@@ -3,8 +3,8 @@ import { defineMessages } from 'react-intl';
 import { toast } from 'react-toastify';
 
 import AddButton from 'lib/components/core/buttons/AddButton';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -36,6 +36,10 @@ const translations = defineMessages({
   toggleFailure: {
     id: 'course.achievement.AchievementsIndex.toggleFailure',
     defaultMessage: 'Failed to update achievement.',
+  },
+  achievements: {
+    id: 'course.achievement.AchievementsIndex.achievements',
+    defaultMessage: 'Achievements',
   },
 });
 
@@ -92,14 +96,14 @@ const AchievementsIndex: FC = () => {
       });
 
   return (
-    <>
-      <PageHeader
-        title={t({
-          id: 'course.achievement.AchievementsIndex.header',
-          defaultMessage: 'Achievements',
-        })}
-        toolbars={headerToolbars}
-      />
+    <Page
+      actions={headerToolbars}
+      title={t({
+        id: 'course.achievement.AchievementsIndex.header',
+        defaultMessage: 'Achievements',
+      })}
+      unpadded
+    >
       {isLoading ? (
         <LoadingIndicator />
       ) : (
@@ -116,8 +120,10 @@ const AchievementsIndex: FC = () => {
           />
         </>
       )}
-    </>
+    </Page>
   );
 };
 
-export default AchievementsIndex;
+const handle = translations.achievements;
+
+export default Object.assign(AchievementsIndex, { handle });

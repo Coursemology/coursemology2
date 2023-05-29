@@ -1,12 +1,10 @@
 import { FC, ReactElement, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
-import { Link, useParams } from 'react-router-dom';
-import { Breadcrumbs, Paper } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { useParams } from 'react-router-dom';
 
 import EditButton from 'lib/components/core/buttons/EditButton';
+import Page from 'lib/components/core/layouts/Page';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { getWorkbinFolderURL } from 'lib/helpers/url-builders';
 import { getCourseId } from 'lib/helpers/url-helpers';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
@@ -19,7 +17,6 @@ import MaterialUpload from '../../components/misc/MaterialUpload';
 import WorkbinTable from '../../components/tables/WorkbinTable';
 import { loadFolder } from '../../operations';
 import {
-  getBreadcrumbs,
   getCurrFolderInfo,
   getFolderMaterials,
   getFolderPermissions,
@@ -50,7 +47,6 @@ const FolderShow: FC = () => {
   const subfolders = useAppSelector(getFolderSubfolders);
   const materials = useAppSelector(getFolderMaterials);
   const currFolderInfo = useAppSelector(getCurrFolderInfo);
-  const breadcrumbs = useAppSelector(getBreadcrumbs);
   const permissions = useAppSelector(getFolderPermissions);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -114,52 +110,20 @@ const FolderShow: FC = () => {
   };
 
   return (
-    <>
-      <Paper
-        sx={{
-          marginBottom: '4px',
-          padding: '4px 8px',
-          backgroundColor: grey[100],
-          border: '0',
-        }}
-        variant="outlined"
-      >
-        <Breadcrumbs>
-          {breadcrumbs.map((breadcrumb, index) => {
-            if (index === breadcrumbs.length - 1) {
-              return (
-                <span key={`folder-breadcrumb-${breadcrumb.id}`}>
-                  {breadcrumb.name}
-                </span>
-              );
-            }
-            return (
-              <Link
-                key={`folder-breadcrumb-${breadcrumb.id}`}
-                to={`/courses/${getCourseId()}/materials/folders/${
-                  breadcrumb.id
-                }/`}
-              >
-                {breadcrumb.name}
-              </Link>
-            );
-          })}
-        </Breadcrumbs>
-      </Paper>
-      <PageHeader
-        key={`workbin-folder-${currFolderInfo.name}-${currFolderInfo.id}`}
-        returnLink={
-          currFolderInfo.parentId !== null
-            ? getWorkbinFolderURL(getCourseId(), currFolderInfo.parentId)
-            : undefined
-        }
-        title={
-          currFolderInfo.name === null
-            ? t(translations.defaultHeader)
-            : currFolderInfo.name
-        }
-        toolbars={headerToolbars}
-      />
+    <Page
+      actions={headerToolbars}
+      backTo={
+        currFolderInfo.parentId !== null
+          ? getWorkbinFolderURL(getCourseId(), currFolderInfo.parentId)
+          : undefined
+      }
+      title={
+        currFolderInfo.name === null
+          ? t(translations.defaultHeader)
+          : currFolderInfo.name
+      }
+      unpadded
+    >
       <WorkbinTable
         key={currFolderInfo.id}
         currFolderId={currFolderInfo.id}
@@ -187,7 +151,7 @@ const FolderShow: FC = () => {
         handleClose={(): void => setIsMaterialUploadOpen(false)}
         isOpen={isMaterialUploadOpen}
       />
-    </>
+    </Page>
   );
 };
 

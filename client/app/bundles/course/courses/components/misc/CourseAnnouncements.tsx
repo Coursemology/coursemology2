@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { defineMessages, injectIntl, WrappedComponentProps } from 'react-intl';
-import { Stack } from '@mui/material';
+import { Stack, Typography } from '@mui/material';
 import { AnnouncementEntity } from 'types/course/announcements';
 
 import AnnouncementCard from '../../../announcements/components/misc/AnnouncementCard';
@@ -12,11 +12,7 @@ interface Props extends WrappedComponentProps {
 const translations = defineMessages({
   announcementHeader: {
     id: 'course.courses.CourseAnnouncements.announcementHeader',
-    defaultMessage: 'Announcements',
-  },
-  noAnnouncements: {
-    id: 'course.courses.CourseAnnouncements.noAnnouncements',
-    defaultMessage: 'There are currently no announcements',
+    defaultMessage: 'Latest announcements',
   },
 });
 
@@ -24,12 +20,10 @@ const CourseAnnouncements: FC<Props> = (props) => {
   const { intl, announcements } = props;
 
   return (
-    <>
-      <h2>{intl.formatMessage(translations.announcementHeader)}</h2>
-
-      {announcements === null && (
-        <>{intl.formatMessage(translations.noAnnouncements)}</>
-      )}
+    <section className="space-y-2">
+      <Typography variant="h6">
+        {intl.formatMessage(translations.announcementHeader)}
+      </Typography>
 
       {announcements && (
         <Stack spacing={1}>
@@ -42,7 +36,7 @@ const CourseAnnouncements: FC<Props> = (props) => {
           ))}
         </Stack>
       )}
-    </>
+    </section>
   );
 };
 

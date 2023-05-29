@@ -100,8 +100,12 @@ const SurveyDetails = (props) => {
     return null;
   }
   return (
-    <Card>
-      <TableContainer dense variant="outlined">
+    <Card variant="outlined">
+      <TableContainer
+        className="border-only-b-neutral-200"
+        dense
+        variant="bare"
+      >
         <TableBody>
           <TableRow>
             <TableCell variant="head">
