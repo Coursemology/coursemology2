@@ -127,6 +127,8 @@ Rails.application.routes.draw do
 
   scope module: 'course' do
     resources :courses, except: [:new, :edit, :update] do
+      get 'sidebar', on: :member
+
       namespace :admin do
         get '/' => 'admin#index'
         patch '/' => 'admin#update'
