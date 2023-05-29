@@ -1,13 +1,17 @@
-import AppLayout from 'lib/components/core/layouts/AppLayout';
+import { Outlet } from 'react-router-dom';
 
-import SystemAdminSidebar from '../../components/navigation/SystemAdminSidebar';
+import Page from 'lib/components/core/layouts/Page';
+
+import SystemAdminTabs from '../../components/navigation/SystemAdminTabs';
 
 const AdminNavigator = (): JSX.Element => (
-  <AppLayout
-    renderSidebar={(isExpanded, handleExpand): JSX.Element => (
-      <SystemAdminSidebar handleExpand={handleExpand} isExpanded={isExpanded} />
-    )}
-  />
+  <Page title="System Admin Panel" unpadded>
+    <SystemAdminTabs />
+
+    <div className="relative">
+      <Outlet />
+    </div>
+  </Page>
 );
 
 export default AdminNavigator;

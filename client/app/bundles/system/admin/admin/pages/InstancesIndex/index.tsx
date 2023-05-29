@@ -1,10 +1,9 @@
-import { FC, ReactElement, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { defineMessages } from 'react-intl';
 import { toast } from 'react-toastify';
+import { Button } from '@mui/material';
 
-import AddButton from 'lib/components/core/buttons/AddButton';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import PageHeader from 'lib/components/navigation/PageHeader';
 import { useAppDispatch, useAppSelector } from 'lib/hooks/store';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -43,46 +42,37 @@ const InstancesIndex: FC = () => {
   const permissions = useAppSelector(getPermissions);
   const instances = useAppSelector(getAllInstanceMiniEntities);
 
-  const headerToolbars: ReactElement[] = [];
-
   useEffect(() => {
     dispatch(indexInstances())
       .catch(() => toast.error(t(translations.fetchInstancesFailure)))
       .finally(() => setIsLoading(false));
   }, [dispatch]);
 
-  if (permissions.canCreateInstances) {
-    headerToolbars.push(
-      <AddButton
-        key="new-instance-button"
-        className="text-white"
-        id="new-instance-button"
-        onClick={(): void => {
-          setIsOpen(true);
-        }}
-        tooltip={t(translations.newInstance)}
-      />,
-    );
-  }
+  if (isLoading) return <LoadingIndicator />;
 
-  const renderBody: JSX.Element = (
+  return (
     <>
+      {permissions.canCreateInstances && (
+        <Button
+          className="absolute right-6 top-4 z-50"
+          id="new-instance-button"
+          onClick={(): void => setIsOpen(true)}
+          variant="outlined"
+        >
+          {t(translations.newInstance)}
+        </Button>
+      )}
+
       <InstancesTable
         instances={instances}
         renderRowActionComponent={(instance): JSX.Element => (
           <InstancesButtons instance={instance} />
         )}
       />
+
       {isOpen && (
         <InstanceNew onClose={(): void => setIsOpen(false)} open={isOpen} />
       )}
-    </>
-  );
-
-  return (
-    <>
-      <PageHeader title={t(translations.header)} toolbars={headerToolbars} />
-      {isLoading ? <LoadingIndicator /> : renderBody}
     </>
   );
 };
