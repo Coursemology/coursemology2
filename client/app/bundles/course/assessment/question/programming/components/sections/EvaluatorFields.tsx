@@ -103,7 +103,7 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        {t(translations.mb)}
+                        {t(translations.megabytes)}
                       </InputAdornment>
                     ),
                   }}
@@ -128,7 +128,7 @@ const EvaluatorFields = (props: EvaluatorFieldsProps): JSX.Element | null => {
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
-                        {t(translations.s)}
+                        {t(translations.seconds)}
                       </InputAdornment>
                     ),
                   }}

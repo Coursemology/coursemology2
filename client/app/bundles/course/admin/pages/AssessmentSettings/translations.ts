@@ -156,8 +156,8 @@ export default defineMessages({
     id: 'course.admin.AssessmentSettings.errorOccurredWhenDeletingTab',
     defaultMessage: 'An error occurred while deleting the tab.',
   },
-  s: {
-    id: 'course.admin.AssessmentSettings.s',
+  seconds: {
+    id: 'course.admin.AssessmentSettings.seconds',
     defaultMessage: 's',
   },
   programmingQuestionSettings: {
