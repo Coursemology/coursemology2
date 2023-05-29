@@ -48,10 +48,8 @@ json.assessments @assessments do |assessment|
     achievement_conditionals = @conditional_service.achievement_conditional_for(assessment)
 
     top_conditionals = achievement_conditionals.first(3)
-    json.topConditionals top_conditionals do |achievement|
-      json.url course_achievement_path(current_course, achievement)
-      json.badgeUrl achievement_badge_path(achievement)
-      json.title achievement.title
+    json.topConditionals do
+      json.partial! 'achievement_badges', achievements: top_conditionals, course: current_course
     end
 
     conditionals_count = achievement_conditionals.size

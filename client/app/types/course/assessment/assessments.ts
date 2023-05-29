@@ -16,6 +16,12 @@ interface AssessmentActionsData {
   deleteUrl?: string;
 }
 
+export interface AchievementBadgeData {
+  url: string;
+  badgeUrl: string;
+  title: string;
+}
+
 export interface AssessmentListData extends AssessmentActionsData {
   id: number;
   title: string;
@@ -37,11 +43,7 @@ export interface AssessmentListData extends AssessmentActionsData {
   isBonusEnded?: boolean;
   isEndTimePassed?: boolean;
   remainingConditionalsCount?: number;
-  topConditionals?: {
-    url: string;
-    badgeUrl: string;
-    title: string;
-  }[];
+  topConditionals?: AchievementBadgeData[];
 }
 
 export interface AssessmentsListData {
