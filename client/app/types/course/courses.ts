@@ -1,8 +1,11 @@
 import { Permissions } from 'types';
 
+import { CourseComponentIconName } from 'lib/constants/icons';
+
+import { AchievementBadgeData } from './assessment/assessments';
 import { TodoData } from './lesson-plan/todos';
 import { AnnouncementData, AnnouncementEntity } from './announcements';
-import { CourseUserListData } from './courseUsers';
+import { CourseUserListData, CourseUserRoles } from './courseUsers';
 import { NotificationData } from './notifications';
 
 export type CoursePermissions = Permissions<'canCreate' | 'isCurrentUser'>;
@@ -70,4 +73,36 @@ export interface CourseEntity extends CourseMiniEntity {
 export interface NewCourseFormData {
   title: string;
   description: string;
+}
+
+export interface SidebarItemData {
+  key: string;
+  label: string;
+  path: string;
+  icon: CourseComponentIconName;
+  unread?: number;
+}
+
+export interface CourseUserProgressData {
+  level?: number;
+  exp?: number;
+  nextLevelPercentage?: number;
+  nextLevelExpDelta?: number | 'max';
+  recentAchievements?: AchievementBadgeData[];
+  remainingAchievementsCount?: number;
+}
+
+export interface CourseLayoutData {
+  courseTitle: string;
+  courseUrl: string;
+  courseLogoUrl: string;
+  courseUserUrl: string;
+  userName: string;
+  courseUserName?: string;
+  courseUserRole?: CourseUserRoles;
+  userAvatarUrl?: string;
+  sidebar?: SidebarItemData[];
+  adminSidebar?: SidebarItemData[];
+  manageEmailSubscriptionUrl?: string;
+  progress?: CourseUserProgressData;
 }
