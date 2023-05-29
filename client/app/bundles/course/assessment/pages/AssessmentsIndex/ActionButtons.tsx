@@ -56,35 +56,22 @@ const ActionButtons = (props: ActionButtonsProps): JSX.Element => {
       .catch(() => setAttempting(false));
   };
 
-  const actionButton = actionButtonUrl && (
-    <Link to={actionButtonUrl}>
-      <Button
-        className="min-w-[8.5rem]"
-        disabled={attempting}
-        onClick={handleActionButton}
-        size="small"
-        variant={assessment.status === 'submitted' ? 'outlined' : 'contained'}
-        // Temporary fix for blue link on hover caused by Bootstrap
-        // TODO: Remove when Bootstrap is finally removed
-        {...((assessment.status === 'open' ||
-          assessment.status === 'attempting' ||
-          assessment.status === 'locked') && {
-          className: 'min-w-[8.5rem] hover:text-white',
-        })}
-      >
-        {t(ACTION_LABELS[assessment.status])}
-      </Button>
-    </Link>
-  );
-
   return (
     <div className="flex items-center">
-      {student ? (
-        actionButton
-      ) : (
-        <div className="hoverable:invisible group-hover?:visible flex h-full items-center transition-position no-hover:mr-4 hoverable:absolute hoverable:right-0 hoverable:pl-8 hoverable:opacity-0 hoverable:bg-fade-to-l-slot-2 group-hover?:right-full group-hover?:opacity-100">
-          {actionButton}
-        </div>
+      {actionButtonUrl && (
+        <Link to={actionButtonUrl}>
+          <Button
+            className="mr-4 min-w-[8.5rem]"
+            disabled={attempting}
+            onClick={handleActionButton}
+            size="small"
+            variant={
+              assessment.status === 'submitted' ? 'outlined' : 'contained'
+            }
+          >
+            {t(ACTION_LABELS[assessment.status])}
+          </Button>
+        </Link>
       )}
 
       {assessment.editUrl && (
