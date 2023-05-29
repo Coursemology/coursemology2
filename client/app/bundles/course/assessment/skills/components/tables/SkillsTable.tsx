@@ -29,8 +29,6 @@ import Note from 'lib/components/core/Note';
 import { TableEnum } from '../../types';
 import SkillManagementButtons from '../buttons/SkillManagementButtons';
 
-import './SkillsTable.scss';
-
 interface Props extends WrappedComponentProps {
   data: SkillBranchMiniEntity[];
   tableType: TableEnum;

@@ -6,8 +6,6 @@ import { CourseMiniEntity } from 'types/course/courses';
 
 import { getCourseURL } from 'lib/helpers/url-builders';
 
-import styles from './CourseInfoBox.scss';
-
 interface Props extends WrappedComponentProps {
   course: CourseMiniEntity;
 }
@@ -40,7 +38,7 @@ const CourseInfoBox: FC<Props> = (props) => {
           }}
         >
           <p
-            className={styles.coursePicture}
+            className="wh-40"
             dangerouslySetInnerHTML={{ __html: course.logoUrl }}
             style={{
               textAlign: 'center',
