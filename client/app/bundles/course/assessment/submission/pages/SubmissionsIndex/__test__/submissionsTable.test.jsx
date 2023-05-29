@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
 
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+import Providers from 'lib/components/wrappers/Providers';
 
 import SubmissionsTable from '../SubmissionsTable';
 
@@ -49,9 +49,9 @@ const defaultProps = {
 const setupTest = (propsOverrides) => {
   const props = { ...defaultProps, ...propsOverrides };
   const submissionsTable = mount(
-    <ProviderWrapper>
+    <Providers>
       <SubmissionsTable {...props} />
-    </ProviderWrapper>,
+    </Providers>,
   );
 
   return {

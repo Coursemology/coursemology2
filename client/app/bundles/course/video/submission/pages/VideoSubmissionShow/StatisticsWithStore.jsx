@@ -2,7 +2,7 @@ import { memo } from 'react';
 import equal from 'fast-deep-equal';
 import PropTypes from 'prop-types';
 
-import { StoreProviderWrapper } from 'lib/components/wrappers/ProviderWrapper';
+import StoreProvider from 'lib/components/wrappers/StoreProvider';
 
 import Statistics from '../../containers/Statistics';
 import VideoPlayer from '../../containers/VideoPlayer';
@@ -11,7 +11,7 @@ import storeCreator from '../../store';
 import styles from '../../containers/Statistics.scss';
 
 const StatisticsWithStore = ({ video, statistics }) => (
-  <StoreProviderWrapper {...storeCreator({ video })}>
+  <StoreProvider {...storeCreator({ video })}>
     <div>
       <div className={styles.statisticsVideoView}>
         <VideoPlayer />
@@ -19,7 +19,7 @@ const StatisticsWithStore = ({ video, statistics }) => (
       <hr />
       <Statistics {...statistics} />
     </div>
-  </StoreProviderWrapper>
+  </StoreProvider>
 );
 StatisticsWithStore.propTypes = {
   video: PropTypes.object.isRequired,

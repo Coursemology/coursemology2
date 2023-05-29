@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import CourseAPI from 'api/course';
 import LoadingIndicator from 'lib/components/core/LoadingIndicator';
-import { StoreProviderWrapper } from 'lib/components/wrappers/ProviderWrapper';
+import StoreProvider from 'lib/components/wrappers/StoreProvider';
 
 import Submission from '../../containers/Submission';
 import storeCreator from '../../store';
@@ -37,13 +37,13 @@ const SubmissionEditWithStore = ({ data }) => {
 
   return (
     <div id="video-component">
-      <StoreProviderWrapper {...storeCreator(editVideoData)}>
+      <StoreProvider {...storeCreator(editVideoData)}>
         <Card className="mt-6">
           <CardContent>
             <Submission />
           </CardContent>
         </Card>
-      </StoreProviderWrapper>
+      </StoreProvider>
     </div>
   );
 };

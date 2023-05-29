@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { AppState, setUpStoreWithState, store as appStore } from 'store';
 
-import ProviderWrapper from 'lib/components/wrappers/ProviderWrapper';
+import Providers from 'lib/components/wrappers/Providers';
 import NotificationPopup from 'lib/containers/NotificationPopup';
 
 export interface CustomRenderOptions {
@@ -20,11 +20,11 @@ const TestApp = (props: TestAppProps): JSX.Element => {
   const store = props.state ? setUpStoreWithState(props.state) : appStore;
 
   return (
-    <ProviderWrapper store={store}>
+    <Providers store={store}>
       <MemoryRouter initialEntries={entries}>{props.children}</MemoryRouter>
 
       <NotificationPopup />
-    </ProviderWrapper>
+    </Providers>
   );
 };
 
