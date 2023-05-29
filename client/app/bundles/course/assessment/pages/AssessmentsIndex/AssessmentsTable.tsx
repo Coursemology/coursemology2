@@ -6,13 +6,13 @@ import {
 
 import Note from 'lib/components/core/Note';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
+import StackedBadges from 'lib/components/extensions/StackedBadges';
 import Table, { ColumnTemplate } from 'lib/components/table';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from '../../translations';
 
 import ActionButtons from './ActionButtons';
-import StackedBadges from './StackedBadges';
 import StatusBadges from './StatusBadges';
 
 interface AssessmentsTableProps {
@@ -62,9 +62,10 @@ const AssessmentsTable = (props: AssessmentsTableProps): JSX.Element => {
       title: t(translations.neededFor),
       cell: (assessment) => (
         <StackedBadges
-          assessmentUrl={assessment.url}
           badges={assessment.topConditionals}
           remainingCount={assessment.remainingConditionalsCount}
+          seeRemainingTooltip={t(translations.seeAllRequirements)}
+          seeRemainingUrl={assessment.url}
         />
       ),
       unless: !display.isAchievementsEnabled,
