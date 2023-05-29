@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export const processStaff = (staff) => ({
   ...staff,
   numGraded: parseInt(staff.numGraded ?? 0, 10),

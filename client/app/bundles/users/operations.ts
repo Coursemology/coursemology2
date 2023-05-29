@@ -4,7 +4,6 @@ import GlobalAPI from 'api';
 
 import { actions } from './store';
 
-// eslint-disable-next-line import/prefer-default-export
 export function fetchUser(userId: number): Operation {
   return async (dispatch) =>
     GlobalAPI.users.fetch(userId).then((response) => {

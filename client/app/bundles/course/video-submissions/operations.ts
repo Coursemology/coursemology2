@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 import { VideoSubmissionListData } from 'types/course/videoSubmissions';
 
 import CourseAPI from 'api/course';

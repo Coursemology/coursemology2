@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 const toCamel = (str) =>
   str.replace(/([-_][a-z])/gi, ($1) =>
     $1.toUpperCase().replace('-', '').replace('_', ''),

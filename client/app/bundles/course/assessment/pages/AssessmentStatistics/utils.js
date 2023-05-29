@@ -8,7 +8,6 @@ function processDayDifference(dayDifference) {
   return `D+${dayDifference}`;
 }
 
-// eslint-disable-next-line import/prefer-default-export
 export function processSubmissionsIntoChartData(submissions) {
   const submittedSubmissions = submissions.filter((s) => s.submittedAt != null);
   const mappedSubmissions = submittedSubmissions
