@@ -119,7 +119,7 @@ const AssessmentsSettingsForm = (
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
-                            {t(translations.s)}
+                            {t(translations.seconds)}
                           </InputAdornment>
                         ),
                       }}

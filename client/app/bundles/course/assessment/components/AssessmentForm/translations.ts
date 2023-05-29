@@ -340,8 +340,8 @@ const translations = defineMessages({
     defaultMessage:
       'Controls how long PulseGrid should wait after the frequency interval before flagging a session as late.',
   },
-  ms: {
-    id: 'course.assessment.AssessmentForm.ms',
+  milliseconds: {
+    id: 'course.assessment.AssessmentForm.milliseconds',
     defaultMessage: 'ms',
   },
   hasToBePositiveIntegerMaxOneDay: {

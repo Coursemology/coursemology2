@@ -752,7 +752,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
-                                {t(translations.ms)}
+                                {t(translations.milliseconds)}
                               </InputAdornment>
                             ),
                           }}
@@ -778,7 +778,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
-                                {t(translations.ms)}
+                                {t(translations.milliseconds)}
                               </InputAdornment>
                             ),
                           }}
@@ -814,7 +814,7 @@ const AssessmentForm = (props: AssessmentFormProps): JSX.Element => {
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
-                            {t(translations.ms)}
+                            {t(translations.milliseconds)}
                           </InputAdornment>
                         ),
                       }}

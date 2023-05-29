@@ -1137,12 +1137,12 @@ const translations = defineMessages({
     id: 'course.assessment.question.programming.attemptLimit',
     defaultMessage: 'Attempt limit',
   },
-  s: {
-    id: 'course.assessment.question.programming.s',
+  seconds: {
+    id: 'course.assessment.question.programming.seconds',
     defaultMessage: 's',
   },
-  mb: {
-    id: 'course.assessment.question.programming.mb',
+  megabytes: {
+    id: 'course.assessment.question.programming.megabytes',
     defaultMessage: 'MB',
   },
   lowestGradingPriority: {
