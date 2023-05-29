@@ -27,8 +27,8 @@ const Section = (props: SectionProps): JSX.Element => (
   >
     <Grid container spacing={2}>
       <Grid
-        className={`lg:sticky lg:self-start ${
-          props.sticksToNavbar ? 'lg:top-20' : 'lg:-top-6'
+        className={`lg:self-start ${
+          props.sticksToNavbar ? 'lg:sticky lg:top-0' : ''
         }`}
         item
         lg={3}
