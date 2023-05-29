@@ -76,6 +76,25 @@ export default {
     }),
     plugin(({ matchUtilities, theme }) => {
       matchUtilities(
+        {
+          'border-only-t': (value) => ({ borderTop: `1px solid ${value}` }),
+          'border-only-b': (value) => ({ borderBottom: `1px solid ${value}` }),
+          'border-only-l': (value) => ({ borderLeft: `1px solid ${value}` }),
+          'border-only-r': (value) => ({ borderRight: `1px solid ${value}` }),
+          'border-only-x': (value) => ({
+            borderLeft: `1px solid ${value}`,
+            borderRight: `1px solid ${value}`,
+          }),
+          'border-only-y': (value) => ({
+            borderTop: `1px solid ${value}`,
+            borderBottom: `1px solid ${value}`,
+          }),
+        },
+        { values: flattenColorPalette(theme('colors')), type: 'color' },
+      );
+    }),
+    plugin(({ matchUtilities, theme }) => {
+      matchUtilities(
         { wh: (value) => ({ width: value, height: value }) },
         { values: theme('spacing'), type: 'number' },
       );
