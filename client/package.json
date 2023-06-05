@@ -40,7 +40,7 @@
     "@hookform/resolvers": "^2.9.11",
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.132",
-    "@mui/material": "^5.13.3",
+    "@mui/material": "^5.13.4",
     "@mui/x-date-pickers": "^5.0.19",
     "@rails/actioncable": "^7.0.5",
     "@reduxjs/toolkit": "^1.9.5",
