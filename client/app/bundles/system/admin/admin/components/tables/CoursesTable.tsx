@@ -1,6 +1,5 @@
 import { ReactElement } from 'react';
 import { defineMessages } from 'react-intl';
-import { Typography } from '@mui/material';
 import { CourseMiniEntity } from 'types/system/courses';
 import { UserBasicMiniEntity } from 'types/users';
 
@@ -19,7 +18,7 @@ interface CoursesTableProps {
 const translations = defineMessages({
   searchText: {
     id: 'system.admin.admin.CoursesTable.searchText',
-    defaultMessage: 'Search courses by its title or owner',
+    defaultMessage: 'Search courses by title or owner',
   },
   fetchFilteredCoursesFailure: {
     id: 'system.admin.admin.CoursesTable.fetchFilteredCoursesFailure',
@@ -56,47 +55,31 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
       sortable: true,
       searchable: true,
       cell: (course) => (
-        <Typography
-          key={`title-${course.id}`}
-          className="course_title"
-          variant="body2"
-        >
-          <a href={`//${course.instance.host}/courses/${course.id}`}>
-            {course.title}
-          </a>
-        </Typography>
+        <a href={`//${course.instance.host}/courses/${course.id}`}>
+          {course.title}
+        </a>
       ),
     },
     {
       of: 'createdAt',
       title: t(tableTranslations.createdAt),
       sortable: true,
-      cell: (course) => (
-        <Typography
-          key={`createdAt-${course.id}`}
-          className="course_created_at"
-          variant="body2"
-        >
-          {course.createdAt}
-        </Typography>
-      ),
+      cell: (course) => course.createdAt,
+      sortProps: {
+        sort: (a, b): number =>
+          Date.parse(a.createdAt) - Date.parse(b.createdAt),
+      },
     },
     {
       of: 'activeUserCount',
       title: t(tableTranslations.activeUsers),
       sortable: true,
       cell: (course) => (
-        <Typography
-          key={`activeTotalUsers-${course.id}`}
-          className="course_active_users"
-          variant="body2"
+        <a
+          href={`//${course.instance.host}/courses/${course.id}/students?active=true`}
         >
-          <a
-            href={`//${course.instance.host}/courses/${course.id}/students?active=true`}
-          >
-            {course.activeUserCount}
-          </a>
-        </Typography>
+          {course.activeUserCount}
+        </a>
       ),
     },
     {
@@ -104,15 +87,9 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
       title: t(tableTranslations.totalUsers),
       sortable: true,
       cell: (course) => (
-        <Typography
-          key={`activeTotalUsers-${course.id}`}
-          className="course_total_users"
-          variant="body2"
-        >
-          <a href={`//${course.instance.host}/courses/${course.id}/students`}>
-            {course.userCount}
-          </a>
-        </Typography>
+        <a href={`//${course.instance.host}/courses/${course.id}/students`}>
+          {course.userCount}
+        </a>
       ),
     },
     {
@@ -120,15 +97,7 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
       title: t(tableTranslations.instance),
       sortable: true,
       cell: (course) => (
-        <a href={`//${course.instance.host}`}>
-          <Typography
-            key={`instance-${course.id}`}
-            className="course_instance"
-            variant="body2"
-          >
-            {course.instance.name}
-          </Typography>
-        </a>
+        <a href={`//${course.instance.host}`}>{course.instance.name}</a>
       ),
       searchProps: { getValue: (course) => course.instance.name },
     },
@@ -160,9 +129,10 @@ const CoursesTable = (props: CoursesTableProps): JSX.Element => {
       className={props.className}
       columns={columns}
       data={courses}
-      getRowClassName={(course): string => `instance_${course.id}`}
+      getRowClassName={(course): string => `course_${course.id}`}
       getRowEqualityData={(course): CourseMiniEntity => course}
       getRowId={(course): string => course.id.toString()}
+      indexing={{ indices: true }}
       pagination={{
         rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
         showAllRows: true,
