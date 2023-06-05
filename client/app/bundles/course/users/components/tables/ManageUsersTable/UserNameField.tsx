@@ -39,6 +39,7 @@ const UserNameField = (props: UserNameFieldProps): JSX.Element => {
             error: error.response?.data?.errors ?? '',
           }),
         );
+        throw error;
       });
   };
 
