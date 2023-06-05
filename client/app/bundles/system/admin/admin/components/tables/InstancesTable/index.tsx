@@ -1,5 +1,5 @@
-import { ReactElement, useState } from 'react';
-import { Typography } from '@mui/material';
+import { ReactElement } from 'react';
+import { defineMessages } from 'react-intl';
 import { InstanceMiniEntity } from 'types/system/instances';
 
 import Table, { ColumnTemplate } from 'lib/components/table';
@@ -7,7 +7,7 @@ import { DEFAULT_TABLE_ROWS_PER_PAGE } from 'lib/constants/sharedConstants';
 import useTranslation from 'lib/hooks/useTranslation';
 import tableTranslations from 'lib/translations/table';
 
-import InstanceNameOrHostField from './ManageInstanceTable/InstanceNameOrHostField';
+import InstanceField from './InstanceField';
 
 interface InstanceTableProps {
   instances: InstanceMiniEntity[];
@@ -15,35 +15,35 @@ interface InstanceTableProps {
   className?: string;
 }
 
+const translations = defineMessages({
+  searchText: {
+    id: 'system.admin.admin.InstancesTable.searchText',
+    defaultMessage: 'Search instance by name or host',
+  },
+});
+
 const InstancesTable = (props: InstanceTableProps): JSX.Element => {
   const { renderRowActionComponent, instances } = props;
   const { t } = useTranslation();
-
-  const [submitting, setSubmitting] = useState(false);
 
   const columns: ColumnTemplate<InstanceMiniEntity>[] = [
     {
       of: 'name',
       title: t(tableTranslations.name),
+      searchable: true,
       sortable: true,
-      cell: (instance) => (
-        <InstanceNameOrHostField
-          for={instance}
-          nameChanged
-          setSubmitting={setSubmitting}
-          submitting={submitting}
-        />
-      ),
+      cell: (instance) => <InstanceField field="name" for={instance} />,
     },
     {
       of: 'host',
       title: t(tableTranslations.host),
+      searchable: true,
       sortable: true,
       cell: (instance) => (
-        <InstanceNameOrHostField
+        <InstanceField
+          field="host"
           for={instance}
-          setSubmitting={setSubmitting}
-          submitting={submitting}
+          link={`//${instance.host}/admin/instances`}
         />
       ),
     },
@@ -52,15 +52,9 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       title: t(tableTranslations.activeUsers),
       sortable: true,
       cell: (instance) => (
-        <Typography
-          key={`instance-${instance.id}`}
-          className="instance_activeUsers"
-          variant="body2"
-        >
-          <a href={`//${instance.host}/admin/users?active=true`}>
-            {instance.activeUserCount}
-          </a>
-        </Typography>
+        <a href={`//${instance.host}/admin/users?active=true`}>
+          {instance.activeUserCount}
+        </a>
       ),
     },
     {
@@ -68,13 +62,7 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       title: t(tableTranslations.totalUsers),
       sortable: true,
       cell: (instance) => (
-        <Typography
-          key={`instance-${instance.id}`}
-          className="instance_totalUsers"
-          variant="body2"
-        >
-          <a href={`//${instance.host}/admin/users`}>{instance.userCount}</a>
-        </Typography>
+        <a href={`//${instance.host}/admin/users`}>{instance.userCount}</a>
       ),
     },
 
@@ -83,15 +71,9 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       title: t(tableTranslations.activeCourses),
       sortable: true,
       cell: (instance) => (
-        <Typography
-          key={`instance-${instance.id}`}
-          className="instance_activeCourses"
-          variant="body2"
-        >
-          <a href={`//${instance.host}/admin/courses?active=true`}>
-            {instance.activeCourseCount}
-          </a>
-        </Typography>
+        <a href={`//${instance.host}/admin/courses?active=true`}>
+          {instance.activeCourseCount}
+        </a>
       ),
     },
     {
@@ -99,13 +81,7 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       title: t(tableTranslations.totalCourses),
       sortable: true,
       cell: (instance) => (
-        <Typography
-          key={`instance-${instance.id}`}
-          className="instance_totalCourses"
-          variant="body2"
-        >
-          <a href={`//${instance.host}/admin/courses`}>{instance.userCount}</a>
-        </Typography>
+        <a href={`//${instance.host}/admin/courses`}>{instance.courseCount}</a>
       ),
     },
     {
@@ -124,9 +100,14 @@ const InstancesTable = (props: InstanceTableProps): JSX.Element => {
       getRowClassName={(instance): string => `instance_${instance.id}`}
       getRowEqualityData={(instance): InstanceMiniEntity => instance}
       getRowId={(instance): string => instance.id.toString()}
+      indexing={{ indices: true }}
       pagination={{
         rowsPerPage: [DEFAULT_TABLE_ROWS_PER_PAGE],
         showAllRows: true,
+      }}
+      search={{ searchPlaceholder: t(translations.searchText) }}
+      toolbar={{
+        show: true,
       }}
     />
   );

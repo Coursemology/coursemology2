@@ -127,7 +127,7 @@ const translations = defineMessages({
   },
   host: {
     id: 'lib.translations.table.column.host',
-    defaultMessage: 'Host Name',
+    defaultMessage: 'Hostname',
   },
   activeUsers: {
     id: 'lib.translations.table.column.activeUsers',

@@ -30,33 +30,36 @@ RSpec.feature 'System: Administration: Instances', js: true do
         instance = Instance.order_for_display[1] # gets first non-default instance
         visit admin_instances_path
 
-        within find("div.instance_name_#{instance.id}") do
+        within find("div.instance_name_field_#{instance.id}") do
           find('button.inline-edit-button', visible: false).click
           find('input').set(' ')
           find('button.confirm-btn').click
         end
 
         expect(instance.reload.name).not_to eq('')
-        expect(find("div.instance_name_#{instance.id}").find('p.MuiFormHelperText-root').text).to eq('Cannot be empty.')
+        expect(find("div.instance_name_field_#{instance.id}").
+          find('p.MuiFormHelperText-root').text).to eq('Cannot be empty.')
         find('button.cancel-btn').click
 
         new_name = 'New Name'
         new_host = generate(:host)
-        within find("div.instance_name_#{instance.id}") do
+        within find("div.instance_name_field_#{instance.id}") do
           find('button.inline-edit-button', visible: false).click
           find('input').set(new_name)
           find('button.confirm-btn').click
         end
-        expect_toastify("Renamed instance to #{new_name}")
-        expect(find("div.instance_name_#{instance.id}").text).to eq(new_name)
+        wait_for_page
+        expect(find("div.instance_name_field_#{instance.id}").text).to eq(new_name)
+        expect(instance.reload.name).to eq(new_name)
 
-        within find("div.instance_host_#{instance.id}") do
+        within find("div.instance_host_field_#{instance.id}") do
           find('button.inline-edit-button', visible: false).click
           find('input').set(new_host)
           find('button.confirm-btn').click
         end
-        expect_toastify("Host changed from #{instance.host} to #{new_host}")
-        expect(find("div.instance_host_#{instance.id}").text).to eq(new_host)
+        wait_for_page
+        expect(find("div.instance_host_field_#{instance.id}").text).to eq(new_host)
+        expect(instance.reload.host).to eq(new_host)
       end
 
       scenario 'I can see all instances' do
@@ -66,9 +69,8 @@ RSpec.feature 'System: Administration: Instances', js: true do
         visit admin_instances_path
 
         instances.each do |instance|
-          expect(page).to have_selector('div.instance_name', exact_text: instance.name)
-          expect(page).
-            to have_link(nil, href: "//#{instance.host}/admin/instances")
+          expect(page).to have_selector("div.instance_name_field_#{instance.id}", exact_text: instance.name)
+          expect(page).to have_link(nil, href: "//#{instance.host}/admin/instances")
         end
       end
 
@@ -77,11 +79,11 @@ RSpec.feature 'System: Administration: Instances', js: true do
         instance = Instance.order_for_display[1] # the 1st instance (Default) cannot be destroyed
         visit admin_instances_path
 
-        expect(page).to have_selector('div.instance_name', exact_text: instance.name)
+        expect(page).to have_selector("div.instance_name_field_#{instance.id}", exact_text: instance.name)
         find("button.instance-delete-#{instance.id}").click
         click_button('Delete')
 
-        expect(page).not_to have_selector('div.instance_name', exact_text: instance.name)
+        expect(page).not_to have_selector("div.instance_name_field_#{instance.id}", exact_text: instance.name)
         expect_toastify("#{instance.name} was deleted.")
       end
     end
