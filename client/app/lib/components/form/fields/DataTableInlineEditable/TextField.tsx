@@ -53,7 +53,7 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
     ...custom
   } = props;
   const [controlledVal, setControlledVal] = useState(value);
-  const [helperText, setHelperText] = useState('');
+  const [errorText, setHelperText] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   if (!renderIf) {
@@ -122,7 +122,8 @@ const InlineEditTextField: FC<Props> = (props): JSX.Element | null => {
       <TextField
         className={className}
         disabled={disabled ?? isSaving}
-        helperText={helperText}
+        error={Boolean(errorText)}
+        helperText={errorText}
         label={label}
         onBlur={handleBlur}
         onChange={handleChange}
