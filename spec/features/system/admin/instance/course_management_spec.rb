@@ -22,7 +22,7 @@ RSpec.feature 'System: Administration: Instance: Courses', js: true do
         visit admin_instance_courses_path
 
         courses.each do |course|
-          expect(page).to have_selector('p.course_title', text: course.title)
+          expect(page).to have_selector("tr.course_#{course.id}", text: course.title)
           expect(page).
             to have_link(nil, href: "//#{course.instance.host}/courses/#{course.id}")
 
