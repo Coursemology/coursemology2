@@ -109,6 +109,7 @@ const UserProfileCard: FC<Props> = ({ user, intl }) => {
             <Typography>
               <strong>{COURSE_USER_ROLES[user.role]}</strong>
             </Typography>
+            <Typography>{user.email}</Typography>
             {renderUserStats()}
           </Grid>
         </Grid>
