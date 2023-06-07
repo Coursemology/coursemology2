@@ -34,7 +34,7 @@
     "@babel/runtime": "^7.22.3",
     "@ckeditor/ckeditor5-build-custom": "github:ekowidianto/CKEditor5-build-coursemology#v0.2.0",
     "@ckeditor/ckeditor5-react": "^5.1.0",
-    "@emotion/react": "^11.11.0",
+    "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@hello-pangea/dnd": "^16.2.0",
     "@hookform/resolvers": "^2.9.11",
