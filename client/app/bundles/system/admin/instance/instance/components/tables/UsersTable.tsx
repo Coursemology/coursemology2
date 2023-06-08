@@ -270,7 +270,7 @@ const UsersTable: FC<Props> = (props) => {
               variant="body2"
             >
               <a
-                href={`/users/${user.id}`}
+                href={`/users/${user.userId}`}
                 rel="noopener noreferrer"
                 target="_blank"
               >

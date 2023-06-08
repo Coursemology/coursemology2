@@ -176,7 +176,7 @@ const UsersIndex: FC<Props> = (props) => {
         })}
       </Typography>
       <Typography variant="body2">
-        {intl.formatMessage(translations.totalUsers, {
+        {intl.formatMessage(translations.activeUsers, {
           allCount: totalActiveUser,
           adminCount: totalActiveAdmin,
           instructorCount: totalActiveInstructor,
