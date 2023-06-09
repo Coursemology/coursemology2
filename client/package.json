@@ -123,7 +123,7 @@
     "@types/jest": "^29.5.2",
     "@types/jquery": "^3.5.16",
     "@types/rails__actioncable": "^6.1.6",
-    "@types/react": "^18.2.8",
+    "@types/react": "^18.2.9",
     "@types/react-beautiful-dnd": "^13.1.4",
     "@types/react-dom": "^18.2.4",
     "@types/react-resizable": "^3.0.4",
