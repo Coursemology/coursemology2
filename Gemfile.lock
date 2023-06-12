@@ -190,7 +190,7 @@ GEM
     capybara-selenium (0.0.6)
       capybara
       selenium-webdriver
-    carrierwave (2.2.3)
+    carrierwave (2.2.4)
       activemodel (>= 5.0.0)
       activesupport (>= 5.0.0)
       addressable (~> 2.6)
@@ -279,7 +279,7 @@ GEM
       nokogiri (>= 1.4)
     htmlentities (4.3.4)
     http_accept_language (2.1.1)
-    i18n (1.13.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     i18n-js (3.9.2)
       i18n (>= 0.6.6)
