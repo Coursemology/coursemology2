@@ -394,7 +394,7 @@ GEM
     pg (1.5.3)
     progress (3.6.0)
     public_suffix (5.0.1)
-    puma (6.2.2)
+    puma (6.3.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
     racc (1.7.0)
