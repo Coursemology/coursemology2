@@ -39,21 +39,23 @@ export default function (state = {}, action) {
       const questionState = {};
       // For each test case in each test type, add back the data without the output
       // and passed values.
-      Object.keys(state[questionId]).forEach((testType) => {
-        if (
-          testType !== 'stdout' &&
-          testType !== 'stderr' &&
-          testType !== 'canReadTests'
-        ) {
-          questionState[testType] = state[questionId][testType].map(
-            (testCase) => ({
-              identifier: testCase.identifier,
-              expression: testCase.expression,
-              expected: testCase.expected,
-            }),
-          );
-        }
-      });
+      if (state[questionId]) {
+        Object.keys(state[questionId]).forEach((testType) => {
+          if (
+            testType !== 'stdout' &&
+            testType !== 'stderr' &&
+            testType !== 'canReadTests'
+          ) {
+            questionState[testType] = state[questionId][testType].map(
+              (testCase) => ({
+                identifier: testCase.identifier,
+                expression: testCase.expression,
+                expected: testCase.expected,
+              }),
+            );
+          }
+        });
+      }
 
       return {
         ...state,

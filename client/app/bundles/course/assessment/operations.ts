@@ -71,8 +71,7 @@ export const deleteAssessment = async (
     const response = await CourseAPI.assessment.assessments.delete(deleteUrl);
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data?.errors);
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
 
     throw error;
   }
@@ -132,8 +131,7 @@ export const duplicateQuestion = async (
     );
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data?.errors);
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
 
     throw error;
   }
@@ -143,8 +141,7 @@ export const deleteQuestion = async (questionUrl: string): Promise<void> => {
   try {
     await CourseAPI.assessment.assessments.deleteQuestion(questionUrl);
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data?.errors);
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
 
     throw error;
   }
@@ -159,8 +156,7 @@ export const convertMcqMrq = async (
     );
     return response.data;
   } catch (error) {
-    if (error instanceof AxiosError)
-      throw new Error(error.response?.data?.errors);
+    if (error instanceof AxiosError) throw error.response?.data?.errors;
 
     throw error;
   }

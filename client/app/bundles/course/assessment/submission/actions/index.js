@@ -38,12 +38,12 @@ const formatAnswers = (answers = {}) => {
 };
 
 function buildErrorMessage(error) {
-  if (!error?.response?.data) {
-    return '';
-  }
-
-  if (typeof error.response.data.error === 'string') {
+  const errMessage = error?.response?.data;
+  if (typeof errMessage?.error === 'string') {
     return error.response.data.error;
+  }
+  if (!errMessage?.errors) {
+    return '';
   }
 
   return Object.values(error.response.data.errors)
