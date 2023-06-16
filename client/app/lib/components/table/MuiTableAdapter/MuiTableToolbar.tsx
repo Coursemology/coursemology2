@@ -28,7 +28,7 @@ const MuiTableToolbar = (props: ToolbarProps): JSX.Element | null => {
         <div className="flex w-full justify-between">
           {props.onSearchKeywordChange && (
             <SearchField
-              className="w-1/2"
+              className="mr-4 lg:mr-0 lg:w-1/2"
               onChangeKeyword={props.onSearchKeywordChange}
               placeholder={props.searchPlaceholder ?? t(translations.search)}
               value={props.searchKeyword}
