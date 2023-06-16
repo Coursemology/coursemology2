@@ -3,7 +3,7 @@ import { Cancel, CheckCircle, Close } from '@mui/icons-material';
 import { Chip, IconButton, Popover, Typography } from '@mui/material';
 import { HeartbeatDetail } from 'types/channels/liveMonitoring';
 
-import { VerticalTable } from 'lib/components/core/table';
+import Table from 'lib/components/table';
 import useTranslation from 'lib/hooks/useTranslation';
 import { formatPreciseDateTime, formatPreciseTime } from 'lib/moment';
 
@@ -142,22 +142,18 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
           })}
         </Typography>
 
-        <VerticalTable
-          data={heartbeats}
-          dense
-          headerClassName="whitespace-nowrap"
-          rowKey={(heartbeat): string => heartbeat.generatedAt?.toString()}
-          variant="outlined"
-        >
-          {[
+        <Table
+          columns={[
             {
-              header: t(translations.generatedAt),
-              content: ({ generatedAt }) => formatPreciseTime(generatedAt),
+              of: 'generatedAt',
+              title: t(translations.generatedAt),
+              cell: ({ generatedAt }) => formatPreciseTime(generatedAt),
               className: '@lg:sticky @lg:left-0 @lg:bg-neutral-100 z-10',
             },
             {
-              header: t(translations.type),
-              content: ({ stale }) =>
+              of: 'stale',
+              title: t(translations.type),
+              cell: ({ stale }) =>
                 stale ? (
                   <Chip
                     color="info"
@@ -175,8 +171,9 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
                 ),
             },
             {
-              header: t(translations.userAgent),
-              content: ({ userAgent }) =>
+              of: 'userAgent',
+              title: t(translations.userAgent),
+              cell: ({ userAgent }) =>
                 props.hasSecret ? (
                   <Validable
                     of={lastHeartbeat?.userAgent}
@@ -188,11 +185,14 @@ const SessionDetailsPopup = (props: SessionDetailsPopupProps): JSX.Element => {
               className: 'whitespace-nowrap',
             },
             {
-              header: t(translations.ipAddress),
-              content: ({ ipAddress }) => <Blankable of={ipAddress} />,
+              of: 'ipAddress',
+              title: t(translations.ipAddress),
+              cell: ({ ipAddress }) => <Blankable of={ipAddress} />,
             },
           ]}
-        </VerticalTable>
+          data={heartbeats}
+          getRowId={(heartbeat): string => heartbeat.generatedAt?.toString()}
+        />
       </Popover>
     </Draggable>
   );
