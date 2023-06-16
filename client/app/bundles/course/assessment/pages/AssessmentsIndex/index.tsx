@@ -73,12 +73,7 @@ const AssessmentsIndex = (): JSX.Element => {
             </Tabs>
           )}
 
-          {refreshable(
-            <AssessmentsTable
-              assessments={data}
-              top={data.display.category.tabs.length > 1 ? 'top-40' : 'top-20'}
-            />,
-          )}
+          {refreshable(<AssessmentsTable assessments={data} />)}
         </>
       )}
     </Preload>
