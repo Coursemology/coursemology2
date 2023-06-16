@@ -100,6 +100,7 @@ const useTanStackTableBuilder = <D extends object>(
       forEach: (header, index) => ({
         id: header.id,
         render: customHeaderRender(header),
+        className: getRealColumn(index)?.className,
         sorting: header.column.getCanSort()
           ? {
               sorted: Boolean(header.column.getIsSorted()),
@@ -139,9 +140,10 @@ const useTanStackTableBuilder = <D extends object>(
     body: {
       rows: table.getRowModel().rows,
       getCells: (row) => row.getVisibleCells(),
-      forEachCell: (cell) => ({
+      forEachCell: (cell, _, index) => ({
         id: cell.id,
         render: customCellRender(cell),
+        className: getRealColumn(index)?.className,
       }),
       forEachRow: (row) => ({
         id: row.id,
