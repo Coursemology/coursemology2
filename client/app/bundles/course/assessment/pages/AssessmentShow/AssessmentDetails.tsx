@@ -1,7 +1,7 @@
 import { TableBody, TableCell, TableRow } from '@mui/material';
 import { AssessmentData } from 'types/course/assessment/assessments';
 
-import { TableContainer } from 'lib/components/core/table';
+import TableContainer from 'lib/components/core/layouts/TableContainer';
 import PersonalStartEndTime from 'lib/components/extensions/PersonalStartEndTime';
 import useTranslation from 'lib/hooks/useTranslation';
 
@@ -15,7 +15,6 @@ const AssessmentDetails = (props: AssessmentDetailsProps): JSX.Element => {
   const { for: assessment } = props;
   const { t } = useTranslation();
 
-  // TODO: Migrate to Tables API once it is ready
   return (
     <TableContainer dense variant="outlined">
       <TableBody>

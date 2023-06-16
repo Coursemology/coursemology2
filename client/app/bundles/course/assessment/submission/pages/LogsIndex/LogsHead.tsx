@@ -4,8 +4,8 @@ import { Chip, TableBody, TableCell, TableRow } from '@mui/material';
 import palette from 'theme/palette';
 import { LogsMainInfo } from 'types/course/assessment/submission/logs';
 
+import TableContainer from 'lib/components/core/layouts/TableContainer';
 import Link from 'lib/components/core/Link';
-import { TableContainer } from 'lib/components/core/table';
 import useTranslation from 'lib/hooks/useTranslation';
 
 import translations from './translations';

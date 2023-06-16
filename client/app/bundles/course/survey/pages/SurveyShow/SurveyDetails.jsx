@@ -16,7 +16,7 @@ import { updateSurvey } from 'course/survey/actions/surveys';
 import RespondButton from 'course/survey/containers/RespondButton';
 import { surveyShape } from 'course/survey/propTypes';
 import surveyTranslations from 'course/survey/translations';
-import { TableContainer } from 'lib/components/core/table';
+import TableContainer from 'lib/components/core/layouts/TableContainer';
 import { useAppDispatch } from 'lib/hooks/store';
 import { formatLongDateTime } from 'lib/moment';
 

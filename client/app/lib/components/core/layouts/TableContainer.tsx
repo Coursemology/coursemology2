@@ -5,7 +5,14 @@ import {
   TableContainer as MuiTableContainer,
 } from '@mui/material';
 
-import { TableContainerProps } from './template';
+type Variants = 'outlined' | 'elevation' | 'bare';
+
+export interface TableContainerProps {
+  className?: string;
+  stickyHeader?: boolean;
+  variant?: Variants;
+  dense?: boolean;
+}
 
 const TableContainer = forwardRef<
   ComponentRef<typeof MuiTableContainer>,
