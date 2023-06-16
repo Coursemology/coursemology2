@@ -40,6 +40,9 @@ const useTanStackTableBuilder = <D extends object>(
   const [searchKeyword, setSearchKeyword] = useState('');
   const [rowSelection, setRowSelection] = useState({});
 
+  const trimAndSetSearchKeyword = (keyword: string): void =>
+    setSearchKeyword(keyword.trim());
+
   const table = useReactTable({
     data: props.data,
     columns,
@@ -52,7 +55,7 @@ const useTanStackTableBuilder = <D extends object>(
     getFacetedUniqueValues: getFacetedUniqueValues(),
     onRowSelectionChange: setRowSelection,
     onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setSearchKeyword,
+    onGlobalFilterChange: trimAndSetSearchKeyword,
     autoResetPageIndex: false,
     state: { rowSelection, columnFilters, globalFilter: searchKeyword },
     initialState: {
@@ -156,6 +159,7 @@ const useTanStackTableBuilder = <D extends object>(
           ),
       },
       searchKeyword,
+      onSearchKeywordChange: trimAndSetSearchKeyword,
       onDownloadCsv: props.csvDownload && generateAndDownloadCsv,
       csvDownloadLabel: props.csvDownload?.downloadButtonLabel,
       searchPlaceholder: props.search?.searchPlaceholder,
