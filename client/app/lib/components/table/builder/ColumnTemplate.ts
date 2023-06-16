@@ -31,6 +31,7 @@ interface ColumnTemplate<D extends Data> {
   csvValue?: (value) => string;
   sortProps?: SortingProps<D>;
   searchProps?: SearchingProps<D>;
+  className?: string;
 }
 
 export default ColumnTemplate;

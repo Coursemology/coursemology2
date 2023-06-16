@@ -7,6 +7,7 @@ import SortProps from './Sort';
 interface HeaderRender {
   id: string;
   render: ReactNode | RowSelector;
+  className?: string;
   sorting?: SortProps;
   filtering?: FilterProps;
 }

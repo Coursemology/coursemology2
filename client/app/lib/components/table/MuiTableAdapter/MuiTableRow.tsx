@@ -18,7 +18,7 @@ const MuiTableRow = <C,>(props: MuiTableRowProps<C>): JSX.Element => (
       const cellProps = props.forEachCell(cell, cellIndex);
 
       return (
-        <TableCell key={cellProps.id}>
+        <TableCell key={cellProps.id} className={cellProps.className}>
           {isRowSelector(cellProps.render) ? (
             <MuiTableRowSelector {...cellProps.render} />
           ) : (

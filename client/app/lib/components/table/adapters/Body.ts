@@ -16,6 +16,7 @@ export interface RowRender {
 export interface CellRender {
   id: string;
   render: ReactNode | RowSelector;
+  className?: string;
 }
 
 interface BodyProps<B, C> {
