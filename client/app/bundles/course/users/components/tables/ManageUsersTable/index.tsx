@@ -108,6 +108,10 @@ const ManageUsersTable = (props: ManageUsersTableProps): JSX.Element => {
       unless: manageStaff,
       csvDownloadable: true,
       csvValue: (value?: number[]) => value?.join('; ') ?? '',
+      sortProps: {
+        sort: (a, b) =>
+          a.groups?.join(';')?.localeCompare(b.groups?.join(';') ?? '') ?? 0,
+      },
     },
     {
       of: 'referenceTimelineId',
