@@ -12,7 +12,7 @@ const MuiTablePagination = (props: PaginationProps): JSX.Element => {
 
   const rowsPerPageOptions = useMemo(() => {
     const options: TablePaginationProps['rowsPerPageOptions'] =
-      props.pages ?? [];
+      props.pages?.slice() ?? [];
 
     if (props.allowShowAll)
       options.push({
