@@ -155,7 +155,7 @@ const useTanStackTableBuilder = <D extends object>(
             table.getSelectedRowModel().rows.map((row) => row.original),
           ),
       },
-      onSearchKeywordChange: setSearchKeyword,
+      searchKeyword,
       onDownloadCsv: props.csvDownload && generateAndDownloadCsv,
       csvDownloadLabel: props.csvDownload?.downloadButtonLabel,
       searchPlaceholder: props.search?.searchPlaceholder,

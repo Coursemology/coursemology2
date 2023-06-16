@@ -6,7 +6,7 @@ interface ToolbarProps {
     when: () => boolean;
     render: () => ReactNode;
   };
-  csvDownload?: () => void;
+  searchKeyword?: string;
   onSearchKeywordChange?: (keyword: string) => void;
   onDownloadCsv?: () => void;
   csvDownloadLabel?: string;

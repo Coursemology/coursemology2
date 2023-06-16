@@ -31,6 +31,7 @@ const MuiTableToolbar = (props: ToolbarProps): JSX.Element | null => {
               className="w-1/2"
               onChangeKeyword={props.onSearchKeywordChange}
               placeholder={props.searchPlaceholder ?? t(translations.search)}
+              value={props.searchKeyword}
             />
           )}
 
