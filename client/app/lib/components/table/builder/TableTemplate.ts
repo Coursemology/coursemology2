@@ -14,7 +14,7 @@ interface TableTemplate<D extends Data> {
   columns: ColumnTemplate<D>[];
   getRowId: (datum: D) => string;
   getRowClassName: (datum: D) => string;
-  getRowEqualityData: (datum: D) => unknown;
+  getRowEqualityData?: (datum: D) => unknown;
   className?: string;
   pagination?: PaginationTemplate;
   csvDownload?: CsvDownloadTemplate;
