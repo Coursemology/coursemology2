@@ -13,7 +13,7 @@ interface TableTemplate<D extends Data> {
   data: D[];
   columns: ColumnTemplate<D>[];
   getRowId: (datum: D) => string;
-  getRowClassName: (datum: D) => string;
+  getRowClassName?: (datum: D) => string;
   getRowEqualityData?: (datum: D) => unknown;
   className?: string;
   pagination?: PaginationTemplate;
