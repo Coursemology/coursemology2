@@ -1,4 +1,4 @@
-export type { default as BodyProps } from './Body';
+export type { default as BodyProps, RowEqualityData } from './Body';
 export type { default as FilterProps } from './Filter';
 export type { default as HeaderProps } from './Header';
 export type { default as PaginationProps } from './Pagination';

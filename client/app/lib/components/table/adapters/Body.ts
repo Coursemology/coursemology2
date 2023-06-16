@@ -2,10 +2,15 @@ import { ReactNode } from 'react';
 
 import RowSelector from './RowSelector';
 
+export interface RowEqualityData {
+  payload: unknown;
+  selected?: boolean;
+}
+
 export interface RowRender {
   id: string;
   className?: string;
-  getEqualityData?: () => unknown;
+  getEqualityData?: () => RowEqualityData;
 }
 
 export interface CellRender {

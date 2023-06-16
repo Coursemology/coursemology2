@@ -13,7 +13,7 @@ import {
 } from '@tanstack/react-table';
 import { isEmpty } from 'lodash';
 
-import { TableProps } from '../adapters';
+import { RowEqualityData, TableProps } from '../adapters';
 import { TableTemplate } from '../builder';
 import { downloadCsv } from '../utils';
 
@@ -130,7 +130,10 @@ const useTanStackTableBuilder = <D extends object>(
         className: props.getRowClassName?.(row.original),
         getEqualityData:
           props.getRowEqualityData &&
-          ((): unknown => props.getRowEqualityData?.(row.original)),
+          ((): RowEqualityData => ({
+            payload: props.getRowEqualityData?.(row.original),
+            selected: rowSelection[row.id],
+          })),
       }),
     },
     pagination: props.pagination && {
